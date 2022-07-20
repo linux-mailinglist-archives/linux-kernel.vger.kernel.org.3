@@ -2,264 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765E557ADC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16E557ADC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 04:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240610AbiGTCUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 22:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S241249AbiGTCXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 22:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240935AbiGTCS4 (ORCPT
+        with ESMTP id S241136AbiGTCVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 22:18:56 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD85664CC;
-        Tue, 19 Jul 2022 19:18:09 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id C08DF3200902;
-        Tue, 19 Jul 2022 22:18:05 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 19 Jul 2022 22:18:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1658283485; x=
-        1658369885; bh=8H7ji+0TyI03eClC29NavdviPz/MRQ5lAGcMJRJ6GdY=; b=m
-        K/AJS6QxpqLS3vdtU5wHOa3VDo+Ss8/omhw7FLM5Ih5gB+1qYCXJV4ibaz5JAnOj
-        5F1hKAJD7frBr7ucr3BGlG8LInkYiIWJvkG1Ar66ywuTfI3o7MkkWO3AI0NaeYd1
-        wN7tqU9trBDHZ85f4N1VOSGhTGY17aaLFdkjoaDBfbgrghG1w1EVAdJhbdcsWeQn
-        wpNKc4m9Vz/BU2gj6Y+Uwc7ro5KLH+spFOb8wB3OeA5KlHaSZIHtASTQSXSLuDQc
-        xbd+KYzIzCR6IfZ+qZ0zz9T69AtqolvqcwU3GORdpgXoXBrZsKo1S73SOtiEJAcO
-        bY9od/jOndn3u11z1N2Pw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658283485; x=
-        1658369885; bh=8H7ji+0TyI03eClC29NavdviPz/MRQ5lAGcMJRJ6GdY=; b=J
-        EOEJm0l8Cn+fHp0naIe+zXdjBkF1Pz21bEEQehCfPgX81e/c6ocQAM8FFi3R3P8S
-        qzfCejVRFEe1bXUX/fUR9k5dogR2iU7nGP9zitb16CRIFLkq0ziFW9XlFZ1yFEtM
-        /bcQ9ceU6ybhk7F7IxPb0r+tWHcDNr1CyXaufW39Djds0i7mL7l79pxv6R2pkeD/
-        T0x582FN4Y9sIfStYK2W9gpAl2wgDo5/vv4y8xEDsrql3GmaHcdbAVwxrM688dpZ
-        DYP1FgWcJ92TQ0+czFK4SuGPIOy3AhxrEBGkRt0rAcwJfyDJJsuZCpTIBMv8kGL8
-        /yRfiR47mn9mPKAj3UnYQ==
-X-ME-Sender: <xms:3GXXYlq_z-KPtMv4vSTR-MnCK-xge4Z5BQU6loUkBnDO8RRv9wWJxA>
-    <xme:3GXXYnpxTfO_uy29DQXfMJhw7rsKptxYS0ASue--IrzBtOxOCjIUK-XnTiZvvBR9U
-    2HflLxd2Pkn>
-X-ME-Received: <xmr:3GXXYiNFxYsgexRry6ZLnD8kOIEgRoIL7uR5z2wUUdopezuIyMfGqgn7G5jFpltpIJFkb2nijPJH6gQlgrc0_7jZDCRD0LMOlQoRcQJEHAf9TMwueRs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeluddgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
-    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
-    epuefhueeiieejueevkefgiedtteehgfdutdelfffhleeflefhudeuvdefhfeghfehnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrvhgvnh
-    esthhhvghmrgifrdhnvght
-X-ME-Proxy: <xmx:3GXXYg5OQxq6aSlgz8prFCsePdXG0kYCKTI3CcGAGUmdopXo3MFCVw>
-    <xmx:3GXXYk6U9PuXrQtnpEOG2zRM_r5uGrduu0LsCJ0PgeRXuqfm4_uiYg>
-    <xmx:3GXXYojVL-Gs3XqNESGW5d8eq4_MS_VAsDF_9yU_uY-cPp02jhDg7w>
-    <xmx:3WXXYilkGvfj5caTUcVIFWqpUTle9TZy28iGFF6AoR-7HvkEbDnUpw>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 19 Jul 2022 22:18:02 -0400 (EDT)
-Message-ID: <6c072650-aed4-3ea5-0b8b-8e52655a222d@themaw.net>
-Date:   Wed, 20 Jul 2022 10:17:58 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] vfs: track count of child mounts
+        Tue, 19 Jul 2022 22:21:46 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4616EE82
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 19:19:03 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K0JPuo031784;
+        Wed, 20 Jul 2022 02:18:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=EjydbCDeB5HpqcU6479zQpQNFL9mryyodE0dDbbTFv0=;
+ b=kJhZznXlqAfxa+kFmGKKjsEuIt/l/4HeMNgyR9V5NOwARS7gx+XqE31LouMpqcehdGi2
+ luVX5Y05k3tuJ6voUCJyeGNvkZhF4uVvzbmT2fLy4Goh5m2Vy1ez6xLztrrHD+smfuuD
+ bTmblkZB4UEWMOLtqpBfKDmNVCc9Lazn5pnA/V/FAthW6qRWkFfcXhUc86K0XpFVDYwP
+ ooejiebQWoPZlTVC5BbX6GSMtMjQcL2PP49+ARZy0nNLWEiMSBybf7spNRKCuG5OGcXj
+ BYD05fs0Z6QAX3e8BTJNB2PlVpe1tMSB6LNLf4FtSZLdSkvzj6kE7l5z+jUQK2Tas4iV Zg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbnvtg6bn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 02:18:40 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26K1QlMi039258;
+        Wed, 20 Jul 2022 02:18:39 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k59311-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 02:18:39 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SIz8HAlA6rceJjOJ0bYtCrDpyZyIei+9kDsON9xiTmn/QCDfdd7dNdLqzqb4azH/t3aVmHbtkn84QWDi7n5e3k+1fPdaIgw2hUnRCjw8nHV2TJOND4zhO2lMbUX9jP8BkEmJygXsu1O9f46OO+ALj3usH0JTAiKgLF8FO/5DBZxuikWM/Y9OjeA719whPlAWKDAQ029faBJxQ4Ue9ngvQtMFQ4ThH9LFIvD6AvwJySfKgm8fX+O2Y6tz8Rw6C7E41LzGBaAElSqiAzfBAjlAlwaTrjmwAY2de7mjkgCbQrFB340dDBkhpbbBj7tk7jM4E8wMLKvZSwHKX9s2LZZD/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EjydbCDeB5HpqcU6479zQpQNFL9mryyodE0dDbbTFv0=;
+ b=nAWm6M5pqfLTRup7Ui8qReMFqJjAaGDaEheVqqXTydw86BgxwB/b1zvP+sPN6qf8aci1BTDApKR194mfuNq36jEEBdIqWhngbScr2yCYaI2Jl5LcavOIISxfCh2VLeADJ2Nr+FqhrDbYujjlrVrhIELKV6dAg5b5gBAw526jaqciDIkSFUbxiL9Y46R9UaOsQhVVx0LeeO40/0+tGk293U5kgpD+ECLKjJzy3KMq3BQofdTTkM6ZcgCDv4/AewA2/YUQCfe4nMWWOufLA+I8E/6MTqmPtPkV7AQX/h66WoJhy6+hkHl7PR3axfzjnHgP5bl1gmAxt2ebTFOd8e0u/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EjydbCDeB5HpqcU6479zQpQNFL9mryyodE0dDbbTFv0=;
+ b=tnvoN40cf/8FGScxAk1/ViwBsBHoU8iV5miBiSNY9SYYo5nblbG1NGU0gB4Xt5xKpsusBYz2NFTGxVrRifIoybmwSEjQ6VChRHde+CZkQ9RXF7p2DtLnEF6i11CdyxALogx5dL4nUnb8nWT9hNpEJg+kecF6wRwS8SILWGP1wZA=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by CH2PR10MB3797.namprd10.prod.outlook.com (2603:10b6:610:6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Wed, 20 Jul
+ 2022 02:18:37 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::c4d1:edc3:7d21:7c68%6]) with mapi id 15.20.5438.024; Wed, 20 Jul 2022
+ 02:18:37 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>
+CC:     Yu Zhao <yuzhao@google.com>
+Subject: [PATCH v12 47/69] perf: use VMA iterator
+Thread-Topic: [PATCH v12 47/69] perf: use VMA iterator
+Thread-Index: AQHYm97uMC1XskqOqUeUyXxzns4sdA==
+Date:   Wed, 20 Jul 2022 02:17:58 +0000
+Message-ID: <20220720021727.17018-48-Liam.Howlett@oracle.com>
+References: <20220720021727.17018-1-Liam.Howlett@oracle.com>
+In-Reply-To: <20220720021727.17018-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <165751053430.210556.5634228273667507299.stgit@donald.themaw.net>
- <165751066075.210556.17270883735094115327.stgit@donald.themaw.net>
- <YtdfUlO1puevbtfi@ZenIV>
-From:   Ian Kent <raven@themaw.net>
-In-Reply-To: <YtdfUlO1puevbtfi@ZenIV>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 25b2c81b-1240-4cb4-c936-08da69f62790
+x-ms-traffictypediagnostic: CH2PR10MB3797:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vupuALZnVsIuc6Zuyl1nMg5mw8O5nGgeS27356pbzsHskdQF2Bn/UQNddZKRpO2o6VMfuA2naQsMvocbZ5cvwFVH5aKLIAh4ZZvt7z4JSjtFJklvgUZ/+JX3F/2NlJLZerR858gyngaqp8fbVRhk/QciA1FTCMbxy0hNKMcU38VBopgFY7sooV76hJ+VRCncItTlPnb3Yss+bwlp8RaG/3+60wQ9C097PDDH+p3o8FRAdvn936nIwr3B2TKSnyo7Bh00QMRb4eFDjZ4WemWE2vbGAYDrKT+j1VxIPYYJFy+bNHjU/8JwhBNhP84ntaCT+ZJMyeQw3WGKPMJ+M1X83d/dntovgFzjD1dkF9g2PluzcrDDgvvNwgxtcTGQ8e+TL2uPRJ1S/znl+5lGt6ToDlIVFUgPXVVeFmtY5XTLlDWJWEcZvavwPY2AWiYSegp9qfCiRL1QGpx/CgQk+zB0Ichccbay0Po4HSZNcwYTeNxlQPsG5NfP1rLoJVdDj4Kw4d8lxjC5VxTkYYHErP4D+t6XISA6vkfrrRJKf4DY6LWctM+2k0zvo5dPP0J6+nLQ9dvDNeCpf5Vaemz5ta/CytTY9IxXb1wpm1MoARRSKg0jBZSSs1/UM9C0C8DFBGFyPZ3L1DXodwTnCug4QjYKkhPSRxqWGWMmWaxZgn95qwzxXUO6ZvvrtioPSOgDV2eg7/o0ysRoM9Q1zgxiRqdNppia6ccyff60t7sX1UlzxeQ02mrII0Q7BLNVrj42LRlBPDWP+8aeUOIouRz0+f8FVQpRMcUV2zzlxBG3jPnJO36ny+Jc02Kg6A3MYBx3jN+SyFGWPtMazb4Fc7iiA10n7ZFdFcKUZxMbaIIxkjwMF52Ppq5pHHQ05nRH7MMArfYQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(136003)(376002)(346002)(39860400002)(91956017)(38070700005)(316002)(122000001)(83380400001)(64756008)(66476007)(71200400001)(66556008)(66946007)(76116006)(38100700002)(36756003)(110136005)(8676002)(66446008)(4326008)(6666004)(5660300002)(26005)(6512007)(8936002)(966005)(478600001)(6486002)(44832011)(2906002)(6506007)(41300700001)(2616005)(86362001)(1076003)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?0wjP1+vmE0igAa4mgY70afq+rt2OCdfNJ+vLVuvBv+Br4Xapaup69xvEMp?=
+ =?iso-8859-1?Q?v+5F68DnBzx/+UGaryYu0kT8WTmeC7d95EB6QNVqPPYr9KODuP0xEFgXSv?=
+ =?iso-8859-1?Q?dxmskmvllHtV8RqGjsuokcQLyMJuku4jckbIHZ3YZQcc2JlSWb5PVJDpNt?=
+ =?iso-8859-1?Q?YGueEt07bXzxfpXoDoUNpr0JGUaYf49b0YNEthqsuR2Wx9fszqVLB8/JOv?=
+ =?iso-8859-1?Q?HPA0y0k8Xie1ryfyO6BXiKS/2Ed+uikzTx/qLTU5VBkHf7VhHz6Vvpdu6e?=
+ =?iso-8859-1?Q?Ut62Qjq/mQZeuLzuTxEep+3tNvIkXC+6gA4evkkeVrNl+nuyccWAE9ex/A?=
+ =?iso-8859-1?Q?XPjmtkdKlLatBKaLLbYFDO7hgOKJ8xYGBnzHbYRlUYPDFBgk9F+jQkHAYy?=
+ =?iso-8859-1?Q?VF72Z+aZWAq3ylmGbQwjm2HydSrzrUu/F7qzvJvuSrv4jG2rp4HsbcORk2?=
+ =?iso-8859-1?Q?xYAxNE/E6CUmd8dnmfiNuhjUzDpMXGfJ3L9SPFvZDPvYUDWM34JAX9X+np?=
+ =?iso-8859-1?Q?gjiMqcY8xZdzPq3PS7TIwTZ2k4wyVvXWc1H3nVaR4quJJQwoJSqaqUD3Pu?=
+ =?iso-8859-1?Q?fF8VgaAc0gL99GRFyy6ApgVy7Pku0meEkS7iBhUfaXzHBH6QBavetBTFr6?=
+ =?iso-8859-1?Q?AAerY1m7oudanrHtYfnXiqF4SlPaAmQtPoaTWqUStCX8R7t/kJXUDvL35X?=
+ =?iso-8859-1?Q?7BnUH2ZxALT/Ikw4078tld55+ZMFYlfTQM35FD7mJ+CDoASTAghhBMPPJj?=
+ =?iso-8859-1?Q?gH7DLTGGLh4JJbLegSEupGDGVsVCH/PwZeczLiZWUnaQxMyQwycIlqajBN?=
+ =?iso-8859-1?Q?TW+9DcXGgYy8Be4wZ0mZwfi20bJQzY5Tnsn5G4QMFADllbzukdevQo7/DI?=
+ =?iso-8859-1?Q?Vi3CnEHZ8bBA463WMsBMLbqGfHuV6lndTyy+UHAnzvuzj0nqvNGrLi613l?=
+ =?iso-8859-1?Q?ehkY/ZHMGUkrDrN7mz+Ctmv0ZxbQ+FPxcgkftqTrIL1yZ0n7Sil7YjV9AE?=
+ =?iso-8859-1?Q?DRiAGrYQvhlQ1KmWvLMel1rWgVLwmM7+jBkAlpkKDqnv5qOYg54u18Tjou?=
+ =?iso-8859-1?Q?4nRedLxv1vmb0Zv2qBntc+li4tLzmETqAKVJiay6rDnZq3RBrPsUm22Nvi?=
+ =?iso-8859-1?Q?ciXLA4T/2K0Li3F97kw6/otOIlX/zMtspeKqqOryRLJlvMFVAbRAsVxmeL?=
+ =?iso-8859-1?Q?7PCi1Ln71gumB7o72w1x6q8VaRDErBvlP3d1ImasMdfN8NpMfFwwxoXvWc?=
+ =?iso-8859-1?Q?lpkzMzbFSzw2K8dhVs+Or7whZ2qUIU8BNNn5qZxB9G8Yld+IKyccj6pbAQ?=
+ =?iso-8859-1?Q?KHhkRQhyY68c5+NbYPP/4tazERw3KTlSxJoiE1hEUd7nottmA6jRPhIRxR?=
+ =?iso-8859-1?Q?cDjDXnXT9G2Hl01SVMGpZm3X8tLoUbx8OlG09m+JT1s+11sh90Yz9nXhXB?=
+ =?iso-8859-1?Q?Zgig5SfJ/3GEV63mvPRR163EMQeKPpHAfG2iM+61dUnOFRtrpaxFkvP2ZX?=
+ =?iso-8859-1?Q?h3s9YJwF5xdKZ1DuChEpzuGPTfvJNTKjwzNV5ZSHclPG2c1ZwxA7jq4Kvy?=
+ =?iso-8859-1?Q?JyF3kJgVKlnfcV7ez4AkNNS73dQKrC+0dCQOJbEsqPgHwJdEXYfc9nrNpm?=
+ =?iso-8859-1?Q?LlB0YyTpP+28f0ZE38nrBWSpil22l/WLtu5EJ+m1I2vwg2z+BBNzfe6w?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25b2c81b-1240-4cb4-c936-08da69f62790
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2022 02:17:58.8365
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jf+OPhiJeAxrfdeYYaJg5aqocdLVqhFFmMFDLl8GsDRpiQxx0RZrAJf3zg2LwoLBaeW1l7R1rR4EuG2zykCRgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB3797
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-19_10,2022-07-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207200008
+X-Proofpoint-GUID: ibix5kPhnUyqj9TFpZHLQJDvLNNJzzlt
+X-Proofpoint-ORIG-GUID: ibix5kPhnUyqj9TFpZHLQJDvLNNJzzlt
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
 
-On 20/7/22 09:50, Al Viro wrote:
-> On Mon, Jul 11, 2022 at 11:37:40AM +0800, Ian Kent wrote:
->> While the total reference count of a mount is mostly all that's needed
->> the reference count corresponding to the mounts only is occassionally
->> also needed (for example, autofs checking if a tree of mounts can be
->> expired).
->>
->> To make this reference count avaialble with minimal changes add a
->> counter to track the number of child mounts under a given mount. This
->> count can then be used to calculate the mounts only reference count.
-> No.  This is a wrong approach - instead of keeping track of number of
-> children, we should just stop having them contribute to refcount of
-> the parent.  Here's what I've got in my local tree; life gets simpler
-> that way.
+The VMA iterator is faster than the linked list and removing the linked
+list will shrink the vm_area_struct.
 
-Right, I'll grab this and run some tests.
+Link: https://lkml.kernel.org/r/20220504011345.662299-32-Liam.Howlett@oracl=
+e.com
+Link: https://lkml.kernel.org/r/20220621204632.3370049-48-Liam.Howlett@orac=
+le.com
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: SeongJae Park <sj@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+ kernel/events/core.c    | 3 ++-
+ kernel/events/uprobes.c | 9 ++++++---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-
-Ian
-
->
-> commit e99f1f9cc864103f326a5352e6ce1e377613437f
-> Author: Al Viro <viro@zeniv.linux.org.uk>
-> Date:   Sat Jul 9 14:45:39 2022 -0400
->
->      namespace: don't keep ->mnt_parent pinned
->      
->      makes refcounting more consistent
->      
->      Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
->
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index 68789f896f08..53c29110a0cd 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -906,7 +906,6 @@ void mnt_set_mountpoint(struct mount *mnt,
->   			struct mount *child_mnt)
->   {
->   	mp->m_count++;
-> -	mnt_add_count(mnt, 1);	/* essentially, that's mntget */
->   	child_mnt->mnt_mountpoint = mp->m_dentry;
->   	child_mnt->mnt_parent = mnt;
->   	child_mnt->mnt_mp = mp;
-> @@ -1429,22 +1428,18 @@ void mnt_cursor_del(struct mnt_namespace *ns, struct mount *cursor)
->   int may_umount_tree(struct vfsmount *m)
->   {
->   	struct mount *mnt = real_mount(m);
-> -	int actual_refs = 0;
-> -	int minimum_refs = 0;
-> -	struct mount *p;
->   	BUG_ON(!m);
->   
->   	/* write lock needed for mnt_get_count */
->   	lock_mount_hash();
-> -	for (p = mnt; p; p = next_mnt(p, mnt)) {
-> -		actual_refs += mnt_get_count(p);
-> -		minimum_refs += 2;
-> +	for (struct mount *p = mnt; p; p = next_mnt(p, mnt)) {
-> +		int allowed = p == mnt ? 2 : 1;
-> +		if (mnt_get_count(p) > allowed) {
-> +			unlock_mount_hash();
-> +			return 0;
-> +		}
->   	}
->   	unlock_mount_hash();
-> -
-> -	if (actual_refs > minimum_refs)
-> -		return 0;
-> -
->   	return 1;
->   }
->   
-> @@ -1586,7 +1581,6 @@ static void umount_tree(struct mount *mnt, enum umount_tree_flags how)
->   
->   		disconnect = disconnect_mount(p, how);
->   		if (mnt_has_parent(p)) {
-> -			mnt_add_count(p->mnt_parent, -1);
->   			if (!disconnect) {
->   				/* Don't forget about p */
->   				list_add_tail(&p->mnt_child, &p->mnt_parent->mnt_mounts);
-> @@ -2892,12 +2886,8 @@ static int do_move_mount(struct path *old_path, struct path *new_path)
->   		put_mountpoint(old_mp);
->   out:
->   	unlock_mount(mp);
-> -	if (!err) {
-> -		if (attached)
-> -			mntput_no_expire(parent);
-> -		else
-> -			free_mnt_ns(ns);
-> -	}
-> +	if (!err && !attached)
-> +		free_mnt_ns(ns);
->   	return err;
->   }
->   
-> @@ -3869,7 +3859,7 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
->   		const char __user *, put_old)
->   {
->   	struct path new, old, root;
-> -	struct mount *new_mnt, *root_mnt, *old_mnt, *root_parent, *ex_parent;
-> +	struct mount *new_mnt, *root_mnt, *old_mnt, *root_parent;
->   	struct mountpoint *old_mp, *root_mp;
->   	int error;
->   
-> @@ -3900,10 +3890,9 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
->   	new_mnt = real_mount(new.mnt);
->   	root_mnt = real_mount(root.mnt);
->   	old_mnt = real_mount(old.mnt);
-> -	ex_parent = new_mnt->mnt_parent;
->   	root_parent = root_mnt->mnt_parent;
->   	if (IS_MNT_SHARED(old_mnt) ||
-> -		IS_MNT_SHARED(ex_parent) ||
-> +		IS_MNT_SHARED(new_mnt->mnt_parent) ||
->   		IS_MNT_SHARED(root_parent))
->   		goto out4;
->   	if (!check_mnt(root_mnt) || !check_mnt(new_mnt))
-> @@ -3942,7 +3931,6 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
->   	attach_mnt(root_mnt, old_mnt, old_mp);
->   	/* mount new_root on / */
->   	attach_mnt(new_mnt, root_parent, root_mp);
-> -	mnt_add_count(root_parent, -1);
->   	touch_mnt_namespace(current->nsproxy->mnt_ns);
->   	/* A moved mount should not expire automatically */
->   	list_del_init(&new_mnt->mnt_expire);
-> @@ -3952,8 +3940,6 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
->   	error = 0;
->   out4:
->   	unlock_mount(old_mp);
-> -	if (!error)
-> -		mntput_no_expire(ex_parent);
->   out3:
->   	path_put(&root);
->   out2:
-> diff --git a/fs/pnode.c b/fs/pnode.c
-> index 1106137c747a..e2c8a4b18857 100644
-> --- a/fs/pnode.c
-> +++ b/fs/pnode.c
-> @@ -368,7 +368,7 @@ static inline int do_refcount_check(struct mount *mnt, int count)
->    */
->   int propagate_mount_busy(struct mount *mnt, int refcnt)
->   {
-> -	struct mount *m, *child, *topper;
-> +	struct mount *m, *child;
->   	struct mount *parent = mnt->mnt_parent;
->   
->   	if (mnt == parent)
-> @@ -384,7 +384,6 @@ int propagate_mount_busy(struct mount *mnt, int refcnt)
->   
->   	for (m = propagation_next(parent, parent); m;
->   	     		m = propagation_next(m, parent)) {
-> -		int count = 1;
->   		child = __lookup_mnt(&m->mnt, mnt->mnt_mountpoint);
->   		if (!child)
->   			continue;
-> @@ -392,13 +391,10 @@ int propagate_mount_busy(struct mount *mnt, int refcnt)
->   		/* Is there exactly one mount on the child that covers
->   		 * it completely whose reference should be ignored?
->   		 */
-> -		topper = find_topper(child);
-> -		if (topper)
-> -			count += 1;
-> -		else if (!list_empty(&child->mnt_mounts))
-> +		if (!find_topper(child) && !list_empty(&child->mnt_mounts))
->   			continue;
->   
-> -		if (do_refcount_check(child, count))
-> +		if (do_refcount_check(child, 1))
->   			return 1;
->   	}
->   	return 0;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 80782cddb1da..61ad10862c21 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -10210,8 +10210,9 @@ static void perf_addr_filter_apply(struct perf_addr=
+_filter *filter,
+ 				   struct perf_addr_filter_range *fr)
+ {
+ 	struct vm_area_struct *vma;
++	VMA_ITERATOR(vmi, mm, 0);
+=20
+-	for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
++	for_each_vma(vmi, vma) {
+ 		if (!vma->vm_file)
+ 			continue;
+=20
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index 2eaa327f8158..401bc2d24ce0 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -349,9 +349,10 @@ static bool valid_ref_ctr_vma(struct uprobe *uprobe,
+ static struct vm_area_struct *
+ find_ref_ctr_vma(struct uprobe *uprobe, struct mm_struct *mm)
+ {
++	VMA_ITERATOR(vmi, mm, 0);
+ 	struct vm_area_struct *tmp;
+=20
+-	for (tmp =3D mm->mmap; tmp; tmp =3D tmp->vm_next)
++	for_each_vma(vmi, tmp)
+ 		if (valid_ref_ctr_vma(uprobe, tmp))
+ 			return tmp;
+=20
+@@ -1231,11 +1232,12 @@ int uprobe_apply(struct inode *inode, loff_t offset=
+,
+=20
+ static int unapply_uprobe(struct uprobe *uprobe, struct mm_struct *mm)
+ {
++	VMA_ITERATOR(vmi, mm, 0);
+ 	struct vm_area_struct *vma;
+ 	int err =3D 0;
+=20
+ 	mmap_read_lock(mm);
+-	for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
++	for_each_vma(vmi, vma) {
+ 		unsigned long vaddr;
+ 		loff_t offset;
+=20
+@@ -1983,9 +1985,10 @@ bool uprobe_deny_signal(void)
+=20
+ static void mmf_recalc_uprobes(struct mm_struct *mm)
+ {
++	VMA_ITERATOR(vmi, mm, 0);
+ 	struct vm_area_struct *vma;
+=20
+-	for (vma =3D mm->mmap; vma; vma =3D vma->vm_next) {
++	for_each_vma(vmi, vma) {
+ 		if (!valid_vma(vma, false))
+ 			continue;
+ 		/*
+--=20
+2.35.1

@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C67157BC6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90D157BC70
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiGTRNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S235580AbiGTROY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiGTRNt (ORCPT
+        with ESMTP id S239755AbiGTROR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:13:49 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C13E6E89E
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:13:47 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 17so6692627pfy.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:13:47 -0700 (PDT)
+        Wed, 20 Jul 2022 13:14:17 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1646EE98
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:14:16 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id w2so21856135ljj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2iDISCtMujoYb4pXrtkdCn8rbdQJ82HuBDJ0+/zcH90=;
-        b=FH+PekUtFfV6pCGLo8uxIDW9LlIKE8Oj1r0NOE0z9UjfPdJ6jNT52Sw/k7AsmP9Syd
-         c+Nf2wjxnJodwudEymZdXsJGWMO6ZhKl+NFWUK6gugXNnKi806TXU3PO/+0QOMVviOzX
-         NMkCcOkk57XTehSLbxDd6wmgYI9ZH0E3Sqc0BU/3EJk4AHfiNsIUua4pOgZjdiUAgp2o
-         4UkaLNfp9uWOPEUTOulda8K7Yrn1l/Ij3uwNt4/3El0vpK+19DYn+xo/Le6ddGizayDA
-         y9eZbH14mzK8vrr1Q1Qhc7RFniEVi/CYnspteYo6Q7BJou9yyyg0RUewg2Yks91NNxUI
-         +dcA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5RkpDfJmyBWfRHg2fVFR+/EdZ4rlvuqSFEKHbwoMbsM=;
+        b=H+7FhV05lIhk0PGB4Z6gEALJjTiEw084oSQ2Ud8MgD/y8JOhBTo9CTroBwwYaV4KRf
+         wo+T2+13vBg07aE5ZDkkmJIQREcaPEvxHTDK2GeS9txCcnfFeII3xhclMU7qdpgTtKpq
+         Qv6x+YINWQAxvFegcEHp6NxYwoRPU6CirCLgAxMLhcSDQ2VkFe0yR+YwsEa4iv3KZpDf
+         4S8Mu6emImwTEBRYFM5m/GSpYwNK9vR4HZsbk/6xWL0+7eMGpVBpFy+QpHoXc9ERr5CT
+         +PZtNyIhcUhtAVC3NpzD3jCYEfxQ3IWW0HE8xTYTeZoSA1ssGYiIlzIpiARAdMOO2xNu
+         wMIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2iDISCtMujoYb4pXrtkdCn8rbdQJ82HuBDJ0+/zcH90=;
-        b=f1Ofkg78AF7NydVzVSyG67APG+6/1NlZfH0dytG++MqL7W5UuCpntGkBsQTk0x9s5R
-         R6ekYDXze01bspYPi2/cuCmz47BCJJ7uVr2X/IYs41exuw4CjJ9KSibO0mJquz4uWFno
-         i1BKQtEXpCzqSTTcdi70v2EpXIQx2hsxJeWlUdYSoqto5i9AIEClReKQaklkHAwQNd5K
-         zmTHxAXhFupzjBoVLmbUXuAvkQ7pYAc7n7Rvq1iD5Z1lwt+gkmg0j6XioHybgZTwWL8I
-         BCFVhrvfJzS2CwzTbF6ERPcvJfSKmOG4+sGthESeRhzciduOGbnXSCtxmQYnoQs71lcf
-         /DBg==
-X-Gm-Message-State: AJIora+wsym9tFdbiGUSloNgFLbPNsp+VN159XiZUqLr/fJatxj+cS5/
-        0PiWQALOPZoEG6GOq74PO+u1ZQ==
-X-Google-Smtp-Source: AGRyM1ukaae49eieQG9eqzW9jOyZthb7CjGb22iyaiJSCFelzdR6Ij6IZfypk2lJdDbeFNT43k1yrQ==
-X-Received: by 2002:aa7:870b:0:b0:522:c223:5c5e with SMTP id b11-20020aa7870b000000b00522c2235c5emr40260065pfo.6.1658337226778;
-        Wed, 20 Jul 2022 10:13:46 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id h14-20020a63e14e000000b004161b3c3388sm12108750pgk.26.2022.07.20.10.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 10:13:46 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 17:13:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kechen Lu <kechenl@nvidia.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, vkuznets@redhat.com,
-        somduttar@nvidia.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 3/7] KVM: x86: Reject disabling of MWAIT
- interception when not allowed
-Message-ID: <Ytg3xjZ48w/3Hh6n@google.com>
-References: <20220615011622.136646-1-kechenl@nvidia.com>
- <20220615011622.136646-4-kechenl@nvidia.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5RkpDfJmyBWfRHg2fVFR+/EdZ4rlvuqSFEKHbwoMbsM=;
+        b=gDzBTS6jrGVibd13CbFBb+UMClUSLiKDUqDCM8lQi+2Fwex9BrVoWpItXttgyI+XYF
+         yN1Q/o0P0xHvxObbFqG9qcapT0A/fX/vhB1TjuKZIAbNFP3CYT5RJamm1y0ZMzpHi5Mz
+         V7j1iWwcsEv8A9Ng3Z8aVsBu8HbcdDiLaZZJl+zTLPRGdPDF4676mMJUkCMBtqFB29N5
+         o4LZbPz1IeLq7bU5fVNu9mgIiJ6GtLTMKhTpy4/tda5AuAQ4GJLgoXjwN3G0hTog4M1o
+         GpEJFOTOl/uMGn0i3+a/CIzt5EdTFWO2V9h+cnXDRgVAy7tEisDIsat8LwFEqJY/H64A
+         JwXg==
+X-Gm-Message-State: AJIora9g5rRXQ6SlV/PHWhMHPPKWVShxcsy+XB3/XBEDbCEZUoNs9wDT
+        59rGgSEfTqNyRRJVfccCi3Ulag==
+X-Google-Smtp-Source: AGRyM1slZ6hO/HAIyCG+31XwLnAM/4pQ8U2rWmJCFJJE6uLFgNQ5+vsUtnCPoRcx6jCpEMRuF7B7KQ==
+X-Received: by 2002:a2e:9ed6:0:b0:25d:5cef:72c3 with SMTP id h22-20020a2e9ed6000000b0025d5cef72c3mr16423219ljk.381.1658337255308;
+        Wed, 20 Jul 2022 10:14:15 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id d25-20020a19e619000000b00489c7fb668dsm3901824lfh.182.2022.07.20.10.14.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 10:14:14 -0700 (PDT)
+Message-ID: <e1ec8511-d1dd-faa5-031f-50c4e55062cd@linaro.org>
+Date:   Wed, 20 Jul 2022 19:14:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615011622.136646-4-kechenl@nvidia.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 2/6] dt-bindings: mediatek,mt6779-keypad: use
+ unevaluatedProperties
+Content-Language: en-US
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
+ <20220720-mt8183-keypad-v1-2-ef9fc29dbff4@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720-mt8183-keypad-v1-2-ef9fc29dbff4@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022, Kechen Lu wrote:
-> From: Sean Christopherson <seanjc@google.com>
+On 20/07/2022 16:48, Mattijs Korpershoek wrote:
+> writing-bindings.rst states:
+>> - If schema includes other schema (e.g. /schemas/i2c/i2c-controller.yaml) use
+>>   "unevaluatedProperties:false". In other cases, usually use
+>>   "additionalProperties:false".
 > 
-> Reject KVM_CAP_X86_DISABLE_EXITS if userspace attempts to disable MWAIT
-> exits and KVM previously reported (via KVM_CHECK_EXTENSION) that MWAIT is
-> not allowed in guest, e.g. because it's not supported or the CPU doesn't
-> have an aways-running APIC timer.
-> 
-> Fixes: 4d5422cea3b6 ("KVM: X86: Provide a capability to disable MWAIT intercepts")
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/x86.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index b419b258ed90..f31ebbb1b94f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4199,6 +4199,17 @@ static inline bool kvm_can_mwait_in_guest(void)
->  		boot_cpu_has(X86_FEATURE_ARAT);
->  }
->  
-> +static u64 kvm_get_allowed_disable_exits(void)
-> +{
-> +	u64 r = KVM_X86_DISABLE_EXITS_HLT | KVM_X86_DISABLE_EXITS_PAUSE |
-> +		KVM_X86_DISABLE_EXITS_CSTATE;
-> +
-> +	if(kvm_can_mwait_in_guest())
+> mt6779-keypad includes matrix-keymap.yaml so replace additionalProperties:false
+> by unevaluatedProperties:false.
 
-Probably my fault for not fixing this during copy+paste, but add a space after the if, i.e.
+This is not sufficient explanation. You now allow all properties from
+matrix-keymap.yaml, which might be desired or might be not (e.g. they
+are not valid for this device). Please investigate it and mention the
+outcome.
 
-	if (kvm_can_mwait_in_guest())
-
-> +		r |= KVM_X86_DISABLE_EXITS_MWAIT;
-> +
-> +	return r;
-> +}
+Best regards,
+Krzysztof

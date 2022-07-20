@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7B257B5F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FB157B5FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 13:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240181AbiGTLxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 07:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S233546AbiGTL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 07:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240078AbiGTLxp (ORCPT
+        with ESMTP id S229695AbiGTL4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 07:53:45 -0400
+        Wed, 20 Jul 2022 07:56:33 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAD672EF7;
-        Wed, 20 Jul 2022 04:53:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ABC5A2D4;
+        Wed, 20 Jul 2022 04:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658318023; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1658318190; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K09VR+cSE8m5Qqo0hYgGalzaeLuxugQm+MZTPFc0mzs=;
-        b=pMvLMo0D2/CPpaCCT1HMTFZQ9TuJRIVZb2u0kKjjWXNyIAMRII1mj5RNX5wjiQJusz72Di
-        Rmw6zq9wrc2hLQOMasqK9IMIahTVkEovn1mb9cp0cdZ2s7rtihbyqxJCzeLBcmmNtHjLx+
-        pwGRdxkeBBFLiFs5a1hQj5ovjRfLYwk=
-Date:   Wed, 20 Jul 2022 12:53:33 +0100
+        bh=Otu7SpCpuiaT1NLh/DRIgkeeMxIACISVLGxUE2EKWbk=;
+        b=ouJniZi1hlAwdQ6wpoWIC/pc0AEoqH+m7LymtYUHg7UFEvQH/nAEtdwWtj9myQp2I7BNOL
+        PE8hIAbItCNKIzmwhmr2C8oser6RREY46gSWp1MVyxGbwHRqvwFnQrBjR2EBPwTjAHxSGe
+        PSX9FxsEHtT8nU9gpMFOCBrUesPA0FE=
+Date:   Wed, 20 Jul 2022 12:56:19 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 07/11] ASoC: jz4740-i2s: Make the PLL clock name
- SoC-specific
+Subject: Re: [PATCH v4 08/11] ASoC: jz4740-i2s: Support S20_LE and S24_LE
+ sample formats
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
         tiwai@suse.com, linux-mips@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <9DIBFR.JZ9UUTMAK40G1@crapouillou.net>
-In-Reply-To: <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
+Message-Id: <VHIBFR.8XGKG1NT4PHX1@crapouillou.net>
+In-Reply-To: <20220708160244.21933-9-aidanmacdonald.0x0@gmail.com>
 References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-8-aidanmacdonald.0x0@gmail.com>
+        <20220708160244.21933-9-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -51,85 +51,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Aidan,
 
-Le ven., juil. 8 2022 at 17:02:40 +0100, Aidan MacDonald=20
+Le ven., juil. 8 2022 at 17:02:41 +0100, Aidan MacDonald=20
 <aidanmacdonald.0x0@gmail.com> a =E9crit :
-> On some Ingenic SoCs, such as the X1000, there is a programmable
-> divider used to generate the I2S system clock from a PLL, rather
-> than a fixed PLL/2 clock. It doesn't make much sense to call the
-> clock "pll half" on those SoCs, so the clock name should really be
-> a SoC-dependent value.
+> The audio controller on JZ47xx SoCs can transfer 20- and 24-bit
+> samples in the FIFO, so allow those formats to be used with the
+> I2S driver. Although the FIFO doesn't care about the in-memory
+> sample format, we only support 4-byte format variants because the
+> DMA controller on these SoCs cannot transfer in 3-byte multiples.
 >=20
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  sound/soc/jz4740/jz4740-i2s.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
+> b/sound/soc/jz4740/jz4740-i2s.c
+> index a41398c24d0e..9be2f3f1b376 100644
+> --- a/sound/soc/jz4740/jz4740-i2s.c
+> +++ b/sound/soc/jz4740/jz4740-i2s.c
+> @@ -238,9 +238,15 @@ static int jz4740_i2s_hw_params(struct=20
+> snd_pcm_substream *substream,
+>  	case SNDRV_PCM_FORMAT_S8:
+>  		sample_size =3D 0;
+>  		break;
+> -	case SNDRV_PCM_FORMAT_S16:
+> +	case SNDRV_PCM_FORMAT_S16_LE:
+
+
+I had to lookup the macro to verify, but this is correct.
 
 Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
 Cheers,
 -Paul
 
-> ---
->  sound/soc/jz4740/jz4740-i2s.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->=20
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index 0dcc658b3784..a41398c24d0e 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -75,6 +75,8 @@ struct i2s_soc_info {
->  	struct reg_field field_i2sdiv_capture;
->  	struct reg_field field_i2sdiv_playback;
->=20
-> +	const char *pll_clk_name;
-> +
->  	bool shared_fifo_flush;
->  };
->=20
-> @@ -281,7 +283,7 @@ static int jz4740_i2s_set_sysclk(struct=20
-> snd_soc_dai *dai, int clk_id,
->  		clk_set_parent(i2s->clk_i2s, parent);
+>  		sample_size =3D 1;
 >  		break;
->  	case JZ4740_I2S_CLKSRC_PLL:
-> -		parent =3D clk_get(NULL, "pll half");
-> +		parent =3D clk_get(NULL, i2s->soc_info->pll_clk_name);
->  		if (IS_ERR(parent))
->  			return PTR_ERR(parent);
->  		clk_set_parent(i2s->clk_i2s, parent);
-> @@ -400,6 +402,7 @@ static const struct i2s_soc_info=20
-> jz4740_i2s_soc_info =3D {
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 8, 11),
->  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		=3D "pll half",
->  	.shared_fifo_flush	=3D true,
+> +	case SNDRV_PCM_FORMAT_S20_LE:
+> +		sample_size =3D 3;
+> +		break;
+> +	case SNDRV_PCM_FORMAT_S24_LE:
+> +		sample_size =3D 4;
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -375,7 +381,9 @@ static const struct snd_soc_dai_ops=20
+> jz4740_i2s_dai_ops =3D {
 >  };
 >=20
-> @@ -409,6 +412,7 @@ static const struct i2s_soc_info=20
-> jz4760_i2s_soc_info =3D {
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
->  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		=3D "pll half",
->  };
+>  #define JZ4740_I2S_FMTS (SNDRV_PCM_FMTBIT_S8 | \
+> -		SNDRV_PCM_FMTBIT_S16_LE)
+> +			 SNDRV_PCM_FMTBIT_S16_LE | \
+> +			 SNDRV_PCM_FMTBIT_S20_LE | \
+> +			 SNDRV_PCM_FMTBIT_S24_LE)
 >=20
->  static struct snd_soc_dai_driver jz4770_i2s_dai =3D {
-> @@ -435,6 +439,7 @@ static const struct i2s_soc_info=20
-> jz4770_i2s_soc_info =3D {
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
->  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		=3D "pll half",
->  };
->=20
->  static const struct i2s_soc_info jz4780_i2s_soc_info =3D {
-> @@ -443,6 +448,7 @@ static const struct i2s_soc_info=20
-> jz4780_i2s_soc_info =3D {
->  	.field_tx_fifo_thresh	=3D REG_FIELD(JZ_REG_AIC_CONF, 16, 20),
->  	.field_i2sdiv_capture	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 8, 11),
->  	.field_i2sdiv_playback	=3D REG_FIELD(JZ_REG_AIC_CLK_DIV, 0, 3),
-> +	.pll_clk_name		=3D "pll half",
->  };
->=20
->  static const struct snd_soc_component_driver jz4740_i2s_component =3D {
+>  static struct snd_soc_dai_driver jz4740_i2s_dai =3D {
+>  	.probe =3D jz4740_i2s_dai_probe,
 > --
 > 2.35.1
 >=20

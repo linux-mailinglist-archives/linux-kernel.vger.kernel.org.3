@@ -2,159 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8390157B495
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C417157B49A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236501AbiGTKgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
+        id S237728AbiGTKh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 06:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiGTKgo (ORCPT
+        with ESMTP id S230346AbiGTKh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:36:44 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3FF4AD67
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:36:40 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a10so20615193ljj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:36:40 -0700 (PDT)
+        Wed, 20 Jul 2022 06:37:26 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723164B0F8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:37:24 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id oy13so32199773ejb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:37:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eOQs/h3TvmwMGsHYWl9U3/WtYoMV9gdMa1dgDXwlbSQ=;
-        b=fkB0BJqfPCtZaMfiYdGb3bdOxfiLSBeYykX2v5HfeUI0qT9RCYWjYKZwN2H2/Lcklg
-         5AtcySUHDocU/gfgqQ6VWa5vXLUeoBByLaXwcyqmEMHN/lC6o1LBfrPHatb2VG1Eheoj
-         uLEPyQzCB8wzzWwIqTO9fAzIK81bYmX8sZuKQn2O6Eqk08vYjGUGX0zg1BDxszd2cGwH
-         BJHeSB3ql3PnNoCjParSAlqbboMcvdkkApwZgirbZGwvTV8dh4aky4QdjnMkgpQ2pCFD
-         mUH0PJziq/T1HRPDay71Oiw5Rxu6yMU2spGr7/T+3+rh0cKImMnmNv8XOtmuAJk5lfk4
-         QQBw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=IQlS7BDnACDaCsMqM0o6ivue0vmf2zRpA7COhg03lwo=;
+        b=JcBt/J1OouW1e2R9hMEn6injX76fjudE4aba4Z7ouSzPSHkB2cHlRYXC02AeUA2Syq
+         smS3tqHA9TK/0E1xezqkq4a+N1EM/eo3qzgOt5TSvAhT1w5lGynWOP90/+LH3b8QstHS
+         HPYglMvNFGn9/FLXXvrR4PqsDTqUdt55V+dyu/cvN3e4q3HU1+fQgXpzvzkrsc1v4TYi
+         fFf1bfWJXNht6dBn9pKfd2f8N7A3cib1j4mvCENJQbDyYVYt/zBH2BP0H1YuSuvovuDO
+         RWJLqdpQr+FcWuD5F99tgvOTc0qFd9YNnP5fp1eF7AqZ7F4FAD5EKSfOoWoVdP7BXgCV
+         ywCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eOQs/h3TvmwMGsHYWl9U3/WtYoMV9gdMa1dgDXwlbSQ=;
-        b=aHy3kiO2tk2JEYDvFs+FuR6qiEsJmEFrYYh77rRTHxbjL97thDiq825xWD4Hwg8rYC
-         4PchHBZnlEhUad7TCfEqMBjXZw4mqfRAM0HDHdnTRbMEAp/+/anpVAsdzPC/nVQjdk3+
-         2EW4T2cYr0vulFgNw37lrbnxqjUSXsMKYGtO3duM97p/8VCS/9m4Z/grIVmKPJTHeeVs
-         k17OYac4FuQkUri2l+v9IkhBXKLbOr13r8oOr6VEL72MGQYp8cQg/OMz8HNM6La0KpT3
-         LP20TDx2l3nJO2YoJvIZh6STlYEP2HIKoOcf/1QpH6VLOcez+dP1OK3B42LLuhMFnB6S
-         2now==
-X-Gm-Message-State: AJIora/ppT2BL/4pk9HOqOLsbEZCILUu4FOaXcPXxdGsMX505LZcG0cV
-        bN8YtGprd4YXfOZb7MTKejT1QVi7Dm7aoqSn
-X-Google-Smtp-Source: AGRyM1shKllIGiUnXHGiJLH6+O6rAfySNJxSL+EK7w+lV4RU9sESPdtwOwhOZz2Yrya3DaMVYGje0w==
-X-Received: by 2002:a2e:a788:0:b0:25d:94fd:1a84 with SMTP id c8-20020a2ea788000000b0025d94fd1a84mr14986884ljf.177.1658313398531;
-        Wed, 20 Jul 2022 03:36:38 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id d29-20020a0565123d1d00b0047255d21124sm3752136lfv.83.2022.07.20.03.36.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 03:36:38 -0700 (PDT)
-Message-ID: <ab78f85c-dd0a-9176-103f-8e4abe01b8f9@linaro.org>
-Date:   Wed, 20 Jul 2022 12:36:36 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IQlS7BDnACDaCsMqM0o6ivue0vmf2zRpA7COhg03lwo=;
+        b=W70PMXd6n58cIhcttF6UD7X7UQFtOJIq5LYuVR8L6EPJ+wv4MXwJEZRBpva7wax6eA
+         2fbCc6cbX8dtcSET3vSrpXaSO0bRhqoDpFdnjnt9JURe4kLNebyEWriOuMhrjB4s4VdG
+         WSEwPG6pnh7aiFMNWVfd+H76n25KiXHiNvqlT3U/GvvksUOaz+NUv4BijCfWLdj37ZOt
+         Wwd9doeNlJI4tMH4FHHXUNlF8DZHd9S/glqZEveQsQcudv6/voqXQDBFHn/6FFLvQhZx
+         R2BLPPMQ5ru4t7ChAovy8Hc5VU4g4Hedpt9qSChOzI3v0YOodeTJXnyRZHZKdoy1iN3A
+         RVSA==
+X-Gm-Message-State: AJIora/KJJx2LG/H+M66u4GS7FHRSYl1CJ1bBT1nHI4KhW5o9HH5Ub5W
+        y1zBR7mfscqjAv9pC30z4JtfzZjeaEQBgAmx/lco0w==
+X-Google-Smtp-Source: AGRyM1tX7i9qvwRtaWPlkB1jU+Ujio9VTofp9GoBleumYJMZajM8x6Z77tLffLe5uj3zQ0r1d7iOtk39WF8f+ycpKQE=
+X-Received: by 2002:a17:906:106:b0:722:e997:a365 with SMTP id
+ 6-20020a170906010600b00722e997a365mr34590466eje.169.1658313442848; Wed, 20
+ Jul 2022 03:37:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: Add device tree for Ampere's Mt.
- Mitchell BMC
-Content-Language: en-US
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>
-Cc:     Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-References: <20220720085230.3801945-1-quan@os.amperecomputing.com>
- <20220720085230.3801945-3-quan@os.amperecomputing.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720085230.3801945-3-quan@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220719114521.868169025@linuxfoundation.org>
+In-Reply-To: <20220719114521.868169025@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 20 Jul 2022 16:07:11 +0530
+Message-ID: <CA+G9fYvckf9isc0eL7DfphD5tuV2jVSobmh9_acK4DZ26iLQcQ@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/43] 4.14.289-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 10:52, Quan Nguyen wrote:
-> The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
-> hardware reference platform with AmpereOne(TM) processor.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> Signed-off-by: Phong Vo <phong@os.amperecomputing.com>
-> Signed-off-by: Thang Q. Nguyen <thang@os.amperecomputing.com>
-> ---
-> v2 :
->   + Remove bootargs                                       [Krzysztof]
->   + Fix gpio-keys nodes name to conform with device tree binding
->   documents                                               [Krzysztof]
->   + Fix some nodes to use generic name                    [Krzysztof]
->   + Remove unnecessary blank line                         [Krzysztof]
->   + Fix typo "LTC" to "LLC" in license info and corrected license
->   info to GPL-2.0-only
-> 
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 577 ++++++++++++++++++
->  2 files changed, 578 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> 
+On Tue, 19 Jul 2022 at 17:27, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.289 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.289-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-(...)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> +
-> +&i2c3 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c4 {
-> +	status = "okay";
-> +
-> +	adc_i2c: adc-i2c@16 {
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Node name: just "adc"
+## Build
+* kernel: 4.14.289-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 5bd8b9267a7f243cbf509ea77626c97103c56fc3
+* git describe: v4.14.288-44-g5bd8b9267a7f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.288-44-g5bd8b9267a7f
 
-> +		compatible = "lltc,ltc2497";
-> +		reg = <0x16>;
-> +		vref-supply = <&voltage_mon_reg>;
-> +		#io-channel-cells = <1>;
-> +		status = "okay";
+## Test Regressions (compared to v4.14.288)
+No test regressions found.
 
-Isn't this new node? Why do you need status here?
+## Metric Regressions (compared to v4.14.288)
+No metric regressions found.
 
-> +	 };
-> +
-> +	eeprom@50 {
-> +		compatible = "atmel,24c64";
-> +		reg = <0x50>;
-> +		pagesize = <32>;
-> +	};
-> +
+## Test Fixes (compared to v4.14.288)
+No test fixes found.
 
-(...)
+## Metric Fixes (compared to v4.14.288)
+No metric fixes found.
 
-> +
-> +&gpio1 {
-> +	gpio-line-names =
-> +	/*18A0-18A7*/	"","","","","","","","",
-> +	/*18B0-18B7*/	"","","","","emmc-rst-n","","s0-soc-pgood","",
-> +	/*18C0-18C7*/	"uart1-mode0","uart1-mode1","uart2-mode0","uart2-mode1",
-> +			"uart3-mode0","uart3-mode1","uart4-mode0","uart4-mode1",
-> +	/*18D0-18D7*/	"","","","","","","","",
-> +	/*18E0-18E3*/	"","","","";
-> +};
-> +
+## Test result summary
+total: 111096, pass: 98012, fail: 211, skip: 11584, xfail: 1289
 
-You have a trailing line error.
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 286 total, 281 passed, 5 failed
+* arm64: 50 total, 47 passed, 3 failed
+* i386: 26 total, 25 passed, 1 failed
+* mips: 30 total, 30 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 16 total, 16 passed, 0 failed
+* s390: 12 total, 9 passed, 3 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 48 total, 47 passed, 1 failed
 
+## Test suites summary
+* fwts
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
 
-Best regards,
-Krzysztof
+--
+Linaro LKFT
+https://lkft.linaro.org

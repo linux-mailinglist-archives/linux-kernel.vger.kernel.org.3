@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE0C57BD57
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81F957BD5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 20:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbiGTSEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 14:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
+        id S236006AbiGTSEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 14:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiGTSEB (ORCPT
+        with ESMTP id S230292AbiGTSEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 14:04:01 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CAE5C36B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:03:59 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so2808325pjq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 11:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wPgDlsIjSt7ILiihh1+1WsRwcr42caYDplzbQCF0rgE=;
-        b=IjNXIRL/qkgJ7y9brcpaV0DL2vOv7xEwYYRX/524Il5GaA8rOGvwlKpaprpQpZlHiD
-         80YPJldEZmGIQrHMhcxclb8EWCC808UifrGFY7nmsQ/Y2h9+yl63gU3DfckOf2Ij81hY
-         ODN8KRsfagfQcOBm+PSn46bZRCP08+ON0QmUwy0/5w3JD64mTWNAOWdvLMHcfXdRP5Cb
-         IeKZO06dhtbGc3J8pWYl0E3IYuALQrqZ2PNtuZrfabfbYKeQZhu09jz/ALba5DKP6748
-         elh40lesNCnggiGowhwl9aX4839O6JqCgZzQYVMraYSlMJSGoOl2VyN3xQMaGUpsqgZV
-         RH1w==
+        Wed, 20 Jul 2022 14:04:38 -0400
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1355C94E;
+        Wed, 20 Jul 2022 11:04:37 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id b10so7515634pjq.5;
+        Wed, 20 Jul 2022 11:04:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=wPgDlsIjSt7ILiihh1+1WsRwcr42caYDplzbQCF0rgE=;
-        b=gBfP0NPmFpbS8tSF4UqBSV8hNHabFPNHCVYmkw8sedpZstz6sxipkA0MH7eA7PDf7N
-         CYNVSQFCnBfK1u7qcam1ipOxWfeisb5ShLwN2fik9DcDd0w/q1kMIfZ5fqHbX+ZVD+nw
-         MA/1KTHmwEfZupDhJwELSHjZZGmKmBy6In/1c+zglkAkZpGZxHDBOum1CFcQdoG7FEF5
-         tJLYtayK8hqWTY9OaDj8K1UVsm0GFhra/H9g3nRtK8y33EronOOD1fawpbG8tjCWf4LL
-         y0ngWI7bZZfqoa9n9eWmdsy1FjyW12UJ7TXxrbWEkpl9GpLP4RWijhm7N9BXWHhpB9og
-         v7wA==
-X-Gm-Message-State: AJIora9ebNNbtWdix57xuQJlxQK+qnHpOzdlckWnHwr2nn8E4BooifnJ
-        tI4dl2Xs10IXRquVc1YYqV4=
-X-Google-Smtp-Source: AGRyM1sLRjhnuqKI1RFALr1ui2VUMIF5f9K9B6eAOSsh9vnMBLzZF+fkYTFgvHL4gKncEEMi4xDl8Q==
-X-Received: by 2002:a17:903:2644:b0:16d:1f61:399e with SMTP id je4-20020a170903264400b0016d1f61399emr4783584plb.38.1658340239063;
-        Wed, 20 Jul 2022 11:03:59 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:f3dd])
-        by smtp.gmail.com with ESMTPSA id z1-20020a170903018100b0016bd8fb1fafsm14388024plg.307.2022.07.20.11.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 11:03:58 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 20 Jul 2022 08:03:56 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [RFC PATCH] workqueue: Unbind workers before sending them to
- exit()
-Message-ID: <YthDjPq3CtWc+o0/@slm.duckdns.org>
-References: <20220719165743.3409313-1-vschneid@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2DLDLzdBIlj0E3CffW9I9SY+0ccLj39YX6IMsm99lYc=;
+        b=aktSf1liK7of1YwjvV9Y/NSr3TtEtRPNaKxtQSq4pp2JID/Pt9zhicE7jlgMmigwkA
+         gd/KLTj/krDm/GCEk3tPoQZ9Hv6xLnGPnLukLPiPHuuzZfdsGf2rCY2d+TSpp4KMN6UQ
+         anipZDoabQ9XbeclH2Pg0xyjBVjmQiu5rPJlfgJfvnKDbj1DRs1NowN8r7Uo/JSfis3T
+         t/jplDRnBFcU1qWAxEdZhoOI8KeC832dyQPyiruU9/8fdUawEPtcMmp255VVaDxKE0zU
+         qJQUfYjx0zHhzmRLIL6j9SoX3OfQE5EC/L1iQva15W3kc9mlJO3W2g8TldwXINfithAU
+         wUNQ==
+X-Gm-Message-State: AJIora8tjeqmSjYE+wr3IR2LrAwijAA4CZv2pX1yjDT6IqUZihGd1Oy3
+        W/clhg0Al80hZ9Y1sPmAVHg=
+X-Google-Smtp-Source: AGRyM1t+npjVzNapGvdQOe6XU0uS9zS90ajnTnj2KhB8ABZvLighBBWMxjla7Skn/TpMUn71XUu7Vw==
+X-Received: by 2002:a17:90a:9406:b0:1f1:a0c0:75d4 with SMTP id r6-20020a17090a940600b001f1a0c075d4mr6846032pjo.198.1658340276699;
+        Wed, 20 Jul 2022 11:04:36 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:a7e0:78fc:9269:215b? ([2620:15c:211:201:a7e0:78fc:9269:215b])
+        by smtp.gmail.com with ESMTPSA id g1-20020a632001000000b004119deff40dsm12176331pgg.23.2022.07.20.11.04.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 11:04:35 -0700 (PDT)
+Message-ID: <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org>
+Date:   Wed, 20 Jul 2022 11:04:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719165743.3409313-1-vschneid@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
+        jason600.groome@gmail.com,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220630195703.10155-1-bvanassche@acm.org>
+ <20220630195703.10155-3-bvanassche@acm.org>
+ <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
+ <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
+ <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
+ <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
+ <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
+ <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 05:57:43PM +0100, Valentin Schneider wrote:
-> It has been reported that isolated CPUs can suffer from interference due to
-> per-CPU kworkers waking up just to die.
+On 7/20/22 10:44, Geert Uytterhoeven wrote:
+> On Wed, Jul 20, 2022 at 6:51 PM Bart Van Assche <bvanassche@acm.org> wrote:
+>> I'm not familiar with the SATA code but from a quick look it seems like
+>> the above code is only triggered from inside the ATA error handler
+>> (ata_do_eh() -> ata_eh_recover() -> ata_eh_revalidate_and_attach() ->
+>> schedule_work(&(ap->scsi_rescan_task) -> ata_scsi_dev_rescan()). It
+>> doesn't seem normal to me that the ATA error handler gets invoked during
+>> a resume. How about testing the following two code changes?
 > 
-> A surge of workqueue activity (sleeping workfn's exacerbate this) during
-> initial setup can cause extra per-CPU kworkers to be spawned. Then, a
-> latency-sensitive task can be running merrily on an isolated CPU only to be
-> interrupted sometime later by a kworker marked for death (cf.
-> IDLE_WORKER_TIMEOUT, 5 minutes after last kworker activity).
+> Thanks for your suggestions!
 > 
-> Affine kworkers to the wq_unbound_cpumask (which doesn't contain isolated
-> CPUs, cf. HK_TYPE_WQ) before waking them up after marking them with
-> WORKER_DIE.
+>> * In sd_start_stop_device(), change "return sd_submit_start(sdkp, cmd,
+>> sizeof(cmd))" into "sd_submit_start(sdkp, cmd, sizeof(cmd))" and below
+>> that call add "flush_work(&sdkp->start_done_work)". This makes
+>> sd_start_stop_device() again synchronous. This will learn us whether the
+>> behavior change is caused by submitting the START command from another
+>> context or by not waiting until the START command has finished.
 > 
-> This follows the logic of CPU hot-unplug, which has been packaged into
-> helpers for the occasion.
+> Unfortunately this doesn't have any impact.
+> 
+>> * Back out the above change, change "return sd_submit_start(sdkp, cmd,
+>> sizeof(cmd))" again into "sd_submit_start(sdkp, cmd, sizeof(cmd))" and
+>> below that statement add a call to
+>> scsi_run_queue(sdkp->device->request_queue). If this change helps it
+> 
+> (that's the static scsi_run_queue() in drivers/scsi/scsi_lib.c?)
+> 
+>> means that the scsi_run_queue() call is necessary to prevent reordering
+>> of the START command with other SCSI commands.
+> 
+> Unfortunately this doesn't have any impact either.
 
-Idea-wise, seems fine to me, but we have some other issues around twiddling
-cpu affinities right now, so let's wait a bit till Lai chimes in.
+That's surprising. Is there anything unusual about the test setup that I 
+should know, e.g. very small number of CPU cores or a very small queue 
+depth of the SATA device? How about adding pr_info() statements at the 
+start and end of the following functions and also before the return 
+statements in these functions to determine where execution of the START 
+command hangs?
+* sd_start_done().
+* sd_start_done_work().
 
-Thanks.
+Thanks,
 
--- 
-tejun
+Bart.

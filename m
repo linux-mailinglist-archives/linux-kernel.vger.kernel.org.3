@@ -2,148 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9382657BBF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5158157BC18
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbiGTQvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
+        id S235644AbiGTQzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235002AbiGTQvj (ORCPT
+        with ESMTP id S235504AbiGTQzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:51:39 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D598D675BB;
-        Wed, 20 Jul 2022 09:51:35 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:54210)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oECv8-00AUeC-Tm; Wed, 20 Jul 2022 10:51:34 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:40140 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oECv7-002zG9-U8; Wed, 20 Jul 2022 10:51:34 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Olivier Langlois <olivier@trillion01.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <192c9697e379bf084636a8213108be6c3b948d0b.camel@trillion01.com>
-        <9692dbb420eef43a9775f425cb8f6f33c9ba2db9.camel@trillion01.com>
-        <87h7i694ij.fsf_-_@disp2133>
-        <1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com>
-        <b3e43e07c68696b83a5bf25664a3fa912ba747e2.camel@trillion01.com>
-        <13250a8d-1a59-4b7b-92e4-1231d73cbdda@gmail.com>
-        <878rw9u6fb.fsf@email.froward.int.ebiederm.org>
-        <303f7772-eb31-5beb-2bd0-4278566591b0@gmail.com>
-        <87ilsg13yz.fsf@email.froward.int.ebiederm.org>
-        <8218f1a245d054c940e25142fd00a5f17238d078.camel@trillion01.com>
-        <a29a1649-5e50-4221-9f44-66a35fbdff80@kernel.dk>
-        <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Wed, 20 Jul 2022 11:51:27 -0500
-In-Reply-To: <87y1wnrap0.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Wed, 20 Jul 2022 11:49:31 -0500")
-Message-ID: <87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 20 Jul 2022 12:55:31 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99BDBC84
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:55:30 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id t1so31167984lft.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ghsRIl9JuEUAT7RkLvrtAJh5nIX2+4oeY+8sAkTqUi8=;
+        b=rrij9HiBkRbqiSHMRbuOYeDYl/1QDqdjMLDsMCllht89qyWj039D33oBZUzR62CBuK
+         WdSRzgXyO41YyPlFU5drYbYssIzqcYVDxLSaBjArT9IX8nBPC5bOrphbtCbi1OHsZwRV
+         ZpjYuDIhJbF9axDINZh6UiTHADnes0C+A4XibyzgKZ35/LoEpNphQlZh5SXgLvrt0A2C
+         m2z9n52ly2xSKbbnUIQXocBNzuyi0/he/66ipoZrJ5fj7hRYLYMSzgz8IP07hyknjazv
+         Ax/KB3y2KjPO1xHiJj0m/lGt6q3fCSEeIsAJEE5cm+B/NBsJQrxxN3bjkZlFwCac17Ss
+         LN8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ghsRIl9JuEUAT7RkLvrtAJh5nIX2+4oeY+8sAkTqUi8=;
+        b=p5WBC3HYKE9UV4mEXCERz6pp3UNFWFFyj3voNwL5FZCNrALFoR2H2NHetPfg6XW6Fi
+         3+XVWou5QsD7hCa7AWUo0fLZYh6OtVWmpSIznrFGnc8zrgBKPD9IRwHtwXY195MniZTR
+         yQDdK3oUvq/9zHexAusOyaNjPl0jElvvbYFcxvQlVKuI62+KJjjVQ1W3ukzSPm3umjU9
+         ALP5RApXZWeFzjG6OQl83gh4jYt6p6BVOmpv1v/PKtoNadtt/j8AjDWYGCa5Ino4sRuq
+         Df5bnXIR9hZYZnlNMlG/75Tp4RKcf+1sLOCFkR84uVwWw2csBmHPYOlsbVtk1G6S9RZT
+         nenw==
+X-Gm-Message-State: AJIora+pzdw0+rjoxtcVuk9LuCIxsSr8OnabU358yRP6kj3I3qNB65BZ
+        b+GlF6d/xHdEthRjZIIWBNlxlw==
+X-Google-Smtp-Source: AGRyM1vBII7bdjh9XymGuoIsbKTl3kq4QQ2UANvX7Rp6zTPRF7Oz9vGJ+aKWRqdUofgP5Ddq2mFV/Q==
+X-Received: by 2002:a05:6512:3d15:b0:489:d97d:8927 with SMTP id d21-20020a0565123d1500b00489d97d8927mr21395907lfv.80.1658336129030;
+        Wed, 20 Jul 2022 09:55:29 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id h24-20020a0565123c9800b004855e979abcsm3894307lfv.99.2022.07.20.09.55.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 09:55:28 -0700 (PDT)
+Message-ID: <bcbca05e-2b75-a405-b1ea-21b276931a90@linaro.org>
+Date:   Wed, 20 Jul 2022 18:55:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oECv7-002zG9-U8;;;mid=<87mtd3rals.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+oGLq5krvvMrRh4NiQGwHlLaqBKb8Xk7Q=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] arm64: dts: qcom: Add SKU6 for
+ sc7180-trogdor-pazquel-lte-parade
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220720025058.1.I5bfba8857ea0d43c747ecdc3a950875abd56927f@changeid>
+ <7a04c9af-0ccb-7711-249f-73908fe7ec36@linaro.org>
+ <CAD=FV=V1MqQzNxq_L8sGtu2JwAAL_FWKXkw9bhCHcD0DycFMUw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=V1MqQzNxq_L8sGtu2JwAAL_FWKXkw9bhCHcD0DycFMUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *****;Jens Axboe <axboe@kernel.dk>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 432 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.6 (1.1%), b_tie_ro: 3.2 (0.7%), parse: 1.20
-        (0.3%), extract_message_metadata: 11 (2.6%), get_uri_detail_list: 2.1
-        (0.5%), tests_pri_-1000: 10 (2.4%), tests_pri_-950: 1.01 (0.2%),
-        tests_pri_-900: 0.78 (0.2%), tests_pri_-90: 93 (21.6%), check_bayes:
-        91 (21.1%), b_tokenize: 6 (1.3%), b_tok_get_all: 8 (1.9%),
-        b_comp_prob: 1.70 (0.4%), b_tok_touch_all: 73 (16.8%), b_finish: 0.82
-        (0.2%), tests_pri_0: 296 (68.5%), check_dkim_signature: 0.41 (0.1%),
-        check_dkim_adsp: 3.3 (0.8%), poll_dns_idle: 1.92 (0.4%), tests_pri_10:
-        2.7 (0.6%), tests_pri_500: 8 (1.8%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 2/2] coredump: Allow coredumps to pipes to work with io_uring
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 20/07/2022 17:13, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, Jul 19, 2022 at 11:10 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 20/07/2022 04:51, Yunlong Jia wrote:
+>>> SKU6 is LTE(w/o eSIM)+WIFI+Parade
+>>>
+>>> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+>>> ---
+>>>
+>>>  arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+>>> index 764c451c1a857..4649eaec6318d 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+>>> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+>>> @@ -14,7 +14,7 @@
+>>>
+>>>  / {
+>>>       model = "Google Pazquel (Parade,LTE)";
+>>> -     compatible = "google,pazquel-sku4", "qcom,sc7180";
+>>> +     compatible = "google,pazquel-sku4", "google,pazquel-sku6", "qcom,sc7180";
+>>
+>> You miss binding change and sku6 should be rather added before sku4 as
+>> it is more specific, isn't it?
+> 
+> Just to close the loop: the order doesn't matter at all. Neither sku4
+> nor sku6 is "more specific". One has the eSIM stuffed and one doesn't.
 
-Now that io_uring like everything else stops for coredumps in
-get_signal the code can once again allow any interruptible
-condition after coredump_wait to interrupt the coredump.
+Thanks Doug. Then the commit description could be improved, so reviewer
+does not have to ask such questions. Otherwise it is confusing to see a
+board which says it is for LTE version but it is actually not for LTE
+version (or whatever combination you have).
 
-Clear TIF_NOTIFY_SIGNAL after coredump_wait, to guarantee that
-anything that sets TIF_NOTIFY_SIGNAL before coredump_wait completed
-won't cause the coredumps to interrupted.
-
-With all of the other threads in the process stopped io_uring doesn't
-call task_work_add on the thread running do_coredump.  Combined with
-the clearing of TIF_NOTIFY_SIGNAL this allows processes that use
-io_uring to coredump through pipes.
-
-Restore dump_interrupted to be a simple call to signal_pending
-effectively reverting commit 06af8679449d ("coredump: Limit what can
-interrupt coredumps").  At this point only SIGKILL delivered to the
-coredumping thread should be able to cause signal_pending to return
-true.
-
-A nice followup would be to find a reliable race free way to modify
-task_work_add and probably set_notify_signal to skip setting
-TIF_NOTIFY_SIGNAL once it is clear a task will no longer process
-signals and other interruptible conditions.  That would allow
-TIF_NOTIFY_SIGNAL to be cleared where TIF_SIGPENDING is cleared in
-coredump_zap_process.
-
-To be as certain as possible that this works, I tested this with
-commit 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
-reverted.  Which means that not only is TIF_NOTIFY_SIGNAL prevented
-from stopping coredumps to pipes, the sequence of stopping threads to
-participate in the coredump avoids deadlocks that were possible
-previously.
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- fs/coredump.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 67dda77c500f..c06594f56cbb 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -476,7 +476,7 @@ static bool dump_interrupted(void)
- 	 * but then we need to teach dump_write() to restart and clear
- 	 * TIF_SIGPENDING.
- 	 */
--	return fatal_signal_pending(current) || freezing(current);
-+	return signal_pending(current);
- }
- 
- static void wait_for_dump_helpers(struct file *file)
-@@ -589,6 +589,9 @@ void do_coredump(const kernel_siginfo_t *siginfo)
- 
- 	old_cred = override_creds(cred);
- 
-+	/* Don't break out of interruptible sleeps */
-+	clear_notify_signal();
-+
- 	ispipe = format_corename(&cn, &cprm, &argv, &argc);
- 
- 	if (ispipe) {
--- 
-2.35.3
-
+Best regards,
+Krzysztof

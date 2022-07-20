@@ -2,206 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D9157B2BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EE757B2B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237871AbiGTIUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S239092AbiGTITt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237710AbiGTIUR (ORCPT
+        with ESMTP id S237547AbiGTITr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:20:17 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790363F3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:20:14 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id j67so8298847ybb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:20:14 -0700 (PDT)
+        Wed, 20 Jul 2022 04:19:47 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5F069F0E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:19:45 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z12so25032642wrq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:19:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=J0M63ZbgDC7xQ5EwBxC6IcpLq6pCXZViuh69dP2t4M4=;
-        b=grv6cjZ1OLCbVvxLWw/8kFDTJlSRkm9ybJEqphSyPWnZeLDuEqdr3GrBvDGof30V7E
-         N+e0zxzbkxvL4S202GcKPwGLrPDatCiscatboB9DaMc1tqDiEcub9H+KNZU9/UERNW/3
-         u9U8R8Sl8O4GMu37Ux+bkD5jYlTEiOhlvUmr6uucfTsGYPngGe0ivN2nfrUoqDefl19h
-         ik8weOj8635dTfoyNAzc2jriOWAgpvDE0Jvil0V9eFnDn2YejdSmrXdxk+UaGFs4Vx7g
-         LGiAU443ow+tHu5BFnLuHl/kCyAfZJK/eSHeYbbXd03tQj5NoU+MidGoOL4lTD1mAPc2
-         bduw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=H3cfWCLBlBYx1Erw4k3ViEzQD+OSmuEO+WWt3HWcPoA=;
+        b=rR6JZ+S7IixgYfovd+L1INMwl+54Px8Y0e+3XmVtikQZpCf5s9gkH9XepDR74CWKOZ
+         9JLTcSPGceYWc1eOO1jx2oXTj8YqOvqS+wG9p4hW9xU9asnbOrl0muhhwwYVM34sKjyS
+         rGNKO6m3k8yyWwgDgA44/wk7ypQ69ZOBiVbJOXplDd3cyZ4R2JYioguX7H/tVjlI2fGM
+         q7p8VdQq0WofPlTG8vZcUCZqagSXzBP8TgIbaBoy52M3B4BtUM57AKJhWQroXQr2u/Ik
+         Q2rYGF/IHqCPOuX/qRNGSq9ICsXBurc2g1nYPIlCV4spj2cX1em/XfRo3bW2bZ0s+rWq
+         tK5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=J0M63ZbgDC7xQ5EwBxC6IcpLq6pCXZViuh69dP2t4M4=;
-        b=eMnDOpisOeyadtqPR6XmvVp33y3/43fqqWkqQyqmUd3nGIQftMe0skZJV4mktp2AV9
-         yEaBe/oo9F5gzlLlBamsIBgC5PWm2efDT5he4Izv7HGeTWxUYSOT4ydZ++mZHAGOFuEW
-         liNi6gneZQqj5J5Di/pG6fBx7C99zz8Rpjg0QtjladLBUpUZdU8oKkIUN5dpjqAYcErz
-         owUc4REZkEES6YXj0I3vMwmAgCQDlY0hQjA0b8YkKaBTpaBvV7vpdSpU/4LeANhdNHfj
-         tNBzttAiTmI3pKCQw2bX7Lo0FBj8FWUPHNscD+hqhPbihXSwv4IHXRz5eBkpBOduSljt
-         Bjjw==
-X-Gm-Message-State: AJIora8h1s8PSvb8K9i53TKQrsFJNX0sVgx405SUFiuQr3tUu+KeyMI/
-        oCH/KYly1qAQltZd3CvXbCmcyCaD6FJbCpd6BH/+XQ==
-X-Google-Smtp-Source: AGRyM1txbe9fP0TCW8vkpS0DylAxl0pyGSHgCt2clQXUA3ZsUmqZ2G9C/cx/GKTb5b36/jML+lPfm0g24Zl8qdtn+Yg=
-X-Received: by 2002:a25:d64a:0:b0:66f:7d56:913d with SMTP id
- n71-20020a25d64a000000b0066f7d56913dmr38735369ybg.199.1658305213152; Wed, 20
- Jul 2022 01:20:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=H3cfWCLBlBYx1Erw4k3ViEzQD+OSmuEO+WWt3HWcPoA=;
+        b=aE/I9XWIWn8KN9lfh6lbLpOTCbUYTjGuTF2oEsjGjWzShNY6wsEzW5S270TkaDOYUI
+         opzIIrJMpVKaxpUBtTAifiH7EWCEiBY9z/Na7oWzSguw4n8IeRtj9U8ou2TeG71qAm8u
+         Q1PH8B/rgnUvcnCvUQ9GUqXpFyRp2SN4USCCKYgwbyTsvVD/kr0S4GJess09JDnXLl5f
+         0icCQ07i5eQ23gjhOB46fiE4aZNb6kG/HFQDW/EDXVE5D/NPAxEITc4RWMyyyFemxpuU
+         CtHcgG+bdzcVNSrDncTFKxsPRJhWlHpbCxtHh+ygN8SP2Ofk6YE86vJ0hTlir4wD0D3R
+         V5Ew==
+X-Gm-Message-State: AJIora9wII2h6rknBsFNEksrcfQ4bYSRrAf2rwg+k/cLUX/etK3DAquf
+        kAwz+uvzsmpN1uBKhvuGkDJnWA==
+X-Google-Smtp-Source: AGRyM1tKM9yWRqu/6hb5ToXfPCjx8kO+ohEW+UULtwcZ7Bj7hyGH5XdN95owydZj/Z9UEhfe392XnQ==
+X-Received: by 2002:a5d:64c8:0:b0:21d:9873:bbf0 with SMTP id f8-20020a5d64c8000000b0021d9873bbf0mr29529081wri.150.1658305184429;
+        Wed, 20 Jul 2022 01:19:44 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003a31b79dc0esm8936892wmb.1.2022.07.20.01.19.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 01:19:43 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 09:19:41 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        katie.morris@in-advantage.com
+Subject: Re: [PATCH v13 net-next 9/9] mfd: ocelot: add support for the
+ vsc7512 chip via spi
+Message-ID: <Yte6nTJ3IMJhdLAp@google.com>
+References: <20220705204743.3224692-1-colin.foster@in-advantage.com>
+ <20220705204743.3224692-10-colin.foster@in-advantage.com>
+ <YtVrtOHy3lAeKCRH@google.com>
+ <Ytbuj6qfUj1NOitS@euler>
 MIME-Version: 1.0
-References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
- <20220712231328.5294-7-kirill.shutemov@linux.intel.com> <CAG_fn=W-pTCxJ6vEa6aSuAiQDxj0n0_8VgpUhp+TxYDrF8AReg@mail.gmail.com>
- <20220720005724.mwodxwm5r5gayqrm@black.fi.intel.com>
-In-Reply-To: <20220720005724.mwodxwm5r5gayqrm@black.fi.intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 20 Jul 2022 10:19:36 +0200
-Message-ID: <CAG_fn=X=yQrWOX43PbLR=VGRVvMgj0_e2x5Mwf0bSZ0DhTQDAQ@mail.gmail.com>
-Subject: Re: [PATCHv5 06/13] x86/mm: Provide ARCH_GET_UNTAG_MASK and ARCH_ENABLE_TAGGED_ADDR
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ytbuj6qfUj1NOitS@euler>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 2:57 AM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> On Mon, Jul 18, 2022 at 07:47:44PM +0200, Alexander Potapenko wrote:
-> > On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
-> > <kirill.shutemov@linux.intel.com> wrote:
-> > >
-> > > Add a couple of arch_prctl() handles:
-> > >
-> > >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required numb=
-er
-> > >    of tag bits. It is rounded up to the nearest LAM mode that can
-> > >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
-> > >
-> > >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
-> > >    bits located in the address.
-> > >
-> > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > ---
-> > >  arch/x86/include/uapi/asm/prctl.h |  3 ++
-> > >  arch/x86/kernel/process_64.c      | 60 +++++++++++++++++++++++++++++=
-+-
-> > >  2 files changed, 62 insertions(+), 1 deletion(-)
-> >
-> >
+On Tue, 19 Jul 2022, Colin Foster wrote:
+
+> On Mon, Jul 18, 2022 at 03:18:28PM +0100, Lee Jones wrote:
+> > On Tue, 05 Jul 2022, Colin Foster wrote:
+> > 
+> > > +MODULE_IMPORT_NS(MFD_OCELOT_SPI);
+> > > diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
+> > > new file mode 100644
+> > > index 000000000000..0c1c5215c706
+> > > --- /dev/null
+> > > +++ b/drivers/mfd/ocelot-spi.c
+> > > @@ -0,0 +1,317 @@
+> > > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > > +/*
+> > > + * SPI core driver for the Ocelot chip family.
+> > > + *
+> > > + * This driver will handle everything necessary to allow for communication over
+> > > + * SPI to the VSC7511, VSC7512, VSC7513 and VSC7514 chips. The main functions
+> > > + * are to prepare the chip's SPI interface for a specific bus speed, and a host
+> > > + * processor's endianness. This will create and distribute regmaps for any
+> > > + * children.
+> > > + *
+> > > + * Copyright 2021, 2022 Innovative Advantage Inc.
+> > > + *
+> > > + * Author: Colin Foster <colin.foster@in-advantage.com>
+> > > + */
 > > > +
-> > > +static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned l=
-ong nr_bits)
-> > > +{
-> > > +       int ret =3D 0;
+> > > +#include <linux/ioport.h>
+> > > +#include <linux/kconfig.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/regmap.h>
+> > > +#include <linux/spi/spi.h>
 > > > +
-> > > +       if (!cpu_feature_enabled(X86_FEATURE_LAM))
-> > > +               return -ENODEV;
-> >
-> > Hm, I used to think ENODEV is specific to devices, and -EINVAL is more
-> > appropriate here.
-> > On the other hand, e.g. prctl(PR_SET_SPECULATION_CTRL) can also return =
-ENODEV...
->
-> I'm fine either way. Although there are way too many -EINVALs around, so
-> it does not communicate much to user.
->
-> > >  long do_arch_prctl_64(struct task_struct *task, int option, unsigned=
- long arg2)
-> > >  {
-> > >         int ret =3D 0;
-> > > @@ -829,7 +883,11 @@ long do_arch_prctl_64(struct task_struct *task, =
-int option, unsigned long arg2)
-> > >         case ARCH_MAP_VDSO_64:
-> > >                 return prctl_map_vdso(&vdso_image_64, arg2);
-> > >  #endif
-> > > -
-> > > +       case ARCH_GET_UNTAG_MASK:
-> > > +               return put_user(task->mm->context.untag_mask,
-> > > +                               (unsigned long __user *)arg2);
-> >
-> > Can we have ARCH_GET_UNTAG_MASK return the same error value (ENODEV or
-> > EINVAL) as ARCH_ENABLE_TAGGED_ADDR in the case the host doesn't
-> > support LAM?
-> > After all, the mask does not make much sense in this case.
->
-> I'm not sure about this.
->
-> As it is ARCH_GET_UNTAG_MASK returns -1UL mask if LAM is not present or
-> not enabled. Applying this mask will give correct result for both.
+> > > +#include <asm/byteorder.h>
+> > > +
+> > > +#include "ocelot.h"
+> > > +
+> > > +#define REG_DEV_CPUORG_IF_CTRL		0x0000
+> > > +#define REG_DEV_CPUORG_IF_CFGSTAT	0x0004
+> > > +
+> > > +#define CFGSTAT_IF_NUM_VCORE		(0 << 24)
+> > > +#define CFGSTAT_IF_NUM_VRAP		(1 << 24)
+> > > +#define CFGSTAT_IF_NUM_SI		(2 << 24)
+> > > +#define CFGSTAT_IF_NUM_MIIM		(3 << 24)
+> > > +
+> > > +#define VSC7512_DEVCPU_ORG_RES_START	0x71000000
+> > > +#define VSC7512_DEVCPU_ORG_RES_SIZE	0x38
+> > > +
+> > > +#define VSC7512_CHIP_REGS_RES_START	0x71070000
+> > > +#define VSC7512_CHIP_REGS_RES_SIZE	0x14
+> > > +
+> > > +struct spi_device;
+> > 
+> > Why not just #include?
+> 
+> I mis-understood this to mean drivers/mfd/ocelot-spi.c when it meant
+> drivers/mfd/ocelot.h. Thanks.
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220701192609.3970317-10-colin.foster@in-advantage.com/#24921057
+> 
+> """
+> You missed a lot of forward declarations that are used in this file.
+> 
+> Like
+> 
+> struct spi_device;
+> """
 
-Is anyone going to use this mask if tagging is unsupported?
-Tools like HWASan won't even try to proceed in that case.
+spi_device is used in *this* file.
 
-> Why is -ENODEV better here? Looks like just more work for userspace.
+You should explicitly add the include file.
 
-This boils down to the question of detecting LAM support I raised previousl=
-y.
-It's nice to have a syscall without side effects to check whether LAM
-can be enabled at all (e.g. one can do the check in the parent process
-and conditionally enable LAM in certain, but not all, child processes)
-CPUID won't help here, because the presence of the LAM bit in CPUID
-doesn't guarantee its support in the kernel, and every other solution
-is more complicated than just issuing a system call.
-
-Note that TBI has PR_GET_TAGGED_ADDR_CTRL, which can be used to detect
-the presence of memory tagging support.
-
->
-> >
-> > > +       case ARCH_ENABLE_TAGGED_ADDR:
-> > > +               return prctl_enable_tagged_addr(task->mm, arg2);
-> > >         default:
-> > >                 ret =3D -EINVAL;
-> > >                 break;
-> > > --
-> > > 2.35.1
-> > >
-> >
-> >
-> > --
-> > Alexander Potapenko
-> > Software Engineer
-> >
-> > Google Germany GmbH
-> > Erika-Mann-Stra=C3=9Fe, 33
-> > 80636 M=C3=BCnchen
-> >
-> > Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-> > Registergericht und -nummer: Hamburg, HRB 86891
-> > Sitz der Gesellschaft: Hamburg
->
-> --
->  Kirill A. Shutemov
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

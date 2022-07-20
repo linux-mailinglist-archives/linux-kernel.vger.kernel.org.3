@@ -2,144 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7174457BB31
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDE957BB38
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237448AbiGTQSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
+        id S234320AbiGTQSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiGTQSD (ORCPT
+        with ESMTP id S238337AbiGTQSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:18:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857173CBD4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658333882; x=1689869882;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PD8parkOBN/qk988ED4eOf8SCsPHOxZ9nlj1lRTxuPU=;
-  b=Bb1Ew+E7dO4MI7NJy4EgijUG3Wf04QF2M3aGZb4e8ThPygOuCoBVCxSn
-   lldb5F0GCQtjSpfG3aw8SKMznnHCc60psJ0ghLQV1+v3tcboL2X393+rh
-   vt+vJ5t1GUjBBuw+vtNIhBbq/wEFdAfyGE45nYYg8o2bFyXXtfGWOvoHn
-   g94uua+oFdluHjs1AoTW9Qt1VZq4kcPvxUTG2KODigY0HTnlfGpLW4BEt
-   fXaqObyoK9KHg45lH8yjlpO9k07Q2MIpxnD3tSEt4PKzjzexh9o5Kfsia
-   ql1bEJQCZeHhmomHm69K0srbtUWXp+yfcZJY0aiSXhjoF+brHJJgOZWbg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="348515750"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="348515750"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 09:17:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="665923359"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Jul 2022 09:17:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id D601A199; Wed, 20 Jul 2022 19:17:51 +0300 (EEST)
-Date:   Wed, 20 Jul 2022 19:17:51 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Kai Huang <kai.huang@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 4/5] x86/mm: Add noalias variants of
- set_memory_*crypted() functions
-Message-ID: <20220720161751.hqztgi6vdxaif6zf@black.fi.intel.com>
-References: <b4190b5d-89e8-b02f-5ef6-c05047af8166@intel.com>
- <20220627151257.fhynhvcnpk22kflw@black.fi.intel.com>
- <fe896ec7-cfce-e8ce-240d-88cca47f8996@intel.com>
- <6b84f9058ce5e60fdf3e4abd075a2b8f591ccffc.camel@intel.com>
- <20220705152910.rq2ga25gnw7kuvt5@box.shutemov.name>
- <5804d4a8-8c5f-5352-8eed-4962e0adca1c@linux.intel.com>
- <20220719161354.27cak6zy3uws3fvm@black.fi.intel.com>
- <1f320d34-c467-38fa-17b1-d0c7cde7b0d0@linux.intel.com>
- <20220719215534.obolreae5dxdk223@black.fi.intel.com>
- <40131b10-7bff-6672-2f2d-179fdd65c430@linux.intel.com>
+        Wed, 20 Jul 2022 12:18:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD5C54050;
+        Wed, 20 Jul 2022 09:18:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF0B3B8210A;
+        Wed, 20 Jul 2022 16:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D508C341D0;
+        Wed, 20 Jul 2022 16:18:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658333919;
+        bh=dBAYRKIzFm0RTKOcH+0KPke3E8MEw8rlIWS4O1tZUf8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=T9YI5+FhKac8fuIV3QPR3CTu79OZY1DHEEAfFE4Iim6EREIDLDo+mQtP1mxW1sggg
+         yt7JoQkZfykvX12pala/eTUXAaJ3AkijMLabBuMpLpzF+Up0VP8nP6WqWD5oYllZ7V
+         T/NcMA6ky6NLqgMz9bHnkh7JhSPYcB9qMKxguCKk6PZQTgW/+j7Np/I9ItGdl8R3Sf
+         IirxP8/4VzC0NN6Oqc19EFy/Tzj7n1fs3rlwpeMpIg74IFPBFuGlJoUI+Xdqks+UgY
+         yzjYj2x+/rSwjxcUbDFOjRGhWwOh6e1hQLkAqsSbS8DfftnnfN4IZaFoBIxbhqHYd8
+         hlxESxWG0hfLQ==
+Received: by mail-vs1-f48.google.com with SMTP id l190so16812109vsc.0;
+        Wed, 20 Jul 2022 09:18:39 -0700 (PDT)
+X-Gm-Message-State: AJIora8M3AUpI++Smmzjy6ERlkbaWrW8kWPO9r5Yuoh9RrB662lYXVfn
+        6hVr4oFzSOWHwGDOdfdrdJNMcycKntDVJastKQ==
+X-Google-Smtp-Source: AGRyM1voQ4F5sT5eKvu1fTJ7ITqpMhh2FJ7XwBQbxVTbwxyO9/skYla1F1uslswBejdiQH8uJSTEQjOOUOMZ4R5nVvM=
+X-Received: by 2002:a67:c18e:0:b0:357:5fc3:45d7 with SMTP id
+ h14-20020a67c18e000000b003575fc345d7mr13075314vsj.53.1658333918336; Wed, 20
+ Jul 2022 09:18:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <40131b10-7bff-6672-2f2d-179fdd65c430@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+-6iNz8DTjAMXnWuOd=0W=qa6J4uD03oH3RJezEk1WxaUN1NA@mail.gmail.com>
+ <20220719200332.GA1552587@bhelgaas> <CA+-6iNzn=JsG=xU2BxagyfeUMZ13p9yg=y+_wVcsAaZ0NgEvKg@mail.gmail.com>
+In-Reply-To: <CA+-6iNzn=JsG=xU2BxagyfeUMZ13p9yg=y+_wVcsAaZ0NgEvKg@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 20 Jul 2022 10:18:27 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLm5pWFNLMYjRXrBNYumOd0Vdyaxj0+PGnABQbjA6bDBQ@mail.gmail.com>
+Message-ID: <CAL_JsqLm5pWFNLMYjRXrBNYumOd0Vdyaxj0+PGnABQbjA6bDBQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+To:     Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 07:56:04AM -0700, Sathyanarayanan Kuppuswamy wrote:
-> diff --git a/arch/x86/coco/mem.c b/arch/x86/coco/mem.c
-> new file mode 100644
-> index 000000000000..ef76a8accc1e
-> --- /dev/null
-> +++ b/arch/x86/coco/mem.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Confidential Computing Decrypted Memory Allocator
-> + *
-> + * Copyright (C) 2022 Intel Corporation, Inc.
-> + *
-> + */
-> +
-> +#undef pr_fmt
-> +#define pr_fmt(fmt)     "cc/mem: " fmt
-> +
-> +#include <linux/export.h>
-> +#include <linux/mm.h>
-> +#include <linux/cc_platform.h>
-> +#include <linux/set_memory.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/dma-mapping.h>
-> +
-> +#include <asm/coco.h>
-> +#include <asm/processor.h>
-> +
-> +#define CC_MEM_DRIVER          "ccmem"
-> +
-> +struct platform_device *mem_pdev;
+On Wed, Jul 20, 2022 at 8:53 AM Jim Quinlan <james.quinlan@broadcom.com> wrote:
+>
+> On Tue, Jul 19, 2022 at 4:03 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > On Tue, Jul 19, 2022 at 09:08:48AM -0400, Jim Quinlan wrote:
+> > > On Mon, Jul 18, 2022 at 6:40 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Mon, Jul 18, 2022 at 02:56:03PM -0400, Jim Quinlan wrote:
+> > > > > On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
+> > > > > > > Currently, the function does the setup for establishing PCIe link-up
+> > > > > > > with the downstream device, and it does the actual link-up as well.
+> > > > > > > The calling sequence is (roughly) the following in the probe:
+> > > > > > >
+> > > > > > > -> brcm_pcie_probe()
+> > > > > > >     -> brcm_pcie_setup();                       /* Set-up and link-up */
+> > > > > > >     -> pci_host_probe(bridge);
+> > > > > > >
+> > > > > > > This commit splits the setup function in two: brcm_pcie_setup(), which only
+> > > > > > > does the set-up, and brcm_pcie_start_link(), which only does the link-up.
+> > > > > > > The reason why we are doing this is to lay a foundation for subsequent
+> > > > > > > commits so that we can turn on any power regulators, as described in the
+> > > > > > > root port's DT node, prior to doing link-up.
+> > > > > >
+> > > > > > All drivers that care about power regulators turn them on before
+> > > > > > link-up, but typically those regulators are described directly under
+> > > > > > the host bridge itself.
+> > > > >
+> > > > > Actually, what you describe is what I proposed with my v1 back in Nov 2020.
+> > > > > The binding commit message said,
+> > > > >
+> > > > >     "Quite similar to the regulator bindings found in
+> > > > >     "rockchip-pcie-host.txt", this allows optional regulators to be
+> > > > >     attached and controlled by the PCIe RC driver."
+> > > > >
+> > > > > > IIUC the difference here is that you have regulators described under
+> > > > > > Root Ports (not the host bridge/Root Complex itself), so you don't
+> > > > > > know about them until you've enumerated the Root Ports.
+> > > > > > brcm_pcie_probe() can't turn them on directly because it doesn't know
+> > > > > > what Root Ports are present and doesn't know about regulators below
+> > > > > > them.
+> > > > >
+> > > > > The reviewer's requested me to move the regulator node(s)
+> > > > > elsewhere, and at some point later it was requested to be placed
+> > > > > under the Root Port driver.  I would love to return them under the
+> > > > > host bridge, just say the word!
+> > > >
+> > > > Actually, I think my understanding is wrong.  Even though the PCI core
+> > > > hasn't enumerated the Root Port as a pci_dev, brcm_pcie_setup() knows
+> > > > about it and should be able to look up the regulators and turn them
+> > > > on.
+> > >
+> > > One can do this with
+> > >         regulator_bulk_get(NULL, ...);
+> > >
+> > > However, MarkB did not like the idea of a driver getting the
+> > > regulator from the global DT namespace [1].
+> > >
+> > > For the RC driver, one  cannot invoke  regulator_bulk_get(dev, ...)
+> > > if there is not a direct child regulator node.  One needs to use the
+> > > Port driver device.  The Port driver device does not exist at this
+> > > point unless one tries to prematurely create it; I tried this and it
+> > > was a mess to say the least.
+> > >
+> > > > Can you dig up the previous discussion about why the regulators need
+> > > > to be under the Root Port and why they can't be turned on before
+> > > > calling pci_host_probe()?
+> > >
+> > > RobH did not want the regulators to be under the RC as he said their
+> > > DT location should resemble the HW [2].  The consensus evolved to
+> > > place it under the port driver, which can provide a general
+> > > mechanism for turning on regulators anywhere in the PCIe tree.
+> >
+> > I don't want to redesign this whole thing.  I just want a crisp
+> > rationale for the commit log.
+> >
+> > All other drivers (exynos, imx6, rw-rockchip, histb, qcom, tegra194,
+> > tegra, rockchip-host) have regulators for downstream PCIe power
+> > directly under the RC.  If putting the regulators under an RP instead
+> > is the direction of the future, I guess that might be OK, and I guess
+> > the reasons are:
+> >
+> >   1) Slot or device power regulators that are logically below the RP
+> >      should be described that way in the DT.
+> >
+> >   2) Associating regulators with a RP allows the possibility of
+> >      selectively controlling power to slots/devices below the RP,
+> >      e.g., to power down devices below RP A when suspending while
+> >      leaving wakeup devices below RP B powered up.
+> >
+> > I think in your case the motivating reason is 2).
+> >
+> > Your commit log for "Add mechanism to turn on subdev regulators"
+> > suggests that you want some user control of endpoint power, e.g., via
+> > sysfs, but I don't see that implemented yet except possibly via a
+> > "remove" file that would unbind the driver and remove the entire
+> > device.
+> Hi Bjorn,
+>
+> Initially we wanted to (a) turn on any regulator found under the RC
+> node and (b) allow the possibility of the regulator to control the
+> EP's power. From the feedback, we realized early on that neither of
+> these were going to fly, so we conceded both requests and just wanted
+> to turn on standard PCIe regulators.  Upon reading the aforementioned
+> commit message I realize that there are a couple of leftover sentences
+> from these early days that must be removed.
+>
+> I think when I submitted v1 of the original series that only the
+> rockchip driver had regulators under the RC.   And my recollection was
+> that this was accepted but there was apprehension of this turning into
+> the "standard" way of turning on such regulators,  as the location of
+> the regulator nodes was in question.
+>
+> In short, I would be quite content  to follow the existing examples.
 
-'static'?
+The existing examples are, in general, incomplete and only work for
+the simplest cases.
 
-> +dma_addr_t handle;
+There's 2 cases to consider here. The first is standard slots with
+standard PCIe signals (e.g. PERST#) and voltage rails. The 2nd is
+either non-standard slots or just soldered down devices which could
+have any number of device specific resources. In the latter case,
+those resources need to go into the node for the device. For the
+former case (which we are discussing here), putting the resources in
+the upstream (side of the link) node is fine. That's the root port
+node(s) or switch port nodes. However, since most host bridges are a
+single RP and don't put the RP node in DT, we've ended up with these
+properties in host bridge nodes. That's fine as long as it's a single
+RP and device. When it is not, we need to do something different. The
+only way this scales is putting resources in the port nodes as those
+are what have a 1:1 relationship to slots. If that's supported, then
+the simple cases are also easily supported with if the resources are
+not found in the port node/device, then look for them in the parent
+node. That's also the path for how we get the handling of PERST out of
+every host bridge driver.
 
-Hm. How does it work with >1 allocation a time?
-
-> +
-> +/* Allocate decrypted memory of given size */
-> +void *cc_decrypted_alloc(size_t size, gfp_t gfp)
-> +{
-> +       if (!mem_pdev)
-> +               return NULL;
-> +
-> +       return dma_alloc_coherent(&mem_pdev->dev, size, &handle, gfp);
-> +}
-> +
-> +/* Free given decrypted memory */
-> +void cc_decrypted_free(void *addr, size_t size)
-> +{
-> +       if (!mem_pdev)
-> +               return;
-> +
-> +       dma_free_coherent(&mem_pdev->dev, size, addr, handle);
-> +}
-> +
-
--- 
- Kirill A. Shutemov
+Rob

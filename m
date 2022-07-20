@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF63157BB5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B7657BB5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233704AbiGTQYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S235069AbiGTQYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiGTQYc (ORCPT
+        with ESMTP id S230451AbiGTQYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:24:32 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8B6171B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:31 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id b11so33941333eju.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:31 -0700 (PDT)
+        Wed, 20 Jul 2022 12:24:36 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E4361B0C
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:35 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id va17so34058395ejb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=EpBkigZDhPdfhuuO8b2HxzOasU8CDpEiB+HyHCiHWt8=;
-        b=po6uQkahdsywOnTCYjRZtZ5cGXET4QXRdc5MHCTVuF8bIYosXLvwPTjBs4D+F0koMa
-         p+gBuIsV5KTiJL1YdkWt+zgO1ocpRVE1QfOKajsYeJUai6m5aSk+CO+pPnpppk4lwEFV
-         syFqKpsUbCAZ0Bzev4H2WGMlgIpub1TlAK5hz9ZzFPTG41KhRd3RKuFKCe2TIjha4/Y8
-         onsxE/7xTjYTCARe8PgFOQroCHe0hUswEJvZqPKWuMlB1Lnd3JV7QjHqBud0JgpWmLZ9
-         X2NeIuiR2dHNXxiBflLOn4qYMFIwWy6Rbxs8wUYsHDwGVZpTor30Aw/nHHrpxvyo8YLI
-         v+iw==
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=A1ulf9tl9d6CNgfQ9aU3xsJISTrMA+hS9QZOTqZ3etU=;
+        b=B1fpFgIPrLCBw3JbTobhegsCRwhKHLeS3mIn9zQfzDz/igoUAq0LQtKuF76sY7/xlB
+         Os0oA4Z8ack8TjxSQfRD2lIPWg5/ZG2dvSLckQfu2xFSHWU/5WPWhWGE3nA/wyKHTsBm
+         b2Wp5QP3G3uSHHP0Y0DR8oQA1Qx9g6nPcjIHY/OX71Zfzh7/OU+ribb8eBNV3Uq/sfxx
+         hZUUwttFv8X8d/a9+Dhi8rwGWS3mLTF8/zhe1SYse5zngaPzAxl73pZlQ0pmIK4/gTmp
+         uTeJjWSlnJRiuWoqNi5cFW8RqHCSa4PDvCt/O79BFhYNisZCQiUXKzm+pDSoKN0Gcysk
+         k92A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=EpBkigZDhPdfhuuO8b2HxzOasU8CDpEiB+HyHCiHWt8=;
-        b=F8vMRoOa/+0uotsOfw9+UCKVvvkCgSyIOa7GCYhrQMwwFGDLZef3S3QvOX2VcYgxGs
-         El/BD2BSN3lPoUVKtva/bQ8A/hmO5CjFX8286lTSr1oS69/18xZCac78NZ5/9epmq2Qy
-         T4YYoQJNW8SpYNUridQt/cQwDMW0jr8JQEMxCEo4u9s/LgLH1Djz/WCZZPWj6WKPJnT9
-         IVOFCag1dPFwI1dV+pmmnoLwIA88PSRUpkghEBMs93tCMr7ijdADjiwRrneDcE62SKDA
-         nmV5Mx8JdcZ0pqytTLtEJ+YwnQShe8Lx1+R5JBedELVd1j2TS4Xf9Q7+6EurPYdWoXM1
-         jRdQ==
-X-Gm-Message-State: AJIora8knC8tJ5/d7IxZ7SSI6rkcmUhNcGnc8aBoaV+VkHsNzDbOXIKi
-        J//bZXhTCylEEnC4DkaVQX4=
-X-Google-Smtp-Source: AGRyM1uh7GzYNjbzMG3aYFISLknlIn55CGjxcIrNuxKZsOMNIm+wYGrNvOlERr/NAkXe/qaxFyEd5Q==
-X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id hr1-20020a1709073f8100b006ff1a3d9092mr36057925ejc.319.1658334269693;
-        Wed, 20 Jul 2022 09:24:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A1ulf9tl9d6CNgfQ9aU3xsJISTrMA+hS9QZOTqZ3etU=;
+        b=21A2ZjCHwoLNIoMzZpWlLYE0aVnXgk0csRBYhsO4+3en3WgGNWFL7u6MQHWeXU+uXX
+         FXz7EjLbxFkkyOusvy6kAkQT+Rbci/5GFRB/I1a6z0/VTVPy2A6ov69spOVNMvyvIgp8
+         FtKSUrmyVwG0maFiXZGLlx+xSmkH5GBLhmqwLRwM5DitVortrUt4GHb2JoPsMAJ0oWo4
+         N49g+cZ1rrozsvTZ3gN3cqYsihf29qAO/aBZ1ppN+4Nv9Fz92tPQ6uEYrJmPjAyE9fIl
+         B200VVryV+ogkzR6h2lwk+KfUJHIFX4C/RZB5Zg5X2ymht3TBKKINsXFqfMqXuE4/pXu
+         fySw==
+X-Gm-Message-State: AJIora/sMVfLMmWy7qzyN1l9YleXUI93/c/yBa6LrEDxnbtdnDC3YWfK
+        rIwolLaIkO0w4+94SO+gTSs=
+X-Google-Smtp-Source: AGRyM1sVRsIQGOTj8rTfOADlm8LQIbTlAOZzvnsi5UY8hGwFR93ppZKRk/3ZI9/L//j5JzSWtgYX3A==
+X-Received: by 2002:a17:906:cc13:b0:72b:31d5:a899 with SMTP id ml19-20020a170906cc1300b0072b31d5a899mr35255149ejb.184.1658334274296;
+        Wed, 20 Jul 2022 09:24:34 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id gj10-20020a170907740a00b00726c0e63b94sm8000447ejc.27.2022.07.20.09.24.28
+        by smtp.gmail.com with ESMTPSA id u2-20020aa7db82000000b0043a253973aasm12347559edt.10.2022.07.20.09.24.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 09:24:29 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 18:24:22 +0200
+        Wed, 20 Jul 2022 09:24:33 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 18:24:32 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Forest Bond <forest@alittletooquiet.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] staging: vt6655: Convert multiline macro to static
- function
-Message-ID: <cover.1658333350.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 1/3] staging: vt6655: Rename byOrgValue to reg_value in a
+ macro
+Message-ID: <83920d919acd7596488943182f37132e479d70f4.1658333350.git.philipp.g.hortmann@gmail.com>
+References: <cover.1658333350.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1658333350.git.philipp.g.hortmann@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,21 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert multiline macro to static function.
-Multiline macros are not liked by kernel community.
+Fix name of a variable in a macro that uses CamelCase which is not
+accepted by checkpatch.pl
 
-Tested with vt6655 on mini PCI Module
-Transferred this patch over wlan connection of vt6655
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/staging/vt6655/mac.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Philipp Hortmann (3):
-  staging: vt6655: Rename byOrgValue to reg_value in a macro
-  staging: vt6655: Rename MACvClearStckDS
-  staging: vt6655: Convert macro vt6655_mac_clear_stck_ds to function
-
- drivers/staging/vt6655/mac.c | 13 ++++++++++++-
- drivers/staging/vt6655/mac.h |  8 --------
- 2 files changed, 12 insertions(+), 9 deletions(-)
-
+diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
+index e2ef8c6ef7b7..837ae9dd6929 100644
+--- a/drivers/staging/vt6655/mac.h
++++ b/drivers/staging/vt6655/mac.h
+@@ -539,10 +539,10 @@
+ 
+ #define MACvClearStckDS(iobase)					\
+ do {									\
+-	unsigned char byOrgValue;					\
+-	byOrgValue = ioread8(iobase + MAC_REG_STICKHW);			\
+-	byOrgValue = byOrgValue & 0xFC;					\
+-	iowrite8(byOrgValue, iobase + MAC_REG_STICKHW);			\
++	unsigned char reg_value;					\
++	reg_value = ioread8(iobase + MAC_REG_STICKHW);			\
++	reg_value = reg_value & 0xFC;					\
++	iowrite8(reg_value, iobase + MAC_REG_STICKHW);			\
+ } while (0)
+ 
+ #define MACvSelectPage0(iobase)				\
 -- 
 2.37.1
 

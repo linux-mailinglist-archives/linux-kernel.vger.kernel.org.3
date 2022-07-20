@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0999057AD68
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC18757AD6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241063AbiGTB4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S241435AbiGTB6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235626AbiGTB4H (ORCPT
+        with ESMTP id S238537AbiGTB6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:56:07 -0400
-Received: from mta02.start.ca (mta02.start.ca [162.250.196.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1E54D159
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:56:05 -0700 (PDT)
-Received: from mta02.start.ca (localhost [127.0.0.1])
-        by mta02.start.ca (Postfix) with ESMTP id 33CFD41A7B;
-        Tue, 19 Jul 2022 21:56:04 -0400 (EDT)
-Received: from localhost (dhcp-24-53-241-20.cable.user.start.ca [24.53.241.20])
-        by mta02.start.ca (Postfix) with ESMTPS id CC78F41A77;
-        Tue, 19 Jul 2022 21:56:03 -0400 (EDT)
-From:   Nick Bowler <nbowler@draconx.ca>
-To:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>
-Subject: [PATCH] nvme: Define compat_ioctl again to unbreak 32-bit userspace.
-Date:   Tue, 19 Jul 2022 21:55:38 -0400
-Message-Id: <20220720015538.15838-1-nbowler@draconx.ca>
-X-Mailer: git-send-email 2.35.1
+        Tue, 19 Jul 2022 21:58:30 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056D24F18C;
+        Tue, 19 Jul 2022 18:58:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VJuk2GC_1658282304;
+Received: from 30.43.104.155(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VJuk2GC_1658282304)
+          by smtp.aliyun-inc.com;
+          Wed, 20 Jul 2022 09:58:25 +0800
+Message-ID: <5bcd437f-92a4-1c04-796c-41559dd2823a@linux.alibaba.com>
+Date:   Wed, 20 Jul 2022 09:58:24 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Kai Shen <kaishen@linux.alibaba.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
+ <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
+ <20220712090110.GL2338@kadam> <20220719125434.GG5049@ziepe.ca>
+ <20220719130125.GB2316@kadam>
+ <7075158a-64c1-8f69-7de1-9a60ee914f05@wanadoo.fr>
+From:   Cheng Xu <chengyou@linux.alibaba.com>
+In-Reply-To: <7075158a-64c1-8f69-7de1-9a60ee914f05@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 89b3d6e60550 ("nvme: simplify the compat ioctl handling") removed
-the initialization of compat_ioctl from the nvme block_device_operations
-structures.
 
-Presumably the expectation was that 32-bit ioctls would be directed
-through the regular handler but this is not the case: failing to assign
-.compat_ioctl actually means that the compat case is disabled entirely,
-and any attempt to submit nvme ioctls from 32-bit userspace fails
-outright with -ENOTTY.
 
-For example:
+On 7/19/22 11:36 PM, Christophe JAILLET wrote:
+> Le 19/07/2022 à 15:01, Dan Carpenter a écrit :
+>> On Tue, Jul 19, 2022 at 09:54:34AM -0300, Jason Gunthorpe wrote:
+>>> On Tue, Jul 12, 2022 at 12:01:10PM +0300, Dan Carpenter wrote:
+>>>
+>>>> Best not to use any auto-formatting tools.  They are all bad.
+>>>
+>>> Have you tried clang-format? I wouldn't call it bad..
+>>
+>> I prefered Christophe's formatting to clang's.  ;)
+>>
+>> regards,
+>> dan carpenter
+>>
+>>
+> 
+> Hi,
+> 
+> (some other files in the same directory also have some checkpatch warning/error)
 
-  % smartctl -x /dev/nvme0n1
-  [...]
-  Read NVMe Identify Controller failed: NVME_IOCTL_ADMIN_CMD: Inappropriate ioctl for device
+I just double checked the checkpatch results, Two type warnings reported:
 
-Direct .compat_ioctl to the main ioctl handlers in order to make things
-work again.
+ - WARNING: Missing commit description - Add an appropriate one (for patch 0001)
+ - WARNING: added, moved or deleted file(s), does MAINTAINERS need updating? (for almost all patches except 0001/0011)
 
-Fixes: 89b3d6e60550 ("nvme: simplify the compat ioctl handling")
-Signed-off-by: Nick Bowler <nbowler@draconx.ca>
----
- drivers/nvme/host/core.c      | 1 +
- drivers/nvme/host/multipath.c | 1 +
- 2 files changed, 2 insertions(+)
+For the first warning, the change is very simple: add erdma's
+rdma_driver_id definition, I think the commit title can describe
+all things, and is enough.
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index a2862a56fadc..30e105dbc178 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -2093,6 +2093,7 @@ static int nvme_report_zones(struct gendisk *disk, sector_t sector,
- static const struct block_device_operations nvme_bdev_ops = {
- 	.owner		= THIS_MODULE,
- 	.ioctl		= nvme_ioctl,
-+	.compat_ioctl	= nvme_ioctl,
- 	.open		= nvme_open,
- 	.release	= nvme_release,
- 	.getgeo		= nvme_getgeo,
-diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-index d464fdf978fb..0f38a5feec22 100644
---- a/drivers/nvme/host/multipath.c
-+++ b/drivers/nvme/host/multipath.c
-@@ -408,6 +408,7 @@ const struct block_device_operations nvme_ns_head_ops = {
- 	.open		= nvme_ns_head_open,
- 	.release	= nvme_ns_head_release,
- 	.ioctl		= nvme_ns_head_ioctl,
-+	.compat_ioctl	= nvme_ns_head_ioctl,
- 	.getgeo		= nvme_getgeo,
- 	.report_zones	= nvme_ns_head_report_zones,
- 	.pr_ops		= &nvme_pr_ops,
--- 
-2.35.1
+For the second warning, I think it is OK for new files before
+MAINTAINERS being updated in patch 0011.
 
+Thanks,
+Cheng Xu

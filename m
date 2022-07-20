@@ -2,74 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A639657BEC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0488057BEC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237133AbiGTTnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
+        id S236440AbiGTTnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236528AbiGTTnu (ORCPT
+        with ESMTP id S230091AbiGTTnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:43:50 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86B068DC4;
-        Wed, 20 Jul 2022 12:43:45 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1658346178tf9ar22l
-Received: from harry-jrlc.. ( [125.70.163.183])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 21 Jul 2022 03:42:47 +0800 (CST)
-X-QQ-SSF: 0100000000200030C000C00A0000020
-X-QQ-FEAT: KfdWLgjtJHZnYfL4/TlHXincVqdrjmUZX2CfrZIoxIJUb1Jv+GS1V2tXzXOhM
-        pG3EYQNNGq5dwwe6bTd4pSDIPh1YWU0zyyojJMYm2PDPw63PAnN57bsM3V1b8sIlbGAhnmM
-        FErGUxHooWzuzh3CD3yakhRpmzOI+gNlsgkv8C6l1JbsBUYAUCdDpes7rdacyok/hOhWXsi
-        YDcgdvB0mH/R5A1XgK+NxmTEocQGcvK/+4IUxvdgGW4NhZc7M0Q967n44AVs4FWV+p3ryjE
-        E0N6I4dvX3YNvZLCriaKGfTSZGh3YTTFgbVL4bZIwGvJ9BoT4aWmkTbWwFMtrEZ7ZEwbGiH
-        rSxXrSNPWL0bAHxYcaMByIYmEO6AgMmGXc7ile2SGkjo6AXrJVLWqPlM6Sivw==
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] b43:do not initialise statics to 0.
-Date:   Thu, 21 Jul 2022 03:42:45 +0800
-Message-Id: <20220720194245.8442-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 20 Jul 2022 15:43:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24BF5508E;
+        Wed, 20 Jul 2022 12:43:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C4CF61B98;
+        Wed, 20 Jul 2022 19:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93CCFC3411E;
+        Wed, 20 Jul 2022 19:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658346186;
+        bh=PnFEDzlN7mX92Wmglf1wrhAi7PN1WR65H5TpqJw7YAA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=PbvTSz0zl6XDNeT/6lXsvFkeYyD8SNq/0/k6ZBeHAMhsCh4g+tm+DclKVN+6Saiby
+         z0P3Gl09jkwjmCfKjgaaiJEuwW+r71c1KdEqRXL+u/Hv++ow5l8e7oMBv9iiOGU3ey
+         bwJbDKcfM3+GzH0Vr0hSGoapVlNCc3OSj5ogDvO8QbdXh6bQOLeU3jEeciMxALZGhJ
+         Lm+6aHjMascnccl4ZNo64oHTp5E603S/pZyaqZNfDyU/FkL0P/ojJtkjx3viqi5Vgt
+         fqFyMXa0+QukVxWFilfLX0vwnBhvSeBEKIg53tCJ5pIWkNQOLH88rMKDyg0Ghxc39c
+         f9j58/PQxa1Rw==
+From:   Mark Brown <broonie@kernel.org>
+To:     robh+dt@kernel.org, nicolas.ferre@microchip.com,
+        Ryan.Wanner@microchip.com, alexandre.belloni@bootlin.com,
+        krzysztof.kozlowski+dt@linaro.org, claudiu.beznea@microchip.com,
+        lgirdwood@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20220715162922.660859-1-Ryan.Wanner@microchip.com>
+References: <20220715162922.660859-1-Ryan.Wanner@microchip.com>
+Subject: Re: [PATCH v3 0/2] ASoC: dt-bindings: atmel-classd: Convert to
+Message-Id: <165834618426.685508.3523782122255231487.b4-ty@kernel.org>
+Date:   Wed, 20 Jul 2022 20:43:04 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-do not initialise statics to 0.
+On Fri, 15 Jul 2022 09:29:20 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> This patch series converts atmel-classd and atmel-pdmic device tree
+> bindings to json-schema.
+> 
+> v1 -> v2:
+> - Fix commit formatting.
+> - Fix titles in yaml file.
+> - Removed trivial descriptions.
+> - Correct formatting errors.
+> 
+> [...]
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- drivers/net/wireless/broadcom/b43/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to
 
-diff --git a/drivers/net/wireless/broadcom/b43/main.c b/drivers/net/wireless/broadcom/b43/main.c
-index 17bcec5f3ff7..5e233d0e06c0 100644
---- a/drivers/net/wireless/broadcom/b43/main.c
-+++ b/drivers/net/wireless/broadcom/b43/main.c
-@@ -105,7 +105,7 @@ int b43_modparam_verbose = B43_VERBOSITY_DEFAULT;
- module_param_named(verbose, b43_modparam_verbose, int, 0644);
- MODULE_PARM_DESC(verbose, "Log message verbosity: 0=error, 1=warn, 2=info(default), 3=debug");
- 
--static int b43_modparam_pio = 0;
-+static int b43_modparam_pio;
- module_param_named(pio, b43_modparam_pio, int, 0644);
- MODULE_PARM_DESC(pio, "Use PIO accesses by default: 0=DMA, 1=PIO");
- 
--- 
-2.30.2
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
+Thanks!
+
+[1/2] ASoC: dt-bindings: atmel-classd: Convert to json-schema
+      commit: a3b19e0c9cdd0ece48f34f68f922764f26435f73
+[2/2] ASoC: dt-bindings: atmel-classd: PDMIC convert to json-schema
+      commit: ca0e30b19dbe5f23cf0abe047259a9e9495624c6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

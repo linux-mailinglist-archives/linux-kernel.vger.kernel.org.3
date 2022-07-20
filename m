@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A78557B232
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A572F57B23A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbiGTH6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S231946AbiGTIBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiGTH6Q (ORCPT
+        with ESMTP id S231364AbiGTIBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:58:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A5461105;
-        Wed, 20 Jul 2022 00:58:16 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K7tpuw027033;
-        Wed, 20 Jul 2022 07:58:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=BbjUISBoD0CbZtVa4qw0rQlzFN0Qz3MAGgfCW4CptDg=;
- b=jnpGZa/V7z3KqJHAubfiNZFs32FCqfXnVMG3TvIkfnOFPEpY/CBYNdtsNj+U11SwshgK
- pybdnLzuPv/8aDHp9MWLP/ZPmQqsf9Pue+9FvJuSU/jCiKKYjUPD+5JZK+PLVU+K/++i
- wfs3Ye2eShVuGlHZyKq7GV6/nXYdCkmtzuGN2jbbcEZHZDRIt5NJ1At2e8vE2N4laUJb
- 4/O9EZAqjUaLaiqP4fpAhMAItaEoq+4BRdNyM7StZcLa8iKYwCeK6W1nwtaMw2/6mZfz
- W1euqHUDvn4z82G4/ey/4NvBsMh8eteWkhNBaFE7d7kz1Z0T29R2nPwz7c4/qJd+3OEa 3g== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hedrh0274-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 07:58:12 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26K7oknW027301;
-        Wed, 20 Jul 2022 07:58:10 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3hbmy8w9ue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Jul 2022 07:58:10 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26K7w65E23659006
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 20 Jul 2022 07:58:06 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0470A4040;
-        Wed, 20 Jul 2022 07:58:06 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40183A4053;
-        Wed, 20 Jul 2022 07:58:06 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.22.197])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 20 Jul 2022 07:58:06 +0000 (GMT)
-Date:   Wed, 20 Jul 2022 09:58:04 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     svens@linux.ibm.com, wintera@linux.ibm.com, wenjia@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, borntraeger@linux.ibm.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] s390/net: Fix comment typo
-Message-ID: <Yte1jKAX4j3Jvdix@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20220716042700.39915-1-wangborong@cdjrlc.com>
- <Ytb1/uU+jlcI4jXw@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        Wed, 20 Jul 2022 04:01:22 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAF565D68
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:01:20 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id a9so28917096lfk.11
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KvELuko9Gh002C2GLIwsGHndFGxCFwNGi9hqGyiMy2E=;
+        b=aHgyFBJJbXAS2lxk8rEpRx4vB5X7uNIRUgKX0mEljwZlKQlHqRM1A8DQ0RCx9b1q1R
+         Z5INnsQBL2ccCUKTsnfR85ev2ymoXLm1HN29JDs688YUGwQjRqzYngivxlDZzzmgusmd
+         nGKMamOQDQFhI2JJOe0ubgoQH9Szwa8U5rXU23CSuAtKLR2aFJsDWOeMGr6qrMC24aaN
+         xbNdxaISBeiRfk1kMEXOS26CPn6Cm/8q0c3DfcjHC7X5ZX3tg1m4huT2z5nz9JiSihC2
+         ex+yKvN5tyignw3IZ0ZjfyEJ+UekKitQTeIofhI43IVqvqpTFPQRZrWuko+j+kbpyf7V
+         8OuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KvELuko9Gh002C2GLIwsGHndFGxCFwNGi9hqGyiMy2E=;
+        b=LoxSTqtzXMecMSRcMMwsy9IXgxngDMz0LdQtlQ40mlKWjLO6MqhBVDWkm6yBRamBNN
+         a+63WDRLEJrICWstoo7YaEf0o+1dQA6IirigbBX/RrxDAqjUyamGYD+aXPY6IClwrZjN
+         o+NNZfVwrdYhPUsQFK8HjhECfS9cRdIuGK/KIbjGvN71B6ghgz9fjjhsCcNoGdO+GWgH
+         Ca7stsMKxHO/85a36SU79UL3P7CaUlBtJrgwSA5uhLp1C/xZSvGUkDs73/fjBINEFlmy
+         rG/+OALB5a4HLtSqJHK1uPnrpIF5JgjDkVMd3TFZHkGogxTyWIn9n5PrPp38gsRHfiEW
+         g2Lg==
+X-Gm-Message-State: AJIora+LezMDnLtOU74z52GBEdndHSVdH56QluuJTygXukqLbNaGxwux
+        QRQr+rtQLd677OVhUKOmRarAdQ==
+X-Google-Smtp-Source: AGRyM1vXMXJNr9XMk0aZdcZihPw3vNyEwCm7X08NhysjxfWWJCUgtWt8w2MXo+WJ+3rqtpmtakgM9A==
+X-Received: by 2002:a05:6512:39cf:b0:48a:15f0:80b6 with SMTP id k15-20020a05651239cf00b0048a15f080b6mr15939377lfu.19.1658304079050;
+        Wed, 20 Jul 2022 01:01:19 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id w16-20020a05651234d000b00485caa0f5dfsm3698009lfr.44.2022.07.20.01.01.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 01:01:18 -0700 (PDT)
+Message-ID: <3747a527-67c8-21ff-7cb8-2205fcb2a669@linaro.org>
+Date:   Wed, 20 Jul 2022 10:01:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ytb1/uU+jlcI4jXw@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iGOsWayD2oenUNCGgfhp4LElpPTwmcGJ
-X-Proofpoint-ORIG-GUID: iGOsWayD2oenUNCGgfhp4LElpPTwmcGJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_04,2022-07-19_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=658
- spamscore=0 adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207200031
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: timer: renesas,cmt: Fix R-Car Gen4 fall-out
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <2e3863ae32e17d49f41111580f195dd34e2b769d.1658303544.git.geert+renesas@glider.be>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2e3863ae32e17d49f41111580f195dd34e2b769d.1658303544.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 08:20:48PM +0200, Alexander Gordeev wrote:
-> Applied, thanks!
+On 20/07/2022 09:53, Geert Uytterhoeven wrote:
+> Restore sort order (by family, followed by type).
+> Update the conditional sections specifying the number of interrupts.
+> 
+> Fixes: 525b296185b4b0ab ("dt-bindings: timer: renesas,cmt: Add r8a779f0 and generic Gen4 CMT support")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Please, ignore this one!
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

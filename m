@@ -2,95 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D238557B213
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995DD57B217
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 09:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiGTHst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 03:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S240250AbiGTHtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 03:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240228AbiGTHso (ORCPT
+        with ESMTP id S240053AbiGTHtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:48:44 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04AB691C0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:48:41 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h8so2187282wrw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:48:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9ElSeSk614sHvQ21Olszx7/fOD72S3pdEjMKoWVvV70=;
-        b=vhSEKJmVmMARaRWH0xaA2l+kCtoc5Zx/reprZlY45YpxW3DQg9C4qONfodIx8+o4FZ
-         158sB+03Rej/8Yf3e7gYSweZ3QyCmBdBh0VytqYAKE+oZyQSUaBygJar2jiBAzoEkfDm
-         Xy7z/6IV1uZa5/UMmF0q2rzbG46hJGLHu0glLNe/8bl6J3YbSzA9dXRv9XD4fKfjMchv
-         ndvMvmrncYAgprfLQrycI45wKDPfJwlwoaICFQ+hwF1gknT6bSptzTNKEdB+SKsj12Tg
-         LRCrO1tXEf1JQAWFoFemlZHgH/7yuZxocrMVCc5L3QF30Q1OI+1IHZ05vmaUDeusjeDV
-         n+1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9ElSeSk614sHvQ21Olszx7/fOD72S3pdEjMKoWVvV70=;
-        b=lLmFkSMqGAEov8XKYxyTinZiE+H4GLoP2EfZF0U6hhgcVsB6cqiOVIK2e9p/y8oelN
-         j0mL6mTXd5RP0lAq4RXdkqEvjiBogTg6yoqolSmfPaqCbbq+IA0/Zy7w5iUIlS9Gi/2/
-         6re9sGuACHvLT0yP/IJq+pNCip6bX4rkVY+KdYjeq54DEYxeLXmIgsyHYUWsNEkWKvQe
-         KN58mhuwVXSMtR3TcDGm/v4gJon3QD8d53a5Z289KxKcZ9F3minSOd9GFx37QbIBLHZf
-         8lKHTHqo8JEeNQtqLNU2cvt4WNzAH/N3tO3B/7ebq0aavra5hqEcBM+wJAU3hRHcV/8t
-         7KpA==
-X-Gm-Message-State: AJIora/8G0a+NomdajESoDaF9b/ePYo/M2aL/hnAY3o5dHDh4IEzPFZW
-        hF4iwJjWNf7w+RwMJ7uq1ihn3+WSb5XKuQ==
-X-Google-Smtp-Source: AGRyM1vuPStHxI48eylnYSZO/6tJTXBaSbjnGnKmJlNTa/CBji3je23kXPmhNPY4cFUIPz3Fu06IOQ==
-X-Received: by 2002:a5d:4e49:0:b0:21d:6e8a:fa3 with SMTP id r9-20020a5d4e49000000b0021d6e8a0fa3mr28469922wrt.528.1658303320157;
-        Wed, 20 Jul 2022 00:48:40 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id a20-20020a05600c225400b003a32167b8d4sm1444891wmm.13.2022.07.20.00.48.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 00:48:39 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 08:48:37 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mfd: st,stm32-timers: Correct 'resets'
- property name
-Message-ID: <YtezVaZGhEZ1ZEKL@google.com>
-References: <20220719215125.1877138-1-robh@kernel.org>
+        Wed, 20 Jul 2022 03:49:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7085070B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 00:49:39 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2706E6601A93;
+        Wed, 20 Jul 2022 08:49:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658303378;
+        bh=ooa8O48dKwGERCcw12fSBMjrfuHHVGb7J7AE5len/QM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=noju9XLQqLynLqKYsGfv4zCfepMa66lTrpBOeP2soJRGcvLrhxkX3KT/CMPSzjLlR
+         Z4F2oWAUL0+XLGyEPGymbqLMeL1BI+Xu1KCIk7neXb1SXGsM6/7djsfTaiuCGxF7eF
+         XYIhg30iI84ZOlBW6mLqHYBVjnC9aBjG8cTflONumZ4Xx+ss4qTgreYddEaCiVTO1h
+         kBSKKITqiBZP7k9UwbC+saFLkFFYIL/pzYxkI88wV39LrZJxZYbyls+jOK6yo1uGrl
+         WXtcYRCAk7kVkXxz4QHGwuOghfnli2Z8xTmspCOiTphd1UMG53ORAXXoSUs7iO0G0c
+         pajID6/BbB4ig==
+Message-ID: <194631de-2e3f-6e1f-65f6-76dbef04483e@collabora.com>
+Date:   Wed, 20 Jul 2022 09:49:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] drm/panel-edp: Add panel entry for R140NWF5 RH
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220719203857.1488831-1-nfraprado@collabora.com>
+ <20220719203857.1488831-2-nfraprado@collabora.com>
+ <CAD=FV=XgWAMXGAfBw9dBoKB6Y6_AAT6ccAtLg=jy3qLa2HOxBA@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAD=FV=XgWAMXGAfBw9dBoKB6Y6_AAT6ccAtLg=jy3qLa2HOxBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220719215125.1877138-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022, Rob Herring wrote:
-
-> The correct property name for the reset binding is 'resets', not 'reset'.
-> Fix the name.
+Il 20/07/22 00:40, Doug Anderson ha scritto:
+> Hi,
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Tue, Jul 19, 2022 at 1:39 PM Nícolas F. R. A. Prado
+> <nfraprado@collabora.com> wrote:
+>>
+>> Add panel identification entry for the IVO R140NWF5 RH (product ID:
+>> 0x057d) panel.
+>>
+>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>
+>> ---
+>> The comments on the driver indicate that the T3 timing should be set on
+>> hpd_absent, while hpd_reliable would have a shorter time just while the
+>> HPD line stabilizes on low after power is supplied.
+> 
+> Right. Ideally hpd_reliable is 0 unless you've got a badly-designed panel.
+> 
+> 
+>> But can we really assume that the HPD line will be reliable at all
+>> before the DDIC is done booting up, at which point the HPD line is
+>> brought up? IOW, shouldn't we always delay T3 (by setting hpd_reliable =
+>> T3), since only then we're really sure that the DDIC is done setting up
+>> and the HPD line is reliable?
+> 
+> If the panel is hooked up properly, then the HPD pin should be pulled
+> low at the start and then should only go high after the panel is ready
+> for us to talk to it, right? So it's not like the DDIC has to boot up
+> and actively init the state. I would assume that the initial state of
+> the "HPD output" from the panel's IC would be one of the following:
+> * A floating input.
+> * A pulled down input.
+> * An output driven low.
+> 
+> In any of those cases just adding a pull down on the line would be
+> enough to ensure that the HPD line is reliable until the panel comes
+> around and actively drives the line high.
+> 
+> Remember, this is eDP and it's not something that's hot-plugged, so
+> there's no debouncing involved and in a properly designed system there
+> should be no time needed for the signal to stabilize. I would also
+> point out that on the oficial eDP docs the eDP timing diagram doesn't
+> show the initial state of "HPD" as "unknown". It shows it as low.
+> 
+> Now, that all being said, I have seen at least one panel that glitched
+> itself at bootup. After you powered it on it would blip its HPD line
+> high before it had actually finished booting. Then the HPD would go
+> low again before finally going high after the panel finished booting.
+> This is the reason for "hpd_reliable".
+> 
+> If you've got a board with a well-designed panel but the hookup
+> between the panel and the board is wrong (maybe the board is missing a
+> pulldown on the HPD line?) then you can just set the "no-hpd" property
+> for your board. That will tell the kernel to just always delay the
+> "hpd-absent" delay.
+> 
 
-Applied, thanks.
+We were concerned exactly about glitchy HPD during DDIC init, as I didn't
+want to trust it because the only testing we could do was on just two units...
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+...but if you're sure that I was too much paranoid about that, that's good,
+as it means I will be a bit more "relaxed" on this topic next time :-)
+
+>> I've set the T3 delay to hpd_absent in this series, following what's
+>> instructed in the comments, but I'd like to discuss whether we shouldn't
+>> be setting T3 on hpd_reliable instead, for all panels, to be on the
+>> safer side.
+> 
+> The way it's specified right now is more flexible, though, isn't it?
+> This way if you're on a board where the HPD truly _isn't_ stable then
+> you can just set the "no-hpd" and it will automatically use the
+> "hpd_absent" delay, right?
+> 
+
+For Chromebooks, that's totally doable, thanks to the bootloader seeking for
+proper machine compatibles, so yes I agree with that.
+
+> 
+>>   drivers/gpu/drm/panel/panel-edp.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+>> index 3626469c4cc2..675d793d925e 100644
+>> --- a/drivers/gpu/drm/panel/panel-edp.c
+>> +++ b/drivers/gpu/drm/panel/panel-edp.c
+>> @@ -1854,6 +1854,12 @@ static const struct panel_delay delay_100_500_e200 = {
+>>          .enable = 200,
+>>   };
+>>
+>> +static const struct panel_delay delay_200_500_e200 = {
+>> +       .hpd_absent = 200,
+>> +       .unprepare = 500,
+>> +       .enable = 200,
+>> +};
+>> +
+>>   #define EDP_PANEL_ENTRY(vend_chr_0, vend_chr_1, vend_chr_2, product_id, _delay, _name) \
+>>   { \
+>>          .name = _name, \
+>> @@ -1882,6 +1888,8 @@ static const struct edp_panel_entry edp_panels[] = {
+>>
+>>          EDP_PANEL_ENTRY('C', 'M', 'N', 0x114c, &innolux_n116bca_ea1.delay, "N116BCA-EA1"),
+>>
+>> +       EDP_PANEL_ENTRY('I', 'V', 'O', 0x057d, &delay_200_500_e200, "R140NWF5 RH"),
+>> +
+> 
+> This looks fine to me:
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> 
+> I'm happy to apply this in a day or two assuming you're OK with my
+> explanation above.
+
+Thank you for the long mail, your explanation was truly helpful!
+(especially for me being paranoid :-P)
+
+So, I agree to go with that one, for which:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Nic, green light?
+
+
+Cheers, (and thanks again!)
+Angelo
+

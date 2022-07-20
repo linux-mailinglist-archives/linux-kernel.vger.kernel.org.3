@@ -2,472 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6FA57B2DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C2B57B2E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240294AbiGTI2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
+        id S240380AbiGTI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238560AbiGTI1z (ORCPT
+        with ESMTP id S239673AbiGTI17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:27:55 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E30966AED
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:27:52 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id z3so1963219plb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:27:52 -0700 (PDT)
+        Wed, 20 Jul 2022 04:27:59 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116FF66AED
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:27:58 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h8so2325116wrw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gXBxRQpMX1ksYgI8KBkW485Tta+lGkkd8IYaTPQBLnE=;
-        b=OLdBIlttf2Nvu6WeZXtOMFmF8e9TU7DaUih3ls7ZvqevmhrB1om/FAg3HvVZHFwgAs
-         n7RX/kLx7i5w8C1L1QF/69uD/Uv0ZvpE24RfuPjRrhbgV0m/TyPsJ63x4rV+BnkUFBjt
-         WNnHb1yWUU9Arzwlt9xuRFbPRwPjM7o4NHAOXTztkzyizSjR7OLnl7m/qhw60UFtJLY+
-         Y8BwgNCPHnf3/cCIt1u4yD7dHcvVtXxS7tI8Wki0neIBlGcLM3+6l94w+2DDRKmtcLlO
-         hD6XXrzWUA2YoECnxrgVhd/Mdmo0KmuB4DdHx00S8FnV4qxb8saWxBETNQrZgCjjFBZ9
-         DBkw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d3W0dtR/y1axIe4Mzxh6PMT5ABepdNbZdQ3J9dNAL+s=;
+        b=bYF/dYn3f4gBcPsyAzRyXUySbN6n5WeioBKFCXdnzFt9P8D0J108vHTsORd+YiyO8M
+         RlGTVexnGb/w/YD0c6W/2GVZnyD5cXSL6hDP4tNdqwe0GQmqAsqk8tX1TF1F70fuGbQe
+         9ErkT5xCUe2elAX77VIROyRmK+C2QmmqhLFdgQh+8vO0hDIaik/HA/lUZXte68okIU76
+         XV5+/Ytls/U7DRF/vSqg9pjAeiYmoaXTcAUP2iCsTrfhi9yopPtLFHGd67YjVwYk7qzr
+         k7cJz+mM5iMffdjiB0AFM3s4YZV98X4bfQ9ad5gqBIaAj6QxklIaVE3P23O5j6QptT1i
+         yETQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gXBxRQpMX1ksYgI8KBkW485Tta+lGkkd8IYaTPQBLnE=;
-        b=Wb47+PVEbKdp8iG+O6BaWk/st9zeBmcTuXq156/vefUC8fmk3Qqaz3Aitfez3SvlP3
-         a3+SXwDFS6bC1zR5Eu91THOFrZSNl2Nvf5ZZzcmZyugXheqyt1THY6KtnujhUvIHwU38
-         aTQf+dtpeiXbc6VNKg5C9QULAdcqMvJ8NXi/l2sbXV2sMepSP7h1wvglUBsli7ZVckq1
-         zt9wk9+9El3u1HX8xV/h6SaI9u26PQ7HKXQhCi3nCTHZcMc7gUMX6okhddw4kdofGWaV
-         nGZzul+ORrR7nG6zzCMMLN1RlxfgrJE1ZAS8IU40A3p0AMtWkgz8XGv+G+sIr2ICSKHv
-         YoCw==
-X-Gm-Message-State: AJIora/8Bs1SCnuExautPeRxMcxhui3PZgSWiZ3Xs0B4WJMiZVARn01G
-        hn84kKIMXViT4tQA+SYDE33tkA==
-X-Google-Smtp-Source: AGRyM1sD61HGTvbb4tKezKF1kHI+msPPDI533+jJcAdUGnhAbo1EHZDi23xEXrU0ReVG9nC4fs1Dpw==
-X-Received: by 2002:a17:90b:4b01:b0:1f0:1aa7:928 with SMTP id lx1-20020a17090b4b0100b001f01aa70928mr3928702pjb.195.1658305671455;
-        Wed, 20 Jul 2022 01:27:51 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170903124e00b0016bee3caabesm13186021plh.270.2022.07.20.01.27.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 01:27:50 -0700 (PDT)
-Message-ID: <50a432af-eb40-8692-78f3-f200222bb2c7@linaro.org>
-Date:   Wed, 20 Jul 2022 13:57:47 +0530
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d3W0dtR/y1axIe4Mzxh6PMT5ABepdNbZdQ3J9dNAL+s=;
+        b=aAtoIe3s+YTfGh5W9KYMdB0vvZBX1bIS5549qkioOAhoh423KaAa7G0/FccW8Jcq97
+         Pgfzq0lWEAu1p4mHSW4xb/GomO187fOJ5nvbC4qAIi7UMcLyHFAW3sXhWqEUn26PMCbd
+         ELZAy5vdlofJLXJy893dqDc8mhuXC4YDlRUI/s+jPgnGHVym1tkY9+nbyopsQQOCmcrn
+         +OYCOeAw0bKuSFl3jjxc6qKsBDE8QEbaG2guGBGL3YMYgTHQx9vKtxaYYbEC32Hv66ql
+         xym47HatWwul/KXtMHQZ7qC0LLqZ/L5Mnmz7pfs2TCZ5YWnpAkgw9nFUfZaKyDLrQSO+
+         /vrA==
+X-Gm-Message-State: AJIora9AIf6JAdD3+xSIAzyMz4C61YGAmQD+8tGq/fZun/LAUAkRIai/
+        dJixRnsHxt++B6JMCEOOa43C7w==
+X-Google-Smtp-Source: AGRyM1tJvQn5cRk8SaHTv7rsLqRwB0dawtl/1l5wFj1DZ7FmFRkFlmA6QG19na4OFpPsmJ86B16LAA==
+X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id r11-20020a5d6c6b000000b001ea77eadde8mr30221498wrz.690.1658305676529;
+        Wed, 20 Jul 2022 01:27:56 -0700 (PDT)
+Received: from google.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
+        by smtp.gmail.com with ESMTPSA id m4-20020a056000024400b0021e4454e643sm3085023wrz.45.2022.07.20.01.27.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 01:27:55 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 08:27:51 +0000
+From:   Keir Fraser <keirf@google.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio: Force DMA restricted devices through DMA API
+Message-ID: <Yte8h0wtBZqiBky8@google.com>
+References: <20220719100256.419780-1-keirf@google.com>
+ <YtbMcBw4l0LAFn9+@infradead.org>
+ <YtbRwO40CmIRWOUR@google.com>
+ <YtbTGjRw65QEKkQA@infradead.org>
+ <YtbXxl8STUtQkacb@google.com>
+ <20220720024756-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
- workaround quirk
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
- <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
- <YtYlcEBszITSZ5on@builder.lan>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <YtYlcEBszITSZ5on@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720024756-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-Thanks for your review.
-
-On 7/19/22 9:00 AM, Bjorn Andersson wrote:
-> On Fri 01 Jul 09:58 CDT 2022, Bhupesh Sharma wrote:
+On Wed, Jul 20, 2022 at 02:59:53AM -0400, Michael S. Tsirkin wrote:
+> On Tue, Jul 19, 2022 at 04:11:50PM +0000, Keir Fraser wrote:
+> > On Tue, Jul 19, 2022 at 08:51:54AM -0700, Christoph Hellwig wrote:
+> > > On Tue, Jul 19, 2022 at 03:46:08PM +0000, Keir Fraser wrote:
+> > > > However, if the general idea at least is acceptable, would the
+> > > > implementation be acceptable if I add an explicit API for this to the
+> > > > DMA subsystem, and hide the detail there?
+> > > 
+> > > I don't think so.  The right thing to key off is
+> > > VIRTIO_F_ACCESS_PLATFORM, which really should be set in any modern
+> > > virtio device after all the problems we had with the lack of it.
+> > 
+> > Ok. Certainly the flag description in virtio spec fits the bill.
 > 
->> Since for some QCoM tsens controllers, its suggested to
->> monitor the controller health periodically and in case an
->> issue is detected, to re-initialize the tsens controller
->> via trustzone, add the support for the same in the
->> qcom tsens driver.
->>
->> Note that Once the tsens controller is reset using scm call,
->> all SROT and TM region registers will enter the reset mode.
->>
->> While all the SROT registers will be re-programmed and
->> re-enabled in trustzone prior to the scm call exit, the TM
->> region registers will not re-initialized in trustzone and thus
->> need to be handled by the tsens driver.
->>
->> Cc: Amit Kucheria <amitk@kernel.org>
->> Cc: Thara Gopinath <thara.gopinath@gmail.com>
->> Cc: linux-pm@vger.kernel.org
->> Cc: linux-arm-msm@vger.kernel.org
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>   drivers/thermal/qcom/tsens-v2.c |   3 +
->>   drivers/thermal/qcom/tsens.c    | 237 +++++++++++++++++++++++++++++++-
->>   drivers/thermal/qcom/tsens.h    |   6 +
->>   3 files changed, 239 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
->> index 61d38a56d29a..9bb542f16482 100644
->> --- a/drivers/thermal/qcom/tsens-v2.c
->> +++ b/drivers/thermal/qcom/tsens-v2.c
->> @@ -88,6 +88,9 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
->>   
->>   	/* TRDY: 1=ready, 0=in progress */
->>   	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
->> +
->> +	/* FIRST_ROUND_COMPLETE: 1=complete, 0=not complete */
->> +	[FIRST_ROUND_COMPLETE] = REG_FIELD(TM_TRDY_OFF, 3, 3),
->>   };
->>   
->>   static const struct tsens_ops ops_generic_v2 = {
->> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
->> index 97f4d4454f20..28d42ae0eb47 100644
->> --- a/drivers/thermal/qcom/tsens.c
->> +++ b/drivers/thermal/qcom/tsens.c
->> @@ -7,6 +7,7 @@
->>   #include <linux/debugfs.h>
->>   #include <linux/err.h>
->>   #include <linux/io.h>
->> +#include <linux/qcom_scm.h>
->>   #include <linux/module.h>
->>   #include <linux/nvmem-consumer.h>
->>   #include <linux/of.h>
->> @@ -21,6 +22,8 @@
->>   #include "../thermal_hwmon.h"
->>   #include "tsens.h"
->>   
->> +LIST_HEAD(tsens_device_list);
->> +
->>   /**
->>    * struct tsens_irq_data - IRQ status and temperature violations
->>    * @up_viol:        upper threshold violated
->> @@ -594,19 +597,159 @@ static void tsens_disable_irq(struct tsens_priv *priv)
->>   	regmap_field_write(priv->rf[INT_EN], 0);
->>   }
->>   
->> +static int tsens_reenable_hw_after_scm(struct tsens_priv *priv)
->> +{
->> +	unsigned long flags;
->> +
->> +	spin_lock_irqsave(&priv->ul_lock, flags);
->> +
->> +	/* Re-enable watchdog, unmask the bark and
->> +	 * disable cycle completion monitoring.
->> +	 */
->> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 1);
->> +	regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 0);
->> +	regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
->> +	regmap_field_write(priv->rf[CC_MON_MASK], 1);
->> +
->> +	/* Re-enable interrupts */
->> +	tsens_enable_irq(priv);
->> +
->> +	spin_unlock_irqrestore(&priv->ul_lock, flags);
->> +
->> +	return 0;
->> +}
->> +
->>   int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->>   {
->> -	struct tsens_priv *priv = s->priv;
->> +	struct tsens_priv *priv = s->priv, *priv_reinit;
->>   	int hw_id = s->hw_id;
->>   	u32 temp_idx = LAST_TEMP_0 + hw_id;
->>   	u32 valid_idx = VALID_0 + hw_id;
->>   	u32 valid;
->> -	int ret;
->> +	int ret, trdy, first_round, tsens_ret, sw_reg;
->> +	unsigned long timeout;
->> +	static atomic_t in_tsens_reinit;
+> Maybe. But balloon really isn't a normal device. Yes the rings kind of
+> operate more or less normally. However consider for example free page
+> hinting. We stick a page address in ring for purposes of telling host it
+> can blow it away at any later time unless we write something into the
+> page.  Free page reporting is similar.
+> Sending gigabytes of memory through swiotlb is at minimum not
+> a good idea.
+
+I don't think any balloon use case needs the page's guest data to be
+made available to the host device. What the device side does with
+reported guest-physical page addresses is somewhat VMM/Hyp specific,
+but I think it's fair to say it will know how to reclaim or track
+pages by guest PA, and bouncing reported/hinted page addresses through
+a SWIOTLB or IOMMU would not be of any use to any use case I can think
+of.
+
+As far as I can see, the only translation that makes sense at all for
+virtio balloon is in ring management.
+
+> Conversely, is it even okay security wise that host can blow away any
+> guest page?  Because with balloon GFNs do not go through bounce
+> buffering.
+
+Ok, I think this is fair and I can address that by describing the use
+case more broadly.
+
+The short answer is that there will be more patches forthcoming,
+because the balloon driver will need to tell the hypervisor (EL2 Hyp
+in the ARM PKVM case) that is is willingly relinquishing memory
+pages. So, there will be a patch to add a new HVC to PKVM Hyp, and a
+patch to detect and use the new HVC via a new API that hooks into
+Linux's balloon infrastructure.
+
+So the use case is that virtio_balloon needs to set up its rings and
+descriptors in a shared memory region, as requested via
+dma-restricted-pool and the VIRTIO_F_PALTFORM_ACCESS flag. This is
+required because the host device has no access to regular guest
+memory.
+
+However, in PKVM, page notifications will notify both the (trusted)
+Hypervisor, via hypercall, and the (untrusted) VMM, via virtio. Guest
+physical addresses are fine here. The VMM understands guest PAs
+perfectly well, it's just not normally allowed to access their
+contents or otherwise map or use those pages itself.
+
 > 
-> This is a global state, I suggest you move it to the top of the file to
-> make that obvious.
-
-Sure.
-
->>   	/* VER_0 doesn't have VALID bit */
->>   	if (tsens_version(priv) == VER_0)
->>   		goto get_temp;
->>   
->> +	/* For some tsens controllers, its suggested to
->> +	 * monitor the controller health periodically
->> +	 * and in case an issue is detected to reinit
->> +	 * tsens controller via trustzone.
->> +	 */
->> +	if (priv->needs_reinit_wa) {
+> > > > Or a completely different approach would be to revert the patch
+> > > > e41b1355508d which clears VIRTIO_F_ACCESS_PLATFORM in the balloon
+> > > > driver. MST: That's back in your court, as it's your patch!
+> > > 
+> > > Which also means this needs to be addresses, but I don't think a
+> > > simple revert is enough.
+> > 
+> > Well here are two possible approaches:
+> > 
+> > 1. Revert e41b1355508d outright. I'm not even sure what it would mean
+> > for reported pages to go through IOMMU. And VIRTIO_F_ACCESS_PLATFORM
+> > is no longer IOMMU-specific anyway.
+> > 
+> > 2. Continue to clear the flag during virtio_balloon negotiation, but
+> > remember that it was offered, and test for that in vring_use_dma_api()
+> > as well as, or instead of, virtio_has_dma_quirk().
+> > 
+> > Do either of those appeal?
 > 
-> I would suggest that you move all this entire block to a separate
-> function, maybe something:
+> I think the use case needs to be documented better.
+
+I hope the above is helpful in giving some more context.
+
+Perhaps it would make more sense to re-submit this patch as part of
+a larger series that includes the rest of the mechanism needed to
+support virtio_balloon on PKVM?
+
+Thanks,
+Keir
+
 > 
-> int tsens_health_check_and_reinit()
-
-Ok. Will fix in v2.
-
->> +		/* First check if TRDY is SET */
->> +		timeout = jiffies + usecs_to_jiffies(TIMEOUT_US);
->> +		do {
->> +			ret = regmap_field_read(priv->rf[TRDY], &trdy);
->> +			if (ret)
->> +				goto err;
->> +			if (!trdy)
->> +				continue;
->> +		} while (time_before(jiffies, timeout));
+> -- 
+> MST
 > 
-> This looks like a regmap_field_read()
-
-Not sure, I completely understand this comment. Can you please elaborate?
-
->> +
->> +		if (!trdy) {
->> +			ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE], &first_round);
->> +			if (ret)
->> +				goto err;
->> +
->> +			if (!first_round) {
->> +				if (atomic_read(&in_tsens_reinit)) {
->> +					dev_dbg(priv->dev, "tsens re-init is in progress\n");
->> +					ret = -EAGAIN;
 > 
-> Is it preferred to return -EAGAIN here, over just serializing this whole
-> thing using a mutex?
-
-Right, using a mutex to serialize here makes sense. Will fix in v2.
-
->> +					goto err;
->> +				}
->> +
->> +				/* Wait for 2 ms for tsens controller to recover */
->> +				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
->> +				do {
->> +					ret = regmap_field_read(priv->rf[FIRST_ROUND_COMPLETE],
->> +								&first_round);
->> +					if (ret)
->> +						goto err;
->> +
->> +					if (first_round) {
->> +						dev_dbg(priv->dev, "tsens controller recovered\n");
->> +						goto sensor_read;
->> +					}
->> +				} while (time_before(jiffies, timeout));
->> +
->> +				/*
->> +				 * tsens controller did not recover,
->> +				 * proceed with SCM call to re-init it
->> +				 */
->> +				if (atomic_read(&in_tsens_reinit)) {
->> +					dev_dbg(priv->dev, "tsens re-init is in progress\n");
->> +					ret = -EAGAIN;
->> +					goto err;
->> +				}
->> +
->> +				atomic_set(&in_tsens_reinit, 1);
-> 
-> Afaict nothing prevents two different processes to run the remainder of
-> the recovery in parallel. I think you need some locking here.
-
-Ack.
-
->> +
->> +				/*
->> +				 * Invoke scm call only if SW register write is
->> +				 * reflecting in controller. Try it for 2 ms.
->> +				 */
->> +				timeout = jiffies + msecs_to_jiffies(RESET_TIMEOUT_MS);
->> +				do {
->> +					ret = regmap_field_write(priv->rf[INT_EN], BIT(2));
-> 
-> Do we know what BIT(2) is and would we be allowed to give it a define?
-
-Sure, I will add a define here.
-
->> +					if (ret)
->> +						goto err_unset;
->> +
->> +					ret = regmap_field_read(priv->rf[INT_EN], &sw_reg);
->> +					if (ret)
->> +						goto err_unset;
->> +
->> +					if (!(sw_reg & BIT(2)))
->> +						continue;
-> 
-> Why not:
-> 
-> } while (sw_reg & BIT(2) && time_before(jiffies, timeout));
-
-Sure.
-
->> +				} while (time_before(jiffies, timeout));
->> +
->> +				if (!(sw_reg & BIT(2))) {
->> +					ret = -ENOTRECOVERABLE;
->> +					goto err_unset;
->> +				}
->> +
->> +				ret = qcom_scm_tsens_reinit(&tsens_ret);
->> +				if (ret || tsens_ret) {
->> +					dev_err(priv->dev, "tsens reinit scm call failed (%d : %d)\n",
->> +							ret, tsens_ret);
->> +					if (tsens_ret)
->> +						ret = -ENOTRECOVERABLE;
-> 
-> If that's the api for the SCM, feel free to move the -ENOTRECOVERABLE to
-> the scm function.
-
-Ok, let me check and fix this in v2.
-
->> +
->> +					goto err_unset;
->> +				}
->> +
->> +				/* After the SCM call, we need to re-enable
->> +				 * the interrupts and also set active threshold
->> +				 * for each sensor.
->> +				 */
->> +				list_for_each_entry(priv_reinit,
->> +						&tsens_device_list, list) {
->> +					ret = tsens_reenable_hw_after_scm(priv_reinit);
->> +					if (ret) {
->> +						dev_err(priv->dev,
->> +							"tsens re-enable after scm call failed (%d)\n",
->> +							ret);
->> +						ret = -ENOTRECOVERABLE;
->> +						goto err_unset;
->> +					}
->> +				}
->> +
->> +				atomic_set(&in_tsens_reinit, 0);
->> +
->> +				/* Notify reinit wa worker */
->> +				list_for_each_entry(priv_reinit,
-> 
-> Do you need to loop twice over the tsens instances?
-> 
->> +						&tsens_device_list, list) {
->> +					queue_work(priv_reinit->reinit_wa_worker,
->> +							&priv_reinit->reinit_wa_notify);
->> +				}
->> +			}
->> +		}
->> +	}
->> +
->> +sensor_read:
->>   	/* Valid bit is 0 for 6 AHB clock cycles.
->>   	 * At 19.2MHz, 1 AHB clock is ~60ns.
->>   	 * We should enter this loop very, very rarely.
->> @@ -623,6 +766,12 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->>   	*temp = tsens_hw_to_mC(s, temp_idx);
->>   
->>   	return 0;
->> +
->> +err_unset:
->> +	atomic_set(&in_tsens_reinit, 0);
->> +
->> +err:
->> +	return ret;
->>   }
->>   
->>   int get_temp_common(const struct tsens_sensor *s, int *temp)
->> @@ -860,6 +1009,14 @@ int __init init_common(struct tsens_priv *priv)
->>   		goto err_put_device;
->>   	}
->>   
->> +	priv->rf[FIRST_ROUND_COMPLETE] = devm_regmap_field_alloc(dev,
->> +								priv->tm_map,
->> +								priv->fields[FIRST_ROUND_COMPLETE]);
->> +	if (IS_ERR(priv->rf[FIRST_ROUND_COMPLETE])) {
->> +		ret = PTR_ERR(priv->rf[FIRST_ROUND_COMPLETE]);
->> +		goto err_put_device;
->> +	}
->> +
->>   	/* This loop might need changes if enum regfield_ids is reordered */
->>   	for (j = LAST_TEMP_0; j <= UP_THRESH_15; j += 16) {
->>   		for (i = 0; i < priv->feat->max_sensors; i++) {
->> @@ -1097,6 +1254,43 @@ static int tsens_register(struct tsens_priv *priv)
->>   	return ret;
->>   }
->>   
->> +static void tsens_reinit_worker_notify(struct work_struct *work)
->> +{
->> +	int i, ret, temp;
-> 
-> priv->num_sensors is unsigned, so i could be too.
-
-Ok.
-
->> +	struct tsens_irq_data d;
->> +	struct tsens_priv *priv = container_of(work, struct tsens_priv,
->> +					       reinit_wa_notify);
->> +
->> +	for (i = 0; i < priv->num_sensors; i++) {
->> +		const struct tsens_sensor *s = &priv->sensor[i];
->> +		u32 hw_id = s->hw_id;
->> +
->> +		if (!s->tzd)
->> +			continue;
->> +		if (!tsens_threshold_violated(priv, hw_id, &d))
->> +			continue;
->> +
->> +		ret = get_temp_tsens_valid(s, &temp);
->> +		if (ret) {
->> +			dev_err(priv->dev, "[%u] %s: error reading sensor\n",
->> +				hw_id, __func__);
-> 
-> Please express yourself in the message, instead of using __func__.
-
-This was a reuse from the existing tsens irq handler code, but I agree.
-Let me fix it in v2.
-
->> +			continue;
->> +		}
->> +
->> +		tsens_read_irq_state(priv, hw_id, s, &d);
->> +
->> +		if ((d.up_thresh < temp) || (d.low_thresh > temp)) {
->> +			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
->> +				hw_id, __func__, temp);
->> +			thermal_zone_device_update(s->tzd,
->> +						   THERMAL_EVENT_UNSPECIFIED);
-> 
-> This is just 86 chars long, no need to wrap the line.
-
-Sure.
-
->> +		} else {
->> +			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
-> 
-> Double space after ':'
-
-Again this is a reuse from the existing tsens irq handler code, but I 
-agree. Let me fix it in v2.
-
->> +				hw_id, __func__, temp);
->> +		}
->> +	}
->> +}
->> +
->>   static int tsens_probe(struct platform_device *pdev)
->>   {
->>   	int ret, i;
->> @@ -1139,6 +1333,19 @@ static int tsens_probe(struct platform_device *pdev)
->>   	priv->dev = dev;
->>   	priv->num_sensors = num_sensors;
->>   	priv->needs_reinit_wa = data->needs_reinit_wa;
->> +
->> +	if (priv->needs_reinit_wa && !qcom_scm_is_available())
->> +		return -EPROBE_DEFER;
->> +
->> +	if (priv->needs_reinit_wa) {
->> +		priv->reinit_wa_worker = alloc_workqueue("tsens_reinit_work",
->> +							 WQ_HIGHPRI, 0);
-> 
-> Do you really need your own work queue for this, how about just
-> scheduling the work on system_highpri_wq?
-
-Ok, let me use 'system_highpri_wq' in v2.
-
-Regards,
-Bhupesh

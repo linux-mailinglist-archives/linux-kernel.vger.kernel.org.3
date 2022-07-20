@@ -2,132 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E60C57BB61
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD1757BB62
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbiGTQZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
+        id S236856AbiGTQ0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235397AbiGTQYs (ORCPT
+        with ESMTP id S230119AbiGTQ0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:24:48 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FE76249B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:47 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l23so33998921ejr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B83+a/WCg0K/QB4/cfV+I8us78zMwa7Te60tJq42yYo=;
-        b=il3tFAHy2sjOz3Zwp7l/b3Lo+C6beKr7cQVDIQ7d1ylJSlTYCyR4UsSomA0KFBHK6v
-         9DO3iFrTAMI5NzmF55sItLSS4OtivvuMwNBBuRpzS1U3jNUZ1zgBOqjc/VvG5W2ZAF2a
-         Hs/G4v0OAkj7WzRmbRMGEXPmVIM6dFOZoijgg8q9ikd0BvA8ZzbPife0cOAJbEgBIXwy
-         XoVzQIr8E4YDMSk0KRUDH4UcysgrfZ0EkqbcYYoAP+9ZuCC+YBjLPwVfuqOiEOgtCDbz
-         5yLUlqwQp4RoANw67o16O4d6GZ0ZXKZKf3PYPTVvmlPz9Vb2SNmcXOSzY5A7kksJZvG9
-         tR6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B83+a/WCg0K/QB4/cfV+I8us78zMwa7Te60tJq42yYo=;
-        b=Lg5t2YJermnBqblJ8R8n/4u1zOAEvYwuTruOCB2QyWBU9MZVT7qMDXCCimk/uV9dxd
-         VDuV6Bf8nLg7Yp+9P3x3sK6lZbSLQeW6PUk9QKwcoTYESiz7mYE1mb7bbZweS5I5ldJR
-         a6wu8ZBqsehoQqISfKuvPqAWtUGiOiErXOeFGmTfdF5gKKNXUjmCq8TwgaadNLoUopfw
-         CE+eQbVPWo3oSsROpVU4+mwV5maBuukZAaZFaZ1kF91dmog0d+JoVuefNx7IV7EL1yXh
-         mFcnKMVwz4YT9jvMY4ADrINU+z0nDTy2yJnaN245zr5U4Hetb0oOe7+iJ8fJtSamxqNh
-         Sesw==
-X-Gm-Message-State: AJIora9CWWFTG94AdKIyvGNu1tAmDGvJYTeeBfo6NmQc+b3B77RIB9iE
-        tjm7mhgK58k8ePJXj/E6t8E=
-X-Google-Smtp-Source: AGRyM1to0zNwyq4MbmCgppYXRLBhyZMSWlMhwNEziXeFIJaT+QuFHXt0kvN1NJRgoh0rdQsrmJR8ow==
-X-Received: by 2002:a17:907:7608:b0:72b:4f33:bcce with SMTP id jx8-20020a170907760800b0072b4f33bccemr35617045ejc.252.1658334285589;
-        Wed, 20 Jul 2022 09:24:45 -0700 (PDT)
-Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id b7-20020aa7dc07000000b0043bbd133358sm375834edu.37.2022.07.20.09.24.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 09:24:45 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 18:24:43 +0200
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] staging: vt6655: Convert macro vt6655_mac_clear_stck_ds
- to function
-Message-ID: <11d4aaf99e1d508c3019327937c7a160050847c1.1658333350.git.philipp.g.hortmann@gmail.com>
-References: <cover.1658333350.git.philipp.g.hortmann@gmail.com>
+        Wed, 20 Jul 2022 12:26:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C291AD93;
+        Wed, 20 Jul 2022 09:26:18 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 18:26:15 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658334377;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=FmzFd4vLylbmJlciVmTg+XgbOpWzFd/O3iwyuawf0N8=;
+        b=kmMmfNPHddxwhREZau1sVKYB9C4Bc/yb7iuXkI1H0ypBNrvSUQmgDqrOfXfI5S2Ks+e9oY
+        25bNkJOpLGe00K3EVTogpzYhK+QOdwJBmI1RKz5XxCuuYodNUCStf3GfldGSngcy0TRsLA
+        5rMF5Bjdn2ZPAO1gZBWl4OxMlAZGp+6kRTJakcGjYU584yGK4LlN6XxLjN3MRVbyDhsUyJ
+        4J6rUaosyzzmfNwvtFTmb6Jiyf+avglgCvz0Ib9eTDoBOJSr6l3IPcz50vq6moX2Mg7VUJ
+        xX6/8LYeLOtZwvYM+W3kBCrQ9Kl+U0kRl4/P7pR3ycdnwzijzQVKqjaX1fC+2w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658334377;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=FmzFd4vLylbmJlciVmTg+XgbOpWzFd/O3iwyuawf0N8=;
+        b=qRZlY4smc589nRlBaRfBm45fGHCmG4O/jbC0L5cO4vjZrK2+SJDMpPS2dzS4QLwxw21A2I
+        A/9xeeRqiyHpN9BA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v5.19-rc7-rt7
+Message-ID: <Ytgsp00o2dfGRn9v@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1658333350.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert once used macro to static function.
-Multiline macros are not liked by kernel community.
+Dear RT folks!
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/vt6655/mac.c | 11 +++++++++++
- drivers/staging/vt6655/mac.h |  8 --------
- 2 files changed, 11 insertions(+), 8 deletions(-)
+I'm pleased to announce the v5.19-rc7-rt7 patch set. 
 
-diff --git a/drivers/staging/vt6655/mac.c b/drivers/staging/vt6655/mac.c
-index d7ee42df7062..3e9494c653dc 100644
---- a/drivers/staging/vt6655/mac.c
-+++ b/drivers/staging/vt6655/mac.c
-@@ -38,6 +38,8 @@
+Changes since v5.19-rc7-rt6:
+
+  - Slightly update the ptrace patch (for wait_task_inactive(). There is
+    no change in functionality, just the code has been reordered.
+
+Known issues
+     - Valentin Schneider reported a few splats on ARM64, see
+          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+
+The delta patch against v5.19-rc7-rt6 is appended below and can be found here:
  
- #include "mac.h"
- 
-+static void vt6655_mac_clear_stck_ds(void __iomem *iobase);
-+
- void vt6655_mac_reg_bits_on(void __iomem *iobase, const u8 reg_offset, const u8 bit_mask)
- {
- 	unsigned char reg_value;
-@@ -70,6 +72,15 @@ void vt6655_mac_word_reg_bits_off(void __iomem *iobase, const u8 reg_offset, con
- 	iowrite16(reg_value & ~(bit_mask), iobase + reg_offset);
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/incr/patch-5.19-rc7-rt6-rt7.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.19-rc7-rt7
+
+The RT patch against v5.19-rc7 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/older/patch-5.19-rc7-rt7.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.19/older/patches-5.19-rc7-rt7.tar.xz
+
+Sebastian
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 1d4660a1915b3..377e7d4139d87 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3299,6 +3299,40 @@ int migrate_swap(struct task_struct *cur, struct task_struct *p,
  }
+ #endif /* CONFIG_NUMA_BALANCING */
  
-+static void vt6655_mac_clear_stck_ds(void __iomem *iobase)
++#ifdef CONFIG_PREEMPT_RT
++static __always_inline bool state_mismatch(struct task_struct *p, unsigned int match_state)
 +{
-+	unsigned char reg_value;
++	unsigned long flags;
++	bool mismatch;
 +
-+	reg_value = ioread8(iobase + MAC_REG_STICKHW);
-+	reg_value = reg_value & 0xFC;
-+	iowrite8(reg_value, iobase + MAC_REG_STICKHW);
++	raw_spin_lock_irqsave(&p->pi_lock, flags);
++	mismatch = READ_ONCE(p->__state) != match_state &&
++		READ_ONCE(p->saved_state) != match_state;
++	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
++	return mismatch;
 +}
++static __always_inline bool state_match(struct task_struct *p, unsigned int match_state,
++					bool *wait)
++{
++	if (READ_ONCE(p->__state) == match_state)
++		return true;
++	if (READ_ONCE(p->saved_state) != match_state)
++		return false;
++	*wait = true;
++	return true;
++}
++#else
++static __always_inline bool state_mismatch(struct task_struct *p, unsigned int match_state)
++{
++	return READ_ONCE(p->__state) != match_state;
++}
++static __always_inline bool state_match(struct task_struct *p, unsigned int match_state,
++					bool *wait)
++{
++	return READ_ONCE(p->__state) == match_state;
++}
++#endif
 +
  /*
-  * Description:
-  *      Test if all test bits off
-diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-index c2c9cb07f32d..467c599a3289 100644
---- a/drivers/staging/vt6655/mac.h
-+++ b/drivers/staging/vt6655/mac.h
-@@ -537,14 +537,6 @@
+  * wait_task_inactive - wait for a thread to unschedule.
+  *
+@@ -3317,12 +3351,10 @@ int migrate_swap(struct task_struct *cur, struct task_struct *p,
+  */
+ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state)
+ {
+-	int running, queued;
++	bool running, wait;
+ 	struct rq_flags rf;
+ 	unsigned long ncsw;
+ 	struct rq *rq;
+-	bool saved_state_match;
+-	bool update_ncsw;
  
- /*---------------------  Export Macros ------------------------------*/
- 
--#define vt6655_mac_clear_stck_ds(iobase)				\
--do {									\
--	unsigned char reg_value;					\
--	reg_value = ioread8(iobase + MAC_REG_STICKHW);			\
--	reg_value = reg_value & 0xFC;					\
--	iowrite8(reg_value, iobase + MAC_REG_STICKHW);			\
--} while (0)
+ 	for (;;) {
+ 		/*
+@@ -3345,24 +3377,8 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
+ 		 * is actually now running somewhere else!
+ 		 */
+ 		while (task_running(rq, p)) {
 -
- #define MACvSelectPage0(iobase)				\
- 	iowrite8(0, iobase + MAC_REG_PAGE1SEL)
+-			if (match_state) {
+-				bool mismatch = false;
+-#ifndef CONFIG_PREEMPT_RT
+-				if (READ_ONCE(p->__state != match_state)
+-					mismatch = true;
+-#else
+-				unsigned long flags;
+-
+-				raw_spin_lock_irqsave(&p->pi_lock, flags);
+-				if (READ_ONCE(p->__state) != match_state &&
+-				    READ_ONCE(p->saved_state) != match_state)
+-					mismatch = true;
+-				raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+-#endif
+-				if (mismatch)
+-					return 0;
+-			}
++			if (match_state && state_mismatch(p, match_state))
++				return 0;
+ 			cpu_relax();
+ 		}
  
--- 
-2.37.1
-
+@@ -3374,24 +3390,12 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
+ 		rq = task_rq_lock(p, &rf);
+ 		trace_sched_wait_task(p);
+ 		running = task_running(rq, p);
+-		queued = task_on_rq_queued(p);
++		wait = task_on_rq_queued(p);
+ 		ncsw = 0;
+-		update_ncsw = false;
+-		saved_state_match = false;
+ 
+-		if (!match_state) {
+-			update_ncsw = true;
+-		} else if (READ_ONCE(p->__state) == match_state) {
+-			update_ncsw = true;
+-#ifdef CONFIG_PREEMPT_RT
+-		} else if (READ_ONCE(p->saved_state) == match_state) {
+-			update_ncsw = true;
+-			saved_state_match = true;
+-#endif
+-		}
+-
+-		if (update_ncsw)
++		if (!match_state || state_match(p, match_state, &wait))
+ 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
++
+ 		task_rq_unlock(rq, p, &rf);
+ 
+ 		/*
+@@ -3420,7 +3424,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
+ 		 * running right now), it's preempted, and we should
+ 		 * yield - it could be a while.
+ 		 */
+-		if (unlikely(queued) || saved_state_match) {
++		if (unlikely(wait)) {
+ 			ktime_t to = NSEC_PER_SEC / HZ;
+ 
+ 			set_current_state(TASK_UNINTERRUPTIBLE);
+diff --git a/localversion-rt b/localversion-rt
+index 8fc605d806670..045478966e9f1 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt6
++-rt7

@@ -2,104 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3A057B104
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E7257B114
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239763AbiGTGYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S239849AbiGTG1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGTGYI (ORCPT
+        with ESMTP id S239826AbiGTG1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:24:08 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30680459B2;
-        Tue, 19 Jul 2022 23:24:08 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 23so15517423pgc.8;
-        Tue, 19 Jul 2022 23:24:08 -0700 (PDT)
+        Wed, 20 Jul 2022 02:27:30 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E66E459B2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:27:28 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id w2so19958277ljj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:27:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qW4cVmX1h5qZcLNtal52XJ6b8VLXyII7R4K8/LUylOY=;
-        b=b9nJbugDE8v6UEtq08WfqdV8g/Ro42CRXvk8R9JRfDaW1nqNrnKYkJznV4y3fyh3jD
-         xU3ZVvaeKxIIMu6B2Xn6kodlPD4H6uT2gPc6XcLTOur+9ur5qFUwKg7pnQID3yyY8aah
-         BUtRjQaC7c16DIm9PUQs349wmd6X7v8+ymhZXLZ9TEPWYXkvTKKzMvQy37gZojABPK2y
-         MzOmy3swv+oTq+t+KzSJXn3YAUd9Kiw0lxQB2CtALKx6MA82zf+J2ozdmB6yh+O9xuwF
-         N3u30wkxj1mucmMQDugX8M41NqLUbGYVaFmHYzkjZaNd3ACPALWTMls57nKDU9Wd+wjV
-         EyxA==
+        bh=2RWe/5etiM/Atur64WJRybmJIj56BMtUZj35fRxxeJU=;
+        b=hC0C815XFlatblvHaHA3D/3JwyDCc0lWVZUUvkD1fi4EARD8mXH7BX7uQtEVI5qriz
+         6CgE98OSwz6vx0Zgg18GIU7wJ6MEWxBtXI0z/JJfQIYK0M4GK019WwEJ2NoFmpCVvRV0
+         EKcdO7I3zU2/DbAl0CIgYeDLdiduo0N5BAHne3fxltLKypi8pmTJRWaMbFV/nPVU+k7b
+         E8RT1MoLn6eV0WAEUvpnA/ecF0HsD6uIdSaTkwsj9PP8g4hUxhCP12ivCFFfLxPBAfF4
+         w0r9DCDMszTHWdGc5Bj+Rull8zb/LAwN0wp47OVURvr7j/PQafq+nlXPzQVcYWJidwU0
+         ZSMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qW4cVmX1h5qZcLNtal52XJ6b8VLXyII7R4K8/LUylOY=;
-        b=HxQuexyeOpZQWK0ZP3BOyBl5/0khkWbUMWKk9jlvC6oo/3J5FTh7gujvY4IzSsOgnR
-         Nhn1Wa0ccoCPEp2To1xTanc+uPJ4Fb+2ePokk6tuqXf71DsHtEM8qEL89zuG8azzSUcD
-         CgPx0MCGDnp7Mf3TDGHeVe9Gn7rgMwTVgVtghc6gstPgQc/t8hWXBu4W4BOp9hz+G4th
-         uUYnbw+EvoC7t7I0dSLcOkcOE0+XaYpi0UtkOgfktFggVLLa5uqhj5O4D9pZJmtT7Heh
-         80xqjU/1JA4MO5jT5f6180zeSa+1UjXah7G/wHsVpFHYQYYUWowwDDX+MLAzPQNR2Nv/
-         I4Hg==
-X-Gm-Message-State: AJIora9IFFSdW55uOWZeOH+7CLGgy7Z6c/XO+qH7oen+8Lr0WicoFata
-        TQU4YnyHzrGRB9qyqmYyzd0=
-X-Google-Smtp-Source: AGRyM1t20nKvY5mV9uyAaORDu5M6aIvYGVS5ZptGu3bcOMOYwTEMY3j9cRRop4fUq6UWUwH9CnM8jA==
-X-Received: by 2002:a63:8549:0:b0:415:ed3a:a0c with SMTP id u70-20020a638549000000b00415ed3a0a0cmr31889521pgd.448.1658298247575;
-        Tue, 19 Jul 2022 23:24:07 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id a11-20020a170902eccb00b0016a034ae481sm12961967plh.176.2022.07.19.23.24.00
+        bh=2RWe/5etiM/Atur64WJRybmJIj56BMtUZj35fRxxeJU=;
+        b=3xUqVF+necQc4jEjpvLuDBlgMQhVaNTseFZKUyc2qEpG8fRTD0DubRX6gWO4ayIVKa
+         oBhFRu0W1dUv7mMjbXptX8lLA+Dm0JHKDBCSqltqERF9H4Cb4Ta5zZZBPiPPs8VlWf9X
+         jKmO8djjwxv1GXWE9mxgEcgxg7sEjq9u+2d+/BY1UIcqHaS4sGyinQ4DPCH48QWC4HeN
+         3iRzbmStmMqIxg8Ojmqj0FN7OzKpL69la2SJT5+lYiD2MzXSQtacWtWzimN6DKAnTmci
+         uXszNCaKHagWxr8HGahslbdk+yRylP2fDC41HDnekfxfrdwdjy3KIMOtPlMBB5g6JAhp
+         gvdQ==
+X-Gm-Message-State: AJIora8/Tpgl+25GWBrIoOew2xZ48sqSn5/nNpkVH/t7aauyx6R9d+i7
+        WprpxiZcB+u/o48kiSZ4q45I/A==
+X-Google-Smtp-Source: AGRyM1tsEpxIQZ9kT4ftSsfNFNs1JlZSItCy24gOE7mBFnUqo/n9Mj/HB/KCURSz4serspeZznlkGg==
+X-Received: by 2002:a2e:2d09:0:b0:25a:816a:2e62 with SMTP id t9-20020a2e2d09000000b0025a816a2e62mr15449635ljt.147.1658298446484;
+        Tue, 19 Jul 2022 23:27:26 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id p18-20020ac24ed2000000b0047255d210d6sm3617731lfr.5.2022.07.19.23.27.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 23:24:07 -0700 (PDT)
-Message-ID: <020db88c-981f-01fb-9689-3e54824f260a@gmail.com>
-Date:   Wed, 20 Jul 2022 14:23:57 +0800
+        Tue, 19 Jul 2022 23:27:26 -0700 (PDT)
+Message-ID: <11cc46d8-ae01-f3d2-b9c6-c366c6e4afc9@linaro.org>
+Date:   Wed, 20 Jul 2022 08:27:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH V4] swiotlb: Split up single swiotlb lock
+Subject: Re: [PATCH v2 2/3] dt-bindings: clock: add SM6375 QCOM global clock
+ bindings
 Content-Language: en-US
-To:     "hch@infradead.org" <hch@infradead.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "bp@suse.de" <bp@suse.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "kirill.shutemov@intel.com" <kirill.shutemov@intel.com>,
-        "andi.kleen@intel.com" <andi.kleen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>
-References: <20220708161544.522312-1-ltykernel@gmail.com>
- <PH0PR21MB3025C32C80BFBE8651CF196AD78C9@PH0PR21MB3025.namprd21.prod.outlook.com>
- <YtefA9mZJo5+YzBG@infradead.org>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <YtefA9mZJo5+YzBG@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220719115756.32231-1-konrad.dybcio@somainline.org>
+ <20220719115756.32231-2-konrad.dybcio@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220719115756.32231-2-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/2022 2:21 PM, hch@infradead.org wrote:
-> Tianyu or Michael, can someone please send me a fixup patch for this?
+On 19/07/2022 13:57, Konrad Dybcio wrote:
+> Add device tree bindings for global clock controller for SM6375 SoCs.
 > 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+> Changes since v1:
+> - dropped clock-names (switched to .index)
+> 
+>  .../bindings/clock/qcom,sm6375-gcc.yaml       |  65 +++++
+>  include/dt-bindings/clock/qcom,sm6375-gcc.h   | 234 ++++++++++++++++++
+>  2 files changed, 299 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,sm6375-gcc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+> new file mode 100644
+> index 000000000000..2e43cd75d3d4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sm6375-gcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Global Clock & Reset Controller Binding for SM6375
+> +
+> +maintainers:
+> +  - Konrad Dybcio <konrad.dybcio@somainline.org>
+> +
+> +description: |
+> +  Qualcomm global clock control module which supports the clocks, resets and
+> +  power domains on SM6375
+> +
+> +  See also:
+> +  - dt-bindings/clock/qcom,sm6375-gcc.h
+> +
 
-Sure. I will do this soon.
+Why you are not referencing qcom,gcc.yaml?
+
+> +properties:
+> +  compatible:
+> +    const: qcom,sm6375-gcc
+> +
+> +  clocks:
+> +    items:
+> +      - description: Board XO source
+> +      - description: Board XO Active-Only source
+> +      - description: Sleep clock source
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +  '#power-domain-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - '#clock-cells'
+> +  - '#reset-cells'
+> +  - '#power-domain-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,rpmcc.h>
+> +    clock-controller@1400000 {
+> +      compatible = "qcom,sm6375-gcc";
+> +      reg = <0x01400000 0x1f0000>;
+> +      clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> +               <&rpmcc RPM_SMD_XO_A_CLK_SRC>,
+> +               <&sleep_clk>;
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +    };
+> +
+> +...
+> diff --git a/include/dt-bindings/clock/qcom,sm6375-gcc.h b/include/dt-bindings/clock/qcom,sm6375-gcc.h
+> new file mode 100644
+> index 000000000000..1e9801e1cedf
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/qcom,sm6375-gcc.h
+> @@ -0,0 +1,234 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+
+Hm, Qualcomm gave permission to relicense bindings to dual-license,
+although I am not sure how this works with files where copyrights were
+transferred to Linux Foundation...
+
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Konrad Dybcio <konrad.dybcio@somainline.org>
+> + */
+> +
+> +#ifndef _DT_BINDINGS_CLK_QCOM_GCC_SM6375_H
+> +#define _DT_BINDINGS_CLK_QCOM_GCC_SM6375_H
+> +
+
+
+Best regards,
+Krzysztof

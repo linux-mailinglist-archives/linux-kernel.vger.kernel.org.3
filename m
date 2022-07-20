@@ -2,116 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F6B57C0CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E587357C0D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiGTXWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S231137AbiGTXXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbiGTXVx (ORCPT
+        with ESMTP id S229595AbiGTXXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:21:53 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD007437C;
-        Wed, 20 Jul 2022 16:21:39 -0700 (PDT)
-Received: from [192.168.88.254] (unknown [125.160.97.11])
-        by gnuweeb.org (Postfix) with ESMTPSA id 3A88E7E317;
-        Wed, 20 Jul 2022 23:21:37 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1658359299;
-        bh=sWVuj0qahdrEIm9D7naDXpYUsd8yvFnG5YezMfbrd3o=;
-        h=Date:To:Cc:From:Subject:From;
-        b=MPIgyDhTtlMgL1qNNvrv3TDLMsr4mkC22n6kgjosRKJiSYLIBpBpaA3vDDkHzHCQ2
-         BbtrHTDAqaKceBctn16MImETeNTKrTpAFmOwb6w9pgOPae/kWu3aEK6wkdjyj8zhdD
-         4jkgGlYmqtv8Mv8c5wleMQjjC2zveLTYNio1HQLUrTzlfXiY35lKhC9aRVj4IBKvij
-         EebDKiKjzDuw8bNrTcXaDc91J9I81Xh+9QctTNmarMXUovF9B/8onlK94WY7PJtNFe
-         3mlqyzh9lQV/N5WqHtFX6zambFENs4mTqqkI7qlO7GTPHvPrTogjke3jFL9EklTQqZ
-         F+6Q0uJ1PDJ9w==
-Message-ID: <2709ed98-6459-70ea-50d4-f24b7278fb24@gnuweeb.org>
-Date:   Thu, 21 Jul 2022 06:21:24 +0700
+        Wed, 20 Jul 2022 19:23:46 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC5A4F6A4
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:23:46 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id b9so135252pfp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qfR3nLVFTpPA1Jo8g/Je7VqV/ARVjZfsoCJM7fq7n1Q=;
+        b=fk92LRXo71Y0CPzDYBJaWRSrrPIdnW2K0E7OcNS0kun4eWarkJNZenVXQg6rq1fHNo
+         rXGY5vBM5HgEQnOnqGH+H/PisEoSVo1xQetvC8EgO+Ks2tsk1EmNGROqQqXzmCu1CoeA
+         HbIHShxSzNA4Mdgl4hihAREh+wfQ2RyBs94JY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qfR3nLVFTpPA1Jo8g/Je7VqV/ARVjZfsoCJM7fq7n1Q=;
+        b=qjFgOf036ShzCQL88/RSzd4rRYoFQXFSBGKfCYhuvaH7NnON0A8jhPobecIC0fUpdB
+         h0V8spXtkxje+AELZraKUZmatsNDWiOhOcZKYGr4iD8ac4Zodr/XlkWdDuMyhGwtzgvz
+         du5LhnZZ/jvbbalYRAUHPypvfMrcyAXhs5/ueIcPSXGbQ7h7gWRxGLKeeQ9hkaZnXmTV
+         uIbJNtJiMHEgkcVdk8U15u5PcVZ0usKIvmqE9Q5ocNZCCv7xMXInIkDOvWDbvZsTEwNy
+         zZ2zURqs9eeC9qlHzMFbe/qEPH0sc+04APb/YjFH76af1Pl5lzfz249FgntwJXZ+fFWA
+         xZ8A==
+X-Gm-Message-State: AJIora85lWfUCBj1EeY53bGloMFhz/lqZjV2ZgY6KYZBkUg/9zgn6nkA
+        dt70G8tZjpaL5KgQxSZz6KhmPSTxRwuW7BPq
+X-Google-Smtp-Source: AGRyM1v2SZ2co4GgiSaGYwPciyT9GbzocP88EbzijPvszQAqdL25QsyvCrJhVJCFgHLbj0XBJQM2kg==
+X-Received: by 2002:a63:2a95:0:b0:41a:27e5:1996 with SMTP id q143-20020a632a95000000b0041a27e51996mr15706166pgq.447.1658359425843;
+        Wed, 20 Jul 2022 16:23:45 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:fdb4:f565:8767:5019])
+        by smtp.gmail.com with ESMTPSA id z3-20020a623303000000b0052895642037sm175853pfz.139.2022.07.20.16.23.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 16:23:45 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/panel-edp: Fix typo in kerneldoc comment (appers=>appears)
+Date:   Wed, 20 Jul 2022 16:23:21 -0700
+Message-Id: <20220720162314.1.Ieef5bc3848df40b71605b70bb571d6429e8978de@changeid>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Fernanda Ma'rouf <fernandafmr12@gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Linux 5.19-rc7 liburing test `poll-mshot-overflow.t` and
- `read-write.t` fail
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jens,
+Ever since I got the spell-check working in my editor this one has
+been bugging me. Fix it.
 
-Kernel version:
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-   commit ff6992735ade75aae3e35d16b17da1008d753d28
-   Author: Linus Torvalds <torvalds@linux-foundation.org>
-   Date:   Sun Jul 17 13:30:22 2022 -0700
+ drivers/gpu/drm/panel/panel-edp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-       Linux 5.19-rc7
-
-liburing version:
-
-   commit 4e6eec8bdea906fe5341c97aef96986d605004e9 (HEAD, origin/master, origin/HEAD)
-   Author: Dylan Yudaken <dylany@fb.com>
-   Date:   Mon Jul 18 06:34:29 2022 -0700
-
-       fix io_uring_recvmsg_cmsg_nexthdr logic
-       
-       io_uring_recvmsg_cmsg_nexthdr was using the payload to delineate the end
-       of the cmsg list, but really it needs to use whatever was returned by the
-       kernel.
-       
-       Reported-and-tested-by: Jens Axboe <axboe@kernel.dk>
-       Fixes: 874406f7fb09 ("add multishot recvmsg API")
-       Signed-off-by: Dylan Yudaken <dylany@fb.com>
-       Link: https://lore.kernel.org/r/20220718133429.726628-1-dylany@fb.com
-       Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
-Two liburing tests fail:
-
-   Tests failed:  <poll-mshot-overflow.t> <read-write.t>
-   make[1]: *** [Makefile:237: runtests] Error 1
-   make[1]: Leaving directory '/home/ammarfaizi2/app/liburing/test'
-   make: *** [Makefile:21: runtests] Error 2
-
-
-   ammarfaizi2@integral2:~/app/liburing$ uname -a
-   Linux integral2 5.19.0-rc7-2022-07-18 #1 SMP PREEMPT_DYNAMIC Mon Jul 18 15:42:27 WIB 2022 x86_64 x86_64 x86_64 GNU/Linux
-   ammarfaizi2@integral2:~/app/liburing$ test/read-write.t
-   cqe res -22, wanted 8192
-   test_buf_select vec failed
-   ammarfaizi2@integral2:~/app/liburing$ test/poll-mshot-overflow.t
-   signalled no more!
-   ammarfaizi2@integral2:~/app/liburing$
-
-JFYI, -22 is -EINVAL.
-
-read-write.t call trace when calling fprintf(..., "cqe res %d, wanted %d\n", ...):
-
-   #0  ___fprintf_chk (./debug/fprintf_chk.c:25)
-   #1  fprintf (/usr/include/x86_64-linux-gnu/bits/stdio2.h:105)
-   #2  __test_io (read-write.c:181)
-   #3  test_buf_select (read-write.c:577)
-   #4  main (read-write.c:849)
-
-poll-mshot-overflow.t call trace should be trivial.
-
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index e6645d6e9b59..07a383dff548 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -53,7 +53,7 @@ struct panel_delay {
+ 	 * before the HPD signal is reliable. Ideally this is 0 but some panels,
+ 	 * board designs, or bad pulldown configs can cause a glitch here.
+ 	 *
+-	 * NOTE: on some old panel data this number appers to be much too big.
++	 * NOTE: on some old panel data this number appears to be much too big.
+ 	 * Presumably some old panels simply didn't have HPD hooked up and put
+ 	 * the hpd_absent here because this field predates the
+ 	 * hpd_absent. While that works, it's non-ideal.
 -- 
-Ammar Faizi
+2.37.0.170.g444d1eabd0-goog
 

@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AF957AD4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A372A57AD4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbiGTBmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S240793AbiGTBmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242093AbiGTBl5 (ORCPT
+        with ESMTP id S241231AbiGTBmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:41:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6A26B768
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:37:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5F5D8CE1E9B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4CA1C341C6;
-        Wed, 20 Jul 2022 01:37:23 +0000 (UTC)
-Date:   Tue, 19 Jul 2022 21:37:21 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, pmladek@suse.com,
-        linux@rasmusvillemoes.dk, willy@infradead.org
-Subject: Re: [PATCH v4 00/34] Printbufs - new data structure for building
- strings
-Message-ID: <20220719213704.5f4a5d61@rorschach.local.home>
-In-Reply-To: <19c1a301-13ca-d7cf-c0f6-a63f75b7f8eb@gmail.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
-        <20220719191522.4002a5fb@gandalf.local.home>
-        <7462e934-f746-eef7-ff92-0eeb8cc08b82@gmail.com>
-        <20220719200507.361b06ee@rorschach.local.home>
-        <a674920f-68b0-0b72-5375-da7c062543cc@gmail.com>
-        <20220719211156.75ea9255@rorschach.local.home>
-        <19c1a301-13ca-d7cf-c0f6-a63f75b7f8eb@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 19 Jul 2022 21:42:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814BCC0C;
+        Tue, 19 Jul 2022 18:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658281132; x=1689817132;
+  h=to:cc:subject:references:date:mime-version:
+   content-transfer-encoding:from:message-id:in-reply-to;
+  bh=c2bvKt7+H9cgbwVo61T9KmcL3V0k2Kq7e6nzPbdgV7g=;
+  b=INWVmjBZLBZmzy+oyvfa1AXLqO5S8LWv8e1w35mSjxJnM/sS3iUSuQdB
+   9fvcmVVabR0X81AiOoOwFEkOY4cN0cVbLWXDPxi4IlEh5p3/nMMYnawg5
+   WCMuG84EwzwjZRPV2nrDv7J9WebnMOCrlFO7ZyhehPo5VrOk1gEmDoTY+
+   ZoAkyVwEqL5Lmta0EfQobqlByxTS2+GKPcvtR6TI90jAjIa+ptRg5Dhmt
+   MgKKiNJGhxQfXGHIVv7/eKHqANjbNkvu9ISgRJo7GIf3Zri1GfjgQoOEg
+   nmqdAspZ9rMLyS6tpK/qc7/vjiYIhmUHpMsjQa4PDx6skyqdZ4LjR1ICw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="284214652"
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="284214652"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 18:38:52 -0700
+X-IronPort-AV: E=Sophos;i="5.92,285,1650956400"; 
+   d="scan'208";a="687336086"
+Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.212.16.56])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 19 Jul 2022 18:38:51 -0700
+Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
+To:     linux-kernel@vger.kernel.org,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>
+Cc:     "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-sgx@vger.kernel.org
+Subject: Re: [PATCH] x86/sgx: Allow enclaves to use Asynchrounous Exit
+ Notification
+References: <20220705183648.3739111-1-dave.hansen@linux.intel.com>
+ <op.1pasmtstwjvjmi@hhuan26-mobl1.mshome.net>
+ <197bba3c-acd2-eb13-4f27-7a5e914ed2e4@intel.com>
+Date:   Tue, 19 Jul 2022 20:38:47 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "Haitao Huang" <haitao.huang@linux.intel.com>
+Organization: Intel Corp
+Message-ID: <op.1pkz6xx8wjvjmi@hhuan26-mobl1.mshome.net>
+In-Reply-To: <197bba3c-acd2-eb13-4f27-7a5e914ed2e4@intel.com>
+User-Agent: Opera Mail/1.0 (Win32)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 21:31:49 -0400
-Kent Overstreet <kent.overstreet@gmail.com> wrote:
+On Tue, 19 Jul 2022 12:54:41 -0500, Dave Hansen <dave.hansen@intel.com>  
+wrote:
 
-> > No, my response is, why should we replace something that is working
-> > just fine?  
-> For you. For your code.
+> Oh, and, btw...  I don't have any hardware that can actually test this
+> patch.  It can't be applied until I have an actual tested-by from
+> someone with the hardware.
 
-For the current working kernel.
-
-> 
-> Look, Steve, I've tried to work with you. And I've given you reasons why 
-> seq_buf doesn't work for vsprintf.c, and more general cases. You have 
-
-Please post the lore links, I'll go back and read them.
-
-> not responded _at all_ with technical reasons or discussion, all you've 
-> done from the very start is lecture me on process.
-
-That's because process *is* the way things get into upstream. I guess
-you fail to understand that.
-
-> 
-> And, to be blunt, the time to have the printbuf vs. seq_buf discussion 
-> was months ago. I tried to start that discussion with you, and you 
-> ghosted on IRC when I started talking about the things in seq_buf that 
-> would have to change.
-
-Look, that was when I was traveling. And when I'm traveling I pretty
-much do not respond to IRC.
-
-> 
-> Like I said, I'll CC you when v5 is posted.
-
-OK.
-
--- Steve
-
+I can ask someone in our team to test and report back results with  
+Tested-by when you post updated patch.
+Thanks
+Haitao

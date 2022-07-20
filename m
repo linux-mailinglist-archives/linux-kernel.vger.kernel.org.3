@@ -2,88 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5959757C01C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A357657C021
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiGTWfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 18:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S230432AbiGTWia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 18:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGTWff (ORCPT
+        with ESMTP id S229631AbiGTWi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 18:35:35 -0400
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB25CBC28;
-        Wed, 20 Jul 2022 15:35:30 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id v1so6443985ilg.4;
-        Wed, 20 Jul 2022 15:35:30 -0700 (PDT)
+        Wed, 20 Jul 2022 18:38:26 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79B42634
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:38:25 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id y24so119789plh.7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 15:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qKundeLwLE8yHDmVC5J90MC57u7WttoWzC9FUcDruuA=;
+        b=teu9Ow/yaZVavTFIRBfdZhx5omBHQ/R1a+0wEZEdWXDuh4SFLngIh/dkQhevzdIAw9
+         wN9if+zAcfY35HB4jzS9uInlSXQzELXqE41bHh/AjHa+O2v2AGnM48wB9piAxJkHElrG
+         i3PaXat4FmqoDkRMrglMzGqg/q5d6h+bXP7t3/Cu47JOa1xUOU5ed/UuCqKIyxx82Otn
+         XQ1ZTwBRWsjt0i8WD/HgPDx7o6sLUuetf79m9fFiWmZy6QX7QIKQwVmja7DIfPokUKmA
+         M6fqfCHoxU6xD9GNbgdWsvRZBO+NoyQcOcEKyS/T+j+Xxnl5BLnaXE0/myauUi3LlpkF
+         KIpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q+JNTXrCvUZCWvrUEjoeK4DEdUzmVuvIzqvtnyaBDYs=;
-        b=wlnvWMHqbjoMB91q0sgPs+vj5gAouno5Dajkl7USDNsSlBFkasZOam5ZRpAJRQSCIz
-         H0+dNeN9HqZ76lkMzW2WAcrcEKafH0JCKepTUjNSacXqGUJdQM3sn8V16a6N5z8YhBwj
-         VvHSs7CDYTP1aMZOFTaI3TUPrh90Vw7a7ZvdzNi7XdkNccTeHbusqUUxWnNbajN7x62O
-         z6V+w9DcdnVlmG/pXLYOzPBwbqkz7T88qM9DNPUpG3zvdl4E852Il7/aC+xACRpXxVAP
-         EPRoJhXQ+SS6LzcMFEVcKsAZsqvV3DqAKPy/rp6yh5/88wmZ5krn5Mk5bMGBDYzUTZNI
-         rsvw==
-X-Gm-Message-State: AJIora+KT3LAYC3SmcKYw4xE5mdEJfNlRFSo02MCjbt1+FggXsY4uuKM
-        sjEUmTR8/Gg/KWCoJaHQ8Q==
-X-Google-Smtp-Source: AGRyM1tRpZp9dVUYdPELLOlKs2qE/RdCpVCQkIQGG3pKo3QvhAnpDuvWJJn465cgxkvC9AGn/XqQLw==
-X-Received: by 2002:a92:ddd1:0:b0:2d5:4877:65c8 with SMTP id d17-20020a92ddd1000000b002d5487765c8mr20608139ilr.267.1658356530116;
-        Wed, 20 Jul 2022 15:35:30 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id n42-20020a02712a000000b0033f3d432a2asm40170jac.174.2022.07.20.15.35.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 15:35:29 -0700 (PDT)
-Received: (nullmailer pid 4105171 invoked by uid 1000);
-        Wed, 20 Jul 2022 22:35:28 -0000
-Date:   Wed, 20 Jul 2022 16:35:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jimmy Chen <jinghung.chen3@hotmail.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v6 1/3] dt-bindings: arm: qcom: document sc7280 and
- villager board
-Message-ID: <20220720223528.GA4105117-robh@kernel.org>
-References: <20220718073104.146985-1-jinghung.chen3@hotmail.com>
- <SG2PR03MB500654EF43123FBDF5F35C05CC8C9@SG2PR03MB5006.apcprd03.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qKundeLwLE8yHDmVC5J90MC57u7WttoWzC9FUcDruuA=;
+        b=N0RQsFClzjRoaag41IsOESMBdYlGwKsHo1TipMP7w3EEP0dnh7RxGJIcriQhBvL4Wc
+         AptUUYAJVcfaklicp130xcDwzyuAuO9SQYPtORMrdvA2gnvIFy1bIvKcgtUEcijy5znc
+         R+wah3UJQaBJMqALufKXQdSGrM1Bb0u6D7e0A+XbqSaceJ2QYrjkc2ElfZHGD/j0V0Dx
+         u6azG4gC5mUJCvdrrszoJgrXUV63S8ejxy45Wk5QZYQDlCRfllLokFeUjoiCeot7FEen
+         bHu0O9TqE4SQ9+q/jqBWtCzw/pB1sF8aYPkrfDxd3BngCnY8ptzo+LSZdJBNpR5CHmiW
+         H6bA==
+X-Gm-Message-State: AJIora/rl+yCmKrdDsOVIt6po2GJkcfnvGMEHL9bn2TkB+nzRP/doJIJ
+        d9OWcp+bdszOdTOIkJootEzJRN+MAXOYtHQ8tpu/OA==
+X-Google-Smtp-Source: AGRyM1sT0VjwrAlAy19Hev842jcsdcPceuFOqBKzFLrWQP0Y1syi+ScUaLbMtA1ceUCC9L3oIZ5bRsF73lTpCfLiRao=
+X-Received: by 2002:a17:90b:4b4d:b0:1ef:bff5:de4f with SMTP id
+ mi13-20020a17090b4b4d00b001efbff5de4fmr7931216pjb.120.1658356704967; Wed, 20
+ Jul 2022 15:38:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SG2PR03MB500654EF43123FBDF5F35C05CC8C9@SG2PR03MB5006.apcprd03.prod.outlook.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
+ <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
+ <179cfb89be0e4f928a55d049fe62aa9e@huawei.com> <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
+ <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com>
+In-Reply-To: <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 20 Jul 2022 15:38:13 -0700
+Message-ID: <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Joe Burton <jevburton.kernel@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Joe Burton <jevburton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 15:31:02 +0800, Jimmy Chen wrote:
-> This adds a LTE skus for Chromebook Villager to the yaml.
-> 
-> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> (no changes since v2)
-> 
-> Changes in v2:
-> -Add this patch
-> 
->  Documentation/devicetree/bindings/arm/qcom.yaml | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
+On Wed, Jul 20, 2022 at 3:30 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > Sent: Wednesday, July 20, 2022 5:57 PM
+> > On Wed, Jul 20, 2022 at 1:02 AM Roberto Sassu <roberto.sassu@huawei.com>
+> > wrote:
+> > >
+> > > > From: Stanislav Fomichev [mailto:sdf@google.com]
+> > > > Sent: Tuesday, July 19, 2022 10:40 PM
+> > > > On Tue, Jul 19, 2022 at 12:40 PM Joe Burton <jevburton.kernel@gmail.com>
+> > > > wrote:
+> > > > >
+> > > > > From: Joe Burton <jevburton@google.com>
+> > > > >
+> > > > > Add an extensible variant of bpf_obj_get() capable of setting the
+> > > > > `file_flags` parameter.
+> > > > >
+> > > > > This parameter is needed to enable unprivileged access to BPF maps.
+> > > > > Without a method like this, users must manually make the syscall.
+> > > > >
+> > > > > Signed-off-by: Joe Burton <jevburton@google.com>
+> > > >
+> > > > Reviewed-by: Stanislav Fomichev <sdf@google.com>
+> > > >
+> > > > For context:
+> > > > We've found this out while we were trying to add support for unpriv
+> > > > processes to open pinned r-x maps.
+> > > > Maybe this deserves a test as well? Not sure.
+> > >
+> > > Hi Stanislav, Joe
+> > >
+> > > I noticed now this patch. I'm doing a broader work to add opts
+> > > to bpf_*_get_fd_by_id(). I also adjusted permissions of bpftool
+> > > depending on the operation type (e.g. show, dump: BPF_F_RDONLY).
+> > >
+> > > Will send it soon (I'm trying to solve an issue with the CI, where
+> > > libbfd is not available in the VM doing actual tests).
+> >
+> > Is something like this patch included in your series as well? Can you
+> > use this new interface or do you need something different?
+>
+> It is very similar. Except that I called it bpf_get_fd_opts, as it
+> is shared with the bpf_*_get_fd_by_id() functions. The member
+> name is just flags, plus an extra u32 for alignment.
 
-Acked-by: Rob Herring <robh@kernel.org>
+We can bikeshed the naming, but we've been using existing conventions
+where opts fields match syscall fields, that seems like a sensible
+thing to do?
+
+> It needs to be shared, as there are functions in bpftool calling
+> both. Since the meaning of flags is the same, seems ok sharing.
+
+So I guess there are no objections to the current patch? If it gets
+accepted, you should be able to drop some of your code and use this
+new bpf_obj_get_opts..
+
+> Roberto
+>
+> > > Roberto
+> > >
+> > > > > ---
+> > > > >  tools/lib/bpf/bpf.c      | 10 ++++++++++
+> > > > >  tools/lib/bpf/bpf.h      |  9 +++++++++
+> > > > >  tools/lib/bpf/libbpf.map |  1 +
+> > > > >  3 files changed, 20 insertions(+)
+> > > > >
+> > > > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> > > > > index 5eb0df90eb2b..5acb0e8bd13c 100644
+> > > > > --- a/tools/lib/bpf/bpf.c
+> > > > > +++ b/tools/lib/bpf/bpf.c
+> > > > > @@ -578,12 +578,22 @@ int bpf_obj_pin(int fd, const char *pathname)
+> > > > >  }
+> > > > >
+> > > > >  int bpf_obj_get(const char *pathname)
+> > > > > +{
+> > > > > +       LIBBPF_OPTS(bpf_obj_get_opts, opts);
+> > > > > +       return bpf_obj_get_opts(pathname, &opts);
+> > > > > +}
+> > > > > +
+> > > > > +int bpf_obj_get_opts(const char *pathname, const struct
+> > bpf_obj_get_opts
+> > > > *opts)
+> > > > >  {
+> > > > >         union bpf_attr attr;
+> > > > >         int fd;
+> > > > >
+> > > > > +       if (!OPTS_VALID(opts, bpf_obj_get_opts))
+> > > > > +               return libbpf_err(-EINVAL);
+> > > > > +
+> > > > >         memset(&attr, 0, sizeof(attr));
+> > > > >         attr.pathname = ptr_to_u64((void *)pathname);
+> > > > > +       attr.file_flags = OPTS_GET(opts, file_flags, 0);
+> > > > >
+> > > > >         fd = sys_bpf_fd(BPF_OBJ_GET, &attr, sizeof(attr));
+> > > > >         return libbpf_err_errno(fd);
+> > > > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> > > > > index 88a7cc4bd76f..f31b493b5f9a 100644
+> > > > > --- a/tools/lib/bpf/bpf.h
+> > > > > +++ b/tools/lib/bpf/bpf.h
+> > > > > @@ -270,8 +270,17 @@ LIBBPF_API int bpf_map_update_batch(int fd,
+> > const
+> > > > void *keys, const void *values
+> > > > >                                     __u32 *count,
+> > > > >                                     const struct bpf_map_batch_opts *opts);
+> > > > >
+> > > > > +struct bpf_obj_get_opts {
+> > > > > +       size_t sz; /* size of this struct for forward/backward compatibility */
+> > > > > +
+> > > > > +       __u32 file_flags;
+> > > > > +};
+> > > > > +#define bpf_obj_get_opts__last_field file_flags
+> > > > > +
+> > > > >  LIBBPF_API int bpf_obj_pin(int fd, const char *pathname);
+> > > > >  LIBBPF_API int bpf_obj_get(const char *pathname);
+> > > > > +LIBBPF_API int bpf_obj_get_opts(const char *pathname,
+> > > > > +                               const struct bpf_obj_get_opts *opts);
+> > > > >
+> > > > >  struct bpf_prog_attach_opts {
+> > > > >         size_t sz; /* size of this struct for forward/backward compatibility */
+> > > > > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> > > > > index 0625adb9e888..119e6e1ea7f1 100644
+> > > > > --- a/tools/lib/bpf/libbpf.map
+> > > > > +++ b/tools/lib/bpf/libbpf.map
+> > > > > @@ -355,6 +355,7 @@ LIBBPF_0.8.0 {
+> > > > >
+> > > > >  LIBBPF_1.0.0 {
+> > > > >         global:
+> > > > > +               bpf_obj_get_opts;
+> > > > >                 bpf_prog_query_opts;
+> > > > >                 bpf_program__attach_ksyscall;
+> > > > >                 btf__add_enum64;
+> > > > > --
+> > > > > 2.37.0.170.g444d1eabd0-goog
+> > > > >

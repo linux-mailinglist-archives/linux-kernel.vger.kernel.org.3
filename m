@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B1957C110
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF82D57C114
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiGTXpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S231712AbiGTXpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiGTXpC (ORCPT
+        with ESMTP id S230396AbiGTXpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:45:02 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B397434F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:45:02 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id f11so77938pgj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KU83ueWiecIonFgsOmua6688d0DkD2VFBOUlUHHUAy4=;
-        b=crqyaOZ4h4DvzDOZlV8IFj5TO9FwtQgfTEFwl7cozQVhZWdxg5P1oS0n1BbIuVeFKp
-         sbFQo7UrR1IARKp4/YvvT1zQw53mH8orfl2Ymz0+ZC6W5iUeJArzkbAUQqmoF/hKDrLJ
-         I+y+qIEaE6fK8dVPnwEZRQ+mmk1Ns6FDHr444ik57iNKxOzMmC/H5AHvYJFYveyesD5U
-         tY5Lfz5lm6GQsJ6XyfW8NPwrkb16SHYikabjdrJnYs+5peu3N+4Qwh8UimWvjFY0fc/k
-         9f+ws98TNylPdg3Ci2/quhtHPmPQcZx0P4ZTki4g9R+HO07lEoUC5AaVMYi1YzPxEAZ+
-         Zadg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KU83ueWiecIonFgsOmua6688d0DkD2VFBOUlUHHUAy4=;
-        b=wGAplHeY2ih077hX483YMOmp8Nd/9MSZ7DJkGOQhF3/FzxQtIc9xeOD5kS5jfOJQyI
-         xAWHP4yGfyqSaloYSFU8Wfr9u3rkuRXbLEI1YNJ44RSlunyJYoQuCjY3M1VCo4miwLWJ
-         l49QwjbGGryOQOzDvyCd7Qx7zEiPolqlkDUyiuVKJadBERIk/zZDYD8q07SDeFGeX5Jf
-         PFVTHKyCemDjqymOJHMQsKENiXUDHy9Q3ACrH/Mug+NdGonefwK3Hlsh3nr3H7V5Wad5
-         EkjIXPjp2K8yp2oYgLEIzmLWzfNfa/ULECoMAb6KiElPkMdpjMSxdzzGEa5nvlNUDySX
-         RoLg==
-X-Gm-Message-State: AJIora//jkvJG/rgrwY1tazvAGX7WS0ByrnjLKkn+7wIG0sjlEX9NPG+
-        fZ1TFB868+Ss93KM4sNAS5PzI7pw3ThwmQ==
-X-Google-Smtp-Source: AGRyM1vdQBK5v2aRMnAgAs2deluNWkY6gyBVKGcHEL3CX6GnUFo74D++CqaEmv7x7kTuGW4DwqbD/g==
-X-Received: by 2002:a05:6a00:2407:b0:52b:29dd:915 with SMTP id z7-20020a056a00240700b0052b29dd0915mr34501978pfh.60.1658360701446;
-        Wed, 20 Jul 2022 16:45:01 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id b18-20020a170903229200b0016be96e07d1sm128016plh.121.2022.07.20.16.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 16:45:00 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 23:44:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 02/11] KVM: x86: emulator: introduce
- update_emulation_mode
-Message-ID: <YtiTeZQ/n0LPTV/W@google.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
- <20220621150902.46126-3-mlevitsk@redhat.com>
+        Wed, 20 Jul 2022 19:45:19 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4DF196;
+        Wed, 20 Jul 2022 16:45:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpC4B3PCFz4xCy;
+        Thu, 21 Jul 2022 09:45:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1658360714;
+        bh=B6oBJpBn5kwOYuxtOQkLahb0ijspbEt8Qy8+bLJHnTU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=X7n3BddCRkkS0HH5OGMinsjLvfRuehazHlZ8/wZn4crbZzI20rI0BRf4Y1uw4aFBz
+         xwimYxGLndw7MqdGyfHrNx+GraON7RxI9YwYCXaxXUZ0C2+DJ5S1Oo+0hBXnaRtieg
+         LwH4FtrNc+fGY8J+8m9Sdx6a10uAuQ11/0vaW2OpSOjj6eiJO+8ZVrq21N+y9Jj38S
+         Fiu+OjLZ0xTkPXJ9RTvA35qX/C+UrWkZkCyEHUYuqtHJo1pJvh35VZCz+c3B1M8kqV
+         TCW1OOtU+IAQAwKGQYrtOjTaQYP6QYNPA6jO8QJVwF2RwQMu/hhfOJnAcYxJOr9SLl
+         qI7i9ulNJ60mA==
+Date:   Thu, 21 Jul 2022 09:45:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>
+Subject: linux-next: manual merge of the arm64 tree with the arm64-fixes
+ tree
+Message-ID: <20220721094512.5419f75f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621150902.46126-3-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/KBXJMu5JXdPIEqwsVqetM.i";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022, Maxim Levitsky wrote:
-> +static inline int update_emulation_mode(struct x86_emulate_ctxt *ctxt)
+--Sig_/KBXJMu5JXdPIEqwsVqetM.i
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Maybe emulator_recalc_and_set_mode()?  It took me a second to understand that
-"update" also involves determining the "new" mode, e.g. I was trying to figure
-out where @mode was :-)
+Hi all,
 
-> +{
-> +	u64 efer;
-> +	struct desc_struct cs;
-> +	u16 selector;
-> +	u32 base3;
-> +
-> +	ctxt->ops->get_msr(ctxt, MSR_EFER, &efer);
-> +
-> +	if (!ctxt->ops->get_cr(ctxt, 0) & X86_CR0_PE) {
-> +		/* Real mode. cpu must not have long mode active */
-> +		if (efer & EFER_LMA)
-> +			return X86EMUL_UNHANDLEABLE;
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-If we hit this, is there any hope of X86EMUL_UNHANDLEABLE doing the right thing?
-Ah, SMM and the ability to swizzle SMRAM state.  Bummer.  I was hoping we could
-just bug the VM.
+  arch/arm64/kernel/head.S
 
-> +		ctxt->mode = X86EMUL_MODE_REAL;
-> +		return X86EMUL_CONTINUE;
-> +	}
+between commit:
+
+  f7b4c3b82e7d ("arm64: set UXN on swapper page tables")
+
+from the arm64-fixes tree and commits:
+
+  e42ade29e3bc ("arm64: head: split off idmap creation code")
+  c3cee924bd85 ("arm64: head: cover entire kernel image in initial ID map")
+
+from the arm64 tree.
+
+I didn't know if the change from the former was still needed after the
+changes in the latter, so I left it out for now.
+
+I fixed it up (see above) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/KBXJMu5JXdPIEqwsVqetM.i
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLYk4gACgkQAVBC80lX
+0GwHowgAk/oYLn9GA3lAdx7Hm6kgOvo7F5ToYMQ+1f+Ghb7sPDyot4XSCRpSxBnL
+gwL202IlYzVmm0I1lHkoqyGq7GymTP0jZQTnTY4OvnSjqHL9SLLUZfM+/B6Hq71e
+LiT7yaLE4QTS+ZejBnLh71V+/PdEfPxQIXZJAD1pRhi/GELHxFyxPCWXvqHcDxwM
+jIxSongxEzE6GsvH+6lAz8tSTLzdu3hGDO3JY/KChANmwqQ+8e7OPKWsduTwvu0z
+WoIZkCSuQjnxuA1ldmcpAtX0lUJWlBV6b0xOruUtOVFlYKsSemyaSLsed2GzP1YT
+YRB02JBCOWtYrhuk9NCfM+17lSSmpQ==
+=RaKZ
+-----END PGP SIGNATURE-----
+
+--Sig_/KBXJMu5JXdPIEqwsVqetM.i--

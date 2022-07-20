@@ -2,193 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED38657B351
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C0957B354
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiGTI5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S231561AbiGTI5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiGTI5K (ORCPT
+        with ESMTP id S229478AbiGTI5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:57:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5E396D2C3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658307429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0PlCq6ajL/Z4I1TluumiywIvpa4NQvyOba7zhGyb68U=;
-        b=e0Kuq0MlHNIvS+1L2zPp32CshvF4Taedkg1a7VHY16rrzS+tbWpGrxu6ZH0CBsfIpca+9r
-        4VErj5ZtYtqy+igeKE0DWTAOVPlrWzAk1EXzTW5NwYQXQQ6tbVGbUd+HkLBI1FwFvVoDqQ
-        QT3zXo7gL/pOeRKzL5+Gd1d9IxPooq8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-XVqcJ2gjOMudmFd7bW9MFA-1; Wed, 20 Jul 2022 04:56:57 -0400
-X-MC-Unique: XVqcJ2gjOMudmFd7bW9MFA-1
-Received: by mail-qt1-f198.google.com with SMTP id a10-20020ac84d8a000000b0031ee6389b7eso7131192qtw.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:56:57 -0700 (PDT)
+        Wed, 20 Jul 2022 04:57:39 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E656B26E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:57:38 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id c131so30330705ybf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1pCmF+7gOKupa+PsFrKqJcnPGIHHy1V9PA29ImLA4kE=;
+        b=k1b0oNdyAPyKppu26soAvwI1DTLaUOuzVZL1OJUREWpzg99kCQHlJ3mGB9+fRSdKZ2
+         WgGeggybcfpJ5PsclC9OLSHyK2Mi14seCCJCYwYfZ/u1KPOT8ce9WtFHpPCxDLEx6pI9
+         Vxwz3xWWl//RNMDhU9pPggpBqUGAVUimQs1YzaDeGwiXEdotfA8mZx3k+0hyPeOHyVZb
+         vNVcZnbsn9V+5bB7N9eEnmYEsxd1NLGVh67+0SmMELw0OSbuQQSu1leVLC+QVk8NuxlU
+         tpmrh+pZlnKtk5miszbWS9lR9ycJYLLsVGuZ/tJ8CTyAZOOO5+IqLIPCMwHhSCZZ6ogf
+         CdMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0PlCq6ajL/Z4I1TluumiywIvpa4NQvyOba7zhGyb68U=;
-        b=7sjTEFw+9qNtiz5pmIY1NcZjBV5JO5MTK20Slj/+PVpZVTbtZFiJRbVKsUtqXPARKv
-         9+Yc7PXRMRSSxp6j8qzhG0IQaTzyhkp8keDrcfO6pl0Yk3ySzi9hNH2bFX2qRYTdIY+w
-         dWGieOJh6kzE6pRc7259eH34IqVjp0OTTqyBeewZ5DanzMHQpuXH8iaICi/QBeEZjbLQ
-         UKAQWqIv25ai3gOBB+1hZR2Ux3GufheSUX78QQWMCC3WpkboSa17T2ryRPUg8Z7R1fj4
-         SRlf0TbuQaElwJ/EfuimHJkn0w4Aw75gEEMg0FtdStrZoYw68Ak+dxsZlQy+ul9e0PWS
-         pg/g==
-X-Gm-Message-State: AJIora/B8qraSfz8OeEcdB3v1VQlLCJHk042b57BIdUfTd2wgqrbV1LT
-        ktCt1JBCMNLNBFGfyGXSuRWLnlKE5k7r9GPCNO/pwBqQCAahk2Xa2s3ZEOQTIDz/YAOyye+QoFW
-        /5iQULU7OTjSYar7AeczFwMFq
-X-Received: by 2002:a0c:8c89:0:b0:470:9ab6:bb27 with SMTP id p9-20020a0c8c89000000b004709ab6bb27mr28764649qvb.118.1658307417211;
-        Wed, 20 Jul 2022 01:56:57 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uUEd8wd9tFBWjZIynLvqe+YW58v3ThG/Igh7FbI5iMXJ4uDVuxP2SQYrdm0ppCHCoqmP9x8A==
-X-Received: by 2002:a0c:8c89:0:b0:470:9ab6:bb27 with SMTP id p9-20020a0c8c89000000b004709ab6bb27mr28764632qvb.118.1658307416999;
-        Wed, 20 Jul 2022 01:56:56 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id bn10-20020a05622a1dca00b0031ece6e0f17sm3229189qtb.71.2022.07.20.01.56.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 01:56:56 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 10:56:49 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v1 3/3] vsock_test: POLLIN + SO_RCVLOWAT test.
-Message-ID: <20220720085649.6pqj55hmkxlamxjq@sgarzare-redhat>
-References: <c8de13b1-cbd8-e3e0-5728-f3c3648c69f7@sberdevices.ru>
- <df70a274-4e69-ca1f-acba-126eb517e532@sberdevices.ru>
- <20220719125227.bktosg3yboeaeoo5@sgarzare-redhat>
- <ea414c31-741f-6994-651a-a686cba3d25e@sberdevices.ru>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1pCmF+7gOKupa+PsFrKqJcnPGIHHy1V9PA29ImLA4kE=;
+        b=No8kDZys/nqKTDJj7NhQEXYSntMU3p4TjTxsIteLIM0nw6bVqhFrXuly+6Ws+w60uC
+         pVJIydPdCXMxRXW1NSJrCK/LRifdAPWW6w4cSJ6cUe7gYp38pjIPVfSpnlW+yNucyZD7
+         CJhlPag/ifDJzhm1LJEONJINYg+KDhPhld3nb7h5PquG1O/lKCJw+bcJwSTyMCIoX4S2
+         +XR2G6IEZ/8mMxNDDWu36iKG6tRwdORa5PJdM7uWYKDBSRKSt3EGkkLYjFfXvThaPEXV
+         gmOBDVWb+IAD+voUp2pIlXwlFP1eMRsNgyt4wZeV5k4rSiovc5gddiXwzkt8lrs+zBui
+         q08Q==
+X-Gm-Message-State: AJIora/tFQIZ9wPDnODOS+Bi3ZO9aQffXRjev20d8SBaJJ7XVWu1vHh4
+        v4mUfSv5bF+hp4HMY4MZh+xfVWNDU9RPWH3NkVMn89K51Sg=
+X-Google-Smtp-Source: AGRyM1v+Q9OYjm34O3xxK2nJl712afZfGnQd156RF/2egoZC2mPPCZsW9ObspHJIA6fRWa3fzUnLH6ZabeYZQZHfH2E=
+X-Received: by 2002:a25:6847:0:b0:66e:b676:834c with SMTP id
+ d68-20020a256847000000b0066eb676834cmr35990047ybc.5.1658307457762; Wed, 20
+ Jul 2022 01:57:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ea414c31-741f-6994-651a-a686cba3d25e@sberdevices.ru>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220712231328.5294-6-kirill.shutemov@linux.intel.com> <20220713150200.17080-1-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220713150200.17080-1-kirill.shutemov@linux.intel.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 20 Jul 2022 10:57:01 +0200
+Message-ID: <CAG_fn=VVBOe8cvbWSMLfJf577yirThABQOMmihNW4pg55Sfhfg@mail.gmail.com>
+Subject: Re: [PATCHv5.1 04/13] x86/mm: Handle LAM on context switch
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dmitriy Vyukov <dvyukov@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Kostya Serebryany <kcc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 05:46:01AM +0000, Arseniy Krasnov wrote:
->On 19.07.2022 15:52, Stefano Garzarella wrote:
->> On Mon, Jul 18, 2022 at 08:19:06AM +0000, Arseniy Krasnov wrote:
->>> This adds test to check, that when poll() returns POLLIN and
->>> POLLRDNORM bits, next read call won't block.
->>>
->>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>> ---
->>> tools/testing/vsock/vsock_test.c | 90 ++++++++++++++++++++++++++++++++
->>> 1 file changed, 90 insertions(+)
->>>
->>> diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->>> index dc577461afc2..8e394443eaf6 100644
->>> --- a/tools/testing/vsock/vsock_test.c
->>> +++ b/tools/testing/vsock/vsock_test.c
->>> @@ -18,6 +18,7 @@
->>> #include <sys/socket.h>
->>> #include <time.h>
->>> #include <sys/mman.h>
->>> +#include <poll.h>
->>>
->>> #include "timeout.h"
->>> #include "control.h"
->>> @@ -596,6 +597,90 @@ static void test_seqpacket_invalid_rec_buffer_server(const struct test_opts *opt
->>>     close(fd);
->>> }
->>>
->>> +static void test_stream_poll_rcvlowat_server(const struct test_opts *opts)
->>> +{
->>> +#define RCVLOWAT_BUF_SIZE 128
->>> +    int fd;
->>> +    int i;
->>> +
->>> +    fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
->>> +    if (fd < 0) {
->>> +        perror("accept");
->>> +        exit(EXIT_FAILURE);
->>> +    }
->>> +
->>> +    /* Send 1 byte. */
->>> +    send_byte(fd, 1, 0);
->>> +
->>> +    control_writeln("SRVSENT");
->>> +
->>> +    /* Just empirically delay value. */
->>> +    sleep(4);
->>
->> Why we need this sleep()?
->Purpose of sleep() is to move client in state, when it has 1 byte of rx data
->and poll() won't wake. For example:
->client:                        server:
->waits for "SRVSENT"
->                               send 1 byte
->                               send "SRVSENT"
->poll()
->                               sleep
->...
->poll sleeps
->...
->                               send rest of data
->poll wake up
->
->I think, without sleep there is chance, that client enters poll() when whole
->data from server is already received, thus test will be useless(it just tests
+>         /*
+> @@ -491,6 +493,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+>  {
+>         struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
+>         u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
+> +       unsigned long prev_lam = tlbstate_lam_cr3_mask();
+Note: this variable is never used if CONFIG_DEBUG_VM is off.
 
-Right, I see (maybe add a comment in the test).
-
->poll()). May be i can remove "SRVSENT" as sleep is enough.
-
-I think it's fine.
-
-An alternative could be to use the `timeout` of poll():
-
-client:                        server:
-waits for "SRVSENT"
-                                send 1 byte
-                                send "SRVSENT"
-poll(, timeout = 1 * 1000)
-                                wait for "CLNSENT"
-poll should return 0
-send "CLNSENT"
-
-poll(, timeout = 10 * 1000)
-...
-poll sleeps
-...
-                                send rest of data
-poll wake up
-
-
-I don't have a strong opinion, also your version seems fine, just an 
-alternative ;-)
-
-Maybe in your version you can add a 10 sec timeout to poll, to avoid 
-that the test stuck for some reason (failing if the timeout is reached).
-
-Thanks,
-Stefano
-
+>  #ifdef CONFIG_DEBUG_VM
+> -       if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
+> +       if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid, prev_lam))) {
+>                 /*
+>                  * If we were to BUG here, we'd be very likely to kill
+>                  * the system so hard that we don't see the call trace.

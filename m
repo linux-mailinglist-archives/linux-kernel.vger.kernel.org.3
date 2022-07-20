@@ -2,143 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A144357B9A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9A357B9B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235047AbiGTPbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S240281AbiGTPcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiGTPbk (ORCPT
+        with ESMTP id S236836AbiGTPcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:31:40 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1075F9B4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:31:39 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id e69so32673012ybh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=benyossef-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0pTlSpxv4exsrmTqfZ5kdf5cK1c62hSiqFaA91m5Jlw=;
-        b=xbg0a6l0ukJ3gm2QUsZry1N+T2uDbJ/t7gM35DtyK8xTwFDEpJ/CgaTrBLNuywvIMt
-         pP+csdQ/uRRtgFptpuw3mbGa/vOp7ZPSXHoSMLr1HUGJjx7HE16iNslKTXta6yTN2xij
-         gVWjbZaU1ras9rxmiQackODz5Jw3gZiVrCsKXtrHpif0qkkMDISghcv7Ih1DSDvS1OVd
-         n7uf/aLgJ/LmpG58pkynXgEGzTLhz20S33olOx59J442bSKcQqfO06KLa4gMlo4P6CeW
-         9F9usiuamLUU5f3IbTpegEO1DE5cSKjGEvgLc1rivPX4M8DtNmdicV04een+Cd1Q0Aur
-         bZsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0pTlSpxv4exsrmTqfZ5kdf5cK1c62hSiqFaA91m5Jlw=;
-        b=zGkjk/MnfW0C/soorfHeTLhOKtS8FQnmMn6Qr6Bw+ZWbJMjwXSM4MHDov+VyzfBEmD
-         qAr6nwQV4AqngJEqawyHr14Ej924g/CvicpoZC0idLXcbMyTTGNJdFKnX5ojS9Ybqq2H
-         UbgRNS9az+Rsn+DbH57KDdtVejabLsBj9TrH2CMLHOapY5Gvv1YVl8Oe35KQktue+EXl
-         Z+H0p+tkxe8ttRqBfcr2rEh+MfmW9FnYlRXNwnN4JQzrPlmB4NM50BJcJ8M3j/k4FjRi
-         MeF6M0gqW2VWRkbXwhIlhNmDth8BgVT+1oACOhUoxSl35kZ8W8bnYfmQKG5vEHMphlNP
-         XECA==
-X-Gm-Message-State: AJIora96sQpIqrBi4MUOCHoqRyHpTtTo61cgfgmBO1Pp3DSN+eUsbxPq
-        4VCGK5Zis3U023t7sZY3jGsqi5OLVsQDV4NwdWcl0A==
-X-Google-Smtp-Source: AGRyM1vfgKge2FP7ohRgsJX8BJYOJrEA9DPEsIsss1QJmRkXI8cZ1gaM01fvHf0F/QwRgwy8mu7jGiFHrGguCjBgySw=
-X-Received: by 2002:a25:dd0:0:b0:670:85ee:166a with SMTP id
- 199-20020a250dd0000000b0067085ee166amr6849957ybn.539.1658331098621; Wed, 20
- Jul 2022 08:31:38 -0700 (PDT)
+        Wed, 20 Jul 2022 11:32:07 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02BD61DBB;
+        Wed, 20 Jul 2022 08:31:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ntNxZ9KmwDGOzZyFOUzo1EpBQe38CHJKP1LgFext6aQvFiBkf3P5z2t8SZKQbmawVfYbhYy2wz7SqtxcdbIonfIbMePGZJgihP845yq2uwu7vE6G0KcvRcQFv1L8Vus0Gd4oQHr7SwmtL7ymjvulHEXBK5cSIzMcHEGtkHtcurU20qbowiH3dfSvh8dKe/tNUQJwZGmf9sEol4os/Y7w2NAXafRxArZpdei/PmHK77wLA/7JkH12c3Wuie2b7uljNLV45yZdisf0XpLbSJc/X3x6AaRFQ+ZzQtIkqLCf5GI/mEjhMSe0lYv61qpMBToOjiU35Uv4DO7DyDp3Dxzt4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I8pXgw62BxAIAwbrEYE97Y22msu6xhq7UAzzGX1PsXg=;
+ b=Jnamp8t9ZMb8uSVdOyWB/YzpTNtT5LosQ5wLBIMc1RPktEWuV4gOHsqxNl82kqkt/LZ2U2mg2BTGWBOom3Yf39gBqQOUdYnTNjOz/WY+YiSqkDoSxnG0knqhTCQZ7JRpQDvkc0bPVgVZMgaxUsOdcMglE/21T1E/+z4x01GsJjUj0xi/P9om4KGCRvNmPN6g8CH3hDoL55rswYS6s1M4VGcx5hngxCmzkdtE+NM+QYzAyPys7DLi3DTdeU5T/7fUTVDzqLZl7ezYq4zFIngNlETd1pBKnb7flT/F/92MzSMV/mqLzT7wbm5Ulw2v6alOPhaxgwRbbNbGgZZ5lZsHGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I8pXgw62BxAIAwbrEYE97Y22msu6xhq7UAzzGX1PsXg=;
+ b=afJ/mkAcEENKHjExurQ4I9eqUdS0i+KkCtD+vp7ExrLoAdNTebhiwNGcQcwosGfN1pV7wy27aW54Yww+pmtdNmoeG/I3pWNisdKWqGYWr51inGeEd12yjDwYkH3jrDhLQz+IHlYZOVJhhxVMDsOaJskWRXxbjuwRNXpO3wDf5Z0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
+ (2603:10b6:910:1f::11) by MN2PR12MB3998.namprd12.prod.outlook.com
+ (2603:10b6:208:16d::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Wed, 20 Jul
+ 2022 15:31:51 +0000
+Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
+ ([fe80::1001:3c79:9504:8d6a]) by CY4PR1201MB0181.namprd12.prod.outlook.com
+ ([fe80::1001:3c79:9504:8d6a%10]) with mapi id 15.20.5438.023; Wed, 20 Jul
+ 2022 15:31:51 +0000
+Message-ID: <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
+Date:   Wed, 20 Jul 2022 17:31:34 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
+ <20220719140843.GA84779@chaop.bj.intel.com>
+ <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
+ <20220720150706.GB124133@chaop.bj.intel.com>
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+In-Reply-To: <20220720150706.GB124133@chaop.bj.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS8PR04CA0140.eurprd04.prod.outlook.com
+ (2603:10a6:20b:127::25) To CY4PR1201MB0181.namprd12.prod.outlook.com
+ (2603:10b6:910:1f::11)
 MIME-Version: 1.0
-References: <f47cdaa7067af0ae2eeeca52cee2176cdc449a22.1658323697.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <f47cdaa7067af0ae2eeeca52cee2176cdc449a22.1658323697.git.christophe.jaillet@wanadoo.fr>
-From:   Gilad Ben-Yossef <gilad@benyossef.com>
-Date:   Wed, 20 Jul 2022 18:31:27 +0300
-Message-ID: <CAOtvUMe3AFbKUCR4L3=Zm9_UxVJNRqxjcU+CR5LHG3B=y839fg@mail.gmail.com>
-Subject: Re: [PATCH v2] crypto: ccree - Remove a useless dma_supported() call
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 75962c63-7ae6-4e91-704b-08da6a64f763
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3998:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q/kbsMs1T0nfLKg/Sp4Q06kzwPXO8WR7RHeqONNmzln9heXT5t0tUwdyMI3K7HmzX1gYAWGecAvITErxnLFt6cUDG0KMoJgewDs25sJN3nY46fC0Cnyajpn7rhgX7iAtHq3nmOtaXO0NwpjPqftfoimFMG7erxRDZNYQA7mDa2jMJqH1DXXmiTF9eTKoqoPuqqGlcx/VxN5MMdSp35bux2UmRqlY8CyFh34W3Afhy8Fx7eGOG0sZPZ7nA9LX3UC0/eYws8vSyJ/C5lr+5j3vKyBcSZLTAsR3wgXvh58fW7PNk0o6jFE3zjgPaUpV5IAhQLHZUV7AgWX17snGdDYD+tjfBmLPpZfamXc4vIp0aFooaMT28kPJvczLo0TrJqEFnWDqusUedJL6GWZA4aZL++7Efd+q7RCXWVnmEc9v1bUjGi5E2lXwfsKxLXLW2lXi/ZYfdX0fYXfRVaGGgYeDTyJsb/Ho+DOnM5U+rChYpDnl69+Fomcvf9wXz7HyrpltgNoDMdGpseztuiOmY83Lo2aYN36fX7CWfTkeZhfXVR2SMY9joP7RdafCDC/St2wCHIMlFG8LE4/0LK/E+snl8Ssyt35L2xLoiJY11+PBLQTtNvubIQCFNglCcVr5mFLWEOpTe9rrvk8o6iqCVNDtwLR8Ym/pV+5xdNSiS1wOTPSBpYSagY3ql29oyA2fn2ZObLUfnhTi617VU8n8RysuWQplE4AoSsZtxjV7CwvHieBM4j52XsuTaPjXKaDAKy5Wek4qj7NqpY8OjvM3GgNNwtvj53CUH1Tms8M8n+GKGYmrlxpi87jx0Vlm7Q082AK4ZpaIREW1RuWyvbOlvBzJhA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1201MB0181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(316002)(54906003)(66476007)(6916009)(66946007)(66556008)(86362001)(186003)(8676002)(5660300002)(4326008)(7416002)(31696002)(7406005)(8936002)(6512007)(38100700002)(6486002)(26005)(2616005)(2906002)(31686004)(36756003)(6666004)(478600001)(41300700001)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmJya1VmeE5OWS93NHBXT2xkMk4zWS9hODV4YUpBTFd1ZERoelRIYUNtQ0FU?=
+ =?utf-8?B?ZHBPUG5SdFpaakVRSFhFTytSUU5pbDI5ak5wcVhaRWJGQmNmaE14OTFSOVdz?=
+ =?utf-8?B?TjNZbjRkeDQ1dnBpQnJ2by9Jb2RNTVk3bGwweWppRnhTdzBvazdGTEoxNGFN?=
+ =?utf-8?B?N3Zua2lWUW9KMUNmbzdCMzNGOWJiT2JoVERDYXhjVlRwbVNGakwwRXMwYVlW?=
+ =?utf-8?B?bWU1U1BDWThsQTBUVnRKUFdwQ2hONDVDNjhNRHo5YlZIa2QyU1kvcm5YelFL?=
+ =?utf-8?B?bFhJNTI5UDBiYlFwL3dGQWFoWEd2eHJMZ25xVU5OOUhYbndHS2hWQjlSTjZr?=
+ =?utf-8?B?SjIrak1FZmtXaCtSV1ZTSXVnZU9VdDJjQjJUU3pYRStiOFIrRVdZYlFOc01K?=
+ =?utf-8?B?bHQ2SXQ5dE1sQUVsRUxtWFUyUnNVbWdUdmxwN3Fyb1dBOXJPS1IvZnRuY09j?=
+ =?utf-8?B?UE5wWERCMk8yV3QrT1ZmRzlqS2lNNE1FZ3lDRmV0RzJIdDFzbElqaTJmd1cw?=
+ =?utf-8?B?d1k2T29YUFdvTkJYRXBiYUloSytOZ1E2YzRGVmZVK3A0RVZrTEo2VTdZcEVZ?=
+ =?utf-8?B?OU9VZUJNT1VzQ2ppQTF3cTBTeG9jeUJoVzFrdno3RndwTHdXZVZZcUlPN1ZU?=
+ =?utf-8?B?NS8xYnVzdEhUZytwMkdIcHE3UC90Mk1ObjhZVWtlTUtlYWM2enBZYWlzRDZt?=
+ =?utf-8?B?OWVxdHVpZkxreWlsamFIMCs3b2MvVUdWTks0Y3hGZmliVm1tYzZwM0M2WU1N?=
+ =?utf-8?B?dnF3MUVFN0QrdEZkdTVtVy9tNjFtVlVhanlSOGhFY1Y0bzBGTVZ0Z0FLL1BF?=
+ =?utf-8?B?WnlTaGhHSEErcGV0SFgxNzVwdzBXYWpLaklhUGFEVEVPRDZvcnJ1alVmUUVs?=
+ =?utf-8?B?R1JHSmEyaUVuT1FYaGk1WHY5b0o3WE5iczNxdGsxdFEzakcwUEx0Sko3cTB2?=
+ =?utf-8?B?K3VFRXJiS2VQa3U4YlNlQU11dkUzZkdxZ1dQalloQWZtWkhZUmpKRVFjU3NW?=
+ =?utf-8?B?VTRGdktFU2Y0MlVFUStPVlFlQy9yRTFWblFyNnZsM2ZIdmlxMWR0UlR1THZH?=
+ =?utf-8?B?a3BKdjUvSjRkS2Vld3k4Z1VZaXY5YlhkM3ozTTZHQnFiWkdEazU3TmM3RVNN?=
+ =?utf-8?B?R20wMGxvZVd2V2h2ZWRRYjlDdjRPNWF2UTk4YjVRK2hOZW90b0cxRkVlUG9v?=
+ =?utf-8?B?M05HMTNxam5PYlJNQjBoSUo1Njkrend5bGUreUdNMVRKSFM3bEN2dE9BZEVQ?=
+ =?utf-8?B?OXlJQkNqajE4ZVFBYXdydVB6Vmw0SkRDZWE1aG5XWG5sbWhGZDQyU3F4MmFF?=
+ =?utf-8?B?bzE2RFF4VXZjZCtaNlgxMlRjSW5FbFN6bFk3QmFWSEp3UzVYNi9hNHQ4TzZy?=
+ =?utf-8?B?SnA1Qi9wMWxDT0pmbXdrK3dHcVQreERSeGl6TWg4T2tlM3lyUkdPSjNlb1Jr?=
+ =?utf-8?B?N0JWcVc3ejRBdjN2Yyt5cld5ZnhxZzBMWGh2eUJ4Y1JEdXJ6YklSbDBoK3do?=
+ =?utf-8?B?OGV1YjAzVkRibHE3djJhVVJNWTFlSHYweFBKdWhVRVhEL0tyME1mUG10Vklo?=
+ =?utf-8?B?QmdKZXpiSXMzdGgySEk2bHcvUk16aSsxM3FDRCtOU1laRk1KZW1VYTVjd2Ez?=
+ =?utf-8?B?WkJBcUFBY3lIenQ2NDVib2NLUkE5d1pHVzZnVm9pTzNRdFNKcjV0V0IzVVhU?=
+ =?utf-8?B?U3p5UWxaZnlnR3ZEazQyVytYUG15YjZMcklIcXQ0YnJUT3NPQlY3WGd3ejZ3?=
+ =?utf-8?B?TEdFMmo4TWJpOWhEcXFSdnlpV0hYb2gxNDVKQnAvU0hGTjQvNHViTVhYQXlT?=
+ =?utf-8?B?YS91UDB4VWxHdzUwTEl3dnZCakloWDdoaGF0anEvUmZIQkVRd0orOFk5TXJ2?=
+ =?utf-8?B?YjFNbWtRVmNTRWhXakJlSjVqQy9tWUxJaFVld0hqb3RFYVhyWG84aklCWE54?=
+ =?utf-8?B?TG5rczRSZm45MC9jREpKc1lRdnZJTHRVT0xtQXBOaDNlWnRGQUp0aGU3S0px?=
+ =?utf-8?B?TUtYU3M0a2tGVUxaOXZmejRScWZYZDNUVnB1M3QvUVMyQ2FCQnRZUW52Ukc1?=
+ =?utf-8?B?L2RJYlpyd0F3UVoxNVl0djZDWUdqc01JYmpod1BTZFZBQlJ2d3RzVTRjR2RG?=
+ =?utf-8?Q?nGatqrFbk3ZMJUWdQLNUUYIY5?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75962c63-7ae6-4e91-704b-08da6a64f763
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1201MB0181.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 15:31:50.9859
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gv/YljjgkS8mtRrJbAASo80kTBH+j1nUXWWwtGyUWcr5UNs8rBKUXKunIkUgWPE7OATmANQceJBiN78kuJhBSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3998
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
+>>>>> +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+>>>>> +{
+>>>>> +	return false;
+>>>>> +}
+>>>>
+>>>> Does this function has to be overriden by SEV and TDX to support the private
+>>>> regions?
+>>>
+>>> Yes it should be overridden by architectures which want to support it.
+>>
+>> o.k
+>>>
+>>>>
+>>>>> +
+>>>>>     static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+>>>>>     {
+>>>>>     	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+>>>>> @@ -4689,6 +4729,22 @@ static long kvm_vm_ioctl(struct file *filp,
+>>>>>     		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+>>>>>     		break;
+>>>>>     	}
+>>>>> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+>>>>> +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+>>>>> +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+>>>>> +		struct kvm_enc_region region;
+>>>>> +
+>>>>> +		if (!kvm_arch_private_mem_supported(kvm))
+>>>>> +			goto arch_vm_ioctl;
+>>>>> +
+>>>>> +		r = -EFAULT;
+>>>>> +		if (copy_from_user(&region, argp, sizeof(region)))
+>>>>> +			goto out;
+>>>>> +
+>>>>> +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
+>>>>
+>>>> this is to store private region metadata not only the encrypted region?
+>>>
+>>> Correct.
+>>
+>> Sorry for not being clear, was suggesting name change of this function from:
+>> "kvm_vm_ioctl_set_encrypted_region" to "kvm_vm_ioctl_set_private_region"
+> 
+> Though I don't have strong reason to change it, I'm fine with this and
 
-On Wed, Jul 20, 2022 at 4:29 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> There is no point in calling dma_supported() before calling
-> dma_set_coherent_mask(). This function already calls dma_supported() and
-> returns an error (-EIO) if it fails.
->
-> So remove the superfluous dma_supported() call.
->
-> Moreover, setting a larger DMA mask will never fail when setting a smalle=
-r
-> one will succeed, so the whole "while" loop can be removed as well. (see
-> [1])
->
-> While at it, fix the name of the function reported in a dev_err().
->
-> [1]: https://lore.kernel.org/all/YteQ6Vx2C03UtCkG@infradead.org/
->
-> Suggested-by: Christoph Hellwig <hch@infradead.org>
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/crypto/ccree/cc_driver.c | 13 +++----------
->  1 file changed, 3 insertions(+), 10 deletions(-)
+Yes, no strong reason, just thought "kvm_vm_ioctl_set_private_region" 
+would depict the actual functionality :)
 
-Acked-by: Gilad Ben-Yossef <gilad@benyossef.com>
+> this name matches the above kvm_arch_private_mem_supported perfectly.
+BTW could not understand this, how "kvm_vm_ioctl_set_encrypted_region"
+matches "kvm_arch_private_mem_supported"?
 
-Thank you,
-Gilad
-
->
-> diff --git a/drivers/crypto/ccree/cc_driver.c b/drivers/crypto/ccree/cc_d=
-river.c
-> index 7d1bee86d581..cadead18b59e 100644
-> --- a/drivers/crypto/ccree/cc_driver.c
-> +++ b/drivers/crypto/ccree/cc_driver.c
-> @@ -372,17 +372,10 @@ static int init_cc_resources(struct platform_device=
- *plat_dev)
->                 dev->dma_mask =3D &dev->coherent_dma_mask;
->
->         dma_mask =3D DMA_BIT_MASK(DMA_BIT_MASK_LEN);
-> -       while (dma_mask > 0x7fffffffUL) {
-> -               if (dma_supported(dev, dma_mask)) {
-> -                       rc =3D dma_set_coherent_mask(dev, dma_mask);
-> -                       if (!rc)
-> -                               break;
-> -               }
-> -               dma_mask >>=3D 1;
-> -       }
-> -
-> +       rc =3D dma_set_coherent_mask(dev, dma_mask);
->         if (rc) {
-> -               dev_err(dev, "Failed in dma_set_mask, mask=3D%llx\n", dma=
-_mask);
-> +               dev_err(dev, "Failed in dma_set_coherent_mask, mask=3D%ll=
-x\n",
-> +                       dma_mask);
->                 return rc;
->         }
->
-> --
-> 2.34.1
->
-
-
---=20
-Gilad Ben-Yossef
-Chief Coffee Drinker
-
-values of =CE=B2 will give rise to dom!
+Thanks,
+Pankaj

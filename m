@@ -2,75 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD2157BEB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8743357BEBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 21:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbiGTTkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 15:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S234254AbiGTTm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 15:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiGTTkI (ORCPT
+        with ESMTP id S231274AbiGTTm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 15:40:08 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD1565D4A;
-        Wed, 20 Jul 2022 12:40:02 -0700 (PDT)
-X-QQ-mid: bizesmtp91t1658345995to035zp2
-Received: from harry-jrlc.. ( [125.70.163.183])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 21 Jul 2022 03:39:43 +0800 (CST)
-X-QQ-SSF: 0100000000200030C000C00A0000020
-X-QQ-FEAT: +bXiSo2NuBeKioPucw27azFzSN7FKN7KqmpjEqbFFM0StNhYLSCZB7gZB64hp
-        Mrbc+QPsqLWG1ZxJmJ0GmLM6JOHIdY7zPZsRak1+247BDVvvyXgKZu84vZqYxmzE1KMmlwP
-        ITwh7ZFK/zDWEKxC4S4bxEvmYJ6FwnATDKXTp3vf32SzVqfmm11SiGnj5acrIs9PlOJXLOa
-        +ooV4XJrMIOEke6MaMHLs+Eu6UAi9S74yDs8kAlsvBLph8MVvmSW4vQYMTPfI+f+1E34N3n
-        CcYrYKXJRVshGzLvu+A7PDGEr43d+hSX0CNUtAqpZwelYmldqckvKQ1DUJnp7rPyNqBFypW
-        r6gyyLxTCTeGtwaKc/QIKLH2xLMR9CKjrJ6c/toUexu00hw1VCaooFi2rzr6w==
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     James.Bottomley@HansenPartnership.com, deller@gmx.de
-Cc:     linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] dma-mapping:do not initialise statics to 0.
-Date:   Thu, 21 Jul 2022 03:39:41 +0800
-Message-Id: <20220720193941.8261-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 20 Jul 2022 15:42:26 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16CA52DC5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:42:25 -0700 (PDT)
+Received: from [192.168.1.101] (abxj77.neoplus.adsl.tpnet.pl [83.9.3.77])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id F3ECD200CD;
+        Wed, 20 Jul 2022 21:42:22 +0200 (CEST)
+Message-ID: <e34e7932-b64a-59d8-dfa2-2de23a52425c@somainline.org>
+Date:   Wed, 20 Jul 2022 21:42:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: clock: add SM6375 QCOM global clock
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220719115756.32231-1-konrad.dybcio@somainline.org>
+ <20220719115756.32231-2-konrad.dybcio@somainline.org>
+ <11cc46d8-ae01-f3d2-b9c6-c366c6e4afc9@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <11cc46d8-ae01-f3d2-b9c6-c366c6e4afc9@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-do not initialise statics to 0.
-
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- arch/parisc/kernel/pci-dma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
-index 160996f2198e..ba87f791323b 100644
---- a/arch/parisc/kernel/pci-dma.c
-+++ b/arch/parisc/kernel/pci-dma.c
-@@ -36,8 +36,8 @@
- #include <asm/tlbflush.h>	/* for purge_tlb_*() macros */
- 
- static struct proc_dir_entry * proc_gsc_root __read_mostly = NULL;
--static unsigned long pcxl_used_bytes __read_mostly = 0;
--static unsigned long pcxl_used_pages __read_mostly = 0;
-+static unsigned long pcxl_used_bytes __read_mostly;
-+static unsigned long pcxl_used_pages __read_mostly;
- 
- extern unsigned long pcxl_dma_start; /* Start of pcxl dma mapping area */
- static DEFINE_SPINLOCK(pcxl_res_lock);
--- 
-2.30.2
 
 
+On 20.07.2022 08:27, Krzysztof Kozlowski wrote:
+> On 19/07/2022 13:57, Konrad Dybcio wrote:
+>> Add device tree bindings for global clock controller for SM6375 SoCs.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+
+[...]
+
+>> +++ b/include/dt-bindings/clock/qcom,sm6375-gcc.h
+>> @@ -0,0 +1,234 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+> 
+> Hm, Qualcomm gave permission to relicense bindings to dual-license,
+> although I am not sure how this works with files where copyrights were
+> transferred to Linux Foundation...
+Right, I overlooked this.
+
+Considering all of the headers for the clock controllers are an exact or
+almost exact copy of the downstream ones ever since qcom switched to using
+the common clock framework in 2017 or so, plus I am not sure how
+copyrightable this is, given copying names from the .c driver, making them
+uppercase and assigning them consecutive numbers is not exactly much of a
+creative work.. so I don't think anybody would oppose it?
+
+Obviously I'm not a lawyer and this is not legal advice..
+
+Konrad
+> 
+>> +/*
+>> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2022, Konrad Dybcio <konrad.dybcio@somainline.org>
+>> + */
+>> +
+>> +#ifndef _DT_BINDINGS_CLK_QCOM_GCC_SM6375_H
+>> +#define _DT_BINDINGS_CLK_QCOM_GCC_SM6375_H
+>> +
+> 
+> 
+> Best regards,
+> Krzysztof

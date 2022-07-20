@@ -2,134 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053B757B2A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D9157B2BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 10:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbiGTIQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 04:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S237871AbiGTIUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 04:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiGTIQT (ORCPT
+        with ESMTP id S237710AbiGTIUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 04:16:19 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D6E54652
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:16:17 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id y24so1053016plh.7
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:16:17 -0700 (PDT)
+        Wed, 20 Jul 2022 04:20:17 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790363F3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:20:14 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id j67so8298847ybb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 01:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=uYiZZ6ipbb2NI+48VeJC83llK7+Y+q8f+kaW8ZK56qQ=;
-        b=GSOr7+oSOYZ/HHofdLRGWf7k+M9K2gU22l7qTUKTZaQEh8qUJj3v/Ej72xu80mI6lz
-         spE4kQmyPcFETNdZ+H0CT+H2J4xPSpPYIYH4HmPX2HrmqKPs43O1wuYFEimeVENrU9L6
-         jCsQtYl9Ra4BJwOD4k2M3DDYBARaRreeeYtXPyDZw+aAQso6eXcOcWdbSIuK+wRkSWDK
-         hFveXJXq6uqt99HSbW4X9Ql7IT5LFcmKuTkoWCh31X1kqFCdOYpcrQBJEvDb1kdKaeD6
-         aViBY/KiP8EtTgXstnGx9Urto+fqRmguifbhyONYbpJvCtqtaKaxGa4d26l+mGjX9IOG
-         pDlw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=J0M63ZbgDC7xQ5EwBxC6IcpLq6pCXZViuh69dP2t4M4=;
+        b=grv6cjZ1OLCbVvxLWw/8kFDTJlSRkm9ybJEqphSyPWnZeLDuEqdr3GrBvDGof30V7E
+         N+e0zxzbkxvL4S202GcKPwGLrPDatCiscatboB9DaMc1tqDiEcub9H+KNZU9/UERNW/3
+         u9U8R8Sl8O4GMu37Ux+bkD5jYlTEiOhlvUmr6uucfTsGYPngGe0ivN2nfrUoqDefl19h
+         ik8weOj8635dTfoyNAzc2jriOWAgpvDE0Jvil0V9eFnDn2YejdSmrXdxk+UaGFs4Vx7g
+         LGiAU443ow+tHu5BFnLuHl/kCyAfZJK/eSHeYbbXd03tQj5NoU+MidGoOL4lTD1mAPc2
+         bduw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uYiZZ6ipbb2NI+48VeJC83llK7+Y+q8f+kaW8ZK56qQ=;
-        b=TX58wQUU4q4Y9kQC3aEy2JYIv6WjrU+/TNOlUcMacNXbyWN8BWD1wM2sHOz4HAt1oB
-         Od2sthirhKbHGQ6M0r8/GeG3pjhlKPKToBfP0cMYzQlJ/8GXX9J/JCUZZPaMP+2Q8og0
-         noNRbdXM4jkGvj6waQULaSshArxU5zQBREKcX5z/meqETK1t3N5cRPVHCUwNlURhvZuc
-         WsjCEfqH7YUS6PP8I/y5ENTkUEE2lIhXTJ3+7t3fyPOcuK23xowtwJs6Fhp6sqMTJ60N
-         orlhxIuiuKeqI6SnYTRW2aRgHr10hkeK+gPugTupnCv2NxPdiy5Q9thiRjlgN9RsxaNx
-         20nA==
-X-Gm-Message-State: AJIora8pt6Pfkv2+gE9KHR2j66quYwJOPW4+QXX2kCOVxZvDPtXzfagi
-        iV5z/72LAX/tyLyOeITYrLNNZxAewsThiA==
-X-Google-Smtp-Source: AGRyM1uQvco9Cf0V2sKG+aFCbvjKaKE2vSku+wKQT4wBMmvJp5xjDkDd8ETcYz/zgb2jrhASk6/q5g==
-X-Received: by 2002:a17:903:22cf:b0:16c:4145:75c5 with SMTP id y15-20020a17090322cf00b0016c414575c5mr37211144plg.127.1658304977031;
-        Wed, 20 Jul 2022 01:16:17 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3b:709e:6fec:df37:6562:5a80? ([2401:4900:1f3b:709e:6fec:df37:6562:5a80])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170903125000b001690d398401sm13419432plh.88.2022.07.20.01.16.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 01:16:16 -0700 (PDT)
-Message-ID: <507fec10-7ef8-e043-b4f6-70cd17b8334f@linaro.org>
-Date:   Wed, 20 Jul 2022 13:46:12 +0530
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=J0M63ZbgDC7xQ5EwBxC6IcpLq6pCXZViuh69dP2t4M4=;
+        b=eMnDOpisOeyadtqPR6XmvVp33y3/43fqqWkqQyqmUd3nGIQftMe0skZJV4mktp2AV9
+         yEaBe/oo9F5gzlLlBamsIBgC5PWm2efDT5he4Izv7HGeTWxUYSOT4ydZ++mZHAGOFuEW
+         liNi6gneZQqj5J5Di/pG6fBx7C99zz8Rpjg0QtjladLBUpUZdU8oKkIUN5dpjqAYcErz
+         owUc4REZkEES6YXj0I3vMwmAgCQDlY0hQjA0b8YkKaBTpaBvV7vpdSpU/4LeANhdNHfj
+         tNBzttAiTmI3pKCQw2bX7Lo0FBj8FWUPHNscD+hqhPbihXSwv4IHXRz5eBkpBOduSljt
+         Bjjw==
+X-Gm-Message-State: AJIora8h1s8PSvb8K9i53TKQrsFJNX0sVgx405SUFiuQr3tUu+KeyMI/
+        oCH/KYly1qAQltZd3CvXbCmcyCaD6FJbCpd6BH/+XQ==
+X-Google-Smtp-Source: AGRyM1txbe9fP0TCW8vkpS0DylAxl0pyGSHgCt2clQXUA3ZsUmqZ2G9C/cx/GKTb5b36/jML+lPfm0g24Zl8qdtn+Yg=
+X-Received: by 2002:a25:d64a:0:b0:66f:7d56:913d with SMTP id
+ n71-20020a25d64a000000b0066f7d56913dmr38735369ybg.199.1658305213152; Wed, 20
+ Jul 2022 01:20:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] thermal: qcom: tsens: Implement re-initialization
- workaround quirk
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-pm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-References: <20220701145815.2037993-1-bhupesh.sharma@linaro.org>
- <20220701145815.2037993-4-bhupesh.sharma@linaro.org>
- <09ff7e3a-7dd5-db35-3795-89151afb5363@somainline.org>
- <e69cb444-2bee-870e-08ca-bbe3237d8166@linaro.org>
- <d5dd721e-b0d7-f76d-d40c-b4927c236460@somainline.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <d5dd721e-b0d7-f76d-d40c-b4927c236460@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
+ <20220712231328.5294-7-kirill.shutemov@linux.intel.com> <CAG_fn=W-pTCxJ6vEa6aSuAiQDxj0n0_8VgpUhp+TxYDrF8AReg@mail.gmail.com>
+ <20220720005724.mwodxwm5r5gayqrm@black.fi.intel.com>
+In-Reply-To: <20220720005724.mwodxwm5r5gayqrm@black.fi.intel.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 20 Jul 2022 10:19:36 +0200
+Message-ID: <CAG_fn=X=yQrWOX43PbLR=VGRVvMgj0_e2x5Mwf0bSZ0DhTQDAQ@mail.gmail.com>
+Subject: Re: [PATCHv5 06/13] x86/mm: Provide ARCH_GET_UNTAG_MASK and ARCH_ENABLE_TAGGED_ADDR
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 4:09 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 18.07.2022 08:34, bhupesh.sharma@linaro.org wrote:
->> Hi Konrad,
->>
->> On 7/15/22 8:26 PM, Konrad Dybcio <konrad.dybcio@somainline.org> wrote:
->>>
->>>
->>> On 1.07.2022 16:58, Bhupesh Sharma wrote:
->>>> Since for some QCoM tsens controllers, its suggested to
->>>> monitor the controller health periodically and in case an
->>>> issue is detected, to re-initialize the tsens controller
->>>> via trustzone, add the support for the same in the
->>>> qcom tsens driver.
->>>>
->>>> Note that Once the tsens controller is reset using scm call,
->>>> all SROT and TM region registers will enter the reset mode.
->>>>
->>>> While all the SROT registers will be re-programmed and
->>>> re-enabled in trustzone prior to the scm call exit, the TM
->>>> region registers will not re-initialized in trustzone and thus
->>>> need to be handled by the tsens driver.
->>>>
->>>> Cc: Amit Kucheria <amitk@kernel.org>
->>>> Cc: Thara Gopinath <thara.gopinath@gmail.com>
->>>> Cc: linux-pm@vger.kernel.org
->>>> Cc: linux-arm-msm@vger.kernel.org
->>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>> ---
->>> Hi, I think this should be also checked and applied on init. This
->>> seems required for at least SM6375, as the controller starts (or
->>> well, doesn't start...) in an unknown state and the driver does
->>> not like it, as the TSENS_EN indicates it is disabled.
->>> Downstream runs this right at probe..
->>
->> Hmm.. very interesting. I was not aware of the SM6375 case, as for SM8150
->> the controller starts in a valid state but may require reinit during operation.
->>
->> So, I did not use the downstream approach to do it right at _probe() and then
->> later while get_temp() is called.
->>
->> Let me add that in v2. BTW do you want me to set the need_reinit_wa as true
->> for SM6375 as well, or would you like to add that with a followup-patch ?
-> Please set it, I'll happily test it!
+On Wed, Jul 20, 2022 at 2:57 AM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> On Mon, Jul 18, 2022 at 07:47:44PM +0200, Alexander Potapenko wrote:
+> > On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
+> > <kirill.shutemov@linux.intel.com> wrote:
+> > >
+> > > Add a couple of arch_prctl() handles:
+> > >
+> > >  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required numb=
+er
+> > >    of tag bits. It is rounded up to the nearest LAM mode that can
+> > >    provide it. For now only LAM_U57 is supported, with 6 tag bits.
+> > >
+> > >  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+> > >    bits located in the address.
+> > >
+> > > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > ---
+> > >  arch/x86/include/uapi/asm/prctl.h |  3 ++
+> > >  arch/x86/kernel/process_64.c      | 60 +++++++++++++++++++++++++++++=
++-
+> > >  2 files changed, 62 insertions(+), 1 deletion(-)
+> >
+> >
+> > > +
+> > > +static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned l=
+ong nr_bits)
+> > > +{
+> > > +       int ret =3D 0;
+> > > +
+> > > +       if (!cpu_feature_enabled(X86_FEATURE_LAM))
+> > > +               return -ENODEV;
+> >
+> > Hm, I used to think ENODEV is specific to devices, and -EINVAL is more
+> > appropriate here.
+> > On the other hand, e.g. prctl(PR_SET_SPECULATION_CTRL) can also return =
+ENODEV...
+>
+> I'm fine either way. Although there are way too many -EINVALs around, so
+> it does not communicate much to user.
+>
+> > >  long do_arch_prctl_64(struct task_struct *task, int option, unsigned=
+ long arg2)
+> > >  {
+> > >         int ret =3D 0;
+> > > @@ -829,7 +883,11 @@ long do_arch_prctl_64(struct task_struct *task, =
+int option, unsigned long arg2)
+> > >         case ARCH_MAP_VDSO_64:
+> > >                 return prctl_map_vdso(&vdso_image_64, arg2);
+> > >  #endif
+> > > -
+> > > +       case ARCH_GET_UNTAG_MASK:
+> > > +               return put_user(task->mm->context.untag_mask,
+> > > +                               (unsigned long __user *)arg2);
+> >
+> > Can we have ARCH_GET_UNTAG_MASK return the same error value (ENODEV or
+> > EINVAL) as ARCH_ENABLE_TAGGED_ADDR in the case the host doesn't
+> > support LAM?
+> > After all, the mask does not make much sense in this case.
+>
+> I'm not sure about this.
+>
+> As it is ARCH_GET_UNTAG_MASK returns -1UL mask if LAM is not present or
+> not enabled. Applying this mask will give correct result for both.
 
-Thanks. Will share v2 shortly.
+Is anyone going to use this mask if tagging is unsupported?
+Tools like HWASan won't even try to proceed in that case.
 
-Regards,
-Bhupesh
+> Why is -ENODEV better here? Looks like just more work for userspace.
 
+This boils down to the question of detecting LAM support I raised previousl=
+y.
+It's nice to have a syscall without side effects to check whether LAM
+can be enabled at all (e.g. one can do the check in the parent process
+and conditionally enable LAM in certain, but not all, child processes)
+CPUID won't help here, because the presence of the LAM bit in CPUID
+doesn't guarantee its support in the kernel, and every other solution
+is more complicated than just issuing a system call.
+
+Note that TBI has PR_GET_TAGGED_ADDR_CTRL, which can be used to detect
+the presence of memory tagging support.
+
+>
+> >
+> > > +       case ARCH_ENABLE_TAGGED_ADDR:
+> > > +               return prctl_enable_tagged_addr(task->mm, arg2);
+> > >         default:
+> > >                 ret =3D -EINVAL;
+> > >                 break;
+> > > --
+> > > 2.35.1
+> > >
+> >
+> >
+> > --
+> > Alexander Potapenko
+> > Software Engineer
+> >
+> > Google Germany GmbH
+> > Erika-Mann-Stra=C3=9Fe, 33
+> > 80636 M=C3=BCnchen
+> >
+> > Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+> > Registergericht und -nummer: Hamburg, HRB 86891
+> > Sitz der Gesellschaft: Hamburg
+>
+> --
+>  Kirill A. Shutemov
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

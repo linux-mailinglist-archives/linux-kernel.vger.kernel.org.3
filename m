@@ -2,109 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2EC257BCDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2560157BCDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbiGTRjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
+        id S235327AbiGTRja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiGTRjD (ORCPT
+        with ESMTP id S230202AbiGTRj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:39:03 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98896FA3F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:02 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 17so6751845pfy.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:02 -0700 (PDT)
+        Wed, 20 Jul 2022 13:39:28 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD337098F
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:26 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id y11so31465065lfs.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gKIOhejkrq+Q8uuRF6iQnfl7G8p3hbpVdHm8R8aIKko=;
-        b=ajAxf9e0OHyYwpsX9evWazSHyzfB73W7maKkyeCSnXzXmlH15O4GzRs+O0rqWHboM2
-         xaSFxnpeCt7qFTqMMS9oN6DJX38iQ3RLx0mOmFcZ6U9W7O/mWx8AyfjwXOHOQvL7H0Rz
-         egvk5cESz+hck09fG4WZ1dlpsfjehnzKSqVdX1/DJb5U02Olw7UGzpads16T6KPILxGO
-         CenaOBjFSIR0cZpUdrW+EGMT9UCBoCiLO4KSxZblrHalXsskYd6YWpP7LnebWdv9t/iX
-         xhRAwAd2Rq5rT3mdzf/OSWlc6+6KWG9i+QTp4TaDwBUmH5pha1uY+kjF/vHKb+XNvPMj
-         RA6Q==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aeyafCkyinZJZTTcPy1wEfXMzXWZcIm0MV4FRs14iJQ=;
+        b=zreXvg79hkBxKuShfS2H1ZVu3CjpX0spc5x+RYWSF3KMxuyjz5fLD7BBgfbuNGIvaN
+         a2Wol5GaBcqFJs24Or/Cx8yVs8kKCzk2Q2Q+Kbw4VACBuD0IgavdZPfksPMWyjvHRkA3
+         Xtom3dAIkGJ5NScEK9Dlt+XbFEMBKHcftw6XKQlhV5SMy5nxSAzs47rcxyG3JKnh9vEl
+         /OKrKhIMKbRVpK72I4APWWgYq4traCLcCWzFv5auA0G14VIFu2oCCHlZ6ikxN3c33nsV
+         XkKmrckQcwEb+7CWFRCHpGWzPJugLd1eKmVhWrUCUnW87mf1rv/60AlQED8RF/yHnS9t
+         ELtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gKIOhejkrq+Q8uuRF6iQnfl7G8p3hbpVdHm8R8aIKko=;
-        b=KUDyqZK60PLYN4ZA1q2jAzZ9qK1RoMORMpQoGby3x1wWRwoqxbiCXghL4jI1mopF9o
-         50FdxopNUWlx+4oHfB8jGwZW64xIUYIx2Ac+TJ/jZ31S/K4BjdeaOvDkhYd80D7AzmsO
-         niSwyE+E0I1PNsV8ziDYF75XZxCyVd8KCJR0IlElSgw2Xa+V2FHK5NoLWqFLPe9HVjlc
-         4dWecjNRe+EocM7IKX59EZAubcr8WCfPGDP9CwMb90QhSbB1II3Y8PqgDE6kZrZ3odfz
-         +0EuKc+PVzxrj3wF2wqkSfWwZ+FZ+GnJRNxfmR0mR/VCDYZRDjfmZWtllZ6W7t8eRPux
-         SoYA==
-X-Gm-Message-State: AJIora/CTXIiGHxEtCCNmvv7cvuMyUjh3dX0H+/jZKTCcO3WS/BjCy7x
-        VXkg0TNEXb9aoeJFwyrunTmh0Q==
-X-Google-Smtp-Source: AGRyM1soWPcGGf8fAYVmZHjvcI2IFRbHXUOG1yZwYb5ZKKIs1YZVEFCQitJrLQtIHkL7ysf7SiTTNg==
-X-Received: by 2002:a05:6a00:2481:b0:52a:d50e:e75e with SMTP id c1-20020a056a00248100b0052ad50ee75emr40449773pfv.43.1658338742013;
-        Wed, 20 Jul 2022 10:39:02 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170903120700b0016cd74e5f87sm10433764plh.240.2022.07.20.10.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 10:39:01 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 17:38:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Kechen Lu <kechenl@nvidia.com>, kvm@vger.kernel.org,
-        pbonzini@redhat.com, vkuznets@redhat.com, somduttar@nvidia.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 5/7] KVM: x86: add vCPU scoped toggling for
- disabled exits
-Message-ID: <Ytg9shoNq9XfTiHS@google.com>
-References: <20220615011622.136646-1-kechenl@nvidia.com>
- <20220615011622.136646-6-kechenl@nvidia.com>
- <20220615024311.GA7808@gao-cwp>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aeyafCkyinZJZTTcPy1wEfXMzXWZcIm0MV4FRs14iJQ=;
+        b=nQT4MQIE0ih6dZdF4BTg0KyTKD3xXB5G1ouscnzjA+VRhw8s3NJPW+egyWo/KLKXaU
+         qLuFPzAqlYEdTWiNFYj7hbE483kdv5V6PXYXxO8E20ODMoPGT1E13oU/mHyHB/HbS77u
+         JW21HkRSl/rBXUBvCFLJsIC7JrYhnikd0KqtSI+ohX352DlvzV69Ov7vjSzQzbTVQ8dp
+         7lv1CIByzQ2aIh3fAs+OnCT1zUNfvwarkXp2FL7sCsfwELzepK5bl+dfLz+1w97sBils
+         UsPx+qVPOwOioWJXjWmFs174YGzYaQom8AUsF5GrMtTj11qLzWPbmIuqtoxQZIsTjmys
+         NO+w==
+X-Gm-Message-State: AJIora+Xyh9huMwvUSvWSgSuGU648X0xVBiD3eBUKafR42st7k7Rm2hw
+        Akrpy6UmMYMBtjn720drHoeWRA==
+X-Google-Smtp-Source: AGRyM1tlok4eLvijqT1LvZXgtABKbS0mRRyNVkb8xzG9GzfNEkfDR+8raI0dXp18XCp0w8HM7jBCAA==
+X-Received: by 2002:a05:6512:410:b0:489:d17a:b2c0 with SMTP id u16-20020a056512041000b00489d17ab2c0mr21052431lfk.493.1658338765232;
+        Wed, 20 Jul 2022 10:39:25 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id z13-20020a19504d000000b00489e64dcf75sm3940177lfj.204.2022.07.20.10.39.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 10:39:24 -0700 (PDT)
+Message-ID: <085a003e-576d-b39a-60ce-ca8f53c89d43@linaro.org>
+Date:   Wed, 20 Jul 2022 19:39:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615024311.GA7808@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 08/21] arm64: dts: mediatek: Update mt81xx scpsys node
+ to align with dt-bindings
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>
+Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220720123023.13500-1-tinghan.shen@mediatek.com>
+ <20220720123023.13500-9-tinghan.shen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720123023.13500-9-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022, Chao Gao wrote:
-> >@@ -5980,6 +5987,8 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_event,
-> > int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> > 			    struct kvm_enable_cap *cap)
-> > {
-> >+	struct kvm_vcpu *vcpu;
-> >+	unsigned long i;
-> > 	int r;
-> > 
-> > 	if (cap->flags)
-> >@@ -6036,14 +6045,17 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> > 			break;
-> > 
-> > 		mutex_lock(&kvm->lock);
-> >-		if (kvm->created_vcpus)
-> >-			goto disable_exits_unlock;
-> >+		if (kvm->created_vcpus) {
-> >+			kvm_for_each_vcpu(i, vcpu, kvm) {
-> >+				kvm_ioctl_disable_exits(vcpu->arch, cap->args[0]);
-> >+				static_call(kvm_x86_update_disabled_exits)(vcpu);
+On 20/07/2022 14:30, Tinghan Shen wrote:
+> Update scpsys nodes using simple-mfd in mt81xx SoC devicetree
+> to align with the bindings.
+
+"Update" is not accurate enough description. The same in commit title.
+It answers "why" you are doing it, but does not answer what exactly you
+are changing here and what is the effect. IOW, you need to explain the
+true logic behind it - 10006000 is not power domain provider etc.
+
 > 
-> IMO, this won't work on Intel platforms.
 
-It's not safe on AMD either because at best the behavior is non-deterministic if
-the vCPU is already running in the guest, and at worst could cause explosions,
-e.g. if hardware doesn't like software modifying in-use VMCB state.
-
-> Because, to manipulate a vCPU's VMCS, vcpu_load() should be invoked in
-> advance to load the VMCS.  Alternatively, you can add a request KVM_REQ_XXX
-> and defer updating VMCS to the next vCPU entry.
-
-Definitely use a request, doing vcpu_load() from a KVM-scoped ioctl() would be
-a mess as KVM would need to acquire the per-vCPU lock for every vCPU.
+Best regards,
+Krzysztof

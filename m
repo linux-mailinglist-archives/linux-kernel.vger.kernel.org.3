@@ -2,85 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FF657B487
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029F357B48B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237963AbiGTK2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S236863AbiGTK25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 06:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237547AbiGTK2g (ORCPT
+        with ESMTP id S238260AbiGTK2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:28:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164EC2E681;
-        Wed, 20 Jul 2022 03:28:32 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 27FBB6601A93;
-        Wed, 20 Jul 2022 11:28:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658312910;
-        bh=WjQuvFNLVm8PV4tL75ngFil2ay60pZ5lwG2z4v6Q6rg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hhmqd1R7Lmd52+qzUkQpbDDGF0an6MsHUnylgLlSnHsxb4h6z4JA1QG8wuBBsnLHG
-         tZHC6I7OlaRjL4g6mUGbKV5W/irLR9Kg7mq0VRwtXCmgMdNQ0ej7KwH5f3Ax5dlMlt
-         UTl4gQMTZxs2TZvcUEiV7qBtNMacZud4oe8mDrzApqPtxOuQP7o26OGyOWFQUGjY7A
-         4cK6Re2EtaMrub72W2LMqYjJRM/zxNFySN7a22qEhlZEC6ueS7yajL8vTOWAKJ4ZPN
-         21Rrc3RFXlJAl/SDTF1hayT9w6mdHqsLOpCCNWiKv5zz5qRsVURdVRWrJVs0/9MHPm
-         jMkYPNKP/rltA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com,
-        chun-jie.chen@mediatek.com, wenst@chromium.org,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 2/2] clk: mediatek: mt8195: Add reset idx for USB/PCIe T-PHY
-Date:   Wed, 20 Jul 2022 12:28:17 +0200
-Message-Id: <20220720102817.237483-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220720102817.237483-1-angelogioacchino.delregno@collabora.com>
-References: <20220720102817.237483-1-angelogioacchino.delregno@collabora.com>
+        Wed, 20 Jul 2022 06:28:52 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77B06559A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:28:49 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y8so23194168eda.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:28:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HxeeahFnyrnq1to3tzfOP43nSOufg2cPA8exTdvP6so=;
+        b=DGLGyt7ZUdRbQTHpOvawsrPyT+cOAeBxpKEBxUemapIUTCtgmMziVfaMUo67dDFh//
+         N/4v79fPnDG/ydkr1XSRjiqDkD/isWsNsHKKqiAtxPmeti/1ZYk9+oG7e+hZHqrW7NO7
+         IAP1bO5Vqlg7x6C+6zlZV4N3vSa1a5tEGyzNk6wlizsYFutZ7g7y1YZGXP5Do3q3ZY3l
+         dIYnMckXVQ/DOr21IWG1WxfWrRiGfQnhj9aHvAdiwyTNkLxhpYeL52y+bBclwAD5YMkm
+         J90k9opl1TvTtvsMvX4Y3Zc9dOKoPZXIjPgHtC6AFT72EzIm4fTkJGquNN9lk7WWi+wT
+         GQFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HxeeahFnyrnq1to3tzfOP43nSOufg2cPA8exTdvP6so=;
+        b=o7OS7Y4X5uB9d1QxFmVO/CAUiVKpXYLUbiREKNyk9ioJeBbZs4CfBfbUoXWgLFzB0Z
+         +IGDrwmE0z/4Mta2P0xv9W+JC029DLK7fZRndC3EKeZmby7NpieYeYYpASRg58b1oe2e
+         palDVEXq7M/IR9pwqb4MNY4c8axW3KEJfnn37exg6T+9I/jxBqBq6cLzczDGusrsd+Kw
+         cBdIfwVqrnXjA4CADe2lM0sc05ikUc35lCh0cdVOsptAKnKbFOsvSiieYobYtqUIsUzq
+         iKC4tF2vMT0n1ZvEQg6/RYev9y+O/s65gHQfYn+Dl9Y1Qioj6XITUBu606EUSUPkiFQz
+         4ENg==
+X-Gm-Message-State: AJIora9S4u9+CLtncRyRiBvkbFeKm3Ueb3OxOx46oiNSqJ6Jj2WBCpFu
+        Hqhsct70sJncRxdrnIimAV94h8CpP0F384BT8rDkRA==
+X-Google-Smtp-Source: AGRyM1v+RgpIAJBMsB0m6x3IAt/8edQ13VW4RHj9DNTPPXSKT+RiSUwrLYziGcQP0kAsm7NdkEzF389/y/5GLa5OdVA=
+X-Received: by 2002:aa7:c6d5:0:b0:43b:a52b:2e9d with SMTP id
+ b21-20020aa7c6d5000000b0043ba52b2e9dmr6653211eds.55.1658312928148; Wed, 20
+ Jul 2022 03:28:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220719114518.915546280@linuxfoundation.org>
+In-Reply-To: <20220719114518.915546280@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 20 Jul 2022 15:58:36 +0530
+Message-ID: <CA+G9fYsTSDGqM1cW1f8aQ8fN3yT71ENpY-duX2vQzWi-Eq-9Cg@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/48] 4.19.253-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the reset idx for the t-phy port 1, used as either USB or
-PCI-Express (secondary controller) PHY, depending on board-specific
-configuration/layout.
+On Tue, 19 Jul 2022 at 17:29, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.253 release.
+> There are 48 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 21 Jul 2022 11:43:40 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.253-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt8195-infra_ao.c | 1 +
- 1 file changed, 1 insertion(+)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/drivers/clk/mediatek/clk-mt8195-infra_ao.c b/drivers/clk/mediatek/clk-mt8195-infra_ao.c
-index 75b54ec9c46c..fcd410461d3b 100644
---- a/drivers/clk/mediatek/clk-mt8195-infra_ao.c
-+++ b/drivers/clk/mediatek/clk-mt8195-infra_ao.c
-@@ -200,6 +200,7 @@ static u16 infra_ao_rst_ofs[] = {
- 
- static u16 infra_ao_idx_map[] = {
- 	[MT8195_INFRA_RST0_THERM_CTRL_SWRST] = 0 * RST_NR_PER_BANK + 0,
-+	[MT8195_INFRA_RST2_USBSIF_P1_SWRST] = 2 * RST_NR_PER_BANK + 18,
- 	[MT8195_INFRA_RST2_PCIE_P0_SWRST] = 2 * RST_NR_PER_BANK + 26,
- 	[MT8195_INFRA_RST2_PCIE_P1_SWRST] = 2 * RST_NR_PER_BANK + 27,
- 	[MT8195_INFRA_RST3_THERM_CTRL_PTP_SWRST] = 3 * RST_NR_PER_BANK + 5,
--- 
-2.35.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.19.253-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 8b84863f2dd59d1663d4c8a38cf7a59fdef04dfc
+* git describe: v4.19.252-49-g8b84863f2dd5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.252-49-g8b84863f2dd5
+
+## Test Regressions (compared to v4.19.252)
+No test regressions found.
+
+## Metric Regressions (compared to v4.19.252)
+No metric regressions found.
+
+## Test Fixes (compared to v4.19.252)
+No test fixes found.
+
+## Metric Fixes (compared to v4.19.252)
+No metric fixes found.
+
+## Test result summary
+total: 113490, pass: 100359, fail: 274, skip: 11697, xfail: 1160
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 286 passed, 5 failed
+* arm64: 58 total, 57 passed, 1 failed
+* i386: 26 total, 25 passed, 1 failed
+* mips: 35 total, 35 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 52 total, 51 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,159 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9449557B8F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A65F57B8F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 16:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240899AbiGTOxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 10:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S241001AbiGTOxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 10:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbiGTOxP (ORCPT
+        with ESMTP id S240938AbiGTOxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:53:15 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2D0DF11;
-        Wed, 20 Jul 2022 07:53:14 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id a11so4885467wmq.3;
-        Wed, 20 Jul 2022 07:53:14 -0700 (PDT)
+        Wed, 20 Jul 2022 10:53:39 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22DE28E2B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:53:37 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id bp15so33545845ejb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 07:53:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y0wRoxXm0lXLU9vHgb65mx+sz5ayh2XUgm6rcM2W0Os=;
-        b=DCcOQ/6pIyGvxCWOmJS1gJrYpFkWZT89oAWW0Ux6OQizF5MPa99CCwIX4LOJsPsX9B
-         MIKDMfkNt7ahoBFEKs3Cca9tYTgh0BpStVWPIVr6tOfeV3GfP1kpCzT0RRsJrHIJUp0r
-         sRoX0fzGoazOGVCzJrnwjsVm4Via8f/Wr3+oWYaKBgzplZRoO71GGex4cHaaTh3xaVw/
-         LgAW498v1nQwVPf6cQNcoN6cFKGNKFh8JQX09MJLKHIIKIT4+d4/qLRHmYRL7gSUHNqi
-         jsQb2kEubx44zU0PxxCYt8SXu6RRT4jRT3mGdWW8qIHIPprKiUnwt2ZlN0uxCqY1gRvq
-         8YJA==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EHnL8tPbxNN29oOhwMl2f2FEODtAZh9gu6a10PJE6TA=;
+        b=Jz+zPAGQY81xbmnf6S2EXoOmMRnw0oHwMZwfMaNbLBq1FWu/5brYbnwErMWE0SVaDB
+         8nkjl+DfBuHkiVtSf2RuNH7v3rp1ZLEzNbfW9a58aLFN54B3WumMv9nWuoIzo2VPmjf3
+         D2zIucq4Vm6EpRU9wEdnuBDxL4hLsNmJ8cX1s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y0wRoxXm0lXLU9vHgb65mx+sz5ayh2XUgm6rcM2W0Os=;
-        b=IGCyHFOpL/7MoMI+2cGiCQx6rXDzuAja2q3Yr0WiJ4oFbi4/RMRFeP4q8xCVPdcN2x
-         R3AZ9GKOtdAOWzYpVOXHY7NDE9kX+SFoOm54/jJklYjEBRJowc7k4DtEICEE7+k1Uiee
-         Aq58/J3MwKKmfXf2xPutH/jaKTQj6rbibKltE8l9PiNO8cztmhR2ClLKvWDlRMH4NSjh
-         TlUhmcPhwIdOVY8KhpyygxXtUBiPCwdll1RSoke5cDRGbzpyyUJMyEGmR35j6UwcUDpP
-         4UBhUROTGlb81Bll/MAexGoNWWf5GKXzUvmUFjII27d+sOJnOYcJ2Ejf/HE05eRFQKMB
-         NnCg==
-X-Gm-Message-State: AJIora/O9St4duBM5cXB3e999a9yCR5IwpSTko235MhYehsnwgAUbf6z
-        WT2PqdOHyc+P+jxzl3gWqOI=
-X-Google-Smtp-Source: AGRyM1uWeUcffW8kDxoO+pUpEnNIyYERqP2oY3ASBFUAIzEgdBIasCmxz4OGqCxwoBCLupGt21noHw==
-X-Received: by 2002:a05:600c:3553:b0:3a3:2b65:299e with SMTP id i19-20020a05600c355300b003a32b65299emr2373091wmq.145.1658328792662;
-        Wed, 20 Jul 2022 07:53:12 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id bg42-20020a05600c3caa00b003a31b79dc0esm11233827wmb.1.2022.07.20.07.53.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 07:53:11 -0700 (PDT)
-Message-ID: <43acea66-78e1-b7da-8d1c-3a60a5ddf4b6@gmail.com>
-Date:   Wed, 20 Jul 2022 16:53:10 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EHnL8tPbxNN29oOhwMl2f2FEODtAZh9gu6a10PJE6TA=;
+        b=CV/Nhi64wOFwOxgT8brr+uK9aNRKwgkf7plaj1DHOpofbMJzgbM1ewOeqNJVcvmuIn
+         XucJ3yO3uzE9TXrj9dc0W3ZIyqpOLJ4ja/KRU3Jcrsi8X5tm1+occZnHCLZKLC3A5lkC
+         dc2tRwNPuhOn5/xn9IIB5f6h0EU8F4Vtz2SKlQFWDYO6sQ+bM/KKzJ8uCeaLBXxBRcGn
+         46U4XGmHerpT7wihth2VRUVv8YDVYYrZBZ2XngNLKvaL9msxxXqcdx+EHKSBtMOEX4GW
+         JEde5rrwHU59oYYi+6maRf3Z4bEVoQADrBQz95CIGIYlBQe5FJrRRZVD9qoaAsSU1nbF
+         wkWQ==
+X-Gm-Message-State: AJIora9O2Mg/58BJ0nhhj90P6DBImJ+uhax+hdMXp6Rmoxmjgcn0gMI9
+        p9ESQtt8FRroimjRmzo6USDxAhSXOLpAPRJYTH09Og==
+X-Google-Smtp-Source: AGRyM1v2EC+Hjyqpka6aujTvod1B12SacJ7kuImQZqTfcejALD61e1pE1oksddVH3Kq/9ma+7pvcG7cRkA/DerUFT8Q=
+X-Received: by 2002:a17:907:2bf4:b0:72b:3336:ca9e with SMTP id
+ gv52-20020a1709072bf400b0072b3336ca9emr35721318ejc.341.1658328816117; Wed, 20
+ Jul 2022 07:53:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 4/6] Input: mt6779-keypad - support double keys matrix
-Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
- <20220720-mt8183-keypad-v1-4-ef9fc29dbff4@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220720-mt8183-keypad-v1-4-ef9fc29dbff4@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+-6iNz8DTjAMXnWuOd=0W=qa6J4uD03oH3RJezEk1WxaUN1NA@mail.gmail.com>
+ <20220719200332.GA1552587@bhelgaas>
+In-Reply-To: <20220719200332.GA1552587@bhelgaas>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Wed, 20 Jul 2022 10:53:24 -0400
+Message-ID: <CA+-6iNzn=JsG=xU2BxagyfeUMZ13p9yg=y+_wVcsAaZ0NgEvKg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000006064305e43dc482"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--00000000000006064305e43dc482
+Content-Type: text/plain; charset="UTF-8"
 
+On Tue, Jul 19, 2022 at 4:03 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Tue, Jul 19, 2022 at 09:08:48AM -0400, Jim Quinlan wrote:
+> > On Mon, Jul 18, 2022 at 6:40 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Mon, Jul 18, 2022 at 02:56:03PM -0400, Jim Quinlan wrote:
+> > > > On Mon, Jul 18, 2022 at 2:14 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > On Sat, Jul 16, 2022 at 06:24:49PM -0400, Jim Quinlan wrote:
+> > > > > > Currently, the function does the setup for establishing PCIe link-up
+> > > > > > with the downstream device, and it does the actual link-up as well.
+> > > > > > The calling sequence is (roughly) the following in the probe:
+> > > > > >
+> > > > > > -> brcm_pcie_probe()
+> > > > > >     -> brcm_pcie_setup();                       /* Set-up and link-up */
+> > > > > >     -> pci_host_probe(bridge);
+> > > > > >
+> > > > > > This commit splits the setup function in two: brcm_pcie_setup(), which only
+> > > > > > does the set-up, and brcm_pcie_start_link(), which only does the link-up.
+> > > > > > The reason why we are doing this is to lay a foundation for subsequent
+> > > > > > commits so that we can turn on any power regulators, as described in the
+> > > > > > root port's DT node, prior to doing link-up.
+> > > > >
+> > > > > All drivers that care about power regulators turn them on before
+> > > > > link-up, but typically those regulators are described directly under
+> > > > > the host bridge itself.
+> > > >
+> > > > Actually, what you describe is what I proposed with my v1 back in Nov 2020.
+> > > > The binding commit message said,
+> > > >
+> > > >     "Quite similar to the regulator bindings found in
+> > > >     "rockchip-pcie-host.txt", this allows optional regulators to be
+> > > >     attached and controlled by the PCIe RC driver."
+> > > >
+> > > > > IIUC the difference here is that you have regulators described under
+> > > > > Root Ports (not the host bridge/Root Complex itself), so you don't
+> > > > > know about them until you've enumerated the Root Ports.
+> > > > > brcm_pcie_probe() can't turn them on directly because it doesn't know
+> > > > > what Root Ports are present and doesn't know about regulators below
+> > > > > them.
+> > > >
+> > > > The reviewer's requested me to move the regulator node(s)
+> > > > elsewhere, and at some point later it was requested to be placed
+> > > > under the Root Port driver.  I would love to return them under the
+> > > > host bridge, just say the word!
+> > >
+> > > Actually, I think my understanding is wrong.  Even though the PCI core
+> > > hasn't enumerated the Root Port as a pci_dev, brcm_pcie_setup() knows
+> > > about it and should be able to look up the regulators and turn them
+> > > on.
+> >
+> > One can do this with
+> >         regulator_bulk_get(NULL, ...);
+> >
+> > However, MarkB did not like the idea of a driver getting the
+> > regulator from the global DT namespace [1].
+> >
+> > For the RC driver, one  cannot invoke  regulator_bulk_get(dev, ...)
+> > if there is not a direct child regulator node.  One needs to use the
+> > Port driver device.  The Port driver device does not exist at this
+> > point unless one tries to prematurely create it; I tried this and it
+> > was a mess to say the least.
+> >
+> > > Can you dig up the previous discussion about why the regulators need
+> > > to be under the Root Port and why they can't be turned on before
+> > > calling pci_host_probe()?
+> >
+> > RobH did not want the regulators to be under the RC as he said their
+> > DT location should resemble the HW [2].  The consensus evolved to
+> > place it under the port driver, which can provide a general
+> > mechanism for turning on regulators anywhere in the PCIe tree.
+>
+> I don't want to redesign this whole thing.  I just want a crisp
+> rationale for the commit log.
+>
+> All other drivers (exynos, imx6, rw-rockchip, histb, qcom, tegra194,
+> tegra, rockchip-host) have regulators for downstream PCIe power
+> directly under the RC.  If putting the regulators under an RP instead
+> is the direction of the future, I guess that might be OK, and I guess
+> the reasons are:
+>
+>   1) Slot or device power regulators that are logically below the RP
+>      should be described that way in the DT.
+>
+>   2) Associating regulators with a RP allows the possibility of
+>      selectively controlling power to slots/devices below the RP,
+>      e.g., to power down devices below RP A when suspending while
+>      leaving wakeup devices below RP B powered up.
+>
+> I think in your case the motivating reason is 2).
+>
+> Your commit log for "Add mechanism to turn on subdev regulators"
+> suggests that you want some user control of endpoint power, e.g., via
+> sysfs, but I don't see that implemented yet except possibly via a
+> "remove" file that would unbind the driver and remove the entire
+> device.
+Hi Bjorn,
 
-On 20/07/2022 16:48, Mattijs Korpershoek wrote:
-> MediaTek keypad has 2 modes of detecting key events:
-> - single key: each (row, column) can detect one key
-> - double key: each (row, column) is a group of 2 keys
-> 
-> Double key support exists to minimize cost, since it reduces the number
-> of pins required for physical keys.
-> 
-> Double key is configured by setting BIT(0) of the KP_SEL register.
-> 
-> Enable double key matrix support based on the mediatek,double-keys
-> device tree property.
-> 
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Initially we wanted to (a) turn on any regulator found under the RC
+node and (b) allow the possibility of the regulator to control the
+EP's power. From the feedback, we realized early on that neither of
+these were going to fly, so we conceded both requests and just wanted
+to turn on standard PCIe regulators.  Upon reading the aforementioned
+commit message I realize that there are a couple of leftover sentences
+from these early days that must be removed.
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+I think when I submitted v1 of the original series that only the
+rockchip driver had regulators under the RC.   And my recollection was
+that this was accepted but there was apprehension of this turning into
+the "standard" way of turning on such regulators,  as the location of
+the regulator nodes was in question.
 
-> 
-> diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
-> index bf447bf598fb..9a5dbd415dac 100644
-> --- a/drivers/input/keyboard/mt6779-keypad.c
-> +++ b/drivers/input/keyboard/mt6779-keypad.c
-> @@ -18,6 +18,7 @@
->   #define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
->   #define MTK_KPD_DEBOUNCE_MAX_MS	256
->   #define MTK_KPD_SEL		0x0020
-> +#define MTK_KPD_SEL_DOUBLE_KP_MODE	BIT(0)
->   #define MTK_KPD_SEL_COL	GENMASK(15, 10)
->   #define MTK_KPD_SEL_ROW	GENMASK(9, 4)
->   #define MTK_KPD_SEL_COLMASK(c)	GENMASK((c) + 9, 10)
-> @@ -31,6 +32,7 @@ struct mt6779_keypad {
->   	struct clk *clk;
->   	u32 n_rows;
->   	u32 n_cols;
-> +	bool double_keys;
->   	DECLARE_BITMAP(keymap_state, MTK_KPD_NUM_BITS);
->   };
->   
-> @@ -67,8 +69,13 @@ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
->   			continue;
->   
->   		key = bit_nr / 32 * 16 + bit_nr % 32;
-> -		row = key / 9;
-> -		col = key % 9;
-> +		if (keypad->double_keys) {
-> +			row = key / 13;
-> +			col = (key % 13) / 2;
-> +		} else {
-> +			row = key / 9;
-> +			col = key % 9;
-> +		}
->   
->   		scancode = MATRIX_SCAN_CODE(row, col, row_shift);
->   		/* 1: not pressed, 0: pressed */
-> @@ -150,6 +157,8 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
->   
->   	wakeup = device_property_read_bool(&pdev->dev, "wakeup-source");
->   
-> +	keypad->double_keys = device_property_read_bool(&pdev->dev, "mediatek,double-keys");
-> +
->   	dev_dbg(&pdev->dev, "n_row=%d n_col=%d debounce=%d\n",
->   		keypad->n_rows, keypad->n_cols, debounce);
->   
-> @@ -166,6 +175,10 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
->   	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
->   		     (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
->   
-> +	if (keypad->double_keys)
-> +		regmap_update_bits(keypad->regmap, MTK_KPD_SEL,
-> +				   MTK_KPD_SEL_DOUBLE_KP_MODE, MTK_KPD_SEL_DOUBLE_KP_MODE);
-> +
->   	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_ROW,
->   			   MTK_KPD_SEL_ROWMASK(keypad->n_rows));
->   	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_COL,
-> 
+In short, I would be quite content  to follow the existing examples.
+
+Regards,
+Jim Quinlan
+Broadcom STB
+
+>
+> > [1] https://lore.kernel.org/linux-pci/20210329162539.GG5166@sirena.org.uk/
+> > [2] https://lore.kernel.org/linux-pci/CAL_JsqKPKk3cPO8DG3FQVSHrKnO+Zed1R=PV7n7iAC+qJKgHcw@mail.gmail.com/
+
+--00000000000006064305e43dc482
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
+DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
+DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
+qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
+YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
+S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
+8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCjNddhdlQM3zuW9Zd4GGZxwviIa9GU
+dl202BaJrEneWjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
+MjAxNDUzMzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEAYEMuM9ri/PnCbYZccHQMUZbXcttIxHy7VcBP47ME+VkdKfrF
+La3taH6K7zPukv2ncLrg82nzprzOJPYBYTiH56tR1Up3F3j1ASlnQC/7iuM17Xo7vBvDoQTCK7p5
+DAPwBseHPUiQLFEvXULxbsaS0wGVWFcMbBwG2p7CyevOJwAyfpYy+pEboBZBX9Xw//Dkpqvvz5wO
+D5PDcJzpR6GCkBtkyYVgRrCPstMPdQBXolDsinabF1fmhAFW6DnpS93ZL6cXWiEtlKqZxuIkNTIw
+X7S2OJ9Q3MI4U/CKMWq4/JP66V0o8/InTGBkPqdkzsrSC7Mm7x5jtYJ/OyVNvpTuLQ==
+--00000000000006064305e43dc482--

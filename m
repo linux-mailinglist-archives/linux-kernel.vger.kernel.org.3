@@ -2,98 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10DA57BCD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8BD57BCD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238349AbiGTRiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S232409AbiGTRij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbiGTRiJ (ORCPT
+        with ESMTP id S241396AbiGTRib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:38:09 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ADB6FA3F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:38:07 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id q7so21921913lji.12
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ICIFskbhDAxkqyFPFywjKrA2bMQUTmKy88Z9Ca4QMwc=;
-        b=pU4v+a1Ih9uwueVmVnw/nnRcFBk6TOtjSs23U+h8gRjVlV7wDHKSroELFu22DOnyC0
-         MyE9ToyAShxsaTpXlt+/dHrJQvJsInZpC6XHFrdQORgZmkhNz/GcLEL7aLSOnjghiFRF
-         yoAig85kwvl0gdzvs1inz7BQHrpwSaBinQUgdUT2+pBtFMNJin0BEW+PLOuwnOieRzVS
-         eAJFwaq+rF9flazp7+kc/D2u4tCzcGylZyCH4TsvhRfddoo6xg4QmIthqM/kEy8hQeCU
-         JWHiDHl/sFzRmFD9/NxBYwUKVb7BC5bLLOH20jDlZ90DknQPvGOX7X1IVUSH0s7dKspk
-         qXDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ICIFskbhDAxkqyFPFywjKrA2bMQUTmKy88Z9Ca4QMwc=;
-        b=wz+1FHE2hvtu/xlJhcKsfwh23ZcOv9EvEFYagu9uPzeIxGmp71t+NuBBcwSy6VPp1N
-         2qwyyCIUUUtNnvm3q7pNbvjUBk6xUhPZBBYG4p89pgo03sF2qEXEcN9Oo5YuCWYdN09p
-         PTifa+HsMXodC7fEQv82ggEIASvfmDeJEQAQmTdG0XHSGbBTvuqWhzC3tTCSadqP8WEV
-         b1XvVRLpAZ8th6Frsq081QcAE/F+eUdjCS6uD5Trm+ogultkFW/fD0lKZizQK5uZslbD
-         yt/WOag83d3FpQUZgfWM3bHDi/ngK6ah/rY8FSP3zFoDzw1cwmGl167BHNqTTgT0/ECw
-         bQ6g==
-X-Gm-Message-State: AJIora/glqF9TOg6BpCgpMg/AoHOZNibNia6uUyPXvMUXc0YiFIBQC11
-        DBKxvEZT5GkxFIea36Hmy8k9yQ==
-X-Google-Smtp-Source: AGRyM1sG7lbScHD/ieFpA/+GQ6oByCyWagIFfgC4I8Gr18ItlMyGc5wtlKO06bA6wu+LjYej5okHsQ==
-X-Received: by 2002:a2e:8e28:0:b0:25d:c1b9:aede with SMTP id r8-20020a2e8e28000000b0025dc1b9aedemr5581492ljk.28.1658338686017;
-        Wed, 20 Jul 2022 10:38:06 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id v14-20020a056512348e00b0047f6b8c2127sm3909309lfr.186.2022.07.20.10.38.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 10:38:05 -0700 (PDT)
-Message-ID: <3fab6834-7622-a33a-dc97-9c630702b6fe@linaro.org>
-Date:   Wed, 20 Jul 2022 19:38:04 +0200
+        Wed, 20 Jul 2022 13:38:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDA670E6C;
+        Wed, 20 Jul 2022 10:38:30 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KHQu6x016806;
+        Wed, 20 Jul 2022 17:38:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=oRYSDww+xT2kBVZi4n+vXxIVbL6AE6OfPZiR44/2RWo=;
+ b=QR4J3FXggDWq+Gc+6Zoe/aYKzTjkebIINEBfoBjM/DcM6DkvECM7oWfqa2ZAbo2Udvjl
+ ZSQk6Bm8K0NUohAW5YyFW7NQ7JhLKRpcbX8mce8qqkXSq7pSa1m1lZxlDEFh/GbJU7WY
+ LjU8X87UtELFFJOXErQYlz3h+SVbnqz215M103lSekbdYPsTTthavmLlwI5hpBaZCcri
+ exzAqJ+GdaAn/5VXZ4qivDi5uq/yyrTQkZRHW6oJXUR8w6dk6RkR9GLOx6kekio4eHil
+ j9fHLUxmA1ECYnPv7uN0P6AF/E1rp22nQzHC6wHXjnM4h/oalD+LGOPqZPEG0IUw/yPP 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hen382yx4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 17:38:24 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26KGnasC035260;
+        Wed, 20 Jul 2022 17:38:24 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hen382ywg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 17:38:24 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26KHNT6o002129;
+        Wed, 20 Jul 2022 17:38:23 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03dal.us.ibm.com with ESMTP id 3hbmy9hp5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 20 Jul 2022 17:38:23 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26KHcMgq3080866
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 17:38:22 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9A7FFB2067;
+        Wed, 20 Jul 2022 17:38:22 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C372B2064;
+        Wed, 20 Jul 2022 17:38:20 +0000 (GMT)
+Received: from [9.211.34.199] (unknown [9.211.34.199])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 20 Jul 2022 17:38:20 +0000 (GMT)
+Message-ID: <016ae05e-6d8c-2c95-ffcf-239230597def@linux.ibm.com>
+Date:   Wed, 20 Jul 2022 19:38:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 07/21] dt-bindings: power: mediatek: Update example in
- dt-bindings
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>
-Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220720123023.13500-1-tinghan.shen@mediatek.com>
- <20220720123023.13500-8-tinghan.shen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720123023.13500-8-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH net-next v2 0/6] net/smc: Introduce virtually contiguous
+ buffers for SMC-R
+To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1657791845-1060-1-git-send-email-guwen@linux.alibaba.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <1657791845-1060-1-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: t4wdqEfuOEECHH7y4DP_PucxfT6lBMWz
+X-Proofpoint-GUID: cUwd6s4raPyTqXGcA1qpEnLNEbltzJ5k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_10,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 adultscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207200071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 14:30, Tinghan Shen wrote:
-> Update the scpsys node compatible string to align with the
-> scpsys node bindings.
+
+
+On 14.07.22 11:43, Wen Gu wrote:
+> On long-running enterprise production servers, high-order contiguous
+> memory pages are usually very rare and in most cases we can only get
+> fragmented pages.
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-
-Squash it with previous because logically it's the same change.
-
-Best regards,
-Krzysztof
+> When replacing TCP with SMC-R in such production scenarios, attempting
+> to allocate high-order physically contiguous sndbufs and RMBs may result
+> in frequent memory compaction, which will cause unexpected hung issue
+> and further stability risks.
+> 
+> So this patch set is aimed to allow SMC-R link group to use virtually
+> contiguous sndbufs and RMBs to avoid potential issues mentioned above.
+> Whether to use physically or virtually contiguous buffers can be set
+> by sysctl smcr_buf_type.
+> 
+> Note that using virtually contiguous buffers will bring an acceptable
+> performance regression, which can be mainly divided into two parts:
+> 
+> 1) regression in data path, which is brought by additional address
+>     translation of sndbuf by RNIC in Tx. But in general, translating
+>     address through MTT is fast. According to qperf test, this part
+>     regression is basically less than 10% in latency and bandwidth.
+>     (see patch 5/6 for details)
+> 
+> 2) regression in buffer initialization and destruction path, which is
+>     brought by additional MR operations of sndbufs. But thanks to link
+>     group buffer reuse mechanism, the impact of this kind of regression
+>     decreases as times of buffer reuse increases.
+> 
+> Patch set overview:
+> - Patch 1/6 and 2/6 mainly about simplifying and optimizing DMA sync
+>    operation, which will reduce overhead on the data path, especially
+>    when using virtually contiguous buffers;
+> - Patch 3/6 and 4/6 introduce a sysctl smcr_buf_type to set the type
+>    of buffers in new created link group;
+> - Patch 5/6 allows SMC-R to use virtually contiguous sndbufs and RMBs,
+>    including buffer creation, destruction, MR operation and access;
+> - patch 6/6 extends netlink attribute for buffer type of SMC-R link group;
+> 
+> v1->v2:
+> - Patch 5/6 fixes build issue on 32bit;
+> - Patch 3/6 adds description of new sysctl in smc-sysctl.rst;
+> 
+> Guangguan Wang (2):
+>    net/smc: remove redundant dma sync ops
+>    net/smc: optimize for smc_sndbuf_sync_sg_for_device and
+>      smc_rmb_sync_sg_for_cpu
+> 
+> Wen Gu (4):
+>    net/smc: Introduce a sysctl for setting SMC-R buffer type
+>    net/smc: Use sysctl-specified types of buffers in new link group
+>    net/smc: Allow virtually contiguous sndbufs or RMBs for SMC-R
+>    net/smc: Extend SMC-R link group netlink attribute
+> 
+>   Documentation/networking/smc-sysctl.rst |  13 ++
+>   include/net/netns/smc.h                 |   1 +
+>   include/uapi/linux/smc.h                |   1 +
+>   net/smc/af_smc.c                        |  68 +++++++--
+>   net/smc/smc_clc.c                       |   8 +-
+>   net/smc/smc_clc.h                       |   2 +-
+>   net/smc/smc_core.c                      | 246 +++++++++++++++++++++-----------
+>   net/smc/smc_core.h                      |  20 ++-
+>   net/smc/smc_ib.c                        |  44 +++++-
+>   net/smc/smc_ib.h                        |   2 +
+>   net/smc/smc_llc.c                       |  33 +++--
+>   net/smc/smc_rx.c                        |  92 +++++++++---
+>   net/smc/smc_sysctl.c                    |  11 ++
+>   net/smc/smc_tx.c                        |  10 +-
+>   14 files changed, 404 insertions(+), 147 deletions(-)
+> 
+It looks good for us. Thank you!
+Acked-by: Wenjia Zhang <wenjia@linux.ibm.com>

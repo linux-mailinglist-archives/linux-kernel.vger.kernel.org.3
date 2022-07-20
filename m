@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E943357BA8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D7057BA92
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiGTPiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S236590AbiGTPiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235929AbiGTPiO (ORCPT
+        with ESMTP id S235049AbiGTPin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:38:14 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652E22FFE1;
-        Wed, 20 Jul 2022 08:38:13 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id e28so30836686lfj.4;
-        Wed, 20 Jul 2022 08:38:13 -0700 (PDT)
+        Wed, 20 Jul 2022 11:38:43 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC218491C7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:38:41 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id ay11-20020a05600c1e0b00b003a3013da120so1592797wmb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:38:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=38iTN6e5RVRnFpyB3AzTyzUK2iU07sRGeD+ht98rJLM=;
-        b=OeIEXclTCOZsmRxunFCydVc7FBgYAN5L19I7RWf1k4e7aig2RX7gHchFoNQqWi6ATP
-         RzIhyMB6iSBxjPYHOjivcDDk9IzLvKgfbFxmg/n4gheSybaX2eud51xTIL1+vebWQfrj
-         HXXHoX8p0SYPG/4FYhGRbJDBji+C1Y1rK5t8Nc5VNmizf8EdLx0V6gYPm5zoAfdq0Zi7
-         AP+1zo/Q3/3HU7Fz0Y0uc6/SUG2am/c5ybAgL3B/gTmeWT9OdlNsNzu5Hza1lBswvIVY
-         JT/+95lN01UMvUQvH+E6iM9NhPHfw5x2Aj4VD4Dmxfkn4Gp5hso0zYoiA9StvKG6DWVJ
-         4SqA==
+        bh=Vg/L/5Ph5NMqge6CPKJ7rIzEwrI2CdrqRTD1mNbi3CM=;
+        b=WP2qB3iLdBec5FMTf17+9mWVcg9ikgt/zfzGpggdre2NeIu+tS1qnx9XlYzPrEJ+91
+         Y64ijbPCx/YcTALcd/pqLUCKobdp6RR16mSNjbOzHwDvoFObs0vOIuD23G6QPTvSYVyT
+         GCW81QeLYiyLb/Vfq0Whmm7HHI7hdjq1Hayc+kJeArl4UWv1JIfSDt0wMeLTvbyPKMPc
+         tBJyGb1YuJEvy1ffUgMb7aFPAtCDqV7sUOv1qD8mUfGPKNfDYh23ZYyDRYDqX2qknZtY
+         bQsh9d5NfBAOZCYhMbITEdsLKN5gEi8QUUrbtw0gNNmyexbcRaYQSnqFknlI7GchYrVB
+         Su9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=38iTN6e5RVRnFpyB3AzTyzUK2iU07sRGeD+ht98rJLM=;
-        b=OAqFfZ4+CEzCbPjZ0v6RrLhXMemGwu3vo0DuC39E4ae2rLlErKJNUfuqMR1esWqNTO
-         Z+y5qhUFzFpAWiRiyFpfg1lgwnAbPxxhrb6tO6j++HM1TggxqRjCn/+5kEWJ05VGaMkQ
-         vc5ZwaOTlGZIGa8FKgA8Creal+9ScmvnUo8aN0O5JM3H6WOK19M9CRUF27Psi8/g5r+R
-         YZa6FuDk7Vdu4q4oqhqUKJRHuxy1buMb7/u5HZ7i6U5c0IKV1Pazd82F1MUxtWxqdkOg
-         z3DN5qKxkct7UQgwXQe32JtDiEnk/iZt4fua4VwLhyaIYOS7vcpY0/qpgMfoDB7vWuYT
-         +EZA==
-X-Gm-Message-State: AJIora8Rwcs4NhNO1cxPe65JYZLFLJHlbP9up64/bDbFKIBNy3+15Wyc
-        gzyLn5SOjq9Z9DLvyA171sZcuwL8Saf3YQUQmvc=
-X-Google-Smtp-Source: AGRyM1uEvI2dqMocc3hPmbDB1apJE/wE7korCP7jP5Q7g/ZgyZtE2X/AbemMGmcOL2O+iRdAmqj0bQLyG9zZMqwrS5k=
-X-Received: by 2002:a05:6512:3409:b0:489:c549:4693 with SMTP id
- i9-20020a056512340900b00489c5494693mr19375109lfr.26.1658331491543; Wed, 20
- Jul 2022 08:38:11 -0700 (PDT)
+        bh=Vg/L/5Ph5NMqge6CPKJ7rIzEwrI2CdrqRTD1mNbi3CM=;
+        b=rVb36qfZUrtYo2vcUEp2xIAr9YwsQyF9N7AJ061iIlMHfbmswoRCairblKIhPZbxUm
+         gWv1f0PW+lZ4QRqMMphqa+QP1aibVFvnTuIe77Tx9FobgapJ684qLhaKyW7C7qeN53uq
+         wekLO7xSY+QOCEKu8q5Ns9f4PTkiBnsrzZnuDXRALtDWpl3IAHdR7bYKHyZXSTmvjesZ
+         2W+VZKO6KKGA7US2tCq2KqB6jsW36HFTUltvQMDUzb/5Jr4kSE+wD5x0vNFG/3aaWr1h
+         Q4OVXfLb7RRLdlHkrMPmKNQ4gY8Hd0ANKBpJ3EQuxEGB5762Pxbi/wJATAbKdWdRoSMg
+         5R4A==
+X-Gm-Message-State: AJIora8CTrAMHmo8/WG9mLX3BST1dISwUkyfJ0HF0DkXe41xTtvQrHUi
+        oue6tcCrnlXWdE3ZaBPU4T7OR+FXHn8vZSuBhOMfAw==
+X-Google-Smtp-Source: AGRyM1se9zXSLqNxP2b1UEHaW5mIQNvzWLfZZ93PvSKMIOQK5gO0TdZJkS+yjUNVH4rwv3nmTGuLPXXvSX847v6c704=
+X-Received: by 2002:a05:600c:4e8f:b0:3a1:8b21:ebbc with SMTP id
+ f15-20020a05600c4e8f00b003a18b21ebbcmr4507339wmq.149.1658331520280; Wed, 20
+ Jul 2022 08:38:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <1658326045-9931-1-git-send-email-quic_zijuhu@quicinc.com> <1658326045-9931-4-git-send-email-quic_zijuhu@quicinc.com>
-In-Reply-To: <1658326045-9931-4-git-send-email-quic_zijuhu@quicinc.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Wed, 20 Jul 2022 08:38:01 -0700
-Message-ID: <CABBYNZJ9Re7PZOFXhj-2tRwJ1UU2kY+QhB4dJT-=GyCYqb_Hhw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] Bluetooth: btusb: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING
- for fake CSR
-To:     Zijun Hu <quic_zijuhu@quicinc.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luiz Augusto Von Dentz <luiz.von.dentz@intel.com>,
-        swyterzone@gmail.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-12-elver@google.com>
+In-Reply-To: <20220704150514.48816-12-elver@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 20 Jul 2022 08:38:28 -0700
+Message-ID: <CAP-5=fWsCxFh4ajE9VH0eEkRk0K1agjCYmQySv4u+2p5on2cpg@mail.gmail.com>
+Subject: Re: [PATCH v3 11/14] perf/hw_breakpoint: Reduce contention with large
+ number of tasks
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,43 +80,429 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zijun,
+On Mon, Jul 4, 2022 at 8:07 AM Marco Elver <elver@google.com> wrote:
+>
+> While optimizing task_bp_pinned()'s runtime complexity to O(1) on
+> average helps reduce time spent in the critical section, we still suffer
+> due to serializing everything via 'nr_bp_mutex'. Indeed, a profile shows
+> that now contention is the biggest issue:
+>
+>     95.93%  [kernel]       [k] osq_lock
+>      0.70%  [kernel]       [k] mutex_spin_on_owner
+>      0.22%  [kernel]       [k] smp_cfm_core_cond
+>      0.18%  [kernel]       [k] task_bp_pinned
+>      0.18%  [kernel]       [k] rhashtable_jhash2
+>      0.15%  [kernel]       [k] queued_spin_lock_slowpath
+>
+> when running the breakpoint benchmark with (system with 256 CPUs):
+>
+>  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
+>  |      Total time: 0.207 [sec]
+>  |
+>  |      108.267188 usecs/op
+>  |     6929.100000 usecs/op/cpu
+>
+> The main concern for synchronizing the breakpoint constraints data is
+> that a consistent snapshot of the per-CPU and per-task data is observed.
+>
+> The access pattern is as follows:
+>
+>  1. If the target is a task: the task's pinned breakpoints are counted,
+>     checked for space, and then appended to; only bp_cpuinfo::cpu_pinned
+>     is used to check for conflicts with CPU-only breakpoints;
+>     bp_cpuinfo::tsk_pinned are incremented/decremented, but otherwise
+>     unused.
+>
+>  2. If the target is a CPU: bp_cpuinfo::cpu_pinned are counted, along
+>     with bp_cpuinfo::tsk_pinned; after a successful check, cpu_pinned is
+>     incremented. No per-task breakpoints are checked.
+>
+> Since rhltable safely synchronizes insertions/deletions, we can allow
+> concurrency as follows:
+>
+>  1. If the target is a task: independent tasks may update and check the
+>     constraints concurrently, but same-task target calls need to be
+>     serialized; since bp_cpuinfo::tsk_pinned is only updated, but not
+>     checked, these modifications can happen concurrently by switching
+>     tsk_pinned to atomic_t.
+>
+>  2. If the target is a CPU: access to the per-CPU constraints needs to
+>     be serialized with other CPU-target and task-target callers (to
+>     stabilize the bp_cpuinfo::tsk_pinned snapshot).
+>
+> We can allow the above concurrency by introducing a per-CPU constraints
+> data reader-writer lock (bp_cpuinfo_sem), and per-task mutexes (reuses
+> task_struct::perf_event_mutex):
+>
+>   1. If the target is a task: acquires perf_event_mutex, and acquires
+>      bp_cpuinfo_sem as a reader. The choice of percpu-rwsem minimizes
+>      contention in the presence of many read-lock but few write-lock
+>      acquisitions: we assume many orders of magnitude more task target
+>      breakpoints creations/destructions than CPU target breakpoints.
+>
+>   2. If the target is a CPU: acquires bp_cpuinfo_sem as a writer.
+>
+> With these changes, contention with thousands of tasks is reduced to the
+> point where waiting on locking no longer dominates the profile:
+>
+>  | $> perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
+>  |      Total time: 0.077 [sec]
+>  |
+>  |       40.201563 usecs/op
+>  |     2572.900000 usecs/op/cpu
+>
+>     21.54%  [kernel]       [k] task_bp_pinned
+>     20.18%  [kernel]       [k] rhashtable_jhash2
+>      6.81%  [kernel]       [k] toggle_bp_slot
+>      5.47%  [kernel]       [k] queued_spin_lock_slowpath
+>      3.75%  [kernel]       [k] smp_cfm_core_cond
+>      3.48%  [kernel]       [k] bcmp
+>
+> On this particular setup that's a speedup of 2.7x.
+>
+> We're also getting closer to the theoretical ideal performance through
+> optimizations in hw_breakpoint.c -- constraints accounting disabled:
+>
+>  | perf bench -r 30 breakpoint thread -b 4 -p 64 -t 64
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 30 threads with 4 breakpoints and 64 parallelism
+>  |      Total time: 0.067 [sec]
+>  |
+>  |       35.286458 usecs/op
+>  |     2258.333333 usecs/op/cpu
+>
+> Which means the current implementation is ~12% slower than the
+> theoretical ideal.
+>
+> For reference, performance without any breakpoints:
+>
+>  | $> bench -r 30 breakpoint thread -b 0 -p 64 -t 64
+>  | # Running 'breakpoint/thread' benchmark:
+>  | # Created/joined 30 threads with 0 breakpoints and 64 parallelism
+>  |      Total time: 0.060 [sec]
+>  |
+>  |       31.365625 usecs/op
+>  |     2007.400000 usecs/op/cpu
+>
+> On a system with 256 CPUs, the theoretical ideal is only ~12% slower
+> than no breakpoints at all; the current implementation is ~28% slower.
+>
+> Signed-off-by: Marco Elver <elver@google.com>
+> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-On Wed, Jul 20, 2022 at 7:07 AM Zijun Hu <quic_zijuhu@quicinc.com> wrote:
->
-> Fake CSR BT controllers do not enable feature "Erroneous Data Reporting"
-> currently, BT core driver will check the feature bit instead of the quirk
-> to decide if HCI command HCI_Read|Write_Default_Erroneous_Data_Reporting
-> work fine, so remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for fake CSR.
->
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+Acked-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
+
 > ---
->  drivers/bluetooth/btusb.c | 1 -
->  1 file changed, 1 deletion(-)
+> v2:
+> * Use percpu-rwsem instead of rwlock.
+> * Use task_struct::perf_event_mutex. See code comment for reasoning.
+> ==> Speedup of 2.7x (vs 2.5x in v1).
+> ---
+>  kernel/events/hw_breakpoint.c | 161 ++++++++++++++++++++++++++++------
+>  1 file changed, 133 insertions(+), 28 deletions(-)
 >
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index f0f86c5c3b37..f2b3d31d56cf 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -2072,7 +2072,6 @@ static int btusb_setup_csr(struct hci_dev *hdev)
->                  * without these the controller will lock up.
->                  */
->                 set_bit(HCI_QUIRK_BROKEN_STORED_LINK_KEY, &hdev->quirks);
-> -               set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
->                 set_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks);
->                 set_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks);
-
-You will probably need to remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING
-last otherwise it breaks the build in between patches, and please
-double check if there are no other instances of driver using it or
-perhaps leave it defined in case the feature is broken for some reason
-but then we need a macro that checks both the quirk and the feature
-bit.
-
+> diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> index 8b40fca1a063..229c6f4fae75 100644
+> --- a/kernel/events/hw_breakpoint.c
+> +++ b/kernel/events/hw_breakpoint.c
+> @@ -19,6 +19,7 @@
+>
+>  #include <linux/hw_breakpoint.h>
+>
+> +#include <linux/atomic.h>
+>  #include <linux/bug.h>
+>  #include <linux/cpu.h>
+>  #include <linux/export.h>
+> @@ -28,6 +29,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/mutex.h>
+>  #include <linux/notifier.h>
+> +#include <linux/percpu-rwsem.h>
+>  #include <linux/percpu.h>
+>  #include <linux/rhashtable.h>
+>  #include <linux/sched.h>
+> @@ -41,9 +43,9 @@ struct bp_cpuinfo {
+>         unsigned int    cpu_pinned;
+>         /* tsk_pinned[n] is the number of tasks having n+1 breakpoints */
+>  #ifdef hw_breakpoint_slots
+> -       unsigned int    tsk_pinned[hw_breakpoint_slots(0)];
+> +       atomic_t        tsk_pinned[hw_breakpoint_slots(0)];
+>  #else
+> -       unsigned int    *tsk_pinned;
+> +       atomic_t        *tsk_pinned;
+>  #endif
+>  };
+>
+> @@ -65,8 +67,79 @@ static const struct rhashtable_params task_bps_ht_params = {
+>
+>  static bool constraints_initialized __ro_after_init;
+>
+> -/* Serialize accesses to the above constraints */
+> -static DEFINE_MUTEX(nr_bp_mutex);
+> +/*
+> + * Synchronizes accesses to the per-CPU constraints; the locking rules are:
+> + *
+> + *  1. Atomic updates to bp_cpuinfo::tsk_pinned only require a held read-lock
+> + *     (due to bp_slots_histogram::count being atomic, no update are lost).
+> + *
+> + *  2. Holding a write-lock is required for computations that require a
+> + *     stable snapshot of all bp_cpuinfo::tsk_pinned.
+> + *
+> + *  3. In all other cases, non-atomic accesses require the appropriately held
+> + *     lock (read-lock for read-only accesses; write-lock for reads/writes).
+> + */
+> +DEFINE_STATIC_PERCPU_RWSEM(bp_cpuinfo_sem);
+> +
+> +/*
+> + * Return mutex to serialize accesses to per-task lists in task_bps_ht. Since
+> + * rhltable synchronizes concurrent insertions/deletions, independent tasks may
+> + * insert/delete concurrently; therefore, a mutex per task is sufficient.
+> + *
+> + * Uses task_struct::perf_event_mutex, to avoid extending task_struct with a
+> + * hw_breakpoint-only mutex, which may be infrequently used. The caveat here is
+> + * that hw_breakpoint may contend with per-task perf event list management. The
+> + * assumption is that perf usecases involving hw_breakpoints are very unlikely
+> + * to result in unnecessary contention.
+> + */
+> +static inline struct mutex *get_task_bps_mutex(struct perf_event *bp)
+> +{
+> +       struct task_struct *tsk = bp->hw.target;
+> +
+> +       return tsk ? &tsk->perf_event_mutex : NULL;
+> +}
+> +
+> +static struct mutex *bp_constraints_lock(struct perf_event *bp)
+> +{
+> +       struct mutex *tsk_mtx = get_task_bps_mutex(bp);
+> +
+> +       if (tsk_mtx) {
+> +               mutex_lock(tsk_mtx);
+> +               percpu_down_read(&bp_cpuinfo_sem);
+> +       } else {
+> +               percpu_down_write(&bp_cpuinfo_sem);
+> +       }
+> +
+> +       return tsk_mtx;
+> +}
+> +
+> +static void bp_constraints_unlock(struct mutex *tsk_mtx)
+> +{
+> +       if (tsk_mtx) {
+> +               percpu_up_read(&bp_cpuinfo_sem);
+> +               mutex_unlock(tsk_mtx);
+> +       } else {
+> +               percpu_up_write(&bp_cpuinfo_sem);
+> +       }
+> +}
+> +
+> +static bool bp_constraints_is_locked(struct perf_event *bp)
+> +{
+> +       struct mutex *tsk_mtx = get_task_bps_mutex(bp);
+> +
+> +       return percpu_is_write_locked(&bp_cpuinfo_sem) ||
+> +              (tsk_mtx ? mutex_is_locked(tsk_mtx) :
+> +                         percpu_is_read_locked(&bp_cpuinfo_sem));
+> +}
+> +
+> +static inline void assert_bp_constraints_lock_held(struct perf_event *bp)
+> +{
+> +       struct mutex *tsk_mtx = get_task_bps_mutex(bp);
+> +
+> +       if (tsk_mtx)
+> +               lockdep_assert_held(tsk_mtx);
+> +       lockdep_assert_held(&bp_cpuinfo_sem);
+> +}
+>
+>  #ifdef hw_breakpoint_slots
+>  /*
+> @@ -97,7 +170,7 @@ static __init int init_breakpoint_slots(void)
+>                 for (i = 0; i < TYPE_MAX; i++) {
+>                         struct bp_cpuinfo *info = get_bp_info(cpu, i);
+>
+> -                       info->tsk_pinned = kcalloc(__nr_bp_slots[i], sizeof(int), GFP_KERNEL);
+> +                       info->tsk_pinned = kcalloc(__nr_bp_slots[i], sizeof(atomic_t), GFP_KERNEL);
+>                         if (!info->tsk_pinned)
+>                                 goto err;
+>                 }
+> @@ -137,11 +210,19 @@ static inline enum bp_type_idx find_slot_idx(u64 bp_type)
+>   */
+>  static unsigned int max_task_bp_pinned(int cpu, enum bp_type_idx type)
+>  {
+> -       unsigned int *tsk_pinned = get_bp_info(cpu, type)->tsk_pinned;
+> +       atomic_t *tsk_pinned = get_bp_info(cpu, type)->tsk_pinned;
+>         int i;
+>
+> +       /*
+> +        * At this point we want to have acquired the bp_cpuinfo_sem as a
+> +        * writer to ensure that there are no concurrent writers in
+> +        * toggle_bp_task_slot() to tsk_pinned, and we get a stable snapshot.
+> +        */
+> +       lockdep_assert_held_write(&bp_cpuinfo_sem);
+> +
+>         for (i = hw_breakpoint_slots_cached(type) - 1; i >= 0; i--) {
+> -               if (tsk_pinned[i] > 0)
+> +               ASSERT_EXCLUSIVE_WRITER(tsk_pinned[i]); /* Catch unexpected writers. */
+> +               if (atomic_read(&tsk_pinned[i]) > 0)
+>                         return i + 1;
+>         }
+>
+> @@ -158,6 +239,11 @@ static int task_bp_pinned(int cpu, struct perf_event *bp, enum bp_type_idx type)
+>         struct perf_event *iter;
+>         int count = 0;
+>
+> +       /*
+> +        * We need a stable snapshot of the per-task breakpoint list.
+> +        */
+> +       assert_bp_constraints_lock_held(bp);
+> +
+>         rcu_read_lock();
+>         head = rhltable_lookup(&task_bps_ht, &bp->hw.target, task_bps_ht_params);
+>         if (!head)
+> @@ -214,16 +300,25 @@ max_bp_pinned_slots(struct perf_event *bp, enum bp_type_idx type)
+>  static void toggle_bp_task_slot(struct perf_event *bp, int cpu,
+>                                 enum bp_type_idx type, int weight)
+>  {
+> -       unsigned int *tsk_pinned = get_bp_info(cpu, type)->tsk_pinned;
+> +       atomic_t *tsk_pinned = get_bp_info(cpu, type)->tsk_pinned;
+>         int old_idx, new_idx;
+>
+> +       /*
+> +        * If bp->hw.target, tsk_pinned is only modified, but not used
+> +        * otherwise. We can permit concurrent updates as long as there are no
+> +        * other uses: having acquired bp_cpuinfo_sem as a reader allows
+> +        * concurrent updates here. Uses of tsk_pinned will require acquiring
+> +        * bp_cpuinfo_sem as a writer to stabilize tsk_pinned's value.
+> +        */
+> +       lockdep_assert_held_read(&bp_cpuinfo_sem);
+> +
+>         old_idx = task_bp_pinned(cpu, bp, type) - 1;
+>         new_idx = old_idx + weight;
+>
+>         if (old_idx >= 0)
+> -               tsk_pinned[old_idx]--;
+> +               atomic_dec(&tsk_pinned[old_idx]);
+>         if (new_idx >= 0)
+> -               tsk_pinned[new_idx]++;
+> +               atomic_inc(&tsk_pinned[new_idx]);
+>  }
+>
+>  /*
+> @@ -241,6 +336,7 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>
+>         /* Pinned counter cpu profiling */
+>         if (!bp->hw.target) {
+> +               lockdep_assert_held_write(&bp_cpuinfo_sem);
+>                 get_bp_info(bp->cpu, type)->cpu_pinned += weight;
+>                 return 0;
+>         }
+> @@ -249,6 +345,11 @@ toggle_bp_slot(struct perf_event *bp, bool enable, enum bp_type_idx type,
+>         for_each_cpu(cpu, cpumask)
+>                 toggle_bp_task_slot(bp, cpu, type, weight);
+>
+> +       /*
+> +        * Readers want a stable snapshot of the per-task breakpoint list.
+> +        */
+> +       assert_bp_constraints_lock_held(bp);
+> +
+>         if (enable)
+>                 return rhltable_insert(&task_bps_ht, &bp->hw.bp_list, task_bps_ht_params);
+>         else
+> @@ -354,14 +455,10 @@ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
+>
+>  int reserve_bp_slot(struct perf_event *bp)
+>  {
+> -       int ret;
+> -
+> -       mutex_lock(&nr_bp_mutex);
+> -
+> -       ret = __reserve_bp_slot(bp, bp->attr.bp_type);
+> -
+> -       mutex_unlock(&nr_bp_mutex);
+> +       struct mutex *mtx = bp_constraints_lock(bp);
+> +       int ret = __reserve_bp_slot(bp, bp->attr.bp_type);
+>
+> +       bp_constraints_unlock(mtx);
+>         return ret;
+>  }
+>
+> @@ -379,12 +476,11 @@ static void __release_bp_slot(struct perf_event *bp, u64 bp_type)
+>
+>  void release_bp_slot(struct perf_event *bp)
+>  {
+> -       mutex_lock(&nr_bp_mutex);
+> +       struct mutex *mtx = bp_constraints_lock(bp);
+>
+>         arch_unregister_hw_breakpoint(bp);
+>         __release_bp_slot(bp, bp->attr.bp_type);
+> -
+> -       mutex_unlock(&nr_bp_mutex);
+> +       bp_constraints_unlock(mtx);
+>  }
+>
+>  static int __modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
+> @@ -411,11 +507,10 @@ static int __modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
+>
+>  static int modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
+>  {
+> -       int ret;
+> +       struct mutex *mtx = bp_constraints_lock(bp);
+> +       int ret = __modify_bp_slot(bp, old_type, new_type);
+>
+> -       mutex_lock(&nr_bp_mutex);
+> -       ret = __modify_bp_slot(bp, old_type, new_type);
+> -       mutex_unlock(&nr_bp_mutex);
+> +       bp_constraints_unlock(mtx);
+>         return ret;
+>  }
+>
+> @@ -426,18 +521,28 @@ static int modify_bp_slot(struct perf_event *bp, u64 old_type, u64 new_type)
+>   */
+>  int dbg_reserve_bp_slot(struct perf_event *bp)
+>  {
+> -       if (mutex_is_locked(&nr_bp_mutex))
+> +       int ret;
+> +
+> +       if (bp_constraints_is_locked(bp))
+>                 return -1;
+>
+> -       return __reserve_bp_slot(bp, bp->attr.bp_type);
+> +       /* Locks aren't held; disable lockdep assert checking. */
+> +       lockdep_off();
+> +       ret = __reserve_bp_slot(bp, bp->attr.bp_type);
+> +       lockdep_on();
+> +
+> +       return ret;
+>  }
+>
+>  int dbg_release_bp_slot(struct perf_event *bp)
+>  {
+> -       if (mutex_is_locked(&nr_bp_mutex))
+> +       if (bp_constraints_is_locked(bp))
+>                 return -1;
+>
+> +       /* Locks aren't held; disable lockdep assert checking. */
+> +       lockdep_off();
+>         __release_bp_slot(bp, bp->attr.bp_type);
+> +       lockdep_on();
+>
+>         return 0;
+>  }
+> @@ -663,7 +768,7 @@ bool hw_breakpoint_is_used(void)
+>                                 return true;
+>
+>                         for (int slot = 0; slot < hw_breakpoint_slots_cached(type); ++slot) {
+> -                               if (info->tsk_pinned[slot])
+> +                               if (atomic_read(&info->tsk_pinned[slot]))
+>                                         return true;
+>                         }
+>                 }
 > --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+> 2.37.0.rc0.161.g10f37bed90-goog
 >
-
-
--- 
-Luiz Augusto von Dentz

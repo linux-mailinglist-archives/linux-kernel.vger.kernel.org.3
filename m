@@ -2,190 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E49D57AC7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6502957AC44
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 03:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241443AbiGTBV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Jul 2022 21:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S241707AbiGTBWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Jul 2022 21:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240962AbiGTBUv (ORCPT
+        with ESMTP id S241703AbiGTBVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Jul 2022 21:20:51 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B24B6559F
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:16:06 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id z13so4443190wro.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 18:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bW+JKCRkrraL1G5WWSlYo9qIrZupPzOKLmThC+fgGao=;
-        b=eavKJoLYp39eJ+OuLSSa1CvQnHWU83szgReL2+yzBxcOrUywcl3h9xNSztKN1YTc2J
-         DuKheVv6jMqkdsu0iRSZi8nop2iOZcz27X3YuO8o6CxKmTw9TEuqxvE9yJ+pJNie9sFu
-         SZx1wgnKG5c6ZULFGPBqzJxpOj7El+Fh679ZiAnawNJ472eEuXjETaa6zI4h80qUGmnL
-         YXlFPzq3r6eg2WO8AHe/vI6FlyN2wrWHiNlleF2hEd8ZbcYCV9IHaA3ah9sSdpc98wt5
-         TenaDC8QOoRuTLpJnPus2WKtb2DhsPVWTDfJZgfg4meBlkGFdcR3xrW9w4oZyKwD0sGy
-         z9Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bW+JKCRkrraL1G5WWSlYo9qIrZupPzOKLmThC+fgGao=;
-        b=k0jqIoX0bs8+I/+FuSH6CnOGgNGhvNpJihYJ0RtKuYXMYzRTzTLtj3dK/BUihL9Hrl
-         bArA+XX30hzqMsgYtypz3HEylvQhTAEOi/zwS8d2vao6a4MBPVf3Fi+ZowkS6HqgvGvG
-         5eesAOFEuFKwYOpUEwG0s1wS3Q2Yn3fBPHWCpOHeNuIM3To5dvgjKxGHjggfpfqukyNG
-         cUUpbt1RBx2EFuYVQYPShdlzSLhgZiva9qXNNK1dp7Cis51WmzwDvbPVSgwIOuiciDkG
-         th5KAqUy1j67kripFcIEpvmPUAhNdi1B3ZUKxk7gZt4pYC5RS1n/4sfSrCmOX4j3GxpO
-         aCmw==
-X-Gm-Message-State: AJIora+BXE8ivFiLPFWSXBaFS8twMyd/sxg1EPZONohRKWKN/9pXNCw2
-        TzHz3RCFml/Fj9WsX4dZuNosuhvshJ9ISy3Y8G3Dbg==
-X-Google-Smtp-Source: AGRyM1vT8gdog19dsLbf908GQkADJf3t9ZiSnp1ex3lEChjSSJCdKA8Da8yefYrfZkwRdvoLOl3IgFVQA6Zw1hKgctw=
-X-Received: by 2002:a5d:4d92:0:b0:21d:6f02:d971 with SMTP id
- b18-20020a5d4d92000000b0021d6f02d971mr27852330wru.300.1658279764042; Tue, 19
- Jul 2022 18:16:04 -0700 (PDT)
+        Tue, 19 Jul 2022 21:21:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91206FA0E;
+        Tue, 19 Jul 2022 18:16:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5BCFB81DE8;
+        Wed, 20 Jul 2022 01:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF22C341CA;
+        Wed, 20 Jul 2022 01:16:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658279779;
+        bh=WP6r6LQNJO2+9pHuPQRmTbKrAoo3ff+tZkivkVuHCjY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=it6b/flguRzXz16kLQg48EuKJ2BcbkcuUTNIWhFwdiufquknzBc2m1ZngWl17/GlS
+         64jPOlTyWTvKi+C4eXcBJ76mkc7nOT7HUlhityh7Tm0WZG1Gz0aJ4W1bdxfOiGMQsx
+         YW9YyIRYJUoPx3gPsvyGRm8dLJLBHcx/kfbhUvpMxVtCz6iupYF3GPtvyJHl7DyR3e
+         euvEFtRrAg7kUwzANAeC//mVmNiDZtcSctBotLa2EeB+QLy1hfH1jCUrzqwLCrnX+s
+         mQgirpccFhesxJiLGQ1IO7FYFJRE+dqQQrd+8D4O8d9DRiVM0y0NDM5KO8q7brOPtV
+         ZKUKh8OWqnlCg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Guozihua <guozihua@huawei.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>, dmitry.kasatkin@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 01/25] Revert "evm: Fix memleak in init_desc"
+Date:   Tue, 19 Jul 2022 21:15:52 -0400
+Message-Id: <20220720011616.1024753-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220711093218.10967-1-adrian.hunter@intel.com> <20220711093218.10967-33-adrian.hunter@intel.com>
-In-Reply-To: <20220711093218.10967-33-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 19 Jul 2022 18:15:52 -0700
-Message-ID: <CAP-5=fWRH0wUfsUA+=s8BFJLycth+xopfM-miyk0EPe+rUwoJw@mail.gmail.com>
-Subject: Re: [PATCH 32/35] perf intel-pt: Determine guest thread from guest sideband
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 2:34 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Prior to decoding, determine what guest thread, if any, is running.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-Acked-by: Ian Rogers <irogers@google.com>
+[ Upstream commit 51dd64bb99e4478fc5280171acd8e1b529eadaf7 ]
 
-Thanks,
-Ian
+This reverts commit ccf11dbaa07b328fa469415c362d33459c140a37.
 
-> ---
->  tools/perf/util/intel-pt.c | 69 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 67 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
-> index dc2af64f9e31..a08c2f059d5a 100644
-> --- a/tools/perf/util/intel-pt.c
-> +++ b/tools/perf/util/intel-pt.c
-> @@ -196,6 +196,10 @@ struct intel_pt_queue {
->         struct machine *guest_machine;
->         struct thread *guest_thread;
->         struct thread *unknown_guest_thread;
-> +       pid_t guest_machine_pid;
-> +       pid_t guest_pid;
-> +       pid_t guest_tid;
-> +       int vcpu;
->         bool exclude_kernel;
->         bool have_sample;
->         u64 time;
-> @@ -759,8 +763,13 @@ static int intel_pt_walk_next_insn(struct intel_pt_insn *intel_pt_insn,
->         cpumode = intel_pt_nr_cpumode(ptq, *ip, nr);
->
->         if (nr) {
-> -               if ((!symbol_conf.guest_code && cpumode != PERF_RECORD_MISC_GUEST_KERNEL) ||
-> -                   intel_pt_get_guest(ptq)) {
-> +               if (ptq->pt->have_guest_sideband) {
-> +                       if (!ptq->guest_machine || ptq->guest_machine_pid != ptq->pid) {
-> +                               intel_pt_log("ERROR: guest sideband but no guest machine\n");
-> +                               return -EINVAL;
-> +                       }
-> +               } else if ((!symbol_conf.guest_code && cpumode != PERF_RECORD_MISC_GUEST_KERNEL) ||
-> +                          intel_pt_get_guest(ptq)) {
->                         intel_pt_log("ERROR: no guest machine\n");
->                         return -EINVAL;
->                 }
-> @@ -1385,6 +1394,55 @@ static void intel_pt_first_timestamp(struct intel_pt *pt, u64 timestamp)
->         }
->  }
->
-> +static int intel_pt_get_guest_from_sideband(struct intel_pt_queue *ptq)
-> +{
-> +       struct machines *machines = &ptq->pt->session->machines;
-> +       struct machine *machine;
-> +       pid_t machine_pid = ptq->pid;
-> +       pid_t tid;
-> +       int vcpu;
-> +
-> +       if (machine_pid <= 0)
-> +               return 0; /* Not a guest machine */
-> +
-> +       machine = machines__find(machines, machine_pid);
-> +       if (!machine)
-> +               return 0; /* Not a guest machine */
-> +
-> +       if (ptq->guest_machine != machine) {
-> +               ptq->guest_machine = NULL;
-> +               thread__zput(ptq->guest_thread);
-> +               thread__zput(ptq->unknown_guest_thread);
-> +
-> +               ptq->unknown_guest_thread = machine__find_thread(machine, 0, 0);
-> +               if (!ptq->unknown_guest_thread)
-> +                       return -1;
-> +               ptq->guest_machine = machine;
-> +       }
-> +
-> +       vcpu = ptq->thread ? ptq->thread->guest_cpu : -1;
-> +       if (vcpu < 0)
-> +               return -1;
-> +
-> +       tid = machine__get_current_tid(machine, vcpu);
-> +
-> +       if (ptq->guest_thread && ptq->guest_thread->tid != tid)
-> +               thread__zput(ptq->guest_thread);
-> +
-> +       if (!ptq->guest_thread) {
-> +               ptq->guest_thread = machine__find_thread(machine, -1, tid);
-> +               if (!ptq->guest_thread)
-> +                       return -1;
-> +       }
-> +
-> +       ptq->guest_machine_pid = machine_pid;
-> +       ptq->guest_pid = ptq->guest_thread->pid_;
-> +       ptq->guest_tid = tid;
-> +       ptq->vcpu = vcpu;
-> +
-> +       return 0;
-> +}
-> +
->  static void intel_pt_set_pid_tid_cpu(struct intel_pt *pt,
->                                      struct auxtrace_queue *queue)
->  {
-> @@ -1405,6 +1463,13 @@ static void intel_pt_set_pid_tid_cpu(struct intel_pt *pt,
->                 if (queue->cpu == -1)
->                         ptq->cpu = ptq->thread->cpu;
->         }
-> +
-> +       if (pt->have_guest_sideband && intel_pt_get_guest_from_sideband(ptq)) {
-> +               ptq->guest_machine_pid = 0;
-> +               ptq->guest_pid = -1;
-> +               ptq->guest_tid = -1;
-> +               ptq->vcpu = -1;
-> +       }
->  }
->
->  static void intel_pt_sample_flags(struct intel_pt_queue *ptq)
-> --
-> 2.25.1
->
+Commit ccf11dbaa07b ("evm: Fix memleak in init_desc") said there is
+memleak in init_desc. That may be incorrect, as we can see, tmp_tfm is
+saved in one of the two global variables hmac_tfm or evm_tfm[hash_algo],
+then if init_desc is called next time, there is no need to alloc tfm
+again, so in the error path of kmalloc desc or crypto_shash_init(desc),
+It is not a problem without freeing tmp_tfm.
+
+And also that commit did not reset the global variable to NULL after
+freeing tmp_tfm and this makes *tfm a dangling pointer which may cause a
+UAF issue.
+
+Reported-by: Guozihua (Scott) <guozihua@huawei.com>
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ security/integrity/evm/evm_crypto.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index a6dd47eb086d..168c3b78ac47 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -73,7 +73,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+ {
+ 	long rc;
+ 	const char *algo;
+-	struct crypto_shash **tfm, *tmp_tfm = NULL;
++	struct crypto_shash **tfm, *tmp_tfm;
+ 	struct shash_desc *desc;
+ 
+ 	if (type == EVM_XATTR_HMAC) {
+@@ -118,16 +118,13 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
+ alloc:
+ 	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
+ 			GFP_KERNEL);
+-	if (!desc) {
+-		crypto_free_shash(tmp_tfm);
++	if (!desc)
+ 		return ERR_PTR(-ENOMEM);
+-	}
+ 
+ 	desc->tfm = *tfm;
+ 
+ 	rc = crypto_shash_init(desc);
+ 	if (rc) {
+-		crypto_free_shash(tmp_tfm);
+ 		kfree(desc);
+ 		return ERR_PTR(rc);
+ 	}
+-- 
+2.35.1
+

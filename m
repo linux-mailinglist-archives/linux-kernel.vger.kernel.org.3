@@ -2,104 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B3257BBA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F4457BBA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiGTQn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S234179AbiGTQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiGTQnr (ORCPT
+        with ESMTP id S231816AbiGTQoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:43:47 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F07643F6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:43:45 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id k19so3677813lji.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:43:45 -0700 (PDT)
+        Wed, 20 Jul 2022 12:44:39 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D9065D69
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:44:37 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id k16so720749pls.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t55C1XFbWIhH1E3uo69pdnvGfBCTN1U6gyLTc72uBSE=;
-        b=cNwVQM9/qzCyD2IKuo1xDl4MCgiOMOtK9saoWRgvboxGgf3aefT2299HywHocJdFCS
-         xobwsWcr8OJHf1Ank3M5TzaQsZ3MG3g0qwx/fTCz1wwjK5HGK41fB4d4fY1zGSJL8ban
-         MVCMprXIeRbTNo7u7ZUNpqfBJBucu1SlL1Ih5Myao0M3k081ey65bWCQGNYUijrOVJIv
-         w9RnJz0KT4WJOoX8A8Y9BlU+riVOIYfvB/mH7hr4URwpunnqr5mj4ZQ0gpT6+SvnQoI2
-         JEvT2D634RdR/cQ7hxBcl+GRwD1iNEzdkVIo+pMGpNY5saOYXIREGsw2H7HRS2YqqQWy
-         vBKQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NKI6wQLzSjuIgXqGP/STBDd/io3ztt1cS6FImLHwFp4=;
+        b=aYf105zHRqcKnwIvd6ekmpqruUyQToVuka3h99YqNWRmFXkZ7ZVHV8oWNskzAvMx2F
+         hflOC9nxBStxjqtxvcltphe6Q5E58yJ1G2iJfhXNEqLsdIUxBz1Jghs5U/OLu3mGUc1a
+         JRrnyPRUFOER4kSZYOrYSqnkSlzR3XQAIIqK13/lyE2A23HrMPyXlZiOV822mKgY0tgd
+         nTwYcdRpttHY+A4wo2bLHxYVFSJL0sIrCNfPF0RyUS+KwJ64AABEJ8yX01Hb9NjXpaI/
+         s6Pf48SWnWTxK6vMsYlo9rnJGzIsPUCTu5j+IdeVl1yrYnYpbPzLMaw748Y0j9AcRKUU
+         ZGfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t55C1XFbWIhH1E3uo69pdnvGfBCTN1U6gyLTc72uBSE=;
-        b=m6InX76+u6TKuBkC8M2sN+WAa7JN1Um3Y8T+1nTT4DflFNNSBwdX5fR4i2i0/7YSeK
-         MVCpHmik7Ptrs8Pi30zGxli04Tb/w27NYALHrW07oTMMLPXeq91YZZId0NWe6qwlxLVt
-         g+gj2HdWTqBvt/vcBkd8XmFhifmmMmWWJoCGqDImWyQrnlpJ7Iqeoa+6aAv4hz6ArsXN
-         i/REFcc4GR0Vvv+c66r6gy7WXgQzRhVCVtECSVRxGm9zrNpNPVeCBpxJLKRK1MOFJ36A
-         FFaCOVMbrqq7aVXQWAI5GxUxOC6tQ/Rbh2dEPmyt5KZn2SX4pIRExUQJSMuq5CBHWL9e
-         778w==
-X-Gm-Message-State: AJIora90ERfbfGARcWHEt5TmXPIqCxnLJhkytrePydJwvKY/H+Djr+Gx
-        LcbU/PrNCpO8uJiu9VWs/KPaQQ==
-X-Google-Smtp-Source: AGRyM1u7K/8V0unyfLWjleyBDtR1Lmb0itlTD+sQyKskV23cTShVVobCpw0TWfpowsjHukv/yOtk+A==
-X-Received: by 2002:a05:651c:1587:b0:25d:7844:5910 with SMTP id h7-20020a05651c158700b0025d78445910mr18644605ljq.325.1658335422174;
-        Wed, 20 Jul 2022 09:43:42 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id o20-20020a056512231400b00478772eb18esm3911500lfu.92.2022.07.20.09.43.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 09:43:41 -0700 (PDT)
-Message-ID: <13607b6c-83a9-4688-aa5b-934319a01f5b@linaro.org>
-Date:   Wed, 20 Jul 2022 18:43:40 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NKI6wQLzSjuIgXqGP/STBDd/io3ztt1cS6FImLHwFp4=;
+        b=PWtHnFt/guStN7/h8zxo2swVUP2qdq9DogqUsfCnj89nO7XSRoroe0p3SG6scyLu5T
+         B+zJHS4n7iiKZkNo9OV7aIFRmnM8Q1iFE7G9AYFSbp2UVHPb023T6L/sK7Frmpn1EJvc
+         HUGvbFhdf2rzSeazGrS11iXeqZp0S8CJnqbKMq95ta9CO8tC1BHCf7i80nL8OvVklHjR
+         H5Lz263MEXebU56GqJ5YC65dr+xxQy387m8X43nU9iyRIHYuKM9mZ5/WyHgRDEFFq3Dx
+         694XU8rhSwREAbambYsDteLiRvF1RwMHTM5xIoI+m92uNr4HuGOj0l1b2o/5v6LH0oAn
+         0Nhw==
+X-Gm-Message-State: AJIora8ld4aBqx8IGR9ELcX53g+ybULC1T2Zv3k9Hviz/n1uzB6DDqEj
+        03TIqqpP9taunS6CjkIKLW9UFg==
+X-Google-Smtp-Source: AGRyM1utYrsQFWglg8OIUvJRKtR6LVkU7MbzTy7HM7RFQtBExxPfhBWR/u5swtl61L63cUwi4vupQg==
+X-Received: by 2002:a17:90b:3ec1:b0:1f1:edcf:dd2b with SMTP id rm1-20020a17090b3ec100b001f1edcfdd2bmr6535996pjb.156.1658335476747;
+        Wed, 20 Jul 2022 09:44:36 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id k6-20020aa79986000000b00528c22038f5sm14345128pfh.14.2022.07.20.09.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 09:44:36 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 16:44:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <Ytgw8HAsKTmZaubv@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH RESEND v2] spi: dt-bindings: qcom,spi-geni-qcom: allow
- three interconnects
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20220720163841.7283-1-krzysztof.kozlowski@linaro.org>
- <Ytgv9R3/hmxql0Lz@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Ytgv9R3/hmxql0Lz@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 18:40, Mark Brown wrote:
-> On Wed, Jul 20, 2022 at 06:38:41PM +0200, Krzysztof Kozlowski wrote:
->> Recent Qualcomm Geni SPI nodes, e.g. on SM8450, come also with three
->> interconnects.  This fixes dtbs_check warnings like:
->>
->>   sm8450-qrd.dtb: spi@a98000: interconnects: [[46, 1, 0, 46, 4, 0], [47, 2, 0, 48, 12, 0], [49, 1, 0, 50, 1, 0]] is too long
->>   sm8450-qrd.dtb: spi@a98000: interconnect-names: ['qup-core', 'qup-config', 'qup-memory'] is too long
->>
->> Fixes: 5bdcae1fe1c5 ("spi: dt-bindings: qcom,spi-geni-qcom: convert to dtschema")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Acked-by: Mark Brown <broonie@kernel.org>
->> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> I'm assuming from the fact that I acked this that there's some sort of
-> dependency here which means I can't apply it?
+On Wed, Jul 06, 2022, Chao Peng wrote:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 230c8ff9659c..bb714c2a4b06 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -914,6 +914,35 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+>  
+>  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+>  
+> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> +#define KVM_MEM_ATTR_PRIVATE	0x0001
+> +static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl,
+> +					     struct kvm_enc_region *region)
+> +{
+> +	unsigned long start, end;
 
-Sorry, I did not drop your ack. Intention is that you pick it up. No
-dependencies. Fixed commit was in v5.19-rc1 so it could be considered
-for fixes, but it is not urgent fix so could wait till v5.20.
+As alluded to in a different reply, because this will track GPAs instead of HVAs,
+the type needs to be "gpa_t", not "unsigned long".  Oh, actually, they need to
+be gfn_t, since those are what gets shoved into the xarray.
 
-Best regards,
-Krzysztof
+> +	void *entry;
+> +	int r;
+> +
+> +	if (region->size == 0 || region->addr + region->size < region->addr)
+> +		return -EINVAL;
+> +	if (region->addr & (PAGE_SIZE - 1) || region->size & (PAGE_SIZE - 1))
+> +		return -EINVAL;
+> +
+> +	start = region->addr >> PAGE_SHIFT;
+> +	end = (region->addr + region->size - 1) >> PAGE_SHIFT;
+> +
+> +	entry = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION ?
+> +				xa_mk_value(KVM_MEM_ATTR_PRIVATE) : NULL;
+> +
+> +	r = xa_err(xa_store_range(&kvm->mem_attr_array, start, end,
+> +					entry, GFP_KERNEL_ACCOUNT));
+
+IIUC, this series treats memory as shared by default.  I think we should invert
+that and have KVM's ABI be that all guest memory as private by default, i.e.
+require the guest to opt into sharing memory instead of opt out of sharing memory.
+
+And then the xarray would track which regions are shared.
+
+Regarding mem_attr_array, it probably makes sense to explicitly include what it's
+tracking in the name, i.e. name it {private,shared}_mem_array depending on whether
+it's used to track private vs. shared memory.  If we ever need to track metadata
+beyond shared/private then we can tweak the name as needed, e.g. if hardware ever
+supports secondary non-ephemeral encryption keys.

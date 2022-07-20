@@ -2,101 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECA957B694
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6949957B69A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 14:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240933AbiGTMi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 08:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
+        id S236412AbiGTMl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 08:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbiGTMi1 (ORCPT
+        with ESMTP id S232178AbiGTMl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 08:38:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191604D4EA
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658320707; x=1689856707;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rAu6jpHhECuVsZhliLNHW/MdjQNLrwdQjmE6gnDMnzM=;
-  b=BkoxqAydOAIU3mahg2C9rzxK05NSMDcJZDHy5mRn+6+zlehgE9+jBOBw
-   lCEnEq+phTHvaRsFpsEbMRtKoqyAj1lcL8sqMuRy5qLIc+YMqz1VVJP+C
-   8GlggBeWxDGwxHSshPPLi8PumaChn8fToS1DifiZa2nV+sl55Vd8OitWo
-   ye2L1rBjs/nf2yFEyk3PcsQ74hjT9KQ/8b4wZEGqgwyXCjdnxweP4RtaC
-   MVJzZ8DKaOTxI91437mUqZ/iZnFtKG0AXpJy2qXZr9KdMfyNV/3W5vOjw
-   uVqUZb/WJRAvTqvs2SVcq4ng0k/JT2T4weZdHdSDEY1XI+EjWNfI/67mB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="373065392"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="373065392"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 05:38:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="740273645"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Jul 2022 05:38:22 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id E8798199; Wed, 20 Jul 2022 15:38:31 +0300 (EEST)
-Date:   Wed, 20 Jul 2022 15:38:31 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dmitriy Vyukov <dvyukov@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Kostya Serebryany <kcc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Taras Madan <tarasmadan@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCHv5.1 04/13] x86/mm: Handle LAM on context switch
-Message-ID: <20220720123831.ebftged5jjpw3mfy@black.fi.intel.com>
-References: <20220712231328.5294-6-kirill.shutemov@linux.intel.com>
- <20220713150200.17080-1-kirill.shutemov@linux.intel.com>
- <CAG_fn=VVBOe8cvbWSMLfJf577yirThABQOMmihNW4pg55Sfhfg@mail.gmail.com>
+        Wed, 20 Jul 2022 08:41:56 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E2968712
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:41:54 -0700 (PDT)
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 89E523F0D7
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 12:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1658320913;
+        bh=Y+9o9GFX1ufwCQQNftB4eyTX1KW13yoadiZ61emz3PM=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=DmmpmhK9mHCgzut1Q3CpCUg3JwPAb5xI9a9qLKrPxfFJPiKnhScQYlTZCX8IcRntE
+         Kj9Wa4Pw8j40i7Ur/otUL5p10RNgVDqFREbDatSa/WlvLy1B4bRUHbEjQstgq7Nju9
+         mxCjBVayVbdPABqNcEpiciwZeni8dfP9XuMqayRC+jKijbc9tzH2g6QKtusu6IEEsm
+         NRZrkQewidd7/3GHAQdf+XL+HuBafpYckGZdtrJjXD9a+M4y9aCEbYFn3vRZzIbdlY
+         hHt0o1PzuII6s3+3udGLor0hS+kn9RRmEm5UTs7dTfrxHH1YG2mE2YlXDzqriSnAbL
+         EAuBCRlycixdA==
+Received: by mail-wm1-f70.google.com with SMTP id r82-20020a1c4455000000b003a300020352so7742740wma.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 05:41:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y+9o9GFX1ufwCQQNftB4eyTX1KW13yoadiZ61emz3PM=;
+        b=ODq0FKx5GQjooFNl5tJ8kZ/Fp2rOddaGCSsH1QXStoXAiQHI7wV0Q/h0owBDDY8bsG
+         3Ob9BoKS4ImeLi1RF5Lks+nnVfcdv7tlMMb9b70buBS8oeGT7wC7bcXY2eG34mYWgj7E
+         SzCcJgYmriDhVbbplhzsD+uFmZtxRkzEZrKH6AX0WmOQx6Oc9Z/xNomXDpJV5F3uFmCa
+         pKjUR0+7RN93u7y6Lv+IAxDu6rtwM0b0tUV192+bPJgbze88/IJM0JeauZqVmV3h41/T
+         TRYMbgJH/GbYbAU7JG9jgpbAX3AVA2rHhqjLWonAjaulxE2E66RI/Y7nEwfCe1pKCY5R
+         7Cdw==
+X-Gm-Message-State: AJIora+Ad4jVKnkvFa2Eydv0m9EFLXs6hDMYNFqFNEvPEnCFGks+5gpq
+        QGulFnu8ixSYUAmiSkiT3m9GVWBAUG7DG6REMJ18bqPCzjxLHnTrAswAfuOXpaRn2sbr8C55DlQ
+        E6ULhrRtoYeAzbOyMTbrEL83aQcNWaFPoKbp1kXxLcA==
+X-Received: by 2002:a05:600c:3512:b0:3a3:f39:5735 with SMTP id h18-20020a05600c351200b003a30f395735mr3843861wmq.165.1658320911263;
+        Wed, 20 Jul 2022 05:41:51 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sD3mkpRaKL6ug0/dKvmXLr/1spERmTEgL9iklugP9KjoO+uOlNO/PcjbC7UDTHmV3y4cSdow==
+X-Received: by 2002:a05:600c:3512:b0:3a3:f39:5735 with SMTP id h18-20020a05600c351200b003a30f395735mr3843839wmq.165.1658320911002;
+        Wed, 20 Jul 2022 05:41:51 -0700 (PDT)
+Received: from localhost ([2a01:4b00:85fd:d700:e4f3:532d:c9d0:df5d])
+        by smtp.gmail.com with ESMTPSA id m39-20020a05600c3b2700b003a2e1883a27sm3349079wms.18.2022.07.20.05.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 05:41:50 -0700 (PDT)
+From:   Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+To:     masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nathan@kernel.org, trix@redhat.com
+Subject: [PATCH] kbuild: introduce $(GCC) variable for path-prefix or version-suffix
+Date:   Wed, 20 Jul 2022 13:41:37 +0100
+Message-Id: <20220720124137.151714-1-dimitri.ledkov@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=VVBOe8cvbWSMLfJf577yirThABQOMmihNW4pg55Sfhfg@mail.gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:57:01AM +0200, Alexander Potapenko wrote:
-> >         /*
-> > @@ -491,6 +493,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
-> >  {
-> >         struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
-> >         u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
-> > +       unsigned long prev_lam = tlbstate_lam_cr3_mask();
-> Note: this variable is never used if CONFIG_DEBUG_VM is off.
+Introduce $(GCC) variable with similar semantics to $(LLVM) for
+setting path-prefix or version-suffix.
 
-Good point. I will add this:
+Currently to correctly and consistently use gcc-10 on Ubuntu 20.04
+LTS, to cross compile a kernel one has to do:
 
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 4c93f87a8928..5e9ed9f55c36 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -558,6 +558,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 	if (real_prev == next) {
- 		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
- 			   next->context.ctx_id);
-+		VM_WARN_ON(prev_lam != new_lam);
+$ make ... CROSS_COMPILE=riscv64-linux-gnu- \
+           CC=riscv64-linux-gnu-gcc-10 \
+           HOSTCC=gcc-10 \
+           HOSTCXX=g++-10
 
- 		/*
- 		 * Even in lazy TLB mode, the CPU should stay set in the
+With this change
+
+$ make ... CROSS_COMPILE=riscv64-linux-gnu- GCC=-10
+
+is sufficient to correctly select a consistent CC/HOSTCC/HOSTCXX set.
+
+Similarly GCC=/path/to/unpacked/toolchains/ can be used to select
+toolchain outside of PATH.
+
+Update documentation for LLVM variable, and mention that GCC variable
+can be used in a similar fashion to set path-prefix, or
+version-suffix.
+
+Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+---
+ Documentation/kbuild/kbuild.rst | 12 ++++++++++--
+ Makefile                        | 12 +++++++++---
+ tools/testing/selftests/lib.mk  |  2 +-
+ 3 files changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+index ef19b9c13523..6382b082018e 100644
+--- a/Documentation/kbuild/kbuild.rst
++++ b/Documentation/kbuild/kbuild.rst
+@@ -276,5 +276,13 @@ whoami and host, respectively.
+ 
+ LLVM
+ ----
+-If this variable is set to 1, Kbuild will use Clang and LLVM utilities instead
+-of GCC and GNU binutils to build the kernel.
++If this variable is set to 1, Kbuild will use Clang and LLVM utilities
++instead of GCC and GNU binutils to build the kernel. It can also be
++used to set a path prefix, or a version suffix, see "Building
++Linux with Clang/LLVM".
++
++GCC
++---
++This variable can be used similar to LLVM variable above to set a path
++prefix, or a version suffix for GNU Toolchain binaries. See examples
++in "Building Linux with Clang/LLVM".
+diff --git a/Makefile b/Makefile
+index 00fd80c5dd6e..e7bd0b572b14 100644
+--- a/Makefile
++++ b/Makefile
+@@ -433,8 +433,14 @@ endif
+ HOSTCC	= $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+ HOSTCXX	= $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
+ else
+-HOSTCC	= gcc
+-HOSTCXX	= g++
++ifneq ($(filter %/,$(GCC)),)
++GCC_PREFIX := $(GCC)
++else ifneq ($(filter -%,$(GCC)),)
++GCC_SUFFIX := $(GCC)
++endif
++
++HOSTCC	= $(GCC_PREFIX)gcc$(GCC_SUFFIX)
++HOSTCXX	= $(GCC_PREFIX)g++$(GCC_SUFFIX)
+ endif
+ HOSTPKG_CONFIG	= pkg-config
+ 
+@@ -461,7 +467,7 @@ OBJDUMP		= $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+ READELF		= $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+ STRIP		= $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+ else
+-CC		= $(CROSS_COMPILE)gcc
++CC		= $(GCC_PREFIX)$(CROSS_COMPILE)gcc$(GCC_SUFFIX)
+ LD		= $(CROSS_COMPILE)ld
+ AR		= $(CROSS_COMPILE)ar
+ NM		= $(CROSS_COMPILE)nm
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 1a5cc3cd97ec..777757d54f42 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -30,7 +30,7 @@ endif # CROSS_COMPILE
+ 
+ CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
+ else
+-CC := $(CROSS_COMPILE)gcc
++CC := $(GCC_PREFIX)$(CROSS_COMPILE)gcc$(GCC_SUFFIX)
+ endif # LLVM
+ 
+ ifeq (0,$(MAKELEVEL))
 -- 
- Kirill A. Shutemov
+2.34.1
+

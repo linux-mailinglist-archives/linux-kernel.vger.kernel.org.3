@@ -2,219 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5103057C0DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE32957C0DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 01:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiGTX0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 19:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S231426AbiGTX2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 19:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiGTX0i (ORCPT
+        with ESMTP id S229793AbiGTX2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 19:26:38 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E668D2E9DE
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:26:37 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id s206so56932pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 16:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=biQfKVkYP0pKtswQt3kzw1zka1n8k/er3b8pHLQhGbo=;
-        b=QSNpm6ni7NgkQBZuAHl6j2XjdW//Yi/pj60mJ8jm5LMKQG6g4kChOUNyLkBg71iOvO
-         LEMFv98cDlIlunj0UuXI8eOwhFqwUAucR+V0O/mDZURxCvChdgGdMhVBXuFmepN1GfLy
-         Cuy+II6JY0jdQR5I4Cdn1nzSOzu603+4vjcMKPdFFUyu6TqfSZtkjoM1mbwXqKezGfOI
-         PuomCkFSly8cNiY8Qa+AU0hNSArl3yhTlU0Dmrj6xjqmZLyvuAQP5RYITdLdQ7qeo/y4
-         uxMLDZ6eJRt5s35+/aKfOxbms7Ef0dEFmFwMLkAwP7nmwDB0YAau/NeokqWKKOupkA+C
-         yB/A==
+        Wed, 20 Jul 2022 19:28:49 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F963DBFE;
+        Wed, 20 Jul 2022 16:28:48 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id v1so6515915ilg.4;
+        Wed, 20 Jul 2022 16:28:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=biQfKVkYP0pKtswQt3kzw1zka1n8k/er3b8pHLQhGbo=;
-        b=KmMQrXHSJOIdvmJACbjTBwbHURtiEniIP57az+uY31iVA0p5wzO4rq0UZ5YeAsRE/E
-         Maqg3AaNDbhmzQtMRMGGDBNzJk5Klmk90tVZhjPTA4CCqu8o9+KyDrnptdeC7BBZJuF3
-         bIffSDXYJhQq4CMB+cspccuAP+cwSpqa1C72MaMm8qWaPq9XJfk/DKpjCsHRQLgdsmZA
-         dn+BnBmlXdKS4SaSHng1p9bBOESrGsjLPKhmK34oTcRu3/w3j8lAwCb67TDW3FdwpHus
-         kZ77ZEMMsHq7Pqdvz3rN3VnmlJHyv2nipE5GyQ+iCX4Alprba9eK7kGwrFVIk4u9iH08
-         /HJA==
-X-Gm-Message-State: AJIora/K5fUQ7mFF6iaSNWaSDJE+nD6LuO5WgxQBcygYBh62eWANqfXW
-        bK36RB2qW0JYVPhVWXn4gvq5yOjcN/4uDcPOZoQLJQ==
-X-Google-Smtp-Source: AGRyM1t0P4fuHckbHl2pK6lXBgp1lrSKqcFhSdGxUQLjPoxHBQJykdV36MkckdP1DgzKclwel/JrBsO63EydO9Y3GGY=
-X-Received: by 2002:a65:4c0b:0:b0:415:d3a4:44d1 with SMTP id
- u11-20020a654c0b000000b00415d3a444d1mr36349247pgq.191.1658359597244; Wed, 20
- Jul 2022 16:26:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lj7ZdYTFFmCvkqUW4bAz3eNYzxAsTwlFDtn0plbsmo0=;
+        b=DJXkppJdKOPyCg2Z0RN6txhAFLuws5ec8BVKTs6m2AMq7pF7/bB3RxVwkKNmKJkjnD
+         XzCB3MFX/OEgg9J+aiUrOALdzjoUF1Q0/EuOYusFK8Bqsf3uJYmHgaeMI8ldvRSaiFw+
+         UqaAMJDXpw/tSWCnWB20/d1GXQuEgCU5lDFLsbaORoFL7haXiobOQMSlVi/KbIs5WuR5
+         FDttw6QnfJi+dMsu+244QNCY4na22W6Jaw0I+gGl3BtUANCrBMU2Uf0oAbXWfW70WuhB
+         PghNvx1RHatceaWNWXF0FKBBimaSQrL+94jMVexORjY6OOjITx7hc5FqQe5JRA3csQsk
+         7OgA==
+X-Gm-Message-State: AJIora9btXD94l1S98vzucwRs6Tmzr25+eKZJ99cXXGKPa9ywSuMIOss
+        gvCY25wcnCncQ56CbPXieATc9FFuiQ==
+X-Google-Smtp-Source: AGRyM1vSrC7x8Cv1BL5qsGSLx/0xJk23RB7zjk5vAxLrkaX7Jwt32B8ZciEUdlhXO22D9AlabLTxpg==
+X-Received: by 2002:a92:d64a:0:b0:2dc:fa9f:7b27 with SMTP id x10-20020a92d64a000000b002dcfa9f7b27mr6200033ilp.173.1658359727764;
+        Wed, 20 Jul 2022 16:28:47 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id s12-20020a92d90c000000b002dc1f1a7cc2sm147953iln.31.2022.07.20.16.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 16:28:47 -0700 (PDT)
+Received: (nullmailer pid 4179862 invoked by uid 1000);
+        Wed, 20 Jul 2022 23:28:45 -0000
+Date:   Wed, 20 Jul 2022 17:28:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Aradhya Bhatia <a-bhatia1@ti.com>
+Cc:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Darren Etheridge <detheridge@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Krunal Bhargav <k-bhargav@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/8] dt-bindings: display: ti,am65x-dss: Add port
+ properties for DSS
+Message-ID: <20220720232845.GA4164694-robh@kernel.org>
+References: <20220719080845.22122-1-a-bhatia1@ti.com>
+ <20220719080845.22122-2-a-bhatia1@ti.com>
 MIME-Version: 1.0
-References: <20220719194028.4180569-1-jevburton.kernel@gmail.com>
- <CAKH8qBsm0QqE-7Pmhhz=tRYAfgpirbu6K1deQ6cQTU+GTykLNA@mail.gmail.com>
- <179cfb89be0e4f928a55d049fe62aa9e@huawei.com> <CAKH8qBt0yR+mtCjAp=8jQL4M6apWQk0wH7Zf4tPDCf3=m+gAKA@mail.gmail.com>
- <31473ddf364f4f16becfd5cd4b9cd7d2@huawei.com> <CAKH8qBsFg5gQ0bqpVtYhiQx=TqJG31c8kfsbCG4X57QGLOhXvw@mail.gmail.com>
- <0c284e09817e4e699aa448aa25af5d79@huawei.com> <CAKH8qBvwzVPY1yJM_FjdH5QptVkZz=j9Ph7pTPCbTLdY1orKJg@mail.gmail.com>
- <c9c203821a854e33970fd10e01632cb7@huawei.com> <CAKH8qBuazK5PwDYAG2bPGfyASAMQAd4_dpFjcW0KYz4ON+kj3g@mail.gmail.com>
- <bf326b7c927a475cae33b89416c1b082@huawei.com> <CAKH8qBtgHK4dpoJzkq2q7rj37Ep9peEPE-3GBu=QqxUU8YVrPQ@mail.gmail.com>
- <8fe67e829d95477d884131641ca0961d@huawei.com>
-In-Reply-To: <8fe67e829d95477d884131641ca0961d@huawei.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 20 Jul 2022 16:26:26 -0700
-Message-ID: <CAKH8qBtQwy=J-tpr86ALrjiFeXNJYLxgfDfDEE=8FFOKdbVu3A@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: Add bpf_obj_get_opts()
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Joe Burton <jevburton.kernel@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joe Burton <jevburton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220719080845.22122-2-a-bhatia1@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 4:17 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > Sent: Thursday, July 21, 2022 1:15 AM
-> > On Wed, Jul 20, 2022 at 4:12 PM Roberto Sassu <roberto.sassu@huawei.com>
-> > wrote:
-> > >
-> > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > Sent: Thursday, July 21, 2022 1:09 AM
-> > > > On Wed, Jul 20, 2022 at 4:02 PM Roberto Sassu
-> > <roberto.sassu@huawei.com>
-> > > > wrote:
-> > > > >
-> > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > Sent: Thursday, July 21, 2022 12:48 AM
-> > > > > > On Wed, Jul 20, 2022 at 3:44 PM Roberto Sassu
-> > > > <roberto.sassu@huawei.com>
-> > > > > > wrote:
-> > > > > > >
-> > > > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > > > Sent: Thursday, July 21, 2022 12:38 AM
-> > > > > > > > On Wed, Jul 20, 2022 at 3:30 PM Roberto Sassu
-> > > > > > <roberto.sassu@huawei.com>
-> > > > > > > > wrote:
-> > > > > > > > >
-> > > > > > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > > > > > Sent: Wednesday, July 20, 2022 5:57 PM
-> > > > > > > > > > On Wed, Jul 20, 2022 at 1:02 AM Roberto Sassu
-> > > > > > > > <roberto.sassu@huawei.com>
-> > > > > > > > > > wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > > From: Stanislav Fomichev [mailto:sdf@google.com]
-> > > > > > > > > > > > Sent: Tuesday, July 19, 2022 10:40 PM
-> > > > > > > > > > > > On Tue, Jul 19, 2022 at 12:40 PM Joe Burton
-> > > > > > > > <jevburton.kernel@gmail.com>
-> > > > > > > > > > > > wrote:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > From: Joe Burton <jevburton@google.com>
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Add an extensible variant of bpf_obj_get() capable of setting
-> > the
-> > > > > > > > > > > > > `file_flags` parameter.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > This parameter is needed to enable unprivileged access to
-> > BPF
-> > > > > > maps.
-> > > > > > > > > > > > > Without a method like this, users must manually make the
-> > > > syscall.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Signed-off-by: Joe Burton <jevburton@google.com>
-> > > > > > > > > > > >
-> > > > > > > > > > > > Reviewed-by: Stanislav Fomichev <sdf@google.com>
-> > > > > > > > > > > >
-> > > > > > > > > > > > For context:
-> > > > > > > > > > > > We've found this out while we were trying to add support for
-> > > > unpriv
-> > > > > > > > > > > > processes to open pinned r-x maps.
-> > > > > > > > > > > > Maybe this deserves a test as well? Not sure.
-> > > > > > > > > > >
-> > > > > > > > > > > Hi Stanislav, Joe
-> > > > > > > > > > >
-> > > > > > > > > > > I noticed now this patch. I'm doing a broader work to add opts
-> > > > > > > > > > > to bpf_*_get_fd_by_id(). I also adjusted permissions of bpftool
-> > > > > > > > > > > depending on the operation type (e.g. show, dump:
-> > > > BPF_F_RDONLY).
-> > > > > > > > > > >
-> > > > > > > > > > > Will send it soon (I'm trying to solve an issue with the CI, where
-> > > > > > > > > > > libbfd is not available in the VM doing actual tests).
-> > > > > > > > > >
-> > > > > > > > > > Is something like this patch included in your series as well? Can
-> > you
-> > > > > > > > > > use this new interface or do you need something different?
-> > > > > > > > >
-> > > > > > > > > It is very similar. Except that I called it bpf_get_fd_opts, as it
-> > > > > > > > > is shared with the bpf_*_get_fd_by_id() functions. The member
-> > > > > > > > > name is just flags, plus an extra u32 for alignment.
-> > > > > > > >
-> > > > > > > > We can bikeshed the naming, but we've been using existing
-> > conventions
-> > > > > > > > where opts fields match syscall fields, that seems like a sensible
-> > > > > > > > thing to do?
-> > > > > > >
-> > > > > > > The only problem is that bpf_*_get_fd_by_id() functions would
-> > > > > > > set the open_flags member of bpf_attr.
-> > > > > > >
-> > > > > > > Flags would be good for both, even if not exact. Believe me,
-> > > > > > > duplicating the opts would just create more confusion.
-> > > > > >
-> > > > > > Wait, that's completely different, right? We are talking here about
-> > > > > > BPF_OBJ_GET (which has related BPF_OBJ_PIN).
-> > > > > > Your GET_XXX_BY_ID are different so you'll still have to have another
-> > > > > > wrapper with opts?
-> > > > >
-> > > > > Yes, they have different wrappers, just accept the same opts as
-> > > > > obj_get(). From bpftool subcommands you want to set the correct
-> > > > > permission, and propagate it uniformly to bpf_*_get_fd_by_id()
-> > > > > or obj_get(). See map_parse_fds().
-> > > >
-> > > > I don't think they are accepting the same opts.
-> > > >
-> > > > For our case, we care about:
-> > > >
-> > > >         struct { /* anonymous struct used by BPF_OBJ_* commands */
-> > > >                 __aligned_u64   pathname;
-> > > >                 __u32           bpf_fd;
-> > > >                 __u32           file_flags;
-> > > >         };
-> > > >
-> > > > For your case, you care about:
-> > > >
-> > > >         struct { /* anonymous struct used by BPF_*_GET_*_ID */
-> > > >                 union {
-> > > >                         __u32           start_id;
-> > > >                         __u32           prog_id;
-> > > >                         __u32           map_id;
-> > > >                         __u32           btf_id;
-> > > >                         __u32           link_id;
-> > > >                 };
-> > > >                 __u32           next_id;
-> > > >                 __u32           open_flags;
-> > > >         };
-> > > >
-> > > > So your new _opts libbpf routine should be independent of what Joe is
-> > > > doing here.
-> > >
-> > > It is. Just I use the same opts to set file_flags or open_flags.
-> >
-> > That seems confusing. Let's have separate calls for separate syscall
-> > commands as we do already?
->
-> Can you wait one day, I send what I have, so that we see
-> everything together?
+On Tue, Jul 19, 2022 at 01:38:38PM +0530, Aradhya Bhatia wrote:
+> Add "ti,oldi-mode" property to indicate the tidss driver the OLDI output
+> mode. The 2 OLDI TXes on am625-dss allow a 3 different types of panel
+> connections with the board.
+> 
+> 1. Single Link / Single Mode on OLDI TX 0 OR 1.
+> 2. Single Link / Duplicate Mode on OLDI TX 0 and 1.
+> 3. Dual Link / Single Mode on OLDI TX 0 and 1.
+> 
+> Add "ti,rgb565-to-888" property to override 16bit output from a videoport
+> for a bridge that only accepts 24bit RGB888 DPI input.
+> 
+> On some boards the HDMI bridge takes a 24bit DPI input, but only 16 data
+> pins are actually enabled from the SoC.  This new property forces the
+> output to be RGB565 on a specific video port if the bridge requests a
+> 24bit RGB color space.
+> 
+> This assumes that the video port is connected like so:
+> 
+> SoC : Bridge
+> R0 ->   R3
+> R1 ->   R4
+> R2 ->   R5
+> R3 ->   R6
+> R4 ->   R7
+> G0 ->   G2
+> G1 ->   G3
+> G2 ->   G4
+> G3 ->   G5
+> G4 ->   G6
+> G5 ->   G7
+> B0 ->   B3
+> B1 ->   B4
+> B2 ->   B5
+> B3 ->   B6
+> B4 ->   B7
+> 
+> On the bridge side R0->R2, G0->G1, B0->B2 would be tied to ground.
+> The bridge sees 24bits of data,  but the lsb's are always zero.
 
-Sure, CC us both on the patches.
+Unless the bridge ignores the LSBs, that's not the right way to do 16 to 
+24 bit. The LSBs should be connected to the MSB of the color component 
+to get full color range.
+
+> 
+> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+> ---
+>  .../bindings/display/ti/ti,am65x-dss.yaml     | 25 +++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> index 6bbce921479d..11d9b3821409 100644
+> --- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> +++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
+> @@ -80,15 +80,35 @@ properties:
+>  
+>      properties:
+>        port@0:
+> -        $ref: /schemas/graph.yaml#/properties/port
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+>          description:
+>            The DSS OLDI output port node form video port 1
+>  
+> +        properties:
+> +          ti,oldi-mode:
+> +            description: TI specific property to indicate the mode the OLDI TXes
+> +              and the display panel are connected in.
+> +              0 -> OLDI TXes OFF (driver default for am625-dss)
+> +              1 -> Single link, Single Mode (OLDI0) (driver default for am65x-dss)
+> +              2 -> Single link, Single Mode (OLDI1)
+> +              3 -> Single link, Duplicate Mode
+> +              4 -> Dual link (Only Single Mode)
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum: [0, 1, 2, 3, 4]
+
+Wouldn't 'data-lanes' property work for this purpose.
+
+Generally, we don't put properties in port nodes.
+
+> +
+>        port@1:
+> -        $ref: /schemas/graph.yaml#/properties/port
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+>          description:
+>            The DSS DPI output port node from video port 2
+>  
+> +        properties:
+> +          ti,rgb565-to-888:
+> +            description:
+> +              property to override DPI output to 16bit for 24bit bridge
+> +            type: boolean
+
+There's work underway for standard way to handle interface formats[1]. 
+Please help/comment on that to make sure it works for you. 
+
+Rob
+
+[1] https://lore.kernel.org/all/20220628181838.2031-3-max.oss.09@gmail.com/

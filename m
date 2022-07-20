@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB5657B473
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF9E57B475
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 12:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbiGTKZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 06:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S235158AbiGTKZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 06:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233360AbiGTKZa (ORCPT
+        with ESMTP id S234780AbiGTKZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 06:25:30 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAFFE0C4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:25:29 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id d16so25451570wrv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:25:29 -0700 (PDT)
+        Wed, 20 Jul 2022 06:25:45 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38FF2C66B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:25:44 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bv24so1601163wrb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 03:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yejlrYISSFvhPNBKBdxPZvCzF3/CE0/YpMN2GnONxr4=;
-        b=sYQhUBG62rxyDAci/Tms08U2qkKt3Np3EY5j29crS/8TSutBlBXpXsxu21EOroVzzO
-         z3OX17bQ468fhmS3sQap454H4jl/eLMVKdAx8zl5NpPQND2C6NTbL9WLFOIuxDwCLb7M
-         Hzip5AXITWaoIqx6OD+WN9oCVsGCD9MR78XBBLSJt+/l0ZLGgoRJOJQRPSwRVXMEY0pc
-         wD86/tD5zIq0T4YISfadrOwgk1L/sYNCjitGV2WCr/Qa60jZHIufoHK6opqHGzl6xfIa
-         6IcfDR4Aj/OpmRtq1sqLxlynlIJczDDt6Lzhl/XTzc0jO6CtL3vCbQ/msxoJmMwW/Q9C
-         FA0g==
+        bh=Z3jJrPCyTzgDwtpGSTySZxdrcJyisqv97waetDyPkCQ=;
+        b=sCjSMvoF3N/YhfKOZGtrMzIcX8cxlimIX+SK+xYqEKXCgqRBkY6lqsBsABZeIzh+yO
+         fs7bpLWl5dF11SXyxp2l2ky/YDoitDwkLXSzsJXTdFeDqwELcxATYktrzyTS/C4/T4IY
+         JgsT1ntJ1QXffjy2ODz6SR4YXqq7KNb8YHpj+he7lVSwm4iLYPRECN5eeo7ro1o3nPP/
+         PZbXUiLkskZo57ZubzaNZXg7QXwDE0omfYBWo9GiMjC6t317K8u0L34/Sc72s53X8OIQ
+         e6UI8uTxSO1TjumE2XjVAOID5Hi/NA/DOlLZ9zNnpqDsRvdwG23Di8YOItQGQp4620NZ
+         wLxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=yejlrYISSFvhPNBKBdxPZvCzF3/CE0/YpMN2GnONxr4=;
-        b=opzM19mJppIRA5J4yGCbVr20whotrFFkCf1Aq3gjYv/ld2DXrwm56Tdt46Zp743alI
-         ptEed34v3w6Dc2pfHG80XchG55h+sxRYgTe0U0cDBezIQ2Av/Z/9llSMo2wB3AGgdyI+
-         nVLLKi0Xpuukpc+MrbRVaYT39GAEkhnP+mJWq1Cb+qRRVJx0vPga4kUseBP3hSeX2hP5
-         WoChyOHf8cgyfLdpNIiWw/Y6d3wiuA1497TRdF+L9Oh5GvVIB/wX0Z1UGNV4ChPEGTV+
-         /HzK3F2N9oC4Jo6xB2PA7DCVXI/hstbzG+HIg7jIjxSVx9RL0yH0A1Y83FTCy8VaKF3g
-         xpjg==
-X-Gm-Message-State: AJIora99fp9ow/B+sIjnbuLQfLvcSQw4ZAjmRMxd9nWdqSAuhAFcIl2I
-        Va+6WA0bJofcD15zjdTXPmFy0Q==
-X-Google-Smtp-Source: AGRyM1ubms2QeI4CFrNlI7wGZGAyw8ZhcZq3U30rSIxFd1xLqoC+dvvDB5eDe3YHJXftDWwxykpcbw==
-X-Received: by 2002:adf:fb43:0:b0:21a:22eb:da43 with SMTP id c3-20020adffb43000000b0021a22ebda43mr30106888wrs.347.1658312727696;
-        Wed, 20 Jul 2022 03:25:27 -0700 (PDT)
+        bh=Z3jJrPCyTzgDwtpGSTySZxdrcJyisqv97waetDyPkCQ=;
+        b=XMGniOROCZzD3z27FrJ9z5hvNXTUUDRRnY9BM7VPPllG1EXB4lmEDdydYewu3L1C0x
+         xf6j/hP8LjE9z8dx/LfSKgPF2zXRI0ZarKGDP8AhMQHzdNbTAcIbbZ25jY2FzQMjnQL5
+         LQGzBrExXfgF3clVdwQ/b6mMdy26GAKhvs2r7KqvMi8MqdXemFAwQ5keVtNKIHJcCkSG
+         nOpYyiHwo63aC6ODbpAy7+l9OMgYFtZgWJTbKAESwhVHwtdlvk0cqbzl5ocpM6K9D3p0
+         F+/5TnN853A5SUmX7ZD8pEs5IIpbq6FOJ6wry4BjDDzgs0VyOwCTVOtu+Y3Z/HJYvcvD
+         fTPg==
+X-Gm-Message-State: AJIora+uVq3nv/V83Suk7nco31Skk2Y8N+IjeHEAPwtcvxyy7oyg3JD8
+        w/+18R/jQ5Br8bHP5Hv9TXxodA==
+X-Google-Smtp-Source: AGRyM1uyrwWzo5MmrGdZYIEhYMnIovU4xFppY+X/ePoCuDLQGMqHhKKIOZHt43U5jzpCtuBuuiuoBA==
+X-Received: by 2002:a5d:598e:0:b0:21d:869c:f6b5 with SMTP id n14-20020a5d598e000000b0021d869cf6b5mr31135914wri.399.1658312743177;
+        Wed, 20 Jul 2022 03:25:43 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:b579:e7b5:219d:267c? ([2a05:6e02:1041:c10:b579:e7b5:219d:267c])
-        by smtp.googlemail.com with ESMTPSA id c7-20020a05600c0a4700b003a31f71c5b8sm2398969wmq.27.2022.07.20.03.25.26
+        by smtp.googlemail.com with ESMTPSA id o24-20020a05600c379800b003a327f19bf9sm1890514wmr.14.2022.07.20.03.25.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 03:25:27 -0700 (PDT)
-Message-ID: <43bc1bf8-a734-e184-e38f-5e2f16a31f1b@linaro.org>
-Date:   Wed, 20 Jul 2022 12:25:26 +0200
+        Wed, 20 Jul 2022 03:25:42 -0700 (PDT)
+Message-ID: <e35a741e-0d90-9aaf-5563-9721648dfc11@linaro.org>
+Date:   Wed, 20 Jul 2022 12:25:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH -next] thermal/drivers/u8500: Remove unnecessary print
- function dev_err()
+Subject: Re: [PATCH] clocksource/drivers/tegra186: Put Kconfig option
+ 'tristate' to 'bool'
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, rafael@kernel.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220719003556.74460-1-yang.lee@linux.alibaba.com>
+To:     tglx@linutronix.de
+Cc:     thierry.reding@gmail.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, kkartik@nvidia.com
+References: <20220718213657.1303538-1-daniel.lezcano@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220719003556.74460-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20220718213657.1303538-1-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,18 +75,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/2022 02:35, Yang Li wrote:
-> The print function dev_err() is redundant because platform_get_irq()
-> already prints an error.
+On 18/07/2022 23:36, Daniel Lezcano wrote:
+> The clocksource are built-in, not as module. We don't know if the core
+> time framework is ready for that.
 > 
-> Eliminate the follow coccicheck warnings:
-> ./drivers/thermal/db8500_thermal.c:162:2-9: line 162 is redundant because platform_get_irq() already prints an error
-> ./drivers/thermal/db8500_thermal.c:176:2-9: line 176 is redundant because platform_get_irq() already prints an error
+> Revert back this option to 'bool'.
 > 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
 
-Applied, thanks
+Applied
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs

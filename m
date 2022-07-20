@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B87657B97C
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA4657B984
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241367AbiGTPW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S239174AbiGTPXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237863AbiGTPWo (ORCPT
+        with ESMTP id S237521AbiGTPXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:22:44 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11405E82C;
-        Wed, 20 Jul 2022 08:22:37 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id z3so2887679plb.1;
-        Wed, 20 Jul 2022 08:22:37 -0700 (PDT)
+        Wed, 20 Jul 2022 11:23:11 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8F45B786
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:23:09 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bv24so2732189wrb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AxcbwNROrPSny6jDSgptTuz7bYbyAsub2rLB4LJL6c0=;
-        b=ErPjdKCP1uIFCgtZu4/aZ6DEM+gUhhT8Ns2PXsNjwcZgql/PUI5443lcUtXj2CgGoI
-         pM+9LfLNrwyVj0Koujo+hTZ2jSW03gnQKvM9YIR1qjmc9YGNod5kJg0AH9c38k15CPXN
-         fwQShGPhp/D8HY/+NtBgQLajV7kBtdi9H3Urwt/Kv7pL1tQavGRt4kpLaHwuOohP8Utb
-         9USZ+CcB58/WxCb68Z922a/rba14XA8nikMckZR3q7qKQ/6l2YuL0lyAQoh4OdKYY8X7
-         D+fxty5r4REIhJoONp/yLHNUbhVB8q9k+OaIlWNOE39erdYuK8ipuX6+T1Zb410KLRhW
-         yWTA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vOU8fNK31UdaRFTxZH7uUNE10MhT+gyU0GxNesrMTbk=;
+        b=gJKMaw7OQwUE8Pl82nASUpBV4CsNQg2+F33xJj7v8amh288eCv9edv4bEuz5Ihf6zq
+         Y1aZR7HfYF1dH9JYipjA7nh7IeXkWXwxfpZbzCLak3lfmkGNTBbq9zbzND9LvlhEJ0tw
+         L7Cme0DFbAMsL+Km35Aq7T7mkyrZyjM3ejLCO1rACTQF2dGqR+2aT1yrne7DQtAZQ5nh
+         l7FDfNdM+eaWlD01XQ3yzUFD91FtX5fidvr605rvCT2KxKPRdPBuQ9sjhmLrTbUrcs3f
+         rgF+mmeeOlHYtIYYQyCKjUo0jSSu2lQOPc6mA6MlL03DQ9DndWc45505ylDGPpXPyp33
+         GFug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AxcbwNROrPSny6jDSgptTuz7bYbyAsub2rLB4LJL6c0=;
-        b=ld9Fbnkyo46vHc8WPDgZwi7KI2Tq4uqnbpt4Ce3rEvA95E566LtXH4xBGau/rZxyqN
-         WsjU9wM7k/z2PtUMgfzTwcbCMwgApDC23y9GgdF/QfOcWHiBjnM9sVseZhHP05BF4Qjw
-         gO6d8aEoiLC5WdgaW/OwcrqnuEU3nxKnFwmEMVFvkYDCZC6RxCjTV2prygKuwZjlLMzj
-         1VVyAtzC71hk9XhJhzdCH4D5j53bcmpGgbyX60w/Wrb13Jm0zQBXwWQhdJM3WvYKosdU
-         wC3zP1DPwbfR5HS77E6NCYoZpgYPxBT+LwH0v8Mbv8BI6tSWm5XkdpXiAttQ4tZX5ZO5
-         7Zyg==
-X-Gm-Message-State: AJIora+cc7lAAEIDMog66QogiMmgkwSzcoki/1zuxMDxcMNuUNTZW7iX
-        80ow3Vu+ZvMpeoxTx54aNNA=
-X-Google-Smtp-Source: AGRyM1t6ZlGmi3rykIgPP2swTymCCx9NyKOzwv3J9vYNXxRlWGFHL9/rh+k4wm4AtoRS1pT9eJe5sg==
-X-Received: by 2002:a17:90b:4ad0:b0:1f0:28c6:9493 with SMTP id mh16-20020a17090b4ad000b001f028c69493mr5922834pjb.142.1658330557180;
-        Wed, 20 Jul 2022 08:22:37 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t12-20020a1709028c8c00b001678dcb4c5asm4003524plo.100.2022.07.20.08.22.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 08:22:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <56edd097-df41-b84b-3688-f1bcabda5046@roeck-us.net>
-Date:   Wed, 20 Jul 2022 08:22:33 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vOU8fNK31UdaRFTxZH7uUNE10MhT+gyU0GxNesrMTbk=;
+        b=AVqCfe+ZIZEIJ0Mk+NIuSt3xmJUGdQsqm18+MAb0dQ2xF5rlMPw+z/Ug/m5HPx4EtA
+         4f5izu/igdz5LJM/H+h54zRyMzC3ZdGdScEFqFVzTdTsKhSqG39ESKL5z0hHm4WRSRV0
+         R3GCze5/30gEwEnqheoKEobFMYYXnXfVKV7RzjiZKZ9LhaNEh/KGaYKiGg9teP4NLcjX
+         eKOlo8D4D6zeABNDm5pwbjo9agvs8RJG7/z2Mw9juKXFWBQk7L9jqhTshjHmBJeKfj/Q
+         +A9zqi0VFobwZ5QMdYYLrg8zNMFPP/00YGsCegaiMc50bJiuQ8oMZKuAVq0mZBe++MZH
+         iIIQ==
+X-Gm-Message-State: AJIora+FewDW++Xo5DAfInkdhOrCjLMWh+Z9KLAJOFoHOPEOucmFji3k
+        5AVZF/Npy3nQqFRqr79hX/Ks9iayUsk34AWN+WCLow==
+X-Google-Smtp-Source: AGRyM1tZmXjjuviW3um3Zs7KIJzIOIOdxEu1q/OkiLALO3+VsFJigpodFYG/Q1++/Z9jVmED5wEZC5v9q22r32zBYo8=
+X-Received: by 2002:a05:6000:8e:b0:21d:7e97:67ed with SMTP id
+ m14-20020a056000008e00b0021d7e9767edmr30017427wrx.343.1658330588252; Wed, 20
+ Jul 2022 08:23:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 RESEND 0/6] Add support for upcoming chips to k10temp
- and amd_nb
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Clemens Ladisch <clemens@ladisch.de>,
+References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-3-elver@google.com>
+ <CACT4Y+aYCkTWu+vBdX2d5GNB9z8oZ+8=a330sK9s18FS8t+6=Q@mail.gmail.com>
+In-Reply-To: <CACT4Y+aYCkTWu+vBdX2d5GNB9z8oZ+8=a330sK9s18FS8t+6=Q@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 20 Jul 2022 08:22:56 -0700
+Message-ID: <CAP-5=fWBVm08LetcyRUh6MK+_gQmyJYxR2sfeZ8LvXfeeJs=zg@mail.gmail.com>
+Subject: Re: [PATCH v3 02/14] perf/hw_breakpoint: Provide hw_breakpoint_is_used()
+ and use in test
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, dave.hansen@linux.intel.com,
-        linux-hwmon@vger.kernel.org, babu.moger@amd.com,
-        yazen.ghannam@amd.com, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20220719195256.1516-1-mario.limonciello@amd.com>
- <YtgVDEQnZpjnIG0k@zn.tnic>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YtgVDEQnZpjnIG0k@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,42 +81,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 07:45, Borislav Petkov wrote:
-> On Tue, Jul 19, 2022 at 02:52:50PM -0500, Mario Limonciello wrote:
->> This series started as what looked like a correction to previous
->> commits, but I missed that the previous commits were for a different
->> family with the same chip models.  So while fixing up the series I also
->> noticed that a few upcoming chips have new PCIe IDs and CCD offsets not
->> yet supported, so add them to amd_nb/k10temp.
->>
->> v2->v3
->>   * Pick up tags
->>   * Group "ROOT" PCI IDs with others in patches 2 and 3.
->> v1->v2:
->>   * Correct commit messages
->>   * Add more missing chips and offsets
->>   * since so much changed, do not include Bjorn's Ack.
->>
->> V3 original submission:
->> * https://lore.kernel.org/lkml/20220613192956.4911-1-mario.limonciello@amd.com/#t
->>
->> Mario Limonciello (6):
->>    x86/amd_nb: Add AMD Family 17h A0-AF IDs
->>    x86/amd_nb: Add Family 19h model 70h-7Fh IDs
->>    x86/amd_nb: Add Family 19h model 60h-6Fh IDs
->>    hwmon: (k10temp): Add support for family 17h models A0h-AFh
->>    hwmon: (k10temp): Add support for family 19h models 70h-7Fh
->>    hwmon: (k10temp): Add support for family 19h models 60h-6Fh
-> 
-> Is there any particular reason why those are split into such small
-> pieces?
-> 
-> I'd expect one patch adding all PCI IDs and a second patch doing the
-> k10temp changes.
-> 
-> If no particular reason, I'll compact them all 6 into 2.
-> 
-Ok with me.
+On Mon, Jul 4, 2022 at 8:10 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Mon, 4 Jul 2022 at 17:06, Marco Elver <elver@google.com> wrote:
+> >
+> > Provide hw_breakpoint_is_used() to check if breakpoints are in use on
+> > the system.
+> >
+> > Use it in the KUnit test to verify the global state before and after a
+> > test case.
+> >
+> > Signed-off-by: Marco Elver <elver@google.com>
+>
+> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-Guenter
+Acked-by: Ian Rogers <irogers@google.com>
 
+Thanks,
+Ian
+
+> > ---
+> > v3:
+> > * New patch.
+> > ---
+> >  include/linux/hw_breakpoint.h      |  3 +++
+> >  kernel/events/hw_breakpoint.c      | 29 +++++++++++++++++++++++++++++
+> >  kernel/events/hw_breakpoint_test.c | 12 +++++++++++-
+> >  3 files changed, 43 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/hw_breakpoint.h b/include/linux/hw_breakpoint.h
+> > index 78dd7035d1e5..a3fb846705eb 100644
+> > --- a/include/linux/hw_breakpoint.h
+> > +++ b/include/linux/hw_breakpoint.h
+> > @@ -74,6 +74,7 @@ register_wide_hw_breakpoint(struct perf_event_attr *attr,
+> >  extern int register_perf_hw_breakpoint(struct perf_event *bp);
+> >  extern void unregister_hw_breakpoint(struct perf_event *bp);
+> >  extern void unregister_wide_hw_breakpoint(struct perf_event * __percpu *cpu_events);
+> > +extern bool hw_breakpoint_is_used(void);
+> >
+> >  extern int dbg_reserve_bp_slot(struct perf_event *bp);
+> >  extern int dbg_release_bp_slot(struct perf_event *bp);
+> > @@ -121,6 +122,8 @@ register_perf_hw_breakpoint(struct perf_event *bp)  { return -ENOSYS; }
+> >  static inline void unregister_hw_breakpoint(struct perf_event *bp)     { }
+> >  static inline void
+> >  unregister_wide_hw_breakpoint(struct perf_event * __percpu *cpu_events)        { }
+> > +static inline bool hw_breakpoint_is_used(void)         { return false; }
+> > +
+> >  static inline int
+> >  reserve_bp_slot(struct perf_event *bp)                 {return -ENOSYS; }
+> >  static inline void release_bp_slot(struct perf_event *bp)              { }
+> > diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+> > index f32320ac02fd..fd5cd1f9e7fc 100644
+> > --- a/kernel/events/hw_breakpoint.c
+> > +++ b/kernel/events/hw_breakpoint.c
+> > @@ -604,6 +604,35 @@ void unregister_wide_hw_breakpoint(struct perf_event * __percpu *cpu_events)
+> >  }
+> >  EXPORT_SYMBOL_GPL(unregister_wide_hw_breakpoint);
+> >
+> > +/**
+> > + * hw_breakpoint_is_used - check if breakpoints are currently used
+> > + *
+> > + * Returns: true if breakpoints are used, false otherwise.
+> > + */
+> > +bool hw_breakpoint_is_used(void)
+> > +{
+> > +       int cpu;
+> > +
+> > +       if (!constraints_initialized)
+> > +               return false;
+> > +
+> > +       for_each_possible_cpu(cpu) {
+> > +               for (int type = 0; type < TYPE_MAX; ++type) {
+> > +                       struct bp_cpuinfo *info = get_bp_info(cpu, type);
+> > +
+> > +                       if (info->cpu_pinned)
+> > +                               return true;
+> > +
+> > +                       for (int slot = 0; slot < nr_slots[type]; ++slot) {
+> > +                               if (info->tsk_pinned[slot])
+> > +                                       return true;
+> > +                       }
+> > +               }
+> > +       }
+> > +
+> > +       return false;
+> > +}
+> > +
+> >  static struct notifier_block hw_breakpoint_exceptions_nb = {
+> >         .notifier_call = hw_breakpoint_exceptions_notify,
+> >         /* we need to be notified first */
+> > diff --git a/kernel/events/hw_breakpoint_test.c b/kernel/events/hw_breakpoint_test.c
+> > index 433c5c45e2a5..5ced822df788 100644
+> > --- a/kernel/events/hw_breakpoint_test.c
+> > +++ b/kernel/events/hw_breakpoint_test.c
+> > @@ -294,7 +294,14 @@ static struct kunit_case hw_breakpoint_test_cases[] = {
+> >  static int test_init(struct kunit *test)
+> >  {
+> >         /* Most test cases want 2 distinct CPUs. */
+> > -       return num_online_cpus() < 2 ? -EINVAL : 0;
+> > +       if (num_online_cpus() < 2)
+> > +               return -EINVAL;
+> > +
+> > +       /* Want the system to not use breakpoints elsewhere. */
+> > +       if (hw_breakpoint_is_used())
+> > +               return -EBUSY;
+> > +
+> > +       return 0;
+> >  }
+> >
+> >  static void test_exit(struct kunit *test)
+> > @@ -308,6 +315,9 @@ static void test_exit(struct kunit *test)
+> >                 kthread_stop(__other_task);
+> >                 __other_task = NULL;
+> >         }
+> > +
+> > +       /* Verify that internal state agrees that no breakpoints are in use. */
+> > +       KUNIT_EXPECT_FALSE(test, hw_breakpoint_is_used());
+> >  }
+> >
+> >  static struct kunit_suite hw_breakpoint_test_suite = {
+> > --
+> > 2.37.0.rc0.161.g10f37bed90-goog
+> >

@@ -2,142 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF52A57BA80
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C2057BA8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 17:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiGTPgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 11:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S235498AbiGTPh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 11:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiGTPge (ORCPT
+        with ESMTP id S230149AbiGTPh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 11:36:34 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E672FFE1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:36:32 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id p26-20020a1c545a000000b003a2fb7c1274so1608493wmi.1
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zFzxx0z8pNKG8GQJAfngz4sVC9qlk18q5vOjkBqe41U=;
-        b=DYrPq68GLvItPSkdP1iRNBYH4r5u/VU/4hctkVb0AVbcaQWnJsmyhV+rknu569NDUk
-         o7570gvxSR4qDT3uhb+ulSVY+WSiEdCJbZadpKchRpy6M635wQ9YE67mAnZUAWX1PnNI
-         DjNpTzN0Y0TYNZC3PGOvGwGPqMFNmf4cPeuBrU+UtoTwmSoU4uFqkOb6Q23CbwC31DYm
-         6Auh+eOKqXfChxALoWTNJB43P4J40PWWdA3VkjuZAUxIw8SVlAQTZTV1vhkY+PvURc4J
-         UMWq3tKkmc5PYODk1J3VfQ1VSqbU6F5BnYiUhV36SYcKWKqn21Xj+zFl5lBXYXLRh/7e
-         lihA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zFzxx0z8pNKG8GQJAfngz4sVC9qlk18q5vOjkBqe41U=;
-        b=BrEf2L0/XHiV6uxBLBSslCxQf9BhByw17gausx5/xlfG/ujDJkc6a4fXOJ0IcwBN9o
-         nv6l5k2vY9wMw5p9v9QLe52Yt4TZU451JTiBufIBk6CQ41eB4g0zEb7VbG33CFvoSC0e
-         e3J1oYiT/HTkuQQqFc4Gp4xOpYaG/rscEGWw5MN6P7qGthVbcToepj99rC6mFoeOBKV5
-         sPa9P2dGnks8sBaWrG8oD7HQiGO5K+SDyYd4ZTrweZFZVkJmfbM+WJd7Ckfs6igxriqP
-         fZ8znkxyaWkxAbBAE68niud5VXiMaK5tnSzc9hhYG5cS0tZISEJtU6i3LjCLc9frGqmJ
-         b4TA==
-X-Gm-Message-State: AJIora/qXrfz3rfNmtG+UtZltx8IvcbtsrtHnoSu68P+9KiXYQa8d2Lp
-        QuuRGVGR64RtTn6VhxlrVBfbXvg7DpX7LfZx7DPSOA==
-X-Google-Smtp-Source: AGRyM1sLPBoh5pqmDtw4wPynZIZtaL2Bw4Asqc9TmCk9ZgFTDI88pTO3drYJSFHLXbjukiaxsv4+tBmZLSdj518/fak=
-X-Received: by 2002:a05:600c:2854:b0:3a3:1551:d7d with SMTP id
- r20-20020a05600c285400b003a315510d7dmr4199687wmb.174.1658331391068; Wed, 20
- Jul 2022 08:36:31 -0700 (PDT)
+        Wed, 20 Jul 2022 11:37:57 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEB22D1FF
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 08:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=V/xzlzJ2En0RfavcxGxC6aJIZSgKDkwEkGCffOphqEY=; b=mEFyQtTwYgvoGI/1+lAaTC39uq
+        NHfPQsXqILjEe95WJFPHMOfRGZDfEvLToJYmrpBe5KcBi9/R9rbJeh3ZsEOGy120tCD2i/0n6pwJr
+        hkKlvXOYoaA6i2rFT8yAgKxlt+F4crQxc8sTNQ/sTxw6hXUKDD+NBaSaYwY9W+9PQjqBJZ3VPzvw7
+        9fvukjyHpmsNFVklV1gu/uhW+ZbEigaPXK6lE4cPfal4aiSCplvWJPWUemGYe+pJJTeYiOHceYjTv
+        WAaBocQ9JAlhajbEz6Ss5XwtJEzEH19T8YzvDEjCzrzSlC2snx4qUhy+Vdo9erFlmvVJFtS5GFcxN
+        LezZSxAw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEBli-005LkK-HN; Wed, 20 Jul 2022 15:37:47 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D2E06980BBE; Wed, 20 Jul 2022 17:37:44 +0200 (CEST)
+Date:   Wed, 20 Jul 2022 17:37:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] locking/lockdep: use pr_warn_once for reporting that
+ lockdep is turned off
+Message-ID: <YtghSIB5wNVfnxoX@worktop.programming.kicks-ass.net>
+References: <6acb20ea-7f9c-120a-c8c5-9ee5d511d766@I-love.SAKURA.ne.jp>
+ <YtgYNzrLuHIcz6R5@worktop.programming.kicks-ass.net>
+ <ba7d4412-2dfb-2e4c-52fc-ba8c305abaa8@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-11-elver@google.com>
-In-Reply-To: <20220704150514.48816-11-elver@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 20 Jul 2022 08:36:18 -0700
-Message-ID: <CAP-5=fX7DoS0eDk=FS14CRjU_UPinH2+0+uD1JPXFMtrb7o1eA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/14] locking/percpu-rwsem: Add percpu_is_write_locked()
- and percpu_is_read_locked()
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba7d4412-2dfb-2e4c-52fc-ba8c305abaa8@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 8:07 AM Marco Elver <elver@google.com> wrote:
->
-> Implement simple accessors to probe percpu-rwsem's locked state:
-> percpu_is_write_locked(), percpu_is_read_locked().
->
-> Signed-off-by: Marco Elver <elver@google.com>
-> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+On Thu, Jul 21, 2022 at 12:13:31AM +0900, Tetsuo Handa wrote:
+> On 2022/07/20 23:59, Peter Zijlstra wrote:
+> > On Wed, Jul 20, 2022 at 10:01:36PM +0900, Tetsuo Handa wrote:
+> >> debug_show_all_locks() can be called for multiple times if
+> >> hung_task_call_panic = 0. No need to repeat this message.
+> > 
+> > That one extra line is really a problem?
+> 
+> When lockdep is turned off during boot or some testing, khungtaskd repeats
+> this message, and I feel this repeated message useless.
 
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
-
-> ---
-> v2:
-> * New patch.
-> ---
->  include/linux/percpu-rwsem.h  | 6 ++++++
->  kernel/locking/percpu-rwsem.c | 6 ++++++
->  2 files changed, 12 insertions(+)
->
-> diff --git a/include/linux/percpu-rwsem.h b/include/linux/percpu-rwsem.h
-> index 5fda40f97fe9..36b942b67b7d 100644
-> --- a/include/linux/percpu-rwsem.h
-> +++ b/include/linux/percpu-rwsem.h
-> @@ -121,9 +121,15 @@ static inline void percpu_up_read(struct percpu_rw_semaphore *sem)
->         preempt_enable();
->  }
->
-> +extern bool percpu_is_read_locked(struct percpu_rw_semaphore *);
->  extern void percpu_down_write(struct percpu_rw_semaphore *);
->  extern void percpu_up_write(struct percpu_rw_semaphore *);
->
-> +static inline bool percpu_is_write_locked(struct percpu_rw_semaphore *sem)
-> +{
-> +       return atomic_read(&sem->block);
-> +}
-> +
->  extern int __percpu_init_rwsem(struct percpu_rw_semaphore *,
->                                 const char *, struct lock_class_key *);
->
-> diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-> index 5fe4c5495ba3..213d114fb025 100644
-> --- a/kernel/locking/percpu-rwsem.c
-> +++ b/kernel/locking/percpu-rwsem.c
-> @@ -192,6 +192,12 @@ EXPORT_SYMBOL_GPL(__percpu_down_read);
->         __sum;                                                          \
->  })
->
-> +bool percpu_is_read_locked(struct percpu_rw_semaphore *sem)
-> +{
-> +       return per_cpu_sum(*sem->read_count) != 0;
-> +}
-> +EXPORT_SYMBOL_GPL(percpu_is_read_locked);
-> +
->  /*
->   * Return true if the modular sum of the sem->read_count per-CPU variable is
->   * zero.  If this sum is zero, then it is stable due to the fact that if any
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
+I feel you should then fix the issue that lockdep is complaining about
+instead of making the message go away.

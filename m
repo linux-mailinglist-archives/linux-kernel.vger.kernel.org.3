@@ -2,72 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D538E57BD4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9480957BD4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 19:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiGTR5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 13:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S230455AbiGTR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 13:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGTR5D (ORCPT
+        with ESMTP id S230000AbiGTR5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 13:57:03 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0CB24951;
-        Wed, 20 Jul 2022 10:57:01 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id p26-20020a1c545a000000b003a2fb7c1274so1857780wmi.1;
-        Wed, 20 Jul 2022 10:57:01 -0700 (PDT)
+        Wed, 20 Jul 2022 13:57:31 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F79624951
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:57:29 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id s204so11812087oif.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 10:57:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yHRPEwie+kv37rjFQaOMTG39vvbswHQIAL5qJKmAXZY=;
-        b=jHHP9ovMBvjF1Tz2XGF2O9uZIGYUh8uL3ccc1JcN0v8LL9vnt/CinMBSagcmUsB0Ha
-         xOMPdfqLVfRR8KBTjUW3q4gJAiq9/Bj+xwq8vM5i2NJGbuUau3prMQFvEfK187IPw3sP
-         ldn0KN2bm3rURRez4YtZRMTE9BhOk8rkB5kG+pW/VAI5cr1aqPSKS04ccEoqIYJR6tVy
-         Zuw3v3nP+Hb8a3vYv7VyQIgdXWHzjqNVBfIr4tnV16bQGFafAwIaR6YmH3qdWmpIj3MM
-         3fM2UpyV4zp2x+GfoPfTe10AJahSclTCRwIrWIwAQ6N64nxC0rG4BGVOnfxlHcdrCw9m
-         qR4Q==
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sgTGIjyBI1Xr5kae9NtvGuvQ751HmdoxY8E4y+04bcM=;
+        b=VuHxsoUeYLJU3NL2MX0RU5EKmY7niw3Gwan0qSjKNQ+yHnuScPtLYptfI3fKI++uAI
+         ZeZ8nICnyQhmL1BpX4XQNXKRt39zlzUQWbx08LgEuCZ1tvXne53ZQf6SRKJVlIm3SYkA
+         mL9xo1GRlnkK1+eByxB1hXq6hJ+8ib0Bj6Vz4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yHRPEwie+kv37rjFQaOMTG39vvbswHQIAL5qJKmAXZY=;
-        b=EMrO5uBrQB3xChamH6PnF9txpk3mUXEH8WZqoIZT19muEMEGx1ZoZq3QQaW5wr1h30
-         e+mZGNU5v6QuJ8cMwSZ05k5+Ou4rqNu+NRzLQ9T25y7u8kTglp9UTQKOFCmtlQ9Tx+1T
-         npDMPOAhdjscfk1PqrcLyirSsa+CvyqjtbbDWLlI4lLT6pYVOr9aYqUogHToaBOL+1gM
-         d7jldZ+/C+GFfr34gIYaCF2kyls1VJCcK7H7NSL122VPbvwSKfTEMdm3HceGE/Q1PjVb
-         42raYm4IgY8aSMMo0dloWih4L5kK9n4gxI5+z+y9olNh7ZO0nwWlclx2WvRPRP/n+/0u
-         FiFw==
-X-Gm-Message-State: AJIora+0P0BdKZHTew0ijJ2G3uDOvM1BWXp1933KOxHqVg5+GRyWSI+z
-        p7tjgelnPI8DLbN0pFmkFdiKXbqsemLI01GLLdw=
-X-Google-Smtp-Source: AGRyM1um84Qx2d3VuA14HmTjZeEjFriFAeIWZ5gQkmqsDi89xqJ0we4+Qh4P4848RYr0tzuTinlTksVyONKTxWesIwg=
-X-Received: by 2002:a05:600c:3ac3:b0:3a0:45b6:7efb with SMTP id
- d3-20020a05600c3ac300b003a045b67efbmr4906657wms.183.1658339820479; Wed, 20
- Jul 2022 10:57:00 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=sgTGIjyBI1Xr5kae9NtvGuvQ751HmdoxY8E4y+04bcM=;
+        b=KBAmND7IHGC9+H1dT2Qmxa7AYgEvlnlnaDdhmyrQ481sne+EEEklvwitgURakrPV/o
+         kp2Bni8gKpm1mPO3RAzNA6u3GSKZEH5MzRPnyMuanuDO5sIT0xvg33t9KPaS5HA0hz5n
+         EV9AmTYIkfRYZwH+bJ5FpM6nXWEt8ggS7zjFNAV7F/J0lfuzQ1BQ5SGKW+dWFvjq0dSD
+         jCtjv1qUhfMhlSubrahk5xX1RIcQvDRQB4/TYwV45AMtVnKo1TmUbLk3DB/vgmcw8PW8
+         qRBVPhWEwooYgrJzh+34eGWy4Is4e/xKWDPQ8uuHpqzpOl4QygurLlUVhCru1nnadsLg
+         hguw==
+X-Gm-Message-State: AJIora9ArPXQemQ6c1OHC2yOvctSNWsbMRS4DP9fJUyCUFwNWwzsbBMx
+        TquEcOg737OOomCaS0ZQhoJXpg==
+X-Google-Smtp-Source: AGRyM1vYLqC/RqZeHtVvHjmMhC0sp3QLz3G9l0Bz1+cMerVnWbXkdjUx5gjtpb0zt3sMy6gYkJFMPg==
+X-Received: by 2002:a05:6808:302:b0:33a:78cc:2fa7 with SMTP id i2-20020a056808030200b0033a78cc2fa7mr2939761oie.50.1658339848625;
+        Wed, 20 Jul 2022 10:57:28 -0700 (PDT)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id y7-20020a544d87000000b0032f7605d1a3sm6795335oix.31.2022.07.20.10.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 10:57:27 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Wed, 20 Jul 2022 12:57:26 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, Jiri Slaby <jslaby@suse.cz>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Tejas Upadhyay <tejas.upadhyay@intel.com>,
+        Anusha Srivatsa <anusha.srivatsa@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
+Message-ID: <YthCBl4SORA2BfDv@fedora64.linuxtx.org>
+References: <20220719114714.247441733@linuxfoundation.org>
+ <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
+ <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com>
+ <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
+ <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220719171900.289265-1-robdclark@gmail.com> <20220719171900.289265-10-robdclark@gmail.com>
- <c5beb186-96d3-59d7-fad8-987bb8125de1@collabora.com>
-In-Reply-To: <c5beb186-96d3-59d7-fad8-987bb8125de1@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 20 Jul 2022 10:57:21 -0700
-Message-ID: <CAF6AEGusbnsY8fyFetkov5bRPd0vidTyBm8QL7a56TwYZ+NdRQ@mail.gmail.com>
-Subject: Re: [PATCH v2 09/13] drm/gem: Add LRU/shrinker helper
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,PDS_BTC_ID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,27 +88,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 11:56 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> On 7/19/22 20:18, Rob Clark wrote:
-> > +void
-> > +drm_gem_lru_move_tail_locked(struct drm_gem_lru *lru, struct drm_gem_object *obj)
-> > +{
-> > +     WARN_ON(!mutex_is_locked(lru->lock));
->
-> Nit: What about lockdep_assert_held_once(&lru->lock->base)) ?
+On Wed, Jul 20, 2022 at 10:28:33AM -0700, Linus Torvalds wrote:
+> [ Adding PeterZ and Jiri to the participants. ]
+> 
+> Looks like 5.18.13 added that commit 9bb2ec608a20 ("objtool: Update
+> Retpoline validation") but I don't see 3131ef39fb03 ("x86/asm/32: Fix
+> ANNOTATE_UNRET_SAFE use on 32-bit") in that list.
 
-ahh, good point.. I've switched it locally
+It should be noted that the build doesn't fail, it just warns.
+I am guessing the 32bit failure is what promoted someone to look at
+the logs to begin with and notice the warn initially. I just verified
+that it exists in our builds of 5.18.13-rc1, but not on mainline builds.
+I am gueesing it is because commit 9bb2ec608a20 ("objtool: Update Retpoline
+validation") should be followed up with at least commit f43b9876e857c
+("x86/retbleed: Add fine grained Kconfig knobs")
 
-BR,
--R
+Justin
 
-> Otherwise, looks good! I'll use it for the DRM-SHMEM shrinker after
-> completing the work on the dma-buf locks.
->
-> Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->
-> --
-> Best regards,
-> Dmitry
+> That said, 3131ef39fb03 should have fixed a completely different issue
+> on 32-bit, not the "naked ret" thing.
+> 
+> PeterZ, Jiri, any ideas? Limited quoting below, see thread at
+> 
+>   https://lore.kernel.org/all/CA+G9fYsJBBbEXowA-3kxDNqcfbtcqmxBrEnJSkCnLUsMzNfJZw@mail.gmail.com/
+> 
+> for more details.
+> 
+>               Linus
+> 
+> On Wed, Jul 20, 2022 at 9:37 AM Justin Forbes <jforbes@fedoraproject.org> wrote:
+> >
+> > On Tue, Jul 19, 2022 at 12:32:48PM -0700, Linus Torvalds wrote:
+> > > On Tue, Jul 19, 2022 at 10:57 AM Naresh Kamboju
+> > > <naresh.kamboju@linaro.org> wrote:
+> > > >
+> > > >
+> > > > 2. Large number of build warnings on x86 with gcc-11,
+> > > > I do not see these build warnings on mainline,
+> > > ..
+> > > > 'naked' return found in RETPOLINE build
+> > >
+> > > Hmm. Does your cross-compiler support '-mfunction-return=thunk-extern'?
+> > >
+> > > Your build does magic things with 'scripts/kconfig/merge_config.sh',
+> > > and I'm wondering if you perhaps end up enabling CONFIG_RETHUNK with a
+> > > compiler that doesn't actually support it, or something like that?
+> >
+> > I am seeing these 'naked' return found in RETPOLINE build on the
+> > standard fedora 36 toolchain as well. No cross compiling, nothing fancy.
+> > These were not seen with mainline, or with the 5.18.12-rc1 retbleed
+> > patches.
+> >
+> > Justin

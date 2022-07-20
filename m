@@ -2,256 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF3957B785
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E5C57B78A
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 15:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236736AbiGTNaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 09:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S231282AbiGTNbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 09:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240449AbiGTNaJ (ORCPT
+        with ESMTP id S229493AbiGTNbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 09:30:09 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034E565545
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:29:49 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id f24-20020a1cc918000000b003a30178c022so1348158wmb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DK1JQpkmSmLaPYH2VON507TntVLKPJOm+v6NeqoLJWM=;
-        b=NbQT+2v4JM6NlAKDlXu8hnf2t6kvTJUAF6wCxYAR7cgqyxTdWVQzCbYhx7/BMdCByy
-         ln8U64JRNkIz/AZZc2+xeMmCzYiHhuC2B3t2efDBv7sLKZWuEmQppFmDVbXC7y+XAdRw
-         J7S1l7rXQDoR3d8PRqglLlAjbe2c8RPy6kv9PXj3nxmTrMTCGoA2lNtxry4PuaFUi8wT
-         lIp5muDMKkr9jm0Ta0Q8OhTvjHuKHuhS9Y6p/V5ZKYZTP0Wi6ZP5pz4dOVebwcRLLPyV
-         T5bmH20bTYQEjZf6Q5oksYmDdZvrM738FVURukBLjJPaSHHgV2xtH7bdArOmA1ZHksnt
-         /X4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DK1JQpkmSmLaPYH2VON507TntVLKPJOm+v6NeqoLJWM=;
-        b=581Ba8QOtrob1b73nm5t7eC8jD66h/njSutyBjabkeTZvxOUE4r994ScAnc/eJ4Myx
-         NDRc0bgtC4moee+B46aJZBcnxyML5BnNRYN7QbOfQG12GJ7jEwPIBwezqs0tYdzLqczq
-         XJZXrVjn1xlW4mFGSWCiY9nIgn690URPHmpEEJucMOpgDO5zJRJo2tTBwh8FQ30pkztC
-         kYiSpDssihI3l6oXwXLC+v4w8r90N4kL4Ys1CBMAJ7Jj3J+YE52V3cwdhcUiMTmxpS/m
-         5AVYF+G+mMT7oiNUqm4F1Yk0hjYFOlO71U1NuVFLwcV/IxgqJmqxTW4GJLFHQ4dZRMRO
-         sLQw==
-X-Gm-Message-State: AJIora9QtKoYk8iI8V0t3TShPfhXnNGbwh4NRn8D/1HFF141akmSvlQi
-        +32gI0tWVbCocGaYOuiwJz8Bgg==
-X-Google-Smtp-Source: AGRyM1sw+SHCwJS/cMVhYgkOZ7Jkh8g5qCEQsE4blkm+DE0L1zRJRaOicmhj9zlyoyKY52uI83rD2g==
-X-Received: by 2002:a7b:c401:0:b0:3a2:ca58:85bc with SMTP id k1-20020a7bc401000000b003a2ca5885bcmr3942374wmi.156.1658323787988;
-        Wed, 20 Jul 2022 06:29:47 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id u4-20020a05600c00c400b0039c454067ddsm2456381wmm.15.2022.07.20.06.29.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 06:29:47 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 14:29:45 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 4/5] mfd: sm5703: Add support for SM5703 MFD
-Message-ID: <YtgDSelfobu/a/be@google.com>
-References: <20220423085319.483524-1-markuss.broks@gmail.com>
- <20220423085319.483524-5-markuss.broks@gmail.com>
- <Yqj+aUNLC00Tcu49@google.com>
- <5498bf71-66a5-957e-ed3d-13e68b982562@gmail.com>
- <YtUXFTx1+vSrXx70@google.com>
- <295e1809-f6f2-ca31-5c36-be133ffdc93b@gmail.com>
- <Yte7Tgq3w8fowTYA@google.com>
- <4be15cff-b0af-8671-57aa-6567c0206715@gmail.com>
+        Wed, 20 Jul 2022 09:31:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B039A22B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 06:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658323892; x=1689859892;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=97Krov47Nh6N4s4IwW10q57tVLfvL2pyX4++1iM6ROo=;
+  b=GXg30PO3Ww0zNnphb4fxV016A52L/0FdqXKF9t2mcTlLtVAAefpBisVb
+   FXIp43V9p6jsdMdRWZ24TWBaafhg/6pMRqLnpl/DDKv3HO5Or5IGgZw3O
+   9GV1k2iS4Ux9RKqwRHnXIWZyRsMdHnpXoWNBqlXdcsNqpo0UDrxf39FPW
+   ROyr5dIz4kXbwzyeOj2MrDrQ/bO26zvi1r83xdGYDiMdg9O0clC3i7dWb
+   MPtMUIK3+b+6VaXNbgkTYMZhmrHSkAPCrKMlv4E7m+YmL5ssTRXnonMXo
+   nPt4fYRMUf+9dSAR2xKsH6BkZajkjjn9p01qWst5dptyVs8cXuhLQyFLR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="266553020"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="266553020"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 06:31:20 -0700
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="573305428"
+Received: from tgeorge1-mobl.amr.corp.intel.com (HELO [10.212.79.208]) ([10.212.79.208])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 06:31:19 -0700
+Message-ID: <514f0fda-9475-e163-fd64-0bc675dd3447@linux.intel.com>
+Date:   Wed, 20 Jul 2022 08:31:18 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4be15cff-b0af-8671-57aa-6567c0206715@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] ALSA: hda: Skip creating captures in SOF context
+Content-Language: en-US
+To:     Jaroslav Kysela <perex@perex.cz>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     tiwai@suse.com, Bard Liao <yung-chuan.liao@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20220719144753.252231-1-kai.heng.feng@canonical.com>
+ <bd59b06a-de49-2a1a-d2a2-351957fec6d0@perex.cz>
+ <CAAd53p6ru7CJ=pJ2knCL5pgU_Y+nA=yTPscKk225zTD-fv4qQg@mail.gmail.com>
+ <34bddb2f-dc57-c08c-358e-26cf7824c203@perex.cz>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <34bddb2f-dc57-c08c-358e-26cf7824c203@perex.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 20 Jul 2022, Markuss Broks wrote:
 
-> Hi Lee,
+
+On 7/20/22 02:52, Jaroslav Kysela wrote:
+> Dne 20. 07. 22 v 3:45 Kai-Heng Feng napsal(a):
+>> On Tue, Jul 19, 2022 at 11:41 PM Jaroslav Kysela <perex@perex.cz> wrote:
+>>>
+>>> Dne 19. 07. 22 v 16:47 Kai-Heng Feng napsal(a):
+>>>> On HP laptops that use SOF driver for DMIC, the micmute LED doesn't
+>>>> light up when mic is muted after commit 9b014266ef8a ("ASoC: SOF:
+>>>> topology: use new sound control LED layer").
+>>>>
+>>>> The micmute LED itself is still working via sysfs, but it doesn't follow
+>>>> mute anymore. That's because unlike vendors like Dell and Lenovo, HP
+>>>> laptops use HDA codec to control mute LEDs instead of ACPI. So on HP
+>>>> laptops, both SOF and HDA create captures with
+>>>> SNDRV_CTL_ELEM_ACCESS_MIC_LED access, snd_ctl_led_set_state() considers
+>>>> there are two different kcontrols and one of them is not muted.
+>>>
+>>> It does not mean that it's a wrong behavior. When both controls are muted, the
+>>> LED should be turned on. It just requires that all inputs are off (and it may
+>>> be the default - probably we can set in UCM or so). If you turn the "Capture
+>>> Switch" off in amixer / alsamixer, do things work as expected ?
+>>
+>> Yes. When all captures are muted the micmute LED is on.
+>>
+>>>
+>>>> So skip creating captures for HDA when it's called from SOF, the
+>>>> captures are already handled by SOF.
+>>>
+>>> The capture controls are for other inputs like external analog microphone. If
+>>> it is required to suppress the MIC LED for some hardware, just skip the
+>>> "spec->mic_mute_led = 1" assignment in hda_generic.c . Also, the check
+>>> "codec->core.type != HDA_DEV_ASOC" is not sufficient, because you don't know,
+>>> if the topology really sets the MIC LED flag.
+>>
+>> AFAIK the external analog microphone on DMIC laptop is driven by SOF driver too.
+>> If those capture controls are indeed needed for external analog mics,
+>> use UCM to mute them by default won't work either.
 > 
-> On 7/20/22 11:22, Lee Jones wrote:
-> > On Tue, 19 Jul 2022, Markuss Broks wrote:
-> > 
-> > > Hi Lee,
-> > > 
-> > > On 7/18/22 11:17, Lee Jones wrote:
-> > > > On Fri, 15 Jul 2022, Markuss Broks wrote:
-> > > > 
-> > > > > Hi Lee,
-> > > > > 
-> > > > > Sorry to bother you again, but I've got additional questions while I was
-> > > > > preparing the next version of the series:
-> > > > > 
-> > > > > On 6/15/22 00:32, Lee Jones wrote:
-> > > > > > On Sat, 23 Apr 2022, Markuss Broks wrote:
-> > > > > > 
-> > > > > > > Silicon Mitus SM5703 is a multi-function device, meant to be
-> > > > > > Please avoid using the term MFD.
-> > > > > > 
-> > > > > > How is the device described in the data-sheet?
-> > > > > > 
-> > > > > > What do you mean by "meant to be"?
-> > > > > > 
-> > > > > > > used in mobile devices. It has several modules: LDO, BUCK regulators,
-> > > > > > Modules or functions?
-> > > > > > 
-> > > > > > > charger circuit, flash LED driver, a fuel gauge for monitoring the battery
-> > > > > > > and a MUIC USB switcher. The MUIC and fuel gauge parts are separate in that
-> > > > > > > they use separate i2c lines to communicate with the device, while charger
-> > > > > > "I2C"
-> > > > > > 
-> > > > > > > circuit, LED driver and regulators are on the main i2c line the device is
-> > > > > > > controlled with.
-> > > > > > > 
-> > > > > > > Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> > > > > > > ---
-> > > > > > >     MAINTAINERS                |   8 +++
-> > > > > > >     drivers/mfd/Kconfig        |  13 +++++
-> > > > > > >     drivers/mfd/Makefile       |   1 +
-> > > > > > >     drivers/mfd/sm5703.c       |  78 +++++++++++++++++++++++++++
-> > > > > > >     include/linux/mfd/sm5703.h | 105 +++++++++++++++++++++++++++++++++++++
-> > > > > > >     5 files changed, 205 insertions(+)
-> > > > > > >     create mode 100644 drivers/mfd/sm5703.c
-> > > > > > >     create mode 100644 include/linux/mfd/sm5703.h
-> > > > > > > 
-> > > > > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > > > > index 6157e706ed02..6125ed1a3be4 100644
-> > > > > > > --- a/MAINTAINERS
-> > > > > > > +++ b/MAINTAINERS
-> > > > > > > @@ -18172,6 +18172,14 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
-> > > > > > >     F:	include/linux/srcu*.h
-> > > > > > >     F:	kernel/rcu/srcu*.c
-> > > > > > > +SM5703 MFD DRIVER
-> > > > > > > +M:	Markuss Broks <markuss.broks@gmail.com>
-> > > > > > > +S:	Maintained
-> > > > > > > +F:	Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-> > > > > > > +F:	Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
-> > > > > > > +F:	drivers/mfd/sm5703.c
-> > > > > > > +F:	drivers/regulator/sm5703-regulator.c
-> > > > > > > +
-> > > > > > >     SMACK SECURITY MODULE
-> > > > > > >     M:	Casey Schaufler <casey@schaufler-ca.com>
-> > > > > > >     L:	linux-security-module@vger.kernel.org
-> > > > > > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > > > > > index 3b59456f5545..c13a99ceae99 100644
-> > > > > > > --- a/drivers/mfd/Kconfig
-> > > > > > > +++ b/drivers/mfd/Kconfig
-> > > > > > > @@ -1237,6 +1237,19 @@ config MFD_SM501
-> > > > > > >     	  interface. The device may be connected by PCI or local bus with
-> > > > > > >     	  varying functions enabled.
-> > > > > > > +config MFD_SM5703
-> > > > > > > +	tristate "Silicon Mitus SM5703 MFD"
-> > > > > > > +	depends on I2C
-> > > > > > > +	depends on OF
-> > > > > > > +	select MFD_CORE
-> > > > > > > +	select REGMAP_I2C
-> > > > > > > +	help
-> > > > > > > +	  This is the core driver for the Silicon Mitus SM5703 multi-function
-> > > > > > Please drop the MFD term, as above.
-> > > > > > 
-> > > > > > > +	  device. This device is meant to be used in phones and it has numerous
-> > > > > > "meant to be"?
-> > > > > > 
-> > > > > > > +	  modules, including LED controller, regulators, fuel gauge, MUIC and
-> > > > > > Either "an LED controller" or "LED controllers"
-> > > > > > 
-> > > > > > Same with "charger circuit" below.
-> > > > > > 
-> > > > > > > +	  charger circuit. It also support muxing a serial interface over USB
-> > > > > > "supports"
-> > > > > > 
-> > > > > > What kind of serial?
-> > > > > > 
-> > > > > > > +	  data lines.
-> > > > > > > +
-> > > > > > >     config MFD_SM501_GPIO
-> > > > > > >     	bool "Export GPIO via GPIO layer"
-> > > > > > >     	depends on MFD_SM501 && GPIOLIB
-> > > > > > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > > > > > > index 858cacf659d6..ca8b86736a36 100644
-> > > > > > > --- a/drivers/mfd/Makefile
-> > > > > > > +++ b/drivers/mfd/Makefile
-> > > > > > > @@ -275,3 +275,4 @@ rsmu-i2c-objs			:= rsmu_core.o rsmu_i2c.o
-> > > > > > >     rsmu-spi-objs			:= rsmu_core.o rsmu_spi.o
-> > > > > > >     obj-$(CONFIG_MFD_RSMU_I2C)	+= rsmu-i2c.o
-> > > > > > >     obj-$(CONFIG_MFD_RSMU_SPI)	+= rsmu-spi.o
-> > > > > > > +obj-$(CONFIG_MFD_SM5703)	+= sm5703.o
-> > > > > > > diff --git a/drivers/mfd/sm5703.c b/drivers/mfd/sm5703.c
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..7f9838149051
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/drivers/mfd/sm5703.c
-> > > > > > > @@ -0,0 +1,78 @@
-> > > > > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > > > > +
-> > > > > > > +#include <linux/err.h>
-> > > > > > > +#include <linux/delay.h>
-> > > > > > > +#include <linux/gpio/consumer.h>
-> > > > > > > +#include <linux/i2c.h>
-> > > > > > > +#include <linux/mfd/core.h>
-> > > > > > > +#include <linux/mfd/sm5703.h>
-> > > > > > > +#include <linux/module.h>
-> > > > > > > +#include <linux/of_device.h>
-> > > > > > > +#include <linux/regmap.h>
-> > > > > > > +
-> > > > > > > +static const struct mfd_cell sm5703_devs[] = {
-> > > > > > > +	{ .name = "sm5703-regulator", },
-> > > > > > > +};
-> > > > > > Where are the rest of the child drivers?
-> > > > > Should those devices still be present even though there's no driver for them
-> > > > > (yet) ? I have a WIP version of driver for almost every function, but I
-> > > > > currently lack time to get them done.
-> > > > Without them the driver-set is useless, no?
-> > > > 
-> > > > We try to refrain from applying dead code.
-> > > > 
-> > > > A lot of it has a tendency to stay that way.
-> > > Well, in my opinion, having just the regulator driver is already useful
-> > > enough: my board (Samsung Galaxy J5 (2015) ) uses one of LDO outputs for
-> > > powering the touchscreen. Touchscreen is kind of vital functionality for a
-> > > phone so I decided to upstream parts that are necessary for it first and
-> > > finish up other stuff later. It's not the only board that uses SM5703's
-> > > regulators for supplying all different kinds of hardware, either.
+> Could you describe this ? I though that only DMIC is handled by SOF when HDA
+> codec is in the system. There is a separate analog codec for external analog
+> microphone or the HDA codec is somehow connected to SOF/DSP ? If so, how ?
 
-> > Upstreaming functionality which is useful on its own is fine, but that
-> > doesn't tick all of the boxes to justify an MFD.  This is a lot of
-> > code which is hard to justify if it only registers a Regulator driver.
+The HDA codec is connected in the same way in all cases, there's no
+hardware/electrical/routing difference.
 
-> Do you think I should hold on this series until I have other things done?
-> Alternatively, I could make the regulator driver standalone, dedicated, but
-> then when I'd add other functionality I'd have to redo it and add the MFD
-> driver back, that I believe would be quite annoying from maintainers' and
-> sanity perspective. The other functions left on the main control I2C are
-> also not really "vital" to device's functionality (Flash LED and charger),
-> so the regulator function makes the most sense to be available first, which
-> was my motivation behind upstreaming that first.
+When used, the SOF driver will handle ALL links, be they DMIC or
+HDAudio. The difference for HDaudio is that instead of a single DMA
+transfer (DDR->FIFO), we have a first 'Host' DMA into the DSP SRAM, some
+processing and a second 'Link' DMA from DSP SRAM to the HDaudio FIFO
+(reversed flow for capture).
 
-What's the reason for this being an MFD in the first place?
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

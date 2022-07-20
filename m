@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F121757BB5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF63157BB5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 18:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiGTQXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 12:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S233704AbiGTQYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 12:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiGTQXE (ORCPT
+        with ESMTP id S230451AbiGTQYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:23:04 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E82558F1;
-        Wed, 20 Jul 2022 09:23:03 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id q43-20020a17090a17ae00b001f1f67e053cso2737349pja.4;
-        Wed, 20 Jul 2022 09:23:03 -0700 (PDT)
+        Wed, 20 Jul 2022 12:24:32 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B8B6171B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:31 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id b11so33941333eju.10
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 09:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=EpBkigZDhPdfhuuO8b2HxzOasU8CDpEiB+HyHCiHWt8=;
+        b=po6uQkahdsywOnTCYjRZtZ5cGXET4QXRdc5MHCTVuF8bIYosXLvwPTjBs4D+F0koMa
+         p+gBuIsV5KTiJL1YdkWt+zgO1ocpRVE1QfOKajsYeJUai6m5aSk+CO+pPnpppk4lwEFV
+         syFqKpsUbCAZ0Bzev4H2WGMlgIpub1TlAK5hz9ZzFPTG41KhRd3RKuFKCe2TIjha4/Y8
+         onsxE/7xTjYTCARe8PgFOQroCHe0hUswEJvZqPKWuMlB1Lnd3JV7QjHqBud0JgpWmLZ9
+         X2NeIuiR2dHNXxiBflLOn4qYMFIwWy6Rbxs8wUYsHDwGVZpTor30Aw/nHHrpxvyo8YLI
+         v+iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j/7Nq86xQuLWi18Sbz5otnLeWqHxkZyGTPSeuAnlhKs=;
-        b=tHGTDDtwPk4MKkQXQKOeE7YnQNmvp1lzmsR73XIs0SPh/+eBY+eGa09w7rZWYzmbT0
-         mXTWOz1XUpTSISBnhFPtbr+I2BvL9gcBJCH+zrjiSbC0XhcAPYTVzHJQicNp3JgRrdEv
-         Ycn/h1a2Ty0XC0783XrX696KscNIuWHH9V5mif0ugr5Xp4L32YCQatJYAa7dongNm71T
-         6srgHkVnbyOkQwqlclWQLMrp1mcUggvW/AG2WLbJ9nZTW8Ll0OHMgG2QLn6pD4Su9uRq
-         HxitYUd16Lj5hEozwxWej9h6qfrPEiztMYqFjS9e/0xJugrDXLgVCobogC1V7cJ1r2mb
-         J6bg==
-X-Gm-Message-State: AJIora+v5S58jDPWFQpoSFba6oqlQSjoEoDFyzeqS4HXOJyVGgsT2WPJ
-        v8Xj/IJO/ukJYn33wRRfNf4=
-X-Google-Smtp-Source: AGRyM1tqGfJtimyYcs1bWLVlLQ6mD2g4Qr/uCJsVxrhEue2fwXlDDOikx06kNgQUciR02J9JPzCa9Q==
-X-Received: by 2002:a17:90b:164d:b0:1f0:31c1:9e88 with SMTP id il13-20020a17090b164d00b001f031c19e88mr6513725pjb.206.1658334182537;
-        Wed, 20 Jul 2022 09:23:02 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:a7e0:78fc:9269:215b? ([2620:15c:211:201:a7e0:78fc:9269:215b])
-        by smtp.gmail.com with ESMTPSA id f5-20020a170902ab8500b0016bfcf8a463sm14058884plr.289.2022.07.20.09.23.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 09:23:01 -0700 (PDT)
-Message-ID: <c4da04a9-3f3d-3e22-a59a-1ab2867a5649@acm.org>
-Date:   Wed, 20 Jul 2022 09:22:59 -0700
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=EpBkigZDhPdfhuuO8b2HxzOasU8CDpEiB+HyHCiHWt8=;
+        b=F8vMRoOa/+0uotsOfw9+UCKVvvkCgSyIOa7GCYhrQMwwFGDLZef3S3QvOX2VcYgxGs
+         El/BD2BSN3lPoUVKtva/bQ8A/hmO5CjFX8286lTSr1oS69/18xZCac78NZ5/9epmq2Qy
+         T4YYoQJNW8SpYNUridQt/cQwDMW0jr8JQEMxCEo4u9s/LgLH1Djz/WCZZPWj6WKPJnT9
+         IVOFCag1dPFwI1dV+pmmnoLwIA88PSRUpkghEBMs93tCMr7ijdADjiwRrneDcE62SKDA
+         nmV5Mx8JdcZ0pqytTLtEJ+YwnQShe8Lx1+R5JBedELVd1j2TS4Xf9Q7+6EurPYdWoXM1
+         jRdQ==
+X-Gm-Message-State: AJIora8knC8tJ5/d7IxZ7SSI6rkcmUhNcGnc8aBoaV+VkHsNzDbOXIKi
+        J//bZXhTCylEEnC4DkaVQX4=
+X-Google-Smtp-Source: AGRyM1uh7GzYNjbzMG3aYFISLknlIn55CGjxcIrNuxKZsOMNIm+wYGrNvOlERr/NAkXe/qaxFyEd5Q==
+X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id hr1-20020a1709073f8100b006ff1a3d9092mr36057925ejc.319.1658334269693;
+        Wed, 20 Jul 2022 09:24:29 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id gj10-20020a170907740a00b00726c0e63b94sm8000447ejc.27.2022.07.20.09.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 09:24:29 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 18:24:22 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] staging: vt6655: Convert multiline macro to static
+ function
+Message-ID: <cover.1658333350.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] block/mq-deadline: Prioritize first request
-Content-Language: en-US
-To:     Wang You <wangyoua@uniontech.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, jaegeuk@kernel.org, fio@vger.kernel.org,
-        ming.lei@redhat.com, wangxiaohua@uniontech.com
-References: <20220720093048.225944-1-wangyoua@uniontech.com>
- <20220720093048.225944-3-wangyoua@uniontech.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220720093048.225944-3-wangyoua@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 02:30, Wang You wrote:
-> The test hardware is:
-> Kunpeng-920, HW-SAS3508+(MG04ACA400N * 2), RAID0.
-Please also provide performance numbers for a single hard disk and with 
-no RAID controller between the host and the hard disk.
+Convert multiline macro to static function.
+Multiline macros are not liked by kernel community.
 
-Thanks,
+Tested with vt6655 on mini PCI Module
+Transferred this patch over wlan connection of vt6655
 
-Bart.
+Philipp Hortmann (3):
+  staging: vt6655: Rename byOrgValue to reg_value in a macro
+  staging: vt6655: Rename MACvClearStckDS
+  staging: vt6655: Convert macro vt6655_mac_clear_stck_ds to function
+
+ drivers/staging/vt6655/mac.c | 13 ++++++++++++-
+ drivers/staging/vt6655/mac.h |  8 --------
+ 2 files changed, 12 insertions(+), 9 deletions(-)
+
+-- 
+2.37.1
+

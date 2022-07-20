@@ -2,305 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA5557BFDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 23:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F35F57BFDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 00:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiGTVyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 17:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S229698AbiGTWAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 18:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiGTVyx (ORCPT
+        with ESMTP id S229496AbiGTWAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 17:54:53 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931DA4BD2E;
-        Wed, 20 Jul 2022 14:54:52 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id x64so7060087iof.1;
-        Wed, 20 Jul 2022 14:54:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9VtPYe9lxt2UYt12yH0kPTLc+/Ee0+kkWogkf/Ga1mw=;
-        b=i8rqcZV6XQkXW4YfuOGgNNIpBX9QBmwyKY6ddOmZTvpZXYukb/Wyw54uUEVbzx5cFZ
-         umfB39SzK1RIykPakiwkrMwx61224GuiiOpZTjC5aMzq8iDFg9szCiwXFEj3EX1DeU+S
-         rahT/FZCXOBsDb6JbQEY0PFIDfUvGfr+LqpZCknytTJSLtOHWTtyrVnxEAvHqQQ2QEHp
-         mexAae4nSs2CC09HpBGIpgsFQgx0lDd1GeB8SvTOJ/1t09+LHduk8brgaCe1cX12fn/x
-         q4VHpVhvBwwPpWBoRrnZD7Q+VSzjSLqzFvZPAckR8HzOJ69O5zHnn6G76S5Xp+1F8WdO
-         5s5w==
-X-Gm-Message-State: AJIora88Jy94Fvj/oFbvLut+L4bqJqVpmJscUpiTmN5/t7DfRCgFW3dQ
-        thGqEggmoQBBd7UjvJshYb2aGr/vQQ==
-X-Google-Smtp-Source: AGRyM1upcvDTAAL1zmHltREfx75k37wJhs626FQ2HRpFiNYFrVvR0kPJ3xCx+8W6U72I7S1mnTDAdg==
-X-Received: by 2002:a02:9426:0:b0:33f:14ad:6931 with SMTP id a35-20020a029426000000b0033f14ad6931mr20260682jai.62.1658354091655;
-        Wed, 20 Jul 2022 14:54:51 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id l19-20020a056e02067300b002dc616d93acsm77966ilt.28.2022.07.20.14.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 14:54:51 -0700 (PDT)
-Received: (nullmailer pid 4049317 invoked by uid 1000);
-        Wed, 20 Jul 2022 21:54:49 -0000
-Date:   Wed, 20 Jul 2022 15:54:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Max Buchholz <max.buchholz@gmx.de>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>,
-        David Heidelberg <david@ixit.cz>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: nvidia,tegra20-kbc: Convert to
- json-schema
-Message-ID: <20220720215449.GA4031847-robh@kernel.org>
-References: <20220715131422.51143-1-max.buchholz@gmx.de>
+        Wed, 20 Jul 2022 18:00:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3722B18E12;
+        Wed, 20 Jul 2022 15:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FiZLfbIHMEm5bs2l9a0O1tE0/R/MU//G5wqi4u7xynA=; b=UEqYJftgqJBF0z+MKxvXZRo8NX
+        ppYxh/pP5a/Tn6On9z3mIURCgdZa6jsVZcbyRqYabMmvuMST3uOmKGrtJk0G3LSgwbEBGs0o42E77
+        +rBWTcE31Gy2gJ6oiJoCsWHY/TM5LTHL+IB51mwLYjtV9lVYpTC0RyhxctZSbQlEAfH0txtJKy9Zm
+        EgWnt6BbhzmHBB4Z09/CF6W0s7huui2t+RF6rBeS7UxTHpu3XBpO1aOplKWVcW9l2zKV2zo23/U23
+        C6MG9NYo+4wSteHYbhzzleXizWeohaCLVfQtlDgBDX+Cs4+3/E77fiTfy9KZjIMRTfsZS0lgiinUs
+        KYaUsO1Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEHjp-00Epie-SM; Wed, 20 Jul 2022 22:00:14 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 76B29980BBE; Thu, 21 Jul 2022 00:00:13 +0200 (CEST)
+Date:   Thu, 21 Jul 2022 00:00:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Justin Forbes <jforbes@fedoraproject.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Tejas Upadhyay <tejas.upadhyay@intel.com>,
+        Anusha Srivatsa <anusha.srivatsa@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
+Message-ID: <Yth67Ubo7PatL0AR@worktop.programming.kicks-ass.net>
+References: <20220719114714.247441733@linuxfoundation.org>
+ <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
+ <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com>
+ <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
+ <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
+ <YthCBl4SORA2BfDv@fedora64.linuxtx.org>
+ <Yth31qsO1nDN4WLB@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220715131422.51143-1-max.buchholz@gmx.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yth31qsO1nDN4WLB@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 03:14:21PM +0200, Max Buchholz wrote:
-> From: Max Buchholz <Max.Buchholz@gmx.de>
+On Wed, Jul 20, 2022 at 11:47:02PM +0200, Peter Zijlstra wrote:
+> On Wed, Jul 20, 2022 at 12:57:26PM -0500, Justin Forbes wrote:
+> > On Wed, Jul 20, 2022 at 10:28:33AM -0700, Linus Torvalds wrote:
+> > > [ Adding PeterZ and Jiri to the participants. ]
+> > > 
+> > > Looks like 5.18.13 added that commit 9bb2ec608a20 ("objtool: Update
+> > > Retpoline validation") but I don't see 3131ef39fb03 ("x86/asm/32: Fix
+> > > ANNOTATE_UNRET_SAFE use on 32-bit") in that list.
+> > 
+> > It should be noted that the build doesn't fail, it just warns.
+> > I am guessing the 32bit failure is what promoted someone to look at
+> > the logs to begin with and notice the warn initially. I just verified
+> > that it exists in our builds of 5.18.13-rc1, but not on mainline builds.
+> > I am gueesing it is because commit 9bb2ec608a20 ("objtool: Update Retpoline
+> > validation") should be followed up with at least commit f43b9876e857c
+> > ("x86/retbleed: Add fine grained Kconfig knobs")
 > 
-> This converts the Nvidia Tegra keyboard controller bindings to YAML
-> and fix them up a bit.
+> Still updateing the stable repro to see what the actual code looks like,
+> but that warning seems to suggest the -mfunction-return=thunk-extern
+> compiler argument went missing.
 > 
-> Reviewed-by: David Heidelberg <david@ixit.cz>
-> Signed-off-by: Max Buchholz <max.buchholz@gmx.de>
-> ---
-> v3:
->  - fixed maxItems for array properties
-> v2:
->  - rework the file according to the feedback
-> 
->  .../bindings/input/nvidia,tegra20-kbc.txt     |  55 ---------
->  .../bindings/input/nvidia,tegra20-kbc.yaml    | 111 ++++++++++++++++++
->  .../bindings/power/wakeup-source.txt          |   2 +-
->  3 files changed, 112 insertions(+), 56 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
->  create mode 100644 Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
-> deleted file mode 100644
-> index 1faa7292e21f..000000000000
-> --- a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
-> +++ /dev/null
-> @@ -1,55 +0,0 @@
-> -* Tegra keyboard controller
-> -The key controller has maximum 24 pins to make matrix keypad. Any pin
-> -can be configured as row or column. The maximum column pin can be 8
-> -and maximum row pins can be 16 for Tegra20/Tegra30.
-> -
-> -Required properties:
-> -- compatible: "nvidia,tegra20-kbc"
-> -- reg: Register base address of KBC.
-> -- interrupts: Interrupt number for the KBC.
-> -- nvidia,kbc-row-pins: The KBC pins which are configured as row. This is an
-> -  array of pin numbers which is used as rows.
-> -- nvidia,kbc-col-pins: The KBC pins which are configured as column. This is an
-> -  array of pin numbers which is used as column.
-> -- linux,keymap: The keymap for keys as described in the binding document
-> -  devicetree/bindings/input/matrix-keymap.txt.
-> -- clocks: Must contain one entry, for the module clock.
-> -  See ../clocks/clock-bindings.txt for details.
-> -- resets: Must contain an entry for each entry in reset-names.
-> -  See ../reset/reset.txt for details.
-> -- reset-names: Must include the following entries:
-> -  - kbc
-> -
-> -Optional properties, in addition to those specified by the shared
-> -matrix-keyboard bindings:
-> -
-> -- linux,fn-keymap: a second keymap, same specification as the
-> -  matrix-keyboard-controller spec but to be used when the KEY_FN modifier
-> -  key is pressed.
-> -- nvidia,debounce-delay-ms: delay in milliseconds per row scan for debouncing
-> -- nvidia,repeat-delay-ms: delay in milliseconds before repeat starts
-> -- nvidia,ghost-filter: enable ghost filtering for this device
-> -- wakeup-source: configure keyboard as a wakeup source for suspend/resume
-> -		 (Legacy property supported: "nvidia,wakeup-source")
-> -
-> -Example:
-> -
-> -keyboard: keyboard {
-> -	compatible = "nvidia,tegra20-kbc";
-> -	reg = <0x7000e200 0x100>;
-> -	interrupts = <0 85 0x04>;
-> -	clocks = <&tegra_car 36>;
-> -	resets = <&tegra_car 36>;
-> -	reset-names = "kbc";
-> -	nvidia,ghost-filter;
-> -	nvidia,debounce-delay-ms = <640>;
-> -	nvidia,kbc-row-pins = <0 1 2>;    /* pin 0, 1, 2 as rows */
-> -	nvidia,kbc-col-pins = <11 12 13>; /* pin 11, 12, 13 as columns */
-> -	linux,keymap = <0x00000074
-> -			0x00010067
-> -			0x00020066
-> -			0x01010068
-> -			0x02000069
-> -			0x02010070
-> -			0x02020071>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
-> new file mode 100644
-> index 000000000000..8e1eaad2fdc1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
-> @@ -0,0 +1,111 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/input/nvidia,tegra20-kbc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Nvidia Tegra keyboard controller
-> +
-> +maintainers:
-> +  - Jon Hunter <jonathanh@nvidia.com>
-> +  - Sameer Pujar <spujar@nvidia.com>
-> +
-> +description: The key controller has maximum 24 pins to make matrix keypad. Any pin
-> +  can be configured as row or column.
-> +
-> +allOf:
-> +  - $ref: "/schemas/input/matrix-keymap.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: nvidia,tegra30-kbc
-> +          - const: nvidia,tegra20-kbc
-> +      - items:
-> +          - const: nvidia,tegra20-kbc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  nvidia,kbc-row-pins:
-> +    minItems: 1
-> +    maxItems: 16
-> +    description: KBC pins which are configured as row
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> For all the files objtool complains about, does the V=1 build output
+> show that option?
 
-items:
-  maximum: 24 (or 23?)
+Ok, I'm now looking at stable-rc/linux-5.18.y which reports itself as:
 
-Also, put 'description' either first or last, not in the middle of 
-constraints.
+VERSION = 5
+PATCHLEVEL = 18
+SUBLEVEL = 13
+EXTRAVERSION = -rc1
 
-> +
-> +  nvidia,kbc-col-pins:
-> +    minItems: 1
-> +    maxItems: 8
-> +    description: KBC pins which are configured as column
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+and I'm most terribly confused... it has the objtool patch to validate
+return thunks, *however*, I'm not seeing any actual retbleed mitigations
+*anywhere*.
 
-Same here.
-
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: kbc
-> +
-> +  linux,fn-keymap:
-
-While mentioned in matrix-keymap.yaml, it is not defined as a schema 
-anywhere. It needs a type. I guess here is fine as this doesn't seem 
-to be used much.
-
-> +    description: a secondary keymap to be used when the KEY_FN modifier key is pressed
-> +
-> +  nvidia,debounce-delay-ms:
-> +    description: delay in milliseconds per row scan for debouncing
-> +
-> +  nvidia,repeat-delay-ms:
-> +    description: delay in milliseconds before repeat starts
-> +
-> +  nvidia,ghost-filter:
-> +    description: enable ghost filtering for this device
-> +    type: boolean
-> +
-> +  wakeup-source:
-> +    description: configure keyboard as a wakeup source for suspend/resume
-> +
-> +  nvidia,wakeup-source:
-> +    description: configure keyboard as a wakeup source for suspend/resume
-> +    deprecated: true
-> +    type: boolean
-
-Deprecated for 7 years. Could be dropped?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - nvidia,kbc-row-pins
-> +  - nvidia,kbc-col-pins
-> +  - linux,keymap
-> +  - clocks
-> +  - resets
-> +  - reset-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    kbc@7000e200 {
-
-keyboard@...
-
-> +        compatible = "nvidia,tegra20-kbc";
-> +        reg = <0x7000e200 0x100>;
-> +        interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks = <&tegra_car 36>;
-> +        resets = <&tegra_car 36>;
-> +        reset-names = "kbc";
-> +        nvidia,ghost-filter;
-> +        nvidia,debounce-delay-ms = <640>;
-> +        nvidia,kbc-row-pins = <0 1 2>;    /* pin 0, 1, 2 as rows */
-> +        nvidia,kbc-col-pins = <11 12 13>; /* pin 11, 12, 13 as columns */
-> +        linux,keymap = <0x00000074
-> +                        0x00010067
-> +                        0x00020066
-> +                        0x01010068
-> +                        0x02000069
-> +                        0x02010070
-> +                        0x02020071>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/power/wakeup-source.txt b/Documentation/devicetree/bindings/power/wakeup-source.txt
-> index cfd74659fbed..728f88de371d 100644
-> --- a/Documentation/devicetree/bindings/power/wakeup-source.txt
-> +++ b/Documentation/devicetree/bindings/power/wakeup-source.txt
-> @@ -25,7 +25,7 @@ List of legacy properties and respective binding document
->  				Documentation/devicetree/bindings/input/touchscreen/ads7846.txt
->  5. "linux,keypad-wakeup"	Documentation/devicetree/bindings/input/qcom,pm8xxx-keypad.txt
->  6. "linux,input-wakeup"		Documentation/devicetree/bindings/input/samsung-keypad.txt
-> -7. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.txt
-> +7. "nvidia,wakeup-source"	Documentation/devicetree/bindings/input/nvidia,tegra20-kbc.yaml
-> 
->  Examples
->  --------
-> --
-> 2.37.0
-> 
-> 
+How, what, why!?

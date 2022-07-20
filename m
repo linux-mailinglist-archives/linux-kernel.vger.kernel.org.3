@@ -2,98 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BD057B11D
+	by mail.lfdr.de (Postfix) with ESMTP id EE25557B11F
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Jul 2022 08:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240023AbiGTG2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 02:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
+        id S231127AbiGTG3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 02:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240037AbiGTG2h (ORCPT
+        with ESMTP id S240081AbiGTG3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 02:28:37 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDCD4F69B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:33 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id u19so19799599lfs.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZvCLm5C4QwrCvu37BPIif9T1t6U/v2ik0pFn7OOeGZc=;
-        b=EDcfoiOEv5QDtsjnmB+++fYI+PYvq75KR2vME7ZodpkSxQyxdgKu5xeKDYtiB+BBnl
-         I8WRvH+SfCLC6PwLlYlptY/tcl9taDXlyncqeTDLoK2P+1XZIvUJV2LUgusNHDpEDggf
-         SGt7Co6UnZ5Lq80j1ZC4MVG31B3eO394wWqFRKreaipg+Nnkt1xsowSg70s2ETyFxjzi
-         zkLxIZlFburRLBAh7eM5UbrYuCwIiC+n3A3TnTnvAV40xQB+yleW8tObS64Q+crcntZa
-         /mTE0MGAqlWL/EY4kCOSFPHxTxj6N6/AoP/2mmwHO0zlD4E+niQ4ht5AedKGDeO01s7F
-         IlIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZvCLm5C4QwrCvu37BPIif9T1t6U/v2ik0pFn7OOeGZc=;
-        b=TIkWOuZu1wGyilhRzYfoqveKCeR5me2qb1ojMiJjqVs+baFnNHqM46W4FjKFSTaOHL
-         YUjietpDtbe0ZrknwNMSTZZAHHRuMcdKPyc5BzKarpw/6SNJXFDtslglTrihAd6o++vH
-         6ZH4262wU1OI3NX+BBRH9Z9uESceoAN421i8mRACgwaVQ8rRgmzyQAqcwi1DO4QeAw17
-         Nt4SWpWoDf5ebof8dTYFM3bvGkSg5ORQtqdbk6PtF4aUa5RTg+VHZDRf5YY/QhUjlVa1
-         33QqF1j3YR1UCnPnnZLiTOrcJvQif9oIDu+jHvMC4oVEdmVY3EXhka1nv/tB2B3tcWzc
-         7Bng==
-X-Gm-Message-State: AJIora/djDlwE7o9Mcj4g+zULgboT/FbCvxJBdeT+XQAAjPuid0HDzOu
-        puWL6bBNLJ6DQxbLY3aPnVOJ7A==
-X-Google-Smtp-Source: AGRyM1u+UekMgIs8vfRrABHoyjMOU+hs7YnksYxtseaC7qX43voYEegkZQl8Z5I17mIeh0wH55NsCg==
-X-Received: by 2002:ac2:5972:0:b0:489:cb5d:9c4b with SMTP id h18-20020ac25972000000b00489cb5d9c4bmr18270243lfp.45.1658298511658;
-        Tue, 19 Jul 2022 23:28:31 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id 11-20020ac25f0b000000b0047fb3ea0659sm3604186lfq.292.2022.07.19.23.28.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Jul 2022 23:28:31 -0700 (PDT)
-Message-ID: <d506a523-6638-78f3-6a7d-2d9312302403@linaro.org>
-Date:   Wed, 20 Jul 2022 08:28:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] dt-bindings: media: mediatek-jpeg-encoder: Add MT8188
- compatible string
-Content-Language: en-US
-To:     Jianhua Lin <jianhua.lin@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220719100214.2096-1-jianhua.lin@mediatek.com>
- <20220719100214.2096-2-jianhua.lin@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220719100214.2096-2-jianhua.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 20 Jul 2022 02:29:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12BE4AD6B
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Jul 2022 23:29:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2831034440;
+        Wed, 20 Jul 2022 06:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658298556; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zjvb1z9IaC7dIvN5NfShCXWS4nB1nq2Q+yZq/HTN4ws=;
+        b=sW/YrLKdNt/bnrOZ/QGfDKLpOts5h/51TWldGyLbRxZOaBJ9+n+o+C4oS/yjOb4nS+ai8Q
+        YVVWdYqHEhkFEQ6y9J085E4wMOpDsOl2y+xAUet774ktuH7aY+b4MhT6F6b6a4bySpjvvo
+        eYP0tJemWgpJcqukwK7RXU3gDmq/qHI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658298556;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zjvb1z9IaC7dIvN5NfShCXWS4nB1nq2Q+yZq/HTN4ws=;
+        b=jDMZixzs58wV9EsIAKPNw3wj4tTOSffRpZRyIgnv0WlXf0zkGzYFmR+vvY8CLE+0toM/JW
+        BnfiKHhs81V7ZbAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D947713AA1;
+        Wed, 20 Jul 2022 06:29:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XD4tNLug12IlPwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 20 Jul 2022 06:29:15 +0000
+Date:   Wed, 20 Jul 2022 08:29:15 +0200
+Message-ID: <87zgh45mbo.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, tiwai@suse.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda: Skip creating captures in SOF context
+In-Reply-To: <CAAd53p6ru7CJ=pJ2knCL5pgU_Y+nA=yTPscKk225zTD-fv4qQg@mail.gmail.com>
+References: <20220719144753.252231-1-kai.heng.feng@canonical.com>
+        <bd59b06a-de49-2a1a-d2a2-351957fec6d0@perex.cz>
+        <CAAd53p6ru7CJ=pJ2knCL5pgU_Y+nA=yTPscKk225zTD-fv4qQg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/2022 12:02, Jianhua Lin wrote:
-> Add compatible for MT8188 jpeg encoder.
+On Wed, 20 Jul 2022 03:45:37 +0200,
+Kai-Heng Feng wrote:
 > 
-> Signed-off-by: Jianhua Lin <jianhua.lin@mediatek.com>
-> ---
->  .../devicetree/bindings/media/mediatek-jpeg-encoder.yaml         | 1 +
->  1 file changed, 1 insertion(+)
+> On Tue, Jul 19, 2022 at 11:41 PM Jaroslav Kysela <perex@perex.cz> wrote:
+> >
+> > Dne 19. 07. 22 v 16:47 Kai-Heng Feng napsal(a):
+> > > On HP laptops that use SOF driver for DMIC, the micmute LED doesn't
+> > > light up when mic is muted after commit 9b014266ef8a ("ASoC: SOF:
+> > > topology: use new sound control LED layer").
+> > >
+> > > The micmute LED itself is still working via sysfs, but it doesn't follow
+> > > mute anymore. That's because unlike vendors like Dell and Lenovo, HP
+> > > laptops use HDA codec to control mute LEDs instead of ACPI. So on HP
+> > > laptops, both SOF and HDA create captures with
+> > > SNDRV_CTL_ELEM_ACCESS_MIC_LED access, snd_ctl_led_set_state() considers
+> > > there are two different kcontrols and one of them is not muted.
+> >
+> > It does not mean that it's a wrong behavior. When both controls are muted, the
+> > LED should be turned on. It just requires that all inputs are off (and it may
+> > be the default - probably we can set in UCM or so). If you turn the "Capture
+> > Switch" off in amixer / alsamixer, do things work as expected ?
 > 
+> Yes. When all captures are muted the micmute LED is on.
+> 
+> >
+> > > So skip creating captures for HDA when it's called from SOF, the
+> > > captures are already handled by SOF.
+> >
+> > The capture controls are for other inputs like external analog microphone. If
+> > it is required to suppress the MIC LED for some hardware, just skip the
+> > "spec->mic_mute_led = 1" assignment in hda_generic.c . Also, the check
+> > "codec->core.type != HDA_DEV_ASOC" is not sufficient, because you don't know,
+> > if the topology really sets the MIC LED flag.
+> 
+> AFAIK the external analog microphone on DMIC laptop is driven by SOF driver too.
+> If those capture controls are indeed needed for external analog mics,
+> use UCM to mute them by default won't work either.
+> 
+> Skip "mic_mute_led = 1" can be hard because it's still needed for legacy HDA.
+> If checking "HDA_DEV_ASOC" isn't sufficient, is it possible to just
+> check "card" in snd_ctl_led_set_state(), instead of kcontrols?
+> I think it's reasonable to assume a card has just one speaker LED and
+> one microphone LED.
+
+Hm, but skipping the whole create_capture_mixers() call doesn't sound
+right, either.  I thought there are still external mic controls via
+codec, and those would be skipped by this patch?
+
+If the mic-mute LED is the problem, it should be rather checked in the
+caller of snd_hda_gen_add_micmute_led_cdev(), i.e. patch_realtek.c,
+instead, IMO.
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+thanks,
 
-
-Best regards,
-Krzysztof
+Takashi

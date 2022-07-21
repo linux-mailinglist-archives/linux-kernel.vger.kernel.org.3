@@ -2,122 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A1F57C547
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81B557C54A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbiGUH0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
+        id S232421AbiGUH1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiGUH0s (ORCPT
+        with ESMTP id S229632AbiGUH1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:26:48 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FACC2A976;
-        Thu, 21 Jul 2022 00:26:47 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id ku18so816064pjb.2;
-        Thu, 21 Jul 2022 00:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=SbJNWDK0M1wZHtYDZkc0Drlqr/h/SXJ/tlHRQqdUMTI=;
-        b=QFi8yqEQ5BCdBvt7z88bOmlZHc0lwDxg5wcNQFIPxxwaEB6Rfut3WF/5WGv0BjPfCD
-         PwkhgCDonQIpdDCNigz5ItDxHS6cF6ACoaoeovjzSj7e7V6R13asngrSWcW8kPPxNyha
-         QMnFeAA8Ug+5Sif0n6TKW8z0noESbAo4Eff9jjtvkaPGh4g9EQEMCINvAiyH7bzndWbw
-         0qIxLxHDJn6Fvt8Zwc4wuhSRlsVCW0pF17Yv/BEdke0B9oKAILCB/jME7B6EoHtPC81T
-         ynQ2+fYFqxkYnoDG8viYwWQremU2QOsYAMppg+S8LkBMuAU9kmhxSoW5sXO2VM9QjPb3
-         LVUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SbJNWDK0M1wZHtYDZkc0Drlqr/h/SXJ/tlHRQqdUMTI=;
-        b=K8MM3krDhGeTI4eatZUpPC5lYWwv2tviEK2s2sk67ku8Xtd6WcZhPQhH0vA+OOM4Sc
-         CSEic0wSZ5MMMWRH6FpspPNz5HD8Nb0mndjrw0+WbSNYX/pkwjb99ZTfmt1DRot5hU41
-         vYF0sti1wmbuZU+dkTxBVXRRen6ZPIpuKoRZBYvi3Orm2e1CRE5nqtiUec+tMGEw8/I5
-         L523OFib4SNE+x/zsJzJLiaXnkqIoTn6ECApUF9+wOSUKUmPRrwKsojG3GceNtBYXitG
-         vhwNDIAZHiNUSzIVLwkhO6kJaLrmwFFEEVPh5WO7jZxOh5ors2/pUUSyC//4D4cYGUdb
-         TP7Q==
-X-Gm-Message-State: AJIora/5nJFdHz0eT0U+YD7FohUQzWmRQ2qP8YgKbdxlSGlsraU9yx1u
-        l23b2ejhRnUbhaG5fE1gGeU=
-X-Google-Smtp-Source: AGRyM1uKv5lo6lhHFNo8GXb7apy5wTjjn/W2WK2c5zABVP5gMPNn07FionuaFPivoDdlLKhi1X1s2g==
-X-Received: by 2002:a17:902:f650:b0:15f:3a10:a020 with SMTP id m16-20020a170902f65000b0015f3a10a020mr42495170plg.61.1658388407001;
-        Thu, 21 Jul 2022 00:26:47 -0700 (PDT)
-Received: from [172.25.58.87] ([203.246.171.161])
-        by smtp.gmail.com with ESMTPSA id q8-20020a63d608000000b00411b3d2bcadsm754934pgg.25.2022.07.21.00.26.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 00:26:46 -0700 (PDT)
-Message-ID: <98780f47-dadd-577e-8baa-322c9503d825@gmail.com>
-Date:   Thu, 21 Jul 2022 16:26:42 +0900
+        Thu, 21 Jul 2022 03:27:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBED7C18F;
+        Thu, 21 Jul 2022 00:27:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B15CE61E1E;
+        Thu, 21 Jul 2022 07:27:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EA4C3411E;
+        Thu, 21 Jul 2022 07:27:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658388447;
+        bh=E86sEscD6n6MV3EJ+eMBIPzwz8N7mGyl3gJcNS5o4qk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gMsgaZvA9OzBQVa8Y1PrOISNc5G4qb8fuY93pILVCU7xEm33Y1m3mQR230WSGrJNw
+         QjClB4bR/Ea5SpTrpmWfue53Vu49whzZTdUmjGMavifvp/PjTZE35oYnoOWVnOGAIx
+         McUiSRCeiDxwF63XdWWMqxFN/b47m3zfrkfSy9QeABWKnlwr/C9pUbzjBKs++0xgI4
+         cn5iwQT2G+dIq19e24dBVvcXQtQeIedaSqE2B6zfPWC6bcDRoyBkFV24Qw5F3u5DYe
+         UfvG9CM8PBQ3lSs9opSn+gZGbJ49NOyW+MqRj7mzJrCQ3AywChfJa56FnjmawSKZHR
+         dijjGUtm7gfdA==
+Date:   Thu, 21 Jul 2022 10:27:23 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Cheng Xu <chengyou@linux.alibaba.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kai Shen <kaishen@linux.alibaba.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
+Message-ID: <Ytj/27UCySaronBO@unreal>
+References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
+ <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
+ <20220712090110.GL2338@kadam>
+ <20220719125434.GG5049@ziepe.ca>
+ <20220719130125.GB2316@kadam>
+ <7075158a-64c1-8f69-7de1-9a60ee914f05@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH -next] amt: Return true/false (not 1/0) from bool function
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220721024443.112126-1-yang.lee@linux.alibaba.com>
-From:   Taehee Yoo <ap420073@gmail.com>
-In-Reply-To: <20220721024443.112126-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7075158a-64c1-8f69-7de1-9a60ee914f05@wanadoo.fr>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
-Thanks a lot for this work!
+On Tue, Jul 19, 2022 at 05:36:36PM +0200, Christophe JAILLET wrote:
+> Le 19/07/2022 � 15:01, Dan Carpenter a �crit�:
+> > On Tue, Jul 19, 2022 at 09:54:34AM -0300, Jason Gunthorpe wrote:
+> > > On Tue, Jul 12, 2022 at 12:01:10PM +0300, Dan Carpenter wrote:
+> > > 
+> > > > Best not to use any auto-formatting tools.  They are all bad.
+> > > 
+> > > Have you tried clang-format? I wouldn't call it bad..
+> > 
+> > I prefered Christophe's formatting to clang's.  ;)
+> > 
+> > regards,
+> > dan carpenter
+> > 
+> > 
+> 
+> Hi,
+> 
+> checkpatch.pl only gives hints and should not blindly be taken as THE
+> reference, but:
+> 
+>   ./scripts/checkpatch.pl -f --strict
+> drivers/infiniband/hw/erdma/erdma_cmdq.c
+> 
+> gives:
+>   CHECK: Lines should not end with a '('
+>   #81: FILE: drivers/infiniband/hw/erdma/erdma_cmdq.c:81:
+>   +	cmdq->comp_wait_bitmap = devm_bitmap_zalloc(
+> 
+>   total: 0 errors, 0 warnings, 1 checks, 493 lines checked
+> 
+> (some other files in the same directory also have some checkpatch
+> warning/error)
+> 
+> 
+> 
+> Don't know if it may be an issue for maintainers.
 
-2022. 7. 21. 오전 11:44에 Yang Li 이(가) 쓴 글:
- > Return boolean values ("true" or "false") instead of 1 or 0 from bool
- > functions. This fixes the following warnings from coccicheck:
- >
+We don't run with --strict. It is indeed very subjective.
 
-commit 30e22a6ebca0 ("amt: use workqueue for gateway side message 
-handling") is not yet merged into net-next branch.
-So, this patch can't be applied to net-next right now.
+Thanks
 
- > ./drivers/net/amt.c:901:9-10: WARNING: return of 0/1 in function 
-'amt_queue_event' with return type bool
- >
- > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
- > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
- > ---
- >   drivers/net/amt.c | 4 ++--
- >   1 file changed, 2 insertions(+), 2 deletions(-)
- >
- > diff --git a/drivers/net/amt.c b/drivers/net/amt.c
- > index febfcf2d92af..2ff53e73f10f 100644
- > --- a/drivers/net/amt.c
- > +++ b/drivers/net/amt.c
- > @@ -898,7 +898,7 @@ static bool amt_queue_event(struct amt_dev *amt, 
-enum amt_event event,
- >   	spin_lock_bh(&amt->lock);
- >   	if (amt->nr_events >= AMT_MAX_EVENTS) {
- >   		spin_unlock_bh(&amt->lock);
- > -		return 1;
- > +		return true;
- >   	}
- >
- >   	index = (amt->event_idx + amt->nr_events) % AMT_MAX_EVENTS;
- > @@ -909,7 +909,7 @@ static bool amt_queue_event(struct amt_dev *amt, 
-enum amt_event event,
- >   	queue_work(amt_wq, &amt->event_wq);
- >   	spin_unlock_bh(&amt->lock);
- >
- > -	return 0;
- > +	return false;
- >   }
- >
- >   static void amt_secret_work(struct work_struct *work)
-
-Thanks a lot!
-Taehee Yoo
+> 
+> CJ

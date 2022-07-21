@@ -2,144 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E082557CE56
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7050C57CE59
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiGUO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S232431AbiGUO5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbiGUO5L (ORCPT
+        with ESMTP id S231639AbiGUO51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:57:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A613A1F2F5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658415429;
+        Thu, 21 Jul 2022 10:57:27 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9358686C39;
+        Thu, 21 Jul 2022 07:57:23 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 22:57:12 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1658415441;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FtBAxFvMFDzgwHndzmBu4PFBZ+QVw2pSEVvuBlD9/k8=;
-        b=BqCWGctikk5zy6sYbqQRXkgZ/lunPvr8GPyOM5ZJkmxh8SaL6WMHuj/4Wi57bP6FVrWKt8
-        InjcQxduIXJM29O4t6gsNaAJSKehlc8RTbZ2UJzh4fwIaK8j+Ilb1XpPJgYZ/YXYijQPi8
-        Ht1edbkiEEZyOC8Wh8M+18I3ouaY8A8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-59-Gn6dFRFKMj6x1PROaP9Jag-1; Thu, 21 Jul 2022 10:57:08 -0400
-X-MC-Unique: Gn6dFRFKMj6x1PROaP9Jag-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83FD31019C96;
-        Thu, 21 Jul 2022 14:57:07 +0000 (UTC)
-Received: from starship (unknown [10.40.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B445492CA5;
-        Thu, 21 Jul 2022 14:57:03 +0000 (UTC)
-Message-ID: <c37645cbba5a381ce409dcdb5b9d9bed02b90dd3.camel@redhat.com>
-Subject: Re: [PATCH v2 05/11] KVM: x86: emulator: update the emulation mode
- after CR0 write
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        bh=HnJf3a3R/WDtkPI32iClfgBxpOQWUhxqHOYGsZd26QY=;
+        b=GdErNbbWgx1K8NgDU1VOOBBzhzkydujCEG+dIXTO5rqjXdQ4uALRBFSQIlECtB0b10E0n1
+        l3bxbzSgFHWEgMf1CePnOVqX+Qt9nNFm6PeKldh63AQdTpGSfflTCK9+De5fgf/QoHknF1
+        0Q7yHEiFdotNEEqfXVNPX4ergSGbLms=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Tao Zhou <tao.zhou@linux.dev>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
         Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>
-Date:   Thu, 21 Jul 2022 17:57:02 +0300
-In-Reply-To: <YtlefGulMwp/WwKv@google.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
-         <20220621150902.46126-6-mlevitsk@redhat.com> <YtiUq7jm2Z1NTRv3@google.com>
-         <532c71cbca049004bd6860508fdc056ae118ab1f.camel@redhat.com>
-         <YtlefGulMwp/WwKv@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Gabriele Paoloni <gpaoloni@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
+Subject: Re: [PATCH V6 11/16] Documentation/rv: Add deterministic automata
+ instrumentation documentation
+Message-ID: <YtlpSGp590YJXT22@geo.homenetwork>
+References: <cover.1658244826.git.bristot@kernel.org>
+ <3c915ffd00f033d57dbac2f69e56a87b7b80adba.1658244826.git.bristot@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c915ffd00f033d57dbac2f69e56a87b7b80adba.1658244826.git.bristot@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-21 at 14:11 +0000, Sean Christopherson wrote:
-> On Thu, Jul 21, 2022, Maxim Levitsky wrote:
-> > On Wed, 2022-07-20 at 23:50 +0000, Sean Christopherson wrote:
-> > > On Tue, Jun 21, 2022, Maxim Levitsky wrote:
-> > > > CR0.PE toggles real/protected mode, thus its update
-> > > > should update the emulation mode.
-> > > > 
-> > > > This is likely a benign bug because there is no writeback
-> > > > of state, other than the RIP increment, and when toggling
-> > > > CR0.PE, the CPU has to execute code from a very low memory address.
-> > > > 
-> > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > > ---
-> > > >  arch/x86/kvm/emulate.c | 13 ++++++++++++-
-> > > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> > > > index 6f4632babc4cd8..002687d17f9364 100644
-> > > > --- a/arch/x86/kvm/emulate.c
-> > > > +++ b/arch/x86/kvm/emulate.c
-> > > > @@ -3659,11 +3659,22 @@ static int em_movbe(struct x86_emulate_ctxt *ctxt)
-> > > >  
-> > > >  static int em_cr_write(struct x86_emulate_ctxt *ctxt)
-> > > >  {
-> > > > -	if (ctxt->ops->set_cr(ctxt, ctxt->modrm_reg, ctxt->src.val))
-> > > > +	int cr_num = ctxt->modrm_reg;
-> > > > +	int r;
-> > > > +
-> > > > +	if (ctxt->ops->set_cr(ctxt, cr_num, ctxt->src.val))
-> > > >  		return emulate_gp(ctxt, 0);
-> > > >  
-> > > >  	/* Disable writeback. */
-> > > >  	ctxt->dst.type = OP_NONE;
-> > > > +
-> > > > +	if (cr_num == 0) {
-> > > > +		/* CR0 write might have updated CR0.PE */
-> > > 
-> > > Or toggled CR0.PG.  
-> > 
-> > I thought about it but paging actually does not affect the CPU mode.
-> 
-> Toggling CR0.PG when EFER.LME=1 (and CR4.PAE=1) switches the CPU in and out of
-> long mode.  That's why I mentioned the EFER.LMA thing below.  It's also notable
-> in that the only reason we don't have to handle CR4 here is because clearing
-> CR4.PAE while long is active causes a #GP.  
+On Tue, Jul 19, 2022 at 07:27:16PM +0200, Daniel Bristot de Oliveira wrote:
 
-I had a distinct feeling that this is related to LMA/LME which I always learn and then forget
-Now I do, and I wrote a short summary for myself to refresh my memory when I forget about this again :-)
+> +Looking at the automata definition, it is possible to see that the system
+> +and the model are expected to return to the initial state after the
+> +preempt_enable execution. Hence, it can be used to synchronize the
+> +system and the model at the initialization of the monitoring section.
+> +
+> +The start is informed via a special handle function, the
+> +"da_handle_start_event_MONITOR_event)", in this case::
 
-I'll update the comment again in v3.
+da_handle_start_event_$MONITOR(event) the same as the previous version
+should be right.
 
-Thanks a lot,
-	Best regards,
-		Maxim Levitsky
+> +
+> +  da_handle_start_event_wip(preempt_disable_wip);
 
->  
-> > E.g if you are in protected mode, instructions execute the same regardless
-> > if you have paging or not.
-> > 
-> > (There are probably some exceptions but you understand what I mean).
-> > 
-> > Best regards,
-> > 	Maxim Levitsky
-> > 
-> > > It's probably also worth noting that ->set_cr() handles side
-> > > effects to other registers, e.g. the lack of an EFER.LMA update makes this look
-> > > suspicious at first glance.
+I didn't see this in last version that the event should be preempt_enable_wip.
 
+> +
+> +So, the callback function will look like::
+> +
+> +  void handle_preempt_enable(void *data, unsigned long ip, unsigned long parent_ip)
+> +  {
+> +        da_handle_start_event_wip(preempt_enable_wip);
+> +  }
+> +
+> +Finally, the "handle_sched_waking()" will look like::
+> +
+> +  void handle_sched_waking(void *data, struct task_struct *task)
+> +  {
+> +        da_handle_event_wip(sched_waking_wip);
+> +  }
+> +
+> +And the explanation is left for the reader as an exercise.
+> +
+> +Start and Stop functions
 
+Start and Stop functions are changed to enable and disable functions.
+
+> +------------------------
+> +
+> +dot2k automatically creates two special functions::
+> +
+> +  enable_MONITOR()
+> +  disable_MONITOR()
+> +
+> +These functions are called when the monitor is enabled and disabled,
+> +respectively.
+> +
+> +They should be used to *attach* and *detach* the instrumentation to the running
+> +system. The developer must add to the relative function all that is needed to
+> +*attach* and *detach* its monitor to the system.
+> +
+> +For the wip case, these functions were named::
+> +
+> + enable_wip()
+> + disable_wip()
+> +
+> +But no change was required because: by default, these functions *attach* and
+> +*detach* the tracepoints_to_attach, which was enough for this case.

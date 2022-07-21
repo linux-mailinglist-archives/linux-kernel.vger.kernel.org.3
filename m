@@ -2,142 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D404557D6C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB08E57D6C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiGUWSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S233441AbiGUWUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiGUWSh (ORCPT
+        with ESMTP id S230304AbiGUWUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:18:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C09140ED;
-        Thu, 21 Jul 2022 15:18:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1313661D29;
-        Thu, 21 Jul 2022 22:18:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15352C3411E;
-        Thu, 21 Jul 2022 22:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658441913;
-        bh=OJi+z9qqPj6IFenYIhxZJ8HTqaeEtifwY78sUa9C01g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UuulMPQZ0Q1acIjWMIt0ZWNnOYFmGyCmGCZbuC6Ri6S+vPHJf3uodol68GDZopJPJ
-         s2uW7gJ5QcSctUYY6pU9SbWuiE7/z991gx+MZBdHtIz5v3nHwH18YX9tm5Bticg6Bj
-         RpRePvIEgWlYwa8c6gkXbQu6036hF5zbXl49LSgxhLxNrKwxJbJu900lW0XUemm/n6
-         e0kVdCUc9KV5IkGcJ/i1dmkGBfmTwmIxEdv1IsoHE6v9aZkBzFhzjU94/SHML2gqNU
-         3qV0ulyi5jcwIlMRSK5n465MRaFmLa/nlyaVOckYM8KzQ7/BgPnNaUIDhTTIqRGUIT
-         dF+Db1k4SMBRQ==
-Received: by pali.im (Postfix)
-        id E977722EF; Fri, 22 Jul 2022 00:18:29 +0200 (CEST)
-Date:   Fri, 22 Jul 2022 00:18:29 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc/fsl-pci: Fix Class Code of PCIe Root Port
-Message-ID: <20220721221829.4iq47kazcb757l2s@pali>
-References: <20220706101043.4867-1-pali@kernel.org>
+        Thu, 21 Jul 2022 18:20:48 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E598A32459
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658442044; x=1689978044;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fZ6kCAH+2wgY/q5oh18R0MM0Nc9/cIncOyti+4hq3HE=;
+  b=lLsPAVchS5DRlNvKCdnBcF5m19vS3/OItilPp4WtcO/9T6ZLHQhC0sY3
+   XiwsdeXkIPsKFy5K6XcvV6QMAN+I0bWjzKWGrg3ycR/Fies3uTV6Y+b4l
+   jopKNhVScIR07QMDM9SB7s8HoP60w4D1XGc6WFYg36orasxOEO5leXbZD
+   WXw6cji1byqZo4CR+rkt/X1fKGmW4QQsOxGQE5Z5KiWLkNcucOqH1NMBG
+   kgBNUweTY8dJe85EFAZeDfm2mGltM2Ez3TNPIIks5frAUWNwa8V2QQ7Ia
+   78f4y0XN7jbuxqPtoEu8kT0j+N+g1sQosypS9HqpiLJkClR8aqkHxr4LO
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="266958409"
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="266958409"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 15:20:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="573930595"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2022 15:20:42 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oEeXB-0000do-2r;
+        Thu, 21 Jul 2022 22:20:41 +0000
+Date:   Fri, 22 Jul 2022 06:20:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.10.y 644/7104] synclink.c:undefined
+ reference to `free_dma'
+Message-ID: <202207220652.CGm6UUjK-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220706101043.4867-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PING?
+Hi Arnd,
 
-On Wednesday 06 July 2022 12:10:43 Pali Rohár wrote:
-> By default old pre-3.0 Freescale PCIe controllers reports invalid PCI Class
-> Code 0x0b20 for PCIe Root Port. It can be seen by lspci -b output on P2020
-> board which has this pre-3.0 controller:
-> 
->   $ lspci -bvnn
->   00:00.0 Power PC [0b20]: Freescale Semiconductor Inc P2020E [1957:0070] (rev 21)
->           !!! Invalid class 0b20 for header type 01
->           Capabilities: [4c] Express Root Port (Slot-), MSI 00
-> 
-> Fix this issue by programming correct PCI Class Code 0x0604 for PCIe Root
-> Port to the Freescale specific PCIe register 0x474.
-> 
-> With this change lspci -b output is:
-> 
->   $ lspci -bvnn
->   00:00.0 PCI bridge [0604]: Freescale Semiconductor Inc P2020E [1957:0070] (rev 21) (prog-if 00 [Normal decode])
->           Capabilities: [4c] Express Root Port (Slot-), MSI 00
-> 
-> Without any "Invalid class" error. So class code was properly reflected
-> into standard (read-only) PCI register 0x08.
-> 
-> Same fix is already implemented in U-Boot pcie_fsl.c driver in commit:
-> http://source.denx.de/u-boot/u-boot/-/commit/d18d06ac35229345a0af80977a408cfbe1d1015b
-> 
-> Fix activated by U-Boot stay active also after booting Linux kernel.
-> But boards which use older U-Boot version without that fix are affected and
-> still require this fix.
-> 
-> So implement this class code fix also in kernel fsl_pci.c driver.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  arch/powerpc/sysdev/fsl_pci.c | 8 ++++++++
->  arch/powerpc/sysdev/fsl_pci.h | 1 +
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/arch/powerpc/sysdev/fsl_pci.c b/arch/powerpc/sysdev/fsl_pci.c
-> index 1011cfea2e32..bfbb8c8fc9aa 100644
-> --- a/arch/powerpc/sysdev/fsl_pci.c
-> +++ b/arch/powerpc/sysdev/fsl_pci.c
-> @@ -521,6 +521,7 @@ int fsl_add_bridge(struct platform_device *pdev, int is_primary)
->  	struct resource rsrc;
->  	const int *bus_range;
->  	u8 hdr_type, progif;
-> +	u32 class_code;
->  	struct device_node *dev;
->  	struct ccsr_pci __iomem *pci;
->  	u16 temp;
-> @@ -594,6 +595,13 @@ int fsl_add_bridge(struct platform_device *pdev, int is_primary)
->  			PPC_INDIRECT_TYPE_SURPRESS_PRIMARY_BUS;
->  		if (fsl_pcie_check_link(hose))
->  			hose->indirect_type |= PPC_INDIRECT_TYPE_NO_PCIE_LINK;
-> +		/* Fix Class Code to PCI_CLASS_BRIDGE_PCI_NORMAL for pre-3.0 controller */
-> +		if (in_be32(&pci->block_rev1) < PCIE_IP_REV_3_0) {
-> +			early_read_config_dword(hose, 0, 0, PCIE_FSL_CSR_CLASSCODE, &class_code);
-> +			class_code &= 0xff;
-> +			class_code |= PCI_CLASS_BRIDGE_PCI_NORMAL << 8;
-> +			early_write_config_dword(hose, 0, 0, PCIE_FSL_CSR_CLASSCODE, class_code);
-> +		}
->  	} else {
->  		/*
->  		 * Set PBFR(PCI Bus Function Register)[10] = 1 to
-> diff --git a/arch/powerpc/sysdev/fsl_pci.h b/arch/powerpc/sysdev/fsl_pci.h
-> index cdbde2e0c96e..093a875d7d1e 100644
-> --- a/arch/powerpc/sysdev/fsl_pci.h
-> +++ b/arch/powerpc/sysdev/fsl_pci.h
-> @@ -18,6 +18,7 @@ struct platform_device;
->  
->  #define PCIE_LTSSM	0x0404		/* PCIE Link Training and Status */
->  #define PCIE_LTSSM_L0	0x16		/* L0 state */
-> +#define PCIE_FSL_CSR_CLASSCODE	0x474	/* FSL GPEX CSR */
->  #define PCIE_IP_REV_2_2		0x02080202 /* PCIE IP block version Rev2.2 */
->  #define PCIE_IP_REV_3_0		0x02080300 /* PCIE IP block version Rev3.0 */
->  #define PIWAR_EN		0x80000000	/* Enable */
-> -- 
-> 2.20.1
-> 
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   7748091a31277b35d55bffa6fecda439d8526366
+commit: 87ae522e467e17a13b796e2cb595f9c3943e4d5e [644/7104] m68knommu: only set CONFIG_ISA_DMA_API for ColdFire sub-arch
+config: m68k-randconfig-r011-20220721 (https://download.01.org/0day-ci/archive/20220722/202207220652.CGm6UUjK-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=87ae522e467e17a13b796e2cb595f9c3943e4d5e
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout 87ae522e467e17a13b796e2cb595f9c3943e4d5e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   m68k-linux-ld: section .rodata VMA [0000000000002000,00000000005fa837] overlaps section .text VMA [0000000000000400,0000000000ffa6bf]
+   m68k-linux-ld: drivers/tty/synclink.o: in function `mgsl_release_resources':
+>> synclink.c:(.text+0xd1a): undefined reference to `free_dma'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

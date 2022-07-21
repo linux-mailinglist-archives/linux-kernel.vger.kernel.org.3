@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28D457CB97
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6232957CB9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbiGUNOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S234124AbiGUNOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbiGUNOF (ORCPT
+        with ESMTP id S234132AbiGUNOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:14:05 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B63308
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:14:04 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LDBwJ1007075
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:14:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=1UTwILVniiw7ynXES8Bhzxf+egvso18YKqvJaTMOLow=;
- b=dMLjrMg2GDYAfjlv6i8dJmT13peB2U9OIJDx/wgs2PcgAhsZ+600V6aFv8pr+gtmzOEB
- B2dWz2DdNm5xpoxpPajAKhaJ0IEsEinqlLcl4pmXj7S79OsQzjtIivPn8iPRoWm26Qj2
- 12/cHUsnfKj2t3iENpuoM0LhXto/18IJSqA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hf7fbr0eq-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:14:03 -0700
-Received: from twshared5640.09.ash9.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 21 Jul 2022 06:13:33 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 6F7E63586F52; Thu, 21 Jul 2022 06:13:30 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
-        Dylan Yudaken <dylany@fb.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH] io_uring: do not recycle buffer in READV
-Date:   Thu, 21 Jul 2022 06:13:25 -0700
-Message-ID: <20220721131325.624788-1-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 21 Jul 2022 09:14:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC0E3C8CD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658409272; x=1689945272;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sCXCtv41801LvQGsNVUf9c540aOtmE9BQ1Ccw7AXtVU=;
+  b=ENacTCU4/vVDf+rUddnuW50upcB7AcFkMWMj03+o1Ace5YKqxSyGfSrF
+   8XcaKXRKiN5Z0JKCj+r9n+JdtZYWDMFznTK47yTLI74GommjjNaY9CmgN
+   R8dm7xsVuVSahv53bP3byGwwXpIKYU/+Mff/81dLF0M67bk5HjsXSzoaV
+   QpvtdCfN0FPguqKk9Ji7LWOG6Cont2OOq5RtiTJ+ZI0tHyproSgOnxWmP
+   hvOlzK5CF+67Mv4KvnfdGqOUSb08cBLwjSM3C31QBvp2knBoL8y60W2yB
+   3r2Cy3G5s+eVDa76r03dCEmST8fM/zi1rHB97cH2iw34M5JooQC7Fmk9X
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="285803474"
+X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
+   d="scan'208";a="285803474"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 06:14:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
+   d="scan'208";a="666282654"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Jul 2022 06:14:30 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oEW0b-00008o-2d;
+        Thu, 21 Jul 2022 13:14:29 +0000
+Date:   Thu, 21 Jul 2022 21:13:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org, build@wireguard.com,
+        linux-kernel@vger.kernel.org
+Subject: [zx2c4-wireguard:jd/new-archs 1/3] ERROR: modpost:
+ "schedule_hrtimeout_range_clock" [drivers/net/wireguard/wireguard.ko]
+ undefined!
+Message-ID: <202207212115.Dutn6aMv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: T0j2jBWSky_LeKj2wwC76yio5WwFADNn
-X-Proofpoint-ORIG-GUID: T0j2jBWSky_LeKj2wwC76yio5WwFADNn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-21_17,2022-07-20_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-READV cannot recycle buffers as it would lose some of the data required t=
-o
-reimport that buffer.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git jd/new-archs
+head:   627fef82b5cfcb865fd8cf67d2d18f17c8c2b2a2
+commit: 82c472126eb825e1e5ed42599a5e78fd69eac274 [1/3] wireguard: ratelimiter: use hrtimer in selftest
+config: microblaze-randconfig-r012-20220718 (https://download.01.org/0day-ci/archive/20220721/202207212115.Dutn6aMv-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git/commit/?id=82c472126eb825e1e5ed42599a5e78fd69eac274
+        git remote add zx2c4-wireguard https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/wireguard-linux.git
+        git fetch --no-tags zx2c4-wireguard jd/new-archs
+        git checkout 82c472126eb825e1e5ed42599a5e78fd69eac274
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash
 
-Reported-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Fixes: b66e65f41426 ("io_uring: never call io_buffer_select() for a buffe=
-r re-select")
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I think going forward we can probably re-enable recycling for READV, or p=
-erhaps stick
-it in the opdef to make it a bit more general. However since it is late i=
-n the merge
-cycle I thought the simplest approach is best.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Worth noting the initial discussed approach of stashing the data in `stru=
-ct io_rw` would not
-have worked as that struct is full already apparently.
+>> ERROR: modpost: "schedule_hrtimeout_range_clock" [drivers/net/wireguard/wireguard.ko] undefined!
 
-Dylan
-
- fs/io_uring.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index a01ea49f3017..b0180679584f 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -1737,6 +1737,14 @@ static void io_kbuf_recycle(struct io_kiocb *req, =
-unsigned issue_flags)
- 	    (req->flags & REQ_F_PARTIAL_IO))
- 		return;
-=20
-+	/*
-+	 * READV uses fields in `struct io_rw` (len/addr) to stash the selected
-+	 * buffer data. However if that buffer is recycled the original request
-+	 * data stored in addr is lost. Therefore forbid recycling for now.
-+	 */
-+	if (req->opcode =3D=3D IORING_OP_READV)
-+		return;
-+
- 	/*
- 	 * We don't need to recycle for REQ_F_BUFFER_RING, we can just clear
- 	 * the flag and hence ensure that bl->head doesn't get incremented.
-
-base-commit: ff6992735ade75aae3e35d16b17da1008d753d28
---=20
-2.30.2
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

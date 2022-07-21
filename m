@@ -2,101 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0172A57C399
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E7357C39E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiGUEn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 00:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S230339AbiGUEoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 00:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiGUEn1 (ORCPT
+        with ESMTP id S229692AbiGUEoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 00:43:27 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B074379;
-        Wed, 20 Jul 2022 21:43:24 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id l23so1120577ejr.5;
-        Wed, 20 Jul 2022 21:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7lkbSCl4WMVF6PyAIugGhujYGS6F9o1+Rht1abC9LWI=;
-        b=IKRYc7LfN4GhVKTKzErBqYb7m8h6Ng81Ugm728RiNIz3q23m9Octz3Zf6PPs6fFZvL
-         ln2/6eQqsc27Z7BuqGWq0aLdViASTIWZe+GSdt+jfxKF0DOjyzjQyW8UFbfh5f84KqQx
-         Wvrbk8ePrZDvJoE2HwkC4rN1W7Tg4TzWNd0FHhFgg7DcxvVRl/UIXdlvRcMu7TT5Vgw8
-         5RNGDDhpOWJS/Y9p0Ow/ex/E8ZlaMT4E+QcqTeHjSGHsixld+GAlmd/rsyctjk0RtrW5
-         +ys+yPZ8HjQJboTMPhclEB43fQFM1TwP4LuUzXvcjQLl9zZ34op/ZO2hZm6I/OVvsC2P
-         1JVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7lkbSCl4WMVF6PyAIugGhujYGS6F9o1+Rht1abC9LWI=;
-        b=Zie7gwF73Kp5jlFdvwPSCh8ZUZiiYwE9+KrPA4SAK4TzNMdguDd5kZUWuAhNhUK2jj
-         RprpIvCy8TWwMGYOwi9e0ywrEPJOYTXESQWK8O4PUBhCT0LjK/BCvG5gMCBLUrHIgeuB
-         sbMw7Q71lu61PGkTN3kQRS6QG5iu8cqrEN8ZNDLhbUmTs2952ji1i0dn8YDznrlzH/+h
-         hNXiUGbpkMjnOtI0IvIG2CVsEiT9bGrRbpbIq+OTl0nb9euDfPuJZ0t9Nr+ltUun0z+r
-         e5oglXLIBXdF05khHSjbvnvNkePUVjDYT7lFpqX62RJ7DzT6iaaVzDmyiNVYYpPZ4s1N
-         Me9Q==
-X-Gm-Message-State: AJIora8ozyEv8dUCUTIrVi7z/bzNxO+g+DsjHo5R+P4fgF+NhFcIvDvT
-        ViKrft2qAANFDaub+f3EKa8=
-X-Google-Smtp-Source: AGRyM1sM/rYuTMl9+p0TqfNhZ8iyCI/Gk2d1yYw0EQj2ga4lxAw3AQPVNPIbEqreVwJRGoIeAGTexg==
-X-Received: by 2002:a17:907:1def:b0:72b:33e6:46d6 with SMTP id og47-20020a1709071def00b0072b33e646d6mr37885988ejc.414.1658378603202;
-        Wed, 20 Jul 2022 21:43:23 -0700 (PDT)
-Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id p8-20020a17090653c800b00726c0e60940sm379575ejo.100.2022.07.20.21.43.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 21:43:22 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: Lower sd speed on quartz64-b
-Date:   Thu, 21 Jul 2022 06:43:06 +0200
-Message-Id: <20220721044307.48641-1-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 21 Jul 2022 00:44:14 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEA9474360
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 21:44:13 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-198-wCWCKbzDPBOPH_d9xnmbWw-1; Thu, 21 Jul 2022 00:44:01 -0400
+X-MC-Unique: wCWCKbzDPBOPH_d9xnmbWw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80331811E80;
+        Thu, 21 Jul 2022 04:44:00 +0000 (UTC)
+Received: from dreadlord.bne.redhat.com (fdacunha.bne.redhat.com [10.64.0.157])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BEEA3909FF;
+        Thu, 21 Jul 2022 04:43:55 +0000 (UTC)
+From:   Dave Airlie <airlied@gmail.com>
+To:     torvalds@linux-foundation.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
+        Daniel Vetter <daniel@ffwll.ch>, mcgrof@kernel.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.sf.net,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
+        linux-block@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Harry Wentland <harry.wentland@amd.com>
+Subject: [PATCH] docs: driver-api: firmware: add driver firmware guidelines. (v3)
+Date:   Thu, 21 Jul 2022 14:43:52 +1000
+Message-Id: <20220721044352.3110507-1-airlied@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOF_GMAIL_MID
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previously stated speed of sdr-104 is too high for the hardware
-to reliably communicate with some fast SD cards.
+From: Dave Airlie <airlied@redhat.com>
 
-Lower this to sd-uhs-sdr50 to fix this.
+A recent snafu where Intel ignored upstream feedback on a firmware
+change, led to a late rc6 fix being required. In order to avoid this
+in the future we should document some expectations around
+linux-firmware.
 
-Fixes: dcc8c66bef79 ("arm64: dts: rockchip: add Pine64 Quartz64-B device tree")
+I was originally going to write this for drm, but it seems quite generic
+advice.
 
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+v2: rewritten with suggestions from Thorsten Leemhuis
+v3: rewritten with suggestions from Mauro
+
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Acked-by: Daniel Vetter <daniel@ffwll.ch>
+Acked-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Dave Airlie <airlied@redhat.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/driver-api/firmware/core.rst    |  1 +
+ .../firmware/firmware-usage-guidelines.rst    | 44 +++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 Documentation/driver-api/firmware/firmware-usage-guidelines.rst
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-index 02d5f5a8ca03..528bb4e8ac77 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-@@ -506,7 +506,7 @@ &sdmmc0 {
- 	disable-wp;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
--	sd-uhs-sdr104;
-+	sd-uhs-sdr50;
- 	vmmc-supply = <&vcc3v3_sd>;
- 	vqmmc-supply = <&vccio_sd>;
- 	status = "okay";
+diff --git a/Documentation/driver-api/firmware/core.rst b/Documentation/driver-api/firmware/core.rst
+index 1d1688cbc078..803cd574bbd7 100644
+--- a/Documentation/driver-api/firmware/core.rst
++++ b/Documentation/driver-api/firmware/core.rst
+@@ -13,4 +13,5 @@ documents these features.
+    direct-fs-lookup
+    fallback-mechanisms
+    lookup-order
++   firmware-usage-guidelines
+ 
+diff --git a/Documentation/driver-api/firmware/firmware-usage-guidelines.rst b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
+new file mode 100644
+index 000000000000..fdcfce42c6d2
+--- /dev/null
++++ b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
+@@ -0,0 +1,44 @@
++===================
++Firmware Guidelines
++===================
++
++Users switching to a newer kernel should *not* have to install newer
++firmware files to keep their hardware working. At the same time updated
++firmware files must not cause any regressions for users of older kernel
++releases.
++
++Drivers that use firmware from linux-firmware should follow the rules in
++this guide. (Where there is limited control of the firmware,
++i.e. company doesn't support Linux, firmwares sourced from misc places,
++then of course these rules will not apply strictly.)
++
++* Firmware files shall be designed in a way that it allows checking for
++  firmware ABI version changes. It is recommended that firmware files be
++  versioned with at least a major/minor version. It is suggested that
++  the firmware files in linux-firmware be named with some device
++  specific name, and just the major version. The firmware version should
++  be stored in the firmware header, or as an exception, as part of the
++  firmware file name, in order to let the driver detact any non-ABI
++  fixes/changes. The firmware files in linux-firmware should be
++  overwritten with the newest compatible major version. Newer major
++  version firmware shall remain compatible with all kernels that load
++  that major number.
++
++* If the kernel support for the hardware is normally inactive, or the
++  hardware isn't available for public consumption, this can
++  be ignored, until the first kernel release that enables that hardware.
++  This means no major version bumps without the kernel retaining
++  backwards compatibility for the older major versions.  Minor version
++  bumps should not introduce new features that newer kernels depend on
++  non-optionally.
++
++* If a security fix needs lockstep firmware and kernel fixes in order to
++  be successful, then all supported major versions in the linux-firmware
++  repo that are required by currently supported stable/LTS kernels,
++  should be updated with the security fix. The kernel patches should
++  detect if the firmware is new enough to declare if the security issue
++  is fixed.  All communications around security fixes should point at
++  both the firmware and kernel fixes. If a security fix requires
++  deprecating old major versions, then this should only be done as a
++  last option, and be stated clearly in all communications.
++
 -- 
-2.37.1
+2.36.1
 

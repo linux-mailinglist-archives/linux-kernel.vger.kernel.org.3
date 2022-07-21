@@ -2,148 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F63D57CAC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5481357CAC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbiGUMkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S233695AbiGUMkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbiGUMkA (ORCPT
+        with ESMTP id S232164AbiGUMkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:40:00 -0400
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20079.outbound.protection.outlook.com [40.107.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB9276956;
-        Thu, 21 Jul 2022 05:39:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GCTmEZ55+6X6/AjLGSJWQQNqO9gsVLlB6/7D1WvIu1sobxJfVWKTqnnC36VODjup4UUjXqyyehGRuBdvB9R0NUg371+utzoz5Ixno6gyDY31fmO1+f1XW4/icbbUgqgdfANkJ1NIDwyUgWMTWcirr6GUEIQh0TP+Vsd3DIJUcXelXWM7Gh3eFmDhT8VSo4rEI+n0zctvQdvCAeQvRDS7+btS1YqzKXlJah9LEUkXYQPz5x/ZWaeMQs7JUmoLy8j0PPDjl5DC+7NX3ixOwl/jkb9UxALovA6XhTpvzabOiImEZ1KhyoENlL2S0rD/3xBoZ9O34kKn3t7HH9/isqDDGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MtwH5Uiu4o5/5+yqwAjA/c8u0JBkiPuY4PwDay1QCjc=;
- b=f+XKKffhtIHBQTNoZQ/M+1qMkEjynlMsnvINZ1BKa9BP4ucOpu+GXGarT/rcJxKX5HmN8aZNcIJ51MpygOTJEEHbh8iyvgMGlNFQkSMXV3VG/KzG3/4RXw4IlO9FDaL6QIS4Hm6Av6JhzsAtvpaeSwV49hThUTAjF6tM04E5b7RVeGt4xKScF4tBgRDXbcTEji8mjTEyjFofJ3Y647FvpPo0jfm7GwAH5Ugmcl16YbLqi+CR14eqQ58/qdvrDDuz/6X9aN74COvg4oHSRHf3aXsGB5QbkNQIPeiz6WUoif4XAu7MoENOY4L3wrUvLWMlyQaVAOxmXqhfAcFToJq/ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MtwH5Uiu4o5/5+yqwAjA/c8u0JBkiPuY4PwDay1QCjc=;
- b=htsp92ZTqey/kP0d9hzegezeWKrPYFBNxWmqAYex3WuPa3H3ERADxnnvZJf6B9aiq326tNnfxMV0uAR/WIVViqWEirjVrVYkJiA1wtG0L/HSqTNsJEyH/hum+dclzHHKaPbI3qTtD3PML64XfkSmOFX58Xv3PR60x5WDmaDyALw=
-Received: from VI1PR04MB5807.eurprd04.prod.outlook.com (2603:10a6:803:ec::21)
- by AM6PR04MB5640.eurprd04.prod.outlook.com (2603:10a6:20b:a3::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 21 Jul
- 2022 12:39:55 +0000
-Received: from VI1PR04MB5807.eurprd04.prod.outlook.com
- ([fe80::1df3:3463:6004:6e27]) by VI1PR04MB5807.eurprd04.prod.outlook.com
- ([fe80::1df3:3463:6004:6e27%4]) with mapi id 15.20.5458.018; Thu, 21 Jul 2022
- 12:39:55 +0000
-From:   Camelia Alexandra Groza <camelia.groza@nxp.com>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: RE: [PATCH net-next v3 19/47] net: fman: Get PCS node in per-mac init
-Thread-Topic: [PATCH net-next v3 19/47] net: fman: Get PCS node in per-mac
- init
-Thread-Index: AQHYmJcYHN/BPHCBxE2E4yLEE8zAva2IzKTg
-Date:   Thu, 21 Jul 2022 12:39:55 +0000
-Message-ID: <VI1PR04MB58079FD99476E843DE70F89AF2919@VI1PR04MB5807.eurprd04.prod.outlook.com>
-References: <20220715215954.1449214-1-sean.anderson@seco.com>
- <20220715215954.1449214-20-sean.anderson@seco.com>
-In-Reply-To: <20220715215954.1449214-20-sean.anderson@seco.com>
-Accept-Language: en-GB, ro-RO, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 28d3ae81-4c20-42e3-58a7-08da6b161da7
-x-ms-traffictypediagnostic: AM6PR04MB5640:EE_
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NA4W84pGgYBrDbYUH8Mb/SV+Qjriqf6MCKFJUwAJfP5eDj4Jhgh5I0Qe2Bb1y3kt4Fnmlh023RKyX6puBJQKWMSPOOvNNNKIrzMXRGRCj+LTas8FVqfXUXMB76cw0rIFymA0mJ1cxeKPMwx5koqeDF0eIPgOFAKR6xh7olKN1q0TiT3WSSfaJK+hGmLc7zR37uc7WBk9qFGmQygUgDmI4xjg6fYdWNLPucc6shIyhp3DP+PqqUaaFrHf3rziLIPKXrD7s0D2eG1md81vc7EWrv67osIhPQ9JwAO6/9yPXkSUoifZTn4f7svWFkd1nUJ2QtFvXubMIvodn4AIUyVAIt/C8ytRZWcLZtr61Zh97aJSU5F3LFezPCBO4Bm9QKMBXtmxVFXJkP2DbGpdZrNw113zYilCzrMOFDkkkIOzlWTuf6C0odSiSysZMFhiOc/mqNtzLuao2gppRJSTuZhT7IXq4apOD+GsTmIoq2sscUjvl8iSS3HsYIuRw5ooJQibrUmNauK4BufvGrVchZSIaRMLfmlU7w5YSYiFJw+8eG0WhVmIuOhLIgP+jejg74XWhRAad8V6YdCKvENFQD9uI1SsqWHRVVnQBZf/lEIJJpt/jS59o9SU36GL/H8EKrvbeKotwXPh2fbD2kCHyyDTnfPstxI0/aLJJ5yCcXiA0znpRxVEC3pSL3er5qLEYT1aInImyDpq3wNjTisXf1bcXnd0B4deSYe3oIh5Bw0FrQl7p8n3eLLesdx6izTNKr9eJw2UwOL1DbR7ESfAuQEoUodwSeY5PLtvqsoXnYVv3A1WyNg3tzLWJ2MSsWU+pVdh
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5807.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(7696005)(478600001)(6506007)(66476007)(83380400001)(64756008)(66556008)(55236004)(9686003)(76116006)(66446008)(71200400001)(52536014)(26005)(2906002)(66946007)(110136005)(41300700001)(53546011)(33656002)(8676002)(55016003)(86362001)(316002)(186003)(54906003)(4744005)(122000001)(8936002)(38070700005)(4326008)(5660300002)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?d76ZlM3pz+NGncPAbZGbwgBWKsXZS4M7jwd7oIXIjKYQmaCxGPFW3o3QnxQf?=
- =?us-ascii?Q?WX7roQGHIzIMdKgWzBmrVoHiCq9mHUguvhHi0oc82nAICJ7WAuN7dtoaiPDb?=
- =?us-ascii?Q?P/zaeDXSeJPN1NBPNQGJyRSRHu/dMOXzkxCqj2ruSa9xZKWEMIERmB2j4kbr?=
- =?us-ascii?Q?QMP5Yd/5i4eIk5zXPlydD+l4v2tXmjicKtFcVEGiKBaDdjg2Cqax6kfbpHCJ?=
- =?us-ascii?Q?CyJVTi5uBozeRJ58rYcxL081DZGfzpDRzEnwTwfIdUvWTafK5fqDgkRADBVc?=
- =?us-ascii?Q?/vRPM1jmK/9YQ4dSryu+XG6tq0oX3Mp9fTnDY3dKvXt3UQ+PqKnKDcS5E6uc?=
- =?us-ascii?Q?8JH1SY543DVQEbqrBvaG0BQnxHQmHbRcw9IFAgIFj+ZlVBXpF75hudKXqeTZ?=
- =?us-ascii?Q?3Uv2/ymc9C4iNGpX9TqiwhpqjOBrrSAh4uSpNZMKtgtArC5E9HUvjw/Ed8Kb?=
- =?us-ascii?Q?cXsjBVaHyJM3ql/z227lZnayBLTmIY85NBd1pOtFY56dBxn4pd7Xyn0RmVS9?=
- =?us-ascii?Q?zbEVFRrHc+tc4x/SMpfQ2Z7ZLfxgqjn4lr8co4XN4vNHRrcrKPZWytIHe64B?=
- =?us-ascii?Q?5PBQXE5zNl1kgBfw9IQ4xsLT4cf1AxkYV69a8d5eUkKBDN/jAnVA+vKijrdC?=
- =?us-ascii?Q?yMXj/r5Nq9192j5pG73fm+2PQ3aWm2g6IYrEVqmiq3621aj7ky6fiMvXrcxm?=
- =?us-ascii?Q?m3vldSBLPepH7ITpEzKOhbDIidf/vYpBFbsNJJPFbFyc+7312xKL3pNBglIx?=
- =?us-ascii?Q?3G4cHP23WcfPuECyOW+yOZphUTUkOeR/LtgYWwTEpeTL8aGPqPxQw598kZ/0?=
- =?us-ascii?Q?5uysw+4Pzeh9bVf2EStb5tQmU8bFqUlcVZ/gk6Rg3dxF99sqG4++MM0W8V9r?=
- =?us-ascii?Q?+skazfluNozdpQbhc9beo5LbuqxRG7oZmViTHviqOenSoKikMjNvPyP3IhHM?=
- =?us-ascii?Q?IVKHneC48eV6c6ETootDCYhDMStSNXnJsrNo7JeTl4LnHBkt0ef8kvD/blAv?=
- =?us-ascii?Q?dUogc0BQr7zN22u98iT3CIRVfYlQ8RGfmpluSIAUpDMFnuwIBKYZGNfdT4RD?=
- =?us-ascii?Q?9R0BcrhIAUojhuVCSic0vdYapMrybd1xSQmKW/J0whYzwnsf4XhBl4umP5Er?=
- =?us-ascii?Q?p8cM3nb57N7MhKKcrZeewUzjJSlFho0qtpbzfwstX0N1kMuax3ni16dXcnap?=
- =?us-ascii?Q?hu1kzMYQPzR/ZKy4cah0ExI5l3LZPQ+wUlQoe+QNG91A0EbRv9t6jsaRDOtr?=
- =?us-ascii?Q?pRqaMYE0Qwx9w10ZN2dcGqUFdCs6fxD0zsUbdcIHZZ/tO0JhKA8X6UxtcKZS?=
- =?us-ascii?Q?iiUN6YeHa4xSt0eZ9Yg5DHN2U4jqUe379Aa/sNlVI4bEA5kIFZzeA4rmDbKP?=
- =?us-ascii?Q?lB2ehJjC2jsG2IzfromBtDTRGsuV9c3T2yS21pBMkxgaNg1eZ1Zf0r9smOW4?=
- =?us-ascii?Q?uecL2sOWFTrDxm8wNwiuG9gP2HdijxdQf3U8JvPL7A0voamAPXJHTSNceH2g?=
- =?us-ascii?Q?lp/2EsKkTq1KmVwFDTRuJOsM5OBc/I93ubtZm+S53HrFHRrom9a05os8HhNf?=
- =?us-ascii?Q?6gSAjtH03KA6gFS+aQ9CbdRgDRUCbtzI8FtyCTdk?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 21 Jul 2022 08:40:41 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2311BE97
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:40:40 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 64so2501702ybt.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:40:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ltjEwT2THhshuoyB4dTRjQu3AXpts4pfyH4FOpyz1R4=;
+        b=ncDY7YsOwUEr7gwHKHUkAjGONhqw0gNRJm7QLl0wPh+zkz6c5liGJt2l6eLROFHsLy
+         3Qi6+/CVjtlCsbFnCab3ULopNYJfefsYKdh+py7JohIZ0ShUOPens9g9gScvoMArW0lv
+         aiXlZ7Ipvh7SA1SP+SrJoFVblXKJSjrJt6Q+zqwDUsa3PKnXndAb/j23pbmc2QFT8UK9
+         Bes8i0mVGPMdpxRoNlM7yPRXQPVyymhATlxS+iXwAhoxEA/Q3mSvjf5osEHaLKNJNt6l
+         C4zJ43iarrpyk+04D0JQCzzbddm5eWY8MjUjnBOfjdGyK0StLxPY6zEgWB+mqil1X5Ih
+         +gdQ==
+X-Gm-Message-State: AJIora/qyEWx6oKls9WT0aZE5FHM027vBiM+CuJtPI6Zf1feGhk2cP4m
+        N79/d+vaO7C8gkUhzYQ/z8srRy8w7jJ+OP7nqqg=
+X-Google-Smtp-Source: AGRyM1vPq8QuZ+upVjGoHwy4A2UXuDt1jWbXkmWgiHVqZ9GpGPE8AyqYB8qh1y69nYGrv7bDAXQCDSQ1CfOqLAfup7U=
+X-Received: by 2002:a25:d714:0:b0:66f:5898:9eb1 with SMTP id
+ o20-20020a25d714000000b0066f58989eb1mr40450049ybg.633.1658407239853; Thu, 21
+ Jul 2022 05:40:39 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5807.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28d3ae81-4c20-42e3-58a7-08da6b161da7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 12:39:55.6680
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: N/BMlrPRPtTYH+fWBNyfFzKeuS5MLY5PbcAY0A6l85Z5TeNs0poEiUYHGBJyY5rrV1h3BHryEll47R6dDzfK2g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5640
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220721123325.4675-1-jiazi.li@transsion.com>
+In-Reply-To: <20220721123325.4675-1-jiazi.li@transsion.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 21 Jul 2022 14:40:28 +0200
+Message-ID: <CAJZ5v0gH5+fo+LP74mWssLCAO6iPfR5rqaSwqpCi2Fb8KSJLUA@mail.gmail.com>
+Subject: Re: [PATCH] driver core: Do not add a device that has been removed in
+ device_shutdown to devices_kset list again.
+To:     "Jiazi.Li" <jqqlijiazi@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Jiazi.Li" <jiazi.li@transsion.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sean Anderson <sean.anderson@seco.com>
-> Sent: Saturday, July 16, 2022 0:59
-> To: David S . Miller <davem@davemloft.net>; Jakub Kicinski
-> <kuba@kernel.org>; Madalin Bucur <madalin.bucur@nxp.com>;
-> netdev@vger.kernel.org
-> Cc: Paolo Abeni <pabeni@redhat.com>; Eric Dumazet
-> <edumazet@google.com>; linux-arm-kernel@lists.infradead.org; Russell
-> King <linux@armlinux.org.uk>; linux-kernel@vger.kernel.org; Sean Anderson
-> <sean.anderson@seco.com>
-> Subject: [PATCH net-next v3 19/47] net: fman: Get PCS node in per-mac ini=
-t
->=20
-> This moves the reading of the PCS property out of the generic probe and
-> into the mac-specific initialization function. This reduces the
-> mac-specific jobs done in the top-level probe function.
->=20
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+On Thu, Jul 21, 2022 at 2:33 PM Jiazi.Li <jqqlijiazi@gmail.com> wrote:
+>
+> There is a race between device_shutdown and devices_kset_move_last:
+> 1. device_shutdown remove dev from devices_kset, unlock list_lock
+>
+> 2. supplier call device_link_add move this consummer dev to
+> last of devices_kset:
+> devices_kset_move_last+0x184/0x1fc
+> device_reorder_to_tail+0x50/0x17c
+> device_link_add+0x670/0x9c0
+> phy_get+0x88/0x300
+>
+> 3. device_shutdown call dev->bus->shutdown first time
+>
+> 4. in next loop, device_shutdown pick this dev from devices_kset
+> again, and call dev->bus->shutdown for the second time.
+>
+> If the protection mechanism of dev->bus->shutdown is not perfect,
+> the following crash will occur:
+> [37.366651] [T1000001] Unable to handle kernel NULL pointer
+> dereference at virtual address 0000000000000070
+> [37.414053] [T1600001] Kernel Offset: 0x2c73800000 from 0xffffffc010000000
+> [37.414908] [T1600001] PHYS_OFFSET: 0x40000000
+> [37.415458] [T1600001] pstate: 60400005 (nZCv daif +PAN -UAO)
+> [37.416172] [T1600001] pc : [0xffffffec83eccd40] kernfs_find_ns+0x18/0x154
+> [37.417025] [T1600001] lr : [0xffffffec83ed8714] sysfs_unmerge_group+0x70/0x2e0
+> [37.417931] [T1600001] sp : ffffffc01008ba90
+> [37.418456] [T1600001] x29: ffffffc01008ba90 x28: ffffffec863c1000
+> [37.419221] [T1600001] x27: ffffffec85234e30 x26: ffffffec86490000
+> [37.419985] [T1600001] x25: ffffff80c854a4c0 x24: ffffff80c854a428
+> [37.420750] [T1600001] x23: 0000000000400100 x22: ffffffec85c4c5c8
+> [37.421514] [T1600001] x21: ffffffec85c4c5a0 x20: 0000000000000000
+> [37.422277] [T1600001] x19: ffffff80c0178000 x18: ffffffc010083068
+> [37.423043] [T1600001] x17: 0000000000000000 x16: 00000000000000d8
+> [37.423807] [T1600001] x15: ffffffec842b9314 x14: ffffffec85b04050
+> [37.424572] [T1600001] x13: 0000000000000000 x12: 000000000000000a
+> [37.425336] [T1600001] x11: 0000000000000000 x10: ffffffec863e9000
+> [37.426102] [T1600001] x9 : 0000000000000001 x8 : 0000000000000000
+> [37.426869] [T1600001] x7 : 332e37332020205b x6 : ffffffec863e6e7e
+> [37.427633] [T1600001] x5 : ffffffffffffffff x4 : 0000000000000000
+> [37.428396] [T1600001] x3 : 000000000000003c x2 : 0000000000000000
+> [37.429161] [T1600001] x1 : ffffffec85c4c5c8 x0 : 0000000000000000
+> [37.612410] [T1600001] Call trace:
+> [37.612831] [T1600001]  dump_backtrace.cfi_jt+0x0/0x8
+> [37.613457] [T1600001]  dump_stack_lvl+0xc4/0x140
+> [37.614038] [T1600001]  dump_stack+0x1c/0x2c
+> [37.614588] [T1600001]  mrdump_common_die+0x3a8/0x544 [mrdump]
+> [37.615326] [T1600001]  ipanic_die+0x24/0x38 [mrdump]
+> [37.615951] [T1600001]  die+0x344/0x748
+> [37.616425] [T1600001]  die_kernel_fault+0x84/0x94
+> [37.617016] [T1600001]  __do_kernel_fault+0x230/0x27c
+> [37.617642] [T1600001]  do_page_fault+0xb4/0x754
+> [37.618212] [T1600001]  do_translation_fault+0x48/0x64
+> [37.618846] [T1600001]  do_mem_abort+0x6c/0x164
+> [37.619406] [T1600001]  el1_abort+0x44/0x68
+> [37.619921] [T1600001]  el1_sync_handler+0x58/0x88
+> [37.620512] [T1600001]  el1_sync+0x8c/0x140
+> [37.621028] [T1600001]  kernfs_find_ns+0x18/0x154
+> [37.621608] [T1600001]  sysfs_unmerge_group+0x70/0x2e0
+> [37.622246] [T1600001]  device_del+0x198/0xd00
+> [37.622794] [T1600001]  device_unregister+0x1c/0x3c
+> [37.623409] [T1600001]  charger_device_unregister+0x40/0x54 [charger_class]
+> [37.624277] [T1600001]  sgm41516d_shutdown+0x54/0x84 [sgm41516d]
+> [37.625021] [T1600001]  i2c_device_shutdown+0x68/0x118
+> [37.625656] [T1600001]  device_shutdown+0x234/0x614
+> [37.626259] [T1600001]  kernel_restart+0x74/0x1e8
+> [37.626840] [T1600001]  __arm64_sys_reboot+0x3b0/0x424
+> [37.627475] [T1600001]  el0_svc_common+0xd4/0x270
+> [37.628056] [T1600001]  el0_svc+0x28/0x88
+> [37.628549] [T1600001]  el0_sync_handler+0x8c/0xf0
+> [37.629141] [T1600001]  el0_sync+0x1b4/0x1c0
+>
+> because dev->kobject.sd has been set to NULL in fisrt shutdown.
+>
+> Signed-off-by: Jiazi.Li <jiazi.li@transsion.com>
+> ---
+>  drivers/base/core.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 753e7cca0f40..301c75639d85 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2850,6 +2850,12 @@ void devices_kset_move_last(struct device *dev)
+>         if (!devices_kset)
 
-Acked-by: Camelia Groza <camelia.groza@nxp.com>
+Why don't you expand the existing check to cover the empty list item case?
+
+It is kind of obvious that empty list items cannot be moved, so it is
+just prudent to check for it except that the check wasn't really
+necessary before, but IMV it would be sufficient to describe the
+failing case in the changelog.
+
+>                 return;
+>         pr_debug("devices_kset: Moving %s to end of list\n", dev_name(dev));
+> +       /*
+> +        * if dev has been removed from devices_kset in device_shutdown,
+> +        * just return.
+> +        */
+> +       if (list_empty(&dev->kobj.entry))
+> +               return
+>         spin_lock(&devices_kset->list_lock);
+>         list_move_tail(&dev->kobj.entry, &devices_kset->list);
+>         spin_unlock(&devices_kset->list_lock);
+> --

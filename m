@@ -2,93 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A7657D5ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18D657D5F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbiGUV1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
+        id S232891AbiGUV3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGUV1q (ORCPT
+        with ESMTP id S229684AbiGUV32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:27:46 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3369285D;
-        Thu, 21 Jul 2022 14:27:45 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id x64so2389491iof.1;
-        Thu, 21 Jul 2022 14:27:45 -0700 (PDT)
+        Thu, 21 Jul 2022 17:29:28 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663E692866
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:29:27 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id bk26so4031711wrb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:29:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6oH1cbsgdhss1AP+uXvA73Emr1xdn7+57VPz7hhNcGA=;
+        b=s0GBanfP7lbAXVi3iLcl7ktDLDo0k3btMRsYXHocefuYBAC1t/SO9a+e5mmhcfkopx
+         ZT1czPzKmKfckcSKlAPR1GQcZJFDcnLgU8Lpglpjp3O9t4WnhqqIxPUKjWFT5Wo0xy3o
+         1HOVVDZxyObl4fZ1swmtK+1p7fY+O+1+BvIqXxhIGDQPlVPk7wLpcvV43HM/k3CLSq/C
+         Jz7RgIyRrqglFU7Wo39wk5hYv0pcOHbaQ7aTV7seA9lPjn9fBQPVFgJPMOZSsPhl5ke4
+         IpdX7ymgEAUWlShczDJvA75JQSQctEVPvjvqZ212EvFA3nIN2pBaRfzp2FhrEx7AM6YO
+         9AfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JIOd09IsCLkkz0R0g/f3vsUbwuWE429fl7X8V0X7KFU=;
-        b=S+V1nXyQlB3D+q9pa9dFVDO23+tzM8kBSnCiqC5VPCQV+sVjTz7KQYI0BUzYkuBXRp
-         g8pfgomNcDAnfalGnmTRwkJyLq8qnNHUdjRcPOOac7E7jW9qAHI/iEBrDCw7FCdMV5Ai
-         xQOTUVRSCIuH9tIWvn8dGrwGtVwK4clslqZgr+Se2QXJtN5yhMKAY7rUsOPi38qbTvcz
-         VUWnvX7j4ZoG7Fmlc4lwQuiFXQX+I/xba6d0kExUYcTWXtEooMs9sbHu/+nALz08qENr
-         qACBD8AE9IK54kjqLO7Qr3xAVLH03XnCWA1+7xZzTYg2riCrSAddH3wKOJFKfXoJor4L
-         es8A==
-X-Gm-Message-State: AJIora9qWXTbzRWWiLc1J3l66cJyGOACYQRiJgvheyy2a8AByfA6I2pZ
-        kxgtxqcepeBZMsmGStydTw==
-X-Google-Smtp-Source: AGRyM1sHh6EMw+CzWVb3mUQlXlPlqrr85rzuYjaxydZ6Ep4VAHBlwBUshbCF5t75FbvVlUPNFXlL9g==
-X-Received: by 2002:a05:6638:50:b0:33f:17b9:be63 with SMTP id a16-20020a056638005000b0033f17b9be63mr251290jap.92.1658438865054;
-        Thu, 21 Jul 2022 14:27:45 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.248])
-        by smtp.googlemail.com with ESMTPSA id h6-20020a05660208c600b0067bf99ea25bsm1285859ioz.44.2022.07.21.14.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 14:27:44 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH 2/2] dt-bindings: arm: coresight-tmc: Add 'iommu' property
-Date:   Thu, 21 Jul 2022 15:27:15 -0600
-Message-Id: <20220721212718.1980905-2-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220721212718.1980905-1-robh@kernel.org>
-References: <20220721212718.1980905-1-robh@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6oH1cbsgdhss1AP+uXvA73Emr1xdn7+57VPz7hhNcGA=;
+        b=ac/f080K9mlFRtSpjABMgp+tY80wxBqVg6EYJc/vAIavybZO4yqoxg4tfholn5fUUQ
+         YHmZ/m8baep+ma33zRLO+T7DD+CctkdqHnPzbaKGQJCL57XPmivVH9XEisuB8Ldzyt0p
+         pQgIII7CF9JdRW950zAQi4fM7PuVJklgyZr5GQVG1MempITDGu1pAI6VtBjH6J54GLDY
+         LpOfiJgf2b1yEbRzTNXZDcSZc3dfdhoYLIlbLQelH17dt/l5E53lyzZZqC7WDfdgTQnr
+         FDf8Cc+InQxKAxcCFyyRi/87fcLIdDdMOsZFaw+uevC/ZdK8LaqdBGr0dZJdOzMimjY7
+         PKnQ==
+X-Gm-Message-State: AJIora8g0kWGdVOyEbdL9ebolxPsiYnhAunAZcFcffsgXud3lqtS9MY/
+        OiRBDQ2DbRX4Qx3Ar2nL9yX+rTyN4zn0ug==
+X-Google-Smtp-Source: AGRyM1ubN1oF93oWLpytkvZB9NDpE35SXL8MNDkxJ6e+iQD1oXNc+GcrMRpSYNM5N9If6MlDZIBayA==
+X-Received: by 2002:adf:e283:0:b0:21e:26fe:14f3 with SMTP id v3-20020adfe283000000b0021e26fe14f3mr275882wri.98.1658438965814;
+        Thu, 21 Jul 2022 14:29:25 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:a2a9:428c:224b:c919? ([2a05:6e02:1041:c10:a2a9:428c:224b:c919])
+        by smtp.gmail.com with ESMTPSA id x10-20020adfec0a000000b0021d6c7a9f50sm3021298wrn.41.2022.07.21.14.29.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 14:29:25 -0700 (PDT)
+Message-ID: <5e9f6d35-08ff-4949-67b0-a2feaab79814@linexp.org>
+Date:   Thu, 21 Jul 2022 23:29:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 11/12] thermal/of: Use thermal trips stored in the
+ thermal zone
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>
+References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
+ <20220710123512.1714714-13-daniel.lezcano@linexp.org>
+ <CAJZ5v0hTQBXbKNurR0p8_MWmcW-EtezUg1oSNLVEYEAdzpeyBA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+In-Reply-To: <CAJZ5v0hTQBXbKNurR0p8_MWmcW-EtezUg1oSNLVEYEAdzpeyBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Coresight TMC component may be behind an IOMMU which is the case for
-the Arm Juno SoC and some Qualcomm SoCs. Add 'iommus' property to the
-binding.
+On 19/07/2022 20:26, Rafael J. Wysocki wrote:
+> On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
+> <daniel.lezcano@linexp.org> wrote:
+>> Now that we have the thermal trip stored in the thermal zone in a
+>> generic way, we can rely on them and remove one indirection we found
+>> in the thermal_of code and do one more step forward the removal of the
+>> duplicated structures.
+>>
+>> Cc: Alexandre Bailon <abailon@baylibre.com>
+>> Cc: Kevin Hilman <khilman@baylibre.com>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+>> ---
+>>   drivers/thermal/thermal_of.c | 53 +++++++++++-------------------------
+>>   1 file changed, 16 insertions(+), 37 deletions(-)
+>>
+>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+>> index e187461dd396..601552c55d0b 100644
+>> --- a/drivers/thermal/thermal_of.c
+>> +++ b/drivers/thermal/thermal_of.c
+>> @@ -118,12 +118,7 @@ static int of_thermal_set_trips(struct thermal_zone_device *tz,
+>>    */
+>>   int of_thermal_get_ntrips(struct thermal_zone_device *tz)
+>>   {
+>> -       struct __thermal_zone *data = tz->devdata;
+>> -
+>> -       if (!data || IS_ERR(data))
+>> -               return -ENODEV;
+>> -
+>> -       return data->ntrips;
+>> +       return tz->ntrips;
+> Hasn't this been renamed to num_trips?
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+Right, it is changed in patch 12/12
 
-diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-index e0b88a71356a..cb8dceaca70e 100644
---- a/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-+++ b/Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
-@@ -55,6 +55,9 @@ properties:
-       - const: apb_pclk
-       - const: atclk
- 
-+  iommus:
-+    maxItems: 1
-+
-   power-domains:
-     maxItems: 1
- 
--- 
-2.34.1
 

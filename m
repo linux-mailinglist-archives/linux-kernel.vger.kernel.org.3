@@ -2,173 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B7757C38D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0172A57C399
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbiGUEh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 00:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S230027AbiGUEn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 00:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiGUEhH (ORCPT
+        with ESMTP id S229778AbiGUEn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 00:37:07 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14EC796AF;
-        Wed, 20 Jul 2022 21:37:02 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id z3so740498plb.1;
-        Wed, 20 Jul 2022 21:37:02 -0700 (PDT)
+        Thu, 21 Jul 2022 00:43:27 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52B074379;
+        Wed, 20 Jul 2022 21:43:24 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id l23so1120577ejr.5;
+        Wed, 20 Jul 2022 21:43:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Sg1vg+JchJzlA6ZZPjGXncq9USvySKwhhpNA+cUndxk=;
-        b=DOzqzuMtBwoya2y0PW/nibHO9bnCrmyFQY3FjD5e3DMlCK3FKfhsynG/H9+zhcUWVR
-         1D/dIEPiLNyq3cK+cng5Glkae1fBWMJFcAJLSY4NOMonLidBiVCrzusCp4WUAQeriish
-         TAttV0a3Tn0PfD1aScM76QNjGHL9VpB4s+KRnXiAo1AjeyG4JdGpR9PAMoGXqQ+9MYrB
-         u10t+pNv1PUdZC8Iy/QmS9SXFQXupkjB4XVI/wCPt7VJ8uXtFiMDJ2u1gVFkYlBtap++
-         Vk/9+iyknzd6Op+r5/a9l0myPSXaMnNC7RjPtHW1MWvxMmNCTdFNKJ4StWHxzyHNAcPY
-         wqJQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7lkbSCl4WMVF6PyAIugGhujYGS6F9o1+Rht1abC9LWI=;
+        b=IKRYc7LfN4GhVKTKzErBqYb7m8h6Ng81Ugm728RiNIz3q23m9Octz3Zf6PPs6fFZvL
+         ln2/6eQqsc27Z7BuqGWq0aLdViASTIWZe+GSdt+jfxKF0DOjyzjQyW8UFbfh5f84KqQx
+         Wvrbk8ePrZDvJoE2HwkC4rN1W7Tg4TzWNd0FHhFgg7DcxvVRl/UIXdlvRcMu7TT5Vgw8
+         5RNGDDhpOWJS/Y9p0Ow/ex/E8ZlaMT4E+QcqTeHjSGHsixld+GAlmd/rsyctjk0RtrW5
+         +ys+yPZ8HjQJboTMPhclEB43fQFM1TwP4LuUzXvcjQLl9zZ34op/ZO2hZm6I/OVvsC2P
+         1JVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=Sg1vg+JchJzlA6ZZPjGXncq9USvySKwhhpNA+cUndxk=;
-        b=J8WULAumMNLJs9Dg5/jSimFwVJ9Fq8bP0ig3sRyqbDqJY6owRsEIIHQXDkkAthQzhB
-         hBX+9TUxErlddGud+2aXsKosWTnXzgDZMQWh3DAXwAwY377yMB3p/mEijRLllN2x2u4X
-         var+ABKbn0vq2wnrHg183lnqDiaMGExtHKGIsDqTKGGv5QBW0HrpO+NUH6QEM43HeMGw
-         E7FVyWpjgmw3qbIoPAT5P1ECcqaROXiUl1aNMhpKdr7GyHbCt3d9SVqVs7zvxTvRIi4T
-         ZbFsXlljC/fGGNgSgHx7G5zBjYG+Suu0eEAqCm3WLTB11mkbC+q1FKbl680pNt7yXjeA
-         FJrw==
-X-Gm-Message-State: AJIora+NrBowaSRpafXABjInuL1wuRy3Tjv9BCY4JlYvkfqi0KdC/g0J
-        yB6Wwj35raiZOjQxhTbt/nE=
-X-Google-Smtp-Source: AGRyM1tiX/TGfsAlPbMoQ/XELk71Lsxxc/EhpuG/O62GTz4XhbHZSkEzuNb3tYX9FxcEGqVpzWmuSw==
-X-Received: by 2002:a17:90a:9315:b0:1f1:fea7:5899 with SMTP id p21-20020a17090a931500b001f1fea75899mr9088008pjo.123.1658378221383;
-        Wed, 20 Jul 2022 21:37:01 -0700 (PDT)
-Received: from balhae.roam.corp.google.com ([2607:fb90:467:a1e4:c167:53fd:8047:7f62])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170902a38b00b0016bea2a0a8dsm450824pla.91.2022.07.20.21.36.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7lkbSCl4WMVF6PyAIugGhujYGS6F9o1+Rht1abC9LWI=;
+        b=Zie7gwF73Kp5jlFdvwPSCh8ZUZiiYwE9+KrPA4SAK4TzNMdguDd5kZUWuAhNhUK2jj
+         RprpIvCy8TWwMGYOwi9e0ywrEPJOYTXESQWK8O4PUBhCT0LjK/BCvG5gMCBLUrHIgeuB
+         sbMw7Q71lu61PGkTN3kQRS6QG5iu8cqrEN8ZNDLhbUmTs2952ji1i0dn8YDznrlzH/+h
+         hNXiUGbpkMjnOtI0IvIG2CVsEiT9bGrRbpbIq+OTl0nb9euDfPuJZ0t9Nr+ltUun0z+r
+         e5oglXLIBXdF05khHSjbvnvNkePUVjDYT7lFpqX62RJ7DzT6iaaVzDmyiNVYYpPZ4s1N
+         Me9Q==
+X-Gm-Message-State: AJIora8ozyEv8dUCUTIrVi7z/bzNxO+g+DsjHo5R+P4fgF+NhFcIvDvT
+        ViKrft2qAANFDaub+f3EKa8=
+X-Google-Smtp-Source: AGRyM1sM/rYuTMl9+p0TqfNhZ8iyCI/Gk2d1yYw0EQj2ga4lxAw3AQPVNPIbEqreVwJRGoIeAGTexg==
+X-Received: by 2002:a17:907:1def:b0:72b:33e6:46d6 with SMTP id og47-20020a1709071def00b0072b33e646d6mr37885988ejc.414.1658378603202;
+        Wed, 20 Jul 2022 21:43:23 -0700 (PDT)
+Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id p8-20020a17090653c800b00726c0e60940sm379575ejo.100.2022.07.20.21.43.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 21:37:01 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH 6/6] perf lock: Support -t option for 'contention' subcommand
-Date:   Wed, 20 Jul 2022 21:36:44 -0700
-Message-Id: <20220721043644.153718-7-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-In-Reply-To: <20220721043644.153718-1-namhyung@kernel.org>
-References: <20220721043644.153718-1-namhyung@kernel.org>
+        Wed, 20 Jul 2022 21:43:22 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: rockchip: Lower sd speed on quartz64-b
+Date:   Thu, 21 Jul 2022 06:43:06 +0200
+Message-Id: <20220721044307.48641-1-frattaroli.nicolas@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like perf lock report, it can report lock contention stat of each task.
+The previously stated speed of sdr-104 is too high for the hardware
+to reliably communicate with some fast SD cards.
 
-  $ perf lock contention -t
-   contended   total wait     max wait     avg wait          pid   comm
+Lower this to sd-uhs-sdr50 to fix this.
 
-           5    945.20 us    902.08 us    189.04 us       316167   EventManager_De
-          33     98.17 us      6.78 us      2.97 us       766063   kworker/0:1-get
-           7     92.47 us     61.26 us     13.21 us       316170   EventManager_De
-          14     76.31 us     12.87 us      5.45 us        12949   timedcall
-          24     76.15 us     12.27 us      3.17 us       767992   sched-pipe
-          15     75.62 us     11.93 us      5.04 us        15127   switchto-defaul
-          24     71.84 us      5.59 us      2.99 us       629168   kworker/u513:2-
-          17     67.41 us      7.94 us      3.96 us        13504   coroner-
-           1     59.56 us     59.56 us     59.56 us       316165   EventManager_De
-          14     56.21 us      6.89 us      4.01 us            0   swapper
+Fixes: dcc8c66bef79 ("arm64: dts: rockchip: add Pine64 Quartz64-B device tree")
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 ---
- tools/perf/Documentation/perf-lock.txt |  4 ++++
- tools/perf/builtin-lock.c              | 22 ++++++++++++++++++++--
- 2 files changed, 24 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
-index ae78e04346bd..8f4e34f924d5 100644
---- a/tools/perf/Documentation/perf-lock.txt
-+++ b/tools/perf/Documentation/perf-lock.txt
-@@ -119,6 +119,10 @@ CONTENTION OPTIONS
- 	and users can customize that using this.  Possible values:
- 	contended, wait_total, wait_max, wait_min, avg_wait.
- 
-+-t::
-+--threads::
-+	Show per-thread lock contention stat
-+
- 
- SEE ALSO
- --------
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index ad3b191db2e7..041801d8b6ac 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -1560,7 +1560,10 @@ static void print_contention_result(void)
- 	list_for_each_entry(key, &lock_keys, list)
- 		pr_info("%*s ", key->len, key->header);
- 
--	pr_info("  %10s   %s\n\n", "type", "caller");
-+	if (show_thread_stats)
-+		pr_info("  %10s   %s\n\n", "pid", "comm");
-+	else
-+		pr_info("  %10s   %s\n\n", "type", "caller");
- 
- 	bad = total = 0;
- 	while ((st = pop_from_result())) {
-@@ -1573,6 +1576,16 @@ static void print_contention_result(void)
- 			pr_info(" ");
- 		}
- 
-+		if (show_thread_stats) {
-+			struct thread *t;
-+			int pid = st->addr;
-+
-+			/* st->addr contains tid of thread */
-+			t = perf_session__findnew(session, pid);
-+			pr_info("  %10d   %s\n", pid, thread__comm_str(t));
-+			continue;
-+		}
-+
- 		pr_info("  %10s   %s\n", get_type_str(st), st->name);
- 	}
- 
-@@ -1703,7 +1716,10 @@ static int __cmd_contention(void)
- 	if (select_key(true))
- 		goto out_delete;
- 
--	aggr_mode = LOCK_AGGR_CALLER;
-+	if (show_thread_stats)
-+		aggr_mode = LOCK_AGGR_TASK;
-+	else
-+		aggr_mode = LOCK_AGGR_CALLER;
- 
- 	err = perf_session__process_events(session);
- 	if (err)
-@@ -1843,6 +1859,8 @@ int cmd_lock(int argc, const char **argv)
- 		    "key for sorting (contended / wait_total / wait_max / wait_min / avg_wait)"),
- 	OPT_STRING('F', "field", &output_fields, "contended,wait_total,wait_max,avg_wait",
- 		    "output fields (contended / wait_total / wait_max / wait_min / avg_wait)"),
-+	OPT_BOOLEAN('t', "threads", &show_thread_stats,
-+		    "show per-thread lock stats"),
- 	OPT_PARENT(lock_options)
- 	};
- 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+index 02d5f5a8ca03..528bb4e8ac77 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+@@ -506,7 +506,7 @@ &sdmmc0 {
+ 	disable-wp;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
+-	sd-uhs-sdr104;
++	sd-uhs-sdr50;
+ 	vmmc-supply = <&vcc3v3_sd>;
+ 	vqmmc-supply = <&vccio_sd>;
+ 	status = "okay";
 -- 
-2.37.0.170.g444d1eabd0-goog
+2.37.1
 

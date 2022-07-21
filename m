@@ -2,92 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DB957C50C
+	by mail.lfdr.de (Postfix) with ESMTP id D404C57C50D
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiGUHJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S232412AbiGUHJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiGUHJO (ORCPT
+        with ESMTP id S232402AbiGUHJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:09:14 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F36B7B1DA
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:09:13 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id h8so929012wrw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:09:13 -0700 (PDT)
+        Thu, 21 Jul 2022 03:09:29 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5AA7B379
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:09:24 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id a5so885767wrx.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:09:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google;
-        h=message-id:date:mime-version:user-agent:reply-to:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=VE0LYpBcSNLxgeKI7cPWq0L3IMO+8/VrqV7u3JYjwXE=;
-        b=eK/pGzO2n6WNLTNZO3Wd0ggPr4sppqc2TD1nUpb+tDhAms8nFEZmQmVFrA8jRCR0P5
-         RQCYcp5aPDhe4Ekv+Lv8FD11jDbxoRwd05zIYzhlt7yLNrV+/NhG9E3yE8RJHB/bxjnM
-         4E/StMXj5w3VQx90jWR2MAhjCT0foKvDnbKnDqIpWbXqto5ydoWY2r1OK49Zvi/DcjgA
-         iwNo+ZBB+irKddepVl6RDPPWQQgFki1PFY48YaB5vLMSIhBRgd2F4/f100YkJPdWl7rl
-         y1IGSd16N8ZPpZJFK5k08dE8pzL+KpTAY5apyN4946Tp755UiGjLWZ5HSYM7EH7AXT7q
-         6PxQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VXozGTkBuN1pc/ZCQCCgyPsWzMv13rxWxDP+7tq7TJw=;
+        b=D4clmYGbwyS4ogHfjdMc0g0hg0J9Quux7dEE5ZiwsDNyFKCENhfLWl0lPlCnZZWCQJ
+         ADYbbcZ2MSNLjFOnls9NFk+73wCzHxH5smZAn8ihwNtOfRTJu9p0uf+fKfJIxoDoqoR4
+         BuNi+gA4dFpgVVQeyCkI8CnQhWjHYdWLjjK8xN9/NNiHL4EKaQgZ7oZxRWqRVfYmb7dn
+         WdFkNHm92qb2xcXSG21B2sNdPmAixmmvn1Yw0m4SXab3b95hkN8uwO1grTDLXTeqwYcF
+         fg825u2vNg0tXdjqsM2uh/mDNSNRUXHVm/VgmUVz76t6u9QsIzhxnzpu0W4D+wXRCNRb
+         DUsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
-         :subject:content-language:to:cc:references:from:organization
-         :in-reply-to:content-transfer-encoding;
-        bh=VE0LYpBcSNLxgeKI7cPWq0L3IMO+8/VrqV7u3JYjwXE=;
-        b=37CQVhH7NRCuhmng/2vf0h0YQxoT8d6AKyzzGJ9ON90xmV/zjKX+Z4CZNqGrDslUkP
-         m12ov7g3WBXUIjhAR1dUioB4EJm8IHBo+sPB6jZQjjH/DU8gitkXmEV0NVt44W7+Isvy
-         SSOvyjbmZvbDwNCuemQbcxF/msnx/5jJ63CLpfmkPn5YDn/MGasly8vf41qD6IHXK9aA
-         hfPWnhDDvj++qlupSnWG2tQ+vUtRyXDy27KiaxF0VAwQPm0anstC1yp9B4o0BEAcTjLL
-         gYQK5NSy8VzEK5Iw9rdJ8kEjzOE1h4etur2MacquJ/ZkQgMO4zrXdvm3QbMuVBWbc+C5
-         70Zg==
-X-Gm-Message-State: AJIora/djQUHq5v9gNfIrMIr7bYUjp5HHu8PLaK+/oyPAXlSkTInoYok
-        iYdpZ+zYFSp9LJfEczP4E6MwNQ==
-X-Google-Smtp-Source: AGRyM1vpOKAfATUcM8qlCM2ouUnThntzP+VxAoH0+K3O4DTe/+n6mZSxk9Ee/fycS5xGUIXpJpfSxQ==
-X-Received: by 2002:a5d:4c4d:0:b0:21d:866e:4739 with SMTP id n13-20020a5d4c4d000000b0021d866e4739mr32190232wrt.147.1658387351367;
-        Thu, 21 Jul 2022 00:09:11 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:b41:c160:956c:3203:b371:1705? ([2a01:e0a:b41:c160:956c:3203:b371:1705])
-        by smtp.gmail.com with ESMTPSA id t7-20020a05600c198700b003a30af0ec83sm2665435wmq.25.2022.07.21.00.09.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 00:09:10 -0700 (PDT)
-Message-ID: <5128cc99-121c-843d-8a65-a930bfb6fa79@6wind.com>
-Date:   Thu, 21 Jul 2022 09:09:09 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VXozGTkBuN1pc/ZCQCCgyPsWzMv13rxWxDP+7tq7TJw=;
+        b=ppfnT3GOv72SCv/ug0CtkApBwF4c1cQnshPyxYPDi1AiLcU+v2DtbxbbR8s4o7yY6o
+         vCbJa9ugLOk/3xmUFk8TZFVDAguDi3XBwIGB5W71aVvOS49fwikBqNKY+PCXcG8GZZSA
+         +TEGA0YP5OUjRmMZAib8ZoSAvcyTmMBdcpKelFs4MQgzoThteBuC0rMG5aQdey5udcVa
+         rWZzXLWBrHtw7Ryo0CRbyHNXuZFp1I90UIH/C6uZ8mA77JhPVjS2eE6UiW2Q48eJN7P1
+         xJ0ngr8OjYbmrAx9J6kO4NjQDjrL0NpfIwjKEfyNLvPjpsA5UMpj0h4QlOIYKZlwd6s6
+         1Trg==
+X-Gm-Message-State: AJIora/Gk2dkoqrHrmFSsEO/7WWqFhxfRL1HtQiSjrInCQEQeXpR8hnZ
+        QHEFgrxKKi1VyKZ1sZunQegGJw==
+X-Google-Smtp-Source: AGRyM1uimq2XmA1Z+1x9bodyzH3DDOeO/EH1oMDau48adGSTkIKD3g2y2p5VAb0Pt5outtsag+HW1w==
+X-Received: by 2002:adf:ee0f:0:b0:21d:6e3b:d262 with SMTP id y15-20020adfee0f000000b0021d6e3bd262mr32237238wrn.687.1658387362894;
+        Thu, 21 Jul 2022 00:09:22 -0700 (PDT)
+Received: from blmsp ([2001:4090:a243:806e:25e7:daa:8208:ceb])
+        by smtp.gmail.com with ESMTPSA id y3-20020a7bcd83000000b003a3253b706esm4713951wmj.34.2022.07.21.00.09.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 00:09:21 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 09:09:20 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jerome Neanne <jneanne@baylibre.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, nm@ti.com, kristo@kernel.org,
+        khilman@baylibre.com, narmstrong@baylibre.com, j-keerthy@ti.c,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 04/14] regulator: dt-bindings: tps65219: Add
+ power-button property
+Message-ID: <20220721070920.dymqnh25dtqysooe@blmsp>
+References: <20220719091742.3221-1-jneanne@baylibre.com>
+ <20220719091742.3221-5-jneanne@baylibre.com>
+ <20220720233906.GB4187584-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH v2 net-next] net: ipv6: avoid accepting values greater
- than 2 for accept_untracked_na
-Content-Language: en-US
-To:     Jaehee Park <jhpark1013@gmail.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        dsahern@gmail.com, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        aajith@arista.com, roopa@nvidia.com, roopa.prabhu@gmail.com,
-        aroulin@nvidia.com, sbrivio@redhat.com
-References: <20220720183632.376138-1-jhpark1013@gmail.com>
-From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Organization: 6WIND
-In-Reply-To: <20220720183632.376138-1-jhpark1013@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220720233906.GB4187584-robh@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rob,
 
-Le 20/07/2022 à 20:36, Jaehee Park a écrit :
-> The accept_untracked_na sysctl changed from a boolean to an integer
-> when a new knob '2' was added. This patch provides a safeguard to avoid
-> accepting values that are not defined in the sysctl. When setting a
-> value greater than 2, the user will get an 'invalid argument' warning.
+On Wed, Jul 20, 2022 at 05:39:06PM -0600, Rob Herring wrote:
+> On Tue, Jul 19, 2022 at 11:17:32AM +0200, Jerome Neanne wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > Add a power-button property to configure the EN/PB/VSENSE pin as a
+> > powerbutton.
 > 
-> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> Suggested-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-> Suggested-by: Roopa Prabhu <roopa@nvidia.com>
-Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+> Belongs in the first binding patch.
+> 
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+> > ---
+> >  Documentation/devicetree/bindings/regulator/ti,tps65219.yaml | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
+> > index 6a60e62a313c..3f7f4c0280c3 100644
+> > --- a/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
+> > +++ b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
+> > @@ -36,6 +36,11 @@ properties:
+> >        include/dt-bindings/interrupt-controller/irq.h
+> >      const: 1
+> >  
+> > +  power-button:
+> 
+> ti,power-button
+> 
+> Though doesn't 'system-power-controller' imply this?
+
+No, there is a difference between system-power-controller and
+power-button. If you ask, my description is probably not clear enough.
+Let me try a new one:
+
+TPS65219 has a multipurpose pin called EN/PB/VSENSE that can be either
+EN in which case it functions as an enable pin. It can be VSENSE which
+compares the voltages and triggers an automatic on/off request. And it
+can be PB in which case it can be configured to trigger an interrupt to
+the SoC. ti,power-button reflects exactly the last one of those options
+where the board has a button wired to the pin and triggers an interrupt
+on pressing it.
+
+I hope that answers your question. We will fix the description in v2.
+
+Thanks,
+Markus
+
+> 
+> > +    type: boolean
+> > +    description: Optional property that sets the EN/PB/VSENSE pin to be a
+> > +      power-button.
+> > +
+> >  patternProperties:
+> >    "^buck[1-3]-supply$":
+> >      description: Input supply phandle of one regulator.
+> > -- 
+> > 2.17.1
+> > 
+> > 

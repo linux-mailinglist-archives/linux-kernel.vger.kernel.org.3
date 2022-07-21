@@ -2,129 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0097E57C14B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B968E57C143
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiGUAEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S231481AbiGUAD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiGUAEO (ORCPT
+        with ESMTP id S229776AbiGUADY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:04:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6772E747BC
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658361853; x=1689897853;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vwRr745hsHtS3o5kz19qtXZyc2oZLqSxhcXbyjxxfhI=;
-  b=gmJA+x8e6twg80V1MGGmxvk/C+MitdG2gsca4riJUbDv3wcgDuTcjvZK
-   rv0wG3+rhpFHLuck2joWc09SfluJ4HFljTbmPx82NZHPkpfzuNwDQ7A/E
-   O3rbbSU0ZslppLA2UU78VbDxbJgLA46xkeNMO1nItztga35xJBiGejW1v
-   kUrK3Q4Kv4o+eIGHFDMD4sbpomdbZ8FK9o5pINNfOM0ZOu6zUQ9ZRB8Pd
-   mReWAyvMWo3EDb/plnpBD0zrM9Mf+yTu4dMo1YduM9rftIg1VMPcA4j6S
-   6thvGBgHvRHw32knXSxXuBr3IV6Jouew3o8F8QmUWrlRINOuw73AD2uqe
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="273756034"
-X-IronPort-AV: E=Sophos;i="5.92,287,1650956400"; 
-   d="scan'208";a="273756034"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 17:03:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,287,1650956400"; 
-   d="scan'208";a="701066661"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 20 Jul 2022 17:03:11 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oEJeo-00014z-Mk;
-        Thu, 21 Jul 2022 00:03:10 +0000
-Date:   Thu, 21 Jul 2022 08:02:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     kbuild-all@lists.01.org, Wei Xu <weixugc@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: Re: [PATCH v10 5/8] mm/demotion: Build demotion targets based on
- explicit memory tiers
-Message-ID: <202207210723.HeaXhM1j-lkp@intel.com>
-References: <20220720025920.1373558-6-aneesh.kumar@linux.ibm.com>
+        Wed, 20 Jul 2022 20:03:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B84974783
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658361802;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0HOOHkAh3MZpUMeUIVAREqDy3wbpVTpA7LvIV0AcxA0=;
+        b=BIoRVQsjx3OYlE/wF7hBGVvUbC8XnhTzPQ3LDtP/yqreRVnzoQiqVkoYRDArJBlGmDtq9M
+        D29ESBGVzprwJe1Ep1uIC/e7LxtnLryY/jSVcZHV2WMrTafNmwI/6/1DDuCdMcIg37k3F5
+        SV1vUmLM+7zEfh7mRgD4ACma+Jiqjfg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362-C-c1XmvGOiGV-jZudbuC9A-1; Wed, 20 Jul 2022 20:03:21 -0400
+X-MC-Unique: C-c1XmvGOiGV-jZudbuC9A-1
+Received: by mail-qk1-f199.google.com with SMTP id bk21-20020a05620a1a1500b006b5c24695a4so214569qkb.15
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:03:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0HOOHkAh3MZpUMeUIVAREqDy3wbpVTpA7LvIV0AcxA0=;
+        b=NQJzCpaC+IbQyYGXlS/b65edTTns9jrnbICfBkGwR2JXoVOPzO0dHbNYOI/0r/XhVS
+         Kxi62NtXiLa0PcbA8no2stlmQEZ29l9hWQCV0ZxADHmNIwKgWMzWI0CKWZDNyCcBSqnN
+         S4XjDJRoRefpHvgefb6KXax13hWQ/qtrt1bpdAdGACDMtcH2+Gypmc3SojdgTvmExcFm
+         oKFdApY9o//u0DSwSmRelh4NJXM9XDn5YeZa+cKe+yJzpet4u7bokCYGMMZ4PeAU1PDZ
+         EPy8DF5wIxrYfY8uoVzSMLYOHY7bmHVbbGIyhrRrJV8wHg3qy7oLn+0eV0DoaeBKG3Y6
+         fLWg==
+X-Gm-Message-State: AJIora+xWBeQBmZogL5x7K1qE1/ihD51HhMJudnMB3SG5qEmueFmdkvx
+        pRpTkN60RIlRFKne++/j1RYhTwMkxTGW2WiJb1Fy9k63hsnz3bdBDNveKlc6IlzoHsloVmM+O5Z
+        maJyQqYBjbBO++gZIUVxJez4/QULG+q1lEPS/Y6TYKKtFJS4ChlWsM716eJGPZQ4loFUgp1ihfg
+        ==
+X-Received: by 2002:a05:6214:194b:b0:474:69c:c21a with SMTP id q11-20020a056214194b00b00474069cc21amr3792543qvk.25.1658361800676;
+        Wed, 20 Jul 2022 17:03:20 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1td9GAJoudrL5DhtFUEXZ0vWM5eEgh/b3Z8hNa2qWsTt+tRvoCnZ7VlRAHlZ06k2CHi33a+3g==
+X-Received: by 2002:a05:6214:194b:b0:474:69c:c21a with SMTP id q11-20020a056214194b00b00474069cc21amr3792502qvk.25.1658361800353;
+        Wed, 20 Jul 2022 17:03:20 -0700 (PDT)
+Received: from localhost.localdomain (bras-base-aurron9127w-grc-37-74-12-30-48.dsl.bell.ca. [74.12.30.48])
+        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm418640qtk.52.2022.07.20.17.03.19
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 20 Jul 2022 17:03:19 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>, peterx@redhat.com,
+        John Hubbard <jhubbard@nvidia.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: [PATCH v2 0/3] kvm/mm: Allow GUP to respond to non fatal signals
+Date:   Wed, 20 Jul 2022 20:03:15 -0400
+Message-Id: <20220721000318.93522-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720025920.1373558-6-aneesh.kumar@linux.ibm.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Aneesh,
+v2:
+- Added r-b
+- Rewrite the comment in faultin_page() for FOLL_INTERRUPTIBLE [John]
+- Dropped the controversial patch to introduce a flag for
+  __gfn_to_pfn_memslot(), instead used a boolean for now [Sean]
+- Rename s/is_sigpending_pfn/KVM_PFN_ERR_SIGPENDING/ [Sean]
+- Change comment in kvm_faultin_pfn() mentioning fatal signals [Sean]
 
-I love your patch! Yet something to improve:
+rfc: https://lore.kernel.org/kvm/20220617014147.7299-1-peterx@redhat.com
+v1:  https://lore.kernel.org/kvm/20220622213656.81546-1-peterx@redhat.com
 
-[auto build test ERROR on akpm-mm/mm-everything]
+One issue was reported that libvirt won't be able to stop the virtual
+machine using QMP command "stop" during a paused postcopy migration [1].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220720-110356
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: arm64-randconfig-r025-20220718 (https://download.01.org/0day-ci/archive/20220721/202207210723.HeaXhM1j-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b5fc1c467550e9f07b8f128b554a7d68e13628ff
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220720-110356
-        git checkout b5fc1c467550e9f07b8f128b554a7d68e13628ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+It won't work because "stop the VM" operation requires the hypervisor to
+kick all the vcpu threads out using SIG_IPI in QEMU (which is translated to
+a SIGUSR1).  However since during a paused postcopy, the vcpu threads are
+hang death at handle_userfault() so there're simply not responding to the
+kicks.  Further, the "stop" command will further hang the QMP channel.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The mm has facility to process generic signal (FAULT_FLAG_INTERRUPTIBLE),
+however it's only used in the PF handlers only, not in GUP. Unluckily, KVM
+is a heavy GUP user on guest page faults.  It means we won't be able to
+interrupt a long page fault for KVM fetching guest pages with what we have
+right now.
 
-All errors (new ones prefixed by >>):
+I think it's reasonable for GUP to only listen to fatal signals, as most of
+the GUP users are not really ready to handle such case.  But actually KVM
+is not such an user, and KVM actually has rich infrastructure to handle
+even generic signals, and properly deliver the signal to the userspace.
+Then the page fault can be retried in the next KVM_RUN.
 
-   mm/memory-tiers.c: In function 'migrate_on_reclaim_init':
->> mm/memory-tiers.c:349:17: error: 'node_demotion' undeclared (first use in this function)
-     349 |                 node_demotion = kcalloc(MAX_NUMNODES, sizeof(struct demotion_nodes),
-         |                 ^~~~~~~~~~~~~
-   mm/memory-tiers.c:349:17: note: each undeclared identifier is reported only once for each function it appears in
+This patchset added FOLL_INTERRUPTIBLE to enable FAULT_FLAG_INTERRUPTIBLE,
+and let KVM be the first one to use it.  KVM and mm/gup can always be able
+to respond to fatal signals, but not non-fatal ones until this patchset.
 
+One thing to mention is that this is not allowing all KVM paths to be able
+to respond to non fatal signals, but only on x86 slow page faults.  In the
+future when more code is ready for handling signal interruptions, we can
+explore possibility to have more gup callers using FOLL_INTERRUPTIBLE.
 
-vim +/node_demotion +349 mm/memory-tiers.c
+Tests
+=====
 
-   345	
-   346	static void __init migrate_on_reclaim_init(void)
-   347	{
-   348		if (IS_ENABLED(CONFIG_MIGRATION)) {
- > 349			node_demotion = kcalloc(MAX_NUMNODES, sizeof(struct demotion_nodes),
-   350						GFP_KERNEL);
-   351			WARN_ON(!node_demotion);
-   352		}
-   353		hotplug_memory_notifier(migrate_on_reclaim_callback, MEMTIER_HOTPLUG_PRIO);
-   354	}
-   355	
+I created a postcopy environment, pause the migration by shutting down the
+network to emulate a network failure (so the handle_userfault() will stuck
+for a long time), then I tried three things:
+
+  (1) Sending QMP command "stop" to QEMU monitor,
+  (2) Hitting Ctrl-C from QEMU cmdline,
+  (3) GDB attach to the dest QEMU process.
+
+Before this patchset, all three use case hang.  After the patchset, all
+work just like when there's not network failure at all.
+
+Please have a look, thanks.
+
+[1] https://gitlab.com/qemu-project/qemu/-/issues/1052
+
+Peter Xu (3):
+  mm/gup: Add FOLL_INTERRUPTIBLE
+  kvm: Add new pfn error KVM_PFN_ERR_SIGPENDING
+  kvm/x86: Allow to respond to generic signals during slow page faults
+
+ arch/arm64/kvm/mmu.c                   |  2 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c    |  2 +-
+ arch/powerpc/kvm/book3s_64_mmu_radix.c |  2 +-
+ arch/x86/kvm/mmu/mmu.c                 | 16 +++++++++++--
+ include/linux/kvm_host.h               | 15 ++++++++++--
+ include/linux/mm.h                     |  1 +
+ mm/gup.c                               | 33 ++++++++++++++++++++++----
+ virt/kvm/kvm_main.c                    | 30 ++++++++++++++---------
+ virt/kvm/kvm_mm.h                      |  4 ++--
+ virt/kvm/pfncache.c                    |  2 +-
+ 10 files changed, 82 insertions(+), 25 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+

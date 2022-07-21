@@ -2,189 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4842C57D264
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295B757D26D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiGURWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S229463AbiGUR1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiGURWI (ORCPT
+        with ESMTP id S229461AbiGUR1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:22:08 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322102D1D4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:22:06 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id n185so1413971wmn.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S3C8q1laz4rBJ9aGVPrsPOjt/QLLVMunUdYBJjHo4DE=;
-        b=FilIoPgSWSX+M9Q5xzcjR7Bm7oSCIxKHBRehRGwnQpyGPiolhL1PxrDc/gy3NEOgOA
-         WtGktAZpu/0N7X96yPfmjrLk2bK/wsS8TEOdha+N5u6sMaZkwMhw8bnIsVuTtsAWfZ9o
-         htlMSo/fKYogD8FOwfdEzo5i+r75wKKrQSZlleXpxHTTDFqyRHQyrtEU3d8Qj5hwOytl
-         2Vl8qkFZwE4dMFP7JDWy90fDAGFnFDYaM5yEfdAeOrfMN5c4raOQQd17eiuYR0t0J5A5
-         vpib/yCSI2QQxVVS5XwklwcxvCmxO2tOy1SVFzfY7kFlxniF2kdvaqzNIhWOLJ+DZBJ+
-         dnaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S3C8q1laz4rBJ9aGVPrsPOjt/QLLVMunUdYBJjHo4DE=;
-        b=x2i31bOkQtDukEUl1eCt6XzRrkhhjcddgzkRKwM1yXwOp0j0EYnvnFiGIz+8hIZ/+b
-         x01Ngefq+/t3t2ahG8kArwcEgaABd7qdHoZy1tXknKsXIFSvhdT5+AlgQQAK5u+fLM7K
-         zBq9SWpyM57WjPBbWwLiCOFQrpIP90twv6vz3Fh9Qp2qKEeeVKC8aMUgcWjcHJH4BX0q
-         iQxBIqb0tNcLGe989+ykHVW8UfYBF3/H4t6kKQgc1+s7VDh5cBlWf6/3u8yLlBATud4E
-         mblbDmDOdqjb9Kfr3/gMB+K446snSc9SPEJ9AOUv3gnhT/glbC4MGm8gBdyUDg+qcGZJ
-         s0/g==
-X-Gm-Message-State: AJIora9Dro5/N/BqzrEty+e9szy37rObYzK0YqyeH3P9kuIl220MWiSS
-        h3BlgwPCFollKYonz2xisMuasp57mcEPRl/H+lY7Bg==
-X-Google-Smtp-Source: AGRyM1t48kSCXbpdLtCbqUKCWIaKHfAn7MwO5VCXmGix7BhsPk0uKaPuE/mS8Vwzif/e/0r5f/Ku//506/LwFKbrjMM=
-X-Received: by 2002:a05:600c:354e:b0:3a3:2ede:853d with SMTP id
- i14-20020a05600c354e00b003a32ede853dmr4107316wmq.61.1658424124442; Thu, 21
- Jul 2022 10:22:04 -0700 (PDT)
+        Thu, 21 Jul 2022 13:27:05 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6637D491FD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:27:04 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4LpfdM44yrzDr4R;
+        Thu, 21 Jul 2022 17:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1658424423; bh=tLbHRN+1HXM03PQNvYmbcQ4E87fMLPaXXEod+l2R5Dw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XLMgp7Y4ElJ5ReFZnBd1+/TY6/l45fvnNGgdwyyp7WHGcZavpLx4YDicsa92I6yr0
+         Ot0LwvNww1nxCQLntxuuF/r8x2L6g4ZS1Jvq+g8iA9vw0F3lJjY99kWaBzQN9Jbtt4
+         eH4WgayKgQ17mCARinnc+5AbXL3XZzdZ/50/36ZU=
+X-Riseup-User-ID: 23B284C68BE6ABE9CC990460759E1236BD94AD3094C54EC02C595A1ADAFBC734
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4LpfdG44xKz214c;
+        Thu, 21 Jul 2022 17:26:57 +0000 (UTC)
+Message-ID: <158dc220-3901-26fc-2f51-ebcecc091e17@riseup.net>
+Date:   Thu, 21 Jul 2022 14:26:54 -0300
 MIME-Version: 1.0
-References: <20220709000439.243271-1-yosryahmed@google.com>
- <20220709000439.243271-5-yosryahmed@google.com> <370cb480-a427-4d93-37d9-3c6acd73b967@fb.com>
- <a6d048b8-d017-ea7e-36f0-1c4f88fc4399@fb.com> <CA+khW7gmVmXMg4YP4fxTtgqNyAr4mQqnXbP=z0nUeQ8=hfGC3g@mail.gmail.com>
- <2a26b45d-6fab-b2a2-786e-5cb4572219ea@fb.com> <CA+khW7jp+0AadVagqCcV8ELNRphP47vJ6=jGyuMJGnTtYynF+Q@mail.gmail.com>
- <3f3ffe0e-d2ac-c868-a1bf-cdf1b58fd666@fb.com>
-In-Reply-To: <3f3ffe0e-d2ac-c868-a1bf-cdf1b58fd666@fb.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 21 Jul 2022 10:21:53 -0700
-Message-ID: <CA+khW7ihQmjwGuVPCEuZ5EXMiMWWaxiAatmjpo1xiaWokUNRGw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/8] bpf: Introduce cgroup iter
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 5/5] drm/amd/display: move FPU code from dcn301 clk mgr to
+ DML folder
+Content-Language: en-US
+To:     Melissa Wen <mwen@igalia.com>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     Guenter Roeck <linux@roeck-us.net>, kernel-dev@igalia.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220720193208.1131493-1-mwen@igalia.com>
+ <20220720193208.1131493-6-mwen@igalia.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220720193208.1131493-6-mwen@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 9:15 AM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 7/20/22 5:40 PM, Hao Luo wrote:
-> > On Mon, Jul 11, 2022 at 8:45 PM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >> On 7/11/22 5:42 PM, Hao Luo wrote:
-> > [...]
-> >>>>>> +
-> >>>>>> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> >>>>>> +{
-> >>>>>> +    struct cgroup_iter_priv *p = seq->private;
-> >>>>>> +
-> >>>>>> +    mutex_lock(&cgroup_mutex);
-> >>>>>> +
-> >>>>>> +    /* support only one session */
-> >>>>>> +    if (*pos > 0)
-> >>>>>> +        return NULL;
-> >>>>>
-> >>>>> This might be okay. But want to check what is
-> >>>>> the practical upper limit for cgroups in a system
-> >>>>> and whether we may miss some cgroups. If this
-> >>>>> happens, it will be a surprise to the user.
-> >>>>>
-> >>>
-> >>> Ok. What's the max number of items supported in a single session?
-> >>
-> >> The max number of items (cgroups) in a single session is determined
-> >> by kernel_buffer_size which equals to 8 * PAGE_SIZE. So it really
-> >> depends on how much data bpf program intends to send to user space.
-> >> If each bpf program run intends to send 64B to user space, e.g., for
-> >> cpu, memory, cpu pressure, mem pressure, io pressure, read rate, write
-> >> rate, read/write rate. Then each session can support 512 cgroups.
-> >>
-> >
-> > Hi Yonghong,
-> >
-> > Sorry about the late reply. It's possible that the number of cgroup
-> > can be large, 1000+, in our production environment. But that may not
-> > be common. Would it be good to leave handling large number of cgroups
-> > as follow up for this patch? If it turns out to be a problem, to
-> > alleviate it, we could:
-> >
-> > 1. tell users to write program to skip a certain uninteresting cgroups.
-> > 2. support requesting large kernel_buffer_size for bpf_iter, maybe as
-> > a new bpf_iter flag.
->
-> Currently if we intend to support multiple read() for cgroup_iter,
-> the following is a very inefficient approach:
->
-> in seq_file private data structure, remember the last cgroup visited
-> and for the second read() syscall, do the traversal again (but not
-> calling bpf program) until the last cgroup and proceed from there.
-> This is inefficient and probably works. But if the last cgroup is
-> gone from the hierarchy, that the above approach won't work. One
-> possibility is to remember the last two cgroups. If the last cgroup
-> is gone, check the 'next' cgroup based on the one before the last
-> cgroup. If both are gone, we return NULL.
->
+Hi Melissa,
 
-I suspect in reality, just remembering the last cgroup (or two
-cgroups) may not be sufficient. First, I don't want to hold
-cgroup_mutex across multiple sessions. I assume it's also not safe to
-release cgroup_mutex in the middle of walking cgroup hierarchy.
-Supporting multiple read() can be nasty for cgroup_iter.
+On 7/20/22 16:32, Melissa Wen wrote:
+> The -mno-gnu-attribute option in dcn301 clk mgr makefile hides a soft vs
+> hard fp error for powerpc. After removing this flag, we can see some FPU
+> code remains there:
+> 
+> gcc-11.3.0-nolibc/powerpc64-linux/bin/powerpc64-linux-ld:
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o uses
+> hard float,
+> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn301/vg_clk_mgr.o
+> uses soft float
+> 
+> Therefore, remove the -mno-gnu-attribute flag for dcn301/powerpc and
+> move FPU-associated code to DML folder.
+> 
+> Signed-off-by: Melissa Wen <mwen@igalia.com>
+> ---
+>  .../gpu/drm/amd/display/dc/clk_mgr/Makefile   |  6 --
+>  .../display/dc/clk_mgr/dcn301/vg_clk_mgr.c    | 86 ++-----------------
+>  .../display/dc/clk_mgr/dcn301/vg_clk_mgr.h    |  3 +
+>  .../amd/display/dc/dml/dcn301/dcn301_fpu.c    | 74 ++++++++++++++++
+>  4 files changed, 84 insertions(+), 85 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile b/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile
+> index 15b660a951a5..271d8e573181 100644
+> --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/Makefile
+> @@ -123,12 +123,6 @@ AMD_DISPLAY_FILES += $(AMD_DAL_CLK_MGR_DCN30)
+>  ###############################################################################
+>  CLK_MGR_DCN301 = vg_clk_mgr.o dcn301_smu.o
+>  
+> -# prevent build errors regarding soft-float vs hard-float FP ABI tags
+> -# this code is currently unused on ppc64, as it applies to VanGogh APUs only
+> -ifdef CONFIG_PPC64
+> -CFLAGS_$(AMDDALPATH)/dc/clk_mgr/dcn301/vg_clk_mgr.o := $(call cc-option,-mno-gnu-attribute)
+> -endif
+> -
+>  AMD_DAL_CLK_MGR_DCN301 = $(addprefix $(AMDDALPATH)/dc/clk_mgr/dcn301/,$(CLK_MGR_DCN301))
+>  
+>  AMD_DISPLAY_FILES += $(AMD_DAL_CLK_MGR_DCN301)
+> diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c
+> index f310b0d25a07..65f224af03c0 100644
+> --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c
+> +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.c
+> @@ -32,6 +32,10 @@
+>  // For dcn20_update_clocks_update_dpp_dto
+>  #include "dcn20/dcn20_clk_mgr.h"
+>  
+> +// For DML FPU code
+> +#include "dml/dcn20/dcn20_fpu.h"
+> +#include "dml/dcn301/dcn301_fpu.h"
+> +
 
-> But in any case, if there are additional cgroups not visited,
-> in the second read(), we should not return NULL which indicates
-> done with all cgroups. We may return EOPNOTSUPP to indicate there
-> are missing cgroups due to not supported.
->
-> Once users see EOPNOTSUPP which indicates there are missing
-> cgroups, they can do more filtering in bpf program to avoid
-> large data volume to user space.
->
+I guess the "dml/dcn301/dcn301_fpu.h" header is not needed, as you only
+use dcn21_clk_mgr_set_bw_params_wm_table and the structs are on the
+source file.
 
-Makes sense. Yonghong, one question to confirm, if the first read()
-overflows, does the user still get partial data?
+Besides that, to the whole series:
+Reviewed-by: Maíra Canal <mairacanal@riseup.net>
 
-I'll change the return code to EOPNOTSUPP in v4 of this patchset.
+Best Regards,
+- Maíra Canal
 
-> To provide a way to truely visit *all* cgroups,
-> we can either use bpf_iter link_create->flags
-> to increase the buffer size as your suggested in the above so
-> user can try to allocate more kernel buffer size. Or implement
-> proper second read() traversal which I don't have a good idea
-> how to do it efficiently.
-
-I will try the buffer size increase first. Looks more doable. Do you
-mind putting this support as a follow-up?
-
-> >
-> > Hao
-> >
-> >>>
-> > [...]
-> >>>>> [...]
+>  #include "vg_clk_mgr.h"
+>  #include "dcn301_smu.h"
+>  #include "reg_helper.h"
+> @@ -526,81 +530,6 @@ static struct clk_bw_params vg_bw_params = {
+>  
+>  };
+>  
+> -static struct wm_table ddr4_wm_table = {
+> -	.entries = {
+> -		{
+> -			.wm_inst = WM_A,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.72,
+> -			.sr_exit_time_us = 6.09,
+> -			.sr_enter_plus_exit_time_us = 7.14,
+> -			.valid = true,
+> -		},
+> -		{
+> -			.wm_inst = WM_B,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.72,
+> -			.sr_exit_time_us = 10.12,
+> -			.sr_enter_plus_exit_time_us = 11.48,
+> -			.valid = true,
+> -		},
+> -		{
+> -			.wm_inst = WM_C,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.72,
+> -			.sr_exit_time_us = 10.12,
+> -			.sr_enter_plus_exit_time_us = 11.48,
+> -			.valid = true,
+> -		},
+> -		{
+> -			.wm_inst = WM_D,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.72,
+> -			.sr_exit_time_us = 10.12,
+> -			.sr_enter_plus_exit_time_us = 11.48,
+> -			.valid = true,
+> -		},
+> -	}
+> -};
+> -
+> -static struct wm_table lpddr5_wm_table = {
+> -	.entries = {
+> -		{
+> -			.wm_inst = WM_A,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.65333,
+> -			.sr_exit_time_us = 13.5,
+> -			.sr_enter_plus_exit_time_us = 16.5,
+> -			.valid = true,
+> -		},
+> -		{
+> -			.wm_inst = WM_B,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.65333,
+> -			.sr_exit_time_us = 13.5,
+> -			.sr_enter_plus_exit_time_us = 16.5,
+> -			.valid = true,
+> -		},
+> -		{
+> -			.wm_inst = WM_C,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.65333,
+> -			.sr_exit_time_us = 13.5,
+> -			.sr_enter_plus_exit_time_us = 16.5,
+> -			.valid = true,
+> -		},
+> -		{
+> -			.wm_inst = WM_D,
+> -			.wm_type = WM_TYPE_PSTATE_CHG,
+> -			.pstate_latency_us = 11.65333,
+> -			.sr_exit_time_us = 13.5,
+> -			.sr_enter_plus_exit_time_us = 16.5,
+> -			.valid = true,
+> -		},
+> -	}
+> -};
+> -
+> -
+>  static unsigned int find_dcfclk_for_voltage(const struct vg_dpm_clocks *clock_table,
+>  		unsigned int voltage)
+>  {
+> @@ -670,10 +599,9 @@ static void vg_clk_mgr_helper_populate_bw_params(
+>  		/*
+>  		 * WM set D will be re-purposed for memory retraining
+>  		 */
+> -		bw_params->wm_table.entries[WM_D].pstate_latency_us = LPDDR_MEM_RETRAIN_LATENCY;
+> -		bw_params->wm_table.entries[WM_D].wm_inst = WM_D;
+> -		bw_params->wm_table.entries[WM_D].wm_type = WM_TYPE_RETRAINING;
+> -		bw_params->wm_table.entries[WM_D].valid = true;
+> +		DC_FP_START();
+> +		dcn21_clk_mgr_set_bw_params_wm_table(bw_params);
+> +		DC_FP_END();
+>  	}
+>  
+>  }
+> diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h
+> index 7255477307f1..75884f572989 100644
+> --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h
+> +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn301/vg_clk_mgr.h
+> @@ -29,6 +29,9 @@
+>  
+>  struct watermarks;
+>  
+> +extern struct wm_table ddr4_wm_table;
+> +extern struct wm_table lpddr5_wm_table;
+> +
+>  struct smu_watermark_set {
+>  	struct watermarks *wm_set;
+>  	union large_integer mc_address;
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+> index e4863f0bf0f6..7ef66e511ec8 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+> @@ -214,6 +214,80 @@ struct _vcs_dpi_soc_bounding_box_st dcn3_01_soc = {
+>  	.urgent_latency_adjustment_fabric_clock_reference_mhz = 0,
+>  };
+>  
+> +struct wm_table ddr4_wm_table = {
+> +	.entries = {
+> +		{
+> +			.wm_inst = WM_A,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.72,
+> +			.sr_exit_time_us = 6.09,
+> +			.sr_enter_plus_exit_time_us = 7.14,
+> +			.valid = true,
+> +		},
+> +		{
+> +			.wm_inst = WM_B,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.72,
+> +			.sr_exit_time_us = 10.12,
+> +			.sr_enter_plus_exit_time_us = 11.48,
+> +			.valid = true,
+> +		},
+> +		{
+> +			.wm_inst = WM_C,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.72,
+> +			.sr_exit_time_us = 10.12,
+> +			.sr_enter_plus_exit_time_us = 11.48,
+> +			.valid = true,
+> +		},
+> +		{
+> +			.wm_inst = WM_D,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.72,
+> +			.sr_exit_time_us = 10.12,
+> +			.sr_enter_plus_exit_time_us = 11.48,
+> +			.valid = true,
+> +		},
+> +	}
+> +};
+> +
+> +struct wm_table lpddr5_wm_table = {
+> +	.entries = {
+> +		{
+> +			.wm_inst = WM_A,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.65333,
+> +			.sr_exit_time_us = 13.5,
+> +			.sr_enter_plus_exit_time_us = 16.5,
+> +			.valid = true,
+> +		},
+> +		{
+> +			.wm_inst = WM_B,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.65333,
+> +			.sr_exit_time_us = 13.5,
+> +			.sr_enter_plus_exit_time_us = 16.5,
+> +			.valid = true,
+> +		},
+> +		{
+> +			.wm_inst = WM_C,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.65333,
+> +			.sr_exit_time_us = 13.5,
+> +			.sr_enter_plus_exit_time_us = 16.5,
+> +			.valid = true,
+> +		},
+> +		{
+> +			.wm_inst = WM_D,
+> +			.wm_type = WM_TYPE_PSTATE_CHG,
+> +			.pstate_latency_us = 11.65333,
+> +			.sr_exit_time_us = 13.5,
+> +			.sr_enter_plus_exit_time_us = 16.5,
+> +			.valid = true,
+> +		},
+> +	}
+> +};
+> +
+>  static void calculate_wm_set_for_vlevel(int vlevel,
+>  		struct wm_range_table_entry *table_entry,
+>  		struct dcn_watermarks *wm_set,

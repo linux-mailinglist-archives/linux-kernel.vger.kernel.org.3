@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C5457C932
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F8857C937
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiGUKji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S232771AbiGUKld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbiGUKjg (ORCPT
+        with ESMTP id S231565AbiGUKl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:39:36 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCB782463;
-        Thu, 21 Jul 2022 03:39:35 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id kh20so841457qvb.5;
-        Thu, 21 Jul 2022 03:39:35 -0700 (PDT)
+        Thu, 21 Jul 2022 06:41:27 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EA543318;
+        Thu, 21 Jul 2022 03:41:26 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id c3so964256qko.1;
+        Thu, 21 Jul 2022 03:41:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=W3en6cyDPa1SruHHHVqAUOOdbcVIPyK0ecTvVZtCNsk=;
-        b=qjO5sv1TPG4VUpDgWoB7iLcAxuX26P1sxBqZVmEIwKs+IJKoTMZNQM6uNe5nDkB3+3
-         ABvpwn/MZSfJ4njEhF0ashbmz/pgte6x03k/474pJlExmfZOIMblJzrK+SRD+09WHsBS
-         YisrtYrBGM8cEVtW60XavKrUtAXTGUu0wQX1YuXlf8cfqSaItBG3nxnsPRVze+dhCiOS
-         BuSh2dFNnGlIougWquaK/fwrDfqvq5ZyXrI7jXK6gw5Vu5pML3oIiOE3A5+nLNSviRhK
-         NkbKYDgJvXxc+qtxjsQ6ockt7cYsZMGAOuA1EvV3PFM2pKdxtqVwNvOpWT2GI03aBZlM
-         Ya9g==
-X-Gm-Message-State: AJIora+DY5NQEkEW8hFU9NyERWLirZPghI9tl/LE+njZWrMKNiU6FblQ
-        z1l7yC39ZOc8YjHwtKFCtTtVuROjAKT1sQ==
-X-Google-Smtp-Source: AGRyM1u6WrgpY6yHLlHY7goZw6l7+JWO5cQqFP99DTH0TE7UOIHM8cOQweyGhPs/Fh7ttxOCwk96mQ==
-X-Received: by 2002:ad4:5ba3:0:b0:473:1b5:e8ba with SMTP id 3-20020ad45ba3000000b0047301b5e8bamr33276887qvq.49.1658399974772;
-        Thu, 21 Jul 2022 03:39:34 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05620a244f00b006af3bc9c6bbsm1320550qkn.52.2022.07.21.03.39.34
+        bh=ZM0L7KaMSxOM/wakTGUefF7pMc1InjFxOidEaSTgOKI=;
+        b=5/vWHP0YgkkeSz7qTFJfpYuH2LoHiLZJP6MdOopIAt5vo+Sg9nhCkIgnxESjjptK+y
+         lToFbhyKh+USPj+p+vbM7ylhsEl77EjfKclVOLt5iCG/wgdgUy7EQOuFVyZnBwZYkJ6B
+         /m6+NyV9iJPFuQ0CGomMD+FiFbfIRrQGBsKgAtHYUc2yBJ1sy5vPaOCCcXp6HQXk1bb7
+         kThOGhNo4R+jgI3ssbErP9XhQ4GgutlpSxcFOjtvUZ7Xc4m3Fqap4UzMi1rH1hc0bryH
+         cebNOA18NIVWVwQMSnS0XjiqVx2HPzC9rMQBje5jBDhrN25NNT2lxy62nGpWnWaagfsu
+         Hvhw==
+X-Gm-Message-State: AJIora80fqbKAVEdL+UVxutHiLk4Fl+UFc16PMtpolBria7WcwkdvdVa
+        fJANk/oJr8zIdYAeozhZvl4Qxbv1Hq22OA==
+X-Google-Smtp-Source: AGRyM1tOeA+Gw7DZiFWRPKJOoA0ezpkitpRciKFcRBWGRCDfdmj6aVKFQ1LYFlWpb0lOf8R04zFU7g==
+X-Received: by 2002:a37:ac17:0:b0:6b5:d5e4:61bc with SMTP id e23-20020a37ac17000000b006b5d5e461bcmr18810281qkm.707.1658400085857;
+        Thu, 21 Jul 2022 03:41:25 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05620a405500b006b5f4b7b088sm1194610qko.108.2022.07.21.03.41.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 03:39:34 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31e7055a61dso12361717b3.11;
-        Thu, 21 Jul 2022 03:39:34 -0700 (PDT)
-X-Received: by 2002:a81:84c1:0:b0:31e:4e05:e4f4 with SMTP id
- u184-20020a8184c1000000b0031e4e05e4f4mr16277343ywf.384.1658399974351; Thu, 21
- Jul 2022 03:39:34 -0700 (PDT)
+        Thu, 21 Jul 2022 03:41:25 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id c131so2057048ybf.9;
+        Thu, 21 Jul 2022 03:41:25 -0700 (PDT)
+X-Received: by 2002:a25:aacc:0:b0:66f:f1ca:409c with SMTP id
+ t70-20020a25aacc000000b0066ff1ca409cmr29824052ybi.36.1658400085177; Thu, 21
+ Jul 2022 03:41:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220718195651.7711-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220718195651.7711-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220718195651.7711-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220718195651.7711-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Jul 2022 12:39:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVjAQ9km_tVHc-BVAbs8XPZ5HiX2-_v5fmtE5-qd3bhog@mail.gmail.com>
-Message-ID: <CAMuHMdVjAQ9km_tVHc-BVAbs8XPZ5HiX2-_v5fmtE5-qd3bhog@mail.gmail.com>
-Subject: Re: [PATCH 3/5] arm64: dts: renesas: r9a07g054: Add IRQC node to SoC DTSI
+Date:   Thu, 21 Jul 2022 12:41:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUNifDMjBj5gkUUir-HYbn-gtx=2e-QkFTNYj_sHNc4RA@mail.gmail.com>
+Message-ID: <CAMuHMdUNifDMjBj5gkUUir-HYbn-gtx=2e-QkFTNYj_sHNc4RA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] arm64: dts: renesas: r9a07g044: Update pinctrl node
+ to handle GPIO interrupts
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -73,7 +74,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Jul 18, 2022 at 9:57 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add IRQC node to R9A07G054 (RZ/V2L) SoC DTSI.
+> Add required  properties in pinctrl node to handle GPIO interrupts.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 

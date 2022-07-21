@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8365057C170
+	by mail.lfdr.de (Postfix) with ESMTP id 368DA57C16F
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbiGUAIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
+        id S232349AbiGUAIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiGUAIX (ORCPT
+        with ESMTP id S232277AbiGUAIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:08:23 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC2774E3B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:22 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso3760235pjk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:22 -0700 (PDT)
+        Wed, 20 Jul 2022 20:08:32 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0707539A
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:30 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 23so118974pgc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:mime-version;
-        bh=RvgbJkR5UbUmNHNZjyO8yHEQtKxB83cJa4EJIk1OIQM=;
-        b=RPKm71oeefdo9vbp/6bPFYPYTpt67nEczadntx0D0CW3267JbSvwMrwgQAaKx+ZFL/
-         hxNxiFpWGbBCIvdDTR/upmgt6RyqJv8xeZD0ktm7OpF5+Q7+lD74qar0gb+ieP7Sb8OJ
-         sEAVTMjOuy1J/IYgJp3uScLOLUG4etWY/ysfw=
+        bh=Vks1jOzJcYFVrlZesnl5WEeHJjwUQR/gR2C1hZpCNvg=;
+        b=RgGWWI1hP1gWigoCXXuphHEJjAJTj1ZWL177IZB9o6MOzUoOJhIZL2SpcA6dtuSABD
+         a90KgHOakmjbgzT8TwJMhjrkku9m3pqygU1XC7wOKAhpohVGTK6MHwY4wU09uSX/p2jw
+         0xeKZ1pmVh8o32eNU99jarHBjFk59jU3P+Ir8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=RvgbJkR5UbUmNHNZjyO8yHEQtKxB83cJa4EJIk1OIQM=;
-        b=FLktWx4KKEUW8700Qi6zFCzxX3/8G8Bt0PnQXmsMe5eVHih3dlXwMKwnMvcWsoYAZz
-         HknGEYg3cdW204N6S1z5WEjHJNG/1ocVY1UBA6JyidSZFCIASVVd/cDzTI6roKBlRg5A
-         tJrge5PSd0izFi89LJPiikAlgCtR6/eG9SKc1vme2+5OFQegz9vw4zOgiPqV9xbhEII+
-         PzOKGMlU8KzS1/E5Vrt+g7m5jAMODv9jSW04DYSKMpZVwAH1NWqwGwNAAYIjyXKZxgj6
-         G0zAtMhNEhJ1X2CXUSUaJMkpf1IKHv6kR9e6edasOOphX6aBmPnj1ULX+7/QpiPgzuN3
-         QXmg==
-X-Gm-Message-State: AJIora8cKkwNd870zvsBpIOjGXlgh1AeyPtnZfgv1ZMvME2YxsadWM6M
-        2zYqpu2kAKyg/Gg5/GNe1nfHkw==
-X-Google-Smtp-Source: AGRyM1tpx4sT4M5wjsBnKIQkzGCTjAUczQEnY5yHe+cpouR/uo1JWV7noN+q+AjAOG4hkgBxYzOKkg==
-X-Received: by 2002:a17:90b:1c09:b0:1ef:f82c:174b with SMTP id oc9-20020a17090b1c0900b001eff82c174bmr8085132pjb.88.1658362102280;
-        Wed, 20 Jul 2022 17:08:22 -0700 (PDT)
+        bh=Vks1jOzJcYFVrlZesnl5WEeHJjwUQR/gR2C1hZpCNvg=;
+        b=P81lNBv1ijNwbtkArz6+QC/TFzOt/7jpuyA4lsg4ixcPMOLbPutJ/UsdJllWWOHkyM
+         +bFRp/vuJTLfO2H1UDBjzzutt0Eg4V15wrwuM2H2v/IZxbmkL+Qb5nQCpXMXXEm4cgqk
+         C5R4Yg2gXTlE9pQkFjd69GuKdQIv3OAjn+E+XybymRfXdnz0rR5vxMQl1JpFP4QnBhXt
+         +CQr2U9qrIMdNiseUduyyzc55j8QOnj2kHF4gHLFd1uruYEBrtV/vfUcNQCWXaQ3+qfE
+         X6IN2h5u1kC0ik3xQmeDPQvlbHTA3u3K84FkQJfaiJgf27tBUse09TcFHBSB8JJVOa62
+         RRiw==
+X-Gm-Message-State: AJIora/jkicIORidit0m+6s4hfNCawabGHV9CfoLHs4GOIKFZo21Ab3F
+        2TcC61BdvnzZOX8l5mNSZ3D2kvba/UvPQg==
+X-Google-Smtp-Source: AGRyM1s/lfKO6GtGHcOqXX2Z7ugrD2g7cgcM1fkDDAiDTAXrFNtRW7m7l0rTitXVwgSnHCg6EVxTNw==
+X-Received: by 2002:aa7:961d:0:b0:528:ce2b:d9ce with SMTP id q29-20020aa7961d000000b00528ce2bd9cemr41846921pfg.83.1658362110203;
+        Wed, 20 Jul 2022 17:08:30 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id o5-20020a62cd05000000b005254c71df0esm215578pfg.86.2022.07.20.17.08.21
+        by smtp.gmail.com with ESMTPSA id w125-20020a628283000000b0052ab5d2d398sm219988pfd.47.2022.07.20.17.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 17:08:21 -0700 (PDT)
+        Wed, 20 Jul 2022 17:08:29 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
 Cc:     joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND PATCH 8/9] MAINTAINERS: Add BCM4908 maintainer to BCMBCA entry
-Date:   Wed, 20 Jul 2022 17:08:11 -0700
-Message-Id: <20220721000811.29663-1-william.zhang@broadcom.com>
+Subject: [RESEND PATCH 9/9] arm64: defconfig: remove BCM4908
+Date:   Wed, 20 Jul 2022 17:08:24 -0700
+Message-Id: <20220721000824.29682-1-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000008980505e4458494"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        boundary="00000000000082293305e4458482"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000008980505e4458494
-Content-Type: text/plain; charset=UTF-8
+--00000000000082293305e4458482
 Content-Transfer-Encoding: 8bit
 
-Since BCM4908 SoC support is merged into ARCH_BCMBCA, add BCM4908
-maintainer Rafal to bcmbca maintainer list.
+Remove CONFIG_ARCH_BCM4908. It is supported under CONFIG_ARCH_BCMBCA.
 
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
+
 ---
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/configs/defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 87e7467d8097..bcc508f4e6c7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3919,6 +3919,7 @@ M:	William Zhang <william.zhang@broadcom.com>
- M:	Anand Gore <anand.gore@broadcom.com>
- M:	Kursad Oney <kursad.oney@broadcom.com>
- M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Rafał Miłecki <rafal@milecki.pl>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 84b203877f91..d0e89702a4da 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -35,7 +35,6 @@ CONFIG_ARCH_SUNXI=y
+ CONFIG_ARCH_ALPINE=y
+ CONFIG_ARCH_APPLE=y
+ CONFIG_ARCH_BCM2835=y
+-CONFIG_ARCH_BCM4908=y
+ CONFIG_ARCH_BCMBCA=y
+ CONFIG_ARCH_BCM_IPROC=y
+ CONFIG_ARCH_BERLIN=y
 -- 
 2.34.1
 
 
---00000000000008980505e4458494
+--00000000000082293305e4458482
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -164,13 +174,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIF5SmGeG6GW+gZpEo69nPL93w7f
-2dEiysNSV/0H//bTMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcyMTAwMDgyMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKNbwjJ8faSQ89e/nZy0pdnj90ES
+gnQZIXA83gp0kWQ8MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcyMTAwMDgzMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBD9adclv7kmPV5D4BGctO1vmkT6BATnNa/DMEiz5675oBZ
-9NYxRehYJmmqTjxRiZArm9symdiYUYavpqUNLchDNROmpXChmzdES0dL9LWiHSk9WBo7owldy7bT
-105X+cY7BCcYJHMn/UR4L68C7yfYmDMWWiKftaGs7g+9DmtzUY898HpIp9pwCDolyKehs9YjQv3x
-jvb4k6JXCH542Z8tlv9Ch5iM0NKovWmP3sj47jMsT1x6+KUUFt44VFMmJRpFFsH3DtYqI/GmYAfD
-TM8MesQuhtg99vI/BgiaFYSBQFVKpfAd3eeySXkfj+11sncEvZQTJOKvFSTpUxscA2N8
---00000000000008980505e4458494--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAsbOfxzt9bkEj7QukErQIWMorIUmjihkC1nmqIcuLTaogL
+tG1sTHbHvaWxET5ZOzpEt/oVIcMcdbl7WuMd5cX4LI+UBjhiZvpafhXeReH9hdeSV0zhVBnbJiqu
+DCf4HDZoXwfLaPNNVbphMP67twHy/pSChBv9SIQb/fKoYelyImKnZCEz3D2wr+5EpT9n87S9RF7J
+P2STDwJwKDphDcpGEQ07EI12sIXJ8hKMUGYpYTCyFfw9rdkaDtoeeKWMe7ZQW9yzqMzgNKjf1IgD
+l0O5TWKjyzwcoiCoPmyc2T7uEbyJt0eRsMX6kVVxtQ/ipm6XIqTCGlCPRiRo/1/uBrG/
+--00000000000082293305e4458482--

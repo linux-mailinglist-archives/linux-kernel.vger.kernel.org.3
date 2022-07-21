@@ -2,133 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B8F57CCC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CC557CCC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiGUN7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
+        id S229982AbiGUOBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiGUN7c (ORCPT
+        with ESMTP id S229713AbiGUOBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:59:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFD33C14A;
-        Thu, 21 Jul 2022 06:59:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA6F561F5F;
-        Thu, 21 Jul 2022 13:59:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1D0C3411E;
-        Thu, 21 Jul 2022 13:59:26 +0000 (UTC)
-Date:   Thu, 21 Jul 2022 09:59:24 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V6 04/16] rv/include: Add deterministic automata monitor
- definition via C macros
-Message-ID: <20220721095924.151c6f5d@gandalf.local.home>
-In-Reply-To: <3c0a4cb5-f88f-ec5f-e614-d1e8ceb036c2@kernel.org>
-References: <cover.1658244826.git.bristot@kernel.org>
-        <9ffc05b67fff087413143a420373731e0e34eef4.1658244826.git.bristot@kernel.org>
-        <20220720160606.3e672b55@gandalf.local.home>
-        <3c0a4cb5-f88f-ec5f-e614-d1e8ceb036c2@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 21 Jul 2022 10:01:04 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCF43D592;
+        Thu, 21 Jul 2022 07:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dlwnS1Fa3TmXXVNwd1KfMLtfg4qW+Hn+l84xHjkNFv4=; b=pM1CVIwQYxiPAKO3GfnMS+lKWM
+        v8JWyHbi4HVsskrZQxy4Ji7eppdHhD1UeK7YeES2Rza9Ju3RbEJUXwt5UYgTNVT2z9kdsVJcQZ2L8
+        N6sK3PA8ObrNJfk7XzTrJZYWeq5vb9MxU4+a7bb7dfmzv/Ic2EqZMfqBN8NDhXaiSx1krB1zjjBqE
+        D6CdkPlu8rryITQUy+7+fBeOogwYiSR19VRwipP0cOL8BciioNlXBMtGct1NVCqFcNqhkzjwMriDU
+        fmUlKR/BahxW7dR+bNhJoxAwIaR0xCbzFpxbFgpew/sJHpTkXKvif23GSxed/IZ1m99labnS42keg
+        BKnGtb8g==;
+Received: from 200-100-212-117.dial-up.telesp.net.br ([200.100.212.117] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oEWjF-001W4c-TX; Thu, 21 Jul 2022 16:00:38 +0200
+Message-ID: <81b1f787-c3d4-1b2d-6b56-38f54947835d@igalia.com>
+Date:   Thu, 21 Jul 2022 11:00:11 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 07/13] parisc: Replace regular spinlock with
+ spin_trylock on panic path
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>, Jeroen Roovers <jer@xs4all.nl>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, linux-parisc@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-8-gpiccoli@igalia.com>
+ <20220720034300.6d2905b8@wim.jer>
+ <76b6f764-23a9-ed0b-df3d-b9194c4acc1d@igalia.com>
+ <7e5dce87-31c1-401f-324a-2aacb6996625@gmx.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <7e5dce87-31c1-401f-324a-2aacb6996625@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 14:08:38 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
-
-> On 7/20/22 22:06, Steven Rostedt wrote:
-> >> +/*												\
-> >> + * da_monitor_enabled_##name - checks if the monitor is enabled					\
-> >> + */												\
-> >> +static inline bool da_monitor_enabled_##name(void)						\
-> >> +{												\  
-> > Should we add a:
-> > 
-> > 	smp_rmb();
-> > 
-> > here? And then a smp_wmb() where these switches get updated?
-> >  
+On 21/07/2022 10:45, Helge Deller wrote:
+> [...]
+> Guilherme, I'd really prefer that you push the whole series at once through
+> some generic tree.
 > 
-> Makes sense.
-> 
-> Should I also add the READ_ONCE/WRITE_ONCE? like
-> 
-> smp_rmb()
-> READ_ONCE(var)
-> 
-> WRITE_ONCE(var, value)
-> smp_wmb()
+> Helge
 
-I'm not sure the WRITE_ONCE() is necessary with the memory barriers.
-Because they should also prevent gcc from doing anything after that
-barrier. As Linus once stated, most cases WRITE_ONCE() is useless, but it's
-fine to keep more for annotation (as to pair with the READ_ONCE()) than for
-anything that is critical.
+Hmm..OK.
 
-> 
-> for all these on/off knobs, or just the barriers?
-> 
-> > I guess how critical is it that these turn off immediately after the switch
-> > is flipped?  
-> 
-> It is not critical to continue the execution of those that have already crossed by
-> the variable. Still, waiting for the tracepoints to finish their execution before
-> returning to the user-space task that disabled the variable might be a good thing.
+Some maintainers will take patches from here and merge, but given your
+preference I can talk to Andrew to see if the can pick via his tree
+(along with the generic panic patches).
 
-You mean after disabling, to wait for the tracepoints that are currently
-running to end?
-
-> 
-> IIRC, we can do that via RCU... like, synchronize_rcu()?
-
-We have tracepoint_synchronize_unregister() that does that, as some
-traceponits use SRCU and not RCU.
-
--- Steve
+Cheers,
 
 
-> 
-> >> +	/* global switch */									\
-> >> +	if (unlikely(!rv_monitoring_on()))							\
-> >> +		return 0;									\
-> >> +												\
-> >> +	/* monitor enabled */									\
-> >> +	if (unlikely(!rv_##name.enabled))							\
-> >> +		return 0;									\
-> >> +												\
-> >> +	return 1;										\
-> >> +}												\
-> >> +												\  
-
+Guilherme

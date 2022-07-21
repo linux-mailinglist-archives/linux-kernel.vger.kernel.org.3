@@ -2,172 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BCA57C992
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F0D57C998
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbiGULIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        id S233080AbiGULKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiGULIk (ORCPT
+        with ESMTP id S232907AbiGULKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:08:40 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6F48320B;
-        Thu, 21 Jul 2022 04:08:39 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4LpVDk4qLxzDr6X;
-        Thu, 21 Jul 2022 11:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1658401718; bh=Nf1Dgyv2qaHl47cUqOxNgenpTkbTW3KND8cpE9za7yk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RjKBmBNQbQslRmze9bo/XVKPk77TFgIvcK1Dv8HnaTofJnxTpQcEXxcnLS8Yiwa33
-         tanx5l2Lc6dVK6HJULsCPpwSTwtPZtvkiV2XjNHYD9yEZKcDrnRd0JajOZHgwHbldu
-         XS0lWir6cL85jZ2XLbpjW9phtYqjCtq3DYNHy7iE=
-X-Riseup-User-ID: 3DFB8BB18B9E4F6B665E5F162549BF310BD214B1CF39F868FF7A64C7FB799035
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4LpVDg3hKDz1xph;
-        Thu, 21 Jul 2022 11:08:35 +0000 (UTC)
-Message-ID: <130be97c-b2cd-5ecc-1549-5b83993843e2@riseup.net>
-Date:   Thu, 21 Jul 2022 08:08:32 -0300
+        Thu, 21 Jul 2022 07:10:52 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3878C82127
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:10:51 -0700 (PDT)
+Received: from 5.5.5 (unknown [10.2.5.5])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb+M5NNlitnAsAA--.488S2;
+        Thu, 21 Jul 2022 19:10:49 +0800 (CST)
+From:   Jun Yi <yijun@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] LoongArch: Remove unused header compiler.h
+Date:   Thu, 21 Jul 2022 19:10:49 +0800
+Message-Id: <20220721111049.4035186-1-yijun@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] Documentation: kunit: Add CLI args for kunit_tool
-Content-Language: en-US
-To:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, skhan@linuxfoundation.org, corbet@lwn.net
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220721081026.1247067-1-sadiyakazi@google.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220721081026.1247067-1-sadiyakazi@google.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf9Dxb+M5NNlitnAsAA--.488S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3ArWrXry7Cr4xCF4rAFWfGrg_yoW7uFy8pF
+        9rCr4kGFZ5WryrJF9FkFyj9r1UJw4kCr1agFyY9a48AF12qr1UZrykKryDAFyUJan5t340
+        gFyfGw1YqF47Xw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5Ab15UUUUU==
+X-CM-SenderInfo: p1lm30o6or00hjvr0hdfq/1tbiAQAOAV3QvP5jAwAIsp
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The content of loongarch's compiler.h is trivial, with
+some unused anywhere, so inline the definitions and remove
+the header.
 
+Signed-off-by: Jun Yi <yijun@loongson.cn>
+---
+v1->v2: Modify commit message
+---
+ arch/loongarch/Kconfig                |  1 -
+ arch/loongarch/include/asm/atomic.h   |  9 ++++-----
+ arch/loongarch/include/asm/compiler.h | 15 ---------------
+ arch/loongarch/include/asm/futex.h    |  5 ++---
+ arch/loongarch/include/asm/irqflags.h |  1 -
+ arch/loongarch/include/asm/local.h    |  1 -
+ arch/loongarch/kernel/reset.c         |  1 -
+ arch/loongarch/lib/delay.c            |  1 -
+ 8 files changed, 6 insertions(+), 28 deletions(-)
+ delete mode 100644 arch/loongarch/include/asm/compiler.h
 
-On 7/21/22 05:10, Sadiya Kazi wrote:
-> Run_wrapper.rst was missing some command line arguments. Added
-> additional args in the file.
-> 
-> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-> ---
-> Changes since V1:
-> https://lore.kernel.org/linux-kselftest/20220719092214.995965-1-sadiyakazi@google.com/
-> - Addressed most of the review comments from Maira and David, except
->   removing the duplicate arguments as I felt its worth keeping them in
->   the reference documentation as well as in context. We can improve them
->   and differentiate their use cases in the future patches.
-> 
-> 
-> ---
->  Documentation/dev-tools/kunit/run_wrapper.rst | 60 ++++++++++++++++++-
->  1 file changed, 59 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-> index 5e560f2c5fca..600af7ac5f88 100644
-> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -233,7 +233,7 @@ Command-Line Arguments
->  ======================
->  
->  kunit_tool has a number of other command-line arguments which can
-> -be useful for our test environment. Below the most commonly used
-> +be useful for our test environment. Below are the most commonly used
->  command line arguments:
->  
->  - ``--help``: Lists all available options. To list common options,
-> @@ -257,3 +257,61 @@ command line arguments:
->              added or modified. Instead, enable all tests
->              which have satisfied dependencies by adding
->              ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
-> +
-> +- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
-> +  file. For example:
-> +
-> +  - ``lib/kunit/.kunitconfig`` can be the path of the file.
-> +
-> +  - ``lib/kunit`` can be the directory in which the file is located.
-> +
-> +  This file is used to build and run with a predefined set of tests
-> +  and their dependencies. For example, to run tests for a given subsystem.
-> +
-> +- ``--kconfig_add``: Specifies additional configuration options to be
-> +  appended to the ``.kunitconfig`` file.
-> +  For example, ``./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y``.
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 53a912befb62..89da3e09084e 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -69,7 +69,6 @@ config LOONGARCH
+ 	select GENERIC_TIME_VSYSCALL
+ 	select GPIOLIB
+ 	select HAVE_ARCH_AUDITSYSCALL
+-	select HAVE_ARCH_COMPILER_H
+ 	select HAVE_ARCH_MMAP_RND_BITS if MMU
+ 	select HAVE_ARCH_SECCOMP_FILTER
+ 	select HAVE_ARCH_TRACEHOOK
+diff --git a/arch/loongarch/include/asm/atomic.h b/arch/loongarch/include/asm/atomic.h
+index 979367ad4e2c..b5e2e3201af1 100644
+--- a/arch/loongarch/include/asm/atomic.h
++++ b/arch/loongarch/include/asm/atomic.h
+@@ -10,7 +10,6 @@
+ #include <linux/types.h>
+ #include <asm/barrier.h>
+ #include <asm/cmpxchg.h>
+-#include <asm/compiler.h>
+ 
+ #if __SIZEOF_LONG__ == 4
+ #define __LL		"ll.w	"
+@@ -164,7 +163,7 @@ static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
+ 		"2:							\n"
+ 		__WEAK_LLSC_MB
+ 		: "=&r" (result), "=&r" (temp),
+-		  "+" GCC_OFF_SMALL_ASM() (v->counter)
++		  "+ZC" (v->counter)
+ 		: "I" (-i));
+ 	} else {
+ 		__asm__ __volatile__(
+@@ -177,7 +176,7 @@ static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
+ 		"2:							\n"
+ 		__WEAK_LLSC_MB
+ 		: "=&r" (result), "=&r" (temp),
+-		  "+" GCC_OFF_SMALL_ASM() (v->counter)
++		  "+ZC" (v->counter)
+ 		: "r" (i));
+ 	}
+ 
+@@ -327,7 +326,7 @@ static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
+ 		"2:							\n"
+ 		__WEAK_LLSC_MB
+ 		: "=&r" (result), "=&r" (temp),
+-		  "+" GCC_OFF_SMALL_ASM() (v->counter)
++		  "+ZC" (v->counter)
+ 		: "I" (-i));
+ 	} else {
+ 		__asm__ __volatile__(
+@@ -340,7 +339,7 @@ static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
+ 		"2:							\n"
+ 		__WEAK_LLSC_MB
+ 		: "=&r" (result), "=&r" (temp),
+-		  "+" GCC_OFF_SMALL_ASM() (v->counter)
++		  "+ZC" (v->counter)
+ 		: "r" (i));
+ 	}
+ 
+diff --git a/arch/loongarch/include/asm/compiler.h b/arch/loongarch/include/asm/compiler.h
+deleted file mode 100644
+index 657cebe70ace..000000000000
+--- a/arch/loongarch/include/asm/compiler.h
++++ /dev/null
+@@ -1,15 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+- */
+-#ifndef _ASM_COMPILER_H
+-#define _ASM_COMPILER_H
+-
+-#define GCC_OFF_SMALL_ASM() "ZC"
+-
+-#define LOONGARCH_ISA_LEVEL "loongarch"
+-#define LOONGARCH_ISA_ARCH_LEVEL "arch=loongarch"
+-#define LOONGARCH_ISA_LEVEL_RAW loongarch
+-#define LOONGARCH_ISA_ARCH_LEVEL_RAW LOONGARCH_ISA_LEVEL_RAW
+-
+-#endif /* _ASM_COMPILER_H */
+diff --git a/arch/loongarch/include/asm/futex.h b/arch/loongarch/include/asm/futex.h
+index 9de8231694ec..e28b65d9c67a 100644
+--- a/arch/loongarch/include/asm/futex.h
++++ b/arch/loongarch/include/asm/futex.h
+@@ -8,7 +8,6 @@
+ #include <linux/futex.h>
+ #include <linux/uaccess.h>
+ #include <asm/barrier.h>
+-#include <asm/compiler.h>
+ #include <asm/errno.h>
+ 
+ #define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
+@@ -95,8 +94,8 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr, u32 oldval, u32 newv
+ 	"	"__UA_ADDR "\t1b, 4b				\n"
+ 	"	"__UA_ADDR "\t2b, 4b				\n"
+ 	"	.previous					\n"
+-	: "+r" (ret), "=&r" (val), "=" GCC_OFF_SMALL_ASM() (*uaddr)
+-	: GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oldval), "Jr" (newval),
++	: "+r" (ret), "=&r" (val), "=ZC" (*uaddr)
++	: "ZC" (*uaddr), "Jr" (oldval), "Jr" (newval),
+ 	  "i" (-EFAULT)
+ 	: "memory", "t0");
+ 
+diff --git a/arch/loongarch/include/asm/irqflags.h b/arch/loongarch/include/asm/irqflags.h
+index 52121cd791fe..319a8c616f1f 100644
+--- a/arch/loongarch/include/asm/irqflags.h
++++ b/arch/loongarch/include/asm/irqflags.h
+@@ -9,7 +9,6 @@
+ 
+ #include <linux/compiler.h>
+ #include <linux/stringify.h>
+-#include <asm/compiler.h>
+ #include <asm/loongarch.h>
+ 
+ static inline void arch_local_irq_enable(void)
+diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
+index 2052a2267337..65fbbae9fc4d 100644
+--- a/arch/loongarch/include/asm/local.h
++++ b/arch/loongarch/include/asm/local.h
+@@ -9,7 +9,6 @@
+ #include <linux/bitops.h>
+ #include <linux/atomic.h>
+ #include <asm/cmpxchg.h>
+-#include <asm/compiler.h>
+ 
+ typedef struct {
+ 	atomic_long_t a;
+diff --git a/arch/loongarch/kernel/reset.c b/arch/loongarch/kernel/reset.c
+index 2b86469e4718..800c965a17ea 100644
+--- a/arch/loongarch/kernel/reset.c
++++ b/arch/loongarch/kernel/reset.c
+@@ -13,7 +13,6 @@
+ #include <linux/console.h>
+ 
+ #include <acpi/reboot.h>
+-#include <asm/compiler.h>
+ #include <asm/idle.h>
+ #include <asm/loongarch.h>
+ #include <asm/reboot.h>
+diff --git a/arch/loongarch/lib/delay.c b/arch/loongarch/lib/delay.c
+index 5d856694fcfe..831d4761f385 100644
+--- a/arch/loongarch/lib/delay.c
++++ b/arch/loongarch/lib/delay.c
+@@ -7,7 +7,6 @@
+ #include <linux/smp.h>
+ #include <linux/timex.h>
+ 
+-#include <asm/compiler.h>
+ #include <asm/processor.h>
+ 
+ void __delay(unsigned long cycles)
+-- 
+2.31.1
 
-Small nit pick: I would rather do:
-
-```
-./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y
-```
-
-> +
-> +- ``--arch``: Runs tests on the specified architecture. The architecture
-> +  specified must match the Kbuild ARCH environment variable.
-> +  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on QEMU.
-> +  Default is `um`.
-> +
-> +- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
-> +  same argument as passed to the ``CROSS_COMPILE`` variable used by
-> +  Kbuild. This will be the prefix for the toolchain
-> +  binaries such as GCC. For example:
-> +
-> +  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
-> +    our system.
-> +
-> +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
-> +    if we have downloaded the microblaze toolchain from the 0-day
-> +    website to a specified path in our home directory called toolchains.
-> +
-> +- ``--qemu_config``: Specifies the path to a file containing a
-> +  custom qemu architecture definition. This should be a python file
-> +  containing a `QemuArchParams` object.
-
-Nit: choose a standard for referring to qemu. Either "qemu" or "QEMU" is
-great for me, but it is ideal that you chose one and stick with it.
-Here, you used "qemu" and on the next argument, you used "QEMU".
-
-> +
-> +- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-smp 8".
-> +
-> +- ``--jobs``: Specifies the number of jobs (commands) to run simultaneously.
-> +  By default, this is set to the number of cores on your system.
-> +
-> +- ``--timeout``: Specifies the maximum number of seconds allowed for all tests to run.
-> +  This does not include the time taken to build the tests.
-> +
-> +- ``--kernel_args``: Specifies additional kernel command-line arguments. Might be repeated.
-> +
-> +- ``--run_isolated``: If set, boots the kernel for each individual suite/test.
-> +  This is useful for debugging a non-hermetic test, one that
-> +  might pass/fail based on what ran before it.
-> +
-> +- ``--raw_output``: If set, generates unformatted output from kernel. Possible options are:
-> +
-> +   - ``all``: To view the full kernel output, use ``--raw_output=all``.
-> +
-> +   - ``kunit``: This is the default option and filters to KUnit output. Use ``--raw_output`` or ``--raw_output=kunit``.
-> +
-> +- ``--json``: If set, stores the test results in a JSON format and prints to `stdout` or
-> +  saves to a file if a filename is specified.
-
-Anyway, the documentation is pretty good and informative! The small nits
-I pointed out are optional. So,
-
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
-
-Best Regards,
-- Maíra Canal

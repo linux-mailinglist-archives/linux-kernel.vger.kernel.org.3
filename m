@@ -2,152 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CB657D2F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E5657D2F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiGUSE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 14:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S232064AbiGUSF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 14:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGUSEZ (ORCPT
+        with ESMTP id S229750AbiGUSF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 14:04:25 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4FC8C582;
-        Thu, 21 Jul 2022 11:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=J2VYcnATE1BBYfEr73NA4avIPlTGJ+FZMlH1oDYhLQI=; b=dzZpi4nV2ExLsdHmq8UvuDYhlg
-        Ul/KxgZO/Fmp45GWa6h7nebQAPZjEtmA6g8y023qaHnt7ng+UnDcbcoZ+OazVEStbL42TlPf+413x
-        GQVoBZdV6JepIZ6d+FULIvc66iMOy5mkcclcpc7jwSof/MCocBa+5OXYWVMxITLzNvNquiVAlBxF9
-        Uixwxk0isujSUvK0FbtN2qI3yTurzEF3mb+FZlLhk6hkcA1vFhPpPgLTEitiLZIts5fXbYLRZlvtj
-        jCRKfe8FaLc3kBKVcdbZV9QznCZpMYMBra8avkj7iJWC6Ezwn8LN9ddf/F3bjTp6oV0yJATgBRFiJ
-        Gthu6Dlw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33486)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oEaX5-0005on-WB; Thu, 21 Jul 2022 19:04:20 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oEaX3-00052g-SX; Thu, 21 Jul 2022 19:04:17 +0100
-Date:   Thu, 21 Jul 2022 19:04:17 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v2 08/11] net: phylink: Adjust advertisement based on
- rate adaptation
-Message-ID: <YtmVIXYKpCJ2GEwK@shell.armlinux.org.uk>
-References: <20220719235002.1944800-1-sean.anderson@seco.com>
- <20220719235002.1944800-9-sean.anderson@seco.com>
- <Ytep4isHcwFM7Ctc@shell.armlinux.org.uk>
- <3844f2a6-90fb-354e-ce88-0e9ff0a10475@seco.com>
+        Thu, 21 Jul 2022 14:05:27 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F97323BF0;
+        Thu, 21 Jul 2022 11:05:26 -0700 (PDT)
+Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LHG1Km010846;
+        Thu, 21 Jul 2022 18:05:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=9k/GYTvLGUcDpcJlhpKTL0HkyWVORo3e8disXhHh3Xk=;
+ b=OEMxAQQ/O/JwESNZ722njxmhdM75k2EAhhV7+IbnIT9VxtfsH3ih2L5maTeyBL781/RK
+ IAruLDSenygxb8STqyz0moxH39ouKxlqxWkfiZWttqxjxT2oX2E3FAoX3f4FQhMCNvDU
+ VHndV4Obu9o8swzfO6CPKD89X8OY/UdWT7zDD3mYNwpfJGu2/HVY+HHLLU3wgaoQb0se
+ kaZbZNCc/35x2qQixoFKInyn9ad3Orlt4SJ6f4zagkQHuBvryQFDB7jXXFJqhtzv4D+T
+ Tqd8/dFZgd99w6gnQmGWZ1ILqaLC4LYB3ut5Y9oY+Fiw9P9UQE5kliHPn81ZbfHRmrbI 0A== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3hfaab8qd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 18:05:06 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id E69A88020A4;
+        Thu, 21 Jul 2022 18:05:04 +0000 (UTC)
+Received: from node1.hpecorp.net (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id ED6CC801AD9;
+        Thu, 21 Jul 2022 18:05:03 +0000 (UTC)
+From:   Toshi Kani <toshi.kani@hpe.com>
+To:     bp@alien8.de, rrichter@marvell.com, mchehab@kernel.org
+Cc:     toshi.kani@hpe.com, elliott@hpe.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Borislav Petkov <bp@suse.de>
+Subject: [PATCH v2] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
+Date:   Thu, 21 Jul 2022 12:05:03 -0600
+Message-Id: <20220721180503.896050-1-toshi.kani@hpe.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3844f2a6-90fb-354e-ce88-0e9ff0a10475@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: kEfQsczPnkoFRP-dfl_OjeLORelv4SG1
+X-Proofpoint-ORIG-GUID: kEfQsczPnkoFRP-dfl_OjeLORelv4SG1
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-21_24,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ mlxscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 suspectscore=0
+ bulkscore=0 impostorscore=0 phishscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207210073
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:55:16PM -0400, Sean Anderson wrote:
-> On 7/20/22 3:08 AM, Russell King (Oracle) wrote:
-> > On Tue, Jul 19, 2022 at 07:49:58PM -0400, Sean Anderson wrote:
-> >> @@ -482,7 +529,39 @@ unsigned long phylink_get_capabilities(phy_interface_t interface,
-> >>  		break;
-> >>  	}
-> >>  
-> >> -	return caps & mac_capabilities;
-> >> +	switch (rate_adaptation) {
-> >> +	case RATE_ADAPT_NONE:
-> >> +		break;
-> >> +	case RATE_ADAPT_PAUSE: {
-> >> +		/* The MAC must support asymmetric pause towards the local
-> >> +		 * device for this. We could allow just symmetric pause, but
-> >> +		 * then we might have to renegotiate if the link partner
-> >> +		 * doesn't support pause.
-> > 
-> > Why do we need to renegotiate, and what would this achieve? The link
-> > partner isn't going to say "oh yes I do support pause after all",
-> > and in any case this function is working out what the capabilities
-> > of the system is prior to bringing anything up.
-> > 
-> > All that we need to know here is whether the MAC supports receiving
-> > pause frames from the PHY - if it doesn't, then the MAC is
-> > incompatible with the PHY using rate adaption.
-> 
-> AIUI, MAC_SYM_PAUSE and MAC_ASYM_PAUSE correspond to the PAUSE and
-> ASM_DIR bits used in autonegotiation. For reference, Table 28B-2 from
-> 802.3 is:
-> 
-> PAUSE (A5) ASM_DIR (A6) Capability
-> ========== ============ ================================================
->          0            0 No PAUSE
->          0            1 Asymmetric PAUSE toward link partner
->          1            0 Symmetric PAUSE
-> 	 1            1 Both Symmetric PAUSE and Asymmetric PAUSE toward
->                         local device
-> 
-> These correspond to the following valid values for MLO_PAUSE:
-> 
-> MAC_SYM_PAUSE MAC_ASYM_PAUSE Valid pause modes
-> ============= ============== ==============================
->             0              0 MLO_PAUSE_NONE
->             0              1 MLO_PAUSE_NONE, MLO_PAUSE_TX
->             1              0 MLO_PAUSE_NONE, MLO_PAUSE_TXRX
-> 	    1              1 MLO_PAUSE_NONE, MLO_PAUSE_RX,
->                              MLO_PAUSE_TXRX
-> 
-> In order to support pause-based rate adaptation, we need MLO_PAUSE_RX to
-> be valid. This rules out the top two rows. In the bottom mode, we can
-> enable MLO_PAUSE_RX without MLO_PAUSE_TX. Whatever our link partner
-> supports, we can still enable it. For the third row, however, we can
-> only enable MLO_PAUSE_RX if we also enable MLO_PAUSE_TX. This can be a
-> problem if the link partner does not support pause frames (or the user
-> has disabled MLO_PAUSE_AN and MLO_PAUSE_TX). So if we were to enable
-> advertisement of pause-based, rate-adapted modes when only MAC_SYM_PAUSE
-> was present, then we might end up in a situation where we'd have to
-> renegotiate without those modes in order to get a valid link state. I
-> don't want to have to implement that, so for now we only advertise
-> pause-based, rate-adapted modes if we support MLO_PAUSE_RX without
-> MLO_PAUSE_TX.
+The following buffer overflow BUG was observed on an HPE system.
+ghes_edac_register() called strlen() on an uninitialized label,
+which had non-zero values from krealloc_array().
 
-Ah, I see. Yes, I agree that we shouldn't do that, and only allow rate
-adaption in pause mode to be used if we can enable RX pause without TX
-pause on our local MAC.
+In dimm_setup_label(), *device was set but *bank was null, which
+left the label uninitialized. *bank is set from SMBIOS type 17
+Bank Locator, offset 11h.  This system had this value set to 0x0
+(null string).
 
-> > Have you checked the PHY documentation to see what the behaviour is
-> > in rate adaption mode with pause frames and it negotiates HD on the
-> > media side? Does it handle the HD issue internally?
-> 
-> It's not documented. This is just conservative. Presumably, there exists
-> (or could exist) a duplex-adapting phy, but I don't know if I have one.
+Change dimm_setup_label() to always initialize the label and use
+"NA" in case bank or device is null.
 
-I guess it would depend on the structure of the PHY - whether the PHY
-is structured similar to a two port switch internally, having a MAC
-facing the host and another MAC facing the media side. (I believe this
-is exactly how the MACSEC versions of the 88x3310 are structured.)
+ detected buffer overflow in __fortify_strlen
+ ------------[ cut here ]------------
+ kernel BUG at lib/string_helpers.c:983!
+ invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+ CPU: 1 PID: 1 Comm: swapper/0 Tainted: G          I       5.18.6-200.fc36.x86_64 #1
+ Hardware name: HPE ProLiant DL360 Gen10/ProLiant DL360 Gen10, BIOS U32 03/15/2019
+ RIP: 0010:fortify_panic+0xf/0x11
+ ...
+ Call Trace:
+  <TASK>
+  ghes_edac_register.cold+0x128/0x128
+  ghes_probe+0x142/0x3a0
+  platform_probe+0x41/0x90
+  really_probe+0x19e/0x370
+  __driver_probe_device+0xfc/0x170
+  driver_probe_device+0x1f/0x90
+  __driver_attach+0xbb/0x190
+  ? __device_attach_driver+0xe0/0xe0
+  bus_for_each_dev+0x5f/0x90
+  bus_add_driver+0x159/0x200
+  driver_register+0x89/0xd0
+  acpi_ghes_init+0x72/0xc3
+  acpi_init+0x441/0x493
+  ? acpi_sleep_proc_init+0x24/0x24
+  do_one_initcall+0x41/0x200
 
-If you don't have that kind of structure, then I would guess that doing
-duplex adaption could be problematical.
+Fixes: b9cae27728d1f ("EDAC/ghes: Scan the system once on driver init")
+Tested-by: Robert Elliott <elliott@hpe.com>
+Signed-off-by: Toshi Kani <toshi.kani@hpe.com>
+Cc: Robert Richter <rrichter@marvell.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/edac/ghes_edac.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index 59b0bedc9c24..8256065b1801 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -100,12 +100,13 @@ static struct dimm_info *find_dimm_by_handle(struct mem_ctl_info *mci, u16 handl
+ static void dimm_setup_label(struct dimm_info *dimm, u16 handle)
+ {
+ 	const char *bank = NULL, *device = NULL;
++	const char *na = "NA";
+ 
+ 	dmi_memdev_name(handle, &bank, &device);
+ 
+-	/* both strings must be non-zero */
+-	if (bank && *bank && device && *device)
+-		snprintf(dimm->label, sizeof(dimm->label), "%s %s", bank, device);
++	snprintf(dimm->label, sizeof(dimm->label), "%s %s",
++			(bank && *bank) ? bank : na,
++			(device && *device) ? device : na);
+ }
+ 
+ static void assign_dmi_dimm_info(struct dimm_info *dimm, struct memdev_dmi_entry *entry)

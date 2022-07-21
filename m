@@ -2,133 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C9057CA24
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED5B57CA27
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbiGUL7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S233382AbiGUL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGUL7V (ORCPT
+        with ESMTP id S232158AbiGUL7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:59:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202963340B;
-        Thu, 21 Jul 2022 04:59:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBC97B82443;
-        Thu, 21 Jul 2022 11:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806D0C3411E;
-        Thu, 21 Jul 2022 11:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658404757;
-        bh=ggHG6nD7013O5l8BLxi1J8dB0HMzHRPWFaAq8WtsKf4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k0VzyS05s/qO/GLUCmqIQcQ620cwKH/qf1ycY0IbyfQgiucVn/Hz30Epfdg1TfTWC
-         JfqKANjEkZt09LBApojiFDRMWD4s3kgce7EBKKZrErkyI0RPpZshbQwHdV1pNon8yF
-         9YIUeH15Qv2QGquouDjOCVT65dVFa9FIFYK8AsDZ5/GMSZy5nY5ZDuHSqZvt3NxVqt
-         loMecXcx5znRYvXg7hCRoYYPHrmyq+Sjeq9oK+lDhq26hEa36aiIhjWrNx/HAwMyp9
-         bpnyJ8BaC5tCb1JcDmZDuGTFxR/Zu39/0bifRl/gRTUCa0Da5kMhXi8QyHsBrbPK4Z
-         fE/Mkn4Lvvymw==
-Date:   Thu, 21 Jul 2022 12:59:09 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/1] bpf: Drop unprotected find_vpid() in favour of
- find_get_pid()
-Message-ID: <Ytk/jT+zyNZpafgn@google.com>
-References: <20220721111430.416305-1-lee@kernel.org>
- <Ytk+/npvvDGg9pBP@krava>
+        Thu, 21 Jul 2022 07:59:37 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0312F65D61;
+        Thu, 21 Jul 2022 04:59:34 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id b25so1052394qka.11;
+        Thu, 21 Jul 2022 04:59:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lRz/hxcrvKaBBIf3i1cgs6tUJRVDE9Sapae6r7E79pw=;
+        b=66SNt/WmtKLXhmxDXTDVgulQYqbOxFF0tMq5ItusPVw8lNq0ECGDEuILGu1giYRcsb
+         6DFJHmWvFtYc53ew3b30BBUzvqzmOQCbiOumKKCdo3SiRXILXpT6kPcJoNWUj711E3CF
+         kigWhTxI8C758XtHaRdmwGCDYzaRiVZL9tJNGirhJcNbot4FGMWPJR7dYVyPxcB7wB2J
+         TH+Kf3n33IhLHJMMt3saYKffTzjw+BftJXdr0OKYw3p6u1oDIdR0hZzBK3OJ9Wm06ha1
+         SGQO3eNVGEwUrUp6Xq/1d71TSod7WF1Wbgu6osuYxLZmwO3XspIldq3hst/NP5jc9cKM
+         ebEw==
+X-Gm-Message-State: AJIora+Cm1BA78I7pFsdsVNdslELYly6OPwc921xpDsFpYLYkwctLoWq
+        auphys0BW5RHKCDSbUkF/LO/jjJpAI5u1A==
+X-Google-Smtp-Source: AGRyM1tmoehH1ovNz56iTGd4o9Fa2qWfFERqV5Fo8MD0TQRz2/QQuYQnpuvT9fJueixfo2fLaofsBw==
+X-Received: by 2002:a37:d281:0:b0:6af:24c7:a981 with SMTP id f123-20020a37d281000000b006af24c7a981mr28334921qkj.736.1658404772977;
+        Thu, 21 Jul 2022 04:59:32 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id r6-20020a05620a298600b006a75a0ffc97sm1335467qkp.3.2022.07.21.04.59.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 04:59:32 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31bf3656517so14269367b3.12;
+        Thu, 21 Jul 2022 04:59:32 -0700 (PDT)
+X-Received: by 2002:a81:6088:0:b0:31e:79fd:3dfa with SMTP id
+ u130-20020a816088000000b0031e79fd3dfamr3834563ywb.47.1658404772353; Thu, 21
+ Jul 2022 04:59:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ytk+/npvvDGg9pBP@krava>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220718195651.7711-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdV5s-q13pWXs-ki6o5h8=ZMPL11o08YQx1pawe9EUySBA@mail.gmail.com>
+ <CA+V-a8tqhiO+WBOzAD40A10K+qtVQ4HE87C9PKVpoFgWkkS54w@mail.gmail.com>
+ <CAMuHMdWcj2xv8FrCiTLCVQfWzejONCAv_o-VzAkicLAFNd5gPg@mail.gmail.com> <CA+V-a8uNZ8T6m+nav=UXTFcwtW8o_2dGE2QFMvkhwcUU=Ka42Q@mail.gmail.com>
+In-Reply-To: <CA+V-a8uNZ8T6m+nav=UXTFcwtW8o_2dGE2QFMvkhwcUU=Ka42Q@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Jul 2022 13:59:21 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXRPpr9othmv9xAOx2a8r=pdP0uZw1xFN9Q0noq1zuw8w@mail.gmail.com>
+Message-ID: <CAMuHMdXRPpr9othmv9xAOx2a8r=pdP0uZw1xFN9Q0noq1zuw8w@mail.gmail.com>
+Subject: Re: [PATCH 5/5] arm64: dts: renesas: rzg2l-smarc-som: Add PHY
+ interrupt support for ETH{0/1}
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022, Jiri Olsa wrote:
+Hi Prabhakar,
 
-> On Thu, Jul 21, 2022 at 12:14:30PM +0100, Lee Jones wrote:
-> > The documentation for find_pid() clearly states:
-> > 
-> >   "Must be called with the tasklist_lock or rcu_read_lock() held."
-> > 
-> > Presently we do neither.
-> > 
-> > In an ideal world we would wrap the in-lined call to find_vpid() along
-> > with get_pid_task() in the suggested rcu_read_lock() and have done.
-> > However, looking at get_pid_task()'s internals, it already does that
-> > independently, so this would lead to deadlock.
-> 
-> hm, we can have nested rcu_read_lock calls, right?
+On Thu, Jul 21, 2022 at 1:55 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Thu, Jul 21, 2022 at 12:43 PM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Thu, Jul 21, 2022 at 1:07 PM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > > On Thu, Jul 21, 2022 at 11:47 AM Geert Uytterhoeven
+> > > <geert@linux-m68k.org> wrote:
+> > > > On Mon, Jul 18, 2022 at 9:57 PM Lad Prabhakar
+> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > > The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ3 for ETH0
+> > > > > and ETH1 respectively.
+> > > > >
+> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Thanks for your patch!
+> > > >
+> > > > > --- a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
+> > > > > +++ b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
+> > > > > @@ -94,6 +94,8 @@ phy0: ethernet-phy@7 {
+> > > > >                 compatible = "ethernet-phy-id0022.1640",
+> > > > >                              "ethernet-phy-ieee802.3-c22";
+> > > > >                 reg = <7>;
+> > > > > +               interrupt-parent = <&irqc>;
+> > > > > +               interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+> > > >
+> > > > 2?
+> > > >
+> > > IRQ2 = SPI 3, the driver expects the SPI number and is used as index
+> > > [0] to map the interrupt in the GIC.
+> > >
+> > > [0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/irqchip/irq-renesas-rzg2l.c?h=next-20220720#n291
+> >
+> > Using the SPI number sounds strange to me, as the consumer
+> > (Ethernet PHY) is linked to the IRQC, not to the GIC directly.
+> >
+> Right, are you suggesting that I tweak the driver? The other problem
+> is how do we differentiate NMI and IRQ0? How about we add macros for
+> IRQ0-7 and use them in the DTS?
+>
+> > > > "The first cell should contain external interrupt number (IRQ0-7)"
+> > > >
+> > > Probably I need to reword this to "The first cell should contain the
+> > > SPI number for IRQ0-7/NMI interrupt lines" ?
+> >
+> > Oh, so zero is the NMI?
+> > And 1-8 are IRQ0-7.
+> >
+> Yes that's right.
 
-I assumed not, but that might be an oversight on my part.
+I don't think it was ever mentioned that the NMI was exposed, too.
 
-Would that be your preference?
+Using macros sounds fine to me.
 
-> > Instead, we'll use find_get_pid() which searches for the vpid, then
-> > takes a reference to it preventing early free, all within the safety
-> > of rcu_read_lock().  Once we have our reference we can safely make use
-> > of it up until the point it is put.
-> > 
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Cc: Stanislav Fomichev <sdf@google.com>
-> > Cc: Hao Luo <haoluo@google.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: bpf@vger.kernel.org
-> > Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-> > Signed-off-by: Lee Jones <lee@kernel.org>
-> > ---
-> >  kernel/bpf/syscall.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 83c7136c5788d..c20cff30581c4 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
-> >  	const struct perf_event *event;
-> >  	struct task_struct *task;
-> >  	struct file *file;
-> > +	struct pid *ppid;
-> >  	int err;
-> >  
-> >  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-> > @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
-> >  	if (attr->task_fd_query.flags != 0)
-> >  		return -EINVAL;
-> >  
-> > -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-> > +	ppid = find_get_pid(pid);
-> > +	task = get_pid_task(ppid, PIDTYPE_PID);
-> > +	put_pid(ppid);
-> >  	if (!task)
-> >  		return -ENOENT;
-> >  
+Gr{oetje,eeting}s,
 
--- 
-Lee Jones [李琼斯]
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

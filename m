@@ -2,141 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5CB57CD8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192A557CD95
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbiGUOZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S231840AbiGUO1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiGUOY6 (ORCPT
+        with ESMTP id S231472AbiGUO1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:24:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8710882FB4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:24:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9C671042;
-        Thu, 21 Jul 2022 07:24:50 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.86.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CFFF3F73D;
-        Thu, 21 Jul 2022 07:24:48 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:24:47 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Subject: Re: [PATCH 7/7] sched/uclamp: Cater for uclamp in
- find_energy_efficient_cpu()'s early exit condition
-Message-ID: <20220721142447.emsv6q3y4ch3bphi@wubuntu>
-References: <20220629194632.1117723-1-qais.yousef@arm.com>
- <20220629194632.1117723-8-qais.yousef@arm.com>
- <CAB8ipk9=EEfArTTQ_w10+Df0WqMinFvjbmfFEBLg1zUYcHkOPw@mail.gmail.com>
+        Thu, 21 Jul 2022 10:27:14 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA1181B2E;
+        Thu, 21 Jul 2022 07:27:13 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h8so2545144wrw.1;
+        Thu, 21 Jul 2022 07:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cS7HI6SzP+cUTcYgVfMeyM3fLXZCY/z4ELbXGyMLw1s=;
+        b=J5FEUrT1LIq+LAfx/r6Aoyp4RzUbFON6T18AAnnb4/AAJgUc31L2F+B7h1jozXGN4c
+         AZo2ptXHfCWYzGlyOnfdPRIc8ePc7Lh8bv3vTxtgu56kKJOjCtG6T+Fv166odqcB38FS
+         Miw2YAWHQVo75nmPyy/Nz/gLLNT3yIrkY3D0AoHMwc11laqkuEMu25TXkire9TFmHCzf
+         BRJPB1IChSzhPF555Es7vy4Q7KD5ucRpkwSfuEkDX9JJdq8f8rdtuDfAS0ukQNDhMmcj
+         UitdKUnIwMVs9kd2R+fqH34ZX1D1TYInLxzmqY1Xy95SWscNEDIM7jKS6FMZFornIA7d
+         74Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cS7HI6SzP+cUTcYgVfMeyM3fLXZCY/z4ELbXGyMLw1s=;
+        b=gN7GzIHXXO586tddmLiwT97Pr9n4JU74+NvKIbGnIe0WsMopBtmRH6HpPwVdXv0Rb/
+         q1jzkyGl5YmiYDv454oQHy86G1WD7S8XVseoyht2G5vb/wO739UpbAt7WZl/zFdrorlX
+         oX1LnyyBz5Nk9zI9hpWRZ18JDHTt8wWMGP35D+3wbEsqygbMXqDx3OSeKcOMfqsU9l8z
+         XzTfzJY27Ugy40LMZGAI/eLm395WASUWi3mdjulJlNgq0VlehZ4WgOBgGvR2Yx8RraYo
+         qMW2g/7dBdRFh4l/Uk3bEAnYjNrcoqihM3WMN5jOnBFbA9LQQDb6YdIqkwpVlk2tBvJp
+         OvoA==
+X-Gm-Message-State: AJIora+0AHavVQpuR0IRP69OQxQEN/mu9FljvFSYszt26z2ZJErUKaxk
+        HwVSA/tRbiJ90kPxEPiknIBTDaf9nzhZ0Q==
+X-Google-Smtp-Source: AGRyM1s2umnKbiUxRjfkk59PJGmeuhNQZawweS8YvfwcceUG+/rqjlIb0swPGDTCdjJcoDHFuzjWDA==
+X-Received: by 2002:a05:6000:1547:b0:21e:5be2:9ed3 with SMTP id 7-20020a056000154700b0021e5be29ed3mr825023wry.459.1658413631486;
+        Thu, 21 Jul 2022 07:27:11 -0700 (PDT)
+Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:64b4])
+        by smtp.gmail.com with ESMTPSA id bw6-20020a0560001f8600b0021e529efa60sm2013358wrb.1.2022.07.21.07.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 07:27:11 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH net-next] net: fix uninitialised msghdr->sg_from_iter
+Date:   Thu, 21 Jul 2022 15:25:46 +0100
+Message-Id: <ce8b68b41351488f79fd998b032b3c56e9b1cc6c.1658401817.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAB8ipk9=EEfArTTQ_w10+Df0WqMinFvjbmfFEBLg1zUYcHkOPw@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/20/22 15:39, Xuewen Yan wrote:
-> Hi Qais
-> 
-> On Thu, Jun 30, 2022 at 3:48 AM Qais Yousef <qais.yousef@arm.com> wrote:
-> >
-> > If the utilization of the woken up task is 0, we skip the energy
-> > calculation because it has no impact.
-> >
-> > But if the task is boosted (uclamp_min != 0) will have an impact on task
-> > placement and frequency selection. Only skip if the util is truly
-> > 0 after applying uclamp values.
-> >
-> > Change uclamp_task_cpu() signature to avoid unnecessary additional calls
-> > to uclamp_eff_get(). feec() is the only user now.
-> >
-> > Fixes: 732cd75b8c920 ("sched/fair: Select an energy-efficient CPU on task wake-up")
-> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> >  kernel/sched/fair.c | 14 ++++++++------
-> >  1 file changed, 8 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 499ef7a7288c..a112ca45864c 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -4057,14 +4057,16 @@ static inline unsigned long task_util_est(struct task_struct *p)
-> >  }
-> >
-> >  #ifdef CONFIG_UCLAMP_TASK
-> > -static inline unsigned long uclamp_task_util(struct task_struct *p)
-> > +static inline unsigned long uclamp_task_util(struct task_struct *p,
-> > +                                            unsigned long uclamp_min,
-> > +                                            unsigned long uclamp_max)
-> >  {
-> > -       return clamp(task_util_est(p),
-> > -                    uclamp_eff_value(p, UCLAMP_MIN),
-> > -                    uclamp_eff_value(p, UCLAMP_MAX));
-> > +       return clamp(task_util_est(p), uclamp_min, uclamp_max);
-> >  }
-> >  #else
-> > -static inline unsigned long uclamp_task_util(struct task_struct *p)
-> > +static inline unsigned long uclamp_task_util(struct task_struct *p,
-> > +                                            unsigned long uclamp_min,
-> > +                                            unsigned long uclamp_max)
-> >  {
-> >         return task_util_est(p);
-> >  }
-> > @@ -6913,7 +6915,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >         target = prev_cpu;
-> >
-> >         sync_entity_load_avg(&p->se);
-> > -       if (!task_util_est(p))
-> > +       if (!uclamp_task_util(p, p_util_min, p_util_max))
-> 
-> Is it not enough to just replace the task_util_est with the
-> uclamp_task_util? If change the definition of uclamp_task_util,
-> that means it have to get task's uclamp first if user want to call the
-> function, may increase the code complex farther more?
+Because of how struct msghdr is usually initialised some fields and
+sg_from_iter in particular might be left out not initialised, so we
+can't safely use it in __zerocopy_sg_from_iter().
 
-Calling uclamp_eff_value() all the time is not cheap actually.
+For now use the callback only when there is ->msg_ubuf set relying on
+the fact that they're used together and we properly zero ->msg_ubuf.
 
-We can easily add two versions when we need to:
+Fixes: ebe73a284f4de8 ("net: Allow custom iter handler in msghdr")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
 
-	__uclamp_task_util(p, uclamp_min, uclamp_max);
+It's not the best approach long term but let's fix first and later
+I'm going to clean up msghdr initialisation.
 
-	uclamp_task_util(p) {
-		uclamp_min = uclamp_eff_value();
-		uclamp_max = uclamp_eff_value();
-		return __uclamp_eff_value(p, uclamp_min, uclamp_max);
-	}
+ net/core/datagram.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-When we need to. Since we have a single user now, there's no need to do this
-now and if we ever get more users it'd be easy to refactor then?
+diff --git a/net/core/datagram.c b/net/core/datagram.c
+index 28cdb79df74d..ecbc0f471089 100644
+--- a/net/core/datagram.c
++++ b/net/core/datagram.c
+@@ -619,7 +619,7 @@ int __zerocopy_sg_from_iter(struct msghdr *msg, struct sock *sk,
+ {
+ 	int frag;
+ 
+-	if (msg && msg->sg_from_iter)
++	if (msg && msg->msg_ubuf && msg->sg_from_iter)
+ 		return msg->sg_from_iter(sk, skb, from, length);
+ 
+ 	frag = skb_shinfo(skb)->nr_frags;
+-- 
+2.37.0
 
-
-Thanks!
-
---
-Qais Yousef
-
-> 
-> >                 goto unlock;
-> >
-> >         for (; pd; pd = pd->next) {
-> > --
-> > 2.25.1
-> >
-> 
-> BR
-> ---
-> xuewen.yan

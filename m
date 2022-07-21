@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEA757D0BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F4757D0C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiGUQJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S231617AbiGUQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGUQJC (ORCPT
+        with ESMTP id S230439AbiGUQKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:09:02 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A98073910
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:09:01 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r186so2093421pgr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kq4tOcuZKKIb0aovN9uV6YoC9FJ55HmRLJusfu89XEw=;
-        b=DuWt7aywVJ00JB3vT7dMSz8Z9Cox7G/gaFzAXv8RkZfpCyc92322h9/2Oa/8mJF4PJ
-         MMQ+YYhkdOyrsDwmQeO4STsE1c3vQMoCorFyOoivDTt7bJ1J3nd/+lZaVmUbzZbZ4PP+
-         QcxpcPqPEbOtJhiW997e+hAtBFfdfyIBz4B75b8S/Jkg48rrRIERk0R0qGcsAoxhxd7A
-         7ClJF0yE6dlV0GgeI+yaik8a0jORzuKog4snzsRbdoaTFDNRTmy5bJKWgtY+uthUcpu+
-         iy5BYeYgw3mN9LWkKvaaiTgj7sF36AQFmn+q0g/LoCooKkaS5v3pFYKPWjv1/aiarsXh
-         KQsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kq4tOcuZKKIb0aovN9uV6YoC9FJ55HmRLJusfu89XEw=;
-        b=kC2ZnvcVeNQ+c+X6SxbbO4kqx2BLOhZVpBEZMfPIh/cW7JdQgver1Ba41BI/JDj3fJ
-         q+2YbNN5pV1WmVLm3N82eLJKP7LTsZkjSNDVYxPdVphvF83INYJJ4od8LIMkIcs/9e4R
-         pxNtZPKQrNguxpus7fXjjIzft1jsUH6ZNw1rsHT/qGXG/hZ0GE+R8oJJPlpoFwy/rLRe
-         GDMVSxE/ZH3EOQk+JM2HbgZPoIP7sz+mScqa5zwnXVXxIQarnb/TQ5ohRB2wPGHDZqp+
-         fjrVP0HzCpY6R8u2Cc6lxNVgopYAT+40cDnh71brikSc16LFaWxmpKSOkV2sR9AKkLbm
-         PuaA==
-X-Gm-Message-State: AJIora+OEeXRHcaCo0aG8z+S5RAzPY73wLqYHq90zZ177EGHl0PqWA0z
-        iAlxppZUVfeJJf+sXTCfduoPgDtPIR3cWw==
-X-Google-Smtp-Source: AGRyM1t8MidjDat9EYC6vZTVSXYGFfAYpEF0IwsYFp46gFNQKqfw66NG3/h0fClfB3dy8eVykGg/+g==
-X-Received: by 2002:a63:f011:0:b0:416:4b7:5ae4 with SMTP id k17-20020a63f011000000b0041604b75ae4mr37730179pgh.380.1658419740817;
-        Thu, 21 Jul 2022 09:09:00 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id i66-20020a626d45000000b00525373aac7csm1992670pfc.26.2022.07.21.09.09.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 09:09:00 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 16:08:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Santosh Shukla <santosh.shukla@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 4/7] KVM: SVM: Report NMI not allowed when Guest busy
- handling VNMI
-Message-ID: <Ytl6GLui7UQFi3FO@google.com>
-References: <20220709134230.2397-1-santosh.shukla@amd.com>
- <20220709134230.2397-5-santosh.shukla@amd.com>
- <Yth5hl+RlTaa5ybj@google.com>
- <c5acc3ac2aec4b98f9211ca3f4100c358bf2f460.camel@redhat.com>
- <Ytlpxa2ULiIQFOnj@google.com>
- <413f59cd3c0a80c5b71a0cd033fdaad082c5a0e7.camel@redhat.com>
+        Thu, 21 Jul 2022 12:10:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AACFD36;
+        Thu, 21 Jul 2022 09:10:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 574CCB8259F;
+        Thu, 21 Jul 2022 16:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A13C341CE;
+        Thu, 21 Jul 2022 16:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658419814;
+        bh=zjEMXxvQfsb7nOkZ6WVZ/odfEb3wozMXvOYlBekZ6gA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=XxIXrS3HIIKOKkGycN0c93jk/96JsOl5hmSGPiTEpF3eLDb9gTevw6jtwszfSoDro
+         RrbC6SLOStxwUzGWa7v94cs7xpAkG4GSumD5tSUeyQdHHrDTP/sK5zswYvwzSDT/5h
+         5XN4p9QSYWgdvR4cgKXPQONld0/EN0pTBLRj3Mh8puX6vPpPMMRkIg1js9ybBPLOPN
+         3E83BYNlalWK/l+1KqAfQ1rHgbB1ausOpakX+qlPgyI4VAFv0dW6KV6Spm/heicwAB
+         odXTFriKVie4M2pXlndqjErPjbB4rjMyRyZlQbKtstKVnmjWvXvpYy5JmPm4oVmapB
+         BVG7UnISXkaHw==
+Date:   Thu, 21 Jul 2022 11:10:13 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
+ funcs
+Message-ID: <20220721161013.GA1725073@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <413f59cd3c0a80c5b71a0cd033fdaad082c5a0e7.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CA+-6iNyAXEYT=pc-i0RgtA2njD3f6yELNppJqy733c7O_rmgUg@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022, Maxim Levitsky wrote:
-> On Thu, 2022-07-21 at 14:59 +0000, Sean Christopherson wrote:
-> > Yep.  Dropping an NMI in the last case is ok, AFAIK no CPU will pend multiple NMIs
-> > while another is in-flight.  But triggering an immediate exit in svm_nmi_allowed()
-> > will hang the vCPU as the second pending NMI will never go away since the vCPU
+On Thu, Jul 21, 2022 at 10:56:53AM -0400, Jim Quinlan wrote:
+> On Wed, Jul 20, 2022 at 4:37 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Mon, Jul 18, 2022 at 05:40:33PM -0500, Bjorn Helgaas wrote:
+> > > On Mon, Jul 18, 2022 at 01:14:25PM -0500, Bjorn Helgaas wrote:
+> > > > ...
+> > >
+> > > > So I think brcm_pcie_setup() does initialization that doesn't depend
+> > > > on the link or any downstream devices, and brcm_pcie_start_link() does
+> > > > things that depend on the link being up.  Right?
+> > > >
+> > > > If so, "start_link" might be a slight misnomer since AFAICT
+> > > > brcm_pcie_start_link() doesn't do anything to initiate link-up except
+> > > > maybe deasserting fundamental reset.  Some drivers start the LTSSM or
+> > > > explicitly enable link training, but brcm_pcie_start_link() doesn't
+> > > > seem to do anything like that.
+> > > >
+> > > > brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
+> > > > that really depend on the link being up?  If that only affects the
+> > > > Root Port, maybe it could be done before link-up?
+> > >
+> > > What about the /* PCIe->SCB endian mode for BAR */ thing?  Does that
+> > > depend on the link being up?
+> > >
+> > > And the "Refclk from RC should be gated with CLKREQ#" part?  Does that
+> > > depend on the link being up?
+> > >
+> > > It seems obvious that brcm_pcie_set_ssc() and reading the negotiated
+> > > link speed and width depend on the link being up.
+> >
+> > Can we close on this?  Splitting into
+>
+> Absolutely.
 > 
-> The idea is to trigger the immediate exit only when a NMI was just injected (V_NMI_PENDING=1)
-> but not masked (that is currently in service, that is V_NMI_MASK=0).
+> >   (a) stuff that can be initialized before the link is available and
+> >   (b) stuff that depends on the link
+> >
+> > makes good sense, but then (b) should only contain stuff that actually
+> > depends on the link.
+> >
+> > The "PCIe->SCB endian mode for BAR" *sounds* like something related to
+> > the primary side of the RP, not the link.
+> >
+> > Not sure about "Refclk from RC".  RC would certainly be primary side,
+> > but ASPM has to do with secondary (link) side.
+> 
+> I get the feedback, submission coming soon -- I was waiting for the
+> email thread to conclude.
 
-I assume you mean "and an NMI is currently NOT in service"?
+I don't expect a new posting of the patches in response to every
+question, but hopefully this is a conversation that goes both ways,
+and there's no need to slow down the conversation.  It's more than
+acceptable to simply ask and answer questions and post updated patches
+later.  We're running out of runway and I want to make sure we get
+this thing done this cycle.
 
-Anyways, we're on the same page, trigger an exit if and only if there's an NMI pending
-and the vCPU isn't already handling a vNMI.  We may need to explicitly drop one of
-the pending NMIs in that case though, otherwise the NMI that _KVM_ holds pending could
-get "injected" well after NMIs are unmasked, which could suprise the guest.  E.g.
-guest IRETs from the second (of three) NMIs, KVM doesn't "inject" that third NMI
-until the next VM-Exit, which could be a long time in the future.
-
-> In case both bits are set, the NMI is dropped, that is no immediate exit is requested.
-> 
-> In this case, next VM entry should have no reason to not inject the NMI and then VM exit
-> on the interrupt we raised, so there should not be a problem with forward progress.
-> 
-> There is an issue still, the NMI could also be masked if we are in SMM (I suggested
-> setting the V_NMI_MASK manually in this case), thus in this case we won't have more
-> that one pending NMI, but I guess this is not that big problem.
-> 
-> We can btw also in this case "open" the NMI window by waiting for RSM intercept.
-> (that is just not inject the NMI, and on RSM inject it, I think that KVM already does this)
-> 
-> I think it should overal work, but no doubt I do expect issues and corner cases,
-> 
-> 
-> > won't make forward progress to unmask NMIs.  This can also happen if there are
-> > two pending NMIs and GIF=0, i.e. any time there are multiple pending NMIs and NMIs
-> > are blocked.
-> 
-> GIF=0 can be dealt with though, if GIF is 0 when 2nd pending NMI arrives, we can
-> delay its injection to the moment the STGI is executed and intercept STGI.
-> 
-> We I think already do something like that as well.
-
-Yep, you're right, svm_enable_nmi_window() sets INTERCEPT_STGI if VGIF is enabled
-and GIF=0 (and STGI exits unconditional if VGIF=0?).
-
-So we have a poor man's NMI-window exiting.
+Bjorn

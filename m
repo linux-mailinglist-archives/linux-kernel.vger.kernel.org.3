@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F9E57D65D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8234857D662
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbiGUV6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S234030AbiGUV7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiGUV6s (ORCPT
+        with ESMTP id S234037AbiGUV7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:58:48 -0400
+        Thu, 21 Jul 2022 17:59:03 -0400
 Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E58F936B6;
-        Thu, 21 Jul 2022 14:58:46 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so6528059pjq.4;
-        Thu, 21 Jul 2022 14:58:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A1E93C29
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:59:03 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so6528617pjq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:59:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=PktSKT1L2O3nGxL2SVwxNXiNfS8ZomkMf08apPvZeCg=;
-        b=DJY3jYWEFScuIXxMnaqONdYTGCVVwRulQsGebVz6JYCl1utvdLvXQ94toEx5kGMkZZ
-         z1/pEiOFwUNWBrMC7+4ufNAkz0jd7cbHp8Zx0ZkqjXfnzObxdRWZcdzVyVOTA1gGu7Wp
-         JmFlPgpXKXjsmdzknKots5Mlaul12c7HuPzlH/glqY7CBGvnUXzOUm/Pn6d996JPp/kd
-         n4swd/grc13CTgVSCCDo1KShFnI4Jm/FapFGmE8Z2OWfZZMKtLemGcWh4NS19m7XSq9K
-         xCmGPLb+25sN7ef6IEg88SWqFRVXLoHcy1Qc9xBZLqp1omKZJBnUyIg5gJB28vKKwrti
-         vv4Q==
+        bh=LR0b4Qmg7kFuIY0NZ5e4svjYAGOAs6o4oip5NbZ+xbY=;
+        b=VvjxnbQ6I6nWNe1l9PLuhN/Q79sF57n2duMsDL0uyiVLtGUsXBr6HVZggvJEZWgO+Q
+         UvuuOyekg7DeXfdQmav8YMiaEJU1GWHcrQaWTdNuUh9w9pj6H8GEnxhDWRKHnoKgff9R
+         lG8x/DCp4X+LL/yJ7kXnyv5ugJ1m/TGTsh9stp+0fgM7G/3FzULcIGFQ1LdJ9F0cYXjv
+         QI35bL7fkfDMdh/tq03VdZLslCFe1BISnF1Rrf0wt3jqhKQFwo0yV++MRImsiNMFl8lI
+         vAnYObU0+WGQmbmjB4XZZU1m+a6tR4a8GpBGHgmpPRqYXNJmcnpn6SXJqN8j/COPstrk
+         RAaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=PktSKT1L2O3nGxL2SVwxNXiNfS8ZomkMf08apPvZeCg=;
-        b=QX3ON5P8XnidJ3mqnXmOxCx30psrBgp2f2fHaCVchi4PAvYzaHh7oouU5akT/bHnzz
-         CGkMXACMHBAJFnMii1Sk11QDzcANeFkIgAvIVydM+ozIG3XDxxX40Dmd1ysTiM1ZcnJ+
-         ZFK9I3RBFuAvOJevR2wxKAToqPNSSHV7C1AwMq8tBdfxhDGVSyKf5krwlfCh13WcreDF
-         m4/iseMeKoFM+yN8LsMigP9H8OogUQc2TCVB61Ifgs2Uhbcg5D7NB1SSTrUJ3xcbSIi2
-         7nOBowFR+pnGE4lw6TDyRwpviH3ELKFWj1HUWn5VQh6gcmGr1ZHpqaEqJgUEuOBrMlJY
-         I+Kg==
-X-Gm-Message-State: AJIora+ShTVDGUfTQI3igZk2vlwavHQ3sTo2K0qs/h5q3ntrtiMKnZCv
-        cafkeCgX0t7Wg8J0elw5n/s=
-X-Google-Smtp-Source: AGRyM1ulFYUkEqFxa2Ru+9pVLJDAQXGuHlUKI/EVz0VkAXFTFzAMfPLdmoEQMlVX34zoyjKglGkluQ==
-X-Received: by 2002:a17:902:db02:b0:16c:5568:d740 with SMTP id m2-20020a170902db0200b0016c5568d740mr362437plx.100.1658440725499;
-        Thu, 21 Jul 2022 14:58:45 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id b17-20020a170903229100b0016bef6f6903sm2266180plh.72.2022.07.21.14.58.44
+        bh=LR0b4Qmg7kFuIY0NZ5e4svjYAGOAs6o4oip5NbZ+xbY=;
+        b=jklUqWhFCHP6izVVIAgl06jrfZ7vq/stU76WN8P69GKT2S2Dwa7TVxt3rLUUov8kKy
+         KLFqfGKkFiM0XfWBMMZHCYgfa6NUSsv4laK9lyJNkifcyJfbvUgG6MmrqUXwuAt+hpVI
+         MI/5tW/TESOZUnPaGyRnMdeJ7P5NtxTOdb+E1lFyfNVHt+BidK8qfalzZnlIDDQeI0jm
+         GNiGCR/IBb2Uh+89xX3XrfFbQNFbynq7KyCtvN8rFRsCn7RNDZ2UuYQdk52+YgxuXz+D
+         hL6a7kzUioSdkA9oSbHi6dzOy5HN17C7jR4CZaPHpgxFMNHveVHZOe+MIa5fUbqA5BhU
+         IC6w==
+X-Gm-Message-State: AJIora8au8xwXkcCKX0ZqPWla6PVYvvAqeHYMB/WALX9q0g61ai/bBNg
+        Npf/Fi+GE8Mdc6BPhpTdiIC3mQ==
+X-Google-Smtp-Source: AGRyM1txzQvw5nlLLhAZBbspwLFdj2AjQdk/wVrmCaP5yLNxHA2DqoRexLUiA3aDxzPfeHCheEypcg==
+X-Received: by 2002:a17:90b:1a8b:b0:1f0:817:3afc with SMTP id ng11-20020a17090b1a8b00b001f008173afcmr13744261pjb.213.1658440742632;
+        Thu, 21 Jul 2022 14:59:02 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id cp1-20020a170902e78100b0016d2540c098sm2181404plb.231.2022.07.21.14.59.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 14:58:44 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 06:58:43 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] asm-generic: Add new pci.h and use it
-Message-ID: <YtnMEwh3U3Ng9q4a@antec>
-References: <20220721134924.596152-5-shorne@gmail.com>
- <20220721173733.GA1731649@bhelgaas>
+        Thu, 21 Jul 2022 14:59:02 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 21:58:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 09/25] KVM: VMX: nVMX: Support TSC scaling and
+ PERF_GLOBAL_CTRL with enlightened VMCS
+Message-ID: <YtnMIkFI469Ub9vB@google.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-10-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721173733.GA1731649@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20220714091327.1085353-10-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,86 +77,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:37:33PM -0500, Bjorn Helgaas wrote:
-> On Thu, Jul 21, 2022 at 10:49:24PM +0900, Stafford Horne wrote:
-> > The asm/pci.h used for many newer architectures share similar
-> > definitions.  Move the common parts to asm-generic/pci.h to allow for
-> > sharing code.
-> > 
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
-> > Acked-by: Pierre Morel <pmorel@linux.ibm.com>
-> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Stafford Horne <shorne@gmail.com>
-> > ---
-> > Since v4:
-> >  - Add reviewed-by
-> > 
-> >  arch/arm64/include/asm/pci.h | 10 ++--------
-> >  arch/csky/include/asm/pci.h  | 17 ++---------------
-> >  arch/riscv/include/asm/pci.h | 23 ++++-------------------
-> >  arch/um/include/asm/pci.h    | 14 ++------------
-> >  include/asm-generic/pci.h    | 32 ++++++++++++++++++++++++++++++++
-> >  5 files changed, 42 insertions(+), 54 deletions(-)
-> >  create mode 100644 include/asm-generic/pci.h
+Nit of all nits, just "KVM: nVMX:" in the shortlog.
+
+On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
+> Enlightened VMCS v1 got updated and now includes the required fields
+> for TSC scaling and loading PERF_GLOBAL_CTRL upon VMENTER/VMEXIT
+> features. For Hyper-V on KVM enablement, KVM can just observe VMX control
+> MSRs and use the features (with or without eVMCS) when
+> possible. Hyper-V on KVM case is trickier because of live migration:
+> the new features require explicit enablement from VMM to not break
+> it. Luckily, the updated eVMCS revision comes with a feature bit in
+> CPUID.0x4000000A.EBX.
+
+Mostly out of curiosity, what happens if the VMM parrots back the results of
+kvm_get_hv_cpuid()?
+
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/hyperv.c     |  2 +-
+>  arch/x86/kvm/vmx/evmcs.c  | 88 +++++++++++++++++++++++++++++++--------
+>  arch/x86/kvm/vmx/evmcs.h  | 17 ++------
+>  arch/x86/kvm/vmx/nested.c |  2 +-
+>  arch/x86/kvm/vmx/vmx.c    |  2 +-
+>  5 files changed, 78 insertions(+), 33 deletions(-)
 > 
-> > +++ b/include/asm-generic/pci.h
-> > @@ -0,0 +1,32 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +
-> > +#ifndef __ASM_GENERIC_PCI_H
-> > +#define __ASM_GENERIC_PCI_H
-> > +
-> > +#include <linux/types.h>
-> 
-> Do we need <linux/types.h> here?  I don't see anything below that
-> depends on it.
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index a8e4944ca110..995d3ab1443e 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -2552,7 +2552,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+>  		case HYPERV_CPUID_NESTED_FEATURES:
+>  			ent->eax = evmcs_ver;
+>  			ent->eax |= HV_X64_NESTED_MSR_BITMAP;
+> -
+> +			ent->ebx |= HV_X64_NESTED_EVMCS1_2022_UPDATE;
+>  			break;
+>  
+>  		case HYPERV_CPUID_SYNDBG_VENDOR_AND_MAX_FUNCTIONS:
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index 8bea5dea0341..52a53debd806 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -368,7 +368,60 @@ uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
+>  	return 0;
+>  }
+>  
+> -void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata)
+> +enum evmcs_v1_revision {
+> +	EVMCSv1_2016,
+> +	EVMCSv1_2022,
+> +};
 
-Thanks, you are right, I think some of the earlier functions may have needed it,
-which is why I had it earlier.  But now that we have removed those we should be
-able to remove this.
+Why bother with the enums?  They don't make life any easier, e.g. if there's a
+2023 update then it's easy to do:
 
-That said, I think some of the architecture includes could also be removed.  On
-OpenRISC we are able to get away with only having the global asm-generic/pci.h
-so we don't need a wrapper pci.h header at all.
+		unsupported = <baseline>;
+		if (!has_evmcs_2022_features)
+			unsupported |= <2022 features>;
+		if (!has_evmcs_2023_features)
+			unsupported |= <2023 features>;
+		return unsupported;
 
-However, I don't have everything setup to build all of those architectures so I
-was being a bit conservative to remove headers.  I'll see what I can do in the
-next version.
+diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+index b5cfbf7d487b..7b348a03e096 100644
+--- a/arch/x86/kvm/vmx/evmcs.c
++++ b/arch/x86/kvm/vmx/evmcs.c
+@@ -355,11 +355,6 @@ uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
+        return 0;
+ }
 
--Stafford
+-enum evmcs_v1_revision {
+-       EVMCSv1_2016,
+-       EVMCSv1_2022,
+-};
+-
+ enum evmcs_unsupported_ctrl_type {
+        EVMCS_EXIT_CTLS,
+        EVMCS_ENTRY_CTLS,
+@@ -372,29 +367,29 @@ static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu,
+                                      enum evmcs_unsupported_ctrl_type ctrl_type)
+ {
+        struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+-       enum evmcs_v1_revision evmcs_rev = EVMCSv1_2016;
++       bool has_evmcs_2022_features;
 
-> > +#ifndef PCIBIOS_MIN_IO
-> > +#define PCIBIOS_MIN_IO		0
-> > +#endif
-> > +
-> > +#ifndef PCIBIOS_MIN_MEM
-> > +#define PCIBIOS_MIN_MEM		0
-> > +#endif
-> > +
-> > +#ifndef pcibios_assign_all_busses
-> > +/* For bootloaders that do not initialize the PCI bus */
-> > +#define pcibios_assign_all_busses() 1
-> > +#endif
-> > +
-> > +/* Enable generic resource mapping code in drivers/pci/ */
-> > +#define ARCH_GENERIC_PCI_MMAP_RESOURCE
-> > +
-> > +#ifdef CONFIG_PCI_DOMAINS
-> > +static inline int pci_proc_domain(struct pci_bus *bus)
-> > +{
-> > +	/* always show the domain in /proc */
-> > +	return 1;
-> > +}
-> > +#endif /* CONFIG_PCI_DOMAINS */
-> > +
-> > +#endif /* __ASM_GENERIC_PCI_H */
-> > -- 
-> > 2.36.1
-> > 
-> > 
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+        if (!hv_vcpu)
+                return 0;
+
+-       if (hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_2022_UPDATE)
+-               evmcs_rev = EVMCSv1_2022;
++       has_evmcs_2022_features = hv_vcpu->cpuid_cache.nested_ebx &
++                                 HV_X64_NESTED_EVMCS1_2022_UPDATE;
+
+        switch (ctrl_type) {
+        case EVMCS_EXIT_CTLS:
+-               if (evmcs_rev == EVMCSv1_2016)
++               if (!has_evmcs_2022_features)
+                        return EVMCS1_UNSUPPORTED_VMEXIT_CTRL |
+                                VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+                else
+                        return EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
+        case EVMCS_ENTRY_CTLS:
+-               if (evmcs_rev == EVMCSv1_2016)
++               if (!has_evmcs_2022_features)
+                        return EVMCS1_UNSUPPORTED_VMENTRY_CTRL |
+                                VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+                else
+                        return EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
+        case EVMCS_2NDEXEC:
+-               if (evmcs_rev == EVMCSv1_2016)
++               if (!has_evmcs_2022_features)
+                        return EVMCS1_UNSUPPORTED_2NDEXEC |
+                                SECONDARY_EXEC_TSC_SCALING;
+                else
+
+> +
+> +enum evmcs_unsupported_ctrl_type {
+> +	EVMCS_EXIT_CTLS,
+> +	EVMCS_ENTRY_CTLS,
+> +	EVMCS_2NDEXEC,
+> +	EVMCS_PINCTRL,
+> +	EVMCS_VMFUNC,
+> +};
+
+Same question here, it just makes life more difficult.  I.e. do
+
+  static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu, int msr_index)
+
+and then
+
+  void nested_evmcs_filter_control_msr(struct kvm_vcpu *vcpu, u32 msr_index, u64 *pdata)
+  {
+	u32 ctl_low = (u32)*pdata;
+	u32 ctl_high = (u32)(*pdata >> 32);
+
+	/*
+	 * Hyper-V 2016 and 2019 try using unsupported features when eVMCS is
+	 * enabled but there are no corresponding fields.
+	 */
+	ctl_high &= ~evmcs_get_unsupported_ctls(vcpu, msr_index);
+
+	*pdata = ctl_low | ((u64)ctl_high << 32);
+  }
+
+
+  int nested_evmcs_check_controls(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12)
+  {
+	int ret = 0;
+	u32 unsupp_ctl;
+
+	unsupp_ctl = vmcs12->pin_based_vm_exec_control &
+		evmcs_get_unsupported_ctls(vcpu, MSR_IA32_VMX_TRUE_PINBASED_CTLS);
+
+	<and so on and so forth>
+  }

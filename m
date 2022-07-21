@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6F157CB8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC00357CB8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233444AbiGUNL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S234060AbiGUNLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbiGUNLW (ORCPT
+        with ESMTP id S233842AbiGUNLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:11:22 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BDCF3D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:10:55 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id l11so2634406ybu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:10:55 -0700 (PDT)
+        Thu, 21 Jul 2022 09:11:34 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767E02B607
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:11:24 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso16459697b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:11:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=RVOGJ4M2F0KLKUB3+Z6qV1Rq1i9C5g74W/OO4zDEL58=;
-        b=KLOJzkFKxPnIXHld8jK2VUCHPUZoJvCKiT09dgLnq1/mxiLuH9MMgu3jWlmkAoxPpR
-         o51pS7EQLLi7R3gSKNltX+brOCmQ7Ld+ShhitqKzhv/+TaTZov/WdLL86rbBITQF31Vr
-         qpNdYLpjh0AZuYWIBYiHxTL3yG6v8fLAq73KOKpuqzSTQO+WozUQJL9LkII9qRAci5nk
-         AJMifWfn9XpxEupX3LvieaeY5y5WWOAbovKOTqUKmaL6qpP6K4kd3IWO88qxNQabuQ5B
-         abwj2R1RwqPEh92fZ1qltngaFkHvMsDKpqEbWgSK4ifcqqrZiCaxIVBsKMwKwnmBvCx/
-         IaAw==
+        bh=3KJW7Fmbq5f+eNMw6VzguHX0B49FKPw4A5l5sLUXhGo=;
+        b=cDDJz93vgcNNLNytxqCbx8V77gcnQB+j09ztN3Q/A3wfSuguHHr5vSGyiDed9ADcd6
+         Qu8RozwM8yO7TnX8u91/tggfA68L2JN2YkymYnnjqHMkjhSx+8Y73kM+UE8/hiVaa1Xv
+         N9gvNrjJro7Zs83exyXlClnG1UGLhSE5k5vtiC7qEjl6+nITPm1PvNpvnOsAvO7FTTOP
+         o7HkYit2MdLNBhbVQ6J99MG+RyRcpRVTLE2ecIuE5B2p82n95kJOVCFpALnohXFpZdXQ
+         MR+CqTl70MXZZUY30UZxA8llahXQgVjFk0T38Xz+7+cfOil+jfutmR3l7AVmBo5f+Ktk
+         RK5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RVOGJ4M2F0KLKUB3+Z6qV1Rq1i9C5g74W/OO4zDEL58=;
-        b=ZmRUT70wWs8i0pKR+zgbsVBGACtG3XCfb+RosPEP57B30momySKaou97iaKNC4WlkZ
-         7awYoje12Ebvaa6QhSDCumauURGKa6ap4pxObh7SbuYA4J/o7hXCAoFXCsi1HdbxF6Ym
-         aHS2x+r3chn0az9TjlDgsFcI0tEE8i12ffp9fZaPsDctsuaE9iALO7C63+v6CFJsmVem
-         bzh/U7piRZI2SKgm5FqWkDwjFOwi6Pbn22CsnAIeKyuZgRNmviBIRXrhbQefm0fP5obT
-         zjKlBIZ1P+8PnMjNLEYv3aEc+JLVFWzgs0gTwLJpX1UKTdqaWiGFdmB+pRtdREAKun1p
-         Gizg==
-X-Gm-Message-State: AJIora+3S2+f8Ktj2ZKTU5taMhOK5nFZ5oFvDpn0IqEzSk1fm3cQM268
-        zK+/klkpMorcQpunHZZUZSK/HnTqLHcStiRi7tDpVg==
-X-Google-Smtp-Source: AGRyM1t6VrXpRJKHyM6oUQ81m8QH3nTAlq3cCeOZ/vKxDDxd7aWq0qpq0j54jBAKZJgaUnHNCGEI1s8fSBxgWr0f7RQ=
-X-Received: by 2002:a25:d1d7:0:b0:670:7db7:1e88 with SMTP id
- i206-20020a25d1d7000000b006707db71e88mr12516221ybg.363.1658409054750; Thu, 21
- Jul 2022 06:10:54 -0700 (PDT)
+        bh=3KJW7Fmbq5f+eNMw6VzguHX0B49FKPw4A5l5sLUXhGo=;
+        b=ehWRkCklsNL0nI/ba0Nsp15SHjJW5LbZVaxu7UF7Ll8zNY2BtKshlYkBZ0DnmATUDi
+         N2HGzDDuXuRGw0Vju3lBMYvi/0b0G6GjaRMltTESSpZeY5z1+OAXyfSKn/uB/PiUj7oB
+         UkrInOEGcuuvfxFoX0NtXDrk3bKptaOJrdG2P6N35qnEFEDQuyPd4OaRgKYGUbGB8f7e
+         EZSdyZtMyyXj/gRMQfzqBrUqMiZCynTF2Evjq/sID+xNjvtxuuOSIB+X+mNfInqOB7Hn
+         IBIMzOSFdunkAT2uNROTyGgde0zuHTJr+QTUj8qq8dD5vwJ/H6VPKwVPaXyYUp+tC5Tt
+         Svhg==
+X-Gm-Message-State: AJIora+Vtri/VIIosGjJbfeFcEFhe9cHhBYdRsd/lIzqRkYnq9XwI+uI
+        2y4EJPDq9SgfC9W7xTLofHiAYYe2+Js6ILGrrA04ig==
+X-Google-Smtp-Source: AGRyM1tLbjkCEhNkeUKj/DUOSL8lYPgWAKfYilQsa2HaMoE1cLwd43UsQsq1xN/a3T6kp4jx0N2DPCYHvCLYCBtYo8I=
+X-Received: by 2002:a81:a1ca:0:b0:31e:58d4:e724 with SMTP id
+ y193-20020a81a1ca000000b0031e58d4e724mr15075845ywg.486.1658409083510; Thu, 21
+ Jul 2022 06:11:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com> <20220712231328.5294-2-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220712231328.5294-2-kirill.shutemov@linux.intel.com>
+References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com> <20220712231328.5294-3-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220712231328.5294-3-kirill.shutemov@linux.intel.com>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 21 Jul 2022 15:10:18 +0200
-Message-ID: <CAG_fn=WmRsiCtGpYhdt7gqjqpRfp3-jsjCM7qH76GwvE56eT0w@mail.gmail.com>
-Subject: Re: [PATCHv5 01/13] x86/mm: Fix CR3_ADDR_MASK
+Date:   Thu, 21 Jul 2022 15:10:47 +0200
+Message-ID: <CAG_fn=U55CSG=xQ8-0Rj9eXrS29n-DiLdCZbqSSRdqiWW9o0fQ@mail.gmail.com>
+Subject: Re: [PATCHv5 02/13] x86: CPUID and CR3/CR4 flags for Linear Address Masking
 To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -83,33 +83,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
 <kirill.shutemov@linux.intel.com> wrote:
 >
-> The mask must not include bits above physical address mask. These bits
-> are reserved and can be used for other things. Bits 61 and 62 are used
-> for Linear Address Masking.
+> Enumerate Linear Address Masking and provide defines for CR3 and CR4
+> flags.
 >
 > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+
 Reviewed-by: Alexander Potapenko <glider@google.com>
 Tested-by: Alexander Potapenko <glider@google.com>
 
+
 > ---
->  arch/x86/include/asm/processor-flags.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/x86/include/asm/cpufeatures.h          | 1 +
+>  arch/x86/include/uapi/asm/processor-flags.h | 6 ++++++
+>  2 files changed, 7 insertions(+)
 >
-> diff --git a/arch/x86/include/asm/processor-flags.h b/arch/x86/include/as=
-m/processor-flags.h
-> index 02c2cbda4a74..a7f3d9100adb 100644
-> --- a/arch/x86/include/asm/processor-flags.h
-> +++ b/arch/x86/include/asm/processor-flags.h
-> @@ -35,7 +35,7 @@
->   */
->  #ifdef CONFIG_X86_64
->  /* Mask off the address space ID and SME encryption bits. */
-> -#define CR3_ADDR_MASK  __sme_clr(0x7FFFFFFFFFFFF000ull)
-> +#define CR3_ADDR_MASK  __sme_clr(PHYSICAL_PAGE_MASK)
->  #define CR3_PCID_MASK  0xFFFull
->  #define CR3_NOFLUSH    BIT_ULL(63)
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cp=
+ufeatures.h
+> index 03acc823838a..6ad5841e087f 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -300,6 +300,7 @@
+>  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 *=
+/
+>  #define X86_FEATURE_AVX_VNNI           (12*32+ 4) /* AVX VNNI instructio=
+ns */
+>  #define X86_FEATURE_AVX512_BF16                (12*32+ 5) /* AVX512 BFLO=
+AT16 instructions */
+> +#define X86_FEATURE_LAM                        (12*32+26) /* Linear Addr=
+ess Masking */
 >
+>  /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
+>  #define X86_FEATURE_CLZERO             (13*32+ 0) /* CLZERO instruction =
+*/
+> diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/inclu=
+de/uapi/asm/processor-flags.h
+> index c47cc7f2feeb..d898432947ff 100644
+> --- a/arch/x86/include/uapi/asm/processor-flags.h
+> +++ b/arch/x86/include/uapi/asm/processor-flags.h
+> @@ -82,6 +82,10 @@
+>  #define X86_CR3_PCID_BITS      12
+>  #define X86_CR3_PCID_MASK      (_AC((1UL << X86_CR3_PCID_BITS) - 1, UL))
+>
+> +#define X86_CR3_LAM_U57_BIT    61 /* Activate LAM for userspace, 62:57 b=
+its masked */
+> +#define X86_CR3_LAM_U57                _BITULL(X86_CR3_LAM_U57_BIT)
+> +#define X86_CR3_LAM_U48_BIT    62 /* Activate LAM for userspace, 62:48 b=
+its masked */
+> +#define X86_CR3_LAM_U48                _BITULL(X86_CR3_LAM_U48_BIT)
+>  #define X86_CR3_PCID_NOFLUSH_BIT 63 /* Preserve old PCID */
+>  #define X86_CR3_PCID_NOFLUSH    _BITULL(X86_CR3_PCID_NOFLUSH_BIT)
+>
+> @@ -132,6 +136,8 @@
+>  #define X86_CR4_PKE            _BITUL(X86_CR4_PKE_BIT)
+>  #define X86_CR4_CET_BIT                23 /* enable Control-flow Enforce=
+ment Technology */
+>  #define X86_CR4_CET            _BITUL(X86_CR4_CET_BIT)
+> +#define X86_CR4_LAM_SUP_BIT    28 /* LAM for supervisor pointers */
+> +#define X86_CR4_LAM_SUP                _BITUL(X86_CR4_LAM_SUP_BIT)
+>
+>  /*
+>   * x86-64 Task Priority Register, CR8
 > --
 > 2.35.1
 >

@@ -2,124 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9012B57CA45
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D410257CA4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbiGUMIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S233528AbiGUMKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiGUMIw (ORCPT
+        with ESMTP id S233516AbiGUMKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:08:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC6B85F95;
-        Thu, 21 Jul 2022 05:08:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76A0A61CFF;
-        Thu, 21 Jul 2022 12:08:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D1FC3411E;
-        Thu, 21 Jul 2022 12:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658405330;
-        bh=LXie3sbnk8wgU9gzwq8ntIR3HYeqzQkMMgEXBK+44jE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fipYXFe5tkugtJrcKyXxa51hr12B18OxkCCuzLPicXgcFU20MBvpER5VMZsrll6nS
-         bE8UKSXOLSkCbjARk7NzKSVcLyWkyrSseoI3t3bkI7JqVziq+qyjIP/juaJRuub3Tf
-         VMhNkMUHeBXvBNGGC/rJuA6xQak+5eHNrJD1qP9++LypHnACsuCIefculn2UafC/KO
-         l1RJjkiz/gBrNBlZgiDcHnVTuEMiXElL4mZ/G3kDz93QU66JsHxnnRm3+SiKyn8nhQ
-         5RdyVlwiIpJgzpsuEMRKuQSyfQ9UfunsyPlob3N8oDajqgSMPV/oqtNrMsEb+PaKHJ
-         PkFglKMtlfOUg==
-Message-ID: <3c0a4cb5-f88f-ec5f-e614-d1e8ceb036c2@kernel.org>
-Date:   Thu, 21 Jul 2022 14:08:38 +0200
+        Thu, 21 Jul 2022 08:10:07 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130075.outbound.protection.outlook.com [40.107.13.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB67C6D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:10:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q/GlGgsb2Q7pfn5agCgznbPNQn2VBds4hDAhb/l51BB4OI+z3D9QGhdF4McjGwmdI9T93i9f9HpOOC7gqmXbkLD+yoJoI8vDla234A2i6x5KszkYAAJIty6kuCd3nrkk0MoZperwpVBzkus5DfuQwAswYhLMsxDkQVzTeSSXCad6fl83k4zkv5be4yNGTe6L62+chD816r4smfDdv8CXVGFnSwQ7FDYaVW7Kehy2hfqo7Yskzyk7ri/XPTR2+gvHfMabaqq+DNy0OqjoLq/iXbp3+E+9Un6ePYrGDu15D5eq24HKhK+CcggflYXVEMIPgH1PWWqWDW8HzMb/0IJqxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k1XX7NJNHbbde85ODGHPMEobrVrS7Tr3u/qkhNMsSjI=;
+ b=QtHl/a6YyqJrwlbyt5hR5Yl/Jl0v4R1WClT4aK4g+35k6xXb1VGO8hK76I5Aq5YuBsYjEk6/+4TbmLjAqci0+QhHTRKncPQQWwcQ3kHtx1ZfJPlpJ/E6fDy3xac85ElLg1I2+AE6K2vFCputLAkPmjVsYTMa14rKLd/icYPjxbjtgObs+9AyMUt4K/rJgK45oAK1MMZ9SxKkH36iYv3S+5AnbJ1v5UynO5M91GA43RcfTo6oJ5CPYVVYcxgrf637w1r1cp0q+F/h6nJZzYQrAG8hUDUPZu3PJ/G+9iEG2Br7hubkXhfvPM/Og7jtr4zJiJAIrYmkXXEYv6zGAMq9zQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k1XX7NJNHbbde85ODGHPMEobrVrS7Tr3u/qkhNMsSjI=;
+ b=AJv1p3bijzQOvhIbZtmuS1vo8AVrPGYaP8Z160QzlV8NFKz+VUSSV67ZtxZRYIXzh4fnrkSnw1xJ3Z7NdsXYzdeA+ZgCEbdsxnH98UOpkisdOUY0Bwe7yccQDb1I68V2KAsxPMWi/s3ex0BXKrFykapcM7JNjvQ0E26nYmsfYnA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR0402MB3902.eurprd04.prod.outlook.com
+ (2603:10a6:803:22::27) by AM6PR04MB4791.eurprd04.prod.outlook.com
+ (2603:10a6:20b:3::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Thu, 21 Jul
+ 2022 12:10:02 +0000
+Received: from VI1PR0402MB3902.eurprd04.prod.outlook.com
+ ([fe80::95d3:800b:30e9:603b]) by VI1PR0402MB3902.eurprd04.prod.outlook.com
+ ([fe80::95d3:800b:30e9:603b%5]) with mapi id 15.20.5438.023; Thu, 21 Jul 2022
+ 12:10:02 +0000
+From:   Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+To:     Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/imx/dcss: get rid of HPD warning message
+Date:   Thu, 21 Jul 2022 15:09:12 +0300
+Message-Id: <20220721120912.6639-1-laurentiu.palcu@oss.nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain; charset="us-ascii"
+X-ClientProxiedBy: AM0PR04CA0116.eurprd04.prod.outlook.com
+ (2603:10a6:208:55::21) To VI1PR0402MB3902.eurprd04.prod.outlook.com
+ (2603:10a6:803:22::27)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V6 04/16] rv/include: Add deterministic automata monitor
- definition via C macros
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1658244826.git.bristot@kernel.org>
- <9ffc05b67fff087413143a420373731e0e34eef4.1658244826.git.bristot@kernel.org>
- <20220720160606.3e672b55@gandalf.local.home>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220720160606.3e672b55@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 93bb614a-f3d8-4a0d-d8b9-08da6b11f05f
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4791:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hWEI6oFBDhtZ+w8kwl+6TEYXHmuM5BKQd3cRLzGCo+Qxu3FQrdD4BodBlnIOD6Mp9le7c87XTCaxzQV+BggtSlAl9rVYC9zgcxA3JsaTPUhwwpKPA3GgCWzB6QbHLB2JfLqIpxI+jZ1TnRlM45cXushyhF8MWXYlMkTW1Yb8uidSFsia0Jpt+volLSC3H6C81gMbxWMMAXzoj3m9Gdqu+VfN2b9QajtoPSV+NRCVNgkfD6TB5N6v/eBEfO6hmnEWMpCP49Sq4Y0s7QiSkTmasEjQn1oqvzkBHFqiVA/8TTxlaesCiADOnnWZE/NMC4jLgQfXdUwQW57yQgvs/ct/HwMEk7yMqKc89m1DRAEYZbpMZ0vKPG9DQwN84FYtiYNbB8tCl8VqxQqv8VTVdquByLzz9uFmfgycAziTVT6FZvgucMtE6VfW1pQMdVSgsKe5pSeYem6v4gxghvqLA602H0KWzF9Zg49+OPvo7cwJGk7rklV3JqkkodkzpvKPBlEGiyAKIzKmooUGffmvSqHXQC9US+Y3kRxWgCg+atCjsalv7prqfHJafIrrjybuxyMmrfiZYYpQUgqwjExuJl+Xhg75ocU8XcjPnu6c4HnmdxmprIolNgoBMJAWwxp7vRhCp8Bn9OTscxuk0kcfRs/MgDPzIGGJdQG/D1FPRzpl7C0MS+lslGIRE9OxvilRGH63celdiziBH4AXZmgAH+3Nn0Q+ugB+ao4hdoz/nzJMRqUj9P85qdyIBWq7knRCIGrJIX85y1RdgvXVyTV6FaIs95bIeiiQZRh1cZDLIk+llUegpC4ka8dJw1rOtzKnOZdqcj4dbONF5fOURcXyz2XE4A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3902.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(136003)(366004)(346002)(39860400002)(66946007)(7416002)(66556008)(2616005)(186003)(4326008)(66476007)(1076003)(6666004)(8676002)(41300700001)(5660300002)(6486002)(52116002)(2906002)(86362001)(44832011)(6512007)(478600001)(26005)(8936002)(110136005)(6506007)(38350700002)(921005)(316002)(83380400001)(38100700002)(26583001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B12F2jx59ctqU9PsTxGf28j1Qbq9deXt296OkeIrBQkcKIdulATxADdgqX7N?=
+ =?us-ascii?Q?BfDina/kIHeYaXSAhAtD7xphgllyWaMAdGeVxa9cyXtwHvd9/BzT4TVjKPeF?=
+ =?us-ascii?Q?ZsSo+4uxibeUxe72jOuLnSxglZfss73d+MuQbXuIUTfbgZrIxrRTsN9rv1qc?=
+ =?us-ascii?Q?eiRgHjesir4XvlrMymqIBHIy15wGgNTYDkeAnpQXKzAuU7mjC/zvW2j8VKsD?=
+ =?us-ascii?Q?88pNVuqgAUw3/OHzXLLK7hdYsqEx1/nHPSEODqm5kAKhMOzMnIqGlMA50kUc?=
+ =?us-ascii?Q?m4nc4cFzbTN1U5D8Oh72lFgD4LaEM97R2lFeOyztq1O0T2R3ag8G217Acuel?=
+ =?us-ascii?Q?JeevkgsOzuOk6hzeqN8Ohc5881ftXMDJF2zb6kFRMDqHorKryyjKtr7u1Vrr?=
+ =?us-ascii?Q?7UjN9EPfJ37DfzB1qttA3u9IZpGMcyTskwn596yDsWxYRvw24agEL9GjsejD?=
+ =?us-ascii?Q?2hPjo/cXzlwsA7S5dgSlOWaAC9CyFqY/1fKc5FWGWr6jOtFUES5lr0kgH0OK?=
+ =?us-ascii?Q?aqICo60xpxPL5kfNuHvJreZ3h4TirAEEgU4UczxccCcB4YNrHDlQllIfTKTx?=
+ =?us-ascii?Q?cntgqskhdlOijx6t3Et4flOHm7Mp791aZjgblObyfiq6wwi7kg22TarvAJkc?=
+ =?us-ascii?Q?SGsIhnLNjDlOZrBBLDSIH0yRAqnARWEkWz1NoTaBSAz082HTpyCFe/nliWZd?=
+ =?us-ascii?Q?X7sp2OJlGxBsuXYtY/lcc0VWzdzMKK/XpS+TCoDpq6pQ/+0aIWQIkhczr8o5?=
+ =?us-ascii?Q?7k5kpDHFQpmt+hrqh/hb4j6F74cUwEcpwhV10qAoU9WrUmpD2OS+hgTq/x+6?=
+ =?us-ascii?Q?e0C3S9qXu7IMDCqTn+68XN6MlGAPzAnV8ceJ400/jKm4h7K53k0Lqh766cQM?=
+ =?us-ascii?Q?XDShA+rWwM6ociC48X4pko/XXExBLmtYCMGwXdz0OS0wD3GgUY+POh1p+6Fx?=
+ =?us-ascii?Q?jCcH37d6Iof1OvRoy191LRtskVfZ+XSmi2eqiiLgsakQhH95WK3rdoIPE/v0?=
+ =?us-ascii?Q?7Loshrq5wmrGE7oieMHEn7i7DobuM5IQraoPSO3vWzG76mJAC7JzKltMEog/?=
+ =?us-ascii?Q?CFt/No98URqppMEclwGxJrb5ZiiSfR9C0aDSRQFejN6ImHZagrrvM7LXoyEL?=
+ =?us-ascii?Q?WvTcVKGkdJ02epixVGPpGHoH/vkK4B4PFpAHdNBg3Ae618ROefDZ1GC5t8tm?=
+ =?us-ascii?Q?uAS5zIToCDWdouGVQRJ62zY5ZK8bsIfF+fWF+0akQT/U89wSTld4OkmsccG/?=
+ =?us-ascii?Q?/d4BZDz/3CGfdb1fX4+QgT+POUTEDpHHsYleqVEn4kVOetz68QX+2f4SQSqP?=
+ =?us-ascii?Q?ZTiXPHrZ/HShAPvJYC9mf6gQmdZekzX05lnO4vlhEzHepov75izE0vCPyARx?=
+ =?us-ascii?Q?HIWDJICCKSqmUx4o1FYJbJFBkdPu5cfKgRg2xJtYtgOU3eTVCM6dHhOpwfwA?=
+ =?us-ascii?Q?DBkHFJmwDivaFNdiGK0njr9SXI2Zzp0DyRmo4wWEDOU3HKhw+qOSYrcFp5Us?=
+ =?us-ascii?Q?h8uxNq/rQR3EDVEWVMRSCNeMJ88MxXgYKdzD470rQLibflLkxaf0YcHMpJqO?=
+ =?us-ascii?Q?SX1KFVRyQekIAQm/FB2zNK/76a4z13y7dpu2CIDOdKAcvLUX1Ihnne1sqHjQ?=
+ =?us-ascii?Q?Ow=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93bb614a-f3d8-4a0d-d8b9-08da6b11f05f
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3902.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 12:10:01.9963
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1ygw/+3xKp8sZldCJ2e6F427xeA9l+7G6uAjivyPoG5AQG8WyY96K//Q+5tJUAWpOWgaJaBGQN8fAMmXcn2dSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4791
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 22:06, Steven Rostedt wrote:
->> +/*												\
->> + * da_monitor_enabled_##name - checks if the monitor is enabled					\
->> + */												\
->> +static inline bool da_monitor_enabled_##name(void)						\
->> +{												\
-> Should we add a:
-> 
-> 	smp_rmb();
-> 
-> here? And then a smp_wmb() where these switches get updated?
->
+When DCSS + MIPI_DSI is used, and the last bridge in the chain supports
+HPD, we can see a "Hot plug detection already enabled" warning stack
+trace dump that's thrown when DCSS is initialized.
 
-Makes sense.
+The problem appeared when HPD was enabled by default in the
+bridge_connector initialization, which made the
+drm_bridge_connector_enable_hpd() call, in DCSS init path, redundant.
+So, let's remove that call.
 
-Should I also add the READ_ONCE/WRITE_ONCE? like
+Fixes: 09077bc311658 ("drm/bridge_connector: enable HPD by default if supported")
+Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+---
+ drivers/gpu/drm/imx/dcss/dcss-kms.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-smp_rmb()
-READ_ONCE(var)
-
-WRITE_ONCE(var, value)
-smp_wmb()
-
-for all these on/off knobs, or just the barriers?
-
-> I guess how critical is it that these turn off immediately after the switch
-> is flipped?
-
-It is not critical to continue the execution of those that have already crossed by
-the variable. Still, waiting for the tracepoints to finish their execution before
-returning to the user-space task that disabled the variable might be a good thing.
-
-IIRC, we can do that via RCU... like, synchronize_rcu()?
-
->> +	/* global switch */									\
->> +	if (unlikely(!rv_monitoring_on()))							\
->> +		return 0;									\
->> +												\
->> +	/* monitor enabled */									\
->> +	if (unlikely(!rv_##name.enabled))							\
->> +		return 0;									\
->> +												\
->> +	return 1;										\
->> +}												\
->> +												\
+diff --git a/drivers/gpu/drm/imx/dcss/dcss-kms.c b/drivers/gpu/drm/imx/dcss/dcss-kms.c
+index 9b84df34a6a12..8cf3352d88582 100644
+--- a/drivers/gpu/drm/imx/dcss/dcss-kms.c
++++ b/drivers/gpu/drm/imx/dcss/dcss-kms.c
+@@ -142,8 +142,6 @@ struct dcss_kms_dev *dcss_kms_attach(struct dcss_dev *dcss)
+ 
+ 	drm_kms_helper_poll_init(drm);
+ 
+-	drm_bridge_connector_enable_hpd(kms->connector);
+-
+ 	ret = drm_dev_register(drm, 0);
+ 	if (ret)
+ 		goto cleanup_crtc;
+-- 
+2.17.1
 

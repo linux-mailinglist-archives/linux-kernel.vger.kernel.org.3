@@ -2,206 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E3E57C426
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC4A57C428
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiGUGHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S232048AbiGUGH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiGUGHo (ORCPT
+        with ESMTP id S232038AbiGUGH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:07:44 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5717AC2B
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658383663; x=1689919663;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1fqzcYm1On03+b7DdxammYXGgXXTPdTxM5qfsq4iUCo=;
-  b=Zr2Hw8bFBiJgX4/dSzpkkP0hRNYZ3YxiXcOE4EZ9l5mt1EoO2bTPkrED
-   kYEYN2hBd/5/S2LpVI4M9qSMLEX8EOY7+JA3SM1oi8EJeSVw2QBX0Bh66
-   YPEApaQYa56qdy9hl5qgZD1UQVQHVRyNJRBvUIR9yiS1FfTm57MuOCvha
-   42dMczudGN7cBRkW2GFCX+3N+ciRIGO2c00l75vm3GxaUt4UvCwHiRTWq
-   7Bp2YNtejLTWR/6nxsu4A8NY4bukTahMsGb7U6mAhle8IpMv16PC0Y/fh
-   oJT6Edm62TYiSl7QIDFjzV6NMBoiRVOSMmVJTI79qFb9y/11iGN52BuSx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="350949160"
-X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
-   d="scan'208";a="350949160"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 23:07:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
-   d="scan'208";a="740558274"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Jul 2022 23:07:38 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oEPLV-0001XH-Tf;
-        Thu, 21 Jul 2022 06:07:37 +0000
-Date:   Thu, 21 Jul 2022 14:07:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: Re: [PATCH v10 4/8] mm/demotion/dax/kmem: Set node's performance
- level to MEMTIER_PERF_LEVEL_PMEM
-Message-ID: <202207211403.1K7X9mSi-lkp@intel.com>
-References: <20220720025920.1373558-5-aneesh.kumar@linux.ibm.com>
+        Thu, 21 Jul 2022 02:07:57 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C707B1C8;
+        Wed, 20 Jul 2022 23:07:54 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id b11so1300422eju.10;
+        Wed, 20 Jul 2022 23:07:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=YNme8fv36q78te0X+x31j3sefCz1PEJZIg9UxmBy0jw=;
+        b=S4o6+MkL8N8taPN1VxX9BCSa3c700YzxdgFY0FxMMuOYy1dTvi5fZ93hrUdMRPQRs3
+         ozwr/2QXd2ZzIdPUKUlOS3l94YNBu+n7c3KtA/gdgTx7omUE0TF+CR8lVJnMr70ET3Lq
+         8EX5nSawJozGd9N+0mASoEDwClKlCyEb81/VqBxFN0GIUQt0qW/WK0DIHYCZ+RCiqd+O
+         D5KAvJlhDD15eBlJyOA98t7JfO65pCtDycK8J4on7EZcd9ES1VarZP5sTNQEoVG7yKv3
+         MHySxvxorw5hRgPn6DbtXjd/ZdDzlLotiJOtgGLOeO/tYPZJE4sJMwhJZXWFZPcMijIJ
+         WjGw==
+X-Gm-Message-State: AJIora/cdtGxZQJu/UtxKn69ANzjST7zGwrsD+v2cmNcgVsIoA/O3ERg
+        mfw8eBsASygLFw1xPmtkAmU=
+X-Google-Smtp-Source: AGRyM1ufjNHVUT+b1CWpnqDp9nytEjuu/Vafzm2PqzhXbdoN2LZnVGjExUfDwkix3sjt4yhviBzIGQ==
+X-Received: by 2002:a17:907:2d0e:b0:72b:4af7:7ccd with SMTP id gs14-20020a1709072d0e00b0072b4af77ccdmr38356818ejc.209.1658383673290;
+        Wed, 20 Jul 2022 23:07:53 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id y10-20020a056402358a00b0043a8f5ad272sm453644edc.49.2022.07.20.23.07.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 23:07:52 -0700 (PDT)
+Message-ID: <4935d164-c99c-5e0d-f390-c86df1971166@kernel.org>
+Date:   Thu, 21 Jul 2022 08:07:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220720025920.1373558-5-aneesh.kumar@linux.ibm.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
+Content-Language: en-US
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Justin Forbes <jforbes@fedoraproject.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Tejas Upadhyay <tejas.upadhyay@intel.com>,
+        Anusha Srivatsa <anusha.srivatsa@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+References: <20220719114714.247441733@linuxfoundation.org>
+ <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
+ <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com>
+ <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
+ <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
+ <YthCBl4SORA2BfDv@fedora64.linuxtx.org>
+ <Yth31qsO1nDN4WLB@worktop.programming.kicks-ass.net>
+ <Yth67Ubo7PatL0AR@worktop.programming.kicks-ass.net>
+ <113dfa1e-49a0-2c70-68e0-c2230755143c@kernel.org>
+In-Reply-To: <113dfa1e-49a0-2c70-68e0-c2230755143c@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Aneesh,
+On 21. 07. 22, 7:31, Jiri Slaby wrote:
+> On 21. 07. 22, 0:00, Peter Zijlstra wrote:
+>> On Wed, Jul 20, 2022 at 11:47:02PM +0200, Peter Zijlstra wrote:
+>>> On Wed, Jul 20, 2022 at 12:57:26PM -0500, Justin Forbes wrote:
+>>>> On Wed, Jul 20, 2022 at 10:28:33AM -0700, Linus Torvalds wrote:
+>>>>> [ Adding PeterZ and Jiri to the participants. ]
+>>>>>
+>>>>> Looks like 5.18.13 added that commit 9bb2ec608a20 ("objtool: Update
+>>>>> Retpoline validation") but I don't see 3131ef39fb03 ("x86/asm/32: Fix
+>>>>> ANNOTATE_UNRET_SAFE use on 32-bit") in that list.
+>>>>
+>>>> It should be noted that the build doesn't fail, it just warns.
+>>>> I am guessing the 32bit failure is what promoted someone to look at
+>>>> the logs to begin with and notice the warn initially. I just verified
+>>>> that it exists in our builds of 5.18.13-rc1, but not on mainline 
+>>>> builds.
+>>>> I am gueesing it is because commit 9bb2ec608a20 ("objtool: Update 
+>>>> Retpoline
+>>>> validation") should be followed up with at least commit f43b9876e857c
+>>>> ("x86/retbleed: Add fine grained Kconfig knobs")
+>>>
+>>> Still updateing the stable repro to see what the actual code looks like,
+>>> but that warning seems to suggest the -mfunction-return=thunk-extern
+>>> compiler argument went missing.
+>>>
+>>> For all the files objtool complains about, does the V=1 build output
+>>> show that option?
+>>
+>> Ok, I'm now looking at stable-rc/linux-5.18.y which reports itself as:
+>>
+>> VERSION = 5
+>> PATCHLEVEL = 18
+>> SUBLEVEL = 13
+>> EXTRAVERSION = -rc1
+>>
+>> and I'm most terribly confused... it has the objtool patch to validate
+>> return thunks, *however*, I'm not seeing any actual retbleed mitigations
+>> *anywhere*.
+>>
+>> How, what, why!?
+> 
+> They were all put aside until all this gets resolved. You can find them 
+> in the stable-queue tree:
+> git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+> 
+> in retbleed-5.18/.
 
-I love your patch! Yet something to improve:
+Ah, apparently not all, as you noted above. But this is obviously a mistake:
+https://lore.kernel.org/all/YthbbBY4JumsBcHU@kroah.com/
 
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220720-110356
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: x86_64-randconfig-r004-20220718 (https://download.01.org/0day-ci/archive/20220721/202207211403.1K7X9mSi-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d94a14b8fe93ff567d64b793ce1939698ca0b834
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220720-110356
-        git checkout d94a14b8fe93ff567d64b793ce1939698ca0b834
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/nfit/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/acpi/nfit/core.c:1719:13: warning: no previous prototype for function 'nfit_intel_shutdown_status' [-Wmissing-prototypes]
-   __weak void nfit_intel_shutdown_status(struct nfit_mem *nfit_mem)
-               ^
-   drivers/acpi/nfit/core.c:1719:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   __weak void nfit_intel_shutdown_status(struct nfit_mem *nfit_mem)
-          ^
-          static 
->> drivers/acpi/nfit/core.c:3495:37: error: use of undeclared identifier 'MEMTIER_PERF_LEVEL_PMEM'
-                                   node_devices[nid]->perf_level = MEMTIER_PERF_LEVEL_PMEM;
-                                                                   ^
->> drivers/acpi/nfit/core.c:3551:41: error: use of undeclared identifier 'MEMTIER_HOTPLUG_PRIO'
-           hotplug_memory_notifier(nfit_callback, MEMTIER_HOTPLUG_PRIO + 1);
-                                                  ^
-   1 warning and 2 errors generated.
-
-
-vim +/MEMTIER_PERF_LEVEL_PMEM +3495 drivers/acpi/nfit/core.c
-
-  3474	
-  3475	static int nfit_callback(struct notifier_block *self,
-  3476				 unsigned long action, void *arg)
-  3477	{
-  3478		bool found = false;
-  3479		struct memory_notify *mnb = arg;
-  3480		int nid = mnb->status_change_nid;
-  3481		struct nfit_spa *nfit_spa;
-  3482		struct acpi_nfit_desc *acpi_desc;
-  3483	
-  3484		if (nid == NUMA_NO_NODE || action != MEM_ONLINE)
-  3485			return NOTIFY_OK;
-  3486	
-  3487		mutex_lock(&acpi_desc_lock);
-  3488		list_for_each_entry(acpi_desc, &acpi_descs, list) {
-  3489			mutex_lock(&acpi_desc->init_mutex);
-  3490			list_for_each_entry(nfit_spa, &acpi_desc->spas, list) {
-  3491				struct acpi_nfit_system_address *spa = nfit_spa->spa;
-  3492				int target_node = pxm_to_node(spa->proximity_domain);
-  3493	
-  3494				if (target_node == nid) {
-> 3495					node_devices[nid]->perf_level = MEMTIER_PERF_LEVEL_PMEM;
-  3496					found = true;
-  3497					break;
-  3498				}
-  3499			}
-  3500			mutex_unlock(&acpi_desc->init_mutex);
-  3501			if (found)
-  3502				break;
-  3503		}
-  3504		mutex_unlock(&acpi_desc_lock);
-  3505		return NOTIFY_OK;
-  3506	}
-  3507	
-  3508	static __init int nfit_init(void)
-  3509	{
-  3510		int ret;
-  3511	
-  3512		BUILD_BUG_ON(sizeof(struct acpi_table_nfit) != 40);
-  3513		BUILD_BUG_ON(sizeof(struct acpi_nfit_system_address) != 64);
-  3514		BUILD_BUG_ON(sizeof(struct acpi_nfit_memory_map) != 48);
-  3515		BUILD_BUG_ON(sizeof(struct acpi_nfit_interleave) != 20);
-  3516		BUILD_BUG_ON(sizeof(struct acpi_nfit_smbios) != 9);
-  3517		BUILD_BUG_ON(sizeof(struct acpi_nfit_control_region) != 80);
-  3518		BUILD_BUG_ON(sizeof(struct acpi_nfit_data_region) != 40);
-  3519		BUILD_BUG_ON(sizeof(struct acpi_nfit_capabilities) != 16);
-  3520	
-  3521		guid_parse(UUID_VOLATILE_MEMORY, &nfit_uuid[NFIT_SPA_VOLATILE]);
-  3522		guid_parse(UUID_PERSISTENT_MEMORY, &nfit_uuid[NFIT_SPA_PM]);
-  3523		guid_parse(UUID_CONTROL_REGION, &nfit_uuid[NFIT_SPA_DCR]);
-  3524		guid_parse(UUID_DATA_REGION, &nfit_uuid[NFIT_SPA_BDW]);
-  3525		guid_parse(UUID_VOLATILE_VIRTUAL_DISK, &nfit_uuid[NFIT_SPA_VDISK]);
-  3526		guid_parse(UUID_VOLATILE_VIRTUAL_CD, &nfit_uuid[NFIT_SPA_VCD]);
-  3527		guid_parse(UUID_PERSISTENT_VIRTUAL_DISK, &nfit_uuid[NFIT_SPA_PDISK]);
-  3528		guid_parse(UUID_PERSISTENT_VIRTUAL_CD, &nfit_uuid[NFIT_SPA_PCD]);
-  3529		guid_parse(UUID_NFIT_BUS, &nfit_uuid[NFIT_DEV_BUS]);
-  3530		guid_parse(UUID_NFIT_DIMM, &nfit_uuid[NFIT_DEV_DIMM]);
-  3531		guid_parse(UUID_NFIT_DIMM_N_HPE1, &nfit_uuid[NFIT_DEV_DIMM_N_HPE1]);
-  3532		guid_parse(UUID_NFIT_DIMM_N_HPE2, &nfit_uuid[NFIT_DEV_DIMM_N_HPE2]);
-  3533		guid_parse(UUID_NFIT_DIMM_N_MSFT, &nfit_uuid[NFIT_DEV_DIMM_N_MSFT]);
-  3534		guid_parse(UUID_NFIT_DIMM_N_HYPERV, &nfit_uuid[NFIT_DEV_DIMM_N_HYPERV]);
-  3535		guid_parse(UUID_INTEL_BUS, &nfit_uuid[NFIT_BUS_INTEL]);
-  3536	
-  3537		nfit_wq = create_singlethread_workqueue("nfit");
-  3538		if (!nfit_wq)
-  3539			return -ENOMEM;
-  3540	
-  3541		nfit_mce_register();
-  3542		ret = acpi_bus_register_driver(&acpi_nfit_driver);
-  3543		if (ret) {
-  3544			nfit_mce_unregister();
-  3545			destroy_workqueue(nfit_wq);
-  3546		}
-  3547		/*
-  3548		 * register a memory hotplug notifier at prio 2 so that we
-  3549		 * can update the perf level for the node.
-  3550		 */
-> 3551		hotplug_memory_notifier(nfit_callback, MEMTIER_HOTPLUG_PRIO + 1);
-  3552		return ret;
-  3553	
-
+> regards,-- 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+js
+suse labs

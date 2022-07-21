@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC5E57C44D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B3857C44E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbiGUGSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S232191AbiGUGSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiGUGSb (ORCPT
+        with ESMTP id S230336AbiGUGSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:18:31 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2046.outbound.protection.outlook.com [40.107.95.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5C9481C5
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:18:30 -0700 (PDT)
+        Thu, 21 Jul 2022 02:18:45 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2047.outbound.protection.outlook.com [40.107.101.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B0045993
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:18:44 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lYuRY99WDwqgIxaFSsoZR/T+y9HuLCXSP7awsnPd9ct4c0Kvn6tNONo4NhJyAbDJa/4YkefM3mALazes6AnJApXDzHGEXR3G5TfYKhmrvBIZQMWiEkZeXHeM8kjk8qjFqg+1gdVzRfXt5tu6mA/GP0TqCdRR+erVyfSWUzVcXn3KbmUnLyeAeSQjthOQKa1geOSJYh1/RuvWymdj5aS9jQzX3G3HevO2F0soDaYLVBbdV44AsqzfaRsCszdlEQUnDLornV3IASMNnBlcSipfk5c61JrYeCO6mlkBDuU1oukt8xWHQq+l42Qlkuy3wTPKVe8m8HWrBPEBYEvEuREMSw==
+ b=YNthUB9QLiWTF590gnacxO970rBq1fwQ0dhO0iZ5itcQExTm//mcI+ItyIG++CVkrxz1qkNiP6VJ9M6G3QbXakC6C24wTR9xrcJKH/dStrKFc1ihiiNWRkixn3GIE+v/8IRW2B01AIX7HNdvfw2Xgs6HlGgBgN9CL+kOENYZEmMAVdHDt/NqT66chdcD40xzJlyb2kg4S2v8ab4Nx5P0y5Y+KbTwWlSdFBRZnJaFdDI7YWk99yMBhmAkyfclA6kTihpT2E/z+Hyl5PO+Y7jVlblTeTkQ/s/a+tyaEHCe50mx3mYlmOIuH+QIDU3S6rsRH+I/kvcWGXyXCVFddJ+b3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=53UPKWwddkq2HDXrU43x19XlSwhYok/Q3gxki6j0hhc=;
- b=f+uxY9sqQFyRND3AhzVZkvJy0a40rJuwWTxaT8naFtqYZYqH44ITVDSMNtD37TPqTnMgKh6YsiMH5Umm7Y9ctSqEC/kzX1KT/TyxtLAzZlBW9Xslt/6iiRGNhBFTKnV+o9Z47M1ZMbdsciegoBFakFggg1P976+phmb7b/QK3Agn5tY3by4oHh66qjNUWlfU3nSoAtXYaZAm3utGomxDL543V6fiSV6azNs1n0hX9aaItXA9zJmjiMgzIGSMvl0iJ5Pj2bXRyvugIV3jdtOay/fS+N+aoDQ8nNTpplxN2kHBJu57FA4a0i9KESvq9KjhiRwgmJRfs+FR6P20iQm6Yg==
+ bh=/p+rk0BGYC0DgF53jOHSj9wrk5wufS85RPVfdOhWV7k=;
+ b=EbssZ/WUIUzvmdn1qAHDEoomRDY+bp5wzhiTK6Fme5PiJBFx1/MEvtpgTCTW1DkOUrmUNt4jDKXmFjuQcvNYcgCH6kcrjIPymSr7N5texUtfKZH6+2rX2i+4RRK5sYyYjpdVRZgQRq5Np4l2l5qpan3dJhmrDFRscNLk7g14B8jggxtP4cEn4ssCTh1OgPZ/GaAB4tJtQfu0ITf7GW8BcFw+sEXbfGl8Pk6Z5sFQUjE3swp+n383xBA+wLZXQYJa5cY4ZmjavWMcMRjDwpK5DE88MeAVBkAiqoU3Fwv/EP7YJc5Z61tam3X1Naw+hwqNGdXbN85IVFWB/idlUWX73g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=53UPKWwddkq2HDXrU43x19XlSwhYok/Q3gxki6j0hhc=;
- b=Z9VZmSeXpLPbKutGf7WnPp00LTxblvIk++SMj6FX63xaG/iwxEQvOOmCIY8L5Bugh+6uS9XRddRSIFzhzn2+eKDHpaYuRxuNxqBomTP5DwSFP9AsjutLbRgaocm1FjMYzfVH8J3BMvbot769+hPUte0e/kc5/icnoHtNYVdqrUQ=
-Received: from BN7PR02CA0019.namprd02.prod.outlook.com (2603:10b6:408:20::32)
- by BL1PR12MB5827.namprd12.prod.outlook.com (2603:10b6:208:396::19) with
+ bh=/p+rk0BGYC0DgF53jOHSj9wrk5wufS85RPVfdOhWV7k=;
+ b=tLRoFjKVwgtXzTxGFIQkoW7Zn/0nSukWhHKlwi5WTDFyIMHjdx2xGyWINHx2gOjT+ueVuU2d/yC5rH0gDWpNp/u1OxoKgwJJv3jK/h0YePWN+rp2sq82kLsbaVVShVE96p43XZklVPvVpDe6lr6ke9EWgtVCuXtwUjMxJXuEbg8=
+Received: from BN0PR08CA0029.namprd08.prod.outlook.com (2603:10b6:408:142::15)
+ by MN0PR12MB6174.namprd12.prod.outlook.com (2603:10b6:208:3c5::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Thu, 21 Jul
- 2022 06:18:28 +0000
-Received: from BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:20:cafe::48) by BN7PR02CA0019.outlook.office365.com
- (2603:10b6:408:20::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25 via Frontend
- Transport; Thu, 21 Jul 2022 06:18:28 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Thu, 21 Jul
+ 2022 06:18:40 +0000
+Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:142:cafe::ce) by BN0PR08CA0029.outlook.office365.com
+ (2603:10b6:408:142::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18 via Frontend
+ Transport; Thu, 21 Jul 2022 06:18:39 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,20 +47,16 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT034.mail.protection.outlook.com (10.13.176.139) with Microsoft SMTP
+ BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5458.17 via Frontend Transport; Thu, 21 Jul 2022 06:18:28 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
+ 15.20.5458.17 via Frontend Transport; Thu, 21 Jul 2022 06:18:39 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 21 Jul
- 2022 01:18:27 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 20 Jul
- 2022 23:18:27 -0700
+ 2022 01:18:39 -0500
 Received: from amd-System-Product-Name.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.28
- via Frontend Transport; Thu, 21 Jul 2022 01:18:18 -0500
+ via Frontend Transport; Thu, 21 Jul 2022 01:18:30 -0500
 From:   Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
 To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
 CC:     <vsujithkumar.reddy@amd.com>, <Vijendar.Mukunda@amd.com>,
@@ -70,12 +66,12 @@ CC:     <vsujithkumar.reddy@amd.com>, <Vijendar.Mukunda@amd.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
         V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4/5] ASoC: amd: acp: Modify const resource struct variable to generic
-Date:   Thu, 21 Jul 2022 11:50:36 +0530
-Message-ID: <20220721062043.3016985-4-venkataprasad.potturu@amd.com>
+Subject: [PATCH 5/5] ASoC: amd: acp: Add error handling cases
+Date:   Thu, 21 Jul 2022 11:50:37 +0530
+Message-ID: <20220721062043.3016985-5-venkataprasad.potturu@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220721062043.3016985-1-venkataprasad.potturu@amd.com>
 References: <20220721062043.3016985-1-venkataprasad.potturu@amd.com>
@@ -84,23 +80,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fe8301a9-1ee1-4eb3-1479-08da6ae0d3b4
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5827:EE_
+X-MS-Office365-Filtering-Correlation-Id: db7fa325-035d-4875-a34c-08da6ae0da94
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6174:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q5L9Z5/Mrj7J0T3tfbj+327wSqiwpOga5DbrojdxYt1qWRtEHJG0xEG8YpJrX51k2tfDvBZYU26NqhFybSCPdy/zvfmxs4WvEywwjIdHoPvDLeCijORC5nwrhLi9f7BAI71wOXvQ15bweAkFST4PCHVVqnd9lypYIbLEjIzZ2BiqvxPGuniK+TlnuaPJs0DrrPOFYrl+gR8nZ3bT/HC4GLNvhx80kroF/JODbBKB1Y64Wf8gYVwjgAzNFIa8IxFCiZR0InypAfD9fdRLtuaWxCd2WRE0uLcUz5TslzgnY+Ki9Hd3X2a9GnNpRJtS8lA3yZ2XuE36+Rzt2Y7OU4vCwKFJWuXc/BUtCVupTxSCXnGNTerDH9higC7KpgjPVj8DJ+EaaBEfSCYQ4pSaBBrpSqnnDbswnkSro57dktXF99q+7/tR0GeOXZhE0JYAevjUk5awXTsDidTIM68j7/GdKW/6zWGEpENZBmoEAQqq3gBaEkl8+yP9yjmWbTOVLxNJnVMW5k50t7kJp7yYgpHdQTzgTZPDQcFq0IKV7DjJekgnXL8oJd6phGG+CD1ngB63QTiz/NpBOa5qZJk/yW0L9bYtMen1XCZ9k1cjNR79IKxZqTJvitNxAkV0HSruFGAjdbvyQRs0OTejEVoymBiEhX7M0vaJkaguz/MarfQ4mZBLDXUbrTk4kwBb5KKueYfpJLSh4Znn20/flDRP3AzgUMMoUmH2m2AICWSgkfh3m70Vu4Q4Jj4iRjM/rTk5QRbmzAgR7Yg/lT6oVi4ukgf/yTHEUFozU2ICcpVyJeagHfnt32z9sXZQG9/4YW1MxpdcKb193YU59JwZPZfdQDSdUJyRC5pbZ2vu2/4a+zy56eA=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(376002)(346002)(39860400002)(36840700001)(46966006)(40470700004)(36756003)(5660300002)(40480700001)(8936002)(2616005)(2906002)(82310400005)(86362001)(40460700003)(8676002)(70586007)(70206006)(1076003)(82740400003)(478600001)(426003)(186003)(41300700001)(4326008)(26005)(54906003)(356005)(110136005)(6666004)(316002)(7696005)(336012)(36860700001)(83380400001)(81166007)(47076005)(41533002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ygj2I0UUC6Ok80adDwG2nUytn8nFBVJwiwJHlM+0xx5QiBbUU0moQpzizM91ehiXjdm8xpAHza72pPTvaE59llRJXFlNlVz5zabxKJINCIN2Bih9wQvlYVDgKqzt7MCo7wtioWXr8Y8VJVprRmQYPZRXAJ+mS0T4Ymuxn66ZDv/WB6RS7aduFVTSYT1PN5DyDV6SviJJGU2kvepL/auqPMMTeCpQOHuskBnmrdskpuHDJuFdF8N7IBiqkZ9LJeffHJwCAnVphbVBwq8M7+Qb2LCPKhQQ/1BI9qASVJjLRmk+l1qg1Ddd/LGfWK2NykJ57Jza0Q5rofRhoEOwmI4pvyuqIBRAUUNO6of4qRdsrHM701a+ZmrvBnyMb9Oo0Dzph6k03dKWbSr0fsk8NScsbstHJxOy6DfmKUfGj6QYheTrbaBR1YZ4KNZ1DsJlelp9UmTkzyzRv1PQxQMw20AN6W6UoZyUQgGOaVZjtez6O06yQ52yV2zrYnmFlitqung+8up7qO+gRqphonahY1OK28Hfyg8GUT6eA/XUkzar/vfBQqrdAeZLZPf8SdDL42aZbsewRKu6k9o9TDnuQCq366lzGeRjoQk7lFjYdTTjwGyqmXkmJ5ca0NRHlKlc0JVMRtpC35QxJxiCgD5om8uuh/mz1jiMJqoA/euVZOlirfaOksYAJa7J6Sgh+rx7RuOcPgJU2CJjiPPPGkv1w4vYQJ2dLb68D4r9EMBnv2kEa7VXkBmrHqiKybqEl7FLCLFLcIXQuLYoMFKORN3N9GIgon6cEMHup+NdqSYkEHd19UQQp5EzpyEYtyqu3yRqG5f6QNS33/Z0X3sqG9ukYdQXuA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(39860400002)(346002)(376002)(46966006)(36840700001)(40470700004)(54906003)(110136005)(40460700003)(26005)(316002)(83380400001)(70206006)(70586007)(47076005)(336012)(8676002)(36860700001)(426003)(36756003)(86362001)(2906002)(82310400005)(40480700001)(186003)(2616005)(41300700001)(8936002)(7696005)(81166007)(4326008)(1076003)(5660300002)(356005)(82740400003)(478600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 06:18:28.2578
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 06:18:39.8114
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe8301a9-1ee1-4eb3-1479-08da6ae0d3b4
+X-MS-Exchange-CrossTenant-Network-Message-Id: db7fa325-035d-4875-a34c-08da6ae0da94
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5827
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6174
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -111,48 +107,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change platform specific constant resource structure variable
-to generic name.
+Add error handling in acp pci driver probe function.
 
 Signed-off-by: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
 Reviewed-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 ---
- sound/soc/amd/acp/acp-pci.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ sound/soc/amd/acp/acp-pci.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
 diff --git a/sound/soc/amd/acp/acp-pci.c b/sound/soc/amd/acp/acp-pci.c
-index c03bcd31fc95..34d75603eea1 100644
+index 34d75603eea1..2c8e960cc9a6 100644
 --- a/sound/soc/amd/acp/acp-pci.c
 +++ b/sound/soc/amd/acp/acp-pci.c
-@@ -29,7 +29,7 @@
- static struct platform_device *dmic_dev;
- static struct platform_device *pdev;
- 
--static const struct resource acp3x_res[] = {
-+static const struct resource acp_res[] = {
- 	{
- 		.start = 0,
- 		.end = ACP3x_REG_END - ACP3x_REG_START,
-@@ -75,16 +75,15 @@ static int acp_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id
+@@ -70,7 +70,8 @@ static int acp_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id
+ 	ret = pci_request_regions(pci, "AMD ACP3x audio");
+ 	if (ret < 0) {
+ 		dev_err(&pci->dev, "pci_request_regions failed\n");
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto disable_pci;
+ 	}
  
  	pci_set_master(pci);
+@@ -89,22 +90,29 @@ static int acp_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id
+ 		break;
+ 	default:
+ 		dev_err(dev, "Unsupported device revision:0x%x\n", pci->revision);
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto release_regions;
+ 	}
  
-+	res_acp = acp_res;
-+	num_res = ARRAY_SIZE(acp_res);
+ 	dmic_dev = platform_device_register_data(dev, "dmic-codec", PLATFORM_DEVID_NONE, NULL, 0);
+ 	if (IS_ERR(dmic_dev)) {
+ 		dev_err(dev, "failed to create DMIC device\n");
+-		return PTR_ERR(dmic_dev);
++		ret = PTR_ERR(dmic_dev);
++		goto release_regions;
+ 	}
+ 
+ 	addr = pci_resource_start(pci, 0);
+ 	chip->base = devm_ioremap(&pci->dev, addr, pci_resource_len(pci, 0));
++	if (!chip->base) {
++		ret = -ENOMEM;
++		goto release_regions;
++	}
+ 
+ 	res = devm_kzalloc(&pci->dev, sizeof(struct resource) * num_res, GFP_KERNEL);
+ 	if (!res) {
+ 		platform_device_unregister(dmic_dev);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto release_regions;
+ 	}
+ 
+ 	for (i = 0; i < num_res; i++, res_acp++) {
+@@ -133,8 +141,16 @@ static int acp_pci_probe(struct pci_dev *pci, const struct pci_device_id *pci_id
+ 		dev_err(&pci->dev, "cannot register %s device\n", pdevinfo.name);
+ 		platform_device_unregister(dmic_dev);
+ 		ret = PTR_ERR(pdev);
++		goto release_regions;
+ 	}
+ 
++	return ret;
 +
- 	switch (pci->revision) {
- 	case 0x01:
--		res_acp = acp3x_res;
--		num_res = ARRAY_SIZE(acp3x_res);
- 		chip->name = "acp_asoc_renoir";
- 		chip->acp_rev = ACP3X_DEV;
- 		break;
- 	case 0x6f:
--		res_acp = acp3x_res;
--		num_res = ARRAY_SIZE(acp3x_res);
- 		chip->name = "acp_asoc_rembrandt";
- 		chip->acp_rev = ACP6X_DEV;
- 		break;
++release_regions:
++	pci_release_regions(pci);
++disable_pci:
++	pci_disable_device(pci);
++
+ 	return ret;
+ };
+ 
 -- 
 2.25.1
 

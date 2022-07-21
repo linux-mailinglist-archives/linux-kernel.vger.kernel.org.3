@@ -2,170 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC6457C81C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A8357C829
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232810AbiGUJu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S232234AbiGUJwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbiGUJux (ORCPT
+        with ESMTP id S229663AbiGUJww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:50:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B77034BD36
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658397051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CO7yqSOqdsoA6FvkegluY8/8ZAYmjQUUu2UI2GMdWBk=;
-        b=g0t9sncE7mdImJqYQm7BmbGU86Il0rQ1sVbdiBpMUoWAfy5pZXY1GE88FS+32Sd7qNg4Sw
-        Zzy6cXugq5N30Uh1qIY7rV1HILKAMn8JQrhO3VRNE/h+b7KfFasKXMhy8C/Hp20zBxFUhn
-        cTr+5fnAQoAB7sGOtSL6UfpB0T3MRwM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-A_4_TM4ONF2BzJXvdG_TnQ-1; Thu, 21 Jul 2022 05:50:49 -0400
-X-MC-Unique: A_4_TM4ONF2BzJXvdG_TnQ-1
-Received: by mail-wm1-f70.google.com with SMTP id n30-20020a05600c501e00b003a3264465ebso2247941wmr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:50:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=CO7yqSOqdsoA6FvkegluY8/8ZAYmjQUUu2UI2GMdWBk=;
-        b=ty1qgda3s5oZv+cgxCTgaj/lurAenLfersfEXojFroSI1TnjLLzXAJqqYuaYfoyThG
-         wEC4zEAfCdX7oW47ZwJnUg88eTAkvZvmGev3x6pTvW2QfMUOQqeaIN2SClwpaFbuWBBP
-         ARyK/xELVlVaWP8VjTtMHH73IzYMZC3kwPdmnCKPouc5RrUHX6m2AE02/ZCoj4J5gDv+
-         bB3e00ZqueTMXFzzMPMnSIAQBkk3YkpHx6dQn3NuPaWM4Y8HWopO+QsEFO5Mh3ex46eE
-         W2R4WYT3Xgweo07fdy3Fp0sfJP39oMTmWIdlDnaFt9Kzfb1OphD1Zax3aFr+R9+1aw1P
-         Lx4w==
-X-Gm-Message-State: AJIora964/an+2jSbjljSfmBK1aEQKJY1acyjqETlmDv9EkkAIRwd/Cj
-        oIoLBQBwp81uUGyfhKMr9CPOIRorheFORs4vJgRmyhAUW27CgUu2uCiqm2NCGh5gaprZPdarR3I
-        IUxezxpVTxub8w3Jd+5Oll7Ql
-X-Received: by 2002:a05:600c:cd:b0:3a3:f40:8776 with SMTP id u13-20020a05600c00cd00b003a30f408776mr7645490wmm.9.1658397048697;
-        Thu, 21 Jul 2022 02:50:48 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uts89nDIOzg3pgovfDVxNFStA298ovCBRrYUGQIqDJzEAWNm0lSXxPmyA4m/lsmvtQcMdkAw==
-X-Received: by 2002:a05:600c:cd:b0:3a3:f40:8776 with SMTP id u13-20020a05600c00cd00b003a30f408776mr7645440wmm.9.1658397048195;
-        Thu, 21 Jul 2022 02:50:48 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:e000:25d3:15fa:4c8b:7e8d? (p200300cbc707e00025d315fa4c8b7e8d.dip0.t-ipconnect.de. [2003:cb:c707:e000:25d3:15fa:4c8b:7e8d])
-        by smtp.gmail.com with ESMTPSA id k23-20020a05600c1c9700b003a31b00c216sm1340719wms.0.2022.07.21.02.50.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 02:50:47 -0700 (PDT)
-Message-ID: <39067d09-b32b-23a6-ae0e-00ac2fe0466c@redhat.com>
-Date:   Thu, 21 Jul 2022 11:50:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+        Thu, 21 Jul 2022 05:52:52 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2108.outbound.protection.outlook.com [40.107.114.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B537B7AF
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:52:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GUA6lY11bcUZKGD46oJUr1tmBovxEoeQwZaaedVel7jtSsBZejNdSfjKLb7+VcKohYgxNZwSQEJUvizJkElVUjgeAayB/+9jbffFIeGCrUBVtj+jHHM0VhI7Hj4rMWSGQ/5WY3ZDaP40tk5H5XaphHexTCGAmU8FLbr1fnh0+WlRyxJ0W71mgh7DevKyf3yaoNCPT/7SPn2LgfC/G+gFsTEjfmR0FSBn2e0Ip82sobyah8ZdYOaEHPW8IV9DleWRi6cJgl+tdnK5KNtVB49VrkhuyAErZgAJnkKSbtF+3LWLWvOuN4Gmro60HikZqrfctWGWwxF28QfHGIYuaix3ZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BHbAM3sOiOJOiPY+rl3WIr/TIS26Q/1IC2Yoiiefspw=;
+ b=iu10lXnTLVy3zuq330tAhLWkJbBPtl44j0AukuCVKXlFdlRJrHkh8NXOgzmL0efZQ3kWzZqYu4JIlvSipJF/vfOzG+u+f3jU70ectdz0zbGrtQaf9cfME5fr8599C70BgKIwFOj+pUueXN+Z3tPrdv32wefwa+iEijKMSdeVDoIuAx9x49HDdGw7THyieuLqQmS/k69MRlBocOkhbsVHRKuUv/tfxQQja5gMfncL1h4fEE6kAVMT6tLo9yH14fDyrp6txuECYJRpZa6YpLs0/XY3QZSolem3L8ngJs3rMjTUy0CyRhsdYbQoZIsNrG3cufRLcpCNP8DyXMGis4TkFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BHbAM3sOiOJOiPY+rl3WIr/TIS26Q/1IC2Yoiiefspw=;
+ b=ku2fysWz7NWNqD/QmHT05ZQ8/UeMZQxwNn9PGNM7oHCaYLbba4KoaZSc3Yq/2rBi4irgnlIeswKZoLyj4SgHsS3kHanlTOQMbDUCW9aIY4qLmU4lIydQ6zQaGfb19Cd7vR3Y2rIJVAGFCG3BUnfixxT7k3tDLv5i1PixHqD+PRA=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by OS3PR01MB8164.jpnprd01.prod.outlook.com (2603:1096:604:176::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Thu, 21 Jul
+ 2022 09:52:48 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::b046:d8a3:ac9c:75b5]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::b046:d8a3:ac9c:75b5%4]) with mapi id 15.20.5438.025; Thu, 21 Jul 2022
+ 09:52:48 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "vigneshr@ti.com" <vigneshr@ti.com>
+Subject: RE: [PATCH 5/6] mtd: spi-nor: add generic flash driver
+Thread-Topic: [PATCH 5/6] mtd: spi-nor: add generic flash driver
+Thread-Index: AQHYnOb6STy+XODYIEqdWdLkpni6C62IlFOg
+Date:   Thu, 21 Jul 2022 09:52:48 +0000
+Message-ID: <OS0PR01MB5922F173C180E49273BEECB186919@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20220513133520.3945820-6-michael@walle.cc>
+ <202205132220.uRTFaqNA-lkp@intel.com> (raw)
+ <e6b22ad3b427770625aa56a4fe700e5c@walle.cc>
+In-Reply-To: <e6b22ad3b427770625aa56a4fe700e5c@walle.cc>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
- <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
-Organization: Red Hat
-In-Reply-To: <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2fd559c8-dd84-48f2-55a8-08da6afec50a
+x-ms-traffictypediagnostic: OS3PR01MB8164:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VJ/c9ml5F7RrzOq1jXo1BWIrAcyTU4lp107mYSwcuuctWcNf1YctHi8sHGzhmXOmOfvY4B4eFqgClFzw+kxf+0jeYyrSAxxCjDgwfrWzD4x9vb8wuciV1jWFBTHuarHj6JkY4jZ7LiXllvSbc+z/U7csVbmiWfcwS+SQAXny6h4nmjkn0rtbtAVFXOTIBBlI9XKvZMIEaC3P0DpuwJAd9PeLorOQtq/9o2Vf7Nt7YgNWjQOwbdCIVHNIl4Fp4oFBuHRbIVqvvFHDtQzVFKb/p1a17yIHMZdyP8GuLsEz+LSUFnv+vyy54u8vS98gDqifKPUvtLMMjovbVrfa/v6vK0ex2yC0Ce74GkIS94iWBypqHXOTx42mw7vgJtDAJ91YScjr59hhdjdimC8HqohdC2W95QYrKPE/Ipmoj0rFtdjiPhaCjSQmcA2i0gi3+HDhEJxSZmPawkTIwy2rZ1epUhaQYkDzpLv826AWQRqWTRKRob503dZUB0hdy6dIPlKAP3jfdn8GMDu8gniWYQxLkzM608pWwrAvZfLtXc1Eimxco9+RmiwqjaW8Z1uj7OLQwB5C3goot2PSRwuqhbtHK2vAscTOxjX0ZHeBUEjTX/R086NE9rfUlJ97RC1SUhxcncyVmfcQhE1mJc+X/JQBDWIfAAsEGj0omz/XaTLuCbaQ6/zU3CWUYltDbKzdIBlNsG6hv5LfLBybSiCrIDmfinAUSrCavHeWxJ/BEgIlc7hicWvwBGeuMpn68S0UsQGuAa1wmhd6ZSEkbNXRS5X2WEx/1a8YjQPzDv5LpHC1J+jxO8VM1mfVwgT8wCs1UUx5QIwoheLXdDGK+Ha5bBAvYg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(122000001)(478600001)(41300700001)(38070700005)(71200400001)(6506007)(9686003)(26005)(7696005)(38100700002)(186003)(83380400001)(316002)(66446008)(33656002)(2906002)(8936002)(8676002)(4744005)(5660300002)(52536014)(6916009)(86362001)(55016003)(4326008)(64756008)(66556008)(66476007)(66946007)(54906003)(76116006)(41533002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AMqAJwnmXyMgdUMtHKXaaCU/BeUHwjwgK+yoApOoGyj0IyJl/SB3fiRTvpJ/?=
+ =?us-ascii?Q?KH3Dsg2Q/YViMdjOJHNxHId5mL4XufuVlIe7zKlO7eyuEFtBalpBFYi104oE?=
+ =?us-ascii?Q?jsQtENnRpS0XMZdejgxiqquaObGAqtbZdaptuOiCi1ZwE97DPcScC6+FCG7a?=
+ =?us-ascii?Q?sSL37pl1F49oLfKyUGLHHX9dsltAHVERSXSLaofjY/0Ca78hrWQBeMOjwuh1?=
+ =?us-ascii?Q?298pkj4TizT3S7AYBG6He8xkCr4Q31jXnZ5jGiCPxVaVzfMrhpzNVU6/rES6?=
+ =?us-ascii?Q?aBuPp+PSALKfkAtc2wHyR0i23gMN0gSu0rn7rm7CTHDuDx3q8rtca8ib2Z05?=
+ =?us-ascii?Q?duTLPUyLoK5iGejF6xYgesDUnRbX2hJxWMr3FADgfSd5PoSMK2hsA1s0m8ow?=
+ =?us-ascii?Q?lSe4V/DI0xzHRHyvyE02GaydZvDa15jz96winFchSYZQmEJzUh68QekJacjN?=
+ =?us-ascii?Q?0g8VO2WxuQbf6II5KwRZd08lUTRGofDL9kh76qSIIwAkZnVv/xttR95ZSH2r?=
+ =?us-ascii?Q?Y+uSWU01DovHsol8RVqjOzZ+Ke7dRjtee7aZNajj1xgAYpSEzXeDaaWXAfuT?=
+ =?us-ascii?Q?pL58YEkoJmgrbuWEJ2qVFOD0Zmftv4mGHDj6bXtao9wR0/R24oGkeQq93dE1?=
+ =?us-ascii?Q?6wlqCl6S046cYfDcqFTc1uTZOTCNEGTvy63oqibqxh3JkLeuk1oWRxji/r7g?=
+ =?us-ascii?Q?R8TU8ZT7N35gyKw/FzGki0m3Ql9HgVg9E2Bx+bPaG/CHvZHI9Xuk36127yuV?=
+ =?us-ascii?Q?AvlCJAInANMohuJTKb0l+pLgnrTt+TC8t/oHsZhgkzDp+3yySFH3iVhiubHr?=
+ =?us-ascii?Q?6vEIVIXCzcW64fEwjvs0T2gy2ySA3gP8e5V25BAf6bRVlQD5mYMxbfyMv4Sq?=
+ =?us-ascii?Q?eT+kWNS6f/e3eXvtzGElPu1iD2QTsxPlOD4Nfcjr4N6wLZPqfNmOAykpOmKY?=
+ =?us-ascii?Q?1aTs2R09beerQzBHopB7dgfHyL9fE/5ovXBn1gt45FyHcrbbF9vRIkZsIKJf?=
+ =?us-ascii?Q?NYqkbdG/hNBzBNVxwVmhgitybvJue5enl6sD55CrTCVEZ0dllv+5q7k6IZNc?=
+ =?us-ascii?Q?ksNrOaFou/Yo1Gzwa/RCpbd5opc5192qTnNJujQZZDMfo0pfW0SWbE14A7CG?=
+ =?us-ascii?Q?OhAFgTK5tdOmFij0oDh+aEFSrNR4wJh9NlhPCsCaZRfhstsGPXkiGryAoowB?=
+ =?us-ascii?Q?kTXFqASjl1BLTSCmo195PtVqxkjA2oSJVA7MTz70Vl9Cds9JPVumyL7ZRaUM?=
+ =?us-ascii?Q?bCA52VWDc/KIjYLQaNc2WP1QsmdusxLVNbidY7G+lPgFe+/6vZuqyeQdc8Ee?=
+ =?us-ascii?Q?DriS10i3JEqolO0M0/5b9wfR9/6HjP0xFAZ8U31sYZGYjUbhXyG9CAOn3U1w?=
+ =?us-ascii?Q?LeG8U32+d6u6CYpQvCDQZGzEV/OEwtt6oBA5Zp/dVn4cL+vfnHmR/Rd0asFU?=
+ =?us-ascii?Q?/5SQjoMYl/cO8wB/hORBz8YaoIa5MKqT8OUATGL1sDfkbvpKl+3LWpre5j2m?=
+ =?us-ascii?Q?YUt+EcFALRfInBtK/5LJe1Zo2ALHHWkb75qJ70HFQJt0fKcolKmxnoC0VgzC?=
+ =?us-ascii?Q?/NRR7IKuNfy1cyR4N+emtMrKyrwWIkbk50HqPDRczqn7dT3/ZrswhDOP9iJr?=
+ =?us-ascii?Q?jA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fd559c8-dd84-48f2-55a8-08da6afec50a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 09:52:48.5748
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qEedAuCyjVh26YeGRplGCnaJRgMeTClveSpXvKnmQMX5WS9H9CLy3k5obIMP5lUvnLdGc0nTlGMwRrUrWavF6/lkvnFz8Pe+daJE7UU4Ib0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8164
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.07.22 11:44, David Hildenbrand wrote:
-> On 06.07.22 10:20, Chao Peng wrote:
->> Normally, a write to unallocated space of a file or the hole of a sparse
->> file automatically causes space allocation, for memfd, this equals to
->> memory allocation. This new seal prevents such automatically allocating,
->> either this is from a direct write() or a write on the previously
->> mmap-ed area. The seal does not prevent fallocate() so an explicit
->> fallocate() can still cause allocating and can be used to reserve
->> memory.
->>
->> This is used to prevent unintentional allocation from userspace on a
->> stray or careless write and any intentional allocation should use an
->> explicit fallocate(). One of the main usecases is to avoid memory double
->> allocation for confidential computing usage where we use two memfds to
->> back guest memory and at a single point only one memfd is alive and we
->> want to prevent memory allocation for the other memfd which may have
->> been mmap-ed previously. More discussion can be found at:
->>
->>   https://lkml.org/lkml/2022/6/14/1255
->>
->> Suggested-by: Sean Christopherson <seanjc@google.com>
->> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
->> ---
->>  include/uapi/linux/fcntl.h |  1 +
->>  mm/memfd.c                 |  3 ++-
->>  mm/shmem.c                 | 16 ++++++++++++++--
->>  3 files changed, 17 insertions(+), 3 deletions(-)
->>
->> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
->> index 2f86b2ad6d7e..98bdabc8e309 100644
->> --- a/include/uapi/linux/fcntl.h
->> +++ b/include/uapi/linux/fcntl.h
->> @@ -43,6 +43,7 @@
->>  #define F_SEAL_GROW	0x0004	/* prevent file from growing */
->>  #define F_SEAL_WRITE	0x0008	/* prevent writes */
->>  #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
->> +#define F_SEAL_AUTO_ALLOCATE	0x0020  /* prevent allocation for writes */
-> 
-> Why only "on writes" and not "on reads". IIRC, shmem doesn't support the
-> shared zeropage, so you'll simply allocate a new page via read() or on
-> read faults.
+Hi Michael Walle,
 
-Correction: on read() we don't allocate a fresh page. But on read faults
-we would. So this comment here needs clarification.
+> Subject: Re: [PATCH 5/6] mtd: spi-nor: add generic flash driver
+>=20
+> Hi,
+>=20
+> >> +
+> >> +	/* Fallback to a generic flash described only by its SFDP data. */
+> >> +	if (!info) {
+> >> +		ret =3D spi_nor_check_sfdp_signature(nor);
+> >> +		if (!ret)
+> >> +			info =3D &spi_nor_generic_flash;
+> >> +	}
+> >
+> > May be this can be combined as
+> >
+> >  	if (!info && (!spi_nor_check_sfdp_signature(nor)))
+> > 		info =3D &spi_nor_generic_flash;
+>=20
+> While this is the behavior, I don't like (1) calling functions in the
+> condition and (2) rely on the && and || semantics, i.e.
+> to just call the second part if the first is true/false.
 
-> 
-> 
-> Also, I *think* you can place pages via userfaultfd into shmem. Not sure
-> if that would count "auto alloc", but it would certainly bypass fallocate().
-> 
+OK fine. I recently got a review comment from mainline for optimizing the n=
+umber
+of lines. That is the reason for suggestion.
 
-
--- 
-Thanks,
-
-David / dhildenb
-
+Cheers,
+biju

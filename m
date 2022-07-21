@@ -2,138 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBFD57D663
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B1C57D65F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234052AbiGUV7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S233990AbiGUV6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234003AbiGUV7F (ORCPT
+        with ESMTP id S233974AbiGUV6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:59:05 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB5293C3B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:59:04 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id e69so5114930ybh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:59:04 -0700 (PDT)
+        Thu, 21 Jul 2022 17:58:45 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5E093C20
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:58:43 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id o12so3425871ljc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:58:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QemyCLkI6dzlXbVvolGX70AxPDsM5uHjNFau1pouZoU=;
-        b=EggV9eOe293C069t33s2imjH0DFks8SbaFyvA4mrzBn40aO4Zh1s/Y+o+PH03J0aum
-         uKjahaNfKINcw/0Xsn87yqdaKC/X2YTOrTJTl0azsijsmNnir7bDIcgwI6B6774UoJXS
-         eH3tBYgyM3zKs/Atfx6PPNT+ta/DnjRBC/UtVrIgetSvCy8qov1FzSwTFj1QIfAaC4ma
-         NZd079sWBU28mv3DylqYcX0X4A8XJ4qk0PPuipu6fzXwjvdGUyYSMVC+IhllGKUPtNPu
-         CqvnApM9NZAym5hGtTEHmwH3bFVsDbzxyiDLWMBZLt6ZfjNxb1lQibCkTcymqNvzkFew
-         3jxQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=ruxLzND3PgJ9tqm9kUHYW4Ktbt1QR2XijLIeX7b4Pj4=;
+        b=Ft4woQpDqYFAByyBLaLGcAiqGkvQ2SOKJ23bWhY7iB8ej/NSYlvpBCltgEVC48wDdv
+         Boo/4ZaQQeSnVs185F/Ts8PbW2b4z1oLp+O/g9GQuSukh9VUaeSIGNyQ9E2rb8tMRNuF
+         ihQKzHHOZPxdgwm4EM048n75mnQJRACrYAEvCykaHzCTv7g2lndbj9qwcN9pSPqLsdrP
+         J75ZnKBDEXyw7UjSUKzPVKEdy+o3tE2yAleE08t3B5C8zsyEhGP7+P1MR3l4Z4VSiydW
+         45xh2Jry76SRc4V1sPnI1OhzlovDK+cl4eObM5QQwJYQUW4cyTip6Qy1Qvg/9eXU8Ckq
+         oUow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QemyCLkI6dzlXbVvolGX70AxPDsM5uHjNFau1pouZoU=;
-        b=YvPLqHWsk0sFLMCnLs+iV5LPMmhl3lHBWF94k4dm4Vx0OZu8yQbUBv+gmfeC4zH/Mj
-         a5IJxfgcPr8WkoFjEDdlgiGqIcgIZViCIvEp+UPLBSKIRQYTkGtRAdKrX1pnKUgGvOUa
-         ce0bnTLBMK8tc/56AqqzdgzkoUoWMFrg/zRLENu9ImNheAo76tY125yLpePEZELVr+Xg
-         P6stu0XvgJkiZlEGi51ypL84xUlIylPFTZJiPeME4J4vpiqnqKIBYzaZNDLamsCIuiHR
-         CVpJ/MmDIbwc9b8htEdqrAeokXpbtyLOS5cq+Ihnn1/TKmmcu4AA//B1ImeisHiVmUzs
-         SUVQ==
-X-Gm-Message-State: AJIora8F76NYIO0WJkTAvgJKdyKNEj+lneqV7n72X59cNZjnt8943XrV
-        WRAeWBSxDCybFh3RklBEU+7ok2PD/Na8SRBQW6eIvw==
-X-Google-Smtp-Source: AGRyM1tkHSFmZ4GKmUVpD2QHp8atjdn/vlLiq4tn3ktMlEUa04YiLlaNHlDvKpIgfQEUdIsme6hDzccfP5OU0SSG9OY=
-X-Received: by 2002:a25:a86:0:b0:670:ef0:3159 with SMTP id 128-20020a250a86000000b006700ef03159mr500307ybk.563.1658440743770;
- Thu, 21 Jul 2022 14:59:03 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ruxLzND3PgJ9tqm9kUHYW4Ktbt1QR2XijLIeX7b4Pj4=;
+        b=yFWJRSEtkHtWMKHEEUc6EGRqYQcTWfEp4p4rrhwjr7pZUDpOzsMUjll7jyyoujeJiD
+         UD2QRN8u05y7qM3bMe5mBpEMmXl34M0VnpL7eynLbgn2x9WZ5QsnVl5jMf5J/UOt9KWG
+         XU54AGW2onR7vFrPjFmBb5wuWLyZ+AM+jEXwfRyLSwZHWv4Qv25NeBF4Cx+zGHUc8L3L
+         Uzpto7yJOrssQI4tUgFRuIJaSfBeelPVwFmHhR3FRvAnG0RNx4NHp3ssObegegq3jL0f
+         EYZPBfzx+oxSJ3CQ87ggUgjHIArnWd+ikGAvsMexrhntAtz2Y7VVSSTrAfWF7O+x1i2s
+         MYAA==
+X-Gm-Message-State: AJIora8tiewa9H1XLPYmKucChAsBa+IsQtSHwivxyA2aROimKRQ2mm+5
+        IuUV8zmwiGdvzhgXpXs8Vm6aDHSYtf9VRg==
+X-Google-Smtp-Source: AGRyM1uJA82GHparoFSnxSL6AlG+DnRHBmgFTdZGfW8hLzPeOq9ZpPpd632EiNEE9/zOnZWFcSgDNA==
+X-Received: by 2002:a2e:a7cf:0:b0:25d:9fe6:7065 with SMTP id x15-20020a2ea7cf000000b0025d9fe67065mr144905ljp.138.1658440722010;
+        Thu, 21 Jul 2022 14:58:42 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id n7-20020a05651203e700b00485e55192a3sm674554lfq.72.2022.07.21.14.58.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 14:58:41 -0700 (PDT)
+Message-ID: <a975956c-edbb-861c-e352-8a168e7cb536@linaro.org>
+Date:   Fri, 22 Jul 2022 00:58:40 +0300
 MIME-Version: 1.0
-References: <20220719182010.637337-1-saravanak@google.com> <20220720131221.azqfidkry3cwiarw@bogus>
- <YtkTK3QS0PQ2LRpM@shell.armlinux.org.uk>
-In-Reply-To: <YtkTK3QS0PQ2LRpM@shell.armlinux.org.uk>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 21 Jul 2022 14:58:27 -0700
-Message-ID: <CAGETcx8mVqX+FRiD9_PahpfQQ1CjG0FxN08pN7jgj+D4x2QjhQ@mail.gmail.com>
-Subject: Re: [PATCH v5] amba: Remove deferred device addition
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] ARM: dts: qcom: ipq8064: pad addresses to 8 digit
+Content-Language: en-GB
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220718153815.29414-1-ansuelsmth@gmail.com>
+ <20220718153815.29414-2-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220718153815.29414-2-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 1:50 AM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Wed, Jul 20, 2022 at 02:12:21PM +0100, Sudeep Holla wrote:
-> > On Tue, Jul 19, 2022 at 11:20:10AM -0700, Saravana Kannan wrote:
-> > > The uevents generated for an amba device need PID and CID information
-> > > that's available only when the amba device is powered on, clocked and
-> > > out of reset. So, if those resources aren't available, the information
-> > > can't be read to generate the uevents. To workaround this requirement,
-> > > if the resources weren't available, the device addition was deferred and
-> > > retried periodically.
-> > >
-> > > However, this deferred addition retry isn't based on resources becoming
-> > > available. Instead, it's retried every 5 seconds and causes arbitrary
-> > > probe delays for amba devices and their consumers.
-> > >
-> > > Also, maintaining a separate deferred-probe like mechanism is
-> > > maintenance headache.
-> > >
-> > > With this commit, instead of deferring the device addition, we simply
-> > > defer the generation of uevents for the device and probing of the device
-> > > (because drivers needs PID and CID to match) until the PID and CID
-> > > information can be read. This allows us to delete all the amba specific
-> > > deferring code and also avoid the arbitrary probing delays.
-> > >
-> > > Cc: Rob Herring <robh@kernel.org>
-> > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > > Cc: Saravana Kannan <saravanak@google.com>
-> > > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> >
-> > Tested-by: Sudeep Holla <sudeep.holla@arm.com>
-> >
-> > on Juno with linux-next(which had the reported issue [1]) + this patch(which
-> > fixes the issue)
->
-> Ok, but this patch needs to end up in the patch system for me to apply
-> it. Can someone please add "KernelVersion: 5.19-rc7" or whatever version
+On 18/07/2022 18:38, Christian Marangi wrote:
+> Pad reg addresses to 8 digit to make sorting easier.
 
-Where am I supposed to add that? Just somewhere in the email body?
+Please put this patch before the patch 1/2. It makes reviewing easier.
+Otherwise:
 
-The patch you are replying to was based on your linu-arm/for-next the
-day I sent it. Do you still need me to rebase it on Linus's tree?
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> the patch was generated against (just the tagged version is sufficient)
-> somewhere in the email, and send it to patches@armlinu.org.uk.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>   arch/arm/boot/dts/qcom-ipq8064.dtsi | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index cf41d330c920..9405d6167b20 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -348,7 +348,7 @@ vsdcc_fixed: vsdcc-regulator {
+>   
+>   		rpm: rpm@108000 {
+>   			compatible = "qcom,rpm-ipq8064";
+> -			reg = <0x108000 0x1000>;
+> +			reg = <0x00108000 0x1000>;
+>   			qcom,ipc = <&l2cc 0x8 2>;
+>   
+>   			interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
+> @@ -389,7 +389,7 @@ tsens_calib_backup: calib_backup@410 {
+>   
+>   		qcom_pinmux: pinmux@800000 {
+>   			compatible = "qcom,ipq8064-pinctrl";
+> -			reg = <0x800000 0x4000>;
+> +			reg = <0x00800000 0x4000>;
+>   
+>   			gpio-controller;
+>   			gpio-ranges = <&qcom_pinmux 0 0 69>;
+> @@ -571,7 +571,7 @@ IRQ_TYPE_EDGE_RISING)>,
+>   
+>   		l2cc: clock-controller@2011000 {
+>   			compatible = "qcom,kpss-gcc", "syscon";
+> -			reg = <0x2011000 0x1000>;
+> +			reg = <0x02011000 0x1000>;
+>   			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+>   			clock-names = "pll8_vote", "pxo";
+>   			clock-output-names = "acpu_l2_aux";
 
-I'll send out the same patch as is to that email. Wait, is there a
-typo in the domain name? Did you leave out the x by accident or is it
-really armlinu? I'm also getting a DNS failure for either one of those
-domains.
 
-I'll wait to hear from you before I send another email.
-
--Saravana
-
->
-> Thanks.
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+-- 
+With best wishes
+Dmitry

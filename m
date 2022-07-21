@@ -2,160 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5335C57C29C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 05:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF4857C2A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 05:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiGUDV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 23:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S231754AbiGUDWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 23:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGUDV0 (ORCPT
+        with ESMTP id S229441AbiGUDW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 23:21:26 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EAB47BA9
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 20:21:25 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id b26so416973wrc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 20:21:25 -0700 (PDT)
+        Wed, 20 Jul 2022 23:22:28 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE81E47BA9;
+        Wed, 20 Jul 2022 20:22:26 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id c139so584408pfc.2;
+        Wed, 20 Jul 2022 20:22:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yp8UseCrak3Uf7ZMCku83+o+h8VdCTPmgbNqPdL/mic=;
-        b=CWUDWwoFiqmSGU594z2yMobPBq5pAqEvzEkfu+LhpngVJg8+AB17WOtYFUaOLL3w/O
-         WZho1Qu5XCZaEiphXiRPHKtYVElMDWAJP16GepKTPRvoGBYykFbFg6t4aRMmgv2wuIdI
-         3cPqRJ9B5aiYxPIjxulAhMdSjndzkcdd0VaCo=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=tmOBFYH42N10hufY6EnMZkuSIJQa7Ph0o+F6wvrL7r4=;
+        b=TnvsdkgwV7J+MzZ8FTOfBZhWP0XD7qBQRgy6NZ6A8sIt9Fm2XT5TQcwZgpVeoMCgQu
+         dO6/xSi3i4CLjSiF5p5EeoF7EDlWOCEy+EvRerDJLQJGjU3ItvkpFLmJ0L7TN1a5/tr3
+         K8Dgx0Fc59Tl3kPLi29F15QXEMMHZ471xtfIeIWa6ZY9MOQ2JUpSTy+tcHzigGcyZJN3
+         mPvRqVYHvo/i3yoyKiMpw2ACkh/GZ1TBtSDQcYOZClXxn11qTWo9wtZ4BdmvWSYuiaUD
+         OzbcfV9hFFw75Tq0Vc7GcreeN1PsBMFElZSO2w2vphoSyaVcxwXU/S1AJFU94lpi62Ql
+         rftA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yp8UseCrak3Uf7ZMCku83+o+h8VdCTPmgbNqPdL/mic=;
-        b=4V+n9SKJoSpK6FlnAGthsmnSgr8CyErnSIm9wr1/SXdLWelkiJcTIAMC0DRCUbsVEi
-         rxV0pqyY02gaFfmBo4GUHIGUpeVQsLzgfQjDncXBhCka7StU6cO/omh2f5GT/lJ2ocYZ
-         bpiM+/+i5+vHRB71UExPmaxZe74p1beRfA6hpnfFwZN481oCPvhzBZw14tQG9ZGyU+Eb
-         dhSbNcnTAd00jIePy/65zBDKZelGPnYk+x9mXJU6GIOLqiix5ThSU8nKW1tjn+7Vjzz6
-         l4tQPBGf6zXm4XYOxSJamj3NpOEoRPReNpfo++5ghlz0CwgIuztpoUtspoj2WlyJZvKg
-         lr3g==
-X-Gm-Message-State: AJIora/Wdd+gLA9nI2s0v29IIRBTXSxlzCMZTu2weKOmjRIKm3sdrIjT
-        j9rOEX7eEaY36ahF7haA6U+JQBM/XqB3at9/4aZc7A==
-X-Google-Smtp-Source: AGRyM1vXWKjhZfkFxxLgAqLrdrUS9zjdNtBJmP2AvtzG3M6MPXGe4Kuq83Pcwy/jiil49jxrZHAjerDJBVq2qFdBaGY=
-X-Received: by 2002:a5d:4cce:0:b0:21d:755b:d4f8 with SMTP id
- c14-20020a5d4cce000000b0021d755bd4f8mr34773870wrt.190.1658373684373; Wed, 20
- Jul 2022 20:21:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220713031547.11641-1-allen.chen@ite.com.tw> <CAG3jFyvDWXZsSKaztKgbAUOY8DNFb81KvSpG5fQC=t1dUZp8oA@mail.gmail.com>
-In-Reply-To: <CAG3jFyvDWXZsSKaztKgbAUOY8DNFb81KvSpG5fQC=t1dUZp8oA@mail.gmail.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Thu, 21 Jul 2022 11:21:13 +0800
-Message-ID: <CAEXTbpeJweJEzPC-cRXYCGGoLM73-8Px8FY6P9hajk2V9eKbLw@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: it6505: Add i2c api power on check
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     allen <allen.chen@ite.com.tw>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Pin-yen Lin <treapking@google.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=tmOBFYH42N10hufY6EnMZkuSIJQa7Ph0o+F6wvrL7r4=;
+        b=jISRjxc6d4w71WyyxAWYY1nY+im66NilllPCBrl6JigaokZ7pFLabR875LzXwYRWWj
+         on8br7eSLc4YwA//URXC85uQ6nWLDnthjs+9fEJMLk1LA3TXwfzy0W+iAwf0s9ANtmW/
+         rF84GSh/ZRilZf4wI58w+VH5ssyj3n6jmeWlIzLkoIppG2EdZ4xdtxcEmvvjSI0v894r
+         0M2GVkhhLxM5r6rxctLdd+huaNwsAAGIXukSZafvABgvSTzbCmhXhU35385CqPcU+NaD
+         XZS4gCpdpSZhG57hom9I3xOnCWnkebUTX5DmnEPPi8M09wECP/Gbonur2UyGC7KFxkr7
+         6Fvw==
+X-Gm-Message-State: AJIora97F9DCEbxjKLlCznAO5/12JBUk6SCnWvilz+boM5BQWX1vbtjE
+        /OFlMpXB8eePaShERmPsxmE=
+X-Google-Smtp-Source: AGRyM1tORNW2tFg+DpPkRBpx1jCUm6ZAFOaogXfK8IeuYViZnV8Xm2Xx/zCLnP4DdsgcOs40/acSPg==
+X-Received: by 2002:a63:565f:0:b0:41a:57d8:a814 with SMTP id g31-20020a63565f000000b0041a57d8a814mr7797545pgm.517.1658373746289;
+        Wed, 20 Jul 2022 20:22:26 -0700 (PDT)
+Received: from localhost.localdomain ([23.91.97.158])
+        by smtp.gmail.com with ESMTPSA id z124-20020a623382000000b00528c34f514dsm391684pfz.121.2022.07.20.20.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 20:22:26 -0700 (PDT)
+From:   xiaolinkui <xiaolinkui@gmail.com>
+X-Google-Original-From: xiaolinkui <xiaolinkui@kylinos.cn>
+To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, gustavoars@kernel.org,
+        quic_jjohnson@quicinc.com, keescook@chromium.org, johan@kernel.org,
+        dan.carpenter@oracle.com, xiaolinkui@gmail.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Linkui Xiao <xiaolinkui@kylinos.cn>
+Subject: [PATCH] wireless: ath6kl: fix out of bound from length.
+Date:   Thu, 21 Jul 2022 11:21:58 +0800
+Message-Id: <20220721032158.31479-1-xiaolinkui@kylinos.cn>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robert,
+From: Linkui Xiao <xiaolinkui@kylinos.cn>
 
-The same patch has been reviewed and applied as
-86088f88a25c76baac304b6f887e5da2c30c4e07 in "drm/bridge: it6505: Fixes
-bugs" series.
+If length from debug_buf.length is 4294967293 (0xfffffffd), the result of
+ALIGN(size, 4) will be 0.
 
-We accidentally sent this out as an individual patch and forgot to
-revoke this after sending out the complete series.
+	length = ALIGN(length, 4);
 
-Sorry about that.
+In case of length == 4294967293 after four-byte aligned access, length will
+become 0.
 
-Regards,
-Pin-yen
+	ret = ath6kl_diag_read(ar, address, buf, length);
 
-On Tue, Jul 19, 2022 at 11:26 PM Robert Foss <robert.foss@linaro.org> wrote:
->
-> On Wed, 13 Jul 2022 at 05:16, allen <allen.chen@ite.com.tw> wrote:
-> >
-> > From: allen chen <allen.chen@ite.com.tw>
-> >
-> > Use i2c bus to read/write when it6505 power off will occur i2c error.
-> > Add this check will prevent i2c error when it6505 power off.
-> >
-> > Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> > Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> > Reviewed-by: Robert Foss <robert.foss@linaro.org>
-> > ---
-> >  drivers/gpu/drm/bridge/ite-it6505.c | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> > index aa5e0aa1af85..cfd2c3275dc5 100644
-> > --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> > +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> > @@ -518,6 +518,9 @@ static int it6505_read(struct it6505 *it6505, unsigned int reg_addr)
-> >         int err;
-> >         struct device *dev = &it6505->client->dev;
-> >
-> > +       if (!it6505->powered)
-> > +               return -ENODEV;
-> > +
-> >         err = regmap_read(it6505->regmap, reg_addr, &value);
-> >         if (err < 0) {
-> >                 dev_err(dev, "read failed reg[0x%x] err: %d", reg_addr, err);
-> > @@ -533,6 +536,9 @@ static int it6505_write(struct it6505 *it6505, unsigned int reg_addr,
-> >         int err;
-> >         struct device *dev = &it6505->client->dev;
-> >
-> > +       if (!it6505->powered)
-> > +               return -ENODEV;
-> > +
-> >         err = regmap_write(it6505->regmap, reg_addr, reg_val);
-> >
-> >         if (err < 0) {
-> > @@ -550,6 +556,9 @@ static int it6505_set_bits(struct it6505 *it6505, unsigned int reg,
-> >         int err;
-> >         struct device *dev = &it6505->client->dev;
-> >
-> > +       if (!it6505->powered)
-> > +               return -ENODEV;
-> > +
-> >         err = regmap_update_bits(it6505->regmap, reg, mask, value);
-> >         if (err < 0) {
-> >                 dev_err(dev, "write reg[0x%x] = 0x%x mask = 0x%x failed err %d",
-> > @@ -2553,13 +2562,12 @@ static int it6505_poweron(struct it6505 *it6505)
-> >                 usleep_range(10000, 20000);
-> >         }
-> >
-> > +       it6505->powered = true;
-> >         it6505_reset_logic(it6505);
-> >         it6505_int_mask_enable(it6505);
-> >         it6505_init(it6505);
-> >         it6505_lane_off(it6505);
-> >
-> > -       it6505->powered = true;
-> > -
-> >         return 0;
-> >  }
-> >
-> > --
-> > 2.25.1
-> >
->
-> This patch no longer applies to the drm-misc-next tree, could you
-> rebase it and send out a v3?
+will fail to read.
+
+Fixes: bc07ddb29a7b ("ath6kl: read fwlog from firmware ring buffer")
+Signed-off-by: Linkui Xiao <xiaolinkui@kylinos.cn>
+---
+ drivers/net/wireless/ath/ath6kl/core.h | 2 +-
+ drivers/net/wireless/ath/ath6kl/main.c | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath6kl/core.h b/drivers/net/wireless/ath/ath6kl/core.h
+index 77e052336eb5..b90ad9541e09 100644
+--- a/drivers/net/wireless/ath/ath6kl/core.h
++++ b/drivers/net/wireless/ath/ath6kl/core.h
+@@ -907,7 +907,7 @@ void ath6kl_cleanup_amsdu_rxbufs(struct ath6kl *ar);
+ int ath6kl_diag_write32(struct ath6kl *ar, u32 address, __le32 value);
+ int ath6kl_diag_write(struct ath6kl *ar, u32 address, void *data, u32 length);
+ int ath6kl_diag_read32(struct ath6kl *ar, u32 address, u32 *value);
+-int ath6kl_diag_read(struct ath6kl *ar, u32 address, void *data, u32 length);
++int ath6kl_diag_read(struct ath6kl *ar, u32 address, void *data, size_t length);
+ int ath6kl_read_fwlogs(struct ath6kl *ar);
+ void ath6kl_init_profile_info(struct ath6kl_vif *vif);
+ void ath6kl_tx_data_cleanup(struct ath6kl *ar);
+diff --git a/drivers/net/wireless/ath/ath6kl/main.c b/drivers/net/wireless/ath/ath6kl/main.c
+index d3aa9e7a37c2..e9e66d5ad505 100644
+--- a/drivers/net/wireless/ath/ath6kl/main.c
++++ b/drivers/net/wireless/ath/ath6kl/main.c
+@@ -233,7 +233,7 @@ int ath6kl_diag_write32(struct ath6kl *ar, u32 address, __le32 value)
+ 	return 0;
+ }
+ 
+-int ath6kl_diag_read(struct ath6kl *ar, u32 address, void *data, u32 length)
++int ath6kl_diag_read(struct ath6kl *ar, u32 address, void *data, size_t length)
+ {
+ 	u32 count, *buf = data;
+ 	int ret;
+@@ -272,7 +272,8 @@ int ath6kl_read_fwlogs(struct ath6kl *ar)
+ {
+ 	struct ath6kl_dbglog_hdr debug_hdr;
+ 	struct ath6kl_dbglog_buf debug_buf;
+-	u32 address, length, firstbuf, debug_hdr_addr;
++	u32 address, firstbuf, debug_hdr_addr;
++	size_t length;
+ 	int ret, loop;
+ 	u8 *buf;
+ 
+-- 
+2.17.1
+

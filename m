@@ -2,207 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9308557CC7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D9F57CB7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiGUNr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S233970AbiGUNJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiGUNrL (ORCPT
+        with ESMTP id S233934AbiGUNJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:47:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6E9820D7;
-        Thu, 21 Jul 2022 06:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658411168; x=1689947168;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fQCPrJb9lHyi4oxZ+pNt0wwlX5RQtHlur9Kl1f9gxRE=;
-  b=eNS027HcYP3OjWp0qunzouJvNGwaiEzkIeFLFtyifGGK5UcWIAqXAatx
-   ABmpwPmk5xx9/Vju9lfohyiXX4BZ8asN2RoI0SjBttTx/UGoA7oO03Z6z
-   mgzIz1hMrJe6EYim76S2GjhyQ1hyGPToShoRNLhqMMJVdG03fmTSEydRQ
-   jEe7753UhvO95l7gHGxzHcukb9GrrcrS/uNMi7wApJnWHRi6NI5ihTmN1
-   weyNpD2KumcUxpgEGeFjwR/9a4Sp6CkDCl9wAFcOfIFz9RckkHKCRWtZs
-   PeIPcQ8tndUTKr4SsVrLvrPXXMg9aPUbkhWSSPlesfvCTiK+tenB5MECW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="267445062"
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="267445062"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 06:46:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,289,1654585200"; 
-   d="scan'208";a="925655444"
-Received: from 984fee006c34.jf.intel.com ([10.165.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Jul 2022 06:46:08 -0700
-From:   Srinivas Kerekare <srinivas.kerekare@intel.com>
-To:     herbert@gondor.apana.org.au
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com,
-        Srinivas Kerekare <srinivas.kerekare@intel.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>
-Subject: [PATCH] crypto: qat - add check to validate firmware images
-Date:   Wed, 22 Jun 2022 14:01:55 -0700
-Message-Id: <20220622210155.69684-1-srinivas.kerekare@intel.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 21 Jul 2022 09:09:00 -0400
+X-Greylist: delayed 8191 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 06:08:42 PDT
+Received: from m1353.mail.163.com (m1353.mail.163.com [220.181.13.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBDD3422FF;
+        Thu, 21 Jul 2022 06:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=yDycJ
+        HNEX38nFYMkuR2P0QYIzEVoyazCWD1v3pTzJRQ=; b=kLqMYO0OYg9GwHVcypEXp
+        VWwWpkBVXOKVbERk6Cq6HNnNv4RBnXHDJK6TnypoiQTBrXDQqgswVLaqZcMAxyQ4
+        2k7ZB4w1SjVy4+pnrki5bf1leJ2aM9OWslu3VdLPmf/byttTJRVCHaypQKLTkpNC
+        n3ihwN8SuU4sViHB4DfAKk=
+Received: from slark_xiao$163.com ( [223.104.68.234] ) by
+ ajax-webmail-wmsvr53 (Coremail) ; Thu, 21 Jul 2022 18:35:25 +0800 (CST)
+X-Originating-IP: [223.104.68.234]
+Date:   Thu, 21 Jul 2022 18:35:25 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Jonathan Cameron" <Jonathan.Cameron@Huawei.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] iio: magn: hmc5843: Fix typo 'the the' in comment
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <20220721111812.00003038@Huawei.com>
+References: <20220721084441.50065-1-slark_xiao@163.com>
+ <20220721111812.00003038@Huawei.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <45c5e3ce.3724.182205399a9.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: NcGowAAXJ5nuK9liQColAA--.31122W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBAxhFZGB0LnhE9wABsK
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function qat_uclo_check_image() validates the MMP and AE firmware
-images. If the QAT device supports firmware authentication (indicated
-by the handle to firmware loader), the input signed binary MMP and AE
-images are validated by parsing the following information:
-- Header length
-- Full size of the binary
-- Type of binary image (MMP or AE Firmware)
-
-Firmware binaries use RSA3K for signing and verification.
-The header length for the RSA3k is 0x384 bytes.
-
-All the size field values in the binary are quantified
-as DWORDS (1 DWORD = 4bytes).
-
-On an invalid value the function prints an error message and returns
-with an error code "EINVAL".
-
-Signed-off-by: Srinivas Kerekare <srinivas.kerekare@intel.com>
-Reviewed-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Reviewed-by: Wojciech Ziemba <wojciech.ziemba@intel.com>
----
- drivers/crypto/qat/qat_common/icp_qat_uclo.h |  3 +-
- drivers/crypto/qat/qat_common/qat_uclo.c     | 56 +++++++++++++++++++-
- 2 files changed, 57 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/crypto/qat/qat_common/icp_qat_uclo.h b/drivers/crypto/qat/qat_common/icp_qat_uclo.h
-index 4b36869bf460..69482abdb8b9 100644
---- a/drivers/crypto/qat/qat_common/icp_qat_uclo.h
-+++ b/drivers/crypto/qat/qat_common/icp_qat_uclo.h
-@@ -86,7 +86,8 @@
- 					ICP_QAT_CSS_FWSK_MODULUS_LEN(handle) + \
- 					ICP_QAT_CSS_FWSK_EXPONENT_LEN(handle) + \
- 					ICP_QAT_CSS_SIGNATURE_LEN(handle))
--#define ICP_QAT_CSS_MAX_IMAGE_LEN   0x40000
-+#define ICP_QAT_CSS_RSA4K_MAX_IMAGE_LEN    0x40000
-+#define ICP_QAT_CSS_RSA3K_MAX_IMAGE_LEN    0x30000
- 
- #define ICP_QAT_CTX_MODE(ae_mode) ((ae_mode) & 0xf)
- #define ICP_QAT_NN_MODE(ae_mode) (((ae_mode) >> 0x4) & 0xf)
-diff --git a/drivers/crypto/qat/qat_common/qat_uclo.c b/drivers/crypto/qat/qat_common/qat_uclo.c
-index 0fe5a474aa45..b7f7869ef8b2 100644
---- a/drivers/crypto/qat/qat_common/qat_uclo.c
-+++ b/drivers/crypto/qat/qat_common/qat_uclo.c
-@@ -1367,6 +1367,48 @@ static void qat_uclo_ummap_auth_fw(struct icp_qat_fw_loader_handle *handle,
- 	}
- }
- 
-+static int qat_uclo_check_image(struct icp_qat_fw_loader_handle *handle,
-+				char *image, unsigned int size,
-+				unsigned int fw_type)
-+{
-+	char *fw_type_name = fw_type ? "MMP" : "AE";
-+	unsigned int css_dword_size = sizeof(u32);
-+
-+	if (handle->chip_info->fw_auth) {
-+		struct icp_qat_css_hdr *css_hdr = (struct icp_qat_css_hdr *)image;
-+		unsigned int header_len = ICP_QAT_AE_IMG_OFFSET(handle);
-+
-+		if ((css_hdr->header_len * css_dword_size) != header_len)
-+			goto err;
-+		if ((css_hdr->size * css_dword_size) != size)
-+			goto err;
-+		if (fw_type != css_hdr->fw_type)
-+			goto err;
-+		if (size <= header_len)
-+			goto err;
-+		size -= header_len;
-+	}
-+
-+	if (fw_type == CSS_AE_FIRMWARE) {
-+		if (size < sizeof(struct icp_qat_simg_ae_mode *) +
-+		    ICP_QAT_SIMG_AE_INIT_SEQ_LEN)
-+			goto err;
-+		if (size > ICP_QAT_CSS_RSA4K_MAX_IMAGE_LEN)
-+			goto err;
-+	} else if (fw_type == CSS_MMP_FIRMWARE) {
-+		if (size > ICP_QAT_CSS_RSA3K_MAX_IMAGE_LEN)
-+			goto err;
-+	} else {
-+		pr_err("QAT: Unsupported firmware type\n");
-+		return -EINVAL;
-+	}
-+	return 0;
-+
-+err:
-+	pr_err("QAT: Invalid %s firmware image\n", fw_type_name);
-+	return -EINVAL;
-+}
-+
- static int qat_uclo_map_auth_fw(struct icp_qat_fw_loader_handle *handle,
- 				char *image, unsigned int size,
- 				struct icp_qat_fw_auth_desc **desc)
-@@ -1379,7 +1421,7 @@ static int qat_uclo_map_auth_fw(struct icp_qat_fw_loader_handle *handle,
- 	struct icp_qat_simg_ae_mode *simg_ae_mode;
- 	struct icp_firml_dram_desc img_desc;
- 
--	if (size > (ICP_QAT_AE_IMG_OFFSET(handle) + ICP_QAT_CSS_MAX_IMAGE_LEN)) {
-+	if (size > (ICP_QAT_AE_IMG_OFFSET(handle) + ICP_QAT_CSS_RSA4K_MAX_IMAGE_LEN)) {
- 		pr_err("QAT: error, input image size overflow %d\n", size);
- 		return -EINVAL;
- 	}
-@@ -1547,6 +1589,11 @@ int qat_uclo_wr_mimage(struct icp_qat_fw_loader_handle *handle,
- {
- 	struct icp_qat_fw_auth_desc *desc = NULL;
- 	int status = 0;
-+	int ret;
-+
-+	ret = qat_uclo_check_image(handle, addr_ptr, mem_size, CSS_MMP_FIRMWARE);
-+	if (ret)
-+		return ret;
- 
- 	if (handle->chip_info->fw_auth) {
- 		status = qat_uclo_map_auth_fw(handle, addr_ptr, mem_size, &desc);
-@@ -2018,8 +2065,15 @@ static int qat_uclo_wr_suof_img(struct icp_qat_fw_loader_handle *handle)
- 	struct icp_qat_fw_auth_desc *desc = NULL;
- 	struct icp_qat_suof_handle *sobj_handle = handle->sobj_handle;
- 	struct icp_qat_suof_img_hdr *simg_hdr = sobj_handle->img_table.simg_hdr;
-+	int ret;
- 
- 	for (i = 0; i < sobj_handle->img_table.num_simgs; i++) {
-+		ret = qat_uclo_check_image(handle, simg_hdr[i].simg_buf,
-+					   simg_hdr[i].simg_len,
-+					   CSS_AE_FIRMWARE);
-+		if (ret)
-+			return ret;
-+
- 		if (qat_uclo_map_auth_fw(handle,
- 					 (char *)simg_hdr[i].simg_buf,
- 					 (unsigned int)
--- 
-2.36.1
-
---------------------------------------------------------------
-Intel Research and Development Ireland Limited
-Registered in Ireland
-Registered Office: Collinstown Industrial Park, Leixlip, County Kildare
-Registered Number: 308263
-
-
-This e-mail and any attachments may contain confidential material for the sole
-use of the intended recipient(s). Any review or distribution by others is
-strictly prohibited. If you are not the intended recipient, please contact the
-sender and delete all copies.
-
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDctMjEgMTg6MTg6MTIsICJKb25hdGhhbiBDYW1lcm9u
+IiA8Sm9uYXRoYW4uQ2FtZXJvbkBIdWF3ZWkuY29tPiB3cm90ZToKPk9uIFRodSwgMjEgSnVsIDIw
+MjIgMTY6NDQ6NDEgKzA4MDAKPlNsYXJrIFhpYW8gPHNsYXJrX3hpYW9AMTYzLmNvbT4gd3JvdGU6
+Cj4KPj4gUmVwbGFjZSAndGhlIHRoZScgd2l0aCAndGhlJyBpbiB0aGUgY29tbWVudC4KPj4gCj4+
+IFNpZ25lZC1vZmYtYnk6IFNsYXJrIFhpYW8gPHNsYXJrX3hpYW9AMTYzLmNvbT4KPkR1cGxpY2F0
+ZSBvZiAKPmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIyMDYyMjAzNTkyNS41MDA4LTEt
+amlhbmdqaWFuQGNkanJsYy5jb20vCj4+IC0tLQoKCk9rLCB0aGFua3MgZm9yIHRoYXQuIEkgd2ls
+bCB1cGRhdGUgbXkgbG9jYWwgZmlsZXMgaW4gdGltZSB0byBhdm9pZCB0aGlzIHNjZW5hcmlvLgpU
+aGFua3MhCgoKPj4gIGRyaXZlcnMvaWlvL21hZ25ldG9tZXRlci9obWM1ODQzX2NvcmUuYyB8IDIg
+Ky0KPj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+PiAK
+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaWlvL21hZ25ldG9tZXRlci9obWM1ODQzX2NvcmUuYyBi
+L2RyaXZlcnMvaWlvL21hZ25ldG9tZXRlci9obWM1ODQzX2NvcmUuYwo+PiBpbmRleCA5MmViMmQx
+NTZkZGIuLjRhNjNiMmRhOWRmMCAxMDA2NDQKPj4gLS0tIGEvZHJpdmVycy9paW8vbWFnbmV0b21l
+dGVyL2htYzU4NDNfY29yZS5jCj4+ICsrKyBiL2RyaXZlcnMvaWlvL21hZ25ldG9tZXRlci9obWM1
+ODQzX2NvcmUuYwo+PiBAQCAtMSw2ICsxLDYgQEAKPj4gIC8vIFNQRFgtTGljZW5zZS1JZGVudGlm
+aWVyOiBHUEwtMi4wLW9yLWxhdGVyCj4+ICAvKgo+PiAtICogRGV2aWNlIGRyaXZlciBmb3IgdGhl
+IHRoZSBITUM1ODQzIG11bHRpLWNoaXAgbW9kdWxlIGRlc2lnbmVkCj4+ICsgKiBEZXZpY2UgZHJp
+dmVyIGZvciB0aGUgSE1DNTg0MyBtdWx0aS1jaGlwIG1vZHVsZSBkZXNpZ25lZAo+PiAgICogZm9y
+IGxvdyBmaWVsZCBtYWduZXRpYyBzZW5zaW5nLgo+PiAgICoKPj4gICAqIENvcHlyaWdodCAoQykg
+MjAxMCBUZXhhcyBJbnN0cnVtZW50cwo=

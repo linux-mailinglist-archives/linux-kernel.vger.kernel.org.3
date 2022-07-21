@@ -2,186 +2,632 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7111657CBE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7267357CBE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiGUN2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S229569AbiGUN3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiGUN2F (ORCPT
+        with ESMTP id S229485AbiGUN3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:28:05 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2041.outbound.protection.outlook.com [40.107.237.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EF753AE;
-        Thu, 21 Jul 2022 06:28:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/VAfCi0aH2M7wUoNHb9X4BQkT1oMCSHf4qMVe1rcVJZmcJ81JXxfzJ+qQ+IdCEUgR/vkIiSR4OMsRWi2KOBrNnMhNtDakg4wx2puuJVMI9XmKHLJ2ocd5rVfKVrFXif16xP6dH4NNCIWUnKWmBRoXJm0F1PGt2pYziA0/e8gRVYABFk4EqbjRMys9ZW8xNjEqPqs0hLSlnUFz4S8juHQlfzqIq4r8B0u+yedMdwj8JjPWvEeJsrIN5heklTcNTS9w3e1N9Uyn4BDGGTrgUci3PJB1oYE0QyevjVW1Eo6YTBdof4AI/dZLbOJxaLifFwWellal20CSa6dVOsfCDT5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uCs13PMPX8ktYmxkw39mM9YPDRfPhpM9eptQi2YcYp8=;
- b=UOQsm0fBTFiASTQ91RI2oV1XZqmEbdGT1PfW1X3yiuSaCKKCcyyh1QQV25/10puT9aUTDRmrZLSE8AVmXhp5vwvNd2r7lXwhEalSfC/hP3Rva7YESJ8q8tgMoQaK+6OfzIpwvSdmOYm/lcHl5inZNMr0rq4fPu2qx7fKQedSQhSTNidW7VyHbCeiokdGwf//oVL8SiJXvdGJj1Uwh857/551uzglc7FXtiPhzam0IgwIIH1nmSZs9mqu9BYgy+XzD14SxLpiVk7r+dpGvsNvZHMfe9qStcOj9X7j+zKrip6yzs5Q1HoL4b6nPI7vp6wb0zXc/HhF8mgValKxFznoWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uCs13PMPX8ktYmxkw39mM9YPDRfPhpM9eptQi2YcYp8=;
- b=L5t9OgKwtKjq3mSvHjj5Dp+RqWBQW3yTAMYFkXfR5O1nRxOeWIkzdwrNdLVDaEzb/efaC25tunHgm7ttS6FXYzOhklJCSw9Ze9ZdklPs0LIlj91SbRd8yNKe5Mp1MudAWHQ0PTU1OUprYkZhRTXrAQUkny8RDpwZcx5mAtub+ZjxP5rGVTQawAsUsfcNrnKEvzD2izQ2XJkwYraedxmfMCx1/Jssb4wYKz5A0zrKioiwBacR+OQFxvbG2yJqsTnSdKGQKx3B+S8COIihDOUp7iDdCYOKTU8tC9qRyytes3KkJCVntv9VAByaylQjTp371CqfgPRRkvcFNz0jsQvQxg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by SJ1PR12MB6244.namprd12.prod.outlook.com (2603:10b6:a03:455::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Thu, 21 Jul
- 2022 13:28:00 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a525:8fcf:95ec:f7ad]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a525:8fcf:95ec:f7ad%9]) with mapi id 15.20.5438.024; Thu, 21 Jul 2022
- 13:27:59 +0000
-Date:   Thu, 21 Jul 2022 16:27:52 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <YtlUWGdgViyjF6MK@shredder>
-References: <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <YtQosZV0exwyH6qo@shredder>
- <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
- <20220721115935.5ctsbtoojtoxxubi@skbuf>
+        Thu, 21 Jul 2022 09:29:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763FD77488;
+        Thu, 21 Jul 2022 06:29:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0324E61EF7;
+        Thu, 21 Jul 2022 13:29:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB40C3411E;
+        Thu, 21 Jul 2022 13:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658410187;
+        bh=lVg+aeeF5jYiHELidqS55Z+55ei7HQueymUyWTSLmY0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UTU+sAyAO1WMQjoLRnRxtPbXL725vY7cTrDt2kHVpAbL1Q2Er8QJtkvhVEztU19gX
+         +uQzHInuBcomGleIQgnfrNk5depEGYxtKVcZPP7xY2qRPJTCJdrj6Y/US+pX9s5My/
+         n7fVsgpbRQJd97jwi5dr0om9YAhN8kzzx2p02Tz7NZU42NJyD/1YBTXoVi/BX2hnTR
+         Jho5h0a6SPD5/KNQ0TuyA3YXTiYH/j3y6/aLoRwQtCGrYeAKkHybc51RGUuxwHRASy
+         a4ZQlqGGxKm3BO+RzZqED1EpmiKv7qFsM7krFtYxbnPGmp8wKV4R7MZFFJNcj3VrR4
+         XRi4T6Y+B0brA==
+Date:   Thu, 21 Jul 2022 18:59:43 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jie Hai <haijie1@huawei.com>
+Cc:     wangzhou1@hisilicon.com, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/7] dmaengine: hisilicon: Adapt DMA driver to
+ HiSilicon IP09
+Message-ID: <YtlUx0lf8ZSfgkff@matsya>
+References: <20220625074422.3479591-1-haijie1@huawei.com>
+ <20220629035549.44181-1-haijie1@huawei.com>
+ <20220629035549.44181-6-haijie1@huawei.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721115935.5ctsbtoojtoxxubi@skbuf>
-X-ClientProxiedBy: VI1PR08CA0242.eurprd08.prod.outlook.com
- (2603:10a6:803:dc::15) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a030a97e-e3da-49ca-cf9b-08da6b1cd411
-X-MS-TrafficTypeDiagnostic: SJ1PR12MB6244:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EqvPHy2a21K6Tdlg61y9SWpdyJRRiPrj67YZkHMdZqPoXOzpHp4OuIamyeRLamIwghsQL6nYurjRY7/LU8QZTzcBa59sfPHKlvywUGfQ6aanv38nbcUJhiGgM9prG4J6emHEx3PeMJh5/UOWx4oruI1hdjgLi+XODjtebEEKJQ3zH7c5rwVmfi96GrqzkTAo1tXAL9B/dQOElqQFH1FNtf+5hgWS7+i1HiB9WdojyTNaMp4N2m5EtOjNf0Br+bSkoYjXcg2iDtj3QuhAjZ3hD0opU2de5jVTOXDdQ43G4UT6rmYKEPrQwY5Ri6FOyV3Mm/un2CkHhk0KgXF9z2+bFFnVlU9CrlP3L2/Iuia9HUFDAJOMPcCo+PirpMlM1MirMz2AmvVHlWJBMyuGv2m50kH/jOynFyJFHzuays4wgC0JkMNegad91ozIIKQvoeWNNULEQUOd9eTh0T9oMhe/blb4Nl9Q/VCRu9EXwrDcrDCapY3OV+iGPTb+LbMMOo83DhzDuvEr39HGGZQozsgJ7JzOK85qgNq+dts2rafgo2v1G1UmWE9iLzeatkP9QBsBPGspWnQCHxHxXNVUl2AiXuzI/GmqtH7U8qxCKiGfFR2gpawsrLGggad1b9OmrplyBxe0TFgTIjzr+4CFuJ51hrM5LaNU9KZ4r9R9w3huwnhSQX4tgKvnhVkD90/JoFwHp2EzyryF4VPY/tawm3dY5cVyvvP17RRQEl18R3TQgOSt3+0apNqn54i5l+kK6Fr/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(366004)(396003)(346002)(376002)(136003)(39860400002)(7416002)(66476007)(66946007)(6486002)(8936002)(2906002)(66556008)(4326008)(38100700002)(5660300002)(33716001)(8676002)(86362001)(41300700001)(478600001)(6506007)(6666004)(6512007)(316002)(9686003)(6916009)(186003)(54906003)(26005)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7pWSu2pcUJYIfRZTHHVEjyYuminVX7roqW1EliPH7hd/AahnKBmJERYoo6/t?=
- =?us-ascii?Q?RsbmtCdfLmgGTA6pe8gpDDVp17foIa9Eh4+SRtcobuhrTJxleN3qunXF+bom?=
- =?us-ascii?Q?k6v7M14+8CGz68QRDpzdwThDL0xJTYLRsNheVbnAu6HQzpliANn1bcyd1R45?=
- =?us-ascii?Q?wnjajYvY159/U1pbRmK4An5PiPDoGyCIaheT4uV/liY2AKwl4iDH27Sl3y2g?=
- =?us-ascii?Q?dIyCNiDC4ngEbg7F7F8+2JeVwLxS6DRk++k8jjEK7bfPAiFtQwbkRZDiOl8B?=
- =?us-ascii?Q?H525VRSi4Wzb0/4XQfgSfK9k74mPsxrcKlQcw/Tsw/U+/JxXjls/DTIlqC3e?=
- =?us-ascii?Q?N14HUvnsNwB2axm+wmKXRQDFbE9MHQHzILQoYhLWSwuWQ/iOuDGua5xb9Y6k?=
- =?us-ascii?Q?oUP6J8Q3lZScKdP/dGcNsr6tgeCyMyfmgh3c9FzOa20DFUGnHyLfw3Ls/+9Z?=
- =?us-ascii?Q?tOkUJFpV8W3jLRb3oEETQIvkGCy5QAWVHkRnBTDyJFLVqwbPgFG1TvreGSxB?=
- =?us-ascii?Q?ibe4YhbTgWO/lFN/iQm49JvQrXprCpVDG07jO/ADj6IIeYNhz2T5/G6tVuK1?=
- =?us-ascii?Q?5moebTLkFbsW/xzwTL7N/yFJ1qGfRVWyTgZeswjcITiOqYoquNyw7//PPNDa?=
- =?us-ascii?Q?qTFZuGAD7rcWQjBcr0SHbrIK2fGi3MoBK652W00P80841NetB2Yugsh2fcnS?=
- =?us-ascii?Q?bontVypryKPow26k9ptgtZjJE5PJKU13ApaoKJ+hqe7F6PRmbKgMygBPqwC/?=
- =?us-ascii?Q?nnuyHI0TMhjXxS+UYiLWQ75EgGtReetWCbmSjt00V1z/F2NvAgbU4OMAIWY9?=
- =?us-ascii?Q?FYIVIvtzNfLSOVD/ToH1Aq7Gp7AEW9q+FB0rVTNs6Eo1N2tg+owyEQtTfxFZ?=
- =?us-ascii?Q?8Gh8hLzwUovtmI/Mubu9zK96JMe83x8wS0NcpusiOqLn+ZEd0oTkTezpM7Pk?=
- =?us-ascii?Q?qpeGSQI4ruwx8YgwFuE0mS3/Di/Ez4XIu15ynumcoiRMyLjEVvqdVukyNqTq?=
- =?us-ascii?Q?cmyGRlBRMvbMjPJiIqT/GrGz4Mzh/0uRiblNr3t1CLoWd3QmtHFFQs028qsK?=
- =?us-ascii?Q?dN4qDRQbv2QrsPzea2A/F8QTpiP0Vq3jf60TrPQ4aq9b3DiD6DE9JIfWmRGn?=
- =?us-ascii?Q?WvKm7OGibw3i9icxWDj6xgTY4SKoJPCMtQ4wW+Q1JaI8y/HOEqTPV5X8DM78?=
- =?us-ascii?Q?tj+HM3QolSA40h0+fR+qWd6nVrSHmF0XEmruFE33rZsegvm8g89fOVI0e4fX?=
- =?us-ascii?Q?Hhee/AIsdfNoFZLlxPU4OPLnWrPNLaEGgNwlkzKVXMzRNP5W7cX9Jak6ioFf?=
- =?us-ascii?Q?Bzv6jGGrwF8oCYEnpgEMLB/DFZxsrlonLQ2HzeprKycXWhd5HWDgFV26JktS?=
- =?us-ascii?Q?kTchMpFfBnCol0kpuKfDzwgQvZ66NIeyehRaRYirQ88k+zA9n9XOOxpYmq6X?=
- =?us-ascii?Q?F+k63eRYJZQIU4OMq+8n9z9qWeUvuXjudxEDM5GSsb1Y1QSr3PYW1NwZ65uU?=
- =?us-ascii?Q?hiQSDvOd0iC02nvbksg77BrLM8oCn/gVV72XLwDLzTJNhChZV8ggiLZwuM7w?=
- =?us-ascii?Q?EH3RHHfs7ybkEHUwemnYf/aNub2OTuCcQJ9NjulO?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a030a97e-e3da-49ca-cf9b-08da6b1cd411
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 13:27:58.8803
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TWUlRHTu8e0SZZLUAVbhEC1T5I4/klCpmmN29PTutxp76FfrqHwWe7sNCJx5nTlRhv8Kkxus2W5UufQypkUjsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6244
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220629035549.44181-6-haijie1@huawei.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 02:59:35PM +0300, Vladimir Oltean wrote:
-> On Sun, Jul 17, 2022 at 05:53:22PM +0200, netdev@kapio-technology.com wrote:
-> > > 3. What happens to packets with a DA matching the zero-DPV entry, are
-> > > they also discarded in hardware? If so, here we differ from the bridge
-> > > driver implementation where such packets will be forwarded according to
-> > > the locked entry and egress the locked port
-> > 
-> > I understand that egress will follow what is setup with regard to UC, MC and
-> > BC, though I haven't tested that. But no replies will get through of course
-> > as long as the port hasn't been opened for the iface behind the locked port.
+On 29-06-22, 11:55, Jie Hai wrote:
+> The HiSilicon IP08 and HiSilicon IP09 are DMA iEPs, they
+> have the same pci device id but different pci revision.
+> Unfortunately, they have different register layouts, so
+> the origin driver cannot run on HiSilicon IP09 correctly.
 > 
-> Here, should we be rather fixing the software bridge, if the current
-> behavior is to forward packets towards locked FDB entries?
+> This patch enables the driver to adapt to HiSilicon IP09.
+> HiSilicon IP09 offers 4 channels, each channel has a send
+> queue, a complete queue and an interrupt to help to do tasks.
+> This DMA engine can do memory copy between memory blocks.
+> 
+> Signed-off-by: Jie Hai <haijie1@huawei.com>
+> ---
+>  drivers/dma/hisi_dma.c | 382 ++++++++++++++++++++++++++++++++---------
+>  1 file changed, 299 insertions(+), 83 deletions(-)
+> 
+> diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c
+> index d5f87ef4a5ee..dc7c59b21114 100644
+> --- a/drivers/dma/hisi_dma.c
+> +++ b/drivers/dma/hisi_dma.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+> -/* Copyright(c) 2019 HiSilicon Limited. */
+> +/* Copyright(c) 2019-2022 HiSilicon Limited. */
+> +
+>  #include <linux/bitfield.h>
+>  #include <linux/dmaengine.h>
+>  #include <linux/init.h>
+> @@ -9,35 +10,85 @@
+>  #include <linux/spinlock.h>
+>  #include "virt-dma.h"
+>  
+> -#define HISI_DMA_SQ_BASE_L		0x0
+> -#define HISI_DMA_SQ_BASE_H		0x4
+> -#define HISI_DMA_SQ_DEPTH		0x8
+> -#define HISI_DMA_SQ_TAIL_PTR		0xc
+> -#define HISI_DMA_CQ_BASE_L		0x10
+> -#define HISI_DMA_CQ_BASE_H		0x14
+> -#define HISI_DMA_CQ_DEPTH		0x18
+> -#define HISI_DMA_CQ_HEAD_PTR		0x1c
+> -#define HISI_DMA_CTRL0			0x20
+> -#define HISI_DMA_CTRL0_QUEUE_EN_S	0
+> -#define HISI_DMA_CTRL0_QUEUE_PAUSE_S	4
+> -#define HISI_DMA_CTRL1			0x24
+> -#define HISI_DMA_CTRL1_QUEUE_RESET_S	0
+> -#define HISI_DMA_Q_FSM_STS		0x30
+> -#define HISI_DMA_FSM_STS_MASK		GENMASK(3, 0)
+> -#define HISI_DMA_INT_STS		0x40
+> -#define HISI_DMA_INT_STS_MASK		GENMASK(12, 0)
+> -#define HISI_DMA_INT_MSK		0x44
+> -#define HISI_DMA_MODE			0x217c
+> -#define HISI_DMA_OFFSET			0x100
+> -
+> -#define HISI_DMA_MSI_NUM		32
+> -#define HISI_DMA_CHAN_NUM		30
+> -#define HISI_DMA_Q_DEPTH_VAL		1024
+> -
+> -#define PCI_BAR_2			2
+> -
+> -#define HISI_DMA_POLL_Q_STS_DELAY_US	10
+> -#define HISI_DMA_POLL_Q_STS_TIME_OUT_US	1000
+> +/* HiSilicon DMA register common field define */
+> +#define HISI_DMA_Q_SQ_BASE_L			0x0
+> +#define HISI_DMA_Q_SQ_BASE_H			0x4
+> +#define HISI_DMA_Q_SQ_DEPTH			0x8
+> +#define HISI_DMA_Q_SQ_TAIL_PTR			0xc
+> +#define HISI_DMA_Q_CQ_BASE_L			0x10
+> +#define HISI_DMA_Q_CQ_BASE_H			0x14
+> +#define HISI_DMA_Q_CQ_DEPTH			0x18
+> +#define HISI_DMA_Q_CQ_HEAD_PTR			0x1c
+> +#define HISI_DMA_Q_CTRL0			0x20
+> +#define HISI_DMA_Q_CTRL0_QUEUE_EN		0
+> +#define HISI_DMA_Q_CTRL0_QUEUE_PAUSE		4
 
-I think the bridge needs to be fixed, but not to discard packets. If I
-decided to lock a port, it means I do not blindly trust whoever who
-is behind the port, but instead want to authorize them first. Since an
-unauthorized user is able to create locked FDB entries we need to
-carefully define what they mean. I tried looking information about MAB
-online, but couldn't find detailed material that answers my questions,
-so my answers are based on what I believe is logical, which might be
-wrong.
+Pls use BIT/GENMASK only for register bits
 
-Currently, the bridge will forward packets to a locked entry which
-effectively means that an unauthorized host can cause the bridge to
-direct packets to it and sniff them. Yes, the host can't send any
-packets through the port (while locked) and can't overtake an existing
-(unlocked) FDB entry, but it still seems like an odd decision. IMO, the
-situation in mv88e6xxx is even worse because there an unauthorized host
-can cause packets to a certain DMAC to be blackholed via its zero-DPV
-entry.
+> +#define HISI_DMA_Q_CTRL1			0x24
+> +#define HISI_DMA_Q_CTRL1_QUEUE_RESET		0
+> +#define HISI_DMA_Q_FSM_STS			0x30
+> +#define HISI_DMA_Q_FSM_STS_MASK			GENMASK(3, 0)
+> +#define HISI_DMA_Q_ERR_INT_NUM0			0x84
+> +#define HISI_DMA_Q_ERR_INT_NUM1			0x88
+> +#define HISI_DMA_Q_ERR_INT_NUM2			0x8c
+> +
+> +/* HiSilicon IP08 DMA register and field define */
+> +#define HISI_DMA_HIP08_MODE			0x217C
+> +#define HISI_DMA_HIP08_Q_BASE			0x0
+> +#define HISI_DMA_HIP08_Q_CTRL0_ERR_ABORT_EN	2
+> +#define HISI_DMA_HIP08_Q_INT_STS		0x40
+> +#define HISI_DMA_HIP08_Q_INT_MSK		0x44
+> +#define HISI_DMA_HIP08_Q_INT_STS_MASK		GENMASK(14, 0)
+> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM3		0x90
+> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM4		0x94
+> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM5		0x98
+> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM6		0x48
+> +#define HISI_DMA_HIP08_Q_CTRL0_SQCQ_DRCT	24
+> +
+> +/* HiSilicon IP09 DMA register and field define */
+> +#define HISI_DMA_HIP09_DMA_FLR_DISABLE		0xA00
+> +#define HISI_DMA_HIP09_DMA_FLR_DISABLE_B	0
+> +#define HISI_DMA_HIP09_Q_BASE			0x2000
+> +#define HISI_DMA_HIP09_Q_CTRL0_ERR_ABORT_EN	GENMASK(31, 28)
+> +#define HISI_DMA_HIP09_Q_CTRL0_SQ_DRCT		26
+> +#define HISI_DMA_HIP09_Q_CTRL0_CQ_DRCT		27
+> +#define HISI_DMA_HIP09_Q_CTRL1_VA_ENABLE	2
+> +#define HISI_DMA_HIP09_Q_INT_STS		0x40
+> +#define HISI_DMA_HIP09_Q_INT_MSK		0x44
+> +#define HISI_DMA_HIP09_Q_INT_STS_MASK		0x1
+> +#define HISI_DMA_HIP09_Q_ERR_INT_STS		0x48
+> +#define HISI_DMA_HIP09_Q_ERR_INT_MSK		0x4C
+> +#define HISI_DMA_HIP09_Q_ERR_INT_STS_MASK	GENMASK(18, 1)
+> +#define HISI_DMA_HIP09_PORT_CFG_REG(port_id)	(0x800 + \
+> +						(port_id) * 0x20)
+> +#define HISI_DMA_HIP09_PORT_CFG_LINK_DOWN_MASK_B	16
+> +
+> +#define HISI_DMA_HIP09_MAX_PORT_NUM		16
+> +
+> +#define HISI_DMA_HIP08_MSI_NUM			32
+> +#define HISI_DMA_HIP08_CHAN_NUM			30
+> +#define HISI_DMA_HIP09_MSI_NUM			4
+> +#define HISI_DMA_HIP09_CHAN_NUM			4
+> +#define HISI_DMA_REVISION_HIP08B		0x21
+> +#define HISI_DMA_REVISION_HIP09A		0x30
+> +
+> +#define HISI_DMA_Q_OFFSET			0x100
+> +#define HISI_DMA_Q_DEPTH_VAL			1024
+> +
+> +#define PCI_BAR_2				2
+> +
+> +#define HISI_DMA_POLL_Q_STS_DELAY_US		10
+> +#define HISI_DMA_POLL_Q_STS_TIME_OUT_US		1000
+> +
+> +/*
+> + * The HIP08B(HiSilicon IP08) and HIP09A(HiSilicon IP09) are DMA iEPs, they
+> + * have the same pci device id but different pci revision.
+> + * Unfortunately, they have different register layouts, so two layout
+> + * enumerations are defined.
+> + */
+> +enum hisi_dma_reg_layout {
+> +	HISI_DMA_REG_LAYOUT_INVALID = 0,
+> +	HISI_DMA_REG_LAYOUT_HIP08,
+> +	HISI_DMA_REG_LAYOUT_HIP09
+> +};
+>  
+>  enum hisi_dma_mode {
+>  	EP = 0,
+> @@ -108,9 +159,45 @@ struct hisi_dma_dev {
+>  	struct dma_device dma_dev;
+>  	u32 chan_num;
+>  	u32 chan_depth;
+> +	enum hisi_dma_reg_layout reg_layout;
+> +	void __iomem *queue_base; /* queue region start of register */
+>  	struct hisi_dma_chan chan[];
+>  };
+>  
+> +static enum hisi_dma_reg_layout hisi_dma_get_reg_layout(struct pci_dev *pdev)
+> +{
+> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
+> +		return HISI_DMA_REG_LAYOUT_HIP08;
+> +	else if (pdev->revision >= HISI_DMA_REVISION_HIP09A)
+> +		return HISI_DMA_REG_LAYOUT_HIP09;
+> +
+> +	return HISI_DMA_REG_LAYOUT_INVALID;
+> +}
+> +
+> +static u32 hisi_dma_get_chan_num(struct pci_dev *pdev)
+> +{
+> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
+> +		return HISI_DMA_HIP08_CHAN_NUM;
+> +
+> +	return HISI_DMA_HIP09_CHAN_NUM;
+> +}
+> +
+> +static u32 hisi_dma_get_msi_num(struct pci_dev *pdev)
+> +{
+> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
+> +		return HISI_DMA_HIP08_MSI_NUM;
+> +
+> +	return HISI_DMA_HIP09_MSI_NUM;
+> +}
+> +
+> +static u32 hisi_dma_get_queue_base(struct pci_dev *pdev)
+> +{
+> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
+> +		return HISI_DMA_HIP08_Q_BASE;
+> +
+> +	return HISI_DMA_HIP09_Q_BASE;
+> +}
+> +
+>  static inline struct hisi_dma_chan *to_hisi_dma_chan(struct dma_chan *c)
+>  {
+>  	return container_of(c, struct hisi_dma_chan, vc.chan);
+> @@ -124,7 +211,7 @@ static inline struct hisi_dma_desc *to_hisi_dma_desc(struct virt_dma_desc *vd)
+>  static inline void hisi_dma_chan_write(void __iomem *base, u32 reg, u32 index,
+>  				       u32 val)
+>  {
+> -	writel_relaxed(val, base + reg + index * HISI_DMA_OFFSET);
+> +	writel_relaxed(val, base + reg + index * HISI_DMA_Q_OFFSET);
+>  }
+>  
+>  static inline void hisi_dma_update_bit(void __iomem *addr, u32 pos, bool val)
+> @@ -139,48 +226,76 @@ static inline void hisi_dma_update_bit(void __iomem *addr, u32 pos, bool val)
+>  static void hisi_dma_pause_dma(struct hisi_dma_dev *hdma_dev, u32 index,
+>  			       bool pause)
+>  {
+> -	void __iomem *addr = hdma_dev->base + HISI_DMA_CTRL0 + index *
+> -			     HISI_DMA_OFFSET;
+> +	void __iomem *addr;
+>  
+> -	hisi_dma_update_bit(addr, HISI_DMA_CTRL0_QUEUE_PAUSE_S, pause);
+> +	addr = hdma_dev->queue_base + HISI_DMA_Q_CTRL0 +
+> +	       index * HISI_DMA_Q_OFFSET;
+> +	hisi_dma_update_bit(addr, HISI_DMA_Q_CTRL0_QUEUE_PAUSE, pause);
+>  }
+>  
+>  static void hisi_dma_enable_dma(struct hisi_dma_dev *hdma_dev, u32 index,
+>  				bool enable)
+>  {
+> -	void __iomem *addr = hdma_dev->base + HISI_DMA_CTRL0 + index *
+> -			     HISI_DMA_OFFSET;
+> +	void __iomem *addr;
+>  
+> -	hisi_dma_update_bit(addr, HISI_DMA_CTRL0_QUEUE_EN_S, enable);
+> +	addr = hdma_dev->queue_base + HISI_DMA_Q_CTRL0 +
+> +	       index * HISI_DMA_Q_OFFSET;
+> +	hisi_dma_update_bit(addr, HISI_DMA_Q_CTRL0_QUEUE_EN, enable);
+>  }
+>  
+>  static void hisi_dma_mask_irq(struct hisi_dma_dev *hdma_dev, u32 qp_index)
+>  {
+> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_INT_MSK, qp_index,
+> -			    HISI_DMA_INT_STS_MASK);
+> +	void __iomem *q_base = hdma_dev->queue_base;
+> +
+> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08)
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_INT_MSK,
+> +				    qp_index, HISI_DMA_HIP08_Q_INT_STS_MASK);
+> +	else {
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_INT_MSK,
+> +				    qp_index, HISI_DMA_HIP09_Q_INT_STS_MASK);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_ERR_INT_MSK,
+> +				    qp_index,
+> +				    HISI_DMA_HIP09_Q_ERR_INT_STS_MASK);
+> +	}
+>  }
+>  
+>  static void hisi_dma_unmask_irq(struct hisi_dma_dev *hdma_dev, u32 qp_index)
+>  {
+> -	void __iomem *base = hdma_dev->base;
+> -
+> -	hisi_dma_chan_write(base, HISI_DMA_INT_STS, qp_index,
+> -			    HISI_DMA_INT_STS_MASK);
+> -	hisi_dma_chan_write(base, HISI_DMA_INT_MSK, qp_index, 0);
+> +	void __iomem *q_base = hdma_dev->queue_base;
+> +
+> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08) {
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_INT_STS,
+> +				    qp_index, HISI_DMA_HIP08_Q_INT_STS_MASK);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_INT_MSK,
+> +				    qp_index, 0);
+> +	} else {
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_INT_STS,
+> +				    qp_index, HISI_DMA_HIP09_Q_INT_STS_MASK);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_ERR_INT_STS,
+> +				    qp_index,
+> +				    HISI_DMA_HIP09_Q_ERR_INT_STS_MASK);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_INT_MSK,
+> +				    qp_index, 0);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_ERR_INT_MSK,
+> +				    qp_index, 0);
+> +	}
+>  }
+>  
+>  static void hisi_dma_do_reset(struct hisi_dma_dev *hdma_dev, u32 index)
+>  {
+> -	void __iomem *addr = hdma_dev->base + HISI_DMA_CTRL1 + index *
+> -			     HISI_DMA_OFFSET;
+> +	void __iomem *addr;
+>  
+> -	hisi_dma_update_bit(addr, HISI_DMA_CTRL1_QUEUE_RESET_S, 1);
+> +	addr = hdma_dev->queue_base +
+> +	       HISI_DMA_Q_CTRL1 + index * HISI_DMA_Q_OFFSET;
+> +	hisi_dma_update_bit(addr, HISI_DMA_Q_CTRL1_QUEUE_RESET, 1);
+>  }
+>  
+>  static void hisi_dma_reset_qp_point(struct hisi_dma_dev *hdma_dev, u32 index)
+>  {
+> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_SQ_TAIL_PTR, index, 0);
+> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_CQ_HEAD_PTR, index, 0);
+> +	void __iomem *q_base = hdma_dev->queue_base;
+> +
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_TAIL_PTR, index, 0);
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR, index, 0);
+>  }
+>  
+>  static void hisi_dma_reset_or_disable_hw_chan(struct hisi_dma_chan *chan,
+> @@ -195,11 +310,11 @@ static void hisi_dma_reset_or_disable_hw_chan(struct hisi_dma_chan *chan,
+>  	hisi_dma_enable_dma(hdma_dev, index, false);
+>  	hisi_dma_mask_irq(hdma_dev, index);
+>  
+> -	addr = hdma_dev->base +
+> -	       HISI_DMA_Q_FSM_STS + index * HISI_DMA_OFFSET;
+> +	addr = hdma_dev->queue_base +
+> +	       HISI_DMA_Q_FSM_STS + index * HISI_DMA_Q_OFFSET;
+>  
+>  	ret = readl_relaxed_poll_timeout(addr, tmp,
+> -		FIELD_GET(HISI_DMA_FSM_STS_MASK, tmp) != RUN,
+> +		FIELD_GET(HISI_DMA_Q_FSM_STS_MASK, tmp) != RUN,
+>  		HISI_DMA_POLL_Q_STS_DELAY_US,
+>  		HISI_DMA_POLL_Q_STS_TIME_OUT_US);
+>  	if (ret) {
+> @@ -217,7 +332,7 @@ static void hisi_dma_reset_or_disable_hw_chan(struct hisi_dma_chan *chan,
+>  	}
+>  
+>  	ret = readl_relaxed_poll_timeout(addr, tmp,
+> -		FIELD_GET(HISI_DMA_FSM_STS_MASK, tmp) == IDLE,
+> +		FIELD_GET(HISI_DMA_Q_FSM_STS_MASK, tmp) == IDLE,
+>  		HISI_DMA_POLL_Q_STS_DELAY_US,
+>  		HISI_DMA_POLL_Q_STS_TIME_OUT_US);
+>  	if (ret) {
+> @@ -300,8 +415,8 @@ static void hisi_dma_start_transfer(struct hisi_dma_chan *chan)
+>  	chan->sq_tail = (chan->sq_tail + 1) % hdma_dev->chan_depth;
+>  
+>  	/* update sq_tail to trigger a new task */
+> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_SQ_TAIL_PTR, chan->qp_num,
+> -			    chan->sq_tail);
+> +	hisi_dma_chan_write(hdma_dev->queue_base, HISI_DMA_Q_SQ_TAIL_PTR,
+> +			    chan->qp_num, chan->sq_tail);
+>  }
+>  
+>  static void hisi_dma_issue_pending(struct dma_chan *c)
+> @@ -375,26 +490,86 @@ static int hisi_dma_alloc_qps_mem(struct hisi_dma_dev *hdma_dev)
+>  static void hisi_dma_init_hw_qp(struct hisi_dma_dev *hdma_dev, u32 index)
+>  {
+>  	struct hisi_dma_chan *chan = &hdma_dev->chan[index];
+> +	void __iomem *q_base = hdma_dev->queue_base;
+>  	u32 hw_depth = hdma_dev->chan_depth - 1;
+> -	void __iomem *base = hdma_dev->base;
+> +	void __iomem *addr;
+> +	u32 tmp;
+>  
+>  	/* set sq, cq base */
+> -	hisi_dma_chan_write(base, HISI_DMA_SQ_BASE_L, index,
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_BASE_L, index,
+>  			    lower_32_bits(chan->sq_dma));
+> -	hisi_dma_chan_write(base, HISI_DMA_SQ_BASE_H, index,
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_BASE_H, index,
+>  			    upper_32_bits(chan->sq_dma));
+> -	hisi_dma_chan_write(base, HISI_DMA_CQ_BASE_L, index,
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_BASE_L, index,
+>  			    lower_32_bits(chan->cq_dma));
+> -	hisi_dma_chan_write(base, HISI_DMA_CQ_BASE_H, index,
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_BASE_H, index,
+>  			    upper_32_bits(chan->cq_dma));
+>  
+>  	/* set sq, cq depth */
+> -	hisi_dma_chan_write(base, HISI_DMA_SQ_DEPTH, index, hw_depth);
+> -	hisi_dma_chan_write(base, HISI_DMA_CQ_DEPTH, index, hw_depth);
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_DEPTH, index, hw_depth);
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_DEPTH, index, hw_depth);
+>  
+>  	/* init sq tail and cq head */
+> -	hisi_dma_chan_write(base, HISI_DMA_SQ_TAIL_PTR, index, 0);
+> -	hisi_dma_chan_write(base, HISI_DMA_CQ_HEAD_PTR, index, 0);
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_TAIL_PTR, index, 0);
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR, index, 0);
+> +
+> +	/* init error interrupt stats */
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_ERR_INT_NUM0, index, 0);
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_ERR_INT_NUM1, index, 0);
+> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_ERR_INT_NUM2, index, 0);
+> +
+> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08) {
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM3,
+> +				    index, 0);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM4,
+> +				    index, 0);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM5,
+> +				    index, 0);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM6,
+> +				    index, 0);
+> +		/*
+> +		 * init SQ/CQ direction selecting register.
+> +		 * "0" is to local side and "1" is to remote side.
+> +		 */
+> +		addr = q_base + HISI_DMA_Q_CTRL0 + index * HISI_DMA_Q_OFFSET;
+> +		hisi_dma_update_bit(addr, HISI_DMA_HIP08_Q_CTRL0_SQCQ_DRCT, 0);
+> +
+> +		/*
+> +		 * 0 - Continue to next descriptor if error occurs.
+> +		 * 1 - Abort the DMA queue if error occurs.
+> +		 */
+> +		hisi_dma_update_bit(addr,
+> +				    HISI_DMA_HIP08_Q_CTRL0_ERR_ABORT_EN, 0);
+> +	} else {
+> +		addr = q_base + HISI_DMA_Q_CTRL0 + index * HISI_DMA_Q_OFFSET;
+> +
+> +		/*
+> +		 * init SQ/CQ direction selecting register.
+> +		 * "0" is to local side and "1" is to remote side.
+> +		 */
+> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_Q_CTRL0_SQ_DRCT, 0);
+> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_Q_CTRL0_CQ_DRCT, 0);
+> +
+> +		/*
+> +		 * 0 - Continue to next descriptor if error occurs.
+> +		 * 1 - Abort the DMA queue if error occurs.
+> +		 */
+> +
+> +		tmp = readl_relaxed(addr);
+> +		tmp &= ~HISI_DMA_HIP09_Q_CTRL0_ERR_ABORT_EN;
+> +		writel_relaxed(tmp, addr);
+> +
+> +		/*
+> +		 * 0 - dma should process FLR whith CPU.
+> +		 * 1 - dma not process FLR, only cpu process FLR.
+> +		 */
+> +		addr = q_base + HISI_DMA_HIP09_DMA_FLR_DISABLE +
+> +		       index * HISI_DMA_Q_OFFSET;
+> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_DMA_FLR_DISABLE_B, 0);
+> +
+> +		addr = q_base + HISI_DMA_Q_CTRL1 + index * HISI_DMA_Q_OFFSET;
+> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_Q_CTRL1_VA_ENABLE, 1);
+> +	}
+>  }
+>  
+>  static void hisi_dma_enable_qp(struct hisi_dma_dev *hdma_dev, u32 qp_index)
+> @@ -438,17 +613,18 @@ static irqreturn_t hisi_dma_irq(int irq, void *data)
+>  	struct hisi_dma_dev *hdma_dev = chan->hdma_dev;
+>  	struct hisi_dma_desc *desc;
+>  	struct hisi_dma_cqe *cqe;
+> +	void __iomem *q_base;
+>  
+>  	spin_lock(&chan->vc.lock);
+>  
+>  	desc = chan->desc;
+>  	cqe = chan->cq + chan->cq_head;
+> +	q_base = hdma_dev->queue_base;
+>  	if (desc) {
+>  		chan->cq_head = (chan->cq_head + 1) %
+>  				hdma_dev->chan_depth;
+> -		hisi_dma_chan_write(hdma_dev->base,
+> -				    HISI_DMA_CQ_HEAD_PTR, chan->qp_num,
+> -				    chan->cq_head);
+> +		hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
+> +				    chan->qp_num, chan->cq_head);
+>  		if (FIELD_GET(STATUS_MASK, cqe->w0) == STATUS_SUCC) {
+>  			vchan_cookie_complete(&desc->vd);
+>  			hisi_dma_start_transfer(chan);
+> @@ -508,16 +684,58 @@ static void hisi_dma_disable_hw_channels(void *data)
+>  static void hisi_dma_set_mode(struct hisi_dma_dev *hdma_dev,
+>  			      enum hisi_dma_mode mode)
+>  {
+> -	writel_relaxed(mode == RC ? 1 : 0, hdma_dev->base + HISI_DMA_MODE);
+> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08)
+> +		writel_relaxed(mode == RC ? 1 : 0,
+> +			       hdma_dev->base + HISI_DMA_HIP08_MODE);
+> +}
+> +
+> +static void hisi_dma_init_hw(struct hisi_dma_dev *hdma_dev)
+> +{
+> +	void __iomem *addr;
+> +	int i;
+> +
+> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP09) {
+> +		for (i = 0; i < HISI_DMA_HIP09_MAX_PORT_NUM; i++) {
+> +			addr = hdma_dev->base + HISI_DMA_HIP09_PORT_CFG_REG(i);
+> +			hisi_dma_update_bit(addr,
+> +				HISI_DMA_HIP09_PORT_CFG_LINK_DOWN_MASK_B, 1);
+> +		}
+> +	}
+> +}
+> +
+> +static void hisi_dma_init_dma_dev(struct hisi_dma_dev *hdma_dev)
+> +{
+> +	struct dma_device *dma_dev;
+> +
+> +	dma_dev = &hdma_dev->dma_dev;
+> +	dma_cap_set(DMA_MEMCPY, dma_dev->cap_mask);
+> +	dma_dev->device_free_chan_resources = hisi_dma_free_chan_resources;
+> +	dma_dev->device_prep_dma_memcpy = hisi_dma_prep_dma_memcpy;
+> +	dma_dev->device_tx_status = hisi_dma_tx_status;
+> +	dma_dev->device_issue_pending = hisi_dma_issue_pending;
+> +	dma_dev->device_terminate_all = hisi_dma_terminate_all;
+> +	dma_dev->device_synchronize = hisi_dma_synchronize;
+> +	dma_dev->directions = BIT(DMA_MEM_TO_MEM);
+> +	dma_dev->dev = &hdma_dev->pdev->dev;
+> +	INIT_LIST_HEAD(&dma_dev->channels);
+>  }
+>  
+>  static int hisi_dma_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  {
+> +	enum hisi_dma_reg_layout reg_layout;
+>  	struct device *dev = &pdev->dev;
+>  	struct hisi_dma_dev *hdma_dev;
+>  	struct dma_device *dma_dev;
+> +	u32 chan_num;
+> +	u32 msi_num;
+>  	int ret;
+>  
+> +	reg_layout = hisi_dma_get_reg_layout(pdev);
+> +	if (reg_layout == HISI_DMA_REG_LAYOUT_INVALID) {
+> +		dev_err(dev, "unsupported device!\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	ret = pcim_enable_device(pdev);
+>  	if (ret) {
+>  		dev_err(dev, "failed to enable device mem!\n");
+> @@ -534,40 +752,37 @@ static int hisi_dma_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  	if (ret)
+>  		return ret;
+>  
+> -	hdma_dev = devm_kzalloc(dev, struct_size(hdma_dev, chan, HISI_DMA_CHAN_NUM), GFP_KERNEL);
+> +	chan_num = hisi_dma_get_chan_num(pdev);
+> +	hdma_dev = devm_kzalloc(dev, struct_size(hdma_dev, chan, chan_num),
+> +				GFP_KERNEL);
+>  	if (!hdma_dev)
+>  		return -EINVAL;
+>  
+>  	hdma_dev->base = pcim_iomap_table(pdev)[PCI_BAR_2];
+>  	hdma_dev->pdev = pdev;
+> -	hdma_dev->chan_num = HISI_DMA_CHAN_NUM;
+>  	hdma_dev->chan_depth = HISI_DMA_Q_DEPTH_VAL;
+> +	hdma_dev->chan_num = chan_num;
+> +	hdma_dev->reg_layout = reg_layout;
+> +	hdma_dev->queue_base = hdma_dev->base + hisi_dma_get_queue_base(pdev);
+>  
+>  	pci_set_drvdata(pdev, hdma_dev);
+>  	pci_set_master(pdev);
+>  
+> +	msi_num = hisi_dma_get_msi_num(pdev);
+> +
+>  	/* This will be freed by 'pcim_release()'. See 'pcim_enable_device()' */
+> -	ret = pci_alloc_irq_vectors(pdev, HISI_DMA_MSI_NUM, HISI_DMA_MSI_NUM,
+> -				    PCI_IRQ_MSI);
+> +	ret = pci_alloc_irq_vectors(pdev, msi_num, msi_num, PCI_IRQ_MSI);
+>  	if (ret < 0) {
+>  		dev_err(dev, "Failed to allocate MSI vectors!\n");
+>  		return ret;
+>  	}
+>  
+> -	dma_dev = &hdma_dev->dma_dev;
+> -	dma_cap_set(DMA_MEMCPY, dma_dev->cap_mask);
+> -	dma_dev->device_free_chan_resources = hisi_dma_free_chan_resources;
+> -	dma_dev->device_prep_dma_memcpy = hisi_dma_prep_dma_memcpy;
+> -	dma_dev->device_tx_status = hisi_dma_tx_status;
+> -	dma_dev->device_issue_pending = hisi_dma_issue_pending;
+> -	dma_dev->device_terminate_all = hisi_dma_terminate_all;
+> -	dma_dev->device_synchronize = hisi_dma_synchronize;
+> -	dma_dev->directions = BIT(DMA_MEM_TO_MEM);
+> -	dma_dev->dev = dev;
+> -	INIT_LIST_HEAD(&dma_dev->channels);
+> +	hisi_dma_init_dma_dev(hdma_dev);
+>  
+>  	hisi_dma_set_mode(hdma_dev, RC);
+>  
+> +	hisi_dma_init_hw(hdma_dev);
+> +
+>  	ret = hisi_dma_enable_hw_channels(hdma_dev);
+>  	if (ret < 0) {
+>  		dev_err(dev, "failed to enable hw channel!\n");
+> @@ -579,6 +794,7 @@ static int hisi_dma_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  	if (ret)
+>  		return ret;
+>  
+> +	dma_dev = &hdma_dev->dma_dev;
+>  	ret = dmaenginem_async_device_register(dma_dev);
+>  	if (ret < 0)
+>  		dev_err(dev, "failed to register device!\n");
+> -- 
+> 2.33.0
 
-Another (minor?) issue is that locked entries cannot roam between locked
-ports. Lets say that my user space MAB policy is to authorize MAC X if
-it appears behind one of the locked ports swp1-swp4. An unauthorized
-host behind locked port swp5 can generate packets with SMAC X,
-preventing the true owner of this MAC behind swp1 from ever being
-authorized.
-
-It seems like the main purpose of these locked entries is to signal to
-user space the presence of a certain MAC behind a locked port, but they
-should not be able to affect packet forwarding in the bridge, unlike
-regular entries.
-
-Regarding a separate knob for MAB, I tend to agree we need it. Otherwise
-we cannot control which locked ports are able to populate the FDB with
-locked entries. I don't particularly like the fact that we overload an
-existing flag ("learning") for that. Any reason not to add an explicit
-flag ("mab")? At least with the current implementation, locked entries
-cannot roam between locked ports and cannot be refreshed, which differs
-from regular learning.
+-- 
+~Vinod

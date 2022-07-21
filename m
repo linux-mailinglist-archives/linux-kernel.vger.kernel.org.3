@@ -2,98 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820A957C239
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6020357C233
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbiGUCZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S230115AbiGUCWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbiGUCZ3 (ORCPT
+        with ESMTP id S229515AbiGUCWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:25:29 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE55B1FA;
-        Wed, 20 Jul 2022 19:25:24 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LpGYn1kY5z1M8Gr;
-        Thu, 21 Jul 2022 10:22:37 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Jul 2022 10:25:21 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 21 Jul
- 2022 10:25:21 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <yekai13@huawei.com>
-Subject: [PATCH] crypto: hisilicon/sec - fix auth key size error
-Date:   Thu, 21 Jul 2022 10:18:31 +0800
-Message-ID: <20220721021831.25609-1-yekai13@huawei.com>
-X-Mailer: git-send-email 2.33.0
+        Wed, 20 Jul 2022 22:22:31 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91CB753B0;
+        Wed, 20 Jul 2022 19:22:30 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r186so372616pgr.2;
+        Wed, 20 Jul 2022 19:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4nLuxiwxNWSo6nYVmF5yVIePyzyJgZedSv2mAEqQoU0=;
+        b=XGsC8Qj+Vasfdh4AYTuUjqAVu0i6Jw68beIIBCjNEfp1WOKPdNq1d+/xhAlrH67CEe
+         uVvdOA88CnT13lTjaam+E7Qaaihs7SPqvmIPNaKSwmg10or8K5cLli2F6pKTSpihbb1E
+         8T4l9lg50W8vKFVJL5Fk035sf8wuWMJD9/enKMmvO5c+zmc39Lcy8Uc9r0qEigJeLpU1
+         uxK8q7lwH4a0lYy1rkO5xyRO7dbGHcMmY6uB0UEQOiubv1R9EZ6LrkUPgjjhizZ/yjHr
+         +CbCvW3MQiETTPiDP3EzG7w1lucyBTBH+rc5GHqIEDZCLa5srQFBnU1nw0shsc1B6bF3
+         xOgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4nLuxiwxNWSo6nYVmF5yVIePyzyJgZedSv2mAEqQoU0=;
+        b=rnwlHG/N2fZpGejsjFYHCetRm+MFgMQ4F2ZTR918O9gUqrekMB11t8pVqurj1/cyYR
+         imzwOBcmR4GvPn54g4lgYNmb4LOGHuF181/6xc4PGFih/SB22KspfM/+7xDLlwx3x6Ns
+         Ukd/VqIQGP1rKpnZTyuqDMCnID786t+/sIwmUGgaGKV+3MsAtChVrlv7IDr2asdKs82N
+         z1OkXEZGK8ObNkyZPvrUcVoyZgpBadJKw9AN/ezOwUrWjJ9aRgp+ySBLK1UMv7PSklCx
+         tbE+N8e+PIcNmPbS02WfMO/yJErW8ROIRsaj9OJWVlGTYIPz8+rujnPaLX6rkvfiNah0
+         ON8w==
+X-Gm-Message-State: AJIora+0u5/W/TwewumlcPvDInszzf9wwWGj1qB5Y/a7UhN5XYqvmdpb
+        hdrzw9go33ZFZ8RnCef8sBBtTz+NzKX/ww==
+X-Google-Smtp-Source: AGRyM1tTvNe9tf8JnJSMKZmwPrM8GisIkMzBuVY5qL4Ry1vpfCNZfvak0SQ1NTvQf2a78QRXRNV69g==
+X-Received: by 2002:a63:1e49:0:b0:3fd:cf48:3694 with SMTP id p9-20020a631e49000000b003fdcf483694mr37308384pgm.275.1658370149785;
+        Wed, 20 Jul 2022 19:22:29 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id q2-20020a170902f34200b0015e8d4eb27esm247824ple.200.2022.07.20.19.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 19:22:29 -0700 (PDT)
+Message-ID: <aacf1eb4-26f6-4c62-9c4a-d8249a986c8c@gmail.com>
+Date:   Thu, 21 Jul 2022 10:22:14 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 4/7] KVM: x86/pmu: Not to generate PEBS records for
+ emulated instructions
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220713122507.29236-1-likexu@tencent.com>
+ <20220713122507.29236-5-likexu@tencent.com> <YtijFDufUBR7buyv@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <YtijFDufUBR7buyv@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The authentication algorithm supports a maximum of 128-byte keys.
-The allocated key memory is insufficient.
+On 21/7/2022 8:51 am, Sean Christopherson wrote:
+> "Don't" instead of "Not to".  Not is an adverb, not a verb itself.
+> 
+> On Wed, Jul 13, 2022, Like Xu wrote:
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> The KVM accumulate an enabeld counter for at least INSTRUCTIONS or
+> 
+> Probably just "KVM" instead of "the KVM"?
+> 
+> s/enabeld/enabled
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
----
- drivers/crypto/hisilicon/sec2/sec_crypto.c | 6 +++---
- drivers/crypto/hisilicon/sec2/sec_crypto.h | 1 +
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Applied, thanks.
 
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-index 53285b0e70d3..d08e2ad8865c 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
-@@ -662,7 +662,7 @@ static int sec_auth_init(struct sec_ctx *ctx)
- {
- 	struct sec_auth_ctx *a_ctx = &ctx->a_ctx;
- 
--	a_ctx->a_key = dma_alloc_coherent(ctx->dev, SEC_MAX_KEY_SIZE,
-+	a_ctx->a_key = dma_alloc_coherent(ctx->dev, SEC_MAX_AKEY_SIZE,
- 					  &a_ctx->a_key_dma, GFP_KERNEL);
- 	if (!a_ctx->a_key)
- 		return -ENOMEM;
-@@ -674,8 +674,8 @@ static void sec_auth_uninit(struct sec_ctx *ctx)
- {
- 	struct sec_auth_ctx *a_ctx = &ctx->a_ctx;
- 
--	memzero_explicit(a_ctx->a_key, SEC_MAX_KEY_SIZE);
--	dma_free_coherent(ctx->dev, SEC_MAX_KEY_SIZE,
-+	memzero_explicit(a_ctx->a_key, SEC_MAX_AKEY_SIZE);
-+	dma_free_coherent(ctx->dev, SEC_MAX_AKEY_SIZE,
- 			  a_ctx->a_key, a_ctx->a_key_dma);
- }
- 
-diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.h b/drivers/crypto/hisilicon/sec2/sec_crypto.h
-index 5e039b50e9d4..d033f63b583f 100644
---- a/drivers/crypto/hisilicon/sec2/sec_crypto.h
-+++ b/drivers/crypto/hisilicon/sec2/sec_crypto.h
-@@ -7,6 +7,7 @@
- #define SEC_AIV_SIZE		12
- #define SEC_IV_SIZE		24
- #define SEC_MAX_KEY_SIZE	64
-+#define SEC_MAX_AKEY_SIZE	128
- #define SEC_COMM_SCENE		0
- #define SEC_MIN_BLOCK_SZ	1
- 
--- 
-2.30.0
+> 
+>> BRANCH_INSTRUCTION hw event from any KVM emulated instructions,
+>> generating emulated overflow interrupt on counter overflow, which
+>> in theory should also happen when the PEBS counter overflows but
+>> it currently lacks this part of the underlying support (e.g. through
+>> software injection of records in the irq context or a lazy approach).
+>>
+>> In this case, KVM skips the injection of this BUFFER_OVF PMI (effectively
+>> dropping one PEBS record) and let the overflow counter move on. The loss
+>> of a single sample does not introduce a loss of accuracy, but is easily
+>> noticeable for certain specific instructions.
+>>
+>> This issue is expected to be addressed along with the issue
+>> of PEBS cross-mapped counters with a slow-path proposal.
+>>
+>> Fixes: 79f3e3b58386 ("KVM: x86/pmu: Reprogram PEBS event to emulate guest PEBS counter")
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+>>   arch/x86/kvm/pmu.c | 11 ++++++++---
+>>   1 file changed, 8 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+>> index 02f9e4f245bd..08ee0fed63d5 100644
+>> --- a/arch/x86/kvm/pmu.c
+>> +++ b/arch/x86/kvm/pmu.c
+>> @@ -106,9 +106,14 @@ static inline void __kvm_perf_overflow(struct kvm_pmc *pmc, bool in_pmi)
+>>   		return;
+>>   
+>>   	if (pmc->perf_event && pmc->perf_event->attr.precise_ip) {
+>> -		/* Indicate PEBS overflow PMI to guest. */
+>> -		skip_pmi = __test_and_set_bit(GLOBAL_STATUS_BUFFER_OVF_BIT,
+>> -					      (unsigned long *)&pmu->global_status);
+>> +		if (!in_pmi) {
+>> +			/* The emulated instructions does not generate PEBS records. */
+> 
+> This needs a better comment.  IIUC, it's not that they don't generate records,
+> it's that KVM is _choosing_ to not generate records to hack around a different
+> bug(s).  If that's true a TODO or FIXME would also be nice.
 
+Indeed, to understand more of the context, this part will look like this:
+
+		if (!in_pmi) {
+			/*
+			* TODO: KVM is currently _choosing_ to not generate records
+			* for emulated instructions, avoiding BUFFER_OVF PMI when
+			* there are no records. Strictly speaking, it should be done
+			* as well in the right context to improve sampling accuracy.
+			*/
+			skip_pmi = true;
+		} else {
+			/* Indicate PEBS overflow PMI to guest. */
+			skip_pmi = __test_and_set_bit(GLOBAL_STATUS_BUFFER_OVF_BIT,
+						      (unsigned long *)&pmu->global_status);
+		}
+
+, what do you think ?
+
+> 
+>> +			skip_pmi = true;
+>> +		} else {
+>> +			/* Indicate PEBS overflow PMI to guest. */
+>> +			skip_pmi = __test_and_set_bit(GLOBAL_STATUS_BUFFER_OVF_BIT,
+>> +						      (unsigned long *)&pmu->global_status);
+>> +		}
+>>   	} else {
+>>   		__set_bit(pmc->idx, (unsigned long *)&pmu->global_status);
+>>   	}
+>> -- 
+>> 2.37.0
+>>

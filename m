@@ -2,103 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A7457D048
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D635357D054
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbiGUPu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S233356AbiGUPwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbiGUPu5 (ORCPT
+        with ESMTP id S230161AbiGUPwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:50:57 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA7A371AF
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:50:56 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26L5LeXL020687;
-        Thu, 21 Jul 2022 10:50:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=Apq/AgQpV/gyFR7POoYO5N2hlaO5daOXlN1AT17e/Gs=;
- b=MOPgq9syNYnW11k80AdW5iNehLZHwGamk+2+VHavYLMbHeaf9zUa3kM+8kpJNXsa9LDp
- XFS8wDzxNNVq6l2aEg3YP0kxYR6+ODVDqucCGuMSf9Gyv9zrdZ4cb4OseWV8QCn6WRdE
- ZtHNe5oZ5Hkl0H64/ul1tbQHXZ2nOXAFgnVoX0YohiA0qmGsaTmaU/Es0rzlg3urAGy7
- Fo2K39X2GBZtN9cYixyKPEZy7TQoCF7SZYMaVgW1cKW7qaaM9V/z87NxBi/Y141CLr21
- bJQfnLH4dPEJ9CdCQ2MUUyZWcPVwZYmcqLC9igcQYT5kIMdKcS8+n80yiqNtZm4eJ1Bh hw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3hdxffarqd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Jul 2022 10:50:31 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Thu, 21 Jul
- 2022 10:50:29 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
- 15.2.1118.9 via Frontend Transport; Thu, 21 Jul 2022 10:50:29 -0500
-Received: from [198.90.202.131] (unknown [198.90.202.131])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 081E946B;
-        Thu, 21 Jul 2022 15:50:29 +0000 (UTC)
-Message-ID: <f7dde431-7a97-b5bb-a47e-8953030ade87@opensource.cirrus.com>
-Date:   Thu, 21 Jul 2022 16:50:28 +0100
+        Thu, 21 Jul 2022 11:52:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8636D371AF;
+        Thu, 21 Jul 2022 08:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658418729; x=1689954729;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=III64DW+0u4G+CjBfeIS14HoJGrVBM+FP7wl8Jf7dg8=;
+  b=Te8cjwBMcKLRt/8YouaDueYj5dXf6NuAgU8ebxGzhh+rTPWPnqvHa1Ul
+   RvEfEsQ86qsQc0udVhd+angGKOPJAx/3GiI/41aNobVpU5x6VKry5az0X
+   N8Ge5gY0/wC2EjWs6ux0re94xnpZ3aRUosaNCBORS2pDBSgiBr/vNfn2B
+   E03tVwGDYa/LFEuOoMYmYI5Nvo3S1hiK8OIvGcpnljITagR+WxxwlUE/v
+   ydwqrRgxxCLOp4xXIgqYLug6B3iFRwQ95QMPK/2SChL+QxJTZwud+C067
+   MjNB/amAKnCElEAhpY4hgZSKK6wnY7YbfEg4/F0i0crIXIX/hCmMaVBmr
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="105554930"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jul 2022 08:52:07 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 21 Jul 2022 08:51:58 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 21 Jul 2022 08:51:48 -0700
+Message-ID: <365646fb-ea8b-6202-48a4-874f1e3c0a65@microchip.com>
+Date:   Thu, 21 Jul 2022 17:51:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] ALSA: hda/realtek: Enable speaker and mute LEDs for HP
- laptops
+Subject: Re: [PATCH 1/6] ARM: refresh defconfig files
 Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, <tiwai@suse.com>
-CC:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Kailang Yang <kailang@realtek.com>,
-        <linux-kernel@vger.kernel.org>, Meng Tang <tangmeng@uniontech.com>,
-        <alsa-devel@alsa-project.org>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Tim Crawford <tcrawford@system76.com>,
-        Andy Chi <andy.chi@canonical.com>,
-        Cameron Berkenpas <cam@neo-zeon.de>,
-        Yong Wu <yong.wu@mediatek.com>, <patches@opensource.cirrus.com>
-References: <20220719142015.244426-1-kai.heng.feng@canonical.com>
-From:   Lucas Tanure <tanureal@opensource.cirrus.com>
-In-Reply-To: <20220719142015.244426-1-kai.heng.feng@canonical.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "Ray Jui" <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "Alexander Shiyan" <shc_work@mail.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Andrew Lunn" <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        "Tony Lindgren" <tony@atomide.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-aspeed@lists.ozlabs.org>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-oxnas@groups.io>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
+        <linux-sh@vger.kernel.org>
+References: <20220721141325.2413920-1-arnd@kernel.org>
+ <20220721141325.2413920-2-arnd@kernel.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220721141325.2413920-2-arnd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: WNlq5lSN-9U0aC-DxBmpXoFUpqeh__MR
-X-Proofpoint-GUID: WNlq5lSN-9U0aC-DxBmpXoFUpqeh__MR
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 7/19/22 15:20, Kai-Heng Feng wrote:
-> Two more HP laptops that use cs35l41 AMP for speaker and GPIO for mute
-> LEDs.
->
-> So use the existing quirk to enable them accordingly.
->
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Reviewed-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+On 21/07/2022 at 16:13, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A lot of Kconfig options have changed over the years, and we tend
+> to not do a blind 'make defconfig' to refresh the files, to ensure
+> we catch options that should not have gone away.
+> 
+> I used some a bit of scripting to only rework the bits where an
+> option moved around in any of the defconfig files, without also
+> dropping any of the other lines, to make it clearer which options
+> we no longer have.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->   sound/pci/hda/patch_realtek.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-> index 2f55bc43bfa9c..cdbee71e83216 100644
-> --- a/sound/pci/hda/patch_realtek.c
-> +++ b/sound/pci/hda/patch_realtek.c
-> @@ -9109,6 +9109,8 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
->   	SND_PCI_QUIRK(0x103c, 0x89c3, "Zbook Studio G9", ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED),
->   	SND_PCI_QUIRK(0x103c, 0x89c6, "Zbook Fury 17 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
->   	SND_PCI_QUIRK(0x103c, 0x89ca, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
-> +	SND_PCI_QUIRK(0x103c, 0x8ad1, "HP EliteBook 840 14 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
-> +	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
->   	SND_PCI_QUIRK(0x103c, 0x8a78, "HP Dev One", ALC285_FIXUP_HP_LIMIT_INT_MIC_BOOST),
->   	SND_PCI_QUIRK(0x103c, 0x8aa0, "HP ProBook 440 G9 (MB 8A9E)", ALC236_FIXUP_HP_GPIO_LED),
->   	SND_PCI_QUIRK(0x103c, 0x8aa3, "HP ProBook 450 G9 (MB 8AA1)", ALC236_FIXUP_HP_GPIO_LED),
+[..]
+>   arch/arm/configs/at91_dt_defconfig        |  10 +-
+[..]
+>   arch/arm/configs/sama5_defconfig          |   8 +-
+>   arch/arm/configs/sama7_defconfig          |   8 +-
+[..]
+
+For at91:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Thanks, best regards,
+   Nicolas
+
+-- 
+Nicolas Ferre

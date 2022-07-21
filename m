@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0618557D08F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2347B57D083
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiGUQCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S230412AbiGUQBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiGUQCI (ORCPT
+        with ESMTP id S229510AbiGUQBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:02:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9959D87C19;
-        Thu, 21 Jul 2022 09:02:07 -0700 (PDT)
+        Thu, 21 Jul 2022 12:01:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F1758876;
+        Thu, 21 Jul 2022 09:01:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658419327; x=1689955327;
+  t=1658419305; x=1689955305;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TLgsJjRByhDdYcQIOFE4TYOytMD2wruMCKk+/mfVKmU=;
-  b=K8vGNM2IHVmcm5SpnWhk/+VM19W6mpRb+OTcruR6l8u97AeUX42ItWyr
-   3AL2mGxxTB9MuwxgDf/gmOwQDPrtVBzl626RFjHHwzXPt/xzCERRGuZOh
-   30vXyQEHiyuobN6tXOnw5o6U57RSVXXr/Zk28Q1uIJ6PI3dIse7vyWI3r
-   LklHnNKuSiCJ87d5cow3nXVhq8zWRiib7QUbt72wtEi3u+Nqi2G7c0+ao
-   P7pYvCnHH9wF8Lo4r3JKWRov4gcFdn+m1j+TldbBfUCayEp7a5J1GodSp
-   q/MyBHhXjVudFVXz1ocU7pvmkMNnxKFmSkdl84KooWsZRofPgGPeofYkb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="288255781"
+  bh=IxIOJp2Qbj+WW3trb3/dQrpMihcnTdPMAtB9cP4gT5k=;
+  b=m19b/MDRaPbVE+V5aAdWfPMeDgKtw3XCNebbXTwyoHDLVphZTzekl8jP
+   75fKkGGLE6myER+53DjpO7fNUJIZSeCgXnpk2noQ90vzw+RwE/23WXB+m
+   O9r97oTqdsdyq/R6hQcftd7WYlwgdpxvN+oytCGySw6hqm/Gs218zeepg
+   5wisXag0wYbopFNSz3aL9bIN9FbuXdppZ+Y+0/56dxSqmC1DD8Wh+SkQx
+   vFxu8zZkR52/mETdI8gQ0MIxnQ31mU2qJm6dD3/H+aN1H09SLsPnu120q
+   zYtM4HO4L9DUmoslL9IEKRKHtSix4VOQwWjT5iVRWsyGZkzYRbLSN8qQ8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="373389478"
 X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
-   d="scan'208";a="288255781"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 09:01:45 -0700
+   d="scan'208";a="373389478"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 09:01:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
-   d="scan'208";a="666337450"
+   d="scan'208";a="598512084"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Jul 2022 09:01:41 -0700
+  by orsmga002.jf.intel.com with ESMTP; 21 Jul 2022 09:01:42 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 26LG1cra003918;
-        Thu, 21 Jul 2022 17:01:40 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 26LG1crb003918;
+        Thu, 21 Jul 2022 17:01:41 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -53,9 +53,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Nikolay Aleksandrov <razor@blackwall.org>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/4] bitmap: add a couple more helpers to work with arrays of u64s
-Date:   Thu, 21 Jul 2022 17:59:48 +0200
-Message-Id: <20220721155950.747251-3-alexandr.lobakin@intel.com>
+Subject: [PATCH net-next 3/4] lib/test_bitmap: cover explicitly byteordered arr64s
+Date:   Thu, 21 Jul 2022 17:59:49 +0200
+Message-Id: <20220721155950.747251-4-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220721155950.747251-1-alexandr.lobakin@intel.com>
 References: <20220721155950.747251-1-alexandr.lobakin@intel.com>
@@ -70,148 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two new functions to work on arr64s:
-
-* bitmap_arr64_size() - takes number of bits to be stored in arr64
-  and returns number of bytes required to store such arr64, can be
-  useful when allocating memory for arr64 containers;
-* bitmap_validate_arr64{,_type}() - takes pointer to an arr64 and
-  its size in bytes, plus expected number of bits and array
-  Endianness. Ensures that the size is valid (must be a multiply
-  of `sizeof(u64)`) and no bits past the number is set (for the
-  specified byteorder).
+When testing converting bitmaps <-> arr64, test Big and Little
+Endianned variants as well to make sure it works as expected on
+all platforms.
+Also, use more complex bitmap_validate_arr64_type() instead of just
+checking the tail. It will handle different Endiannesses correctly
+(note we don't pass `sizeof(arr)` to it as we poison it with 0xa5).
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/linux/bitmap.h | 22 ++++++++++++++-
- lib/bitmap.c           | 63 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 84 insertions(+), 1 deletion(-)
+ lib/test_bitmap.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-index 95408d6e0f94..14add46e06e4 100644
---- a/include/linux/bitmap.h
-+++ b/include/linux/bitmap.h
-@@ -7,7 +7,8 @@
- #include <linux/align.h>
- #include <linux/bitops.h>
- #include <linux/find.h>
--#include <linux/limits.h>
-+#include <linux/math.h>
-+#include <linux/overflow.h>
- #include <linux/string.h>
- #include <linux/types.h>
- 
-@@ -76,6 +77,9 @@ struct device;
-  *  bitmap_to_arr32(buf, src, nbits)            Copy nbits from buf to u32[] dst
-  *  bitmap_to_arr64(buf, src, nbits)            Copy nbits from buf to u64[] dst
-  *  bitmap_to_arr64_type(buf, src, nbits, type)  Copy nbits to {u,be,le}64[] dst
-+ *  bitmap_validate_arr64_type(buf, len, nbits, type)  Validate {u,be,le}64[]
-+ *  bitmap_validate_arr64(buf, len, nbits)      Validate u64[] buf of len bytes
-+ *  bitmap_arr64_size(nbits)                    Get size of u64[] arr for nbits
-  *  bitmap_get_value8(map, start)               Get 8bit value from map at start
-  *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
-  *
-@@ -317,6 +321,8 @@ void __bitmap_from_arr64_type(unsigned long *bitmap, const void *buf,
- 			      unsigned int nbits, u32 type);
- void __bitmap_to_arr64_type(void *arr, const unsigned long *buf,
- 			    unsigned int nbits, u32 type);
-+int bitmap_validate_arr64_type(const void *buf, size_t len, size_t nbits,
-+			       u32 type);
- 
- /*
-  * On 64-bit systems bitmaps are represented as u64 arrays internally. On LE32
-@@ -358,6 +364,20 @@ static __always_inline void bitmap_to_arr64_type(void *buf,
- 	bitmap_from_arr64_type((bitmap), (buf), (nbits), BITMAP_ARR_U64)
- #define bitmap_to_arr64(buf, bitmap, nbits)				\
- 	bitmap_to_arr64_type((buf), (bitmap), (nbits), BITMAP_ARR_U64)
-+#define bitmap_validate_arr64(buf, len, nbits)				\
-+	bitmap_validate_arr64_type((buf), (len), (nbits), BITMAP_ARR_U64)
-+
-+/**
-+ * bitmap_arr64_size - determine the size of array of u64s for a number of bits
-+ * @nbits: number of bits to store in the array
-+ *
-+ * Returns the size in bytes of a u64s-array needed to carry the specified
-+ * number of bits.
-+ */
-+static inline size_t bitmap_arr64_size(size_t nbits)
-+{
-+	return array_size(BITS_TO_U64(nbits), sizeof(u64));
-+}
- 
- static inline bool bitmap_and(unsigned long *dst, const unsigned long *src1,
- 			const unsigned long *src2, unsigned int nbits)
-diff --git a/lib/bitmap.c b/lib/bitmap.c
-index e660077f2099..5ad6f18f27dc 100644
---- a/lib/bitmap.c
-+++ b/lib/bitmap.c
-@@ -1613,3 +1613,66 @@ void __bitmap_to_arr64_type(void *buf, const unsigned long *bitmap,
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index 98754ff9fe68..8a44290b60ba 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -585,7 +585,7 @@ static void __init test_bitmap_arr32(void)
  	}
  }
- EXPORT_SYMBOL(__bitmap_to_arr64_type);
+ 
+-static void __init test_bitmap_arr64(void)
++static void __init test_bitmap_arr64_type(u32 type)
+ {
+ 	unsigned int nbits, next_bit;
+ 	u64 arr[EXP1_IN_BITS / 64];
+@@ -594,9 +594,11 @@ static void __init test_bitmap_arr64(void)
+ 	memset(arr, 0xa5, sizeof(arr));
+ 
+ 	for (nbits = 0; nbits < EXP1_IN_BITS; ++nbits) {
++		int res;
 +
-+/**
-+ * bitmap_validate_arr64_type - perform validation of a u64-array bitmap
-+ * @buf: array of u64/__be64/__le64, the dest bitmap
-+ * @len: length of the array, in bytes
-+ * @nbits: expected/supported number of bits in the bitmap
-+ * @type: expected array type (%BITMAP_*64)
-+ *
-+ * Returns 0 if the array passed the checks (see below), -%EINVAL otherwise.
-+ */
-+int bitmap_validate_arr64_type(const void *buf, size_t len, size_t nbits,
-+			       u32 type)
+ 		memset(bmap2, 0xff, sizeof(arr));
+-		bitmap_to_arr64(arr, exp1, nbits);
+-		bitmap_from_arr64(bmap2, arr, nbits);
++		bitmap_to_arr64_type(arr, exp1, nbits, type);
++		bitmap_from_arr64_type(bmap2, arr, nbits, type);
+ 		expect_eq_bitmap(bmap2, exp1, nbits);
+ 
+ 		next_bit = find_next_bit(bmap2, round_up(nbits, BITS_PER_LONG), nbits);
+@@ -604,17 +606,21 @@ static void __init test_bitmap_arr64(void)
+ 			pr_err("bitmap_copy_arr64(nbits == %d:"
+ 				" tail is not safely cleared: %d\n", nbits, next_bit);
+ 
+-		if ((nbits % 64) &&
+-		    (arr[(nbits - 1) / 64] & ~GENMASK_ULL((nbits - 1) % 64, 0)))
+-			pr_err("bitmap_to_arr64(nbits == %d): tail is not safely cleared: 0x%016llx (must be 0x%016llx)\n",
+-			       nbits, arr[(nbits - 1) / 64],
+-			       GENMASK_ULL((nbits - 1) % 64, 0));
++		res = bitmap_validate_arr64_type(arr, bitmap_arr64_size(nbits),
++						 nbits, type);
++		expect_eq_uint(nbits ? 0 : -EINVAL, res);
+ 
+ 		if (nbits < EXP1_IN_BITS - 64)
+ 			expect_eq_uint(arr[DIV_ROUND_UP(nbits, 64)], 0xa5a5a5a5);
+ 	}
+ }
+ 
++static void __init test_bitmap_arr64(void)
 +{
-+	size_t word = (nbits - 1) / BITS_PER_TYPE(u64);
-+	u32 pos = (nbits - 1) % BITS_PER_TYPE(u64);
-+	const union {
-+		__be64	be;
-+		__le64	le;
-+		u64	u;
-+	} *arr = buf;
-+	u64 last;
-+
-+	/* Must consist of 1...n full u64s */
-+	if (!len || len % sizeof(u64))
-+		return -EINVAL;
-+
-+	/*
-+	 * If the array is shorter than expected, assume we support
-+	 * all of the bits set there
-+	 */
-+	if (word >= len / sizeof(u64))
-+		return 0;
-+
-+	switch (type) {
-+#ifdef __LITTLE_ENDIAN
-+	case BITMAP_ARR_BE64:
-+		last = be64_to_cpu(arr[word].be);
-+		break;
-+#else
-+	case BITMAP_ARR_LE64:
-+		last = le64_to_cpu(arr[word].le);
-+		break;
-+#endif
-+	default:
-+		last = arr[word].u;
-+		break;
-+	}
-+
-+	/* Last word must not contain any bits past the expected number */
-+	if (last & ~GENMASK_ULL(pos, 0))
-+		return -EINVAL;
-+
-+	/*
-+	 * If the array is longer than expected, make sure all the bytes
-+	 * past the expected length are zeroed
-+	 */
-+	len -= bitmap_arr64_size(nbits);
-+	if (len && memchr_inv(&arr[word + 1], 0, len))
-+		return -EINVAL;
-+
-+	return 0;
++	for (u32 type = 0; type < __BITMAP_ARR_TYPE_NUM; type++)
++		test_bitmap_arr64_type(type);
 +}
-+EXPORT_SYMBOL(bitmap_validate_arr64_type);
++
+ static void noinline __init test_mem_optimisations(void)
+ {
+ 	DECLARE_BITMAP(bmap1, 1024);
 -- 
 2.36.1
 

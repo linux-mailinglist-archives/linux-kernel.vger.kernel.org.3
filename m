@@ -2,153 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A8357C829
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272FC57C82A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiGUJwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S232542AbiGUJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiGUJww (ORCPT
+        with ESMTP id S229663AbiGUJxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:52:52 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2108.outbound.protection.outlook.com [40.107.114.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B537B7AF
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:52:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GUA6lY11bcUZKGD46oJUr1tmBovxEoeQwZaaedVel7jtSsBZejNdSfjKLb7+VcKohYgxNZwSQEJUvizJkElVUjgeAayB/+9jbffFIeGCrUBVtj+jHHM0VhI7Hj4rMWSGQ/5WY3ZDaP40tk5H5XaphHexTCGAmU8FLbr1fnh0+WlRyxJ0W71mgh7DevKyf3yaoNCPT/7SPn2LgfC/G+gFsTEjfmR0FSBn2e0Ip82sobyah8ZdYOaEHPW8IV9DleWRi6cJgl+tdnK5KNtVB49VrkhuyAErZgAJnkKSbtF+3LWLWvOuN4Gmro60HikZqrfctWGWwxF28QfHGIYuaix3ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BHbAM3sOiOJOiPY+rl3WIr/TIS26Q/1IC2Yoiiefspw=;
- b=iu10lXnTLVy3zuq330tAhLWkJbBPtl44j0AukuCVKXlFdlRJrHkh8NXOgzmL0efZQ3kWzZqYu4JIlvSipJF/vfOzG+u+f3jU70ectdz0zbGrtQaf9cfME5fr8599C70BgKIwFOj+pUueXN+Z3tPrdv32wefwa+iEijKMSdeVDoIuAx9x49HDdGw7THyieuLqQmS/k69MRlBocOkhbsVHRKuUv/tfxQQja5gMfncL1h4fEE6kAVMT6tLo9yH14fDyrp6txuECYJRpZa6YpLs0/XY3QZSolem3L8ngJs3rMjTUy0CyRhsdYbQoZIsNrG3cufRLcpCNP8DyXMGis4TkFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BHbAM3sOiOJOiPY+rl3WIr/TIS26Q/1IC2Yoiiefspw=;
- b=ku2fysWz7NWNqD/QmHT05ZQ8/UeMZQxwNn9PGNM7oHCaYLbba4KoaZSc3Yq/2rBi4irgnlIeswKZoLyj4SgHsS3kHanlTOQMbDUCW9aIY4qLmU4lIydQ6zQaGfb19Cd7vR3Y2rIJVAGFCG3BUnfixxT7k3tDLv5i1PixHqD+PRA=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by OS3PR01MB8164.jpnprd01.prod.outlook.com (2603:1096:604:176::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Thu, 21 Jul
- 2022 09:52:48 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::b046:d8a3:ac9c:75b5]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::b046:d8a3:ac9c:75b5%4]) with mapi id 15.20.5438.025; Thu, 21 Jul 2022
- 09:52:48 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>
-Subject: RE: [PATCH 5/6] mtd: spi-nor: add generic flash driver
-Thread-Topic: [PATCH 5/6] mtd: spi-nor: add generic flash driver
-Thread-Index: AQHYnOb6STy+XODYIEqdWdLkpni6C62IlFOg
-Date:   Thu, 21 Jul 2022 09:52:48 +0000
-Message-ID: <OS0PR01MB5922F173C180E49273BEECB186919@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20220513133520.3945820-6-michael@walle.cc>
- <202205132220.uRTFaqNA-lkp@intel.com> (raw)
- <e6b22ad3b427770625aa56a4fe700e5c@walle.cc>
-In-Reply-To: <e6b22ad3b427770625aa56a4fe700e5c@walle.cc>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2fd559c8-dd84-48f2-55a8-08da6afec50a
-x-ms-traffictypediagnostic: OS3PR01MB8164:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VJ/c9ml5F7RrzOq1jXo1BWIrAcyTU4lp107mYSwcuuctWcNf1YctHi8sHGzhmXOmOfvY4B4eFqgClFzw+kxf+0jeYyrSAxxCjDgwfrWzD4x9vb8wuciV1jWFBTHuarHj6JkY4jZ7LiXllvSbc+z/U7csVbmiWfcwS+SQAXny6h4nmjkn0rtbtAVFXOTIBBlI9XKvZMIEaC3P0DpuwJAd9PeLorOQtq/9o2Vf7Nt7YgNWjQOwbdCIVHNIl4Fp4oFBuHRbIVqvvFHDtQzVFKb/p1a17yIHMZdyP8GuLsEz+LSUFnv+vyy54u8vS98gDqifKPUvtLMMjovbVrfa/v6vK0ex2yC0Ce74GkIS94iWBypqHXOTx42mw7vgJtDAJ91YScjr59hhdjdimC8HqohdC2W95QYrKPE/Ipmoj0rFtdjiPhaCjSQmcA2i0gi3+HDhEJxSZmPawkTIwy2rZ1epUhaQYkDzpLv826AWQRqWTRKRob503dZUB0hdy6dIPlKAP3jfdn8GMDu8gniWYQxLkzM608pWwrAvZfLtXc1Eimxco9+RmiwqjaW8Z1uj7OLQwB5C3goot2PSRwuqhbtHK2vAscTOxjX0ZHeBUEjTX/R086NE9rfUlJ97RC1SUhxcncyVmfcQhE1mJc+X/JQBDWIfAAsEGj0omz/XaTLuCbaQ6/zU3CWUYltDbKzdIBlNsG6hv5LfLBybSiCrIDmfinAUSrCavHeWxJ/BEgIlc7hicWvwBGeuMpn68S0UsQGuAa1wmhd6ZSEkbNXRS5X2WEx/1a8YjQPzDv5LpHC1J+jxO8VM1mfVwgT8wCs1UUx5QIwoheLXdDGK+Ha5bBAvYg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(122000001)(478600001)(41300700001)(38070700005)(71200400001)(6506007)(9686003)(26005)(7696005)(38100700002)(186003)(83380400001)(316002)(66446008)(33656002)(2906002)(8936002)(8676002)(4744005)(5660300002)(52536014)(6916009)(86362001)(55016003)(4326008)(64756008)(66556008)(66476007)(66946007)(54906003)(76116006)(41533002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AMqAJwnmXyMgdUMtHKXaaCU/BeUHwjwgK+yoApOoGyj0IyJl/SB3fiRTvpJ/?=
- =?us-ascii?Q?KH3Dsg2Q/YViMdjOJHNxHId5mL4XufuVlIe7zKlO7eyuEFtBalpBFYi104oE?=
- =?us-ascii?Q?jsQtENnRpS0XMZdejgxiqquaObGAqtbZdaptuOiCi1ZwE97DPcScC6+FCG7a?=
- =?us-ascii?Q?sSL37pl1F49oLfKyUGLHHX9dsltAHVERSXSLaofjY/0Ca78hrWQBeMOjwuh1?=
- =?us-ascii?Q?298pkj4TizT3S7AYBG6He8xkCr4Q31jXnZ5jGiCPxVaVzfMrhpzNVU6/rES6?=
- =?us-ascii?Q?aBuPp+PSALKfkAtc2wHyR0i23gMN0gSu0rn7rm7CTHDuDx3q8rtca8ib2Z05?=
- =?us-ascii?Q?duTLPUyLoK5iGejF6xYgesDUnRbX2hJxWMr3FADgfSd5PoSMK2hsA1s0m8ow?=
- =?us-ascii?Q?lSe4V/DI0xzHRHyvyE02GaydZvDa15jz96winFchSYZQmEJzUh68QekJacjN?=
- =?us-ascii?Q?0g8VO2WxuQbf6II5KwRZd08lUTRGofDL9kh76qSIIwAkZnVv/xttR95ZSH2r?=
- =?us-ascii?Q?Y+uSWU01DovHsol8RVqjOzZ+Ke7dRjtee7aZNajj1xgAYpSEzXeDaaWXAfuT?=
- =?us-ascii?Q?pL58YEkoJmgrbuWEJ2qVFOD0Zmftv4mGHDj6bXtao9wR0/R24oGkeQq93dE1?=
- =?us-ascii?Q?6wlqCl6S046cYfDcqFTc1uTZOTCNEGTvy63oqibqxh3JkLeuk1oWRxji/r7g?=
- =?us-ascii?Q?R8TU8ZT7N35gyKw/FzGki0m3Ql9HgVg9E2Bx+bPaG/CHvZHI9Xuk36127yuV?=
- =?us-ascii?Q?AvlCJAInANMohuJTKb0l+pLgnrTt+TC8t/oHsZhgkzDp+3yySFH3iVhiubHr?=
- =?us-ascii?Q?6vEIVIXCzcW64fEwjvs0T2gy2ySA3gP8e5V25BAf6bRVlQD5mYMxbfyMv4Sq?=
- =?us-ascii?Q?eT+kWNS6f/e3eXvtzGElPu1iD2QTsxPlOD4Nfcjr4N6wLZPqfNmOAykpOmKY?=
- =?us-ascii?Q?1aTs2R09beerQzBHopB7dgfHyL9fE/5ovXBn1gt45FyHcrbbF9vRIkZsIKJf?=
- =?us-ascii?Q?NYqkbdG/hNBzBNVxwVmhgitybvJue5enl6sD55CrTCVEZ0dllv+5q7k6IZNc?=
- =?us-ascii?Q?ksNrOaFou/Yo1Gzwa/RCpbd5opc5192qTnNJujQZZDMfo0pfW0SWbE14A7CG?=
- =?us-ascii?Q?OhAFgTK5tdOmFij0oDh+aEFSrNR4wJh9NlhPCsCaZRfhstsGPXkiGryAoowB?=
- =?us-ascii?Q?kTXFqASjl1BLTSCmo195PtVqxkjA2oSJVA7MTz70Vl9Cds9JPVumyL7ZRaUM?=
- =?us-ascii?Q?bCA52VWDc/KIjYLQaNc2WP1QsmdusxLVNbidY7G+lPgFe+/6vZuqyeQdc8Ee?=
- =?us-ascii?Q?DriS10i3JEqolO0M0/5b9wfR9/6HjP0xFAZ8U31sYZGYjUbhXyG9CAOn3U1w?=
- =?us-ascii?Q?LeG8U32+d6u6CYpQvCDQZGzEV/OEwtt6oBA5Zp/dVn4cL+vfnHmR/Rd0asFU?=
- =?us-ascii?Q?/5SQjoMYl/cO8wB/hORBz8YaoIa5MKqT8OUATGL1sDfkbvpKl+3LWpre5j2m?=
- =?us-ascii?Q?YUt+EcFALRfInBtK/5LJe1Zo2ALHHWkb75qJ70HFQJt0fKcolKmxnoC0VgzC?=
- =?us-ascii?Q?/NRR7IKuNfy1cyR4N+emtMrKyrwWIkbk50HqPDRczqn7dT3/ZrswhDOP9iJr?=
- =?us-ascii?Q?jA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fd559c8-dd84-48f2-55a8-08da6afec50a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 09:52:48.5748
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qEedAuCyjVh26YeGRplGCnaJRgMeTClveSpXvKnmQMX5WS9H9CLy3k5obIMP5lUvnLdGc0nTlGMwRrUrWavF6/lkvnFz8Pe+daJE7UU4Ib0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8164
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 05:53:18 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 082F881B0E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:53:13 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9L9Idlipk0sAA--.307S2;
+        Thu, 21 Jul 2022 17:53:01 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] LoongArch: Fix wrong "ROM Size" of boardinfo
+Date:   Thu, 21 Jul 2022 17:53:01 +0800
+Message-Id: <1658397181-2095-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxv9L9Idlipk0sAA--.307S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF1Dur4DJF1xKFWUZF45GFg_yoW8urWUpr
+        43Aws7Grs8Wrn3u34rX348Wr45KF9xGFn2qa17Ar4xArZxWr12gw40vFyfuFW2y3yrGFW0
+        qa4fKa1FgF4DG3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8uwCF04k2
+        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUyD7aUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael Walle,
+We can see the "ROM Size" is different in the following outputs:
 
-> Subject: Re: [PATCH 5/6] mtd: spi-nor: add generic flash driver
->=20
-> Hi,
->=20
-> >> +
-> >> +	/* Fallback to a generic flash described only by its SFDP data. */
-> >> +	if (!info) {
-> >> +		ret =3D spi_nor_check_sfdp_signature(nor);
-> >> +		if (!ret)
-> >> +			info =3D &spi_nor_generic_flash;
-> >> +	}
-> >
-> > May be this can be combined as
-> >
-> >  	if (!info && (!spi_nor_check_sfdp_signature(nor)))
-> > 		info =3D &spi_nor_generic_flash;
->=20
-> While this is the behavior, I don't like (1) calling functions in the
-> condition and (2) rely on the && and || semantics, i.e.
-> to just call the second part if the first is true/false.
+[root@linux loongson]# cat /sys/firmware/loongson/boardinfo
+BIOS Information
+Vendor                  : Loongson
+Version                 : vUDK2018-LoongArch-V2.0.pre-beta8
+ROM Size                : 63 KB
+Release Date            : 06/15/2022
 
-OK fine. I recently got a review comment from mainline for optimizing the n=
-umber
-of lines. That is the reason for suggestion.
+Board Information
+Manufacturer            : Loongson
+Board Name              : Loongson-LS3A5000-7A1000-1w-A2101
+Family                  : LOONGSON64
 
-Cheers,
-biju
+[root@linux loongson]# dmidecode | head -11
+...
+Handle 0x0000, DMI type 0, 26 bytes
+BIOS Information
+	Vendor: Loongson
+	Version: vUDK2018-LoongArch-V2.0.pre-beta8
+	Release Date: 06/15/2022
+	ROM Size: 4 MB
+
+According to "BIOS Information (Type 0) structure" in the SMBIOS
+Reference Specification [1], it shows 64K * (n+1) is the size of
+the physical device containing the BIOS if the size is less than
+16M.
+
+Additionally, we can see the related code in dmidecode [2]:
+
+  u64 s = { .l = (code1 + 1) << 6 };
+
+So the output of dmidecode is correct, the output of boardinfo
+is wrong, fix it.
+
+By the way, at present no need to consider the size is 16M or
+greater on LoongArch, because it is usually 4M or 8M which is
+enough to use.
+
+[1] https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.pdf
+[2] https://git.savannah.nongnu.org/cgit/dmidecode.git/tree/dmidecode.c#n347
+
+Fixes: 628c3bb40e9a ("LoongArch: Add boot and setup routines")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/loongarch/kernel/setup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index c74860b..8f5c2f9 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -126,7 +126,7 @@ static void __init parse_bios_table(const struct dmi_header *dm)
+ 	char *dmi_data = (char *)dm;
+ 
+ 	bios_extern = *(dmi_data + SMBIOS_BIOSEXTERN_OFFSET);
+-	b_info.bios_size = *(dmi_data + SMBIOS_BIOSSIZE_OFFSET);
++	b_info.bios_size = (*(dmi_data + SMBIOS_BIOSSIZE_OFFSET) + 1) << 6;
+ 
+ 	if (bios_extern & LOONGSON_EFI_ENABLE)
+ 		set_bit(EFI_BOOT, &efi.flags);
+-- 
+2.1.0
+

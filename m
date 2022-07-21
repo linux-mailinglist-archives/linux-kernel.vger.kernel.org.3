@@ -2,87 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1F357C388
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327B457C385
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiGUEhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 00:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S231139AbiGUEgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 00:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbiGUEhF (ORCPT
+        with ESMTP id S229569AbiGUEgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 00:37:05 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06FD7756C;
-        Wed, 20 Jul 2022 21:36:58 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 7FD6CDFFB9;
-        Wed, 20 Jul 2022 21:36:58 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3Mz-hSBnJr9K; Wed, 20 Jul 2022 21:36:57 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658378217; bh=6y3+NTu0dXrI4QCo6VqX1YmHK03E+ttdfPlbAoyczPM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ze+47WMhj54H9O+GFby1oD4C2hEC9e2Syv5AhaN+ux4EVcrF3dDMUflB1X48O3z38
-         ficqBE5VNRDv6GF6F+9EOeN+9NRB3MuvDfP8efYZIvYvb5JWx66ki8di5kEa8fMcR+
-         vn1Cm0KVnWjPF7u990hc0iPT1/Jkmna/OcyAi/UNIPhs78DMqRKcZbnKujwU8koK1b
-         6hWaW/zDMqipysUk/QmzfO7SBI31HRL9aTwr2tXcpq4ADeYfx6nhGyUnulRcSvxIML
-         dE6iZedFPSs9V0SiQnJ/klUWgZh2lIOeECBTp9nnmDNM8UOLyKIx4oZLUUakkrg5QC
-         RkxHpBulDjTTA==
-To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v5 3/3] soc: imx: gpcv2: fix suspend/resume by setting GENPD_FLAG_IRQ_ON
-Date:   Thu, 21 Jul 2022 06:36:08 +0200
-Message-Id: <20220721043608.1527686-4-martin.kepplinger@puri.sm>
-In-Reply-To: <20220721043608.1527686-1-martin.kepplinger@puri.sm>
-References: <20220721043608.1527686-1-martin.kepplinger@puri.sm>
+        Thu, 21 Jul 2022 00:36:49 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF74201AA;
+        Wed, 20 Jul 2022 21:36:48 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id 70so707033pfx.1;
+        Wed, 20 Jul 2022 21:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v4NTWGXxo8g+KNPo4Ft3fUbFupiF219bG5Z9P6EjVAM=;
+        b=hfT2qHeqiG5Kb4oOr3IXP0rT+7Jq7+ug3X1cfRlbTDp8lLzP9ICRuyg8d8KQk7UQ6q
+         AyvXG54Ls++Q2MRGUbt2gDnaq+Wr66OdD9WkDNY+SgtXJkU6zvj2HeaXJmLwseSu9+2k
+         INOUNECQgzct0BgJ8u+BMyFjF6ZOtA1YdSQjwPSDrGXomeJao3YJLS8t/mdpt2SZICVY
+         cVfiklkY2fruiYqYZB4FmN2nbpIt40O3O0kMxQmAowVr2726cqDOgAf0D04RvKiFAVUs
+         oAfWsJqpMquQU95NIU0MIibyUtVhO+kSrQUNWJq6AuKXahUbQ3bQ2vhFxPmeX3E6Kyjh
+         9F9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=v4NTWGXxo8g+KNPo4Ft3fUbFupiF219bG5Z9P6EjVAM=;
+        b=Mm4E0n/S0hdieItJVs9WEpGd/h6xP3yTJzJ3NQ+D2uU5/FufFgYRxwl3dsAHV1z1yk
+         md9wxMCcYKhIrVMpad7aPpNUkiMbTUDCrXewLk2xyukpp/xgt/IrAm7sBE3ASCrUz6zQ
+         J3tDeVA2szBBAfLudke3/L0RNXXsfM0XhSnTAVqfxIwYgvEWCnshwLBN6eFK3jKJzoPg
+         Bfa9Qgefm3RqAb04/OQFYKhvRMcLeQw4SbU6oRGKnN7fJ9VvnvUYulehnxaa87oGal62
+         wXJE+6j7at1gxc8jUrPs2MNwIS3iZ9qGjJED6iFhSPar3jfRBiE3aLXjgs//h0fYlogC
+         g3TQ==
+X-Gm-Message-State: AJIora+qrTQVX75zBDLkk8OXRgR3/N7+N0ZqSa0uFQXNZ28DNeS5Be19
+        Kv6OdfLOevSftZnKGFEoteM=
+X-Google-Smtp-Source: AGRyM1v+L7N/IiaW2G+4lAwBELZV+Ka4l+68Jga7iZ0BvKg0esOYp6vOWbraKtfsi1zj5atku0oilw==
+X-Received: by 2002:a63:4042:0:b0:411:bbfe:e736 with SMTP id n63-20020a634042000000b00411bbfee736mr36804892pga.1.1658378208053;
+        Wed, 20 Jul 2022 21:36:48 -0700 (PDT)
+Received: from balhae.roam.corp.google.com ([2607:fb90:467:a1e4:c167:53fd:8047:7f62])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170902a38b00b0016bea2a0a8dsm450824pla.91.2022.07.20.21.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 21:36:47 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Subject: [PATCHSET 0/6] perf lock: Add contention subcommand (v1)
+Date:   Wed, 20 Jul 2022 21:36:38 -0700
+Message-Id: <20220721043644.153718-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For boards that use power-domains' power-supplies that need interrupts
-to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
-This will tell genpd to adjust accordingly. Currently it "only" sets the
-correct suspend/resume callbacks.
+Hello,
 
-This fixes suspend/resume on imx8mq-librem5 boards (tested) and
-imx8mq-evk (by looking at dts) and possibly more.
+It's to add a new subcommand 'contention' (shortly 'con') to perf lock.
 
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
----
- drivers/soc/imx/gpcv2.c | 3 +++
- 1 file changed, 3 insertions(+)
+The new subcommand is to handle the new lock:contention_{begin,end}
+tracepoints and shows lock type and caller address like below:
 
-diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-index 6383a4edc360..e058aed76602 100644
---- a/drivers/soc/imx/gpcv2.c
-+++ b/drivers/soc/imx/gpcv2.c
-@@ -1337,6 +1337,9 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
- 		regmap_update_bits(domain->regmap, domain->regs->map,
- 				   domain->bits.map, domain->bits.map);
- 
-+	if (of_parse_phandle(domain->dev->of_node, "power-supply", 0))
-+		domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
-+
- 	ret = pm_genpd_init(&domain->genpd, NULL, true);
- 	if (ret) {
- 		dev_err(domain->dev, "Failed to init power domain\n");
+  $ perf lock contention
+   contended   total wait     max wait     avg wait         type   caller
+
+         238      1.41 ms     29.20 us      5.94 us     spinlock   update_blocked_averages+0x4c
+           1    902.08 us    902.08 us    902.08 us      rwsem:R   do_user_addr_fault+0x1dd
+          81    330.30 us     17.24 us      4.08 us     spinlock   _nohz_idle_balance+0x172
+           2     89.54 us     61.26 us     44.77 us     spinlock   do_anonymous_page+0x16d
+          24     78.36 us     12.27 us      3.27 us        mutex   pipe_read+0x56
+           2     71.58 us     59.56 us     35.79 us     spinlock   __handle_mm_fault+0x6aa
+           6     25.68 us      6.89 us      4.28 us     spinlock   do_idle+0x28d
+           1     18.46 us     18.46 us     18.46 us      rtmutex   exec_fw_cmd+0x21b
+           3     15.25 us      6.26 us      5.08 us     spinlock   tick_do_update_jiffies64+0x2c
+   ...
+
+where rwsem:R stands for read access (down_read) for a rw-semaphore.
+Other types of lock access is obvious and it doesn't detect optimistic
+spinning on mutex yet.  This is just a base work for lock contention
+analysis and more will come later.
+
+You can get this from 'perf/lock-subcmd-v1' branch on
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (6):
+  perf lock: Fix a copy-n-paste bug
+  perf lock: Add flags field in the lock_stat
+  perf lock: Add lock aggregation enum
+  perf lock: Add 'contention' subcommand
+  perf lock: Add -k and -F options to 'contention' subcommand
+  perf lock: Support -t option for 'contention' subcommand
+
+ tools/perf/Documentation/perf-lock.txt |  23 +-
+ tools/perf/builtin-lock.c              | 403 ++++++++++++++++++++++---
+ 2 files changed, 391 insertions(+), 35 deletions(-)
+
+
+base-commit: 41d0914d861e82b4eeec16dd0f6109c311cf4c7e
 -- 
-2.30.2
+2.37.0.170.g444d1eabd0-goog
 

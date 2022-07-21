@@ -2,94 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E9B57D23B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9B157D241
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiGURLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S230169AbiGUROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGURLV (ORCPT
+        with ESMTP id S230129AbiGUROK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:11:21 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DBF86C05;
-        Thu, 21 Jul 2022 10:11:19 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id z132so1866466iof.0;
-        Thu, 21 Jul 2022 10:11:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fSQEs0HZT/Xo4GRuc/+cXwXUWYe3250eMC7wwm7xlLA=;
-        b=fAcVC3WfjtBK9m6o70UQQybxracHTmVt5qQpnruhiihppBWTeCYM1m26bXM9vv+Q5s
-         nAbKkGG2hQiY2SLAyNfrn7aELmyn8smzs0yBBPlELvlX6x63N6kHyP+zSoWJDOXQCgj4
-         DHnkO27kev6FKqqH89GG8JhXxOr7NmtIzJXkiyx94KfseoZv63+93w7vYutcfFhTrk+e
-         pYbSIy7GMDwwQPDXMcmQDTdkA7WtEpUWtqQnCTBJToCxi0zbkQJAM6ps4YeZEq64+ffT
-         30KEquum88jZPby3XMqYp+h4fCwjbjx2z27sd0pRYaFJA1a8bO0pVj/ASq1/V+BngTGe
-         WV4g==
-X-Gm-Message-State: AJIora97UptJQWpuKoSacN3K4Y5fYFEH9ms9gz9GZfXNk0ihBOyRYw2J
-        Q6AhuAxL6/wZbIosgqtAVg==
-X-Google-Smtp-Source: AGRyM1ucM/EQx0eoqGUm5wI1e/jwVXy8rvyogOxt9R7tRyBHkIPkte+FCtzBASWtJVf3dZxlXaxt9w==
-X-Received: by 2002:a05:6638:3589:b0:33f:88f2:2545 with SMTP id v9-20020a056638358900b0033f88f22545mr21953911jal.229.1658423479176;
-        Thu, 21 Jul 2022 10:11:19 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t10-20020a02b18a000000b0032e2996cadesm1004329jah.66.2022.07.21.10.11.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 10:11:18 -0700 (PDT)
-Received: (nullmailer pid 1578546 invoked by uid 1000);
-        Thu, 21 Jul 2022 17:11:17 -0000
-Date:   Thu, 21 Jul 2022 11:11:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Subject: Re: [RESEND PATCH v2] dt-bindings: leds: skyworks,aat1290: convert
- to dtschema
-Message-ID: <20220721171117.GA1578234-robh@kernel.org>
-References: <20220721160611.250274-1-krzysztof.kozlowski@linaro.org>
+        Thu, 21 Jul 2022 13:14:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A7286C29;
+        Thu, 21 Jul 2022 10:14:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658423649; x=1689959649;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2VsP1VnPxrhHVMrqEWBHwDQJS/BpBEhQECyvetxj8xs=;
+  b=MNK4vwZsK4QL4TxSdrw8U4oOxGg+J1redBWZQRUw044/3DrmxL/gGmQ4
+   aTXekKij+tb+CutYHCgPTsWovRqIm9hvJmiuDvndSLE47Rp748Nl72JtB
+   Upnt4lnE2BJbWkxxe/NIfsEolvV0gjYUwqAiIZvsmBNLOM5tG8Bf+o4il
+   pKaNJwzZaw8zIloL991QdCShpOsZ/PnZcLw/RCggF1XZePMEr3x0pf7zD
+   DdZfokTyktwmWF3cC/cA+E3W4bWC1UPBA7z/PfBWcdKv7LxcTIfQ89+Ml
+   QkoyWzb7+KQ5qQzisM4S/o+dHqbh7/MSC9fgn7QWVc7FxzpxocibVWZ/S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="285875337"
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="285875337"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:12:17 -0700
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="573825972"
+Received: from vasantgx-mobl.amr.corp.intel.com (HELO [10.212.244.191]) ([10.212.244.191])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:12:15 -0700
+Message-ID: <ffb4ae72-7fd4-d2a0-df10-3969cf8ca07f@intel.com>
+Date:   Thu, 21 Jul 2022 10:12:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721160611.250274-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Content-Language: en-US
+To:     Marc Orr <marcorr@google.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
+References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
+ <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
+ <20220718172159.4vwjzrfthelovcty@black.fi.intel.com>
+ <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
+ <YtcCWfCQuEsVhH6W@zn.tnic>
+ <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+ <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
+ <YtcnQbiRgZPtR+rQ@zn.tnic> <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
+ <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 18:06:11 +0200, Krzysztof Kozlowski wrote:
-> Convert the Skyworks Solutions, Inc. AAT1290 Current Regulator bindings
-> to DT Schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> 
-> ---
-> 
-> Hi,
-> 
-> This is waiting on the lists for a month:
-> https://lore.kernel.org/all/20220620175033.130468-2-krzysztof.kozlowski@linaro.org/
-> 
-> so maybe it could be merged via LED or DT binding tree?
-> 
-> Best regards,
-> Krzysztof
-> ---
->  .../devicetree/bindings/leds/leds-aat1290.txt | 77 ---------------
->  .../bindings/leds/skyworks,aat1290.yaml       | 95 +++++++++++++++++++
->  2 files changed, 95 insertions(+), 77 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/leds/leds-aat1290.txt
->  create mode 100644 Documentation/devicetree/bindings/leds/skyworks,aat1290.yaml
-> 
+On 7/19/22 17:26, Marc Orr wrote:
+> - Dave's suggestion to "2. Boot some intermediate thing like a
+> bootloader that does acceptance ..." is pretty clever! So if upstream
+> thinks this FW-kernel negotiation is not a good direction, maybe we
+> (Google) can pursue this idea to avoid introducing yet another tag on
+> our images.
 
-Applied, thanks!
+I'm obviously speaking only for myself here and not for "upstream" as a
+whole, but I clearly don't like the FW/kernel negotiation thing.  It's a
+permanent pain in our necks to solve a very temporary problem.

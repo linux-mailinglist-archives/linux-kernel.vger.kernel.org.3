@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E06357CEE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB30457CEEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiGUP2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S230258AbiGUPaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiGUP2Q (ORCPT
+        with ESMTP id S229379AbiGUPaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:28:16 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82E67A51E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:28:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658417295; x=1689953295;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WZ59twi+Y234fwpfoBS9XgGliCsgnLhK4MhvmcDYmj0=;
-  b=leyOaD1LzkO3+Vbyv3JwSQQerckDYs14zCNhJsGBjqY37IErHh1cADgZ
-   Jvo6n3tq/2ZeSC6wtCybo6ODC8tTZ/S3q3ujJUN3hAEc4xHq0M+0uQ+0q
-   OTwijBp47oa0KV7fIgO7CmNE4OthJux2hfMxSsoIzi9i+1JlMwaAJwzLJ
-   RZl5OS/7VyFcEuPUFUnWZ//y5xgJgptGnI1lm1Nw4E2TeJdbY1pwDxrZs
-   63tUj7zk6iWhNhDyIGx1ECOTL8WdCd9rbVnRkj5xISij7K/zkgTV2ov5M
-   4jiM0otWJ6FL0rkPi3oZ+GJu2WycePJnAlcs5XKn9UsiXwjKfLTGsEkLV
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="312794154"
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="312794154"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 08:28:15 -0700
-X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
-   d="scan'208";a="656794382"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.149]) ([10.99.249.149])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 08:28:11 -0700
-Message-ID: <d8e8e5e5-001d-5f22-b22c-aaea16ed8719@linux.intel.com>
-Date:   Thu, 21 Jul 2022 17:28:09 +0200
+        Thu, 21 Jul 2022 11:30:15 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7865626ED;
+        Thu, 21 Jul 2022 08:30:09 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26L9eg42006844;
+        Thu, 21 Jul 2022 17:29:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=AI3xjtjTZIAaatsI0ZacNwbn9jQQKBbOlZvWXacEyzI=;
+ b=Ywh/qznhcuPD7PalYsxWAlC7nt9WTMTteEIqKBvKzjlkExXDHWgZmgtxO0QHXQSVXXTS
+ z5WY3s91IvM1NVIxEPOpjsiAcqTmUttLLhEroZsOPue5ZNX7NWl34EEuqiZbim9j9SR3
+ 3NCM4PQH6piaI2dYXwbvu6oAiCoU8XHnbeqKLJAkoKg2YSiuU4LUYwXI94g86SuHkt0s
+ SvpI28xhuy3vySrMAgLgcUb3jyohFwNDia0O6IZqCPFuHI8XDnC/EU3NzlA4/fw6UgmR
+ xNqNy8EkLilBIG9nl/E+UnMvowSsJDPRPKA6rUwbUkKJqIkR5pVZ/tZlQqAL0H2LQtGV dw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hbnp6du3c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 17:29:54 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1600110002A;
+        Thu, 21 Jul 2022 17:29:52 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1151B226FC6;
+        Thu, 21 Jul 2022 17:29:52 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Thu, 21 Jul
+ 2022 17:29:51 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <alexandre.torgue@foss.st.com>
+CC:     <robh+dt@kernel.org>, <mcoquelin.stm32@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>
+Subject: [PATCH 0/2] ARM: dts: stm32: add i2c in STM32MP13
+Date:   Thu, 21 Jul 2022 17:29:31 +0200
+Message-ID: <20220721152933.3805272-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as
- noinline
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, patches@lists.linux.dev,
-        alsa-devel@alsa-project.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-References: <20220720185228.3182663-1-nathan@kernel.org>
- <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
- <YtllwRY6F93uYRxz@sirena.org.uk>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <YtllwRY6F93uYRxz@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-21_18,2022-07-20_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,94 +71,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/21/2022 4:42 PM, Mark Brown wrote:
-> On Thu, Jul 21, 2022 at 02:25:20PM +0200, Amadeusz Sławiński wrote:
->> On 7/20/2022 8:52 PM, Nathan Chancellor wrote:
-> 
->>> This warning is also visible with allmodconfig on other architectures.
-> 
->> My first question would be what clang does differently in this configuration
->> (ARM) than in all other configurations (x86, etc.) and gcc.
-> 
-> See above from Nathan's commit message...
+This series adds all i2c nodes for the stm32mp131 platform and
+enables i2c1 and i2c5 on the stm32mp135 discovery board.
 
-Ah, missed that. Anyway, what about if we replace multiple calls to 
-guid_equal with lookup table and one call in loop?
+Alain Volmat (2):
+  ARM: dts: stm32: add i2c nodes into stm32mp131.dtsi
+  ARM: dts: stm32: enable i2c1 and i2c5 on stm32mp135f-dk.dts
 
-Do let me know if something like the following works and I will send it 
-as a proper patch:
+ arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 34 +++++++++
+ arch/arm/boot/dts/stm32mp131.dtsi        | 90 ++++++++++++++++++++++++
+ arch/arm/boot/dts/stm32mp135f-dk.dts     | 26 +++++++
+ 3 files changed, 150 insertions(+)
 
-diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
-index 3d46dd5e5bc4..ce157a8d6552 100644
---- a/sound/soc/intel/avs/path.c
-+++ b/sound/soc/intel/avs/path.c
-@@ -449,35 +449,39 @@ static int avs_modext_create(struct avs_dev *adev, 
-struct avs_path_module *mod)
-         return ret;
-  }
+-- 
+2.25.1
 
-+static int avs_probe_create(struct avs_dev *adev, struct 
-avs_path_module *mod)
-+{
-+       dev_err(adev->dev, "Probe module can't be instantiated by 
-topology");
-+       return -EINVAL;
-+}
-+
-+struct avs_module_create {
-+       guid_t *guid;
-+       int (*create)(struct avs_dev *adev, struct avs_path_module *mod);
-+};
-+
-+static struct avs_module_create avs_module_create[] = {
-+       { &AVS_MIXIN_MOD_UUID, avs_modbase_create },
-+       { &AVS_MIXOUT_MOD_UUID, avs_modbase_create },
-+       { &AVS_KPBUFF_MOD_UUID, avs_modbase_create },
-+       { &AVS_COPIER_MOD_UUID, avs_copier_create },
-+       { &AVS_MICSEL_MOD_UUID, avs_micsel_create },
-+       { &AVS_MUX_MOD_UUID, avs_mux_create },
-+       { &AVS_UPDWMIX_MOD_UUID, avs_updown_mix_create },
-+       { &AVS_SRCINTC_MOD_UUID, avs_src_create },
-+       { &AVS_AEC_MOD_UUID, avs_aec_create },
-+       { &AVS_ASRC_MOD_UUID, avs_asrc_create },
-+       { &AVS_INTELWOV_MOD_UUID, avs_wov_create },
-+       { &AVS_PROBE_MOD_UUID, avs_probe_create },
-+};
-+
-  static int avs_path_module_type_create(struct avs_dev *adev, struct 
-avs_path_module *mod)
-  {
-         const guid_t *type = &mod->template->cfg_ext->type;
-
--       if (guid_equal(type, &AVS_MIXIN_MOD_UUID) ||
--           guid_equal(type, &AVS_MIXOUT_MOD_UUID) ||
--           guid_equal(type, &AVS_KPBUFF_MOD_UUID))
--               return avs_modbase_create(adev, mod);
--       if (guid_equal(type, &AVS_COPIER_MOD_UUID))
--               return avs_copier_create(adev, mod);
--       if (guid_equal(type, &AVS_MICSEL_MOD_UUID))
--               return avs_micsel_create(adev, mod);
--       if (guid_equal(type, &AVS_MUX_MOD_UUID))
--               return avs_mux_create(adev, mod);
--       if (guid_equal(type, &AVS_UPDWMIX_MOD_UUID))
--               return avs_updown_mix_create(adev, mod);
--       if (guid_equal(type, &AVS_SRCINTC_MOD_UUID))
--               return avs_src_create(adev, mod);
--       if (guid_equal(type, &AVS_AEC_MOD_UUID))
--               return avs_aec_create(adev, mod);
--       if (guid_equal(type, &AVS_ASRC_MOD_UUID))
--               return avs_asrc_create(adev, mod);
--       if (guid_equal(type, &AVS_INTELWOV_MOD_UUID))
--               return avs_wov_create(adev, mod);
--
--       if (guid_equal(type, &AVS_PROBE_MOD_UUID)) {
--               dev_err(adev->dev, "Probe module can't be instantiated 
-by topology");
--               return -EINVAL;
--       }
-+       for (int i = 0; i < ARRAY_SIZE(avs_module_create); i++)
-+               if (guid_equal(type, avs_module_create[i].guid))
-+                       return avs_module_create[i].create(adev, mod);
-
-         return avs_modext_create(adev, mod);
-  }

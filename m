@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E811357CB8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 634F857CB83
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiGUNLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S234137AbiGUNKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbiGUNI7 (ORCPT
+        with ESMTP id S234132AbiGUNJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:08:59 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F80413FAF
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658408911; x=1689944911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2uKZEJQsehXBmfegRTdLkR14GGknjRcpexMkOtCqVKw=;
-  b=T84lUyfWQXsSdUGWypow4aThvKTaEZHEm1txrWW3vkiliE5dZycEgJFt
-   ybSOFDIL96k5Rrf0tJ+h/7U1t3EQofE+5bYFUkIhcsKzV9PgzwEbxeQAK
-   mSacQ8iJhcFIitxhDQYQWElb0TVOeui89XroOo1sAfUKpR7nAMH6B1lak
-   ivTjA2v1vdcy3Snth6oYtVVAWsUtdotV3kaK8ghLx97gTrp08oKUzy4rO
-   P0CuMpHDH/dTTXkVDLx5SZet1cFg/eAauda4jr0mb5sbBHp4fQ9pbGdHF
-   kH3Jms5A3uW3ruOI87ywSgtya/YROhEbzA96nx7DbGmnKCm1X3RKaiCmR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="373340071"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="373340071"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 06:08:30 -0700
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="656735336"
-Received: from mstrobel-mobl.ger.corp.intel.com (HELO intel.com) ([10.251.210.203])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 06:08:26 -0700
-Date:   Thu, 21 Jul 2022 15:08:20 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     daniel@ffwll.ch, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, airlied@linux.ie,
-        John.C.Harrison@intel.com, matthew.d.roper@intel.com,
-        matthew.brost@intel.com, andi.shyti@linux.intel.com,
-        zhou1615@umn.edu, michal.winiarski@intel.com,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/selftests: Fix comment typo
-Message-ID: <YtlPxPZ/BWATWL1J@alfio.lan>
-References: <20220716040520.31676-1-wangborong@cdjrlc.com>
+        Thu, 21 Jul 2022 09:09:51 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5835820E5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:09:38 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id i14so2691917yba.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=helfzrGgYuErFKUHoxu4xJhqLDpOC/RmZFHNZgYAfKo=;
+        b=Sx7jP9r3YT3aPeole6+tZCcgCvZuqY0xN8mk9Rs/YHsbEZEmuao10TL3q515Af3tiA
+         Cpw8+dZf7N0JnqL/ajolRjAktRS3LoWpZXs6TumaSiAJJTBJVDz88L9NII3YYgs3HqL9
+         oRjxaPFtsimYccxZ86AgGhd9ZctW6b5QdURBi8TEZs0QQZgBPb8I32AWEJB2W9JdXb+v
+         eftfmyRYN9EbQ0uJ61NqGaNRNt4GicrX2Fo8J9IlzONDsZuhaROt33+0ePSmN+yoc3Nw
+         nVf+ZjCLYKd8PoH29GixFdzeTo+2EpP4N6ZoTnF2QWQiNvjR/uXvkARnOKaIqg9M1koe
+         DQHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=helfzrGgYuErFKUHoxu4xJhqLDpOC/RmZFHNZgYAfKo=;
+        b=B2dPQ3k8jwWMF8dVO2Emh+8vnXVWvUlZJnHGIiFtcOGquJh0UrdyxRrriU/Z05dEZz
+         CYvvq15nNiZ/4W29+aFW4qEgdyCOWt/dNJCnviO4AZ1yWQvaPo92KXhoAVhh7Qo7KK0G
+         jYWZmZ/0kLuemwG7RlCXw27K0Tk6NuO0kcfzjdIbkFQOrWxoH0HffgXvGwuZyQ/Jd74q
+         pkZzBq/O+ywMiP9HNHr9ILPAeAYkk3VT/kfQq8G7Hy42v344DosTt5bxdzyjBhUPC0c9
+         e3AyOpaBjvSzCWVxs8Hh7FIs/I1w6KkR2d5VtxckNCwUpl5vzV9m3Y8R+2m8cxldxRx+
+         +E2Q==
+X-Gm-Message-State: AJIora/Qu/4ljVkraaH/wY7wzN+ikCChpGS8/ZRP525/OSnj/Gi9Hyoz
+        oFqva9i5lpErewbJfYy7Uj0a7n8iDZovjt8MZLlHQQ==
+X-Google-Smtp-Source: AGRyM1u2HXBoOdDRhhWpXvxbBfK5Qjy2aPfjbJTF/wn9rE9BeDWtwoRKtyLesAGosnz5RfL4p6l/+HIIEIXzWJv04FU=
+X-Received: by 2002:a25:3491:0:b0:66f:a7f5:f5dd with SMTP id
+ b139-20020a253491000000b0066fa7f5f5ddmr40578478yba.274.1658408977145; Thu, 21
+ Jul 2022 06:09:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220716040520.31676-1-wangborong@cdjrlc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com>
+ <CAG_fn=WR3s3UMh76+bibN0nUpZk9AS_M18=oxP+pc_vtqKt34A@mail.gmail.com> <20220720005950.fonulr4kkwbh6kbz@black.fi.intel.com>
+In-Reply-To: <20220720005950.fonulr4kkwbh6kbz@black.fi.intel.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 21 Jul 2022 15:09:00 +0200
+Message-ID: <CAG_fn=W92Ug+=pS2SPZcSaEWSOagTE99TGT8Hi-KRxYdFzbonQ@mail.gmail.com>
+Subject: Re: [PATCHv5 00/13] Linear Address Masking enabling
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Wed, Jul 20, 2022 at 2:59 AM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> On Mon, Jul 18, 2022 at 07:39:22PM +0200, Alexander Potapenko wrote:
+> > On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
+> > <kirill.shutemov@linux.intel.com> wrote:
+> > >
+> > > Linear Address Masking[1] (LAM) modifies the checking that is applied to
+> > > 64-bit linear addresses, allowing software to use of the untranslated
+> > > address bits for metadata.
+> > >
+> > > The patchset brings support for LAM for userspace addresses.
 
-On Sat, Jul 16, 2022 at 12:05:20PM +0800, Jason Wang wrote:
-> Fix the double `wait' typo in comment.
-> 
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-
-Few warnings for this patch:
-
- 1. you missed Rodrigo's r-b tag.
- 2. please add a counter to your patch, this would be [PATCH v2]
- 3. please add a changelog, as this is a single patch, do it
-    after the '---'
-
-No need to resend, just keep the three notes in mind for your
-next patches. Anyway, thanks for the fix and as I am at it:
-
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-
-Thanks,
-Andi
-
-> ---
->  drivers/gpu/drm/i915/selftests/i915_request.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/selftests/i915_request.c b/drivers/gpu/drm/i915/selftests/i915_request.c
-> index c56a0c2cd2f7..ec05f578a698 100644
-> --- a/drivers/gpu/drm/i915/selftests/i915_request.c
-> +++ b/drivers/gpu/drm/i915/selftests/i915_request.c
-> @@ -971,7 +971,7 @@ static struct i915_vma *empty_batch(struct drm_i915_private *i915)
->  	if (err)
->  		goto err;
->  
-> -	/* Force the wait wait now to avoid including it in the benchmark */
-> +	/* Force the wait now to avoid including it in the benchmark */
->  	err = i915_vma_sync(vma);
->  	if (err)
->  		goto err_pin;
-> -- 
-> 2.35.1
+For what it's worth, there's an LLVM bot running basic HWASan tests on
+QEMU with the latest LAM patches here:
+https://lab.llvm.org/buildbot/#/builders/169
+So far the bot is happy, giving us some sense of LAM_U57 support being sane.
+I'll add some tags to individual patches.

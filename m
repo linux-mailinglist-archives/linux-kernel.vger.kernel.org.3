@@ -2,110 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EEE057C461
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B45957C434
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbiGUG1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S231615AbiGUGMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiGUG1n (ORCPT
+        with ESMTP id S229498AbiGUGLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:27:43 -0400
-X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Jul 2022 23:27:42 PDT
-Received: from 5.mo581.mail-out.ovh.net (5.mo581.mail-out.ovh.net [178.32.120.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390496D2DE
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:27:42 -0700 (PDT)
-Received: from player758.ha.ovh.net (unknown [10.109.156.29])
-        by mo581.mail-out.ovh.net (Postfix) with ESMTP id BBEC923AF6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:11:49 +0000 (UTC)
-Received: from RCM-web2.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player758.ha.ovh.net (Postfix) with ESMTPSA id 6F8EF2CD0FAD7;
-        Thu, 21 Jul 2022 06:11:38 +0000 (UTC)
+        Thu, 21 Jul 2022 02:11:55 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C696270E65;
+        Wed, 20 Jul 2022 23:11:54 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id q43-20020a17090a17ae00b001f1f67e053cso533853pja.4;
+        Wed, 20 Jul 2022 23:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qmTXLgSYfe8i7w6gO6nOarXTiH3i5mk/SE0uP1HtN2c=;
+        b=DsLS6IZYhi/zohzXQDQOxiMx/WmBzMUtQFNI2iCoM1lrbRT9t2zXVw6hF/x7pS0CA4
+         A0X7H/hqnps45GXVFJrzNA3OMKKkjyc99B8wUL45vZRhJRi3A0eY1MHVdJ1w5pbudSuK
+         rnAf+pmDPVCv5K1vB/10d2s9E2sjp1PbfjwLavUakeGOOaImofCSe+OEpPT1g0Y22Gps
+         28Zd4j9n4hh5bRYKDW/B32d+1YPfVodmFj+oPAj1vTUO51y5IBDqxXOsxJ34rv+Nq6Ef
+         FeG2DfF3bp7h/cp5RjxNG04y5rmN8sztOLv0no5xUeCokrhubaBD9JjCu3LY+O1yYzBo
+         sDig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qmTXLgSYfe8i7w6gO6nOarXTiH3i5mk/SE0uP1HtN2c=;
+        b=U41N9Z7Yhdor6m07JU4UY2kU8yExTfaAT11L7nXhz0gIxfnznMWkf6fJuG7Iyz/vDb
+         v3y94HJgXy8xE7TNjfllcrYLKei67N0Pg2A4mbCX+Qu4z+sYmZp0KI+Uq2j7f8MPV+/6
+         n3/4v+rQALr1bkRMiu/rWfxAyIFC/W5G5A7sPFwCsjE6PZSV4DbFFNob0eR6ic99jEg9
+         wufe9DawAhJOdOAAe8v1eIVNRfchWkCMDwhCLBB9RUZN9QdY/yCbFUgJr6QtxYyoXFXp
+         zGQdhuluT5hYVMul1aZO7VlxDevl1S0F4/zcJCD0BDBQqoJLL0GJlCAUXRYoXzD4mdrx
+         ZdLw==
+X-Gm-Message-State: AJIora//ii3yw3Hu4sMdqS5+XwPPm469I45JGnNsmqO1mv2FQsC+EZYV
+        aPah3w3zuO3aa/CCo4Uol6E=
+X-Google-Smtp-Source: AGRyM1sN4636z4jnPwe/yE4JQWpojZ5lFQ02VWdbDJUpn3Z77XJknm8Hxm8UFDgBFDUcVv9mmKD4KA==
+X-Received: by 2002:a17:90b:3b8d:b0:1f0:22f1:27d8 with SMTP id pc13-20020a17090b3b8d00b001f022f127d8mr9701266pjb.56.1658383914036;
+        Wed, 20 Jul 2022 23:11:54 -0700 (PDT)
+Received: from genechen-System-Product-Name.richtek.com ([2402:7500:46a:8b75:f825:a44d:6d0d:6d6e])
+        by smtp.gmail.com with ESMTPSA id 13-20020a62170d000000b0052ba782f4cbsm744998pfx.7.2022.07.20.23.11.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 23:11:53 -0700 (PDT)
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, gene_chen@richtek.com,
+        cy_huang@richtek.com
+Subject: [PATCH v2 1/6] dt-bindings usb: typec: rt1711h: Add binding for Richtek RT1711H
+Date:   Thu, 21 Jul 2022 14:11:39 +0800
+Message-Id: <20220721061144.35139-2-gene.chen.richtek@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
+References: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
 MIME-Version: 1.0
-Date:   Thu, 21 Jul 2022 08:11:38 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
-In-Reply-To: <20220721000658.29537-1-william.zhang@broadcom.com>
-References: <20220721000658.29537-1-william.zhang@broadcom.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a0fa14ba8c4782bde5148d389e2f2a37@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17160121956132236251
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkedgtdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeevjefhffffveeludejfedtvdfftdekgffghfegieeliedvfeeigfejteejjeekfeenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejheekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-21 02:06, William Zhang wrote:
-> Append "brcm,bcmbca" to BCM4908 chip family compatible strings. Add
-> generic 4908 board entry.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+From: Gene Chen <gene_chen@richtek.com>
 
-Acked-by: Rafał Miłecki <rafal@milecki.pl>
+Add binding for Richtek RT1711H
 
-(with one minor comment below)
+Signed-off-by: Gene Chen <gene_chen@richtek.com>
+---
+ .../bindings/usb/richtek,rt1711h.yaml         | 100 ++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
 
-> ---
-> 
->  Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
-> b/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
-> index 6a64afa95918..4494a2c58c7f 100644
-> --- a/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
-> +++ b/Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
-> @@ -36,18 +36,22 @@ properties:
->                - tplink,archer-c2300-v1
->            - const: brcm,bcm4906
->            - const: brcm,bcm4908
-> +          - const: brcm,bcmbca
-> 
->        - description: BCM4908 based boards
->          items:
->            - enum:
->                - asus,gt-ac5300
->                - netgear,raxe500
-> +              - brcm,bcm94908
+diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+new file mode 100644
+index 000000000000..1999f614c89b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
+@@ -0,0 +1,100 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/usb/richtek,rt1711h.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Richtek RT1711H Type-C Port Switch and Power Delivery controller
++
++maintainers:
++  - Gene Chen <gene_chen@richtek.com>
++
++description: |
++  The RT1711H is a USB Type-C controller that complies with the latest
++  USB Type-C and PD standards. It does the USB Type-C detection including attach
++  and orientation. It integrates the physical layer of the USB BMC power
++  delivery protocol to allow up to 100W of power. The BMC PD block enables full
++  support for alternative interfaces of the Type-C specification.
++
++properties:
++  compatible:
++    enum:
++      - richtek,rt1711h
++      - richtek,rt1715
++    description:
++      RT1711H support PD20, RT1715 support PD30 except Fast Role Swap.
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  wakeup-source:
++    type: boolean
++
++  connector:
++    type: object
++    $ref: /schemas/connector/usb-connector.yaml#
++    description:
++      Properties for usb c connector.
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - connector
++  - interrupts
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/usb/pd.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      rt1711h@4e {
++        compatible = "richtek,rt1711h";
++        reg = <0x4e>;
++        interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
++        wakeup-source;
++
++        connector {
++          compatible = "usb-c-connector";
++          label = "USB-C";
++          data-role = "dual";
++          power-role = "dual";
++          try-power-role = "sink";
++          source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
++          sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
++          op-sink-microwatt = <10000000>;
++
++          ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            port@0 {
++              reg = <0>;
++              endpoint {
++                remote-endpoint = <&usb_hs>;
++              };
++            };
++            port@1 {
++              reg = <1>;
++              endpoint {
++                remote-endpoint = <&usb_ss>;
++              };
++            };
++            port@2 {
++              reg = <2>;
++              endpoint {
++                remote-endpoint = <&dp_aux>;
++              };
++            };
++          };
++        };
++      };
++    };
++...
+-- 
+2.25.1
 
-I think it would be nice to keep enum entries sorted
-
-
->            - const: brcm,bcm4908
-> +          - const: brcm,bcmbca
-> 
->        - description: BCM49408 based boards
->          items:
->            - const: brcm,bcm49408
->            - const: brcm,bcm4908
-> +          - const: brcm,bcmbca
-> 
->        - description: BCM4912 based boards
->          items:

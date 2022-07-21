@@ -2,143 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E7357C39E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA7657C3A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiGUEoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 00:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S230332AbiGUErM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 00:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiGUEoO (ORCPT
+        with ESMTP id S229692AbiGUErK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 00:44:14 -0400
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEA9474360
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 21:44:13 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-198-wCWCKbzDPBOPH_d9xnmbWw-1; Thu, 21 Jul 2022 00:44:01 -0400
-X-MC-Unique: wCWCKbzDPBOPH_d9xnmbWw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 21 Jul 2022 00:47:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C517F78DE2;
+        Wed, 20 Jul 2022 21:47:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80331811E80;
-        Thu, 21 Jul 2022 04:44:00 +0000 (UTC)
-Received: from dreadlord.bne.redhat.com (fdacunha.bne.redhat.com [10.64.0.157])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BEEA3909FF;
-        Thu, 21 Jul 2022 04:43:55 +0000 (UTC)
-From:   Dave Airlie <airlied@gmail.com>
-To:     torvalds@linux-foundation.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, gregkh@linuxfoundation.org,
-        Daniel Vetter <daniel@ffwll.ch>, mcgrof@kernel.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.sf.net,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
-        linux-block@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Harry Wentland <harry.wentland@amd.com>
-Subject: [PATCH] docs: driver-api: firmware: add driver firmware guidelines. (v3)
-Date:   Thu, 21 Jul 2022 14:43:52 +1000
-Message-Id: <20220721044352.3110507-1-airlied@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CD8761805;
+        Thu, 21 Jul 2022 04:47:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE697C3411E;
+        Thu, 21 Jul 2022 04:47:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658378828;
+        bh=1b6KFnzt/XRO3H9QzuEte6FrE/uR0jOfEb/7nMgJjuw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dn+B/nOHUX/baSwA/l4KE/nRknv1cMibO62yJHy47tfTCkzHdv+mqcMy1Dk0Pt4Ap
+         5CLSYbKJv1AXH92XWRlSutGgRlnpWCtKR2zfWeueNIHURsUKL5OngFUJpjmACgf40N
+         PMwxP7nB0XJtzmij3R1MaG6QqVDE1FYMyMwCue8hP3BkibqDCj+uoPB+vmdFNbz9Ds
+         9x35Ugk0CAYYw9GYtgip/bX4ZBCTl8GRFCWwkwREISNyJHV6YFEYHWoozdcmPHIu91
+         d8nE/zzaaf2SCF4i6aFysiY7D4Rkt7A1isCY50SNUjz8TtDyWQ8OObp5gv/ywbLscU
+         zYr0iLWOnOyaQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5F3585C054C; Wed, 20 Jul 2022 21:47:08 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 21:47:08 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Brian Foster <bfoster@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>
+Subject: Re: [PATCH rcu 04/12] rcu: Switch polled grace-period APIs to
+ ->gp_seq_polled
+Message-ID: <20220721044708.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225128.3842050-4-paulmck@kernel.org>
+ <Ytijki0fkkyKaD9u@boqun-archlinux>
+ <20220721010455.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YtixMeMCcqAyeTiH@boqun-archlinux>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOF_GMAIL_MID
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtixMeMCcqAyeTiH@boqun-archlinux>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Airlie <airlied@redhat.com>
+On Wed, Jul 20, 2022 at 06:51:45PM -0700, Boqun Feng wrote:
+> On Wed, Jul 20, 2022 at 06:04:55PM -0700, Paul E. McKenney wrote:
+> [...]
+> > > > @@ -3860,7 +3944,7 @@ unsigned long get_state_synchronize_rcu(void)
+> > > >  	 * before the load from ->gp_seq.
+> > > >  	 */
+> > > >  	smp_mb();  /* ^^^ */
+> > > > -	return rcu_seq_snap(&rcu_state.gp_seq);
+> > > > +	return rcu_seq_snap(&rcu_state.gp_seq_polled);
+> > > 
+> > > I happened to run into this. There is one usage of
+> > > get_state_synchronize_rcu() in start_poll_synchronize_rcu(), in which
+> > > the return value of get_state_synchronize_rcu() ("gp_seq") will be used
+> > > for rcu_start_this_gp(). I don't think this is quite right, because
+> > > after this change, rcu_state.gp_seq and rcu_state.gp_seq_polled are
+> > > different values, in fact ->gp_seq_polled is greater than ->gp_seq
+> > > by how many synchronize_rcu() is called in early boot.
+> > > 
+> > > Am I missing something here?
+> > 
+> > It does not appear that your are missing anything, sad to say!
+> > 
+> > Does the following make it work better?
+> > 
+> > 							Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 2122359f0c862..cf2fd58a93a41 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -3571,7 +3571,7 @@ EXPORT_SYMBOL_GPL(get_state_synchronize_rcu);
+> >  unsigned long start_poll_synchronize_rcu(void)
+> >  {
+> >  	unsigned long flags;
+> > -	unsigned long gp_seq = get_state_synchronize_rcu();
+> > +	unsigned long gp_seq = rcu_seq_snap(&rcu_state.gp_seq);
+> 
+> get_state_synchronize_rcu() is still needed, because we need to return
+> a cookie for polling for this function. Something like below maybe? Hope
+> I didn't mess up the ordering ;-)
 
-A recent snafu where Intel ignored upstream feedback on a firmware
-change, led to a late rc6 fix being required. In order to avoid this
-in the future we should document some expectations around
-linux-firmware.
+My thought is to combine your comment with my functionally equivalent
+code that avoids the extra variable.  If that works for you (and if it
+works, for that matter), does Co-developed-by work for you?
 
-I was originally going to write this for drm, but it seems quite generic
-advice.
+							Thanx, Paul
 
-v2: rewritten with suggestions from Thorsten Leemhuis
-v3: rewritten with suggestions from Mauro
-
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Acked-by: Daniel Vetter <daniel@ffwll.ch>
-Acked-by: Harry Wentland <harry.wentland@amd.com>
-Signed-off-by: Dave Airlie <airlied@redhat.com>
----
- Documentation/driver-api/firmware/core.rst    |  1 +
- .../firmware/firmware-usage-guidelines.rst    | 44 +++++++++++++++++++
- 2 files changed, 45 insertions(+)
- create mode 100644 Documentation/driver-api/firmware/firmware-usage-guidelines.rst
-
-diff --git a/Documentation/driver-api/firmware/core.rst b/Documentation/driver-api/firmware/core.rst
-index 1d1688cbc078..803cd574bbd7 100644
---- a/Documentation/driver-api/firmware/core.rst
-+++ b/Documentation/driver-api/firmware/core.rst
-@@ -13,4 +13,5 @@ documents these features.
-    direct-fs-lookup
-    fallback-mechanisms
-    lookup-order
-+   firmware-usage-guidelines
- 
-diff --git a/Documentation/driver-api/firmware/firmware-usage-guidelines.rst b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
-new file mode 100644
-index 000000000000..fdcfce42c6d2
---- /dev/null
-+++ b/Documentation/driver-api/firmware/firmware-usage-guidelines.rst
-@@ -0,0 +1,44 @@
-+===================
-+Firmware Guidelines
-+===================
-+
-+Users switching to a newer kernel should *not* have to install newer
-+firmware files to keep their hardware working. At the same time updated
-+firmware files must not cause any regressions for users of older kernel
-+releases.
-+
-+Drivers that use firmware from linux-firmware should follow the rules in
-+this guide. (Where there is limited control of the firmware,
-+i.e. company doesn't support Linux, firmwares sourced from misc places,
-+then of course these rules will not apply strictly.)
-+
-+* Firmware files shall be designed in a way that it allows checking for
-+  firmware ABI version changes. It is recommended that firmware files be
-+  versioned with at least a major/minor version. It is suggested that
-+  the firmware files in linux-firmware be named with some device
-+  specific name, and just the major version. The firmware version should
-+  be stored in the firmware header, or as an exception, as part of the
-+  firmware file name, in order to let the driver detact any non-ABI
-+  fixes/changes. The firmware files in linux-firmware should be
-+  overwritten with the newest compatible major version. Newer major
-+  version firmware shall remain compatible with all kernels that load
-+  that major number.
-+
-+* If the kernel support for the hardware is normally inactive, or the
-+  hardware isn't available for public consumption, this can
-+  be ignored, until the first kernel release that enables that hardware.
-+  This means no major version bumps without the kernel retaining
-+  backwards compatibility for the older major versions.  Minor version
-+  bumps should not introduce new features that newer kernels depend on
-+  non-optionally.
-+
-+* If a security fix needs lockstep firmware and kernel fixes in order to
-+  be successful, then all supported major versions in the linux-firmware
-+  repo that are required by currently supported stable/LTS kernels,
-+  should be updated with the security fix. The kernel patches should
-+  detect if the firmware is new enough to declare if the security issue
-+  is fixed.  All communications around security fixes should point at
-+  both the firmware and kernel fixes. If a security fix requires
-+  deprecating old major versions, then this should only be done as a
-+  last option, and be stated clearly in all communications.
-+
--- 
-2.36.1
-
+> Regards,
+> Boqun
+> 
+> ---------------
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 84d281776688..0f9134871289 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3571,11 +3583,39 @@ EXPORT_SYMBOL_GPL(get_state_synchronize_rcu);
+>  unsigned long start_poll_synchronize_rcu(void)
+>  {
+>         unsigned long flags;
+> -       unsigned long gp_seq = get_state_synchronize_rcu();
+> +       unsigned long gp_seq_poll = get_state_synchronize_rcu();
+> +       unsigned long gp_seq;
+>         bool needwake;
+>         struct rcu_data *rdp;
+>         struct rcu_node *rnp;
+> 
+> +       /*
+> +        * Need to start a gp if no gp has been started yet.
+> +        *
+> +        * Note that we need to snapshot gp_seq after gp_seq_poll, otherwise
+> +        * consider the follow case:
+> +        *
+> +        *      <no gp in progress>     // gp# is 0
+> +        *      snapshot gp_seq         // gp #2 will be set as needed
+> +        *      <a gp passed>
+> +        *                              // gp# is 1
+> +        *      snapshot gp_seq_poll    // polling gets ready until gp #3
+> +        *
+> +        * then the following rcu_start_this_gp() won't mark gp #3 as needed,
+> +        * and polling won't become ready if others don't start a gp.
+> +        *
+> +        * And the following case is fine:
+> +        *
+> +        *      <no gp in progress>     // gp# is 0
+> +        *      snapshot gp_seq_poll    // polling gets ready until gp #2
+> +        *      <a gp passed>
+> +        *                              // gp# is 1
+> +        *      snapshot gp_seq         // gp #3 will be set as needed
+> +        *
+> +        * Also note, we rely on the smp_mb() in get_state_synchronize_rcu()
+> +        * to order the two snapshots.
+> +        */
+> +       gp_seq = rcu_seq_snap(&rcu_state.gp_seq);
+>         lockdep_assert_irqs_enabled();
+>         local_irq_save(flags);
+>         rdp = this_cpu_ptr(&rcu_data);
+> @@ -3585,7 +3625,7 @@ unsigned long start_poll_synchronize_rcu(void)
+>         raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>         if (needwake)
+>                 rcu_gp_kthread_wake();
+> -       return gp_seq;
+> +       return gp_seq_poll;
+>  }
+>  EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);

@@ -2,285 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56B557D0B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698B557D0B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiGUQGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S231205AbiGUQG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiGUQGU (ORCPT
+        with ESMTP id S229989AbiGUQGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:06:20 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6BF2CCA6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:06:16 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id q7so2344055lji.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:06:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bOAD0WaXsD+JG0JF1mCsUCytEFM/ny7YDKpLSwYvJzw=;
-        b=KwMyPMPbKbXkjxL+uTj15OnFAIiUv/+VHaeyhgGJ41oSthr9EFoxwuMi3d+sQGMTSz
-         FNqmFEb9D+N/xww/HobSo9uGKWDT4FVhC3c8HSSYCIc2wdBPagpaulpxuSE21DC7M+69
-         sbHUR8UKkuY81Fdc3y+SFU7/s3wfh8GX45g1RfcJZQPmjDb9ouTb8GJxka1m1sGV20o3
-         JzX1VJczogIgyS129FHesh5pe/+gkFq1NPQpoVrk4kAs+r4xk6kPkJ3mkh80hj7Vv7FT
-         d3dEUL1FXLMCrFYhvGEFpJAdepfYkXEByi4F84bPppa62UyP31TsIot/7k0oCaDNPKxH
-         iRHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bOAD0WaXsD+JG0JF1mCsUCytEFM/ny7YDKpLSwYvJzw=;
-        b=pPmACBl1dUoCq6zcSYbjedRUPUpHaN0txrchxLM6yDExoL77YdTni1Bd3BVE4nonRB
-         ppsSmzsrC1RhseoYTHvQCmPrnjiIHVbduwnAYNq/V5A5dCVWg09BS0d2HTOxn47BuJP9
-         5W2BwLU+zN32kbWh4W7n5UsLKlDgL9xhkxlVsXftSDZJ1raYzQI8FP+7e0VGgAv+fwkM
-         h0zdIR+K9D9mjKhN7F7iFkOiMFSiRR5hrAuCVYl8s0YeWMrnrwUnXUPk3Hp81JZ68THp
-         eMoxBQAm7OBG1APR26dVrRxbuNdI1Y9J8YHXWhChpsNayKKVAEY2W/fEUCihB7GShQSp
-         K6ew==
-X-Gm-Message-State: AJIora/khjKnF1B1NEv+gDvee+p260PzvjFW+I84RGwt/9/DzVm5dQY9
-        PF0uIy6fGrRbbA50gRhmvpaGqA==
-X-Google-Smtp-Source: AGRyM1tKdUEyiXgh7nWkXj/5n2r75XTsJnX4oy9eT8joUGvGn03QNWbTxnwlN9zWpozfFN4bD8gvgw==
-X-Received: by 2002:a05:651c:238b:b0:25d:eabe:225a with SMTP id bk11-20020a05651c238b00b0025deabe225amr504758ljb.28.1658419574658;
-        Thu, 21 Jul 2022 09:06:14 -0700 (PDT)
-Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id 8-20020ac25f08000000b0048a6bb9418esm511171lfq.295.2022.07.21.09.06.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 09:06:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [RESEND PATCH v2] dt-bindings: leds: skyworks,aat1290: convert to dtschema
-Date:   Thu, 21 Jul 2022 18:06:11 +0200
-Message-Id: <20220721160611.250274-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 21 Jul 2022 12:06:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697F73FA33;
+        Thu, 21 Jul 2022 09:06:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DA32B82579;
+        Thu, 21 Jul 2022 16:06:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FCAFC341C0;
+        Thu, 21 Jul 2022 16:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658419601;
+        bh=s8xeRnOct+FSrRLuDnVjoDrk1lcFnJ4sNmdHqdLZjyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h8GxrIgrPevpvhKSj3MpdPSs883nobdr60tmmqptVY8xAwg1tZMWYU53td+TBqtIF
+         92UbCLNtTLb+LO+uPtCi1hdjk6nBHzZtmgWIvVDpNtFEGA3RrkSNG4YpZcg0YvInsk
+         4IkOMHjtmqe906fJiSYpERdKfJ3z/RLyhnhSHc95zqOz+VzksnemiTT+UkklIXmjHp
+         IO8clZIg9437kflBhXNN6+xzT6YletRme11kZNicQ7VazO6FxL8n/2p8Mq/wg0sVZV
+         0VQ1pPJXt+mxM3Dt+66mtmm619fR4AIL1X/4X94KjphqAeo6Qf3iVm54SBR/WOqOME
+         xz09WKw54tXfQ==
+Date:   Thu, 21 Jul 2022 17:06:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Andy Gross <agross@kernel.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v16 0/3] eDP/DP Phy vdda realted function
+Message-ID: <Ytl5icJyICD1fbzP@sirena.org.uk>
+References: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
+ <YtkrDcjTGhpaU1e0@hovoldconsulting.com>
+ <CAA8EJprQnnWjDZJy9+zUBsVQCi3jtc0Ngtzzk9MXpwOvuAS68g@mail.gmail.com>
+ <CAD=FV=W0m-x9JC=5hQ3urSNmUp8sY-u8YkNd66yrKfRNAH4rcg@mail.gmail.com>
+ <YtlrV5R+JMxb7Dlu@sirena.org.uk>
+ <CAD=FV=XDOxy1R5ipD0errwi6GOFz-X6G3_WE34LGLqmWE6_iyw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="797VOFF2drkIGdfE"
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=XDOxy1R5ipD0errwi6GOFz-X6G3_WE34LGLqmWE6_iyw@mail.gmail.com>
+X-Cookie: Exercise caution in your daily affairs.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Skyworks Solutions, Inc. AAT1290 Current Regulator bindings
-to DT Schema.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+--797VOFF2drkIGdfE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
----
+On Thu, Jul 21, 2022 at 08:43:48AM -0700, Doug Anderson wrote:
 
-Hi,
+> I guess I'd put it this way, though: how many drivers in Linux today
+> have _two_ calls to regulator_set_load(): one for the "active" state
+> and one for the retention state. Looks like UFS maybe. Any others? For
+> most devices the pattern is:
 
-This is waiting on the lists for a month:
-https://lore.kernel.org/all/20220620175033.130468-2-krzysztof.kozlowski@linaro.org/
+Oh, I'm not saying there's sensible implementations in drivers.  In
+general I'd say that as with voltage if a driver is not actively
+managing the load during runtime it should not be setting it at all, one
+time configuration should be left to the constraints if it's needed.
 
-so maybe it could be merged via LED or DT binding tree?
+--797VOFF2drkIGdfE
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
----
- .../devicetree/bindings/leds/leds-aat1290.txt | 77 ---------------
- .../bindings/leds/skyworks,aat1290.yaml       | 95 +++++++++++++++++++
- 2 files changed, 95 insertions(+), 77 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-aat1290.txt
- create mode 100644 Documentation/devicetree/bindings/leds/skyworks,aat1290.yaml
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/Documentation/devicetree/bindings/leds/leds-aat1290.txt b/Documentation/devicetree/bindings/leds/leds-aat1290.txt
-deleted file mode 100644
-index 62ed17ec075b..000000000000
---- a/Documentation/devicetree/bindings/leds/leds-aat1290.txt
-+++ /dev/null
-@@ -1,77 +0,0 @@
--* Skyworks Solutions, Inc. AAT1290 Current Regulator for Flash LEDs
--
--The device is controlled through two pins: FL_EN and EN_SET. The pins when,
--asserted high, enable flash strobe and movie mode (max 1/2 of flash current)
--respectively. In order to add a capability of selecting the strobe signal source
--(e.g. CPU or camera sensor) there is an additional switch required, independent
--of the flash chip. The switch is controlled with pin control.
--
--Required properties:
--
--- compatible : Must be "skyworks,aat1290".
--- flen-gpios : Must be device tree identifier of the flash device FL_EN pin.
--- enset-gpios : Must be device tree identifier of the flash device EN_SET pin.
--
--Optional properties:
--- pinctrl-names : Must contain entries: "default", "host", "isp". Entries
--		"default" and "host" must refer to the same pin configuration
--		node, which sets the host as a strobe signal provider. Entry
--		"isp" must refer to the pin configuration node, which sets the
--		ISP as a strobe signal provider.
--
--A discrete LED element connected to the device must be represented by a child
--node - see Documentation/devicetree/bindings/leds/common.txt.
--
--Required properties of the LED child node:
--- led-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--- flash-max-microamp : see Documentation/devicetree/bindings/leds/common.txt
--                       Maximum flash LED supply current can be calculated using
--                       following formula: I = 1A * 162kohm / Rset.
--- flash-max-timeout-us : see Documentation/devicetree/bindings/leds/common.txt
--                         Maximum flash timeout can be calculated using following
--                         formula: T = 8.82 * 10^9 * Ct.
--
--Optional properties of the LED child node:
--- function : see Documentation/devicetree/bindings/leds/common.txt
--- color : see Documentation/devicetree/bindings/leds/common.txt
--- label : see Documentation/devicetree/bindings/leds/common.txt (deprecated)
--
--Example (by Ct = 220nF, Rset = 160kohm and exynos4412-trats2 board with
--a switch that allows for routing strobe signal either from the host or from
--the camera sensor):
--
--#include "exynos4412.dtsi"
--#include <dt-bindings/leds/common.h>
--
--led-controller {
--	compatible = "skyworks,aat1290";
--	flen-gpios = <&gpj1 1 GPIO_ACTIVE_HIGH>;
--	enset-gpios = <&gpj1 2 GPIO_ACTIVE_HIGH>;
--
--	pinctrl-names = "default", "host", "isp";
--	pinctrl-0 = <&camera_flash_host>;
--	pinctrl-1 = <&camera_flash_host>;
--	pinctrl-2 = <&camera_flash_isp>;
--
--	camera_flash: led {
--		function = LED_FUNCTION_FLASH;
--		color = <LED_COLOR_ID_WHITE>;
--		led-max-microamp = <520833>;
--		flash-max-microamp = <1012500>;
--		flash-max-timeout-us = <1940000>;
--	};
--};
--
--&pinctrl_0 {
--	camera_flash_host: camera-flash-host {
--		samsung,pins = "gpj1-0";
--		samsung,pin-function = <1>;
--		samsung,pin-val = <0>;
--	};
--
--	camera_flash_isp: camera-flash-isp {
--		samsung,pins = "gpj1-0";
--		samsung,pin-function = <1>;
--		samsung,pin-val = <1>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/leds/skyworks,aat1290.yaml b/Documentation/devicetree/bindings/leds/skyworks,aat1290.yaml
-new file mode 100644
-index 000000000000..a6aaa92dbccd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/skyworks,aat1290.yaml
-@@ -0,0 +1,95 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/skyworks,aat1290.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Skyworks Solutions, Inc. AAT1290 Current Regulator for Flash LEDs
-+
-+maintainers:
-+  - Jacek Anaszewski <jacek.anaszewski@gmail.com>
-+  - Krzysztof Kozlowski <krzk@kernel.org>
-+
-+description: |
-+  The device is controlled through two pins:: FL_EN and EN_SET. The pins when,
-+  asserted high, enable flash strobe and movie mode (max 1/2 of flash current)
-+  respectively. In order to add a capability of selecting the strobe signal
-+  source (e.g. CPU or camera sensor) there is an additional switch required,
-+  independent of the flash chip. The switch is controlled with pin control.
-+
-+properties:
-+  compatible:
-+    const: skyworks,aat1290
-+
-+  enset-gpios:
-+    maxItems: 1
-+    description: EN_SET pin
-+
-+  flen-gpios:
-+    maxItems: 1
-+    description: FL_EN pin
-+
-+  led:
-+    $ref: common.yaml#
-+    unevaluatedProperties: false
-+
-+    properties:
-+      led-max-microamp: true
-+
-+      flash-max-microamp:
-+        description: |
-+          Maximum flash LED supply current can be calculated using following
-+          formula:: I = 1A * 162 kOhm / Rset.
-+
-+      flash-max-timeout-us:
-+        description: |
-+          Maximum flash timeout can be calculated using following formula::
-+            T = 8.82 * 10^9 * Ct.
-+
-+    required:
-+      - flash-max-microamp
-+      - flash-max-timeout-us
-+      - led-max-microamp
-+
-+  pinctrl-names:
-+    items:
-+      - const: default
-+      - const: host
-+      - const: isp
-+
-+  pinctrl-0: true
-+  pinctrl-1: true
-+  pinctrl-2: true
-+
-+required:
-+  - compatible
-+  - enset-gpios
-+  - flen-gpios
-+  - led
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
-+
-+    // Ct = 220 nF, Rset = 160 kOhm
-+    led-controller {
-+        compatible = "skyworks,aat1290";
-+        flen-gpios = <&gpj1 1 GPIO_ACTIVE_HIGH>;
-+        enset-gpios = <&gpj1 2 GPIO_ACTIVE_HIGH>;
-+
-+        pinctrl-names = "default", "host", "isp";
-+        pinctrl-0 = <&camera_flash_host>;
-+        pinctrl-1 = <&camera_flash_host>;
-+        pinctrl-2 = <&camera_flash_isp>;
-+
-+        led {
-+            function = LED_FUNCTION_FLASH;
-+            color = <LED_COLOR_ID_WHITE>;
-+            led-max-microamp = <520833>;
-+            flash-max-microamp = <1012500>;
-+            flash-max-timeout-us = <1940000>;
-+        };
-+    };
--- 
-2.34.1
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLZeYgACgkQJNaLcl1U
+h9Bitwf/T7m2MuB1BDNcYxER8zA/bmfsSd02RVjQBt889bIiIQndg6hsiAsYJDzL
+YiHt3f0B5VwYWEYQ7qHJJNv2XTnkLyck+/KrZy9mzJifwbD9JuozXIquclLzsUse
+NP5zX0uDOJBsNX23i0B/d6R650tJvYSHY3++cxMkHCPFxL7VgB/meefwMrpPdNAJ
+DMSiihQNvJRcI8c+Iy41pA4lRJaEl6EG/B3my5nFYsj8+guxaNkLkIpWt8dq2VMl
+a6jslx3UiscBq9BxK3MCAvhLON57wr9nnKlFJfaheIqqn1bXKYQ+ufJX2YxPpyXI
+1WmQBt54MQiyiEAO777PA6jPhC021Q==
+=HOZd
+-----END PGP SIGNATURE-----
 
+--797VOFF2drkIGdfE--

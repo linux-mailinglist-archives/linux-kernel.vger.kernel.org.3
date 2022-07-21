@@ -2,106 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B9357CEE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E06357CEE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiGUP2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S229923AbiGUP2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGUP2T (ORCPT
+        with ESMTP id S229658AbiGUP2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:28:19 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC24A7E834;
-        Thu, 21 Jul 2022 08:28:18 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id o10so879923vkl.3;
-        Thu, 21 Jul 2022 08:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=2ABOAhbNUvDmFBr5+kPISE8py0yDxYD2k6gjXgSabzw=;
-        b=dBP3D2j7Zbfyd9lBMrfA3+rBVYUf1xyi3KeCVbhGycv18vrz+uD2EUIG/ljS0fQ5ii
-         gQGN18QnCtOtTaoNVF24jzmPKWWy41TxcwDAA2KtIRtKSufoN7g+HcUk1VAUF4iQqS/l
-         QOfxLMMChEtlQaS37rk0/fRxItkRu/6XKXWWgqEyDuns5jC72HuKUCBp6Wc+6tWhs1fy
-         oea4UuyrjTpJAGftjfEgY+nhUHLAR2ZJyC9mrNRm4sC0YSyxucCfkCs8SH7+n0CPUBer
-         b6Gm1PSZJB9mqbBgPITOkYAsCavkWlwU62tvQUb+x5um7PczfjyFyG9zgjg4xojJIbFp
-         x1tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=2ABOAhbNUvDmFBr5+kPISE8py0yDxYD2k6gjXgSabzw=;
-        b=TP7WSfPjcB/mQddHl8by3Cbgm83pAwgyHHTah4KqXEh8wvQwKMumjs3s/yAY3nCwyS
-         xtRse0wAsmwDp2F9Q7eGMPIOWxgsk5f7qog9CifCv1nYiWnWoYPYriYxcO4kjkGaaTeF
-         22W5RhqRlbghOprwaqFZ+ZSN9uqqyuYkEEojpFrix6nIRmSJdcMvgR61x6XeM5R+SPx5
-         RBqHGov9yQbgK3zgyNU5zvuK+r/O1qFRp198lC1u57qEhGdRraho5338x2XnrgisyzT1
-         w/lexvR82aMfmD04+8fxxFlOattXabCacJZFknx8p/IKJT0uWP9kU4QaafD0KBV2SAlo
-         W+QQ==
-X-Gm-Message-State: AJIora9fvqJhtq0jQ0jaHI+jRm+/mLMrdz2Z/vc5leCJKThg9IcTCFnQ
-        Gj+om3pd2f4KzFkBIgR9p+ODxBXAjDmHgkv2AcfDn1MurIPA4A==
-X-Google-Smtp-Source: AGRyM1vNMcqyiN2b4w6Eng0CYE9EaMj0cXEOhZIVlptz/ytKraa77603uWNjtnllPoz3OreWA3lwHzbbHZ0gcAFn0mo=
-X-Received: by 2002:a05:6122:11a9:b0:374:8a3d:ba60 with SMTP id
- y9-20020a05612211a900b003748a3dba60mr15397442vkn.24.1658417297616; Thu, 21
- Jul 2022 08:28:17 -0700 (PDT)
+        Thu, 21 Jul 2022 11:28:16 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82E67A51E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658417295; x=1689953295;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WZ59twi+Y234fwpfoBS9XgGliCsgnLhK4MhvmcDYmj0=;
+  b=leyOaD1LzkO3+Vbyv3JwSQQerckDYs14zCNhJsGBjqY37IErHh1cADgZ
+   Jvo6n3tq/2ZeSC6wtCybo6ODC8tTZ/S3q3ujJUN3hAEc4xHq0M+0uQ+0q
+   OTwijBp47oa0KV7fIgO7CmNE4OthJux2hfMxSsoIzi9i+1JlMwaAJwzLJ
+   RZl5OS/7VyFcEuPUFUnWZ//y5xgJgptGnI1lm1Nw4E2TeJdbY1pwDxrZs
+   63tUj7zk6iWhNhDyIGx1ECOTL8WdCd9rbVnRkj5xISij7K/zkgTV2ov5M
+   4jiM0otWJ6FL0rkPi3oZ+GJu2WycePJnAlcs5XKn9UsiXwjKfLTGsEkLV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="312794154"
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="312794154"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 08:28:15 -0700
+X-IronPort-AV: E=Sophos;i="5.93,290,1654585200"; 
+   d="scan'208";a="656794382"
+Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.249.149]) ([10.99.249.149])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 08:28:11 -0700
+Message-ID: <d8e8e5e5-001d-5f22-b22c-aaea16ed8719@linux.intel.com>
+Date:   Thu, 21 Jul 2022 17:28:09 +0200
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 21 Jul 2022 10:28:06 -0500
-Message-ID: <CAH2r5msxJU+nTN14LSd6tmFtpgRY4o+-SVktHoqoeD03XepUPw@mail.gmail.com>
-Subject: [PATCH][CIFS] update MAINTAINERS files with reviewers for cifs.ko
-To:     CIFS <linux-cifs@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000ea5d4205e4525dba"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: Intel: avs: Mark avs_path_module_type_create() as
+ noinline
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, patches@lists.linux.dev,
+        alsa-devel@alsa-project.org,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20220720185228.3182663-1-nathan@kernel.org>
+ <c00a8b5e-6def-971a-d4f2-cd65c95fe430@linux.intel.com>
+ <YtllwRY6F93uYRxz@sirena.org.uk>
+From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <YtllwRY6F93uYRxz@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000ea5d4205e4525dba
-Content-Type: text/plain; charset="UTF-8"
+On 7/21/2022 4:42 PM, Mark Brown wrote:
+> On Thu, Jul 21, 2022 at 02:25:20PM +0200, Amadeusz Sławiński wrote:
+>> On 7/20/2022 8:52 PM, Nathan Chancellor wrote:
+> 
+>>> This warning is also visible with allmodconfig on other architectures.
+> 
+>> My first question would be what clang does differently in this configuration
+>> (ARM) than in all other configurations (x86, etc.) and gcc.
+> 
+> See above from Nathan's commit message...
 
-And also correct the URL for the project web site. See attached.
+Ah, missed that. Anyway, what about if we replace multiple calls to 
+guid_equal with lookup table and one call in loop?
 
+Do let me know if something like the following works and I will send it 
+as a proper patch:
 
+diff --git a/sound/soc/intel/avs/path.c b/sound/soc/intel/avs/path.c
+index 3d46dd5e5bc4..ce157a8d6552 100644
+--- a/sound/soc/intel/avs/path.c
++++ b/sound/soc/intel/avs/path.c
+@@ -449,35 +449,39 @@ static int avs_modext_create(struct avs_dev *adev, 
+struct avs_path_module *mod)
+         return ret;
+  }
 
--- 
-Thanks,
++static int avs_probe_create(struct avs_dev *adev, struct 
+avs_path_module *mod)
++{
++       dev_err(adev->dev, "Probe module can't be instantiated by 
+topology");
++       return -EINVAL;
++}
++
++struct avs_module_create {
++       guid_t *guid;
++       int (*create)(struct avs_dev *adev, struct avs_path_module *mod);
++};
++
++static struct avs_module_create avs_module_create[] = {
++       { &AVS_MIXIN_MOD_UUID, avs_modbase_create },
++       { &AVS_MIXOUT_MOD_UUID, avs_modbase_create },
++       { &AVS_KPBUFF_MOD_UUID, avs_modbase_create },
++       { &AVS_COPIER_MOD_UUID, avs_copier_create },
++       { &AVS_MICSEL_MOD_UUID, avs_micsel_create },
++       { &AVS_MUX_MOD_UUID, avs_mux_create },
++       { &AVS_UPDWMIX_MOD_UUID, avs_updown_mix_create },
++       { &AVS_SRCINTC_MOD_UUID, avs_src_create },
++       { &AVS_AEC_MOD_UUID, avs_aec_create },
++       { &AVS_ASRC_MOD_UUID, avs_asrc_create },
++       { &AVS_INTELWOV_MOD_UUID, avs_wov_create },
++       { &AVS_PROBE_MOD_UUID, avs_probe_create },
++};
++
+  static int avs_path_module_type_create(struct avs_dev *adev, struct 
+avs_path_module *mod)
+  {
+         const guid_t *type = &mod->template->cfg_ext->type;
 
-Steve
+-       if (guid_equal(type, &AVS_MIXIN_MOD_UUID) ||
+-           guid_equal(type, &AVS_MIXOUT_MOD_UUID) ||
+-           guid_equal(type, &AVS_KPBUFF_MOD_UUID))
+-               return avs_modbase_create(adev, mod);
+-       if (guid_equal(type, &AVS_COPIER_MOD_UUID))
+-               return avs_copier_create(adev, mod);
+-       if (guid_equal(type, &AVS_MICSEL_MOD_UUID))
+-               return avs_micsel_create(adev, mod);
+-       if (guid_equal(type, &AVS_MUX_MOD_UUID))
+-               return avs_mux_create(adev, mod);
+-       if (guid_equal(type, &AVS_UPDWMIX_MOD_UUID))
+-               return avs_updown_mix_create(adev, mod);
+-       if (guid_equal(type, &AVS_SRCINTC_MOD_UUID))
+-               return avs_src_create(adev, mod);
+-       if (guid_equal(type, &AVS_AEC_MOD_UUID))
+-               return avs_aec_create(adev, mod);
+-       if (guid_equal(type, &AVS_ASRC_MOD_UUID))
+-               return avs_asrc_create(adev, mod);
+-       if (guid_equal(type, &AVS_INTELWOV_MOD_UUID))
+-               return avs_wov_create(adev, mod);
+-
+-       if (guid_equal(type, &AVS_PROBE_MOD_UUID)) {
+-               dev_err(adev->dev, "Probe module can't be instantiated 
+by topology");
+-               return -EINVAL;
+-       }
++       for (int i = 0; i < ARRAY_SIZE(avs_module_create); i++)
++               if (guid_equal(type, avs_module_create[i].guid))
++                       return avs_module_create[i].create(adev, mod);
 
---000000000000ea5d4205e4525dba
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-cifs-update-MAINTAINERS-file-with-reviewers.patch"
-Content-Disposition: attachment; 
-	filename="0001-cifs-update-MAINTAINERS-file-with-reviewers.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l5v6tt6s0>
-X-Attachment-Id: f_l5v6tt6s0
-
-RnJvbSA1NzY1NjQ4NzQ2M2IzN2E5MzE0ZjM5ZDczY2QwZmNlNjM3MTM3NzIyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IFRodSwgMjEgSnVsIDIwMjIgMTA6MjI6NDggLTA1MDAKU3ViamVjdDogW1BBVENIXSBj
-aWZzOiB1cGRhdGUgTUFJTlRBSU5FUlMgZmlsZSB3aXRoIHJldmlld2VycwoKQW5kIGFsc28gY29y
-cmVjdCB0aGUgVVJMIGZvciB0aGUgcHJvamVjdCB3ZWIgc2l0ZS4KClNpZ25lZC1vZmYtYnk6IFN0
-ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9zb2Z0LmNvbT4KLS0tCiBNQUlOVEFJTkVSUyB8IDcg
-KysrKystLQogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkK
-CmRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJTCmluZGV4IDY1MTYxNmVkOGFl
-Mi4uODVmMWRkODUxODEyIDEwMDY0NAotLS0gYS9NQUlOVEFJTkVSUworKysgYi9NQUlOVEFJTkVS
-UwpAQCAtNTA1NSwxMiArNTA1NSwxNSBAQCBGOglpbmNsdWRlL2xpbnV4L2Nsay8KIEY6CWluY2x1
-ZGUvbGludXgvb2ZfY2xrLmgKIFg6CWRyaXZlcnMvY2xrL2Nsa2Rldi5jCiAKLUNPTU1PTiBJTlRF
-Uk5FVCBGSUxFIFNZU1RFTSBDTElFTlQgKENJRlMpCitDT01NT04gSU5URVJORVQgRklMRSBTWVNU
-RU0gQ0xJRU5UIChDSUZTIGFuZCBTTUIzKQogTToJU3RldmUgRnJlbmNoIDxzZnJlbmNoQHNhbWJh
-Lm9yZz4KK1I6CVBhdWxvIEFsY2FudGFyYSA8cGNAY2pyLm56PiAoREZTLCBnbG9iYWwgbmFtZSBz
-cGFjZSkKK1I6CVJvbm5pZSBTYWhsYmVyZyA8bHNhaGxiZXJAcmVkaGF0LmNvbT4gKGRpcmVjdG9y
-eSBsZWFzZXMsIHNwYXJzZSBmaWxlcykKK1I6CVNoeWFtIFByYXNhZCBOIDxzcHJhc2FkQG1pY3Jv
-c29mdC5jb20+IChtdWx0aWNoYW5uZWwpCiBMOglsaW51eC1jaWZzQHZnZXIua2VybmVsLm9yZwog
-TDoJc2FtYmEtdGVjaG5pY2FsQGxpc3RzLnNhbWJhLm9yZyAobW9kZXJhdGVkIGZvciBub24tc3Vi
-c2NyaWJlcnMpCiBTOglTdXBwb3J0ZWQKLVc6CWh0dHA6Ly9saW51eC1jaWZzLnNhbWJhLm9yZy8K
-K1c6CWh0dHBzOi8vd2lraS5zYW1iYS5vcmcvaW5kZXgucGhwL0xpbnV4Q0lGUwogVDoJZ2l0IGdp
-dDovL2dpdC5zYW1iYS5vcmcvc2ZyZW5jaC9jaWZzLTIuNi5naXQKIEY6CURvY3VtZW50YXRpb24v
-YWRtaW4tZ3VpZGUvY2lmcy8KIEY6CWZzL2NpZnMvCi0tIAoyLjM0LjEKCg==
---000000000000ea5d4205e4525dba--
+         return avs_modext_create(adev, mod);
+  }

@@ -2,190 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F98657C26C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E4857C274
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbiGUCq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
+        id S230133AbiGUCt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGUCq5 (ORCPT
+        with ESMTP id S229989AbiGUCtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:46:57 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2106.outbound.protection.outlook.com [40.107.93.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5E04B0D0;
-        Wed, 20 Jul 2022 19:46:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AMZQwILX6Ggk2lAOkmoWR/CGfS1x7sx4GJpmyN0YuDpWY13R6WIm5rH7rr4LIHmpAhPgeI18DtC2IAF8Y+d2R90ej43ml1eAWR4vfRNnNxJqksGpNrM6JEOAzO2SAjGzcJwSDhEJuaL1HV5bHsQ48v0GRzJQCnOesJlUZGwqEcccu1IjKviUElmwXU5DqO3ABLKd0qVTGOK0dwRoUrfzQnDRFEwSpdidXx+6d9REyH9xY7SZ4S+0SEP1v1RV4181LzRo4U9JYR7EROeDEHjT3rje5ryGFeueruSyE4u1gwcWrf47DE/fKnpaplq9mtqICqEd+WglTfXMrKG1H4UQ8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZWVUica3jXRnISWMbst9J7Ty7BnhVPqlQFZJUlbCBAg=;
- b=F72XgQtZwqOgsU0dgHfFv2OGXXXlbMkK78PCq7PSrWRI4ZKlfHN5baYNKkTGVRF95ecd2LEVIHletX2NXjLyavl9BpVEQ4dIiqqam5mL8p1Y3EbBN9G4Obi/mohzZ+RuelDJ2yYcEC5GxJ1KrHmjc0QOHCYI00qhYDzQVtRl16GeCY3A0L0UjtYz7utk/UIq0OmR5mBHI6E9qH/iLjdSVArXELQeQv5NvVvv+7HgConqv9yXwSr0ipP3xwBQVPBpM6c3KxPcs0GOQK7xdIBqZtX9AlPbOtVTjZVJOOxSKFqjN2kK89PEP7JdHCrhFeJ5auRPRyJh4cXYArz4IFJbxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZWVUica3jXRnISWMbst9J7Ty7BnhVPqlQFZJUlbCBAg=;
- b=Rgc9N0dM18Mu3xjd4VnTmL2BoR4YeOn7XdvN+6/SdZ38DYBFtlu8Q1dDFs3QAfiYS+e6ICjQz7w2WFYbGcgUgUCee0idlcFQ7Cjn6b/l5wCCkopmmqdLRSSpCrDyzijwdzlQkzi8v+NMhbPS/0+0ND74D6e2sM+HkI8d4nNVaGA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
- DM5PR01MB2668.prod.exchangelabs.com (2603:10b6:3:f3::10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5458.18; Thu, 21 Jul 2022 02:46:54 +0000
-Received: from SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::7535:773:f979:893e]) by SJ0PR01MB7282.prod.exchangelabs.com
- ([fe80::7535:773:f979:893e%9]) with mapi id 15.20.5438.023; Thu, 21 Jul 2022
- 02:46:53 +0000
-Message-ID: <4516d7a6-f493-aa51-2700-bbab8ea8533a@os.amperecomputing.com>
-Date:   Thu, 21 Jul 2022 09:46:42 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: aspeed: document Ampere
- Mt.Mitchell BMC compatibles
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>
-Cc:     Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com
-References: <20220720085230.3801945-1-quan@os.amperecomputing.com>
- <20220720085230.3801945-2-quan@os.amperecomputing.com>
- <0a5cbaaa-565a-7215-5e31-12c52f4bbcbd@linaro.org>
-Content-Language: en-CA
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-In-Reply-To: <0a5cbaaa-565a-7215-5e31-12c52f4bbcbd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR02CA0005.apcprd02.prod.outlook.com
- (2603:1096:3:17::17) To SJ0PR01MB7282.prod.exchangelabs.com
- (2603:10b6:a03:3f2::24)
+        Wed, 20 Jul 2022 22:49:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B021E62A5C
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 19:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658371789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z6hDKYquK0RWOwBXuZpsj17I8aU98q+WZfO0MGTd+kY=;
+        b=d1m74V6TqYOjc8DCqfuSRwIaBmbEwPJYkVrGDalmqItVBKqv7r+R1yW6nKPbVbR8hU7Dv+
+        q9hi3uAfd71UlTb0f0i2KvH8q9/FJ1BO8k60sRMbXDIY3R0XHHCPoS43UPPZ+cclJCRD3i
+        i1s0BQkIUoUkXaZCSrbgXFpswBwuCRU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-497-EMGYVkNqPvCnoluoS9oQAw-1; Wed, 20 Jul 2022 22:49:46 -0400
+X-MC-Unique: EMGYVkNqPvCnoluoS9oQAw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21EB885A585;
+        Thu, 21 Jul 2022 02:49:45 +0000 (UTC)
+Received: from localhost (ovpn-12-68.pek2.redhat.com [10.72.12.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EE2FD2166B26;
+        Thu, 21 Jul 2022 02:49:43 +0000 (UTC)
+Date:   Thu, 21 Jul 2022 10:49:40 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     corbet@lwn.net, vgoyal@redhat.com, dyoung@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, william.gray@linaro.org,
+        dhowells@redhat.com, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        tglx@linutronix.de, bigeasy@linutronix.de,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-cachefs@redhat.com
+Subject: Re: [PATCH v2] docs: Fix typo in comment
+Message-ID: <Yti+xEJIWeTSqD8n@MiWiFi-R3L-srv>
+References: <20220721015605.20651-1-slark_xiao@163.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e14f0cb7-fc60-433e-55a5-08da6ac344f7
-X-MS-TrafficTypeDiagnostic: DM5PR01MB2668:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CkpkbSW8is87jdVYw8Ya51FxhW9PGqDViEzFBdWTmqW9oFCWMoX6Zs6KqHut36ZEisxFjHBBtGXrHOxXrYJKXZMagCyJTV1VO/PjmOxmAz2aR/dxa+3p0cDAcnxwZPsAGOpBMVbcMDJBqmaMew7oQzhkXFKwfeIvRqGQfhrY/l0JXphOUd9F8uGj8cQ3wgxcRnxnSJg4IuQ9hcHszUOwUulAGo+NnpmZ4rVFq7NgZ6BNKqRpBf2tvMkRlHQYvGstm7WZIEkwO9uk0ku9fyrWoNGudt9CrfsjPLYsqgJPPaTgZf5qfeDF992tjGPbyP9oUs2FJdoBlo+BjZyVVGejy1viG65iOi3RfAwrIM1NKd14GhfD/pxwRnfcn39JLETuyxaR/R4+Hy/qSPw1/E+HzlMelkbGB9FG/tN6aaTndSW2LguX4/D3IjSxOECDHA2lrgc3KxmqEtoxRhV3aI1FUDL97qIV/SYZ++slWbgfpfhcIG0KWwHFsiHNtvqljTnATYUOtHcva4u48f8/E4g5SDGDU1k2FtPF+jk5BchQMbYzYwYE4ZwLjxG1RAagAfSe2nq7L1CLvyiGpxXIECZY47A+BcyK7dmz/iDGDaApJFbHoO/jVg2uIdV1gFqK3s++o6vqbKOilhQ2RrpWJPL3Jj6zU05K6gpF5HeZand+9PdacLE65d0F+u0wo/5vV0WPUPZXbAltqGu9LLBsFpVC/fg5lh2SqHXEtgp5zLQYhKjc+M6gM71KQg0EDSbPtXmjJ7nVRZy7/Xd9aSMGs0yjBHdxepQrj9G843qJ5IU/44Ptb7sNHPzuIOOORJP7qX/lwNr5TZ1lHHojdl9wXXbTaxs0Y4L53CDQnZcFKXyjz5E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(396003)(136003)(366004)(346002)(376002)(7416002)(8676002)(8936002)(5660300002)(4326008)(66946007)(66556008)(66476007)(2906002)(83380400001)(86362001)(38350700002)(38100700002)(6486002)(921005)(6506007)(6512007)(316002)(107886003)(2616005)(110136005)(52116002)(478600001)(26005)(186003)(41300700001)(31686004)(31696002)(53546011)(6666004)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NkhEeWU0S3l5SmljZ2ZGSUtRblE5bE9NWHdJM3VSeHpNOFBOL3FKZ0RZMnU4?=
- =?utf-8?B?RFpzSVljTVNzWlc2aXFHRzYxY01vaVFTSjBBVnlTVUE4RGtNck9pSFhYN0s3?=
- =?utf-8?B?ajFCZ2dZQ2VmRmphZ2JjdW02Y2tPcGlybGR6SmlhRWdTc0Q3U1NvdVQ5bXYy?=
- =?utf-8?B?L1ZMSHJpSVlkMHlrVEdmNlB2SmloMG9hZ3dmclVGSWE2eC95SWpYaFlJM293?=
- =?utf-8?B?bjNZSWtUUVRHdHBoWWVOc0VRajVLWTkvYnJQd2ZYcFQwK2hBU1FFbkd1Ri9a?=
- =?utf-8?B?V3dEL1lFZUt4L0owazlDUXo0cUF2Zm5ybGNYWWl2c2ZqVk5qZ2VGeXliS1B3?=
- =?utf-8?B?KzIzNlFrdHVqWC9CaFU0Y1l4MEpsMmdLWklYUGIxUlhCNTN3RFdpbDh2VlFG?=
- =?utf-8?B?NzhnOGt6OFUvRmlNbnEzWmRRSytXNzRKU012OFZxb1E4aWRlajhsNWRMZTZQ?=
- =?utf-8?B?cWZQT3BIWXRoV1VwMW1OWXZvUVlpRjVJUEJWR2pSdjM1ZUUwcHF3ODdIOVJi?=
- =?utf-8?B?cXZUekNtb0tYSklFM2czaUdaekNVaFhQSTh4QzVCMnUzbUN3TVVuUlB3cDVa?=
- =?utf-8?B?TXpkbkhNR2FpYXdUcDdrSDhDU1NPSlkybFd4clZTbVBFK0g3bnI5VzA4YXVG?=
- =?utf-8?B?MW1QdjFWemM5WFZoNjZUaERFdzdIK2hwS0FHZXc5WkxoVHpGbFMrTWpCejJL?=
- =?utf-8?B?RklYZUFpTjhpeEFSeFNCU0hsdFVlWktOYjFoSzI1bUxacW14a250QmhQeXJT?=
- =?utf-8?B?MmY5QUlzODlhbUlVcHQ1OXhjdm1ESnR1NnhVM0l6RVdoWEJ3NVZlODQ0aGpP?=
- =?utf-8?B?bXhRTXRZQVVkU3BBdUlLM0tYTjFJdXVvbmFHMlNkTVFJV0xVc1hGNFBnNito?=
- =?utf-8?B?UWFoYklkaWlLakU0SHlxZWFsTkNyTzNyUmt6bDZSTkUwQUFvcjNULy9HYnRY?=
- =?utf-8?B?NXBxWW1NOEZYOTltd042TXdMeDRKb2g2VjQzNkdlelltUks1Ym9ySHZGcVNM?=
- =?utf-8?B?Q09NYWk5SFRhWGRIdUY5Mi8vKzdheDduTHJ4YURZWlFCZmttNnZ0K3l4YitX?=
- =?utf-8?B?VFZLQzVrMGpyakJpMFZVZWIvY29hallxRC9HTXhrRWtXN2tzODc1b09NdG1N?=
- =?utf-8?B?bzBSQVppdlRDbE8waTFlNnRTbUNUM1RXNWRrS0lta1dYN0FObGM5N1U0dVAy?=
- =?utf-8?B?d0JwRzZKRC9QRzM1Z3JjQW1Pa3N2bk9qbi80RmxYbzlBcUtuYkJsbk1tSFZF?=
- =?utf-8?B?Z0F5RlhPZ1lLSkNSb0QzTTQyR0ZOOFFScEx6SW03VWZTYzJDUElZK29rSGNw?=
- =?utf-8?B?c2VkV0FjbUc5dmFQdHpSUkplUk9wYmUyTUpvM041Y0hRWjF6MEV0cXlnbFor?=
- =?utf-8?B?SmsxZzlRVllFdWpZSlJtOVdZdkt0dWl0UXpxYytZeVYxWVhPcHpDNlZvTVpY?=
- =?utf-8?B?U0J2dlNHc240U3E4S0oxSzJidFU2UE9BTTAwVkJmb2xYT3M3bUliSUltUENQ?=
- =?utf-8?B?bVBIVWYyVjVIaXE5NklaQWNWcmduQXh2UWxQVUtMQkNxNno2NzVKdnJ0LzZC?=
- =?utf-8?B?TlVaMnVlVHBML0RzRFRzZjZTWkhXamJxZHQwVVRhMW12d3VOSDVhUkhFNHV3?=
- =?utf-8?B?MnpNbjhBQjFpNXNaSkFHMlVUQ0VzYm5ITGFEZ3kxZjRudHA3VW9seEZERkU5?=
- =?utf-8?B?ZTRsclhKRzlmN2JDUDU4ZW0wNWkrdi9ycHpiZ2hrdFR1UDVUK296bmtSWjdW?=
- =?utf-8?B?djFObkYrRERRUjBnNWFGMzY2MXRCajVvcW1NcU5oa29ScnMwT0wya1RkZ1FL?=
- =?utf-8?B?ajJVcTZpOG1WbTg3V2VKUjczUFRKQmtDdWhWQU1EZXJFL1VVWEx0MkhNWTYy?=
- =?utf-8?B?alpNMkltZThvcEptd0poemtETE43OXB4MEhXaU5Hc2V0MHpjbmtwUWRlYjVz?=
- =?utf-8?B?UVhNdlFuWVZtcllVcW5Yd1BvUGZKT0w4V3FzZkFqUUhOVVEwbEpvOTRQWGRK?=
- =?utf-8?B?NG1vWVp4WFpKM1BpOS9zRDdyWk14eWVsZDI0Ym9XY1EzVWJ2bUkyR3hjQ3pU?=
- =?utf-8?B?K0ZZeU53Qzdwc0Y1Vlh4ZTRyVVlEOVZMTXdnVFNReU1CWkt1akdZeUNkK0VL?=
- =?utf-8?B?ZzRTZTNWejM1aDdrVmE3bkRlbEF2ZllkWHZTZjNtamM2NGYzUnlCamcrQVly?=
- =?utf-8?Q?B1q5ytSuNF/3MC3sbTUgLN4=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e14f0cb7-fc60-433e-55a5-08da6ac344f7
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 02:46:53.8167
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O9SrukKahuNxxcdUUGTKO08N0XFfP8uKwHRyWLvsHOLOLx+4ORFBeYpSeSSfkU1QpJkAq3ZvTgxG1eCzwgx1jwd7v20M1yQWIVnF90f2NFo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR01MB2668
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721015605.20651-1-slark_xiao@163.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/21/22 at 09:56am, Slark Xiao wrote:
+> Fix typo in the comment
 
+Better tell what's fixed to save reviewers' time:
 
-On 20/07/2022 17:34, Krzysztof Kozlowski wrote:
-> On 20/07/2022 10:52, Quan Nguyen wrote:
->> Document Ampere Mt.Mitchell BMC board compatible.
->>
->> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+Fix typo 'the the' in several places of document.
+
+Other then this nitpick, looks good to me.
+
+Reviewed-by: Baoquan He <bhe@redhat.com>
+
 > 
-> Thank you for your patch. There is something to discuss/improve.
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> ---
+> v2: Add all .rst changes in Documents into 1 single patch
+> ---
+>  Documentation/admin-guide/kdump/vmcoreinfo.rst    | 2 +-
+>  Documentation/bpf/map_cgroup_storage.rst          | 4 ++--
+>  Documentation/core-api/cpu_hotplug.rst            | 2 +-
+>  Documentation/driver-api/isa.rst                  | 2 +-
+>  Documentation/filesystems/caching/backend-api.rst | 2 +-
+>  Documentation/locking/seqlock.rst                 | 2 +-
+>  Documentation/sphinx/cdomain.py                   | 2 +-
+>  7 files changed, 8 insertions(+), 8 deletions(-)
 > 
->> ---
->> v2:
->>    + Introduce in v2 to add Ampere Mt. Mitchell BMC compatible [Krzysztof]
->>
->>   Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
->> index d61408194998..b8146d5c4431 100644
->> --- a/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
->> +++ b/Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml
->> @@ -71,6 +71,7 @@ properties:
->>             - enum:
->>                 - aspeed,ast2600-evb
->>                 - aspeed,ast2600-evb-a1
->> +              - ampere,mtmitchell-bmc
+> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> index 8419019b6a88..6726f439958c 100644
+> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> @@ -200,7 +200,7 @@ prb
+>  
+>  A pointer to the printk ringbuffer (struct printk_ringbuffer). This
+>  may be pointing to the static boot ringbuffer or the dynamically
+> -allocated ringbuffer, depending on when the the core dump occurred.
+> +allocated ringbuffer, depending on when the core dump occurred.
+>  Used by user-space tools to read the active kernel log buffer.
+>  
+>  printk_rb_static
+> diff --git a/Documentation/bpf/map_cgroup_storage.rst b/Documentation/bpf/map_cgroup_storage.rst
+> index cab9543017bf..8e5fe532c07e 100644
+> --- a/Documentation/bpf/map_cgroup_storage.rst
+> +++ b/Documentation/bpf/map_cgroup_storage.rst
+> @@ -31,7 +31,7 @@ The map uses key of type of either ``__u64 cgroup_inode_id`` or
+>      };
+>  
+>  ``cgroup_inode_id`` is the inode id of the cgroup directory.
+> -``attach_type`` is the the program's attach type.
+> +``attach_type`` is the program's attach type.
+>  
+>  Linux 5.9 added support for type ``__u64 cgroup_inode_id`` as the key type.
+>  When this key type is used, then all attach types of the particular cgroup and
+> @@ -155,7 +155,7 @@ However, the BPF program can still only associate with one map of each type
+>  ``BPF_MAP_TYPE_CGROUP_STORAGE`` or more than one
+>  ``BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE``.
+>  
+> -In all versions, userspace may use the the attach parameters of cgroup and
+> +In all versions, userspace may use the attach parameters of cgroup and
+>  attach type pair in ``struct bpf_cgroup_storage_key`` as the key to the BPF map
+>  APIs to read or update the storage for a given attachment. For Linux 5.9
+>  attach type shared storages, only the first value in the struct, cgroup inode
+> diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/cpu_hotplug.rst
+> index c6f4ba2fb32d..f75778d37488 100644
+> --- a/Documentation/core-api/cpu_hotplug.rst
+> +++ b/Documentation/core-api/cpu_hotplug.rst
+> @@ -560,7 +560,7 @@ available:
+>    * cpuhp_state_remove_instance(state, node)
+>    * cpuhp_state_remove_instance_nocalls(state, node)
+>  
+> -The arguments are the same as for the the cpuhp_state_add_instance*()
+> +The arguments are the same as for the cpuhp_state_add_instance*()
+>  variants above.
+>  
+>  The functions differ in the way how the installed callbacks are treated:
+> diff --git a/Documentation/driver-api/isa.rst b/Documentation/driver-api/isa.rst
+> index def4a7b690b5..3df1b1696524 100644
+> --- a/Documentation/driver-api/isa.rst
+> +++ b/Documentation/driver-api/isa.rst
+> @@ -100,7 +100,7 @@ I believe platform_data is available for this, but if rather not, moving
+>  the isa_driver pointer to the private struct isa_dev is ofcourse fine as
+>  well.
+>  
+> -Then, if the the driver did not provide a .match, it matches. If it did,
+> +Then, if the driver did not provide a .match, it matches. If it did,
+>  the driver match() method is called to determine a match.
+>  
+>  If it did **not** match, dev->platform_data is reset to indicate this to
+> diff --git a/Documentation/filesystems/caching/backend-api.rst b/Documentation/filesystems/caching/backend-api.rst
+> index d7507becf674..3a199fc50828 100644
+> --- a/Documentation/filesystems/caching/backend-api.rst
+> +++ b/Documentation/filesystems/caching/backend-api.rst
+> @@ -122,7 +122,7 @@ volumes, calling::
+>  to tell fscache that a volume has been withdrawn.  This waits for all
+>  outstanding accesses on the volume to complete before returning.
+>  
+> -When the the cache is completely withdrawn, fscache should be notified by
+> +When the cache is completely withdrawn, fscache should be notified by
+>  calling::
+>  
+>  	void fscache_relinquish_cache(struct fscache_cache *cache);
+> diff --git a/Documentation/locking/seqlock.rst b/Documentation/locking/seqlock.rst
+> index 64405e5da63e..bfda1a5fecad 100644
+> --- a/Documentation/locking/seqlock.rst
+> +++ b/Documentation/locking/seqlock.rst
+> @@ -39,7 +39,7 @@ as the writer can invalidate a pointer that the reader is following.
+>  Sequence counters (``seqcount_t``)
+>  ==================================
+>  
+> -This is the the raw counting mechanism, which does not protect against
+> +This is the raw counting mechanism, which does not protect against
+>  multiple writers.  Write side critical sections must thus be serialized
+>  by an external lock.
+>  
+> diff --git a/Documentation/sphinx/cdomain.py b/Documentation/sphinx/cdomain.py
+> index ca8ac9e59ded..a7d1866e72ff 100644
+> --- a/Documentation/sphinx/cdomain.py
+> +++ b/Documentation/sphinx/cdomain.py
+> @@ -151,7 +151,7 @@ class CObject(Base_CObject):
+>      def handle_func_like_macro(self, sig, signode):
+>          u"""Handles signatures of function-like macros.
+>  
+> -        If the objtype is 'function' and the the signature ``sig`` is a
+> +        If the objtype is 'function' and the signature ``sig`` is a
+>          function-like macro, the name of the macro is returned. Otherwise
+>          ``False`` is returned.  """
+>  
+> -- 
+> 2.25.1
 > 
-> Put the entry ordered alphabetically.
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
 > 
 
-Thanks Krzysztof for the review.
-
-Will change to :
-              - enum:
-  +              - ampere,mtmitchell-bmc
-                 - aspeed,ast2600-evb
-                 - aspeed,ast2600-evb-a1
-
-But, should we correct the below as well? ie: to move 
-"ampere,mtjade-bmc" to before "aspeed,ast2500-evb" ?
-
-- description: AST2500 based boards
-         items:
-           - enum:
-               - aspeed,ast2500-evb
-               - amd,ethanolx-bmc
-               - ampere,mtjade-bmc
-               - asrock,e3c246d4i-bmc
-
-Thanks,
-- Quan

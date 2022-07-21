@@ -2,65 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342AB57D5C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF4557D5CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbiGUVRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
+        id S233848AbiGUVTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233685AbiGUVRg (ORCPT
+        with ESMTP id S233812AbiGUVTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:17:36 -0400
-Received: from luna (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net [86.15.83.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9266074362
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:17:35 -0700 (PDT)
-Received: from ben by luna with local (Exim 4.96)
-        (envelope-from <ben@luna.fluff.org>)
-        id 1oEdY2-001tWU-2x;
-        Thu, 21 Jul 2022 22:17:30 +0100
-From:   Ben Dooks <ben-linux@fluff.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     linux@armlinux.org.uk, Ben Dooks <ben-linux@fluff.org>
-Subject: [PATCH 3/3] arm: fix undeclared soft_restart
-Date:   Thu, 21 Jul 2022 22:17:29 +0100
-Message-Id: <20220721211729.451731-4-ben-linux@fluff.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220721211729.451731-1-ben-linux@fluff.org>
-References: <20220721211729.451731-1-ben-linux@fluff.org>
+        Thu, 21 Jul 2022 17:19:12 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF26E91CDD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:19:10 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y9so2844335pff.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:19:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ScpzxJyKmeludExQxXIszukI2lfSKDVjTGaUtRwviD0=;
+        b=fYYV0vbwKMgnf6isTcV+vMM02uE3HouFd898nbPDmChcgRckNqpK/32TxwPnHN227J
+         ++L0os8W6x9ium+SRGtN1Ky0yP28Yuv/qHye6YY85twUgSpz5cL4iafN1yWBzT5mF5jT
+         zfZ0audvBpI4c00xFJNjzqhLBl3DeJoNNfW967aC5PgjacYCopiCYm4yTM/A0/u+cirV
+         MUabNXNe86MjLj4FukHS14w3Pyv+H9Fs6bPQsVG7BpQl5iGi6UTeRa3otGxN0BH1ah9v
+         19fMAXWCGwObG/1U0EneiYQ/0oaLDLnpN90yC2Rxw6G7kn46NiP6IFXR/iv11/pJMTkK
+         uw5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ScpzxJyKmeludExQxXIszukI2lfSKDVjTGaUtRwviD0=;
+        b=AFkJfkKnOJKG8kLSafFDy10WDcq8EK9QrPWDQFavCEUeFeL0xKuGUwKZi/Zsoo7PfE
+         NtCbIlIj1APyyco2DUwwUK93jWPMOpddYS3amIPQRp+Bwq5YzOfKACaJWbh6FHHh1Zla
+         QxicJhuH5pjoHkPO5k5BsVFd70KH+yIXIcskfJJFAJpL5pu0Ae1R30fEvN+VI18FiZYv
+         64w/CzfX/QIbShMQyeCpvIM2hdfk4rj0FW0l+F8Z4y1CxfuFKvMIjrtVFBRZTq5AbWI+
+         9MVuDGI48tDKj/OUwzDa06EMUVYBjdYhBhw3yimhU2d7o+o34/pphUmW/dBvvHPxiuMV
+         WgrA==
+X-Gm-Message-State: AJIora+qPwk1W7Mwgr0t73xRJk2V2T+P4djDpDefJrbKQrf3Vv4K1mOe
+        P4Q/4uTqs3318WvABrZ1g0wI+w==
+X-Google-Smtp-Source: AGRyM1tRhRp+6mg/TcG9DeP0WjeN5fNx2D34QSPiNsnaUnKIDpEjYXyyrYr8GL+NFtkg+bEZ2FCYeg==
+X-Received: by 2002:a65:6d19:0:b0:41a:625e:7d7a with SMTP id bf25-20020a656d19000000b0041a625e7d7amr275152pgb.506.1658438350139;
+        Thu, 21 Jul 2022 14:19:10 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id i67-20020a62c146000000b005289fbef7c4sm2243655pfg.140.2022.07.21.14.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 14:19:09 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 21:19:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        nikunj@amd.com, ashish.kalra@amd.com
+Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <YtnCyqbI26QfRuOP@google.com>
+References: <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
+ <YksIQYdG41v3KWkr@google.com>
+ <Ykslo2eo2eRXrpFR@google.com>
+ <eefc3c74-acca-419c-8947-726ce2458446@www.fastmail.com>
+ <Ykwbqv90C7+8K+Ao@google.com>
+ <YkyEaYiL0BrDYcZv@google.com>
+ <20220422105612.GB61987@chaop.bj.intel.com>
+ <20220509223056.pyazfxjwjvipmytb@amd.com>
+ <YnmjvX9ow4elYsY8@google.com>
+ <c3ca63d6-db27-d783-40ca-486b3fbbced7@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
-        HELO_NO_DOMAIN,KHOP_HELO_FCRDNS,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3ca63d6-db27-d783-40ca-486b3fbbced7@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The soft_restart() is declared in <asm/system_misc.h> so
-include that to fix the following sparse warning:
+On Thu, Jul 21, 2022, Gupta, Pankaj wrote:
+> 
+> Hi Sean, Chao,
+> 
+> While attempting to solve the pre-boot guest payload/firmware population
+> into private memory for SEV SNP, retrieved this thread. Have question below:
+> 
+> > > > Requirements & Gaps
+> > > > -------------------------------------
+> > > >    - Confidential computing(CC): TDX/SEV/CCA
+> > > >      * Need support both explicit/implicit conversions.
+> > > >      * Need support only destructive conversion at runtime.
+> > > >      * The current patch should just work, but prefer to have pre-boot guest
+> > > >        payload/firmware population into private memory for performance.
+> > > 
+> > > Not just performance in the case of SEV, it's needed there because firmware
+> > > only supports in-place encryption of guest memory, there's no mechanism to
+> > > provide a separate buffer to load into guest memory at pre-boot time. I
+> > > think you're aware of this but wanted to point that out just in case.
+> > 
+> > I view it as a performance problem because nothing stops KVM from copying from
+> > userspace into the private fd during the SEV ioctl().  What's missing is the
+> > ability for userspace to directly initialze the private fd, which may or may not
+> > avoid an extra memcpy() depending on how clever userspace is.
+> Can you please elaborate more what you see as a performance problem? And
+> possible ways to solve it?
 
-arch/arm/kernel/reboot.c:78:6: warning: symbol 'soft_restart' was not declared. Should it be static?
-
-Signed-off-by: Ben Dooks <ben-linux@fluff.org>
----
- arch/arm/kernel/reboot.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/kernel/reboot.c b/arch/arm/kernel/reboot.c
-index 2cb943422554..3f0d5c3dae11 100644
---- a/arch/arm/kernel/reboot.c
-+++ b/arch/arm/kernel/reboot.c
-@@ -10,6 +10,7 @@
- #include <asm/cacheflush.h>
- #include <asm/idmap.h>
- #include <asm/virt.h>
-+#include <asm/system_misc.h>
- 
- #include "reboot.h"
- 
--- 
-2.35.1
-
+Oh, I'm not saying there actually _is_ a performance problem.  What I'm saying is
+that in-place encryption is not a functional requirement, which means it's purely
+an optimization, and thus we should other bother supporting in-place encryption
+_if_ it would solve a performane bottleneck.

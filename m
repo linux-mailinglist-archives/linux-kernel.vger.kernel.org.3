@@ -2,121 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD92457C568
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7677857C56B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiGUHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S232233AbiGUHhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiGUHg6 (ORCPT
+        with ESMTP id S231381AbiGUHhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:36:58 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B8D7C1B4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:36:56 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id j26so845923lji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:36:56 -0700 (PDT)
+        Thu, 21 Jul 2022 03:37:46 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106517CB40
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:37:45 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso2738259wma.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:37:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=INIrz+WDj0ZvQHcz9TnBkLHSMLRDg1voDl7d6lVEzy4=;
-        b=XuwHynZZccr+ihJjF+6M8WbwngkPw/sUIZTTN6Y/xf8Jz9I6G7qe61XakhiWCodkXB
-         WMHqiTeIL0IbF+IGWXlCRF7qTO9W1RwL61FPdVJ9bNGGNvXw4NkF9YhaF9+DWDNxugIU
-         fyKK0Ws8XA0eHWHZmJnOdipZfy7kWJJ2bdl/bkC+Y+95HpNAgyGfEQXwzCjLHGtDr2Lg
-         rFGPG9gC8+BumsYcKTToqT8sEP+hF08WY3amq2X8lnII5RcT2T7wsOtfWRoQI2aKvSl+
-         +Gw0i9xZbHhNrCl/NfvaZ15vGJmPTzzMlHJ4VqATS9GJ1cMd8VED74Ly9i4zIPFZQwI/
-         P4xg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gzAWwnUgPA8hYUFg1Aq5YWHbOYBuHEot0taeaAhNYtQ=;
+        b=MpTCbtKio/TJ8EaXwHYZmaqBSB0W3G2PSKgVmNgRPiln+t53SaPCCwlyheL1ytNuZD
+         UuhgB9kHYplJD740Ual4j07JiPBZd0ot9SbISSbOJs11ndeluMNW3hvGV+AbDnlUS6/q
+         fBYsaH32/44zJXt3gpRwxxSNNq9KOXzRij7xt/YEZAfvNdL2mc5cqbPCkY2iEjsL3cNG
+         nyZZIouibxtG/ZBfot0mqNROr6wdJqVr//bQG4ic8OZ0A91qtuHeUyRm2nUn97ERdKiN
+         bzpnHgdRM7BF1ZMceTwtZ3/7B5UqOb2aCSwg5D/eP06UgDGq1QOyHMdOuIVWXcCKJKcR
+         DUPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=INIrz+WDj0ZvQHcz9TnBkLHSMLRDg1voDl7d6lVEzy4=;
-        b=blZbWI/jugvFAr5u69ZtrM/RR23AmpS8pdyVuUkmj2DTWtUid3EubHpEzwouo3Ai4u
-         H1LKPMglUz+IQUXYkm0O6oCgqBOuC3D/MGvGZGzcoxGJZJU2WXQzoYZURNIntKRaRXF/
-         TZ7hXbCGtKGqLTJjunrq/ib2cV1CPcnHyNp4THWLd3TjxsSe+nF1UAUku6vO+btsPf9p
-         qt5px8JzwMPX3FGWITmnzaNPxbusCZWXtfS9tHfCoe85UMC/IPEdnFt0k1M9aoNawOW7
-         6Jcw92pO+On9VCin7IPd5FZRhh9AbEHMb9UOf7+RWNAuOzVrmT9AfK956297hoH+KfTV
-         DfzA==
-X-Gm-Message-State: AJIora/4uyHn4JXrRIozGKLom5iY8Elkrir7qXsxmqt8DX039BptWsEt
-        g4tdtK7gr+wJlq7HlGUoXWO4ag==
-X-Google-Smtp-Source: AGRyM1vmHIZvYb5hQiGX+8TA1O0aR9NSdv6+VJidFvgFxA/LZZxBMKynm3UyxFXXWa1or5c1+APrtg==
-X-Received: by 2002:a2e:a990:0:b0:25d:5e37:1746 with SMTP id x16-20020a2ea990000000b0025d5e371746mr18898124ljq.34.1658389015350;
-        Thu, 21 Jul 2022 00:36:55 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id cf3-20020a056512280300b0048a71ff9c04sm115644lfb.254.2022.07.21.00.36.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 00:36:54 -0700 (PDT)
-Message-ID: <c5b37e68-dc1f-cdae-83e4-23aa0216db69@linaro.org>
-Date:   Thu, 21 Jul 2022 09:36:53 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gzAWwnUgPA8hYUFg1Aq5YWHbOYBuHEot0taeaAhNYtQ=;
+        b=lV4PXj1cffiCGnTDalOJ9xK8Rpldg1I/0nLMjbST9SwAa/6tyFGU1JeSfZNSOGbWuw
+         b27DfyTg3qjhJu7IQ+gBH+wuRhZGUnDOsik8Zr047yyzDJ9BwfLv+ckkgUeySB9uNVKK
+         iqe5aCZ0E1/nmIe+8V3YHaf19mXzRYP7HnlnLod8LqzAd7hgvGGZCAyJGxEYUqPCCg2P
+         lo0d6g8/qsqAD8tKy7rE0txVSMYU9lPa3oFncIrfhuBcru9mqWFAdmiYq6DtyQ7+ZTvB
+         i1tuaPloc2FWnRSOz95lr/qB5+ud4vnLIkkG2ux4oQwpKsOeDiWcOA1dlYBCiIayWxoq
+         jWfw==
+X-Gm-Message-State: AJIora8HcROD9S86L+/9KhJOnDx8JG/8hpmwY/mbWXH5wPuLrsKFoQhl
+        y+u9ZZZj19M/xVGxCJ5itWiDdw==
+X-Google-Smtp-Source: AGRyM1vUYhpfJ8f5WiYRNRoDmh5lXecdVlAzF+s7bAs2s48eQne8qOMtKWfGmdODzofob0AHo0i4kQ==
+X-Received: by 2002:a05:600c:601b:b0:3a3:21a2:8bcd with SMTP id az27-20020a05600c601b00b003a321a28bcdmr6992613wmb.80.1658389063396;
+        Thu, 21 Jul 2022 00:37:43 -0700 (PDT)
+Received: from google.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
+        by smtp.gmail.com with ESMTPSA id j9-20020a5d5649000000b0021d7ff34df7sm1132377wrw.117.2022.07.21.00.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 00:37:42 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 07:37:38 +0000
+From:   Keir Fraser <keirf@google.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jason Wang <jasowang@redhat.com>, kernel-team@android.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio: Force DMA restricted devices through DMA API
+Message-ID: <YtkCQsSvE9AZyrys@google.com>
+References: <20220719100256.419780-1-keirf@google.com>
+ <YtbMcBw4l0LAFn9+@infradead.org>
+ <YtbRwO40CmIRWOUR@google.com>
+ <YtbTGjRw65QEKkQA@infradead.org>
+ <YtbXxl8STUtQkacb@google.com>
+ <20220720024756-mutt-send-email-mst@kernel.org>
+ <Yte8h0wtBZqiBky8@google.com>
+ <20220720051351-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220721000658.29537-1-william.zhang@broadcom.com>
- <a635754e-bf41-4058-5fbb-57ead36b7128@linaro.org>
- <883c2ad4c36220b488519a8902ad72bc@milecki.pl>
- <193845cb-6149-1ae6-5eb6-6b01ffcf763b@linaro.org>
- <4b5100e4a6e9e581f4b8ab58e5ca4927@milecki.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4b5100e4a6e9e581f4b8ab58e5ca4927@milecki.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720051351-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/07/2022 09:13, Rafał Miłecki wrote:
->> That's better argument. But what's the benefit of adding generic
->> compatible? Devices cannot bind to it (it is too generic). Does it
->> describe the device anyhow? Imagine someone adding compatible
->> "brcm,all-soc-of-broadcom" - does it make any sense?
+On Wed, Jul 20, 2022 at 05:58:28AM -0400, Michael S. Tsirkin wrote:
+> On Wed, Jul 20, 2022 at 08:27:51AM +0000, Keir Fraser wrote:
+> > The short answer is that there will be more patches forthcoming,
+> > because the balloon driver will need to tell the hypervisor (EL2 Hyp
+> > in the ARM PKVM case) that is is willingly relinquishing memory
+> > pages. So, there will be a patch to add a new HVC to PKVM Hyp, and a
+> > patch to detect and use the new HVC via a new API that hooks into
+> > Linux's balloon infrastructure.
+> > 
+> > So the use case is that virtio_balloon needs to set up its rings and
+> > descriptors in a shared memory region, as requested via
+> > dma-restricted-pool and the VIRTIO_F_PALTFORM_ACCESS flag. This is
+> > required because the host device has no access to regular guest
+> > memory.
+> > 
+> > However, in PKVM, page notifications will notify both the (trusted)
+> > Hypervisor, via hypercall, and the (untrusted) VMM, via virtio. Guest
+> > physical addresses are fine here. The VMM understands guest PAs
+> > perfectly well, it's just not normally allowed to access their
+> > contents or otherwise map or use those pages itself.
 > 
-> OK, I see it now. I can't think of any case of handling all devices
-> covered with suc a wide brcm,bcmbca binding.
+> OK ... and I wonder whether this extends the balloon device
+> in some way? Is there or can there be a new feature bit for this
+> functionality?
 
-Maybe there is some common part of a SoC which that generic compatible
-would express?
+To my mind it is implementation dependent whether the balloon device
+needs to be extended. In my current implementation it is not, and
+probably it will continue to be entirely handled host-side by the host
+kernel and hypervisor. But we should consider the possibility of
+requiring knowledge/extension in the device for sure.
 
-Most archs don't use soc-wide generic compatible, because of reasons I
-mentioned - no actual benefits for anyone from such compatible.
+Currently there is no feature flag for the new Hyp-notification path
+on the driver side. The notification hypercall is hidden behind a new
+API, and there is an init/probe call on that API by which the driver
+unilaterally decides the extended path including Hyp notification is to
+be used. One downside of this is that the device cannot detect a
+legacy driver that lacks knowledge of the extended PKVM path. Any
+pages returned by a legacy driver will simply crash the VMM, because
+the hypervisor is still protecting those pages. A rather inelegant
+failure mode!
 
-But there are exceptions. I fouun socfpga and apple. The apple sounds as
-mistake to me, because the generic "apple,arm-platform" compatible looks
-like covering all possible Apple ARM platforms. I think Apple ARM
-designs in 20 years will not be compatible at all with current design,
-so such broad compatible is not useful... but that's only my opinion.
+I can envision a new feature flag that:
 
+1. Is advertised by the device (makes sense: the VMM surely knows that
+it is managing a protected VM).
+
+2. Is Ack'ed by an aware driver, and which switches on the extended
+notification path.
+
+3. Is not negotiated by a legacy driver, causing the device to clear
+FEATURES_OK, and the balloon is unavailable.
+
+A balloon-specific flag called perhaps VIRTIO_F_BALLOON_UNTRUSTED_HOST,
+or VIRTIO_F_BALLOON_NOTIFY_HYP, or somesuch? In some senses it's not a
+balloon-specific piece of information, but it's only a pertinent feature
+for balloon (at least as of now).
+
+My understanding is that the first step in upstreaming such a new flag
+would be to get it accepted into the virtio specification? If so and
+this sounds agreeable, I'll rework my private patches, and cook up an
+extension to the virtio spec. If an RFC posting of the patches here is
+preferred before posting to the virtio-spec list, I can do that too.
+
+> > Perhaps it would make more sense to re-submit this patch as part of
+> > a larger series that includes the rest of the mechanism needed to
+> > support virtio_balloon on PKVM?
+> > 
+> > Thanks,
+> > Keir
 > 
-> This leads me to another question if we should actually totally drop
-> brcm,bcmbca from other SoCs bindings, see linux-next's
-> Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
+> I suspect so, yes.
 
-This would be tricky as it was already accepted, unless all sit in
-linux-next and did not make to v5.19-rc1.
+Thanks for your review feedback. I will submit a full patch series in
+due course.
 
-Best regards,
-Krzysztof
+Regards,
+Keir

@@ -2,117 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CE257C6F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B359C57C6F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiGUIzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S232686AbiGUIzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232684AbiGUIzE (ORCPT
+        with ESMTP id S232685AbiGUIzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:55:04 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C51680512;
-        Thu, 21 Jul 2022 01:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=5IySwf3XGzdy0S9zkwVt+ygnU6w2l4TY/umizNUb2Ss=;
-        b=I5pgcldwwXwLNS1ZhOR83NcNMSsVS4g4Y+thqh/OHu6WB7m3oW2LWQwlkW+0zXj/Mhuq2UcccUbSg
-         4GpGv4+LRXq8+3g5aa69BavaF753i9d844Fb2FsXoPE6DLRBYNmKcWnATChhHRUJWcMWey02E1MRp6
-         AQhA+XozlCNYM488l8KS2xwtfjTMRtBPTeMgCVIKLoRSTo382jwzjsG19frmHQ6uFVywdfBMp1+CYP
-         Ck9Og3G6rTSywayOq9KVDl6vsqvCLnVZzb0Cg9GNz4+whVMiNhQza0HXX77SCGBd81OwGnBbvlASfx
-         sdr7vKxDFzS0LEr7G8rSlQCQofIYNhw==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.009141)], BW: [Enabled, t: (0.000012,0.000001)], RTDA: [Enabled, t: (0.084208), Hit: No, Details: v2.40.0; Id: 15.52k8uq.1g8fvemiq.ml00; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 21 Jul 2022 11:54:37 +0300
-Date:   Thu, 21 Jul 2022 11:54:11 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v5 0/2] Lattice ECP5 FPGA manager
-Message-ID: <20220721085411.ennvx74k45sxsimm@h-e2.ddg>
-References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
- <20220721074431.GA1712998@yilunxu-OptiPlex-7050>
+        Thu, 21 Jul 2022 04:55:38 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0A42F64E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:55:36 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id k19so1009122lji.10
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4GeLyV51uYj8j4S4aBve635E01r+lvLx2pbTjxK4lWY=;
+        b=r7/Jn5fBFKJaOhtb44Dkjir5D0my9GI5ryjs+mFVridMBGrA31diU16QC2UbpL167X
+         eWcY8H3uvQu/abRABlzE4W9nzhLybMEhXsBOdE58UnvdATo2x6OEIbQqKhZdpU3IPFRs
+         OuFHTLK8S75Bpltb/aEvT2UawF69arCPTyn/s7/V7R2GFzZEHjUXqM1Lj6ZVHtKihRFk
+         L6sMUxXH+LKkm7F5trbtBIN0gM93PTfJSox5aFPGm5Igsp6ejwaOqGtyDZL+eaFLO406
+         pFblBNMt5JH4n1C5KILz8CDIoS9kmWbFwlGYo0UEgw77xnYXHEGzBawWEW4cymTG2oO0
+         GEig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4GeLyV51uYj8j4S4aBve635E01r+lvLx2pbTjxK4lWY=;
+        b=1+XqStdW4ZcPaMHjttWkl+Q5RosL3JP9CoFV2COZi2pQzKUEtuHUeplQceBpnxwIyy
+         +bXyY+EekesN3M2wGZcbt7dpYWNzlw2ChKJdP3vzZkyS+bW0KtK5D0LVcQoYHIKqconv
+         TF6/N/YyuMyeKd4C0gd/9ObDtfcbYgyJkFzkXoA6s/ZfB19wkuH5oLPIJM3/IbMQw8hH
+         OJQx8SGIiB4T+yiRTz5ihBbPuJIxKIOl4jEoj66HCNJXmIxqjcOX1v6h+3l6S9z7ZYly
+         JMpcvcHgCsjU4+lqwVJxdDM7dq/vuX2qo7gfopWuM1Tr3pIRodPg8wThIG3oE+ymPwCk
+         AhFw==
+X-Gm-Message-State: AJIora+k0E07JRGzfeQErXba8BZZGUPy+ZsrhE4RXJxcL1YHi3ip/a2V
+        JLFJQ0tNhSbnN3ISr++sqBrXNQ==
+X-Google-Smtp-Source: AGRyM1t+1EDHj6uDmmwBE6CgTZopBYct95p34fYs4E202hjjQ4LPh6wl3Vozu3ATNCFfiaswEwGWyw==
+X-Received: by 2002:a2e:8852:0:b0:25d:4ab5:593b with SMTP id z18-20020a2e8852000000b0025d4ab5593bmr17501577ljj.261.1658393735136;
+        Thu, 21 Jul 2022 01:55:35 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id bp25-20020a056512159900b0047f76a935a5sm308444lfb.137.2022.07.21.01.55.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 01:55:33 -0700 (PDT)
+Message-ID: <19ccf775-cc1d-37de-bf4e-7745f0943851@linaro.org>
+Date:   Thu, 21 Jul 2022 10:55:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721074431.GA1712998@yilunxu-OptiPlex-7050>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
+Content-Language: en-US
+To:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>
+Cc:     Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>,
+        Yeeun Kim <yeeun119.kim@samsung.com>
+References: <20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p5>
+ <CGME20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p6>
+ <20220720055436epcms2p63896ebe4e2131e3844044d0112288570@epcms2p6>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720055436epcms2p63896ebe4e2131e3844044d0112288570@epcms2p6>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 03:44:31PM +0800, Xu Yilun wrote:
-> On Tue, Jul 19, 2022 at 02:23:33PM +0300, Ivan Bornyakov wrote:
-> > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
-> > slave SPI interface with .bit formatted uncompressed bitstream image.
+On 20/07/2022 07:54, Wangseok Lee wrote:
+> Add description to support Axis, ARTPEC-8 SoC. ARTPEC-8 is the SoC platform
+> of Axis Communications and PCIe controller is designed based on Design-Ware
+> PCIe controller.
 > 
-> I didn't have time to looking into the patches yet, but I have some quick
-> question.
+> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+> ---
+> v3->v4 :
+> -Add missing properties
 > 
-> Where is the bitstream data writing to? To the FPGA active region or the
-> backup nvmem like flash?
+> v2->v3 :
+> -Modify version history to fit the linux commit rule
+> -Remove 'Device Tree Bindings' on title
+> -Remove clock-names entries
+> -Change node name to soc from artpec8 on excamples
 
-Bitstream is written to FPGA's volatile SRAM configuration memory.
+Please rebase on newest Linux kernel or linux-next and use
+get_maintainers.pl script.
 
 > 
-> After reconfiguration, how to re-enumerate the hardware devices in the
-> newly programmed FPGA region?
+> v1->v2 :
+> -'make dt_binding_check' result improvement
+> -Add the missing property list
+> -Align the indentation of continued lines/entries
+> ---
+>  .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 138 +++++++++++++++++++
+>  .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 148 +++++++++++++++++++++
+>  2 files changed, 286 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+> new file mode 100644
+> index 0000000..435e86f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+> @@ -0,0 +1,138 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie-ep.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ARTPEC-8 SoC PCIe Controller
+> +
+> +maintainers:
+> +  - Jesper Nilsson <jesper.nilsson@axis.com>
+> +
+> +description: |+
+> +  This PCIe end-point controller is based on the Synopsys DesignWare PCIe IP
+> +  and thus inherits all the common properties defined in snps,dw-pcie-ep.yaml.
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: axis,artpec8-pcie-ep
+> +
+> +  reg:
+> +    items:
+> +      - description: Data Bus Interface (DBI) registers.
+> +      - description: Data Bus Interface (DBI2) registers.
+> +      - description: PCIe address space region.
+> +
+> +  reg-names:
+> +    items:
+> +      - const: dbi
+> +      - const: dbi2
+> +      - const: addr_space
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PIPE clock, used by the controller to clock the PIPE
+> +      - description: PCIe dbi clock, ungated version
+> +      - description: PCIe master clock, ungated version
+> +      - description: PCIe slave clock, ungated version
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pipe
+> +      - const: dbi
+> +      - const: mstr
+> +      - const: slv
+> +
+> +  samsung,fsys-sysreg:
+> +    description:
+> +      Phandle to system register of fsys block.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 
-I personally describe FPGA-based devices statically in DT overlay within
-fpga-region. Of course this approach is error prone to mismatch between
-firmware and devices described in DT overlay...
+Since you wrote this is one register, I expect offset:
+https://elixir.bootlin.com/linux/v5.18-rc1/source/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml#L42
 
-> Thanks,
-> Yilun
-> 
-> > 
-> > ChangeLog:
-> >   v1 -> v2:
-> >     * remove "spi" from compatible string
-> >     * reword description in dt-bindings doc
-> >     * add reference to spi-peripheral-props.yaml in dt-binding doc
-> >     * fix DTS example in dt-bindings doc: 4-spaces indentations, no
-> >       undersores in node names.
-> >   v2 -> v3:
-> >     * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
-> >   v3 -> v4:
-> >     * dt-bindings: reword description
-> >     * dt-bindings: revert props order
-> >   v4 -> v5:
-> >     * dt-bindings: remove trailing dot from title
-> >     * dt-bindings: reword description to avoid driver reference
-> >     * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
-> > 
-> > Ivan Bornyakov (2):
-> >   fpga: ecp5-spi: add Lattice ECP5 FPGA manager
-> >   dt-bindings: fpga: add binding doc for ecp5-spi fpga mgr
-> > 
-> >  .../bindings/fpga/lattice,ecp5-fpga-mgr.yaml  |  74 +++++
-> >  drivers/fpga/Kconfig                          |   7 +
-> >  drivers/fpga/Makefile                         |   1 +
-> >  drivers/fpga/ecp5-spi.c                       | 275 ++++++++++++++++++
-> >  4 files changed, 357 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-fpga-mgr.yaml
-> >  create mode 100644 drivers/fpga/ecp5-spi.c
-> > 
-> > -- 
-> > 2.37.1
-> > 
 
+> +
+> +  samsung,syscon-phandle:
+> +    description:
+> +      Phandle to the PMU system controller node.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +  samsung,fsys-bus-s:
+> +    description:
+> +      Phandle to bus-s of fsys block, this register
+> +      is additional control sysreg in fsys block and
+> +      this is used for pcie slave control setting.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+
+Ditto
+
+> +
+> +  samsung,fsys-bus-p:
+> +    description:
+> +      Phandle to bus-p of fsys block, this register
+> +      is additional control sysreg in fsys block and
+> +      this is used for pcie dbi control setting.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+
+Ditto
+
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    items:
+> +      - const: pcie_phy
+> +
+> +  num-lanes:
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clock-names
+> +  - samsung,fsys-sysreg
+> +  - samsung,syscon-phandle
+> +  - samsung,syscon-bus-s-fsys
+
+This does not match what you wrote in properties.
+
+Best regards,
+Krzysztof

@@ -2,188 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FFB57C1A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E132C57C1A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiGUA2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S231268AbiGUAfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbiGUA2i (ORCPT
+        with ESMTP id S230323AbiGUAfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:28:38 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3286249D;
-        Wed, 20 Jul 2022 17:28:36 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d7so306510plr.9;
-        Wed, 20 Jul 2022 17:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qHyW/zQGeHxiV8yKl6wtD5EU59PXEqMR+w3eh+TCFyE=;
-        b=SsuaZEcuN5do3+2MU1oonViR5MxpkAeiLETraeHDU+jUrOSJAu6J9p3xgNiIvqmDT+
-         ei/82Wrx/LydCV6FW9oOzc0Sq+Grkd2f0UUTm8kOTfKjPaCeaA8T0Budlm8Ox0c1AEdD
-         SWCU6W5hUo48z1rnXDDrar+YJdt8Mpr+ZDst6Lhym/YPpZB1lflP+KZeoNKEwtnHC8zq
-         USJsHDigua9pVKcCD03+0W1/Q84tK6B9zdcog+qRIXvJK/Viag4Dl4SyiNS1N/LhPEBz
-         pXz9RGfTgr9K7puvvGOjPpgmIChyqy3s4cbt7cdPmlmjrqFxQwf5IAmlQhi5JuwWLOQK
-         cfYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=qHyW/zQGeHxiV8yKl6wtD5EU59PXEqMR+w3eh+TCFyE=;
-        b=Fs6lvrjGwahaCII5Xz2yel+ZKQ1ZXc68sfsjG+icOBUc6rruYBjtbEwz7uxSuW4HhB
-         r+eyAqJzKhyV6Tr6ilY5XpNXpGqmKwPEvoz6T/hInNva8Gjt6yCk97HRAuajmemc2bne
-         9si9qRQcaTFqDFe0m9VJTCb4yV15Dwxz4l6Yl85HDqb2KVzyssHMYkR2ol3UNmFJpq7E
-         8tf0yJNMAhPx/+0zUpGJSCysRVyI5LdpcHN06fSJBi8B8ZsuK4X+V5FXL2r6y4a3OBhG
-         jbHRTTh1oPi5D1fYsblc7qTfp5T4odS9T8uJiK0VbpP1MH/iTEmLokPpQkksxGNIpk5S
-         8t3A==
-X-Gm-Message-State: AJIora+NG7WV/PBV80F+yCFmHxkpvjmJdGOzciuohx7VpeSCtreDtuQ2
-        eQE72qleGMgfYwea6cf1nEI=
-X-Google-Smtp-Source: AGRyM1tQVpAMPxmkuQ++lKXbIMF1xWaC4zknVeGb01qhRv1EyhtY+pCvWVk+DkpuQji1WGd3qXg5FA==
-X-Received: by 2002:a17:902:c945:b0:16c:49c9:7932 with SMTP id i5-20020a170902c94500b0016c49c97932mr41447676pla.80.1658363315963;
-        Wed, 20 Jul 2022 17:28:35 -0700 (PDT)
-Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170902db0500b0016bc4a6ce28sm163226plx.98.2022.07.20.17.28.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Jul 2022 17:28:35 -0700 (PDT)
-From:   justinpopo6@gmail.com
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, joalonsof@gmail.com, jesionowskigreg@gmail.com,
-        jackychou@asix.com.tw, jannh@google.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     f.fainelli@gmail.com, justin.chen@broadcom.com,
-        Justin Chen <justinpopo6@gmail.com>
-Subject: [PATCH v2 5/5] net: usb: ax88179_178a: wol optimizations
-Date:   Wed, 20 Jul 2022 17:28:16 -0700
-Message-Id: <1658363296-15734-6-git-send-email-justinpopo6@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1658363296-15734-1-git-send-email-justinpopo6@gmail.com>
-References: <1658363296-15734-1-git-send-email-justinpopo6@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 20:35:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF8A56272
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658363708;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YUjwNdRUT99ASZIZYsMJwCcledX4/RDVaQ7w44xnB7Y=;
+        b=T9Nv9aBGucqXbRbfpsxw8ICKtdARG2Sl51SEFmEhNB1w0HYfgBfN/gZwbiM1xbsJk1/yPh
+        OLEn3vKoq2fJkDa7LiP6UwjuhR+eVMi0qbWRMDAVaHyWcA//BuVkTMVk8KnR5nAFjeCdNS
+        VF2XfWoNSoX+RbURHpjky3UadaZOrnE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-382-EJHkHy_0MJmNKSAqYJkZpA-1; Wed, 20 Jul 2022 20:34:56 -0400
+X-MC-Unique: EJHkHy_0MJmNKSAqYJkZpA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 10365811E76;
+        Thu, 21 Jul 2022 00:34:56 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.43])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C2C7400DFD7;
+        Thu, 21 Jul 2022 00:34:55 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/amd: Disable guest vapic logging during early kdump init
+Date:   Wed, 20 Jul 2022 17:34:39 -0700
+Message-Id: <20220721003439.403435-1-jsnitsel@redhat.com>
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Justin Chen <justinpopo6@gmail.com>
+With commit a8d4a37d1bb9 ("iommu/amd: Restore GA log/tail pointer on
+host resume"), there now is a WARN_ON in iommu_ga_log_enable that
+triggers if the GALOG_RUN bit is set in the MMIO status register, and
+this warning has been reported when a kdump kernel is booting.
 
-- Check if wol is supported on reset instead of everytime get_wol
-is called.
-- Save wolopts in private data instead of relying on the HW to save it.
-- Defer enabling WoL until suspend instead of enabling it everytime
-set_wol is called.
+We probably don't really care about guest vapic logging during kdump,
+but the proper thing seems to be disabling the GALOG_EN bit in the
+MMIO control register in the kdump code path of
+early_enable_iommus(). The iommu pci init code is going to set the ga
+log address pointers to new values in the amd_iommu struct, and these
+aren't pushed to the iommu until after the warning and return in
+iommu_ga_log_enable(). So worst case, the GALOG bits are set and the
+iommu has stale pointers to the ga log addresses. So disable GALOG_EN
+in early_enable_iommus() and allow iommu_ga_log_enable() to set it up
+properly and enable again.
 
-Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+Without the fix you will see the following warning when the kdump
+kernel boots:
+
+[    7.731955] ------------[ cut here ]------------
+[    7.736575] WARNING: CPU: 0 PID: 1 at drivers/iommu/amd/init.c:829 iommu_ga_log_enable.isra.0+0x16f/0x190
+[    7.746135] Modules linked in:
+[    7.749193] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W        --------  ---  5.19.0-0.rc7.53.eln120.x86_64 #1
+[    7.759706] Hardware name: Dell Inc. PowerEdge R7525/04D5GJ, BIOS 2.1.6 03/09/2021
+[    7.767274] RIP: 0010:iommu_ga_log_enable.isra.0+0x16f/0x190
+[    7.772931] Code: 20 20 00 00 8b 00 f6 c4 01 74 da 48 8b 44 24 08 65 48 2b 04 25 28 00 00 00 75 13 48 83 c4 10 5b 5d e9 f5 00 72 00 0f 0b eb e1 <0f> 0b eb dd e8 f8 66 42 00 48 8b 15 f1 85 53 01 e9 29 ff ff ff 48
+[    7.791679] RSP: 0018:ffffc90000107d20 EFLAGS: 00010206
+[    7.796905] RAX: ffffc90000780000 RBX: 0000000000000100 RCX: ffffc90000780000
+[    7.804038] RDX: 0000000000000001 RSI: ffffc90000780000 RDI: ffff8880451f9800
+[    7.811170] RBP: ffff8880451f9800 R08: ffffffffffffffff R09: 0000000000000000
+[    7.818303] R10: 0000000000000000 R11: 0000000000000000 R12: 0008000000000000
+[    7.825435] R13: ffff8880462ea900 R14: 0000000000000021 R15: 0000000000000000
+[    7.832572] FS:  0000000000000000(0000) GS:ffff888054a00000(0000) knlGS:0000000000000000
+[    7.840657] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    7.846400] CR2: ffff888054dff000 CR3: 0000000053210000 CR4: 0000000000350eb0
+[    7.853533] Call Trace:
+[    7.855979]  <TASK>
+[    7.858085]  amd_iommu_enable_interrupts+0x180/0x270
+[    7.863051]  ? iommu_setup+0x271/0x271
+[    7.866803]  state_next+0x197/0x2c0
+[    7.870295]  ? iommu_setup+0x271/0x271
+[    7.874049]  iommu_go_to_state+0x24/0x2c
+[    7.877976]  amd_iommu_init+0xf/0x29
+[    7.881554]  pci_iommu_init+0xe/0x36
+[    7.885133]  do_one_initcall+0x44/0x200
+[    7.888975]  do_initcalls+0xc8/0xe1
+[    7.892466]  kernel_init_freeable+0x14c/0x199
+[    7.896826]  ? rest_init+0xd0/0xd0
+[    7.900231]  kernel_init+0x16/0x130
+[    7.903723]  ret_from_fork+0x22/0x30
+[    7.907306]  </TASK>
+[    7.909497] ---[ end trace 0000000000000000 ]---
+
+Fixes: 3ac3e5ee5ed5 ("iommu/amd: Copy old trans table from old kernel")
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc: Will Deacon <will@kernel.org> (maintainer:IOMMU DRIVERS)
+Cc: iommu@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
 ---
- drivers/net/usb/ax88179_178a.c | 52 +++++++++++++++++++++++-------------------
- 1 file changed, 28 insertions(+), 24 deletions(-)
+ drivers/iommu/amd/init.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index d0cd986..3b0e8f9 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -171,6 +171,8 @@ struct ax88179_data {
- 	u8  eee_active;
- 	u16 rxctl;
- 	u8 in_pm;
-+	u32 wol_supported;
-+	u32 wolopts;
- };
- 
- struct ax88179_int_data {
-@@ -400,6 +402,7 @@ ax88179_phy_write_mmd_indirect(struct usbnet *dev, u16 prtad, u16 devad,
- static int ax88179_suspend(struct usb_interface *intf, pm_message_t message)
- {
- 	struct usbnet *dev = usb_get_intfdata(intf);
-+	struct ax88179_data *priv = dev->driver_priv;
- 	u16 tmp16;
- 	u8 tmp8;
- 
-@@ -407,6 +410,19 @@ static int ax88179_suspend(struct usb_interface *intf, pm_message_t message)
- 
- 	usbnet_suspend(intf, message);
- 
-+	/* Enable WoL */
-+	if (priv->wolopts) {
-+		ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MONITOR_MOD,
-+				 1, 1, &tmp8);
-+		if (priv->wolopts & WAKE_PHY)
-+			tmp8 |= AX_MONITOR_MODE_RWLC;
-+		if (priv->wolopts & WAKE_MAGIC)
-+			tmp8 |= AX_MONITOR_MODE_RWMP;
-+
-+		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MONITOR_MOD,
-+				  1, 1, &tmp8);
-+	}
-+
- 	/* Disable RX path */
- 	ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 			 2, 2, &tmp16);
-@@ -480,40 +496,22 @@ static void
- ax88179_get_wol(struct net_device *net, struct ethtool_wolinfo *wolinfo)
- {
- 	struct usbnet *dev = netdev_priv(net);
--	u8 opt;
--
--	if (ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MONITOR_MOD,
--			     1, 1, &opt) < 0) {
--		wolinfo->supported = 0;
--		wolinfo->wolopts = 0;
--		return;
--	}
-+	struct ax88179_data *priv = dev->driver_priv;
- 
--	wolinfo->supported = WAKE_PHY | WAKE_MAGIC;
--	wolinfo->wolopts = 0;
--	if (opt & AX_MONITOR_MODE_RWLC)
--		wolinfo->wolopts |= WAKE_PHY;
--	if (opt & AX_MONITOR_MODE_RWMP)
--		wolinfo->wolopts |= WAKE_MAGIC;
-+	wolinfo->supported = priv->wol_supported;
-+	wolinfo->wolopts = priv->wolopts;
+diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+index 1d08f87e734b..2b00d7f28df7 100644
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -815,6 +815,11 @@ static void free_ga_log(struct amd_iommu *iommu)
+ #endif
  }
  
- static int
- ax88179_set_wol(struct net_device *net, struct ethtool_wolinfo *wolinfo)
- {
- 	struct usbnet *dev = netdev_priv(net);
--	u8 opt = 0;
-+	struct ax88179_data *priv = dev->driver_priv;
- 
--	if (wolinfo->wolopts & ~(WAKE_PHY | WAKE_MAGIC))
-+	if (wolinfo->wolopts & ~(priv->wol_supported))
- 		return -EINVAL;
- 
--	if (wolinfo->wolopts & WAKE_PHY)
--		opt |= AX_MONITOR_MODE_RWLC;
--	if (wolinfo->wolopts & WAKE_MAGIC)
--		opt |= AX_MONITOR_MODE_RWMP;
--
--	if (ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MONITOR_MOD,
--			      1, 1, &opt) < 0)
--		return -EINVAL;
-+	priv->wolopts = wolinfo->wolopts;
- 
- 	return 0;
- }
-@@ -1636,6 +1634,12 @@ static int ax88179_reset(struct usbnet *dev)
- 	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MEDIUM_STATUS_MODE,
- 			  2, 2, tmp16);
- 
-+	/* Check if WoL is supported */
-+	ax179_data->wol_supported = 0;
-+	if (ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_MONITOR_MOD,
-+			     1, 1, &tmp) > 0)
-+		ax179_data->wol_supported = WAKE_MAGIC | WAKE_PHY;
++static void iommu_ga_log_disable(struct amd_iommu *iommu)
++{
++	iommu_feature_disable(iommu, CONTROL_GALOG_EN);
++}
 +
- 	ax88179_led_setting(dev);
- 
- 	ax179_data->eee_enabled = 0;
+ static int iommu_ga_log_enable(struct amd_iommu *iommu)
+ {
+ #ifdef CONFIG_IRQ_REMAP
+@@ -2504,6 +2509,7 @@ static void early_enable_iommus(void)
+ 		for_each_iommu(iommu) {
+ 			iommu_disable_command_buffer(iommu);
+ 			iommu_disable_event_buffer(iommu);
++			iommu_ga_log_disable(iommu);
+ 			iommu_enable_command_buffer(iommu);
+ 			iommu_enable_event_buffer(iommu);
+ 			iommu_enable_ga(iommu);
+
+base-commit: ca85855bdcae8f84f1512e88b4c75009ea17ea2f
 -- 
-2.7.4
+2.36.1
 

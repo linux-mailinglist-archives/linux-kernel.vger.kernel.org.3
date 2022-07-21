@@ -2,153 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0BC57D06D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1AD57D06B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiGUP6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S229655AbiGUP6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiGUP6q (ORCPT
+        with ESMTP id S229547AbiGUP6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:58:46 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5477BE28
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:58:44 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id b26so2923153wrc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:58:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=swGACW5Jh2L0fPaTYT636BPQVQeKVon43dJ9BYyWHwk=;
-        b=r+w+mxLV3pDF7H2PvRP1rSgfVNzPHjXRHDyW0bx0FSpYp1xxdfqRoM2olAqDztXFE2
-         PrymskSXxb/ztAY1MquHjtG0OPZHvYVoOyAxVVJizv2kBU3Q4X1K7qkH/BbNu30JXFtU
-         jhWBX1Jy7Ww9lAN0MpXsAQhFSo5xgPmW7AAMUve3/2zmUkNLIZbDLkbOVMwQ42/Zvgxm
-         Ti1H7+z6K/40JPEy9H0KmJ3GQHMbwo2S5TK+RhZh2SpFcwkIZHoA/HDnKg2724iqIleF
-         GGmYpUbMNf8YGpByjFYxAiFmsiC7KoY1DCuYjnD3rpRD2ICk4RJIeYEkxerGu8ODGLx2
-         Oc0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=swGACW5Jh2L0fPaTYT636BPQVQeKVon43dJ9BYyWHwk=;
-        b=65fk4nsaiXY2oh9ibJJKxM2Mnr09hB0tAe5Pi8CKFFoVFeeNDlWKKEJZP9Dopy36Jz
-         7xOMP83nebuWMDoUmN2ey4uegUL0EtcxUz3lz/gsI5/gKWKM+aR46W6saH+AaLMaAgkT
-         3mANiycbbGBN3l3dDRo9BITIbGm8hIMTJ1EcZtvaxiUYfa7POZ268wdA2aaKf3lXLXO7
-         DuVCwqYWGVSVqJdI5CzT6Nbxcz4MPXBc8G2lK223YkjrnlqQgUVasuov1JrUqL18sCg9
-         GMLOvInqiIS82p5mT9D63v56CLV5rHV4WugVQmS5ZN4eldgAFDlHyJJHPOaArGl45PB5
-         TTDA==
-X-Gm-Message-State: AJIora806VSUmvriWwXFVrmxmpQwdMSlyiE1HWRwFsig7FaLNK4Nv0KO
-        G10xu6vdqDUT2aK1uot2HY6JCyCORzSt1TYhitB05w==
-X-Google-Smtp-Source: AGRyM1ui36nmmM0kwT+BBL9kt+7hL3D05kc007Hh2x/g9jXftjz2Ge7Zcom7SuTAQth49VFnYPf/LsmoF3sLqsIZlEs=
-X-Received: by 2002:a5d:588b:0:b0:21d:a918:65a5 with SMTP id
- n11-20020a5d588b000000b0021da91865a5mr35915956wrf.210.1658419122519; Thu, 21
- Jul 2022 08:58:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220714064918.2576464-1-yosryahmed@google.com>
- <YtfJug77XJ9BPA8L@dhcp22.suse.cz> <CALvZod7X3PsM2+ZrWXwb75FNBBjaBGJpjd+WVmzr5hStROvW+g@mail.gmail.com>
- <CAJD7tkYBm+L_-GTLDux0ZsJ6=kw-zzHjs6vgKUtmeZhcxLwqiw@mail.gmail.com> <Ytk8EBBEi4EubvPn@dhcp22.suse.cz>
-In-Reply-To: <Ytk8EBBEi4EubvPn@dhcp22.suse.cz>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 21 Jul 2022 08:58:06 -0700
-Message-ID: <CAJD7tkZVcQ6xzdnGPS0kQAP=+Q=yZwVT_ZrLaEsAgkLi_DAMtQ@mail.gmail.com>
-Subject: Re: [PATCH v4] mm: vmpressure: don't count proactive reclaim in vmpressure
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
+        Thu, 21 Jul 2022 11:58:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1997B1FE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AZXkGwoOX1JrZvD+fPeKunMd6GdYNliqLEsor5vQnwI=; b=m58CK47P6Lhrl+v6zZzvdcI5F0
+        pzf9OgeEKSamZC9gocSb9L7p1EiOxGztXgGEYmww8GD9lPA4RwHKGJ0DQXUkccYyqkMbeEXttAHJ6
+        z8txTcOe+umZJuNDpxp8PRQh7OMTqyKsZteBzW/0JzAySiUsXomGSQqCa7uCPDULgvS4wX5xfrftN
+        SHwZ+OwrAt1sWGz0OIRFHmiTBYF0AYtEAbFZdW5GvdhO8GsUBwq7lYSmt8IwpoumHMlTX381zEZV1
+        tQuUAGSL6BFMv2fsROnfECOG7GiOUlinLuFPUKiVwRBIL6RN0oeypxmeJhCPMkahQsAkR6EViWBbT
+        LuFnlH1Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEYZ3-00FTGW-NN; Thu, 21 Jul 2022 15:58:13 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 50049980BD2; Thu, 21 Jul 2022 17:58:13 +0200 (CEST)
+Date:   Thu, 21 Jul 2022 17:58:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        Joao Moreira <joao.moreira@intel.com>,
+        Joseph Nuzman <joseph.nuzman@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH] lkdtm: Keep the rodata test from causing retbleed
+ WARNINGS
+Message-ID: <Ytl3leUTGSOaMFDS@worktop.programming.kicks-ass.net>
+References: <20220720155507.4f904a58@gandalf.local.home>
+ <202207201311.775CB068@keescook>
+ <20220720225615.lrt7xnxv3trmiyc7@treble>
+ <20220720225809.wtnlgvof6wi4owkq@treble>
+ <YtkSjUBIsy5WbrZT@hirez.programming.kicks-ass.net>
+ <20220721095151.7eaabfcb@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721095151.7eaabfcb@gandalf.local.home>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 4:44 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 20-07-22 11:02:56, Yosry Ahmed wrote:
-> > On Wed, Jul 20, 2022 at 10:50 AM Shakeel Butt <shakeelb@google.com> wrote:
-> > >
-> > > On Wed, Jul 20, 2022 at 2:24 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > [...]
-> > > >
-> > > > I think what we are missing here is
-> > > > - explain that this doesn't have any effect on existing users of
-> > > >   vmpressure user interface because that is cgroup v1 and memory.reclaim
-> > > >   is v2 feature. This is a trivial statement but quite useful for future
-> > > >   readers of this commit
-> > > > - explain the effect on the networking layer and typical usecases
-> > > >   memory.reclaim is used for currently and ideally document that.
-> > >
-> > > I agree with the above two points (Yosry, please address those) but
-> > > the following third point is orthogonal and we don't really need to
-> > > have an answer for this patch to be accepted.
-> > >
-> >
-> > That's great feedback, thanks Michal and Shakeel!
-> >
-> > How do you feel about the following commit message instead? Does it
-> > address your concerns?:
-> >
-> > memory.reclaim is a cgroup v2 interface that allows users to
-> > proactively reclaim memory from a memcg, without real memory pressure.
-> > Reclaim operations invoke vmpressure, which is used in cgroup v1 to
-> > notify userspace of reclaim efficiency, and used in both v1 and v2 as
-> > a signal for a memcg being under memory pressure for networking (see
-> > mem_cgroup_under_socket_pressure()). For the former, vmpressure
-> > notifications in v1 are not affected by this change since
-> > memory.reclaim is a v2 feature.
-> >
-> > For the latter, the effects of the vmpressure signal (according to
-> > Shakeel [1]) are as follows:
-> > 1. Reducing send and receive buffers of the current socket.
-> > 2. May drop packets on the rx path.
-> > 3. May throttle current thread on the tx path.
-> >
-> > Since proactive reclaim is invoked directly by userspace, not by
-> > memory pressure, it makes sense not to throttle networking. Hence,
-> > this change makes sure that proactive reclaim caused by memory.reclaim
-> > does not trigger vmpressure.
->
-> OK, looks much better. Please also add a note to the documentation about
-> this side effect.
+On Thu, Jul 21, 2022 at 09:51:51AM -0400, Steven Rostedt wrote:
+> On Thu, 21 Jul 2022 10:47:09 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > On Wed, Jul 20, 2022 at 03:58:09PM -0700, Josh Poimboeuf wrote:
+> > > Actually Peter said he grabbed it and is planning to push it to -tip
+> > > tomorrow.  
+> > 
+> > Robots were happy, all pushed now.
+> 
+> What tree is this against. I tried to add it to v5.19-rc7 but it fails to
+> apply.
 
-I don't want to add something to the documentation about throttling
-networking because it seems like these are implementation details that
-we may change in the future. I don't know if we can document this
-behavior today and then change it later.
-
-How about we document a more generic statement in memory.reclaim
-documentation, like:
-
-"With reactive reclaim operations triggered by the kernel, the kernel
-may take further actions to alleviate memory pressure (such as
-throttling networking memory consumption). For proactive reclaim
-operations triggered by this interface, the kernel may choose to skip
-such actions as reclaim is not an indication of memory pressure."
-
-Does this make sense to you?
-
->
-> Thanks!
-> --
-> Michal Hocko
-> SUSE Labs
+I can cleanly merge tip/x86/urgent into v5.19-rc7 (ff merge)

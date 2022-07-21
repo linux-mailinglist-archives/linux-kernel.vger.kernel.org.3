@@ -2,121 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6077357C910
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42FC57C90F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbiGUKfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S232995AbiGUKey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbiGUKfH (ORCPT
+        with ESMTP id S232586AbiGUKev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:35:07 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887B4823A2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=t1D1TNt+y52e8I+wqbglpFwxSIDJ0TYIEuP5FTx39Yo=; b=dr2GoOd0mq3CZ8Ux2Uan1oyT9E
-        YKvT+ZLRogJjKVP/ka87islaEmsiCEnazbi07izitnEBmhhPnBTGZSdw+Z0Ms4ZnNZ58cqSdDaavD
-        h6OMQvTkzyFVnw4ParCLGxq31+Rye4PzmffCkL7oIq4PlPIrYxocnyCEuiAxFHx2tQUB3CkZQ2W77
-        sP/lQJU4KAG95iKxrpx6VLrBSk6aHngr6kieXqa6UpAyZKj5cI9o/VdCJVHXUqunzWJkr++Dyii69
-        7450sNFuiDKk4QKzKZplrUWohKVa8U3lYOzlHz01qM/TpU/uf3OvNH4iylKhrshXX4dOHtlP6WV2x
-        7+oiOuWw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oETVH-005Wpc-M1; Thu, 21 Jul 2022 10:34:00 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 42DB0980BBE; Thu, 21 Jul 2022 12:33:57 +0200 (CEST)
-Date:   Thu, 21 Jul 2022 12:33:57 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Guodong Xu <guodong.xu@linaro.org>, hesham.almatary@huawei.com,
-        john.garry@huawei.com, Yang Shen <shenyang39@huawei.com>,
-        kprateek.nayak@amd.com, Chen Yu <yu.c.chen@intel.com>,
-        wuyun.abel@bytedance.com
-Subject: Re: [RESEND PATCH v5 2/2] sched/fair: Scan cluster before scanning
- LLC in wake-up path
-Message-ID: <YtkrlVmqnx9VTbLl@worktop.programming.kicks-ass.net>
-References: <20220720081150.22167-1-yangyicong@hisilicon.com>
- <20220720081150.22167-3-yangyicong@hisilicon.com>
- <Ytfjs+m1kUs0ScSn@worktop.programming.kicks-ass.net>
- <CAGsJ_4yrZnPbhBb4wd3x1h994tv6Jfri+y2xrPSJv7yF+Mj7tg@mail.gmail.com>
+        Thu, 21 Jul 2022 06:34:51 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8D049B68
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:34:50 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31e1ecea074so12344027b3.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RZq7zJW68AsB2c8MQdTOdMV2RE0j/waEnaPxwlHywbM=;
+        b=pAv2uvm8AJ1VyPTcGWTCmrcD+KQzAjTV8rgacFCdLNgEoYhtZf4R4S3Xa5omL2Dp0C
+         0beuUd1jAQg6A4oUyDlIJ7akUVkVjyFI/pJRTHaJux4Vybn6w/89HG0fLpjNog8xmH3p
+         1O639kvK2H80xC+WGzetFzAFghu8RiEVK6CGZ56ExIdlg85iy/7Kf4oEbK8BmHNfVuYW
+         bqLxEnrTsvSd4kgXey5h1hhswPiSc8sH8+98lBjM/6v0foJW8Y19j6Fsenu266suy2w/
+         3R/M9qDu2T98P9bHxyCGn/BlDUQGpPGV+T18t136eaGX411ZNDtRh2mSSXfc1NvMmJEn
+         eb6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RZq7zJW68AsB2c8MQdTOdMV2RE0j/waEnaPxwlHywbM=;
+        b=xHPmOpSBXsG/Dvv+mQyq7Wilah3f1TmdAMUJmgY5TLUGaOvLENh0NNdWRxXuSd0BQz
+         q7N74RvmV+8XfvLwJCuDNbhb8PZWM92guyZvAISEwISwO7A/loN48CLevZmkdbpGjJP6
+         CCi6at2r1Vku1ZyubFvCvuWipwgxRoPemuRRhzMpXr1/9gexd2K/HCmMyRfO2iSghHPE
+         eWx3nnEzsq6riw2Ns0nNxiTB10hJud9lZoQqELhdJp+DVGwbM5DU8PhiejTCO3+JugXg
+         iA1kBEsFm/3HIlAMHfoyHcE0eW4wVtU29Z1cQRe00bpT532lhD3K5f6HraoVIoS4RrXU
+         LcSg==
+X-Gm-Message-State: AJIora8j3ujzCMZEeCAaMPQzCUY/eHfZn9ICdOyrFTCBq5jw8eFcLrmU
+        C7b/VlhydN3yNqUZpvWofk915qKZ8vholQTDcwY=
+X-Google-Smtp-Source: AGRyM1sSn1BkAWY+mB4ipMJAHZFCKaVocMYpWA13ZykYuFlMENH68zd3kb0uUYUhJRdQ/UEUdH98A7DEqZZkjmF+Pew=
+X-Received: by 2002:a81:234e:0:b0:31e:2cd2:624f with SMTP id
+ j75-20020a81234e000000b0031e2cd2624fmr20702507ywj.516.1658399690236; Thu, 21
+ Jul 2022 03:34:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGsJ_4yrZnPbhBb4wd3x1h994tv6Jfri+y2xrPSJv7yF+Mj7tg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:a514:0:0:0:0 with HTTP; Thu, 21 Jul 2022 03:34:50
+ -0700 (PDT)
+Reply-To: sgtkaylam28@gmail.com
+From:   sgt kayla manthey <tchaloelise@gmail.com>
+Date:   Thu, 21 Jul 2022 04:34:50 -0600
+Message-ID: <CAObQroXHJ+D5GKJ9q8RF3P5NCdRTvP15XvE7suhjR6Y4QfE2gQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 09:38:04PM +1200, Barry Song wrote:
-> On Wed, Jul 20, 2022 at 11:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Jul 20, 2022 at 04:11:50PM +0800, Yicong Yang wrote:
-> > > +     /* TODO: Support SMT system with cluster topology */
-> > > +     if (!sched_smt_active() && sd) {
-> > > +             for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-> >
-> > So that's no SMT and no wrap iteration..
-> >
-> > Does something like this work?
-> >
-> > ---
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6437,6 +6437,30 @@ static int select_idle_cpu(struct task_s
-> >                 }
-> >         }
-> >
-> > +       if (IS_ENABLED(CONFIG_SCHED_CLUSTER) &&
-> > +           static_branch_unlikely(&sched_cluster_active)) {
-> > +               struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
-> > +               if (sdc) {
-> > +                       for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
-> > +                               if (!cpumask_test_cpu(cpu, cpus))
-> > +                                       continue;
-> > +
-> > +                               if (has_idle_core) {
-> > +                                       i = select_idle_core(p, cpu, cpus, &idle_cpu);
-> > +                                       if ((unsigned int)i < nr_cpumask_bits)
-> > +                                               return i;
-> > +                               } else {
-> > +                                       if (--nr <= 0)
-> > +                                               return -1;
-> > +                                       idle_cpu = __select_idle_cpu(cpu, p);
-> > +                                       if ((unsigned int)idle_cpu < nr_cpumask_bits)
-> > +                                               break;
-> 
-> Guess here it should be "return idle_cpu", but not "break". as "break"
-> will make us scan more
-> other cpus outside the cluster if we have found idle_cpu within the cluster.
-> 
-> Yicong,
-> Please test Peter's code with the above change.
-
-Indeed. Sorry for that.
+-- 
+Greetings,
+Please did you receive my previous message? write me back

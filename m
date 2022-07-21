@@ -2,147 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4C757D28D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BF957D296
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiGUR3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S232226AbiGUR3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiGUR2k (ORCPT
+        with ESMTP id S232221AbiGUR3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:28:40 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7DB8B49A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:28:22 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10cf9f5b500so3318780fac.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9XmM5ZEm+shFY9USkb0JIud5sKeKc0ztWjPwdUbLtVM=;
-        b=VxN5mqJJldqCTmzCQx2+zgcmh2YQ/eQWRZOCH3SSk/wgcplWOs9zda4bzFvX0e/y3I
-         w3O6v0xE9QlSb5O7mcwsd7nUKfGQMW+kAGmKMdQ3s/MptadnTYQWw5YHyzVxhn0Qdra7
-         /HkKK7hh0AG+o5x79m4ZlAOsEEJPLxCywqt50=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9XmM5ZEm+shFY9USkb0JIud5sKeKc0ztWjPwdUbLtVM=;
-        b=WwaQnCFyGttyJcwg0S8Z4epHzMwmFgzM7QJGrFociu0lqbASav1/D8j05xbVdy3i91
-         tqMp01GE9J3qGYeNPcP3dmdCxjuY8gEdeEpmDlKk254c0cf5X9XNGvrd0CwAGC4GCfda
-         ab9s149LqDRfKtVsU9wtrNgu7Y6lkYVDj2cNbLZ44ujxQwcf3n+IOw7/TdpmWWuj+9bh
-         4lH21YCkU2dfTRf5PGNgjg6kOwKwnrJEeNifCJBAnuGNdnnMjpfTGtmRTGJW1Cu4MXGq
-         +hMkQ7WIxIa4Q9M6vyBsUZ3lvJ/gr6K5KX3vbnMghIQr75VYkYcOC67NfNRdRLoRuKTh
-         xS+w==
-X-Gm-Message-State: AJIora88NiXHKhcIXrBZfJECJMcWKCnZCHMpHnxoWQ5YIIwxKK3BL88T
-        zS8U8BSdbU/DQ6y0WSccUV6ajg==
-X-Google-Smtp-Source: AGRyM1szrijCIIxZinJ6E7J+5pSN+ES88nSt3CyPGl/JIMkRcNEV5/3s7Tb0OdikxMeqWkjS76rHQg==
-X-Received: by 2002:a05:6870:709e:b0:10d:752a:9ce7 with SMTP id v30-20020a056870709e00b0010d752a9ce7mr5876067oae.233.1658424501678;
-        Thu, 21 Jul 2022 10:28:21 -0700 (PDT)
-Received: from localhost.localdomain ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id du24-20020a0568703a1800b00101c83352c6sm1106207oab.34.2022.07.21.10.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 10:28:21 -0700 (PDT)
-From:   Frederick Lawler <fred@cloudflare.com>
-To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com, Frederick Lawler <fred@cloudflare.com>
-Subject: [PATCH v3 4/4] selinux: Implement userns_create hook
-Date:   Thu, 21 Jul 2022 12:28:08 -0500
-Message-Id: <20220721172808.585539-5-fred@cloudflare.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220721172808.585539-1-fred@cloudflare.com>
-References: <20220721172808.585539-1-fred@cloudflare.com>
+        Thu, 21 Jul 2022 13:29:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160318C595
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:29:03 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 378316601ABB;
+        Thu, 21 Jul 2022 18:29:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658424541;
+        bh=ZwBOqbXQCiDJrGaaYB3nSbHLVzztmKxAsw+KrM0BKjE=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=H4cpsF3fvmDf6Py8DbatCE8t/PKBhBzn+rpNJbPfCKhWbWJt429xCGiQroxcd/IXV
+         vdBjvxCzc/7oXEcOzDFngg1PA9XuIwrWU2zFhYcuRlkYmPtcAtBDYG/1PvtdO2s7rK
+         uIRCHpfMdCY7aP6HT6S9d5piuwtY71nMgB8svJokMwtel7+hnVr7knD20X85UOniuy
+         TmW5SU4NAglwuyYv91c5/sYWV1nqS8ujxPjsCRGFqfNdeadrvqqvN+/chKN902CEBL
+         aJmbJWkQqWgqTZFK4vZ14WrFJmDkZ0ZJhLg42CJ/eviX/atTknDZmL/WjFvIUvkykS
+         TSLf0zx89wU4g==
+Message-ID: <7a5b9c8a-f074-e6ce-d458-61068452e43f@collabora.com>
+Date:   Thu, 21 Jul 2022 19:28:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v7, 2/4] drm/mediatek: Separate poweron/poweroff from
+ enable/disable and define new funcs
+To:     xinlei.lee@mediatek.com, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        matthias.bgg@gmail.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        rex-bc.chen@mediatek.com, jitao.shi@mediatek.com
+References: <1653012007-11854-1-git-send-email-xinlei.lee@mediatek.com>
+ <1653012007-11854-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Language: en-US
+In-Reply-To: <1653012007-11854-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unprivileged user namespace creation is an intended feature to enable
-sandboxing, however this feature is often used to as an initial step to
-perform a privilege escalation attack.
+Il 20/05/22 04:00, xinlei.lee@mediatek.com ha scritto:
+> From: Jitao Shi <jitao.shi@mediatek.com>
+> 
+> In order to match the changes of "Use the drm_panel_bridge API",
+> the poweron/poweroff of dsi is extracted from enable/disable and
+> defined as new funcs (atomic_pre_enable/atomic_post_disable).
+> 
+> Since dsi_poweron is moved from dsi_enable to pre_enable function, in
+> order to avoid poweron failure, the operation of dsi register fails to
+> cause bus hang. Therefore, the protection mechanism is added to the
+> dsi_enable function.
+> 
+> Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the drm_panel_bridge API")
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
-This patch implements a new user_namespace { create } access control
-permission to restrict which domains allow or deny user namespace
-creation. This is necessary for system administrators to quickly protect
-their systems while waiting for vulnerability patches to be applied.
+Hello Xinlei, CK, maintainers:
 
-This permission can be used in the following way:
+This patch is breaking machines that are using a DSI->DisplayPort bridge (like
+the ANX7625 chip), but that's not the main issue.
 
-        allow domA_t domA_t : user_namespace { create };
+----> I have never given a Reviewed-by tag for this commit <----
 
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+It's true I've given my tag for an older version [1] of this one, which was *not*
+using atomic_* callbacks and that one worked fine (which is why I gave you
+my R-b tag for it).
 
----
-Changes since v2:
-- Rename create_user_ns hook to userns_create
-- Use user_namespace as an object opposed to a generic namespace object
-- s/domB_t/domA_t in commit message
-Changes since v1:
-- Introduce this patch
----
- security/selinux/hooks.c            | 9 +++++++++
- security/selinux/include/classmap.h | 2 ++
- 2 files changed, 11 insertions(+)
+You have changed commits in this series to use atomic_(pre_)enable callbacks
+but kept my tag, which is seriously wrong - and even more, because it's actually
+breaking display support for a generous number of Chromebooks upstream.
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index beceb89f68d9..afc9da0249e7 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -4227,6 +4227,14 @@ static void selinux_task_to_inode(struct task_struct *p,
- 	spin_unlock(&isec->lock);
- }
- 
-+static int selinux_userns_create(const struct cred *cred)
-+{
-+	u32 sid = current_sid();
-+
-+	return avc_has_perm(&selinux_state, sid, sid, SECCLASS_USER_NAMESPACE,
-+						USER_NAMESPACE__CREATE, NULL);
-+}
-+
- /* Returns error only if unable to parse addresses */
- static int selinux_parse_skb_ipv4(struct sk_buff *skb,
- 			struct common_audit_data *ad, u8 *proto)
-@@ -7117,6 +7125,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(task_movememory, selinux_task_movememory),
- 	LSM_HOOK_INIT(task_kill, selinux_task_kill),
- 	LSM_HOOK_INIT(task_to_inode, selinux_task_to_inode),
-+	LSM_HOOK_INIT(userns_create, selinux_userns_create),
- 
- 	LSM_HOOK_INIT(ipc_permission, selinux_ipc_permission),
- 	LSM_HOOK_INIT(ipc_getsecid, selinux_ipc_getsecid),
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index ff757ae5f253..0bff55bb9cde 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -254,6 +254,8 @@ const struct security_class_mapping secclass_map[] = {
- 	  { COMMON_FILE_PERMS, NULL } },
- 	{ "io_uring",
- 	  { "override_creds", "sqpoll", NULL } },
-+	{ "user_namespace",
-+	  { "create", NULL } },
- 	{ NULL }
-   };
- 
--- 
-2.30.2
 
+Please be careful next time and ask for a new review when you make substantial
+changes to your commits.
+
+
+Anyway, I have already sent a fix for this situation, please look at [2].
+
+Regards,
+Angelo
+
+[1]: 
+https://patchwork.kernel.org/project/linux-mediatek/patch/1649644308-8455-3-git-send-email-xinlei.lee@mediatek.com/
+
+[2]: 
+https://lore.kernel.org/lkml/20220721172727.14624-1-angelogioacchino.delregno@collabora.com/T/#u
+
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dsi.c | 53 +++++++++++++++++++-----------
+>   1 file changed, 34 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index f880136cec09..d9a6b928dba8 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -691,16 +691,6 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
+>   	if (--dsi->refcount != 0)
+>   		return;
+>   
+> -	/*
+> -	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> -	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
+> -	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
+> -	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
+> -	 * after dsi is fully set.
+> -	 */
+> -	mtk_dsi_stop(dsi);
+> -
+> -	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>   	mtk_dsi_reset_engine(dsi);
+>   	mtk_dsi_lane0_ulp_mode_enter(dsi);
+>   	mtk_dsi_clk_ulp_mode_enter(dsi);
+> @@ -715,17 +705,9 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
+>   
+>   static void mtk_output_dsi_enable(struct mtk_dsi *dsi)
+>   {
+> -	int ret;
+> -
+>   	if (dsi->enabled)
+>   		return;
+>   
+> -	ret = mtk_dsi_poweron(dsi);
+> -	if (ret < 0) {
+> -		DRM_ERROR("failed to power on dsi\n");
+> -		return;
+> -	}
+> -
+>   	mtk_dsi_set_mode(dsi);
+>   	mtk_dsi_clk_hs_mode(dsi, 1);
+>   
+> @@ -739,7 +721,16 @@ static void mtk_output_dsi_disable(struct mtk_dsi *dsi)
+>   	if (!dsi->enabled)
+>   		return;
+>   
+> -	mtk_dsi_poweroff(dsi);
+> +	/*
+> +	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> +	 * mtk_dsi_stop() should be called after mtk_drm_crtc_atomic_disable(),
+> +	 * which needs irq for vblank, and mtk_dsi_stop() will disable irq.
+> +	 * mtk_dsi_start() needs to be called in mtk_output_dsi_enable(),
+> +	 * after dsi is fully set.
+> +	 */
+> +	mtk_dsi_stop(dsi);
+> +
+> +	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>   
+>   	dsi->enabled = false;
+>   }
+> @@ -776,13 +767,37 @@ static void mtk_dsi_bridge_atomic_enable(struct drm_bridge *bridge,
+>   {
+>   	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+>   
+> +	if (dsi->refcount == 0)
+> +		return;
+> +
+>   	mtk_output_dsi_enable(dsi);
+>   }
+>   
+> +static void mtk_dsi_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+> +					     struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +	int ret;
+> +
+> +	ret = mtk_dsi_poweron(dsi);
+> +	if (ret < 0)
+> +		DRM_ERROR("failed to power on dsi\n");
+> +}
+> +
+> +static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge *bridge,
+> +					       struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +
+> +	mtk_dsi_poweroff(dsi);
+> +}
+> +
+>   static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+>   	.attach = mtk_dsi_bridge_attach,
+>   	.atomic_disable = mtk_dsi_bridge_atomic_disable,
+>   	.atomic_enable = mtk_dsi_bridge_atomic_enable,
+> +	.atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
+> +	.atomic_post_disable = mtk_dsi_bridge_atomic_post_disable,
+>   	.mode_set = mtk_dsi_bridge_mode_set,
+>   };
+>   

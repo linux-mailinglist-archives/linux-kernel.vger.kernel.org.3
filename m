@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4566F57C3E4
+	by mail.lfdr.de (Postfix) with ESMTP id E0D3457C3E7
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 07:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiGUF5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 01:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
+        id S231191AbiGUF5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 01:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiGUF5j (ORCPT
+        with ESMTP id S230499AbiGUF5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 01:57:39 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF07978DDE
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:57:38 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31e559f6840so6702657b3.6
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:57:38 -0700 (PDT)
+        Thu, 21 Jul 2022 01:57:42 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1955E79ECE
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:57:40 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id v1-20020a259d81000000b0066ec7dff8feso570172ybp.18
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=iuiJRZjPzVH9NFZXc2I6eZu6HPWoG6DIfc9zwIk6fqU=;
-        b=Ub0rmGKgsPw/uAZ4GGpi1VBT46ThpqEdpr2mq5eMvygSt80XqgB/W48o9TC1s3+qQS
-         v7DHcG2nDxfhoyg2sVyhfTK1tZgdAmY8h3XLPAHmTVUmOr+REfo2lm37KSYFn0DZJkoo
-         fAPXgIdDJaieSrl96TjbUmS0Apzy9/IwJS8MSzDEGhlEf7kVwIHmY/AvMqDSAb+r/3un
-         HTJoGcKhknLgg8DBNTgbWSM0ot1aggOfhqWLlmPxSAmrPvtDYz+yzz9CQiaZcUjI8f8z
-         +PfBftcQ+q2R/jPuE6SyZ1Jp8dLREhbSOn5/T3iKFcDQF9YB2nUogVbKGT7n3tY7Yb+f
-         IBvw==
+        bh=hybHHJpNkr5qvVF2psrpE5ezfSg01aH1BSluCT+EV4I=;
+        b=Gy3GT+AejE5lIqh2FM7HDqKdxCV2+m38IsmUpjEKK1QJmEoelcLR1wNLUpjwR0PQkT
+         B/On8ku5ir8YgBuuIXV0lnVfrOyHsaNGO/oL7BybSdER3FWejp7+Df8wxKW/R20ChgQO
+         0tgF+VaCWq69D/tqUhWzHS7NsjR7+BjUQboxtxC/mIamoEzuietAqDCS5WNaPh0NI1a7
+         mrsgfg+J61pDYkEnH16ghZeVk38xPbU9JFqu4U396jprd1MwcgriPzJJOiokg7xUfE+x
+         Rz6bdZ0FG+eKIe2YdXgj6+0uRXCSoNKy9bpzXtHHvJX1XzmnGuI3NqMkai5ZBhjlyTO5
+         9Dfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=iuiJRZjPzVH9NFZXc2I6eZu6HPWoG6DIfc9zwIk6fqU=;
-        b=zToMhLTMLQheVQnZssmWREa7QYoAQppCGpg5TBnW2wzgvGKAwo9yHsSf15qZCT8Ajs
-         nybrPYLKTCpdhLupw0x01juo0NOsbguLVEi3CgJf+QpKnFkk9uRsNUecxt32zqCvMvkj
-         I4DKxlqMnnN4cXivlRxjm1+2KeLm0/cqOD3PGNrwPCXryNP1rrzx/WrUDEbTzHpH7sXj
-         3EMC+7j0iIL6GxbtjAyuqOWSFKMNDrM9Vj8FKKrizeOfyFl9U112OSEeX9MZQNcRlo9F
-         xNtUehIL/3G9kw7IJMVKzj67tUHZkxzDs7D2eW0JVLXGfsk/yl/anFY5cjWaYo8OzsGd
-         G8Lw==
-X-Gm-Message-State: AJIora9RpiBjYZzBQs3wscgYu700s12CDzqgSjPtB4IrFra/uxypVPZZ
-        75yxYCFgZBJ/ckmhHJOY5BEjdr2YP34QigxqIg==
-X-Google-Smtp-Source: AGRyM1vGT8w8+qyglCyqqsexhhFl2xh/RNXpV9KZJmAlMvxnjkqvinTizqBBiGxZFk68SWeE0uI4FjmfcyDRZ1sZmg==
+        bh=hybHHJpNkr5qvVF2psrpE5ezfSg01aH1BSluCT+EV4I=;
+        b=gBWX4+5gRcQnhvP640vIcoeUnQwuAJ7qFPAfK8+AXpuL+yalYRX3T6taAjGyjH8kIe
+         vvz0sDtczbAU2HNj+oiQt6ZVOU0F68se22nt9tkZb+U56tVyIs9jy3KvE3OXuPwQ70y1
+         vqKe1hqsZR/bvCqUoOyE/6u87iWKFx+NcE4FaKzxca9ih71uzMzjOxSYQaveAr86vCsd
+         CmImWXGWhcl8i/MaT5FNs/S3g20Ve+UCKOT98NaugIwZXjh5CabcpTQJA7mwmEJBxgwP
+         g3yG6dzNh5kHLiDLuI+b1rPs1rAUi6gpl4+KBbj93iGrkIS80IzapBWVvR4UamYm1xci
+         axUQ==
+X-Gm-Message-State: AJIora9azlPIICcT3ykBVUhmEt7g5ix7uj/ckIqArFBF74PyVMcIpw2O
+        8fpkaCYWhaiLyVIke9V99+Nz3jBZUCBZ3xTGxQ==
+X-Google-Smtp-Source: AGRyM1t7p5bQOsZ7cBIoy5YIYG4Vty+5ObB0xcGW4MddH7Fc9hMYX+1F2OdOwVc+nCl0IjFDFNgEYMiRjLwrtJHNPw==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:5a87:b61e:76b5:d1e0])
- (user=kaleshsingh job=sendgmr) by 2002:a05:6902:114d:b0:66d:9fa6:4bd4 with
- SMTP id p13-20020a056902114d00b0066d9fa64bd4mr37315370ybu.362.1658383058157;
- Wed, 20 Jul 2022 22:57:38 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 22:57:13 -0700
+ (user=kaleshsingh job=sendgmr) by 2002:a25:d117:0:b0:670:7e79:e104 with SMTP
+ id i23-20020a25d117000000b006707e79e104mr11309346ybg.528.1658383060543; Wed,
+ 20 Jul 2022 22:57:40 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 22:57:14 -0700
 In-Reply-To: <20220721055728.718573-1-kaleshsingh@google.com>
-Message-Id: <20220721055728.718573-3-kaleshsingh@google.com>
+Message-Id: <20220721055728.718573-4-kaleshsingh@google.com>
 Mime-Version: 1.0
 References: <20220721055728.718573-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
-Subject: [PATCH v5 02/17] arm64: stacktrace: Factor out on_accessible_stack_common()
+Subject: [PATCH v5 03/17] arm64: stacktrace: Factor out unwind_next_common()
 From:   Kalesh Singh <kaleshsingh@google.com>
 To:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
         madvenka@linux.microsoft.com, tabba@google.com
@@ -69,17 +69,17 @@ Cc:     will@kernel.org, qperret@google.com, kaleshsingh@google.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move common on_accessible_stack checks to stacktrace/common.h. This is
-used in the implementation of the nVHE hypervisor unwinder later in
-this series.
+Move common unwind_next logic to stacktrace/common.h. This allows
+reusing the code in the implementation the nVHE hypervisor stack
+unwinder, later in this series.
 
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 Reviewed-by: Fuad Tabba <tabba@google.com>
@@ -88,72 +88,134 @@ Reviewed-by: Mark Brown <broonie@kernel.org>
 
 Changes in v5:
   - Add Reviewed-by tags from Mark Brown and Fuad
-  - Remove random whitespace change, per Mark Brown
 
- arch/arm64/include/asm/stacktrace.h        |  6 ++----
- arch/arm64/include/asm/stacktrace/common.h | 18 ++++++++++++++++++
- 2 files changed, 20 insertions(+), 4 deletions(-)
+ arch/arm64/include/asm/stacktrace/common.h | 50 ++++++++++++++++++++++
+ arch/arm64/kernel/stacktrace.c             | 41 ++----------------
+ 2 files changed, 54 insertions(+), 37 deletions(-)
 
-diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
-index 79f455b37c84..43f4b4a6d383 100644
---- a/arch/arm64/include/asm/stacktrace.h
-+++ b/arch/arm64/include/asm/stacktrace.h
-@@ -65,8 +65,8 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
- 				       unsigned long sp, unsigned long size,
- 				       struct stack_info *info)
- {
--	if (info)
--		info->type = STACK_TYPE_UNKNOWN;
-+	if (on_accessible_stack_common(tsk, sp, size, info))
-+		return true;
- 
- 	if (on_task_stack(tsk, sp, size, info))
- 		return true;
-@@ -74,8 +74,6 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
- 		return false;
- 	if (on_irq_stack(sp, size, info))
- 		return true;
--	if (on_overflow_stack(sp, size, info))
--		return true;
- 	if (on_sdei_stack(sp, size, info))
- 		return true;
- 
 diff --git a/arch/arm64/include/asm/stacktrace/common.h b/arch/arm64/include/asm/stacktrace/common.h
-index 64ae4f6b06fe..f58b786460d3 100644
+index f58b786460d3..0c5cbfdb56b5 100644
 --- a/arch/arm64/include/asm/stacktrace/common.h
 +++ b/arch/arm64/include/asm/stacktrace/common.h
-@@ -62,6 +62,9 @@ struct unwind_state {
- 	struct task_struct *task;
- };
+@@ -65,6 +65,10 @@ struct unwind_state {
+ static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+ 				     struct stack_info *info);
  
-+static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
-+				     struct stack_info *info);
++static inline bool on_accessible_stack(const struct task_struct *tsk,
++				       unsigned long sp, unsigned long size,
++				       struct stack_info *info);
 +
  static inline bool on_stack(unsigned long sp, unsigned long size,
  			    unsigned long low, unsigned long high,
  			    enum stack_type type, struct stack_info *info)
-@@ -80,6 +83,21 @@ static inline bool on_stack(unsigned long sp, unsigned long size,
- 	return true;
+@@ -120,4 +124,50 @@ static inline void unwind_init_common(struct unwind_state *state,
+ 	state->prev_type = STACK_TYPE_UNKNOWN;
  }
  
-+static inline bool on_accessible_stack_common(const struct task_struct *tsk,
-+					      unsigned long sp,
-+					      unsigned long size,
-+					      struct stack_info *info)
++static inline int unwind_next_common(struct unwind_state *state,
++				     struct stack_info *info)
 +{
-+	if (info)
-+		info->type = STACK_TYPE_UNKNOWN;
++	struct task_struct *tsk = state->task;
++	unsigned long fp = state->fp;
++
++	if (fp & 0x7)
++		return -EINVAL;
++
++	if (!on_accessible_stack(tsk, fp, 16, info))
++		return -EINVAL;
++
++	if (test_bit(info->type, state->stacks_done))
++		return -EINVAL;
 +
 +	/*
-+	 * Both the kernel and nvhe hypervisor make use of
-+	 * an overflow_stack
++	 * As stacks grow downward, any valid record on the same stack must be
++	 * at a strictly higher address than the prior record.
++	 *
++	 * Stacks can nest in several valid orders, e.g.
++	 *
++	 * TASK -> IRQ -> OVERFLOW -> SDEI_NORMAL
++	 * TASK -> SDEI_NORMAL -> SDEI_CRITICAL -> OVERFLOW
++	 *
++	 * ... but the nesting itself is strict. Once we transition from one
++	 * stack to another, it's never valid to unwind back to that first
++	 * stack.
 +	 */
-+	return on_overflow_stack(sp, size, info);
-+}
++	if (info->type == state->prev_type) {
++		if (fp <= state->prev_fp)
++			return -EINVAL;
++	} else {
++		__set_bit(state->prev_type, state->stacks_done);
++	}
 +
- static inline void unwind_init_common(struct unwind_state *state,
- 				      struct task_struct *task)
- {
++	/*
++	 * Record this frame record's values and location. The prev_fp and
++	 * prev_type are only meaningful to the next unwind_next() invocation.
++	 */
++	state->fp = READ_ONCE(*(unsigned long *)(fp));
++	state->pc = READ_ONCE(*(unsigned long *)(fp + 8));
++	state->prev_fp = fp;
++	state->prev_type = info->type;
++
++	return 0;
++}
+ #endif	/* __ASM_STACKTRACE_COMMON_H */
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+index 94a5dd2ab8fd..834851939364 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -81,48 +81,15 @@ static int notrace unwind_next(struct unwind_state *state)
+ 	struct task_struct *tsk = state->task;
+ 	unsigned long fp = state->fp;
+ 	struct stack_info info;
++	int err;
+ 
+ 	/* Final frame; nothing to unwind */
+ 	if (fp == (unsigned long)task_pt_regs(tsk)->stackframe)
+ 		return -ENOENT;
+ 
+-	if (fp & 0x7)
+-		return -EINVAL;
+-
+-	if (!on_accessible_stack(tsk, fp, 16, &info))
+-		return -EINVAL;
+-
+-	if (test_bit(info.type, state->stacks_done))
+-		return -EINVAL;
+-
+-	/*
+-	 * As stacks grow downward, any valid record on the same stack must be
+-	 * at a strictly higher address than the prior record.
+-	 *
+-	 * Stacks can nest in several valid orders, e.g.
+-	 *
+-	 * TASK -> IRQ -> OVERFLOW -> SDEI_NORMAL
+-	 * TASK -> SDEI_NORMAL -> SDEI_CRITICAL -> OVERFLOW
+-	 *
+-	 * ... but the nesting itself is strict. Once we transition from one
+-	 * stack to another, it's never valid to unwind back to that first
+-	 * stack.
+-	 */
+-	if (info.type == state->prev_type) {
+-		if (fp <= state->prev_fp)
+-			return -EINVAL;
+-	} else {
+-		__set_bit(state->prev_type, state->stacks_done);
+-	}
+-
+-	/*
+-	 * Record this frame record's values and location. The prev_fp and
+-	 * prev_type are only meaningful to the next unwind_next() invocation.
+-	 */
+-	state->fp = READ_ONCE(*(unsigned long *)(fp));
+-	state->pc = READ_ONCE(*(unsigned long *)(fp + 8));
+-	state->prev_fp = fp;
+-	state->prev_type = info.type;
++	err = unwind_next_common(state, &info);
++	if (err)
++		return err;
+ 
+ 	state->pc = ptrauth_strip_insn_pac(state->pc);
+ 
 -- 
 2.37.0.170.g444d1eabd0-goog
 

@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3C957D3FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5827D57D402
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiGUTRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 15:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S230310AbiGUTU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 15:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiGUTRS (ORCPT
+        with ESMTP id S229547AbiGUTUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 15:17:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F4F88CC1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:16:59 -0700 (PDT)
+        Thu, 21 Jul 2022 15:20:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067D5193E1;
+        Thu, 21 Jul 2022 12:20:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00E21B82643
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:16:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A16C3411E;
-        Thu, 21 Jul 2022 19:16:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658431016;
-        bh=8e9CNfH+8m+ZNfFbI/5jclv5hzKBm6mFHMfm+bGmD64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AXtjJGn4LdIS0uky6qjA/qscCFFD7i0Go4tcQAptpzSFIWb/52hEr+mI69rnIq+sG
-         G7kG+tN9DBq6TMPWxHe9/t1GoO3DUESoR34yyNptOOLTjBix200wLaAMhu/pFl2rbF
-         QzA75YbalX2aARaizQQxeisr+IIG+kbKdVYjq0fs=
-Date:   Thu, 21 Jul 2022 21:16:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     kah.jing.lee@intel.com
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
-        rafael.j.wysocki@intel.com, tien.sung.ang@intel.com,
-        dinh.nguyen@intel.com, Zhou Furong <furong.zhou@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: misc: intel_sysid: Add the system id
- binding for Altera(Intel) FPGA platform
-Message-ID: <YtmmJawYXeO0uxLU@kroah.com>
-References: <20220721123017.416438-1-kah.jing.lee@intel.com>
- <20220721123216.416696-1-kah.jing.lee@intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9609B62084;
+        Thu, 21 Jul 2022 19:20:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC206C341C0;
+        Thu, 21 Jul 2022 19:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658431223;
+        bh=W05HymhqzZ2/pgDnQOnSSiXG3hYoa3dkCKd25PiLmwc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=XTsXuBQaylyi/yykcaa6fq3RyUIC+7EHnmVhSNJYHdynGUOwvgTnPxqB5v/RWZe2f
+         V9NqCq0Bt0ao1KeCGMkuxyQl6ZrU4baN9iGI1ehEzfsbOXFeWsvJU9UQnygoAQtZd8
+         MV43ltTyfMRhwv4tbbXAw0JHjK1jahZWvWa3zrgAMLmbW17ctASh75VYUc8ZDZM//H
+         b+NsmEpLQTnBJlk72RMjbBNDu/PAyQrLwokoDbr9IMKET+68fHG4taQjdPmws4WvOi
+         WfDXnk2O2FWBT8jOeY6Ij+1CAspP1+37TMOu7Tk/koq2WgCv7Ni/+Hbf71YlYvc7SU
+         dKVKqhNgz3vMw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D1D8AE451B8;
+        Thu, 21 Jul 2022 19:20:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721123216.416696-1-kah.jing.lee@intel.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] Networking for 5.19-rc8
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165843122285.6393.5400949047459171467.git-patchwork-notify@kernel.org>
+Date:   Thu, 21 Jul 2022 19:20:22 +0000
+References: <20220721093051.14504-1-pabeni@redhat.com>
+In-Reply-To: <20220721093051.14504-1-pabeni@redhat.com>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,27 +57,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 08:32:17PM +0800, kah.jing.lee@intel.com wrote:
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/misc/intel,socfpga-sysid.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2022, Intel Corporation.
-> +# Copyright (C) 2013-2015, Altera Corporation.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/misc/intel,socfpga-sysid.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Altera(Intel) Sysid IP core driver
-> +
-> +maintainers:
-> +  - Arnd Bergmann <arnd@arndb.de>
-> +  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hello:
 
-You want me to maintain an Intel-only file?   Great, where do I send my
-billing rates to?  :)
+This pull request was applied to netdev/net.git (master)
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-thanks,
+On Thu, 21 Jul 2022 11:30:51 +0200 you wrote:
+> Hi Linus!
+> 
+> Still no major regressions, most of the changes are still
+> due to data races fixes, plus the usual bunch of drivers
+> fixes.
+> 
+> The following changes since commit db886979683a8360ced9b24ab1125ad0c4d2cf76:
+> 
+> [...]
 
-greg k-h
+Here is the summary with links:
+  - [GIT,PULL] Networking for 5.19-rc8
+    https://git.kernel.org/netdev/net/c/7ca433dc6ded
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

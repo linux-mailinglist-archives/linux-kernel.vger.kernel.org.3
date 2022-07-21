@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCCF57C8E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0667957C8E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbiGUKY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S233217AbiGUKZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbiGUKYy (ORCPT
+        with ESMTP id S233081AbiGUKY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:24:54 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C075631DF4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:24:53 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id e15so1588733edj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:24:53 -0700 (PDT)
+        Thu, 21 Jul 2022 06:24:56 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271B82CCAF
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:24:55 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id tk8so2361748ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dnjcUJZ0kP3zLVkI00AAytAat4+SP0QD4gn/D4v+BD0=;
-        b=EM1FkaouTqByZK/MLu7Gh8P+yVBOtMGiUCl9XnlpiY9BYdL9D17dk4fgt7jHA689FC
-         8hVvNiHElxWiFBkrxZzxr9j9Ew6eqS1+dnIVwKz0ZfUMsxbTtRFLKO4oJJT9TRHHQFEd
-         U8woqsMio5/pgULp2gqs1Fx+AdA1lIY/XpheRDCa6QoYQu3xSnTLtnGz8PV2o4hidVLK
-         15fQsJNR4BB9Xclu74BJfA6J3sUeLwss1SNkEbwhx5CxxC6nogpBzn0wJzt4leORq0lX
-         4/QL69AQXYk2QIDCZnxx37rnItIvp1T+jnQSFfgFc8if27fyjzxa/1pO/7jqjxsdjn6j
-         vFaQ==
+        bh=DDlxv6f17NMMsNj65PpLbDHfFZ9n6R5iig5GSNIQc60=;
+        b=BXbAH2QpOuEtDBsyknn63KMdYDqwYJ04QkYENBBBubvPKw5ufJQQ2RYWkh8TUehmAp
+         eRg1pqewIA/nWrCKjZm9eUb5/F7/+M3SfQb3fG2M/j37/NW+H4x5xwUZB8pLViC0hPap
+         mpJRkHmRolRjatLFK46JVrwFPwWbLIjnK/IPCnz962aIg/Ya09URDokHXSDpIDp++KMU
+         IvdBpBpqCcplCkrF6gXYiY5M/0zk2Ofj6aGIuMQ3j/QygHzKx4yIlYJ5mdI9YATue7Lz
+         mzIUg11Y/4YGn1/EkK5qinmyWQ1dBof6ytJgv5ZSspVQS1IpsGnFb75wrOwzRzVcwf/U
+         M+9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dnjcUJZ0kP3zLVkI00AAytAat4+SP0QD4gn/D4v+BD0=;
-        b=iBNo2K3QFQvX2M2Oz5MdOF7/AvDxiIUaFuu6qlom8kReNeEL/zahLhR36v05/BrWVD
-         8mhSrmRWHJrVlycKkNKK+uJBI06xyV+GxPtrbhm6ziD/GpFzRDXB9ozuYUOszHv1+sua
-         0DzQMb6le7z842lDBlUtnVEdVMFXDU9ZO++l+qGvFZ3XbYWx8EYiw3HjvXGZiEL6gwGI
-         VqRQQdz3J3XCL1kv8efSGc63s1Qizze4XjQ3LVnP0OUDU8Ollbz05LbfBQFMPZAVC5zT
-         VQwWwGUuaWGJADSBnVFsRyEFYpTgRhrkQozlyLZkhbF7OqHVdIsLAqCmLUPQtg3jLdU+
-         jhKA==
-X-Gm-Message-State: AJIora8Cb0zE72E5+YeRFIrXa0JFsxwEK3U971ftM6M3vrNc0dEYhVVR
-        tfkYMShp7npPTNuHdMjreww=
-X-Google-Smtp-Source: AGRyM1sjm77tFldslhTTtKG6r/nB5ftOMbBvPBn0I5SNviJAxfO6zmsuOVFu8GtH/lDpkb2LWoMdlg==
-X-Received: by 2002:a05:6402:11c9:b0:43b:b905:cb88 with SMTP id j9-20020a05640211c900b0043bb905cb88mr8429851edw.102.1658399092334;
-        Thu, 21 Jul 2022 03:24:52 -0700 (PDT)
+        bh=DDlxv6f17NMMsNj65PpLbDHfFZ9n6R5iig5GSNIQc60=;
+        b=ET6+jQTJ58dGyZ0sdmpHn115+aKN1D4Gtmcd1ce5NX2rBaWQypBiRWUd5bCwvqeIst
+         enH36Tc0Y8a9kTfK0Tb8c46mYPBP6uH4Hgtmu2yl/dOpWfyUtDVVBXJf9sdaPbDynVXa
+         ysCMHsdzhjcGba37Ty5hljh4EGpPyRipl7GpmwAlAThGHUb8aL8tkUZQ3tzWOCKVRIv0
+         f1h/YHVIIYu4M4UyodAJfBkeWcqAjJDFtuZwhKFUNGSE/k46CksOfY9IYJLTAH9fGsbU
+         CoEgKkhKRrUFaH9cwlT3Ua1zgpgZHdrv8MMz9OS6Lvis1K2TWkEzJCnMLz8PT3RA5a5D
+         DXPQ==
+X-Gm-Message-State: AJIora/MWySZgUnCmDvDTtwexDplENFknaOR7V/1eAHzFHfR3DwCnVfq
+        BFfBiXaZjLQl7R4GzS+b9Zk=
+X-Google-Smtp-Source: AGRyM1uT4hp2Itp4P40blzsKlm6eCx6+8avKdG3J/Wu5vQx5h0kQMV6Q9zWDGrdUxUc9Zz0qPjlN4g==
+X-Received: by 2002:a17:906:9c84:b0:6e0:7c75:6f01 with SMTP id fj4-20020a1709069c8400b006e07c756f01mr40510180ejc.103.1658399093753;
+        Thu, 21 Jul 2022 03:24:53 -0700 (PDT)
 Received: from localhost (92.40.202.7.threembb.co.uk. [92.40.202.7])
-        by smtp.gmail.com with ESMTPSA id b21-20020a17090630d500b0072aa1313f5csm652000ejb.201.2022.07.21.03.24.51
+        by smtp.gmail.com with ESMTPSA id bv4-20020a170906b1c400b0072f0dbaf2f7sm653335ejb.214.2022.07.21.03.24.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 03:24:51 -0700 (PDT)
+        Thu, 21 Jul 2022 03:24:53 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
         tiwai@suse.com, srinivas.kandagatla@linaro.org,
         bgoswami@quicinc.com
 Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH -next 1/2] sound: soc: codecs: wcd9335: Convert irq chip to config regs
-Date:   Thu, 21 Jul 2022 11:25:57 +0100
-Message-Id: <20220721102558.25457-2-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH -next 2/2] sound: soc: codecs: wcd938x: Remove spurious type_base from irq chip
+Date:   Thu, 21 Jul 2022 11:25:58 +0100
+Message-Id: <20220721102558.25457-3-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220721102558.25457-1-aidanmacdonald.0x0@gmail.com>
 References: <20220721102558.25457-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -70,47 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Type registers in regmap-irq have been deprecated in favor of config
-registers, which are more general. Chips using type_base can switch
-over to a single config base register and a standard ->set_irq_type()
-callback provided by regmap-irq, which uses the type info associated
-with each 'struct regmap_irq' to update type registers in the same
-way as the old code did.
+There is no reason to set type_base here: the chip doesn't set
+num_type_regs and none of the IRQs have type information so it's
+not possible for regmap-irq to configure IRQ types.
+
+Type registers are also deprecated in regmap-irq, so any IRQ type
+support in the future should be implemented using config registers
+instead.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- sound/soc/codecs/wcd9335.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ sound/soc/codecs/wcd938x.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wcd9335.c b/sound/soc/codecs/wcd9335.c
-index 3cb7a3eab8c7..81678c85ff7b 100644
---- a/sound/soc/codecs/wcd9335.c
-+++ b/sound/soc/codecs/wcd9335.c
-@@ -5031,16 +5031,22 @@ static const struct regmap_irq wcd9335_codec_irqs[] = {
- 	},
- };
- 
-+static const unsigned int wcd9335_config_regs[] = {
-+	WCD9335_INTR_LEVEL0,
-+};
-+
- static const struct regmap_irq_chip wcd9335_regmap_irq1_chip = {
- 	.name = "wcd9335_pin1_irq",
- 	.status_base = WCD9335_INTR_PIN1_STATUS0,
- 	.mask_base = WCD9335_INTR_PIN1_MASK0,
- 	.ack_base = WCD9335_INTR_PIN1_CLEAR0,
--	.type_base = WCD9335_INTR_LEVEL0,
--	.num_type_reg = 4,
- 	.num_regs = 4,
- 	.irqs = wcd9335_codec_irqs,
- 	.num_irqs = ARRAY_SIZE(wcd9335_codec_irqs),
-+	.config_base = wcd9335_config_regs,
-+	.num_config_bases = ARRAY_SIZE(wcd9335_config_regs),
-+	.num_config_regs = 4,
-+	.set_type_config = regmap_irq_set_type_config_simple,
- };
- 
- static int wcd9335_parse_dt(struct wcd9335_codec *wcd)
+diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+index 781ae569be29..aca06a4026f3 100644
+--- a/sound/soc/codecs/wcd938x.c
++++ b/sound/soc/codecs/wcd938x.c
+@@ -1298,7 +1298,6 @@ static struct regmap_irq_chip wcd938x_regmap_irq_chip = {
+ 	.num_regs = 3,
+ 	.status_base = WCD938X_DIGITAL_INTR_STATUS_0,
+ 	.mask_base = WCD938X_DIGITAL_INTR_MASK_0,
+-	.type_base = WCD938X_DIGITAL_INTR_LEVEL_0,
+ 	.ack_base = WCD938X_DIGITAL_INTR_CLEAR_0,
+ 	.use_ack = 1,
+ 	.runtime_pm = true,
 -- 
 2.35.1
 

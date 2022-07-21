@@ -2,127 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1FD57C717
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528AE57C71B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiGUJGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
+        id S232807AbiGUJIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiGUJGq (ORCPT
+        with ESMTP id S230047AbiGUJIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:06:46 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA562F64C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:06:45 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id a11so655608wmq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:06:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=/H+ubGz5dC0Dz+m1egBSS+mn3sw5UpB8w1f81HptlFo=;
-        b=D0wGWDqCWVf1ogvzp2scTFOcL/n/BMEgsTofv86DsSTkPtAJuQsI83k7g+ea2/xTwQ
-         aI8aQ9xBbDoOqQ5HJIENAZCvvpuIuNc0skABIW5X+dF/ISz+o6oMNsblkkia9J5AZedK
-         i1y3HXa+oWE2R64nyu9rYveTvuz0cb5odonsNSBEx+cwUiSPpkiGVPKv+peVdCd6QB3d
-         OtgnnK4tBoOJsH602xwzjG1GygYAmo2MkVu23eWuqc5iZFp0sPMmFleasSQjSUwtBoAI
-         yE+DInYb6Y7WwG1PbJk9v2V3UK6GMrfcKtTGnRUskE8dqSv80KIp37ZBuWUxeHQGh8H3
-         9VhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=/H+ubGz5dC0Dz+m1egBSS+mn3sw5UpB8w1f81HptlFo=;
-        b=sYFbNvA2EpO9owP15p/DyWGhFwGv9gCnNngLvTGgqbxyyBCO8N1em0+JXahoH79JqM
-         lDEcSQ9+GQ6vjySGHTCvW/4PQvcRrVt6OaB1Ete1JJZzhtd9w7nUV27vSuPLl6ij6ws/
-         Kiql7WkwLs7lV/cfrIVJr2df2h011LrKqQAnCTZxXdQAnuRHAyCDRWwztxIqMS5UsZcD
-         thPYmRoho3Hby1Ml40VQ4ToJ9/CmaKW8r9vX3ACYU+oibpvAI9m1friJWtaSQNsSZGVc
-         4vCGf7n8nhe/1anlwVEnu8v5Fps6l/ZtpmjhQ7/TxM9VtOQh4tO8H9XJGnCS49sMQszx
-         Y3rw==
-X-Gm-Message-State: AJIora+/mbhmWDEYO3dz119+SrsAiXHPIUKxJLj0G4Su5XuDUc6AfvwO
-        KlfIwXZRaVm+yes7LgkM8vchhg==
-X-Google-Smtp-Source: AGRyM1tZz2TDn6be9lWTWQ2CDScl7zAd9M2KfMm9B3ELPlAoh19nphaaWcU/vY70sT+0kbd5D4xRGw==
-X-Received: by 2002:a05:600c:5006:b0:3a3:2dcd:8730 with SMTP id n6-20020a05600c500600b003a32dcd8730mr3710520wmr.99.1658394403779;
-        Thu, 21 Jul 2022 02:06:43 -0700 (PDT)
-Received: from localhost ([82.66.159.240])
-        by smtp.gmail.com with ESMTPSA id q15-20020a5d658f000000b0021e48faed68sm1225231wru.97.2022.07.21.02.06.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 02:06:43 -0700 (PDT)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 2/6] dt-bindings: mediatek,mt6779-keypad: use
- unevaluatedProperties
-In-Reply-To: <e1ec8511-d1dd-faa5-031f-50c4e55062cd@linaro.org>
-References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
- <20220720-mt8183-keypad-v1-2-ef9fc29dbff4@baylibre.com>
- <e1ec8511-d1dd-faa5-031f-50c4e55062cd@linaro.org>
-Date:   Thu, 21 Jul 2022 11:06:42 +0200
-Message-ID: <874jzaj0m5.fsf@baylibre.com>
+        Thu, 21 Jul 2022 05:08:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9155D5BC;
+        Thu, 21 Jul 2022 02:08:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 262F161F25;
+        Thu, 21 Jul 2022 09:08:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8EBC3411E;
+        Thu, 21 Jul 2022 09:08:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658394522;
+        bh=B9iP6qE7nPoeum7kN2F9VsPqrRUG04QNIW0sAV37Y48=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O5Qw8UdFQrpwIBOwk28ekFS4IfjCePHCsug14SEjtFHHM0brqYZB8KVr29icb6WfM
+         OaVJOh7yP90HRo/2/gCeXHiKXPCYrpkp2fvyPKNSyaDfvoVf10UR/aotPI1x1ZjyIo
+         k0AUnoYd7Ij1Q9J8MAJVXt2b42uT00nZijzBTsxJJSfzwxd/MyBFzuf5lVHtsP9hE+
+         rY//IzS69gZA/IcaWggJahZuRUnCkNG5ingspVhEF/QpEGf/XjBSmtUYeqx9RSl9p3
+         6kwEdI61Y7HOOqcM0zPpDc33ui8b15FeIyiyrlllmV5Y9ITpIPfBU82AMsFn1qEajs
+         kU5IXE8Z6GwHQ==
+From:   alexs@kernel.org
+Cc:     Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] doc/mm: move overcommit-accounting doc to admin-guide
+Date:   Thu, 21 Jul 2022 17:08:34 +0800
+Message-Id: <20220721090834.17130-1-alexs@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 19:14, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+From: Alex Shi <alexs@kernel.org>
 
-> On 20/07/2022 16:48, Mattijs Korpershoek wrote:
->> writing-bindings.rst states:
->>> - If schema includes other schema (e.g. /schemas/i2c/i2c-controller.yaml) use
->>>   "unevaluatedProperties:false". In other cases, usually use
->>>   "additionalProperties:false".
->> 
->> mt6779-keypad includes matrix-keymap.yaml so replace additionalProperties:false
->> by unevaluatedProperties:false.
->
-> This is not sufficient explanation. You now allow all properties from
-> matrix-keymap.yaml, which might be desired or might be not (e.g. they
-> are not valid for this device). Please investigate it and mention the
-> outcome.
+Since the contents is mainly focus on a sysctl vm.overcommit_memory,
+it's more suitable for admin-guide dir instead of mm/ dir.
 
-Hi Krzysztof,
+Signed-off-by: Alex Shi <alexs@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ Documentation/admin-guide/mm/index.rst                          | 1 +
+ Documentation/{ => admin-guide}/mm/overcommit-accounting.rst    | 0
+ Documentation/admin-guide/sysctl/vm.rst                         | 2 +-
+ Documentation/filesystems/proc.rst                              | 2 +-
+ Documentation/mm/index.rst                                      | 1 -
+ Documentation/translations/zh_CN/admin-guide/mm/index.rst       | 1 +
+ .../zh_CN/{ => admin-guide}/mm/overcommit-accounting.rst        | 2 +-
+ Documentation/translations/zh_CN/mm/index.rst                   | 1 -
+ 8 files changed, 5 insertions(+), 5 deletions(-)
+ rename Documentation/{ => admin-guide}/mm/overcommit-accounting.rst (100%)
+ rename Documentation/translations/zh_CN/{ => admin-guide}/mm/overcommit-accounting.rst (97%)
 
-Thank you for your prompt review.
+diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-guide/mm/index.rst
+index 1bd11118dfb1..9aea816493a5 100644
+--- a/Documentation/admin-guide/mm/index.rst
++++ b/Documentation/admin-guide/mm/index.rst
+@@ -35,6 +35,7 @@ the Linux memory management.
+    nommu-mmap
+    numa_memory_policy
+    numaperf
++   overcommit-accounting
+    pagemap
+    shrinker_debugfs
+    soft-dirty
+diff --git a/Documentation/mm/overcommit-accounting.rst b/Documentation/admin-guide/mm/overcommit-accounting.rst
+similarity index 100%
+rename from Documentation/mm/overcommit-accounting.rst
+rename to Documentation/admin-guide/mm/overcommit-accounting.rst
+diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+index 9b833e439f09..ec611b8c620c 100644
+--- a/Documentation/admin-guide/sysctl/vm.rst
++++ b/Documentation/admin-guide/sysctl/vm.rst
+@@ -758,7 +758,7 @@ and don't use much of it.
+ 
+ The default value is 0.
+ 
+-See Documentation/mm/overcommit-accounting.rst and
++See Documentation/admin-guide/mm/overcommit-accounting.rst and
+ mm/util.c::__vm_enough_memory() for more information.
+ 
+ 
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 47e95dbc820d..0ed8c9777d8c 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -1114,7 +1114,7 @@ CommitLimit
+               yield a CommitLimit of 7.3G.
+ 
+               For more details, see the memory overcommit documentation
+-              in mm/overcommit-accounting.
++              in admin-guide/mm/overcommit-accounting.
+ Committed_AS
+               The amount of memory presently allocated on the system.
+               The committed memory is a sum of all of the memory which
+diff --git a/Documentation/mm/index.rst b/Documentation/mm/index.rst
+index 575ccd40e30c..e5ba30c89552 100644
+--- a/Documentation/mm/index.rst
++++ b/Documentation/mm/index.rst
+@@ -52,7 +52,6 @@ above structured documentation, or deleted if it has served its purpose.
+    memory-model
+    mmu_notifier
+    numa
+-   overcommit-accounting
+    page_migration
+    page_frags
+    page_owner
+diff --git a/Documentation/translations/zh_CN/admin-guide/mm/index.rst b/Documentation/translations/zh_CN/admin-guide/mm/index.rst
+index 702271c5b683..7304924d8131 100644
+--- a/Documentation/translations/zh_CN/admin-guide/mm/index.rst
++++ b/Documentation/translations/zh_CN/admin-guide/mm/index.rst
+@@ -31,6 +31,7 @@ Linux内存管理有它自己的术语，如果你还不熟悉它，请考虑阅
+ 
+    damon/index
+    ksm
++   overcommit-accounting
+ 
+ Todolist:
+ * concepts
+diff --git a/Documentation/translations/zh_CN/mm/overcommit-accounting.rst b/Documentation/translations/zh_CN/admin-guide/mm/overcommit-accounting.rst
+similarity index 97%
+rename from Documentation/translations/zh_CN/mm/overcommit-accounting.rst
+rename to Documentation/translations/zh_CN/admin-guide/mm/overcommit-accounting.rst
+index d8452d8b7fbb..04b6067d711d 100644
+--- a/Documentation/translations/zh_CN/mm/overcommit-accounting.rst
++++ b/Documentation/translations/zh_CN/admin-guide/mm/overcommit-accounting.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/mm/overcommit-accounting.rst
++:Original: Documentation/admin-guide/mm/overcommit-accounting.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/mm/index.rst b/Documentation/translations/zh_CN/mm/index.rst
+index 2f53e37b8049..3d603c90364c 100644
+--- a/Documentation/translations/zh_CN/mm/index.rst
++++ b/Documentation/translations/zh_CN/mm/index.rst
+@@ -49,7 +49,6 @@ Linux内存管理文档
+    memory-model
+    mmu_notifier
+    numa
+-   overcommit-accounting
+    page_frags
+    page_migration
+    page_owner
+-- 
+2.25.1
 
-In mt6779_keypad_pdrv_probe(), we call
-* matrix_keypad_parse_properties() which requires keypad,num-rows and keypad,num-cols.
-* matrix_keypad_build_keymap() which uses linux,keymap
-
-Therefore, all properties from matrix-keymap.yaml are
-required by the mt6779-keypad driver.
-
-In v2, I will add the above justification and also add all 3 properties
-in the "required" list.
-
-Initially, I did not do this because from a dts/code perspective it seemed
-interesting to split out SoC specific keyboard node vs board specific key configuration:
-* [PATCH v1 5/6] arm64: dts: mediatek: mt8183: add keyboard node # SoC specific
-* [PATCH v1 6/6] arm64: dts: mediatek: mt8183-pumpkin: add keypad support # board specific
-
-What would be the recommend approach for above?
-I see at least 2:
-* "move the whole keyboard node into the board file (mt8183-pumpkin.dts)" even if it generates
-  duplication between boards using the same SoC.
-* "add a "dummy keymap,row,cols" properties in the soc node which can be overriden in board file.
-  For example, use rows and cols = 0 which would have the driver early exit.
-
-Thanks,
-Mattijs
-
->
-> Best regards,
-> Krzysztof

@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A75957CCCF
+	by mail.lfdr.de (Postfix) with ESMTP id 38F2857CCCE
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiGUOCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S230452AbiGUOCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiGUOCd (ORCPT
+        with ESMTP id S230325AbiGUOCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:02:33 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08413ED54
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Vg47MT9CYxVlKDfYeFrs6uVhxA2N7iGnYsekPSd9PLU=; b=rf4D7P6LRVg5IFDDhyBor71CZu
-        3QAp6A9r7WfoW7/Clpm62SfV7wANE8oBbVcMvxtX8uSdAucHI3Y4Kts21MZHDmCSz8xvcjaRe2nCg
-        X2kmJX3pxs75qo14xPEqELLjIJbnNnrOngXsIie+a1/LCclG8nMsBlQlnapHhT93PSPzBh0LJpZPg
-        LnzqjMoDxahO5di8SXZ/aAXIxHy+V09bpk0+7lPzOl6tyYdi58i4ryf2HQ+mt7jpC9yH4kTdT0OL1
-        64zKWXlwGkTnH6TuwNN4DX4pDaccmQ0XzAx7DOUayAtW5vxurXsudrwbBPAETOOYJN41dxERgVF/B
-        op8tohbA==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEWkU-007SAu-Un; Thu, 21 Jul 2022 14:01:55 +0000
-Message-ID: <9d2da296-80a8-f632-27a4-42cd91cdff3e@infradead.org>
-Date:   Thu, 21 Jul 2022 07:01:51 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5/5] ASoC: amd: enable RPL Platform acp drivers build
-Content-Language: en-US
-To:     syed sabakareem <Syed.SabaKareem@amd.com>, broonie@kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     Alexander.Deucher@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, vijendar.mukunda@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        Bard Liao <bard.liao@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220721061035.91139-1-Syed.SabaKareem@amd.com>
- <20220721061035.91139-5-Syed.SabaKareem@amd.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220721061035.91139-5-Syed.SabaKareem@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 10:02:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C0E3FA14;
+        Thu, 21 Jul 2022 07:02:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23CC861F63;
+        Thu, 21 Jul 2022 14:02:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEB1C3411E;
+        Thu, 21 Jul 2022 14:02:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658412156;
+        bh=e6XE1e+obJFo7Tktg3GWlC87fH+4kQSiz17LMa5xy5Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V5Of0GiBlWOIrJrzcd+33hBErXGotNuRd2QAua0IvNV891HcrvYc6jg1bBhGZ4RaP
+         Pif8GXAcR0w7oH+FCV118HotirNn9aSNCMFy68XDBScKC+WQ8CN2mG3VICkjcNMsC9
+         +IH8Ill+QSTxJQmlMQfiPnMCDjeRaVj1wNf+jzsZib471tvlvvZMHp7iTb6MI97TtR
+         9F4iveX362XEGp/59+nVhp4SY4ss6k4PFYT+dg2MM9x/S/pGSkqRCQKhnRtAf9S+Ux
+         FGFiWZbvusaGFrCtQsF5/2OhTES1bNrU7+bZiT4j/MoRaYbctUl6mPcvT/RasqzOHw
+         HFn4mpEyx9TiQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oEWl8-0095zH-3s;
+        Thu, 21 Jul 2022 15:02:34 +0100
+Date:   Thu, 21 Jul 2022 15:02:33 +0100
+Message-ID: <87zgh2y35y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Aishwarya TCV <Aishwarya.TCV@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: arm64: defconfig build failed on Linux next-20220721
+In-Reply-To: <CA+G9fYsuUdyUUUa_Xcfzfnh+Y8c82LnjeHum31C2ancBdxswCQ@mail.gmail.com>
+References: <CA+G9fYsuUdyUUUa_Xcfzfnh+Y8c82LnjeHum31C2ancBdxswCQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, linux-next@vger.kernel.org, linux-kernel@vger.kernel.org, regressions@lists.linux.dev, lkft-triage@lists.linaro.org, linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, mark.rutland@arm.com, broonie@kernel.org, arnd@arndb.de, Aishwarya.TCV@arm.com, ardb@kernel.org, akpm@linux-foundation.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Thu, 21 Jul 2022 14:53:03 +0100,
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> 
+> arm64 defconfig build failed on Linux next-20220721 tag kernel.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Regressions found on arm64:
+>    - build-gcc-11-lkftconfig-64k_page_size
+>    - build-gcc-11-lkftconfig-rcutorture
+>    - build-gcc-11-lkftconfig-devicetree
+>    - build-gcc-11-lkftconfig
+>    - build-gcc-11-lkftconfig-debug
+>    - build-gcc-11-lkftconfig-armv8_features
+>    - build-gcc-11-lkftconfig-kselftest
+>    - build-gcc-11-lkftconfig-kunit
+>    - build-gcc-11-lkftconfig-libgpiod
+>    - build-gcc-11-lkftconfig-kasan
+>    - build-clang-12-lkftconfig
+>    - build-clang-14-lkftconfig
+>    - build-clang-13-lkftconfig
+>    - build-clang-nightly-lkftconfig
+>    - build-gcc-11-lkftconfig-debug-kmemleak
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build
+> CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
+> CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+> /builds/linux/arch/arm64/kernel/head.S: Assembler messages:
+> /builds/linux/arch/arm64/kernel/head.S:334: Error: immediate cannot be
+> moved by a single instruction
 
-On 7/20/22 23:10, syed sabakareem wrote:
-> diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-> index 9c2fef2ce89f..08f5289dac54 100644
-> --- a/sound/soc/amd/Kconfig
-> +++ b/sound/soc/amd/Kconfig
-> @@ -117,3 +117,13 @@ config SND_AMD_ACP_CONFIG
->  	 driver modules to use
->  
->  source "sound/soc/amd/acp/Kconfig"
-> +
-> +config SND_SOC_AMD_RPL_ACP6x
-> +        tristate "AMD Audio Coprocessor-v6.2 RPL support"
-> +        depends on X86 && PCI
-> +        help
-> +          This option enables Audio Coprocessor i.e ACP v6.2 support on
+See https://lore.kernel.org/r/20220721124244.903567-1-maz@kernel.org
+as a potential workaround.
 
-If that "i.e" is supposed to mean "that is", then it should be "i.e.".
-Or does it mean something else here?
+Another solution would be to have Peter's patch in 5.19 but not in
+5.20.
 
-> +          AMD RPL platform. By enabling this flag build will be
-> +          triggered for ACP PCI driver.
-> +          Say m if you have such a device.
-> +          If unsure select "N".
+Thanks,
+
+	M.
 
 -- 
-~Randy
+Without deviation from the norm, progress is not possible.

@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D85257CACA
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F2357CACE
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbiGUMmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S233735AbiGUMm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbiGUMmR (ORCPT
+        with ESMTP id S232164AbiGUMm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:42:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7873ED41
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:42:15 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LpXDJ3zdqzWf76;
-        Thu, 21 Jul 2022 20:38:24 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Jul 2022 20:42:13 +0800
-CC:     <yangyicong@hisilicon.com>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        <prime.zeng@huawei.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Guodong Xu <guodong.xu@linaro.org>,
-        <hesham.almatary@huawei.com>, <john.garry@huawei.com>,
-        Yang Shen <shenyang39@huawei.com>, <kprateek.nayak@amd.com>,
-        Chen Yu <yu.c.chen@intel.com>, <wuyun.abel@bytedance.com>
-Subject: Re: [RESEND PATCH v5 2/2] sched/fair: Scan cluster before scanning
- LLC in wake-up path
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Barry Song <21cnbao@gmail.com>
-References: <20220720081150.22167-1-yangyicong@hisilicon.com>
- <20220720081150.22167-3-yangyicong@hisilicon.com>
- <Ytfjs+m1kUs0ScSn@worktop.programming.kicks-ass.net>
- <CAGsJ_4yrZnPbhBb4wd3x1h994tv6Jfri+y2xrPSJv7yF+Mj7tg@mail.gmail.com>
- <YtkrlVmqnx9VTbLl@worktop.programming.kicks-ass.net>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <0af67cbc-10a3-b5d4-d80a-e878706f8be5@huawei.com>
-Date:   Thu, 21 Jul 2022 20:42:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 21 Jul 2022 08:42:57 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8762A31360;
+        Thu, 21 Jul 2022 05:42:56 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id x23-20020a05600c179700b003a30e3e7989so769325wmo.0;
+        Thu, 21 Jul 2022 05:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HRTXV8cFbW+efzv2SDGshel6YzEMdaNUonQxjNrbvZU=;
+        b=T6ob61YTom7vlfUnFmhWrjAqhdPz0vmm68x0CCl5LtFfTPXLKgDDNDEzh4hkd4I4jf
+         PsfPpeapUSi8Ltp8VpZrBMdbVSqCtzD9zZakVr4xA1Mrbih2AODK83SEHUv9VXDQvJMN
+         jOn5JANek/7KPEfkYrXhENw/kOcJ48lTem7YnXgzACp/Bc4B5Y18Dm+47jWbMwFrQ7Ul
+         2Bd2Zosp2b2eWW8kaij0N8UYOf+pDmxbnd12GqU7VzSkiHzAT8SV4SdWj4gqEClb7h0q
+         /uh10sHc8x230wPG2yFxjEuFt0dOV6C8IplGhzqk7naZDg1gvCf3INGGuQ8fzfPNWG4X
+         KPqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HRTXV8cFbW+efzv2SDGshel6YzEMdaNUonQxjNrbvZU=;
+        b=fXi5LsN+xZS7NyDYKXZ3+V5ssInmkc28a3T7ncTiDQaXajzC/5RJtz3ik1V/NQVVDx
+         mA7Mv11gt5+mIdaZjKjNZenIOBbcqPTEV9raPPkUPjXs5a1aSgxncgiFJIfmFCNYLATn
+         LzlVSl4E8MXhKyv+Re8WEoThecIjSvVNXCXWEwz2tyac/7KmZbn8l0zwlZrQbz7BXC4O
+         eKNVy4a+ir7rHRwSDU8BO4TAqb1qx2Oj11bE0zWK2hk20mGbh6I7Vdbd2Yy+fTPqa97M
+         4vwY59ABMjT52rXJeeofIc0Wr1uGEI/4CKMEZILBshH9cS/o+aIF5TOGs+1r6dIVe0Pq
+         eDkg==
+X-Gm-Message-State: AJIora8gCSmpD7i3GK2Z9w8FVEC+M2IMsvlBGxEyugwrz5WGE+cfES+g
+        qYiIhRLKErFwjvst1YK2b43vJazvyc4yByBl
+X-Google-Smtp-Source: AGRyM1tJwSY/A09DmSchBJIT4wiX1XFryLNpHwfK/rwkOCkLDE4DgCI032Bqj20lXmJuqcr/5rmddg==
+X-Received: by 2002:a1c:3541:0:b0:3a2:e2e2:d80e with SMTP id c62-20020a1c3541000000b003a2e2e2d80emr8186393wma.184.1658407375060;
+        Thu, 21 Jul 2022 05:42:55 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g18-20020a05600c4ed200b003a3199c243bsm8170348wmq.0.2022.07.21.05.42.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 05:42:54 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] KVM: selftests: Fix spelling mistake "mismtach" -> "mismatch"
+Date:   Thu, 21 Jul 2022 13:42:53 +0100
+Message-Id: <20220721124253.20823-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-In-Reply-To: <YtkrlVmqnx9VTbLl@worktop.programming.kicks-ass.net>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,87 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/21 18:33, Peter Zijlstra wrote:
-> On Thu, Jul 21, 2022 at 09:38:04PM +1200, Barry Song wrote:
->> On Wed, Jul 20, 2022 at 11:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
->>>
->>> On Wed, Jul 20, 2022 at 04:11:50PM +0800, Yicong Yang wrote:
->>>> +     /* TODO: Support SMT system with cluster topology */
->>>> +     if (!sched_smt_active() && sd) {
->>>> +             for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
->>>
->>> So that's no SMT and no wrap iteration..
->>>
->>> Does something like this work?
->>>
->>> ---
->>> --- a/kernel/sched/fair.c
->>> +++ b/kernel/sched/fair.c
->>> @@ -6437,6 +6437,30 @@ static int select_idle_cpu(struct task_s
->>>                 }
->>>         }
->>>
->>> +       if (IS_ENABLED(CONFIG_SCHED_CLUSTER) &&
->>> +           static_branch_unlikely(&sched_cluster_active)) {
->>> +               struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
->>> +               if (sdc) {
->>> +                       for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
->>> +                               if (!cpumask_test_cpu(cpu, cpus))
->>> +                                       continue;
->>> +
->>> +                               if (has_idle_core) {
->>> +                                       i = select_idle_core(p, cpu, cpus, &idle_cpu);
->>> +                                       if ((unsigned int)i < nr_cpumask_bits)
->>> +                                               return i;
->>> +                               } else {
->>> +                                       if (--nr <= 0)
->>> +                                               return -1;
->>> +                                       idle_cpu = __select_idle_cpu(cpu, p);
->>> +                                       if ((unsigned int)idle_cpu < nr_cpumask_bits)
->>> +                                               break;
->>
->> Guess here it should be "return idle_cpu", but not "break". as "break"
->> will make us scan more
->> other cpus outside the cluster if we have found idle_cpu within the cluster.
->>
+There is a spelling mistake in an assert message. Fix it.
 
-That can explain why the performance regress when underload.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/kvm/x86_64/cpuid_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> Yicong,
->> Please test Peter's code with the above change.
-> 
-> Indeed. Sorry for that.
-> 
+diff --git a/tools/testing/selftests/kvm/x86_64/cpuid_test.c b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
+index a6aeee2e62e4..c85113d1aeb2 100644
+--- a/tools/testing/selftests/kvm/x86_64/cpuid_test.c
++++ b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
+@@ -93,7 +93,7 @@ static void compare_cpuids(const struct kvm_cpuid2 *cpuid1,
+ 
+ 		TEST_ASSERT(e1->function == e2->function &&
+ 			    e1->index == e2->index && e1->flags == e2->flags,
+-			    "CPUID entries[%d] mismtach: 0x%x.%d.%x vs. 0x%x.%d.%x\n",
++			    "CPUID entries[%d] mismatch: 0x%x.%d.%x vs. 0x%x.%d.%x\n",
+ 			    i, e1->function, e1->index, e1->flags,
+ 			    e2->function, e2->index, e2->flags);
+ 
+-- 
+2.35.3
 
-The performance's still positive based on the tip/sched/core used in this patch's commit.
-70fb5ccf2ebb ("sched/fair: Introduce SIS_UTIL to search idle CPU based on sum of util_avg").
-
-On numa 0:
-                           tip/core                 patched
-Hmean     1        345.89 (   0.00%)      398.43 *  15.19%*
-Hmean     2        697.77 (   0.00%)      794.40 *  13.85%*
-Hmean     4       1392.51 (   0.00%)     1577.60 *  13.29%*
-Hmean     8       2800.61 (   0.00%)     3118.38 *  11.35%*
-Hmean     16      5514.27 (   0.00%)     6124.51 *  11.07%*
-Hmean     32     10869.81 (   0.00%)    10690.97 *  -1.65%*
-Hmean     64      8315.22 (   0.00%)     8520.73 *   2.47%*
-Hmean     128     6324.47 (   0.00%)     7253.65 *  14.69%*
-
-On numa 0-1:
-                           tip/core                 patched
-Hmean     1        348.68 (   0.00%)      397.74 *  14.07%*
-Hmean     2        693.57 (   0.00%)      795.54 *  14.70%*
-Hmean     4       1369.26 (   0.00%)     1548.72 *  13.11%*
-Hmean     8       2772.99 (   0.00%)     3055.54 *  10.19%*
-Hmean     16      4825.83 (   0.00%)     5936.64 *  23.02%*
-Hmean     32     10250.32 (   0.00%)    11780.59 *  14.93%*
-Hmean     64     16309.51 (   0.00%)    19864.38 *  21.80%*
-Hmean     128    13022.32 (   0.00%)    16365.43 *  25.67%*
-Hmean     256    11335.79 (   0.00%)    13991.33 *  23.43%*
-
-Hi Peter,
-
-Do you want me to respin a v6 based on your change?
-
-Thanks,
-Yicong

@@ -2,128 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3635B57CCBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2748B57CCBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiGUNxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S230419AbiGUNx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiGUNxR (ORCPT
+        with ESMTP id S230014AbiGUNx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:53:17 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61912E1D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:53:16 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id j22so3323747ejs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=QTfsunLqKTRB2CFPsnW6lbEDPr/NGxI4rqcD38FJJkw=;
-        b=DArx0cdwILUNhnM5+w7oUR7j8ov5x8tkDJdlXFTZUi79VTS/UMrU1tywOPb1RqBeWa
-         g/Dw1peDlFsUR5OON4WW29nG6C5hNeWlekxqCj2PxL3nGzZgKQKqvjTx2AIpSOd9+/wa
-         rNkf/n8mpaqOUtNgkn0i/XsVM6Jc2u+TzjB61cuX0XyfYZx8zvSTMp/fA+kgqV0YNsgR
-         mLefzb3HdB7mHmrwy81dUD0je+ohD29EALmiIJUYVT3thYfdiAHp3SoIR7fy9C04QA10
-         fpQ1QT4f2JlxBrcwuj06kZw5L3NnG+KUQUICjYGYNRzqmuq3zUokA8jJY6JVvXkP94y7
-         KjVQ==
+        Thu, 21 Jul 2022 09:53:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BECCE1D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658411635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Py5p6dIw7RyqWLqBb5JYlm9TREMqDn9d4+KPpK4eceE=;
+        b=cnoHEieZ13Z+431z0mSrzmZHKn0Z3rJFZzqGFCepeI+OX5QtrlcrF7jY+g/VEDER8QF5ps
+        7pcJjlAtt3WsZXT6FGtQvY2Jb4eQQrw7NqX9m3sAQ/nDgz22La9voFZwYflehTy7tRol62
+        ZqWOT9bsAIkwNmJe4bnueIKXIKzTWxc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-222-YoYp21dOPF68v9CAcLK9WA-1; Thu, 21 Jul 2022 09:53:47 -0400
+X-MC-Unique: YoYp21dOPF68v9CAcLK9WA-1
+Received: by mail-wm1-f70.google.com with SMTP id v123-20020a1cac81000000b003a02a3f0beeso2844986wme.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:53:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=QTfsunLqKTRB2CFPsnW6lbEDPr/NGxI4rqcD38FJJkw=;
-        b=liPnxtaEJ58/EJL3cZWHJ1E4IXA+L0YXwyuFVSrauGZl+5mobJTmVkTKYtkI+93OMo
-         wnDz948wH4ftF75US0EYF6VnK0NPaZcHg+cGj6dRTe4/j6bBsbeLatfvs3sgq0MuVnQp
-         D2JPmzh1FB+aCJWM++TJhTePAhhOjSP8ynm5J68cA/Qz1DZ6I48UiXSnJatqHAICKKzS
-         OjhDDfqjCi0yo8bxbHx4jIE+8We5hXxpLNX8mdiJYCUeA09KWUu4/HHk+TlH1E+C7zhp
-         7u27gmNOlskvwraXZ0mwODrLrAwo0BhT/Gm8kspUKAIiRlETBBhnT7OWUjUE37ipF/SZ
-         qpsQ==
-X-Gm-Message-State: AJIora8dt6B1DyoCzCMaDzBcXPVxWVVI7wrK0KjIiPnhpGQ/ti9cR7o5
-        xLDIo3SZnBpPKd9rG6W1SeZvPWqwhD0VWTkLR85AYw==
-X-Google-Smtp-Source: AGRyM1ud9picHHVdTtA2cJCpNsz7WoU+vwr2wtnyBeX+6n2757l598TbKI0zKDRgvH5Gnk8iWrQ3dDdGNBKQc0p1aFI=
-X-Received: by 2002:a17:906:2dd:b0:712:1293:3dd8 with SMTP id
- 29-20020a17090602dd00b0071212933dd8mr41059487ejk.448.1658411594627; Thu, 21
- Jul 2022 06:53:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Py5p6dIw7RyqWLqBb5JYlm9TREMqDn9d4+KPpK4eceE=;
+        b=lqr+0fhc59yd69MJPsG39Gnr4SIDHBLWPxikxhSnXw/n7rlpsM7k76Bbwx50iBiNgL
+         BclwK/uMyxlJa/t9NuEv6iVF94hTe/XRglUaJj3kziDkbj6D6YVTi+dmddqtn8Dxr+rs
+         Sqjy2UIX3GJvvMiV8f4AzUxaz32KvCgbK5mim61fo3nAatA5IUIHBmfa+LFhqYR57LPj
+         NYvVJMR1I4u1Osv6vlgLUbAF/aCFhcjsIaHL9C+zRlQZlmKKFIbbM+TTpaXWyDzz0Shw
+         J3s6lo8c1ziUEd8Rb8OyyuMtHuj4BBhq0zoqejGgRagQ4jclSkws3yCWKVT2zwpWhmbT
+         qS1A==
+X-Gm-Message-State: AJIora+uHwrB1OyVIzaDJsrYSL/F4bZ2yebdWnp+m5zjfdRRGITaCC9Y
+        auj5NyPvP6kIk0xckhtJdLnF53zbvWJVOpuLY066MhVbA9SDXouXOXTYQ2DdiyWMoh8QJJqR05o
+        WGj297N23URBsse9gXpXAusOd
+X-Received: by 2002:a05:600c:4f49:b0:3a3:2717:27fc with SMTP id m9-20020a05600c4f4900b003a3271727fcmr8395156wmq.36.1658411626043;
+        Thu, 21 Jul 2022 06:53:46 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vtffZCfX7ip8YK5dZI/pOP5iqYltOevdyqaFsbPhaRMVJrljCorjoneygwo5G4iE+W6ugqBw==
+X-Received: by 2002:a05:600c:4f49:b0:3a3:2717:27fc with SMTP id m9-20020a05600c4f4900b003a3271727fcmr8395140wmq.36.1658411625697;
+        Thu, 21 Jul 2022 06:53:45 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id a8-20020adfe5c8000000b0021e5d77a489sm75105wrn.31.2022.07.21.06.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 06:53:45 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>, Tejun Heo <tj@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [RFC PATCH] workqueue: Unbind workers before sending them to
+ exit()
+In-Reply-To: <CAJhGHyAso+JH+QMXcfKTyOqq4yBD9Vc19sBbebEXohHe5znL8Q@mail.gmail.com>
+References: <20220719165743.3409313-1-vschneid@redhat.com>
+ <YthDjPq3CtWc+o0/@slm.duckdns.org>
+ <CAJhGHyAso+JH+QMXcfKTyOqq4yBD9Vc19sBbebEXohHe5znL8Q@mail.gmail.com>
+Date:   Thu, 21 Jul 2022 14:53:43 +0100
+Message-ID: <xhsmhv8rqfu6w.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 21 Jul 2022 19:23:03 +0530
-Message-ID: <CA+G9fYsuUdyUUUa_Xcfzfnh+Y8c82LnjeHum31C2ancBdxswCQ@mail.gmail.com>
-Subject: arm64: defconfig build failed on Linux next-20220721
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Aishwarya TCV <Aishwarya.TCV@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arm64 defconfig build failed on Linux next-20220721 tag kernel.
+On 21/07/22 11:35, Lai Jiangshan wrote:
+>> @@ -1999,6 +2011,16 @@ static void destroy_worker(struct worker *worker)
+>>
+>>         list_del_init(&worker->entry);
+>>         worker->flags |= WORKER_DIE;
+>> +
+>> +       /*
+>> +        * We're sending that thread off to die, so any CPU would do. This is
+>> +        * especially relevant for pcpu kworkers affined to an isolated CPU:
+>> +        * we'd rather not interrupt an isolated CPU just for a kworker to
+>> +        * do_exit().
+>> +        */
+>> +       if (!(worker->flags & WORKER_UNBOUND))
+>> +               unbind_worker(worker);
+>> +
+>>         wake_up_process(worker->task);
+>>  }
+>
+> destroy_worker() is called with raw_spin_lock_irq(pool->lock), so
+> it cannot call the sleepable set_cpus_allowed_ptr().
+>
+> From __set_cpus_allowed_ptr:
+>> * NOTE: the caller must have a valid reference to the task, the
+>> * task must not exit() & deallocate itself prematurely. The
+>> * call is not atomic; no spinlocks may be held.
+>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Heh, I somehow forgot that this is blocking. Now in this particular case I
+think pcpu kworkers are "safe" - they shouldn't be running when
+destroy_worker() is invoked on them (though AFAICT that is not a "hard"
+guarantee), and it doesn't make any sense for them to use
+migrate_disable(). Still, yeah, not ideal.
 
-Regressions found on arm64:
-   - build-gcc-11-lkftconfig-64k_page_size
-   - build-gcc-11-lkftconfig-rcutorture
-   - build-gcc-11-lkftconfig-devicetree
-   - build-gcc-11-lkftconfig
-   - build-gcc-11-lkftconfig-debug
-   - build-gcc-11-lkftconfig-armv8_features
-   - build-gcc-11-lkftconfig-kselftest
-   - build-gcc-11-lkftconfig-kunit
-   - build-gcc-11-lkftconfig-libgpiod
-   - build-gcc-11-lkftconfig-kasan
-   - build-clang-12-lkftconfig
-   - build-clang-14-lkftconfig
-   - build-clang-13-lkftconfig
-   - build-clang-nightly-lkftconfig
-   - build-gcc-11-lkftconfig-debug-kmemleak
+> I think it needs something like task_set_cpumask_possible() which is
+> documented as being usable in (raw) spinlocks and set the task's cpumask
+> to cpu_possible_mask and let the later ttwu help migrate it to a
+> proper non-isolated CPU or let it keep running.
+>
 
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build
-CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
-CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
-'HOSTCC=sccache gcc'
-/builds/linux/arch/arm64/kernel/head.S: Assembler messages:
-/builds/linux/arch/arm64/kernel/head.S:334: Error: immediate cannot be
-moved by a single instruction
-/builds/linux/arch/arm64/kernel/head.S:343: Error: immediate cannot be
-moved by a single instruction
-/builds/linux/arch/arm64/kernel/head.S:354: Error: immediate cannot be
-moved by a single instruction
-/builds/linux/arch/arm64/kernel/head.S:379: Error: immediate cannot be
-moved by a single instruction
-make[3]: *** [/builds/linux/scripts/Makefile.build:382:
-arch/arm64/kernel/head.o] Error 1
-/builds/linux/arch/arm64/mm/proc.S: Assembler messages:
-/builds/linux/arch/arm64/mm/proc.S:296: Error: immediate cannot be
-moved by a single instruction
-make[3]: *** [/builds/linux/scripts/Makefile.build:382:
-arch/arm64/mm/proc.o] Error 1
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [/builds/linux/scripts/Makefile.build:525: arch/arm64/mm] Error 2
-make[3]: Target '__build' not remade because of errors.
-make[2]: *** [/builds/linux/scripts/Makefile.build:525:
-arch/arm64/kernel] Error 2
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [/builds/linux/Makefile:2005: arch/arm64] Error 2
+I'll see what I can come up with, thanks for the suggestion.
 
-Build log details link,
-https://builds.tuxbuild.com/2CFcb9W3YxjuZPYeK5VFFhsYrbg/
-
-I am running my bisect scripts to find out the first bad commit.
-
---
-Linaro LKFT
-https://lkft.linaro.org

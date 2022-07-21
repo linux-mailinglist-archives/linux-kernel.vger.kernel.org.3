@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DD057C9D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E46A57C9DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbiGULh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S232513AbiGULme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiGULhY (ORCPT
+        with ESMTP id S230284AbiGULmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:37:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6C731DF4;
-        Thu, 21 Jul 2022 04:37:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 21 Jul 2022 07:42:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FE35D0EE;
+        Thu, 21 Jul 2022 04:42:30 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2389B347EB;
+        Thu, 21 Jul 2022 11:42:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658403749; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BkvbSMivb/aWXIlzYNPZoVB/iKbqXT76LFZqzry9Fz4=;
+        b=r2465AG3bndbjlFwjkJAWIovGGRSvB4ub7P3vDo/JON7K4EOcDSeD0D4aKvmMfKaVYRcsN
+        q071il98/zaQkOiititSJGsdWBY7fcTNeVkfW8TDsWHrmu1KKFWJmlRfJ6yd/MKGdXD5C2
+        //MdG7ABC4+aDFuIp0M2Obnx5rxqfQY=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0B64B823C8;
-        Thu, 21 Jul 2022 11:37:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C31DC341CE;
-        Thu, 21 Jul 2022 11:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658403440;
-        bh=IJfrVQPMT4yKttp8HhU31vIdYsxoLfOU3EqREIXq8TY=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=mpLbs1fgXFwTqj00tbzZDZNxz2E4STwel3+kvfzwsPwr4M8E0iDna/YTsYKjY+6OG
-         AIFZrGgvBL/fn3g6N6JVUGUK1OqxkKoOt9AAg86LfDa61gEwCTGALeIzMo6Q3szskm
-         57xcN0rWPIbOtRtVre6EE42ZeDRqGwyWbuZJ9eVq6AynpVtnWPK9eBKl/IvOz+B4fz
-         e7WyuJNm+lFP98HgwuBylwAPlmlQ7HZv9CB6/x4W/+prsyJTqx7E7Xl55toftbEbtC
-         FapDcAfWltbTsP2tr7P+IFqK5zhHPfJcd1FkA8uqoSNjvzO0fyXhZrRnTg5PBh6iwy
-         at+ZoK1EDnYvg==
-Date:   Thu, 21 Jul 2022 13:37:15 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: core: remove unneeded assignment in
- hid_process_report()
-In-Reply-To: <20220701112720.13452-1-lukas.bulwahn@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2207211337090.19850@cbobk.fhfr.pm>
-References: <20220701112720.13452-1-lukas.bulwahn@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by relay2.suse.de (Postfix) with ESMTPS id 5E9632C149;
+        Thu, 21 Jul 2022 11:42:28 +0000 (UTC)
+Date:   Thu, 21 Jul 2022 13:42:25 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v4] mm: vmpressure: don't count proactive reclaim in
+ vmpressure
+Message-ID: <Ytk7octCv1DZeelM@dhcp22.suse.cz>
+References: <20220714064918.2576464-1-yosryahmed@google.com>
+ <YtfJug77XJ9BPA8L@dhcp22.suse.cz>
+ <CALvZod7X3PsM2+ZrWXwb75FNBBjaBGJpjd+WVmzr5hStROvW+g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod7X3PsM2+ZrWXwb75FNBBjaBGJpjd+WVmzr5hStROvW+g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Jul 2022, Lukas Bulwahn wrote:
+On Wed 20-07-22 10:49:53, Shakeel Butt wrote:
+> On Wed, Jul 20, 2022 at 2:24 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> [...]
+> >
+> > I think what we are missing here is
+> > - explain that this doesn't have any effect on existing users of
+> >   vmpressure user interface because that is cgroup v1 and memory.reclaim
+> >   is v2 feature. This is a trivial statement but quite useful for future
+> >   readers of this commit
+> > - explain the effect on the networking layer and typical usecases
+> >   memory.reclaim is used for currently and ideally document that.
+> 
+> I agree with the above two points (Yosry, please address those) but
+> the following third point is orthogonal and we don't really need to
+> have an answer for this patch to be accepted.
+> 
+> > - how are we going to deal with users who would really want to use
+> >   memory.reclaim interface as a replacement for existing hard/high
+> >   memory reclaim? Is that even something that the interface is intended
+> >   for?
+> 
+> I do agree that this question is important. Nowadays I am looking at
+> this from a different perspective and use-case. More concretely how
+> (and why) to replace vmpressure based network throttling for cgroup
+> v2. I will start a separate thread for that discussion.
 
-> Commit bebcc522fbee ("HID: core: for input reports, process the usages by
-> priority list") split the iteration into two distinct loops in
-> hid_process_report().
-> 
-> After this change, the variable field is only used while iterating in the
-> second loop and the assignment of values to this variable in the first loop
-> is simply not needed.
-> 
-> Remove the unneeded assignment during retrieval. No functional change and
-> no change in the resulting object code.
-> 
-> This was discovered as a dead store with clang-analyzer.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Benjamin, Jiri, please pick this minor non-urgent clean-up patch.
-> 
->  drivers/hid/hid-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index 00154a1cd2d8..b7f5566e338d 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -1662,7 +1662,7 @@ static void hid_process_report(struct hid_device *hid,
->  
->  	/* first retrieve all incoming values in data */
->  	for (a = 0; a < report->maxfield; a++)
-> -		hid_input_fetch_field(hid, field = report->field[a], data);
-> +		hid_input_fetch_field(hid, report->field[a], data);
->  
->  	if (!list_empty(&report->field_entry_list)) {
-
-Applied, thanks Lukas.
+I think we should be good to document this side effect for now. If you
+have a plan to change to vmpressure based throttling then only better.
+But one way or the other impact of the memory.reclaim interface on
+netwroking should be documented properly.
 
 -- 
-Jiri Kosina
+Michal Hocko
 SUSE Labs
-

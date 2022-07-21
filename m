@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBFC57C251
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C294857C254
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiGUCey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S231674AbiGUCfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGUCex (ORCPT
+        with ESMTP id S231503AbiGUCfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:34:53 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE2774AA;
-        Wed, 20 Jul 2022 19:34:52 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 112615C00A8;
-        Wed, 20 Jul 2022 22:34:52 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Wed, 20 Jul 2022 22:34:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1658370892; x=1658457292; bh=tvo8SkIpWm
-        /MJl1+Nc10z41BWFP5+H61IqrS8LHpPrk=; b=PfdfHkvjY2P/RctekW5T0uGbMB
-        uDIeIbUtd7CknB+kLubU+d+whYViAsT49zFfMm15PraDcRQMZGufjFqO+17V3Oef
-        KvaVhtNxyFVr6rKR3oTY1RaretXM0yQCG8Dqm8b/by1HJM10GI4tkMf+MkWQYP1F
-        h+5g5MapmCrPOqDU8bsE1r5JDI7/Pmg0udBRyxKK4vhFTfJJkk53ULCwXqKS2k/5
-        8rHgFqtqfoqMJmfnP9b3dtEg3f3DFtKDL8vEJLmmBEAptGuEE6Lgr4/uUNnUmGz9
-        JGEIB60lonLefK7aqgt+7o3g16nQGAxMZi4ouiUaFAK9weFuLGJ2lC2mLF6w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658370892; x=1658457292; bh=tvo8SkIpWm/MJl1+Nc10z41BWFP5
-        +H61IqrS8LHpPrk=; b=1fYwVf2iq/s9vIW1t0yAsquw2ualTEO5CHXPjQolAx6I
-        cipxra9ea6jYRwKWVL6JjYUUm+YfsQU6euGbG5jG3x8y/fAH5XxzUiXmmBLkafkj
-        un57tHbOm0YnjDShqOSoVaABrQkqo4nt6d2MeOsVBt1W7X0wl8WiiC/C5jLpo5Fm
-        HmD9lwsb21gTRPh4v5GmJVckIDli8xjrNGcuSGDKbhpIYKuNHzmHiu8faKUXXe/Z
-        D7mxd8lhEhhgwEt1HN++0srgWFnZfQ2Q20+t7rT9dG9RVtqAHIpFLQFmHXNeGJzT
-        VgX53I/TrAE/i6K9chiXcqF1ztPjUe41etX6bsEjZw==
-X-ME-Sender: <xms:S7vYYvKVwg81f79XBoGWcsdsH7XqTulRku7qparGO6puBHmRta2-Jw>
-    <xme:S7vYYjJgn-emxYKoumfE4ekJE5CoxprGT0lLY0VqNFnv1BkzhLFw7SstEEh9p7BaB
-    -oZCYfUnCqQA_aB9A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudelfedgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
-    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
-    feetkeeiteenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:S7vYYns5wdDGpJvRFCI3O-lpy2k7Ap7qS8MEuGwSvpY2T-hINT7dBQ>
-    <xmx:S7vYYoZnMWjkBcJqu3wbSnBwlUsChCrAzs1zXPYs-tf12tGfM6WI5g>
-    <xmx:S7vYYmY815_Cfs7OTANZK1gNXPa6ci9UO49hfZrT3IE2AaypwCM1dQ>
-    <xmx:TLvYYsl1Jx1vtZ1J8q4C7LkPHHkVXQGib5QGsaeBWpaC9xGOYSyBzA>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 079CB170007E; Wed, 20 Jul 2022 22:34:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-755-g3e1da8b93f-fm-20220708.002-g3e1da8b9
-Mime-Version: 1.0
-Message-Id: <42fb4884-e2c3-4d7f-9049-f14c19701b20@www.fastmail.com>
-In-Reply-To: <c86be8e0-8350-5d73-8055-e04a4e88f3b6@linaro.org>
-References: <20220529104928.79636-1-krzysztof.kozlowski@linaro.org>
- <c86be8e0-8350-5d73-8055-e04a4e88f3b6@linaro.org>
-Date:   Thu, 21 Jul 2022 12:04:30 +0930
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Joel Stanley" <joel@jms.id.au>, "Arnd Bergmann" <arnd@arndb.de>,
-        "Steven Lee" <steven_lee@aspeedtech.com>,
-        "Ken Chen" <chen.kenyy@inventec.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     "David Wang" <David_Wang6097@jabil.com>
-Subject: Re: [PATCH 1/7] dt-bindings: vendor-prefixes: document several vendors for
- Aspeed BMC boards
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 22:35:20 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D7DB846;
+        Wed, 20 Jul 2022 19:35:18 -0700 (PDT)
+X-UUID: a87ce954c5df4c359b7262e0bc1b48bc-20220721
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:fcf65bc8-e657-4b99-8b3a-bfd6bc1b7cea,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:0f94e32,CLOUDID:6574d964-0b3f-4b2c-b3a6-ed5c044366a0,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: a87ce954c5df4c359b7262e0bc1b48bc-20220721
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1845675534; Thu, 21 Jul 2022 10:35:14 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 21 Jul 2022 10:35:13 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 21 Jul 2022 10:35:13 +0800
+Message-ID: <c79b0f441bc4d7dce6c8d35f189783e69144413f.camel@mediatek.com>
+Subject: Re: [PATCH v3 06/21] dt-bindings: power: mediatek: Add bindings for
+ MediaTek SCPSYS
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+CC:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>,
+        <iommu@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 21 Jul 2022 10:35:13 +0800
+In-Reply-To: <68a30bbd-5f9d-17d2-59fa-7b0da06ee877@linaro.org>
+References: <20220720123023.13500-1-tinghan.shen@mediatek.com>
+         <20220720123023.13500-7-tinghan.shen@mediatek.com>
+         <YtgDu70Lpl/uPOkf@google.com>
+         <68a30bbd-5f9d-17d2-59fa-7b0da06ee877@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2022-07-20 at 19:37 +0200, Krzysztof Kozlowski wrote:
+> On 20/07/2022 15:31, Lee Jones wrote:
+> > On Wed, 20 Jul 2022, Tinghan Shen wrote:
+> > 
+> > > The System Control Processor System (SCPSYS) has several power
+> > > management related tasks in the system. Add the bindings for it.
+> > > 
+> > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > 
+> > Why have you ignored my review comments from v2?
+> 
+> If you refer whether the binding is needed at all, then the answer is
+> yes, because this is not simple syscons but a device with children,
+> which we want to parse/match.
+> 
+> Anyway Tinghan should respond to you about way how he proceeds...
+> 
+> Best regards,
+> Krzysztof
+
+Hi Lee,
+
+I'm so sorry for not answering your feedback. I misunderstood it
+that you're waiting the review result of DT maintainers.
+
+This binding is added because of the discussion of the scpsys node[1].
+I first looked at mfd/syscon.yaml to see if I could use it.
+I found that it doesn't have the 'simple-mfd' compatible, so I decide to add a new one.
+It's because I need the 'simple-mfd' compatible to parse child nodes.
 
 
-On Thu, 9 Jun 2022, at 18:20, Krzysztof Kozlowski wrote:
-> On 29/05/2022 12:49, Krzysztof Kozlowski wrote:
->> Add vendor prefixes for manufacturers of Aspeed SoC based BMC boards:
->> ASrock, ByteDance, Ingrasys, Inventec and Quanta.  Move also bticino to
->> proper alphabetical place.
->> 
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->
-> Joel, Andrew,
->
-> Any comments on this patchset? Are you going to pick it up? If you
-> prefer me taking it, I can, but new boards depend on the bindings, so
-> this should rather go via your tree.
+[1] https://lore.kernel.org/all/f7eee4e8-05fa-4c83-9168-64e5ea4c510f@linaro.org/
 
-Apologies for not getting to this earlier, but I see Rob's applied it.
 
-Andrew
+
+Best regards,
+TingHan
+

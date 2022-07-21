@@ -2,186 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D911D57C481
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD1157C460
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiGUGcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
+        id S231764AbiGUGZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGUGca (ORCPT
+        with ESMTP id S230205AbiGUGZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:32:30 -0400
-Received: from 7.mo575.mail-out.ovh.net (7.mo575.mail-out.ovh.net [46.105.63.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC690BC31
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:32:28 -0700 (PDT)
-Received: from player750.ha.ovh.net (unknown [10.110.115.215])
-        by mo575.mail-out.ovh.net (Postfix) with ESMTP id 9F4C223790
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:25:23 +0000 (UTC)
-Received: from RCM-web2.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player750.ha.ovh.net (Postfix) with ESMTPSA id 38BDD2CBF8089;
-        Thu, 21 Jul 2022 06:25:10 +0000 (UTC)
+        Thu, 21 Jul 2022 02:25:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EAEF20;
+        Wed, 20 Jul 2022 23:25:52 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26L4Kd06001025;
+        Thu, 21 Jul 2022 06:25:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=M2JiBalwW4CD0ytKTgXWsVduvHfTTbLfJmMWCa+ruTo=;
+ b=iZSo7VPT1M0gQM729fcZqTKrcghH2tz21YIEhU2TaumIbBd+AdhpEz6T3lSkJLf67Z6E
+ ECB42n88pf7PTDodk8qnfLzraYsbMW0/PrzTxlUIu4WlwkV9i9izzPLx5Lxvp1BkKsgq
+ 18skh9QpBcOmPAgWA+FTrDL/fihEcllCsH0DhAXA8onGG80X5oxaW44xAU0wGDurgEjT
+ 1HIX1DdbpTEksG4Jp63X0afwVfa9vzIEf8UOcOEdAhs27mvOGIfW/OZQ3T1P48u+ya+v
+ 5goRjGFY4WV0CGJ66GrpZQzNpNU9zkF9g5WH6mP/X7R3xEqmmthDdV485qBsYxgPpK/n zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3heypn3epq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 06:25:52 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26L6HNXI008746;
+        Thu, 21 Jul 2022 06:25:52 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3heypn3enx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 06:25:51 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26L6MA4M030351;
+        Thu, 21 Jul 2022 06:25:49 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3hbmy8vx2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 06:25:49 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26L6PkdN24052198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Jul 2022 06:25:46 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EDC6D52054;
+        Thu, 21 Jul 2022 06:25:45 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.22.197])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 921BB52050;
+        Thu, 21 Jul 2022 06:25:45 +0000 (GMT)
+Date:   Thu, 21 Jul 2022 08:25:44 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     hca@linux.ibm.com, gor@linux.ibm.com, svens@linux.ibm.com,
+        borntraeger@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] s390: Fix typo 'the the' in comment
+Message-ID: <YtjxaKSMDvdTsyM+@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220721033358.44838-1-slark_xiao@163.com>
 MIME-Version: 1.0
-Date:   Thu, 21 Jul 2022 08:25:10 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 4/9] arm64: dts: Move BCM4908 dts to bcmbca folder
-In-Reply-To: <20220721000720.29578-1-william.zhang@broadcom.com>
-References: <20220721000720.29578-1-william.zhang@broadcom.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9e81a389e165685cc69236245819d863@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 17389242590046825435
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkedguddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeegvdffjeelvdeggeetheegveejieetgeeiiefggeelveejffehieekhfduueelhfenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejhedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeeh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721033358.44838-1-slark_xiao@163.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: b75hMYjowo3flnNLqOsBze3rRdv4bfrW
+X-Proofpoint-ORIG-GUID: V349dZAfTqmJnLSDX6dDtSALmLTZZuFw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_12,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=738 spamscore=0
+ clxscore=1015 suspectscore=0 malwarescore=0 priorityscore=1501
+ phishscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207210023
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-21 02:07, William Zhang wrote:
-> Move the BCM4908 dts files to bcmbca folder. Use CONFIG_ARCH_BCMBCA to
-> build all the BCM4908 board dts. Remove bcm4908 folder and its 
-> makefile.
-
-This will be a but painful for projects like OpenWrt or Buildroot. They
-have scripts that look for dtb files in specific directories. Now they
-will have to be made kernel-version-aware which may not be an option.
-
-Still I think it's a nice & needed cleanup!
-
-Just in case someone knows some intermediate solution let me know
-please.
-
-
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+On Thu, Jul 21, 2022 at 11:33:58AM +0800, Slark Xiao wrote:
+> Replace 'the the' with 'the' in the comment.
+> 
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 > ---
-> 
->  arch/arm64/boot/dts/broadcom/Makefile                        | 1 -
->  arch/arm64/boot/dts/broadcom/bcm4908/Makefile                | 5 -----
->  arch/arm64/boot/dts/broadcom/bcmbca/Makefile                 | 4 ++++
->  .../broadcom/{bcm4908 => bcmbca}/bcm4906-netgear-r8000p.dts  | 0
->  .../{bcm4908 => bcmbca}/bcm4906-tplink-archer-c2300-v1.dts   | 0
->  .../arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906.dtsi | 0
->  .../broadcom/{bcm4908 => bcmbca}/bcm4908-asus-gt-ac5300.dts  | 0
->  .../broadcom/{bcm4908 => bcmbca}/bcm4908-netgear-raxe500.dts | 0
->  .../arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908.dtsi | 0
->  9 files changed, 4 insertions(+), 6 deletions(-)
->  delete mode 100644 arch/arm64/boot/dts/broadcom/bcm4908/Makefile
->  rename arch/arm64/boot/dts/broadcom/{bcm4908 =>
-> bcmbca}/bcm4906-netgear-r8000p.dts (100%)
->  rename arch/arm64/boot/dts/broadcom/{bcm4908 =>
-> bcmbca}/bcm4906-tplink-archer-c2300-v1.dts (100%)
->  rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906.dtsi 
-> (100%)
->  rename arch/arm64/boot/dts/broadcom/{bcm4908 =>
-> bcmbca}/bcm4908-asus-gt-ac5300.dts (100%)
->  rename arch/arm64/boot/dts/broadcom/{bcm4908 =>
-> bcmbca}/bcm4908-netgear-raxe500.dts (100%)
->  rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908.dtsi 
-> (100%)
-> 
-> diff --git a/arch/arm64/boot/dts/broadcom/Makefile
-> b/arch/arm64/boot/dts/broadcom/Makefile
-> index e8584d3b698f..05d8c5ecf3b0 100644
-> --- a/arch/arm64/boot/dts/broadcom/Makefile
-> +++ b/arch/arm64/boot/dts/broadcom/Makefile
-> @@ -8,7 +8,6 @@ dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
->  			      bcm2837-rpi-cm3-io3.dtb \
->  			      bcm2837-rpi-zero-2-w.dtb
-> 
-> -subdir-y	+= bcm4908
->  subdir-y	+= bcmbca
->  subdir-y	+= northstar2
->  subdir-y	+= stingray
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/Makefile
-> b/arch/arm64/boot/dts/broadcom/bcm4908/Makefile
-> deleted file mode 100644
-> index 6e364e304d4f..000000000000
-> --- a/arch/arm64/boot/dts/broadcom/bcm4908/Makefile
-> +++ /dev/null
-> @@ -1,5 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0
-> -dtb-$(CONFIG_ARCH_BCM4908) += bcm4906-netgear-r8000p.dtb
-> -dtb-$(CONFIG_ARCH_BCM4908) += bcm4906-tplink-archer-c2300-v1.dtb
-> -dtb-$(CONFIG_ARCH_BCM4908) += bcm4908-asus-gt-ac5300.dtb
-> -dtb-$(CONFIG_ARCH_BCM4908) += bcm4908-netgear-raxe500.dtb
-> diff --git a/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
-> b/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
-> index 38f14307184b..d30fa75f0611 100644
-> --- a/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
-> +++ b/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
-> @@ -1,5 +1,9 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_BCMBCA) += \
-> +				bcm4906-netgear-r8000p.dtb \
-> +				bcm4906-tplink-archer-c2300-v1.dtb \
-> +				bcm4908-asus-gt-ac5300.dtb \
-> +				bcm4908-netgear-raxe500.dtb \
->  				bcm4912-asus-gt-ax6000.dtb \
->  				bcm94912.dtb \
->  				bcm963158.dtb \
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
-> b/arch/arm64/boot/dts/broadcom/bcmbca/bcm4906-netgear-r8000p.dts
-> similarity index 100%
-> rename from 
-> arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
-> rename to 
-> arch/arm64/boot/dts/broadcom/bcmbca/bcm4906-netgear-r8000p.dts
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
-> b/arch/arm64/boot/dts/broadcom/bcmbca/bcm4906-tplink-archer-c2300-v1.dts
-> similarity index 100%
-> rename from
-> arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
-> rename to 
-> arch/arm64/boot/dts/broadcom/bcmbca/bcm4906-tplink-archer-c2300-v1.dts
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-> b/arch/arm64/boot/dts/broadcom/bcmbca/bcm4906.dtsi
-> similarity index 100%
-> rename from arch/arm64/boot/dts/broadcom/bcm4908/bcm4906.dtsi
-> rename to arch/arm64/boot/dts/broadcom/bcmbca/bcm4906.dtsi
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
-> b/arch/arm64/boot/dts/broadcom/bcmbca/bcm4908-asus-gt-ac5300.dts
-> similarity index 100%
-> rename from 
-> arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
-> rename to 
-> arch/arm64/boot/dts/broadcom/bcmbca/bcm4908-asus-gt-ac5300.dts
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
-> b/arch/arm64/boot/dts/broadcom/bcmbca/bcm4908-netgear-raxe500.dts
-> similarity index 100%
-> rename from 
-> arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
-> rename to 
-> arch/arm64/boot/dts/broadcom/bcmbca/bcm4908-netgear-raxe500.dts
-> diff --git a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-> b/arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi
-> similarity index 100%
-> rename from arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi
-> rename to arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi
+>  arch/s390/kernel/perf_cpum_sf.c | 2 +-
+>  arch/s390/kernel/sthyi.c        | 2 +-
+
+Please, split in two patches and add subsystems to the descriptions.
+
+Thanks!

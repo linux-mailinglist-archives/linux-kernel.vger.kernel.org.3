@@ -2,91 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4708757C9EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7560557C9F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiGULt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S233269AbiGULv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiGULtZ (ORCPT
+        with ESMTP id S230230AbiGULvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:49:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA7E823A6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:49:24 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oEUfx-0002Sl-Ls; Thu, 21 Jul 2022 13:49:05 +0200
-Message-ID: <6cf47684e92d21a343dbb7861f5d4e5ad1949cdc.camel@pengutronix.de>
-Subject: Re: [PATCH v5 3/3] soc: imx: gpcv2: fix suspend/resume by setting
- GENPD_FLAG_IRQ_ON
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
-        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz
-Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        aford173@gmail.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Thu, 21 Jul 2022 13:49:03 +0200
-In-Reply-To: <20220721043608.1527686-4-martin.kepplinger@puri.sm>
-References: <20220721043608.1527686-1-martin.kepplinger@puri.sm>
-         <20220721043608.1527686-4-martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Thu, 21 Jul 2022 07:51:24 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A9A2AC53;
+        Thu, 21 Jul 2022 04:51:22 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id j22so2748438ejs.2;
+        Thu, 21 Jul 2022 04:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GmDGNOSJLQLxHyqUbqdShMpk7Rg5vZOsES1osVYWvM8=;
+        b=OGZ65YDJOY1TZJZnVZ0xSIYu44FSqV/GtlogNPVbdgVP4qeyYrQHHb6ra08gEteLzV
+         Xza04ZqfmXuFmhOG2yubswI7rJYU6kah1KAk/PdYFcxZyIUiqrdeuYQK7JWkTWahv2Xx
+         H+xG3OpXRv+ZsZ9rhioXX7uv2G6nrzfmTw7N3N0qOk9X/x9PqACbHtBuZasvnja9gYYF
+         XGFgOoVVvydCpOFf0ll9jxiG+6G7lDcfGhK5m+DOx0uPlszpt/Sur2fiK2z/QmWdmkHp
+         l+f6Bq9/k/W8I3XbHk5jPjUEsVz3hHt6datdIR1dhSigpWSaon9VR/EFMeMQbgLyiwqu
+         SAzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GmDGNOSJLQLxHyqUbqdShMpk7Rg5vZOsES1osVYWvM8=;
+        b=TkjgvM7cB30f4bxfCx8YOzMs4FtlwK6dTKKvKuFg6WAp7WasXVMo2KDwtnXFoIgnDt
+         N1/D0td07rYb82m0PYTPFMbxHC/cYB4WMCp0IBrv8RnHNmr/VZJBqB85ZYTVrPWEnItZ
+         L4SvcQas2RGd4Tdk9jinxv/i2eW/9rGU31GfHDL539fPkzEu7La7F0rD7VuTCWlOSF7m
+         PhglL5JTgtjwgdHEq4KLxlnd+oLaRmEaYi1Y0exg8nGGOjSuUD0RQv8NHP9wMeP67Z1H
+         jpWR/HV5yfEhC/5TXZT0rCdKjcsJ8Gw8gXtP4L3atL5hMmp0p0QusfYZX/5KCyU+KxbU
+         dfcA==
+X-Gm-Message-State: AJIora+V7wrsUQuD5kndzrAoyFVNrquWT1APco6nHKomnlFrCkQH1OuM
+        /EnKGTD3Q/bL0JcvycNAJpU=
+X-Google-Smtp-Source: AGRyM1suSHIrHuomtbcQyx39R4sEOccPsO0YKHzge8wgHA4N/CbmPmzndo1pH08PAhDMKhOryuKMBA==
+X-Received: by 2002:a17:906:2086:b0:715:7983:a277 with SMTP id 6-20020a170906208600b007157983a277mr39840337ejq.386.1658404280576;
+        Thu, 21 Jul 2022 04:51:20 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id 15-20020a170906328f00b006fee98045cdsm814224ejw.10.2022.07.21.04.51.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 04:51:19 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 14:51:16 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <20220721115116.5avmhghbmbbprq23@skbuf>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-4-netdev@kapio-technology.com>
+ <20220708084904.33otb6x256huddps@skbuf>
+ <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
+ <20220708091550.2qcu3tyqkhgiudjg@skbuf>
+ <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, dem 21.07.2022 um 06:36 +0200 schrieb Martin Kepplinger:
-> For boards that use power-domains' power-supplies that need interrupts
-> to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
-> This will tell genpd to adjust accordingly. Currently it "only" sets the
-> correct suspend/resume callbacks.
+On Fri, Jul 08, 2022 at 11:50:33AM +0200, netdev@kapio-technology.com wrote:
+> On 2022-07-08 11:15, Vladimir Oltean wrote:
+> > When the possibility for it to be true will exist, _all_ switchdev
+> > drivers will need to be updated to ignore that (mlxsw, cpss, ocelot,
+> > rocker, prestera, etc etc), not just DSA. And you don't need to
+> > propagate the is_locked flag to all individual DSA sub-drivers when none
+> > care about is_locked in the ADD_TO_DEVICE direction, you can just ignore
+> > within DSA until needed otherwise.
+> > 
 > 
-> This fixes suspend/resume on imx8mq-librem5 boards (tested) and
-> imx8mq-evk (by looking at dts) and possibly more.
-> 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
->  drivers/soc/imx/gpcv2.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> index 6383a4edc360..e058aed76602 100644
-> --- a/drivers/soc/imx/gpcv2.c
-> +++ b/drivers/soc/imx/gpcv2.c
-> @@ -1337,6 +1337,9 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
->  		regmap_update_bits(domain->regmap, domain->regs->map,
->  				   domain->bits.map, domain->bits.map);
->  
-> +	if (of_parse_phandle(domain->dev->of_node, "power-supply", 0))
+> Maybe I have it wrong, but I think that Ido requested me to send it to all
+> the drivers, and have them ignore entries with is_locked=true ...
 
-We don't actually need to parse the phandle. For a simple presence
-check of_property_read_bool() is enough.
-
-Regards,
-Lucas
-
-> +		domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
-> +
->  	ret = pm_genpd_init(&domain->genpd, NULL, true);
->  	if (ret) {
->  		dev_err(domain->dev, "Failed to init power domain\n");
-
-
+Yes, but re-read my message about what "all the drivers" means.

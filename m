@@ -2,76 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A02557D45B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABE857D460
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiGUTpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 15:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S231557AbiGUTrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 15:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiGUTpO (ORCPT
+        with ESMTP id S229475AbiGUTrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 15:45:14 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F70B1E6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:45:11 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id w2so3055366ljj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wWzcp1Z8HWXlZGBmd2SY3dRRfAqxHf8nagIP1lsSW5w=;
-        b=GfvL2JFNB8yDOfrBzXPR28ePl1mIvysTBOgaKcjnGva2ZTymhmVH+3mZDIioZs5lAz
-         ERjUW3sMTOYwCNHAp73jtQ3XmGcQ7PWTNHkwwhll77e/9uFc3rhIc7vnZLzass58FLiR
-         /okJG5sVVAthcVmBD9xoLnJLj/WpWqPKr6BiB1nwz6JG2skQR1BPkGKiSs0d8fO2EEYW
-         TMbSh4Nrx7DZ95TYYIjXRcebiQCguVpTU/h1LY2hwiDNIUp4EF+lJXAGeQ2H+gYvwFhy
-         b4WbAq2uLtd0DWU9bueYB7oj4pPk7msqqTh2/EjsE4U9CNUKEBMdqkM9Rulr4M+RoQwE
-         gfNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wWzcp1Z8HWXlZGBmd2SY3dRRfAqxHf8nagIP1lsSW5w=;
-        b=0fR+RPe4MA2Xd1TqXajqnsowEXlYhREVdqWZ/W22XVhaCABoew7YbUZeEvJLOmU9ZC
-         +ljUmQPJGcq04SwEGvxb8pG3D+ok4TE4ydh7YkzeTvFspQCUS/ztZsslpEMBgDzCgvh6
-         e9vxQdlqjSBYWG2jVb2wpjkEYIaJY2uhIZvUNLFMTCeXEh5/wKCe6GEXksa2Q/T2wtPm
-         DYq3lak6EC0/delUdi9eQQa+Pe5nIVuUpH7Gg9wLdyxEn7ynu/T9JgEqiM8BNZMGIAeD
-         396lXuCQlltLZ9NMr/FJ8C/gzsPvSSPj8hh+g9k9M0pV4X4qmtuvAm31H8NgTp/MtXXG
-         JqzA==
-X-Gm-Message-State: AJIora8EKu0rZmo+xCusisy/b0Xjl2HMKyvCt6F3Be16sXjsmNYzCSu9
-        qLEFZVDp72XIE8UPQ+eF8xMaMQF24pOaOFmtKkMeYA==
-X-Google-Smtp-Source: AGRyM1u61sG92A3BoKVniDwQ4OfheO2BicDYZUFekdY25+Rm80SbqovMIgW9EWNRVmdUb7Zo5joN9hVOgLAkovEoeHE=
-X-Received: by 2002:a2e:b011:0:b0:25d:6208:77b1 with SMTP id
- y17-20020a2eb011000000b0025d620877b1mr19085765ljk.469.1658432709589; Thu, 21
- Jul 2022 12:45:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-21-jthoughton@google.com> <YtGUARcBHxLU0axU@xz-m1.local>
- <CADrL8HXYab_VJS=Y0h2OSiCrj2pYbDJME2P=Tsn9jcDRbcqR1g@mail.gmail.com>
- <YtGh46Jr0EGpqW7s@xz-m1.local> <CADrL8HX1YbDArmPsGUH+7b6dNxDa3Xo+fd5npGgz=RFehSw6iA@mail.gmail.com>
- <YtmkX73/wzptkZbu@xz-m1.local>
-In-Reply-To: <YtmkX73/wzptkZbu@xz-m1.local>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 21 Jul 2022 12:44:58 -0700
-Message-ID: <CADrL8HVDtnDg0M4C4A7LN2dmnT2bMXSjJadE=guKFniK_EPdkQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 20/26] hugetlb: add support for high-granularity UFFDIO_CONTINUE
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Thu, 21 Jul 2022 15:47:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361D322294;
+        Thu, 21 Jul 2022 12:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t+2Pbo5NAhkqaCvz9kmOCN8MxxSQWlhxYZSNcMRXya8=; b=FaEecfr9a5jd2L20DIeYZIpsKS
+        ClAy/kzorOmkDirLP7TTYs979JJW6IyuEOmL9hhNK51u/LX00fAWDF69pWOQokY2l65Kuw3gDl144
+        FiCulboI67kCI/rOAF0VOR2RYMJBOUupe29k/ff3+HGN6KmTFRSBsggAhgP6gQDulus26dCr88hH2
+        g8QgMji47uCaVGNyx1QsTW4e+LY2M993BZiDrqgCLgqnneulygOFG0LlbjYbA37MwZ+jymo4xF5qu
+        8589TqUBnuMKtbQYYUlEKdzKXXzINxUs3ixdz1TKEM6KEjvPfq7fSsbrF5JneZsQ9j4NEy8WVNjsg
+        hrt3A1rA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEc8Y-00BsAG-6k; Thu, 21 Jul 2022 19:47:06 +0000
+Date:   Thu, 21 Jul 2022 12:47:06 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Zhang Yuchen <zhangyuchen.lcr@bytedance.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
         Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        linux-api@vger.kernel.org, keescook@chromium.org,
+        yzaikin@google.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC] proc: fix create timestamp of files in proc
+Message-ID: <YtmtOtNp4p0mEARW@bombadil.infradead.org>
+References: <20220721081617.36103-1-zhangyuchen.lcr@bytedance.com>
+ <Ytl772fRS74eIneC@bombadil.infradead.org>
+ <87wnc6nyux.fsf@email.froward.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wnc6nyux.fsf@email.froward.int.ebiederm.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,49 +59,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:09 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Jul 20, 2022 at 01:58:06PM -0700, James Houghton wrote:
-> > > > > > @@ -335,12 +337,16 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
-> > > > > >       copied = 0;
-> > > > > >       page = NULL;
-> > > > > >       vma_hpagesize = vma_kernel_pagesize(dst_vma);
-> > > > > > +     if (use_hgm)
-> > > > > > +             vma_altpagesize = PAGE_SIZE;
-> > > > >
-> > > > > Do we need to check the "len" to know whether we should use sub-page
-> > > > > mapping or original hpage size?  E.g. any old UFFDIO_CONTINUE code will
-> > > > > still want the old behavior I think.
-> > > >
-> > > > I think that's a fair point; however, if we enable HGM and the address
-> > > > and len happen to be hstate-aligned
-> > >
-> > > The address can, but len (note! not "end" here) cannot?
+On Thu, Jul 21, 2022 at 12:45:42PM -0500, Eric W. Biederman wrote:
+> Luis Chamberlain <mcgrof@kernel.org> writes:
+> 
+> > On Thu, Jul 21, 2022 at 04:16:17PM +0800, Zhang Yuchen wrote:
+> >> A user has reported a problem that the /proc/{pid} directory
+> >> creation timestamp is incorrect.
 > >
-> > They both (dst_start and len) need to be hpage-aligned, otherwise we
-> > won't be able to install hstate-sized PTEs. Like if we're installing
-> > 4K at the beginning of a 1G hpage, we can't install a PUD, because we
-> > only want to install that 4K.
->
-> I'm still confused...
->
-> Shouldn't one of the major goals of sub-page mapping is to grant user the
-> capability to do UFFDIO_CONTINUE with len<hpagesize (so we install pages in
-> sub-page level)?  If so, why len needs to be always hpagesize aligned?
+> > The directory?
+> 
+> A bit of history that I don't think made it to the git log is that
+> procps uses the /proc/<pid> directory, to discover the uid and gid of the
+> process.
 
-Sorry I misunderstood what you were asking. We allow both to be
-PAGE_SIZE-aligned. :) That is indeed the goal of HGM.
+Oy vei.
 
-If dst_start and len were both hpage-aligned, then we *could* set
-`use_hgm = false`, and everything would still work. That's what I
-thought you were asking about. I don't see any reason to do this
-though, as `use_hgm = true` will only grant additional functionality,
-and `use_hgm = false` would only -- at best -- be a minor performance
-optimization in this case.
+In that sense, if *really* the directory for a PID all of a sudden
+disappear and reapper with another time stamp, I wonder if its
+possible to change the uid/gid.
 
-- James
+> I have memories of Albert Cahalan reporting regressions because I
+> had tweaked the attributes of proc in ways that I expected no
+> one would care about and caused a regression in procps.
 
->
-> --
-> Peter Xu
->
+Thanks for bringing this little bit of history to light.
+
+> So it is not unreasonable for people to have used proc in surprising
+> ways.
+> 
+> I took a quick read through procps and it looks like procps reads
+> /proc/<pid>/stat to get the start_time of the process.
+
+OK so at least for that world of userspace *if* indeed the pid directory
+is changing time somehow (the exact way in which this can happen as
+reported is yet to be determined) the existing procps would *not* have
+been affected.
+
+If *procps* is not being used and someone is trying to re-implement it,
+and if indeed it is using the time of the inode, and *if* this really
+can change, then we have an explanation to the current situation.
+
+> Which leads us to this quality of implementation issue that the time
+> on the inode of a proc directory is the first time that someone read
+> the directory and observed the file.  Which does not need to be anything
+> at all related to the start time.
+
+Best I think we can do, is document this, and if we *want* to accept
+a *new mechanism*, add a kconfig entry so to distinguish this, so to
+not break old reliance on prior behaviour.
+
+> I think except for the symlinks and files under /proc/pid/fd and
+> /proc/pid/fdinfo there is a very good case for making all of the files
+> /proc/pid have a creation time of equal to the creation of the process
+> in question.
+
+A new kconfig entry could enable this. But that still would not
+prevent userspace from modifying file's creation time and I'm not
+sure why we'd want to change things.
+
+> Although the files under /proc/pid/task/ need to have
+> a time equal to the creation time of the thread in question.
+> 
+> Improving the quality of implementation requires caring enough to make
+> that change, and right now I don't.
+
+My biggest fear is breaking things.
+
+If we *really* are somehow modifying the timestamp of the directory
+inode though, I'd like to understand how that happened.
+
+> At the same time I would say the suggested patch is a bad idea.
+> Any application that breaks because we hard set the timestamp on a proc
+> file or directory to the beginning of time is automatically counts as a
+> regression.
+
+It is why I was seriously confused, why would someone purposely try to
+create a regression.
+
+> Since the entire point of the patch is to break applications that are
+> doing things wrong, aka cause regressions I don't think the patch
+> make sense.
+
+And hence my serious distaste for it.
+
+> So I would vote for understanding what the problem user is doing.  Then
+> either proc can be improved to better support users, or we can do
+> nothing.
+> 
+> Except for explaining the history and how people have legitimately used
+> implementation details of proc before, I am not really interested.  But
+> I do think we can do better.
+
+Thanks for the feedback.
+
+  Luis

@@ -2,187 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F23157D399
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F4757D39C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbiGUSs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 14:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
+        id S232854AbiGUSvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 14:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiGUSsz (ORCPT
+        with ESMTP id S229761AbiGUSvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 14:48:55 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366768CC80
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:48:54 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso2209849pjk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:48:54 -0700 (PDT)
+        Thu, 21 Jul 2022 14:51:20 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B275340BDE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:51:18 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id r21so1944267qtn.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to;
-        bh=Q9Vh0Vx9kARBvpNWXyrvDOnqU56sUBDAq2W2IHY49Cg=;
-        b=bWyHWm+0Rj5NBYRxUj5WMbJF1S/pWppf+BTpwY96QhG4yltvu2KQ9DMqTTEp1211qB
-         odPM8mimAzNj3AunEMPVqSlL0h58EQXheMwdTbSLXjNYFvzSipRlh0NVQFG4DczCQqjU
-         riTeeqP+DhEArBLexKYMsICYQSv2PZklTKa6Q=
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ABlARo1q4W8MWl8fMSyyIWAkJhcwdZqRLERUMRVV8y0=;
+        b=a3Dipqi7DP4aUkldrHp93ne1O6cTrWtFJpNvlTOIVlXo01XvWSk4dz1tX3rtPQH3F2
+         jAZAdCSavV3Sqgbsz0881u6GS2ltM95tIgUSEsp0f4tJQdjSNgtsu7Jm0vYtk0N2CT3v
+         Aif0YgWwWfuK44GRHXwEJRP03Ftyu1B4VkWa6AXBbpGhQcxyIz58MrwLQXzV7/YOGDWD
+         JA9n9g/1CRGRGhplF8rk7GYAdQ3ph3PTTW9VPSa4A+IG/q+1eI6r6yd63bvqVxvRoThu
+         CFd4/soAUrj26JEa+N7OTRsMBMcMiPKeKZJ6e4cI5qyemzqeYxtA9kaepAZ6wNVIN7X3
+         sMPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=Q9Vh0Vx9kARBvpNWXyrvDOnqU56sUBDAq2W2IHY49Cg=;
-        b=Ti51Zs2dpEV5CrmsIRLzYcuuhck9lFjKdmRcIkPhUOdTRiB1ugLz/3pTVT8z79AY1D
-         /NkLex0c3YU8HuHMO7AMEfYp2l5tEy4jXAYVdobMQ+JQ+YzoPwvzZ6EBCgLsZRGRwU1g
-         UbZFLQ56HfGKWghlZbMc/gEChj4JoWE9Pi7iBL3DUNleXcmJh4G54QeVwdkfEm2eHNOl
-         GPkvkLpbsX68nwQRS1oG4/C6D2cHLFiJYT3sy4wOw62qOJV0xzp5uIupdzri7R5RUg33
-         hOP7Cd8DWBTxrYH7YHoGxyGxlvEiKhZOcl6/4//vlVw0tDrw1XvWbV/dqzzPxdGhDv4n
-         xDgA==
-X-Gm-Message-State: AJIora/3kZKpgmtsXdjNCmW+pZFMfHiMGA99uVrv4YHwoG6qWB3agV/Y
-        I0E8sQpD85IVh1uQU8+6WkW4JA==
-X-Google-Smtp-Source: AGRyM1tA1QoHWIVEhKZ3LBLayKmCGVZudFcwAYB7lpGO3Su53FeKdXnz9sUSaolQ+C5NbxeRhemMgQ==
-X-Received: by 2002:a17:902:d292:b0:16b:e6a4:5768 with SMTP id t18-20020a170902d29200b0016be6a45768mr44962295plc.128.1658429333196;
-        Thu, 21 Jul 2022 11:48:53 -0700 (PDT)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0016be527753bsm2079721plh.264.2022.07.21.11.48.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Jul 2022 11:48:51 -0700 (PDT)
-Subject: Re: [RESEND PATCH 0/9] arm64: bcmbca: Move BCM4908 SoC support under
- ARCH_BCMBCA
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20220721000626.29497-1-william.zhang@broadcom.com>
- <cb6bcce75bec6c845fa4a35587a2332d@milecki.pl>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <8dae1eab-6dce-c3e7-2baf-5dd4a5d04ed4@broadcom.com>
-Date:   Thu, 21 Jul 2022 11:48:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ABlARo1q4W8MWl8fMSyyIWAkJhcwdZqRLERUMRVV8y0=;
+        b=1kHuMPg/AsUr72pZqr7wtokN5gtyZRJRDzwpIHUON7qeaA1STadXrJrGSco9JfUggU
+         /SqGgCgWKFrSYeBoR6E/ajl19Y43AAvMznyaapzQt3g96iwS6ac1Rxh+tTAxkKhU0KGi
+         ojUgahJMsjT6SROWuxfsBA7u8dSnvtwJZPWoIIT2pgA4UGARLlCCj2i09NBku0m50RXY
+         KDBUaLhtOj+tqY2CrvgPfBdAd9W4S3nVThb+Lh3JZMoN7FIbjk8sRVnO4KVdldWe2jAo
+         4zup7PLS2gwY9g72e9m3WbLzw8TMYyw1OiT5ql5JcdCBS3Qf5N/HEgp8JKpN0WXmc/v9
+         Aj4g==
+X-Gm-Message-State: AJIora/ApA+J3g85OZLnTa6z/fXQxHl9VmL4QmUBYg4QLN/6IkQT8LlU
+        KS1Wt9pFYke7/ZOIGWcKMAHuHw==
+X-Google-Smtp-Source: AGRyM1tSQawsbfCG3JVFskJrFAyZkEyE7wpSkmlKeLjG/ZzroPfTxIM/UKxdVXtcFB6JavtqQFxOGg==
+X-Received: by 2002:ac8:5a12:0:b0:31e:f233:50f1 with SMTP id n18-20020ac85a12000000b0031ef23350f1mr15963077qta.229.1658429477857;
+        Thu, 21 Jul 2022 11:51:17 -0700 (PDT)
+Received: from ziepe.ca ([142.177.133.130])
+        by smtp.gmail.com with ESMTPSA id q5-20020a05620a038500b006b5e833d996sm1745532qkm.22.2022.07.21.11.51.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 11:51:17 -0700 (PDT)
+Received: from jgg by jggl with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oEbGW-00022g-2R; Thu, 21 Jul 2022 15:51:16 -0300
+Date:   Thu, 21 Jul 2022 15:51:16 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        akpm@linux-foundation.org, jhubbard@nvidia.com,
+        william.kucharski@oracle.com, jack@suse.cz, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        nvdimm@lists.linux.dev, ruansy.fnst@fujitsu.com, hch@infradead.org
+Subject: Re: [PATCH] mm: fix missing wake-up event for FSDAX pages
+Message-ID: <20220721185116.GC6833@ziepe.ca>
+References: <20220704074054.32310-1-songmuchun@bytedance.com>
+ <YsLDGEiVSHN3Xx/g@casper.infradead.org>
+ <YsLHUxNjXLOumaIy@FVFYT0MHHV2J.usts.net>
+ <62ccded5298d8_293ff129437@dwillia2-xfh.notmuch>
 MIME-Version: 1.0
-In-Reply-To: <cb6bcce75bec6c845fa4a35587a2332d@milecki.pl>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000517e1705e4552b5a"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62ccded5298d8_293ff129437@dwillia2-xfh.notmuch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000517e1705e4552b5a
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-
-
-
-On 07/20/2022 11:55 PM, Rafał Miłecki wrote:
-> On 2022-07-21 02:06, William Zhang wrote:
->> RESEND to include linux arm kernel mailing list.
->>
->> Now that Broadcom Broadband arch ARCH_BCMBCA is in the kernel, this 
->> change
->> set migrates the existing broadband chip BCM4908 support to ARCH_BCMBCA.
+On Mon, Jul 11, 2022 at 07:39:17PM -0700, Dan Williams wrote:
+> Muchun Song wrote:
+> > On Mon, Jul 04, 2022 at 11:38:16AM +0100, Matthew Wilcox wrote:
+> > > On Mon, Jul 04, 2022 at 03:40:54PM +0800, Muchun Song wrote:
+> > > > FSDAX page refcounts are 1-based, rather than 0-based: if refcount is
+> > > > 1, then the page is freed.  The FSDAX pages can be pinned through GUP,
+> > > > then they will be unpinned via unpin_user_page() using a folio variant
+> > > > to put the page, however, folio variants did not consider this special
+> > > > case, the result will be to miss a wakeup event (like the user of
+> > > > __fuse_dax_break_layouts()).
+> > > 
+> > > Argh, no.  The 1-based refcounts are a blight on the entire kernel.
+> > > They need to go away, not be pushed into folios as well.  I think
+> > 
+> > I would be happy if this could go away.
 > 
-> I'd expect me to receive patches 7/9, 8/9 and 9/9 too.
-I will explicitly add you to the cc list.  The get_maintainer.pl does 
-not return your email for these three patches. I guess it is because the 
-MAINTAINER file does not have your name for 4908 ARCH. I
+> Continue to agree that this blight needs to end.
+> 
+> One of the pre-requisites to getting back to normal accounting of FSDAX
+> page pin counts was to first drop the usage of get_dev_pagemap() in the
+> GUP path:
+> 
+> https://lore.kernel.org/linux-mm/161604048257.1463742.1374527716381197629.stgit@dwillia2-desk3.amr.corp.intel.com/
+> 
+> That work stalled on notifying mappers of surprise removal events of FSDAX pfns.
 
---000000000000517e1705e4552b5a
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+We already talked about this - once we have proper refcounting the
+above is protected naturally by the proper refcounting. The reason it
+is there is only because the refcount goes to 1 and the page is
+re-used so the natural protection in GUP doesn't work.
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMaljd/nx3prmA/hkB/MrtPbEmWF
-WmzyyK96VUWFSDvYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcyMTE4NDg1M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQA4wI1+ksd2io+j6J616Q8Z9TQZNHftaADPosz5cn68LseX
-4VePjGfiDlAuLWbqLV3r/a9nxKLdOl4w+Un3Px6HqcbhxToEONIRV6nsIgBvwFGyjvxE9FKsJBjs
-Y6659jR3vaAsVtBKHS8aTizWFGxGMe0bh/SkdMcl7WRTjNwCH2+iVFj4mDi4FUU9gBcVjqLr5RpP
-vjSYxC/2GrGH+iQz4mXIIM8+6lRZE0YttktE3sqHFqIkV8OBK4Q44C2p7WMb03xmoQNYPMs1/h3W
-/Rly3T7x6iSdn8InU0QMAlgdejsE2MJA03EcxHg+okBU/LKaIXM9iFJ3l4QLnz7kFKJr
---000000000000517e1705e4552b5a--
+We don't need surprise removal events to fix this, we need the FS side
+to hold a reference when it puts the pages into the PTEs..
+
+> So, once I dig out from a bit of CXL backlog and review that effort the
+> next step that I see will be convert the FSDAX path to take typical
+> references vmf_insert() time. Unless I am missing a shorter path to get
+> this fixed up?
+
+Yeah, just do this. IIRC Christoph already did all the infrastructure now,
+just take the correct references and remove the special cases that
+turn off the new infrastructure for fsdax.
+
+When I looked at it a long while ago it seemd to require some
+understanding of the fsdax code and exactly what the lifecycle model
+was supposed to be there.
+
+Jason

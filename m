@@ -2,124 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B28A57C3C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 07:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BB557C3CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 07:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiGUFit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 01:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
+        id S230175AbiGUFkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 01:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiGUFis (ORCPT
+        with ESMTP id S229569AbiGUFk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 01:38:48 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD7C30F67
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:38:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1658381922; bh=j+rA8aG+kQUXpuMbzX1iQ2xDoWFCvZ/8ALjoVajgI+U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D+daAD6j6jHm2a4Gm1ueSnGVZ2mZkK6LnELuC6OQM4NdSQV6x3LWnNm2jQVqc2EuF
-         QBcAQMcKh79EuXkOSzx9xzntpY+DvcYU8xHoT2MLm/8N0/qKdqfdS9SSZIQNnrRGXr
-         OfWk5UE1U8Tf2oow1BeKF3KBW2OiY0FTFBO8hu1o=
-Received: from [100.100.35.250] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 21 Jul 2022 01:40:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D2C2CC95;
+        Wed, 20 Jul 2022 22:40:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id A8D9A60104;
-        Thu, 21 Jul 2022 13:38:42 +0800 (CST)
-Message-ID: <4a8f5963-28f1-7439-9b52-7084d51707b2@xen0n.name>
-Date:   Thu, 21 Jul 2022 13:38:42 +0800
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2D87E209D2;
+        Thu, 21 Jul 2022 05:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658382025; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AfVQON7xknHl8TJztdxmdrLLY/PURiJN0ES1Nfd6CUI=;
+        b=Hi8uXc5bJMCrpd4CfWMoAAjovSJ9T02dqd1xtj29juhpfFnEANdkiTdyMhiSYSJwc4I3AB
+        pPNKsLv5HKY1ylk7Cb5/2N70ZzqxmoCAAJb6D66fltsRfsGL5WGJI092YSUhD5bptQIQmE
+        WmqG0prcN4GwGpezJAk2L+pk7vFkWCs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658382025;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AfVQON7xknHl8TJztdxmdrLLY/PURiJN0ES1Nfd6CUI=;
+        b=4TqtpuVqhzEYjt12/Qu0xXKiARsEpll5uU4bwAZDwjjHdPZNc6Bpj/feGBoHkuO83MO6GB
+        QJTTAC+WlZ2IqcCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D4330134CF;
+        Thu, 21 Jul 2022 05:40:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IB76Msjm2GJSZgAAMHmgww
+        (envelope-from <hare@suse.de>); Thu, 21 Jul 2022 05:40:24 +0000
+Message-ID: <d0a3007a-930f-4ae3-2830-ee35585e01d7@suse.de>
+Date:   Thu, 21 Jul 2022 07:40:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
- Gecko/20100101 Thunderbird/104.0a1
-Subject: Re: [PATCH] LoongArch: Remove unused header compiler.h
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jun Yi <yijun@loongson.cn>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20220721021127.1086628-1-yijun@loongson.cn>
- <CAAhV-H4YL-8tj+-329tWguwxrPaL7DpiTT2QkXBPh_feT7M5jA@mail.gmail.com>
- <dcfac9ad-d6e0-b157-4f11-cc2d3e2f1376@xen0n.name>
- <CAAhV-H6RGZwKjV4Shm9fvH_XJ1+yqq9KpxkXNEWwOaPRmahSLQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
 Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAAhV-H6RGZwKjV4Shm9fvH_XJ1+yqq9KpxkXNEWwOaPRmahSLQ@mail.gmail.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
+        jason600.groome@gmail.com,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220630195703.10155-1-bvanassche@acm.org>
+ <20220630195703.10155-3-bvanassche@acm.org>
+ <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
+ <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
+ <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
+ <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
+ <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/21 11:22, Huacai Chen wrote:
-> Hi, Xuerui,
->
-> On Thu, Jul 21, 2022 at 11:17 AM WANG Xuerui <kernel@xen0n.name> wrote:
->> Hi YI Jun and Huacai,
+On 7/20/22 18:51, Bart Van Assche wrote:
+> On 7/20/22 00:47, Geert Uytterhoeven wrote:
+>> With more debug options enabled, it prints:
 >>
->> On 2022/7/21 10:52, Huacai Chen wrote:
->>> Hi, Jun,
->>>
->>> On Thu, Jul 21, 2022 at 10:11 AM Jun Yi <yijun@loongson.cn> wrote:
->>>> Loongarch not used arch-specific compiler.h
->>> I'm not sure whether compiler.h will be used in future. If it will be
->>> used, I want to keep it as is. Xuerui, what do you think about it?
->> I surveyed all the existing arch compiler.h in the tree:
+>> INFO: task kworker/0:7:283 blocked for more than 120 seconds.
+>>        Not tainted 5.19.0-rc7-salvator-x-00794-g6780eb02b605 #1287
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:kworker/0:7     state:D stack:    0 pid:  283 ppid:     2 
+>> flags:0x00000008
+>> Workqueue: events ata_scsi_dev_rescan
+>> Call trace:
+>>   __switch_to+0xbc/0x124
+>>   __schedule+0x540/0x71c
+>>   schedule+0x58/0xa0
+>>   io_schedule+0x18/0x34
+>>   blk_mq_get_tag+0x138/0x244
+>>   __blk_mq_alloc_requests+0x130/0x2f0
+>>   blk_mq_alloc_request+0x74/0xa8
+>>   scsi_alloc_request+0x10/0x30
+>>   __scsi_execute+0x5c/0x18c
+>>   scsi_vpd_inquiry+0x7c/0xdc
+>>   scsi_get_vpd_size+0x34/0xa8
+>>   scsi_get_vpd_buf+0x28/0xf4
+>>   scsi_attach_vpd+0x44/0x170
+>>   scsi_rescan_device+0x30/0x98
+>>   ata_scsi_dev_rescan+0xc8/0xfc
+>>   process_one_work+0x2e0/0x474
+>>   worker_thread+0x1cc/0x270
+>>   kthread+0xd8/0xe8
+>>   ret_from_fork+0x10/0x20
 >>
->> $ find ./arch -name compiler.h
->> ./arch/alpha/include/asm/compiler.h
->> ./arch/alpha/include/uapi/asm/compiler.h
->> ./arch/arm/include/asm/compiler.h
->> ./arch/arm64/include/asm/compiler.h
->> ./arch/mips/include/asm/compiler.h
->> ./arch/loongarch/include/asm/compiler.h
->>
->> Of all these occurrences:
->>
->> - alpha needs to ensure a certain insn is being emitted from time to
->> time, with plain C constructs (or built-ins) on compiler versions with
->> said support, falling back to inline asm otherwise;
->> - arm and arm64 both need some inline assembly help (of different sort),
->> with arm64 stuffing some pointer authentication helpers into this file too;
->> - mips, which is obviously what the loongarch version is based on, needs
->> (1) a kludge for older compilers to fix delay slot filling around
->> __builtin_unreachable, (2) definitions for explicit arch level
->> selection. There is also the historical GCC_OFF_SMALL_ASM() constraint
->> definition that was rendered redundant by commit 4abaacc704729 ("MIPS:
->> remove GCC < 4.9 support").
->>
->> For loongarch, the "ZC" constraint (I don't think it was a coincidence
->> BTW) should be usable for all present and future hardware, so I do think
->> the GCC_OFF_SMALL_ASM() here is redundant. We may want to remove the
->> mips one too. And the arch level thing is not currently needed either,
->> future revisions to the LoongArch ISA should be largely backwards
->> compatible, so it could be a long time before such explicit selection of
->> arch level is necessary, for exact control over emitted insn.
->>
->> So overall, I'm in favor of removing this header for now.
-> Have you considered the new relocation types will be added in the near
-> future? I think we need compiler.h at that time.
+>> This doesn't look like it's blocked in the R-Car SATA driver, but on
+>> some I/O scheduling event in the block core?
+> 
+> I'm not familiar with the SATA code but from a quick look it seems like 
+> the above code is only triggered from inside the ATA error handler 
+> (ata_do_eh() -> ata_eh_recover() -> ata_eh_revalidate_and_attach() -> 
+> schedule_work(&(ap->scsi_rescan_task) -> ata_scsi_dev_rescan()). It 
+> doesn't seem normal to me that the ATA error handler gets invoked during 
+> a resume. How about testing the following two code changes?
 
-I assume you mean the proposal being discussed at [1] [2] and [3].
+Sadly, that _is_ the normal workflow. SATA EH gets invoked regularly, 
+and is handling the device resets after resume.
 
-For new reloc types that affect module loading, asm/elf.h and 
-kernel/module.c need modification to add awareness, but this doesn't 
-involve compiler.h. The kernel image itself is not affected.
+Cheers,
 
-There is also the case of building LoongArch kernel sources without 
-support for the new reloc types, but on a newer compiler that emits the 
-new-style reloc records by default. In this case, a switch reverting the 
-compiler to the old-style relocs is needed in CFLAGS, but (1) not all 
-essential support are merged for LoongArch so practically we don't need 
-to care about non-kernel-ABI compatibility at this time, and (2) CFLAGS 
-tweaks don't involve compiler.h either.
-
-[1]: https://sourceware.org/pipermail/binutils/2022-July/121849.html
-[2]: https://sourceware.org/pipermail/binutils/2022-July/121933.html
-[3]: https://github.com/loongson/LoongArch-Documentation/pull/57
-
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman

@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF2A57C9BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7638757C9C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbiGUL3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S233161AbiGULaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiGUL3O (ORCPT
+        with ESMTP id S229866AbiGULad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:29:14 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F0129C9D;
-        Thu, 21 Jul 2022 04:29:13 -0700 (PDT)
-Received: from zn.tnic (p5de8e862.dip0.t-ipconnect.de [93.232.232.98])
+        Thu, 21 Jul 2022 07:30:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AFC2CE24
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:30:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D3DAC1EC0380;
-        Thu, 21 Jul 2022 13:29:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658402947;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Wd2DXG4EY+gV5zYMOQhIEqcD8PQY00hUt7HCgRibjL8=;
-        b=dFXCVt/OHUd/noNwab4aCuTwdHKd3CdavlyVXQUVKSiS1+i6jsnv+RaBor6Eb0ibeEH8Ik
-        ZW7eGQZ5aCAV385nZn2vqMYWTQQUDYh0ZpB0Vhc9p+44UKLkVTNN/r9xFHx2rSqY2Qcdbg
-        csa52vVIX68AZfpxHkRUlE5KlvGx05g=
-Date:   Thu, 21 Jul 2022 13:29:01 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 04/49] x86/sev: set SYSCFG.MFMD
-Message-ID: <Ytk4fWCC3feXdAPW@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <c933e87762d78e5dce78e9bbf9c41aa0b30ddba2.1655761627.git.ashish.kalra@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52F1361AAC
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:30:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB09C3411E;
+        Thu, 21 Jul 2022 11:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658403031;
+        bh=gIU05DjFlkodFloAR0LapBs8EY/oYW4Iwpe7LC1pqac=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IZLO9qZOzZQ2f8axx0+Wh0wpg9T8anGP6Mym+njmlF2fBkHNS8f8V/rdQtsxtzcRa
+         MtPqMFL8z22wwfxOCdjj+dwwSuhhg8ogObkzHbhS5RoOhe7pMUYdh2yOMYJWY1ZQZI
+         aOGuA4IRA6O8SDAAnSqxGOSHgeNtQia9A9CcqKjmGvZ1LFoFrRSXyINTjicUiAAzS1
+         Kaw1Bb43dB05oOsNcbiRlZuIsWLzdKXBNP6sJ6ywyjUXW5Y7fsdmEZQ+3F2kU8PcAf
+         OE9YoWviYYqcnhK4mbiWHf6wguhvr+/A20/zoiiDbhg0Le0G6RK3UgSvxHGCDIbs3Q
+         lm74OjMMtUeBw==
+Date:   Thu, 21 Jul 2022 12:30:18 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] amba: Remove deferred device addition
+Message-ID: <Ytk4yqbW+P3ZUQgb@google.com>
+References: <20220719182010.637337-1-saravanak@google.com>
+ <20220720131221.azqfidkry3cwiarw@bogus>
+ <YtkTK3QS0PQ2LRpM@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c933e87762d78e5dce78e9bbf9c41aa0b30ddba2.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtkTK3QS0PQ2LRpM@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:02:18PM +0000, Ashish Kalra wrote:
-> Subject: [PATCH Part2 v6 04/49] x86/sev: set SYSCFG.MFMD
+On Thu, 21 Jul 2022, Russell King (Oracle) wrote:
 
-That subject title needs to be made human readable.
-
-> From: Brijesh Singh <brijesh.singh@amd.com>
+> On Wed, Jul 20, 2022 at 02:12:21PM +0100, Sudeep Holla wrote:
+> > On Tue, Jul 19, 2022 at 11:20:10AM -0700, Saravana Kannan wrote:
+> > > The uevents generated for an amba device need PID and CID information
+> > > that's available only when the amba device is powered on, clocked and
+> > > out of reset. So, if those resources aren't available, the information
+> > > can't be read to generate the uevents. To workaround this requirement,
+> > > if the resources weren't available, the device addition was deferred and
+> > > retried periodically.
+> > > 
+> > > However, this deferred addition retry isn't based on resources becoming
+> > > available. Instead, it's retried every 5 seconds and causes arbitrary
+> > > probe delays for amba devices and their consumers.
+> > > 
+> > > Also, maintaining a separate deferred-probe like mechanism is
+> > > maintenance headache.
+> > > 
+> > > With this commit, instead of deferring the device addition, we simply
+> > > defer the generation of uevents for the device and probing of the device
+> > > (because drivers needs PID and CID to match) until the PID and CID
+> > > information can be read. This allows us to delete all the amba specific
+> > > deferring code and also avoid the arbitrary probing delays.
+> > > 
+> > > Cc: Rob Herring <robh@kernel.org>
+> > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > Cc: Saravana Kannan <saravanak@google.com>
+> > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > 
+> > Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+> > 
+> > on Juno with linux-next(which had the reported issue [1]) + this patch(which
+> > fixes the issue)
 > 
-> SEV-SNP FW >= 1.51 requires that SYSCFG.MFMD must be set.
+> Ok, but this patch needs to end up in the patch system for me to apply
+> it. Can someone please add "KernelVersion: 5.19-rc7" or whatever version
+> the patch was generated against (just the tagged version is sufficient)
+> somewhere in the email, and send it to patches@armlinu.org.uk.
 
-Because?
-
-Also, commit message needs to be human-readable and not pseudocode.
-
-> @@ -2325,6 +2346,9 @@ static __init int __snp_rmptable_init(void)
->  	/* Flush the caches to ensure that data is written before SNP is enabled. */
->  	wbinvd_on_all_cpus();
->  
-> +	/* MFDM must be enabled on all the CPUs prior to enabling SNP. */
-> +	on_each_cpu(mfdm_enable, NULL, 1);
-> +
->  	/* Enable SNP on all CPUs. */
->  	on_each_cpu(snp_enable, NULL, 1);
-
-No, not two IPI generating function calls - one and do everything in it.
-I.e., what Marc said.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+If this is a part of the submission process for the subsystems/files
+you maintain, do you think it would be worth while adding this address
+to MAINTAINERS to make it easier for future contributors?

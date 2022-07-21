@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E9857CA78
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1453557CAC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbiGUMNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S233676AbiGUMjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbiGUMNd (ORCPT
+        with ESMTP id S232164AbiGUMjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:13:33 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0938689F
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658405611; x=1689941611;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WVw/GgSsVUJfsjlWtcltTLtLJGGerJroVsUb2oi/Ur0=;
-  b=HM61WMXnqrQYHciwa7pWM3vwTNrKBqM81R4CiuhwJ8oEYecQBHMJZTyO
-   sJ9bpi06uYswUWjITHNJbr5YZfmYbNFTGCTWCB0RsJ2kTb+DJbbQh6tKE
-   npZcED8OwjyvQ9BZDWHIzGmTPQWLAQnLVhq1Ny15eLWo2wMj6qm9hNNpA
-   GwSDEYXB7w6fXK1OB7cm+t0UlsQfMW9F1cRW3U97EGZ3G0sUp1G0ZHLva
-   eWx3F2xvcfCplKLIuDaGOnlSChMfii764admX9f0qW3ICxaBsY7Xp/9p9
-   GZYvnMUOBHFEtUv71lAQMIVJvubciTf59SpgR7qVXfYlcQJbIT9le5VSQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="273874964"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="273874964"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 05:13:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="666265537"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Jul 2022 05:13:28 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oEV3Y-000074-0V;
-        Thu, 21 Jul 2022 12:13:28 +0000
-Date:   Thu, 21 Jul 2022 20:12:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Thu, 21 Jul 2022 08:39:37 -0400
+X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 05:39:35 PDT
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB07538E;
+        Thu, 21 Jul 2022 05:39:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4LpWRs64fYz6S3Md;
+        Thu, 21 Jul 2022 20:03:21 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP1 (Coremail) with SMTP id cCh0CgAnLWHKQNliUh8JBA--.48026S2;
+        Thu, 21 Jul 2022 20:04:27 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:tglx/devel/depthtracking 44/45]
- arch/x86/lib/putuser.S:81: Error: symbol `__put_user_nocheck_2' is already
- defined
-Message-ID: <202207212007.ELVbSv77-lkp@intel.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Zi Shen Lim <zlim.lnx@gmail.com>
+Subject: [PATCH bpf-next] bpf, arm64: Fix compile error in dummy_tramp()
+Date:   Thu, 21 Jul 2022 08:13:19 -0400
+Message-Id: <20220721121319.2999259-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgAnLWHKQNliUh8JBA--.48026S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFyxCF15uw18tFWfAF45trb_yoW8GF1kpw
+        1UCrnxC3yqgF4DGa4rXa1fXF15tF4qqFWa9rW2grW5tF9FvryUGr4fKw1kWrZxJr1Fva1r
+        AFWjkwn5A3Wvv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r106r1rM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/depthtracking
-head:   714d29e3e7e3faac27142424ae2533163ddd3a46
-commit: 825ec2afef752357059c356cf19e8cd6230af560 [44/45] x86/putuser: Provide room for padding
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220721/202207212007.ELVbSv77-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/825ec2afef752357059c356cf19e8cd6230af560
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tglx/devel/depthtracking
-        git checkout 825ec2afef752357059c356cf19e8cd6230af560
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+From: Xu Kuohai <xukuohai@huawei.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+dummy_tramp() uses "lr" to refer to the x30 register, but some assembler
+does not recognize "lr" and reports a build failure:
 
-All errors (new ones prefixed by >>):
+/tmp/cc52xO0c.s: Assembler messages:
+/tmp/cc52xO0c.s:8: Error: operand 1 should be an integer register -- `mov lr,x9'
+/tmp/cc52xO0c.s:7: Error: undefined symbol lr used as an immediate value
+make[2]: *** [scripts/Makefile.build:250: arch/arm64/net/bpf_jit_comp.o] Error 1
+make[1]: *** [scripts/Makefile.build:525: arch/arm64/net] Error 2
 
-   arch/x86/lib/putuser.S: Assembler messages:
->> arch/x86/lib/putuser.S:81: Error: symbol `__put_user_nocheck_2' is already defined
+So replace "lr" with "x30" to fix it.
 
+Fixes: b2ad54e1533e ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-vim +81 arch/x86/lib/putuser.S
-
-    79	
-    80	SYM_FUNC_START(__put_user_nocheck_2)
-  > 81	SYM_INNER_LABEL(__put_user_nocheck_2, SYM_L_GLOBAL)
-    82		ENDBR
-    83		ASM_STAC
-    84	2:	movw %ax,(%_ASM_CX)
-    85		xor %ecx,%ecx
-    86		ASM_CLAC
-    87		RET
-    88	SYM_FUNC_END(__put_user_nocheck_2)
-    89	EXPORT_SYMBOL(__put_user_nocheck_2)
-    90	
-
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index dcc572b7d4da..7ca8779ae34f 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -610,8 +610,8 @@ asm (
+ #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+ "	bti j\n" /* dummy_tramp is called via "br x10" */
+ #endif
+-"	mov x10, lr\n"
+-"	mov lr, x9\n"
++"	mov x10, x30\n"
++"	mov x30, x9\n"
+ "	ret x10\n"
+ "	.size dummy_tramp, .-dummy_tramp\n"
+ "	.popsection\n"
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

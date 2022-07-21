@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41B557D19B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530EC57D19D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiGUQdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
+        id S230343AbiGUQeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbiGUQdR (ORCPT
+        with ESMTP id S229485AbiGUQd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:33:17 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7024B89E98
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RhI3VCUzNHo5JklMmIqECqYQ6SyTPpDz3EAd2IXpnCc=; b=BBkvMnqQohd6YdtIM+p3u0mFPe
-        E/h4AwZ7lEA/5Y8xtvIbzGvgnsQ+FNj4guVIegorCmbP5MBFp1kHxpemTERABuEqZ4J+T6nTXOP8r
-        +zbgnboMaloQK6Jsb7IZMCf9fOJTn6xqhdyJHHC6fwJldazzKn5eN8AQlq8OKBOXxub0DtA13WpkP
-        KMesSlG1Jiv3g7WQ9MkfnGGeOYl6POj7vOHgXKsJtpeI5YiIu/gqrCmn+9Ilr8CN85BUybrBHmFcN
-        HpiYvHrU2IZfWFiAwCFzhy5BLLobYnR+0MAa4ELRT5DniZYFouSXRoEXrQLvT6GQ86CmgER+dYAtI
-        aHKs3d0A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEZ6s-00A2Mo-7j; Thu, 21 Jul 2022 16:33:10 +0000
-Date:   Thu, 21 Jul 2022 09:33:10 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Khalid Masum <khalid.masum.92@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        kgdb-bugreport@lists.sourceforge.net
-Subject: Re: [PATCH RESEND] scripts/gdb: Fix gdb 'lx-symbols' command
-Message-ID: <Ytl/xkb9OC43dgJd@bombadil.infradead.org>
-References: <20220721093042.9840-1-khalid.masum.92@gmail.com>
- <CAD=FV=UbRX194rDztr_=eoALg4kTmjzq=EXCX6RJSSq3vO=fbw@mail.gmail.com>
+        Thu, 21 Jul 2022 12:33:58 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A6889AA2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:33:57 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id u13so3637988lfn.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0wZNg+3wPANTd0lRPHXLuv+xpAninwLRTERLUu9/iV0=;
+        b=VqMex1M6FRxuAjOX5PnC/HKTSGZJlg9F3Xl1Th8veis9ZwLc8vDjULvKc5W7mKvdei
+         UyrqTs0MSVXnYDpTkaQCjk6dltKKxb6E2AF6xC+d5WuPbwawbs0EBXOxhCHwO0IlvNvj
+         Lg5NQUECCQiifIcnY8aAspgN4O2OZEyflkzfZVOQP4vKZGU3InFxkg//fNB6eRZaqlHq
+         47czCUSM+Jwy36BP2/ikS4zshHQLPrXSTsEittrTRMFEdvUs6wPCpSC2H2UEyT38Zx/k
+         LE7UBa+JvuYxgC4J04LfAt9mBh9YwO6MgSHmEHRmbuekLhdo38DM3YVXtXJkCJ4BYhpz
+         ertQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0wZNg+3wPANTd0lRPHXLuv+xpAninwLRTERLUu9/iV0=;
+        b=u66oViEPLUQmHdeQjULrMtyPEx+exOsIOZgKGo942+/VaxsPD2Q+h71XV6OwN8p5iL
+         swXgqOKdR+FoLU7kDY4bJmrNaTAo1J709E5TYHBtL7pN10/uzvtD+WzxQq7LHCReltnY
+         hpyj8NTvyJS4MxxJROxyQ3PfR3x9op2QwKq38FeWGqkibk69xBz0kkAlUFI2bubF+ncA
+         fT0QkiKv6wgxoyd2yJYerl4ZTX6xdWFBd15yRwCkTqdJNCRRxuNOaKbQ7YxtB+ICuoOj
+         4omAfP6l/3y5luvAmNXYEskLE9txzB2NEDFskS9wlPhIM4GXgqDkIsblSMVvG5IkNbaH
+         shhQ==
+X-Gm-Message-State: AJIora+WmW4wTM9chWJHdYvVDxl+N0Ci/OEeE5IYmcXIqiyBgsIQOTcJ
+        V8S4mlLqYsxu5cZtEnfIz+tK+w==
+X-Google-Smtp-Source: AGRyM1suwpWeDcSxhta8Meu7xyqrPbrBgRqfzDYdr1Ot0b9fitq1x465Kq3zXTHaFYc9Em7plvJk4Q==
+X-Received: by 2002:a05:6512:6d4:b0:48a:2aaf:1d93 with SMTP id u20-20020a05651206d400b0048a2aaf1d93mr15556923lff.457.1658421235985;
+        Thu, 21 Jul 2022 09:33:55 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id t14-20020a056512208e00b00488bef659d2sm526769lfr.234.2022.07.21.09.33.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 09:33:55 -0700 (PDT)
+Message-ID: <05ad5e68-7ff2-b1b5-fa49-0e48c7cc313f@linaro.org>
+Date:   Thu, 21 Jul 2022 18:33:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=UbRX194rDztr_=eoALg4kTmjzq=EXCX6RJSSq3vO=fbw@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: arm: fsl: Add MSC SM2S-IMX8PLUS SoM
+ and SM2-MB-EP1 Carrier
+Content-Language: en-US
+To:     Martyn Welch <martyn.welch@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
+Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220721101050.2362811-1-martyn.welch@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220721101050.2362811-1-martyn.welch@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 09:24:31AM -0700, Doug Anderson wrote:
-> Hi,
+On 21/07/2022 12:10, Martyn Welch wrote:
+> Add DT compatible strings for a combination of the 14N0600E variant of
+> the Avnet (MSC branded) SM2S-IMX8PLUS SoM on it's own and in combination
+> with the SM2-MB-EP1 carrier board.
 > 
-> On Thu, Jul 21, 2022 at 2:31 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
-> >
-> > Currently the command 'lx-symbols' in gdb exits with the error`Function
-> > "do_init_module" not defined in "kernel/module.c"`. This occurs because
-> > the file kernel/module.c was moved to kernel/module/main.c.
-> >
-> > Fix this breakage by changing the path to "kernel/module/main.c" in
-> > LoadModuleBreakpoint.
-> >
-> > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> > ---
-> >  scripts/gdb/linux/symbols.py | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/gdb/linux/symbols.py b/scripts/gdb/linux/symbols.py
-> > index 46f7542db08c..dc07b6d12e30 100644
-> > --- a/scripts/gdb/linux/symbols.py
-> > +++ b/scripts/gdb/linux/symbols.py
-> > @@ -180,7 +180,7 @@ lx-symbols command."""
-> >                  self.breakpoint.delete()
-> >                  self.breakpoint = None
-> >              self.breakpoint = LoadModuleBreakpoint(
-> > -                "kernel/module.c:do_init_module", self)
-> > +                "kernel/module/main.c:do_init_module", self)
-> 
-> Fixes: cfc1d277891e ("module: Move all into module/")
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
 
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-This should go to Linus prior to the next rc.  Linus, I think this is
-with picking up now as I smell a final release soon.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-FWIW a git grep of "kernel/module\.c" reveals no other code users of
-this path.
 
-  Luis
+Best regards,
+Krzysztof

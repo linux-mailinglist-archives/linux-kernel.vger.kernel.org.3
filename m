@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179E157C854
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C9257C857
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbiGUJ62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S232944AbiGUJ6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbiGUJ6W (ORCPT
+        with ESMTP id S232936AbiGUJ6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:58:22 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478F381B1E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:58:21 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id g20-20020a9d6a14000000b0061c84e679f5so765411otn.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:58:21 -0700 (PDT)
+        Thu, 21 Jul 2022 05:58:37 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FDB820D6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:58:33 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10d9137bd2eso1708187fac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:58:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=w1cw8n2s++yGrcoRACgo1RACYLLvGocB0lSZfMf+v5k=;
-        b=GAiOHo1VRSqtmwOO5seALkjK17Xl0J2NPoHCbEV3V07AP4Q2diSeRtvxSgavPHZl2O
-         8NkgO9GuJGz5vkg6RGY5AX0645gxSAAi0+fNRbfT4mSLeoi0cOBpH/pHgmmtcUCsLIwk
-         5EFuw/QBuJxkhjgWqt08kwIN/JVUy/1J1zRTpEaOWGHnkZpmjeMafnxpAGL6hdwz0EkV
-         6lsSAmvB0GJYnA/+1nqw8/SUbEZNTOtnhzSW4jP3lFvH/ZfvGFDFxlKXzdN2trkCQlH2
-         CXdK/0a/22SEDyIMh/oa5dmVfs6B0HrwGLiXw5Z/Ro4cSU1Wwirr+HjCB9lamCBoOZHk
-         udqA==
+        bh=cke61x1VyLaOYMRXa+KSlFmuqpeiXyYoEp5L0oHK1QY=;
+        b=Tv95sC0RqA3YKlr8Mh8ehqDQQXV9jQB2dagD6vtqdXmVNw98AKjRH+UwEbuwL2OHbz
+         KAAkhFIW3FZwlIYmgkwTCOJgSBItuMIrzMHPGXkY7LvyHwdFnRrGX0LevGgQFkGpNRpE
+         J9wqLlYi4/pflPV5HBV4XXjyVO6b+I8QstZAqTw65q71c3h/PMs622hA5yg4rCgfSeJ5
+         2g5Di77DrhkMVDgr+gOZbpQD3/hK1YSEfxYJGaey4k6XC/JL0gnm47mrlpXpzdxznlaL
+         oGUh9EqkT5n2W2VMQjS6SQd/55HLeg9DGahze8oyN1mdYMq19MZHbB0woZe+TGiOkWwU
+         JilQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w1cw8n2s++yGrcoRACgo1RACYLLvGocB0lSZfMf+v5k=;
-        b=LHsRsgUW08uE3zdbDrGrYgNXcL3S+IXu5PQLpwYcQIMxWixsOoVTepHp+9kt/nj8tM
-         qtThP7wl3t+oxRcX6zm5tQ4GqZ9ZWIvRetzyT5RRQWDUH0i7i+SvlmJEuXQx8bWwIuJd
-         NPvi5M6tWPTIqwOzTMYSjOXUFYp2+G0LHSo9Nqr2zKL5R23YZvJZrhr7jEHQaCw+OZrZ
-         JHw2PJz5Ubqa3v4fE0FVhgr2wh/jEZWccvSlBeHkqMfDKaBWpjA0pCX4SfecPt9sLRud
-         p9KJdr+8mqFDG7516NJfgNjXI+sVb8g+rcZe0/M8LV+PZfaKXihz4w/7oJh/aIVUbrdT
-         Wu4A==
-X-Gm-Message-State: AJIora+lwWG18PMelL3Wu+gHjJM2yQ0N8b3XH0Z3LL3SGyursLs4ilyM
-        YF2N1Z4MusNcwrIR5V4mkaQu1mZQN8YJllCTHrfMRw==
-X-Google-Smtp-Source: AGRyM1v2hPhTASw+wF+XVDBlk1CI1nNorxhP4r6p0nuR1mYXYF4mAP3CWBqFwNTgIpR5+p7wQj950bEmAKkn/BHUbRU=
-X-Received: by 2002:a9d:5f1a:0:b0:61c:50a1:df3 with SMTP id
- f26-20020a9d5f1a000000b0061c50a10df3mr16441497oti.102.1658397500469; Thu, 21
- Jul 2022 02:58:20 -0700 (PDT)
+        bh=cke61x1VyLaOYMRXa+KSlFmuqpeiXyYoEp5L0oHK1QY=;
+        b=FrcUXRjVj5VGoOgWtN4P3iblv1SHgY680BNZP7HeeOeLuYZJJZlq5Qx/K1UIJEuq8K
+         eVok2G2Ti/FLkgvs2eFneFI9nt6p0i++YITMOhyXWI/JIyfheHhk/8hLBu/M3tTPKXsM
+         pZGm9u25TxDWlbo6DWL8M5OmAxp7x4guU2WU4/Fuw1tueEWf2sqv3NAQE3sa0LTgMopd
+         xPl56Wl2DRDOVyhuuFmzTTJTQHrYUBlVoqnPkUbEbLHo0VGiZ4zZWP/H585jh3Q9GxIC
+         zgZEICNtS16Lj93pW/QxzCZLGqgUscr7jisi2t6Rp/lx8z6JnasMkWqlTNYReKqBO8vA
+         Q3+Q==
+X-Gm-Message-State: AJIora8d7DB0OWtXU9tdBs2vSVBWa070v2SiAIE2XMeIIsN+oT4+he7c
+        7LUwfVusycJBzOyxyGpaObXWp0SWTyTxa4E525tAag==
+X-Google-Smtp-Source: AGRyM1s1/WqNg+sC8uUwNPbq5XStZk8otBFSfStT4w/YkwUXcQ6JM+u9wee9XyLVbencTF50D7kTRxumET8UpAglsaI=
+X-Received: by 2002:a05:6871:890:b0:10b:f3eb:b45d with SMTP id
+ r16-20020a056871089000b0010bf3ebb45dmr4955346oaq.294.1658397512248; Thu, 21
+ Jul 2022 02:58:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721055728.718573-1-kaleshsingh@google.com> <20220721055728.718573-9-kaleshsingh@google.com>
-In-Reply-To: <20220721055728.718573-9-kaleshsingh@google.com>
+References: <20220721055728.718573-1-kaleshsingh@google.com> <20220721055728.718573-10-kaleshsingh@google.com>
+In-Reply-To: <20220721055728.718573-10-kaleshsingh@google.com>
 From:   Fuad Tabba <tabba@google.com>
-Date:   Thu, 21 Jul 2022 10:57:44 +0100
-Message-ID: <CA+EHjTxtwjf3dMhrBFa0iTMPayV0V0dM-z_Gk_hSQn_hr4zYow@mail.gmail.com>
-Subject: Re: [PATCH v5 08/17] KVM: arm64: Add PROTECTED_NVHE_STACKTRACE Kconfig
+Date:   Thu, 21 Jul 2022 10:57:56 +0100
+Message-ID: <CA+EHjTwvGj+1TQ1OKDNhJsFd=TjwuPr=mjGxvZDqTKWYMcbN+Q@mail.gmail.com>
+Subject: Re: [PATCH v5 09/17] KVM: arm64: Allocate shared pKVM hyp stacktrace buffers
 To:     Kalesh Singh <kaleshsingh@google.com>
 Cc:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
         madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
@@ -79,59 +79,68 @@ Hi Kalesh,
 
 On Thu, Jul 21, 2022 at 6:57 AM Kalesh Singh <kaleshsingh@google.com> wrote:
 >
-> This can be used to disable stacktrace for the protected KVM
-> nVHE hypervisor, in order to save on the associated memory usage.
+> In protected nVHE mode the host cannot directly access
+> hypervisor memory, so we will dump the hypervisor stacktrace
+> to a shared buffer with the host.
 >
-> This option is disabled by default, since protected KVM is not widely
-> used on platforms other than Android currently.
+> The minimum size for the buffer required, assuming the min frame
+> size of [x29, x30] (2 * sizeof(long)), is half the combined size of
+> the hypervisor and overflow stacks plus an additional entry to
+> delimit the end of the stacktrace.
+>
+> The stacktrace buffers are used later in the seried to dump the
+
+nit: seried/series
+
+> nVHE hypervisor stacktrace when using protected-mode.
 >
 > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 > ---
 
-Just wanted to point out that I have specifically tested this as well,
-enabling PROTECTED_NVHE_STACKTRACE but not NVHE_EL2_DEBUG. Works as
-expected.
-
-Tested-by: Fuad Tabba <tabba@google.com>
 Reviewed-by: Fuad Tabba <tabba@google.com>
 
 Cheers,
 /fuad
 
 
->
 > Changes in v5:
->   - Make PROTECTED_NVHE_STACKTRACE depend on NVHE_EL2_DEBUG, per Marc
+>   - Fix typo in commit text, per Marc
 >
->  arch/arm64/kvm/Kconfig | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+>  arch/arm64/include/asm/memory.h      | 8 ++++++++
+>  arch/arm64/kvm/hyp/nvhe/stacktrace.c | 4 ++++
+>  2 files changed, 12 insertions(+)
 >
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index 8a5fbbf084df..09c995869916 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -46,6 +46,21 @@ menuconfig KVM
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 0af70d9abede..cab80a9a4086 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -113,6 +113,14 @@
 >
->           If unsure, say N.
+>  #define OVERFLOW_STACK_SIZE    SZ_4K
 >
-> +config PROTECTED_NVHE_STACKTRACE
-> +       bool "Protected KVM hypervisor stacktraces"
-> +       depends on NVHE_EL2_DEBUG
-> +       default n
-> +       help
-> +         Say Y here to enable pKVM hypervisor stacktraces on hyp_panic()
+> +/*
+> + * With the minimum frame size of [x29, x30], exactly half the combined
+> + * sizes of the hyp and overflow stacks is the maximum size needed to
+> + * save the unwinded stacktrace; plus an additional entry to delimit the
+> + * end.
+> + */
+> +#define NVHE_STACKTRACE_SIZE   ((OVERFLOW_STACK_SIZE + PAGE_SIZE) / 2 + sizeof(long))
 > +
-> +         If you are not using protected nVHE (pKVM), say N.
+>  /*
+>   * Alignment of kernel segments (e.g. .text, .data).
+>   *
+> diff --git a/arch/arm64/kvm/hyp/nvhe/stacktrace.c b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> index a3d5b34e1249..69e65b457f1c 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> @@ -9,3 +9,7 @@
+>
+>  DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+>         __aligned(16);
 > +
-> +         If using protected nVHE mode, but cannot afford the associated
-> +         memory cost (less than 0.75 page per CPU) of pKVM stacktraces,
-> +         say N.
-> +
-> +         If unsure, say N.
-> +
->  config NVHE_EL2_DEBUG
->         bool "Debug mode for non-VHE EL2 object"
->         depends on KVM
+> +#ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
+> +DEFINE_PER_CPU(unsigned long [NVHE_STACKTRACE_SIZE/sizeof(long)], pkvm_stacktrace);
+> +#endif /* CONFIG_PROTECTED_NVHE_STACKTRACE */
 > --
 > 2.37.0.170.g444d1eabd0-goog
 >

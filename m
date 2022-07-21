@@ -2,132 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E56A57C152
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C52857C150
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiGUAGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S231787AbiGUAGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiGUAGQ (ORCPT
+        with ESMTP id S232025AbiGUAGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:06:16 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021022.outbound.protection.outlook.com [52.101.62.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6675730F42;
-        Wed, 20 Jul 2022 17:06:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wcypu8Rn3QpzVrYjMjKhdolmGCUIXzNbvGAbhTq4HybmQJzbcOAIF+81NTJaXpzdrQBPU51qtkRYV1e08Ikud6W7VfNgVS5K/WbLVqYuPvaQX4NFFuQnm3ajFfkwDfWyDCxk68WEuohZbpcA4dgnZuKgYGOBc5zGg3bYX5jfogYdqqKHkk6rjYVnvQ3pNZqrthmumQX9fdpbXMxbYrCyMGn32gnkp2emeM8nRJESwRTxmz/X4uOE8oM2dM2jezl4R9ijjAhNCZXAi4g4N93leQWQo3QlIB/8e8FZYOcXn/ipi+Atth/ry3AFNHR905MgHvFEu7P7ViE+O/to7ot5eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ph2HWtgEXxltMMeeA2RKHyCIesYQhw4XkKq2hJUcRW8=;
- b=k0HbZibYRwbWW+LTjNhNxDfgFhmNAFld/VdoSdTxA7xdoRTjsll0V4yddvo1hf0LfZSMbwbfXR5AJ5Phfbe6w3jdpsDQITxYVVtJKA/abBaPEiPrAGyEoMfdyH0j427Bj+D5o9WrFoWgLNMB+THDbik3XzOHNo5/UmyTh/y9XVYk2LwgUOpSgQrX41vucdKoO106sSIwIIpNCVJOt7bbi003cJ+HiUg07gzdPheSC1OLE5sl2N6lRLXa2MH3vmUhDq8Kom/CE9mM6LaRly8M2JHSW6qGMuyDVCs8UesCXbL5Al8rigO/USqoAjZ0PERVpHg173RBjxkhRM91r7t0gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ph2HWtgEXxltMMeeA2RKHyCIesYQhw4XkKq2hJUcRW8=;
- b=CQPnEjvhfTpizCJvghIgbpC3O5qHjhbRPdReY70tBCIQSUkjV0Sm5Q02Pzd3fnLGMW4U/UUrVq4tc8ORrGOL0h6zkpPwsVHbPgMV0Vtv/icsy4UDauUihOU6RpJg95JOSGKP2DQhS6IjrAsebxyMm9Bwvq66ryV1KDqlOHaqSvc=
-Received: from PH7PR21MB3263.namprd21.prod.outlook.com (2603:10b6:510:1db::16)
- by SA0PR21MB1929.namprd21.prod.outlook.com (2603:10b6:806:e1::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.1; Thu, 21 Jul
- 2022 00:06:13 +0000
-Received: from PH7PR21MB3263.namprd21.prod.outlook.com
- ([fe80::69ca:919f:a635:db5a]) by PH7PR21MB3263.namprd21.prod.outlook.com
- ([fe80::69ca:919f:a635:db5a%7]) with mapi id 15.20.5482.001; Thu, 21 Jul 2022
- 00:06:12 +0000
-From:   Long Li <longli@microsoft.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: RE: [Patch v4 03/12] net: mana: Handle vport sharing between devices
-Thread-Topic: [Patch v4 03/12] net: mana: Handle vport sharing between devices
-Thread-Index: AQHYgSXY1SrlgLfyyEyOddi806gORa14hJeAgAK137CADOflgIAABSdw
-Date:   Thu, 21 Jul 2022 00:06:12 +0000
-Message-ID: <PH7PR21MB3263F5FD2FA4BA6669C21509CE919@PH7PR21MB3263.namprd21.prod.outlook.com>
-References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
- <1655345240-26411-4-git-send-email-longli@linuxonhyperv.com>
- <SN6PR2101MB13272044B91D6E37F7F5124FBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
- <PH7PR21MB3263F08C111C5D06C99CC32ACE869@PH7PR21MB3263.namprd21.prod.outlook.com>
- <20220720234209.GP5049@ziepe.ca>
-In-Reply-To: <20220720234209.GP5049@ziepe.ca>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=952ff3b5-bbab-4714-ae30-9eeffd76dc4a;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-07-21T00:00:35Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 70359c4b-5b69-4125-3e7e-08da6aacd2bc
-x-ms-traffictypediagnostic: SA0PR21MB1929:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j4VYvCLcwSA4mLbfH9A1Rs7+ugnUsD71sNYe+UmRQIUFZCDV+lv4rqkGThyGLYMEqVNeSch8W+xBDNfr/LEQr70VqoNiqNXh7BktLoxqw2mrDR0jIzeJ5Q3McZ+5+XxfDRc9+VSOoiMRsCaS8L587va+X+XmBnbFkKiAKJ8ATpDTLeyax4R2E6BS7cvY5OSj9Lrh/W4m9VQDC+LzIaPHLuca4fD48t8KWdN2S+EK59ZLugye/dlMeQUtWKuuMZjCELg1xhBdfptnGbGsqjgUl3UucMVmE9tVjbZmmL2HATBDNwalAnJERFoVcML4NhHAGLyyHsu5GJn0RqQ+HvMwe0Vh8ge+vggrz2uhky8V4gNbEqKAFMsUmLLmrNigeLBWzJmTbH3g06LQKEUxHY2GpKAyThTOkXTbmRTURGfsYQ9/7avoknSsvf2+N7mBlccdpQMBEsAbP+SQbKT7jN4l142VNxW9O5piwjFjhpAcVK//gF3Ip+1Urs1yR8SOJbzasGFWIL8QxEEAIn2XTpI+Lb3ITMO93EgGGA+obsntnFn7lcIjlsuKLuVaZ5Gg7iONHvMMZrN6J2cbv26gftiPnTnRgNd/lJrj9PUxRWiK4qvVy7/JV2MI80/vwJL2oVI19ziruOE1WjvliROWh7DxdlckSxsRgs9tkUe4zUW+7nFzBCMzWFRw03PiyHjS/R0F0p8v0kWdce6xIKzhpXc90z5u62QpG7mCtkx+w+mfnVASq4c2SUi/J/u3zwwHKdjtdrLqjqyghwdLZlmPiEKO/BmSQ413IHe7XdcVtgOuiuGOKrjx0njJG6Ba4I1huu5MwyE86TRPER9jos/Z+ISPshyguGYN/1bYFbiLpxqyNvo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3263.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(39860400002)(136003)(346002)(366004)(451199009)(8990500004)(8676002)(2906002)(86362001)(52536014)(41300700001)(33656002)(9686003)(83380400001)(26005)(186003)(7696005)(7416002)(6506007)(478600001)(5660300002)(8936002)(316002)(54906003)(6916009)(82950400001)(71200400001)(10290500003)(122000001)(66946007)(4326008)(64756008)(66446008)(66476007)(55016003)(38070700005)(76116006)(66556008)(82960400001)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?I4yb2CCHcxrEOrGWV+jLbxS4VGnOBwm1SR5pSfCIIK3dKbf8pqEiMFyThT3n?=
- =?us-ascii?Q?wySxRdqEix6KzUvRtP+D9QQ7tbdeYFvR5jmhXOn46n+wtdnC8oXSbWCQVTze?=
- =?us-ascii?Q?I5X5l4Go9lsxIHloMjJi8I/izoLp0GOzBobR/2D1zk5YFsHfkBc0YoLn83uB?=
- =?us-ascii?Q?b49VixbUmG6VfXZ6YPN+w4QlBJ0DVafWxsF1TKBm3sPw6UJvin50bUiB8Hsu?=
- =?us-ascii?Q?dEYdWYqGBou02C8m2Vo8oGdAE3eTF3bTtfxGkRSg/SvUUQU0ksAMzxwhPDQ3?=
- =?us-ascii?Q?SqNFVxSrUSR9hqoSdxswNJoHvxhzGIRb+8G71IWHiu9NCjDAZyzynYLpPPPv?=
- =?us-ascii?Q?+VLB6jMueEdlSwnTMcy2b3X2h1VT2WH5XuXRXt5DV39dt5QSXuKV3B0uKqLw?=
- =?us-ascii?Q?1lMtzl1eu6nf93SQeAhZERAOR+/AEREvcDGrRDmEIDiQ69cpAdoM944P4eRz?=
- =?us-ascii?Q?n76A7/rXWW4lFgefRL9/NcYfv38aTb6d7IJGxkIKtmd7E8zhhXImNTnvgBGn?=
- =?us-ascii?Q?NfLi0edgvgLGoOjagYkYuGozp9uXyAWU7jXSqd8EnAtI99dTo9ZPJDO2KMKo?=
- =?us-ascii?Q?urb8xKTZ80MHpUFbbXhUbBkGaQNqEBG79LTEL59rEXTuEX+jr4rTD8IFW9qm?=
- =?us-ascii?Q?8d4GxoGMEdX/wAwT3TGHVNI8w4G7dTfewUbtdFNzidsbr/aVEgoLypaxTZWw?=
- =?us-ascii?Q?prmznR04gnPLeVpl+D6UVXqxQ7OkmZGP7mCXOriHhU7Sf2CAUmnaumIUjHZN?=
- =?us-ascii?Q?92kN5l+P7QLAilANDtz+cuaIpZ0oJoDBqe0w4zBGkH81buwfDjBXdrHNwub7?=
- =?us-ascii?Q?MDh79jlWR3RqZnjuoO27/NrF2nPF9YnYF/xFJUFPm699OrccKi3vUpdsYqx/?=
- =?us-ascii?Q?sgDL0RgHK5zDanPdsBp2lyiPc1iMh88d8OLlt52vZzAbar1U9mifm3wJSr58?=
- =?us-ascii?Q?s2vFXudmKtZM+GiPieLSkiTJzlkPof+HEAgD9zCZGO0nZb5NFUTgNmMPOAKH?=
- =?us-ascii?Q?8pUukJk7vEBdOLwdjTOO2yfnmpryE+zQVTWeoVpcrdAV6Yz62f4TNBRkZFjj?=
- =?us-ascii?Q?NukNVXjqZPhIJENBhsCj80QNCNxn7wnvW6U1c6r3v2Nl+Ua2O4kiCE2xFrEV?=
- =?us-ascii?Q?c812be0HeRsYmpLiREyEffFyCxVE80WrID1u2/GKLj2ZU6R9uHKzLERTdTrf?=
- =?us-ascii?Q?JSQF9Xkd+VW+ppZs/Bh3ljy0zxBwmE1LFY/Mp0/fqIKfbW9xUSCvR6Q1WUnL?=
- =?us-ascii?Q?ZzuHDyIseSxUDKWtB/m9BmIUpKRjsb3tjnTXiT5AJyB2jmLmdAB8w4Bqs2Y4?=
- =?us-ascii?Q?QMqUD+38lw73UkZBbsyJr3NAucuIDi0fd+YdMb9GCBOKElALtigxdNOVaDzU?=
- =?us-ascii?Q?pbdRXsi5DZDyGCZdUp15v7FugBTRf7Bd/dybmb/r7vNPv1ARiZuLI6MAe2H+?=
- =?us-ascii?Q?CiUQ0HlrWDW4uGcSDlg4EnMitGk56yt+QLXi1yYqym54MBpWFNUkil4YwLUA?=
- =?us-ascii?Q?1MW0BtW+ed2ZmETFJqtBwapbQNd5MqIHrDejEpolFtUlBA8TY6H0VR+y+dFW?=
- =?us-ascii?Q?acxOqgB6uGPRrDqZPi1rsd9kIJ5+T9X0CJXeKIjJ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 20 Jul 2022 20:06:18 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092CE33343
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:06:18 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id go3so102040pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Zl8f6HPV5Rh1bVpXZpG/PEaQanwB5mTX2EqFow7ycko=;
+        b=Xx7vzVCyr7mRNu58QYoYyo86qSl8a+kuEDUBCY48OhL3YMALD4/CAq8hvTzABMUoTd
+         uLKYr3y4hrF00Y2NyJzRGrJaK38Q2z+sC2ERNsYkS1c9dsBOVNA9jXjyq0QxR8taQyeD
+         Gd6zwv6JAFcwxovkErY66KP7MJdOHq2cqNWX7qtLy8V/KvN7PjxI8ahnilmA5QpG46lB
+         J3ZTJeb/LfJju34WO9NAzVCgwoUyOs6BO5kCCLohNr7x+pvUX3j1uNyezyyCqD4ZS68N
+         YmYocE3jf8eaDS8U/L3ZCYZEznzJZrlG9D1avRqB6bOMqeB6B3aU1+4ML0Re5B4+JqOJ
+         MLBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Zl8f6HPV5Rh1bVpXZpG/PEaQanwB5mTX2EqFow7ycko=;
+        b=wp+8a0jdCCHL0YcAh8jdbFPJm17BHQ4U5M27KRCBvzd6sVVigb14AFFH3o5k9pZ3dB
+         BHtEhSYtv/HFKnE9rOIndMTjBXvD9JcFZLBLEbXsF/i0yEb/Inowq2Urio+Tv+e/ZxMh
+         ZLOnd41dSX9x6zimewKP3gRDj/k15t4FkjfaFkgj5XU7BGghTYO8t2PdlbjgQmbeE3PA
+         mqS2v3Uv5GmTmXOmxHvqyAiK8uXFKA+gLKnWATq6FDbItivuzLghouNqcVuj5ry4ESbM
+         wRsCdcKEKGkjj7ATWxwCcPEq1TD2LN1igGZFm0wzmWfEC+mEWIrXna4EtLnVaiINheFf
+         thdQ==
+X-Gm-Message-State: AJIora+l+9nTQ9UVd+ApqixOtEysWUQtjQaoZcmcIQxcFj++U5B38yHF
+        XuMjydk90eFgdCiyQTWut56rAg==
+X-Google-Smtp-Source: AGRyM1u0qqrMwXFL3ruItNWgLDmjtV7VS1B/ZOauP14OjkD++cleqCJs9fxb05Cy971+zEUN/4hCZw==
+X-Received: by 2002:a17:90b:1d01:b0:1f2:104:6424 with SMTP id on1-20020a17090b1d0100b001f201046424mr7992254pjb.101.1658361977426;
+        Wed, 20 Jul 2022 17:06:17 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id i66-20020a626d45000000b00525373aac7csm221278pfc.26.2022.07.20.17.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 17:06:16 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 00:06:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 06/11] KVM: x86: emulator/smm: number of GPRs in the
+ SMRAM image depends on the image format
+Message-ID: <YtiYdTWQ7Vy+IHLO@google.com>
+References: <20220621150902.46126-1-mlevitsk@redhat.com>
+ <20220621150902.46126-7-mlevitsk@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3263.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70359c4b-5b69-4125-3e7e-08da6aacd2bc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 00:06:12.8504
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PmMjTah1Xa+rGSQsbOSex3kNcHKGw+a3v24YKCzSgdN4F3T3JgUmkvN5GaJYPXQRJ+9zVKvvzaDEESB3gD0AAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR21MB1929
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621150902.46126-7-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -135,43 +82,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [Patch v4 03/12] net: mana: Handle vport sharing between
-> devices
->=20
-> On Tue, Jul 12, 2022 at 06:48:09PM +0000, Long Li wrote:
-> > > > @@ -563,9 +581,19 @@ static int mana_cfg_vport(struct
-> > > > mana_port_context *apc, u32 protection_dom_id,
-> > > >
-> > > >  	apc->tx_shortform_allowed =3D resp.short_form_allowed;
-> > > >  	apc->tx_vp_offset =3D resp.tx_vport_offset;
-> > > > +
-> > > > +	netdev_info(apc->ndev, "Configured vPort %llu PD %u DB %u\n",
-> > > > +		    apc->port_handle, protection_dom_id, doorbell_pg_id);
-> > > Should this be netdev_dbg()?
-> > > The log buffer can be flooded if there are many vPorts per VF PCI
-> > > device and there are a lot of VFs.
-> >
-> > The reason netdev_info () is used is that this message is important
-> > for troubleshooting initial setup issues with Ethernet driver. We rely
-> > on user to get this configured right to share the same hardware port
-> > between Ethernet and RDMA driver. As far as I know, there is no easy
-> > way for a driver to "take over" an exclusive hardware resource from
-> > another driver.
->=20
-> This seems like a really strange statement.
->=20
-> Exactly how does all of this work?
->=20
-> Jason
+On Tue, Jun 21, 2022, Maxim Levitsky wrote:
+> On 64 bit host, if the guest doesn't have X86_FEATURE_LM, we would
 
-"vport" is a hardware resource that can either be used by an Ethernet devic=
-e, or an RDMA device. But it can't be used by both at the same time. The "v=
-port" is associated with a protection domain and doorbell, it's programmed =
-in the hardware. Outgoing traffic is enforced on this vport based on how it=
- is programmed.
+s/we would/KVM will
 
-Hardware is not responsible for tracking which one is using this "vport", i=
-t's up to the software to make sure it's correctly configured for that devi=
-ce.
+> access 16 gprs to 32-bit smram image, causing out-ouf-bound ram
+> access.
+> 
+> On 32 bit host, the rsm_load_state_64/enter_smm_save_state_64
+> is compiled out, thus access overflow can't happen.
+> 
+> Fixes: b443183a25ab61 ("KVM: x86: Reduce the number of emulator GPRs to '8' for 32-bit KVM")
 
-Long
+Argh, I forgot that this one of the like five places KVM actually respects the
+long mode flag.  Even worse, I fixed basically the same thing a while back,
+commit b68f3cc7d978 ("KVM: x86: Always use 32-bit SMRAM save state for 32-bit kernels").
+
+We should really harden put_smstate() and GET_SMSTATE()...
+
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+
+Nits aside,
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+>  arch/x86/kvm/emulate.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 002687d17f9364..ce186aebca8e83 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -2469,7 +2469,7 @@ static int rsm_load_state_32(struct x86_emulate_ctxt *ctxt,
+>  	ctxt->eflags =             GET_SMSTATE(u32, smstate, 0x7ff4) | X86_EFLAGS_FIXED;
+>  	ctxt->_eip =               GET_SMSTATE(u32, smstate, 0x7ff0);
+>  
+> -	for (i = 0; i < NR_EMULATOR_GPRS; i++)
+> +	for (i = 0; i < 8; i++)
+>  		*reg_write(ctxt, i) = GET_SMSTATE(u32, smstate, 0x7fd0 + i * 4);
+>  
+>  	val = GET_SMSTATE(u32, smstate, 0x7fcc);
+> @@ -2526,7 +2526,7 @@ static int rsm_load_state_64(struct x86_emulate_ctxt *ctxt,
+>  	u16 selector;
+>  	int i, r;
+>  
+> -	for (i = 0; i < NR_EMULATOR_GPRS; i++)
+> +	for (i = 0; i < 16; i++)
+>  		*reg_write(ctxt, i) = GET_SMSTATE(u64, smstate, 0x7ff8 - i * 8);
+>  
+>  	ctxt->_eip   = GET_SMSTATE(u64, smstate, 0x7f78);
+> -- 
+> 2.26.3
+> 

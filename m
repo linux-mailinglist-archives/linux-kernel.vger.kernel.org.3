@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C294857C254
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E6A57C256
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbiGUCfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S231699AbiGUCgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiGUCfU (ORCPT
+        with ESMTP id S231683AbiGUCgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:35:20 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D7DB846;
-        Wed, 20 Jul 2022 19:35:18 -0700 (PDT)
-X-UUID: a87ce954c5df4c359b7262e0bc1b48bc-20220721
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:fcf65bc8-e657-4b99-8b3a-bfd6bc1b7cea,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:0f94e32,CLOUDID:6574d964-0b3f-4b2c-b3a6-ed5c044366a0,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: a87ce954c5df4c359b7262e0bc1b48bc-20220721
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1845675534; Thu, 21 Jul 2022 10:35:14 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 21 Jul 2022 10:35:13 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 21 Jul 2022 10:35:13 +0800
-Message-ID: <c79b0f441bc4d7dce6c8d35f189783e69144413f.camel@mediatek.com>
-Subject: Re: [PATCH v3 06/21] dt-bindings: power: mediatek: Add bindings for
- MediaTek SCPSYS
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-CC:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        MandyJH Liu <mandyjh.liu@mediatek.com>,
-        <iommu@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 21 Jul 2022 10:35:13 +0800
-In-Reply-To: <68a30bbd-5f9d-17d2-59fa-7b0da06ee877@linaro.org>
-References: <20220720123023.13500-1-tinghan.shen@mediatek.com>
-         <20220720123023.13500-7-tinghan.shen@mediatek.com>
-         <YtgDu70Lpl/uPOkf@google.com>
-         <68a30bbd-5f9d-17d2-59fa-7b0da06ee877@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 20 Jul 2022 22:36:01 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A680A1F2EF
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 19:35:59 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bv24so327371wrb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 19:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VqmzPsRoQUtQQLCqBZaksSJCZdedraAjaKBqFxITMf0=;
+        b=XwrCn5FUkCoJgYv24Y9WOPzewP9cZ+h84e8RO1ACno2pA0lyagADV+s//yvCpc5Usd
+         dvxBAxOQ4PDBlTcdiRhBdN4XmsS91P2rW+wkqtSUwtMN0wk7Bjo6j2nz0AJYilAXx8Yq
+         0liDzgRBePKy3qYqV6E/WaexRuEnW8hD8edEvoKjeLMxb2qbdY4MQODd0z9BhOopghrI
+         ZdBmXvBDcMCDaJ32hyCEXRjYxLmni1UFskDOYxYC+/V6ykBKHOqa4hYNA9FtlmWZlyN5
+         UnCpwiuyeMQ+LwyGsJtyuFRhoMsf+Rf4np+JNzY38ZGHTn6ZnKKaXCutrtAaQ8O1UjiZ
+         lk1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VqmzPsRoQUtQQLCqBZaksSJCZdedraAjaKBqFxITMf0=;
+        b=6jf8Mnl98NHjMMiaMhNXQ5ZhO0KEcsh3WrFbRxcDaYW6p1+f9gNvtMDef4BULYCV47
+         iFrg/IdjiMbbxOj9/eu132A5TkOuw5PdByoTdWOTPGJYIqPHZALarOBp1c/16XZNyLVa
+         CwhUcfYLkXIgtyskyDvUO8iRzQ3EfD6rbSqdLp34PFjMgDw19NxaTmlQKYrRy124c2QL
+         NcUFUWmhJNJnbKrva/jAJ4X5iNAz5WdkE/cLQ2sG3uGX72N7VDQIlrl+qn/WSyWIfwQI
+         WsClDTcDbUdaxfVD206efEo9EXJRJU9y2WFZoMQPueNeFGmlHO2+zQqPOMb/WqlKcWcb
+         x8Tg==
+X-Gm-Message-State: AJIora+iOnhrHm70Tml/B2+cpwv0GoVmvx25GjUZwam2LIwTPWtFAvkA
+        ipMaqzNXI5GtJhtbiKDhFKYIG+FgNK5N2g6weplLiA==
+X-Google-Smtp-Source: AGRyM1vLldRzfJBxIPk3X5buyWrLNnStBvGVL8RiAnMbD2FCnu5GVC3c/94CrP+XUiDL5BR9sPQzj0WKVynUZ8o9yg4=
+X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
+ v13-20020adfe28d000000b0021e4c3bb446mr3739209wri.300.1658370958022; Wed, 20
+ Jul 2022 19:35:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+References: <20220721090500.35774b43@canb.auug.org.au>
+In-Reply-To: <20220721090500.35774b43@canb.auug.org.au>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 20 Jul 2022 19:35:45 -0700
+Message-ID: <CAP-5=fV+Oo+__sWTgfqyVKwyr1FxYYSv9H6H72CgdQN_Jv1ZAQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <rogers.email@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,41 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-20 at 19:37 +0200, Krzysztof Kozlowski wrote:
-> On 20/07/2022 15:31, Lee Jones wrote:
-> > On Wed, 20 Jul 2022, Tinghan Shen wrote:
-> > 
-> > > The System Control Processor System (SCPSYS) has several power
-> > > management related tasks in the system. Add the bindings for it.
-> > > 
-> > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > 
-> > Why have you ignored my review comments from v2?
-> 
-> If you refer whether the binding is needed at all, then the answer is
-> yes, because this is not simple syscons but a device with children,
-> which we want to parse/match.
-> 
-> Anyway Tinghan should respond to you about way how he proceeds...
-> 
-> Best regards,
-> Krzysztof
+On Wed, Jul 20, 2022 at 4:05 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the perf tree, today's linux-next build (native perf)
+> failed like this:
+>
+> Traceback (most recent call last):
+>   File "util/setup.py", line 31, in <module>
+>     from setuptools import setup, Extension
+> ImportError: No module named setuptools
+>
+> Caused by commit
+>
+>   ee87a0841aa5 ("perf python: Avoid deprecation warning on distutils")
+>
+> I installed python3-setuptools.
 
-Hi Lee,
+Thanks, could you give more details? Are you overriding python to be
+an older version on the command line? What does "python --version" and
+"python3 --version" show? Installing python3-setuptools should be what
+you need, but I'm not sure why that's not working for you.
 
-I'm so sorry for not answering your feedback. I misunderstood it
-that you're waiting the review result of DT maintainers.
+In any case. sorry for the inconvenience of this. Thanks,
+Ian
 
-This binding is added because of the discussion of the scpsys node[1].
-I first looked at mfd/syscon.yaml to see if I could use it.
-I found that it doesn't have the 'simple-mfd' compatible, so I decide to add a new one.
-It's because I need the 'simple-mfd' compatible to parse child nodes.
-
-
-[1] https://lore.kernel.org/all/f7eee4e8-05fa-4c83-9168-64e5ea4c510f@linaro.org/
-
-
-
-Best regards,
-TingHan
-
+> --
+> Cheers,
+> Stephen Rothwell

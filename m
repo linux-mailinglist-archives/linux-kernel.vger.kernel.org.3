@@ -2,143 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A02257CB1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088AB57CB28
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbiGUNBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S233834AbiGUNCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbiGUNBh (ORCPT
+        with ESMTP id S233814AbiGUNBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:01:37 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2083.outbound.protection.outlook.com [40.107.95.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28B474CE5;
-        Thu, 21 Jul 2022 06:01:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M6tmHzVXL0l4UTw+84JXRDXmn9Fnlj9XQZKeV07bvqXpga4r1Q5MYvzHBwgQQQbrGT/PXTsJeexWc72jiiqtJXNJ/nMW5WUZQBZwuRdPDV5eqOyuJlImnwodl3Ih6HAHmXpni95JaH9ife1+p0RJtPdd2BYviVrQgZuu3PCHJyPbc7se+DTcVSRsSDqKLxYVmIPHxKDxmvpm8+hAWm94GfPUQK5qzWL3Ccn17X2Davl/Vt4HtG41IuIuI2MZucg87ryhuriZJAsRJFX3u1G7lFOUM2ZDRo2w/V0VXwKBMB1JYT3IWM3B7rj7uB+iqhmPnGbsF8tvj6LHXGcf3ngbpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IKY4vL4B/sN/fK7RI82U4BmzYum2xw/qDgrjipVQGSw=;
- b=FylF6lXyjPv/filJ1USmq0RKQ7z5IKu+4tL0Iw9bGcX6gWblyfx2k6T4sDYQ2VrtKZge/d0goC3HtyddVWqDnWoRkoyJ1Fb6QEhuImq1zssT0VjzimnPeSBYw5VN3Rductw1j23FXmB8qq1RrQ/9mQ6cMwKNlcc+pTzwioYKfbKLjCQ8o6S1cStFYlra+xu9JpigDjFGWpLOAIsx64lTEKa8X/DTAQIK7R1fogRHbqoh0KHxxjz327Ll/Wta5t3pO2nrsElO/NFu3ndGwkxCPODiIlVdC2EAuHfLPTTLpJCHiQPo9A1IX03ZtjYr3Ji1kIQzE4V2X7BtbnHQF4Z6TQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IKY4vL4B/sN/fK7RI82U4BmzYum2xw/qDgrjipVQGSw=;
- b=N2puuanRtUH69BzME3FAUs3siT3gepgq+Ogsq79jL9KEZMmjKKNSF7vbAwHbtdI6ks2oYYZ3QeSXzXn2pGMLGE9yuvsrl1/pFL/GIkSQH+G0nVFm2btD0h6ly44OtQP0si8igxz1gw8YpIoHmGoRmhevFKaSy1PdB1L5s5kF2+6vo4JK0MyX/NrwPWde90oTKWdV+HMK+c5nxTFB2rAsSQk6LbFL/p9Nkg0USgog18aXd6BhObQ2UPZax6c2V7Q2B7pwmG1Xehhsjuhf4jQJHL99dlEWWvap1ao0801G56K4TIZUysKehTSKMchHu1naXzuAFHMhyecxhitFns1C0w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN0PR12MB5979.namprd12.prod.outlook.com (2603:10b6:208:37e::15)
- by PH7PR12MB5832.namprd12.prod.outlook.com (2603:10b6:510:1d7::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Thu, 21 Jul
- 2022 13:01:33 +0000
-Received: from MN0PR12MB5979.namprd12.prod.outlook.com
- ([fe80::6cf7:d2b:903c:282]) by MN0PR12MB5979.namprd12.prod.outlook.com
- ([fe80::6cf7:d2b:903c:282%3]) with mapi id 15.20.5417.023; Thu, 21 Jul 2022
- 13:01:33 +0000
+        Thu, 21 Jul 2022 09:01:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DE406FA33
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:01:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658408504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=l2nqXopB0oj59rxt8GS0i/Ow2d0ixiDSZZXxLOPWTGI=;
+        b=ESOw8aIF40Va+OreyCPCoqKUkXXxhBpFu8gggZ+4GF8MQAvXB6v5OUY6TGgdO6nPAC0nwb
+        ufQzra+oLaL5tdjs1PPXmOF7Q3EFHYW0NzJ2uFy9Zkr8FbeAsrNMh7SIFif2wo8F0ynSHj
+        liejXH78LxULzexlBL8SYBhMzU1i5ts=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-643-W8riDNRkNQW9kT1XdBnaMg-1; Thu, 21 Jul 2022 09:01:41 -0400
+X-MC-Unique: W8riDNRkNQW9kT1XdBnaMg-1
+Received: by mail-ej1-f71.google.com with SMTP id hb41-20020a170907162900b0072f044ca263so768130ejc.15
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:01:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l2nqXopB0oj59rxt8GS0i/Ow2d0ixiDSZZXxLOPWTGI=;
+        b=KNGHG7bZVZhoRk7pIeEyiFaKg05b/4N2RMIQ0STdfEHfgmpiqU1BUXoSpwEpTAlQPv
+         bbIDwE/sAwJU5AUO6pKwE5ToYx4OI10/3p/1ouKIyS7qnSiYHqBRkiTnaqczZl/R6oXW
+         k0TAEamSChkhSsvhnBWGq7WMRCrmPtYUSxLNXj6o2QTEUFYVzPg2KxRZbwT74mhwRJVO
+         90ziAmT9S+4GVk/qQDyY+bysqeD+EJG6kI0LRAZ0DVsHt8LDjbLeDJwOfoeKDSuNIz5s
+         NWQhj852MLicEY5wT3btuCidOaAvadrITkfH1fyGsWinEuCv3v/baIa2XdNGrpFlRSIC
+         2inw==
+X-Gm-Message-State: AJIora9DrEXvvV9l1uOn4l47o8+UjdzvpJ2+MKtNMs1mY2EfQYsZ86J8
+        eCyk/v1OTi+PlbbFcAGqkHCAabJDd3ZawZqOf7I6i+8z7kQttsdKcCTgfCaWA/ci8y72IUVeWlT
+        Vd9Jxrk11mFqUI5cDgkh88wI3
+X-Received: by 2002:a17:907:3e8c:b0:72b:4f2d:782b with SMTP id hs12-20020a1709073e8c00b0072b4f2d782bmr39125269ejc.223.1658408498051;
+        Thu, 21 Jul 2022 06:01:38 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1up9+TwOCP7rJC7JRSVpRtM3m+bDoM2mC3Cfn5rCTUr5nE2Os9jTHJlf3z0oWLR4ZJMbD4z8A==
+X-Received: by 2002:a17:907:3e8c:b0:72b:4f2d:782b with SMTP id hs12-20020a1709073e8c00b0072b4f2d782bmr39125177ejc.223.1658408496318;
+        Thu, 21 Jul 2022 06:01:36 -0700 (PDT)
+Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id dk20-20020a0564021d9400b0043a71775903sm955826edb.39.2022.07.21.06.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 06:01:35 -0700 (PDT)
+From:   Danilo Krummrich <dakr@redhat.com>
+To:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
+        airlied@linux.ie, tzimmermann@suse.de, mripard@kernel.org,
+        sam@ravnborg.org
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Danilo Krummrich <dakr@redhat.com>
+Subject: [PATCH drm-misc-next v6 0/5] drm: rename CMA helpers to DMA helpers
 Date:   Thu, 21 Jul 2022 15:01:28 +0200
-From:   Jiri Pirko <jiri@nvidia.com>
-To:     Vikas Gupta <vikas.gupta@broadcom.com>
-Cc:     kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        dsahern@kernel.org, stephen@networkplumber.org,
-        edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
-        leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
-        michael.chan@broadcom.com, andrew.gospodarek@broadcom.com
-Subject: Re: [PATCH net-next v4 1/3] devlink: introduce framework for
- selftests
-Message-ID: <YtlOKP4i3AG0gz+B@nanopsycho>
-References: <20220718062032.22426-1-vikas.gupta@broadcom.com>
- <20220721072121.43648-1-vikas.gupta@broadcom.com>
- <20220721072121.43648-2-vikas.gupta@broadcom.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721072121.43648-2-vikas.gupta@broadcom.com>
-X-ClientProxiedBy: ZR0P278CA0137.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:40::16) To MN0PR12MB5979.namprd12.prod.outlook.com
- (2603:10b6:208:37e::15)
+Message-Id: <20220721130133.829693-1-dakr@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9a2bdc6b-3b6f-4109-5275-08da6b19230a
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5832:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BpZTYwuolRCs5uEMwNZktMw7rYRr9VfMVxCQnp1N0u99gE2QOUw5AfVWP5yFBgij7jTF7J5+6T96rY2coUpZd+IHZIFs0uwTUne6XvYxPMzCng50VZPGALpLxDPwKkIvOUxY/kgP+UNy9W8l1GiAMlTY3Z1kMolZbd3hymbTvX63EXsrHD5H6dpbtl6HTaipzuhldtgzw5XpiRQiCvyaUxuOUagrnIlm4WKSp0V/89GiCwnhjPlVN9BjPatKOXCaOoDOQm+cBOD0hLv7JNj2pz3xKMQTjaLgvxoZIByFVo2SRey/HbHcwrmWKWDPEt/oQPTPUDzkDwTEUQRFV1renA736MyMPZQtWOf3jjU3Owet9eFNL7kneKV2yESa48U7Lp4oX4aYMZIt+/wF9RuUpVt9CJclfWXL/xkHuiRGzhw1fioUhdbI1Xiv0pEcK15f/naykljbjMO9eZjiaTdw5D8xXWY/3PlT5YMaZreMMD4sAXPzFOGEY6+5RYxWEqWMvIt7JgcPCbqAUNcCHwPDQXMnd1RboeS8+9uGdmBbkFu2a5d7em0+/QTA0xI+hvCUFsVcG6+xlUp3Ln5FST2Fhfoff55eUeC1tevKJzg3AZti8bsMoum9OP0t+J1zBXdiafy/zTXl1dyqsXSuBaa+WLcEvbF12NDLreSnlfWMGKDq+VV/ACKmpnB6ytLnBNVJLKAm+wqO2XXHfGpJ9q0L4Zxnv8KjU4qy5l+hUdKiLNAPYlK3Mlr9LoxJwe3LJ8TlrCT1llQeRAT9mKNaodoMLlL4nftw/BDsRaDh+k7U9c0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5979.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(366004)(136003)(39860400002)(396003)(376002)(346002)(9686003)(6506007)(6512007)(26005)(83380400001)(186003)(8936002)(2906002)(4744005)(5660300002)(7416002)(66556008)(86362001)(6916009)(8676002)(4326008)(6666004)(38100700002)(6486002)(41300700001)(33716001)(478600001)(66946007)(316002)(66476007)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?p8QYRn35n+Pbczztk80JtVfmjfiqShCl0A6CUkNHZrSDlOeiPQi912gyWwDk?=
- =?us-ascii?Q?WNdQINpXtvk0CxUx3rRSM3vDXQ1hHuLtr/eXsTMveZAbsdHAqKxBCKMzkF70?=
- =?us-ascii?Q?5awHSDR3GvqQqNTOvY7MXevEMspBozEh6OS1VThQAAVB0+49nr1XHr7bs7p/?=
- =?us-ascii?Q?1f6SF6kYuSCIyOuwhTk4GJljx2y7PK7rZ3YB+WsAJMqSpxTUj0LwxUZrvxmM?=
- =?us-ascii?Q?iY3ENsa43rtL7efkbI4egeYTZ/YbjfhyQeem2WaVnF8yYQ6tU3FpBKmnrH3J?=
- =?us-ascii?Q?75GsBMWVZmbBpl+8p6/1eJSmcElVwRu2s2S+dL/8TumyZ4Ms/16nGmHBuUFb?=
- =?us-ascii?Q?sRd0yfilRfwQYDfBIMZtnR0NRlgP2mhpLtaHn351owBJwH8aMuZMg8ccJ3n1?=
- =?us-ascii?Q?b0rCaVw9cCSHjm8wuH0c5BJQ0XWriT5kktPuzAtQsOeow/jT5gAJnKNArEDO?=
- =?us-ascii?Q?Yl8hKI08exdSZHQBTiYXwF6301E150APV7DQCypKxB2ZCs601se44f2sZ6MK?=
- =?us-ascii?Q?8VxX/zb3VWglW9T52g+2cDGzctrHx6JbTPHCFaaR2OVqrOvpkLrMWjqO0iZ0?=
- =?us-ascii?Q?NtJkUYAURy32O7kdFXbuD+wAAnufWkKmnIjIMrQtV3F+TvrOgAnPpC7lW6qI?=
- =?us-ascii?Q?0TNkdVVUH8EbEoVVKlZDQ7I0+9N7VRLzafz3BOpWGUorILnb4FfNcVieA02p?=
- =?us-ascii?Q?PIPbd2sq9FhvmtYBQD8gD6Y9V+w7L+LaOJBzwr+Ccruo53UhIPPBtD1YgcR5?=
- =?us-ascii?Q?UYKfZVVkTmkxhskz18u/fJ76ZioRWI8f849c8+dHkJxDfVzswsTUgXGX4nEI?=
- =?us-ascii?Q?1lhrv1NctmcLqnAQWlz9Ardkolg2Hpngz2pfv6ONQ2GGhOUFPVWD/SpYSM8p?=
- =?us-ascii?Q?Zbdf+ntf0ONBElIs5RyJBu0AvC8QEKlbR4oU6pJKxEXkgrIHipNWD3+mt34+?=
- =?us-ascii?Q?w8yfYRYcIc2RZtWLOtFz5lPE165FUCoTnOodVUk8MzMtWdfq+vOUzsR3CDqH?=
- =?us-ascii?Q?+p/P6IXPuvQaQLWwWmayIkOqDyMahsoqBCFvwaVSSIkLs5gQe8BxtqM3Msvu?=
- =?us-ascii?Q?X5GclBDt5VNRIKx+2hXjCji5jjS6kPeP+5lyyTiM1UF+BTk3bivjMteLHn92?=
- =?us-ascii?Q?qZPlmH+EWhU8mb17J3+tEJ4cUFZiS4Ue7b+kZWzGPJjCAogSrOF/jr3itEaG?=
- =?us-ascii?Q?1mPlMLCT+9tThWJnBUtDGopOfVXvYAlf9knI/ajAciwef3zFhPAnRRurMXb7?=
- =?us-ascii?Q?k4YwRnIKLLgPGbmePnyx75OHHftDeSQbalysk5TG8/0wgRUWhyawYSCcNFGg?=
- =?us-ascii?Q?KiDFrgebk9dDB52VEyWzdRSMg8P+r7F9FOhVya9//aaGrPxqyKL7kcgBClWw?=
- =?us-ascii?Q?TQLAgj29VTuaD0ocRkgUh5KQPMUG5sxoH4u6aj4KYFLpGe+pRVFI+jaWtjRe?=
- =?us-ascii?Q?itnSiA2IgZua2JVZFNJu46AkLI+PY2BBN2aSdWSyeqym4CCvGEfcFX9j0x/A?=
- =?us-ascii?Q?bSY6+hKAt78/KyeRn7OWsy5k9epGCkf9YA5Es9MoTSepxpcJ9mvN6hfDKLpZ?=
- =?us-ascii?Q?u7aCpR38FGO3XcVBuD1TkmDrUAlnfqsZ7aZ4fCdi?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a2bdc6b-3b6f-4109-5275-08da6b19230a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5979.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 13:01:33.3517
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Gy8EsSXX0exOZr9JaRS8tQ3eEOPD6dqPqKeQcMgXALYa588ZYxDxz9LEnqHs7+wF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5832
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thu, Jul 21, 2022 at 09:21:19AM CEST, vikas.gupta@broadcom.com wrote:
+This patch series renames all CMA helpers to DMA helpers - considering the
+hierarchy of APIs (mm/cma -> dma -> gem/fb dma helpers) calling them DMA
+helpers seems to be more applicable.
 
-[...]
+Additionally, commit e57924d4ae80 ("drm/doc: Task to rename CMA helpers")
+requests to rename the CMA helpers and implies that people seem to be confused
+about the naming.
 
->+	/**
->+	 * selftest_run() - Runs a selftest
->+	 * @devlink: Devlink instance
->+	 * @test_id: test index
->+	 * @extack: extack for reporting error messages
->+	 *
->+	 * Return: Result of the test
->+	 */
->+	u8 (*selftest_run)(struct devlink *devlink, int test_id,
+The patches are compile-time tested building a x86_64 kernel with
+`make allyesconfig && make drivers/gpu/drm`.
 
-It should return enum. Make sure you changed the variable type you store
-the test status in.
+Changes in v2:
+  - Fixed up comments for consistent memory/address classification
+    (DMA-contiguous)
+  - Added a patch to rename struct drm_gem_dma_object.{paddr => dma_addr}
 
+Changes in v3:
+  - Use a ccoccinelle script for
+    "drm/gem: rename struct drm_gem_dma_object.{paddr => dma_addr}" for fixing
+    up missing drivers and compile-test on x86_64, arm and arm64.
 
->+			   struct netlink_ext_ack *extack);
-> };
+Changes in v4:
+  - Rebased all patches on drm-misc/drm-misc-next.
 
-[...]
+Changes in v5:
+  - Rebase of v4, meanwhile some merge conflicts came up on
+    drm-misc/drm-misc-next.
+
+Changes in v6:
+  - Added a patch to remove unused include occurances of drm_fb_cma_helper.h
+    in various drivers.
+
+Danilo Krummrich (5):
+  drm/fb: remove unused includes of drm_fb_cma_helper.h
+  drm/fb: rename FB CMA helpers to FB DMA helpers
+  drm/gem: rename GEM CMA helpers to GEM DMA helpers
+  drm/gem: rename struct drm_gem_dma_object.{paddr => dma_addr}
+  drm/todo: remove task to rename CMA helpers
+
+ Documentation/gpu/drm-kms-helpers.rst         |   8 +-
+ Documentation/gpu/drm-mm.rst                  |  16 +-
+ Documentation/gpu/todo.rst                    |  13 -
+ drivers/gpu/drm/Kconfig                       |   4 +-
+ drivers/gpu/drm/Makefile                      |   6 +-
+ drivers/gpu/drm/arm/Kconfig                   |   4 +-
+ drivers/gpu/drm/arm/display/Kconfig           |   2 +-
+ .../arm/display/komeda/komeda_framebuffer.c   |  12 +-
+ .../gpu/drm/arm/display/komeda/komeda_kms.c   |  10 +-
+ drivers/gpu/drm/arm/hdlcd_crtc.c              |   6 +-
+ drivers/gpu/drm/arm/hdlcd_drv.c               |   7 +-
+ drivers/gpu/drm/arm/malidp_drv.c              |   9 +-
+ drivers/gpu/drm/arm/malidp_mw.c               |   8 +-
+ drivers/gpu/drm/arm/malidp_planes.c           |  34 +-
+ drivers/gpu/drm/armada/armada_gem.c           |   6 +-
+ drivers/gpu/drm/aspeed/Kconfig                |   2 +-
+ drivers/gpu/drm/aspeed/aspeed_gfx_crtc.c      |  10 +-
+ drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |   7 +-
+ drivers/gpu/drm/atmel-hlcdc/Kconfig           |   2 +-
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |   6 +-
+ .../gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c   |   8 +-
+ ...rm_fb_cma_helper.c => drm_fb_dma_helper.c} |  67 ++--
+ drivers/gpu/drm/drm_file.c                    |   2 +-
+ drivers/gpu/drm/drm_format_helper.c           |   4 +-
+ ..._gem_cma_helper.c => drm_gem_dma_helper.c} | 302 +++++++++---------
+ drivers/gpu/drm/drm_mipi_dbi.c                |   2 +-
+ drivers/gpu/drm/fsl-dcu/Kconfig               |   2 +-
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |   7 +-
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_kms.c     |   1 -
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_plane.c   |  10 +-
+ drivers/gpu/drm/hisilicon/kirin/Kconfig       |   2 +-
+ .../gpu/drm/hisilicon/kirin/kirin_drm_ade.c   |  14 +-
+ .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |   3 +-
+ drivers/gpu/drm/imx/Kconfig                   |   2 +-
+ drivers/gpu/drm/imx/dcss/Kconfig              |   2 +-
+ drivers/gpu/drm/imx/dcss/dcss-kms.c           |   6 +-
+ drivers/gpu/drm/imx/dcss/dcss-plane.c         |  18 +-
+ drivers/gpu/drm/imx/imx-drm-core.c            |   9 +-
+ drivers/gpu/drm/imx/imx-drm.h                 |   2 +-
+ drivers/gpu/drm/imx/ipuv3-crtc.c              |   3 +-
+ drivers/gpu/drm/imx/ipuv3-plane.c             |  28 +-
+ drivers/gpu/drm/ingenic/Kconfig               |   2 +-
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  14 +-
+ drivers/gpu/drm/ingenic/ingenic-ipu.c         |  12 +-
+ drivers/gpu/drm/kmb/Kconfig                   |   2 +-
+ drivers/gpu/drm/kmb/kmb_drv.c                 |   6 +-
+ drivers/gpu/drm/kmb/kmb_plane.c               |  10 +-
+ drivers/gpu/drm/logicvc/logicvc_crtc.c        |   2 +-
+ drivers/gpu/drm/logicvc/logicvc_drm.c         |  10 +-
+ drivers/gpu/drm/logicvc/logicvc_interface.c   |   2 +-
+ drivers/gpu/drm/logicvc/logicvc_layer.c       |   6 +-
+ drivers/gpu/drm/logicvc/logicvc_mode.c        |   3 +-
+ drivers/gpu/drm/mcde/Kconfig                  |   2 +-
+ drivers/gpu/drm/mcde/mcde_display.c           |   8 +-
+ drivers/gpu/drm/mcde/mcde_drv.c               |  10 +-
+ drivers/gpu/drm/mediatek/Kconfig              |   2 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   2 +-
+ drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   4 +-
+ drivers/gpu/drm/meson/Kconfig                 |   2 +-
+ drivers/gpu/drm/meson/meson_drv.c             |  10 +-
+ drivers/gpu/drm/meson/meson_overlay.c         |  18 +-
+ drivers/gpu/drm/meson/meson_plane.c           |  10 +-
+ drivers/gpu/drm/msm/msm_drv.c                 |   2 +-
+ drivers/gpu/drm/mxsfb/Kconfig                 |   2 +-
+ drivers/gpu/drm/mxsfb/lcdif_drv.c             |   6 +-
+ drivers/gpu/drm/mxsfb/lcdif_kms.c             |   8 +-
+ drivers/gpu/drm/mxsfb/mxsfb_drv.c             |   6 +-
+ drivers/gpu/drm/mxsfb/mxsfb_kms.c             |  34 +-
+ drivers/gpu/drm/panel/Kconfig                 |   2 +-
+ drivers/gpu/drm/panel/panel-ilitek-ili9341.c  |   6 +-
+ drivers/gpu/drm/pl111/Kconfig                 |   2 +-
+ drivers/gpu/drm/pl111/pl111_display.c         |   8 +-
+ drivers/gpu/drm/pl111/pl111_drv.c             |   9 +-
+ drivers/gpu/drm/rcar-du/Kconfig               |   2 +-
+ drivers/gpu/drm/rcar-du/rcar_du_crtc.c        |   3 +-
+ drivers/gpu/drm/rcar-du/rcar_du_drv.c         |   5 +-
+ drivers/gpu/drm/rcar-du/rcar_du_kms.c         |  37 ++-
+ drivers/gpu/drm/rcar-du/rcar_du_plane.c       |  10 +-
+ drivers/gpu/drm/rcar-du/rcar_du_vsp.c         |   8 +-
+ drivers/gpu/drm/rockchip/Kconfig              |   2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.c   |   2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   4 +-
+ drivers/gpu/drm/shmobile/Kconfig              |   2 +-
+ drivers/gpu/drm/shmobile/shmob_drm_crtc.c     |  14 +-
+ drivers/gpu/drm/shmobile/shmob_drm_drv.c      |   6 +-
+ drivers/gpu/drm/shmobile/shmob_drm_kms.c      |   3 +-
+ drivers/gpu/drm/shmobile/shmob_drm_kms.h      |   2 +-
+ drivers/gpu/drm/shmobile/shmob_drm_plane.c    |  14 +-
+ drivers/gpu/drm/solomon/ssd130x.c             |   1 -
+ drivers/gpu/drm/sprd/Kconfig                  |   2 +-
+ drivers/gpu/drm/sprd/sprd_dpu.c               |  10 +-
+ drivers/gpu/drm/sprd/sprd_drm.c               |   6 +-
+ drivers/gpu/drm/sti/Kconfig                   |   2 +-
+ drivers/gpu/drm/sti/sti_cursor.c              |  14 +-
+ drivers/gpu/drm/sti/sti_drv.c                 |   7 +-
+ drivers/gpu/drm/sti/sti_gdp.c                 |  18 +-
+ drivers/gpu/drm/sti/sti_hqvdp.c               |  18 +-
+ drivers/gpu/drm/sti/sti_plane.c               |   3 +-
+ drivers/gpu/drm/stm/Kconfig                   |   2 +-
+ drivers/gpu/drm/stm/drv.c                     |  11 +-
+ drivers/gpu/drm/stm/ltdc.c                    |  16 +-
+ drivers/gpu/drm/sun4i/Kconfig                 |   2 +-
+ drivers/gpu/drm/sun4i/sun4i_backend.c         |  16 +-
+ drivers/gpu/drm/sun4i/sun4i_drv.c             |   9 +-
+ drivers/gpu/drm/sun4i/sun4i_frontend.c        |  26 +-
+ drivers/gpu/drm/sun4i/sun8i_mixer.c           |   3 +-
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.c        |  22 +-
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c        |  22 +-
+ drivers/gpu/drm/tegra/fb.c                    |   2 +-
+ drivers/gpu/drm/tidss/Kconfig                 |   2 +-
+ drivers/gpu/drm/tidss/tidss_crtc.c            |   3 +-
+ drivers/gpu/drm/tidss/tidss_dispc.c           |  28 +-
+ drivers/gpu/drm/tidss/tidss_drv.c             |   6 +-
+ drivers/gpu/drm/tidss/tidss_kms.c             |   1 -
+ drivers/gpu/drm/tidss/tidss_plane.c           |   1 -
+ drivers/gpu/drm/tilcdc/Kconfig                |   2 +-
+ drivers/gpu/drm/tilcdc/tilcdc_crtc.c          |  10 +-
+ drivers/gpu/drm/tilcdc/tilcdc_drv.c           |   6 +-
+ drivers/gpu/drm/tiny/Kconfig                  |  22 +-
+ drivers/gpu/drm/tiny/arcpgu.c                 |  14 +-
+ drivers/gpu/drm/tiny/hx8357d.c                |   6 +-
+ drivers/gpu/drm/tiny/ili9163.c                |   6 +-
+ drivers/gpu/drm/tiny/ili9225.c                |  12 +-
+ drivers/gpu/drm/tiny/ili9341.c                |   6 +-
+ drivers/gpu/drm/tiny/ili9486.c                |   6 +-
+ drivers/gpu/drm/tiny/mi0283qt.c               |   6 +-
+ drivers/gpu/drm/tiny/panel-mipi-dbi.c         |   6 +-
+ drivers/gpu/drm/tiny/repaper.c                |  12 +-
+ drivers/gpu/drm/tiny/st7586.c                 |  12 +-
+ drivers/gpu/drm/tiny/st7735r.c                |   6 +-
+ drivers/gpu/drm/tve200/Kconfig                |   2 +-
+ drivers/gpu/drm/tve200/tve200_display.c       |  12 +-
+ drivers/gpu/drm/tve200/tve200_drv.c           |   7 +-
+ drivers/gpu/drm/v3d/v3d_drv.c                 |   1 -
+ drivers/gpu/drm/v3d/v3d_gem.c                 |   4 +-
+ drivers/gpu/drm/vc4/Kconfig                   |   2 +-
+ drivers/gpu/drm/vc4/vc4_bo.c                  |  46 +--
+ drivers/gpu/drm/vc4/vc4_crtc.c                |  18 +-
+ drivers/gpu/drm/vc4/vc4_drv.c                 |   7 +-
+ drivers/gpu/drm/vc4/vc4_drv.h                 |  18 +-
+ drivers/gpu/drm/vc4/vc4_gem.c                 |  12 +-
+ drivers/gpu/drm/vc4/vc4_irq.c                 |   2 +-
+ drivers/gpu/drm/vc4/vc4_plane.c               |  14 +-
+ drivers/gpu/drm/vc4/vc4_render_cl.c           |  40 +--
+ drivers/gpu/drm/vc4/vc4_txp.c                 |   8 +-
+ drivers/gpu/drm/vc4/vc4_v3d.c                 |   8 +-
+ drivers/gpu/drm/vc4/vc4_validate.c            |  28 +-
+ drivers/gpu/drm/vc4/vc4_validate_shaders.c    |   2 +-
+ drivers/gpu/drm/xlnx/Kconfig                  |   2 +-
+ drivers/gpu/drm/xlnx/zynqmp_disp.c            |   8 +-
+ drivers/gpu/drm/xlnx/zynqmp_dpsub.c           |   8 +-
+ ...rm_fb_cma_helper.h => drm_fb_dma_helper.h} |  10 +-
+ include/drm/drm_gem.h                         |   2 +-
+ ..._gem_cma_helper.h => drm_gem_dma_helper.h} | 158 ++++-----
+ 154 files changed, 887 insertions(+), 919 deletions(-)
+ rename drivers/gpu/drm/{drm_fb_cma_helper.c => drm_fb_dma_helper.c} (60%)
+ rename drivers/gpu/drm/{drm_gem_cma_helper.c => drm_gem_dma_helper.c} (61%)
+ rename include/drm/{drm_fb_cma_helper.h => drm_fb_dma_helper.h} (56%)
+ rename include/drm/{drm_gem_cma_helper.h => drm_gem_dma_helper.h} (53%)
+
+-- 
+2.36.1
+

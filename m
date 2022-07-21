@@ -2,632 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7267357CBE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D804957CBF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiGUN3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        id S229635AbiGUNap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGUN3u (ORCPT
+        with ESMTP id S229549AbiGUNan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:29:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763FD77488;
-        Thu, 21 Jul 2022 06:29:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0324E61EF7;
-        Thu, 21 Jul 2022 13:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB40C3411E;
-        Thu, 21 Jul 2022 13:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658410187;
-        bh=lVg+aeeF5jYiHELidqS55Z+55ei7HQueymUyWTSLmY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UTU+sAyAO1WMQjoLRnRxtPbXL725vY7cTrDt2kHVpAbL1Q2Er8QJtkvhVEztU19gX
-         +uQzHInuBcomGleIQgnfrNk5depEGYxtKVcZPP7xY2qRPJTCJdrj6Y/US+pX9s5My/
-         n7fVsgpbRQJd97jwi5dr0om9YAhN8kzzx2p02Tz7NZU42NJyD/1YBTXoVi/BX2hnTR
-         Jho5h0a6SPD5/KNQ0TuyA3YXTiYH/j3y6/aLoRwQtCGrYeAKkHybc51RGUuxwHRASy
-         a4ZQlqGGxKm3BO+RzZqED1EpmiKv7qFsM7krFtYxbnPGmp8wKV4R7MZFFJNcj3VrR4
-         XRi4T6Y+B0brA==
-Date:   Thu, 21 Jul 2022 18:59:43 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jie Hai <haijie1@huawei.com>
-Cc:     wangzhou1@hisilicon.com, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] dmaengine: hisilicon: Adapt DMA driver to
- HiSilicon IP09
-Message-ID: <YtlUx0lf8ZSfgkff@matsya>
-References: <20220625074422.3479591-1-haijie1@huawei.com>
- <20220629035549.44181-1-haijie1@huawei.com>
- <20220629035549.44181-6-haijie1@huawei.com>
+        Thu, 21 Jul 2022 09:30:43 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140051.outbound.protection.outlook.com [40.107.14.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0647633E22;
+        Thu, 21 Jul 2022 06:30:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JlrGt85k0tAVtrU1cGtqdI3F/E2aqfvHCx0cF9ARrnfDjRM6roypx+mpfhg2d3e8nDHECTqNtmLZDYyl4Y/GRiPDEBs6orrN7KMLNBsB5ufs6fLBdQRB2fzVdZurRgge4X19/wbfJGHvELWjZ9UmyYIhTo75qsMb9UR5E/3HcFuwpXjKQtw4YFsVd7u2SR6ES1lAqIjqJWxn+e+zECOvLx9TF1AeCpkbRFfa2usFe3/4AXluGQ17S5bNw0SPl0fuE/j6rJ3elrrOsk5H6w+rQn6HmQ2HkVpdBwCl6mmXDkX7neSe86nvqD0I8uGY8l7wzXSiScatKlyfsqL8ptoa4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9n/zxedwQEhjwdlYgb4QcReutgQKxUTTm2aIbiZeIS4=;
+ b=EIcxAIrkWf5LYr7DcEGyP8HMOi8SNiPI9kXUgbx4VWWL01Z1mYhx7k8l73U8VLbhsoqHokuW852DSOpEC/7kCT5wvr32gkdfO/qLuST22KbthpnUBOsT0DcWtdl5TgNfWyLWwV0pKb7URdarBrDSOXdEQrXjzf9qMVi+P5nF3wARAF9kYh5mJznNsMp0w2HhK/uj1CkMPinnuAXq9dyYGq+7cYXAtydHRKYVJWpGrvpiRvme29XBrJjhkJs8jBD9kBqwlvXbl+cEdBMfxMeZAIvInxEGOIzaBy7CFuauj9jN+yd4JlWtnIgGuh0p6r562y37pv7/AMSR+TazjdrQ7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9n/zxedwQEhjwdlYgb4QcReutgQKxUTTm2aIbiZeIS4=;
+ b=SD2qVz90CdzuAdIog8upJaeE8VGvQksoCopYQgexFDcb/UN3OldAzKJJDN6w1fgMy16+b1z5VYt+/4RcS1hWIE3ZU70cU3W1w2LcpWbeEv613Z8h8itArNMPuN/ijpe/SBZjdtgma4WYzOmHrAe+2hK9g6VT/tY7pE4U8dF08zk=
+Received: from VI1PR04MB5807.eurprd04.prod.outlook.com (2603:10a6:803:ec::21)
+ by AS8PR04MB8401.eurprd04.prod.outlook.com (2603:10a6:20b:3f3::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 21 Jul
+ 2022 13:30:38 +0000
+Received: from VI1PR04MB5807.eurprd04.prod.outlook.com
+ ([fe80::1df3:3463:6004:6e27]) by VI1PR04MB5807.eurprd04.prod.outlook.com
+ ([fe80::1df3:3463:6004:6e27%4]) with mapi id 15.20.5458.018; Thu, 21 Jul 2022
+ 13:30:37 +0000
+From:   Camelia Alexandra Groza <camelia.groza@nxp.com>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: RE: [PATCH net-next v3 39/47] net: fman: memac: Add serdes support
+Thread-Topic: [PATCH net-next v3 39/47] net: fman: memac: Add serdes support
+Thread-Index: AQHYmJcSjDRhpKy6Qk2ihwHZ5ZBFnq2I17xA
+Date:   Thu, 21 Jul 2022 13:30:37 +0000
+Message-ID: <VI1PR04MB58071192E279070C90F81843F2919@VI1PR04MB5807.eurprd04.prod.outlook.com>
+References: <20220715215954.1449214-1-sean.anderson@seco.com>
+ <20220715215954.1449214-40-sean.anderson@seco.com>
+In-Reply-To: <20220715215954.1449214-40-sean.anderson@seco.com>
+Accept-Language: en-GB, ro-RO, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d142825f-c703-49ab-5ea5-08da6b1d32d1
+x-ms-traffictypediagnostic: AS8PR04MB8401:EE_
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CiIgsNueOg1aacCBqvqjIhx2Lk0Q5W+/bTBI9jk8OFUoi6OGmnmkwgpTWVNZk9/wvef5N+haQ/GPTtt9vRzz1Ktp4r3iiS40oBB0bBlceNQ/rKn7FKZfn4tg2SFjeRmCMDFqE+jcDxQf0zaoVH64qY6iesaz6qleI/cAm3mJEjoPSCS+76bQZ4x9N22nTfdirf0OAIQ04GOhnKdMxOMWasCgOxw45kgjwxEgoUK7/4G5pbQSbT+kvJdWyLFK6lmU2QrN+hAa15w9I7yVmw2XwBBeNDHXgJRrsiuX/rLzzSDPlsKr88UjW1ZUwflavF8IFuF19Cz5GzgavPEFiZwMqz4crpUkHDeDB26ZrE2eG7RbRVYcpRZv2sB2cc5BVRhecWBn3ji4ofpGdP9nQJJRW4lsLx+OjSwWGsbYPyOusioIUALuQ+14VoLKDZ06M3hXk3rA368HhJAM/nV9svk7f4vwZxtSNpqkLwi8eIW20llGUseaR33CNaXfx6+M/AGD2jMpOP4cQRRdzOX3ejewwWZ4U4T32Gib4Ib42IKDtDUj+3PVfoe/Q1IQTC2EUfhAsctnIDLYdFUwnvYGq/xoNvaPbI0HoFUzpcLX98gQ17mtqhStbKnoHMQ5nt1TPLrD2XW+wuVbMPZR/fBrwQkX/JS2TJbw85oZiNrk3VUj/A9QQqfiu/6N3HKsHXcpj185BkbgbEyNCWydX5AArTQicnMZ0+Dki0todNCZN1VnYBOtGEZQo9/uLt0qo+ssfiDlCm177hCcleQB3CfaTWjJ54z0EQLEPwnBHP/8znV2iHU2as+rXMZBa5k+ZQWaSPMg
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5807.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(396003)(39860400002)(366004)(122000001)(33656002)(2906002)(110136005)(54906003)(9686003)(316002)(38100700002)(478600001)(53546011)(7696005)(186003)(8936002)(55016003)(76116006)(8676002)(66556008)(64756008)(4326008)(5660300002)(66476007)(71200400001)(66946007)(26005)(66446008)(38070700005)(86362001)(6506007)(41300700001)(55236004)(83380400001)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AUWKVo7M4HmBNta+L6UMzdz3nfjmIm/J8Vo+KMdDBinUDblU/0QwEe2vWeDu?=
+ =?us-ascii?Q?RppSs2zGKUVa853YgSgnfCAzYmBxjn4GyM7GY3HLxGYqv40iqlDoYcwQ79gv?=
+ =?us-ascii?Q?+5KJ0UBrzoGgKLO4v/KatkpImsefi1fCmv3oQm/yPNMTFK1srxCxnZMrHdt4?=
+ =?us-ascii?Q?OxYdU5g2KJ0CSpDcZS6WI6PKq5Rdp5VEZmBcYgDV3MRXWF0I91/+Dn8NA4Bs?=
+ =?us-ascii?Q?Kw5lRLbL5qnKt7MDiy3FowNn4jqsi07aD7V47cJyBne18IhPBntXI5JDhqqf?=
+ =?us-ascii?Q?3WRlxdh1TJD4iSeRIGIhs70EhHaC2aB9Z7n49PEfs4nvwemDrjMVgqDsrPOX?=
+ =?us-ascii?Q?my4rF7d1JAy//8tJRQnvUS7gQgAMt7pim8J8UMdccGxyetQktrxi3d193hqv?=
+ =?us-ascii?Q?74xo51wtnwUL8zQGNhjp+vNlg4WOloUznp4+QVcKk1Lp1di2Zu9EJN1+35NW?=
+ =?us-ascii?Q?AtYlBlkebFaq0GvA7gGOWxUAOyKbWN7grb8FvJF6BT1scz+5H4BPld1N9gtD?=
+ =?us-ascii?Q?0o25Q2xI6FqpxMkM2hOq5UsAOOWgdojeDEbzfXMbgEi01x1PYwSl5rVJC22q?=
+ =?us-ascii?Q?8eHJ7zbM53JfNjQDoAi7uQe8bjgxTnKSGHkBpQMfqZzNpfVb73TduHFcQ47I?=
+ =?us-ascii?Q?NzGQnyX2L4nCvVzDRNijdeqZHFnbhGCCAKn3/zkC1oEbaQTgm4FOYKrfnZB5?=
+ =?us-ascii?Q?AayhPCd7wbBmWDzsRTe+yfp02GPXk8X8QHFhsF8LSt/UJ9Hnqd2vpTR5wW+R?=
+ =?us-ascii?Q?qQ9YHcoopnrkTC05M4mVIGhJ5mWYFNNdVp9scPMIfE7JpqbcKZO642xxR4bb?=
+ =?us-ascii?Q?Ys4QBTH9BF2vpTMbYharVwJNndLntVSq0ZWqZabKHMsE9NMtkypMW9n94VUt?=
+ =?us-ascii?Q?Etei3vu7cItfe9cW1Vw4fm9kK/NwOHrQvjstbgpPvS/6AxMlU2Sb7WIk+SAj?=
+ =?us-ascii?Q?zRPHGY0Sw4tSQo40BmT9GW9HjOiXFzDa08VGv+zauHC3QxhxZ9KjT/3l9vRa?=
+ =?us-ascii?Q?KM7G/KIys2sGfd2+07ChdLolzBouAEBOgD58KoL+wmA57QqTNdnSrAcuEpp4?=
+ =?us-ascii?Q?sVIFYJJbWLGJ16ATIQ+Y9Rl/dKcpDpzx4iDrHkmm2qsdXByjFM7b1++C8Vio?=
+ =?us-ascii?Q?RVY8fpRaOHJjto6W7GYb8CvYqsD31Ra2mAIr4mhHirs3f4fVb/Y891E7EaAF?=
+ =?us-ascii?Q?mYJS5U2aJzbdHtiVTA0dchCild/NYDdqmCa2EPVWtN4CH5UYPCesgH7gLkgM?=
+ =?us-ascii?Q?sCifHN9WljjbD4Mei6LEj3DDYjjndnJv+kvPGYbZleFAAJBo4CD5uZUVI8ze?=
+ =?us-ascii?Q?O0/EpwMRevlSISlvNLnOcDG8+wPjeQrPtC+Yu3RSwRrzou8ke9E9F8ukJ/LR?=
+ =?us-ascii?Q?ZXTgVtHhJQUrpb+nYgqbiWvb4M6CERhUFq5BdsxCQJ3wzcTFTr1NEgeA4i7H?=
+ =?us-ascii?Q?tZMRUjbS7pske0phYYC3+AdIDvF1Nc3aytcmHT2QjnlZAJmstUi08yRZ4HFA?=
+ =?us-ascii?Q?uAvT5EByYrp7Nt9A8oB6OWgz+E1kdF4M9yxJxkX/xOPH34MQFecbq+wggDI+?=
+ =?us-ascii?Q?1N4PlxjvrxLUtOHrZHbBdOwhgoskihVH/FoM/cp0?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220629035549.44181-6-haijie1@huawei.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5807.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d142825f-c703-49ab-5ea5-08da6b1d32d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 13:30:37.6527
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5rTbba5Lwp94ejpL4yaEVQk25r7hQ/dMGCBaQC4lYGQn5GmcaGX3aXdaJyT5+jjWODiuRdLQgzuojF3Xd0vxxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8401
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-06-22, 11:55, Jie Hai wrote:
-> The HiSilicon IP08 and HiSilicon IP09 are DMA iEPs, they
-> have the same pci device id but different pci revision.
-> Unfortunately, they have different register layouts, so
-> the origin driver cannot run on HiSilicon IP09 correctly.
-> 
-> This patch enables the driver to adapt to HiSilicon IP09.
-> HiSilicon IP09 offers 4 channels, each channel has a send
-> queue, a complete queue and an interrupt to help to do tasks.
-> This DMA engine can do memory copy between memory blocks.
-> 
-> Signed-off-by: Jie Hai <haijie1@huawei.com>
+> -----Original Message-----
+> From: Sean Anderson <sean.anderson@seco.com>
+> Sent: Saturday, July 16, 2022 1:00
+> To: David S . Miller <davem@davemloft.net>; Jakub Kicinski
+> <kuba@kernel.org>; Madalin Bucur <madalin.bucur@nxp.com>;
+> netdev@vger.kernel.org
+> Cc: Paolo Abeni <pabeni@redhat.com>; Eric Dumazet
+> <edumazet@google.com>; linux-arm-kernel@lists.infradead.org; Russell
+> King <linux@armlinux.org.uk>; linux-kernel@vger.kernel.org; Sean Anderson
+> <sean.anderson@seco.com>
+> Subject: [PATCH net-next v3 39/47] net: fman: memac: Add serdes support
+>=20
+> This adds support for using a serdes which has to be configured. This is
+> primarly in preparation for the next commit, which will then change the
+> serdes mode dynamically.
+>=20
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > ---
->  drivers/dma/hisi_dma.c | 382 ++++++++++++++++++++++++++++++++---------
->  1 file changed, 299 insertions(+), 83 deletions(-)
-> 
-> diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c
-> index d5f87ef4a5ee..dc7c59b21114 100644
-> --- a/drivers/dma/hisi_dma.c
-> +++ b/drivers/dma/hisi_dma.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> -/* Copyright(c) 2019 HiSilicon Limited. */
-> +/* Copyright(c) 2019-2022 HiSilicon Limited. */
-> +
->  #include <linux/bitfield.h>
->  #include <linux/dmaengine.h>
->  #include <linux/init.h>
-> @@ -9,35 +10,85 @@
->  #include <linux/spinlock.h>
->  #include "virt-dma.h"
->  
-> -#define HISI_DMA_SQ_BASE_L		0x0
-> -#define HISI_DMA_SQ_BASE_H		0x4
-> -#define HISI_DMA_SQ_DEPTH		0x8
-> -#define HISI_DMA_SQ_TAIL_PTR		0xc
-> -#define HISI_DMA_CQ_BASE_L		0x10
-> -#define HISI_DMA_CQ_BASE_H		0x14
-> -#define HISI_DMA_CQ_DEPTH		0x18
-> -#define HISI_DMA_CQ_HEAD_PTR		0x1c
-> -#define HISI_DMA_CTRL0			0x20
-> -#define HISI_DMA_CTRL0_QUEUE_EN_S	0
-> -#define HISI_DMA_CTRL0_QUEUE_PAUSE_S	4
-> -#define HISI_DMA_CTRL1			0x24
-> -#define HISI_DMA_CTRL1_QUEUE_RESET_S	0
-> -#define HISI_DMA_Q_FSM_STS		0x30
-> -#define HISI_DMA_FSM_STS_MASK		GENMASK(3, 0)
-> -#define HISI_DMA_INT_STS		0x40
-> -#define HISI_DMA_INT_STS_MASK		GENMASK(12, 0)
-> -#define HISI_DMA_INT_MSK		0x44
-> -#define HISI_DMA_MODE			0x217c
-> -#define HISI_DMA_OFFSET			0x100
-> -
-> -#define HISI_DMA_MSI_NUM		32
-> -#define HISI_DMA_CHAN_NUM		30
-> -#define HISI_DMA_Q_DEPTH_VAL		1024
-> -
-> -#define PCI_BAR_2			2
-> -
-> -#define HISI_DMA_POLL_Q_STS_DELAY_US	10
-> -#define HISI_DMA_POLL_Q_STS_TIME_OUT_US	1000
-> +/* HiSilicon DMA register common field define */
-> +#define HISI_DMA_Q_SQ_BASE_L			0x0
-> +#define HISI_DMA_Q_SQ_BASE_H			0x4
-> +#define HISI_DMA_Q_SQ_DEPTH			0x8
-> +#define HISI_DMA_Q_SQ_TAIL_PTR			0xc
-> +#define HISI_DMA_Q_CQ_BASE_L			0x10
-> +#define HISI_DMA_Q_CQ_BASE_H			0x14
-> +#define HISI_DMA_Q_CQ_DEPTH			0x18
-> +#define HISI_DMA_Q_CQ_HEAD_PTR			0x1c
-> +#define HISI_DMA_Q_CTRL0			0x20
-> +#define HISI_DMA_Q_CTRL0_QUEUE_EN		0
-> +#define HISI_DMA_Q_CTRL0_QUEUE_PAUSE		4
-
-Pls use BIT/GENMASK only for register bits
-
-> +#define HISI_DMA_Q_CTRL1			0x24
-> +#define HISI_DMA_Q_CTRL1_QUEUE_RESET		0
-> +#define HISI_DMA_Q_FSM_STS			0x30
-> +#define HISI_DMA_Q_FSM_STS_MASK			GENMASK(3, 0)
-> +#define HISI_DMA_Q_ERR_INT_NUM0			0x84
-> +#define HISI_DMA_Q_ERR_INT_NUM1			0x88
-> +#define HISI_DMA_Q_ERR_INT_NUM2			0x8c
-> +
-> +/* HiSilicon IP08 DMA register and field define */
-> +#define HISI_DMA_HIP08_MODE			0x217C
-> +#define HISI_DMA_HIP08_Q_BASE			0x0
-> +#define HISI_DMA_HIP08_Q_CTRL0_ERR_ABORT_EN	2
-> +#define HISI_DMA_HIP08_Q_INT_STS		0x40
-> +#define HISI_DMA_HIP08_Q_INT_MSK		0x44
-> +#define HISI_DMA_HIP08_Q_INT_STS_MASK		GENMASK(14, 0)
-> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM3		0x90
-> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM4		0x94
-> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM5		0x98
-> +#define HISI_DMA_HIP08_Q_ERR_INT_NUM6		0x48
-> +#define HISI_DMA_HIP08_Q_CTRL0_SQCQ_DRCT	24
-> +
-> +/* HiSilicon IP09 DMA register and field define */
-> +#define HISI_DMA_HIP09_DMA_FLR_DISABLE		0xA00
-> +#define HISI_DMA_HIP09_DMA_FLR_DISABLE_B	0
-> +#define HISI_DMA_HIP09_Q_BASE			0x2000
-> +#define HISI_DMA_HIP09_Q_CTRL0_ERR_ABORT_EN	GENMASK(31, 28)
-> +#define HISI_DMA_HIP09_Q_CTRL0_SQ_DRCT		26
-> +#define HISI_DMA_HIP09_Q_CTRL0_CQ_DRCT		27
-> +#define HISI_DMA_HIP09_Q_CTRL1_VA_ENABLE	2
-> +#define HISI_DMA_HIP09_Q_INT_STS		0x40
-> +#define HISI_DMA_HIP09_Q_INT_MSK		0x44
-> +#define HISI_DMA_HIP09_Q_INT_STS_MASK		0x1
-> +#define HISI_DMA_HIP09_Q_ERR_INT_STS		0x48
-> +#define HISI_DMA_HIP09_Q_ERR_INT_MSK		0x4C
-> +#define HISI_DMA_HIP09_Q_ERR_INT_STS_MASK	GENMASK(18, 1)
-> +#define HISI_DMA_HIP09_PORT_CFG_REG(port_id)	(0x800 + \
-> +						(port_id) * 0x20)
-> +#define HISI_DMA_HIP09_PORT_CFG_LINK_DOWN_MASK_B	16
-> +
-> +#define HISI_DMA_HIP09_MAX_PORT_NUM		16
-> +
-> +#define HISI_DMA_HIP08_MSI_NUM			32
-> +#define HISI_DMA_HIP08_CHAN_NUM			30
-> +#define HISI_DMA_HIP09_MSI_NUM			4
-> +#define HISI_DMA_HIP09_CHAN_NUM			4
-> +#define HISI_DMA_REVISION_HIP08B		0x21
-> +#define HISI_DMA_REVISION_HIP09A		0x30
-> +
-> +#define HISI_DMA_Q_OFFSET			0x100
-> +#define HISI_DMA_Q_DEPTH_VAL			1024
-> +
-> +#define PCI_BAR_2				2
-> +
-> +#define HISI_DMA_POLL_Q_STS_DELAY_US		10
-> +#define HISI_DMA_POLL_Q_STS_TIME_OUT_US		1000
-> +
-> +/*
-> + * The HIP08B(HiSilicon IP08) and HIP09A(HiSilicon IP09) are DMA iEPs, they
-> + * have the same pci device id but different pci revision.
-> + * Unfortunately, they have different register layouts, so two layout
-> + * enumerations are defined.
-> + */
-> +enum hisi_dma_reg_layout {
-> +	HISI_DMA_REG_LAYOUT_INVALID = 0,
-> +	HISI_DMA_REG_LAYOUT_HIP08,
-> +	HISI_DMA_REG_LAYOUT_HIP09
-> +};
->  
->  enum hisi_dma_mode {
->  	EP = 0,
-> @@ -108,9 +159,45 @@ struct hisi_dma_dev {
->  	struct dma_device dma_dev;
->  	u32 chan_num;
->  	u32 chan_depth;
-> +	enum hisi_dma_reg_layout reg_layout;
-> +	void __iomem *queue_base; /* queue region start of register */
->  	struct hisi_dma_chan chan[];
+>=20
+> (no changes since v1)
+>=20
+>  .../net/ethernet/freescale/fman/fman_memac.c  | 48
+> ++++++++++++++++++-
+>  1 file changed, 46 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/freescale/fman/fman_memac.c
+> b/drivers/net/ethernet/freescale/fman/fman_memac.c
+> index 02b3a0a2d5d1..a62fe860b1d0 100644
+> --- a/drivers/net/ethernet/freescale/fman/fman_memac.c
+> +++ b/drivers/net/ethernet/freescale/fman/fman_memac.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/io.h>
+>  #include <linux/phy.h>
+>  #include <linux/phy_fixed.h>
+> +#include <linux/phy/phy.h>
+>  #include <linux/of_mdio.h>
+>=20
+>  /* PCS registers */
+> @@ -324,6 +325,7 @@ struct fman_mac {
+>  	void *fm;
+>  	struct fman_rev_info fm_rev_info;
+>  	bool basex_if;
+> +	struct phy *serdes;
+>  	struct phy_device *pcsphy;
+>  	bool allmulti_enabled;
 >  };
->  
-> +static enum hisi_dma_reg_layout hisi_dma_get_reg_layout(struct pci_dev *pdev)
-> +{
-> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
-> +		return HISI_DMA_REG_LAYOUT_HIP08;
-> +	else if (pdev->revision >= HISI_DMA_REVISION_HIP09A)
-> +		return HISI_DMA_REG_LAYOUT_HIP09;
-> +
-> +	return HISI_DMA_REG_LAYOUT_INVALID;
-> +}
-> +
-> +static u32 hisi_dma_get_chan_num(struct pci_dev *pdev)
-> +{
-> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
-> +		return HISI_DMA_HIP08_CHAN_NUM;
-> +
-> +	return HISI_DMA_HIP09_CHAN_NUM;
-> +}
-> +
-> +static u32 hisi_dma_get_msi_num(struct pci_dev *pdev)
-> +{
-> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
-> +		return HISI_DMA_HIP08_MSI_NUM;
-> +
-> +	return HISI_DMA_HIP09_MSI_NUM;
-> +}
-> +
-> +static u32 hisi_dma_get_queue_base(struct pci_dev *pdev)
-> +{
-> +	if (pdev->revision == HISI_DMA_REVISION_HIP08B)
-> +		return HISI_DMA_HIP08_Q_BASE;
-> +
-> +	return HISI_DMA_HIP09_Q_BASE;
-> +}
-> +
->  static inline struct hisi_dma_chan *to_hisi_dma_chan(struct dma_chan *c)
->  {
->  	return container_of(c, struct hisi_dma_chan, vc.chan);
-> @@ -124,7 +211,7 @@ static inline struct hisi_dma_desc *to_hisi_dma_desc(struct virt_dma_desc *vd)
->  static inline void hisi_dma_chan_write(void __iomem *base, u32 reg, u32 index,
->  				       u32 val)
->  {
-> -	writel_relaxed(val, base + reg + index * HISI_DMA_OFFSET);
-> +	writel_relaxed(val, base + reg + index * HISI_DMA_Q_OFFSET);
->  }
->  
->  static inline void hisi_dma_update_bit(void __iomem *addr, u32 pos, bool val)
-> @@ -139,48 +226,76 @@ static inline void hisi_dma_update_bit(void __iomem *addr, u32 pos, bool val)
->  static void hisi_dma_pause_dma(struct hisi_dma_dev *hdma_dev, u32 index,
->  			       bool pause)
->  {
-> -	void __iomem *addr = hdma_dev->base + HISI_DMA_CTRL0 + index *
-> -			     HISI_DMA_OFFSET;
-> +	void __iomem *addr;
->  
-> -	hisi_dma_update_bit(addr, HISI_DMA_CTRL0_QUEUE_PAUSE_S, pause);
-> +	addr = hdma_dev->queue_base + HISI_DMA_Q_CTRL0 +
-> +	       index * HISI_DMA_Q_OFFSET;
-> +	hisi_dma_update_bit(addr, HISI_DMA_Q_CTRL0_QUEUE_PAUSE, pause);
->  }
->  
->  static void hisi_dma_enable_dma(struct hisi_dma_dev *hdma_dev, u32 index,
->  				bool enable)
->  {
-> -	void __iomem *addr = hdma_dev->base + HISI_DMA_CTRL0 + index *
-> -			     HISI_DMA_OFFSET;
-> +	void __iomem *addr;
->  
-> -	hisi_dma_update_bit(addr, HISI_DMA_CTRL0_QUEUE_EN_S, enable);
-> +	addr = hdma_dev->queue_base + HISI_DMA_Q_CTRL0 +
-> +	       index * HISI_DMA_Q_OFFSET;
-> +	hisi_dma_update_bit(addr, HISI_DMA_Q_CTRL0_QUEUE_EN, enable);
->  }
->  
->  static void hisi_dma_mask_irq(struct hisi_dma_dev *hdma_dev, u32 qp_index)
->  {
-> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_INT_MSK, qp_index,
-> -			    HISI_DMA_INT_STS_MASK);
-> +	void __iomem *q_base = hdma_dev->queue_base;
-> +
-> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08)
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_INT_MSK,
-> +				    qp_index, HISI_DMA_HIP08_Q_INT_STS_MASK);
-> +	else {
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_INT_MSK,
-> +				    qp_index, HISI_DMA_HIP09_Q_INT_STS_MASK);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_ERR_INT_MSK,
-> +				    qp_index,
-> +				    HISI_DMA_HIP09_Q_ERR_INT_STS_MASK);
-> +	}
->  }
->  
->  static void hisi_dma_unmask_irq(struct hisi_dma_dev *hdma_dev, u32 qp_index)
->  {
-> -	void __iomem *base = hdma_dev->base;
-> -
-> -	hisi_dma_chan_write(base, HISI_DMA_INT_STS, qp_index,
-> -			    HISI_DMA_INT_STS_MASK);
-> -	hisi_dma_chan_write(base, HISI_DMA_INT_MSK, qp_index, 0);
-> +	void __iomem *q_base = hdma_dev->queue_base;
-> +
-> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08) {
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_INT_STS,
-> +				    qp_index, HISI_DMA_HIP08_Q_INT_STS_MASK);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_INT_MSK,
-> +				    qp_index, 0);
-> +	} else {
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_INT_STS,
-> +				    qp_index, HISI_DMA_HIP09_Q_INT_STS_MASK);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_ERR_INT_STS,
-> +				    qp_index,
-> +				    HISI_DMA_HIP09_Q_ERR_INT_STS_MASK);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_INT_MSK,
-> +				    qp_index, 0);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP09_Q_ERR_INT_MSK,
-> +				    qp_index, 0);
-> +	}
->  }
->  
->  static void hisi_dma_do_reset(struct hisi_dma_dev *hdma_dev, u32 index)
->  {
-> -	void __iomem *addr = hdma_dev->base + HISI_DMA_CTRL1 + index *
-> -			     HISI_DMA_OFFSET;
-> +	void __iomem *addr;
->  
-> -	hisi_dma_update_bit(addr, HISI_DMA_CTRL1_QUEUE_RESET_S, 1);
-> +	addr = hdma_dev->queue_base +
-> +	       HISI_DMA_Q_CTRL1 + index * HISI_DMA_Q_OFFSET;
-> +	hisi_dma_update_bit(addr, HISI_DMA_Q_CTRL1_QUEUE_RESET, 1);
->  }
->  
->  static void hisi_dma_reset_qp_point(struct hisi_dma_dev *hdma_dev, u32 index)
->  {
-> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_SQ_TAIL_PTR, index, 0);
-> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_CQ_HEAD_PTR, index, 0);
-> +	void __iomem *q_base = hdma_dev->queue_base;
-> +
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_TAIL_PTR, index, 0);
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR, index, 0);
->  }
->  
->  static void hisi_dma_reset_or_disable_hw_chan(struct hisi_dma_chan *chan,
-> @@ -195,11 +310,11 @@ static void hisi_dma_reset_or_disable_hw_chan(struct hisi_dma_chan *chan,
->  	hisi_dma_enable_dma(hdma_dev, index, false);
->  	hisi_dma_mask_irq(hdma_dev, index);
->  
-> -	addr = hdma_dev->base +
-> -	       HISI_DMA_Q_FSM_STS + index * HISI_DMA_OFFSET;
-> +	addr = hdma_dev->queue_base +
-> +	       HISI_DMA_Q_FSM_STS + index * HISI_DMA_Q_OFFSET;
->  
->  	ret = readl_relaxed_poll_timeout(addr, tmp,
-> -		FIELD_GET(HISI_DMA_FSM_STS_MASK, tmp) != RUN,
-> +		FIELD_GET(HISI_DMA_Q_FSM_STS_MASK, tmp) != RUN,
->  		HISI_DMA_POLL_Q_STS_DELAY_US,
->  		HISI_DMA_POLL_Q_STS_TIME_OUT_US);
->  	if (ret) {
-> @@ -217,7 +332,7 @@ static void hisi_dma_reset_or_disable_hw_chan(struct hisi_dma_chan *chan,
+> @@ -1203,17 +1205,55 @@ int memac_initialization(struct mac_device
+> *mac_dev,
+>  		}
 >  	}
->  
->  	ret = readl_relaxed_poll_timeout(addr, tmp,
-> -		FIELD_GET(HISI_DMA_FSM_STS_MASK, tmp) == IDLE,
-> +		FIELD_GET(HISI_DMA_Q_FSM_STS_MASK, tmp) == IDLE,
->  		HISI_DMA_POLL_Q_STS_DELAY_US,
->  		HISI_DMA_POLL_Q_STS_TIME_OUT_US);
->  	if (ret) {
-> @@ -300,8 +415,8 @@ static void hisi_dma_start_transfer(struct hisi_dma_chan *chan)
->  	chan->sq_tail = (chan->sq_tail + 1) % hdma_dev->chan_depth;
->  
->  	/* update sq_tail to trigger a new task */
-> -	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_SQ_TAIL_PTR, chan->qp_num,
-> -			    chan->sq_tail);
-> +	hisi_dma_chan_write(hdma_dev->queue_base, HISI_DMA_Q_SQ_TAIL_PTR,
-> +			    chan->qp_num, chan->sq_tail);
->  }
->  
->  static void hisi_dma_issue_pending(struct dma_chan *c)
-> @@ -375,26 +490,86 @@ static int hisi_dma_alloc_qps_mem(struct hisi_dma_dev *hdma_dev)
->  static void hisi_dma_init_hw_qp(struct hisi_dma_dev *hdma_dev, u32 index)
->  {
->  	struct hisi_dma_chan *chan = &hdma_dev->chan[index];
-> +	void __iomem *q_base = hdma_dev->queue_base;
->  	u32 hw_depth = hdma_dev->chan_depth - 1;
-> -	void __iomem *base = hdma_dev->base;
-> +	void __iomem *addr;
-> +	u32 tmp;
->  
->  	/* set sq, cq base */
-> -	hisi_dma_chan_write(base, HISI_DMA_SQ_BASE_L, index,
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_BASE_L, index,
->  			    lower_32_bits(chan->sq_dma));
-> -	hisi_dma_chan_write(base, HISI_DMA_SQ_BASE_H, index,
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_BASE_H, index,
->  			    upper_32_bits(chan->sq_dma));
-> -	hisi_dma_chan_write(base, HISI_DMA_CQ_BASE_L, index,
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_BASE_L, index,
->  			    lower_32_bits(chan->cq_dma));
-> -	hisi_dma_chan_write(base, HISI_DMA_CQ_BASE_H, index,
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_BASE_H, index,
->  			    upper_32_bits(chan->cq_dma));
->  
->  	/* set sq, cq depth */
-> -	hisi_dma_chan_write(base, HISI_DMA_SQ_DEPTH, index, hw_depth);
-> -	hisi_dma_chan_write(base, HISI_DMA_CQ_DEPTH, index, hw_depth);
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_DEPTH, index, hw_depth);
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_DEPTH, index, hw_depth);
->  
->  	/* init sq tail and cq head */
-> -	hisi_dma_chan_write(base, HISI_DMA_SQ_TAIL_PTR, index, 0);
-> -	hisi_dma_chan_write(base, HISI_DMA_CQ_HEAD_PTR, index, 0);
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_SQ_TAIL_PTR, index, 0);
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR, index, 0);
-> +
-> +	/* init error interrupt stats */
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_ERR_INT_NUM0, index, 0);
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_ERR_INT_NUM1, index, 0);
-> +	hisi_dma_chan_write(q_base, HISI_DMA_Q_ERR_INT_NUM2, index, 0);
-> +
-> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08) {
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM3,
-> +				    index, 0);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM4,
-> +				    index, 0);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM5,
-> +				    index, 0);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_HIP08_Q_ERR_INT_NUM6,
-> +				    index, 0);
-> +		/*
-> +		 * init SQ/CQ direction selecting register.
-> +		 * "0" is to local side and "1" is to remote side.
-> +		 */
-> +		addr = q_base + HISI_DMA_Q_CTRL0 + index * HISI_DMA_Q_OFFSET;
-> +		hisi_dma_update_bit(addr, HISI_DMA_HIP08_Q_CTRL0_SQCQ_DRCT, 0);
-> +
-> +		/*
-> +		 * 0 - Continue to next descriptor if error occurs.
-> +		 * 1 - Abort the DMA queue if error occurs.
-> +		 */
-> +		hisi_dma_update_bit(addr,
-> +				    HISI_DMA_HIP08_Q_CTRL0_ERR_ABORT_EN, 0);
+>=20
+> +	memac->serdes =3D devm_of_phy_get(mac_dev->dev, mac_node,
+> "serdes");
+
+devm_of_phy_get returns -ENOSYS on PPC builds because CONFIG_GENERIC_PHY is=
+n't
+enabled by default. Please add a dependency.
+
+> +	if (PTR_ERR(memac->serdes) =3D=3D -ENODEV) {
+> +		memac->serdes =3D NULL;
+> +	} else if (IS_ERR(memac->serdes)) {
+> +		err =3D PTR_ERR(memac->serdes);
+> +		dev_err_probe(mac_dev->dev, err, "could not get
+> serdes\n");
+> +		goto _return_fm_mac_free;
 > +	} else {
-> +		addr = q_base + HISI_DMA_Q_CTRL0 + index * HISI_DMA_Q_OFFSET;
+> +		err =3D phy_init(memac->serdes);
+> +		if (err) {
+> +			dev_err_probe(mac_dev->dev, err,
+> +				      "could not initialize serdes\n");
+> +			goto _return_fm_mac_free;
+> +		}
 > +
-> +		/*
-> +		 * init SQ/CQ direction selecting register.
-> +		 * "0" is to local side and "1" is to remote side.
-> +		 */
-> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_Q_CTRL0_SQ_DRCT, 0);
-> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_Q_CTRL0_CQ_DRCT, 0);
+> +		err =3D phy_power_on(memac->serdes);
+> +		if (err) {
+> +			dev_err_probe(mac_dev->dev, err,
+> +				      "could not power on serdes\n");
+> +			goto _return_phy_exit;
+> +		}
 > +
-> +		/*
-> +		 * 0 - Continue to next descriptor if error occurs.
-> +		 * 1 - Abort the DMA queue if error occurs.
-> +		 */
-> +
-> +		tmp = readl_relaxed(addr);
-> +		tmp &= ~HISI_DMA_HIP09_Q_CTRL0_ERR_ABORT_EN;
-> +		writel_relaxed(tmp, addr);
-> +
-> +		/*
-> +		 * 0 - dma should process FLR whith CPU.
-> +		 * 1 - dma not process FLR, only cpu process FLR.
-> +		 */
-> +		addr = q_base + HISI_DMA_HIP09_DMA_FLR_DISABLE +
-> +		       index * HISI_DMA_Q_OFFSET;
-> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_DMA_FLR_DISABLE_B, 0);
-> +
-> +		addr = q_base + HISI_DMA_Q_CTRL1 + index * HISI_DMA_Q_OFFSET;
-> +		hisi_dma_update_bit(addr, HISI_DMA_HIP09_Q_CTRL1_VA_ENABLE, 1);
-> +	}
->  }
->  
->  static void hisi_dma_enable_qp(struct hisi_dma_dev *hdma_dev, u32 qp_index)
-> @@ -438,17 +613,18 @@ static irqreturn_t hisi_dma_irq(int irq, void *data)
->  	struct hisi_dma_dev *hdma_dev = chan->hdma_dev;
->  	struct hisi_dma_desc *desc;
->  	struct hisi_dma_cqe *cqe;
-> +	void __iomem *q_base;
->  
->  	spin_lock(&chan->vc.lock);
->  
->  	desc = chan->desc;
->  	cqe = chan->cq + chan->cq_head;
-> +	q_base = hdma_dev->queue_base;
->  	if (desc) {
->  		chan->cq_head = (chan->cq_head + 1) %
->  				hdma_dev->chan_depth;
-> -		hisi_dma_chan_write(hdma_dev->base,
-> -				    HISI_DMA_CQ_HEAD_PTR, chan->qp_num,
-> -				    chan->cq_head);
-> +		hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
-> +				    chan->qp_num, chan->cq_head);
->  		if (FIELD_GET(STATUS_MASK, cqe->w0) == STATUS_SUCC) {
->  			vchan_cookie_complete(&desc->vd);
->  			hisi_dma_start_transfer(chan);
-> @@ -508,16 +684,58 @@ static void hisi_dma_disable_hw_channels(void *data)
->  static void hisi_dma_set_mode(struct hisi_dma_dev *hdma_dev,
->  			      enum hisi_dma_mode mode)
->  {
-> -	writel_relaxed(mode == RC ? 1 : 0, hdma_dev->base + HISI_DMA_MODE);
-> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP08)
-> +		writel_relaxed(mode == RC ? 1 : 0,
-> +			       hdma_dev->base + HISI_DMA_HIP08_MODE);
-> +}
-> +
-> +static void hisi_dma_init_hw(struct hisi_dma_dev *hdma_dev)
-> +{
-> +	void __iomem *addr;
-> +	int i;
-> +
-> +	if (hdma_dev->reg_layout == HISI_DMA_REG_LAYOUT_HIP09) {
-> +		for (i = 0; i < HISI_DMA_HIP09_MAX_PORT_NUM; i++) {
-> +			addr = hdma_dev->base + HISI_DMA_HIP09_PORT_CFG_REG(i);
-> +			hisi_dma_update_bit(addr,
-> +				HISI_DMA_HIP09_PORT_CFG_LINK_DOWN_MASK_B, 1);
+> +		if (memac->phy_if =3D=3D PHY_INTERFACE_MODE_SGMII ||
+> +		    memac->phy_if =3D=3D PHY_INTERFACE_MODE_1000BASEX ||
+> +		    memac->phy_if =3D=3D PHY_INTERFACE_MODE_2500BASEX ||
+> +		    memac->phy_if =3D=3D PHY_INTERFACE_MODE_QSGMII ||
+> +		    memac->phy_if =3D=3D PHY_INTERFACE_MODE_XGMII) {
+> +			err =3D phy_set_mode_ext(memac->serdes,
+> PHY_MODE_ETHERNET,
+> +					       memac->phy_if);
+> +			if (err) {
+> +				dev_err_probe(mac_dev->dev, err,
+> +					      "could not set serdes mode
+> to %s\n",
+> +					      phy_modes(memac->phy_if));
+> +				goto _return_phy_power_off;
+> +			}
 > +		}
 > +	}
-> +}
 > +
-> +static void hisi_dma_init_dma_dev(struct hisi_dma_dev *hdma_dev)
-> +{
-> +	struct dma_device *dma_dev;
-> +
-> +	dma_dev = &hdma_dev->dma_dev;
-> +	dma_cap_set(DMA_MEMCPY, dma_dev->cap_mask);
-> +	dma_dev->device_free_chan_resources = hisi_dma_free_chan_resources;
-> +	dma_dev->device_prep_dma_memcpy = hisi_dma_prep_dma_memcpy;
-> +	dma_dev->device_tx_status = hisi_dma_tx_status;
-> +	dma_dev->device_issue_pending = hisi_dma_issue_pending;
-> +	dma_dev->device_terminate_all = hisi_dma_terminate_all;
-> +	dma_dev->device_synchronize = hisi_dma_synchronize;
-> +	dma_dev->directions = BIT(DMA_MEM_TO_MEM);
-> +	dma_dev->dev = &hdma_dev->pdev->dev;
-> +	INIT_LIST_HEAD(&dma_dev->channels);
->  }
->  
->  static int hisi_dma_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
-> +	enum hisi_dma_reg_layout reg_layout;
->  	struct device *dev = &pdev->dev;
->  	struct hisi_dma_dev *hdma_dev;
->  	struct dma_device *dma_dev;
-> +	u32 chan_num;
-> +	u32 msi_num;
->  	int ret;
->  
-> +	reg_layout = hisi_dma_get_reg_layout(pdev);
-> +	if (reg_layout == HISI_DMA_REG_LAYOUT_INVALID) {
-> +		dev_err(dev, "unsupported device!\n");
-> +		return -EINVAL;
-> +	}
-> +
->  	ret = pcim_enable_device(pdev);
->  	if (ret) {
->  		dev_err(dev, "failed to enable device mem!\n");
-> @@ -534,40 +752,37 @@ static int hisi_dma_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (ret)
->  		return ret;
->  
-> -	hdma_dev = devm_kzalloc(dev, struct_size(hdma_dev, chan, HISI_DMA_CHAN_NUM), GFP_KERNEL);
-> +	chan_num = hisi_dma_get_chan_num(pdev);
-> +	hdma_dev = devm_kzalloc(dev, struct_size(hdma_dev, chan, chan_num),
-> +				GFP_KERNEL);
->  	if (!hdma_dev)
->  		return -EINVAL;
->  
->  	hdma_dev->base = pcim_iomap_table(pdev)[PCI_BAR_2];
->  	hdma_dev->pdev = pdev;
-> -	hdma_dev->chan_num = HISI_DMA_CHAN_NUM;
->  	hdma_dev->chan_depth = HISI_DMA_Q_DEPTH_VAL;
-> +	hdma_dev->chan_num = chan_num;
-> +	hdma_dev->reg_layout = reg_layout;
-> +	hdma_dev->queue_base = hdma_dev->base + hisi_dma_get_queue_base(pdev);
->  
->  	pci_set_drvdata(pdev, hdma_dev);
->  	pci_set_master(pdev);
->  
-> +	msi_num = hisi_dma_get_msi_num(pdev);
-> +
->  	/* This will be freed by 'pcim_release()'. See 'pcim_enable_device()' */
-> -	ret = pci_alloc_irq_vectors(pdev, HISI_DMA_MSI_NUM, HISI_DMA_MSI_NUM,
-> -				    PCI_IRQ_MSI);
-> +	ret = pci_alloc_irq_vectors(pdev, msi_num, msi_num, PCI_IRQ_MSI);
->  	if (ret < 0) {
->  		dev_err(dev, "Failed to allocate MSI vectors!\n");
->  		return ret;
->  	}
->  
-> -	dma_dev = &hdma_dev->dma_dev;
-> -	dma_cap_set(DMA_MEMCPY, dma_dev->cap_mask);
-> -	dma_dev->device_free_chan_resources = hisi_dma_free_chan_resources;
-> -	dma_dev->device_prep_dma_memcpy = hisi_dma_prep_dma_memcpy;
-> -	dma_dev->device_tx_status = hisi_dma_tx_status;
-> -	dma_dev->device_issue_pending = hisi_dma_issue_pending;
-> -	dma_dev->device_terminate_all = hisi_dma_terminate_all;
-> -	dma_dev->device_synchronize = hisi_dma_synchronize;
-> -	dma_dev->directions = BIT(DMA_MEM_TO_MEM);
-> -	dma_dev->dev = dev;
-> -	INIT_LIST_HEAD(&dma_dev->channels);
-> +	hisi_dma_init_dma_dev(hdma_dev);
->  
->  	hisi_dma_set_mode(hdma_dev, RC);
->  
-> +	hisi_dma_init_hw(hdma_dev);
-> +
->  	ret = hisi_dma_enable_hw_channels(hdma_dev);
->  	if (ret < 0) {
->  		dev_err(dev, "failed to enable hw channel!\n");
-> @@ -579,6 +794,7 @@ static int hisi_dma_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (ret)
->  		return ret;
->  
-> +	dma_dev = &hdma_dev->dma_dev;
->  	ret = dmaenginem_async_device_register(dma_dev);
->  	if (ret < 0)
->  		dev_err(dev, "failed to register device!\n");
-> -- 
-> 2.33.0
+>  	if (!mac_dev->phy_node && of_phy_is_fixed_link(mac_node)) {
+>  		struct phy_device *phy;
+>=20
+>  		err =3D of_phy_register_fixed_link(mac_node);
+>  		if (err)
+> -			goto _return_fm_mac_free;
+> +			goto _return_phy_power_off;
+>=20
+>  		fixed_link =3D kzalloc(sizeof(*fixed_link), GFP_KERNEL);
+>  		if (!fixed_link) {
+>  			err =3D -ENOMEM;
+> -			goto _return_fm_mac_free;
+> +			goto _return_phy_power_off;
+>  		}
+>=20
+>  		mac_dev->phy_node =3D of_node_get(mac_node);
+> @@ -1242,6 +1282,10 @@ int memac_initialization(struct mac_device
+> *mac_dev,
+>=20
+>  	goto _return;
+>=20
+> +_return_phy_power_off:
+> +	phy_power_off(memac->serdes);
+> +_return_phy_exit:
+> +	phy_exit(memac->serdes);
+>  _return_fixed_link_free:
+>  	kfree(fixed_link);
 
--- 
-~Vinod
+_return_fixed_link_free should execute before _return_phy_power_off and _re=
+turn_phy_exit
+
+>  _return_fm_mac_free:
+> --
+> 2.35.1.1320.gc452695387.dirty
+

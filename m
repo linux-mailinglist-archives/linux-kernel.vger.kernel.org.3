@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BC357C6D1
+	by mail.lfdr.de (Postfix) with ESMTP id 662A857C6D0
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiGUIu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S232560AbiGUIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbiGUIuT (ORCPT
+        with ESMTP id S232240AbiGUIuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:50:19 -0400
+        Thu, 21 Jul 2022 04:50:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14F364DD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EA964DC
         for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:50:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87560B8239A
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75A0AB8238A
         for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 10101C341CE;
-        Thu, 21 Jul 2022 08:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F2F49C3411E;
+        Thu, 21 Jul 2022 08:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1658393416;
-        bh=fJEbxj/rLvARqpZfUp6BagahrLnkUsF2v0RN86pTDVE=;
+        bh=RR5j2KJQJeiVePJADOKQ9hMt9OPnVOD2Ib5XrtYAZrQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FgqOVNjdr3+5kUXtlfmfgR2ts/rl/UP5B0lSbv5uqKFCNbuRtsb7eRIbzZYIl4tYm
-         Wpi0SZbUL3SiXPyG+wjXsUriIfyzXiAlLLRzLiuJfXIRoJntN3zpw62GP24NsF+AuQ
-         xOGoeVszdxGby9ocbXQ/0eOUcjH8IOrQJkXxfCRNhWac+azi5AABOsGPtW2doAevyG
-         52AlvsgmWvXxZr2PrJ1GAMH/f58RByerTt5heLAn+Pkg0U9pYSRrjGLrqPGDuDGNBh
-         x1ct4xjIp4NaBM1xhI2ttknt6jJYqsSmN8ADglHsNCMME+6Ef1dwxuAfl/X7j4a4LW
-         51Z54gi1op2vQ==
+        b=aruA412GpHrUMTS71ZaAnMvzt6fPY4NFuENRLikWh5qk6lJYJU7WmTEtP3u45HHB4
+         zTemcXO7JIZ04L1TicUuWfrSDd0S60IfMpTDlwwikzgmJnCI2iw/pjyr7L1GVJW+Mt
+         HvxKwXqrJAaWAEg6eo2JsUblsbRfUcH+j2KpYoRDjfLnWd+rw1fnDLcYMN2KRlOyZt
+         yM7gRpqp9I5trgat3FHy6f6IgQWyv0wG3pBGlV9aOtRcM2bl30VzvaG0XQHBukqdm3
+         /Ktp3U9uzCr2bSrIbYS0wigv3gFI3+W5QE8blax6GXDDeXpID0f/lVPIr4TgPNURB8
+         YFAgVP8GKDSOg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8DCCE451BD;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAE3EE451B9;
         Thu, 21 Jul 2022 08:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] platform/chrome: cros_kbd_led_backlight: fix build warning
+Subject: Re: [PATCH v2 00/10] platform/chrome: Kunit tests and refactor for
+ cros_ec_cmd_xfer()
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165839341595.29073.14151139321094625998.git-patchwork-notify@kernel.org>
+Message-Id: <165839341589.29073.1144007082391930309.git-patchwork-notify@kernel.org>
 Date:   Thu, 21 Jul 2022 08:50:15 +0000
-References: <20220718105047.2356542-1-tzungbi@kernel.org>
-In-Reply-To: <20220718105047.2356542-1-tzungbi@kernel.org>
+References: <20220718050914.2267370-1-tzungbi@kernel.org>
+In-Reply-To: <20220718050914.2267370-1-tzungbi@kernel.org>
 To:     Tzung-Bi Shih <tzungbi@kernel.org>
 Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        lkp@intel.com
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,26 +59,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to chrome-platform/linux.git (for-next)
+This series was applied to chrome-platform/linux.git (for-next)
 by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-On Mon, 18 Jul 2022 10:50:47 +0000 you wrote:
-> drivers/platform/chrome/cros_kbd_led_backlight.c got a new build warning
-> when using the randconfig in [1]:
-> >>> warning: unused variable 'keyboard_led_drvdata_ec_pwm'
+On Mon, 18 Jul 2022 05:09:04 +0000 you wrote:
+> The 1st patch fixes an issue that cros_kunit_ec_xfer_mock() could return
+> garbage bytes for `msg->result` if the mock list is empty.
 > 
-> The warning happens when CONFIG_CROS_EC is set but CONFIG_OF is not set.
-> Reproduce:
-> - mkdir build_dir
-> - wget [1] -O build_dir/.config
-> - COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 \
->   O=build_dir ARCH=s390 SHELL=/bin/bash drivers/platform/chrome/
+> The 2nd ~ 6th patches add Kunit tests and refactors for cros_ec_cmd_xfer().
+> 
+> The last 4 patches change the behavior a bit by altering return codes.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] platform/chrome: cros_kbd_led_backlight: fix build warning
-    https://git.kernel.org/chrome-platform/c/7e76e4bc0099
+  - [v2,01/10] platform/chrome: cros_kunit_util: add default value for `msg->result`
+    (no matching commit)
+  - [v2,02/10] platform/chrome: cros_ec_proto: add "cros_ec_" prefix to send_command()
+    https://git.kernel.org/chrome-platform/c/d311664b9057
+  - [v2,03/10] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_cmd_xfer()
+    https://git.kernel.org/chrome-platform/c/82f4def2d822
+  - [v2,04/10] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_send_command()
+    (no matching commit)
+  - [v2,05/10] platform/chrome: cros_ec_proto: separate cros_ec_xfer_command()
+    https://git.kernel.org/chrome-platform/c/810be30d27bd
+  - [v2,06/10] platform/chrome: cros_ec_proto: separate cros_ec_wait_until_complete()
+    https://git.kernel.org/chrome-platform/c/0aad9aff6a64
+  - [v2,07/10] platform/chrome: cros_ec_proto: change Kunit expectation when timed out
+    https://git.kernel.org/chrome-platform/c/00eb36d52872
+  - [v2,08/10] platform/chrome: cros_ec_proto: return -EAGAIN when retries timed out
+    https://git.kernel.org/chrome-platform/c/7f95d2b68b9a
+  - [v2,09/10] platform/chrome: cros_ec_proto: add Kunit test for empty payload
+    https://git.kernel.org/chrome-platform/c/82c9b7ed8c5c
+  - [v2,10/10] platform/chrome: cros_ec_proto: return -EPROTO if empty payload
+    https://git.kernel.org/chrome-platform/c/3e1c715ea179
 
 You are awesome, thank you!
 -- 

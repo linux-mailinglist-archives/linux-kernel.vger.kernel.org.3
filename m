@@ -2,112 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1FE57C1CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFF457C1CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbiGUBAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 21:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S230404AbiGUBE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 21:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiGUBA0 (ORCPT
+        with ESMTP id S229576AbiGUBE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 21:00:26 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5139C14016;
-        Wed, 20 Jul 2022 18:00:23 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so3678470pjq.4;
-        Wed, 20 Jul 2022 18:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cE98CASMbH5mx65VuYel96FPiYp84qn1nOJorTFAy+A=;
-        b=PcvjKGlO0ZnIRTCObWKULvH0h7EFXO+hUWezU3GGHK46jKXG8s9MkP7kpv7OF3RoI3
-         4EazV0j6IdHVP5Qorosbxtkd25MublbGf9Z26/iVy4utxO4GIR/MNVLXg5s+y0ytDcxp
-         GIxqiuJIb6AQYKB25jyNRQe9qOOldYsDAQbOM7WYzY8DDI8akb2YoIHeRtJ35Ym7e/Wd
-         wulVKE4cFQvYtFhF+eEwf/2a4Tl0r6E/VVc3mgmhCC/CnfvT2e9vVelPReAiLpRKMLM4
-         9PaLoscm0HcJr+wEZEQWInHHedmfr+PUQ3udmwDmPGJ6jSIG6HyuNFwEXre7lILWO7y+
-         Jlfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cE98CASMbH5mx65VuYel96FPiYp84qn1nOJorTFAy+A=;
-        b=ual290GypQKO+2dkK65kIuIiOcVIgm5A16sJj0WjpnlAhhzhvEYbMaOiRJ/nMM35sw
-         TefVkLfKz3Ff5QrmsnuDU3Zquf8W4SHMB0KA/7Q36zDZLYl9wWQLD05WjIZdtZXEk5XF
-         yww8IGMu60BzWRQX24qiLKJGsIZTcIh79oRBhizcVO+YcmojWuyNjVlo4w7lfal0F4HB
-         hTORBPZJQHt+9qMMfiGEvS9ihH+4MkrvJQa9kpFy7fjislTiMFI26Z/F9f/TAD7LNE/z
-         FMZZcnzGO6CQnA7NE3Wd7eyL7ySyPNEJzbX4AR5oLgnSO86cfCUW7YVDEIPyhBstZfBX
-         O0Rg==
-X-Gm-Message-State: AJIora9qBwoik0CCFAW/H/OgypMoEu/KKI6PyZw9mZ+frqzGTGUScRuT
-        TJv837NuN3gXQ8dVei2o4oY=
-X-Google-Smtp-Source: AGRyM1vFZnNRdBqA+FcKcKAPaI4/ri5Y0FLeviGuRwjH4lFRhkMkDQ4e2y2Woe3VqB+T2IJUenKg/Q==
-X-Received: by 2002:a17:902:f683:b0:16c:3752:e332 with SMTP id l3-20020a170902f68300b0016c3752e332mr41156086plg.18.1658365222687;
-        Wed, 20 Jul 2022 18:00:22 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 24-20020a630f58000000b00419b66846fcsm100870pgp.91.2022.07.20.18.00.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 18:00:22 -0700 (PDT)
-Message-ID: <62d8a526.1c69fb81.e02e3.04ac@mx.google.com>
-X-Google-Original-Message-ID: <20220721010020.GA1498096@cgel.zte@gmail.com>
-Date:   Thu, 21 Jul 2022 01:00:20 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     viro@zeniv.linux.org.uk, hughd@google.com,
-        akpm@linux-foundation.org, hch@infradead.org,
-        hsiangkao@linux.alibaba.com, yang.yang29@zte.com.cn,
-        axboe@kernel.dk, yangerkun@huawei.com, johannes.thumshirn@wdc.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Ran Xiaokai <ran.xiaokai@zte.com.cn>
-Subject: Re: [PATCH] fs: drop_caches: skip dropping pagecache which is always
- dirty
-References: <20220720022118.1495752-1-yang.yang29@zte.com.cn>
- <YtdwULpWfSR3JI/u@casper.infradead.org>
- <62d79a79.1c69fb81.e4cba.37f5@mx.google.com>
- <YtgY7CEWvcqywK1/@casper.infradead.org>
+        Wed, 20 Jul 2022 21:04:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E73753B0;
+        Wed, 20 Jul 2022 18:04:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AE5D61E98;
+        Thu, 21 Jul 2022 01:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E982EC3411E;
+        Thu, 21 Jul 2022 01:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658365496;
+        bh=xtz5ThvICiGLhs5j2JUYNvuutyA8eNYp/HsIoNyGRbw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=GDE79V/l0IRvcZFyJW0SEqPayouMw81ZDs7yLveENn6Tide4lKj4CNxGg/96nkoji
+         GznMiS8dNrFlmcWOsCUjOoMOdMu5kC0QiEVvcnkLlV69pSN5CGxRcX1hJaOYJlAHaR
+         T3AxRq5PGiGMx3PHlFxcWnYbGRM8fn+QmJc8M1r2M/HuIcr8QXfNAHlwsFFVl1zp/n
+         VzPUup3p6ERqTbepsB0+5qwQMQFTK/zVYjqBiwwuiMX33Zr9ZlSX8Fdf4VW9ZL+X6i
+         hPKpZlbOf4CDFlysDhyl6776yPDTOkUZVKvtCBPKVOYqasGLykIx8GVm8dQ+kev2Yh
+         6VzhrpdJimTxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 850D05C054C; Wed, 20 Jul 2022 18:04:55 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 18:04:55 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Brian Foster <bfoster@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>
+Subject: Re: [PATCH rcu 04/12] rcu: Switch polled grace-period APIs to
+ ->gp_seq_polled
+Message-ID: <20220721010455.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225128.3842050-4-paulmck@kernel.org>
+ <Ytijki0fkkyKaD9u@boqun-archlinux>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YtgY7CEWvcqywK1/@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Ytijki0fkkyKaD9u@boqun-archlinux>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 04:02:04PM +0100, Matthew Wilcox wrote:
-> On Wed, Jul 20, 2022 at 06:02:32AM +0000, CGEL wrote:
-> > On Wed, Jul 20, 2022 at 04:02:40AM +0100, Matthew Wilcox wrote:
-> > > On Wed, Jul 20, 2022 at 02:21:19AM +0000, cgel.zte@gmail.com wrote:
-> > > > From: Yang Yang <yang.yang29@zte.com.cn>
-> > > > 
-> > > > Pagecache of some kind of fs has PG_dirty bit set once it was
-> > > > allocated, so it can't be dropped. These fs include ramfs and
-> > > > tmpfs. This can make drop_pagecache_sb() more efficient.
-> > > 
-> > > Why do we want to make drop_pagecache_sb() more efficient?
+On Wed, Jul 20, 2022 at 05:53:38PM -0700, Boqun Feng wrote:
+> Hi Paul,
+> 
+> On Mon, Jun 20, 2022 at 03:51:20PM -0700, Paul E. McKenney wrote:
+> > This commit switches the existing polled grace-period APIs to use a
+> > new ->gp_seq_polled counter in the rcu_state structure.  An additional
+> > ->gp_seq_polled_snap counter in that same structure allows the normal
+> > grace period kthread to interact properly with the !SMP !PREEMPT fastpath
+> > through synchronize_rcu().  The first of the two to note the end of a
+> > given grace period will make knowledge of this transition available to
+> > the polled API.
 > > 
-> > Some users may use drop_caches besides testing or debugging.
+> > This commit is in preparation for polled expedited grace periods.
+> > 
+> > Link: https://lore.kernel.org/all/20220121142454.1994916-1-bfoster@redhat.com/
+> > Link: https://docs.google.com/document/d/1RNKWW9jQyfjxw2E8dsXVTdvZYh0HnYeSHDKog9jhdN8/edit?usp=sharing
+> > Cc: Brian Foster <bfoster@redhat.com>
+> > Cc: Dave Chinner <david@fromorbit.com>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: Ian Kent <raven@themaw.net>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > ---
+> >  kernel/rcu/tree.c | 90 +++++++++++++++++++++++++++++++++++++++++++++--
+> >  kernel/rcu/tree.h |  2 ++
+> >  2 files changed, 89 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 46cfceea87847..637e8f9454573 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -1775,6 +1775,78 @@ static void rcu_strict_gp_boundary(void *unused)
+> >  	invoke_rcu_core();
+> >  }
+> >  
+> > +// Has rcu_init() been invoked?  This is used (for example) to determine
+> > +// whether spinlocks may be acquired safely.
+> > +static bool rcu_init_invoked(void)
+> > +{
+> > +	return !!rcu_state.n_online_cpus;
+> > +}
+> > +
+> > +// Make the polled API aware of the beginning of a grace period.
+> > +static void rcu_poll_gp_seq_start(unsigned long *snap)
+> > +{
+> > +	struct rcu_node *rnp = rcu_get_root();
+> > +
+> > +	if (rcu_init_invoked())
+> > +		raw_lockdep_assert_held_rcu_node(rnp);
+> > +
+> > +	// If RCU was idle, note beginning of GP.
+> > +	if (!rcu_seq_state(rcu_state.gp_seq_polled))
+> > +		rcu_seq_start(&rcu_state.gp_seq_polled);
+> > +
+> > +	// Either way, record current state.
+> > +	*snap = rcu_state.gp_seq_polled;
+> > +}
+> > +
+> > +// Make the polled API aware of the end of a grace period.
+> > +static void rcu_poll_gp_seq_end(unsigned long *snap)
+> > +{
+> > +	struct rcu_node *rnp = rcu_get_root();
+> > +
+> > +	if (rcu_init_invoked())
+> > +		raw_lockdep_assert_held_rcu_node(rnp);
+> > +
+> > +	// If the the previously noted GP is still in effect, record the
+> > +	// end of that GP.  Either way, zero counter to avoid counter-wrap
+> > +	// problems.
+> > +	if (*snap && *snap == rcu_state.gp_seq_polled) {
+> > +		rcu_seq_end(&rcu_state.gp_seq_polled);
+> > +		rcu_state.gp_seq_polled_snap = 0;
+> > +	} else {
+> > +		*snap = 0;
+> > +	}
+> > +}
+> > +
+> > +// Make the polled API aware of the beginning of a grace period, but
+> > +// where caller does not hold the root rcu_node structure's lock.
+> > +static void rcu_poll_gp_seq_start_unlocked(unsigned long *snap)
+> > +{
+> > +	struct rcu_node *rnp = rcu_get_root();
+> > +
+> > +	if (rcu_init_invoked()) {
+> > +		lockdep_assert_irqs_enabled();
+> > +		raw_spin_lock_irq_rcu_node(rnp);
+> > +	}
+> > +	rcu_poll_gp_seq_start(snap);
+> > +	if (rcu_init_invoked())
+> > +		raw_spin_unlock_irq_rcu_node(rnp);
+> > +}
+> > +
+> > +// Make the polled API aware of the end of a grace period, but where
+> > +// caller does not hold the root rcu_node structure's lock.
+> > +static void rcu_poll_gp_seq_end_unlocked(unsigned long *snap)
+> > +{
+> > +	struct rcu_node *rnp = rcu_get_root();
+> > +
+> > +	if (rcu_init_invoked()) {
+> > +		lockdep_assert_irqs_enabled();
+> > +		raw_spin_lock_irq_rcu_node(rnp);
+> > +	}
+> > +	rcu_poll_gp_seq_end(snap);
+> > +	if (rcu_init_invoked())
+> > +		raw_spin_unlock_irq_rcu_node(rnp);
+> > +}
+> > +
+> >  /*
+> >   * Initialize a new grace period.  Return false if no grace period required.
+> >   */
+> > @@ -1810,6 +1882,7 @@ static noinline_for_stack bool rcu_gp_init(void)
+> >  	rcu_seq_start(&rcu_state.gp_seq);
+> >  	ASSERT_EXCLUSIVE_WRITER(rcu_state.gp_seq);
+> >  	trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq, TPS("start"));
+> > +	rcu_poll_gp_seq_start(&rcu_state.gp_seq_polled_snap);
+> >  	raw_spin_unlock_irq_rcu_node(rnp);
+> >  
+> >  	/*
+> > @@ -2069,6 +2142,7 @@ static noinline void rcu_gp_cleanup(void)
+> >  	 * safe for us to drop the lock in order to mark the grace
+> >  	 * period as completed in all of the rcu_node structures.
+> >  	 */
+> > +	rcu_poll_gp_seq_end(&rcu_state.gp_seq_polled_snap);
+> >  	raw_spin_unlock_irq_rcu_node(rnp);
+> >  
+> >  	/*
+> > @@ -3837,8 +3911,18 @@ void synchronize_rcu(void)
+> >  			 lock_is_held(&rcu_lock_map) ||
+> >  			 lock_is_held(&rcu_sched_lock_map),
+> >  			 "Illegal synchronize_rcu() in RCU read-side critical section");
+> > -	if (rcu_blocking_is_gp())
+> > +	if (rcu_blocking_is_gp()) {
+> > +		// Note well that this code runs with !PREEMPT && !SMP.
+> > +		// In addition, all code that advances grace periods runs
+> > +		// at process level.  Therefore, this GP overlaps with other
+> > +		// GPs only by being fully nested within them, which allows
+> > +		// reuse of ->gp_seq_polled_snap.
+> > +		rcu_poll_gp_seq_start_unlocked(&rcu_state.gp_seq_polled_snap);
+> > +		rcu_poll_gp_seq_end_unlocked(&rcu_state.gp_seq_polled_snap);
+> > +		if (rcu_init_invoked())
+> > +			cond_resched_tasks_rcu_qs();
+> >  		return;  // Context allows vacuous grace periods.
+> > +	}
+> >  	if (rcu_gp_is_expedited())
+> >  		synchronize_rcu_expedited();
+> >  	else
+> > @@ -3860,7 +3944,7 @@ unsigned long get_state_synchronize_rcu(void)
+> >  	 * before the load from ->gp_seq.
+> >  	 */
+> >  	smp_mb();  /* ^^^ */
+> > -	return rcu_seq_snap(&rcu_state.gp_seq);
+> > +	return rcu_seq_snap(&rcu_state.gp_seq_polled);
 > 
-> This is a terrible reason.
->
-
-Another case that may use drop_caches: "Migration of virtual machines
-will go faster if there are fewer pages to copy, so administrators would
-like to be able to force a virtual machine to reclaim as much memory as
-possible before the migration begins. "
-
-See https://lwn.net/Articles/894849/
-
-> > For example, some systems will create a lot of pagecache when boot up
-> > while reading bzImage, ramdisk, docker images etc. Most of this pagecache
-> > is useless after boot up. It may has a longterm negative effects for the
-> > workload when trigger page reclaim. It is especially harmful when trigger
-> > direct_reclaim or we need allocate pages in atomic context. So users may
-> > chose to drop_caches after boot up.
+> I happened to run into this. There is one usage of
+> get_state_synchronize_rcu() in start_poll_synchronize_rcu(), in which
+> the return value of get_state_synchronize_rcu() ("gp_seq") will be used
+> for rcu_start_this_gp(). I don't think this is quite right, because
+> after this change, rcu_state.gp_seq and rcu_state.gp_seq_polled are
+> different values, in fact ->gp_seq_polled is greater than ->gp_seq
+> by how many synchronize_rcu() is called in early boot.
 > 
-> If that's actually a problem, work on fixing that.
+> Am I missing something here?
+
+It does not appear that your are missing anything, sad to say!
+
+Does the following make it work better?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 2122359f0c862..cf2fd58a93a41 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3571,7 +3571,7 @@ EXPORT_SYMBOL_GPL(get_state_synchronize_rcu);
+ unsigned long start_poll_synchronize_rcu(void)
+ {
+ 	unsigned long flags;
+-	unsigned long gp_seq = get_state_synchronize_rcu();
++	unsigned long gp_seq = rcu_seq_snap(&rcu_state.gp_seq);
+ 	bool needwake;
+ 	struct rcu_data *rdp;
+ 	struct rcu_node *rnp;

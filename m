@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA8E57C22A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820A957C239
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbiGUCQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S231671AbiGUCZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiGUCQ0 (ORCPT
+        with ESMTP id S231302AbiGUCZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:16:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5A56D2D9;
-        Wed, 20 Jul 2022 19:16:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpGQW5q2Tz4x1h;
-        Thu, 21 Jul 2022 12:16:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658369779;
-        bh=7VsGzyLSIlUXoL9tBmDBhsJtgMbbanTcoqRPv+zZg7E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WwQs4QDD1zAMQtopxEOdY7wlC4K1DRfuWDOiA65x3q4AQ4fihgDXZ2GKkcjSTFDMq
-         lsDST9rRDBFjFu87s07o918dqQT5PtiqDKcf1a6HEwy1FYsnZW0yLfy8/+PGPEMMxg
-         qPtkJeI56nurWdmHJ/oIH/OFxB1df1bbsnjl4CWLpeqP5X/wQzxSVHqMrSMLWC0cNM
-         /wEAYKVCGMsfcumSWLXrYaRHVhnOX+kyZWPWQAuKSfDF0mQN1yaRpWZYzWl+4Gs5kx
-         kYwCUFTJbptrTBvy7tQd3GJwNU4QXeEh1DG0DuIrIxvSQq+TNEmwVaJOuYCht06iMG
-         QgS1pjJWXtdWg==
-Date:   Thu, 21 Jul 2022 12:16:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220721121618.049b9c00@canb.auug.org.au>
-In-Reply-To: <20220720124732.4aeb3748@canb.auug.org.au>
-References: <20220719123607.63cbb3c5@canb.auug.org.au>
-        <20220720124732.4aeb3748@canb.auug.org.au>
+        Wed, 20 Jul 2022 22:25:29 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE55B1FA;
+        Wed, 20 Jul 2022 19:25:24 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LpGYn1kY5z1M8Gr;
+        Thu, 21 Jul 2022 10:22:37 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 21 Jul 2022 10:25:21 +0800
+Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
+ (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 21 Jul
+ 2022 10:25:21 +0800
+From:   Kai Ye <yekai13@huawei.com>
+To:     <herbert@gondor.apana.org.au>
+CC:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <yekai13@huawei.com>
+Subject: [PATCH] crypto: hisilicon/sec - fix auth key size error
+Date:   Thu, 21 Jul 2022 10:18:31 +0800
+Message-ID: <20220721021831.25609-1-yekai13@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PA5GB2es=AsdGUk3H1gfIHJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/PA5GB2es=AsdGUk3H1gfIHJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The authentication algorithm supports a maximum of 128-byte keys.
+The allocated key memory is insufficient.
 
-Hi all,
+Signed-off-by: Kai Ye <yekai13@huawei.com>
+---
+ drivers/crypto/hisilicon/sec2/sec_crypto.c | 6 +++---
+ drivers/crypto/hisilicon/sec2/sec_crypto.h | 1 +
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-On Wed, 20 Jul 2022 12:47:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
-c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
-> > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.=
-c:3799:1: error: the frame size of 2464 bytes is larger than 2048 bytes [-W=
-error=3Dframe-larger-than=3D]
-> >  3799 | } // ModeSupportAndSystemConfigurationFull
-> >       | ^ =20
->=20
-> This is still here, but the frame size is down to 2336.
+diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+index 53285b0e70d3..d08e2ad8865c 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
++++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+@@ -662,7 +662,7 @@ static int sec_auth_init(struct sec_ctx *ctx)
+ {
+ 	struct sec_auth_ctx *a_ctx = &ctx->a_ctx;
+ 
+-	a_ctx->a_key = dma_alloc_coherent(ctx->dev, SEC_MAX_KEY_SIZE,
++	a_ctx->a_key = dma_alloc_coherent(ctx->dev, SEC_MAX_AKEY_SIZE,
+ 					  &a_ctx->a_key_dma, GFP_KERNEL);
+ 	if (!a_ctx->a_key)
+ 		return -ENOMEM;
+@@ -674,8 +674,8 @@ static void sec_auth_uninit(struct sec_ctx *ctx)
+ {
+ 	struct sec_auth_ctx *a_ctx = &ctx->a_ctx;
+ 
+-	memzero_explicit(a_ctx->a_key, SEC_MAX_KEY_SIZE);
+-	dma_free_coherent(ctx->dev, SEC_MAX_KEY_SIZE,
++	memzero_explicit(a_ctx->a_key, SEC_MAX_AKEY_SIZE);
++	dma_free_coherent(ctx->dev, SEC_MAX_AKEY_SIZE,
+ 			  a_ctx->a_key, a_ctx->a_key_dma);
+ }
+ 
+diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.h b/drivers/crypto/hisilicon/sec2/sec_crypto.h
+index 5e039b50e9d4..d033f63b583f 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_crypto.h
++++ b/drivers/crypto/hisilicon/sec2/sec_crypto.h
+@@ -7,6 +7,7 @@
+ #define SEC_AIV_SIZE		12
+ #define SEC_IV_SIZE		24
+ #define SEC_MAX_KEY_SIZE	64
++#define SEC_MAX_AKEY_SIZE	128
+ #define SEC_COMM_SCENE		0
+ #define SEC_MIN_BLOCK_SZ	1
+ 
+-- 
+2.30.0
 
-Today it is down to 2128.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/PA5GB2es=AsdGUk3H1gfIHJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLYtvIACgkQAVBC80lX
-0Gxd3wf+Ojr46o/0kPWH0GRXLbSEqnau2ERG4Dle0ucSuoDsEgnks2qC3ffywsIG
-5kKK0CeaefHI4Dw22Bmh3zJB16dNmWhpmUJWPQtxHKsGKRkSOEgsWP6yC1qlLVs1
-46HEkTcmPXK4GEECyFjqfH1xx12HndxzPqi/E0Vw7TYeWlfGtIl9cbr1/HNyLXls
-8Ku1ONdAUMLFxEfROsqnyBm7Ah29NEOm9ujx/6njPxv3nbuSbxCkyhz1ZOLZw+WL
-aC4Y/hvfuvNITGV6mg5aA5AC2FbPMDxT4zeWPFtit6T7oLOKWIpoocisPqJNzWv5
-pPNdsF+XTZBAvGeSmSdrmlVLq9IlkQ==
-=VoWl
------END PGP SIGNATURE-----
-
---Sig_/PA5GB2es=AsdGUk3H1gfIHJ--

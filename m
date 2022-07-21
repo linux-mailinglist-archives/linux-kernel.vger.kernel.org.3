@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B80357C60A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0409657C60F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiGUIRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
+        id S232005AbiGUIR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiGUIR3 (ORCPT
+        with ESMTP id S232204AbiGUIRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:17:29 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92927E019
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id u13so1598335lfn.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
+        Thu, 21 Jul 2022 04:17:55 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F35E7D7B1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:17:54 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso2800219wma.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:17:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
-        b=ECKSOnUYc5HaMnhSUPrnMRaZKeYAD7ValXquz6QlXsQRvt6pM3dc1Zh6iuvqMQqs1p
-         vkficU6A26aKu3AISdyt/5LgUlepuAeYYShiP7XLRoKI4zCLuJHsAlBPu3unpyQeF/nL
-         tHMzK4wJUtu4FbnPes5doM3OThzn7D/fceMjo=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LnS4U70xTD5RndpC3IpS7w07CUZXggrNJFWkXeqFf+g=;
+        b=bcsXl3cPziwD12F/cqYeCXDt5Q33OX113ksfbpr7U6u5NaGA4jxO1MBcclqS9/9x6j
+         C/HW3H5C6yqIkp4H0q2K97q03zz2LIY7Tjqqs4PD1vAAdRNnTwuGRfTuq7HRfkveZQbV
+         gbPs7f1jYpKHGZ3Xyn7tRKBJSWGx1TpdEX2vF6kExUAdRbNtMRaKdd9u8/EhU5vmcYMO
+         VoJc9RZE7OfIxhcpxu5X1/oUpKQxBUcJDNjDJc388fJo/iv9QiHnYyNu0tLYNrkQ2p8h
+         SjV50lLi6FoFY4ycW2LOOWqfVF9ogMVAdGCHaQY0H2VffPUk4jcXYzhi7pCl5JOWhg5H
+         UMQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
-        b=0Xb+NtlFgipB2rHrAAmSb4krSeMM0Il0EoO7WezhoTCDc+54rTOL2rOOb/GTSgZjca
-         1wm0ObMoT6QT3165eR4jhKVdxkfmih6Af+8O3inURwOHucP9kMNPZ0Y4MPvTJeBNoI26
-         GNtgOjDy7k3G3OTIV98hB4Op6KErKDs7pdrrWRGSjy4G7Pt2PUSJkOu5HwxIXRerKydh
-         DjnDhhQRP0MBFh2p4xaFNihbz3x/neb1gtbh07EwodoBBCMVEyz2IWiw6LAqYRQhszE9
-         pj0ll/lLYtQFlkajc0AR9fMWdFw3TKFeeOuN/o0lMvY1MtbDyZjEGU0E8K4FjCv9Ffsp
-         LV3g==
-X-Gm-Message-State: AJIora/PwKM/+WRay1uBX3ZBCnoreCF8it1V+Y0+CAcQibPYJTAwaMwF
-        eAlirh76j8C6ymoPqxisFY616eet1Ns1QKK3s/+13w==
-X-Google-Smtp-Source: AGRyM1syTT0nDSlzBPl3yxxmAFp/qrDcpgxuTHgeAQieT1mLOMdlSf1rR2uu6j+2gJMs2n8OiBAmZwYrMBl4iqln7Ks=
-X-Received: by 2002:a05:6512:32c1:b0:489:e9de:2f0 with SMTP id
- f1-20020a05651232c100b00489e9de02f0mr23244981lfg.117.1658391446244; Thu, 21
- Jul 2022 01:17:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LnS4U70xTD5RndpC3IpS7w07CUZXggrNJFWkXeqFf+g=;
+        b=GCzkzrwESsXUQ6K6sJdlddnU17fc80foTIWSN0DtMItaoEYZGstblfvDXubzEfAEg/
+         g4mtqdL9rm7ySg/68D1Ycsc81QYvRiOheEseHV4ehPPRXcQ4F1vWBiljvG7gLsK27LGH
+         v1GBRQHe7mhd5bslqySPa/0JYuyqMZdnFHZtkWw1ACRnwmXdPhwVqPcLaQJ1ucr/HpZU
+         vo08D+DCZRKxuvPmJSSTyU40KRF6mQaY6OrmXR+HLOqAHU5C4zrlctVCawBSPTGbljzZ
+         LYyfXdL5fxafG+6W2l6clQD9bv4Jotk10/suHk+NgGXNyU726ux9oK0dx3Sn0rXUHes5
+         iwhg==
+X-Gm-Message-State: AJIora/Lol+PfnTkwEcBtKcEcQVb6Rkq6omkYRvRHNhLwjEuREZ1YrfH
+        W1AKUlEzJAnp2I23LoHAIXHQ4g==
+X-Google-Smtp-Source: AGRyM1tZapHSOqd9rZaA9FThLwuD/+wlnEQp2GVkGsMTRyiuMws0EMy36pd8Y5pNYI4ym5zS2U3nYw==
+X-Received: by 2002:a05:600c:591:b0:3a3:205f:e2ca with SMTP id o17-20020a05600c059100b003a3205fe2camr7036614wmd.147.1658391473141;
+        Thu, 21 Jul 2022 01:17:53 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u8-20020a05600c19c800b0039db31f6372sm2247237wmq.2.2022.07.21.01.17.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 01:17:52 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 11:17:51 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] clk: Use clk_core_unlink_consumer on __clk_put
+Message-ID: <YtkLr9DJLO215gBJ@linaro.org>
+References: <20220707100309.1357663-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
- <20220716170007.2020037-6-dario.binacchi@amarulasolutions.com> <20220718102203.66y6glwwphptl2tu@pengutronix.de>
-In-Reply-To: <20220718102203.66y6glwwphptl2tu@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Thu, 21 Jul 2022 10:17:15 +0200
-Message-ID: <CABGWkvqxKBVa_pGhg-aThn76wz-rpiVAqgFNDT-HNd1_Bz7WXw@mail.gmail.com>
-Subject: Re: [RFC PATCH 5/5] can: slcan: send the listen-only command to the adapter
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707100309.1357663-1-abel.vesa@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -75,109 +72,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marc,
+On 22-07-07 13:03:06, Abel Vesa wrote:
+> For consistency, use clk_core_unlink_consumer rather then hlist_del
+> directly, on __clk_put. Prepare lock is already acquired at that point.
+>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 
-On Mon, Jul 18, 2022 at 12:22 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> The subject can be enhanced, as the listen-only command ist not send
-> unconditionally. What about: "add support for listen-only mode"?
+Gentle ping.
 
-I like it.
-
+> ---
+>  drivers/clk/clk.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> On 16.07.2022 19:00:07, Dario Binacchi wrote:
-> > In case the bitrate has been set via ip tool, this patch changes the
-> > driver to send the listen-only ("L\r") command to the adapter.
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index 7fc191c15507..e1d8245866b1 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -4347,7 +4347,7 @@ void __clk_put(struct clk *clk)
+>  		clk->exclusive_count = 0;
+>  	}
 >
-> ...but only of CAN_CTRLMODE_LISTENONLY is requested.
->
-> What about:
->
-> For non-legacy, i.e. ip based configuration, add support for listen-only
-> mode. If listen-only is requested send a listen-only ("L\r") command
-> instead of an open ("O\r") command to the adapter..
-
-I agree with you. It's definitely clearer.
-
-Thanks and regards,
-Dario
->
-> >
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> >
-> > ---
-> >
-> >  drivers/net/can/slcan/slcan-core.c | 20 ++++++++++++++++----
-> >  1 file changed, 16 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-> > index 7a1540507ecd..d97dfeccbf9c 100644
-> > --- a/drivers/net/can/slcan/slcan-core.c
-> > +++ b/drivers/net/can/slcan/slcan-core.c
-> > @@ -711,10 +711,21 @@ static int slcan_netdev_open(struct net_device *dev)
-> >                       }
-> >               }
-> >
-> > -             err = slcan_transmit_cmd(sl, "O\r");
-> > -             if (err) {
-> > -                     netdev_err(dev, "failed to send open command 'O\\r'\n");
-> > -                     goto cmd_transmit_failed;
-> > +             /* listen-only command overrides open command */
->
-> I think this comment can be removed.
->
-> > +             if (sl->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-> > +                     err = slcan_transmit_cmd(sl, "L\r");
-> > +                     if (err) {
-> > +                             netdev_err(dev,
-> > +                                        "failed to send listen-only command 'L\\r'\n");
-> > +                             goto cmd_transmit_failed;
-> > +                     }
-> > +             } else {
-> > +                     err = slcan_transmit_cmd(sl, "O\r");
-> > +                     if (err) {
-> > +                             netdev_err(dev,
-> > +                                        "failed to send open command 'O\\r'\n");
-> > +                             goto cmd_transmit_failed;
-> > +                     }
-> >               }
-> >       }
-> >
-> > @@ -801,6 +812,7 @@ static int slcan_open(struct tty_struct *tty)
-> >       /* Configure CAN metadata */
-> >       sl->can.bitrate_const = slcan_bitrate_const;
-> >       sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
-> > +     sl->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY;
-> >
-> >       /* Configure netdev interface */
-> >       sl->dev = dev;
->
-> Marc
->
+> -	hlist_del(&clk->clks_node);
+> +	clk_core_unlink_consumer(clk);
+>  	if (clk->min_rate > clk->core->req_rate ||
+>  	    clk->max_rate < clk->core->req_rate)
+>  		clk_core_set_rate_nolock(clk->core, clk->core->req_rate);
 > --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
-
--- 
-
-Dario Binacchi
-
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+> 2.34.3
+>

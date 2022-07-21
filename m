@@ -2,121 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D44257C974
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D9857C975
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbiGUK7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S232860AbiGULA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiGUK7l (ORCPT
+        with ESMTP id S229759AbiGULA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:59:41 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CC982F9B;
-        Thu, 21 Jul 2022 03:59:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 21 Jul 2022 07:00:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6FC248F8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:00:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LpV2M0cJwz4xD9;
-        Thu, 21 Jul 2022 20:59:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658401179;
-        bh=LTZQOvJr8ear+cIoJhpifBjbEikmG63F8Fv6vdFzcEc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sxH/PbVaVvc5dlbHNx3kuCg5tZ36O/jig/d/OHVniKeDpVjLfgHLXydL1fShCv0J0
-         Wa1GSEZpz3J//1L9y7VgIogOuwsDxw7o4q4Pm01SkNJ26RyliFh0QPoIAokEQ/08/H
-         eNy2oykIQ9iGZTui7FRWaeSZVqr7+fWgzGQhMtGhlnDjjw7hS3tOp0ST6bZypPZpD5
-         d7Xjet3Ba+Q3Z/LHeWFENEXSokVH+g43q1Oe6yAtnsIYk6cZ3gmUuWPtq2c0lml3el
-         oPOFKs6nAoXhdHIkFgzQqJGWeI396DNb0Bf0Ge8oA/dSbkc1J4+wmITVtvfbVlxE/J
-         Z3zanhD4bU1UQ==
-Date:   Thu, 21 Jul 2022 20:59:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the s390 tree
-Message-ID: <20220721205937.10043b5f@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QdrUYM_Zcu1KIpvNg68mM1n";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7696C61A14
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1D9C3411E;
+        Thu, 21 Jul 2022 11:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658401225;
+        bh=Ea9B/drW2I5/wUW5EUvPUNDW6jClSjzDFf7/q9ktofk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Cu6QVFEKS9lI65MnO4BvYC9syNP117/ey0qM+jpD3Mf8QmPlnyrBwT3CfQbTpw9DV
+         qxqvxzYrGpOsHSquiVvYMMSBgap4ccpxv7UNy5Qc8t282TwipbXo20YAAhLNTbNHf4
+         qeD7KqyaAdku3B1O6DKkaMp7g1RMQwup0OLPfAXCD18tAxBtdE5pzEeAz9rhi0stQJ
+         SJkCf7e6BLAw27igxVGkfbqE6BXyM7y6mxJppeKj7x39dUWMJeKrT/6zk/XOlB8/wW
+         vZb8l0PV8E11c7Z6bnSehGOT0Jqz/ed5w9XXZPSt/CPmX3APqLbLVB48OoH1hLTHcn
+         OBHvSFoeDwykw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oETup-0093RK-LR;
+        Thu, 21 Jul 2022 12:00:23 +0100
+Date:   Thu, 21 Jul 2022 12:00:23 +0100
+Message-ID: <8735euzq60.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <20220720152348.2889109-4-apatel@ventanamicro.com>
+References: <20220720152348.2889109-1-apatel@ventanamicro.com>
+        <20220720152348.2889109-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/QdrUYM_Zcu1KIpvNg68mM1n
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 20 Jul 2022 16:23:44 +0100,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> All RISC-V platforms have a single HW IPI provided by the INTC local
+> interrupt controller. The HW method to trigger INTC IPI can be through
+> external irqchip (e.g. RISC-V AIA), through platform specific device
+> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> 
+> To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+> mechanism which help us create multiple virtual IPIs using a single
+> HW IPI. This generic IPI multiplexing is shared among various RISC-V
+> irqchip drivers.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  include/linux/irq.h  |  16 ++++
+>  kernel/irq/Kconfig   |   4 +
+>  kernel/irq/Makefile  |   1 +
+>  kernel/irq/ipi-mux.c | 199 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 220 insertions(+)
+>  create mode 100644 kernel/irq/ipi-mux.c
+> 
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index 505308253d23..a97bf13a8965 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -1249,6 +1249,22 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+>  int ipi_send_single(unsigned int virq, unsigned int cpu);
+>  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
+>  
+> +/**
+> + * struct ipi_mux_ops - IPI multiplex operations
+> + *
+> + * @ipi_mux_clear:	Optional function to clear parent IPI
+> + * @ipi_mux_send:	Trigger parent IPI on target CPUs
+> + */
+> +struct ipi_mux_ops {
+> +	void (*ipi_mux_clear)(unsigned int parent_virq);
+> +	void (*ipi_mux_send)(unsigned int parent_virq,
+> +			     const struct cpumask *mask);
+> +};
+> +
+> +void ipi_mux_process(void);
+> +int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
+> +		   const struct ipi_mux_ops *ops);
+> +
+>  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+>  /*
+>   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> index 10929eda9825..2388e7d40ed3 100644
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -84,6 +84,10 @@ config GENERIC_IRQ_IPI
+>  	bool
+>  	select IRQ_DOMAIN_HIERARCHY
+>  
+> +# Generic IRQ IPI Mux support
+> +config GENERIC_IRQ_IPI_MUX
+> +	bool
+> +
+>  # Generic MSI interrupt support
+>  config GENERIC_MSI_IRQ
+>  	bool
+> diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> index b4f53717d143..f19d3080bf11 100644
+> --- a/kernel/irq/Makefile
+> +++ b/kernel/irq/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+>  obj-$(CONFIG_PM_SLEEP) += pm.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+>  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+>  obj-$(CONFIG_SMP) += affinity.o
+>  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+>  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> new file mode 100644
+> index 000000000000..bd6b31ca588b
+> --- /dev/null
+> +++ b/kernel/irq/ipi-mux.c
+> @@ -0,0 +1,199 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Multiplex several virtual IPIs over a single HW IPI.
+> + *
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#define pr_fmt(fmt) "ipi-mux: " fmt
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/smp.h>
+> +
+> +static unsigned int ipi_mux_nr;
+> +static unsigned int ipi_mux_parent_virq;
+> +static struct irq_domain *ipi_mux_domain;
+> +static const struct  ipi_mux_ops *ipi_mux_ops;
+> +static DEFINE_PER_CPU(unsigned long, ipi_mux_bits);
+> +
+> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> +{
+> +	int cpu;
+> +
+> +	/* Barrier before doing atomic bit update to IPI bits */
+> +	smp_mb__before_atomic();
+> +
+> +	for_each_cpu(cpu, mask)
+> +		set_bit(d->hwirq, per_cpu_ptr(&ipi_mux_bits, cpu));
+> +
+> +	/* Barrier after doing atomic bit update to IPI bits */
+> +	smp_mb__after_atomic();
+> +
+> +	/* Trigger the parent IPI */
+> +	ipi_mux_ops->ipi_mux_send(ipi_mux_parent_virq, mask);
+> +}
+> +
+> +static const struct irq_chip ipi_mux_chip = {
+> +	.name		= "IPI Mux",
+> +	.ipi_send_mask	= ipi_mux_send_mask,
 
-Hi all,
+I've given this a bit more though, and I came to the conclusion that
+we really should have the full masking semantics here, even if Linux
+currently doesn't really use it.
 
-After merging the s390 tree, today's linux-next build (htmldocs) produced
-these warnings:
+It makes the handling a bit more complex, and unmasking a pending IPI
+must be handled gracefully, but we already have implemented most of
+that code in the irq-apple-aic driver.
 
-Documentation/s390/vfio-ap.rst:684: WARNING: Inline strong start-string wit=
-hout end-string.
-Documentation/s390/vfio-ap.rst:684: WARNING: Inline emphasis start-string w=
-ithout end-string.
-Documentation/s390/vfio-ap.rst:943: WARNING: Title underline too short.
+And if we go down this road, such a driver should be very easy to move
+over this infrastructure, making the change a lot more palatable.
 
-Hot plug/unplug support:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Documentation/s390/vfio-ap.rst:943: WARNING: Title underline too short.
+	M.
 
-Hot plug/unplug support:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Documentation/s390/vfio-ap.rst:965: WARNING: Title underline too short.
-
-Over-provisioning of AP queues for a KVM guest:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Documentation/s390/vfio-ap.rst:965: WARNING: Title underline too short.
-
-Over-provisioning of AP queues for a KVM guest:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Documentation/s390/vfio-ap.rst:998: WARNING: Definition list ends without a=
- blank line; unexpected unindent.
-Documentation/s390/vfio-ap.rst:999: WARNING: Definition list ends without a=
- blank line; unexpected unindent.
-Documentation/s390/vfio-ap.rst:1038: WARNING: Definition list ends without =
-a blank line; unexpected unindent.
-Documentation/s390/vfio-ap.rst:1039: WARNING: Definition list ends without =
-a blank line; unexpected unindent.
-
-Introduced by commit
-
-  cb269e0aba7c ("s390/vfio-ap: update docs to include dynamic config suppor=
-t")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/QdrUYM_Zcu1KIpvNg68mM1n
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLZMZkACgkQAVBC80lX
-0GwpwAf+MC6ISS5iUzgGEVRMVkquS9qUui69AP7aW4hL7rPNueIDPcTGva/0+L6/
-WPY3WmCtzB6MoAOqTPQ3MeMqShZjSlPR77wv8scz/bNOdhCymBQaODemQ6NEJZi1
-jkQ30cMznxj9uUCeqx2tNW9FqB4NWTE4sGmCtq85BU4oPa8grhVC64FDV6sZ5gYG
-UZ6XLJtqZ+dGfTZjhp8SjPYOvJChEnnoqadnMcslPs6yg0k8M0bq1GexTuS2O91L
-b1FfsA4saIQTUAZr2KrqGslULVGbTQLTYKhMaEeRi+Vg6Z4Yovq3KUeYSPIpOUMZ
-/gFwlPPelVlkWk903vOa1YwPsPchAw==
-=pxGK
------END PGP SIGNATURE-----
-
---Sig_/QdrUYM_Zcu1KIpvNg68mM1n--
+-- 
+Without deviation from the norm, progress is not possible.

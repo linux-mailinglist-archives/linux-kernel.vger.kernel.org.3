@@ -2,146 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951A757CA1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D103157CA1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiGUL45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S233345AbiGUL5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233311AbiGUL4x (ORCPT
+        with ESMTP id S233223AbiGUL5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:56:53 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEC310B1;
-        Thu, 21 Jul 2022 04:56:50 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ez10so2666354ejc.13;
-        Thu, 21 Jul 2022 04:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7j2Z+jKnofpzEPs1iDevvQ+YzbnWiCnAWDycqUdF6iQ=;
-        b=dcl5uFXVV84GF+jVUjjhN9PWk6O2Lx7XsFzUYg7LIAH3UoyPOrkxf2TGXSRL4E3/qu
-         pbK1ZbTDBJe/SREyakLZMHYOY7uZQEhdTpa0TZIcw5Jg0SBCJ+mhpwtLXQdip5IfDw+6
-         sx+Q8JWz9vFajf31ILGqb3VMHd3DlacQWs0mZo05RbR2iyhCzm6KNOddJCaMyUgNqrGq
-         e6XBincHb9riL9L1shsiLn16qWCmWCyg8Iw2W0cru7XAuQsa9PXK+nVtbx9qVYsPXwg0
-         9AkKmAMXFPC+GPJ9qXHJTyIii/QwSpg2VQK8Ouhbdo0Wp9UuEtLGeSbTDsHV3/rL74mR
-         vbOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7j2Z+jKnofpzEPs1iDevvQ+YzbnWiCnAWDycqUdF6iQ=;
-        b=MzvaiTLnG7zxqYjsiquHFQKJ3KjsetffKtegIiJhdu/XnSUVp6w9jIA+49vvr7J6Mo
-         3kFkcViL7abReLcJRVDb4Gka/mKC78bSvuHTDFZiTT8zLD/E3kxskLXnk6w2h1mCwktN
-         eWmZ69qc7we54aq4GL1MdlFB2TRrmLybEcEsjTekL3SLs0g6i90pfsJDrU8HFxHCmsQu
-         E9sLfyigx5QAZaCWQ0VP31xwuTF2FMM+w6ZQOUx0g1mXGPQyxNeI/4N1JFZTvDBREj4n
-         55MDAkVFUwStt6SBMSVa+DLNWXjhnOK1JTrotDUvtlZ5QrJW8ofoBurTLEhgKypQieNo
-         hcFA==
-X-Gm-Message-State: AJIora+dyQ22DAoOnSuwKgXLBYOBKBtyHEbatvDA1bZHvXGw+2SVCqGH
-        GuLKYXNDcNn+vDHQb25Nvl0=
-X-Google-Smtp-Source: AGRyM1vjT5HpONYlE/7HZlAuVQwzeUOP2y42cAc5pqI1stKZhurzqfOOjsT/ooqU1IGwqKH00XOBGQ==
-X-Received: by 2002:a17:907:2d88:b0:72f:5bb:1ee0 with SMTP id gt8-20020a1709072d8800b0072f05bb1ee0mr28518359ejc.641.1658404608396;
-        Thu, 21 Jul 2022 04:56:48 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id a3-20020a05640213c300b0043bbbaa323dsm900352edx.0.2022.07.21.04.56.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 04:56:47 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 21 Jul 2022 13:56:46 +0200
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/1] bpf: Drop unprotected find_vpid() in favour of
- find_get_pid()
-Message-ID: <Ytk+/npvvDGg9pBP@krava>
-References: <20220721111430.416305-1-lee@kernel.org>
+        Thu, 21 Jul 2022 07:57:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C0CE2D1FF
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658404627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E0E6tU6gY5NO+RqEHYg9V7mVYbdn26+2ozaiEoyYI8s=;
+        b=bHRnHOGPoylZ15ZTVNOOC7pMJ6TiSvO8g/2Zd9PY/n/s1oe7u1Je+PgEZli+EOzHjNLr7h
+        TqAfaY7emyKDD48wyy0jH3GVgkahv7DMYxOzmCNcaYnhpQUAyVb1yrLMzknjWY/05LL2Nw
+        7Z8VjTyM+rg09JFzaPOnXoMwlhECLsc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-260-neNqakEbPvqBw9t7gQb52g-1; Thu, 21 Jul 2022 07:56:58 -0400
+X-MC-Unique: neNqakEbPvqBw9t7gQb52g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84A34802D2C;
+        Thu, 21 Jul 2022 11:56:57 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 37D6A2026985;
+        Thu, 21 Jul 2022 11:56:55 +0000 (UTC)
+Message-ID: <44938d77b4ee62b69ad3ff88be30c942282a05d7.camel@redhat.com>
+Subject: Re: [PATCH 4/7] KVM: SVM: Report NMI not allowed when Guest busy
+ handling VNMI
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     "Shukla, Santosh" <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 21 Jul 2022 14:56:54 +0300
+In-Reply-To: <ca108529-9252-5f1d-cbd1-51a43b476ce9@amd.com>
+References: <20220602142620.3196-1-santosh.shukla@amd.com>
+         <20220602142620.3196-5-santosh.shukla@amd.com>
+         <da6e0e9375d1286d3d9d4b6ab669d234850261eb.camel@redhat.com>
+         <45e9ccafcdb48c7521b697b41e849dab98a7a76c.camel@redhat.com>
+         <ac67da62-a0c0-27a4-df81-90734382ffdf@amd.com>
+         <76e007d7fc7af0629279f2563f8d0c48274bc774.camel@redhat.com>
+         <ca108529-9252-5f1d-cbd1-51a43b476ce9@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721111430.416305-1-lee@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:14:30PM +0100, Lee Jones wrote:
-> The documentation for find_pid() clearly states:
+On Thu, 2022-07-21 at 15:01 +0530, Shukla, Santosh wrote:
 > 
->   "Must be called with the tasklist_lock or rcu_read_lock() held."
+> On 7/10/2022 9:38 PM, Maxim Levitsky wrote:
+> > On Fri, 2022-06-17 at 20:29 +0530, Shukla, Santosh wrote:
+> > > On 6/7/2022 6:42 PM, Maxim Levitsky wrote:
+> > > > On Tue, 2022-06-07 at 16:10 +0300, Maxim Levitsky wrote:
+> > > > > On Thu, 2022-06-02 at 19:56 +0530, Santosh Shukla wrote:
+> > > > > > In the VNMI case, Report NMI is not allowed when the processor set the
+> > > > > > V_NMI_MASK to 1 which means the Guest is busy handling VNMI.
+> > > > > > 
+> > > > > > Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> > > > > > ---
+> > > > > >  arch/x86/kvm/svm/svm.c | 6 ++++++
+> > > > > >  1 file changed, 6 insertions(+)
+> > > > > > 
+> > > > > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > > > > index d67a54517d95..a405e414cae4 100644
+> > > > > > --- a/arch/x86/kvm/svm/svm.c
+> > > > > > +++ b/arch/x86/kvm/svm/svm.c
+> > > > > > @@ -3483,6 +3483,9 @@ bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
+> > > > > >         struct vmcb *vmcb = svm->vmcb;
+> > > > > >         bool ret;
+> > > > > >  
+> > > > > > +       if (is_vnmi_enabled(vmcb) && is_vnmi_mask_set(vmcb))
+> > > > > > +               return true;
+> > > > > 
+> > > > > How does this interact with GIF? if the guest does clgi, will the
+> > > > > CPU update the V_NMI_MASK on its own If vGIF is enabled?
+> > > > > 
+> > > Yes.
+> > > 
+> > > > > What happens if vGIF is disabled and vNMI is enabled? KVM then intercepts
+> > > > > the stgi/clgi, and it should then update the V_NMI_MASK?
+> > > > > 
+> > > No.
+> > > 
+> > > For both case - HW takes the V_NMI event at the boundary of VMRUN instruction.
+> > 
+> > How that is possible? if vGIF is disabled in L1, then L1 can't execute STGI/CLGI - 
+> > that means that the CPU can't update the V_NMI, as it never sees the STGI/CLGI
+> > beeing executed.
+> > 
 > 
-> Presently we do neither.
-> 
-> In an ideal world we would wrap the in-lined call to find_vpid() along
-> with get_pid_task() in the suggested rcu_read_lock() and have done.
-> However, looking at get_pid_task()'s internals, it already does that
-> independently, so this would lead to deadlock.
+> If vGIF is disabled then HW will take the vnmi event at the boundary of vmrun instruction.
 
-hm, we can have nested rcu_read_lock calls, right?
 
-jirka
+I think I understand now, if vGIF is enabled, and V_NMI_MASK is set, and the guest does STGI, then nothing
+new should be injected.
+
+If V_NMI_MASK is not set, then svm_nmi_blocked will respect the HF_GIF_MASK, and on STGI interception,
+the new NMI will be injected on VM entry by setting the V_NMI_PENDING.
+
+So looks like it should work.
+
+Thanks,
+	Best regards,
+		Maxim Levitsky
+
 
 > 
-> Instead, we'll use find_get_pid() which searches for the vpid, then
-> takes a reference to it preventing early free, all within the safety
-> of rcu_read_lock().  Once we have our reference we can safely make use
-> of it up until the point it is put.
+> Thanks,
+> Santosh
 > 
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: bpf@vger.kernel.org
-> Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-> Signed-off-by: Lee Jones <lee@kernel.org>
-> ---
->  kernel/bpf/syscall.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 83c7136c5788d..c20cff30581c4 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->  	const struct perf_event *event;
->  	struct task_struct *task;
->  	struct file *file;
-> +	struct pid *ppid;
->  	int err;
->  
->  	if (CHECK_ATTR(BPF_TASK_FD_QUERY))
-> @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
->  	if (attr->task_fd_query.flags != 0)
->  		return -EINVAL;
->  
-> -	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-> +	ppid = find_get_pid(pid);
-> +	task = get_pid_task(ppid, PIDTYPE_PID);
-> +	put_pid(ppid);
->  	if (!task)
->  		return -ENOENT;
->  
-> -- 
-> 2.37.0.170.g444d1eabd0-goog
-> 
+> > Best regards,
+> > 	Maxim Levitsky
+> > 
+> > > > > 
+> > > > > > +
+> > > > > >         if (!gif_set(svm))
+> > > > > >                 return true;
+> > > > > >  
+> > > > > > @@ -3618,6 +3621,9 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+> > > > > >  {
+> > > > > >         struct vcpu_svm *svm = to_svm(vcpu);
+> > > > > >  
+> > > > > > +       if (is_vnmi_enabled(svm->vmcb) && is_vnmi_mask_set(svm->vmcb))
+> > > > > > +               return;
+> > > > > 
+> > > > > This might have hidden assumption that we will only enable NMI window when vNMI is masked.
+> > > > 
+> > > > Also what if vNMI is already pending?
+> > > > 
+> > > If V_NMI_MASK set, that means V_NMI is pending, if so then inject another V_NMI in next VMRUN.
+> > > 
+> > > Thanks,
+> > > Santosh
+> > > 
+> > > > Best regards,
+> > > > 	Maxim Levitsky
+> > > > > 
+> > > > > > +
+> > > > > >         if ((vcpu->arch.hflags & (HF_NMI_MASK | HF_IRET_MASK)) == HF_NMI_MASK)
+> > > > > >                 return; /* IRET will cause a vm exit */
+> > > > > >  
+> > > > > 
+> > > > > Best regards,
+> > > > >         Maxim Levitsky
+
+

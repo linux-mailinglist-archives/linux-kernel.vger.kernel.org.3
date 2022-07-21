@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086B257CC09
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1085F57CC0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiGUNfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
+        id S229705AbiGUNgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiGUNfU (ORCPT
+        with ESMTP id S229523AbiGUNgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:35:20 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7561DEA7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8YFbTHxQthzOWNFDNujZ6xnF8BTNw3UEG0+j6FNXCWU=; b=snffF4nd3H4L5E8gMhriYYOREh
-        Q71a9ezaDjUGUnhsZtzY8/6EqCqPZAZsLJWRRmW7bzR5EDMe31n5bfVa3A1mAYMihCLdi3uzzSvoT
-        gDwXOgQkCwpnWcPbfySE+BwUB1JiP4NsH1DwT+Y0bS4ofjHH4Pjt8av2BZdtp8OzwOzdnHQy4Irkk
-        HezfoOlKUFq7nOib9NARIY0vbDtnb/opPPQ68oZ4mdh3M5Du4xmxfyQ0uhMdZ9aqlBZXy7gGq8G32
-        bB8tHDbluUYKSYw4HdZ1tfnvSiTr+uFH+1fM+5+Cpp9aA+MlL17DzfbllssIbqpxhgJy8IEgOmet8
-        sAxzouGA==;
-Received: from 201-13-50-220.dsl.telesp.net.br ([201.13.50.220] helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oEWKh-001UuF-57; Thu, 21 Jul 2022 15:35:15 +0200
-Message-ID: <14e11a4b-7300-a54d-6794-1eeb7ab8a079@igalia.com>
-Date:   Thu, 21 Jul 2022 10:34:56 -0300
+        Thu, 21 Jul 2022 09:36:23 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4813927CC6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:36:22 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v12so2170352edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kZ+EaaTNcvyNclKTamsWDViD0TCzODM1RnJ73E0WdAY=;
+        b=M5Lm6hdN0IaCIgqk+NnU2YYFc7XuxPONmUSZ259X+eoeZaBm2Nq3a2rHfQ7zMkWNj3
+         zPEVdUeryYmsbaLGwuKw3VS4qZZuufbCeuSmSCmmT/Px6JFLyfOSGPdQ8QKujwXsalgY
+         QjQDkue1sfu0li+R3yg1x6xPSir5QDi6/I7V8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kZ+EaaTNcvyNclKTamsWDViD0TCzODM1RnJ73E0WdAY=;
+        b=ur1/Ln29opzCcvdGP0W/tDw13OMBAZyp++7djMbG6coTwieGjCDxjd6Nqt8fRFmIp+
+         gvsvqlzRTkPWxbZm2+A2PZerUdFb4Wk+YUKYAsrKlwiKUTvsRUJrrahKVfokwph2R0Xw
+         pAl0Q2xuNu7ACPRX+KOVHDYa3uYkgFbvHgmEevmgnlPzXuBBDXkBbAVLXorMjSrv051N
+         ph4lvltVnmzytHEFHFhLp6KG4neDdepbZZXoVh40t9zdhYdHT2aav7gQ7T/6Eu8HjLrO
+         t7W9BU3YFsVLAAnQozz2WzSAklLzJNybQ7X1fIxGh643bhsdpDTSAbreyETnXmZfp4wP
+         V7xQ==
+X-Gm-Message-State: AJIora8fwLTJN3h2XrT+RlId85K5a/R38pgqqp1POoVfKY6G9RkXBJOA
+        0jbsZURejTTEQoZFgxp3/3xNweeHq+g8gOuN
+X-Google-Smtp-Source: AGRyM1uhb+KsgpIvCMLHHJxQ7L0hT0O03zI9hI+uWsq4SzXiuEzOeTM6Xz5FmmYqiH1UcxLWHR5Obw==
+X-Received: by 2002:a05:6402:5518:b0:43a:9e32:b6fc with SMTP id fi24-20020a056402551800b0043a9e32b6fcmr58096626edb.252.1658410580679;
+        Thu, 21 Jul 2022 06:36:20 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id l10-20020a1709060cca00b0072b2ef2757csm853983ejh.180.2022.07.21.06.36.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 06:36:18 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id n12so2300220wrc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:36:16 -0700 (PDT)
+X-Received: by 2002:adf:fb12:0:b0:20c:79b2:a200 with SMTP id
+ c18-20020adffb12000000b0020c79b2a200mr35138943wrr.617.1658410575960; Thu, 21
+ Jul 2022 06:36:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/4] drm/amd/display: Remove duplicated
- CalculateWriteBackDISPCLK
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-Cc:     magalilemes00@gmail.com, christian.koenig@amd.com,
-        Daniel Vetter <daniel@ffwll.ch>, Xinhui.Pan@amd.com,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        tales.aparecida@gmail.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, mwen@igalia.com,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net,
-        Harry Wentland <harry.wentland@amd.com>,
-        David Airlie <airlied@linux.ie>
-References: <20220720182228.259119-1-mairacanal@riseup.net>
- <20220720182228.259119-2-mairacanal@riseup.net>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20220720182228.259119-2-mairacanal@riseup.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
+In-Reply-To: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 21 Jul 2022 06:36:03 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Uuv0rGg1+8_b=R7SM-g87U_4TipwbNgVTXDd6T=X3qEQ@mail.gmail.com>
+Message-ID: <CAD=FV=Uuv0rGg1+8_b=R7SM-g87U_4TipwbNgVTXDd6T=X3qEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] arm64: dts: qcom: Add SKU6 for sc7180-trogdor-pazquel-lte-parade
+To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Às 15:22 de 20/07/22, Maíra Canal escreveu:
-> The functions dml30_CalculateWriteBackDISPCLK and
-> dml31_CalculateWriteBackDISPCLK are identical. Therefor, to avoid
-> code duplication, dml31_CalculateWriteBackDISPCLK is removed and
-> replaced by dml30_CalculateWriteBackDISPCLK.
-> 
+Hi,
 
-The message should be in imperative mood:
-
-"to avoid code duplication, dml31_CalculateWriteBackDISPCLK is removed
-and replaced by dml30_CalculateWriteBackDISPCLK." -> "to avoid code
-duplication, replace dml31_CalculateWriteBackDISPCLK by
-dml30_CalculateWriteBackDISPCLK"
-
-> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+On Wed, Jul 20, 2022 at 8:59 PM Yunlong Jia
+<yunlong.jia@ecs.corp-partner.google.com> wrote:
+>
+> SKU6 is LTE(w/o eSIM)+WIFI+Parade
+>
+> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
 > ---
+>
+> Changes in v3:
+> - Bindings and dts in the same series.
+>
+> Changes in v2:
+> - Put sku6 before sku4.
+>
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

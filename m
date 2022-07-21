@@ -2,232 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87B857CCBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AED57CCC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiGUNzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S230105AbiGUN4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiGUNy6 (ORCPT
+        with ESMTP id S229680AbiGUN4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:54:58 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB2027CE7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:54:57 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a13so1735455ljr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:54:57 -0700 (PDT)
+        Thu, 21 Jul 2022 09:56:13 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCE418B1A
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:56:11 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d7so1874052plr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1Svh48ykFz6FZPDaJbvr0X3QSVsa1sHd8+kMWlEiIAc=;
-        b=xx+rHMyP4qPgY9HXMXMjJoMr4m8zjaLGA5pkqOlRz9/E4CprEqUp7wnTEkEwqC7jRf
-         Rm6vMlKGPQHp1qQsgmLb4AzzH27nKUyxSPUPNIEaJM/z79tNBlxVvxKzployPgqEG/sp
-         szA2oLqalVPZIXBdTCnRe/Z2zKzqhEQARyd7anY/FxP3Pod0oYOzKkkO0IapXvQ6Es0j
-         vkG3YDf42d0pX1a0wzt23Zpn9XDTlIl/+5Nvk0Sk7ktAyDzMqWvlFiA2netx+ViQBQyo
-         KaLa7FtVB0XIvR6tQrwWEFYjJNDliApoezriVyrRMoqliL12Lia3jNY0DwILaVuDDY5t
-         2rqw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kAP2SBk42D4uaxvGZu+TFcwqKnU7hQWu1FF7205bWk4=;
+        b=Bs1I43g8APEuqfWK3Lt2auFA5pkva6Zc82Je4rpDAjkcUsiPt6amnuT9QT23QrkXhv
+         +WsQS6Kde6kOF4SjReZyRpxj3rtqXTvZSaFDj6qS79GLF4Fi1nReYDZEPgIZG96Qvm4L
+         ZFjdGLCN/PGIK6ok5WXgWdeW0+TM2286i4F4iTZaYOMAj6B+Ti01v2JkR/VyqhwdFIej
+         YDBd7eMABIIZ8GD4q9i60M+RHuN7sqclTlb82vAp4gVdW7MZ1pSfJOpcixKe8qsWWroG
+         zX+nzjk7SRK62N2Q/vwwya2FdBZIC4On+83qA3DvIkqid0be6mExM4LIojxFBihe2jAT
+         qzfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1Svh48ykFz6FZPDaJbvr0X3QSVsa1sHd8+kMWlEiIAc=;
-        b=1Qmnu3p6rZZqB5toOe8zCizEmZsnZtavlcKI11bvwk7iWXfZmSWTAQI0GaO2dfeoc5
-         XUsUjy6tcF5H6c/99IH4bB6k1KnE29nnMu9jKa5KmD04XN6gLbq6EOcUu0Hi5ytu4ZqH
-         1AGOT+Afky58d5NP8fBTONWh3N2nB69fRRMPLp8IEUqhbI6qI+kaUbbWKaACwdnTxro6
-         SzfjDKly1mBipUJDp1sv6YPUR7BqcQLS8+2oXs7Fw0UNde7QL8yxwBu4G/fqUjMmxH7K
-         sXrh2DT4VWFb4STLvBTqR6PBvK8mR1R6ML580c82iDCqxIr0ZQFYwNaaN4xHUOSEuZ95
-         vvBg==
-X-Gm-Message-State: AJIora8PB8lOlLkuSxmtHABFjK7xVCuHoNYlfy2nFRYz0s0qBF2skJXh
-        z4CGWLHKg7ZQtJocA4FZhKidycohuN4bEG6IJ7rSww==
-X-Google-Smtp-Source: AGRyM1vSkGgyIiZxk3eGrerbp2z+/RiOJTriDdXdltxBDPXUwqJLfvQ32oO4Brfu6P2UqeUw/3u9C22AuLJZUo6eHPo=
-X-Received: by 2002:a2e:895a:0:b0:25d:6815:98ff with SMTP id
- b26-20020a2e895a000000b0025d681598ffmr18164174ljk.189.1658411695787; Thu, 21
- Jul 2022 06:54:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kAP2SBk42D4uaxvGZu+TFcwqKnU7hQWu1FF7205bWk4=;
+        b=xk6nouXz4txj42xJb8d91H+DolJlENGRQmfoQpiCS/IXPI5GAJGZ7exvX4hwoxJXGn
+         C+yGT/kREWUXGXqDAd1Idyu/EZGVBSrC7PHpVOoc3j0L7Wp95SHHWPpEUphlSQBwPhbw
+         drbmqTqLLyCH42i3bAg5oled61GkYCeOdZpq4O6aZUbMxjt4iVrWDAiE0Ar4J450bj01
+         laVvZlWAh2ljH2menPFzqXYTJEmvR7sy1hOtaT/mKnrO+kn6Z8K5xoQrfvOycaBi2hgX
+         3WSpKaZGF4QeAl8ahoJTef4DAehCTPAcMqzl9jRrHUFAFk5f090bPnopzKBQHfxNpchs
+         DAUA==
+X-Gm-Message-State: AJIora+Gh7ibtjTGLz4327S/oIyhYI0Va/CKLRjDcGZfEDztIM6XN2Lq
+        GcQ1/VGejZoOFH6V/MrtKOCy9Q==
+X-Google-Smtp-Source: AGRyM1vFJnVKkmZoFDLh8byAtiK0Kz0JPkFdhRGPioPDqNFYy8KABq/yI1hiqLzenN32g7I1mEy/5A==
+X-Received: by 2002:a17:902:760f:b0:16c:ae59:c9b2 with SMTP id k15-20020a170902760f00b0016cae59c9b2mr38346424pll.0.1658411771121;
+        Thu, 21 Jul 2022 06:56:11 -0700 (PDT)
+Received: from [10.254.44.13] ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id g200-20020a6252d1000000b0052521fd273fsm1785908pfb.218.2022.07.21.06.56.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 06:56:10 -0700 (PDT)
+Message-ID: <3cc8def4-54ef-9ca5-7da9-eaa38ad9bd4c@bytedance.com>
+Date:   Thu, 21 Jul 2022 21:56:05 +0800
 MIME-Version: 1.0
-References: <20220704081149.16797-1-mike.leach@linaro.org> <0b493b49-2657-ad5d-465e-d80b62820613@arm.com>
-In-Reply-To: <0b493b49-2657-ad5d-465e-d80b62820613@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 21 Jul 2022 14:54:44 +0100
-Message-ID: <CAJ9a7VhXMn+DJ+qgeYRbqgGDm3jV_xNeBGKP=q7eiSe03_7eJw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/13] coresight: Add new API to allocate trace source
- ID values
-To:     James Clark <james.clark@arm.com>
-Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        quic_jinlmao@quicinc.com, suzuki.poulose@arm.com,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.1
+Subject: Re: [External] Re: [PATCH v2 07/10] sched/fair: use update_load_avg()
+ to attach/detach entity load_avg
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org, bsegall@google.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+References: <20220713040430.25778-1-zhouchengming@bytedance.com>
+ <20220713040430.25778-8-zhouchengming@bytedance.com>
+ <e838ac28-f68e-2282-94d5-616ea3bdf8d0@arm.com>
+ <88062fb6-e2fe-cf4e-10b5-7694c4d30941@bytedance.com>
+ <CAKfTPtCsd2RkOZoa10SSwKhm0NRzmOphAVNW7_JykqzxqfkSXg@mail.gmail.com>
+ <107763fc-7eab-a807-fa15-024178bdf57e@bytedance.com>
+ <CAKfTPtBo9GgkT1VeVA+1CBhiVZ8Vf+kp0XV3PWcBLGuZaz_hKQ@mail.gmail.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <CAKfTPtBo9GgkT1VeVA+1CBhiVZ8Vf+kp0XV3PWcBLGuZaz_hKQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On 2022/7/20 23:34, Vincent Guittot wrote:
+> On Wed, 20 Jul 2022 at 15:41, Chengming Zhou
+> <zhouchengming@bytedance.com> wrote:
+>>
+>> On 2022/7/19 18:29, Vincent Guittot wrote:
+>>> On Fri, 15 Jul 2022 at 18:21, Chengming Zhou
+>>> <zhouchengming@bytedance.com> wrote:
+>>>>
+> 
+> ...
+> 
+>>>>
+>>>>>
+>>>>> Looks to me that you want to replace this by your `freeze PELT when
+>>>>> outside fair` model.
+>>>>
+>>>> Yes, want to freeze PELT for two !fair cases:
+>>>>
+>>>> 1. !fair task hasn't been fair before: will still have its init load_avg
+>>>>    when switch to fair.
+>>>
+>>> But I'm not sure it makes sense to keep these init values. As an
+>>> example, the util_avg is set according to the cpu utilization at the
+>>> time of the task creation. I would tend to decay them as these init
+>>> values become less and less relevant.
+>>>
+>>> so we should return early in post_init_entity_util_avg() and don't set
+>>> util_avg if sched class is not cfs
+>>
+>> Yes, this indeed is a problem if we attach this init sched_avg of !fair task.
+>> I'm also not sure whether it make sense to keep them to 0 ? Will it cause
+>> unfairness problem between cfs_rqs?
+> 
+> Why should it cause an unfairness problem ? !fair tasks are not
+> accounted and their pelt values will be decayed down to 0 after 320ms
+> anyway (with the current implementation). So it's just like if you
+> started directly after those 320ms
 
-Thanks for looking at this.
+Thanks for your patient explain. IMHO, I am thinking if we have init sched_avg
+for new fair task (A), but have 0 for new task switched from !fair (B). Then
+what's the point of init sched_avg for the fair task?
 
-On Thu, 21 Jul 2022 at 11:27, James Clark <james.clark@arm.com> wrote:
->
->
->
-> On 04/07/2022 09:11, Mike Leach wrote:
-> > The current method for allocating trace source ID values to sources is
-> > to use a fixed algorithm for CPU based sources of (cpu_num * 2 + 0x10).
-> > The STM is allocated ID 0x1.
-> >
-> > This fixed algorithm is used in both the CoreSight driver code, and by
-> > perf when writing the trace metadata in the AUXTRACE_INFO record.
-> >
-> > The method needs replacing as currently:-
-> > 1. It is inefficient in using available IDs.
-> > 2. Does not scale to larger systems with many cores and the algorithm
-> > has no limits so will generate invalid trace IDs for cpu number > 44.
-> >
-> > Additionally requirements to allocate additional system IDs on some
-> > systems have been seen.
-> >
-> > This patch set  introduces an API that allows the allocation of trace IDs
-> > in a dynamic manner.
->
-> I've tested this with various commands like with per-thread mode, attaching,
-> running the tests and also Carsten's new tests. Apart from the possible
-> backwards compatibility issue and the minor code comments it looks good to
-> me.
->
+The B task will need some time to reach its stable load value, so in this process
+its cfs_rq may can't get enough shares? Imaging below scenario, if we have fair
+task A and switched from !fair task B at the same time, could cause unfairness
+between cfs0 and cfs1 ?
 
-I've looked at the backwards compatibility issue. At present with the
-current set
-(K = kernel drivers, P-rec = perf record, P-rep = perf report)
-::
+CPU0   tg   CPU1
+  |  /    \  |
+  | /      \ |
+cfs0        cfs1
+ (A)         (B)
 
-K-v1-ids  + P-rec-v1-ids => P-rep-v1 (OK)  P-rep-v2 (OK)
-K-v1-ids  + P-rec-v2-ids => P-rep-v1 (error message)  P-rep-v2 (fail)
-K-v2-ids  + P-rec-v1-ids => P-rep-v1 (fail)  P-rep-v2 (fail)
-K-v2-ids  + P-rec-v2-ids => P-rep-v1 (error message)  P-rep-v2 (OK)
+If runnable_avg and util_avg are 0 when switched from !fair, so we need more time
+to do load balance or CPU frequency adjust? I think it's the reason why we have
+init sched_avg for new fair task. Should we care about these, or it will be no problem?
 
-So, with a P-rec generating v2 metadata, P rep will cleanly error out.
-Where the Kernel ID version and the perf report ID version differ,
-even the P rep v2 will fail, due to the IDs being different in the
-file and actual drivers. These fails will simply look like no data
-present.
+I'm not sure, I must have missed something :-)
 
-There are two possible fixes that improve this:-
-A) if the v2 kernel uses a sysfs flag to indicate new ID usage, then
-if this is missing the new perf record can degrade to using the old
-algorithm to put IDs directly into metadata as it assumes it is
-running on a v1 kernel.
-This fixes things then for the P-rep v2 that can look for this & we
-know there will be no incoming ID packets.
-B) P-rep v2 can look for new packets irrespective of incoming metadata
-version, and if it sees them, override them
+Thanks!
 
-Compatibility matrix then looks like::
-K-v1-ids  + P-rec-v1-ids => P-rep-v1 (OK)  P-rep-v2 (OK)
-K-v1-ids  + P-rec-v2-ids => P-rep-v1 (error message)  P-rep-v2 (OK)
-K-v2-ids  + P-rec-v1-ids => P-rep-v1 (fail)  P-rep-v2 (OK)
-K-v2-ids  + P-rec-v2-ids => P-rep-v1 (error message)  P-rep-v2 (OK)
-
-There is no solution to using an old version of perf record on a new
-kernel and getting the old version of perf report to correctly decode
-the file.
-
-Thoughts?
-
-Mike
-
-> >
-> > Architecturally reserved IDs are never allocated, and the system is
-> > limited to allocating only valid IDs.
-> >
-> > Each of the current trace sources ETM3.x, ETM4.x and STM is updated to use
-> > the new API.
-> >
-> > For the ETMx.x devices IDs are allocated on certain events
-> > a) When using sysfs, an ID will be allocated on hardware enable, or a read of
-> > sysfs TRCTRACEID register and freed when the sysfs reset is written.
-> >
-> > b) When using perf, ID is allocated on hardware enable, and freed on
-> > hardware disable. IDs are communicated using the AUX_OUTPUT_HW_ID packet.
-> > The ID allocator is notified when perf sessions start and stop
-> > so CPU based IDs are kept constant throughout any perf session.
-> >
-> >
-> > Note: This patchset breaks backward compatibility for perf record and
-> > perf report.
-> >
-> > Because the method for generating the AUXTRACE_INFO meta data has
-> > changed, using an older perf record will result in metadata that
-> > does not match the trace IDs used in the recorded trace data.
-> > This mismatch will cause subsequent decode to fail.
-> >
-> > The version of the AUXTRACE_INFO has been updated to reflect the fact that
-> > the trace source IDs are no longer present in the metadata. This will
-> > mean older versions of perf report cannot decode the file.
-> >
-> > Applies to coresight/next [c06475910b52]
-> > Tested on DB410c
-> >
-> > Changes since v1:
-> > (after feedback & discussion with Mathieu & Suzuki).
-> >
-> > 1) API has changed. The global trace ID map is managed internally, so it
-> > is no longer passed in to the API functions.
-> >
-> > 2) perf record does not use sysfs to find the trace IDs. These are now
-> > output as AUX_OUTPUT_HW_ID events. The drivers, perf record, and perf report
-> > have been updated accordingly to generate and handle these events.
-> >
-> > Mike Leach (13):
-> >   coresight: trace-id: Add API to dynamically assign Trace ID values
-> >   coresight: trace-id: update CoreSight core to use Trace ID API
-> >   coresight: stm: Update STM driver to use Trace ID API
-> >   coresight: etm4x: Update ETM4 driver to use Trace ID API
-> >   coresight: etm3x: Update ETM3 driver to use Trace ID API
-> >   coresight: etmX.X: stm: Remove unused legacy source Trace ID ops
-> >   coresight: perf: traceid: Add perf notifiers for Trace ID
-> >   perf: cs-etm: Move mapping of Trace ID and cpu into helper function
-> >   perf: cs-etm: Update record event to use new Trace ID protocol
-> >   kernel: events: Export perf_report_aux_output_id()
-> >   perf: cs-etm: Handle PERF_RECORD_AUX_OUTPUT_HW_ID packet
-> >   coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID used for Trace ID
-> >   coresight: trace-id: Add debug & test macros to Trace ID allocation
-> >
-> >  drivers/hwtracing/coresight/Makefile          |   2 +-
-> >  drivers/hwtracing/coresight/coresight-core.c  |  49 +---
-> >  .../hwtracing/coresight/coresight-etm-perf.c  |  17 ++
-> >  drivers/hwtracing/coresight/coresight-etm.h   |   3 +-
-> >  .../coresight/coresight-etm3x-core.c          |  85 +++---
-> >  .../coresight/coresight-etm3x-sysfs.c         |  28 +-
-> >  .../coresight/coresight-etm4x-core.c          |  65 ++++-
-> >  .../coresight/coresight-etm4x-sysfs.c         |  32 ++-
-> >  drivers/hwtracing/coresight/coresight-etm4x.h |   3 +
-> >  drivers/hwtracing/coresight/coresight-stm.c   |  49 +---
-> >  .../hwtracing/coresight/coresight-trace-id.c  | 263 ++++++++++++++++++
-> >  .../hwtracing/coresight/coresight-trace-id.h  |  65 +++++
-> >  include/linux/coresight-pmu.h                 |  31 ++-
-> >  include/linux/coresight.h                     |   3 -
-> >  kernel/events/core.c                          |   1 +
-> >  tools/include/linux/coresight-pmu.h           |  31 ++-
-> >  tools/perf/arch/arm/util/cs-etm.c             |  21 +-
-> >  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |   9 +
-> >  tools/perf/util/cs-etm.c                      | 220 +++++++++++++--
-> >  tools/perf/util/cs-etm.h                      |  14 +-
-> >  20 files changed, 784 insertions(+), 207 deletions(-)
-> >  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
-> >  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
-> >
-
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+> 
+>>
+>>>
+>>>>
+>>>> 2. !fair task has been switched_from_fair(): will still keep its lastest
+>>>>    load_avg when switch to fair.
+>>>>
+>>>>>
+>>>>>> This patch make update_load_avg() the only location of attach/detach,
+>>>>>> and can handle these corner cases like change cgroup of NEW tasks,
+>>>>>> by checking last_update_time before attach/detach.
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>>> @@ -11527,9 +11522,7 @@ static void detach_entity_cfs_rq(struct sched_entity *se)
+>>>>>>      struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>>>>>>
+>>>>>>      /* Catch up with the cfs_rq and remove our load when we leave */
+>>>>>> -    update_load_avg(cfs_rq, se, 0);
+>>>>>> -    detach_entity_load_avg(cfs_rq, se);
+>>>>>> -    update_tg_load_avg(cfs_rq);
+>>>>>> +    update_load_avg(cfs_rq, se, UPDATE_TG | DO_DETACH);
+>>>>>
+>>>>> IMHO, the DO_[DE|AT]TACH comments in update_load_avg() would have to be
+>>>>> updated in this case.
+>>>>
+>>>> Correct, will do.
+>>>>
+>>>> Thanks.
+>>>>
+>>>>>
+>>>>> [...]

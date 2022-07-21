@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF9357C190
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED2157C19A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiGUA1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S230341AbiGUA2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiGUA1a (ORCPT
+        with ESMTP id S229540AbiGUA22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:27:30 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BEB74CCD
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:27:28 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id os14so422455ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:27:28 -0700 (PDT)
+        Wed, 20 Jul 2022 20:28:28 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164BB5A88B;
+        Wed, 20 Jul 2022 17:28:24 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 72so210133pge.0;
+        Wed, 20 Jul 2022 17:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bCLRjsvYtRZeZNV9Bm912X2zs0KkM1GXJxaEZhHa5nE=;
-        b=HqMfVkkMPd0BQ06k135notIHxmB0/Wr0NhajRsDIE/q1frPsEfF5cN+9ONCxbxnP5D
-         L8vG6ozVaqzhR98wdBJ3ap2Woe6/8AyIcyHIqcCkGQsZp0YnD/5meOUjRNixzqOjEsrm
-         d/lKXf7c5DfoJp5ahmT4ImNt6nj3COLZ/j8d2YdNhuQT9yJuWBKYKaVpVcTGqOkAjErr
-         JywaPH9o2dDwLwd+A389tgG/QBjfKvEBom4Q3mTtorlMiVxiWY1B5JAsdRHtRvHIhipA
-         47niDJYvv3ly9eHuFjYat0VcT4Y9bv9RcCdGmOeneOm8kczIQeq3nCZeSyVMZGTxjNBw
-         u/VA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=jH9h10qQPmqy9XaSFPaWtgsJKQU/Fb0xm7oNpd+XnLI=;
+        b=cFUO37NjH/fDK5op+fHw7DyAEcDcKJzyphiPTIre5PkNvyL+5KIw2a6QG7gys43+rq
+         X6wu9p+FYkIl+cF1YLqmZI8Ux+5bd5idCFxlp1Gm3Z4WjsOM8RQmzKaman6wvixnfErC
+         JU9tMmHV34EBlhRlpCCBPqPAh8ok6jcTxbtrOZGeMMt+GdP6gN0g9hthzft0J6Crpi1h
+         IF9LQ4L0Fg+gNyCZr51O73tv1k9ZnNdPB1TK0ocZAO9aTW9OqldAn717UFdfFHagua4E
+         CFfqUFDOr9h981S1jcTba5XG/wOf9Nj2FIXnAZzTJ2/+G1+5Tf+2ISX4tjxdKrAFESyV
+         df8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bCLRjsvYtRZeZNV9Bm912X2zs0KkM1GXJxaEZhHa5nE=;
-        b=sygpBJ2fnE+4WzVt6U8iMAfyZjrOVod9Yfb5hTBHqVIcjBxKfDhcUIWDokfPsBeWdh
-         buDrWMoMhpxQkggqB8bB7UsH9oBY97z5ADo3w1zjH6LPN3goQ+lfCe6zhOnAMrG75Wvs
-         flScHXKm6YSBPH340Tfv77JrDAqqn67ys6r76NCfqEIy+isZE+f3xdiFoLyxWbw4F8jA
-         O9hgY5xT2pFcQLkG6ksR1wWKf/nVNBA9+BULgRd3Wbf2FCT2XHZoxuRUK5W/tkst9wqZ
-         P702GBDk89C49ifnNPj7DGssGtymDYaYVd56dJdtE8Af+lORYp/Ob+3jGTrmLAgdZt1U
-         SbOw==
-X-Gm-Message-State: AJIora+iZZjhlMv8YjygmjPwBA01JdfVUHRsDsaosbk2LWTm81W21gFW
-        qvrblm9sJvQSBVqAFOXqJr1SMA==
-X-Google-Smtp-Source: AGRyM1vgRhqQv3LgmIHebxs9JwPcvjq22yU0EnYatlVT11ojjmDMODN5Id2uFmWBXjUd5sSDsbQ2ig==
-X-Received: by 2002:a17:906:7e43:b0:72b:52de:b039 with SMTP id z3-20020a1709067e4300b0072b52deb039mr38326269ejr.198.1658363246662;
-        Wed, 20 Jul 2022 17:27:26 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.97.246])
-        by smtp.gmail.com with ESMTPSA id j10-20020a17090623ea00b0072ab06bf296sm213886ejg.23.2022.07.20.17.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 17:27:25 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 08:27:19 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Ali Saidi <alisaidi@amazon.com>, Joe Mario <jmario@redhat.com>,
-        Adam Li <adam.li@amperecomputing.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Kajol Jain <kjain@linux.ibm.com>
-Subject: Re: [PATCH v5 01/17] perf: Add SNOOP_PEER flag to perf mem data
- struct
-Message-ID: <20220721002719.GA29595@leoy-ThinkPad-X240s>
-References: <20220604042820.2270916-1-leo.yan@linaro.org>
- <20220604042820.2270916-2-leo.yan@linaro.org>
- <YthNXweIEdNfcoX1@kernel.org>
- <YthNmcOJOZitcsjD@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YthNmcOJOZitcsjD@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=jH9h10qQPmqy9XaSFPaWtgsJKQU/Fb0xm7oNpd+XnLI=;
+        b=AjuNoXACiCjGekUfUhr+r369YevsTb3MtHGsmeGFaQXTaAweekxD70aB5W5eestwgx
+         N1TXX6qyXBzm+RK8+XPa4H1k57UsjviEJnrpH+SvOExFOIe/Us47QQN5DecY0F/rIS1w
+         Ey3dxuqG8n6WvFPjUEQVZ11Sq7MmjeEDLTnhJIWhxTkQ5VdgS8See/lIVuhUX9mK1K/5
+         OtHCg/BYQHMhBBiYV6Zr0497UlxT0E7cHAPl4ixpSQ/rcNVj5/I2DT8OtpvDU0hcj8Ld
+         l8hko1ENffg8/O0odxT+4TcJOLrr4m02cLy+/NXZdMIJCH2xymuQwBF8xYYTaGMQFmnr
+         eRcg==
+X-Gm-Message-State: AJIora/9slOhuFL7Bx9KiFsHiFXd0aJrxskU1f9uDoZ+Qddwgo106Wui
+        J5BGMwPJxc7qNUYbbAmqoUE=
+X-Google-Smtp-Source: AGRyM1ukWh5ihjPMbEXvPa9Q6FMOYa+DWD1lmp51UkwycijxpOMA2+dVCW0oMM/4A5gfiq+dKylfMA==
+X-Received: by 2002:a65:6c03:0:b0:412:ac5a:bcab with SMTP id y3-20020a656c03000000b00412ac5abcabmr36088141pgu.7.1658363303175;
+        Wed, 20 Jul 2022 17:28:23 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902db0500b0016bc4a6ce28sm163226plx.98.2022.07.20.17.28.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 20 Jul 2022 17:28:22 -0700 (PDT)
+From:   justinpopo6@gmail.com
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, joalonsof@gmail.com, jesionowskigreg@gmail.com,
+        jackychou@asix.com.tw, jannh@google.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     f.fainelli@gmail.com, justin.chen@broadcom.com,
+        Justin Chen <justinpopo6@gmail.com>
+Subject: [PATCH v2 0/5] net: usb: ax88179_178a: improvements and bug fixes
+Date:   Wed, 20 Jul 2022 17:28:11 -0700
+Message-Id: <1658363296-15734-1-git-send-email-justinpopo6@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 03:46:49PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Jul 20, 2022 at 03:45:51PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Sat, Jun 04, 2022 at 12:28:04PM +0800, Leo Yan escreveu:
-> > > From: Ali Saidi <alisaidi@amazon.com>
-> > > 
-> > > Add a flag to the perf mem data struct to signal that a request caused a
-> > > cache-to-cache transfer of a line from a peer of the requestor and
-> > > wasn't sourced from a lower cache level.  The line being moved from one
-> > > peer cache to another has latency and performance implications. On Arm64
-> > > Neoverse systems the data source can indicate a cache-to-cache transfer
-> > > but not if the line is dirty or clean, so instead of overloading HITM
-> > > define a new flag that indicates this type of transfer.
-> > > 
-> > > Signed-off-by: Ali Saidi <alisaidi@amazon.com>
-> > > Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> > > Reviewed-by: Kajol Jain<kjain@linux.ibm.com>
-> > 
-> > Hey, any knews about this going upstream? PeterZ?
-> 
-> Just took a look and it isn't in tip/master.
+From: Justin Chen <justinpopo6@gmail.com>
 
-Yeah, this patch is not picked by maintainers.
+v2
+	Remove unused variables
+	Remove unnecessary memset
 
-I confirmed that this patch can be applied cleanly on tip/master
-branch.  Peter.Z, could you pick this patch?
+Power management was partially broken. There were two issues when dropping
+into a sleep state.
+1. Resume was not doing a fully HW restore. Only a partial restore. This
+lead to a couple things being broken on resume. One of them being tcp rx.
+2. wolopt was not being restored properly on resume.
 
-Thanks,
-Leo
+Also did some general improvements and clean up to make it easier to fix
+the issues mentioned above.
+
+Justin Chen (5):
+  net: usb: ax88179_178a: remove redundant init code
+  net: usb: ax88179_178a: clean up pm calls
+  net: usb: ax88179_178a: restore state on resume
+  net: usb: ax88179_178a: move priv to driver_priv
+  net: usb: ax88179_178a: wol optimizations
+
+ drivers/net/usb/ax88179_178a.c | 319 +++++++++++++----------------------------
+ 1 file changed, 99 insertions(+), 220 deletions(-)
+
+-- 
+2.7.4
+

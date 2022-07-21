@@ -2,143 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED5B57CA27
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C9D57CA2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiGUL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S233407AbiGUL7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiGUL7h (ORCPT
+        with ESMTP id S233390AbiGUL7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:59:37 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0312F65D61;
-        Thu, 21 Jul 2022 04:59:34 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id b25so1052394qka.11;
-        Thu, 21 Jul 2022 04:59:33 -0700 (PDT)
+        Thu, 21 Jul 2022 07:59:42 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9903079ED3;
+        Thu, 21 Jul 2022 04:59:41 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id mf4so2785933ejc.3;
+        Thu, 21 Jul 2022 04:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=a2m1SZg7h2oHboY4NytPHUqMWEZ4cTDRU1p3Uh7JG+s=;
+        b=Epo4QTTd7Rmf98WYXfniuwZVegSEbuoqug8aWUntuRbDRsemnS1wNPmrlHKp5ywF8K
+         46o+vGGjdO36dzhhuR119Vy2PL2m0LJDB1OunDXXMiZPUSbv8qLV81aZNz7yURhEKKQV
+         qONo5//m4kDf/aZNOBobcaDuHaf47RluHRrFQas0s28JhGbuNoYpTOSykMcLWdI+pWRG
+         dj54yl2wf/L0zZ48XsVIaBp0jZTUCy7/VKCZTN/aCdDtbw1QcpC8vqeKb7aXL+lAq35X
+         hJaOZ+Tpg7pQUU0olzJuXjIS2UeqGM0OkzI2BkF6boaQTwpjPj5VZHEqHP2T76i0xNWn
+         GwUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lRz/hxcrvKaBBIf3i1cgs6tUJRVDE9Sapae6r7E79pw=;
-        b=66SNt/WmtKLXhmxDXTDVgulQYqbOxFF0tMq5ItusPVw8lNq0ECGDEuILGu1giYRcsb
-         6DFJHmWvFtYc53ew3b30BBUzvqzmOQCbiOumKKCdo3SiRXILXpT6kPcJoNWUj711E3CF
-         kigWhTxI8C758XtHaRdmwGCDYzaRiVZL9tJNGirhJcNbot4FGMWPJR7dYVyPxcB7wB2J
-         TH+Kf3n33IhLHJMMt3saYKffTzjw+BftJXdr0OKYw3p6u1oDIdR0hZzBK3OJ9Wm06ha1
-         SGQO3eNVGEwUrUp6Xq/1d71TSod7WF1Wbgu6osuYxLZmwO3XspIldq3hst/NP5jc9cKM
-         ebEw==
-X-Gm-Message-State: AJIora+Cm1BA78I7pFsdsVNdslELYly6OPwc921xpDsFpYLYkwctLoWq
-        auphys0BW5RHKCDSbUkF/LO/jjJpAI5u1A==
-X-Google-Smtp-Source: AGRyM1tmoehH1ovNz56iTGd4o9Fa2qWfFERqV5Fo8MD0TQRz2/QQuYQnpuvT9fJueixfo2fLaofsBw==
-X-Received: by 2002:a37:d281:0:b0:6af:24c7:a981 with SMTP id f123-20020a37d281000000b006af24c7a981mr28334921qkj.736.1658404772977;
-        Thu, 21 Jul 2022 04:59:32 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id r6-20020a05620a298600b006a75a0ffc97sm1335467qkp.3.2022.07.21.04.59.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 04:59:32 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31bf3656517so14269367b3.12;
-        Thu, 21 Jul 2022 04:59:32 -0700 (PDT)
-X-Received: by 2002:a81:6088:0:b0:31e:79fd:3dfa with SMTP id
- u130-20020a816088000000b0031e79fd3dfamr3834563ywb.47.1658404772353; Thu, 21
- Jul 2022 04:59:32 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a2m1SZg7h2oHboY4NytPHUqMWEZ4cTDRU1p3Uh7JG+s=;
+        b=ik69EZvvrnbn7Ta3mTHBOH40GglXtODuDw+tZEPLRtwnumdYmbFpJrnhEIBcu9AIqu
+         /EXd4oOy2UAA7QvAhKrLYyqesRbRCMxDGAe3uj0bGYAS5+YrPk6Rs1+I95yJlOPOtx4P
+         wnub863jDPIqk9r5Y/qM+w8Ihq5qv99PmYHMXxZWvgEkSmBF3V9SIyZucBnOWr9vm4zk
+         AUl6aNKhO4wd8Eb/2ZsVTNGOAAsGcsaCnrgoyUc0uoxlfOVrtkuvf0+wNO41m5lzYgue
+         LkCNzq6yTqPitkCYEbww/Ce4ay97FVhxSXK0utyf3FeFMXtWmQDxp6VJmVTJFsnam8Rf
+         8L8g==
+X-Gm-Message-State: AJIora+ycBiABRVytvlXCBlUhYVm+oXkalztELh/puuPqrZ4zUw/eFYc
+        I5RMADaI6hbwvNWY/OBkcBg=
+X-Google-Smtp-Source: AGRyM1sgsgI/WSY+ey9uZVcDNSpjjPoqNQrVadgcVf4CT98XxbJLOlIlRDjYuFPJo0Q/oTsPUzORDA==
+X-Received: by 2002:a17:907:3daa:b0:72b:7656:d4d2 with SMTP id he42-20020a1709073daa00b0072b7656d4d2mr40394554ejc.166.1658404779830;
+        Thu, 21 Jul 2022 04:59:39 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id v17-20020a056402175100b0043bb69e1dcfsm870539edx.85.2022.07.21.04.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 04:59:38 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 14:59:35 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <20220721115935.5ctsbtoojtoxxubi@skbuf>
+References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
+ <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
+ <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+ <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
+ <YtQosZV0exwyH6qo@shredder>
+ <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
 MIME-Version: 1.0
-References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220718195651.7711-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdV5s-q13pWXs-ki6o5h8=ZMPL11o08YQx1pawe9EUySBA@mail.gmail.com>
- <CA+V-a8tqhiO+WBOzAD40A10K+qtVQ4HE87C9PKVpoFgWkkS54w@mail.gmail.com>
- <CAMuHMdWcj2xv8FrCiTLCVQfWzejONCAv_o-VzAkicLAFNd5gPg@mail.gmail.com> <CA+V-a8uNZ8T6m+nav=UXTFcwtW8o_2dGE2QFMvkhwcUU=Ka42Q@mail.gmail.com>
-In-Reply-To: <CA+V-a8uNZ8T6m+nav=UXTFcwtW8o_2dGE2QFMvkhwcUU=Ka42Q@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Jul 2022 13:59:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXRPpr9othmv9xAOx2a8r=pdP0uZw1xFN9Q0noq1zuw8w@mail.gmail.com>
-Message-ID: <CAMuHMdXRPpr9othmv9xAOx2a8r=pdP0uZw1xFN9Q0noq1zuw8w@mail.gmail.com>
-Subject: Re: [PATCH 5/5] arm64: dts: renesas: rzg2l-smarc-som: Add PHY
- interrupt support for ETH{0/1}
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On Sun, Jul 17, 2022 at 05:53:22PM +0200, netdev@kapio-technology.com wrote:
+> > 3. What happens to packets with a DA matching the zero-DPV entry, are
+> > they also discarded in hardware? If so, here we differ from the bridge
+> > driver implementation where such packets will be forwarded according to
+> > the locked entry and egress the locked port
+> 
+> I understand that egress will follow what is setup with regard to UC, MC and
+> BC, though I haven't tested that. But no replies will get through of course
+> as long as the port hasn't been opened for the iface behind the locked port.
 
-On Thu, Jul 21, 2022 at 1:55 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Thu, Jul 21, 2022 at 12:43 PM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Thu, Jul 21, 2022 at 1:07 PM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> > > On Thu, Jul 21, 2022 at 11:47 AM Geert Uytterhoeven
-> > > <geert@linux-m68k.org> wrote:
-> > > > On Mon, Jul 18, 2022 at 9:57 PM Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > > The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ3 for ETH0
-> > > > > and ETH1 respectively.
-> > > > >
-> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Thanks for your patch!
-> > > >
-> > > > > --- a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
-> > > > > +++ b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
-> > > > > @@ -94,6 +94,8 @@ phy0: ethernet-phy@7 {
-> > > > >                 compatible = "ethernet-phy-id0022.1640",
-> > > > >                              "ethernet-phy-ieee802.3-c22";
-> > > > >                 reg = <7>;
-> > > > > +               interrupt-parent = <&irqc>;
-> > > > > +               interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-> > > >
-> > > > 2?
-> > > >
-> > > IRQ2 = SPI 3, the driver expects the SPI number and is used as index
-> > > [0] to map the interrupt in the GIC.
-> > >
-> > > [0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/irqchip/irq-renesas-rzg2l.c?h=next-20220720#n291
-> >
-> > Using the SPI number sounds strange to me, as the consumer
-> > (Ethernet PHY) is linked to the IRQC, not to the GIC directly.
-> >
-> Right, are you suggesting that I tweak the driver? The other problem
-> is how do we differentiate NMI and IRQ0? How about we add macros for
-> IRQ0-7 and use them in the DTS?
->
-> > > > "The first cell should contain external interrupt number (IRQ0-7)"
-> > > >
-> > > Probably I need to reword this to "The first cell should contain the
-> > > SPI number for IRQ0-7/NMI interrupt lines" ?
-> >
-> > Oh, so zero is the NMI?
-> > And 1-8 are IRQ0-7.
-> >
-> Yes that's right.
-
-I don't think it was ever mentioned that the NMI was exposed, too.
-
-Using macros sounds fine to me.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Here, should we be rather fixing the software bridge, if the current
+behavior is to forward packets towards locked FDB entries?

@@ -2,71 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AC157CFCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D2557CF58
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232985AbiGUPjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
+        id S231734AbiGUPgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232917AbiGUPjK (ORCPT
+        with ESMTP id S231499AbiGUPgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:39:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD0A288763
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658417853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+w7mjnwOlINJMKCuWIn64MJoJuBpfG6APw9NPBjcvFw=;
-        b=WzLBzAbdoF79irJj6OalIgwmbBkOQcWZ8I2wRKtd5VMklbgNHwlCyApf3L//lM8hVzqCqn
-        XF6+ZHjZNOPuw3XmaKOUbFQCLc7I/5bi16ghjWW248v40I0jDWZr83AhGbtdz7apUEPyyW
-        mdEavikNzoXGbNMDf/O69DUhN7THsBo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-215-vGkUN8vHOoeMb4-OVYfjpw-1; Thu, 21 Jul 2022 11:37:28 -0400
-X-MC-Unique: vGkUN8vHOoeMb4-OVYfjpw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFD213817A75;
-        Thu, 21 Jul 2022 15:37:26 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.194.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E1312166B26;
-        Thu, 21 Jul 2022 15:37:23 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v7 16/24] selftests/bpf/hid: add test to change the report size
+        Thu, 21 Jul 2022 11:36:24 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A8638BF
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:36:22 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id n18so3412432lfq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hfKsdhQQt9tQ595I9ds8b/DPqZVDcCzjVcrK9iWT3ts=;
+        b=GCw16KpafXB+y2e+gFPayJKLMhyZMkVvIg00xSfR0J6zmap4XUiw74QYrBPZojxqnG
+         nlMigEvmPTJqX2BUwSdZ4mJxx8kFZTXQJaOIndmhXWmnsZmilUJXncDHi2uKE8pGuWVL
+         znA3Smzdfbdkc8qVWjZ7RHlZu4leucipgnhrY3cduU0fYTHFS3staPx9+XFkY/ZjtM2h
+         117KpUbzALp8IYmM0wdGGHbqPzb9abAasZ2Y4vFeXAUqeWHw9qTJ0dR/mA5YE4OC5PTw
+         ZVK2616IlVs5qLNNTIINaLS39Wgp/5PWsi2sSjQEOqP4IsbdopLcNcEJfX1/nxCnsqxR
+         Lwew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hfKsdhQQt9tQ595I9ds8b/DPqZVDcCzjVcrK9iWT3ts=;
+        b=ymUdWV8ZEUo01CB3dlRVLxtprflGfc/eSaipjRvvgMErJsBPsECEQnLkQnH+LBuWZJ
+         NBcAV0QiFCvKCAlQbl25aupbGm5DAquiuZv78Ny4/oB/8gmdPiarNyO7WivaucC8smmq
+         /SN0u5FHu33Mwp4C/Rg/b8HkfRwdicjtpcbhutbrqjshDnbH8kcvURj3DnGFxDNDENkK
+         GFiPJ4iCsVgX6YizK6do0FRlm5fXfHqaBcv8vLa8pg7lBC3SJTPCLDlK/S7SjEyHN0Cf
+         pMQP1oMoMH7aEaBlWrSxDkDL3iv9xWU2/7M9QaUYJ8q8T7Q0IVORHWI4LI2Dj6CurC7R
+         Rgtw==
+X-Gm-Message-State: AJIora/GVbPkB3ifXMGiV5oejF9Nf3RXO6tcVwI4CBDL9qGhUErNy9dD
+        W5BYMNAOlV9Wagzaak4vEiaUjQ==
+X-Google-Smtp-Source: AGRyM1uYyhdhJ+K6lLI/9qjAZeU/e9ueK5AuTfFuX6OK/DbxDxlvM3z4hS4HgQhwQusCJCfVoUBo3A==
+X-Received: by 2002:a05:6512:1506:b0:47f:79c6:eb36 with SMTP id bq6-20020a056512150600b0047f79c6eb36mr24308198lfb.168.1658417780731;
+        Thu, 21 Jul 2022 08:36:20 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id w17-20020a05651234d100b00478f1e04655sm511718lfr.14.2022.07.21.08.36.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 08:36:20 -0700 (PDT)
+Message-ID: <9e872a00-966a-aaf8-7bb9-6627fcb0cf83@linaro.org>
 Date:   Thu, 21 Jul 2022 17:36:17 +0200
-Message-Id: <20220721153625.1282007-17-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/6] ARM: refresh defconfig files
+Content-Language: en-US
+To:     Scott Branden <scott.branden@broadcom.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-sh@vger.kernel.org
+References: <20220721141325.2413920-1-arnd@kernel.org>
+ <20220721141325.2413920-2-arnd@kernel.org>
+ <9321ce6c-7565-a7eb-2bfe-dac144ab7733@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9321ce6c-7565-a7eb-2bfe-dac144ab7733@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,134 +121,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a different report with a bigger size and ensures we are doing
-things properly.
+On 21/07/2022 17:33, Scott Branden wrote:
+> Hi Arnd,
+> 
+> On 2022-07-21 07:13, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> A lot of Kconfig options have changed over the years, and we tend
+>> to not do a blind 'make defconfig' to refresh the files, to ensure
+>> we catch options that should not have gone away.
+>>
+>> I used some a bit of scripting to only rework the bits where an
+>> option moved around in any of the defconfig files, without also
+>> dropping any of the other lines, to make it clearer which options
+>> we no longer have.
+> Resync is fine.  But, it would be great if the defconfig files were kept 
+> in sync. Almost every kernel version kconfig options change which affect 
+> these files. Could we put in place a defconfig refresh per kernel 
+> version to keep them all in sync going forward?
+>
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Not entirely, because some Kconfig changes are causing symbols to
+disappear. Also defconfig is expected to include user-visible options,
+even if savedefconfig would drop them.
 
----
+This is why blind savedefconfig is not acceptable.
 
-no changes in v7
-
-no changes in v6
-
-new in v5
----
- tools/testing/selftests/bpf/prog_tests/hid.c | 60 ++++++++++++++++++++
- tools/testing/selftests/bpf/progs/hid.c      | 15 ++++-
- 2 files changed, 74 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-index 719d220c8d86..47bc0a30c275 100644
---- a/tools/testing/selftests/bpf/prog_tests/hid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-@@ -17,6 +17,17 @@ static unsigned char rdesc[] = {
- 	0xa1, 0x01,		/* COLLECTION (Application) */
- 	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
- 	0xa1, 0x00,			/* COLLECTION (Physical) */
-+	0x85, 0x02,				/* REPORT_ID (2) */
-+	0x19, 0x01,				/* USAGE_MINIMUM (1) */
-+	0x29, 0x08,				/* USAGE_MAXIMUM (3) */
-+	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
-+	0x25, 0xff,				/* LOGICAL_MAXIMUM (255) */
-+	0x95, 0x08,				/* REPORT_COUNT (8) */
-+	0x75, 0x08,				/* REPORT_SIZE (8) */
-+	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
-+	0xc0,				/* END_COLLECTION */
-+	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
-+	0xa1, 0x00,			/* COLLECTION (Physical) */
- 	0x85, 0x01,				/* REPORT_ID (1) */
- 	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
- 	0x19, 0x01,				/* USAGE_MINIMUM (1) */
-@@ -635,6 +646,53 @@ static int test_attach_detach(int uhid_fd, int dev_id)
- 	return ret;
- }
- 
-+/*
-+ * Attach hid_change_report_id to the given uhid device,
-+ * retrieve and open the matching hidraw node,
-+ * inject one event in the uhid device,
-+ * check that the program sees it and can change the data
-+ */
-+static int test_hid_change_report(int uhid_fd, int dev_id)
-+{
-+	struct test_params params;
-+	int err, hidraw_fd = -1;
-+	u8 buf[10] = {0};
-+	int ret = -1;
-+
-+	err = prep_test(dev_id, "hid_change_report_id", &params);
-+	if (!ASSERT_EQ(err, 0, "prep_test(hid_change_report_id)"))
-+		goto cleanup;
-+
-+	hidraw_fd = params.hidraw_fd;
-+
-+	/* inject one event */
-+	buf[0] = 1;
-+	buf[1] = 42;
-+	send_event(uhid_fd, buf, 6);
-+
-+	/* read the data from hidraw */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(hidraw_fd, buf, sizeof(buf));
-+	if (!ASSERT_EQ(err, 9, "read_hidraw"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[0], 2, "hid_change_report_id"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[1], 42, "hid_change_report_id"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[2], 0, "leftovers_from_previous_test"))
-+		goto cleanup;
-+
-+	ret = 0;
-+
-+cleanup:
-+	cleanup_test(&params);
-+
-+	return ret;
-+}
-+
- void serial_test_hid_bpf(void)
- {
- 	int err, uhid_fd;
-@@ -660,6 +718,8 @@ void serial_test_hid_bpf(void)
- 	ASSERT_OK(err, "hid");
- 	err = test_attach_detach(uhid_fd, dev_id);
- 	ASSERT_OK(err, "hid_attach_detach");
-+	err = test_hid_change_report(uhid_fd, dev_id);
-+	ASSERT_OK(err, "hid_change_report");
- 
- 	destroy(uhid_fd);
- 
-diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-index fc0a4241643a..ee7529c47ad8 100644
---- a/tools/testing/selftests/bpf/progs/hid.c
-+++ b/tools/testing/selftests/bpf/progs/hid.c
-@@ -32,7 +32,20 @@ int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx)
- 
- 	rw_data[2] = rw_data[1] + 5;
- 
--	return 0;
-+	return hid_ctx->size;
-+}
-+
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_change_report_id, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *rw_data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 3 /* size */);
-+
-+	if (!rw_data)
-+		return 0; /* EPERM check */
-+
-+	rw_data[0] = 2;
-+
-+	return 9;
- }
- 
- SEC("syscall")
--- 
-2.36.1
-
+Best regards,
+Krzysztof

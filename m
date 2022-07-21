@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E96A57C6C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0BF57C6C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbiGUIqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S230201AbiGUIqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiGUIqd (ORCPT
+        with ESMTP id S229539AbiGUIq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:46:33 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A98183B8;
-        Thu, 21 Jul 2022 01:46:32 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26L8FdGB027725;
-        Thu, 21 Jul 2022 08:46:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=x80jC0+vqrPicCD5sQzIJ9uqpCvdD5695j7ali2vEaw=;
- b=sZyVunw2rBZG7DHqi0blHbs8eTAtBHIxO7GaKTR0VLNhUr0OqjELSVllUr2Gkb3G+spd
- Zg2i1fNEgnbjQHkJj9l3qaAO9CHTUj74NpUEak3++fWX2N8Hd635ae0UI/tCISkKIX5R
- ZQyQwBt6KoT12m8VVi78DkQbOBH0k2mQVURr/jE96LOgUlshbNs7Y5qhTqsv0TIQOyge
- XO0EJ9fbstL8PvP8lie1YoN9UYxB6XkVWYVp4JHch+MfOhxDE+epz4Fw/hWmmr6irWzA
- dTzWmgCuBZQfLnUmI6SsXsMdbkbmW0eYu6wOz7NrAsoseb7LnbpNf4to5bLt/DZ9iUv/ UA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hf34srunj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Jul 2022 08:46:24 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26L8ItWm009789;
-        Thu, 21 Jul 2022 08:46:24 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hf34sruky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Jul 2022 08:46:24 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26L8Kued012338;
-        Thu, 21 Jul 2022 08:46:22 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3hbmkj6nrd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Jul 2022 08:46:21 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26L8kIw516187772
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Jul 2022 08:46:18 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B5E4C11C050;
-        Thu, 21 Jul 2022 08:46:18 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C06A11C04C;
-        Thu, 21 Jul 2022 08:46:18 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.22.197])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 21 Jul 2022 08:46:18 +0000 (GMT)
-Date:   Thu, 21 Jul 2022 10:46:16 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] s390/crash: support multi-segment iterators
-Message-ID: <YtkSWBPpUe8CqNxV@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <cover.1658206891.git.agordeev@linux.ibm.com>
- <YtdzwLXFMuv02JEA@ZenIV>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtdzwLXFMuv02JEA@ZenIV>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Wirt8CpA_AQCfHEZ0HCuATCAMHvigZiN
-X-Proofpoint-ORIG-GUID: tJF6N95NuLGFjDOGt52sD8BrlBw7IVwZ
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 21 Jul 2022 04:46:29 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D32183B8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:46:25 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id o7so1670058lfq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9DFC7DURCYpRYFYZYkyppLob9xkCwy+AEFcaVaYPfs8=;
+        b=euTx6iihA4na02hBm19yonYXxMNvIx3Ol6Uv+9lmbcNSZ/9vb2mqV6dtCG72Oh2UA1
+         kate/d954NuSI3iDXm+t5XnRkJoiWGK38sL83L+xyWZNXGpoZ3W9schn2a3cAtfSQpGx
+         8FNDXt82/3yUs0TSrc/Fed+73RA9Ft2nhwzDa4yNsP0UTRDShNH7TxykViGUgpeumskj
+         HRvGRqVme3LZPMYne/DPsDaR6X/ArzSw24+E0qs8BeIT4Va97odlVrMIDbFWWbRY/BAJ
+         wimcNfmKdrLL+s8IjRdOjnNRTvzBr7M82hlc3olmIbSvusme5U9tl7fejhlZxrbkQQIo
+         LXHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9DFC7DURCYpRYFYZYkyppLob9xkCwy+AEFcaVaYPfs8=;
+        b=hWHtiatyGTOmWaQx7eUILCmCS2RjTLlTwTJtep1x+JHf5YNURSVP81nYtF8HHzNbJB
+         wDhx6EJs5koxBAkW2DXYf9aMPDkzG9Wl7U9y+sj0F9Gg7CFP3RZauxpDfhhrGBeeLxZL
+         Le/qvmSo83ndLWqiO3q31u2/JpZeLhWTL2DvxWDMyz7B1sZC10piyKeKCFh434xEgqMN
+         Oczq4IE2/5mKc8FqkmAc6JzYz+SamWUCIA5q3Zka8Zd7zX23YicrbafDMDCtw0PxCSEz
+         NHHFqFo1UMi+ZF+QWgf11Pc0GmdC14SI2fvSAqMq0NBCspw0D9op0tjMACwFexZgza1u
+         bT5w==
+X-Gm-Message-State: AJIora9HOAcHJDa8odwz1lH7IV1D5V8oJt7wXpz3MRJEAaeRKnc3fdoL
+        2Geg3NQ8ZWRlh2PldXNP2xDkcCGUo8h+dtAC
+X-Google-Smtp-Source: AGRyM1tOI+u3IonFCcBXlF2yOgxTJjNZ569ISXB7y6CJ2aWXrdfhLu5zMFy7KSt5m+lJ0hmX9XnbHA==
+X-Received: by 2002:a05:6512:2285:b0:487:2538:f0e0 with SMTP id f5-20020a056512228500b004872538f0e0mr23613079lfu.614.1658393182475;
+        Thu, 21 Jul 2022 01:46:22 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id i19-20020a056512341300b0047968606114sm303969lfr.111.2022.07.21.01.46.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 01:46:21 -0700 (PDT)
+Message-ID: <9645b7cb-2a43-3085-4caa-f6527cbc2b21@linaro.org>
+Date:   Thu, 21 Jul 2022 10:46:20 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_12,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 suspectscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207210033
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: add MSC Technologies
+Content-Language: en-US
+To:     Martyn Welch <martyn.welch@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     kernel@collabora.com, Rob Herring <robh@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220720150007.2168051-1-martyn.welch@collabora.com>
+ <abd47815-c84b-115b-f6f2-b6ec0dbf1bef@linaro.org>
+ <86de8ba0157c451fcce4ca92b6cad835e3f1e4d9.camel@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <86de8ba0157c451fcce4ca92b6cad835e3f1e4d9.camel@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 04:17:20AM +0100, Al Viro wrote:
-> I can put your series into replacement of #fixes-s390, or pull it
-> from whatever static branch you put it into - up to you.
-> Preferences?
+On 21/07/2022 10:03, Martyn Welch wrote:
+> On Wed, 2022-07-20 at 19:07 +0200, Krzysztof Kozlowski wrote:
+>> On 20/07/2022 17:00, Martyn Welch wrote:
+>>> Add "msc" vendor prefix for MSC Technologies GmbH
+>>> (https://www.msc-technologies.eu).
+>>
+>> Does not really work - leads to Avnet, so there is no MSC anymore?
+>>
+> 
+> It still seems to be used as branding by Avnet.
+> 
+>>>
+>>> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+>>> ---
+>>>
+>>> Changes in v2:
+>>>   - New addition
+>>>
+>>>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+>>> b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+>>> index 0496773a3c4d..1658357bc1c4 100644
+>>> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+>>> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+>>> @@ -816,6 +816,8 @@ patternProperties:
+>>>    "^mrvl,.*":
+>>>      description: Marvell Technology Group Ltd.
+>>>      deprecated: true
+>>> +  "^msc,.*":
+>>> +    description: MSC Technologies GmbH.
+>>
+>> This should be rather msct or msctech, but anyway in fact you maybe
+>> should use avnet?
+>>
+> 
+> My rationale for using MSC Technologies is that is how the device is
+> described on the website as being a MSC device. I think the
+> amalgamation of the MSC website into Avnet's has happened in the last
+> year or so. I assume a new device released in the near future would be
+> branded more directly as an Avnet device, or maybe not, I see that the
+> i.MX 9 is being described as "MSC SM2S-IMX93".
+> 
+> I'll switch to msctech unless there are objections to that.
+> 
 
-Hi Al,
+We still have prefixes (and compatibles) from entities which disappeared
+(e.g. Freescale) but these were added probably before the
+merge/acquisition happened. In this case, I do not see a benefit of
+adding a vendor prefix of non-existing vendor.
 
-Please find the changes since commit af2debd58bd769e38f538143f0d332e15d753396:
+Therefore use avnet as vendor in compatible. The model name of course
+can stay MSC or whatever you prefer.
 
-  s390/crash: make copy_oldmem_page() return number of bytes copied
-
-up to ebbc9570169147740aa39aee1d61b4cc5a631644:
-
-  s390/crash: support multi-segment iterators
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git	vmcore-iov_iter
-
-Please, note three (rather trivial) prereq commits to pull along:
-
-  f6749da17a34 s390/crash: fix incorrect number of bytes to copy to user space
-  86caa4b67895 s390/crash: remove redundant panic() on save area allocation failure
-  7190d84966b3 s390/mm: remove unused tprot() function
-
-Thanks!
+Best regards,
+Krzysztof

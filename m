@@ -2,208 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD6657CD2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5D657CD32
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiGUOT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S229657AbiGUOUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGUOTY (ORCPT
+        with ESMTP id S229462AbiGUOUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:19:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7718D8048A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:19:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF2A71042;
-        Thu, 21 Jul 2022 07:19:23 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.86.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AEA73F73D;
-        Thu, 21 Jul 2022 07:19:20 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:19:18 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>, Yun Hsiang <hsiang023167@gmail.com>
-Subject: Re: [PATCH 3/7] sched/uclamp: Fix fits_capacity() check in feec()
-Message-ID: <20220721141918.s2xlvrwqvulp6lyb@wubuntu>
-References: <20220629194632.1117723-1-qais.yousef@arm.com>
- <20220629194632.1117723-4-qais.yousef@arm.com>
- <CAB8ipk_mjv6RGAL+2ZY2AKoRrf6LR-d5yJ=4Fz-+DW=aHDOpYQ@mail.gmail.com>
+        Thu, 21 Jul 2022 10:20:09 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F316EA3;
+        Thu, 21 Jul 2022 07:20:07 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id m8so2344190edd.9;
+        Thu, 21 Jul 2022 07:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qXv6CUvSTMfPvvXNvz/Br6ygFjjEQtW3IZorN82JkiU=;
+        b=P+0nQPKeA3PoGFzwFw3rHozuSxcxC8sThvgWr85Jgf8I0HLON9ganDXQeF+CXi03M8
+         QjR7MJw6kirPoUgYH+Giho7PJvp2ReSEvld3BVDqJP1IlxeQfywVwXtpsBRJSXX4+jWb
+         plznFF7jPvGt3gwaqtL2/00LYhCFhrX8Q2iWYZFHKd/mPx6Mpu3FViZ6AsRPoG3iofQI
+         H3FmIsHff9UoPwOJzMMdft7cHqTf5qN4rDyGg8bdoUwiX6nh+bYwn2P7RsU/suilsCsu
+         3pYjs4Ujkes4hhtM+BsOvm8IEzRBpXWF+HOV66ewkbbfBisnVv6XU9Kv1t4SKZAjMJNo
+         0u+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qXv6CUvSTMfPvvXNvz/Br6ygFjjEQtW3IZorN82JkiU=;
+        b=bchfPPGoVgR6mRbVMdStTaaep7JZadvGRQHdRRNwST70mhK69yqckrp7YmIC210KS+
+         WrRcl/lWD1hGZPYIZLz3N7w6+M7TY+o3Bj0aJZAEpjISUw0FsZ70Xvi25MzsqRc3tXM9
+         W1SEiwRTOphZJl30GWnBfhwdYf2rVuELYFLktSB9T7qdoq/DSWRoaw+eBkJvk9Z0y7rQ
+         Q+4s3hgLUZRAuDivTB/YzqNHnaoh8/eqyDGw1raMfWglyvd5A1NVe97bzTwZS1alf3PH
+         PLFmyUZ6vvpqBVJAAUrhk8dBZaMdPmeHDl3Be+Y3Pfsc1mi9C9eYcR4m9oBuoOXh03bW
+         Z30A==
+X-Gm-Message-State: AJIora8GfmBKWXBl5GJ7xDGeBJfcN7KJknS/QECB32pmRq/hY4O0QS96
+        1tC8Ga7R16jpAd/+/lJT+AY=
+X-Google-Smtp-Source: AGRyM1uGxCFM+uC51rrnQKpnRyzGOk2xs0Ei7v+HkEZHqj5CW5fMsFpSjcMs9VwNKiAXPxxspRRC+w==
+X-Received: by 2002:a05:6402:159a:b0:43b:ba6c:d0e2 with SMTP id c26-20020a056402159a00b0043bba6cd0e2mr8810492edv.418.1658413205937;
+        Thu, 21 Jul 2022 07:20:05 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05640234cc00b0043bc5ee3ec4sm1105646edc.22.2022.07.21.07.20.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 07:20:04 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 17:20:01 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <20220721142001.twcmiyvhvlxmp24j@skbuf>
+References: <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+ <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
+ <YtQosZV0exwyH6qo@shredder>
+ <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
+ <20220721115935.5ctsbtoojtoxxubi@skbuf>
+ <YtlUWGdgViyjF6MK@shredder>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB8ipk_mjv6RGAL+2ZY2AKoRrf6LR-d5yJ=4Fz-+DW=aHDOpYQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YtlUWGdgViyjF6MK@shredder>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/20/22 15:30, Xuewen Yan wrote:
-> Hi Qais
+On Thu, Jul 21, 2022 at 04:27:52PM +0300, Ido Schimmel wrote:
+> I tried looking information about MAB online, but couldn't find
+> detailed material that answers my questions, so my answers are based
+> on what I believe is logical, which might be wrong.
+
+I'm kind of in the same situation here.
+
+> Currently, the bridge will forward packets to a locked entry which
+> effectively means that an unauthorized host can cause the bridge to
+> direct packets to it and sniff them. Yes, the host can't send any
+> packets through the port (while locked) and can't overtake an existing
+> (unlocked) FDB entry, but it still seems like an odd decision. IMO, the
+> situation in mv88e6xxx is even worse because there an unauthorized host
+> can cause packets to a certain DMAC to be blackholed via its zero-DPV
+> entry.
 > 
-> On Thu, Jun 30, 2022 at 3:48 AM Qais Yousef <qais.yousef@arm.com> wrote:
-> >
-> > As reported by Yun Hsiang [1], if a task has its uclamp_min >= 0.8 * 1024,
-> > it'll always pick the previous CPU because fits_capacity() will always
-> > return false in this case.
-> >
-> > The new util_fits_cpu() logic should handle this correctly for us beside
-> > more corner cases where similar failures could occur, like when using
-> > UCLAMP_MAX.
-> >
-> > We open code uclamp_rq_util_with() except for the clamp() part,
-> > util_fits_cpu() needs the 'raw' values to be passed to it.
-> >
-> > Also introduce uclamp_rq_{set, get}() shorthand accessors to get uclamp
-> > value for the rq. Makes the code more readable and ensures the right
-> > rules (use READ_ONCE/WRITE_ONCE) are respected transparently.
-> >
-> > [1] https://lists.linaro.org/pipermail/eas-dev/2020-July/001488.html
-> >
-> > Fixes: 1d42509e475c ("sched/fair: Make EAS wakeup placement consider uclamp restrictions")
-> > Reported-by: Yun Hsiang <hsiang023167@gmail.com>
-> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> >  kernel/sched/core.c  | 10 +++++-----
-> >  kernel/sched/fair.c  | 26 ++++++++++++++++++++++++--
-> >  kernel/sched/sched.h | 40 ++++++++++++++++++++++++++++++++++++++--
-> >  3 files changed, 67 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index d3e2c5a7c1b7..f5dac570d6c5 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -1404,7 +1404,7 @@ static inline void uclamp_idle_reset(struct rq *rq, enum uclamp_id clamp_id,
-> >         if (!(rq->uclamp_flags & UCLAMP_FLAG_IDLE))
-> >                 return;
-> >
-> > -       WRITE_ONCE(rq->uclamp[clamp_id].value, clamp_value);
-> > +       uclamp_rq_set(rq, clamp_id, clamp_value);
-> >  }
-> >
-> >  static inline
-> > @@ -1555,8 +1555,8 @@ static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
-> >         if (bucket->tasks == 1 || uc_se->value > bucket->value)
-> >                 bucket->value = uc_se->value;
-> >
-> > -       if (uc_se->value > READ_ONCE(uc_rq->value))
-> > -               WRITE_ONCE(uc_rq->value, uc_se->value);
-> > +       if (uc_se->value > uclamp_rq_get(rq, clamp_id))
-> > +               uclamp_rq_set(rq, clamp_id, uc_se->value);
-> >  }
-> >
-> >  /*
-> > @@ -1622,7 +1622,7 @@ static inline void uclamp_rq_dec_id(struct rq *rq, struct task_struct *p,
-> >         if (likely(bucket->tasks))
-> >                 return;
-> >
-> > -       rq_clamp = READ_ONCE(uc_rq->value);
-> > +       rq_clamp = uclamp_rq_get(rq, clamp_id);
-> >         /*
-> >          * Defensive programming: this should never happen. If it happens,
-> >          * e.g. due to future modification, warn and fixup the expected value.
-> > @@ -1630,7 +1630,7 @@ static inline void uclamp_rq_dec_id(struct rq *rq, struct task_struct *p,
-> >         SCHED_WARN_ON(bucket->value > rq_clamp);
-> >         if (bucket->value >= rq_clamp) {
-> >                 bkt_clamp = uclamp_rq_max_value(rq, clamp_id, uc_se->value);
-> > -               WRITE_ONCE(uc_rq->value, bkt_clamp);
-> > +               uclamp_rq_set(rq, clamp_id, bkt_clamp);
-> >         }
-> >  }
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 313437bea5a2..c80c676ab1bc 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6878,6 +6878,8 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
-> >  static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >  {
-> >         unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
-> > +       unsigned long p_util_min = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MIN) : 0;
-> > +       unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
-> >         struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
-> >         int cpu, best_energy_cpu = prev_cpu, target = -1;
-> >         unsigned long cpu_cap, util, base_energy = 0;
-> > @@ -6907,6 +6909,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >
-> >         for (; pd; pd = pd->next) {
-> >                 unsigned long cur_delta, spare_cap, max_spare_cap = 0;
-> > +               unsigned long rq_util_min, rq_util_max;
-> > +               unsigned long util_min, util_max;
-> >                 bool compute_prev_delta = false;
-> >                 unsigned long base_energy_pd;
-> >                 int max_spare_cap_cpu = -1;
-> > @@ -6927,8 +6931,26 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                          * much capacity we can get out of the CPU; this is
-> >                          * aligned with sched_cpu_util().
-> >                          */
-> > -                       util = uclamp_rq_util_with(cpu_rq(cpu), util, p);
-> > -                       if (!fits_capacity(util, cpu_cap))
-> > +                       if (uclamp_is_used()) {
-> > +                               if (uclamp_rq_is_idle(cpu_rq(cpu))) {
-> > +                                       util_min = p_util_min;
-> > +                                       util_max = p_util_max;
-> > +                               } else {
-> > +                                       /*
-> > +                                        * Open code uclamp_rq_util_with() except for
-> > +                                        * the clamp() part. Ie: apply max aggregation
-> > +                                        * only. util_fits_cpu() logic requires to
-> > +                                        * operate on non clamped util but must use the
-> > +                                        * max-aggregated uclamp_{min, max}.
-> > +                                        */
-> > +                                       rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
-> > +                                       rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
-> > +
-> > +                                       util_min = max(rq_util_min, p_util_min);
-> > +                                       util_max = max(rq_util_max, p_util_max);
-> > +                               }
-> > +                       }
-> > +                       if (!util_fits_cpu(util, util_min, util_max, cpu))
-> >                                 continue;
-> >
-> >                         if (cpu == prev_cpu) {
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index 9599d2eea3e7..69c4d35988b9 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -2907,6 +2907,23 @@ static inline unsigned long cpu_util_rt(struct rq *rq)
-> >  #ifdef CONFIG_UCLAMP_TASK
-> >  unsigned long uclamp_eff_value(struct task_struct *p, enum uclamp_id clamp_id);
-> >
-> > +static inline unsigned long uclamp_rq_get(struct rq *rq,
-> > +                                         enum uclamp_id clamp_id)
-> > +{
-> > +       return READ_ONCE(rq->uclamp[clamp_id].value);
-> > +}
-> > +
-> > +static inline void uclamp_rq_set(struct rq *rq, enum uclamp_id clamp_id,
-> > +                                unsigned int value)
-> > +{
-> > +       WRITE_ONCE(rq->uclamp[clamp_id].value, value);
-> > +}
-> > +
-> > +static inline bool uclamp_rq_is_idle(struct rq *rq)
-> > +{
-> > +       return rq->uclamp_flags & UCLAMP_FLAG_IDLE;
-> > +}
-> 
-> Can you replace the idle judgment in the uclamp_rq_util_with()
-> function by the way?
+> Another (minor?) issue is that locked entries cannot roam between locked
+> ports. Lets say that my user space MAB policy is to authorize MAC X if
+> it appears behind one of the locked ports swp1-swp4. An unauthorized
+> host behind locked port swp5 can generate packets with SMAC X,
+> preventing the true owner of this MAC behind swp1 from ever being
+> authorized.
 
-Yep I missed it. Fixed.
+In the mv88e6xxx offload implementation, the locked entries eventually
+age out from time to time, practically giving the true owner of the MAC
+address another chance every 5 minutes or so. In the pure software
+implementation of locked FDB entries I'm not quite sure. It wouldn't
+make much sense for the behavior to differ significantly though.
 
+> It seems like the main purpose of these locked entries is to signal to
+> user space the presence of a certain MAC behind a locked port, but they
+> should not be able to affect packet forwarding in the bridge, unlike
+> regular entries.
 
-Thanks!
+So essentially what you want is for br_handle_frame_finish() to treat
+"dst = br_fdb_find_rcu(br, eth_hdr(skb)->h_dest, vid);" as NULL if
+test_bit(BR_FDB_LOCKED, &dst->flags) is true?
 
---
-Qais Yousef
+> Regarding a separate knob for MAB, I tend to agree we need it. Otherwise
+> we cannot control which locked ports are able to populate the FDB with
+> locked entries. I don't particularly like the fact that we overload an
+> existing flag ("learning") for that. Any reason not to add an explicit
+> flag ("mab")? At least with the current implementation, locked entries
+> cannot roam between locked ports and cannot be refreshed, which differs
+> from regular learning.
+
+Well, assuming we model the software bridge closer to mv88e6xxx (where
+locked FDB entries can roam after a certain time), does this change things?
+In the software implementation I think it would make sense for them to
+be able to roam right away (the age-out interval in mv88e6xxx is just a
+compromise between responsiveness to roaming and resistance to DoS).

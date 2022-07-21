@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC00357CB8F
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB3C57CB8E
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbiGUNLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
+        id S234063AbiGUNLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbiGUNLe (ORCPT
+        with ESMTP id S233964AbiGUNLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:11:34 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767E02B607
+        Thu, 21 Jul 2022 09:11:30 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FEF2B278
         for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:11:24 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso16459697b3.9
+Received: by mail-wr1-x429.google.com with SMTP id k11so1754108wrx.5
         for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:11:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=3KJW7Fmbq5f+eNMw6VzguHX0B49FKPw4A5l5sLUXhGo=;
-        b=cDDJz93vgcNNLNytxqCbx8V77gcnQB+j09ztN3Q/A3wfSuguHHr5vSGyiDed9ADcd6
-         Qu8RozwM8yO7TnX8u91/tggfA68L2JN2YkymYnnjqHMkjhSx+8Y73kM+UE8/hiVaa1Xv
-         N9gvNrjJro7Zs83exyXlClnG1UGLhSE5k5vtiC7qEjl6+nITPm1PvNpvnOsAvO7FTTOP
-         o7HkYit2MdLNBhbVQ6J99MG+RyRcpRVTLE2ecIuE5B2p82n95kJOVCFpALnohXFpZdXQ
-         MR+CqTl70MXZZUY30UZxA8llahXQgVjFk0T38Xz+7+cfOil+jfutmR3l7AVmBo5f+Ktk
-         RK5A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=2GDU2IRydfXQkfqrUDMU1D/n3Z3JpQ7CUV8m7kZHOXo=;
+        b=zM6uqqJD0zUpxrXvqvUJTtgzK7C8wI0w7+NobGNxJFW/oU2rftvyIufnMzzsksbQfo
+         UPL6bIwDPZSX2erGUifThY2H1sG1qGDQM31W5Umj8L55JPcbgUJ+cO+aXCfAaeSJxRc3
+         myUrxdjxtk9d5svXSSZra335QyPA3OCo5I+I3Hnp+g+6il7yE8imHH9KCq0lfrM3YMEg
+         HRzpljYsgy8TtyJV8zSBIpAxN9W5F+b4p9vLrSp75U1Jufzo1WbGPolvsp4cUx6Pn5cD
+         DsCs0sYDiem6ZuqbEt1ZrQFRxc5RhdUk5wrtjJo5b9rf5hw4s7m0p7UieJO7pPFlbwCz
+         wHng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3KJW7Fmbq5f+eNMw6VzguHX0B49FKPw4A5l5sLUXhGo=;
-        b=ehWRkCklsNL0nI/ba0Nsp15SHjJW5LbZVaxu7UF7Ll8zNY2BtKshlYkBZ0DnmATUDi
-         N2HGzDDuXuRGw0Vju3lBMYvi/0b0G6GjaRMltTESSpZeY5z1+OAXyfSKn/uB/PiUj7oB
-         UkrInOEGcuuvfxFoX0NtXDrk3bKptaOJrdG2P6N35qnEFEDQuyPd4OaRgKYGUbGB8f7e
-         EZSdyZtMyyXj/gRMQfzqBrUqMiZCynTF2Evjq/sID+xNjvtxuuOSIB+X+mNfInqOB7Hn
-         IBIMzOSFdunkAT2uNROTyGgde0zuHTJr+QTUj8qq8dD5vwJ/H6VPKwVPaXyYUp+tC5Tt
-         Svhg==
-X-Gm-Message-State: AJIora+Vtri/VIIosGjJbfeFcEFhe9cHhBYdRsd/lIzqRkYnq9XwI+uI
-        2y4EJPDq9SgfC9W7xTLofHiAYYe2+Js6ILGrrA04ig==
-X-Google-Smtp-Source: AGRyM1tLbjkCEhNkeUKj/DUOSL8lYPgWAKfYilQsa2HaMoE1cLwd43UsQsq1xN/a3T6kp4jx0N2DPCYHvCLYCBtYo8I=
-X-Received: by 2002:a81:a1ca:0:b0:31e:58d4:e724 with SMTP id
- y193-20020a81a1ca000000b0031e58d4e724mr15075845ywg.486.1658409083510; Thu, 21
- Jul 2022 06:11:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=2GDU2IRydfXQkfqrUDMU1D/n3Z3JpQ7CUV8m7kZHOXo=;
+        b=3aKNJ9bOuTNIcsLDilH4BkJvbjPcASqX5Mza+7hSxng+L0qfTxmBdfjJypJkJ5LVmu
+         xLUnBUDXSBbH7D5IVWuMoOf+HVpJJUaIuslqVycx215Tnp9z/6MCsNidggu34tr04QtS
+         cA5HfKwp+ef0/N23kfbyMoijDvGnddm8779vm+WaZ+RRm6CEo7eviJb9qZ9Hh+EkTCk7
+         coZSJ8Vup7+Hf2KgGSycxTTd5YIwWXgmYFq00pxM+Kr7qKKLkaRPfz0S4SzylOoK4Uc8
+         aBlBoygb1Ogc/QYggLtFWhJOhjQDP2DiSpmVQf9VoKXDDDbIGBVuyUS7PrC3dgh0Wl4A
+         bXgQ==
+X-Gm-Message-State: AJIora897CqMtCggS2EbQLsO9DfSCCN0/wGSZmfW62VGsqsgfhDFysaE
+        9bUyWT9T8I9vs1p2bmJGp/TXkg==
+X-Google-Smtp-Source: AGRyM1vMWJglV7kWdNrjYZOUhLc5gsJSA6p5P1/egh9annTDsloDA+h8irZ0fOR8tFshFQMxXCNoOQ==
+X-Received: by 2002:a05:6000:1d9c:b0:21e:4a6d:664d with SMTP id bk28-20020a0560001d9c00b0021e4a6d664dmr6415826wrb.673.1658409082764;
+        Thu, 21 Jul 2022 06:11:22 -0700 (PDT)
+Received: from localhost ([82.66.159.240])
+        by smtp.gmail.com with ESMTPSA id l37-20020a05600c1d2500b003a33227e49bsm1635651wms.4.2022.07.21.06.11.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 06:11:22 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1 2/6] dt-bindings: mediatek,mt6779-keypad: use
+ unevaluatedProperties
+In-Reply-To: <734ed3cf-1461-6067-e718-663ca4be47a6@linaro.org>
+References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
+ <20220720-mt8183-keypad-v1-2-ef9fc29dbff4@baylibre.com>
+ <e1ec8511-d1dd-faa5-031f-50c4e55062cd@linaro.org>
+ <874jzaj0m5.fsf@baylibre.com>
+ <734ed3cf-1461-6067-e718-663ca4be47a6@linaro.org>
+Date:   Thu, 21 Jul 2022 15:11:21 +0200
+Message-ID: <87tu7ahapy.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <20220712231328.5294-1-kirill.shutemov@linux.intel.com> <20220712231328.5294-3-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20220712231328.5294-3-kirill.shutemov@linux.intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 21 Jul 2022 15:10:47 +0200
-Message-ID: <CAG_fn=U55CSG=xQ8-0Rj9eXrS29n-DiLdCZbqSSRdqiWW9o0fQ@mail.gmail.com>
-Subject: Re: [PATCHv5 02/13] x86: CPUID and CR3/CR4 flags for Linear Address Masking
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,82 +80,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 1:13 AM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> Enumerate Linear Address Masking and provide defines for CR3 and CR4
-> flags.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+On Thu, Jul 21, 2022 at 11:16, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Reviewed-by: Alexander Potapenko <glider@google.com>
-Tested-by: Alexander Potapenko <glider@google.com>
+> On 21/07/2022 11:06, Mattijs Korpershoek wrote:
+>> On Wed, Jul 20, 2022 at 19:14, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>> 
+>>> On 20/07/2022 16:48, Mattijs Korpershoek wrote:
+>>>> writing-bindings.rst states:
+>>>>> - If schema includes other schema (e.g. /schemas/i2c/i2c-controller.yaml) use
+>>>>>   "unevaluatedProperties:false". In other cases, usually use
+>>>>>   "additionalProperties:false".
+>>>>
+>>>> mt6779-keypad includes matrix-keymap.yaml so replace additionalProperties:false
+>>>> by unevaluatedProperties:false.
+>>>
+>>> This is not sufficient explanation. You now allow all properties from
+>>> matrix-keymap.yaml, which might be desired or might be not (e.g. they
+>>> are not valid for this device). Please investigate it and mention the
+>>> outcome.
+>> 
+>> Hi Krzysztof,
+>> 
+>> Thank you for your prompt review.
+>> 
+>> In mt6779_keypad_pdrv_probe(), we call
+>> * matrix_keypad_parse_properties() which requires keypad,num-rows and keypad,num-cols.
+>> * matrix_keypad_build_keymap() which uses linux,keymap
+>> 
+>> Therefore, all properties from matrix-keymap.yaml are
+>> required by the mt6779-keypad 
+> Better to mention the device, not driver.
 
+I mixed up driver versus device (hardware). Sorry about that.
 
-> ---
->  arch/x86/include/asm/cpufeatures.h          | 1 +
->  arch/x86/include/uapi/asm/processor-flags.h | 6 ++++++
->  2 files changed, 7 insertions(+)
->
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cp=
-ufeatures.h
-> index 03acc823838a..6ad5841e087f 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -300,6 +300,7 @@
->  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 *=
-/
->  #define X86_FEATURE_AVX_VNNI           (12*32+ 4) /* AVX VNNI instructio=
-ns */
->  #define X86_FEATURE_AVX512_BF16                (12*32+ 5) /* AVX512 BFLO=
-AT16 instructions */
-> +#define X86_FEATURE_LAM                        (12*32+26) /* Linear Addr=
-ess Masking */
->
->  /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
->  #define X86_FEATURE_CLZERO             (13*32+ 0) /* CLZERO instruction =
-*/
-> diff --git a/arch/x86/include/uapi/asm/processor-flags.h b/arch/x86/inclu=
-de/uapi/asm/processor-flags.h
-> index c47cc7f2feeb..d898432947ff 100644
-> --- a/arch/x86/include/uapi/asm/processor-flags.h
-> +++ b/arch/x86/include/uapi/asm/processor-flags.h
-> @@ -82,6 +82,10 @@
->  #define X86_CR3_PCID_BITS      12
->  #define X86_CR3_PCID_MASK      (_AC((1UL << X86_CR3_PCID_BITS) - 1, UL))
->
-> +#define X86_CR3_LAM_U57_BIT    61 /* Activate LAM for userspace, 62:57 b=
-its masked */
-> +#define X86_CR3_LAM_U57                _BITULL(X86_CR3_LAM_U57_BIT)
-> +#define X86_CR3_LAM_U48_BIT    62 /* Activate LAM for userspace, 62:48 b=
-its masked */
-> +#define X86_CR3_LAM_U48                _BITULL(X86_CR3_LAM_U48_BIT)
->  #define X86_CR3_PCID_NOFLUSH_BIT 63 /* Preserve old PCID */
->  #define X86_CR3_PCID_NOFLUSH    _BITULL(X86_CR3_PCID_NOFLUSH_BIT)
->
-> @@ -132,6 +136,8 @@
->  #define X86_CR4_PKE            _BITUL(X86_CR4_PKE_BIT)
->  #define X86_CR4_CET_BIT                23 /* enable Control-flow Enforce=
-ment Technology */
->  #define X86_CR4_CET            _BITUL(X86_CR4_CET_BIT)
-> +#define X86_CR4_LAM_SUP_BIT    28 /* LAM for supervisor pointers */
-> +#define X86_CR4_LAM_SUP                _BITUL(X86_CR4_LAM_SUP_BIT)
->
->  /*
->   * x86-64 Task Priority Register, CR8
-> --
-> 2.35.1
->
+For successful key detection, the hardware (called MediaTek keypad) 
+requires that we program rows/columns via the KP_SEL register.
+So num-rows and num-cols are valid properties for this device.
 
+The MediaTek keypad has a set of bits representing keys, from KEY0 to KEY77. 
+These keys are organized in a 8x8 hardware matrix.
+Therefore, linux,keymap is also a valid property for this device.
+>
+>> 
+>> In v2, I will add the above justification and also add all 3 properties
+>> in the "required" list.
+>> 
+>> Initially, I did not do this because from a dts/code perspective it seemed
+>> interesting to split out SoC specific keyboard node vs board specific key configuration:
+>> * [PATCH v1 5/6] arm64: dts: mediatek: mt8183: add keyboard node # SoC specific
+>> * [PATCH v1 6/6] arm64: dts: mediatek: mt8183-pumpkin: add keypad support # board specific
+>> 
+>> What would be the recommend approach for above?
+>> I see at least 2:
+>> * "move the whole keyboard node into the board file (mt8183-pumpkin.dts)" even if it generates
+>>   duplication between boards using the same SoC.
+>> * "add a "dummy keymap,row,cols" properties in the soc node which can be overriden in board file.
+>>   For example, use rows and cols = 0 which would have the driver early exit.
+>> 
+> SoC DTSI should have only SoC properties. The keyboard module is part of
+> SoC. The keys and how it is wired to them - not.
 
---=20
-Alexander Potapenko
-Software Engineer
+Indeed. So the split I send in v1 is "valid", from a device(hardware)
+point of view.
+In that case i'll not make the properties from matrix-keymap.yaml
+*required* in v2.
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+Thanks again for your feedback.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Mattijs
+
+>
+> Best regards,
+> Krzysztof

@@ -2,23 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2257957D490
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4549057D48E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbiGUUGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 16:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
+        id S233190AbiGUUFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 16:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233122AbiGUUFk (ORCPT
+        with ESMTP id S229471AbiGUUFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 21 Jul 2022 16:05:40 -0400
-X-Greylist: delayed 309 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 13:05:36 PDT
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF5D70E41;
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A74A7435F;
         Thu, 21 Jul 2022 13:05:36 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.243.92]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MId3J-1oJnQ631kb-00EbYd;
- Thu, 21 Jul 2022 22:00:12 +0200
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1M9WFU-1oBIxW0UAm-005Z14;
+ Thu, 21 Jul 2022 22:00:14 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
@@ -30,30 +29,30 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 04/12] ARM: dts: imx6qdl-sabre: change to use SPDX identifiers
-Date:   Thu, 21 Jul 2022 21:59:27 +0200
-Message-Id: <20220721195936.1082422-5-marcel@ziswiler.com>
+Subject: [PATCH v1 05/12] ARM: dts: imx7d-pico: indent use tabs, no spaces at start of line
+Date:   Thu, 21 Jul 2022 21:59:28 +0200
+Message-Id: <20220721195936.1082422-6-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220721195936.1082422-1-marcel@ziswiler.com>
 References: <20220721195936.1082422-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:B+B3mP3pRAJMWU5aKA+QiDfNKTj1HfzIADp40JXRmDnp2rfbDrh
- 9wWonLOcRTUvPjz18aVeHFfxMk0hNq7gNVdczbU6ipQXdCXq7Fo9FsvvZCLjLM2d8OW1Clc
- wUlgTZ4HsA3Jwwp33P1Yod6pcrgSipiYb3ZvTgm9AdPGPBrYaaseSclzvHnEb9hQ7VoSyYx
- IrpgLQaWWMfuJEzhe0E4Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:h2AGwEiaoOU=:cYIwKfszpSeBdvGOajdj1V
- qFwraR1Uomp3kwO5jn9R3Qxua97hut4W75z4r9xiwMzvkbRpI0Se+sf0h1vYevi1JtlrKXh9j
- ow7nukbSkjdrNTjZkxhIIU1R2et3UGuy/J/8BsCNar0PAdjj9YM6oOaVrelxGW99Kelaw3p05
- AyHj05jr00aVHTB2fTK5+ZMi0Esh6wiNlnPaCKGHh8Yqaodz7VKUPegTiLX1HDNSFIfLOX/62
- M0JHvqrtH+KJ13dUtmmz0kbitYQ6M7E++Hh2jabamfalRHagLEttdWFtuQq9tYEF75vN9lP/a
- ffQtYE4H7BWqSx+iSy7B2219k6RYnRAD7hYt9UcLmFW4g0ET6itE0VGvruV4FG8IIUBWc6yk7
- 60DuSdRQGhWRNc7lO24a6xZqY2cPDmFolo4wQ19i6VTBZwWXuU9mhn4EHJo2OMA07sZ+CAcyv
- 9F3YqhO/HXzK0DQJAA8OeRE8wJGz5AOsYNdkyXVEOIzKDg/ZB7u2IsZYmEJEZ738o26oBXy/6
- yLel1dNo8krXJEXeQ0LIf6Wbkzq1HTsuNgTh10cPACzNJwbZe79FdD9no7q2kibvz3YqgbOe8
- UH4pVFQtUdSysWdLYv95xyWTa4LOQ4yTNecY6FQPa59UJZGCRjK6Nk8Uja9prMMI66dUAxJZ2
- V/MmG4rRuu4dfafQVozJLhTBO3o9i5iZCiP2GoPCi7Kx4vAsn/B/Obzg6XHEV2IN1Ss7GgSI/
- qTVCTocO6dAoG1LZtn2eKBB4uYChdYPQnfXtnw==
+X-Provags-ID: V03:K1:ma/1/gUOs+1SQ5WFYt6UMn+Ph4ajz6DquzBm4NWtSK7DSqJEH1f
+ fBQ4Z4E8qrvxChuy6B8sWTCs6qIgruBWAuzBLJWizy/h4cw3lc/W8RVygWf9wjjipcf1ItE
+ cUIxyYj2gMVRCAC1BanRUhji8+1QjC2KzZUCehxTBHz5E5GdyoFoc3wUbrct72wmfm0+X5i
+ vGp2LdZIPGfT1SFzXGwaA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QIN+N77RXoI=:3SEcnrIdS/24oPRKJCWvex
+ NruA7leIbvr3qI9Vfuv4QG5igvubz2KLq4z9qBWjemq3pL67desQ12cwNEALB9EMUNbiBIzY/
+ smnatO5BDunoYbFvYb7Nd3r0PcdFkeNqrO52uSyVfamrtf6D7C9v7XPHJvUr7pZXvKoi7/Sc3
+ iLsOlaGLQKXG4R1P6gHF05jdTtwHQf80ds1YR11bf5E2OHEMirgL091Spv64q6nHAZc8quwYc
+ CSJ7NPMtDPZ+T3R43h5E6VInCNxWDqylLRuwWYBco9Dqs/wCuU0fqcMbXLjCVRNivAD2WZUq4
+ HKOldpeAnXkvHxsWpLGNaqScFydEywjinfJnNW76qglvzIXgkbcdwnIqbizH+nGTSMJ0aS+v8
+ mfjml+YnIPrn3qUHIfWML9yaJ1spo6FLpdAx2n3SVAipTl2psI5q5wySmjnnHL6laQDGLJmo9
+ 59QRki9CEXbAO3GnIv9vjudXps+PyV3eQ5GLuuYCHfsXtV1Xgq7IBMNAFsbvi2Qo9u2tKlx79
+ kJKQ8kILWVeqG3ggUxRbl/EAwmKcTA9GWEMgbedvDmcgfQK56cohVkBLhiMCd91dkCVp04X4r
+ hoIFj7cYC5IJ/EnDNaD+VVScl/MZUatbxKql8ubgpiXELi+CuzsR+QsXrpkTaPcSEPeZECkc3
+ NSE18+0/eZIp+auEW+Nlyi56PXr+aC1uw1XmA9c/bBdWWvjliNUCqCpDJSygyf97aHFv/ou3o
+ Bk4GYwCkAzl3XF5JAQZxySzI8ythx0VAm/LrhA==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -65,68 +64,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Replace the license text with SPDX identifiers.
-
 Avoid the following checkpatch warning:
 
-arch/arm/boot/dts/imx6qdl-sabrelite.dtsi:1: warning: Missing or
- malformed SPDX-License-Identifier tag in line 1
+arch/arm/boot/dts/imx7d-pico.dtsi:44: error: code indent should use tabs
+ where possible
+arch/arm/boot/dts/imx7d-pico.dtsi:44: warning: please, no spaces at the
+ start of a line
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm/boot/dts/imx6qdl-sabrelite.dtsi | 37 +-----------------------
- 1 file changed, 1 insertion(+), 36 deletions(-)
+ arch/arm/boot/dts/imx7d-pico.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi b/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
-index 901b9a761b66..32f3c92bcc52 100644
---- a/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
-@@ -1,43 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR X11
- /*
-  * Copyright 2011 Freescale Semiconductor, Inc.
-  * Copyright 2011 Linaro Ltd.
-  *
-- * This file is dual-licensed: you can use it either under the terms
-- * of the GPL or the X11 license, at your option. Note that this dual
-- * licensing only applies to this file, and not this project as a
-- * whole.
-- *
-- *  a) This file is free software; you can redistribute it and/or
-- *     modify it under the terms of the GNU General Public License
-- *     version 2 as published by the Free Software Foundation.
-- *
-- *     This file is distributed in the hope that it will be useful,
-- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
-- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- *     GNU General Public License for more details.
-- *
-- * Or, alternatively,
-- *
-- *  b) Permission is hereby granted, free of charge, to any person
-- *     obtaining a copy of this software and associated documentation
-- *     files (the "Software"), to deal in the Software without
-- *     restriction, including without limitation the rights to use,
-- *     copy, modify, merge, publish, distribute, sublicense, and/or
-- *     sell copies of the Software, and to permit persons to whom the
-- *     Software is furnished to do so, subject to the following
-- *     conditions:
-- *
-- *     The above copyright notice and this permission notice shall be
-- *     included in all copies or substantial portions of the Software.
-- *
-- *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-- *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-- *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-- *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-- *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-- *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-- *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-- *     OTHER DEALINGS IN THE SOFTWARE.
-  */
+diff --git a/arch/arm/boot/dts/imx7d-pico.dtsi b/arch/arm/boot/dts/imx7d-pico.dtsi
+index e519897fae08..e0bff39e8d3e 100644
+--- a/arch/arm/boot/dts/imx7d-pico.dtsi
++++ b/arch/arm/boot/dts/imx7d-pico.dtsi
+@@ -41,7 +41,7 @@ reg_lcd_3v3: regulator-lcd-3v3 {
+ 		regulator-max-microvolt = <3300000>;
+ 		gpio = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+ 		enable-active-high;
+-        };
++	};
  
- #include <dt-bindings/clock/imx6qdl-clock.h>
+ 	reg_wlreg_on: regulator-wlreg_on {
+ 		compatible = "regulator-fixed";
+@@ -432,7 +432,7 @@ MX7D_PAD_ENET1_RGMII_RD1__ENET1_RGMII_RD1	0x1
+ 			MX7D_PAD_ENET1_RGMII_RD2__ENET1_RGMII_RD2	0x1
+ 			MX7D_PAD_ENET1_RGMII_RD3__ENET1_RGMII_RD3	0x1
+ 			MX7D_PAD_ENET1_RGMII_RX_CTL__ENET1_RGMII_RX_CTL	0x1
+-			MX7D_PAD_SD3_RESET_B__GPIO6_IO11                0x1  /* Ethernet reset */
++			MX7D_PAD_SD3_RESET_B__GPIO6_IO11		0x1  /* Ethernet reset */
+ 		>;
+ 	};
+ 
+@@ -493,19 +493,19 @@ MX7D_PAD_LCD_RESET__GPIO3_IO4		0x14
+ 
+ 	pinctrl_pwm1: pwm1 {
+ 		fsl,pins = <
+-			MX7D_PAD_GPIO1_IO08__PWM1_OUT   0x7f
++			MX7D_PAD_GPIO1_IO08__PWM1_OUT	0x7f
+ 		>;
+ 	};
+ 
+ 	pinctrl_pwm2: pwm2 {
+ 		fsl,pins = <
+-			MX7D_PAD_GPIO1_IO09__PWM2_OUT   0x7f
++			MX7D_PAD_GPIO1_IO09__PWM2_OUT	0x7f
+ 		>;
+ 	};
+ 
+ 	pinctrl_pwm3: pwm3 {
+ 		fsl,pins = <
+-			MX7D_PAD_GPIO1_IO10__PWM3_OUT   0x7f
++			MX7D_PAD_GPIO1_IO10__PWM3_OUT	0x7f
+ 		>;
+ 	};
+ 
 -- 
 2.35.1
 

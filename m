@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8C657D023
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FB057D02B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbiGUPq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
+        id S233061AbiGUPrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiGUPqL (ORCPT
+        with ESMTP id S233013AbiGUPq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:46:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBA58E4CC
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:42:12 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id t1so3393846lft.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:42:12 -0700 (PDT)
+        Thu, 21 Jul 2022 11:46:57 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9EA88E1F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:43:25 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t1so3398972lft.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DbAlny0t1Z1mEp76q3Ok9AdQU6F9gRBoHTbQLXF/2lk=;
-        b=hvMY/wKgqNkLwMGAA1veSwXkHAGy+A6V3WOkfUKYAdhYB8ptxzUPD7n35rsO9Jcvr7
-         6UDVHo0V37fnqX2S0c15nIq3n4z6ArkAWtF+lGEg9BC5qQf+mEDT2UuywuO/+AFrwg6P
-         jFuYVRrXQ21UhwdbV388q5sUMCQU465XKUyiSp0BPn/vBPSJN9lK2KzWUZE7tRuBCkcF
-         ewxg0NMWAaa3d+T2QRhzgxExRIc5ACCOcQ3/ppkPQ5wo0swP5SjDLy8L+XwpArxrJ0Q/
-         eeAmdqXFlUazj++UKjdRTrln8X4SOrsW3BodSCOU0+mbJsZrrBRXQKEnIdrhHN8un0RW
-         grAg==
+        bh=tk1DYU/BipOe/ykhrE+uY+ooU5Pb7mB25/yNG8lTcfE=;
+        b=wfl3g/vRkmVmlH69jDqxAlRnmvZUFAn0fafUutbXTYDpLsG8Pb+wt+a7RBPTTkIeAv
+         RTA1J3Qz8g58ZqKaZFGcfmZoiK5L3wvZnMlJImcTLgNb+ldG2lCPymk8BkG9ehlB0xoG
+         6h/kCT9Muj89aPsxnGQE2taw2N9Id53CXH1TBhOx3DaVlqzhvPDKzR4lMgdoo8EdHX9y
+         gDiQ7Ozw9bbiMJhjlNnpYcBKWyzHzzfSEgaRaxT3b+Gqd8C2TJ8X8ryAyEr+SXyHNfaX
+         YlDbi4hbRJ2ceGpQOt2JP8zBnTDt95lIKLw81bA5NGb3sE9IcntSJch4r301U++1U29V
+         fOpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=DbAlny0t1Z1mEp76q3Ok9AdQU6F9gRBoHTbQLXF/2lk=;
-        b=rX0k42RJIsyALEz3Z7+I2ve2RFFeI7Su580dET5dkoBCJbeJEvXMFCdRgeGryKMDsD
-         m89GVkHsrnwxGh5c7VQOnd0gjBeAV9YN+ZblO2N3YqGU2rk52ird3ru7foB9J4Ffiob7
-         F6D+HXtyUfuDQLEX0gct5w1xpX/WACexsU2ILfDHWvv6j4PMunG0HPTU/3YtPa9SVFTN
-         +STFfGN42YG5SOr3RXbfQ4uZHxnKU0WzaQgRw4+/+VI0ZqHhlAmKW2bLlUXUMYbWUOa7
-         FfaoeNVVeZW+kzie3RqgovyL/Qxp7quoYHPfg5jIlduJtbl4NDp5hjGoetmPXC4zOoTe
-         p+AQ==
-X-Gm-Message-State: AJIora/ZlzBGp7xjanaRh+ZIjn03PMFKVWTPzBjghD7nEeV/vvgcoR1G
-        d6mFPzxDRbId60/7246MRvobcQ==
-X-Google-Smtp-Source: AGRyM1uH+KevGsKWyG8Df61xvPgqfo29eVC+LR/aED9QzOXzzbztIiUFTSzFYEZjDIchb6h/N4lCSg==
-X-Received: by 2002:a05:6512:3409:b0:489:c549:4693 with SMTP id i9-20020a056512340900b00489c5494693mr21503245lfr.26.1658418131160;
-        Thu, 21 Jul 2022 08:42:11 -0700 (PDT)
+        bh=tk1DYU/BipOe/ykhrE+uY+ooU5Pb7mB25/yNG8lTcfE=;
+        b=V0ihyZa0AlwgTojFvLHxqQQ2VuSLeUMC3QeQJl6gdUyafLTfAlL+ti4GntoXRJKv8Z
+         lK5zBkCO1WiCqCIqIUxxMaQfEP6wjwmssHHlPb7QNwUx0eGVv30Fv9mh30SPtHGO65u/
+         Oj0i8IsxX3hXdQAhQr3g84RgtLLE3DwkGPbZnGNUEWunPSGDK4BPYsQHv+DrIvBz5HEC
+         bcRc0OXQZn0lcGJBD6+Muja8a2LVyFiY7w1c8G5TfZTvy7o26sRMbi1cN6H/fJ6SaEEY
+         qJRpWDpygY9jOVEMj8a7Nrl1H9i3c+1BpubYIAHfVuQq2lklCDvqiCV8NxuPN8o1aKxW
+         4GCQ==
+X-Gm-Message-State: AJIora8sortufjZtPfbUlVrn2SmgAzUdvNrrYOIHmFUrCNce8wRQ6dkY
+        uZSk+hEA4L0mKzvf20XA1vd+6Q==
+X-Google-Smtp-Source: AGRyM1ucvLSRgQ3vWLF4H0bcarGzsvXB0TIajUEBtz3KiyNKgTBVHkKnKs5eHbjxAH0RAjhN7ZfcTw==
+X-Received: by 2002:a19:6510:0:b0:47f:baaf:e3be with SMTP id z16-20020a196510000000b0047fbaafe3bemr23855009lfb.139.1658418203026;
+        Thu, 21 Jul 2022 08:43:23 -0700 (PDT)
 Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056512314400b00488333b6515sm499662lfi.305.2022.07.21.08.42.08
+        by smtp.gmail.com with ESMTPSA id w9-20020ac254a9000000b0047f8d7c08e4sm506524lfk.166.2022.07.21.08.43.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 08:42:10 -0700 (PDT)
-Message-ID: <e83c98f9-f32a-6bfd-71b6-9aba22aa7abb@linaro.org>
-Date:   Thu, 21 Jul 2022 17:42:07 +0200
+        Thu, 21 Jul 2022 08:43:22 -0700 (PDT)
+Message-ID: <ba87edff-6e2c-884f-1afb-cf4b721b6893@linaro.org>
+Date:   Thu, 21 Jul 2022 17:43:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 4/6] ARM: defconfig: address renamed CONFIG_DEBUG_INFO=y
+Subject: Re: [PATCH 5/6] ARM: defconfig: remove broken CONFIG_THUMB disables
 Content-Language: en-US
 To:     Arnd Bergmann <arnd@kernel.org>,
         linux-arm-kernel@lists.infradead.org
@@ -104,14 +104,15 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
         linux-sh@vger.kernel.org
 References: <20220721141325.2413920-1-arnd@kernel.org>
- <20220721141325.2413920-5-arnd@kernel.org>
+ <20220721141325.2413920-6-arnd@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220721141325.2413920-5-arnd@kernel.org>
+In-Reply-To: <20220721141325.2413920-6-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -121,20 +122,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 21/07/2022 16:13, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> CONFIG_DEBUG_INFO is now implicitly selected if one picks one of the
-> explicit options that could be DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT,
-> DEBUG_INFO_DWARF4, DEBUG_INFO_DWARF5.
+> Since commit 1515b186c235 ("ARM: make configuration of userspace
+> Thumb support an expert option"), CONFIG_THUMB cannot be disabled
+> unless one turns on CONFIG_EXPERT first.
 > 
-> This was actually not what I had in mind when I suggested making
-> it a 'choice' statement, but it's too late to change again now,
-> and the Kconfig logic is more sensible in the new form.
+> This is probably for the better, so remove the statements that
+> turn it off.
 > 
-> Change any defconfig file that had CONFIG_DEBUG_INFO enabled
-> but did not pick DWARF4 or DWARF5 explicitly to now pick the toolchain
-> default.
 
-I think this should be split - into remove DEBUG_INFO (noop) and into
-selecting CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT (a fix).
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof

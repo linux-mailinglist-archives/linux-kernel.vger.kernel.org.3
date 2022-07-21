@@ -2,159 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BAC57D24B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8AD57D268
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiGURQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
+        id S229681AbiGURZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiGURQF (ORCPT
+        with ESMTP id S229461AbiGURZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:16:05 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2087.outbound.protection.outlook.com [40.107.104.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5041B64F8;
-        Thu, 21 Jul 2022 10:16:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Euvxa+/q9A4LLWQJndjy/E+hMJWNoqlwlMdrFqFv2a9I/uK+TllhzmpqciLvWkqnbBLnblkkRGp2tQffAz1aEveyPMAflL/Nj8PTmNikAoCyGC7TGmKmTY76PjgkLTvjkbprinDiCXBpgFTetPTMtiNxs5NR6nbGsyRtVwrG+FQAEYAwgZPnk/dEu4AL+rjBaXNGPKQJtns4kf2SD+xm4WwPGEe+VTkti5xhWbnlc66Yw5yxykWb4z5i+XbL3NtjqeiO+calDi/oGTzihjxGCkexuBgNFrHy/DAV8DoYisdT9ga6BfqGClsyfjUYI4vZIE+9E4DaQU6n+pPpgQFlZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wKLMoAURk13Y5ouMxTVYXEQRKhHSqeYcHNO+Dp/l/Ok=;
- b=DsChx1OCcDhHzlX6xV2xixPfz+85oKZ6I7ocSPyCez2Yky/eXbpWyJ/ckKtf+59AzU3sSiAkmHtGA6p5mDoSlMblNCEfckdvKHiM3U612fUvM55Ae1WOQvEdkvnbBjFQHCaAYEZyj7jCOo+4cYJPeILJIqj9To+AOPK29g6wKQ/iDLDYXndGEuvqerVkMUnNy0Ov22o5+Cd9D5fnh0jP+RZrfjD8IGWsGFg0lQVD1Cnh6P0GQdzsN4pNOWXUcCZ4/OnEfy2Ff/ft+IJedUzQFnXkiAcn54XoPDRxbVzwt7FbjIZIguWSCmLS2ptUUYj5GEDxUBZsbDTI5UhBcco0wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wKLMoAURk13Y5ouMxTVYXEQRKhHSqeYcHNO+Dp/l/Ok=;
- b=jyiBQvtUDAbHrekRKW389CQ+TbmEd7A+G+p9P/uVrr/WN4M5wfmZJyIOiwLr+q+67XTFxRvEGWBYUoCpMfJawp55BqSP8VyFqkcOf7K93HyfPUmfUKS6p+lOWK/s21E8VWILnqAq5azE+5kW1PKsXyROqZvkgTrzkwoflCZ1s9UAK364ufatrHKb8Il4VnC54M1ExR8pyMhWpzd5K/pXUXYa5Ex4ZsETwUo9M9ryMnp1oF04xu+tPtU+5pe509SY9Vs2Q01xpq5Bx/PGpxCzR7miylmrQve6CHjGuCjsDP0YeHaA10Ilifc+fCnsTsI0tLr4CDwT7YNEXkFq9ypMhQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by AM6PR03MB5126.eurprd03.prod.outlook.com (2603:10a6:20b:81::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Thu, 21 Jul
- 2022 17:15:59 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::59ef:35d2:2f27:e98b]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::59ef:35d2:2f27:e98b%4]) with mapi id 15.20.5458.018; Thu, 21 Jul 2022
- 17:15:59 +0000
-Subject: Re: [PATCH v2 10/11] net: phy: aquantia: Add some additional phy
- interfaces
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20220719235002.1944800-1-sean.anderson@seco.com>
- <20220719235002.1944800-11-sean.anderson@seco.com>
- <YtfodwyLc5pMw4Gb@shell.armlinux.org.uk>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <35c49437-c0fa-509f-f56a-530986891131@seco.com>
-Date:   Thu, 21 Jul 2022 13:15:54 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <YtfodwyLc5pMw4Gb@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR10CA0003.namprd10.prod.outlook.com
- (2603:10b6:208:120::16) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Thu, 21 Jul 2022 13:25:05 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C378354642
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658424303; x=1689960303;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iFVJ2PD2NWlvU7WTBpY338s4u7DT0v69UFMKVGkspzM=;
+  b=ajhbbdZvMexuapU/gKVtVdHnXu+fI0GjDfqMQAIXYkPjccw2ISsluy6d
+   gNx7LvTgb4tdQuomimBnN7NnAdae2Qf0aITssA5J1+S5zggKTBstDzbZz
+   kneOoieM5mHRvGutqk6MhOP5xS68KZd2mYBpy5H8DwpRtBaBvWP9wGeP5
+   Pke16Vef7+c/X1bITX4jPSIRvV0CsK01VOF+bZutHBymU8LwbjEAFQ1Ia
+   KIbSoTicxLv40r5VbWjB1MytlRX5Wi+WCXPkWkUDMYbaL4J65bmiC72E9
+   sH7jHRt6HIl0K71DE8IecQ91SuuExUp1SL8i6MaPmKcrejE0xHuNJaFEn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="287872386"
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="287872386"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:16:50 -0700
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="598542459"
+Received: from sattaran-mobl1.amr.corp.intel.com (HELO [10.212.246.186]) ([10.212.246.186])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:16:38 -0700
+Message-ID: <b8af932e-13da-ddcd-4ecb-bd8369853242@linux.intel.com>
+Date:   Thu, 21 Jul 2022 10:16:37 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 61ff3f9f-1688-4f4d-2e4b-08da6b3cae04
-X-MS-TrafficTypeDiagnostic: AM6PR03MB5126:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D2yVnzsgQkPu0p5f/IpmqUQDCLZbkCO45snZQ7k3dGw0CvxWI4KWYdi70TP/BcVAnnG85dRx+FaVXk/2cd6E5pjEDwz0tqZLybTsrJ2Zg/claMfjtUfwcsDjUAMKtmbFHouYv5fhs8IE49eN4Sh5HW2WZB2G9hNKtQ2sXT7VsOeP9fbIHsW1im6GeyLP8n7iaILftZ7Z5eez6Z7Z69DRicEH8UjQMtTz1g0Jw7LC7aQO7/Cz8Nj4E3qQoRC225bk4u3UOKpRz5ck/tKjcihZ4zNAoXssuPdspFX8o/aksDzoy4NrcNsvnvSOkRIgohZk6jurompvUT+gugy/BCVdHDgZGAZ8Lz1akJVF/ujiM1wnaIQCIZLQXKHPELOz3Z5Oi8OZu4VK7//lc1XF6g0zSxnxUcApkLMJoWx/PGf5q40cWGctOMq0tBZ5sESExTOB7KQPO/zUek3Jxat+lsgc6pIg7JKifq/hLo/z3DY4uPOJl+umVKU4M2f5oW2xJN/Bdckb/bs1f4/rtIx2t5Q7ReXcu0itvnNZVGGW0BMq/AMtAaW5ZxOZX0SBguz4VdEv85CchbzyywmWidJyw0b0xPhVo0LiSEDgsFL2WuZCD/UYH74VMdvZBWSOd/XTtnEDwD1aw1aDFZsiV1J+HCnUSh/aQGcPKx+3pSwL5Ew0eKHhrVnH+wMmpjEIhpjunneggs1U0tV+yoUA/nzJDznNxkrjBbBMh7/qgsnqRqhTMyPqGy+/g5AwiuJNMtYg38luwCdNvA+tlGnavoszimXQ2i1GuBWPasuKocZUJlL9LrM7YaqM/tcPz8ty7I9m66x6PvaOD5EaLagOgiFSIgYmz364PGGQ1CVggf0oPE8qnufsH0GZTCVr+tjqLh2nGVhQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(376002)(136003)(39850400004)(366004)(316002)(38100700002)(26005)(41300700001)(52116002)(2906002)(4744005)(6512007)(7416002)(53546011)(186003)(6666004)(66476007)(6916009)(31696002)(478600001)(66946007)(38350700002)(36756003)(31686004)(54906003)(4326008)(8676002)(6506007)(6486002)(86362001)(66556008)(2616005)(8936002)(5660300002)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OStwcGFqWWx6UmJmT3FFbFViblhtazY2TFBDQlE0QU5UZmkrK2l2cFJBR1dR?=
- =?utf-8?B?enErZ3JiWW1GRmREUjZDUDd1VXZaWlUrOHByMDdMak9GbFc5ZGVIOHhGQWxj?=
- =?utf-8?B?eTcrdStzMzdoUFRweWpjK0dWcnUydUNzMXQ0M1pCVVJyTERqd2g1RHF5K3FX?=
- =?utf-8?B?YjQ0QStZa2xsVHJVZU1pK0F0U3h5enZ2NGpMYUsvS0dBVmU2V3pQZmVRTm5F?=
- =?utf-8?B?c1R4elIwYWxTbEFacmhxMzd6TkdEZ1RYdWkveHExZEI3VDhiSFNCMmVJRnJS?=
- =?utf-8?B?YWNobEdMQlNaRzM1QXNaZHJGZFRkZzB2dEk5V0JFUVNFNGtIYnNxVTlKQVpD?=
- =?utf-8?B?a2szL0kxTzZPRmNOZUpkd1BCSjNyVjVRcDU3djliY3ZwM0RJL2tUTlNDaGI0?=
- =?utf-8?B?NkttTXF6MTNtQkxBdG5kVjNFSE9rSGlkaDVyMU53OGZob2xJbGF0QnJxaXVE?=
- =?utf-8?B?OURmVFAzZnlMcEVXa2FhZzZFZ3NVU0RuTFRTRWYvS1hDclF1QnJwQ3dBckhW?=
- =?utf-8?B?VVlKTWpsY3FJaUo5UVVFclhWbFpQbU92dGFRSVd1Y1JpU2ROUGJsdVFaV2lS?=
- =?utf-8?B?YnNuQjJlSkx3K3RhNVRsODFndnZHSDFVTUFRVURCbU1KRG1QdXI1N3pKb0Yz?=
- =?utf-8?B?RXRwUUNEK3lhcnVhL3FPNndibVEzVjhuRmc1NmxMcDlNQVBsT2h1MFJhUUVB?=
- =?utf-8?B?dExhdk0vK1Q1a3c0eVlteXZTU0M1TVhFSnhOQnBUYi94UXd6MDVmZFArSUtS?=
- =?utf-8?B?eS80WkYwMS9ETUczbjdxOU56cTFsckQ0ZHIrTjFNVDEzd3F1bitxQ0hZNWVv?=
- =?utf-8?B?Q1JiV3ZjVzJPenlmQlZ4ZWZ2b3hmYXp4d2RSSmVmeGZhSGQ4VkJQcFdnY1NV?=
- =?utf-8?B?d1RReXl0OWxUOXJnYTlIeEM3Y2dZdUZFamI0c29kalNwNVhMNm9kQTJsOFFS?=
- =?utf-8?B?VHI1WjNiVzVreVJNS3FibTNQc1ByOVIrdmRmbC9KSitRbW9BbzRaMXhPcm5D?=
- =?utf-8?B?TXYvSm92SUtpbXdJczdLTTIrNUFBanVENlJPVWovRk14Wnd3MlYvSUNyaks4?=
- =?utf-8?B?bVZ2dktPRE1oeS9EZFVvdWFtWkN5bnRlZnhVbml5TjlLNnVYbmdta2xiOTg4?=
- =?utf-8?B?RFFDVW5UZHl0eUwwUEd0RzNkeU1UYzZ1YVd6VGF4amthNWtnc1BsNTlUWE9H?=
- =?utf-8?B?YWxMc2RqOG9OSGRWd1piMXZ0ci9GUXZmQ2lVNy9yRitCU01lVkMyVDNRelRo?=
- =?utf-8?B?cGlUNENwWWJIQWZsL1BUdVVWMVNTQ05iVG84a2gvZTJxUWcvSFJ3SldrZlNF?=
- =?utf-8?B?d005NjNJeTI0LzRFVVJtN3RyT3NNQkpZaTRLQmFXM1E4M0xrSEJjUGc5NFJJ?=
- =?utf-8?B?ZWVseUEzendvVVhxNVY1QWV2cmgxYW1CbTZSUnd6UVIyOTh0eWVBc1NEK3NZ?=
- =?utf-8?B?Si9rU3FHSUtzNVpFRTRWRzFKTTRnMko4ZGI4OUtnYnJNSlNVWTRjSXN3M2p3?=
- =?utf-8?B?OW5nVWxGYzgwYitwMnZGZEk3cVFLSHpScmJRcnFpZGNVQllYUUlISTU0TndX?=
- =?utf-8?B?VXh1M2ZlYlJXWHYvMms5VnZrWjRNK2VidHJBbURhR1o4enZRUFZ1SzRZL3Fv?=
- =?utf-8?B?a2JIODJTOXdKOUxhN0JjRjRoZGhPcGJMRUcydW0zMW1sc0lnK3Jhd1BUWGkz?=
- =?utf-8?B?MFYzU0xXWVNyV05jRnVGWjlnWGRsbVJzWEdJQkRWOGxadS9XeGd2MHoxUTVi?=
- =?utf-8?B?Ritwa3FQaEJSUjRWQW1VblBxK3Axb1lrYTRJamtXU2xQaUM5ZlRqZlBpb0p0?=
- =?utf-8?B?R2J0T0dvcjc2QS9SbWFXQ3J2MFY0MDh4ajk5SzFiSERnWmMxeFhjL0hMSlFL?=
- =?utf-8?B?eGswNkJDRXlNWllWaTVyeno0TXJJMzlaZ3JrQXA2NklGL2xEZmZTTVNoam8y?=
- =?utf-8?B?QS8xRkszMnFENERjd3NvZ1Y0Q3ZlbFNkdmpGY3lxclM3Y1IyUHQ2Um9VK0M4?=
- =?utf-8?B?QlhKblhxeElCTXZXelFSVmpScUI4TGNwUkZ3UlN0MFN3cWswaC9WUHBaeGVn?=
- =?utf-8?B?dEdlMnhFWDJTTmR3L3RldjZpUksxYXNDNzJJMjZNMG5QRkl5UFJFR0g3REhk?=
- =?utf-8?B?ck1CczFOd0tTR3BIWmdnanF0WW90UHVsTXpLaER1SlVoRlZ1bnhhdHdKaHJT?=
- =?utf-8?B?RXc9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61ff3f9f-1688-4f4d-2e4b-08da6b3cae04
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 17:15:58.9940
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6a+Uflh4+dHRYqXFgNJCubbeFCPUh4rWemo3ByprRfA7BkYShraiUIppYk6cVj+U9RJfSck18wNiAv5Flyy1UA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB5126
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <d3808510-9974-258e-0c7b-9a76e0868d48@intel.com>
+ <f043d9f5-8f89-4ef3-2ce1-75665122bb3a@linux.intel.com>
+ <214e24f0-5236-be8d-024a-da48737d854a@intel.com>
+ <e280aaf4-57da-6453-c31c-6996dc85219c@linux.intel.com>
+ <a65473db-b307-c076-6d2f-8f2084d81eb5@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <a65473db-b307-c076-6d2f-8f2084d81eb5@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dave,
 
-
-On 7/20/22 7:35 AM, Russell King (Oracle) wrote:
-> On Tue, Jul 19, 2022 at 07:50:00PM -0400, Sean Anderson wrote:
->> +/* The following registers all have similar layouts; first the registers... */
->> +#define VEND1_GLOBAL_CFG_10M			0x0310
->> +#define VEND1_GLOBAL_CFG_100M			0x031b
->> +#define VEND1_GLOBAL_CFG_1G			0x031c
->> +#define VEND1_GLOBAL_CFG_2_5G			0x031d
->> +#define VEND1_GLOBAL_CFG_5G			0x031e
->> +#define VEND1_GLOBAL_CFG_10G			0x031f
->> +/* ...and now the fields */
->> +#define VEND1_GLOBAL_CFG_RATE_ADAPT		GENMASK(8, 7)
->> +#define VEND1_GLOBAL_CFG_RATE_ADAPT_NONE	0
->> +#define VEND1_GLOBAL_CFG_RATE_ADAPT_USX		1
->> +#define VEND1_GLOBAL_CFG_RATE_ADAPT_PAUSE	2
->> +
+On 7/21/22 10:02 AM, Dave Hansen wrote:
+> On 7/21/22 09:54, Sathyanarayanan Kuppuswamy wrote:
+>>
+>> On 7/21/22 9:49 AM, Dave Hansen wrote:
+>>> On 7/21/22 09:42, Sathyanarayanan Kuppuswamy wrote:
+>>>> On 7/21/22 9:08 AM, Dave Hansen wrote:
+>>>>> On 6/8/22 19:52, Kuppuswamy Sathyanarayanan wrote:
+>>>>>> For shared buffer allocation, alternatives like using the DMA API is
+>>>>>> also considered. Although it simpler to use, it is not preferred because
+>>>>>> dma_alloc_*() APIs require a valid bus device as argument, which would
+>>>>>> need converting the attestation driver into a platform device driver.
+>>>>>> This is unnecessary, and since the attestation driver does not do real
+>>>>>> DMA, there is no need to use real DMA APIs.
+>>>>> Let's actually try to walk through the requirements for the memory
+>>>>> allocation here.
+>>>>>
+>>>>>  1. The guest kernel needs to allocate some guest physical memory
+>>>>>     for the attestation data buffer
+>>>> Physically contiguous memory.
+>>> Remind me how large the quote structures are.
+>> It depends on the attestation service. In addition to TDREPORT (1K size),
+>> during quote generation, additional data can be included in the signed
+>> quote. So the spec allows variable length. User agent will communicate with
+>> attestation service to identify the appropriate buffer length. Our test
+>> uses 8K buffers
 > 
-> Shouldn't these definitions be in patch 11? They don't appear to be used
-> in this patch.
+> What is this "additional data"?  Is that "REPORTDATA" from the TDX
+> module spec?
+> 
+> 	"Additional REPORTDATA, a 64-byte value, is provided by the
+> 	guest TD to be included in the TDG.MR.REPORT."
 
-You're right. It looks like I added these too early.
 
---Sean
+It is not the REPORTDATA. REPORTDATA is already included in the TDREPORT during
+REPORT generation process (using TDG.MR.REPORT).
+
+Spec does not clearly define the details about the additional data. I think it is
+related to certificates.
+
+Isaku, do you have more details about it?
+
+Current ABI allows attestation service and agent to decide the quote size. So
+we can't make assumptions on what that size will be.
+
+Following is copied from TDX Module specification, sec titled "Measurement
+and Attestation"
+
+An Intel SGX Quoting Enclave, written specifically to support quoting Intel TDX TDs,
+uses a new ENCLU instruction leaf, EVERIFYREPORT2, to help check the integrity of the
+TDG.MR.REPORT. If it passes, the Quoting Enclave can use a certified quote signing key
+to sign a quote containing the guest TD’s measurements and the additional data being
+quoted.
+
+> 
+> 
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

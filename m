@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A577357CA16
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E91E57CA17
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233364AbiGULzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S233384AbiGULz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbiGULzN (ORCPT
+        with ESMTP id S233330AbiGULzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:55:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7CDA1B2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:55:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658404504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HERq0We8j8CwHoxj+xEjyLsUyfaDI+Q0OqS7fh97oS8=;
-        b=FEAJjb0Mmhcg4oRrwmBIg2BpbM85fmziy/r0XW17u6vlY8wNIKgSGoCrVycQyyDHhxTrK9
-        QV3vreFN1RAfxC/Lz3p3cgF/ql1cYAh/M2tv/dK/I4gIZSVpll7wiDSVkuNyMxxOyhCYZ9
-        nabUbeQtEGmUTfL4VOy93Z2Jxaka1x8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-292-PyRpB3c-NQqwC8SzSTMV1g-1; Thu, 21 Jul 2022 07:54:59 -0400
-X-MC-Unique: PyRpB3c-NQqwC8SzSTMV1g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D59BF3C0E216;
-        Thu, 21 Jul 2022 11:54:58 +0000 (UTC)
-Received: from starship (unknown [10.40.192.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 56CEF40C1288;
-        Thu, 21 Jul 2022 11:54:55 +0000 (UTC)
-Message-ID: <a1d5b658870ea5eb545034a00088ddca5bb6219b.camel@redhat.com>
-Subject: Re: [PATCH v2 10/11] KVM: x86: SVM: use smram structs
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>
-Date:   Thu, 21 Jul 2022 14:54:54 +0300
-In-Reply-To: <YtigJfHmyTr3eE5v@google.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
-         <20220621150902.46126-11-mlevitsk@redhat.com> <YtigJfHmyTr3eE5v@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 21 Jul 2022 07:55:47 -0400
+Received: from smtp236.sjtu.edu.cn (smtp236.sjtu.edu.cn [202.120.2.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A2874CC8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:55:41 -0700 (PDT)
+Received: from proxy02.sjtu.edu.cn (smtp188.sjtu.edu.cn [202.120.2.188])
+        by smtp236.sjtu.edu.cn (Postfix) with ESMTPS id 0FF5C1008AED8;
+        Thu, 21 Jul 2022 19:55:38 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by proxy02.sjtu.edu.cn (Postfix) with ESMTP id E568E2008B6BB;
+        Thu, 21 Jul 2022 19:55:38 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from proxy02.sjtu.edu.cn ([127.0.0.1])
+        by localhost (proxy02.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vSRyE9_Mjxh7; Thu, 21 Jul 2022 19:55:38 +0800 (CST)
+Received: from [192.168.24.189] (unknown [202.120.40.82])
+        (Authenticated sender: qtxuning1999@sjtu.edu.cn)
+        by proxy02.sjtu.edu.cn (Postfix) with ESMTPSA id 98B28200A5C04;
+        Thu, 21 Jul 2022 19:55:31 +0800 (CST)
+Message-ID: <4185ee25-52af-8271-c4de-3824490fba6a@sjtu.edu.cn>
+Date:   Thu, 21 Jul 2022 19:55:31 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 0/4] virtio/virtio_test
+Content-Language: en-US
+To:     jasowang@redhat.com, mst@redhat.com
+Cc:     eperezma@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, sgarzare@redhat.com
+References: <20220709022745.21020-1-qtxuning1999@sjtu.edu.cn>
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+In-Reply-To: <20220709022745.21020-1-qtxuning1999@sjtu.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-21 at 00:39 +0000, Sean Christopherson wrote:
-> On Tue, Jun 21, 2022, Maxim Levitsky wrote:
-> > +	if (!guest_cpuid_has(vcpu, X86_FEATURE_SVM))
-> 
-> I think you want X86_FEATURE_LM, not X86_FEATURE_SVM.
-> 
+On 2022/7/9 10:27, Guo Zhi wrote:
+> Original virtio_test only use add one descriptor for each io event, thus code of descriptor chain and indirection have not been tested(one descriptor will not use indirect feature even indirect feature has been specified). In fact it would have not been possible for vhost_test to access to the indirect descriptor table, because it's impossible for virtio_ring.c to allocate it.
+>
+> This series using descriptor chain and enable indirection feature. And through gcov we find the code coverage has been improved(not high for virtio_ring.c because virtio_test only test split virtqueue):
+>
+> +------------+-------------+-------------+
+> |            |virtio_test.c|virtio_ring.c|
+> +------------+-------------+-------------+
+> | original   |   72.32%    |   24.71%    |
+> +------------+-------------+-------------+
+> | current    |    75%      |   28.05%    |
+> +------------+-------------+-------------+
+>
+> Guo Zhi (4):
+>    virtio_test: kick vhost for a batch of descriptors
+>    virtio_test: use random length scatterlists to test descriptor chain
+>    virtio_test: enable indirection feature
+>    virtio_test: pregenerate random numbers
+>
+>   tools/virtio/virtio_test.c | 85 ++++++++++++++++++++++++++++++--------
+>   1 file changed, 68 insertions(+), 17 deletions(-)
+>
+Hi, the new version patch of virtio_test is waiting for review:)
 
-Yes, sorry about that! Thanks!
-
-Best regards,
-	Maxim Levitsky
+Thanks.
 

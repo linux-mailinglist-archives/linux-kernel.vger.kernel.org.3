@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223F357CC2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5076457CC50
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiGUNm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S229452AbiGUNnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiGUNmg (ORCPT
+        with ESMTP id S229653AbiGUNmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:42:36 -0400
+        Thu, 21 Jul 2022 09:42:38 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECDE7E31D;
-        Thu, 21 Jul 2022 06:42:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EC45A476;
+        Thu, 21 Jul 2022 06:42:36 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5AB8D6601AAE;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E4CD56601AAF;
         Thu, 21 Jul 2022 14:42:34 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658410954;
-        bh=akTb+gtu7ReGU7vaNrXZI/GzP5obrfG91xyx1IuWCT0=;
+        s=mail; t=1658410955;
+        bh=dlqdtSuo04KavAzVuh7wvb7toYorthQcXqSIIZVLL6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y80YZP2S/6CF3IswsEqGwn3wtC0MpOrFK8QfIWWO1/6JCSR7ztz+LzVSO8296vSfB
-         CMEpRj39aea0i2ZYb+jIIWtBpCspZK9iKSMLwvhI+wf0B8ObD38rRgOX9qLqKOcsbc
-         MFftWcYIc3t9lgt+B8vrBwWGgkeK9LooeNH/gyKzfawBYazMO5RyhaplrrmRG+1jxy
-         VYA0acB+ULdpIBfaqTtVRTHY/ogDJMSkyJ/le2fqblWP9ohkLup7ZrnCpF5SStL2yB
-         ulM49iOcPewfTVMqmYD9CnaqAOU5klDURHZ409dMwBbPFO/09fe76Cf+P0vdlGGSoB
-         nAnN8oU/PJGkw==
+        b=g+P9MM+AWoHjLIq62e484C/HRNq88fz3TVaXhZcj0KYZDt9FmuNBEKQZz8g36jNxb
+         H0UyK+//tRmueKYzwOXvC6o4uDBAMaN5movVlvUxkDUuasdF5HyxWVgOKVhlPLmRGP
+         2dJZYXAJk5PB7pWVcsRGesavGJ1LAgqcVh5uArn5tyPFZSmrX2lA5P1jnVgSA/5qkO
+         8Vl03pfv8I49ajVikz7IcIR/8Gt+vAQ6V0Cm9fWjI5sPbGiDGxHzULmYFdY9sERy+t
+         n2AZP0b+VfaUCZsZDgVC0vGg066qiRPdgLSYKo3k9A02Ej6zG444fnDEphdv6YjaOx
+         QiOlfAjND6ZoA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -41,9 +41,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 5/8] arm64: dts: mediatek: cherry: Enable Elantech eKTH3000 i2c trackpad
-Date:   Thu, 21 Jul 2022 15:42:25 +0200
-Message-Id: <20220721134228.310178-6-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 6/8] arm64: dts: mediatek: cherry: Enable DSP, audio codec and sound card
+Date:   Thu, 21 Jul 2022 15:42:26 +0200
+Message-Id: <20220721134228.310178-7-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220721134228.310178-1-angelogioacchino.delregno@collabora.com>
 References: <20220721134228.310178-1-angelogioacchino.delregno@collabora.com>
@@ -58,50 +58,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Cherry platform uses an Elantech touchpad/trackpad: enable
-probing it at address 0x15 on I2C1.
+All machines of the Cherry platform have a working DSP (integrated
+into the MT8195 SoC), and audio support, some with a different audio
+codec: specifically, some using Realtek's RT5682I and some RT5682S.
+
+Write a configuration for all the audio bits to enable functionality.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../arm64/boot/dts/mediatek/mt8195-cherry.dtsi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ .../dts/mediatek/mt8195-cherry-tomato-r1.dts  |  10 ++
+ .../dts/mediatek/mt8195-cherry-tomato-r2.dts  |  10 ++
+ .../dts/mediatek/mt8195-cherry-tomato-r3.dts  |  10 ++
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 117 ++++++++++++++++++
+ 4 files changed, 147 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 8859957c7b27..58349d4c3c8b 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -134,6 +134,16 @@ &i2c1 {
- 	i2c-scl-internal-delay-ns = <12500>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c1_pins>;
-+
-+	trackpad@15 {
-+		compatible = "elan,ekth3000";
-+		reg = <0x15>;
-+		interrupts-extended = <&pio 6 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&trackpad_pins>;
-+		vcc-supply = <&pp3300_s3>;
-+		wakeup-source;
-+	};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
+index 3348ba69ff6c..2d5e8f371b6d 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
+@@ -10,6 +10,16 @@ / {
+ 	compatible = "google,tomato-rev1", "google,tomato", "mediatek,mt8195";
  };
  
- &i2c2 {
-@@ -727,6 +737,14 @@ subpmic_pin_irq: pins-subpmic-int-n {
- 		};
++&audio_codec {
++	compatible = "realtek,rt5682i";
++	realtek,btndet-delay = <16>;
++};
++
++&sound {
++	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
++	model = "mt8195_r1019_5682";
++};
++
+ &ts_10 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
+index 4669e9d917f8..2586c32ce6e6 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
+@@ -10,6 +10,11 @@ / {
+ 	compatible = "google,tomato-rev2", "google,tomato", "mediatek,mt8195";
+ };
+ 
++&audio_codec {
++	compatible = "realtek,rt5682i";
++	realtek,btndet-delay = <16>;
++};
++
+ &pio_default {
+ 	pins-low-power-hdmi-disable {
+ 		pinmux = <PINMUX_GPIO31__FUNC_GPIO31>,
+@@ -30,6 +35,11 @@ pins-low-power-pcie0-disable {
+ 	};
+ };
+ 
++&sound {
++	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
++	model = "mt8195_r1019_5682";
++};
++
+ &ts_10 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
+index 5021edd02f7c..f54f9477b99d 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
+@@ -11,6 +11,11 @@ / {
+ 		     "google,tomato", "mediatek,mt8195";
+ };
+ 
++&audio_codec {
++	compatible = "realtek,rt5682s";
++	realtek,amic-delay-ms = <250>;
++};
++
+ &pio_default {
+ 	pins-low-power-hdmi-disable {
+ 		pinmux = <PINMUX_GPIO31__FUNC_GPIO31>,
+@@ -31,6 +36,11 @@ pins-low-power-pcie0-disable {
+ 	};
+ };
+ 
++&sound {
++	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
++	model = "m8195_r1019_5682s";
++};
++
+ &ts_10 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+index 58349d4c3c8b..ca9955a97f8f 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+@@ -25,6 +25,12 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
  	};
  
-+	trackpad_pins: trackpad-default-pins {
-+		pins-int-n {
-+			pinmux = <PINMUX_GPIO6__FUNC_GPIO6>;
-+			input-enable;
-+			bias-pull-up;
++	dmic_codec: dmic-codec {
++		compatible = "dmic-codec";
++		num-channels = <2>;
++		wakeup-delay-ms = <50>;
++	};
++
+ 	memory@40000000 {
+ 		device_type = "memory";
+ 		reg = <0 0x40000000 0 0x80000000>;
+@@ -116,9 +122,49 @@ scp_mem: memory@50000000 {
+ 			reg = <0 0x50000000 0 0x2900000>;
+ 			no-map;
+ 		};
++
++		adsp_mem: memory@60000000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0x60000000 0 0xd80000>;
++			no-map;
++		};
++
++		afe_mem: memory@60d80000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0x60d80000 0 0x100000>;
++			no-map;
++		};
++
++		adsp_device_mem: memory@60e80000 {
++			compatible = "shared-dma-pool";
++			reg = <0 0x60e80000 0 0x280000>;
++			no-map;
 +		};
 +	};
 +
- 	touchscreen_pins: touchscreen-default-pins {
- 		pins-int-n {
- 			pinmux = <PINMUX_GPIO92__FUNC_GPIO92>;
++	spk_amplifier: rt1019p {
++		compatible = "realtek,rt1019p";
++		label = "rt1019p";
++		pinctrl-names = "default";
++		pinctrl-0 = <&rt1019p_pins_default>;
++		sdb-gpios = <&pio 100 GPIO_ACTIVE_HIGH>;
+ 	};
+ };
+ 
++&adsp {
++	status = "okay";
++
++	memory-region = <&adsp_device_mem>, <&adsp_mem>;
++};
++
++&afe {
++	status = "okay";
++
++	mediatek,etdm-in2-cowork-source = <2>;
++	mediatek,etdm-out2-cowork-source = <0>;
++	memory-region = <&afe_mem>;
++};
++
+ &i2c0 {
+ 	status = "okay";
+ 
+@@ -152,6 +198,17 @@ &i2c2 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c2_pins>;
++
++	audio_codec: codec@1a {
++		/* Realtek RT5682i or RT5682s, sharing the same configuration */
++		reg = <0x1a>;
++		interrupts-extended = <&pio 89 IRQ_TYPE_EDGE_BOTH>;
++		realtek,jd-src = <1>;
++
++		AVDD-supply = <&mt6359_vio18_ldo_reg>;
++		MICVDD-supply = <&pp3300_z2>;
++		VBAT-supply = <&pp3300_z5>;
++	};
+ };
+ 
+ &i2c3 {
+@@ -256,6 +313,11 @@ &mmc1 {
+ 	vqmmc-supply = <&mt_pmic_vmc_ldo_reg>;
+ };
+ 
++&mt6359codec {
++	mediatek,dmic-mode = <1>;  /* one-wire */
++	mediatek,mic-type-0 = <2>; /* DMIC */
++};
++
+ /* for CPU-L */
+ &mt6359_vcore_buck_reg {
+ 	regulator-always-on;
+@@ -463,6 +525,34 @@ &pio {
+ 		"AP_SPI_FLASH_MOSI",
+ 		"AP_SPI_FLASH_MISO";
+ 
++	aud_pins_default: audio-default-pins {
++		pins-cmd-dat {
++		    pinmux = <PINMUX_GPIO69__FUNC_AUD_CLK_MOSI>,
++			     <PINMUX_GPIO70__FUNC_AUD_SYNC_MOSI>,
++			     <PINMUX_GPIO71__FUNC_AUD_DAT_MOSI0>,
++			     <PINMUX_GPIO72__FUNC_AUD_DAT_MOSI1>,
++			     <PINMUX_GPIO73__FUNC_AUD_DAT_MISO0>,
++			     <PINMUX_GPIO74__FUNC_AUD_DAT_MISO1>,
++			     <PINMUX_GPIO75__FUNC_AUD_DAT_MISO2>,
++			     <PINMUX_GPIO0__FUNC_TDMIN_MCK>,
++			     <PINMUX_GPIO1__FUNC_TDMIN_DI>,
++			     <PINMUX_GPIO2__FUNC_TDMIN_LRCK>,
++			     <PINMUX_GPIO3__FUNC_TDMIN_BCK>,
++			     <PINMUX_GPIO60__FUNC_I2SO2_D0>,
++			     <PINMUX_GPIO49__FUNC_I2SIN_D0>,
++			     <PINMUX_GPIO50__FUNC_I2SO1_MCK>,
++			     <PINMUX_GPIO51__FUNC_I2SO1_BCK>,
++			     <PINMUX_GPIO52__FUNC_I2SO1_WS>,
++			     <PINMUX_GPIO53__FUNC_I2SO1_D0>;
++		};
++
++		pins-hp-jack-int-odl {
++			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>;
++			input-enable;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
++		};
++	};
++
+ 	cr50_int: cr50-irq-default-pins {
+ 		pins-gsc-ap-int-odl {
+ 			pinmux = <PINMUX_GPIO88__FUNC_GPIO88>;
+@@ -707,6 +797,21 @@ pins-low-power-pupd {
+ 		};
+ 	};
+ 
++	rt1011_pins_default: rt1011-default-pins {
++		pins-spk {
++			pinmux = <PINMUX_GPIO94__FUNC_GPIO94>,
++				 <PINMUX_GPIO100__FUNC_GPIO100>;
++			output-high;
++		};
++	};
++
++	rt1019p_pins_default: rt1019p-default-pins {
++		pins-amp-sdb {
++			pinmux = <PINMUX_GPIO100__FUNC_GPIO100>;
++			output-low;
++		};
++	};
++
+ 	scp_pins: scp-default-pins {
+ 		pins-vreq {
+ 			pinmux = <PINMUX_GPIO76__FUNC_SCP_VREQ_VAO>;
+@@ -779,6 +884,18 @@ cros-ec-rpmsg {
+ 	};
+ };
+ 
++&sound {
++	status = "okay";
++
++	mediatek,adsp = <&adsp>;
++	mediatek,dai-link =
++		"DL10_FE", "DPTX_BE", "ETDM1_IN_BE", "ETDM2_IN_BE",
++		"ETDM1_OUT_BE", "ETDM2_OUT_BE","UL_SRC1_BE",
++		"AFE_SOF_DL2", "AFE_SOF_DL3", "AFE_SOF_UL4", "AFE_SOF_UL5";
++	pinctrl-names = "default";
++	pinctrl-0 = <&aud_pins_default>;
++};
++
+ &spi0 {
+ 	status = "okay";
+ 
 -- 
 2.35.1
 

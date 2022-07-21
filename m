@@ -2,135 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA0857CDDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40EB57CDDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiGUOjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S231731AbiGUOjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiGUOjD (ORCPT
+        with ESMTP id S232113AbiGUOjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:39:03 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CEE8688C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:39:01 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id i4so1307493qvv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kwW27VCQ4+JlDB+iPSDhz5O1D0eurbd7dKtxO/dfIvY=;
-        b=OnzKBTMKPt8ybqoDKEizFWOIZUwtYD8NVniERJQRrRBD+FC+PRdDYfR9tAPu3M63Wt
-         JG3TqJzUoWvMaF0pCE36eey30fVsLVvODRU/er7wla8BCkhleJfMm7QLgdvrEynQfv7f
-         D64FKivghTNDU7lIbls+9rYw7bof/BUsEQ8+fzzuudi9b3k4wY3SXlIAk/SxIJOZJVCQ
-         TzeoL49vw0ePEWJOK2s1Tu0Tc1DJW173uCXzh3pS7Xigojqp5Ood6OfscacTHVee07jq
-         YdRhUB07YqVnhDr/fzI+/qAYhFgZvJyL8yNAyD2VsfUeuUe52gn2DhlXweRSZoq+fOeV
-         FLgA==
+        Thu, 21 Jul 2022 10:39:07 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7698569F19;
+        Thu, 21 Jul 2022 07:39:06 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id u19so886426ilk.7;
+        Thu, 21 Jul 2022 07:39:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kwW27VCQ4+JlDB+iPSDhz5O1D0eurbd7dKtxO/dfIvY=;
-        b=fqg/ZjRpBui3W/xForf2VvUoPzeW3Cg/Lz9aqME+GVo3puoJvooeH7AKLgL4FS0P7f
-         lRAfCx4g5jcr9BTTPUAU6s4mGRYtcyoqsLnyanvQ0ftn1naDuclN6EfL/lHf6TxiciFt
-         y+YK3pjEqDzhfKNk27/5udLD6EzBH4ovMbnW1d6wrSjQjkDe0pMSoXfzxG5dk5lgC1Zb
-         u8yOt9uxFHIO6lgRgFgKKOHXMdjTpFsO7uj2t+bIBq4QrxKW2/1jbx9ej8X2MfgGGswZ
-         v5mihnyiGtRxjNaeT0R5vEV2JujoQkpNDuFNpjDfdIRrXjs23e2wr/PopbpVZaIX1Y2f
-         7Erg==
-X-Gm-Message-State: AJIora8DVpmMdSqOw8KZKdfj65zGWd9+aeHuRwsDgcne6PlwfzEHtzIb
-        gfR3OV7FwpPHyQmuY+LLHsOL8w==
-X-Google-Smtp-Source: AGRyM1uWQJMIGs0cFKjzk6jOPxy6nU58JEm7wrsssEUVgVK/vH4DFVTrvRD0ZbRcmdLePWGA232yJQ==
-X-Received: by 2002:ad4:4ea2:0:b0:473:6d91:6759 with SMTP id ed2-20020ad44ea2000000b004736d916759mr34926483qvb.102.1658414340714;
-        Thu, 21 Jul 2022 07:39:00 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05620a12d300b006b5905999easm1403705qkl.121.2022.07.21.07.38.59
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Sm3tlB8yJNkvcnmGZzguj4nSasaetiaq3D0mjYCkJN0=;
+        b=Q+eziC9iHTKY7L9tORcfEVBuY4F4+cz9TXxFH3Ca/FpZ7c3MoS+3uYkxVzXTFpUvHF
+         OR2WhE5Nk5gkuM9ipIdZAcvLMl46EfxhhP0gsQV8oeA/D9YhF6TbcyFydOu0zX3dU9jr
+         nLZTWIC8O6u8cPXH6l9cZaqiLeEsNwlw3DpCObIl2DGDhAdHE2x7BlDnJeh34zR9bNyQ
+         T8CszXIEze6+twnayFszqSSR4CpDXlHo7TuErrKNKC4QWiR1Ul+g8BD/5Y02AO93iWF1
+         vlpxAG1Jvn0uHAHnAntUPg+kcwR6E7xxgEGT6a5byg5TNTgeOGpafibuiiWLDAn+MxhI
+         vKSw==
+X-Gm-Message-State: AJIora/QTLjhn5Fx/sQm7AwHUN/FF0yDhsLYkwn7CA+QGE8XPucyG+2x
+        fmexFgFkKvKPz7GsgUaNrg==
+X-Google-Smtp-Source: AGRyM1s3RgA4RPtEqdms0tt8gKlUtsmi8LztDesM8l1Pi2YyOtRfdM8vD2mP/jx42IXRMbzL8n5HqQ==
+X-Received: by 2002:a05:6e02:1a49:b0:2dc:7230:29fd with SMTP id u9-20020a056e021a4900b002dc723029fdmr21805427ilv.82.1658414345707;
+        Thu, 21 Jul 2022 07:39:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id i2-20020a6bb802000000b0067bcb28e036sm911054iof.49.2022.07.21.07.39.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 07:38:59 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1oEXKM-001wqY-N5; Thu, 21 Jul 2022 11:38:58 -0300
-Date:   Thu, 21 Jul 2022 11:38:58 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Long Li <longli@microsoft.com>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [Patch v4 03/12] net: mana: Handle vport sharing between devices
-Message-ID: <20220721143858.GV5049@ziepe.ca>
-References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
- <1655345240-26411-4-git-send-email-longli@linuxonhyperv.com>
- <SN6PR2101MB13272044B91D6E37F7F5124FBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
- <PH7PR21MB3263F08C111C5D06C99CC32ACE869@PH7PR21MB3263.namprd21.prod.outlook.com>
- <20220720234209.GP5049@ziepe.ca>
- <PH7PR21MB3263F5FD2FA4BA6669C21509CE919@PH7PR21MB3263.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR21MB3263F5FD2FA4BA6669C21509CE919@PH7PR21MB3263.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 07:39:05 -0700 (PDT)
+Received: (nullmailer pid 1363458 invoked by uid 1000);
+        Thu, 21 Jul 2022 14:39:02 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     nick.hawkins@hpe.com
+Cc:     devicetree@vger.kernel.org, broonie@kernel.org, robh+dt@kernel.org,
+        verdun@hpe.com, krzysztof.kozlowski+dt@linaro.org,
+        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        joel@jms.id.au, arnd@arndb.de
+In-Reply-To: <20220720201158.78068-3-nick.hawkins@hpe.com>
+References: <20220720201158.78068-1-nick.hawkins@hpe.com> <20220720201158.78068-3-nick.hawkins@hpe.com>
+Subject: Re: [PATCH v1 2/5] spi: dt-bindings: add documentation for hpe,gxp-spifi
+Date:   Thu, 21 Jul 2022 08:39:02 -0600
+Message-Id: <1658414342.342423.1363457.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:06:12AM +0000, Long Li wrote:
-> > Subject: Re: [Patch v4 03/12] net: mana: Handle vport sharing between
-> > devices
-> > 
-> > On Tue, Jul 12, 2022 at 06:48:09PM +0000, Long Li wrote:
-> > > > > @@ -563,9 +581,19 @@ static int mana_cfg_vport(struct
-> > > > > mana_port_context *apc, u32 protection_dom_id,
-> > > > >
-> > > > >  	apc->tx_shortform_allowed = resp.short_form_allowed;
-> > > > >  	apc->tx_vp_offset = resp.tx_vport_offset;
-> > > > > +
-> > > > > +	netdev_info(apc->ndev, "Configured vPort %llu PD %u DB %u\n",
-> > > > > +		    apc->port_handle, protection_dom_id, doorbell_pg_id);
-> > > > Should this be netdev_dbg()?
-> > > > The log buffer can be flooded if there are many vPorts per VF PCI
-> > > > device and there are a lot of VFs.
-> > >
-> > > The reason netdev_info () is used is that this message is important
-> > > for troubleshooting initial setup issues with Ethernet driver. We rely
-> > > on user to get this configured right to share the same hardware port
-> > > between Ethernet and RDMA driver. As far as I know, there is no easy
-> > > way for a driver to "take over" an exclusive hardware resource from
-> > > another driver.
-> > 
-> > This seems like a really strange statement.
-> > 
-> > Exactly how does all of this work?
-> > 
-> > Jason
+On Wed, 20 Jul 2022 15:11:55 -0500, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> "vport" is a hardware resource that can either be used by an
-> Ethernet device, or an RDMA device. But it can't be used by both at
-> the same time. The "vport" is associated with a protection domain
-> and doorbell, it's programmed in the hardware. Outgoing traffic is
-> enforced on this vport based on how it is programmed.
+> Create documentation for the hpe,gxp-spifi binding to support access to
+> the SPI parts
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> ---
+>  .../bindings/spi/hpe,gxp-spifi.yaml           | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> 
 
-Sure, but how is the users problem to "get this configured right" and
-what exactly is the user supposed to do?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I would expect the allocation of HW resources to be completely
-transparent to the user. Why is it not?
+yamllint warnings/errors:
 
-Jason
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.example.dtb: spi@200: Unevaluated properties are not allowed ('interrupt-parrent' was unexpected)
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

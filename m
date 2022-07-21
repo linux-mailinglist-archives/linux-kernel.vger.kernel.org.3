@@ -2,130 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D07257C9B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF2A57C9BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiGUL0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S233148AbiGUL3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiGUL0G (ORCPT
+        with ESMTP id S229866AbiGUL3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:26:06 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24941101DF;
-        Thu, 21 Jul 2022 04:26:05 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31e560aa854so13647197b3.6;
-        Thu, 21 Jul 2022 04:26:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y3aH26Tt0fov+wN+dziNA4MJLDOlPeS6/aeyAPgNAKs=;
-        b=3EIrm4O/Lfk3+4uxM/71zDRe3/koVmWLFM9P3manGnin2LdbYLeg/upp+mwTCzR9ZV
-         MRPJmwpw5u2kYT1Tzxnpty66elJqDX4lI9sMz3HwlmLilVvSpfxyRhGAzO5TJ/gkTYOh
-         FLQzwJfdCU11ChjCa7innwrkWSDM/0mxRnTICaMli/P5DpWde40H+gKE+6FeWKDY46kv
-         2l3tgGr03ddEZHSDNxlPn86dVvCOR7gDBWDEEZbE/N4NX0JHEpgslsMYl5pOs4gkIh3b
-         DuZh6kX35Nz7Rar7sp0fVL99quVjJaTHBmdvA0VlLrORIoo1jTBY44761wrhXRx+PsN7
-         iHig==
-X-Gm-Message-State: AJIora8jiiRFtDWd5GGxdfLa0tQdldkyB763bQ4Ig+HySLr53VomhEjB
-        KyhCAlzW5byRQzNd+3fJ6NXu9DdFQh/ohIl5j3E=
-X-Google-Smtp-Source: AGRyM1udwHaTCh3Lm0psHK2LHkSbxBfKdfvBaU4qSeul2vjAkQ+H3vW7FVuR7eqNJDtROz2TrSyVB5zTTGnB1WB7TyI=
-X-Received: by 2002:a81:1a11:0:b0:31e:4549:d667 with SMTP id
- a17-20020a811a11000000b0031e4549d667mr17201713ywa.196.1658402764395; Thu, 21
- Jul 2022 04:26:04 -0700 (PDT)
+        Thu, 21 Jul 2022 07:29:14 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F0129C9D;
+        Thu, 21 Jul 2022 04:29:13 -0700 (PDT)
+Received: from zn.tnic (p5de8e862.dip0.t-ipconnect.de [93.232.232.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D3DAC1EC0380;
+        Thu, 21 Jul 2022 13:29:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658402947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Wd2DXG4EY+gV5zYMOQhIEqcD8PQY00hUt7HCgRibjL8=;
+        b=dFXCVt/OHUd/noNwab4aCuTwdHKd3CdavlyVXQUVKSiS1+i6jsnv+RaBor6Eb0ibeEH8Ik
+        ZW7eGQZ5aCAV385nZn2vqMYWTQQUDYh0ZpB0Vhc9p+44UKLkVTNN/r9xFHx2rSqY2Qcdbg
+        csa52vVIX68AZfpxHkRUlE5KlvGx05g=
+Date:   Thu, 21 Jul 2022 13:29:01 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 04/49] x86/sev: set SYSCFG.MFMD
+Message-ID: <Ytk4fWCC3feXdAPW@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <c933e87762d78e5dce78e9bbf9c41aa0b30ddba2.1655761627.git.ashish.kalra@amd.com>
 MIME-Version: 1.0
-References: <20220718145038.1114379-1-daniel.lezcano@linaro.org>
- <20220718145038.1114379-3-daniel.lezcano@linaro.org> <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
- <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org>
-In-Reply-To: <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Jul 2022 13:25:53 +0200
-Message-ID: <CAJZ5v0gjfeyiS8rUoPpa3sMrofw1ZyQe=+P6pvPbeirs07F+Qw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] thermal/core: Build ascending ordered indexes for
- the trip points
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c933e87762d78e5dce78e9bbf9c41aa0b30ddba2.1655761627.git.ashish.kalra@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:59 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 19/07/2022 20:56, Rafael J. Wysocki wrote:
-> > On Mon, Jul 18, 2022 at 4:50 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> By convention the trips points are declared in the ascending
-> >> temperature order. However, no specification for the device tree, ACPI
-> >> or documentation tells the trip points must be ordered this way.
-> >>
-> >> In the other hand, we need those to be ordered to browse them at the
-> >
-> > s/In/On/
-> >
-> >> thermal events.
-> >
-> > What if they are all inspected every time?
->
-> My bad, my sentence is confusing. The trip point are browsed every time
-> and we need to have them ordered to detect correctly the thermal events.
+On Mon, Jun 20, 2022 at 11:02:18PM +0000, Ashish Kalra wrote:
+> Subject: [PATCH Part2 v6 04/49] x86/sev: set SYSCFG.MFMD
 
-I see.
+That subject title needs to be made human readable.
 
-So this mostly is a preparation for patch 4, isn't it?
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> SEV-SNP FW >= 1.51 requires that SYSCFG.MFMD must be set.
 
-> >> But if we assume they are ordered and change the code
-> >> based on this assumption, any platform with shuffled trip points
-> >> description will be broken (if they exist).
-> >>
-> >> Instead of taking the risk of breaking the existing platforms, use an
-> >> array of temperature ordered trip identifiers and make it available
-> >> for the code needing to browse the trip points in an ordered way.
-> >
-> > Well, having ops->get_trip_temp() suggests that the trip temperatures
-> > can be dynamic.  Is the ordering guaranteed to be preserved in that
-> > case?
->
-> The number of trips can not be changed. It is fixed when the thermal
-> zone is created AFAICT.
+Because?
 
-The current code appears to assume that and I think that this is a
-reasonable expectation.
+Also, commit message needs to be human-readable and not pseudocode.
 
-> The get_trip_temp() is just a way to let the
-> different driver declare their own trip structure which is actually
-> something I'm trying to fix by moving the structure thermal_trip inside
-> the thermal zone. But that is a longer and separate work.
+> @@ -2325,6 +2346,9 @@ static __init int __snp_rmptable_init(void)
+>  	/* Flush the caches to ensure that data is written before SNP is enabled. */
+>  	wbinvd_on_all_cpus();
+>  
+> +	/* MFDM must be enabled on all the CPUs prior to enabling SNP. */
+> +	on_each_cpu(mfdm_enable, NULL, 1);
+> +
+>  	/* Enable SNP on all CPUs. */
+>  	on_each_cpu(snp_enable, NULL, 1);
 
-Well, I'm not sure.
+No, not two IPI generating function calls - one and do everything in it.
+I.e., what Marc said.
 
-Trip point temperatures can be set via trip_point_temp_store() at
-least in principle.  How is it guaranteed that this won't affect the
-ordering?
+Thx.
 
-> > Anyway, if they need to be sorted, why don't we just sort them
-> > properly instead of adding this extra array?
->
-> We can not because ATM the trip points array is private to the different
-> sensors.
+-- 
+Regards/Gruss,
+    Boris.
 
-Well, the core could create an array or list of trip points for the
-thermal zone during registration and populate it from the
-driver-provided data.  Then, it could be sorted at the creation time.
-
-However, the above question needs to be addressed first.
+https://people.kernel.org/tglx/notes-about-netiquette

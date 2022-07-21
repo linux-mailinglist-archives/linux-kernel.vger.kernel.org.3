@@ -2,132 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B9B57C5FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B80357C60A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbiGUIQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
+        id S229527AbiGUIRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiGUIQW (ORCPT
+        with ESMTP id S229902AbiGUIR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:16:22 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFF67D1FC
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:21 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id g18-20020a056602249200b0067c0f24207cso168581ioe.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:21 -0700 (PDT)
+        Thu, 21 Jul 2022 04:17:29 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92927E019
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id u13so1598335lfn.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
+        b=ECKSOnUYc5HaMnhSUPrnMRaZKeYAD7ValXquz6QlXsQRvt6pM3dc1Zh6iuvqMQqs1p
+         vkficU6A26aKu3AISdyt/5LgUlepuAeYYShiP7XLRoKI4zCLuJHsAlBPu3unpyQeF/nL
+         tHMzK4wJUtu4FbnPes5doM3OThzn7D/fceMjo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=XiflHrkGhMohfp90y6rm8XzN9ejlCNoFswsBGQ/pU/U=;
-        b=xMPgtoESYy9+WxFNAMWgzsk4S402e88okzsbdeDcKq7nRi2T+6vs0QGMp1M9EXcdWL
-         hI4Ezxls7arS6lsZoCpQ475zTbtdd01hBp9V3dl/DCN9AnjAJ07nbxEjS6SSmmxipRaX
-         X770UXsIsmmKYCXE4aLtYnYHjn5MFP9NveAgUivKJGL9OfamthQJV28IAlGIij5dbTu2
-         H3cYAJmJt9r0dhYa2zQeBlIJsmKW21m86PX2L3YgqY/nI/x5Zh77cXt4bXnRPVy82YSi
-         eSUaKLN+cgFzucYUQyg7O0VXSqs18sUxqIrieGhhU5zij+VyNUZ/rpx7YYx6LT5d2R7s
-         pX1g==
-X-Gm-Message-State: AJIora8TIoWonq8gT/gFDOUKFe9bz/Oa+oAocWX8hwmypvlQrrdYxz0y
-        0GxUOyiD5SF/PyY9jCZBoxiOHh0L3f27yVmHJFDVyUEuGA3G
-X-Google-Smtp-Source: AGRyM1uRrMW3mfids6Sst+N2N2tZanU9cElVjImRKGVG39qcdE0cDece+SGIR9+7ZcJQeC7ZuGEGQblaXekZAhQ4tDDbiJSvbChG
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
+        b=0Xb+NtlFgipB2rHrAAmSb4krSeMM0Il0EoO7WezhoTCDc+54rTOL2rOOb/GTSgZjca
+         1wm0ObMoT6QT3165eR4jhKVdxkfmih6Af+8O3inURwOHucP9kMNPZ0Y4MPvTJeBNoI26
+         GNtgOjDy7k3G3OTIV98hB4Op6KErKDs7pdrrWRGSjy4G7Pt2PUSJkOu5HwxIXRerKydh
+         DjnDhhQRP0MBFh2p4xaFNihbz3x/neb1gtbh07EwodoBBCMVEyz2IWiw6LAqYRQhszE9
+         pj0ll/lLYtQFlkajc0AR9fMWdFw3TKFeeOuN/o0lMvY1MtbDyZjEGU0E8K4FjCv9Ffsp
+         LV3g==
+X-Gm-Message-State: AJIora/PwKM/+WRay1uBX3ZBCnoreCF8it1V+Y0+CAcQibPYJTAwaMwF
+        eAlirh76j8C6ymoPqxisFY616eet1Ns1QKK3s/+13w==
+X-Google-Smtp-Source: AGRyM1syTT0nDSlzBPl3yxxmAFp/qrDcpgxuTHgeAQieT1mLOMdlSf1rR2uu6j+2gJMs2n8OiBAmZwYrMBl4iqln7Ks=
+X-Received: by 2002:a05:6512:32c1:b0:489:e9de:2f0 with SMTP id
+ f1-20020a05651232c100b00489e9de02f0mr23244981lfg.117.1658391446244; Thu, 21
+ Jul 2022 01:17:26 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2203:b0:33e:b93f:5882 with SMTP id
- l3-20020a056638220300b0033eb93f5882mr21645815jas.66.1658391380915; Thu, 21
- Jul 2022 01:16:20 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 01:16:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000028796b05e44c55e9@google.com>
-Subject: [syzbot] WARNING in ext2_get_group_desc
-From:   syzbot <syzbot+d273f7d7f58afd93be48@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
+ <20220716170007.2020037-6-dario.binacchi@amarulasolutions.com> <20220718102203.66y6glwwphptl2tu@pengutronix.de>
+In-Reply-To: <20220718102203.66y6glwwphptl2tu@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Thu, 21 Jul 2022 10:17:15 +0200
+Message-ID: <CABGWkvqxKBVa_pGhg-aThn76wz-rpiVAqgFNDT-HNd1_Bz7WXw@mail.gmail.com>
+Subject: Re: [RFC PATCH 5/5] can: slcan: send the listen-only command to the adapter
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello Marc,
 
-syzbot found the following issue on:
+On Mon, Jul 18, 2022 at 12:22 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> The subject can be enhanced, as the listen-only command ist not send
+> unconditionally. What about: "add support for listen-only mode"?
 
-HEAD commit:    c658cabbfd32 Merge tag 's390-5.19-6' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=149c07d0080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cf350e66d4493550
-dashboard link: https://syzkaller.appspot.com/bug?extid=d273f7d7f58afd93be48
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
+I like it.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+>
+> On 16.07.2022 19:00:07, Dario Binacchi wrote:
+> > In case the bitrate has been set via ip tool, this patch changes the
+> > driver to send the listen-only ("L\r") command to the adapter.
+>
+> ...but only of CAN_CTRLMODE_LISTENONLY is requested.
+>
+> What about:
+>
+> For non-legacy, i.e. ip based configuration, add support for listen-only
+> mode. If listen-only is requested send a listen-only ("L\r") command
+> instead of an open ("O\r") command to the adapter..
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d273f7d7f58afd93be48@syzkaller.appspotmail.com
+I agree with you. It's definitely clearer.
 
-loop1: detected capacity change from 0 to 20
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3999 at fs/ext2/balloc.c:51 ext2_get_group_desc+0x88/0xb4 fs/ext2/balloc.c:51
-block_group >= groups_count - block_group = 1, groups_count = 1
-Modules linked in:
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 3999 Comm: syz-executor.1 Not tainted 5.19.0-rc6-syzkaller #0
-Hardware name: ARM-Versatile Express
-Backtrace: 
-[<816f379c>] (dump_backtrace) from [<816f3acc>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:253)
- r7:81d72500 r6:82422fec r5:60000093 r4:81d80550
-[<816f3ab4>] (show_stack) from [<816fc3f8>] (__dump_stack lib/dump_stack.c:88 [inline])
-[<816f3ab4>] (show_stack) from [<816fc3f8>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
-[<816fc3b0>] (dump_stack_lvl) from [<816fc41c>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
- r5:00000000 r4:82642d14
-[<816fc404>] (dump_stack) from [<816f4668>] (panic+0x11c/0x360 kernel/panic.c:274)
-[<816f454c>] (panic) from [<80242a2c>] (__warn+0x98/0x198 kernel/panic.c:623)
- r3:00000001 r2:00000000 r1:00000000 r0:81d72500
- r7:806112e0
-[<80242994>] (__warn) from [<816f4948>] (warn_slowpath_fmt+0x9c/0xd4 kernel/panic.c:653)
- r8:00000009 r7:806112e0 r6:00000033 r5:81db0ac4 r4:81db0a80
-[<816f48b0>] (warn_slowpath_fmt) from [<806112e0>] (ext2_get_group_desc+0x88/0xb4 fs/ext2/balloc.c:51)
- r8:00000001 r7:851d1c00 r6:ee24dde0 r5:851d1c00 r4:00000000
-[<80611258>] (ext2_get_group_desc) from [<80615118>] (ext2_get_inode+0x94/0x134 fs/ext2/inode.c:1345)
- r4:00000002
-[<80615084>] (ext2_get_inode) from [<80617194>] (ext2_iget+0x84/0x438 fs/ext2/inode.c:1425)
- r9:88485670 r8:00000000 r7:851d1c00 r6:00000002 r5:00000000 r4:8497b6f8
-[<80617110>] (ext2_iget) from [<8061a940>] (ext2_fill_super+0xb30/0xe14 fs/ext2/super.c:1162)
- r8:00000000 r7:84af7600 r6:88307400 r5:851d1c00 r4:88485600
-[<80619e10>] (ext2_fill_super) from [<8049e2a0>] (mount_bdev+0x178/0x1a4 fs/super.c:1367)
- r10:852b4000 r9:83917dbc r8:00000083 r7:852b4000 r6:00000000 r5:851d1c00
- r4:83917b80
-[<8049e128>] (mount_bdev) from [<806189ac>] (ext2_mount+0x20/0x28 fs/ext2/super.c:1465)
- r9:86184b80 r8:86184200 r7:ee24df6c r6:00000020 r5:8061898c r4:85352f00
-[<8061898c>] (ext2_mount) from [<804de934>] (legacy_get_tree+0x2c/0x50 fs/fs_context.c:610)
-[<804de908>] (legacy_get_tree) from [<8049c85c>] (vfs_get_tree+0x2c/0x108 fs/super.c:1497)
- r5:85352f00 r4:85352f00
-[<8049c830>] (vfs_get_tree) from [<804c5818>] (do_new_mount fs/namespace.c:3040 [inline])
-[<8049c830>] (vfs_get_tree) from [<804c5818>] (path_mount+0x3e8/0xabc fs/namespace.c:3370)
- r6:00000020 r5:00000000 r4:85352f00
-[<804c5430>] (path_mount) from [<804c6428>] (do_mount fs/namespace.c:3383 [inline])
-[<804c5430>] (path_mount) from [<804c6428>] (__do_sys_mount fs/namespace.c:3591 [inline])
-[<804c5430>] (path_mount) from [<804c6428>] (sys_mount+0x118/0x220 fs/namespace.c:3568)
- r10:00000000 r9:76f05ef8 r8:00000000 r7:00000000 r6:852b4000 r5:86184200
- r4:86184b80
-[<804c6310>] (sys_mount) from [<80200060>] (ret_fast_syscall+0x0/0x1c arch/arm/mm/proc-v7.S:64)
-Exception stack(0xee24dfa8 to 0xee24dff0)
-dfa0:                   76f05ef8 20000000 76f05eb8 20000240 20000000 00000000
-dfc0: 76f05ef8 20000000 20000340 00000015 76f05eb8 00000000 76f05eb8 00000000
-dfe0: 000862b8 76f05e70 00016a48 0004d500
- r10:00000015 r9:84f38bc0 r8:80200288 r7:00000015 r6:20000340 r5:20000000
- r4:76f05ef8
-Rebooting in 86400 seconds..
+Thanks and regards,
+Dario
+>
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > ---
+> >
+> >  drivers/net/can/slcan/slcan-core.c | 20 ++++++++++++++++----
+> >  1 file changed, 16 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+> > index 7a1540507ecd..d97dfeccbf9c 100644
+> > --- a/drivers/net/can/slcan/slcan-core.c
+> > +++ b/drivers/net/can/slcan/slcan-core.c
+> > @@ -711,10 +711,21 @@ static int slcan_netdev_open(struct net_device *dev)
+> >                       }
+> >               }
+> >
+> > -             err = slcan_transmit_cmd(sl, "O\r");
+> > -             if (err) {
+> > -                     netdev_err(dev, "failed to send open command 'O\\r'\n");
+> > -                     goto cmd_transmit_failed;
+> > +             /* listen-only command overrides open command */
+>
+> I think this comment can be removed.
+>
+> > +             if (sl->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
+> > +                     err = slcan_transmit_cmd(sl, "L\r");
+> > +                     if (err) {
+> > +                             netdev_err(dev,
+> > +                                        "failed to send listen-only command 'L\\r'\n");
+> > +                             goto cmd_transmit_failed;
+> > +                     }
+> > +             } else {
+> > +                     err = slcan_transmit_cmd(sl, "O\r");
+> > +                     if (err) {
+> > +                             netdev_err(dev,
+> > +                                        "failed to send open command 'O\\r'\n");
+> > +                             goto cmd_transmit_failed;
+> > +                     }
+> >               }
+> >       }
+> >
+> > @@ -801,6 +812,7 @@ static int slcan_open(struct tty_struct *tty)
+> >       /* Configure CAN metadata */
+> >       sl->can.bitrate_const = slcan_bitrate_const;
+> >       sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
+> > +     sl->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY;
+> >
+> >       /* Configure netdev interface */
+> >       sl->dev = dev;
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

@@ -2,41 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5961A57C489
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C3F57C48C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiGUGey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S232010AbiGUGf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiGUGew (ORCPT
+        with ESMTP id S229653AbiGUGf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:34:52 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC485245F
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:34:50 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VK-QiEr_1658385285;
-Received: from 30.178.82.178(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0VK-QiEr_1658385285)
-          by smtp.aliyun-inc.com;
-          Thu, 21 Jul 2022 14:34:46 +0800
-Message-ID: <06b571a5-4d0f-2112-c73b-35618b652a3b@linux.alibaba.com>
-Date:   Thu, 21 Jul 2022 14:34:45 +0800
+        Thu, 21 Jul 2022 02:35:56 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44AF73AE41;
+        Wed, 20 Jul 2022 23:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=9XCyq
+        eP4OtkNEsuVjEU+S2obYwxCz6LbY9AgANlqHIU=; b=p9jV8LuQBsqNUwbLmMrJj
+        7cHUiLq7omRxJ57HeWtXr+qDw7qZhuZyHz5OmqKRkuP6ozy1+K7/dxlKTVCMMS5X
+        YUxktA9mdtkLZsAo4wBocbl4CwAAXvZYAcK0jV6hBM4R3SR41ie4KbFqFDKmLRQu
+        iT1WFwU+8BR3gDkChxqsuE=
+Received: from localhost.localdomain (unknown [112.97.57.47])
+        by smtp1 (Coremail) with SMTP id GdxpCgDH5ta389hiWptLPg--.4289S2;
+        Thu, 21 Jul 2022 14:35:38 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     srinivas.pandruvada@linux.intel.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] HID: intel-ish-hid: Fix typo 'the the' in comment
+Date:   Thu, 21 Jul 2022 14:35:34 +0800
+Message-Id: <20220721063534.47272-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v2] nvme: Define compat_ioctl again to unbreak 32-bit
- userspace.
-To:     Nick Bowler <nbowler@draconx.ca>, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>
-References: <20220721035735.2720-1-nbowler@draconx.ca>
-From:   Guixin Liu <kanie@linux.alibaba.com>
-In-Reply-To: <20220721035735.2720-1-nbowler@draconx.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+X-CM-TRANSID: GdxpCgDH5ta389hiWptLPg--.4289S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr1kCFy5tr4xArW3trb_yoWfAFg_Cw
+        1Fvrn7G3yktFs3tr4qkr9xZrW7t3yFqrna93WfKryFkFy8uwn8ZF4ktr18Xw45Gr45t3Z3
+        XFyDurn8AF1xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRfnOQUUUUUU==
+X-Originating-IP: [112.97.57.47]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJRpFZGAJpJiCPgABs2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,61 +52,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LGTM,
+Replace 'the the' with 'the' in the comment.
 
-Reviewed-by: Guixin Liu <kanie@linux.alibaba.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/hid/intel-ish-hid/ishtp-hid-client.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-在 2022/7/21 11:57, Nick Bowler 写道:
-> Commit 89b3d6e60550 ("nvme: simplify the compat ioctl handling") removed
-> the initialization of compat_ioctl from the nvme block_device_operations
-> structures.
->
-> Presumably the expectation was that 32-bit ioctls would be directed
-> through the regular handler but this is not the case: failing to assign
-> .compat_ioctl actually means that the compat case is disabled entirely,
-> and any attempt to submit nvme ioctls from 32-bit userspace fails
-> outright with -ENOTTY.
->
-> For example:
->
->    % smartctl -x /dev/nvme0n1
->    [...]
->    Read NVMe Identify Controller failed: NVME_IOCTL_ADMIN_CMD: Inappropriate ioctl for device
->
-> The blkdev_compat_ptr_ioctl helper can be used to direct compat calls
-> through the main ioctl handler and makes things work again.
->
-> Fixes: 89b3d6e60550 ("nvme: simplify the compat ioctl handling")
-> Signed-off-by: Nick Bowler <nbowler@draconx.ca>
-> ---
->
-> v2: use blkdev_compat_ptr_ioctl as suggested by Christoph Hellwig
->
->   drivers/nvme/host/core.c      | 1 +
->   drivers/nvme/host/multipath.c | 1 +
->   2 files changed, 2 insertions(+)
->
-> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> index 6a12a906a11e..9c75d7378d31 100644
-> --- a/drivers/nvme/host/core.c
-> +++ b/drivers/nvme/host/core.c
-> @@ -2123,6 +2123,7 @@ static int nvme_report_zones(struct gendisk *disk, sector_t sector,
->   static const struct block_device_operations nvme_bdev_ops = {
->   	.owner		= THIS_MODULE,
->   	.ioctl		= nvme_ioctl,
-> +	.compat_ioctl	= blkdev_compat_ptr_ioctl,
->   	.open		= nvme_open,
->   	.release	= nvme_release,
->   	.getgeo		= nvme_getgeo,
-> diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-> index d3e2440d8abb..432ea9793a84 100644
-> --- a/drivers/nvme/host/multipath.c
-> +++ b/drivers/nvme/host/multipath.c
-> @@ -408,6 +408,7 @@ const struct block_device_operations nvme_ns_head_ops = {
->   	.open		= nvme_ns_head_open,
->   	.release	= nvme_ns_head_release,
->   	.ioctl		= nvme_ns_head_ioctl,
-> +	.compat_ioctl	= blkdev_compat_ptr_ioctl,
->   	.getgeo		= nvme_getgeo,
->   	.report_zones	= nvme_ns_head_report_zones,
->   	.pr_ops		= &nvme_pr_ops,
+diff --git a/drivers/hid/intel-ish-hid/ishtp-hid-client.c b/drivers/hid/intel-ish-hid/ishtp-hid-client.c
+index 4338c9b68a43..e3d70c5460e9 100644
+--- a/drivers/hid/intel-ish-hid/ishtp-hid-client.c
++++ b/drivers/hid/intel-ish-hid/ishtp-hid-client.c
+@@ -328,7 +328,7 @@ static void process_recv(struct ishtp_cl *hid_ishtp_cl, void *recv_buf,
+ 
+ /**
+  * ish_cl_event_cb() - bus driver callback for incoming message/packet
+- * @device:	Pointer to the the ishtp client device for which this message
++ * @device:	Pointer to the ishtp client device for which this message
+  *		is targeted
+  *
+  * Remove the packet from the list and process the message by calling
+-- 
+2.25.1
+

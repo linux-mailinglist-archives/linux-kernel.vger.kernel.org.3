@@ -2,233 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32EE457D6F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC4157D6F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233674AbiGUWfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
+        id S233891AbiGUWfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbiGUWe7 (ORCPT
+        with ESMTP id S233603AbiGUWfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:34:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 762FB91CE2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658442895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bQio+55hxj6+t1WAQxWAmFxvlBH4CtIfnR9T5vDPgcw=;
-        b=IqTfNkm1qchlMBWPtJVW36B4705JY8BzWNkpP2SEwysToIzp2OV65IqafLBMSSYEKanlH+
-        cbpefx7eZ5cJ4KCwZpkEJoVnEo5TRy2OowuyqcH2bv7BiJJjz1+joNgSg8gyy8z6f0x0ZO
-        iT7xwhGknaCa6Z3EG3jSoKw2qWC3AI4=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-BJ7Ts_ovMrOtQWtFaFT83Q-1; Thu, 21 Jul 2022 18:34:54 -0400
-X-MC-Unique: BJ7Ts_ovMrOtQWtFaFT83Q-1
-Received: by mail-il1-f197.google.com with SMTP id z2-20020a056e02088200b002dc4022c15fso1637916ils.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:34:54 -0700 (PDT)
+        Thu, 21 Jul 2022 18:35:01 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6C7972C3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:34:58 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id z3so3131955plb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bfbQhsD5vWiW4wKUHofAh5aINPhABCid3Cx9QRVCm70=;
+        b=ne1eX39S8Bl+YdHPzgGo/gO1fjwRmLwSdkEokkhoTxo02uNS6I+M4L/eEUltHI/drU
+         x6NTkfWnufF5w1LrG7LyjEt178lc9T/dF2IUV9nuFruTT+yTHZsa7AkMQ3B/Iu8MEcov
+         Xx3C5gw5Dy56wLYT1SZdhnotPlaWrm0iwAA+CoteTvtcBApiOu2/opQHZMUO3K3dde9p
+         nZMykB4L++stfe+qh6fUhGgfQpn3tPydWnZfdJCBiX1gj0Uqt5KQtxBKjtNyQG4aDY/y
+         YwY/Cj4H//gV4Dty7i9/tvTGLRDPhd44nNGwta1IsTpaZJjQvm62skf0KV+zpiVJBTqV
+         V3eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=bQio+55hxj6+t1WAQxWAmFxvlBH4CtIfnR9T5vDPgcw=;
-        b=8N4eCNOE7HQiGbJstFASlARNH0AOmGqFUsioR51FKpA586Isq4eM9End0OIHOAQQvH
-         j30CumT7Glbd+VkchuF2kxJ1be3AQdf07Sd4/pN/8fESeJqj04vKrclwM+deMxTvuY8a
-         QzAJVK+pW4mVHbfyw5MxWDaCBVMs5nzgjAFn5MunZPsuHVNsSyTuhtWt5YLDNqt5zsm9
-         1D9RnxlK3IyrIp2nCGT99mNjmxX0obHQoFHZuWS8L0+a8F/as0L0/xM2DkkJappCUWcg
-         C2qopctSYoMRQdtOWwguc4knuNbHjrqm+0Vh8BQRyCgJB2vbS0O6wuD5OdXmLASb3DRV
-         26Vg==
-X-Gm-Message-State: AJIora8bMetlB0NvzhZjZ/1LMiCNkIKJtamVUMvKOfNIM1GNhgMMCkQn
-        s2mFtkM5yQEkxMKRzGhA2xPUL0qjHxp4EE0pThgZMULZgJK4rykGoQSoCKb/SQBwJtukxs06+E5
-        XTAKgHfJTr/gngXpJ9zV6v4n+
-X-Received: by 2002:a05:6e02:2168:b0:2dc:7313:c62e with SMTP id s8-20020a056e02216800b002dc7313c62emr250460ilv.220.1658442893581;
-        Thu, 21 Jul 2022 15:34:53 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ulehtgJhid5KOUip5hnDSLWdR5VEHckEdwptR7hMFLjpLBbJ0zd2Oko5/1xv6SQrR78MEm7A==
-X-Received: by 2002:a05:6e02:2168:b0:2dc:7313:c62e with SMTP id s8-20020a056e02216800b002dc7313c62emr250442ilv.220.1658442893292;
-        Thu, 21 Jul 2022 15:34:53 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id m30-20020a026a5e000000b0034149185a92sm1297066jaf.148.2022.07.21.15.34.52
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bfbQhsD5vWiW4wKUHofAh5aINPhABCid3Cx9QRVCm70=;
+        b=B1XUMfwEYc4HM4wI9DirGX5Np1xADiYlBBEYPypPmeNIcTy3X73RQebVQmERK2UNah
+         NrjXyk7vbmyn121s7P1B3HdtnDzA0svmcP5nQEt1GJ2GQnT9HgwYpZj2w1rzTV4E0+pl
+         MLyGi6S41qaqYiPUz+zWXoH8Lw0Ce+lhlRcIbFiXxY0bMtaiXkE+6WdBCzR1Z6bNHuxZ
+         Okaq8wXnnjnGmqQKM0no50yU4BIob374ZbuueX2/jQpJItGPBkQOwwU4lVimOW5hAPZr
+         TRfy79b28fLJeyFz3vQ1jWh1p2icoJ+OiyWuXg1Ap/0lm8lrhjlsHabpH/pih0Mq9EWi
+         1lhA==
+X-Gm-Message-State: AJIora+x3WBvBTyj2RSSeQ+WDakMQj7bYpMf97M+zndRmDjDCSqDODfX
+        /6dsfqTtnygfCQjdL/7j5hSWUQ==
+X-Google-Smtp-Source: AGRyM1sBL2i6waxbr9LLBC5yCmsbdFzr+1eGzZj7detwBF4w2XAvVucgDc4UkEitEF9OEOtYogFVhw==
+X-Received: by 2002:a17:90a:feb:b0:1f2:6b7:8c2d with SMTP id 98-20020a17090a0feb00b001f206b78c2dmr651153pjz.147.1658442897658;
+        Thu, 21 Jul 2022 15:34:57 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902780200b00168dadc7354sm2218124pll.78.2022.07.21.15.34.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 15:34:52 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 16:34:51 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v5 2/5] vfio: Increment the runtime PM usage count
- during IOCTL call
-Message-ID: <20220721163451.67cd9be8.alex.williamson@redhat.com>
-In-Reply-To: <20220719121523.21396-3-abhsahu@nvidia.com>
-References: <20220719121523.21396-1-abhsahu@nvidia.com>
-        <20220719121523.21396-3-abhsahu@nvidia.com>
-Organization: Red Hat
+        Thu, 21 Jul 2022 15:34:56 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 22:34:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 17/25] KVM: VMX: Add missing VMEXIT controls to
+ vmcs_config
+Message-ID: <YtnUjRQn22pSCjq2@google.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-18-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714091327.1085353-18-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 17:45:20 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
-
-> The vfio-pci based drivers will have runtime power management
-> support where the user can put the device into the low power state
-> and then PCI devices can go into the D3cold state. If the device is
-> in the low power state and the user issues any IOCTL, then the
-> device should be moved out of the low power state first. Once
-> the IOCTL is serviced, then it can go into the low power state again.
-> The runtime PM framework manages this with help of usage count.
+On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
+> As a preparation to reusing the result of setup_vmcs_config() in
+> nested VMX MSR setup, add the VMEXIT controls which KVM doesn't
+> use but supports for nVMX to KVM_OPT_VMX_VM_EXIT_CONTROLS and
+> filter them out in vmx_vmexit_ctrl().
 > 
-> One option was to add the runtime PM related API's inside vfio-pci
-> driver but some IOCTL (like VFIO_DEVICE_FEATURE) can follow a
-> different path and more IOCTL can be added in the future. Also, the
-> runtime PM will be added for vfio-pci based drivers variant currently,
-> but the other VFIO based drivers can use the same in the
-> future. So, this patch adds the runtime calls runtime-related API in
-> the top-level IOCTL function itself.
+> No functional change intended.
 > 
-> For the VFIO drivers which do not have runtime power management
-> support currently, the runtime PM API's won't be invoked. Only for
-> vfio-pci based drivers currently, the runtime PM API's will be invoked
-> to increment and decrement the usage count. In the vfio-pci drivers also,
-> the variant drivers can opt-out by incrementing the usage count during
-> device-open. The pm_runtime_resume_and_get() checks the device
-> current status and will return early if the device is already in the
-> ACTIVE state.
-> 
-> Taking this usage count incremented while servicing IOCTL will make
-> sure that the user won't put the device into the low power state when any
-> other IOCTL is being serviced in parallel. Let's consider the
-> following scenario:
-> 
->  1. Some other IOCTL is called.
->  2. The user has opened another device instance and called the IOCTL for
->     low power entry.
->  3. The low power entry IOCTL moves the device into the low power state.
->  4. The other IOCTL finishes.
-> 
-> If we don't keep the usage count incremented then the device
-> access will happen between step 3 and 4 while the device has already
-> gone into the low power state.
-> 
-> The pm_runtime_resume_and_get() will be the first call so its error
-> should not be propagated to user space directly. For example, if
-> pm_runtime_resume_and_get() can return -EINVAL for the cases where the
-> user has passed the correct argument. So the
-> pm_runtime_resume_and_get() errors have been masked behind -EIO.
-> 
-> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> Reviewed-by: Jim Mattson <jmattson@google.com>
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
->  drivers/vfio/vfio.c | 52 ++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 49 insertions(+), 3 deletions(-)
+>  arch/x86/kvm/vmx/vmx.c | 4 ++++
+>  arch/x86/kvm/vmx/vmx.h | 3 +++
+>  2 files changed, 7 insertions(+)
 > 
-> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-> index bd84ca7c5e35..1d005a0a9d3d 100644
-> --- a/drivers/vfio/vfio.c
-> +++ b/drivers/vfio/vfio.c
-> @@ -32,6 +32,7 @@
->  #include <linux/vfio.h>
->  #include <linux/wait.h>
->  #include <linux/sched/signal.h>
-> +#include <linux/pm_runtime.h>
->  #include "vfio.h"
->  
->  #define DRIVER_VERSION	"0.3"
-> @@ -1335,6 +1336,39 @@ static const struct file_operations vfio_group_fops = {
->  	.release	= vfio_group_fops_release,
->  };
->  
-> +/*
-> + * Wrapper around pm_runtime_resume_and_get().
-> + * Return error code on failure or 0 on success.
-> + */
-> +static inline int vfio_device_pm_runtime_get(struct vfio_device *device)
-> +{
-> +	struct device *dev = device->dev;
-> +
-> +	if (dev->driver && dev->driver->pm) {
-> +		int ret;
-> +
-> +		ret = pm_runtime_resume_and_get(dev);
-> +		if (ret < 0) {
-
-Nit, pm_runtime_resume_and_get() cannot return a positive value, it's
-either zero or -errno, so we could just test (ret).  Thanks,
-
-Alex
-
-> +			dev_info_ratelimited(dev,
-> +				"vfio: runtime resume failed %d\n", ret);
-> +			return -EIO;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Wrapper around pm_runtime_put().
-> + */
-> +static inline void vfio_device_pm_runtime_put(struct vfio_device *device)
-> +{
-> +	struct device *dev = device->dev;
-> +
-> +	if (dev->driver && dev->driver->pm)
-> +		pm_runtime_put(dev);
-> +}
-> +
->  /*
->   * VFIO Device fd
->   */
-> @@ -1649,15 +1683,27 @@ static long vfio_device_fops_unl_ioctl(struct file *filep,
->  				       unsigned int cmd, unsigned long arg)
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index d7170990f469..2fb89bdcbbd8 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4196,6 +4196,10 @@ static u32 vmx_vmexit_ctrl(void)
 >  {
->  	struct vfio_device *device = filep->private_data;
-> +	int ret;
-> +
-> +	ret = vfio_device_pm_runtime_get(device);
-> +	if (ret)
-> +		return ret;
+>  	u32 vmexit_ctrl = vmcs_config.vmexit_ctrl;
 >  
->  	switch (cmd) {
->  	case VFIO_DEVICE_FEATURE:
-> -		return vfio_ioctl_device_feature(device, (void __user *)arg);
-> +		ret = vfio_ioctl_device_feature(device, (void __user *)arg);
-> +		break;
-> +
->  	default:
->  		if (unlikely(!device->ops->ioctl))
-> -			return -EINVAL;
-> -		return device->ops->ioctl(device, cmd, arg);
-> +			ret = -EINVAL;
-> +		else
-> +			ret = device->ops->ioctl(device, cmd, arg);
-> +		break;
->  	}
-> +
-> +	vfio_device_pm_runtime_put(device);
-> +	return ret;
->  }
->  
->  static ssize_t vfio_device_fops_read(struct file *filep, char __user *buf,
+> +	/* Not used by KVM but supported for nesting. */
 
+I think it's worth expanding the comment to clarify that "supported for nesting"
+just means allowing them in vmcs12.  Most controls are fully emulated and so are
+never set in vmcs02 even when they're turned on by L1.  Something like?
+
+	/*
+	 * Not used by KVM and never set in vmcs01 or vmcs02, but emulated for
+	 * nested virtualization and thus allowed to be set in vmcs12.
+	 */
+
+
+> +	vmexit_ctrl &= ~(VM_EXIT_SAVE_IA32_PAT | VM_EXIT_SAVE_IA32_EFER |
+> +			 VM_EXIT_SAVE_VMX_PREEMPTION_TIMER);
+> +
+>  	if (vmx_pt_mode_is_system())
+>  		vmexit_ctrl &= ~(VM_EXIT_PT_CONCEAL_PIP |
+>  				 VM_EXIT_CLEAR_IA32_RTIT_CTL);
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index 89eaab3495a6..e9c392398f1b 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -498,8 +498,11 @@ static inline u8 vmx_get_rvi(void)
+>  #endif
+>  #define KVM_OPT_VMX_VM_EXIT_CONTROLS				\
+>  	      (VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |		\
+> +	      VM_EXIT_SAVE_IA32_PAT |				\
+>  	      VM_EXIT_LOAD_IA32_PAT |				\
+> +	      VM_EXIT_SAVE_IA32_EFER |				\
+>  	      VM_EXIT_LOAD_IA32_EFER |				\
+> +	      VM_EXIT_SAVE_VMX_PREEMPTION_TIMER |		\
+>  	      VM_EXIT_CLEAR_BNDCFGS |				\
+>  	      VM_EXIT_PT_CONCEAL_PIP |				\
+>  	      VM_EXIT_CLEAR_IA32_RTIT_CTL)
+> -- 
+> 2.35.3
+> 

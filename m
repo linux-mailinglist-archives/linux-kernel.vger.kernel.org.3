@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A959057C7B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A9A57C7A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiGUJdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S232153AbiGUJbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiGUJdH (ORCPT
+        with ESMTP id S230148AbiGUJa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:33:07 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732768053F;
-        Thu, 21 Jul 2022 02:33:06 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id b26so1424090wrc.2;
-        Thu, 21 Jul 2022 02:33:06 -0700 (PDT)
+        Thu, 21 Jul 2022 05:30:57 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396087E82C;
+        Thu, 21 Jul 2022 02:30:56 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id y11so1849625lfs.6;
+        Thu, 21 Jul 2022 02:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=l5niOVFsh2sCh8YnUUi4BLzbtkhxEAzqscgbM7MRnjQ=;
-        b=bm50RtAX9ajTFua0iJ1xCdzl0sJ0gmSnfo+3vWGB6+0kShPYneL1iaUpdoOMSBVRyE
-         9zvUrs+pmkPjiMmOtmvaNb1xd936dlYQMI0M2b69oEJfRHDgJV7B/cl8a7bUekMzPzQT
-         QCzrb+NzoT7sLD9W2NNP4+fE5hDyMSaMXUxJ+xYtEXqCDHr+G0SpQkNQaafo327mhHlp
-         zZ4+E1TVwW0GgLkaldq+MXeVS9sDlRFJ5GzFuQfK3Fk6a8Acwtnjnio5pxFCjZeTnVnA
-         vU4MEcAYDx/fe2LUcET6whSW8NKVJFIsT7h4Q3qSdGkkFdLcljo7QcW+UaOLjctVQZNC
-         meYg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s151ffk1JIauk2lEB3TrZV+yG7gGvKpVixQvHLr+F1w=;
+        b=nZvJDPK0EO6QY9MLTYOQ0LWUPTJZ5JUKK0SEj61HOjGzS4p4dNaOmtMk+ASvtvO0kx
+         VvN0Jg0ed2dCQehW/9iVtgCAPxitukB6VZ29jQ9k4NV7Mz0gSPh5InWM/gTnb4DNn8Y4
+         sQbFjRcLH33bYFC2t3Jyl+EyNzOFuNb4LGjth3GYI82qFrwTb0liiz+Uf1c6YQU7cdVY
+         9DJi18H5P55gdWgJQcsPXkoo7YhU96Xwwu55mg7D0Qww43xwVMWuaboePe5HjAvPLwKy
+         C5As6//osND0ELDE9TdlKYFu0Bthos9Il+0w9j/EuwSho/hJBVG3eO+AGN7DqG8Ob4NG
+         wsSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l5niOVFsh2sCh8YnUUi4BLzbtkhxEAzqscgbM7MRnjQ=;
-        b=IzBzZoPLXi1ZGh6zyLjeuoKLFLXJdXZSw9EpPEiNrPb0zxJ+Zs90dyNYpb9qYPY/n/
-         lGCfOBZKSoozK8FLwIYV6Dk7wj1nFTWlroaZMvQFXB961L17aeUNQvn2WK5vaI7mk4CZ
-         v9dAOOnc5arrfdzUIpOJdQ68UmOetnF6h9b0ZtSmrpxD8g2z+DhIsvNSuyOWOGO7VpOo
-         8mUJhzDy3LlD0f6k0XTpCeAThuHmZFOKMV6SA68mAuVDmxnqPnlP3PwF/Bqmg7nOt6uc
-         9/YhD1FCyapsRpsuc1ARDMNmwcZ9QlQ/ExLcr6H5Pnc0GupnWagyYRoejHPis3Xx2/0Z
-         Wq3g==
-X-Gm-Message-State: AJIora/51sf74P9vJS4c2Aq7uQFBUlzg+jd0t5GQl1jLO7xWWbV1hoBx
-        AR6ta3tX/GL8p+4t8smLhWP5f3S+7EREIIdi//bZAGcEP7Q=
-X-Google-Smtp-Source: AGRyM1ssa3GPQdBMD2hAosSKN1BnrY5ZSF80zStvf8FgpyiS1ZTqrK/LEtoqIQnCq0JVG2zYF8OEXBpT3X5mYZ9FP70=
-X-Received: by 2002:a05:6000:1a87:b0:21d:b5b9:7666 with SMTP id
- f7-20020a0560001a8700b0021db5b97666mr34540696wry.1.1658395984874; Thu, 21 Jul
- 2022 02:33:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s151ffk1JIauk2lEB3TrZV+yG7gGvKpVixQvHLr+F1w=;
+        b=oZDXFfPiHXcWB8/ICgUK8uNdifdyxXOv1OZt4x1OgjOZ2qvXFjgWZEEaowznwulf9Z
+         djuxnpCo33LyIAG7NfQRXQHuoQolQB99cxsHPtojqrt9ACXV1aKVE6gTTQ1eL0Z05An2
+         xI0YZupV4V9yCXv/Cdjyp4N3Ee+cR53q9wEzaBq9KDgnXtLmLkXw3+qTm8tQyrYbdCHN
+         RadfbN8vzIu9M3XEJp9/xbjwFv4u6NpIr1dBdflK9ApalwuYdjobrqdC2IA3KnXviz59
+         veYHcUVyYxU16ialqbXbUNRN1uMnUSfISGkuaMkUzakPAIpycCbJh3lkVIbZRaWY6Nx+
+         dUrA==
+X-Gm-Message-State: AJIora8vXL3VMQJXTSfXbruUy73D7/e/I84/JgvgP258ECX2OgOf+sm6
+        4fI2mxfDss9AFf5c/CXf/ycxk3fJ6fk=
+X-Google-Smtp-Source: AGRyM1uLU45d6nitV/svzhHqvt6/3qKj2nNBMf/FZIrIQ/ktIuvkN7xNwI/GV3FyTP60CY71VLOBnA==
+X-Received: by 2002:a05:6512:33c5:b0:48a:1c38:e43 with SMTP id d5-20020a05651233c500b0048a1c380e43mr18876341lfg.671.1658395854412;
+        Thu, 21 Jul 2022 02:30:54 -0700 (PDT)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id y30-20020a19915e000000b0047f6b4f82d1sm323055lfj.250.2022.07.21.02.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 02:30:53 -0700 (PDT)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marcus Folkesson <marcus.folkesson@gmail.com>
+Subject: [PATCH 1/2] gpio: gpio-74x164: add support for CDx4HC4094
+Date:   Thu, 21 Jul 2022 11:34:21 +0200
+Message-Id: <20220721093422.2173982-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220605064342.309219-1-jiangshanlai@gmail.com>
- <20220605064342.309219-6-jiangshanlai@gmail.com> <YtcLiNskPb8z/2Qc@google.com>
-In-Reply-To: <YtcLiNskPb8z/2Qc@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Thu, 21 Jul 2022 17:32:53 +0800
-Message-ID: <CAJhGHyAoM+6cOh7XQUvavgJcUts53FW6BnjM_wqMD6fkoYoB3w@mail.gmail.com>
-Subject: Re: [PATCH 05/12] KVM: X86/MMU: Clear unsync bit directly in __mmu_unsync_walk()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,65 +73,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 3:52 AM Sean Christopherson <seanjc@google.com> wrote:
+74hc4094 and 75hc4094 works similar to 74x164 but has an additional
+storage latch associated with each stage for strobing data from the
+serial input to parallell buffer tri-state output.
 
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 22 +++++++++++++---------
-> >  1 file changed, 13 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index f35fd5c59c38..2446ede0b7b9 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -1794,19 +1794,23 @@ static int __mmu_unsync_walk(struct kvm_mmu_page *sp,
-> >                               return -ENOSPC;
-> >
-> >                       ret = __mmu_unsync_walk(child, pvec);
-> > -                     if (!ret) {
-> > -                             clear_unsync_child_bit(sp, i);
-> > -                             continue;
-> > -                     } else if (ret > 0) {
-> > -                             nr_unsync_leaf += ret;
-> > -                     } else
-> > +                     if (ret < 0)
-> >                               return ret;
-> > -             } else if (child->unsync) {
-> > +                     nr_unsync_leaf += ret;
-> > +             }
-> > +
-> > +             /*
-> > +              * Clear unsync bit for @child directly if @child is fully
-> > +              * walked and all the unsync shadow pages descended from
-> > +              * @child (including itself) are added into @pvec, the caller
-> > +              * must sync or zap all the unsync shadow pages in @pvec.
-> > +              */
-> > +             clear_unsync_child_bit(sp, i);
-> > +             if (child->unsync) {
-> >                       nr_unsync_leaf++;
-> >                       if (mmu_pages_add(pvec, child, i))
->
-> This ordering is wrong, no?  If the child itself is unsync and can't be added to
-> @pvec, i.e. fails here, then clearing its bit in unsync_child_bitmap is wrong.
+Add support for an optional strobe pin.
 
-mmu_pages_add() can always successfully add the page to @pvec and
-the caller needs to guarantee there is enough room to do so.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ drivers/gpio/gpio-74x164.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-When it returns true, it means it will fail if you keep adding pages.
+diff --git a/drivers/gpio/gpio-74x164.c b/drivers/gpio/gpio-74x164.c
+index e00c33310517..4a1c4de358e4 100644
+--- a/drivers/gpio/gpio-74x164.c
++++ b/drivers/gpio/gpio-74x164.c
+@@ -21,6 +21,7 @@ struct gen_74x164_chip {
+ 	struct gpio_chip	gpio_chip;
+ 	struct mutex		lock;
+ 	struct gpio_desc	*gpiod_oe;
++	struct gpio_desc	*gpiod_strobe;
+ 	u32			registers;
+ 	/*
+ 	 * Since the registers are chained, every byte sent will make
+@@ -66,6 +67,10 @@ static void gen_74x164_set_value(struct gpio_chip *gc,
+ 		chip->buffer[bank] &= ~(1 << pin);
+ 
+ 	__gen_74x164_write_config(chip);
++
++	/*  Latch data to output pins*/
++	gpiod_set_value_cansleep(chip->gpiod_strobe, 1);
++	gpiod_set_value_cansleep(chip->gpiod_strobe, 0);
+ 	mutex_unlock(&chip->lock);
+ }
+ 
+@@ -87,6 +92,10 @@ static void gen_74x164_set_multiple(struct gpio_chip *gc, unsigned long *mask,
+ 		chip->buffer[bank] |= bitmask;
+ 	}
+ 	__gen_74x164_write_config(chip);
++
++	/*  Latch data to output pins*/
++	gpiod_set_value_cansleep(chip->gpiod_strobe, 1);
++	gpiod_set_value_cansleep(chip->gpiod_strobe, 0);
+ 	mutex_unlock(&chip->lock);
+ }
+ 
+@@ -129,6 +138,12 @@ static int gen_74x164_probe(struct spi_device *spi)
+ 
+ 	gpiod_set_value_cansleep(chip->gpiod_oe, 1);
+ 
++	chip->gpiod_strobe = devm_gpiod_get_optional(&spi->dev, "strobe",
++			GPIOD_OUT_LOW);
++	if (IS_ERR(chip->gpiod_strobe))
++		return PTR_ERR(chip->gpiod_strobe);
++
++
+ 	spi_set_drvdata(spi, chip);
+ 
+ 	chip->gpio_chip.label = spi->modalias;
+@@ -153,6 +168,10 @@ static int gen_74x164_probe(struct spi_device *spi)
+ 		goto exit_destroy;
+ 	}
+ 
++	/*  Latch data to output pins*/
++	gpiod_set_value_cansleep(chip->gpiod_strobe, 1);
++	gpiod_set_value_cansleep(chip->gpiod_strobe, 0);
++
+ 	ret = gpiochip_add_data(&chip->gpio_chip, chip);
+ 	if (!ret)
+ 		return 0;
+@@ -182,6 +201,8 @@ MODULE_DEVICE_TABLE(spi, gen_74x164_spi_ids);
+ static const struct of_device_id gen_74x164_dt_ids[] = {
+ 	{ .compatible = "fairchild,74hc595" },
+ 	{ .compatible = "nxp,74lvc594" },
++	{ .compatible = "ti,cd54hc4094" },
++	{ .compatible = "ti,cd74hc4094" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, gen_74x164_dt_ids);
+-- 
+2.36.1
 
->
-> I also dislike that that this patch obfuscates that a shadow page can't be unsync
-> itself _and_ have unsync children (because only PG_LEVEL_4K can be unsync).  In
-> other words, keep the
->
->         if (child->unsync_children) {
->
->         } else if (child->unsync) {
->
->         }
->
-
-The code was not streamlined like this just because
-I need to add some comments on clear_unsync_child_bit().
-
-Duplicated clear_unsync_child_bit() would require
-duplicated comments.  I will use "See above" instead.

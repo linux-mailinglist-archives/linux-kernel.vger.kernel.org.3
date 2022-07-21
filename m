@@ -2,159 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B4F57D219
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D01157D220
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbiGUQ5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S231168AbiGUQ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232832AbiGUQ5Z (ORCPT
+        with ESMTP id S229456AbiGUQ7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:57:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A909E89A9B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:57:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658422641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QYkkBe6l4cX/NT5fsK6oNEqOI7IEBj6r0KNIEZJp5rs=;
-        b=KTPZZab8Q6JChzn7OgUrBoYADo8OGqiLHc9dCiF0di+qAYn9CVn3w2fvyfAJFAm7AsehAN
-        DkE3b9f0VJjDS0yGq7A7r1LGgNf+bofaZDzP6zOtEes3PHJIkWdB5ggYWmuZsXT9btcYsL
-        J1aoMM56T/jIKC7C4v29jiqhUOoggrc=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-lwwnccWANRCQ__-PUbLS6A-1; Thu, 21 Jul 2022 12:57:18 -0400
-X-MC-Unique: lwwnccWANRCQ__-PUbLS6A-1
-Received: by mail-qv1-f72.google.com with SMTP id ne15-20020a056214424f00b004737e7bcfa6so1397990qvb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:57:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QYkkBe6l4cX/NT5fsK6oNEqOI7IEBj6r0KNIEZJp5rs=;
-        b=fLDpF4n8D6qkEns1/s07uYdR96xiQge5Ig6KZqoULlTcY53DPXYgQz9KY6bz3JApRk
-         k7Xl2GO6rUY6YMsLssp2tv20ulN4U2oGWq9g/AKeehOHeXFQlCy+8VFqfA8kDlOLZ6uE
-         Wi9Kc2v6ACvuQcBDNEUccdEXjRq1iXa7nAapcSvdH7Asfe4w3JKm3lVoMXYpDNp54jYQ
-         qltJ0wN8g7szv1k0H4BP1VTH8EWINswtApEFUrF44sUYodRMFgQuUzYHixhXZEl5+4ce
-         ueo+c9HD6ThMFa6E/Swf+DPAxpMlyvLN5bWtiN8Idh4WnpuI8ALIipZHM1zyVsXpgkjm
-         FRNQ==
-X-Gm-Message-State: AJIora+NhuNNZGua52i7Q5B42RrsQokNg+wIrEV1cu/4AnsKivfVUb2P
-        s+HHgJq6jN3FdB1p6wckjny80oHxHGBEDxUOm9EawZsMOX9hJYc/1HOFMBeBu03KP0g/3HCtvtV
-        IYn+eiBYZu4a0aaX8fIw0T241
-X-Received: by 2002:a05:6214:519a:b0:473:6d83:17e9 with SMTP id kl26-20020a056214519a00b004736d8317e9mr33980093qvb.115.1658422637679;
-        Thu, 21 Jul 2022 09:57:17 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tKfr/Iqt4xNR2rSwhG38OkcKQpC8U78lMeM2rzT2mJddVbR2NygckqZ5bcu3ovsLkOvv11/g==
-X-Received: by 2002:a05:6214:519a:b0:473:6d83:17e9 with SMTP id kl26-20020a056214519a00b004736d8317e9mr33980061qvb.115.1658422637327;
-        Thu, 21 Jul 2022 09:57:17 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id bn31-20020a05620a2adf00b006b5ef0aff29sm1631388qkb.87.2022.07.21.09.57.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 09:57:16 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 12:57:15 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] mm/mprotect: Fix soft-dirty check in
- can_change_pte_writable()
-Message-ID: <YtmFa+BdYkY3SSVP@xz-m1.local>
-References: <20220720220324.88538-1-peterx@redhat.com>
- <f0d193c2-9b23-6f3a-9208-2a615febe0c2@redhat.com>
+        Thu, 21 Jul 2022 12:59:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B28D89A70;
+        Thu, 21 Jul 2022 09:59:03 -0700 (PDT)
+Received: from localhost (dynamic-089-204-139-174.89.204.139.pool.telefonica.de [89.204.139.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sebastianfricke)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6A6426601AB9;
+        Thu, 21 Jul 2022 17:59:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658422741;
+        bh=nytjLL1qqhxW1al82U0BuwYCZTfI48D3p8N0FpybNgU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=htOvEoeIYIh8p5vABCMSkf28ZUGJq5tbnbIH2LD0eatDIbVprolQ78XXCICqk0EoL
+         KPK0u0afkhxWJf24FfcwVvSN/fZWuz8j35MXEor2AT4BbHeccMoXR3oXdQwCoxuP6k
+         pm8t43DIv6YK+F5P/1TulCM16uJz7E6N7dBqS5WfKDP2R8FmKRW7NvusKynodb06Lw
+         MbUIAOs1RUURlpddBJfoDFdaQluoTmzYIAh4R+m1Ez0lH1nUMmoafJ/uuShnfqJus0
+         brnreWc6jDAXTqJq0PoxP7Bm1TGW2Q0FVEea4hWEVvl0V6HNGXj3j71rLy04DE7xCr
+         S/9BB4yYCRDKg==
+Date:   Thu, 21 Jul 2022 18:58:57 +0200
+From:   Sebastian Fricke <sebastian.fricke@collabora.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, jernej.skrabec@gmail.com,
+        knaerzche@gmail.com, kernel@collabora.com,
+        bob.beckett@collabora.com, ezequiel@vanguardiasur.com.ar,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, Jonas Karlman <jonas@kwiboo.se>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Ming Qian <ming.qian@nxp.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH 1/6] media: v4l2: Add NV15 pixel format
+Message-ID: <20220721165857.euuywbja3kw5m43g@basti-XPS-13-9310>
+References: <20220713162449.133738-1-sebastian.fricke@collabora.com>
+ <20220713162449.133738-2-sebastian.fricke@collabora.com>
+ <Ys8OzDzXmmCHI9qb@pendragon.ideasonboard.com>
+ <acded11db2957b4e9d4f8df44f82dc1babe7aae0.camel@collabora.com>
+ <YtCvF+kAfeiTduW+@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <f0d193c2-9b23-6f3a-9208-2a615febe0c2@redhat.com>
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YtCvF+kAfeiTduW+@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 09:28:47AM +0200, David Hildenbrand wrote:
-> Modifying your test to map page from a file MAP_SHARED gives me under
-> 5.18.11-100.fc35.x86_64:
-> 
-> 
-> 53,54d52
-> <       FILE *file = fopen("tmpfile", "w+");
-> <       int file_fd;
-> 56d53
-> <       assert(file);
-> 59,61d55
-> <
-> <       file_fd = fileno(file);
-> <       ftruncate(file_fd, psize);
-> 63c57
-> <                   MAP_SHARED, file_fd, 0);
-> ---
-> >                   MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
-> 
-> 
-> t480s: ~  $ sudo ./tmp
-> ERROR: Wrote page again, soft-dirty=0 (expect: 1
-> 
-> 
-> 
-> IMHO, while the check in vma_wants_writenotify() is correct and makes
-> sure that the pages are kept R/O by the generic machinery. We get
-> vma_wants_writenotify(), so we activate MM_CP_TRY_CHANGE_WRITABLE. The
-> wrong logic in can_change_pte_writable(), however, maps the page
-> writable again without caring about softdirty.
-> 
-> At least that would be my explanation for the failure. But maybe I
-> messes up something else :)
+Hey Laurent and Nicolas,
 
-Correct, I missed that part.  I verified that the same test also fails for
-me easily on a xfs file test of an old kernel.
+On 15.07.2022 03:04, Laurent Pinchart wrote:
+>On Thu, Jul 14, 2022 at 09:02:38AM -0400, Nicolas Dufresne wrote:
+>> Le mercredi 13 juillet 2022 à 21:28 +0300, Laurent Pinchart a écrit :
+>> > Hi Sebastian and Jonas,
+>> >
+>> > Thank you for the patch.
 
-Let me touch up the commit message for that.   Though I think I'll still
-keep the Fixes since the patch won't apply to before the commit, but I'll
-mention that's only for tracking purpose.
+Thank you for your review :).
 
-[...]
+>> >
+>> > On Wed, Jul 13, 2022 at 06:24:46PM +0200, Sebastian Fricke wrote:
+>> > > From: Jonas Karlman <jonas@kwiboo.se>
+>> > >
+>> > > Add the NV15 pixel format used by the Rockchip Video Decoder for 10-bit
+>> > > buffers.
+>> > >
+>> > > NV15 is a packed 10-bit 4:2:0 Y/CbCr format similar to P010 and P210 but
+>> > > has no padding between components. Instead, luminance and chrominance
+>> > > samples are grouped into 4s so that each group is packed into an integer
+>> > > number of bytes:
+>> > >
+>> > > YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
+>> > >
+>> > > The '15' suffix refers to the optimum effective bits per pixel which is
+>> > > achieved when the total number of luminance samples is a multiple of 8
+>> > > for NV15.
+>> > >
+>> > > Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+>> > > Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
+>> > > ---
+>> > >  .../media/v4l/pixfmt-yuv-planar.rst           | 53 +++++++++++++++++++
+>> > >  drivers/media/v4l2-core/v4l2-common.c         |  2 +
+>> > >  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+>> > >  include/uapi/linux/videodev2.h                |  1 +
+>> > >  4 files changed, 57 insertions(+)
+>> > >
+>> > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+>> > > index a900ff66911a..42ab3fe4667f 100644
+>> > > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+>> > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+>> > > @@ -79,6 +79,13 @@ All components are stored with the same number of bits per component.
+>> > >        - Cr, Cb
+>> > >        - Yes
+>> > >        - Linear
+>> > > +    * - V4L2_PIX_FMT_NV15
+>> > > +      - 'NV15'
+>> > > +      - 15
+>> > > +      - 4:2:0
+>> > > +      - Cb, Cr
+>> > > +      - Yes
+>> > > +      - Linear
+>> > >      * - V4L2_PIX_FMT_NV12M
+>> > >        - 'NM12'
+>> > >        - 8
+>> > > @@ -176,6 +183,7 @@ horizontally.
+>> > >
+>> > >  .. _V4L2-PIX-FMT-NV12:
+>> > >  .. _V4L2-PIX-FMT-NV21:
+>> > > +.. _V4L2-PIX-FMT-NV15:
+>> > >  .. _V4L2-PIX-FMT-NV12M:
+>> > >  .. _V4L2-PIX-FMT-NV21M:
+>> > >  .. _V4L2-PIX-FMT-P010:
+>> > > @@ -570,6 +578,51 @@ Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian ord
+>> > >        - Cb\ :sub:`11`
+>> > >        - Cr\ :sub:`11`
+>> > >
+>> > > +.. _V4L2_PIX_FMT_NV15:
+>> > > +
+>> > > +NV15
+>> > > +----
+>> > > +
+>> > > +Like P010 but a packed 10-bit 4:2:0 semi-planar Y/CbCr format without padding between components.
+>> >
+>> > "packed 10-bit semi-planar" sounds confusing, as "packed YUV" usually
+>> > refers to YUYV-style formats, but I'm not sure how to express that
+>> > better.
+>>
+>> Perhaps:
+>>
+>> "Similar to P010 (10-bit 4:":0 semi-planer Y/CbCr), though unlike P010, the
+>> there is not padding between components."
 
-> Can we turn that into a vm selftest in
-> tools/testing/selftests/vm/soft-dirty.c, and also extend it by
-> MAP_SHARED froma  file as above?
+I'll take that for V2.
 
-Sure.  I'll post a v3 with that.
+>>
+>> > > +Instead, luminance and chrominance samples are grouped into 4s so that each group is packed into an integer
+>> > > +number of bytes:
+>> >
+>> > Could you please wrap the description at 80 columns ?
 
-[...]
+Will do.
 
-> > @@ -48,8 +48,11 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
-> >  	if (pte_protnone(pte) || !pte_dirty(pte))
-> >  		return false;
-> >  
-> > -	/* Do we need write faults for softdirty tracking? */
-> > -	if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
-> > +	/*
-> > +	 * Do we need write faults for softdirty tracking?  Note,
-> > +	 * soft-dirty is enabled when !VM_SOFTDIRTY.
-> > +	 */
-> > +	if (!(vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
-> >  		return false;
-> 
-> I wonder if we now want, just as in vma_wants_writenotify(), an early
-> check for IS_ENABLED(CONFIG_MEM_SOFT_DIRTY), to optimize this out
-> completely.
+>> >
+>> > > +YYYY = UVUV = 4 * 10 bits = 40 bits = 5 bytes
+>> > > +
+>> > > +.. flat-table:: Sample 4x4 NV15 Image
+>> > > +    :header-rows:  0
+>> > > +    :stub-columns: 0
+>> > > +
+>> > > +    * - start + 0:
+>> > > +      - Y'\ :sub:`00`
+>> > > +      - Y'\ :sub:`01`
+>> > > +      - Y'\ :sub:`02`
+>> > > +      - Y'\ :sub:`03`
+>> > > +    * - start + 8:
+>> > > +      - Y'\ :sub:`10`
+>> > > +      - Y'\ :sub:`11`
+>> > > +      - Y'\ :sub:`12`
+>> > > +      - Y'\ :sub:`13`
+>> > > +    * - start + 16:
+>> > > +      - Y'\ :sub:`20`
+>> > > +      - Y'\ :sub:`21`
+>> > > +      - Y'\ :sub:`22`
+>> > > +      - Y'\ :sub:`23`
+>> > > +    * - start + 24:
+>> > > +      - Y'\ :sub:`30`
+>> > > +      - Y'\ :sub:`31`
+>> > > +      - Y'\ :sub:`32`
+>> > > +      - Y'\ :sub:`33`
+>> > > +    * - start + 32:
+>> > > +      - Cb\ :sub:`00`
+>> > > +      - Cr\ :sub:`00`
+>> > > +      - Cb\ :sub:`01`
+>> > > +      - Cr\ :sub:`01`
+>> > > +    * - start + 40:
+>> > > +      - Cb\ :sub:`10`
+>> > > +      - Cr\ :sub:`10`
+>> > > +      - Cb\ :sub:`11`
+>> > > +      - Cr\ :sub:`11`
+>> >
+>> > This doesn't look right. You need to describe the data at the bit level,
+>> > so show how the 10-bit samples are packed into bytes.
+>>
+>> A word of NV15 is 40 bits, so 1 word of NV12 is 5 bytes, 4 pixels. I believe
+>> there is no choice here but to describe 4 pixels for Y plane, and 4 pixels for
+>> CbCr plane. This might be a bit big though.
+>
+>I agree, it may not be the prettiest, but I'd rather have a larger table
+>than a format that is understood differently by different drivers. Been
+>there, done that, not again :-)
 
-Hmm, it may not even be an optimization issue, since when
-!CONFIG_MEM_SOFT_DIRTY we have VM_SOFTDIRTY defined as 0x0.
+I'll prepare something for V2 (at my current workload in about 3 weeks
+at the earliest).
 
-It means !(vma->vm_flags & VM_SOFTDIRTY) will be constantly true even if
-soft dirty not compiled in.
+Greetings,
+Sebastian
 
-I'll add that check too.  Thanks,
-
--- 
-Peter Xu
-
+>
+>> > > +
+>> > >  .. raw:: latex
+>> > >
+>> > >      \endgroup
+>> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+>> > > index 1e38ad8906a2..23a0cb02ea3a 100644
+>> > > --- a/drivers/media/v4l2-core/v4l2-common.c
+>> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
+>> > > @@ -262,6 +262,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>> > >  		/* YUV planar formats */
+>> > >  		{ .format = V4L2_PIX_FMT_NV12,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+>> > >  		{ .format = V4L2_PIX_FMT_NV21,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+>> > > +		{ .format = V4L2_PIX_FMT_NV15,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 5, 5, 0, 0 }, .hdiv = 2, .vdiv = 2,
+>> > > +		  .block_w = { 4, 2, 0, 0 }, .block_h = { 1, 1, 0, 0 } },
+>> > >  		{ .format = V4L2_PIX_FMT_NV16,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>> > >  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>> > >  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>> > > index e2526701294e..9e5510cb255e 100644
+>> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>> > > @@ -1302,6 +1302,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>> > >  	case V4L2_PIX_FMT_M420:		descr = "YUV 4:2:0 (M420)"; break;
+>> > >  	case V4L2_PIX_FMT_NV12:		descr = "Y/CbCr 4:2:0"; break;
+>> > >  	case V4L2_PIX_FMT_NV21:		descr = "Y/CrCb 4:2:0"; break;
+>> > > +	case V4L2_PIX_FMT_NV15:		descr = "10-bit Y/CbCr 4:2:0 (Packed)"; break;
+>> > >  	case V4L2_PIX_FMT_NV16:		descr = "Y/CbCr 4:2:2"; break;
+>> > >  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
+>> > >  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
+>> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+>> > > index 5a73b92ffe4d..47ff34d6b79f 100644
+>> > > --- a/include/uapi/linux/videodev2.h
+>> > > +++ b/include/uapi/linux/videodev2.h
+>> > > @@ -598,6 +598,7 @@ struct v4l2_pix_format {
+>> > >  /* two planes -- one Y, one Cr + Cb interleaved  */
+>> > >  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/CbCr 4:2:0  */
+>> > >  #define V4L2_PIX_FMT_NV21    v4l2_fourcc('N', 'V', '2', '1') /* 12  Y/CrCb 4:2:0  */
+>> > > +#define V4L2_PIX_FMT_NV15    v4l2_fourcc('N', 'V', '1', '5') /* 15  Y/CbCr 4:2:0 10-bit packed */
+>> > >  #define V4L2_PIX_FMT_NV16    v4l2_fourcc('N', 'V', '1', '6') /* 16  Y/CbCr 4:2:2  */
+>> > >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
+>> > >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+>
+>-- 
+>Regards,
+>
+>Laurent Pinchart

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A1A57CE33
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D092657CE30
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbiGUOu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
+        id S232118AbiGUOu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiGUOuf (ORCPT
+        with ESMTP id S231338AbiGUOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 21 Jul 2022 10:50:35 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F39B26AE8;
-        Thu, 21 Jul 2022 07:50:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD062019E;
+        Thu, 21 Jul 2022 07:50:34 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DB94B6601AB5;
-        Thu, 21 Jul 2022 15:50:31 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7E4FA6601AB6;
+        Thu, 21 Jul 2022 15:50:32 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1658415032;
-        bh=dlqdtSuo04KavAzVuh7wvb7toYorthQcXqSIIZVLL6M=;
+        bh=PxVOdo3kmX5GhVqhInInTAsKF/mvybao/JRyPYM/wN0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RZ45RTO0fguI0kSN84DEuHHb6CtsQZEA67tq9sIEqjlGCXC2t1YFRQS/s56GkcfeC
-         MxIvOFN48Gbyj3ALwx0hNwiZ19DCin1GeTZKytohAc0jvxrlhNsebgEb1/UbYgOxLQ
-         VaCJ6zo/+8PVv99jpJeqt5iTovfsnGggfqm/I7lfEbUsVunZiNcSUguEco2flqnXhQ
-         Uu8UDtxDZ38sZJZ+znZjIlwR1UFjhvxi1M6nhLRPacvu48hRLE2N0Qc+2MexIQp7Aq
-         3REAnvGZahdAJnSdA9PTO/pmIZE+cDcV/wH0oNhU/35SX4ZRvyiTNbo7TvdzRKnk+i
-         jRkgboKWuXd1A==
+        b=RhMOLexbI/J6DRhKHUs3stBIJKE/U0o04dE0zkTOM8ggsKjwROG3afPQVz3bBcBLn
+         DyG80nCcYt0gd95FjWIlKFtR+tfw1RiqGkalb+s2hsDMyZMKrYOnKa07et2ve5DeKf
+         xjTTtD7xsPUvgIRolrMlScGWAEx6qFZoCJKaZ/OI9E9l83Fi/mVGzefABXYiNwv7Zm
+         AZLaLaOH5vHLsEjbrT1ygFY0j0Vz3XG60IKql3D2fYGcdIfgumuVHHSdbcm+Z8pXqj
+         4bVbgL/N7jm2jvpwbce0dWTmXDklRN6nHPsiXzsB8l1rxnedzKFOoO064YFSb+HlMM
+         AOp8vyH7e3KcA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -41,9 +41,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 6/8] arm64: dts: mediatek: cherry: Enable DSP, audio codec and sound card
-Date:   Thu, 21 Jul 2022 16:50:15 +0200
-Message-Id: <20220721145017.918102-7-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 7/8] arm64: dts: mediatek: cherry: Enable keyboard PWM backlight
+Date:   Thu, 21 Jul 2022 16:50:16 +0200
+Message-Id: <20220721145017.918102-8-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220721145017.918102-1-angelogioacchino.delregno@collabora.com>
 References: <20220721145017.918102-1-angelogioacchino.delregno@collabora.com>
@@ -58,270 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All machines of the Cherry platform have a working DSP (integrated
-into the MT8195 SoC), and audio support, some with a different audio
-codec: specifically, some using Realtek's RT5682I and some RT5682S.
-
-Write a configuration for all the audio bits to enable functionality.
+Add a pwm-leds node to enable the PWM controlled keyboard backlight.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../dts/mediatek/mt8195-cherry-tomato-r1.dts  |  10 ++
- .../dts/mediatek/mt8195-cherry-tomato-r2.dts  |  10 ++
- .../dts/mediatek/mt8195-cherry-tomato-r3.dts  |  10 ++
- .../boot/dts/mediatek/mt8195-cherry.dtsi      | 117 ++++++++++++++++++
- 4 files changed, 147 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
-index 3348ba69ff6c..2d5e8f371b6d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r1.dts
-@@ -10,6 +10,16 @@ / {
- 	compatible = "google,tomato-rev1", "google,tomato", "mediatek,mt8195";
- };
- 
-+&audio_codec {
-+	compatible = "realtek,rt5682i";
-+	realtek,btndet-delay = <16>;
-+};
-+
-+&sound {
-+	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
-+	model = "mt8195_r1019_5682";
-+};
-+
- &ts_10 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
-index 4669e9d917f8..2586c32ce6e6 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dts
-@@ -10,6 +10,11 @@ / {
- 	compatible = "google,tomato-rev2", "google,tomato", "mediatek,mt8195";
- };
- 
-+&audio_codec {
-+	compatible = "realtek,rt5682i";
-+	realtek,btndet-delay = <16>;
-+};
-+
- &pio_default {
- 	pins-low-power-hdmi-disable {
- 		pinmux = <PINMUX_GPIO31__FUNC_GPIO31>,
-@@ -30,6 +35,11 @@ pins-low-power-pcie0-disable {
- 	};
- };
- 
-+&sound {
-+	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
-+	model = "mt8195_r1019_5682";
-+};
-+
- &ts_10 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
-index 5021edd02f7c..f54f9477b99d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r3.dts
-@@ -11,6 +11,11 @@ / {
- 		     "google,tomato", "mediatek,mt8195";
- };
- 
-+&audio_codec {
-+	compatible = "realtek,rt5682s";
-+	realtek,amic-delay-ms = <250>;
-+};
-+
- &pio_default {
- 	pins-low-power-hdmi-disable {
- 		pinmux = <PINMUX_GPIO31__FUNC_GPIO31>,
-@@ -31,6 +36,11 @@ pins-low-power-pcie0-disable {
- 	};
- };
- 
-+&sound {
-+	compatible = "mediatek,mt8195_mt6359_rt1019_rt5682";
-+	model = "m8195_r1019_5682s";
-+};
-+
- &ts_10 {
- 	status = "okay";
- };
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 58349d4c3c8b..ca9955a97f8f 100644
+index ca9955a97f8f..9086a440a995 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -25,6 +25,12 @@ chosen {
- 		stdout-path = "serial0:115200n8";
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
+ #include "mt8195.dtsi"
+ #include "mt6359.dtsi"
+ 
+@@ -31,6 +32,18 @@ dmic_codec: dmic-codec {
+ 		wakeup-delay-ms = <50>;
  	};
  
-+	dmic_codec: dmic-codec {
-+		compatible = "dmic-codec";
-+		num-channels = <2>;
-+		wakeup-delay-ms = <50>;
++	led-controller {
++		compatible = "pwm-leds";
++
++		keyboard_backlight: keyboard-backlight {
++			default-state = "off";
++			function = LED_FUNCTION_KBD_BACKLIGHT;
++			label = "cros_ec::kbd_backlight";
++			max-brightness = <1023>;
++			pwms = <&cros_ec_pwm 3>;
++		};
 +	};
 +
  	memory@40000000 {
  		device_type = "memory";
  		reg = <0 0x40000000 0 0x80000000>;
-@@ -116,9 +122,49 @@ scp_mem: memory@50000000 {
- 			reg = <0 0x50000000 0 0x2900000>;
- 			no-map;
- 		};
-+
-+		adsp_mem: memory@60000000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x60000000 0 0xd80000>;
-+			no-map;
-+		};
-+
-+		afe_mem: memory@60d80000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x60d80000 0 0x100000>;
-+			no-map;
-+		};
-+
-+		adsp_device_mem: memory@60e80000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0 0x60e80000 0 0x280000>;
-+			no-map;
-+		};
-+	};
-+
-+	spk_amplifier: rt1019p {
-+		compatible = "realtek,rt1019p";
-+		label = "rt1019p";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&rt1019p_pins_default>;
-+		sdb-gpios = <&pio 100 GPIO_ACTIVE_HIGH>;
- 	};
- };
- 
-+&adsp {
-+	status = "okay";
-+
-+	memory-region = <&adsp_device_mem>, <&adsp_mem>;
-+};
-+
-+&afe {
-+	status = "okay";
-+
-+	mediatek,etdm-in2-cowork-source = <2>;
-+	mediatek,etdm-out2-cowork-source = <0>;
-+	memory-region = <&afe_mem>;
-+};
-+
- &i2c0 {
- 	status = "okay";
- 
-@@ -152,6 +198,17 @@ &i2c2 {
- 	clock-frequency = <400000>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c2_pins>;
-+
-+	audio_codec: codec@1a {
-+		/* Realtek RT5682i or RT5682s, sharing the same configuration */
-+		reg = <0x1a>;
-+		interrupts-extended = <&pio 89 IRQ_TYPE_EDGE_BOTH>;
-+		realtek,jd-src = <1>;
-+
-+		AVDD-supply = <&mt6359_vio18_ldo_reg>;
-+		MICVDD-supply = <&pp3300_z2>;
-+		VBAT-supply = <&pp3300_z5>;
-+	};
- };
- 
- &i2c3 {
-@@ -256,6 +313,11 @@ &mmc1 {
- 	vqmmc-supply = <&mt_pmic_vmc_ldo_reg>;
- };
- 
-+&mt6359codec {
-+	mediatek,dmic-mode = <1>;  /* one-wire */
-+	mediatek,mic-type-0 = <2>; /* DMIC */
-+};
-+
- /* for CPU-L */
- &mt6359_vcore_buck_reg {
- 	regulator-always-on;
-@@ -463,6 +525,34 @@ &pio {
- 		"AP_SPI_FLASH_MOSI",
- 		"AP_SPI_FLASH_MISO";
- 
-+	aud_pins_default: audio-default-pins {
-+		pins-cmd-dat {
-+		    pinmux = <PINMUX_GPIO69__FUNC_AUD_CLK_MOSI>,
-+			     <PINMUX_GPIO70__FUNC_AUD_SYNC_MOSI>,
-+			     <PINMUX_GPIO71__FUNC_AUD_DAT_MOSI0>,
-+			     <PINMUX_GPIO72__FUNC_AUD_DAT_MOSI1>,
-+			     <PINMUX_GPIO73__FUNC_AUD_DAT_MISO0>,
-+			     <PINMUX_GPIO74__FUNC_AUD_DAT_MISO1>,
-+			     <PINMUX_GPIO75__FUNC_AUD_DAT_MISO2>,
-+			     <PINMUX_GPIO0__FUNC_TDMIN_MCK>,
-+			     <PINMUX_GPIO1__FUNC_TDMIN_DI>,
-+			     <PINMUX_GPIO2__FUNC_TDMIN_LRCK>,
-+			     <PINMUX_GPIO3__FUNC_TDMIN_BCK>,
-+			     <PINMUX_GPIO60__FUNC_I2SO2_D0>,
-+			     <PINMUX_GPIO49__FUNC_I2SIN_D0>,
-+			     <PINMUX_GPIO50__FUNC_I2SO1_MCK>,
-+			     <PINMUX_GPIO51__FUNC_I2SO1_BCK>,
-+			     <PINMUX_GPIO52__FUNC_I2SO1_WS>,
-+			     <PINMUX_GPIO53__FUNC_I2SO1_D0>;
-+		};
-+
-+		pins-hp-jack-int-odl {
-+			pinmux = <PINMUX_GPIO89__FUNC_GPIO89>;
-+			input-enable;
-+			bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-+		};
-+	};
-+
- 	cr50_int: cr50-irq-default-pins {
- 		pins-gsc-ap-int-odl {
- 			pinmux = <PINMUX_GPIO88__FUNC_GPIO88>;
-@@ -707,6 +797,21 @@ pins-low-power-pupd {
- 		};
- 	};
- 
-+	rt1011_pins_default: rt1011-default-pins {
-+		pins-spk {
-+			pinmux = <PINMUX_GPIO94__FUNC_GPIO94>,
-+				 <PINMUX_GPIO100__FUNC_GPIO100>;
-+			output-high;
-+		};
-+	};
-+
-+	rt1019p_pins_default: rt1019p-default-pins {
-+		pins-amp-sdb {
-+			pinmux = <PINMUX_GPIO100__FUNC_GPIO100>;
-+			output-low;
-+		};
-+	};
-+
- 	scp_pins: scp-default-pins {
- 		pins-vreq {
- 			pinmux = <PINMUX_GPIO76__FUNC_SCP_VREQ_VAO>;
-@@ -779,6 +884,18 @@ cros-ec-rpmsg {
- 	};
- };
- 
-+&sound {
-+	status = "okay";
-+
-+	mediatek,adsp = <&adsp>;
-+	mediatek,dai-link =
-+		"DL10_FE", "DPTX_BE", "ETDM1_IN_BE", "ETDM2_IN_BE",
-+		"ETDM1_OUT_BE", "ETDM2_OUT_BE","UL_SRC1_BE",
-+		"AFE_SOF_DL2", "AFE_SOF_DL3", "AFE_SOF_UL4", "AFE_SOF_UL5";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&aud_pins_default>;
-+};
-+
- &spi0 {
- 	status = "okay";
- 
 -- 
 2.35.1
 

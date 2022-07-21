@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D4957CCCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A75957CCCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiGUOCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S230358AbiGUOCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiGUOCV (ORCPT
+        with ESMTP id S230245AbiGUOCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:02:21 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C503D5B7;
-        Thu, 21 Jul 2022 07:02:20 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id os14so3361640ejb.4;
-        Thu, 21 Jul 2022 07:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jVFPBqUH4CP3bZyK8ezfuKjTdPdnvbLrBY0GTGcqTYo=;
-        b=e7C8fTzfObVJ4yjtD/YkDrrhwadB9/tBEXwJLxdLa+ErOnEtKJBHN9Gl7amPCdntXf
-         /EtCOrcrmStofQNzzlJEi0mDCF8jetEdEllVFXsil4bWjPOMQZLz2RqNXs3pjqZ4T3BG
-         Ofzd1ab67YvTjKBtJzcYa5mTtRY9Njhe/Q95p/itrMb3h0+yI7TOQDvdxkOLv3CmSmkB
-         +b23+JGAv7aMwPRJE/AqPK9UeojM7TYU6oSpyrBivVqkDLDc1BEK2nc6xxGRlwH/KEiD
-         tcoY1ZpwbDZJGJV+N8l7KInXY6Dh+PYCxDb15+eOCUJSqSGo+hgTiHlAE2JqfA/jKeDO
-         jDKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jVFPBqUH4CP3bZyK8ezfuKjTdPdnvbLrBY0GTGcqTYo=;
-        b=uSgoeDcM+op3RyNc2K6eorjs2O4mcGfWtxip7z31UORd5SEOYB1JWvZvrqndYpZaiI
-         aTZLvOnmOK6dV6+OMq184ru6qmfxgiyYN+OIaNpqFFfnNtIe0jkEfWT39VdOeTYmRE9l
-         GOb8mGz3ZuFHqcV8ICfEQdlWpqnifZ4okIKshQjwMo6CLX9MlthDhkmhhzoXgueYSzOb
-         DdRsL4dosofRa0JjrRPjAbaLM7nrJzIBXeg7VvCYWsVPGeYwndAUGpIga2P2YMk9yFyI
-         CJSxb5af+Tba3B+0j7oYwxfkI68fQre7ZPw1pseuFWTTt40FYQdE1l86P4tSh9SUf3Q6
-         Go1Q==
-X-Gm-Message-State: AJIora9P6gA745PKrpwEkxVVtZvbbMT6ZnbhPMlqlT5yWgJuuDGavEIJ
-        FS7eD1lM5KJTfIgFv5n50no9pvMmGKC22yZGR6A=
-X-Google-Smtp-Source: AGRyM1u8/7fifE505BM62HBP6toE/0yq0Y6gu53cPsyFffFAcSVPumAQ1OFIwQKoifby/NmpWVCoQNF5C+wuz0kjNTE=
-X-Received: by 2002:a17:907:3f07:b0:72b:54b2:f57f with SMTP id
- hq7-20020a1709073f0700b0072b54b2f57fmr39743031ejc.502.1658412139195; Thu, 21
- Jul 2022 07:02:19 -0700 (PDT)
+        Thu, 21 Jul 2022 10:02:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08413ED54
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Vg47MT9CYxVlKDfYeFrs6uVhxA2N7iGnYsekPSd9PLU=; b=rf4D7P6LRVg5IFDDhyBor71CZu
+        3QAp6A9r7WfoW7/Clpm62SfV7wANE8oBbVcMvxtX8uSdAucHI3Y4Kts21MZHDmCSz8xvcjaRe2nCg
+        X2kmJX3pxs75qo14xPEqELLjIJbnNnrOngXsIie+a1/LCclG8nMsBlQlnapHhT93PSPzBh0LJpZPg
+        LnzqjMoDxahO5di8SXZ/aAXIxHy+V09bpk0+7lPzOl6tyYdi58i4ryf2HQ+mt7jpC9yH4kTdT0OL1
+        64zKWXlwGkTnH6TuwNN4DX4pDaccmQ0XzAx7DOUayAtW5vxurXsudrwbBPAETOOYJN41dxERgVF/B
+        op8tohbA==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEWkU-007SAu-Un; Thu, 21 Jul 2022 14:01:55 +0000
+Message-ID: <9d2da296-80a8-f632-27a4-42cd91cdff3e@infradead.org>
+Date:   Thu, 21 Jul 2022 07:01:51 -0700
 MIME-Version: 1.0
-References: <20220720114652.3020467-1-asavkov@redhat.com> <20220720114652.3020467-2-asavkov@redhat.com>
-In-Reply-To: <20220720114652.3020467-2-asavkov@redhat.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 21 Jul 2022 07:02:07 -0700
-Message-ID: <CAADnVQ+mt1iEsXUGBeL-dgXRoRwPxoz+G=aRcZTkhx2AA10R-A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/4] bpf: add BPF_F_DESTRUCTIVE flag for BPF_PROG_LOAD
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5/5] ASoC: amd: enable RPL Platform acp drivers build
+Content-Language: en-US
+To:     syed sabakareem <Syed.SabaKareem@amd.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     Alexander.Deucher@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, vijendar.mukunda@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Julian Braha <julianbraha@gmail.com>,
+        Bard Liao <bard.liao@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220721061035.91139-1-Syed.SabaKareem@amd.com>
+ <20220721061035.91139-5-Syed.SabaKareem@amd.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220721061035.91139-5-Syed.SabaKareem@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 4:47 AM Artem Savkov <asavkov@redhat.com> wrote:
->
-> +/* If BPF_F_DESTRUCTIVE is used in BPF_PROG_LOAD command, the loaded program
-> + * will be able to perform destructive operations such as calling bpf_panic()
-> + * helper.
-> + */
-> +#define BPF_F_DESTRUCTIVE      (1U << 6)
+Hi--
 
-I don't understand what value this flag provides.
+On 7/20/22 23:10, syed sabakareem wrote:
+> diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
+> index 9c2fef2ce89f..08f5289dac54 100644
+> --- a/sound/soc/amd/Kconfig
+> +++ b/sound/soc/amd/Kconfig
+> @@ -117,3 +117,13 @@ config SND_AMD_ACP_CONFIG
+>  	 driver modules to use
+>  
+>  source "sound/soc/amd/acp/Kconfig"
+> +
+> +config SND_SOC_AMD_RPL_ACP6x
+> +        tristate "AMD Audio Coprocessor-v6.2 RPL support"
+> +        depends on X86 && PCI
+> +        help
+> +          This option enables Audio Coprocessor i.e ACP v6.2 support on
 
-bpf prog won't be using kexec accidentally.
-Requiring user space to also pass this flag seems pointless.
+If that "i.e" is supposed to mean "that is", then it should be "i.e.".
+Or does it mean something else here?
+
+> +          AMD RPL platform. By enabling this flag build will be
+> +          triggered for ACP PCI driver.
+> +          Say m if you have such a device.
+> +          If unsure select "N".
+
+-- 
+~Randy

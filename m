@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076AF57D551
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2932257D554
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiGUU6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 16:58:25 -0400
+        id S233578AbiGUU63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 16:58:29 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbiGUU6U (ORCPT
+        with ESMTP id S233559AbiGUU6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 16:58:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACB3904F0;
-        Thu, 21 Jul 2022 13:58:10 -0700 (PDT)
+        Thu, 21 Jul 2022 16:58:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30BB904CA;
+        Thu, 21 Jul 2022 13:58:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF54EB82680;
-        Thu, 21 Jul 2022 20:58:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E5AC3411E;
-        Thu, 21 Jul 2022 20:58:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F04260AD8;
+        Thu, 21 Jul 2022 20:58:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71230C3411E;
+        Thu, 21 Jul 2022 20:58:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658437087;
-        bh=TJy6oV2ClpHeP1ehFHQPSiyhoWHgHghft6FoozMWqQg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V99tJWDcRv1RzXemv+3Vfvjgenyc7nS3ZG+WWdTqQDeQNbj6aXRLWYgpTiwz0Z2Th
-         oXRgO11iP5ibVAECA3ZgfhEHCq2HDspzoJ3U0iGzaqavJCbD4Q60MJdC1X18MnBZzS
-         LOw5oU4GcZoQlSYQXNAAW+ygYc9HKz13l7nRwIuBRf7pFCeaYQLEFDjKNGmWCQ4HlK
-         zHwlMEB9zCY18bn6/gm2Fw4HW368+3Uwfluz520FeEWc1RTezjHCNu1YGM33TUUXqS
-         xiMPotDdrO/nwkkeMyi6bFKI42F7bsr1Ukft7ausiyE02yso2TPYxVRl1ZyJWexIp2
-         1oFymV61XI/sA==
-Date:   Thu, 21 Jul 2022 21:58:00 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/1] bpf: Drop unprotected find_vpid() in favour of
- find_get_pid()
-Message-ID: <Ytm92NYx4SyKN4Nm@google.com>
-References: <20220721111430.416305-1-lee@kernel.org>
- <Ytk+/npvvDGg9pBP@krava>
- <Ytk/jT+zyNZpafgn@google.com>
- <YtlDPYQWDcORbP0o@krava>
- <fbc98bb0-a2d6-a450-e6fc-878701e5906d@fb.com>
+        s=k20201202; t=1658437101;
+        bh=H/aHhtlRLOeWCCQ5QG+qxA0GsTmdnIKgv+5n5V0Q6n8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KLeVB7ABm4ecgcmx0viupligXKNnNx1xb7evo72pn3Zlb4f9eDbW8miXjfzrZzyoE
+         FRiZz2NHq5lMMXydznLM7Q7iz+GaZAz8bIarL8okiQT673X1g0Wj/itVgSQrKUVjZS
+         Ww/Sd1cwfSQuLKvqe4oz5WZuRpcOyiOkRbRtp1aFR12hbBzDAvbGF6iN+4IAuJ0P18
+         xxyjw3TAuOlcTEOauJkLKoUVcL/AB3FBE6OCKZImLVtRjPmYzO6C64O4WgFgwzwgF6
+         daVATJG/L3yJWqYc4RcpjVzTk//ao+3Vun3a2HC7TXVVW/OAiSwydS/vidV7KXF892
+         ZUFONRMtOpNLg==
+Date:   Thu, 21 Jul 2022 15:58:19 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>,
+        Yeeun Kim <yeeun119.kim@samsung.com>
+Subject: Re: [PATCH v4 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
+Message-ID: <20220721205819.GA1753070@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fbc98bb0-a2d6-a450-e6fc-878701e5906d@fb.com>
+In-Reply-To: <226ac31e-2ac4-cb73-ab67-62f86d5e5783@linaro.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,63 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022, Yonghong Song wrote:
-
-> 
-> 
-> On 7/21/22 5:14 AM, Jiri Olsa wrote:
-> > On Thu, Jul 21, 2022 at 12:59:09PM +0100, Lee Jones wrote:
-> > > On Thu, 21 Jul 2022, Jiri Olsa wrote:
-> > > 
-> > > > On Thu, Jul 21, 2022 at 12:14:30PM +0100, Lee Jones wrote:
-> > > > > The documentation for find_pid() clearly states:
+On Thu, Jul 21, 2022 at 11:04:00AM +0200, Krzysztof Kozlowski wrote:
+> On 20/07/2022 08:01, Wangseok Lee wrote:
+> > Add support Axis, ARTPEC-8 SoC. ARTPEC-8 is the SoC platform of Axis
+> > Communications. This is based on arm64 and support GEN4 & 2lane. This
+> > PCIe controller is based on DesignWare Hardware core and uses DesignWare
+> > core functions to implement the driver. "pcie-artpec6. c" supports artpec6
+> > and artpec7 H/W. artpec8 can not be expanded because H/W configuration is
+> > completely different from artpec6/7. PHY and sub controller are different.
 > > 
-> > typo find_vpid
+> > Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+> > Signed-off-by: Jaeho Cho <jaeho79.cho@samsung.com>
+> > ---
+> > v3->v4 :
+> > -Remove unnecessary enum type
+> > -Fix indentation
 > > 
-> > > > > 
-> > > > >    "Must be called with the tasklist_lock or rcu_read_lock() held."
-> > > > > 
-> > > > > Presently we do neither.
-> > 
-> > just curious, did you see crash related to this or you just spot that
-> > 
-> > > > > 
-> > > > > In an ideal world we would wrap the in-lined call to find_vpid() along
-> > > > > with get_pid_task() in the suggested rcu_read_lock() and have done.
-> > > > > However, looking at get_pid_task()'s internals, it already does that
-> > > > > independently, so this would lead to deadlock.
-> > > > 
-> > > > hm, we can have nested rcu_read_lock calls, right?
-> > > 
-> > > I assumed not, but that might be an oversight on my part.
 > 
-> From kernel documentation, nested rcu_read_lock is allowed.
-> https://www.kernel.org/doc/Documentation/RCU/Design/Requirements/Requirements.html
+> Thanks for the changes. This starts to look good, however I am not going
+> to ack it. This is also not a strong NAK, as I would respect Bjorn and
+> other maintainers decision.
 > 
-> RCU's grace-period guarantee allows updaters to wait for the completion of
-> all pre-existing RCU read-side critical sections. An RCU read-side critical
-> section begins with the marker rcu_read_lock() and ends with the marker
-> rcu_read_unlock(). These markers may be nested, and RCU treats a nested set
-> as one big RCU read-side critical section. Production-quality
-> implementations of rcu_read_lock() and rcu_read_unlock() are extremely
-> lightweight, and in fact have exactly zero overhead in Linux kernels built
-> for production use with CONFIG_PREEMPT=n.
-> 
-> > > 
-> > > Would that be your preference?
-> > 
-> > seems simpler than calling get/put for ppid
-> 
-> The current implementation seems okay since we can hide
-> rcu_read_lock() inside find_get_pid(). We can also avoid
-> nested rcu_read_lock(), which is although allowed but
-> not pretty.
+> I don't like the approach of creating only Artpec-8 specific driver.
+> Samsung heavily reuses its block in all Exynos devices. Now it re-uses
+> them for other designs as well. Therefore, even if merging with existing
+> Exynos PCIe driver is not feasible (we had such discussions), I expect
+> this to cover all Samsung Foundry PCIe devices. From all current designs
+> up to future licensed blocks, including some new Samsung Exynos SoC. Or
+> at least be ready for it.
 
-Right, this was my thinking.
+I would certainly prefer fewer drivers but I don't know enough about
+the underlying IP and the places it's integrated to to know what's
+practical.  The only way I could figure that out would be by manually
+comparing the drivers for similarity.  I assume/expect all driver
+authors are doing that.
 
-Happy to go with whatever you guys decide though.
-
-Make the call and I'll rework, or not.
-
--- 
-Lee Jones [李琼斯]
+Bjorn

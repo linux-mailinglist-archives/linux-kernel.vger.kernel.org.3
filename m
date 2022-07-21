@@ -2,117 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328E757D66B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318A757D66D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233985AbiGUWBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S234062AbiGUWBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbiGUWBT (ORCPT
+        with ESMTP id S233456AbiGUWBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:01:19 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 148451759B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:01:17 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-146-vVf4_H80MfeFo66gwMM5tg-1; Thu, 21 Jul 2022 23:01:15 +0100
-X-MC-Unique: vVf4_H80MfeFo66gwMM5tg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Thu, 21 Jul 2022 23:01:12 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Thu, 21 Jul 2022 23:01:12 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     Sami Tolvanen <samitolvanen@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joao Moreira <joao@overdrivepizza.com>,
+        Thu, 21 Jul 2022 18:01:49 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0376393C36;
+        Thu, 21 Jul 2022 15:01:47 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 88F5962CA1B;
+        Fri, 22 Jul 2022 08:01:44 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oEeEo-003i9f-Da; Fri, 22 Jul 2022 08:01:42 +1000
+Date:   Fri, 22 Jul 2022 08:01:42 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     Dave Chinner <dchinner@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Collingbourne <pcc@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: RE: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-Thread-Topic: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-Thread-Index: AQHYnSyhi03gNC/QIkePUsvbFv4MOq2JW8MQ
-Date:   Thu, 21 Jul 2022 22:01:12 +0000
-Message-ID: <d0597f7096344b10bfcd95a0ffdbad17@AcuMS.aculab.com>
-References: <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
- <87fsiyuhyz.ffs@tglx>
- <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
- <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
- <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net>
- <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
- <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
- <Ytbnlms90+LBLbrY@google.com>
- <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
- <Ytl2vg15Hc0fh8Dl@worktop.programming.kicks-ass.net>
- <YtmTK93vHWQUFinE@worktop.programming.kicks-ass.net>
- <CAHk-=whLGENEkjME_v_3P1SwhwjzH4GK2RLA3fn=yQNuyKLBkg@mail.gmail.com>
-In-Reply-To: <CAHk-=whLGENEkjME_v_3P1SwhwjzH4GK2RLA3fn=yQNuyKLBkg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-xfs@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
+        ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+Subject: Re: [xfs]  016a23388c:  stress-ng.xattr.ops_per_sec 58.4% improvement
+Message-ID: <20220721220142.GW3861211@dread.disaster.area>
+References: <Yti6PccitrglBtIj@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yti6PccitrglBtIj@xsang-OptiPlex-9020>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=OJNEYQWB c=1 sm=1 tr=0 ts=62d9ccc9
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=8nJEP1OIZ-IA:10 a=RgO8CyIxsXoA:10 a=VwQbUJbxAAAA:8 a=NEAV23lmAAAA:8
+        a=7-415B0cAAAA:8 a=Cv6hED_WFzwE_hcpyKwA:9 a=wPNLvfGTeEIA:10
+        a=AjGcO6oz07-iQ99wixmX:22 a=biEYGPWJfzWAr4FL6Ov7:22
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjEgSnVseSAyMDIyIDE5OjA3DQouLi4NCj4g
-IChiKSBzaW5jZSB5b3UgaGF2ZSB0aGF0IHIxMCB1c2UgYW55d2F5LCB3aHkgY2FuJ3QgeW91IGp1
-c3QgZ2VuZXJhdGUgdGhlIHNpbXBsZXINCj4gDQo+ICAgICAgICAgbW92bCAkLUlNTSwlcjEwZA0K
-PiAgICAgICAgIGFkZGwgLTQoJWNhbGxkZXN0KSwlcjEwZA0KPiANCj4gICAgICBpbnN0ZWFkPyBZ
-b3Ugb25seSBuZWVkIFpGIGFueXdheS4NCj4gDQo+ICAgICAgTWF5YmUgeW91IG5lZWQgdG8gYWRk
-IHNvbWUgInIxMCBpcyBjbG9iYmVyZWQiIHRoaW5nLCBJIGRvbid0IGtub3cuDQo+IA0KPiBCdXQg
-YWdhaW46IEkgZG9uJ3Qga25vdyBsbHZtLCBzbyB0aGUgYWJvdmUgaXMgYmFzaWNhbGx5IG1lIGp1
-c3QgZG9pbmcNCj4gdGhlICJwYXR0ZXJuIG1hdGNoaW5nIG1vbmtleSIgdGhpbmcuDQo+IA0KPiAg
-ICAgICAgICAgICAgTGludXMNCg0KU2luY2U6ICJJZiB0aGUgY2FsbGVlIGlzIGEgdmFyaWFkaWMg
-ZnVuY3Rpb24sIHRoZW4gdGhlIG51bWJlciBvZiBmbG9hdGluZw0KcG9pbnQgYXJndW1lbnRzIHBh
-c3NlZCB0byB0aGUgZnVuY3Rpb24gaW4gdmVjdG9yIHJlZ2lzdGVycyBtdXN0IGJlIHByb3ZpZGVk
-DQpieSB0aGUgY2FsbGVyIGluIHRoZSBBTCByZWdpc3Rlci4iDQoNCkFuZCB0aGF0IHRoYXQgbmV2
-ZXIgaGFwcGVucyBpbiB0aGUga2VybmVsIHlvdSBjYW4gdXNlICVlYXggaW5zdGVhZA0Kb2YgJXIx
-MGQuDQoNCkV2ZW4gaW4gdXNlcnNwYWNlICVhbCBjYW4gYmUgc2V0IG5vbi16ZXJvIGFmdGVyIHRo
-ZSBzaWduYXR1cmUgY2hlY2suDQoNCklmIHlvdSBhcmUgd2lsbGluZyB0byBjdXQgdGhlIHNpZ25h
-dHVyZSBkb3duIHRvIDI2IGJpdHMgYW5kDQp0aGVuIGVuc3VyZSB0aGF0IG9uZSBvZiB0aGUgYnl0
-ZXMgb2YgLUlNTSAob3IgfklNTSBpZiB5b3UNCnVzZSB4b3IpIGlzIDB4Y2MgYW5kIGp1bXAgYmFj
-ayB0byB0aGF0IG9uIGVycm9yIHRoZSBjaGVjaw0KYmVjb21lczoNCgltb3ZsCSQtSU1NLCVlYXgN
-CjE6CWFkZGwJLTQoJWNhbGxkZXN0KSwlZWF4DQoJam56CTFiLTEJLy8gb3IgLTIsIC0zLCAtNA0K
-CWFkZAkkbnVtX2ZwX2FyZ3MsJWVheAkvLyBJZiBuZWVkZWQgbm9uLXplcm8NCgljYWxsCSVjYWxs
-ZGVzdA0KDQpJIHRoaW5rIHRoYXQgYWRkcyAxMCBieXRlcyB0byB0aGUgY2FsbCBzaXRlLg0KQWx0
-aG91Z2ggd2l0aCByZXRwb2xpbmUgdGh1bmtzIChhbmQgbm8gZnAgdmFyYXJncyBjYWxscykNCmFs
-bCBidXQgdGhlIGluaXRpYWwgbW92bCBjYW4gZ28gaW50byB0aGUgdGh1bmsuDQoNCglEYXZpZA0K
-DQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFy
-bSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAo
-V2FsZXMpDQo=
+On Thu, Jul 21, 2022 at 10:30:21AM +0800, kernel test robot wrote:
+> 
+> 
+> Greeting,
+> 
+> FYI, we noticed a 58.4% improvement of stress-ng.xattr.ops_per_sec due to commit:
+> 
+> 
+> commit: 016a23388cdcb2740deb1379dc408f21c84efb11 ("xfs: Add order IDs to log items in CIL")
+> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+> 
+> in testcase: stress-ng
+> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
+> with following parameters:
+> 
+> 	nr_threads: 10%
+> 	disk: 1HDD
+> 	testtime: 60s
+> 	fs: xfs
+> 	class: filesystem
+> 	test: xattr
+> 	cpufreq_governor: performance
+> 	ucode: 0xb000280
+> 
+> 
+> 
+> 
+> 
+> 
+> Details are as below:
+> -------------------------------------------------------------------------------------------------->
+> 
+> 
+> To reproduce:
+> 
+>         git clone https://github.com/intel/lkp-tests.git
+>         cd lkp-tests
+>         sudo bin/lkp install job.yaml           # job file is attached in this email
+>         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+>         sudo bin/lkp run generated-yaml-file
+> 
+>         # if come across any failure that blocks the test,
+>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+> 
+> =========================================================================================
+> class/compiler/cpufreq_governor/disk/fs/kconfig/nr_threads/rootfs/tbox_group/test/testcase/testtime/ucode:
+>   filesystem/gcc-11/performance/1HDD/xfs/x86_64-rhel-8.3/10%/debian-11.1-x86_64-20220510.cgz/lkp-icl-2sp1/xattr/stress-ng/60s/0xb000280
+> 
+> commit: 
+>   df7a4a2134 ("xfs: convert CIL busy extents to per-cpu")
+>   016a23388c ("xfs: Add order IDs to log items in CIL")
 
+This bisect looks like it's identified the wrong commit. The reason
+things went faster was:
+
+> df7a4a2134b0a201 016a23388cdcb2740deb1379dc4 
+> ---------------- --------------------------- 
+>          %stddev     %change         %stddev
+>              \          |                \  
+.....
+>      25.64 ±  8%     -25.6        0.00        perf-profile.calltrace.cycles-pp.native_queued_spin_lock_slowpath._raw_spin_lock.xlog_cil_insert_items.xlog_cil_commit.__xfs_trans_commit
+
+A huge amount of spinlock contention in the xlog_commit_cil() path
+went away. The commit identified doesn't remove/change any
+spinlocks, it actually adds more overhead to the critical section of
+the above spinlock in preparation for removing said spinlocks.
+
+That removal happens in the next commit in that series - c0fb4765c508 ("xfs:
+convert CIL to unordered per cpu lists") - so I'd be expecting a
+bisect to demonstrate that the spinlock contention goes away with
+the commit that removed the spinlocks (as it does in all the testing
+of this I've done over the past 2 years), not the commit this bisect
+identified. Hence I think the bisect went wrong somewhere...
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

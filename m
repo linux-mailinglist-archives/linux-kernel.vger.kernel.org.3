@@ -2,194 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9681E57CDCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771BE57CDD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiGUOhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51796 "EHLO
+        id S231648AbiGUOhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGUOhG (ORCPT
+        with ESMTP id S231195AbiGUOhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:37:06 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7E99FCA;
-        Thu, 21 Jul 2022 07:37:04 -0700 (PDT)
-Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Ma1wY-1o2LZy47IS-00W0Yl; Thu, 21 Jul 2022 16:37:03 +0200
-Received: by mail-yb1-f171.google.com with SMTP id c131so3075134ybf.9;
-        Thu, 21 Jul 2022 07:37:02 -0700 (PDT)
-X-Gm-Message-State: AJIora+OlxEsMclG7HRfV3/Z8wEbqvpsuTmnq3BY4AiK1qKS5zg8KS50
-        boiK7OsyvCvLb4NDakzK26FtAn7i6uljCOdhhI8=
-X-Google-Smtp-Source: AGRyM1sipmxaJDGQ/BXJ6IogC7daDCl2+j4F9uhSVcXz89KYHnAMaLqcK10XehN8TJ/WBsHB+lO9Dw0DiPklmfIK8Mk=
-X-Received: by 2002:a81:493:0:b0:31e:6ab9:99a5 with SMTP id
- 141-20020a810493000000b0031e6ab999a5mr8799929ywe.209.1658414210293; Thu, 21
- Jul 2022 07:36:50 -0700 (PDT)
+        Thu, 21 Jul 2022 10:37:19 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F8785F92
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:37:18 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id a13so1888287ljr.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UNboldPsa6NL6HkP/uwDWmY1V1v2qEdKxOLHr3lu02Y=;
+        b=ZVvu2qk0IlAhphe1eVCBnTvpyhOOSQMyU+xpDJLvQ9qlxwlG0hmkA8E5d7I4JwXODd
+         l/BfagBbNh+gciltJqzYvBi4XDSQ+XeFsxzBYD9bJmbjaRiqkLhKWaVCpY7hcPss154R
+         8HHgXIhNffDFUBEAKqZ7NwCO0OBaks9Pk/daeX3rfrpQN8ex0PIIROmtjM5TraBaswXg
+         22zWic7d0Q+SNfI3kS4K9MqDfNTLMXMdctjMPTYLTPX4Xgo9Rzgc2L2MGV7WfUEx3rMC
+         R4hVbPoT1zkROkQKXgHdr5T59ehxDWhJhkkyFGj9tWGTjaCuj3y2KHL78bBUbyVevAr2
+         BoIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UNboldPsa6NL6HkP/uwDWmY1V1v2qEdKxOLHr3lu02Y=;
+        b=0VTrngZQqyVOiQml68LuxU51eZP++wCVe6w2cGTtyjlI1dwWHfU8CovLxv45TZUqIi
+         7GKOcf70Vj+hL7azQv1dGLhQM9IpOPImphheKKY3NbzM3uRXaau0lpb4YH9bH8gLCPpm
+         xht4bfbiBETn18Bv2AWGlpsUtAnRlLUmQ1+oNONJqRywUM3sMd89vEX/PANEmaB1V+pE
+         JlL0O6/Vkw+EN14jHjs8riqGMR2LUUbB+nHjyeZUfLT8+48ct8Slp4PqKbJ4QVg3GQ3S
+         BGaWjX3BvfOSk2qQm9EGMiKFSI2yLFtVzkEMntnDXSNVTBQjT9rDFGdBSAJzq6CO2lrl
+         Yegg==
+X-Gm-Message-State: AJIora8o25p0cGtwt/3a2aZsJCZef5RrCXDzouHaOXmw0usprVH7ihY9
+        u5DZ0rcPJAnDC++x8kAy3861+21C8EltzK6JEWDfEw==
+X-Google-Smtp-Source: AGRyM1unUkT7KHAbSoQ8LxQrFMd0W4nlZA2BSaWIotCDnTIk04ut6fiwktEBu7yTRhA4MEq29l5ofVGmrS/AEcslm4U=
+X-Received: by 2002:a2e:8609:0:b0:25d:6af0:63b5 with SMTP id
+ a9-20020a2e8609000000b0025d6af063b5mr19769192lji.360.1658414236802; Thu, 21
+ Jul 2022 07:37:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721141325.2413920-1-arnd@kernel.org> <20220721141325.2413920-2-arnd@kernel.org>
-In-Reply-To: <20220721141325.2413920-2-arnd@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 Jul 2022 16:36:27 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2X7unsa2N5ynkUdk6H1=GZiWTyKBiLrDjQirAc9nfKhg@mail.gmail.com>
-Message-ID: <CAK8P3a2X7unsa2N5ynkUdk6H1=GZiWTyKBiLrDjQirAc9nfKhg@mail.gmail.com>
-Subject: Re: [PATCH 1/6] ARM: refresh defconfig files
-To:     Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>, linux-oxnas@groups.io,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>
+References: <20220720232332.2720091-1-justinstitt@google.com> <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
+In-Reply-To: <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 21 Jul 2022 07:37:05 -0700
+Message-ID: <CAKwvOdmtiRb4FRBS3BVNbDmOn3S2sfSrMYrC+5Te9A2jyr=CXQ@mail.gmail.com>
+Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>,
+        youngmin.nam@samsung.com
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Jc3Fh2gfdpN+8HVDOauBXVPpRe0WBUQLIN/mBe+fdzftNpQ5j6Y
- /Q8TCadAMtrVhIsC3l+NMErEOqf1CkMOZ7tXCY3PXUqZVs7nMPYBlnDfaOTIEAUI6P65nwV
- 8sRqJEpiEO39deVCaI3xdN9CH5pIxRs/NTtw4v3PHA/UKVjLePA+kgrsrbEyeZqy6qRKMJD
- y3u6z4TSZcHEZ+y8AsByQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CwOUKFV/LxQ=:FDmh5vyhQrb/b5rVNhrlaX
- 5UoAVjtwTh8NLpY1KxKL7EQ/MFPQg7QrtHG/Et2HFkDlX/FTrgA5qA3xCrYamd/SRdfOfCWTE
- IiXm4jWFVYbQJIWTnM440kQf8IYOlB4T6e1w/nxXAGD/cq2mdqvWjp7oDMvGJJ10aDANN2x/v
- tKy3Y3DGyjl4XeQNfLms4KBpHlXv78hddGIDxB8dlasZMU7SXr4X8Q3hHlWBLvFpWnZJB+AVH
- rHoLux/0NvZAyq+qoqVYAEc9JCCcGo/CcOvCzoJpDIzNDhF+cG8Bsj9nQEZHDsqh039+i6ks+
- Aj3JsUJc6MKWSO6KBbNQ2pm7U3uUJtOHrs9gCWW0yk814+w68fFjjed8ZnUdvuTBruDymnss4
- uz9eNh10RvemeTuNYrsT1BmsQZ//V0d7vb6ABmTbo9Sf26j+HvtKFCeWHt0jlrp1mBSGq7HIY
- uvCXqQF7wBVn8uLNcb3zYaltOVe8wRvn+SgZxXYZNSrLHvMxoA9E3XsNPEkoQMYeWw2kbxyB4
- qoXdyp3hF9/nLHyDaFB4n4t48F1eVyCqkgdSNzwwLNWp7TwggM6b0BZDNtP2ErYUFbIAg5Lwq
- btq3T4L4kyXtRycWYNzHUo+CAt6WxTHmWK1ECTHo1/eZbqb7plxrWLVtF4Nk75BxTVVRx4SAY
- 1rIP8Rh10uTP5Q8iPcxWrwNLyVfzET0ZXRe7nSqtoBr+8bhxVnd/pDU4HuFiXxyrno3DSHeND
- v9RLaCk3rkzL8JF7fi3D37w9FmVGuGteXwzbdH5xasbGrrWxwMp+/IXsyDhnsr8BHGNpgbE2U
- f28Jg4hkVNB8gogHmno5c6D1uT7fpJDFdqzeLbUOFZdMhrdhwbvzHRXL9XTJ5ocoHljij3qTY
- nt40WK7VGvRXrUDhSBnCN5qwpvrExGBL4BX6ED12s=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 4:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Thu, Jul 21, 2022 at 7:27 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
+> >
+> > There's been an ongoing mission to re-enable the -Wformat warning for
+> > Clang. A previous attempt at enabling the warning showed that there were
+> > many instances of this warning throughout the codebase. The sheer amount
+> > of these warnings really polluted builds and thus -Wno-format was added
+> > to _temporarily_ toggle them off.
+> >
+> > After many patches the warning has largely been eradicated for x86,
+> > x86_64, arm, and arm64 on a variety of configs. The time to enable the
+> > warning has never been better as it seems for the first time we are
+> > ahead of them and can now solve them as they appear rather than tackling
+> > from a backlog.
+> >
+> > As to the root cause of this large backlog of warnings, Clang seems to
+> > pickup on some more nuanced cases of format warnings caused by implicit
+> > integer conversion as well as default argument promotions from
+> > printf-like functions.
+> >
+> >
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > ---
+> > Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
+> >
+> > Note:
+> > For this patch to land on its feet, the plethora of supporting patches that
+> > fixed various -Wformat warnings need to be picked up. Thanfully, a lot
+> > of them have!
+> >
+> > Here are the patches still waiting to be picked up:
+> > * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
+> > * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
 >
-> A lot of Kconfig options have changed over the years, and we tend
-> to not do a blind 'make defconfig' to refresh the files, to ensure
-> we catch options that should not have gone away.
->
-> I used some a bit of scripting to only rework the bits where an
-> option moved around in any of the defconfig files, without also
-> dropping any of the other lines, to make it clearer which options
-> we no longer have.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Hi Masahiro, Nathan, and Tom,
+> What are your thoughts for _when_ in the release cycle this should be
+> picked up?  I worry that if we don't remove this soon, we will
+> backslide, and more -Wformat issues will crop up making removing this
+> in the future like digging in sand.  Justin has chased down many
+> instances of this warning, and I'm happy to help clean up fallout from
+> landing this.
 
-Apparently this patch got a little large and was rejected by some of
-the mailing lists, in case someone wonders what happened.
-Fortunately the contents  don't actually matter here, as I'm just
-reordering the lines as seen in the diffstat.
+Otherwise, we probably want to look at picking up Youngmin's patch ASAP.
+https://lore.kernel.org/all/20220716084532.2324050-1-youngmin.nam@samsung.com/
 
-        Arnd
+(This thread, for context for Youngmin:
+https://lore.kernel.org/llvm/20220720232332.2720091-1-justinstitt@google.com/)
 
-> ---
->  arch/arm/configs/am200epdkit_defconfig    |  26 ++---
->  arch/arm/configs/aspeed_g4_defconfig      |  16 +--
->  arch/arm/configs/aspeed_g5_defconfig      |  16 +--
->  arch/arm/configs/assabet_defconfig        |   8 +-
->  arch/arm/configs/at91_dt_defconfig        |  10 +-
->  arch/arm/configs/axm55xx_defconfig        |  22 ++--
->  arch/arm/configs/badge4_defconfig         |   8 +-
->  arch/arm/configs/bcm2835_defconfig        |  36 +++----
->  arch/arm/configs/cerfcube_defconfig       |  16 +--
->  arch/arm/configs/clps711x_defconfig       |   2 +-
->  arch/arm/configs/cm_x300_defconfig        |  26 ++---
->  arch/arm/configs/cns3420vb_defconfig      |  18 ++--
->  arch/arm/configs/colibri_pxa270_defconfig |  32 +++---
->  arch/arm/configs/colibri_pxa300_defconfig |  10 +-
->  arch/arm/configs/collie_defconfig         |  20 ++--
->  arch/arm/configs/corgi_defconfig          |  44 ++++----
->  arch/arm/configs/davinci_all_defconfig    |  26 ++---
->  arch/arm/configs/dove_defconfig           |  28 ++---
->  arch/arm/configs/ep93xx_defconfig         |  16 +--
->  arch/arm/configs/eseries_pxa_defconfig    |  26 ++---
->  arch/arm/configs/exynos_defconfig         |  20 ++--
->  arch/arm/configs/ezx_defconfig            |  72 ++++++-------
->  arch/arm/configs/footbridge_defconfig     |  14 +--
->  arch/arm/configs/h3600_defconfig          |  10 +-
->  arch/arm/configs/h5000_defconfig          |  18 ++--
->  arch/arm/configs/hackkit_defconfig        |   4 +-
->  arch/arm/configs/hisi_defconfig           |  24 ++---
->  arch/arm/configs/imx_v4_v5_defconfig      |   8 +-
->  arch/arm/configs/imx_v6_v7_defconfig      |   8 +-
->  arch/arm/configs/integrator_defconfig     |   2 +-
->  arch/arm/configs/iop32x_defconfig         |  20 ++--
->  arch/arm/configs/jornada720_defconfig     |  10 +-
->  arch/arm/configs/keystone_defconfig       |  62 +++++------
->  arch/arm/configs/lart_defconfig           |   6 +-
->  arch/arm/configs/lpc18xx_defconfig        |  12 +--
->  arch/arm/configs/lpc32xx_defconfig        |   8 +-
->  arch/arm/configs/lpd270_defconfig         |   6 +-
->  arch/arm/configs/lubbock_defconfig        |  10 +-
->  arch/arm/configs/magician_defconfig       |  30 +++---
->  arch/arm/configs/mainstone_defconfig      |   4 +-
->  arch/arm/configs/milbeaut_m10v_defconfig  |   6 +-
->  arch/arm/configs/mini2440_defconfig       |   6 +-
->  arch/arm/configs/mmp2_defconfig           |  28 ++---
->  arch/arm/configs/moxart_defconfig         |  18 ++--
->  arch/arm/configs/mps2_defconfig           |  14 +--
->  arch/arm/configs/multi_v4t_defconfig      |   4 +-
->  arch/arm/configs/multi_v5_defconfig       |  12 +--
->  arch/arm/configs/multi_v7_defconfig       |  62 +++++------
->  arch/arm/configs/mv78xx0_defconfig        |  32 +++---
->  arch/arm/configs/mvebu_v5_defconfig       |  28 ++---
->  arch/arm/configs/mvebu_v7_defconfig       |   2 +-
->  arch/arm/configs/mxs_defconfig            |   4 +-
->  arch/arm/configs/neponset_defconfig       |  24 ++---
->  arch/arm/configs/netwinder_defconfig      |  10 +-
->  arch/arm/configs/nhk8815_defconfig        |   6 +-
->  arch/arm/configs/omap1_defconfig          |  74 ++++++-------
->  arch/arm/configs/omap2plus_defconfig      |  16 +--
+>
+> >
+> >  scripts/Makefile.extrawarn | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> > index f5f0d6f09053..9bbaf7112a9b 100644
+> > --- a/scripts/Makefile.extrawarn
+> > +++ b/scripts/Makefile.extrawarn
+> > @@ -47,7 +47,6 @@ else
+> >
+> >  ifdef CONFIG_CC_IS_CLANG
+> >  KBUILD_CFLAGS += -Wno-initializer-overrides
+> > -KBUILD_CFLAGS += -Wno-format
+> >  KBUILD_CFLAGS += -Wno-sign-compare
+> >  KBUILD_CFLAGS += -Wno-format-zero-length
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> > --
+> > 2.37.0.170.g444d1eabd0-goog
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers

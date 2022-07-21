@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937FB57CA7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E724E57CA83
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbiGUMPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S233523AbiGUMQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233589AbiGUMPH (ORCPT
+        with ESMTP id S229497AbiGUMQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:15:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DE286881
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:15:03 -0700 (PDT)
-Received: from localhost (unknown [188.24.146.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 21 Jul 2022 08:16:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6074C501A9;
+        Thu, 21 Jul 2022 05:16:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 861BA6601AA7;
-        Thu, 21 Jul 2022 13:15:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658405701;
-        bh=vBTCRcHWGtDqiA4fxJOYlqI6XHGxo1rup1RqlhRSdD8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IKFaPwbl52WVwlaSmN54Nuw+s49PB1Zgk9vh8UoWwdTUNhU4w74QiBNIAS1n1DLIf
-         KvV+fpoezwrTOfu07V3P9nIAd6Kx6yr/GxdMvARzLtEhw68kshrH4St6X3Ub45rdtz
-         mOUsh0RtHzp52H7FyCr50FrYVVUrTXGxI8bp3piexc4JnLVPl282qP1xQlxWAOdgUK
-         Y86bS6C63NAz/w+nV0z2HO8ukiueNjzCjziO+nDjl6CfOIsRA21F5r8m4EBJPE0ibr
-         XHF0P6e8eOfrGK6rFqSd/cZVqI3kmesKAWp4aO5pzfsDWPAl7b6uS77Ae9fLaSTl00
-         2W3G6PZO/wJYQ==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: [PATCH] ASoC: cs35l41: Set the new legacy DAI naming flag
-Date:   Thu, 21 Jul 2022 15:14:54 +0300
-Message-Id: <20220721121454.1378945-1-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.37.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CE53B82348;
+        Thu, 21 Jul 2022 12:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F6FC3411E;
+        Thu, 21 Jul 2022 12:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658405775;
+        bh=s8ppiCf7fhbpmh6vKsurmBVf6gQCtK8vCzH2kjhT5Wc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GXKNxoGDTKXsZnbkMn3FRJ0gnUhtzkCB0qKD1O+0eC642q2Ezzu+8tVG6a08YXeg/
+         7nJ0J02Rl3LpTpUgwYTj5vSdG+xcUuS+19KgveVN4fU8cjRr0qblOCik7IgdN/RZvO
+         lYkTiED8TH7KHZKF7Fy2hl4jrl7TwQDPUvj6yf7lz8v3BHW6OjXAzWraRbn7xtezVf
+         zh17LvbGJ7MeQjYid1JAlixn7aNXtptb8qpXT1AfqbiXtVkEYxfB9T5SW+Wv3lFibO
+         zSTIZk/8oFIpcU+WP5mwK8Dw78OiqKuKg/DYi5RqLPI/oDZKc8FXH1QDEvpimPIReE
+         g6w0fFJaryirg==
+Date:   Thu, 21 Jul 2022 17:46:10 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/24] dmaengine: dw-edma: Add RP/EP local DMA
+ controllers support
+Message-ID: <YtlDivjaXfSEK1Xg@matsya>
+References: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unlike most CODEC drivers, the CS35L41 driver did not have the
-non_legacy_dai_naming set, meaning it uses the legacy naming.
+On 10-06-22, 12:14, Serge Semin wrote:
+> This is a final patchset in the series created in the framework of
+> my Baikal-T1 PCIe/eDMA-related work:
+> 
+> [1: In-progress v4] PCI: dwc: Various fixes and cleanups
+> Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
+> [2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
+> Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
+> [3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
+> Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
+> [4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
+> Link: ---you are looking at it---
+> 
+> Note it is very recommended to merge the patchsets in the same order as
+> they are listed in the set above in order to have them applied smoothly.
+> Nothing prevents them from being reviewed synchronously though.
+> 
+> Please note originally this series was self content, but due to Frank
+> being a bit faster in his work submission I had to rebase my patchset onto
+> his one. So now this patchset turns to be dependent on the Frank' work:
+> 
+> Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
+> 
+> So please merge Frank' series first before applying this one.
+> 
+> Here is a short summary regarding this patchset. The series starts with
+> fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
+> initializes the LL/DT base addresses for the platforms with not matching
+> CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
+> method to get a correct base address. After that you can find a series of
+> the interleaved xfers fixes. It turned out the interleaved transfers
+> implementation didn't work quite correctly from the very beginning for
+> instance missing src/dst addresses initialization, etc. In the framework
+> of the next two patches we suggest to add a new platform-specific
+> callback - pci_address() and use it to convert the CPU address to the PCIe
+> space address. It is at least required for the DW eDMA remote End-point
+> setup on the platforms with not-matching CPU/PCIe address spaces. In case
+> of the DW eDMA local RP/EP setup the conversion will be done automatically
+> by the outbound iATU (if no DMA-bypass flag is specified for the
+> corresponding iATU window). Then we introduce a set of the patches to make
+> the DebugFS part of the code supporting the multi-eDMA controllers
+> platforms. It starts with several cleanup patches and is closed joining
+> the Read/Write channels into a single DMA-device as they originally should
+> have been. After that you can find the patches with adding the non-atomic
+> io-64 methods usage, dropping DT-region descriptors allocation, replacing
+> chip IDs with the device name. In addition to that in order to have the
+> eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
+> dma-ranges-based memory ranges mapping since in case of the root port DT
+> node it's applicable for the peripheral PCIe devices only. Finally at the
+> series closure we introduce a generic DW eDMA controller support being
+> available in the DW PCIe Root Port/Endpoint driver.
 
-The recent migration to the new legacy DAI naming style has broken
-driver functionality because it is now expected to set the new legacy
-DAI naming flag in order to instruct the core subsystem to use the
-legacy name format on DAI registration.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-Let's fix this by setting the legacy_dai_naming flag accordingly.
-
-Fixes: bc949a3b4af3 ("ASoC: core: Switch core to new DAI naming flag")
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- sound/soc/codecs/cs35l41.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index c223d83e02cf..b49f9a32abf2 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -1028,6 +1028,7 @@ static const struct snd_soc_component_driver soc_component_dev_cs35l41 = {
- 	.set_sysclk = cs35l41_component_set_sysclk,
-
- 	.endianness = 1,
-+	.legacy_dai_naming = 1,
- };
-
- static int cs35l41_handle_pdata(struct device *dev, struct cs35l41_hw_cfg *hw_cfg)
---
-2.37.1
+-- 
+~Vinod

@@ -2,233 +2,422 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0675457D34A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A7E57D34D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiGUS3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 14:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S229680AbiGUSaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 14:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiGUS3n (ORCPT
+        with ESMTP id S232640AbiGUS34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 14:29:43 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9288C8D6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:29:41 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id y24so2599755plh.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to;
-        bh=v3TKtPiAXEV+gz+iIY0SLTr3JUg8dGIEvaEohdbYGlk=;
-        b=G0GpgGKezuu+8liBk0/f5fQt4XYrWJRtObjmlx2LM0A5oZK9Rdw2ExqRzQqu6DLXKF
-         Q4CH7tB1AZj2pmv//RwL5F3Ptav+UDF4J9akPAS4aQaII5EZf+Hs4S4EQOyrcnYoEclQ
-         IHG1qgdLtYnNIPnZJ2BLtt/mWXEP7xLvf1XKI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=v3TKtPiAXEV+gz+iIY0SLTr3JUg8dGIEvaEohdbYGlk=;
-        b=MkxhLfoXnrSs+ru5BYI9cJFPERT0yVEe+BFBPtMBMORnV/K4xwJKlouJChMZEGXjTP
-         nFrD5QE6m9l5AulvjR49JkpaaZKoknf5TCY1F80Nb6t1MKvxFY15nD6sksVD0XP8N7dJ
-         ygFmsTM7tpYFg5/rDYv+Ys97Baz9Tf+vS4bYBbq5OIsqAezehukTfUp2obX1sBaLXxFO
-         wh3zvLWaDuATgMGOkIlNUw9Xyr15uMrLLMuwII5oWyXf8FmI5of8c5WC0hBkRQv+oOdZ
-         sPgs3UeX1UdXsU0uLgeD69JbODGZ2M+5OQG71ywfyG9VWbBoG++Ow/C4J0kpMeFYNcEH
-         uR1A==
-X-Gm-Message-State: AJIora9GRiqaGySrSMgwmK2RpdVZcZcEcYsTO6BGnmNCRk3Hxx2BbfZ3
-        52ZqDGK0kBN75cRbMl9vCoolOtL85RFRthC5Z57X//SbKrmQOc542dXuAGAa5IB7Ye6lDR9p3YH
-        iKQnqXAEURkedFnGdnu3ArQldtdG3Fv5ipSsUsJOxe0eis4/bhzzj9HynSOSonPYp7rxeyA1XJT
-        3sNkJm+ekd
-X-Google-Smtp-Source: AGRyM1vqGfXNs7pYbIAdIsfTSHXEVK6HCc+0lhKWDBip6QojA1Q64hmzdFz1wT1Tq+rqMrUQ/u9DgQ==
-X-Received: by 2002:a17:903:1103:b0:16c:9a6e:d54 with SMTP id n3-20020a170903110300b0016c9a6e0d54mr42239822plh.131.1658428181001;
-        Thu, 21 Jul 2022 11:29:41 -0700 (PDT)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id v8-20020a17090ad58800b001f121421893sm1743645pju.53.2022.07.21.11.29.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Jul 2022 11:29:39 -0700 (PDT)
-Subject: Re: [RESEND PATCH 5/9] arm64: dts: Add BCM4908 generic board dts
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220721000731.29597-1-william.zhang@broadcom.com>
- <4919ef26ece22db845de584e3d9b3814@milecki.pl>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <6e3bfcb2-41e8-5e67-6e17-8dc1a0dd0c07@broadcom.com>
-Date:   Thu, 21 Jul 2022 11:29:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        Thu, 21 Jul 2022 14:29:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038608C8D9;
+        Thu, 21 Jul 2022 11:29:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7704D61FD8;
+        Thu, 21 Jul 2022 18:29:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4F9C341CE;
+        Thu, 21 Jul 2022 18:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658428193;
+        bh=Pl+gLqKQxLJK9F7QwAj5jF5+jUyNj4bbTIpEoPFUbOU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=d/FlpGKKy3eShP4OygXsSMW28+0naP5V+ZPoYCur5cXCFuKAGHwmr33yGIxl/sXpu
+         gnVU7GxKpRG6rebW/TTugIJ1/4207yZJ59bCFXBFySDa1hRyHbSBiKocX3X9xtGFBJ
+         Zk1g6x0zMLALQ6YaPAafQ3dDMiEenBV7S+j/x840TlFtUx28HgQm1rSMC5HA/IKk9P
+         LJV1Kl9PTponXPV5vckYOuVAcpXx+61KbNNU9O3igtBhbC1NeyfK2t2G0mG7ekddGh
+         SaOKG+em9VSPhfv85DcbZSC7i8u0i5eWYYJn3zbzEMXAYeqVXLbQfovMyIz/TeoU9T
+         iVFs6ZQMCXVEQ==
+Received: by mail-vs1-f51.google.com with SMTP id j1so2344246vsr.4;
+        Thu, 21 Jul 2022 11:29:53 -0700 (PDT)
+X-Gm-Message-State: AJIora/r3Q1OoNs79XXwft0DlGNcCbfh66/t/Ow+efiTOMV2qeEQWVgx
+        XiHXPm2LS9HjQmYmPoq8Jl4iuMubGSSO9xrKSA==
+X-Google-Smtp-Source: AGRyM1vEvtKbdX8fyIgtgjSksM0g4dPbh/ZQKD7bHOOzlJUyWkTVS0NhGIVkqx8TiLx/fB0F/mXqOevv+MGWOCT1OLE=
+X-Received: by 2002:a67:c088:0:b0:358:bb1:fdf7 with SMTP id
+ x8-20020a67c088000000b003580bb1fdf7mr4938634vsi.85.1658428192502; Thu, 21 Jul
+ 2022 11:29:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4919ef26ece22db845de584e3d9b3814@milecki.pl>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a651e005e454e6a8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220715215954.1449214-1-sean.anderson@seco.com>
+ <20220715215954.1449214-2-sean.anderson@seco.com> <20220720221704.GA4049520-robh@kernel.org>
+ <d4d6d881-ca3e-b77f-cee0-70e2518bef69@seco.com>
+In-Reply-To: <d4d6d881-ca3e-b77f-cee0-70e2518bef69@seco.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 21 Jul 2022 12:29:40 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJqU4-F52NLWDWK=Qy0ECRrYL9fmJD4CLd=J1KzCBgU7Q@mail.gmail.com>
+Message-ID: <CAL_JsqJqU4-F52NLWDWK=Qy0ECRrYL9fmJD4CLd=J1KzCBgU7Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 01/47] dt-bindings: phy: Add Lynx 10G phy binding
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a651e005e454e6a8
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+On Thu, Jul 21, 2022 at 10:06 AM Sean Anderson <sean.anderson@seco.com> wrote:
+>
+>
+>
+> On 7/20/22 6:17 PM, Rob Herring wrote:
+> > On Fri, Jul 15, 2022 at 05:59:08PM -0400, Sean Anderson wrote:
+> >> This adds a binding for the SerDes module found on QorIQ processors. The
+> >> phy reference has two cells, one for the first lane and one for the
+> >> last. This should allow for good support of multi-lane protocols when
+> >> (if) they are added. There is no protocol option, because the driver is
+> >> designed to be able to completely reconfigure lanes at runtime.
+> >> Generally, the phy consumer can select the appropriate protocol using
+> >> set_mode. For the most part there is only one protocol controller
+> >> (consumer) per lane/protocol combination. The exception to this is the
+> >> B4860 processor, which has some lanes which can be connected to
+> >> multiple MACs. For that processor, I anticipate the easiest way to
+> >> resolve this will be to add an additional cell with a "protocol
+> >> controller instance" property.
+> >>
+> >> Each serdes has a unique set of supported protocols (and lanes). The
+> >> support matrix is configured in the device tree. The format of each
+> >> PCCR (protocol configuration register) is modeled. Although the general
+> >> format is typically the same across different SoCs, the specific
+> >> supported protocols (and the values necessary to select them) are
+> >> particular to individual SerDes. A nested structure is used to reduce
+> >> duplication of data.
+> >>
+> >> There are two PLLs, each of which can be used as the master clock for
+> >> each lane. Each PLL has its own reference. For the moment they are
+> >> required, because it simplifies the driver implementation. Absent
+> >> reference clocks can be modeled by a fixed-clock with a rate of 0.
+> >>
+> >> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> >> ---
+> >>
+> >> Changes in v3:
+> >> - Manually expand yaml references
+> >> - Add mode configuration to device tree
+> >>
+> >> Changes in v2:
+> >> - Rename to fsl,lynx-10g.yaml
+> >> - Refer to the device in the documentation, rather than the binding
+> >> - Move compatible first
+> >> - Document phy cells in the description
+> >> - Allow a value of 1 for phy-cells. This allows for compatibility with
+> >>   the similar (but according to Ioana Ciornei different enough) lynx-28g
+> >>   binding.
+> >> - Remove minItems
+> >> - Use list for clock-names
+> >> - Fix example binding having too many cells in regs
+> >> - Add #clock-cells. This will allow using assigned-clocks* to configure
+> >>   the PLLs.
+> >> - Document the structure of the compatible strings
+> >>
+> >>  .../devicetree/bindings/phy/fsl,lynx-10g.yaml | 311 ++++++++++++++++++
+> >>  1 file changed, 311 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml b/Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml
+> >> new file mode 100644
+> >> index 000000000000..a2c37225bb67
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml
+> >> @@ -0,0 +1,311 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/phy/fsl,lynx-10g.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: NXP Lynx 10G SerDes
+> >> +
+> >> +maintainers:
+> >> +  - Sean Anderson <sean.anderson@seco.com>
+> >> +
+> >> +description: |
+> >> +  These Lynx "SerDes" devices are found in NXP's QorIQ line of processors. The
+> >> +  SerDes provides up to eight lanes. Each lane may be configured individually,
+> >> +  or may be combined with adjacent lanes for a multi-lane protocol. The SerDes
+> >> +  supports a variety of protocols, including up to 10G Ethernet, PCIe, SATA, and
+> >> +  others. The specific protocols supported for each lane depend on the
+> >> +  particular SoC.
+> >> +
+> >> +definitions:
+> >
+> > $defs:
+>
+> That didn't work until recently :)
+>
+> I will change this for next revision.
+>
+> >> +  fsl,cfg:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    minimum: 1
+> >> +    description: |
+> >> +      The configuration value to program into the field.
+> >
+> > What field?
+>
+> Ah, looks like this lost some context when I moved it. I will expand on this.
+>
+> >> +
+> >> +  fsl,first-lane:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    minimum: 0
+> >> +    maximum: 7
+> >> +    description: |
+> >> +      The first lane in the group configured by fsl,cfg. This lane will have
+> >> +      the FIRST_LANE bit set in GCR0. The reset direction will also be set
+> >> +      based on whether this property is less than or greater than
+> >> +      fsl,last-lane.
+> >> +
+> >> +  fsl,last-lane:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    minimum: 0
+> >> +    maximum: 7
+> >> +    description: |
+> >> +      The last lane configured by fsl,cfg. If this property is absent,
+> >> +      then it will default to the value of fsl,first-lane.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    items:
+> >> +      - enum:
+> >> +          - fsl,ls1046a-serdes
+> >> +          - fsl,ls1088a-serdes
+> >> +      - const: fsl,lynx-10g
+> >> +
+> >> +  "#clock-cells":
+> >> +    const: 1
+> >> +    description: |
+> >> +      The cell contains the index of the PLL, starting from 0. Note that when
+> >> +      assigning a rate to a PLL, the PLLs' rates are divided by 1000 to avoid
+> >> +      overflow. A rate of 5000000 corresponds to 5GHz.
+> >> +
+> >> +  "#phy-cells":
+> >> +    minimum: 1
+> >> +    maximum: 2
+> >> +    description: |
+> >> +      The cells contain the following arguments:
+> >> +      - The first lane in the group. Lanes are numbered based on the register
+> >> +        offsets, not the I/O ports. This corresponds to the letter-based ("Lane
+> >> +        A") naming scheme, and not the number-based ("Lane 0") naming scheme. On
+> >> +        most SoCs, "Lane A" is "Lane 0", but not always.
+> >> +      - Last lane. For single-lane protocols, this should be the same as the
+> >> +        first lane.
+> >
+> > Perhaps a single cell with a lane mask would be simpler.
+>
+> Yes.
+>
+> >> +      If no lanes in a SerDes can be grouped, then #phy-cells may be 1, and the
+> >> +      first cell will specify the only lane in the group.
+> >
+> > It is generally easier to have a fixed number of cells.
+>
+> This was remarked on last time. I allowed this for better compatibility with the lynx
+> 28g serdes binding. Is that reasonable? I agree it would simplify the driver to just
+> have one cell type.
+>
+> >> +
+> >> +  clocks:
+> >> +    maxItems: 2
+> >> +    description: |
+> >> +      Clock for each PLL reference clock input.
+> >> +
+> >> +  clock-names:
+> >> +    minItems: 2
+> >> +    maxItems: 2
+> >> +    items:
+> >> +      enum:
+> >> +        - ref0
+> >> +        - ref1
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +patternProperties:
+> >> +  '^pccr-':
+> >> +    type: object
+> >> +
+> >> +    description: |
+> >> +      One of the protocol configuration registers (PCCRs). These contains
+> >> +      several fields, each of which mux a particular protocol onto a particular
+> >> +      lane.
+> >> +
+> >> +    properties:
+> >> +      fsl,pccr:
+> >> +        $ref: /schemas/types.yaml#/definitions/uint32
+> >> +        description: |
+> >> +          The index of the PCCR. This is the same as the register name suffix.
+> >> +          For example, a node for PCCRB would use a value of '0xb' for an
+> >> +          offset of 0x22C (0x200 + 4 * 0xb).
+> >> +
+> >> +    patternProperties:
+> >> +      '^(q?sgmii|xfi|pcie|sata)-':
+> >> +        type: object
+> >> +
+> >> +        description: |
+> >> +          A configuration field within a PCCR. Each field configures one
+> >> +          protocol controller. The value of the field determines the lanes the
+> >> +          controller is connected to, if any.
+> >> +
+> >> +        properties:
+> >> +          fsl,index:
+> >
+> > indexes are generally a red flag in binding. What is the index, how does
+> > it correspond to the h/w and why do you need it.
+>
+> As described in the description below, the "index" is the protocol controller suffix,
+> corresponding to a particular field (or set of fields) in the protocol configuration
+> registers.
+>
+> > If we do end up needing
+> > it, 'reg' is generally how we address some component.
+>
+> I originally used reg, but I got warnings about inheriting #size-cells and
+> #address-cells. These bindings are already quite verbose to write out (there
+> are around 10-20 configurations per SerDes to describe) and I would like to
+> minimize the amount of properties to what is necessary. Additionally, this
+> really describes a particular index of a field, and not a register (or an offset
+> within a register).
+
+Are you trying to describe all possible configurations in DT? Don't.
+The DT should be the config for the specific board, not a menu of
+possible configurations.
 
 
+> >> +            $ref: /schemas/types.yaml#/definitions/uint32
+> >> +            description: |
+> >> +              The index of the field. This corresponds to the suffix in the
+> >
+> > What field?
+>
+> The one from the description above.
+>
+> >> +              documentation. For example, PEXa would be 0, PEXb 1, etc.
+> >> +              Generally, higher fields occupy lower bits.
+> >> +
+> >> +              If there are any subnodes present, they will be preferred over
+> >> +              fsl,cfg et. al.
+> >> +
+> >> +          fsl,cfg:
+> >> +            $ref: "#/definitions/fsl,cfg"
+> >> +
+> >> +          fsl,first-lane:
+> >> +            $ref: "#/definitions/fsl,first-lane"
+> >> +
+> >> +          fsl,last-lane:
+> >> +            $ref: "#/definitions/fsl,last-lane"
+> >
+> > Why do you have lane assignments here and in the phy cells?
+>
+> For three reasons. First, because we need to know what protocols are valid on what
+> lanes. The idea is to allow the MAC to configure the protocols at runtime. To do
+> this, someone has to figure out if the protocol is supported on that lane. The
+> best place to put this IMO is the serdes.
 
-On 07/20/2022 11:45 PM, Rafał Miłecki wrote:
-> On 2022-07-21 02:07, William Zhang wrote:
->> Add generic bcm94908.dts file.
->>
->> Signed-off-by: William Zhang <william.zhang@broadcom.com>
->> ---
->>
->>  arch/arm64/boot/dts/broadcom/bcmbca/Makefile  |  1 +
->>  .../boot/dts/broadcom/bcmbca/bcm94908.dts     | 30 +++++++++++++++++++
->>  2 files changed, 31 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm94908.dts
->>
->> diff --git a/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
->> b/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
->> index d30fa75f0611..27741b71ba9e 100644
->> --- a/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
->> +++ b/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
->> @@ -4,6 +4,7 @@ dtb-$(CONFIG_ARCH_BCMBCA) += \
->>                  bcm4906-tplink-archer-c2300-v1.dtb \
->>                  bcm4908-asus-gt-ac5300.dtb \
->>                  bcm4908-netgear-raxe500.dtb \
->> +                bcm94908.dtb \
->>                  bcm4912-asus-gt-ax6000.dtb \
->>                  bcm94912.dtb \
->>                  bcm963158.dtb \
-> 
-> AFAIU bcm94908 is a reference board name. I think I see some
-> inconsistency in naming Broadcom's reference boards DTS files.
-> 
-> If you take a look at in-kernel DTS files:
-> find ./arch/arm*/boot/dts/ -name "*.dts"
-> 99% of them are prefixed with family/SoC name. I did the same for
-> bcm4908 (and Northstar) boards. So it's
-> <soc>-<manufacturer>-<model>.dts
-> e.g.
-> bcm4908-asus-gt-ac5300.dts
-> 
-> To match that I *think* you should actually call your file:
-> bcm4908-bcm94908 (or bcm4908-94908 depending on actual board name)
-> 
-> First of all: am I correct here?
-> 
-I do see many dts named in the format you described here and I agree it 
-is very clear.  But at Broadcom we use a slight different format for 
-reference boards that we started from day 1: bcm9<soc>-<ref board 
-model>.dts such as bcm963138REF.dts. And there are many in the kernel as 
-well if you search "bcm9*.dts".  Many of them are Broadcom reference 
-boards and some are actual consumer product.
+Within ethernet protocols, that makes sense.
 
-> Secondly: could you do that? I know many DTS files named ignoring SoC/
-> family prefix. Still maybe we could change it as some (this) point?
-I actually was thinking to ask you if we can change all the 4908 boards 
-to use bcm94908- prefix to be consistent with Broadcom board name 
-convention. But at the second thought, I didn't ask because it does not 
-make much benefit other than a uniform name, unless you agree and I can 
-make that change. Otherwise, I would rather keep them as they are now 
-because we have ton of reference boards here and we don't want to make 
-that changes to remove the 9 (which will definitive cause big confusing 
-internally) and there are no rule in linux for the name as far as I 
-know.   What I can do is update the bcmbca.yaml to put bcmbca board name 
-rule bcm9<soc>-<ref board model>.dts  for broadcom reference board and 
-bcm<soc>-<manufacturer>-<model>.dts for customer board,  if that sounds 
-good to you.
+> Second, some serdes have (mostly) unsupported protocols such as PCIe as well as
+> Ethernet protocols. To allow using Ethernet, we need to know which lanes are
+> configured (by the firmware/bootloader) for some other protocol. That way, we
+> can avoid touching them.
 
---000000000000a651e005e454e6a8
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+The ones needed for ethernet are the ones with a connection to the
+ethernet MACs with the 'phys' properties. Why don't you just ignore
+the !ethernet ones?
 
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMP/qOCsK4Qb/6dKvg6YsJQCD1Zr
-K0897K9lcXTfbnhZMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcyMTE4Mjk0MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCeziZoeQ7k+cVJQt/PCwxB7PkPdRe0kwBvQfaGvoP/q6MW
-+YG8hBrhtPedbtdU0KM2GKAABV9NcZ4BceYel43jISkpn0gedcar5okXzovSV59gwUb2PoXzz+5w
-1J4ohYxPE1FdemxiL4LUaHmqZ8Rgo5O7eaPb2NEeI2YMUKcj76bgpUVoTvg9HN4Mw6NG9Rc/w+zi
-epbw8y8Xr6a4DwwkumysQlI+gk5R9q6S4GPkIHKOBH2M5yECH+KQI2t71RaCCHdaEL2+2T0Ag/lF
-6aPwDAjlWB4FNhQzvEtbJZ0Ub9Yj/flRUt8qJk8NkaLeh/2w4Mi/Gy14rg8MP7WveD4R
---000000000000a651e005e454e6a8--
+> Third, as part of the probe sequence, we need to ensure that no protocol controllers
+> are currently selected. Otherwise, we will get strange problems later when we try
+> to connect multiple protocol controllers to the same lane.
+
+Sounds like a kernel problem...
+
+>
+> >> +
+> >> +          fsl,proto:
+> >> +            $ref: /schemas/types.yaml#/definitions/string
+> >> +            enum:
+> >> +              - sgmii
+> >> +              - sgmii25
+> >> +              - qsgmii
+> >> +              - xfi
+> >> +              - pcie
+> >> +              - sata
+> >
+> > We have standard phy modes already for at least most of these types.
+> > Generally the mode is set in the phy cells.
+>
+> Yes, but this is the "protocol" which may correspond to multiple phy modes.
+> For example, sgmii25 allows SGMII, 1000BASE-X, 1000BASE-KR, and 2500BASE-X
+> phy modes.
+
+As phy mode is more specific than protocol (or mode implies protocol),
+why do we need protocol in DT?
+
+[...]
+
+> >> +        xfi-1 {
+> >> +          fsl,index = <1>;
+> >> +          fsl,cfg = <0x1>;
+> >> +          fsl,first-lane = <0>;
+> >> +          fsl,proto = "xfi";
+> >> +        };
+> >> +      };
+> >> +    };
+> >
+> > Other than lane assignments and modes, I don't really understand what
+> > you are trying to do.
+>
+> This is touched on a bit above, but the idea here is to allow for dynamic
+> reconfiguration of the serdes mode in order to support multiple ethernet
+> phy modes at runtime. To do this, we need to know about all the available
+> protocol controllers, and the lanes they support. In particular, the
+> available controllers and the lanes they map to (and the values to
+> program to select them) differ even between different serdes on the same
+> SoC.
+>
+> > It all looks too complex and I don't see any other
+> > phy bindings needing something this complex.
+>
+> This was explicitly asked for last time. I also would not like to do this,
+> but you and Krzysztof Kozlowski were very opposed to having per-device
+> compatible strings. If you have a suggestion for a different approach, I
+> am all ears. I find it very frustrating that the primary feedback I get from
+> the device tree folks is "you can't do this" without a corresponding "do it
+> this way."
+
+How much time do you expect that we spend on your binding which is
+only 1 out of the 100-200 patches we get a week? We're not experts in
+all kinds of h/w and the experts for specific h/w don't always care
+about DT bindings. We often get presented with solutions without
+sufficient explanations of the problem. If I don't understand the
+problem, how can I propose a solution? We can only point out what
+doesn't fit within normal DT patterns. PHYs with multiple modes
+supported is not a unique problem, so why are existing ways to deal
+with that not sufficient and why do you need a *very* specific
+binding?
+
+With the phy binding, you know what each lane is connected to. You can
+put whatever information you want in the phy cells to configure the
+phy for that client. The phy cells are defined by the provider and
+opaque to the consumer. Yes, we like to standardize cells when
+possible, but that's only a convenience. I'm not saying phy cells is
+the answer for everything and define 10 cells worth of data either.
+
+Rob

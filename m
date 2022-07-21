@@ -2,157 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82FC57D1AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C55357D1B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbiGUQi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        id S229988AbiGUQk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiGUQi5 (ORCPT
+        with ESMTP id S229540AbiGUQky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:38:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580337C18E;
-        Thu, 21 Jul 2022 09:38:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0707FB8258F;
-        Thu, 21 Jul 2022 16:38:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43162C3411E;
-        Thu, 21 Jul 2022 16:38:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658421531;
-        bh=XQuaI9JDOz1OBn9ObdPK5HEn8VD/Fw7EKM1NPRG5An0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=M/Uh2T7kTP3dCVvPz+LAe+f4IOJVm/09AEsKH1uHLzIeH+V/Lx5oQOb12/zYBuTcw
-         N1p+JBreNfBebraTaMw1n9SjLLYNZZJrFvmr1iEVwv03R9KyxYQq3xevqZZQIDNPIs
-         R/wZo3Qwr3IRUy/etzDCIiQNtDO8hwIzRK+SGae6Jq14nfqYBF4XyELRPlXL6gjg5d
-         Deo3f281WwJqbDQmNquxwYZ5OQ9it9JgbfccUmg7p7+yYICqQUyOmPdWTv5wGVdI8l
-         138Bn41gCCM33yVu6h323aRWbTS0n3TScA8H8e/h7jVlir3y3K1bGZnIPN4p/TSfQU
-         fH4ZYEz4oYeMg==
-Message-ID: <26c5c095-2aff-3c7b-80ad-7b21702a3fdd@kernel.org>
-Date:   Thu, 21 Jul 2022 18:38:42 +0200
+        Thu, 21 Jul 2022 12:40:54 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5F220BE5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:40:51 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bf9so3613625lfb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:40:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VQ7eOrI6FIZwDaocmq454OANKIbrFQPFfq7eOf2JtIw=;
+        b=BDQmRTlsWdzM7ha06GNX77q/tKZ0XTEo9fJIbCJldo2c1MlEd4Cj96Aq8ofFupXvmm
+         LwwtzSyQK9F6cWGK2OgkIaLHxqqluHEz/5IKQolhL1fshzKoipro7gf4RymDLM/hiLWH
+         l6tXUE3LWZHLMhZDYFxrPe4Q86mEtzivN6uqZVCGeya38tQ4GPAxzX4RAGsznEWHpRyI
+         xV89H4gFPiR1rOdt436tpogKCt2nAzQBp2xdvWUzr68uyNXtqwQGJJQG65Kh5zvErPjW
+         ZcowdcjTLZ/rwBC7wBoQPHOv46iBBnJtMv1fTYchDJpTEuts61DOfDMI+BkO9KqR/7w3
+         4jwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VQ7eOrI6FIZwDaocmq454OANKIbrFQPFfq7eOf2JtIw=;
+        b=5KbgjlnQCo5jJAaTImAKPJVkmW5eYEscCFm/M/NxfxWHC/p3nxOpB4WHx+sIT4YAIE
+         loxODoePXGY+x9+Ed3hZahjohhR+tG/lQJZfThIIq8epT1m9mQ3y+CkKGI0AsDEFW0c4
+         0SwtxjuW3qMqN6ocjm2kg4uh6E3zLm8HsXyROn3crzRnaCj+UUMj0OIRpveKdR+RGt/h
+         +BKm33IY9nT7LdRjhIQDkDzz5UJiaOMtHvxufe1KR38YsPdQYuQVppp78AayKePa6NDg
+         pMhKIeaTcCkPp2EHHPugQB3Nyiv85rAYtMHR0kgWOHkzDeDc/P3tqOWhq1EWn82y0KH3
+         z0CQ==
+X-Gm-Message-State: AJIora9A1SEv7bOmq9hyy0hKCmfaxssLG/8pAPQl1RbNDJSS9Fdd/VrY
+        dxMJd7df+8FqX2GBHr5daMf+/CQpvObwr2tF
+X-Google-Smtp-Source: AGRyM1vfHkvSll1Vf5naVbcFaiTWlBdlvn27d6kKY+yCpav3hSTxEtd3L6HpE0apL2mqZLBUxlockw==
+X-Received: by 2002:a05:6512:3192:b0:48a:50a0:e0f1 with SMTP id i18-20020a056512319200b0048a50a0e0f1mr6672900lfe.301.1658421650132;
+        Thu, 21 Jul 2022 09:40:50 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id p20-20020ac24ed4000000b00489c54859a5sm530202lfr.287.2022.07.21.09.40.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 09:40:49 -0700 (PDT)
+Message-ID: <1e0df4bd-0184-d373-b290-128714b2dc53@linaro.org>
+Date:   Thu, 21 Jul 2022 18:40:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH V6 04/16] rv/include: Add deterministic automata monitor
- definition via C macros
+Subject: Re: [PATCH v2 2/3] dt-bindings: clock: add SM6375 QCOM global clock
+ bindings
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Tao Zhou <tao.zhou@linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-References: <cover.1658244826.git.bristot@kernel.org>
- <9ffc05b67fff087413143a420373731e0e34eef4.1658244826.git.bristot@kernel.org>
- <20220720160606.3e672b55@gandalf.local.home>
- <3c0a4cb5-f88f-ec5f-e614-d1e8ceb036c2@kernel.org>
- <20220721095924.151c6f5d@gandalf.local.home>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220721095924.151c6f5d@gandalf.local.home>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220719115756.32231-1-konrad.dybcio@somainline.org>
+ <20220719115756.32231-2-konrad.dybcio@somainline.org>
+ <11cc46d8-ae01-f3d2-b9c6-c366c6e4afc9@linaro.org>
+ <887b005d-750d-39f2-73b7-851aa0e461f4@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <887b005d-750d-39f2-73b7-851aa0e461f4@somainline.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/21/22 15:59, Steven Rostedt wrote:
-> On Thu, 21 Jul 2022 14:08:38 +0200
-> Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
+On 20/07/2022 21:36, Konrad Dybcio wrote:
 > 
->> On 7/20/22 22:06, Steven Rostedt wrote:
->>>> +/*												\
->>>> + * da_monitor_enabled_##name - checks if the monitor is enabled					\
->>>> + */												\
->>>> +static inline bool da_monitor_enabled_##name(void)						\
->>>> +{												\  
->>> Should we add a:
+> 
+> On 20.07.2022 08:27, Krzysztof Kozlowski wrote:
+>> On 19/07/2022 13:57, Konrad Dybcio wrote:
+>>> Add device tree bindings for global clock controller for SM6375 SoCs.
 >>>
->>> 	smp_rmb();
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>> ---
+>>> Changes since v1:
+>>> - dropped clock-names (switched to .index)
 >>>
->>> here? And then a smp_wmb() where these switches get updated?
->>>  
+>>>  .../bindings/clock/qcom,sm6375-gcc.yaml       |  65 +++++
+>>>  include/dt-bindings/clock/qcom,sm6375-gcc.h   | 234 ++++++++++++++++++
+>>>  2 files changed, 299 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+>>>  create mode 100644 include/dt-bindings/clock/qcom,sm6375-gcc.h
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+>>> new file mode 100644
+>>> index 000000000000..2e43cd75d3d4
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+>>> @@ -0,0 +1,65 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/clock/qcom,sm6375-gcc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Qualcomm Global Clock & Reset Controller Binding for SM6375
+>>> +
+>>> +maintainers:
+>>> +  - Konrad Dybcio <konrad.dybcio@somainline.org>
+>>> +
+>>> +description: |
+>>> +  Qualcomm global clock control module which supports the clocks, resets and
+>>> +  power domains on SM6375
+>>> +
+>>> +  See also:
+>>> +  - dt-bindings/clock/qcom,sm6375-gcc.h
+>>> +
 >>
->> Makes sense.
->>
->> Should I also add the READ_ONCE/WRITE_ONCE? like
->>
->> smp_rmb()
->> READ_ONCE(var)
->>
->> WRITE_ONCE(var, value)
->> smp_wmb()
-> 
-> I'm not sure the WRITE_ONCE() is necessary with the memory barriers.
-> Because they should also prevent gcc from doing anything after that
-> barrier. As Linus once stated, most cases WRITE_ONCE() is useless, but it's
-> fine to keep more for annotation (as to pair with the READ_ONCE()) than for
-> anything that is critical.
+>> Why you are not referencing qcom,gcc.yaml?
+> Hm.. Out of all the SoCs we support, only apq8084 and apq/ipq8064 reference it..
+> Should I add that?
 
-Ack, I can keep for annotation.
+Yes. There was a patchset adding references everywhere, so new code for
+sure must have it.
 
->>
->> for all these on/off knobs, or just the barriers?
->>
->>> I guess how critical is it that these turn off immediately after the switch
->>> is flipped?  
->>
->> It is not critical to continue the execution of those that have already crossed by
->> the variable. Still, waiting for the tracepoints to finish their execution before
->> returning to the user-space task that disabled the variable might be a good thing.
-> 
-> You mean after disabling, to wait for the tracepoints that are currently
-> running to end?
 
-yes, after disabling tracepoints.
-
->>
->> IIRC, we can do that via RCU... like, synchronize_rcu()?
-> 
-> We have tracepoint_synchronize_unregister() that does that, as some
-> traceponits use SRCU and not RCU.
-
-yep, that is it!
- 
--- Daniel
-
-> -- Steve
-> 
-> 
->>
->>>> +	/* global switch */									\
->>>> +	if (unlikely(!rv_monitoring_on()))							\
->>>> +		return 0;									\
->>>> +												\
->>>> +	/* monitor enabled */									\
->>>> +	if (unlikely(!rv_##name.enabled))							\
->>>> +		return 0;									\
->>>> +												\
->>>> +	return 1;										\
->>>> +}												\
->>>> +												\  
-> 
-
+Best regards,
+Krzysztof

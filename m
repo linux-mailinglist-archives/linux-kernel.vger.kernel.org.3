@@ -2,158 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DEF57D66F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C251A57D676
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbiGUWCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S234020AbiGUWFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiGUWBz (ORCPT
+        with ESMTP id S233557AbiGUWFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:01:55 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4554951C6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:01:53 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q5so3033565plr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qAhQVrDK7MeMMYS/5qRomq3MD/hkNWCuehhNsXzbgQo=;
-        b=ZUo+pcqX+m03XBo3VIe2oP3PC5Yx9q6t+LNJ3nlkwp9cqqkDCGsDdFnpYDoIc48AYP
-         RqkkWjbXOmdrfftYpEd8+wnFzpskv5xukjy3rWWQvMDxqEuCnvySwhdHqbtma88iwLjK
-         3SpNhA0R8aOYCLwNirkO/K0i85tmOH00nJH7kQKc6U6hF9AyKDdlt6E+TQNrDKZSqA3T
-         pn8VC9dGIEUcmFuLRq/zQk0bjFViQjK+g5BAKG26MQ61J1OjA0I3ITrAArqXHcNcYWBS
-         UrRijBoHciAj9Rvs0YD8MZL+qGxFhu5rlOCT9X796TU392MsF8HmqNnL6jkoeEJGoJZ6
-         bbHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qAhQVrDK7MeMMYS/5qRomq3MD/hkNWCuehhNsXzbgQo=;
-        b=pzeeOw47thrtoaZkrBmbveyu2X2UxqVud4R7UU2M/JFMBcrtrNQo1zKV/8LCq3qyFk
-         VNZsoPD+Vt080xjl+vquA+Z3J6OClIOAFKUJmZW+rBODj+LvtOWxolwjQvhwbgxeauIl
-         PDIGMtqSbCmTSHGGFUyKupgx3iUw6fEu8Fcy0nD5i/taObCRgs1NLPkSdr4luzaLEYzc
-         5U1uKJrRQQNmlfI2ejhtDBR7R/m0oNHQo0T3NkQ1d3bT0TtkxiI8sytk7bIjkW39SSgJ
-         o7SMhhRBxm3fyj3ryerzMXwBbkJiAjZSZmF4KWxN4cGSxmU+hnukSi3pmlYCrIz2Pt/+
-         +QFQ==
-X-Gm-Message-State: AJIora+tJguLIlDihNfwKnWWXyvqjpg/uoiJGBM1DxAfjV3c+jSV1ATq
-        ERv4A23w1b2ggIXBuXDEDrH+ww==
-X-Google-Smtp-Source: AGRyM1slz+g1gHw3leOJLSaj8QCnE6xdOjrsgDKLP6wzNYPrBWcAXvMsb77K+qY8XFirPvNkvHSmmw==
-X-Received: by 2002:a17:902:708a:b0:16d:b34:ed6 with SMTP id z10-20020a170902708a00b0016d0b340ed6mr530303plk.162.1658440913077;
-        Thu, 21 Jul 2022 15:01:53 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id z2-20020a1709027e8200b0016b8b35d725sm2212061pla.95.2022.07.21.15.01.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 15:01:52 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 22:01:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 13/25] KVM: VMX: Check
- CPU_BASED_{INTR,NMI}_WINDOW_EXITING in setup_vmcs_config()
-Message-ID: <YtnMzYztYVtRVV1B@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-14-vkuznets@redhat.com>
+        Thu, 21 Jul 2022 18:05:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE8C1276C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:05:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42E53B826AE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 22:05:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D8B2C3411E;
+        Thu, 21 Jul 2022 22:05:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658441111;
+        bh=LvcuNeaTxV66PvKnmvNrKgBUF+QpgGrAAwxXDjh8JUs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M3DUY5QpK02B5dyP6VKhqCfc4Wprfy7PsekVgbT+uZHlTLs7zs2uMX6j8SYxYODmf
+         fd6/BKLrQdUINwXFcRl5s4Zc5awICjOyBDCn8xtSE83tx8ms0DAoiZDDrdU0k2+ntX
+         wcCHAnGpX38gTRGrucevYNxUma2oOdca5cxEY986qgQoGxHVHupu+eckJr1PAHFDGT
+         6a+TU9pgq6r/ynPe4h6HRluk5hQZf5BODrkCMnmXeRdvFXq6QTk9HLti5o5sFV9ANb
+         GECQuhBZSwiVzeYGml/KmNhatDX1s8UZEfsdwZlWNrOo24NAaY4tUOVYNl8vhgKmyk
+         FkP9JmivuHAWQ==
+Date:   Thu, 21 Jul 2022 15:05:09 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     ndesaulniers@google.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, trix@redhat.com
+Subject: Re: [PATCH v2] drivers: lkdtm: fix clang -Wformat warning
+Message-ID: <YtnNlZYZCEVUiuaE@dev-arch.thelio-3990X>
+References: <CAKwvOd=wn=tbX7ixs9a=4zoVSbAU1qP-6NE04hGG9dzvo0zFJw@mail.gmail.com>
+ <20220721215706.4153027-1-justinstitt@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220714091327.1085353-14-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220721215706.4153027-1-justinstitt@google.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> CPU_BASED_{INTR,NMI}_WINDOW_EXITING controls are toggled dynamically by
-> vmx_enable_{irq,nmi}_window, handle_interrupt_window(), handle_nmi_window()
-> but setup_vmcs_config() doesn't check their existence. Add the check and
-> filter the controls out in vmx_exec_control().
+On Thu, Jul 21, 2022 at 02:57:06PM -0700, Justin Stitt wrote:
+> When building with Clang we encounter the following warning
+> (ARCH=hexagon + CONFIG_FRAME_WARN=0):
+> | ../drivers/misc/lkdtm/bugs.c:107:3: error: format specifies type
+> | 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+> |                 REC_STACK_SIZE, recur_count);
+> |                 ^~~~~~~~~~~~~~
 > 
-> Note: KVM explicitly supports CPUs without VIRTUAL_NMIS and all these CPUs
-> are supposedly lacking NMI_WINDOW_EXITING too. Adjust cpu_has_virtual_nmis()
-> accordingly.
+> Cast REC_STACK_SIZE to `unsigned long` to match format specifier `%lu`
+> as well as maintain symmetry with `#define REC_STACK_SIZE
+> (_AC(CONFIG_FRAME_WARN, UL) / 2)`.
 > 
-> No functional change intended.
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+
+Personally, I would drop this; my suggestion was the cast, which we are
+not going with anymore. Not worth a v3 unless there are other changes
+requested.
+
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
-
-Nit aside,
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-
->  arch/x86/kvm/vmx/capabilities.h | 3 ++-
->  arch/x86/kvm/vmx/vmx.c          | 8 +++++++-
->  2 files changed, 9 insertions(+), 2 deletions(-)
+> Reported by Nathan here:
+> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
 > 
-> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-> index 069d8d298e1d..07e7492fe72a 100644
-> --- a/arch/x86/kvm/vmx/capabilities.h
-> +++ b/arch/x86/kvm/vmx/capabilities.h
-> @@ -82,7 +82,8 @@ static inline bool cpu_has_vmx_basic_inout(void)
->  
->  static inline bool cpu_has_virtual_nmis(void)
->  {
-> -	return vmcs_config.pin_based_exec_ctrl & PIN_BASED_VIRTUAL_NMIS;
-> +	return vmcs_config.pin_based_exec_ctrl & PIN_BASED_VIRTUAL_NMIS &&
-> +		vmcs_config.cpu_based_exec_ctrl & CPU_BASED_NMI_WINDOW_EXITING;
-
-I prefer to align these, though Paolo always scoffs at me :-)
-
-
-static inline bool cpu_has_virtual_nmis(void)
-{
-	return vmcs_config.pin_based_exec_ctrl & PIN_BASED_VIRTUAL_NMIS &&
-	       vmcs_config.cpu_based_exec_ctrl & CPU_BASED_NMI_WINDOW_EXITING;
-}
-
->  }
->  
->  static inline bool cpu_has_vmx_preemption_timer(void)
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 1aaec4d19e1b..ce54f13d8da1 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2487,10 +2487,12 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->  	      CPU_BASED_MWAIT_EXITING |
->  	      CPU_BASED_MONITOR_EXITING |
->  	      CPU_BASED_INVLPG_EXITING |
-> -	      CPU_BASED_RDPMC_EXITING;
-> +	      CPU_BASED_RDPMC_EXITING |
-> +	      CPU_BASED_INTR_WINDOW_EXITING;
->  
->  	opt = CPU_BASED_TPR_SHADOW |
->  	      CPU_BASED_USE_MSR_BITMAPS |
-> +	      CPU_BASED_NMI_WINDOW_EXITING |
->  	      CPU_BASED_ACTIVATE_SECONDARY_CONTROLS |
->  	      CPU_BASED_ACTIVATE_TERTIARY_CONTROLS;
->  	if (adjust_vmx_controls(min, opt, MSR_IA32_VMX_PROCBASED_CTLS,
-> @@ -4299,6 +4301,10 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
->  {
->  	u32 exec_control = vmcs_config.cpu_based_exec_ctrl;
->  
-> +	/* INTR_WINDOW_EXITING and NMI_WINDOW_EXITING are toggled dynamically */
-> +	exec_control &= ~(CPU_BASED_INTR_WINDOW_EXITING |
-> +			  CPU_BASED_NMI_WINDOW_EXITING);
-> +
->  	if (vmx->vcpu.arch.switch_db_regs & KVM_DEBUGREG_WONT_EXIT)
->  		exec_control &= ~CPU_BASED_MOV_DR_EXITING;
+> changes from v1 -> v2:
+> * Use implicit division conversion with `/ nUL` instead of verbose
+> `(unsigned long)` ~ Thanks Nick
+> 
+>  drivers/misc/lkdtm/bugs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+> index 009239ad1d8a..48821f4c2b21 100644
+> --- a/drivers/misc/lkdtm/bugs.c
+> +++ b/drivers/misc/lkdtm/bugs.c
+> @@ -29,7 +29,7 @@ struct lkdtm_list {
+>  #if defined(CONFIG_FRAME_WARN) && (CONFIG_FRAME_WARN > 0)
+>  #define REC_STACK_SIZE (_AC(CONFIG_FRAME_WARN, UL) / 2)
+>  #else
+> -#define REC_STACK_SIZE (THREAD_SIZE / 8)
+> +#define REC_STACK_SIZE (THREAD_SIZE / 8UL)
+>  #endif
+>  #define REC_NUM_DEFAULT ((THREAD_SIZE / REC_STACK_SIZE) * 2)
 >  
 > -- 
-> 2.35.3
+> 2.37.1.359.gd136c6c3e2-goog
+> 
 > 

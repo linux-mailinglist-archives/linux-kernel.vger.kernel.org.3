@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F400557C9E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4708757C9EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbiGULst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S233235AbiGULt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiGULsr (ORCPT
+        with ESMTP id S230230AbiGULtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:48:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CCA8213C;
-        Thu, 21 Jul 2022 04:48:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 893E061C61;
-        Thu, 21 Jul 2022 11:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB39C3411E;
-        Thu, 21 Jul 2022 11:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658404125;
-        bh=JTMyejOti6w6vxB7oO98F/1xGgPNOKOcBtobYLK8O24=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Yk6KK4DzU4Ng4AwnWv96vLV7llVZFQ5agAqVWOkqUcqVEs/XFmNm6TtTE/tpnevvf
-         Lu2Yo8MXoC8t9qaMIhXGFS42trekjXqzX+mFiNtlBRKuuaQ71mcD1DbpmBfRlNflZS
-         ZaCZf/7j8LECtUdtD+SMaILQuLKiiYR/+yWkp/BvMxFICZnrp7FIHI8vLDgcaUY8be
-         x7ZvuPJUvT1FVWsmAPLpss956S/AuRscKplHTZr49Dnra+UgyABm6akAL1SXxuThYU
-         6urpdV44FhLe4ZK+W1YzS710Y0nHAhP2VnkVYHPSvWAD4VDkoeH4ZvK1urPZkhCxA0
-         ASTVHYIAGGaog==
-Date:   Thu, 21 Jul 2022 13:48:41 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-cc:     Guenter Roeck <linux@roeck-us.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nergi Rahardi <nergi@google.com>,
-        "Daniel J . Ogorchock" <djogorchock@gmail.com>
-Subject: Re: [PATCH] HID: nintendo: Add missing array termination
-In-Reply-To: <Ys33FIuNEsyZw8EF@google.com>
-Message-ID: <nycvar.YFH.7.76.2207211348340.19850@cbobk.fhfr.pm>
-References: <20220712221705.1847793-1-linux@roeck-us.net> <Ys33FIuNEsyZw8EF@google.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 21 Jul 2022 07:49:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA7E823A6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:49:24 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oEUfx-0002Sl-Ls; Thu, 21 Jul 2022 13:49:05 +0200
+Message-ID: <6cf47684e92d21a343dbb7861f5d4e5ad1949cdc.camel@pengutronix.de>
+Subject: Re: [PATCH v5 3/3] soc: imx: gpcv2: fix suspend/resume by setting
+ GENPD_FLAG_IRQ_ON
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>, rafael@kernel.org,
+        khilman@kernel.org, ulf.hansson@linaro.org, robh@kernel.org,
+        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz
+Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
+        aford173@gmail.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Thu, 21 Jul 2022 13:49:03 +0200
+In-Reply-To: <20220721043608.1527686-4-martin.kepplinger@puri.sm>
+References: <20220721043608.1527686-1-martin.kepplinger@puri.sm>
+         <20220721043608.1527686-4-martin.kepplinger@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Jul 2022, Dmitry Torokhov wrote:
-
-> On Tue, Jul 12, 2022 at 03:17:05PM -0700, Guenter Roeck wrote:
-> > joycon_dpad_inputs_jc[] is unterminated. This may result in odd warnings
-> > such as
-> > 
-> > input: input_set_capability: invalid code 3077588140 for type 1
-> > 
-> > or in kernel crashes in nintendo_hid_probe(). Terminate the array to fix
-> > the problem.
-> > 
-> > Fixes: 2af16c1f846bd ("HID: nintendo: add nintendo switch controller driver")
-> > Cc: Daniel J. Ogorchock <djogorchock@gmail.com>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Am Donnerstag, dem 21.07.2022 um 06:36 +0200 schrieb Martin Kepplinger:
+> For boards that use power-domains' power-supplies that need interrupts
+> to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
+> This will tell genpd to adjust accordingly. Currently it "only" sets the
+> correct suspend/resume callbacks.
 > 
-> Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> This fixes suspend/resume on imx8mq-librem5 boards (tested) and
+> imx8mq-evk (by looking at dts) and possibly more.
 > 
-> I'd recommend tagging stable on this one.
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>  drivers/soc/imx/gpcv2.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+> index 6383a4edc360..e058aed76602 100644
+> --- a/drivers/soc/imx/gpcv2.c
+> +++ b/drivers/soc/imx/gpcv2.c
+> @@ -1337,6 +1337,9 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+>  		regmap_update_bits(domain->regmap, domain->regs->map,
+>  				   domain->bits.map, domain->bits.map);
+>  
+> +	if (of_parse_phandle(domain->dev->of_node, "power-supply", 0))
 
-I did so and applied, thanks.
+We don't actually need to parse the phandle. For a simple presence
+check of_property_read_bool() is enough.
 
--- 
-Jiri Kosina
-SUSE Labs
+Regards,
+Lucas
+
+> +		domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
+> +
+>  	ret = pm_genpd_init(&domain->genpd, NULL, true);
+>  	if (ret) {
+>  		dev_err(domain->dev, "Failed to init power domain\n");
+
 

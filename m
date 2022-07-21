@@ -2,117 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7BB57D5DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46DD57D5DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiGUVWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S233872AbiGUVYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiGUVWh (ORCPT
+        with ESMTP id S230022AbiGUVYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:22:37 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F6D9284B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:22:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6F6DACE25B3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 21:22:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD762C3411E;
-        Thu, 21 Jul 2022 21:22:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658438552;
-        bh=2csh2IPzZB9Q9+L8yOL8SYU7r0lrEKvI5elBmtDV4/c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b6dgBxwPawsXvrs8FUNrO+XL/BjA70/JzCpatMpkSzj7k4H1NCNOiotZyhdFxGAVC
-         PP0TouGwpOyksZ+JkyaViKZi3wwSpRxAUa4jll8RuuLciixdPnP+QJ8lxUivlSpKsB
-         IZaLl9ccELLbadWEDYu2IUFTzanj8FANZM1pKkqE8MnVhWfswSrv0nZn71HKHlkutm
-         rTvsprQlzBRrdkkI6jlkYjSpIZgIRtAsx7h78aYQqKCBAMIfBoZolXCk9gp8uaOVoL
-         jXUd9dVTvLgfSfSAipukCS4ycfOPt6bw0Whg/TNDhpzYHimHr2ZCe/fZQOmVqeudAP
-         26pIQWRO6TIwQ==
-Date:   Thu, 21 Jul 2022 14:22:30 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Tom Rix <trix@redhat.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] soc: sof: fix clang -Wformat warnings
-Message-ID: <YtnDltqEVeJQQkbW@dev-arch.thelio-3990X>
-References: <20220721211218.4039288-1-justinstitt@google.com>
+        Thu, 21 Jul 2022 17:24:37 -0400
+Received: from luna (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net [86.15.83.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE95B92856
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:24:35 -0700 (PDT)
+Received: from ben by luna with local (Exim 4.96)
+        (envelope-from <ben@luna.fluff.org>)
+        id 1oEdep-001ttl-2D;
+        Thu, 21 Jul 2022 22:24:31 +0100
+From:   Ben Dooks <ben-linux@fluff.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        Ben Dooks <ben-linux@fluff.org>
+Subject: [PATCH] serial: stm32: make info structs static to avoid sparse warnings
+Date:   Thu, 21 Jul 2022 22:24:30 +0100
+Message-Id: <20220721212430.453192-1-ben-linux@fluff.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721211218.4039288-1-justinstitt@google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
+        HELO_NO_DOMAIN,KHOP_HELO_FCRDNS,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 02:12:18PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter these warnings:
-> | sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type
-> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-> |                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
-> |                  ^~~~~~~~~~~~~~~^~~~~~~~~~~~~~~^~~~~~~~~~~~~
-> 
-> Use correct format specifier `%d` since args are of type int.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+The info structs are local only to the stm32-usart.c driver and are
+triggering sparse warnings about being undecalred. Move these into
+the main driver code and make them static to avoid the following
+warnings:
 
-Indeed, decimal integer literals with no suffix are of type 'int' when
-they can fit in an 'int'. In this case, there shouldn't be a bug since
-the values of these macros can fit in an 'unsigned char' (so no
-truncation) but it is still correct to use '%d' instead of '%hhu', which
-matches the stance of commit cbacb5ab0aa0 ("docs: printk-formats: Stop
-encouraging use of unnecessary %h[xudi] and %hh[xudi]").
+drivers/tty/serial/stm32-usart.h:42:25: warning: symbol 'stm32f4_info' was not declared. Should it be static?
+drivers/tty/serial/stm32-usart.h:63:25: warning: symbol 'stm32f7_info' was not declared. Should it be static?
+drivers/tty/serial/stm32-usart.h:85:25: warning: symbol 'stm32h7_info' was not declared. Should it be static?
 
-This was introduced by commit 323aa1f093e6 ("ASoC: SOF: Add a new IPC op
-for parsing topology manifest"), not sure it warrants a fixes tag for
-the reason I outlined above, but it might be helpful for other
-reviewers.
+Signed-off-by: Ben Dooks <ben-linux@fluff.org>
+---
+ drivers/tty/serial/stm32-usart.c | 69 ++++++++++++++++++++++++++++++++
+ drivers/tty/serial/stm32-usart.h | 68 -------------------------------
+ 2 files changed, 69 insertions(+), 68 deletions(-)
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 0973b03eeeaa..01f1ab2c18c0 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -35,6 +35,75 @@
+ #include "serial_mctrl_gpio.h"
+ #include "stm32-usart.h"
+ 
++
++/* Register offsets */
++static struct stm32_usart_info stm32f4_info = {
++	.ofs = {
++		.isr	= 0x00,
++		.rdr	= 0x04,
++		.tdr	= 0x04,
++		.brr	= 0x08,
++		.cr1	= 0x0c,
++		.cr2	= 0x10,
++		.cr3	= 0x14,
++		.gtpr	= 0x18,
++		.rtor	= UNDEF_REG,
++		.rqr	= UNDEF_REG,
++		.icr	= UNDEF_REG,
++	},
++	.cfg = {
++		.uart_enable_bit = 13,
++		.has_7bits_data = false,
++		.fifosize = 1,
++	}
++};
++
++static struct stm32_usart_info stm32f7_info = {
++	.ofs = {
++		.cr1	= 0x00,
++		.cr2	= 0x04,
++		.cr3	= 0x08,
++		.brr	= 0x0c,
++		.gtpr	= 0x10,
++		.rtor	= 0x14,
++		.rqr	= 0x18,
++		.isr	= 0x1c,
++		.icr	= 0x20,
++		.rdr	= 0x24,
++		.tdr	= 0x28,
++	},
++	.cfg = {
++		.uart_enable_bit = 0,
++		.has_7bits_data = true,
++		.has_swap = true,
++		.fifosize = 1,
++	}
++};
++
++static struct stm32_usart_info stm32h7_info = {
++	.ofs = {
++		.cr1	= 0x00,
++		.cr2	= 0x04,
++		.cr3	= 0x08,
++		.brr	= 0x0c,
++		.gtpr	= 0x10,
++		.rtor	= 0x14,
++		.rqr	= 0x18,
++		.isr	= 0x1c,
++		.icr	= 0x20,
++		.rdr	= 0x24,
++		.tdr	= 0x28,
++	},
++	.cfg = {
++		.uart_enable_bit = 0,
++		.has_7bits_data = true,
++		.has_swap = true,
++		.has_wakeup = true,
++		.has_fifo = true,
++		.fifosize = 16,
++	}
++};
++
+ static void stm32_usart_stop_tx(struct uart_port *port);
+ static void stm32_usart_transmit_chars(struct uart_port *port);
+ static void __maybe_unused stm32_usart_console_putchar(struct uart_port *port, unsigned char ch);
+diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
+index ee69c203b926..0ec41a732c88 100644
+--- a/drivers/tty/serial/stm32-usart.h
++++ b/drivers/tty/serial/stm32-usart.h
+@@ -38,74 +38,6 @@ struct stm32_usart_info {
+ 
+ #define UNDEF_REG 0xff
+ 
+-/* Register offsets */
+-struct stm32_usart_info stm32f4_info = {
+-	.ofs = {
+-		.isr	= 0x00,
+-		.rdr	= 0x04,
+-		.tdr	= 0x04,
+-		.brr	= 0x08,
+-		.cr1	= 0x0c,
+-		.cr2	= 0x10,
+-		.cr3	= 0x14,
+-		.gtpr	= 0x18,
+-		.rtor	= UNDEF_REG,
+-		.rqr	= UNDEF_REG,
+-		.icr	= UNDEF_REG,
+-	},
+-	.cfg = {
+-		.uart_enable_bit = 13,
+-		.has_7bits_data = false,
+-		.fifosize = 1,
+-	}
+-};
+-
+-struct stm32_usart_info stm32f7_info = {
+-	.ofs = {
+-		.cr1	= 0x00,
+-		.cr2	= 0x04,
+-		.cr3	= 0x08,
+-		.brr	= 0x0c,
+-		.gtpr	= 0x10,
+-		.rtor	= 0x14,
+-		.rqr	= 0x18,
+-		.isr	= 0x1c,
+-		.icr	= 0x20,
+-		.rdr	= 0x24,
+-		.tdr	= 0x28,
+-	},
+-	.cfg = {
+-		.uart_enable_bit = 0,
+-		.has_7bits_data = true,
+-		.has_swap = true,
+-		.fifosize = 1,
+-	}
+-};
+-
+-struct stm32_usart_info stm32h7_info = {
+-	.ofs = {
+-		.cr1	= 0x00,
+-		.cr2	= 0x04,
+-		.cr3	= 0x08,
+-		.brr	= 0x0c,
+-		.gtpr	= 0x10,
+-		.rtor	= 0x14,
+-		.rqr	= 0x18,
+-		.isr	= 0x1c,
+-		.icr	= 0x20,
+-		.rdr	= 0x24,
+-		.tdr	= 0x28,
+-	},
+-	.cfg = {
+-		.uart_enable_bit = 0,
+-		.has_7bits_data = true,
+-		.has_swap = true,
+-		.has_wakeup = true,
+-		.has_fifo = true,
+-		.fifosize = 16,
+-	}
+-};
+-
+ /* USART_SR (F4) / USART_ISR (F7) */
+ #define USART_SR_PE		BIT(0)
+ #define USART_SR_FE		BIT(1)
+-- 
+2.35.1
 
-> ---
-> Reported by Nathan here:
-> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
-> 
->  sound/soc/sof/ipc3-topology.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/ipc3-topology.c b/sound/soc/sof/ipc3-topology.c
-> index b2cc046b9f60..65923e7a5976 100644
-> --- a/sound/soc/sof/ipc3-topology.c
-> +++ b/sound/soc/sof/ipc3-topology.c
-> @@ -2338,7 +2338,7 @@ static int sof_ipc3_parse_manifest(struct snd_soc_component *scomp, int index,
->  	}
->  
->  	dev_info(scomp->dev,
-> -		 "Topology: ABI %d:%d:%d Kernel ABI %hhu:%hhu:%hhu\n",
-> +		 "Topology: ABI %d:%d:%d Kernel ABI %d:%d:%d\n",
->  		 man->priv.data[0], man->priv.data[1], man->priv.data[2],
->  		 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
->  
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
-> 

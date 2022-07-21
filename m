@@ -2,190 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAFF57CE4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399E157CE4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbiGUOzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S232362AbiGUOzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiGUOzP (ORCPT
+        with ESMTP id S229797AbiGUOzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:55:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5E05F5E;
-        Thu, 21 Jul 2022 07:55:10 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 21 Jul 2022 10:55:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051A913E3B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:55:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C86916601AAA;
-        Thu, 21 Jul 2022 15:55:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658415309;
-        bh=EyTW2qzfSr+AZwVRWnf0cfBClBBVk9mIXqcmwKrTY2s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aSEK3wBJW5ZfYWmPNlbU0sePZNNXqwE5AWAY0mJjsvUxtxBli+P/UKHnuJANoPXq7
-         i6YchppxsUCeAkZabMD3HcUnpaKhjWb8sHCBVZys24FUwLxG+uctouTt7zv/etPMVS
-         nolBLYYTQL+7sIBdXza+ndbUjXIo3MfypvJenbXhmDIFaxKNIH+DUA/zTkJ0sU2q+E
-         gG6FhfvlzqcTG3tjE9UfPG4RjFNhti5Z9yx/7arp0+aq0e2WejNFtNxiMZHhMF6i31
-         l11Wi9NEOqihzUURMuI23vmri2Ffz90BVG7OgT75M5Hf/vi33Nr+hpCpwVi1lFUhCy
-         AyJ2RTNWhDHFg==
-Message-ID: <1eed6877-8868-6b29-b7c9-90986d230f36@collabora.com>
-Date:   Thu, 21 Jul 2022 16:55:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 4/6] Input: mt6779-keypad - support double keys matrix
-Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
- <20220720-mt8183-keypad-v1-4-ef9fc29dbff4@baylibre.com>
- <b2676b5c-14b3-2058-9fb8-d6d78cc5d29c@collabora.com>
- <87ilnqh632.fsf@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <87ilnqh632.fsf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5252B82472
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F07CDC3411E;
+        Thu, 21 Jul 2022 14:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658415344;
+        bh=PzmXzO0OGI8+AukQJZUMy/PSmU3hi9+I1oGnrrJOq5c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tJuFU0CPMVa9GI4+tbmHMFcn1ZCvjrj45fYFY8+cS5dDT1Vqa8FBT2Qmj5/qogfAx
+         wV74R3bSi+jqkP1d4q5a15us1/55k6gLuEySxyacgKwPzb4dkJNh1nc2M9NhQsmMAe
+         xYFdkM/bSimMkO2Tep+lLnxKJhy8n9T1gbpn1qsFAQajLln1pL65WOYHjL2dQbbS3j
+         f16bGKVQQUtr+ghG+ZS/59xV7hmQ6W5KlDb1VgwarjiCDVncqX6BHtu02wYIsBzgld
+         Q/TQqnjfBguSUpWu/0BisWL6mcLticzyz6F3UrvEeDOvRO9vKbVcJTThte+5jsjJA2
+         lRAuJo6lXeXrg==
+Date:   Thu, 21 Jul 2022 23:55:40 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] selftests/kprobe: Update test for no event name syntax
+ error
+Message-Id: <20220721235540.a9e068f9dbb442aa44c117c9@kernel.org>
+In-Reply-To: <1c530e9b-3184-0113-d8ef-47548d7ab173@quicinc.com>
+References: <20220718144007.78c5b50f9b123fb80a920054@kernel.org>
+        <165812790993.1377963.9762767354560397298.stgit@devnote2>
+        <1c530e9b-3184-0113-d8ef-47548d7ab173@quicinc.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/07/22 16:51, Mattijs Korpershoek ha scritto:
-> On Thu, Jul 21, 2022 at 10:34, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
+On Mon, 18 Jul 2022 17:36:43 +0800
+Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
+
+> hi Masami,
 > 
->> Il 20/07/22 16:48, Mattijs Korpershoek ha scritto:
->>> MediaTek keypad has 2 modes of detecting key events:
->>> - single key: each (row, column) can detect one key
->>> - double key: each (row, column) is a group of 2 keys
->>>
->>> Double key support exists to minimize cost, since it reduces the number
->>> of pins required for physical keys.
->>>
->>> Double key is configured by setting BIT(0) of the KP_SEL register.
->>>
->>> Enable double key matrix support based on the mediatek,double-keys
->>> device tree property.
->>>
->>> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
->>> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
->>>
->>> diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
->>> index bf447bf598fb..9a5dbd415dac 100644
->>> --- a/drivers/input/keyboard/mt6779-keypad.c
->>> +++ b/drivers/input/keyboard/mt6779-keypad.c
->>> @@ -18,6 +18,7 @@
->>>    #define MTK_KPD_DEBOUNCE_MASK	GENMASK(13, 0)
->>>    #define MTK_KPD_DEBOUNCE_MAX_MS	256
->>>    #define MTK_KPD_SEL		0x0020
->>> +#define MTK_KPD_SEL_DOUBLE_KP_MODE	BIT(0)
->>>    #define MTK_KPD_SEL_COL	GENMASK(15, 10)
->>>    #define MTK_KPD_SEL_ROW	GENMASK(9, 4)
->>>    #define MTK_KPD_SEL_COLMASK(c)	GENMASK((c) + 9, 10)
->>> @@ -31,6 +32,7 @@ struct mt6779_keypad {
->>>    	struct clk *clk;
->>>    	u32 n_rows;
->>>    	u32 n_cols;
->>> +	bool double_keys;
->>>    	DECLARE_BITMAP(keymap_state, MTK_KPD_NUM_BITS);
->>>    };
->>>    
->>> @@ -67,8 +69,13 @@ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
->>>    			continue;
->>>    
->>>    		key = bit_nr / 32 * 16 + bit_nr % 32;
->>> -		row = key / 9;
->>> -		col = key % 9;
->>> +		if (keypad->double_keys) {
->>> +			row = key / 13;
->>> +			col = (key % 13) / 2;
->>> +		} else {
->>> +			row = key / 9;
->>> +			col = key % 9;
->>> +		}
->>
->> I don't fully like this if branch permanently evaluating true or false, as no
->> runtime can actually change this result...
->>
->> In practice, it's fine, but I was wondering if anyone would disagree with the
->> following proposal...
->>
->> struct mt6779_keypad {
->> 	.......
->> 	void (*calc_row_col)(unsigned int *row, unsigned int *col);
->> };
->>
->> In mt6779_keypad_irq_handler:
->>
->> 	key = bit_nr / 32 * 16 + bit_nr % 32;
->> 	keypad->calc_row_col(&row, &col);
->>
->> and below...
->>
->>>    
->>>    		scancode = MATRIX_SCAN_CODE(row, col, row_shift);
->>>    		/* 1: not pressed, 0: pressed */
->>> @@ -150,6 +157,8 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
->>>    
->>>    	wakeup = device_property_read_bool(&pdev->dev, "wakeup-source");
->>>    
->>> +	keypad->double_keys = device_property_read_bool(&pdev->dev, "mediatek,double-keys");
->>> +
->>>    	dev_dbg(&pdev->dev, "n_row=%d n_col=%d debounce=%d\n",
->>>    		keypad->n_rows, keypad->n_cols, debounce);
->>>    
->>> @@ -166,6 +175,10 @@ static int mt6779_keypad_pdrv_probe(struct platform_device *pdev)
->>>    	regmap_write(keypad->regmap, MTK_KPD_DEBOUNCE,
->>>    		     (debounce * (1 << 5)) & MTK_KPD_DEBOUNCE_MASK);
->>>    
->>> +	if (keypad->double_keys)
->>
->> 		keypad->calc_row_col = mt6779_keypad_calc_row_col_double_kp;
->>
->>> +		regmap_update_bits(keypad->regmap, MTK_KPD_SEL,
->>> +				   MTK_KPD_SEL_DOUBLE_KP_MODE, MTK_KPD_SEL_DOUBLE_KP_MODE);
->>> +
->>
->> 	} else {
->> 		keypad->calc_row_col = mt6779_keypad_calc_row_col_single_kp;
->> 	}
->>
->>>    	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_ROW,
->>>    			   MTK_KPD_SEL_ROWMASK(keypad->n_rows));
->>>    	regmap_update_bits(keypad->regmap, MTK_KPD_SEL, MTK_KPD_SEL_COL,
->>
->> what do you think?
+> On 7/18/2022 3:05 PM, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> >
+> > The commit 208003254c32 ("selftests/kprobe: Do not test for GRP/
+> > without event failures") removed a syntax which is no more cause
+> > a syntax error (NO_EVENT_NAME error with GRP/).
+> > However, there are another case (NO_EVENT_NAME error without GRP/)
+> > which causes a same error. This adds a test for that case.
+> >
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >   .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |    1 +
+> >   1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+> > index 7c02509c71d0..9e85d3019ff0 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
+> > @@ -21,6 +21,7 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
+> >   check_error 'p:^12345678901234567890123456789012345678901234567890123456789012345/bar vfs_read'	# GROUP_TOO_LONG
+> >   
+> >   check_error 'p:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
+> > +check_error 'p:^ vfs_read'		# NO_EVENT_NAME
 > 
-> Hi Angelo,
+> i think you fix the issue which exist from start, right ?
+
+Yes, this is not a new bug but the error case which still
+exists.
+
 > 
-> Thank you for your detailed suggestion. I like it and since I have to
-> resend a v2 anyways, I will consider implementing it.
-> On the other hand, I'm a little reluctant because it means that I'll
-> have to remove Matthias's reviewed-by :(
+> is there better comment than NO_EVENT_NAME  ?
+
+These comments are corresponding to the error name, so that we can
+find the logging code easily. (Not for users)
+
+Thank you,
+
 > 
-
-Yes, you will have to. In that case:
-
-Matthias, any considerations about this idea? :)))
-
->>
->> Cheers,
->> Angelo
+> >   check_error 'p:foo/^12345678901234567890123456789012345678901234567890123456789012345 vfs_read'	# EVENT_TOO_LONG
+> >   check_error 'p:foo/^bar.1 vfs_read'	# BAD_EVENT_NAME
+> >   
+> >
 
 
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

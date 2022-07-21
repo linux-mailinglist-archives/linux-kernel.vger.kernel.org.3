@@ -2,174 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE75757D4D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD5757D4ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbiGUUfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 16:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S232583AbiGUUl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 16:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiGUUfd (ORCPT
+        with ESMTP id S229498AbiGUUlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 16:35:33 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEE32CDD7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 13:35:30 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 21:35:26 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658435729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xf2R3DLEoWV9wiDF/EeEI67ekf5B8ETj3Ae3cglXYTQ=;
-        b=LCKVjwVeX3h/LJlm5Q+ZVxAzI8OGSt1gtNMfTIM4zhBrh5K1BJZzOdYuc11fL+2sF8I9gW
-        ugooAwV9bAtpkfjd76uA/0VU+Koxl64lmoPFPLAGjMAUCJI5gkk7aYlq12L+8GFShHbZOX
-        KUWvcVNrv3UBsznTETFsyIURS6u06QQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
-        madvenka@linux.microsoft.com, tabba@google.com, will@kernel.org,
-        qperret@google.com, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com,
-        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
-        mhiramat@kernel.org, ast@kernel.org, drjones@redhat.com,
-        wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com,
-        yuzenghui@huawei.com, ardb@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, android-mm@google.com,
-        kernel-team@android.com
-Subject: Re: [PATCH v5 17/17] KVM: arm64: Introduce hyp_dump_backtrace()
-Message-ID: <Ytm4ji93wyjRI7Jw@google.com>
-References: <20220721055728.718573-1-kaleshsingh@google.com>
- <20220721055728.718573-18-kaleshsingh@google.com>
+        Thu, 21 Jul 2022 16:41:24 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1781C8F50B;
+        Thu, 21 Jul 2022 13:41:23 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 6so4778280ybc.8;
+        Thu, 21 Jul 2022 13:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NN9gIWbssHpQMwgTaofM6Dhn1ydMG7fE42r2fJou3QU=;
+        b=EAs5lIdZwfgvMiiFrXAjbIxg4I2+0eHCF172BcCmhd+2wIfUIdxpOx5C+XXGKs/zHH
+         SiB+t541qdsMkXlT9JsL9L8ljsZpDqMqnQ/Pk5A6BJBrpUNbDVCu9fRXO+upQ1zzSejp
+         smii47hkVd5pf6kpQkjiXRKF0X8UHXHSp+cyH5gNP19ZtP1ovJJEiSIhPEXRIlTIrir7
+         S5Z2pHNk7fTYYfkAa4Nu7yZ6rBF2V37UHi60rNcti/KgXL1yMLrLY3ed62PRgR8b1e9M
+         WQXpWqt/819bYUEj724B+DjoYBqYVuNcf/Ebl2/owpJX1aVZ1A7EGH+wPNf1pADNSZvH
+         SsxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NN9gIWbssHpQMwgTaofM6Dhn1ydMG7fE42r2fJou3QU=;
+        b=lv3cQ8JjwoZw0B2wuvvZWUDxPNtX5bRT/hvuxhSlvjJWjoBz9aH+NqEp41oEFy6fuK
+         mmlIk0U1fWd4NSp6g6+t1FNWi5jDlxw0W9nbD7ot0b+wSX18/ID02CS/LUlQHmh/gXrY
+         49hVpNuR9w7Y65tp+qGzl1064ABIeshSKoJMAxCHDhGonT9EmHXskAm+O0EqPBWCDc2n
+         6cCEIVHXNeE6BPx//JpDrBQTsqd9+GtCsE3nMNJuKdgxiYeicTUiFvYXwPwIqXLwkA03
+         fYb/SOs5RwOdRmKscg+xXLSt9FS7N4hgIuw2qG+vl40BdBZFkxY/FETIF/JXrHhQK7ZR
+         dLPw==
+X-Gm-Message-State: AJIora/0KXF/ezb8Ql2kx2dLep5KwHKYvuL/AIe4gAbLdCgwbklwj4pw
+        w20h5nVF9faQJg9alituLFVB5QgpvmaOZx+Wh9V6T/5v+oU=
+X-Google-Smtp-Source: AGRyM1vB0OZ8Yyp2ugdum3iPSv+Y6eUzrmcnReWfrk5hjSgVACxC+ScBe4IoRqDCowQp3s9Lcrsdv1GsDvbQ6kxw6rk=
+X-Received: by 2002:a25:850b:0:b0:66c:d287:625a with SMTP id
+ w11-20020a25850b000000b0066cd287625amr347706ybk.31.1658436082171; Thu, 21 Jul
+ 2022 13:41:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721055728.718573-18-kaleshsingh@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
+ <mhng-f5938c9b-7fc1-4b0c-9449-7dd1431f5446@palmerdabbelt-glaptop>
+ <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
+ <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
+ <4ff47e50-8702-1177-612b-73d9700e47c5@microchip.com> <CAK8P3a01x_ETchX2Vwm9oNaFJDhVZEu+G-2vRwegqKkMe54m6g@mail.gmail.com>
+ <CAKXUXMxOUs31SkGb0JD=nmHxgFy4tQ5vn6yD6ivgRpbSAxm7mA@mail.gmail.com>
+ <CAK8P3a3K8PnPF7KEEVb=hquZsjXiatCkyXe9B_RLBcse2jU5LQ@mail.gmail.com> <CAKXUXMyEG1Sc18NuhONWHuQWvTfFHNPrn4wJf=v9jMSpLGfP+Q@mail.gmail.com>
+In-Reply-To: <CAKXUXMyEG1Sc18NuhONWHuQWvTfFHNPrn4wJf=v9jMSpLGfP+Q@mail.gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Thu, 21 Jul 2022 22:41:12 +0200
+Message-ID: <CAKXUXMyfobnA92JAXY56djEP9bUiA2t2aOUEGyDTOACu1NRVuA@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalesh,
+On Thu, Jul 21, 2022 at 8:52 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> On Wed, Jul 20, 2022 at 12:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Thu, Jul 7, 2022 at 4:41 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> > > On Thu, Jul 7, 2022 at 3:07 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > On Thu, Jul 7, 2022 at 2:20 PM <Conor.Dooley@microchip.com> wrote:
+> >
+> > > > lkft just found a build failure:
+> > > >
+> > > > https://gitlab.com/Linaro/lkft/users/arnd.bergmann/asm-generic/-/jobs/2691154818
+> > > >
+> > > > I have not investigated what went wrong, but it does look like an actual
+> > > > regression, so I'll wait for Lukas to follow up with a new version of the patch.
+> > >
+> > > Thanks for your testing. I will look into it. Probably it is due to
+> > > some more rigor during builds (-Werror and new warning types in the
+> > > default build) since I proposed the patch in October 2021. That should
+> > > be easy to fix, but let us see. I will send a PATCH v2 soon.
+> >
+> > Any update on this? I have another bugfix for asm-generic now and was planning
+> > to send a pull request with both. If you don't have the updated patch
+> > ready yet, this
+> > will have to go into 5.21 instead.
+> >
+>
+> It is still on my TODO list for revisiting, but I had other work on
+> patches taking me longer than originally expected. I now moved this
+> patch revisiting to the top of my TODO list; so, I will certainly look
+> into this today. So far, I have not set up an arm64 build on my local
+> machine and have not used tuxbuild (which should simplify all this
+> setup)---the typical challenges for a "part-time kernel
+> contributor/janitor"...
+>
+> Arnd, I will certainly let you know by this evening (European time
+> zone) how far I got. If that is already too late, it is also perfectly
+> fine if this goes in 5.21 instead, but I will try my best to make it
+> 5.20 material.
+>
 
-Nifty series! Had the chance to take it for a spin :) Few comments
-below:
+Arnd, I can reproduce the error from your build system.
 
-On Wed, Jul 20, 2022 at 10:57:28PM -0700, Kalesh Singh wrote:
-> In non-protected nVHE mode, unwinds and dumps the hypervisor backtrace
-> from EL1. This is possible beacuase the host can directly access the
-> hypervisor stack pages in non-proteced mode.
-> 
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> ---
-> 
-> Changes in v5:
->   - Move code out from nvhe.h header to handle_exit.c, per Marc
->   - Fix stacktrace symoblization when CONFIG_RAMDOMIZE_BASE is enabled,
->     per Fuad
->   - Use regular comments instead of doc comments, per Fuad
-> 
->  arch/arm64/kvm/handle_exit.c | 65 +++++++++++++++++++++++++++++++-----
->  1 file changed, 56 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-> index ad568da5c7d7..432b6b26f4ad 100644
-> --- a/arch/arm64/kvm/handle_exit.c
-> +++ b/arch/arm64/kvm/handle_exit.c
+I think I have an idea what the correct patch would actually be:
 
-[...]
+- either make the function declaration completely unconditional,
+- or put the function declaration under #ifdef and not #ifndef.
 
-> @@ -318,6 +319,56 @@ void handle_exit_early(struct kvm_vcpu *vcpu, int exception_index)
->  		kvm_handle_guest_serror(vcpu, kvm_vcpu_get_esr(vcpu));
->  }
->  
-> +/*
-> + * kvm_nvhe_print_backtrace_entry - Symbolizes and prints the HYP stack address
-> + */
-> +static void kvm_nvhe_print_backtrace_entry(unsigned long addr,
-> +						  unsigned long hyp_offset)
-> +{
-> +	unsigned long va_mask = GENMASK_ULL(vabits_actual - 1, 0);
-> +
-> +	/* Mask tags and convert to kern addr */
-> +	addr = (addr & va_mask) + hyp_offset;
-> +	kvm_err(" [<%016lx>] %pB\n", addr, (void *)(addr + kaslr_offset()));
-> +}
+I guess the first should actually lead to some compiler warning (at
+W=2 or so) having a function declared multiple times, for some
+architectures. And hence, the second option is a better one. This is
+all educated guessing so far, so to confirm, I need to build the
+kernel with W=2 on the defconfig all architectures before and after
+patch application and see if I am right. This is going to take some
+build time on my local (home) machine. So, I hope that I can spend
+some time tomorrow on just kicking off builds and looking at diffs and
+then send out a working patch v2.
 
-It is a bit odd to see this get churned from the last patch. Is it
-possible to introduce the helper earlier on? In fact, the non-protected
-patch should come first to layer the series better.
-
-Also, it seems to me that there isn't much need for the indirection if
-the pKVM unwinder is made to work around the below function signature:
-
-<snip>
-
-> +/*
-> + * hyp_dump_backtrace_entry - Dump an entry of the non-protected nVHE HYP stacktrace
-> + *
-> + * @arg    : the hypervisor offset, used for address translation
-> + * @where  : the program counter corresponding to the stack frame
-> + */
-> +static bool hyp_dump_backtrace_entry(void *arg, unsigned long where)
-> +{
-> +	kvm_nvhe_print_backtrace_entry(where, (unsigned long)arg);
-> +
-> +	return true;
-> +}
-
-</snip>
-
-> +/*
-> + * hyp_dump_backtrace - Dump the non-proteced nVHE HYP backtrace.
-> + *
-> + * @hyp_offset: hypervisor offset, used for address translation.
-> + *
-> + * The host can directly access HYP stack pages in non-protected
-> + * mode, so the unwinding is done directly from EL1. This removes
-> + * the need for shared buffers between host and hypervisor for
-> + * the stacktrace.
-> + */
-> +static void hyp_dump_backtrace(unsigned long hyp_offset)
-> +{
-> +	struct kvm_nvhe_stacktrace_info *stacktrace_info;
-> +	struct unwind_state state;
-> +
-> +	stacktrace_info = this_cpu_ptr_nvhe_sym(kvm_stacktrace_info);
-> +
-> +	kvm_nvhe_unwind_init(&state, stacktrace_info->fp, stacktrace_info->pc);
-> +
-> +	kvm_err("Non-protected nVHE HYP call trace:\n");
-
-I don't see the value in discerning non-protected vs. protected in the
-preamble, as panic() will dump the kernel commandline which presumably
-would have a `kvm-arm.mode=protected` in the case of pKVM.
-
-<nit>
-
-Not entirely your problem, but we should really use a consistent name
-for that thing we have living at EL2. Hyp or nVHE (but not both) would
-be appropriate.
-
-</nit>
-
-> +	unwind(&state, hyp_dump_backtrace_entry, (void *)hyp_offset);
-> +	kvm_err("---- End of Non-protected nVHE HYP call trace ----\n");
-
-Maybe:
-
-kvm_err("---[ end ${NAME_FOR_EL2} trace ]---");
-
-(more closely matches the pattern of the arm64 stacktrace)
-
---
-Thanks,
-Oliver
+Lukas

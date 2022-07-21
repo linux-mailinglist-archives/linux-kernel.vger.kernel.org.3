@@ -2,101 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D8E57C515
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AEF57C519
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbiGUHNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S232363AbiGUHPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiGUHNd (ORCPT
+        with ESMTP id S230238AbiGUHPd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:13:33 -0400
-Received: from 13.mo582.mail-out.ovh.net (13.mo582.mail-out.ovh.net [188.165.56.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131F57B1DA
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:13:28 -0700 (PDT)
-Received: from player758.ha.ovh.net (unknown [10.110.208.183])
-        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 2D0C523486
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:13:27 +0000 (UTC)
-Received: from RCM-web2.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player758.ha.ovh.net (Postfix) with ESMTPSA id D07AF2CD18D4F;
-        Thu, 21 Jul 2022 07:13:14 +0000 (UTC)
+        Thu, 21 Jul 2022 03:15:33 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEC7461121
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=emaVs
+        3PgOLL97Ep5cNDit7A4KQid3p8Z4dDZp6jnY0w=; b=XZ9PnfTj7Eu1SzZKQ/nZO
+        4amQMHjV0BGeZ9ZETJ19B58Bgo6Z+TpstLOPJkRDoRuNqQN6MTZ+Ef0lq3pg+lID
+        DJ57IuFjZoqIIwL35/OdVD1FGyngFaUaQIAt3mxIYDUHWl520QFVRuVpBjusLzzK
+        JNMc/4UzGjQg4IkQQ/4nIM=
+Received: from localhost.localdomain (unknown [112.97.57.47])
+        by smtp1 (Coremail) with SMTP id GdxpCgBneXQL_dhitcFQPg--.2602S2;
+        Thu, 21 Jul 2022 15:15:26 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     monstr@monstr.eu, mail@conchuod.ie
+Cc:     linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH v2] microblaze: Fix some typos in comment
+Date:   Thu, 21 Jul 2022 15:15:20 +0800
+Message-Id: <20220721071520.48384-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Thu, 21 Jul 2022 09:13:14 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
-In-Reply-To: <193845cb-6149-1ae6-5eb6-6b01ffcf763b@linaro.org>
-References: <20220721000658.29537-1-william.zhang@broadcom.com>
- <a635754e-bf41-4058-5fbb-57ead36b7128@linaro.org>
- <883c2ad4c36220b488519a8902ad72bc@milecki.pl>
- <193845cb-6149-1ae6-5eb6-6b01ffcf763b@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <4b5100e4a6e9e581f4b8ab58e5ca4927@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 18201016422655699931
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkedgvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeevjefhffffveeludejfedtvdfftdekgffghfegieeliedvfeeigfejteejjeekfeenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejheekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedv
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GdxpCgBneXQL_dhitcFQPg--.2602S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7XF1Dtw1xAF1UKw1ftFWDArb_yoWfWwcEqw
+        17Xws7Gr4SyF9FvF4DKr1fZr93Kws8K3ZYvws2grZFgF95Wa1Iqr9agrn8XFn8WrsrtFWk
+        urZxZ3ZFkwn7GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_OJ53UUUUU==
+X-Originating-IP: [112.97.57.47]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDQ5FZFaEKA1vcAAAsK
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-21 09:01, Krzysztof Kozlowski wrote:
-> On 21/07/2022 08:51, Rafał Miłecki wrote:
->> On 2022-07-21 08:44, Krzysztof Kozlowski wrote:
->>> On 21/07/2022 02:06, William Zhang wrote:
->>>> Append "brcm,bcmbca" to BCM4908 chip family compatible strings. Add
->>>> generic 4908 board entry.
->>> 
->>> This does not explain at all why you are doing it. Improve your 
->>> commit
->>> messages.
->> 
->> To clarify it from my side (and maybe help a bit):
->> 
->> 1. As I understand it BCMBCA is a one big family of SoCs.
->> 2. BCM4908 is a subset of that family (a subfamily?) designed for a
->>     specific group of devices.
->> 
->> If that's correct I think William it's what you should describe in 
->> your
->> commit message. That would make binding more accurate and should be a
->> good argument for your change (I believe).
-> 
-> That's better argument. But what's the benefit of adding generic
-> compatible? Devices cannot bind to it (it is too generic). Does it
-> describe the device anyhow? Imagine someone adding compatible
-> "brcm,all-soc-of-broadcom" - does it make any sense?
+Replace 'the the' with 'like the' in the comment.
+Replace 'an' with 'a'.
 
-OK, I see it now. I can't think of any case of handling all devices
-covered with suc a wide brcm,bcmbca binding.
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ arch/microblaze/kernel/entry.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This leads me to another question if we should actually totally drop
-brcm,bcmbca from other SoCs bindings, see linux-next's
-Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
+diff --git a/arch/microblaze/kernel/entry.S b/arch/microblaze/kernel/entry.S
+index b179f8f6d287..d875a0c01032 100644
+--- a/arch/microblaze/kernel/entry.S
++++ b/arch/microblaze/kernel/entry.S
+@@ -456,7 +456,7 @@ TRAP_return:		/* Make global symbol for debugging */
+ 
+ 
+ /* This the initial entry point for a new child thread, with an appropriate
+-   stack in place that makes it look the the child is in the middle of an
++   stack in place that makes it look like the child is in the middle of a
+    syscall.  This function is actually `returned to' from switch_thread
+    (copy_thread makes ret_from_fork the return address in each new thread's
+    saved context).  */
+-- 
+2.25.1
+

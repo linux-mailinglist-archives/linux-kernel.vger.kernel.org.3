@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CAD57C862
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205E857C863
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbiGUJ73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S232968AbiGUJ7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiGUJ7L (ORCPT
+        with ESMTP id S233030AbiGUJ7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:59:11 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6906820DB
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:59:09 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id tk8so2253741ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:59:09 -0700 (PDT)
+        Thu, 21 Jul 2022 05:59:19 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E42881B34
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:59:18 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id os14so2279317ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ICWtRl11EBLkBuC8EKMztaMYVbdXxjQF2E9VxjALgEA=;
-        b=WE9n3XArdq7o+kzZ13s0vVvM7r42mMYB85W4rZvYcjhnt9r9XI5WbIKrjfW1LQ1pZo
-         4fVZ1r/gPV499EesnIUsH8/MWOY20iAEm2+xGjR9KwHQBrsI9oS9+8qrC3JcYcoGSuDz
-         S9eIWpz9x8RfGmZjQ+JZaXzfj6NvJ9/sYg+VD2tIoCHNXHeaNnyeoQpI5bLB+0ivhEqV
-         a9gxnXEBoATbkdyY+gfySkgoHPGutTbCt/BPyng0x12sMOIdkXPGgI22eLE3kU7m/gQ9
-         RydAP1+0G3mYntwQK5R9Vvpu482j61AuTxmLn/cJolqCYiX3YLHELJit8Zhx687II1lL
-         eKNA==
+        bh=Lj/0wM6NAt2u4+QegECU3k06tWmQYzBPAjiO9RdsPZg=;
+        b=TWW8k4hNmMq9Daa63lNZ1ib4dK8on5MllaStr0wGK4hJZvkqqOaXSM2ogqz6vmexvT
+         s1EFTwlXjIYmge/HQBuFO/YI4JOHjW3jTR7Gi7XBL+sGUCe4hkywaCi6yHxj6NwE3trP
+         q7F9lxawv6hAriazOGeT3RgXZhSRqpd+JxiCUn3uA0FzHF00YC19vLx9T5YJCDuQcx0y
+         vnkexEUgnkxjmB2lgv+fgrbbd+zU99FxRC40IOhRageMos4P34CJvhkDwiAqY4W5Qkh4
+         BwimYmXY7nJDTNPzJjvkW2atxkxPiwcaXPug33Eyu2aU6u/x+//9WQ2aRh9H+/l4DRjs
+         vWXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ICWtRl11EBLkBuC8EKMztaMYVbdXxjQF2E9VxjALgEA=;
-        b=J20RfTBqrbYIWaVXG/zsHzHqu7HKJJtjtC0Sp4KjHtGrtshzvArpP0GK+cD5iFQz62
-         z5yxNwOMSYiSCC+I039UjQIvBQWOzdIfBJ4DKof+Y1ZZFo5eO1iaaJq1qQTOJs/11Ers
-         RXJbarwxVK35xA/JXRL5JqCED3yxwMF7Xhok5SfEL2Jec3VnfSQ70z9TW4555hVPx7PC
-         NWARv//uW3OI6+XcCr78PGs4XihXxuebIQ/4Zf5gB+TqpWH3DxgZ+CSg0j59xDFM4QSd
-         PHUu3urjZ1xtLJN+36XPe8o5TakoyKTlaWbIfjNZd4Iq6tmWvjmMe871aQ1ViwdOW1Dv
-         qSBQ==
-X-Gm-Message-State: AJIora9XSzrOyetI97ECWB51LEy43W9d6SAEB2ulEIEde7nq6+zbSfTk
-        XGHJEAB9iWA4V8Jvf/V1AishjJePuzs6DjcHCHJ85g==
-X-Google-Smtp-Source: AGRyM1sjg+ZFLlpWNaGHG3a6g5PxuklNxTpGOLm/IgklW+n1Stkn0tqCWIQ3ZsPM3p/lMtRZYk/TmwDVwdphzfzbS60=
-X-Received: by 2002:a17:907:7ea7:b0:72b:6e6b:4895 with SMTP id
- qb39-20020a1709077ea700b0072b6e6b4895mr39726176ejc.338.1658397549012; Thu, 21
- Jul 2022 02:59:09 -0700 (PDT)
+        bh=Lj/0wM6NAt2u4+QegECU3k06tWmQYzBPAjiO9RdsPZg=;
+        b=k+uC9R+W1zsRTmma5dLUa7xH9slMJKv8pXrSQX6akPgfs621a6X5Ntmj9uOHD3plnn
+         rGu5ACMjYEVKfYYUYyKgpaHiZ4x80fkYP+DUEwjWyDT1srgxVWry6kdmWo186LkTSUwv
+         I548PccOu/qtDqfC9MDO7SNTcBgV8Xa7tzggYwgf7MeelXuM9ULo3T11wrn7pQ+RIwgE
+         F5rUCp3BCd/pRuuwP040WwjSglTDEyQgbGtOjKBH/jcWdXhfQbfMaqK88m0eLqi6ju4W
+         AcA5zEXUgTiK7a6MACaTB02hltwG9M35VukER0SPv1Y5oymM+zdroagHvADhAhkzFQq/
+         +fRg==
+X-Gm-Message-State: AJIora8eDPLW6dEn2ha+ea9s43h7qvLabNWhI4j+prTKl9ZVdetSplyU
+        3vo6VzrZB20yJ1j4bMcU3BPge7gPoGErgNFH55qmgg==
+X-Google-Smtp-Source: AGRyM1vFVHjD2TFnvN66RJojUMjD/iIsLidEphqOnhp9/G1jJM7kym/Lso/S89nbkov9+VZ0as59TPn0TDwUL1SEHts=
+X-Received: by 2002:a17:907:6297:b0:72f:9aad:fcb with SMTP id
+ nd23-20020a170907629700b0072f9aad0fcbmr1588686ejc.161.1658397556502; Thu, 21
+ Jul 2022 02:59:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721055728.718573-1-kaleshsingh@google.com> <20220721055728.718573-14-kaleshsingh@google.com>
-In-Reply-To: <20220721055728.718573-14-kaleshsingh@google.com>
+References: <20220721055728.718573-1-kaleshsingh@google.com> <20220721055728.718573-15-kaleshsingh@google.com>
+In-Reply-To: <20220721055728.718573-15-kaleshsingh@google.com>
 From:   Fuad Tabba <tabba@google.com>
-Date:   Thu, 21 Jul 2022 10:58:32 +0100
-Message-ID: <CA+EHjTxpHxojNdRm21hYgcWqFJCzPx3jch2bdVqZ4+2NQqNvDA@mail.gmail.com>
-Subject: Re: [PATCH v5 13/17] KVM: arm64: Prepare non-protected nVHE
- hypervisor stacktrace
+Date:   Thu, 21 Jul 2022 10:58:40 +0100
+Message-ID: <CA+EHjTzyK+bhtbC3xU5zCnsTDHpAKFqP3sp3LYFXjkHfPn8o-Q@mail.gmail.com>
+Subject: Re: [PATCH v5 14/17] KVM: arm64: Implement protected nVHE hyp stack unwinder
 To:     Kalesh Singh <kaleshsingh@google.com>
 Cc:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
         madvenka@linux.microsoft.com, will@kernel.org, qperret@google.com,
@@ -68,8 +67,8 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        T_FILL_THIS_FORM_SHORT,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,18 +77,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Kalesh,
 
-
 On Thu, Jul 21, 2022 at 6:58 AM Kalesh Singh <kaleshsingh@google.com> wrote:
 >
-> In non-protected nVHE mode (non-pKVM) the host can directly access
-> hypervisor memory; and unwinding of the hypervisor stacktrace is
-> done from EL1 to save on memory for shared buffers.
+> Implements the common framework necessary for unwind() to work in
+> the protected nVHE context:
+>    - on_accessible_stack()
+>    - on_overflow_stack()
+>    - unwind_next()
 >
-> To unwind the hypervisor stack from EL1 the host needs to know the
-> starting point for the unwind and information that will allow it to
-> translate hypervisor stack addresses to the corresponding kernel
-> addresses. This patch sets up this book keeping. It is made use of
-> later in the series.
+> Protected nVHE unwind() is used to unwind and save the hyp stack
+> addresses to the shared stacktrace buffer. The host reads the
+> entries in this buffer, symbolizes and dumps the stacktrace (later
+> patch in the series).
 >
 > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 > ---
@@ -100,104 +99,97 @@ Cheers,
 /fuad
 
 
+>  arch/arm64/include/asm/stacktrace/common.h |  2 ++
+>  arch/arm64/include/asm/stacktrace/nvhe.h   | 34 ++++++++++++++++++++--
+>  2 files changed, 34 insertions(+), 2 deletions(-)
 >
-> Changes in v5:
->   - Use regular comments instead of doc comments, per Fuad
->
->  arch/arm64/include/asm/kvm_asm.h         | 16 ++++++++++++++++
->  arch/arm64/include/asm/stacktrace/nvhe.h |  4 ++++
->  arch/arm64/kvm/hyp/nvhe/stacktrace.c     | 24 ++++++++++++++++++++++++
->  3 files changed, 44 insertions(+)
->
-> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
-> index 2e277f2ed671..53035763e48e 100644
-> --- a/arch/arm64/include/asm/kvm_asm.h
-> +++ b/arch/arm64/include/asm/kvm_asm.h
-> @@ -176,6 +176,22 @@ struct kvm_nvhe_init_params {
->         unsigned long vtcr;
+> diff --git a/arch/arm64/include/asm/stacktrace/common.h b/arch/arm64/include/asm/stacktrace/common.h
+> index be7920ba70b0..73fd9e143c4a 100644
+> --- a/arch/arm64/include/asm/stacktrace/common.h
+> +++ b/arch/arm64/include/asm/stacktrace/common.h
+> @@ -34,6 +34,7 @@ enum stack_type {
+>         STACK_TYPE_OVERFLOW,
+>         STACK_TYPE_SDEI_NORMAL,
+>         STACK_TYPE_SDEI_CRITICAL,
+> +       STACK_TYPE_HYP,
+>         __NR_STACK_TYPES
 >  };
 >
-> +/*
-> + * Used by the host in EL1 to dump the nVHE hypervisor backtrace on
-> + * hyp_panic() in non-protected mode.
-> + *
-> + * @stack_base:                 hyp VA of the hyp_stack base.
-> + * @overflow_stack_base:        hyp VA of the hyp_overflow_stack base.
-> + * @fp:                         hyp FP where the backtrace begins.
-> + * @pc:                         hyp PC where the backtrace begins.
-> + */
-> +struct kvm_nvhe_stacktrace_info {
-> +       unsigned long stack_base;
-> +       unsigned long overflow_stack_base;
-> +       unsigned long fp;
-> +       unsigned long pc;
-> +};
-> +
->  /* Translate a kernel address @ptr into its equivalent linear mapping */
->  #define kvm_ksym_ref(ptr)                                              \
->         ({                                                              \
+> @@ -186,6 +187,7 @@ static inline int unwind_next_common(struct unwind_state *state,
+>          *
+>          * TASK -> IRQ -> OVERFLOW -> SDEI_NORMAL
+>          * TASK -> SDEI_NORMAL -> SDEI_CRITICAL -> OVERFLOW
+> +        * HYP -> OVERFLOW
+>          *
+>          * ... but the nesting itself is strict. Once we transition from one
+>          * stack to another, it's never valid to unwind back to that first
 > diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
-> index 05d7e03e0a8c..8f02803a005f 100644
+> index 8f02803a005f..c3688e717136 100644
 > --- a/arch/arm64/include/asm/stacktrace/nvhe.h
 > +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
-> @@ -19,6 +19,7 @@
->  #ifndef __ASM_STACKTRACE_NVHE_H
->  #define __ASM_STACKTRACE_NVHE_H
+> @@ -39,10 +39,19 @@ static inline void kvm_nvhe_unwind_init(struct unwind_state *state,
+>         state->pc = pc;
+>  }
 >
-> +#include <asm/kvm_asm.h>
->  #include <asm/stacktrace/common.h>
->
->  /*
-> @@ -52,6 +53,9 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
->   * In protected mode, the unwinding is done by the hypervisor in EL2.
->   */
->
-> +DECLARE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack);
-> +DECLARE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+> +static inline bool on_hyp_stack(unsigned long sp, unsigned long size,
+> +                               struct stack_info *info);
 > +
->  #ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
+>  static inline bool on_accessible_stack(const struct task_struct *tsk,
+>                                        unsigned long sp, unsigned long size,
+>                                        struct stack_info *info)
+>  {
+> +       if (on_accessible_stack_common(tsk, sp, size, info))
+> +               return true;
+> +
+> +       if (on_hyp_stack(sp, size, info))
+> +               return true;
+> +
+>         return false;
+>  }
+>
+> @@ -60,12 +69,27 @@ DECLARE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
 >  static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
 >                                      struct stack_info *info)
-> diff --git a/arch/arm64/kvm/hyp/nvhe/stacktrace.c b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
-> index 60461c033a04..cbd365f4f26a 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/stacktrace.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
-> @@ -9,6 +9,28 @@
->  DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
->         __aligned(16);
->
-> +DEFINE_PER_CPU(struct kvm_nvhe_stacktrace_info, kvm_stacktrace_info);
+>  {
+> -       return false;
+> +       unsigned long low = (unsigned long)this_cpu_ptr(overflow_stack);
+> +       unsigned long high = low + OVERFLOW_STACK_SIZE;
 > +
-> +/*
-> + * hyp_prepare_backtrace - Prepare non-protected nVHE backtrace.
-> + *
-> + * @fp : frame pointer at which to start the unwinding.
-> + * @pc : program counter at which to start the unwinding.
-> + *
-> + * Save the information needed by the host to unwind the non-protected
-> + * nVHE hypervisor stack in EL1.
-> + */
-> +static void hyp_prepare_backtrace(unsigned long fp, unsigned long pc)
-> +{
-> +       struct kvm_nvhe_stacktrace_info *stacktrace_info = this_cpu_ptr(&kvm_stacktrace_info);
-> +       struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
-> +
-> +       stacktrace_info->stack_base = (unsigned long)(params->stack_hyp_va - PAGE_SIZE);
-> +       stacktrace_info->overflow_stack_base = (unsigned long)this_cpu_ptr(overflow_stack);
-> +       stacktrace_info->fp = fp;
-> +       stacktrace_info->pc = pc;
+> +       return on_stack(sp, size, low, high, STACK_TYPE_OVERFLOW, info);
 > +}
 > +
->  #ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
->  DEFINE_PER_CPU(unsigned long [NVHE_STACKTRACE_SIZE/sizeof(long)], pkvm_stacktrace);
->
-> @@ -89,4 +111,6 @@ void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
->  {
->         if (is_protected_kvm_enabled())
->                 pkvm_save_backtrace(fp, pc);
-> +       else
-> +               hyp_prepare_backtrace(fp, pc);
+> +static inline bool on_hyp_stack(unsigned long sp, unsigned long size,
+> +                               struct stack_info *info)
+> +{
+> +       struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
+> +       unsigned long high = params->stack_hyp_va;
+> +       unsigned long low = high - PAGE_SIZE;
+> +
+> +       return on_stack(sp, size, low, high, STACK_TYPE_HYP, info);
 >  }
+>
+>  static inline int notrace unwind_next(struct unwind_state *state)
+>  {
+> -       return 0;
+> +       struct stack_info info;
+> +
+> +       return unwind_next_common(state, &info, NULL);
+>  }
+>  NOKPROBE_SYMBOL(unwind_next);
+>  #else  /* !CONFIG_PROTECTED_NVHE_STACKTRACE */
+> @@ -75,6 +99,12 @@ static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+>         return false;
+>  }
+>
+> +static inline bool on_hyp_stack(unsigned long sp, unsigned long size,
+> +                               struct stack_info *info)
+> +{
+> +       return false;
+> +}
+> +
+>  static inline int notrace unwind_next(struct unwind_state *state)
+>  {
+>         return 0;
 > --
 > 2.37.0.170.g444d1eabd0-goog
 >

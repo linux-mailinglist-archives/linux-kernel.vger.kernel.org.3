@@ -2,105 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BFB57CDC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9681E57CDCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiGUOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S230408AbiGUOhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGUOgM (ORCPT
+        with ESMTP id S229502AbiGUOhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:36:12 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60E54A814;
-        Thu, 21 Jul 2022 07:36:11 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a23so687489lfm.10;
-        Thu, 21 Jul 2022 07:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=a45XGYjGqJj1SQDNhpIFTnsS1sN/Pvl1ei9cqTikBdo=;
-        b=ZtPDqAPNcLI5BmGpzis11nE5xbKaJSqYBdhdLVwZSA9MIrBTenSJl984+CJg2un54E
-         0vOQ9dVDtygBYd2OWxt0jt320O9/Cfz5DmAre28h5pFNYVpyjnnyWq0mOd1kxYA/wQDb
-         Nk8uVDwav760RHf7Re6a4/p6aREx/utu7K/v8xQvupb6Nvdp6pLi9grUtIqDJNUC/2lk
-         TVSJ4PZPO1LxcpuZSqldEfoGfaPUbS5jXm6dPfX87s45ZNYXduJo+A2CnUyEOB6FPIVy
-         5eG5O2MPHt/BMI7s3vo5BhVu0vZsAh34ZHRP8rBvLXTcHFiq8r9dro2jAi6SIuuphkLz
-         YyTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=a45XGYjGqJj1SQDNhpIFTnsS1sN/Pvl1ei9cqTikBdo=;
-        b=ubRSra4WSUlj9lG9c9Ia8pk2pFAIXGTPVq38TU4h/QIXGMWxFim1l9yVZOkaXm//MN
-         Eaxtkh71KGXsaieoyrgzbNiy7/WuD1jNGo0Z+pu8MnSIY+CST2cUsrunK/S6Q3MGa1fd
-         0qV9o+YIfp1YqCgE6LkxfWUCdWv9d8Pbzt9HNexi9kD/0OeZ1+UXje8jzVhpcNK3fq4V
-         Px3wegtmCaMvxr4cjtwo/F0OlGw9nuUkkus7oI3zYOucl0d19Tp+BJ8w5gtKzdsYfPzo
-         lY/17qMxznQnsIjgVO+iQNrl+jaHlbtyeiMPfoUcRQpLDxkTZ5KcRZrvt2toV14jNbt8
-         fJuA==
-X-Gm-Message-State: AJIora99UNZ/qWoC2prWM68GWNdfifJK9etWzFPHiUVGWNdWUYogOthp
-        v2l/1B6pAtUYmZil/rvi/jNLMiKaQ1jB9KoR95I=
-X-Google-Smtp-Source: AGRyM1tJveEikQFTfSBOWxKIFmbqGzdQVmYaRXPZa7hYzIom8WOv8CXPxQnNyXC+Eclmf8Z12KA3a8w8w+W0bZdh2FU=
-X-Received: by 2002:ac2:4897:0:b0:489:f2ad:1191 with SMTP id
- x23-20020ac24897000000b00489f2ad1191mr21118185lfc.25.1658414169880; Thu, 21
- Jul 2022 07:36:09 -0700 (PDT)
+        Thu, 21 Jul 2022 10:37:06 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7E99FCA;
+        Thu, 21 Jul 2022 07:37:04 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Ma1wY-1o2LZy47IS-00W0Yl; Thu, 21 Jul 2022 16:37:03 +0200
+Received: by mail-yb1-f171.google.com with SMTP id c131so3075134ybf.9;
+        Thu, 21 Jul 2022 07:37:02 -0700 (PDT)
+X-Gm-Message-State: AJIora+OlxEsMclG7HRfV3/Z8wEbqvpsuTmnq3BY4AiK1qKS5zg8KS50
+        boiK7OsyvCvLb4NDakzK26FtAn7i6uljCOdhhI8=
+X-Google-Smtp-Source: AGRyM1sipmxaJDGQ/BXJ6IogC7daDCl2+j4F9uhSVcXz89KYHnAMaLqcK10XehN8TJ/WBsHB+lO9Dw0DiPklmfIK8Mk=
+X-Received: by 2002:a81:493:0:b0:31e:6ab9:99a5 with SMTP id
+ 141-20020a810493000000b0031e6ab999a5mr8799929ywe.209.1658414210293; Thu, 21
+ Jul 2022 07:36:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721101556.118568-1-tmaimon77@gmail.com> <YtlES7MX6nJr8l+L@sirena.org.uk>
-In-Reply-To: <YtlES7MX6nJr8l+L@sirena.org.uk>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Thu, 21 Jul 2022 17:35:58 +0300
-Message-ID: <CAP6Zq1gB1yrqNDJROf8xyjYiCv6H-rW=Qa7J17AoFo3mv5hsLA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] spi: npcm-pspi: add Arbel NPCM8XX and full duplex support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-spi@vger.kernel.org,
+References: <20220721141325.2413920-1-arnd@kernel.org> <20220721141325.2413920-2-arnd@kernel.org>
+In-Reply-To: <20220721141325.2413920-2-arnd@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 21 Jul 2022 16:36:27 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2X7unsa2N5ynkUdk6H1=GZiWTyKBiLrDjQirAc9nfKhg@mail.gmail.com>
+Message-ID: <CAK8P3a2X7unsa2N5ynkUdk6H1=GZiWTyKBiLrDjQirAc9nfKhg@mail.gmail.com>
+Subject: Re: [PATCH 1/6] ARM: refresh defconfig files
+To:     Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>, linux-oxnas@groups.io,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:Jc3Fh2gfdpN+8HVDOauBXVPpRe0WBUQLIN/mBe+fdzftNpQ5j6Y
+ /Q8TCadAMtrVhIsC3l+NMErEOqf1CkMOZ7tXCY3PXUqZVs7nMPYBlnDfaOTIEAUI6P65nwV
+ 8sRqJEpiEO39deVCaI3xdN9CH5pIxRs/NTtw4v3PHA/UKVjLePA+kgrsrbEyeZqy6qRKMJD
+ y3u6z4TSZcHEZ+y8AsByQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CwOUKFV/LxQ=:FDmh5vyhQrb/b5rVNhrlaX
+ 5UoAVjtwTh8NLpY1KxKL7EQ/MFPQg7QrtHG/Et2HFkDlX/FTrgA5qA3xCrYamd/SRdfOfCWTE
+ IiXm4jWFVYbQJIWTnM440kQf8IYOlB4T6e1w/nxXAGD/cq2mdqvWjp7oDMvGJJ10aDANN2x/v
+ tKy3Y3DGyjl4XeQNfLms4KBpHlXv78hddGIDxB8dlasZMU7SXr4X8Q3hHlWBLvFpWnZJB+AVH
+ rHoLux/0NvZAyq+qoqVYAEc9JCCcGo/CcOvCzoJpDIzNDhF+cG8Bsj9nQEZHDsqh039+i6ks+
+ Aj3JsUJc6MKWSO6KBbNQ2pm7U3uUJtOHrs9gCWW0yk814+w68fFjjed8ZnUdvuTBruDymnss4
+ uz9eNh10RvemeTuNYrsT1BmsQZ//V0d7vb6ABmTbo9Sf26j+HvtKFCeWHt0jlrp1mBSGq7HIY
+ uvCXqQF7wBVn8uLNcb3zYaltOVe8wRvn+SgZxXYZNSrLHvMxoA9E3XsNPEkoQMYeWw2kbxyB4
+ qoXdyp3hF9/nLHyDaFB4n4t48F1eVyCqkgdSNzwwLNWp7TwggM6b0BZDNtP2ErYUFbIAg5Lwq
+ btq3T4L4kyXtRycWYNzHUo+CAt6WxTHmWK1ECTHo1/eZbqb7plxrWLVtF4Nk75BxTVVRx4SAY
+ 1rIP8Rh10uTP5Q8iPcxWrwNLyVfzET0ZXRe7nSqtoBr+8bhxVnd/pDU4HuFiXxyrno3DSHeND
+ v9RLaCk3rkzL8JF7fi3D37w9FmVGuGteXwzbdH5xasbGrrWxwMp+/IXsyDhnsr8BHGNpgbE2U
+ f28Jg4hkVNB8gogHmno5c6D1uT7fpJDFdqzeLbUOFZdMhrdhwbvzHRXL9XTJ5ocoHljij3qTY
+ nt40WK7VGvRXrUDhSBnCN5qwpvrExGBL4BX6ED12s=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-Thanks for your comment, next version I will make sure to send two
-separate patches
-
-On Thu, 21 Jul 2022 at 15:19, Mark Brown <broonie@kernel.org> wrote:
+On Thu, Jul 21, 2022 at 4:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On Thu, Jul 21, 2022 at 01:15:54PM +0300, Tomer Maimon wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> > Tomer Maimon (2):
-> >   spi: npcm-pspi: add full duplex support
-> >   dt-binding: spi: npcm-pspi: Add npcm845 compatible
+> A lot of Kconfig options have changed over the years, and we tend
+> to not do a blind 'make defconfig' to refresh the files, to ensure
+> we catch options that should not have gone away.
 >
-> It is not obvious why these are a series, they appear to be entirely
-> orthogonal.  If there's no relationship between patches it's generally
-> better to send them separately, that way problems with one patch won't
-> hold up unrelated patches and reviewers aren't left wondering about why
-> things are grouped.
+> I used some a bit of scripting to only rework the bits where an
+> option moved around in any of the defconfig files, without also
+> dropping any of the other lines, to make it clearer which options
+> we no longer have.
 >
-> Please submit patches using subject lines reflecting the style for the
-> subsystem, this makes it easier for people to identify relevant patches.
-> Look at what existing commits in the area you're changing are doing and
-> make sure your subject lines visually resemble what they're doing.
-> There's no need to resubmit to fix this alone.
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Best regards,
+Apparently this patch got a little large and was rejected by some of
+the mailing lists, in case someone wonders what happened.
+Fortunately the contents  don't actually matter here, as I'm just
+reordering the lines as seen in the diffstat.
 
-Tomer
+        Arnd
+
+> ---
+>  arch/arm/configs/am200epdkit_defconfig    |  26 ++---
+>  arch/arm/configs/aspeed_g4_defconfig      |  16 +--
+>  arch/arm/configs/aspeed_g5_defconfig      |  16 +--
+>  arch/arm/configs/assabet_defconfig        |   8 +-
+>  arch/arm/configs/at91_dt_defconfig        |  10 +-
+>  arch/arm/configs/axm55xx_defconfig        |  22 ++--
+>  arch/arm/configs/badge4_defconfig         |   8 +-
+>  arch/arm/configs/bcm2835_defconfig        |  36 +++----
+>  arch/arm/configs/cerfcube_defconfig       |  16 +--
+>  arch/arm/configs/clps711x_defconfig       |   2 +-
+>  arch/arm/configs/cm_x300_defconfig        |  26 ++---
+>  arch/arm/configs/cns3420vb_defconfig      |  18 ++--
+>  arch/arm/configs/colibri_pxa270_defconfig |  32 +++---
+>  arch/arm/configs/colibri_pxa300_defconfig |  10 +-
+>  arch/arm/configs/collie_defconfig         |  20 ++--
+>  arch/arm/configs/corgi_defconfig          |  44 ++++----
+>  arch/arm/configs/davinci_all_defconfig    |  26 ++---
+>  arch/arm/configs/dove_defconfig           |  28 ++---
+>  arch/arm/configs/ep93xx_defconfig         |  16 +--
+>  arch/arm/configs/eseries_pxa_defconfig    |  26 ++---
+>  arch/arm/configs/exynos_defconfig         |  20 ++--
+>  arch/arm/configs/ezx_defconfig            |  72 ++++++-------
+>  arch/arm/configs/footbridge_defconfig     |  14 +--
+>  arch/arm/configs/h3600_defconfig          |  10 +-
+>  arch/arm/configs/h5000_defconfig          |  18 ++--
+>  arch/arm/configs/hackkit_defconfig        |   4 +-
+>  arch/arm/configs/hisi_defconfig           |  24 ++---
+>  arch/arm/configs/imx_v4_v5_defconfig      |   8 +-
+>  arch/arm/configs/imx_v6_v7_defconfig      |   8 +-
+>  arch/arm/configs/integrator_defconfig     |   2 +-
+>  arch/arm/configs/iop32x_defconfig         |  20 ++--
+>  arch/arm/configs/jornada720_defconfig     |  10 +-
+>  arch/arm/configs/keystone_defconfig       |  62 +++++------
+>  arch/arm/configs/lart_defconfig           |   6 +-
+>  arch/arm/configs/lpc18xx_defconfig        |  12 +--
+>  arch/arm/configs/lpc32xx_defconfig        |   8 +-
+>  arch/arm/configs/lpd270_defconfig         |   6 +-
+>  arch/arm/configs/lubbock_defconfig        |  10 +-
+>  arch/arm/configs/magician_defconfig       |  30 +++---
+>  arch/arm/configs/mainstone_defconfig      |   4 +-
+>  arch/arm/configs/milbeaut_m10v_defconfig  |   6 +-
+>  arch/arm/configs/mini2440_defconfig       |   6 +-
+>  arch/arm/configs/mmp2_defconfig           |  28 ++---
+>  arch/arm/configs/moxart_defconfig         |  18 ++--
+>  arch/arm/configs/mps2_defconfig           |  14 +--
+>  arch/arm/configs/multi_v4t_defconfig      |   4 +-
+>  arch/arm/configs/multi_v5_defconfig       |  12 +--
+>  arch/arm/configs/multi_v7_defconfig       |  62 +++++------
+>  arch/arm/configs/mv78xx0_defconfig        |  32 +++---
+>  arch/arm/configs/mvebu_v5_defconfig       |  28 ++---
+>  arch/arm/configs/mvebu_v7_defconfig       |   2 +-
+>  arch/arm/configs/mxs_defconfig            |   4 +-
+>  arch/arm/configs/neponset_defconfig       |  24 ++---
+>  arch/arm/configs/netwinder_defconfig      |  10 +-
+>  arch/arm/configs/nhk8815_defconfig        |   6 +-
+>  arch/arm/configs/omap1_defconfig          |  74 ++++++-------
+>  arch/arm/configs/omap2plus_defconfig      |  16 +--

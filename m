@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CF457C61F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC8857C620
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbiGUIVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S231730AbiGUIWC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 21 Jul 2022 04:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiGUIVq (ORCPT
+        with ESMTP id S231185AbiGUIWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:21:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E950C7E002;
-        Thu, 21 Jul 2022 01:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1658391697;
-        bh=yNyaWxGVWAkT4VwBbvTqloaCzcp93id9lrdVRLcIzxE=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=BTWN8TzHtxoRGp72P8nurA+lrMmWQUH2h+S2ptppi5YULal1rCWKbG4uE3z2gznC1
-         Zvy7xWuAg3//NAzYeDQVoZQ8g41z/5BJ0wI07dSR3nA2TXjHNgqR2s6cB72EAd1/TR
-         rdHelyOnGumv0SBr6Ddw61qCKXvoMeY/vvaPYLE0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.130.88]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4s4r-1oFocI3XN9-0022ti; Thu, 21
- Jul 2022 10:21:37 +0200
-Message-ID: <e63cfffa-126c-d6da-207d-43db651d2d92@gmx.de>
-Date:   Thu, 21 Jul 2022 10:21:32 +0200
+        Thu, 21 Jul 2022 04:22:00 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DEDC7E012
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:21:56 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-244-mS6qzph4P96-D1ySmr3PJw-1; Thu, 21 Jul 2022 09:21:53 +0100
+X-MC-Unique: mS6qzph4P96-D1ySmr3PJw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Thu, 21 Jul 2022 09:21:52 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Thu, 21 Jul 2022 09:21:52 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Peter Zijlstra' <peterz@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Peter Collingbourne <pcc@google.com>,
+        "Kees Cook" <keescook@chromium.org>
+Subject: RE: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Thread-Topic: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Thread-Index: AQHYnH2Hi03gNC/QIkePUsvbFv4MOq2Ie8qw
+Date:   Thu, 21 Jul 2022 08:21:52 +0000
+Message-ID: <8177b804cfcb461d9f1f40d242cd84db@AcuMS.aculab.com>
+References: <87lesqukm5.ffs@tglx>
+ <2f7f899cb75b79b08b0662ff4d2cb877@overdrivepizza.com>
+ <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
+ <87fsiyuhyz.ffs@tglx>
+ <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
+ <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
+ <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net>
+ <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
+ <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
+ <Ytbnlms90+LBLbrY@google.com>
+ <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
+In-Reply-To: <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dma-mapping:do not initialise statics to 0.
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Xin Gao <gaoxin@cdjrlc.com>
-Cc:     linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220720193941.8261-1-gaoxin@cdjrlc.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220720193941.8261-1-gaoxin@cdjrlc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gYTUu6tG0sdhEE85vOo6dYW4wCykQ9sH4QkWJdu7L5837A3aG2D
- tjytWJg7xk/VJNutSNaAfb5mmapZQ1fLxdmwPXTCD3XGNnI6bTv8MY1arq0dKXzXYzivFod
- zRfaiZnm+3l4lGLe6o+4u4xmF0Q1FVt07rIM9AQnwfWw2CtABUkP+GtWKc+0FlxnGh9YWX7
- kfq1nXlkRqcG5EwlF70Xw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6XwlE23K330=:CiVxwWkTZSFSbTvpYLnU2E
- U49XW4EdBsn2F+DD1ifHsobWC/8PfpMlvN7QhSbstucrGY0xHN5cSJ2z6dBqBEKf+Ak9gqzA5
- crVpgOdRHFyMIPy7lcPC63HsdjWk9prVh6bXPBFivGQSnTKdUEUV5PCg0shm+pQpw/xax9iwS
- gDgDLu7rj2+C+b1uVh4Sbg1uFtfU56cFbei03pWe150Ll2zDLxwL0f2lU2Gj2VR6tDduyUFGI
- RezxdflJguemvq8rDzvusWxPgOz+XlAdzdLc6ksvjqunYF6+Y2uwQAyX+4U4/ZULyUxGaQIOH
- i4yuSxN63RQVbpol/YhCsJNe/Ek/3Ata/EVeztW3XV7D+OV14SlcxJwlg9PYovgSUU5nTmQkX
- WTCWJHgWwp1erZDqI4W93KsDQoHGws77LmrBH7ci3sKzrJ1EytOReuhiBzgllKSdE5rVupK2P
- 0UKSjGTFE4u4nhVqc9ur1xmswhiVmNTKgju/jD99V5CWURjpVu5Xk32s+piWM35wOCC7jP3ZE
- RDdpUFd1nvn7UuPAEl0UEhLIUvFq8B0IJrYbF6MgDi0W9+2/p5aHD9teE84Xv1Z7+3zIQVcPX
- gpOsqn8GGuPTXC9bDZU7IxMav4AmI4zT1SvK4sJ7/RUFTcFvBiRMhZy5i1BVJfwTPu+BnVAKM
- fNebeMuoKH/es7daJ4l6lyu2PLEzB1poZa9xhLSeyIC4U6JsNefI3+gOuh2bFmZxyKJt8Opcf
- Fa9GGxFZHX77kbzOAm+2gLv1MlEuPQKnMqIxoHwNKoFj9wB09vbjlyeHCgIdeK+oauKJBokFz
- sc8uYszk57R3U0weUwE96mlc77+yHDQGoU7RcyFXHYLCIcxQMeObI3LRpGRFUr+PNUEjvMgmM
- laLUxNVkwt4SrFmwch4j8OjrpC7z07++sXSKZN3N2rOV4S5825EUBtdj3NafgtR9y8LoUL2AE
- fnC15VZPqF7NoQ3r0XVTb0n+qLvn+O42F7NcK2F83SSIEO3XJvxaxCBf1titwzBvvlvrRIZQw
- iZgJNzmoHuqQGRERHaY1vozmpDM+ErutO0M8ULGTHJxWpDmpxHegJGhABFeJzouH/BoDq/gWR
- Jcyde800r8JmRkvqqOESfmOUaVGi4qo0fCn
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/22 21:39, Xin Gao wrote:
-> do not initialise statics to 0.
->
-> Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
-> ---
->  arch/parisc/kernel/pci-dma.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
-> index 160996f2198e..ba87f791323b 100644
-> --- a/arch/parisc/kernel/pci-dma.c
-> +++ b/arch/parisc/kernel/pci-dma.c
-> @@ -36,8 +36,8 @@
->  #include <asm/tlbflush.h>	/* for purge_tlb_*() macros */
->
->  static struct proc_dir_entry * proc_gsc_root __read_mostly =3D NULL;
+From: Peter Zijlstra
+> Sent: 20 July 2022 22:13
+...
+> The prettiest option to obscure the immediate at the callsite I could
+> conjure up is something like:
+> 
+> kcfi_caller_linus:
+> 	movl	$0x12345600, %r10d
+> 	movb	$0x78, %r10b
+> 	cmpl	%r10d, -OFFSET(%r11)
+> 	je	1f
+> 	ud2
+> 1:	call	__x86_thunk_indirect_r11
+> 
+> Which comes to around 22 bytes (+5 over the original).
 
-While at it, you could remove the "=3D NULL" as well.
+You'd be better doing:
+	movl $0x12345678-0xaa, %r10d
+	addl $0xaa, %r10d
+so that the immediate is obscured even if the low bits are zero.
 
-Helge
+	David
 
-> -static unsigned long pcxl_used_bytes __read_mostly =3D 0;
-> -static unsigned long pcxl_used_pages __read_mostly =3D 0;
-> +static unsigned long pcxl_used_bytes __read_mostly;
-> +static unsigned long pcxl_used_pages __read_mostly;
->
->  extern unsigned long pcxl_dma_start; /* Start of pcxl dma mapping area =
-*/
->  static DEFINE_SPINLOCK(pcxl_res_lock);
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

@@ -2,173 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D2C57D4B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F261D57D4BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbiGUUP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 16:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S233060AbiGUUTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 16:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbiGUUPy (ORCPT
+        with ESMTP id S232122AbiGUUTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 16:15:54 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F183B951;
-        Thu, 21 Jul 2022 13:15:51 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id z132so2265647iof.0;
-        Thu, 21 Jul 2022 13:15:50 -0700 (PDT)
+        Thu, 21 Jul 2022 16:19:24 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511EB8EEE8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 13:19:22 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id i7so2080177qvr.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 13:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DdlpYHvySLWZI9PuVVkLLZBH3yjydjUTeDSjiCRAPjg=;
-        b=Emb6nVw/XsXfIS2rg5l909a2QlHcjhWE6BvXTfg7yFiAz4PCoYNtH3W2EfmQ4FRE6y
-         2pzUglyR5engfI0A8axVQUlrS837XKYH84LVFJoqlPal8GV8hRSl1uceuwRPAUHUgPdy
-         YdUPzSnnoxSEC9oOOZbIl3zFV+fqFjUsnUcT+dB6Q23AD3q3yumtw9WPxv775fB/3DTs
-         WP6TpLle3aNXqrUP0buCa+694rc1cDagQd5A5fMaR3rxaQ5Z3XvvMiys9OjY08KU3ibQ
-         fv+sLC6OhAjVZbB5xqlp11/NKOthbaMzt6GxAjDsl5tVgh2KfWVpBSKKAhMwVHs3Nruw
-         vEKQ==
+        bh=nHZhsJvZuU8x8cSV7hJ3bwYV3pDJsGuu8QgGpzsHbKI=;
+        b=i3M7DR7R/92yls/0qJasv9Mdrw0PUg60oMhsu7k2wXs0clqJcf4XZSIidylzk7XvNm
+         Kj/G/ydgomlXntOBztn/Xdn11KSc5WdAoY0Y98B9SjtG7qXeu8Ai66pmjl5aLDea1jH6
+         0pqUs7UHObk7IUP2TZ+CUM0aGIEq8wMAd5Kpw9F57ezZuApAFUyLG7o+As22AxiOcu8/
+         RRZp2gGNATKlUqyJ8xiQ20dmkbLmWUg5jXtCtg9l7Tw6Pq6TnQL6nB3X0+sBh+J8xaSE
+         4X08lxqqGKlXulgEKo7uuexd/DISTQ7DXsnKkWnk3TmdZ0FjvxAqL8V0io6NMRXUEc96
+         sFTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DdlpYHvySLWZI9PuVVkLLZBH3yjydjUTeDSjiCRAPjg=;
-        b=fPCPZykZTDkSU6X33lVLNf5JqCp+EaqG4z7JVOPsNnyn9DiEOIEsWNSXYVXZsYkzHr
-         gjqLRID23NtztgrJkrOg+ITkKqnQwKX6f5/5n/Ij/TPA6QEGw/c3AH40FfcDhFVO5L6o
-         1BXCvLmWurG4CD1Qd0rIuvWGCnGI0NYoTv4f8efFESHoFsc6++O96omjiQFIPLAoPBBe
-         whjT4v2ReL+gSlgc0z9qiM6mxaPyHUBirEjWwYEVDwYogTEic+6pQUd3VGrTU49dx+ca
-         uT6wRPm6x4zyxfBzpaqWhxTJUGoGdlEN/Fc3cS+ilnBoGc+m6RjITsJDdgosoF/m8UZt
-         /JbQ==
-X-Gm-Message-State: AJIora+5Q3NY5E71VIOzYuRGRU31+ApiBZuLv7/FZ3huOMjBbrWBugF1
-        OaDok3IcCmz786SbTlzzImPdoX1JZp0BkSYmgQhTsjX2aPk=
-X-Google-Smtp-Source: AGRyM1s1dL2pvG1uxUsYYIrkYW/FJ9oEkL6wAsTSGF52krk09y5ouOvFZX9RoHB/cPeHZ2FTRKUfl2LlvjYLHkJU5/M=
-X-Received: by 2002:a05:6602:150c:b0:67c:149b:a349 with SMTP id
- g12-20020a056602150c00b0067c149ba349mr74750iow.168.1658434550268; Thu, 21 Jul
- 2022 13:15:50 -0700 (PDT)
+        bh=nHZhsJvZuU8x8cSV7hJ3bwYV3pDJsGuu8QgGpzsHbKI=;
+        b=NzKIhQ3+wYmVSCnKjFmZ2y5BWhVeqa4LMyQSOLPIrWjuaeqkTd5fuUevltWO21539Z
+         +EkHzVytYkGFtdbG2fHO4hBrnHi/1LhQMBUY5HC1c0jecFqfzVMUz6btgQSzFmQLMnCo
+         1PvUIAkI1/Gb1cs3pIVqFNCDsBibfDueFVXKK54gNPRxbco2pa3XZzORhH7G5fAJ23Xe
+         s21Sk6XYOy2ma63VF6QCOOAqTePIZa7duEs7j2hFtV7+/g6NHRHV5hU05zIr7nJKsmGt
+         pPIw3JtpjqchyG5wWxeY5wH5z/90W6WizAAYLqISk0ZpnQcl80Gq5tmajxbwK4E4gMx2
+         8Jfw==
+X-Gm-Message-State: AJIora+iW+1WlQW4Z9zlHc2KP4XpTfjuBUteUhg8kL/3oxcY/sKJQug5
+        OnIIvCZVDxaSUflntj9bmHpgsc+vL555SQ309Lfi9Q==
+X-Google-Smtp-Source: AGRyM1tmIb9QZW3GuI3H9geW6F1Yo2ZDUH8ndpTeEDQeOHPdXB96hnQnvYJMducw/HqOnVQWQTotOyM59G4sVGFAdbY=
+X-Received: by 2002:a05:6214:d03:b0:473:7764:2ab with SMTP id
+ 3-20020a0562140d0300b00473776402abmr247073qvh.119.1658434761411; Thu, 21 Jul
+ 2022 13:19:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com> <20220721153625.1282007-3-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220721153625.1282007-3-benjamin.tissoires@redhat.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Thu, 21 Jul 2022 22:15:14 +0200
-Message-ID: <CAP01T746d18QjJH1pRaq5Wy2QtrXXKhaJge8sB=q1rNtqjTntA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 02/24] bpf/verifier: allow kfunc to read user
- provided context
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20220721195502.1525214-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220721195502.1525214-1-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 21 Jul 2022 23:19:10 +0300
+Message-ID: <CAA8EJppGS38aP7gyd1c3kNgraAVJDoqUef2cDfZpu2aL_iwW0g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: leds: Describe optional 'reg' property used
+ for Qualcomm LPG nodes
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org, pavel@ucw.cz
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 17:36, Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
+On Thu, 21 Jul 2022 at 22:55, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
 >
-> When a kfunc was trying to access data from context in a syscall eBPF
-> program, the verifier was rejecting the call.
-> This is because the syscall context is not known at compile time, and
-> so we need to check this when actually accessing it.
+> As Bjorn noted in [1], it is useful to describe the optional
+> 'reg' property for Qualcomm LPG nodes as it is used in
+> some Qualcomm dts files.
+
+I don't think this is correct. LPG block maps to several regions, so
+using just one of them in reg doesn't look correct.
+
+> This fixes the following 'make dtbs_check' error reported for
+> pm8350c & sc8280xp pwm nodes:
 >
-> Check for the valid memory access and allow such situation to happen.
+> arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb:
+>  pwm@e800: 'reg' does not match any of the regexes:
+>  '^led@[0-9a-f]$', 'pinctrl-[0-9]+'
+
+I'd prefer to follow the existing schema and to drop the region from
+those files.
+
 >
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> [1]. https://lore.kernel.org/linux-arm-msm/Ytg3tIaL5h5b9ewH@builder.lan/
 >
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: robh@kernel.org
+> Cc: pavel@ucw.cz
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
+>  Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-
-LGTM, with just a couple more nits.
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-> changes in v7:
-> - renamed access_t into atype
-> - allow zero-byte read
-> - check_mem_access() to the correct offset/size
+> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> index fe336fa16518..f394ab7a757b 100644
+> --- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> @@ -27,6 +27,9 @@ properties:
+>        - qcom,pmi8994-lpg
+>        - qcom,pmi8998-lpg
 >
-> new in v6
-> ---
->  kernel/bpf/verifier.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7c1e056624f9..d5fe7e618c52 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
->         struct bpf_map *map_ptr;
->         bool raw_mode;
->         bool pkt_access;
-> +       bool is_kfunc;
->         u8 release_regno;
->         int regno;
->         int access_size;
-> @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
->                                    struct bpf_call_arg_meta *meta)
->  {
->         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
-> +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->         u32 *max_access;
->
->         switch (base_type(reg->type)) {
-> @@ -5223,6 +5225,24 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
->                                 env,
->                                 regno, reg->off, access_size,
->                                 zero_size_allowed, ACCESS_HELPER, meta);
-> +       case PTR_TO_CTX:
-> +               /* in case of a kfunc called in a program of type SYSCALL, the context is
-> +                * user supplied, so not computed statically.
-> +                * Dynamically check it now
-> +                */
-> +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
-> +                       enum bpf_access_type atype = meta->raw_mode ? BPF_WRITE : BPF_READ;
-> +                       int offset = access_size - 1;
+> +  reg:
+> +    maxItems: 1
 > +
-> +                       /* Allow zero-byte read from NULL or PTR_TO_CTX */
-
-This will not be handling the case for NULL, only for kfunc(ptr_to_ctx, 0)
-A null pointer has its reg->type as scalar, so it will be handled by
-the default case.
-
-> +                       if (access_size == 0)
-> +                               return zero_size_allowed ? 0 : -EINVAL;
-
-We should use -EACCES, just to be consistent.
-
-> +
-> +                       return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
-> +                                               atype, -1, false);
-> +               }
-> +
-> +               fallthrough;
->         default: /* scalar_value or invalid ptr */
->                 /* Allow zero-byte read from NULL, regardless of pointer type */
->                 if (zero_size_allowed && access_size == 0 &&
-> @@ -5335,6 +5355,7 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
->         WARN_ON_ONCE(regno < BPF_REG_2 || regno > BPF_REG_5);
+>    "#pwm-cells":
+>      const: 2
 >
->         memset(&meta, 0, sizeof(meta));
-> +       meta.is_kfunc = true;
->
->         if (may_be_null) {
->                 saved_reg = *mem_reg;
 > --
-> 2.36.1
+> 2.35.3
 >
+
+
+-- 
+With best wishes
+Dmitry

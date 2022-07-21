@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2932257D554
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCE757D557
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233578AbiGUU63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 16:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S233634AbiGUU7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 16:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233559AbiGUU6Y (ORCPT
+        with ESMTP id S233214AbiGUU7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 16:58:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30BB904CA;
-        Thu, 21 Jul 2022 13:58:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F04260AD8;
-        Thu, 21 Jul 2022 20:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71230C3411E;
-        Thu, 21 Jul 2022 20:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658437101;
-        bh=H/aHhtlRLOeWCCQ5QG+qxA0GsTmdnIKgv+5n5V0Q6n8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KLeVB7ABm4ecgcmx0viupligXKNnNx1xb7evo72pn3Zlb4f9eDbW8miXjfzrZzyoE
-         FRiZz2NHq5lMMXydznLM7Q7iz+GaZAz8bIarL8okiQT673X1g0Wj/itVgSQrKUVjZS
-         Ww/Sd1cwfSQuLKvqe4oz5WZuRpcOyiOkRbRtp1aFR12hbBzDAvbGF6iN+4IAuJ0P18
-         xxyjw3TAuOlcTEOauJkLKoUVcL/AB3FBE6OCKZImLVtRjPmYzO6C64O4WgFgwzwgF6
-         daVATJG/L3yJWqYc4RcpjVzTk//ao+3Vun3a2HC7TXVVW/OAiSwydS/vidV7KXF892
-         ZUFONRMtOpNLg==
-Date:   Thu, 21 Jul 2022 15:58:19 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-Subject: Re: [PATCH v4 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
-Message-ID: <20220721205819.GA1753070@bhelgaas>
+        Thu, 21 Jul 2022 16:59:02 -0400
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69131904DD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 13:59:01 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id EdG2oNF3UGDTnEdG2ovb82; Thu, 21 Jul 2022 22:58:59 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 21 Jul 2022 22:58:59 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Yang Shen <shenyang39@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH v2] crypto: hisilicon/zip: Use the bitmap API to allocate bitmaps
+Date:   Thu, 21 Jul 2022 22:58:53 +0200
+Message-Id: <456a8b00720d603221c8329c19e38b9f4d96d15a.1658437112.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <226ac31e-2ac4-cb73-ab67-62f86d5e5783@linaro.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:04:00AM +0200, Krzysztof Kozlowski wrote:
-> On 20/07/2022 08:01, Wangseok Lee wrote:
-> > Add support Axis, ARTPEC-8 SoC. ARTPEC-8 is the SoC platform of Axis
-> > Communications. This is based on arm64 and support GEN4 & 2lane. This
-> > PCIe controller is based on DesignWare Hardware core and uses DesignWare
-> > core functions to implement the driver. "pcie-artpec6. c" supports artpec6
-> > and artpec7 H/W. artpec8 can not be expanded because H/W configuration is
-> > completely different from artpec6/7. PHY and sub controller are different.
-> > 
-> > Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
-> > Signed-off-by: Jaeho Cho <jaeho79.cho@samsung.com>
-> > ---
-> > v3->v4 :
-> > -Remove unnecessary enum type
-> > -Fix indentation
-> > 
-> 
-> Thanks for the changes. This starts to look good, however I am not going
-> to ack it. This is also not a strong NAK, as I would respect Bjorn and
-> other maintainers decision.
-> 
-> I don't like the approach of creating only Artpec-8 specific driver.
-> Samsung heavily reuses its block in all Exynos devices. Now it re-uses
-> them for other designs as well. Therefore, even if merging with existing
-> Exynos PCIe driver is not feasible (we had such discussions), I expect
-> this to cover all Samsung Foundry PCIe devices. From all current designs
-> up to future licensed blocks, including some new Samsung Exynos SoC. Or
-> at least be ready for it.
+Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+It is less verbose and it improves the semantic.
 
-I would certainly prefer fewer drivers but I don't know enough about
-the underlying IP and the places it's integrated to to know what's
-practical.  The only way I could figure that out would be by manually
-comparing the drivers for similarity.  I assume/expect all driver
-authors are doing that.
+While at it, add an explicit include <linux/bitmap.h>.
 
-Bjorn
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+v1 -> v2
+- add the missing include <linux/bitmap.h>
+---
+ drivers/crypto/hisilicon/zip/zip_crypto.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/crypto/hisilicon/zip/zip_crypto.c b/drivers/crypto/hisilicon/zip/zip_crypto.c
+index 67869513e48c..ad35434a3fdb 100644
+--- a/drivers/crypto/hisilicon/zip/zip_crypto.c
++++ b/drivers/crypto/hisilicon/zip/zip_crypto.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2019 HiSilicon Limited. */
+ #include <crypto/internal/acompress.h>
+ #include <linux/bitfield.h>
++#include <linux/bitmap.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/scatterlist.h>
+ #include "zip.h"
+@@ -606,8 +607,7 @@ static int hisi_zip_create_req_q(struct hisi_zip_ctx *ctx)
+ 		req_q = &ctx->qp_ctx[i].req_q;
+ 		req_q->size = QM_Q_DEPTH;
+ 
+-		req_q->req_bitmap = kcalloc(BITS_TO_LONGS(req_q->size),
+-					    sizeof(long), GFP_KERNEL);
++		req_q->req_bitmap = bitmap_zalloc(req_q->size, GFP_KERNEL);
+ 		if (!req_q->req_bitmap) {
+ 			ret = -ENOMEM;
+ 			if (i == 0)
+@@ -631,11 +631,11 @@ static int hisi_zip_create_req_q(struct hisi_zip_ctx *ctx)
+ 	return 0;
+ 
+ err_free_loop1:
+-	kfree(ctx->qp_ctx[HZIP_QPC_DECOMP].req_q.req_bitmap);
++	bitmap_free(ctx->qp_ctx[HZIP_QPC_DECOMP].req_q.req_bitmap);
+ err_free_loop0:
+ 	kfree(ctx->qp_ctx[HZIP_QPC_COMP].req_q.q);
+ err_free_bitmap:
+-	kfree(ctx->qp_ctx[HZIP_QPC_COMP].req_q.req_bitmap);
++	bitmap_free(ctx->qp_ctx[HZIP_QPC_COMP].req_q.req_bitmap);
+ 	return ret;
+ }
+ 
+@@ -645,7 +645,7 @@ static void hisi_zip_release_req_q(struct hisi_zip_ctx *ctx)
+ 
+ 	for (i = 0; i < HZIP_CTX_Q_NUM; i++) {
+ 		kfree(ctx->qp_ctx[i].req_q.q);
+-		kfree(ctx->qp_ctx[i].req_q.req_bitmap);
++		bitmap_free(ctx->qp_ctx[i].req_q.req_bitmap);
+ 	}
+ }
+ 
+-- 
+2.34.1
+

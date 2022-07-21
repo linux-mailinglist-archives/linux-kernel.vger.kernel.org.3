@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F4757D0C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203A057D0C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiGUQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S231269AbiGUQKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiGUQKT (ORCPT
+        with ESMTP id S229463AbiGUQKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:10:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AACFD36;
-        Thu, 21 Jul 2022 09:10:17 -0700 (PDT)
+        Thu, 21 Jul 2022 12:10:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE0AB862;
+        Thu, 21 Jul 2022 09:10:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 574CCB8259F;
-        Thu, 21 Jul 2022 16:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A13C341CE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A4AA61D07;
+        Thu, 21 Jul 2022 16:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 89AECC341C0;
         Thu, 21 Jul 2022 16:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1658419814;
-        bh=zjEMXxvQfsb7nOkZ6WVZ/odfEb3wozMXvOYlBekZ6gA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=XxIXrS3HIIKOKkGycN0c93jk/96JsOl5hmSGPiTEpF3eLDb9gTevw6jtwszfSoDro
-         RrbC6SLOStxwUzGWa7v94cs7xpAkG4GSumD5tSUeyQdHHrDTP/sK5zswYvwzSDT/5h
-         5XN4p9QSYWgdvR4cgKXPQONld0/EN0pTBLRj3Mh8puX6vPpPMMRkIg1js9ybBPLOPN
-         3E83BYNlalWK/l+1KqAfQ1rHgbB1ausOpakX+qlPgyI4VAFv0dW6KV6Spm/heicwAB
-         odXTFriKVie4M2pXlndqjErPjbB4rjMyRyZlQbKtstKVnmjWvXvpYy5JmPm4oVmapB
-         BVG7UnISXkaHw==
-Date:   Thu, 21 Jul 2022 11:10:13 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two
- funcs
-Message-ID: <20220721161013.GA1725073@bhelgaas>
+        bh=HOE/flbCziKu2voAYBrndOCgntACUbS6q6MoJRpxXLk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=n2KSyOjp4la/FcqMfQZnczNR08ZLwUSz+YF3Jw9nyHiLC9ijJUU9U/zGsDioa1Fo0
+         v90CYmjgNA90FJgAws5N90/8uotYe5tht9ClreBRPOfEVeZ1FBFCVErNhVu9ZExPyM
+         5grEu5t6lZb7u83fAoYntI0tQK916iG46+FavPa1JOONtxrUwyj7uM/tYQ6G8y2zCC
+         E9A9co2vBSI+r9Uy9Xh3DIc/UYy1NhCHjEj0x48dz74VSmtW58jJ74HZQkSL/IWnbp
+         j60KpyN9P1/rqZVVvvGAA9TRfU+fPgB5bYL67idAM9UMXs1iOwkQOjgMx1qonwIIfA
+         mKjqgZfKu7f/A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 66BE8E451B0;
+        Thu, 21 Jul 2022 16:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+-6iNyAXEYT=pc-i0RgtA2njD3f6yELNppJqy733c7O_rmgUg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 0/4] Bluetooth: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <165841981441.30268.9603484388527010825.git-patchwork-notify@kernel.org>
+Date:   Thu, 21 Jul 2022 16:10:14 +0000
+References: <1658383473-32188-1-git-send-email-quic_zijuhu@quicinc.com>
+In-Reply-To: <1658383473-32188-1-git-send-email-quic_zijuhu@quicinc.com>
+To:     Zijun Hu <quic_zijuhu@quicinc.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, luiz.von.dentz@intel.com, swyterzone@gmail.com,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,59 +59,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 10:56:53AM -0400, Jim Quinlan wrote:
-> On Wed, Jul 20, 2022 at 4:37 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Mon, Jul 18, 2022 at 05:40:33PM -0500, Bjorn Helgaas wrote:
-> > > On Mon, Jul 18, 2022 at 01:14:25PM -0500, Bjorn Helgaas wrote:
-> > > > ...
-> > >
-> > > > So I think brcm_pcie_setup() does initialization that doesn't depend
-> > > > on the link or any downstream devices, and brcm_pcie_start_link() does
-> > > > things that depend on the link being up.  Right?
-> > > >
-> > > > If so, "start_link" might be a slight misnomer since AFAICT
-> > > > brcm_pcie_start_link() doesn't do anything to initiate link-up except
-> > > > maybe deasserting fundamental reset.  Some drivers start the LTSSM or
-> > > > explicitly enable link training, but brcm_pcie_start_link() doesn't
-> > > > seem to do anything like that.
-> > > >
-> > > > brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
-> > > > that really depend on the link being up?  If that only affects the
-> > > > Root Port, maybe it could be done before link-up?
-> > >
-> > > What about the /* PCIe->SCB endian mode for BAR */ thing?  Does that
-> > > depend on the link being up?
-> > >
-> > > And the "Refclk from RC should be gated with CLKREQ#" part?  Does that
-> > > depend on the link being up?
-> > >
-> > > It seems obvious that brcm_pcie_set_ssc() and reading the negotiated
-> > > link speed and width depend on the link being up.
-> >
-> > Can we close on this?  Splitting into
->
-> Absolutely.
-> 
-> >   (a) stuff that can be initialized before the link is available and
-> >   (b) stuff that depends on the link
-> >
-> > makes good sense, but then (b) should only contain stuff that actually
-> > depends on the link.
-> >
-> > The "PCIe->SCB endian mode for BAR" *sounds* like something related to
-> > the primary side of the RP, not the link.
-> >
-> > Not sure about "Refclk from RC".  RC would certainly be primary side,
-> > but ASPM has to do with secondary (link) side.
-> 
-> I get the feedback, submission coming soon -- I was waiting for the
-> email thread to conclude.
+Hello:
 
-I don't expect a new posting of the patches in response to every
-question, but hopefully this is a conversation that goes both ways,
-and there's no need to slow down the conversation.  It's more than
-acceptable to simply ask and answer questions and post updated patches
-later.  We're running out of runway and I want to make sure we get
-this thing done this cycle.
+This series was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Bjorn
+On Thu, 21 Jul 2022 14:04:29 +0800 you wrote:
+> This patch series remove bluetooth HCI_QUIRK_BROKEN_ERR_DATA_REPORTING
+> the quirk was introduced by 'commit cde1a8a99287 ("Bluetooth: btusb: Fix
+> and detect most of the Chinese Bluetooth controllers")' to mark HCI
+> commands HCI_Read|Write_Default_Erroneous_Data_Reporting broken within BT
+> device driver, but the reason why these two HCI commands are broken is
+> that feature "Erroneous Data Reporting" is not enabled by firmware, so BT
+> core driver can addtionally check feature bit "Erroneous Data Reporting"
+> instead of the quirk to decide if these two HCI commands work fine.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,1/4] Bluetooth: hci_sync: Check LMP feature bit instead of quirk
+    https://git.kernel.org/bluetooth/bluetooth-next/c/ca832c5e178f
+  - [v2,2/4] Bluetooth: btusb: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for QCA
+    https://git.kernel.org/bluetooth/bluetooth-next/c/9ee3f82b5015
+  - [v2,3/4] Bluetooth: btusb: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for fake CSR
+    https://git.kernel.org/bluetooth/bluetooth-next/c/08454349a054
+  - [v2,4/4] Bluetooth: hci_sync: Remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING
+    https://git.kernel.org/bluetooth/bluetooth-next/c/4d22b9f84c44
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

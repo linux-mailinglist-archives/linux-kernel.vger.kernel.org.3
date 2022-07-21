@@ -2,124 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBAE57C1F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A100457C1F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiGUBsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 21:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
+        id S230290AbiGUBsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 21:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiGUBse (ORCPT
+        with ESMTP id S229510AbiGUBs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 21:48:34 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 974FB15A14;
-        Wed, 20 Jul 2022 18:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=S/t2O
-        7Mawm4B2IlPVurMnVZ+xhJpp4xe7u8hL0rAK3o=; b=noi8b5T6XqlJScoaBtp1i
-        jgtUEZf3/nUTXoqsbO5XHKNUyFgWWBpidrbG0I9kjHDDTWrryVaf/aOAw1zGNUJ5
-        Q9NYXWpMbpbXiZvqlcXbZY+yhHDALQRRt+VYBNiLOBNaMdPDJQORJu/Q7+bbEuIy
-        vHGXzF59NB2UT94hQmpm6g=
-Received: from localhost.localdomain (unknown [112.95.163.118])
-        by smtp3 (Coremail) with SMTP id G9xpCgA33pcqsNhisaGGQQ--.113S2;
-        Thu, 21 Jul 2022 09:47:40 +0800 (CST)
-From:   LemmyHuang <hlm3280@163.com>
-To:     ncardwell@google.com
-Cc:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        hlm3280@163.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, soheil@google.com,
-        weiwan@google.com, ycheng@google.com
-Subject: Re: [PATCH net-next v2] tcp: fix condition for increasing pingpong count
-Date:   Thu, 21 Jul 2022 09:47:21 +0800
-Message-Id: <20220721014721.17919-1-hlm3280@163.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <CADVnQynXC=sEiYOcbSJBv2SML8gzooK_xitXt5uOqybTxj-VtQ@mail.gmail.com>
-References: <CADVnQynXC=sEiYOcbSJBv2SML8gzooK_xitXt5uOqybTxj-VtQ@mail.gmail.com>
+        Wed, 20 Jul 2022 21:48:29 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3648C15A14;
+        Wed, 20 Jul 2022 18:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658368108; x=1689904108;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iXMHw5Asl7oU6fyDe5ffouo+oBUrAhNmZtBQxZRHC/I=;
+  b=BLtGR5rjjCIxVX0Nz7V7djzURA1HCqPBGnQv0/twq2DmpdqDnwSJVSb7
+   xcatyx5VTrBCDWgl/WbBF1NRSe4QKfAlFYpiq9o75rmaG+4YtRMxohGOi
+   AIxULJBrEggXyrHTg3rE0rlzptI9xf4AcXdsi+BQiemYbMnMD6zmDIPTM
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jul 2022 18:48:27 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 18:48:27 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 18:48:27 -0700
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 20 Jul 2022 18:48:26 -0700
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <3090101217@zju.edu.cn>, <balbi@kernel.org>,
+        <colin.king@intel.com>, <jbrunet@baylibre.com>,
+        <jleng@ambarella.com>, <pavel.hofman@ivitera.com>,
+        <pawell@cadence.com>, <ruslan.bilovol@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Jack Pham <quic_jackp@quicinc.com>
+Subject: [PATCH v5] usb: gadget: f_uac2: fix superspeed transfer
+Date:   Wed, 20 Jul 2022 18:48:15 -0700
+Message-ID: <20220721014815.14453-1-quic_jackp@quicinc.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgA33pcqsNhisaGGQQ--.113S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXrWfAr18KryDXrWkuw15Arb_yoW5GF4UpF
-        W8Kr4rCa18Zr10krsIg3WDXry7Ww4FvryxWa18Aw4I934DWr13KFyv9F4ruFyj9F48Kr45
-        Xa4qqw42gryUZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi5xhJUUUUU=
-X-Originating-IP: [112.95.163.118]
-X-CM-SenderInfo: pkopjjiyq6il2tof0z/1tbiSB1F+V+Fe-uqTAAAsV
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At 2022-07-21 02:49:35, "Neal Cardwell" <ncardwell@google.com> wrote:
-> On Wed, Jul 20, 2022 at 3:25 AM LemmyHuang <hlm3280@163.com> wrote:
->>
->> When CONFIG_HZ defaults to 1000Hz and the network transmission time is
->> less than 1ms, lsndtime and lrcvtime are likely to be equal, which will
->> lead to hundreds of interactions before entering pingpong mode.
->>
->> Fixes: 4a41f453bedf ("tcp: change pingpong threshold to 3")
->> Suggested-by: Jakub Kicinski <kuba@kernel.org>
->> Signed-off-by: LemmyHuang <hlm3280@163.com>
->> ---
->> v2:
->>   * Use !after() wrapping the values. (Jakub Kicinski)
->>
->> v1: https://lore.kernel.org/netdev/20220719130136.11907-1-hlm3280@163.com/
->> ---
->>  net/ipv4/tcp_output.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
->> index 858a15cc2..c1c95dc40 100644
->> --- a/net/ipv4/tcp_output.c
->> +++ b/net/ipv4/tcp_output.c
->> @@ -172,7 +172,7 @@ static void tcp_event_data_sent(struct tcp_sock *tp,
->>          * and it is a reply for ato after last received packet,
->>          * increase pingpong count.
->>          */
->> -       if (before(tp->lsndtime, icsk->icsk_ack.lrcvtime) &&
->> +       if (!after(tp->lsndtime, icsk->icsk_ack.lrcvtime) &&
->>             (u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
->>                 inet_csk_inc_pingpong_cnt(sk);
->>
->> --
->
-> Thanks for pointing out this problem!
-> 
-> AFAICT this patch would result in incorrect behavior.
-> 
-> With this patch, we could have cases where tp->lsndtime ==
-> icsk->icsk_ack.lrcvtime and (u32)(now - icsk->icsk_ack.lrcvtime) <
-> icsk->icsk_ack.ato and yet we do not really have a ping-pong exchange.
-> 
-> For example, with this patch we could have:
-> 
-> T1: jiffies=J1; host B receives RPC request from host A
-> T2: jiffies=J1; host B sends first RPC response data packet to host A;
->       -> calls inet_csk_inc_pingpong_cnt()
-> T3: jiffies=J1; host B sends second RPC response data packet to host A;
->       -> calls inet_csk_inc_pingpong_cnt()
-> 
-> In this scenario there is only one ping-pong exchange but the code
-> calls inet_csk_inc_pingpong_cnt() twice.
-> 
-> So I'm hoping we can come up with a better fix.
-> 
-> A simpler approach might be to simplify the model and go back to
-> having a single ping-pong interaction cause delayed ACKs to be enabled
-> on a connection endpoint. Our team has been seeing good results for a
-> while with the simpler approach. What do folks think?
-> 
-> 
-> neal
+From: Jing Leng <jleng@ambarella.com>
 
-It seems better to go back.
+On page 362 of the USB3.2 specification (
+https://usb.org/sites/default/files/usb_32_20210125.zip),
+The 'SuperSpeed Endpoint Companion Descriptor' shall only be returned
+by Enhanced SuperSpeed devices that are operating at Gen X speed.
+Each endpoint described in an interface is followed by a 'SuperSpeed
+Endpoint Companion Descriptor'.
 
-Look at this revert patch:
-https://lore.kernel.org/netdev/20220720233156.295074-1-weiwan@google.com/
+If users use SuperSpeed UDC, host can't recognize the device if endpoint
+doesn't have 'SuperSpeed Endpoint Companion Descriptor' followed.
+
+Currently in the uac2 driver code:
+1. ss_epout_desc_comp follows ss_epout_desc;
+2. ss_epin_fback_desc_comp follows ss_epin_fback_desc;
+3. ss_epin_desc_comp follows ss_epin_desc;
+4. Only ss_ep_int_desc endpoint doesn't have 'SuperSpeed Endpoint
+Companion Descriptor' followed, so we should add it.
+
+Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+Signed-off-by: Jack Pham <quic_jackp@quicinc.com>
+---
+v5: Revived from https://lore.kernel.org/linux-usb/20220218095948.4077-1-3090101217@zju.edu.cn/
+    and rebased on Greg's usb-linus
+
+ChangeLog v3->v4:
+- Add "Fixes:" tag in the changelog area
+ChangeLog v2->v3:
+- Remove static variables which are explicitly initialized to 0
+- Remove redundant modification "case USB_SPEED_SUPER_PLUS:"
+ChangeLog v1->v2:
+- Update more detailed description of the PATCH
+
+ drivers/usb/gadget/function/f_uac2.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index 1905a8d8e0c9..08726e4c68a5 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -291,6 +291,12 @@ static struct usb_endpoint_descriptor ss_ep_int_desc = {
+ 	.bInterval = 4,
+ };
+ 
++static struct usb_ss_ep_comp_descriptor ss_ep_int_desc_comp = {
++	.bLength = sizeof(ss_ep_int_desc_comp),
++	.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
++	.wBytesPerInterval = cpu_to_le16(6),
++};
++
+ /* Audio Streaming OUT Interface - Alt0 */
+ static struct usb_interface_descriptor std_as_out_if0_desc = {
+ 	.bLength = sizeof std_as_out_if0_desc,
+@@ -604,7 +610,8 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
+ 	(struct usb_descriptor_header *)&in_feature_unit_desc,
+ 	(struct usb_descriptor_header *)&io_out_ot_desc,
+ 
+-  (struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc,
++	(struct usb_descriptor_header *)&ss_ep_int_desc_comp,
+ 
+ 	(struct usb_descriptor_header *)&std_as_out_if0_desc,
+ 	(struct usb_descriptor_header *)&std_as_out_if1_desc,
+@@ -800,6 +807,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	struct usb_ss_ep_comp_descriptor *epout_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
+ 	struct usb_ss_ep_comp_descriptor *epin_fback_desc_comp = NULL;
++	struct usb_ss_ep_comp_descriptor *ep_int_desc_comp = NULL;
+ 	struct usb_endpoint_descriptor *epout_desc;
+ 	struct usb_endpoint_descriptor *epin_desc;
+ 	struct usb_endpoint_descriptor *epin_fback_desc;
+@@ -827,6 +835,7 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 		epin_fback_desc = &ss_epin_fback_desc;
+ 		epin_fback_desc_comp = &ss_epin_fback_desc_comp;
+ 		ep_int_desc = &ss_ep_int_desc;
++		ep_int_desc_comp = &ss_ep_int_desc_comp;
+ 	}
+ 
+ 	i = 0;
+@@ -855,8 +864,11 @@ static void setup_headers(struct f_uac2_opts *opts,
+ 	if (EPOUT_EN(opts))
+ 		headers[i++] = USBDHDR(&io_out_ot_desc);
+ 
+-	if (FUOUT_EN(opts) || FUIN_EN(opts))
++	if (FUOUT_EN(opts) || FUIN_EN(opts)) {
+ 		headers[i++] = USBDHDR(ep_int_desc);
++		if (ep_int_desc_comp)
++			headers[i++] = USBDHDR(ep_int_desc_comp);
++	}
+ 
+ 	if (EPOUT_EN(opts)) {
+ 		headers[i++] = USBDHDR(&std_as_out_if0_desc);
+-- 
+2.24.0
 

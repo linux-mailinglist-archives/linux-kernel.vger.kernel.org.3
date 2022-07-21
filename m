@@ -2,177 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E184457C76E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD14D57C770
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbiGUJTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S232841AbiGUJTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiGUJT3 (ORCPT
+        with ESMTP id S231335AbiGUJTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:19:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13233785AB;
-        Thu, 21 Jul 2022 02:19:28 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 09:19:25 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658395166;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yj+iNsRdO7eK1x4tHRnfrDMhGOSBB3eMOx9yOGW+ZOY=;
-        b=sIEVD54pEprogYVMQttPWb2E9yr9LZZooBAY1timIW/K7ADQ0J6GbsR0XKwGY2/50wy7Rx
-        AJoglBpvjwFQ0bXwGAxMj6Jf3fY5Om2fNWW15jKCy818FEemaelL1TQQHX66pv6tNMiGkF
-        tG7Yf7V9rHuu8PmBhpvjuYqnQe0pk/Z801jCcbrPR6d56KvtwqyOvKfTFVTUnIDeji0u3F
-        ZMEfqdD1gSM83ayJrvkNhR52GESgSKehgokcjc35j6mZyaPeR8rYzmB3L0sIifTjDHfRIs
-        +iKzeowpMrNgNJW05srsjsMk2xpgfHEjFaOJk9OZlHYTTjeaI4iKasIj3TM4+g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658395166;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yj+iNsRdO7eK1x4tHRnfrDMhGOSBB3eMOx9yOGW+ZOY=;
-        b=Rqov2GB602VLttAs1Xcaq6iHGdb/qh1MoZJ3+sTq5TTaef1ZSzvQdTFN38wyP7LjGvpbaN
-        6mT/RnRE8JS9j2CA==
-From:   "tip-bot2 for Mario Limonciello" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] x86/amd_nb: Add AMD PCI IDs for SMN communication
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Borislav Petkov <bp@suse.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220719195256.1516-1-mario.limonciello@amd.com>
-References: <20220719195256.1516-1-mario.limonciello@amd.com>
+        Thu, 21 Jul 2022 05:19:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1E6F785AB;
+        Thu, 21 Jul 2022 02:19:41 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01D7A1042;
+        Thu, 21 Jul 2022 02:19:42 -0700 (PDT)
+Received: from [10.57.41.17] (unknown [10.57.41.17])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AA5553F70D;
+        Thu, 21 Jul 2022 02:19:38 -0700 (PDT)
+Message-ID: <9d36f053-f929-204b-fb47-60c685b06717@arm.com>
+Date:   Thu, 21 Jul 2022 10:19:36 +0100
 MIME-Version: 1.0
-Message-ID: <165839516549.15455.5543584372152726957.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH v3 1/2] perf: coresight_pmu: Add support for ARM
+ CoreSight PMU driver
+To:     Besar Wicaksono <bwicaksono@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        "thanu.rangarajan@arm.com" <thanu.rangarajan@arm.com>,
+        "Michael.Williams@arm.com" <Michael.Williams@arm.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vikram Sethi <vsethi@nvidia.com>,
+        "mike.leach@linaro.org" <mike.leach@linaro.org>,
+        "leo.yan@linaro.org" <leo.yan@linaro.org>
+References: <20220621055035.31766-1-bwicaksono@nvidia.com>
+ <20220621055035.31766-2-bwicaksono@nvidia.com>
+ <73dafe08-d1f1-90b6-995e-7d38e9e1dce7@arm.com>
+ <SJ0PR12MB567600F730B47F3A1007775AA0829@SJ0PR12MB5676.namprd12.prod.outlook.com>
+ <20220712163638.GA2945984@p14s>
+ <632f5c80-2be3-ace5-6b0d-ee0c9e5560ff@arm.com>
+ <SJ0PR12MB567612C18D20A0C0243F0D23A0889@SJ0PR12MB5676.namprd12.prod.outlook.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <SJ0PR12MB567612C18D20A0C0243F0D23A0889@SJ0PR12MB5676.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+Hi
 
-Commit-ID:     f8faf3496633b302a6591fda599540a0b53a35bb
-Gitweb:        https://git.kernel.org/tip/f8faf3496633b302a6591fda599540a0b53a35bb
-Author:        Mario Limonciello <mario.limonciello@amd.com>
-AuthorDate:    Tue, 19 Jul 2022 14:52:51 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 20 Jul 2022 17:35:40 +02:00
+On 14/07/2022 05:47, Besar Wicaksono wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Robin Murphy <robin.murphy@arm.com>
+>> Sent: Wednesday, July 13, 2022 3:13 AM
+>> To: Mathieu Poirier <mathieu.poirier@linaro.org>; Besar Wicaksono
+>> <bwicaksono@nvidia.com>
+>> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>; catalin.marinas@arm.com;
+>> will@kernel.org; mark.rutland@arm.com; linux-arm-
+>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; linux-
+>> tegra@vger.kernel.org; sudeep.holla@arm.com;
+>> thanu.rangarajan@arm.com; Michael.Williams@arm.com; Thierry Reding
+>> <treding@nvidia.com>; Jonathan Hunter <jonathanh@nvidia.com>; Vikram
+>> Sethi <vsethi@nvidia.com>; mike.leach@linaro.org; leo.yan@linaro.org
+>> Subject: Re: [RESEND PATCH v3 1/2] perf: coresight_pmu: Add support for
+>> ARM CoreSight PMU driver
+>>
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2022-07-12 17:36, Mathieu Poirier wrote:
+>> [...]
+>>>>> If we have decied to call this arm_system_pmu, (which I am perfectly
+>>>>> happy with), could we please stick to that name for functions that we
+>>>>> export ?
+>>>>>
+>>>>> e.g,
+>>>>>
+>> s/coresight_pmu_sysfs_event_show/arm_system_pmu_event_show()/
+>>>>>
+>>>>
+>>>> Just want to confirm, is it just the public functions or do we need to
+>> replace
+>>>> all that has "coresight" naming ? Including the static functions, structs,
+>> filename.
+>>>
+>>> I think all references to "coresight" should be changed to
+>> "arm_system_pmu",
+>>> including filenames.  That way there is no doubt this IP block is not
+>>> related, and does not interoperate, with the any of the "coresight" IP
+>> blocks
+>>> already supported[1] in the kernel.
+>>>
+>>> I have looked at the documentation[2] in the cover letter and I agree
+>>> with an earlier comment from Sudeep that this IP has very little to do with
+>> any
+>>> of the other CoreSight IP blocks found in the CoreSight framework[1].
+>> Using the
+>>> "coresight" naming convention in this driver would be _extremely_
+>> confusing,
+>>> especially when it comes to exported functions.
+>>
+>> But conversely, how is it not confusing to make up completely different
+>> names for things than what they're actually called? The CoreSight
+>> Performance Monitoring Unit is a part of the Arm CoreSight architecture,
+>> it says it right there on page 1. What if I instinctively associate the
+>> name Mathieu with someone more familiar to me, so to avoid confusion I'd
+>> prefer to call you Steve? Is that OK?
+>>
+> 
+> What is the naming convention for modules under drivers/perf ?
+> In my observation, the names there correspond to the part monitored by
+> the PMU. The confusion on using "coresight_pmu" naming could be that
+> people may think the PMU monitors coresight system, i.e the trace system under hwtracing.
+> However, the driver in this patch is for a new PMU standard that monitors uncore
+> parts. Uncore was considered as terminology from Intel, so "system" was picked instead.
+> Please see this thread for reference:
+>    https://lore.kernel.org/linux-arm-kernel/20220510111318.GD27557@willie-the-truck/
 
-x86/amd_nb: Add AMD PCI IDs for SMN communication
+I think we all understand the state of affairs.
 
-Add support for SMN communication on family 17h model A0h and family 19h
-models 60h-70h.
+- We have an architecutre specification for PMUs, Arm CoreSight PMU 
+Architecutre, which has absolutely no relationship with :
 
-  [ bp: Merge into a single patch. ]
+    either CoreSight Self-Hosted Tracing (handled by "coresight" 
+subsystem in the kernel under drivers/hwtracing/coresight/, with a user 
+visible pmu as "cs_etm")
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>	# pci_ids.h
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220719195256.1516-1-mario.limonciello@amd.com
----
- arch/x86/kernel/amd_nb.c | 13 +++++++++++++
- include/linux/pci_ids.h  |  3 +++
- 2 files changed, 16 insertions(+)
+    or the CoreSight Architecture (except for the name). This is of less 
+significance in general. But has a significant impact on the "name"
+users might expect for the driver/Kconfig etc.
 
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 190e0f7..4266b64 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -19,17 +19,23 @@
- #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
- #define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
- #define PCI_DEVICE_ID_AMD_17H_M60H_ROOT	0x1630
-+#define PCI_DEVICE_ID_AMD_17H_MA0H_ROOT	0x14b5
- #define PCI_DEVICE_ID_AMD_19H_M10H_ROOT	0x14a4
-+#define PCI_DEVICE_ID_AMD_19H_M60H_ROOT	0x14d8
-+#define PCI_DEVICE_ID_AMD_19H_M70H_ROOT	0x14e8
- #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
- #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
- #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
-+#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F4 0x1728
- #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
- #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F4 0x14b1
- #define PCI_DEVICE_ID_AMD_19H_M40H_ROOT	0x14b5
- #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F4 0x167d
- #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
-+#define PCI_DEVICE_ID_AMD_19H_M60H_DF_F4 0x14e4
-+#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F4 0x14f4
- 
- /* Protect the PCI config register pairs used for SMN. */
- static DEFINE_MUTEX(smn_mutex);
-@@ -41,8 +47,11 @@ static const struct pci_device_id amd_root_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_ROOT) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_ROOT) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M60H_ROOT) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M70H_ROOT) },
- 	{}
- };
- 
-@@ -61,12 +70,15 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F3) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M60H_DF_F3) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
- 	{}
- };
- 
-@@ -81,6 +93,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F4) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_DF_F4) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_DF_F4) },
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index 0178823..7fa460c 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -556,10 +556,13 @@
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
- #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
- #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
-+#define PCI_DEVICE_ID_AMD_17H_MA0H_DF_F3 0x1727
- #define PCI_DEVICE_ID_AMD_19H_DF_F3	0x1653
- #define PCI_DEVICE_ID_AMD_19H_M10H_DF_F3 0x14b0
- #define PCI_DEVICE_ID_AMD_19H_M40H_DF_F3 0x167c
- #define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3 0x166d
-+#define PCI_DEVICE_ID_AMD_19H_M60H_DF_F3 0x14e3
-+#define PCI_DEVICE_ID_AMD_19H_M70H_DF_F3 0x14f3
- #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
- #define PCI_DEVICE_ID_AMD_LANCE		0x2000
- #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
+- We want to be able to make it easier for the users/developers to
+choose what they want without causing confusion.
+
+For an end-user: Having the PMU instance named after the "System IP"
+(as implememented in the driver solves the problem and falling back to
+arm_system_pmu is a good enough choice. So let us stick with that)
+
+Kconfig: May be we can choose
+CONFIG_ARM_CORESIGHT_PMU_ARCH_PMU
+or even
+CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU
+
+with appropriate help text to ensure there is enough stress about what
+this is and what this is not would be sufficient.
+
+Now the remaining contention is about the name of the "subsystem" and 
+also the dir/files.  This may sound insignificant. But it is also 
+important to get this right. e.g., helps the reviewers unambiguously 
+identify the change or maintainers accepting pull requests (remember
+these two PMUs (cs_etm and this one) go via different trees.). Not
+everyone who deals with this in the community may be aware of how
+these are different.
+
+We could choose arm_cspmu_ or simply cspmu. Given that only the
+"normal" users care about the "association" with the "architecture"
+and more advanced users (e.g, developers) can easily map "Kconfig"
+to driver files, may be we could even stick to the "arm_syspmu"
+(from "arm system pmu") ?
+
+Suzuki
+
+
+> 
+>> As it happens, Steve, I do actually agree with you that "coresight_" is
+>> a bad prefix here, but only for the reason that it's too general. TBH I
+>> think that's true of the existing Linux subsystem too, but that damage
+>> is already done, and I'd concur that there's little value in trying to
+>> unpick that now, despite the clear existence of products like CoreSight
+>> DAP and CoreSight ELA which don't have all that much to do with program
+>> trace either.
+>>
+>> However, hindsight and inertia are hardly good reasons to double down on
+>> poor decisions, so if I was going to vote for anything here it would be
+>> "cspmu_", which is about as
+>> obviously-related-to-the-thing-it-actually-is as we can get while also
+>> being pleasantly concise.
+>>
+>> [ And no, this isn't bikeshedding. Naming things right is *important* ]
+>>
+> 
+> I agree having the correct name is important, especially at this early stage.
+> A direction of what the naming should describe would be very helpful here.
+> 
+>> Cheers,
+>> Robin.
+>>
+>>>
+>>> Thanks,
+>>> Steve
+>>>
+>>> [1]. drivers/hwtracing/coresight/
+>>> [2]. https://developer.arm.com/documentation/ihi0091/latest
+

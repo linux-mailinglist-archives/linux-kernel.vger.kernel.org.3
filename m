@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934FF57C981
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D8857C983
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiGULFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S233006AbiGULFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiGULFR (ORCPT
+        with ESMTP id S231157AbiGULFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:05:17 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AAE2B61E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:05:15 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id u14so1412973lju.0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yJ/vHPCzm1f2d//qmF68sXf6yNTReQ0ju6ClzshBRoI=;
-        b=WYXA1xzOXuyrZ3dBHDunm5dy+Ue2dNxXFJBMKycIK+S3seEprfABLkefA2RuFkHR/F
-         qThOZ+oBVw1Ez2sRJm9WW6pfc8iM0YYJHn+/vYPDZ9ji0Q4DvIir49gCBzBJfhBDQdj/
-         JLzjmJIP/mahXqvfp3jgazyX0x5psXSenRy5RlfzLBfg4E0ghufWCysQ2QNb0yJmXR3/
-         Bzrxe5cyKTEEwiCHPViQ0ZPffooVyF2wbl+mUs1EGMAtYr8a/Hf/QERvT/1gNrlkKE+Q
-         TEEA1OZ7FVM7AFcQjMpaiBwUO2vxQpegPERArDO8LvyYRvHxEzrZYALWyuLPS2wZI4V5
-         aGBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yJ/vHPCzm1f2d//qmF68sXf6yNTReQ0ju6ClzshBRoI=;
-        b=bJeESV7hX8qapydUgMyUHykxtSLlasi0Vn4+qTfgI2r0uhVAFytmgTpWqmmifxZ3SP
-         PtCp4eS1yUG8KGDphK9jfGuVMLs9G/4R6YnNMqi6Hvh3Eyw2kVTL71SkxTKY+aQ3TTB1
-         8VVo2139rVvVJBMC9hbwwwEMgaSFBLsE/lqcS6K2VErnvOuQWuXG1KrrbpqIRgSe+LSa
-         /u3AyOb5KOnpZCA39L+RPn9nqV+z7lbJevXax8b9N5Yxj3SbzTO1Ab/Ga2mPQt/HTdFJ
-         rDx7ICHgAr4YrkFjvph1UKb6d8Gjtaw6fnxiG8ktquYqzW6McOXdz63mTIMmoZgHUydl
-         qaSA==
-X-Gm-Message-State: AJIora+uUzNze8xHcmIAwvWuxiLokGxeRghU4y0tL5JaAqXw6WSdr2uK
-        rjL6iO1KJ7Xo5od6pY0q/sFU2rCQhCC1GULnrouK2Q==
-X-Google-Smtp-Source: AGRyM1vcvJjCP/hw4nnWQPdUZUzdVTMwbnE0GxM/EXfiRGf+G3w+JBmm/xpG4NFQmXvYIMkJMMthdgPcgvTzijzMINU=
-X-Received: by 2002:a05:651c:158:b0:25d:d59c:85bd with SMTP id
- c24-20020a05651c015800b0025dd59c85bdmr3473477ljd.463.1658401514066; Thu, 21
- Jul 2022 04:05:14 -0700 (PDT)
+        Thu, 21 Jul 2022 07:05:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA2582471
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:05:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39FE4B823C8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F476C3411E;
+        Thu, 21 Jul 2022 11:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658401532;
+        bh=l7E5l4c+Ygm6fPaYzwHXDYWSIV1KuaMsb151szj2Syw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KLn/H8QWqn5kYjgT8FnRomo0986UKMgm4Ad3XBBlX0JVLUC3ZyTm0fZekkleVM0/B
+         kk46+eODylPqrHMRiiL5TVPyBDWlcAtPLtXNpo6E+MqLizKolwAVGD/tI0iKtINYrc
+         6TVOt1MeruUisBo3MdXzARFyozazq0ceDre8CF1ZxiTFEY2lnKvbEglce0p2oIniJZ
+         gk2HMpB1hnGwOGIUbe2+dVSGj3AT5nZsQqFhs7EIn/h43kEg2rr/O9TT4Vz4fggsrB
+         3h7vZ3OqAom1tYShkieDC5SMsFNIxtLqkLaP/FZAQVQJWaQMOwFVs1M3dVlAE1IhhR
+         iNuQxK1Ev7mKg==
+Date:   Thu, 21 Jul 2022 12:05:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Rob Herring <robh@kernel.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v4 2/4] dt-bindings: regulator: add bindings for
+ output-supply
+Message-ID: <Ytky912vo1HmEWkd@sirena.org.uk>
+References: <20220707081826.953449-1-Naresh.Solanki@9elements.com>
+ <20220707081826.953449-3-Naresh.Solanki@9elements.com>
+ <20220714141041.GB2229197-robh@kernel.org>
+ <YtAkwcwXaQqZV75d@sirena.org.uk>
+ <CAL_JsqKu_HCDoPBTcVdVV2JyD_8p3+cbrNC0u6VrK85vWZmt3Q@mail.gmail.com>
+ <YtArbh4a40cACRMt@sirena.org.uk>
+ <CAL_Jsq+KRyE3i3CkPKopGgFvL+h0pT3R-d3aZNgVmKyiTy3gjw@mail.gmail.com>
+ <YtA8KOLDIsEH+okf@sirena.org.uk>
+ <CAL_JsqKCByvNASAxRWV3bcjFSBjXZUQf0Xvv_dCZ0z1CRCcOKA@mail.gmail.com>
+ <YtkPUOh5XiQyGLxw@hatter.bewilderbeest.net>
 MIME-Version: 1.0
-References: <20220721043608.1527686-1-martin.kepplinger@puri.sm> <20220721043608.1527686-2-martin.kepplinger@puri.sm>
-In-Reply-To: <20220721043608.1527686-2-martin.kepplinger@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 21 Jul 2022 13:04:37 +0200
-Message-ID: <CAPDyKFpTauJeRS0W34Cz7v_HzJzBCsOk-M2PvrWoYR=cth=j5Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] PM: domain: fix indentation and use BIT macro for flags
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b0S5Jq2JCjyLZwLX"
+Content-Disposition: inline
+In-Reply-To: <YtkPUOh5XiQyGLxw@hatter.bewilderbeest.net>
+X-Cookie: Exercise caution in your daily affairs.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 06:36, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Use the BIT macro for flags and simply do 2 tags indentation.
->
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 
-I prefer to keep the advantages with doing a git blame on this file,
-over this cleanup. Unless you feel strongly about this I would
-appreciate it if you can drop $subject patch from the series.
+--b0S5Jq2JCjyLZwLX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Kind regards
-Uffe
+On Thu, Jul 21, 2022 at 01:33:20AM -0700, Zev Weiss wrote:
 
-> ---
->  include/linux/pm_domain.h | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index ebc351698090..76bc9e3ef5ff 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_DOMAIN_H
->  #define _LINUX_PM_DOMAIN_H
->
-> +#include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/ktime.h>
->  #include <linux/mutex.h>
-> @@ -61,13 +62,13 @@
->   *                             components' next wakeup when determining the
->   *                             optimal idle state.
->   */
-> -#define GENPD_FLAG_PM_CLK       (1U << 0)
-> -#define GENPD_FLAG_IRQ_SAFE     (1U << 1)
-> -#define GENPD_FLAG_ALWAYS_ON    (1U << 2)
-> -#define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
-> -#define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
-> -#define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
-> -#define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
-> +#define GENPD_FLAG_PM_CLK              BIT(0)
-> +#define GENPD_FLAG_IRQ_SAFE            BIT(1)
-> +#define GENPD_FLAG_ALWAYS_ON           BIT(2)
-> +#define GENPD_FLAG_ACTIVE_WAKEUP       BIT(3)
-> +#define GENPD_FLAG_CPU_DOMAIN          BIT(4)
-> +#define GENPD_FLAG_RPM_ALWAYS_ON       BIT(5)
-> +#define GENPD_FLAG_MIN_RESIDENCY       BIT(6)
->
->  enum gpd_status {
->         GENPD_STATE_ON = 0,     /* PM domain is on */
-> --
-> 2.30.2
->
+> A question for Mark though -- in one of my earliest stabs at this I floated
+> the idea of using reg-userspace-consumer for it, but was told in no
+> uncertain terms that that driver was for testing only and should under no
+> circumstances ever be instantiated in a production system.  Has the thinking
+> on its usage changed in the last year or so such that this approach was
+> deemed okay?
+
+I was talked around after some discussion of the use case.  It's still
+not a great API but for at least some of these users it'll do.  It's
+important that it not appear directly in bindings though.
+
+--b0S5Jq2JCjyLZwLX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLZMvcACgkQJNaLcl1U
+h9AJTAf+LXFZPSqos9tHTiRzoxXmVCnmp/OSMKlH9+KnBbU+K6Ytd8IZrv3oqZU+
+haHZScqVjWuYHlro6TOSBS6ZqGggc5R4btpe9TFPNAIEvDTYg+YXk6zeeZWyhAZg
+W552I0rDqoEgyxjZ08F2FVlzV/U0LddQopLHj/Ur8sdmKOV6v/NcznLPTmmdJ/ev
+6ux8LxvHNoVLzbUgW47YHa00JNCUWKrB6z5Lf3eRao3O6hs7J7RH6GejMbpyPnx9
+rlIG9+JUlTVURFNnYEzLaX+kV9GlEQAAiKC++IEu2/InSDMvIa5sEkUEtWD7u6Lf
+Pmbzfnrml0Y/vF7BnT2K7/pf4jR4zA==
+=bvLv
+-----END PGP SIGNATURE-----
+
+--b0S5Jq2JCjyLZwLX--

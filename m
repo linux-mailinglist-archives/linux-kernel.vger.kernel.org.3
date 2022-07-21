@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369FD57C80D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FC857C81B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbiGUJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
+        id S232850AbiGUJvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiGUJts (ORCPT
+        with ESMTP id S232812AbiGUJu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:49:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F65A814B9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:49:48 -0700 (PDT)
+        Thu, 21 Jul 2022 05:50:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24894BD36
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:50:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658396988; x=1689932988;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cZIk67FVaNbtZuvKdX2cpRHJBrAqOXcyqpFPn3oWtgQ=;
-  b=dcrGTkN1sA6vpVUnFberQEaPPkOZ9WI8rcPsp58u5oelYv43+5kBALTR
-   fOSzJJx1KbtsguhZ9jn600y54V713atdOuVAt0O0gOm+8EDuTWC/VLD7A
-   Ilbm5y174q5bOpFTZ1Tl7nH5wT3G2+Ulbc9/UDw+iIoQcAJhfSbDXKYK2
-   l/aw7Y11RUbiNoT0x/sRnfp5nuMJww0FH4jh3RNBAsFa/UAdxBRKUVxA/
-   g98WuRC5wR6aWShmf8AVduGx0lPpEBRvcuN6RP10xh8gGfpwTRRMLE4ML
-   WONs7nmNA7mDIF3LZqLmoR1QZFd6KDxVPZGygp6hpBSuQ7vbbV6jZ9xki
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="287011413"
+  t=1658397054; x=1689933054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UBtdiK8rxibAsEgP3o4hqQ1ofzGNPEkyGhbFOLcvcog=;
+  b=gB28EYZ2b0By+SPITtfKCdgCfLVLm+tk5aLEIqJBHM9jccTFEgvf/v4v
+   Rjt3kz4rv1UWugEJZ2SMYspMeRdmcmQVmBE/VEFEbyVkFisMom+OtnS/M
+   3uvlZq5udzOLfaIcsLAXj60tke8eivl54Tw3QPp0DaIbMkJxp8yltVVaT
+   qV6r91y+OLmi3qVDxQBv9GsHIeAaiI9G4YJLIA7I8EO5bRao9w7IXywmR
+   dukr4plfNPOQb9B5La6Q11d1CtwUt7e/gCS0CzjV/EbG0Z9GRLKvFqEu8
+   tIWs0zqywRTrsJ8pLVUDGJqJCbk7G8YP1G8MyDcyk0UM2RK7y2K9iPZc5
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="348699487"
 X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="287011413"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 02:49:48 -0700
+   d="scan'208";a="348699487"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 02:50:54 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="740617886"
+   d="scan'208";a="724981305"
 Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Jul 2022 02:49:47 -0700
+  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2022 02:50:52 -0700
 Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1oESoU-0001gr-An;
-        Thu, 21 Jul 2022 09:49:46 +0000
-Date:   Thu, 21 Jul 2022 17:49:38 +0800
+        id 1oESpS-0001gv-BW;
+        Thu, 21 Jul 2022 09:50:46 +0000
+Date:   Thu, 21 Jul 2022 17:50:24 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/for-next-fam1] BUILD SUCCESS
- 6000a0296e3d32c25e0e618f96a79ca511b4e5de
-Message-ID: <62d92132.Yu0VXroVO93sdXQ1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Petr Mladek <pmladek@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v3 2/2] printk: console: Support console-specific
+ loglevels
+Message-ID: <202207211731.9YcNa5UE-lkp@intel.com>
+References: <b9fa85cfed3a97ab4292daca51476e4e23da2f9a.1658339046.git.chris@chrisdown.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Disposition: inline
+In-Reply-To: <b9fa85cfed3a97ab4292daca51476e4e23da2f9a.1658339046.git.chris@chrisdown.name>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,136 +68,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/for-next-fam1
-branch HEAD: 6000a0296e3d32c25e0e618f96a79ca511b4e5de  ksmbd: Replace multiple one-element arrays with flexible-array members
+Hi Chris,
 
-elapsed time: 730m
+I love your patch! Perhaps something to improve:
 
-configs tested: 116
-configs skipped: 5
+[auto build test WARNING on 9d882352bac8f2ff3753d691e2dc65fcaf738729]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/printk-console-Per-console-loglevels/20220721-015315
+base:   9d882352bac8f2ff3753d691e2dc65fcaf738729
+reproduce: make htmldocs
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm                      integrator_defconfig
-arm                        keystone_defconfig
-arc                          axs101_defconfig
-xtensa                  audio_kc705_defconfig
-powerpc                    adder875_defconfig
-mips                         bigsur_defconfig
-csky                              allnoconfig
-um                             i386_defconfig
-mips                           ci20_defconfig
-arm                          lpd270_defconfig
-arm                        mvebu_v7_defconfig
-m68k                           virt_defconfig
-sh                           se7206_defconfig
-sh                             shx3_defconfig
-sh                                  defconfig
-powerpc                     rainier_defconfig
-powerpc                        cell_defconfig
-nios2                               defconfig
-openrisc                 simple_smp_defconfig
-xtensa                    smp_lx200_defconfig
-sh                         microdev_defconfig
-mips                          rb532_defconfig
-parisc                           allyesconfig
-arm                            hisi_defconfig
-sh                           se7724_defconfig
-arm                       aspeed_g5_defconfig
-arm                            zeus_defconfig
-powerpc                     tqm8548_defconfig
-sparc                             allnoconfig
-arm                        mini2440_defconfig
-arc                        nsimosci_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                   secureedge5410_defconfig
-m68k                        mvme147_defconfig
-nios2                         10m50_defconfig
-xtensa                              defconfig
-m68k                            mac_defconfig
-arm                           viper_defconfig
-powerpc                      ep88xc_defconfig
-powerpc                      pcm030_defconfig
-ia64                         bigsur_defconfig
-arm                          exynos_defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-nios2                            allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-arm                  randconfig-c002-20220718
-i386                 randconfig-c001-20220718
-x86_64               randconfig-c001-20220718
-alpha                             allnoconfig
-arc                               allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64               randconfig-a012-20220718
-x86_64               randconfig-a011-20220718
-x86_64               randconfig-a014-20220718
-x86_64               randconfig-a016-20220718
-x86_64               randconfig-a013-20220718
-x86_64               randconfig-a015-20220718
-i386                 randconfig-a015-20220718
-i386                 randconfig-a011-20220718
-i386                 randconfig-a012-20220718
-i386                 randconfig-a014-20220718
-i386                 randconfig-a016-20220718
-i386                 randconfig-a013-20220718
-i386                          randconfig-a012
-i386                          randconfig-a016
-s390                 randconfig-r044-20220718
-riscv                randconfig-r042-20220718
-arc                  randconfig-r043-20220718
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-clang tested configs:
-arm                      tct_hammer_defconfig
-mips                           ip28_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                 mpc832x_mds_defconfig
-x86_64                        randconfig-k001
-i386                          randconfig-a004
-i386                 randconfig-a001-20220718
-i386                 randconfig-a006-20220718
-i386                 randconfig-a002-20220718
-i386                 randconfig-a004-20220718
-i386                 randconfig-a005-20220718
-i386                 randconfig-a003-20220718
-x86_64               randconfig-a005-20220718
-x86_64               randconfig-a003-20220718
-x86_64               randconfig-a006-20220718
-hexagon              randconfig-r041-20220718
-hexagon              randconfig-r045-20220718
+All warnings (new ones prefixed by >>):
+
+>> Documentation/ABI/testing/sysfs-class-console:18: WARNING: Unexpected indentation.
+>> Documentation/admin-guide/per-console-loglevel.rst: WARNING: document isn't included in any toctree
+
+vim +18 Documentation/ABI/testing/sysfs-class-console
+
+  > 18	Date:		May 2022
+    19	Contact:	Chris Down <chris@chrisdown.name>
+    20	Description:	Read only. The currently effective loglevel source for this
+    21			console -- for example, whether it was set globally, or whether
+    22			it was set locally for this console. Possible values are:
+    23	
+    24			local: The loglevel comes from the per-console loglevel.
+    25			global: The loglevel comes from the global loglevel.
+    26			ignore_loglevel: Both the per-console loglevel and global
+    27					 loglevels are ignored as ignore_loglevel is
+    28					 present on the kernel command line.
+    29	
 
 -- 
 0-DAY CI Kernel Test Service

@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8623F57C4C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5AB57C4B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiGUG5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S231856AbiGUGvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiGUG5l (ORCPT
+        with ESMTP id S230058AbiGUGvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:57:41 -0400
-Received: from 18.mo581.mail-out.ovh.net (18.mo581.mail-out.ovh.net [188.165.56.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EE3785BE
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:57:40 -0700 (PDT)
-Received: from player697.ha.ovh.net (unknown [10.110.103.226])
-        by mo581.mail-out.ovh.net (Postfix) with ESMTP id AAEFE236F9
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:51:21 +0000 (UTC)
-Received: from RCM-web2.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player697.ha.ovh.net (Postfix) with ESMTPSA id 65D0E2CD2F359;
-        Thu, 21 Jul 2022 06:51:09 +0000 (UTC)
+        Thu, 21 Jul 2022 02:51:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D9242ADA;
+        Wed, 20 Jul 2022 23:51:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C752061D96;
+        Thu, 21 Jul 2022 06:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A1BC3411E;
+        Thu, 21 Jul 2022 06:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658386296;
+        bh=vmVX9bnmGimudbWeAcntQ9Q8n8YB6rg9wKjyHxHE1Rg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D0sP2Y5BF9BX4KbXc6RGH2xefa/cpPfdKM+EXSigmJlyPYlUtAd2b6Q/On8yw7Lu8
+         IP0DF4iUgtzK5Y0BOuwL8kQB+Sw5wO8NmbQIHZvjzyTQuN3Fc1ns/JjlxTiehde2zk
+         6bsVotR3iAyn49ouWMSbw4lcPINxiDZIY22Lr7JkltvppygcNMaWaoNLadNmrQ/Aj7
+         oy3U7uIsj7/jVJA9GHZ07WHVb022YpcCZofBxqYE+UM4Gs5bui1FZhfc52L581adpN
+         Jt6SOJGusXzeh7xzG9oL5KhwCZqJ7u7AdinDsts9kWD8T9K3LJycZaI7KaKDOmj14A
+         2FGnR8h+zr+sA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oEQ23-0002pw-Qv; Thu, 21 Jul 2022 08:51:35 +0200
+Date:   Thu, 21 Jul 2022 08:51:35 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
+Message-ID: <Ytj3dzQveHhf/0+P@hovoldconsulting.com>
+References: <20220519094646.23009-1-johan+linaro@kernel.org>
+ <20220720212053.GA1659584@bhelgaas>
 MIME-Version: 1.0
-Date:   Thu, 21 Jul 2022 08:51:09 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
-In-Reply-To: <a635754e-bf41-4058-5fbb-57ead36b7128@linaro.org>
-References: <20220721000658.29537-1-william.zhang@broadcom.com>
- <a635754e-bf41-4058-5fbb-57ead36b7128@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <883c2ad4c36220b488519a8902ad72bc@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 17827780602349661147
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkedgudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtjehjtddtredvnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeegvdffjeelvdeggeetheegveejieetgeeiiefggeelveejffehieekhfduueelhfenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheileejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720212053.GA1659584@bhelgaas>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,20 +65,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-21 08:44, Krzysztof Kozlowski wrote:
-> On 21/07/2022 02:06, William Zhang wrote:
->> Append "brcm,bcmbca" to BCM4908 chip family compatible strings. Add
->> generic 4908 board entry.
+On Wed, Jul 20, 2022 at 04:20:53PM -0500, Bjorn Helgaas wrote:
+> On Thu, May 19, 2022 at 11:46:46AM +0200, Johan Hovold wrote:
+> > Allow the Qualcomm PCIe controller driver to be built as a module, which
+> > is useful for multi-platform kernels as well as during development.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > 
-> This does not explain at all why you are doing it. Improve your commit
-> messages.
+> This no longer applies on my pci/ctrl/qcom branch:
+> 839fbdee4c08 ("dt-bindings: PCI: qcom: Fix reset conditional")
+> 
+> Do you want to refresh it, or should we wait until the next cycle?
 
-To clarify it from my side (and maybe help a bit):
+I just sent a rebased v2 (the context had changed due to the addition of
+the ipq6018 device-id entry):
 
-1. As I understand it BCMBCA is a one big family of SoCs.
-2. BCM4908 is a subset of that family (a subfamily?) designed for a
-    specific group of devices.
+	https://lore.kernel.org/all/20220721064720.10762-1-johan+linaro@kernel.org/
 
-If that's correct I think William it's what you should describe in your
-commit message. That would make binding more accurate and should be a
-good argument for your change (I believe).
+Johan

@@ -2,242 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA8457D226
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C482A57D22E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiGURBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        id S229630AbiGUREy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGURBG (ORCPT
+        with ESMTP id S229449AbiGUREw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:01:06 -0400
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF9E419B7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:01:03 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id EZXhoxRl0LFqbEZXhozq3f; Thu, 21 Jul 2022 19:01:02 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 21 Jul 2022 19:01:02 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <4feebd9e-d1c3-aeea-8294-e7ae182f7918@wanadoo.fr>
-Date:   Thu, 21 Jul 2022 19:00:53 +0200
+        Thu, 21 Jul 2022 13:04:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3621E691FD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658423091; x=1689959091;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0PJdUtRNz1ps3/mVqAp7w0q1s+ILafhchr3FLLZ7DE4=;
+  b=echIodlm+yfJpPV9ay+7OTriM8kZmiXZt3qef5OxQscrQ+jxoPiQj/n0
+   N7aUZbpzNmVrZum6HZJ6jkWw3df4VbwLC/ckn+55G/Jmq0oxXK90bMyUD
+   Rl5FpAYIFfJfV3i7xa0dHG4lkWHAMhW2z+OzWPfwZKpUW2V1eWvwNoizD
+   Wut6PJacNg2FEowArxPQH2XH8zztgOmjH8vJWVrDHddjYcGtKc97UyTdm
+   KM0JkSVdogDjLl/7PmG4I0EwWZO3OAZ+WKXio8Jpj+IUm4pvav4UWhTV4
+   XrryIJUOdO2bmBRbfbnkgxDuXIABykb/ZBIauMSkLQi9a32O5M9Qw+MIp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="287859859"
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="287859859"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:02:06 -0700
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="573820533"
+Received: from vasantgx-mobl.amr.corp.intel.com (HELO [10.212.244.191]) ([10.212.244.191])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:02:05 -0700
+Message-ID: <a65473db-b307-c076-6d2f-8f2084d81eb5@intel.com>
+Date:   Thu, 21 Jul 2022 10:02:05 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v5 7/7] clk: mediatek: Add MediaTek Helio X10 MT6795 clock
- drivers
-Content-Language: fr
-References: <20220629110254.184213-1-angelogioacchino.delregno@collabora.com>
- <20220629110254.184213-8-angelogioacchino.delregno@collabora.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     angelogioacchino.delregno@collabora.com
-Cc:     bgolaszewski@baylibre.com, chun-jie.chen@mediatek.com,
-        ck.hu@mediatek.com, devicetree@vger.kernel.org,
-        fparent@baylibre.com, ikjn@chromium.org, jason-jh.lin@mediatek.com,
-        kernel@collabora.com, konrad.dybcio@somainline.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        matthias.bgg@gmail.com, miles.chen@mediatek.com,
-        mturquette@baylibre.com, p.zabel@pengutronix.de,
-        paul.bouchara@somainline.org, phone-devel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, robh+dt@kernel.org,
-        sam.shih@mediatek.com, sboyd@kernel.org, tinghan.shen@mediatek.com,
-        weiyi.lu@mediatek.com, wenst@chromium.org,
-        y.oudjana@protonmail.com, ~postmarketos/upstreaming@lists.sr.ht
-In-Reply-To: <20220629110254.184213-8-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+Content-Language: en-US
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <d3808510-9974-258e-0c7b-9a76e0868d48@intel.com>
+ <f043d9f5-8f89-4ef3-2ce1-75665122bb3a@linux.intel.com>
+ <214e24f0-5236-be8d-024a-da48737d854a@intel.com>
+ <e280aaf4-57da-6453-c31c-6996dc85219c@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <e280aaf4-57da-6453-c31c-6996dc85219c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 29/06/2022 à 13:02, AngeloGioacchino Del Regno a écrit :
-> Add the clock drivers for the entire clock tree of MediaTek Helio X10
-> MT6795, including system clocks (apmixedsys, infracfg, pericfg, topckgen)
-> and multimedia clocks (mmsys, mfg, vdecsys, vencsys).
+On 7/21/22 09:54, Sathyanarayanan Kuppuswamy wrote:
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno-ZGY8ohtN/8qB+jHODAdFcQ@public.gmane.org>
-> Reviewed-by: Matthias Brugger <matthias.bgg-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> ---
->   drivers/clk/mediatek/Kconfig                 |  37 ++
->   drivers/clk/mediatek/Makefile                |   6 +
->   drivers/clk/mediatek/clk-mt6795-apmixedsys.c | 157 +++++
->   drivers/clk/mediatek/clk-mt6795-infracfg.c   | 148 +++++
->   drivers/clk/mediatek/clk-mt6795-mfg.c        |  50 ++
->   drivers/clk/mediatek/clk-mt6795-mm.c         | 106 ++++
->   drivers/clk/mediatek/clk-mt6795-pericfg.c    | 160 +++++
->   drivers/clk/mediatek/clk-mt6795-topckgen.c   | 610 +++++++++++++++++++
->   drivers/clk/mediatek/clk-mt6795-vdecsys.c    |  55 ++
->   drivers/clk/mediatek/clk-mt6795-vencsys.c    |  50 ++
->   10 files changed, 1379 insertions(+)
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-apmixedsys.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-infracfg.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-mfg.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-mm.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-pericfg.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-topckgen.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-vdecsys.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-vencsys.c
-> 
+> On 7/21/22 9:49 AM, Dave Hansen wrote:
+>> On 7/21/22 09:42, Sathyanarayanan Kuppuswamy wrote:
+>>> On 7/21/22 9:08 AM, Dave Hansen wrote:
+>>>> On 6/8/22 19:52, Kuppuswamy Sathyanarayanan wrote:
+>>>>> For shared buffer allocation, alternatives like using the DMA API is
+>>>>> also considered. Although it simpler to use, it is not preferred because
+>>>>> dma_alloc_*() APIs require a valid bus device as argument, which would
+>>>>> need converting the attestation driver into a platform device driver.
+>>>>> This is unnecessary, and since the attestation driver does not do real
+>>>>> DMA, there is no need to use real DMA APIs.
+>>>> Let's actually try to walk through the requirements for the memory
+>>>> allocation here.
+>>>>
+>>>>  1. The guest kernel needs to allocate some guest physical memory
+>>>>     for the attestation data buffer
+>>> Physically contiguous memory.
+>> Remind me how large the quote structures are.
+> It depends on the attestation service. In addition to TDREPORT (1K size),
+> during quote generation, additional data can be included in the signed
+> quote. So the spec allows variable length. User agent will communicate with
+> attestation service to identify the appropriate buffer length. Our test
+> uses 8K buffers
 
+What is this "additional data"?  Is that "REPORTDATA" from the TDX
+module spec?
 
-[...]
+	"Additional REPORTDATA, a 64-byte value, is provided by the
+	guest TD to be included in the TDG.MR.REPORT."
 
-> diff --git a/drivers/clk/mediatek/clk-mt6795-apmixedsys.c b/drivers/clk/mediatek/clk-mt6795-apmixedsys.c
-> new file mode 100644
-> index 000000000000..e87db76799af
-> --- /dev/null
-> +++ b/drivers/clk/mediatek/clk-mt6795-apmixedsys.c
-
-[...]
-
-> +static int clk_mt6795_apmixed_probe(struct platform_device *pdev)
-> +{
-> +	struct clk_hw_onecell_data *clk_data;
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *node = dev->of_node;
-> +	void __iomem *base;
-> +	struct clk_hw *hw;
-> +	int ret;
-> +
-> +	base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-> +	if (!clk_data)
-> +		return -ENOMEM;
-> +
-> +	ret = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-> +	if (ret)
-> +		goto free_clk_data;
-> +
-> +	hw = mtk_clk_register_ref2usb_tx("ref2usb_tx", "clk26m", base + REG_REF2USB);
-
-This calls kzalloc() and clk_hw_register() but...
-
-> +	if (IS_ERR(hw)) {
-> +		ret = PTR_ERR(hw);
-> +		dev_err(dev, "Failed to register ref2usb_tx: %d\n", ret);
-> +		goto unregister_plls;
-> +	}
-> +	clk_data->hws[CLK_APMIXED_REF2USB_TX] = hw;
-> +
-> +	ret = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-> +	if (ret) {
-> +		dev_err(dev, "Cannot register clock provider: %d\n", ret);
-> +		goto unregister_ref2usb;
-> +	}
-> +
-> +	/* Setup MD1 to avoid random crashes */
-> +	dev_dbg(dev, "Performing initial setup for MD1\n");
-> +	clk_mt6795_apmixed_setup_md1(base);
-> +
-> +	return 0;
-> +
-> +unregister_ref2usb:
-> +	clk_hw_unregister(clk_data->hws[CLK_APMIXED_REF2USB_TX]);
-
-... only clk_hw_register() is undone here. Should a 
-mtk_clk_unregister_ref2usb_tx() be useful?
-
-Or is it already handled somewhere else?
-
-> +unregister_plls:
-> +	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-> +free_clk_data:
-> +	mtk_free_clk_data(clk_data);
-> +	return ret;
-> +}
-> +
-> +static int clk_mt6795_apmixed_remove(struct platform_device *pdev)
-> +{
-> +	struct device_node *node = pdev->dev.of_node;
-> +	struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
-> +
-> +	of_clk_del_provider(node);
-> +	clk_hw_unregister(clk_data->hws[CLK_APMIXED_REF2USB_TX]);
-
-Same here.
-
-> +	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-> +	mtk_free_clk_data(clk_data);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver clk_mt6795_apmixed_drv = {
-> +	.probe = clk_mt6795_apmixed_probe,
-> +	.remove = clk_mt6795_apmixed_remove,
-> +	.driver = {
-> +		.name = "clk-mt6795-apmixed",
-> +		.of_match_table = of_match_clk_mt6795_apmixed,
-> +	},
-> +};
-> +module_platform_driver(clk_mt6795_apmixed_drv);
-> +
-> +MODULE_DESCRIPTION("MediaTek MT6795 apmixed clocks driver");
-> +MODULE_LICENSE("GPL v2");
-
-[...]
-
-> diff --git a/drivers/clk/mediatek/clk-mt6795-mm.c b/drivers/clk/mediatek/clk-mt6795-mm.c
-> new file mode 100644
-> index 000000000000..27a8859ff5b5
-> --- /dev/null
-> +++ b/drivers/clk/mediatek/clk-mt6795-mm.c
-
-[...]
-
-> +static int clk_mt6795_mm_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *node = dev->parent->of_node;
-> +	struct clk_hw_onecell_data *clk_data;
-> +	int ret;
-> +
-> +	clk_data = mtk_alloc_clk_data(CLK_MM_NR_CLK);
-> +	if (!clk_data)
-> +		return -ENOMEM;
-> +
-> +	ret = mtk_clk_register_gates(node, mm_gates, ARRAY_SIZE(mm_gates), clk_data);
-> +	if (ret)
-
-Add an error handling path and call mtk_free_clk_data(clk_data); if this 
-fails?
-
-> +		return ret;
-> +
-> +	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-
-Same here, + mtk_clk_unregister_gates()?
-
-> +}
-> +
-> +static struct platform_driver clk_mt6795_mm_drv = {
-> +	.driver = {
-> +		.name = "clk-mt6795-mm",
-> +	},
-> +	.probe = clk_mt6795_mm_probe,
-
-.remove function that mimics the (non existent) error handling path of 
-the probe?
-
-> +};
-> +module_platform_driver(clk_mt6795_mm_drv);
-> +
-> +MODULE_DESCRIPTION("MediaTek MT6795 multimedia clocks driver");
-> +MODULE_LICENSE("GPL v2");
-
-[...]
 

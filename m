@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341F657D467
+	by mail.lfdr.de (Postfix) with ESMTP id 8407857D468
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbiGUTxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 15:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
+        id S232623AbiGUTxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 15:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGUTxT (ORCPT
+        with ESMTP id S229479AbiGUTxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 15:53:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF320691D1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658433197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1Ll575DJoxkh8lFqVhc8EJOSqoHRZjxOqFyBiQJk0Ho=;
-        b=DfsLr0fM0pJUonwuGN1z5xvQ+lyp/Ut69Z4NIU0bivAr6YZNCLTKu7tj+vTMXEl6NrUJDF
-        +MIBCh4EItdRJxoAAoGrEBiTfxZVuhgQdVm3J4+I1bv5Nzxfr2XUoBRVgjQZioLGSh2DPx
-        MHzV9Vx3skHQXrg0dujKWbHY4EDvmM8=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-500-fZiRqnJZNjKiPf6-rxYExQ-1; Thu, 21 Jul 2022 15:53:13 -0400
-X-MC-Unique: fZiRqnJZNjKiPf6-rxYExQ-1
-Received: by mail-qk1-f197.google.com with SMTP id w22-20020a05620a425600b006b5f48556cbso2071688qko.17
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:53:13 -0700 (PDT)
+        Thu, 21 Jul 2022 15:53:18 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7D168DFD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:53:17 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id p6-20020a17090a680600b001f2267a1c84so4583566pjj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HsT+SOh6igago54DFk+NR9EMx4G+VOnG1ZM35MOSsdM=;
+        b=dZTLC6T8LQqP4RfUYojYXtJS1ACmXZjhKUovfox5ilqKM1trs1sF+9KGWw1NvyVbe4
+         Ofm2D9OdwPyNEUdwXZf759WKjMIUbrEb38lzG35mELnSYt05VK4QEdVbHD1pGmfRELQN
+         79gmUrFhlT6i0QSApljrs03dmnOawpgRtgHJyhhmxaVJCN4AVP0pPvOB1EGxNzkTotBA
+         GFD4j9kFP13RmHkmQwxHz0b4saNNjcM6b6YCSD0MLPyqhv9rWOoJWM+7gmWalUulBsAf
+         EfLt03YQjJxc04E4Klm2fRFBGb+8f1PMJxf6Gv4aEDc5r/qRnPXyZn1M6syjTZ8MDjv1
+         cUVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1Ll575DJoxkh8lFqVhc8EJOSqoHRZjxOqFyBiQJk0Ho=;
-        b=fI+1NOiHxcDQnUCpcnG3FNFVvQBvI4krihbiaxV5kYHrhde63nP+2iDNtcwGs/+gYu
-         11HtkcRHynanXllenuyGHEfurA5rTlSOgEjqVJXYB1uhFhQRGEQ6z7Ky57ecCJ5uM54f
-         OgXodfhR+m88yYMp5Xg2ij1BRQm8TdsrfvIcIU5nF8bjBsFePq71Tz3uCw7lwZIdZanT
-         SkeUoaR45rbU8Gu6MmSRKsZOi52ZEOgFuL5xN2AdRQ3Ocy+oFal8f5K01OIKGEK0IWPJ
-         ZRCBZKLGKq0KXEEW5Pw+1h14cctXwVHhEBkmDxJ8vFm5hG6TlIYnIkyIBEES/cAM5x8x
-         Lp6A==
-X-Gm-Message-State: AJIora9chX8lDCbC716uGBHwIDVtBelH1tmnihKXETg8kcXNUsoA1xQ6
-        6zmOVwfQeobn5RHgUyjt6kWArio4UQcyOtYScTLJgv2eKnbJIgTV18NloqCAmzCARlhIfQsV67Q
-        v9j7O8350i48XZ9cPN3E8KIQs
-X-Received: by 2002:a37:c401:0:b0:6b5:e0c5:39f4 with SMTP id d1-20020a37c401000000b006b5e0c539f4mr46588qki.455.1658433192864;
-        Thu, 21 Jul 2022 12:53:12 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sqQdd9qUU3kIybPnGtmypi2hKHjCJQKLjdXOkzbmByKXn8wi2UcUFtmm3Y40UUfhsPdWP+ww==
-X-Received: by 2002:a37:c401:0:b0:6b5:e0c5:39f4 with SMTP id d1-20020a37c401000000b006b5e0c539f4mr46565qki.455.1658433192574;
-        Thu, 21 Jul 2022 12:53:12 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05620a415500b006b5ed1eccc5sm2259278qko.44.2022.07.21.12.53.11
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=HsT+SOh6igago54DFk+NR9EMx4G+VOnG1ZM35MOSsdM=;
+        b=6DuxocjLAuX5Y0BS8CHZuQMpBhG4F5Z+ugESgifdZOBCis13jZQU9/uFd+pIlvBAEw
+         YNQ1fXT/WWOPktKcdeLkR1xR964AIHimC0YaZRV6Bu46OUgR1sWyz7icUh7KWmkSnzFZ
+         sfWBLO3Jt9DtCszMA2mNtAgZ38dtodpNzaqQhDS3eOBwPrv0d0CdGDOW04reDhn6lqsE
+         kvKZGB0VhMxRRSqrE2vBvCzhRYJCd/+/8dip1Cwl8Z7AIyec5MaH6mIylTZ5NB4QmedC
+         6Mu6sLBZ0vtgd8viJpMRfYc9hPdV1a7t+OZsip3ymEC+aEXxYapwlChDKFwGu2jba5RG
+         foyg==
+X-Gm-Message-State: AJIora9RMjD7+IJnfOuwvfifXH33hGOf4eIunvtDkBv45W/CWVTFow5n
+        nuHXRBou4aZW96jmjxX7vq22Qw==
+X-Google-Smtp-Source: AGRyM1tGJwxbrdSYfu8R3bcKyPvyMTqQUG4QriRETnjQ+o4wsiVmS1vgA0CXW9TUHdLn5ftwQNzpLQ==
+X-Received: by 2002:a17:902:cece:b0:16c:3683:8835 with SMTP id d14-20020a170902cece00b0016c36838835mr45821418plg.104.1658433197228;
+        Thu, 21 Jul 2022 12:53:17 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id x2-20020a634a02000000b0040ced958e8fsm1884826pga.80.2022.07.21.12.53.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 12:53:12 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:53:10 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 20/26] hugetlb: add support for high-granularity
- UFFDIO_CONTINUE
-Message-ID: <YtmupryTFRJWRW/t@xz-m1.local>
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-21-jthoughton@google.com>
- <YtGUARcBHxLU0axU@xz-m1.local>
- <CADrL8HXYab_VJS=Y0h2OSiCrj2pYbDJME2P=Tsn9jcDRbcqR1g@mail.gmail.com>
- <YtGh46Jr0EGpqW7s@xz-m1.local>
- <CADrL8HX1YbDArmPsGUH+7b6dNxDa3Xo+fd5npGgz=RFehSw6iA@mail.gmail.com>
- <YtmkX73/wzptkZbu@xz-m1.local>
- <CADrL8HVDtnDg0M4C4A7LN2dmnT2bMXSjJadE=guKFniK_EPdkQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CADrL8HVDtnDg0M4C4A7LN2dmnT2bMXSjJadE=guKFniK_EPdkQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 12:53:16 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 12:53:16 -0700 (PDT)
+X-Google-Original-Date: Thu, 21 Jul 2022 12:53:14 PDT (-0700)
+Subject:     Re: [PATCH] [PATCH v2] riscv: add as-options for modules with assembly compontents
+In-Reply-To: <20220529152200.609809-1-ben.dooks@codethink.co.uk>
+CC:     linux-kernel@lists.codethink.co.uk,
+        linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu,
+        linux-kernel@vger.kernel.org, ben.dooks@codethink.co.uk,
+        Bin Meng <bmeng.cn@gmail.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     ben.dooks@codethink.co.uk
+Message-ID: <mhng-e9fd43e2-2d5f-40e6-b7ba-cad78f2a118b@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:44:58PM -0700, James Houghton wrote:
-> On Thu, Jul 21, 2022 at 12:09 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Wed, Jul 20, 2022 at 01:58:06PM -0700, James Houghton wrote:
-> > > > > > > @@ -335,12 +337,16 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
-> > > > > > >       copied = 0;
-> > > > > > >       page = NULL;
-> > > > > > >       vma_hpagesize = vma_kernel_pagesize(dst_vma);
-> > > > > > > +     if (use_hgm)
-> > > > > > > +             vma_altpagesize = PAGE_SIZE;
-> > > > > >
-> > > > > > Do we need to check the "len" to know whether we should use sub-page
-> > > > > > mapping or original hpage size?  E.g. any old UFFDIO_CONTINUE code will
-> > > > > > still want the old behavior I think.
-> > > > >
-> > > > > I think that's a fair point; however, if we enable HGM and the address
-> > > > > and len happen to be hstate-aligned
-> > > >
-> > > > The address can, but len (note! not "end" here) cannot?
-> > >
-> > > They both (dst_start and len) need to be hpage-aligned, otherwise we
-> > > won't be able to install hstate-sized PTEs. Like if we're installing
-> > > 4K at the beginning of a 1G hpage, we can't install a PUD, because we
-> > > only want to install that 4K.
-> >
-> > I'm still confused...
-> >
-> > Shouldn't one of the major goals of sub-page mapping is to grant user the
-> > capability to do UFFDIO_CONTINUE with len<hpagesize (so we install pages in
-> > sub-page level)?  If so, why len needs to be always hpagesize aligned?
-> 
-> Sorry I misunderstood what you were asking. We allow both to be
-> PAGE_SIZE-aligned. :) That is indeed the goal of HGM.
+On Sun, 29 May 2022 08:22:00 PDT (-0700), ben.dooks@codethink.co.uk wrote:
+> When trying to load modules built for RISC-V which include assembly files
+> the kernel loader errors with "unexpected relocation type 'R_RISCV_ALIGN'"
+> due to R_RISCV_ALIGN relocations being generated by the assembler.
+>
+> The R_RISCV_ALIGN relocations can be removed at the expense of code space
+> by adding -mno-relax to gcc and as.  In commit 7a8e7da42250138
+> ("RISC-V: Fixes to module loading") -mno-relax is added to the build
+> variable KBUILD_CFLAGS_MODULE. See [1] for more info.
+>
+> The issue is that when kbuild builds a .S file, it invokes gcc with
+> the -mno-relax flag, but this is not being passed through to the
+> assembler. Adding -Wa,-mno-relax to KBUILD_AFLAGS_MODULE ensures that
+> the assembler is invoked correctly. This may have now been fixed in
+> gcc[2] and this addition should not stop newer gcc and as from working.
+>
+> [1] https://github.com/riscv/riscv-elf-psabi-doc/issues/183
+> [2] https://github.com/gcc-mirror/gcc/commit/3b0a7d624e64eeb81e4d5e8c62c46d86ef521857
+>
+> Notes:
+>
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+> ---
+>  arch/riscv/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 1f5c03082976..fca40511a8c6 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -60,6 +60,7 @@ ifeq ($(CONFIG_PERF_EVENTS),y)
+>  endif
+>
+>  KBUILD_CFLAGS_MODULE += $(call cc-option,-mno-relax)
+> +KBUILD_AFLAGS_MODULE += $(call as-option,-Wa$(comma)-mno-relax)
+>
+>  # GCC versions that support the "-mstrict-align" option default to allowing
+>  # unaligned accesses.  While unaligned accesses are explicitly allowed in the
 
-Ah OK. :)
+Sorry for being so slow here, I've gotten pretty buried and it wasn't 
+clear this was a fix.  I put it in fixes with some tags.
 
-> 
-> If dst_start and len were both hpage-aligned, then we *could* set
-> `use_hgm = false`, and everything would still work. That's what I
-> thought you were asking about. I don't see any reason to do this
-> though, as `use_hgm = true` will only grant additional functionality,
-> and `use_hgm = false` would only -- at best -- be a minor performance
-> optimization in this case.
-
-I just want to make sure this patch won't break existing uffd-minor users,
-or it'll be an kernel abi breakage.
-
-We'd still want to have e.g. existing compiled apps run like before, which
-iiuc means we should only use sub-page mapping when len!=hpagesize here.
-
-I'm not sure it's only about perf - the app may not even be prepared to
-receive yet another page faults within the same huge page range.
-
--- 
-Peter Xu
-
+Thanks!

@@ -2,132 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CDA57C63B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E884B57C647
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiGUI0l convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 21 Jul 2022 04:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
+        id S232300AbiGUIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbiGUI0j (ORCPT
+        with ESMTP id S231443AbiGUIdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:26:39 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF7AC1AF2F
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:26:38 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-209-auZpXflvPsSN020UXNPu1Q-1; Thu, 21 Jul 2022 09:26:35 +0100
-X-MC-Unique: auZpXflvPsSN020UXNPu1Q-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Thu, 21 Jul 2022 09:26:35 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Thu, 21 Jul 2022 09:26:35 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Liam Howlett' <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>
-CC:     Yu Zhao <yuzhao@google.com>
-Subject: RE: [PATCH] maple_tree: Do not inline write slow path
-Thread-Topic: [PATCH] maple_tree: Do not inline write slow path
-Thread-Index: AQHYnJw6aOsbtqNHaEaswARV7Qt6zq2IfbZw
-Date:   Thu, 21 Jul 2022 08:26:34 +0000
-Message-ID: <040322fa455941ff9b82ebb0f53a576a@AcuMS.aculab.com>
-References: <20220721005237.377987-1-Liam.Howlett@oracle.com>
-In-Reply-To: <20220721005237.377987-1-Liam.Howlett@oracle.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 21 Jul 2022 04:33:13 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B8225E81;
+        Thu, 21 Jul 2022 01:33:12 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id oy13so1942586ejb.1;
+        Thu, 21 Jul 2022 01:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6/ZzFcfNXq3FJXVmp131vQ08suTfBEJgqdvlvCUqagg=;
+        b=fUW992UR56l7WdJLfb9SyQEjVC5L/8Eo6Nt2OaDp0tKrGDUSHL81BTaID//izNAGoN
+         F/S33qqLYfo8TkE9+9ylLiZPVibzSm3gocSkepuoCW9lCpZ6hl6pJhZ/W37MWNYxM5G5
+         ynX7JmuFURmDatrMSq+bmMiYskW7Vag4JS56v2zHeSwCq8z4jzz0wgfDVF5CcWg75BEs
+         HakItCvr+Hn3/0Desi71EpvdIrnhZXk98I72hI7CF2iZVyFvgSn7SuvlgV75K7OElvPq
+         Zl4XtI+oPoDnocDrzPju6w8dLpG04uEC2RlxdTIXfdYneDmpTfKnJ5gIjHD1B+6c/nEt
+         7yfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6/ZzFcfNXq3FJXVmp131vQ08suTfBEJgqdvlvCUqagg=;
+        b=m+hDyNHXZfrX7ctH+JxIGaVIlVlvQO4PdJmz0j8stSUTdGSViBA5JBuQm6SK/WLdVs
+         UjrcFQa/4XW6oWqQhXEa/RS4Z2I0l9o5DEQfsrYEqstibBOEb2lQ4bafyf8ZN1GQUT6H
+         zjqDqznQFZJ09ccBRiLsoQesNcFZPWAN5RueOyxusSHn5KNKEbxLhbvKDYpkT4EI6YQM
+         /x1PiuqdtnFx8+NzdRkZeO+mKKNv+KV7pBh4SFTmQVZTg/Pft37VcEHTjSW/KHRVe0O+
+         f5xoflNC/PN7lBTSG0kDVbxycj8NUQZcahy+A0IF4rncu/wFDwiMLF6J3aD/2EuNxXVQ
+         c/NA==
+X-Gm-Message-State: AJIora+S55zdcMZ1NM36SglVhFZ3Xn8H71ZaTFRVm2SNXKpzzjnnQBLc
+        Zwn50okgGCPWCH9fU+s1RLY=
+X-Google-Smtp-Source: AGRyM1sLJgetIf5jJsZaQjxquQ8BPC/F8f52bROyoHmk+eqALowCo76e1HkIc7utmda6/lJMQuFF3Q==
+X-Received: by 2002:a17:906:84f7:b0:72b:57c2:5e13 with SMTP id zp23-20020a17090684f700b0072b57c25e13mr40568129ejb.702.1658392390546;
+        Thu, 21 Jul 2022 01:33:10 -0700 (PDT)
+Received: from localhost.localdomain (ict-networks-195-176-112-012.fwd-v4.ethz.ch. [195.176.112.12])
+        by smtp.gmail.com with ESMTPSA id m18-20020aa7c492000000b0043ba45cec41sm615485edq.36.2022.07.21.01.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 01:33:10 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64: dts: rockchip: Add analog audio output on quartz64-b
+Date:   Thu, 21 Jul 2022 10:33:00 +0200
+Message-Id: <20220721083301.3711-1-frattaroli.nicolas@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liam Howlett
-> Sent: 21 July 2022 01:53
-> 
-> Having the slow path inlined causes too much stack usage.  Create new
-> function mas_wr_bnode() to write a big node into the tree
+This adds the necessary device tree changes to enable analog
+audio output on the PINE64 Quartz64 Model B with its RK809
+codec.
 
-Unless you mark the function 'noinline' the compiler is
-likely to inline it anyway.
+The headphone detection pin is left out for now because I couldn't
+get it to work and am not sure if it even matters, but for future
+reference: It's pin GPIO4 RK_PC4, named HP_DET_L_GPIO4_C4 in the
+schematic.
 
-	David
+Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+---
+Changes since v1:
+ - use generic node name for the simple-audio-card node
 
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->  lib/maple_tree.c | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 95d8659c5a99..4c383c780162 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -4297,12 +4297,27 @@ static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
->  	return false;
->  }
-> 
-> +/*
-> + * mas_wr_bnode() - Slow path for a modification.
-> + * @wr_mas: The write maple state
-> + *
-> + * This is where split, rebalance end up.
-> + */
-> +static void mas_wr_bnode(struct ma_wr_state *wr_mas)
-> +{
-> +	struct maple_big_node b_node;
-> +
-> +	trace_ma_write(__func__, wr_mas->mas, 0, wr_mas->entry);
-> +	memset(&b_node, 0, sizeof(struct maple_big_node));
-> +	mas_store_b_node(wr_mas, &b_node, wr_mas->offset_end);
-> +	mas_commit_b_node(wr_mas, &b_node, wr_mas->node_end);
-> +}
-> +
->  static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
->  {
->  	unsigned char node_slots;
->  	unsigned char node_size;
->  	struct ma_state *mas = wr_mas->mas;
-> -	struct maple_big_node b_node;
-> 
->  	/* Direct replacement */
->  	if (wr_mas->r_min == mas->index && wr_mas->r_max == mas->last) {
-> @@ -4338,10 +4353,7 @@ static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
->  		return;
-> 
->  slow_path:
-> -	memset(&b_node, 0, sizeof(struct maple_big_node));
-> -	mas_store_b_node(wr_mas, &b_node, wr_mas->offset_end);
-> -	trace_ma_write(__func__, mas, 0, wr_mas->entry);
-> -	mas_commit_b_node(wr_mas, &b_node, wr_mas->node_end);
-> +	mas_wr_bnode(wr_mas);
->  }
-> 
->  /*
-> --
-> 2.35.1
+---
+ .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 32 ++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+index 02d5f5a8ca03..3897980d69d1 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+@@ -42,6 +42,21 @@ led-user {
+ 		};
+ 	};
+ 
++	sound {
++		compatible = "simple-audio-card";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,name = "Analog RK809";
++		simple-audio-card,mclk-fs = <256>;
++
++		simple-audio-card,cpu {
++			sound-dai = <&i2s1_8ch>;
++		};
++
++		simple-audio-card,codec {
++			sound-dai = <&rk809>;
++		};
++	};
++
+ 	sdio_pwrseq: sdio-pwrseq {
+ 		status = "okay";
+ 		compatible = "mmc-pwrseq-simple";
+@@ -177,11 +192,16 @@ rk809: pmic@20 {
+ 		reg = <0x20>;
+ 		interrupt-parent = <&gpio0>;
+ 		interrupts = <RK_PA7 IRQ_TYPE_LEVEL_LOW>;
++		assigned-clocks = <&cru I2S1_MCLKOUT_TX>;
++		assigned-clock-parents = <&cru CLK_I2S1_8CH_TX>;
++		clock-names = "mclk";
++		clocks = <&cru I2S1_MCLKOUT_TX>;
+ 		clock-output-names = "rk808-clkout1", "rk808-clkout2";
+ 
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&pmic_int>;
++		pinctrl-0 = <&pmic_int>, <&i2s1m0_mclk>;
+ 		rockchip,system-power-controller;
++		#sound-dai-cells = <0>;
+ 		wakeup-source;
+ 		#clock-cells = <1>;
+ 
+@@ -420,6 +440,16 @@ &i2c5 {
+ 	status = "disabled";
+ };
+ 
++&i2s1_8ch {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2s1m0_sclktx
++		     &i2s1m0_lrcktx
++		     &i2s1m0_sdi0
++		     &i2s1m0_sdo0>;
++	rockchip,trcm-sync-tx-only;
++	status = "okay";
++};
++
+ &mdio1 {
+ 	rgmii_phy1: ethernet-phy@1 {
+ 		compatible = "ethernet-phy-ieee802.3-c22";
+-- 
+2.37.1
 

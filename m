@@ -2,136 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC8857C757
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B014E57C75C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbiGUJQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S232535AbiGUJRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiGUJQL (ORCPT
+        with ESMTP id S230092AbiGUJRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:16:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA000735A2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:16:09 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id r9so1775548lfp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:16:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NX01PXec4oCp0RNFOcGC2D4osWkcf/OjSXNrxmif0H4=;
-        b=m5R8uFVK4YrCrVYE4rVc+jXXO2vKg46lp/urdVrQ8f2wGi+2ZdgHF6TxAk+Z1H1NL5
-         s5eRagjcZrTKUvY8orKP+y3wIkuE/LB4brKZg2bUltf6tKqn942slGDC+InNt0FGfGdi
-         +ObIujImekzOuhEK9oi8ajmUpgs8Yhlu93R3fluCYHIDeOy06dXMo8VhUh15wpjHymNc
-         1avfgz0EYxZZGdYrIx1yMHVfpMar52gvGJN17PkyjYwqOoteMsff2wOlNGidyR8TReIB
-         1QBrFPPJ8i7TxaXZlOuOuK9m2555n+BWH/vjXDNV6vNdhPpnqAqGFqpslYgyQHxrosGW
-         JM5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NX01PXec4oCp0RNFOcGC2D4osWkcf/OjSXNrxmif0H4=;
-        b=JsZ2WNRE1JQFHA7UCiZg3MRg/vGWg88uDo6aUU0yN7+Lb4WizHdADvGZgwqU1kQvAc
-         Z8iVpYDyUrwnH4zMRrR+iJYXtoOc8Cwf+kWo9YZOfOkcHjZjqdfLbbdPhGfysO4uDYEl
-         Raz8ibz9ZUpXCPrsCcwQVQRxj9rKWTWQqDVXW/eZaUeRX36dGQTyi3sH8Dvs5m3JR1B1
-         fzyWIoSFuxGCQWxReJ//XVeSNeuD2jCaN/56SBCmWnQYnahxEAQq1vo4lHId14LAGhhd
-         5fojaLNfAz51zZ+IXjfl7tvpZdAAUQZMrPA0kzXTjNdYLQfunR16co/togFpRVMdZTEC
-         Z+Ow==
-X-Gm-Message-State: AJIora8TIUfCkI5URFqHcRZXPgh9bQUU6n3s6hANW3lrSjq4oDz7+roO
-        WOByU9i2gfT+z9BP1QVJjdFZ1Q==
-X-Google-Smtp-Source: AGRyM1tZG8v/X5Cvk5Swz75Z3HdFevHIeUTVvTwWLJIDvqUWpXwC4324umZdPzad973iHEQ3WAhL+w==
-X-Received: by 2002:a05:6512:3c9f:b0:48a:2c32:e22c with SMTP id h31-20020a0565123c9f00b0048a2c32e22cmr14987643lfv.356.1658394968135;
-        Thu, 21 Jul 2022 02:16:08 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056512202100b0047fac0f34absm318272lfs.196.2022.07.21.02.16.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 02:16:06 -0700 (PDT)
-Message-ID: <734ed3cf-1461-6067-e718-663ca4be47a6@linaro.org>
-Date:   Thu, 21 Jul 2022 11:16:05 +0200
+        Thu, 21 Jul 2022 05:17:16 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729222B1B6;
+        Thu, 21 Jul 2022 02:17:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VK.Qu92_1658395024;
+Received: from 192.168.0.4(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VK.Qu92_1658395024)
+          by smtp.aliyun-inc.com;
+          Thu, 21 Jul 2022 17:17:06 +0800
+Message-ID: <f030aeab-b503-8381-53f5-15862e1333b0@linux.alibaba.com>
+Date:   Thu, 21 Jul 2022 17:17:03 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 2/6] dt-bindings: mediatek,mt6779-keypad: use
- unevaluatedProperties
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+From:   Cheng Xu <chengyou@linux.alibaba.com>
+Subject: Re: [Patch v4 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
+ Network Adapter
+To:     longli@microsoft.com, "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, edumazet@google.com,
+        shiraz.saleem@intel.com, Ajay Sharma <sharmaajay@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
+References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
+ <1655345240-26411-13-git-send-email-longli@linuxonhyperv.com>
 Content-Language: en-US
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
- <20220720-mt8183-keypad-v1-2-ef9fc29dbff4@baylibre.com>
- <e1ec8511-d1dd-faa5-031f-50c4e55062cd@linaro.org>
- <874jzaj0m5.fsf@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <874jzaj0m5.fsf@baylibre.com>
+In-Reply-To: <1655345240-26411-13-git-send-email-longli@linuxonhyperv.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/07/2022 11:06, Mattijs Korpershoek wrote:
-> On Wed, Jul 20, 2022 at 19:14, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 20/07/2022 16:48, Mattijs Korpershoek wrote:
->>> writing-bindings.rst states:
->>>> - If schema includes other schema (e.g. /schemas/i2c/i2c-controller.yaml) use
->>>>   "unevaluatedProperties:false". In other cases, usually use
->>>>   "additionalProperties:false".
->>>
->>> mt6779-keypad includes matrix-keymap.yaml so replace additionalProperties:false
->>> by unevaluatedProperties:false.
->>
->> This is not sufficient explanation. You now allow all properties from
->> matrix-keymap.yaml, which might be desired or might be not (e.g. they
->> are not valid for this device). Please investigate it and mention the
->> outcome.
-> 
-> Hi Krzysztof,
-> 
-> Thank you for your prompt review.
-> 
-> In mt6779_keypad_pdrv_probe(), we call
-> * matrix_keypad_parse_properties() which requires keypad,num-rows and keypad,num-cols.
-> * matrix_keypad_build_keymap() which uses linux,keymap
-> 
-> Therefore, all properties from matrix-keymap.yaml are
-> required by the mt6779-keypad 
-Better to mention the device, not driver.
 
-> 
-> In v2, I will add the above justification and also add all 3 properties
-> in the "required" list.
-> 
-> Initially, I did not do this because from a dts/code perspective it seemed
-> interesting to split out SoC specific keyboard node vs board specific key configuration:
-> * [PATCH v1 5/6] arm64: dts: mediatek: mt8183: add keyboard node # SoC specific
-> * [PATCH v1 6/6] arm64: dts: mediatek: mt8183-pumpkin: add keypad support # board specific
-> 
-> What would be the recommend approach for above?
-> I see at least 2:
-> * "move the whole keyboard node into the board file (mt8183-pumpkin.dts)" even if it generates
->   duplication between boards using the same SoC.
-> * "add a "dummy keymap,row,cols" properties in the soc node which can be overriden in board file.
->   For example, use rows and cols = 0 which would have the driver early exit.
-> 
-SoC DTSI should have only SoC properties. The keyboard module is part of
-SoC. The keys and how it is wired to them - not.
 
-Best regards,
-Krzysztof
+On 6/16/22 10:07 AM, longli@linuxonhyperv.com wrote:
+> From: Long Li <longli@microsoft.com>
+> 
+
+<...>
+
+> +
+> +static int mana_ib_create_qp_raw(struct ib_qp *ibqp, struct ib_pd *ibpd,
+> +				 struct ib_qp_init_attr *attr,
+> +				 struct ib_udata *udata)
+> +{
+> +	struct mana_ib_pd *pd = container_of(ibpd, struct mana_ib_pd, ibpd);
+> +	struct mana_ib_qp *qp = container_of(ibqp, struct mana_ib_qp, ibqp);
+> +	struct mana_ib_dev *mdev =
+> +		container_of(ibpd->device, struct mana_ib_dev, ib_dev);
+> +	struct mana_ib_cq *send_cq =
+> +		container_of(attr->send_cq, struct mana_ib_cq, ibcq);
+> +	struct ib_ucontext *ib_ucontext = ibpd->uobject->context;
+> +	struct mana_ib_create_qp_resp resp = {};
+> +	struct mana_ib_ucontext *mana_ucontext;
+> +	struct gdma_dev *gd = mdev->gdma_dev;
+> +	struct mana_ib_create_qp ucmd = {};
+> +	struct mana_obj_spec wq_spec = {};
+> +	struct mana_obj_spec cq_spec = {};
+> +	struct mana_port_context *mpc;
+> +	struct mana_context *mc;
+> +	struct net_device *ndev;
+> +	struct ib_umem *umem;
+> +	int err;
+> +	u32 port;
+> +
+> +	mana_ucontext =
+> +		container_of(ib_ucontext, struct mana_ib_ucontext, ibucontext);
+> +	mc = gd->driver_data;
+> +
+> +	if (udata->inlen < sizeof(ucmd))
+> +		return -EINVAL;
+> +
+> +	err = ib_copy_from_udata(&ucmd, udata, min(sizeof(ucmd), udata->inlen));
+> +	if (err) {
+> +		ibdev_dbg(&mdev->ib_dev,
+> +			  "Failed to copy from udata create qp-raw, %d\n", err);
+> +		return -EFAULT;
+> +	}
+> +
+> +	/* IB ports start with 1, MANA Ethernet ports start with 0 */
+> +	port = ucmd.port;
+> +	if (ucmd.port > mc->num_ports)
+> +		return -EINVAL;
+> +
+> +	if (attr->cap.max_send_wr > MAX_SEND_BUFFERS_PER_QUEUE) {
+> +		ibdev_dbg(&mdev->ib_dev,
+> +			  "Requested max_send_wr %d exceeding limit\n",
+> +			  attr->cap.max_send_wr);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (attr->cap.max_send_sge > MAX_TX_WQE_SGL_ENTRIES) {
+> +		ibdev_dbg(&mdev->ib_dev,
+> +			  "Requested max_send_sge %d exceeding limit\n",
+> +			  attr->cap.max_send_sge);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ndev = mc->ports[port - 1];
+> +	mpc = netdev_priv(ndev);
+> +	ibdev_dbg(&mdev->ib_dev, "port %u ndev %p mpc %p\n", port, ndev, mpc);
+> +
+> +	err = mana_ib_cfg_vport(mdev, port - 1, pd, mana_ucontext->doorbell);
+> +	if (err)
+> +		return -ENODEV;
+> +
+> +	qp->port = port;
+> +
+> +	ibdev_dbg(&mdev->ib_dev, "ucmd sq_buf_addr 0x%llx port %u\n",
+> +		  ucmd.sq_buf_addr, ucmd.port);
+> +
+> +	umem = ib_umem_get(ibpd->device, ucmd.sq_buf_addr, ucmd.sq_buf_size,
+> +			   IB_ACCESS_LOCAL_WRITE);
+> +	if (IS_ERR(umem)) {
+> +		err = PTR_ERR(umem);
+> +		ibdev_dbg(&mdev->ib_dev,
+> +			  "Failed to get umem for create qp-raw, err %d\n",
+> +			  err);
+> +		goto err_free_vport;
+> +	}
+> +	qp->sq_umem = umem;
+> +
+> +	err = mana_ib_gd_create_dma_region(mdev, qp->sq_umem,
+> +					   &qp->sq_gdma_region, PAGE_SIZE);
+> +	if (err) {
+> +		ibdev_err(&mdev->ib_dev,
+> +			  "Failed to create dma region for create qp-raw, %d\n",
+> +			  err);
+
+It is better not print in userspace-triggered paths.
+
+There are also same issues in other paths.
+
+Thanks,
+Cheng Xu
+
+

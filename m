@@ -2,119 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341B257C41F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E3E57C426
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbiGUGGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S232033AbiGUGHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiGUGF6 (ORCPT
+        with ESMTP id S231279AbiGUGHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:05:58 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6DC12D32;
-        Wed, 20 Jul 2022 23:05:56 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id m16so850710edb.11;
-        Wed, 20 Jul 2022 23:05:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=4aFAperWkgMWZD1HrgPGLDvbqBbKMtmvuEATzypfwXo=;
-        b=szvJjE3tPGN7KMnJ6oYZsxq8llHWQtmfewZKjVu5Sbu6HoEqVJ+L8Wfa2DA8UpyrPF
-         h6aUy9PrASB4xMe5F1ZZP2fo7wi4PzQDt8K197yp7IhFf3epJ3kExo7aRnDbqxLafB+d
-         5ii2YaixgyuKQxiopidV/Z9iPIkci2+iZWq9lj276Eyzn+mXSr3mTUUzbZwmLICxAM3g
-         q0GOcKQqEp0U7SX9AWX0H6TGeP0tiPyarlwAKqOk8bhSovlmsPRWfUiiVA/VeJxkOynY
-         hn8AZGiKDx8YGkAAq7fg2xKWErySQt8eVY+nZkq2H6EXgcJqEJrvONBelmDCV4FfzZyZ
-         De/g==
-X-Gm-Message-State: AJIora987cpVuU9B7i8SxjPD4RAc+5ERRl2OIcJJiLt+MoVKatc/Mdwh
-        OGrkRiPTeyO3DLsbPwfaqSI=
-X-Google-Smtp-Source: AGRyM1sz335CBIJ+dljd+h02oNbxHh9qgX9sOcTFL/NKb1++LzkRAts4RXmmKiOedM1E/5riSRa4eg==
-X-Received: by 2002:a05:6402:2997:b0:43b:247b:89cb with SMTP id eq23-20020a056402299700b0043b247b89cbmr46145271edb.91.1658383555428;
-        Wed, 20 Jul 2022 23:05:55 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id ku21-20020a170907789500b0072b3464c043sm443830ejc.116.2022.07.20.23.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 23:05:54 -0700 (PDT)
-Message-ID: <bb2516b5-8dd3-3223-0bdc-809e51311347@kernel.org>
-Date:   Thu, 21 Jul 2022 08:05:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Justin Forbes <jforbes@fedoraproject.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 21 Jul 2022 02:07:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5717AC2B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658383663; x=1689919663;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1fqzcYm1On03+b7DdxammYXGgXXTPdTxM5qfsq4iUCo=;
+  b=Zr2Hw8bFBiJgX4/dSzpkkP0hRNYZ3YxiXcOE4EZ9l5mt1EoO2bTPkrED
+   kYEYN2hBd/5/S2LpVI4M9qSMLEX8EOY7+JA3SM1oi8EJeSVw2QBX0Bh66
+   YPEApaQYa56qdy9hl5qgZD1UQVQHVRyNJRBvUIR9yiS1FfTm57MuOCvha
+   42dMczudGN7cBRkW2GFCX+3N+ciRIGO2c00l75vm3GxaUt4UvCwHiRTWq
+   7Bp2YNtejLTWR/6nxsu4A8NY4bukTahMsGb7U6mAhle8IpMv16PC0Y/fh
+   oJT6Edm62TYiSl7QIDFjzV6NMBoiRVOSMmVJTI79qFb9y/11iGN52BuSx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="350949160"
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="350949160"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 23:07:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="740558274"
+Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jul 2022 23:07:38 -0700
+Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oEPLV-0001XH-Tf;
+        Thu, 21 Jul 2022 06:07:37 +0000
+Date:   Thu, 21 Jul 2022 14:07:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Tejas Upadhyay <tejas.upadhyay@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-References: <20220719114714.247441733@linuxfoundation.org>
- <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
- <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com>
- <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
- <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
- <6cb8a9c9-d256-5db2-e352-e8de1165950c@kernel.org>
-In-Reply-To: <6cb8a9c9-d256-5db2-e352-e8de1165950c@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Subject: Re: [PATCH v10 4/8] mm/demotion/dax/kmem: Set node's performance
+ level to MEMTIER_PERF_LEVEL_PMEM
+Message-ID: <202207211403.1K7X9mSi-lkp@intel.com>
+References: <20220720025920.1373558-5-aneesh.kumar@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720025920.1373558-5-aneesh.kumar@linux.ibm.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21. 07. 22, 7:42, Jiri Slaby wrote:
-> Config:
-> https://github.com/openSUSE/kernel-source/blob/stable/config/i386/pae
-> 
-> It says:
-> CONFIG_CC_HAS_SLS=y
-> CONFIG_CC_HAS_RETURN_THUNK=y
-> CONFIG_SPECULATION_MITIGATIONS=y
-> CONFIG_PAGE_TABLE_ISOLATION=y
-> CONFIG_RETPOLINE=y
-> CONFIG_RETHUNK=y
-> CONFIG_CPU_UNRET_ENTRY=y
-> CONFIG_CPU_IBPB_ENTRY=y
-> CONFIG_CPU_IBRS_ENTRY=y
-> CONFIG_ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE=y
-> 
-> Patches:
-> https://github.com/openSUSE/kernel-source/tree/stable/patches.suse
-> 
-> Apart from others, it contains:
-> 3131ef39fb03 x86/asm/32: Fix ANNOTATE_UNRET_SAFE use on 32-bit
-...
-> b75b7f8ef114 x86/xen: Rename SYS* entry points
+Hi "Aneesh,
 
-Thinking about it, that's likely the reason I'm not seeing any failures 
--- I still carry all the retbleed patches on the top of stable. So while 
-5.18.12-rc1 (the retbleed one) had them and added the above configs, 
-later 5.18.12-rc/-final (only rawnand fixup), or 5.18.13-rc1 do not -- 
-the configs are gone.
+I love your patch! Yet something to improve:
 
-regards,
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220720-110356
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: x86_64-randconfig-r004-20220718 (https://download.01.org/0day-ci/archive/20220721/202207211403.1K7X9mSi-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dd5635541cd7bbd62cd59b6694dfb759b6e9a0d8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d94a14b8fe93ff567d64b793ce1939698ca0b834
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aneesh-Kumar-K-V/mm-demotion-Memory-tiers-and-demotion/20220720-110356
+        git checkout d94a14b8fe93ff567d64b793ce1939698ca0b834
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/nfit/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/acpi/nfit/core.c:1719:13: warning: no previous prototype for function 'nfit_intel_shutdown_status' [-Wmissing-prototypes]
+   __weak void nfit_intel_shutdown_status(struct nfit_mem *nfit_mem)
+               ^
+   drivers/acpi/nfit/core.c:1719:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __weak void nfit_intel_shutdown_status(struct nfit_mem *nfit_mem)
+          ^
+          static 
+>> drivers/acpi/nfit/core.c:3495:37: error: use of undeclared identifier 'MEMTIER_PERF_LEVEL_PMEM'
+                                   node_devices[nid]->perf_level = MEMTIER_PERF_LEVEL_PMEM;
+                                                                   ^
+>> drivers/acpi/nfit/core.c:3551:41: error: use of undeclared identifier 'MEMTIER_HOTPLUG_PRIO'
+           hotplug_memory_notifier(nfit_callback, MEMTIER_HOTPLUG_PRIO + 1);
+                                                  ^
+   1 warning and 2 errors generated.
+
+
+vim +/MEMTIER_PERF_LEVEL_PMEM +3495 drivers/acpi/nfit/core.c
+
+  3474	
+  3475	static int nfit_callback(struct notifier_block *self,
+  3476				 unsigned long action, void *arg)
+  3477	{
+  3478		bool found = false;
+  3479		struct memory_notify *mnb = arg;
+  3480		int nid = mnb->status_change_nid;
+  3481		struct nfit_spa *nfit_spa;
+  3482		struct acpi_nfit_desc *acpi_desc;
+  3483	
+  3484		if (nid == NUMA_NO_NODE || action != MEM_ONLINE)
+  3485			return NOTIFY_OK;
+  3486	
+  3487		mutex_lock(&acpi_desc_lock);
+  3488		list_for_each_entry(acpi_desc, &acpi_descs, list) {
+  3489			mutex_lock(&acpi_desc->init_mutex);
+  3490			list_for_each_entry(nfit_spa, &acpi_desc->spas, list) {
+  3491				struct acpi_nfit_system_address *spa = nfit_spa->spa;
+  3492				int target_node = pxm_to_node(spa->proximity_domain);
+  3493	
+  3494				if (target_node == nid) {
+> 3495					node_devices[nid]->perf_level = MEMTIER_PERF_LEVEL_PMEM;
+  3496					found = true;
+  3497					break;
+  3498				}
+  3499			}
+  3500			mutex_unlock(&acpi_desc->init_mutex);
+  3501			if (found)
+  3502				break;
+  3503		}
+  3504		mutex_unlock(&acpi_desc_lock);
+  3505		return NOTIFY_OK;
+  3506	}
+  3507	
+  3508	static __init int nfit_init(void)
+  3509	{
+  3510		int ret;
+  3511	
+  3512		BUILD_BUG_ON(sizeof(struct acpi_table_nfit) != 40);
+  3513		BUILD_BUG_ON(sizeof(struct acpi_nfit_system_address) != 64);
+  3514		BUILD_BUG_ON(sizeof(struct acpi_nfit_memory_map) != 48);
+  3515		BUILD_BUG_ON(sizeof(struct acpi_nfit_interleave) != 20);
+  3516		BUILD_BUG_ON(sizeof(struct acpi_nfit_smbios) != 9);
+  3517		BUILD_BUG_ON(sizeof(struct acpi_nfit_control_region) != 80);
+  3518		BUILD_BUG_ON(sizeof(struct acpi_nfit_data_region) != 40);
+  3519		BUILD_BUG_ON(sizeof(struct acpi_nfit_capabilities) != 16);
+  3520	
+  3521		guid_parse(UUID_VOLATILE_MEMORY, &nfit_uuid[NFIT_SPA_VOLATILE]);
+  3522		guid_parse(UUID_PERSISTENT_MEMORY, &nfit_uuid[NFIT_SPA_PM]);
+  3523		guid_parse(UUID_CONTROL_REGION, &nfit_uuid[NFIT_SPA_DCR]);
+  3524		guid_parse(UUID_DATA_REGION, &nfit_uuid[NFIT_SPA_BDW]);
+  3525		guid_parse(UUID_VOLATILE_VIRTUAL_DISK, &nfit_uuid[NFIT_SPA_VDISK]);
+  3526		guid_parse(UUID_VOLATILE_VIRTUAL_CD, &nfit_uuid[NFIT_SPA_VCD]);
+  3527		guid_parse(UUID_PERSISTENT_VIRTUAL_DISK, &nfit_uuid[NFIT_SPA_PDISK]);
+  3528		guid_parse(UUID_PERSISTENT_VIRTUAL_CD, &nfit_uuid[NFIT_SPA_PCD]);
+  3529		guid_parse(UUID_NFIT_BUS, &nfit_uuid[NFIT_DEV_BUS]);
+  3530		guid_parse(UUID_NFIT_DIMM, &nfit_uuid[NFIT_DEV_DIMM]);
+  3531		guid_parse(UUID_NFIT_DIMM_N_HPE1, &nfit_uuid[NFIT_DEV_DIMM_N_HPE1]);
+  3532		guid_parse(UUID_NFIT_DIMM_N_HPE2, &nfit_uuid[NFIT_DEV_DIMM_N_HPE2]);
+  3533		guid_parse(UUID_NFIT_DIMM_N_MSFT, &nfit_uuid[NFIT_DEV_DIMM_N_MSFT]);
+  3534		guid_parse(UUID_NFIT_DIMM_N_HYPERV, &nfit_uuid[NFIT_DEV_DIMM_N_HYPERV]);
+  3535		guid_parse(UUID_INTEL_BUS, &nfit_uuid[NFIT_BUS_INTEL]);
+  3536	
+  3537		nfit_wq = create_singlethread_workqueue("nfit");
+  3538		if (!nfit_wq)
+  3539			return -ENOMEM;
+  3540	
+  3541		nfit_mce_register();
+  3542		ret = acpi_bus_register_driver(&acpi_nfit_driver);
+  3543		if (ret) {
+  3544			nfit_mce_unregister();
+  3545			destroy_workqueue(nfit_wq);
+  3546		}
+  3547		/*
+  3548		 * register a memory hotplug notifier at prio 2 so that we
+  3549		 * can update the perf level for the node.
+  3550		 */
+> 3551		hotplug_memory_notifier(nfit_callback, MEMTIER_HOTPLUG_PRIO + 1);
+  3552		return ret;
+  3553	
+
 -- 
-js
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,81 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E4957CA95
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA2D57CA9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbiGUMYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S233522AbiGUMZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiGUMYF (ORCPT
+        with ESMTP id S233157AbiGUMZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:24:05 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E71F21E1E;
-        Thu, 21 Jul 2022 05:24:04 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10d6e8990b9so2129146fac.7;
-        Thu, 21 Jul 2022 05:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ImwLpat+1sPYdOj7Iczdt+M/YFfAZGN24qOSHSTu1vc=;
-        b=fsnOG1id6H4i0ySXm6YWreNVF7KeIpTVioFDQOlXK3RiVgjb73e8Qa+QS9EGxb8ZeO
-         V1tm2lFPzYrFUBhZhKtUjijRYcdDEQQ/SviFPC4g1+EMei9t/bSL9Dh5vWVp3HW5r6Af
-         RQRUJhOBqNBN7n30ANShNkCd71QY+75ZSvSWlDOJKaj6IxVG5LyxI8zOFLC3khAfECQn
-         AhM3c+GzSVJh4+fI+/qXknh6qwE059yMnFjLuJ/oVcQPBlpStZdilSnboCDNCRlclvaN
-         lu6esVq/IN6Lckd2Co1AfFTJFknofaVhpla/PWbPZuigM44UYuIixtGQzLxk7CeXBCKs
-         g8OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ImwLpat+1sPYdOj7Iczdt+M/YFfAZGN24qOSHSTu1vc=;
-        b=vF449iFt8JuQttLdBUf8AsUtwzV5YIHDPs/vBql5LJHL1mDzTki6MYjCBWDH/CiBH6
-         1AWZ0UI1J8j4gJpCqkIvVB8xi9MYSsschdSsWVu1+9owegPmffQv5BjOFe5/lePMLUT+
-         yGI2HBSvC3Fj1bDy5au1GSHSxgZPKUTwBQDwMLFviptEYW53S8RrSlPo5Ybac/wxNTAz
-         1BZ8nTTgrhPIgDbu86g35sd9m+45Q82khHRwE88/K8hoYxFlxZErxYLlose3cG7z4LtS
-         etEjqo2g5ygEfAX/VyJSDy8LXvbt9hPLJW+V78IdN8fC2GA3j23aczx6WeH9OvW7okkQ
-         OPgg==
-X-Gm-Message-State: AJIora+qevTYx/TYAdC5/xUJwctb6d9yqpDe13kumXZMo4jwD7t/Pb8j
-        7S6ZAjqIlY5GORIn/1CmQssok39qw8IpJARnvuY=
-X-Google-Smtp-Source: AGRyM1tEjr8y+gdoyIFOFwb1TodPOJkj9G4SjX5rY0CJ6zGtLqwRg8jjmzwVI7hfd/F8AgDcMrepZDGjx9iSpjrDcXM=
-X-Received: by 2002:a05:6870:2111:b0:e9:768:f288 with SMTP id
- f17-20020a056870211100b000e90768f288mr4980852oae.45.1658406243729; Thu, 21
- Jul 2022 05:24:03 -0700 (PDT)
+        Thu, 21 Jul 2022 08:25:08 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6F632C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:25:06 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 28F41496;
+        Thu, 21 Jul 2022 14:25:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1658406304;
+        bh=Emp/6tFuyFlwG6QHbyW9jzXRmPRexPwIgBYyovQerJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pmFgHDk6rGBfrUbse68M/3VoyInH8PcSKFdWsM1dLMQxVrMMv7rpgumH95jQIbcHd
+         yTKslEAg/vwlqeAOfWkLYcvrd9UlVS7KPqHuREhrAx9LpE6rnk1gxKRdKz6VJEDn6U
+         l5TufDS+IcQBv+07gJHstmjK0P3ODcWaN0bqqobQ=
+Date:   Thu, 21 Jul 2022 15:25:02 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/imx/dcss: get rid of HPD warning message
+Message-ID: <YtlFniiVnYUoZCPM@pendragon.ideasonboard.com>
+References: <20220721120912.6639-1-laurentiu.palcu@oss.nxp.com>
 MIME-Version: 1.0
-References: <CAHP4M8VuX6NrqyKQU1KS3DdTzZRQTdPK+nF0-eXXeQqhHyOypw@mail.gmail.com>
- <20220713181805.GA841376@bhelgaas> <CAHP4M8X67WSLMqe2qQrbODrg5oSLvR5fP4JVN+zeQafHizrOXA@mail.gmail.com>
- <ff345fdf-4398-0275-1e1d-f87e15b31d3a@ti.com>
-In-Reply-To: <ff345fdf-4398-0275-1e1d-f87e15b31d3a@ti.com>
-From:   Ajay Garg <ajaygargnsit@gmail.com>
-Date:   Thu, 21 Jul 2022 17:53:50 +0530
-Message-ID: <CAHP4M8WfngsoAAA=7CUeqEf2SME+4HvZ+9zAe-0pxOLmS62bAw@mail.gmail.com>
-Subject: Re: No controller seen in /sys/kernel/config/pci_ep/controllers
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220721120912.6639-1-laurentiu.palcu@oss.nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, that helps.
+Hi Laurentiu,
 
-> Not sure what exactly your use case is.
+Thank you for the patch.
 
-Nothing complicated, I was stuck on the first step of having the
-pci-controller in endpoint-mode :)
-Your reply has given me a direction : I will try and find a
-hardware/setup wherein I can have a pci-controller in endpoint-mode.
+On Thu, Jul 21, 2022 at 03:09:12PM +0300, Laurentiu Palcu wrote:
+> When DCSS + MIPI_DSI is used, and the last bridge in the chain supports
+> HPD, we can see a "Hot plug detection already enabled" warning stack
+> trace dump that's thrown when DCSS is initialized.
+> 
+> The problem appeared when HPD was enabled by default in the
+> bridge_connector initialization, which made the
+> drm_bridge_connector_enable_hpd() call, in DCSS init path, redundant.
+> So, let's remove that call.
+> 
+> Fixes: 09077bc311658 ("drm/bridge_connector: enable HPD by default if supported")
+> Signed-off-by: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Thanks and Regards,
-Ajay
+> ---
+>  drivers/gpu/drm/imx/dcss/dcss-kms.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/imx/dcss/dcss-kms.c b/drivers/gpu/drm/imx/dcss/dcss-kms.c
+> index 9b84df34a6a12..8cf3352d88582 100644
+> --- a/drivers/gpu/drm/imx/dcss/dcss-kms.c
+> +++ b/drivers/gpu/drm/imx/dcss/dcss-kms.c
+> @@ -142,8 +142,6 @@ struct dcss_kms_dev *dcss_kms_attach(struct dcss_dev *dcss)
+>  
+>  	drm_kms_helper_poll_init(drm);
+>  
+> -	drm_bridge_connector_enable_hpd(kms->connector);
+> -
+>  	ret = drm_dev_register(drm, 0);
+>  	if (ret)
+>  		goto cleanup_crtc;
+
+-- 
+Regards,
+
+Laurent Pinchart

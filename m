@@ -2,161 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156F457D748
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 01:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724C057D74D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 01:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbiGUXO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 19:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S233725AbiGUXQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 19:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGUXO4 (ORCPT
+        with ESMTP id S232938AbiGUXQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 19:14:56 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49D582F98
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 16:14:55 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LNEKuq016176;
-        Thu, 21 Jul 2022 23:14:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=1aN1UV6zboeRqCPR7ZFzdRL7xMyFFu9Ldz3J+OSKqi0=;
- b=DxXPc5Id7vw4K2bA7MDmDx8F5+IhbSdc8ZuBETFiGpz/CokdEFHuhJdsYgKuN0zylFoq
- pCLBENNzqs4RDbfmQhWrPuCokTevZpOatXY11PbmSL4qkL4rGTY/US78mTmgZkWComzE
- 35EoVVC+1ErlHJyKLc8aKGKdZI+7mgLV4rD1GDFusxCKRWzUkvB4QAXpYQHIooMhVo6v
- dNdGRwtaKhuCLe7ZPX5rYeFvHtEiq6SXGGE1vvPqYZnuf8/2JDOAcDTgUP2Y0ZwMaa1h
- 2OkW0ctgHgz+aiv2q1cwMDwcPjuURln4euM6bOamnnVHXKKeR3ZhZHNzaEBjp6MqD7jZ 0A== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbkrcdkq0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Jul 2022 23:14:49 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26LL8aTJ039236;
-        Thu, 21 Jul 2022 23:14:48 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2173.outbound.protection.outlook.com [104.47.57.173])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k7aj7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Jul 2022 23:14:48 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZqQy44aiMiV2ck215uFaUMxVKj7ie/WHbqdCVchoquSyWbNHxyX5jjVRkQmfP9UfKgJ/fU4Z55LLbMduysy3q8O5JVUuwsI7rx5P8H12g9yjOsin9Rp05s0KMU2l6wcX3gzfCEtrhYSmlSSvaHWIpyAayME0sKTtpEN1yFbJoYT4ObSv+szIOwkzgR0rCvgQmKeGJfDFphoxv8eYWKTpUYB+64gme7ZxW8vkLm8zFfuPcqYEQUUhJ6F0hGtjULwNVB/to07/y/ajiZtUK6V86TthRfGnNmajHBOorVcGUiU1mGhx5cmoQAwyIK/ai+eLWRG+/K39C9xpu4IGhLIF4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1aN1UV6zboeRqCPR7ZFzdRL7xMyFFu9Ldz3J+OSKqi0=;
- b=DlZf1O4kmmI5htab5uEAb4ugftfvdEOCM39wPnhA+pzixBQ/bydjPe1ZotOkJpdhc2X4f6UhYwMjcTGQ4vxOWG8VNy8RLReChMNxtXO7QkXUpHLGJW7O10rclsbURAyhhdlCPvme1IAXKfFIQM+i/rFBVBwJDDLKhyPrkIBQ2/X7UcAx3haEH4CLVeUXDgmtvE9iZbYpHbKG8JQjG1mhji/554kke3ByVXKNbijO7369twGuAhTuEwTKO2wjAfBP4YF+dVpZTz3Jz41g/QOz/AjpNzd9yRYwcaiFGe57qQs+9ICeE0tW3w4p1A9XoXlBe/SoOTQCnfPLxGNA6Gos9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1aN1UV6zboeRqCPR7ZFzdRL7xMyFFu9Ldz3J+OSKqi0=;
- b=i+w+aGMcYXp+rbVvM88z18bimTSzIBpl0HvVG5tdc6kuGaqM2FOKjZD6hxnlBICHKElpD44H7qP2QcAe9BRATSq4779BDaRr0Ppv2fHCZwkH3LqSBQjWxDwjrKSrXtCMhtJvJNnH52H4mZuSbG3n99svCh1UfykYEf30OwNb8NE=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by MW5PR10MB5691.namprd10.prod.outlook.com (2603:10b6:303:19c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 21 Jul
- 2022 23:14:46 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::c1ba:c197:f81f:ec0%4]) with mapi id 15.20.5458.019; Thu, 21 Jul 2022
- 23:14:46 +0000
-Date:   Thu, 21 Jul 2022 16:14:43 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] hugetlbfs: remove unneeded hugetlbfs_ops forward
- declaration
-Message-ID: <Ytnd4/3xcwJ5dq1K@monkey>
-References: <20220721131637.6306-1-linmiaohe@huawei.com>
- <20220721131637.6306-3-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721131637.6306-3-linmiaohe@huawei.com>
-X-ClientProxiedBy: MW4PR03CA0265.namprd03.prod.outlook.com
- (2603:10b6:303:b4::30) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        Thu, 21 Jul 2022 19:16:24 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E707A8E4FD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 16:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658445383; x=1689981383;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=yXmjzY48y3LBBb1ENVUd9rxbwFFLDcvQu+zW/2hNpCA=;
+  b=i0UkaAAiXXDVYtSGqwYy4FHs43R1u2X4BuDXBR9yh/NlyYLFfur1PEgS
+   oLZn8OSWTmBWtQXoYAaexQxIbhWwy68sg1CnsBmyucTqgREagwNENJbhR
+   exEEmVPqOxY6/j6e7LKyaJnWs3Jxq/izF4jmODDphgzurzDFERWTtC0MM
+   jyX41vFLX6iVqgCJkHGekv3A7eyQc1qh8scd/cxnYTx6oEeK/tKAbvc1j
+   uBr3LK1pRExSz7I3AjpadJw2fGIkL0Jo+uaUTXE8WqULZIDxCT6PjabxZ
+   byZYku0KCttBfZEwhoR/Ylf+T8XVqEjHMTXfUDIVKVCH7Ta7lXNxgp41u
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="348892648"
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="348892648"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 16:16:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="548966548"
+Received: from refarabe-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.165.223])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 16:16:19 -0700
+Message-ID: <84d736f4d9321bc1245e30b43c6c2bc18965f718.camel@intel.com>
+Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 22 Jul 2022 11:16:17 +1200
+In-Reply-To: <71f3326d-319b-c78a-345b-499001e766ff@intel.com>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <d3808510-9974-258e-0c7b-9a76e0868d48@intel.com>
+         <f043d9f5-8f89-4ef3-2ce1-75665122bb3a@linux.intel.com>
+         <214e24f0-5236-be8d-024a-da48737d854a@intel.com>
+         <e280aaf4-57da-6453-c31c-6996dc85219c@linux.intel.com>
+         <a65473db-b307-c076-6d2f-8f2084d81eb5@intel.com>
+         <b8af932e-13da-ddcd-4ecb-bd8369853242@linux.intel.com>
+         <fb9cbec5-6f64-4647-3bc2-30f07a0b6b59@intel.com>
+         <20220721184221.GA3288872@ls.amr.corp.intel.com>
+         <1fdecc17-8f4f-fceb-8da0-4a21ca0d58be@intel.com>
+         <d0a3d1cc-dfea-0731-c801-97c8eb2cd535@linux.intel.com>
+         <71f3326d-319b-c78a-345b-499001e766ff@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8bab2eae-dc27-4bab-ac1c-08da6b6ecd75
-X-MS-TrafficTypeDiagnostic: MW5PR10MB5691:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eZVhhkMSZbuXyXkxlp0cdU5PYr4xtKJAZgQoDpprvrRqzXSSIWHO/0lyAvvCC2BCi52i+CZCdAfRmjverYBlXJmBqUvNzKgXq73g/5zX/6iQ0k/7kZ/uTy7+I+Se9WPajF3CJkvNbyNAQL3sr9NHeH3d7q8gncT1WqznjZgCqIW80XYFfajZ5nXqKp1NgkeurKzquBCTF48R1dDmLX6qO+/QQlqRgrj+EhOpG2BOwG7mFG+ZdRcyGyzNE5YLpzhKEGOj3tPsSUvuJBfQTvLUHMRkPZhNfs9QNYQhr5EV0oLG+J4IsBnvi83XKSF3tW7BP2awlSJZmyLosunaugkGUX2oCDERybMdDOZmFoWauPxOSgUud7wXPNy8EiOETyPnr277AF70DLqXAGGaXemm+GNZbxaldEZKHZvlaEO09ZZQ3ZW7vZ5qke2myOeIvjohwfFUXr/P8X4DhjTPpuYNDSAl4fkQURauhQaQgFRB2PaisPIM2Q5+1kV+Ale3ewM4Q2M01PdYkiTOto5paNfR5Y2NsAGisrWHD5khC5YHx/tpDlpzxnwPpmRi4VQjbOPexD0Qge+ZnKuMqUmu5uFQoMsuJ3SpbaA8cmIE4d2+3doIGxLuKoc/5FsFLUcZf9Io21KOde0+Z3Z/kUQ3Bz+VsN+FfkFACcnW+FXQ/EYyggvF0Z8UYmDVi3BNlcuPHM3hgfIATX7zlqnYofzPqN9hixF/MjKbT6vTXp3TxSkcHYZ4yeuMYVFM0cYS5uadwufV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(346002)(136003)(39860400002)(376002)(366004)(86362001)(26005)(8936002)(83380400001)(186003)(6512007)(38100700002)(9686003)(41300700001)(6916009)(6486002)(478600001)(6666004)(6506007)(53546011)(316002)(66556008)(66476007)(66946007)(44832011)(5660300002)(4326008)(4744005)(8676002)(2906002)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VN+4m3FTOqzwLRNafwpDn1QSKBvb2EMCQnPs1+0KQ/qiVPoe+cjWBK7zPRg7?=
- =?us-ascii?Q?dCNuoWrezjZLd+EtMLaVC0HLDABvRcmgKUpQ3gMMD1ykHxnibXirvAXJRQ8X?=
- =?us-ascii?Q?kRhmfDsWt/DvZY/M6i8FmDaNlHwWX15Zl8TtYJuWULzXblPjR2vbxC8EaEd8?=
- =?us-ascii?Q?kl+vzdxFQkCRIyRI0Z9ugwlomhwb01ZJnzEoL7WXl1Zba0/XRnFoNpFyGMUo?=
- =?us-ascii?Q?gPBHkdMQRjNtgkP3kHKyAdkiw8J4uo4Vt640BqUl2n109cs78/ggeS0O8Mbg?=
- =?us-ascii?Q?eT8EdeRkJR3zzYZwAEbQfI1sl6zFCJM5vaiJP1uW2vw4SGdMHsu1U0ymU26N?=
- =?us-ascii?Q?RtwEVE6Z4aV14SgOAOjTKUmXNknnjJ5LUUhb/Ye2uabmiRDXMCKtM38MDJrR?=
- =?us-ascii?Q?/nVMtqMwEtEDZLDV/aeGKUaXBIz74EikL2xQDHbPpg+4UuLs3PERMM6KLpbm?=
- =?us-ascii?Q?mNI/yKxMQxSJunHLWFaOyKj2Bts2vUmd7cxv9H9dyREokN0nvX3GNtHE4PJQ?=
- =?us-ascii?Q?5NZSRDqNzzpfnLbyReu/xt5rKfsXw+vyQnVUJzHfPpM7HfJcYdQs9X6+EzCX?=
- =?us-ascii?Q?7z1/LSfLyDVcapSZqd9XJZSgCszfD2QcGEyRJ5dgoejlTmQRoHiAOJzcJuUj?=
- =?us-ascii?Q?cBdvIKVgpr+tyn0+bUciOJqDjySxwpysA+LiYs3eJ0gH6MttCjmakIVdfQmP?=
- =?us-ascii?Q?EzpZkdVw8Qb6E31dPCOQuVXi6FHqPo7AJ+tvjX8CeLpjoDq8T8QLtg3FDRMB?=
- =?us-ascii?Q?pS0q8aQ7KYsx3ld9hz+8GdVp+Q8fK5oxC+M8pHOGVyMc1PAxf1REp97+AwU6?=
- =?us-ascii?Q?UaMcapVa2WvwSyz8gtMIbtzJW1IUHy+HhCaZ3dJ/eLHJiNvtbLx5i4ZOQRm2?=
- =?us-ascii?Q?CtozcnLmdaOmt9JXznkHlSHlHb8KpwsNyk61P12xKLRrcu3ph+9sLKNXExPD?=
- =?us-ascii?Q?ar4XrYdWjxccvAsJu0cEivkTZ936UeqCOwa0icITEJrInPVNmvUssoXwgJhs?=
- =?us-ascii?Q?9DwmXhhyl4Myb2jvohlcjyJWWxpO1KsbCF9NOwLvPOwxbdej5cHEPVb0B9Qv?=
- =?us-ascii?Q?iHdU0yP6lKJvtR3NJhGTQaKyyhLRhO6P7dtIY3QfwIq1neB4gxK8u36cWv5Z?=
- =?us-ascii?Q?NdCblUaYU5lXM2qPvyApqUqF938tuuRF4dJAcGxX2g+tzNkxFnjYbWtaOBXK?=
- =?us-ascii?Q?85m2JJhQm73EKXvY2KfNcKhgYKq8k3GexY59h22cHNxatAQFWHD2Cxap9Zkk?=
- =?us-ascii?Q?PtGg+ixIjV0IXAzNZrO96R07GQ0slK4kg1I3PDMmqlh42mJMIPGSp3+sEbLH?=
- =?us-ascii?Q?dQnj8v/oavUNsTmShIB/6CK3PfSQhbaiPrZBmzekO41qWpxeoYNZbV2qfIvZ?=
- =?us-ascii?Q?SMKCmm+0BkGXX/qFWq0jS6/kgT0oR1HzuvEVZGSPtzdN1XIm7QvKCSzzaWY+?=
- =?us-ascii?Q?fTe9s/IKm3G5PRFEqsPI+p5pv/MwapeGC1q5BmnM5svsmig2Q34UOrW8/9Oi?=
- =?us-ascii?Q?63D7cELqjlmmARVKLXnKFnHdZxm0MLQVPBZGQdIwdgjIC7DLsZvMYJKBmk1C?=
- =?us-ascii?Q?0117AslxoChoRAgBVM42OH15rXvUlJjoKdFVys84bCQwWXkKLw0k6JErVVKY?=
- =?us-ascii?Q?Mw=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bab2eae-dc27-4bab-ac1c-08da6b6ecd75
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 23:14:46.5211
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M6xHXcQk/c2TQ3jwDigz3SdTqihnk6ymu7OS/v+xJF3LOrPk6GHLqc330ZjOwJbBKfd+hpGp5F4+iE7pxOrHIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5691
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-21_28,2022-07-21_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207210096
-X-Proofpoint-GUID: 0WTG6TXbc8d15r-mKPxHAxPkBJKU7ywu
-X-Proofpoint-ORIG-GUID: 0WTG6TXbc8d15r-mKPxHAxPkBJKU7ywu
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/21/22 21:16, Miaohe Lin wrote:
-> The forward declaration for hugetlbfs_ops is unnecessary. Remove it.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  fs/hugetlbfs/inode.c | 1 -
->  1 file changed, 1 deletion(-)
+On Thu, 2022-07-21 at 12:23 -0700, Dave Hansen wrote:
+> On 7/21/22 11:57, Sathyanarayanan Kuppuswamy wrote:
+> > > How does the VMM know how much to read/write?  I have a theory: the s=
+pec
+> > > says that R12 is:
+> > >=20
+> > > 	"Shared 4KB GPA as input =E2=80=93 the memory contains a
+> > > 	TDREPORT_STRUCT."
+> > >=20
+> > > That's *A* 4KB GPA.  The maximum is one 4KB page.  That's the only th=
+ing
+> > > that makes sense because there's no length in the ABI anywhere.
+> > >=20
+> > > What am I missing?
+> > I think you are looking into the old spec. Please check the version
+> > "FEBRUARY 2022"
+> >=20
+> > Following are the ABI details:
+> >=20
+> > R11 - TDG.VP.VMCALL< GetQuote > sub-function per Table 2-3
+> > R12 - Shared GPA as input =E2=80=93 the memory contains a TDREPORT_STRU=
+CT. The
+> >        same buffer is used as output =E2=80=93 the memory contains a TD=
+ Quote.
+> > R13 -  Size of shared GPA. The size must be 4KB-aligned.
+>=20
+> Yeah, silly me.  I assumed the ABI was stable and wouldn't be, you know,
+> adding and removing parameters.
+>=20
+> I still don't know how this all works.  You just said:
+>=20
+> > Current ABI allows attestation service and agent to decide the quote si=
+ze. So
+> > we can't make assumptions on what that size will be.
+>=20
+> But, the guest *HAS* to make assumptions, right?  It's allocating the
+> buffer and handing a pointer and size over to the host.  It's also guest
+> *userspace*.  In fact, this implementation *ABSOLUTELY* makes
+> assumptions about the buffer size.
+>=20
+> If host userspace some day decides it needs 5MB of space, then all the
+> guests will just stop working.  This implementation is limited by the
+> max page allocator size.
+>=20
+> This all just seems to work by chance.
 
+The Intel's Quote format is pretty much defined in some spec.  I don't know
+whether the spec is public or not, though.  But Quote by definition has Int=
+el's
+certificates embedded so the size is indeed variable -- even though in real=
+ity
+it can be treated as fixed as Intel's certificates don't change often.
+
+Intel's QGS (Quote Generation Service) once had an API to query Quote size =
+but
+it  got removed somehow, and instead, Intel used hard-coded (8K or 16K I fo=
+rgot)
+buffer, which is big enough for now.
+
+Also, theoretically, 3rd party can add more staff (i.e. their certificates)=
+ when
+they deploy their own attestation services, so the Quote can even be 3rd pa=
+rty
+dependent.
+
+So in short, yes, we Quote size is variable and it is determined by userspa=
+ce.=20
+But in reality, 16K is big enough for foreseeable future.
+
+When using the vsock, userspace just uses standard socket API to read data =
+from
+QGS.  It has all the flexibility, for instance, it can read the header firs=
+t
+(which is couple of bytes and fixed size) and decode the exact Quote size. =
+ Then
+it can allocate a large enough buffer and read once for all.  How vsock in
+kernel uses whatever shared buffer size is implemented by vsock and transpa=
+rent
+to the userspace.
+
+But with GetQuote TDVMCALL we don't have the luxury.  Userspace needs to te=
+ll a
+big enough buffer to the kernel since the GetQuote must receive the entire =
+Quote
+at once.
+
+That being said, ideally, what we need is a TDVMCALL based communication
+channel, instead of bunches of TDVMCALLs with each being associated one spe=
+cific
+operation (i.e. GetQuote).  But obviously this isn't the direction we are
+heading.
+
+
+--=20
 Thanks,
+-Kai
 
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
--- 
-Mike Kravetz

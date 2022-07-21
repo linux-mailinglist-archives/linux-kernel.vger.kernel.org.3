@@ -2,226 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B22457D038
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B11057D040
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbiGUPtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S232947AbiGUPta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiGUPsk (ORCPT
+        with ESMTP id S233356AbiGUPs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:48:40 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4509D7664
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:48:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jkdptinD/pAEZFuAzbTitDLx/PejFiorw4l5lp+7K2igXRaawPRmBH9dtviWopBxnEYMKhYF8FdUFQzGGgzs3naIygOG7JY061gVrd5zVo11fdpURuUWVIuFFlrOYpazg0d3qRt5NhhUPLeLOTHfydGssmkvnTA5ulytlqXAl1ac6jBRC+a2ZSHZZ9u3UTZG2UPqrc+Xwfybs5rVNQD4r0iMxu+djM16NyQjBKKfpTRXt//Xe9DkBalSNYBVVXD4BpioW2m6y60FqiQ22Tq8lnNoQatLOU2dkiMp6iagfkn8Cx6XEX8wW/yAS2nMq3YyeiuHKHXtsO98u63I9JGcdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9hkr9Yqfh0NfJMc6vETptt7qbCNRYkJAUyTApJvpI2w=;
- b=HDg2n8nXylMfWGKNZeJRMl0bAMIFj/PCQl14cb7PEKyTYNu9JLaT0ncsMUJ94uevOb3feP5Qf9DebAVyDLfnD3K098VBR3BhY/2RFDMPvwAIKrARUaKN6uBfYtLj4Vi9lGX5aU5M3SwrHAOKc4cfEB8Y4jQvFskWhQoLssoLxc14fPMliZBAz7SjpSzAzIjNqDrGuFHMotM8TZ1Ytn9VlVBYmFvd5G+AKz8MF7JAeZJ3pmD7Lhor/ZTUtMWBRIL0dkIenRjENeJaYBpdaXwbph7cCt5IKFwNQSqKA9cFjHJcz7DFp+0WG7no9RpzbSI+MVTSsEOMyv7gj9KuEY3wfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9hkr9Yqfh0NfJMc6vETptt7qbCNRYkJAUyTApJvpI2w=;
- b=iHleN1T8JejKkYn0navaKyfunMptnSmjCI+vQp8sur0Akrmmtdneomug+37ASwzTqF6Zd50q2LiK44t7fuZklIt6vLOw9b5Vfo/FIRj+zJHbdQKillPGn1gCPLmkD2NmMPjIlxqXsQtVNMA55jzLWOngTA4dNBvO/b6y3RdOPYKk2RptI2qJh4d6z3lCPUQA+V/Sfp2fw4IYsgnKtZcWUavs5k331LBOZK0YYf+9X5REUL23itzmbGojg0I6txw/3hL7cN+A1yNsnK42GxdvAaiwWKQZ3muGm4Zq6QtOInXoQBWyHkuRMqWKRNKYgUgIhwmWcmE5/gYwAziUzr2XEQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- SN6PR12MB2654.namprd12.prod.outlook.com (2603:10b6:805:73::28) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5458.18; Thu, 21 Jul 2022 15:48:12 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::5044:4e6f:f7d8:b509]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::5044:4e6f:f7d8:b509%7]) with mapi id 15.20.5458.019; Thu, 21 Jul 2022
- 15:48:12 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     akpm@linux-foundation.org, ying.huang@intel.com,
-        shy828301@gmail.com, linux-mm@kvack.org,
+        Thu, 21 Jul 2022 11:48:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEB9D625D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:48:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658418532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+nImgMMtCWQDpksf0Q8VMWi1XHxli4GgXi12sbDxxsE=;
+        b=FZYRdgweyMUFL5CfZ29IXPwFW6dF314Rk+xysh/AbxW7+8D1/P9j9z56kp/z0eFmF0m2eM
+        9hfuEGiG/z8EB9tIy9G5mpXSuf6ljcgJzYmY3Ibuv4QFNEjZfrc5UWey+WSv6gj62cSFBc
+        O3+tsEUNVaaTtArxGV/IjAyLDWfyjoA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-230-gFGjwVf3ODeDJWNzCjB2TQ-1; Thu, 21 Jul 2022 11:48:47 -0400
+X-MC-Unique: gFGjwVf3ODeDJWNzCjB2TQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 879C51C05192;
+        Thu, 21 Jul 2022 15:48:46 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CF50140EBE3;
+        Thu, 21 Jul 2022 15:48:44 +0000 (UTC)
+Message-ID: <dfcc309b1a9258efd2d8b97e0f6d795707941019.camel@redhat.com>
+Subject: Re: [PATCHv2 3/7] KVM: SVM: Add VNMI support in get/set_nmi_mask
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     "Shukla, Santosh" <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: migrate: Do not retry 10 times for the subpages of
- fail-to-migrate THP
-Date:   Thu, 21 Jul 2022 11:48:09 -0400
-X-Mailer: MailMate (1.14r5902)
-Message-ID: <EC02F1E6-E201-4A8D-84B4-47758EA3F20A@nvidia.com>
-In-Reply-To: <1658405108-100658-1-git-send-email-baolin.wang@linux.alibaba.com>
-References: <1658405108-100658-1-git-send-email-baolin.wang@linux.alibaba.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_E6833651-E51F-4CAB-951F-76BB2E931EF5_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1PR13CA0013.namprd13.prod.outlook.com
- (2603:10b6:208:256::18) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+Date:   Thu, 21 Jul 2022 18:48:43 +0300
+In-Reply-To: <a6b40519-e777-da9b-f5bf-4b65490d439a@amd.com>
+References: <20220709134230.2397-1-santosh.shukla@amd.com>
+         <20220709134230.2397-4-santosh.shukla@amd.com>
+         <641b171f53cb6a1e596e9591065a694fd2a59b69.camel@redhat.com>
+         <6a1e7ce4-81af-ffb9-d193-a98375b632fd@amd.com>
+         <d5df7e9e18528de56c41c24958901ace1e2d0aca.camel@redhat.com>
+         <a6b40519-e777-da9b-f5bf-4b65490d439a@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 656ada58-2598-4656-0d93-08da6b306aa1
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2654:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?qa69lRbtsBN/mZU3Q9IVkPvQ2T+Nw1NhdvFEBcH+OgYU7rygh+IlS6Dw+eve?=
- =?us-ascii?Q?gHnwbO8PGQlbGjX9klRiQGYITcoieGUngBqPIYWlA5wKglT7CdBTDR5/OIk0?=
- =?us-ascii?Q?r61vk4gANCmPAEs3NSvn36evw4lowTuk3NXohxdVi1tJHRc+HyLqETM/5q5r?=
- =?us-ascii?Q?O3yf3+q4WX9N5/XQZJ8wOvK4soBMjsGRsE2I6om5v/kjhn/cd8zUlg/4bbe+?=
- =?us-ascii?Q?emEkwZ9eS6+Q8yN4hftLKHq7bpGJhj73Yo4Cl8SMG3q0LCnp7Ojmxpea9ZoH?=
- =?us-ascii?Q?FRhIwMFjAvRP/mh7R2PGlR5YEiK2MD6ejnAJ5qU8uXaRU3rdylB/GA2mSgNd?=
- =?us-ascii?Q?r+4BvhYSGMZXcOO6+ov+pS75+PRpZ25C8JmIxUJYORN9PbJ6DqI9WlwhreER?=
- =?us-ascii?Q?YyXp10g8kJ8ppyKuiiaURMcGPQIea6zjgvEKK5ZVg0ksNGRJ8pptTt80bHFH?=
- =?us-ascii?Q?+T+M/O0XrvI4vhMu+Q7PhSRRamwQBOyh/PZBsyopm4H7v1ToFsqqthThkauu?=
- =?us-ascii?Q?f4vZuqtoATtgXqpmm7Z2uX+ZvtMfhYDwyG/Km5cGfDW0heMRTyGsgFDRIQv6?=
- =?us-ascii?Q?qo4m9UPRk5k/q1/yjxkrkOvp5/ghG8J2gX174oYh3qQ17QDGIP0bWvavgqGX?=
- =?us-ascii?Q?SehRKjsNdyyEF80h8TJYuol61ya5/tKwThDOdUg6g43ZEulBWxlbhjGJLKIa?=
- =?us-ascii?Q?d367X7tIsxfX3o5YNmPprmsptY3GOktKmo93UrROHwU+2+BtgC1LgD8T1Qr8?=
- =?us-ascii?Q?uGuJa3dtZxcZHnf+8DIx57B2Ip8JJJHiJtJdyujxuKHmpG7CO9RQbiQux6Rp?=
- =?us-ascii?Q?2HD3Yu2KUZmgCn1FBw60W8t7Qlu0cvC9fUcDMz7S9fDmKFeBDaPjJU6W26Bp?=
- =?us-ascii?Q?WwTGjHTtMT1bO7Bdp0tqnveefCftbhHkMwqcF4AW70QWU4eH7+BA2yGTM025?=
- =?us-ascii?Q?3Bg1tV0zerzaHftGXMDndA=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(366004)(136003)(396003)(6506007)(38100700002)(53546011)(235185007)(6666004)(41300700001)(2616005)(8936002)(966005)(5660300002)(478600001)(36756003)(316002)(83380400001)(6486002)(6916009)(8676002)(66946007)(26005)(66556008)(6512007)(186003)(33656002)(66476007)(2906002)(4326008)(86362001)(72826004)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dJl86mAElX/0g+hyoRSNQYv4H3A08iwtQeZ+YqOS3ibFTUEjbDNIZztYlXCe?=
- =?us-ascii?Q?3iKkTkDH3+zpw22UaCiArZ8V4p6M7ZYppsrvkgya7gaJ/obcSTSSWRe68s+0?=
- =?us-ascii?Q?aJE43o09SOSB2g5UdCHCN4/pmOmftJBV7X3ojwNVlwJegw0iQ54PhpgX9hvL?=
- =?us-ascii?Q?Vfm4iUMZMWAnLlaLb42piuEa66S8InYqajEpNvWhWduau8mIa6UeZOCUmRVV?=
- =?us-ascii?Q?c/Kds+dWlFXXCLw8Cxcigxn7nRb5doZ0e+SPQ+IaEkPsnLRzZgZgYOxvfKBz?=
- =?us-ascii?Q?P1rAPK/GrfeuIlhllzYlnPYEQzMRRu1eKAV3Eh9AU/Tgq5qVCoAIbpZSfVwN?=
- =?us-ascii?Q?5CTVrqAvsUFQs/Uksv8siIR87aUxtFcmoLpzs4booXiSO/4RirpZSjVdo/YI?=
- =?us-ascii?Q?jbhrOPXrieBMTl81DBWpNP1NcGNaRiqTRsDCvkv1JgQW5LWnIPtsx5cWlFxy?=
- =?us-ascii?Q?en/tpGsTDiX3c6xiUGvynFImWfXGb2LdrjzD39FWwJh6s9c8XIM38WMbnZKg?=
- =?us-ascii?Q?N4jSGEXqcAxBhsoN++Rw4jrvgM/WPJUcl4smbTKkJzrVTs8o6pd928hPUf4q?=
- =?us-ascii?Q?umjDuWZYiCYCh7AUc6K6CtTZ84S4epVFM15/oS0enNX1bGWEn18u1biIUolE?=
- =?us-ascii?Q?hwaTQlrNUW8mHDEzHTXBb74wN6jLzF0AjKZlQ06uJvqh0OJqB9mMpT4SgCpE?=
- =?us-ascii?Q?4nMPrmQbBSCU8RitkYiTvkQqs7HoJZQNUAWC25m/PIlzfh1/Go+/VB22mylh?=
- =?us-ascii?Q?QURs06vgAND5v+MwAuTWVZLcko6/SVYC9OjA6gEHYA4n4J3FO8nkKFrhgC9L?=
- =?us-ascii?Q?vFQa4zgjSAYpWog3ZVncf70V64DUTFLsYYU2oRopv896TiqgzhyWIek93uwn?=
- =?us-ascii?Q?jra/W6wqmBqaNL3LgfKHzesai7BD1Z1wvk/unyy8h7qmIIcj22qDBGrWTlgF?=
- =?us-ascii?Q?GuDXC0lQ9aZ5gxutDzMZ2cOZRTskd8NbN/6hLYbKyrDISJgezcwLa7MNg0iR?=
- =?us-ascii?Q?dpQDBFHxDEDwDsG3LwK29KGc17TJwN6I0jhM1R6g7K9MfOf+3oVqwRjKloaL?=
- =?us-ascii?Q?Uu8ryxq/9ZOJ0kdXwRtlJO9iWpImafArBQUOZra+zziLG5ftnsgHU/AThUR+?=
- =?us-ascii?Q?CciPDt4GBNDe4UgwKyaNESUtmeMYMxz+VLcgr0H1GTnPKUHNOb/Db77wcsGX?=
- =?us-ascii?Q?HGSt+z7aLQIebbwvp4VbhZlzHriEr8JJ42VBj+wqN3eyTx/bYmyLbuQTHJXP?=
- =?us-ascii?Q?jRw3kULtKQO4byQJyyuFMPvz06l25/L0RubmEFdFHgrO9CsREsBhqGQVhQoC?=
- =?us-ascii?Q?lhx+kWkPfPUURvv+xKVKdVvQMCKNGxHIZ6KmajeifvmgjgFE/AWEIjbVCzLd?=
- =?us-ascii?Q?4mbb1uRbShTzSNZaHg9xlRhiDi18vwHqXCN3C3nneSuiFCAVB45XdKltqO4g?=
- =?us-ascii?Q?WUkeVSRIJENCzB/QwKdFutoteABndVJ2v+v35gn0mVqerNKg/F2dJRnuvtg+?=
- =?us-ascii?Q?aXuVCWcG66/KAM3KxfjNG7WWpp9KGUtPkPD+oisyioT8UHlmqzZ0UPI0e0sn?=
- =?us-ascii?Q?yaaZM0oWHql5kMnofK8axFhL9smcx+Sk0dyNPJ9H?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 656ada58-2598-4656-0d93-08da6b306aa1
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 15:48:12.2574
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vFY0IXktU3owMuMCmDHF1+g/W87MEYUM2R+nqk+VFPL/aW0QL9uqaGcajaD/WEbs
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2654
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_E6833651-E51F-4CAB-951F-76BB2E931EF5_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2022-07-21 at 18:42 +0530, Shukla, Santosh wrote:
+> 
+> On 7/21/2022 5:31 PM, Maxim Levitsky wrote:
+> > On Thu, 2022-07-21 at 15:04 +0530, Shukla, Santosh wrote:
+> > > On 7/10/2022 9:45 PM, Maxim Levitsky wrote:
+> > > > On Sat, 2022-07-09 at 19:12 +0530, Santosh Shukla wrote:
+> > > > > VMCB intr_ctrl bit12 (V_NMI_MASK) is set by the processor when handling
+> > > > > NMI in guest and is cleared after the NMI is handled. Treat V_NMI_MASK as
+> > > > > read-only in the hypervisor and do not populate set accessors.
+> > > > > 
+> > > > > Adding API(get_vnmi_vmcb) in order to return the correct vmcb for L1 or
+> > > > > L2.
+> > > > > 
+> > > > > Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> > > > > ---
+> > > > > v2:
+> > > > > - Added get_vnmi_vmcb API to return vmcb for l1 and l2.
+> > > > > - Use get_vnmi_vmcb to get correct vmcb in func -
+> > > > >   is_vnmi_enabled/_mask_set()
+> > > > > - removed vnmi check from is_vnmi_enabled() func.
+> > > > > 
+> > > > >  arch/x86/kvm/svm/svm.c | 12 ++++++++++--
+> > > > >  arch/x86/kvm/svm/svm.h | 32 ++++++++++++++++++++++++++++++++
+> > > > >  2 files changed, 42 insertions(+), 2 deletions(-)
+> > > > > 
+> > > > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > > > index baaf35be36e5..3574e804d757 100644
+> > > > > --- a/arch/x86/kvm/svm/svm.c
+> > > > > +++ b/arch/x86/kvm/svm/svm.c
+> > > > > @@ -198,7 +198,7 @@ module_param(dump_invalid_vmcb, bool, 0644);
+> > > > >  bool intercept_smi = true;
+> > > > >  module_param(intercept_smi, bool, 0444);
+> > > > >  
+> > > > > -static bool vnmi;
+> > > > > +bool vnmi = true;
+> > > > >  module_param(vnmi, bool, 0444);
+> > > > >  
+> > > > >  static bool svm_gp_erratum_intercept = true;
+> > > > > @@ -3503,13 +3503,21 @@ static int svm_nmi_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+> > > > >  
+> > > > >  static bool svm_get_nmi_mask(struct kvm_vcpu *vcpu)
+> > > > >  {
+> > > > > -	return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> > > > > +	struct vcpu_svm *svm = to_svm(vcpu);
+> > > > > +
+> > > > > +	if (is_vnmi_enabled(svm))
+> > > > > +		return is_vnmi_mask_set(svm);
+> > > > > +	else
+> > > > > +		return !!(vcpu->arch.hflags & HF_NMI_MASK);
+> > > > >  }
+> > > > >  
+> > > > >  static void svm_set_nmi_mask(struct kvm_vcpu *vcpu, bool masked)
+> > > > >  {
+> > > > >  	struct vcpu_svm *svm = to_svm(vcpu);
+> > > > >  
+> > > > > +	if (is_vnmi_enabled(svm))
+> > > > > +		return;
+> > > > > +
+> > > > >  	if (masked) {
+> > > > >  		vcpu->arch.hflags |= HF_NMI_MASK;
+> > > > >  		if (!sev_es_guest(vcpu->kvm))
+> > > > > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > > > > index 9223ac100ef5..f36e30df6202 100644
+> > > > > --- a/arch/x86/kvm/svm/svm.h
+> > > > > +++ b/arch/x86/kvm/svm/svm.h
+> > > > > @@ -35,6 +35,7 @@ extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+> > > > >  extern bool npt_enabled;
+> > > > >  extern int vgif;
+> > > > >  extern bool intercept_smi;
+> > > > > +extern bool vnmi;
+> > > > >  
+> > > > >  /*
+> > > > >   * Clean bits in VMCB.
+> > > > > @@ -509,6 +510,37 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
+> > > > >  	return svm->nested.ctl.nested_ctl & SVM_NESTED_CTL_NP_ENABLE;
+> > > > >  }
+> > > > >  
+> > > > > +static inline struct vmcb *get_vnmi_vmcb(struct vcpu_svm *svm)
+> > > > > +{
+> > > > > +	if (!vnmi)
+> > > > > +		return NULL;
+> > > > > +
+> > > > > +	if (is_guest_mode(&svm->vcpu))
+> > > > > +		return svm->nested.vmcb02.ptr;
+> > > > > +	else
+> > > > > +		return svm->vmcb01.ptr;
+> > > > > +}
+> > > > 
+> > > > This is better but still not enough to support nesting:
+> > > > 
+> > > > 
+> > > > Let me explain the cases that we need to cover:
+> > > > 
+> > > > 
+> > > > 1. non nested case, vmcb01 has all the VNMI settings,
+> > > > and I think it should work, but need to review the patches again.
+> > > > 
+> > > > 
+> > > > 
+> > > > 2. L1 uses vNMI, L2 doesn't use vNMI (nested_vnmi_enabled() == false).
+> > > > 
+> > > >   In this case, vNMI settings just need to be copied from vmcb01 to vmcb02
+> > > >   and vise versa during nested entry and exit.
+> > > > 
+> > > > 
+> > > >   This means that nested_vmcb02_prepare_control in this case should copy
+> > > >   all 3 bits from vmcb01 to vmcb02, and vise versa nested_svm_vmexit
+> > > >   should copy them back.
+> > > > 
+> > > >   Currently I see no indication of this being done in this patch series.
+> > > > 
+> > > 
+> > > Yes, Thanks for pointing out, in v3 series.
+> > > 
+> > > >   vmcb02 should indeed be used to read vnmi bits (like done above).
+> > > > 
+> > > > 
+> > > > 3. L1 uses vNMI, L2 uses vNMI:
+> > > > 
+> > > >   - First of all in this case all 3 vNMI bits should be copied from vmcb12
+> > > >     to vmcb02 on nested entry and back on nested VM exit.
+> > > > 
+> > > >     I *think* this is done correctly in the patch 6, but I need to check again.
+> > > > 
+> > > >  
+> > > >   - Second issue, depends on vNMI spec which we still don't have, and it
+> > > >     relates to the fact on what to do if NMIs are not intercepted by
+> > > >     the (nested) hypervisor, and L0 wants to inject an NMI
+> > > > 
+> > > >     (from L1 point of view it means that a 'real' NMI is about to be
+> > > >     received while L2 is running).
+> > > > 
+> > > > 
+> > > >     - If VNMI is not allowed to be enabled when NMIs are not intercepted,
+> > > >       (vast majority of nested hypervisors will want to intercept real NMIs)
+> > > >       then everything is fine -
+> > > > 
+> > > >       this means that if nested vNMI is enabled, then L1 will have
+> > > >       to intercept 'real' NMIs, and thus L0 would be able to always
+> > > >       inject 'real' NMIs while L2 is running by doing a VM exit to L1 without
+> > > >       touching any vNMI state.
+> > > > 
+> > > Yes. Enabling NMI virtualization requires the NMI intercept bit to be set.
+> > 
+> > Those are very good news. 
+> > 
+> > What would happen though if the guest doesn't intercept NMI,
+> > and still tries to enable vNMI? 
+> > 
+> > Failed VM entry or vNMI ignored?
+> > 
+> 
+> VMEXIT_INVALID.
 
-On 21 Jul 2022, at 8:05, Baolin Wang wrote:
+Perfect!
+> 
+> > This matters for nested because nested must work the same as real hardware.
+> > 
+> > In either of the cases some code is needed to emulate this correctly in the nested
+> > virtualization code in KVM, but the patches have none.
+> > 
+> 
+> Yes,. in v3.
 
-> If THP is failed to migrate due to -ENOSYS or -ENOMEM case, the THP wil=
-l
-> be split, and the subpages of fail-to-migrate THP will be tried to migr=
-ate
-> again, so we should not account the retry counter in the second loop, s=
-ince
-> we already accounted 'nr_thp_failed' in the first loop.
->
-> Moreover we also do not need retry 10 times for -EAGAIN case for the su=
-bpages
-> of fail-to-migrate THP in the second loop, since we already regarded th=
-e
-> THP as migration failure, and save some migration time (for the worst c=
-ase,
-> will try 512 * 10 times) according to previous discussion [1].
->
-> [1] https://lore.kernel.org/linux-mm/87r13a7n04.fsf@yhuang6-desk2.ccr.c=
-orp.intel.com/
->
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
-> Note, this patch is based on the patch set [1] from Huang Ying.
-> [1] https://lore.kernel.org/linux-mm/20220711084948.274787-1-ying.huang=
-@intel.com/
-> ---
->  mm/migrate.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 8429206..e36a084 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1507,7 +1507,7 @@ int migrate_pages(struct list_head *from, new_pag=
-e_t get_new_page,
->  			case -EAGAIN:
->  				if (is_thp)
->  					thp_retry++;
-> -				else
-> +				else if (!no_subpage_counting)
->  					retry++;
->  				nr_retry_pages +=3D nr_subpages;
->  				break;
-> @@ -1533,8 +1533,7 @@ int migrate_pages(struct list_head *from, new_pag=
-e_t get_new_page,
->  			}
->  		}
->  	}
-> -	if (!no_subpage_counting)
-> -		nr_failed +=3D retry;
-> +	nr_failed +=3D retry;
->  	nr_thp_failed +=3D thp_retry;
->  	nr_failed_pages +=3D nr_retry_pages;
->  	/*
-> -- =
+Perfect!
 
-> 1.8.3.1
 
-LGTM. Thanks. Reviewed-by: Zi Yan <ziy@nvidia.com>
+Best regards,
+	Maxim Levitsky
 
---
-Best Regards,
-Yan, Zi
+> 
+> Thanks,
+> Santosh
+>  
+> > Best regards,
+> > 	Maxim Levitsky
+> > 
+> > 
+> > > >     - If the vNMI spec states that if vNMI is enabled, real NMIs
+> > > >       are not intercepted and a real NMI is arriving, then the CPU
+> > > >       will use vNMI state to handle it (that is it will set the 'pending'
+> > > >       bit, then check if 'masked' bit is set, and if not, move pending to masked
+> > > >       and deliver NMI to L2, in this case, it is indeed right to use vmcb02
+> > > >       and keep on using VNMI for NMIs that are directed to L1,
+> > > >       but I highly doubt that this is the case.
+> > > > 
+> > > > 
+> > > No.
+> > > 
+> > > >     - Most likely case - vNMI is allowed without NMI intercept,
+> > > >       and real NMI does't consult the vNMI bits, but rather uses 'hosts'
+> > > >       NMI masking. IRET doesn't affect host's NMI' masking as well.
+> > > > 
+> > > > 
+> > > 
+> > > No.
+> > > 
+> > > Thanks,
+> > > Santosh
+> > >  
+> > > >       In this case, when L0 wants to inject NMI to a nested guest
+> > > >       that has vNMI enabled, and doesn't intercept NMIs, it
+> > > >       has to:
+> > > > 
+> > > >       - still consult the vNMI pending/masked bits of *vmcb01*,
+> > > >         to know if it can inject a NMI
+> > > > 
+> > > >       - if it can inject it, it should update *manually* the pending/masked bits
+> > > >         of vmcb01 as well, so that L1's vNMI the state remains consistent.
+> > > > 
+> > > >       - inject the NMI to L2, in the old fashioned way with EVENTINJ,
+> > > > 	or open NMI window by intercepting IRET if NMI is masked.
+> > > > 
+> > > > 
+> > > > Best regards,
+> > > > 	Maxim Levitsky
+> > > > 
+> > > > 
+> > > > 
+> > > > 
+> > > > > +
+> > > > > +static inline bool is_vnmi_enabled(struct vcpu_svm *svm)
+> > > > > +{
+> > > > > +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> > > > > +
+> > > > > +	if (vmcb)
+> > > > > +		return !!(vmcb->control.int_ctl & V_NMI_ENABLE);
+> > > > > +	else
+> > > > > +		return false;
+> > > > > +}
+> > > > > +
+> > > > > +static inline bool is_vnmi_mask_set(struct vcpu_svm *svm)
+> > > > > +{
+> > > > > +	struct vmcb *vmcb = get_vnmi_vmcb(svm);
+> > > > > +
+> > > > > +	if (vmcb)
+> > > > > +		return !!(vmcb->control.int_ctl & V_NMI_MASK);
+> > > > > +	else
+> > > > > +		return false;
+> > > > > +}
+> > > > > +
+> > > > >  /* svm.c */
+> > > > >  #define MSR_INVALID				0xffffffffU
+> > > > >  
 
---=_MailMate_E6833651-E51F-4CAB-951F-76BB2E931EF5_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename=signature.asc
-Content-Type: application/pgp-signature; name=signature.asc
 
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEE6rR4j8RuQ2XmaZol4n+egRQHKFQFAmLZdTkPHHppeUBudmlk
-aWEuY29tAAoJEOJ/noEUByhU1SkP/1VGvUeZfp3iFmS1/HdD3bCqbgik8u8uOYcG
-RU2IlCXShFOtLX3DtPVxTBItrNCTINzRHtkGCUm3o+NFevc6DKdCynZxfsJe5c8r
-iaMb7PuYK7+1GaqXcpRqsuo7fEgYnLu/jyQP96ur2RxqI9jVvuIMvvz6pt6tAasi
-LO/jsQVaFhfQeDCr+LOTYe0Y37gpyKp2ZqB2PowI89RQax2o6OLfQXuOTYqRBAgG
-mLk5RCnW3PR21x3rhP7JaQ6aIGWCEEmif5JPjocRYjjdDJEzC8iCISfSyIQwqvam
-SLLbIR89SXcISRlXClMosm3BTc4RULtYK722oYw/791oLG/DwMdrgw9NrGKHX38n
-5z1ybtUmeqoBCUz1EJ8cPgzPJ31XfU/8E1z1O/eF7T8r5cLWEuRbSRQTQhzMI1vG
-fH1tVRUke3wAgU310gpoCWnMDpVbMUZG1xk7sIePrmqRqIw5racHq4nvq1JiI8H5
-oUdpbGhB1Rm/zQp6iw4DSB7G9XvB1HHmmLhtWDINh59aJKU920CuQ5uDpT1HYNvx
-JqhnWQ9V64lviaWtCA9xrOCpbH6JTNTzUn1XrHBElENRybVZHrymInc7BaeiC+nC
-EzvFsAHiCkgbBS6+kHvfne4iO4V4XnZZGjzBdYf37xKLNMogYHpHxjZP17kn0rvF
-MehT1xc5
-=E+0g
------END PGP SIGNATURE-----
-
---=_MailMate_E6833651-E51F-4CAB-951F-76BB2E931EF5_=--

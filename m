@@ -2,300 +2,479 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F23F57D4CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C61E57D4D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 22:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbiGUUcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 16:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S229754AbiGUUfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 16:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiGUUcU (ORCPT
+        with ESMTP id S232579AbiGUUfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 16:32:20 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4926787368
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 13:32:19 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id tk8so5117282ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 13:32:19 -0700 (PDT)
+        Thu, 21 Jul 2022 16:35:38 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8AA4E840;
+        Thu, 21 Jul 2022 13:35:36 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id z23so5076059eju.8;
+        Thu, 21 Jul 2022 13:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zccUArvHbZkwSLlopBVJYUUMkElLghD6qyHZAjaPBgs=;
-        b=NFaShSkqPcwWe0I+zdT08zjLl533SqHJSZMCnmrymqmk4kjxbEiMj1gB+9m9KkqG7L
-         dTg9IOB4dnPKkcRkYGmYvzzXlf0B83BKWotFKSZAx57vDpeJ4Qgfe+ihjM36eO717Yy0
-         9Fv2ZOi8mbDTHegwxc7Vtpf+ATsjJLllPJookEK7zZJMRVvOatBpCrqkcf1rmrxgwBSl
-         2LE29TlLfDA9j3RVQHvM7ulDp7BOLhbSmbkmD8vRZwCR2TjhSgpMRJbIDt5Oh7UvlWjj
-         XQKXYil5HWSvMMYpbf4d9Z7WCDOnqOfJuBI3iFZLdX2KeWf+tZASuEHVkIjfQRZEd7fT
-         IYJw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=mV/dw7vkpS6dqZh16XxyiXycD9pTjTsGfMdvE5yLq8o=;
+        b=g9kp/TvFvMzRDLWx0dMOfD2iH1Ro/KmgVlw1R3yhsOhp1AAUM0K29u+v3Oj1t0RAsM
+         9gWwDceB8DPYyaUZA1cqjs9FSrV+SwV2YLRYSgjLLhJ5yjqGALM92JRgSbVUqugMkgaH
+         FVQGAoAL8wyxouJ36BkcObai5KT+PMJnOPrqm2GsD+onrUWwcl9wXtHNRk79qE3dBFyJ
+         5YCqQ0P5Cd5GRa/vPTqk49I6FtLVTLUBGHBJc3yPetSaRS18EB4X3M8MRVeFfWy/o7PC
+         DhAEaFRl0Tev0cRvabIMes6rkGmrGetdc27ZvDSJSlqLsmz7O0FYmynVVQZZMO1vdRHu
+         CClQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zccUArvHbZkwSLlopBVJYUUMkElLghD6qyHZAjaPBgs=;
-        b=V9P8uOMaruFMBJEl6zPOA6KimTqu75kQouw76AtRp7gXifPGaTYv7ES7mBluPyjqmb
-         PpwoCFZRfOMkJWvBwgPBXjBboHXovQdCezjkYAU4TysZhhq7vU4BYc4hQYLhqOzs5LlG
-         v6wtp9Puo6JPP2vnFQcZJiYpAmH7Mfe4fPVePkKfTln60Rhj2oo04kCU1ZZHPZTT28cG
-         cZllQXuMxRKHEfkKYtnbmoY6yfISgQKrYOp7zr+cB+Q67KlV9wCboP4R4a5n4RpDp8lI
-         OscL89bXeMoafwk4UNPy8SGZQ17G8quGjmH8uOJLTG+UdAgEBDpBCwXyj3S3uUeMS/qQ
-         Yp1w==
-X-Gm-Message-State: AJIora+8lci1nsT5HHyZqPdqysprgUP1pcxHYDyYorYrZDPcVqBZA7kQ
-        82EXhPBf5Z9Tsoy8LnLEF3MlzX6+vezuzySZIpUznA==
-X-Google-Smtp-Source: AGRyM1tzSQvKpl4YX6qzJ+Vj/spOW9tVhxrOJT0ZUayhQgAX5cMte9FQvPliZEAikinTo3i3z6T+rs/cSN3MZufNFus=
-X-Received: by 2002:a17:906:cc5a:b0:72b:1459:6faa with SMTP id
- mm26-20020a170906cc5a00b0072b14596faamr285506ejb.221.1658435537581; Thu, 21
- Jul 2022 13:32:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=mV/dw7vkpS6dqZh16XxyiXycD9pTjTsGfMdvE5yLq8o=;
+        b=XgGgDS6daQWkxGJCJtAERSW+j5F3vsObASCtg9Oy6TtExlJt5eqGdfbe3XkJQtcMfP
+         S4u5AP+cbzil2njKpAplEUeRj5GSpkl+L+mWzHMzMunMIDJpKsmt58ekZ2H2AqQLb/v/
+         KdBXZSaN/KAkGkndkvZD6HzMZge1Jv5H/rj34vKGCP+y36b5GGcXkgDXTHQglqPimQFQ
+         4HfURp1R+QGXAnaPQfJfE5oEKIfxbvY4xMmTyRZQ4aJvKdgzsfHtBYXC/MhemrHxYm2V
+         iSaypZpm05WpxqALxNuMqYVfqzw/X6WI5egs0/HtUx/OSjjhIGjgARMiImBISGYphOvQ
+         q91w==
+X-Gm-Message-State: AJIora+XAhWk+ntmn+XjDqxR1PufoRWOjYAMG196OAkrU9Px8LoaZvuE
+        4B36sTWV9wtzn4m/cqaNUk2q5YI6l/Q=
+X-Google-Smtp-Source: AGRyM1tvboGHiZgeI1dBfLVJJ6Hn+aFO5AbWerH8UMOmMnBmGB7bx6BP55wq6EKFabtg1VPd9Z1eWA==
+X-Received: by 2002:a17:907:7f8e:b0:72f:11ec:f5f8 with SMTP id qk14-20020a1709077f8e00b0072f11ecf5f8mr278485ejc.343.1658435734463;
+        Thu, 21 Jul 2022 13:35:34 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:6e18:3e00:5147:bc1c:8bf1:863a? (dynamic-2a01-0c22-6e18-3e00-5147-bc1c-8bf1-863a.c22.pool.telefonica.de. [2a01:c22:6e18:3e00:5147:bc1c:8bf1:863a])
+        by smtp.googlemail.com with ESMTPSA id y3-20020aa7ccc3000000b0043577da51f1sm1558873edt.81.2022.07.21.13.35.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 13:35:33 -0700 (PDT)
+Message-ID: <356f4285-1e83-ab14-c890-4131acd8e61d@gmail.com>
+Date:   Thu, 21 Jul 2022 22:35:21 +0200
 MIME-Version: 1.0
-References: <20220720232332.2720091-1-justinstitt@google.com>
- <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com>
- <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X> <YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X>
-In-Reply-To: <YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X>
-From:   Justin Stitt <justinstitt@google.com>
-Date:   Thu, 21 Jul 2022 13:32:06 -0700
-Message-ID: <CAFhGd8pNqX=ieoUciJpmm3VSj5yBsZsnsq-HryTYTWczdocFZQ@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Chunhao Lin <hau@realtek.com>, netdev@vger.kernel.org
+Cc:     nic_swsd@realtek.com, linux-kernel@vger.kernel.org
+References: <20220721144550.4405-1-hau@realtek.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net-next] r8169: add support for rtl8168h(revid 0x2a) +
+ rtl8211fs fiber application
+In-Reply-To: <20220721144550.4405-1-hau@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:37 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> On Thu, Jul 21, 2022 at 08:10:27AM -0700, Nathan Chancellor wrote:
-> > On Thu, Jul 21, 2022 at 07:27:34AM -0700, Nick Desaulniers wrote:
-> > > On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
-> > > >
-> > > > There's been an ongoing mission to re-enable the -Wformat warning for
-> > > > Clang. A previous attempt at enabling the warning showed that there were
-> > > > many instances of this warning throughout the codebase. The sheer amount
-> > > > of these warnings really polluted builds and thus -Wno-format was added
-> > > > to _temporarily_ toggle them off.
-> > > >
-> > > > After many patches the warning has largely been eradicated for x86,
-> > > > x86_64, arm, and arm64 on a variety of configs. The time to enable the
-> > > > warning has never been better as it seems for the first time we are
-> > > > ahead of them and can now solve them as they appear rather than tackling
-> > > > from a backlog.
-> > > >
-> > > > As to the root cause of this large backlog of warnings, Clang seems to
-> > > > pickup on some more nuanced cases of format warnings caused by implicit
-> > > > integer conversion as well as default argument promotions from
-> > > > printf-like functions.
-> > > >
-> > > >
-> > > > Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> > > > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > > Signed-off-by: Justin Stitt <justinstitt@google.com>
-> > > > ---
-> > > > Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
-> > > >
-> > > > Note:
-> > > > For this patch to land on its feet, the plethora of supporting patches that
-> > > > fixed various -Wformat warnings need to be picked up. Thanfully, a lot
-> > > > of them have!
-> > > >
-> > > > Here are the patches still waiting to be picked up:
-> > > > * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
-> > > > * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
-> > >
-> > > Hi Masahiro, Nathan, and Tom,
-> > > What are your thoughts for _when_ in the release cycle this should be
-> > > picked up?  I worry that if we don't remove this soon, we will
-> > > backslide, and more -Wformat issues will crop up making removing this
-> > > in the future like digging in sand.  Justin has chased down many
-> > > instances of this warning, and I'm happy to help clean up fallout from
-> > > landing this.
-> >
-> > Let me do a series of builds with the two patches above against
-> > next-20220721 to see if there are any instances of this warning across
-> > the less frequently tested architectures then I will review/ack this.
->
-> Alright, against next-20220721, I applied:
->
-> * https://lore.kernel.org/20220712204900.660569-1-justinstitt@google.com/ (applied to net-next, just not in this -next release)
-> * https://lore.kernel.org/20220718230626.1029318-1-justinstitt@google.com/ (not picked up)
-> * https://lore.kernel.org/20220711222919.2043613-1-justinstitt@google.com/ (not picked up)
->
-> I still see the following warnings. I have suggested fixes, which I am happy to
-> send unless Justin wants to.
+On 21.07.2022 16:45, Chunhao Lin wrote:
+> rtl8168h(revid 0x2a) + rtl8211fs is for fiber related application.
+> rtl8168h will control rtl8211fs via its eeprom or gpo pins.
 
-I can tackle these by EOD.
+RTL8168h has an integrated PHY, how is it with rev 0x2a? Can this version
+be used with an external PHY only?
+And how about the case that somebody combines this chip version with
+another PHY that supports fiber? It seems the code makes the assumption
+that rev2a is always coupled with an external RTL8211FS.
 
->
-> ========================================================================
->
-> ARCH=arm allmodconfig:
->
-> ../drivers/iommu/msm_iommu.c:603:6: error: format specifies type 'unsigned short' but the argument has type 'int' [-Werror,-Wformat]
->                                  sid);
->                                  ^~~
-> ../include/linux/dev_printk.h:146:70: note: expanded from macro 'dev_warn'
->         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
->                                                                     ~~~     ^~~~~~~~~~~
-> ../include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
->                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
->                              ~~~    ^~~~~~~~~~~
-> 1 error generated.
->
-> Introduced by commit f78ebca8ff3d ("iommu/msm: Add support for generic master
-> bindings").
->
-> diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
-> index 428919a474c1..6a24aa804ea3 100644
-> --- a/drivers/iommu/msm_iommu.c
-> +++ b/drivers/iommu/msm_iommu.c
-> @@ -599,7 +599,7 @@ static int insert_iommu_master(struct device *dev,
->
->         for (sid = 0; sid < master->num_mids; sid++)
->                 if (master->mids[sid] == spec->args[0]) {
-> -                       dev_warn(dev, "Stream ID 0x%hx repeated; ignoring\n",
-> +                       dev_warn(dev, "Stream ID 0x%x repeated; ignoring\n",
->                                  sid);
->                         return 0;
->                 }
->
-> ========================================================================
->
-> ARCH=hexagon allmodconfig + CONFIG_FRAME_WARN=0:
->
-> ../drivers/misc/lkdtm/bugs.c:107:3: error: format specifies type 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
->                 REC_STACK_SIZE, recur_count);
->                 ^~~~~~~~~~~~~~
-> ../include/linux/printk.h:537:34: note: expanded from macro 'pr_info'
->         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
->                                 ~~~     ^~~~~~~~~~~
-> ../include/linux/printk.h:464:60: note: expanded from macro 'printk'
-> #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
->                                                     ~~~    ^~~~~~~~~~~
-> ../include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
->                 _p_func(_fmt, ##__VA_ARGS__);                           \
->                         ~~~~    ^~~~~~~~~~~
-> ../drivers/misc/lkdtm/bugs.c:32:24: note: expanded from macro 'REC_STACK_SIZE'
-> #define REC_STACK_SIZE (THREAD_SIZE / 8)
->                        ^~~~~~~~~~~~~~~~~
-> 1 error generated.
->
-> Introduced by commit 24cccab42c41 ("lkdtm/bugs: Adjust recursion test to avoid
-> elision").
->
-> diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-> index 009239ad1d8a..6381255aaecc 100644
-> --- a/drivers/misc/lkdtm/bugs.c
-> +++ b/drivers/misc/lkdtm/bugs.c
-> @@ -29,7 +29,7 @@ struct lkdtm_list {
->  #if defined(CONFIG_FRAME_WARN) && (CONFIG_FRAME_WARN > 0)
->  #define REC_STACK_SIZE (_AC(CONFIG_FRAME_WARN, UL) / 2)
->  #else
-> -#define REC_STACK_SIZE (THREAD_SIZE / 8)
-> +#define REC_STACK_SIZE ((unsigned long)(THREAD_SIZE / 8))
->  #endif
->  #define REC_NUM_DEFAULT ((THREAD_SIZE / REC_STACK_SIZE) * 2)
->
->
-> ========================================================================
->
-> ARCH=arm allmodconfig:
->
-> ../drivers/nvme/target/auth.c:492:18: error: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Werror,-Wformat]
->                         ctrl->cntlid, ctrl->dh_keysize, buf_size);
->                                       ^~~~~~~~~~~~~~~~
-> ../include/linux/printk.h:517:37: note: expanded from macro 'pr_warn'
->         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
->                                    ~~~     ^~~~~~~~~~~
-> ../include/linux/printk.h:464:60: note: expanded from macro 'printk'
-> #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
->                                                     ~~~    ^~~~~~~~~~~
-> ../include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
->                 _p_func(_fmt, ##__VA_ARGS__);                           \
->                         ~~~~    ^~~~~~~~~~~
-> 1 error generated.
->
-> Introduced by commit 71ebe3842ebe ("nvmet-auth: Diffie-Hellman key exchange
-> support").
->
-> This one is not clang specific and already has a fix pending:
->
-> https://lore.kernel.org/20220718050356.227647-1-hch@lst.de/
->
-> ========================================================================
->
-> Pretty much every allmodconfig:
->
-> ../sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
->                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
->                  ^~~~~~~~~~~~~
-> ../include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
->         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
->                                                                  ~~~     ^~~~~~~~~~~
-> ../include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
->                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
->                              ~~~    ^~~~~~~~~~~
-> ../include/uapi/sound/sof/abi.h:30:23: note: expanded from macro 'SOF_ABI_MAJOR'
-> #define SOF_ABI_MAJOR 3
->                       ^
-> ../sound/soc/sof/ipc3-topology.c:2343:19: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
->                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
->                                 ^~~~~~~~~~~~~
-> ../include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
->         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
->                                                                  ~~~     ^~~~~~~~~~~
-> ../include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
->                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
->                              ~~~    ^~~~~~~~~~~
-> ../include/uapi/sound/sof/abi.h:31:23: note: expanded from macro 'SOF_ABI_MINOR'
-> #define SOF_ABI_MINOR 22
->                       ^~
-> ../sound/soc/sof/ipc3-topology.c:2343:34: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
->                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
->                                                ^~~~~~~~~~~~~
-> ../include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
->         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
->                                                                  ~~~     ^~~~~~~~~~~
-> ../include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
->                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
->                              ~~~    ^~~~~~~~~~~
-> ../include/uapi/sound/sof/abi.h:32:23: note: expanded from macro 'SOF_ABI_PATCH'
-> #define SOF_ABI_PATCH 0
->                       ^
-> 3 errors generated.
->
-> Introduced by commit 323aa1f093e6 ("ASoC: SOF: Add a new IPC op for parsing
-> topology manifest") for little reason it seems?
->
-> diff --git a/sound/soc/sof/ipc3-topology.c b/sound/soc/sof/ipc3-topology.c
-> index b2cc046b9f60..65923e7a5976 100644
-> --- a/sound/soc/sof/ipc3-topology.c
-> +++ b/sound/soc/sof/ipc3-topology.c
-> @@ -2338,7 +2338,7 @@ static int sof_ipc3_parse_manifest(struct snd_soc_component *scomp, int index,
->         }
->
->         dev_info(scomp->dev,
-> -                "Topology: ABI %d:%d:%d Kernel ABI %hhu:%hhu:%hhu\n",
-> +                "Topology: ABI %d:%d:%d Kernel ABI %d:%d:%d\n",
->                  man->priv.data[0], man->priv.data[1], man->priv.data[2],
->                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
->
->
-> ========================================================================
->
-> I would really like to see patches in flight for these before this patch
-> is accepted but it is really awesome to see how close we are :)
->
-> Cheers,
-> Nathan
+Are there any realworld devices that use RTL8168H with fiber?
 
--Justin
+> Fiber module will be connected to rtl8211fs. The link speed between
+> rtl8168h and rtl8211fs is decied by fiber module.
+> 
+> Signed-off-by: Chunhao Lin <hau@realtek.com>
+> ---
+>  drivers/net/ethernet/realtek/r8169_main.c | 315 +++++++++++++++++++++-
+>  1 file changed, 313 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+> index 1b7fdb4f056b..aa817e2f919a 100644
+> --- a/drivers/net/ethernet/realtek/r8169_main.c
+> +++ b/drivers/net/ethernet/realtek/r8169_main.c
+> @@ -344,6 +344,15 @@ enum rtl8125_registers {
+>  	EEE_TXIDLE_TIMER_8125	= 0x6048,
+>  };
+>  
+> +enum rtl8168_sfp_registers {
+> +	MDIO_IN			= 0xdc04,
+> +	PINOE			= 0xdc06,
+> +	PIN_I_SEL_1		= 0xdc08,
+> +	PIN_I_SEL_2		= 0xdc0A,
+> +	PINPU			= 0xdc18,
+> +	GPOUTPIN_SEL	= 0xdc20,
+> +};
+> +
+>  #define RX_VLAN_INNER_8125	BIT(22)
+>  #define RX_VLAN_OUTER_8125	BIT(23)
+>  #define RX_VLAN_8125		(RX_VLAN_INNER_8125 | RX_VLAN_OUTER_8125)
+> @@ -584,6 +593,30 @@ struct rtl8169_tc_offsets {
+>  	__le16	rx_missed;
+>  };
+>  
+> +struct rtl_sfp_if_info {
+> +	u16 mdio_oe_i;
+> +	u16 mdio_oe_o;
+> +	u16 mdio_pu;
+> +	u16 mdio_pd;
+> +	u16 mdc_pu;
+> +	u16 mdc_pd;
+> +};
+> +
+> +struct rtl_sfp_if_mask {
+> +	const u16 pin_mask;
+> +	const u16 mdio_oe_mask;
+> +	const u16 mdio_mask;
+> +	const u16 mdc_mask;
+> +	const u16 phy_addr;
+> +	const u16 rb_pos;
+> +};
+> +
+> +struct rtl_sfp_if_mask rtl_sfp_if_eeprom_mask = {
+> +	0x0050, 0x0040, 0x000f, 0x0f00, 0, 6};
+> +
+> +struct rtl_sfp_if_mask rtl_sfp_if_gpo_mask = {
+> +	0x0210, 0x0200, 0xf000, 0x0f00, 1, 9};
+> +
+>  enum rtl_flag {
+>  	RTL_FLAG_TASK_ENABLED = 0,
+>  	RTL_FLAG_TASK_RESET_PENDING,
+> @@ -596,6 +629,12 @@ enum rtl_dash_type {
+>  	RTL_DASH_EP,
+>  };
+>  
+> +enum rtl_sfp_if_type {
+> +	RTL_SFP_IF_NONE,
+> +	RTL_SFP_IF_EEPROM,
+> +	RTL_SFP_IF_GPIO,
+> +};
+> +
+>  struct rtl8169_private {
+>  	void __iomem *mmio_addr;	/* memory map physical address */
+>  	struct pci_dev *pci_dev;
+> @@ -635,6 +674,8 @@ struct rtl8169_private {
+>  	struct rtl_fw *rtl_fw;
+>  
+>  	u32 ocp_base;
+> +
+> +	enum rtl_sfp_if_type sfp_if_type;
+>  };
+>  
+>  typedef void (*rtl_generic_fct)(struct rtl8169_private *tp);
+> @@ -914,8 +955,12 @@ static void r8168g_mdio_write(struct rtl8169_private *tp, int reg, int value)
+>  	if (tp->ocp_base != OCP_STD_PHY_BASE)
+>  		reg -= 0x10;
+>  
+> -	if (tp->ocp_base == OCP_STD_PHY_BASE && reg == MII_BMCR)
+> +	if (tp->ocp_base == OCP_STD_PHY_BASE && reg == MII_BMCR) {
+> +		if (tp->sfp_if_type != RTL_SFP_IF_NONE && value & BMCR_PDOWN)
+> +			return;
+> +
+>  		rtl8168g_phy_suspend_quirk(tp, value);
+> +	}
+>  
+>  	r8168_phy_ocp_write(tp, tp->ocp_base + reg * 2, value);
+>  }
+> @@ -1214,6 +1259,266 @@ static enum rtl_dash_type rtl_check_dash(struct rtl8169_private *tp)
+>  	}
+>  }
+>  
+> +static void rtl_sfp_shift_bit_in(struct rtl8169_private *tp,
+> +				  struct rtl_sfp_if_info *sfp_if_info, u32 val, int count)
+> +{
+> +	int i;
+> +	const u16 mdc_reg = PIN_I_SEL_1;
+> +	const u16 mdio_reg = PIN_I_SEL_2;
+> +
+> +	for (i = (count - 1); i >= 0; i--) {
+> +		r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info->mdc_pd);
+> +		if (val & BIT(i))
+> +			r8168_mac_ocp_write(tp, mdio_reg, sfp_if_info->mdio_pu);
+> +		else
+> +			r8168_mac_ocp_write(tp, mdio_reg, sfp_if_info->mdio_pd);
+> +		r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info->mdc_pu);
+> +	}
+> +}
+> +
+> +static u16 rtl_sfp_shift_bit_out(struct rtl8169_private *tp,
+> +				  struct rtl_sfp_if_info *sfp_if_info, u16 rb_pos)
+> +{
+> +	int i;
+> +	u16 data = 0;
+> +	const u16 mdc_reg = PIN_I_SEL_1;
+> +	const u16 mdio_in_reg = MDIO_IN;
+> +
+> +	for (i = 15; i >= 0; i--) {
+> +		r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info->mdc_pu);
+> +		r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info->mdc_pd);
+> +		data += r8168_mac_ocp_read(tp, mdio_in_reg) & BIT(rb_pos) ? BIT(i) : 0;
+> +	}
+> +
+> +	return data;
+> +}
+> +
+> +static void rtl_select_sfp_if(struct rtl8169_private *tp,
+> +				  struct rtl_sfp_if_mask *sfp_if_mask,
+> +				  struct rtl_sfp_if_info *sfp_if_info)
+> +{
+> +	u16 pinoe_value, pin_i_sel_1_value, pin_i_sel_2_value;
+> +
+> +	r8168_mac_ocp_modify(tp, PINPU, sfp_if_mask->pin_mask, 0);
+> +	r8168_mac_ocp_modify(tp, PINOE, 0, sfp_if_mask->pin_mask);
+> +
+> +	pinoe_value = r8168_mac_ocp_read(tp, PINOE);
+> +	pin_i_sel_1_value = r8168_mac_ocp_read(tp, PIN_I_SEL_1);
+> +	pin_i_sel_2_value = r8168_mac_ocp_read(tp, PIN_I_SEL_2);
+> +
+> +	sfp_if_info->mdio_oe_i = pinoe_value & ~sfp_if_mask->mdio_oe_mask;
+> +	sfp_if_info->mdio_oe_o = pinoe_value | sfp_if_mask->mdio_oe_mask;
+> +	sfp_if_info->mdio_pd = pin_i_sel_2_value & ~sfp_if_mask->mdio_mask;
+> +	sfp_if_info->mdio_pu = pin_i_sel_2_value | sfp_if_mask->mdio_mask;
+> +	sfp_if_info->mdc_pd = pin_i_sel_1_value & ~sfp_if_mask->mdc_mask;
+> +	sfp_if_info->mdc_pu = pin_i_sel_1_value | sfp_if_mask->mdc_mask;
+> +}
+> +
+> +#define RT_SFP_ST (1)
+> +#define RT_SFP_OP_W (1)
+> +#define RT_SFP_OP_R (2)
+> +#define RT_SFP_TA_W (2)
+> +#define RT_SFP_TA_R (0)
+> +
+> +static void rtl_sfp_if_write(struct rtl8169_private *tp,
+> +				  struct rtl_sfp_if_mask *sfp_if_mask, u8 reg, u16 val)
+> +{
+> +	struct rtl_sfp_if_info sfp_if_info = {0};
+> +	const u16 mdc_reg = PIN_I_SEL_1;
+> +	const u16 mdio_reg = PIN_I_SEL_2;
+> +
+> +	rtl_select_sfp_if(tp, sfp_if_mask, &sfp_if_info);
+> +
+> +	/* change to output mode */
+> +	r8168_mac_ocp_write(tp, PINOE, sfp_if_info.mdio_oe_o);
+> +
+> +	/* init sfp interface */
+> +	r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info.mdc_pd);
+> +	r8168_mac_ocp_write(tp, mdio_reg, sfp_if_info.mdio_pu);
+> +
+> +	/* preamble 32bit of 1 */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, 0xffffffff, 32);
+> +
+> +	/* opcode write */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_ST, 2);
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_OP_W, 2);
+> +
+> +	/* phy address */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, sfp_if_mask->phy_addr, 5);
+> +
+> +	/* phy reg */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, reg, 5);
+> +
+> +	/* turn-around(TA) */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_TA_W, 2);
+> +
+> +	/* write phy data */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, val, 16);
+> +}
+> +
+> +static u16 rtl_sfp_if_read(struct rtl8169_private *tp,
+> +				  struct rtl_sfp_if_mask *sfp_if_mask, u8 reg)
+> +{
+> +	struct rtl_sfp_if_info sfp_if_info = {0};
+> +	const u16 mdc_reg = PIN_I_SEL_1;
+> +	const u16 mdio_reg = PIN_I_SEL_2;
+> +
+> +	rtl_select_sfp_if(tp, sfp_if_mask, &sfp_if_info);
+> +
+> +	/* change to output mode */
+> +	r8168_mac_ocp_write(tp, PINOE, sfp_if_info.mdio_oe_o);
+> +
+> +	/* init sfp interface */
+> +	r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info.mdc_pd);
+> +	r8168_mac_ocp_write(tp, mdio_reg, sfp_if_info.mdio_pd);
+> +
+> +	/* preamble 32bit of 1 */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, 0xffffffff, 32);
+> +
+> +	/* opcode read */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_ST, 2);
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_OP_R, 2);
+> +
+> +	/* phy address */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, sfp_if_mask->phy_addr, 5);
+> +
+> +	/* phy reg */
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, reg, 5);
+> +
+> +	/* turn-around(TA) */
+> +	r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info.mdc_pd);
+> +	r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info.mdc_pu);
+> +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, 0, 1);
+> +
+> +	/* change to input mode */
+> +	r8168_mac_ocp_write(tp, PINOE, sfp_if_info.mdio_oe_i);
+> +
+> +	/* read phy data */
+> +	return rtl_sfp_shift_bit_out(tp, &sfp_if_info, sfp_if_mask->rb_pos);
+> +}
+> +
+> +static void rtl_sfp_eeprom_write(struct rtl8169_private *tp, u8 reg,
+> +				  u16 val)
+> +{
+> +	rtl_sfp_if_write(tp, &rtl_sfp_if_eeprom_mask, reg, val);
+> +}
+> +
+> +static u16 rtl_sfp_eeprom_read(struct rtl8169_private *tp, u8 reg)
+> +{
+> +	return rtl_sfp_if_read(tp, &rtl_sfp_if_eeprom_mask, reg);
+> +}
+> +
+> +static void rtl_sfp_gpo_write(struct rtl8169_private *tp, u8 reg,
+> +				  u16 val)
+> +{
+> +	rtl_sfp_if_write(tp, &rtl_sfp_if_gpo_mask, reg, val);
+> +}
+> +
+> +static u16 rtl_sfp_gpo_read(struct rtl8169_private *tp, u8 reg)
+> +{
+> +	return rtl_sfp_if_read(tp, &rtl_sfp_if_gpo_mask, reg);
+> +}
+> +
+> +static void rtl_sfp_mdio_write(struct rtl8169_private *tp,
+> +				  u8 reg,
+> +				  u16 val)
+> +{
+> +	switch (tp->sfp_if_type) {
+> +	case RTL_SFP_IF_EEPROM:
+> +		return rtl_sfp_eeprom_write(tp, reg, val);
+> +	case RTL_SFP_IF_GPIO:
+> +		return rtl_sfp_gpo_write(tp, reg, val);
+> +	default:
+> +		return;
+> +	}
+> +}
+> +
+> +static u16 rtl_sfp_mdio_read(struct rtl8169_private *tp,
+> +				  u8 reg)
+> +{
+> +	switch (tp->sfp_if_type) {
+> +	case RTL_SFP_IF_EEPROM:
+> +		return rtl_sfp_eeprom_read(tp, reg);
+> +	case RTL_SFP_IF_GPIO:
+> +		return rtl_sfp_gpo_read(tp, reg);
+> +	default:
+> +		return 0xffff;
+> +	}
+> +}
+> +
+> +static void rtl_sfp_mdio_modify(struct rtl8169_private *tp, u32 reg, u16 mask,
+> +				 u16 set)
+> +{
+> +	u16 data = rtl_sfp_mdio_read(tp, reg);
+> +
+> +	rtl_sfp_mdio_write(tp, reg, (data & ~mask) | set);
+> +}
+> +
+> +#define RTL8211FS_PHY_ID_1 0x001c
+> +#define RTL8211FS_PHY_ID_2 0xc916
+> +
+> +static enum rtl_sfp_if_type rtl8168h_check_sfp(struct rtl8169_private *tp)
+> +{
+> +	int i;
+> +	int const checkcnt = 4;
+> +
+> +	rtl_sfp_eeprom_write(tp, 0x1f, 0x0000);
+> +	for (i = 0; i < checkcnt; i++) {
+> +		if (rtl_sfp_eeprom_read(tp, 0x02) != RTL8211FS_PHY_ID_1 ||
+> +			rtl_sfp_eeprom_read(tp, 0x03) != RTL8211FS_PHY_ID_2)
+> +			break;
+> +	}
+> +
+> +	if (i == checkcnt)
+> +		return RTL_SFP_IF_EEPROM;
+> +
+> +	rtl_sfp_gpo_write(tp, 0x1f, 0x0000);
+> +	for (i = 0; i < checkcnt; i++) {
+> +		if (rtl_sfp_gpo_read(tp, 0x02) != RTL8211FS_PHY_ID_1 ||
+> +			rtl_sfp_gpo_read(tp, 0x03) != RTL8211FS_PHY_ID_2)
+> +			break;
+> +	}
+> +
+> +	if (i == checkcnt)
+> +		return RTL_SFP_IF_GPIO;
+> +
+> +	return RTL_SFP_IF_NONE;
+> +}
+> +
+> +static enum rtl_sfp_if_type rtl_check_sfp(struct rtl8169_private *tp)
+> +{
+> +	switch (tp->mac_version) {
+> +	case RTL_GIGA_MAC_VER_45:
+> +	case RTL_GIGA_MAC_VER_46:
+> +		if (tp->pci_dev->revision == 0x2a)
+> +			return rtl8168h_check_sfp(tp);
+> +		else
+> +			return RTL_SFP_IF_NONE;
+> +	default:
+> +		return RTL_SFP_IF_NONE;
+> +	}
+> +}
+> +
+> +static void rtl_hw_sfp_phy_config(struct rtl8169_private *tp)
+> +{
+> +	/* disable ctap */
+> +	rtl_sfp_mdio_write(tp, 0x1f, 0x0a43);
+> +	rtl_sfp_mdio_modify(tp, 0x19, BIT(6), 0);
+> +
+> +	/* change Rx threshold */
+> +	rtl_sfp_mdio_write(tp, 0x1f, 0x0dcc);
+> +	rtl_sfp_mdio_modify(tp, 0x14, 0, BIT(2) | BIT(3) | BIT(4));
+> +
+> +	/* switch pin34 to PMEB pin */
+> +	rtl_sfp_mdio_write(tp, 0x1f, 0x0d40);
+> +	rtl_sfp_mdio_modify(tp, 0x16, 0, BIT(5));
+> +
+> +	rtl_sfp_mdio_write(tp, 0x1f, 0x0000);
+> +
+> +	/* disable ctap */
+> +	phy_modify_paged(tp->phydev, 0x0a43, 0x11, BIT(6), 0);
+> +}
+> +
+>  static void rtl_set_d3_pll_down(struct rtl8169_private *tp, bool enable)
+>  {
+>  	switch (tp->mac_version) {
+> @@ -2195,6 +2500,9 @@ static void rtl8169_init_phy(struct rtl8169_private *tp)
+>  	    tp->pci_dev->subsystem_device == 0xe000)
+>  		phy_write_paged(tp->phydev, 0x0001, 0x10, 0xf01b);
+>  
+> +	if (tp->sfp_if_type != RTL_SFP_IF_NONE)
+> +		rtl_hw_sfp_phy_config(tp);
+> +
+>  	/* We may have called phy_speed_down before */
+>  	phy_speed_up(tp->phydev);
+>  
+> @@ -2251,7 +2559,8 @@ static void rtl_prepare_power_down(struct rtl8169_private *tp)
+>  		rtl_ephy_write(tp, 0x19, 0xff64);
+>  
+>  	if (device_may_wakeup(tp_to_dev(tp))) {
+> -		phy_speed_down(tp->phydev, false);
+> +		if (tp->sfp_if_type == RTL_SFP_IF_NONE)
+> +			phy_speed_down(tp->phydev, false);
+>  		rtl_wol_enable_rx(tp);
+>  	}
+>  }
+> @@ -5386,6 +5695,8 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  
+>  	tp->dash_type = rtl_check_dash(tp);
+>  
+> +	tp->sfp_if_type = rtl_check_sfp(tp);
+> +
+>  	tp->cp_cmd = RTL_R16(tp, CPlusCmd) & CPCMD_MASK;
+>  
+>  	if (sizeof(dma_addr_t) > 4 && tp->mac_version >= RTL_GIGA_MAC_VER_18 &&
+

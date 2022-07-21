@@ -2,152 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D93057CE81
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CF757CE8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbiGUPFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S231503AbiGUPGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiGUPFS (ORCPT
+        with ESMTP id S229599AbiGUPF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:05:18 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D596321
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:05:14 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id o12so2003168pfp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:05:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+qHP7skd3Cv7XJJygZVSwGskr21EGyWaFJgDdfd1xqA=;
-        b=oQSFR9+MjkkY1ur4gDW1MTlCrXf3uwlJLfESqNwsf2awYRDW0+8aavy8VzAuy9DB0G
-         JDCIQp1vt5BvWbaqkABHrCn9h2qVHzO/SxEDKgSBlbay4FQdznJ6OWnc4Hc0C/769sBL
-         aq7cj8hP0AUHXUTvnue16TNcqCwcMJHJ1Gz4cj7NXbvObCQklTY4pdJ1ZwEWRYUotwWt
-         BRQpaLf82OEJ9tYyxOPCUOLwadWEY7ln+vmIVrCj1MGptoVCZg53AGjaczk8CTfjFYcd
-         x+IeQO2qzB9zjTUGUovD73lL5DdL7DCL3eyEpBmg3MXYdMfYAAsyQOy2T2yk808kuO5O
-         Wxgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+qHP7skd3Cv7XJJygZVSwGskr21EGyWaFJgDdfd1xqA=;
-        b=DDFi0mEOV6rzuFtrmj64DxNb13TGUBZKTrTPhy5GnZV4fqWF70DXrGZsD+fBt1TYVt
-         ZdM5jr9SreBqTq1zsSW4Misdf/oNbtOMtGK/E5wl1kuNSQrrRJ+0ckryeka7mckbEEls
-         k1SjrMIwuuFqiOWsK0Sag3WciYxO1Tdouyanq1bs4eKlp+uAPjtI0Mhrux8AoMHf21l8
-         rPESxyfnhnyU2UQptv7+4aSURaRU541yrrk1MWWjDXkAPWqacSDRhpoNgKIrfk86+xYB
-         eU/ytOiLGFxfth8+5lp47gZEV4Ob1q8yy2bD8PBB4oY8A/TRp5LAxNuMJJXP6nn+n/8H
-         UVEw==
-X-Gm-Message-State: AJIora/fdV7uwD5Iyxgmuu0qftRivYelgcPKGp3X/u7r3YgH73cP1Pgn
-        w341Yss68TU6LgpAZPVv4LWTYQ==
-X-Google-Smtp-Source: AGRyM1uCSCT3ljh7PToWudc0PHcaebaKp/GEubhDiVG89ItWbH0HuD55vNtJx6Xaam1ITOer8uSeSA==
-X-Received: by 2002:a63:b56:0:b0:41a:495a:2a26 with SMTP id a22-20020a630b56000000b0041a495a2a26mr13293961pgl.411.1658415913932;
-        Thu, 21 Jul 2022 08:05:13 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id a17-20020aa78e91000000b005254e44b748sm1872610pfr.84.2022.07.21.08.05.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 08:05:13 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:05:09 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
-Message-ID: <YtlrJR3uP6940tjd@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
- <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
- <39067d09-b32b-23a6-ae0e-00ac2fe0466c@redhat.com>
+        Thu, 21 Jul 2022 11:05:59 -0400
+Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D9910542
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:05:52 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1658415941trffb0df
+Received: from localhost.localdomain ( [125.70.163.183])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 21 Jul 2022 23:05:32 +0800 (CST)
+X-QQ-SSF: 01000000002000409000B00A0000000
+X-QQ-FEAT: dDyohfujUnkwCuUiL58tJnO6zzR4NDiMnbHCq0ugwSbBYiDCLMByWHQMOXbvB
+        VM4J1r9cg9xK1XpFDCfUEK5UsLYf0qoo4eUMo9jJWsCNA91WvnFua729T+IRGkKo68D9DXY
+        O/mXWGm4q1br78s+RAsBFoWEbC7pOdmDH8N/10PYdux6tpaIv+9WIyTvnzu8xXrJ7Vf7cbk
+        QUNPdjkEnh5NZCgsI0XFy7TD8CdbdzRVF3DfIHEiyg18Eenzv+g6nJXr7toDp0dH3BkDIqQ
+        xdTuGyfWJvefjZ2kcIgQqLyK34MuEX2kzWpzPuX1xmXPFF+3812o16hvcT+nX8xLHiKcADm
+        MTFcCatSl2TcqZuB9+iCQGNCTfp4MX3obb/n9qxHlvDx35uzjYkiKoQZss+0S5zyiEinMBj
+X-QQ-GoodBg: 0
+From:   shaomin Deng <dengshaomin@cdjrlc.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] ALSA: emu10k1: Fix typo in comments
+Date:   Thu, 21 Jul 2022 11:05:28 -0400
+Message-Id: <20220721150528.22099-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39067d09-b32b-23a6-ae0e-00ac2fe0466c@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
+        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022, David Hildenbrand wrote:
-> On 21.07.22 11:44, David Hildenbrand wrote:
-> > On 06.07.22 10:20, Chao Peng wrote:
-> >> Normally, a write to unallocated space of a file or the hole of a sparse
-> >> file automatically causes space allocation, for memfd, this equals to
-> >> memory allocation. This new seal prevents such automatically allocating,
-> >> either this is from a direct write() or a write on the previously
-> >> mmap-ed area. The seal does not prevent fallocate() so an explicit
-> >> fallocate() can still cause allocating and can be used to reserve
-> >> memory.
-> >>
-> >> This is used to prevent unintentional allocation from userspace on a
-> >> stray or careless write and any intentional allocation should use an
-> >> explicit fallocate(). One of the main usecases is to avoid memory double
-> >> allocation for confidential computing usage where we use two memfds to
-> >> back guest memory and at a single point only one memfd is alive and we
-> >> want to prevent memory allocation for the other memfd which may have
-> >> been mmap-ed previously. More discussion can be found at:
-> >>
-> >>   https://lkml.org/lkml/2022/6/14/1255
-> >>
-> >> Suggested-by: Sean Christopherson <seanjc@google.com>
-> >> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> >> ---
-> >>  include/uapi/linux/fcntl.h |  1 +
-> >>  mm/memfd.c                 |  3 ++-
-> >>  mm/shmem.c                 | 16 ++++++++++++++--
-> >>  3 files changed, 17 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-> >> index 2f86b2ad6d7e..98bdabc8e309 100644
-> >> --- a/include/uapi/linux/fcntl.h
-> >> +++ b/include/uapi/linux/fcntl.h
-> >> @@ -43,6 +43,7 @@
-> >>  #define F_SEAL_GROW	0x0004	/* prevent file from growing */
-> >>  #define F_SEAL_WRITE	0x0008	/* prevent writes */
-> >>  #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
-> >> +#define F_SEAL_AUTO_ALLOCATE	0x0020  /* prevent allocation for writes */
-> > 
-> > Why only "on writes" and not "on reads". IIRC, shmem doesn't support the
-> > shared zeropage, so you'll simply allocate a new page via read() or on
-> > read faults.
-> 
-> Correction: on read() we don't allocate a fresh page. But on read faults
-> we would. So this comment here needs clarification.
+Remove the rebundant word "in" in comments.
 
-Not just the comment, the code too.  The intent of F_SEAL_AUTO_ALLOCATE is very
-much to block _all_ implicit allocations (or maybe just fault-based allocations
-if "implicit" is too broad of a description).
+Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ sound/pci/emu10k1/memory.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/pci/emu10k1/memory.c b/sound/pci/emu10k1/memory.c
+index 9d26535f3fa3..edb3f1763719 100644
+--- a/sound/pci/emu10k1/memory.c
++++ b/sound/pci/emu10k1/memory.c
+@@ -324,7 +324,7 @@ snd_emu10k1_alloc_pages(struct snd_emu10k1 *emu, struct snd_pcm_substream *subst
+ 		return NULL;
+ 	}
+ 	/* fill buffer addresses but pointers are not stored so that
+-	 * snd_free_pci_page() is not called in in synth_free()
++	 * snd_free_pci_page() is not called in synth_free()
+ 	 */
+ 	idx = 0;
+ 	for (page = blk->first_page; page <= blk->last_page; page++, idx++) {
+-- 
+2.35.1
+

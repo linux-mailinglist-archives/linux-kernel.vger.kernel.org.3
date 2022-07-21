@@ -2,82 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395BA57D689
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3AB57D68F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiGUWIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S232084AbiGUWJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiGUWIu (ORCPT
+        with ESMTP id S229498AbiGUWJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:08:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB5B93C2B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:08:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658441329; x=1689977329;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=A15/vVZpnpZfHrd9m7ClSkmBk0SMp9sEl8Bf2e15Ymw=;
-  b=VKat/S161BbfhWvjsH2xtVU1gl8EVaRb621tba/HzJg2+HU3GMt5SrcF
-   ekkHpnrSd6JYyPA4Wk2cSPPePSCK1gzfK1UFjloLULnOCoJUULu85O72j
-   tB/gTbWKuNm52Cm5vDZ6YVjB9H31Kt/G9X5KrYP7cWZusHyk8aEb3VovP
-   mM+0yZqLVkltH9QqxKVf9Zc6imtNa9WEghZB6OevUTC252LgC0qu4Ke9R
-   uM5ZxyBwgiSS6aFyZtSv4AGf6KRlN5D+VwoE5V9+oNzYPX7snnkVVnbT+
-   PTNgHAQMYY/Zro76SYIwFP5/ttvwl5+TPPcsACUQWJtFkipfQcswdz7QT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="270217629"
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="270217629"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 15:08:49 -0700
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="598633154"
-Received: from sattaran-mobl1.amr.corp.intel.com (HELO [10.212.246.186]) ([10.212.246.186])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 15:08:48 -0700
-Message-ID: <0b4af60c-73fc-054e-8a2c-7bf4544e77f6@linux.intel.com>
-Date:   Thu, 21 Jul 2022 15:08:48 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+        Thu, 21 Jul 2022 18:09:09 -0400
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9511B951CE;
+        Thu, 21 Jul 2022 15:09:08 -0700 (PDT)
+Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
+        by mx0b-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LLPSbW019663;
+        Thu, 21 Jul 2022 15:09:02 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
+ bh=2RfGcmMD2obHPtNAfGL1er5zkumuS7fZuhBRMb+yAVc=;
+ b=sIGtdiz/5kkbiJ9xI97Ex+Q3kJfNiEaIPWXoGkbkcO5TsDD5kK47MRxuAy0pi88ksqaL
+ 3x1euxZhlmsp14KVpFWNGeBkOjwi54z1zej/JJfxf5FVtlvDMmUFI/sgaTsx0mxe6CUi
+ NW4VCeECeXgTIJ0LtchbCGLWObCUugGx5GNYEKjl54vFCNwE3sXc1sMa85ANzFF15fje
+ NRsQFCfvIPLkdZ0xNaTQCmX1KGJpeb5Qj5YskTvj47GYj1wvxSPfTVTnh6NNnzNAlMcY
+ EEztE8GT8sYUW6vCNhZrkMgetcjhifcb1aFSaYnAh0x1Wakqy61VPdPAqYmNplKKWIXm tA== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3hc6c3subr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 15:09:02 -0700
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 974BC4009A;
+        Thu, 21 Jul 2022 22:09:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1658441341; bh=2RfGcmMD2obHPtNAfGL1er5zkumuS7fZuhBRMb+yAVc=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=Uk7hzvm5CoRZskJzzYY/2LRvFzUePUybi+hdPA3c8eqc9e955pVwBuA0so1LGMoYe
+         mFItNy4gLaX8rE0HeAlBDugkNvkeuRzhQxAoFHeMOFaw7FYuM9grwKP8zumR/YgXl2
+         Uc/MkvM4QWmKkGUsF0yGMVvyP6E4Ygjj9sj7iVXQrHdwT7SSmtEvpKqfjdZaSl5o1m
+         P2zcTXhX0S0nQRhVjyPg1TJkzlly4XTmPMu7/d5s76etQMu/Pv4yXQZRoNDeFRvLZ1
+         tj3ZTxX76XyDglK4vHRXJ7C6aVCQYTJXJlPIE0IRDydpx2R6Pw4ihBnnV/s4+wqm9e
+         aGyEohzsQJjqg==
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id BAD61A00A2;
+        Thu, 21 Jul 2022 22:08:59 +0000 (UTC)
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2049.outbound.protection.outlook.com [104.47.56.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 799D7400C5;
+        Thu, 21 Jul 2022 22:08:58 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="F2w+JZLa";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a/bgd+V3Mkqmw2vkk2kzVShZRNhWYoK3Isxy3ZL5ZEMAGQ6ltwfYI3DorlIjrLTIfwRNh8924L2mmazkbo4sqMh596o8pxnW9GWx9oW7r/sMTyj1/cGr+tK34qKUzcfEyr4ll4nXkyiCcQJGAmhtHtUGRVz3NtAYV26dM0VBwRQHYoA5v4nHZZ96Twr2Qk/mEccORfXSvrxGZp+Drz9Cz2nB0Mno4bhwVrnxWzUzDZyMvjA1jhJjl3ZLV1fx+wPSL3hpArOiMG3leuyVGvoVTpuTVltiYlza7fJ8i+MaJ3M1MhUEB/01XQGRGZkBzFtET7YBd8Ui8dn58n5R70fLGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2RfGcmMD2obHPtNAfGL1er5zkumuS7fZuhBRMb+yAVc=;
+ b=XfGfD/yAM6lr8KspmCJx8sIV+4dpQNSMWGN/EdUIw65on4uKY4hDMU3WtMbg79s7dUc0RImBRw0KEGej9zverHHSdFoygSgqZa6u3pxIqR2jSx/3e4dc6B60a0VUV58cPdzAH3oWVhipoC7+rnVJ58hRZVTELumNTceBEA9qnAE5//ZEaF9h8XpgeWzi2hkXR3fgEmEElJiliNH8Y/cWnvuhEQmgbATPTlxdki+cE4FgVx3g3ylqGzKgiJyPfgqotWRhyCcM5JaFpqpi759W0unUGzhSeKt3krqJ3viEO2tEDWBL4/ahacXfFXoZ9Jt/PrhrIR7nWZGcwZBl1Takiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2RfGcmMD2obHPtNAfGL1er5zkumuS7fZuhBRMb+yAVc=;
+ b=F2w+JZLaV5+/2L3xsPR162gsJxspcPPKJ7sacka4AXWWzVX5oYAyxs3gxsMnN607hX9C55yxHTNvGD4jnhoAqshVtaw0+8zK/6yj7h38/acG0lE4K6w3018Dnh+/X0VtVxcBFxqPyi5+7FSkxmwzxKnp5288IE/L/VAtkF2FYEc=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by MWHPR1201MB2527.namprd12.prod.outlook.com (2603:10b6:300:df::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 21 Jul
+ 2022 22:08:55 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::8948:d205:4d47:c54c]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::8948:d205:4d47:c54c%7]) with mapi id 15.20.5438.023; Thu, 21 Jul 2022
+ 22:08:55 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v2 4/5] usb: dwc3: Allow end transfer commands to be sent
+ during soft disconnect
+Thread-Topic: [PATCH v2 4/5] usb: dwc3: Allow end transfer commands to be sent
+ during soft disconnect
+Thread-Index: AQHYllCHTDdRJ4wf3U6yBQnRzTv93K2JcEyA
+Date:   Thu, 21 Jul 2022 22:08:55 +0000
+Message-ID: <d8d26ce3-6773-bd9c-e227-0924f239eae0@synopsys.com>
+References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
+ <20220713003523.29309-5-quic_wcheng@quicinc.com>
+In-Reply-To: <20220713003523.29309-5-quic_wcheng@quicinc.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
- <d3808510-9974-258e-0c7b-9a76e0868d48@intel.com>
- <f043d9f5-8f89-4ef3-2ce1-75665122bb3a@linux.intel.com>
- <214e24f0-5236-be8d-024a-da48737d854a@intel.com>
- <e280aaf4-57da-6453-c31c-6996dc85219c@linux.intel.com>
- <a65473db-b307-c076-6d2f-8f2084d81eb5@intel.com>
- <b8af932e-13da-ddcd-4ecb-bd8369853242@linux.intel.com>
- <fb9cbec5-6f64-4647-3bc2-30f07a0b6b59@intel.com>
- <20220721184221.GA3288872@ls.amr.corp.intel.com>
- <1fdecc17-8f4f-fceb-8da0-4a21ca0d58be@intel.com>
- <d0a3d1cc-dfea-0731-c801-97c8eb2cd535@linux.intel.com>
- <71f3326d-319b-c78a-345b-499001e766ff@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <71f3326d-319b-c78a-345b-499001e766ff@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5ebfba81-3f5b-422a-acb5-08da6b659a50
+x-ms-traffictypediagnostic: MWHPR1201MB2527:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZHrPXezwnWjMiPA4/pzv5RAXd2HHI6QKmmMJ37bXxh70zXgUST7rUWLvM9ObtYM/hCxmdWxzS0ku4Uz6zvmjy+zEmgiibhXwuG6rapxWAdtxiweGBKBq5IkVOBxCOIij6b936yRsm3+NrVK+iGf3hyH48BuaFOyazQ1nmheurN6qHDjUY01W68oUFqlKYZ9JiOLG8OljlZfz6tslKm7wIJfEWHEN1QebrK31nuv88A0pRWp6V/s9UPsLhqZt1ibgX6mqN75EoLRKKGeOLaw7z1iUesQtYB+EuFk0Y865Q1VXmYO97Khq/IRPeV7rdfQNVpPZvVMkAuYQRHPy+HQP2Tx9noR8/tNMHYMyIiAowUWYvX83owGwbETJyWAJV2swyopYJSrQX794fjAWlyBNc1A+dd+/RqNBUHvyHL0CqwC9KdbC8BbgnoBoenwLELWg4QBfvDOZpCZ0d2EWESrg/T5TAL9LAt8YTk04wuiF8knhjHTppD6CWpcXOODLT5kQhiF0X6pE9g1NRxWgt8gxvi042IZTd4xcwFbwW5MGtQZg/VSsgqo/Rem0WeyNYWnuPy1P5xgIMM88xDKoczjsG7JuWSHbKegyEmBVteKTp+PcKboI/cL6w+egIrkvStzTty+ACHYe/yUJJYF9uhahzzIFhfv7YJerh+u4m5NA+4LSVB/KXuYDAh09lgLlnD+foIsXcYtS/t+ih9DRXRegwJOBMj5Mq5B5uly//hW/DKX5FKYwmIe7KUaAGMjjlw37l78ArB4dBVmflvPE45/R5ULN5tfKMvdXqBhGRHuFx3Mk97nMSboojeFRPYCUadmQfuxyqrRVavPqlPNlloVb0mx31luYwkK3jLy+FfBdHWsQ3N16d62tc2MYdv9W7x3ePCstDuhgc2cON28nTuvfBg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(396003)(39860400002)(346002)(376002)(36756003)(316002)(6486002)(76116006)(110136005)(54906003)(66556008)(4326008)(71200400001)(8676002)(66446008)(66946007)(64756008)(66476007)(91956017)(2616005)(107886003)(186003)(83380400001)(41300700001)(966005)(6512007)(478600001)(26005)(31696002)(86362001)(6506007)(8936002)(31686004)(5660300002)(2906002)(38070700005)(38100700002)(122000001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WXJzTXEwNWY1dFQwaHlCQmtLeUdMbjY5NytKc1hrMHo2VjZWQXlBWllmMXBv?=
+ =?utf-8?B?aE5sWUY4QUgrR3h6eVZNNi9sSlZVekx6U3kwSVJlNFY5WU5pMldrNzR5bWlH?=
+ =?utf-8?B?ZmNoVysvUHorV3JOSWFNVHhDOE5DeXR1dFVPMGE5MjJ3OXFkR0FYeENqakM4?=
+ =?utf-8?B?UGd5NzRZY3V5MDZ5NUdGK29Ub3NtNWEzUlZKeVJHQXdQcVEyakY3TVdvVk96?=
+ =?utf-8?B?TkdGQUo2WkhSRUlpQXB4dWJ0NGU5WUF5TGtFVlZyMU9sdmFsblFqTnU5V3Nr?=
+ =?utf-8?B?Q1FUaTcxN2crSHNrTDFQRk1DUEh0S1RSYzh3WGgybE9ia2hoNFJiTG9aeHcw?=
+ =?utf-8?B?TXVDb2FsMkNpamRFWDYyc21STFRQS2NkRU54YXNsNVFtczFmZmRLb0FJTlRl?=
+ =?utf-8?B?Y1czU2xFNVNNYmZOU0p1bVNDNWQ0U0taRE1HRllnY1hDaHhCTVgzdjVNVkVC?=
+ =?utf-8?B?NGJSakRQYVppOG56cnZPN2Q2K1pDUElrbFRwMzVQek5Qcy9UdFBTdFIwMy9r?=
+ =?utf-8?B?a2xLWFZQNXQ3ZG9QTFY3ZG9GN043L3NGbHpQWjV6MlRBV1l3VDVPV2RrTE9Q?=
+ =?utf-8?B?eVhNVk9uRFZ0cEhUMEhNMWlCYUlpNldkcng4aXBiWkJpc0ZGWUpZQVpzMTJC?=
+ =?utf-8?B?MFZZeDFma0Y1VjQwY1pYVDdMTXlVK1ZZa3NtSjlNVUw2ZWJmNklnczI2MUZ4?=
+ =?utf-8?B?Nks1cEp3NEkyc2dCajRkVE1XekVUU0VxbytORkFvRnFDZTdRTGRmOENuU2N2?=
+ =?utf-8?B?SDA3Q3UxbGI1UDdTekVEM29HenUwd2d0ZG8rbEh2Nm5KZWFJYkhNb0prVCtr?=
+ =?utf-8?B?aktRaDBMQ2lVQXJwQ1pKdEFrWUJlai9KaG1NZTRqQ21sV2Y0UUtTZSt2ZG5j?=
+ =?utf-8?B?aG5mNVdGaEttS0ovU0doRXg5QkJVWHNadlcvSEdXZnAzZDFlMFBDajU3Y2ZU?=
+ =?utf-8?B?S1NhNHJLNVBxL2x4TWxnMGhicEFyQlU5VHJoeGFZUDZpMHV2ZkxvVzlRM1dU?=
+ =?utf-8?B?UEVXMTNKMlV4TFRuMnlBK3JoMkRyUzY4Z1NJQS9tdDR3eHhRRWQwcmJqUFZT?=
+ =?utf-8?B?Kzc3NkJJaDF0dUNVa3BhbWZZMTJ4dXZ0ZWF5ZU8renhVWFBnckwyZHNYMUFq?=
+ =?utf-8?B?RGlIQksvYVJmOVpXcmFwV1NKK216cDE4dStSdDY2ZXRMKzU0RFNYY1lOemIw?=
+ =?utf-8?B?RmNoT1RpVWdtdkJ6UU9OWmVhNEVYNXdHandCeURVbS9CQThGR25DMTJtL000?=
+ =?utf-8?B?T1loelArRkdqNE9uNVpMSVNkSkZicFhtR1BTaWplckIyUVRGUkR2THprRGtM?=
+ =?utf-8?B?NFUyZUU3RzdiUGpSWGpkYUc5YmdCdFlPQXh0UUxqMDI3VG1CdzRDVGN3aVNn?=
+ =?utf-8?B?KzlNRnJzUm0vdERNRUVrSHNSTWduNnB3Y0dJSlFrRkxtdUIvakd4L09meVJI?=
+ =?utf-8?B?dFlvYWExa3N5Y0tYejhSNjNnVHhoaHJDSjhQdFdyWmxzclZoNU0zcTZVSTRx?=
+ =?utf-8?B?dDNHK3VZcnkyQ3hqUWx2aGVSRUVJTTA1bnVBUjF3b005dXJ0d0ZxWkpXUDJE?=
+ =?utf-8?B?ZDBoZXUvVVVJN1VVV3hPcGR2bEFmNVlaT21LLytERnZya1JIREJ3TGQvMWhy?=
+ =?utf-8?B?MDJFa2cvb3hwejhlWlRlN2gvOURQNktxU1hRVGxWa2lXcGppQkU4VkxJZE9x?=
+ =?utf-8?B?NmwzTERUTHhVRUtFTVRIRTdFSTVxem5qYmhNMXVCd2ZlQTRiWVVtQWxua1Vs?=
+ =?utf-8?B?Y1hxdXkzRklOTVFCQ2JRejM2OTVTUmlROHZMLytZR1VoSzdOa1dEZWJxTXRu?=
+ =?utf-8?B?dk1BTWNwTjdDamVON0Z2cDRiSWttZXJkQTcxQTZTemlWbFh2eUNlWlRabjI3?=
+ =?utf-8?B?Z3hsL0JCVDZoZWhyWnZwcDBVWVd2NDhCVTMycmRDKzA4bjJpQTdNeDlEUDdR?=
+ =?utf-8?B?Smp5YmpqT1NKY2N1dEl6MFZxalNSSzg1aWhpRHVJQmdOTnNSdWx4UnZ4OFlq?=
+ =?utf-8?B?alZCeFd2ZUh0OFk1SVVGTUovRXp2d0wzTXBRVy9BZGZVdmI2TEFCTHpzcUhV?=
+ =?utf-8?B?L25IWGxJS3lCVXpma0cyb0xOS2w3TE94c2g2R0IrUmlGT3RSRWRQS05KK3Rt?=
+ =?utf-8?Q?4gV+VgR0e//izi7xyDgsMP5I6?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1BC535FDD9F3A447ACBBAC401BDA2B99@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ebfba81-3f5b-422a-acb5-08da6b659a50
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 22:08:55.0725
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Rzre0jbhphi0YUNA0I70S1pbw7cZG/b1mi7gNSzFRkh2dBjoVK+UM+1bxXaOc8+CDa5OXuYSv8PKG9EUA5w9Eg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB2527
+X-Proofpoint-ORIG-GUID: oaLG9tG_sASmjyPqFjtbpESeVCfSK0aD
+X-Proofpoint-GUID: oaLG9tG_sASmjyPqFjtbpESeVCfSK0aD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-21_28,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ malwarescore=0 priorityscore=1501 mlxscore=0 impostorscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207210091
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,139 +188,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-
-On 7/21/22 12:23 PM, Dave Hansen wrote:
-> On 7/21/22 11:57, Sathyanarayanan Kuppuswamy wrote:
->>> How does the VMM know how much to read/write?  I have a theory: the spec
->>> says that R12 is:
->>>
->>> 	"Shared 4KB GPA as input – the memory contains a
->>> 	TDREPORT_STRUCT."
->>>
->>> That's *A* 4KB GPA.  The maximum is one 4KB page.  That's the only thing
->>> that makes sense because there's no length in the ABI anywhere.
->>>
->>> What am I missing?
->> I think you are looking into the old spec. Please check the version
->> "FEBRUARY 2022"
->>
->> Following are the ABI details:
->>
->> R11 - TDG.VP.VMCALL< GetQuote > sub-function per Table 2-3
->> R12 - Shared GPA as input – the memory contains a TDREPORT_STRUCT. The
->>        same buffer is used as output – the memory contains a TD Quote.
->> R13 -  Size of shared GPA. The size must be 4KB-aligned.
-> 
-> Yeah, silly me.  I assumed the ABI was stable and wouldn't be, you know,
-> adding and removing parameters.
-> 
-> I still don't know how this all works.  You just said:
-
-At a high level, the quote generation communication flow is as below:
-
-Entities involved are,
-
-Guest TD user app (send TDREPORT)  <-> Quoting Enclave (QE) (Sign TDREPORT and send Quote)
-
-Steps involved are,
-
-1. Attestation agent (in TD userspace)  will get the TDREPORT data from
-   the TDX module.
-2. To generate a remotely verifiable Quote, send the TDREPORT data to the
-   Quoting enclave (QE). QE will verify the integrity of TDREPORT and sign
-   it with the attestation key.
-   * QE can be hosted as simple app in the host, or it can be hosted in a special
-     TD guest.
-3. Method of sending TDREPORT to QE depends on the QE requirements. In most
-   cases, it will support TCP/IP or vsock communication models. So the attestation
-   agent can easily send the TDREPORT via TCP/IP and get the Quote data.
-
-But for platforms that do not want to support TCP/IP or socket communication,
-TDX ABI defines a method of getting Quote using TDVMCALL. It is a less common
-case. Our current discussion is related to this approach.
-
-Entities involved in this approach are,
-
-TD Guest user app <-> TD Guest kernel <-> VMM  <-> QE
-
-Communication flow looks like below:
-
-1. Attestation agent (in TD userspace)  will get the TDREPORT data from
-   the TDX module.
-2. Check with QE about the required quote size (it can be some form of
-   agreement between QE and attestation agent).
-3. Allocate space for Quote buffer and update the header details like
-   mentioned below and send the quote buffer and length details via
-   IOCTL
-
-+/*
-+ * Format of Quote data header. More details can be found in TDX
-+ * Guest-Host Communication Interface (GHCI) for Intel TDX 1.0,
-+ * section titled "TDG.VP.VMCALL<GetQuote>"
-+ */
-+struct tdx_quote_hdr {
-+       /* Quote version, filled by TD */
-+       __u64 version;
-+       /* Status code of Quote request, filled by VMM */
-+       __u64 status;
-+       /* Length of TDREPORT, filled by TD */
-+       __u32 in_len;
-+       /* Length of Quote, filled by VMM */
-+       __u32 out_len;
-+       /* Actual Quote data or TDREPORT on input */
-+       __u64 data[0];
-+};
-+
-+/* struct tdx_quote_req: Request to generate TD Quote using TDREPORT
-+ *
-+ * @buf         : Pass user data that includes TDREPORT as input. Upon
-+ *                successful completion of IOCTL, output is copied
-+ *                back to the same buffer.
-+ * @len         : Length of the Quote buffer.
-+ */
-+struct tdx_quote_req {
-+       __u64 buf;
-+       __u64 len;
-+}
-
-4. Once an IOCTL request is received, the kernel will allocate a Quote buffer
-   of the requested size, and use GetQuote hypercall to send this request to VMM. 
-
-   GetQuote (TDVMCALL type, kernel buffer physical addr, length of the buffer).
-   
-5. Upon hypercall request, VMM will further send the details to the QE. Once
-   QE processes this request and generates the Quote, it will update the status
-   details in the Quote header and copy the Quote back to the guest GPA. After
-   completing the request, it will also send the IRQ notification to the TD
-   Guest kernel. Event notification IRQ requirement is due to this step.
-   
-6. Once TD Guest kernel receives event notification, it will copy the 
-   contents of the Quote back to the user buffer and complete the IOCTL
-   request.
-
-> 
->> Current ABI allows attestation service and agent to decide the quote size. So
->> we can't make assumptions on what that size will be.
-> 
-> But, the guest *HAS* to make assumptions, right?  It's allocating the
-> buffer and handing a pointer and size over to the host.  It's also guest
-> *userspace*.  In fact, this implementation *ABSOLUTELY* makes
-> assumptions about the buffer size.
-> 
-> If host userspace some day decides it needs 5MB of space, then all the
-> guests will just stop working.  This implementation is limited by the
-> max page allocator size.
-
-Agree. We are assuming that the user agent will not request buffer that
-exceeds the limit of the page allocator. But as Isaku mentioned, it is
-expected that the Quote size will only be in KBs. I think the main
-reason for ABI not limiting the size is, for flexibility and to
-support future requirements.
-
-Also, as mentioned above, this approach is not a common case. TCP/IP or
-vsock models are generally supported and can be used for Quote generation.
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+SGkgV2VzbGV5LA0KDQpPbiA3LzEyLzIwMjIsIFdlc2xleSBDaGVuZyB3cm90ZToNCj4gSWYgc29m
+dCBkaXNjb25uZWN0IGlzIGluIHByb2dyZXNzLCBhbGxvdyB0aGUgZW5keGZlciBjb21tYW5kIHRv
+IGJlIHNlbnQsDQo+IHdpdGhvdXQgdGhpcywgdGhlcmUgaXMgYW4gaXNzdWUgd2hlcmUgdGhlIHN0
+b3AgYWN0aXZlIHRyYW5zZmVyIGNhbGwNCj4gKGR1cmluZyBwdWxsdXAgZGlzYWJsZSkgd291bGRu
+J3QgYWN0dWFsbHkgaXNzdWUgdGhlIGVuZHhmZXIgY29tbWFuZCwNCj4gd2hpbGUgY2xlYXJpbmcg
+dGhlIERFUCBmbGFnLg0KPg0KPiBJbiBhZGRpdGlvbiwgaWYgdGhlIERXQzNfRVBfREVMQVlfU1RP
+UCBmbGFnIHdhcyBzZXQgYmVmb3JlIHNvZnQgZGlzY29ubmVjdA0KPiBzdGFydGVkIChpLmUuIGZy
+b20gdGhlIGRlcXVldWUgcGF0aCksIGVuc3VyZSB0aGF0IHdoZW4gdGhlIEVQMCB0cmFuc2FjdGlv
+bg0KPiBjb21wbGV0ZXMgZHVyaW5nIHNvZnQgZGlzY29ubmVjdCwgdG8gaXNzdWUgdGhlIGVuZHhm
+ZXIgd2l0aCB0aGUgZm9yY2UNCj4gcGFyYW1ldGVyIHNldCwgYXMgaXQgZG9lcyBub3QgZXhwZWN0
+IGEgY29tbWFuZCBjb21wbGV0ZSBldmVudC4NCj4NCj4gRml4ZXM6IGU0Y2Y2NTgwYWM3NDAgKCJ1
+c2I6IGR3YzM6IGdhZGdldDogV2FpdCBmb3IgZXAwIHhmZXJzIHRvIGNvbXBsZXRlIGR1cmluZyBk
+ZXF1ZXVlIikNCj4gU3VnZ2VzdGVkLWJ5OiBUaGluaCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5v
+cHN5cy5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IFdlc2xleSBDaGVuZyA8cXVpY193Y2hlbmdAcXVp
+Y2luYy5jb20+DQo+IC0tLQ0KPiBMaW5rOg0KPiAgICBodHRwczovL3VybGRlZmVuc2UuY29tL3Yz
+L19faHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtdXNiLzFhMWE1NDg1LTc5MGUtNzljZS1m
+NWE2LTFlOTZkOWI0OWE0N0BzeW5vcHN5cy5jb20vX187ISFBNEYyUjlHX3BnIWNYVzJUbEFMWVdu
+WE5QZy1Ob01GVXJROEsxZWdFWmlRaXpaNUNBMURPTTFHY3c0dGZPVUx5LV8yZU1Hdkw4cFFQdGU1
+ZFNjRk9OLTB3eEgyZVh1OGlqRVFVYnMkDQo+DQo+ICAgZHJpdmVycy91c2IvZHdjMy9lcDAuYyAg
+ICB8IDMgKy0tDQo+ICAgZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYyB8IDUgKysrKy0NCj4gICAy
+IGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4NCj4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzMvZXAwLmMgYi9kcml2ZXJzL3VzYi9kd2MzL2VwMC5j
+DQo+IGluZGV4IDUwNmVmNzE3ZmRjMC4uNTg1MWIwZTlkYjBhIDEwMDY0NA0KPiAtLS0gYS9kcml2
+ZXJzL3VzYi9kd2MzL2VwMC5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZXAwLmMNCj4gQEAg
+LTI5MCw4ICsyOTAsNyBAQCB2b2lkIGR3YzNfZXAwX291dF9zdGFydChzdHJ1Y3QgZHdjMyAqZHdj
+KQ0KPiAgIAkJaWYgKCEoZHdjM19lcC0+ZmxhZ3MgJiBEV0MzX0VQX0RFTEFZX1NUT1ApKQ0KPiAg
+IAkJCWNvbnRpbnVlOw0KPiAgIA0KPiAtCQlkd2MzX2VwLT5mbGFncyAmPSB+RFdDM19FUF9ERUxB
+WV9TVE9QOw0KDQpJZiB3ZSBkb24ndCBjbGVhciB0aGlzIGZsYWcgaGVyZSwNCg0KPiAtCQlkd2Mz
+X3N0b3BfYWN0aXZlX3RyYW5zZmVyKGR3YzNfZXAsIHRydWUsIHRydWUpOw0KPiArCQlkd2MzX3N0
+b3BfYWN0aXZlX3RyYW5zZmVyKGR3YzNfZXAsIHRydWUsIGR3Yy0+Y29ubmVjdGVkKTsNCj4gICAJ
+fQ0KPiAgIH0NCj4gICANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMg
+Yi9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jDQo+IGluZGV4IGVlODViNzczZTNmZS4uNDFiNzAw
+NzM1OGRlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jDQo+ICsrKyBi
+L2RyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMNCj4gQEAgLTE2OTMsNiArMTY5Myw3IEBAIHN0YXRp
+YyBpbnQgX19kd2MzX3N0b3BfYWN0aXZlX3RyYW5zZmVyKHN0cnVjdCBkd2MzX2VwICpkZXAsIGJv
+b2wgZm9yY2UsIGJvb2wgaW50DQo+ICAgCQlkZXAtPmZsYWdzICY9IH5EV0MzX0VQX1RSQU5TRkVS
+X1NUQVJURUQ7DQo+ICAgCWVsc2UgaWYgKCFyZXQpDQo+ICAgCQlkZXAtPmZsYWdzIHw9IERXQzNf
+RVBfRU5EX1RSQU5TRkVSX1BFTkRJTkc7DQo+ICsJZGVwLT5mbGFncyAmPSB+RFdDM19FUF9ERUxB
+WV9TVE9QOw0KPiAgIA0KPiAgIAlyZXR1cm4gcmV0Ow0KPiAgIH0NCj4gQEAgLTM2ODYsOCArMzY4
+NywxMCBAQCB2b2lkIGR3YzNfc3RvcF9hY3RpdmVfdHJhbnNmZXIoc3RydWN0IGR3YzNfZXAgKmRl
+cCwgYm9vbCBmb3JjZSwNCj4gICAJaWYgKGRlcC0+bnVtYmVyIDw9IDEgJiYgZHdjLT5lcDBzdGF0
+ZSAhPSBFUDBfREFUQV9QSEFTRSkNCj4gICAJCXJldHVybjsNCj4gICANCj4gKwlpZiAoaW50ZXJy
+dXB0ICYmIChkZXAtPmZsYWdzICYgRFdDM19FUF9ERUxBWV9TVE9QKSkNCj4gKwkJcmV0dXJuOw0K
+PiArDQoNCnRoZW4gaXQgbWF5IG5vdCBnbyB0aHJvdWdoIGhlcmUuIEkgdGhpbmsgSSBtYWRlIHRo
+aXMgc2FtZSBtaXN0YWtlIGluIG15IA0KcHJldmlvdXMgc3VnZ2VzdGlvbi4NCg0KPiAgIAlpZiAo
+IShkZXAtPmZsYWdzICYgRFdDM19FUF9UUkFOU0ZFUl9TVEFSVEVEKSB8fA0KPiAtCSAgICAoZGVw
+LT5mbGFncyAmIERXQzNfRVBfREVMQVlfU1RPUCkgfHwNCj4gICAJICAgIChkZXAtPmZsYWdzICYg
+RFdDM19FUF9FTkRfVFJBTlNGRVJfUEVORElORykpDQo+ICAgCQlyZXR1cm47DQo+ICAgDQoNClRo
+YW5rcywNClRoaW5oDQo=

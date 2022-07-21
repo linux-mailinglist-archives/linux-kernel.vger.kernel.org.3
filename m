@@ -2,69 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42FC57C90F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E3657C915
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiGUKey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S230016AbiGUKgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiGUKev (ORCPT
+        with ESMTP id S230412AbiGUKf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:34:51 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8D049B68
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:34:50 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31e1ecea074so12344027b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:34:50 -0700 (PDT)
+        Thu, 21 Jul 2022 06:35:59 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EB723BD5;
+        Thu, 21 Jul 2022 03:35:58 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id ku18so1213284pjb.2;
+        Thu, 21 Jul 2022 03:35:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=RZq7zJW68AsB2c8MQdTOdMV2RE0j/waEnaPxwlHywbM=;
-        b=pAv2uvm8AJ1VyPTcGWTCmrcD+KQzAjTV8rgacFCdLNgEoYhtZf4R4S3Xa5omL2Dp0C
-         0beuUd1jAQg6A4oUyDlIJ7akUVkVjyFI/pJRTHaJux4Vybn6w/89HG0fLpjNog8xmH3p
-         1O639kvK2H80xC+WGzetFzAFghu8RiEVK6CGZ56ExIdlg85iy/7Kf4oEbK8BmHNfVuYW
-         bqLxEnrTsvSd4kgXey5h1hhswPiSc8sH8+98lBjM/6v0foJW8Y19j6Fsenu266suy2w/
-         3R/M9qDu2T98P9bHxyCGn/BlDUQGpPGV+T18t136eaGX411ZNDtRh2mSSXfc1NvMmJEn
-         eb6g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nlKSmqIiaep9xUE+mf7wOdafADvwgWNGf5OHGKH+YIY=;
+        b=bqacb7y8dDA6y7o+7uYTEaqhxFF6srCvQYNxkK7wB+goHEurm56G/xpZpof9GMkoTk
+         YAKEWC+uWHLnCB2kfOpDD/TGrv8ChZAiveM1grLixXjkFIShHcRXibt8dVeZXZa7z9u6
+         JmMPSuGDDy+ofukXe4v2+Zzij4asbTptcAeY/A9fnBkiApbkJLjDAPXljCT3K0buwu7f
+         PCIxlslXU1hHs1t03ixfc/8gnezsW2dleropzqoChInrtm93XY0W4I8WPk+QvHqY8t3Y
+         kNSdS5ZuA6LRboDrVGCz9ISrd3CPGb8hcXPvIF0KR208GP+VUGKz9vVWFnEtDowD5Uco
+         j5rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=RZq7zJW68AsB2c8MQdTOdMV2RE0j/waEnaPxwlHywbM=;
-        b=xHPmOpSBXsG/Dvv+mQyq7Wilah3f1TmdAMUJmgY5TLUGaOvLENh0NNdWRxXuSd0BQz
-         q7N74RvmV+8XfvLwJCuDNbhb8PZWM92guyZvAISEwISwO7A/loN48CLevZmkdbpGjJP6
-         CCi6at2r1Vku1ZyubFvCvuWipwgxRoPemuRRhzMpXr1/9gexd2K/HCmMyRfO2iSghHPE
-         eWx3nnEzsq6riw2Ns0nNxiTB10hJud9lZoQqELhdJp+DVGwbM5DU8PhiejTCO3+JugXg
-         iA1kBEsFm/3HIlAMHfoyHcE0eW4wVtU29Z1cQRe00bpT532lhD3K5f6HraoVIoS4RrXU
-         LcSg==
-X-Gm-Message-State: AJIora8j3ujzCMZEeCAaMPQzCUY/eHfZn9ICdOyrFTCBq5jw8eFcLrmU
-        C7b/VlhydN3yNqUZpvWofk915qKZ8vholQTDcwY=
-X-Google-Smtp-Source: AGRyM1sSn1BkAWY+mB4ipMJAHZFCKaVocMYpWA13ZykYuFlMENH68zd3kb0uUYUhJRdQ/UEUdH98A7DEqZZkjmF+Pew=
-X-Received: by 2002:a81:234e:0:b0:31e:2cd2:624f with SMTP id
- j75-20020a81234e000000b0031e2cd2624fmr20702507ywj.516.1658399690236; Thu, 21
- Jul 2022 03:34:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nlKSmqIiaep9xUE+mf7wOdafADvwgWNGf5OHGKH+YIY=;
+        b=mhGQDEsN95p5OZbhbWewe/NWo74p9AqJvwW6ECTUh9l0YAwe5msFldmggbaTmwhyck
+         2Z5Kzfbe6REX7WkJLbdfpwtGS0JjesHefIopV/uSCbPXGaNWcEQfAOSmgaUYYLdo3Aas
+         evZLETw3AoxkhE+N7grRPRNWacn/vWKNXtk9Yjf3V+qoFF/5/CsvS6xzJN6w3LMrsGne
+         6FL+SBsSfST8DSOyLbVlvdODx1dUwdLD9cl/pI5Hri4jO0QqMgwcL9+M9Gsq29ytncw/
+         ZWxCcN9dhYXQK9pzWesJjs4oAEN5Hq+xjm32rUaKafoTVPvpIH6OEpAsYCN+JKExbz/W
+         6Giw==
+X-Gm-Message-State: AJIora9+SokdttwJidADK7lAe3ti2RxKFYxJjsgY+6CMDzBkqgRVAfD1
+        83LI/ELVwtSK+CwMIUWOE3U=
+X-Google-Smtp-Source: AGRyM1t5ki0T4OGJUamTPas/YgZFJjNLIDHsMyMf3zEWBafNwPdFpmxu/DJTBmWKnettRzryLxcQWA==
+X-Received: by 2002:a17:90a:d195:b0:1ef:8eb2:4f4d with SMTP id fu21-20020a17090ad19500b001ef8eb24f4dmr10376445pjb.104.1658399758026;
+        Thu, 21 Jul 2022 03:35:58 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id q12-20020a65494c000000b00419aa0d9a2esm1161887pgs.28.2022.07.21.03.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 03:35:57 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: [PATCH v2 0/7] KVM: x86/pmu: Fix some corner cases including Intel PEBS
+Date:   Thu, 21 Jul 2022 18:35:41 +0800
+Message-Id: <20220721103549.49543-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Received: by 2002:a05:7000:a514:0:0:0:0 with HTTP; Thu, 21 Jul 2022 03:34:50
- -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   sgt kayla manthey <tchaloelise@gmail.com>
-Date:   Thu, 21 Jul 2022 04:34:50 -0600
-Message-ID: <CAObQroXHJ+D5GKJ9q8RF3P5NCdRTvP15XvE7suhjR6Y4QfE2gQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Good well-designed tests can help us find more bugs, especially when
+the test steps differ from the Linux kernel behaviour in terms of the
+timing of access to virtualized hw resources.
+
+A new guest PEBS kvm-unit-test constructs a number of typical and
+corner use cases to demonstrate how fragile the earlier PEBS
+enabling patch set is. I prefer to reveal these flaws and fix them
+myself before we receive complaints from projects that rely on it.
+
+In this patch series, there is one small optimization (006), one hardware
+surprise (002), and most of these fixes have stepped on my little toes.
+
+Please feel free to run tests, add more or share comments.
+
+Previous:
+https://lore.kernel.org/kvm/20220713122507.29236-1-likexu@tencent.com/
+
+V1 -> V2 Changelog:
+- For 3/7, use "hw_idx > -1" and add comment; (Sean)
+- For 4/7, refine commit message and add comment; (Sean)
+- For 6/7, inline reprogram_counter() and restrict pmc->current_config;
+
+Like Xu (7):
+  perf/x86/core: Update x86_pmu.pebs_capable for ICELAKE_{X,D}
+  perf/x86/core: Completely disable guest PEBS via guest's global_ctrl
+  KVM: x86/pmu: Avoid setting BIT_ULL(-1) to pmu->host_cross_mapped_mask
+  KVM: x86/pmu: Don't generate PEBS records for emulated instructions
+  KVM: x86/pmu: Avoid using PEBS perf_events for normal counters
+  KVM: x86/pmu: Defer reprogram_counter() to kvm_pmu_handle_event()
+  KVM: x86/pmu: Defer counter emulated overflow via pmc->stale_counter
+
+ arch/x86/events/intel/core.c    |  4 ++-
+ arch/x86/include/asm/kvm_host.h |  6 +++--
+ arch/x86/kvm/pmu.c              | 47 +++++++++++++++++++++------------
+ arch/x86/kvm/pmu.h              |  6 ++++-
+ arch/x86/kvm/svm/pmu.c          |  2 +-
+ arch/x86/kvm/vmx/pmu_intel.c    | 30 ++++++++++-----------
+ 6 files changed, 58 insertions(+), 37 deletions(-)
+
 -- 
-Greetings,
-Please did you receive my previous message? write me back
+2.37.1
+

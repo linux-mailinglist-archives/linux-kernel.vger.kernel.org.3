@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9601157D6E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC5457D6E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbiGUWaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S233860AbiGUWaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiGUWaS (ORCPT
+        with ESMTP id S229684AbiGUWaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:30:18 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF9226AD8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:30:17 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id h132so2903694pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DXbmVLSQ/kF6PAAfuZldRiLPfHWkw3KMuA2Cj4p5KCc=;
-        b=gq7l1cK+W8oZFwCWYHkKKHapRWrJZsiH/EliM+zZ13wNhqSehiBcUBZw5XgleoWibP
-         VYKByIf9+6UyxiAKHKNiSzpoUsM+a4l911b6k+Pfz/VK0TVCfOYAu/x3fuKKnV5Klyv2
-         EgekyMc7wcSwbRzn6f7Uu5tNRDq2BvH/J3YXJ4Y0SbqHSlGJMBwqc6NB5b2tOalWGpn+
-         UrfZaAznGUDo7UPqQS+xabwQXm1JiR/aEhytyvYde76khXg6u5kEX5aWnKMk6jvBeHNb
-         1M5VdxFgdU6f5D/EkytEmavNsZi3Rnrm133ecB29iRoX2GOzE6VQh013NjV3Bqdw/jOS
-         Su9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DXbmVLSQ/kF6PAAfuZldRiLPfHWkw3KMuA2Cj4p5KCc=;
-        b=m/2RHdG2DQ8XptciaMGxxsLWtEwY0dk+VlU+a6goeygjFVUtyBU18qM87Ye6HvJeRQ
-         wJpaL5sCu8be5GuXJ6VnBNKNL02aoHUKmz+wiU4UGXmGyG4fmCPjSxEF6WKr9Bd1fpf9
-         puREwp6RbPXtxIzAcP4Dk4j1+oYN4j245Y7v78yM4va5wR/28tC9QSdfq9XwUrMsOttZ
-         x9Xovj9W6JxYrMzW50dADLFL7raySaeA6qsOjuSUui0CyZ2cKEjv/7BGYfDHXjh4HN4h
-         XNFSAH8zbVHOxpNmv2oNF5I8xA5Pxh8vLQ65MAQ7sIqqLpC/q8hHOJrfyi3wh+b1S4HA
-         zcyw==
-X-Gm-Message-State: AJIora9bE1lrQ5RUegZcv/U6CkiVMcgdxool7iLPTAI7zoHOBhHVR5Kw
-        jACBx5HKCDDXc2Hcp4qDCqgIEg==
-X-Google-Smtp-Source: AGRyM1uwTVH1mO8sOka50FJ8zNCt0zM/avdSqJaZ8jKo9PDLwXTxlupeYMDuwIh2AxGHwGUJ2PJDWQ==
-X-Received: by 2002:a05:6a00:1a44:b0:52a:ecd5:bbef with SMTP id h4-20020a056a001a4400b0052aecd5bbefmr382535pfv.28.1658442616341;
-        Thu, 21 Jul 2022 15:30:16 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id x75-20020a62864e000000b0052b9747e0d1sm2248424pfd.189.2022.07.21.15.30.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 18:30:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55235255A7;
         Thu, 21 Jul 2022 15:30:15 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 22:30:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 16/25] KVM: VMX: Move
- CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of setup_vmcs_config()
-Message-ID: <YtnTc/L5u5AuUhYN@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-17-vkuznets@redhat.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E614B61E23;
+        Thu, 21 Jul 2022 22:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A311C341C6;
+        Thu, 21 Jul 2022 22:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658442614;
+        bh=M0NrkebK2nQP0JGmkZ9AAOBaRfwlQ/U1x2M+0d/KGDg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=t0z3M3FFxRHXl/w/6d+7GkvE+1zBhALq6THo1wBc19+PoHnFtsEX6da2QiTZOX0tw
+         cSELw/t5YrtJIsRmebXHIxF2r8lraAYAgz3PfObcyxVaE6rVylYUqigjJ33nKNa7tB
+         ZV/UrDKDGjAxYNV1RBkoBCnPNFWg4xgrjoL6/rRpcWTHJeymjnUsioEbkADkWg7/qu
+         Syagcg46coCu9s4TL6gkYpixpCFKSMZQHdVI9/YX1FN7vq4MacMmg0/Zkl8IwbjhJ2
+         zIup9sHjo4MW9PnSvqV6Na06JwMp5yRY6huDIpVFN9ntboRs3JYEXDaGbCP2Dq93Qj
+         iIaocsVrTPgdA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 15049E451B9;
+        Thu, 21 Jul 2022 22:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714091327.1085353-17-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf, arm64: Fix compile error in dummy_tramp()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165844261408.3850.10654235868584356143.git-patchwork-notify@kernel.org>
+Date:   Thu, 21 Jul 2022 22:30:14 +0000
+References: <20220721121319.2999259-1-xukuohai@huaweicloud.com>
+In-Reply-To: <20220721121319.2999259-1-xukuohai@huaweicloud.com>
+To:     Xu Kuohai <xukuohai@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        catalin.marinas@arm.com, daniel@iogearbox.net, haoluo@google.com,
+        jakub@cloudflare.com, jean-philippe@linaro.org, jolsa@kernel.org,
+        john.fastabend@gmail.com, jonathanh@nvidia.com, kpsingh@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, sdf@google.com,
+        will@kernel.org, yhs@fb.com, zlim.lnx@gmail.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> As a preparation to reusing the result of setup_vmcs_config() in
-> nested VMX MSR setup, move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering
-> to vmx_exec_control().
-> 
-> No functional change intended.
-> 
-> Reviewed-by: Jim Mattson <jmattson@google.com>
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
+Hello:
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Thu, 21 Jul 2022 08:13:19 -0400 you wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+> 
+> dummy_tramp() uses "lr" to refer to the x30 register, but some assembler
+> does not recognize "lr" and reports a build failure:
+> 
+> /tmp/cc52xO0c.s: Assembler messages:
+> /tmp/cc52xO0c.s:8: Error: operand 1 should be an integer register -- `mov lr,x9'
+> /tmp/cc52xO0c.s:7: Error: undefined symbol lr used as an immediate value
+> make[2]: *** [scripts/Makefile.build:250: arch/arm64/net/bpf_jit_comp.o] Error 1
+> make[1]: *** [scripts/Makefile.build:525: arch/arm64/net] Error 2
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] bpf, arm64: Fix compile error in dummy_tramp()
+    https://git.kernel.org/bpf/bpf-next/c/339ed900b307
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

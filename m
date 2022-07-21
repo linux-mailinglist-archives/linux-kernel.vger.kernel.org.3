@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF40F57C66C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E7357C673
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbiGUIgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S232419AbiGUIhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbiGUIg2 (ORCPT
+        with ESMTP id S232361AbiGUIhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:36:28 -0400
-Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 898233A486
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:36:23 -0700 (PDT)
-Received: from asem-TANK-H61.asem.intra ([151.1.184.193])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id ERe9oJVIEtk1HEReRojXy2; Thu, 21 Jul 2022 10:35:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1658392522; bh=d3ojLOveqXbmSiZO4Qo5C01LjgUH9rwc4A6+CEo+xVo=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=FQ/8T24nFLJ7wl2q868J8AckjLWYO0PHwwRxM++IGFwqfsZVNkNfbePCH+lX1MwBG
-         urnxGBw6BkH2aYwh5Dp7e0Nq/YgNvB9CcbfN0VbaDDkVXg3dNJC9uLh+YFgp8vgKqc
-         bRsjdLm6AD0Xuh1yacCaMG852k/hA0ilqEYFQZ8W2uLAqYLqVwm5nOjnRUtVRYOg4R
-         i2Cpf8k7gnhQz28VsJdUTl+8pR3DaTEfZ4GSO9U7OdRX73FODY9P+10j6uEgApxsuP
-         0A2v8BnrFL4T7KZaEIRLiseq3Cfw1qrR95Cip3GCQHAdqiEQ1l7pSAUKdEqpSCz3Kr
-         pEQQ9w+nWwOVQ==
-From:   Luca Ellero <luca.ellero@brickedbrain.com>
-To:     dmitry.torokhov@gmail.com, daniel@zonque.org,
-        m.felsch@pengutronix.de, andriy.shevchenko@linux.intel.com,
-        u.kleine-koenig@pengutronix.de, mkl@pengutronix.de,
-        miquel.raynal@bootlin.com, imre.deak@nokia.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Ellero <l.ellero@asem.it>
-Subject: [PATCH v2 3/3] ads7846: don't check penirq immediately for 7845
-Date:   Thu, 21 Jul 2022 10:34:58 +0200
-Message-Id: <20220721083458.6412-4-luca.ellero@brickedbrain.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220721083458.6412-1-luca.ellero@brickedbrain.com>
-References: <20220721083458.6412-1-luca.ellero@brickedbrain.com>
+        Thu, 21 Jul 2022 04:37:00 -0400
+Received: from sender4-pp-o93.zoho.com (sender4-pp-o93.zoho.com [136.143.188.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4902628729;
+        Thu, 21 Jul 2022 01:36:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1658392612; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=RZuvCtiU4fKZaz+xbff2VIqiPdkTLtN41r0+W1V6BWSCLkwfC1qk3Usks/cEEVsCnVK575F1BlJ8WPrVDkTq9V5WanBsEwrd0FI2pQInHfg7rqvw2wyG//gDCOpDmPfyS2F2P6rawD8rVHnk4ZmQYYGyMIvBdIEs4BO5rr6sHug=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1658392612; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=CE1Xk4p5RR17p5R3WbIoxrG3xk/BTEPCABwgd4UK3no=; 
+        b=SyVBugycFOPlhHgOb3X8UpvAYyE2bj2H63RV+qBJNms194PEQZy5QjR28oNZAYh3HRLiI01MmtNGvyJOJIC4PcmGdlR3I9GQhR0fXYmXWmZPjEoGCUXSBku24gVWkycIiW2ZWn+Q4C6D27t/nbqmQhOtpF3mSH/Wac7vUTGii7A=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=hmsjwzb@zoho.com;
+        dmarc=pass header.from=<hmsjwzb@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id:mime-version; 
+  b=euHo0Fc7Jdb32iFSTPOuhv/F3vJlDCbjE2r6dDD4CJOEgQO/VqkocQTs0FZt1uuhf9SJB+zxu/MU
+    TPa+K+zsAbF/b/zbxRmkzNDkkBlRc5utFZa9wubsQjwfTrjtb6Iz  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658392612;
+        s=zm2022; d=zoho.com; i=hmsjwzb@zoho.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=CE1Xk4p5RR17p5R3WbIoxrG3xk/BTEPCABwgd4UK3no=;
+        b=dOtXi33j/Fen5kR5h8r8QMuE5Ojya4cxcYL294zk5+asVzMwRQCxEHB2tQJPcWT5
+        FqZlj/ghXKfdxaEehZBfowa8KtZHCBfZcbh5k2UYIjmzL47pLUSCvtKiBdPsPs2rdK/
+        YepmBB1q5ar1VJ5npKuJGJjgQE7SGwXR7mF/OIA4=
+Received: from localhost.localdomain (58.247.201.70 [58.247.201.70]) by mx.zohomail.com
+        with SMTPS id 1658392610284663.8069833515924; Thu, 21 Jul 2022 01:36:50 -0700 (PDT)
+From:   "Flint.Wang" <hmsjwzb@zoho.com>
+To:     anand.jain@oracle.com
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH]btrfs: Fix fstest case btrfs/219
+Date:   Thu, 21 Jul 2022 16:36:08 +0800
+Message-Id: <20220721083609.5695-1-hmsjwzb@zoho.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfFbdTgu8oX/OZAFfyhgjeweFgExsOWhbkk4p92LNQsdkO1lpmrlOwkJxIz3lfVBUyr7aPxpcaWaAkJ7ExQ0POBk0gtz+oEhGquM92q/1R0/8WWmUQRPU
- 7GrCa7XoLa0RaWyuUxfueDzLeracnhE+LwqBcc9ddzbVRalbVP706cBymI2tizvoGpNB84P5IdRMPf+q0ddZ0ZVweKt2BBRBVcHKLOGnJjZH0pInqdabL+TP
- oLr4DcUtirIOJNoOBMCC1IqK8S5Qer850cbxEqZoBKfPMrEtgYe1ZXqrUyg8RBG5e6M1lkrf3MTxXhUd4mOnT9/bO/i0ncrI4unNa2k47Tri4XrxVNP2jHgP
- 3ZAJ61TjDMCx+vos8s7g75OiWXJsCZ/rlNJ+my/GkhbGxQQVy3cpLkMxnTZbz/igMbsUammXXcQTFGuvsViD8G2TGw805uydgGwlhm9oIj+dynNc/RXbvk6i
- TGzwyrpdlYxjgyJGQUPwtYcyqFb5fa7iUBrLbFBql/c0hpLm+3Omv2Jl9KFxCkDjjzMSdDCc68yfXnH2Cw9QnfyURXJEnkDH/IAVZgtKwB4iQKFCAKOAbk//
- aXA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +62,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Ellero <l.ellero@asem.it>
+Hi,
+fstest btrfs/291 failed.
 
-To discard false readings, one should use "ti,penirq-recheck-delay-usecs".
-Checking get_pendown_state() at the beginning, most of the time fails
-causing malfunctioning.
+[How to reproduce]
+mkdir -p /mnt/test/219.mnt
+xfs_io -f -c "truncate 256m" /mnt/test/219.img1
+mkfs.btrfs /mnt/test/219.img1
+cp /mnt/test/219.img1 /mnt/test/219.img2
+mount -o loop /mnt/test/219.img1 /mnt/test/219.mnt
+umount /mnt/test/219.mnt
+losetup -f --show /mnt/test/219.img1 dev
+mount /dev/loop0 /mnt/test/219.mnt
+umount /mnt/test/219.mnt
+mount -o loop /mnt/test/219.img2 /mnt/test/219.mnt
 
-Signed-off-by: Luca Ellero <l.ellero@asem.it>
+[Root cause]
+if (fs_devices->opened && found_transid < device->generation) {
+	/*
+	 * That is if the FS is _not_ mounted and if you
+	 * are here, that means there is more than one
+	 * disk with same uuid and devid.We keep the one
+	 * with larger generation number or the last-in if
+	 * generation are equal.
+	 */
+	mutex_unlock(&fs_devices->device_list_mutex);
+	return ERR_PTR(-EEXIST);
+}
+
+[Personal opinion]
+User might back up a block device to another. I think it is improper
+to forbid user from mounting it.
+
+Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
 ---
- drivers/input/touchscreen/ads7846.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ fs/btrfs/volumes.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-index 9e15cdf6faa0..122d3a13b7c5 100644
---- a/drivers/input/touchscreen/ads7846.c
-+++ b/drivers/input/touchscreen/ads7846.c
-@@ -843,14 +843,8 @@ static void ads7846_report_state(struct ads7846 *ts)
- 	if (x == MAX_12BIT)
- 		x = 0;
- 
--	if (ts->model == 7843) {
-+	if (ts->model == 7843 || ts->model == 7845) {
- 		Rt = ts->pressure_max / 2;
--	} else if (ts->model == 7845) {
--		if (get_pendown_state(ts))
--			Rt = ts->pressure_max / 2;
--		else
--			Rt = 0;
--		dev_vdbg(&ts->spi->dev, "x/y: %d/%d, PD %d\n", x, y, Rt);
- 	} else if (likely(x && z1)) {
- 		/* compute touch pressure resistance using equation #2 */
- 		Rt = z2;
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index 6aa6bc769569a..76af32032ac85 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -900,7 +900,7 @@ static noinline struct btrfs_device *device_list_add(const char *path,
+ 		 * tracking a problem where systems fail mount by subvolume id
+ 		 * when we reject replacement on a mounted FS.
+ 		 */
+-		if (!fs_devices->opened && found_transid < device->generation) {
++		if (fs_devices->opened && found_transid < device->generation) {
+ 			/*
+ 			 * That is if the FS is _not_ mounted and if you
+ 			 * are here, that means there is more than one
 -- 
-2.25.1
+2.37.0
 

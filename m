@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456C257D353
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF0C57D357
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiGUScz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 14:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S232716AbiGUSeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 14:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbiGUScw (ORCPT
+        with ESMTP id S232161AbiGUSdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 14:32:52 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403CE86C2C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:32:51 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id os14so4643556ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R73YgZrLIlJfKQP7Dz276GH0gHxdx2MZ5pIXDHc/zZQ=;
-        b=Yo+krzexnqWdMuTKccVWI9awZtte9vIYfO1Tncd/bvZBbmw/2tNO0HXSH5gCRmCmYH
-         Ze/lfza3ylQtn3Cmp0YpH71s1BqX9JsyEUI4Z8Yj0pa8KzhhbVAr4WrBx4nVeNT5SWJz
-         a7H05pSW1e8DJRZpuhC8/OAjU4mdKrbZ+TcoM=
+        Thu, 21 Jul 2022 14:33:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84D668CC83
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658428428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HJB4awZMcHCUKT/brNSroFnUPIWlUAvdMcDbLhHOPQQ=;
+        b=K3tn3pCVNX9XpIgDKrUBdrcxPuCpOfPz3TWbVvpI3kBHJykmLsQYB4mXhuZkF8auBJx6JD
+        8Tcis9swU86EWYkFyOGncejbY9Aq8HIwOBdlKvA5snCvjFjd5H7JyE9NtShd6BEeu2iROk
+        wGBnNPvkxrlNoMu1S/YQNOiHjHAVxZk=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-534-HFgLW8ipPhSMEqo5l3nvzg-1; Thu, 21 Jul 2022 14:33:41 -0400
+X-MC-Unique: HFgLW8ipPhSMEqo5l3nvzg-1
+Received: by mail-qk1-f197.google.com with SMTP id s9-20020a05620a254900b006b54dd4d6deso1930048qko.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:33:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R73YgZrLIlJfKQP7Dz276GH0gHxdx2MZ5pIXDHc/zZQ=;
-        b=IQdh2TZsLh9/8b1tLS1jaEg2SqaIik1jJLdglWalbq7iJj+baXXuhA8PSLhgY1e6Fk
-         NiGaOwAzRcAaGpH0Y790fJzAF5MK1VenHVIjls5qM2i8QYxX36Pfr7f+JUPViJr8jlXg
-         g83YOOK1VXBeQDG8XiLpOb6WWh0RgrucwLtxasQPnzXILgTNgb5TVhNKvx/aLKM8sAsI
-         58J12GCBW1ZQ7WMUMS1Y9FsFfJfRuY0XrzCOFYfOCxpq1bFznmHKGFTBvPOzeo972ghE
-         VrcUPShZRC2YvHmhGuLzohGKjAHyhxgrQrR0vcPtXCAfJvETSO/kZAI89y+rLX8klCc2
-         bPOA==
-X-Gm-Message-State: AJIora/DW3+ZYC8iRAFt2KONtWN4qoNOPTS6IEd2WOWMLwCpkBZ1EpyS
-        O/U4/lrXFjvJ6OVsR+gr2OQxD37KQkUZGj//0fA=
-X-Google-Smtp-Source: AGRyM1tzetdyIYoCA99u9+hpz3tuiFqIfGAiUIH0ngiqEh5iDEyahifZc7afnMYOl0jX5qMsCfVwlA==
-X-Received: by 2002:a17:907:96a1:b0:72b:918c:13f with SMTP id hd33-20020a17090796a100b0072b918c013fmr42440204ejc.659.1658428369458;
-        Thu, 21 Jul 2022 11:32:49 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id cy24-20020a0564021c9800b0043ba1ecb0dfsm1402284edb.75.2022.07.21.11.32.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 11:32:48 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id u5so3479122wrm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:32:48 -0700 (PDT)
-X-Received: by 2002:a05:6000:1049:b0:21e:584f:3574 with SMTP id
- c9-20020a056000104900b0021e584f3574mr2487570wrx.274.1658428368088; Thu, 21
- Jul 2022 11:32:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HJB4awZMcHCUKT/brNSroFnUPIWlUAvdMcDbLhHOPQQ=;
+        b=5QcKhQQIHgJOXsAJo4M/VIFc1ZE+sx/5jA089CK2LdCQcYdlqlkDdDQBusWWMVKzUK
+         BI1rgY2imPhH/+j+SBmApZpNZNmG+P/w8p/zZKSP2ejlUz7zZjMRtq9IEnFuciFvaLAw
+         8ui3tMNptDllinwCeCMMBnz+yQLBatI6+T7bMjsOBk+10Dx5b5PMEycxpv8SBIE1W1vz
+         CGIYDN3rGQ+pM+e56oUsCT3lXZ9ZKpSd8zymglknr6oXH1MjhkNUsuq3RplecEykkf85
+         X28HryD7gXj0cWDHDcxH3GE1assKeRG1uQYWb+B97+fmqOHtq5on3X0/L5CbemjOKyD+
+         Bz5w==
+X-Gm-Message-State: AJIora+pbrR+DOUaPiUjxa6myF2XVs0zYSiV0CPz9NWaKKESW5nMaoCM
+        IJmK4drO/7T/IIizrDskrHOKQbk9x+gZO2lSRR8dTiCL06MHE4QBvaf+L9y1fux4ogpryxk16HR
+        MvVi1tLme1vzvYo8zpkjwBC9yFIPp+4gscf+yMyTKg/VQEfz42iMaR7gIDnGHeFYrzJxZAGYcCQ
+        ==
+X-Received: by 2002:a05:620a:2556:b0:6a7:9f07:602 with SMTP id s22-20020a05620a255600b006a79f070602mr28249687qko.207.1658428420916;
+        Thu, 21 Jul 2022 11:33:40 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t+xOHzxLKS6RXNOCj6oemogjHOTFszZibiB4umcqn73ukKiPEyCMActk/gwgysEap2Ss5eIg==
+X-Received: by 2002:a05:620a:2556:b0:6a7:9f07:602 with SMTP id s22-20020a05620a255600b006a79f070602mr28249669qko.207.1658428420648;
+        Thu, 21 Jul 2022 11:33:40 -0700 (PDT)
+Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id bj9-20020a05620a190900b006a6a7b4e7besm1878519qkb.109.2022.07.21.11.33.39
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 21 Jul 2022 11:33:40 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Nadav Amit <nadav.amit@gmail.com>, peterx@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: [PATCH v3 0/3] mm/mprotect: Fix soft-dirty checks
+Date:   Thu, 21 Jul 2022 14:33:35 -0400
+Message-Id: <20220721183338.27871-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
- <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
- <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net> <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
- <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
- <Ytbnlms90+LBLbrY@google.com> <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
- <Ytl2vg15Hc0fh8Dl@worktop.programming.kicks-ass.net> <YtmTK93vHWQUFinE@worktop.programming.kicks-ass.net>
- <CAHk-=whLGENEkjME_v_3P1SwhwjzH4GK2RLA3fn=yQNuyKLBkg@mail.gmail.com> <YtmagFcae43wzwCf@worktop.programming.kicks-ass.net>
-In-Reply-To: <YtmagFcae43wzwCf@worktop.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 21 Jul 2022 11:32:31 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh=Z++NTkd5972_WSHJQ-G63k5-2eYjsQWkRvtW5+fEdQ@mail.gmail.com>
-Message-ID: <CAHk-=wh=Z++NTkd5972_WSHJQ-G63k5-2eYjsQWkRvtW5+fEdQ@mail.gmail.com>
-Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Johannes Wikner <kwikner@ethz.ch>,
-        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
-        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Gross, Jurgen" <jgross@suse.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Collingbourne <pcc@google.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:27 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> R11,R11 are caller-saved, and since this is the actual call site, the
-> caller must already have saved them or marked them clobbered.
+v2: https://lore.kernel.org/lkml/20220720220324.88538-1-peterx@redhat.com/
 
-Ok. I don't know the context, but I was thinking along the lines of
-the same hash value perhaps being used multiple times because it has
-the same function type.  Then using the "addl" trick means that the
-hash value in %r10 will be changing and cannot be re-used.
+Patch 1 is the previous patch and real fix.  Two more test patches added to
+add mprotect test to soft-dirty.c, meanwhile add soft-dirty test into the
+vm test loop.
 
-But I guess this is *much* too late for those kinds of optimizations,
-as it literally just outputs the raw instruction sequence, and so the
-(negated) hash value will always be re-generated anyway, no re-use
-possible.
+Please review, thanks.
 
-             Linus
+Peter Xu (3):
+  mm/mprotect: Fix soft-dirty check in can_change_pte_writable()
+  selftests: soft-dirty: Add test for mprotect
+  selftests: Add soft-dirty into run_vmtests.sh
+
+ mm/internal.h                             | 18 ++++++
+ mm/mmap.c                                 |  2 +-
+ mm/mprotect.c                             |  2 +-
+ tools/testing/selftests/vm/run_vmtests.sh |  2 +
+ tools/testing/selftests/vm/soft-dirty.c   | 69 ++++++++++++++++++++++-
+ 5 files changed, 90 insertions(+), 3 deletions(-)
+
+-- 
+2.32.0
+

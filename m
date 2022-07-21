@@ -2,77 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2377E57C202
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DA957C203
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbiGUBx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 21:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S230372AbiGUBzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 21:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiGUBxY (ORCPT
+        with ESMTP id S231148AbiGUBzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 21:53:24 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61CC13F05;
-        Wed, 20 Jul 2022 18:53:22 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VJzMVEo_1658368398;
-Received: from 30.227.74.51(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VJzMVEo_1658368398)
-          by smtp.aliyun-inc.com;
-          Thu, 21 Jul 2022 09:53:19 +0800
-Message-ID: <20aa3fe4-0ad1-80b6-ca64-b0bcba884b49@linux.alibaba.com>
-Date:   Thu, 21 Jul 2022 09:53:18 +0800
+        Wed, 20 Jul 2022 21:55:03 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785B87696E
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 18:55:01 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id B11208A9; Wed, 20 Jul 2022 20:54:59 -0500 (CDT)
+Date:   Wed, 20 Jul 2022 20:54:59 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [PATCH] sched: __fatal_signal_pending() should also check
+ PF_EXITING
+Message-ID: <20220721015459.GA4297@mail.hallyn.com>
+References: <Ys2PwTS0qFmGNFqy@netflix>
+ <20220713175305.1327649-1-tycho@tycho.pizza>
+ <20220720150328.GA30749@mail.hallyn.com>
+ <YthsgqAZYnwHZLn+@tycho.pizza>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] ocfs2: Remove a useless spinlock
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     David.Laight@ACULAB.COM, jlbec@evilplan.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mark@fasheh.com, ocfs2-devel@oss.oracle.com
-References: <bd6796635e58f9c47cf857573c3b9474a00ce26a.1658224839.git.christophe.jaillet@wanadoo.fr>
- <8ba7004d330cbe5f626539a8a3bff696d0c4285e.1658224839.git.christophe.jaillet@wanadoo.fr>
- <7b644e5d32d74d3d90dfc5b1786ae5b9@AcuMS.aculab.com>
- <29c3fbdd-7695-46c5-bb75-fe358c574ab3@wanadoo.fr>
- <07c924de-78bf-c993-ce73-635af71f4edd@linux.alibaba.com>
- <f313cb6f-de75-2447-eebc-5c240bc243a2@wanadoo.fr>
- <65e6bbcb-2c33-2e43-1826-a62387572310@linux.alibaba.com>
- <a66632a1-9cde-1b3c-afa9-8f63bd4a9cf0@wanadoo.fr>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <a66632a1-9cde-1b3c-afa9-8f63bd4a9cf0@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YthsgqAZYnwHZLn+@tycho.pizza>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 7/20/22 9:32 PM, Christophe JAILLET wrote:
-> Le 20/07/2022 à 11:48, Joseph Qi a écrit :
->>
->> These code are introduced long time ago...
->> Refer to commit b4df6ed8db0c "[PATCH] ocfs2: fix orphan recovery
->> deadlock", I guess it plays a role 'barrier' and make sure test node map
->> is executed prior than signal orphan recovery thread. In other words, to
->> serialize evict inode and orphan recovery.
->>
->> Thanks,
->> Joseph
->>
+On Wed, Jul 20, 2022 at 02:58:42PM -0600, Tycho Andersen wrote:
+> On Wed, Jul 20, 2022 at 10:03:28AM -0500, Serge E. Hallyn wrote:
+> > On Wed, Jul 13, 2022 at 11:53:05AM -0600, Tycho Andersen wrote:
+> > > The wait_* code uses signal_pending_state() to test whether a thread has
+> > > been interrupted, which ultimately uses __fatal_signal_pending() to detect
+> > > if there is a fatal signal.
+> > > 
+> > > When a pid ns dies, it does:
+> > > 
+> > >     group_send_sig_info(SIGKILL, SEND_SIG_PRIV, task, PIDTYPE_MAX);
+> > > 
+> > > for all the tasks in the pid ns. That calls through:
+> > > 
+> > >     group_send_sig_info() ->
+> > >       do_send_sig_info() ->
+> > >         send_signal_locked() ->
+> > >           __send_signal_locked()
+> > > 
+> > > which does:
+> > > 
+> > >     pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+> > > 
+> > > which puts sigkill in the set of shared signals, but not the individual
+> > > pending ones. When complete_signal() is called at the end of
+> > > __send_signal_locked(), if the task already had PF_EXITING (i.e. was
+> > > already waiting on something in its fd closing path like a fuse flush),
+> > > complete_signal() will not wake up the thread, since wants_signal() checks
+> > > PF_EXITING before testing for SIGKILL.
+> > > 
+> > > If tasks are stuck in a killable wait (e.g. a fuse flush operation), they
+> > > won't see this shared signal, and will hang forever, since TIF_SIGPENDING
+> > > is set, but the fatal signal can't be detected. So, let's also look for
+> > > PF_EXITING in __fatal_signal_pending().
+> > > 
+> > > Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
+> > 
+> > Cool, thanks for nailing this down!
+> > 
+> > I assume you've been running this on some boxes with no weird effects?
 > 
-> Ok, so just leave it as-is.
+> Yes, but I haven't tested all the paths.
 > 
-> Should I resend the serie without this patch, or can 1/3 and 3/3 be applied as-is?
+> > > ---
+> > >  include/linux/sched/signal.h | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+> > > index cafbe03eed01..c20b7e1d89ef 100644
+> > > --- a/include/linux/sched/signal.h
+> > > +++ b/include/linux/sched/signal.h
+> > > @@ -402,7 +402,8 @@ static inline int signal_pending(struct task_struct *p)
+> > >  
+> > >  static inline int __fatal_signal_pending(struct task_struct *p)
+> > >  {
+> > > -	return unlikely(sigismember(&p->pending.signal, SIGKILL));
+> > > +	return unlikely(sigismember(&p->pending.signal, SIGKILL) ||
+> > > +			p->flags & PF_EXITING);
+> > 
+> > Looking around at the callers this does seem safe, but the name does
+> > now seem misleading.  Should this be renamed to something like
+> > exiting_or_fatal_signal_pending()?  
 > 
+> This is why I like my original patch better: it is just expanding the
+> set of signals to include the shared signals, which are indeed still
+> fatal pending signals for the task. I don't really understand Eric's
+> argument about kernel threads ignoring SIGKILL, since kernel threads
 
-If you don't mind, please resend with my rvb and involve akpm as well.
+Oh - I didn't either - checking the sigkill in shared signals *seems*
+legit if they can be put there - but since you posted the new patch I
+assumed his reasoning was clear to you.  I know Eric's busy, cc:ing Oleg
+for his interpretation too.
 
-Thanks,
-Joseph
+> can still ignore SIGKILL just fine after this patch.
+> 
+> But yes, assuming Eric is ok with this venison. I can send a v2 with
+> the name change as you suggest.
+> 
+> Thanks for looking.
+> 
+> Tycho

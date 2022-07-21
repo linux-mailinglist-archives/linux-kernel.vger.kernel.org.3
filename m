@@ -2,238 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A44357D71B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2382F57D721
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiGUWxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S230344AbiGUW4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbiGUWxO (ORCPT
+        with ESMTP id S229739AbiGUW4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:53:14 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3148CEAE
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:53:12 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x1so1385575plb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:53:12 -0700 (PDT)
+        Thu, 21 Jul 2022 18:56:31 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41A48E1C4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:56:29 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id 17so3094312pfy.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:56:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OdHxhDLWx9WG8mHbYev4aWkSSHwaBBLRnpm2kKlMDcw=;
-        b=tP3yiJQp5Dy41n0tJFQKrM/9B5oLwt7fU8kModaq7uZp7yKdhz6sHGUjZFPCyDMjlM
-         r3Bdyt/jHF0FAoyVr+ba35Fo82qtNo/Qsb5PYWYjaV4CpgBdbUu1toHdrPIYcFVgFsMI
-         EBftvgjQe/yIi0gPy0yljglHJo2lNju1kXn05bs4b3VazrUNtRzV4tlbsF7VYSpsKbJ/
-         iJQvKowGnjL0BSqt1x20U9kpaFmMdfG0u1y6lq4e25bw7YWQbek9IoZdHzesbBhQLPqS
-         Xic+Xr5PY7V2AoPkQL4gpbt9G/vJQAbRcFljI58fH9divOxh1VNp7XLA0tDjPt9LbKs3
-         4R1Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GCuzPWEu7otLZxcKOxiOTjBEcbCLykrIMf22tVoEcgM=;
+        b=ab4pIG/1tZZgSRaUxBAOJ/jiYodQ+Gh6U3ACDG2etAD/KJJSUWvWRs5RnTjKfeSt2N
+         JTvh9v+li6lkk7IM0q3ABDJcMLke0SCe3Mkn6YOVbhbv9MP+S38lh+oLAQ1q9meKML75
+         iDfocEvd9+qMfqbb1Kgc/Fw3f2x6dXN19NsHdUbEPgvTRoGJqCLBC2QkRBzE8nGLj+Fz
+         lh3amcj1fGSgfino0/bhsb9HdWomZsoffm1F3dseyEatvt5Bvo+owz2Kw621yKKhNLvv
+         0WPcpc48tqT0ILld9JZ/J/KiXJ0HyirbL6G/5K/rsajDw5/WneeGdiIkoKda6R1tHp+Y
+         y7pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=OdHxhDLWx9WG8mHbYev4aWkSSHwaBBLRnpm2kKlMDcw=;
-        b=xMELuaweREGEkdH51kBBiW4lIN4m03qG1ar6GhA5/9sxqTLlzUmNOfws1wT2+eUTon
-         RjGrV90ab/S5BNqMEHhANeuun9MlZAbe2PhbReJar3Cjc3I0dLmMBYVkxjkOSBG9SmkU
-         6sPNMYMNH6pWlf3Za5dnhThdvwm9x48R8rKogIgb/aNANOtgzpcgUinHdg0xqF7nZG6P
-         Wg+UPM0vsLNurO5X/mAdewUbfILxV9ZcI1AIDPRdJQSks/L6ZvpShqpXF5yL1q9zssCp
-         XvFaYMLxt+2ZAMOLCBtAp3hm8P1vhoM2wnNdG1jMZIQDThp0zWhrPgeQgpkE1GixrVDT
-         Eltg==
-X-Gm-Message-State: AJIora93WdlDHfT7+Gh8ohO3CTxI6s6xPwVtXCatFASllLAatFIUlYTt
-        5dLUM+yyEY5zRVy74JY3o17jgc0U4cAF8A==
-X-Google-Smtp-Source: AGRyM1sNOd4rSRLr/yIF40jwUmoga02TNaaJTR/6clatLb4XIuD1cw+cWv0cAfzU4APaRXVLN02/vw==
-X-Received: by 2002:a17:902:db0f:b0:16d:1cfa:1bfc with SMTP id m15-20020a170902db0f00b0016d1cfa1bfcmr545876plx.82.1658443991052;
-        Thu, 21 Jul 2022 15:53:11 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902f60300b0016bdea07b9esm2197378plg.190.2022.07.21.15.53.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GCuzPWEu7otLZxcKOxiOTjBEcbCLykrIMf22tVoEcgM=;
+        b=EMdmRYph47+ZE41Ta2l+oExXkcnxkQUv9bUxhoVH4Uk91Y1wEwu7HAiYqS9O2i3Hgm
+         wqE7uSclMnp/BGKqJeQhh+RqY4pQwV5b5zc8Ay1ZS+st/bXrJXuQ4XK4AGpmgpepkmea
+         LOg5dqO0pv3BcFdM5MdXj30nSxrbwvtZE9nRGYyvMJ4xbUTm1qTqJy0GV75PhwM3IcaA
+         kQddza0mcSWnW9WluKqC1nFjeuOA3yMyPL3cRTPLpakwj8T88frqn+zm2/FMurafCEy1
+         NGdxdC0rEI3qsrmbbMS/AjnC1h78tactekeLMQgs08b0dn0yI0uLp8nHMCH08C/wQHGL
+         vOpg==
+X-Gm-Message-State: AJIora/wIlkBStnKot1QQpbrdLCgSOAEUt/vYQcJiaX7x9DMh1QXkk9x
+        g++HNlsaPvHTykMOpECgHhf1OQ==
+X-Google-Smtp-Source: AGRyM1tvNyeeZFqJhLpPd5lMh8DRK3xHx7b1vhl4Hxah1uSc3wgMlOg9y3iWj7F08zMuW3Cz2sDd1A==
+X-Received: by 2002:a63:8a41:0:b0:41a:4abd:5c98 with SMTP id y62-20020a638a41000000b0041a4abd5c98mr568303pgd.292.1658444189250;
+        Thu, 21 Jul 2022 15:56:29 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b0016bf2dc1724sm2266311plh.247.2022.07.21.15.56.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 15:53:10 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:53:10 -0700 (PDT)
-X-Google-Original-Date: Thu, 21 Jul 2022 15:53:09 PDT (-0700)
-Subject:     Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
-In-Reply-To: <YtnNrkH9UJYreU5M@antec>
-CC:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        Will Deacon <will@kernel.org>, guoren@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        bhelgaas@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     shorne@gmail.com, Arnd Bergmann <arnd@arndb.de>
-Message-ID: <mhng-97127945-353c-4d1b-8bd8-eaf6ac139f79@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 15:56:28 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 22:56:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 21/25] KVM: VMX: Move LOAD_IA32_PERF_GLOBAL_CTRL
+ errata handling out of setup_vmcs_config()
+Message-ID: <YtnZmCutdd5tpUmz@google.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-22-vkuznets@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714091327.1085353-22-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 15:05:34 PDT (-0700), shorne@gmail.com wrote:
-> On Tue, Jul 19, 2022 at 08:58:39AM -0700, Palmer Dabbelt wrote:
->> On Sun, 17 Jul 2022 17:41:14 PDT (-0700), shorne@gmail.com wrote:
->> > The asm/pci.h used for many newer architectures share similar
->> > definitions.  Move the common parts to asm-generic/pci.h to allow for
->> > sharing code.
->> >
->> > Two things to note are:
->> >
->> >  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
->> >    these architectures avoid creating that file and add the definition
->> >    to asm/pci.h.
->> >  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
->> >    undefine it after including asm-generic/pci.h.  Why doesn't csky
->> >    define it?
->> >  - pci_get_legacy_ide_irq, This function is only used on architectures
->> >    that support PNP.  It is only maintained for arm64, in other
->> >    architectures it is removed.
->> >
->> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
->> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
->> > Signed-off-by: Stafford Horne <shorne@gmail.com>
->> > ---
->> > Second note on isa_dma_bridge_buggy, this is set on x86 but it it also set in
->> > pci/quirks.c.  We discussed limiting it only to x86 though as its a general
->> > quick triggered by pci ids I think it will be more tricky than we thought so I
->> > will leave as is.  It might be nice to move it out of asm/dma.h and into
->> > asm/pci.h though.
->> >
->> > Since v2:
->> >  - Nothing
->> > Since v1:
->> >  - Remove definition of pci_get_legacy_ide_irq
->> >
->> >  arch/arm64/include/asm/pci.h | 12 +++---------
->> >  arch/csky/include/asm/pci.h  | 24 ++++--------------------
->> >  arch/riscv/include/asm/pci.h | 25 +++----------------------
->> >  arch/um/include/asm/pci.h    | 24 ++----------------------
->> >  include/asm-generic/pci.h    | 36 ++++++++++++++++++++++++++++++++++++
->> >  5 files changed, 48 insertions(+), 73 deletions(-)
->> >  create mode 100644 include/asm-generic/pci.h
->> >
->> > diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
->> > index b33ca260e3c9..1180e83712f5 100644
->> > --- a/arch/arm64/include/asm/pci.h
->> > +++ b/arch/arm64/include/asm/pci.h
->> > @@ -9,7 +9,6 @@
->> >  #include <asm/io.h>
->> >
->> >  #define PCIBIOS_MIN_IO		0x1000
->> > -#define PCIBIOS_MIN_MEM		0
->> >
->> >  /*
->> >   * Set to 1 if the kernel should re-assign all PCI bus numbers
->> > @@ -18,9 +17,6 @@
->> >  	(pci_has_flag(PCI_REASSIGN_ALL_BUS))
->> >
->> >  #define arch_can_pci_mmap_wc() 1
->> > -#define ARCH_GENERIC_PCI_MMAP_RESOURCE	1
->> > -
->> > -extern int isa_dma_bridge_buggy;
->> >
->> >  #ifdef CONFIG_PCI
->> >  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->> > @@ -28,11 +24,9 @@ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->> >  	/* no legacy IRQ on arm64 */
->> >  	return -ENODEV;
->> >  }
->> > -
->> > -static inline int pci_proc_domain(struct pci_bus *bus)
->> > -{
->> > -	return 1;
->> > -}
->> >  #endif  /* CONFIG_PCI */
->> >
->> > +/* Generic PCI */
->> > +#include <asm-generic/pci.h>
->> > +
->> >  #endif  /* __ASM_PCI_H */
->> > diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
->> > index ebc765b1f78b..44866c1ad461 100644
->> > --- a/arch/csky/include/asm/pci.h
->> > +++ b/arch/csky/include/asm/pci.h
->> > @@ -9,26 +9,10 @@
->> >
->> >  #include <asm/io.h>
->> >
->> > -#define PCIBIOS_MIN_IO		0
->> > -#define PCIBIOS_MIN_MEM		0
->> > +/* Generic PCI */
->> > +#include <asm-generic/pci.h>
->> >
->> > -/* C-SKY shim does not initialize PCI bus */
->> > -#define pcibios_assign_all_busses() 1
->> > -
->> > -extern int isa_dma_bridge_buggy;
->> > -
->> > -#ifdef CONFIG_PCI
->> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->> > -{
->> > -	/* no legacy IRQ on csky */
->> > -	return -ENODEV;
->> > -}
->> > -
->> > -static inline int pci_proc_domain(struct pci_bus *bus)
->> > -{
->> > -	/* always show the domain in /proc */
->> > -	return 1;
->> > -}
->> > -#endif  /* CONFIG_PCI */
->> > +/* csky doesn't use generic pci resource mapping */
->> > +#undef ARCH_GENERIC_PCI_MMAP_RESOURCE
->> >
->> >  #endif  /* __ASM_CSKY_PCI_H */
->> > diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
->> > index 7fd52a30e605..12ce8150cfb0 100644
->> > --- a/arch/riscv/include/asm/pci.h
->> > +++ b/arch/riscv/include/asm/pci.h
->> > @@ -12,29 +12,7 @@
->> >
->> >  #include <asm/io.h>
->> >
->> > -#define PCIBIOS_MIN_IO		0
->> > -#define PCIBIOS_MIN_MEM		0
->>
->> My for-next changes these in bb356ddb78b2 ("RISC-V: PCI: Avoid handing out
->> address 0 to devices").  Do you mind either splitting out the arch/riscv
->> bits or having this in via some sort of shared tag?
->
-> Hi Palmer,
->
-> I replied last on my phone but since it produces HTML multi-part email it got
-> rejected from a few places and I am not sure if you saw my reply.
->
-> It might be a bit hard to separate out the architecture specific bits as it
-> requires a bit of coordination with the asm-generic/pci.h move.
->
-> Some options:
->   1 I can produce a tag for you to merge into your for-next.
->   2 I can skip touching riscv at all in this patch and you can take care of it
->     in a future patch.
->   3 I could cherry pick your change bb356ddb78b2 ("RISC-V: PCI: Avoid handing out
->     address 0 to devices") to my for-next branch.  It should help avoid conflict.
->
-> Seeing that I am still doing small updates here and there I am not sure when I
-> will be ablt to create a stable tag.  So maybe 3 would work best?
+On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
+> As a preparation to reusing the result of setup_vmcs_config() for setting
+> up nested VMX control MSRs, move LOAD_IA32_PERF_GLOBAL_CTRL errata handling
+> to vmx_vmexit_ctrl()/vmx_vmentry_ctrl() and print the warning from
+> hardware_setup(). While it seems reasonable to not expose
+> LOAD_IA32_PERF_GLOBAL_CTRL controls to L1 hypervisor on buggy CPUs,
+> such change would inevitably break live migration from older KVMs
+> where the controls are exposed. Keep the status quo for know, L1 hypervisor
 
-If you cherry pick it then we're going to both end up with the patch, 
-which IMO is worse than the conflict (and the patch is pretty far back, 
-so I don't really want to rebase everything this late).
+s/know/now
 
-Since this isn't in yet, would it be OK just landing it as a single 
-patch on top of 5.19-rc1 that gets merged into whatever tree it ends up 
-in (ie, yours or Arnd's)?  Then as long as the commit is stable when it 
-lands in for-next I can just merge it down to my tree and sort out the 
-conflict from there.
+> itself is supposed to take care of the errata.
 
-If that's not possible then I think the best bet is to just drop the 
-RISC-V diff, I can deal with it when the rest lands in Linus' tree.
+Except the errata are based on FMS and the FMS exposed to the L1 hypervisor may
+not be the real FMS.
 
-> -Stafford
+But that's moot, because they _should_ be fully emulated by KVM anyways; KVM
+runs L2 with a MSR value modified by perf, not the raw MSR value requested by L1.
+
+Of course KVM screws things up and fails to clear the flag in entry controls...
+All exit controls are emulated so at least KVM gets those right.
+
+Untested, but I believe KVM the fix is:
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index d0e781c7ac72..76926147b672 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -2357,7 +2357,8 @@ static void prepare_vmcs02_early(struct vcpu_vmx *vmx, struct loaded_vmcs *vmcs0
+         * we can avoid VMWrites during vmx_set_efer().
+         */
+        exec_control = __vm_entry_controls_get(vmcs01);
+-       exec_control |= vmcs12->vm_entry_controls;
++       exec_control |= (vmcs12->vm_entry_controls &
++                        ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL);
+        exec_control &= ~(VM_ENTRY_IA32E_MODE | VM_ENTRY_LOAD_IA32_EFER);
+        if (cpu_has_load_ia32_efer()) {
+                if (guest_efer & EFER_LMA)
+
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 62 ++++++++++++++++++++++++++----------------
+>  1 file changed, 38 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 2dff5b94c535..e462e5b9c0a1 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2416,6 +2416,31 @@ static bool cpu_has_sgx(void)
+>  	return cpuid_eax(0) >= 0x12 && (cpuid_eax(0x12) & BIT(0));
+>  }
+>  
+> +/*
+> + * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
+> + * can't be used due to errata where VM Exit may incorrectly clear
+> + * IA32_PERF_GLOBAL_CTRL[34:32]. Work around the errata by using the
+> + * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
+> + */
+> +static bool cpu_has_perf_global_ctrl_bug(void)
+> +{
+> +	if (boot_cpu_data.x86 == 0x6) {
+> +		switch (boot_cpu_data.x86_model) {
+> +		case INTEL_FAM6_NEHALEM_EP:	/* AAK155 */
+> +		case INTEL_FAM6_NEHALEM:	/* AAP115 */
+> +		case INTEL_FAM6_WESTMERE:	/* AAT100 */
+> +		case INTEL_FAM6_WESTMERE_EP:	/* BC86,AAY89,BD102 */
+> +		case INTEL_FAM6_NEHALEM_EX:	/* BA97 */
+> +			return true;
+> +		default:
+> +			break;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +
+>  static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
+>  				      u32 msr, u32 *result)
+>  {
+> @@ -2572,30 +2597,6 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>  		_vmexit_control &= ~x_ctrl;
+>  	}
+>  
+> -	/*
+> -	 * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
+> -	 * can't be used due to an errata where VM Exit may incorrectly clear
+> -	 * IA32_PERF_GLOBAL_CTRL[34:32].  Workaround the errata by using the
+> -	 * MSR load mechanism to switch IA32_PERF_GLOBAL_CTRL.
+> -	 */
+> -	if (boot_cpu_data.x86 == 0x6) {
+> -		switch (boot_cpu_data.x86_model) {
+> -		case INTEL_FAM6_NEHALEM_EP:	/* AAK155 */
+> -		case INTEL_FAM6_NEHALEM:	/* AAP115 */
+> -		case INTEL_FAM6_WESTMERE:	/* AAT100 */
+> -		case INTEL_FAM6_WESTMERE_EP:	/* BC86,AAY89,BD102 */
+> -		case INTEL_FAM6_NEHALEM_EX:	/* BA97 */
+> -			_vmentry_control &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+> -			_vmexit_control &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+> -			pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
+> -					"does not work properly. Using workaround\n");
+> -			break;
+> -		default:
+> -			break;
+> -		}
+> -	}
+> -
+> -
+>  	rdmsr(MSR_IA32_VMX_BASIC, vmx_msr_low, vmx_msr_high);
+>  
+>  	/* IA-32 SDM Vol 3B: VMCS size is never greater than 4kB. */
+> @@ -4184,6 +4185,10 @@ static u32 vmx_vmentry_ctrl(void)
+>  			  VM_ENTRY_LOAD_IA32_EFER |
+>  			  VM_ENTRY_IA32E_MODE);
+>  
+> +
+
+Extra line.
+
+> +	if (cpu_has_perf_global_ctrl_bug())
+> +		vmentry_ctrl &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+> +
+>  	return vmentry_ctrl;
+>  }
+>  
+> @@ -4198,6 +4203,10 @@ static u32 vmx_vmexit_ctrl(void)
+>  	if (vmx_pt_mode_is_system())
+>  		vmexit_ctrl &= ~(VM_EXIT_PT_CONCEAL_PIP |
+>  				 VM_EXIT_CLEAR_IA32_RTIT_CTL);
+> +
+> +	if (cpu_has_perf_global_ctrl_bug())
+> +		vmexit_ctrl &= ~VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+> +
+>  	/* Loading of EFER and PERF_GLOBAL_CTRL are toggled dynamically */
+>  	return vmexit_ctrl &
+>  		~(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL | VM_EXIT_LOAD_IA32_EFER);
+> @@ -8113,6 +8122,11 @@ static __init int hardware_setup(void)
+>  	if (setup_vmcs_config(&vmcs_config, &vmx_capability) < 0)
+>  		return -EIO;
+>  
+> +	if (cpu_has_perf_global_ctrl_bug()) {
+
+Curly braces not needed.
+
+> +		pr_warn_once("kvm: VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL "
+> +			     "does not work properly. Using workaround\n");
+> +	}
+> +
+>  	if (boot_cpu_has(X86_FEATURE_NX))
+>  		kvm_enable_efer_bits(EFER_NX);
+>  
+> -- 
+> 2.35.3
+> 

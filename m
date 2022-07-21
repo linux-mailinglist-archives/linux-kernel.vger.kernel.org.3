@@ -2,86 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B647A57CDA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A8257CDA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiGUO3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
+        id S229751AbiGUOaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiGUO3k (ORCPT
+        with ESMTP id S232198AbiGUO3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:29:40 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C238484EED
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:29:37 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id u19so872133ilk.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=dv5Xa3sw79SKXhsKD0ky5VXyt/Mi380ArH09DvLLu8Y=;
-        b=1C7Jn5oEOCUSUrknL+Aia81kMhNerZHzhQ/ugPmRb8IiJ5sklVKgQ9M98aigtTU8yN
-         eywP/b4dHJfbilEyHZ2I2bNQCoGbB/ZU9rvnjfV715QEnkPCDhcQQWw+Gr2aZD4Ju+Az
-         IbbWFbc6LRNXamSm3AQF3DUjsg1bqFN9rnpbOFH9wYMMF3qtxexCnbedtPVP669T5c3G
-         5HdbSYo/kPzxiEU/LNQdVFJ3noo+IidPjjwI9kxF28yChhJB3plcD9LCDBblmaMlH4uY
-         soFq+1tTkfNLFdBSr9fQqSYHvga/CJRhL5ePJZZaFsxRHdctPHetRfaNaetbiWhLiRa5
-         zDNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=dv5Xa3sw79SKXhsKD0ky5VXyt/Mi380ArH09DvLLu8Y=;
-        b=66S7bQ9mHGscaoOuYKVp2pQtZwryXd0kRtHAEATQCAzW5Hs7Ik+0/zy+saAk+g8S9r
-         3jdUyfS4EuL3pj/L3bYE/2qiEIuGv92TOgDFAYGGl7zdoMjtk41KgZ5VV43TJszLpLlw
-         XWYOo0xl/pdlyT+dpgH1r8rx5Q71f2cRoIXvor4lTDKSXpqlTa4x9gjZrcEG3Gougf/X
-         sTiUmqd64MpUKBoutK7iMwMnV2r9fl8SRjH8tc8DWzjSnwhyfVLSDDMhMrzGqcN4qXuF
-         BqJxxEBLa+weVUWO7eLdrxNBkxaItsj/xlo40+Ez7aj3A9agKEt2cSh7lFLn/yL7v7xA
-         ZYHw==
-X-Gm-Message-State: AJIora9har6q1Peb6h4asbCI6hjhtNX4Fx+x1PeRzvKv5Tphhv85oVSE
-        rp/6mWTIDJrbgvPUC2Jr7e+jow==
-X-Google-Smtp-Source: AGRyM1tTwb9Uc51X/JBwgiwuTs/fv8uITklVuIU49soA7CMiAzlJW6SnkT7kJxdJY4GiwMG+UiL0oA==
-X-Received: by 2002:a05:6e02:152a:b0:2dc:3984:196e with SMTP id i10-20020a056e02152a00b002dc3984196emr20553813ilu.228.1658413777054;
-        Thu, 21 Jul 2022 07:29:37 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id a18-20020a92c712000000b002dd16300beasm381381ilp.51.2022.07.21.07.29.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 07:29:36 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, dylany@fb.com, asml.silence@gmail.com
-Cc:     Kernel-team@fb.com, linux-kernel@vger.kernel.org,
-        mail.dipanjan.das@gmail.com
-In-Reply-To: <20220721110115.3964104-1-dylany@fb.com>
-References: <20220721110115.3964104-1-dylany@fb.com>
-Subject: Re: [PATCH] io_uring: fix free of unallocated buffer list
-Message-Id: <165841377614.7746.5269980516216984960.b4-ty@kernel.dk>
-Date:   Thu, 21 Jul 2022 08:29:36 -0600
+        Thu, 21 Jul 2022 10:29:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB77381B2D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:29:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9F9C1042;
+        Thu, 21 Jul 2022 07:29:52 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.86.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 233D33F73D;
+        Thu, 21 Jul 2022 07:29:51 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 15:29:49 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Subject: Re: [PATCH 2/7] sched/uclamp: Make task_fits_capacity() use
+ util_fits_cpu()
+Message-ID: <20220721142949.fqmabrjwylkuoltw@wubuntu>
+References: <20220629194632.1117723-1-qais.yousef@arm.com>
+ <20220629194632.1117723-3-qais.yousef@arm.com>
+ <CAKfTPtAxK=NGbpQkiW8-tx3kEwp-M7LAr1Rq_kdWDdsSq7Hd9A@mail.gmail.com>
+ <20220712104843.frbtkgkiftaovcon@wubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220712104843.frbtkgkiftaovcon@wubuntu>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 04:01:15 -0700, Dylan Yudaken wrote:
-> in the error path of io_register_pbuf_ring, only free bl if it was
-> allocated.
+On 07/12/22 11:48, Qais Yousef wrote:
+> On 07/11/22 15:09, Vincent Guittot wrote:
+> > On Wed, 29 Jun 2022 at 21:48, Qais Yousef <qais.yousef@arm.com> wrote:
 > 
+> [...]
 > 
+> > > @@ -8502,15 +8504,16 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+> > >         trace_sched_cpu_capacity_tp(cpu_rq(cpu));
+> > >
+> > >         sdg->sgc->capacity = capacity;
+> > > -       sdg->sgc->min_capacity = capacity;
+> > > -       sdg->sgc->max_capacity = capacity;
+> > > +       sdg->sgc->min_capacity_cpu = cpu;
+> > > +       sdg->sgc->max_capacity_cpu = cpu;
+> > 
+> > you make these fields useless. There is only one cpu per sched_group
+> > at this level so you don't need to save the twice cpu number of the
+> > nly cpu of this group
+> 
+> Ah, so we can use group->asym_prefer_cpu then?
+> 
+> I think I got confused and thought we could cover multiple capacity levels
+> there.
+> 
+> > >  }
+> > >
+> > >  void update_group_capacity(struct sched_domain *sd, int cpu)
+> > >  {
+> > > -       struct sched_domain *child = sd->child;
+> > >         struct sched_group *group, *sdg = sd->groups;
+> > > -       unsigned long capacity, min_capacity, max_capacity;
+> > > +       struct sched_domain *child = sd->child;
+> > > +       int min_capacity_cpu, max_capacity_cpu;
+> > > +       unsigned long capacity;
+> > >         unsigned long interval;
+> > >
+> > >         interval = msecs_to_jiffies(sd->balance_interval);
+> > > @@ -8523,8 +8526,7 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
+> > >         }
+> > >
+> > >         capacity = 0;
+> > > -       min_capacity = ULONG_MAX;
+> > > -       max_capacity = 0;
+> > > +       min_capacity_cpu = max_capacity_cpu = cpu;
+> > >
+> > >         if (child->flags & SD_OVERLAP) {
+> > >                 /*
+> > > @@ -8536,29 +8538,44 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
+> > >                         unsigned long cpu_cap = capacity_of(cpu);
+> > >
+> > >                         capacity += cpu_cap;
+> > > -                       min_capacity = min(cpu_cap, min_capacity);
+> > > -                       max_capacity = max(cpu_cap, max_capacity);
+> > > +                       if (cpu_cap < capacity_of(min_capacity_cpu))
+> > > +                               min_capacity_cpu = cpu;
+> > > +
+> > > +                       if (cpu_cap > capacity_of(max_capacity_cpu))
+> > > +                               max_capacity_cpu = cpu;
+> > >                 }
+> > >         } else  {
+> > >                 /*
+> > >                  * !SD_OVERLAP domains can assume that child groups
+> > >                  * span the current group.
+> > >                  */
+> > > +               unsigned long min_capacity = ULONG_MAX;
+> > > +               unsigned long max_capacity = 0;
+> > >
+> > >                 group = child->groups;
+> > >                 do {
+> > >                         struct sched_group_capacity *sgc = group->sgc;
+> > > +                       unsigned long cpu_cap_min = capacity_of(sgc->min_capacity_cpu);
+> > > +                       unsigned long cpu_cap_max = capacity_of(sgc->max_capacity_cpu);
+> > 
+> > By replacing sgc->min_capacity with sgc->min_capacity_cpu, the
+> > min_capacity is no more stable and can become > max_capacity
+> 
+> Right.
+> 
+> > 
+> > >
+> > >                         capacity += sgc->capacity;
+> > > -                       min_capacity = min(sgc->min_capacity, min_capacity);
+> > > -                       max_capacity = max(sgc->max_capacity, max_capacity);
+> > > +                       if (cpu_cap_min < min_capacity) {
+> > > +                               min_capacity = cpu_cap_min;
+> > > +                               min_capacity_cpu = sgc->min_capacity_cpu;
+> > > +                       }
+> > > +
+> > > +                       if (cpu_cap_max > max_capacity) {
+> > > +                               max_capacity = cpu_cap_max;
+> > > +                               max_capacity_cpu = sgc->max_capacity_cpu;
+> > > +                       }
+> > > +
+> > >                         group = group->next;
+> > >                 } while (group != child->groups);
+> > >         }
+> > >
+> > >         sdg->sgc->capacity = capacity;
+> > > -       sdg->sgc->min_capacity = min_capacity;
+> > > -       sdg->sgc->max_capacity = max_capacity;
+> > > +       sdg->sgc->min_capacity_cpu = min_capacity_cpu;
+> > > +       sdg->sgc->max_capacity_cpu = max_capacity_cpu;
+> > >  }
+> > >
+> > >  /*
+> > > @@ -8902,7 +8919,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+> > >          * internally or be covered by avg_load imbalance (eventually).
+> > >          */
+> > >         if (sgs->group_type == group_misfit_task &&
+> > > -           (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
+> > > +           (!capacity_greater(env->dst_cpu, sg->sgc->max_capacity_cpu) ||
+> > >              sds->local_stat.group_type != group_has_spare))
+> > >                 return false;
+> > >
+> > > @@ -8986,7 +9003,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+> > >          */
+> > >         if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
+> > >             (sgs->group_type <= group_fully_busy) &&
+> > > -           (capacity_greater(sg->sgc->min_capacity, capacity_of(env->dst_cpu))))
+> > > +           (capacity_greater(sg->sgc->min_capacity_cpu, env->dst_cpu)))
+> > >                 return false;
+> > >
+> > >         return true;
+> > > @@ -9108,7 +9125,7 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+> > >
+> > >         /* Check if task fits in the group */
+> > >         if (sd->flags & SD_ASYM_CPUCAPACITY &&
+> > > -           !task_fits_capacity(p, group->sgc->max_capacity)) {
+> > > +           !task_fits_cpu(p, group->sgc->max_capacity_cpu)) {
+> > 
+> > All the changes and added complexity above for this line. Can't you
+> > find another way ?
+> 
+> You're right, I might have got carried away trying to keep the logic the same.
+> 
+> Can we use group->asym_prefer_cpu or pick a cpu from group->sgc->cpumask
+> instead?
+> 
+> I'll dig more into it anyway and try to come up with simpler alternative.
 
-Applied, thanks!
+Actually we can't.
 
-[1/1] io_uring: fix free of unallocated buffer list
-      commit: ec8516f3b7c40ba7050e6b3a32467e9de451ecdf
+I can keep the current {max,min}_capacity field and just add the new
+{max,min}_capacity_cpu and use them where needed. Should address your concerns
+this way? That was actually the first version of the code, but then it seemed
+redundant to keep both {max,min}_capacity and {max,min}_capacity_cpu.
 
-Best regards,
--- 
-Jens Axboe
+OR
+
+I can add a new function to search for max spare capacity cpu in the group.
+
+Preference?
 
 
+Thanks!
+
+--
+Qais Yousef

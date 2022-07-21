@@ -2,143 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207D457C813
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9409557C7F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiGUJud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S232609AbiGUJpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232763AbiGUJu0 (ORCPT
+        with ESMTP id S232345AbiGUJpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:50:26 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F62F3A480;
-        Thu, 21 Jul 2022 02:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658397026; x=1689933026;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=Ac+0RLuL49DbuWul8+wP6iRaArHsOfPE0tmeiZTP7OA=;
-  b=hTz9YotS9xWFXknZGPbV5OQvu8sG0LrT5rFevNkwwiIgKl6KwmDsQYRC
-   1TcBzqSLV5bi8LdQ1YXvkhw19UIsscuzprhts6aeemNB+1Sp5LRIFi8/z
-   sZQTus0dU8u165S/MHo5Z+qv2WRisKjvSYsjG6iruBw7hgnxXK86+nc7W
-   s8Jz5ywGQDwv3m2xJaX4Eqbl/td8a8kbfSpe/6Q362yFc3C1s8mUacbs9
-   js/KZrommMztWrZ0ecc+oSf1FtOjH2oFM6+xZ+ydi/gsnPDrnMDShmbnE
-   c0IGYgBTSP/m2Exoznwsuh9tCWa7PA4JGU80KIxHRUKUDXgfBjxa343bZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="287752644"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="287752644"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 02:50:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="626050085"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2022 02:50:12 -0700
-Date:   Thu, 21 Jul 2022 17:45:23 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, mhocko@suse.com
-Subject: Re: [PATCH v6 6/8] KVM: Handle page fault for private memory
-Message-ID: <20220721094523.GC153288@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-7-chao.p.peng@linux.intel.com>
- <b3ce0855-0e4b-782a-599c-26590df948dd@amd.com>
- <20220624090246.GA2181919@chaop.bj.intel.com>
- <CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com>
- <20220630222140.of4md7bufd5jv5bh@amd.com>
- <4fe3b47d-e94a-890a-5b87-6dfb7763bc7e@intel.com>
- <Ysc9JDcVAnlVrGC8@google.com>
- <5d0b9341-78b5-0959-2517-0fb1fe83a205@intel.com>
- <CAGtprH9knCr++C7jgXYCi1zfYcreip1uun-d+eucjEQy9xymNg@mail.gmail.com>
+        Thu, 21 Jul 2022 05:45:50 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2141408C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:45:49 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id u14so1194591lju.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rATgYaRc06yup3B9vQoeZCRxplvBjG7cGBY1+cZOcR0=;
+        b=lQtaZPe4+cFvvzkekGvWGs1/h1VvwEnVqlZbeIzGv47QEApdtNWinAkHczWThbeHan
+         y4WnW9ZrUXUfBtR8qo8nI7Ozu6RrqpmV4x/3IeBD3MHphexBmhZ7/pbDs6cWBB9oheQ7
+         S8iLgkk9jKb1hQDQ2j+3N+X2gA+D8dNgr4pmct7Yl83DCkhuZTSCjJElFZLt4azjUr4w
+         IlWV7OM/sK5olfXpXp8iWIIUkSdia7JwcOrMPlLHksQ+lxRkJ1x+XJ0CYMSxfj7T0LEb
+         wx4V309mo09SWsr5yDhbNFYjIzNp6Nxeb9F9ChPy5Mj1XvUgFs3sCPEdDHyWcq4Li8+w
+         MK0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rATgYaRc06yup3B9vQoeZCRxplvBjG7cGBY1+cZOcR0=;
+        b=zaw/Jpe55HAhvD8tS7KQcKc9n+R/XTyGX7Ku8Rldudxx++gFKlulAJD/i04aBnK875
+         8Cq0y7XfSrf7AQptPgPHF/FYE0hqGxn1woi+l3s6MlRrGTs2JAZXqSCp9G43PIxKn86c
+         J+Oa2EZACJQ7f0UjkuOg3SpyQt3RYlEkeVPFNyMOa4zDyhS97DlcpKh4juxyZiYfvTxY
+         nxiUso3TXJ8r2FxI0mKmVi+KKMbuTz7pzPJSiGxtOy2MjktWrKkO6a7v28036hUsl1Ve
+         FueRwsT8rp6idh7DhvxtvgZxig4/q5VSgsvzwUkhQ6WfCTPT3VSZLHCVsmMfmkTfRHHh
+         5Cfg==
+X-Gm-Message-State: AJIora+iQTxobL0TVnx6Fyfyywdur/u3x0NoKu+MomL5O2vnSnOPYs7m
+        eLTjTTdJuLOJeE/Mr/Sc5m09Pj6c9O0DQXLdgZAeEg==
+X-Google-Smtp-Source: AGRyM1sB1eQ5rWzg3axoBKsTIsw/olo2zDoZljUFFhOhipu0awj1+20YmiCgzI410ZaVmMyLHQpqpg40o4F+tQWhxGU=
+X-Received: by 2002:a05:651c:12cb:b0:25b:fa3f:c3f with SMTP id
+ 11-20020a05651c12cb00b0025bfa3f0c3fmr19485233lje.364.1658396747462; Thu, 21
+ Jul 2022 02:45:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGtprH9knCr++C7jgXYCi1zfYcreip1uun-d+eucjEQy9xymNg@mail.gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220719054729.2224766-1-apatel@ventanamicro.com>
+ <20220719054729.2224766-3-apatel@ventanamicro.com> <315d9850-e660-f71e-2321-b0684f7df950@sholland.org>
+In-Reply-To: <315d9850-e660-f71e-2321-b0684f7df950@sholland.org>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Thu, 21 Jul 2022 15:15:33 +0530
+Message-ID: <CAK9=C2UZ_o+DJ3s0Q5ET43CYhfu8A4TTfosor1wyUdPO2mjn_g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] clocksource: timer-riscv: Set CLOCK_EVT_FEAT_C3STOP
+ based on DT property
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 04:08:10PM -0700, Vishal Annapurve wrote:
-> > > Hmm, so a new slot->arch.page_attr array shouldn't be necessary, KVM can instead
-> > > update slot->arch.lpage_info on shared<->private conversions.  Detecting whether
-> > > a given range is partially mapped could get nasty if KVM defers tracking to the
-> > > backing store, but if KVM itself does the tracking as was previously suggested[*],
-> > > then updating lpage_info should be relatively straightfoward, e.g. use
-> > > xa_for_each_range() to see if a given 2mb/1gb range is completely covered (fully
-> > > shared) or not covered at all (fully private).
-> > >
-> > > [*] https://lore.kernel.org/all/YofeZps9YXgtP3f1@google.com
-> >
-> > Yes, slot->arch.page_attr was introduced to help identify whether a page
-> > is completely shared/private at given level. It seems XARRAY can serve
-> > the same purpose, though I know nothing about it. Looking forward to
-> > seeing the patch of using XARRAY.
-> >
-> > yes, update slot->arch.lpage_info is good to utilize the existing logic
-> > and Isaku has applied it to slot->arch.lpage_info for 2MB support patches.
-> 
-> Chao, are you planning to implement these changes to ensure proper
-> handling of hugepages partially mapped as private/shared in subsequent
-> versions of this series?
-> Or is this something left to be handled by the architecture specific code?
+On Tue, Jul 19, 2022 at 12:12 PM Samuel Holland <samuel@sholland.org> wrote:
+>
+> Hi Anup,
+>
+> On 7/19/22 12:47 AM, Anup Patel wrote:
+> > We should set CLOCK_EVT_FEAT_C3STOP for a clock_event_device only when
+> > riscv,timer-always-on DT property is not present for the corresponding
+> > CPU.
+>
+> The timer maintaining its context (and continuing to count) during non-retentive
+> CPU suspend is not sufficient to drop CLOCK_EVT_FEAT_C3STOP.
+>
+> Another requirement is that the timer interrupt is generated and routed outside
+> the CPU's power/reset domain, to whatever hardware is responsible for turning
+> the CPU back on. It does not matter if the timer interrupt fires, if that
+> interrupt cannot wake up the CPU.
+>
+> So something closer to "riscv,timer-can-wake-cpu" would be a more accurate
+> property name for how you are using it.
 
-Ah, the topic gets moved to a different place. I should update here.
-There were more discussions under TDX KVM patch series and I actually
-just sent out the draft code for this:
+I agree with your suggestion. Let's make this DT property name aligned with
+what it is doing.
 
-https://lkml.org/lkml/2022/7/20/610
+>
+> And even then, that ability is a property of the SBI implementation, not just
+> the hardware. In the motivating example for the flag (Allwinner D1), the CLINT
+> cannot wake the CPU from reset, but the SoC contains other MMIO timers that can.
+> So the capability of the SBI timer extension depends on which timer hardware the
+> SBI implementation chooses to use. So I am not sure that the property belongs in
+> the CPU node.
+>
+> Maybe it makes sense to report this capability via a function in the SBI timer
+> extension?
 
-That patch is based on UPM v7 here. If I can get more feedbacks there
-then I will include an udpated version in UPM v8.
+Well, the timer interrupt not firing in non-retentive suspend is an attribute of
+underlying platform and not of the SBI implementation (firmware/hypervisor)
+hence should be described in DT or ACPI.
 
-If you have bandwdith, you can also play with that patch, any feedback
-is welcome.
+Also, the timer interrupt not firing in non-retentive suspend is also possible
+with RISC-V Sstc extension (i.e stimecmp CSRs) so the proposed DT
+property will be useful for platforms with Sstc extension as well.
 
-Chao
-> 
+Regards,
+Anup
+
+>
 > Regards,
-> Vishal
+> Samuel
+>
+> > This way CLOCK_EVT_FEAT_C3STOP feature is set for clock_event_device
+> > based on RISC-V platform capabilities rather than having it set for
+> > all RISC-V platforms.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  drivers/clocksource/timer-riscv.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> > index 593d5a957b69..3015324f2b59 100644
+> > --- a/drivers/clocksource/timer-riscv.c
+> > +++ b/drivers/clocksource/timer-riscv.c
+> > @@ -34,7 +34,7 @@ static int riscv_clock_next_event(unsigned long delta,
+> >  static unsigned int riscv_clock_event_irq;
+> >  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
+> >       .name                   = "riscv_timer_clockevent",
+> > -     .features               = CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
+> > +     .features               = CLOCK_EVT_FEAT_ONESHOT,
+> >       .rating                 = 100,
+> >       .set_next_event         = riscv_clock_next_event,
+> >  };
+> > @@ -65,9 +65,13 @@ static struct clocksource riscv_clocksource = {
+> >  static int riscv_timer_starting_cpu(unsigned int cpu)
+> >  {
+> >       struct clock_event_device *ce = per_cpu_ptr(&riscv_clock_event, cpu);
+> > +     struct device_node *np = of_get_cpu_node(cpu, NULL);
+> >
+> >       ce->cpumask = cpumask_of(cpu);
+> >       ce->irq = riscv_clock_event_irq;
+> > +     if (!of_property_read_bool(np, "riscv,timer-always-on"))
+> > +             ce->features |= CLOCK_EVT_FEAT_C3STOP;
+> > +     of_node_put(np);
+> >       clockevents_config_and_register(ce, riscv_timebase, 100, 0x7fffffff);
+> >
+> >       enable_percpu_irq(riscv_clock_event_irq,
+> >
+>

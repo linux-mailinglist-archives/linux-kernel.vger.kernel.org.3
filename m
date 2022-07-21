@@ -2,327 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AFF57D3CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDEE57D3CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiGUTGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 15:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S231863AbiGUTH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 15:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGUTF7 (ORCPT
+        with ESMTP id S229436AbiGUTH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 15:05:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372A2140F4;
-        Thu, 21 Jul 2022 12:05:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE3F9B82646;
-        Thu, 21 Jul 2022 19:05:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF6FC3411E;
-        Thu, 21 Jul 2022 19:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658430355;
-        bh=/cYlqnnP2Keta3V+NNEZPfIrCOKOCQmj26TBYnq1Ej4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VrIHZzx6nWKSO9yerce/vXNXa/9EMhq3eYDNE98yPitgRQ9a9tMIGkwpNqeulBflD
-         F/3yjGAudhhgvRB7ga6MA0ezF98T/CVPZGdHUGVotgnv1RvILRT7jIt1/Ho4XFKQvQ
-         mzYnuXZjdLadU2LKTghsthJ1gF2+wGuSoUUqWiwQXXHe4Owm5V6fXEr/zWvDA+2gr7
-         MEoEsrd+hEGtmNEANtY/ryQQ3f/tyCUQ3QygcNnyh/m0ZaObkDl/nQnKCkHBezfgrE
-         2+QQTBXd8sE7Zk5cETus5RG55gZeDqYI/mxcGsUV1OxeEN0+LcYoPBDnRrGq3Oe2G3
-         zTqc7tVthMW/A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A092D40374; Thu, 21 Jul 2022 16:05:52 -0300 (-03)
-Date:   Thu, 21 Jul 2022 16:05:52 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH 3/6] perf lock: Add lock aggregation enum
-Message-ID: <YtmjkCbvemjvlPBN@kernel.org>
-References: <20220721043644.153718-1-namhyung@kernel.org>
- <20220721043644.153718-4-namhyung@kernel.org>
- <Ytmi4otIpXA+zNSx@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 21 Jul 2022 15:07:26 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D1187F74
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:07:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XvkD5gKBfRiMQsvAkwbgSlJQOVDON1Jne+tMM/adY9gOEfKrP3OZgEXv5z4MtfreH/QDdwKdwUNlHefvayGTN6Pe+dJskHxygi3xNh3pBjaivo0h//eVVXLnIWYzShYv2Ve1TOxGM6STH3nhfw065bQXNU6cqSEmBPgpF+6nCfaXL18MEyX8ym0MjgbIWl7jl83tUAErSz/BH3bKgd51xXk02iXPaTX2uC2yL35smFodSizMTp6Fl5ahbJpfoyAG+Mxwl/W8Yy7A47YiPDxgwfW7AsMPLie1IR3WwNPzLE+7SaRhOObncAQrOqEpH3Wa/anVYd7pvZRhLfJbAgwEOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s5PxrXyWRtcFbOAy18160snTfCYwoU1/tAbtD/yUG/o=;
+ b=gW04a7zsgJBOYhokMq20xCtzGxS8ALNvv/vQK/nDW5EJIxSjGZ9PcYWA6hufVdJ84m+DMt76lrnZBfKm1wZm1JA6IOT52wvepCiuJie84e4k9wMzFsJYL2DbHPmmvI4JeJo74u1diJX8I0pX/2AAZxkBm+MRwwmR//8lmzOQmwdgIaComQQuASLPDEgvqlkaRrwtCXE77gQUWaYI+x5DlxQQjkQ4iANQDQBmA+oj8Crcl7Uv5133AQk/bZS7Qd2regKmyIYOtTMzyBzR8GJGswpvkSm0RR+NMEXTKM6Vn+a9K4C4DaAxbMFet+kcqag+tUEGlMTw03JcAa0DHcIimQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s5PxrXyWRtcFbOAy18160snTfCYwoU1/tAbtD/yUG/o=;
+ b=F8MTDqmtkDQPdSB/6mxplLFIecykky2Z0v9zFHPL+68N/HXllzDO+uIuhtP2CRcDwJkl1B21kZxEpF+tVxNz3KaL0y+XMgi9W92vPbu7A3uzev/y9FPvUhb+9ubWdHKll8+LQUtB/xczb3cZCzB9I4jVxoRh8bajUHKgTfxz8RU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+ by DM4PR12MB5376.namprd12.prod.outlook.com (2603:10b6:5:39f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Thu, 21 Jul
+ 2022 19:07:22 +0000
+Received: from MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::d122:1dae:8445:2e43]) by MN2PR12MB2941.namprd12.prod.outlook.com
+ ([fe80::d122:1dae:8445:2e43%7]) with mapi id 15.20.5438.023; Thu, 21 Jul 2022
+ 19:07:22 +0000
+Message-ID: <c13ddeb3-2b34-09b2-ffb7-6eb7b38e2859@amd.com>
+Date:   Thu, 21 Jul 2022 15:07:14 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/5] drm/amd/display: FPU cleanup in clk_mgr files for
+ powerpc
+Content-Language: en-US
+To:     Melissa Wen <mwen@igalia.com>, airlied@linux.ie,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        daniel@ffwll.ch, harry.wentland@amd.com, sunpeng.li@amd.com,
+        Xinhui.Pan@amd.com
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        kernel-dev@igalia.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220720193208.1131493-1-mwen@igalia.com>
+From:   Rodrigo Siqueira Jordao <Rodrigo.Siqueira@amd.com>
+In-Reply-To: <20220720193208.1131493-1-mwen@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ytmi4otIpXA+zNSx@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BL0PR01CA0003.prod.exchangelabs.com (2603:10b6:208:71::16)
+ To MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7dbc2177-3553-4174-b5c7-08da6b4c3ddb
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5376:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2bfUDkc1St0/KxNbyFX/zfCXDWnov4jEOJDH8wf/HZv4qyJHu8zq924gfedLTIhJFYIzCx+ZXFKcXPuvpIHeS/kdTrX/dGVcA+xAs+4Rn+SEtdiR0evYKpRguIdPN59UGejOUeT5YZplS9Z17gEwwHtUwK9iJS2esgAbtEPJqsU/aNfAABsfdc2pAZ5SUYpjNY4zMO3IUmhURWUXTv5Ceit181oqThg5AH2d7BqpvTHkb6d7Yn2nW324v3Qx3LmIt7sK50gw7hot9D2zFDPYyUi/KIX+Na1N+ZlAcqJcvIjBG5+JZnlm7o0sTYiqV7V9UVIzHEMqzHPu8SIXHq4NIkvF25rlEm1cw7Own2ZTMFFXFZyBZhSA8c81dZAA/CrJ0h0q/Jm+1IKmZDRTN6ZX21LdX6lOrw4BRV52W2Blf9+m9vcEIyEslLq/aLcCPoG9+CwzSdWkoV9YzTlPz1pyAyOgkOEguYizzPB6fg3f+abYa9GfIRZCdyB986A/mMerVO930hx7/5/YdBEX1XTB5sJOeLnSQQLfOe1Aqx7lBADgQ4iR7aPJCiDi5y/lPwil4pPBkU0YG/sKyDN/KG5XUveFLfk513vuP2GBwpsg4r5cum6L0uQr8nEmWaT5ChJbe1ruhx10znRYZdZfe9CiOyTWF2s9Ic+ADVVsJzpMyoYAnvz/EEBD0oVaMiAGmKrJB+HbXwzysDcQVYIgST/ReXmwgLsClkGfjwYKOkZ8wJ2yIDrC6sqdWeDr5gv2mMI2DGKc5T4zeRJX+60LgDUkj5LkmdCvp6p0Rf0Iyz9i5/y44NwsjRzFrtej6kW+ZctfNwDBbaVgvr1PlrdFP8s9b7NxiNHd5u+tWwJDAX5am0OftHBwjuU3M/RJHCdm+wCk/jLrhx3st4R/Pe3AHael1A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(966005)(26005)(6486002)(2906002)(38100700002)(6666004)(4326008)(6506007)(8676002)(53546011)(66556008)(66574015)(66946007)(66476007)(86362001)(6512007)(31696002)(5660300002)(8936002)(36756003)(316002)(186003)(83380400001)(2616005)(54906003)(478600001)(6636002)(41300700001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VURSQlRjQS9Kb0RMSXh3UTNZVmZnZW1xM2dBT1FtaXE0VGg0RVA1VU93bVFK?=
+ =?utf-8?B?d0h3VmdGbnkrTDN4MnNBYkJJUGY3Y0ppTExNNXNiMmRjcGxyeU9DWDUvZFor?=
+ =?utf-8?B?OTZXd3B2cStwcWo2UUhPR3UwK1pHdyttdFllT1FkVE0wZkl5bStDRjRKeUt6?=
+ =?utf-8?B?M2Zvdk9nQ3lCWDU5Ky9DallxRWwxZk9RS2FQL2ZaZVlqZWhGNWlZbFZoZTJC?=
+ =?utf-8?B?MjVBa1VJc1ZiL1BCVkQwaEtTUldBbDU0cDd0UVQwNFNoenY2eGxCZllGbndQ?=
+ =?utf-8?B?QjkxZUR5UmFBb1VjMldhcU9NanN2ZUtBdnhKQ3Evb1NsNEZ4TTNybG9kdmxW?=
+ =?utf-8?B?c0MwQ1dKV2lBSHN5V3ZEL3oxNHJKRXhrS0dmWWFaV2FtVjRPVzdHL0YxYTNJ?=
+ =?utf-8?B?d0dRY3BZUURPWVBjYjlzRzdUdmt5bExRY1Y0VCtFTjJkVEMrSWNSMGdDOXhj?=
+ =?utf-8?B?VmZaNXpUV3lqMFB2c002U1BwVjJ6QmJDdlBPOUNzeDZkVXBKUExCUjNEak9l?=
+ =?utf-8?B?S1pxTEV1dlBldEc1K290WEU3TW9RSFdubkNxalhvODNCVFhRa0pNZkQxaVJy?=
+ =?utf-8?B?YVBYSDZCaVRhcm80YWU1ek9Tby9pSlpyd0ZhSU0rQzNTQURNY2FYWDduUWVl?=
+ =?utf-8?B?ODJJbTY0REhFRkFCTWVjY01XV3NHUFFHVnR2RGZmT002S1FWWDBlbmg3VFJM?=
+ =?utf-8?B?d1ZsWWRsTXlVSWpiRnBISlg2RnYxL25zZkFMTEZrNzliWGlYZzhJRDVLek5G?=
+ =?utf-8?B?eE5SNTRKQ0FHeW5jdzVQbUZORmZ6cTNUYnBPdHIzdFdZc2h4WlpONXVkWm1V?=
+ =?utf-8?B?SWI5NkMxZVNzaDRaMW1JMHFjbWo3VzZOL3J3U0UyMUM3cmk5N2pXTHJ6RHlr?=
+ =?utf-8?B?MHhNWmhJSXFDY1d2N2RRYUhiZlpzS2dMNFJ5bnExYjRJVHhKS2c5WjFoUGJM?=
+ =?utf-8?B?Z3FEci9xRGEwSFFNTDRzOW9zUWVsK2ZzWDQ4d293cittUjZvZURZK1BuSWdm?=
+ =?utf-8?B?MlQvSHhHRnVMeWlRTEZQZG1USHNmVFNOaDZKNlRVMEp5SWtTVkwrVUhhUi9a?=
+ =?utf-8?B?QVNQdDFJdm81L0RESC9oQjQ5THd3WUxSZFlobU1PQk9nZ1NCR3RvV1NFZjFn?=
+ =?utf-8?B?Tkd2azZOOGRoM2VGR2tKVmc0am5FOS9Xc0pPWnpPQ0ppWEZXOGZLa3kzN3Vj?=
+ =?utf-8?B?amZ4Y1VRcDlNVmEyYWpQOU5TbjdJc2xqVkJuaFZXMUpQU2FpWWJ0MGhVZ1lI?=
+ =?utf-8?B?cE9BVC9La1NMaldhTG9NTG9lcEpDTStJaUVrRmV6eGdhaUxwME1uc3RKcys5?=
+ =?utf-8?B?NFRzUkltditjUkVRYXU0YTdpZlRpV21LdkYxaDMwekoyTWlGamptVVNFT01q?=
+ =?utf-8?B?U0dtaEZISmhTQmRobWVWSSt3cjI1RHF2SERyTFB6Y2ZCNUxvT0xiVy8ydkJm?=
+ =?utf-8?B?ZEZNOVA3azdaSTU5eWJ2UVQvRWtuekN0N3lVWHI0VXVQMUxSQkFudGNNTGpj?=
+ =?utf-8?B?T1I1cUlUV0ZobzlPcysvZVJ1U3Ura05DalUyYkYreXlPRkFTejNOYXlGNERT?=
+ =?utf-8?B?cTg3MWNDOEJxSkEwSmFGRldkcFdsZkNORjlBVGtXcFFaamUxdVkrZFZQamdk?=
+ =?utf-8?B?aTB6SkRiTDIzK29ZNDlya2Z6L2ExQ0oyZkc0RnZjbjNrb3lVZVMyR05tdTN6?=
+ =?utf-8?B?S05leHIzcWtkSDBEdDBJbWd6YUxIL29tekRtaCtiUS9QbzdGWmNLamQwNTVq?=
+ =?utf-8?B?bk5wZmhrU3dZd00vV2M2dkdtVWlTOWtiSFhGRkFjeExCS3JOM0c5QWoyNUdB?=
+ =?utf-8?B?OWptc2tZOEozYVBEQjM2Y2FDeWxQa0M3SER4RGZXTE5udmVOWlF3NTFzcUlh?=
+ =?utf-8?B?VWVwd09kak5Fc3ZLdC9YOHZSZ3V4N0pPSkdvamZZQTFtSk9reEtzZWpTOG52?=
+ =?utf-8?B?eFc5WUFPWUpod1l2K2NjblJmK2FYZHJKK1g3ZU96Tmx6aisyV2dOTmRaZDNi?=
+ =?utf-8?B?eTZjeWVnVnM4S2hLOUFsMnEreHpPcFV0NE5IY0ZaQ3NvenJNNHZldmFESURR?=
+ =?utf-8?B?YUFBTnZHOWV4N2V3Z0hOYXlqNVplK1JjVHgzZ1dob0ZVaDV5dWluNDZJRFhq?=
+ =?utf-8?Q?H6RnZtXzJgX04stHnExKmmF50?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7dbc2177-3553-4174-b5c7-08da6b4c3ddb
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 19:07:22.6935
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nmTyKh+dtHX2kSONbGTy6LvxGIz4PF+Z5pKcUfTAyw+6Nr4AGf4Mc/vP02tx/VZTXS+oIBCXG0gnlU0nuVMSqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5376
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Jul 21, 2022 at 04:02:58PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Jul 20, 2022 at 09:36:41PM -0700, Namhyung Kim escreveu:
-> > Introduce the aggr_mode variable to prepare the later code change.
-> > The default is LOCK_AGGR_ADDR which aggregate the result for the lock
-> > instances.  When -t/--threads option is given, it'd be set to
-> > LOCK_AGGR_TASK.  The LOCK_AGGR_CALLER is for the contention analysis
-> > and it'd aggregate the stat by comparing the callstacks.
+
+
+On 2022-07-20 15:32, Melissa Wen wrote:
+> An initial report from Guenter[1] shows some soft-fp vs hard-fp error
+> from DCN31 clk mgr for powerpc. I was not able to reproduce it
+> cross-compiling with gcc-powerpc-linux-gnu and gcc-11.3, but thanks to
+> Maíra tips, I can reproduce the issue using make.cross, as follows:
 > 
-> builtin-lock.c: In function ‘report_lock_contention_end_event’:
-> builtin-lock.c:1113:13: error: variable ‘key’ set but not used [-Werror=unused-but-set-variable]
->  1113 |         u64 key;
->       |             ^~~
-> cc1: all warnings being treated as errors
+> - wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> - chmod +x ~/bin/make.cross
+> - mkdir build_dir
+> - COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 ~/make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+
+Hi Melissa,
+
+I didn't know about these steps, I was trying to reproduce this issue by 
+using the standard cross compile package provided by my distro (Debian 
+testing and ArchLinux), and as a result, I was never able to see the 
+problem. Anyway, I can now reproduce this issue, thanks a lot.
+
+> with a config file generate by allmodconfig
 > 
+> So, the first patch fix the issue reported by Guenter. The second is
+> just a cleanup in dcn31_resource file to remove useless DC_FP_ wrapper.
+> Finally, the last three patches I'm removing the -mno-gnu-attribute
+> option, that was just hiding FPU-associated code in clk mgr files of
+> dcn21/30/301, and moving them to DML folder. This series doesn't cover
+> recent drivers dcn32/314.
+
+I validated this series in our internal CI by running multiple IGT tests 
+in numerous ASICs. Tomorrow we will also send some extra patches 
+associated with this FPU effort; hopefully, after that, we will finally 
+have all the FPU code under DML. Again, thanks a lot for your effort!
+
+Thanks
+Siqueira
+
+> Thanks Guenter, Maíra, Siqueira and Alex for all inputs on this
+> debugging process. Let me know your thoughts on this approach.
 > 
-> trying to fix
-
-Please take a look at this:
-
-builtin-lock.c: In function ‘report_lock_contention_end_event’:
-builtin-lock.c:1113:13: error: variable ‘key’ set but not used [-Werror=unused-but-set-variable]
- 1113 |         u64 key;
-      |             ^~~
-cc1: all warnings being treated as errors
-make[3]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/builtin-lock.o] Error 1
-make[2]: *** [Makefile.perf:660: /tmp/build/perf/perf-in.o] Error 2
-make[1]: *** [Makefile.perf:240: sub-make] Error 2
-make: *** [Makefile:113: install-bin] Error 2
-make: Leaving directory '/var/home/acme/git/perf/tools/perf'
-
- Performance counter stats for 'make -k BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin':
-
-     6,642,782,729      cycles:u
-    12,246,940,928      instructions:u            #    1.84  insn per cycle
-
-       2.513486078 seconds time elapsed
-
-       1.649124000 seconds user
-       1.272055000 seconds sys
-
-
-⬢[acme@toolbox perf]$ gcc -v
-Using built-in specs.
-COLLECT_GCC=/usr/bin/gcc
-COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/12/lto-wrapper
-OFFLOAD_TARGET_NAMES=nvptx-none
-OFFLOAD_TARGET_DEFAULT=1
-Target: x86_64-redhat-linux
-Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,objc,obj-c++,ada,go,d,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-12.1.1-20220507/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none --without-cuda-driver --enable-offload-defaulted --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
-Thread model: posix
-Supported LTO compression algorithms: zlib zstd
-gcc version 12.1.1 20220507 (Red Hat 12.1.1-1) (GCC)
-⬢[acme@toolbox perf]$ cat /etc/fedora-release
-Fedora release 36 (Thirty Six)
-⬢[acme@toolbox perf]$
-  
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/builtin-lock.c | 112 +++++++++++++++++++++++++++++++-------
-> >  1 file changed, 93 insertions(+), 19 deletions(-)
-> > 
-> > diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> > index 1de459198b99..551bad905139 100644
-> > --- a/tools/perf/builtin-lock.c
-> > +++ b/tools/perf/builtin-lock.c
-> > @@ -126,6 +126,12 @@ static struct rb_root		thread_stats;
-> >  static bool combine_locks;
-> >  static bool show_thread_stats;
-> >  
-> > +static enum {
-> > +	LOCK_AGGR_ADDR,
-> > +	LOCK_AGGR_TASK,
-> > +	LOCK_AGGR_CALLER,
-> > +} aggr_mode = LOCK_AGGR_ADDR;
-> > +
-> >  /*
-> >   * CONTENTION_STACK_DEPTH
-> >   * Number of stack trace entries to find callers
-> > @@ -622,12 +628,22 @@ static int report_lock_acquire_event(struct evsel *evsel,
-> >  	const char *name = evsel__strval(evsel, sample, "name");
-> >  	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
-> >  	int flag = evsel__intval(evsel, sample, "flags");
-> > +	u64 key;
-> >  
-> > -	/* abuse ls->addr for tid */
-> > -	if (show_thread_stats)
-> > -		addr = sample->tid;
-> > +	switch (aggr_mode) {
-> > +	case LOCK_AGGR_ADDR:
-> > +		key = addr;
-> > +		break;
-> > +	case LOCK_AGGR_TASK:
-> > +		key = sample->tid;
-> > +		break;
-> > +	case LOCK_AGGR_CALLER:
-> > +	default:
-> > +		pr_err("Invalid aggregation mode: %d\n", aggr_mode);
-> > +		return -EINVAL;
-> > +	}
-> >  
-> > -	ls = lock_stat_findnew(addr, name, 0);
-> > +	ls = lock_stat_findnew(key, name, 0);
-> >  	if (!ls)
-> >  		return -ENOMEM;
-> >  
-> > @@ -695,11 +711,22 @@ static int report_lock_acquired_event(struct evsel *evsel,
-> >  	u64 contended_term;
-> >  	const char *name = evsel__strval(evsel, sample, "name");
-> >  	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
-> > +	u64 key;
-> >  
-> > -	if (show_thread_stats)
-> > -		addr = sample->tid;
-> > +	switch (aggr_mode) {
-> > +	case LOCK_AGGR_ADDR:
-> > +		key = addr;
-> > +		break;
-> > +	case LOCK_AGGR_TASK:
-> > +		key = sample->tid;
-> > +		break;
-> > +	case LOCK_AGGR_CALLER:
-> > +	default:
-> > +		pr_err("Invalid aggregation mode: %d\n", aggr_mode);
-> > +		return -EINVAL;
-> > +	}
-> >  
-> > -	ls = lock_stat_findnew(addr, name, 0);
-> > +	ls = lock_stat_findnew(key, name, 0);
-> >  	if (!ls)
-> >  		return -ENOMEM;
-> >  
-> > @@ -757,11 +784,22 @@ static int report_lock_contended_event(struct evsel *evsel,
-> >  	struct lock_seq_stat *seq;
-> >  	const char *name = evsel__strval(evsel, sample, "name");
-> >  	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
-> > +	u64 key;
-> >  
-> > -	if (show_thread_stats)
-> > -		addr = sample->tid;
-> > +	switch (aggr_mode) {
-> > +	case LOCK_AGGR_ADDR:
-> > +		key = addr;
-> > +		break;
-> > +	case LOCK_AGGR_TASK:
-> > +		key = sample->tid;
-> > +		break;
-> > +	case LOCK_AGGR_CALLER:
-> > +	default:
-> > +		pr_err("Invalid aggregation mode: %d\n", aggr_mode);
-> > +		return -EINVAL;
-> > +	}
-> >  
-> > -	ls = lock_stat_findnew(addr, name, 0);
-> > +	ls = lock_stat_findnew(key, name, 0);
-> >  	if (!ls)
-> >  		return -ENOMEM;
-> >  
-> > @@ -812,11 +850,22 @@ static int report_lock_release_event(struct evsel *evsel,
-> >  	struct lock_seq_stat *seq;
-> >  	const char *name = evsel__strval(evsel, sample, "name");
-> >  	u64 addr = evsel__intval(evsel, sample, "lockdep_addr");
-> > +	u64 key;
-> >  
-> > -	if (show_thread_stats)
-> > -		addr = sample->tid;
-> > +	switch (aggr_mode) {
-> > +	case LOCK_AGGR_ADDR:
-> > +		key = addr;
-> > +		break;
-> > +	case LOCK_AGGR_TASK:
-> > +		key = sample->tid;
-> > +		break;
-> > +	case LOCK_AGGR_CALLER:
-> > +	default:
-> > +		pr_err("Invalid aggregation mode: %d\n", aggr_mode);
-> > +		return -EINVAL;
-> > +	}
-> >  
-> > -	ls = lock_stat_findnew(addr, name, 0);
-> > +	ls = lock_stat_findnew(key, name, 0);
-> >  	if (!ls)
-> >  		return -ENOMEM;
-> >  
-> > @@ -980,11 +1029,22 @@ static int report_lock_contention_begin_event(struct evsel *evsel,
-> >  	struct thread_stat *ts;
-> >  	struct lock_seq_stat *seq;
-> >  	u64 addr = evsel__intval(evsel, sample, "lock_addr");
-> > +	u64 key;
-> >  
-> > -	if (show_thread_stats)
-> > -		addr = sample->tid;
-> > +	switch (aggr_mode) {
-> > +	case LOCK_AGGR_ADDR:
-> > +		key = addr;
-> > +		break;
-> > +	case LOCK_AGGR_TASK:
-> > +		key = sample->tid;
-> > +		break;
-> > +	case LOCK_AGGR_CALLER:
-> > +	default:
-> > +		pr_err("Invalid aggregation mode: %d\n", aggr_mode);
-> > +		return -EINVAL;
-> > +	}
-> >  
-> > -	ls = lock_stat_find(addr);
-> > +	ls = lock_stat_find(key);
-> >  	if (!ls) {
-> >  		char buf[128];
-> >  		const char *caller = buf;
-> > @@ -993,7 +1053,7 @@ static int report_lock_contention_begin_event(struct evsel *evsel,
-> >  		if (lock_contention_caller(evsel, sample, buf, sizeof(buf)) < 0)
-> >  			caller = "Unknown";
-> >  
-> > -		ls = lock_stat_findnew(addr, caller, flags);
-> > +		ls = lock_stat_findnew(key, caller, flags);
-> >  		if (!ls)
-> >  			return -ENOMEM;
-> >  	}
-> > @@ -1050,9 +1110,20 @@ static int report_lock_contention_end_event(struct evsel *evsel,
-> >  	struct lock_seq_stat *seq;
-> >  	u64 contended_term;
-> >  	u64 addr = evsel__intval(evsel, sample, "lock_addr");
-> > +	u64 key;
-> >  
-> > -	if (show_thread_stats)
-> > -		addr = sample->tid;
-> > +	switch (aggr_mode) {
-> > +	case LOCK_AGGR_ADDR:
-> > +		key = addr;
-> > +		break;
-> > +	case LOCK_AGGR_TASK:
-> > +		key = sample->tid;
-> > +		break;
-> > +	case LOCK_AGGR_CALLER:
-> > +	default:
-> > +		pr_err("Invalid aggregation mode: %d\n", aggr_mode);
-> > +		return -EINVAL;
-> > +	}
-> >  
-> >  	ls = lock_stat_find(addr);
-> >  	if (!ls)
-> > @@ -1416,6 +1487,9 @@ static int __cmd_report(bool display_info)
-> >  	if (select_key())
-> >  		goto out_delete;
-> >  
-> > +	if (show_thread_stats)
-> > +		aggr_mode = LOCK_AGGR_TASK;
-> > +
-> >  	err = perf_session__process_events(session);
-> >  	if (err)
-> >  		goto out_delete;
-> > -- 
-> > 2.37.0.170.g444d1eabd0-goog
+> Melissa
 > 
-> -- 
+> [1] https://lore.kernel.org/amd-gfx/20220618232737.2036722-1-linux@roeck-us.net/>> 
+> Melissa Wen (5):
+>    drm/amd/display: fix soft-fp vs hard-fp on DCN 3.1 family for powerpc
+>    drm/amd/display: remove useless FPU protection wrapper from
+>      dcn31_resource file
+>    drm/amd/display: move FPU code on dcn21 clk_mgr
+>    drm/amd/display: move FPU code from dcn30 clk mgr to DML folder
+>    drm/amd/display: move FPU code from dcn301 clk mgr to DML folder
 > 
-> - Arnaldo
+>   .../gpu/drm/amd/display/dc/clk_mgr/Makefile   |  18 --
+>   .../amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.c | 234 +----------------
+>   .../amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h |   7 +
+>   .../display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c  |  63 +----
+>   .../display/dc/clk_mgr/dcn301/vg_clk_mgr.c    |  86 +------
+>   .../display/dc/clk_mgr/dcn301/vg_clk_mgr.h    |   3 +
+>   .../drm/amd/display/dc/dcn31/dcn31_resource.c |  11 +-
+>   .../amd/display/dc/dcn315/dcn315_resource.c   |   5 +-
+>   .../amd/display/dc/dcn316/dcn316_resource.c   |   5 +-
+>   .../drm/amd/display/dc/dml/dcn20/dcn20_fpu.c  | 235 ++++++++++++++++++
+>   .../drm/amd/display/dc/dml/dcn20/dcn20_fpu.h  |   2 +
+>   .../drm/amd/display/dc/dml/dcn30/dcn30_fpu.c  |  63 ++++-
+>   .../drm/amd/display/dc/dml/dcn30/dcn30_fpu.h  |   1 +
+>   .../amd/display/dc/dml/dcn301/dcn301_fpu.c    |  74 ++++++
+>   .../drm/amd/display/dc/dml/dcn31/dcn31_fpu.c  |  11 +
+>   .../drm/amd/display/dc/dml/dcn31/dcn31_fpu.h  |   3 +
+>   16 files changed, 423 insertions(+), 398 deletions(-)
+> 
 
--- 
-
-- Arnaldo

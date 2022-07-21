@@ -2,84 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB6757D6BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F036D57D6BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbiGUWQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S232820AbiGUWQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbiGUWQn (ORCPT
+        with ESMTP id S233463AbiGUWQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:16:43 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB9A19C1C;
-        Thu, 21 Jul 2022 15:16:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lpn3Q4HRDz4xGC;
-        Fri, 22 Jul 2022 08:16:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658441794;
-        bh=kFeJUu85GewLppY0RIt8DS0OhaFAkTyEUtGKA4W/In4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DROt4CwCZ02uEw3njYblGbseKyMAbQ1VdCP3IM0FbEs7Zyy6/XwcuDoHGegKrZrVb
-         D1++jIS7knD3zIXnG0KW1yto7/UjaJoZ7gBBbJKFD1rOV2X7ycXVbA7VeIoKNQmvD7
-         jrac0CFQq1wteJHW88m6bH5jLLlaet7xtVnswKrHsApx1SrXUBbw8flaidS0i66f+1
-         zzung94XBW8nE/c572uKC5aoXLNwqlibvU+Un+o6RBCYdvby9n4au3xSCD8iloJPq3
-         0UkiIwGEeE4p1qLgcllFyw28b6xulBR3R5xYeQMU4X3MUPOO/rpDAtlMWZ92VEhia/
-         LzeOdH5yoL9fw==
-Date:   Fri, 22 Jul 2022 08:16:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the fuse tree
-Message-ID: <20220722081614.07e3261a@canb.auug.org.au>
+        Thu, 21 Jul 2022 18:16:32 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5706815FC9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:16:29 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id h206-20020a1c21d7000000b003a2fa488efdso1561258wmh.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ecbf/P3CduU/YXdJfd7fPC/TGMnD0SWt94NF3vpr9EA=;
+        b=nVCGadmq0Nb13+gtLOLrUjqN0RcYRuJjnv5Qzrys06chh9q23A7K2nn8QTrUwFPIiP
+         lTRgCPwvymS8eDMYGgZVsCZbrTxjULpjAMcuqUFDFxSOx2/upVMHVjdGRujYGD6wtNui
+         OS0kZX3nYpRcsLFN7LRySXdSmp5hwMk/zcjuTZEDB21P008yDsmTqJ7TxXkgPwler/nE
+         DkaM8kKL4sSdTSIfH/a/U792CZNWKF43jbiz80Y1cZIHr4M7ZIOQaRMZHOhOZFaYSWig
+         QC92hNKFzfh/6eUd4iuQvdINc/k7P1LRXj+FqT8z/AoDfdQ0wyvGknaVHcAqYWw6CQSS
+         3mZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ecbf/P3CduU/YXdJfd7fPC/TGMnD0SWt94NF3vpr9EA=;
+        b=uL94qIDnG1Wx/qZHQ9rtg8F3+/68AR+Wi7/CVOkxB9S/a0+ovXGzGgjeX9sQ2Z/P5Y
+         CT+CSCf2QhSRG5dsNnuI2jX8KyntCAMicCGRuhBE4Izips9kXQEqu6CiYpkFddXUGWiw
+         ddWO/Z9lyIPbq6o6HPHMWuvd/uSj8hlveVU8DZXtba2p2vCXBnVtomnT2o7L8JvMiJ7T
+         EXDX+DZg3O/5ZOx5wkRSHefZ2Jx5byvwOW228Hyqt7/WadlMaUwApu3zCckejVbg6LXP
+         r652ZfXhIJ54yomdMmvS9oMt7NYYA74jZPnZJbx9uiktATS3NXCBj/UA93x6veP9smTW
+         zqXg==
+X-Gm-Message-State: AJIora/uQTtR2YaG0TT4DvrKkkyKGqij+wpVhjlD5ny6V1BvfgsVV7QO
+        4qpcZkgjihSGn0FEg1GsS5436Q==
+X-Google-Smtp-Source: AGRyM1uj0+oTfPJhOJiCkfqcZNambR9C1njfGUueRfDMQoYE9QVlvPRv+1DEpFM2wcTAiCIRsSDVJQ==
+X-Received: by 2002:a1c:ed14:0:b0:3a2:b91b:dce4 with SMTP id l20-20020a1ced14000000b003a2b91bdce4mr10073965wmh.22.1658441787831;
+        Thu, 21 Jul 2022 15:16:27 -0700 (PDT)
+Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
+        by smtp.gmail.com with ESMTPSA id r13-20020a05600c35cd00b003a046549a85sm7273837wmq.37.2022.07.21.15.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 15:16:27 -0700 (PDT)
+Message-ID: <97c24824-d487-e377-3ef6-287bc5e0c0d6@sifive.com>
+Date:   Thu, 21 Jul 2022 23:16:26 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NMK6869ZzKqlQ_UhKDqYuzm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/3] dmaengine: dw-axi-dmac: dump channel registers on
+ error
+Content-Language: en-GB
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, Eugeniy.Paltsev@synopsys.com,
+        linux-kernel@vger.kernel.org,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+References: <20220708170153.269991-1-ben.dooks@sifive.com>
+ <20220708170153.269991-2-ben.dooks@sifive.com> <YtlG6hdTJPIDBk9Y@matsya>
+From:   Ben Dooks <ben.dooks@sifive.com>
+In-Reply-To: <YtlG6hdTJPIDBk9Y@matsya>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NMK6869ZzKqlQ_UhKDqYuzm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 21/07/2022 13:30, Vinod Koul wrote:
+> On 08-07-22, 18:01, Ben Dooks wrote:
+>> On channel error, dump the channel register state before
+>> the channel's LLI entries to see what the controller was
+>> actually doing when the error happend.
+>>
+>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>> ---
+>>   .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 28 +++++++++++++++++++
+>>   1 file changed, 28 insertions(+)
+>>
+>> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+>> index e9c9bcb1f5c2..75c537153e92 100644
+>> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+>> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+>> @@ -79,6 +79,20 @@ axi_chan_iowrite64(struct axi_dma_chan *chan, u32 reg, u64 val)
+>>   	iowrite32(upper_32_bits(val), chan->chan_regs + reg + 4);
+>>   }
+>>   
+>> +static inline u64
+>> +axi_chan_ioread64(struct axi_dma_chan *chan, u32 reg)
+>> +{
+>> +	u32 high, low;
+>> +	u64 result;
+>> +
+>> +	low = ioread32(chan->chan_regs + reg);
+>> +	high = ioread32(chan->chan_regs + reg + 4);
+>> +
+>> +	result = low;
+>> +	result |= (u64)high << 32;
+>> +	return result;
+>> +}
+> 
+> Better to use helpers like lo_hi_readq()?
 
-Hi all,
-
-Commit
-
-  c8d80924ae02 ("virtio_fs: Modify format for virtio_fs_direct_access")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NMK6869ZzKqlQ_UhKDqYuzm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLZ0C4ACgkQAVBC80lX
-0GyVTQf/VNYj8r/e7dgv5CWfYdc4CQ1+RQX3ekoKhvV121gUMVsmmlMglMBqwIVN
-SG2KSuCFX67vSC907Vt0z1Hc7HxXgdLsj1/N+B08gzs+weK0pU1Byd7DLiHwmdvI
-1EVfEh56xSOp1Bs4CF9HzG4Ue8k+HHQlzrUCIBv1M7Ia9GzSGTrZKNPIPGacmA2q
-1dtaw9OJGWDX8vSQNviKWgiE2TwKlYonofnjZkJOCL9gQIPf2Rj36KY7nfXB4s66
-in1c18Mi2NRORPL4AiwBH+EB9phtVq12LM79k+TWkCBVq/cHKLF66MczOPrvRPCW
-JoAb2Ra4CQ1sFXCjV8Cj+XWlnJfy0Q==
-=5bxL
------END PGP SIGNATURE-----
-
---Sig_/NMK6869ZzKqlQ_UhKDqYuzm--
+Will go check on those, thanks.

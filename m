@@ -2,116 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8407857D468
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8263857D46A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiGUTxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 15:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S232761AbiGUTyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 15:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiGUTxS (ORCPT
+        with ESMTP id S229479AbiGUTyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 15:53:18 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7D168DFD
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:53:17 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id p6-20020a17090a680600b001f2267a1c84so4583566pjj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 12:53:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HsT+SOh6igago54DFk+NR9EMx4G+VOnG1ZM35MOSsdM=;
-        b=dZTLC6T8LQqP4RfUYojYXtJS1ACmXZjhKUovfox5ilqKM1trs1sF+9KGWw1NvyVbe4
-         Ofm2D9OdwPyNEUdwXZf759WKjMIUbrEb38lzG35mELnSYt05VK4QEdVbHD1pGmfRELQN
-         79gmUrFhlT6i0QSApljrs03dmnOawpgRtgHJyhhmxaVJCN4AVP0pPvOB1EGxNzkTotBA
-         GFD4j9kFP13RmHkmQwxHz0b4saNNjcM6b6YCSD0MLPyqhv9rWOoJWM+7gmWalUulBsAf
-         EfLt03YQjJxc04E4Klm2fRFBGb+8f1PMJxf6Gv4aEDc5r/qRnPXyZn1M6syjTZ8MDjv1
-         cUVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=HsT+SOh6igago54DFk+NR9EMx4G+VOnG1ZM35MOSsdM=;
-        b=6DuxocjLAuX5Y0BS8CHZuQMpBhG4F5Z+ugESgifdZOBCis13jZQU9/uFd+pIlvBAEw
-         YNQ1fXT/WWOPktKcdeLkR1xR964AIHimC0YaZRV6Bu46OUgR1sWyz7icUh7KWmkSnzFZ
-         sfWBLO3Jt9DtCszMA2mNtAgZ38dtodpNzaqQhDS3eOBwPrv0d0CdGDOW04reDhn6lqsE
-         kvKZGB0VhMxRRSqrE2vBvCzhRYJCd/+/8dip1Cwl8Z7AIyec5MaH6mIylTZ5NB4QmedC
-         6Mu6sLBZ0vtgd8viJpMRfYc9hPdV1a7t+OZsip3ymEC+aEXxYapwlChDKFwGu2jba5RG
-         foyg==
-X-Gm-Message-State: AJIora9RMjD7+IJnfOuwvfifXH33hGOf4eIunvtDkBv45W/CWVTFow5n
-        nuHXRBou4aZW96jmjxX7vq22Qw==
-X-Google-Smtp-Source: AGRyM1tGJwxbrdSYfu8R3bcKyPvyMTqQUG4QriRETnjQ+o4wsiVmS1vgA0CXW9TUHdLn5ftwQNzpLQ==
-X-Received: by 2002:a17:902:cece:b0:16c:3683:8835 with SMTP id d14-20020a170902cece00b0016c36838835mr45821418plg.104.1658433197228;
-        Thu, 21 Jul 2022 12:53:17 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id x2-20020a634a02000000b0040ced958e8fsm1884826pga.80.2022.07.21.12.53.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 12:53:16 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 12:53:16 -0700 (PDT)
-X-Google-Original-Date: Thu, 21 Jul 2022 12:53:14 PDT (-0700)
-Subject:     Re: [PATCH] [PATCH v2] riscv: add as-options for modules with assembly compontents
-In-Reply-To: <20220529152200.609809-1-ben.dooks@codethink.co.uk>
-CC:     linux-kernel@lists.codethink.co.uk,
-        linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu,
-        linux-kernel@vger.kernel.org, ben.dooks@codethink.co.uk,
-        Bin Meng <bmeng.cn@gmail.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     ben.dooks@codethink.co.uk
-Message-ID: <mhng-e9fd43e2-2d5f-40e6-b7ba-cad78f2a118b@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 15:54:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12603691D1;
+        Thu, 21 Jul 2022 12:54:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA9962098;
+        Thu, 21 Jul 2022 19:54:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FFF2C3411E;
+        Thu, 21 Jul 2022 19:54:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658433276;
+        bh=n0LUlDFRxvmloJIBnwb8oeIMcuhkLDWUpN3AnMOXSBc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ck1VZV+5yea8vUj67fFZ9L0rykyv+jIoTeseyZpFa6kZX8n2AwKrluA1tOS5SKflr
+         XHQioX4J3oNrA7V95QdX94vRktvDQ8OVFHx1futsGqK7LGkJcuKpYbx6nz8rgpPCxL
+         PvupmD7f91D/gV75ItpLurZIiJKc1K299XiVWGyT0EXg7LIySe2ZJAmKtdzHUCCfmU
+         s8kfGArkQx1o42KpRag8sm0RH8uFaUDVKIMG3ypX4zbALi6Nwh841ByuJPqr+ksbAL
+         HB84rn13wW6/5vENx//kM2iznBU6oJI4ZCpO2dycg0nxNoTES8lDPHFZWP/g26jTYs
+         ZaTPpFL20KSTw==
+Date:   Thu, 21 Jul 2022 14:54:33 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>
+Cc:     linux-pci@vger.kernel.org, Tom Joseph <tjoseph@cadence.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Why set .suppress_bind_attrs even though .remove() implemented?
+Message-ID: <20220721195433.GA1747571@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 May 2022 08:22:00 PDT (-0700), ben.dooks@codethink.co.uk wrote:
-> When trying to load modules built for RISC-V which include assembly files
-> the kernel loader errors with "unexpected relocation type 'R_RISCV_ALIGN'"
-> due to R_RISCV_ALIGN relocations being generated by the assembler.
->
-> The R_RISCV_ALIGN relocations can be removed at the expense of code space
-> by adding -mno-relax to gcc and as.  In commit 7a8e7da42250138
-> ("RISC-V: Fixes to module loading") -mno-relax is added to the build
-> variable KBUILD_CFLAGS_MODULE. See [1] for more info.
->
-> The issue is that when kbuild builds a .S file, it invokes gcc with
-> the -mno-relax flag, but this is not being passed through to the
-> assembler. Adding -Wa,-mno-relax to KBUILD_AFLAGS_MODULE ensures that
-> the assembler is invoked correctly. This may have now been fixed in
-> gcc[2] and this addition should not stop newer gcc and as from working.
->
-> [1] https://github.com/riscv/riscv-elf-psabi-doc/issues/183
-> [2] https://github.com/gcc-mirror/gcc/commit/3b0a7d624e64eeb81e4d5e8c62c46d86ef521857
->
-> Notes:
->
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-> ---
->  arch/riscv/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 1f5c03082976..fca40511a8c6 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -60,6 +60,7 @@ ifeq ($(CONFIG_PERF_EVENTS),y)
->  endif
->
->  KBUILD_CFLAGS_MODULE += $(call cc-option,-mno-relax)
-> +KBUILD_AFLAGS_MODULE += $(call as-option,-Wa$(comma)-mno-relax)
->
->  # GCC versions that support the "-mstrict-align" option default to allowing
->  # unaligned accesses.  While unaligned accesses are explicitly allowed in the
+The j721e, kirin, tegra, and mediatek drivers all implement .remove().
 
-Sorry for being so slow here, I've gotten pretty buried and it wasn't 
-clear this was a fix.  I put it in fixes with some tags.
+They also set ".suppress_bind_attrs = true".  I think this means
+bus_add_driver() will not create the "bind" and "unbind" sysfs
+attributes for the driver that would allow users to users to manually
+attach and detach devices from it.
 
-Thanks!
+Is there a reason for this, or should these drivers stop setting
+.suppress_bind_attrs?
+
+For example, Pali and Ley Foon *did* stop setting .suppress_bind_attrs
+when adding .remove() methods in these commits:
+
+  0746ae1be121 ("PCI: mvebu: Add support for compiling driver as module")
+  526a76991b7b ("PCI: aardvark: Implement driver 'remove' function and allow to build it as module")
+  ec15c4d0d5d2 ("PCI: altera: Allow building as module")
+
+Bjorn

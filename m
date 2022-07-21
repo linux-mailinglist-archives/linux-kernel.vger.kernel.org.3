@@ -2,137 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0A057C670
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A3957C67A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiGUIgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S232392AbiGUIh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiGUIga (ORCPT
+        with ESMTP id S232398AbiGUIhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:36:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729D33B946
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C280B82375
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B95CEC36AF2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658392581;
-        bh=nKpz/OqRztg5EzCK42ZfWepbK8TN0TvfFCyvjm5mdIY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=A+bMhyz+nHDfKK4NfWjEW+Vv65X+YF922kXyOusZOYcgGfruM+e6flOuE99wPPcHT
-         dl4geEg4tuNIBIZpKpJqAVrlBGI82HGMfVVOSHjTpG/wyOqyVjii1hXCfq8bLj+kiv
-         0lhMS18hTlbxo0g6TsB1cz9pU9ltIzBTGStm4VKFJrsjs7++0e/1qNqdVFE0t94yLf
-         b7XO4QFmkJvlSu+3N+zB9xI49PajgB6WuhwV+QzQhDQFMqcaVJIV9o8uXlRuZNXTng
-         FjgDS8Sd+4A2+uLWjRmieS6Hqoh/nZIznpUGitL/IdrFGy+AWndZOT/ei0BP1NBsxg
-         l5qRuGqNhEHAw==
-Received: by mail-ua1-f47.google.com with SMTP id p8so296349uam.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:36:21 -0700 (PDT)
-X-Gm-Message-State: AJIora8UeD6DChE5VE0wOCLf8HEcXJOlYqJYvvtU7YCwboiKrsy7CCF5
-        m5Ry9haxneba5lvznwXfsLE64Uy80tuJzV+Rn2k=
-X-Google-Smtp-Source: AGRyM1s3YfCfLq6toB5w0XxbU0n07z9DjrkLgoEL84RlBpFnEkguxwPqkVoRBkP0FWDYxyCvF7QqKys2qruTxPL8kPE=
-X-Received: by 2002:ab0:37d7:0:b0:384:47a1:eb8e with SMTP id
- e23-20020ab037d7000000b0038447a1eb8emr2239729uav.23.1658392580666; Thu, 21
- Jul 2022 01:36:20 -0700 (PDT)
+        Thu, 21 Jul 2022 04:37:32 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317D87F502
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/waEL92ZUjXVpyZQLVT0SgQb3olAeZWoorHC9Ns4fIg=; b=HxnTYQo+qITEJ6oSSbWJAZ/yI/
+        lyKER31rJ7VVPVww3Xea1b9bKkpDn0mY4GpnLbNc529I7g/4qrI4T1l2pMuTgGSqAkWZQBfkZhYNk
+        mY1c5jiHj1A7LpVZTsdTUhjuTXeFo0jEUHkOlJpkddoqc5rkGiNXAMho9fr4Gek+qIuCCOcpGp4Wb
+        5j7q7oomDKCPvg/miF1xrRDUfgUcnmUfTkO3UAX3ElcUGcEpB4yBCTE+Hqs5Kb5sFG1IJrVzwQDR/
+        p/CmQHNYBLoWxXYHn1R76uY8w0ryC24Aq5QGeIU1l5ZYw90nqZTp9s0QiL5zLHBkuHFOcsXABtzi3
+        QyUBgebw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oERgH-005W43-0Y; Thu, 21 Jul 2022 08:37:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81215300790;
+        Thu, 21 Jul 2022 10:37:08 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1B41C2011B913; Thu, 21 Jul 2022 10:37:08 +0200 (CEST)
+Date:   Thu, 21 Jul 2022 10:37:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jann Horn <jannh@google.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guo Ren <guoren@kernel.org>, David Miller <davem@davemloft.net>
+Subject: Re: [PATCH 0/4] munmap() vs unmap_mapping_range()
+Message-ID: <YtkQNA4jkhfEfWzs@hirez.programming.kicks-ass.net>
+References: <20220708071802.751003711@infradead.org>
 MIME-Version: 1.0
-References: <20220721021127.1086628-1-yijun@loongson.cn> <CAAhV-H4YL-8tj+-329tWguwxrPaL7DpiTT2QkXBPh_feT7M5jA@mail.gmail.com>
- <dcfac9ad-d6e0-b157-4f11-cc2d3e2f1376@xen0n.name> <CAAhV-H6RGZwKjV4Shm9fvH_XJ1+yqq9KpxkXNEWwOaPRmahSLQ@mail.gmail.com>
- <4a8f5963-28f1-7439-9b52-7084d51707b2@xen0n.name>
-In-Reply-To: <4a8f5963-28f1-7439-9b52-7084d51707b2@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 21 Jul 2022 16:36:08 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4fqirffgyhc1Ros9KiOtM32vHqVKprLfvaROE3DHzYdw@mail.gmail.com>
-Message-ID: <CAAhV-H4fqirffgyhc1Ros9KiOtM32vHqVKprLfvaROE3DHzYdw@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Remove unused header compiler.h
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Jun Yi <yijun@loongson.cn>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708071802.751003711@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OK, please update the commit message and send V2, please.
+On Fri, Jul 08, 2022 at 09:18:02AM +0200, Peter Zijlstra wrote:
+> Hi,
+> 
+> These 4 patches implement the suggestion by Linus.
+> 
+> The first patch nukes all architecture implementations of tlb_{start,end}_vma()
+> by adding two additional MMU_GATHER config knobs.
+> 
+> DaveM, please clarify the sparc64 case, it seems a little odd to have
+> flush_cache_range() but to explicitly not call it at unmap time. It would be
+> nice to remove this one special case.
+> 
+> The second patch isn't strictly needed for this series but since I was looking
+> at all this, I figured C-SKY didn't make a whole lot of sense. Guo, please
+> have a look.
+> 
+> The third patch cleans up the #ifdeffery and provides a single
+> tlb_{start,end}_vma() implementation for everyone.
+> 
+> The fourth, and final, patch does the force TLB-flush on VM_PFNMAP thing.
+> 
+> I've had the first three patches exposed to the robots and they've (so far) not
+> reported build (or other) fail.
+> 
 
-On Thu, Jul 21, 2022 at 1:38 PM WANG Xuerui <kernel@xen0n.name> wrote:
->
-> On 2022/7/21 11:22, Huacai Chen wrote:
-> > Hi, Xuerui,
-> >
-> > On Thu, Jul 21, 2022 at 11:17 AM WANG Xuerui <kernel@xen0n.name> wrote:
-> >> Hi YI Jun and Huacai,
-> >>
-> >> On 2022/7/21 10:52, Huacai Chen wrote:
-> >>> Hi, Jun,
-> >>>
-> >>> On Thu, Jul 21, 2022 at 10:11 AM Jun Yi <yijun@loongson.cn> wrote:
-> >>>> Loongarch not used arch-specific compiler.h
-> >>> I'm not sure whether compiler.h will be used in future. If it will be
-> >>> used, I want to keep it as is. Xuerui, what do you think about it?
-> >> I surveyed all the existing arch compiler.h in the tree:
-> >>
-> >> $ find ./arch -name compiler.h
-> >> ./arch/alpha/include/asm/compiler.h
-> >> ./arch/alpha/include/uapi/asm/compiler.h
-> >> ./arch/arm/include/asm/compiler.h
-> >> ./arch/arm64/include/asm/compiler.h
-> >> ./arch/mips/include/asm/compiler.h
-> >> ./arch/loongarch/include/asm/compiler.h
-> >>
-> >> Of all these occurrences:
-> >>
-> >> - alpha needs to ensure a certain insn is being emitted from time to
-> >> time, with plain C constructs (or built-ins) on compiler versions with
-> >> said support, falling back to inline asm otherwise;
-> >> - arm and arm64 both need some inline assembly help (of different sort),
-> >> with arm64 stuffing some pointer authentication helpers into this file too;
-> >> - mips, which is obviously what the loongarch version is based on, needs
-> >> (1) a kludge for older compilers to fix delay slot filling around
-> >> __builtin_unreachable, (2) definitions for explicit arch level
-> >> selection. There is also the historical GCC_OFF_SMALL_ASM() constraint
-> >> definition that was rendered redundant by commit 4abaacc704729 ("MIPS:
-> >> remove GCC < 4.9 support").
-> >>
-> >> For loongarch, the "ZC" constraint (I don't think it was a coincidence
-> >> BTW) should be usable for all present and future hardware, so I do think
-> >> the GCC_OFF_SMALL_ASM() here is redundant. We may want to remove the
-> >> mips one too. And the arch level thing is not currently needed either,
-> >> future revisions to the LoongArch ISA should be largely backwards
-> >> compatible, so it could be a long time before such explicit selection of
-> >> arch level is necessary, for exact control over emitted insn.
-> >>
-> >> So overall, I'm in favor of removing this header for now.
-> > Have you considered the new relocation types will be added in the near
-> > future? I think we need compiler.h at that time.
->
-> I assume you mean the proposal being discussed at [1] [2] and [3].
->
-> For new reloc types that affect module loading, asm/elf.h and
-> kernel/module.c need modification to add awareness, but this doesn't
-> involve compiler.h. The kernel image itself is not affected.
->
-> There is also the case of building LoongArch kernel sources without
-> support for the new reloc types, but on a newer compiler that emits the
-> new-style reloc records by default. In this case, a switch reverting the
-> compiler to the old-style relocs is needed in CFLAGS, but (1) not all
-> essential support are merged for LoongArch so practically we don't need
-> to care about non-kernel-ABI compatibility at this time, and (2) CFLAGS
-> tweaks don't involve compiler.h either.
->
-> [1]: https://sourceware.org/pipermail/binutils/2022-July/121849.html
-> [2]: https://sourceware.org/pipermail/binutils/2022-July/121933.html
-> [3]: https://github.com/loongson/LoongArch-Documentation/pull/57
->
->
+What are we doing with these patches? Andrew will you pick them up, or
+will I smuggle them in x86/mm or something ?

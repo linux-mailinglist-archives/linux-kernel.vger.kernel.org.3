@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4295B57CAAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7C357CAAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233618AbiGUMdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
+        id S233631AbiGUMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiGUMdO (ORCPT
+        with ESMTP id S229497AbiGUMdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:33:14 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9CC743C4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658406794; x=1689942794;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9Mastm4bVBpgeITeul311rbm3Z4aqMWvLnpkTWQve5Q=;
-  b=OJSP0q9ssN1S2rjiNsljXOHqaAno/TNMr3Br+Z+VY8lwyD1lGFVmA5dK
-   Xhy4yeAPQNhyzCH3sNeTb3rUNiuEEJhdNJGSgvKI6g8gGOltx3jhbEYNW
-   a55q0B0FV15QtgpPhAXMUW1tzEhsfQ27/45SEs+JX1D1DphzvSQQdGtjq
-   GPaO2g/bzuueM8fwtOmb6LYAq0MWdYRau2M2aAXjRjGSt2So4S60wqzQT
-   ADT7YSDggangEkogZy3Zfnzz9b9zoGbqRXT4B0Ewkak6++7UIFnAesi7D
-   Bhf4buuKjWd7p/Fr4dEMr1pbK+6Hc4EIxZaSWwR2QLKz442IIuMWu5igm
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="373332458"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="373332458"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 05:33:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="573720813"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
-  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2022 05:33:11 -0700
-From:   kah.jing.lee@intel.com
-To:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de
-Cc:     rafael.j.wysocki@intel.com, tien.sung.ang@intel.com,
-        dinh.nguyen@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>,
-        Zhou Furong <furong.zhou@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: [PATCH v2 3/3] documentation: misc: intel_sysid: Add the system id sysfs documentation for Altera(Intel) FPGA platform
-Date:   Thu, 21 Jul 2022 20:32:59 +0800
-Message-Id: <20220721123258.416802-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220721123017.416438-1-kah.jing.lee@intel.com>
-References: <20220721123017.416438-1-kah.jing.lee@intel.com>
+        Thu, 21 Jul 2022 08:33:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE937644C;
+        Thu, 21 Jul 2022 05:33:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC0C061DB3;
+        Thu, 21 Jul 2022 12:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5876C3411E;
+        Thu, 21 Jul 2022 12:33:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658406803;
+        bh=U3HKY3eo89n9BqlckvyAr4J4M8kysFY/9cojjm7aybE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GDSxEZN6oB3CajAVy0FTltBjBZFUGTEYORl4FJqaVV0G3Q2E/2voIhbAl9AhWNFcD
+         ZTnXFO7wNvbQctOSuoXFXSfMv9hbHKvCaWzEmmBUz0QLISbLKSsVRmkx7Ru6IuGcsI
+         CpruinQxCT7K3xTAy5fczW/d5O424qUFqxmduLwDIMf7q7WP73w48KDJKGpBE1NnN7
+         1bUdOTkgWteafXFGvZZj7mBZh0tPMOqK9E/FGVPZhg9WAIFxto4YlnyAvnVtg85AhY
+         wVlnpqt1GP+Z1l2h0g3gFMK5UTcIi8RDPPhFlLyrS1drJENuJiuVKRkhuxc4m9LFi7
+         7izLCanWwCbSw==
+Date:   Thu, 21 Jul 2022 18:03:19 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     dmaengine@vger.kernel.org, Eugeniy.Paltsev@synopsys.com,
+        linux-kernel@vger.kernel.org,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+Subject: Re: [PATCH 2/3] dmaengine: dw-axi-dmac: do not print NULL LLI during
+ error
+Message-ID: <YtlHj2f9biaFEK+m@matsya>
+References: <20220708170153.269991-1-ben.dooks@sifive.com>
+ <20220708170153.269991-3-ben.dooks@sifive.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708170153.269991-3-ben.dooks@sifive.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+On 08-07-22, 18:01, Ben Dooks wrote:
+> During debugging we have seen an issue where axi_chan_dump_lli()
+> is passed a NULL LLI pointer which ends up causing an OOPS due
+> to trying to get fields from it. Simply print NULL LLI and exit
+> to avoid this.
 
-This sysfs documentation is created for Altera(Intel) FPGA platform
-System ID soft IP. The Altera(Intel) Sysid component is generally
-part of an FPGA design.
-The component can be hotplugged when the FPGA is reconfigured.
+Applied, thanks
 
-Based on an initial contribution from Ley Foon Tan at Altera
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
-Reviewed-by: Zhou Furong <furong.zhou@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
----
- .../testing/sysfs-devices-platform-soc-sysid  | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-devices-platform-soc-sysid
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+>  drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> index 75c537153e92..d6ef5f49f281 100644
+> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> @@ -1008,6 +1008,11 @@ static void axi_chan_dump_regs(struct axi_dma_chan *chan)
+>  static void axi_chan_dump_lli(struct axi_dma_chan *chan,
+>  			      struct axi_dma_hw_desc *desc)
+>  {
+> +	if (!desc->lli) {
+> +		dev_err(dchan2dev(&chan->vc.chan), "NULL LLI\n");
+> +		return;
+> +	}
+> +
+>  	dev_err(dchan2dev(&chan->vc.chan),
+>  		"SAR: 0x%llx DAR: 0x%llx LLP: 0x%llx BTS 0x%x CTL: 0x%x:%08x",
+>  		le64_to_cpu(desc->lli->sar),
+> -- 
+> 2.35.1
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-platform-soc-sysid b/Documentation/ABI/testing/sysfs-devices-platform-soc-sysid
-new file mode 100644
-index 000000000000..9fa58fd88dc0
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-devices-platform-soc-sysid
-@@ -0,0 +1,27 @@
-+What:		/sys/devices/platform/soc@X/soc:base_fpga_region/
-+soc:base_fpga_region:fpga_pr_region0/XXXXXXXX.sysid/
-+Date:		May 2022
-+KernelVersion:	v5.18
-+Contact:	Kah Jing Lee <kah.jing.lee@intel.com>
-+Description:
-+		The soc@X/soc:base_fpga_region/soc:base_fpga_region:fpga_pr_region0/
-+		XXXXXXXX.sysid/ directory contains read-only attributes exposing
-+		information about an System ID soft IP device. The X values could vary,
-+		based on the FPGA platform System ID soft IP register address.
-+
-+What:		.../XXXXXXX.sysid/sysid
-+Date:		May 2022
-+KernelVersion:	v5.18
-+Contact:	Kah Jing Lee <kah.jing.lee@intel.com>
-+Description:
-+		The .../XXXXXXX.sysid/sysid file contains the System ID for the FPGA
-+		platform which is unique for the platform type and can be used for
-+		checking the platform type for software download purposes.
-+
-+What:		.../XXXXXXX.sysid/buildtime
-+Date:		May 2022
-+KernelVersion:	v5.18
-+Contact:	Kah Jing Lee <kah.jing.lee@intel.com>
-+Description:
-+		The .../XXXXXXX.sysid/buildtime file contains the buildtime for the
-+		FPGA board file generation.
 -- 
-2.25.1
-
+~Vinod

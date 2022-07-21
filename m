@@ -2,99 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F1057C8F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FDC57C8F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbiGUK1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S233250AbiGUK2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiGUK1h (ORCPT
+        with ESMTP id S233276AbiGUK14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:27:37 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001AA820F2;
-        Thu, 21 Jul 2022 03:27:36 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id t7so822219qvz.6;
-        Thu, 21 Jul 2022 03:27:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rCvMc/vUOC3tOb2eOH0GWgA9WCBLLNYDitbf9JR/hfU=;
-        b=fpp3noq4BzFCBH2th9e/zGIsV53MuyqNuT12Un9ao837FhsO2L2FUcbdsJDr/xKKPj
-         8MtRSzk+bxi4ZRCJhrufOHENuISLoNuNKsDVrT0X+7eciD6KcYB25NOAbQWuNjGGG1Mb
-         0NX79K0t+1lzGSv2I+ODZSx6la1aTAZvv+iOMa04hcB9zZplgHKGi8TneEaj8J4uJ76w
-         IaY89IkEvDABeKU+wj78pThyniTIzrXE8bgwiw2OOAJyXhJvEIugL8zGW9AOWjLt2Ess
-         WyMhWHSwkLhfoSHCYUcMIIv/R6wBMVdjpa30rJblNTdbbMPM+Lp5fWH/VRkkU1Kd1Nwi
-         Kd5Q==
-X-Gm-Message-State: AJIora9zP1TKGH7RiRgTZioy8iR58Az8WA0AnN9z0O0Jmnq0uneJU/m4
-        CZmMa5dt/vkyDYZ1xYt/NfPKv+6y1cdg0Q==
-X-Google-Smtp-Source: AGRyM1ttXVWS4N5jakkrb6NlMVajJfSsT5gVwKWLLaKJebOcJpFIjzzP0LhDfFRXQYMgJGFSO13zvQ==
-X-Received: by 2002:a05:6214:21ad:b0:473:8d7d:5456 with SMTP id t13-20020a05621421ad00b004738d7d5456mr32809100qvc.88.1658399255984;
-        Thu, 21 Jul 2022 03:27:35 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id c23-20020a05620a269700b006a6ebde4799sm1101730qkp.90.2022.07.21.03.27.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 03:27:35 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31d85f82f0bso12205897b3.7;
-        Thu, 21 Jul 2022 03:27:35 -0700 (PDT)
-X-Received: by 2002:a81:84c1:0:b0:31e:4e05:e4f4 with SMTP id
- u184-20020a8184c1000000b0031e4e05e4f4mr16234850ywf.384.1658399255079; Thu, 21
- Jul 2022 03:27:35 -0700 (PDT)
+        Thu, 21 Jul 2022 06:27:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 904E2823BC;
+        Thu, 21 Jul 2022 03:27:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D53E71042;
+        Thu, 21 Jul 2022 03:27:53 -0700 (PDT)
+Received: from [10.57.41.123] (unknown [10.57.41.123])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2475C3F70D;
+        Thu, 21 Jul 2022 03:27:49 -0700 (PDT)
+Message-ID: <0b493b49-2657-ad5d-465e-d80b62820613@arm.com>
+Date:   Thu, 21 Jul 2022 11:27:47 +0100
 MIME-Version: 1.0
-References: <20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220718193745.7472-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Jul 2022 12:27:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUmfAPv0NHOm5J_D=f7ayu+tb1dDqrxLy7FFU8PLDs==w@mail.gmail.com>
-Message-ID: <CAMuHMdUmfAPv0NHOm5J_D=f7ayu+tb1dDqrxLy7FFU8PLDs==w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: interrupt-controller: renesas,rzg2l-irqc:
- Document RZ/V2L SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 00/13] coresight: Add new API to allocate trace source
+ ID values
+Content-Language: en-US
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     mathieu.poirier@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, linux-perf-users@vger.kernel.org,
+        quic_jinlmao@quicinc.com, suzuki.poulose@arm.com,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220704081149.16797-1-mike.leach@linaro.org>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220704081149.16797-1-mike.leach@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 9:38 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document RZ/V2L (R9A07G054) IRQC bindings. The RZ/V2L IRQC block is
-> identical to one found on the RZ/G2L SoC. No driver changes are
-> required as generic compatible string "renesas,rzg2l-irqc" will be
-> used as a fallback.
->
-> While at it, update the comment "# RZ/G2L" to "# RZ/G2{L,LC}" for
-> "renesas,r9a07g044-irqc" compatible string as both RZ/G2L and
-> RZ/G2LC SoC's use the common SoC DTSI and have the same IRQC block.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Gr{oetje,eeting}s,
+On 04/07/2022 09:11, Mike Leach wrote:
+> The current method for allocating trace source ID values to sources is
+> to use a fixed algorithm for CPU based sources of (cpu_num * 2 + 0x10).
+> The STM is allocated ID 0x1.
+> 
+> This fixed algorithm is used in both the CoreSight driver code, and by
+> perf when writing the trace metadata in the AUXTRACE_INFO record.
+> 
+> The method needs replacing as currently:-
+> 1. It is inefficient in using available IDs.
+> 2. Does not scale to larger systems with many cores and the algorithm
+> has no limits so will generate invalid trace IDs for cpu number > 44.
+> 
+> Additionally requirements to allocate additional system IDs on some
+> systems have been seen.
+> 
+> This patch set  introduces an API that allows the allocation of trace IDs
+> in a dynamic manner.
 
-                        Geert
+I've tested this with various commands like with per-thread mode, attaching,
+running the tests and also Carsten's new tests. Apart from the possible
+backwards compatibility issue and the minor code comments it looks good to
+me.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> Architecturally reserved IDs are never allocated, and the system is
+> limited to allocating only valid IDs.
+> 
+> Each of the current trace sources ETM3.x, ETM4.x and STM is updated to use
+> the new API.
+> 
+> For the ETMx.x devices IDs are allocated on certain events
+> a) When using sysfs, an ID will be allocated on hardware enable, or a read of
+> sysfs TRCTRACEID register and freed when the sysfs reset is written.
+> 
+> b) When using perf, ID is allocated on hardware enable, and freed on
+> hardware disable. IDs are communicated using the AUX_OUTPUT_HW_ID packet.
+> The ID allocator is notified when perf sessions start and stop
+> so CPU based IDs are kept constant throughout any perf session.
+> 
+> 
+> Note: This patchset breaks backward compatibility for perf record and
+> perf report.
+> 
+> Because the method for generating the AUXTRACE_INFO meta data has
+> changed, using an older perf record will result in metadata that
+> does not match the trace IDs used in the recorded trace data.
+> This mismatch will cause subsequent decode to fail.
+> 
+> The version of the AUXTRACE_INFO has been updated to reflect the fact that
+> the trace source IDs are no longer present in the metadata. This will
+> mean older versions of perf report cannot decode the file.
+> 
+> Applies to coresight/next [c06475910b52]
+> Tested on DB410c
+> 
+> Changes since v1:
+> (after feedback & discussion with Mathieu & Suzuki).
+> 
+> 1) API has changed. The global trace ID map is managed internally, so it
+> is no longer passed in to the API functions.
+> 
+> 2) perf record does not use sysfs to find the trace IDs. These are now
+> output as AUX_OUTPUT_HW_ID events. The drivers, perf record, and perf report
+> have been updated accordingly to generate and handle these events.
+> 
+> Mike Leach (13):
+>   coresight: trace-id: Add API to dynamically assign Trace ID values
+>   coresight: trace-id: update CoreSight core to use Trace ID API
+>   coresight: stm: Update STM driver to use Trace ID API
+>   coresight: etm4x: Update ETM4 driver to use Trace ID API
+>   coresight: etm3x: Update ETM3 driver to use Trace ID API
+>   coresight: etmX.X: stm: Remove unused legacy source Trace ID ops
+>   coresight: perf: traceid: Add perf notifiers for Trace ID
+>   perf: cs-etm: Move mapping of Trace ID and cpu into helper function
+>   perf: cs-etm: Update record event to use new Trace ID protocol
+>   kernel: events: Export perf_report_aux_output_id()
+>   perf: cs-etm: Handle PERF_RECORD_AUX_OUTPUT_HW_ID packet
+>   coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID used for Trace ID
+>   coresight: trace-id: Add debug & test macros to Trace ID allocation
+> 
+>  drivers/hwtracing/coresight/Makefile          |   2 +-
+>  drivers/hwtracing/coresight/coresight-core.c  |  49 +---
+>  .../hwtracing/coresight/coresight-etm-perf.c  |  17 ++
+>  drivers/hwtracing/coresight/coresight-etm.h   |   3 +-
+>  .../coresight/coresight-etm3x-core.c          |  85 +++---
+>  .../coresight/coresight-etm3x-sysfs.c         |  28 +-
+>  .../coresight/coresight-etm4x-core.c          |  65 ++++-
+>  .../coresight/coresight-etm4x-sysfs.c         |  32 ++-
+>  drivers/hwtracing/coresight/coresight-etm4x.h |   3 +
+>  drivers/hwtracing/coresight/coresight-stm.c   |  49 +---
+>  .../hwtracing/coresight/coresight-trace-id.c  | 263 ++++++++++++++++++
+>  .../hwtracing/coresight/coresight-trace-id.h  |  65 +++++
+>  include/linux/coresight-pmu.h                 |  31 ++-
+>  include/linux/coresight.h                     |   3 -
+>  kernel/events/core.c                          |   1 +
+>  tools/include/linux/coresight-pmu.h           |  31 ++-
+>  tools/perf/arch/arm/util/cs-etm.c             |  21 +-
+>  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |   9 +
+>  tools/perf/util/cs-etm.c                      | 220 +++++++++++++--
+>  tools/perf/util/cs-etm.h                      |  14 +-
+>  20 files changed, 784 insertions(+), 207 deletions(-)
+>  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
+>  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
+> 

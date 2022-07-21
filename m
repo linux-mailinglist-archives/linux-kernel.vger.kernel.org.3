@@ -2,145 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA4757D42D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C1257D43B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiGUTcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 15:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S233204AbiGUTfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 15:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiGUTcb (ORCPT
+        with ESMTP id S233301AbiGUTfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 15:32:31 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A79DF1B;
-        Thu, 21 Jul 2022 12:32:27 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id o17so1108517ils.9;
-        Thu, 21 Jul 2022 12:32:27 -0700 (PDT)
+        Thu, 21 Jul 2022 15:35:36 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AA93B951;
+        Thu, 21 Jul 2022 12:35:30 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id mf4so4922752ejc.3;
+        Thu, 21 Jul 2022 12:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=KzbAYM4nGE4ezUX59c5W154+NTPrtANBLPEKpj2px0c=;
+        b=DiFDsU8CXUaFSApPMqlBrkFd3QUhyecksU6hRMdf1ltuCKYSnecZ4azYPFydoLR7hP
+         lKKq90W1HXBGVU+tB0fPCJbJdtOsJVrsvGU33KiYXKGEw0Q9ag+DOZDQhS81O09SJKHA
+         imtV2sfUl1B69A/o6raDSnRsOLa7eXhxEAH+QJjEURmqO9O8lsjUA9ctiGTwOOv7MqNh
+         vu9sjta1Z4cior2BcZYMz+WJzL9qZ3HQPJjiPGi8yxYBew1ZN1Dqrhj+Iy96kUBwRxNB
+         +R6dL39C0H6OG11rsDIAFPYZcrn4w08UXo7x45xNTfwemLI9jHR/RS2cYMFsWhlgXqWw
+         uBTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RW1s9d0AAPQ8Q1ggcxkOL30thDKSyaQDJk2AQocHRzI=;
-        b=hfqDZJKaSHT3oBUj9Lx8hiNTtsLfX9DdevN7s0z+3z105M/J6aa/5ipG/8hkSt3l4Q
-         R1P9Noq73VxDygCFAI9rxy2mfh5L9Wr1lL+d16M4Hkl9iYiuXi30xOI/+kfNhGDn3NyI
-         AIFw7/gv7MYZwlQwxbAv3C6ffIbQrePLeiH/jQ+hFH3+0FfDoRfgmeQlg6NU74atioLm
-         zugIJigUvlbHhGMPmrv2oW9bWy8zrFfyzaZEJhsfHNbgUvCa3Fu8rt510jYhfbsAK59c
-         uoQyNJAnxCdewS/be/Wv85TBbZJ/RXli5pnFIU86vICOd7dYRQt18WMLcKdgTLoJ+Sly
-         IHNw==
-X-Gm-Message-State: AJIora+8CSmEgdf7jvtGnKkqRFvJJ5PYVAb/sFZ66B0bkL80aGiK/SX9
-        w/cNfLEak6qiqNh2mRlrNw==
-X-Google-Smtp-Source: AGRyM1urApMk3RmAgAk80eaJYDGIiCddCIb635mCXcyV8VHha7Y/DzXmZJzaV4JfmCjlsWC3fhIGUw==
-X-Received: by 2002:a92:b70e:0:b0:2dd:10f0:6f8d with SMTP id k14-20020a92b70e000000b002dd10f06f8dmr2526356ili.321.1658431946785;
-        Thu, 21 Jul 2022 12:32:26 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f19-20020a056638113300b0033f3ab94271sm1126125jar.139.2022.07.21.12.32.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KzbAYM4nGE4ezUX59c5W154+NTPrtANBLPEKpj2px0c=;
+        b=yoAUAEjAv7E2b46VVFEbl/hUgJjMa8K82OaRg88Z87iZpReEAPWiYfdeG5zU0QXETM
+         JkXuegFI9BHFghNLXTUjYOBOtCQz0iGh8mJ3wm6mIXuvyR38OBcjEp8yGPOkylRJ7ZO3
+         eE7lRgKNEvdKBHV4pW80jxZ5ru1Ko15eYaXZtuJAXfShcScruHbEVXo3TV2Acl2w+5pP
+         dNvrW1qndqC30VYgC/ii18AnV0KxHwEp4ku/CxpAWO3XP3xfhHnQQqNx60bn338nx9ZI
+         4qIW5+9rT8BoPVUFkCQx5mPZFRZHZUeaSVhj9RkbcFm5pst3YTrjeSXfC5dKlqR7zwUA
+         9Tww==
+X-Gm-Message-State: AJIora/JJfpAvuYn2Ah713AeZhBUChdt6nXC9R91sm1k5d5oTKAjJxqH
+        xEgEOSHgCdT2Ue7t2KlL4aQ=
+X-Google-Smtp-Source: AGRyM1sLEA1vmCHtkt1jvy1GGU0P18Ro29Y9+B+l9q4gGXE8q3ixgg7YGrHxunMQe2PUfXco17S2fQ==
+X-Received: by 2002:a17:907:1361:b0:72b:3554:4f7 with SMTP id yo1-20020a170907136100b0072b355404f7mr115941ejb.420.1658432129142;
+        Thu, 21 Jul 2022 12:35:29 -0700 (PDT)
+Received: from localhost.localdomain ([155.133.219.250])
+        by smtp.gmail.com with ESMTPSA id q6-20020a056402032600b0043574d27ddasm1430430edw.16.2022.07.21.12.35.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 12:32:26 -0700 (PDT)
-Received: (nullmailer pid 1794689 invoked by uid 1000);
-        Thu, 21 Jul 2022 19:32:22 -0000
-Date:   Thu, 21 Jul 2022 13:32:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Nuno Sa <nuno.sa@analog.com>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Belisko <marek@goldelico.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Christian Eggers <ceggers@arri.de>,
-        Beniamin Bia <beniamin.bia@analog.com>,
-        Stefan Popa <stefan.popa@analog.com>,
-        Oskar Andero <oskar.andero@gmail.com>,
-        =?UTF-8?Q?M=C3=A5rten_Lindahl?= <martenli@axis.com>,
-        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
-        Cristian Pop <cristian.pop@analog.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Matheus Tavares <matheus.bernardino@usp.br>,
-        Sankar Velliangiri <navin@linumiz.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Stefan Wahren <stefan.wahren@in-tech.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH 3/6] dt-bindings: iio: explicitly list SPI CPHA and CPOL
-Message-ID: <20220721193222.GA1792785-robh@kernel.org>
-References: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
- <20220721153155.245336-4-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721153155.245336-4-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 12:35:28 -0700 (PDT)
+From:   Daniel Kestrel <kestrelseventyfour@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Kestrel <kestrelseventyfour@gmail.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Add support for WASP SoC on AVM router boards
+Date:   Thu, 21 Jul 2022 21:34:52 +0200
+Message-Id: <20220721193455.2717-1-kestrelseventyfour@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 05:31:52PM +0200, Krzysztof Kozlowski wrote:
-> The spi-cpha and spi-cpol properties are device specific and should be
-> accepted only if device really needs them.  Explicitly list them in
-> device bindings in preparation of their removal from generic
-> spi-peripheral-props.yaml schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/iio/accel/adi,adxl345.yaml   | 10 ++++++++--
->  .../devicetree/bindings/iio/adc/adi,ad7192.yaml      | 10 ++++++++--
->  .../devicetree/bindings/iio/adc/adi,ad7292.yaml      |  5 ++++-
->  .../devicetree/bindings/iio/adc/adi,ad7606.yaml      | 10 ++++++++--
->  .../devicetree/bindings/iio/adc/adi,ad7768-1.yaml    | 10 ++++++++--
->  .../bindings/iio/adc/microchip,mcp3201.yaml          | 12 ++++++++++--
->  .../devicetree/bindings/iio/adc/ti,adc084s021.yaml   | 11 +++++++++--
->  .../devicetree/bindings/iio/adc/ti,ads124s08.yaml    |  5 ++++-
->  .../devicetree/bindings/iio/adc/ti,ads131e08.yaml    |  5 ++++-
->  .../devicetree/bindings/iio/addac/adi,ad74413r.yaml  |  5 ++++-
->  .../devicetree/bindings/iio/dac/adi,ad5592r.yaml     |  5 ++++-
->  .../devicetree/bindings/iio/dac/adi,ad5755.yaml      | 10 ++++++++--
->  .../devicetree/bindings/iio/dac/adi,ad5758.yaml      |  6 +++++-
->  .../devicetree/bindings/iio/dac/adi,ad5766.yaml      |  5 ++++-
->  .../devicetree/bindings/iio/dac/ti,dac082s085.yaml   |  9 +++++++--
->  .../bindings/iio/gyroscope/adi,adxrs290.yaml         | 10 ++++++++--
->  .../devicetree/bindings/iio/imu/adi,adis16460.yaml   | 12 +++++++++---
->  .../devicetree/bindings/iio/imu/adi,adis16475.yaml   | 10 ++++++++--
->  .../devicetree/bindings/iio/imu/adi,adis16480.yaml   | 11 +++++++++--
->  .../bindings/iio/imu/invensense,icm42600.yaml        | 12 ++++++++++--
->  .../bindings/iio/proximity/ams,as3935.yaml           |  5 ++++-
->  .../devicetree/bindings/iio/resolver/adi,ad2s90.yaml | 10 ++++++++--
->  .../bindings/iio/temperature/maxim,max31855k.yaml    |  6 +++++-
->  .../bindings/iio/temperature/maxim,max31856.yaml     |  6 +++++-
->  .../bindings/iio/temperature/maxim,max31865.yaml     |  6 +++++-
->  25 files changed, 166 insertions(+), 40 deletions(-)
+There is a popular set of Lantiq xrx200 router boards by AVM in
+Germany (AVM Fritzbox 3390, 3490, 5490, 5491 and 7490) which
+have the strange implementation of having the wifi cards
+connected to a separate memory only ATH79 based SoC. It has no
+persistent storage and no access to any resource on the Lantiq
+host, but is connect to the Lantiq GSWIP switch on an additional
+fixed internal network port.
+This kernel module is to support booting the secondary SoC called
+Wireless Assistant Support Processor (WASP).
+After turning it on, a small network boot firmware is sent to
+the SoC by using mdio and when it is started, an initramfs
+linux image is sent to the SoC using raw ethernet frames.
 
-This whole patch can be dropped which will make merging easier.
+The whole procedure takes about 6 seconds, if there is no error.
+So far tested on 3490, 5490 and 7490 devices based on OpenWrt, 3390
+takes about 20 seconds.
 
-Rob
+Patch 1/3 adds the vendor name
+Patch 2/3 adds the dt-bindings
+Patch 3/3 adds the remoteproc driver
+
+To build and run, there is OpenWrt PR 5075.
+
+Please review.
+
+Changes in v3:
+  - Replace generic avm,fritzboxx490-wasp with actual device names for
+    device tree documentation and change the driver to accept them
+  - Add maxItems to device tree documentation
+  - Change example in the device tree documentation
+  - Fix wait time to make the Wasp upload work for 3390 more reliable
+  - Enable the SOC on driver load, use reset instead of disable/enable
+    while driver is loaded and disable on unloading the driver
+  - Change some messages printed to adhere to standards (e.g. remove !)
+
+Changes in v2:
+  - Remove firmware names from dt-binding and add as kmod parameters
+  - Rename other bindings with vender prefix and fix gpios suffix
+  - Change descriptions in dt-binding
+  - Replace/Remove asynch load of firmware with request_firmware_direct
+  - Fix comments to use the errno define instead of the number
+  - Implement wait loops with read_poll_timeout() macro
+  - Wrap read_poll_timeout() macro in function saving 6k module size
+  - Return -ETIMEDOUT for all errors returned by read_poll_timeout
+  - Replace mdio writes/reads with mdiobus_write and mdiobus_read and add
+    return codes and their handling
+  - Remove mutex for mdiobus_lock and add return code checking for mdio ops
+  - Replaced the mdio register array with directly specifying registers
+  - As a result of the previous 3 changes remove the functions for mdio
+  - Consolidate error messages for mdio writes into a single one saved 1k
+    for module size
+  - Replaced mdelay with usleep_range saved 0,7k module size
+  - Remove unneeded include <linux/interrupt.h> and <linux/error.h>
+  - Wrap all blocks with {} and fix some indentation errors
+  - Change const len in to size_t in avm_wasp_netboot_write_chunk
+  - Make all methods static to fix kernel bot warning
+  - Change read variable name in avm_wasp_load_initramfs_image
+  - Change ssize_t variables to size_t in avm_wasp_load_initramfs_image
+  - avm_wasp_netboot_write_chunk change for loop for 2 byte divisibility
+  - Change uint32_t to u32
+  - Change int count = -1 to u32 with U32_MAX initialisation
+  - Add check for firmware len divisable by 4
+  - Replace big endian bit shift operations with be32_to_cpu
+  - Change loop to write 14 byte firmware chuncks like suggested
+  - Change WASP_CHUNK_SIZE to ARRAY_SIZE(mac_data) for readability
+  - Change int done to boolean
+  - Change unsigned ints to u32
+  - Change int to size_t for send_len
+  - Use int for numbytes because kernel_recvmsg returns error or number
+  - Two sockets are not needed, so reduce to one socket usage
+  - Remove struct timeval definition, replace with __kernel_old_timeval
+  - __kernel_old_timeval is depracated, but arch mips is 32bit platform
+  - Replace &avmwasp->pdev->dev with local dev
+  - Check if wasp network interface is up and fail if not in start method
+  - Remove setsockopt for SO_REUSEADDR and SO_BINDTODEVICE
+  - Remove packet_counter
+  - Move firmware and firmware_end out of RESP_DISCOVER to make sure that
+    they are initialized if RESP_DISCOVER is not happening first
+  - indend break;
+  - Move second half of the send/receive paket while loop to RESP_OK and
+    let RESP_DISCOVER fall through
+  - Remove bringing up the wasp network interface
+  - Check if wasp network interface is up in probe and defer if not
+  - Remove the check for the root device and replace it with match data
+    for WASP device identification
+  - Move of_read and find of mdio bus to rproc_start but delete reference
+    after using it in the rproc_start method
+  - Replace dev_set_drvdata with platform_set_drvdata
+  - Remove avm_wasp_rproc_boot_addr because its not needed and move
+    setting the fw struct pointer to avm_wasp_rproc_load
+  - Move avm_wasp.h definitions to kernel module
+
+Reported-by: kernel test robot <lkp@intel.com>
+
+Daniel Kestrel (3):
+  dt-bindings: vendor-prefixes: Add AVM
+  dt-bindings: remoteproc: Add AVM WASP
+  remoteproc: Add AVM WASP driver
+
+ .../bindings/remoteproc/avm,wasp-rproc.yaml   |   61 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ drivers/remoteproc/Kconfig                    |   10 +
+ drivers/remoteproc/Makefile                   |    1 +
+ drivers/remoteproc/avm_wasp.c                 | 1056 +++++++++++++++++
+ 5 files changed, 1130 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
+ create mode 100644 drivers/remoteproc/avm_wasp.c
+
+-- 
+2.17.1
+

@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053A157CE53
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E082557CE56
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbiGUO5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S231200AbiGUO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiGUO5I (ORCPT
+        with ESMTP id S232441AbiGUO5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:57:08 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9883D49
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:57:07 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id b11so3556461eju.10
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=exCI3TR0kc6ObjwGiSEPtQxiqL802InWe30/x4Adv3Q=;
-        b=KMNnYZj3gibuOQuztf8X+aPeMkdVs0vHBowELYbMwZ4++ad1Gyt0+6PFYzNwatRWy2
-         Z2EAws1rLlIuy1G5RiyLrfaynLIGS7EVkW2jheD9SFoAE8FWNFNVNxGNHdO+svmhi02C
-         idm/DAOZAS5Y7OWXvvciBPFMR/JQF7/cC7SWU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=exCI3TR0kc6ObjwGiSEPtQxiqL802InWe30/x4Adv3Q=;
-        b=ybHkpmSB9YMnynu9l+ofquPMjDL0kVtMWm+fpPOJod0OEYOnnnq0lHBG+MD/ifRVh4
-         UYdfvSPv3SEI0Ch6226PWKnG8k2Z2crtUHjPZgGUsUEBapm8tDObWTyOSG27xBLI+nVW
-         fYjArl6U7LC16rqpneiHswopW++O8qlpq45fYxcQxCNZ7/akqz4Qy8smN9w/IkabZ7tG
-         9HXMiMt15ecXj2aBM+eu4BQRzRrk8lVL99LVCPQPFVaRT9pSmMihpU6OXNUqUx9uJkcT
-         PYOYu5C8zt3Ly7A05sv6gwY2YSNHXnhxKbPhcp0AWzqGwNEapXavmQ4XNfMzgz3Dwaz2
-         r2ww==
-X-Gm-Message-State: AJIora9417pHRTpEVCxdSXVGhqrZU7v3jfc0xasCiyn3+RTkLbIV3/bt
-        aG1dNn8tmOe7/+JgZW4XaAcPIKso4N8AA1+BYz0zAA==
-X-Google-Smtp-Source: AGRyM1uKuCK5XU9mrN1KyK9VOGrq9PVjbeJNNkDMJitdEMpXWQ7KLU5QEBMUUAKOJdsRQxn51H+WNhZby6VcXRPOHac=
-X-Received: by 2002:a17:906:106:b0:715:7cdf:400f with SMTP id
- 6-20020a170906010600b007157cdf400fmr41073145eje.1.1658415425127; Thu, 21 Jul
- 2022 07:57:05 -0700 (PDT)
+        Thu, 21 Jul 2022 10:57:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A613A1F2F5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658415429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FtBAxFvMFDzgwHndzmBu4PFBZ+QVw2pSEVvuBlD9/k8=;
+        b=BqCWGctikk5zy6sYbqQRXkgZ/lunPvr8GPyOM5ZJkmxh8SaL6WMHuj/4Wi57bP6FVrWKt8
+        InjcQxduIXJM29O4t6gsNaAJSKehlc8RTbZ2UJzh4fwIaK8j+Ilb1XpPJgYZ/YXYijQPi8
+        Ht1edbkiEEZyOC8Wh8M+18I3ouaY8A8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-Gn6dFRFKMj6x1PROaP9Jag-1; Thu, 21 Jul 2022 10:57:08 -0400
+X-MC-Unique: Gn6dFRFKMj6x1PROaP9Jag-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83FD31019C96;
+        Thu, 21 Jul 2022 14:57:07 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B445492CA5;
+        Thu, 21 Jul 2022 14:57:03 +0000 (UTC)
+Message-ID: <c37645cbba5a381ce409dcdb5b9d9bed02b90dd3.camel@redhat.com>
+Subject: Re: [PATCH v2 05/11] KVM: x86: emulator: update the emulation mode
+ after CR0 write
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>
+Date:   Thu, 21 Jul 2022 17:57:02 +0300
+In-Reply-To: <YtlefGulMwp/WwKv@google.com>
+References: <20220621150902.46126-1-mlevitsk@redhat.com>
+         <20220621150902.46126-6-mlevitsk@redhat.com> <YtiUq7jm2Z1NTRv3@google.com>
+         <532c71cbca049004bd6860508fdc056ae118ab1f.camel@redhat.com>
+         <YtlefGulMwp/WwKv@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-References: <20220718224033.GA1450714@bhelgaas> <20220720203705.GA1654821@bhelgaas>
-In-Reply-To: <20220720203705.GA1654821@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Thu, 21 Jul 2022 10:56:53 -0400
-Message-ID: <CA+-6iNyAXEYT=pc-i0RgtA2njD3f6yELNppJqy733c7O_rmgUg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] PCI: brcmstb: Split brcm_pcie_setup() into two funcs
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000061bdff05e451ee1d"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,143 +74,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000061bdff05e451ee1d
-Content-Type: text/plain; charset="UTF-8"
+On Thu, 2022-07-21 at 14:11 +0000, Sean Christopherson wrote:
+> On Thu, Jul 21, 2022, Maxim Levitsky wrote:
+> > On Wed, 2022-07-20 at 23:50 +0000, Sean Christopherson wrote:
+> > > On Tue, Jun 21, 2022, Maxim Levitsky wrote:
+> > > > CR0.PE toggles real/protected mode, thus its update
+> > > > should update the emulation mode.
+> > > > 
+> > > > This is likely a benign bug because there is no writeback
+> > > > of state, other than the RIP increment, and when toggling
+> > > > CR0.PE, the CPU has to execute code from a very low memory address.
+> > > > 
+> > > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > > ---
+> > > >  arch/x86/kvm/emulate.c | 13 ++++++++++++-
+> > > >  1 file changed, 12 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> > > > index 6f4632babc4cd8..002687d17f9364 100644
+> > > > --- a/arch/x86/kvm/emulate.c
+> > > > +++ b/arch/x86/kvm/emulate.c
+> > > > @@ -3659,11 +3659,22 @@ static int em_movbe(struct x86_emulate_ctxt *ctxt)
+> > > >  
+> > > >  static int em_cr_write(struct x86_emulate_ctxt *ctxt)
+> > > >  {
+> > > > -	if (ctxt->ops->set_cr(ctxt, ctxt->modrm_reg, ctxt->src.val))
+> > > > +	int cr_num = ctxt->modrm_reg;
+> > > > +	int r;
+> > > > +
+> > > > +	if (ctxt->ops->set_cr(ctxt, cr_num, ctxt->src.val))
+> > > >  		return emulate_gp(ctxt, 0);
+> > > >  
+> > > >  	/* Disable writeback. */
+> > > >  	ctxt->dst.type = OP_NONE;
+> > > > +
+> > > > +	if (cr_num == 0) {
+> > > > +		/* CR0 write might have updated CR0.PE */
+> > > 
+> > > Or toggled CR0.PG.  
+> > 
+> > I thought about it but paging actually does not affect the CPU mode.
+> 
+> Toggling CR0.PG when EFER.LME=1 (and CR4.PAE=1) switches the CPU in and out of
+> long mode.  That's why I mentioned the EFER.LMA thing below.  It's also notable
+> in that the only reason we don't have to handle CR4 here is because clearing
+> CR4.PAE while long is active causes a #GP.  
 
-On Wed, Jul 20, 2022 at 4:37 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Mon, Jul 18, 2022 at 05:40:33PM -0500, Bjorn Helgaas wrote:
-> > On Mon, Jul 18, 2022 at 01:14:25PM -0500, Bjorn Helgaas wrote:
-> > > ...
-> >
-> > > So I think brcm_pcie_setup() does initialization that doesn't depend
-> > > on the link or any downstream devices, and brcm_pcie_start_link() does
-> > > things that depend on the link being up.  Right?
-> > >
-> > > If so, "start_link" might be a slight misnomer since AFAICT
-> > > brcm_pcie_start_link() doesn't do anything to initiate link-up except
-> > > maybe deasserting fundamental reset.  Some drivers start the LTSSM or
-> > > explicitly enable link training, but brcm_pcie_start_link() doesn't
-> > > seem to do anything like that.
-> > >
-> > > brcm_pcie_start_link() still does brcm_pcie_set_outbound_win().  Does
-> > > that really depend on the link being up?  If that only affects the
-> > > Root Port, maybe it could be done before link-up?
-> >
-> > What about the /* PCIe->SCB endian mode for BAR */ thing?  Does that
-> > depend on the link being up?
-> >
-> > And the "Refclk from RC should be gated with CLKREQ#" part?  Does that
-> > depend on the link being up?
-> >
-> > It seems obvious that brcm_pcie_set_ssc() and reading the negotiated
-> > link speed and width depend on the link being up.
->
-> Can we close on this?  Splitting into
-Absolutely.
+I had a distinct feeling that this is related to LMA/LME which I always learn and then forget
+Now I do, and I wrote a short summary for myself to refresh my memory when I forget about this again :-)
 
->
->   (a) stuff that can be initialized before the link is available and
->   (b) stuff that depends on the link
->
-> makes good sense, but then (b) should only contain stuff that actually
-> depends on the link.
->
-> The "PCIe->SCB endian mode for BAR" *sounds* like something related to
-> the primary side of the RP, not the link.
->
-> Not sure about "Refclk from RC".  RC would certainly be primary side,
-> but ASPM has to do with secondary (link) side.
+I'll update the comment again in v3.
 
-I get the feedback, submission coming soon -- I was waiting for the
-email thread to conclude.
+Thanks a lot,
+	Best regards,
+		Maxim Levitsky
 
-Regards,
-Jim Quinlan
-Broadcom STB
+>  
+> > E.g if you are in protected mode, instructions execute the same regardless
+> > if you have paging or not.
+> > 
+> > (There are probably some exceptions but you understand what I mean).
+> > 
+> > Best regards,
+> > 	Maxim Levitsky
+> > 
+> > > It's probably also worth noting that ->set_cr() handles side
+> > > effects to other registers, e.g. the lack of an EFER.LMA update makes this look
+> > > suspicious at first glance.
 
 
->
-> Bjorn
-
---00000000000061bdff05e451ee1d
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-LeylbuEJGL9I80yqq8e6Z+Q6ulLxa6SopzpoysJe/vEVHgp9jPNppZzwKngVd2iDBRqpKlCngIAM
-DXgVGyEojXnuEbRs3NlB7wq1kJGlYysrnDug55ncJM8CAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFCeTeUYv84Mo3T1V+OyDdxib
-DDLvMA0GCSqGSIb3DQEBCwUAA4IBAQCCqR1PBVtHPvQHuG8bjMFQ94ZB7jmFEGhgfAsFJMaSMLov
-qyt8DKr8suCYF4dKGzqalbxo5QU9mmZXdLifqceHdt/Satxb+iGJjBhZg4E0cDds24ofYq+Lbww2
-YlIKC2HHxIN+JX2mFpavSXkshR5GT29B9EIJ8hgSjbs61XXeAcrmVIDfYbXQEmGbsnwqxdq+DJpQ
-S2kM2wvSlgSWDb6pL7myuKR5lCkQhj7piGSgrVLJRDRrMPw1L4MvnV9DjUFMlGCB40Hm6xqn/jm0
-8FCLlWhxve5mj+hgUOPETiKbjhCxJhhAPDdCvDRkZtJlQ8oxUVvXHugG8jm1YqB5AWx7MYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMI+Aj9XRk/wFexb9/
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBELyzMjGBCviKtpUT9+Nla/JO/h98f
-IRLvitgDMnnG+TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA3
-MjExNDU3MDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEAREEFXsrmI9WMXe54+37RL+oX0k0vb5vTT7mUtg7LdsCeyfOI
-EZ5aTR4X11aRidmGSnPt01aq1frraU+bbgWY0A4L5vrpD3WM2a2QR0l6Syqsl2DjZhhJOXSHLKk0
-RJuaynlttl3ducL5oJPys/Sn+jqwQwNLnamEWUoZ0lXboWq3kAPsjkx2kMlTaFA/uwsdWyaZ6tw2
-mOUcIPLJ1cDcXgfpO3Y2RHEJ4QxLCDpMcyJU/QMjh5+dXQUZv0zn6Gt2D4hygvSOG91fGMIxF/5l
-UdqsHe0x6ssIZHV2D+8hd+9Eu2GHdgP9ej5I4rANpcDcYCADPVfveaYVrriU01/Uhg==
---00000000000061bdff05e451ee1d--

@@ -2,155 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD057D55F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6E657D569
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiGUVB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S229668AbiGUVC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiGUVBZ (ORCPT
+        with ESMTP id S232975AbiGUVCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:01:25 -0400
-Received: from luna (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net [86.15.83.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E322AE8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:01:23 -0700 (PDT)
-Received: from ben by luna with local (Exim 4.96)
-        (envelope-from <ben@luna.fluff.org>)
-        id 1oEdIP-001std-11;
-        Thu, 21 Jul 2022 22:01:21 +0100
-From:   Ben Dooks <ben-linux@fluff.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, sre@kernel.org,
-        Ben Dooks <ben-linux@fluff.org>
-Subject: [PATCH] power: supply: bq27xxx: fix NULL vs 0 warnings
-Date:   Thu, 21 Jul 2022 22:01:20 +0100
-Message-Id: <20220721210120.449340-1-ben-linux@fluff.org>
-X-Mailer: git-send-email 2.35.1
+        Thu, 21 Jul 2022 17:02:18 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FD98FD5D;
+        Thu, 21 Jul 2022 14:02:16 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id p26-20020a1c545a000000b003a2fb7c1274so4066743wmi.1;
+        Thu, 21 Jul 2022 14:02:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LUbqQkNcEA47t5z4D+rB9SkmqQ7VO2bp8iPexMuATqU=;
+        b=OP+empOPZ1RB4JBaGjSPYztBbLFE4gQ/UMeL0BSMHnxPLK3k0KrYPjtb07qeYQxxJv
+         XqQg8H7RuS7Scu1YTs0X0D+eJLso0hzu+0R5UpPGLKaLWO1MM7gplZKvSRZC2LNcR06U
+         80Y+yOXRAgZvfBU2OTjZiz8xGAtZeG1vmJsROmrx35GfjE1ch48IjYQbQRyxGZ6haYgJ
+         5GllGV4ItT92kO+9PVZf2AlXC0SsddoIVN4+Oak/14A3dEunFBoIwo8FJBPftKR0l20s
+         pNfU5j5SeVss4s1WnlNRFvNLCHY/gyeCpwxSUsSKqHcUx9carxxFyyEdLp93fy2iQwmR
+         6yjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LUbqQkNcEA47t5z4D+rB9SkmqQ7VO2bp8iPexMuATqU=;
+        b=PccAqZkRBt7z4d/qF/csg2w5PjzKCVJuOlulI9xD++eKipJnADrx2Y1NvJ55rwQDeR
+         StFiSLLnq5KYDtOs7h6pMlY4vKpivOffkJmpuJPEok21XNScgsyOa5WjcwmyI1G64lfV
+         psra8a8SXZxb/9pQ0XCJ+VVHlfqSNm8lS5SWeVPOtX+6sovr6ZCxZ1WrxKR6hHc91Ipe
+         eSkppWezIaIpV8KvOV5bfY9FpKIprpNRHNT3hvG6QC/lQDbI+8b2TtBhGVxhscLbnPj/
+         ukYHE6qyat6uOkTCpXUcUJzYI0NzPTYvojSSIWEj4ETtXAh7VP2HJPB1pcIZh+hxo8WY
+         QNDg==
+X-Gm-Message-State: AJIora+E414LjJ8UbGNsQruxz7hTTIixYSCIZevqxtJo64X+1SlyhAtq
+        A/VbaVJKuKLhHh/4Gytc6X4=
+X-Google-Smtp-Source: AGRyM1uP6Bx8g4K9CRYbsg9B23+EhG+3Brx44lVLjS+PZZ+KB82TJ8d8YOOK80DoXNHzV34OYmYkog==
+X-Received: by 2002:a05:600c:601b:b0:3a3:21a2:8bcd with SMTP id az27-20020a05600c601b00b003a321a28bcdmr35141wmb.80.1658437335162;
+        Thu, 21 Jul 2022 14:02:15 -0700 (PDT)
+Received: from localhost.localdomain (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
+        by smtp.gmail.com with ESMTPSA id d12-20020adffbcc000000b0021b8c554196sm2884383wrs.29.2022.07.21.14.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 14:02:13 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 0/7] highmem: Extend kmap_local_page() documentation 
+Date:   Thu, 21 Jul 2022 23:01:59 +0200
+Message-Id: <20220721210206.13774-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FSL_HELO_NON_FQDN_1,
-        HELO_NO_DOMAIN,KHOP_HELO_FCRDNS,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver has a lot of sparse warnings for using 0 as a NULL
-pointer when NULL would be appropriate. Change the 0 values
-to NULL to fix the warnings, some of which are shown here:
+The Highmem's interface is evolving and the current documentation does not
+reflect the intended uses of each of the calls. Furthermore, after a
+recent series of reworks, the differences of the calls can still be
+confusing and may lead to the expanded use of calls which are deprecated.
 
-drivers/power/supply/bq27xxx_battery.c:984:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:985:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:986:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:987:23: warning: Using plain integer as NULL pointer
-drivers/power/supply/bq27xxx_battery.c:988:23: warning: Using plain integer as NULL pointer
+This series is the second round of changes towards an enhanced
+documentation of the Highmem's interface; at this stage the patches are
+only focused to kmap_local_page().
 
-Signed-off-by: Ben Dooks <ben-linux@fluff.org>
----
- drivers/power/supply/bq27xxx_battery.c | 54 +++++++++++++-------------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+In addition it also contains some minor clean ups.
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 35e6a394c0df..dccc2683455a 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -868,11 +868,11 @@ enum bq27xxx_dm_reg_id {
- 	BQ27XXX_DM_TERMINATE_VOLTAGE,
- };
- 
--#define bq27000_dm_regs 0
--#define bq27010_dm_regs 0
--#define bq2750x_dm_regs 0
--#define bq2751x_dm_regs 0
--#define bq2752x_dm_regs 0
-+#define bq27000_dm_regs NULL
-+#define bq27010_dm_regs NULL
-+#define bq2750x_dm_regs NULL
-+#define bq2751x_dm_regs NULL
-+#define bq2752x_dm_regs NULL
- 
- #if 0 /* not yet tested */
- static struct bq27xxx_dm_reg bq27500_dm_regs[] = {
-@@ -881,24 +881,24 @@ static struct bq27xxx_dm_reg bq27500_dm_regs[] = {
- 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 80, 48, 2, 1000, 32767 },
- };
- #else
--#define bq27500_dm_regs 0
-+#define bq27500_dm_regs NULL
- #endif
- 
- /* todo create data memory definitions from datasheets and test on chips */
--#define bq27510g1_dm_regs 0
--#define bq27510g2_dm_regs 0
--#define bq27510g3_dm_regs 0
--#define bq27520g1_dm_regs 0
--#define bq27520g2_dm_regs 0
--#define bq27520g3_dm_regs 0
--#define bq27520g4_dm_regs 0
--#define bq27521_dm_regs 0
--#define bq27530_dm_regs 0
--#define bq27531_dm_regs 0
--#define bq27541_dm_regs 0
--#define bq27542_dm_regs 0
--#define bq27546_dm_regs 0
--#define bq27742_dm_regs 0
-+#define bq27510g1_dm_regs NULL
-+#define bq27510g2_dm_regs NULL
-+#define bq27510g3_dm_regs NULL
-+#define bq27520g1_dm_regs NULL
-+#define bq27520g2_dm_regs NULL
-+#define bq27520g3_dm_regs NULL
-+#define bq27520g4_dm_regs NULL
-+#define bq27521_dm_regs NULL
-+#define bq27530_dm_regs NULL
-+#define bq27531_dm_regs NULL
-+#define bq27541_dm_regs NULL
-+#define bq27542_dm_regs NULL
-+#define bq27546_dm_regs NULL
-+#define bq27742_dm_regs NULL
- 
- #if 0 /* not yet tested */
- static struct bq27xxx_dm_reg bq27545_dm_regs[] = {
-@@ -907,7 +907,7 @@ static struct bq27xxx_dm_reg bq27545_dm_regs[] = {
- 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 80, 67, 2, 2800,  3700 },
- };
- #else
--#define bq27545_dm_regs 0
-+#define bq27545_dm_regs NULL
- #endif
- 
- static struct bq27xxx_dm_reg bq27411_dm_regs[] = {
-@@ -937,7 +937,7 @@ static struct bq27xxx_dm_reg bq27426_dm_regs[] = {
- #if 0 /* not yet tested */
- #define bq27441_dm_regs bq27421_dm_regs
- #else
--#define bq27441_dm_regs 0
-+#define bq27441_dm_regs NULL
- #endif
- 
- #if 0 /* not yet tested */
-@@ -947,13 +947,13 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
- 	[BQ27XXX_DM_TERMINATE_VOLTAGE] = { 82, 9, 2, 2500,  3700 },
- };
- #else
--#define bq27621_dm_regs 0
-+#define bq27621_dm_regs NULL
- #endif
- 
--#define bq27z561_dm_regs 0
--#define bq28z610_dm_regs 0
--#define bq34z100_dm_regs 0
--#define bq78z100_dm_regs 0
-+#define bq27z561_dm_regs NULL
-+#define bq28z610_dm_regs NULL
-+#define bq34z100_dm_regs NULL
-+#define bq78z100_dm_regs NULL
- 
- #define BQ27XXX_O_ZERO		BIT(0)
- #define BQ27XXX_O_OTDC		BIT(1) /* has OTC/OTD overtemperature flags */
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Mike Rapoport <rppt@linux.ibm.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+Fabio M. De Francesco (7):
+  highmem: Remove unneeded spaces in kmap_local_page() kdocs
+  highmem: Specify that kmap_local_page() is callable from interrupts
+  Documentation/mm: Don't kmap*() pages which can't come from HIGHMEM
+  Documentation/mm: Avoid invalid use of addresses from
+    kmap_local_page()
+  Documentation/mm: Prefer kmap_local_page() and avoid kmap()
+  highmem: Delete a sentence from kmap_local_page() kdocs
+  Documentation/mm: Add details about kmap_local_page() and preemption
+
+ Documentation/vm/highmem.rst | 31 +++++++++++++++++++++++++++----
+ include/linux/highmem.h      |  7 +++----
+ 2 files changed, 30 insertions(+), 8 deletions(-)
+
 -- 
-2.35.1
+2.37.1
 

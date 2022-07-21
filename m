@@ -2,110 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C251A57D676
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3FA57D67A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234020AbiGUWFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S234075AbiGUWFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbiGUWFQ (ORCPT
+        with ESMTP id S233557AbiGUWFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:05:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE8C1276C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:05:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42E53B826AE
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 22:05:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D8B2C3411E;
-        Thu, 21 Jul 2022 22:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658441111;
-        bh=LvcuNeaTxV66PvKnmvNrKgBUF+QpgGrAAwxXDjh8JUs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M3DUY5QpK02B5dyP6VKhqCfc4Wprfy7PsekVgbT+uZHlTLs7zs2uMX6j8SYxYODmf
-         fd6/BKLrQdUINwXFcRl5s4Zc5awICjOyBDCn8xtSE83tx8ms0DAoiZDDrdU0k2+ntX
-         wcCHAnGpX38gTRGrucevYNxUma2oOdca5cxEY986qgQoGxHVHupu+eckJr1PAHFDGT
-         6a+TU9pgq6r/ynPe4h6HRluk5hQZf5BODrkCMnmXeRdvFXq6QTk9HLti5o5sFV9ANb
-         GECQuhBZSwiVzeYGml/KmNhatDX1s8UZEfsdwZlWNrOo24NAaY4tUOVYNl8vhgKmyk
-         FkP9JmivuHAWQ==
-Date:   Thu, 21 Jul 2022 15:05:09 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     ndesaulniers@google.com, arnd@arndb.de, gregkh@linuxfoundation.org,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, trix@redhat.com
-Subject: Re: [PATCH v2] drivers: lkdtm: fix clang -Wformat warning
-Message-ID: <YtnNlZYZCEVUiuaE@dev-arch.thelio-3990X>
-References: <CAKwvOd=wn=tbX7ixs9a=4zoVSbAU1qP-6NE04hGG9dzvo0zFJw@mail.gmail.com>
- <20220721215706.4153027-1-justinstitt@google.com>
+        Thu, 21 Jul 2022 18:05:38 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ECB54642;
+        Thu, 21 Jul 2022 15:05:37 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y9so2927524pff.12;
+        Thu, 21 Jul 2022 15:05:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y05qOXaISg5b5cePrR6f95SnWWn5ZLoSf0WhccEFMxc=;
+        b=nNnaDJLAX2ldtXUDnqFoB2asA98UwfumeRoo7G5H5Y6iYqwXQdjhedmSMzHLUeIgoT
+         h7bFWvH0y5GmH+jBASfY2Hd3Jnm2bNRbIpVLFaGFN7Nyj3y6HSgXM+pCGz6cCSqZMsiZ
+         7N/4CfDAQgcKjCGQGGhsNZTUV53/1hUwtBrvkFuAi95qUVoxQ4ZOude9xLX+vB3YTYsK
+         V/0IPqS9EHsk2PQd7Wfmqun/jRC+TPr1T1VmC6oZv4SFlyA0sagiA4nt+dULYWcLpUnl
+         WFj1GywCLHzL4U/ehwktB8F24U6y4WBcsVpsT7p+NdnfoJR/7sqTmmbF21wM3i3Mqvbh
+         AaMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y05qOXaISg5b5cePrR6f95SnWWn5ZLoSf0WhccEFMxc=;
+        b=vIs6513qNZKgYIo9CSaxjpM9jdkfuJxw557UDeXMLXPtVV6WgLFPphoPR06opQUrIn
+         OjVb7XoV829d2sBbbTGqGIty6ufjp1GCkJp8T4OpiVSCEm/KejX4Am8CA0BD1c7hMI2h
+         TPprl3yy0cgzwCEIpv4SB5CfHCHXyeNCOwtFDVtgJQeKNk/+0gtq2E3Lnjj3rBd/E3nN
+         RrJ4RUznj47bhhtZUSijbeEcauvYzu8xODP5Ygkk/ODO8vnMGymtfJTNXZcLxDGqUl95
+         I8g4+Xwj6JgXgytOPNCJgJb0DoqLdlD8EtQO1Ruc7GDeSjvgnQaNJyqXHGvB6+IbYvR2
+         BTeQ==
+X-Gm-Message-State: AJIora94eb9dxZ76lXS1y7s5DEb32rExhknVt48wbQs19PPFj+nAEERW
+        0pUHuvAndSn82/oDqB88IqQ=
+X-Google-Smtp-Source: AGRyM1u+eqoFm4876gMFLzZFNfZyFDr1xS9hGetab9jTuWfaEOH08h9swQhz05Slhr6cqjMb/onsBQ==
+X-Received: by 2002:a63:f107:0:b0:41a:996c:d03b with SMTP id f7-20020a63f107000000b0041a996cd03bmr434248pgi.228.1658441136840;
+        Thu, 21 Jul 2022 15:05:36 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a8b8a00b001ef87123615sm1881188pjn.37.2022.07.21.15.05.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 15:05:36 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 07:05:34 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        catalin.marinas@arm.com, Will Deacon <will@kernel.org>,
+        guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        bhelgaas@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
+Message-ID: <YtnNrkH9UJYreU5M@antec>
+References: <20220718004114.3925745-3-shorne@gmail.com>
+ <mhng-3ae42214-abe0-4fad-9fa9-8f19809fa4d9@palmer-mbp2014>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721215706.4153027-1-justinstitt@google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <mhng-3ae42214-abe0-4fad-9fa9-8f19809fa4d9@palmer-mbp2014>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 02:57:06PM -0700, Justin Stitt wrote:
-> When building with Clang we encounter the following warning
-> (ARCH=hexagon + CONFIG_FRAME_WARN=0):
-> | ../drivers/misc/lkdtm/bugs.c:107:3: error: format specifies type
-> | 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
-> |                 REC_STACK_SIZE, recur_count);
-> |                 ^~~~~~~~~~~~~~
+On Tue, Jul 19, 2022 at 08:58:39AM -0700, Palmer Dabbelt wrote:
+> On Sun, 17 Jul 2022 17:41:14 PDT (-0700), shorne@gmail.com wrote:
+> > The asm/pci.h used for many newer architectures share similar
+> > definitions.  Move the common parts to asm-generic/pci.h to allow for
+> > sharing code.
+> > 
+> > Two things to note are:
+> > 
+> >  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
+> >    these architectures avoid creating that file and add the definition
+> >    to asm/pci.h.
+> >  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
+> >    undefine it after including asm-generic/pci.h.  Why doesn't csky
+> >    define it?
+> >  - pci_get_legacy_ide_irq, This function is only used on architectures
+> >    that support PNP.  It is only maintained for arm64, in other
+> >    architectures it is removed.
+> > 
+> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
+> > Signed-off-by: Stafford Horne <shorne@gmail.com>
+> > ---
+> > Second note on isa_dma_bridge_buggy, this is set on x86 but it it also set in
+> > pci/quirks.c.  We discussed limiting it only to x86 though as its a general
+> > quick triggered by pci ids I think it will be more tricky than we thought so I
+> > will leave as is.  It might be nice to move it out of asm/dma.h and into
+> > asm/pci.h though.
+> > 
+> > Since v2:
+> >  - Nothing
+> > Since v1:
+> >  - Remove definition of pci_get_legacy_ide_irq
+> > 
+> >  arch/arm64/include/asm/pci.h | 12 +++---------
+> >  arch/csky/include/asm/pci.h  | 24 ++++--------------------
+> >  arch/riscv/include/asm/pci.h | 25 +++----------------------
+> >  arch/um/include/asm/pci.h    | 24 ++----------------------
+> >  include/asm-generic/pci.h    | 36 ++++++++++++++++++++++++++++++++++++
+> >  5 files changed, 48 insertions(+), 73 deletions(-)
+> >  create mode 100644 include/asm-generic/pci.h
+> > 
+> > diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
+> > index b33ca260e3c9..1180e83712f5 100644
+> > --- a/arch/arm64/include/asm/pci.h
+> > +++ b/arch/arm64/include/asm/pci.h
+> > @@ -9,7 +9,6 @@
+> >  #include <asm/io.h>
+> > 
+> >  #define PCIBIOS_MIN_IO		0x1000
+> > -#define PCIBIOS_MIN_MEM		0
+> > 
+> >  /*
+> >   * Set to 1 if the kernel should re-assign all PCI bus numbers
+> > @@ -18,9 +17,6 @@
+> >  	(pci_has_flag(PCI_REASSIGN_ALL_BUS))
+> > 
+> >  #define arch_can_pci_mmap_wc() 1
+> > -#define ARCH_GENERIC_PCI_MMAP_RESOURCE	1
+> > -
+> > -extern int isa_dma_bridge_buggy;
+> > 
+> >  #ifdef CONFIG_PCI
+> >  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+> > @@ -28,11 +24,9 @@ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+> >  	/* no legacy IRQ on arm64 */
+> >  	return -ENODEV;
+> >  }
+> > -
+> > -static inline int pci_proc_domain(struct pci_bus *bus)
+> > -{
+> > -	return 1;
+> > -}
+> >  #endif  /* CONFIG_PCI */
+> > 
+> > +/* Generic PCI */
+> > +#include <asm-generic/pci.h>
+> > +
+> >  #endif  /* __ASM_PCI_H */
+> > diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
+> > index ebc765b1f78b..44866c1ad461 100644
+> > --- a/arch/csky/include/asm/pci.h
+> > +++ b/arch/csky/include/asm/pci.h
+> > @@ -9,26 +9,10 @@
+> > 
+> >  #include <asm/io.h>
+> > 
+> > -#define PCIBIOS_MIN_IO		0
+> > -#define PCIBIOS_MIN_MEM		0
+> > +/* Generic PCI */
+> > +#include <asm-generic/pci.h>
+> > 
+> > -/* C-SKY shim does not initialize PCI bus */
+> > -#define pcibios_assign_all_busses() 1
+> > -
+> > -extern int isa_dma_bridge_buggy;
+> > -
+> > -#ifdef CONFIG_PCI
+> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+> > -{
+> > -	/* no legacy IRQ on csky */
+> > -	return -ENODEV;
+> > -}
+> > -
+> > -static inline int pci_proc_domain(struct pci_bus *bus)
+> > -{
+> > -	/* always show the domain in /proc */
+> > -	return 1;
+> > -}
+> > -#endif  /* CONFIG_PCI */
+> > +/* csky doesn't use generic pci resource mapping */
+> > +#undef ARCH_GENERIC_PCI_MMAP_RESOURCE
+> > 
+> >  #endif  /* __ASM_CSKY_PCI_H */
+> > diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
+> > index 7fd52a30e605..12ce8150cfb0 100644
+> > --- a/arch/riscv/include/asm/pci.h
+> > +++ b/arch/riscv/include/asm/pci.h
+> > @@ -12,29 +12,7 @@
+> > 
+> >  #include <asm/io.h>
+> > 
+> > -#define PCIBIOS_MIN_IO		0
+> > -#define PCIBIOS_MIN_MEM		0
 > 
-> Cast REC_STACK_SIZE to `unsigned long` to match format specifier `%lu`
-> as well as maintain symmetry with `#define REC_STACK_SIZE
-> (_AC(CONFIG_FRAME_WARN, UL) / 2)`.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> My for-next changes these in bb356ddb78b2 ("RISC-V: PCI: Avoid handing out
+> address 0 to devices").  Do you mind either splitting out the arch/riscv
+> bits or having this in via some sort of shared tag?
 
-Personally, I would drop this; my suggestion was the cast, which we are
-not going with anymore. Not worth a v3 unless there are other changes
-requested.
+Hi Palmer,
 
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+I replied last on my phone but since it produces HTML multi-part email it got
+rejected from a few places and I am not sure if you saw my reply.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+It might be a bit hard to separate out the architecture specific bits as it
+requires a bit of coordination with the asm-generic/pci.h move.
 
-> ---
-> Reported by Nathan here:
-> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
-> 
-> changes from v1 -> v2:
-> * Use implicit division conversion with `/ nUL` instead of verbose
-> `(unsigned long)` ~ Thanks Nick
-> 
->  drivers/misc/lkdtm/bugs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-> index 009239ad1d8a..48821f4c2b21 100644
-> --- a/drivers/misc/lkdtm/bugs.c
-> +++ b/drivers/misc/lkdtm/bugs.c
-> @@ -29,7 +29,7 @@ struct lkdtm_list {
->  #if defined(CONFIG_FRAME_WARN) && (CONFIG_FRAME_WARN > 0)
->  #define REC_STACK_SIZE (_AC(CONFIG_FRAME_WARN, UL) / 2)
->  #else
-> -#define REC_STACK_SIZE (THREAD_SIZE / 8)
-> +#define REC_STACK_SIZE (THREAD_SIZE / 8UL)
->  #endif
->  #define REC_NUM_DEFAULT ((THREAD_SIZE / REC_STACK_SIZE) * 2)
->  
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
-> 
-> 
+Some options:
+  1 I can produce a tag for you to merge into your for-next.
+  2 I can skip touching riscv at all in this patch and you can take care of it
+    in a future patch.
+  3 I could cherry pick your change bb356ddb78b2 ("RISC-V: PCI: Avoid handing out
+    address 0 to devices") to my for-next branch.  It should help avoid conflict.
+
+Seeing that I am still doing small updates here and there I am not sure when I
+will be ablt to create a stable tag.  So maybe 3 would work best?
+
+-Stafford

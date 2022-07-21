@@ -2,101 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545B857CDAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D2157CDB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiGUOa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S230191AbiGUObP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiGUOa1 (ORCPT
+        with ESMTP id S229458AbiGUObN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:30:27 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610602B604
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:30:25 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id bv24so2553321wrb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:30:25 -0700 (PDT)
+        Thu, 21 Jul 2022 10:31:13 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F7CCE3;
+        Thu, 21 Jul 2022 07:31:12 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g12so1928880pfb.3;
+        Thu, 21 Jul 2022 07:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XhhMsY9RfWRqTmpaxcMmlEuk/6JY2Q0sFPTnxJuSH/c=;
-        b=HF/GiANUG1tbwXOkMqbonr5uqgeDDqKXeHrpOGj9X1YCLcgJ31NlFsLSr19G+Us9iB
-         fje0mIeU4RN4HWR/+C1BatWkzkD/Cylb//dKW0uio4/xskDi7YQBjPIcNnhBgkbOV6fq
-         cz3WwLwdCrtnco6bL63SgRQ+LFIrLEeVdrNP0RRdcf76IGydcR4HYfLgo9tel4+DH2QI
-         JeHWn8SsvVabE2yEQKwfRToTepvHML+GqcfARbnjBlMIaMQlZv5gxMdz9lK0EmltBh1A
-         8Tk9OVCAkTsnvvLX1Fen9dReiGaKEXmKgJ26gzi0HuWd2GiYsq0GPBQy3SqgYxJf49ul
-         MCJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=XhhMsY9RfWRqTmpaxcMmlEuk/6JY2Q0sFPTnxJuSH/c=;
-        b=tfJaT2UCR/4pF+P3+65RY53eoug/59i/YYaqL7mNQ9SiruiVW36bbOfBGj+q83ngXA
-         wdQChWE6AJliSra8EYm+X+apUbSLie8R2IbMxUFOfZqfhacOLIVc2H4RAbdkF6ZBi/in
-         XF9nUhwSR8TAmt+ahjadBDVyzSEHPg/eu4frdHbRmH2d7oCa4I1XhY6P9DiN4QofS5Pj
-         eDtV5KTq7IyF5IM23u88y8XIyn12yc/iunxHt9s52NCTrWI/ewq7FAgY8JEB4m/jEm6I
-         Nhc9ySYo91LyigUQjoTNOyIFPMdfL5g60zui747wWzHh5BhM7UvcaNb7jfTAwvglQ2Wq
-         rA2A==
-X-Gm-Message-State: AJIora/UEvKRZPPgqaDQTjPFzCG7HQOFY1u2DjAWyYvrjAvtThYEftMf
-        /mSyTmfo5N7QSDBDkmTsEyncew==
-X-Google-Smtp-Source: AGRyM1tSv2LRbOsioc1gUtCnwKFEXIgzbpBFTfyM17uLvH/QU77KYxhHSkynSfcLTg2qDA6NtYC+Xw==
-X-Received: by 2002:a5d:59a2:0:b0:21d:a96b:b3dd with SMTP id p2-20020a5d59a2000000b0021da96bb3ddmr32689302wrr.128.1658413823838;
-        Thu, 21 Jul 2022 07:30:23 -0700 (PDT)
-Received: from [10.205.160.53] ([95.83.233.54])
-        by smtp.gmail.com with ESMTPSA id j6-20020a5d4486000000b0021e47fb24a2sm2138817wrq.19.2022.07.21.07.30.22
+        bh=qk/0tQRhj2htLAv7EewmihQQ0IAjpoIgD+xbr3ZPelU=;
+        b=h4VlMFP4xCKDNB2NVM1ZSGyMJG8ieq/PlQHH3EnhLiihZoJKQBLkjZhJdsGubmO6Wn
+         FB9mT/W6OgiOFLS8hWLiw/Kq4kuPs7JN6fuWAiHpz+y7uq0rBGZVOaiBTcGaD15B8hwy
+         ps2r/GS4xy+BTyn4lypLLYqPi3cThwnOsyT3JZ/ZcoFKmitYj9huMyx8ckCBHAbeB06Y
+         kJKWG9y+e3Unaexaric6V/hHWdcFWYF+MVXw3c5+0mmNmqIrymZGcQYkTjGrtLPZAN3j
+         wJ0J+iw7b/T/Le8BHlodXxHrXVyNKea+ctpUr2Yz1RLGLb9B8qPfsdC4mmofMgkbmO2J
+         Iczw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qk/0tQRhj2htLAv7EewmihQQ0IAjpoIgD+xbr3ZPelU=;
+        b=MyfCqvZdfpafciDx0fG68JHN4/ttkXRn59+SGp4Ad11399s5LaZmz9kkqafI9KdBsN
+         RDTL5uB9i/cV5bpcHaRLXDRi1JCKr9DlTy4nij5fufKmtaR4ofFja7KeqU0fkbWZQ5VP
+         2lxFgGuWDokbGFG9BmgoqV7Uic7GbkjHZ70k/7UEgdnFxbTGn246T+vK0g7jO3S3JiZb
+         kBlOu06RPyzsq+Ww2bZS+yKBkXue/2YHUdmIfiO8cELrARqjgSFWMpxpRtSXypkh7rg6
+         WxwC+wS2KEbn4EhgYgclOJh/CD+Eq4qUnv5Mb0uqn8lAnSvtcWp8SW0OxrMFLP/mGo8E
+         gxsA==
+X-Gm-Message-State: AJIora+3rC5A0aMy5irJdLswEEx45NR3cmmExeqcvHgRhcrKe9ygVMEI
+        UX9RpS8Lqm6vRa0l7ukkt81k5etzBJFLwA==
+X-Google-Smtp-Source: AGRyM1vwbYNtROckT6Pl70KLbQhzQTc3/H468Ezk72OHgivlVSvlmDm0TwKDycDyT97557Bp+zJs7w==
+X-Received: by 2002:a63:148:0:b0:41a:53d5:fb04 with SMTP id 69-20020a630148000000b0041a53d5fb04mr10243279pgb.39.1658413872260;
+        Thu, 21 Jul 2022 07:31:12 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t15-20020aa7946f000000b0052592a8ef62sm1855369pfq.110.2022.07.21.07.31.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 07:30:23 -0700 (PDT)
-Message-ID: <157e8ae8-2456-dca3-ab2e-5f60a5223ca2@conchuod.ie>
-Date:   Thu, 21 Jul 2022 15:30:43 +0100
+        Thu, 21 Jul 2022 07:31:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <658f943f-f410-fb83-03f3-527c7ddab00f@roeck-us.net>
+Date:   Thu, 21 Jul 2022 07:31:09 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v6 3/4] pwm: add microchip soft ip corePWM driver
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 2/6] usb: typec: tcpci_rt1711h: Fix vendor setting when
+ set vconn
 Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Conor.Dooley@microchip.com
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Daire.McNamara@microchip.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220712142557.1773075-1-conor.dooley@microchip.com>
- <20220712142557.1773075-4-conor.dooley@microchip.com>
- <c49776c2-4807-91c1-010a-a33bd98b68b7@microchip.com>
- <ee05749f-c33f-3505-4309-f4d036de92a1@microchip.com>
- <20220721142030.yh7x3ebr2b4fcunc@pengutronix.de>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220721142030.yh7x3ebr2b4fcunc@pengutronix.de>
+To:     Gene Chen <gene.chen.richtek@gmail.com>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, gene_chen@richtek.com,
+        cy_huang@richtek.com
+References: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
+ <20220721061144.35139-3-gene.chen.richtek@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220721061144.35139-3-gene.chen.richtek@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/07/2022 15:20, Uwe Kleine-König wrote:
-> Hello,
+On 7/20/22 23:11, Gene Chen wrote:
+> From: Gene Chen <gene_chen@richtek.com>
 > 
-> On Thu, Jul 21, 2022 at 11:05:54AM +0000, Conor.Dooley@microchip.com wrote:
->> Should I resubmit now with the warnings fixed?
->> It is a pair of unused-result on the mutexes & a unused-variable so
->> they should not have much of an impact on any review you would give
->> for this version.
+> replace overwrite whole register with update bits
 > 
-> Don't wait for me to find the time to look. If you have some pending
-> changes I prefer not to look at the series with known drawbacks.
+> Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> ---
+>   drivers/usb/typec/tcpm/tcpci_rt1711h.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> So fire at will.
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index b56a0880a044..3309ceace2b2 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -23,6 +23,7 @@
+>   #define RT1711H_RTCTRL8_SET(ck300, ship_off, auto_idle, tout) \
+>   			    (((ck300) << 7) | ((ship_off) << 5) | \
+>   			    ((auto_idle) << 3) | ((tout) & 0x07))
+> +#define RT1711H_AUTOIDLEEN_MASK	BIT(3)
 
-Cool, didn't want to send a revision if you could've been in the
-process of looking at it. I'll send the fixed version so that if
-you do get a chance to look it'll at least be a better one than
-v6.
+Simple RT1711H_AUTOIDLEEN would be sufficient. Also, when using BIT(),
+include the necessary include file.
 
-Thanks!
+>   
+>   #define RT1711H_RTCTRL11	0x9E
+>   
+> @@ -109,8 +110,8 @@ static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *tdata,
+>   {
+>   	struct rt1711h_chip *chip = tdata_to_rt1711h(tdata);
+>   
+> -	return rt1711h_write8(chip, RT1711H_RTCTRL8,
+> -			      RT1711H_RTCTRL8_SET(0, 1, !enable, 2));
+> +	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL8,
+> +				  RT1711H_AUTOIDLEEN_MASK, enable ? 0 : 0xFF);
+
+I would suggest
+	return regmap_update_bits(chip->data.regmap, RT1711H_RTCTRL8,
+				  RT1711H_AUTOIDLEEN, enable ? 0 : RT1711H_AUTOIDLEEN);
+
+to avoid confusion why 0xFF is used.
+
+Thanks,
+Guenter
+
+>   }
+>   
+>   static int rt1711h_start_drp_toggling(struct tcpci *tcpci,
+

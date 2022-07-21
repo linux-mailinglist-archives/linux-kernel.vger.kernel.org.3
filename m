@@ -2,97 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D9657D25A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4842C57D264
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiGURVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
+        id S230389AbiGURWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGURV2 (ORCPT
+        with ESMTP id S229986AbiGURWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:21:28 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CB92AC65
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:21:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id bk26so3197314wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:21:27 -0700 (PDT)
+        Thu, 21 Jul 2022 13:22:08 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322102D1D4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:22:06 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id n185so1413971wmn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SXLvUdDnjJEodQJ94faqLUeDy8d1elhS2wljuKyR9r4=;
-        b=OSGxsO7g2K40pu0NwLqzvnlUz82CEbFPTvtAHhq0Lt42XIo478IZ0cVHDyZcv3LzN+
-         doQwS0X5S7UHIxC9NIByl8mpgfD+9fykQt8oCdaEmU61OOI4m/PpDnv1MosqFBkN+Mm6
-         Eah/SZ6SreSS+CWTZNEMdvTvTRoLgblAU2dfyUrMl5tNJESdszbOWXfe3Gd+tsC1mNIa
-         V/LZjsE1Rq7iYgiJNcx4XZ1FcwcPBXWrZdOyi6bpWW07Bp7wovr21Nkp97BOPnXf9a9S
-         k2mwT8d9r+UvMll3RAl+MpEmvZNnLBOi+1iHTbqB2z5dlGiFL851dRrd2FQgyyixo8v7
-         HSYw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S3C8q1laz4rBJ9aGVPrsPOjt/QLLVMunUdYBJjHo4DE=;
+        b=FilIoPgSWSX+M9Q5xzcjR7Bm7oSCIxKHBRehRGwnQpyGPiolhL1PxrDc/gy3NEOgOA
+         WtGktAZpu/0N7X96yPfmjrLk2bK/wsS8TEOdha+N5u6sMaZkwMhw8bnIsVuTtsAWfZ9o
+         htlMSo/fKYogD8FOwfdEzo5i+r75wKKrQSZlleXpxHTTDFqyRHQyrtEU3d8Qj5hwOytl
+         2Vl8qkFZwE4dMFP7JDWy90fDAGFnFDYaM5yEfdAeOrfMN5c4raOQQd17eiuYR0t0J5A5
+         vpib/yCSI2QQxVVS5XwklwcxvCmxO2tOy1SVFzfY7kFlxniF2kdvaqzNIhWOLJ+DZBJ+
+         dnaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SXLvUdDnjJEodQJ94faqLUeDy8d1elhS2wljuKyR9r4=;
-        b=SYtPPhb/Ge7nFGfYrRy0QVHM+oYpvzIMMsxWh99HSV+6fdRZyoMNETumuhJqGQBFOA
-         7cgzHu3oc+xq/tfcU22kJ5nTUYs3ouMmUZVvDirZclXKvwSPYb7fU/XX0wsyaSoPkT7Q
-         IJlMCfLl2L4ng6PxU5n9XUoMyp+gPVSR7Oxro925XlPFm0UQqR13XEKc4ygtgF3TOBug
-         7qYFb7vMWvr9FOy0khwsu6jMORYpIA/vR5SPiDPfV46klP26w6eaVbh1GLAjpCfhxP/z
-         rcPXWo2kZTu6Zo4rPOqlhsoNLq5Tn5YE3HE+Oa9fL0F3UA9CLtnW0StU9/89tRs4eq7C
-         YT+g==
-X-Gm-Message-State: AJIora/zlPLDYh1/HeBInHtTl/WoqGK9HaXS9P4XaPzLmLg8IzxnCA0a
-        xVE9SYLeCMAigm7DiABX3ceQ9w==
-X-Google-Smtp-Source: AGRyM1sIASv9vmR7KNGAFsXqp4jOf5Se7BsMQgouD3zNrQ1FA0oeq0+2XKTq6qHLn4chl5q3KOnZWQ==
-X-Received: by 2002:a05:6000:1847:b0:21d:c149:263 with SMTP id c7-20020a056000184700b0021dc1490263mr30567246wri.449.1658424086844;
-        Thu, 21 Jul 2022 10:21:26 -0700 (PDT)
-Received: from henark71.. ([109.76.125.251])
-        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b003a2cf1535aasm2455697wme.17.2022.07.21.10.21.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 10:21:26 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     u.kleine-koenig@pengutronix.de
-Cc:     conor.dooley@microchip.com, daire.mcnamara@microchip.com,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        robh+dt@kernel.org, thierry.reding@gmail.com
-Subject: [PATCH v7 4/4] MAINTAINERS: add pwm to PolarFire SoC entry
-Date:   Thu, 21 Jul 2022 18:21:10 +0100
-Message-Id: <20220721172109.941900-5-mail@conchuod.ie>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220721172109.941900-1-mail@conchuod.ie>
-References: <20220721172109.941900-1-mail@conchuod.ie>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S3C8q1laz4rBJ9aGVPrsPOjt/QLLVMunUdYBJjHo4DE=;
+        b=x2i31bOkQtDukEUl1eCt6XzRrkhhjcddgzkRKwM1yXwOp0j0EYnvnFiGIz+8hIZ/+b
+         x01Ngefq+/t3t2ahG8kArwcEgaABd7qdHoZy1tXknKsXIFSvhdT5+AlgQQAK5u+fLM7K
+         zBq9SWpyM57WjPBbWwLiCOFQrpIP90twv6vz3Fh9Qp2qKEeeVKC8aMUgcWjcHJH4BX0q
+         iQxBIqb0tNcLGe989+ykHVW8UfYBF3/H4t6kKQgc1+s7VDh5cBlWf6/3u8yLlBATud4E
+         mblbDmDOdqjb9Kfr3/gMB+K446snSc9SPEJ9AOUv3gnhT/glbC4MGm8gBdyUDg+qcGZJ
+         s0/g==
+X-Gm-Message-State: AJIora9Dro5/N/BqzrEty+e9szy37rObYzK0YqyeH3P9kuIl220MWiSS
+        h3BlgwPCFollKYonz2xisMuasp57mcEPRl/H+lY7Bg==
+X-Google-Smtp-Source: AGRyM1t48kSCXbpdLtCbqUKCWIaKHfAn7MwO5VCXmGix7BhsPk0uKaPuE/mS8Vwzif/e/0r5f/Ku//506/LwFKbrjMM=
+X-Received: by 2002:a05:600c:354e:b0:3a3:2ede:853d with SMTP id
+ i14-20020a05600c354e00b003a32ede853dmr4107316wmq.61.1658424124442; Thu, 21
+ Jul 2022 10:22:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220709000439.243271-1-yosryahmed@google.com>
+ <20220709000439.243271-5-yosryahmed@google.com> <370cb480-a427-4d93-37d9-3c6acd73b967@fb.com>
+ <a6d048b8-d017-ea7e-36f0-1c4f88fc4399@fb.com> <CA+khW7gmVmXMg4YP4fxTtgqNyAr4mQqnXbP=z0nUeQ8=hfGC3g@mail.gmail.com>
+ <2a26b45d-6fab-b2a2-786e-5cb4572219ea@fb.com> <CA+khW7jp+0AadVagqCcV8ELNRphP47vJ6=jGyuMJGnTtYynF+Q@mail.gmail.com>
+ <3f3ffe0e-d2ac-c868-a1bf-cdf1b58fd666@fb.com>
+In-Reply-To: <3f3ffe0e-d2ac-c868-a1bf-cdf1b58fd666@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 21 Jul 2022 10:21:53 -0700
+Message-ID: <CA+khW7ihQmjwGuVPCEuZ5EXMiMWWaxiAatmjpo1xiaWokUNRGw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/8] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Jul 21, 2022 at 9:15 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 7/20/22 5:40 PM, Hao Luo wrote:
+> > On Mon, Jul 11, 2022 at 8:45 PM Yonghong Song <yhs@fb.com> wrote:
+> >>
+> >> On 7/11/22 5:42 PM, Hao Luo wrote:
+> > [...]
+> >>>>>> +
+> >>>>>> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> >>>>>> +{
+> >>>>>> +    struct cgroup_iter_priv *p = seq->private;
+> >>>>>> +
+> >>>>>> +    mutex_lock(&cgroup_mutex);
+> >>>>>> +
+> >>>>>> +    /* support only one session */
+> >>>>>> +    if (*pos > 0)
+> >>>>>> +        return NULL;
+> >>>>>
+> >>>>> This might be okay. But want to check what is
+> >>>>> the practical upper limit for cgroups in a system
+> >>>>> and whether we may miss some cgroups. If this
+> >>>>> happens, it will be a surprise to the user.
+> >>>>>
+> >>>
+> >>> Ok. What's the max number of items supported in a single session?
+> >>
+> >> The max number of items (cgroups) in a single session is determined
+> >> by kernel_buffer_size which equals to 8 * PAGE_SIZE. So it really
+> >> depends on how much data bpf program intends to send to user space.
+> >> If each bpf program run intends to send 64B to user space, e.g., for
+> >> cpu, memory, cpu pressure, mem pressure, io pressure, read rate, write
+> >> rate, read/write rate. Then each session can support 512 cgroups.
+> >>
+> >
+> > Hi Yonghong,
+> >
+> > Sorry about the late reply. It's possible that the number of cgroup
+> > can be large, 1000+, in our production environment. But that may not
+> > be common. Would it be good to leave handling large number of cgroups
+> > as follow up for this patch? If it turns out to be a problem, to
+> > alleviate it, we could:
+> >
+> > 1. tell users to write program to skip a certain uninteresting cgroups.
+> > 2. support requesting large kernel_buffer_size for bpf_iter, maybe as
+> > a new bpf_iter flag.
+>
+> Currently if we intend to support multiple read() for cgroup_iter,
+> the following is a very inefficient approach:
+>
+> in seq_file private data structure, remember the last cgroup visited
+> and for the second read() syscall, do the traversal again (but not
+> calling bpf program) until the last cgroup and proceed from there.
+> This is inefficient and probably works. But if the last cgroup is
+> gone from the hierarchy, that the above approach won't work. One
+> possibility is to remember the last two cgroups. If the last cgroup
+> is gone, check the 'next' cgroup based on the one before the last
+> cgroup. If both are gone, we return NULL.
+>
 
-Add the newly introduced pwm driver to the existing PolarFire SoC entry.
+I suspect in reality, just remembering the last cgroup (or two
+cgroups) may not be sufficient. First, I don't want to hold
+cgroup_mutex across multiple sessions. I assume it's also not safe to
+release cgroup_mutex in the middle of walking cgroup hierarchy.
+Supporting multiple read() can be nasty for cgroup_iter.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+> But in any case, if there are additional cgroups not visited,
+> in the second read(), we should not return NULL which indicates
+> done with all cgroups. We may return EOPNOTSUPP to indicate there
+> are missing cgroups due to not supported.
+>
+> Once users see EOPNOTSUPP which indicates there are missing
+> cgroups, they can do more filtering in bpf program to avoid
+> large data volume to user space.
+>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7d14a446df13..c785765c66b7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17510,6 +17510,7 @@ F:	drivers/char/hw_random/mpfs-rng.c
- F:	drivers/clk/microchip/clk-mpfs.c
- F:	drivers/mailbox/mailbox-mpfs.c
- F:	drivers/pci/controller/pcie-microchip-host.c
-+F:	drivers/pwm/pwm-microchip-core.c
- F:	drivers/rtc/rtc-mpfs.c
- F:	drivers/soc/microchip/
- F:	drivers/spi/spi-microchip-core.c
--- 
-2.37.1
+Makes sense. Yonghong, one question to confirm, if the first read()
+overflows, does the user still get partial data?
 
+I'll change the return code to EOPNOTSUPP in v4 of this patchset.
+
+> To provide a way to truely visit *all* cgroups,
+> we can either use bpf_iter link_create->flags
+> to increase the buffer size as your suggested in the above so
+> user can try to allocate more kernel buffer size. Or implement
+> proper second read() traversal which I don't have a good idea
+> how to do it efficiently.
+
+I will try the buffer size increase first. Looks more doable. Do you
+mind putting this support as a follow-up?
+
+> >
+> > Hao
+> >
+> >>>
+> > [...]
+> >>>>> [...]

@@ -2,78 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C6657C266
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7BE57C269
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiGUCow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S231770AbiGUCqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiGUCou (ORCPT
+        with ESMTP id S229680AbiGUCqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:44:50 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05717774BD;
-        Wed, 20 Jul 2022 19:44:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VJzcuX0_1658371484;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VJzcuX0_1658371484)
-          by smtp.aliyun-inc.com;
-          Thu, 21 Jul 2022 10:44:45 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     ap420073@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] amt: Return true/false (not 1/0) from bool function
-Date:   Thu, 21 Jul 2022 10:44:43 +0800
-Message-Id: <20220721024443.112126-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 20 Jul 2022 22:46:31 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2103.outbound.protection.outlook.com [40.107.93.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4134B0D0;
+        Wed, 20 Jul 2022 19:46:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SyWU5pPAFv5Xl8Cm/PMouD/iEty4oCpFaoEwnuMGXSBR4+lhbuUO853J4GVb1khVDu/I1HouPEnJlM1DClh4/D3Gjd46qvS7FugBC9U541i0xqt7vv6rq7uzqGmIcDGCIdZGGoWYLRa+xRpIdEUeC/Lc/5VSVJlYm8tb2w4Bq7yq8DFGx6X4CtYvealXb4foz8NsrSG3FHjsYQLQfF8Z/Dv1f5Ayn13FmCmAa01laUstmO/sUZ7JzTyPERzmIqAwVs9aA+Rc2w1GwbnUDXMariwg6/Sad7Vlnh4QGdITf8QZIJeNdDEafxanWMXv12wExKaFOlvP1LgLIsfKrmsneA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uyk7zFcJPwv8UJK+/6SJhuJznSKY4hWn0sZ69jpxb8c=;
+ b=nl680NJ9986WOX2wpm1U+hXMyWyimD2XWmSmelcThmX6sA/YXRZujoBXrKB9ETgg+rzR1YhIxxlWeeLzS7K0zvkxe1cSkOgUm++mHbMWaHq1GrROy0dVRYRHI5s68NOtz1var2fYJubYPgjxiVJWDYUTMa+nPicfb9t3E4Bm4IqRj646hhYNUKVuITqASVXZjHQTioMds+lVddF/oT7EFiudjB/mEM0WMUH8z3yKR3Diga67sTJsT9GrMU7UJKcZ0yzDFM9SDUJTTfIOpsqmu8atdBjEQg3u+bzb5HzXIK4ZLJ6Az4SUo7tk7QnOq986Fq8eDzZOxmHbY4xKbhXTHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uyk7zFcJPwv8UJK+/6SJhuJznSKY4hWn0sZ69jpxb8c=;
+ b=Kc8uZrfNQEDmcofcX5xBDZIhg2wn/6kwOv1DubGvUTo94Mvhn0RnUMSSysvFA9Gozc+XusYtdxR0/BtbkdoCjf3s9DgBhN/AmRpVenN+9Vh0rtdm7h3ClIO6lQ5We1qhy8Kk1q0XfI7/1S6rFlpAT5O7HfJMp7nQmaBQ5LERP/M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ DM5PR01MB2668.prod.exchangelabs.com (2603:10b6:3:f3::10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5458.18; Thu, 21 Jul 2022 02:46:27 +0000
+Received: from SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e]) by SJ0PR01MB7282.prod.exchangelabs.com
+ ([fe80::7535:773:f979:893e%9]) with mapi id 15.20.5438.023; Thu, 21 Jul 2022
+ 02:46:27 +0000
+Message-ID: <878f9889-0255-96d8-77c8-19b0542932f4@os.amperecomputing.com>
+Date:   Thu, 21 Jul 2022 09:46:10 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.2
+Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: Add device tree for Ampere's Mt.
+ Mitchell BMC
+Content-Language: en-CA
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>
+Cc:     Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com
+References: <20220720085230.3801945-1-quan@os.amperecomputing.com>
+ <20220720085230.3801945-3-quan@os.amperecomputing.com>
+ <ab78f85c-dd0a-9176-103f-8e4abe01b8f9@linaro.org>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+In-Reply-To: <ab78f85c-dd0a-9176-103f-8e4abe01b8f9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0003.apcprd02.prod.outlook.com
+ (2603:1096:3:17::15) To SJ0PR01MB7282.prod.exchangelabs.com
+ (2603:10b6:a03:3f2::24)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1ef0cb55-be58-445c-9d3a-08da6ac3351e
+X-MS-TrafficTypeDiagnostic: DM5PR01MB2668:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Al3xa+uT/8SWPw2oEOLYPyo0WDJ2tNXeeBIMbRKi0MHYJ2Z/Gt32eYP/so5ZE0TnQ5JWyvURLtfx6UHzys8efr8+DyK0NmvA5Gg1mVkPjAgDRXPe3CSqgcFV+eg0zkVyoiGKWYqeif5HeBxeaS5LDx3GMtXOSavWr7gV5SU3lwQgmSFmk/PSgZvVsiX/5hAJ/y5VUoe4LQ/9XoZjU2tsVTUQFImK6PLR1h1kBSr8kn2tWVM6VHMSXv8R6267cnMDMcls64qBuOwV2ct2B+5RfGAmHcYnZS0+Wmewg7KFji6jNYWtB3hM0WR7cR2t1z7QOy4iObk9LLds2V7NUkzFJxLKjZFiKK6fA4PiAw49BQbA8Z3RJejkQGuKA0nzLVXNEezCvqr8d40Xm/CIMPbtSxlUI0yIs3fcxOHKY0jWsMOqI+tbXc/zxLBFmTeoTaMIXvrq/02y9+1qqm1GJh63H24gXNhrEje+q8N7JyIrxX9mjb0+FkrK2sKNfi/wTtzoDQOgCoSt+ANL7BUMG2U9EXLqYfPXzW5N9FXB1bSNyFEndoRIefw5Bfju3A2gG9St2Tqx7swMswzZhaIzikUBoAxw9EOYoXxzj38vFTDCAzGHegv/X8+WlEI6XMWU+iV0KpZs0bCLsELMn4gHx3nXD4xD7SBg/i9mndEGdlzBShmBbxOHDu6wspFhtBrGwEsQiDFfwhvWpIgyZ0ywcKBfgWwoljRyB/11wg9/nKbhI24ZFnUguoRb37acQuH/TtG9LfJMImQv0g5K84COLeWFFx8Z9DV7WQ9wtEg18CDwZFsigvLFwkXCJQOuaIW36t/5qlvJbBlhEGwELkkHBdKGADXi+T6tywHcyCLVB32CYCc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR01MB7282.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(396003)(136003)(366004)(346002)(376002)(7416002)(8676002)(8936002)(5660300002)(4326008)(66946007)(66556008)(66476007)(2906002)(83380400001)(86362001)(38350700002)(38100700002)(6486002)(921005)(6506007)(6512007)(316002)(107886003)(2616005)(110136005)(52116002)(66574015)(478600001)(26005)(186003)(41300700001)(31686004)(31696002)(53546011)(6666004)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L0drSUtidmQ5U3ZzYjVmektmZmE1UXZHNjlCOVoxL000Rk1VQkV4QlFLbkNP?=
+ =?utf-8?B?TWdkSDVIb1VrY0NpL2t5V1FFRzJCTU9McmxHZkh2LzdOeFhaRGpja2JPc0Y2?=
+ =?utf-8?B?eHU1RTdlaVhja1VBNk8wTUFmekZ4ZFFXTXNkOWRPdHMwYVVOejBEOGVLRURQ?=
+ =?utf-8?B?MXhvMHpmSyt5encxWjh3Z242SzM1OFBDOTZmc2NSNm1JbEhVT2ZEQU1IejNk?=
+ =?utf-8?B?WFpORGFlOWFGUmpCWUIwREY2cFlVQUlFTktGbHppcDYzVkZsdGV5WWtVN2VS?=
+ =?utf-8?B?MmlXdmwwYzdITEFOUm5QMHdlUlBkZGhKWERLRTZlbHpMRllJaEU0WnhjSkZZ?=
+ =?utf-8?B?bEtlUnVpLzdsY05iWG80N0xKMWx4eWhENEVmWnVRb3ljR3YyUFJiTDdYaURa?=
+ =?utf-8?B?bHE5U0ZlMkFObms4aUZjUEhzdm5KTzY2ZEJYTlIvMWUxV29TQ3haSm1IME9S?=
+ =?utf-8?B?dDM1aURnbFdqKzA5Q01nU3VhcWs4R2lpbEcrSU42MWg5K1hHbUV5cWVEcjNW?=
+ =?utf-8?B?OVhkdlN5eUNqK2ZNMnFtck5TMWJwSEZlRjJOZy9NM0RQWm9vMitzdjl2cUtr?=
+ =?utf-8?B?QjFjRkppcHIyRDdISHpvVHFac0g3UG0vNHdWVEkrL015cW9jdi9hWitQalBN?=
+ =?utf-8?B?RjVZdmRTZUxMWEtic05jVHU4Kzd3c1NaaVRVUW1qdnlIVmw1Y3pKcVFqaEsw?=
+ =?utf-8?B?MDVXSHRJLzVIRDVUaW5OaEZ0ZTZscWV1VDBoS0laQlhFRjFQQ0g1SUtiQnRp?=
+ =?utf-8?B?aVJqeW9VOEFldi9TU3J5MWpERVJSRENYZVdKU2NOQm9ZcnFXaWk0dXNSK3RP?=
+ =?utf-8?B?dVhPbWhlNDg1QnhoRzJGc2N4V2RabnBuck9NZCtFYkJBMkg4STJadTNuQVdO?=
+ =?utf-8?B?WFYzeEVQc0Ixa1QvQXpFcG5iSEtpdU5mZHh0TmRnNWtWRXo2eWY4eWRWL1NR?=
+ =?utf-8?B?djdScGNLbEhwT1BFbWpXOVdMcmxpTHJuTlZScXRReE0veWJYajdWdWVCdmtE?=
+ =?utf-8?B?WVdZem0yek4ra3VBRjd5WUxWdDFzcU1ja1YxR2lwWlNrc3JQS2Q5NVQ4TnZJ?=
+ =?utf-8?B?WnNPenFVWVRJUlFOaTdheWhES1VsMHc2N1ZOZ2VhRGhCc2xYNlhQcjZMV2g2?=
+ =?utf-8?B?YkRmUkFVNTRlY3FMUTcydHhTNzR3czNoOWtYMHVrZDRNQ2ozNmtTYWpHMEJD?=
+ =?utf-8?B?TUpxNkM2SkpTakx4b2pGaTRGMXhNS2VPU1dNRjdFY1BZZUcwRkt4SmwySFQ2?=
+ =?utf-8?B?NFB2U09Fb3Z1cWEwblIyVGd3OGpPNXJpczdEU2JycktGYWNiOE5nS0lnZEFI?=
+ =?utf-8?B?ZmpGdWJDODZuOW9UWU9kU002VFdONDBnQkk0K2xWR25vd2t0UXI1SmlMYWw3?=
+ =?utf-8?B?VzNUdXJjajA1dWF2QmZGOGpiYjRja0xnWTVyaVpXSERpd0lLVUpPd29FZkRR?=
+ =?utf-8?B?TXFlSkVMSG8rZDhPUU5JR3VBVUZOa2twZGF6ZGZkL0NSL2diQXlFUVVBcmZR?=
+ =?utf-8?B?RjRxcXRXTERxUzM2Slh6ZmJzV0wyZlRCRXk4R2Y5SDhBVE5hUnJvWnRiNkg2?=
+ =?utf-8?B?a2JJRGVNUTJ4SjhrOHBPb2FlRDdUOFlLL2hRWUZkL1ZVUUs5L01xNjI2Z04w?=
+ =?utf-8?B?VksrSEV1VWpuVlJWRXFNeHIwOVRFY2VZM2Q4TXVzSmxPZWRoUXkrTGFIKzJn?=
+ =?utf-8?B?d2kraUFEeFhSSE12MmUrMnlmc0xVUFFMZlptcFFEY3VpSmxUWmk5Nll3dVRH?=
+ =?utf-8?B?aHpwdURsK1N4R3lLTEwyekFXalp1Z1hZc3FwR2lSbWE4TUdZbHZ5U3FOQWdF?=
+ =?utf-8?B?aDAxaG50Y2UrYURiNG9tVHYxaHVTKzMrYkJSVU95WWVwT0I0UGtwYXJZNEsw?=
+ =?utf-8?B?UWdMSG4ycnZyOHZGWlVNYXVTTUFFMTYwUVg1L1k4RVFBbjdndnNubmJrV0Q2?=
+ =?utf-8?B?MHlYRXRFRWhlYTBaOVhwK0lJOGhvWHA3MlpYMmYvdVE3Uk1BY0N3OFA5Nldz?=
+ =?utf-8?B?MFdQeVlFdkh2cVB6ZEdIRGt3REJWNzUxMVlzK3pDSTNwSzFYUVpYMjZ2Rmhs?=
+ =?utf-8?B?TitKVWNHU0EvZUVXcklpcHFOU3BRV2JrNmhpR1NLc0c5bFZQNTNCdG1WVVls?=
+ =?utf-8?B?NWREWFhCNXBWaW9oMENpNEJyRWJNYjc4Q2Z6N3ZOQXlMbG50U2YzNkV1THAx?=
+ =?utf-8?Q?zsTK1u66DIOOsJex+e0riSo=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ef0cb55-be58-445c-9d3a-08da6ac3351e
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR01MB7282.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 02:46:27.3555
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qCHY19RCpVpK6q/DHbT5gi9NXagbndByBRukwjJ/fxI1410a+MPKsCc8jL2PXRcohA/HRSDO8l0D9vXRffdPMChYDDwgiNr7C8SoBhvFw+c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR01MB2668
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,WEIRD_QUOTING autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions. This fixes the following warnings from coccicheck:
 
-./drivers/net/amt.c:901:9-10: WARNING: return of 0/1 in function 'amt_queue_event' with return type bool
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/net/amt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 20/07/2022 17:36, Krzysztof Kozlowski wrote:
+> On 20/07/2022 10:52, Quan Nguyen wrote:
+>> The Mt. Mitchell BMC is an ASPEED AST2600-based BMC for the Mt. Mitchell
+>> hardware reference platform with AmpereOne(TM) processor.
+>>
+>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>> Signed-off-by: Phong Vo <phong@os.amperecomputing.com>
+>> Signed-off-by: Thang Q. Nguyen <thang@os.amperecomputing.com>
+>> ---
+>> v2 :
+>>    + Remove bootargs                                       [Krzysztof]
+>>    + Fix gpio-keys nodes name to conform with device tree binding
+>>    documents                                               [Krzysztof]
+>>    + Fix some nodes to use generic name                    [Krzysztof]
+>>    + Remove unnecessary blank line                         [Krzysztof]
+>>    + Fix typo "LTC" to "LLC" in license info and corrected license
+>>    info to GPL-2.0-only
+>>
+>>   arch/arm/boot/dts/Makefile                    |   1 +
+>>   .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 577 ++++++++++++++++++
+>>   2 files changed, 578 insertions(+)
+>>   create mode 100644 arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
+>>
+> 
+> (...)
+> 
+>> +
+>> +&i2c3 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&i2c4 {
+>> +	status = "okay";
+>> +
+>> +	adc_i2c: adc-i2c@16 {
+> 
+> Node name: just "adc"
+> 
 
-diff --git a/drivers/net/amt.c b/drivers/net/amt.c
-index febfcf2d92af..2ff53e73f10f 100644
---- a/drivers/net/amt.c
-+++ b/drivers/net/amt.c
-@@ -898,7 +898,7 @@ static bool amt_queue_event(struct amt_dev *amt, enum amt_event event,
- 	spin_lock_bh(&amt->lock);
- 	if (amt->nr_events >= AMT_MAX_EVENTS) {
- 		spin_unlock_bh(&amt->lock);
--		return 1;
-+		return true;
- 	}
- 
- 	index = (amt->event_idx + amt->nr_events) % AMT_MAX_EVENTS;
-@@ -909,7 +909,7 @@ static bool amt_queue_event(struct amt_dev *amt, enum amt_event event,
- 	queue_work(amt_wq, &amt->event_wq);
- 	spin_unlock_bh(&amt->lock);
- 
--	return 0;
-+	return false;
- }
- 
- static void amt_secret_work(struct work_struct *work)
--- 
-2.20.1.7.g153144c
+Thanks, will fix.
 
+>> +		compatible = "lltc,ltc2497";
+>> +		reg = <0x16>;
+>> +		vref-supply = <&voltage_mon_reg>;
+>> +		#io-channel-cells = <1>;
+>> +		status = "okay";
+> 
+> Isn't this new node? Why do you need status here?
+> 
+Thanks for the comment. The drivers/iio/adc/ltc2497.c does not check for 
+the status indeed. Will remove it.
+
+>> +	 };
+>> +
+>> +	eeprom@50 {
+>> +		compatible = "atmel,24c64";
+>> +		reg = <0x50>;
+>> +		pagesize = <32>;
+>> +	};
+>> +
+> 
+> (...)
+> 
+>> +
+>> +&gpio1 {
+>> +	gpio-line-names =
+>> +	/*18A0-18A7*/	"","","","","","","","",
+>> +	/*18B0-18B7*/	"","","","","emmc-rst-n","","s0-soc-pgood","",
+>> +	/*18C0-18C7*/	"uart1-mode0","uart1-mode1","uart2-mode0","uart2-mode1",
+>> +			"uart3-mode0","uart3-mode1","uart4-mode0","uart4-mode1",
+>> +	/*18D0-18D7*/	"","","","","","","","",
+>> +	/*18E0-18E3*/	"","","","";
+>> +};
+>> +
+> 
+> You have a trailing line error.
+> 
+> 
+Thanks, will fix
+- Quan

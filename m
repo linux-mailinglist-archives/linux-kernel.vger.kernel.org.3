@@ -2,148 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E2157CCEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7EE57CCEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiGUOK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S230143AbiGUOLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGUOK5 (ORCPT
+        with ESMTP id S230349AbiGUOLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:10:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 701CC481E1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658412655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rDTTu30CW6yuJVbQ/60UukKUOMp8krfp5ZoEixBMzVc=;
-        b=RmaM0zuty1fvqD1O/t3vd88KKRhj25LnSupszEN280YbI9PZaWOI0ZvP1CyNS0FXrTeEwk
-        ABtA8HNL+tLAwpy+wCO8fbBUFKfDiamyg8ymDof1qkRLMrrfHolOEQpO6CLNqUBVr0U/qZ
-        qtfIPLq/x39xHdmuV4aLM76uJVcG/a4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-365-C_4hm5t7Nouoa0k-tAzOjQ-1; Thu, 21 Jul 2022 10:10:54 -0400
-X-MC-Unique: C_4hm5t7Nouoa0k-tAzOjQ-1
-Received: by mail-wr1-f71.google.com with SMTP id t13-20020adfe10d000000b0021bae3def1eso376131wrz.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:10:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:references:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=rDTTu30CW6yuJVbQ/60UukKUOMp8krfp5ZoEixBMzVc=;
-        b=u+X7OZslPnE4ud5HHBTWMc8/NeFjPlzqdAcVU+TbAiKImSt37z6qp6p1X4e8VFnD+8
-         96+iiMma6Zg7bsJ3ilEDYGpW8o4tumZXz2F2m9hRC0L6JrzOKi/zMjwfQyufVjLwKicK
-         BBI0zC550I3tjG5LwrTW95aJSgOLL9YOYEv860mQpLXSu8y3BIRZJHCg/kuXNVISsS75
-         Rk+6qpCvAF9xaaijiN81JSafE3q9NFh7xg2vmhoKQnIYTy2YHioQD2KxFe/IICOwQCyq
-         +210pnWDdjQ7J7x1WUuxZjG1DXxOjtbJsMiRBQzTe/rUEMYPZUw0vmW7UTN2A2uQh0M8
-         jkbg==
-X-Gm-Message-State: AJIora9vsT+A0bkvT4ERw6e29diczP5/IoUDMB0leEHzUfTafoqcrMVD
-        8iX4c9afV2fYDLPIEu2N6cgzM2o4sIxODBYu63lQfWgrtojqZn/7L+OnBfUg6lRqOmeb3mN4DTx
-        sjVrv0RdPcDNRainlDeXiWy6I
-X-Received: by 2002:a7b:c7d2:0:b0:3a3:209d:cdc6 with SMTP id z18-20020a7bc7d2000000b003a3209dcdc6mr8649596wmk.55.1658412652696;
-        Thu, 21 Jul 2022 07:10:52 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vpPVSt5eQQkxyxRPFJ6jginy3ckuXzWnSclnptMjXfdA4Nd/j5PEpqKX37REEkffQhXExeEA==
-X-Received: by 2002:a7b:c7d2:0:b0:3a3:209d:cdc6 with SMTP id z18-20020a7bc7d2000000b003a3209dcdc6mr8649580wmk.55.1658412652388;
-        Thu, 21 Jul 2022 07:10:52 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:e000:25d3:15fa:4c8b:7e8d? (p200300cbc707e00025d315fa4c8b7e8d.dip0.t-ipconnect.de. [2003:cb:c707:e000:25d3:15fa:4c8b:7e8d])
-        by smtp.gmail.com with ESMTPSA id d5-20020adff845000000b0021dd08ad8d7sm2133349wrq.46.2022.07.21.07.10.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 07:10:51 -0700 (PDT)
-Message-ID: <7a6b346a-9225-c6f4-aca4-93c588b6917e@redhat.com>
-Date:   Thu, 21 Jul 2022 16:10:50 +0200
+        Thu, 21 Jul 2022 10:11:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94E8653D34
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:11:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D53191042;
+        Thu, 21 Jul 2022 07:11:07 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.86.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A601B3F73D;
+        Thu, 21 Jul 2022 07:11:05 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 15:11:04 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Subject: Re: [PATCH 2/7] sched/uclamp: Make task_fits_capacity() use
+ util_fits_cpu()
+Message-ID: <20220721141104.3d4ohdyxxlqyttle@wubuntu>
+References: <20220629194632.1117723-1-qais.yousef@arm.com>
+ <20220629194632.1117723-3-qais.yousef@arm.com>
+ <CAB8ipk99oZNBP6kxSh6c+DrU-0tEX-wANYw3QDYHgES9AME38w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>
-References: <20220718120212.3180-1-namit@vmware.com>
- <20220718120212.3180-2-namit@vmware.com> <YtcYVMoSRVxRH70Z@xz-m1.local>
- <017facf0-7ef8-3faf-138d-3013a20b37db@redhat.com>
- <Ytf+zIxVPTVXTZdp@xz-m1.local>
- <2b4393ce-95c9-dd3e-8495-058a139e771e@redhat.com>
- <YthUYF3invrjlzUc@xz-m1.local>
- <69022bad-d6f1-d830-224d-eb8e5c90d5c7@redhat.com>
- <YthcC78q1hdd7mNT@xz-m1.local>
- <4ad140b5-1d5b-2486-0893-7886a9cdfd76@redhat.com>
- <95320077-52CF-4CB0-92F9-523E1AE74A3D@gmail.com>
- <468a7114-7541-0d5e-c1fc-083bbb95e78d@redhat.com>
- <F56D4014-7FE2-4C60-9CFA-A7E7B684098B@gmail.com>
- <8e2dcae3-5f50-cd59-7588-b8f566549ad4@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 01/14] userfaultfd: set dirty and young on
- writeprotect
-In-Reply-To: <8e2dcae3-5f50-cd59-7588-b8f566549ad4@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAB8ipk99oZNBP6kxSh6c+DrU-0tEX-wANYw3QDYHgES9AME38w@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.07.22 09:52, David Hildenbrand wrote:
->>> Yes. Especially for any MAP_PRIVATE mappings.
->>>
->>> If you want to write to something that's not mapped writable in a
->>> MAP_PRIVATE mapping it
->>> a) Has to be an exclusive anonymous page
->>> b) The pte has to be dirty
->>
->> Do you need both conditions to be true? I thought (a) is sufficient (if
->> the soft-dirty and related checks succeed).
+On 07/20/22 15:23, Xuewen Yan wrote:
+> On Thu, Jun 30, 2022 at 3:48 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> >
+> > So that the new uclamp rules in regard to migration margin and capacity
+> > pressure are taken into account correctly.
+> >
+> > To cater for update_sg_wakeup_stats() user, we add new
+> > {min,max}_capacity_cpu to struct sched_group_capacity since
+> > util_fits_cpu() takes the cpu rather than capacity as an argument.
+> >
+> > This includes updating capacity_greater() definition to take cpu as an
+> > argument instead of capacity.
+> >
+> > Fixes: a7008c07a568 ("sched/fair: Make task_fits_capacity() consider uclamp restrictions")
+> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > ---
+> >  kernel/sched/fair.c     | 67 ++++++++++++++++++++++++++---------------
+> >  kernel/sched/sched.h    | 13 ++++++--
+> >  kernel/sched/topology.c | 18 ++++++-----
+> >  3 files changed, 64 insertions(+), 34 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 5eecae32a0f6..313437bea5a2 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -160,7 +160,7 @@ int __weak arch_asym_cpu_priority(int cpu)
+> >   *
+> >   * (default: ~5%)
+> >   */
+> > -#define capacity_greater(cap1, cap2) ((cap1) * 1024 > (cap2) * 1078)
+> > +#define capacity_greater(cpu1, cpu2) ((capacity_of(cpu1)) * 1024 > (capacity_of(cpu2)) * 1078)
+> >  #endif
+> >
+> >  #ifdef CONFIG_CFS_BANDWIDTH
+> > @@ -4317,10 +4317,12 @@ static inline int util_fits_cpu(unsigned long util,
+> >         return fits;
+> >  }
+> >
+> > -static inline int task_fits_capacity(struct task_struct *p,
+> > -                                    unsigned long capacity)
+> > +static inline int task_fits_cpu(struct task_struct *p, int cpu)
+> >  {
+> > -       return fits_capacity(uclamp_task_util(p), capacity);
+> > +       unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
+> > +       unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
+> > +       unsigned long util = task_util_est(p);
+> > +       return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
+> >  }
 > 
-> If we force-write to a page, we need it to be dirty to tell reclaim code
-> that the content stale. We can either mark the pte dirty manually, or
-> just let the write fault handler deal with it to simplify GUP code. This
-> needs some more thought, but that's my understanding.
+> May we should consider the CONFIG_UCLAMP_TASK...
 
-Extending on my previous answer after staring at the code
+The uclamp functions are protected with CONFIG_UCLAMP_TASK and should result in
+dummy implementation and dead code to be compiled out.
 
-a) I have to dig if the FOLL_FORCE special-retry-handling is required
-for MAP_SHARED at all.
-
-check_vma_flags() allows FOLL_FORCE only on MAP_PRIVATE VMAs that lack
-VM_WRITE.
-
-Consequently, I would have assumed that the first write fault should be
-sufficient on a MAP_SHARED VMA to actually map the PTE writable and not
-require any of that special retry magic.
+It avoids sprinkling ifdefs all over the place this way.
 
 
-b) I wonder if we have to take care of uffd-wp and softdirty (just like
-in mprotect code here) as well in case we stumble over an exclusive
-anonymous page. Yes, the VMA is currently not writable, but I'd have
-expected at least softdirty tracking to apply.
+Cheers
 
-... I'll dig into the details.
-
--- 
-Thanks,
-
-David / dhildenb
-
+--
+Qais Yousef

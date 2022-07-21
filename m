@@ -2,159 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4FA57C6EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CE257C6F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiGUIyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S232671AbiGUIzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiGUIyA (ORCPT
+        with ESMTP id S232684AbiGUIzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:54:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B127FE4B;
-        Thu, 21 Jul 2022 01:53:59 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 53B1D66019C1;
-        Thu, 21 Jul 2022 09:53:56 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658393637;
-        bh=PWaD409ygy+Er3xoqJTY1NemC1LqQPgB8DQibUFvffo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HFOn3jmV7jaLw7oD5M8TZqbVkyn5IY9/ekzUHdGUjK/NHL0uQjPZSsNphdJQoNF7r
-         KaYZk9/u1Inf/eei+TdvpOSTrp043auyfH1Mz92Z3tjnig+WQbj+BguEmG8NKpBByH
-         QXf9Jx4YBsQqBLdTKYBevHn0R7FB5FkaS0JWgai+EsUO/RTwYieoqVdeVJID3ehKMq
-         UIaXr6YLUR7zVEqt/ngzQ2UFcUi81uo6pWD2ggbRKqxjfsUOFW/laJAvAP//4+Cv23
-         nMYwM7s/NdsuIdKpiDI35PzXW+ymxuN7ejOJ8RPT/P5VjWE/urap5HmsruvVVrXCoY
-         gKam2qjT/QF6g==
-Message-ID: <45ff2e82-caeb-9575-ce73-1bd43c37c0c5@collabora.com>
-Date:   Thu, 21 Jul 2022 10:53:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 0/7] MediaTek Helio X10 MT6795 - Clock drivers
-Content-Language: en-US
-To:     robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        y.oudjana@protonmail.com, jason-jh.lin@mediatek.com,
-        ck.hu@mediatek.com, fparent@baylibre.com, rex-bc.chen@mediatek.com,
-        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
-        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
-        sam.shih@mediatek.com, wenst@chromium.org,
-        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com
-References: <20220629110254.184213-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220629110254.184213-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Thu, 21 Jul 2022 04:55:04 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C51680512;
+        Thu, 21 Jul 2022 01:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=5IySwf3XGzdy0S9zkwVt+ygnU6w2l4TY/umizNUb2Ss=;
+        b=I5pgcldwwXwLNS1ZhOR83NcNMSsVS4g4Y+thqh/OHu6WB7m3oW2LWQwlkW+0zXj/Mhuq2UcccUbSg
+         4GpGv4+LRXq8+3g5aa69BavaF753i9d844Fb2FsXoPE6DLRBYNmKcWnATChhHRUJWcMWey02E1MRp6
+         AQhA+XozlCNYM488l8KS2xwtfjTMRtBPTeMgCVIKLoRSTo382jwzjsG19frmHQ6uFVywdfBMp1+CYP
+         Ck9Og3G6rTSywayOq9KVDl6vsqvCLnVZzb0Cg9GNz4+whVMiNhQza0HXX77SCGBd81OwGnBbvlASfx
+         sdr7vKxDFzS0LEr7G8rSlQCQofIYNhw==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.009141)], BW: [Enabled, t: (0.000012,0.000001)], RTDA: [Enabled, t: (0.084208), Hit: No, Details: v2.40.0; Id: 15.52k8uq.1g8fvemiq.ml00; mclb], total: 0(700)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from h-e2.ddg ([85.143.252.66])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Thu, 21 Jul 2022 11:54:37 +0300
+Date:   Thu, 21 Jul 2022 11:54:11 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v5 0/2] Lattice ECP5 FPGA manager
+Message-ID: <20220721085411.ennvx74k45sxsimm@h-e2.ddg>
+References: <20220719112335.9528-1-i.bornyakov@metrotek.ru>
+ <20220721074431.GA1712998@yilunxu-OptiPlex-7050>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721074431.GA1712998@yilunxu-OptiPlex-7050>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/06/22 13:02, AngeloGioacchino Del Regno ha scritto:
-> In an effort to give some love to the apparently forgotten MT6795 SoC,
-> I am upstreaming more components that are necessary to support platforms
-> powered by this one apart from a simple boot to serial console.
+On Thu, Jul 21, 2022 at 03:44:31PM +0800, Xu Yilun wrote:
+> On Tue, Jul 19, 2022 at 02:23:33PM +0300, Ivan Bornyakov wrote:
+> > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+> > slave SPI interface with .bit formatted uncompressed bitstream image.
 > 
-> This (very big) series introduces system clock, multimedia clock drivers
-> (including resets) for this SoC.
+> I didn't have time to looking into the patches yet, but I have some quick
+> question.
 > 
-> Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
+> Where is the bitstream data writing to? To the FPGA active region or the
+> backup nvmem like flash?
+
+Bitstream is written to FPGA's volatile SRAM configuration memory.
+
 > 
-> This series depends on, and can be merged on top of:
-> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=640122
-> [2]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+> After reconfiguration, how to re-enumerate the hardware devices in the
+> newly programmed FPGA region?
 > 
 
-Gentle ping for this series...
-...I've got a lot of commits to send that depend on this one...
+I personally describe FPGA-based devices statically in DT overlay within
+fpga-region. Of course this approach is error prone to mismatch between
+firmware and devices described in DT overlay...
 
-P.S.: The dependencies in [1] and [2] are already upstream.
-
-Cheers,
-Angelo
-
-
-> Changes in v5:
->   - Renamed clock/reset header filenames to add vendor prefix
->   - Removed quotes for $id, $schema in commit [4/7]
+> Thanks,
+> Yilun
 > 
-> Changes in v4:
->   - Removed unnecessary examples for clock controllers in commit [4/7]
->   - Fixed one instance of 88 columns line wrap in commit [4/7]
-> 
-> Changes in v3:
->   - Fixed typo in commit [4/7]
-> 
-> Changes in v2:
->   - Fixed yaml clock bindings as per Rob's review
->   - Added ability to compile all MT6795 clock drivers as modules
->   - Added commits to export some symbols, required to compile as module
-> AngeloGioacchino Del Regno (7):
->    dt-bindings: mediatek: Document MT6795 system controllers bindings
->    dt-bindings: clock: Add MediaTek Helio X10 MT6795 clock bindings
->    dt-bindings: reset: Add bindings for MT6795 Helio X10 reset
->      controllers
->    dt-bindings: clock: mediatek: Add clock driver bindings for MT6795
->    clk: mediatek: clk-apmixed: Remove unneeded __init annotation
->    clk: mediatek: Export required symbols to compile clk drivers as
->      module
->    clk: mediatek: Add MediaTek Helio X10 MT6795 clock drivers
-> 
->   .../arm/mediatek/mediatek,infracfg.yaml       |   2 +
->   .../bindings/arm/mediatek/mediatek,mmsys.yaml |   1 +
->   .../arm/mediatek/mediatek,pericfg.yaml        |   1 +
->   .../bindings/clock/mediatek,apmixedsys.yaml   |   1 +
->   .../bindings/clock/mediatek,mt6795-clock.yaml |  66 ++
->   .../clock/mediatek,mt6795-sys-clock.yaml      |  54 ++
->   .../bindings/clock/mediatek,topckgen.yaml     |   1 +
->   drivers/clk/mediatek/Kconfig                  |  37 ++
->   drivers/clk/mediatek/Makefile                 |   6 +
->   drivers/clk/mediatek/clk-apmixed.c            |   3 +-
->   drivers/clk/mediatek/clk-cpumux.c             |   2 +
->   drivers/clk/mediatek/clk-mt6795-apmixedsys.c  | 157 +++++
->   drivers/clk/mediatek/clk-mt6795-infracfg.c    | 148 +++++
->   drivers/clk/mediatek/clk-mt6795-mfg.c         |  50 ++
->   drivers/clk/mediatek/clk-mt6795-mm.c          | 106 +++
->   drivers/clk/mediatek/clk-mt6795-pericfg.c     | 160 +++++
->   drivers/clk/mediatek/clk-mt6795-topckgen.c    | 610 ++++++++++++++++++
->   drivers/clk/mediatek/clk-mt6795-vdecsys.c     |  55 ++
->   drivers/clk/mediatek/clk-mt6795-vencsys.c     |  50 ++
->   drivers/clk/mediatek/clk-mtk.c                |   2 +
->   drivers/clk/mediatek/reset.c                  |   1 +
->   .../dt-bindings/clock/mediatek,mt6795-clk.h   | 275 ++++++++
->   .../reset/mediatek,mt6795-resets.h            |  50 ++
->   23 files changed, 1837 insertions(+), 1 deletion(-)
->   create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-clock.yaml
->   create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-apmixedsys.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-infracfg.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-mfg.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-mm.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-pericfg.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-topckgen.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-vdecsys.c
->   create mode 100644 drivers/clk/mediatek/clk-mt6795-vencsys.c
->   create mode 100644 include/dt-bindings/clock/mediatek,mt6795-clk.h
->   create mode 100644 include/dt-bindings/reset/mediatek,mt6795-resets.h
-> 
-
+> > 
+> > ChangeLog:
+> >   v1 -> v2:
+> >     * remove "spi" from compatible string
+> >     * reword description in dt-bindings doc
+> >     * add reference to spi-peripheral-props.yaml in dt-binding doc
+> >     * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+> >       undersores in node names.
+> >   v2 -> v3:
+> >     * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+> >   v3 -> v4:
+> >     * dt-bindings: reword description
+> >     * dt-bindings: revert props order
+> >   v4 -> v5:
+> >     * dt-bindings: remove trailing dot from title
+> >     * dt-bindings: reword description to avoid driver reference
+> >     * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+> > 
+> > Ivan Bornyakov (2):
+> >   fpga: ecp5-spi: add Lattice ECP5 FPGA manager
+> >   dt-bindings: fpga: add binding doc for ecp5-spi fpga mgr
+> > 
+> >  .../bindings/fpga/lattice,ecp5-fpga-mgr.yaml  |  74 +++++
+> >  drivers/fpga/Kconfig                          |   7 +
+> >  drivers/fpga/Makefile                         |   1 +
+> >  drivers/fpga/ecp5-spi.c                       | 275 ++++++++++++++++++
+> >  4 files changed, 357 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/fpga/lattice,ecp5-fpga-mgr.yaml
+> >  create mode 100644 drivers/fpga/ecp5-spi.c
+> > 
+> > -- 
+> > 2.37.1
+> > 
 

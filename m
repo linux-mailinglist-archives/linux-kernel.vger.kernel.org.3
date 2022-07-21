@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698B557D0B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F1757D0BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiGUQG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S229588AbiGUQI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiGUQGq (ORCPT
+        with ESMTP id S229456AbiGUQIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:06:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697F73FA33;
-        Thu, 21 Jul 2022 09:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DA32B82579;
-        Thu, 21 Jul 2022 16:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FCAFC341C0;
-        Thu, 21 Jul 2022 16:06:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658419601;
-        bh=s8xeRnOct+FSrRLuDnVjoDrk1lcFnJ4sNmdHqdLZjyc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h8GxrIgrPevpvhKSj3MpdPSs883nobdr60tmmqptVY8xAwg1tZMWYU53td+TBqtIF
-         92UbCLNtTLb+LO+uPtCi1hdjk6nBHzZtmgWIvVDpNtFEGA3RrkSNG4YpZcg0YvInsk
-         4IkOMHjtmqe906fJiSYpERdKfJ3z/RLyhnhSHc95zqOz+VzksnemiTT+UkklIXmjHp
-         IO8clZIg9437kflBhXNN6+xzT6YletRme11kZNicQ7VazO6FxL8n/2p8Mq/wg0sVZV
-         0VQ1pPJXt+mxM3Dt+66mtmm619fR4AIL1X/4X94KjphqAeo6Qf3iVm54SBR/WOqOME
-         xz09WKw54tXfQ==
-Date:   Thu, 21 Jul 2022 17:06:33 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Andy Gross <agross@kernel.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v16 0/3] eDP/DP Phy vdda realted function
-Message-ID: <Ytl5icJyICD1fbzP@sirena.org.uk>
-References: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
- <YtkrDcjTGhpaU1e0@hovoldconsulting.com>
- <CAA8EJprQnnWjDZJy9+zUBsVQCi3jtc0Ngtzzk9MXpwOvuAS68g@mail.gmail.com>
- <CAD=FV=W0m-x9JC=5hQ3urSNmUp8sY-u8YkNd66yrKfRNAH4rcg@mail.gmail.com>
- <YtlrV5R+JMxb7Dlu@sirena.org.uk>
- <CAD=FV=XDOxy1R5ipD0errwi6GOFz-X6G3_WE34LGLqmWE6_iyw@mail.gmail.com>
+        Thu, 21 Jul 2022 12:08:24 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2B91CB35
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658419703; x=1689955703;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iLYpl+fVYVmkfr9E9caHMjCAGbV8hRO/IPyAJkxWSV0=;
+  b=DZK7GCFQtLpmP1f/6fdHX9svw2hqdZ9CdI6Sa/uKDifGkIOZXd7YOF1h
+   dYbH9zL1/zVmXG06UHXf+qz/9WeWI8gNTa+Bo1lHfWfpqO3El+soDXgWH
+   gpQbnnpJimRjG7sKdpONYOclQRB2fur54D3UYEfpeuvbeZkP8PMOeagxJ
+   gg9bYtEHKe8G9VtTwf5ZOkvPQGw2cT6xKXTFI6yeJOz6naRpSEUUQMUd9
+   xMdknmtC6XbOVifguGujnwZ91+1nD6r2/WqnX/Qp3sNyb5r621uaxG+M6
+   wnEXdamU7cx2qMT5CBjK0oouMQVLNGOfXHTkcf01M2NPAgpF8cw7Swgl7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="287843033"
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="287843033"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 09:08:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
+   d="scan'208";a="573800883"
+Received: from vasantgx-mobl.amr.corp.intel.com (HELO [10.212.244.191]) ([10.212.244.191])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 09:08:16 -0700
+Message-ID: <d3808510-9974-258e-0c7b-9a76e0868d48@intel.com>
+Date:   Thu, 21 Jul 2022 09:08:11 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="797VOFF2drkIGdfE"
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=XDOxy1R5ipD0errwi6GOFz-X6G3_WE34LGLqmWE6_iyw@mail.gmail.com>
-X-Cookie: Exercise caution in your daily affairs.
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+Content-Language: en-US
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/8/22 19:52, Kuppuswamy Sathyanarayanan wrote:
+> For shared buffer allocation, alternatives like using the DMA API is
+> also considered. Although it simpler to use, it is not preferred because
+> dma_alloc_*() APIs require a valid bus device as argument, which would
+> need converting the attestation driver into a platform device driver.
+> This is unnecessary, and since the attestation driver does not do real
+> DMA, there is no need to use real DMA APIs.
 
---797VOFF2drkIGdfE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Let's actually try to walk through the requirements for the memory
+allocation here.
 
-On Thu, Jul 21, 2022 at 08:43:48AM -0700, Doug Anderson wrote:
+ 1. The guest kernel needs to allocate some guest physical memory
+    for the attestation data buffer
+ 2. The guest physical memory must be mapped by the guest so that
+    it can be read/written.
+ 3. The guest mapping must be a "TDX Shared" mapping.  Since all
+    guest physical memory is "TDX Private" by default, something
+    must convert the memory from Private->Shared.
+ 4. If there are alias mappings with "TDX Private" page table
+    permissions, those mappings must never be used while the page is
+    in its shared state.
+    4a. load_unaligned_zeropad() must be prevented from being used
+	on the page immediately preceding a Private alias to a Shared
+ 	page.
+ 5. Actions that increasingly fracture the direct map must be avoided.
+    Attestation may happen many times and repeated allocations that
+    fracture the direct map have performance consequences.
+ 6. A softer requirement: presuming that bounce buffers won't be used
+    for TDX devices *forever*, it would be nice to use a mechanism that
+    will continue to work on systems that don't have swiotlb on.
 
-> I guess I'd put it this way, though: how many drivers in Linux today
-> have _two_ calls to regulator_set_load(): one for the "active" state
-> and one for the retention state. Looks like UFS maybe. Any others? For
-> most devices the pattern is:
+I think we've talked about three different solutions:
 
-Oh, I'm not saying there's sensible implementations in drivers.  In
-general I'd say that as with voltage if a driver is not actively
-managing the load during runtime it should not be setting it at all, one
-time configuration should be left to the constraints if it's needed.
+== vmalloc() ==
 
---797VOFF2drkIGdfE
-Content-Type: application/pgp-signature; name="signature.asc"
+So, let's say we used a relatively plain vmalloc().  That's great for
+#1->#3 as long as the vmalloc() mapping gets the "TDX Shared" bit set
+properly on its PTEs.  But, it falls over for *either* #4 or #5.  If it
+leaves the direct map alone, it's exposed to load_unaligned_zeropad().
+If it unmaps the memory from the direct map, it runs afoul of #5.
 
------BEGIN PGP SIGNATURE-----
+== order-1 + vmap() ==
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLZeYgACgkQJNaLcl1U
-h9Bitwf/T7m2MuB1BDNcYxER8zA/bmfsSd02RVjQBt889bIiIQndg6hsiAsYJDzL
-YiHt3f0B5VwYWEYQ7qHJJNv2XTnkLyck+/KrZy9mzJifwbD9JuozXIquclLzsUse
-NP5zX0uDOJBsNX23i0B/d6R650tJvYSHY3++cxMkHCPFxL7VgB/meefwMrpPdNAJ
-DMSiihQNvJRcI8c+Iy41pA4lRJaEl6EG/B3my5nFYsj8+guxaNkLkIpWt8dq2VMl
-a6jslx3UiscBq9BxK3MCAvhLON57wr9nnKlFJfaheIqqn1bXKYQ+ufJX2YxPpyXI
-1WmQBt54MQiyiEAO777PA6jPhC021Q==
-=HOZd
------END PGP SIGNATURE-----
+Let's now consider a vmalloc() variant: allocate a bunch of order-1
+pages and vmap() page[1], leaving page[0] as a guard page against
+load_unaligned_zeropad() on the direct map.  That works, but it's an
+annoying amount of code.
 
---797VOFF2drkIGdfE--
+== swiotlb pages ==
+
+Using the swiotlb bounce buffer pages is the other proposed option.
+They already have a working kernel mapping and have already been
+converted.  They are mitigated against load_unaligned_zeropad().  They
+do cause direct map fracturing, but only once since they're allocated
+statically.  They don't increasingly degrade things.  It's a one-time
+cost.  Their interaction with #6 is not great.
+
+Did I miss anything?  Does that accurately capture where we are?

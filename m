@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76C957C390
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1F357C388
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 06:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiGUEhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 00:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S231389AbiGUEhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 00:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbiGUEgy (ORCPT
+        with ESMTP id S231781AbiGUEhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 00:36:54 -0400
+        Thu, 21 Jul 2022 00:37:05 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432ED66B97;
-        Wed, 20 Jul 2022 21:36:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06FD7756C;
+        Wed, 20 Jul 2022 21:36:58 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 21313DFFAD;
-        Wed, 20 Jul 2022 21:36:53 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 7FD6CDFFB9;
+        Wed, 20 Jul 2022 21:36:58 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vyK_ybaBOpjU; Wed, 20 Jul 2022 21:36:52 -0700 (PDT)
+        with ESMTP id 3Mz-hSBnJr9K; Wed, 20 Jul 2022 21:36:57 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1658378212; bh=o2yNLa0wPhFYr2u615+caHpTvHnlqkg5x/WICPzNwHg=;
+        t=1658378217; bh=6y3+NTu0dXrI4QCo6VqX1YmHK03E+ttdfPlbAoyczPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TKLiY3KYJp6SfK/XDJMjbqm57vNeK7RNTyd5kWkSlWBf89ZB+3CmoLs0+pBMsq6v4
-         kZ/FEYHs1n9TZmE4zLKAOV4uxkDXEY3JrzGr7hfWxjnlpcl4Q21dOyOVfESxIXMjjj
-         IjhM9PueBCtHJtm+sWiYdpSS3c0nafOVd0kf5TZeLXPHAr1rUVoS4bM/gEU3a6oDQs
-         /r7NsAQ0nXY93YJOY+EI0a+vap8cH4GyuewhyRYdhAtuH/qv27dOiOkepmUyKi5asL
-         l1bVpCLkq9T9zMfnTjP1F3b529pukxLh9L4KCbB3L+oe3NSeyii8cTnhc/CrClbIrC
-         ijQgFgkutvHkw==
+        b=Ze+47WMhj54H9O+GFby1oD4C2hEC9e2Syv5AhaN+ux4EVcrF3dDMUflB1X48O3z38
+         ficqBE5VNRDv6GF6F+9EOeN+9NRB3MuvDfP8efYZIvYvb5JWx66ki8di5kEa8fMcR+
+         vn1Cm0KVnWjPF7u990hc0iPT1/Jkmna/OcyAi/UNIPhs78DMqRKcZbnKujwU8koK1b
+         6hWaW/zDMqipysUk/QmzfO7SBI31HRL9aTwr2tXcpq4ADeYfx6nhGyUnulRcSvxIML
+         dE6iZedFPSs9V0SiQnJ/klUWgZh2lIOeECBTp9nnmDNM8UOLyKIx4oZLUUakkrg5QC
+         RkxHpBulDjTTA==
 To:     rafael@kernel.org, khilman@kernel.org, ulf.hansson@linaro.org,
         robh@kernel.org, krzysztof.kozlowski@linaro.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -40,9 +40,9 @@ Cc:     kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v5 2/3] power: domain: handle genpd correctly when needing interrupts
-Date:   Thu, 21 Jul 2022 06:36:07 +0200
-Message-Id: <20220721043608.1527686-3-martin.kepplinger@puri.sm>
+Subject: [PATCH v5 3/3] soc: imx: gpcv2: fix suspend/resume by setting GENPD_FLAG_IRQ_ON
+Date:   Thu, 21 Jul 2022 06:36:08 +0200
+Message-Id: <20220721043608.1527686-4-martin.kepplinger@puri.sm>
 In-Reply-To: <20220721043608.1527686-1-martin.kepplinger@puri.sm>
 References: <20220721043608.1527686-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
@@ -56,94 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If for example the power-domains' power-supply node (regulator) needs
-interrupts to work, the current setup with noirq callbacks cannot
-work; for example a pmic regulator on i2c, when suspending, usually already
-times out during suspend_noirq:
+For boards that use power-domains' power-supplies that need interrupts
+to work (like regulator over i2c), set GENPD_FLAG_IRQ_ON.
+This will tell genpd to adjust accordingly. Currently it "only" sets the
+correct suspend/resume callbacks.
 
-[   41.024193] buck4: failed to disable: -ETIMEDOUT
-
-So fix system suspend and resume for these power-domains by using the
-"outer" suspend/resume callbacks instead. Tested on the imx8mq-librem5 board,
-but by looking at the dts, this will fix imx8mq-evk and possibly many other
-boards too.
-
-This is designed so that genpd providers just say "this genpd needs
-interrupts" (by setting the flag) - without implying an implementation.
-
-Initially system suspend problems had been discussed at
-https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-which led to discussing the pmic that contains the regulators which
-serve as power-domain power-supplies:
-https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
+This fixes suspend/resume on imx8mq-librem5 boards (tested) and
+imx8mq-evk (by looking at dts) and possibly more.
 
 Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
- drivers/base/power/domain.c | 13 +++++++++++++
- include/linux/pm_domain.h   |  5 +++++
- 2 files changed, 18 insertions(+)
+ drivers/soc/imx/gpcv2.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 5a2e0232862e..ef77700e0def 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -130,6 +130,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
- #define genpd_is_active_wakeup(genpd)	(genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
- #define genpd_is_cpu_domain(genpd)	(genpd->flags & GENPD_FLAG_CPU_DOMAIN)
- #define genpd_is_rpm_always_on(genpd)	(genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
-+#define genpd_irq_on(genpd)		(genpd->flags & GENPD_FLAG_IRQ_ON)
+diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+index 6383a4edc360..e058aed76602 100644
+--- a/drivers/soc/imx/gpcv2.c
++++ b/drivers/soc/imx/gpcv2.c
+@@ -1337,6 +1337,9 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+ 		regmap_update_bits(domain->regmap, domain->regs->map,
+ 				   domain->bits.map, domain->bits.map);
  
- static inline bool irq_safe_dev_in_sleep_domain(struct device *dev,
- 		const struct generic_pm_domain *genpd)
-@@ -2079,6 +2080,13 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
- 		genpd->dev_ops.start = pm_clk_resume;
- 	}
- 
-+	if (genpd_irq_on(genpd)) {
-+		genpd->domain.ops.suspend = genpd_suspend_noirq;
-+		genpd->domain.ops.resume = genpd_resume_noirq;
-+		genpd->domain.ops.suspend_noirq = NULL;
-+		genpd->domain.ops.resume_noirq = NULL;
-+	}
++	if (of_parse_phandle(domain->dev->of_node, "power-supply", 0))
++		domain->genpd.flags |= GENPD_FLAG_IRQ_ON;
 +
- 	/* The always-on governor works better with the corresponding flag. */
- 	if (gov == &pm_domain_always_on_gov)
- 		genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-@@ -2769,6 +2777,11 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 			goto err;
- 		dev_gpd_data(dev)->default_pstate = pstate;
- 	}
-+
-+	if (pd->domain.ops.suspend_noirq && (pd->flags & GENPD_FLAG_IRQ_ON))
-+		dev_err(dev, "PM domain %s needs irqs but uses noirq suspend\n",
-+			pd->name);
-+
- 	return 1;
- 
- err:
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 76bc9e3ef5ff..03bb86e43550 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -61,6 +61,10 @@
-  * GENPD_FLAG_MIN_RESIDENCY:	Enable the genpd governor to consider its
-  *				components' next wakeup when determining the
-  *				optimal idle state.
-+ *
-+ * GENPD_FLAG_IRQ_ON:		genpd needs irqs to be able to manage power
-+ *				on/off. Use the outer suspend/resume callbacks
-+ *				instead of noirq for example.
-  */
- #define GENPD_FLAG_PM_CLK		BIT(0)
- #define GENPD_FLAG_IRQ_SAFE		BIT(1)
-@@ -69,6 +73,7 @@
- #define GENPD_FLAG_CPU_DOMAIN		BIT(4)
- #define GENPD_FLAG_RPM_ALWAYS_ON	BIT(5)
- #define GENPD_FLAG_MIN_RESIDENCY	BIT(6)
-+#define GENPD_FLAG_IRQ_ON		BIT(7)
- 
- enum gpd_status {
- 	GENPD_STATE_ON = 0,	/* PM domain is on */
+ 	ret = pm_genpd_init(&domain->genpd, NULL, true);
+ 	if (ret) {
+ 		dev_err(domain->dev, "Failed to init power domain\n");
 -- 
 2.30.2
 

@@ -2,113 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8254057CF2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301A457CF06
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiGUPdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S231254AbiGUPcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiGUPco (ORCPT
+        with ESMTP id S229446AbiGUPcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:32:44 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EC287C26
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:32:22 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id d17so1209385lfa.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zSAEKIvtye5jS07a7SCopVWWSkQdxtLbeG/Qb/jLxOk=;
-        b=Rvdze6Ay/jzmEJuWKHz6d8GONFosd5gpWdYWi/JRN1OjKN2i1Jk8wdvsduQ4H8k8JL
-         UdwErw84gZ4T/ZzSfJ5NynfzzrkFsWvRk7AQLb9rYAPas3wqT0gUiMpE9V1wXzOAsmHF
-         7EXEizMpX5vmdqwD6YyQM96dzP5GLBGnrBDS1/XmKVJk143W6ioev/IgPkh1VLk2Wzvz
-         /oNmvFAOYhtfbU0Cy1XasqHa9Dek8OUzjDtO10bNzcSElFT/9iZWpMTF0hdbY2dMa4En
-         sAR44Y7lA86ATER7P2GVmQOnk/BllCZ1FFLpXhxAkOtjuJVpIUurtPbYYw/BlC/KIOGq
-         IdiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zSAEKIvtye5jS07a7SCopVWWSkQdxtLbeG/Qb/jLxOk=;
-        b=G8vmYhdj1t5zySVsQA3tXNyggah/cd3dnWhFYYQPFbB9TvM3DXTEtXogwK1Kvb6Hl1
-         I5vooKYUuFo6UalMYKxLy7OdWfXo1a8IwLi2qcjNYBdhwgjcInvxVHWcmqBsNshaHJGa
-         GPP/5bk6Q21SQts0/4y/6y2shdtl1hDZE2Z7wr2JIj1TK/xKtffWSEi7qw4R2uUg2wwM
-         tTYCqqPy6k6KZK2rXt59ymL3orM3zVXYQQony48jax822ADG/n2Tv28XAHHU/jLSrClD
-         kha77KY4/BnRaQaw+Bowiah5hY3Z0p6dnUoSfGJuvfSWzoeoY/Pbc0pBm1P+YDYrI53m
-         snCg==
-X-Gm-Message-State: AJIora8qrFc85mqqgWXuYowjMkYhCisp6sR1VnAtsihFNx3AfgsEE6+G
-        vIJ+Q5YugvsGLFb7KpEQT9aB5w==
-X-Google-Smtp-Source: AGRyM1t1GsMxf5C4K7kyBGZWAKDxo4V4V9DKDdnTuEaHQtbYw9EAmvVhKT4eVr1iIzVSWR6scvBZrQ==
-X-Received: by 2002:ac2:47f6:0:b0:488:b649:9f77 with SMTP id b22-20020ac247f6000000b00488b6499f77mr24197373lfp.559.1658417542316;
-        Thu, 21 Jul 2022 08:32:22 -0700 (PDT)
-Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id a27-20020ac25e7b000000b0048a2995772asm504604lfr.73.2022.07.21.08.32.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 08:32:21 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Nuno Sa <nuno.sa@analog.com>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Belisko <marek@goldelico.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Christian Eggers <ceggers@arri.de>,
-        Beniamin Bia <beniamin.bia@analog.com>,
-        Stefan Popa <stefan.popa@analog.com>,
-        Oskar Andero <oskar.andero@gmail.com>,
-        =?UTF-8?q?M=C3=A5rten=20Lindahl?= <martenli@axis.com>,
-        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
-        Cristian Pop <cristian.pop@analog.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Matheus Tavares <matheus.bernardino@usp.br>,
-        Sankar Velliangiri <navin@linumiz.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Stefan Wahren <stefan.wahren@in-tech.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 6/6] spi: dt-bindings: drop CPHA and CPOL from common properties
-Date:   Thu, 21 Jul 2022 17:31:55 +0200
-Message-Id: <20220721153155.245336-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
-References: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
+        Thu, 21 Jul 2022 11:32:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29E8B33A10
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:32:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658417524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GgKT1VkFHod0SXS+lxkOUzuqRT5Wgmq8Kpjbic6X/pE=;
+        b=QgDoFSrW/IDI+Z0imt2yc+1XEvrSrPET31MQaH3HYUFMCjDgQv1aw3xJLnQhpsyfBM7H83
+        lAFHx+8hjYd4E58ib5mNppeXQsc6Qr19frqR1dgOo6XtqpZTUVOSvIBM+ypmjfR9s/M0Gi
+        D2tr8DduYIN8v0v4mQOhRiZNXQNZjJU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-55-Bc2sPCtJPYWTiDUoRGONtw-1; Thu, 21 Jul 2022 11:32:01 -0400
+X-MC-Unique: Bc2sPCtJPYWTiDUoRGONtw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6F5038037AC;
+        Thu, 21 Jul 2022 15:32:00 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A9CD492C3B;
+        Thu, 21 Jul 2022 15:31:57 +0000 (UTC)
+Message-ID: <413f59cd3c0a80c5b71a0cd033fdaad082c5a0e7.camel@redhat.com>
+Subject: Re: [PATCHv2 4/7] KVM: SVM: Report NMI not allowed when Guest busy
+ handling VNMI
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Santosh Shukla <santosh.shukla@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 21 Jul 2022 18:31:56 +0300
+In-Reply-To: <Ytlpxa2ULiIQFOnj@google.com>
+References: <20220709134230.2397-1-santosh.shukla@amd.com>
+         <20220709134230.2397-5-santosh.shukla@amd.com>
+         <Yth5hl+RlTaa5ybj@google.com>
+         <c5acc3ac2aec4b98f9211ca3f4100c358bf2f460.camel@redhat.com>
+         <Ytlpxa2ULiIQFOnj@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,39 +72,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The spi-cpha and spi-cpol properties are device specific and should be
-accepted only if device really needs them.  Drop them from common
-spi-peripheral-props.yaml schema (each device schema will list them
-instead).
+On Thu, 2022-07-21 at 14:59 +0000, Sean Christopherson wrote:
+> On Thu, Jul 21, 2022, Maxim Levitsky wrote:
+> > On Wed, 2022-07-20 at 21:54 +0000, Sean Christopherson wrote:
+> > > On Sat, Jul 09, 2022, Santosh Shukla wrote:
+> > > > @@ -3609,6 +3612,9 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+> > > >  {
+> > > >  	struct vcpu_svm *svm = to_svm(vcpu);
+> > > >  
+> > > > +	if (is_vnmi_enabled(svm))
+> > > > +		return;
+> > > 
+> > > Ugh, is there really no way to trigger an exit when NMIs become unmasked?  Because
+> > > if there isn't, this is broken for KVM.
+> > > 
+> > > On bare metal, if two NMIs arrive "simultaneously", so long as NMIs aren't blocked,
+> > > the first NMI will be delivered and the second will be pended, i.e. software will
+> > > see both NMIs.  And if that doesn't hold true, the window for a true collision is
+> > > really, really tiny.
+> > > 
+> > > But in KVM, because a vCPU may not be run a long duration, that window becomes
+> > > very large.  To not drop NMIs and more faithfully emulate hardware, KVM allows two
+> > > NMIs to be _pending_.  And when that happens, KVM needs to trigger an exit when
+> > > NMIs become unmasked _after_ the first NMI is injected.
+> > 
+> > This is how I see this:
+> > 
+> > - When a NMI arrives and neither NMI is injected (V_NMI_PENDING) nor in service (V_NMI_MASK)
+> >   then all it is needed to inject the NMI will be to set the V_NMI_PENDING bit and do VM entry.
+> > 
+> > - If V_NMI_PENDING is set but not V_NMI_MASK, and another NMI arrives we can make the
+> >   svm_nmi_allowed return -EBUSY which will cause immediate VM exit,
+> > 
+> >   and if hopefully vNMI takes priority over the fake interrupt we raise, it will be injected,
+> 
+> Nit (for other readers following along), it's not a fake interrupt,I would describe
+> it as spurious or ignored.  It's very much a real IRQ, which matters because it
+> factors into event priority.
 
-Suggested-by: Jonathan Cameron <jic23@kernel.org>
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/spi/spi-peripheral-props.yaml  | 10 ----------
- 1 file changed, 10 deletions(-)
+Yep, 100% agree.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-index 9d63a58b46a0..ce048e782e80 100644
---- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-@@ -34,16 +34,6 @@ properties:
-     description:
-       The device requires 3-wire mode.
- 
--  spi-cpha:
--    $ref: /schemas/types.yaml#/definitions/flag
--    description:
--      The device requires shifted clock phase (CPHA) mode.
--
--  spi-cpol:
--    $ref: /schemas/types.yaml#/definitions/flag
--    description:
--      The device requires inverse clock polarity (CPOL) mode.
--
-   spi-cs-high:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
--- 
-2.34.1
+
+> 
+> >   and upon immediate VM exit we can inject another NMI by setting the V_NMI_PENDING again,
+> >   and later when the guest is done with first NMI, it will take the second.
+> 
+> Yeaaaah.  This depends heavily on the vNMI being prioritized over the IRQ.
+> 
+> >   Of course if we get a nested exception, then it will be fun....
+> > 
+> >   (the patches don't do it (causing immediate VM exit), 
+> >   but I think we should make the svm_nmi_allowed, check for the case for 
+> >   V_NMI_PENDING && !V_NMI_MASK and make it return -EBUSY).
+> 
+> Yep, though I think there's a wrinkle (see below).
+> 
+> > - If both V_NMI_PENDING and V_NMI_MASK are set, then I guess we lose an NMI.
+> >  (It means that the guest is handling an NMI, there is a pending NMI, and now
+> >  another NMI arrived)
+> > 
+> >  Sean, this is the problem you mention, right?
+> 
+> Yep.  Dropping an NMI in the last case is ok, AFAIK no CPU will pend multiple NMIs
+> while another is in-flight.  But triggering an immediate exit in svm_nmi_allowed()
+> will hang the vCPU as the second pending NMI will never go away since the vCPU
+
+The idea is to trigger the immediate exit only when a NMI was just injected (V_NMI_PENDING=1)
+but not masked (that is currently in service, that is V_NMI_MASK=0).
+
+In case both bits are set, the NMI is dropped, that is no immediate exit is requested.
+
+In this case, next VM entry should have no reason to not inject the NMI and then VM exit
+on the interrupt we raised, so there should not be a problem with forward progress.
+
+There is an issue still, the NMI could also be masked if we are in SMM (I suggested
+setting the V_NMI_MASK manually in this case), thus in this case we won't have more
+that one pending NMI, but I guess this is not that big problem.
+
+We can btw also in this case "open" the NMI window by waiting for RSM intercept.
+(that is just not inject the NMI, and on RSM inject it, I think that KVM already does this)
+
+I think it should overal work, but no doubt I do expect issues and corner cases,
+
+
+> won't make forward progress to unmask NMIs.  This can also happen if there are
+> two pending NMIs and GIF=0, i.e. any time there are multiple pending NMIs and NMIs
+> are blocked.
+
+GIF=0 can be dealt with though, if GIF is 0 when 2nd pending NMI arrives, we can
+delay its injection to the moment the STGI is executed and intercept STGI.
+
+We I think already do something like that as well.
+
+> 
+> One other question: what happens if software atomically sets V_NMI_PENDING while
+> the VMCB is in use?  I assume bad things?  I.e. I assume KVM can't "post" NMIs :-)
+
+I can't answer that but I bet that this bit is only checked on VM entry.
+
+
+Another question about the spec (sorry if I already asked this):
+
+if vGIF is used, and the guest does CLGI, does the CPU set the V_NMI_MASK,
+itself, or the CPU considers both the V_GIF and the V_NMI_MASK in the int_ctl,
+as a condition of delivering the NMI? I think that the later should be true,
+and thus V_NMI_MASK is more like V_NMI_IN_SERVICE.
+
+Best regards,
+	Maxim Levitsky
+
+> 
+
 

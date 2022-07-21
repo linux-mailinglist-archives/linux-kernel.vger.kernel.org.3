@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0667957C8E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D160357C8E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbiGUKZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
+        id S233131AbiGUK1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbiGUKY4 (ORCPT
+        with ESMTP id S229926AbiGUK1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:24:56 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271B82CCAF
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:24:55 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id tk8so2361748ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:24:55 -0700 (PDT)
+        Thu, 21 Jul 2022 06:27:02 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2CC5D5BC;
+        Thu, 21 Jul 2022 03:27:01 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id c139so1371918pfc.2;
+        Thu, 21 Jul 2022 03:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DDlxv6f17NMMsNj65PpLbDHfFZ9n6R5iig5GSNIQc60=;
-        b=BXbAH2QpOuEtDBsyknn63KMdYDqwYJ04QkYENBBBubvPKw5ufJQQ2RYWkh8TUehmAp
-         eRg1pqewIA/nWrCKjZm9eUb5/F7/+M3SfQb3fG2M/j37/NW+H4x5xwUZB8pLViC0hPap
-         mpJRkHmRolRjatLFK46JVrwFPwWbLIjnK/IPCnz962aIg/Ya09URDokHXSDpIDp++KMU
-         IvdBpBpqCcplCkrF6gXYiY5M/0zk2Ofj6aGIuMQ3j/QygHzKx4yIlYJ5mdI9YATue7Lz
-         mzIUg11Y/4YGn1/EkK5qinmyWQ1dBof6ytJgv5ZSspVQS1IpsGnFb75wrOwzRzVcwf/U
-         M+9g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hnx5MUx2Qay45VKPxChWILBO1CDCjk/WOYP9rCnQ4A4=;
+        b=YjrQI/1ayvgUAdDFhvxjLCh8wm+uE3CWIbPq68wdA8NBOFkpBB3jGi5PbI0nTmwVEz
+         AfF1r15nTjZXSKAOQOeMsoreVGtp/c6p3q9dBFT/3JAUT6XYZQiGcigD2R0wm23bIat4
+         2DSIKDf73m7pjDxycdQZGYwR6vnwZv85dUaH8FFa6rE73Fw2u8xQKMXbiOb7ZuPGoW52
+         ESGVeRtj3Nvm6fu9j86/IOrSlFvkirayrQKyxs+cY+3aMqwQNSy3aEzLB9Gvic0Pfatf
+         McmMruj7L3jFaykFy6wsnwhzU5NDxZRHtQ9Fn+M52/+4fdEGzZxpY2Vu6NQcuaj3vzKO
+         0KVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DDlxv6f17NMMsNj65PpLbDHfFZ9n6R5iig5GSNIQc60=;
-        b=ET6+jQTJ58dGyZ0sdmpHn115+aKN1D4Gtmcd1ce5NX2rBaWQypBiRWUd5bCwvqeIst
-         enH36Tc0Y8a9kTfK0Tb8c46mYPBP6uH4Hgtmu2yl/dOpWfyUtDVVBXJf9sdaPbDynVXa
-         ysCMHsdzhjcGba37Ty5hljh4EGpPyRipl7GpmwAlAThGHUb8aL8tkUZQ3tzWOCKVRIv0
-         f1h/YHVIIYu4M4UyodAJfBkeWcqAjJDFtuZwhKFUNGSE/k46CksOfY9IYJLTAH9fGsbU
-         CoEgKkhKRrUFaH9cwlT3Ua1zgpgZHdrv8MMz9OS6Lvis1K2TWkEzJCnMLz8PT3RA5a5D
-         DXPQ==
-X-Gm-Message-State: AJIora/MWySZgUnCmDvDTtwexDplENFknaOR7V/1eAHzFHfR3DwCnVfq
-        BFfBiXaZjLQl7R4GzS+b9Zk=
-X-Google-Smtp-Source: AGRyM1uT4hp2Itp4P40blzsKlm6eCx6+8avKdG3J/Wu5vQx5h0kQMV6Q9zWDGrdUxUc9Zz0qPjlN4g==
-X-Received: by 2002:a17:906:9c84:b0:6e0:7c75:6f01 with SMTP id fj4-20020a1709069c8400b006e07c756f01mr40510180ejc.103.1658399093753;
-        Thu, 21 Jul 2022 03:24:53 -0700 (PDT)
-Received: from localhost (92.40.202.7.threembb.co.uk. [92.40.202.7])
-        by smtp.gmail.com with ESMTPSA id bv4-20020a170906b1c400b0072f0dbaf2f7sm653335ejb.214.2022.07.21.03.24.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hnx5MUx2Qay45VKPxChWILBO1CDCjk/WOYP9rCnQ4A4=;
+        b=RnGpypPHc1lKFFb6o8O5SFyquD3ZK+bTVE2D2kzS2uM108op5iPDVWBn9X/4dCxZXq
+         PL0+jkscV8btbxcbro8omdEb7wZr98BcKnKf4C2p+DDvNlRFRp/auTP0pFtVSVgMfQz4
+         LPQtOczDA6FCgKOzGu7fxDrlIhm76/peNtndlcpt/v9E/iHBoLVVcwrXJBq3sUfceDP4
+         dWcI7orUr06GUykvlLikmdlAx2Vi9Kkn6stxrtZmI/wTiR+u6yK+IoRH6jtLzxvlufQD
+         eAvwsNROQT1unPeS8vxtcCUYtIGKMukRSnRrA6VgiXPngHraZ6UMBY+YGU1BT9NlZpxk
+         /3MA==
+X-Gm-Message-State: AJIora+nEksDwYzH4t7WWaGJNujNKL6okZKpBPo7bQnOLPmIYrNidvsf
+        8z5nv3lEnNbSjg1WRtsY+p1Paj91GwjH9Vd2vTU=
+X-Google-Smtp-Source: AGRyM1veomwcwmD7njgdLv3uDNpUEWGyLAwEAdjYT3F5q9MrhFq81H8SEWHFwnAb2VVpBxeBowdtHQ==
+X-Received: by 2002:a63:8441:0:b0:41a:8f86:a6dc with SMTP id k62-20020a638441000000b0041a8f86a6dcmr301636pgd.296.1658399220798;
+        Thu, 21 Jul 2022 03:27:00 -0700 (PDT)
+Received: from kvm.. ([58.76.185.115])
+        by smtp.googlemail.com with ESMTPSA id f64-20020a17090a28c600b001ef7c7564fdsm3285752pjd.21.2022.07.21.03.26.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 03:24:53 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        bgoswami@quicinc.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH -next 2/2] sound: soc: codecs: wcd938x: Remove spurious type_base from irq chip
-Date:   Thu, 21 Jul 2022 11:25:58 +0100
-Message-Id: <20220721102558.25457-3-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20220721102558.25457-1-aidanmacdonald.0x0@gmail.com>
-References: <20220721102558.25457-1-aidanmacdonald.0x0@gmail.com>
+        Thu, 21 Jul 2022 03:27:00 -0700 (PDT)
+From:   Juhee Kang <claudiajkang@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     tchornyi@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, idosch@nvidia.com,
+        petrm@nvidia.com, linux-kernel@vger.kernel.org,
+        Juhee Kang <claudiajkang@gmail.com>
+Subject: [PATCH net-next 1/2] mlxsw: use netif_is_any_bridge_port() instead of open code
+Date:   Thu, 21 Jul 2022 19:26:47 +0900
+Message-Id: <20220721102648.2455-1-claudiajkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no reason to set type_base here: the chip doesn't set
-num_type_regs and none of the IRQs have type information so it's
-not possible for regmap-irq to configure IRQ types.
+The open code which is netif_is_bridge_port() || netif_is_ovs_port() is
+defined as a new helper function on netdev.h like netif_is_any_bridge_port
+that can check both IFF flags in 1 go. So use netif_is_any_bridge_port()
+function instead of open code. This patch doesn't change logic.
 
-Type registers are also deprecated in regmap-irq, so any IRQ type
-support in the future should be implemented using config registers
-instead.
-
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Signed-off-by: Juhee Kang <claudiajkang@gmail.com>
 ---
- sound/soc/codecs/wcd938x.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index 781ae569be29..aca06a4026f3 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -1298,7 +1298,6 @@ static struct regmap_irq_chip wcd938x_regmap_irq_chip = {
- 	.num_regs = 3,
- 	.status_base = WCD938X_DIGITAL_INTR_STATUS_0,
- 	.mask_base = WCD938X_DIGITAL_INTR_MASK_0,
--	.type_base = WCD938X_DIGITAL_INTR_LEVEL_0,
- 	.ack_base = WCD938X_DIGITAL_INTR_CLEAR_0,
- 	.use_ack = 1,
- 	.runtime_pm = true,
--- 
-2.35.1
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+index 23d526f13f1c..3a16c24154e1 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_router.c
+@@ -8590,9 +8590,7 @@ static int mlxsw_sp_inetaddr_port_event(struct net_device *port_dev,
+ 					unsigned long event,
+ 					struct netlink_ext_ack *extack)
+ {
+-	if (netif_is_bridge_port(port_dev) ||
+-	    netif_is_lag_port(port_dev) ||
+-	    netif_is_ovs_port(port_dev))
++	if (netif_is_any_bridge_port(port_dev) || netif_is_lag_port(port_dev))
+ 		return 0;
+
+ 	return mlxsw_sp_inetaddr_port_vlan_event(port_dev, port_dev, event,
+--
+2.34.1
 

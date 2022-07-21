@@ -2,150 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363A557C6A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1522C57C5C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbiGUInm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S232054AbiGUIEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiGUInl (ORCPT
+        with ESMTP id S231278AbiGUIED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:43:41 -0400
-X-Greylist: delayed 3494 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 01:43:38 PDT
-Received: from 19.mo583.mail-out.ovh.net (19.mo583.mail-out.ovh.net [46.105.35.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902E0FE3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:43:38 -0700 (PDT)
-Received: from player726.ha.ovh.net (unknown [10.110.115.111])
-        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 47F6A245E0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:15:24 +0000 (UTC)
-Received: from RCM-web2.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player726.ha.ovh.net (Postfix) with ESMTPSA id 096522CC42DE3;
-        Thu, 21 Jul 2022 06:15:16 +0000 (UTC)
-MIME-Version: 1.0
-Date:   Thu, 21 Jul 2022 08:15:15 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
+        Thu, 21 Jul 2022 04:04:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F4F796A8;
+        Thu, 21 Jul 2022 01:04:01 -0700 (PDT)
+Received: from [IPv6:2a00:23c6:c30a:1501:427e:206e:3eb7:267d] (unknown [IPv6:2a00:23c6:c30a:1501:427e:206e:3eb7:267d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BDF2F66019C1;
+        Thu, 21 Jul 2022 09:03:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658390640;
+        bh=fs3O49CtwD+yyqy9aNqBLmpgxY/wLTliwXWOK4mYbl8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HGnRR4MoeYzwZ7nuD8zWv09oTda5dNBZxtWI1ZlRSAXYOUoInlKoLLoJEW09Gz6MH
+         YHrBJtS3ffRwz1SJukzWh5R8chpRRPauzXIEYNgMGPY1U6QBhnsySEPhSJbsSdA2EK
+         acSuXIqZujzKznKLTXlBJrx8CoYIVogUzHdOTNYBQgKBT4VhM/Nehzn4QWBlojq971
+         2tXjhrr1w0mfnFYzE0ASggX82GGaJbBb8C01yt4lWRkVT+KB3kCZDksFmbjF1gg0Bv
+         O2pzVeS498Ryw7IIs1eERQP5VqssOZ1TavbaT70ua/p0Lz37Zifl6ahsmhtpH0okyC
+         vA1IezgxwBGqQ==
+Message-ID: <86de8ba0157c451fcce4ca92b6cad835e3f1e4d9.camel@collabora.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: add MSC
+ Technologies
+From:   Martyn Welch <martyn.welch@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     kernel@collabora.com, Rob Herring <robh@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 3/9] arm64: dts: bcmbca: update BCM4908 board dts
- files
-In-Reply-To: <20220721000707.29557-1-william.zhang@broadcom.com>
-References: <20220721000707.29557-1-william.zhang@broadcom.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <07a566d45cf48baff70f027e52264aa8@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17220639077199358939
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkedgtdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvvefujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpeevjefhffffveeludejfedtvdfftdekgffghfegieeliedvfeeigfejteejjeekfeenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejvdeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeef
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Thu, 21 Jul 2022 09:03:56 +0100
+In-Reply-To: <abd47815-c84b-115b-f6f2-b6ec0dbf1bef@linaro.org>
+References: <20220720150007.2168051-1-martyn.welch@collabora.com>
+         <abd47815-c84b-115b-f6f2-b6ec0dbf1bef@linaro.org>
+Organization: Collabora Ltd.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2-1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-07-21 02:07, William Zhang wrote:
-> Append "brcm,bcmbca" to compatible strings based on the new bcmbca
-> binding rule for BCM4908 family based boards. This will break drivers
-> that use the old compatible string for binding. Fortunately there is no
-> such usage in linux and u-boot.
+On Wed, 2022-07-20 at 19:07 +0200, Krzysztof Kozlowski wrote:
+> On 20/07/2022 17:00, Martyn Welch wrote:
+> > Add "msc" vendor prefix for MSC Technologies GmbH
+> > (https://www.msc-technologies.eu).
+>=20
+> Does not really work - leads to Avnet, so there is no MSC anymore?
+>=20
 
-Why should an extra "compatible" value break anything? I don't think it
-will happen unless some driver does some really crazy stuff (like
-checking full list of "compatible" values).
+It still seems to be used as branding by Avnet.
 
+> >=20
+> > Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+> > ---
+> >=20
+> > Changes in v2:
+> > =C2=A0 - New addition
+> >=20
+> > =C2=A0Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+> > =C2=A01 file changed, 2 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > index 0496773a3c4d..1658357bc1c4 100644
+> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > @@ -816,6 +816,8 @@ patternProperties:
+> > =C2=A0=C2=A0 "^mrvl,.*":
+> > =C2=A0=C2=A0=C2=A0=C2=A0 description: Marvell Technology Group Ltd.
+> > =C2=A0=C2=A0=C2=A0=C2=A0 deprecated: true
+> > +=C2=A0 "^msc,.*":
+> > +=C2=A0=C2=A0=C2=A0 description: MSC Technologies GmbH.
+>=20
+> This should be rather msct or msctech, but anyway in fact you maybe
+> should use avnet?
+>=20
 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+My rationale for using MSC Technologies is that is how the device is
+described on the website as being a MSC device. I think the
+amalgamation of the MSC website into Avnet's has happened in the last
+year or so. I assume a new device released in the near future would be
+branded more directly as an Avnet device, or maybe not, I see that the
+i.MX 9 is being described as "MSC SM2S-IMX93".
 
-Other than confusing commit message:
+I'll switch to msctech unless there are objections to that.
 
-Acked-by: Rafał Miłecki <rafal@milecki.pl>
+Martyn
 
+> > =C2=A0=C2=A0 "^mscc,.*":
+> > =C2=A0=C2=A0=C2=A0=C2=A0 description: Microsemi Corporation
+> > =C2=A0=C2=A0 "^msi,.*":
+>=20
+>=20
+> Best regards,
+> Krzysztof
 
-> ---
-> 
->  arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts | 2 +-
->  .../dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts     | 2 +-
->  arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts | 2 +-
->  .../arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
-> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
-> index 2dd028438c22..d8b60575eb4f 100644
-> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
-> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
-> @@ -7,7 +7,7 @@
->  #include "bcm4906.dtsi"
-> 
->  / {
-> -	compatible = "netgear,r8000p", "brcm,bcm4906", "brcm,bcm4908";
-> +	compatible = "netgear,r8000p", "brcm,bcm4906", "brcm,bcm4908", 
-> "brcm,bcmbca";
->  	model = "Netgear R8000P";
-> 
->  	memory@0 {
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
-> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
-> index 064f7f549665..296393d4aaab 100644
-> --- 
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
-> +++ 
-> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
-> @@ -7,7 +7,7 @@
->  #include "bcm4906.dtsi"
-> 
->  / {
-> -	compatible = "tplink,archer-c2300-v1", "brcm,bcm4906", 
-> "brcm,bcm4908";
-> +	compatible = "tplink,archer-c2300-v1", "brcm,bcm4906",
-> "brcm,bcm4908", "brcm,bcmbca";
->  	model = "TP-Link Archer C2300 V1";
-> 
->  	memory@0 {
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
-> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
-> index 04f8524b5335..787c7ddf9102 100644
-> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
-> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
-> @@ -6,7 +6,7 @@
->  #include "bcm4908.dtsi"
-> 
->  / {
-> -	compatible = "asus,gt-ac5300", "brcm,bcm4908";
-> +	compatible = "asus,gt-ac5300", "brcm,bcm4908", "brcm,bcmbca";
->  	model = "Asus GT-AC5300";
-> 
->  	memory@0 {
-> diff --git
-> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
-> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
-> index 3c2cf2d238b6..23b96c663239 100644
-> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
-> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
-> @@ -3,7 +3,7 @@
->  #include "bcm4908.dtsi"
-> 
->  / {
-> -	compatible = "netgear,raxe500", "brcm,bcm4908";
-> +	compatible = "netgear,raxe500", "brcm,bcm4908", "brcm,bcmbca";
->  	model = "Netgear RAXE500";
-> 
->  	memory@0 {

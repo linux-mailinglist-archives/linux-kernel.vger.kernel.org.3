@@ -2,152 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E132C57C1A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD33557C1AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiGUAfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
+        id S231299AbiGUAg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiGUAfL (ORCPT
+        with ESMTP id S230256AbiGUAg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:35:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF8A56272
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658363708;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=YUjwNdRUT99ASZIZYsMJwCcledX4/RDVaQ7w44xnB7Y=;
-        b=T9Nv9aBGucqXbRbfpsxw8ICKtdARG2Sl51SEFmEhNB1w0HYfgBfN/gZwbiM1xbsJk1/yPh
-        OLEn3vKoq2fJkDa7LiP6UwjuhR+eVMi0qbWRMDAVaHyWcA//BuVkTMVk8KnR5nAFjeCdNS
-        VF2XfWoNSoX+RbURHpjky3UadaZOrnE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-EJHkHy_0MJmNKSAqYJkZpA-1; Wed, 20 Jul 2022 20:34:56 -0400
-X-MC-Unique: EJHkHy_0MJmNKSAqYJkZpA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 10365811E76;
-        Thu, 21 Jul 2022 00:34:56 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.43])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C2C7400DFD7;
-        Thu, 21 Jul 2022 00:34:55 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/amd: Disable guest vapic logging during early kdump init
-Date:   Wed, 20 Jul 2022 17:34:39 -0700
-Message-Id: <20220721003439.403435-1-jsnitsel@redhat.com>
+        Wed, 20 Jul 2022 20:36:56 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B177753AA
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:36:54 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220721003649epoutp02e3cc0609e5e44896872ce1e80dec6da3~DsRkcTUpJ2015420154epoutp02S
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:36:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220721003649epoutp02e3cc0609e5e44896872ce1e80dec6da3~DsRkcTUpJ2015420154epoutp02S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1658363809;
+        bh=VRxCJBmeMeIfHCw20HGM2OUWF/cbxVYH3881kVhEA0w=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=u4kT1T/OSyurUe+5AI+scP+wbkplbrCqUGhNWPpBXp6gv8O4E+MPLIo+1dBBTS7BM
+         ru4aWxjF7EANLsEnFAfkHOgqZNULkzddEG3f1v2tVl+qBh4uvA94rzY+s4CNXqirqt
+         Ij4L2xacbBhtQQ8HuUkTbBhnAz/fga+EptZ9QDPg=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220721003648epcas1p1b195e82b8e422de9392e19a1cc1eca9a~DsRj-ljKw1825018250epcas1p1E;
+        Thu, 21 Jul 2022 00:36:48 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.38.241]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4LpDCh4Tj4z4x9Pv; Thu, 21 Jul
+        2022 00:36:48 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        79.8E.10203.B9F98D26; Thu, 21 Jul 2022 09:36:43 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220721003642epcas1p4e316dcedc2165bc4e1f5d32d715073c9~DsReds18-0049400494epcas1p4b;
+        Thu, 21 Jul 2022 00:36:42 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220721003642epsmtrp1193e9c2312b80698dd9234bc191d3e65~DsRedFGZQ1863018630epsmtrp1C;
+        Thu, 21 Jul 2022 00:36:42 +0000 (GMT)
+X-AuditID: b6c32a38-597ff700000027db-e4-62d89f9bc999
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        60.35.08802.A9F98D26; Thu, 21 Jul 2022 09:36:42 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220721003642epsmtip29f1523f7b15754235ec82fd58448d491~DsReQbQJx2261522615epsmtip28;
+        Thu, 21 Jul 2022 00:36:42 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     "'linkinjeon'" <linkinjeon@kernel.org>
+Cc:     "'linux-fsdevel'" <linux-fsdevel@vger.kernel.org>,
+        "'linux-kernel'" <linux-kernel@vger.kernel.org>
+In-Reply-To: <SG2PR04MB3899752B10CFB6CF93A6127C81879@SG2PR04MB3899.apcprd04.prod.outlook.com>
+Subject: RE: [PATCH v2 0/3] exfat: remove duplicate write directory entries
+Date:   Thu, 21 Jul 2022 09:36:42 +0900
+Message-ID: <011d01d89c99$f2b1fd70$d815f850$@samsung.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQFemAJYJOoyOYeQemHeqAgjsZ9DnAHKuyhHrm2tVkA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKJsWRmVeSWpSXmKPExsWy7bCmge7s+TeSDLatYLOYOG0ps8WevSdZ
+        LC7vmsPmwOyxaVUnm8fnTXIBTFENjDaJRckZmWWpCql5yfkpmXnptkqhIW66FkoKGfnFJbZK
+        0YaGRnqGBuZ6RkZGesaWsVZGpkoKeYm5qbZKFbpQvUoKRckFQLW5lcVAA3JS9aDiesWpeSkO
+        WfmlIIfpFSfmFpfmpesl5+cqKZQl5pQCjVDST/jGmPF5XytbwRHNirVbIhsYd0l2MXJySAiY
+        SLxsu8vYxcjFISSwg1Gia/YpZgjnE6PE19PN7BDOZ0aJg5uWssK0zLr2jRUisYtRYt7lJ8wg
+        CSGBl4wSy95Xg9hsAroST278BIpzcIgIaEl0H48GCTMLZEhsnPmBHcTmFIiVmPjzOpgtLOAt
+        8ejadDYQm0VAVeLflM9gcV4BS4nnH25B2YISJ2c+YYGYoy2xbOFrZoh7FCR2fzoKdpuIgJXE
+        livT2CFqRCRmd7aBfSMhcI9d4uJjkD85gBwXicZ9CRC9whKvjm9hh7ClJF72t0HZzYwSzY1G
+        EHYHo8TTjbIQrfYS7y9ZgJjMApoS63fpQ1QoSuz8PZcRwhaUOH2tmxniAj6Jd197WCE6eSU6
+        2oQgSlQkvn/YyTKBUXkWkr9mIflrFpL7ZyEsW8DIsopRLLWgODc9tdiwwAQ5rjcxglOklsUO
+        xrlvP+gdYmTiYDzEKMHBrCTC+7TwepIQb0piZVVqUX58UWlOavEhxmRgSE9klhJNzgcm6byS
+        eEMTYwMDI2ASNLc0NyZC2NLAxMzIxMLY0thMSZy3d+rpRCGB9MSS1OzU1ILUIpgtTBycUg1M
+        cmvKk7c8Z/l1VnXLpf/XuMoa/7EKn9hwt6b3Sv+r53odBavvbb6fOlk1YWHSNn6+n1r3bMp4
+        b6VxmplxvUuXyLyzeWrfhYanqxuT3/S+8+bwvta3ac1yAc5s/q/bSrTc93rMFLmRcWbC/xPy
+        NRuvOq2z3Dvn45SFExZtenzv9PwFe2K0j9519cmTE1i2ZPOKaQ8fHo4+51ha/93whduBpS0r
+        rbfsTdqmL6U6N75ezGqnxH62R/f37Uiy5BDmiFTM/z5V7qXc7hPrDwXeWZjI7dgqv/kUw17T
+        RdN8hL7MWKDK6XDvKutMp1u9E4qV6jt3anKc1N4dpc2WPWkDl4VGllrAYQWBmwfi+hIvt33h
+        WqTEUpyRaKjFXFScCAC+hX9qSAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSvO6s+TeSDA69ULeYOG0ps8WevSdZ
+        LC7vmsPmwOyxaVUnm8fnTXIBTFFcNimpOZllqUX6dglcGWsev2Mr+KhWcfhNP3MD41+xLkZO
+        DgkBE4lZ176xdjFycQgJ7GCUaNx+iaWLkQMoISVxcJ8mhCkscfhwMUi5kMBzRont3S4gNpuA
+        rsSTGz+ZQUpEBLQkuo9Hg4SZBTIkZu3YwgZRvo5RYvqTeBCbUyBWYuLP6+wgtrCAt8Sja9PB
+        algEVCX+TfkMFucVsJR4/uEWlC0ocXLmExaImdoSvQ9bGWHsZQtfM0NcryCx+9NRVhBbRMBK
+        YsuVaewQNSISszvbmCcwCs9CMmoWklGzkIyahaRlASPLKkbJ1ILi3PTcYsMCo7zUcr3ixNzi
+        0rx0veT83E2M4AjQ0trBuGfVB71DjEwcjIcYJTiYlUR4nxZeTxLiTUmsrEotyo8vKs1JLT7E
+        KM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qBid/+Z8IMSYvdbBY/7E0yjaZeKv8o3eBv
+        P63yywaHM8uWsR4p81+XXXc1eWNZT9r+E+Y2zAv0DY6VtU/QrWTmv1/Jk/X+21XHBzmLii6u
+        ZhabbHOj5pK7WX3UVMWmiHWz576/6qbQdVnyoNSZAKlTk7RS4qQaEu/f3R27eDPT2/CmcyZX
+        lI+l7zl3REtOM2K6gdWs6XVvsrtzLhroLOeaHr3qYujZ6W7vRRPijplIxKY0/Tecze3o9Dp9
+        UV/SjA8VHAl/jJZUW5vf7V7nyWAsdWW2+EQOiTV8HWV/9youlRNojbTRmOrhojlLSfSniMjx
+        j5OU+iZdkrKwNHj++Xda8Y2r5mJhCzwzhOU4dD4osRRnJBpqMRcVJwIAH7ZGQe8CAAA=
+X-CMS-MailID: 20220721003642epcas1p4e316dcedc2165bc4e1f5d32d715073c9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220711093004epcas1p4b7f4a4426c8d4f950631731156d95aa3
+References: <CGME20220711093004epcas1p4b7f4a4426c8d4f950631731156d95aa3@epcas1p4.samsung.com>
+        <SG2PR04MB3899752B10CFB6CF93A6127C81879@SG2PR04MB3899.apcprd04.prod.outlook.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit a8d4a37d1bb9 ("iommu/amd: Restore GA log/tail pointer on
-host resume"), there now is a WARN_ON in iommu_ga_log_enable that
-triggers if the GALOG_RUN bit is set in the MMIO status register, and
-this warning has been reported when a kdump kernel is booting.
+> Changes for v2:
+>   - =5B1/3=5D: Fix timing of calling __exfat_write_inode()
+>     - __exfat_write_inode() should be called after updating inode.
+>     - This call will be removed in =5B3/3=5D, so the patch series is
+>       no code changes between v1 and v2.
+>=20
+>=20
+> These patches simplifie the code, and removes unnecessary writes for the
+> following operations.
 
-We probably don't really care about guest vapic logging during kdump,
-but the proper thing seems to be disabling the GALOG_EN bit in the
-MMIO control register in the kdump code path of
-early_enable_iommus(). The iommu pci init code is going to set the ga
-log address pointers to new values in the amd_iommu struct, and these
-aren't pushed to the iommu until after the warning and return in
-iommu_ga_log_enable(). So worst case, the GALOG bits are set and the
-iommu has stale pointers to the ga log addresses. So disable GALOG_EN
-in early_enable_iommus() and allow iommu_ga_log_enable() to set it up
-properly and enable again.
+Looks good. Thanks.
 
-Without the fix you will see the following warning when the kdump
-kernel boots:
+Reviewed-by: Sungjong Seo <sj1557.seo=40samsung.com>
 
-[    7.731955] ------------[ cut here ]------------
-[    7.736575] WARNING: CPU: 0 PID: 1 at drivers/iommu/amd/init.c:829 iommu_ga_log_enable.isra.0+0x16f/0x190
-[    7.746135] Modules linked in:
-[    7.749193] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W        --------  ---  5.19.0-0.rc7.53.eln120.x86_64 #1
-[    7.759706] Hardware name: Dell Inc. PowerEdge R7525/04D5GJ, BIOS 2.1.6 03/09/2021
-[    7.767274] RIP: 0010:iommu_ga_log_enable.isra.0+0x16f/0x190
-[    7.772931] Code: 20 20 00 00 8b 00 f6 c4 01 74 da 48 8b 44 24 08 65 48 2b 04 25 28 00 00 00 75 13 48 83 c4 10 5b 5d e9 f5 00 72 00 0f 0b eb e1 <0f> 0b eb dd e8 f8 66 42 00 48 8b 15 f1 85 53 01 e9 29 ff ff ff 48
-[    7.791679] RSP: 0018:ffffc90000107d20 EFLAGS: 00010206
-[    7.796905] RAX: ffffc90000780000 RBX: 0000000000000100 RCX: ffffc90000780000
-[    7.804038] RDX: 0000000000000001 RSI: ffffc90000780000 RDI: ffff8880451f9800
-[    7.811170] RBP: ffff8880451f9800 R08: ffffffffffffffff R09: 0000000000000000
-[    7.818303] R10: 0000000000000000 R11: 0000000000000000 R12: 0008000000000000
-[    7.825435] R13: ffff8880462ea900 R14: 0000000000000021 R15: 0000000000000000
-[    7.832572] FS:  0000000000000000(0000) GS:ffff888054a00000(0000) knlGS:0000000000000000
-[    7.840657] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    7.846400] CR2: ffff888054dff000 CR3: 0000000053210000 CR4: 0000000000350eb0
-[    7.853533] Call Trace:
-[    7.855979]  <TASK>
-[    7.858085]  amd_iommu_enable_interrupts+0x180/0x270
-[    7.863051]  ? iommu_setup+0x271/0x271
-[    7.866803]  state_next+0x197/0x2c0
-[    7.870295]  ? iommu_setup+0x271/0x271
-[    7.874049]  iommu_go_to_state+0x24/0x2c
-[    7.877976]  amd_iommu_init+0xf/0x29
-[    7.881554]  pci_iommu_init+0xe/0x36
-[    7.885133]  do_one_initcall+0x44/0x200
-[    7.888975]  do_initcalls+0xc8/0xe1
-[    7.892466]  kernel_init_freeable+0x14c/0x199
-[    7.896826]  ? rest_init+0xd0/0xd0
-[    7.900231]  kernel_init+0x16/0x130
-[    7.903723]  ret_from_fork+0x22/0x30
-[    7.907306]  </TASK>
-[    7.909497] ---[ end trace 0000000000000000 ]---
-
-Fixes: 3ac3e5ee5ed5 ("iommu/amd: Copy old trans table from old kernel")
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc: Will Deacon <will@kernel.org> (maintainer:IOMMU DRIVERS)
-Cc: iommu@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/iommu/amd/init.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index 1d08f87e734b..2b00d7f28df7 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -815,6 +815,11 @@ static void free_ga_log(struct amd_iommu *iommu)
- #endif
- }
- 
-+static void iommu_ga_log_disable(struct amd_iommu *iommu)
-+{
-+	iommu_feature_disable(iommu, CONTROL_GALOG_EN);
-+}
-+
- static int iommu_ga_log_enable(struct amd_iommu *iommu)
- {
- #ifdef CONFIG_IRQ_REMAP
-@@ -2504,6 +2509,7 @@ static void early_enable_iommus(void)
- 		for_each_iommu(iommu) {
- 			iommu_disable_command_buffer(iommu);
- 			iommu_disable_event_buffer(iommu);
-+			iommu_ga_log_disable(iommu);
- 			iommu_enable_command_buffer(iommu);
- 			iommu_enable_event_buffer(iommu);
- 			iommu_enable_ga(iommu);
-
-base-commit: ca85855bdcae8f84f1512e88b4c75009ea17ea2f
--- 
-2.36.1
+>=20
+> 1. Write data to an empty file
+>   * Preparation
+>     =60=60=60
+>     mkdir /mnt/dir;touch /mnt/dir/file;sync
+>     =60=60=60
+>   * Capture the blktrace log of the following command
+>     =60=60=60
+>     dd if=3D/dev/zero of=3D/mnt/dir/file bs=3D=24=7Bcluster_size=7D count=
+=3D1
+> oflag=3Dappend conv=3Dnotrunc
+>     =60=60=60
+>   * blktrace log
+>     * Before
+>       =60=60=60
+>       179,3    0        1     0.000000000    84  C  WS 2623488 + 1 =5B0=
+=5D
+> BootArea
+>       179,3    2        1    30.259435003   189  C   W 2628864 + 256 =5B0=
+=5D
+> /dir/file
+>       179,3    0        2    30.264066003    84  C   W 2627584 + 1 =5B0=
+=5D
+> BitMap
+>       179,3    2        2    30.261749337   189  C   W 2628608 + 1 =5B0=
+=5D        /dir/
+>       179,3    0        3    60.479159007    84  C   W 2628608 + 1 =5B0=
+=5D        /dir/
+>       =60=60=60
+>     * After
+>       =60=60=60
+>       179,3    0        1     0.000000000    84  C  WS 2623488 + 1 =5B0=
+=5D
+> BootArea
+>       179,3    3        1    30.185383337    87  C   W 2629888 + 256 =5B0=
+=5D
+> /dir/file
+>       179,3    0        2    30.246422004    84  C   W 2627584 + 1 =5B0=
+=5D
+> BitMap
+>       179,3    0        3    60.466497674    84  C   W 2628352 + 1 =5B0=
+=5D        /dir/
+>       =60=60=60
+>=20
+> 2. Allocate a new cluster for a directory
+>   * Preparation
+>     =60=60=60
+>     mkdir /mnt/dir
+>     for ((i=3D1; i<cluster_size/96; i++)); do > /mnt/dir/file=24i; done
+>     mkdir /mnt/dir/dir1; sync
+>     =60=60=60
+>   * Capture the blktrace log of the following command
+>     =60=60=60
+>     > /mnt/dir/file
+>     =60=60=60
+>   * blktrace log
+>     - Before
+>       =60=60=60
+>       179,3    0        1     0.000000000    84  C  WS 2623488 + 1 =5B0=
+=5D
+> BootArea
+>       179,3    2        1    30.263762003   189  C   W 2629504 + 128 =5B0=
+=5D      /dir/
+>       179,3    2        2    30.275596670   189  C   W 2629376 + 128 =5B0=
+=5D      /dir/
+>       179,3    2        3    30.290174003   189  C   W 2629119 + 1 =5B0=
+=5D        /dir/
+>       179,3    2        4    30.292362670   189  C   W 2628096 + 1 =5B0=
+=5D        /
+>       179,3    2        5    30.294547337   189  C   W 2627584 + 1 =5B0=
+=5D
+> BitMap
+>       179,3    0        2    30.296661337    84  C   W 2625536 + 1 =5B0=
+=5D
+> FatArea
+>       179,3    0        3    60.478775007    84  C   W 2628096 + 1 =5B0=
+=5D        /
+>       =60=60=60
+>     - After
+>       =60=60=60
+>       179,3    0        1     0.000000000    84  C  WS 2623488 + 1 =5B0=
+=5D
+> BootArea
+>       179,3    3        1    30.288114670    87  C   W 2631552 + 128 =5B0=
+=5D      /dir/
+>       179,3    3        2    30.303518003    87  C   W 2631424 + 128 =5B0=
+=5D      /dir/
+>       179,3    3        3    30.324212337    87  C   W 2631167 + 1 =5B0=
+=5D        /dir/
+>       179,3    3        4    30.326579003    87  C   W 2627584 + 1 =5B0=
+=5D
+> BitMap
+>       179,3    0        2    30.328892670    84  C   W 2625536 + 1 =5B0=
+=5D
+> FatArea
+>       179,3    0        3    60.503128674    84  C   W 2628096 + 1 =5B0=
+=5D        /
+>       =60=60=60
+>=20
+> 3. Truncate and release cluster from the file
+>   * Preparation
+>     =60=60=60
+>     mkdir /mnt/dir
+>     dd if=3D/dev/zero of=3D/mnt/dir/file bs=3D=24=7Bcluster_size=7D count=
+=3D2
+>     sync
+>     =60=60=60
+>   * Capture the blktrace log of the following command
+>     =60=60=60
+>     truncate -s =24=7Bcluster_size=7D /mnt/dir/file
+>     =60=60=60
+>=20
+>   * blktrace log
+>     * Before
+>       =60=60=60
+>       179,3    0        1     0.000000000    84  C  WS 2623488 + 1 =5B0=
+=5D
+> BootArea
+>       179,3    1        1     5.048452334    49  C   W 2629120 + 1 =5B0=
+=5D        /dir/
+>       179,3    0        2     5.062994334    84  C   W 2627584 + 1 =5B0=
+=5D        BitMap
+>       179,3    0        3    10.031253002    84  C   W 2629120 + 1 =5B0=
+=5D        /dir/
+>       =60=60=60
+>=20
+>      * After
+>       =60=60=60
+>       179,3    0        1     0.000000000  9143  C  WS 2623488 + 1 =5B0=
+=5D
+> BootArea
+>       179,3    0        2    14.839244001  9143  C   W 2629888 + 1 =5B0=
+=5D        /dir/
+>       179,3    0        3    14.841562335  9143  C   W 2627584 + 1 =5B0=
+=5D
+> BitMap
+>       =60=60=60
+>=20
+> Yuezhang Mo (3):
+>   exfat: reuse __exfat_write_inode() to update directory entry
+>   exfat: remove duplicate write inode for truncating file
+>   exfat: remove duplicate write inode for extending dir/file
+>=20
+>  fs/exfat/exfat_fs.h =7C  1 +
+>  fs/exfat/file.c     =7C 82 ++++++++++++++-------------------------------
+>  fs/exfat/inode.c    =7C 41 ++++++-----------------
+>  fs/exfat/namei.c    =7C 20 -----------
+>  4 files changed, 37 insertions(+), 107 deletions(-)
+>=20
+> --
+> 2.25.1
 

@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0499957D354
+	by mail.lfdr.de (Postfix) with ESMTP id 5438E57D355
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbiGUSdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 14:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S232106AbiGUSdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 14:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGUSdq (ORCPT
+        with ESMTP id S229778AbiGUSdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 14:33:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3785F8C8E2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:33:45 -0700 (PDT)
+        Thu, 21 Jul 2022 14:33:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D9D48C8E2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:33:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658428424;
+        s=mimecast20190719; t=1658428425;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KH2IQ7lvNvosAuw/khX6+zs8dl9iHbPrciywy6iP5nM=;
-        b=YUCHiViLBy7Pnmf6iAwL/fgrDyi4Wsj+sivU3V+ydR3V0fFz6i8yJuCt6A1KpQB3PEJklJ
-        CTnUVag6kOYXTJWufaosOSXcvc40rIWrS+krgoIyvhnHyWTk68riAuZfVRsOeBI3y93N/Y
-        bF1ltrG8BQQNZDeD55OG0CKkbOD6FOg=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nbIFjjgDA4ooaBqJdaxSYkeX6CtTRCPcitxkJ2jJ7zw=;
+        b=fu2/XqBvmXDQ2TkRqQa8RnSAE3XepU07P6CCUQnUcg7npyhiu/BQ4CWQN/OeMjt56J+J0A
+        jiroxlZRR9cMh6JRI1sX1hLI7JmuSpiuxLDyMQ2knljhi2SnPLhiePy0JBLl4DAccsiPMI
+        poWyaT1R4CYf8uFsCSwLdpElzPunW68=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-539-I4nX6CXEMLS40VSlGoXa2w-1; Thu, 21 Jul 2022 14:33:43 -0400
-X-MC-Unique: I4nX6CXEMLS40VSlGoXa2w-1
-Received: by mail-qv1-f70.google.com with SMTP id k7-20020a056214102700b004740a13b3bcso1557114qvr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:33:43 -0700 (PDT)
+ us-mta-592-aWOPC14IMYOFqesp56s6Dw-1; Thu, 21 Jul 2022 14:33:44 -0400
+X-MC-Unique: aWOPC14IMYOFqesp56s6Dw-1
+Received: by mail-qk1-f197.google.com with SMTP id bk21-20020a05620a1a1500b006b5c24695a4so1924838qkb.15
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 11:33:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KH2IQ7lvNvosAuw/khX6+zs8dl9iHbPrciywy6iP5nM=;
-        b=tB+UdwsZciTF0IiMqUFezvBi1MhCPkf/kyXBiTE/N3gKPHWasSkmtZ+tQ65sMFQtkV
-         zMOUHza2ja3mfyE0qxJKU9a2P6Y8jmoLnryjqKKTbUGnZ2gFmpYck+SutE1jcB2Ldaqz
-         zfOR1aa9tpG5ckHzamTvRD3qnJQ2+YOZI3AMl91iBbvDNZfn6jIxPeGEEOxCeU78Fh8a
-         GDB1Y5+tlH5RZtozjZqPyItu+MV2PVjAiqE8OEB7NGny4FH0Flb+9a8rdbqrh6Hprugi
-         tKTgWel89PeQy+vZBqTsw3kn/hQw/auRlvcAosvtRIpX3OmYu6ZsUrL42U6Xf9XSF4u+
-         904A==
-X-Gm-Message-State: AJIora9ueJj8pB1MGQ6XXXdSOJ5S+Z1E9LVPUojGJxlTJPKBdcL63ne5
-        2L6+ptHA9e8aKiH+XbXW+vwjMLejdTKanFIc+7BADbAUbcDp3471hNdxjgrZLQXaDti9pSrUR1+
-        Fpsc4KjWF5jNJEG5a0lpWtWZJJv/GEdQlH2pxCGu6MY9qfhfFVn31Cr4KPDpYPiF+c6jnaJtTEA
+        bh=nbIFjjgDA4ooaBqJdaxSYkeX6CtTRCPcitxkJ2jJ7zw=;
+        b=y6B08XesalBuaSj0WfQktwI00mSFFAyW1TmKOsktXA37A1e5oszQ476PIyyTLwXlXb
+         PZ5BPjdGTiahmLgHDXzs9I9OFzTELnsMkdcdVfqAKUv7XKKz1FE0OwzApGev3xZraFzp
+         +d/B/ligKOvr65JxL196wHu1dANQE0q3EEjWc+rHtMY2X5zP3CC1HTM/Tt2TEP14f5ph
+         6agdkbaRGKavQEtrh749rGsoBzAShrK4kCgaaKAlMF6LsLfXgYWoRLxxjtNomtU9VVYb
+         h2l73oizO7pitsFgtCnsPqtuA/MFClXjJLXZGA1LjMY/4u1AT0me0qTbVeyqwWCe5XQQ
+         55FQ==
+X-Gm-Message-State: AJIora/HpyqoT5OrKc5NWET5LdtF0ubyOQydtF3x7ifYu7OaX9arGMvX
+        N+JpVGqjgpaMp++Wuz1wFX6/3XOqkWp1KwwssjkqDSlV09Pf/AKAtfkfnyuzUpJkB6MivWb2F7s
+        CLiEYdz5/uEyzon8HIoqLZy9FEKXiVNxrqSvTAsdiAsxEApTMe0oS1PXHG5LX+cXANifvRBuFzQ
         ==
-X-Received: by 2002:a05:622a:3d1:b0:31e:f837:6a9f with SMTP id k17-20020a05622a03d100b0031ef8376a9fmr13960530qtx.226.1658428422423;
-        Thu, 21 Jul 2022 11:33:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sZ7wKbfXKinHSsJeIWKE6bOHV+sPExv1NjPbvw/3nqalaZMxK+iiLytgOcjEV/BxghohjA8A==
-X-Received: by 2002:a05:622a:3d1:b0:31e:f837:6a9f with SMTP id k17-20020a05622a03d100b0031ef8376a9fmr13960499qtx.226.1658428422068;
-        Thu, 21 Jul 2022 11:33:42 -0700 (PDT)
+X-Received: by 2002:a05:620a:4512:b0:6b6:2fe:6dc3 with SMTP id t18-20020a05620a451200b006b602fe6dc3mr9582942qkp.124.1658428423988;
+        Thu, 21 Jul 2022 11:33:43 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vyEE7j8jfEYZlnYclQKsnWvrL6a7mIg2DOWksGCUaTXhUXJZfkl0sPpefsfJuH4H4kzX7CcQ==
+X-Received: by 2002:a05:620a:4512:b0:6b6:2fe:6dc3 with SMTP id t18-20020a05620a451200b006b602fe6dc3mr9582910qkp.124.1658428423448;
+        Thu, 21 Jul 2022 11:33:43 -0700 (PDT)
 Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id bj9-20020a05620a190900b006a6a7b4e7besm1878519qkb.109.2022.07.21.11.33.40
+        by smtp.gmail.com with ESMTPSA id bj9-20020a05620a190900b006a6a7b4e7besm1878519qkb.109.2022.07.21.11.33.42
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 21 Jul 2022 11:33:41 -0700 (PDT)
+        Thu, 21 Jul 2022 11:33:42 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Nadav Amit <nadav.amit@gmail.com>, peterx@redhat.com,
         Andrew Morton <akpm@linux-foundation.org>,
         David Hildenbrand <david@redhat.com>,
         Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH v3 1/3] mm/mprotect: Fix soft-dirty check in can_change_pte_writable()
-Date:   Thu, 21 Jul 2022 14:33:36 -0400
-Message-Id: <20220721183338.27871-2-peterx@redhat.com>
+Subject: [PATCH v3 2/3] selftests: soft-dirty: Add test for mprotect
+Date:   Thu, 21 Jul 2022 14:33:37 -0400
+Message-Id: <20220721183338.27871-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220721183338.27871-1-peterx@redhat.com>
 References: <20220721183338.27871-1-peterx@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,166 +80,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check wanted to make sure when soft-dirty tracking is enabled we won't
-grant write bit by accident, as a page fault is needed for dirty tracking.
-The intention is correct but we didn't check it right because VM_SOFTDIRTY
-set actually means soft-dirty tracking disabled.  Fix it.
+Add two soft-diryt test cases for mprotect() on both anon or file.
 
-There's another thing tricky about soft-dirty is that, we can't check the
-vma flag !(vma_flags & VM_SOFTDIRTY) directly but only check it after we
-checked CONFIG_MEM_SOFT_DIRTY because otherwise VM_SOFTDIRTY will be
-defined as zero, and !(vma_flags & VM_SOFTDIRTY) will constantly return
-true.  To avoid misuse, introduce a helper for checking whether vma has
-soft-dirty tracking enabled.
-
-We can easily verify this with any exclusive anonymous page, like program
-below:
-
-=======8<======
-  #include <stdio.h>
-  #include <unistd.h>
-  #include <stdlib.h>
-  #include <assert.h>
-  #include <inttypes.h>
-  #include <stdint.h>
-  #include <sys/types.h>
-  #include <sys/mman.h>
-  #include <sys/types.h>
-  #include <sys/stat.h>
-  #include <unistd.h>
-  #include <fcntl.h>
-  #include <stdbool.h>
-
-  #define BIT_ULL(nr)                   (1ULL << (nr))
-  #define PM_SOFT_DIRTY                 BIT_ULL(55)
-
-  unsigned int psize;
-  char *page;
-
-  uint64_t pagemap_read_vaddr(int fd, void *vaddr)
-  {
-      uint64_t value;
-      int ret;
-
-      ret = pread(fd, &value, sizeof(uint64_t),
-                  ((uint64_t)vaddr >> 12) * sizeof(uint64_t));
-      assert(ret == sizeof(uint64_t));
-
-      return value;
-  }
-
-  void clear_refs_write(void)
-  {
-      int fd = open("/proc/self/clear_refs", O_RDWR);
-
-      assert(fd >= 0);
-      write(fd, "4", 2);
-      close(fd);
-  }
-
-  #define  check_soft_dirty(str, expect)  do {                            \
-          bool dirty = pagemap_read_vaddr(fd, page) & PM_SOFT_DIRTY;      \
-          if (dirty != expect) {                                          \
-              printf("ERROR: %s, soft-dirty=%d (expect: %d)\n", str, dirty, expect); \
-              exit(-1);                                                   \
-          }                                                               \
-  } while (0)
-
-  int main(void)
-  {
-      int fd = open("/proc/self/pagemap", O_RDONLY);
-
-      assert(fd >= 0);
-      psize = getpagesize();
-      page = mmap(NULL, psize, PROT_READ|PROT_WRITE,
-                  MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
-      assert(page != MAP_FAILED);
-
-      *page = 1;
-      check_soft_dirty("Just faulted in page", 1);
-      clear_refs_write();
-      check_soft_dirty("Clear_refs written", 0);
-      mprotect(page, psize, PROT_READ);
-      check_soft_dirty("Marked RO", 0);
-      mprotect(page, psize, PROT_READ|PROT_WRITE);
-      check_soft_dirty("Marked RW", 0);
-      *page = 2;
-      check_soft_dirty("Wrote page again", 1);
-
-      munmap(page, psize);
-      close(fd);
-      printf("Test passed.\n");
-
-      return 0;
-  }
-=======8<======
-
-Here we attach a Fixes to commit 64fe24a3e05e only for easy tracking, as
-this patch won't apply to a tree before that point.  However the commit
-wasn't the source of problem, it's just that then anonymous memory will
-also suffer from this problem with mprotect().
-
-Fixes: 64fe24a3e05e ("mm/mprotect: try avoiding write faults for exclusive anonymous pages when changing protection")
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/internal.h | 18 ++++++++++++++++++
- mm/mmap.c     |  2 +-
- mm/mprotect.c |  2 +-
- 3 files changed, 20 insertions(+), 2 deletions(-)
+ tools/testing/selftests/vm/soft-dirty.c | 69 ++++++++++++++++++++++++-
+ 1 file changed, 68 insertions(+), 1 deletion(-)
 
-diff --git a/mm/internal.h b/mm/internal.h
-index 15e8cb118832..e2d442e3c0b2 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -860,4 +860,22 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
+diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
+index 08ab62a4a9d0..7d93906aa43f 100644
+--- a/tools/testing/selftests/vm/soft-dirty.c
++++ b/tools/testing/selftests/vm/soft-dirty.c
+@@ -121,13 +121,78 @@ static void test_hugepage(int pagemap_fd, int pagesize)
+ 	free(map);
+ }
  
- DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
- 
-+static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
++static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
 +{
-+	/*
-+	 * NOTE: we must check this before VM_SOFTDIRTY on soft-dirty
-+	 * enablements, because when without soft-dirty being compiled in,
-+	 * VM_SOFTDIRTY is defined as 0x0, then !(vm_flags & VM_SOFTDIRTY)
-+	 * will be constantly true.
-+	 */
-+	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
-+		return false;
++	const char *type[] = {"file", "anon"};
++	const char *fname = "./soft-dirty-test-file";
++	int test_fd;
++	char *map;
 +
-+	/*
-+	 * Soft-dirty is kind of special: its tracking is enabled when the
-+	 * vma flags not set.
-+	 */
-+	return !(vma->vm_flags & VM_SOFTDIRTY);
++	if (anon) {
++		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
++			   MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
++		if (!map)
++			ksft_exit_fail_msg("anon mmap failed\n");
++	} else {
++		unlink(fname);
++		test_fd = open(fname, O_RDWR | O_CREAT);
++		if (test_fd < 0) {
++			ksft_test_result_skip("Test %s huge page allocation\n", __func__);
++			return;
++		}
++		ftruncate(test_fd, pagesize);
++		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
++			   MAP_SHARED, test_fd, 0);
++		if (!map)
++			ksft_exit_fail_msg("file mmap failed\n");
++	}
++
++	*map = 1;
++	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) == 1,
++			 "Test %s-%s dirty bit of new written page\n",
++			 __func__, type[anon]);
++	clear_softdirty();
++	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) == 0,
++			 "Test %s-%s soft-dirty clear after clear_refs\n",
++			 __func__, type[anon]);
++	mprotect(map, pagesize, PROT_READ);
++	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) == 0,
++			 "Test %s-%s soft-dirty clear after marking RO\n",
++			 __func__, type[anon]);
++	mprotect(map, pagesize, PROT_READ|PROT_WRITE);
++	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) == 0,
++			 "Test %s-%s soft-dirty clear after marking RW\n",
++			 __func__, type[anon]);
++	*map = 2;
++	ksft_test_result(pagemap_is_softdirty(pagemap_fd, map) == 1,
++			 "Test %s-%s soft-dirty after rewritten\n",
++			 __func__, type[anon]);
++
++	munmap(map, pagesize);
++
++	if (!anon) {
++		close(test_fd);
++		unlink(fname);
++	}
 +}
 +
- #endif	/* __MM_INTERNAL_H */
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 125e8903c93c..93f9913409ea 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1518,7 +1518,7 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
- 		return 0;
++static void test_mprotect_anon(int pagemap_fd, int pagesize)
++{
++	test_mprotect(pagemap_fd, pagesize, true);
++}
++
++static void test_mprotect_file(int pagemap_fd, int pagesize)
++{
++	test_mprotect(pagemap_fd, pagesize, false);
++}
++
+ int main(int argc, char **argv)
+ {
+ 	int pagemap_fd;
+ 	int pagesize;
  
- 	/* Do we need to track softdirty? */
--	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY))
-+	if (vma_soft_dirty_enabled(vma))
- 		return 1;
+ 	ksft_print_header();
+-	ksft_set_plan(5);
++	ksft_set_plan(15);
  
- 	/* Specialty mapping? */
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 0420c3ed936c..c403e84129d4 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -49,7 +49,7 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
- 		return false;
+ 	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
+ 	if (pagemap_fd < 0)
+@@ -138,6 +203,8 @@ int main(int argc, char **argv)
+ 	test_simple(pagemap_fd, pagesize);
+ 	test_vma_reuse(pagemap_fd, pagesize);
+ 	test_hugepage(pagemap_fd, pagesize);
++	test_mprotect_anon(pagemap_fd, pagesize);
++	test_mprotect_file(pagemap_fd, pagesize);
  
- 	/* Do we need write faults for softdirty tracking? */
--	if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
-+	if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
- 		return false;
+ 	close(pagemap_fd);
  
- 	/* Do we need write faults for uffd-wp tracking? */
 -- 
 2.32.0
 

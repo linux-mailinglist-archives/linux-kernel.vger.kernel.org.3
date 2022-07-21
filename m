@@ -2,119 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F327757CDD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA0857CDDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiGUOij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S231124AbiGUOjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiGUOii (ORCPT
+        with ESMTP id S230056AbiGUOjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:38:38 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAB085F96;
-        Thu, 21 Jul 2022 07:38:37 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 22:38:25 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658414315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y7NIy/sFvH7jcPjQz5rMP0tVdv+pcC943zyadbA9JMA=;
-        b=L0F5YCg/mY7nY9yWcaH8KzsTSg1GLC6SMZLH7EW7kL8sbqMO5Gu2Mz68CsIhU8JslpyEx+
-        BAkn7T5mS+VxVOZPAzPXfVhJOHkaWg2ePTD7fIWopZqwVLXHGRqRCYmMpHctSa+gXAX8z+
-        bbslSjgmX4YHZJxhdAewvyOGQW1srDc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org, Tao Zhou <tao.zhou@linux.dev>
-Subject: Re: [PATCH V6 01/16] rv: Add Runtime Verification (RV) interface
-Message-ID: <Ytlk4ePA+TpGItJ6@geo.homenetwork>
-References: <cover.1658244826.git.bristot@kernel.org>
- <69bb4c369b4f6f12014eb9ca3c28b74e4378c007.1658244826.git.bristot@kernel.org>
+        Thu, 21 Jul 2022 10:39:03 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CEE8688C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:39:01 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id i4so1307493qvv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:39:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kwW27VCQ4+JlDB+iPSDhz5O1D0eurbd7dKtxO/dfIvY=;
+        b=OnzKBTMKPt8ybqoDKEizFWOIZUwtYD8NVniERJQRrRBD+FC+PRdDYfR9tAPu3M63Wt
+         JG3TqJzUoWvMaF0pCE36eey30fVsLVvODRU/er7wla8BCkhleJfMm7QLgdvrEynQfv7f
+         D64FKivghTNDU7lIbls+9rYw7bof/BUsEQ8+fzzuudi9b3k4wY3SXlIAk/SxIJOZJVCQ
+         TzeoL49vw0ePEWJOK2s1Tu0Tc1DJW173uCXzh3pS7Xigojqp5Ood6OfscacTHVee07jq
+         YdRhUB07YqVnhDr/fzI+/qAYhFgZvJyL8yNAyD2VsfUeuUe52gn2DhlXweRSZoq+fOeV
+         FLgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kwW27VCQ4+JlDB+iPSDhz5O1D0eurbd7dKtxO/dfIvY=;
+        b=fqg/ZjRpBui3W/xForf2VvUoPzeW3Cg/Lz9aqME+GVo3puoJvooeH7AKLgL4FS0P7f
+         lRAfCx4g5jcr9BTTPUAU6s4mGRYtcyoqsLnyanvQ0ftn1naDuclN6EfL/lHf6TxiciFt
+         y+YK3pjEqDzhfKNk27/5udLD6EzBH4ovMbnW1d6wrSjQjkDe0pMSoXfzxG5dk5lgC1Zb
+         u8yOt9uxFHIO6lgRgFgKKOHXMdjTpFsO7uj2t+bIBq4QrxKW2/1jbx9ej8X2MfgGGswZ
+         v5mihnyiGtRxjNaeT0R5vEV2JujoQkpNDuFNpjDfdIRrXjs23e2wr/PopbpVZaIX1Y2f
+         7Erg==
+X-Gm-Message-State: AJIora8DVpmMdSqOw8KZKdfj65zGWd9+aeHuRwsDgcne6PlwfzEHtzIb
+        gfR3OV7FwpPHyQmuY+LLHsOL8w==
+X-Google-Smtp-Source: AGRyM1uWQJMIGs0cFKjzk6jOPxy6nU58JEm7wrsssEUVgVK/vH4DFVTrvRD0ZbRcmdLePWGA232yJQ==
+X-Received: by 2002:ad4:4ea2:0:b0:473:6d91:6759 with SMTP id ed2-20020ad44ea2000000b004736d916759mr34926483qvb.102.1658414340714;
+        Thu, 21 Jul 2022 07:39:00 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id e19-20020a05620a12d300b006b5905999easm1403705qkl.121.2022.07.21.07.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 07:38:59 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oEXKM-001wqY-N5; Thu, 21 Jul 2022 11:38:58 -0300
+Date:   Thu, 21 Jul 2022 11:38:58 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Long Li <longli@microsoft.com>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: [Patch v4 03/12] net: mana: Handle vport sharing between devices
+Message-ID: <20220721143858.GV5049@ziepe.ca>
+References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
+ <1655345240-26411-4-git-send-email-longli@linuxonhyperv.com>
+ <SN6PR2101MB13272044B91D6E37F7F5124FBF879@SN6PR2101MB1327.namprd21.prod.outlook.com>
+ <PH7PR21MB3263F08C111C5D06C99CC32ACE869@PH7PR21MB3263.namprd21.prod.outlook.com>
+ <20220720234209.GP5049@ziepe.ca>
+ <PH7PR21MB3263F5FD2FA4BA6669C21509CE919@PH7PR21MB3263.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <69bb4c369b4f6f12014eb9ca3c28b74e4378c007.1658244826.git.bristot@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+In-Reply-To: <PH7PR21MB3263F5FD2FA4BA6669C21509CE919@PH7PR21MB3263.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 07:27:06PM +0200, Daniel Bristot de Oliveira wrote:
+On Thu, Jul 21, 2022 at 12:06:12AM +0000, Long Li wrote:
+> > Subject: Re: [Patch v4 03/12] net: mana: Handle vport sharing between
+> > devices
+> > 
+> > On Tue, Jul 12, 2022 at 06:48:09PM +0000, Long Li wrote:
+> > > > > @@ -563,9 +581,19 @@ static int mana_cfg_vport(struct
+> > > > > mana_port_context *apc, u32 protection_dom_id,
+> > > > >
+> > > > >  	apc->tx_shortform_allowed = resp.short_form_allowed;
+> > > > >  	apc->tx_vp_offset = resp.tx_vport_offset;
+> > > > > +
+> > > > > +	netdev_info(apc->ndev, "Configured vPort %llu PD %u DB %u\n",
+> > > > > +		    apc->port_handle, protection_dom_id, doorbell_pg_id);
+> > > > Should this be netdev_dbg()?
+> > > > The log buffer can be flooded if there are many vPorts per VF PCI
+> > > > device and there are a lot of VFs.
+> > >
+> > > The reason netdev_info () is used is that this message is important
+> > > for troubleshooting initial setup issues with Ethernet driver. We rely
+> > > on user to get this configured right to share the same hardware port
+> > > between Ethernet and RDMA driver. As far as I know, there is no easy
+> > > way for a driver to "take over" an exclusive hardware resource from
+> > > another driver.
+> > 
+> > This seems like a really strange statement.
+> > 
+> > Exactly how does all of this work?
+> > 
+> > Jason
+> 
+> "vport" is a hardware resource that can either be used by an
+> Ethernet device, or an RDMA device. But it can't be used by both at
+> the same time. The "vport" is associated with a protection domain
+> and doorbell, it's programmed in the hardware. Outgoing traffic is
+> enforced on this vport based on how it is programmed.
 
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/slab.h>
-> +#include <rv/rv.h>
-> +
-> +#include "rv.h"
-> +
-> +DEFINE_MUTEX(rv_interface_lock);
-> +/*
-> + * Enable a given monitor.
-> + */
-> +static int enable_monitor(struct rv_monitor_def *mdef)
-> +{
-> +	int retval;
-> +
-> +	if (!mdef->monitor->enabled) {
-> +		retval = mdef->monitor->enable();
-> +		if (retval)
-> +			return retval;
-> +	}
-> +
-> +	mdef->monitor->enabled = 1;
+Sure, but how is the users problem to "get this configured right" and
+what exactly is the user supposed to do?
 
-This should be placed at the end of the last if block. Otherwise
-another assignment may be duplicated because it is already 1 now.
-no?(not sure how compiler treat this..)
+I would expect the allocation of HW resources to be completely
+transparent to the user. Why is it not?
 
-> +
-> +/*
-> + * Interface to read the enable/disable status of a monitor.
-
-I see the 'status' but look a little more this function is about the
-description of monitor, so:
-/* Interface to read the description message of a monitor */
-or others.
-
-> + */
-> +static ssize_t monitor_desc_read_data(struct file *filp, char __user *user_buf, size_t count,
-> +				      loff_t *ppos)
-> +{
-> +	struct rv_monitor_def *mdef = filp->private_data;
-> +	char buff[256];
-> +
-> +	memset(buff, 0, sizeof(buff));
-> +
-> +	mutex_lock(&rv_interface_lock);
-> +	snprintf(buff, sizeof(buff), "%s\n", mdef->monitor->description);
-> +	mutex_unlock(&rv_interface_lock);
-
+Jason

@@ -2,178 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61E757C5FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB5157C602
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbiGUIQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        id S232088AbiGUIQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiGUIQE (ORCPT
+        with ESMTP id S232073AbiGUIQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:16:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6547D1DE;
-        Thu, 21 Jul 2022 01:16:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37F8566019C1;
-        Thu, 21 Jul 2022 09:16:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658391361;
-        bh=+uro6du1jM5M4noaSgYgRc27Gam/1Je5qgKJlaUGw3E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KQVQhT6Yc7na1ehojhPFmDL6LAvIqD293jaoYW48/jtLurvY4/CuT2s4HYBbxeC0u
-         BSfzVXeX+qjChVMmr7GBDNvKMpE5tG7GUQOHWYWGaeJ+H1iCpMMckiIYwWlwev2KK9
-         kFuAPGPpYxedUOShBPOaGIYB/hdHOrp/Nmj5QGLNWDAvkNoqB0BvDoXU/upUysfb/0
-         2rAScxkwo22utlywvGDmmg8HHUYe4cofuvRASIDflpLQrsbn3aG0ALUhqcaUBtekbb
-         7q3Vm3ruvO2JzY1QPxEbLOjKd55sWa+7yAfiTkZRISPeTWlRnrRGpJ7YJDey7cxsO+
-         JTeISkn/Jf8LQ==
-Message-ID: <c780f640-7112-1968-04d5-17e30c8e1cc2@collabora.com>
-Date:   Thu, 21 Jul 2022 10:15:58 +0200
+        Thu, 21 Jul 2022 04:16:27 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9D07D1F8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:26 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id f11so1133412plr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vcjP/TTiCJtollpq0IPhYOJ7clDYhyVICdNwHyD3LrE=;
+        b=zSgKsABZNHCGDGlRauoWxpAH/o/0gRVuIgQ9ktno6Af3XPNaeY7ZIkQbIP1dODyyW6
+         SyK/9cq3DiYyhrwSAOBIgFy9YhGgH3oPglY56gT28qdvQij5J8IbvF1G3UAurRqRaLY8
+         VlNnceYzSRQ59u17FNBweM260mhdf51ls1OGj1DTrVpwjr2ukZ/l+p1ccJvzkhaULMDC
+         VOSTkOS1+lFNpaMcgUJHwvvZ5HSZckSRvTuQrpsQL/Xig2HvGDgJeOkGGVwf8/ezcr07
+         YEdk1nTyI82qUMYsFB3Rxl6jpyYHSc3z0T6MfwpB33NJWKdp90G2ueFhHfAEMcyEitg8
+         FkJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vcjP/TTiCJtollpq0IPhYOJ7clDYhyVICdNwHyD3LrE=;
+        b=XvOYItSNvXRfLRjkHDP2I62jQCC1/JZ+UUKxMibTIBX8YWx6dhzAKu8CqHxXhhjZmv
+         HqaJTfF0DxJwRBgVivYBVjH8GDYJNS7Jkn7oNyjmPPBDQ1f0o6sdx7lstHcIWBsm49J2
+         ZOvqbInLrYBdE5s5Ir27oUoLe+yuoVA2iYrRK+fydEWAf8cpUooiidkUtvMZK9fOHEIe
+         Wk9HIcilu3LezAtCpV9ZGmK9rigOklRc2jjYYmIxTJNk60raQMSfFGd3TVp3kqgET/VM
+         qDuQFhHfKDAapsnI1gbaoX3E6ut9e9ZGOwnW5ASDG8QvfmliuUzLwTL+JhOWTxUK76ya
+         UJyQ==
+X-Gm-Message-State: AJIora+tPHWuH0VPLCnp+ACrH/bRWA0uecrZOHDuaqmkMT1Dt1UAaHlk
+        2NAeJgDGi4sA1wrt2FgvZfS1/Q==
+X-Google-Smtp-Source: AGRyM1uXK++DxHvIzgYiDg8vMrV8xv2FtMAqJSlSdEaG5dKsvrlGScwbEADljdYPFp4BHWGJk22qlA==
+X-Received: by 2002:a17:90a:9409:b0:1f0:e171:f2bd with SMTP id r9-20020a17090a940900b001f0e171f2bdmr9758963pjo.245.1658391386081;
+        Thu, 21 Jul 2022 01:16:26 -0700 (PDT)
+Received: from C02GF2LXMD6R.bytedance.net ([139.177.225.246])
+        by smtp.gmail.com with ESMTPSA id j2-20020a17090a694200b001f204399045sm837995pjm.17.2022.07.21.01.16.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 01:16:25 -0700 (PDT)
+From:   Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        songmuchun@bytedance.com
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
+Subject: [RFC] proc: fix create timestamp of files in proc
+Date:   Thu, 21 Jul 2022 16:16:17 +0800
+Message-Id: <20220721081617.36103-1-zhangyuchen.lcr@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/4] thermal: mediatek: add support for MT8365 SoC
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        matthias.bgg@gmail.com
-Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        robh+dt@kernel.org, rui.zhang@intel.com
-References: <20220720181854.547881-1-aouledameur@baylibre.com>
- <20220720181854.547881-3-aouledameur@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220720181854.547881-3-aouledameur@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/07/22 20:18, Amjad Ouled-Ameur ha scritto:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> MT8365 is similar to the other SoCs supported by the driver. It has only
-> one bank and 3 actual sensors that can be multiplexed. There is another
-> one sensor that does not have usable data.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Reviewed-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Tested-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> ---
->   drivers/thermal/mtk_thermal.c | 68 +++++++++++++++++++++++++++++++++++
->   1 file changed, 68 insertions(+)
-> 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index ede94eadddda..216eb0d61c5b 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -31,6 +31,7 @@
->   #define AUXADC_CON2_V		0x010
->   #define AUXADC_DATA(channel)	(0x14 + (channel) * 4)
->   
-> +#define APMIXED_SYS_TS_CON0	0x600
->   #define APMIXED_SYS_TS_CON1	0x604
->   
->   /* Thermal Controller Registers */
-> @@ -245,6 +246,17 @@ enum mtk_thermal_version {
->   /* The calibration coefficient of sensor  */
->   #define MT8183_CALIBRATION	153
->   
-> +/* MT8365 */
-> +#define MT8365_TEMP_AUXADC_CHANNEL 11
-> +#define MT8365_CALIBRATION 164
-> +#define MT8365_NUM_CONTROLLER 1
-> +#define MT8365_NUM_BANKS 1
-> +#define MT8365_NUM_SENSORS 3
-> +#define MT8365_NUM_SENSORS_PER_ZONE 3
-> +#define MT8365_TS1 0
-> +#define MT8365_TS2 1
-> +#define MT8365_TS3 2
-> +
->   struct mtk_thermal;
->   
->   struct thermal_bank_cfg {
-> @@ -386,6 +398,24 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
->   static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
->   static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
->   
-> +/* MT8365 thermal sensor data */
-> +static const int mt8365_bank_data[MT8365_NUM_SENSORS] = {
-> +	MT8365_TS1, MT8365_TS2, MT8365_TS3
-> +};
-> +
-> +static const int mt8365_msr[MT8365_NUM_SENSORS_PER_ZONE] = {
-> +	TEMP_MSR0, TEMP_MSR1, TEMP_MSR2
-> +};
-> +
-> +static const int mt8365_adcpnp[MT8365_NUM_SENSORS_PER_ZONE] = {
-> +	TEMP_ADCPNP0, TEMP_ADCPNP1, TEMP_ADCPNP2
-> +};
-> +
-> +static const int mt8365_mux_values[MT8365_NUM_SENSORS] = { 0, 1, 2 };
-> +static const int mt8365_tc_offset[MT8365_NUM_CONTROLLER] = { 0 };
-> +
-> +static const int mt8365_vts_index[MT8365_NUM_SENSORS] = { VTS1, VTS2, VTS3 };
-> +
->   /*
->    * The MT8173 thermal controller has four banks. Each bank can read up to
->    * four temperature sensors simultaneously. The MT8173 has a total of 5
-> @@ -460,6 +490,40 @@ static const struct mtk_thermal_data mt2701_thermal_data = {
->   	.version = MTK_THERMAL_V1,
->   };
->   
-> +/*
-> + * The MT8365 thermal controller has one bank, which can read up to
-> + * four temperature sensors simultaneously. The MT8365 has a total of 3
-> + * temperature sensors.
-> + *
-> + * The thermal core only gets the maximum temperature of this one bank,
-> + * so the bank concept wouldn't be necessary here. However, the SVS (Smart
-> + * Voltage Scaling) unit makes its decisions based on the same bank
-> + * data.
-> + */
-> +static const struct mtk_thermal_data mt8365_thermal_data = {
-> +	.auxadc_channel = MT8365_TEMP_AUXADC_CHANNEL,
-> +	.num_banks = MT8365_NUM_BANKS,
-> +	.num_sensors = MT8365_NUM_SENSORS,
-> +	.vts_index = mt8365_vts_index,
-> +	.cali_val = MT8365_CALIBRATION,
-> +	.num_controller = MT8365_NUM_CONTROLLER,
-> +	.controller_offset = mt8365_tc_offset,
-> +	.need_switch_bank = false,
-> +	.bank_data = {
-> +		{
-> +			.num_sensors = MT8365_NUM_SENSORS,
-> +			.sensors = mt8365_bank_data
-> +		},
-> +	},
-> +	.msr = mt8365_msr,
-> +	.adcpnp = mt8365_adcpnp,
-> +	.sensor_mux_values = mt8365_mux_values,
-> +	.version = MTK_THERMAL_V1,
-> +	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON0,
-> +	.apmixed_buffer_ctl_mask = (u32) ~GENMASK(29, 28),
-> +	.apmixed_buffer_ctl_set = 0,
+A user has reported a problem that the /proc/{pid} directory
+creation timestamp is incorrect.
+He believes that the directory was created when the process was
+started, so the timestamp of the directory creation should also
+be when the process was created.
 
-Every commit has to build on its own.
+The file timestamp in procfs is the timestamp when the inode was
+created. If the inode of a file in procfs is reclaimed, the inode
+will be recreated when it is opened again, and the timestamp will
+be changed to the time when it was recreated.
+In other file systems, this timestamp is typically recorded in
+the file system and assigned to the inode when the inode is created.
 
-This won't compile unless moved after 'thermal: mediatek: control buffer enablement
-tweaks': please move it.
+This mechanism can be confusing to users who are not familiar with
+it.
+For users who know this mechanism, they will choose not to trust
+this time.
+So the timestamp now has no meaning other than to confuse the user.
+It needs fixing.
 
-Regards,
-Angelo
+There are three solutions. We don't have to make the timestamp
+meaningful, as long as the user doesn't trust the timestamp.
+
+1. Add to the kernel documentation that the timestamp in PROC is
+   not reliable and do not use this timestamp.
+   The problem with this solution is that most users don't read
+   the kernel documentation and it can still be misleading.
+
+2. Fix it, change the timestamp of /proc/pid to the timestamp of
+   process creation.
+
+   This raises new questions.
+
+   a. Users don't know which kernel version is correct.
+
+   b. This problem exists not only in the pid directory, but also
+      in other directories under procfs. It would take a lot of
+      extra work to fix them all. There are also easier ways for
+      users to get the creation time information better than this.
+
+   c. We need to describe the specific meaning of each file under
+      proc in the kernel documentation for the creation time.
+      Because the creation time of various directories has different
+      meanings. For example, PID directory is the process creation
+      time, FD directory is the FD creation time and so on.
+
+   d. Some files have no associated entity, such as iomem.
+      Unable to give a meaningful time.
+
+3. Instead of fixing it, set the timestamp in all procfs to 0.
+   Users will see it as an error and will not use it.
+
+I think 3 is better. Any other suggestions?
+
+Signed-off-by: Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
+---
+ fs/proc/base.c        | 4 +++-
+ fs/proc/inode.c       | 3 ++-
+ fs/proc/proc_sysctl.c | 3 ++-
+ fs/proc/self.c        | 3 ++-
+ fs/proc/thread_self.c | 3 ++-
+ 5 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 0b72a6d8aac3..af440ef13091 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1892,6 +1892,8 @@ struct inode *proc_pid_make_inode(struct super_block *sb,
+ 	struct proc_inode *ei;
+ 	struct pid *pid;
+ 
++	struct timespec64 ts_zero = {0, 0};
++
+ 	/* We need a new inode */
+ 
+ 	inode = new_inode(sb);
+@@ -1902,7 +1904,7 @@ struct inode *proc_pid_make_inode(struct super_block *sb,
+ 	ei = PROC_I(inode);
+ 	inode->i_mode = mode;
+ 	inode->i_ino = get_next_ino();
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++	inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
+ 	inode->i_op = &proc_def_inode_operations;
+ 
+ 	/*
+diff --git a/fs/proc/inode.c b/fs/proc/inode.c
+index fd40d60169b5..efb1c935fa8d 100644
+--- a/fs/proc/inode.c
++++ b/fs/proc/inode.c
+@@ -642,6 +642,7 @@ const struct inode_operations proc_link_inode_operations = {
+ struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
+ {
+ 	struct inode *inode = new_inode(sb);
++	struct timespec64 ts_zero = {0, 0};
+ 
+ 	if (!inode) {
+ 		pde_put(de);
+@@ -650,7 +651,7 @@ struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
+ 
+ 	inode->i_private = de->data;
+ 	inode->i_ino = de->low_ino;
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++	inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
+ 	PROC_I(inode)->pde = de;
+ 	if (is_empty_pde(de)) {
+ 		make_empty_dir_inode(inode);
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 021e83fe831f..c670f9d3b871 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -455,6 +455,7 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
+ 	struct ctl_table_root *root = head->root;
+ 	struct inode *inode;
+ 	struct proc_inode *ei;
++	struct timespec64 ts_zero = {0, 0};
+ 
+ 	inode = new_inode(sb);
+ 	if (!inode)
+@@ -476,7 +477,7 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
+ 	head->count++;
+ 	spin_unlock(&sysctl_lock);
+ 
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++	inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
+ 	inode->i_mode = table->mode;
+ 	if (!S_ISDIR(table->mode)) {
+ 		inode->i_mode |= S_IFREG;
+diff --git a/fs/proc/self.c b/fs/proc/self.c
+index 72cd69bcaf4a..b9e572fdc27c 100644
+--- a/fs/proc/self.c
++++ b/fs/proc/self.c
+@@ -44,9 +44,10 @@ int proc_setup_self(struct super_block *s)
+ 	self = d_alloc_name(s->s_root, "self");
+ 	if (self) {
+ 		struct inode *inode = new_inode(s);
++		struct timespec64 ts_zero = {0, 0};
+ 		if (inode) {
+ 			inode->i_ino = self_inum;
+-			inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
+ 			inode->i_mode = S_IFLNK | S_IRWXUGO;
+ 			inode->i_uid = GLOBAL_ROOT_UID;
+ 			inode->i_gid = GLOBAL_ROOT_GID;
+diff --git a/fs/proc/thread_self.c b/fs/proc/thread_self.c
+index a553273fbd41..964966387da2 100644
+--- a/fs/proc/thread_self.c
++++ b/fs/proc/thread_self.c
+@@ -44,9 +44,10 @@ int proc_setup_thread_self(struct super_block *s)
+ 	thread_self = d_alloc_name(s->s_root, "thread-self");
+ 	if (thread_self) {
+ 		struct inode *inode = new_inode(s);
++		struct timespec64 ts_zero = {0, 0};
+ 		if (inode) {
+ 			inode->i_ino = thread_self_inum;
+-			inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++			inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
+ 			inode->i_mode = S_IFLNK | S_IRWXUGO;
+ 			inode->i_uid = GLOBAL_ROOT_UID;
+ 			inode->i_gid = GLOBAL_ROOT_GID;
+-- 
+2.30.2
 

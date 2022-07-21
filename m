@@ -2,275 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C000457C54D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B2657C551
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiGUH2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S232438AbiGUHaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiGUH2x (ORCPT
+        with ESMTP id S229604AbiGUH37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:28:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0AD07C199
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658388532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gBu0C6SmChVBYE3EWfPl4wKuLdjdTei9NtZmcfmPFKU=;
-        b=gjHiKbfHha18BIXy511cE17rvRU5z1YaX/lVEbiPaq1EdCTTMh9ctNfbvW1NtyJumAI+77
-        iqkVouXoQlc/2hm625wbw8gv/y8AI6Np0I98aPswbrjhr55trsl4mtlQ3P1EWmhKkiUFef
-        esWSTD4CQePdTKTGrVw5jRlTqXvvvBY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558-Rxw2Ka8CNUuxeFEDtGMLiQ-1; Thu, 21 Jul 2022 03:28:50 -0400
-X-MC-Unique: Rxw2Ka8CNUuxeFEDtGMLiQ-1
-Received: by mail-wm1-f69.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so348605wmj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:28:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=gBu0C6SmChVBYE3EWfPl4wKuLdjdTei9NtZmcfmPFKU=;
-        b=Eay8GxhekMVakmIJ5efuf/+FDClbfTpnyELX6iX1c70OLqPd2nz6xgKiHmlZ8E2Bv3
-         2N/QN16qnqouLauz2vbrjmzNeVYTYt6dgwq101/nhHQ82h+D2X1LH5f2Nsy2UqEuYMBO
-         Xm6x1nEOQCHP4gWxUGaUSzGcaKcTjcA+JZbnDGARsY9y1XAn++kk9rvZKmpk72VPmQqm
-         f78LVOWGOXBVg8Z8MiI7iBhZ3KkYK/nRXa0uad4VLAm8ol1VvhfvoEVZMDrPvkfYzv+r
-         2hY4FAouyGoU88DjzUL+75TVDmDmX/Ytvaos09Fo4UeQqeE+3YsncE6F56Y8BcdKYFqx
-         kbDQ==
-X-Gm-Message-State: AJIora8UtqKdJr3NEDSIM96BGmnIL3GzI/X3olj5ARXaqG29Zwz7RV+R
-        Og1/QNakHPv0gDOJ+KcCc3VvYjzxzcDhfCMbm4Eo1nGsuGGEy9j1Gu2TWj6Fb2TB92k5vzE1TEN
-        1XU39HR+CWskibVs1V0OpaDbH
-X-Received: by 2002:a5d:59a5:0:b0:21d:abc4:29ec with SMTP id p5-20020a5d59a5000000b0021dabc429ecmr33151770wrr.666.1658388529216;
-        Thu, 21 Jul 2022 00:28:49 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tzlvlSraysNcDTugirMAuzJNK+5byYzk1ueqL/RDMyI6446bYemuMQjrAQvkbKKV2hZBumYw==
-X-Received: by 2002:a5d:59a5:0:b0:21d:abc4:29ec with SMTP id p5-20020a5d59a5000000b0021dabc429ecmr33151748wrr.666.1658388528719;
-        Thu, 21 Jul 2022 00:28:48 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:e000:25d3:15fa:4c8b:7e8d? (p200300cbc707e00025d315fa4c8b7e8d.dip0.t-ipconnect.de. [2003:cb:c707:e000:25d3:15fa:4c8b:7e8d])
-        by smtp.gmail.com with ESMTPSA id e6-20020a05600c4e4600b003a3188bef63sm973238wmq.11.2022.07.21.00.28.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 00:28:48 -0700 (PDT)
-Message-ID: <f0d193c2-9b23-6f3a-9208-2a615febe0c2@redhat.com>
-Date:   Thu, 21 Jul 2022 09:28:47 +0200
-MIME-Version: 1.0
+        Thu, 21 Jul 2022 03:29:59 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2077.outbound.protection.outlook.com [40.107.93.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4FE7C18F;
+        Thu, 21 Jul 2022 00:29:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JCEjn+1dm7myASDlhGPsFwKaZptUC8+i1aK106H0dzCFich9oyuazaEVAnxXLy+of4KTfAx+8tLxuVwoZ/4o9Xn0F8nr/WrRJBQq1SdUBo8AsikBc1dHvRXCkUI960hW47IhWJblY8H8qi6jH6Stc3L+WUU6Q9OnodjLlVG7ZVVk8yW4N3zmQ10kBX/r0J9Oyrs1qb10tAqQ+Pg4NjM8g051sUNVkKlPx2LTvqcPHBZsUME4tTRCz74wRnJmK25L3jD8Dg1YKyM0USINvMscX16fdE7Ylb9lMSbpbNYhCUkxMMBZHI8g93KXQCDuHF9W79uONGTg6eVLJSDXd8kV8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5T0C8aOo9b6FhF5pZ4csIR8wyCuXBr3xKu36QMrZ7z8=;
+ b=G4Z3TyzW+EYGD4/ScUXdDzpszmIr0StGAxw+gKUEY9n9f9TxP0rSkAOmWuFh0N8UyVX2CvWHKYW2bMXRk2BfEqPFdbtp0MTu2HUrA1/v+8T0JgqGpmxsprU0P+4nnnjRRi3qnO4EpyRJIDqxmsKeqBSW67Rf4L2gYqjP17UYaVa5dQ6Xv5xHGuBDr4XFNvgklVv1ARkX8NRyc6OtAy19exvidODhocdezJ5gtkAijyLWNFuNeiknNqbfg1vPTLgURHJ9oh3TyAEnQyoAGq+eJ8nBoIoaZFGplSDYl+BpVOz8HBQP7M+i3/SIR57X4f2cMh8on1PwbbKCWWu2YTpleg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5T0C8aOo9b6FhF5pZ4csIR8wyCuXBr3xKu36QMrZ7z8=;
+ b=I/v6dPwAK7BX7FjlABozaybttxk9CPpSl+4dAVZckm3sldGQn5huzH6r4oeugyQ0NT39tIBGK1bz4CTOP0vCMyF+wWY+I4xeHyA+pFwTJ5pYi+BeggOv1wQ+vKxOcEiq/20YC2JB/YbxzDZXNHSPA8N1Iu0g8nwYo+1XM/P+7j7dufOg6vqWGQbLKKxyVgdxolsNebe7bVgRqGO5siOdjuSCgiygast1UNvyXnr8KeYJj0/jCu/2HvnSLfOAm13KK+A8vCXPt8sL72U73Fnjyqs0bJa+WNWVPDgAdFhfxzI1I5oOCyDywqTHm86fR1h8VLvthu1fXBdGhkr6H7svjA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ DM4PR12MB5261.namprd12.prod.outlook.com (2603:10b6:5:398::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5458.18; Thu, 21 Jul 2022 07:29:56 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b148:f3bb:5247:a55d]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::b148:f3bb:5247:a55d%2]) with mapi id 15.20.5458.018; Thu, 21 Jul 2022
+ 07:29:56 +0000
+Message-ID: <8489a831-1785-fa8d-183e-22fd841b65d0@nvidia.com>
+Date:   Thu, 21 Jul 2022 08:29:46 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
+Subject: Re: [PATCH bpf-next v9 3/4] bpf, arm64: Implement
+ bpf_arch_text_poke() for arm64
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220720220324.88538-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2] mm/mprotect: Fix soft-dirty check in
- can_change_pte_writable()
-In-Reply-To: <20220720220324.88538-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Will Deacon <will@kernel.org>, KP Singh <kpsingh@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20220711150823.2128542-1-xukuohai@huawei.com>
+ <20220711150823.2128542-4-xukuohai@huawei.com>
+ <8de014c1-aa63-5783-e5fd-53b7fdece805@nvidia.com>
+ <b0e740c4-9630-c539-e811-a4ad93fcca5c@huawei.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <b0e740c4-9630-c539-e811-a4ad93fcca5c@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO4P265CA0112.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c3::15) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7c732355-f296-4e52-78ed-08da6aeacf5c
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5261:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S2wfmp4/Bf8awLOImF9AC6etEIQF1KYWVFAk6ha2+oZT7VxzLOw6gbZ0Jc7s+A0R5GjSx+4/tRBarLCIl4b6XlsecW7tbweACveMCm9rlelfJA1+aulCT8UKdt3wHG9z61G4T5RQunLe+1e02GZAWYhhOO74MKG7XgbAAQSn8rmoddqXavEEL/03YTvL0kSldXVLK4i2nUeBg1Im7Uw/5bHGkYhsbyzLu7ogVhqQ4Y/LHdHRTefy3pLRLJFfwNH+C5C73+UDr8dHRpjI/+tZbRwD9P4cp0xTl9k/AcTh3qu1a81E0LaavUs3vw7uLWv4GYYnjJxcQJdhQnSp1r/kwFpsN37yVvVYPsd9oJ3qI7afS5J9Q13uBLhh50LTCIFd/EMWh+3xqAG+FoLwYLQNqGnskGhc/th1JtMTxtjN5YnETt8OKa81uH09ETRW7/zJ30GTf+FpsSDAP7SjVJELTY/0+o8id4+MiyqfSSvdZEBdGnb4CmWDc1tT/j+c9ZQXLM2Vc9l3Q+pGeQB16fAK4TvMKMEM8Uhx3MUdIK48LeKiyWoXKd1fzJDST6rDmrS2wYuypSm55n4yYHwPlZE96NQ94G2X2ELBr90Y6hKV/siw0mUiKqsHoZ96bCMOzCOR4xPXgTxMDEf5T10f84Ry2sWiz0eu1S3IZR/S3p8eHU0f7AgnApXBO/rBqmmknhj4DzOitFGDc/sNe3+X79QJrONyKXQe83EQRXRFzw1WRDaVYob2KXit/P47AKh1eCQkJ9H7X+IOtOgV2PnH2ZiASvAOGLM952+Hu4lTToBRtJ9wlqmKBnKSCmqQiEpaOZN9h2R8BB8Y3pmBCUtGY3AJ6w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(136003)(376002)(366004)(396003)(4326008)(86362001)(2616005)(478600001)(186003)(55236004)(6506007)(8936002)(53546011)(38100700002)(6666004)(41300700001)(2906002)(7416002)(5660300002)(7406005)(6486002)(26005)(6512007)(31696002)(31686004)(83380400001)(54906003)(110136005)(8676002)(36756003)(316002)(66556008)(66476007)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K1czWWIxWUQyL1hHM3A4V2lnRGlncWFuWWNEY0pWMXZqNkttMlpURXRQMzhh?=
+ =?utf-8?B?alNtMW1JQnU0cXNrWW1JRjl0RHgzMFlOQkx5WHI2ZFh3amlQOXB2QXBQZklY?=
+ =?utf-8?B?eGdjcFBJWGxFeG03STJ2dzhXNysxR3orK0FYakgzTUtKMCtUQTl6dk5WSXdW?=
+ =?utf-8?B?cEcwS0cvYkdRUDNRZXJTQTVpNk1rbWl2WDlrRXp1bGNZcFhZNnZFdk0wTmdh?=
+ =?utf-8?B?UjFzRG81ZERVMmlValEwSS9VUkQ4KzhHMW8rNTMyVEJsaE1XS0k5NTY3S09s?=
+ =?utf-8?B?MGYwUEl6aWRRZDZoMDdzcm0wMFZQUUlwWW53d1ZieEE2K3ZMd0lsTFRiVTU5?=
+ =?utf-8?B?eE0xZkY1K0txbzQ0MWk3a00yMWdFUmFMdWRLdk1FdGJSbUVYVnJSTWp0Q1E2?=
+ =?utf-8?B?VCs2SUYzWlArMjJvbWV1MTFtdUV4QlNOaWVma3pwRUtmcWFSbzFPM0FTYjIy?=
+ =?utf-8?B?a2o5S0xkMFp2U2NLNFR3bFpMaHB3UlptSlI2eXBvcU4xQ3hEblg2NGpZbW9Z?=
+ =?utf-8?B?a3owdU9HaXp6ZlA0anBUbzV3cCs4WGRtRnRTLy9ObEUwOW9VSFdMMWJYK0pl?=
+ =?utf-8?B?aFNpSXV0UkJFR21iOTU3UmFUc29Nei9tUU9aUDVaUFZDNTllZEttZlRNV0RH?=
+ =?utf-8?B?cE4xZWM0encvN3k0QWcxTlQ3a25rTVBMVWlLMzkyQWk3TnJYRUJqSDdKRzZy?=
+ =?utf-8?B?MWwrVEkwLzk3NGU4UXduYWxRcmNzdGZhZzg5eWw5cXl3eXBkYjBLRVRGaWcw?=
+ =?utf-8?B?L3BQaW5pcUdqZ1JsMEJvLzNzOWd5OE9mTzJVV2I5WThKRkRhVkxiVDVkUW0w?=
+ =?utf-8?B?bThXVU14bHozNlpIM01DSDFKRXFkS05wWStUQlZUYkVJenZPREtjeVhpWVRT?=
+ =?utf-8?B?NXdmb3dvd3Vtb1JndzNTYnRlRUE0and1WWZRWTRUSStQUlVRY0F2b1ZwWWZX?=
+ =?utf-8?B?L2FNaTA2cEtOZ3duVlhvMGFIWXJtdDBoTmNxVksvT1I2S2MvUFZLenRUYnVo?=
+ =?utf-8?B?TUNCSDRYRGZaRmNlRWNOMlZ2Ykk2bEYyRHhEaE9UTjBVUVRuKytmM0h0dTcr?=
+ =?utf-8?B?MnliT2JSRlA2MjNUQm5DVWJhQVBxdkZTY1FNRUx1eVFOdTZ2RXUxeWRmYlFw?=
+ =?utf-8?B?OU9GM0gwa3N1WjZqZnlUVUp2WjhEVWhlUmMrOCtEdE5IdC9qME5yU0hsendM?=
+ =?utf-8?B?NnFCYXhsT2gwZktGcFprTFBwS3Q0T2tmVmY3RzRBOXYvNE5EYVVJQTVvVDc3?=
+ =?utf-8?B?QmZmSjVTdHhza0g5RWdwQmxlNkhhWFo0VHFMT3JZaXBDYnlrTFYweWpQWWUx?=
+ =?utf-8?B?WXBVNTVpUURObGpyVXVHVDl4NlNoVC8zL3A2REV3djA3WFlwQUJtWjg4US9i?=
+ =?utf-8?B?OGZod1FnSnhCK1VTSXlXSWtDNXBpVDRRSGRsVzdVQzNCVWNnRFFRNVNKZXor?=
+ =?utf-8?B?RERlbW8vejlPU1BYS0IwbzVBdVp3am5wUDdreEtiS2pxVGM1eW5La0NHUFJV?=
+ =?utf-8?B?RnRVZEFNWVVER3dtN2x2czBxZ244elZ1ZG8xRFJYSkdDekwyZEdqekZpbHha?=
+ =?utf-8?B?c1FPU3VhVlkzcTBtSUJZT0dOM1AwbmZXb2FWbU1SRnRzemZGL0taTnlmY3Y5?=
+ =?utf-8?B?LzV2Vm1sczdoVmxJMmYyc0FUMTFWMmNPOTBWNEpTTklDV3B6OUx3K0g3alQw?=
+ =?utf-8?B?OXNpdHg3T3BrVUNTU0FrS3NPakRkVldUWEdEbjNCRkpmVzVPUTJoVkVscFFV?=
+ =?utf-8?B?eVd5UHNjdE5kTzNYUk1HSFVYS1l6U0FKWjRZeVNoYmZVbHJVUVliSHc1bG9p?=
+ =?utf-8?B?M0puaTg3Mi9PZW9qYlU3bVZ0UWxobEEzR1E4bEQ2WG5zZS9GZG9PcmdEV3Bj?=
+ =?utf-8?B?aWV1M2RQaWhRN29vbXR6S2Y2Y1RCeElnR3RFWjM1Y3NtSzVENElOK25nVWVr?=
+ =?utf-8?B?NW4zaWFqa1A1WndibUxYK0JTNFBsTGZnOXpUNUhVWEVINUtMVHZpTTQwUW1F?=
+ =?utf-8?B?S1JPY2ladG1IbTdTRGo1R3FncllJM1ZVYUxoNHh0cVVNTkI4WmViRURFTUUx?=
+ =?utf-8?B?ZldrdG40QXJCb0J5UnFpWEpHbCtkR3JudTlXaDNtUnBiQUlCa0FvNlg4Q0dU?=
+ =?utf-8?Q?/p5DstSnwHYiCXMVHXYTFx5ad?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c732355-f296-4e52-78ed-08da6aeacf5c
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 07:29:56.3930
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kG3Vh1A5NbKMoNiC9YnLWfuNkGjiwaCJTnqzHupj6leQrEMKPONebrSXH6UwjN1dtcyvwSZ0nOF4plo7nPunKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5261
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.07.22 00:03, Peter Xu wrote:
-> The check wanted to make sure when soft-dirty tracking is enabled we won't
-> grant write bit by accident, as a page fault is needed for dirty tracking.
-> The intention is correct but we didn't check it right because VM_SOFTDIRTY
-> set actually means soft-dirty tracking disabled.  Fix it.
-
-Thanks for digging into this and writing the reproducer. The softdirty
-logic was rather confusing for me.
-
-> 
-> It wasn't a bug for a long time because we used to only optimize the write
-> bit settings in change_pte_range() for page caches, and since we've got a
-> higher level check in vma_wants_writenotify(), we will never set the bit
-> MM_CP_TRY_CHANGE_WRITABLE for soft-dirty enabled page caches, hence even if
-> we checked with the wrong value of VM_SOFTDIRTY in change_pte_range() it'll
-> just be an no-op.  Functionally it was still correct, even if cpu cycles
-> wasted.
-
-I don't quite follow that explanation and most probably I am missing
-something.
-
-Modifying your test to map page from a file MAP_SHARED gives me under
-5.18.11-100.fc35.x86_64:
 
 
-53,54d52
-<       FILE *file = fopen("tmpfile", "w+");
-<       int file_fd;
-56d53
-<       assert(file);
-59,61d55
-<
-<       file_fd = fileno(file);
-<       ftruncate(file_fd, psize);
-63c57
-<                   MAP_SHARED, file_fd, 0);
----
->                   MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+On 18/07/2022 16:37, Xu Kuohai wrote:
+> On 7/18/2022 9:52 PM, Jon Hunter wrote:
+> 
+> [..]
+>>
+>> This change appears to be causing the build to fail ...
+>>
+>> /tmp/cc52xO0c.s: Assembler messages:
+>> /tmp/cc52xO0c.s:8: Error: operand 1 should be an integer register --
+>> `mov lr,x9'
+>> /tmp/cc52xO0c.s:7: Error: undefined symbol lr used as an immediate value
+>> make[2]: *** [scripts/Makefile.build:250: arch/arm64/net/bpf_jit_comp.o]
+>> Error 1
+>> make[1]: *** [scripts/Makefile.build:525: arch/arm64/net] Error 2
+>>
+>> Let me know if you have any thoughts.
+>>
+> 
+> Sorry for this failure, but I can't reproduce it.
+> 
+> I guess maybe your assembler doesn't recognize "lr". Could you give a
+> try to replace "lr" with "x30"?
+> 
+>   #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+>   "      bti j\n" /* dummy_tramp is called via "br x10" */
+>   #endif
+> -"      mov x10, lr\n"
+> -"      mov lr, x9\n"
+> +"      mov x10, x30\n"
+> +"      mov x30, x9\n"
+>   "      ret x10\n"
+>   "      .size dummy_tramp, .-dummy_tramp\n"
+>   "      .popsection\n
+> 
+> Thanks.
 
 
-t480s: ~  $ sudo ./tmp
-ERROR: Wrote page again, soft-dirty=0 (expect: 1
+Sorry for delay, this did not seem to land in my inbox. Anyway, yes this 
+fixes the build issue for me!
 
-
-
-IMHO, while the check in vma_wants_writenotify() is correct and makes
-sure that the pages are kept R/O by the generic machinery. We get
-vma_wants_writenotify(), so we activate MM_CP_TRY_CHANGE_WRITABLE. The
-wrong logic in can_change_pte_writable(), however, maps the page
-writable again without caring about softdirty.
-
-At least that would be my explanation for the failure. But maybe I
-messes up something else :)
-
-
-
-> 
-> However after the recent work of anonymous page optimization on exclusive
-> pages we'll start to make it wrong because anonymous page does not require
-> the check in vma_wants_writenotify() hence it'll suffer from the wrong
-> check here in can_change_pte_writable().
-> 
-> We can easily verify this with any exclusive anonymous page, like program
-> below:
-> 
-> =======8<======
->   #include <stdio.h>
->   #include <unistd.h>
->   #include <stdlib.h>
->   #include <assert.h>
->   #include <inttypes.h>
->   #include <stdint.h>
->   #include <sys/types.h>
->   #include <sys/mman.h>
->   #include <sys/types.h>
->   #include <sys/stat.h>
->   #include <unistd.h>
->   #include <fcntl.h>
->   #include <stdbool.h>
-> 
->   #define BIT_ULL(nr)                   (1ULL << (nr))
->   #define PM_SOFT_DIRTY                 BIT_ULL(55)
-> 
->   unsigned int psize;
->   char *page;
-> 
->   uint64_t pagemap_read_vaddr(int fd, void *vaddr)
->   {
->       uint64_t value;
->       int ret;
-> 
->       ret = pread(fd, &value, sizeof(uint64_t),
->                   ((uint64_t)vaddr >> 12) * sizeof(uint64_t));
->       assert(ret == sizeof(uint64_t));
-> 
->       return value;
->   }
-> 
->   void clear_refs_write(void)
->   {
->       int fd = open("/proc/self/clear_refs", O_RDWR);
-> 
->       assert(fd >= 0);
->       write(fd, "4", 2);
->       close(fd);
->   }
-> 
->   #define  check_soft_dirty(str, expect)  do {                            \
->           bool dirty = pagemap_read_vaddr(fd, page) & PM_SOFT_DIRTY;      \
->           if (dirty != expect) {                                          \
->               printf("ERROR: %s, soft-dirty=%d (expect: %d)\n", str, dirty, expect); \
->               exit(-1);                                                   \
->           }                                                               \
->   } while (0)
-> 
->   int main(void)
->   {
->       int fd = open("/proc/self/pagemap", O_RDONLY);
-> 
->       assert(fd >= 0);
->       psize = getpagesize();
->       page = mmap(NULL, psize, PROT_READ|PROT_WRITE,
->                   MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
->       assert(page != MAP_FAILED);
-> 
->       *page = 1;
->       check_soft_dirty("Just faulted in page", 1);
->       clear_refs_write();
->       check_soft_dirty("Clear_refs written", 0);
->       mprotect(page, psize, PROT_READ);
->       check_soft_dirty("Marked RO", 0);
->       mprotect(page, psize, PROT_READ|PROT_WRITE);
->       check_soft_dirty("Marked RW", 0);
->       *page = 2;
->       check_soft_dirty("Wrote page again", 1);
-> 
->       munmap(page, psize);
->       close(fd);
->       printf("Test passed.\n");
-> 
->       return 0;
->   }
-
-Can we turn that into a vm selftest in
-tools/testing/selftests/vm/soft-dirty.c, and also extend it by
-MAP_SHARED froma  file as above?
-
-> =======8<======
-> 
-> So even if commit 64fe24a3e05e kept the old behavior and didn't attempt to
-> change the behavior here, the bug will only be able to be triggered after
-> commit 64fe24a3e05e because only anonymous page will suffer from it.
-> 
-> Fixes: 64fe24a3e05e ("mm/mprotect: try avoiding write faults for exclusive anonymous pages when changing protection")
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  mm/mprotect.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 0420c3ed936c..804807ab14e6 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -48,8 +48,11 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
->  	if (pte_protnone(pte) || !pte_dirty(pte))
->  		return false;
->  
-> -	/* Do we need write faults for softdirty tracking? */
-> -	if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
-> +	/*
-> +	 * Do we need write faults for softdirty tracking?  Note,
-> +	 * soft-dirty is enabled when !VM_SOFTDIRTY.
-> +	 */
-> +	if (!(vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
->  		return false;
-
-I wonder if we now want, just as in vma_wants_writenotify(), an early
-check for IS_ENABLED(CONFIG_MEM_SOFT_DIRTY), to optimize this out
-completely.
-
->  
->  	/* Do we need write faults for uffd-wp tracking? */
-
+Thanks!
+Jon
 
 -- 
-Thanks,
-
-David / dhildenb
-
+nvpublic

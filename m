@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7EE57CCEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E91D57CCED
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiGUOLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S229581AbiGUOLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiGUOLI (ORCPT
+        with ESMTP id S231327AbiGUOLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:11:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94E8653D34
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:11:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D53191042;
-        Thu, 21 Jul 2022 07:11:07 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.86.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A601B3F73D;
-        Thu, 21 Jul 2022 07:11:05 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:11:04 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Subject: Re: [PATCH 2/7] sched/uclamp: Make task_fits_capacity() use
- util_fits_cpu()
-Message-ID: <20220721141104.3d4ohdyxxlqyttle@wubuntu>
-References: <20220629194632.1117723-1-qais.yousef@arm.com>
- <20220629194632.1117723-3-qais.yousef@arm.com>
- <CAB8ipk99oZNBP6kxSh6c+DrU-0tEX-wANYw3QDYHgES9AME38w@mail.gmail.com>
+        Thu, 21 Jul 2022 10:11:17 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2005052FD5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:11:14 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id bf13so1765309pgb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JdLRsvRnZXSge95hUUniiBkKTb/15qbqNRgmQFuXFpQ=;
+        b=U9/GVNr7Qn7GXD9Ir8eRl7CIKSjh+S8N0xIJQVcE0Ek6IRZjcuGRrVPhycCG0BujXm
+         /zs70hdIHMmYtwWARr77YGYwuAFIwyUrW68zLuF1r2iAv4SNEmdZMWsbNH+Q0Itg2dsO
+         AWFV7qZl+ejmr1kHeMaKQn2V2iRlaUgOGl2fkqSLhQNcSD2NCjv+6GfvQ/Q4UgpJNQxq
+         aK5s0IshYbWISsTjE5hvtlIdSq6QXbpyL8U8xHszq9rhHMjztAp07NSAo0i6hF6Txmsa
+         dj0pK98iQCMIK6+A2QJD5/7Erhb2E4dU6YtKq0GPFRfbKl4GR+V5yx0mAn+/1nfvisKw
+         6YcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JdLRsvRnZXSge95hUUniiBkKTb/15qbqNRgmQFuXFpQ=;
+        b=fARW2GCcvAoI9qQkyEHldQZkRLCWYvNwGf0GYYuK1v7lBsZBZMoYAWdSm+dbRhXxxg
+         bpfBIDy39jaegF+wZd8HCHpfocYeRhBF2BQjbH7tUqnkMoqcDxEFCekax3ouoc3ENX28
+         zmbDjNilBQ8z75Nn4CjU331TAGXpWwgg4LOWExMuUleBUQl5G9DOUmI7ryjQG90kadUE
+         ijc52SIlfzIN8sx1y6BBHPEaspFjIUKKSj5m55204q8yRtc4uNYjmYKM/+4tOULXBekp
+         BZF9M/8/E6WnpA72PJKXLNOkvaF3rpemz3TGbW1lufxU3yUykmNV6bWshL6oGTVUywcI
+         GSyA==
+X-Gm-Message-State: AJIora/PvttMqwxuk6hVSM7jkiinFYAdoiudVw96DxyH9GJxi6lIoLIQ
+        16f+Nu+4krNLO/t/JnPTW45vow==
+X-Google-Smtp-Source: AGRyM1s01zL0Y2g/nLveXPvxylj4bvkc9N7+K/k0hCI2a45sUWQDWZ/0MowhBRo7y2SRhY5eioETrA==
+X-Received: by 2002:a63:9041:0:b0:415:c0e8:c588 with SMTP id a62-20020a639041000000b00415c0e8c588mr37681722pge.282.1658412673210;
+        Thu, 21 Jul 2022 07:11:13 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902778c00b0016d1f474653sm1495911pll.52.2022.07.21.07.11.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 07:11:12 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 14:11:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH v2 05/11] KVM: x86: emulator: update the emulation mode
+ after CR0 write
+Message-ID: <YtlefGulMwp/WwKv@google.com>
+References: <20220621150902.46126-1-mlevitsk@redhat.com>
+ <20220621150902.46126-6-mlevitsk@redhat.com>
+ <YtiUq7jm2Z1NTRv3@google.com>
+ <532c71cbca049004bd6860508fdc056ae118ab1f.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB8ipk99oZNBP6kxSh6c+DrU-0tEX-wANYw3QDYHgES9AME38w@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <532c71cbca049004bd6860508fdc056ae118ab1f.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/20/22 15:23, Xuewen Yan wrote:
-> On Thu, Jun 30, 2022 at 3:48 AM Qais Yousef <qais.yousef@arm.com> wrote:
-> >
-> > So that the new uclamp rules in regard to migration margin and capacity
-> > pressure are taken into account correctly.
-> >
-> > To cater for update_sg_wakeup_stats() user, we add new
-> > {min,max}_capacity_cpu to struct sched_group_capacity since
-> > util_fits_cpu() takes the cpu rather than capacity as an argument.
-> >
-> > This includes updating capacity_greater() definition to take cpu as an
-> > argument instead of capacity.
-> >
-> > Fixes: a7008c07a568 ("sched/fair: Make task_fits_capacity() consider uclamp restrictions")
-> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> >  kernel/sched/fair.c     | 67 ++++++++++++++++++++++++++---------------
-> >  kernel/sched/sched.h    | 13 ++++++--
-> >  kernel/sched/topology.c | 18 ++++++-----
-> >  3 files changed, 64 insertions(+), 34 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 5eecae32a0f6..313437bea5a2 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -160,7 +160,7 @@ int __weak arch_asym_cpu_priority(int cpu)
-> >   *
-> >   * (default: ~5%)
-> >   */
-> > -#define capacity_greater(cap1, cap2) ((cap1) * 1024 > (cap2) * 1078)
-> > +#define capacity_greater(cpu1, cpu2) ((capacity_of(cpu1)) * 1024 > (capacity_of(cpu2)) * 1078)
-> >  #endif
-> >
-> >  #ifdef CONFIG_CFS_BANDWIDTH
-> > @@ -4317,10 +4317,12 @@ static inline int util_fits_cpu(unsigned long util,
-> >         return fits;
-> >  }
-> >
-> > -static inline int task_fits_capacity(struct task_struct *p,
-> > -                                    unsigned long capacity)
-> > +static inline int task_fits_cpu(struct task_struct *p, int cpu)
-> >  {
-> > -       return fits_capacity(uclamp_task_util(p), capacity);
-> > +       unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
-> > +       unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
-> > +       unsigned long util = task_util_est(p);
-> > +       return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
-> >  }
+On Thu, Jul 21, 2022, Maxim Levitsky wrote:
+> On Wed, 2022-07-20 at 23:50 +0000, Sean Christopherson wrote:
+> > On Tue, Jun 21, 2022, Maxim Levitsky wrote:
+> > > CR0.PE toggles real/protected mode, thus its update
+> > > should update the emulation mode.
+> > > 
+> > > This is likely a benign bug because there is no writeback
+> > > of state, other than the RIP increment, and when toggling
+> > > CR0.PE, the CPU has to execute code from a very low memory address.
+> > > 
+> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > > ---
+> > >  arch/x86/kvm/emulate.c | 13 ++++++++++++-
+> > >  1 file changed, 12 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> > > index 6f4632babc4cd8..002687d17f9364 100644
+> > > --- a/arch/x86/kvm/emulate.c
+> > > +++ b/arch/x86/kvm/emulate.c
+> > > @@ -3659,11 +3659,22 @@ static int em_movbe(struct x86_emulate_ctxt *ctxt)
+> > >  
+> > >  static int em_cr_write(struct x86_emulate_ctxt *ctxt)
+> > >  {
+> > > -	if (ctxt->ops->set_cr(ctxt, ctxt->modrm_reg, ctxt->src.val))
+> > > +	int cr_num = ctxt->modrm_reg;
+> > > +	int r;
+> > > +
+> > > +	if (ctxt->ops->set_cr(ctxt, cr_num, ctxt->src.val))
+> > >  		return emulate_gp(ctxt, 0);
+> > >  
+> > >  	/* Disable writeback. */
+> > >  	ctxt->dst.type = OP_NONE;
+> > > +
+> > > +	if (cr_num == 0) {
+> > > +		/* CR0 write might have updated CR0.PE */
+> > 
+> > Or toggled CR0.PG.  
 > 
-> May we should consider the CONFIG_UCLAMP_TASK...
+> I thought about it but paging actually does not affect the CPU mode.
 
-The uclamp functions are protected with CONFIG_UCLAMP_TASK and should result in
-dummy implementation and dead code to be compiled out.
-
-It avoids sprinkling ifdefs all over the place this way.
-
-
-Cheers
-
---
-Qais Yousef
+Toggling CR0.PG when EFER.LME=1 (and CR4.PAE=1) switches the CPU in and out of
+long mode.  That's why I mentioned the EFER.LMA thing below.  It's also notable
+in that the only reason we don't have to handle CR4 here is because clearing
+CR4.PAE while long is active causes a #GP.  
+ 
+> E.g if you are in protected mode, instructions execute the same regardless
+> if you have paging or not.
+> 
+> (There are probably some exceptions but you understand what I mean).
+> 
+> Best regards,
+> 	Maxim Levitsky
+> 
+> > It's probably also worth noting that ->set_cr() handles side
+> > effects to other registers, e.g. the lack of an EFER.LMA update makes this look
+> > suspicious at first glance.

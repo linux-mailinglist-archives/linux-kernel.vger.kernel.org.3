@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F63D57CF3C
+	by mail.lfdr.de (Postfix) with ESMTP id 302DD57CF3B
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232091AbiGUPe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S229642AbiGUPfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiGUPef (ORCPT
+        with ESMTP id S229975AbiGUPef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 21 Jul 2022 11:34:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC7E78597
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:34:07 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id q43-20020a17090a17ae00b001f1f67e053cso1754522pja.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:34:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=uE3ao+vl8qPQGTzPozYTqjYqerJYeizR2JT1j0OcY6E=;
-        b=JQvi5qNu2QHHKec+bClpEy1SHjNB5LHlhNmsLaJOrp8q3YdnUbH3ZORTojiz/W6g/Y
-         9PXQ6RFOWWTy44UbPB14YVPghVR9ZTkKiFiZNq1J92x7xOB3+DeFIb8Kbr7U0XO+4y/q
-         RT3KIF50izjb8npMmx82ElWK/0JvgdkDsgG0E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=uE3ao+vl8qPQGTzPozYTqjYqerJYeizR2JT1j0OcY6E=;
-        b=rAwOw1XV5jf7oM2/D+2ViXcNVHc+D9BvdmzfIiAmM9otj89GNfrY7rTjgo5CHcVdlW
-         ErBGuU+Shfb2zH2gDIn8q+9L2rdjHjLNy4BaWMFLFK1S87avn3hh5zAdW7jBv00kBgRs
-         WEjp0dQ6lkwPD73pJmB8HnRAH1+e7fqhNIgHiLTm3JytRIl5xvnEA3W4fiWq7rfahog5
-         S1Y49dw+KtiyMNB3YOZCtCNCf8EivtfCdEYLJWWVQvpzQFQD4JCFex5M2n+EXH/zqxBj
-         bmS1SMfpAqXoHbrhkTxIhRJCFnOhyFiXbZp07ixLODOMRixz8O5XZmqH9rpxTAC/Cf16
-         KsYQ==
-X-Gm-Message-State: AJIora+ZScAbRQkZtTTE4KmW6LPlIv9/VHP7LmfSIexUd5I6hSWrM49C
-        lGeieNxpFmOxVDh89a/Micy1ag==
-X-Google-Smtp-Source: AGRyM1sHleLcTr3DO0FrfC0ZiCPSd0JGsEjW4P2kVgbVbQtHoTej1ZR2POYmDaWQ0K8oBRKRCqHM+Q==
-X-Received: by 2002:a17:90a:a40a:b0:1f2:979:397d with SMTP id y10-20020a17090aa40a00b001f20979397dmr11614767pjp.179.1658417646943;
-        Thu, 21 Jul 2022 08:34:06 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.161.248])
-        by smtp.gmail.com with ESMTPSA id u17-20020a17090341d100b001677d4a9654sm1870726ple.265.2022.07.21.08.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 08:34:04 -0700 (PDT)
-Message-ID: <9321ce6c-7565-a7eb-2bfe-dac144ab7733@broadcom.com>
-Date:   Thu, 21 Jul 2022 08:33:58 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/6] ARM: refresh defconfig files
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2076.outbound.protection.outlook.com [40.107.22.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE32D83211;
+        Thu, 21 Jul 2022 08:34:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V50SiPb/F3m0tpJBzUDyYd7xIsTFJYPJwc52yPUlCESERyfEBxQaChTSjF6IOGXtJeoqvJ6510h62mSJJvNK9hD8aqkQ9SU2paQR6F3SKPntifieWyD5uBA8+JFTTuGh13yiRhL+jlTBC/c2Mhl0RWZrobeZ+gvSFoPGsXTBIP9ys3kMPOyXY0psgHS8vL1GHRw/Zf6B+8BTlEILUvmZtaa4CLghEM6TDNQ3o/ySIQSHRLLyGwViY6mKILjBYpEWBePvpLNYmNIAbVaBN+RlQKQ0eYzNcdv/YdgZqWqgcE0ZMegKgEy18P9B97gfdMvK66oCl7dMmUNdc9hz4B9X0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hLMdYSbx/YXTG3LJaZN1WEDbP9qcQhLtSnOw3zOsEPs=;
+ b=UlXAIkn0iLq3o8RMB15SY1XaWvOdXLzxSe5DSxFSqcJPWxDyWW8geiCJgibAWjHalSBgPphc7YYtqXQ2DgdeIhKw3waMiYtjuBY7nvwZ8rTDWHQmMOlBL0gWfq9m+tlwM3f4P+oAzlFvFrkgbECUlV83L2vtmDfSDJ8SG71LAxp4fkzExSUyOd3QiG1WPeUPPSXId/8P/Wi/nOgx/kIOKRe2oXLSeWigJ3areB67NDouMQ/rRZz10cm4Oo6/WI9iaQ3zPiW+OVUVWDp3bfv0S3mYw3gfZeek5jjZP9P9Ab4Dabd0JpbyjSNO7kOLezS6R4+M2DrxzQGS6hTbfsENrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hLMdYSbx/YXTG3LJaZN1WEDbP9qcQhLtSnOw3zOsEPs=;
+ b=hgTzBzRcDoN11srqtbSX1vE8HEhHnyRkk9zhg4zAltEVIpg5aU2+ZiD7uZqHybZSGL0WAZc6DyT0mNO1n+K3Yp2e0I8XYmT4ZX9XDSp90uZm3+BGU9O5V9sFXvIevz8WSzZIVaiLqmwWxZy2zA9IY54UmdCVAsf5Rgh38CqphSB/IOSDJM5He6qYChLbLVkBVOkNctlPh/3Z3D7tQqnInXeBUrBgUVfcSRluSfq/EhAXEQcl9bHhyBsSiK5WUrrDhkrYhWCQScNTtaU2I1MAhVBshCaOUJkLFw6yNo03ViIPTzSsuaxRlLYbb3LjJo7mz/v7ma0WcwjyJ6NmTnbI1A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by DB7PR03MB4076.eurprd03.prod.outlook.com (2603:10a6:5:36::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 21 Jul
+ 2022 15:34:09 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::59ef:35d2:2f27:e98b]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::59ef:35d2:2f27:e98b%4]) with mapi id 15.20.5458.018; Thu, 21 Jul 2022
+ 15:34:09 +0000
+Subject: Re: [PATCH net-next v3 20/47] net: fman: Store initialization
+ function in match data
+To:     Camelia Alexandra Groza <camelia.groza@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-sh@vger.kernel.org
-References: <20220721141325.2413920-1-arnd@kernel.org>
- <20220721141325.2413920-2-arnd@kernel.org>
-From:   Scott Branden <scott.branden@broadcom.com>
-In-Reply-To: <20220721141325.2413920-2-arnd@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c2fd9605e45272ac"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220715215954.1449214-1-sean.anderson@seco.com>
+ <20220715215954.1449214-21-sean.anderson@seco.com>
+ <VI1PR04MB580745EF94973A1468C9FE80F2919@VI1PR04MB5807.eurprd04.prod.outlook.com>
+From:   Sean Anderson <sean.anderson@seco.com>
+Message-ID: <3d490504-c03d-f418-cec2-c976831a224f@seco.com>
+Date:   Thu, 21 Jul 2022 11:34:05 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <VI1PR04MB580745EF94973A1468C9FE80F2919@VI1PR04MB5807.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0297.namprd13.prod.outlook.com
+ (2603:10b6:208:2bc::32) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 002010fb-a693-498b-6bd1-08da6b2e7499
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4076:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MYNxNTSNIgRDeCQVhxO6I5Si8S0koQ04Q5wEUSHcaYLIQiNfRV9tOnaIbCybq7rrvPDRLTtbiihFmpRPSRwJZzxaMl4uwp0zuftGuMpSA3Fw+AOJvHAddexIqJOz/ABCcen0zoOLxoylA6CoXGz9Tbx6mRWNGRYNv7FZRWkR78mDClBwbCzWnQkp+RaFK32GL4ulUmzkUuCUsKKHqabY7etMqonTU9b7gNLJYcfjPD0QGgl/uFTNpZAwLmz8kPCcpKJFKFq5QpL5wM/VJkrJ/XtqBuicFmLupO08D6ZfgQnsZ7irQtpxWIs/QzSDSJrWbXhz8w1eKv6lKETepPJQT07T4nAzhVwVWFSrsoP21eHCoW6BLlfgHjxAl7cI3/t6n3k722yq8aZkJekRnS2W5QkZPk6z/qKE7/g/2n5DghSvzKRpzzqcr1RzKj8VoMG+tMVkM7mHIGL5i0PZO+XUYvfTxieMd3zL3wB+xoqA4mhfzvf9HArav+KULR7/9jGmGikd0qD8sv5Gz87Y6Mg7Wkp/VCcnWaAhamuDXrYHnidfCdqvnGCjuHh7hZYnIcxvtKDSBYa++2oZCxViPVnJ1Gx8jvUehd2hRkdU6uBYXu0RfhoizUr+uSdXUiTz1vYOdIITCYLfWoTiadk5RN2Id6jVq4ptOa308uYFANzqIbdsNgEjYS55TTotr+TjZmH/l4DE2XkMVCYUidJ31Fu1Kyer5UOL/EGzQuQxzsr36Hu49ANH/Zps9JHfkFvyGzZoW486dK38qdBaVUiVvuBFP8OoQAPJ3lWbzU2lWeLyGG8bh240rIXjG9jhV1HKEQSDRWyEaYF2JpHxN0mNm7VmHkgSbw3Q6ift/xXMUy5AOKZ3tbrWOOAR6/qc2gmx9CEH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(346002)(376002)(39850400004)(366004)(86362001)(31696002)(83380400001)(38350700002)(38100700002)(4326008)(8676002)(66476007)(66946007)(66556008)(316002)(54906003)(52116002)(6512007)(44832011)(53546011)(5660300002)(26005)(6506007)(6666004)(8936002)(2906002)(36756003)(2616005)(41300700001)(110136005)(186003)(6486002)(31686004)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bG96OHcwNkRhajVrQi9GMHBDRkRTSFNINFloeGpWdHpIci9uV0kzak5PVUtS?=
+ =?utf-8?B?RFRzeUNXd1JFTndjR1UySElTWlp5ejFHRVlvVlB1TXU0TWtFNnJnRWhnVHli?=
+ =?utf-8?B?T0V5S0hRSXJlaG92VDhiWURXaVQzR3cxTUF2WXlNUUtZcHNzYmZERlJ5d0lz?=
+ =?utf-8?B?L29YVTFnMTB6aGw4ZlJLNGhhalUxbzJNVmVPcHFpMkk2Sk12S1BsbUpsSTFH?=
+ =?utf-8?B?aVZXc2JlV29oS1k0Ty9Kei8waVlSTDFZM0xEOWVGMm1FUXZ1bmlCQXQ5bkw4?=
+ =?utf-8?B?T0YzU0JVWE9jQjhqVmY5ZVpWSTRzMDFyMDlNbGYwR0xmTWJOajQ0RWJkWk42?=
+ =?utf-8?B?Wjd3RTB0WVRXZEVhNllUVlVIOUh3eXZXS3dmRVUyK3QvQWR4QUpSMVQwK3BV?=
+ =?utf-8?B?dm9kUEFiN05iQ3dPcmlLemNuNjNwMGllQkJVMEFjNEh0WTdoODg1QWllcGxr?=
+ =?utf-8?B?MzhkUUFzanNJUm1kQy90N3l5SU1udTRvYmFYalE5LzJMVzZXM3NEd01icVNq?=
+ =?utf-8?B?blYxdjVkRENLQnJFajVXYnpDbWYrSVF6L1h1MzhoYm03bFJOUkNxQWp1YXFp?=
+ =?utf-8?B?MFdxMmFINmVvT1BDSFM3Rll3V2xHb3BhazUrcWM0cTdMOXYwa3dPNWxCbGs1?=
+ =?utf-8?B?ZXZ1VUhQUlVSeFRVeTVpVHk4NWdjUTJqblF6dGpCOHV2ZmhwazlaTjVJU0VF?=
+ =?utf-8?B?WkhlYi9BMXNQbmRoeFZhZndsdklucjI5aUdZckRDT3NYVEhVUm0rZ3daU2RV?=
+ =?utf-8?B?aSsyclR2MnlnZFNudGJ1ZHFCR1lkWlJKdlpuU0tkREVDWlVPcFRMaVU2UlJO?=
+ =?utf-8?B?LzBlRmRDWG5td25pR2ZwZzlvQkNPQnZtN3pOcWdXbldOYmF4VEx3RGc1c2kz?=
+ =?utf-8?B?RGNuWDdyK0Z2S1NWYmczTS9EdnRJcjBwdDlzemdNUlJubFJsWGVUUzZXV1U1?=
+ =?utf-8?B?TWZLTElkcE9xV2srTCsreFRQM1VILzFQMExZYXFPU1REVEhzemJjQlQyc2xC?=
+ =?utf-8?B?aUpjNVVETVpIZVFWbWNELzViQmhvZDNMMnhtekVwL0ZiRnRUVlBjUTRVanJt?=
+ =?utf-8?B?Wm5zcGtKWHhxM2d2ampCWFBsd3RFWE9qaDE2WDFOY2VsWG5oelpFYjNLOTNT?=
+ =?utf-8?B?NUN3SkM1SUNISmZOdXFya1RDejNheitET3crK0pIcmoybHd6aGhVc3BGTUtP?=
+ =?utf-8?B?ZmZVdHJoVHI3WEUzYUlSSTNsNkVhVXVFZnJjaXZEb1pxQ2RQZTFkQWlLbjhF?=
+ =?utf-8?B?Y3ZoZDM1emVSbVZtaW1WTWZ4YUtTZUp4RkIzOCsrRUVuSk56Y1l0T1RheDBO?=
+ =?utf-8?B?dU1yREE2cDZibllVajVLNmNTbjdRUjM1ZkVQclVkMmJ2Nkw5cE9PT3JvODE0?=
+ =?utf-8?B?MkVzL2ZVQzJQT3lsdEtVNTc1cXh5MFU0UFhmQ3JkOUY4dHZMZmxQdlBYSDl5?=
+ =?utf-8?B?K2N3N2hxTGNlaDBYN1FRVXVIc3FzaU1HNlJab2hlUFJka2hsNGdad3dqN2Ra?=
+ =?utf-8?B?bUJPVUp2S3MrYVBuK3p0NU9Ya3duYmhOUW50MWk4ODdJWUJyaWhPYStCQXhN?=
+ =?utf-8?B?c3FIR1dzTTZiQWN3NFp1NWxkSWNlZVIyZzlXT1lqVTJ2Y0hOd211UmErNVdG?=
+ =?utf-8?B?dVhiSkdPbEJrRGQwNHZHMlNueE9RL3FiaFZpbUVZY25wNEZlWE1uOEF6RTBK?=
+ =?utf-8?B?K2tyTXdlbGJpMUZQUHh6dm9PaUd4M0sreXkvd0N3T2RHd3dIY3I5WUI2dUV5?=
+ =?utf-8?B?aG9iUExQUFB3RlZpck5aNWZ6NHE0bEVuc0RaS3djeGZvOHd3c0IwTU5oNjhn?=
+ =?utf-8?B?dS9vRDdLQTBZakovbUZ3c1Noa1hVYzk4MC8rWlNRaEs4dEliUG5NcTU3M2dF?=
+ =?utf-8?B?YTJEUXhmaVdPL1hBRVFrT2ZETWpUbkNBNWl1UUc3b1hudXptRGIyeVB2ajJQ?=
+ =?utf-8?B?cllQYWc3R3crUVpBdzFDTlpIWDB0QnpDaGNWRnFzcWtFcGR4WTdUK0ZuMVR2?=
+ =?utf-8?B?RXdvem1PSi9tTlk1N3FlSkpOUEM2blRqVW1sRy9ocUdLNHVoRGFXVVFCVXZj?=
+ =?utf-8?B?eUc4azYwTmlsbDJhS1VNZmdOTDhCMXVCZGh4SUlnSGRKa1Nudy90cXBJNFJG?=
+ =?utf-8?B?N3ZGUnFLcUdzVnNTYlVtU3EwaHIvd2lsZFY2TUFaN2srdXR0ZWhOcHZTdk9V?=
+ =?utf-8?B?UkE9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 002010fb-a693-498b-6bd1-08da6b2e7499
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 15:34:09.6319
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DYABBiKkquTTJkPXaAMs/HDv/3jqmdmveEo15lD2tRSw+zPMrGnRvsLCHYbsc8Ij0YhM3tYvH9hp1syiybZhnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB4076
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,110 +136,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c2fd9605e45272ac
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Arnd,
 
-On 2022-07-21 07:13, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 7/21/22 8:51 AM, Camelia Alexandra Groza wrote:
+>> -----Original Message-----
+>> From: Sean Anderson <sean.anderson@seco.com>
+>> Sent: Saturday, July 16, 2022 0:59
+>> To: David S . Miller <davem@davemloft.net>; Jakub Kicinski
+>> <kuba@kernel.org>; Madalin Bucur <madalin.bucur@nxp.com>;
+>> netdev@vger.kernel.org
+>> Cc: Paolo Abeni <pabeni@redhat.com>; Eric Dumazet
+>> <edumazet@google.com>; linux-arm-kernel@lists.infradead.org; Russell
+>> King <linux@armlinux.org.uk>; linux-kernel@vger.kernel.org; Sean Anderson
+>> <sean.anderson@seco.com>
+>> Subject: [PATCH net-next v3 20/47] net: fman: Store initialization function in
+>> match data
+>> 
+>> Instead of re-matching the compatible string in order to determine the
+>> init function, just store it in the match data. This also move the setting
+>> of the rest of the functions into init as well. 
 > 
-> A lot of Kconfig options have changed over the years, and we tend
-> to not do a blind 'make defconfig' to refresh the files, to ensure
-> we catch options that should not have gone away.
+> This last sentence can be rephrased to be clearer. Maybe something like:
+> The separate setup functions aren't needed anymore. Merge their content
+> into init as well.
+
+You're right, this is not really clear. I will revise the wording.
+
+--Sean
+
+>> To ensure everything
+>> compiles correctly, we move them to the bottom of the file.
+>> 
+>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 > 
-> I used some a bit of scripting to only rework the bits where an
-> option moved around in any of the defconfig files, without also
-> dropping any of the other lines, to make it clearer which options
-> we no longer have.
-Resync is fine.  But, it would be great if the defconfig files were kept 
-in sync. Almost every kernel version kconfig options change which affect 
-these files. Could we put in place a defconfig refresh per kernel 
-version to keep them all in sync going forward?
-
-Regards,
-Scott
-
---000000000000c2fd9605e45272ac
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
-D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
-V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
-VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
-S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
-lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
-wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
-Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIK1b3EDyS2KVHkLhVjA3AFE6++dj
-RqK4eQsweJa+uvwDMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcyMTE1MzQwN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBT+T+ylEZ7A2Te2k4ixSnSFh5BZaJKGL0RQHVUGsfBOwKe
-v2uPxn2vqjLPd4fYUxMqCkxwZY6AArO1M9+FJw9iatuatwElGVdOnepeYxD+FyDuBV5X4WpZEiSc
-4VbUYZF117UEdjhuZNOuApntvuCmZ/OPNNVHM8pNuSFP6ixRh4yUoSuebGKMD8ajL0qombKG5aQz
-AyPH8grgh6cMAFjSqRmd/cklpCHKDLhjDaXNEFOZvEBmnhg6c40wHnzc+j22TFNviHNO6Yrx9xzw
-gBLiluNUbRziJmt8pLjdczVtdgLxNvScortqcLVgkbRHHpVTSa5spcMuXDTjJjdeCttJ
---000000000000c2fd9605e45272ac--
+> Acked-by: Camelia Groza <camelia.groza@nxp.com>
+> 

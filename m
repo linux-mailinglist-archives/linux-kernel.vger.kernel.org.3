@@ -2,63 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFCA57D6CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8D857D6D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233892AbiGUWVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S234096AbiGUWVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233866AbiGUWVU (ORCPT
+        with ESMTP id S233663AbiGUWV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:21:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D5495C18
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:21:19 -0700 (PDT)
+        Thu, 21 Jul 2022 18:21:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABCE3ED5F;
+        Thu, 21 Jul 2022 15:21:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB0F961DB0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 22:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D09CC341CE;
-        Thu, 21 Jul 2022 22:21:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C371B82587;
+        Thu, 21 Jul 2022 22:21:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A78BC341C0;
+        Thu, 21 Jul 2022 22:21:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658442078;
-        bh=WhB1PD1kMyLRf+42xJ1wMh8BKbH3xsmCONTEx0+eMh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BEZ+jC0rJiVM+zeUWTx6V2ftRHpCjVGuE2uRsAyTcxM5rv/coRx4w90PZ8fReg8tg
-         blGghO+x7ozDoMwI15kEx5/XuOSO6k2ta02eqRqazL3PVazjiJLjKWytT6yYBjg5J+
-         YUlxbybDmg7HJH3qJlLOMcTIE2JPLVCbqk0fbmUDiOjVGks+zTK1OUhIhuNr6f1S5P
-         P9TV03QOzXRoHybEa4TJqop8MuQ3WifqEM5VkjcsPi131EdS8FV/7b1XpaymqvUy6I
-         LTYzlF8sIOHkfnDj1Nw4N/PyI8HpZAgjidS+k06pNZkcuKxO0MiwoaL2Owkw3ut7bx
-         8UuEpfVNBQZag==
-Date:   Thu, 21 Jul 2022 23:21:11 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     syed sabakareem <Syed.SabaKareem@amd.com>
-Cc:     alsa-devel@alsa-project.org, Alexander.Deucher@amd.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        vijendar.mukunda@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Bard Liao <bard.liao@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] ASoC: amd: enable RPL Platform acp drivers build
-Message-ID: <YtnRV4qQoUkLN552@sirena.org.uk>
-References: <20220721061035.91139-1-Syed.SabaKareem@amd.com>
- <20220721061035.91139-5-Syed.SabaKareem@amd.com>
- <YtmqzkUjhKDIg0d2@sirena.org.uk>
+        s=k20201202; t=1658442085;
+        bh=Yjf5MWQLAPw4IWWhGL15WD5FiZeYXerj3Q2VN55OYsI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ntJPnLbfLqNyyd2s/HX7AvbocCcWjDATuMoYhms0Nn2ImMIs56NIxSmzmYH/3IPLi
+         VTZhEIDhW1FdlSm6506f4af5PPMiRrkRSsOR1EQ1gMoi0cJiYpghQKZ5IzoNL6HJlp
+         AkPfXARCGc37WRp/04s2yY5WiGV8kDvvV/Kd3UfhiZjR080OA4CrS1aGD2Rh5xtJwJ
+         GKuKYnRnbNPBEZ74wL1hoHtb+TWGz2s9fqL1z6w2OQ4gVYTcNFY0F9WP6qVcg8dNTJ
+         U58qjAzKH1bzBiiym7xxK5mksJW1fFsVtqGaO24/0T9OQ+K3LaS0b0BbEPI9aObMPZ
+         Va6eSjJBu4pAA==
+Date:   Thu, 21 Jul 2022 17:21:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        linux-pci@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Why set .suppress_bind_attrs even though .remove() implemented?
+Message-ID: <20220721222122.GA1754784@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oOv3QA6AufJZt5bU"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YtmqzkUjhKDIg0d2@sirena.org.uk>
-X-Cookie: Do not pick the flowers.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220721204607.xklzyklbgwcgepjm@pali>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,47 +62,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[+to Johan for qcom]
+[-cc Tom, email bounces]
 
---oOv3QA6AufJZt5bU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jul 21, 2022 at 10:46:07PM +0200, Pali Rohár wrote:
+> On Thursday 21 July 2022 14:54:33 Bjorn Helgaas wrote:
+> > The j721e, kirin, tegra, and mediatek drivers all implement .remove().
+> > 
+> > They also set ".suppress_bind_attrs = true".  I think this means
+> > bus_add_driver() will not create the "bind" and "unbind" sysfs
+> > attributes for the driver that would allow users to users to manually
+> > attach and detach devices from it.
+> > 
+> > Is there a reason for this, or should these drivers stop setting
+> > .suppress_bind_attrs?
+> 
+> I have already asked this question during review of kirin driver:
+> https://lore.kernel.org/linux-pci/20211031205527.ochhi72dfu4uidii@pali/
+> 
+> Microchip driver wanted to change its type from bool to tristate
+> https://lore.kernel.org/linux-pci/20220420093449.38054-1-u.kleine-koenig@pengutronix.de/t/#u
+> and after discussion it seems that it is needed to do more work for this
+> driver.
+> 
+> > For example, Pali and Ley Foon *did* stop setting .suppress_bind_attrs
+> > when adding .remove() methods in these commits:
+> > 
+> >   0746ae1be121 ("PCI: mvebu: Add support for compiling driver as module")
+> >   526a76991b7b ("PCI: aardvark: Implement driver 'remove' function and allow to build it as module")
+> >   ec15c4d0d5d2 ("PCI: altera: Allow building as module")
+> 
+> I added it for both pci-mvebu.c and pci-aardvark.c. And just few days
+> ago I realized why suppress_bind_attrs was set to true and remove method
+> was not implemented.
 
-On Thu, Jul 21, 2022 at 08:36:53PM +0100, Mark Brown wrote:
-> On Thu, Jul 21, 2022 at 11:40:02AM +0530, syed sabakareem wrote:
-> > From: Syed Saba Kareem <Syed.SabaKareem@amd.com>
-> >=20
-> > RPL Platform drivers can be built by selecting necessary
-> > kernel config option.
-> > The patch enables build support of the same.
->=20
-> This breaks an x86 allmodconfig build:
->=20
-> /build/stage/linux/sound/soc/amd/acp/acp-platform.c: In function =E2=80=
-=98i2s_irq_handle
-> r=E2=80=99:
-> /build/stage/linux/sound/soc/amd/acp/acp-platform.c:108:31: error: =E2=80=
-=98struct acp_d
-> ev_data=E2=80=99 has no member named =E2=80=98stream=E2=80=99
->   108 |                 stream =3D adata->stream[i];
->       |                               ^~
+With suppress_bind_attrs, the user can't manually unbind a device, so
+we can't get to mvebu_pcie_remove() that way, but since mvebu is a
+modular driver, I assume we can unload the module and *that* would
+call mvebu_pcie_remove().  Right?
 
-Sorry, this was actually a different commit earlier in the branch
-triggering this.
+> Implementing remove method is not really simple, specially when pci
+> controller driver implements also interrupt controller (e.g. for
+> handling legacy interrupts).
 
---oOv3QA6AufJZt5bU
-Content-Type: application/pgp-signature; name="signature.asc"
+Hmmm.  Based on your patches below, it looks like we need to call
+irq_dispose_mapping() in some cases, but I'm very confused about
+*which* cases.
 
------BEGIN PGP SIGNATURE-----
+I first thought it was for mappings created with irq_create_mapping(),
+but pci-aardvark.c never calls that, so there must be more to it.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLZ0VYACgkQJNaLcl1U
-h9C4qwf+LvXEf1DhkBwwKhCvfZyKKK9YVzwpry417epDVJnvaorf84Y6FyGJjm6D
-x++atMwrYkY8N6Ro0ls3a8jmHBlozUs8m0uJ9Hlo7k81zANGPzZ5Pyb6VDrdVM/r
-js1NVEvqRu3inNtQQjLu5UjcXISHBUjOWzMVSEfCQ5K2cDklTaItFviXX7ZtA9Fj
-KkE+cmaj5EOk1y5h0MRBITwfeFYcgAm7pviqPzKpXi+h8n2ycutgCjdRztB5C33Q
-bjN0YODYLtm5EinD8u2h+mWk9VmDDmY/t8SrpJ4PE126FsKL2icNoo7sazfHyIiY
-rmdtIVCRSeF7t7Ynvdc1Gf4Z0aYPLA==
-=ujmp
------END PGP SIGNATURE-----
+Currently only altera, iproc, mediatek-gen3, and mediatek call
+irq_dispose_mapping() from their .remove() methods.  (They all call
+irq_domain_remove() *before* irq_dispose_mapping().  Is that legal?
+Your patches do irq_dispose_mapping() *first*.)
 
---oOv3QA6AufJZt5bU--
+altera, mediatek-gen3, and mediatek call irq_dispose_mapping() on IRQs
+that came from platform_get_irq().
+
+qcom is a DWC driver, so all the IRQ stuff happens in
+dw_pcie_host_init().  qcom_pcie_remove() does call
+dw_pcie_host_deinit(), which calls irq_domain_remove(), but nobody
+calls irq_dispose_mapping().
+
+I'm thoroughly confused by all this.  But I suspect that maybe I
+should drop the "make qcom modular" patch because it seems susceptible
+to this problem:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/qcom&id=41b68c2d097e
+
+> Here are waiting fixup patches for pci-mvebu.c and pci-aardvark.c which
+> fixes .remove callback. Without these patches calling 'rmmod driver' let
+> dangling pointer in kernel which may cause random kernel crashes. See:
+> 
+> https://lore.kernel.org/linux-pci/20220709161858.15031-1-pali@kernel.org/
+> https://lore.kernel.org/linux-pci/20220711120626.11492-1-pali@kernel.org/
+> https://lore.kernel.org/linux-pci/20220711120626.11492-2-pali@kernel.org/
+> 
+> So I would suggest to do more detailed review when adding .remove
+> callback for pci controller driver (or when remove suppress_bind_attrs)
+> and do more testings and checking if all IRQ mappings are disposed.
+
+I'm not smart enough to do "more detailed review" because I don't know
+what things to look for :)  Thanks for all your work in sorting out
+these arcane details!
+
+Bjorn

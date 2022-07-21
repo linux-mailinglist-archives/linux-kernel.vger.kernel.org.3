@@ -2,631 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1367757C21D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ED357C22D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiGUCJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
+        id S231634AbiGUCQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiGUCJe (ORCPT
+        with ESMTP id S229999AbiGUCQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:09:34 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB998255A0;
-        Wed, 20 Jul 2022 19:09:32 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 2896F2008EB;
-        Thu, 21 Jul 2022 04:09:31 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id BFE92203668;
-        Thu, 21 Jul 2022 04:09:30 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 8AC331800318;
-        Thu, 21 Jul 2022 10:09:28 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org
-Cc:     shengjiu.wang@gmail.com, linux-kernel@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/2] ASoC: SOF: imx: Add i.MX8ULP HW support
-Date:   Thu, 21 Jul 2022 09:53:44 +0800
-Message-Id: <1658368424-28247-2-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1658368424-28247-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1658368424-28247-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 20 Jul 2022 22:16:55 -0400
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4CDB77482;
+        Wed, 20 Jul 2022 19:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6+kso
+        QkLExV2bd0Cnv7ry+o19UtcornIgTbSBFvBIys=; b=f92h29BEjq1JTcrsx3EBm
+        DdruE3MxYSPo4laVAiv/h6HiOANLHeVqtHFlixNimIhSoI3UIbpNbaROnSyRKhTP
+        9Bz0LAXCdVjHvCwN20YpdxqTgqg5BLgIj7pgdyDgUAFeVO7zojglBqjDP50vamzi
+        3C4ByAD9V8Bfc6Hoo28R3U=
+Received: from localhost.localdomain (unknown [223.104.68.243])
+        by smtp11 (Coremail) with SMTP id D8CowAB3fyNJsthi_fmVAA--.64S2;
+        Thu, 21 Jul 2022 09:56:32 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     corbet@lwn.net
+Cc:     bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, william.gray@linaro.org,
+        dhowells@redhat.com, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        tglx@linutronix.de, bigeasy@linutronix.de,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-cachefs@redhat.com, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH v2] docs: Fix typo in comment
+Date:   Thu, 21 Jul 2022 09:56:05 +0800
+Message-Id: <20220721015605.20651-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: D8CowAB3fyNJsthi_fmVAA--.64S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Xry8uw1rur4DXr47XF43ZFb_yoW7urW3pa
+        saqryIg3WkZas7ur1xJ342qFyxZaykWa1UGF4kKr10van8JwnYvF17K3Z8A3W5GryxAFW7
+        XrWSvryUZw4jya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEApnhUUUUU=
+X-Originating-IP: [223.104.68.243]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBAxtFZGB0LnLBDAAAs8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Peng <peng.zhang_8@nxp.com>
+Fix typo in the comment
 
-This adds skeleton support for the audio DSP hardware found on
-NXP i.MX8ULP platform.
-
-On i.MX8ULP resources (clocks, power, etc) are managed by the
-System Integration Module in LPAV domain and XRDC which is handled
-by arm trusted firmware.
-
-Signed-off-by: Zhang Peng <peng.zhang_8@nxp.com>
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
-changes in v2:
-- Add arm-smccc.h and use snd_sof_ipc_process_reply()
-- Address review comments
+v2: Add all .rst changes in Documents into 1 single patch
+---
+ Documentation/admin-guide/kdump/vmcoreinfo.rst    | 2 +-
+ Documentation/bpf/map_cgroup_storage.rst          | 4 ++--
+ Documentation/core-api/cpu_hotplug.rst            | 2 +-
+ Documentation/driver-api/isa.rst                  | 2 +-
+ Documentation/filesystems/caching/backend-api.rst | 2 +-
+ Documentation/locking/seqlock.rst                 | 2 +-
+ Documentation/sphinx/cdomain.py                   | 2 +-
+ 7 files changed, 8 insertions(+), 8 deletions(-)
 
- sound/soc/sof/imx/Kconfig   |   9 +
- sound/soc/sof/imx/Makefile  |   2 +
- sound/soc/sof/imx/imx8ulp.c | 514 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 525 insertions(+)
- create mode 100644 sound/soc/sof/imx/imx8ulp.c
-
-diff --git a/sound/soc/sof/imx/Kconfig b/sound/soc/sof/imx/Kconfig
-index cc6e695f913a..4751b04d5e6f 100644
---- a/sound/soc/sof/imx/Kconfig
-+++ b/sound/soc/sof/imx/Kconfig
-@@ -41,4 +41,13 @@ config SND_SOC_SOF_IMX8M
- 	  Say Y if you have such a device.
- 	  If unsure select "N".
+diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+index 8419019b6a88..6726f439958c 100644
+--- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
++++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+@@ -200,7 +200,7 @@ prb
  
-+config SND_SOC_SOF_IMX8ULP
-+	tristate "SOF support for i.MX8ULP"
-+	depends on IMX_DSP
-+	select SND_SOC_SOF_IMX_COMMON
-+	help
-+	  This adds support for Sound Open Firmware for NXP i.MX8ULP platforms.
-+	  Say Y if you have such a device.
-+	  If unsure select "N".
-+
- endif ## SND_SOC_SOF_IMX_TOPLEVEL
-diff --git a/sound/soc/sof/imx/Makefile b/sound/soc/sof/imx/Makefile
-index dba93c3466ec..798b43a415bf 100644
---- a/sound/soc/sof/imx/Makefile
-+++ b/sound/soc/sof/imx/Makefile
-@@ -1,9 +1,11 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
- snd-sof-imx8-objs := imx8.o
- snd-sof-imx8m-objs := imx8m.o
-+snd-sof-imx8ulp-objs := imx8ulp.o
+ A pointer to the printk ringbuffer (struct printk_ringbuffer). This
+ may be pointing to the static boot ringbuffer or the dynamically
+-allocated ringbuffer, depending on when the the core dump occurred.
++allocated ringbuffer, depending on when the core dump occurred.
+ Used by user-space tools to read the active kernel log buffer.
  
- snd-sof-imx-common-objs := imx-common.o
+ printk_rb_static
+diff --git a/Documentation/bpf/map_cgroup_storage.rst b/Documentation/bpf/map_cgroup_storage.rst
+index cab9543017bf..8e5fe532c07e 100644
+--- a/Documentation/bpf/map_cgroup_storage.rst
++++ b/Documentation/bpf/map_cgroup_storage.rst
+@@ -31,7 +31,7 @@ The map uses key of type of either ``__u64 cgroup_inode_id`` or
+     };
  
- obj-$(CONFIG_SND_SOC_SOF_IMX8) += snd-sof-imx8.o
- obj-$(CONFIG_SND_SOC_SOF_IMX8M) += snd-sof-imx8m.o
-+obj-$(CONFIG_SND_SOC_SOF_IMX8ULP) += snd-sof-imx8ulp.o
- obj-$(CONFIG_SND_SOC_SOF_IMX_COMMON) += imx-common.o
-diff --git a/sound/soc/sof/imx/imx8ulp.c b/sound/soc/sof/imx/imx8ulp.c
-new file mode 100644
-index 000000000000..02b496165acc
---- /dev/null
-+++ b/sound/soc/sof/imx/imx8ulp.c
-@@ -0,0 +1,514 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-+//
-+// Copyright 2021-2022 NXP
-+//
-+// Author: Peng Zhang <peng.zhang_8@nxp.com>
-+//
-+// Hardware interface for audio DSP on i.MX8ULP
-+
-+#include <linux/arm-smccc.h>
-+#include <linux/clk.h>
-+#include <linux/firmware.h>
-+#include <linux/firmware/imx/dsp.h>
-+#include <linux/firmware/imx/ipc.h>
-+#include <linux/firmware/imx/svc/misc.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_platform.h>
-+#include <linux/of_reserved_mem.h>
-+
-+#include <sound/sof.h>
-+#include <sound/sof/xtensa.h>
-+
-+#include "../ops.h"
-+#include "../sof-of-dev.h"
-+#include "imx-common.h"
-+
-+#define FSL_SIP_HIFI_XRDC	0xc200000e
-+
-+/* SIM Domain register */
-+#define SYSCTRL0		0x8
-+#define EXECUTE_BIT		BIT(13)
-+#define RESET_BIT		BIT(16)
-+#define HIFI4_CLK_BIT		BIT(17)
-+#define PB_CLK_BIT		BIT(18)
-+#define PLAT_CLK_BIT		BIT(19)
-+#define DEBUG_LOGIC_BIT		BIT(25)
-+
-+#define MBOX_OFFSET		0x800000
-+#define MBOX_SIZE		0x1000
-+
-+static struct clk_bulk_data imx8ulp_dsp_clks[] = {
-+	{ .id = "core" },
-+	{ .id = "ipg" },
-+	{ .id = "ocram" },
-+	{ .id = "mu" },
-+};
-+
-+struct imx8ulp_priv {
-+	struct device *dev;
-+	struct snd_sof_dev *sdev;
-+
-+	/* DSP IPC handler */
-+	struct imx_dsp_ipc *dsp_ipc;
-+	struct platform_device *ipc_dev;
-+
-+	struct regmap *regmap;
-+	struct imx_clocks *clks;
-+};
-+
-+static void imx8ulp_sim_lpav_start(struct imx8ulp_priv *priv)
-+{
-+	/* Controls the HiFi4 DSP Reset: 1 in reset, 0 out of reset */
-+	regmap_update_bits(priv->regmap, SYSCTRL0, RESET_BIT, 0);
-+
-+	/* Reset HiFi4 DSP Debug logic: 1 debug reset, 0  out of reset*/
-+	regmap_update_bits(priv->regmap, SYSCTRL0, DEBUG_LOGIC_BIT, 0);
-+
-+	/* Stall HIFI4 DSP Execution: 1 stall, 0 run */
-+	regmap_update_bits(priv->regmap, SYSCTRL0, EXECUTE_BIT, 0);
-+}
-+
-+static int imx8ulp_get_mailbox_offset(struct snd_sof_dev *sdev)
-+{
-+	return MBOX_OFFSET;
-+}
-+
-+static int imx8ulp_get_window_offset(struct snd_sof_dev *sdev, u32 id)
-+{
-+	return MBOX_OFFSET;
-+}
-+
-+static void imx8ulp_dsp_handle_reply(struct imx_dsp_ipc *ipc)
-+{
-+	struct imx8ulp_priv *priv = imx_dsp_get_data(ipc);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&priv->sdev->ipc_lock, flags);
-+
-+	snd_sof_ipc_process_reply(priv->sdev, 0);
-+
-+	spin_unlock_irqrestore(&priv->sdev->ipc_lock, flags);
-+}
-+
-+static void imx8ulp_dsp_handle_request(struct imx_dsp_ipc *ipc)
-+{
-+	struct imx8ulp_priv *priv = imx_dsp_get_data(ipc);
-+	u32 p; /* panic code */
-+
-+	/* Read the message from the debug box. */
-+	sof_mailbox_read(priv->sdev, priv->sdev->debug_box.offset + 4, &p, sizeof(p));
-+
-+	/* Check to see if the message is a panic code (0x0dead***) */
-+	if ((p & SOF_IPC_PANIC_MAGIC_MASK) == SOF_IPC_PANIC_MAGIC)
-+		snd_sof_dsp_panic(priv->sdev, p, true);
-+	else
-+		snd_sof_ipc_msgs_rx(priv->sdev);
-+}
-+
-+static struct imx_dsp_ops dsp_ops = {
-+	.handle_reply		= imx8ulp_dsp_handle_reply,
-+	.handle_request		= imx8ulp_dsp_handle_request,
-+};
-+
-+static int imx8ulp_send_msg(struct snd_sof_dev *sdev, struct snd_sof_ipc_msg *msg)
-+{
-+	struct imx8ulp_priv *priv = sdev->pdata->hw_pdata;
-+
-+	sof_mailbox_write(sdev, sdev->host_box.offset, msg->msg_data,
-+			  msg->msg_size);
-+	imx_dsp_ring_doorbell(priv->dsp_ipc, 0);
-+
-+	return 0;
-+}
-+
-+static int imx8ulp_run(struct snd_sof_dev *sdev)
-+{
-+	struct imx8ulp_priv *priv = sdev->pdata->hw_pdata;
-+
-+	imx8ulp_sim_lpav_start(priv);
-+
-+	return 0;
-+}
-+
-+static int imx8ulp_reset(struct snd_sof_dev *sdev)
-+{
-+	struct imx8ulp_priv *priv = sdev->pdata->hw_pdata;
-+	struct arm_smccc_res smc_resource;
-+
-+	/* HiFi4 Platform Clock Enable: 1 enabled, 0 disabled */
-+	regmap_update_bits(priv->regmap, SYSCTRL0, PLAT_CLK_BIT, PLAT_CLK_BIT);
-+
-+	/* HiFi4 PBCLK clock enable: 1 enabled, 0 disabled */
-+	regmap_update_bits(priv->regmap, SYSCTRL0, PB_CLK_BIT, PB_CLK_BIT);
-+
-+	/* HiFi4 Clock Enable: 1 enabled, 0 disabled */
-+	regmap_update_bits(priv->regmap, SYSCTRL0, HIFI4_CLK_BIT, HIFI4_CLK_BIT);
-+
-+	regmap_update_bits(priv->regmap, SYSCTRL0, RESET_BIT, RESET_BIT);
-+	usleep_range(1, 2);
-+
-+	/* Stall HIFI4 DSP Execution: 1 stall, 0 not stall */
-+	regmap_update_bits(priv->regmap, SYSCTRL0, EXECUTE_BIT, EXECUTE_BIT);
-+	usleep_range(1, 2);
-+
-+	arm_smccc_smc(FSL_SIP_HIFI_XRDC, 0, 0, 0, 0, 0, 0, 0, &smc_resource);
-+
-+	return 0;
-+}
-+
-+static int imx8ulp_probe(struct snd_sof_dev *sdev)
-+{
-+	struct platform_device *pdev =
-+		container_of(sdev->dev, struct platform_device, dev);
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device_node *res_node;
-+	struct resource *mmio;
-+	struct imx8ulp_priv *priv;
-+	struct resource res;
-+	u32 base, size;
-+	int ret = 0;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clks = devm_kzalloc(&pdev->dev, sizeof(*priv->clks), GFP_KERNEL);
-+	if (!priv->clks)
-+		return -ENOMEM;
-+
-+	sdev->num_cores = 1;
-+	sdev->pdata->hw_pdata = priv;
-+	priv->dev = sdev->dev;
-+	priv->sdev = sdev;
-+
-+	/* System integration module(SIM) control dsp configuration */
-+	priv->regmap = syscon_regmap_lookup_by_phandle(np, "fsl,dsp-ctrl");
-+	if (IS_ERR(priv->regmap))
-+		return PTR_ERR(priv->regmap);
-+
-+	priv->ipc_dev = platform_device_register_data(sdev->dev, "imx-dsp",
-+						      PLATFORM_DEVID_NONE,
-+						      pdev, sizeof(*pdev));
-+	if (IS_ERR(priv->ipc_dev))
-+		return PTR_ERR(priv->ipc_dev);
-+
-+	priv->dsp_ipc = dev_get_drvdata(&priv->ipc_dev->dev);
-+	if (!priv->dsp_ipc) {
-+		/* DSP IPC driver not probed yet, try later */
-+		ret = -EPROBE_DEFER;
-+		dev_err(sdev->dev, "Failed to get drvdata\n");
-+		goto exit_pdev_unregister;
-+	}
-+
-+	imx_dsp_set_data(priv->dsp_ipc, priv);
-+	priv->dsp_ipc->ops = &dsp_ops;
-+
-+	/* DSP base */
-+	mmio = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (mmio) {
-+		base = mmio->start;
-+		size = resource_size(mmio);
-+	} else {
-+		dev_err(sdev->dev, "error: failed to get DSP base at idx 0\n");
-+		ret = -EINVAL;
-+		goto exit_pdev_unregister;
-+	}
-+
-+	sdev->bar[SOF_FW_BLK_TYPE_IRAM] = devm_ioremap(sdev->dev, base, size);
-+	if (!sdev->bar[SOF_FW_BLK_TYPE_IRAM]) {
-+		dev_err(sdev->dev, "failed to ioremap base 0x%x size 0x%x\n",
-+			base, size);
-+		ret = -ENODEV;
-+		goto exit_pdev_unregister;
-+	}
-+	sdev->mmio_bar = SOF_FW_BLK_TYPE_IRAM;
-+
-+	res_node = of_parse_phandle(np, "memory-reserved", 0);
-+	if (!res_node) {
-+		dev_err(&pdev->dev, "failed to get memory region node\n");
-+		ret = -ENODEV;
-+		goto exit_pdev_unregister;
-+	}
-+
-+	ret = of_address_to_resource(res_node, 0, &res);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to get reserved region address\n");
-+		goto exit_pdev_unregister;
-+	}
-+
-+	sdev->bar[SOF_FW_BLK_TYPE_SRAM] = devm_ioremap_wc(sdev->dev, res.start,
-+							  resource_size(&res));
-+	if (!sdev->bar[SOF_FW_BLK_TYPE_SRAM]) {
-+		dev_err(sdev->dev, "failed to ioremap mem 0x%x size 0x%x\n",
-+			base, size);
-+		ret = -ENOMEM;
-+		goto exit_pdev_unregister;
-+	}
-+	sdev->mailbox_bar = SOF_FW_BLK_TYPE_SRAM;
-+
-+	/* set default mailbox offset for FW ready message */
-+	sdev->dsp_box.offset = MBOX_OFFSET;
-+
-+	ret = of_reserved_mem_device_init(sdev->dev);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to init reserved memory region %d\n", ret);
-+		goto exit_pdev_unregister;
-+	}
-+
-+	priv->clks->dsp_clks = imx8ulp_dsp_clks;
-+	priv->clks->num_dsp_clks = ARRAY_SIZE(imx8ulp_dsp_clks);
-+
-+	ret = imx8_parse_clocks(sdev, priv->clks);
-+	if (ret < 0)
-+		goto exit_pdev_unregister;
-+
-+	ret = imx8_enable_clocks(sdev, priv->clks);
-+	if (ret < 0)
-+		goto exit_pdev_unregister;
-+
-+	return 0;
-+
-+exit_pdev_unregister:
-+	platform_device_unregister(priv->ipc_dev);
-+
-+	return ret;
-+}
-+
-+static int imx8ulp_remove(struct snd_sof_dev *sdev)
-+{
-+	struct imx8ulp_priv *priv = sdev->pdata->hw_pdata;
-+
-+	imx8_disable_clocks(sdev, priv->clks);
-+	platform_device_unregister(priv->ipc_dev);
-+
-+	return 0;
-+}
-+
-+/* on i.MX8 there is 1 to 1 match between type and BAR idx */
-+static int imx8ulp_get_bar_index(struct snd_sof_dev *sdev, u32 type)
-+{
-+	return type;
-+}
-+
-+static int imx8ulp_suspend(struct snd_sof_dev *sdev)
-+{
-+	int i;
-+	struct imx8ulp_priv *priv = (struct imx8ulp_priv *)sdev->pdata->hw_pdata;
-+
-+	/*Stall DSP,  release in .run() */
-+	regmap_update_bits(priv->regmap, SYSCTRL0, EXECUTE_BIT, EXECUTE_BIT);
-+
-+	for (i = 0; i < DSP_MU_CHAN_NUM; i++)
-+		imx_dsp_free_channel(priv->dsp_ipc, i);
-+
-+	imx8_disable_clocks(sdev, priv->clks);
-+
-+	return 0;
-+}
-+
-+static int imx8ulp_resume(struct snd_sof_dev *sdev)
-+{
-+	struct imx8ulp_priv *priv = (struct imx8ulp_priv *)sdev->pdata->hw_pdata;
-+	int i;
-+
-+	imx8_enable_clocks(sdev, priv->clks);
-+
-+	for (i = 0; i < DSP_MU_CHAN_NUM; i++)
-+		imx_dsp_request_channel(priv->dsp_ipc, i);
-+
-+	return 0;
-+}
-+
-+static int imx8ulp_dsp_runtime_resume(struct snd_sof_dev *sdev)
-+{
-+	const struct sof_dsp_power_state target_dsp_state = {
-+		.state = SOF_DSP_PM_D0,
-+		.substate = 0,
-+	};
-+
-+	imx8ulp_resume(sdev);
-+
-+	return snd_sof_dsp_set_power_state(sdev, &target_dsp_state);
-+}
-+
-+static int imx8ulp_dsp_runtime_suspend(struct snd_sof_dev *sdev)
-+{
-+	const struct sof_dsp_power_state target_dsp_state = {
-+		.state = SOF_DSP_PM_D3,
-+		.substate = 0,
-+	};
-+
-+	imx8ulp_suspend(sdev);
-+
-+	return snd_sof_dsp_set_power_state(sdev, &target_dsp_state);
-+}
-+
-+static int imx8ulp_dsp_suspend(struct snd_sof_dev *sdev, unsigned int target_state)
-+{
-+	const struct sof_dsp_power_state target_dsp_state = {
-+		.state = target_state,
-+		.substate = 0,
-+	};
-+
-+	if (!pm_runtime_suspended(sdev->dev))
-+		imx8ulp_suspend(sdev);
-+
-+	return snd_sof_dsp_set_power_state(sdev, &target_dsp_state);
-+}
-+
-+static int imx8ulp_dsp_resume(struct snd_sof_dev *sdev)
-+{
-+	const struct sof_dsp_power_state target_dsp_state = {
-+		.state = SOF_DSP_PM_D0,
-+		.substate = 0,
-+	};
-+
-+	imx8ulp_resume(sdev);
-+
-+	if (pm_runtime_suspended(sdev->dev)) {
-+		pm_runtime_disable(sdev->dev);
-+		pm_runtime_set_active(sdev->dev);
-+		pm_runtime_mark_last_busy(sdev->dev);
-+		pm_runtime_enable(sdev->dev);
-+		pm_runtime_idle(sdev->dev);
-+	}
-+
-+	return snd_sof_dsp_set_power_state(sdev, &target_dsp_state);
-+}
-+
-+static struct snd_soc_dai_driver imx8ulp_dai[] = {
-+	{
-+		.name = "sai5",
-+		.playback = {
-+			.channels_min = 1,
-+			.channels_max = 32,
-+		},
-+		.capture = {
-+			.channels_min = 1,
-+			.channels_max = 32,
-+		},
-+	},
-+	{
-+		.name = "sai6",
-+		.playback = {
-+			.channels_min = 1,
-+			.channels_max = 32,
-+		},
-+		.capture = {
-+			.channels_min = 1,
-+			.channels_max = 32,
-+		},
-+	},
-+};
-+
-+static int imx8ulp_dsp_set_power_state(struct snd_sof_dev *sdev,
-+				       const struct sof_dsp_power_state *target_state)
-+{
-+	sdev->dsp_power_state = *target_state;
-+
-+	return 0;
-+}
-+
-+/* i.MX8 ops */
-+struct snd_sof_dsp_ops sof_imx8ulp_ops = {
-+	/* probe and remove */
-+	.probe		= imx8ulp_probe,
-+	.remove		= imx8ulp_remove,
-+	/* DSP core boot */
-+	.run		= imx8ulp_run,
-+	.reset		= imx8ulp_reset,
-+
-+	/* Block IO */
-+	.block_read	= sof_block_read,
-+	.block_write	= sof_block_write,
-+
-+	/* Module IO */
-+	.read64		= sof_io_read64,
-+
-+	/* Mailbox IO */
-+	.mailbox_read	= sof_mailbox_read,
-+	.mailbox_write	= sof_mailbox_write,
-+
-+	/* ipc */
-+	.send_msg	= imx8ulp_send_msg,
-+	.get_mailbox_offset	= imx8ulp_get_mailbox_offset,
-+	.get_window_offset	= imx8ulp_get_window_offset,
-+
-+	.ipc_msg_data	= sof_ipc_msg_data,
-+	.set_stream_data_offset = sof_set_stream_data_offset,
-+
-+	/* stream callbacks */
-+	.pcm_open	= sof_stream_pcm_open,
-+	.pcm_close	= sof_stream_pcm_close,
-+
-+	/* module loading */
-+	.get_bar_index	= imx8ulp_get_bar_index,
-+	/* firmware loading */
-+	.load_firmware	= snd_sof_load_firmware_memcpy,
-+
-+	/* Debug information */
-+	.dbg_dump	= imx8_dump,
-+
-+	/* Firmware ops */
-+	.dsp_arch_ops	= &sof_xtensa_arch_ops,
-+
-+	/* DAI drivers */
-+	.drv		= imx8ulp_dai,
-+	.num_drv	= ARRAY_SIZE(imx8ulp_dai),
-+
-+	/* ALSA HW info flags */
-+	.hw_info	= SNDRV_PCM_INFO_MMAP |
-+			SNDRV_PCM_INFO_MMAP_VALID |
-+			SNDRV_PCM_INFO_INTERLEAVED |
-+			SNDRV_PCM_INFO_PAUSE |
-+			SNDRV_PCM_INFO_NO_PERIOD_WAKEUP,
-+
-+	/* PM */
-+	.runtime_suspend	= imx8ulp_dsp_runtime_suspend,
-+	.runtime_resume		= imx8ulp_dsp_runtime_resume,
-+
-+	.suspend	= imx8ulp_dsp_suspend,
-+	.resume		= imx8ulp_dsp_resume,
-+
-+	.set_power_state	= imx8ulp_dsp_set_power_state,
-+};
-+
-+static struct sof_dev_desc sof_of_imx8ulp_desc = {
-+	.ipc_supported_mask     = BIT(SOF_IPC),
-+	.ipc_default            = SOF_IPC,
-+	.default_fw_path = {
-+		[SOF_IPC] = "imx/sof",
-+	},
-+	.default_tplg_path = {
-+		[SOF_IPC] = "imx/sof-tplg",
-+	},
-+	.default_fw_filename = {
-+		[SOF_IPC] = "sof-imx8ulp.ri",
-+	},
-+	.nocodec_tplg_filename = "sof-imx8ulp-nocodec.tplg",
-+	.ops = &sof_imx8ulp_ops,
-+};
-+
-+static const struct of_device_id sof_of_imx8ulp_ids[] = {
-+	{ .compatible = "fsl,imx8ulp-dsp", .data = &sof_of_imx8ulp_desc},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, sof_of_imx8ulp_ids);
-+
-+/* DT driver definition */
-+static struct platform_driver snd_sof_of_imx8ulp_driver = {
-+	.probe = sof_of_probe,
-+	.remove = sof_of_remove,
-+	.driver = {
-+		.name = "sof-audio-of-imx8ulp",
-+		.pm = &sof_of_pm,
-+		.of_match_table = sof_of_imx8ulp_ids,
-+	},
-+};
-+module_platform_driver(snd_sof_of_imx8ulp_driver);
-+
-+MODULE_IMPORT_NS(SND_SOC_SOF_XTENSA);
-+MODULE_LICENSE("Dual BSD/GPL");
+ ``cgroup_inode_id`` is the inode id of the cgroup directory.
+-``attach_type`` is the the program's attach type.
++``attach_type`` is the program's attach type.
+ 
+ Linux 5.9 added support for type ``__u64 cgroup_inode_id`` as the key type.
+ When this key type is used, then all attach types of the particular cgroup and
+@@ -155,7 +155,7 @@ However, the BPF program can still only associate with one map of each type
+ ``BPF_MAP_TYPE_CGROUP_STORAGE`` or more than one
+ ``BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE``.
+ 
+-In all versions, userspace may use the the attach parameters of cgroup and
++In all versions, userspace may use the attach parameters of cgroup and
+ attach type pair in ``struct bpf_cgroup_storage_key`` as the key to the BPF map
+ APIs to read or update the storage for a given attachment. For Linux 5.9
+ attach type shared storages, only the first value in the struct, cgroup inode
+diff --git a/Documentation/core-api/cpu_hotplug.rst b/Documentation/core-api/cpu_hotplug.rst
+index c6f4ba2fb32d..f75778d37488 100644
+--- a/Documentation/core-api/cpu_hotplug.rst
++++ b/Documentation/core-api/cpu_hotplug.rst
+@@ -560,7 +560,7 @@ available:
+   * cpuhp_state_remove_instance(state, node)
+   * cpuhp_state_remove_instance_nocalls(state, node)
+ 
+-The arguments are the same as for the the cpuhp_state_add_instance*()
++The arguments are the same as for the cpuhp_state_add_instance*()
+ variants above.
+ 
+ The functions differ in the way how the installed callbacks are treated:
+diff --git a/Documentation/driver-api/isa.rst b/Documentation/driver-api/isa.rst
+index def4a7b690b5..3df1b1696524 100644
+--- a/Documentation/driver-api/isa.rst
++++ b/Documentation/driver-api/isa.rst
+@@ -100,7 +100,7 @@ I believe platform_data is available for this, but if rather not, moving
+ the isa_driver pointer to the private struct isa_dev is ofcourse fine as
+ well.
+ 
+-Then, if the the driver did not provide a .match, it matches. If it did,
++Then, if the driver did not provide a .match, it matches. If it did,
+ the driver match() method is called to determine a match.
+ 
+ If it did **not** match, dev->platform_data is reset to indicate this to
+diff --git a/Documentation/filesystems/caching/backend-api.rst b/Documentation/filesystems/caching/backend-api.rst
+index d7507becf674..3a199fc50828 100644
+--- a/Documentation/filesystems/caching/backend-api.rst
++++ b/Documentation/filesystems/caching/backend-api.rst
+@@ -122,7 +122,7 @@ volumes, calling::
+ to tell fscache that a volume has been withdrawn.  This waits for all
+ outstanding accesses on the volume to complete before returning.
+ 
+-When the the cache is completely withdrawn, fscache should be notified by
++When the cache is completely withdrawn, fscache should be notified by
+ calling::
+ 
+ 	void fscache_relinquish_cache(struct fscache_cache *cache);
+diff --git a/Documentation/locking/seqlock.rst b/Documentation/locking/seqlock.rst
+index 64405e5da63e..bfda1a5fecad 100644
+--- a/Documentation/locking/seqlock.rst
++++ b/Documentation/locking/seqlock.rst
+@@ -39,7 +39,7 @@ as the writer can invalidate a pointer that the reader is following.
+ Sequence counters (``seqcount_t``)
+ ==================================
+ 
+-This is the the raw counting mechanism, which does not protect against
++This is the raw counting mechanism, which does not protect against
+ multiple writers.  Write side critical sections must thus be serialized
+ by an external lock.
+ 
+diff --git a/Documentation/sphinx/cdomain.py b/Documentation/sphinx/cdomain.py
+index ca8ac9e59ded..a7d1866e72ff 100644
+--- a/Documentation/sphinx/cdomain.py
++++ b/Documentation/sphinx/cdomain.py
+@@ -151,7 +151,7 @@ class CObject(Base_CObject):
+     def handle_func_like_macro(self, sig, signode):
+         u"""Handles signatures of function-like macros.
+ 
+-        If the objtype is 'function' and the the signature ``sig`` is a
++        If the objtype is 'function' and the signature ``sig`` is a
+         function-like macro, the name of the macro is returned. Otherwise
+         ``False`` is returned.  """
+ 
 -- 
-2.34.1
+2.25.1
 

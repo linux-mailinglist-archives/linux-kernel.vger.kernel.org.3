@@ -2,82 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CF457C3D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 07:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2125657C3D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 07:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiGUFmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 01:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S230314AbiGUFt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 01:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiGUFmQ (ORCPT
+        with ESMTP id S229692AbiGUFty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 01:42:16 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E38E3B941;
-        Wed, 20 Jul 2022 22:42:15 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id b11so1218504eju.10;
-        Wed, 20 Jul 2022 22:42:15 -0700 (PDT)
+        Thu, 21 Jul 2022 01:49:54 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C064B2DC5;
+        Wed, 20 Jul 2022 22:49:52 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id r21so563916qtn.11;
+        Wed, 20 Jul 2022 22:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=feedback-id:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VNX5a0tfW2WJAh5eNBTKobwKPQoqU8dw2jsnN5jkG7w=;
+        b=GaJHzn+8ZK3kOKKkiyyC4YOzzCOBRCM0COhhCm04+ZGDivSGwIXMIjMC4SpAekSk2+
+         5J7TYK+kAEfaj246wV2xItJ0Cczemv9DdHNERXThoqbVpDAfkjoyJRTR4ONlDbkliLXR
+         er8pz7/8eEbnoOODppwIv/5GQ1wS+E1y6MRqtU9LcQg1kK/d7+8q3nnYY1qMWe7x02EG
+         YA8V27HMZ45f3JrsaWqy5r67Bu4OIQA2frR9IJGRepjvIJeh73ZsLsTjoqL0akyBjmfg
+         2rXQnYPRRj98F0hk38qQjypYswpwWlDealGCpXCCh703pW9RkH76IuJb5u/tk5jFEIDa
+         fKGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=y556XsK+9YT7ZnqHsQO4pYXsuRIeC4AlnPZA+pHqtoE=;
-        b=3rWgPtr3uNkD9zkUiWqpL/et+dxzbp/kCUzS6AzwA7e0wnAB9y2UTJYCpF9toS5EJm
-         4l9x/zrfFOTcepshIqeQ9C7W+iiqmWyZHcLu+q8E4WCHdZSVu+f5CbYTXfi+GvqEYph1
-         L4FB5zeUYzDscViKIeZXWV+hTZOvyjknIjkczrRbuJApbZcVeNcKjTo+/iJVrF7uwW0b
-         qnUBcWbyGqJz+FgBakIxbBztZdObqA15BZ71EpE4vFX1gp8o+VHG50iFFYy8KDlzUN+2
-         hcfZS9OtPxdRZsxv/M6ZOiRIep78oN0ri8J1RoSFEt+QTzleaLDIHF08nPQg5jDrY6rz
-         EZbA==
-X-Gm-Message-State: AJIora/orULUUbGzQwb2xNDB6xSnprKudjKopEE5Q7d8g8ojWpTG52Rt
-        WcayTm7zrwuvxAnOV/JR1a4=
-X-Google-Smtp-Source: AGRyM1vaqNtYojNtPQeKnELzxJ/+XJ4gg50RE4DfmX5pEXBkDub1teSONlnKDgNkkVToBUsiatOwQw==
-X-Received: by 2002:a17:906:9750:b0:72f:39e7:1215 with SMTP id o16-20020a170906975000b0072f39e71215mr16551320ejy.122.1658382133592;
-        Wed, 20 Jul 2022 22:42:13 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id h14-20020aa7de0e000000b0043a7404314csm444867edv.8.2022.07.20.22.42.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 22:42:12 -0700 (PDT)
-Message-ID: <6cb8a9c9-d256-5db2-e352-e8de1165950c@kernel.org>
-Date:   Thu, 21 Jul 2022 07:42:11 +0200
+        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=VNX5a0tfW2WJAh5eNBTKobwKPQoqU8dw2jsnN5jkG7w=;
+        b=lAf19ieLBzRolEBHE1TkmV6O/1SxCT6jRB35Up2hzW4BaZ/vSBITYC268NmNFp789d
+         46K9PPOxKCcCk01ocodIvX1RokhX4rhZ26eLaPKceo9tZOVzvnKwfUTu3rQnLGQFYfJ5
+         h8G63UPfc2A5HAn8EgntLv/mVecGC94gJFoVqY7wsGBil2JiA4wAhD2xBb7UREs59bIM
+         fCMYPI9+SH/TFpX+t1wlI07LEu0gLDyVp1AX7/N/AcxeDyFECYIoPE2yqPf5eIBfnXpW
+         P7yw7JsiMWpAXDILrA/S4N5zqQcS73/Y98UF4AbHmb1PH7h2WOvwBGO3DDWBMdkpb6jb
+         gG/w==
+X-Gm-Message-State: AJIora/71edWD37cX8auhdYDFu82uqncNqq+uqi8C6fHz8MLAGSfAyOU
+        TZBtcMjsLjpSnk36E1h5RU8=
+X-Google-Smtp-Source: AGRyM1td7BWqEr9DSNRFQjxKjKe0c9w8TaeNzEd+Bbnh42WDDLAVP3NIrHbutEIDBG5xgeY5vsczCQ==
+X-Received: by 2002:ac8:5bcf:0:b0:31e:f981:184a with SMTP id b15-20020ac85bcf000000b0031ef981184amr10557360qtb.653.1658382591861;
+        Wed, 20 Jul 2022 22:49:51 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id ca24-20020a05622a1f1800b0031ea864d3b2sm770955qtb.30.2022.07.20.22.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 22:49:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id D006427C005A;
+        Thu, 21 Jul 2022 01:49:50 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 21 Jul 2022 01:49:50 -0400
+X-ME-Sender: <xms:_ujYYq9hX_i60Jb4fnHoPwq52ivljWnnDiIR7175fVnmZy5QSN0lwQ>
+    <xme:_ujYYqvtqYkPvU_mmDTgKpKiGfiiX4RT0e_ufYgx2Q-KMQijMRzP8OSIqyx7l2l94
+    D12CrO2Mf2SdKWX1w>
+X-ME-Received: <xmr:_ujYYgAs5qPC4-2tKqilqUPUDcJZyMZ75XBt1vA3G61biYuGJb1Gf6_uriAEdQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudelkedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:_ujYYicobGnRa9q63cKeb-nIFy0CB92LSeQZe3LS0Qu9sy26ap2U1w>
+    <xmx:_ujYYvPmVyG90sP3bApRhoXIlBA2eOrMMw5hk8ox7W5ucBrYeE56vQ>
+    <xmx:_ujYYslD1k5C-BR0RYtzuNn2Vo_T9E21O2XlZxRs-mv3JVC82a76Nw>
+    <xmx:_ujYYogUeJGvVsuc6DASL-_h6Eklm48XcOkaOOOZ9ZWi2j09tASO6A>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 21 Jul 2022 01:49:49 -0400 (EDT)
+Date:   Wed, 20 Jul 2022 22:49:26 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Brian Foster <bfoster@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>
+Subject: Re: [PATCH rcu 04/12] rcu: Switch polled grace-period APIs to
+ ->gp_seq_polled
+Message-ID: <Ytjo5gPq0TnJEeZY@boqun-archlinux>
+References: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225128.3842050-4-paulmck@kernel.org>
+ <Ytijki0fkkyKaD9u@boqun-archlinux>
+ <20220721010455.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YtixMeMCcqAyeTiH@boqun-archlinux>
+ <20220721044708.GU1790663@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.18 000/231] 5.18.13-rc1 review
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Justin Forbes <jforbes@fedoraproject.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Tejas Upadhyay <tejas.upadhyay@intel.com>,
-        Anusha Srivatsa <anusha.srivatsa@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-References: <20220719114714.247441733@linuxfoundation.org>
- <CA+G9fYsCL48P5zFMKUxoJ-1vwUJSWhcn17rUx=1rxOdzdw_Mmg@mail.gmail.com>
- <CAHk-=wjo-u8=yJQJQnaP41FkQw7we9A-zJH3UELx5x_1ynPDfw@mail.gmail.com>
- <YtgvLUMuz+1zpQHR@fedora64.linuxtx.org>
- <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAHk-=wiu=yk=3xzXk18o5yU6v1wn27rcrOD=vmKm_aLNz=zJ+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,BITCOIN_SPAM_02,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,PDS_BTC_ID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721044708.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,149 +105,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20. 07. 22, 19:28, Linus Torvalds wrote:
-> [ Adding PeterZ and Jiri to the participants. ]
+On Wed, Jul 20, 2022 at 09:47:08PM -0700, Paul E. McKenney wrote:
+> On Wed, Jul 20, 2022 at 06:51:45PM -0700, Boqun Feng wrote:
+> > On Wed, Jul 20, 2022 at 06:04:55PM -0700, Paul E. McKenney wrote:
+> > [...]
+> > > > > @@ -3860,7 +3944,7 @@ unsigned long get_state_synchronize_rcu(void)
+> > > > >  	 * before the load from ->gp_seq.
+> > > > >  	 */
+> > > > >  	smp_mb();  /* ^^^ */
+> > > > > -	return rcu_seq_snap(&rcu_state.gp_seq);
+> > > > > +	return rcu_seq_snap(&rcu_state.gp_seq_polled);
+> > > > 
+> > > > I happened to run into this. There is one usage of
+> > > > get_state_synchronize_rcu() in start_poll_synchronize_rcu(), in which
+> > > > the return value of get_state_synchronize_rcu() ("gp_seq") will be used
+> > > > for rcu_start_this_gp(). I don't think this is quite right, because
+> > > > after this change, rcu_state.gp_seq and rcu_state.gp_seq_polled are
+> > > > different values, in fact ->gp_seq_polled is greater than ->gp_seq
+> > > > by how many synchronize_rcu() is called in early boot.
+> > > > 
+> > > > Am I missing something here?
+> > > 
+> > > It does not appear that your are missing anything, sad to say!
+> > > 
+> > > Does the following make it work better?
+> > > 
+> > > 							Thanx, Paul
+> > > 
+> > > ------------------------------------------------------------------------
+> > > 
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index 2122359f0c862..cf2fd58a93a41 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -3571,7 +3571,7 @@ EXPORT_SYMBOL_GPL(get_state_synchronize_rcu);
+> > >  unsigned long start_poll_synchronize_rcu(void)
+> > >  {
+> > >  	unsigned long flags;
+> > > -	unsigned long gp_seq = get_state_synchronize_rcu();
+> > > +	unsigned long gp_seq = rcu_seq_snap(&rcu_state.gp_seq);
+> > 
+> > get_state_synchronize_rcu() is still needed, because we need to return
+> > a cookie for polling for this function. Something like below maybe? Hope
+> > I didn't mess up the ordering ;-)
 > 
-> Looks like 5.18.13 added that commit 9bb2ec608a20 ("objtool: Update
-> Retpoline validation") but I don't see 3131ef39fb03 ("x86/asm/32: Fix
-> ANNOTATE_UNRET_SAFE use on 32-bit") in that list.
+> My thought is to combine your comment with my functionally equivalent
+> code that avoids the extra variable.  If that works for you (and if it
+> works, for that matter), does Co-developed-by work for you?
 > 
-> That said, 3131ef39fb03 should have fixed a completely different issue
-> on 32-bit, not the "naked ret" thing.
 
-Right. After applying 3131ef39fb03 on the top of 5.18.12 (or 5.18.13-rc1 
-too), I'm fine:
-https://build.opensuse.org/public/build/Kernel:stable/standard/i586/kernel-pae/_log
+Sure! Thanks ;-)
 
-I.e. no warnings at all, the kernel compiles and runs fine -- tested in 
-qemu only. It's gcc12 as can be seen in the log above.
+Regards,
+Boqun
 
-Config:
-https://github.com/openSUSE/kernel-source/blob/stable/config/i386/pae
-
-It says:
-CONFIG_CC_HAS_SLS=y
-CONFIG_CC_HAS_RETURN_THUNK=y
-CONFIG_SPECULATION_MITIGATIONS=y
-CONFIG_PAGE_TABLE_ISOLATION=y
-CONFIG_RETPOLINE=y
-CONFIG_RETHUNK=y
-CONFIG_CPU_UNRET_ENTRY=y
-CONFIG_CPU_IBPB_ENTRY=y
-CONFIG_CPU_IBRS_ENTRY=y
-CONFIG_ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE=y
-
-Patches:
-https://github.com/openSUSE/kernel-source/tree/stable/patches.suse
-
-Apart from others, it contains:
-3131ef39fb03 x86/asm/32: Fix ANNOTATE_UNRET_SAFE use on 32-bit
-bb06650634d3 KVM: VMX: Convert launched argument to flags
-bea7e31a5cac KVM: VMX: Fix IBRS handling after vmexit
-8bd200d23ec4 KVM: VMX: Flatten __vmx_vcpu_run()
-07853adc29a0 KVM: VMX: Prevent RSB underflow before vmenter
-fc02735b14ff KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
-bf5835bcdb96 intel_idle: Disable IBRS during long idle
-a09a6e2399ba objtool: Add entry UNRET validation
-8faea26e6111 objtool: Re-add UNWIND_HINT_{SAVE_RESTORE}
-951ddecf4356 objtool: Treat .text.__x86.* as noinstr
-9bb2ec608a20 objtool: Update Retpoline validation
-a149180fbcf3 x86: Add magic AMD return-thunk
-15e67227c49a x86: Undo return-thunk damage
-aa3d480315ba x86: Use return-thunk in asm code
-d77cfe594ad5 x86/bpf: Use alternative RET encoding
-7fbf47c7ce50 x86/bugs: Add AMD retbleed= boot parameter
-f54d45372c6a x86/bugs: Add Cannon lake to RETBleed affected CPU list
-3ebc17006888 x86/bugs: Add retbleed=ibpb
-0fe4aeea9c01 x86/bugs: Do IBPB fallback check only once
-2259da159fbe x86/bugs: Do not enable IBPB-on-entry when IBPB is not 
-supported
-e8ec1b6e08a2 x86/bugs: Enable STIBP for JMP2RET
-caa0ff24d5d0 x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
-c779bc1a9002 x86/bugs: Optimize SPEC_CTRL MSR writes
-bcf163150cd3 x86/bugs: Remove apostrophe typo
-6b80b59b3555 x86/bugs: Report AMD retbleed vulnerability
-6ad0ad2bf8a6 x86/bugs: Report Intel retbleed vulnerability
-166115c08a9b x86/bugs: Split spectre_v2_select_mitigation() and 
-spectre_v2_user_select_mitigation()
-7a05bc95ed1c x86/common: Stamp out the stepping madness
-d7caac991fee x86/cpu/amd: Add Spectral Chicken
-26aae8ccbc19 x86/cpu/amd: Enumerate BTC_NO
-a883d624aed4 x86/cpufeatures: Move RETPOLINE flags to word 11
-2dbb887e875b x86/entry: Add kernel IBRS implementation
-7c81c0c9210c x86/entry: Avoid very early RET
-64cbd0acb582 x86/entry: Don't call error_entry() for XENPV
-2c08b9b38f5b x86/entry: Move PUSH_AND_CLEAR_REGS() back into error_entry
-ee774dac0da1 x86/entry: Move PUSH_AND_CLEAR_REGS out of error_entry()
-d16e0b266720 x86/entry: Remove UNTRAIN_RET from native_irq_return_ldt
-1b331eeea7b8 x86/entry: Remove skip_r11rcx
-520a7e80c96d x86/entry: Switch the stack after error_entry() returns
-1f001e9da6bb x86/ftrace: Use alternative RET encoding
-697977d8415d x86/kexec: Disable RET on kexec
-af2e140f3420 x86/kvm: Fix SETcc emulation for return thunks
-84e7051c0bc1 x86/kvm: fix FASTOP_SIZE when return thunks are enabled
-742ab6df974a x86/kvm/vmx: Make noinstr clean
-a1e2c031ec39 x86/mm: Simplify RESERVE_BRK()
-d9e9d2300681 x86,objtool: Create .return_sites
-f43b9876e857 x86/retbleed: Add fine grained Kconfig knobs
-369ae6ffc41a x86/retpoline: Cleanup some #ifdefery
-00e1533325fd x86/retpoline: Swizzle retpoline thunk
-0b53c374b9ef x86/retpoline: Use -mfunction-return
-0ee9073000e8 x86/sev: Avoid using __x86_return_thunk
-7c693f54c873 x86/speculation: Add spectre_v2=ibrs option to support 
-Kernel IBRS
-4ad3278df6fe x86/speculation: Disable RRSBA behavior
-9756bba28470 x86/speculation: Fill RSB on vmexit for IBRS
-b2620facef48 x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n
-56aa4d221f1e x86/speculation: Fix SPEC_CTRL write on SMT state change
-e6aa13622ea8 x86/speculation: Fix firmware entry SPEC_CTRL handling
-acac5e98ef8d x86/speculation: Remove x86_spec_ctrl_mask
-bbb69e8bee1b x86/speculation: Use cached host SPEC_CTRL value for guest 
-entry/exit
-c27c753ea6fd x86/static_call: Serialize __static_call_fixup() properly
-ee88d363d156 x86,static_call: Use alternative RET encoding
-0aca53c6b522 x86/traps: Use pt_regs directly in fixup_bad_iret()
-15583e514eb1 x86/vsyscall_emu/64: Don't use RET in vsyscall emulation
-d147553b64ba x86/xen: Add UNTRAIN_RET
-b75b7f8ef114 x86/xen: Rename SYS* entry points
-
-Series file:
-https://github.com/openSUSE/kernel-source/blob/stable/series.conf
-
-> PeterZ, Jiri, any ideas? Limited quoting below, see thread at
+> 							Thanx, Paul
 > 
->    https://lore.kernel.org/all/CA+G9fYsJBBbEXowA-3kxDNqcfbtcqmxBrEnJSkCnLUsMzNfJZw@mail.gmail.com/
-> 
-> for more details.
-> 
->                Linus
-> 
-> On Wed, Jul 20, 2022 at 9:37 AM Justin Forbes <jforbes@fedoraproject.org> wrote:
->>
->> On Tue, Jul 19, 2022 at 12:32:48PM -0700, Linus Torvalds wrote:
->>> On Tue, Jul 19, 2022 at 10:57 AM Naresh Kamboju
->>> <naresh.kamboju@linaro.org> wrote:
->>>>
->>>>
->>>> 2. Large number of build warnings on x86 with gcc-11,
->>>> I do not see these build warnings on mainline,
->>> ..
->>>> 'naked' return found in RETPOLINE build
->>>
->>> Hmm. Does your cross-compiler support '-mfunction-return=thunk-extern'?
->>>
->>> Your build does magic things with 'scripts/kconfig/merge_config.sh',
->>> and I'm wondering if you perhaps end up enabling CONFIG_RETHUNK with a
->>> compiler that doesn't actually support it, or something like that?
->>
->> I am seeing these 'naked' return found in RETPOLINE build on the
->> standard fedora 36 toolchain as well. No cross compiling, nothing fancy.
->> These were not seen with mainline, or with the 5.18.12-rc1 retbleed
->> patches.
->>
->> Justin
-
-regards,
--- 
-js
-suse labs
+> > Regards,
+> > Boqun
+> > 
+> > ---------------
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 84d281776688..0f9134871289 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -3571,11 +3583,39 @@ EXPORT_SYMBOL_GPL(get_state_synchronize_rcu);
+> >  unsigned long start_poll_synchronize_rcu(void)
+> >  {
+> >         unsigned long flags;
+> > -       unsigned long gp_seq = get_state_synchronize_rcu();
+> > +       unsigned long gp_seq_poll = get_state_synchronize_rcu();
+> > +       unsigned long gp_seq;
+> >         bool needwake;
+> >         struct rcu_data *rdp;
+> >         struct rcu_node *rnp;
+> > 
+> > +       /*
+> > +        * Need to start a gp if no gp has been started yet.
+> > +        *
+> > +        * Note that we need to snapshot gp_seq after gp_seq_poll, otherwise
+> > +        * consider the follow case:
+> > +        *
+> > +        *      <no gp in progress>     // gp# is 0
+> > +        *      snapshot gp_seq         // gp #2 will be set as needed
+> > +        *      <a gp passed>
+> > +        *                              // gp# is 1
+> > +        *      snapshot gp_seq_poll    // polling gets ready until gp #3
+> > +        *
+> > +        * then the following rcu_start_this_gp() won't mark gp #3 as needed,
+> > +        * and polling won't become ready if others don't start a gp.
+> > +        *
+> > +        * And the following case is fine:
+> > +        *
+> > +        *      <no gp in progress>     // gp# is 0
+> > +        *      snapshot gp_seq_poll    // polling gets ready until gp #2
+> > +        *      <a gp passed>
+> > +        *                              // gp# is 1
+> > +        *      snapshot gp_seq         // gp #3 will be set as needed
+> > +        *
+> > +        * Also note, we rely on the smp_mb() in get_state_synchronize_rcu()
+> > +        * to order the two snapshots.
+> > +        */
+> > +       gp_seq = rcu_seq_snap(&rcu_state.gp_seq);
+> >         lockdep_assert_irqs_enabled();
+> >         local_irq_save(flags);
+> >         rdp = this_cpu_ptr(&rcu_data);
+> > @@ -3585,7 +3625,7 @@ unsigned long start_poll_synchronize_rcu(void)
+> >         raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+> >         if (needwake)
+> >                 rcu_gp_kthread_wake();
+> > -       return gp_seq;
+> > +       return gp_seq_poll;
+> >  }
+> >  EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);

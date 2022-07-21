@@ -2,154 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABE857D460
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4E857D466
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 21:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiGUTrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 15:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S229475AbiGUTw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 15:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiGUTrR (ORCPT
+        with ESMTP id S229844AbiGUTwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 15:47:17 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361D322294;
-        Thu, 21 Jul 2022 12:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=t+2Pbo5NAhkqaCvz9kmOCN8MxxSQWlhxYZSNcMRXya8=; b=FaEecfr9a5jd2L20DIeYZIpsKS
-        ClAy/kzorOmkDirLP7TTYs979JJW6IyuEOmL9hhNK51u/LX00fAWDF69pWOQokY2l65Kuw3gDl144
-        FiCulboI67kCI/rOAF0VOR2RYMJBOUupe29k/ff3+HGN6KmTFRSBsggAhgP6gQDulus26dCr88hH2
-        g8QgMji47uCaVGNyx1QsTW4e+LY2M993BZiDrqgCLgqnneulygOFG0LlbjYbA37MwZ+jymo4xF5qu
-        8589TqUBnuMKtbQYYUlEKdzKXXzINxUs3ixdz1TKEM6KEjvPfq7fSsbrF5JneZsQ9j4NEy8WVNjsg
-        hrt3A1rA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEc8Y-00BsAG-6k; Thu, 21 Jul 2022 19:47:06 +0000
-Date:   Thu, 21 Jul 2022 12:47:06 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Zhang Yuchen <zhangyuchen.lcr@bytedance.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-api@vger.kernel.org, keescook@chromium.org,
-        yzaikin@google.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC] proc: fix create timestamp of files in proc
-Message-ID: <YtmtOtNp4p0mEARW@bombadil.infradead.org>
-References: <20220721081617.36103-1-zhangyuchen.lcr@bytedance.com>
- <Ytl772fRS74eIneC@bombadil.infradead.org>
- <87wnc6nyux.fsf@email.froward.int.ebiederm.org>
+        Thu, 21 Jul 2022 15:52:19 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BB02183F;
+        Thu, 21 Jul 2022 12:52:18 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id e69so2184014iof.5;
+        Thu, 21 Jul 2022 12:52:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9qU3lShC423RO9jUaFHy+GEk0cB+opAvk6TkHNpI+xU=;
+        b=KZKB2m3WSJUG9LKZ3sR/Ie2L87r6w4ZcHTj8yX5RmEiL/4vaK/GAgwut5NWyA7+u3h
+         r1RTluXKFrge5WeeCZ1TWN4RTzcgZXCDum4A3Td8g6W4YQL/DvxFFGxX0NTJgAAopJ09
+         2yqBmXipH4d+ZExhZOiN9DI4dL46XG1w5yS+2WZsfQuAQYfRr3tlf1tS8KkggaLZ/xu8
+         hkIpLUEjutp5j8tIrbm9JY/MHAZmQTCM5YbdSZHlI0hxU6CK97NluYiWW0dBkY7KV1Dy
+         /7I3vYJMbyNpvwQf6L9WaloxgBAUDHg684rafOoMCVkiB5Itp+/sBbo+dRt6+Jd2GQRZ
+         Wmbg==
+X-Gm-Message-State: AJIora96+mn46UR7GdPCgzXzO0sE5rkYQAYd774kcUe+01Mlp4uqpwP0
+        aPzpWfQJ1/qBlGDqhCB/+g==
+X-Google-Smtp-Source: AGRyM1vtb/Pgq6vsjHn+wt+hYE2q0Nb6Yn4IDlr2B93dVsctunQcYCRjbeahSAuZpzfSUQBA5UXtzQ==
+X-Received: by 2002:a05:6638:3881:b0:33c:c785:37d1 with SMTP id b1-20020a056638388100b0033cc78537d1mr98828jav.40.1658433137724;
+        Thu, 21 Jul 2022 12:52:17 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id y6-20020a92d206000000b002dc10fd4b88sm1026857ily.29.2022.07.21.12.52.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 12:52:17 -0700 (PDT)
+Received: (nullmailer pid 1821727 invoked by uid 1000);
+        Thu, 21 Jul 2022 19:52:15 -0000
+Date:   Thu, 21 Jul 2022 13:52:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v3 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA
+ binding to json format
+Message-ID: <20220721195215.GA1817266-robh@kernel.org>
+References: <20220417210436.6203-1-singh.kuldeep87k@gmail.com>
+ <20220417210436.6203-7-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87wnc6nyux.fsf@email.froward.int.ebiederm.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220417210436.6203-7-singh.kuldeep87k@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:45:42PM -0500, Eric W. Biederman wrote:
-> Luis Chamberlain <mcgrof@kernel.org> writes:
+On Mon, 18 Apr 2022 02:34:36 +0530, Kuldeep Singh wrote:
+> Convert Qualcomm BAM DMA controller binding to DT schema format using
+> json schema.
 > 
-> > On Thu, Jul 21, 2022 at 04:16:17PM +0800, Zhang Yuchen wrote:
-> >> A user has reported a problem that the /proc/{pid} directory
-> >> creation timestamp is incorrect.
-> >
-> > The directory?
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+> v3:
+> - Address Krzysztof Comments
+> - qcom,ee as required property
+> - Use boolean type instead of flag
+> - Add min/max to qcom,ee
+> - skip clocks, as it's users are not fixed
+> ---
+> v2:
+> - Use dma-cells
+> - Set additionalProperties to false
+> ---
+>  .../devicetree/bindings/dma/qcom,bam-dma.yaml | 97 +++++++++++++++++++
+>  .../devicetree/bindings/dma/qcom_bam_dma.txt  | 52 ----------
+>  2 files changed, 97 insertions(+), 52 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
 > 
-> A bit of history that I don't think made it to the git log is that
-> procps uses the /proc/<pid> directory, to discover the uid and gid of the
-> process.
 
-Oy vei.
+This is the 11th most warned on (168 warnings) for missing a schema, so 
+I've implemented my only comment and applied. It seems neither this one 
+or the other attempt at converting are getting respun.
 
-In that sense, if *really* the directory for a PID all of a sudden
-disappear and reapper with another time stamp, I wonder if its
-possible to change the uid/gid.
-
-> I have memories of Albert Cahalan reporting regressions because I
-> had tweaked the attributes of proc in ways that I expected no
-> one would care about and caused a regression in procps.
-
-Thanks for bringing this little bit of history to light.
-
-> So it is not unreasonable for people to have used proc in surprising
-> ways.
-> 
-> I took a quick read through procps and it looks like procps reads
-> /proc/<pid>/stat to get the start_time of the process.
-
-OK so at least for that world of userspace *if* indeed the pid directory
-is changing time somehow (the exact way in which this can happen as
-reported is yet to be determined) the existing procps would *not* have
-been affected.
-
-If *procps* is not being used and someone is trying to re-implement it,
-and if indeed it is using the time of the inode, and *if* this really
-can change, then we have an explanation to the current situation.
-
-> Which leads us to this quality of implementation issue that the time
-> on the inode of a proc directory is the first time that someone read
-> the directory and observed the file.  Which does not need to be anything
-> at all related to the start time.
-
-Best I think we can do, is document this, and if we *want* to accept
-a *new mechanism*, add a kconfig entry so to distinguish this, so to
-not break old reliance on prior behaviour.
-
-> I think except for the symlinks and files under /proc/pid/fd and
-> /proc/pid/fdinfo there is a very good case for making all of the files
-> /proc/pid have a creation time of equal to the creation of the process
-> in question.
-
-A new kconfig entry could enable this. But that still would not
-prevent userspace from modifying file's creation time and I'm not
-sure why we'd want to change things.
-
-> Although the files under /proc/pid/task/ need to have
-> a time equal to the creation time of the thread in question.
-> 
-> Improving the quality of implementation requires caring enough to make
-> that change, and right now I don't.
-
-My biggest fear is breaking things.
-
-If we *really* are somehow modifying the timestamp of the directory
-inode though, I'd like to understand how that happened.
-
-> At the same time I would say the suggested patch is a bad idea.
-> Any application that breaks because we hard set the timestamp on a proc
-> file or directory to the beginning of time is automatically counts as a
-> regression.
-
-It is why I was seriously confused, why would someone purposely try to
-create a regression.
-
-> Since the entire point of the patch is to break applications that are
-> doing things wrong, aka cause regressions I don't think the patch
-> make sense.
-
-And hence my serious distaste for it.
-
-> So I would vote for understanding what the problem user is doing.  Then
-> either proc can be improved to better support users, or we can do
-> nothing.
-> 
-> Except for explaining the history and how people have legitimately used
-> implementation details of proc before, I am not really interested.  But
-> I do think we can do better.
-
-Thanks for the feedback.
-
-  Luis
+Rob

@@ -2,193 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97D957C3C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 07:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B28A57C3C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 07:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiGUFiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 01:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S230288AbiGUFit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 01:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiGUFiG (ORCPT
+        with ESMTP id S229569AbiGUFis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 01:38:06 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36BC30F67
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:38:04 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id l11so1019910ybu.13
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FEbY+UdcRJSElq0P7L4/KDdxeRCwEYJgFfHXwQLLZHc=;
-        b=cqxfxuP/yHlleNMSpmYXC7PWUYCrEL6GniuxeEutJEBNmUQFY/Y8BNMMJnaxOxlSC/
-         GOBK/mA0E5y4TARAIx0U8ls3D/a+vg/ePfuSawrj/h0XaO1NgLkNrqWD8WOCrm25dFMH
-         /lcew+foloMZQafT2P3xKiwUDnRrzF99mnddkvuSgYTm80lxw5JISX/XMAnWxadST75A
-         rj+bGx8rn91AOzOdJ5Z0+muULMvTu9eEWHCPY9zqiRk/AMsnhZfleR2D5pxAAtzuQsw1
-         mwqq3BolLbJikUDbaL0C/Zd54OPjnmyiyYmkaZvz6aPBTa6fJY7vnGUOojBU8UqcfLTr
-         9LVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FEbY+UdcRJSElq0P7L4/KDdxeRCwEYJgFfHXwQLLZHc=;
-        b=XKbgc7UjQ6Va2Xn6Ou5WXKGq0avy1Cbz1Z0qpTcWCnwjpk+RbgmVjt5fpUILL283L9
-         WsCwoNotDaYg0A6+yLF3o1kNH/4pDzyhYskBDbCKKBoihkY6vomXOS7qvnGWH8GU5rF8
-         BMF4S1uGOEoGCCXP89rbmKq86qw0t9sBD/ldSac+R5TnP2SIaiqSy1wXcF0+q4xV93FD
-         PdEU2njWTMaxn5xaY+Ax9AWuOVeSLNjK32Q2HrtZxGnm9zezmyJWy5ITIcMaQxjbRlc+
-         fygn7VaaxUINMzfNLdaNzDsFRsUCGrtrn6CApnW5ufG7O83+D9ua9EGMM9uvIdqJNnam
-         HZ2w==
-X-Gm-Message-State: AJIora/BvDukmDaeka68nWqYIAxc2NosA1LHwARGAnqX8nveoUdLEO+9
-        zWTrhu5IMX8tV3BRJa5RblwN5s4eXBG7aGO1hf+5
-X-Google-Smtp-Source: AGRyM1vyEl1OsxehVnO27Noj73kHPePI8DRK22VT54fEdRlVhvZiYc2fETtzZKbk635WCQhFzBLHr0AoiwBm/NCqSDU=
-X-Received: by 2002:a25:6a43:0:b0:66f:d259:7918 with SMTP id
- f64-20020a256a43000000b0066fd2597918mr33079789ybc.486.1658381884132; Wed, 20
- Jul 2022 22:38:04 -0700 (PDT)
+        Thu, 21 Jul 2022 01:38:48 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD7C30F67
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 22:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1658381922; bh=j+rA8aG+kQUXpuMbzX1iQ2xDoWFCvZ/8ALjoVajgI+U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=D+daAD6j6jHm2a4Gm1ueSnGVZ2mZkK6LnELuC6OQM4NdSQV6x3LWnNm2jQVqc2EuF
+         QBcAQMcKh79EuXkOSzx9xzntpY+DvcYU8xHoT2MLm/8N0/qKdqfdS9SSZIQNnrRGXr
+         OfWk5UE1U8Tf2oow1BeKF3KBW2OiY0FTFBO8hu1o=
+Received: from [100.100.35.250] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id A8D9A60104;
+        Thu, 21 Jul 2022 13:38:42 +0800 (CST)
+Message-ID: <4a8f5963-28f1-7439-9b52-7084d51707b2@xen0n.name>
+Date:   Thu, 21 Jul 2022 13:38:42 +0800
 MIME-Version: 1.0
-References: <20220720044144.90-1-xieyongji@bytedance.com> <20220720044144.90-6-xieyongji@bytedance.com>
- <CACGkMEti0LLi8s7V_9oCvSgj=-nNAEHLipnnwtH0_RTF75-XrQ@mail.gmail.com>
-In-Reply-To: <CACGkMEti0LLi8s7V_9oCvSgj=-nNAEHLipnnwtH0_RTF75-XrQ@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Thu, 21 Jul 2022 13:37:53 +0800
-Message-ID: <CACycT3vKFUdOSF7n79Cxt3pg0hF3uxdMjiN+=mNLwUJeVHtdxw@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] vduse: Support querying information of IOVA regions
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst <mst@redhat.com>, Liu Xiaodong <xiaodong.liu@intel.com>,
-        Maxime Coquelin <maxime.coquelin@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        songmuchun@bytedance.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
+ Gecko/20100101 Thunderbird/104.0a1
+Subject: Re: [PATCH] LoongArch: Remove unused header compiler.h
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jun Yi <yijun@loongson.cn>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20220721021127.1086628-1-yijun@loongson.cn>
+ <CAAhV-H4YL-8tj+-329tWguwxrPaL7DpiTT2QkXBPh_feT7M5jA@mail.gmail.com>
+ <dcfac9ad-d6e0-b157-4f11-cc2d3e2f1376@xen0n.name>
+ <CAAhV-H6RGZwKjV4Shm9fvH_XJ1+yqq9KpxkXNEWwOaPRmahSLQ@mail.gmail.com>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAAhV-H6RGZwKjV4Shm9fvH_XJ1+yqq9KpxkXNEWwOaPRmahSLQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 5:15 PM Jason Wang <jasowang@redhat.com> wrote:
+On 2022/7/21 11:22, Huacai Chen wrote:
+> Hi, Xuerui,
 >
-> On Wed, Jul 20, 2022 at 12:42 PM Xie Yongji <xieyongji@bytedance.com> wrote:
-> >
-> > This introduces a new ioctl: VDUSE_IOTLB_GET_INFO to
-> > support querying some information of IOVA regions.
-> >
-> > Now it can be used to query whether the IOVA region
-> > supports userspace memory registration.
-> >
-> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > ---
-> >  drivers/vdpa/vdpa_user/vduse_dev.c | 39 ++++++++++++++++++++++++++++++
-> >  include/uapi/linux/vduse.h         | 25 +++++++++++++++++++
-> >  2 files changed, 64 insertions(+)
-> >
-> > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-> > index eedff0a3885a..cc4a9a700c24 100644
-> > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> > @@ -1228,6 +1228,45 @@ static long vduse_dev_ioctl(struct file *file, unsigned int cmd,
-> >                                            umem.size);
-> >                 break;
-> >         }
-> > +       case VDUSE_IOTLB_GET_INFO: {
-> > +               struct vduse_iova_info info;
-> > +               struct vhost_iotlb_map *map;
-> > +               struct vduse_iova_domain *domain = dev->domain;
-> > +
-> > +               ret = -EFAULT;
-> > +               if (copy_from_user(&info, argp, sizeof(info)))
-> > +                       break;
-> > +
-> > +               ret = -EINVAL;
-> > +               if (info.start > info.last)
-> > +                       break;
-> > +
-> > +               if (!is_mem_zero((const char *)info.reserved,
-> > +                                sizeof(info.reserved)))
-> > +                       break;
-> > +
-> > +               spin_lock(&domain->iotlb_lock);
-> > +               map = vhost_iotlb_itree_first(domain->iotlb,
-> > +                                             info.start, info.last);
-> > +               if (map) {
-> > +                       info.start = map->start;
-> > +                       info.last = map->last;
-> > +                       info.capability = 0;
-> > +                       if (domain->bounce_map && map->start >= 0 &&
-> > +                           map->last < domain->bounce_size)
->
-> We don't check map->start and map->last in GET_FD, any reason for
-> those checks here?
->
+> On Thu, Jul 21, 2022 at 11:17 AM WANG Xuerui <kernel@xen0n.name> wrote:
+>> Hi YI Jun and Huacai,
+>>
+>> On 2022/7/21 10:52, Huacai Chen wrote:
+>>> Hi, Jun,
+>>>
+>>> On Thu, Jul 21, 2022 at 10:11 AM Jun Yi <yijun@loongson.cn> wrote:
+>>>> Loongarch not used arch-specific compiler.h
+>>> I'm not sure whether compiler.h will be used in future. If it will be
+>>> used, I want to keep it as is. Xuerui, what do you think about it?
+>> I surveyed all the existing arch compiler.h in the tree:
+>>
+>> $ find ./arch -name compiler.h
+>> ./arch/alpha/include/asm/compiler.h
+>> ./arch/alpha/include/uapi/asm/compiler.h
+>> ./arch/arm/include/asm/compiler.h
+>> ./arch/arm64/include/asm/compiler.h
+>> ./arch/mips/include/asm/compiler.h
+>> ./arch/loongarch/include/asm/compiler.h
+>>
+>> Of all these occurrences:
+>>
+>> - alpha needs to ensure a certain insn is being emitted from time to
+>> time, with plain C constructs (or built-ins) on compiler versions with
+>> said support, falling back to inline asm otherwise;
+>> - arm and arm64 both need some inline assembly help (of different sort),
+>> with arm64 stuffing some pointer authentication helpers into this file too;
+>> - mips, which is obviously what the loongarch version is based on, needs
+>> (1) a kludge for older compilers to fix delay slot filling around
+>> __builtin_unreachable, (2) definitions for explicit arch level
+>> selection. There is also the historical GCC_OFF_SMALL_ASM() constraint
+>> definition that was rendered redundant by commit 4abaacc704729 ("MIPS:
+>> remove GCC < 4.9 support").
+>>
+>> For loongarch, the "ZC" constraint (I don't think it was a coincidence
+>> BTW) should be usable for all present and future hardware, so I do think
+>> the GCC_OFF_SMALL_ASM() here is redundant. We may want to remove the
+>> mips one too. And the arch level thing is not currently needed either,
+>> future revisions to the LoongArch ISA should be largely backwards
+>> compatible, so it could be a long time before such explicit selection of
+>> arch level is necessary, for exact control over emitted insn.
+>>
+>> So overall, I'm in favor of removing this header for now.
+> Have you considered the new relocation types will be added in the near
+> future? I think we need compiler.h at that time.
 
-Since we only support userspace memory registration for the bounce
-buffer region. We don't need to set VDUSE_IOVA_CAP_UMEM_SUPPORT for
-any other region.
+I assume you mean the proposal being discussed at [1] [2] and [3].
 
-> > +                               info.capability |= VDUSE_IOVA_CAP_UMEM_SUPPORT;
->
-> Not a native speaker, but I think CAP is duplicated with SUPPORT.
->
-> Something like VDUSE_IOVA_CAP_UMEM might be better.
->
+For new reloc types that affect module loading, asm/elf.h and 
+kernel/module.c need modification to add awareness, but this doesn't 
+involve compiler.h. The kernel image itself is not affected.
 
-OK.
+There is also the case of building LoongArch kernel sources without 
+support for the new reloc types, but on a newer compiler that emits the 
+new-style reloc records by default. In this case, a switch reverting the 
+compiler to the old-style relocs is needed in CFLAGS, but (1) not all 
+essential support are merged for LoongArch so practically we don't need 
+to care about non-kernel-ABI compatibility at this time, and (2) CFLAGS 
+tweaks don't involve compiler.h either.
 
-> > +               }
-> > +               spin_unlock(&domain->iotlb_lock);
-> > +               if (!map)
-> > +                       break;
-> > +
-> > +               ret = -EFAULT;
-> > +               if (copy_to_user(argp, &info, sizeof(info)))
-> > +                       break;
-> > +
-> > +               ret = 0;
-> > +               break;
-> > +       }
-> >         default:
-> >                 ret = -ENOIOCTLCMD;
-> >                 break;
-> > diff --git a/include/uapi/linux/vduse.h b/include/uapi/linux/vduse.h
-> > index 9885e0571f09..720fb0b6d8ff 100644
-> > --- a/include/uapi/linux/vduse.h
-> > +++ b/include/uapi/linux/vduse.h
-> > @@ -233,6 +233,31 @@ struct vduse_iova_umem {
-> >  /* De-register the userspace memory. Caller should set iova and size field. */
-> >  #define VDUSE_IOTLB_DEREG_UMEM _IOW(VDUSE_BASE, 0x19, struct vduse_iova_umem)
-> >
-> > +/**
-> > + * struct vduse_iova_info - information of one IOVA region
-> > + * @start: start of the IOVA region
-> > + * @last: last of the IOVA region
-> > + * @capability: capability of the IOVA regsion
-> > + * @reserved: for future use, needs to be initialized to zero
-> > + *
-> > + * Structure used by VDUSE_IOTLB_GET_INFO ioctl to get information of
-> > + * one IOVA region.
-> > + */
-> > +struct vduse_iova_info {
-> > +       __u64 start;
-> > +       __u64 last;
-> > +#define VDUSE_IOVA_CAP_UMEM_SUPPORT (1 << 0)
-> > +       __u64 capability;
-> > +       __u64 reserved[3];
-> > +};
-> > +
-> > +/*
-> > + * Find the first IOVA region that overlaps with the range [start, last]
-> > + * and return some information on it. Caller should set start and last fields.
-> > + */
-> > +#define VDUSE_IOTLB_GET_INFO   _IOW(VDUSE_BASE, 0x1a, struct vduse_iova_info)
->
-> This should be _IOWR() ?
->
+[1]: https://sourceware.org/pipermail/binutils/2022-July/121849.html
+[2]: https://sourceware.org/pipermail/binutils/2022-July/121933.html
+[3]: https://github.com/loongson/LoongArch-Documentation/pull/57
 
-Will fix it.
-
-Thanks,
-Yongji

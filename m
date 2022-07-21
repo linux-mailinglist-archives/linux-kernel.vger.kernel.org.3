@@ -2,92 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2E057C93A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B11C57C93D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiGUKl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S232827AbiGUKmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiGUKl5 (ORCPT
+        with ESMTP id S232869AbiGUKmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:41:57 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9982397;
-        Thu, 21 Jul 2022 03:41:54 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id m16so929178qka.12;
-        Thu, 21 Jul 2022 03:41:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZM0L7KaMSxOM/wakTGUefF7pMc1InjFxOidEaSTgOKI=;
-        b=l7SEZv1MbWIF2XINR7muGIZED01C62l2p3jelI42OGjyeI9qQlFbNhsVItbVOZZ3NE
-         DqDvzavLDaWFrRG6NnVCK14glNUT1XJgA37H7+pReeyBj5GkI4NqAxV7JmWptLv34uat
-         da81wEn4Q+NW8xgrB2IQX1LYi0qA8M7qI+FKSPgVCYlKrSHO6fGaHj/71nDcQuAPRFXc
-         78vLsJ84LodZgOD6yOGyUH4ZCBzu+/Q0GdDs91zFj/dU/MoEvhFShUI3O6pvV4eYjWlu
-         f6BbJpeZHyGDHaPdICvBZk+gk3tfACjyFRPNbA7s9m9b52+BDVHMheQMpdtGCOOZtVrF
-         5YfA==
-X-Gm-Message-State: AJIora/46cWTOFTnp4NMx4m5mk7mX5GtmKeYCVc4ulsRCvw3pBiSJbrw
-        2I/6jjFH6hJuPHsOIB3pNuz2pwaAYTbcPw==
-X-Google-Smtp-Source: AGRyM1sz/sPTdTsxLBMziz+RAB/CS0GAoTA5sD6ylXO98epGcXFNriU3nxEAn1BnIyO0jQ+07Unoyg==
-X-Received: by 2002:a05:620a:4444:b0:6b5:f7a0:ff50 with SMTP id w4-20020a05620a444400b006b5f7a0ff50mr10831185qkp.211.1658400113945;
-        Thu, 21 Jul 2022 03:41:53 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id bv15-20020a05622a0a0f00b0031ecce4077fsm1085036qtb.31.2022.07.21.03.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 03:41:53 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31e7055a61dso12418397b3.11;
-        Thu, 21 Jul 2022 03:41:53 -0700 (PDT)
-X-Received: by 2002:a81:6088:0:b0:31e:79fd:3dfa with SMTP id
- u130-20020a816088000000b0031e79fd3dfamr3528216ywb.47.1658400113296; Thu, 21
- Jul 2022 03:41:53 -0700 (PDT)
+        Thu, 21 Jul 2022 06:42:07 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E497481C3;
+        Thu, 21 Jul 2022 03:42:06 -0700 (PDT)
+Received: from [192.168.88.254] (unknown [125.160.97.11])
+        by gnuweeb.org (Postfix) with ESMTPSA id C4E3E7E24B;
+        Thu, 21 Jul 2022 10:42:03 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1658400125;
+        bh=RCXThBtAq0TfDuJT7F2JB16g3t+iEe5qppWuFWN4zH4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=R9UlvmChjdYvJMkWmizigTUkgmR24APhNXRyZGXeI/LRC8O2qON5i9UORYgIgOHCa
+         yyhh3fNz6/QggYAB0twPiFvc/FxBxjBefGfHOCrK/8PlC6BkVVagS2/fyV7DOnPnB4
+         sGrTc/UtmHbD6xJfMeKMetQZdqHuH/ciCimKEEK/X4K7lvxMdDB9LLRO5BECqw/XNF
+         89/WNMljteFCZ98waahwYLDseNb8tR5dOBw+kdTVzZJ3xALjDj7TpM/gZogPJp1XLn
+         h4GAtapN1daOgJQX4YYfPqkYZOThQ5b7PYsr67kk990QTrnMjMqatyfJ37pBgSdJvP
+         AvlLOL5OJ+/5w==
+Message-ID: <beae1b3b-eec3-1afb-cdf9-999a1d161db4@gnuweeb.org>
+Date:   Thu, 21 Jul 2022 17:41:52 +0700
 MIME-Version: 1.0
-References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220718195651.7711-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220718195651.7711-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Jul 2022 12:41:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXiM7S-qB-dgsvP8CfN81SFYJoWfNVyD=4f-TVv6TqAYA@mail.gmail.com>
-Message-ID: <CAMuHMdXiM7S-qB-dgsvP8CfN81SFYJoWfNVyD=4f-TVv6TqAYA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] arm64: dts: renesas: r9a07g054: Update pinctrl node
- to handle GPIO interrupts
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: Linux 5.19-rc7 liburing test `poll-mshot-overflow.t` and
+ `read-write.t` fail
+Content-Language: en-US
+To:     Dylan Yudaken <dylany@fb.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Fernanda Ma'rouf <fernandafmr12@gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+References: <2709ed98-6459-70ea-50d4-f24b7278fb24@gnuweeb.org>
+ <3489ef4e810b822d6fdb0948ef7fdaeb5547eeba.camel@fb.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <3489ef4e810b822d6fdb0948ef7fdaeb5547eeba.camel@fb.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 9:57 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add required  properties in pinctrl node to handle GPIO interrupts.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 7/21/22 4:48 PM, Dylan Yudaken wrote:
+> What fs are you using? testing on a fresh XFS fs read-write.t works for
+> me
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.21.
+I am using btrfs.
 
-Gr{oetje,eeting}s,
+After I got your email, I tried to run the test on an ext4 directory and
+it works fine. But fails on a btrfs directory.
 
-                        Geert
+Any idea why does the test fail on a btrfs fs?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-- 
+Ammar Faizi
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

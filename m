@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C892E57C1C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F8D57C1C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiGUAxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S230526AbiGUAyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiGUAxP (ORCPT
+        with ESMTP id S229608AbiGUAyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:53:15 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7084BD25
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:53:14 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26L0p3Uv026464;
-        Thu, 21 Jul 2022 00:53:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=corp-2022-7-12;
- bh=i+IZMfd43v2HyytbYcgR9m7fH7TGbn8+/9Seg3i7X/4=;
- b=PMIAb/iSeFMUp3kEGHcHufV9x4m73WrzDec19Z2JxfTYnorcRl9j5fXhyo7Dj3CVqOFq
- tWAETmaY/yN2MQn+g5+V/UPozpDinOO6yq3YbEb3sd1RNkiYwCtsiDsF3X+oifYAJFtR
- qCzwii69QlVM+SEaF84WbpHsEW7duwzwZi+zaUKN+8dPwBbdQbXC4fUzZyBotu1elKG/
- cYnR0pm8mKVeLgcNayEuvFkfzzZGRNtJpaY4Nq3i+J6LqZ5LKj5ws3mVr1GG9nn8Ejo5
- xQVkhmFDq4DrW0NoAR5i9wjr1WbM7xDPJ1jr9D3lzTSuVt4j8vhxMS59mC8aEX3LHScf HQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbn7aavj4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Jul 2022 00:53:05 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26KMGte1007889;
-        Thu, 21 Jul 2022 00:53:04 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2102.outbound.protection.outlook.com [104.47.70.102])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1k4qbgg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Jul 2022 00:53:04 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZbZSvdg9plv08rEjLupVQkY1fDEKfEr/h/SmBM6MBsasFIcMn/KkbPY1/mFCgp5g3R4RgnnOaV99ka1Uom8XfA6xzJE5JuayUwjdOxH4i8EiOdDfcRzKCGI80SDhPWe9T804KF5iUm2MvLcgom43+hYG7YGHL4dtv9m56Ja1O+j6qMFI4oRWms1Mo//SO9zn7K9fMZjgmrlbzNf+1WftzBPy53CniQzkjhrFgsnSnOfxyE12AXil64M+OV4N3yUK6fWnJa0I+LftKAsSzoeICwPkI/iMRSqBbOZPHcrLvm6B17lv7Xu87oFoAV3pKFtOBKFMyulJHoKXOE84J6KssQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i+IZMfd43v2HyytbYcgR9m7fH7TGbn8+/9Seg3i7X/4=;
- b=bectsJho90xApSWss46jIbPgxYDkTEdRJ451X+widZOEH0qcio/Zw8H5+xthOdDFNdrb6pmRpUpksPkH3QsFnnXh8+GV3GMACohipi01/XI+JCIL+L7IvyMiVaHv5EY7CXRezT+eoJ/kWRIA1YresZu52KhjaqxL/210+XJqaMXbnk/WIKhHsE7PRI7vBAG3k3WbfAA/ysDVd9OOWjmi5jyqGNvSWKee0u+exgYU52Zx1YBKBsJweITu3JpUVM8znQy0KeaMuzknqsfRcuxGxl/tLC1mkWvsbDAJx/UPhi8JD+NCFyTm1o78xdxvydPQudHPTvieAwtm2xBSTbZ42Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 20 Jul 2022 20:54:05 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9293C4BD25;
+        Wed, 20 Jul 2022 17:54:04 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id f14so311213qkm.0;
+        Wed, 20 Jul 2022 17:54:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i+IZMfd43v2HyytbYcgR9m7fH7TGbn8+/9Seg3i7X/4=;
- b=GEIppFfHAxsf1YPk3Rxg6kjrQWKLWDePwQSkDsfLTFV+SvROtmphYDovWUY1Kr9vCqrO6WoPOLrcTp3VLZpaNwO5vcxPatuCe5on59ZGSTt/CeGERg+aeqKYfJNG/92/4XUB0amUl/sEaYVa4jMDehOIglrKZBlBDr4jMgyqqJM=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by MN2PR10MB3392.namprd10.prod.outlook.com (2603:10b6:208:131::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.21; Thu, 21 Jul
- 2022 00:53:02 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::c4d1:edc3:7d21:7c68]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::c4d1:edc3:7d21:7c68%6]) with mapi id 15.20.5438.024; Thu, 21 Jul 2022
- 00:53:02 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>
-CC:     Yu Zhao <yuzhao@google.com>
-Subject: [PATCH] maple_tree: Do not inline write slow path
-Thread-Topic: [PATCH] maple_tree: Do not inline write slow path
-Thread-Index: AQHYnJw6aOsbtqNHaEaswARV7Qt6zg==
-Date:   Thu, 21 Jul 2022 00:53:02 +0000
-Message-ID: <20220721005237.377987-1-Liam.Howlett@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.35.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5fc16c88-f9b3-4282-b1e1-08da6ab35d67
-x-ms-traffictypediagnostic: MN2PR10MB3392:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BJfhEdFf5o0T9g+s/JTpbU7nsb4ueUMKj39Zw5hT8DqvENkSA9MswEAuLZY2wiQLooL2KZtpxiHoJpAlk48ns77qCFaULg5dQENSxghhqg3oajlF9UyxqU3mgCA2ZUTBMePDmJy2CPCy/EUnOMOnAD2w2euS4zODTJiF0rBwxmtvJpjRP9lWMAdiJ02PArQqPvvR66fC3gTa4ETbhu+DI0JXIcvo5LmhmwbNk8p20pMFMaRZ38IwAubf8QnXxc+w8/E4Qdj9SD7jHUdTNjIH4y0fgcVfwOu6RhQd6Gt6aVu5RfODH40W/pmKHbcJeJXUmMAty8DJ4IT0nFPL7maO5+uBV/0alh5FBahpmPCBly0I24UzfalmQK7cXi81g6ocrDcJrfE1tOBqGWPzIhYNI5fWqGjIr1KCpAzL7sBllJlbZmlxDgVcDD5Suq3WWplz/PuSPD+gVro4ELy2sCo4OzYNa0OE9srd5xR8iv+6NuXYwQXDYdjriHOV2vEujCAw0e2HggNQdG1LDYiZ9xVUaSiEnUx2gJUXQm/U+ekIrKy3+cuXLdBrIFIHS3sEMVoaC+gduCsvLP20UZVKQHARi5KHKgwuiGLrN2+9V/L/dtjxg+6bXFPTKuKJMu+AC6KM0Y4Vm8Xe+azn8fmAhilneO1yjk3sFSdHJSZuvUlW0fsjfbP+VUP3eVjG+XP6vUX1/K85iysF8+I0NJJhGr01YJZXrdAq7UP2RuyUPslHCvqzVZ3p+FMjfdG4VUrTJMTwPD2iFyeEgdFUQ1KB8sDhTXs/Xxjijl2kU1xd2PRA0Zkw9KM+P4sdT3fZSzc6ne+4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(396003)(366004)(346002)(39860400002)(66946007)(4326008)(8936002)(76116006)(64756008)(316002)(5660300002)(2906002)(66556008)(44832011)(91956017)(122000001)(83380400001)(8676002)(66476007)(71200400001)(38070700005)(6512007)(86362001)(41300700001)(36756003)(66446008)(38100700002)(26005)(186003)(1076003)(478600001)(2616005)(6486002)(110136005)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?cWHdHkYVz3SBnyvX0TAkbFB4vnxxNs/MDwv9U4pBBtL9gOmJySHO5X9DQq?=
- =?iso-8859-1?Q?b5/6Fux295d9ThA2PeIhJNEMTICX5fLIwmb85g9E0SBKve9I/fsssqjqzB?=
- =?iso-8859-1?Q?f1v9roNwRyEnn+JGDJR7mOK0NN17iGVYamqLd5k/TEmmwUs1DBUen66z7y?=
- =?iso-8859-1?Q?QLOHP1a6NA2e5YUPITs+VI6uWkPo+ro7NEci/D1K7nYhzpIH6dLyDIMKfm?=
- =?iso-8859-1?Q?dy7old1AEnT3nKEo3vUGwi1CFaIbhSLu4cMUk/0P//kTs7Urdn1oaZ8QQM?=
- =?iso-8859-1?Q?IIvNmPeB0RngPp+RcQQExSiLGEUl6KVvOnQvborOPAwrqW59xBndsGfN9p?=
- =?iso-8859-1?Q?pFxri4sPA+6yA2SUmMFlYbyKX2kRTr5lHUllxFkvCqfdDtfcwFyOYZUfMc?=
- =?iso-8859-1?Q?88o7QVZGBUTo35J2r7MVXPTQqd5fz3t/f3eRvx1ApPbG+quFhP2GqAarUb?=
- =?iso-8859-1?Q?wzcUFfVTJA5BP8pxF1HMGXwNLoG/z4AQ7F4JPnsfjhFaabGL6CktEy8OOm?=
- =?iso-8859-1?Q?fa9UD9igjwJtVlTGQzSyZRttehxCOt0DWIlqQUr+jpFa/c6LrNYUi3jfI0?=
- =?iso-8859-1?Q?FdXk//YI5+qO1cI562y4pXJOF/9RqvT1W/bZMeLx1sYqgVxrRxFn2uV1bH?=
- =?iso-8859-1?Q?XS3MB24ZloWkWv7g6fQDOVLqgQSrPQeBdkFgToWMK3yLLSdBfMqraGqLwq?=
- =?iso-8859-1?Q?yKcaD710IwMc8Bmcsc4BbvZDHq/ryu74bolTG9H/+DWiqd05TNBPcF5pNH?=
- =?iso-8859-1?Q?Hm47r+0uXkCmMDCwTa1Nz8S/27RrUiqQTHT+U5yQ6vACjb0dnSSjsqVjv8?=
- =?iso-8859-1?Q?Qo4ZHs50+4SOjVVtUIeZDyA/i96LloQTd4kyPfmBTcVLCztFDrlwFgEzb4?=
- =?iso-8859-1?Q?IwocvVDm/LfgCqujKo0aYA5XPM+nT/fWAkt7hUAKLMuP15WytFHgRoNrVv?=
- =?iso-8859-1?Q?Dxf9WV3Ym9mdxS51GCDdDqQLgv2YstuYIyXXhdSNoyiAwVzLEaNZef24kr?=
- =?iso-8859-1?Q?RaSplWVD6to6dH3OhmnBZ8cO9gnWX7LpM3zCQze9IxXmxGRy6kTXRODDzY?=
- =?iso-8859-1?Q?nWUbuSeQTBtC4XVLTzHoOc0zHPV7zAWpPs4hyZPxzTQPN7nLWDDV6wyQ8Z?=
- =?iso-8859-1?Q?Y02m8smBOYWLmJD16XtMbhfk8H6aX2uxkIOr7tmRPXiCvrmIE94wM3BawU?=
- =?iso-8859-1?Q?2xyq/TflHSruA4ZbJeVpIQsEjLoM13GW2vbQHB0NEY74CynppucM1raHXW?=
- =?iso-8859-1?Q?I1dqPWAW5uJ4eeSNGFPbz1y+IT8CqesyN2k4NdrOZF54XByJ7UyIv0hYM0?=
- =?iso-8859-1?Q?57mVCjRCUVGCOX3kLFvQ0Dy5wxVEtkow6Ys3LDxvuJbN6TE1BJaQDaBA1X?=
- =?iso-8859-1?Q?Xda/lkS3crm+sY1DYdihb52Etd4WKOWfL2soXYT1sM9lP5OdIQFXap5SqQ?=
- =?iso-8859-1?Q?FyBrb9u7y9Kxa2gZH+ELDqkdjoT5bo3Xtgd8P+uAEkWwPRem1zOpeR5sfp?=
- =?iso-8859-1?Q?aVIDEcYhAK9cS8bXYB3UZXEbx/5srVVF04wjb6fL9bFwYVCccOwaGRMxcd?=
- =?iso-8859-1?Q?Ju8FfCqXA1QIOzZwKofgLtnCt4C6xi9drsoL1ApSrO1CO7W7aWfhQKpnob?=
- =?iso-8859-1?Q?oGHPQE72UqVKeP3uEGro1NLEYlvq9B4rmqw18Me8WQn/hT5ofrlnwqIw?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=feedback-id:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t3lLrosI1/cNYKOYojGU7UNK7R9m4ERBIOUqoHDIgNU=;
+        b=pit3ukjGiNq5ITD+Tp90qAtrZJP3BfsyTlpP4qYYMetwKhDJv0F/aQ+Zh5va7yt41x
+         NPpkCZ9hyjSE0Xb1EKhsvKaF9yzq911DYYEzAQ1gnWIL8Zc2EUijaAssY+1PxdMq64an
+         bh0pw/JYTI/FW/aZwN1iB3KzleLjfMZLMe4aT4L5927UMgWxRH1BFQOg1wSODcu1xE2p
+         skWdiZ6/Qsbx/RG7lbYnfmNb/kDQY7MWsGFaTpn0kP3OjlMIlVpWBF0tUPwfPTHOUA5Z
+         j0aW0fkJzzqiy313ESk9g0bA+wR00duk9gW+nWSFql6LzQUP0iTFHwA5DsAaNvRmburB
+         YGfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=t3lLrosI1/cNYKOYojGU7UNK7R9m4ERBIOUqoHDIgNU=;
+        b=FCo98yDZ0JmkVUHeXDwXr2rt8j2rEuU0jTu3iqSZhS6t/9QlAgTIsZTc2qu1hi+Mgp
+         fS6zMSaAau84tX4NfKqAoPzITMA/m+OOJJAPo0C93Vik7IyMm0fQHCjPZ6hxrF6IaY+v
+         oA7WIklAXN3H2kZBZCayVey65XVuhrzsD3qbFWMcsBWTiY2opbOZR8LUQP9x+Ng692O6
+         M74p9vgHvBVzJDl0Q70rzzVMZ29juy07aG6/Yj/Pcb1Kwg1qQj4KgELDmli+JiAsiKER
+         pz9OwUSDDvnUrSbumZyGD5loOIMOwwrxlyfEGVwXBjx8WjRzLd7F3vfdDr3NxNCRsoCy
+         +q7A==
+X-Gm-Message-State: AJIora+GSLDtWD551yor1vo20d4qrt6OGTC/EQtQzGPPJFfw5OTKAmFx
+        T2pC2BSupBj/07x1iMuhv80=
+X-Google-Smtp-Source: AGRyM1vmxQfv+X64OfAMStLLu3Ax1kE9S4gCpd3gwU/qBz985mSddw8Lk2Y6oW5dgTIwEXVFBWUdFw==
+X-Received: by 2002:a37:644b:0:b0:6b5:d62f:7ed with SMTP id y72-20020a37644b000000b006b5d62f07edmr17096802qkb.143.1658364843672;
+        Wed, 20 Jul 2022 17:54:03 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05622a130900b0031efc91644fsm460293qtk.33.2022.07.20.17.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 17:54:03 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 80DD027C0054;
+        Wed, 20 Jul 2022 20:54:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 20 Jul 2022 20:54:02 -0400
+X-ME-Sender: <xms:qaPYYgYi8jeYRe4glzw7zS5686LJUjmd-TCDJDwKBGV9FrJUDZgl8Q>
+    <xme:qaPYYrb8JzZPEseTtGvNriPKwC7l-QEF7IR6LtaKRDYEUOJ1NroeHgqaLLSC03tns
+    vsLsMOfoWzMFoF-ZA>
+X-ME-Received: <xmr:qaPYYq91Or_jQhTPyS5O65LcF2vI5auyr-UVRjWL5rvcjsv3JoVsvxmHdvAHZw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudelfedgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvfevuffkfhggtggu
+    jgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfh
+    gvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpeegtdeftdevudfhtdeh
+    udfhheehtdejleejieetudfgleehjeeiudelleekudfhudenucffohhmrghinhepkhgvrh
+    hnvghlrdhorhhgpdhgohhoghhlvgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrsh
+    honhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghn
+    gheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:qaPYYqrB1nXFHL6t5P3b77HTg0L-l-tVPeHur7QT0gkXNLuChtSV8A>
+    <xmx:qaPYYrr1ak-5vWm6SMuec_pIMtqyIZGZ0AYXlSb2cQXj_xd6dfkRQw>
+    <xmx:qaPYYoRYrj3c1D5nZUXRTFzPqnL65kYUgKl4SzDPplwArkv98-S8Kw>
+    <xmx:qqPYYvcnvi08dU3KhyI3V0S83qKDc8O7UoXC3W-awBh3og9DCfHfPw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 20 Jul 2022 20:54:01 -0400 (EDT)
+Date:   Wed, 20 Jul 2022 17:53:38 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Brian Foster <bfoster@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Ian Kent <raven@themaw.net>
+Subject: Re: [PATCH rcu 04/12] rcu: Switch polled grace-period APIs to
+ ->gp_seq_polled
+Message-ID: <Ytijki0fkkyKaD9u@boqun-archlinux>
+References: <20220620224943.GA3841634@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225128.3842050-4-paulmck@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fc16c88-f9b3-4282-b1e1-08da6ab35d67
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 00:53:02.4801
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KQA70kzRFiPQxGMmk52/zQJy9Vh37Tjf6H9iNDgCuu/bRvuA3wES0YqqheZATmPOwpoPqe1m4rSy0iG7br0/5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3392
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-20_12,2022-07-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 phishscore=0
- mlxlogscore=999 spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207210002
-X-Proofpoint-ORIG-GUID: RYnVkdP8zCCKMdDyqc1KQ2oL4nZvxhVL
-X-Proofpoint-GUID: RYnVkdP8zCCKMdDyqc1KQ2oL4nZvxhVL
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620225128.3842050-4-paulmck@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -150,60 +102,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having the slow path inlined causes too much stack usage.  Create new
-function mas_wr_bnode() to write a big node into the tree
+Hi Paul,
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- lib/maple_tree.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+On Mon, Jun 20, 2022 at 03:51:20PM -0700, Paul E. McKenney wrote:
+> This commit switches the existing polled grace-period APIs to use a
+> new ->gp_seq_polled counter in the rcu_state structure.  An additional
+> ->gp_seq_polled_snap counter in that same structure allows the normal
+> grace period kthread to interact properly with the !SMP !PREEMPT fastpath
+> through synchronize_rcu().  The first of the two to note the end of a
+> given grace period will make knowledge of this transition available to
+> the polled API.
+> 
+> This commit is in preparation for polled expedited grace periods.
+> 
+> Link: https://lore.kernel.org/all/20220121142454.1994916-1-bfoster@redhat.com/
+> Link: https://docs.google.com/document/d/1RNKWW9jQyfjxw2E8dsXVTdvZYh0HnYeSHDKog9jhdN8/edit?usp=sharing
+> Cc: Brian Foster <bfoster@redhat.com>
+> Cc: Dave Chinner <david@fromorbit.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Ian Kent <raven@themaw.net>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  kernel/rcu/tree.c | 90 +++++++++++++++++++++++++++++++++++++++++++++--
+>  kernel/rcu/tree.h |  2 ++
+>  2 files changed, 89 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 46cfceea87847..637e8f9454573 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1775,6 +1775,78 @@ static void rcu_strict_gp_boundary(void *unused)
+>  	invoke_rcu_core();
+>  }
+>  
+> +// Has rcu_init() been invoked?  This is used (for example) to determine
+> +// whether spinlocks may be acquired safely.
+> +static bool rcu_init_invoked(void)
+> +{
+> +	return !!rcu_state.n_online_cpus;
+> +}
+> +
+> +// Make the polled API aware of the beginning of a grace period.
+> +static void rcu_poll_gp_seq_start(unsigned long *snap)
+> +{
+> +	struct rcu_node *rnp = rcu_get_root();
+> +
+> +	if (rcu_init_invoked())
+> +		raw_lockdep_assert_held_rcu_node(rnp);
+> +
+> +	// If RCU was idle, note beginning of GP.
+> +	if (!rcu_seq_state(rcu_state.gp_seq_polled))
+> +		rcu_seq_start(&rcu_state.gp_seq_polled);
+> +
+> +	// Either way, record current state.
+> +	*snap = rcu_state.gp_seq_polled;
+> +}
+> +
+> +// Make the polled API aware of the end of a grace period.
+> +static void rcu_poll_gp_seq_end(unsigned long *snap)
+> +{
+> +	struct rcu_node *rnp = rcu_get_root();
+> +
+> +	if (rcu_init_invoked())
+> +		raw_lockdep_assert_held_rcu_node(rnp);
+> +
+> +	// If the the previously noted GP is still in effect, record the
+> +	// end of that GP.  Either way, zero counter to avoid counter-wrap
+> +	// problems.
+> +	if (*snap && *snap == rcu_state.gp_seq_polled) {
+> +		rcu_seq_end(&rcu_state.gp_seq_polled);
+> +		rcu_state.gp_seq_polled_snap = 0;
+> +	} else {
+> +		*snap = 0;
+> +	}
+> +}
+> +
+> +// Make the polled API aware of the beginning of a grace period, but
+> +// where caller does not hold the root rcu_node structure's lock.
+> +static void rcu_poll_gp_seq_start_unlocked(unsigned long *snap)
+> +{
+> +	struct rcu_node *rnp = rcu_get_root();
+> +
+> +	if (rcu_init_invoked()) {
+> +		lockdep_assert_irqs_enabled();
+> +		raw_spin_lock_irq_rcu_node(rnp);
+> +	}
+> +	rcu_poll_gp_seq_start(snap);
+> +	if (rcu_init_invoked())
+> +		raw_spin_unlock_irq_rcu_node(rnp);
+> +}
+> +
+> +// Make the polled API aware of the end of a grace period, but where
+> +// caller does not hold the root rcu_node structure's lock.
+> +static void rcu_poll_gp_seq_end_unlocked(unsigned long *snap)
+> +{
+> +	struct rcu_node *rnp = rcu_get_root();
+> +
+> +	if (rcu_init_invoked()) {
+> +		lockdep_assert_irqs_enabled();
+> +		raw_spin_lock_irq_rcu_node(rnp);
+> +	}
+> +	rcu_poll_gp_seq_end(snap);
+> +	if (rcu_init_invoked())
+> +		raw_spin_unlock_irq_rcu_node(rnp);
+> +}
+> +
+>  /*
+>   * Initialize a new grace period.  Return false if no grace period required.
+>   */
+> @@ -1810,6 +1882,7 @@ static noinline_for_stack bool rcu_gp_init(void)
+>  	rcu_seq_start(&rcu_state.gp_seq);
+>  	ASSERT_EXCLUSIVE_WRITER(rcu_state.gp_seq);
+>  	trace_rcu_grace_period(rcu_state.name, rcu_state.gp_seq, TPS("start"));
+> +	rcu_poll_gp_seq_start(&rcu_state.gp_seq_polled_snap);
+>  	raw_spin_unlock_irq_rcu_node(rnp);
+>  
+>  	/*
+> @@ -2069,6 +2142,7 @@ static noinline void rcu_gp_cleanup(void)
+>  	 * safe for us to drop the lock in order to mark the grace
+>  	 * period as completed in all of the rcu_node structures.
+>  	 */
+> +	rcu_poll_gp_seq_end(&rcu_state.gp_seq_polled_snap);
+>  	raw_spin_unlock_irq_rcu_node(rnp);
+>  
+>  	/*
+> @@ -3837,8 +3911,18 @@ void synchronize_rcu(void)
+>  			 lock_is_held(&rcu_lock_map) ||
+>  			 lock_is_held(&rcu_sched_lock_map),
+>  			 "Illegal synchronize_rcu() in RCU read-side critical section");
+> -	if (rcu_blocking_is_gp())
+> +	if (rcu_blocking_is_gp()) {
+> +		// Note well that this code runs with !PREEMPT && !SMP.
+> +		// In addition, all code that advances grace periods runs
+> +		// at process level.  Therefore, this GP overlaps with other
+> +		// GPs only by being fully nested within them, which allows
+> +		// reuse of ->gp_seq_polled_snap.
+> +		rcu_poll_gp_seq_start_unlocked(&rcu_state.gp_seq_polled_snap);
+> +		rcu_poll_gp_seq_end_unlocked(&rcu_state.gp_seq_polled_snap);
+> +		if (rcu_init_invoked())
+> +			cond_resched_tasks_rcu_qs();
+>  		return;  // Context allows vacuous grace periods.
+> +	}
+>  	if (rcu_gp_is_expedited())
+>  		synchronize_rcu_expedited();
+>  	else
+> @@ -3860,7 +3944,7 @@ unsigned long get_state_synchronize_rcu(void)
+>  	 * before the load from ->gp_seq.
+>  	 */
+>  	smp_mb();  /* ^^^ */
+> -	return rcu_seq_snap(&rcu_state.gp_seq);
+> +	return rcu_seq_snap(&rcu_state.gp_seq_polled);
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 95d8659c5a99..4c383c780162 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -4297,12 +4297,27 @@ static inline bool mas_wr_append(struct ma_wr_state=
- *wr_mas)
- 	return false;
- }
-=20
-+/*
-+ * mas_wr_bnode() - Slow path for a modification.
-+ * @wr_mas: The write maple state
-+ *
-+ * This is where split, rebalance end up.
-+ */
-+static void mas_wr_bnode(struct ma_wr_state *wr_mas)
-+{
-+	struct maple_big_node b_node;
-+
-+	trace_ma_write(__func__, wr_mas->mas, 0, wr_mas->entry);
-+	memset(&b_node, 0, sizeof(struct maple_big_node));
-+	mas_store_b_node(wr_mas, &b_node, wr_mas->offset_end);
-+	mas_commit_b_node(wr_mas, &b_node, wr_mas->node_end);
-+}
-+
- static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
- {
- 	unsigned char node_slots;
- 	unsigned char node_size;
- 	struct ma_state *mas =3D wr_mas->mas;
--	struct maple_big_node b_node;
-=20
- 	/* Direct replacement */
- 	if (wr_mas->r_min =3D=3D mas->index && wr_mas->r_max =3D=3D mas->last) {
-@@ -4338,10 +4353,7 @@ static inline void mas_wr_modify(struct ma_wr_state =
-*wr_mas)
- 		return;
-=20
- slow_path:
--	memset(&b_node, 0, sizeof(struct maple_big_node));
--	mas_store_b_node(wr_mas, &b_node, wr_mas->offset_end);
--	trace_ma_write(__func__, mas, 0, wr_mas->entry);
--	mas_commit_b_node(wr_mas, &b_node, wr_mas->node_end);
-+	mas_wr_bnode(wr_mas);
- }
-=20
- /*
---=20
-2.35.1
+I happened to run into this. There is one usage of
+get_state_synchronize_rcu() in start_poll_synchronize_rcu(), in which
+the return value of get_state_synchronize_rcu() ("gp_seq") will be used
+for rcu_start_this_gp(). I don't think this is quite right, because
+after this change, rcu_state.gp_seq and rcu_state.gp_seq_polled are
+different values, in fact ->gp_seq_polled is greater than ->gp_seq
+by how many synchronize_rcu() is called in early boot.
+
+Am I missing something here?
+
+Regards,
+Boqun
+
+>  }
+>  EXPORT_SYMBOL_GPL(get_state_synchronize_rcu);
+>  
+> @@ -3925,7 +4009,7 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);
+>  bool poll_state_synchronize_rcu(unsigned long oldstate)
+>  {
+>  	if (oldstate == RCU_GET_STATE_COMPLETED ||
+> -	    rcu_seq_done_exact(&rcu_state.gp_seq, oldstate)) {
+> +	    rcu_seq_done_exact(&rcu_state.gp_seq_polled, oldstate)) {
+>  		smp_mb(); /* Ensure GP ends before subsequent accesses. */
+>  		return true;
+>  	}
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index 2ccf5845957df..9c853033f159d 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -323,6 +323,8 @@ struct rcu_state {
+>  	short gp_state;				/* GP kthread sleep state. */
+>  	unsigned long gp_wake_time;		/* Last GP kthread wake. */
+>  	unsigned long gp_wake_seq;		/* ->gp_seq at ^^^. */
+> +	unsigned long gp_seq_polled;		/* GP seq for polled API. */
+> +	unsigned long gp_seq_polled_snap;	/* ->gp_seq_polled at normal GP start. */
+>  
+>  	/* End of fields guarded by root rcu_node's lock. */
+>  
+> -- 
+> 2.31.1.189.g2e36527f23
+> 

@@ -2,142 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B596457C20C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9697957C214
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 04:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiGUCC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 22:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S231490AbiGUCHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 22:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiGUCC6 (ORCPT
+        with ESMTP id S229515AbiGUCHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 22:02:58 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4679876EA9;
-        Wed, 20 Jul 2022 19:02:57 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id l124so427742pfl.8;
-        Wed, 20 Jul 2022 19:02:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HpcRUpj6IiUvvjtSDoaM3wTDrN7fB6SBCqzwQ3NdYug=;
-        b=SKrB9hsQsTBjY2hhBm975Cw+42SgVUJYEODjrJBmuYP3nhDd4iQz+WCVXRoBwNXqu9
-         4AR8DgHAgY4T65IeZixo1HPFBH6Xh+fqsqI4v8DZ4//U2sWS4zmlDlPIE/xBbYYFao5q
-         3cVgZstV9vgukhH1Gz3BPpbJ9OI4Xya5d8WXNe6v7xJ1AnRg02pgLrLxmOma6xGQWJMw
-         2zWou9Q66nlXzuWYZbhUYjqYQRFGoHnqcFHJWk1XnrEpIbnaVPLUDztM84yC1ByCWWG6
-         1VhkX8yeBV167qpsT9P825UiySUjD8DPQrzDv/exNq1tfJ3Hlm9n0sekqR+G6IZqTz0f
-         Oinw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HpcRUpj6IiUvvjtSDoaM3wTDrN7fB6SBCqzwQ3NdYug=;
-        b=edbBvWcHeFfRIVav47J4PC16cimr2wbbYNX966/XBj/Vp32F0O7Ev/HRZWqee9zmFv
-         izwbuv8xnrEBFRW9s3XqE0HaJATnxR3lWuY7rel0mN1E/OLeKvaunn/01kCAGEcRq/x4
-         0ZTYoYNBk0eQPahiEfYPJzzyyssA036mtOLiT+mFZY/jv2ofzN9Zlv/nAtMdnNc94xHR
-         vQ8EJkXEuxuOgquS1vX5mbANLhX9ekJEplmQdYC3iBVwFq3D7LHxgzW7sMMjweh0fELN
-         WbPUz5Ks1QOFGHE2OrUS2ItIjVOzEetYAIxKkOLusrv1gX0tVeS+eFBmxVFpkGInABfO
-         tkpw==
-X-Gm-Message-State: AJIora8GsjDrpQsOpgTxTeckmhGJZ5gzK8G8x4WIwTtwUVPHOrFGFyQK
-        7K/6kuapD+T6B+oz5NWDw8w46Hy27v1pEQ==
-X-Google-Smtp-Source: AGRyM1sVHPY1/OZYVWtmwakh8JAAtvQhNlGVzbjZKOnbPHSUXLyeREKlqNnGdAcx9NhDX5TVCq+1Kg==
-X-Received: by 2002:a63:111a:0:b0:412:97c3:6907 with SMTP id g26-20020a63111a000000b0041297c36907mr36739521pgl.213.1658368976767;
-        Wed, 20 Jul 2022 19:02:56 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id z14-20020a62d10e000000b005289753448fsm306997pfg.123.2022.07.20.19.02.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 19:02:56 -0700 (PDT)
-Message-ID: <84e1a911-d4f9-8984-a548-62100aafd035@gmail.com>
-Date:   Thu, 21 Jul 2022 10:02:49 +0800
+        Wed, 20 Jul 2022 22:07:07 -0400
+Received: from m12-18.163.com (m12-18.163.com [220.181.12.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E47E5252A1
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 19:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=XU12i
+        H4pMl40EXW/nX9VVQCNZUvF291SzJYyAXnNGu0=; b=RdCgMdCT4MSQbawt/xjUe
+        soFmfpQZ6NNQ1dvDXDJ2Dq3u8u7+BzMk8L9GZh+9pwsnvv1rxpcsGsuUYjBY1n9z
+        ve/vWlpjN05Ms9C1Y4lJ1aQWOYXXOqSHHvdspDkhF3G0sFkZZ3ReF0XOc+DMuLWJ
+        2ljuR4zkqsnDj9zxp0u2F4=
+Received: from localhost.localdomain (unknown [223.104.68.243])
+        by smtp14 (Coremail) with SMTP id EsCowADn7wejtNhiY2DFOA--.245S2;
+        Thu, 21 Jul 2022 10:06:29 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     gregkh@linuxfoundation.org, mchehab+huawei@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH v2] docs: ABI: Fix typo in comment
+Date:   Thu, 21 Jul 2022 10:06:23 +0800
+Message-Id: <20220721020623.20974-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 3/7] KVM: x86/pmu: Avoid setting BIT_ULL(-1) to
- pmu->host_cross_mapped_mask
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Like Xu <likexu@tencent.com>
-References: <20220713122507.29236-1-likexu@tencent.com>
- <20220713122507.29236-4-likexu@tencent.com> <YtihtuxO/uefpAqJ@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <YtihtuxO/uefpAqJ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EsCowADn7wejtNhiY2DFOA--.245S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF4UWr47XFyDCFWDAFWUArb_yoWrGFyUp3
+        40yrnFgwn3Gry7Xr1xAFykKF1xCr4xCw4rJrs5Wry0v34qv3W0kFW7tr4ruFnxArWruayr
+        uFySyryfAF4j9wUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUI388UUUUU=
+X-Originating-IP: [223.104.68.243]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQVFZGBbEaukXAAAso
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/7/2022 8:45 am, Sean Christopherson wrote:
-> On Wed, Jul 13, 2022, Like Xu wrote:
->> From: Like Xu <likexu@tencent.com>
->>
->> In the extreme case of host counters multiplexing and contention, the
->> perf_event requested by the guest's pebs counter is not allocated to any
->> actual physical counter, in which case hw.idx is bookkept as -1,
->> resulting in an out-of-bounds access to host_cross_mapped_mask.
->>
->> Fixes: 854250329c02 ("KVM: x86/pmu: Disable guest PEBS temporarily in two rare situations")
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->>   arch/x86/kvm/vmx/pmu_intel.c | 11 +++++------
->>   1 file changed, 5 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
->> index 53ccba896e77..1588627974fa 100644
->> --- a/arch/x86/kvm/vmx/pmu_intel.c
->> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->> @@ -783,20 +783,19 @@ static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
->>   void intel_pmu_cross_mapped_check(struct kvm_pmu *pmu)
->>   {
->>   	struct kvm_pmc *pmc = NULL;
->> -	int bit;
->> +	int bit, hw_idx;
->>   
->>   	for_each_set_bit(bit, (unsigned long *)&pmu->global_ctrl,
->>   			 X86_PMC_IDX_MAX) {
->>   		pmc = intel_pmc_idx_to_pmc(pmu, bit);
->>   
->>   		if (!pmc || !pmc_speculative_in_use(pmc) ||
->> -		    !intel_pmc_is_enabled(pmc))
->> +		    !intel_pmc_is_enabled(pmc) || !pmc->perf_event)
->>   			continue;
->>   
->> -		if (pmc->perf_event && pmc->idx != pmc->perf_event->hw.idx) {
->> -			pmu->host_cross_mapped_mask |=
->> -				BIT_ULL(pmc->perf_event->hw.idx);
->> -		}
->> +		hw_idx = pmc->perf_event->hw.idx;
->> +		if (hw_idx != pmc->idx && hw_idx != -1)
-> 
-> How about "hw_idx > 0" so that KVM is a little less dependent on perf's exact
-> behavior?  A comment here would be nice too.
+Fix typo in the comment
 
-The "hw->idx = 0" means that it occupies counter 0, so this part will look like 
-this:
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+v2: Add all changes in ABI into 1 single patch
+---
+ Documentation/ABI/stable/sysfs-module                     | 2 +-
+ Documentation/ABI/testing/sysfs-class-rtrs-client         | 2 +-
+ Documentation/ABI/testing/sysfs-class-rtrs-server         | 2 +-
+ Documentation/ABI/testing/sysfs-devices-platform-ACPI-TAD | 2 +-
+ Documentation/ABI/testing/sysfs-devices-power             | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-		hw_idx = pmc->perf_event->hw.idx;
-		/* make it a little less dependent on perf's exact behavior */
-		if (hw_idx != pmc->idx && hw_idx > -1)
-			pmu->host_cross_mapped_mask |= BIT_ULL(hw_idx);
+diff --git a/Documentation/ABI/stable/sysfs-module b/Documentation/ABI/stable/sysfs-module
+index 560b4a3278df..41b1f16e8795 100644
+--- a/Documentation/ABI/stable/sysfs-module
++++ b/Documentation/ABI/stable/sysfs-module
+@@ -38,7 +38,7 @@ What:		/sys/module/<MODULENAME>/srcversion
+ Date:		Jun 2005
+ Description:
+ 		If the module source has MODULE_VERSION, this file will contain
+-		the checksum of the the source code.
++		the checksum of the source code.
+ 
+ What:		/sys/module/<MODULENAME>/version
+ Date:		Jun 2005
+diff --git a/Documentation/ABI/testing/sysfs-class-rtrs-client b/Documentation/ABI/testing/sysfs-class-rtrs-client
+index 49a4157c7bf1..fecc59d1b96f 100644
+--- a/Documentation/ABI/testing/sysfs-class-rtrs-client
++++ b/Documentation/ABI/testing/sysfs-class-rtrs-client
+@@ -78,7 +78,7 @@ What:		/sys/class/rtrs-client/<session-name>/paths/<src@dst>/hca_name
+ Date:		Feb 2020
+ KernelVersion:	5.7
+ Contact:	Jack Wang <jinpu.wang@cloud.ionos.com> Danil Kipnis <danil.kipnis@cloud.ionos.com>
+-Description:	RO, Contains the the name of HCA the connection established on.
++Description:	RO, Contains the name of HCA the connection established on.
+ 
+ What:		/sys/class/rtrs-client/<session-name>/paths/<src@dst>/hca_port
+ Date:		Feb 2020
+diff --git a/Documentation/ABI/testing/sysfs-class-rtrs-server b/Documentation/ABI/testing/sysfs-class-rtrs-server
+index 3b6d5b067df0..b08601d80409 100644
+--- a/Documentation/ABI/testing/sysfs-class-rtrs-server
++++ b/Documentation/ABI/testing/sysfs-class-rtrs-server
+@@ -24,7 +24,7 @@ What:		/sys/class/rtrs-server/<session-name>/paths/<src@dst>/hca_name
+ Date:		Feb 2020
+ KernelVersion:	5.7
+ Contact:	Jack Wang <jinpu.wang@cloud.ionos.com> Danil Kipnis <danil.kipnis@cloud.ionos.com>
+-Description:	RO, Contains the the name of HCA the connection established on.
++Description:	RO, Contains the name of HCA the connection established on.
+ 
+ What:		/sys/class/rtrs-server/<session-name>/paths/<src@dst>/hca_port
+ Date:		Feb 2020
+diff --git a/Documentation/ABI/testing/sysfs-devices-platform-ACPI-TAD b/Documentation/ABI/testing/sysfs-devices-platform-ACPI-TAD
+index f7b360a61b21..bc44bc903bc8 100644
+--- a/Documentation/ABI/testing/sysfs-devices-platform-ACPI-TAD
++++ b/Documentation/ABI/testing/sysfs-devices-platform-ACPI-TAD
+@@ -74,7 +74,7 @@ Description:
+ 
+ 		Reads also cause the AC alarm timer status to be reset.
+ 
+-		Another way to reset the the status of the AC alarm timer is to
++		Another way to reset the status of the AC alarm timer is to
+ 		write (the number) 0 to this file.
+ 
+ 		If the status return value indicates that the timer has expired,
+diff --git a/Documentation/ABI/testing/sysfs-devices-power b/Documentation/ABI/testing/sysfs-devices-power
+index 1b2a2d41ff80..54195530e97a 100644
+--- a/Documentation/ABI/testing/sysfs-devices-power
++++ b/Documentation/ABI/testing/sysfs-devices-power
+@@ -303,5 +303,5 @@ Date:		Apr 2010
+ Contact:	Dominik Brodowski <linux@dominikbrodowski.net>
+ Description:
+ 		Reports the runtime PM children usage count of a device, or
+-		0 if the the children will be ignored.
++		0 if the children will be ignored.
+ 
+-- 
+2.25.1
 
-, what do you think ?
-
-> 
->> +			pmu->host_cross_mapped_mask |= BIT_ULL(hw_idx);
->>   	}
->>   }
->>   
->> -- 
->> 2.37.0
->>

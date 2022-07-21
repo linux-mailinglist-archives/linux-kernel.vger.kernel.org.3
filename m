@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E53357C53C
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF2C57C53E
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbiGUHYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S232403AbiGUHZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiGUHYU (ORCPT
+        with ESMTP id S232266AbiGUHZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:24:20 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEE57BE29
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:24:19 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id n18so1437538lfq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:24:19 -0700 (PDT)
+        Thu, 21 Jul 2022 03:25:11 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41115DF6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:25:08 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id w2so790671ljj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 00:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g/Erh9ECa1GmGYKcDR9QQf3X/C7BJEjXlaj9Ex/mhqI=;
-        b=mo1ucbP9dUaLOghZSffc4yuhJfHR2Ge78KgH0AbJTkk34XaWUZbF2qlV3mg/kAuQA5
-         qoYqi26TkqBxJC21aE6Cb/Kvc0bKI+rw+gMH38CuUGX5FULs/HGd9F9N7vWjiygozLKd
-         VtlZ5mgLRdXxh/nitoa5MNcFP5ymFcOlB+//JJkoNsbONCVVSPUUy2d5TMA5TIHUS+IH
-         64Gi3QzlsOvk9x1sSwNrryOrCqt4AgDbLwiQJ/ohkSXFCIbLNtGnV94S+X3QoEXtPF3+
-         TGqoEaicZ8E/HJ4UkqzkldBbAcFyWbUOBbczTR+2LnvXEbhV30TLH/rulo/rv1IbGelo
-         Ro4A==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=2mcFMkdFlegyaGlkJRzck9ynacBYIr8JIQrrqE1QtHQ=;
+        b=tYHFkxpwdcnUQpnCYyayLPi5CzFc6YrNc6lB9ARelLymRoQOmIWGwVOVMw2fjkrtXg
+         hkFHzRYZ2NTtDe++JKiaEJHGTXMIUmMtFZLi16uOUJoXlZIQAi26VkO0noApt5cdeI02
+         TN8Cgk23ccoqT5IrgxpzlzXMxyK7vcQ4FwIYkWjAOofT9KHpghFf2IC0JD2uoAaT9ZiQ
+         Bj1QYc7F9vgpXSK4LdEPm+FSiK8rm9m37EgvtUXHCj2ud4oqkhb3w3NKeNo/uMnpMTms
+         E19aZ0ZQwbR5WsIHGfvcS446TUH+d2xVbUEQT7iMldQU0GmiZFrbAViKmk6OnQ2ux3Sj
+         Si9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=g/Erh9ECa1GmGYKcDR9QQf3X/C7BJEjXlaj9Ex/mhqI=;
-        b=x59Na94t5bJ4mMBQrLStxjIVfAn/OJi2GPdvwIvMawU7EPmysDWLAfCE1DJ0ZC+AAF
-         qQEerpfIbtIIxbMYwSEHLit3ZWRsAR676h3w8qCw6wi2e9Vdzlz3xtKEtTMukVYfnRlq
-         KAZwkpER195k7V/+eTo8CQaLBq0WvtYIEmHuAQ/skMl9EodtB94BA3Na6XZV1IX31Xhq
-         bn0+bi7fQygE1KOKxvDxTcJNbB4uzBwLN7IX/CrUzwb+lftWBf3OamoxK/0zvW4B/EcX
-         abbv33v1Qump1347cCiWCmgxcCgvAa8/UJyWiQ9LoB2ecrTDuAbInR00fk2IpydP6YMs
-         2KfQ==
-X-Gm-Message-State: AJIora8JaF+cUxy6NcZBCFNlMPrVoxEZ0cudUXDGYav0ftArB6o4QrKQ
-        hgWHGD/N2Bag4TkG/RYL9pSIKGexzKeYvGli
-X-Google-Smtp-Source: AGRyM1t9vXNUOHcavuxV31KizmszNRMPwXlxzOTvLE9zBeHRAgaSArMq/Fyk80oELTM42L+J1Ey11w==
-X-Received: by 2002:ac2:54a1:0:b0:48a:6908:1d54 with SMTP id w1-20020ac254a1000000b0048a69081d54mr1212982lfk.295.1658388258209;
-        Thu, 21 Jul 2022 00:24:18 -0700 (PDT)
-Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id i8-20020a2ea368000000b0025dd6dd482fsm293007ljn.96.2022.07.21.00.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 00:24:17 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] ARM: dt-bindings: aspeed for v5.20
-Date:   Thu, 21 Jul 2022 09:24:15 +0200
-Message-Id: <20220721072415.11424-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=2mcFMkdFlegyaGlkJRzck9ynacBYIr8JIQrrqE1QtHQ=;
+        b=S7LU1Dsu5GS2hUSRqAQwgMJq12ncVyx4uuzesu/ZK+llspbE+2dodsPZM+TdIOIM1g
+         E2WBlBgj6KKdJWyN7CLB8Ca50vM0K2UIJhUAcdS1c/hvzFH4/tmH3uk0pb9s9QNaYOcU
+         JbnwFIUH0atPQn2FK3+XO9h8HeVTldb2UWyRWHjgl957OSXmSqH72C6WmEO/wut8goWG
+         jpUV/12zcV9BnoE94auTqJo0tbxqlZxhK95UlBN4f6xVj0lPCwv1jPCc2KRmB9XXA/xD
+         MkWFwmJibnmuqii4Xzc4H8/DeK+Y0ZYgINFe1g/xYxdZX93qZ7FI5Zep1VWVJLa2xTJL
+         6fGw==
+X-Gm-Message-State: AJIora8yb2OlQNrmnkGOTAHNM9tCl8Y8umyds6p9OkybTS6Ni64Durn3
+        kkk9fw4GWjywSEeMbIUgzSotLw==
+X-Google-Smtp-Source: AGRyM1swyaJylpQW1HUAs/YKi2zAEaOv5XArks69BMBBv+GjPdFriuSjdzcx9tFrEZcjg8uQ4H+/9w==
+X-Received: by 2002:a2e:9c5a:0:b0:25d:dad5:1e04 with SMTP id t26-20020a2e9c5a000000b0025ddad51e04mr1198656ljj.428.1658388307218;
+        Thu, 21 Jul 2022 00:25:07 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id r26-20020ac252ba000000b00489e011bad7sm260305lfm.218.2022.07.21.00.25.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 00:25:06 -0700 (PDT)
+Message-ID: <1f0f2083-3100-a2d4-d513-52869b5aa706@linaro.org>
+Date:   Thu, 21 Jul 2022 09:25:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/7] dt-bindings: vendor-prefixes: document several
+ vendors for Aspeed BMC boards
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andrew Jeffery <andrew@aj.id.au>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
+        Steven Lee <steven_lee@aspeedtech.com>,
+        Ken Chen <chen.kenyy@inventec.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     David Wang <David_Wang6097@jabil.com>
+References: <20220529104928.79636-1-krzysztof.kozlowski@linaro.org>
+ <c86be8e0-8350-5d73-8055-e04a4e88f3b6@linaro.org>
+ <42fb4884-e2c3-4d7f-9049-f14c19701b20@www.fastmail.com>
+ <fb1b5eed-41ed-2c4b-c984-235ec4b3b0f6@linaro.org>
+In-Reply-To: <fb1b5eed-41ed-2c4b-c984-235ec4b3b0f6@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,54 +82,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd and Olof,
+On 21/07/2022 08:30, Krzysztof Kozlowski wrote:
+> On 21/07/2022 04:34, Andrew Jeffery wrote:
+>>> Any comments on this patchset? Are you going to pick it up? If you
+>>> prefer me taking it, I can, but new boards depend on the bindings, so
+>>> this should rather go via your tree.
+>>
+>> Apologies for not getting to this earlier, but I see Rob's applied it.
+> 
+> Rob took only the first patch - vendor-prefix. The DTS patches I sent to
+> arm-soc.
+> 
+> However the second bindings patch [1] will miss merge window as I did
+> not send it to arm-soc. I have it in my tree but I am not planning to
+> push it out before merge window.
+> 
 
-My two patches documenting existing Aspeed board compatibles were waiting for
-some time, so a month ago I decided to pick them up and include in the
-linux-next, so other developers - like David - can base their work on these.
-Unfortunately the responsibility for the patches was not cleared as I was
-waiting for some replies Joel and Andrew, so I also did not push them out to
-you. And then rc7 appeared and it is quite late now. That's my mistake, I
-should sort it out earlier.
-
-But anyway these were for a month in linux-next and other work [1] will need it.
-
-Can you grab them last minute? If not, could you queue it for v5.21?
-
-[1] https://lore.kernel.org/all/20220720085230.3801945-3-quan@os.amperecomputing.com/
+I sent pull with the bindings now.
 
 Best regards,
 Krzysztof
-
-
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-bindings-aspeed-5.20
-
-for you to fetch changes up to 12f158808510b7810bda1fadd3e88ddc9e768db4:
-
-  dt-bindings: arm: aspeed: add Aspeed Evaluation boards (2022-07-21 09:11:19 +0200)
-
-----------------------------------------------------------------
-Devicetree bindings for Aspeed boards
-
-1. Document the compatibles of existing Aspeed-based boards.
-2. Add jabil,rbp-bmc compatible.
-
-----------------------------------------------------------------
-David Wang (1):
-      dt-bindings: arm: aspeed: document board compatibles
-
-Krzysztof Kozlowski (2):
-      dt-bindings: arm: aspeed: document board compatibles
-      dt-bindings: arm: aspeed: add Aspeed Evaluation boards
-
- .../devicetree/bindings/arm/aspeed/aspeed.yaml     | 87 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 88 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml

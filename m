@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADD857CA11
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A577357CA16
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233316AbiGULzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S233364AbiGULzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbiGULyx (ORCPT
+        with ESMTP id S233339AbiGULzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:54:53 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2883234;
-        Thu, 21 Jul 2022 04:54:52 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id fy29so2662470ejc.12;
-        Thu, 21 Jul 2022 04:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=c2k9Gs9aq7wD8Q/GIeDAjL6HQrb7wXOBzG+CfyfPzhY=;
-        b=ACF8TqJG/PCVXLN/DfmbuzxuxGjPaw8maXBAuewHlJ9tumjTSGSDkhS2sVl3mLiHWH
-         gCsWXSI0FmZsI34OPo09XlR6d0q73kcocEcWWkKGjzE3a/SnNxwefEu0fWJe685Ee1bh
-         hr76tigPIOAmzmWMQbOcJl98m4kLXsEmHlFrh8NsMF6Wgk180kD1qEg0trdSvLAXMwBy
-         m3yuAKekMn8UkwpXDJcG2Vu9OTQUQp0DWYtTLeXC54pTyG2QSdPeVLqWSbJ9mZD+WR0E
-         Kn3/kl+f8xFbpe2MgcBwchwQdpRzPAIdytrWqM4CVkxx1m25gChgQcEbUAhWaqWj8AxP
-         RQNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c2k9Gs9aq7wD8Q/GIeDAjL6HQrb7wXOBzG+CfyfPzhY=;
-        b=qCgm7MaxHxLo3Ey3mle0KhbZk2GtVcJBYIo6qF9+lVEQpTkOrHGFIQGBij8Y8ZCbxC
-         62tspZQWRvhCN6MfKEGaAjdObTkgToQZWvWAyUFdOonaSmv8K0dtKLZPwrFB5Pz/9Xp/
-         Qr5mgpe8aBo/wmQ6FTPLALvjhwGDtvWKln7Wta059YLMZGUmWF9J0gR+JSkSuixnkm3L
-         3z18pn7vSyZRPB6YKdyXaPC6XCJVlNlBUgFl9B11hQIjC3FjZgfqb+aoHRHpNxpfwa88
-         JUlHsWwBzK3QtiKJH+75FMBWK0lV9R73e8fYksparxYmA/rL1mYnxUAUPZFr7djxXHL6
-         IthA==
-X-Gm-Message-State: AJIora//RBrwzxzjHtWTBEGgnlwnLa0i0Evxt03WqP8Ilvfd3UIG5HVa
-        4w8GI+wMogaPNL1wlMzJSrw=
-X-Google-Smtp-Source: AGRyM1sP7uU7BnTye1iWJUkXjwdHTa35FSpU/Q4kXU1vdqrQ7JS0A4/bkQTt5/kxqjiYmY2pRwPVgA==
-X-Received: by 2002:a17:906:730a:b0:72f:6ce7:8acd with SMTP id di10-20020a170906730a00b0072f6ce78acdmr7574235ejc.233.1658404490767;
-        Thu, 21 Jul 2022 04:54:50 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id g2-20020a170906538200b0072b1bb3cc08sm788567ejo.120.2022.07.21.04.54.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 04:54:50 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 14:54:47 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <20220721115447.cxfiromwtxw4ukv4@skbuf>
-References: <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <20220717125718.mj7b3j3jmltu6gm5@skbuf>
- <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
- <20220717135951.ho4raw3bzwlgixpb@skbuf>
- <e1c1e7c114f0226b116d9549cea8e7a9@kapio-technology.com>
- <20220717150821.ehgtbnh6kmcbmx6u@skbuf>
- <480c7e1e9faa207f37258d8e1b955adc@kapio-technology.com>
+        Thu, 21 Jul 2022 07:55:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7CDA1B2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 04:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658404504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HERq0We8j8CwHoxj+xEjyLsUyfaDI+Q0OqS7fh97oS8=;
+        b=FEAJjb0Mmhcg4oRrwmBIg2BpbM85fmziy/r0XW17u6vlY8wNIKgSGoCrVycQyyDHhxTrK9
+        QV3vreFN1RAfxC/Lz3p3cgF/ql1cYAh/M2tv/dK/I4gIZSVpll7wiDSVkuNyMxxOyhCYZ9
+        nabUbeQtEGmUTfL4VOy93Z2Jxaka1x8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-292-PyRpB3c-NQqwC8SzSTMV1g-1; Thu, 21 Jul 2022 07:54:59 -0400
+X-MC-Unique: PyRpB3c-NQqwC8SzSTMV1g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D59BF3C0E216;
+        Thu, 21 Jul 2022 11:54:58 +0000 (UTC)
+Received: from starship (unknown [10.40.192.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 56CEF40C1288;
+        Thu, 21 Jul 2022 11:54:55 +0000 (UTC)
+Message-ID: <a1d5b658870ea5eb545034a00088ddca5bb6219b.camel@redhat.com>
+Subject: Re: [PATCH v2 10/11] KVM: x86: SVM: use smram structs
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>
+Date:   Thu, 21 Jul 2022 14:54:54 +0300
+In-Reply-To: <YtigJfHmyTr3eE5v@google.com>
+References: <20220621150902.46126-1-mlevitsk@redhat.com>
+         <20220621150902.46126-11-mlevitsk@redhat.com> <YtigJfHmyTr3eE5v@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <480c7e1e9faa207f37258d8e1b955adc@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 06:10:22PM +0200, netdev@kapio-technology.com wrote:
-> Okay, I see the problem you refer to. I think that we have to accept some
-> limitations unless you think that just zeroing the specific port bit in the
-> DPV would be a better solution, and there wouldn't be caveats with that
-> besides having to do a FDB search etc to get the correct DPV if I am not too
-> mistaken.
+On Thu, 2022-07-21 at 00:39 +0000, Sean Christopherson wrote:
+> On Tue, Jun 21, 2022, Maxim Levitsky wrote:
+> > +	if (!guest_cpuid_has(vcpu, X86_FEATURE_SVM))
+> 
+> I think you want X86_FEATURE_LM, not X86_FEATURE_SVM.
+> 
 
-No, honestly I believe that what we should do to improve the limitation
-is to have proper ATU database separation between one VLAN-unaware
-bridge and another (i.e. what is now MV88E6XXX_FID_BRIDGED to be one FID
-per bridge).
+Yes, sorry about that! Thanks!
+
+Best regards,
+	Maxim Levitsky
+

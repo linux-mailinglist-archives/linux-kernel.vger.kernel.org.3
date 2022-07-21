@@ -2,153 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DAC57C989
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2327657C98D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiGULGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S233057AbiGULH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbiGULGi (ORCPT
+        with ESMTP id S232411AbiGULHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:06:38 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EAA82FB9;
-        Thu, 21 Jul 2022 04:06:37 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26KNbFvF011311;
-        Thu, 21 Jul 2022 04:06:37 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=jXLR63N5kKHyKvwUR670khzRcYB7acyPvfVekzFeSJ4=;
- b=TCqznL5wl0J7MIlyWwRHJvAQ/6TFNO732mzGLY3CK2lfFk3r9Vu3U8lZbPZXJIyJwanq
- FIBmPQddyemuBSrXDyImkqXoTlxPfb1xBniMuiSeNjAhRmhAzgYz3fEkPxhuewVekWFI
- 8e7iVI34bRL/+gjy55iy2dFO2i9VvoeVCAM= 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3he82dsba3-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Jul 2022 04:06:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fXys17kSJrKEaCJK5rs+FdIgbr7KHiw6PENBGLbguivOyukRAAQi/C8mY4GfcVe+A1Zil4Nyq5sih40zfEypysxiJ91LY0wB8moeAPFPFPDAL6OytjXlWLa4FLmgzA7VUptPr+axApYSlHdv7kCwIvnCpBP9J1Fc++sOTm+eB2hJOpc0l25LwCL9Af538t8KvOm/QS2GbZ9Wk/4odSxXCCKBKnF5WBIaWNEwfKrp1woM7j706kQR8rEt3U2WDTL2mLFXGf3socEEe376MhNGzHSYDejKHE4xdCQVeIlokh9bBGtKh8Os+NuEHr9RG7u2kMV4Wyta1H9AkHZG7SKI/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jXLR63N5kKHyKvwUR670khzRcYB7acyPvfVekzFeSJ4=;
- b=AKXq3RIOBzW0zJ0xi0S1u5VtTlLw6YPeWS8qroPN9gigfg5DHud8y666Zm6/yK2ZMHUsfMJU5HKpo7zgT24en8hvm68s7zAYk1Q2pk5IihraNaFV/SDSKLaj219wu8+ZfoB3Zz2OwFz+ewzRXhM7PQDXpNiszPGeOqf+Yk9eSV5apA8a0Vpk1dUpotGDySEvWipTrsg+GhFxxvf8r5NJkuKWvxN4o01SwJET7+wnenX6lXsuhi1rhoDOwIlfXWO6pwwnNwb9DPPM4EmB0EsLmjRr2PNiBLsyN9qoUzevD87/rmeIv1+sU5azyDPAZtl+jaApfcdHOWa4m3owQztzBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB4854.namprd15.prod.outlook.com (2603:10b6:806:1e1::19)
- by BN8PR15MB3217.namprd15.prod.outlook.com (2603:10b6:408:aa::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Thu, 21 Jul
- 2022 11:06:33 +0000
-Received: from SA1PR15MB4854.namprd15.prod.outlook.com
- ([fe80::15b5:7935:b8c2:4504]) by SA1PR15MB4854.namprd15.prod.outlook.com
- ([fe80::15b5:7935:b8c2:4504%6]) with mapi id 15.20.5458.019; Thu, 21 Jul 2022
- 11:06:33 +0000
-From:   Dylan Yudaken <dylany@fb.com>
-To:     "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mail.dipanjan.das@gmail.com" <mail.dipanjan.das@gmail.com>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>
-CC:     "fleischermarius@googlemail.com" <fleischermarius@googlemail.com>,
-        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
-        "its.priyanka.bose@gmail.com" <its.priyanka.bose@gmail.com>
-Subject: Re: KASAN: use-after-free Read in __io_remove_buffers
-Thread-Topic: KASAN: use-after-free Read in __io_remove_buffers
-Thread-Index: AQHYnKMMh/zxMjVYwUGeiFeZyBTdAK2IqpmA
-Date:   Thu, 21 Jul 2022 11:06:33 +0000
-Message-ID: <e21e651299a4230b965cf79d4ae9efd1bc307491.camel@fb.com>
-References: <CANX2M5YiZBXU3L6iwnaLs-HHJXRvrxM8mhPDiMDF9Y9sAvOHUA@mail.gmail.com>
-In-Reply-To: <CANX2M5YiZBXU3L6iwnaLs-HHJXRvrxM8mhPDiMDF9Y9sAvOHUA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1edef618-bb56-48fb-0986-08da6b0912a2
-x-ms-traffictypediagnostic: BN8PR15MB3217:EE_
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eyTIrJ05Udt4Cj5DVclPscLsaXyFxlEu3y1TYKtJUO5kof/af927suAYqJK2uLgeS9FsO26nsqer94EWvJZLgHsU49wOb+PA1IUv61pJrvRqvz2g2pm5DqMRGHZ2Na4Jji3c6htvnKvV31Hs4BriUYdq0S8q9kVMMfdB+l9CQRNdodigj/f3yfi1caqvz+D/mhGJGs4D07uRYCmI1xk4C2jRXpJ9YBBId6d1DlrHgedbPOLxtFvH2XaTMZ0uKAKzqa7tEVA7SBegCQ176PuNQn4y1CU5UpO4jf1115VGweP1gOKY7xZjjqb3iLx0l8K/mfq1ZiZmraj5GNuOSGsLfIusUXFxmK8Ui8NR79PVtFspchS6ADWqy6lKNvqp5h5gPkXg7JmHmy6TuWAF4wedcLCy6PA4o2+qTbEfsRvapPNpFfsMOZ38SLom41OQZ+D/VRE7ZZolB9jl4hwKGjDZ8+MqjxF9uAx1SxNTqVB19kO6Va0C4ymqwelI35EykGWOamVVE9GVRvmej5efoJcpCyaZrKQz7nrvy6RLYl6Nu5+1bniYV/RZNk9VAL23a4uIx0Stk0ombFlG7J82kfRWybSMErzUKdpbksl7VaOjFcp7Ll2YVc9UbxoLZZM/d1RCLRyeD+xt1zPluwq4Tzv2hNgcdcnE5uHfQu7AhbFI5GLV65g4EGHjNSmHTjJGhEG5tvZo3sqgUsPXv95+fbSDUv/bQYfGLbi46w75KS5w4OHa7dPoG97H3cEjm+zfFjLEnGrl4LyKWoBsTxGLbS883hNM3yq5lJOn4pDRGxaIbWAM20pKtc9T2Q/bl7H8kGlH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB4854.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(366004)(136003)(39860400002)(346002)(6506007)(6512007)(2616005)(186003)(5660300002)(4744005)(2906002)(478600001)(6486002)(36756003)(54906003)(41300700001)(71200400001)(316002)(110136005)(122000001)(86362001)(8936002)(66946007)(66556008)(66476007)(91956017)(76116006)(4326008)(38100700002)(8676002)(66446008)(64756008)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cmUyWUNTakRPcDI5cGo2Vzk4MmR0ZlJNSlVaYmVEYzE2a29JeVBrMTdkQWgw?=
- =?utf-8?B?TVlvaWdkVWI0NFNKVnZraHFmNTlEa3FyRzd6RGQ2TktKNFlTQmxtWWR1QVU1?=
- =?utf-8?B?VVJ1T2dxTGd1T1kzRHppd0VROUpQVlRMZmpmVzFLVDIxTFV5S3lCTFNaYmRE?=
- =?utf-8?B?Vm5DRFdKT2MwK3FKZkQvSGV0T3FWUlFDZm8xM1Q3dEtiZjlxbnF2Nzc2VUxG?=
- =?utf-8?B?dHQyZlNxRkRvVGhUNG9qRHlnS3p6dkZ0UHJtVkU0blVqNDIzeFUvemt5dFhG?=
- =?utf-8?B?RXFGang0dzhCc2hTWGtGbGUvRVRZOFFGQ0dtakJmdUZZRVFMNUpmd2NHait5?=
- =?utf-8?B?TjRNaEJTbUJ0ZTl0WGNFVDBldk4rL2o4b1JGeTNDMUNnQXhVbnBtdEJJeWd6?=
- =?utf-8?B?aktaVlJsdW0wN0tCV20zUlR4WkU2RFU0VDZ2d0Nnb1pTZ05vOCtRdU1KZ2d6?=
- =?utf-8?B?WG4xRHpZMEV6QVlZRDd0ZFNDckh6K09CZ1VZVWppZFVyQkRZN0xjWFltRFc2?=
- =?utf-8?B?RmR5Y2RNMXlZSXI4cWhJbEhsNlRHd0hyU3BWTHpRZ1NuMkMzTCtkdUxFaHh1?=
- =?utf-8?B?NnN6Sy9lWHVjbVRmU1NPVktiZEZaOGJOTkZmSnFINFBqSkFYbEF4UHNLVkRy?=
- =?utf-8?B?bTF6TXFPSDJZWXVhelBOalBnTVNRd09ibE85bmxBRTc2Rlp2RWJRekZYYXg2?=
- =?utf-8?B?dVNGYkRWb043dDFvU29rb0dqVGVtaEhENUpacjc2aStYU2xPeDcxM3VzSTFs?=
- =?utf-8?B?ZE9SSC9acmFndnpubm9haHJaQkxZbFlGSTRvU1haU0VEOE1sRVUveHZ3QlFG?=
- =?utf-8?B?b1NOVTI4dXRiV05qYit1TmIrajV3NjZLOXdRYm5UUW82U3lEaGRVd0NzMG0z?=
- =?utf-8?B?VGFkMnBQc3Rnc3p4UG9zWkNld2VWak1Uc0daQXZQWFl3cW93Qk42SjdGTFY2?=
- =?utf-8?B?c3ZrMHgxT1BRZm5vOU9lZFlsbVdaSEg2cTZVWVYrbmFzYnhRbEJITmoyU0hF?=
- =?utf-8?B?aTcwRlFjMDA5d3ZlTjhQQ0JlTllUY0FYcXRzT0FzNXgzN0FlSm9hZDlla3RR?=
- =?utf-8?B?M25LQWg3SWZsUkVBdmF3SEVkTENlZzJkUHNhSS9oRll3bm10Y2UxRFhrblNj?=
- =?utf-8?B?a00reGdxeHlBYm13U1FnazdLSlo5Z1g2QkxPZFlsTFdiYjNwZC8zMlMwQmdS?=
- =?utf-8?B?dW9jb2dGRjZJRmtaZWFOaExJeG9WSnpvaWdrYjY3YzRaMlJDbE8yNkxmQVN4?=
- =?utf-8?B?OUZaSVNod3ZiWHI5czMvTnlubEszcnBLd0lPZnoxaVdsdnZ3YnlteTkrNW9a?=
- =?utf-8?B?UjRGRjAxdVB2NEV0VXQ0MC9laitPODZzc2x5NENHT2xyK2NZM3EvTWpBbTVj?=
- =?utf-8?B?cnlYK3V1dXlzcjZwYm05aUpvWm14OW84SXNzOXV4WlVYRzVXODAzNktKZ1d2?=
- =?utf-8?B?WkJUd25MTk9JaHgzTk9CeWE2bHNVc2Nua3Z1SXdDam84aTV6a2x3NFNzN2t1?=
- =?utf-8?B?OVluWVp3YUtxbjZaUml1SG5BajNSUGh0M29uYmhSOTNiUEcyMVdCajI1bFow?=
- =?utf-8?B?cENZRVZJY1QzYk03RFo2YkVEelo0bkluaitINUdlenI0TzdtaUZ2andFSjlk?=
- =?utf-8?B?a05PSnVFb3IrN281Nmh5OXNKRmRaZFg3SzVrL3NtWDhzZWlLbGVwdEQva1ZF?=
- =?utf-8?B?d1JxT1d1SDhhU2tSZ3FNQ0dabkw1bW9pQ0tlSmZNOHEvaGFhOUhuVDc5R2hl?=
- =?utf-8?B?R01Kam9qT2c4aElnTUo0c2hMeHppK1pFckNmbStJUkRxVnF3RHJZNWxLU3Jq?=
- =?utf-8?B?U2IvZmlrYzdVYkNFQTlmZkx0VzUzY0ZjMUR6dWJlWStnbGRaRHBHb2p3SWdE?=
- =?utf-8?B?LzRLT2VjQkcvWXI1djBTQi9tajRwbnFXN0NMRDBKeVNjRWdVMnFQYnBMeGVR?=
- =?utf-8?B?b3VxZFlMd0xMdnN6eS9Cd09McmxYU0xSandaMmx0aTAyK3ZMTjY5S2dTM1Jp?=
- =?utf-8?B?M292cytxSVQ1bFh4RGt2M09Jc0hLL1lvVjNjSUltUjRuNEJ0Y2xQdmNrMTZY?=
- =?utf-8?B?bmRNNXlKZUU2bkRVMktTVWppcS9iZis1OG9GYys4RGtDZGtjWFRmZVJUMDBz?=
- =?utf-8?B?czlpelQxOGNOMUF1MEN4VHh0aDR3c0RySFZiUDFvUXRiS0pNMzU5ZGFEcVFP?=
- =?utf-8?B?VkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3FBC177D6A2A7F4082BCA04B845F3CC9@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 21 Jul 2022 07:07:25 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C5F82F97;
+        Thu, 21 Jul 2022 04:07:24 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 7so2234733ybw.0;
+        Thu, 21 Jul 2022 04:07:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5mro53eIOes0RXW0prFbxemaCXmpb/aOLLa0hQCmy08=;
+        b=TGQ+2X7BFMGJRNO80GY1luuDbJo5ce+mctyZY04Tn+bn0eBWPnSRow0Dla5/Esak3N
+         yRVED71u8otXRdDI1RreBFKJJMqVsVHPgJnBO1N6O+iPsW0s8y9kyF1s2qnevhYxJQjj
+         8JfiqSWG6SfnNkkIBS8sa+u0KtHIgvBw2vPdOnQCe7rpCjA2MgvJ5YsPUyCOzudzmrzN
+         bEZmj0s9AZxIZLZ5VeL0VhMyx1NqrcgYddQ8M9Xk143zXwRYbg/m13Tsn22X8SABb/vt
+         kWVP9FhRvHj1vzGLH/6EaMoy8spdPYLABqTIvlN4jCcfcy1GSKCcrsHBcR0DRPPoHq1F
+         epxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5mro53eIOes0RXW0prFbxemaCXmpb/aOLLa0hQCmy08=;
+        b=Ae652mE2O4m9Zg4PeJOkXUaSJ4N7++A6TF5e0PwRFMYcc1JQ3EMRZxAzpNJLHZovd2
+         DXIDY428x2L5k49xF70lNESTmtho/QDcSKg7Vw7Ad2RLkcTcxJl+t7FH9+p3Sj9E4IDk
+         VcT+1aefX+wwe1KVwu+9wlTyaTvX+ZBAjOxdIVkCw1cbLuYwsUoE35EieTGWidvDEdVJ
+         JN/OcCokIDp+YLrZEocGB+zZUF1hGTGxjOAEeDVltmvE4Xo6n5y/bhQC0wGrx2KZ6AWx
+         YDTNpceszine+eH9xpmytI6y+hcQcjpj69NXZgLx0QXxCl3C0mAr5dHdij3qaNBBrVOm
+         BxJg==
+X-Gm-Message-State: AJIora82ssVbY8T3ZQkmrDyBdxUpRxHQqE0H1w5+9+dBTmPTTDUy6hXR
+        HsGgBr+2a/36ayF0MxPGZ+yxAXvVHVvIO/TbuU0=
+X-Google-Smtp-Source: AGRyM1uNhi6JqOtUV7rz5Sib7uydLDy+F4oP4tJI5TWWwnh3/+PPPbgApVrOHmfik36wx39uyP1FRckNTbDUFiOqfvs=
+X-Received: by 2002:a25:830f:0:b0:66f:cc60:c740 with SMTP id
+ s15-20020a25830f000000b0066fcc60c740mr35450510ybk.117.1658401643785; Thu, 21
+ Jul 2022 04:07:23 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB4854.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1edef618-bb56-48fb-0986-08da6b0912a2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2022 11:06:33.7363
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vn3lqVUnyz/TGOMobdZwsDAhtdIiA7cDSfEWwBxOBWcULBrQ797snBhlIDpL8vgg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB3217
-X-Proofpoint-ORIG-GUID: 7wJssg5RaFi8bMw9ceTypNwE9OPsvd-4
-X-Proofpoint-GUID: 7wJssg5RaFi8bMw9ceTypNwE9OPsvd-4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-21_14,2022-07-20_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220718195651.7711-6-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdV5s-q13pWXs-ki6o5h8=ZMPL11o08YQx1pawe9EUySBA@mail.gmail.com>
+In-Reply-To: <CAMuHMdV5s-q13pWXs-ki6o5h8=ZMPL11o08YQx1pawe9EUySBA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 21 Jul 2022 12:06:56 +0100
+Message-ID: <CA+V-a8tqhiO+WBOzAD40A10K+qtVQ4HE87C9PKVpoFgWkkS54w@mail.gmail.com>
+Subject: Re: [PATCH 5/5] arm64: dts: renesas: rzg2l-smarc-som: Add PHY
+ interrupt support for ETH{0/1}
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTA3LTIwIGF0IDE4OjQxIC0wNzAwLCBEaXBhbmphbiBEYXMgd3JvdGU6DQo+
-IEhpLA0KPiANCj4gV2Ugd291bGQgbGlrZSB0byByZXBvcnQgdGhlIGZvbGxvd2luZyBidWcgd2hp
-Y2ggaGFzIGJlZW4gZm91bmQgYnkgb3VyDQo+IG1vZGlmaWVkIHZlcnNpb24gb2Ygc3l6a2FsbGVy
-Lg0KDQpIaSwNCg0KQm90aCBvZiB0aGUgYnVnIHJlcG9ydHMgeW91IHNlbnQgc2VlbSB0byBiZSBm
-aXhlZCBieSB0aGUgcGF0Y2ggSSBqdXN0DQpzZW50Lg0KDQpUaGlzIG9uZSBob3dldmVyIGRvZXMg
-bm90IHNlZW0gdG8gdGVybWluYXRlIG9uY2UgZml4ZWQuIElzIHRoZXJlIGFuDQpleHBlY3RlZCBy
-dW4gdGltZT8NCg0KVGhhbmtzIQ0K
+Hi Geert,
+
+Thank you for the review.
+
+On Thu, Jul 21, 2022 at 11:47 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, Jul 18, 2022 at 9:57 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ3 for ETH0
+> > and ETH1 respectively.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> > --- a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
+> > +++ b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
+> > @@ -94,6 +94,8 @@ phy0: ethernet-phy@7 {
+> >                 compatible = "ethernet-phy-id0022.1640",
+> >                              "ethernet-phy-ieee802.3-c22";
+> >                 reg = <7>;
+> > +               interrupt-parent = <&irqc>;
+> > +               interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+>
+> 2?
+>
+IRQ2 = SPI 3, the driver expects the SPI number and is used as index
+[0] to map the interrupt in the GIC.
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/irqchip/irq-renesas-rzg2l.c?h=next-20220720#n291
+
+> "The first cell should contain external interrupt number (IRQ0-7)"
+>
+Probably I need to reword this to "The first cell should contain the
+SPI number for IRQ0-7/NMI interrupt lines" ?
+
+
+> >                 rxc-skew-psec = <2400>;
+> >                 txc-skew-psec = <2400>;
+> >                 rxdv-skew-psec = <0>;
+> > @@ -120,6 +122,8 @@ phy1: ethernet-phy@7 {
+> >                 compatible = "ethernet-phy-id0022.1640",
+> >                              "ethernet-phy-ieee802.3-c22";
+> >                 reg = <7>;
+> > +               interrupt-parent = <&irqc>;
+> > +               interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
+>
+> 3?
+>
+IRQ3 = SPI 4
+
+Cheers,
+Prabhakar
+> >                 rxc-skew-psec = <2400>;
+> >                 txc-skew-psec = <2400>;
+> >                 rxdv-skew-psec = <0>;
+> > @@ -171,7 +175,8 @@ eth0_pins: eth0 {
+> >                          <RZG2L_PORT_PINMUX(25, 0, 1)>, /* ET0_RXD0 */
+> >                          <RZG2L_PORT_PINMUX(25, 1, 1)>, /* ET0_RXD1 */
+> >                          <RZG2L_PORT_PINMUX(26, 0, 1)>, /* ET0_RXD2 */
+> > -                        <RZG2L_PORT_PINMUX(26, 1, 1)>; /* ET0_RXD3 */
+> > +                        <RZG2L_PORT_PINMUX(26, 1, 1)>, /* ET0_RXD3 */
+> > +                        <RZG2L_PORT_PINMUX(1, 0, 1)>;  /* IRQ2 */
+> >         };
+> >
+> >         eth1_pins: eth1 {
+> > @@ -189,7 +194,8 @@ eth1_pins: eth1 {
+> >                          <RZG2L_PORT_PINMUX(34, 1, 1)>, /* ET1_RXD0 */
+> >                          <RZG2L_PORT_PINMUX(35, 0, 1)>, /* ET1_RXD1 */
+> >                          <RZG2L_PORT_PINMUX(35, 1, 1)>, /* ET1_RXD2 */
+> > -                        <RZG2L_PORT_PINMUX(36, 0, 1)>; /* ET1_RXD3 */
+> > +                        <RZG2L_PORT_PINMUX(36, 0, 1)>, /* ET1_RXD3 */
+> > +                        <RZG2L_PORT_PINMUX(1, 1, 1)>;  /* IRQ3 */
+> >         };
+> >
+> >         gpio-sd0-pwr-en-hog {
+> > --
+> > 2.25.1
+> >
+>
+>
+> --
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

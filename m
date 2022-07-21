@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552DA57C69D
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89F257C6A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbiGUIk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S232477AbiGUIls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiGUIkh (ORCPT
+        with ESMTP id S232508AbiGUIl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:40:37 -0400
+        Thu, 21 Jul 2022 04:41:29 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCA2357C3;
-        Thu, 21 Jul 2022 01:40:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CD3FE3;
+        Thu, 21 Jul 2022 01:41:28 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B895E66019C1;
-        Thu, 21 Jul 2022 09:40:33 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F009466019C1;
+        Thu, 21 Jul 2022 09:41:26 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658392834;
-        bh=UkS0m/M5DvbbQ/GObPG5/kXK7jhZdM3ZkXjeCEHoCvo=;
+        s=mail; t=1658392887;
+        bh=DgHftiCEhCQJ15Wj0pfslx32ViPF5o7q5eIFrCJ9Eys=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Wnmud/HyoKxCMwupH5qw3uy/zD/ZJAYNNJeOIQLkvpFaLe3dFhwrg+J9cpDkqFtrc
-         9/OGMoi7tmIR3zySfl6CrGRHaPeYRYi+3cKgTtKYy9/PBQM2IgagXmSrAG6gIejYth
-         nmZMNyE4wSKs++BntTw0XBni+hZdexLJNKMK/M/ImDkWod+EpOqOsy5lS3q98HMGv9
-         sqbJphzqjZ2tB5yZX7X85InhUyXxg6OrUsyPKk57h95EB62sXwpGLHx9bSfmKYZH1c
-         IFXDk7zmNRC6odyxyZVp3M6O/jgbuofnF/3rDPK499SCRcmBnFDjrl5gq5eVIu87RF
-         1QEJrnzzjgH2w==
-Message-ID: <c5e94d12-4f52-2e75-3b45-735afa0e987b@collabora.com>
-Date:   Thu, 21 Jul 2022 10:40:31 +0200
+        b=cgPJfcrRWP5XcReCy6+E6h3yIgSJNMxdS7TenuM2bsD0EBVO2hxzKP3CZVyleS9QS
+         /QE4Tf1wXjQ+gweV+kBgRKPRxbmEHvdIVZ3nQ9SRp6fZ5OBCGaoEmBE+dcFF/DEefO
+         FNjvhELXOl2tiOiVrlLBo5nBUkTqR6+opAVfssV7WHl7TjyDHkee7VrFP1Z4imAiP5
+         +NwVhrY4LyXpE2Dzp99JhV7jvLY67pZpqFphoK83GbU9397MN1/3B7a2w8bhom92NH
+         YxLdk6YKeqx5UI3CAB4F+vChZHNz6tbm+MMXNB3CzN6nnOSUpUAa8kJ0tjVL2i1rJJ
+         8p/x5ma5cCMuQ==
+Message-ID: <ff169a88-250c-1e21-b65d-bc92fad20f79@collabora.com>
+Date:   Thu, 21 Jul 2022 10:41:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v1 3/6] dt-bindings: mediatek,mt6779-keypad: add
- mediatek,double-keys
+Subject: Re: [PATCH v1 5/6] arm64: dts: mediatek: mt8183: add keyboard node
 Content-Language: en-US
 To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -51,10 +50,10 @@ Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         Fabien Parent <fparent@baylibre.com>,
         linux-arm-kernel@lists.infradead.org
 References: <20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com>
- <20220720-mt8183-keypad-v1-3-ef9fc29dbff4@baylibre.com>
+ <20220720-mt8183-keypad-v1-5-ef9fc29dbff4@baylibre.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220720-mt8183-keypad-v1-3-ef9fc29dbff4@baylibre.com>
+In-Reply-To: <20220720-mt8183-keypad-v1-5-ef9fc29dbff4@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,46 +66,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 20/07/22 16:48, Mattijs Korpershoek ha scritto:
-> MediaTek keypad has 2 modes of detecting key events:
-> - single key: each (row, column) can detect one key
-> - double key: each (row, column) is a group of 2 keys
+> From: Fabien Parent <fparent@baylibre.com>
 > 
-> Currently, only single key detection is supported (by default)
-> Add an optional property, mediatek,double-keys to support double
-> key detection.
+> MT8183 has an on-SoC keyboard controller commonly used for volume
+> up/down buttons.
 > 
-> Double key support exists to minimize cost, since it reduces the number
-> of pins required for physical keys.
+> List it in the SoC dts so that boards can enable/use it.
 > 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
 > Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-> index ca8ae40a73f7..03c9555849e5 100644
-> --- a/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-> +++ b/Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-> @@ -49,6 +49,12 @@ properties:
->       maximum: 256
->       default: 16
->   
-> +  mediatek,double-keys:
-> +    description: |
-> +      use double key matrix instead of single key
-> +      when set, each (row,column) is a group that can detect 2 keys
 
-We can make it shorter and (imo) easier to understand, like:
-
-   mediatek,double-keys:
-
-     description: Each (row, column) group has two keys
-
-...also because, if we say that the group "can detect" two keys, it may be
-creating a misunderstandment such as "if I press one key, it gives me two
-different input events for two different keys.", which is something that
-wouldn't make a lot of sense, would it? :-)
-
-> +    type: boolean
-> +
->   required:
->     - compatible
->     - reg
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

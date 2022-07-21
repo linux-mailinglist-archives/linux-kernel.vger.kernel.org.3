@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04B957C171
+	by mail.lfdr.de (Postfix) with ESMTP id 8365057C170
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiGUAIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S232178AbiGUAIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbiGUAIQ (ORCPT
+        with ESMTP id S232187AbiGUAIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:08:16 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC7374E29
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:07 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so3587602pjq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:07 -0700 (PDT)
+        Wed, 20 Jul 2022 20:08:23 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC2774E3B
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:22 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso3760235pjk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:mime-version;
-        bh=xP7tgULkndjenpEsMqZL4/XM5sOo4w38smadLpoT94g=;
-        b=hpcFathPOTE4/xKH7ukf91cL2ISJwlTGa07xY6zlK5SZCv/hnPz2sCSqX3LKMtG0R6
-         zMOrmD1uIxJ+/2gnWqXnBqRu3nvKiKsXc3rGzPskXUp4SlPYxZx85lrDkOBm3C98GGUj
-         6ZC1q38kAfP0nYTaOuI3aWB09GT6r4zGdgcrA=
+        bh=RvgbJkR5UbUmNHNZjyO8yHEQtKxB83cJa4EJIk1OIQM=;
+        b=RPKm71oeefdo9vbp/6bPFYPYTpt67nEczadntx0D0CW3267JbSvwMrwgQAaKx+ZFL/
+         hxNxiFpWGbBCIvdDTR/upmgt6RyqJv8xeZD0ktm7OpF5+Q7+lD74qar0gb+ieP7Sb8OJ
+         sEAVTMjOuy1J/IYgJp3uScLOLUG4etWY/ysfw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=xP7tgULkndjenpEsMqZL4/XM5sOo4w38smadLpoT94g=;
-        b=EyZkqI8R9Ua/0SsaVN48/FL7STY3kjS/e3sRgzuvDxla4yuSdtH71ZDrhgz8DVXcP/
-         ibNt1QJ+LLwcHVMKmsgeVrZARi9j3vy+0nl1wbuZKpRQOGlvpnaKFPqrKWmnTJyig0O0
-         MJWj8TdqcVooOWO8q13oKlOqBIDMkNfGA5sEUH6iRgOFKhrI3MN13NTyEYPsXUnlaZyK
-         60K3K9GMbVPRZ896ZN7mIi2MMEVDPV4N4G483Y79P7J/RpUEATr7B2lV7JYD1qPBlzDH
-         KnBJgQKx3utaNVKxnIxKVHb/IxovtzsXsrFS8AD3P99pNQ88xrkeIjOhLOUp4/AdjOap
-         C/fA==
-X-Gm-Message-State: AJIora95JFo3M2+wlSrcDBAGkQvqC+n0j3ORjgqjEPfnX8nyOy9Hct89
-        LbO03uhz4kWVxlW6yvNV4wPwMPch8uwJ2w==
-X-Google-Smtp-Source: AGRyM1tKmhNcIWYp/66o3520JnI1XIVEoHNIgcXw6onHWc8UDuCqmVSRTrUC8XYPOxkioqgYw3C4UA==
-X-Received: by 2002:a17:903:445:b0:16c:5d4f:c329 with SMTP id iw5-20020a170903044500b0016c5d4fc329mr41905187plb.104.1658362087376;
-        Wed, 20 Jul 2022 17:08:07 -0700 (PDT)
+        bh=RvgbJkR5UbUmNHNZjyO8yHEQtKxB83cJa4EJIk1OIQM=;
+        b=FLktWx4KKEUW8700Qi6zFCzxX3/8G8Bt0PnQXmsMe5eVHih3dlXwMKwnMvcWsoYAZz
+         HknGEYg3cdW204N6S1z5WEjHJNG/1ocVY1UBA6JyidSZFCIASVVd/cDzTI6roKBlRg5A
+         tJrge5PSd0izFi89LJPiikAlgCtR6/eG9SKc1vme2+5OFQegz9vw4zOgiPqV9xbhEII+
+         PzOKGMlU8KzS1/E5Vrt+g7m5jAMODv9jSW04DYSKMpZVwAH1NWqwGwNAAYIjyXKZxgj6
+         G0zAtMhNEhJ1X2CXUSUaJMkpf1IKHv6kR9e6edasOOphX6aBmPnj1ULX+7/QpiPgzuN3
+         QXmg==
+X-Gm-Message-State: AJIora8cKkwNd870zvsBpIOjGXlgh1AeyPtnZfgv1ZMvME2YxsadWM6M
+        2zYqpu2kAKyg/Gg5/GNe1nfHkw==
+X-Google-Smtp-Source: AGRyM1tpx4sT4M5wjsBnKIQkzGCTjAUczQEnY5yHe+cpouR/uo1JWV7noN+q+AjAOG4hkgBxYzOKkg==
+X-Received: by 2002:a17:90b:1c09:b0:1ef:f82c:174b with SMTP id oc9-20020a17090b1c0900b001eff82c174bmr8085132pjb.88.1658362102280;
+        Wed, 20 Jul 2022 17:08:22 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170902d50c00b0016c78aaae7fsm160106plg.23.2022.07.20.17.08.06
+        by smtp.gmail.com with ESMTPSA id o5-20020a62cd05000000b005254c71df0esm215578pfg.86.2022.07.20.17.08.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 17:08:06 -0700 (PDT)
+        Wed, 20 Jul 2022 17:08:21 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
 Cc:     joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [RESEND PATCH 7/9] arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA
-Date:   Wed, 20 Jul 2022 17:08:01 -0700
-Message-Id: <20220721000801.29644-1-william.zhang@broadcom.com>
+Subject: [RESEND PATCH 8/9] MAINTAINERS: Add BCM4908 maintainer to BCMBCA entry
+Date:   Wed, 20 Jul 2022 17:08:11 -0700
+Message-Id: <20220721000811.29663-1-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000025f85c05e44583a2"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        boundary="00000000000008980505e4458494"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000025f85c05e44583a2
+--00000000000008980505e4458494
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Delete ARCH_BCM4908 platform Kconfig for BCM4908 SoC and move its
-selection to ARCH_BCMBCA.
+Since BCM4908 SoC support is merged into ARCH_BCMBCA, add BCM4908
+maintainer Rafal to bcmbca maintainer list.
 
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
 ---
 
- arch/arm64/Kconfig.platforms | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index e2700db35701..6124349b9b2d 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -47,15 +47,6 @@ config ARCH_BCM2835
- 	  This enables support for the Broadcom BCM2837 and BCM2711 SoC.
- 	  These SoCs are used in the Raspberry Pi 3 and 4 devices.
- 
--config ARCH_BCM4908
--	bool "Broadcom BCM4908 family"
--	select ARCH_BCMBCA
--	select GPIOLIB
--	help
--	  This enables support for the Broadcom BCM4906, BCM4908 and
--	  BCM49408 SoCs. These SoCs use Brahma-B53 cores and can be
--	  found in home routers.
--
- config ARCH_BCM_IPROC
- 	bool "Broadcom iProc SoC Family"
- 	select COMMON_CLK_IPROC
-@@ -66,6 +57,7 @@ config ARCH_BCM_IPROC
- 
- config ARCH_BCMBCA
- 	bool "Broadcom Broadband Carrier Access (BCA) origin SoC"
-+	select GPIOLIB
- 	help
- 	  Say Y if you intend to run the kernel on a Broadcom Broadband ARM-based
- 	  BCA chipset.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 87e7467d8097..bcc508f4e6c7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3919,6 +3919,7 @@ M:	William Zhang <william.zhang@broadcom.com>
+ M:	Anand Gore <anand.gore@broadcom.com>
+ M:	Kursad Oney <kursad.oney@broadcom.com>
+ M:	Florian Fainelli <f.fainelli@gmail.com>
++M:	Rafał Miłecki <rafal@milecki.pl>
+ R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
 -- 
 2.34.1
 
 
---00000000000025f85c05e44583a2
+--00000000000008980505e4458494
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -182,13 +164,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILLT8Ypk3i5L8Tj5e+zig/4nF5Rt
-5kLXLs67Qkvm0qxNMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcyMTAwMDgwN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIF5SmGeG6GW+gZpEo69nPL93w7f
+2dEiysNSV/0H//bTMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcyMTAwMDgyMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBDW2QWiR4KvEjRJipSzSe5hGUU9S4sOzyO+uxPP3t1OUPG
-TAs5+h4WdNj5xKXz5SdW5ju9+ufOIlUj7KKqEdPmAAv3CpKZPaMPOfxJH3IS1PYNFgo/MeYw8xZx
-eNdirDsaCbXtX0MmypwEqgeyfpiOkeTMFYnD4JNuxQLATt+KFVKazuixZg6ShkAuqkRJdXTbjtlF
-PGfqcliq0RG0apNodafj3ZWv+qaRGASJvfxu2dylQxO1m5fYYz73Jq4ZK0p9lz5YHZY1DAoIyOZk
-eVALq/EOqWLzzx40GIIFuv173D8c4Np2uQbOu6NZ9BEgnOPC6IyFS+1NVeE5tyjfvIrC
---00000000000025f85c05e44583a2--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBD9adclv7kmPV5D4BGctO1vmkT6BATnNa/DMEiz5675oBZ
+9NYxRehYJmmqTjxRiZArm9symdiYUYavpqUNLchDNROmpXChmzdES0dL9LWiHSk9WBo7owldy7bT
+105X+cY7BCcYJHMn/UR4L68C7yfYmDMWWiKftaGs7g+9DmtzUY898HpIp9pwCDolyKehs9YjQv3x
+jvb4k6JXCH542Z8tlv9Ch5iM0NKovWmP3sj47jMsT1x6+KUUFt44VFMmJRpFFsH3DtYqI/GmYAfD
+TM8MesQuhtg99vI/BgiaFYSBQFVKpfAd3eeySXkfj+11sncEvZQTJOKvFSTpUxscA2N8
+--00000000000008980505e4458494--

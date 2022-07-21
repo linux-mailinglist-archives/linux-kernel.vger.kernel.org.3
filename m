@@ -2,71 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B762D57CA13
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADD857CA11
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 13:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbiGULzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 07:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S233316AbiGULzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 07:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233350AbiGULzN (ORCPT
+        with ESMTP id S232932AbiGULyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 07:55:13 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937CAF4F;
-        Thu, 21 Jul 2022 04:55:09 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l11so2308539ybu.13;
-        Thu, 21 Jul 2022 04:55:09 -0700 (PDT)
+        Thu, 21 Jul 2022 07:54:53 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2883234;
+        Thu, 21 Jul 2022 04:54:52 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id fy29so2662470ejc.12;
+        Thu, 21 Jul 2022 04:54:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qaP0I0aztXzOWdDYC6Rm+hRi89p++ypn2u6RYuQqmAI=;
-        b=n2GNvol73UZ9RBTEE6JYD4zt2QH59JOnkcXJ1909hABOXRirc5oX1vQSx/1JlwEJ95
-         /jdcCsJ5KQmtsF3mAS4cj089UfHwvIAS8reNMQP0Yc1nH8z3lHWlyrVySmzroH5KgTlH
-         7MItE624eO7F90XusVFnG7ko1/3rX0agZx2NEPD/Nj3pL9XJ1Q8FJh0yq1wuEEaz0uQ7
-         FXbBwv3ZqqEykoB5q0SaO99Fe4M8I9yWLcCRca0tq3QG4Vun7oMEpBlVC2T38m7z/gjC
-         JVkrdony4n/6MjliMh/JKlSSzYgksBT9n3Bw4Q0/CqfyLbGtjkX6cM7R8h4JXM2+qjLS
-         XiEA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=c2k9Gs9aq7wD8Q/GIeDAjL6HQrb7wXOBzG+CfyfPzhY=;
+        b=ACF8TqJG/PCVXLN/DfmbuzxuxGjPaw8maXBAuewHlJ9tumjTSGSDkhS2sVl3mLiHWH
+         gCsWXSI0FmZsI34OPo09XlR6d0q73kcocEcWWkKGjzE3a/SnNxwefEu0fWJe685Ee1bh
+         hr76tigPIOAmzmWMQbOcJl98m4kLXsEmHlFrh8NsMF6Wgk180kD1qEg0trdSvLAXMwBy
+         m3yuAKekMn8UkwpXDJcG2Vu9OTQUQp0DWYtTLeXC54pTyG2QSdPeVLqWSbJ9mZD+WR0E
+         Kn3/kl+f8xFbpe2MgcBwchwQdpRzPAIdytrWqM4CVkxx1m25gChgQcEbUAhWaqWj8AxP
+         RQNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qaP0I0aztXzOWdDYC6Rm+hRi89p++ypn2u6RYuQqmAI=;
-        b=CEFbofwSKoedfFp9dwVDR11K7ObcHe+0o90jXTCrOHOW70nBkW2waQJfPPK6veMWkE
-         0890IFFFsp7VGIR0HJHRml8KuMz6Hw1S1p2AL9/MTSEtGS2eGa1HdE9Qw81liyCrJNpo
-         Sh/QneX2zk93xj4vHltSoszxoryEtsyT6byXLFGG+ORZUq+8V63wOHmXuF/obu+L5o7i
-         xMzU2Uy7AuI34EZqhuwTc6NfW8vzgMKj/k2CP15ny5uN6nC+Mbgql5YYF0Vw3UrW54Je
-         sJ0RIgHg8LCvbuCaqLGQvkbxWdcWrdar3awV5uUT6azCCMG5zz6u85w36fIYjB0uItj4
-         F9Ww==
-X-Gm-Message-State: AJIora9OSgtZ3+EB1D8fhhLAMyRgYHBvNZ5Q2iaXzC58iU2EXxjl58mp
-        hMAmkXspkTefyL2L4D/iVmX61h0iVzPFWEx1zvykraardlg=
-X-Google-Smtp-Source: AGRyM1s8IJzc+CDFsmhXm05gI9yyjM4jlO0gtZQGHVvafriU/TFryCg3YL75XaMYb+qD5v2zymGC/gqXcY7RpTbrtZw=
-X-Received: by 2002:a05:6902:1082:b0:670:9307:b0eb with SMTP id
- v2-20020a056902108200b006709307b0ebmr8351482ybu.335.1658404508819; Thu, 21
- Jul 2022 04:55:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=c2k9Gs9aq7wD8Q/GIeDAjL6HQrb7wXOBzG+CfyfPzhY=;
+        b=qCgm7MaxHxLo3Ey3mle0KhbZk2GtVcJBYIo6qF9+lVEQpTkOrHGFIQGBij8Y8ZCbxC
+         62tspZQWRvhCN6MfKEGaAjdObTkgToQZWvWAyUFdOonaSmv8K0dtKLZPwrFB5Pz/9Xp/
+         Qr5mgpe8aBo/wmQ6FTPLALvjhwGDtvWKln7Wta059YLMZGUmWF9J0gR+JSkSuixnkm3L
+         3z18pn7vSyZRPB6YKdyXaPC6XCJVlNlBUgFl9B11hQIjC3FjZgfqb+aoHRHpNxpfwa88
+         JUlHsWwBzK3QtiKJH+75FMBWK0lV9R73e8fYksparxYmA/rL1mYnxUAUPZFr7djxXHL6
+         IthA==
+X-Gm-Message-State: AJIora//RBrwzxzjHtWTBEGgnlwnLa0i0Evxt03WqP8Ilvfd3UIG5HVa
+        4w8GI+wMogaPNL1wlMzJSrw=
+X-Google-Smtp-Source: AGRyM1sP7uU7BnTye1iWJUkXjwdHTa35FSpU/Q4kXU1vdqrQ7JS0A4/bkQTt5/kxqjiYmY2pRwPVgA==
+X-Received: by 2002:a17:906:730a:b0:72f:6ce7:8acd with SMTP id di10-20020a170906730a00b0072f6ce78acdmr7574235ejc.233.1658404490767;
+        Thu, 21 Jul 2022 04:54:50 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170906538200b0072b1bb3cc08sm788567ejo.120.2022.07.21.04.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 04:54:50 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 14:54:47 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <20220721115447.cxfiromwtxw4ukv4@skbuf>
+References: <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+ <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
+ <20220717125718.mj7b3j3jmltu6gm5@skbuf>
+ <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
+ <20220717135951.ho4raw3bzwlgixpb@skbuf>
+ <e1c1e7c114f0226b116d9549cea8e7a9@kapio-technology.com>
+ <20220717150821.ehgtbnh6kmcbmx6u@skbuf>
+ <480c7e1e9faa207f37258d8e1b955adc@kapio-technology.com>
 MIME-Version: 1.0
-References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220718195651.7711-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdV5s-q13pWXs-ki6o5h8=ZMPL11o08YQx1pawe9EUySBA@mail.gmail.com>
- <CA+V-a8tqhiO+WBOzAD40A10K+qtVQ4HE87C9PKVpoFgWkkS54w@mail.gmail.com> <CAMuHMdWcj2xv8FrCiTLCVQfWzejONCAv_o-VzAkicLAFNd5gPg@mail.gmail.com>
-In-Reply-To: <CAMuHMdWcj2xv8FrCiTLCVQfWzejONCAv_o-VzAkicLAFNd5gPg@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 21 Jul 2022 12:54:41 +0100
-Message-ID: <CA+V-a8uNZ8T6m+nav=UXTFcwtW8o_2dGE2QFMvkhwcUU=Ka42Q@mail.gmail.com>
-Subject: Re: [PATCH 5/5] arm64: dts: renesas: rzg2l-smarc-som: Add PHY
- interrupt support for ETH{0/1}
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <480c7e1e9faa207f37258d8e1b955adc@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,79 +92,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Sun, Jul 17, 2022 at 06:10:22PM +0200, netdev@kapio-technology.com wrote:
+> Okay, I see the problem you refer to. I think that we have to accept some
+> limitations unless you think that just zeroing the specific port bit in the
+> DPV would be a better solution, and there wouldn't be caveats with that
+> besides having to do a FDB search etc to get the correct DPV if I am not too
+> mistaken.
 
-On Thu, Jul 21, 2022 at 12:43 PM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Thu, Jul 21, 2022 at 1:07 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> > On Thu, Jul 21, 2022 at 11:47 AM Geert Uytterhoeven
-> > <geert@linux-m68k.org> wrote:
-> > > On Mon, Jul 18, 2022 at 9:57 PM Lad Prabhakar
-> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ3 for ETH0
-> > > > and ETH1 respectively.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Thanks for your patch!
-> > >
-> > > > --- a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
-> > > > +++ b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
-> > > > @@ -94,6 +94,8 @@ phy0: ethernet-phy@7 {
-> > > >                 compatible = "ethernet-phy-id0022.1640",
-> > > >                              "ethernet-phy-ieee802.3-c22";
-> > > >                 reg = <7>;
-> > > > +               interrupt-parent = <&irqc>;
-> > > > +               interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-> > >
-> > > 2?
-> > >
-> > IRQ2 = SPI 3, the driver expects the SPI number and is used as index
-> > [0] to map the interrupt in the GIC.
-> >
-> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/irqchip/irq-renesas-rzg2l.c?h=next-20220720#n291
->
-> Using the SPI number sounds strange to me, as the consumer
-> (Ethernet PHY) is linked to the IRQC, not to the GIC directly.
->
-Right, are you suggesting that I tweak the driver? The other problem
-is how do we differentiate NMI and IRQ0? How about we add macros for
-IRQ0-7 and use them in the DTS?
-
-> > > "The first cell should contain external interrupt number (IRQ0-7)"
-> > >
-> > Probably I need to reword this to "The first cell should contain the
-> > SPI number for IRQ0-7/NMI interrupt lines" ?
->
-> Oh, so zero is the NMI?
-> And 1-8 are IRQ0-7.
->
-Yes that's right.
-
-> All of this should be documented in the bindings.
->
-> Probably you want to document the parent interrupts:
->   - First entry is NMI,
->   - Next 8 entries are IRQ0-7,
->   - Next 32 entries are TINT0-31.
-> Currently it's a flat list.
->
-Agreed, I will update that.
-
-Cheers,
-Prabhakar
-
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+No, honestly I believe that what we should do to improve the limitation
+is to have proper ATU database separation between one VLAN-unaware
+bridge and another (i.e. what is now MV88E6XXX_FID_BRIDGED to be one FID
+per bridge).

@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C116B57D19F
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048E857D1A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiGUQeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S229951AbiGUQhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiGUQet (ORCPT
+        with ESMTP id S229471AbiGUQhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:34:49 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3422E89E98
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:34:48 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id q7so2434718lji.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:34:48 -0700 (PDT)
+        Thu, 21 Jul 2022 12:37:18 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B497AC1E
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:37:16 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id n18so3674947lfq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lbuWDvRgQP4kS+kKYZcZnG6rgbl3Nz3ODL+tqYR0a+w=;
-        b=X4ImQQbgcJD4ln76H14MOkiKXMWf0KMiM+ZyMKQKKGVK7F/kOc1uUwrm7gNcnPQynq
-         A4eDf63m5PjOaCuw0lGveOz+XhwzW3JgjywlgaQYcjDVhXY88DsjEKzI3nP4tdSphk2R
-         aLum8Un1MjfF1F/sL2JrZIMkVaUAOCBBPShHoS9htJ89g2x2Ga0f+I5oskzPwaSr9sRi
-         Vrsl2Imji372q3UZuhrVL6lKwnnh1dieSUDbhsDoquBtfgl0nA2Qj/+FvzBBXNjxten5
-         EHR+Ew7/4EGnTxShtIT0mrDY62Pwn2eYYJl2NEao5fQ36gXzESGhazPiCg8Oj1P8Yd6A
-         N8wg==
+        bh=egOPuEF9TqE75gZWwUjjn7qf+5eCfzce3I3zf+IUXOo=;
+        b=lMktJyzrq1TEYow7Koe8TieEr0tXpOkNUlPK+blhOL7s0Kdtidyp+G2N+ZZ4qxbmXJ
+         Rp4er8nUP2ZdowjxcqDVBUkgezKRr5hUiYpnrx98MPVLhAM3+X+EQhVKwNyndbiAlJp3
+         VH6Olpyynvcz84fZOsOVU59G2lmJ4LI6pWUQxKBLL94P2AplGDGP8lN4I2DLdhUhz7kY
+         1xByz8ImHNXldbxUkRDgSNOH5Nawi7AdKQpzfQ1W4cAQ/W4xVS3tx5VH3pskOBv8zBfz
+         UlF+ESATrroO7a3GCavLz6U6tF1XOePATh4c/zdgh17bppeuyk23VaHEMB81w+UmMGn9
+         deiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=lbuWDvRgQP4kS+kKYZcZnG6rgbl3Nz3ODL+tqYR0a+w=;
-        b=TEC6QxsfXVFkl9S0Qj7boL2waD5ggLzd0kJyjun3+Dfc8AlOTUQSLjMQsKm+lxF5em
-         qU8hMl//kyzQg87Lxx1Rhm6TK+s2ulNIf6Km3BIuQW8bN9SHJjMhdfR23yz7jltzJZD8
-         9qyMTuiFr2dFinBx8gNb5pGDG9gcwJPWIgIMZhUm2XFqoRb5iI2n3b4X19smPafbcqGp
-         /7ziltG/lZGZeIYz9TVLJ6eEWKblfEv5x0DQJj0REvcNFBBy+xLTmTeMKDRg/mzpcTtA
-         sIBK8VRbNbLU757nfOtN/MPMFISmaYWJZy3PF3QB91MJQdB5S9nLrAfjDLa/pbDSK0MD
-         7czQ==
-X-Gm-Message-State: AJIora8KiedxfajCYZs8QjM64zCtcYDZrmiwUaOiCEqw9A1YNKNWTBGJ
-        +eBqVJt90cQuh6XtPdpHkLYwuQ==
-X-Google-Smtp-Source: AGRyM1ssWyd9nCaaxXHuoqoTVZDwZhxv1f/lGGVSTBUiA8DEf4ZQ7fA6FySYKIH3oU6z4G1PWtC9jg==
-X-Received: by 2002:a05:651c:12c4:b0:25d:d71c:e249 with SMTP id 4-20020a05651c12c400b0025dd71ce249mr3397475lje.17.1658421286595;
-        Thu, 21 Jul 2022 09:34:46 -0700 (PDT)
+        bh=egOPuEF9TqE75gZWwUjjn7qf+5eCfzce3I3zf+IUXOo=;
+        b=GWM2ymL63nAZmEUkGUrN7Jw/QG23aKm9HTHEQ7DLJhPu/nL7xGMQnrXDG6jig3H4tg
+         e56cDVB9u8AbceVfTXnpmDsg+DQSwyuVouUyuEBSbq3/eeHsAkgBLVs/0zsFS3TI7Zkt
+         jePK9BvZcSEhr9XE9EjvfGKgaq5uRCFxJR9hbmxiqem7x269JG2WgBs6RKfHaedMs+rR
+         5qdS+kAyRBqFknCEOrZYjRWYetZaylDbV0yejHRjo6vKC58MAPQ6aNkarMjwzyE1us+M
+         sOPiTXWQ4WvO0+xWBNIlawZE/e9/vI8ryvKQgWtrQhUPf3BWfblt0PqJyk7je1LqZonu
+         hwbA==
+X-Gm-Message-State: AJIora/Ou2rAsJzTO9T3DBiuYEMdUslVx0Htxae/6pi0cfduh5betVFO
+        lBXuDuItTrBHSZd2PHjcOOETQA==
+X-Google-Smtp-Source: AGRyM1si6G1spc2SptdyuVnAcORyTN034fH8EFU/ukJye3I59DI2LMn3mMICtmSEXg4uCa3HJG1r2A==
+X-Received: by 2002:a05:6512:3996:b0:489:d526:93e5 with SMTP id j22-20020a056512399600b00489d52693e5mr23205070lfu.534.1658421435329;
+        Thu, 21 Jul 2022 09:37:15 -0700 (PDT)
 Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id 20-20020ac25f54000000b0047f68e0ca8fsm538022lfz.49.2022.07.21.09.34.45
+        by smtp.gmail.com with ESMTPSA id k6-20020a192d06000000b0047f674838a5sm188263lfj.231.2022.07.21.09.37.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 09:34:46 -0700 (PDT)
-Message-ID: <eade56c1-bf4e-0ece-9b67-02f01a95c741@linaro.org>
-Date:   Thu, 21 Jul 2022 18:34:44 +0200
+        Thu, 21 Jul 2022 09:37:14 -0700 (PDT)
+Message-ID: <67796aa8-6509-620f-f96a-ff22218f1b0c@linaro.org>
+Date:   Thu, 21 Jul 2022 18:37:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees for
- MSC SM2S-IMX8PLUS SoM and carrier board
+Subject: Re: [PATCH v2 2/4] thermal: mediatek: add support for MT8365 SoC
 Content-Language: en-US
-To:     Martyn Welch <martyn.welch@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220721101050.2362811-1-martyn.welch@collabora.com>
- <20220721101050.2362811-2-martyn.welch@collabora.com>
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        matthias.bgg@gmail.com
+Cc:     rafael@kernel.org, fparent@baylibre.com, amitk@kernel.org,
+        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+        robh+dt@kernel.org, rui.zhang@intel.com
+References: <20220720181854.547881-1-aouledameur@baylibre.com>
+ <20220720181854.547881-3-aouledameur@baylibre.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220721101050.2362811-2-martyn.welch@collabora.com>
+In-Reply-To: <20220720181854.547881-3-aouledameur@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/07/2022 12:10, Martyn Welch wrote:
-> Add device trees for one of a number of MSC's (parent company, Avnet)
-> variants of the SM2S-IMX8PLUS system on module along with the compatible
-> SM2S-SK-AL-EP1 carrier board. As the name suggests, this family of SoMs use
-> the NXP i.MX8MP SoC and provide the SMARC module interface.
+On 20/07/2022 20:18, Amjad Ouled-Ameur wrote:
+> From: Fabien Parent <fparent@baylibre.com>
 > 
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
-> ---
+> MT8365 is similar to the other SoCs supported by the driver. It has only
+> one bank and 3 actual sensors that can be multiplexed. There is another
+> one sensor that does not have usable data.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Reviewed-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Tested-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Just like in all other cases - you miss your SoB which is necessary for
+the chain.
 
 
 Best regards,

@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5537957CEDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B9357CEE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiGUP0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S229713AbiGUP2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiGUP0D (ORCPT
+        with ESMTP id S229463AbiGUP2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:26:03 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCEF2124C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:26:02 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id b7-20020a17090a12c700b001f20eb82a08so5582894pjg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:26:02 -0700 (PDT)
+        Thu, 21 Jul 2022 11:28:19 -0400
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC24A7E834;
+        Thu, 21 Jul 2022 08:28:18 -0700 (PDT)
+Received: by mail-vk1-xa33.google.com with SMTP id o10so879923vkl.3;
+        Thu, 21 Jul 2022 08:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2uLd/RvlCglp7VMJKG7TRwZBoXRuAQZML6wCn6y9QPE=;
-        b=U8YeA1C1xSmyf9+g6oR8D+gFOIU4wx6tbOqYi/lXgRktJn50dwvUYwjs0cAk4xYSRZ
-         NdVOITGtBt1888pnTJF12EhfFQp1ZjMYxPtt2twRkUFC5rAwA58kPIJeQ+XWL7tAEKLv
-         PHhv4UmiLlB2FD5ZZwJ87M+5IJ2jbF6D9yGS94EUIXg8+3+enWUWO58q+DA4ghVcBfOf
-         OXYwfAaGtYbxz316MH3az8hvm+PgGNDH4LueZl+QJPAnZy0hrPWIYLVHo1UCrES6RVqB
-         zP4RHCzc9gDewTG9NDS3IDGMN2jzDS63hbyUZsWGGW4vnuNXk0JbbXHxQeNFRWhTBvo/
-         e97Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=2ABOAhbNUvDmFBr5+kPISE8py0yDxYD2k6gjXgSabzw=;
+        b=dBP3D2j7Zbfyd9lBMrfA3+rBVYUf1xyi3KeCVbhGycv18vrz+uD2EUIG/ljS0fQ5ii
+         gQGN18QnCtOtTaoNVF24jzmPKWWy41TxcwDAA2KtIRtKSufoN7g+HcUk1VAUF4iQqS/l
+         QOfxLMMChEtlQaS37rk0/fRxItkRu/6XKXWWgqEyDuns5jC72HuKUCBp6Wc+6tWhs1fy
+         oea4UuyrjTpJAGftjfEgY+nhUHLAR2ZJyC9mrNRm4sC0YSyxucCfkCs8SH7+n0CPUBer
+         b6Gm1PSZJB9mqbBgPITOkYAsCavkWlwU62tvQUb+x5um7PczfjyFyG9zgjg4xojJIbFp
+         x1tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2uLd/RvlCglp7VMJKG7TRwZBoXRuAQZML6wCn6y9QPE=;
-        b=HgqzwCXmHuz6ihNtLfl6OrjH/eF98FmCypcaG/c2TasaX1hm8jU0uIN2OLOyaYaRa6
-         S16vweqahyE53xVLkhJUpYCNDqojR7BKWcJlHhADp3eMrA1kx4H7+ZfeysuUztxsyfR8
-         vVnWmN9DLvJ6NIWgJwmEEMf2Wtf8mcbmSS7s/Z5AJitJs/Vp1cR1ByzqZKwAnOUaIDCt
-         Sld97TC/Pn//gdmNlgX52A6c9A1qDTo0Nb+5xye/eXuejoghEimCJapoED3bHwFOZaFY
-         8QzdKJX+EzuS0Zd+5Tu2LUKsjwkh/Rrt2Fz2zfndkKutVVE4EGNQYwVNn+yHMHr2h+ui
-         lZyw==
-X-Gm-Message-State: AJIora9/0ePlrZuYVMVt2ecr7QNyCd6g9/5hq1X4+vsUW0S8qkx0wN7C
-        qqLoFPtGTn/4sZWeCfM/iJ5RQw==
-X-Google-Smtp-Source: AGRyM1s4jbrd+HHmsGjYZRgS2raRakVuaIBd48F8IPCNE2NUCnQugca4NB0SWzvboULXHumLt45VtQ==
-X-Received: by 2002:a17:90a:8914:b0:1dc:20c0:40f4 with SMTP id u20-20020a17090a891400b001dc20c040f4mr11806859pjn.11.1658417161366;
-        Thu, 21 Jul 2022 08:26:01 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id q14-20020a170902a3ce00b001618b70dcc9sm1832358plb.101.2022.07.21.08.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 08:26:00 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:25:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Subject: Re: [PATCH 07/12] KVM: X86/MMU: Remove the useless struct
- mmu_page_path
-Message-ID: <YtlwBcvU5ro11wuy@google.com>
-References: <20220605064342.309219-1-jiangshanlai@gmail.com>
- <20220605064342.309219-8-jiangshanlai@gmail.com>
- <YtcQ1GuTAttXaUk+@google.com>
- <CAJhGHyB=-bGrguLKtTh+EAr5zr--H97HUgR3WP=JTovQLkoevQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=2ABOAhbNUvDmFBr5+kPISE8py0yDxYD2k6gjXgSabzw=;
+        b=TP7WSfPjcB/mQddHl8by3Cbgm83pAwgyHHTah4KqXEh8wvQwKMumjs3s/yAY3nCwyS
+         xtRse0wAsmwDp2F9Q7eGMPIOWxgsk5f7qog9CifCv1nYiWnWoYPYriYxcO4kjkGaaTeF
+         22W5RhqRlbghOprwaqFZ+ZSN9uqqyuYkEEojpFrix6nIRmSJdcMvgR61x6XeM5R+SPx5
+         RBqHGov9yQbgK3zgyNU5zvuK+r/O1qFRp198lC1u57qEhGdRraho5338x2XnrgisyzT1
+         w/lexvR82aMfmD04+8fxxFlOattXabCacJZFknx8p/IKJT0uWP9kU4QaafD0KBV2SAlo
+         W+QQ==
+X-Gm-Message-State: AJIora9fvqJhtq0jQ0jaHI+jRm+/mLMrdz2Z/vc5leCJKThg9IcTCFnQ
+        Gj+om3pd2f4KzFkBIgR9p+ODxBXAjDmHgkv2AcfDn1MurIPA4A==
+X-Google-Smtp-Source: AGRyM1vNMcqyiN2b4w6Eng0CYE9EaMj0cXEOhZIVlptz/ytKraa77603uWNjtnllPoz3OreWA3lwHzbbHZ0gcAFn0mo=
+X-Received: by 2002:a05:6122:11a9:b0:374:8a3d:ba60 with SMTP id
+ y9-20020a05612211a900b003748a3dba60mr15397442vkn.24.1658417297616; Thu, 21
+ Jul 2022 08:28:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJhGHyB=-bGrguLKtTh+EAr5zr--H97HUgR3WP=JTovQLkoevQ@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 21 Jul 2022 10:28:06 -0500
+Message-ID: <CAH2r5msxJU+nTN14LSd6tmFtpgRY4o+-SVktHoqoeD03XepUPw@mail.gmail.com>
+Subject: [PATCH][CIFS] update MAINTAINERS files with reviewers for cifs.ko
+To:     CIFS <linux-cifs@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000ea5d4205e4525dba"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022, Lai Jiangshan wrote:
-> On Wed, Jul 20, 2022 at 4:15 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > Nit, s/useless/now-unused, or "no longer used".  I associate "useless" in shortlogs
-> > as "this <xyz> is pointless and always has been pointless", whereas "now-unused"
-> > is likely to be interpreted as "remove <xyz> as it's no longer used after recent
-> > changes".
-> >
-> > Alternatively, can this patch be squashed with the patch that removes
-> > mmu_pages_clear_parents()?  Yeah, it'll be a (much?) larger patch, but leaving
-> > dead code behind is arguably worse.
-> 
-> Defined by the C-language and the machine, struct mmu_page_path is used
-> in for_each_sp() and the data is set and updated every iteration.
-> 
-> It is not really dead code.
+--000000000000ea5d4205e4525dba
+Content-Type: text/plain; charset="UTF-8"
 
-I'm not talking about just "struct mmu_page_path", but also the pointless updates
-in for_each_sp().  And I think even if we're being super pedantic, it _is_ dead
-code because C99 allows the compiler to drop code that the compiler can prove has
-no side effects.  I learned this the hard way by discovering that an asm() blob
-with an output constraint will be elided if the output isn't consumed and the asm()
-blob isn't tagged volatile.
+And also correct the URL for the project web site. See attached.
 
-  In the abstract machine, all expressions are evaluated as specified by the
-  semantics. An actual implementation need not evaluate part of an expression if
-  it can deduce that its value is not used and that no needed side effects are
-  produced (including any caused by calling a function or accessing a volatile object)
 
-I don't see any advantage to separating this from mmu_pages_clear_parents().  It
-doesn't make the code any easier to review.  I'd argue it does the opposite because
-it makes it harder to see that mmu_pages_clear_parents() was the only user, i.e.
-squashing this would provide further justification for dropping mmu_pages_clear_parents().
+
+-- 
+Thanks,
+
+Steve
+
+--000000000000ea5d4205e4525dba
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-cifs-update-MAINTAINERS-file-with-reviewers.patch"
+Content-Disposition: attachment; 
+	filename="0001-cifs-update-MAINTAINERS-file-with-reviewers.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l5v6tt6s0>
+X-Attachment-Id: f_l5v6tt6s0
+
+RnJvbSA1NzY1NjQ4NzQ2M2IzN2E5MzE0ZjM5ZDczY2QwZmNlNjM3MTM3NzIyIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IFRodSwgMjEgSnVsIDIwMjIgMTA6MjI6NDggLTA1MDAKU3ViamVjdDogW1BBVENIXSBj
+aWZzOiB1cGRhdGUgTUFJTlRBSU5FUlMgZmlsZSB3aXRoIHJldmlld2VycwoKQW5kIGFsc28gY29y
+cmVjdCB0aGUgVVJMIGZvciB0aGUgcHJvamVjdCB3ZWIgc2l0ZS4KClNpZ25lZC1vZmYtYnk6IFN0
+ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9zb2Z0LmNvbT4KLS0tCiBNQUlOVEFJTkVSUyB8IDcg
+KysrKystLQogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkK
+CmRpZmYgLS1naXQgYS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJTCmluZGV4IDY1MTYxNmVkOGFl
+Mi4uODVmMWRkODUxODEyIDEwMDY0NAotLS0gYS9NQUlOVEFJTkVSUworKysgYi9NQUlOVEFJTkVS
+UwpAQCAtNTA1NSwxMiArNTA1NSwxNSBAQCBGOglpbmNsdWRlL2xpbnV4L2Nsay8KIEY6CWluY2x1
+ZGUvbGludXgvb2ZfY2xrLmgKIFg6CWRyaXZlcnMvY2xrL2Nsa2Rldi5jCiAKLUNPTU1PTiBJTlRF
+Uk5FVCBGSUxFIFNZU1RFTSBDTElFTlQgKENJRlMpCitDT01NT04gSU5URVJORVQgRklMRSBTWVNU
+RU0gQ0xJRU5UIChDSUZTIGFuZCBTTUIzKQogTToJU3RldmUgRnJlbmNoIDxzZnJlbmNoQHNhbWJh
+Lm9yZz4KK1I6CVBhdWxvIEFsY2FudGFyYSA8cGNAY2pyLm56PiAoREZTLCBnbG9iYWwgbmFtZSBz
+cGFjZSkKK1I6CVJvbm5pZSBTYWhsYmVyZyA8bHNhaGxiZXJAcmVkaGF0LmNvbT4gKGRpcmVjdG9y
+eSBsZWFzZXMsIHNwYXJzZSBmaWxlcykKK1I6CVNoeWFtIFByYXNhZCBOIDxzcHJhc2FkQG1pY3Jv
+c29mdC5jb20+IChtdWx0aWNoYW5uZWwpCiBMOglsaW51eC1jaWZzQHZnZXIua2VybmVsLm9yZwog
+TDoJc2FtYmEtdGVjaG5pY2FsQGxpc3RzLnNhbWJhLm9yZyAobW9kZXJhdGVkIGZvciBub24tc3Vi
+c2NyaWJlcnMpCiBTOglTdXBwb3J0ZWQKLVc6CWh0dHA6Ly9saW51eC1jaWZzLnNhbWJhLm9yZy8K
+K1c6CWh0dHBzOi8vd2lraS5zYW1iYS5vcmcvaW5kZXgucGhwL0xpbnV4Q0lGUwogVDoJZ2l0IGdp
+dDovL2dpdC5zYW1iYS5vcmcvc2ZyZW5jaC9jaWZzLTIuNi5naXQKIEY6CURvY3VtZW50YXRpb24v
+YWRtaW4tZ3VpZGUvY2lmcy8KIEY6CWZzL2NpZnMvCi0tIAoyLjM0LjEKCg==
+--000000000000ea5d4205e4525dba--

@@ -2,72 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD9A57D1E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1707557D1E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbiGUQqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S231192AbiGUQs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiGUQqP (ORCPT
+        with ESMTP id S229471AbiGUQs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:46:15 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4069E87C00
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:46:15 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id z11-20020a05660217cb00b0067c63cf0236so398394iox.13
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:46:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Lh8GUyjZ+95KJHeS6CKqtOSROmHf9AQTkTHT8abyJsc=;
-        b=RyByYGjjfqGhWD5nFOw43o8TgUjK5XWVgk+YPKg3j1sxps3L2bOIAanS5Xy9xlkabX
-         hNTC62Hr7qkfV7J9Q3V5y5ymPXkoTirsglTzp+TK0yFJXNucB3DLc/MN+CkM+iOIv9Yd
-         NXCvbpiYSdtscJCM5wOuGzOKvLr3dzfGfhaEN8XMmmNWo8soa1SkbKhSU4AqIW6TZ+Y5
-         b7reGT9qjfiXOMWU2OcIAJvmAgAZB3Ks4Ttb+wvC6oRv98fFQvfPVFt0Jebltdck74Sa
-         jOO70Af028ZpPGwpfvF4WGFUy/W+qmhDqw2XPxpRwBFsQQ2ttLsJMcXPre+b3ucTWyVY
-         zT6A==
-X-Gm-Message-State: AJIora+Ekjh1hevcS2tVCe977Qaq6BaFXE5vTlZdkgRs3uJC245zr5OI
-        lvVeUG79y+A5jrlKcpgoFl8K8ofMcXZWoQjcfh9tcOn4yK05
-X-Google-Smtp-Source: AGRyM1tFwAXk7LyT0MzJve5L+Ak4wKxJsuHUR2/5Vh+aXLMMJoS9NQE5rRLSOCJWtWCOHmI0NLcVsNngtAqFawxLff6yqHMzgT+5
+        Thu, 21 Jul 2022 12:48:27 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071B08812D;
+        Thu, 21 Jul 2022 09:48:26 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LCXeC8021465;
+        Thu, 21 Jul 2022 16:48:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=qcppdkim1;
+ bh=CjpWaSkMjpushvLWWB+MZ+mEPHbX6DOXx0M+VrxWs6Q=;
+ b=PUwhepW/eqMzzMUf3pgdU4jM2GZCb1eezFoZtWuVdu3u1hWUn0Qtfqa43kJb2kg01VCb
+ S43+8ipTPxrIlcdDezj1aNuKvAwGnHVZx/uXzVk1aWH78ooM4RpCFh6CZzlsPOCa8es8
+ z7C8zhYasX7lRYwEm0RlxHPUb/lMh0WzdG9o9RVPdJymT52JU5rz4iHnq23wksP+z0kD
+ pPxAxTtwllBoa8dKzomGkbIk3ARhe8sWoaQWWp6uimbns+TTTw7Q/Em0ogMdITRBriV4
+ stPVY6jcqIGdQlqRekgy9CfyI8Re2FBemc7Ej5OrBGRR/bDeqwx6CbZOgm5whPM9252P 7Q== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3heb3x4kae-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 16:48:10 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26LGm9W9011413
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 16:48:09 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 21 Jul
+ 2022 09:48:09 -0700
+Date:   Thu, 21 Jul 2022 09:48:07 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David Heidelberg" <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH 5/5] firmware: qcom: scm: Add wait-queue handling logic
+Message-ID: <20220721164807.GA14440@quicinc.com>
+References: <1656359076-13018-1-git-send-email-quic_gurus@quicinc.com>
+ <1656359076-13018-6-git-send-email-quic_gurus@quicinc.com>
+ <ec04538b-93e2-fa93-4043-c489a0f228e8@quicinc.com>
+ <ad5e875d-e5d7-3b6f-4915-98ba08df8c5d@quicinc.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:10a:b0:2dd:15af:379a with SMTP id
- t10-20020a056e02010a00b002dd15af379amr1205180ilm.101.1658421974644; Thu, 21
- Jul 2022 09:46:14 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 09:46:14 -0700
-In-Reply-To: <20220721162656.2033-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000afbe5805e45374a8@google.com>
-Subject: Re: [syzbot] INFO: trying to register non-static key in ieee80211_do_stop
-From:   syzbot <syzbot+eceab52db7c4b961e9d6@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ad5e875d-e5d7-3b6f-4915-98ba08df8c5d@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: d8FmaQ9dRYTCRwB3ffjiYAACf2Q1IPQV
+X-Proofpoint-ORIG-GUID: d8FmaQ9dRYTCRwB3ffjiYAACf2Q1IPQV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-21_23,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=864 impostorscore=0 spamscore=0 clxscore=1011 suspectscore=0
+ bulkscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207210067
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Jul 01 2022 16:51, Rajendra Nayak wrote:
+> >>+
+> >>+            if (res->a0 == QCOM_SCM_WAITQ_SLEEP) {
+> >>+                wait_for_completion(wq);
+> >>+                fill_wq_resume_args(smc, smc_call_ctx);
+> >>+                wq = NULL;
+> >>+                continue;
+> >>+            } else {
+> >>+                fill_wq_wake_ack_args(smc, smc_call_ctx);
+> >>+                continue;
+> >>+            }
+> >>+        } else if ((long)res->a0 < 0) {
+> >>+            /* Error, simply return to caller */
+> >>+            break;
+> 
+> if my understanding above is correct, shouldn't we do a
+> >>+            if (wq)
+> >>+                scm_waitq_flag_handler(wq, flags);
+> in the error case also?
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Yes, you're right, since both error or success means that a request is
+complete. We should act the same way for error as for success. Thanks for
+catching this.
 
-Reported-and-tested-by: syzbot+eceab52db7c4b961e9d6@syzkaller.appspotmail.com
+> Also why no just scm_waitq_flag_handler(wq, flags); before fill_wq_wake_ack_args(smc, smc_call_ctx);?
 
-Tested on:
-
-commit:         e22c8879 Merge branch '100GbE' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=119975d6080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e37e9aaa4c062adb
-dashboard link: https://syzkaller.appspot.com/bug?extid=eceab52db7c4b961e9d6
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14583378080000
-
-Note: testing is done by a robot and is best-effort only.
+Because that is not part of the protocol - calling scm_waitq_flag_handler(wq, flags)
+would result in a completion being freed, meaning a sleeping call would be
+woken up, which is not what we want. When a WAITQ_WAKE is received, the
+action to be taken is to immediately respond with a wq_wake_ack() and nothing
+else.

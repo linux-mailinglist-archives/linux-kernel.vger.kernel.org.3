@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A440357CD1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4424257CD11
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiGUOPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S231620AbiGUOOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiGUOOv (ORCPT
+        with ESMTP id S231500AbiGUOOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:14:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285F95D59F;
-        Thu, 21 Jul 2022 07:14:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7189B8251D;
-        Thu, 21 Jul 2022 14:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97AEEC341CF;
-        Thu, 21 Jul 2022 14:14:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658412883;
-        bh=/vCEI1AOH7tR3gZ6O+JPQGMF/sAoVLZ3uWMA0Iwt7XE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HpAfec0gFYqrVoSkCO4sXEAZJj6a7nlvE9MtI6Bg2ZjZhO6xVNE5quhHoG9li1pjF
-         dGObm8xrzgq4ef8BeBWO9p0Y3XnwDJ71BuO+mZqCa4gQaN28AnWIjM0fqBQ26CKh1i
-         fFUV5YrvKJZ0MPXfwtZMAsEiYHOEHSmrqqLMz6oBwgK2XiplJwIP/279I8/8/fWfsK
-         UJCNwGf+jgv3N07sbLEucaE472RJauzJvp7ZbQT3qINfcJn3zwzntEBwzWDHWGNPSw
-         yRH3zSGjDl53RqZJvdkqUsW/avaFiy4vRQI5KRxGCXi7g/ybxdkaafzM/nP3mm7qpF
-         I6uhohtuiVY/g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Subject: [PATCH 6/6] ARM: defconfig: kill remnants of CONFIG_LEDS
-Date:   Thu, 21 Jul 2022 16:13:25 +0200
-Message-Id: <20220721141325.2413920-7-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220721141325.2413920-1-arnd@kernel.org>
-References: <20220721141325.2413920-1-arnd@kernel.org>
+        Thu, 21 Jul 2022 10:14:04 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1997A558DD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:14:03 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id i14so3001638yba.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pMvbL5rXnaaHRfS4CHseNqOPVLapmfnpz0FRVAY74sQ=;
+        b=WDJTGzLcaU1MWFAEN7HhqpcpC5ouFJlwyCUd1FxVg1PWMaCbcPX3UqOI8SjZ1P5bW7
+         7MavWF7hZqW30MqymhJpovW8BODXOOAen8JcJiLB0p0t7CxY40qtjMreb/QwRY99odMr
+         aSE7kxYfk9N+qk87fJFA3ElOvs7VuMeq0eBj7HFb3E60z+19HjB4GFVJ1MZ3sBhkj1Ur
+         NczHm9pCWGVA4NN1eRMgm+Ab0pSKi7HwGT9MVvcy55XqgPcjUe625j1NvgzBrsaMi2w/
+         n0F/sdliAJiTVgm7VnIHsnZC+LaNn1XQTO9/JtDBNxaroSEKc4rGk00B48CJJ5wQrr9p
+         iJ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pMvbL5rXnaaHRfS4CHseNqOPVLapmfnpz0FRVAY74sQ=;
+        b=iEATX1KgQE6JQSdynMdhnAdYsfzDw8v3uquSWu6bbZPL0E8+VAjT5QyrvYQAvkZFjy
+         Y19LJ6nEovMOD0Iymhcaupj5JD2tCssf3qYay2ZeWBJw14sAoCQJfaJKugJZbusV/5FV
+         Ai84VOR9RU2rfCkrxAuLcSvLahXAsPmNmRlJtuS/eJIRKchnZ8kHvIMLsAXB9E1rSJMF
+         Z04TZr2Rjbkzp7dP0zFHqva9VETxBsFeeWnrkl6T87kdjrmKqC/fvTswaEp5jgIU8Y8E
+         7pZZpbNdblXzUHvTRv1iecClCiQdb0qGbDqdosCoxTDeOQtz0dfYgweEgI75r9/V/IIf
+         FFEw==
+X-Gm-Message-State: AJIora96S8k1llDsPz3ItyTUJodXM49KGlaM5Tu8bzmGbPnSrfegNIOR
+        HgJ6niZA4ZIUQK11v/t/jIw66IBW9D4Xc31DCY8QBw==
+X-Google-Smtp-Source: AGRyM1uMBcNHC44oJ6Zd1hHpd+OzCl2WXis8vymmrMC38oiVvjhqfqoulFVFUe8VSS/QZ+CmzzB71LNlQOUVZ2ScLdk=
+X-Received: by 2002:a25:3085:0:b0:66e:4440:f42e with SMTP id
+ w127-20020a253085000000b0066e4440f42emr40440432ybw.403.1658412842097; Thu, 21
+ Jul 2022 07:14:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220713040430.25778-1-zhouchengming@bytedance.com>
+ <20220713040430.25778-8-zhouchengming@bytedance.com> <e838ac28-f68e-2282-94d5-616ea3bdf8d0@arm.com>
+ <88062fb6-e2fe-cf4e-10b5-7694c4d30941@bytedance.com> <CAKfTPtCsd2RkOZoa10SSwKhm0NRzmOphAVNW7_JykqzxqfkSXg@mail.gmail.com>
+ <107763fc-7eab-a807-fa15-024178bdf57e@bytedance.com> <CAKfTPtBo9GgkT1VeVA+1CBhiVZ8Vf+kp0XV3PWcBLGuZaz_hKQ@mail.gmail.com>
+ <3cc8def4-54ef-9ca5-7da9-eaa38ad9bd4c@bytedance.com>
+In-Reply-To: <3cc8def4-54ef-9ca5-7da9-eaa38ad9bd4c@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 21 Jul 2022 16:13:50 +0200
+Message-ID: <CAKfTPtCscXjUoOY2EwSwDZ=Qsx0+TPO_ejP5Fh+ds==_hetMfA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v2 07/10] sched/fair: use update_load_avg()
+ to attach/detach entity load_avg
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org, bsegall@google.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,307 +71,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, 21 Jul 2022 at 15:56, Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
+>
+> On 2022/7/20 23:34, Vincent Guittot wrote:
+> > On Wed, 20 Jul 2022 at 15:41, Chengming Zhou
+> > <zhouchengming@bytedance.com> wrote:
+> >>
+> >> On 2022/7/19 18:29, Vincent Guittot wrote:
+> >>> On Fri, 15 Jul 2022 at 18:21, Chengming Zhou
+> >>> <zhouchengming@bytedance.com> wrote:
+> >>>>
+> >
+> > ...
+> >
+> >>>>
+> >>>>>
+> >>>>> Looks to me that you want to replace this by your `freeze PELT when
+> >>>>> outside fair` model.
+> >>>>
+> >>>> Yes, want to freeze PELT for two !fair cases:
+> >>>>
+> >>>> 1. !fair task hasn't been fair before: will still have its init load_avg
+> >>>>    when switch to fair.
+> >>>
+> >>> But I'm not sure it makes sense to keep these init values. As an
+> >>> example, the util_avg is set according to the cpu utilization at the
+> >>> time of the task creation. I would tend to decay them as these init
+> >>> values become less and less relevant.
+> >>>
+> >>> so we should return early in post_init_entity_util_avg() and don't set
+> >>> util_avg if sched class is not cfs
+> >>
+> >> Yes, this indeed is a problem if we attach this init sched_avg of !fair task.
+> >> I'm also not sure whether it make sense to keep them to 0 ? Will it cause
+> >> unfairness problem between cfs_rqs?
+> >
+> > Why should it cause an unfairness problem ? !fair tasks are not
+> > accounted and their pelt values will be decayed down to 0 after 320ms
+> > anyway (with the current implementation). So it's just like if you
+> > started directly after those 320ms
+>
+> Thanks for your patient explain. IMHO, I am thinking if we have init sched_avg
+> for new fair task (A), but have 0 for new task switched from !fair (B). Then
+> what's the point of init sched_avg for the fair task?
 
-CONFIG_LEDS was replaced by CONFIG_NEW_LEDS over ten years ago with commit
-fa8bbb13ab49 ("ARM: use new LEDS CPU trigger stub to replace old one"),
-but some defconfig files still reference it.
+For fair task, the util_avg is set according to cpu's util_avg at fork
+time as an estimate of its coming utilization. The load_is also set to
+max to ensure an min share. But these init value have a real impact on
+the first 320ms. after they have just disappear from the *_avg.
 
-Replace it and its sub-options with the corresponding new versions.
+For !fair task, these init value will be decayed when
+swicthed_to_fair(). This means that if a !fair task stays more than
+320ms in !fair class (running, runnable or sleeping) before switching
+into fair class, those init pelt value will be decayed to 0.
+If we keep these init value, the initial util_avg value which has been
+set according to the cpu's util_avg at fork will stay at this value
+which is no more relevant
 
-Some of these machines may not actually have a new-style LED driver,
-and I did not check them individually as most of the machines are
-going away soon anyway.
+>
+> The B task will need some time to reach its stable load value, so in this process
+> its cfs_rq may can't get enough shares? Imaging below scenario, if we have fair
+> task A and switched from !fair task B at the same time, could cause unfairness
+> between cfs0 and cfs1 ?
+>
+> CPU0   tg   CPU1
+>   |  /    \  |
+>   | /      \ |
+> cfs0        cfs1
+>  (A)         (B)
+>
+> If runnable_avg and util_avg are 0 when switched from !fair, so we need more time
+> to do load balance or CPU frequency adjust? I think it's the reason why we have
+> init sched_avg for new fair task. Should we care about these, or it will be no problem?
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/configs/assabet_defconfig    | 6 ++++--
- arch/arm/configs/cerfcube_defconfig   | 6 ++++--
- arch/arm/configs/footbridge_defconfig | 6 ++++--
- arch/arm/configs/hackkit_defconfig    | 6 ++++--
- arch/arm/configs/lart_defconfig       | 6 ++++--
- arch/arm/configs/lubbock_defconfig    | 6 ++++--
- arch/arm/configs/mainstone_defconfig  | 6 ++++--
- arch/arm/configs/neponset_defconfig   | 6 ++++--
- arch/arm/configs/netwinder_defconfig  | 6 ++++--
- arch/arm/configs/omap1_defconfig      | 1 -
- arch/arm/configs/pxa255-idp_defconfig | 6 ++++--
- arch/arm/configs/simpad_defconfig     | 3 ++-
- 12 files changed, 42 insertions(+), 22 deletions(-)
+But the util_avg which has been set at fork time,  has been set
+according to a cpu util_avg which is maybe hundreds of seconds old.
 
-diff --git a/arch/arm/configs/assabet_defconfig b/arch/arm/configs/assabet_defconfig
-index da5284a8f374..801383e4135d 100644
---- a/arch/arm/configs/assabet_defconfig
-+++ b/arch/arm/configs/assabet_defconfig
-@@ -3,8 +3,6 @@ CONFIG_LOG_BUF_SHIFT=14
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_ARCH_SA1100=y
- CONFIG_SA1100_ASSABET=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_CMDLINE="mem=32M console=ttySA0,38400n8 initrd=0xc0800000,3M root=/dev/ram"
- CONFIG_FPE_NWFPE=y
- CONFIG_PM=y
-@@ -42,6 +40,10 @@ CONFIG_FB=y
- CONFIG_FB_SA1100=y
- # CONFIG_VGA_CONSOLE is not set
- CONFIG_SOUND=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_MSDOS_FS=y
- CONFIG_TMPFS=y
-diff --git a/arch/arm/configs/cerfcube_defconfig b/arch/arm/configs/cerfcube_defconfig
-index c42e39b011df..d4f3f9a8cd97 100644
---- a/arch/arm/configs/cerfcube_defconfig
-+++ b/arch/arm/configs/cerfcube_defconfig
-@@ -4,8 +4,6 @@ CONFIG_LOG_BUF_SHIFT=14
- CONFIG_ARCH_SA1100=y
- CONFIG_SA1100_CERF=y
- CONFIG_SA1100_CERF_FLASH_16MB=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_CMDLINE="console=ttySA0,38400 root=/dev/mtdblock3 rootfstype=jffs2 rw mem=32M init=/linuxrc"
- CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
- CONFIG_CPU_FREQ_GOV_USERSPACE=m
-@@ -46,6 +44,10 @@ CONFIG_SERIAL_SA1100_CONSOLE=y
- CONFIG_WATCHDOG=y
- CONFIG_SA1100_WATCHDOG=m
- # CONFIG_VGA_CONSOLE is not set
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=m
- CONFIG_EXT3_FS=m
- CONFIG_MSDOS_FS=m
-diff --git a/arch/arm/configs/footbridge_defconfig b/arch/arm/configs/footbridge_defconfig
-index af7d3120cc9c..5c0c88ce9bc5 100644
---- a/arch/arm/configs/footbridge_defconfig
-+++ b/arch/arm/configs/footbridge_defconfig
-@@ -8,8 +8,6 @@ CONFIG_ARCH_FOOTBRIDGE=y
- CONFIG_ARCH_CATS=y
- CONFIG_ARCH_EBSA285_HOST=y
- CONFIG_ARCH_NETWINDER=y
--CONFIG_LEDS=y
--CONFIG_LEDS_TIMER=y
- CONFIG_FPE_NWFPE=y
- CONFIG_FPE_NWFPE_XP=y
- CONFIG_BINFMT_AOUT=y
-@@ -91,6 +89,10 @@ CONFIG_SOUND=m
- CONFIG_USB=m
- CONFIG_USB_MON=m
- CONFIG_USB_PRINTER=m
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_TIMER=y
- CONFIG_EXT2_FS=y
- CONFIG_AUTOFS4_FS=y
- CONFIG_ISO9660_FS=m
-diff --git a/arch/arm/configs/hackkit_defconfig b/arch/arm/configs/hackkit_defconfig
-index e0ea332a4cf4..19bc294c2767 100644
---- a/arch/arm/configs/hackkit_defconfig
-+++ b/arch/arm/configs/hackkit_defconfig
-@@ -3,8 +3,6 @@ CONFIG_LOG_BUF_SHIFT=14
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_ARCH_SA1100=y
- CONFIG_SA1100_HACKKIT=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_CMDLINE="console=ttySA0,115200 root=/dev/ram0 initrd=0xc0400000,8M init=/rootshell"
- CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
- CONFIG_FPE_NWFPE=y
-@@ -31,6 +29,10 @@ CONFIG_DUMMY=y
- CONFIG_SERIAL_SA1100=y
- CONFIG_SERIAL_SA1100_CONSOLE=y
- # CONFIG_VGA_CONSOLE is not set
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_MSDOS_FS=y
- CONFIG_VFAT_FS=y
-diff --git a/arch/arm/configs/lart_defconfig b/arch/arm/configs/lart_defconfig
-index 76ea89716184..3dad6adabb43 100644
---- a/arch/arm/configs/lart_defconfig
-+++ b/arch/arm/configs/lart_defconfig
-@@ -3,8 +3,6 @@ CONFIG_LOG_BUF_SHIFT=14
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_ARCH_SA1100=y
- CONFIG_SA1100_LART=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_CMDLINE="console=ttySA0,9600 root=/dev/ram"
- CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
- CONFIG_CPU_FREQ_GOV_USERSPACE=y
-@@ -37,6 +35,10 @@ CONFIG_SERIAL_SA1100=y
- CONFIG_SERIAL_SA1100_CONSOLE=y
- # CONFIG_VGA_CONSOLE is not set
- CONFIG_SOUND=m
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_EXT3_FS=m
- CONFIG_REISERFS_FS=m
-diff --git a/arch/arm/configs/lubbock_defconfig b/arch/arm/configs/lubbock_defconfig
-index 95e937379a62..ca226bce5025 100644
---- a/arch/arm/configs/lubbock_defconfig
-+++ b/arch/arm/configs/lubbock_defconfig
-@@ -3,8 +3,6 @@ CONFIG_LOG_BUF_SHIFT=14
- # CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_PXA=y
- CONFIG_ARCH_LUBBOCK=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_CMDLINE="root=/dev/nfs ip=bootp console=ttyS0,115200 mem=64M"
- CONFIG_FPE_NWFPE=y
- CONFIG_MODULES=y
-@@ -37,6 +35,10 @@ CONFIG_SERIAL_PXA_CONSOLE=y
- # CONFIG_VGA_CONSOLE is not set
- CONFIG_USB_GADGET=y
- CONFIG_USB_G_SERIAL=m
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_MSDOS_FS=y
- CONFIG_JFFS2_FS=y
-diff --git a/arch/arm/configs/mainstone_defconfig b/arch/arm/configs/mainstone_defconfig
-index f5c271631633..dc1a88ed4de4 100644
---- a/arch/arm/configs/mainstone_defconfig
-+++ b/arch/arm/configs/mainstone_defconfig
-@@ -3,8 +3,6 @@ CONFIG_LOG_BUF_SHIFT=14
- # CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_PXA=y
- CONFIG_MACH_MAINSTONE=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_CMDLINE="root=/dev/nfs ip=bootp console=ttyS0,115200 mem=64M"
- CONFIG_FPE_NWFPE=y
- CONFIG_MODULES=y
-@@ -35,6 +33,10 @@ CONFIG_FB_PXA=y
- # CONFIG_VGA_CONSOLE is not set
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_LOGO=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_MSDOS_FS=y
- CONFIG_JFFS2_FS=y
-diff --git a/arch/arm/configs/neponset_defconfig b/arch/arm/configs/neponset_defconfig
-index bc70ca29a166..907403529e30 100644
---- a/arch/arm/configs/neponset_defconfig
-+++ b/arch/arm/configs/neponset_defconfig
-@@ -4,8 +4,6 @@ CONFIG_BLK_DEV_INITRD=y
- CONFIG_ARCH_SA1100=y
- CONFIG_SA1100_ASSABET=y
- CONFIG_ASSABET_NEPONSET=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_ZBOOT_ROM_TEXT=0x80000
- CONFIG_ZBOOT_ROM_BSS=0xc1000000
- CONFIG_ZBOOT_ROM=y
-@@ -70,6 +68,10 @@ CONFIG_USB=m
- CONFIG_USB_MON=m
- CONFIG_USB_OHCI_HCD=m
- CONFIG_USB_STORAGE=m
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_MSDOS_FS=m
- CONFIG_VFAT_FS=m
-diff --git a/arch/arm/configs/netwinder_defconfig b/arch/arm/configs/netwinder_defconfig
-index d870524e87bf..cf7bbcf9d98a 100644
---- a/arch/arm/configs/netwinder_defconfig
-+++ b/arch/arm/configs/netwinder_defconfig
-@@ -2,8 +2,6 @@ CONFIG_SYSVIPC=y
- CONFIG_LOG_BUF_SHIFT=14
- CONFIG_ARCH_FOOTBRIDGE=y
- CONFIG_ARCH_NETWINDER=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_DEPRECATED_PARAM_STRUCT=y
- CONFIG_CMDLINE="root=0x801"
- CONFIG_FPE_NWFPE=y
-@@ -58,6 +56,10 @@ CONFIG_SOUND_TRACEINIT=y
- CONFIG_SOUND_DMAP=y
- CONFIG_SOUND_YM3812=y
- CONFIG_SOUND_WAVEARTIST=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_ISO9660_FS=y
- CONFIG_JOLIET=y
-diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-index e10febef3c43..3f72d2ff7644 100644
---- a/arch/arm/configs/omap1_defconfig
-+++ b/arch/arm/configs/omap1_defconfig
-@@ -41,7 +41,6 @@ CONFIG_MACH_NOKIA770=y
- CONFIG_MACH_AMS_DELTA=y
- CONFIG_MACH_OMAP_GENERIC=y
- CONFIG_AEABI=y
--CONFIG_LEDS=y
- CONFIG_CMDLINE="root=1f03 rootfstype=jffs2"
- CONFIG_FPE_NWFPE=y
- # CONFIG_SUSPEND is not set
-diff --git a/arch/arm/configs/pxa255-idp_defconfig b/arch/arm/configs/pxa255-idp_defconfig
-index feb840102a05..d141cc786145 100644
---- a/arch/arm/configs/pxa255-idp_defconfig
-+++ b/arch/arm/configs/pxa255-idp_defconfig
-@@ -3,8 +3,6 @@ CONFIG_LOG_BUF_SHIFT=14
- # CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_PXA=y
- CONFIG_ARCH_PXA_IDP=y
--CONFIG_LEDS=y
--CONFIG_LEDS_CPU=y
- CONFIG_CMDLINE="root=/dev/nfs ip=dhcp console=ttyS0,115200 mem=64M"
- CONFIG_FPE_NWFPE=y
- CONFIG_MODULES=y
-@@ -36,6 +34,10 @@ CONFIG_FB_PXA=y
- # CONFIG_VGA_CONSOLE is not set
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_LOGO=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_CPU=y
- CONFIG_EXT2_FS=y
- CONFIG_MSDOS_FS=y
- CONFIG_JFFS2_FS=y
-diff --git a/arch/arm/configs/simpad_defconfig b/arch/arm/configs/simpad_defconfig
-index b81e5decd147..7956f0da0bf9 100644
---- a/arch/arm/configs/simpad_defconfig
-+++ b/arch/arm/configs/simpad_defconfig
-@@ -7,7 +7,6 @@ CONFIG_KALLSYMS_ALL=y
- CONFIG_KALLSYMS_EXTRA_PASS=y
- CONFIG_ARCH_SA1100=y
- CONFIG_SA1100_SIMPAD=y
--CONFIG_LEDS=y
- CONFIG_CMDLINE="mtdparts=sa1100:512k(boot),1m(kernel),-(root) console=ttySA0 root=1f02 noinitrd mem=64M jffs2_orphaned_inodes=delete rootfstype=jffs2"
- CONFIG_FPE_NWFPE=y
- CONFIG_MODULES=y
-@@ -75,6 +74,8 @@ CONFIG_FB=y
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_LOGO=y
- CONFIG_SOUND=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
- CONFIG_EXT2_FS=m
- CONFIG_EXT3_FS=m
- CONFIG_REISERFS_FS=m
--- 
-2.29.2
-
+>
+> I'm not sure, I must have missed something :-)
+>
+> Thanks!
+>
+> >
+> >>
+> >>>
+> >>>>
+> >>>> 2. !fair task has been switched_from_fair(): will still keep its lastest
+> >>>>    load_avg when switch to fair.
+> >>>>
+> >>>>>
+> >>>>>> This patch make update_load_avg() the only location of attach/detach,
+> >>>>>> and can handle these corner cases like change cgroup of NEW tasks,
+> >>>>>> by checking last_update_time before attach/detach.
+> >>>>>
+> >>>>> [...]
+> >>>>>
+> >>>>>> @@ -11527,9 +11522,7 @@ static void detach_entity_cfs_rq(struct sched_entity *se)
+> >>>>>>      struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> >>>>>>
+> >>>>>>      /* Catch up with the cfs_rq and remove our load when we leave */
+> >>>>>> -    update_load_avg(cfs_rq, se, 0);
+> >>>>>> -    detach_entity_load_avg(cfs_rq, se);
+> >>>>>> -    update_tg_load_avg(cfs_rq);
+> >>>>>> +    update_load_avg(cfs_rq, se, UPDATE_TG | DO_DETACH);
+> >>>>>
+> >>>>> IMHO, the DO_[DE|AT]TACH comments in update_load_avg() would have to be
+> >>>>> updated in this case.
+> >>>>
+> >>>> Correct, will do.
+> >>>>
+> >>>> Thanks.
+> >>>>
+> >>>>>
+> >>>>> [...]

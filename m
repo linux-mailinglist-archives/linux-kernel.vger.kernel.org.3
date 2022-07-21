@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF0A57D636
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95D557D63A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiGUVm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S233836AbiGUVni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233787AbiGUVm0 (ORCPT
+        with ESMTP id S233703AbiGUVng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:42:26 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5570936AA
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:42:23 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a10so3382474ljj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:42:23 -0700 (PDT)
+        Thu, 21 Jul 2022 17:43:36 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A926F936A3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:43:34 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so6498674pjq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:43:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wRbqgW25Md992aZiFQNaLfMNuOXLSkIclPSTYF16KUU=;
-        b=kI3RWq6qU86SvhXJ+n4czGx32GlH4FX7gQPfGn/pCa+Z8RzNmoP1Z6qIBESW7Kr+25
-         SpDwme5otXH0/kXwSzId0A2MvBEcMqpD9IN/UpRs+w+9oUS5SEBn9eNYe2plOp0AynYL
-         OjltcH/TTdeL+Bi5wTm9B4D5uh0aZTVp1qKCIbMpti2LAAcCtpT8e/xe9P0SyX/lCH+b
-         X2FSuTg87lwBMuJ4h27KrXBbdJt4kZdMJOHFAQXnY233rTuuM+lNnHTusvpbUicBjdNZ
-         eJzxUSUosPMukXDVLdoGfH2HmvzJkiIwGKydvsOh5RJY5jNHpA4ry1QVsHjXwwMoyOG/
-         uZPg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=v5w1CEKb5lWaIk8RLPJBXF3xB963/QpWk9gTmTbgykg=;
+        b=isGV8ExNkQux68fByCMrRCn/Ib1blLrzg5miI3ReclIgLUD6qmn/x5GCSk6mvX/uJ5
+         Ue6bMGLfZbiUELfj+mBcHGP1BMzzPpYwe3nn5JdLCZsgP8EkMx/kt8GphI/g27MhLDQX
+         RGD+uGJkNsKLbBpl4/JfsedDxApzHXSEIh0+ATnR7olgvTQzfubJeGyS5v8DR2naX43/
+         sewoZLRVgvUNSvx/yrbzMPzbXgITtzh/X3Nk1Fh128igd8ICEJK3CnSDuteegER9LjFH
+         nf7AmjF4VTO1lbwBpRVmmetY4nrSFIchLi5w8l02A+ATduxf6FqAK42q1sGWYxQNPyln
+         ABXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wRbqgW25Md992aZiFQNaLfMNuOXLSkIclPSTYF16KUU=;
-        b=fTgAQ2wVAOO2x68RnKMWhjlAkN5MUhHpvIhcStH++JGU+h9c2OOm6smAi/wVxBfjMU
-         6BJ8FVPNnmI+4uonvQIY3216XdP1PkIxL0RKcgfVHaUjzMR5LL5n4+ueMkazl+FPjEkz
-         V5TGXIL2yO/RTOqWqQ0FDprFoB0o+Fn4mVFw7N656tmEYMJJ4gL4TktxbMkXeniWGsNH
-         hDRIbOI0tZvJaHHebLLiqvF8HUhCkhYBW1+Tu5TShS7uKkalJMIXAH8wUW/8VslT5one
-         TIQChEyGyIh74IOzH52ODeH9drAdmAUZPl6DrfCrZoHBaPkdkDywKNAyg0+S1fI9Dvhv
-         qBDQ==
-X-Gm-Message-State: AJIora8BMZfRE+gDqhL6qkUQRKlJ+JAK/MufLtw4S3fJhdCSITruh5Zc
-        qgbB3ImqxrkLOMGJ33hksAmB9KlFvCn/W9XPpKVT7A==
-X-Google-Smtp-Source: AGRyM1vOumvDj2RLhisOcU/m0l4DiaopArK0kFTBoJQSufKneeNaEsTSPD2PHZBdOJhBe2j7q/PVSkIkkssHHXRraU4=
-X-Received: by 2002:a2e:3109:0:b0:25a:8a0c:40e2 with SMTP id
- x9-20020a2e3109000000b0025a8a0c40e2mr120698ljx.26.1658439741750; Thu, 21 Jul
- 2022 14:42:21 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=v5w1CEKb5lWaIk8RLPJBXF3xB963/QpWk9gTmTbgykg=;
+        b=dvMmq5R3cJQQYZuoNF5RRXUFme5IXqV6OTP1995A2IDVT4tR6R75a7s0zUilLJEICI
+         +K4X41Mx4zQE26FT8WBGZ8+BnedoCui1+R++y6Xnta1H1/P+vFu5JMCViN0udQb3Mbon
+         6kSIAPQUPnQhg3XHPs/iwTK0MAVj95vvWHoHYh6CbehGXFGItI1+JSVu81dZ45pQ4O2y
+         eZcCVfJPkDgDQO026VuaX/IJ3tjGsjJvKbwdzijd4JgygE+lJcbmOD11N5TdGCCqIxtC
+         zTLl5MEIwDL4aYxU1U4l5ZOIlUx194xrEqi+Jfa/HYeRH+9w1VwpIQWM7dXzwg1Vqa/+
+         CvjQ==
+X-Gm-Message-State: AJIora/SXCXNPqA+GgaLUcIyoMLgH8Wf0KsP91p7ThgtkZ4PrHjZ9yTP
+        Yn/DCv62JO8ySVhOHCixvpWvXNmnKehXxQ==
+X-Google-Smtp-Source: AGRyM1uXHR8jTjhjsgoyXO5G6sQw0lYkq5kWNncOHLdm3Ou0iyCqrzkrlwq6KM+SaA1K00u/imd6mw==
+X-Received: by 2002:a17:90a:bb94:b0:1f2:19f0:b01e with SMTP id v20-20020a17090abb9400b001f219f0b01emr514168pjr.46.1658439814017;
+        Thu, 21 Jul 2022 14:43:34 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id d2-20020a17090a3b0200b001f1abb8de2bsm3865842pjc.49.2022.07.21.14.43.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 14:43:33 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 21:43:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 01/25] KVM: x86: hyper-v: Expose access to debug MSRs
+ in the partition privilege flags
+Message-ID: <YtnIgQOPbcZOQK2D@google.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-2-vkuznets@redhat.com>
 MIME-Version: 1.0
-References: <20220721212012.4060328-1-justinstitt@google.com>
-In-Reply-To: <20220721212012.4060328-1-justinstitt@google.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 21 Jul 2022 14:42:10 -0700
-Message-ID: <CAKwvOd=wn=tbX7ixs9a=4zoVSbAU1qP-6NE04hGG9dzvo0zFJw@mail.gmail.com>
-Subject: Re: [PATCH] drivers: lkdtm: fix clang -Wformat warning
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714091327.1085353-2-vkuznets@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,49 +77,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 2:20 PM Justin Stitt <justinstitt@google.com> wrote:
->
-> When building with Clang we encounter the following warning
-> (ARCH=hexagon + CONFIG_FRAME_WARN=0):
-> | ../drivers/misc/lkdtm/bugs.c:107:3: error: format specifies type
-> | 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
-> |                 REC_STACK_SIZE, recur_count);
-> |                 ^~~~~~~~~~~~~~
->
-> Cast REC_STACK_SIZE to `unsigned long` to match format specifier `%lu`.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/378
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
+> For some features, Hyper-V spec defines two separate CPUID bits: one
+> listing whether the feature is supported or not and another one showing
+> whether guest partition was granted access to the feature ("partition
+> privilege mask"). 'Debug MSRs available' is one of such features. Add
+> the missing 'access' bit.
+> 
+> Fixes: f97f5a56f597 ("x86/kvm/hyper-v: Add support for synthetic debugger interface")
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
-> Reported by Nathan here:
-> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
->
->  drivers/misc/lkdtm/bugs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-> index 009239ad1d8a..6381255aaecc 100644
-> --- a/drivers/misc/lkdtm/bugs.c
-> +++ b/drivers/misc/lkdtm/bugs.c
-> @@ -29,7 +29,7 @@ struct lkdtm_list {
->  #if defined(CONFIG_FRAME_WARN) && (CONFIG_FRAME_WARN > 0)
->  #define REC_STACK_SIZE (_AC(CONFIG_FRAME_WARN, UL) / 2)
->  #else
-> -#define REC_STACK_SIZE (THREAD_SIZE / 8)
-> +#define REC_STACK_SIZE ((unsigned long)(THREAD_SIZE / 8))
+>  arch/x86/kvm/hyperv.c             | 1 +
+>  include/asm-generic/hyperv-tlfs.h | 2 ++
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index e2e95a6fccfd..e08189211d9a 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -2496,6 +2496,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+>  			ent->eax |= HV_MSR_RESET_AVAILABLE;
+>  			ent->eax |= HV_MSR_REFERENCE_TSC_AVAILABLE;
+>  			ent->eax |= HV_ACCESS_FREQUENCY_MSRS;
+> +			ent->eax |= HV_ACCESS_DEBUG_MSRS;
+>  			ent->eax |= HV_ACCESS_REENLIGHTENMENT;
 
-`THREAD_SIZE / 8UL` might be more concise.
+Doesn't KVM also need to switch to enforcing the "access" flag?
 
->  #endif
->  #define REC_NUM_DEFAULT ((THREAD_SIZE / REC_STACK_SIZE) * 2)
->
-> --
-> 2.37.1.359.gd136c6c3e2-goog
->
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index c284a605e453..ca91547034e4 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1282,7 +1282,7 @@ static bool hv_check_msr_access(struct kvm_vcpu_hv *hv_vcpu, u32 msr)
+        case HV_X64_MSR_SYNDBG_OPTIONS:
+        case HV_X64_MSR_SYNDBG_CONTROL ... HV_X64_MSR_SYNDBG_PENDING_BUFFER:
+                return hv_vcpu->cpuid_cache.features_edx &
+-                       HV_FEATURE_DEBUG_MSRS_AVAILABLE;
++                       HV_ACCESS_DEBUG_MSRS;
+        default:
+                break;
+        }
 
-
--- 
-Thanks,
-~Nick Desaulniers

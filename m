@@ -2,291 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B3A57D6E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF01057D6EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbiGUWcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S232782AbiGUWex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGUWcI (ORCPT
+        with ESMTP id S229579AbiGUWeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:32:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75281B7A3;
-        Thu, 21 Jul 2022 15:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658442727; x=1689978727;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=8GXS+MumU8gPy/Pb6vPNNRn3HGXDtrkY3dK1BuNA0ts=;
-  b=EWD1sTFyDLVHQVqTtsRm3dUMfyGTz4uhf806VXnrPyUhn4/GhFFmrkum
-   osaiTWiRzyObiuiOppMkY8ZHF97EhbjMc3/zYjNGhdmsKX84M3r2ws7b1
-   ub9FmjnEKxB0py+jYCawIP71yaRtjyDVZkt8LkYRzTFs9pZ7mIq02s+Dj
-   39CzIOeLdufCxsHg6Omy+BiwMaMu0exSL5mjoOUfvkcx2VoYdflNMCSnV
-   SqnVd8Bv1ofvmJ6U2Hf7D8rOT0RgwMVAhJB9O/2aGsgWC1kkcMgQWMpXB
-   F68UL5Ap8ReJYzuhT9nO4obukkyMYBp8ODvn06LUS+GnoIa+L9dhNBf56
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="266960330"
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="266960330"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 15:32:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="725216106"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jul 2022 15:32:06 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 21 Jul 2022 15:32:06 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 21 Jul 2022 15:32:06 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 21 Jul 2022 15:32:06 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 21 Jul 2022 15:32:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iBe93qd8+jd/o/JiqAaIWayGpb7xq3vxstvaUCnSofPtYF3XvG3sT9nt/oahbRbQMxbKBrHTeueihFan3gnYH8mzifDN2nC3y8PHyUl1SeEJ8aQCeG8LJIKSRa8NAANOoXGuNzGuhlb4KoQnVEkwEYkcNixY0i/17pGyhhg/It8ah9kgO4rVfuLjPRqFOe3b8jItwKgwge6003OjoCBo37OIJno/1btA8wh5ySAJfoUnxEzAGDB3YVxFHwG7TgdG33aB1UkN6KUImjlL0bDCHWeTAD11Wvs5+SzzffrFz0RB0D5DBlQq35q991PeCtJ2Rdw1CeWzBsScFX4uM9iOpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=71GrRWGcPcx2KUURmgdCqr+s+OTMZzXWa1Xr0E0PzYU=;
- b=H+NYgfqGjTQyILMSbbJIyhzyYevHsF4S/+ZSNBwgo4J4jap3WvdzlYh3nUYX2jOo8vu5rBqYcx0g5NN3pA8sxg2uJUaxr3ZXrYPF4lJLoJ4nTTYihwlwQW1SjTRk7w+PIePoGYrDvhsh6rowPMWFK/c92sngz3E/4zVYhLzw+dkiBZecN9k/POat+obgH9ezsdGGIAeUoG5I6DKfkU/QZVkYLq/HEQ+BVdnPE21KD4V8WmK/ySCpOQcoTU061V3ZhLgBFvEdeUdIs7jKGkzMk4HwmpJ2x503LFliZl4rGvnbyEm6cq7M8lQ2+nufW/18vhT1JSSfUEyxNOPaFFtYXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- PH0PR11MB5029.namprd11.prod.outlook.com (2603:10b6:510:30::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5458.18; Thu, 21 Jul 2022 22:32:04 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::3154:e32f:e50c:4fa6]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::3154:e32f:e50c:4fa6%6]) with mapi id 15.20.5438.017; Thu, 21 Jul 2022
- 22:32:04 +0000
-Date:   Thu, 21 Jul 2022 15:31:59 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-aio@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] aio: Replace kmap{,_atomic}() with kmap_local_page()
-Message-ID: <YtnT36RXiWQ/Qtl9@iweiny-desk3>
-References: <20220706233328.18582-1-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220706233328.18582-1-fmdefrancesco@gmail.com>
-X-ClientProxiedBy: BY5PR03CA0001.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::11) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
+        Thu, 21 Jul 2022 18:34:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAE007647B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658442888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FbHoTM5Rt91OdmCyo1W3xeRtGZ9iC9uA5MFK7g8w+Fg=;
+        b=Ks/h8aZhClK8Mk9OFL7G+GvG2Lee+T28pMQg03UYyqdtxjUpJ1usCuql1H8WRYvDTB86at
+        WuUjVSreMIpEuMUvcXYJPh4La+EHk4VYukIpOLW/ruNqc+DeTOz2opHqYJ/gQATxU4oiYQ
+        y1/r2mFbxbZIJ69TSkhAuSTbI3z2jaU=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-324-JXguyG8fOkym-0oELJeKPg-1; Thu, 21 Jul 2022 18:34:46 -0400
+X-MC-Unique: JXguyG8fOkym-0oELJeKPg-1
+Received: by mail-il1-f198.google.com with SMTP id z2-20020a056e02088200b002dc4022c15fso1637745ils.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:34:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=FbHoTM5Rt91OdmCyo1W3xeRtGZ9iC9uA5MFK7g8w+Fg=;
+        b=C3v/UfcFS4rM6TeUSN72LC+uhy7goPXGR7VYCeDGxYosZRuoSapA2FwoMpEpw5p1rT
+         F2Y05q0Nrc/OperKpso8zp/1o433NduTuiLy3N1Y3MHgxsxcpwHnmHdLJFoVz72TWYxZ
+         Frl//PBEU6HcTQ8la8Nxb6POPQnIp76aoPyUkIL+mUgOFkv5ODGkmdX2g+6OdWdQc2Yh
+         j98Ti59Zl36Rlcq94jN9yI/j++0PmD+PnviGR2Sjp3/19Tyy0cfBfi61Ll96pqdNYcWY
+         V6paNh56VT6tzqlWPaQChHEQi/R6s8g2AFHTKJhAHPqUHA5UHof7wxK9/OuOE22EkyPa
+         VA7g==
+X-Gm-Message-State: AJIora9qtm3yz6Mb7NNPKvi2W3VVgXUKQ1p6xyAnVaGom3vRY2L46Yip
+        kfZVmo68udnRkeCxedBCn0Z2rAcBk6XaGgTT77oux7aZKF+eolTx8tHlAg+bQ5bKDtXIMizCkYy
+        ODqUlVipnDB3fvM5n3HE6rpYk
+X-Received: by 2002:a05:6638:3589:b0:33f:88f2:2545 with SMTP id v9-20020a056638358900b0033f88f22545mr311973jal.229.1658442885837;
+        Thu, 21 Jul 2022 15:34:45 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1u3YiP6JXEgjAKXrBeop0N46j1B+Tfjsl9+kS03iKFvuVf+mnHSNfypqaXgylDjjdtyx72oZQ==
+X-Received: by 2002:a05:6638:3589:b0:33f:88f2:2545 with SMTP id v9-20020a056638358900b0033f88f22545mr311963jal.229.1658442885478;
+        Thu, 21 Jul 2022 15:34:45 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id x8-20020a0566022c4800b0067c09fd0b53sm1330034iov.21.2022.07.21.15.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 15:34:44 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 16:34:42 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v5 5/5] vfio/pci: Implement
+ VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+Message-ID: <20220721163442.7d2ae47f.alex.williamson@redhat.com>
+In-Reply-To: <20220719121523.21396-6-abhsahu@nvidia.com>
+References: <20220719121523.21396-1-abhsahu@nvidia.com>
+        <20220719121523.21396-6-abhsahu@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 87c99078-9a90-4f83-7018-08da6b68d64a
-X-MS-TrafficTypeDiagnostic: PH0PR11MB5029:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rnzYdvj54ex798mgpn0snKDbbisAqUp+0BwhNH7K4oW15C/gW8hJHwwVJyk14qY8xtFDMQ273/Remag5ojzu0J3nXcwjDAEG0xvBb4gZgoPdB6tiytpdN3tZykpQj9lgliaiZJMVANxaC01sEIOmAc5cTepIu3E0aukxHOrs737SeZxHwtEoGXUN82MZUnzDTwLsDuCxpF/am3R099TZSi9v/68AHw5AROVMYmxUiWGMT+meRs/v9gOSJeK5kA3FLaFQu8tGAtw4c5rTdRAxUrCMuWri2zfquM+V4fJkMfV8sJQJ2XHVZu1KVzl9uKCyW3+VvD7WZd4S26dBkwG3UmPlGqbnEw2XZjo66HQZ8w/K2EdzM+XoXTTBsQ5D3gmypiEwv/Hg5c9Ua/t1l9HMAQdlAqy8b2qAUGjRy/JnWgoUQyqnWvLWVvTyyQ+iAvqr0EbtNCd1khrBhG6LOm5VCWiOv7OzYAYIdc7lYXA2qGsj5ZP751rgAdOPEWp+uXir7c5t2DwcMz3mKqKRHzrK860NGTZsHHi/sqrKzzB8TEQnvOytWlGAdmCiR34rsZkBT/y1HoI04xaADvsFhJaH5XwTikLgMTPGINVNJQVWJIJs4AyxKw1SFokhFru/fa7ZqaYs+7qU5+6VG2E0ghR/Ay84fg3fA5uWuD5eS37nCdPRohq6KMzf34ouKUG+DVyZ7pYl1RzkJ1e7u9J0M+Phx/Ybxj1gmovaZkyUuAqm/3Wm6zNlyWeNZqXkF9159/6Z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(396003)(39860400002)(376002)(366004)(136003)(26005)(2906002)(6486002)(82960400001)(66476007)(83380400001)(33716001)(6506007)(8936002)(6666004)(44832011)(41300700001)(5660300002)(86362001)(6916009)(9686003)(186003)(54906003)(6512007)(66556008)(316002)(478600001)(4326008)(38100700002)(66946007)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oNzRzxDQ+7uNK+eByrjRQ18hQgOxAvrmFuetx3GQu0Fm4PJ0GozPGpBSuPET?=
- =?us-ascii?Q?x9xGHv2o2Y/28MWueewdap7p3maW0bQTdwQfjukHJ/jLiCatuX0vmOjZVBhf?=
- =?us-ascii?Q?DHHTWEDjpipt7J3EaPSrquwXyRLK/4UzpaCmYwq87a5mLe+OM2/5l5zAvTqn?=
- =?us-ascii?Q?Ccr+YfFyVeSP+ApnyoLXBIXAxJkyiu5IvN1Vk0kt8S/VBgNqSX2w6nQNnivi?=
- =?us-ascii?Q?ocEJNfivY5ZJPvJCgjZyvR04djN89PgrCAtJiayEaBhOLM0RE89OPnavF5Om?=
- =?us-ascii?Q?5oChdjveT3KYjdOYGfX73LXFoOav3gmogDmdkoF6OyjpeZhC8di/f6/q2RcD?=
- =?us-ascii?Q?wvcRHPC/Wl5YhtdMKgzwlppzonxGs6djd9C1t/W7mAvEF1peOASuIxh+1TUU?=
- =?us-ascii?Q?eqn2y43vBaOuEEfPgSih6q7CTOE0GelkHLGgqiulm0bR2wD7amKprS+sdb+R?=
- =?us-ascii?Q?q8KPjgWBPVWqSUVIAZ9JwlkGmoAsm9+FPys36A2taAlOMl7rhUQILi/3D3YA?=
- =?us-ascii?Q?ySrICUuTQtgzobv1GUgCOduzW2tcjJTyIKx55tw4a8jbf9WDOTonoSXNIHmr?=
- =?us-ascii?Q?YoD8Tvq70o3GYRhHeEw0XkPeEcArTm4p8Q/tvtgkhX7y06pXM8luc58PQzMK?=
- =?us-ascii?Q?DTzdfKXUzRuz3k6RkwlFp0ph8o/OoaqR0DZfYPaqnO1B6hcBLNchEfukGMtU?=
- =?us-ascii?Q?uYTwmJmyStnUltCRrJ6pl0Mnli9rDTnCanOUPHg72EVgWdfXkvGGoTbwcznH?=
- =?us-ascii?Q?/4r669icsKET7CX39FXbVOmjUIME5rzK6YsYKoRkLjrUOQ8Toanz/yjEuI3b?=
- =?us-ascii?Q?29XfTnia0iZVBsqyYEwK4M4vDeSgbfHsFfe/eNQhO0ljiXQumkkzKHb4d0rV?=
- =?us-ascii?Q?g6O9XJNIKYXbfmJQk/Qo3zAliMUlqAQMJahiSApABU0aDj2ZohBB3tsWf7LF?=
- =?us-ascii?Q?nGtPXCBnnt4cRLz2ozccQIaRkVIX8oxAz5qoeVAlUr2CR3tpnkH+A1k4naw9?=
- =?us-ascii?Q?TGnSTV6s2Q53/qChyDYeeOh71EN0mi3iq2SD5HOK9UouXTRdmjsoOZWFYqwL?=
- =?us-ascii?Q?pcRORUdtnR+7L1UfKuAAl9voJLU/LM3N7eCjsd16jML/TCZhA0uU6HR6zI7K?=
- =?us-ascii?Q?39iy1yoZSrSI5RslI/bW+WYYBjleatWuocKysWadQgB+H5ILsudRbtMk7y+9?=
- =?us-ascii?Q?Mqh37klVQ4bh58WJ4qPcaM42XEE+RsjfYap5dEmtLwpJNMQUaYeheIhkKLcu?=
- =?us-ascii?Q?EDfEUcCdwWUM/ZUimG0ONcMkeUMBpUlIMCceZbEvypyEwaUJaLbyhsgXMk4H?=
- =?us-ascii?Q?yAaeb719kwfNQbs5W+t4ZkUmaGaq3HKvUWwO1LNSf6xO9TxgLtggTfM2FWMr?=
- =?us-ascii?Q?bhYxfpokJKpsEIkL2Ol+mGElQ+BOruumKCee0kSEI2PM+HKnGGD4eCSC+HZZ?=
- =?us-ascii?Q?BkYaXP198a5Rw8a47AfPv47f97rO20bXL3GkUg1dWDxDOLZ2fwayDhqd0knV?=
- =?us-ascii?Q?NiIl5uZ9grtjjmqKP4DgvaZyrl9ruX1m9rCGgPgvBJh/yFweSyCyo3ktAC2o?=
- =?us-ascii?Q?TO/U20/xQf+GI0eAVlsE9AjnWy/4eG/WaNMrHGvf?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87c99078-9a90-4f83-7018-08da6b68d64a
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 22:32:04.3413
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KV9FTfDyPZ1mNQyX1v6VyvhAMgpH9x20S1E8rKbTuOhUaplkbEs6+UVC4bggBfqcTfCa7D+n+jxZyPEK76orYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5029
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 01:33:28AM +0200, Fabio M. De Francesco wrote:
-> The use of kmap() and kmap_atomic() are being deprecated in favor of
-> kmap_local_page().
-> 
-> With kmap_local_page(), the mappings are per thread, CPU local and not
-> globally visible. Furthermore, the mappings can be acquired from any
-> context (including interrupts).
-> 
-> Therefore, use kmap_local_page() in aio.c because these mappings are per
-> thread, CPU local, and not globally visible.
-> 
-> Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
-> HIGHMEM64GB enabled.
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+On Tue, 19 Jul 2022 17:45:23 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> This patch implements VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP
+> device feature. In the VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY, if there is
+> any access for the VFIO device on the host side, then the device will
+> be moved out of the low power state without the user's guest driver
+> involvement. Once the device access has been finished, then the device
+> will be moved again into low power state. With the low power
+> entry happened through VFIO_DEVICE_FEATURE_LOW_POWER_ENTRY_WITH_WAKEUP,
+> the device will not be moved back into the low power state and
+> a notification will be sent to the user by triggering wakeup eventfd.
+> 
+> vfio_pci_core_pm_entry() will be called for both the variants of low
+> power feature entry so add an extra argument for wakeup eventfd context
+> and store locally in 'struct vfio_pci_core_device'.
+> 
+> For the entry happened without wakeup eventfd, all the exit related
+> handling will be done by the LOW_POWER_EXIT device feature only.
+> When the LOW_POWER_EXIT will be called, then the vfio core layer
+> vfio_device_pm_runtime_get() will increment the usage count and will
+> resume the device. In the driver runtime_resume callback,
+> the 'pm_wake_eventfd_ctx' will be NULL so the vfio_pci_runtime_pm_exit()
+> will return early. Then vfio_pci_core_pm_exit() will again call
+> vfio_pci_runtime_pm_exit() and now the exit related handling will be done.
+> 
+> For the entry happened with wakeup eventfd, in the driver resume
+> callback, eventfd will be triggered and all the exit related handling will
+> be done. When vfio_pci_runtime_pm_exit() will be called by
+> vfio_pci_core_pm_exit(), then it will return early. But if the user has
+> disabled the runtime PM on the host side, the device will never go
+> runtime suspended state and in this case, all the exit related handling
+> will be done during vfio_pci_core_pm_exit() only. Also, the eventfd will
+> not be triggered since the device power state has not been changed by the
+> host driver.
+> 
+> For vfio_pci_core_disable() also, all the exit related handling
+> needs to be done if user has closed the device after putting into
+> low power. In this case eventfd will not be triggered since
+> the device close has been initiated by the user only.
+> 
+> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
 > ---
+>  drivers/vfio/pci/vfio_pci_core.c | 78 ++++++++++++++++++++++++++++++--
+>  include/linux/vfio_pci_core.h    |  1 +
+>  2 files changed, 74 insertions(+), 5 deletions(-)
 > 
-> I've tested with "./check -g aio". The tests in this group fail 3/26
-> times, with and without my patch. Therefore, these changes don't introduce
-> further errors.
-> 
->  fs/aio.c | 32 ++++++++++++++++----------------
->  1 file changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/fs/aio.c b/fs/aio.c
-> index 3c249b938632..343fea0c6d1a 100644
-> --- a/fs/aio.c
-> +++ b/fs/aio.c
-> @@ -567,7 +567,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
->  	ctx->user_id = ctx->mmap_base;
->  	ctx->nr_events = nr_events; /* trusted copy */
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 726a6f282496..dbe942bcaa67 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -259,7 +259,8 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
+>  	return ret;
+>  }
 >  
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	ring->nr = nr_events;	/* user copy */
->  	ring->id = ~0U;
->  	ring->head = ring->tail = 0;
-> @@ -575,7 +575,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
->  	ring->compat_features = AIO_RING_COMPAT_FEATURES;
->  	ring->incompat_features = AIO_RING_INCOMPAT_FEATURES;
->  	ring->header_length = sizeof(struct aio_ring);
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
->  
->  	return 0;
-> @@ -678,9 +678,9 @@ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
->  					 * we are protected from page migration
->  					 * changes ring_pages by ->ring_lock.
->  					 */
-> -					ring = kmap_atomic(ctx->ring_pages[0]);
-> +					ring = kmap_local_page(ctx->ring_pages[0]);
->  					ring->id = ctx->id;
-> -					kunmap_atomic(ring);
-> +					kunmap_local(ring);
->  					return 0;
->  				}
->  
-> @@ -1024,9 +1024,9 @@ static void user_refill_reqs_available(struct kioctx *ctx)
->  		 * against ctx->completed_events below will make sure we do the
->  		 * safe/right thing.
->  		 */
-> -		ring = kmap_atomic(ctx->ring_pages[0]);
-> +		ring = kmap_local_page(ctx->ring_pages[0]);
->  		head = ring->head;
-> -		kunmap_atomic(ring);
-> +		kunmap_local(ring);
->  
->  		refill_reqs_available(ctx, head, ctx->tail);
->  	}
-> @@ -1132,12 +1132,12 @@ static void aio_complete(struct aio_kiocb *iocb)
->  	if (++tail >= ctx->nr_events)
->  		tail = 0;
->  
-> -	ev_page = kmap_atomic(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
-> +	ev_page = kmap_local_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
->  	event = ev_page + pos % AIO_EVENTS_PER_PAGE;
->  
->  	*event = iocb->ki_res;
->  
-> -	kunmap_atomic(ev_page);
-> +	kunmap_local(ev_page);
->  	flush_dcache_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
->  
->  	pr_debug("%p[%u]: %p: %p %Lx %Lx %Lx\n", ctx, tail, iocb,
-> @@ -1151,10 +1151,10 @@ static void aio_complete(struct aio_kiocb *iocb)
->  
->  	ctx->tail = tail;
->  
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	head = ring->head;
->  	ring->tail = tail;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
->  
->  	ctx->completed_events++;
-> @@ -1214,10 +1214,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
->  	mutex_lock(&ctx->ring_lock);
->  
->  	/* Access to ->ring_pages here is protected by ctx->ring_lock. */
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	head = ring->head;
->  	tail = ring->tail;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  
+> -static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev)
+> +static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev,
+> +				     struct eventfd_ctx *efdctx)
+>  {
 >  	/*
->  	 * Ensure that once we've read the current tail pointer, that
-> @@ -1249,10 +1249,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
->  		avail = min(avail, nr - ret);
->  		avail = min_t(long, avail, AIO_EVENTS_PER_PAGE - pos);
->  
-> -		ev = kmap(page);
-> +		ev = kmap_local_page(page);
->  		copy_ret = copy_to_user(event + ret, ev + pos,
->  					sizeof(*ev) * avail);
-> -		kunmap(page);
-> +		kunmap_local(ev);
->  
->  		if (unlikely(copy_ret)) {
->  			ret = -EFAULT;
-> @@ -1264,9 +1264,9 @@ static long aio_read_events_ring(struct kioctx *ctx,
->  		head %= ctx->nr_events;
+>  	 * The vdev power related flags are protected with 'memory_lock'
+> @@ -272,6 +273,7 @@ static int vfio_pci_runtime_pm_entry(struct vfio_pci_core_device *vdev)
 >  	}
 >  
-> -	ring = kmap_atomic(ctx->ring_pages[0]);
-> +	ring = kmap_local_page(ctx->ring_pages[0]);
->  	ring->head = head;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
+>  	vdev->pm_runtime_engaged = true;
+> +	vdev->pm_wake_eventfd_ctx = efdctx;
+>  	pm_runtime_put_noidle(&vdev->pdev->dev);
+>  	up_write(&vdev->memory_lock);
 >  
->  	pr_debug("%li  h%u t%u\n", ret, head, tail);
-> -- 
-> 2.36.1
-> 
+> @@ -295,21 +297,67 @@ static int vfio_pci_core_pm_entry(struct vfio_device *device, u32 flags,
+>  	 * while returning from the ioctl and then the device can go into
+>  	 * runtime suspended state.
+>  	 */
+> -	return vfio_pci_runtime_pm_entry(vdev);
+> +	return vfio_pci_runtime_pm_entry(vdev, NULL);
+>  }
+>  
+> -static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
+> +static int
+> +vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
+> +				   void __user *arg, size_t argsz)
+> +{
+> +	struct vfio_pci_core_device *vdev =
+> +		container_of(device, struct vfio_pci_core_device, vdev);
+> +	struct vfio_device_low_power_entry_with_wakeup entry;
+> +	struct eventfd_ctx *efdctx;
+> +	int ret;
+> +
+> +	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_SET,
+> +				 sizeof(entry));
+> +	if (ret != 1)
+> +		return ret;
+> +
+> +	if (copy_from_user(&entry, arg, sizeof(entry)))
+> +		return -EFAULT;
+> +
+> +	if (entry.wakeup_eventfd < 0)
+> +		return -EINVAL;
+> +
+> +	efdctx = eventfd_ctx_fdget(entry.wakeup_eventfd);
+> +	if (IS_ERR(efdctx))
+> +		return PTR_ERR(efdctx);
+> +
+> +	ret = vfio_pci_runtime_pm_entry(vdev, efdctx);
+> +	if (ret)
+> +		eventfd_ctx_put(efdctx);
+> +
+> +	return ret;
+> +}
+> +
+> +static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev,
+> +				     bool resume_callback)
+>  {
+>  	/*
+>  	 * The vdev power related flags are protected with 'memory_lock'
+>  	 * semaphore.
+>  	 */
+>  	down_write(&vdev->memory_lock);
+> +	if (resume_callback && !vdev->pm_wake_eventfd_ctx) {
+> +		up_write(&vdev->memory_lock);
+> +		return;
+> +	}
+> +
+>  	if (vdev->pm_runtime_engaged) {
+>  		vdev->pm_runtime_engaged = false;
+>  		pm_runtime_get_noresume(&vdev->pdev->dev);
+>  	}
+>  
+> +	if (vdev->pm_wake_eventfd_ctx) {
+> +		if (resume_callback)
+> +			eventfd_signal(vdev->pm_wake_eventfd_ctx, 1);
+> +
+> +		eventfd_ctx_put(vdev->pm_wake_eventfd_ctx);
+> +		vdev->pm_wake_eventfd_ctx = NULL;
+> +	}
+> +
+>  	up_write(&vdev->memory_lock);
+>  }
+>  
+
+I find the pm_exit handling here confusing.  We only have one caller
+that can signal the eventfd, so it seems cleaner to me to have that
+caller do the eventfd signal.  We can then remove the arg to pm_exit
+and pull the core of it out to a pre-locked function for that call
+path.  Sometime like below (applies on top of this patch).  Also moved
+the intx unmasking until after the eventfd signaling.  What do you
+think?  Thanks,
+
+Alex
+
+diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+index dbe942bcaa67..93169b7d6da2 100644
+--- a/drivers/vfio/pci/vfio_pci_core.c
++++ b/drivers/vfio/pci/vfio_pci_core.c
+@@ -332,32 +332,27 @@ vfio_pci_core_pm_entry_with_wakeup(struct vfio_device *device, u32 flags,
+ 	return ret;
+ }
+ 
+-static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev,
+-				     bool resume_callback)
++static void __vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
+ {
+-	/*
+-	 * The vdev power related flags are protected with 'memory_lock'
+-	 * semaphore.
+-	 */
+-	down_write(&vdev->memory_lock);
+-	if (resume_callback && !vdev->pm_wake_eventfd_ctx) {
+-		up_write(&vdev->memory_lock);
+-		return;
+-	}
+-
+ 	if (vdev->pm_runtime_engaged) {
+ 		vdev->pm_runtime_engaged = false;
+ 		pm_runtime_get_noresume(&vdev->pdev->dev);
+-	}
+-
+-	if (vdev->pm_wake_eventfd_ctx) {
+-		if (resume_callback)
+-			eventfd_signal(vdev->pm_wake_eventfd_ctx, 1);
+ 
+-		eventfd_ctx_put(vdev->pm_wake_eventfd_ctx);
+-		vdev->pm_wake_eventfd_ctx = NULL;
++		if (vdev->pm_wake_eventfd_ctx) {
++			eventfd_ctx_put(vdev->pm_wake_eventfd_ctx);
++			vdev->pm_wake_eventfd_ctx = NULL;
++		}
+ 	}
++}
+ 
++static void vfio_pci_runtime_pm_exit(struct vfio_pci_core_device *vdev)
++{
++	/*
++	 * The vdev power related flags are protected with 'memory_lock'
++	 * semaphore.
++	 */
++	down_write(&vdev->memory_lock);
++	__vfio_pci_runtime_pm_exit(vdev);
+ 	up_write(&vdev->memory_lock);
+ }
+ 
+@@ -373,22 +368,13 @@ static int vfio_pci_core_pm_exit(struct vfio_device *device, u32 flags,
+ 		return ret;
+ 
+ 	/*
+-	 * The device should already be resumed by the vfio core layer.
+-	 * vfio_pci_runtime_pm_exit() will internally increment the usage
+-	 * count corresponding to pm_runtime_put() called during low power
+-	 * feature entry.
+-	 *
+-	 * For the low power entry happened with wakeup eventfd, there will
+-	 * be two cases:
+-	 *
+-	 * 1. The device has gone into runtime suspended state. In this case,
+-	 *    the runtime resume by the vfio core layer should already have
+-	 *    performed all exit related handling and the
+-	 *    vfio_pci_runtime_pm_exit() will return early.
+-	 * 2. The device was in runtime active state. In this case, the
+-	 *    vfio_pci_runtime_pm_exit() will do all the required handling.
++	 * The device is always in the active state here due to pm wrappers
++	 * around ioctls.  If the device had entered a low power state and
++	 * pm_wake_eventfd_ctx is valid, vfio_pci_core_runtime_resume() has 
++	 * already signaled the eventfd and exited low power mode itself.
++	 * pm_runtime_engaged protects the redundant call here.
+ 	 */
+-	vfio_pci_runtime_pm_exit(vdev, false);
++	vfio_pci_runtime_pm_exit(vdev);
+ 	return 0;
+ }
+ 
+@@ -425,15 +411,19 @@ static int vfio_pci_core_runtime_resume(struct device *dev)
+ {
+ 	struct vfio_pci_core_device *vdev = dev_get_drvdata(dev);
+ 
+-	if (vdev->pm_intx_masked)
+-		vfio_pci_intx_unmask(vdev);
+-
+ 	/*
+-	 * Only for the low power entry happened with wakeup eventfd,
+-	 * the vfio_pci_runtime_pm_exit() will perform exit related handling
+-	 * and will trigger eventfd. For the other cases, it will return early.
++	 * Resume with a pm_wake_eventfd_ctx signals the eventfd and exits
++	 * low power mode.
+ 	 */
+-	vfio_pci_runtime_pm_exit(vdev, true);
++	down_write(&vdev->memory_lock);
++	if (vdev->pm_wake_eventfd_ctx) {
++		eventfd_signal(vdev->pm_wake_eventfd_ctx, 1);
++		__vfio_pci_runtime_pm_exit(vdev);
++	}
++	up_write(&vdev->memory_lock);
++
++	if (vdev->pm_intx_masked)
++		vfio_pci_intx_unmask(vdev);
+ 
+ 	return 0;
+ }
+@@ -553,7 +543,7 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
+ 	 * the vfio_pci_set_power_state() will change the device power state
+ 	 * to D0.
+ 	 */
+-	vfio_pci_runtime_pm_exit(vdev, false);
++	vfio_pci_runtime_pm_exit(vdev);
+ 	pm_runtime_resume(&pdev->dev);
+ 
+ 	/*
+

@@ -2,64 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B2F57CC07
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 086B257CC09
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiGUNfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S229697AbiGUNfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiGUNfD (ORCPT
+        with ESMTP id S229686AbiGUNfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:35:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AE25A44B;
-        Thu, 21 Jul 2022 06:35:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D424B82505;
-        Thu, 21 Jul 2022 13:35:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2181BC341C6;
-        Thu, 21 Jul 2022 13:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658410499;
-        bh=LotosDg6OqPi/QeVcyfUiP3kmxKG1o5zdHj+YsZWQ9Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UX8CdA026mJAPAHm2TucVcx5xnfwh8f5p4Ojy59QPYi57r89CSa7tf3aXaUcmm821
-         YFm4AtJMMcEKxzwA8NeHTH2CA2+0uPk6idLhf6vRa03QDBrGAAuAMAAc3Bc+MhHA6Z
-         VS9FILAwIlgpDHC2M4RCWBMtTzR+xrQOMfz//JI/n8WerNdQoMOyWHRIHZdqVVEx+M
-         KjPNw+38GHw7CqYiTWIK0qDtzT1Snh3V/UeuC4QMrmHdXEfa4zlHRiKsiQgr4N2dC7
-         feSEpWw6l+ap/XrMX6RC7UEiQmNUW0kZvYIJ6kymCQGc8ztoNs9BXPlirZgy+rNwxQ
-         xqUxlIIG1NFsw==
-Date:   Thu, 21 Jul 2022 19:04:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     XueBing Chen <chenxuebing@jari.cn>
-Cc:     hyun.kwon@xilinx.com, laurent.pinchart@ideasonboard.com,
-        michal.simek@xilinx.com, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: xilinx: use strscpy to replace strlcpy
-Message-ID: <YtlV/9YmSrAZcnSI@matsya>
-References: <39aa840f.e31.181ed9461c2.Coremail.chenxuebing@jari.cn>
+        Thu, 21 Jul 2022 09:35:20 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7561DEA7
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8YFbTHxQthzOWNFDNujZ6xnF8BTNw3UEG0+j6FNXCWU=; b=snffF4nd3H4L5E8gMhriYYOREh
+        Q71a9ezaDjUGUnhsZtzY8/6EqCqPZAZsLJWRRmW7bzR5EDMe31n5bfVa3A1mAYMihCLdi3uzzSvoT
+        gDwXOgQkCwpnWcPbfySE+BwUB1JiP4NsH1DwT+Y0bS4ofjHH4Pjt8av2BZdtp8OzwOzdnHQy4Irkk
+        HezfoOlKUFq7nOib9NARIY0vbDtnb/opPPQ68oZ4mdh3M5Du4xmxfyQ0uhMdZ9aqlBZXy7gGq8G32
+        bB8tHDbluUYKSYw4HdZ1tfnvSiTr+uFH+1fM+5+Cpp9aA+MlL17DzfbllssIbqpxhgJy8IEgOmet8
+        sAxzouGA==;
+Received: from 201-13-50-220.dsl.telesp.net.br ([201.13.50.220] helo=[192.168.15.109])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oEWKh-001UuF-57; Thu, 21 Jul 2022 15:35:15 +0200
+Message-ID: <14e11a4b-7300-a54d-6794-1eeb7ab8a079@igalia.com>
+Date:   Thu, 21 Jul 2022 10:34:56 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39aa840f.e31.181ed9461c2.Coremail.chenxuebing@jari.cn>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/4] drm/amd/display: Remove duplicated
+ CalculateWriteBackDISPCLK
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+Cc:     magalilemes00@gmail.com, christian.koenig@amd.com,
+        Daniel Vetter <daniel@ffwll.ch>, Xinhui.Pan@amd.com,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        tales.aparecida@gmail.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, mwen@igalia.com,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
+        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net,
+        Harry Wentland <harry.wentland@amd.com>,
+        David Airlie <airlied@linux.ie>
+References: <20220720182228.259119-1-mairacanal@riseup.net>
+ <20220720182228.259119-2-mairacanal@riseup.net>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20220720182228.259119-2-mairacanal@riseup.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-07-22, 22:05, XueBing Chen wrote:
+Às 15:22 de 20/07/22, Maíra Canal escreveu:
+> The functions dml30_CalculateWriteBackDISPCLK and
+> dml31_CalculateWriteBackDISPCLK are identical. Therefor, to avoid
+> code duplication, dml31_CalculateWriteBackDISPCLK is removed and
+> replaced by dml30_CalculateWriteBackDISPCLK.
 > 
-> The strlcpy should not be used because it doesn't limit the source
-> length. Preferred is strscpy.
 
-Applied, thanks
+The message should be in imperative mood:
 
--- 
-~Vinod
+"to avoid code duplication, dml31_CalculateWriteBackDISPCLK is removed
+and replaced by dml30_CalculateWriteBackDISPCLK." -> "to avoid code
+duplication, replace dml31_CalculateWriteBackDISPCLK by
+dml30_CalculateWriteBackDISPCLK"
+
+> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+> ---

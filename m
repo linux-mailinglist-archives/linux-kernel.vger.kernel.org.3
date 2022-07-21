@@ -2,175 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84C157C5DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CBF57C637
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiGUIKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S232139AbiGUI0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiGUIKA (ORCPT
+        with ESMTP id S231330AbiGUI0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:10:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E203A7D1F4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658390999; x=1689926999;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=oHN64mkeDS8xOwMvYqz9RpRSwbmLI2csxxw/dLUM6fI=;
-  b=mv4aPoUEbRXjb2chqPDVkQ0VP1jgRzf7olty6w9h2nJMWLO9phGk1m3T
-   pUxZY95ZV9YapUjg8ABv02GvXcex6QVqE43XM/vDcnYbj66nrYCTogAR2
-   IX88O5erbgbWjDe05S9QmfiBnk6/kZktafToU2EnaCz/WddACKNGBLxfG
-   JOV90t/bjjL8HGGfH70DRTD+a5jsfUiDXEf7FNCRDYhEKUN1uIYldN9m5
-   RT+MQukM81J4hYPIe0OYIPLsVvR96KTxIj3M5AutSQu6S1iLXzsvyJxi9
-   kdOYNiaPhcfhHZLK345yP76Y/c7DHKDPZVEdMuYSM+IEPi1bG/Tcz0QJa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="348678142"
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="348678142"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 01:09:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
-   d="scan'208";a="925557717"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Jul 2022 01:09:57 -0700
-Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 21 Jul 2022 01:09:56 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 21 Jul 2022 01:09:56 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 21 Jul 2022 01:09:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Laz4ukY5v+EhtbMVbSmso1THN5LmZa/KWp9iaMJsGxOMW/2E/W07TDHzTrHKNC3yAPbRLLt/wPahVqjkodBjRj7nf2Es43oJWdvZybL6txXNpkG7b5ii9LCb9Pp+kr0aPXvOdDtFxuGo25u/YJvEKEgH5c9K8GajmmENf8fIm5X05xKwYirmKI7Kg3tnQ9zPssAvB8xGKbAVdJQZ/Hp1U60L5i4wJMrYttMMg4oXS5oxQWelM6COh82jaB6f/BvcQmlj5ccBu7lUhoRqHBltNDJx/5amr9V1QAe4K0sM/1ho8ISbUJM01Z1lmlWaR3RTSTaz7V214AWX9w7HT+l7iQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yrMLKx+YU7TXY60ylcyu00P3IPrc72pdsKl86DEhVf0=;
- b=fO6XxipzkXUTI8B6HzDOTyOoUtCNxFVwdaL/Z2pIDtxDoS24Sf7xR7y/DnHFEf5ZfL7VkkGM6HviEtKHb6TEBjqblfLud4ZTsSHK3M0LUe2zE4Dod5NALJaYOWInFlPtCTvS2a0RLE/H2lhWMH5tsmmUcBQpbjDjTeVqYkfn6CxNge0JQeXyBQFYvgCN1x5x6Xw8122uuVw57N9Db6UKZUhnk8/nxcL8fg2sP4eZ1YoxxrhByBx+Pm9xvK5Thti+SyNhPZ7pcmsAUiReN+hEUyKAOAEcd8K+IBWHA4veVoF67a+ign3ys/k5c9beFrhTN2QSYhsDdv/XdzMt+DlC1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by DM6PR11MB4626.namprd11.prod.outlook.com (2603:10b6:5:2a9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Thu, 21 Jul
- 2022 08:09:55 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::a968:40aa:6163:5c79]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::a968:40aa:6163:5c79%5]) with mapi id 15.20.5458.018; Thu, 21 Jul 2022
- 08:09:55 +0000
-Date:   Thu, 21 Jul 2022 04:09:50 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Jason Wang <wangborong@cdjrlc.com>
-CC:     <daniel@ffwll.ch>, <tvrtko.ursulin@linux.intel.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <thomas.hellstrom@linux.intel.com>, <airlied@linux.ie>,
-        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <matthew.auld@intel.com>, <dan.carpenter@oracle.com>
-Subject: Re: [PATCH] drm/i915/gt: Remove unneeded semicolon
-Message-ID: <YtkJzu7vKunsqI6G@intel.com>
-References: <20220716184439.72056-1-wangborong@cdjrlc.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220716184439.72056-1-wangborong@cdjrlc.com>
-X-ClientProxiedBy: SJ0PR13CA0217.namprd13.prod.outlook.com
- (2603:10b6:a03:2c1::12) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ece0f9e5-41a8-4099-0ab2-08da6af0653d
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4626:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oH2kp/Ejw3vb/9utdsMsQBCfY/53APL5ACnn2h2AdjXS+38ve+s250uO8INJ5q2P4gEBERxzc7yP69DAR1rHEVbHDNxGqdXdyzEDP6vsQt+RN1QnOsc2cH1jjHaHbXvL6ABbg7BbWTsdF58xGiY8mVWYx0bpxgFCnlGjYmhE3+1TMG4YIOMvWPMZWgfBmmhCaMy4VFDxYbq2aushnAJiPxW0rpxu8+ySS8CjtJIEt30ZkElk2X0HHzpLvv475FhSae6RfgP3m23s9dpML8ldf6L5aAIUSORiX3eBVucKtHaxYlVuxXEebpGZ1nK7UBcv+k1MHxxThRBf/39msnIld28WYmPqmK85az02nNE9knt+clXI1iuZ+4qV61yPc4qg6/gNAqgw5VUla5Q8+DBsB/5BPi+yqdx4UIQiPETUXM69hLwfuN71YTkl3AyKqpcmf7Nh6qOWBA8NF5Xo/DdQ3Jc2A+Ao92h4HG9RLlU7reTCCMPhIsMYeLASfF6XbIzjm/7sEYPc1wRoanEvqDDWTii6zmomK0bXcsqOdY/174oCHnxs1Vw3+7R9H/0NDAHCIcX5yv1g5EWqeSkBKO4jAJutXTB6kWJERcwauS4K0MbhR+ESiIssoHU6QD9egx7SyvwfGZws9rkr2SKtY6CiWHzMxVp54OFvwZt5YJ19KwJ70wmOrkIMbOtCf49QkdepVdGnL381iyRrpueweR4ReoGzAqQa7Qt9Ks2Ror6SoAbZOA7lqvcmYsbAc0HpylTQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(396003)(136003)(366004)(346002)(83380400001)(186003)(2616005)(6666004)(36756003)(82960400001)(38100700002)(6486002)(4326008)(26005)(6512007)(8676002)(6506007)(66476007)(66556008)(66946007)(478600001)(316002)(41300700001)(86362001)(5660300002)(2906002)(6916009)(8936002)(4744005)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nrpGY8FzPCYjtRIAZbRGH/ftFkVlCQFpEuCS+71CxbRgggcx20vkqZZ//kmP?=
- =?us-ascii?Q?v18gmLQ8xr8+b7ztckwxp52+J5FgMxuMMZV13WiYwpDBU4XzZGD/ENxaXAA3?=
- =?us-ascii?Q?KTTLMMJLLpZFMYieTUbeOXwEhZvLPHpj00S2/Qndcs+FwzhvY1cRWVvQQ9kn?=
- =?us-ascii?Q?VAJo2oObGOmODKI1UUiN3/z0p2HMAln/r66Tz7vcTKVZljIfMlbboN9LuGEn?=
- =?us-ascii?Q?JKJqrbO+aW11JWVPkC8K9ia9h7jKLfJoQCjNEraOMNt7aqLDEoek+IU36raL?=
- =?us-ascii?Q?0jiI3RLgNn+acnoxcUw4Q+Sw0n+Xzri1npBcZprRF7RJZaFygJwt83+LaWCU?=
- =?us-ascii?Q?9V6Aqluwduxuslk+t4nZSDwxQibuzCy8H/PXdkbpHcJKzwD2I0n0CykWbxkm?=
- =?us-ascii?Q?eXc/x12IejLhf5o32IRrANQDZ8/hQ+vLZSKFEYNw/fYqQgAEU79jOOojhGkW?=
- =?us-ascii?Q?Cj5tsQ9lf7eNBKKa6YhQzmqducf3UfNOIbwSrCZ6OovXttNhcBaR3lgNQbGJ?=
- =?us-ascii?Q?FZ4Y8nxw0EPkrTFtZM9SmdNkXkqcQQIIAs6653CkA+75fszAxAXdQJhbWRBt?=
- =?us-ascii?Q?moM1Ax8IFLVRMnj+i5d5IgtIMTgXT9n2jba2bnkEwXURcJRt8xJ5T/kZti5L?=
- =?us-ascii?Q?7X27rb6JG120RnmrtWYFctw3iwyw3w7a2BEHALKaJteOG1Qe+9Co+QoZlpJV?=
- =?us-ascii?Q?ibnQJaqalrcdvWIDP9xa3Jj38QttdWgGcs63pjlw+MyB43mv2kNcbr0nyWYm?=
- =?us-ascii?Q?dgsWMdWTxGfNcaplewF+wN7sDgusBZLIFt8jmKxP7VnTSSGyB9Jm3fHOnGyW?=
- =?us-ascii?Q?yk/hkH3ZvdaY5w272GUmSL+dMbxGAIVBC79Txnf1Qqav9BcknKgLMXY6XiOg?=
- =?us-ascii?Q?+e/oI306Nb0KbF2kdKZe/JFxaaZoygQx6OB3MFMTSJqufxIHfXvc3946U+hD?=
- =?us-ascii?Q?B/GGqxZcotZhpvWHwzitKJkDa/X8cU23s2mMz2i42r7QYtDPeit9h1Nacqg8?=
- =?us-ascii?Q?i+lyXooKOqmIYVNWXhBtoBXev13EeN9Ekaz3udQdk7EKd1CYRcllmDJC2QhJ?=
- =?us-ascii?Q?VVfly336S3jc+gGHzDgTAt8b6xp0fcbEuzUtcd70VULkXsA+uLemf2zjF36a?=
- =?us-ascii?Q?3kt5S0pgpmiVFu6Rg51Jltlyx1vrFjrUatRZPj8RHz6IrBq4wZ9bqJtGWn3l?=
- =?us-ascii?Q?fUEA7xDJlYdJPJ82e5LFUFEEdgxwgWFxCKUaw9gqaKjNaDwhEFJB/FxmxIuM?=
- =?us-ascii?Q?iH2VmGJl5oVIT9aSr/7jaad7aZMN9NvXX6svGU1X3BraULQL671QSXo/XBfI?=
- =?us-ascii?Q?i+yMx/LUDXke4sQps2yLQtzmLEnS/d5Xod4BUXu1iB1G3Kg1y1SB3foEoZZI?=
- =?us-ascii?Q?ICNaGiINIxq04secQT4Bu5TTwRYtkEVSeLix65jejFMm9q5meNTrkz6NKMUz?=
- =?us-ascii?Q?jnpbvniZzvhhCTQbYFZpH1x6pXqMrMZN7u+oFwiyOdQOecTv9nBxdri+TbhP?=
- =?us-ascii?Q?I451lVHVOUo28PD9DAmqQB4GBud8pMe6xN9m5/0NSiYbx1yZixVGXZsyQ9MR?=
- =?us-ascii?Q?3bNXKL+57M1bVLEKzTn2pIiNCBhzWjp+ZVdTaPQ9EYzItue4s28DAB8vJkJQ?=
- =?us-ascii?Q?8w=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ece0f9e5-41a8-4099-0ab2-08da6af0653d
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 08:09:55.5645
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZckaQbTPDRdnzP8rNZSEKcjDhS2XU3rqbQurSPyhernBHEewzwNNidGJ5I6oVgSbAaXq2IB3jtIDYssR+MpNKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4626
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 04:26:07 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AE42CDEF
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:26:06 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id o13-20020a17090ab88d00b001f1ef2109aaso2506299pjr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=D/jsDBi2QFOs4Zs9HMSmYJI8zRXb+dPzos0HZwfSzzc=;
+        b=hDrAMBg+Z58759aVRZuEyzgtEevkSBomPALCPlB5FpjqCmKg8B0/ALxrCvYQikj+H5
+         fxst5CjnEkashz8KaxmEkft/H1HJM0q/5JSCTEziGJVfyxDb8Tjqo1FJSXZJmHaSCFFJ
+         Z6k161Kw/1FwBVTD39n/pntZJBIGo4dLkrk8RxqVFcKP5FVn37uScX64N3sZHH383QnV
+         7yjJX6A9ZpFCvoc1YqHM0qqNOuh5VMEDTbpU80qq8Gmw0u7fPJf9odGO03uIMXvljOn1
+         QmjxH/o8StFq9utrr0exokzUQlGoDdEjVLijTC72IRrs36dKf1irONKGhxhL94DIpx1X
+         ZluA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=D/jsDBi2QFOs4Zs9HMSmYJI8zRXb+dPzos0HZwfSzzc=;
+        b=CjE4bWv5P3woMm4DYTf36IgEIsO3SuJQNlq0XMkLsVFvu69pQ20eYKSWWtawak1FBQ
+         Ow9ISTM7trBJI/bdDHCjbyBjf5MuOjpzindDwJPWyyuSgVUQEHWSbsuPKG2wJ9HVpQLz
+         2ODRM3gob5/CoAI1qCsMkJnl2n13DGtK2I3fRvafzHhNnmCs6yXHrFFxfIXAeRbJTC30
+         7uRwGR+D8BhNio8+Fr+xxtXMnHojkJ/YVS+Yr0XxawQ008FXS+8ZC2sXjiTkb1x3E3ry
+         CoAUPiRUpe5yMyj1pvlECy5K9rtjVaS25sRuyct2Pwl5RFZwk71wo+fNE7O6KEkvsnw6
+         Df9Q==
+X-Gm-Message-State: AJIora97i3ziXLsGXX9QPBywNPsbKMHHrTgZuEpYVLHOrkM2eZQb+kvh
+        JMihSogm8RbqgDaoyipKrtscEEI8C4W9t9nt
+X-Google-Smtp-Source: AGRyM1te19it3AE4l9t6OQd4moI7u3bYsVRejG70XLibIb70+UbPjpftAuMZHyGoLFjGdHCu7fLF3uBTDNrUINke
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a05:6a00:1a:b0:52a:dec1:308c with SMTP
+ id h26-20020a056a00001a00b0052adec1308cmr43268981pfk.52.1658391965893; Thu,
+ 21 Jul 2022 01:26:05 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 08:10:27 +0000
+Message-Id: <20220721081026.1247067-1-sadiyakazi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.170.g444d1eabd0-goog
+Subject: [PATCH v2] Documentation: kunit: Add CLI args for kunit_tool
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net, mairacanal@riseup.net
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 02:44:39AM +0800, Jason Wang wrote:
-> The semicolon after the `}' in line 648 is unneeded.
+Run_wrapper.rst was missing some command line arguments. Added
+additional args in the file.
 
-I removed the line mention while pushing to drm-intel-gt-next.
-Thanks for the patch.
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
+Changes since V1:
+https://lore.kernel.org/linux-kselftest/20220719092214.995965-1-sadiyakazi@google.com/
+- Addressed most of the review comments from Maira and David, except
+  removing the duplicate arguments as I felt its worth keeping them in
+  the reference documentation as well as in context. We can improve them
+  and differentiate their use cases in the future patches.
 
-> 
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
-> ---
->  drivers/gpu/drm/i915/gt/intel_migrate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/intel_migrate.c b/drivers/gpu/drm/i915/gt/intel_migrate.c
-> index 2c35324b5f68..a69b244f14d0 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_migrate.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_migrate.c
-> @@ -645,7 +645,7 @@ static int scatter_list_length(struct scatterlist *sg)
->  	while (sg && sg_dma_len(sg)) {
->  		len += sg_dma_len(sg);
->  		sg = sg_next(sg);
-> -	};
-> +	}
->  
->  	return len;
->  }
-> -- 
-> 2.35.1
-> 
+
+---
+ Documentation/dev-tools/kunit/run_wrapper.rst | 60 ++++++++++++++++++-
+ 1 file changed, 59 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+index 5e560f2c5fca..600af7ac5f88 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -233,7 +233,7 @@ Command-Line Arguments
+ ======================
+ 
+ kunit_tool has a number of other command-line arguments which can
+-be useful for our test environment. Below the most commonly used
++be useful for our test environment. Below are the most commonly used
+ command line arguments:
+ 
+ - ``--help``: Lists all available options. To list common options,
+@@ -257,3 +257,61 @@ command line arguments:
+             added or modified. Instead, enable all tests
+             which have satisfied dependencies by adding
+             ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
++
++- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
++  file. For example:
++
++  - ``lib/kunit/.kunitconfig`` can be the path of the file.
++
++  - ``lib/kunit`` can be the directory in which the file is located.
++
++  This file is used to build and run with a predefined set of tests
++  and their dependencies. For example, to run tests for a given subsystem.
++
++- ``--kconfig_add``: Specifies additional configuration options to be
++  appended to the ``.kunitconfig`` file.
++  For example, ``./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y``.
++
++- ``--arch``: Runs tests on the specified architecture. The architecture
++  specified must match the Kbuild ARCH environment variable.
++  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on QEMU.
++  Default is `um`.
++
++- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
++  same argument as passed to the ``CROSS_COMPILE`` variable used by
++  Kbuild. This will be the prefix for the toolchain
++  binaries such as GCC. For example:
++
++  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
++    our system.
++
++  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
++    if we have downloaded the microblaze toolchain from the 0-day
++    website to a specified path in our home directory called toolchains.
++
++- ``--qemu_config``: Specifies the path to a file containing a
++  custom qemu architecture definition. This should be a python file
++  containing a `QemuArchParams` object.
++
++- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-smp 8".
++
++- ``--jobs``: Specifies the number of jobs (commands) to run simultaneously.
++  By default, this is set to the number of cores on your system.
++
++- ``--timeout``: Specifies the maximum number of seconds allowed for all tests to run.
++  This does not include the time taken to build the tests.
++
++- ``--kernel_args``: Specifies additional kernel command-line arguments. Might be repeated.
++
++- ``--run_isolated``: If set, boots the kernel for each individual suite/test.
++  This is useful for debugging a non-hermetic test, one that
++  might pass/fail based on what ran before it.
++
++- ``--raw_output``: If set, generates unformatted output from kernel. Possible options are:
++
++   - ``all``: To view the full kernel output, use ``--raw_output=all``.
++
++   - ``kunit``: This is the default option and filters to KUnit output. Use ``--raw_output`` or ``--raw_output=kunit``.
++
++- ``--json``: If set, stores the test results in a JSON format and prints to `stdout` or
++  saves to a file if a filename is specified.
+-- 
+2.37.0.170.g444d1eabd0-goog
+

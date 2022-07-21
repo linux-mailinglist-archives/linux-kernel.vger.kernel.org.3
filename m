@@ -2,178 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2523657D1F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47FE57D1F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 18:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiGUQtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 12:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S232519AbiGUQuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 12:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiGUQtw (ORCPT
+        with ESMTP id S229750AbiGUQuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 12:49:52 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAE388F3F
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:49:50 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso1138044wmq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 09:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RdUUQLWwQt1lokFjpVxfgBDqZBmrvlIq3f9uYET+tvs=;
-        b=GY5wu9Q/FEgr1xnB2EhxJuzovNWJwL4CbpjQ4mge6mweV3qC/mZ0X2IJ4qIMHbUUAG
-         UAvCXBjfOz56dmlgiKQ40A8WYTaPIowbBSTxq8HYzTMdNas7AZ66zJ79UC4oYn9KQko5
-         Wyn061wupTIFwzmtENvE6UeJ5MCktaVrRDbnpP56MexcUXHFft4o+C/Amwpp9RiqCt7w
-         r8rjXuOIrINJLUX4LbvxHTzwEb+a00CsAJzmE2PBDL9EEpSSEIAR2/46he8lpjR23dPa
-         Jn1nOFUTWXgYcS6hT4+jq4SrRLsflQkzCKKbYVtnUMDDM7Kio/t61r+yB0bYBIBEMz3Q
-         2s/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RdUUQLWwQt1lokFjpVxfgBDqZBmrvlIq3f9uYET+tvs=;
-        b=D5SYCDoHOJ+hcfjkYIz+JC2PUQ8WvETwSlc/UUv7lgwqaDs9aGlbXhSVbuNLl6a1NP
-         CttGN/jMsraScMFRdKTxsL/1TcdKpBI/0fZJ902hOYreudfv5aQXhXZav7veOSoaqDH3
-         RWfIRsnX6hxxVfOptbtRrw1laLJiUH7LGRhO8v4IQbCLsqLoTtDnVmxcOuoHJQzx7jHv
-         wavL0cTebXpCo+LmSuSI0WegBCVh1X8qBMWFoKkhDG7ZPy77JwO9OgdwYg7yWGAln1q1
-         GIHIZ/Llp73+gCJurNa19OActuotmELGGs8n3Jfuf3Lt03HHglSQ3AvOHwsy5lKtzP/w
-         0yyg==
-X-Gm-Message-State: AJIora9T+oM6YA6mAqxrirP5Ao4gZIz0bdpU2dEs73haLxPHZdEjAgLV
-        M9CxYz371F69aRkLkef2ydluWSLhNUe2uJ3ZN/K3Xg==
-X-Google-Smtp-Source: AGRyM1uueYuywQlzFF79QTrzJABzxA9oBvmvm72bRPUCr6v3SC49VU6rYoQLotGaJGSdOVt7/FOJ/SgaBNAk+1wOFj4=
-X-Received: by 2002:a7b:c85a:0:b0:3a3:1884:6391 with SMTP id
- c26-20020a7bc85a000000b003a318846391mr9132955wml.196.1658422189317; Thu, 21
- Jul 2022 09:49:49 -0700 (PDT)
+        Thu, 21 Jul 2022 12:50:44 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34968AEE8;
+        Thu, 21 Jul 2022 09:50:41 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LCob61012583;
+        Thu, 21 Jul 2022 16:50:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=uSOngsMlx/P519OlD2T4SviaTBg41aXPtvK39CIWeI8=;
+ b=DlTpbIhpAMpVTcTtQ7w/O/vNios1k2/2a6j4lW8X/M7iHzVBQV+PYyRImm22EWk0sggQ
+ 98qQGZWi3x+qeRjIBOtyBK9tSFK7xiLcwcjDdA+SQRq/mhdWiRsQ030Cqta15ACupgOD
+ 5kwcUTjyr1V80alJWhWCY4U0Ivzj7SAlOTDw5FKYfv9hVP3pCzcnaGvL1eyIT58BkAO0
+ Xuj5M1si5gFo3UQbj+d0sWXXiAWSzUzNe7FjIJVIlPQo2EeGLjMSlZLbTFnR+JlLcP7y
+ N8rLZmutX/xjC67iedVdPM58llkodvgKOCIU8Iv1RV/p9+B4uinqUHxKNC1BihY9K/yl GQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hf12qsfvg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 16:50:27 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26LGoQKK015553
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 Jul 2022 16:50:26 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 21 Jul
+ 2022 09:50:26 -0700
+Date:   Thu, 21 Jul 2022 09:50:25 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David Heidelberg" <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH 5/5] firmware: qcom: scm: Add wait-queue handling logic
+Message-ID: <20220721165024.GB14440@quicinc.com>
+References: <1656359076-13018-1-git-send-email-quic_gurus@quicinc.com>
+ <1656359076-13018-6-git-send-email-quic_gurus@quicinc.com>
+ <ec04538b-93e2-fa93-4043-c489a0f228e8@quicinc.com>
+ <ad5e875d-e5d7-3b6f-4915-98ba08df8c5d@quicinc.com>
+ <20220714005735.GA22183@quicinc.com>
+ <7d1106b0-178c-7167-34d5-330bb2763c3e@quicinc.com>
 MIME-Version: 1.0
-References: <20220714064918.2576464-1-yosryahmed@google.com>
- <YtfJug77XJ9BPA8L@dhcp22.suse.cz> <CALvZod7X3PsM2+ZrWXwb75FNBBjaBGJpjd+WVmzr5hStROvW+g@mail.gmail.com>
- <CAJD7tkYBm+L_-GTLDux0ZsJ6=kw-zzHjs6vgKUtmeZhcxLwqiw@mail.gmail.com>
- <Ytk8EBBEi4EubvPn@dhcp22.suse.cz> <CAJD7tkZVcQ6xzdnGPS0kQAP=+Q=yZwVT_ZrLaEsAgkLi_DAMtQ@mail.gmail.com>
- <YtmCDCsv+K+9refK@dhcp22.suse.cz>
-In-Reply-To: <YtmCDCsv+K+9refK@dhcp22.suse.cz>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 21 Jul 2022 09:49:12 -0700
-Message-ID: <CAJD7tkagAqXQ8b921d3_1=JtwKXM-q3ubK6wgN3ku-0XSLmJaA@mail.gmail.com>
-Subject: Re: [PATCH v4] mm: vmpressure: don't count proactive reclaim in vmpressure
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <7d1106b0-178c-7167-34d5-330bb2763c3e@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: GzupB7l2S9FqQCcju0WLu8gqF6z4i4P_
+X-Proofpoint-ORIG-GUID: GzupB7l2S9FqQCcju0WLu8gqF6z4i4P_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-21_23,2022-07-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
+ mlxlogscore=924 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207210067
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 9:42 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 21-07-22 08:58:06, Yosry Ahmed wrote:
-> > On Thu, Jul 21, 2022 at 4:44 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Wed 20-07-22 11:02:56, Yosry Ahmed wrote:
-> > > > On Wed, Jul 20, 2022 at 10:50 AM Shakeel Butt <shakeelb@google.com> wrote:
-> > > > >
-> > > > > On Wed, Jul 20, 2022 at 2:24 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > >
-> > > > > [...]
-> > > > > >
-> > > > > > I think what we are missing here is
-> > > > > > - explain that this doesn't have any effect on existing users of
-> > > > > >   vmpressure user interface because that is cgroup v1 and memory.reclaim
-> > > > > >   is v2 feature. This is a trivial statement but quite useful for future
-> > > > > >   readers of this commit
-> > > > > > - explain the effect on the networking layer and typical usecases
-> > > > > >   memory.reclaim is used for currently and ideally document that.
-> > > > >
-> > > > > I agree with the above two points (Yosry, please address those) but
-> > > > > the following third point is orthogonal and we don't really need to
-> > > > > have an answer for this patch to be accepted.
-> > > > >
-> > > >
-> > > > That's great feedback, thanks Michal and Shakeel!
-> > > >
-> > > > How do you feel about the following commit message instead? Does it
-> > > > address your concerns?:
-> > > >
-> > > > memory.reclaim is a cgroup v2 interface that allows users to
-> > > > proactively reclaim memory from a memcg, without real memory pressure.
-> > > > Reclaim operations invoke vmpressure, which is used in cgroup v1 to
-> > > > notify userspace of reclaim efficiency, and used in both v1 and v2 as
-> > > > a signal for a memcg being under memory pressure for networking (see
-> > > > mem_cgroup_under_socket_pressure()). For the former, vmpressure
-> > > > notifications in v1 are not affected by this change since
-> > > > memory.reclaim is a v2 feature.
-> > > >
-> > > > For the latter, the effects of the vmpressure signal (according to
-> > > > Shakeel [1]) are as follows:
-> > > > 1. Reducing send and receive buffers of the current socket.
-> > > > 2. May drop packets on the rx path.
-> > > > 3. May throttle current thread on the tx path.
-> > > >
-> > > > Since proactive reclaim is invoked directly by userspace, not by
-> > > > memory pressure, it makes sense not to throttle networking. Hence,
-> > > > this change makes sure that proactive reclaim caused by memory.reclaim
-> > > > does not trigger vmpressure.
-> > >
-> > > OK, looks much better. Please also add a note to the documentation about
-> > > this side effect.
-> >
-> > I don't want to add something to the documentation about throttling
-> > networking because it seems like these are implementation details that
-> > we may change in the future. I don't know if we can document this
-> > behavior today and then change it later.
->
-> The exact mechanism on how the throttling is done is one thing. This can
-> change. But the fact that _no_ throttling is applied is something that
-> we shouldn't change of course. If we were really strict we shouldn't
-> change it even now but considering that the interface is new and
-> usecases still shaping then better now than later.
->
-> > How about we document a more generic statement in memory.reclaim
-> > documentation, like:
-> >
-> > "With reactive reclaim operations triggered by the kernel, the kernel
-> > may take further actions to alleviate memory pressure (such as
-> > throttling networking memory consumption). For proactive reclaim
-> > operations triggered by this interface, the kernel may choose to skip
-> > such actions as reclaim is not an indication of memory pressure."
->
-> IDK, this sounds too much word lawyering to me TBH. It is better to be clear
-> about explicitly known side effects. For example where do shrinkers
-> stand in the light of above wording? Kernel can chose to do almost
-> anything and I do not think we want to control which shrinkers are
-> triggered and what they do.
->
-> So I would really prefer to say something like:
-> "
-> Please note that the proactive reclaim (triggered by this interface) is
-> not meant to indicate memory pressure on the memory cgroup. Therefore
-> socket memory balancing triggered by the memory reclaim normally is not
-> exercised in this case. This means that the networking layer will not
-> adapt based on reclaim induced by memory.reclaim.
-> "
+On Jul 19 2022 16:03, Rajendra Nayak wrote:
+> Ok thanks for the explanation, I actually had a few more comments down in that
+> patch which you did not answer, can you clarify them too?
 
-Sounds good to me! Will send v5 shortly with added doc changes and the
-newly agreed upon commit log. Thanks Michal!
+Just replied. Sorry, missed them amidst the wall of lines of context. Could you
+please remove all lines of context that are not relevant while replying? That
+will help draw attention to the comments that are being made.
 
-> --
-> Michal Hocko
-> SUSE Labs
+Thank you.
+
+Guru Das.

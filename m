@@ -2,154 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E884B57C647
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB7557C69B
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiGUIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S232374AbiGUIks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbiGUIdN (ORCPT
+        with ESMTP id S229703AbiGUIk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:33:13 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B8225E81;
-        Thu, 21 Jul 2022 01:33:12 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id oy13so1942586ejb.1;
-        Thu, 21 Jul 2022 01:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6/ZzFcfNXq3FJXVmp131vQ08suTfBEJgqdvlvCUqagg=;
-        b=fUW992UR56l7WdJLfb9SyQEjVC5L/8Eo6Nt2OaDp0tKrGDUSHL81BTaID//izNAGoN
-         F/S33qqLYfo8TkE9+9ylLiZPVibzSm3gocSkepuoCW9lCpZ6hl6pJhZ/W37MWNYxM5G5
-         ynX7JmuFURmDatrMSq+bmMiYskW7Vag4JS56v2zHeSwCq8z4jzz0wgfDVF5CcWg75BEs
-         HakItCvr+Hn3/0Desi71EpvdIrnhZXk98I72hI7CF2iZVyFvgSn7SuvlgV75K7OElvPq
-         Zl4XtI+oPoDnocDrzPju6w8dLpG04uEC2RlxdTIXfdYneDmpTfKnJ5gIjHD1B+6c/nEt
-         7yfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6/ZzFcfNXq3FJXVmp131vQ08suTfBEJgqdvlvCUqagg=;
-        b=m+hDyNHXZfrX7ctH+JxIGaVIlVlvQO4PdJmz0j8stSUTdGSViBA5JBuQm6SK/WLdVs
-         UjrcFQa/4XW6oWqQhXEa/RS4Z2I0l9o5DEQfsrYEqstibBOEb2lQ4bafyf8ZN1GQUT6H
-         zjqDqznQFZJ09ccBRiLsoQesNcFZPWAN5RueOyxusSHn5KNKEbxLhbvKDYpkT4EI6YQM
-         /x1PiuqdtnFx8+NzdRkZeO+mKKNv+KV7pBh4SFTmQVZTg/Pft37VcEHTjSW/KHRVe0O+
-         f5xoflNC/PN7lBTSG0kDVbxycj8NUQZcahy+A0IF4rncu/wFDwiMLF6J3aD/2EuNxXVQ
-         c/NA==
-X-Gm-Message-State: AJIora+S55zdcMZ1NM36SglVhFZ3Xn8H71ZaTFRVm2SNXKpzzjnnQBLc
-        Zwn50okgGCPWCH9fU+s1RLY=
-X-Google-Smtp-Source: AGRyM1sLJgetIf5jJsZaQjxquQ8BPC/F8f52bROyoHmk+eqALowCo76e1HkIc7utmda6/lJMQuFF3Q==
-X-Received: by 2002:a17:906:84f7:b0:72b:57c2:5e13 with SMTP id zp23-20020a17090684f700b0072b57c25e13mr40568129ejb.702.1658392390546;
-        Thu, 21 Jul 2022 01:33:10 -0700 (PDT)
-Received: from localhost.localdomain (ict-networks-195-176-112-012.fwd-v4.ethz.ch. [195.176.112.12])
-        by smtp.gmail.com with ESMTPSA id m18-20020aa7c492000000b0043ba45cec41sm615485edq.36.2022.07.21.01.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 01:33:10 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: dts: rockchip: Add analog audio output on quartz64-b
-Date:   Thu, 21 Jul 2022 10:33:00 +0200
-Message-Id: <20220721083301.3711-1-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 21 Jul 2022 04:40:28 -0400
+X-Greylist: delayed 418 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 01:40:27 PDT
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B455D3718C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:40:27 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-160-236.tukw.qwest.net [174.21.160.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 2D1C6368;
+        Thu, 21 Jul 2022 01:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1658392409;
+        bh=JTCX2RPG9UJuRluX0zfDraxLCvMLDl+tZnvWVUgS2W8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EFRhza/ucYPcmdZg9HdiNyv1g8I84hZvm8xkIF+gCp9e3e06hgT5W2q5YPjsgCPBI
+         Ngzjfq3o58VMd0WcSvRUbyVVdHSDiwDXqwn2RrrJD+JfiY+mxhJDVsfpY2CH+G7Erw
+         5nNvPoqusCMnd/bq7bt4DLEBL7GZsLIv6DDEzrQY=
+Date:   Thu, 21 Jul 2022 01:33:20 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v4 2/4] dt-bindings: regulator: add bindings for
+ output-supply
+Message-ID: <YtkPUOh5XiQyGLxw@hatter.bewilderbeest.net>
+References: <20220707081826.953449-1-Naresh.Solanki@9elements.com>
+ <20220707081826.953449-3-Naresh.Solanki@9elements.com>
+ <20220714141041.GB2229197-robh@kernel.org>
+ <YtAkwcwXaQqZV75d@sirena.org.uk>
+ <CAL_JsqKu_HCDoPBTcVdVV2JyD_8p3+cbrNC0u6VrK85vWZmt3Q@mail.gmail.com>
+ <YtArbh4a40cACRMt@sirena.org.uk>
+ <CAL_Jsq+KRyE3i3CkPKopGgFvL+h0pT3R-d3aZNgVmKyiTy3gjw@mail.gmail.com>
+ <YtA8KOLDIsEH+okf@sirena.org.uk>
+ <CAL_JsqKCByvNASAxRWV3bcjFSBjXZUQf0Xvv_dCZ0z1CRCcOKA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqKCByvNASAxRWV3bcjFSBjXZUQf0Xvv_dCZ0z1CRCcOKA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the necessary device tree changes to enable analog
-audio output on the PINE64 Quartz64 Model B with its RK809
-codec.
+On Thu, Jul 14, 2022 at 09:59:48AM PDT, Rob Herring wrote:
+>+Zev
+>
+>On Thu, Jul 14, 2022 at 9:54 AM Mark Brown <broonie@kernel.org> wrote:
+>>
+>> On Thu, Jul 14, 2022 at 09:07:49AM -0600, Rob Herring wrote:
+>> > On Thu, Jul 14, 2022 at 8:43 AM Mark Brown <broonie@kernel.org> wrote:
+>>
+>> > > Consider for example a BMC (IIRC that's what their specific product is),
+>> > > a bench supply or some automated test equipment.  Part of the function
+>> > > for these systems is to provide power to other systems which would be
+>> > > represented as a root or wall supply in the description of the system
+>> > > that actually uses the supply if it were described using DT.
+>>
+>> > Didn't someone else have a similar use recently? Controlling some
+>> > supply external to the system. I can't seem to find it now.
+>>
+>> IIRC that was an earlier iteration of the same thing - it's been round
+>> the houses a bit.  extcon seemed like it might be a home since these are
+>> external connections from the system but in the end people didn't think
+>> it looked like a good fit.
+>
+>Found it:
+>
+>v1: https://lore.kernel.org/all/20220504065252.6955-2-zev@bewilderbeest.net/
+>v2: https://lore.kernel.org/all/20220505232557.10936-1-zev@bewilderbeest.net/
+>
+>v2 was the using extcon version. v1 looks pretty similar to this one
+>though anything that's just a compatible plus supplies would.
+>
+>But AFAICT these 2 submissions are completely independent.
+>
 
-The headphone detection pin is left out for now because I couldn't
-get it to work and am not sure if it even matters, but for future
-reference: It's pin GPIO4 RK_PC4, named HP_DET_L_GPIO4_C4 in the
-schematic.
+Thanks for looping me in here Rob, I hadn't been aware of this series.
 
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
----
-Changes since v1:
- - use generic node name for the simple-audio-card node
+Naresh, I'd appreciate it if you could CC me on any subsequent 
+iterations; as linked above I've made some sporadic attempts at getting 
+support for this functionality merged, and am certainly interested in 
+any other efforts on that front.
 
----
- .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 32 ++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
+A question for Mark though -- in one of my earliest stabs at this I 
+floated the idea of using reg-userspace-consumer for it, but was told in 
+no uncertain terms that that driver was for testing only and should 
+under no circumstances ever be instantiated in a production system.  Has 
+the thinking on its usage changed in the last year or so such that this 
+approach was deemed okay?
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-index 02d5f5a8ca03..3897980d69d1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-@@ -42,6 +42,21 @@ led-user {
- 		};
- 	};
- 
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,format = "i2s";
-+		simple-audio-card,name = "Analog RK809";
-+		simple-audio-card,mclk-fs = <256>;
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&i2s1_8ch>;
-+		};
-+
-+		simple-audio-card,codec {
-+			sound-dai = <&rk809>;
-+		};
-+	};
-+
- 	sdio_pwrseq: sdio-pwrseq {
- 		status = "okay";
- 		compatible = "mmc-pwrseq-simple";
-@@ -177,11 +192,16 @@ rk809: pmic@20 {
- 		reg = <0x20>;
- 		interrupt-parent = <&gpio0>;
- 		interrupts = <RK_PA7 IRQ_TYPE_LEVEL_LOW>;
-+		assigned-clocks = <&cru I2S1_MCLKOUT_TX>;
-+		assigned-clock-parents = <&cru CLK_I2S1_8CH_TX>;
-+		clock-names = "mclk";
-+		clocks = <&cru I2S1_MCLKOUT_TX>;
- 		clock-output-names = "rk808-clkout1", "rk808-clkout2";
- 
- 		pinctrl-names = "default";
--		pinctrl-0 = <&pmic_int>;
-+		pinctrl-0 = <&pmic_int>, <&i2s1m0_mclk>;
- 		rockchip,system-power-controller;
-+		#sound-dai-cells = <0>;
- 		wakeup-source;
- 		#clock-cells = <1>;
- 
-@@ -420,6 +440,16 @@ &i2c5 {
- 	status = "disabled";
- };
- 
-+&i2s1_8ch {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2s1m0_sclktx
-+		     &i2s1m0_lrcktx
-+		     &i2s1m0_sdi0
-+		     &i2s1m0_sdo0>;
-+	rockchip,trcm-sync-tx-only;
-+	status = "okay";
-+};
-+
- &mdio1 {
- 	rgmii_phy1: ethernet-phy@1 {
- 		compatible = "ethernet-phy-ieee802.3-c22";
--- 
-2.37.1
+
+Thanks,
+Zev
 

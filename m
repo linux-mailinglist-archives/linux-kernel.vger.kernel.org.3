@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D211D57D377
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B757E57D37D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 20:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbiGUSkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 14:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S232831AbiGUSln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 14:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGUSke (ORCPT
+        with ESMTP id S229379AbiGUSlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 14:40:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058ED19C2E;
-        Thu, 21 Jul 2022 11:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=h/0A4RGH/zY+Ku8k/xauLxj65JhhDPY8gyI7dZDUJxY=; b=r0Y/tgeKdXYQmdSUjAH9KbS93X
-        vneKr4mr3bjCT7CCsam6XRRDD/RKG5jTl6ONbGY1POmL8GodKZ4FvulV0XYKbG8KLVYLODEUaoMOP
-        N55IcydIZ3VgNmD8sYc86zSpBUXVK1xCRMlp2oIPSt4R4S6qVnUGl1RIqCuBrTyM5k+nOBVP3PZrG
-        soBqLHLzM1woHLIT8w66dF7flt8zHo2LGCZgcmVXKG4ByJ6b8RH5fc4ff6b9EHHeZLAdhlkSFzUDb
-        odKzDKOv+AA1SfAedVyrqqa91b2twUjiLWpWcuRTIckeKp5dXNcm8Wtkhyj1CrDWyk/STmtj6Umop
-        SKmMgiOg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEb5k-00BVq1-CS; Thu, 21 Jul 2022 18:40:08 +0000
-Message-ID: <6ca59494-cc64-d85c-98e8-e9bef2a04c15@infradead.org>
-Date:   Thu, 21 Jul 2022 11:40:06 -0700
+        Thu, 21 Jul 2022 14:41:40 -0400
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CE086C1E;
+        Thu, 21 Jul 2022 11:41:38 -0700 (PDT)
+Received: from [192.168.1.101] (abxj77.neoplus.adsl.tpnet.pl [83.9.3.77])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 7B0673F72A;
+        Thu, 21 Jul 2022 20:41:35 +0200 (CEST)
+Message-ID: <d960d442-4b0a-ef33-04da-8fe3a3c8fb90@somainline.org>
+Date:   Thu, 21 Jul 2022 20:41:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2] docs: Fix typo in comment
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: introduce sa8540p-ride dts
 Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, Slark Xiao <slark_xiao@163.com>,
-        kafai <kafai@fb.com>
-Cc:     Baoquan He <bhe@redhat.com>, vgoyal <vgoyal@redhat.com>,
-        dyoung <dyoung@redhat.com>, ast <ast@kernel.org>,
-        daniel <daniel@iogearbox.net>, andrii <andrii@kernel.org>,
-        "martin.lau" <martin.lau@linux.dev>, song <song@kernel.org>,
-        yhs <yhs@fb.com>, "john.fastabend" <john.fastabend@gmail.com>,
-        kpsingh <kpsingh@kernel.org>, sdf <sdf@google.com>,
-        haoluo <haoluo@google.com>, jolsa <jolsa@kernel.org>,
-        "william.gray" <william.gray@linaro.org>,
-        dhowells <dhowells@redhat.com>, peterz <peterz@infradead.org>,
-        mingo <mingo@redhat.com>, will <will@kernel.org>,
-        longman <longman@redhat.com>,
-        "boqun.feng" <boqun.feng@gmail.com>, tglx <tglx@linutronix.de>,
-        bigeasy <bigeasy@linutronix.de>,
-        kexec <kexec@lists.infradead.org>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-cachefs <linux-cachefs@redhat.com>
-References: <20220721015605.20651-1-slark_xiao@163.com>
- <20220721154110.fqp7n6f7ij22vayp@kafai-mbp.dhcp.thefacebook.com>
- <21cac0ea.18f.182218041f7.Coremail.slark_xiao@163.com>
- <874jzamhxe.fsf@meer.lwn.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <874jzamhxe.fsf@meer.lwn.net>
+To:     Parikshit Pareek <quic_ppareek@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220721154057.15276-1-quic_ppareek@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220721154057.15276-1-quic_ppareek@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,23 +50,94 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Hello!
 
-On 7/21/22 11:36, Jonathan Corbet wrote:
-> "Slark Xiao" <slark_xiao@163.com> writes:
+On 21.07.2022 17:40, Parikshit Pareek wrote:
+> Create new dts file specific for Qdrive board based on sa8540p chipset.
+Is the SA8540P any different than SA8295P? My wild guess is that they're
+binned versions of each other with different DVFS levels.. That could
+use a separate SoC DTSI to hold these differences should that be true..
+
+
+> Introduce common dtsi file sa8295p-adp.dtsi, to be included for adp and
+> Qdrive board.
 > 
->> May I know the maintainer of one subsystem could merge the changes
->> contains lots of subsystem?  I also know this could be filtered by
->> grep and sed command, but that patch would have dozens of maintainers
->> and reviewers.
+> Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts      | 378 +----------------
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dtsi     | 385 ++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts |  15 +
+>  4 files changed, 403 insertions(+), 376 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sa8295p-adp.dtsi
+>  create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
 > 
-> Certainly I don't think I can merge a patch touching 166 files across
-> the tree.  This will need to be broken down by subsystem, and you may
-> well find that there are some maintainers who don't want to deal with
-> this type of minor fix.
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 9e2a13d75f9d..fa0abcf7660b 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -51,6 +51,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
+> +dtb-$(CONFIG_ARCH_QCOM) += sa8540p-adp-ride.dtb
+This needs to be a tab.
 
-We have also seen cases where "the the" should be replaced by "then the"
-or some other pair of words, so some of these changes could fall into
-that category.
 
--- 
-~Randy
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> index 9398f0349944..adb6637117bc 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> @@ -2,388 +2,14 @@
+>  /*
+>   * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+>   * Copyright (c) 2022, Linaro Limited
+> + * Copyright (c) 2022 Qualcomm Innovaion Center, Inc. All rights reserved.
+Please add a comma after the year to keep it consistent.
+
+
+>   */
+>  
+>  /dts-v1/;
+
+[...]
+
+> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dtsi b/arch/arm64/boot/dts/qcom/sa8295p-adp.dtsi
+> new file mode 100644
+> index 000000000000..75ef77b7cac1
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dtsi
+Are the boards based on each other? Or on a similar base platform?
+Maybe sa8295p/sa8540p/sasomethingelse-automotive.dtsi could be a 
+better name in the latter case?
+
+
+[...]
+
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Linaro Limited
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "sa8295p-adp.dtsi"
+> +
+> +/ {
+> +	model = "Qualcomm SA8540 ADP";
+So "Qdrive board" == SA8540 ADP == SA8540 ADP Ride? Or is there
+a base platform for all of them? Maybe the Qdrive is simply based
+on the ADPs? Is there a clear distinction between ADP and ADP Ride?
+
+Konrad
+
+> +	compatible = "qcom,sa8540p-adp-ride", "qcom,sa8540p";
+> +};

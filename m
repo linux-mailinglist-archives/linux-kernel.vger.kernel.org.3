@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662A857C6D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D8757C6CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiGUIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S232402AbiGUIuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbiGUIuU (ORCPT
+        with ESMTP id S232149AbiGUIuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:50:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EA964DC
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:50:18 -0700 (PDT)
+        Thu, 21 Jul 2022 04:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFB962CA
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:50:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75A0AB8238A
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2F49C3411E;
-        Thu, 21 Jul 2022 08:50:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A53D661F04
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 092CAC341CB;
+        Thu, 21 Jul 2022 08:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1658393416;
-        bh=RR5j2KJQJeiVePJADOKQ9hMt9OPnVOD2Ib5XrtYAZrQ=;
+        bh=2hebJRVnSw8a/+tmnCngeqcM68rilnEA7AZzAQBYsEU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=aruA412GpHrUMTS71ZaAnMvzt6fPY4NFuENRLikWh5qk6lJYJU7WmTEtP3u45HHB4
-         zTemcXO7JIZ04L1TicUuWfrSDd0S60IfMpTDlwwikzgmJnCI2iw/pjyr7L1GVJW+Mt
-         HvxKwXqrJAaWAEg6eo2JsUblsbRfUcH+j2KpYoRDjfLnWd+rw1fnDLcYMN2KRlOyZt
-         yM7gRpqp9I5trgat3FHy6f6IgQWyv0wG3pBGlV9aOtRcM2bl30VzvaG0XQHBukqdm3
-         /Ktp3U9uzCr2bSrIbYS0wigv3gFI3+W5QE8blax6GXDDeXpID0f/lVPIr4TgPNURB8
-         YFAgVP8GKDSOg==
+        b=GB91xZa0MC2Ehrr2OypFTTPEH2WNHiuF7Ik+bzbOUK6G4FSDuzcnDEHC62TDkHubT
+         3w+MLrV10rJlr430d/Muz2hOVtiCtDuKfdNIgJ50bLazK6DPADUbUkIcmjAfAXwU1S
+         UQ5Xs2w36zle7dUnqCqunBFGB69jTfj6I+5lhMuT1S3A455de73xf4uUpygGJNUQHH
+         DOkFmIhT0vczNFOXt42hDcXg4RXAf5NTX2ayV0vjUIJSJlDUFdBLVi2IrM7yYCOhBr
+         Hk1SF/oQrrCKsCTc0GtI+c0vW5KJlxzO85dfqpgLoyH/wK9CD+RfUnl8Fecya4UKoP
+         0BnUD6exKY6og==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAE3EE451B9;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E1C32D9DDDD;
         Thu, 21 Jul 2022 08:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 00/10] platform/chrome: Kunit tests and refactor for
- cros_ec_cmd_xfer()
+Subject: Re: [PATCH 0/7] platform/chrome: cros_ec_proto: add Kunit tests
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165839341589.29073.1144007082391930309.git-patchwork-notify@kernel.org>
+Message-Id: <165839341592.29073.1350523720863689608.git-patchwork-notify@kernel.org>
 Date:   Thu, 21 Jul 2022 08:50:15 +0000
-References: <20220718050914.2267370-1-tzungbi@kernel.org>
-In-Reply-To: <20220718050914.2267370-1-tzungbi@kernel.org>
+References: <20220622041040.202737-1-tzungbi@kernel.org>
+In-Reply-To: <20220622041040.202737-1-tzungbi@kernel.org>
 To:     Tzung-Bi Shih <tzungbi@kernel.org>
 Cc:     bleung@chromium.org, groeck@chromium.org,
         chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
@@ -62,37 +61,38 @@ Hello:
 This series was applied to chrome-platform/linux.git (for-next)
 by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-On Mon, 18 Jul 2022 05:09:04 +0000 you wrote:
-> The 1st patch fixes an issue that cros_kunit_ec_xfer_mock() could return
-> garbage bytes for `msg->result` if the mock list is empty.
+On Wed, 22 Jun 2022 04:10:33 +0000 you wrote:
+> The series add Kunit tests for the rest of exported functions.
 > 
-> The 2nd ~ 6th patches add Kunit tests and refactors for cros_ec_cmd_xfer().
+> The series applies after
+> https://patchwork.kernel.org/project/chrome-platform/cover/20220615051248.1628156-1-tzungbi@kernel.org/.
 > 
-> The last 4 patches change the behavior a bit by altering return codes.
+> Tzung-Bi Shih (7):
+>   platform/chrome: cros_ec_proto: add Kunit tests for cmd_xfer_status
+>   platform/chrome: cros_ec_proto: add Kunit test for cros_ec_map_error()
+>   platform/chrome: cros_ec_proto: add Kunit tests for get_next_event
+>   platform/chrome: cros_ec_proto: add Kunit tests for get_host_event
+>   platform/chrome: cros_ec_proto: add Kunit tests for check_features
+>   platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
+>   platform/chrome: cros_ec_proto: add Kunit test for cros_ec_cmd()
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,01/10] platform/chrome: cros_kunit_util: add default value for `msg->result`
-    (no matching commit)
-  - [v2,02/10] platform/chrome: cros_ec_proto: add "cros_ec_" prefix to send_command()
-    https://git.kernel.org/chrome-platform/c/d311664b9057
-  - [v2,03/10] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_cmd_xfer()
-    https://git.kernel.org/chrome-platform/c/82f4def2d822
-  - [v2,04/10] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_send_command()
-    (no matching commit)
-  - [v2,05/10] platform/chrome: cros_ec_proto: separate cros_ec_xfer_command()
-    https://git.kernel.org/chrome-platform/c/810be30d27bd
-  - [v2,06/10] platform/chrome: cros_ec_proto: separate cros_ec_wait_until_complete()
-    https://git.kernel.org/chrome-platform/c/0aad9aff6a64
-  - [v2,07/10] platform/chrome: cros_ec_proto: change Kunit expectation when timed out
-    https://git.kernel.org/chrome-platform/c/00eb36d52872
-  - [v2,08/10] platform/chrome: cros_ec_proto: return -EAGAIN when retries timed out
-    https://git.kernel.org/chrome-platform/c/7f95d2b68b9a
-  - [v2,09/10] platform/chrome: cros_ec_proto: add Kunit test for empty payload
-    https://git.kernel.org/chrome-platform/c/82c9b7ed8c5c
-  - [v2,10/10] platform/chrome: cros_ec_proto: return -EPROTO if empty payload
-    https://git.kernel.org/chrome-platform/c/3e1c715ea179
+  - [1/7] platform/chrome: cros_ec_proto: add Kunit tests for cmd_xfer_status
+    https://git.kernel.org/chrome-platform/c/74bed42fd5fa
+  - [2/7] platform/chrome: cros_ec_proto: add Kunit test for cros_ec_map_error()
+    https://git.kernel.org/chrome-platform/c/1242688fc2f0
+  - [3/7] platform/chrome: cros_ec_proto: add Kunit tests for get_next_event
+    https://git.kernel.org/chrome-platform/c/2b7ed927953f
+  - [4/7] platform/chrome: cros_ec_proto: add Kunit tests for get_host_event
+    https://git.kernel.org/chrome-platform/c/7cb1eb82642b
+  - [5/7] platform/chrome: cros_ec_proto: add Kunit tests for check_features
+    https://git.kernel.org/chrome-platform/c/00238864435f
+  - [6/7] platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
+    https://git.kernel.org/chrome-platform/c/33f0fdba6066
+  - [7/7] platform/chrome: cros_ec_proto: add Kunit test for cros_ec_cmd()
+    https://git.kernel.org/chrome-platform/c/9399b2cb2070
 
 You are awesome, thank you!
 -- 

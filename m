@@ -2,237 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC4E57C8D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FFD57C8DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiGUKTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S232128AbiGUKY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiGUKTf (ORCPT
+        with ESMTP id S229875AbiGUKYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:19:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89F782397;
-        Thu, 21 Jul 2022 03:19:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E892B8239C;
-        Thu, 21 Jul 2022 10:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7376CC3411E;
-        Thu, 21 Jul 2022 10:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658398770;
-        bh=uF9353hnQZd3BXE41rHODhzKSUHBPzaXqjrZu5+fQok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g5wyVh3Gn4BsqDlCw+fbSxAn78RXXIoT3k3EmqB0Q3qRZUwmQ3UxcuC/hHdKqjryt
-         UL0Z3gxCcIXkmUt1MDIx/8wSh5BRe3U1sVMgqUoU3kk9dU5JZyxzmaiHhZOV5zqVXq
-         VCQQPVKwcPaCvLe+g9GrpaAbZuqIwOebbv+dSZjjxDLLw4CMvvoC8rEv7kjHLkXAxa
-         svCKnBBJDIrefopoBqpBDgBxHyCpIOSm3qOic/fwAaTJ7batwifueGm+IchNg8O24J
-         ef957N0zqIj6XCdzvwVhwuqnowdjeKGFsjxOrarhIm38uqnun3ZcHGXXHkYY3EdZeZ
-         ms8mPLsXjnVOQ==
-Date:   Thu, 21 Jul 2022 15:49:14 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Qiang Yu <quic_qianyu@quicinc.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>, quic_hemantk@quicinc.com,
-        loic.poulain@linaro.org, quic_jhugo@quicinc.com,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
-        ath11k@lists.infradead.org
-Subject: Re: [PATCH v4 1/1] bus: mhi: host: Move IRQ allocation to controller
- registration phase
-Message-ID: <20220721101914.GC36189@thinkpad>
-References: <1655952183-66792-1-git-send-email-quic_qianyu@quicinc.com>
- <20220624072740.GA12171@thinkpad>
- <87k08an038.fsf@kernel.org>
- <20220720093909.GA5747@thinkpad>
- <063fe6bf-11b1-1724-058f-0fed7247906e@quicinc.com>
+        Thu, 21 Jul 2022 06:24:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96EB62CCAF
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:24:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4BFC1042;
+        Thu, 21 Jul 2022 03:24:21 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.86.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98C063F70D;
+        Thu, 21 Jul 2022 03:24:19 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 11:24:17 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Subject: Re: [PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
+ migration margin
+Message-ID: <20220721102417.cf6ukxpvkh4grjeh@wubuntu>
+References: <20220629194632.1117723-1-qais.yousef@arm.com>
+ <20220629194632.1117723-2-qais.yousef@arm.com>
+ <CAB8ipk-PzwsfTzJtfrq6vJJdDNHsnGKrHjFR+527SoxBNQy0YA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <063fe6bf-11b1-1724-058f-0fed7247906e@quicinc.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAB8ipk-PzwsfTzJtfrq6vJJdDNHsnGKrHjFR+527SoxBNQy0YA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 05:47:37PM +0800, Qiang Yu wrote:
-> 
-> On 7/20/2022 5:39 PM, Manivannan Sadhasivam wrote:
-> > On Mon, Jul 18, 2022 at 02:15:23PM +0300, Kalle Valo wrote:
-> > > + ath11k list
-> > > 
-> > > Manivannan Sadhasivam <mani@kernel.org> writes:
-> > > 
-> > > > On Thu, Jun 23, 2022 at 10:43:03AM +0800, Qiang Yu wrote:
-> > > > > During runtime, the MHI endpoint may be powered up/down several times.
-> > > > > So instead of allocating and destroying the IRQs all the time, let's just
-> > > > > enable/disable IRQs during power up/down.
-> > > > > 
-> > > > > The IRQs will be allocated during mhi_register_controller() and freed
-> > > > > during mhi_unregister_controller(). This works well for things like PCI
-> > > > > hotplug also as once the PCI device gets removed, the controller will
-> > > > > get unregistered. And once it comes back, it will get registered back
-> > > > > and even if the IRQ configuration changes (MSI), that will get accounted.
-> > > > > 
-> > > > > Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
-> > > > Applied to mhi-next!
-> > > I did a bisect and this patch breaks ath11k during rmmod. I'm on
-> > > vacation right now so I can't investigate in detail but more info below.
-> > > 
-> > I just tested linux-next/master next-20220718 on my NUC with QCA6390, but I'm
-> > not able to reproduce the issue during rmmod! Instead I couldn't connect to AP.
-> 
-> I suspect that in __free_irq(), if CONFIG_DEBUG_SHIRQ is enabled, irq
-> handler for a shared IRQ will be invoked and null pointer access happen.
-> 
-> #ifdef CONFIG_DEBUG_SHIRQ
->     /*
->      * It's a shared IRQ -- the driver ought to be prepared for an IRQ
->      * event to happen even now it's being freed, so let's make sure that
->      * is so by doing an extra call to the handler ....
->      *
->      * ( We do this after actually deregistering it, to make sure that a
->      *   'real' IRQ doesn't run in parallel with our fake. )
->      */
->     if (action->flags & IRQF_SHARED) {
->         local_irq_save(flags);
->         action->handler(irq, dev_id);
->         local_irq_restore(flags);
->     }
-> #endif
-> 
+Hi Xuewen
 
-Ah yes, after enabling CONFIG_DEBUG_SHIRQ I could reproduce the issue.
-
-Thanks,
-Mani
-
-> > 
-> > log: https://paste.debian.net/1247788/
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > [   66.939878] rmmod ath11k_pci
-> > > [   67.606269] general protection fault, probably for non-canonical
-> > > address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC KASAN
-> > > PTI
-> > > [   67.606328] KASAN: null-ptr-deref in range
-> > > [0x0000000000000000-0x0000000000000007]
-> > > [   67.606387] CPU: 3 PID: 1463 Comm: rmmod Not tainted 5.19.0-rc1+ #669
-> > > [   67.606456] Hardware name: Intel(R) Client Systems
-> > > NUC8i7HVK/NUC8i7HVB, BIOS HNKBLi70.86A.0067.2021.0528.1339 05/28/2021
-> > > [   67.606492] RIP: 0010:mhi_irq_handler+0x61/0x370 [mhi]
-> > > [   67.606565] Code: 00 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 9b 02 00
-> > > 00 49 8b ad 20 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 ea 48 c1 ea
-> > > 03 <80> 3c 02 00 0f 85 bd 02 00 00 48 8d 7b 10 48 8b 6d 00 48 b8 00 00
-> > > [   67.606639] RSP: 0018:ffffc900042ffba8 EFLAGS: 00010046
-> > > [   67.606706] RAX: dffffc0000000000 RBX: ffff88812e1e2800 RCX:
-> > > 0000000000000001
-> > > [   67.606742] RDX: 0000000000000000 RSI: ffff88812e1e2800 RDI:
-> > > ffff888110e8d120
-> > > [   67.606776] RBP: 0000000000000000 R08: 0000000000000001 R09:
-> > > ffffffff86ac17af
-> > > [   67.606810] R10: fffffbfff0d582f5 R11: 0000000000000001 R12:
-> > > ffff88812c3afb80
-> > > [   67.606845] R13: ffff888110e8d000 R14: ffff88811ddba800 R15:
-> > > ffff88812e1e2800
-> > > [   67.606880] FS:  00007fef00794740(0000) GS:ffff888234200000(0000)
-> > > knlGS:0000000000000000
-> > > [   67.606915] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > [   67.606950] CR2: 000055df2323b788 CR3: 0000000109844001 CR4:
-> > > 00000000003706e0
-> > > [   67.606987] Call Trace:
-> > > [   67.607021]  <TASK>
-> > > [   67.607056]  __free_irq+0x590/0x9d0
-> > > [   67.607099]  ? slab_free_freelist_hook+0xf0/0x1a0
-> > > [   67.607136]  free_irq+0x7b/0x110
-> > > [   67.607171]  mhi_deinit_free_irq+0x14e/0x260 [mhi]
-> > > [   67.607210]  mhi_unregister_controller+0x69/0x290 [mhi]
-> > > [   67.607249]  ath11k_mhi_unregister+0x2b/0x70 [ath11k_pci]
-> > > [   67.607284]  ath11k_pci_remove+0x107/0x2a0 [ath11k_pci]
-> > > [   67.607321]  pci_device_remove+0x89/0x1b0
-> > > [   67.607359]  device_release_driver_internal+0x3bc/0x600
-> > > [   67.607400]  driver_detach+0xbc/0x180
-> > > [   67.607439]  bus_remove_driver+0xe2/0x2d0
-> > > [   67.607476]  pci_unregister_driver+0x21/0x250
-> > > [   67.607512]  __do_sys_delete_module+0x307/0x4b0
-> > > [   67.607548]  ? free_module+0x4e0/0x4e0
-> > > [   67.607584]  ? lockdep_hardirqs_on_prepare.part.0+0x18c/0x370
-> > > [   67.607618]  ? syscall_enter_from_user_mode+0x1d/0x50
-> > > [   67.607653]  ? lockdep_hardirqs_on+0x79/0x100
-> > > [   67.607688]  do_syscall_64+0x35/0x80
-> > > [   67.607723]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> > > [   67.607758] RIP: 0033:0x7fef008e1a6b
-> > > [   67.607794] Code: 73 01 c3 48 8b 0d 25 c4 0c 00 f7 d8 64 89 01 48 83
-> > > c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00 00 0f
-> > > 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d f5 c3 0c 00 f7 d8 64 89 01 48
-> > > [   67.607836] RSP: 002b:00007ffdd5803a38 EFLAGS: 00000206 ORIG_RAX:
-> > > 00000000000000b0
-> > > [   67.607873] RAX: ffffffffffffffda RBX: 000055c0d3f107a0 RCX:
-> > > 00007fef008e1a6b
-> > > [   67.607961] RDX: 000000000000000a RSI: 0000000000000800 RDI:
-> > > 000055c0d3f10808
-> > > [   67.607995] RBP: 00007ffdd5803a98 R08: 0000000000000000 R09:
-> > > 0000000000000000
-> > > [   67.608029] R10: 00007fef0095dac0 R11: 0000000000000206 R12:
-> > > 00007ffdd5803c70
-> > > [   67.608063] R13: 00007ffdd5804eb7 R14: 000055c0d3f0f2a0 R15:
-> > > 000055c0d3f107a0
-> > > [   67.608100]  </TASK>
-> > > [   67.608134] Modules linked in: ath11k_pci(-) ath11k mac80211 libarc4
-> > > cfg80211 qmi_helpers qrtr_mhi mhi qrtr nvme nvme_core
-> > > [   67.608185] ---[ end trace 0000000000000000 ]---
-> > > [   67.608186] RIP: 0010:mhi_irq_handler+0x61/0x370 [mhi]
-> > > [   67.608192] Code: 00 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 9b 02 00
-> > > 00 49 8b ad 20 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 ea 48 c1 ea
-> > > 03 <80> 3c 02 00 0f 85 bd 02 00 00 48 8d 7b 10 48 8b 6d 00 48 b8 00 00
-> > > [   67.608194] RSP: 0018:ffffc900042ffba8 EFLAGS: 00010046
-> > > [   67.608196] RAX: dffffc0000000000 RBX: ffff88812e1e2800 RCX:
-> > > 0000000000000001
-> > > [   67.608197] RDX: 0000000000000000 RSI: ffff88812e1e2800 RDI:
-> > > ffff888110e8d120
-> > > [   67.608198] RBP: 0000000000000000 R08: 0000000000000001 R09:
-> > > ffffffff86ac17af
-> > > [   67.608199] R10: fffffbfff0d582f5 R11: 0000000000000001 R12:
-> > > ffff88812c3afb80
-> > > [   67.608200] R13: ffff888110e8d000 R14: ffff88811ddba800 R15:
-> > > ffff88812e1e2800
-> > > [   67.608201] FS:  00007fef00794740(0000) GS:ffff888234200000(0000)
-> > > knlGS:0000000000000000
-> > > [   67.608203] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > [   67.608204] CR2: 000055df2323b788 CR3: 0000000109844001 CR4:
-> > > 00000000003706e0
-> > > [   67.608206] Kernel panic - not syncing: Fatal exception
-> > > [   67.608665] Kernel Offset: 0xa00000 from 0xffffffff81000000
-> > > (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> > > [   67.608704] Rebooting in 10 seconds..
-> > > 
-> > > git bisect start
-> > > # bad: [9df125af0822d3e2bde7508e9536d67ab541a166] bus: mhi: ep: Check dev_set_name() return value
-> > > git bisect bad 9df125af0822d3e2bde7508e9536d67ab541a166
-> > > # good: [178329d4d635fb1848cc7ca1803dee5a634cde0d] bus: mhi: host: pci_generic: Add support for Quectel EM120 FCCL modem
-> > > git bisect good 178329d4d635fb1848cc7ca1803dee5a634cde0d
-> > > # bad: [1227d2a20cd7319fb45c62fab4b252600e0308bf] bus: mhi: host: Move IRQ allocation to controller registration phase
-> > > git bisect bad 1227d2a20cd7319fb45c62fab4b252600e0308bf
-> > > # good: [b7ce716254315dffcfce60e149ddd022c8a60345] bus: mhi: host: pci_generic: Add Cinterion MV31-W with new baseline
-> > > git bisect good b7ce716254315dffcfce60e149ddd022c8a60345
-> > > # first bad commit: [1227d2a20cd7319fb45c62fab4b252600e0308bf] bus: mhi: host: Move IRQ allocation to controller registration phase
-> > > 
-> > > -- 
-> > > https://patchwork.kernel.org/project/linux-wireless/list/
-> > > 
-> > > https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-> > > 
+On 07/20/22 15:17, Xuewen Yan wrote:
+> Hi Qais,
 > 
+> On Thu, Jun 30, 2022 at 3:47 AM Qais Yousef <qais.yousef@arm.com> wrote:
+> >
+> > fits_capacity() verifies that a util is within 20% margin of the
+> > capacity of a CPU, which is an attempt to speed up upmigration.
+> >
+> > But when uclamp is used, this 20% margin is problematic because for
+> > example if a task is boosted to 1024, then it will not fit on any CPU
+> > according to fits_capacity() logic.
+> >
+> > Or if a task is boosted to capacity_orig_of(medium_cpu). The task will
+> > end up on big instead on the desired medium CPU.
+> 
+> I think it is reasonable. Since the user sets uclamp_min to be greater
+> than 0, the user prefers that the process has better performance cpu.
+> If ignore the margin here, the uclamp_min is meaningless.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Why is it meaningless?
+
+uclamp is a performance hint, not a bandwidth hint.
+
+That is, if the task's util_avg, which represents its bandwidth, is being
+impacted then it should move up.
+
+But if the task is getting the bandwidth it needs, which is again represented
+by its util_avg, then uclamp_min just ensure it is running at the right
+performance level. Performance level is orthogonal to bandwidth.
+
+As long as the medium CPU will run at max performance point, it is fine.
+
+> 
+> >
+> > Similar corner cases exist for uclamp and usage of capacity_of().
+> > Slightest irq pressure on biggest CPU for example will make a 1024
+> > boosted task look like it can't fit.
+> 
+> I think it can't fit is reasonable. The uclamp_min is limit the
+> util_avg, if the task can fit the cpu with capacity is 1024, which
+> uclamp_min is 1024, How to deal with the task which util is 1024?
+> Maybe your idea is that the biggest cpu can fit any task even if it's
+> util is 1024?
+
+util_fits_cpu() compares util_avg with capacity_of(). So if
+
+	util_avg >= 0.8 * 1024
+
+then it will not fit the cpu. Regardless of what is the uclamp_min value. Only
+exception is if you use uclamp_max, then by design this should force it to fit
+even if util_avg is bigger.
+
+> 
+> >
+> > What we really want is for uclamp comparisons to ignore the migration
+> > margin and capacity pressure, yet retain them for when checking the
+> > _actual_ util signal.
+> >
+> > For example, task p:
+> >
+> >         p->util_avg = 300
+> >         p->uclamp[UCLAMP_MIN] = 1024
+> >
+> > Will fit a big CPU. But
+> >
+> >         p->util_avg = 900
+> >         p->uclamp[UCLAMP_MIN] = 1024
+> >
+> > will not, this should trigger overutilized state because the big CPU is
+> > now *actually* being saturated.
+> 
+> Now the code would catch the uclamp before judging the fits_capacity.
+> The two task both can not fit the cpu, why the task(300) can fit the
+> cpu?
+
+Because
+
+	p->util_avg < 0.8 * capacity_of(big_cpu)
+AND
+	p->uclamp_min <= capacity_orig_of(big_cpu)
+
+Why it shouldn't fit?
+
+Please keep in mind that uclamp is a performance hint and not a bandwidth hint.
+It requests for the task to run at a performance level, if we can satisfy that
+request, but it doesn't say that the task is actually occupies that bandwidth.
+
+By design, we want to allow multiple small tasks to be packed on a big core.
+For example if we have
+
+	p0->util_avg = 300
+	p0->uclamp_min = 1024
+
+	p1->util_avg = 300
+	p1->uclamp_min = 1024
+
+Then by design we would like to enable both of these tasks to run on big cores.
+
+Their combined bandwidth is 600, which is well below the available bandwidth.
+And uclamp_min = 1024 just means these task must run at highest frequency on
+the biggest cpu.
+
+feec() will actually take care of deciding whether to pack or spread within
+the big cpu 'cluster'. util_fits_cpu() role is merely to indicate whether this
+cpu is a viable option or not.
+
+Taking any pressure into account will mean any hint to 1024 will almost always
+fail because in the common case there's always some form of pressure on a CPU.
+So even if capacity_of() is 1023, this will make p0 and p1 to trigger
+overutilized state. Which is plain wrong. The tasks are actually small, and the
+fact that uclamp_min is 1024 is a simple request to *attempt* to run it at max
+performance point, which is the biggest core and highest frequency. None of
+these has any correlation to rt/irq pressures.
+
+> 
+> >
+> > Similar reasoning applies to capping tasks with UCLAMP_MAX. For example:
+> >
+> >         p->util_avg = 1024
+> >         p->uclamp[UCLAMP_MAX] = capacity_orig_of(medium_cpu)
+> >
+> > Should fit the task on medium cpus without triggering overutilized
+> > state.
+> 
+> I fully agree with this! But there is a problem, How to do when there
+> is RT pressure or irq pressure?
+> Maybe it is better to compare the uclamp_max with the capacity_of(cpu)
+> instead of the capacity_origin?
+
+No. This IS the problem I am trying to fix with this series. UCLAMP_MAX limits
+the performance level the task can obtain.
+
+The fact that there's RT or irq pressure doesn't prevent this task from being
+capped to that performance level.
+
+Beside this will break the ability to use uclamp as a weak affinity.
+
+Setting uclamp_max to capacity_orig_of(little_cpu), as one would do for
+background tasks for instance, will enable EAS to consider the little cores as
+a viable candidate and select it if it is the most energy efficient CPU.
+Which is an intended design use case.
+
+If we start failing to do this randomly because of spurious RT and irq
+pressure, the benefit of the hint will be significantly reduced.
+And then it *will* become meaningless.
+
+> 
+> >
+> > Inlined comments expand more on desired behavior in more scenarios.
+> >
+> > Introduce new util_fits_cpu() function which encapsulates the new logic.
+> > The new function is not used anywhere yet, but will be used to update
+> > various users of fits_capacity() in later patches.
+> >
+> > Fixes: af24bde8df202 ("sched/uclamp: Add uclamp support to energy_compute()")
+> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > ---
+> >  kernel/sched/fair.c | 114 ++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 114 insertions(+)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index f80ae86bb404..5eecae32a0f6 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -4203,6 +4203,120 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+> >         trace_sched_util_est_se_tp(&p->se);
+> >  }
+> >
+> > +static inline int util_fits_cpu(unsigned long util,
+> > +                               unsigned long uclamp_min,
+> > +                               unsigned long uclamp_max,
+> > +                               int cpu)
+> > +{
+> 
+> May the function name is not proper when the uclamp is unused.
+
+Are you suggesting to rename it? What name do you have in mind?
+I think this is a suitable name, but open for suggestions :-)
+
+> 
+> > +       unsigned long capacity = capacity_of(cpu);
+> > +       unsigned long capacity_orig;
+> > +       bool fits, max_capacity;
+> > +       bool uclamp_max_fits;
+> > +
+> > +       /*
+> > +        * Check if the real util fits without any uclamp boost/cap applied.
+> > +        */
+> > +       fits = fits_capacity(util, capacity);
+> > +
+> > +       if (!uclamp_is_used())
+> > +               return fits;
+> > +
+> > +       /*
+> > +        * We must use capacity_orig_of() for comparing against uclamp_min and
+> > +        * uclamp_max. We only care about capacity pressure (by using
+> > +        * capacity_of()) for comparing against the real util.
+> > +        *
+> > +        * If a task is boosted to 1024 for example, we don't want a tiny
+> > +        * pressure to skew the check whether it fits a CPU or not.
+> > +        *
+> > +        * Similarly if a task is capped to capacity_orig_of(little_cpu), it
+> > +        * should fit a little cpu even if there's some pressure.
+> > +        *
+> > +        * Known limitation is when thermal pressure is severe to the point
+> > +        * where we have capacity inversion. We don't cater for that as the
+> > +        * system performance will already be impacted severely.
+> > +        */
+> > +       capacity_orig = capacity_orig_of(cpu);
+> > +
+> > +       /*
+> > +        * We want to force a task to fit a cpu as implied by uclamp_max.
+> > +        * But we do have some corner cases to cater for..
+> > +        *
+> > +        *
+> > +        *                                 C=z
+> > +        *   |                             ___
+> > +        *   |                  C=y       |   |
+> > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _  uclamp_max
+> > +        *   |      C=x        |   |      |   |
+> > +        *   |      ___        |   |      |   |
+> > +        *   |     |   |       |   |      |   |    (util somewhere in this region)
+> > +        *   |     |   |       |   |      |   |
+> > +        *   |     |   |       |   |      |   |
+> > +        *   +----------------------------------------
+> > +        *         cpu0        cpu1       cpu2
+> > +        *
+> > +        *   In the above example if a task is capped to a specific performance
+> > +        *   point, y, then when:
+> > +        *
+> > +        *   * util = 80% of x then it does not fit on cpu0 and should migrate
+> > +        *     to cpu1
+> > +        *   * util = 80% of y then it is forced to fit on cpu1 to honour
+> > +        *     uclamp_max request.
+> > +        *
+> > +        *   which is what we're enforcing here. A task always fits if
+> > +        *   uclamp_max <= capacity_orig. But when uclamp_max > capacity_orig,
+> > +        *   the normal upmigration rules should withhold still.
+> > +        *
+> > +        *   Only exception is when we are on max capacity, then we need to be
+> > +        *   careful not to block overutilized state. This is so because:
+> > +        *
+> > +        *     1. There's no concept of capping at max_capacity! We can't go
+> > +        *        beyond this performance level anyway.
+> > +        *     2. The system is being saturated when we're operating near
+> > +        *        max_capacity, it doesn't make sense to block overutilized.
+> > +        */
+> > +       max_capacity = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+> > +       uclamp_max_fits = !max_capacity && (uclamp_max <= capacity_orig);
+> > +       fits = fits || uclamp_max_fits;
+> 
+> As I said above, Using the capacity_orig may ignore the rt/irq pressure.
+> If we have two or more middle cpus, we can select the cpu whose rt/irq
+> pressure is smaller.
+> If using the capacity_orig, the first MID cpu is always the candidate.
+
+I hope my explanation above addressed that too. rt/irq has no impact on the
+task's ability to achieve the required performance level from uclamp hint PoV.
+We still use util_avg to compare with rt/irq pressure as usual. so if rt/irq
+pose any issue to the task's ability to obtain the required bandwidth that will
+be taken into account. But if util_avg is happy with that level of rt/irq
+pressure, then uclamp only cares about being able to achieve the performance
+level on that cpu, which doesn't care about rt/irq pressure.
+
+> 
+> > +
+> > +       /*
+> > +        *
+> > +        *                                 C=z
+> > +        *   |                             ___       (region a, capped, util >= uclamp_max)
+> > +        *   |                  C=y       |   |
+> > +        *   |_ _ _ _ _ _ _ _ _ ___ _ _ _ | _ | _ _ _ _ _ uclamp_max
+> > +        *   |      C=x        |   |      |   |
+> > +        *   |      ___        |   |      |   |      (region b, uclamp_min <= util <= uclamp_max)
+> > +        *   |_ _ _|_ _|_ _ _ _| _ | _ _ _| _ | _ _ _ _ _ uclamp_min
+> > +        *   |     |   |       |   |      |   |
+> > +        *   |     |   |       |   |      |   |      (region c, boosted, util < uclamp_min)
+> > +        *   +----------------------------------------
+> > +        *         cpu0        cpu1       cpu2
+> > +        *
+> > +        * a) If util > uclamp_max, then we're capped, we don't care about
+> > +        *    actual fitness value here. We only care if uclamp_max fits
+> > +        *    capacity without taking margin/pressure into account.
+> > +        *    See comment above.
+> > +        *
+> > +        * b) If uclamp_min <= util <= uclamp_max, then the normal
+> > +        *    fits_capacity() rules apply. Except we need to ensure that we
+> > +        *    enforce we remain within uclamp_max, see comment above.
+> > +        *
+> > +        * c) If util < uclamp_min, then we are boosted. Same as (b) but we
+> > +        *    need to take into account the boosted value fits the CPU without
+> > +        *    taking margin/pressure into account.
+> > +        *
+> > +        * Cases (a) and (b) are handled in the 'fits' variable already. We
+> > +        * just need to consider an extra check for case (c) after ensuring we
+> > +        * handle the case uclamp_min > uclamp_max.
+> > +        */
+> > +       uclamp_min = min(uclamp_min, uclamp_max);
+> > +       if (util < uclamp_min)
+> > +               fits = fits && (uclamp_min <= capacity_orig);
+> 
+> As said above, I think the uclamp_min should consider the margin.
+
+Addressed above ;-)
+
+
+Thanks!
+
+--
+Qais Yousef
+
+> 
+> > +
+> > +       return fits;
+> > +}
+> > +
+> >  static inline int task_fits_capacity(struct task_struct *p,
+> >                                      unsigned long capacity)
+> >  {
+> > --
+> > 2.25.1
+> >
+> 
+> Thanks!
+> BR
+> ---
+> xuewen.yan

@@ -2,125 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CA757CEC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FEA057CECB
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiGUPRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
+        id S230480AbiGUPWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiGUPQ7 (ORCPT
+        with ESMTP id S229616AbiGUPWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:16:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AD251BEA1;
-        Thu, 21 Jul 2022 08:16:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8036B23A;
-        Thu, 21 Jul 2022 08:16:55 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 347213F70D;
-        Thu, 21 Jul 2022 08:16:49 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 16:16:46 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Subject: Re: [PATCH 0/6] ARM: defconfig cleanups
-Message-ID: <20220721151646.3xnptk72qhgnrwqw@bogus>
-References: <20220721141325.2413920-1-arnd@kernel.org>
+        Thu, 21 Jul 2022 11:22:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635381FCE3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=18IhroUGeHEx3M1LazyEz3WKWJiZ0ox5uDr8Q7r9CWs=; b=Otxg257FRhjTZXr/F9G32USeeU
+        YO6rDzZYNOwkDC2Hw+ye13Fq0mVPzmkLT/qDrdTJDq2S1AucVRI4b4ogvxl9bkkldRLS7+ibiK1Ec
+        MzpY6HITq3D8C9B4gatb2M/wmT84it5/0AKN8WDHqzjlKjCBsStuRCwZXn4o8gnfojrLBDqlGZKfb
+        6y5SGdg6ofkOP6q0NW1J8HNlL9ERpZoyFaUpYPTYvuWrgmy96eIdcNMoELZuYCynuEBgr3ju70Aim
+        klQFejTFVipdAwwDe2QK4y8HPPOxWjJ7c2qkJJxi44xsp15enBd081XWpyF9UAdAXv3DOz7A9Wys8
+        bAzYSOlg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEY0d-0090jY-1C; Thu, 21 Jul 2022 15:22:39 +0000
+Date:   Thu, 21 Jul 2022 08:22:39 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ben Dooks <ben-linux@fluff.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kallsyms: make arch_get_kallsym() static
+Message-ID: <YtlvP1toPTmv4brF@infradead.org>
+References: <20220721151040.359389-1-ben-linux@fluff.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721141325.2413920-1-arnd@kernel.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220721151040.359389-1-ben-linux@fluff.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 04:13:19PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Jul 21, 2022 at 04:10:40PM +0100, Ben Dooks wrote:
+> The arch_get_kallsym() function is not used anywhere in the kernel
+> now, so it should at-least be static or just be removed as there
+> are no users. Making it static fixes the following sparse warning:
 > 
-> In the process of deprecating board files, I had to modify some defconfig
-> files and ran into the same problem as everyone else that a lot of
-> them are rather outdated. With some scripting, I managed to split out
-> a preparation patch that puts all lines into the expected order without
-> actually changing the contents.
-> 
-> This helped doing the cleanup separately per Kconfig option that needed
-> to be addressed. I only did a small portion of the follow-up changes
-> to get to the point of being able to rebase my board changes on top,
-> but I did manage to address some bugs that have crept in.
-> 
-> If there are no objections, I'd apply this set to the arm/defconfig
-> branch of the soc tree directly.
-> 
->       Arnd
-> 
-> Arnd Bergmann (6):
->   ARM: refresh defconfig files
->   ARM: defconfig: remove irda remnants
->   ARM: defconfig: remove stale CONFIG_ZBOOT_ROM entries
->   ARM: defconfig: address renamed CONFIG_DEBUG_INFO=y
->   ARM: defconfig: remove broken CONFIG_THUMB disables
->   ARM: defconfig: kill remnants of CONFIG_LEDS
-> 
+> kernel/kallsyms.c:590:12: warning: symbol 'arch_get_kallsym' was not declared. Should it be static?
 
-[...]
-
->  arch/arm/configs/vexpress_defconfig       |   8 +-
-
-For vexpress,
-
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
--- 
-Regards,
-Sudeep
+It fixes the warning, but isn't exactly useful.  Please just remove it,
+get_ksymbol_arch and iter->pos_arch_end entirely instead.

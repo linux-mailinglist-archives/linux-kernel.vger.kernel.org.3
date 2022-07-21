@@ -2,79 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD7E57C1B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7ED57C1B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 02:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiGUAkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 20:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
+        id S231351AbiGUAlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 20:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiGUAku (ORCPT
+        with ESMTP id S230474AbiGUAlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 20:40:50 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E89422C2
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:40:48 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id d7-20020a17090a564700b001f209736b89so3699400pji.0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:40:48 -0700 (PDT)
+        Wed, 20 Jul 2022 20:41:06 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898E2753BD
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:41:05 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id n2so253081qkk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 17:41:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KH9fFq73YQqYjsyxO6D0porLgzRsQltbJ34jnP4zXh4=;
-        b=iz0p9LKdQrmSzQP8AJxjJmN5xTZMXPJIEDuiBSaEGGcfBu5jQnyU9Y3SlAs4Tcts5z
-         b8vgoydsX+KvP9162K7c8oMq08HrTAw8utpXVekIOdbu0T/8SpFijkrCDU4duZARtohG
-         KYc+N3uq6eDBWFIoWWyhIg96+pwBa9ttxrTYKMwimLT8Y3MJhqh7lcPOYCQoQWQmArrp
-         rjr4+76QmCH5Ip98Ac6YBIynpYgoGe768jB8IMHF5N6fwtOKwQs6Mo1WZ6ysI4U+FNDK
-         GALqiXlnSGzpldLgKa0Vq/uNpx2xPKaYpA+ER/K8Dn6a8Wi9sWGEII0XNb22552nGUQg
-         X0Qw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NLPMp1+Mt0L/+E6R8JU+BLoZczUGaly/ZIP7N/DIUjk=;
+        b=c/VUBK2QvK2vfwdHRofaHZt9HYM7EXslS5s2wi+6Jwim5NYju5JdGCOAHrTetv5xzX
+         P6KxFVcy1D5RFcg/Lvl97dO+5pxv0GXUlzN44Cy5TuZ/gA81BWqp9haTPUM6xx64N0bs
+         SHW6Vm0sBminmKxtKqvJupkRFTQNNDwJV4AcYgtn0fbG/utFhqyLDZJA1eq3+H7nQ+j7
+         BJsTZb0EboDNRuH2YyK6pgTy5VpPPpWotY6gCwtNSxHpU8gv/rBsdETPlA3GXuCsgPb9
+         76rbDja4enOdfJIlMTAQPtwAl4IndOKluUlnQfdcLMztE4Dp/VpnhnLxp0iOhX56xuDc
+         ggBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KH9fFq73YQqYjsyxO6D0porLgzRsQltbJ34jnP4zXh4=;
-        b=FvhyeVwVe9JkqLWcez9CVY8l5wXiRyhbJyQj9eJb7889KUEJn28dTCwe1ekF0jr3OB
-         +ksBywJpA1wRgHmG9NAMTcha9a0Opc75wkcEeaXwi/oKbw5md1qwXmQIgewAOSU46Smz
-         RIq0TmCOpmXqhFyHPdW2cmgv4KiJ2Aebe8zadp8hl2cO3qYDf9v7UAjDPA8OBhDxAMHS
-         fFUzP0l1Dbej8FX/HYcmdiShE0n2hzbN8U7uN4xVJHsHgU+9sj/oUNCxsK6JX+IX928n
-         H7LoYDAz72zGf9FM2oAh6/0Xls8Jes0UrSuie4shUheqjpwY1A/hb+a3xX/Wr3Is3gUN
-         Z/sA==
-X-Gm-Message-State: AJIora8HLPzXR61Igg93U67jwAc4QdM/7y2W16ScLxDQT/RQG5lazLAy
-        7t62IbYb3n0mJ8qNJ2wdnEY7QQ==
-X-Google-Smtp-Source: AGRyM1umqan83UN80lOz+jt46sai3tfTEzFIsGmDof83tydt4zEPllCUXAFqQDQt7Q8Fo+UUvVe83Q==
-X-Received: by 2002:a17:90b:4b0a:b0:1f0:5c2d:fe72 with SMTP id lx10-20020a17090b4b0a00b001f05c2dfe72mr8524569pjb.150.1658364048295;
-        Wed, 20 Jul 2022 17:40:48 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id r5-20020a635145000000b0040dd052ab11sm96429pgl.58.2022.07.20.17.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 17:40:47 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 00:40:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 07/11] KVM: x86: emulator/smm: add structs for KVM's
- smram layout
-Message-ID: <YtigjIgWj40QSsMA@google.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
- <20220621150902.46126-8-mlevitsk@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NLPMp1+Mt0L/+E6R8JU+BLoZczUGaly/ZIP7N/DIUjk=;
+        b=31PDAWXVxBWq9/+P/8avPxFrMcmOPtJng1sX4opCnx7sfVIs0PWK4l6TGAP0D05PYq
+         DSNA5SbE5njbex5u4UzQz9HzsgxQZQQsI2D+Nzr94AT1UleLHn+455jGgOlo/S8vNAbZ
+         Xp53l3gDT/EqKTIYEpGXA3QbbBsq4fkw4KM4nIxBQTyur2EOswkZF3A5xvcva3mObaxK
+         1FTl5L/QC42Ow+hQC44KyADl4eDA9LVcjUdmnkBBl0KT4IDjYmrUtFPK6rRk3+flm3Xb
+         jgVrZ5scT8sEEJtmCeWl0FY1R4tqmqji70835K7dQoLs6G3Y8zeAZVzrtPAiejuhphX/
+         qDJQ==
+X-Gm-Message-State: AJIora+SoirOk8xNW4T4Ok66BXsY6eOY6oct1wUaLhzXXKK2kxw8ETCM
+        dahYdTb54yda5XQoQbFbT1IlvFfP8gknCJArGjkCQQ==
+X-Google-Smtp-Source: AGRyM1t7L3IvjLTHGAVSqlP7orZ4xN16eJegyERHUQa/h5YTRHg7oWqGSwg34qaRWfWGU6zWV64OePdr5YgV/f6wBcM=
+X-Received: by 2002:a05:620a:4590:b0:6b5:e884:2d2c with SMTP id
+ bp16-20020a05620a459000b006b5e8842d2cmr12236347qkb.267.1658364064440; Wed, 20
+ Jul 2022 17:41:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621150902.46126-8-mlevitsk@redhat.com>
+References: <20220709000439.243271-1-yosryahmed@google.com>
+ <20220709000439.243271-5-yosryahmed@google.com> <370cb480-a427-4d93-37d9-3c6acd73b967@fb.com>
+ <a6d048b8-d017-ea7e-36f0-1c4f88fc4399@fb.com> <CA+khW7gmVmXMg4YP4fxTtgqNyAr4mQqnXbP=z0nUeQ8=hfGC3g@mail.gmail.com>
+ <2a26b45d-6fab-b2a2-786e-5cb4572219ea@fb.com>
+In-Reply-To: <2a26b45d-6fab-b2a2-786e-5cb4572219ea@fb.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 20 Jul 2022 17:40:53 -0700
+Message-ID: <CA+khW7jp+0AadVagqCcV8ELNRphP47vJ6=jGyuMJGnTtYynF+Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/8] bpf: Introduce cgroup iter
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,46 +89,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022, Maxim Levitsky wrote:
-> Those structs will be used to read/write the smram state image.
-> 
-> Also document the differences between KVM's SMRAM layout and SMRAM
-> layout that is used by real Intel/AMD cpus.
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/kvm_emulate.h | 139 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 139 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-> index 89246446d6aa9d..7015728da36d5f 100644
-> --- a/arch/x86/kvm/kvm_emulate.h
-> +++ b/arch/x86/kvm/kvm_emulate.h
-> @@ -503,6 +503,145 @@ enum x86_intercept {
->  	nr_x86_intercepts
->  };
->  
-> +
-> +/*
-> + * 32 bit KVM's emulated SMM layout
-> + * Loosely based on Intel's layout
-> + */
-> +
-> +struct kvm_smm_seg_state_32 {
-> +	u32 flags;
-> +	u32 limit;
-> +	u32 base;
-> +} __packed;
-> +
-> +struct kvm_smram_state_32 {
-> +
-> +	u32 reserved1[62];			/* FE00 - FEF7 */
-> +	u32 smbase;				/* FEF8 */
-> +	u32 smm_revision;			/* FEFC */
-> +	u32 reserved2[5];			/* FF00-FF13 */
-> +	/* CR4 is not present in Intel/AMD SMRAM image*/
-> +	u32 cr4;				/* FF14 */
-> +	u32 reserved3[5];			/* FF18 */
+On Mon, Jul 11, 2022 at 8:45 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> On 7/11/22 5:42 PM, Hao Luo wrote:
+[...]
+> >>>> +
+> >>>> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
+> >>>> +{
+> >>>> +    struct cgroup_iter_priv *p = seq->private;
+> >>>> +
+> >>>> +    mutex_lock(&cgroup_mutex);
+> >>>> +
+> >>>> +    /* support only one session */
+> >>>> +    if (*pos > 0)
+> >>>> +        return NULL;
+> >>>
+> >>> This might be okay. But want to check what is
+> >>> the practical upper limit for cgroups in a system
+> >>> and whether we may miss some cgroups. If this
+> >>> happens, it will be a surprise to the user.
+> >>>
+> >
+> > Ok. What's the max number of items supported in a single session?
+>
+> The max number of items (cgroups) in a single session is determined
+> by kernel_buffer_size which equals to 8 * PAGE_SIZE. So it really
+> depends on how much data bpf program intends to send to user space.
+> If each bpf program run intends to send 64B to user space, e.g., for
+> cpu, memory, cpu pressure, mem pressure, io pressure, read rate, write
+> rate, read/write rate. Then each session can support 512 cgroups.
+>
 
-Again, I love this approach, but we should have compile-time asserts to verify
-the layout, e.g. see vmx_check_vmcs12_offsets().
+Hi Yonghong,
+
+Sorry about the late reply. It's possible that the number of cgroup
+can be large, 1000+, in our production environment. But that may not
+be common. Would it be good to leave handling large number of cgroups
+as follow up for this patch? If it turns out to be a problem, to
+alleviate it, we could:
+
+1. tell users to write program to skip a certain uninteresting cgroups.
+2. support requesting large kernel_buffer_size for bpf_iter, maybe as
+a new bpf_iter flag.
+
+Hao
+
+> >
+[...]
+> >>> [...]

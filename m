@@ -2,30 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB8B57CE6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4340757CE50
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiGUPBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S232373AbiGUO4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiGUPBj (ORCPT
+        with ESMTP id S230248AbiGUO4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:01:39 -0400
+        Thu, 21 Jul 2022 10:56:40 -0400
+X-Greylist: delayed 254 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 07:56:38 PDT
 Received: from mail.boiledscript.com (mail.boiledscript.com [144.168.59.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35767A50E;
-        Thu, 21 Jul 2022 08:01:38 -0700 (PDT)
-Message-ID: <y76wnc6o6w9.wl-hako@ultrarare.space>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C38D49;
+        Thu, 21 Jul 2022 07:56:38 -0700 (PDT)
+Message-ID: <y761queplmt.wl-hako@ultrarare.space>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ultrarare.space;
-        s=dkim; t=1658415143;
+        s=dkim; t=1658414932;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type;
         bh=WTkPvBNLDrnyNYrtfpFg5lgdjoVZlrQg0/eORua9JR8=;
-        b=WVHazqJmhEgSRqQscIcJxdzVwXsMW0O2cxKQrItUOUPR/s2jiTDIwvXog5vP01q4eaTCSG
-        C68A+k1iHSgySDlRN9/ZtSMnoL5ySSn82ETdP6NrnuiBd/Ny8AoUfzHuiRyThUjSUWeWEE
-        jP8xWntNtcWQoNwU5mH7CNqK+Xto9LSKXvKcS3QIwyfQ+iQcaokdZm0+7t2rGD84a5fYPs
-        FF+SOMjBsvXO9HEl1Wtq4JRTNJVE0k2zeIL9+hW+GXTijcipnUahpkjWcGAUQ93IoYeiCd
-        pwsuQheaEyKo1WnLIxqyJ6Rx+fWOMfdoEdmffszdMtBRFg0h+7HVpUDltxJcfQ==
+        b=xe23SRSbcTvq/CT0Q13ph/5wjy7GZxDRFRJQlS8k2kOzHn08N3gcCAI1Eq41MoSD4oral7
+        aG7lIHRSEciqS6iOrHpxiSQO3zvgfSBtpLT2bnGgL7/J8EoMT+dqVbR0lM1376E8moVKir
+        aFvmmGlOo4CC1aJpl8tm9LHXmulpXF3wBNQIbgnGxcidPaDGDU8yXtPOq8J16MNwd9/hs+
+        P+djwN5HlTy38Ok5p9/dkTGCGcHsC2H6lhRmAPTUhy8P5oOBn/pLKfF7nrT4J/vuq176Jb
+        A+Bum4G71veYBa6mzvvUeszmJTv37AqbSoCERPbYmS5ETWP8F9cuc0QkdYM5Ig==
 From:   Hilton Chain <hako@ultrarare.space>
 To:     Jiri Kosina <jikos@kernel.org>
 Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
@@ -41,7 +42,7 @@ Authentication-Results: mail.boiledscript.com;
         auth=pass smtp.mailfrom=hako@ultrarare.space
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk

@@ -2,101 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2722E57C557
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575D257C55F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbiGUHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
+        id S231190AbiGUHfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGUHby (ORCPT
+        with ESMTP id S229604AbiGUHfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:31:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB9940BCB;
-        Thu, 21 Jul 2022 00:31:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93C13B82295;
-        Thu, 21 Jul 2022 07:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30CBC341C0;
-        Thu, 21 Jul 2022 07:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658388711;
-        bh=D/EwxG48+usgRTXxqf6kit86Em4c5TWk/ao44/6iDaw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I1p5Nr7ZODMqDdhsmoYYxS0kZTkKG7dakrbNgEqjrv6kE+hthnls1UCEm5yZLg6sk
-         pCw5Lu6yeBLoy7bgKGpW6JEdEmgkgaJcndr3Czbo71zxCQ4Mb/PG9AOKOVL+yTaXpq
-         +nKkeor1aeM1XBBsmkaVv2wxpkFC2aziiPlY2+3xPikS6dNLQ7etiV3rS3Z7jsbcBS
-         lqwvyzp561bSI1OpG2n4VSAENmi7S3S3xiBlrWcW0h0Sr1BwG4fgj8flR1WdiSKg/5
-         83eDaLeqvZHjThlhFj47EEaLnDWsqxggQSxMPQeKScx3po/g5X/JPgCvCJRd+gJyba
-         JH6iqBF8G/6bw==
-Date:   Thu, 21 Jul 2022 10:31:46 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Cheng Xu <chengyou@linux.alibaba.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kai Shen <kaishen@linux.alibaba.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
-Message-ID: <YtkA4tBhlSHX76JM@unreal>
-References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
- <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
- <20220712090110.GL2338@kadam>
- <20220719125434.GG5049@ziepe.ca>
- <20220719130125.GB2316@kadam>
- <7075158a-64c1-8f69-7de1-9a60ee914f05@wanadoo.fr>
- <5bcd437f-92a4-1c04-796c-41559dd2823a@linux.alibaba.com>
+        Thu, 21 Jul 2022 03:35:18 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7590D11B;
+        Thu, 21 Jul 2022 00:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658388917; x=1689924917;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HDZ5ADD7H00ujzYo8f6UW7EI5DQuY8pQPtvATJDvm4I=;
+  b=ipaVH0A1IdlCM4V/RRcDGYVjn28z9hgpjyJ5fTjgRtAUjrvQuOVd0TVd
+   YhQJEBgvRh8MFAzOhGugYZwNo5KmfcybgQp8kf2TJfrJWYRmoLnl8SNaA
+   cDvmVQJqB+4apfkhqjUDLu4PFyykYClif54JQUOIISzf6tP6+dCUZAUER
+   b5xHxFYIawwVSEHUOQ533k2mNaTUXeVTVgpu7h/d00qaJp6VZU02U5FM5
+   o43/eDAx0eV2kM4e150OHmagnEvgW8XCSQlrvMNb8uTGnIn4v+9E2bPPf
+   qLOazo/vmb9apW0ZksEhrzkJRyim7RtZ4mtw4infkYF+HMXrtHzTsp3Rj
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="350963821"
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="350963821"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 00:35:16 -0700
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="626004190"
+Received: from wangwei-desk.sh.intel.com (HELO [10.239.159.152]) ([10.239.159.152])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 00:35:06 -0700
+Message-ID: <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
+Date:   Thu, 21 Jul 2022 15:34:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5bcd437f-92a4-1c04-796c-41559dd2823a@linux.alibaba.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
+ <20220719140843.GA84779@chaop.bj.intel.com>
+ <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
+ <20220720150706.GB124133@chaop.bj.intel.com>
+ <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com> <YtgrkXqP/GIi9ujZ@google.com>
+From:   Wei Wang <wei.w.wang@linux.intel.com>
+In-Reply-To: <YtgrkXqP/GIi9ujZ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 09:58:24AM +0800, Cheng Xu wrote:
-> 
-> 
-> On 7/19/22 11:36 PM, Christophe JAILLET wrote:
-> > Le 19/07/2022 à 15:01, Dan Carpenter a écrit :
-> >> On Tue, Jul 19, 2022 at 09:54:34AM -0300, Jason Gunthorpe wrote:
-> >>> On Tue, Jul 12, 2022 at 12:01:10PM +0300, Dan Carpenter wrote:
-> >>>
-> >>>> Best not to use any auto-formatting tools.  They are all bad.
-> >>>
-> >>> Have you tried clang-format? I wouldn't call it bad..
-> >>
-> >> I prefered Christophe's formatting to clang's.  ;)
-> >>
-> >> regards,
-> >> dan carpenter
-> >>
-> >>
-> > 
-> > Hi,
-> > 
-> > (some other files in the same directory also have some checkpatch warning/error)
-> 
-> I just double checked the checkpatch results, Two type warnings reported:
-> 
->  - WARNING: Missing commit description - Add an appropriate one (for patch 0001)
->  - WARNING: added, moved or deleted file(s), does MAINTAINERS need updating? (for almost all patches except 0001/0011)
-> 
-> For the first warning, the change is very simple: add erdma's
-> rdma_driver_id definition, I think the commit title can describe
-> all things, and is enough.
 
-To be clear, our preference is to have commit message in any case, even
-for simple changes.
 
-Thanks
+On 7/21/22 00:21, Sean Christopherson wrote:
+> On Wed, Jul 20, 2022, Gupta, Pankaj wrote:
+>>>>>>> +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+> Use kvm_arch_has_private_mem(), both because "has" makes it obvious this is checking
+> a flag of sorts, and to align with other helpers of this nature (and with
+> CONFIG_HAVE_KVM_PRIVATE_MEM).
+>
+>    $ git grep kvm_arch | grep supported | wc -l
+>    0
+>    $ git grep kvm_arch | grep has | wc -l
+>    26
+>
+>>>>>>> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+>>>>>>> +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+>>>>>>> +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+>>>>>>> +		struct kvm_enc_region region;
+>>>>>>> +
+>>>>>>> +		if (!kvm_arch_private_mem_supported(kvm))
+>>>>>>> +			goto arch_vm_ioctl;
+>>>>>>> +
+>>>>>>> +		r = -EFAULT;
+>>>>>>> +		if (copy_from_user(&region, argp, sizeof(region)))
+>>>>>>> +			goto out;
+>>>>>>> +
+>>>>>>> +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
+>>>>>> this is to store private region metadata not only the encrypted region?
+>>>>> Correct.
+>>>> Sorry for not being clear, was suggesting name change of this function from:
+>>>> "kvm_vm_ioctl_set_encrypted_region" to "kvm_vm_ioctl_set_private_region"
+>>> Though I don't have strong reason to change it, I'm fine with this and
+>> Yes, no strong reason, just thought "kvm_vm_ioctl_set_private_region" would
+>> depict the actual functionality :)
+>>
+>>> this name matches the above kvm_arch_private_mem_supported perfectly.
+>> BTW could not understand this, how "kvm_vm_ioctl_set_encrypted_region"
+>> matches "kvm_arch_private_mem_supported"?
+> Chao is saying that kvm_vm_ioctl_set_private_region() pairs nicely with
+> kvm_arch_private_mem_supported(), not that the "encrypted" variant pairs nicely.
+>
+> I also like using "private" instead of "encrypted", though we should probably
+> find a different verb than "set", because calling "set_private" when making the
+> region shared is confusing.  I'm struggling to come up with a good alternative
+> though.
+>
+> kvm_vm_ioctl_set_memory_region() is already taken by KVM_SET_USER_MEMORY_REGION,
+> and that also means that anything with "memory_region" in the name is bound to be
+> confusing.
+>
+> Hmm, and if we move away from "encrypted", it probably makes sense to pass in
+> addr+size instead of a kvm_enc_region.
+>
+> Maybe this?
+>
+> static int kvm_vm_ioctl_set_or_clear_mem_private(struct kvm *kvm, gpa_t gpa,
+> 					         gpa_t size, bool set_private)
+>
+> and then:
+>
+> #ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> 	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> 	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> 		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
+> 		struct kvm_enc_region region;
+>
+> 		if (!kvm_arch_private_mem_supported(kvm))
+> 			goto arch_vm_ioctl;
+>
+> 		r = -EFAULT;
+> 		if (copy_from_user(&region, argp, sizeof(region)))
+> 			goto out;
+>
+> 		r = kvm_vm_ioctl_set_or_clear_mem_private(kvm, region.addr,
+> 							  region.size, set);
+> 		break;
+> 	}
+> #endif
+>
+> I don't love it, so if someone has a better idea...
+>
+Maybe you could tag it with cgs for all the confidential guest support 
+related stuff:
+e.g. kvm_vm_ioctl_set_cgs_mem()
+
+bool is_private = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
+...
+kvm_vm_ioctl_set_cgs_mem(, is_private)
+

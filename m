@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5CE57CB26
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8261957CB2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233844AbiGUNCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
+        id S233769AbiGUNDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbiGUNBs (ORCPT
+        with ESMTP id S233928AbiGUNDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:01:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB61A74366
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:01:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658408505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bOmD7nAs9F7OxSkYkzWTSYR+3/R6/fZia8Dt8fL8A6I=;
-        b=ifqUd7B2wHVWSgrMz0utn5lxQK85otBjXx+3BhPbxBVzmru8quMWJF0+c/X9+pGu718Rom
-        uMHS4l0og4x95jqgjty6LnSHTavlkI1ovHEUhT45c5TeFEkTkTqQQJQvPKnHUbtce1K/nN
-        kHx/sme+Uk9RVO+Ms1gXyBmhIWeIdj4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-602--VL01H60NdqaFKTRWdXGnQ-1; Thu, 21 Jul 2022 09:01:44 -0400
-X-MC-Unique: -VL01H60NdqaFKTRWdXGnQ-1
-Received: by mail-ed1-f71.google.com with SMTP id b7-20020a056402350700b0043baadc4a58so1084960edd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:01:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bOmD7nAs9F7OxSkYkzWTSYR+3/R6/fZia8Dt8fL8A6I=;
-        b=K6eGrf0+H3Jx4BLYMaeNp04H9s1VdVj4f+IS5gdglQl2etzEPnXjYdae63g0bPAUXc
-         lYEYtBUjZUppunisYoO1Y0xelCcZMpA6lMc9VITIMw4nXAJ8FlD0EcqEGivZxhZ2EVE5
-         bhrbeECFHrvJzk8l8abWfuoexerQ7xgeSntXVVI3EgTpvzTRyWrBy8IrOO1ZVueZ3Rva
-         qfng0S7yi7BUZ2cjH+FKtWoiQgqBVsxPxTeB2Sr5Hax2VhFnhe+WAEtmg+oxYFgesfVp
-         Deo/IDUdIjw7QDdDilEtHemmZ4veDa+i0PBEgGZD0wuJY2XLrCIr0JYADHy9rD0ojbVE
-         rEyw==
-X-Gm-Message-State: AJIora9XE5uyDDAa7PhzySQZ3rh6iC7EL+2D2CGMqYDNi8e+2KlM+5HU
-        PHq2cS2k+wNh+UK75gvRxKo2Bn97hY9mRarvUMUQbBm0NXYeyz8h6V+9uVCwA8CAsUu5xN5+Q46
-        EAwolhdYQCJPzxCmR9+fMZ4f6
-X-Received: by 2002:a17:907:72cb:b0:72b:820a:f09b with SMTP id du11-20020a17090772cb00b0072b820af09bmr39522181ejc.335.1658408502921;
-        Thu, 21 Jul 2022 06:01:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sTUDkfMV6+YjMFSbP85j+wYdLmnn3J2tOEDOg7E2zpHSnQC642s42tXrtJSN+xVDV7Brl/cw==
-X-Received: by 2002:a17:907:72cb:b0:72b:820a:f09b with SMTP id du11-20020a17090772cb00b0072b820af09bmr39522151ejc.335.1658408502564;
-        Thu, 21 Jul 2022 06:01:42 -0700 (PDT)
-Received: from pollux.redhat.com ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id dk20-20020a0564021d9400b0043a71775903sm955826edb.39.2022.07.21.06.01.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 06:01:42 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     daniel@ffwll.ch, laurent.pinchart@ideasonboard.com,
-        airlied@linux.ie, tzimmermann@suse.de, mripard@kernel.org,
-        sam@ravnborg.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v6 5/5] drm/todo: remove task to rename CMA helpers
-Date:   Thu, 21 Jul 2022 15:01:33 +0200
-Message-Id: <20220721130133.829693-6-dakr@redhat.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220721130133.829693-1-dakr@redhat.com>
-References: <20220721130133.829693-1-dakr@redhat.com>
+        Thu, 21 Jul 2022 09:03:05 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2052.outbound.protection.outlook.com [40.107.95.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B7664E1F;
+        Thu, 21 Jul 2022 06:02:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kL0HLVovDU+Xj/5piOhg+XVgbNUjQJZtYnH5pduqzrEP5rowuCcX3fF8iPUdXMxP7RUlv5dr12JbYQg5EJm2hjkkAM9EKgIdp7R6VkxX4UCw8BHhKcJk21S8rZhKV/q69uAjE37ocMtsk6xI5F1vFzINrm5dB+1uF+BFDzQhu7bjdlhCHUIQ2CX2HdloWqFkUAT08NRspF8OIK75Gr6hI2oSAjsKEXxKY0Hw6SELFMqgvuKnXspV0ULahgjmKpX4yg1G/oSXQna0AtpPbU0k4F6eH5OvC4nb/LYg1jcoCp47RQpkEw8Q47zx3zcf0o+mYVPMKTZ0IYv7Nly4yKl7HA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jg+4YuK/SWrYQ6XNPf1cinOCCFFVU0jYgvh29CsWcGA=;
+ b=dvK6pLVzSzzHjVHN8IhZNCQIjoZCzeMsJhqWCI9pCQMTH+2E4Tvpp+VoMHV5RVFdGbkn7NYUT1D0p3Er3Rn4eMRqF9ZXAIDotvOaoZqRAygf92iK5bgOInWK9arSHOu8E/6PfHiJfSkLJbNzsdvwLk8tjDsOUXLQq4bazFICslNQpRLX3uKVwe9YBBM52Yd2ZKlmGju2QXVIOQRACqIsb7NOcvlyCEYScSfZG2+/SC4/gDyKEylp3N0W1H936rD861yq9iWNYQrS71IV77MU2amAfIF19Ch4sxSBKd5ds9Rm+q9z1BjZWHRdTPZQYfGP0S4RMm2k8XeKztdkMKCduw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jg+4YuK/SWrYQ6XNPf1cinOCCFFVU0jYgvh29CsWcGA=;
+ b=AlIWBA00imc5B2H3YEfYWNkgi0E5fse50eYiYvRF50gxEA5IDyI8Oz80dCYHRJT/ZnaxNT1xXBOeh4FP+25n1+3tGTBL1QDJvoHmP/rUmFjz6SPWGGyWH0dw8LcUHxA9Vj2epC0F0ypecRm9T6LDkB/PWV1si8IFiigGY3MT7KrF+BXwd6gnyLeDUGvE+36eXzkdxOnp/Oz3z+iBDSHNq3H1b0YEDjU5GjQx1dcwMPbGaN36z9Nlw9CInbEWaQWH3uyEfhzc/YuaTfyAOPQyFsXxFLGRP3CdoF6TxM+opW+rqvuzDxrmAJ8z9M691xJuQah5uDf9m+URGCo6NEUXyQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN0PR12MB5979.namprd12.prod.outlook.com (2603:10b6:208:37e::15)
+ by PH7PR12MB5832.namprd12.prod.outlook.com (2603:10b6:510:1d7::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Thu, 21 Jul
+ 2022 13:02:46 +0000
+Received: from MN0PR12MB5979.namprd12.prod.outlook.com
+ ([fe80::6cf7:d2b:903c:282]) by MN0PR12MB5979.namprd12.prod.outlook.com
+ ([fe80::6cf7:d2b:903c:282%3]) with mapi id 15.20.5417.023; Thu, 21 Jul 2022
+ 13:02:46 +0000
+Date:   Thu, 21 Jul 2022 15:02:42 +0200
+From:   Jiri Pirko <jiri@nvidia.com>
+To:     Vikas Gupta <vikas.gupta@broadcom.com>
+Cc:     kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        dsahern@kernel.org, stephen@networkplumber.org,
+        edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
+        leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
+        michael.chan@broadcom.com, andrew.gospodarek@broadcom.com
+Subject: Re: [PATCH net-next v4 2/3] bnxt_en: refactor NVM APIs
+Message-ID: <YtlOcl+xcxYvSsbl@nanopsycho>
+References: <20220718062032.22426-1-vikas.gupta@broadcom.com>
+ <20220721072121.43648-1-vikas.gupta@broadcom.com>
+ <20220721072121.43648-3-vikas.gupta@broadcom.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721072121.43648-3-vikas.gupta@broadcom.com>
+X-ClientProxiedBy: FR3P281CA0036.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::18) To MN0PR12MB5979.namprd12.prod.outlook.com
+ (2603:10b6:208:37e::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3d70ec77-cc8c-45c5-616f-08da6b194e66
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5832:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DfCYNxVIm+erbnjbqyKiQ1fKC2cbjFaUK0UGtVHAb3Bj1BTIhnQYAcO8GovuXxcM7+aA2oURs/yaqBbJqNg/kGtbPDx90HVh4HugGYvycUp01u4AOaLg0svCZVIzg3WYSWfuHJC1i52fBkR4HkhmHC8pZppsAxU7DfojO2B1ToBiXThG0bmqGK9OEY6q2cfQbUWzSlL34gTGHttOIkdZ2qbzko9XUDrQ1Wh9NdkiE04RAZkL6eH6eFLxQN/ICyhNda6El7GF8W1+eFcbuuZLZ2/JWhdTxtjE9eShBGd089CB/4NSZ8hrTIQCo4Oux3xF4yjpELPxrX7nM4mL89KSBIOOepAZJiF3+QvG/ZQ+GLiRpnr4MsLfuzIqzGAq2PQ7uw6E7HXWuhj+o2O2EqsjeJDsIyN63BHhxR1UB3wKXZpZnZMhylPCwwaNyyKoRxVQAvG8UUZFKIQIfL2il5NlScKZGp4DlHUann00GBOMWyVXuaNA2hVCzgOms48A0TTgtJ2/OD+uAOKJC/q+oL8PsT2kXkcDs+8kD6l7USAC5D7X4rX0ONigG9hoGBYe1ZP+AMdhZv41CdTMMI78bMb1za36uoppS+R/tlaEqrOXIPPuIG5HgLsISYOuOTdTBvaa0lp2k0smMH7AL+EV5rmhKwFhPFRnl7NqnF1q9H95s1C2Ok/1/D0K8WhTY7h6l9P7fJzoOuachOQ75dXIVH9owJFSiz5hrPMI7ojT3OrMH9udph3UEjA5zZjYtQ//jh49wfx2CbaMUTSIHTdd4EhTZbzIgwRSsNqPMxlblMpVo8Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB5979.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(366004)(136003)(39860400002)(396003)(376002)(346002)(9686003)(6506007)(6512007)(26005)(186003)(8936002)(2906002)(5660300002)(7416002)(66556008)(86362001)(6916009)(8676002)(4326008)(6666004)(558084003)(38100700002)(6486002)(41300700001)(33716001)(478600001)(66946007)(316002)(66476007)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7n6/FS7/8YPCNvfHwUvXfeE20Zrl3sv5zu+pmQUOzi9pFwNhEJoOto+HwIL7?=
+ =?us-ascii?Q?xst3etmabCq44pm44YG7YbaKXzftzJSLGJrXO8QZypj67KLMmadH5Z0jMojN?=
+ =?us-ascii?Q?iggddr2yYm7zD6iabWe9ImWeeG5RuRpBaT1e806A+MKrzaRSVGmeg6Ooaqaj?=
+ =?us-ascii?Q?QANEFU7MXzx5YQWNIQztDGFd0SnkGC3Yvw2wNRiQB1G0dRAAU738/rhFOXui?=
+ =?us-ascii?Q?EMnCcxxd/LzP0XIpoMR224pYbFf+vQWZrovtGHi2prgJFMjpUtukh470JHMp?=
+ =?us-ascii?Q?NkDHab9VO8r6lNcufqmfNNMK2Essdz0waTunvX/bCwaL+lZruCD7vY5V9jeP?=
+ =?us-ascii?Q?FDKWt/PDhmCj9OkTP7cUBK73UlLazlkS+7eQl07V5wDt/acR5NskOlAIDnG5?=
+ =?us-ascii?Q?Thi18A3kPGS2YEy0lRDuTNuw0WQiR144ULEzYld5ybaGkmqxF95+bSZNNIm4?=
+ =?us-ascii?Q?5gtIaiEmpqFwe3DZQe976pTSCc1q4DvMM21NfBpYn1BpdpUV4N0hGPytJBY5?=
+ =?us-ascii?Q?eNz2O+lYnim6pxdvrVQUI0jIKqKA7664CPGORJr1jEZtuXLGEG7XFvjlIy3T?=
+ =?us-ascii?Q?KQAHuzYGj4cfrM9HIAYyzJTTnPTnp7HG2bBYC5g/kvDclhXG4Cr7DnGSjQLx?=
+ =?us-ascii?Q?7G12INWeHw97zcZllCNmtEZSNM8jr+GSmeZ/enZtVsa1zhF+q+Kqi4XIsI1d?=
+ =?us-ascii?Q?Ks0/G1H7CVMxnlLegnb/hanCNpHZw9Ogvlxo4S3hkOXewxEoOeMQy6Jr8tV8?=
+ =?us-ascii?Q?EntwXsY17O2Bn25FaWw/Kb6lg6ZEPvR0CDGvJEHAVIK9+LeoybSlqKTmwlh2?=
+ =?us-ascii?Q?YmlNkHj5lwGvbR3zZQZnr4CVdRHx0SfqaGsTxJHP8z8hTpZRpaPmGvFltg7P?=
+ =?us-ascii?Q?JAHRTwoxpFcWLbtM25UqDfUsO3xPvp17wJOcKnuZz/2s7GKXNK8bDjd4mJh9?=
+ =?us-ascii?Q?7DyhUlJUSC1nM5eSd7QteXDxucWM1bdAy+YyjATecipAbFyIIo7sUonKe/oI?=
+ =?us-ascii?Q?LEo+6E2fmewObuzOyXVWaVTWfSdfmR4fx3y+KO/evTEbb/QxX938Sjl9WL0H?=
+ =?us-ascii?Q?1/rlc2IPbwBHkUrn4JwiKtvfO7prX1i/zILYfkers7NCZt70SUC1AycRraT+?=
+ =?us-ascii?Q?J8HjXeFcz12k/+98LyswQXpGsh/IrNOmAdxRO138F31vEDxG8RfPLKYrXt8e?=
+ =?us-ascii?Q?dru8I1/gdvHxFyP0AECPKMgkNHFxtKQRA0JETISN+uwTM47qn5dSPtna72+0?=
+ =?us-ascii?Q?F/BEYaFf3BMajpaQfcDZjVMRnESx04bKeklK7lQZmUR+afTHb/FaDCJVC/TR?=
+ =?us-ascii?Q?e3cTxlcQzHBJelLfEwl/NGrX1G0tZL4aoIdmut73ZQNxmz64wpMTs5SRN3xY?=
+ =?us-ascii?Q?h6wlpyUcxsxKXTZIdiS1yf4cGJWoKJEJsRhSN6AD6LXHO3MtitQa9ruNHZEt?=
+ =?us-ascii?Q?c1ZHXms4z9buGIM8ZvLbOYanKqTFmxkH+KkoLGcijfqXIBuuSdKn1jLkA2i9?=
+ =?us-ascii?Q?nEwALEmZ8FOJ7afEYWmlkKEvL6QzzD45QNl845qS9rlf3oCo2wPaIZ7nhsYq?=
+ =?us-ascii?Q?R1XL+CZZHMH0R/uWdZkzglYIKhCrNuLxnPI37i8B?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d70ec77-cc8c-45c5-616f-08da6b194e66
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB5979.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2022 13:02:46.1126
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: amXm+tbWZkNo+5Mtfq3iMKluZcUJWCO0FtPUhbvHH7jhQc7bvec8vlpagEdy0uPa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5832
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both, GEM and FB, CMA helpers were renamed to "GEM DMA" and "FB DMA",
-hence the task can be removed.
-
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- Documentation/gpu/todo.rst | 13 -------------
- 1 file changed, 13 deletions(-)
-
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index 10bfb50908d1..fd5b3f2fb19e 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -343,19 +343,6 @@ converted, except for struct drm_driver.gem_prime_mmap.
- 
- Level: Intermediate
- 
--Rename CMA helpers to DMA helpers
-----------------------------------
--
--CMA (standing for contiguous memory allocator) is really a bit an accident of
--what these were used for first, a much better name would be DMA helpers. In the
--text these should even be called coherent DMA memory helpers (so maybe CDM, but
--no one knows what that means) since underneath they just use dma_alloc_coherent.
--
--Contact: Laurent Pinchart, Daniel Vetter
--
--Level: Intermediate (mostly because it is a huge tasks without good partial
--milestones, not technically itself that challenging)
--
- connector register/unregister fixes
- -----------------------------------
- 
--- 
-2.36.1
-
+"bnxt_en: refactor NVM APIs" is very odd patch subject name. Please
+change it to the summary of what the patch is aiming to do.

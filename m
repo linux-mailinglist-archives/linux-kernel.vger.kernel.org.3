@@ -2,269 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5168457CCA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FA157CC89
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 15:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiGUNun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 09:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S230406AbiGUNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 09:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiGUNu2 (ORCPT
+        with ESMTP id S230473AbiGUNtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 09:50:28 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69635192A7;
-        Thu, 21 Jul 2022 06:50:21 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q16so1731510pgq.6;
-        Thu, 21 Jul 2022 06:50:21 -0700 (PDT)
+        Thu, 21 Jul 2022 09:49:40 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19036313
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:49:38 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id j26so1911025lji.1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 06:49:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=O3NW8StoMQqfZ5lEvH9Li2usMzQWsOyWcla1sD26BZA=;
-        b=l4Jy+1eGLeneEJth/E1CnZE/vsnjojIheWPBXvcrXjH+5BQBFbjvceMhq+o2pYAjKS
-         MD+VaXcYRMyFQ16WfImVaSy1OSpSNO3QdZxATD45lmRC5q8WXWrh41xZ8lLcHXMHWme3
-         yZGGX36QpZNxL+P2fz44ZKZwUW4ptPlS4+EEtkTNXZHcyig8/8wP8+sqiscc2BxaVrpH
-         ONRfaiu/jl6jB+cubZ542DsdjnE0Ne5GvBSHEQE4CAZXbdeQ70BLcUMXF7xU87BnGei8
-         x1dzKBuh/3S1IDjQOX2yebPuN3bRR5pO5c9YGGMKFT5ELeF+n2YXZ/a1UloYUeuOHSWi
-         rIqA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Df5PaXBQvWi3ElHoTsEdWiLtMQ6HsSl/JnMKyaUxUZw=;
+        b=u/jvunMnyd49xDidrkd2IjPWAeumQ8e8y/ZLGpFdZyEHxSJEMo2CR8SUicSbdC74NE
+         JMb7LSsarT5VL72kvSyrJo9Nv5G9/KfHABcXTLUO7U6qIMBfWsJa4I91DCLXglTvcafB
+         fNp40vmMAN5kmvqf1PzUVuQHws+ep/jtnM/oswkgfBbOXM8pihXM81a9zOatRFYovNkp
+         nxkqdts7DyqcEMvNwIk6EtaHnV40krQtd8xHHxqt+HKytqXQsTa1soVCwJXesGyXdmKW
+         /p/4P4PvZ/Qc4YH2R0uSC6ECgSR1yStB8saq+ayFfYAKxkBsFySs77mV6/ouRJjO/aSs
+         NCyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=O3NW8StoMQqfZ5lEvH9Li2usMzQWsOyWcla1sD26BZA=;
-        b=JmqR07NmzZobv0i3ia3zi6Ti6wwUBrL0vozCmJEzNRWtXntZoDcq4Gadv0H/CoVIHP
-         2L74UcDutdBjydxJ3n8CMvo9Dk1DaFKboF8P7faQkDuWfCIjIJ2aqmfdtQjQzt5+Zofp
-         /sCjRsdRVDZ7X0xArawHivFuFJngVjXVf6NW3YhpluM8rqNq7LAt2ImFW/4MacdgH8tT
-         PcEBVV51rLyL/+27KJXEz7NCH83PQrHUNGMVCOYjUNxO1itb47v6Wh8l1Zqcy2AK02kg
-         QzkRDn3grr4LnXXbWmkidxzm2wd1QM9GsFejgv4RaJJV/dX0KGFblmFc3BkUvGz+Hwfg
-         /rPA==
-X-Gm-Message-State: AJIora9Oylijkw0Q2gmHFGP7V1y45jUQ3bmNxiTn3GxxhqeB4wTw4AWm
-        8h4/JSSaBg5AzC8JirqjsMFo+TgsDijINQ==
-X-Google-Smtp-Source: AGRyM1vPMEeONk3v7CnRF6RKdDnbix8SCNiG1wqm5GnfxgVPELvgoMqTxIJK0nCWixsFG2HB0x6P+w==
-X-Received: by 2002:a65:498b:0:b0:412:8e4:2842 with SMTP id r11-20020a65498b000000b0041208e42842mr38195607pgs.71.1658411420668;
-        Thu, 21 Jul 2022 06:50:20 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id a142-20020a621a94000000b0052b433aa45asm1794762pfa.159.2022.07.21.06.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 06:50:20 -0700 (PDT)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Stafford Horne <shorne@gmail.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH v5 4/4] asm-generic: Add new pci.h and use it
-Date:   Thu, 21 Jul 2022 22:49:24 +0900
-Message-Id: <20220721134924.596152-5-shorne@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220721134924.596152-1-shorne@gmail.com>
-References: <20220721134924.596152-1-shorne@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Df5PaXBQvWi3ElHoTsEdWiLtMQ6HsSl/JnMKyaUxUZw=;
+        b=b0QUBDfpD8bkkt6Fmu4BlO0lZaA445YKyW86sSmKhuYPqnhDTxMEO/1X5kQikQjWnC
+         eJzQOe2nUrnGjMK8UXRePUhCtK5G7YvJkjGH24q8d3iIRaTPKMBf3cXgZk/ybKx9JZdn
+         U4UuA9cfsllVwmnIDQxr/f1r2de6H6hAjKb8L8o9koIpRciRdHOHMFZDTOBe9YLekPOy
+         mLVvJp5AG1AP3KTHRMBDqi1254/FesaVO7bioQi849OrgMv571G7S2eeQYmIF7dBcL0o
+         CE9q4FsI5Tcahi3yX9xTHHnBPPNqZ9uUBndC37tDjf4bbSYIo5dQX2qHWPcUy3V9LTHZ
+         Hfyw==
+X-Gm-Message-State: AJIora94CD6w5BlWq1OVp7gbAxj7u0MUZGKalptNEk+nlFmHo+zX//Tp
+        Wec+ZkL/6Drhxe/tdzYQKFB3Xw==
+X-Google-Smtp-Source: AGRyM1thiRH/aj+PE2hEZO3seebses8tiG7Wdmeu6aB+i44xAKChmd5OawfeBgmZpsvVxmmTUcXReg==
+X-Received: by 2002:a2e:a591:0:b0:25d:7366:3344 with SMTP id m17-20020a2ea591000000b0025d73663344mr19932544ljp.242.1658411376877;
+        Thu, 21 Jul 2022 06:49:36 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id a8-20020a2eb548000000b0025a6e47056csm518302ljn.124.2022.07.21.06.49.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 06:49:36 -0700 (PDT)
+Message-ID: <b0f7dadc-fa40-c192-9c37-c8150c0d6929@linaro.org>
+Date:   Thu, 21 Jul 2022 15:49:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V3 3/7] dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
+Content-Language: en-US
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "aford173@gmail.com" <aford173@gmail.com>,
+        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+References: <20220719055054.3855979-1-peng.fan@oss.nxp.com>
+ <20220719055054.3855979-4-peng.fan@oss.nxp.com>
+ <27ab24ec-61c7-cafb-6665-a16c58808649@linaro.org>
+ <DU0PR04MB941796A54DC4932E5A58F4B0888F9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <9c1735bf-3f29-4bf1-f7cf-f9e211c505ac@linaro.org>
+ <DU0PR04MB94172A78F8E9E74FC842F22B88919@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DU0PR04MB94172A78F8E9E74FC842F22B88919@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The asm/pci.h used for many newer architectures share similar
-definitions.  Move the common parts to asm-generic/pci.h to allow for
-sharing code.
+On 21/07/2022 12:38, Peng Fan wrote:
+>> Subject: Re: [PATCH V3 3/7] dt-bindings: soc: imx: add i.MX8MP vpu blk ctrl
+>>
+>> On 19/07/2022 11:58, Peng Fan wrote:
+>>>>> +        interconnects:
+>>>>> +          items:
+>>>>> +            - description: G1 decoder interconnect
+>>>>> +            - description: G2 decoder interconnect
+>>>>> +            - description: VC8000E encoder interconnect
+>>>>> +
+>>>>> +        interconnect-names:
+>>>>> +          items:
+>>>>> +            - const: g1
+>>>>> +            - const: g2
+>>>>> +            - const: vc8000e
+>>>>
+>>>> Include interconnects+names in list of all properties and disallow
+>>>> them for other variants.
+>>>
+>>> I not understand well about
+>>> " Include interconnects+names in list of all properties ", could you
+>>> please explain a bit more?
+>>>
+>>> And there is already an "if" to check whether the compatible contains
+>>> " fsl,imx8mp-vpu-blk-ctrl" to make sure the interconnect valid for
+>>> i.MX8MP, so it is not valid to other variants.
+>>
+>> Defining properties in some if: clause is not really readable and
+>> maintainable. The properties should be defined in top-level properties:.
+> 
+> Maybe I should also include i.MX8MM interconnect and make it
+> a separate patch, then i.MX8MP/i.MX8MM just use their own
+> names just like other properities. In final, as below:
+> 
+> Tow patch:
+>   1. Add interconnect property for i.MX8MM VPU BLK CTRL
+>   2. Add i.MX8MP VPU BLK CTRL dt bindings
+> 
+> In top-level:
+> + interconnects:
+> +    maxItems: 3
+>  
+> +   interconnect-names:
+> +      maxItems: 3
+> 
+> For i.MX8MM
+> +        interconnects:
+> +          items:
+> +            - description: G1 decoder interconnect
+> +            - description: G2 decoder interconnect
+> +            - description: H1 encoder interconnect
+> +
+> +        interconnect-names:
+> +          items:
+> +            - const: g1
+> +            - const: g2
+> +            - const: h1
+> 
+> For i.MX8MP:
+> +        interconnects:
+> +          items:
+> +            - description: G1 decoder interconnect
+> +            - description: G2 decoder interconnect
+> +            - description: VC8000E encoder interconnect
+> +
+> +        interconnect-names:
+> +          items:
+> +            - const: g1
+> +            - const: g2
+> +            - const: vc8000e
+> 
+> How do you think?
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
-Acked-by: Pierre Morel <pmorel@linux.ibm.com>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Stafford Horne <shorne@gmail.com>
----
-Since v4:
- - Add reviewed-by
+I don't understand what is the question here to me. Shall I tell you
+what to do or not to do with iMX 8MM? I don't know. I am not a
+maintainer of that SoC.
 
- arch/arm64/include/asm/pci.h | 10 ++--------
- arch/csky/include/asm/pci.h  | 17 ++---------------
- arch/riscv/include/asm/pci.h | 23 ++++-------------------
- arch/um/include/asm/pci.h    | 14 ++------------
- include/asm-generic/pci.h    | 32 ++++++++++++++++++++++++++++++++
- 5 files changed, 42 insertions(+), 54 deletions(-)
- create mode 100644 include/asm-generic/pci.h
 
-diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
-index 682c922b5658..016eb6b46dc0 100644
---- a/arch/arm64/include/asm/pci.h
-+++ b/arch/arm64/include/asm/pci.h
-@@ -9,7 +9,6 @@
- #include <asm/io.h>
- 
- #define PCIBIOS_MIN_IO		0x1000
--#define PCIBIOS_MIN_MEM		0
- 
- /*
-  * Set to 1 if the kernel should re-assign all PCI bus numbers
-@@ -18,13 +17,8 @@
- 	(pci_has_flag(PCI_REASSIGN_ALL_BUS))
- 
- #define arch_can_pci_mmap_wc() 1
--#define ARCH_GENERIC_PCI_MMAP_RESOURCE	1
- 
--#ifdef CONFIG_PCI
--static inline int pci_proc_domain(struct pci_bus *bus)
--{
--	return 1;
--}
--#endif  /* CONFIG_PCI */
-+/* Generic PCI */
-+#include <asm-generic/pci.h>
- 
- #endif  /* __ASM_PCI_H */
-diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
-index 875bc028f8f6..42724c630d30 100644
---- a/arch/csky/include/asm/pci.h
-+++ b/arch/csky/include/asm/pci.h
-@@ -9,20 +9,7 @@
- 
- #include <asm/io.h>
- 
--#define PCIBIOS_MIN_IO		0
--#define PCIBIOS_MIN_MEM		0
--
--/* C-SKY shim does not initialize PCI bus */
--#define pcibios_assign_all_busses() 1
--
--#define ARCH_GENERIC_PCI_MMAP_RESOURCE	1
--
--#ifdef CONFIG_PCI
--static inline int pci_proc_domain(struct pci_bus *bus)
--{
--	/* always show the domain in /proc */
--	return 1;
--}
--#endif  /* CONFIG_PCI */
-+/* Generic PCI */
-+#include <asm-generic/pci.h>
- 
- #endif  /* __ASM_CSKY_PCI_H */
-diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
-index f904df586c03..6ef4a1426194 100644
---- a/arch/riscv/include/asm/pci.h
-+++ b/arch/riscv/include/asm/pci.h
-@@ -12,23 +12,7 @@
- 
- #include <asm/io.h>
- 
--#define PCIBIOS_MIN_IO		0
--#define PCIBIOS_MIN_MEM		0
--
--/* RISC-V shim does not initialize PCI bus */
--#define pcibios_assign_all_busses() 1
--
--#define ARCH_GENERIC_PCI_MMAP_RESOURCE 1
--
--#ifdef CONFIG_PCI
--static inline int pci_proc_domain(struct pci_bus *bus)
--{
--	/* always show the domain in /proc */
--	return 1;
--}
--
--#ifdef	CONFIG_NUMA
--
-+#if defined(CONFIG_PCI) && defined(CONFIG_NUMA)
- static inline int pcibus_to_node(struct pci_bus *bus)
- {
- 	return dev_to_node(&bus->dev);
-@@ -38,8 +22,9 @@ static inline int pcibus_to_node(struct pci_bus *bus)
- 				 cpu_all_mask :				\
- 				 cpumask_of_node(pcibus_to_node(bus)))
- #endif
--#endif	/* CONFIG_NUMA */
-+#endif /* defined(CONFIG_PCI) && defined(CONFIG_NUMA) */
- 
--#endif  /* CONFIG_PCI */
-+/* Generic PCI */
-+#include <asm-generic/pci.h>
- 
- #endif  /* _ASM_RISCV_PCI_H */
-diff --git a/arch/um/include/asm/pci.h b/arch/um/include/asm/pci.h
-index 1211855aff34..34fe4921b5fa 100644
---- a/arch/um/include/asm/pci.h
-+++ b/arch/um/include/asm/pci.h
-@@ -4,18 +4,8 @@
- #include <linux/types.h>
- #include <asm/io.h>
- 
--#define PCIBIOS_MIN_IO		0
--#define PCIBIOS_MIN_MEM		0
--
--#define pcibios_assign_all_busses() 1
--
--#ifdef CONFIG_PCI_DOMAINS
--static inline int pci_proc_domain(struct pci_bus *bus)
--{
--	/* always show the domain in /proc */
--	return 1;
--}
--#endif  /* CONFIG_PCI */
-+/* Generic PCI */
-+#include <asm-generic/pci.h>
- 
- #ifdef CONFIG_PCI_MSI_IRQ_DOMAIN
- /*
-diff --git a/include/asm-generic/pci.h b/include/asm-generic/pci.h
-new file mode 100644
-index 000000000000..3ceb0cb12321
---- /dev/null
-+++ b/include/asm-generic/pci.h
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ASM_GENERIC_PCI_H
-+#define __ASM_GENERIC_PCI_H
-+
-+#include <linux/types.h>
-+
-+#ifndef PCIBIOS_MIN_IO
-+#define PCIBIOS_MIN_IO		0
-+#endif
-+
-+#ifndef PCIBIOS_MIN_MEM
-+#define PCIBIOS_MIN_MEM		0
-+#endif
-+
-+#ifndef pcibios_assign_all_busses
-+/* For bootloaders that do not initialize the PCI bus */
-+#define pcibios_assign_all_busses() 1
-+#endif
-+
-+/* Enable generic resource mapping code in drivers/pci/ */
-+#define ARCH_GENERIC_PCI_MMAP_RESOURCE
-+
-+#ifdef CONFIG_PCI_DOMAINS
-+static inline int pci_proc_domain(struct pci_bus *bus)
-+{
-+	/* always show the domain in /proc */
-+	return 1;
-+}
-+#endif /* CONFIG_PCI_DOMAINS */
-+
-+#endif /* __ASM_GENERIC_PCI_H */
--- 
-2.36.1
-
+Best regards,
+Krzysztof

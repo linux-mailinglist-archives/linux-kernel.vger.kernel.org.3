@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F8857C937
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2E057C93A
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbiGUKld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S232851AbiGUKl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiGUKl1 (ORCPT
+        with ESMTP id S232827AbiGUKl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:41:27 -0400
+        Thu, 21 Jul 2022 06:41:57 -0400
 Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EA543318;
-        Thu, 21 Jul 2022 03:41:26 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id c3so964256qko.1;
-        Thu, 21 Jul 2022 03:41:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9982397;
+        Thu, 21 Jul 2022 03:41:54 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id m16so929178qka.12;
+        Thu, 21 Jul 2022 03:41:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=ZM0L7KaMSxOM/wakTGUefF7pMc1InjFxOidEaSTgOKI=;
-        b=5/vWHP0YgkkeSz7qTFJfpYuH2LoHiLZJP6MdOopIAt5vo+Sg9nhCkIgnxESjjptK+y
-         lToFbhyKh+USPj+p+vbM7ylhsEl77EjfKclVOLt5iCG/wgdgUy7EQOuFVyZnBwZYkJ6B
-         /m6+NyV9iJPFuQ0CGomMD+FiFbfIRrQGBsKgAtHYUc2yBJ1sy5vPaOCCcXp6HQXk1bb7
-         kThOGhNo4R+jgI3ssbErP9XhQ4GgutlpSxcFOjtvUZ7Xc4m3Fqap4UzMi1rH1hc0bryH
-         cebNOA18NIVWVwQMSnS0XjiqVx2HPzC9rMQBje5jBDhrN25NNT2lxy62nGpWnWaagfsu
-         Hvhw==
-X-Gm-Message-State: AJIora80fqbKAVEdL+UVxutHiLk4Fl+UFc16PMtpolBria7WcwkdvdVa
-        fJANk/oJr8zIdYAeozhZvl4Qxbv1Hq22OA==
-X-Google-Smtp-Source: AGRyM1tOeA+Gw7DZiFWRPKJOoA0ezpkitpRciKFcRBWGRCDfdmj6aVKFQ1LYFlWpb0lOf8R04zFU7g==
-X-Received: by 2002:a37:ac17:0:b0:6b5:d5e4:61bc with SMTP id e23-20020a37ac17000000b006b5d5e461bcmr18810281qkm.707.1658400085857;
-        Thu, 21 Jul 2022 03:41:25 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05620a405500b006b5f4b7b088sm1194610qko.108.2022.07.21.03.41.25
+        b=l7SEZv1MbWIF2XINR7muGIZED01C62l2p3jelI42OGjyeI9qQlFbNhsVItbVOZZ3NE
+         DqDvzavLDaWFrRG6NnVCK14glNUT1XJgA37H7+pReeyBj5GkI4NqAxV7JmWptLv34uat
+         da81wEn4Q+NW8xgrB2IQX1LYi0qA8M7qI+FKSPgVCYlKrSHO6fGaHj/71nDcQuAPRFXc
+         78vLsJ84LodZgOD6yOGyUH4ZCBzu+/Q0GdDs91zFj/dU/MoEvhFShUI3O6pvV4eYjWlu
+         f6BbJpeZHyGDHaPdICvBZk+gk3tfACjyFRPNbA7s9m9b52+BDVHMheQMpdtGCOOZtVrF
+         5YfA==
+X-Gm-Message-State: AJIora/46cWTOFTnp4NMx4m5mk7mX5GtmKeYCVc4ulsRCvw3pBiSJbrw
+        2I/6jjFH6hJuPHsOIB3pNuz2pwaAYTbcPw==
+X-Google-Smtp-Source: AGRyM1sz/sPTdTsxLBMziz+RAB/CS0GAoTA5sD6ylXO98epGcXFNriU3nxEAn1BnIyO0jQ+07Unoyg==
+X-Received: by 2002:a05:620a:4444:b0:6b5:f7a0:ff50 with SMTP id w4-20020a05620a444400b006b5f7a0ff50mr10831185qkp.211.1658400113945;
+        Thu, 21 Jul 2022 03:41:53 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id bv15-20020a05622a0a0f00b0031ecce4077fsm1085036qtb.31.2022.07.21.03.41.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 03:41:25 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id c131so2057048ybf.9;
-        Thu, 21 Jul 2022 03:41:25 -0700 (PDT)
-X-Received: by 2002:a25:aacc:0:b0:66f:f1ca:409c with SMTP id
- t70-20020a25aacc000000b0066ff1ca409cmr29824052ybi.36.1658400085177; Thu, 21
- Jul 2022 03:41:25 -0700 (PDT)
+        Thu, 21 Jul 2022 03:41:53 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31e7055a61dso12418397b3.11;
+        Thu, 21 Jul 2022 03:41:53 -0700 (PDT)
+X-Received: by 2002:a81:6088:0:b0:31e:79fd:3dfa with SMTP id
+ u130-20020a816088000000b0031e79fd3dfamr3528216ywb.47.1658400113296; Thu, 21
+ Jul 2022 03:41:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220718195651.7711-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220718195651.7711-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220718195651.7711-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220718195651.7711-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220718195651.7711-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 21 Jul 2022 12:41:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUNifDMjBj5gkUUir-HYbn-gtx=2e-QkFTNYj_sHNc4RA@mail.gmail.com>
-Message-ID: <CAMuHMdUNifDMjBj5gkUUir-HYbn-gtx=2e-QkFTNYj_sHNc4RA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] arm64: dts: renesas: r9a07g044: Update pinctrl node
+Date:   Thu, 21 Jul 2022 12:41:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXiM7S-qB-dgsvP8CfN81SFYJoWfNVyD=4f-TVv6TqAYA@mail.gmail.com>
+Message-ID: <CAMuHMdXiM7S-qB-dgsvP8CfN81SFYJoWfNVyD=4f-TVv6TqAYA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] arm64: dts: renesas: r9a07g054: Update pinctrl node
  to handle GPIO interrupts
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,

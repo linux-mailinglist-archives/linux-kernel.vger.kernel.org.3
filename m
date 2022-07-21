@@ -2,123 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB7257C1DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA3457C1E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 03:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiGUB2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 20 Jul 2022 21:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S230109AbiGUBgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 20 Jul 2022 21:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGUB2h (ORCPT
+        with ESMTP id S229515AbiGUBgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 20 Jul 2022 21:28:37 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DD974CD8;
-        Wed, 20 Jul 2022 18:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658366916; x=1689902916;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2taxh7mCw2+GLKWNabZXLdL/LDPI6ZOkmkd+dAwnLEA=;
-  b=LtQZf1ZuNv0J+sxdinA3UMIQzgjsHIRbkROouUIX8Ya7e5f+yUW1sOSZ
-   gvmbJLtEE9lbHOVVxqDVkjW8oW/YbMcfNMLDzr6kBA/uOwkJszm7b7t5H
-   2i3CzCvYZs55qOImdQulgEnihdPZq08ENlw4/r5Smi64N7JTzTdK0wycB
-   I=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Jul 2022 18:28:36 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 18:28:36 -0700
-Received: from [10.253.78.99] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 20 Jul
- 2022 18:28:33 -0700
-Message-ID: <311eba1b-d62f-7029-9775-e4843d71befa@quicinc.com>
-Date:   Thu, 21 Jul 2022 09:28:31 +0800
+        Wed, 20 Jul 2022 21:36:02 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C92E14D04;
+        Wed, 20 Jul 2022 18:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=sLpyO
+        TOaVlwjg6BmNqEyy16SWc61/FN+vJOjx1Wr9/w=; b=JFTLaXaLpBo9ehwi3ng66
+        MoQH2cebPtgNR9I2kHwyRayionQxSU4Y1uw61moS3j5EMzxsIbzkGCiXOKmiwXoR
+        z3Y8teSLjTi6Hn7TaeYDCj6riKAfO7ZCxt7R+98dsiRx+WSqFwHEhm6p3JmNLvVz
+        SQ2Ne+8fUObjP4BOsD3nsU=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp1 (Coremail) with SMTP id GdxpCgAHNfZMrdhi1tsZPg--.514S2;
+        Thu, 21 Jul 2022 09:35:11 +0800 (CST)
+From:   williamsukatube@163.com
+To:     colyli@suse.de, kent.overstreet@gmail.com,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH v2 -next] bcache: Fix spelling mistakes
+Date:   Thu, 21 Jul 2022 09:35:06 +0800
+Message-Id: <20220721013506.2842433-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 3/3] Bluetooth: btusb: Remove
- HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for fake CSR
-Content-Language: en-US
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-CC:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luiz Augusto Von Dentz <luiz.von.dentz@intel.com>,
-        <swyterzone@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-References: <1658326045-9931-1-git-send-email-quic_zijuhu@quicinc.com>
- <1658326045-9931-4-git-send-email-quic_zijuhu@quicinc.com>
- <CABBYNZJ9Re7PZOFXhj-2tRwJ1UU2kY+QhB4dJT-=GyCYqb_Hhw@mail.gmail.com>
-From:   quic_zijuhu <quic_zijuhu@quicinc.com>
-In-Reply-To: <CABBYNZJ9Re7PZOFXhj-2tRwJ1UU2kY+QhB4dJT-=GyCYqb_Hhw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgAHNfZMrdhi1tsZPg--.514S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr1DuFWkJw43Cw4fCFyxAFb_yoWrtry7pF
+        W7X34fAw1vq3y7Ar98AFyUuFyrJa45tFy7Kas7uas5ZFy7ZF1rAFyUKayDtw1kWryfJFW2
+        qr45tw1DWF1rKaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07b1GYLUUUUU=
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBew9Fg2AZAYH74wAAsT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/20/2022 11:38 PM, Luiz Augusto von Dentz wrote:
-> Hi Zijun,
-> 
-> On Wed, Jul 20, 2022 at 7:07 AM Zijun Hu <quic_zijuhu@quicinc.com> wrote:
->>
->> Fake CSR BT controllers do not enable feature "Erroneous Data Reporting"
->> currently, BT core driver will check the feature bit instead of the quirk
->> to decide if HCI command HCI_Read|Write_Default_Erroneous_Data_Reporting
->> work fine, so remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING for fake CSR.
->>
->> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
->> ---
->>  drivers/bluetooth/btusb.c | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
->> index f0f86c5c3b37..f2b3d31d56cf 100644
->> --- a/drivers/bluetooth/btusb.c
->> +++ b/drivers/bluetooth/btusb.c
->> @@ -2072,7 +2072,6 @@ static int btusb_setup_csr(struct hci_dev *hdev)
->>                  * without these the controller will lock up.
->>                  */
->>                 set_bit(HCI_QUIRK_BROKEN_STORED_LINK_KEY, &hdev->quirks);
->> -               set_bit(HCI_QUIRK_BROKEN_ERR_DATA_REPORTING, &hdev->quirks);
->>                 set_bit(HCI_QUIRK_BROKEN_FILTER_CLEAR_ALL, &hdev->quirks);
->>                 set_bit(HCI_QUIRK_NO_SUSPEND_NOTIFIER, &hdev->quirks);
-> 
-> You will probably need to remove HCI_QUIRK_BROKEN_ERR_DATA_REPORTING
-> last otherwise it breaks the build in between patches, and please
-> double check if there are no other instances of driver using it or
-> perhaps leave it defined in case the feature is broken for some reason
-> but then we need a macro that checks both the quirk and the feature
-> bit.
-> 
-okay, i will split this change to solve build error between patches.
+From: William Dean <williamsukatube@gmail.com>
 
-yes.  only QCA and CSR device with USB I/F use it. no other driver use it
+Fix follow spelling misktakes:
+	automatical  ==> automatic
+	arount ==> around
+	individial  ==> individual
+	embeddded  ==> embedded
+	addionally  ==> additionally
+	unncessary  ==> unnecessary
+	definitly  ==> definitely
 
-the quirk was introduced to mark HCI_Read|Write_Default_Erroneous_Data_Reporting
-broken, but the reason why these two HCI commands don't work fine is that the feature
-"Erroneous Data Reporting" is not enabled by firmware.
-so we need to check the feature bit instead of the quirk and don't also need the quirk.
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+v2: fix wrong commit msg comment
 
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
->>
-> 
-> 
+ drivers/md/bcache/bcache.h    | 2 +-
+ drivers/md/bcache/bset.h      | 2 +-
+ drivers/md/bcache/btree.c     | 2 +-
+ drivers/md/bcache/btree.h     | 2 +-
+ drivers/md/bcache/stats.c     | 2 +-
+ drivers/md/bcache/writeback.c | 2 +-
+ drivers/md/bcache/writeback.h | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/md/bcache/bcache.h b/drivers/md/bcache/bcache.h
+index 2acda9cea0f9..2b35c0a14d4d 100644
+--- a/drivers/md/bcache/bcache.h
++++ b/drivers/md/bcache/bcache.h
+@@ -635,7 +635,7 @@ struct cache_set {
+ 	struct bkey		gc_done;
+ 
+ 	/*
+-	 * For automatical garbage collection after writeback completed, this
++	 * For automatic garbage collection after writeback completed, this
+ 	 * varialbe is used as bit fields,
+ 	 * - 0000 0001b (BCH_ENABLE_AUTO_GC): enable gc after writeback
+ 	 * - 0000 0010b (BCH_DO_AUTO_GC):     do gc after writeback
+diff --git a/drivers/md/bcache/bset.h b/drivers/md/bcache/bset.h
+index d795c84246b0..76f75bbcb731 100644
+--- a/drivers/md/bcache/bset.h
++++ b/drivers/md/bcache/bset.h
+@@ -45,7 +45,7 @@
+  * 4 in memory - we lazily resort as needed.
+  *
+  * We implement code here for creating and maintaining auxiliary search trees
+- * (described below) for searching an individial bset, and on top of that we
++ * (described below) for searching an individual bset, and on top of that we
+  * implement a btree iterator.
+  *
+  * BTREE ITERATOR:
+diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+index e136d6edc1ed..a26863eedc6f 100644
+--- a/drivers/md/bcache/btree.c
++++ b/drivers/md/bcache/btree.c
+@@ -154,7 +154,7 @@ void bch_btree_node_read_done(struct btree *b)
+ 	/*
+ 	 * c->fill_iter can allocate an iterator with more memory space
+ 	 * than static MAX_BSETS.
+-	 * See the comment arount cache_set->fill_iter.
++	 * See the comment around cache_set->fill_iter.
+ 	 */
+ 	iter = mempool_alloc(&b->c->fill_iter, GFP_NOIO);
+ 	iter->size = b->c->cache->sb.bucket_size / b->c->cache->sb.block_size;
+diff --git a/drivers/md/bcache/btree.h b/drivers/md/bcache/btree.h
+index 1b5fdbc0d83e..b46bf6268aca 100644
+--- a/drivers/md/bcache/btree.h
++++ b/drivers/md/bcache/btree.h
+@@ -54,7 +54,7 @@
+  * Btree nodes never have to be explicitly read in; bch_btree_node_get() handles
+  * this.
+  *
+- * For writing, we have two btree_write structs embeddded in struct btree - one
++ * For writing, we have two btree_write structs embedded in struct btree - one
+  * write in flight, and one being set up, and we toggle between them.
+  *
+  * Writing is done with a single function -  bch_btree_write() really serves two
+diff --git a/drivers/md/bcache/stats.c b/drivers/md/bcache/stats.c
+index 68b02216033d..dcd87eb6f85e 100644
+--- a/drivers/md/bcache/stats.c
++++ b/drivers/md/bcache/stats.c
+@@ -11,7 +11,7 @@
+ #include "sysfs.h"
+ 
+ /*
+- * We keep absolute totals of various statistics, and addionally a set of three
++ * We keep absolute totals of various statistics, and additionally a set of three
+  * rolling averages.
+  *
+  * Every so often, a timer goes off and rescales the rolling averages.
+diff --git a/drivers/md/bcache/writeback.c b/drivers/md/bcache/writeback.c
+index 3f0ff3aab6f2..bd83a33b8a2f 100644
+--- a/drivers/md/bcache/writeback.c
++++ b/drivers/md/bcache/writeback.c
+@@ -238,7 +238,7 @@ static void update_writeback_rate(struct work_struct *work)
+ 	/*
+ 	 * If the whole cache set is idle, set_at_max_writeback_rate()
+ 	 * will set writeback rate to a max number. Then it is
+-	 * unncessary to update writeback rate for an idle cache set
++	 * unnecessary to update writeback rate for an idle cache set
+ 	 * in maximum writeback rate number(s).
+ 	 */
+ 	if (atomic_read(&dc->has_dirty) && dc->writeback_percent &&
+diff --git a/drivers/md/bcache/writeback.h b/drivers/md/bcache/writeback.h
+index 31df716951f6..37f66bea522f 100644
+--- a/drivers/md/bcache/writeback.h
++++ b/drivers/md/bcache/writeback.h
+@@ -69,7 +69,7 @@ static inline int offset_to_stripe(struct bcache_device *d,
+ 	}
+ 
+ 	/*
+-	 * Here offset is definitly smaller than INT_MAX,
++	 * Here offset is definitely smaller than INT_MAX,
+ 	 * return it as int will never overflow.
+ 	 */
+ 	return offset;
+-- 
+2.25.1
 

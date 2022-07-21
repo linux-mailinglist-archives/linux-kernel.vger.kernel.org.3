@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8844457CF28
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6838C57CF25
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiGUPdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S232035AbiGUPdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbiGUPck (ORCPT
+        with ESMTP id S231678AbiGUPcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:32:40 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CC88722C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:32:19 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id n18so3394052lfq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:32:19 -0700 (PDT)
+        Thu, 21 Jul 2022 11:32:43 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E5887358
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:32:20 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id a13so2082152ljr.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:32:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KpbhzspuygFwG8vSA8m7O2wzJD0Js2bLL2ZwSFQUUh8=;
-        b=Wb0rgx/+JD0lUO5OIbB13AO2kBj5vUIgEXqqA/A7qkzZbSkf6H5TybPzAc3jLDRWZz
-         De4WQJnjI8sBvx/GegpfA1NIr8rFGrK6Aly5uAe3MV5JfBncMtME2wikDcSvchswZz2H
-         bGSdBZ3Y/eaVXJx/oekM+nPU6YMkzGlhvS+Y09AUAaM7BodBFWsZtMuaEw5YVtimcJIS
-         12YbKGbYvGnx4Nl49xdzjrX7XOE0OH5uVQJ28w4sEYFoPpSaJbKMOXPTslhG0MHUDNR2
-         RTtCrW1myAJqWrWmhMA5zngFS4b5D3FkPX1I6gujjeNsueoKwdJpWBTxFNTF4BpJE2bo
-         8+mA==
+        bh=Qkcak79PKqus0FBcBxREwIPQ11TDFoKGG7oCkfoXPQc=;
+        b=SwxDA2lsFKhk6eufWqim1Ro7JRbs5otwloShXKdIpq6ZcJReMBAY58gN0E7UQp6NHa
+         wSI10aoScdzw8YSJQKeSc8ZiJ2/jQrOCKox3W9A7U/I4/PTgvHSf9xW7a1onx8EY9iYk
+         BwZQ4PSquN8zdyaSiAFB/pFTprslWTyuIlKIe7mpnyuqWJ+aqoU9wNkMOSOkuizT6zdW
+         8Ju7sAzettoIlO1AWlALjN59qJamLNafzIFzH9m8ccBNUht5Z2U3T63oAK2mFdYRALZa
+         LdJNeykJiUPFRDhNj+y5tpsvd0/5F8ceDQgABQr50RMi820tS3INbLiOe9iCmBOrhtxQ
+         /Hww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KpbhzspuygFwG8vSA8m7O2wzJD0Js2bLL2ZwSFQUUh8=;
-        b=VOEQWQbog3M6bhjr9eYUKnzdVVSpdxHLKJlWRHOzM9GyFlz1nDq5AkUKgqFDZwpYuJ
-         GiFIDWbV9Z2235uyKlEGP8To+VLRdyZ+rbGbJGIUfv0m775zw6NwQRx3IVLBK/Ww3z+m
-         WmZR0uxhaMsSaT0kD2lTQ6wQG9ZsGaHZgb9dgKxR1uuG00GK9bVlPG2kmwZBke5IjCnu
-         1ZUYrghgKZQ2b2NBu6Ow4O7VG4CKZc4o+dCcH3LRHT7C6qdbQOKhnxGChOVHs1L7wn8N
-         5KUKI9+LG7x4HhWcMBVROYJIc9PrDlCNvuegfNpXJ/Eb6BfCzK2M7X35O8yQhuluwvwJ
-         oteQ==
-X-Gm-Message-State: AJIora9Xb+cK+jwo27pSMGPHdVckXpX/erlMIyhKrsjiivm/DJouOlaR
-        sOsvxzpUvXI0zbrGYsTTNBNqiA==
-X-Google-Smtp-Source: AGRyM1ubWL7w8E7CRaphPTSvA0k3fiWFSqprLYOLH+JjbjSiG740pSD/ln4Nfs04hmWe6t26JztkWg==
-X-Received: by 2002:a05:6512:2809:b0:489:ff8e:44f2 with SMTP id cf9-20020a056512280900b00489ff8e44f2mr23393295lfb.70.1658417537183;
-        Thu, 21 Jul 2022 08:32:17 -0700 (PDT)
+        bh=Qkcak79PKqus0FBcBxREwIPQ11TDFoKGG7oCkfoXPQc=;
+        b=k71MUeGkZWmaZstay/j2UJr1O19U34DW6bF60VSmdUja5laVU8s44xWZNmeuypDetD
+         QsC8TjNRcTYG8PSrKNgGoLMKLwB64q+4iXRHtWHB8/vqBHHx/UWrBLVimarp3XNJv4bO
+         MBfje3gVy/Hmz5frE4za764mJ8toqYLpL0eYVzBTjmNJzMtRFhXc49t4X6w2KXb60fNR
+         dQClsHognVXixk8fwZ1W8/yOTf8gJ1HIyGsHtIL0P6dnrnJcie5YbPkyIZ35Y3e5+sS+
+         YVVN+HTzPpeYMtEwA+TXj8NSOAbD42cdwZbVf3b77qj72Ckr0r0G6mxueAqKktv8hySz
+         MURQ==
+X-Gm-Message-State: AJIora+AJx5pBi8eEDfqSGkuCBh/B+i4rAZJ3zYuCAPvP2rviksBX/rv
+        W5gwticuEnr57AH3gLqzMtmTtQ==
+X-Google-Smtp-Source: AGRyM1t5FpFk3c1ZpM6yYyF3OrMRK1RSMfVVWmGiA4wJJR3dTOcfJAhsvvr1fmUCOx5XIdCoKvqclQ==
+X-Received: by 2002:a2e:b947:0:b0:25d:d6f6:adaf with SMTP id 7-20020a2eb947000000b0025dd6f6adafmr3741489ljs.230.1658417539757;
+        Thu, 21 Jul 2022 08:32:19 -0700 (PDT)
 Received: from krzk-bin.. (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id a27-20020ac25e7b000000b0048a2995772asm504604lfr.73.2022.07.21.08.32.14
+        by smtp.gmail.com with ESMTPSA id a27-20020ac25e7b000000b0048a2995772asm504604lfr.73.2022.07.21.08.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 08:32:16 -0700 (PDT)
+        Thu, 21 Jul 2022 08:32:19 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -97,9 +97,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         linux-fbdev@vger.kernel.org, netdev@vger.kernel.org,
         linux-spi@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 4/6] dt-bindings: misc: explicitly list SPI CPHA and CPOL
-Date:   Thu, 21 Jul 2022 17:31:53 +0200
-Message-Id: <20220721153155.245336-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 5/6] dt-bindings: net: explicitly list SPI CPHA and CPOL
+Date:   Thu, 21 Jul 2022 17:31:54 +0200
+Message-Id: <20220721153155.245336-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
 References: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
@@ -107,8 +107,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -122,25 +121,56 @@ spi-peripheral-props.yaml schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/net/nfc/marvell,nci.yaml     | 12 ++++++++++--
+ .../devicetree/bindings/net/vertexcom-mse102x.yaml   | 12 +++++++++---
+ 2 files changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-index b3c45c046ba5..a198848283d2 100644
---- a/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-+++ b/Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml
-@@ -28,7 +28,10 @@ properties:
-     description: GPIO uspecifier of the CMD pin
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml b/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml
+index 1bcaf6ba822c..00b3918a9bf2 100644
+--- a/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml
++++ b/Documentation/devicetree/bindings/net/nfc/marvell,nci.yaml
+@@ -56,8 +56,16 @@ properties:
+     description: |
+       For UART type of connection. Specifies that the chip is using RTS/CTS.
  
 -  spi-cpha: true
+-  spi-cpol: true
 +  spi-cpha:
 +    type: boolean
 +    description:
 +      The device requires shifted clock phase (CPHA) mode.
++
++  spi-cpol:
++    type: boolean
++    description:
++      The device requires inverse clock polarity (CPOL) mode.
++
+   spi-max-frequency: true
  
  required:
-   - compatible
+diff --git a/Documentation/devicetree/bindings/net/vertexcom-mse102x.yaml b/Documentation/devicetree/bindings/net/vertexcom-mse102x.yaml
+index 8156a9aeb589..9dc1609f6d06 100644
+--- a/Documentation/devicetree/bindings/net/vertexcom-mse102x.yaml
++++ b/Documentation/devicetree/bindings/net/vertexcom-mse102x.yaml
+@@ -34,9 +34,15 @@ properties:
+   interrupts:
+     maxItems: 1
+ 
+-  spi-cpha: true
+-
+-  spi-cpol: true
++  spi-cpha:
++    type: boolean
++    description:
++      The device requires shifted clock phase (CPHA) mode.
++
++  spi-cpol:
++    type: boolean
++    description:
++      The device requires inverse clock polarity (CPOL) mode.
+ 
+   spi-max-frequency:
+     minimum: 6000000
 -- 
 2.34.1
 

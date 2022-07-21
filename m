@@ -2,212 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085EA57C894
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8E557C8A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbiGUKIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S233086AbiGUKJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiGUKI2 (ORCPT
+        with ESMTP id S232939AbiGUKJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:08:28 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63693691D2;
-        Thu, 21 Jul 2022 03:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1658398105; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zr0w1O3lZ0yYDNjjfrSSdrZWx1dvMhV92UH4jm6Fo5I=;
-        b=4CWAPyjGKsXTwOQ9CFMAFIJjwPH42tynqPn0HHDXMYCujBxsGSV4zyefky40XMaYyCR4zV
-        d706479PBxSxyD29/rk7dj3bnBzbF5fM0HDnoc5aP23lwF4MwNcF3f6EprNlAxxTu/JdqD
-        iK4bNfGv/4cuUE8UdQJ11M2U16X0wFA=
-Date:   Thu, 21 Jul 2022 11:08:14 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 01/11] ASoC: jz4740-i2s: Handle independent FIFO flush
- bits
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Message-Id: <Q58DFR.835FR3DH8BFV@crapouillou.net>
-In-Reply-To: <KM3aQuHkqtNZOgfaFAVA54klqcIZBA4X@localhost>
-References: <20220708160244.21933-1-aidanmacdonald.0x0@gmail.com>
-        <20220708160244.21933-2-aidanmacdonald.0x0@gmail.com>
-        <UXHBFR.6W2XPUNX040K1@crapouillou.net>
-        <KM3aQuHkqtNZOgfaFAVA54klqcIZBA4X@localhost>
+        Thu, 21 Jul 2022 06:09:54 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4DA691D2;
+        Thu, 21 Jul 2022 03:09:52 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id w185so1329655pfb.4;
+        Thu, 21 Jul 2022 03:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JsNvQYgS7LcjVv/c6iexGN5Si+fKRd5f5BAbC7QtYk4=;
+        b=eAa08a3+tl/ZofuTfcSSlCIRAq8gzsE5weAOP7UsxCGX7Y3mEwbV149NCokUNAuKe5
+         EN8JAjfmhP9N9CspG2jqaZSyIaGbkZUhDaW7qofKWFu8aKMXKSZIN/OslbLhdpG3vXAe
+         Ur/lyWqy91Q56Es+2f1zy2dzQ+hj8jlo3qE0YiObY2S52rcdXtLGShkNUGJiecJGeLOG
+         GtukmBHV1TgkmoL4837XnIBFnmUr7cQbqEUii+cPTEyr6HZ7158GO1PQ1FREaPNHpO3p
+         +zxpj8UH5CIEkJ0zMqYXxrZuHhPdN0LgPYLVzbKBbdgveUmcPeMuT3v6VXPjNd763lsV
+         k55Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JsNvQYgS7LcjVv/c6iexGN5Si+fKRd5f5BAbC7QtYk4=;
+        b=8NhrzcyPq8vo0eJhwJoQ3PDeYP8gtUM6T0S3PS/2iBRqpZ3WK2j2d02LCAXJWtijR0
+         ZFvkCFt7LxfEH8kXTYAjO0gcI5ex1sCbl9kXXPbGpcCgyVfZF98nBjeLtPCrC8g/S+SO
+         pxurZMjOnsWUN+dNGLSeEGRZiOkednYQcxjbSWD5mkkfGPVGdPTuqiHBSbrGwx/yRqiB
+         wCgknT25M6Brs+Nsf2EWbgIUr+MNm5+v0mfKt96EF+qkLkzV+gfxtAqD+/fp/354Y303
+         xSRxpMLc2M9FfDSGGgaMo6M1TwuVkktvB7K8nrE13H9RnKLNeXTCPaD6xVAorDH+Eu76
+         4Ylw==
+X-Gm-Message-State: AJIora/WFL/93eMT8Q7EgbhNiTf0wbblbTmaLkYxrNNSsd+bq8GvxdwU
+        ygFMao6IanLXTjJ5GnbX6kM=
+X-Google-Smtp-Source: AGRyM1tMdDKZ5ydOiuf36WZNOlcNoDOh7UeG2Wl5nFnV3DeSsvm2YGSyx3q8fnZshmx3L5mTpd0DGQ==
+X-Received: by 2002:a05:6a00:23c9:b0:52a:cedd:3992 with SMTP id g9-20020a056a0023c900b0052acedd3992mr42915651pfc.43.1658398191449;
+        Thu, 21 Jul 2022 03:09:51 -0700 (PDT)
+Received: from cyhuang-hp-elitebook-840-g3.rt ([2402:7500:56a:cec2:d9ce:3b52:7023:4b90])
+        by smtp.gmail.com with ESMTPSA id x187-20020a6286c4000000b0052ac2e23295sm1351501pfd.44.2022.07.21.03.09.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 21 Jul 2022 03:09:50 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 18:09:37 +0800
+From:   ChiYuan Huang <u0084500@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v5 11/13] leds: mt6370: Add MediaTek MT6370 current sink
+ type LED Indicator support
+Message-ID: <20220721100933.GA17618@cyhuang-hp-elitebook-840-g3.rt>
+References: <20220715112607.591-1-peterwu.pub@gmail.com>
+ <20220715112607.591-12-peterwu.pub@gmail.com>
+ <20220717084643.GA14285@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220717084643.GA14285@duo.ucw.cz>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
-
-Le mer., juil. 20 2022 at 15:43:06 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
->=20
-> Paul Cercueil <paul@crapouillou.net> writes:
->=20
->>  Hi Aidan,
->>=20
->>  Le ven., juil. 8 2022 at 17:02:34 +0100, Aidan MacDonald
->>  <aidanmacdonald.0x0@gmail.com> a =E9crit :
->>>  On the JZ4740, there is a single bit that flushes (empties) both
->>>  the transmit and receive FIFO. Later SoCs have independent flush
->>>  bits for each FIFO, which allows us to flush the right FIFO when
->>>  starting up a stream.
->>>  This also fixes a bug: since we were only setting the JZ4740's
->>>  flush bit, which corresponds to the TX FIFO flush bit on other
->>>  SoCs, other SoCs were not having their RX FIFO flushed at all.
->>>  Fixes: 967beb2e8777 ("ASoC: jz4740: Add jz4780 support")
->>>  Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->>>  ---
->>>   sound/soc/jz4740/jz4740-i2s.c | 33=20
->>> ++++++++++++++++++++++++++++++---
->>>   1 file changed, 30 insertions(+), 3 deletions(-)
->>>  diff --git a/sound/soc/jz4740/jz4740-i2s.c=20
->>> b/sound/soc/jz4740/jz4740-i2s.c
->>>  index ecd8df70d39c..576f31f9d734 100644
->>>  --- a/sound/soc/jz4740/jz4740-i2s.c
->>>  +++ b/sound/soc/jz4740/jz4740-i2s.c
->>>  @@ -64,6 +64,9 @@
->>>   #define JZ_AIC_CTRL_ENABLE_PLAYBACK BIT(1)
->>>   #define JZ_AIC_CTRL_ENABLE_CAPTURE BIT(0)
->>>  +#define JZ4760_AIC_CTRL_TFLUSH BIT(8)
->>>  +#define JZ4760_AIC_CTRL_RFLUSH BIT(7)
->>=20
->>  Just rename JZ_AIC_CTRL_FLUSH to JZ_AIC_CTRL_TFLUSH and introduce
->>  JZ_AIC_CTRL_RLUSH.
->>=20
->=20
-> According to the JZ4740 programming manual JZ_AIC_CTRL_FLUSH flushes
-> both FIFOs, so it's not equivalent JZ4760_AIC_CTRL_TFLUSH. I don't
-> think it's a good idea to confuse the two, or we'd need comments to
-> explain why JZ4740 uses TFLUSH but not RFLUSH.
-
-"shared_fifo_flush" is pretty much self-explanatory though. It then=20
-becomes obvious looking at the code that when this flag is set, TFLUSH=20
-flushes both FIFOs.
-
-If you prefer... you can #define JZ_AIC_CTRL_FLUSH JZ_AIC_CTRL_TFLUSH.=20
-I don't like the JZ4760 prefix, this is in no way specific to the=20
-JZ4760.
-
->=20
->>>  +
->>>   #define JZ_AIC_CTRL_OUTPUT_SAMPLE_SIZE_OFFSET 19
->>>   #define JZ_AIC_CTRL_INPUT_SAMPLE_SIZE_OFFSET  16
->>>  @@ -90,6 +93,8 @@ enum jz47xx_i2s_version {
->>>   struct i2s_soc_info {
->>>   	enum jz47xx_i2s_version version;
->>>   	struct snd_soc_dai_driver *dai;
->>>  +
->>>  +	bool shared_fifo_flush;
->>>   };
->>>   struct jz4740_i2s {
->>>  @@ -124,12 +129,33 @@ static int jz4740_i2s_startup(struct=20
->>> snd_pcm_substream
->>>  *substream,
->>>   	uint32_t conf, ctrl;
->>>   	int ret;
->>>  +	/*
->>>  +	 * When we can flush FIFOs independently, only flush the
->>>  +	 * FIFO that is starting up.
->>>  +	 */
->>>  +	if (!i2s->soc_info->shared_fifo_flush) {
->>>  +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->>>  +
->>>  +		if (substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK)
->>>  +			ctrl |=3D JZ4760_AIC_CTRL_TFLUSH;
->>>  +		else
->>>  +			ctrl |=3D JZ4760_AIC_CTRL_RFLUSH;
->>>  +
->>>  +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->>>  +	}
->>=20
->>  Wouldn't it be simpler to do one single if/else? And hy is one=20
->> checked before
->>  the (snd_soc_dai_active(dai)) check, and the other is checked after?
->=20
-> snd_soc_dai_active() is essentially checking if there's an active
-> substream. Eg. if no streams are open and you start playback, then
-> the DAI will be inactive. If you then start capture while playback is
-> running, the DAI is already active.
->=20
-> With a shared flush bit we can only flush if there are no other active
-> substreams (because we don't want to disturb the active stream by
-> flushing the FIFO) so it goes after the snd_soc_dai_active() check.
->=20
-> When the FIFOs can be separately flushed, flushing can be done before
-> the check because it won't disturb any active substream.
-
-Ok. It makes sense then. Please add some info about this in the commit=20
-message, because it really wasn't obvious to me.
-
-You should maybe factorize the read-modify-write into its own function.=20
-I know this gets eventually modified by [03/11], but this [01/11] is a=20
-bugfix so it will be applied to older kernels, and I'd rather not have=20
-duplicated code there.
-
-Cheers,
--Paul
-
->=20
->>  You could do something like this:
->>=20
->>  ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->>=20
->>  if (i2s->soc_info->shared_fifo_flush ||
->>     substream->stream =3D=3D SNDRV_PCM_STREAM_PLAYBACK) {
->>     ctrl |=3D JZ_AIC_CTRL_TFLUSH;
->>  } else {
->>     ctrl |=3D JZ_AIC_CTRL_RFLUSH;
->>  }
->>=20
->>  jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->>=20
->>  Cheers,
->>  -Paul
->>=20
->=20
->>>  +
->>>   	if (snd_soc_dai_active(dai))
->>>   		return 0;
->>>  -	ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->>>  -	ctrl |=3D JZ_AIC_CTRL_FLUSH;
->>>  -	jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->>>  +	/*
->>>  +	 * When there is a shared flush bit for both FIFOs we can
->>>  +	 * only flush the FIFOs if no other stream has started.
->>>  +	 */
->>>  +	if (i2s->soc_info->shared_fifo_flush) {
->>>  +		ctrl =3D jz4740_i2s_read(i2s, JZ_REG_AIC_CTRL);
->>>  +		ctrl |=3D JZ_AIC_CTRL_FLUSH;
->>>  +		jz4740_i2s_write(i2s, JZ_REG_AIC_CTRL, ctrl);
->>>  +	}
->>>   	ret =3D clk_prepare_enable(i2s->clk_i2s);
->>>   	if (ret)
->>>  @@ -444,6 +470,7 @@ static struct snd_soc_dai_driver=20
->>> jz4740_i2s_dai =3D {
->>>   static const struct i2s_soc_info jz4740_i2s_soc_info =3D {
->>>   	.version =3D JZ_I2S_JZ4740,
->>>   	.dai =3D &jz4740_i2s_dai,
->>>  +	.shared_fifo_flush =3D true,
->>>   };
->>>   static const struct i2s_soc_info jz4760_i2s_soc_info =3D {
->>>  --
->>>  2.35.1
->>>=20
->=20
+On Sun, Jul 17, 2022 at 10:46:43AM +0200, Pavel Machek wrote:
+> Hi!
+> 
+> > The MediaTek MT6370 is a highly-integrated smart power management IC,
+> > which includes a single cell Li-Ion/Li-Polymer switching battery
+> > charger, a USB Type-C & Power Delivery (PD) controller, dual
+> > Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> > a display bias driver and a general LDO for portable devices.
+> > 
+> > In MediaTek MT6370, there are four channel current-sink RGB LEDs that
+> > support hardware pattern for constant current, PWM, and breath mode.
+> > Isink4 channel can also be used as a CHG_VIN power good indicator.
+> > 
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> > index a49979f..71bacb5 100644
+> > --- a/drivers/leds/Kconfig
+> > +++ b/drivers/leds/Kconfig
+> > @@ -244,6 +244,20 @@ config LEDS_MT6323
+> >  	  This option enables support for on-chip LED drivers found on
+> >  	  Mediatek MT6323 PMIC.
+> >  
+> > +config LEDS_MT6370_RGB
+> > +	tristate "LED Support for MediaTek MT6370 PMIC"
+> > +	depends on LEDS_CLASS
+> > +	depends on MFD_MT6370
+> > +	select LINEAR_RANGE
+> > +	help
+> > +	  Say Y here to enable support for MT6370_RGB LED device.
+> > +	  In MT6370, there are four channel current-sink LED drivers that
+> > +	  support hardware pattern for constant current, PWM, and breath mode.
+> > +	  Isink4 channel can also be used as a CHG_VIN power good
+> 
+> Should this go to leds/rgb directory, and should it depend on
+> multicolor framework?
+Yes, and I may also want to change the file name from 'leds-mt6370'
+to 'leds-mt6370-rgb'. Is it ok?
+> 
+> Best regards,
+> 							Pavel
+> -- 
+> People of Russia, stop Putin before his war on Ukraine escalates.
 
 

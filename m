@@ -2,143 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC8B57D704
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5510357D70B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 00:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiGUWjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 18:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S233580AbiGUWlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 18:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiGUWjH (ORCPT
+        with ESMTP id S229946AbiGUWlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 18:39:07 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40816B98
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:39:06 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ku18so2870436pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 15:39:06 -0700 (PDT)
+        Thu, 21 Jul 2022 18:41:10 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4AD78587;
+        Thu, 21 Jul 2022 15:41:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5BvfHq2lTZErkasii1jgE6YW7HKwD3mAVcfjh5S1rsM=;
-        b=R4NfdldE60aDy0LaVigIzFGzrv9FvyVjY36WsCw3NgLlRL3Uy5ipBhxl2Vq+W80DA3
-         PPVFe4z3/5l2B1k8uDGbaNQCOlGWo7OM/s7Xjg7wVmhiELTkbOKCdC0UlNVWpX2mzwKT
-         eTxJ55HksOL4M8nUvvycwfdxn+PQTyvRjKskr48TvvAjgMVza3GXUjpIUilBeIBzV7GE
-         8aUgsNvdb4WDvS1pboXbkLMMgVrzvD80IQ5gIvXhBNOiZmnXCibA1hFsR264RFirAnoe
-         8VBvQD4ZS06lDWqYKJNs7C9mN3iesY36NyX/5mqkCT/sGy3KeMvN7oShMpLvzyZWI9XK
-         9k/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5BvfHq2lTZErkasii1jgE6YW7HKwD3mAVcfjh5S1rsM=;
-        b=o8DxiZhfKHJrwRTtGDTCPd4QvToT5cJWIG+oF4dA5Z+84fxjAlUG4ul/5W5e4L4nm1
-         ZHvBQX8cPuijGZnI25bnmJ0VAtvVQ/P5DXC6AfK+6JV8c7pmHg2P6zqOH5NZdlwOHVEW
-         tOMvmsq5YFaHfx7peNLYAWXxj8bGely4NGYH4wb8MLtyTr2+5ddU8Rd7aZyo+O/aXp6f
-         bi2iNZBYwmBx9Pi/Qnkervr8YtRP3sjYvWa3xLbiraQ7rJFWQIHD3WT+ZJsQGiYNacMJ
-         DLEARruPBQ3QW4lmtTYnVQhSHP1Mm9E5fA6zdW3mFt82j9ZwOE+pk//dEJbCSeNFqxLn
-         kp5w==
-X-Gm-Message-State: AJIora+qCJxsAXoUCX03kcW8RomVUItlrdO5mIGNTgtvhxW2XixXz/Tx
-        zJYcW1j3ffeBEypZzvY2BJOszw==
-X-Google-Smtp-Source: AGRyM1uqv3JCAjossSLSzKvL74YCZI1slQMOmoZChvzDYH12nTlipPQo+jB6YFPR7eexWjJuLfcr/Q==
-X-Received: by 2002:a17:90b:3a8b:b0:1f0:127:360d with SMTP id om11-20020a17090b3a8b00b001f00127360dmr685727pjb.64.1658443145559;
-        Thu, 21 Jul 2022 15:39:05 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id y14-20020a17090a644e00b001f217ec21efsm4070309pjm.13.2022.07.21.15.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 15:39:04 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 22:39:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 18/25] KVM: VMX: Add missing CPU based VM execution
- controls to vmcs_config
-Message-ID: <YtnVhIzxkkxM3cTk@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-19-vkuznets@redhat.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658443268; x=1689979268;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VUFUlsdaiUkm5+1lgJa5T5z3NfCHkGS7hyu1kAqbiv8=;
+  b=PseUYa6pFxQ1kv2V+sOO/anmoBrw9AQiozFsZKFTPL+WEBOzk/BWGTyj
+   RGfIcVG8EzkX0/Mf+m6KpsLbQPIccEfMNYupP63TPmdpl4597Wmf61S95
+   RzegPzpxT0grEBIFZRzrJcPBuxI0zidX8xrw5a8/MI5I9Ck72vU6GQqc4
+   Q=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 21 Jul 2022 15:41:08 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 15:41:08 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 21 Jul 2022 15:40:07 -0700
+Received: from [10.110.106.175] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 21 Jul
+ 2022 15:40:07 -0700
+Message-ID: <5a57d5b9-b81e-bb09-998b-2915d9ab6b2f@quicinc.com>
+Date:   Thu, 21 Jul 2022 15:40:06 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714091327.1085353-19-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 4/5] usb: dwc3: Allow end transfer commands to be sent
+ during soft disconnect
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <20220713003523.29309-1-quic_wcheng@quicinc.com>
+ <20220713003523.29309-5-quic_wcheng@quicinc.com>
+ <d8d26ce3-6773-bd9c-e227-0924f239eae0@synopsys.com>
+ <98623d02-cde4-b036-a85c-9325b58c7eab@quicinc.com>
+ <5d0cf380-e045-fcec-639f-ac2f6a187ca8@synopsys.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <5d0cf380-e045-fcec-639f-ac2f6a187ca8@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> As a preparation to reusing the result of setup_vmcs_config() in
-> nested VMX MSR setup, add the CPU based VM execution controls which KVM
-> doesn't use but supports for nVMX to KVM_OPT_VMX_CPU_BASED_VM_EXEC_CONTROL
-> and filter them out in vmx_exec_control().
-> 
-> No functional change intended.
-> 
-> Reviewed-by: Jim Mattson <jmattson@google.com>
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 6 ++++++
->  arch/x86/kvm/vmx/vmx.h | 6 +++++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 2fb89bdcbbd8..9771c771c8f5 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -4240,6 +4240,12 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
->  {
->  	u32 exec_control = vmcs_config.cpu_based_exec_ctrl;
->  
-> +	/* Not used by KVM but supported for nesting. */
+Hi Thinh,
 
-And then for this one, clarify that these _are_ enabled in vmcs02.  It doesn't
-really matter, I was just surprised by the "SAVE_PAT" in the previous patch because
-for a second I thought we were leaking host state :-)
-
-	/*
-	 * Not used by KVM, but fully supported for nesting, i.e. are allowed in
-	 * vmcs12 and propagated to vmcs02 when set in vmcs12.
-	 */
-
-> +	exec_control &= ~(CPU_BASED_RDTSC_EXITING |
-> +			  CPU_BASED_USE_IO_BITMAPS |
-> +			  CPU_BASED_MONITOR_TRAP_FLAG |
-> +			  CPU_BASED_PAUSE_EXITING);
-> +
->  	/* INTR_WINDOW_EXITING and NMI_WINDOW_EXITING are toggled dynamically */
->  	exec_control &= ~(CPU_BASED_INTR_WINDOW_EXITING |
->  			  CPU_BASED_NMI_WINDOW_EXITING);
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index e9c392398f1b..758f80c41beb 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -539,9 +539,13 @@ static inline u8 vmx_get_rvi(void)
->  #endif
->  
->  #define KVM_OPT_VMX_CPU_BASED_VM_EXEC_CONTROL			\
-> -	(CPU_BASED_TPR_SHADOW |					\
-> +	(CPU_BASED_RDTSC_EXITING |				\
-> +	CPU_BASED_TPR_SHADOW |					\
-> +	CPU_BASED_USE_IO_BITMAPS |				\
-> +	CPU_BASED_MONITOR_TRAP_FLAG |				\
->  	CPU_BASED_USE_MSR_BITMAPS |				\
->  	CPU_BASED_NMI_WINDOW_EXITING |				\
-> +	CPU_BASED_PAUSE_EXITING |				\
->  	CPU_BASED_ACTIVATE_SECONDARY_CONTROLS |			\
->  	CPU_BASED_ACTIVATE_TERTIARY_CONTROLS)
->  
-> -- 
-> 2.35.3
+On 7/21/2022 3:20 PM, Thinh Nguyen wrote:
+> On 7/21/2022, Wesley Cheng wrote:
+>> Hi Thinh,
+>>
+>> On 7/21/2022 3:08 PM, Thinh Nguyen wrote:
+>>> Hi Wesley,
+>>>
+>>> On 7/12/2022, Wesley Cheng wrote:
+>>>> If soft disconnect is in progress, allow the endxfer command to be
+>>>> sent,
+>>>> without this, there is an issue where the stop active transfer call
+>>>> (during pullup disable) wouldn't actually issue the endxfer command,
+>>>> while clearing the DEP flag.
+>>>>
+>>>> In addition, if the DWC3_EP_DELAY_STOP flag was set before soft
+>>>> disconnect
+>>>> started (i.e. from the dequeue path), ensure that when the EP0
+>>>> transaction
+>>>> completes during soft disconnect, to issue the endxfer with the force
+>>>> parameter set, as it does not expect a command complete event.
+>>>>
+>>>> Fixes: e4cf6580ac740 ("usb: dwc3: gadget: Wait for ep0 xfers to
+>>>> complete during dequeue")
+>>>> Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>>> ---
+>>>> Link:
+>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/1a1a5485-790e-79ce-f5a6-1e96d9b49a47@synopsys.com/__;!!A4F2R9G_pg!cXW2TlALYWnXNPg-NoMFUrQ8K1egEZiQizZ5CA1DOM1Gcw4tfOULy-_2eMGvL8pQPte5dScFON-0wxH2eXu8ijEQUbs$
+>>>>
+>>>>     drivers/usb/dwc3/ep0.c    | 3 +--
+>>>>     drivers/usb/dwc3/gadget.c | 5 ++++-
+>>>>     2 files changed, 5 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>>>> index 506ef717fdc0..5851b0e9db0a 100644
+>>>> --- a/drivers/usb/dwc3/ep0.c
+>>>> +++ b/drivers/usb/dwc3/ep0.c
+>>>> @@ -290,8 +290,7 @@ void dwc3_ep0_out_start(struct dwc3 *dwc)
+>>>>             if (!(dwc3_ep->flags & DWC3_EP_DELAY_STOP))
+>>>>                 continue;
+>>>>     -        dwc3_ep->flags &= ~DWC3_EP_DELAY_STOP;
+>>>
+>>> If we don't clear this flag here,
+>>>
+>>
+>> This is why I added the dwc->connected argument to control the
+>> "interrupt" argument.
+>>
+>>>> - dwc3_stop_active_transfer(dwc3_ep, true, true);
+>>>> +        dwc3_stop_active_transfer(dwc3_ep, true, dwc->connected);
+>>>>         }
+>>>>     }
+>>>>     diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>> index ee85b773e3fe..41b7007358de 100644
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -1693,6 +1693,7 @@ static int __dwc3_stop_active_transfer(struct
+>>>> dwc3_ep *dep, bool force, bool int
+>>>>             dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
+>>>>         else if (!ret)
+>>>>             dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
+>>>> +    dep->flags &= ~DWC3_EP_DELAY_STOP;
+>>>>            return ret;
+>>>>     }
+>>>> @@ -3686,8 +3687,10 @@ void dwc3_stop_active_transfer(struct dwc3_ep
+>>>> *dep, bool force,
+>>>>         if (dep->number <= 1 && dwc->ep0state != EP0_DATA_PHASE)
+>>>>             return;
+>>>>     +    if (interrupt && (dep->flags & DWC3_EP_DELAY_STOP))
+>>>> +        return;
+>>>> +
+>>>
+>>> then it may not go through here. I think I made this same mistake in my
+>>> previous suggestion.
+>>>
+>>
+>> Since dwc->connected is set to FALSE before we call stop active
+>> transfers, if we ever run into a situation where delayed stop is set
+>> already, then it should go through.
+>>
 > 
+> Then the check for request dequeue that we did previously will not work
+> anymore.
+> 
+
+Could you help clarify?  The pullup refactor kind of shifted some of the 
+previous checks we had in the dequeue path, and combined with with the 
+stop active transfer checks.
+
+I think there was an issue w/ the patch I submitted though.  the above 
+snippet should be replacing what is there:
+
+void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
+	bool interrupt)
+{
+...
+	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
+	    /* Following should be removed --- (dep->flags & 
+DWC3_EP_DELAY_STOP) || */
+	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+		return;
+
+Thanks
+Wesley Cheng

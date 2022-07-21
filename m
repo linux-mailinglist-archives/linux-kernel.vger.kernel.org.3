@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA84257C949
+	by mail.lfdr.de (Postfix) with ESMTP id 2325D57C947
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 12:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiGUKpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 06:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        id S231981AbiGUKqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 06:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbiGUKpp (ORCPT
+        with ESMTP id S232935AbiGUKpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 06:45:45 -0400
+        Thu, 21 Jul 2022 06:45:47 -0400
 Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C549B4E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:45:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3015D7E007
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 03:45:46 -0700 (PDT)
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B51361A3631;
-        Thu, 21 Jul 2022 12:45:43 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DE5571A362E;
+        Thu, 21 Jul 2022 12:45:44 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7E0D11A362D;
-        Thu, 21 Jul 2022 12:45:43 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7D3351A362D;
+        Thu, 21 Jul 2022 12:45:44 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 0D0F51800318;
-        Thu, 21 Jul 2022 18:45:41 +0800 (+08)
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 0ACC5180222A;
+        Thu, 21 Jul 2022 18:45:42 +0800 (+08)
 From:   Shengjiu Wang <shengjiu.wang@nxp.com>
 To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
         shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 -next 3/5] ASoC: fsl-asoc-card: force cast the asrc_format type
-Date:   Thu, 21 Jul 2022 18:29:51 +0800
-Message-Id: <1658399393-28777-4-git-send-email-shengjiu.wang@nxp.com>
+Subject: [PATCH v2 -next 4/5] ASoC: fsl_easrc: use snd_pcm_format_t type for sample_format
+Date:   Thu, 21 Jul 2022 18:29:52 +0800
+Message-Id: <1658399393-28777-5-git-send-email-shengjiu.wang@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1658399393-28777-1-git-send-email-shengjiu.wang@nxp.com>
 References: <1658399393-28777-1-git-send-email-shengjiu.wang@nxp.com>
@@ -45,39 +45,97 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Fix sparse warning:
-sound/soc/fsl/fsl-asoc-card.c:833:45: sparse: warning: incorrect type in argument 3 (different base types)
-sound/soc/fsl/fsl-asoc-card.c:833:45: sparse:    expected unsigned int [usertype] *out_value
-sound/soc/fsl/fsl-asoc-card.c:833:45: sparse:    got restricted snd_pcm_format_t *
+sound/soc/fsl/fsl_easrc.c:562:33: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/fsl/fsl_easrc.c:563:34: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/fsl/fsl_easrc.c:565:38: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/fsl/fsl_easrc.c:566:39: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/fsl/fsl_easrc.c:608:33: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/fsl/fsl_easrc.c:609:34: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/fsl/fsl_easrc.c:615:40: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/fsl/fsl_easrc.c:616:41: sparse: warning: restricted snd_pcm_format_t degrades to integer
 
-Fixes: 859e364302c5 ("ASoC: fsl-asoc-card: Support new property fsl, asrc-format")
+sound/soc/fsl/fsl_easrc.c:1465:51: sparse: warning: incorrect type in assignment (different base types)
+sound/soc/fsl/fsl_easrc.c:1465:51: sparse:    expected unsigned int sample_format
+sound/soc/fsl/fsl_easrc.c:1465:51: sparse:    got restricted snd_pcm_format_t [usertype] format
+sound/soc/fsl/fsl_easrc.c:1467:52: sparse: warning: incorrect type in assignment (different base types)
+sound/soc/fsl/fsl_easrc.c:1467:52: sparse:    expected unsigned int sample_format
+sound/soc/fsl/fsl_easrc.c:1467:52: sparse:    got restricted snd_pcm_format_t [usertype] asrc_format
+sound/soc/fsl/fsl_easrc.c:1470:52: sparse: warning: incorrect type in assignment (different base types)
+sound/soc/fsl/fsl_easrc.c:1470:52: sparse:    expected unsigned int sample_format
+sound/soc/fsl/fsl_easrc.c:1470:52: sparse:    got restricted snd_pcm_format_t [usertype] format
+sound/soc/fsl/fsl_easrc.c:1472:51: sparse: warning: incorrect type in assignment (different base types)
+sound/soc/fsl/fsl_easrc.c:1472:51: sparse:    expected unsigned int sample_format
+sound/soc/fsl/fsl_easrc.c:1472:51: sparse:    got restricted snd_pcm_format_t [usertype] asrc_format
+sound/soc/fsl/fsl_easrc.c:1484:41: sparse: warning: incorrect type in argument 2 (different base types)
+sound/soc/fsl/fsl_easrc.c:1484:41: sparse:    expected restricted snd_pcm_format_t [usertype] *in_raw_format
+sound/soc/fsl/fsl_easrc.c:1484:41: sparse:    got unsigned int *
+sound/soc/fsl/fsl_easrc.c:1485:41: sparse: warning: incorrect type in argument 3 (different base types)
+sound/soc/fsl/fsl_easrc.c:1485:41: sparse:    expected restricted snd_pcm_format_t [usertype] *out_raw_format
+sound/soc/fsl/fsl_easrc.c:1485:41: sparse:    got unsigned int *
+sound/soc/fsl/fsl_easrc.c:1937:60: sparse: warning: incorrect type in argument 3 (different base types)
+sound/soc/fsl/fsl_easrc.c:1937:60: sparse:    expected unsigned int [usertype] *out_value
+sound/soc/fsl/fsl_easrc.c:1937:60: sparse:    got restricted snd_pcm_format_t *
+sound/soc/fsl/fsl_easrc.c:1943:49: sparse: warning: restricted snd_pcm_format_t degrades to integer
+
+Fixes: 955ac624058f ("ASoC: fsl_easrc: Add EASRC ASoC CPU DAI drivers")
 Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 ---
- sound/soc/fsl/fsl-asoc-card.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ sound/soc/fsl/fsl_easrc.c | 9 ++++++---
+ sound/soc/fsl/fsl_easrc.h | 2 +-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/fsl/fsl-asoc-card.c b/sound/soc/fsl/fsl-asoc-card.c
-index d9a0d4768c4d..c836848ef0a6 100644
---- a/sound/soc/fsl/fsl-asoc-card.c
-+++ b/sound/soc/fsl/fsl-asoc-card.c
-@@ -537,6 +537,7 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
- 	struct device *codec_dev = NULL;
- 	const char *codec_dai_name;
- 	const char *codec_dev_name;
+diff --git a/sound/soc/fsl/fsl_easrc.c b/sound/soc/fsl/fsl_easrc.c
+index ea96b0fb6b20..3153d19136b2 100644
+--- a/sound/soc/fsl/fsl_easrc.c
++++ b/sound/soc/fsl/fsl_easrc.c
+@@ -476,7 +476,8 @@ static int fsl_easrc_prefilter_config(struct fsl_asrc *easrc,
+ 	struct fsl_asrc_pair *ctx;
+ 	struct device *dev;
+ 	u32 inrate, outrate, offset = 0;
+-	u32 in_s_rate, out_s_rate, in_s_fmt, out_s_fmt;
++	u32 in_s_rate, out_s_rate;
++	snd_pcm_format_t in_s_fmt, out_s_fmt;
+ 	int ret, i;
+ 
+ 	if (!easrc)
+@@ -1874,6 +1875,7 @@ static int fsl_easrc_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct device_node *np;
+ 	void __iomem *regs;
 +	u32 asrc_fmt = 0;
- 	u32 width;
- 	int ret;
+ 	int ret, irq;
  
-@@ -829,8 +830,8 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
- 			goto asrc_fail;
- 		}
+ 	easrc = devm_kzalloc(dev, sizeof(*easrc), GFP_KERNEL);
+@@ -1934,13 +1936,14 @@ static int fsl_easrc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
--		ret = of_property_read_u32(asrc_np, "fsl,asrc-format",
--					   &priv->asrc_format);
-+		ret = of_property_read_u32(asrc_np, "fsl,asrc-format", &asrc_fmt);
-+		priv->asrc_format = (__force snd_pcm_format_t)asrc_fmt;
- 		if (ret) {
- 			/* Fallback to old binding; translate to asrc_format */
- 			ret = of_property_read_u32(asrc_np, "fsl,asrc-width",
+-	ret = of_property_read_u32(np, "fsl,asrc-format", &easrc->asrc_format);
++	ret = of_property_read_u32(np, "fsl,asrc-format", &asrc_fmt);
++	easrc->asrc_format = (__force snd_pcm_format_t)asrc_fmt;
+ 	if (ret) {
+ 		dev_err(dev, "failed to asrc format\n");
+ 		return ret;
+ 	}
+ 
+-	if (!(FSL_EASRC_FORMATS & (1ULL << easrc->asrc_format))) {
++	if (!(FSL_EASRC_FORMATS & (pcm_format_to_bits(easrc->asrc_format)))) {
+ 		dev_warn(dev, "unsupported format, switching to S24_LE\n");
+ 		easrc->asrc_format = SNDRV_PCM_FORMAT_S24_LE;
+ 	}
+diff --git a/sound/soc/fsl/fsl_easrc.h b/sound/soc/fsl/fsl_easrc.h
+index 86d5c360d4f5..7c70dac52713 100644
+--- a/sound/soc/fsl/fsl_easrc.h
++++ b/sound/soc/fsl/fsl_easrc.h
+@@ -569,7 +569,7 @@ struct fsl_easrc_io_params {
+ 	unsigned int access_len;
+ 	unsigned int fifo_wtmk;
+ 	unsigned int sample_rate;
+-	unsigned int sample_format;
++	snd_pcm_format_t sample_format;
+ 	unsigned int norm_rate;
+ };
+ 
 -- 
 2.34.1
 

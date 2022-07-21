@@ -2,189 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A749457C720
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7F157C73C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiGUJNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S232858AbiGUJO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiGUJNc (ORCPT
+        with ESMTP id S232829AbiGUJO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:13:32 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE15631E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:13:31 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id u14so1108276lju.0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TpS5izxbfaIi7KiXxTWz4goQ0xYb3Nec6QgQZFgkaFE=;
-        b=Ne/Tamn9sbxHkFifvNCByhbqPuu7S59vYRhKjA+pAGtq/voVmRpIKPGl9l2Kjbc98w
-         5CKROxuqxUCEqexcCgU3SHklH4gCpLkkMPZ5fTqsEk1Q0mBkpckAnTqyH19AT7cWqqx1
-         GtuOTVsIHaeXnoC4oGX78S5T9pCG+PPPP/NfC/cu7xK69P8GkXvmY2Yoe7utySXmSHLB
-         l3QomXa/Hw95FksUG9tfQW0bJ+lNDf0NtjzhudXzf2B6isggQukBIHvIZGLeSQl7OOxI
-         oqCh+uWtxNvECLXZPtL8zCbd6CyhMkDXx2EuFxw7aizwyLDeGHefcD2w32KfH0X1pIw6
-         9qpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TpS5izxbfaIi7KiXxTWz4goQ0xYb3Nec6QgQZFgkaFE=;
-        b=vcs/aW+w+Ob2Lx+1Nd1p+4DiRnxy/7D8JSmJ4yqTxvSLyb2xpBjEWuSwLk47Nttq/R
-         e+f1NS6g8pjNazZZQa9rlRtV2m9F2k7gceY/92AmsENLpJFyn8Dxk6SVBr9qEb8FX1E0
-         A6F3fTTGzI9iuYHuapzr8TZRkAAKUqUzbmABbe0mQmnbeV/BSHVC4NlMByVAU1t2Ecn+
-         rlzFWplCXmyKT0FOY4O07xfAEtny/93iXBLOTOpmEjcCfLdtjYbhYXdNc1DoYQ1Cq+OA
-         w4JTBjwCMFAYrD7q3zXQ948DOFNUySd2VR068asGwAYgHFPXjnJRvOPi9e8B8gyisPmx
-         5F7Q==
-X-Gm-Message-State: AJIora9WPXF/Yi5asPNz5CDxbBO5/22/GZDP15X/U8rEw6Mn+l1cxG/4
-        feVNpEE5SdkFYeKRWUT+L0BkMQ==
-X-Google-Smtp-Source: AGRyM1vl+UbQxsnzo9Wgux87cQYIJBlZXhKDpg0KV4cXsthLRh+gvdcdYWQ7aL/wMk5e1MmMIqymUg==
-X-Received: by 2002:a2e:504:0:b0:25d:529a:3852 with SMTP id 4-20020a2e0504000000b0025d529a3852mr17569239ljf.179.1658394809488;
-        Thu, 21 Jul 2022 02:13:29 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id y11-20020a05651c106b00b002554dce4048sm366771ljm.53.2022.07.21.02.13.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 02:13:28 -0700 (PDT)
-Message-ID: <84853ee4-94aa-585d-e13d-dca21a6ac37e@linaro.org>
-Date:   Thu, 21 Jul 2022 11:13:26 +0200
+        Thu, 21 Jul 2022 05:14:58 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DBF3FA23;
+        Thu, 21 Jul 2022 02:14:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=chengyou@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VK.RF5m_1658394892;
+Received: from 192.168.0.4(mailfrom:chengyou@linux.alibaba.com fp:SMTPD_---0VK.RF5m_1658394892)
+          by smtp.aliyun-inc.com;
+          Thu, 21 Jul 2022 17:14:54 +0800
+Message-ID: <6f684f43-4c98-8f27-abea-02ad5f68cef1@linux.alibaba.com>
+Date:   Thu, 21 Jul 2022 17:14:52 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 2/5] dt-bindings: phy: Add ARTPEC-8 PCIe phy
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] RDMA/erdma: Use the bitmap API to allocate bitmaps
 Content-Language: en-US
-To:     wangseok.lee@samsung.com,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
-        "lars.persson@axis.com" <lars.persson@axis.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
-        "kernel@axis.com" <kernel@axis.com>
-Cc:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Yeeun Kim <yeeun119.kim@samsung.com>
-References: <20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p5>
- <CGME20220720055108epcms2p563c65b3de6333ccbc68386aa2471a800@epcms2p6>
- <20220720055716epcms2p60e80b1089dca0f83a894262bce676858@epcms2p6>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220720055716epcms2p60e80b1089dca0f83a894262bce676858@epcms2p6>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kai Shen <kaishen@linux.alibaba.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <2764b6e204b32ef8c198a5efaf6c6bc4119f7665.1657301795.git.christophe.jaillet@wanadoo.fr>
+ <670c57a2-6432-80c9-cdc0-496d836d7bf0@linux.alibaba.com>
+ <20220712090110.GL2338@kadam> <20220719125434.GG5049@ziepe.ca>
+ <20220719130125.GB2316@kadam>
+ <7075158a-64c1-8f69-7de1-9a60ee914f05@wanadoo.fr>
+ <5bcd437f-92a4-1c04-796c-41559dd2823a@linux.alibaba.com>
+ <YtkA4tBhlSHX76JM@unreal>
+From:   Cheng Xu <chengyou@linux.alibaba.com>
+In-Reply-To: <YtkA4tBhlSHX76JM@unreal>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/07/2022 07:57, Wangseok Lee wrote:
-> Add description to support Axis, ARTPEC-8 SoC. ARTPEC-8 is the SoC platform
-> of Axis Communications and PCIe PHY is designed based on Samsung PHY.
-> 
-> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
-> ---
-> v3->v4 :
-> -Add "fsys-sysreg" to properties
-> -Modify the "lcpll-ref-clk" and "clocks" in properties
->  "lcpll-ref-clk" is custom properties, so add 'vendor', type(enum),
->  description
->  Add the maxItem in clocks, add clock-names in properties
-> 
-> v2->v3 :
-> -Modify version history to fit the linux commit rule
-> -Remove 'Device Tree Bindings' on title
-> -Remove clock-names entries
-> -Change node name to soc from artpec8 on excamples
-> 
-> v1->v2 :
-> -'make dt_binding_check' result improvement
-> -Add the missing property list
-> -Align the indentation of continued lines/entries
-> ---
->  .../bindings/phy/axis,artpec8-pcie-phy.yaml        | 85 ++++++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
-> new file mode 100644
-> index 0000000..9db39ef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/axis,artpec8-pcie-phy.yaml
-> @@ -0,0 +1,85 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/axis,artpec8-pcie-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ARTPEC-8 SoC PCIe PHY
-> +
-> +maintainers:
-> +  - Jesper Nilsson <jesper.nilsson@axis.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: axis,artpec8-pcie-phy
-> +
-> +  reg:
-> +    items:
-> +      - description: PHY registers.
-> +      - description: PHY coding sublayer registers.
-> +
-> +  reg-names:
-> +    items:
-> +      - const: phy
-> +      - const: pcs
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ref
-> +
-> +  samsung,fsys-sysreg:
-> +    description:
-> +      Phandle to system register of fsys block.
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
-> +  num-lanes:
-> +    const: 2
-> +
-> +  axis,lcpll-ref-clk:
-> +    description:
-> +      select the reference clock of phy and initialization is performed
-> +      with the reference clock according to the selected value.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-This looks like hardware register value... but after looking at driver
-you rather need string... although REF_CLK_RESERVED is confusing. You
-need to describe the feature, not some device programming model.
 
-Then looking deeper it seems you just made a workaround around common
-clock framework. At least for XO and SOC case - you just implemented a
-clock mux in your PHY driver!
+On 7/21/22 3:31 PM, Leon Romanovsky wrote:
+> On Wed, Jul 20, 2022 at 09:58:24AM +0800, Cheng Xu wrote:
+>>
+>>
+>> On 7/19/22 11:36 PM, Christophe JAILLET wrote:
+>>> Le 19/07/2022 à 15:01, Dan Carpenter a écrit :
+>>>> On Tue, Jul 19, 2022 at 09:54:34AM -0300, Jason Gunthorpe wrote:
+>>>>> On Tue, Jul 12, 2022 at 12:01:10PM +0300, Dan Carpenter wrote:
+>>>>>
+>>>>>> Best not to use any auto-formatting tools.  They are all bad.
+>>>>>
+>>>>> Have you tried clang-format? I wouldn't call it bad..
+>>>>
+>>>> I prefered Christophe's formatting to clang's.  ;)
+>>>>
+>>>> regards,
+>>>> dan carpenter
+>>>>
+>>>>
+>>>
+>>> Hi,
+>>>
+>>> (some other files in the same directory also have some checkpatch warning/error)
+>>
+>> I just double checked the checkpatch results, Two type warnings reported:
+>>
+>>  - WARNING: Missing commit description - Add an appropriate one (for patch 0001)
+>>  - WARNING: added, moved or deleted file(s), does MAINTAINERS need updating? (for almost all patches except 0001/0011)
+>>
+>> For the first warning, the change is very simple: add erdma's
+>> rdma_driver_id definition, I think the commit title can describe
+>> all things, and is enough.
+> 
+> To be clear, our preference is to have commit message in any case, even
+> for simple changes.
+> 
 
-Implement a clock driver instead and handle only special case - clock
-coming from IO.
+Sorry for this, I didn't know it previously. Before I sent our patches, I reviewed the EFA/SIW's
+upstreaming history, and siw only has one line commit title for simply changes, I followed.
 
-Best regards,
-Krzysztof
+I will update our patches to fix it in a few days, and collect potential feedback
+of erdma code in linux-next.
+
+Thanks,
+Cheng Xu

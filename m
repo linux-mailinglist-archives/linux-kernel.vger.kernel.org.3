@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEBA57CE7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D93057CE81
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 17:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiGUPEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 11:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
+        id S230407AbiGUPFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 11:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiGUPEE (ORCPT
+        with ESMTP id S229475AbiGUPFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 11:04:04 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE90E84ED4;
-        Thu, 21 Jul 2022 08:04:02 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id va17so3718246ejb.0;
-        Thu, 21 Jul 2022 08:04:02 -0700 (PDT)
+        Thu, 21 Jul 2022 11:05:18 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D596321
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:05:14 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id o12so2003168pfp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 08:05:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WZY3t0NZGuTXsMWoX5QYWqWMtkxGTr+i/nc1XlDM8Y4=;
-        b=NmgQ5WvuD8XqtCLLQuc6YUtqO0ImP9P0gljqHUyvnWjzwyFODmpUxqKyeGPpAc9cXC
-         Yb5y2d5LWhWPIY4F/+7CH4r/8gGB/HM9GVwBsWsXHyE5jms4sSkSwE6lyuCaWSF450WD
-         EdCxSH0zb68yesikhcpmtdXjhpdpLSBGyP279WP5/CHD9tXIayCrsVAhuKP82sP6NI2x
-         pEOVEKiAcq+YN6aQUgOICVdp+1bTikZF7+UVgAOGVZBpqK3tAztbVluyVm0RM9YIkym6
-         cb1zde7IGcSvaL0JptydfsA2H/6GyOikZZwFVu8Qr8DeJ+FoT5FmPShXTQ+PQnyaTjaU
-         QbwA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+qHP7skd3Cv7XJJygZVSwGskr21EGyWaFJgDdfd1xqA=;
+        b=oQSFR9+MjkkY1ur4gDW1MTlCrXf3uwlJLfESqNwsf2awYRDW0+8aavy8VzAuy9DB0G
+         JDCIQp1vt5BvWbaqkABHrCn9h2qVHzO/SxEDKgSBlbay4FQdznJ6OWnc4Hc0C/769sBL
+         aq7cj8hP0AUHXUTvnue16TNcqCwcMJHJ1Gz4cj7NXbvObCQklTY4pdJ1ZwEWRYUotwWt
+         BRQpaLf82OEJ9tYyxOPCUOLwadWEY7ln+vmIVrCj1MGptoVCZg53AGjaczk8CTfjFYcd
+         x+IeQO2qzB9zjTUGUovD73lL5DdL7DCL3eyEpBmg3MXYdMfYAAsyQOy2T2yk808kuO5O
+         Wxgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WZY3t0NZGuTXsMWoX5QYWqWMtkxGTr+i/nc1XlDM8Y4=;
-        b=QF6coiZ9Kuvpb39jEWrFGrypaJqFF5+jf1cw+FgMoHYke9xjOsOb+uznuxkiwivBM+
-         kXTnIeCI6QZdOCQsn6meJ7OPon8X+fgoqHlY1RV3qqu2x9ianMFsy8kLVEp4weX/oYdO
-         4ZdgOpPqRvtYJfmoIsZr79ZZWItSSNm6BI0RQFGSos1+lY6A27/qli4BzU8itDaj0SnR
-         J3/p4zcAumzaPNaTfunsqj9WYc/Yh3MpULSVfcoVOmEqEZXArDN6Xrr7CO9JDjIbTq1P
-         LcNpwbAJOiHVRzBAE8QAwy1buM5hvm/PTE02vebb6ZOlT74o/9FPiE4tBAodLwtSKLnM
-         HB2g==
-X-Gm-Message-State: AJIora+pvn4KCYUS6TMIOPXE2eVh2fCdBjXqUkH826i0Mzs6kiXMYORs
-        upz/MxzhuGdKqYx/Kmavsrk=
-X-Google-Smtp-Source: AGRyM1tx4qgDiPlw73OnGDJULo2qk1SNBkaYXmyBBcKtmntG8pWEIhoIv9VtYkaGcyjuJQmc48QmDQ==
-X-Received: by 2002:a17:907:75ce:b0:72b:305f:5985 with SMTP id jl14-20020a17090775ce00b0072b305f5985mr40127216ejc.527.1658415841341;
-        Thu, 21 Jul 2022 08:04:01 -0700 (PDT)
-Received: from jernej-laptop.localnet (86-58-13-89.dynamic.telemach.net. [86.58.13.89])
-        by smtp.gmail.com with ESMTPSA id w17-20020a056402071100b0043aa17dc199sm1097785edx.90.2022.07.21.08.03.57
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+qHP7skd3Cv7XJJygZVSwGskr21EGyWaFJgDdfd1xqA=;
+        b=DDFi0mEOV6rzuFtrmj64DxNb13TGUBZKTrTPhy5GnZV4fqWF70DXrGZsD+fBt1TYVt
+         ZdM5jr9SreBqTq1zsSW4Misdf/oNbtOMtGK/E5wl1kuNSQrrRJ+0ckryeka7mckbEEls
+         k1SjrMIwuuFqiOWsK0Sag3WciYxO1Tdouyanq1bs4eKlp+uAPjtI0Mhrux8AoMHf21l8
+         rPESxyfnhnyU2UQptv7+4aSURaRU541yrrk1MWWjDXkAPWqacSDRhpoNgKIrfk86+xYB
+         eU/ytOiLGFxfth8+5lp47gZEV4Ob1q8yy2bD8PBB4oY8A/TRp5LAxNuMJJXP6nn+n/8H
+         UVEw==
+X-Gm-Message-State: AJIora/fdV7uwD5Iyxgmuu0qftRivYelgcPKGp3X/u7r3YgH73cP1Pgn
+        w341Yss68TU6LgpAZPVv4LWTYQ==
+X-Google-Smtp-Source: AGRyM1uCSCT3ljh7PToWudc0PHcaebaKp/GEubhDiVG89ItWbH0HuD55vNtJx6Xaam1ITOer8uSeSA==
+X-Received: by 2002:a63:b56:0:b0:41a:495a:2a26 with SMTP id a22-20020a630b56000000b0041a495a2a26mr13293961pgl.411.1658415913932;
+        Thu, 21 Jul 2022 08:05:13 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id a17-20020aa78e91000000b005254e44b748sm1872610pfr.84.2022.07.21.08.05.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 08:04:00 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-oxnas@groups.io, linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-sh@vger.kernel.org
-Subject: Re: [PATCH 1/6] ARM: refresh defconfig files
-Date:   Thu, 21 Jul 2022 17:03:56 +0200
-Message-ID: <2073800.OBFZWjSADL@jernej-laptop>
-In-Reply-To: <20220721141325.2413920-2-arnd@kernel.org>
-References: <20220721141325.2413920-1-arnd@kernel.org> <20220721141325.2413920-2-arnd@kernel.org>
+        Thu, 21 Jul 2022 08:05:13 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 15:05:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+Message-ID: <YtlrJR3uP6940tjd@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
+ <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+ <39067d09-b32b-23a6-ae0e-00ac2fe0466c@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39067d09-b32b-23a6-ae0e-00ac2fe0466c@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,123 +102,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne =C4=8Detrtek, 21. julij 2022 ob 16:13:20 CEST je Arnd Bergmann napisal(=
-a):
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> A lot of Kconfig options have changed over the years, and we tend
-> to not do a blind 'make defconfig' to refresh the files, to ensure
-> we catch options that should not have gone away.
->=20
-> I used some a bit of scripting to only rework the bits where an
-> option moved around in any of the defconfig files, without also
-> dropping any of the other lines, to make it clearer which options
-> we no longer have.
->=20
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/configs/am200epdkit_defconfig    |  26 ++---
->  arch/arm/configs/aspeed_g4_defconfig      |  16 +--
->  arch/arm/configs/aspeed_g5_defconfig      |  16 +--
->  arch/arm/configs/assabet_defconfig        |   8 +-
->  arch/arm/configs/at91_dt_defconfig        |  10 +-
->  arch/arm/configs/axm55xx_defconfig        |  22 ++--
->  arch/arm/configs/badge4_defconfig         |   8 +-
->  arch/arm/configs/bcm2835_defconfig        |  36 +++----
->  arch/arm/configs/cerfcube_defconfig       |  16 +--
->  arch/arm/configs/clps711x_defconfig       |   2 +-
->  arch/arm/configs/cm_x300_defconfig        |  26 ++---
->  arch/arm/configs/cns3420vb_defconfig      |  18 ++--
->  arch/arm/configs/colibri_pxa270_defconfig |  32 +++---
->  arch/arm/configs/colibri_pxa300_defconfig |  10 +-
->  arch/arm/configs/collie_defconfig         |  20 ++--
->  arch/arm/configs/corgi_defconfig          |  44 ++++----
->  arch/arm/configs/davinci_all_defconfig    |  26 ++---
->  arch/arm/configs/dove_defconfig           |  28 ++---
->  arch/arm/configs/ep93xx_defconfig         |  16 +--
->  arch/arm/configs/eseries_pxa_defconfig    |  26 ++---
->  arch/arm/configs/exynos_defconfig         |  20 ++--
->  arch/arm/configs/ezx_defconfig            |  72 ++++++-------
->  arch/arm/configs/footbridge_defconfig     |  14 +--
->  arch/arm/configs/h3600_defconfig          |  10 +-
->  arch/arm/configs/h5000_defconfig          |  18 ++--
->  arch/arm/configs/hackkit_defconfig        |   4 +-
->  arch/arm/configs/hisi_defconfig           |  24 ++---
->  arch/arm/configs/imx_v4_v5_defconfig      |   8 +-
->  arch/arm/configs/imx_v6_v7_defconfig      |   8 +-
->  arch/arm/configs/integrator_defconfig     |   2 +-
->  arch/arm/configs/iop32x_defconfig         |  20 ++--
->  arch/arm/configs/jornada720_defconfig     |  10 +-
->  arch/arm/configs/keystone_defconfig       |  62 +++++------
->  arch/arm/configs/lart_defconfig           |   6 +-
->  arch/arm/configs/lpc18xx_defconfig        |  12 +--
->  arch/arm/configs/lpc32xx_defconfig        |   8 +-
->  arch/arm/configs/lpd270_defconfig         |   6 +-
->  arch/arm/configs/lubbock_defconfig        |  10 +-
->  arch/arm/configs/magician_defconfig       |  30 +++---
->  arch/arm/configs/mainstone_defconfig      |   4 +-
->  arch/arm/configs/milbeaut_m10v_defconfig  |   6 +-
->  arch/arm/configs/mini2440_defconfig       |   6 +-
->  arch/arm/configs/mmp2_defconfig           |  28 ++---
->  arch/arm/configs/moxart_defconfig         |  18 ++--
->  arch/arm/configs/mps2_defconfig           |  14 +--
->  arch/arm/configs/multi_v4t_defconfig      |   4 +-
->  arch/arm/configs/multi_v5_defconfig       |  12 +--
->  arch/arm/configs/multi_v7_defconfig       |  62 +++++------
->  arch/arm/configs/mv78xx0_defconfig        |  32 +++---
->  arch/arm/configs/mvebu_v5_defconfig       |  28 ++---
->  arch/arm/configs/mvebu_v7_defconfig       |   2 +-
->  arch/arm/configs/mxs_defconfig            |   4 +-
->  arch/arm/configs/neponset_defconfig       |  24 ++---
->  arch/arm/configs/netwinder_defconfig      |  10 +-
->  arch/arm/configs/nhk8815_defconfig        |   6 +-
->  arch/arm/configs/omap1_defconfig          |  74 ++++++-------
->  arch/arm/configs/omap2plus_defconfig      |  16 +--
->  arch/arm/configs/orion5x_defconfig        |  32 +++---
->  arch/arm/configs/oxnas_v6_defconfig       |  14 +--
->  arch/arm/configs/palmz72_defconfig        |  14 +--
->  arch/arm/configs/pcm027_defconfig         |  22 ++--
->  arch/arm/configs/pleb_defconfig           |   6 +-
->  arch/arm/configs/pxa168_defconfig         |  18 ++--
->  arch/arm/configs/pxa255-idp_defconfig     |  10 +-
->  arch/arm/configs/pxa3xx_defconfig         |  18 ++--
->  arch/arm/configs/pxa910_defconfig         |  22 ++--
->  arch/arm/configs/pxa_defconfig            | 126 +++++++++++-----------
->  arch/arm/configs/qcom_defconfig           |  60 +++++------
->  arch/arm/configs/realview_defconfig       |   8 +-
->  arch/arm/configs/rpc_defconfig            |  18 ++--
->  arch/arm/configs/s3c2410_defconfig        |   8 +-
->  arch/arm/configs/s3c6400_defconfig        |   2 +-
->  arch/arm/configs/s5pv210_defconfig        |   4 +-
->  arch/arm/configs/sama5_defconfig          |   8 +-
->  arch/arm/configs/sama7_defconfig          |   8 +-
->  arch/arm/configs/shannon_defconfig        |   8 +-
->  arch/arm/configs/simpad_defconfig         |  18 ++--
->  arch/arm/configs/socfpga_defconfig        |   4 +-
->  arch/arm/configs/spear13xx_defconfig      |  16 +--
->  arch/arm/configs/spear3xx_defconfig       |  10 +-
->  arch/arm/configs/spear6xx_defconfig       |   8 +-
->  arch/arm/configs/spitz_defconfig          |  44 ++++----
->  arch/arm/configs/stm32_defconfig          |  14 +--
->  arch/arm/configs/sunxi_defconfig          |   2 +-
+On Thu, Jul 21, 2022, David Hildenbrand wrote:
+> On 21.07.22 11:44, David Hildenbrand wrote:
+> > On 06.07.22 10:20, Chao Peng wrote:
+> >> Normally, a write to unallocated space of a file or the hole of a sparse
+> >> file automatically causes space allocation, for memfd, this equals to
+> >> memory allocation. This new seal prevents such automatically allocating,
+> >> either this is from a direct write() or a write on the previously
+> >> mmap-ed area. The seal does not prevent fallocate() so an explicit
+> >> fallocate() can still cause allocating and can be used to reserve
+> >> memory.
+> >>
+> >> This is used to prevent unintentional allocation from userspace on a
+> >> stray or careless write and any intentional allocation should use an
+> >> explicit fallocate(). One of the main usecases is to avoid memory double
+> >> allocation for confidential computing usage where we use two memfds to
+> >> back guest memory and at a single point only one memfd is alive and we
+> >> want to prevent memory allocation for the other memfd which may have
+> >> been mmap-ed previously. More discussion can be found at:
+> >>
+> >>   https://lkml.org/lkml/2022/6/14/1255
+> >>
+> >> Suggested-by: Sean Christopherson <seanjc@google.com>
+> >> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> >> ---
+> >>  include/uapi/linux/fcntl.h |  1 +
+> >>  mm/memfd.c                 |  3 ++-
+> >>  mm/shmem.c                 | 16 ++++++++++++++--
+> >>  3 files changed, 17 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+> >> index 2f86b2ad6d7e..98bdabc8e309 100644
+> >> --- a/include/uapi/linux/fcntl.h
+> >> +++ b/include/uapi/linux/fcntl.h
+> >> @@ -43,6 +43,7 @@
+> >>  #define F_SEAL_GROW	0x0004	/* prevent file from growing */
+> >>  #define F_SEAL_WRITE	0x0008	/* prevent writes */
+> >>  #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
+> >> +#define F_SEAL_AUTO_ALLOCATE	0x0020  /* prevent allocation for writes */
+> > 
+> > Why only "on writes" and not "on reads". IIRC, shmem doesn't support the
+> > shared zeropage, so you'll simply allocate a new page via read() or on
+> > read faults.
+> 
+> Correction: on read() we don't allocate a fresh page. But on read faults
+> we would. So this comment here needs clarification.
 
-=46or sunxi:
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
->  arch/arm/configs/tct_hammer_defconfig     |  12 +--
->  arch/arm/configs/tegra_defconfig          |  18 ++--
->  arch/arm/configs/trizeps4_defconfig       |  58 +++++-----
->  arch/arm/configs/u8500_defconfig          |   2 +-
->  arch/arm/configs/versatile_defconfig      |   4 +-
->  arch/arm/configs/vexpress_defconfig       |   4 +-
->  arch/arm/configs/vf610m4_defconfig        |   2 +-
->  arch/arm/configs/viper_defconfig          |  28 ++---
->  arch/arm/configs/vt8500_v6_v7_defconfig   |   2 +-
->  arch/arm/configs/xcep_defconfig           |  30 +++---
->  arch/arm/configs/zeus_defconfig           |  26 ++---
-
-
-
+Not just the comment, the code too.  The intent of F_SEAL_AUTO_ALLOCATE is very
+much to block _all_ implicit allocations (or maybe just fault-based allocations
+if "implicit" is too broad of a description).

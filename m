@@ -2,264 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD6857D2D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFF957D2D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbiGURyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S231985AbiGUR4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiGURyX (ORCPT
+        with ESMTP id S229540AbiGUR4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:54:23 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6347589675
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:54:22 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 17so2473062pfy.0
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to;
-        bh=5M9wqKER//0rDN866usNTE9YPEHR4cKE3LFskHfasMo=;
-        b=WzjsSMYRF5fwrG+LKBKYpLUeX4t8devtyHZ8FTcumK9M3eabwfvAKxEXy4L4BfuzTm
-         VfsE5mbwQb+JzlbSEtyHoiOVyTHn7kGuO81v5qbo/eoS0LJDuZr7M1g1sS5QG08c6/o3
-         bhoQFBxFj7GiHanpRytV3yMP8hf1fgD4E+kg8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=5M9wqKER//0rDN866usNTE9YPEHR4cKE3LFskHfasMo=;
-        b=nTb7uJzVrU64AqdwVzQmN/T4arug2p3PgmSdEAW/h2CjeO0B8BADyH9QONt2kLSlox
-         wx0okazK011a3pbbhvyqRS/09EB3HtMcbzsOcdDil5HdZaqv7IiwrtAT/7/SVLRoduW5
-         fWNb1IgnSBuTi8HPl/WtA6l/iL3hezscFlDVGQMQPFnDZopTMfLkL1H6z6lgDeKGU3d8
-         CTmMtYGeHOiEQAgdGxkymYHBDfvMX0SiWXBI8zu4Sr5UBi0lEq4WTWD1J3y8CgdJUqKX
-         5xGn0gkXxm5FkEQd2/x/+T+Ubej+Xc2FkaEC5H7yNKSl1ucmAfGQ4WrfBLXvmXNXg026
-         18VQ==
-X-Gm-Message-State: AJIora9aUKAfydCxgG83M50YvqJnq6FLKy3b0eN2MahBydB+xRUOH+Hf
-        VimuHoiQ4bytOeAw+TmPjT9e6pJEObOQ0skOK6KvswVLXmmGLTS1/TNkj3i++yUcas7EIrMVbx5
-        ItxngMj/ybnJuNCxPFBHFnAhE82YpPj6JqQPmA76pV5LQVUd129kojdZQWd6cyrL1J87k2fwTsg
-        j6j4ZNAN5I
-X-Google-Smtp-Source: AGRyM1ub0NIgEn3RjZTSnlDQ4XF6OpmrgJLTmcOTQ/DZHT6plXxGSxAOIphOjRK4bcZ0dbivv3E3RQ==
-X-Received: by 2002:a63:c158:0:b0:41a:6685:59de with SMTP id p24-20020a63c158000000b0041a668559demr8139294pgi.95.1658426061390;
-        Thu, 21 Jul 2022 10:54:21 -0700 (PDT)
-Received: from bcacpedev-irv-3.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id w1-20020a17090a028100b001f216a9d021sm3918909pja.40.2022.07.21.10.54.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 21 Jul 2022 10:54:20 -0700 (PDT)
-Subject: Re: [RESEND PATCH 3/9] arm64: dts: bcmbca: update BCM4908 board dts
- files
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220721000707.29557-1-william.zhang@broadcom.com>
- <07a566d45cf48baff70f027e52264aa8@milecki.pl>
-From:   William Zhang <william.zhang@broadcom.com>
-Message-ID: <62efc265-aeea-4394-2844-d54fdb0e05b7@broadcom.com>
-Date:   Thu, 21 Jul 2022 10:54:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.4.0
+        Thu, 21 Jul 2022 13:56:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F458810C
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aGCdA0oy0ExkilJgMyu6nxyVwVfsPF+6Fxmkt0K0bO4=; b=LWls5ks2K60cBgc7+u3P5xJeUe
+        hh0OUBx99MfBG4Wubbgh43z5J/oEJPjObRXlx1eZLY8GiI1VjK30OKZEUnk4CP9X5YkD3XwqECoGW
+        EhYW6+Ot3fiFnDl9FJp9ITANPB6HxKf/7ezohrRCBLaR5t8g1+P3ADVdfjCAagvnekC8EA5kYiJx1
+        2tjB47lLBg9NYfIcSthR0vlW6UWkdELYGKmcEu82K1bASqoe1NurIA+vhr/WJTrtyPUUG4t5YijSV
+        0RwEYp+3ry5hfsxCOQoabZCbIgo+elHnsvn8e6/p6ciKtIQYQUlqNT4lDRfBQq51ZXvxhldjGaYTn
+        fXBc2LDg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEaOz-005bM6-1a; Thu, 21 Jul 2022 17:55:57 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CE05B980BD2; Thu, 21 Jul 2022 19:55:55 +0200 (CEST)
+Date:   Thu, 21 Jul 2022 19:55:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Collingbourne <pcc@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Message-ID: <YtmTK93vHWQUFinE@worktop.programming.kicks-ass.net>
+References: <CABCJKudvSv9bAOrDLHki5XPYNJK6=PS-x8v=E08es8w4LJpxBw@mail.gmail.com>
+ <87fsiyuhyz.ffs@tglx>
+ <CAHk-=wjEDJ4+xg0CWR7CaCKnO6Nhzn+vjJy7CjaVmf9R+g_3ag@mail.gmail.com>
+ <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
+ <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net>
+ <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
+ <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
+ <Ytbnlms90+LBLbrY@google.com>
+ <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
+ <Ytl2vg15Hc0fh8Dl@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <07a566d45cf48baff70f027e52264aa8@milecki.pl>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004f777d05e4546853"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ytl2vg15Hc0fh8Dl@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004f777d05e4546853
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+On Thu, Jul 21, 2022 at 05:54:38PM +0200, Peter Zijlstra wrote:
+> My very firstest LLVM patch; except it explodes at runtime and I'm not
+> sure where to start looking...
+> 
+> On top of sami-llvm/kcfi
 
+Thanks Sami!
 
+this seems to work, let me go hack the kernel..
 
-On 07/20/2022 11:15 PM, Rafał Miłecki wrote:
-> On 2022-07-21 02:07, William Zhang wrote:
->> Append "brcm,bcmbca" to compatible strings based on the new bcmbca
->> binding rule for BCM4908 family based boards. This will break drivers
->> that use the old compatible string for binding. Fortunately there is no
->> such usage in linux and u-boot.
-> 
-> Why should an extra "compatible" value break anything? I don't think it
-> will happen unless some driver does some really crazy stuff (like
-> checking full list of "compatible" values).
-> 
-Yes anything along those lines will break. But there is no such 
-craziness in linux and u-boot(wouldn't be accepted in first place).  But 
-Krzysztof suggested to add that to the commit message.  I would prefer 
-not to add that either.
+---
+ clang/lib/Driver/SanitizerArgs.cpp     | 12 ---------
+ llvm/lib/Target/X86/X86AsmPrinter.cpp  | 11 --------
+ llvm/lib/Target/X86/X86MCInstLower.cpp | 47 ++++++++++++++++++++++------------
+ 3 files changed, 31 insertions(+), 39 deletions(-)
 
-> 
->> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> 
-> Other than confusing commit message:
-> 
-> Acked-by: Rafał Miłecki <rafal@milecki.pl>
-> 
-> 
->> ---
->>
->>  arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts | 2 +-
->>  .../dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts     | 2 +-
->>  arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts | 2 +-
->>  .../arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts | 2 +-
->>  4 files changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git
->> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
->> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
->> index 2dd028438c22..d8b60575eb4f 100644
->> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
->> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-netgear-r8000p.dts
->> @@ -7,7 +7,7 @@
->>  #include "bcm4906.dtsi"
->>
->>  / {
->> -    compatible = "netgear,r8000p", "brcm,bcm4906", "brcm,bcm4908";
->> +    compatible = "netgear,r8000p", "brcm,bcm4906", "brcm,bcm4908", 
->> "brcm,bcmbca";
->>      model = "Netgear R8000P";
->>
->>      memory@0 {
->> diff --git
->> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
->> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
->> index 064f7f549665..296393d4aaab 100644
->> --- 
->> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
->> +++ 
->> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4906-tplink-archer-c2300-v1.dts
->> @@ -7,7 +7,7 @@
->>  #include "bcm4906.dtsi"
->>
->>  / {
->> -    compatible = "tplink,archer-c2300-v1", "brcm,bcm4906", 
->> "brcm,bcm4908";
->> +    compatible = "tplink,archer-c2300-v1", "brcm,bcm4906",
->> "brcm,bcm4908", "brcm,bcmbca";
->>      model = "TP-Link Archer C2300 V1";
->>
->>      memory@0 {
->> diff --git
->> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
->> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
->> index 04f8524b5335..787c7ddf9102 100644
->> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
->> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts
->> @@ -6,7 +6,7 @@
->>  #include "bcm4908.dtsi"
->>
->>  / {
->> -    compatible = "asus,gt-ac5300", "brcm,bcm4908";
->> +    compatible = "asus,gt-ac5300", "brcm,bcm4908", "brcm,bcmbca";
->>      model = "Asus GT-AC5300";
->>
->>      memory@0 {
->> diff --git
->> a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
->> b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
->> index 3c2cf2d238b6..23b96c663239 100644
->> --- a/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
->> +++ b/arch/arm64/boot/dts/broadcom/bcm4908/bcm4908-netgear-raxe500.dts
->> @@ -3,7 +3,7 @@
->>  #include "bcm4908.dtsi"
->>
->>  / {
->> -    compatible = "netgear,raxe500", "brcm,bcm4908";
->> +    compatible = "netgear,raxe500", "brcm,bcm4908", "brcm,bcmbca";
->>      model = "Netgear RAXE500";
->>
->>      memory@0 {
-
---0000000000004f777d05e4546853
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
-fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
-+EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
-abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
-ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
-W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
-1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIP4ibY+gCLHmsTqykum3flxGixic
-3d2unqCFgIzrQ1PGMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDcyMTE3NTQyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAeIt7mfmIbkmApi8eAzhEp6Gw2z+ZSR1mEaPLBDcGRp6dh
-/EbdJnDGpLNaZWgHe2bVqZ8mhHSb4yWeUtd9x68/7ITCaE09QDpOVtGn1KNWfVWegekGTvgYfpzk
-5De2ODKi9hxtj+B9snjFVcNI1atFjykh5VMXKel3Uzst9uEJ7EuHPsnDWBOtWAq+ZOwRmMPaywI9
-5J9GFodLOaBd8xHT8SqJzYOWReZhHV86k/QlZ0AkbPiDlnWqBybJQnY6LHQJ37Q7UqDFalkC+9/Z
-hW2H7VO9CdJFr5XQ5Hy2J5iGR9pIwzPKELn58qb6h4vuQIgKLrF7KUDhqivPQ270ZeTW
---0000000000004f777d05e4546853--
+diff --git a/clang/lib/Driver/SanitizerArgs.cpp b/clang/lib/Driver/SanitizerArgs.cpp
+index 373a74399df0..b6ebc8ad1842 100644
+--- a/clang/lib/Driver/SanitizerArgs.cpp
++++ b/clang/lib/Driver/SanitizerArgs.cpp
+@@ -719,18 +719,6 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
+       D.Diag(diag::err_drv_argument_not_allowed_with)
+           << "-fsanitize=kcfi"
+           << lastArgumentForMask(D, Args, SanitizerKind::CFI);
+-
+-    if (Arg *A = Args.getLastArg(options::OPT_fpatchable_function_entry_EQ)) {
+-      StringRef S = A->getValue();
+-      unsigned N, M;
+-      // With -fpatchable-function-entry=N,M, where M > 0,
+-      // llvm::AsmPrinter::emitFunctionHeader injects nops before the
+-      // KCFI type identifier, which is currently unsupported.
+-      if (!S.consumeInteger(10, N) && S.consume_front(",") &&
+-          !S.consumeInteger(10, M) && M > 0)
+-        D.Diag(diag::err_drv_argument_not_allowed_with)
+-            << "-fsanitize=kcfi" << A->getAsString(Args);
+-    }
+   }
+ 
+   Stats = Args.hasFlag(options::OPT_fsanitize_stats,
+diff --git a/llvm/lib/Target/X86/X86AsmPrinter.cpp b/llvm/lib/Target/X86/X86AsmPrinter.cpp
+index 5e011d409ee8..ffdb95324da7 100644
+--- a/llvm/lib/Target/X86/X86AsmPrinter.cpp
++++ b/llvm/lib/Target/X86/X86AsmPrinter.cpp
+@@ -124,23 +124,12 @@ void X86AsmPrinter::emitKCFITypeId(const MachineFunction &MF,
+     OutStreamer->emitSymbolAttribute(FnSym, MCSA_ELF_TypeFunction);
+   OutStreamer->emitLabel(FnSym);
+ 
+-  // Emit int3 padding to allow runtime patching of the preamble.
+-  EmitAndCountInstruction(MCInstBuilder(X86::INT3));
+-  EmitAndCountInstruction(MCInstBuilder(X86::INT3));
+-
+   // Embed the type hash in the X86::MOV32ri instruction to avoid special
+   // casing object file parsers.
+   EmitAndCountInstruction(MCInstBuilder(X86::MOV32ri)
+                               .addReg(X86::EAX)
+                               .addImm(Type->getZExtValue()));
+ 
+-  // The type hash is encoded in the last four bytes of the X86::MOV32ri
+-  // instruction. Emit additional X86::INT3 padding to ensure the hash is
+-  // at offset -6 from the function start to avoid potential call target
+-  // gadgets in checks emitted by X86AsmPrinter::LowerKCFI_CHECK.
+-  EmitAndCountInstruction(MCInstBuilder(X86::INT3));
+-  EmitAndCountInstruction(MCInstBuilder(X86::INT3));
+-
+   if (MAI->hasDotTypeDotSizeDirective()) {
+     MCSymbol *EndSym = OutContext.createTempSymbol("cfi_func_end");
+     OutStreamer->emitLabel(EndSym);
+diff --git a/llvm/lib/Target/X86/X86MCInstLower.cpp b/llvm/lib/Target/X86/X86MCInstLower.cpp
+index 16c4d2e45970..4ed23348aa7c 100644
+--- a/llvm/lib/Target/X86/X86MCInstLower.cpp
++++ b/llvm/lib/Target/X86/X86MCInstLower.cpp
+@@ -1340,22 +1340,37 @@ void X86AsmPrinter::LowerKCFI_CHECK(const MachineInstr &MI) {
+   assert(std::next(MI.getIterator())->isCall() &&
+          "KCFI_CHECK not followed by a call instruction");
+ 
+-  // The type hash is encoded in the last four bytes of the X86::CMP32mi
+-  // instruction. If we decided to place the hash immediately before
+-  // indirect call targets (offset -4), the X86::JCC_1 instruction we'll
+-  // emit next would be a potential indirect call target as it's preceded
+-  // by a valid type hash.
+-  //
+-  // To avoid generating useful gadgets, X86AsmPrinter::emitKCFITypeId
+-  // emits the type hash prefix at offset -6, which makes X86::TRAP the
+-  // only possible target in this instruction sequence.
+-  EmitAndCountInstruction(MCInstBuilder(X86::CMP32mi)
+-                              .addReg(MI.getOperand(0).getReg())
+-                              .addImm(1)
+-                              .addReg(X86::NoRegister)
+-                              .addImm(-6)
+-                              .addReg(X86::NoRegister)
+-                              .addImm(MI.getOperand(1).getImm()));
++  const Function &F = MF->getFunction();
++  unsigned Imm = MI.getOperand(1).getImm();
++  unsigned Num = 0;
++
++  if (F.hasFnAttribute("patchable-function-prefix")) {
++    if (F.getFnAttribute("patchable-function-prefix")
++            .getValueAsString()
++            .getAsInteger(10, Num))
++      Num = 0;
++  } 
++
++  // movl $(~0x12345678), %r10d
++  EmitAndCountInstruction(MCInstBuilder(X86::MOV32ri)
++		  .addReg(X86::R10D) // dst
++		  .addImm(~Imm));
++
++  // negl %r10d
++  EmitAndCountInstruction(MCInstBuilder(X86::NEG32r)
++		  .addReg(X86::R10D) // dst
++		  .addReg(X86::R10D) // src
++		  );
++
++  // cmpl %r10d, -off(%r11)
++  EmitAndCountInstruction(MCInstBuilder(X86::CMP32mr)
++                              .addReg(MI.getOperand(0).getReg()) // base
++                              .addImm(0) // scale
++                              .addReg(0) // index
++                              .addImm(-(Num+4)) // offset
++                              .addReg(0) // segment
++                              .addReg(X86::R10D) // reg
++			      );
+ 
+   MCSymbol *Pass = OutContext.createTempSymbol();
+   EmitAndCountInstruction(

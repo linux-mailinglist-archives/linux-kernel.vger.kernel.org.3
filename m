@@ -2,113 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2697957D278
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E7257D255
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 19:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiGUR2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 13:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S229517AbiGURV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 13:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGUR2O (ORCPT
+        with ESMTP id S229485AbiGURVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:28:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA489EAF
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658424494; x=1689960494;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=C7OM+7gmEvFiG7txHrhKLL6FE+AyPkqqZ7WvQWwgEQE=;
-  b=K/PiTF2dtDxE/2ORKp063ZAcnBFck+2oi9tPvICxTcLlhW8kwineTDSC
-   vtTiYFJH5qyFqpEni3L2xFZPp4Glhg73PK226pmvJl5rpt6y/Yg9jnJdf
-   KZywwUVAbpBROBKgB2E62eVStndBHArbosHkOlp/Wit5HMv1Him62Y//m
-   s+u111LPen4LYDGujtsqTJ7+hTpy47XDA+za7nj5RAYflmtpJqhU171sK
-   VLJmuELtjZdgvux50MIcHpptUHgDgHEZq1YDD+m8/3tRRK7Q5X+3JTJAP
-   JfKPg5hSvb8nkbYw4dR1knSZRM9DBw2vbkYWVPGbuDq2dO+4pDGbtcwWr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="270156891"
-X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
-   d="scan'208";a="270156891"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:19:31 -0700
-X-IronPort-AV: E=Sophos;i="5.93,183,1654585200"; 
-   d="scan'208";a="573830939"
-Received: from vasantgx-mobl.amr.corp.intel.com (HELO [10.212.244.191]) ([10.212.244.191])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 10:19:30 -0700
-Message-ID: <fb9cbec5-6f64-4647-3bc2-30f07a0b6b59@intel.com>
-Date:   Thu, 21 Jul 2022 10:19:30 -0700
+        Thu, 21 Jul 2022 13:21:25 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981DB2B611
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:21:23 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id b26so3231407wrc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 10:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CmRxLVY9HuAG01Hu57i7xdSoJXhylPjj1q4eOpHaFLo=;
+        b=bTWUL7ViGNTVsC1FoDdx7RIkNJcFCZWlEiGsHbnuE+6RcUfQUpWssDkNFN/E4Dx2wc
+         S4QXVjfjyFqP9+KLSIg5alE48GBHoasHbTMPJJ0c97khOC+DXmIWPq2rA3KGqSRTo7p4
+         n8mLzpupa6zIRkP3mXzEPKc7oNuUDwZQS6IeeCevOwLeEEHk0HGihjt1E4h2e/ZsCPSr
+         OFWfOIOnC57+2bM9UB5fjBwRAyLdAL0Ufmt8j/AnA31QIl/1DKwDTY+jF3XJm5y3dAaT
+         MGToqoriWdQxlLDA6F/h5BRFAtA7/i6u7VNrC/qJ30AmrwL441/sKzUFEs3LtvjdWtel
+         zT8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CmRxLVY9HuAG01Hu57i7xdSoJXhylPjj1q4eOpHaFLo=;
+        b=D0DSKfLhui740D0u9LPle5upoHsWN/DEKAwiXwl0cB7NdLAdcSg3bNHSTg/9nHV2rG
+         IJE2lLSmjN976YQ9ET99bhCnlvKsmu06SFYgyKUyHPaYZ/2HdS0k48/n55yEx08aX7Eg
+         u5kHsBBqzFaNqLcBNNUhTQa4fmaZ5IcLahqlBg5IT+8mJXY3At9Md/+xFnMtjqogh+bV
+         +Ul4L2DS2g2MZ2pZ+PNeDaa7nt9D5x2EQ2FssBED9mwUdop6dwGrBFbVUIfRKIvrqtoh
+         hqP9r+GIvRKZnjZqrB+T4ZWyf3djCNcn5oV/dRpbimtzjhtnl2Fmrnh2VjfMk2icWiz4
+         nnUQ==
+X-Gm-Message-State: AJIora+k4x8NMRfdYwpIm5T4XRXFMyDSojKfzRvPMwJLVcAxN0s10nmX
+        DRgtIc5h2C9d/fKthvOO+ooWEw==
+X-Google-Smtp-Source: AGRyM1teRPSq/gbNJAmKT5r8AGTamBTGc9+ZMkZBVbSD6pG2a1PnAJYJzQxDdZRMi/sHSn+IxunABg==
+X-Received: by 2002:a05:6000:719:b0:21e:4530:c558 with SMTP id bs25-20020a056000071900b0021e4530c558mr8808003wrb.243.1658424081913;
+        Thu, 21 Jul 2022 10:21:21 -0700 (PDT)
+Received: from henark71.. ([109.76.125.251])
+        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b003a2cf1535aasm2455697wme.17.2022.07.21.10.21.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 10:21:21 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     u.kleine-koenig@pengutronix.de
+Cc:     conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        robh+dt@kernel.org, thierry.reding@gmail.com
+Subject: [PATCH v7 0/4] Microchip soft ip corePWM driver
+Date:   Thu, 21 Jul 2022 18:21:06 +0100
+Message-Id: <20220721172109.941900-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
- <d3808510-9974-258e-0c7b-9a76e0868d48@intel.com>
- <f043d9f5-8f89-4ef3-2ce1-75665122bb3a@linux.intel.com>
- <214e24f0-5236-be8d-024a-da48737d854a@intel.com>
- <e280aaf4-57da-6453-c31c-6996dc85219c@linux.intel.com>
- <a65473db-b307-c076-6d2f-8f2084d81eb5@intel.com>
- <b8af932e-13da-ddcd-4ecb-bd8369853242@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <b8af932e-13da-ddcd-4ecb-bd8369853242@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/21/22 10:16, Sathyanarayanan Kuppuswamy wrote:
->> What is this "additional data"?  Is that "REPORTDATA" from the TDX
->> module spec?
->>
->> 	"Additional REPORTDATA, a 64-byte value, is provided by the
->> 	guest TD to be included in the TDG.MR.REPORT."
-> 
-> It is not the REPORTDATA. REPORTDATA is already included in the TDREPORT during
-> REPORT generation process (using TDG.MR.REPORT).
-> 
-> Spec does not clearly define the details about the additional data. I think it is
-> related to certificates.
-> 
-> Isaku, do you have more details about it?
-> 
-> Current ABI allows attestation service and agent to decide the quote size. So
-> we can't make assumptions on what that size will be.
-> 
-> Following is copied from TDX Module specification, sec titled "Measurement
-> and Attestation"
-> 
-> An Intel SGX Quoting Enclave, written specifically to support quoting Intel TDX TDs,
-> uses a new ENCLU instruction leaf, EVERIFYREPORT2, to help check the integrity of the
-> TDG.MR.REPORT. If it passes, the Quoting Enclave can use a certified quote signing key
-> to sign a quote containing the guest TD’s measurements and the additional data being
-> quoted.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-<sigh> We're off in the weeds again.
+Hey Uwe, all,
 
-How many bytes does the TDX module read from and write to the guest
-physical address space?  What are the absolute limits?  What is the
-minimum and the maximum that the kernel needs to handle?
+(~same cover as v5)
+
+Added some extra patches so I have a cover letter this time.
+You pointed out that I was overriding npwmcells in the driver and I
+realised that the dt & binding were not correct so I have added two
+simple patches to deal with that. The dts patch I will take in my tree
+once the binding is applied.
+
+For the maintainers entry, I mentioned before that I have several
+changes in-flight for it. We are late~(ish)~ in the cycle so I doubt
+you'll be applying this for v5.20, but in the off chance you do - I
+would be happy to send it (with your Ack) alongside an i2c addition
+that is "deferred". I rebased it ~today~ on top of an additional change
+so it may not apply for you.
+
+In your review of v3, you had a lot of comments about the period and
+duty cycle calculations, so I have had another run at them. I converted
+the period calculation to "search" from the bottom up for the suitable
+prescale value. The duty cycle calculation has been fixed - the problem
+was exactly what I suspected in my replies to your review. I had to block
+the use of a 0xFF period_steps register value (which I think should be
+covered by the updated comment and limitation #2).
+
+Beyond that, I have rebased on -next and converted to the devm_ stuff
+in probe that was recently added & dropped remove() - as requested.
+I added locking to protect the period racing, changed the #defines and
+switched to returning -EINVAL when the period is locked to a value
+greater than that requested.
+
+I'll take the dts change myself once the rest is merged.
+
+Thanks,
+Conor.
+
+Changes from v6:
+- Dropped an unused variable that I'd missed
+- Actually check the return values of the mutex lock()s
+- Re-rebased on -next for the MAINTAINERS patch (again...)
+
+Changes from v5:
+- switched to a mutex b/c we must sleep with the lock taken
+- simplified the locking in apply() and added locking to get_state()
+- reworked apply() as requested
+- removed the loop in the period calculation (thanks Uwe!)
+- add a copy of the enable registers in the driver to save on reads.
+- remove the second (useless) write to sync_update
+- added some missing rounding in get_state()
+- couple other minor cleanups as requested in:
+https://lore.kernel.org/linux-riscv/20220709160206.cw5luo7kxdshoiua@pengutronix.de/
+
+Changes from v4:
+- dropped some accidentally added files
+
+Conor Dooley (4):
+  dt-bindings: pwm: fix microchip corePWM's pwm-cells
+  riscv: dts: fix the icicle's #pwm-cells
+  pwm: add microchip soft ip corePWM driver
+  MAINTAINERS: add pwm to PolarFire SoC entry
+
+ .../bindings/pwm/microchip,corepwm.yaml       |   4 +-
+ MAINTAINERS                                   |   1 +
+ .../dts/microchip/mpfs-icicle-kit-fabric.dtsi |   2 +-
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-microchip-core.c              | 371 ++++++++++++++++++
+ 6 files changed, 387 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/pwm/pwm-microchip-core.c
+
+
+base-commit: a3fd3ca134d9485a0f9a7bdcffd7f8bae27f79d3
+-- 
+2.37.1
+

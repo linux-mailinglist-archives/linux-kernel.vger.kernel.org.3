@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF21057D73B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 01:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1384657D73D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 01:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbiGUXG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 19:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S229498AbiGUXG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 19:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233928AbiGUXGL (ORCPT
+        with ESMTP id S230349AbiGUXGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 19:06:11 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8AA9368C
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 16:06:07 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id bh13so2990837pgb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 16:06:06 -0700 (PDT)
+        Thu, 21 Jul 2022 19:06:54 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF8E8C74D
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 16:06:52 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id r3so5338404ybr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 16:06:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=87wZkeERCeXfVURi93ftUkOINKaeWlxijauUdSoY5xA=;
-        b=fM7VSUuZ5Z2PC40pfTNXIOFR0ofADrIZupwXOuFZhywxnAMqmaPx48sy1+hMoc5Wqt
-         FAi4s5QxJF54Lg7m2esjHEMCFKCKudPDf7tsK1/UFKyR1mbSV95qW1fRUO01lcIWbrjz
-         XuuAZ1C6oDRlmtqgPKzeuwGkgYx0H15gFKsyurzqg51IJhkNQeQCrY+X/hGLsAPlOaD2
-         ujIg5nluWzJ6c8kIFeOelQfVI1BU2WEexH/pIPL3SZOndpDyb8PnGoXviwhiVCIQDPfy
-         jsNB13dFGzEjbviib46KqFfA3AMa40SYAZVCezff3OmUJSxGx7sVVmKLeOfTAExUucVJ
-         0Rcg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cTLhFXIHh0SUJ25wVZJw+HP2iRwlWac00C5bdTV0xrE=;
+        b=Xt7u6/rOiGa+WA9iGb4wzxgW9oSlxQmy0TfcioYyZgrNHiaMaxK43LSDcX+jm+toCt
+         BftxvGaSkf/vWCRkRra3CYO0XCUv+vLYYXVP4NtLQ1ycggMa2fGznwGYx0w1YWaC5Qw+
+         67kjByBYZY+F13k+7ab9cDWqazn1S+jCVav1NLA3HLV0A/tXeEnsuwD3jn0GCLLGZ3dG
+         Bv6vW2CQWegScocZeE705+IKMCsz07ps1p9hi4r6mC+okJVMha/GGhDaXXH5j0sdJff4
+         JWzTL6UWF8/kfhyDpcViaIrAlUMC9s2g2dDdOtjy8IijPe8P7v7CfAyDg2vVJWLOxNFg
+         gC9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=87wZkeERCeXfVURi93ftUkOINKaeWlxijauUdSoY5xA=;
-        b=ZVEAmoUFkHhqKvXU3hu69L8Te2HUyjzi3yJI1aEwoZy26kLlXMVnRXYe5YYvGen8ln
-         XI0KyYWDuHvm6cTBqVkl2od3SuYvrvJTr5dHu8zH06wNNyUi77rzhnKuGurOpwAvR+8+
-         dT0pUxNjLdMNPhB4tQawIMatdyZojWpjIyVw29oGxDrFdFCp06E6723r13Xxry273MtF
-         Am7BM43dN2cTPmOvilSnrt2nO9AvttPetL3lEYQcSa8j4tgtE1+b0MuofBTB0pisXFFh
-         4NAmMNXXKihxIAwrVJmDu0ayv8/iFF3YJ4TsGYsWp9/0kGHeYY+hbtVVWC2EIa3BZ6mI
-         6Jyg==
-X-Gm-Message-State: AJIora/qiIbKP+kypG3yp4xxs3gfi4Gg1gNe/IiM2fvinJJdVCxs2bn0
-        qq/+2oDwzOymbWtVf8Mxk2QHJw==
-X-Google-Smtp-Source: AGRyM1tcNPwrEFwaYRNv6k4BCQmt+bqE5SrACmuSFUKgq3xmhBDBrnyyEmcV4r/DfgnNtdc+SgWcJA==
-X-Received: by 2002:a05:6a00:2484:b0:52b:2be0:2191 with SMTP id c4-20020a056a00248400b0052b2be02191mr489868pfv.51.1658444765755;
-        Thu, 21 Jul 2022 16:06:05 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id c6-20020a62f846000000b0052ac99c2c1csm2324716pfm.83.2022.07.21.16.06.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 16:06:05 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 23:06:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 24/25] KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
-Message-ID: <Ytnb2Zc0ANQM+twN@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-25-vkuznets@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cTLhFXIHh0SUJ25wVZJw+HP2iRwlWac00C5bdTV0xrE=;
+        b=WwpVXHWuYHXgzDGe9rPkb9E52kOVipqPnX3BfRI4u925oaucLK2YqxhaLJHwp5xaLA
+         Y0UKop3cS/jXAgQfgXaSXfsRlSpkVxHIG2J81ebk+StwBVdgCqieR1YRQhwhD0gHcu3V
+         154ZS8JC5OT4VzxCD2E9Q3nFAhxij8cPQITXMfqISF8dMg/sjZqsuNSCQVpwSVprnk12
+         v2beQ+pcl1BLwbCraBbBSyddT1ijlM8DgXV3HRBJEekAnKNilyyin2f7pRdKbeXBqmbg
+         Cygsrli2Vr50wnZu7IuISfg64aoByUsqMvGhMjoI2tsRdQBEn1YKLYyDoyTso1v2qF1C
+         qeNg==
+X-Gm-Message-State: AJIora838N2HIrdaBP20XPgJmVAgKu7ZeFFAKbIEEmlo9Ai6zMVE+Ttb
+        WEPZ2zUb+rmOXnA8uGUz/tuiyL8XOG1ekV+/p+Zkfg==
+X-Google-Smtp-Source: AGRyM1uioPfGAyKMjHvvfN8AQOo9jULB0onEsOaXUuTW+LG1Vcj3oj+HzMgmiVdk0RUHy1+As357+DdWUA9o0m+XKng=
+X-Received: by 2002:a25:8384:0:b0:66f:ad5a:a7b9 with SMTP id
+ t4-20020a258384000000b0066fad5aa7b9mr777236ybk.352.1658444811762; Thu, 21 Jul
+ 2022 16:06:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714091327.1085353-25-vkuznets@redhat.com>
+References: <20210714061807.5737-1-martin.kepplinger@puri.sm>
+In-Reply-To: <20210714061807.5737-1-martin.kepplinger@puri.sm>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 21 Jul 2022 16:06:15 -0700
+Message-ID: <CAGETcx-rfcP9dFSstf7PKmc2W3kWRLCMRGz8uCvJxo-OpFpjgw@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: typec: tipd: Don't block probing of consumer of
+ "connector" nodes
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     grandmaster@al2klimov.de, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, rjw@rjwysocki.net, kernel@puri.sm,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,45 +70,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> @@ -2613,6 +2614,8 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->  	if (((vmx_msr_high >> 18) & 15) != 6)
->  		return -EIO;
->  
-> +	rdmsrl(MSR_IA32_VMX_MISC, misc_msr);
+On Tue, Jul 13, 2021 at 11:18 PM Martin Kepplinger
+<martin.kepplinger@puri.sm> wrote:
+>
+> Similar as with tcpm this patch lets fw_devlink know not to wait on the
+> fwnode to be populated as a struct device.
+>
+> Without this patch, USB functionality can be broken on some previously
+> supported boards.
+>
+> Fixes: 28ec344bb891 ("usb: typec: tcpm: Don't block probing of consumers of "connector" nodes")
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>
+> revision history
+> ----------------
+> v2: (thank you Saravana)
+> * add a code-comment why the call is needed.
+>
+> v1:
+> https://lore.kernel.org/linux-usb/20210713073946.102501-1-martin.kepplinger@puri.sm/
+>
+>
+>
+>  drivers/usb/typec/tipd/core.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 938219bc1b4b..21b3ae25c76d 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -629,6 +629,15 @@ static int tps6598x_probe(struct i2c_client *client)
+>         if (!fwnode)
+>                 return -ENODEV;
+>
+> +       /*
+> +        * This fwnode has a "compatible" property, but is never populated as a
+> +        * struct device. Instead we simply parse it to read the properties.
+> +        * This breaks fw_devlink=on. To maintain backward compatibility
+> +        * with existing DT files, we work around this by deleting any
+> +        * fwnode_links to/from this fwnode.
+> +        */
+> +       fw_devlink_purge_absent_suppliers(fwnode);
+> +
 
-Might make sense to sanitize fields that KVM doesn't use and that are not exposed
-to L1.  Not sure it's worthwhile though as many of the bits fall into a grey area,
-e.g. all the SMM stuff isn't technically used by KVM, but that's largely because
-much of it just isn't relevant to virtualization.
+Hey Martin,
 
-I'm totally ok leaving it as-is, though maybe name it "unsanitized_misc" or so
-to make that obvious?
+As part of a series I'm working on, I'm looking into deleting
+fw_devlink_purge_absent_suppliers() and having the driver core figure
+this out automatically.
 
->  	vmcs_conf->size = vmx_msr_high & 0x1fff;
->  	vmcs_conf->basic_cap = vmx_msr_high & ~0x1fff;
->  
-> @@ -2624,6 +2627,7 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->  	vmcs_conf->cpu_based_3rd_exec_ctrl = _cpu_based_3rd_exec_control;
->  	vmcs_conf->vmexit_ctrl         = _vmexit_control;
->  	vmcs_conf->vmentry_ctrl        = _vmentry_control;
-> +	vmcs_conf->misc	= misc_msr;
->  
->  	return 0;
->  }
-> @@ -8241,11 +8245,9 @@ static __init int hardware_setup(void)
->  
->  	if (enable_preemption_timer) {
->  		u64 use_timer_freq = 5000ULL * 1000 * 1000;
-> -		u64 vmx_msr;
->  
-> -		rdmsrl(MSR_IA32_VMX_MISC, vmx_msr);
->  		cpu_preemption_timer_multi =
-> -			vmx_msr & VMX_MISC_PREEMPTION_TIMER_RATE_MASK;
-> +			vmcs_config.misc & VMX_MISC_PREEMPTION_TIMER_RATE_MASK;
->  
->  		if (tsc_khz)
->  			use_timer_freq = (u64)tsc_khz * 1000;
-> -- 
-> 2.35.3
-> 
+So I was making sure all the current uses of
+fw_devlink_purge_absent_suppliers() would automatically be handled by
+driver core. But when I looked at this usage of
+fw_devlink_purge_absent_suppliers(), I didn't see any "compatible"
+property in the "connector" child node. So, I'm confused how you had a
+problem without this patch.
+
+fw_devlink would have created fwnode links
+between typec_pd and usb_dwc3_0, figured out it's a cycle and have
+stopped enforcing the "remote-endpoint" dependencies.
+
+Can you give me more details please on why you were having a problem
+without this patch?
+
+I'm looking at arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi as an
+example because you listed it in your v1 patch.
+
+-Saravana
+
+>         tps->role_sw = fwnode_usb_role_switch_get(fwnode);
+>         if (IS_ERR(tps->role_sw)) {
+>                 ret = PTR_ERR(tps->role_sw);
+> --
+> 2.30.2
+>

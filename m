@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2D957C4D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED4E57C4D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 09:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiGUHAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 03:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        id S231920AbiGUHA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 03:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbiGUHAB (ORCPT
+        with ESMTP id S231845AbiGUHA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:00:01 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A8657969A;
-        Thu, 21 Jul 2022 00:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=P7Abi
-        l4H36otn2wsbYWWyQKJi103I/rzypr3iHP5Q2k=; b=jdDxLuWNQwuVWNriNgsy/
-        3qtsnRh6zmafiCMFt7e68lnab2Sn/WXYuQIDT9/MmLyRsLo1t/eSEL/z/eT6QDB4
-        MfpctHx53psDM5o2y/9AwbR/5StG6dEGWznvbYiyIpF9saYzapKcMSmf0V+I9H+v
-        zwN2FsCBKv9qnKNpX9B3Uo=
-Received: from localhost.localdomain (unknown [112.97.57.47])
-        by smtp3 (Coremail) with SMTP id G9xpCgD3fV5o+dhiXse4QQ--.3284S2;
-        Thu, 21 Jul 2022 14:59:55 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH v2] s390/sthyi: Fix typo 'the the' in comment
-Date:   Thu, 21 Jul 2022 14:59:50 +0800
-Message-Id: <20220721065950.47992-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Jul 2022 03:00:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5CD1EC79;
+        Thu, 21 Jul 2022 00:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D165B8214A;
+        Thu, 21 Jul 2022 07:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA7CC341C0;
+        Thu, 21 Jul 2022 07:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658386822;
+        bh=QHcPH2JHX6WvolXMHHgwBQ6XXDa2Nmc2P9luaCk0fAA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aYR2WPk8fHDRmt4HxSJowwXmcdSaIUNyNMagKYr9YbPN7DSjQwzdfmaTyySdqG+NN
+         Jf1dEKsWcskddVYY4iH2hrbj8vvJUr2x6JiapbU0F5TRYTFZ08ZmR+vpr61JnzAzq/
+         begvg5VKKufybidHXlUFiuFapOGinjr4ObUnQv1j1Kn3u+YwYrQ/Iy0FxA2wIdMql4
+         C8DUWD/ClAFkQ9u0dbSD3nV0pJva/rrIjnoLPEf3uomiPU7sFQXE3Yu3xpMG5EiuDW
+         zH3I4L2GDG4D+qs5e/1NBHcdixkJaIa9X96hE7b1XXRSm+6TV4Vooz8EAMps/KR950
+         EVxLuyRGgxQsQ==
+Date:   Thu, 21 Jul 2022 10:00:18 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     zyjzyj2000@gmail.com, jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        renyu@nfschina.com
+Subject: Re: [PATCH] RDMA/rxe: Fix typo
+Message-ID: <Ytj5gsZQGZ6V4yNE@unreal>
+References: <20220701080019.13329-1-jiaming@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgD3fV5o+dhiXse4QQ--.3284S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFykWry3KFykGFyDAF15twb_yoW3Jwb_J3
-        WxCw4kWw40y3yIvry8Zr4S9ryvkanYgFZYyrs2g3y7XFyDKrZxZ3sYvF4UGrn5Xws8JrZ3
-        XF93W390va4qkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRd-PYUUUUUU==
-X-Originating-IP: [112.97.57.47]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJQtFZGAJpJjHbAAAsx
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220701080019.13329-1-jiaming@nfschina.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+On Fri, Jul 01, 2022 at 04:00:19PM +0800, Zhang Jiaming wrote:
+> There is a spelling mistake (writeable) in function rxe_check_bind_mw.
+> Fix it.
+> 
+> Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
+> ---
+>  drivers/infiniband/sw/rxe/rxe_mw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- arch/s390/kernel/sthyi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/s390/kernel/sthyi.c b/arch/s390/kernel/sthyi.c
-index 4d141e2c132e..dfc350fab384 100644
---- a/arch/s390/kernel/sthyi.c
-+++ b/arch/s390/kernel/sthyi.c
-@@ -250,7 +250,7 @@ static void fill_diag_mac(struct sthyi_sctns *sctns,
- 	sctns->mac.infmval1 |= MAC_CNT_VLD;
- }
- 
--/* Returns a pointer to the the next partition block. */
-+/* Returns a pointer to the next partition block. */
- static struct diag204_x_part_block *lpar_cpu_inf(struct lpar_cpu_inf *part_inf,
- 						 bool this_lpar,
- 						 void *diag224_buf,
--- 
-2.25.1
-
+Thanks, applied.

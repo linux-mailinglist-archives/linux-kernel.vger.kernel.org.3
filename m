@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4149057D5D3
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7E557D5D4
 	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiGUVU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
+        id S233857AbiGUVUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbiGUVUZ (ORCPT
+        with ESMTP id S233304AbiGUVUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:20:25 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724501DA67
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:20:24 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2dc7bdd666fso24204407b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=xoz21j2Dj3N22i5I3c/WmVlJjyxmAgsmaF7YGZS1igQ=;
-        b=r0CrshHTamGdv7nAX2cKNcCLazSyYJyvvzY4UhayDPzGRMDwZRP7CHkXtY4j+xI9wF
-         wtfbR1Y2qehU4i7DplHqn+PpyQUavJTWnmwWvvaN87Zcni1NiCma4ABFCtdPyQi9z2UL
-         FN/euEa7ngpeu88Fz5KwJH9v2re3f5vdSUOhr+07dc5waTJt70WFEXamTQHH90oEZ8Ez
-         s2nmMpA/rQCiffiSNRmt8tRrpGndqSw5TiPqDXRqg+V+4fFPVBvSgmj8C4NLk1/sZz/b
-         6iAzxWzIN5vOGy9krYodMG+7pglSQZI4H3v+0MYZO0uuggFCy+8oSczOhCMvL9xAP4Ft
-         f2Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=xoz21j2Dj3N22i5I3c/WmVlJjyxmAgsmaF7YGZS1igQ=;
-        b=F5xnhsOL5fO91EptTrRj/6troonf1t3cSUC+mlloYyaw90ZJS5vDE1Clum3maLKSPD
-         +VJsSxtYIh/SbWLxc9a0BwU9vJRI35HXd15rZwsHF2RVkm4tbBU2VmHtFcCPkYhmY4S+
-         9jOYvNzQaBanTkrpdfJDAmpju2ttIBWjCg73TP9hOgENze/4DAGxWbjm7k8mvTqi4kyn
-         ladICndzqn3wAwMwLLjzid+hIansv0o0aSUR0foaP0RWKZGwEwiI91sPbnDTBn/9C16A
-         vE1HKS2ct/ZXu12T0ogkH5lnRTypxu52Ugx9hkNAngVxxM9M8wXLgh+DEZzvVdhs4Npc
-         rRNA==
-X-Gm-Message-State: AJIora9c8ASxrf4L6cHVC92Mh/luUS89S1dq00guG8HnyDY4/kWYupxC
-        X8502zR3f4O/ggcTjtvQpBI3cAqBzbmsURUM3A==
-X-Google-Smtp-Source: AGRyM1vEU0TU6446zcFlt8XQ41VpLNIDpvLPJJWLFyAvdYxrrXtwtri0B4ajRFiKvqzZ4o36bIfOakNDOfb3+fL11Q==
-X-Received: from justinstitt.mtv.corp.google.com ([2620:15c:211:202:21e:d672:5a6a:420e])
- (user=justinstitt job=sendgmr) by 2002:a05:6902:706:b0:670:a469:6efb with
- SMTP id k6-20020a056902070600b00670a4696efbmr500406ybt.410.1658438423802;
- Thu, 21 Jul 2022 14:20:23 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 14:20:12 -0700
-Message-Id: <20220721212012.4060328-1-justinstitt@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH] drivers: lkdtm: fix clang -Wformat warning
-From:   Justin Stitt <justinstitt@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 17:20:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AD715838;
+        Thu, 21 Jul 2022 14:20:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98BE96181D;
+        Thu, 21 Jul 2022 21:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EA372C341C0;
+        Thu, 21 Jul 2022 21:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658438414;
+        bh=HUuVCf8AwAMI2usXH0mlaxaxdAySQiYPiu5NUkSZYro=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cxO5QSNahJG1CTiuTmit/uJ3/vQpQbwD3RXU/9tHvGJH3OXy750qY2796yxEvtD3d
+         qlyAU+BpEEQk6DM8O3lFi9Hzz5XNcGjZ6OQdsHOPACaMgiuSd/j563x2cZQafOECxt
+         6KFIUAtPcAWy9Bz4mZADCkN5HS78lAxXtmnJex4FzRAQhhYqkwxBdzAsXd6qixrWW7
+         SHGsuTNoUJw2nVzJ13spduBAIPtzZP80RlNnNcMJLBTj85IkUcHZepJsmqwoCXTFrp
+         aZzIosXvq9SMCdamLDUSufweNuBjwz6KCgFhd2yvu3WSZWOyhN4NtZjGSIuldq2ofI
+         69PqoSGcYmLBg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CFB9DD9DDDD;
+        Thu, 21 Jul 2022 21:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/2] Bluetooth: hci_sync: Refactor add Adv Monitor
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <165843841384.2414.3327226907905248679.git-patchwork-notify@kernel.org>
+Date:   Thu, 21 Jul 2022 21:20:13 +0000
+References: <20220720162102.v2.1.If745ed1d05d98c002fc84ba60cef99eb786b7caa@changeid>
+In-Reply-To: <20220720162102.v2.1.If745ed1d05d98c002fc84ba60cef99eb786b7caa@changeid>
+To:     Manish Mandlik <mmandlik@google.com>
+Cc:     marcel@holtmann.org, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org, mcchou@google.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        johan.hedberg@gmail.com, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with Clang we encounter the following warning
-(ARCH=hexagon + CONFIG_FRAME_WARN=0):
-| ../drivers/misc/lkdtm/bugs.c:107:3: error: format specifies type
-| 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
-|                 REC_STACK_SIZE, recur_count);
-|                 ^~~~~~~~~~~~~~
+Hello:
 
-Cast REC_STACK_SIZE to `unsigned long` to match format specifier `%lu`.
+This series was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/378
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
-Reported by Nathan here:
-https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
+On Wed, 20 Jul 2022 16:21:13 -0700 you wrote:
+> Make use of hci_cmd_sync_queue for adding an advertisement monitor.
+> 
+> Signed-off-by: Manish Mandlik <mmandlik@google.com>
+> Reviewed-by: Miao-chen Chou <mcchou@google.com>
+> ---
+> 
+> Changes in v2:
+> - Refactored to correctly use hci_cmd_sync_queue
+> 
+> [...]
 
- drivers/misc/lkdtm/bugs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here is the summary with links:
+  - [v2,1/2] Bluetooth: hci_sync: Refactor add Adv Monitor
+    https://git.kernel.org/bluetooth/bluetooth-next/c/75d2509cd04e
+  - [v2,2/2] Bluetooth: hci_sync: Refactor remove Adv Monitor
+    https://git.kernel.org/bluetooth/bluetooth-next/c/6b88eff43704
 
-diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
-index 009239ad1d8a..6381255aaecc 100644
---- a/drivers/misc/lkdtm/bugs.c
-+++ b/drivers/misc/lkdtm/bugs.c
-@@ -29,7 +29,7 @@ struct lkdtm_list {
- #if defined(CONFIG_FRAME_WARN) && (CONFIG_FRAME_WARN > 0)
- #define REC_STACK_SIZE (_AC(CONFIG_FRAME_WARN, UL) / 2)
- #else
--#define REC_STACK_SIZE (THREAD_SIZE / 8)
-+#define REC_STACK_SIZE ((unsigned long)(THREAD_SIZE / 8))
- #endif
- #define REC_NUM_DEFAULT ((THREAD_SIZE / REC_STACK_SIZE) * 2)
- 
+You are awesome, thank you!
 -- 
-2.37.1.359.gd136c6c3e2-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

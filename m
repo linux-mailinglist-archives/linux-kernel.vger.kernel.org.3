@@ -2,231 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB5157C602
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B9B57C5FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 10:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbiGUIQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 04:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S232016AbiGUIQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 04:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiGUIQ1 (ORCPT
+        with ESMTP id S229591AbiGUIQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 04:16:27 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9D07D1F8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:26 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id f11so1133412plr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vcjP/TTiCJtollpq0IPhYOJ7clDYhyVICdNwHyD3LrE=;
-        b=zSgKsABZNHCGDGlRauoWxpAH/o/0gRVuIgQ9ktno6Af3XPNaeY7ZIkQbIP1dODyyW6
-         SyK/9cq3DiYyhrwSAOBIgFy9YhGgH3oPglY56gT28qdvQij5J8IbvF1G3UAurRqRaLY8
-         VlNnceYzSRQ59u17FNBweM260mhdf51ls1OGj1DTrVpwjr2ukZ/l+p1ccJvzkhaULMDC
-         VOSTkOS1+lFNpaMcgUJHwvvZ5HSZckSRvTuQrpsQL/Xig2HvGDgJeOkGGVwf8/ezcr07
-         YEdk1nTyI82qUMYsFB3Rxl6jpyYHSc3z0T6MfwpB33NJWKdp90G2ueFhHfAEMcyEitg8
-         FkJg==
+        Thu, 21 Jul 2022 04:16:22 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFF67D1FC
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:21 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id g18-20020a056602249200b0067c0f24207cso168581ioe.8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 01:16:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vcjP/TTiCJtollpq0IPhYOJ7clDYhyVICdNwHyD3LrE=;
-        b=XvOYItSNvXRfLRjkHDP2I62jQCC1/JZ+UUKxMibTIBX8YWx6dhzAKu8CqHxXhhjZmv
-         HqaJTfF0DxJwRBgVivYBVjH8GDYJNS7Jkn7oNyjmPPBDQ1f0o6sdx7lstHcIWBsm49J2
-         ZOvqbInLrYBdE5s5Ir27oUoLe+yuoVA2iYrRK+fydEWAf8cpUooiidkUtvMZK9fOHEIe
-         Wk9HIcilu3LezAtCpV9ZGmK9rigOklRc2jjYYmIxTJNk60raQMSfFGd3TVp3kqgET/VM
-         qDuQFhHfKDAapsnI1gbaoX3E6ut9e9ZGOwnW5ASDG8QvfmliuUzLwTL+JhOWTxUK76ya
-         UJyQ==
-X-Gm-Message-State: AJIora+tPHWuH0VPLCnp+ACrH/bRWA0uecrZOHDuaqmkMT1Dt1UAaHlk
-        2NAeJgDGi4sA1wrt2FgvZfS1/Q==
-X-Google-Smtp-Source: AGRyM1uXK++DxHvIzgYiDg8vMrV8xv2FtMAqJSlSdEaG5dKsvrlGScwbEADljdYPFp4BHWGJk22qlA==
-X-Received: by 2002:a17:90a:9409:b0:1f0:e171:f2bd with SMTP id r9-20020a17090a940900b001f0e171f2bdmr9758963pjo.245.1658391386081;
-        Thu, 21 Jul 2022 01:16:26 -0700 (PDT)
-Received: from C02GF2LXMD6R.bytedance.net ([139.177.225.246])
-        by smtp.gmail.com with ESMTPSA id j2-20020a17090a694200b001f204399045sm837995pjm.17.2022.07.21.01.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 01:16:25 -0700 (PDT)
-From:   Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        songmuchun@bytedance.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-Subject: [RFC] proc: fix create timestamp of files in proc
-Date:   Thu, 21 Jul 2022 16:16:17 +0800
-Message-Id: <20220721081617.36103-1-zhangyuchen.lcr@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=XiflHrkGhMohfp90y6rm8XzN9ejlCNoFswsBGQ/pU/U=;
+        b=xMPgtoESYy9+WxFNAMWgzsk4S402e88okzsbdeDcKq7nRi2T+6vs0QGMp1M9EXcdWL
+         hI4Ezxls7arS6lsZoCpQ475zTbtdd01hBp9V3dl/DCN9AnjAJ07nbxEjS6SSmmxipRaX
+         X770UXsIsmmKYCXE4aLtYnYHjn5MFP9NveAgUivKJGL9OfamthQJV28IAlGIij5dbTu2
+         H3cYAJmJt9r0dhYa2zQeBlIJsmKW21m86PX2L3YgqY/nI/x5Zh77cXt4bXnRPVy82YSi
+         eSUaKLN+cgFzucYUQyg7O0VXSqs18sUxqIrieGhhU5zij+VyNUZ/rpx7YYx6LT5d2R7s
+         pX1g==
+X-Gm-Message-State: AJIora8TIoWonq8gT/gFDOUKFe9bz/Oa+oAocWX8hwmypvlQrrdYxz0y
+        0GxUOyiD5SF/PyY9jCZBoxiOHh0L3f27yVmHJFDVyUEuGA3G
+X-Google-Smtp-Source: AGRyM1uRrMW3mfids6Sst+N2N2tZanU9cElVjImRKGVG39qcdE0cDece+SGIR9+7ZcJQeC7ZuGEGQblaXekZAhQ4tDDbiJSvbChG
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:2203:b0:33e:b93f:5882 with SMTP id
+ l3-20020a056638220300b0033eb93f5882mr21645815jas.66.1658391380915; Thu, 21
+ Jul 2022 01:16:20 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 01:16:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000028796b05e44c55e9@google.com>
+Subject: [syzbot] WARNING in ext2_get_group_desc
+From:   syzbot <syzbot+d273f7d7f58afd93be48@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A user has reported a problem that the /proc/{pid} directory
-creation timestamp is incorrect.
-He believes that the directory was created when the process was
-started, so the timestamp of the directory creation should also
-be when the process was created.
+Hello,
 
-The file timestamp in procfs is the timestamp when the inode was
-created. If the inode of a file in procfs is reclaimed, the inode
-will be recreated when it is opened again, and the timestamp will
-be changed to the time when it was recreated.
-In other file systems, this timestamp is typically recorded in
-the file system and assigned to the inode when the inode is created.
+syzbot found the following issue on:
 
-This mechanism can be confusing to users who are not familiar with
-it.
-For users who know this mechanism, they will choose not to trust
-this time.
-So the timestamp now has no meaning other than to confuse the user.
-It needs fixing.
+HEAD commit:    c658cabbfd32 Merge tag 's390-5.19-6' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=149c07d0080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cf350e66d4493550
+dashboard link: https://syzkaller.appspot.com/bug?extid=d273f7d7f58afd93be48
+compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm
 
-There are three solutions. We don't have to make the timestamp
-meaningful, as long as the user doesn't trust the timestamp.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-1. Add to the kernel documentation that the timestamp in PROC is
-   not reliable and do not use this timestamp.
-   The problem with this solution is that most users don't read
-   the kernel documentation and it can still be misleading.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d273f7d7f58afd93be48@syzkaller.appspotmail.com
 
-2. Fix it, change the timestamp of /proc/pid to the timestamp of
-   process creation.
+loop1: detected capacity change from 0 to 20
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3999 at fs/ext2/balloc.c:51 ext2_get_group_desc+0x88/0xb4 fs/ext2/balloc.c:51
+block_group >= groups_count - block_group = 1, groups_count = 1
+Modules linked in:
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 3999 Comm: syz-executor.1 Not tainted 5.19.0-rc6-syzkaller #0
+Hardware name: ARM-Versatile Express
+Backtrace: 
+[<816f379c>] (dump_backtrace) from [<816f3acc>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:253)
+ r7:81d72500 r6:82422fec r5:60000093 r4:81d80550
+[<816f3ab4>] (show_stack) from [<816fc3f8>] (__dump_stack lib/dump_stack.c:88 [inline])
+[<816f3ab4>] (show_stack) from [<816fc3f8>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
+[<816fc3b0>] (dump_stack_lvl) from [<816fc41c>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
+ r5:00000000 r4:82642d14
+[<816fc404>] (dump_stack) from [<816f4668>] (panic+0x11c/0x360 kernel/panic.c:274)
+[<816f454c>] (panic) from [<80242a2c>] (__warn+0x98/0x198 kernel/panic.c:623)
+ r3:00000001 r2:00000000 r1:00000000 r0:81d72500
+ r7:806112e0
+[<80242994>] (__warn) from [<816f4948>] (warn_slowpath_fmt+0x9c/0xd4 kernel/panic.c:653)
+ r8:00000009 r7:806112e0 r6:00000033 r5:81db0ac4 r4:81db0a80
+[<816f48b0>] (warn_slowpath_fmt) from [<806112e0>] (ext2_get_group_desc+0x88/0xb4 fs/ext2/balloc.c:51)
+ r8:00000001 r7:851d1c00 r6:ee24dde0 r5:851d1c00 r4:00000000
+[<80611258>] (ext2_get_group_desc) from [<80615118>] (ext2_get_inode+0x94/0x134 fs/ext2/inode.c:1345)
+ r4:00000002
+[<80615084>] (ext2_get_inode) from [<80617194>] (ext2_iget+0x84/0x438 fs/ext2/inode.c:1425)
+ r9:88485670 r8:00000000 r7:851d1c00 r6:00000002 r5:00000000 r4:8497b6f8
+[<80617110>] (ext2_iget) from [<8061a940>] (ext2_fill_super+0xb30/0xe14 fs/ext2/super.c:1162)
+ r8:00000000 r7:84af7600 r6:88307400 r5:851d1c00 r4:88485600
+[<80619e10>] (ext2_fill_super) from [<8049e2a0>] (mount_bdev+0x178/0x1a4 fs/super.c:1367)
+ r10:852b4000 r9:83917dbc r8:00000083 r7:852b4000 r6:00000000 r5:851d1c00
+ r4:83917b80
+[<8049e128>] (mount_bdev) from [<806189ac>] (ext2_mount+0x20/0x28 fs/ext2/super.c:1465)
+ r9:86184b80 r8:86184200 r7:ee24df6c r6:00000020 r5:8061898c r4:85352f00
+[<8061898c>] (ext2_mount) from [<804de934>] (legacy_get_tree+0x2c/0x50 fs/fs_context.c:610)
+[<804de908>] (legacy_get_tree) from [<8049c85c>] (vfs_get_tree+0x2c/0x108 fs/super.c:1497)
+ r5:85352f00 r4:85352f00
+[<8049c830>] (vfs_get_tree) from [<804c5818>] (do_new_mount fs/namespace.c:3040 [inline])
+[<8049c830>] (vfs_get_tree) from [<804c5818>] (path_mount+0x3e8/0xabc fs/namespace.c:3370)
+ r6:00000020 r5:00000000 r4:85352f00
+[<804c5430>] (path_mount) from [<804c6428>] (do_mount fs/namespace.c:3383 [inline])
+[<804c5430>] (path_mount) from [<804c6428>] (__do_sys_mount fs/namespace.c:3591 [inline])
+[<804c5430>] (path_mount) from [<804c6428>] (sys_mount+0x118/0x220 fs/namespace.c:3568)
+ r10:00000000 r9:76f05ef8 r8:00000000 r7:00000000 r6:852b4000 r5:86184200
+ r4:86184b80
+[<804c6310>] (sys_mount) from [<80200060>] (ret_fast_syscall+0x0/0x1c arch/arm/mm/proc-v7.S:64)
+Exception stack(0xee24dfa8 to 0xee24dff0)
+dfa0:                   76f05ef8 20000000 76f05eb8 20000240 20000000 00000000
+dfc0: 76f05ef8 20000000 20000340 00000015 76f05eb8 00000000 76f05eb8 00000000
+dfe0: 000862b8 76f05e70 00016a48 0004d500
+ r10:00000015 r9:84f38bc0 r8:80200288 r7:00000015 r6:20000340 r5:20000000
+ r4:76f05ef8
+Rebooting in 86400 seconds..
 
-   This raises new questions.
 
-   a. Users don't know which kernel version is correct.
-
-   b. This problem exists not only in the pid directory, but also
-      in other directories under procfs. It would take a lot of
-      extra work to fix them all. There are also easier ways for
-      users to get the creation time information better than this.
-
-   c. We need to describe the specific meaning of each file under
-      proc in the kernel documentation for the creation time.
-      Because the creation time of various directories has different
-      meanings. For example, PID directory is the process creation
-      time, FD directory is the FD creation time and so on.
-
-   d. Some files have no associated entity, such as iomem.
-      Unable to give a meaningful time.
-
-3. Instead of fixing it, set the timestamp in all procfs to 0.
-   Users will see it as an error and will not use it.
-
-I think 3 is better. Any other suggestions?
-
-Signed-off-by: Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
 ---
- fs/proc/base.c        | 4 +++-
- fs/proc/inode.c       | 3 ++-
- fs/proc/proc_sysctl.c | 3 ++-
- fs/proc/self.c        | 3 ++-
- fs/proc/thread_self.c | 3 ++-
- 5 files changed, 11 insertions(+), 5 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 0b72a6d8aac3..af440ef13091 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -1892,6 +1892,8 @@ struct inode *proc_pid_make_inode(struct super_block *sb,
- 	struct proc_inode *ei;
- 	struct pid *pid;
- 
-+	struct timespec64 ts_zero = {0, 0};
-+
- 	/* We need a new inode */
- 
- 	inode = new_inode(sb);
-@@ -1902,7 +1904,7 @@ struct inode *proc_pid_make_inode(struct super_block *sb,
- 	ei = PROC_I(inode);
- 	inode->i_mode = mode;
- 	inode->i_ino = get_next_ino();
--	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-+	inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
- 	inode->i_op = &proc_def_inode_operations;
- 
- 	/*
-diff --git a/fs/proc/inode.c b/fs/proc/inode.c
-index fd40d60169b5..efb1c935fa8d 100644
---- a/fs/proc/inode.c
-+++ b/fs/proc/inode.c
-@@ -642,6 +642,7 @@ const struct inode_operations proc_link_inode_operations = {
- struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
- {
- 	struct inode *inode = new_inode(sb);
-+	struct timespec64 ts_zero = {0, 0};
- 
- 	if (!inode) {
- 		pde_put(de);
-@@ -650,7 +651,7 @@ struct inode *proc_get_inode(struct super_block *sb, struct proc_dir_entry *de)
- 
- 	inode->i_private = de->data;
- 	inode->i_ino = de->low_ino;
--	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-+	inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
- 	PROC_I(inode)->pde = de;
- 	if (is_empty_pde(de)) {
- 		make_empty_dir_inode(inode);
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 021e83fe831f..c670f9d3b871 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -455,6 +455,7 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
- 	struct ctl_table_root *root = head->root;
- 	struct inode *inode;
- 	struct proc_inode *ei;
-+	struct timespec64 ts_zero = {0, 0};
- 
- 	inode = new_inode(sb);
- 	if (!inode)
-@@ -476,7 +477,7 @@ static struct inode *proc_sys_make_inode(struct super_block *sb,
- 	head->count++;
- 	spin_unlock(&sysctl_lock);
- 
--	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-+	inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
- 	inode->i_mode = table->mode;
- 	if (!S_ISDIR(table->mode)) {
- 		inode->i_mode |= S_IFREG;
-diff --git a/fs/proc/self.c b/fs/proc/self.c
-index 72cd69bcaf4a..b9e572fdc27c 100644
---- a/fs/proc/self.c
-+++ b/fs/proc/self.c
-@@ -44,9 +44,10 @@ int proc_setup_self(struct super_block *s)
- 	self = d_alloc_name(s->s_root, "self");
- 	if (self) {
- 		struct inode *inode = new_inode(s);
-+		struct timespec64 ts_zero = {0, 0};
- 		if (inode) {
- 			inode->i_ino = self_inum;
--			inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
- 			inode->i_mode = S_IFLNK | S_IRWXUGO;
- 			inode->i_uid = GLOBAL_ROOT_UID;
- 			inode->i_gid = GLOBAL_ROOT_GID;
-diff --git a/fs/proc/thread_self.c b/fs/proc/thread_self.c
-index a553273fbd41..964966387da2 100644
---- a/fs/proc/thread_self.c
-+++ b/fs/proc/thread_self.c
-@@ -44,9 +44,10 @@ int proc_setup_thread_self(struct super_block *s)
- 	thread_self = d_alloc_name(s->s_root, "thread-self");
- 	if (thread_self) {
- 		struct inode *inode = new_inode(s);
-+		struct timespec64 ts_zero = {0, 0};
- 		if (inode) {
- 			inode->i_ino = thread_self_inum;
--			inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode->i_atime = inode->i_ctime = ts_zero;
- 			inode->i_mode = S_IFLNK | S_IRWXUGO;
- 			inode->i_uid = GLOBAL_ROOT_UID;
- 			inode->i_gid = GLOBAL_ROOT_GID;
--- 
-2.30.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

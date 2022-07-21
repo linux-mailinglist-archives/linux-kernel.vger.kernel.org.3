@@ -2,209 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A8257CDA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545B857CDAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiGUOaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S229659AbiGUOa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbiGUO3y (ORCPT
+        with ESMTP id S229458AbiGUOa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:29:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB77381B2D
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:29:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9F9C1042;
-        Thu, 21 Jul 2022 07:29:52 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.86.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 233D33F73D;
-        Thu, 21 Jul 2022 07:29:51 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 15:29:49 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-Subject: Re: [PATCH 2/7] sched/uclamp: Make task_fits_capacity() use
- util_fits_cpu()
-Message-ID: <20220721142949.fqmabrjwylkuoltw@wubuntu>
-References: <20220629194632.1117723-1-qais.yousef@arm.com>
- <20220629194632.1117723-3-qais.yousef@arm.com>
- <CAKfTPtAxK=NGbpQkiW8-tx3kEwp-M7LAr1Rq_kdWDdsSq7Hd9A@mail.gmail.com>
- <20220712104843.frbtkgkiftaovcon@wubuntu>
+        Thu, 21 Jul 2022 10:30:27 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610602B604
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:30:25 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bv24so2553321wrb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XhhMsY9RfWRqTmpaxcMmlEuk/6JY2Q0sFPTnxJuSH/c=;
+        b=HF/GiANUG1tbwXOkMqbonr5uqgeDDqKXeHrpOGj9X1YCLcgJ31NlFsLSr19G+Us9iB
+         fje0mIeU4RN4HWR/+C1BatWkzkD/Cylb//dKW0uio4/xskDi7YQBjPIcNnhBgkbOV6fq
+         cz3WwLwdCrtnco6bL63SgRQ+LFIrLEeVdrNP0RRdcf76IGydcR4HYfLgo9tel4+DH2QI
+         JeHWn8SsvVabE2yEQKwfRToTepvHML+GqcfARbnjBlMIaMQlZv5gxMdz9lK0EmltBh1A
+         8Tk9OVCAkTsnvvLX1Fen9dReiGaKEXmKgJ26gzi0HuWd2GiYsq0GPBQy3SqgYxJf49ul
+         MCJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XhhMsY9RfWRqTmpaxcMmlEuk/6JY2Q0sFPTnxJuSH/c=;
+        b=tfJaT2UCR/4pF+P3+65RY53eoug/59i/YYaqL7mNQ9SiruiVW36bbOfBGj+q83ngXA
+         wdQChWE6AJliSra8EYm+X+apUbSLie8R2IbMxUFOfZqfhacOLIVc2H4RAbdkF6ZBi/in
+         XF9nUhwSR8TAmt+ahjadBDVyzSEHPg/eu4frdHbRmH2d7oCa4I1XhY6P9DiN4QofS5Pj
+         eDtV5KTq7IyF5IM23u88y8XIyn12yc/iunxHt9s52NCTrWI/ewq7FAgY8JEB4m/jEm6I
+         Nhc9ySYo91LyigUQjoTNOyIFPMdfL5g60zui747wWzHh5BhM7UvcaNb7jfTAwvglQ2Wq
+         rA2A==
+X-Gm-Message-State: AJIora/UEvKRZPPgqaDQTjPFzCG7HQOFY1u2DjAWyYvrjAvtThYEftMf
+        /mSyTmfo5N7QSDBDkmTsEyncew==
+X-Google-Smtp-Source: AGRyM1tSv2LRbOsioc1gUtCnwKFEXIgzbpBFTfyM17uLvH/QU77KYxhHSkynSfcLTg2qDA6NtYC+Xw==
+X-Received: by 2002:a5d:59a2:0:b0:21d:a96b:b3dd with SMTP id p2-20020a5d59a2000000b0021da96bb3ddmr32689302wrr.128.1658413823838;
+        Thu, 21 Jul 2022 07:30:23 -0700 (PDT)
+Received: from [10.205.160.53] ([95.83.233.54])
+        by smtp.gmail.com with ESMTPSA id j6-20020a5d4486000000b0021e47fb24a2sm2138817wrq.19.2022.07.21.07.30.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 07:30:23 -0700 (PDT)
+Message-ID: <157e8ae8-2456-dca3-ab2e-5f60a5223ca2@conchuod.ie>
+Date:   Thu, 21 Jul 2022 15:30:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220712104843.frbtkgkiftaovcon@wubuntu>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 3/4] pwm: add microchip soft ip corePWM driver
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Conor.Dooley@microchip.com
+Cc:     thierry.reding@gmail.com, lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Daire.McNamara@microchip.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220712142557.1773075-1-conor.dooley@microchip.com>
+ <20220712142557.1773075-4-conor.dooley@microchip.com>
+ <c49776c2-4807-91c1-010a-a33bd98b68b7@microchip.com>
+ <ee05749f-c33f-3505-4309-f4d036de92a1@microchip.com>
+ <20220721142030.yh7x3ebr2b4fcunc@pengutronix.de>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220721142030.yh7x3ebr2b4fcunc@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/22 11:48, Qais Yousef wrote:
-> On 07/11/22 15:09, Vincent Guittot wrote:
-> > On Wed, 29 Jun 2022 at 21:48, Qais Yousef <qais.yousef@arm.com> wrote:
+On 21/07/2022 15:20, Uwe Kleine-König wrote:
+> Hello,
 > 
-> [...]
+> On Thu, Jul 21, 2022 at 11:05:54AM +0000, Conor.Dooley@microchip.com wrote:
+>> Should I resubmit now with the warnings fixed?
+>> It is a pair of unused-result on the mutexes & a unused-variable so
+>> they should not have much of an impact on any review you would give
+>> for this version.
 > 
-> > > @@ -8502,15 +8504,16 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
-> > >         trace_sched_cpu_capacity_tp(cpu_rq(cpu));
-> > >
-> > >         sdg->sgc->capacity = capacity;
-> > > -       sdg->sgc->min_capacity = capacity;
-> > > -       sdg->sgc->max_capacity = capacity;
-> > > +       sdg->sgc->min_capacity_cpu = cpu;
-> > > +       sdg->sgc->max_capacity_cpu = cpu;
-> > 
-> > you make these fields useless. There is only one cpu per sched_group
-> > at this level so you don't need to save the twice cpu number of the
-> > nly cpu of this group
+> Don't wait for me to find the time to look. If you have some pending
+> changes I prefer not to look at the series with known drawbacks.
 > 
-> Ah, so we can use group->asym_prefer_cpu then?
-> 
-> I think I got confused and thought we could cover multiple capacity levels
-> there.
-> 
-> > >  }
-> > >
-> > >  void update_group_capacity(struct sched_domain *sd, int cpu)
-> > >  {
-> > > -       struct sched_domain *child = sd->child;
-> > >         struct sched_group *group, *sdg = sd->groups;
-> > > -       unsigned long capacity, min_capacity, max_capacity;
-> > > +       struct sched_domain *child = sd->child;
-> > > +       int min_capacity_cpu, max_capacity_cpu;
-> > > +       unsigned long capacity;
-> > >         unsigned long interval;
-> > >
-> > >         interval = msecs_to_jiffies(sd->balance_interval);
-> > > @@ -8523,8 +8526,7 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
-> > >         }
-> > >
-> > >         capacity = 0;
-> > > -       min_capacity = ULONG_MAX;
-> > > -       max_capacity = 0;
-> > > +       min_capacity_cpu = max_capacity_cpu = cpu;
-> > >
-> > >         if (child->flags & SD_OVERLAP) {
-> > >                 /*
-> > > @@ -8536,29 +8538,44 @@ void update_group_capacity(struct sched_domain *sd, int cpu)
-> > >                         unsigned long cpu_cap = capacity_of(cpu);
-> > >
-> > >                         capacity += cpu_cap;
-> > > -                       min_capacity = min(cpu_cap, min_capacity);
-> > > -                       max_capacity = max(cpu_cap, max_capacity);
-> > > +                       if (cpu_cap < capacity_of(min_capacity_cpu))
-> > > +                               min_capacity_cpu = cpu;
-> > > +
-> > > +                       if (cpu_cap > capacity_of(max_capacity_cpu))
-> > > +                               max_capacity_cpu = cpu;
-> > >                 }
-> > >         } else  {
-> > >                 /*
-> > >                  * !SD_OVERLAP domains can assume that child groups
-> > >                  * span the current group.
-> > >                  */
-> > > +               unsigned long min_capacity = ULONG_MAX;
-> > > +               unsigned long max_capacity = 0;
-> > >
-> > >                 group = child->groups;
-> > >                 do {
-> > >                         struct sched_group_capacity *sgc = group->sgc;
-> > > +                       unsigned long cpu_cap_min = capacity_of(sgc->min_capacity_cpu);
-> > > +                       unsigned long cpu_cap_max = capacity_of(sgc->max_capacity_cpu);
-> > 
-> > By replacing sgc->min_capacity with sgc->min_capacity_cpu, the
-> > min_capacity is no more stable and can become > max_capacity
-> 
-> Right.
-> 
-> > 
-> > >
-> > >                         capacity += sgc->capacity;
-> > > -                       min_capacity = min(sgc->min_capacity, min_capacity);
-> > > -                       max_capacity = max(sgc->max_capacity, max_capacity);
-> > > +                       if (cpu_cap_min < min_capacity) {
-> > > +                               min_capacity = cpu_cap_min;
-> > > +                               min_capacity_cpu = sgc->min_capacity_cpu;
-> > > +                       }
-> > > +
-> > > +                       if (cpu_cap_max > max_capacity) {
-> > > +                               max_capacity = cpu_cap_max;
-> > > +                               max_capacity_cpu = sgc->max_capacity_cpu;
-> > > +                       }
-> > > +
-> > >                         group = group->next;
-> > >                 } while (group != child->groups);
-> > >         }
-> > >
-> > >         sdg->sgc->capacity = capacity;
-> > > -       sdg->sgc->min_capacity = min_capacity;
-> > > -       sdg->sgc->max_capacity = max_capacity;
-> > > +       sdg->sgc->min_capacity_cpu = min_capacity_cpu;
-> > > +       sdg->sgc->max_capacity_cpu = max_capacity_cpu;
-> > >  }
-> > >
-> > >  /*
-> > > @@ -8902,7 +8919,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
-> > >          * internally or be covered by avg_load imbalance (eventually).
-> > >          */
-> > >         if (sgs->group_type == group_misfit_task &&
-> > > -           (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
-> > > +           (!capacity_greater(env->dst_cpu, sg->sgc->max_capacity_cpu) ||
-> > >              sds->local_stat.group_type != group_has_spare))
-> > >                 return false;
-> > >
-> > > @@ -8986,7 +9003,7 @@ static bool update_sd_pick_busiest(struct lb_env *env,
-> > >          */
-> > >         if ((env->sd->flags & SD_ASYM_CPUCAPACITY) &&
-> > >             (sgs->group_type <= group_fully_busy) &&
-> > > -           (capacity_greater(sg->sgc->min_capacity, capacity_of(env->dst_cpu))))
-> > > +           (capacity_greater(sg->sgc->min_capacity_cpu, env->dst_cpu)))
-> > >                 return false;
-> > >
-> > >         return true;
-> > > @@ -9108,7 +9125,7 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
-> > >
-> > >         /* Check if task fits in the group */
-> > >         if (sd->flags & SD_ASYM_CPUCAPACITY &&
-> > > -           !task_fits_capacity(p, group->sgc->max_capacity)) {
-> > > +           !task_fits_cpu(p, group->sgc->max_capacity_cpu)) {
-> > 
-> > All the changes and added complexity above for this line. Can't you
-> > find another way ?
-> 
-> You're right, I might have got carried away trying to keep the logic the same.
-> 
-> Can we use group->asym_prefer_cpu or pick a cpu from group->sgc->cpumask
-> instead?
-> 
-> I'll dig more into it anyway and try to come up with simpler alternative.
+> So fire at will.
 
-Actually we can't.
-
-I can keep the current {max,min}_capacity field and just add the new
-{max,min}_capacity_cpu and use them where needed. Should address your concerns
-this way? That was actually the first version of the code, but then it seemed
-redundant to keep both {max,min}_capacity and {max,min}_capacity_cpu.
-
-OR
-
-I can add a new function to search for max spare capacity cpu in the group.
-
-Preference?
-
+Cool, didn't want to send a revision if you could've been in the
+process of looking at it. I'll send the fixed version so that if
+you do get a chance to look it'll at least be a better one than
+v6.
 
 Thanks!
-
---
-Qais Yousef

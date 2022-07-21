@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7E557D5D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7BB57D5DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 23:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbiGUVUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 17:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S233812AbiGUVWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 17:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbiGUVUP (ORCPT
+        with ESMTP id S230022AbiGUVWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AD715838;
-        Thu, 21 Jul 2022 14:20:15 -0700 (PDT)
+        Thu, 21 Jul 2022 17:22:37 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F6D9284B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 14:22:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98BE96181D;
-        Thu, 21 Jul 2022 21:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EA372C341C0;
-        Thu, 21 Jul 2022 21:20:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6F6DACE25B3
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 21:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD762C3411E;
+        Thu, 21 Jul 2022 21:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658438414;
-        bh=HUuVCf8AwAMI2usXH0mlaxaxdAySQiYPiu5NUkSZYro=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cxO5QSNahJG1CTiuTmit/uJ3/vQpQbwD3RXU/9tHvGJH3OXy750qY2796yxEvtD3d
-         qlyAU+BpEEQk6DM8O3lFi9Hzz5XNcGjZ6OQdsHOPACaMgiuSd/j563x2cZQafOECxt
-         6KFIUAtPcAWy9Bz4mZADCkN5HS78lAxXtmnJex4FzRAQhhYqkwxBdzAsXd6qixrWW7
-         SHGsuTNoUJw2nVzJ13spduBAIPtzZP80RlNnNcMJLBTj85IkUcHZepJsmqwoCXTFrp
-         aZzIosXvq9SMCdamLDUSufweNuBjwz6KCgFhd2yvu3WSZWOyhN4NtZjGSIuldq2ofI
-         69PqoSGcYmLBg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CFB9DD9DDDD;
-        Thu, 21 Jul 2022 21:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1658438552;
+        bh=2csh2IPzZB9Q9+L8yOL8SYU7r0lrEKvI5elBmtDV4/c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b6dgBxwPawsXvrs8FUNrO+XL/BjA70/JzCpatMpkSzj7k4H1NCNOiotZyhdFxGAVC
+         PP0TouGwpOyksZ+JkyaViKZi3wwSpRxAUa4jll8RuuLciixdPnP+QJ8lxUivlSpKsB
+         IZaLl9ccELLbadWEDYu2IUFTzanj8FANZM1pKkqE8MnVhWfswSrv0nZn71HKHlkutm
+         rTvsprQlzBRrdkkI6jlkYjSpIZgIRtAsx7h78aYQqKCBAMIfBoZolXCk9gp8uaOVoL
+         jXUd9dVTvLgfSfSAipukCS4ycfOPt6bw0Whg/TNDhpzYHimHr2ZCe/fZQOmVqeudAP
+         26pIQWRO6TIwQ==
+Date:   Thu, 21 Jul 2022 14:22:30 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Justin Stitt <justinstitt@google.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Tom Rix <trix@redhat.com>,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] soc: sof: fix clang -Wformat warnings
+Message-ID: <YtnDltqEVeJQQkbW@dev-arch.thelio-3990X>
+References: <20220721211218.4039288-1-justinstitt@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 1/2] Bluetooth: hci_sync: Refactor add Adv Monitor
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <165843841384.2414.3327226907905248679.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Jul 2022 21:20:13 +0000
-References: <20220720162102.v2.1.If745ed1d05d98c002fc84ba60cef99eb786b7caa@changeid>
-In-Reply-To: <20220720162102.v2.1.If745ed1d05d98c002fc84ba60cef99eb786b7caa@changeid>
-To:     Manish Mandlik <mmandlik@google.com>
-Cc:     marcel@holtmann.org, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org, mcchou@google.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        johan.hedberg@gmail.com, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721211218.4039288-1-justinstitt@google.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,32 +65,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
-
-On Wed, 20 Jul 2022 16:21:13 -0700 you wrote:
-> Make use of hci_cmd_sync_queue for adding an advertisement monitor.
+On Thu, Jul 21, 2022 at 02:12:18PM -0700, Justin Stitt wrote:
+> When building with Clang we encounter these warnings:
+> | sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type
+> | 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+> |                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+> |                  ^~~~~~~~~~~~~~~^~~~~~~~~~~~~~~^~~~~~~~~~~~~
 > 
-> Signed-off-by: Manish Mandlik <mmandlik@google.com>
-> Reviewed-by: Miao-chen Chou <mcchou@google.com>
+> Use correct format specifier `%d` since args are of type int.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+
+Indeed, decimal integer literals with no suffix are of type 'int' when
+they can fit in an 'int'. In this case, there shouldn't be a bug since
+the values of these macros can fit in an 'unsigned char' (so no
+truncation) but it is still correct to use '%d' instead of '%hhu', which
+matches the stance of commit cbacb5ab0aa0 ("docs: printk-formats: Stop
+encouraging use of unnecessary %h[xudi] and %hh[xudi]").
+
+This was introduced by commit 323aa1f093e6 ("ASoC: SOF: Add a new IPC op
+for parsing topology manifest"), not sure it warrants a fixes tag for
+the reason I outlined above, but it might be helpful for other
+reviewers.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
+> Reported by Nathan here:
+> https://lore.kernel.org/all/YtmrCJjQrSbv8Aj1@dev-arch.thelio-3990X/
 > 
-> Changes in v2:
-> - Refactored to correctly use hci_cmd_sync_queue
+>  sound/soc/sof/ipc3-topology.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [...]
-
-Here is the summary with links:
-  - [v2,1/2] Bluetooth: hci_sync: Refactor add Adv Monitor
-    https://git.kernel.org/bluetooth/bluetooth-next/c/75d2509cd04e
-  - [v2,2/2] Bluetooth: hci_sync: Refactor remove Adv Monitor
-    https://git.kernel.org/bluetooth/bluetooth-next/c/6b88eff43704
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> diff --git a/sound/soc/sof/ipc3-topology.c b/sound/soc/sof/ipc3-topology.c
+> index b2cc046b9f60..65923e7a5976 100644
+> --- a/sound/soc/sof/ipc3-topology.c
+> +++ b/sound/soc/sof/ipc3-topology.c
+> @@ -2338,7 +2338,7 @@ static int sof_ipc3_parse_manifest(struct snd_soc_component *scomp, int index,
+>  	}
+>  
+>  	dev_info(scomp->dev,
+> -		 "Topology: ABI %d:%d:%d Kernel ABI %hhu:%hhu:%hhu\n",
+> +		 "Topology: ABI %d:%d:%d Kernel ABI %d:%d:%d\n",
+>  		 man->priv.data[0], man->priv.data[1], man->priv.data[2],
+>  		 SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>  
+> -- 
+> 2.37.1.359.gd136c6c3e2-goog
+> 

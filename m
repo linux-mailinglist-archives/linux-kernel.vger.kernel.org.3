@@ -2,117 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272FC57C82A
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F82557C82C
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 11:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbiGUJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 05:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S232812AbiGUJyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 05:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiGUJxS (ORCPT
+        with ESMTP id S229663AbiGUJyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 05:53:18 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 082F881B0E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 02:53:13 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9L9Idlipk0sAA--.307S2;
-        Thu, 21 Jul 2022 17:53:01 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: Fix wrong "ROM Size" of boardinfo
-Date:   Thu, 21 Jul 2022 17:53:01 +0800
-Message-Id: <1658397181-2095-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxv9L9Idlipk0sAA--.307S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF1Dur4DJF1xKFWUZF45GFg_yoW8urWUpr
-        43Aws7Grs8Wrn3u34rX348Wr45KF9xGFn2qa17Ar4xArZxWr12gw40vFyfuFW2y3yrGFW0
-        qa4fKa1FgF4DG3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8uwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUyD7aUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 05:54:19 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A21A81B04;
+        Thu, 21 Jul 2022 02:54:18 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-31e560aa854so11469737b3.6;
+        Thu, 21 Jul 2022 02:54:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iTJfNbacNs72Ij4X/S7T9wZZgS4I9cYRvxKbLI1wpAs=;
+        b=YnpSd7KKl/Z0xpMNKUGkW8s7zl139mC87bQ2zNAf15TzhQOQNSmDF0u5EZYCbJslmt
+         UcZC8s3Sfoms887MG6OnhVev9WD6NDvdnBn+owWRJa6tsC65fhSre1QX0Y3ir5dvN/Nr
+         aYTd8Pn7pRNMIb8Y6ZFgYpD/ncohtCa/e6XoR2JRV6e6OpaKpk0lKahMTQvbXRv0JkIN
+         UAv3q8Hk59d+87d/CyN1gMb6yoTraYc5SA/BVqOQl4C6/54AoMtYl/9n7wSW9av5JqWA
+         35uInn/S9lL+0TPQOZ2Smq7M2k5MCg6L0gLbr/Pgl0lA8x4wUY+tat7OckzDZaYRyk5g
+         KuHg==
+X-Gm-Message-State: AJIora9q0c0UULaokglkdWB7ypCKSU50vn5dRHRn2Qi3p5hPQylxjV9b
+        hbHrz+auw1klk1607OfGuDPWSx5DmZr5sNoLsbg=
+X-Google-Smtp-Source: AGRyM1tGJGvJH4lyIFuh4q9T0AcAsnMIfyWz0d7qz0qCCso3kBQcxWQBTlIfYJvS/hWYgsjCDGac9oVZPnBiFYj4OUc=
+X-Received: by 2002:a81:89c3:0:b0:31e:6908:f857 with SMTP id
+ z186-20020a8189c3000000b0031e6908f857mr8348503ywf.149.1658397257668; Thu, 21
+ Jul 2022 02:54:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220720-arch_topo_fixes-v3-0-43d696288e84@arm.com> <20220720-arch_topo_fixes-v3-2-43d696288e84@arm.com>
+In-Reply-To: <20220720-arch_topo_fixes-v3-2-43d696288e84@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 21 Jul 2022 11:54:05 +0200
+Message-ID: <CAJZ5v0jizZELraQsS0gP0ALL60wyhT2F-7no5p5KKmg7Spi6uw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] ACPI: PPTT: Leave the table mapped for the runtime usage
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can see the "ROM Size" is different in the following outputs:
+On Wed, Jul 20, 2022 at 2:56 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> Currently, everytime an information needs to be fetched from the PPTT,
+> the table is mapped via acpi_get_table() and unmapped after the use via
+> acpi_put_table() which is fine. However we do this at runtime especially
+> when the CPU is hotplugged out and plugged in back since we re-populate
+> the cache topology and other information.
+>
+> However, with the support to fetch LLC information from the PPTT in the
+> cpuhotplug path which is executed in the atomic context, it is preferred
+> to avoid mapping and unmapping of the PPTT for every single use as the
+> acpi_get_table() might sleep waiting for a mutex.
+>
+> In order to avoid the same, the table is needs to just mapped once on
+> the boot CPU and is never unmapped allowing it to be used at runtime
+> with out the hassle of mapping and unmapping the table.
+>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+>
+> --
+>
+> Hi Rafael,
+>
+> Sorry to bother you again on this PPTT changes. Guenter reported an issue
+> with lockdep enabled in -next that include my cacheinfo/arch_topology changes
+> to utilise LLC from PPTT in the CPU hotplug path.
+>
+> Please ack the change once you are happy so that I can get it merged with
+> other fixes via Greg's tree.
 
-[root@linux loongson]# cat /sys/firmware/loongson/boardinfo
-BIOS Information
-Vendor                  : Loongson
-Version                 : vUDK2018-LoongArch-V2.0.pre-beta8
-ROM Size                : 63 KB
-Release Date            : 06/15/2022
+OK
 
-Board Information
-Manufacturer            : Loongson
-Board Name              : Loongson-LS3A5000-7A1000-1w-A2101
-Family                  : LOONGSON64
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[root@linux loongson]# dmidecode | head -11
-...
-Handle 0x0000, DMI type 0, 26 bytes
-BIOS Information
-	Vendor: Loongson
-	Version: vUDK2018-LoongArch-V2.0.pre-beta8
-	Release Date: 06/15/2022
-	ROM Size: 4 MB
-
-According to "BIOS Information (Type 0) structure" in the SMBIOS
-Reference Specification [1], it shows 64K * (n+1) is the size of
-the physical device containing the BIOS if the size is less than
-16M.
-
-Additionally, we can see the related code in dmidecode [2]:
-
-  u64 s = { .l = (code1 + 1) << 6 };
-
-So the output of dmidecode is correct, the output of boardinfo
-is wrong, fix it.
-
-By the way, at present no need to consider the size is 16M or
-greater on LoongArch, because it is usually 4M or 8M which is
-enough to use.
-
-[1] https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.pdf
-[2] https://git.savannah.nongnu.org/cgit/dmidecode.git/tree/dmidecode.c#n347
-
-Fixes: 628c3bb40e9a ("LoongArch: Add boot and setup routines")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/kernel/setup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index c74860b..8f5c2f9 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -126,7 +126,7 @@ static void __init parse_bios_table(const struct dmi_header *dm)
- 	char *dmi_data = (char *)dm;
- 
- 	bios_extern = *(dmi_data + SMBIOS_BIOSEXTERN_OFFSET);
--	b_info.bios_size = *(dmi_data + SMBIOS_BIOSSIZE_OFFSET);
-+	b_info.bios_size = (*(dmi_data + SMBIOS_BIOSSIZE_OFFSET) + 1) << 6;
- 
- 	if (bios_extern & LOONGSON_EFI_ENABLE)
- 		set_bit(EFI_BOOT, &efi.flags);
--- 
-2.1.0
-
+>
+> diff --git a/drivers/acpi/pptt.c b/drivers/acpi/pptt.c
+> index dd3222a15c9c..c91342dcbcd6 100644
+> --- a/drivers/acpi/pptt.c
+> +++ b/drivers/acpi/pptt.c
+> @@ -533,21 +533,37 @@ static int topology_get_acpi_cpu_tag(struct acpi_table_header *table,
+>         return -ENOENT;
+>  }
+>
+> +
+> +static struct acpi_table_header *acpi_get_pptt(void)
+> +{
+> +       static struct acpi_table_header *pptt;
+> +       acpi_status status;
+> +
+> +       /*
+> +        * PPTT will be used at runtime on every CPU hotplug in path, so we
+> +        * don't need to call acpi_put_table() to release the table mapping.
+> +        */
+> +       if (!pptt) {
+> +               status = acpi_get_table(ACPI_SIG_PPTT, 0, &pptt);
+> +               if (ACPI_FAILURE(status))
+> +                       acpi_pptt_warn_missing();
+> +       }
+> +
+> +       return pptt;
+> +}
+> +
+>  static int find_acpi_cpu_topology_tag(unsigned int cpu, int level, int flag)
+>  {
+>         struct acpi_table_header *table;
+> -       acpi_status status;
+>         int retval;
+>
+> -       status = acpi_get_table(ACPI_SIG_PPTT, 0, &table);
+> -       if (ACPI_FAILURE(status)) {
+> -               acpi_pptt_warn_missing();
+> +       table = acpi_get_pptt();
+> +       if (!table)
+>                 return -ENOENT;
+> -       }
+> +
+>         retval = topology_get_acpi_cpu_tag(table, cpu, level, flag);
+>         pr_debug("Topology Setup ACPI CPU %d, level %d ret = %d\n",
+>                  cpu, level, retval);
+> -       acpi_put_table(table);
+>
+>         return retval;
+>  }
+> @@ -568,16 +584,13 @@ static int find_acpi_cpu_topology_tag(unsigned int cpu, int level, int flag)
+>  static int check_acpi_cpu_flag(unsigned int cpu, int rev, u32 flag)
+>  {
+>         struct acpi_table_header *table;
+> -       acpi_status status;
+>         u32 acpi_cpu_id = get_acpi_id_for_cpu(cpu);
+>         struct acpi_pptt_processor *cpu_node = NULL;
+>         int ret = -ENOENT;
+>
+> -       status = acpi_get_table(ACPI_SIG_PPTT, 0, &table);
+> -       if (ACPI_FAILURE(status)) {
+> -               acpi_pptt_warn_missing();
+> -               return ret;
+> -       }
+> +       table = acpi_get_pptt();
+> +       if (!table)
+> +               return -ENOENT;
+>
+>         if (table->revision >= rev)
+>                 cpu_node = acpi_find_processor_node(table, acpi_cpu_id);
+> @@ -585,8 +598,6 @@ static int check_acpi_cpu_flag(unsigned int cpu, int rev, u32 flag)
+>         if (cpu_node)
+>                 ret = (cpu_node->flags & flag) != 0;
+>
+> -       acpi_put_table(table);
+> -
+>         return ret;
+>  }
+>
+> @@ -605,18 +616,15 @@ int acpi_find_last_cache_level(unsigned int cpu)
+>         u32 acpi_cpu_id;
+>         struct acpi_table_header *table;
+>         int number_of_levels = 0;
+> -       acpi_status status;
+> +
+> +       table = acpi_get_pptt();
+> +       if (!table)
+> +               return -ENOENT;
+>
+>         pr_debug("Cache Setup find last level CPU=%d\n", cpu);
+>
+>         acpi_cpu_id = get_acpi_id_for_cpu(cpu);
+> -       status = acpi_get_table(ACPI_SIG_PPTT, 0, &table);
+> -       if (ACPI_FAILURE(status)) {
+> -               acpi_pptt_warn_missing();
+> -       } else {
+> -               number_of_levels = acpi_find_cache_levels(table, acpi_cpu_id);
+> -               acpi_put_table(table);
+> -       }
+> +       number_of_levels = acpi_find_cache_levels(table, acpi_cpu_id);
+>         pr_debug("Cache Setup find last level level=%d\n", number_of_levels);
+>
+>         return number_of_levels;
+> @@ -638,20 +646,16 @@ int acpi_find_last_cache_level(unsigned int cpu)
+>  int cache_setup_acpi(unsigned int cpu)
+>  {
+>         struct acpi_table_header *table;
+> -       acpi_status status;
+> -
+> -       pr_debug("Cache Setup ACPI CPU %d\n", cpu);
+>
+> -       status = acpi_get_table(ACPI_SIG_PPTT, 0, &table);
+> -       if (ACPI_FAILURE(status)) {
+> -               acpi_pptt_warn_missing();
+> +       table = acpi_get_pptt();
+> +       if (!table)
+>                 return -ENOENT;
+> -       }
+> +
+> +       pr_debug("Cache Setup ACPI CPU %d\n", cpu);
+>
+>         cache_setup_acpi_cpu(table, cpu);
+> -       acpi_put_table(table);
+>
+> -       return status;
+> +       return 0;
+>  }
+>
+>  /**
+> @@ -730,50 +734,38 @@ int find_acpi_cpu_topology_package(unsigned int cpu)
+>  int find_acpi_cpu_topology_cluster(unsigned int cpu)
+>  {
+>         struct acpi_table_header *table;
+> -       acpi_status status;
+>         struct acpi_pptt_processor *cpu_node, *cluster_node;
+>         u32 acpi_cpu_id;
+>         int retval;
+>         int is_thread;
+>
+> -       status = acpi_get_table(ACPI_SIG_PPTT, 0, &table);
+> -       if (ACPI_FAILURE(status)) {
+> -               acpi_pptt_warn_missing();
+> +       table = acpi_get_pptt();
+> +       if (!table)
+>                 return -ENOENT;
+> -       }
+>
+>         acpi_cpu_id = get_acpi_id_for_cpu(cpu);
+>         cpu_node = acpi_find_processor_node(table, acpi_cpu_id);
+> -       if (cpu_node == NULL || !cpu_node->parent) {
+> -               retval = -ENOENT;
+> -               goto put_table;
+> -       }
+> +       if (!cpu_node || !cpu_node->parent)
+> +               return -ENOENT;
+>
+>         is_thread = cpu_node->flags & ACPI_PPTT_ACPI_PROCESSOR_IS_THREAD;
+>         cluster_node = fetch_pptt_node(table, cpu_node->parent);
+> -       if (cluster_node == NULL) {
+> -               retval = -ENOENT;
+> -               goto put_table;
+> -       }
+> +       if (!cluster_node)
+> +               return -ENOENT;
+> +
+>         if (is_thread) {
+> -               if (!cluster_node->parent) {
+> -                       retval = -ENOENT;
+> -                       goto put_table;
+> -               }
+> +               if (!cluster_node->parent)
+> +                       return -ENOENT;
+> +
+>                 cluster_node = fetch_pptt_node(table, cluster_node->parent);
+> -               if (cluster_node == NULL) {
+> -                       retval = -ENOENT;
+> -                       goto put_table;
+> -               }
+> +               if (!cluster_node)
+> +                       return -ENOENT;
+>         }
+>         if (cluster_node->flags & ACPI_PPTT_ACPI_PROCESSOR_ID_VALID)
+>                 retval = cluster_node->acpi_processor_id;
+>         else
+>                 retval = ACPI_PTR_DIFF(cluster_node, table);
+>
+> -put_table:
+> -       acpi_put_table(table);
+> -
+>         return retval;
+>  }
+>
+>
+> --
+> b4 0.10.0-dev-54fef

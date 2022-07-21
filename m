@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F50D57C4A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD24857C4A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiGUGqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S231332AbiGUGqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiGUGqK (ORCPT
+        with ESMTP id S230482AbiGUGqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:46:10 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E310F53D2D;
-        Wed, 20 Jul 2022 23:46:08 -0700 (PDT)
-X-UUID: bde30c7768594db7b4220ebd93a256e9-20220721
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:f34ef06c-0a96-4db9-9901-7f678b49630c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.8,REQID:f34ef06c-0a96-4db9-9901-7f678b49630c,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:0f94e32,CLOUDID:8f6312d8-5d6d-4eaf-a635-828a3ee48b7c,C
-        OID:54f23d73c3e2,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: bde30c7768594db7b4220ebd93a256e9-20220721
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <jing-ting.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 431965892; Thu, 21 Jul 2022 14:46:05 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 21 Jul 2022 14:46:04 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 21 Jul 2022 14:46:03 +0800
-Message-ID: <98d738ec5d7d32441f6e62278fff32201fd948de.camel@mediatek.com>
-Subject: Re: [Bug] race condition at rebind_subsystems()
-From:   Jing-Ting Wu <jing-ting.wu@mediatek.com>
-To:     Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-CC:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        "Zefan Li" <lizefan.x@bytedance.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        <wsd_upstream@mediatek.com>, <lixiong.liu@mediatek.com>,
-        <wenju.xu@mediatek.com>, <jonathan.jmchen@mediatek.com>
-Date:   Thu, 21 Jul 2022 14:46:03 +0800
-In-Reply-To: <20220719133512.GD897@blackbody.suse.cz>
-References: <1978e209e71905d89651e61abd07285912d412a1.camel@mediatek.com>
-         <20220715115938.GA8646@blackbody.suse.cz>
-         <YtGaP+e35DZYSQf0@slm.duckdns.org>
-         <d8f0bc5e2fb6ed259f9334c83279b4c011283c41.camel@mediatek.com>
-         <20220719133512.GD897@blackbody.suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 21 Jul 2022 02:46:23 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053D5E827
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:46:21 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id z13so300524ljj.6
+        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6ebqScyVCL5xtjaYG+MWDobiZU7shkrkf2/xCeYnqTo=;
+        b=cnNPNF6p5XEVyBPgnDIoPk2a55l5wVTjYAGOx9lKKj+nLyGm/ggYZMxUHnMR8u+QcT
+         1N61AswMKoA1NNRB/BvUZ/k5WXPko0h8u6ojHSM51BHJXeQTiJkSH41em82J3CPZUzCc
+         5AQJK6GpA9EAUTZRDsYOmpM1o6bvpE2MZrXHLObG57mLY6yPmpZyItDJb5XbCKcXFnhD
+         IWwoAe9TvwIjeCUSX8519cufzESYT6aLzhRkFRFEzmpwk7RODzxaM8Fwqw8EE3I9aJ2v
+         8rzGknfknGjRPNpY7Jn927hi1IU1vsbcFeuvrPNRluErWnMzPHZcOxodjBIFR1P0LtL0
+         EYUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6ebqScyVCL5xtjaYG+MWDobiZU7shkrkf2/xCeYnqTo=;
+        b=V8Oa2wCRPYGNyEcwhPPVbb2nk9NSeZ4n+NyckyNiKdwFtpIJM7+qCUj1GZhxdoT91R
+         Bbv6MYolqR8swiIOM2knkOOFXW8CeB1I5rFpvOuJr3dcnHBNeg32b4UnLcyXrbLPBke+
+         y3pxEHYki6kW7zu8T/VZ+DhxJ21sRYGwyuzm/t5en09+IZEWmJJQP8/nilGQec80Ez2T
+         L5FNrPl3Vh2CRjQPjaINIlreEFIrFtTwgxcO/d3duLqYcM2xUH2YXHPSY7uJVrP5mpgL
+         CjK4IKl+DZqZ5wQtmpO0jbgxFxsbfyOiWHh/iCk2Dd9kY0mB2oejfOw7yAmLkipaeCKI
+         FiWA==
+X-Gm-Message-State: AJIora+5MxH4KD8F7lulFK76KNjpzfXHkgfN8HHGEyrSG8op1XGTGRZL
+        7tlVOSYBYtHyrrZ9zPlqDVJRjA==
+X-Google-Smtp-Source: AGRyM1sYM/moheTL9vxo8wPQwgwFru+XwB8ZKQ7WV6dGO46MCFpk7mzsGMi5V3SSFRP0Dify8FztGQ==
+X-Received: by 2002:a2e:8705:0:b0:25d:da25:e7c2 with SMTP id m5-20020a2e8705000000b0025dda25e7c2mr1491219lji.139.1658385980013;
+        Wed, 20 Jul 2022 23:46:20 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id k3-20020ac257c3000000b00478de10cf5esm239195lfo.247.2022.07.20.23.46.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Jul 2022 23:46:19 -0700 (PDT)
+Message-ID: <d66aae55-1615-1bbc-4f56-2b4806635db4@linaro.org>
+Date:   Thu, 21 Jul 2022 08:46:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: at91: add lan966 pcb8309 board
+Content-Language: en-US
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, arnd@arndb.de, olof@lixom.net,
+        soc@kernel.org, UNGLinuxDriver@microchip.com,
+        maxime.chevallier@bootlin.com
+References: <20220720194904.2025384-1-horatiu.vultur@microchip.com>
+ <20220720194904.2025384-2-horatiu.vultur@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220720194904.2025384-2-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-07-19 at 15:35 +0200, Michal Koutný wrote:
-> On Mon, Jul 18, 2022 at 03:44:21PM +0800, Jing-Ting Wu <
-> jing-ting.wu@mediatek.com> wrote:
-> > Accroding your description, is the following patch corrent?
+On 20/07/2022 21:49, Horatiu Vultur wrote:
+> Add documentation for Microchip LAN9662 PCB8309.
 > 
-> Yes, this is what I meant (i.e. grace period before invalidating the
-> removed rstat_css_node).
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/arm/atmel-at91.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> > If the patch is correct, we will add this patch to our stability
-> > test.
-> > And we will continue to observe whether the problem is solved.
-> 
-> It'd be great to have such confirmation.
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> index 4e495e03264b..9dc9ad81193a 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> +++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> @@ -169,6 +169,12 @@ properties:
+>            - const: microchip,lan9662
+>            - const: microchip,lan966
+>  
+> +      - description: Microchip LAN9662 PCB8309 Evaluation Board.
+> +        items:
+> +          - const: microchip,lan9662-pcb8309
 
-Thanks for confirm the patch.
-We already add patch to our stability test.
-We will reply mail if we have any update.
-
-> 
-> Thanks,
-> Michal
-
+This and other lan9662 boards should be just an enum. You grow the file
+needlessly... Unless it is clear preference of maintainer. Other boards
+follow normal enum approach, so it seems there is no such preference.
 
 
 Best regards,
-Jing-Ting Wu
-
+Krzysztof

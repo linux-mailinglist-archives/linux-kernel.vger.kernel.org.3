@@ -2,103 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C8E57C499
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2727157C49D
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 08:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiGUGo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 02:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
+        id S230444AbiGUGpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 02:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiGUGoX (ORCPT
+        with ESMTP id S230100AbiGUGpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 02:44:23 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A55C599E0
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:44:22 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id a13so526781ljr.11
-        for <linux-kernel@vger.kernel.org>; Wed, 20 Jul 2022 23:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9EZ/ZfJ5Dqv/Z3vw3hGwnwu2K6278KtSj/3KJUUKvB4=;
-        b=C+NIwK6JmyQSy6TZnTxWc8AE+VxdpZU00M/uR3FaIduX2i1aGcHp8PW81i+6ey+5ue
-         rkjoDwpZ0e//SR/C9AhcyQ/KdHZ2X4cHoOVPYnEdcLbOqej9PdZwsrFS/N8R8zMG0q3m
-         bmoiY+XaYattEv5qCdDDghTcCwpWhc/bU+a9Tt/9e+82i8zLPDy4/dOJGuE5n9kqtK6D
-         r8RmDV+Pq4fAHW3E19Kg3XaHr8imi4zRGwZZ+W6J4hQnVsXodmTLK4kIkB/OrHA/veTL
-         ZHMPb2JpXU2+DH6f5KRPxpc0R+fpte1fUma6KjuRz0dnu2BYE33TTXXKAdjgIvosvEyn
-         r6Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9EZ/ZfJ5Dqv/Z3vw3hGwnwu2K6278KtSj/3KJUUKvB4=;
-        b=l96n6qjtUz4FrApHt0peacM3j94FRXJ2vDfP9MvNkpPQXJRyZomAyCyWnYaB1aTNrB
-         /UEC4sTgpYxbjpaAfoRy+9fjK52bSPR5mtAUH2Qmz9hAV7JYXYjQhzpQ3YVDluy4H6WW
-         kdvVdhV9q+0AFHeeHyaq2Czslz16eyzY7KLoz+5XfLZ/hN22/sbGNn+suUXgp0EsOsFT
-         JZmYzyPpKmf+j9er5ZPOJoEr/NDTY7P/8vtGGRnQLb+rg6cG3zFKvB5bkwi/1AoeItEI
-         b+Cva+Jte+pjHS4MJXxgC4fR3UPKNw2a098GkgEbQAQVJGb6d63PoBiW7PojZgBdm0Wy
-         Qykw==
-X-Gm-Message-State: AJIora9hzuoZvAwDqkH0BHJBS0+UuI+Rcw4EYR/pi7jM2wl7eBhs92iN
-        zAtsoqSudFShWRKqO0FtmOniIw==
-X-Google-Smtp-Source: AGRyM1sAMFvj0gKcnXVhV+I8VCvP4qPZbRcyE6t04/7Xi0WloWvBTC4tmIjUdUAAD0J3xuGPkDDjeQ==
-X-Received: by 2002:a05:651c:54a:b0:25d:6c19:448 with SMTP id q10-20020a05651c054a00b0025d6c190448mr19349273ljp.239.1658385860890;
-        Wed, 20 Jul 2022 23:44:20 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id m1-20020a056512114100b0047f7464f1bbsm242803lfg.116.2022.07.20.23.44.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 23:44:20 -0700 (PDT)
-Message-ID: <a635754e-bf41-4058-5fbb-57ead36b7128@linaro.org>
-Date:   Thu, 21 Jul 2022 08:44:18 +0200
+        Thu, 21 Jul 2022 02:45:09 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62375E06;
+        Wed, 20 Jul 2022 23:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658385907; x=1689921907;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=HhxImctwfYIb9DUOTTgHXwOx+Lua9JqCY8lR+0LM5Gk=;
+  b=LL8sjbL0LmAKX8cQ0B4ZObj/ZI8vyL4Hk3j2uW1dewdErTNpVDGhDfhO
+   MsznwfyaCmnNW8ArTTbJDUNi34W7b7ewVN7QcKV3UsJe79qm2rFkuRGUb
+   WM0S5oKWTlFUT9J3Dmz7VAbSTQ6DXiL3gU1RJFOV5qxZoMVWJb2Sij8gl
+   kXX19ZKMZ/WHzV5TeMEsoyuBUq0L6B5ThnJt7tbzkbom4U6/sLD+zzY0B
+   IYw5CHlpi6QhhfpjZ4ddr2iS7XgPHoVbZIXuuts4qoHuS/0piPOEZOm4Z
+   Gqte4YDEC+aygXlx78mNjHHBl6DBfS1yRxsYr74dg8hsLJE4uB4nyLzMF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="373268353"
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="373268353"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 23:45:06 -0700
+X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
+   d="scan'208";a="656607244"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.31.95]) ([10.255.31.95])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 23:44:58 -0700
+Message-ID: <33cc6a12-ccd7-c2ef-5dfc-0434105c50a8@linux.intel.com>
+Date:   Thu, 21 Jul 2022 14:44:56 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
+Subject: Re: [PATCH v3 0/5] Add perf stat default events for hybrid machines
 Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220721000658.29537-1-william.zhang@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220721000658.29537-1-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, alexander.shishkin@intel.com,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <20220610025449.2089232-1-zhengjun.xing@linux.intel.com>
+ <CAM9d7cjSynKt+CfoPqHQHNJt=to3LmdQqh_x6rKJSUcx6qFbsA@mail.gmail.com>
+ <1d0e29b9-aa14-4cf5-9692-21244f7ddef5@linux.intel.com>
+In-Reply-To: <1d0e29b9-aa14-4cf5-9692-21244f7ddef5@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/07/2022 02:06, William Zhang wrote:
-> Append "brcm,bcmbca" to BCM4908 chip family compatible strings. Add
-> generic 4908 board entry.
+Hi Arnaldo,
 
-This does not explain at all why you are doing it. Improve your commit
-messages.
+On 7/4/2022 5:05 PM, Xing Zhengjun wrote:
+> Hi,
+> 
+> On 6/15/2022 1:59 AM, Namhyung Kim wrote:
+>> Hello,
+>>
+>> On Thu, Jun 9, 2022 at 7:55 PM <zhengjun.xing@linux.intel.com> wrote:
+>>>
+>>> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>>>
+>>> The patch series is to clean up the existing perf stat default and 
+>>> support
+>>> the perf metrics Topdown for the p-core PMU in the perf stat default. 
+>>> The
+>>> first 4 patches are the clean-up patch and fixing the "--detailed" 
+>>> issue.
+>>> The last patch adds support for the perf metrics Topdown, the perf 
+>>> metrics
+>>> Topdown support for e-core PMU will be implemented later separately.
+>>>
+>>> Kan Liang (4):
+>>>    perf stat: Revert "perf stat: Add default hybrid events"
+>>>    perf evsel: Add arch_evsel__hw_name()
+>>>    perf evlist: Always use arch_evlist__add_default_attrs()
+>>>    perf x86 evlist: Add default hybrid events for perf stat
+>>>
+>>> Zhengjun Xing (1):
+>>>    perf stat: Add topdown metrics in the default perf stat on the hybrid
+>>>      machine
+>>
+>> Acked-by: Namhyung Kim <namhyung@kernel.org>
+>>
+> 
+> Thanks Namhyung.
+> 
+> Hi Arnaldo,
+> 
+> Can this patch series go in?
+> Thanks.
 
-The explanation you gave here:
-https://lore.kernel.org/all/b8eda882-6838-ab7d-6e2e-131e3125b16f@broadcom.com/
-is also not really sufficient (and is not in commit msg). Moving things
-around in Linux Kconfig does not justify adding some new compatibles.
+This patch series has been a long time, patch2(perf evsel: Add 
+arch_evsel__hw_name() ) need rebase to the latest perf/core branch,
+I will send a v4 version for it.
+> 
+>> Thanks,
+>> Namhyung
+>>
+>>
+>>>
+>>>   tools/perf/arch/x86/util/evlist.c  | 64 +++++++++++++++++++++++++-----
+>>>   tools/perf/arch/x86/util/evsel.c   | 20 ++++++++++
+>>>   tools/perf/arch/x86/util/topdown.c | 51 ++++++++++++++++++++++++
+>>>   tools/perf/arch/x86/util/topdown.h |  1 +
+>>>   tools/perf/builtin-stat.c          | 50 ++++-------------------
+>>>   tools/perf/util/evlist.c           | 11 +++--
+>>>   tools/perf/util/evlist.h           |  9 ++++-
+>>>   tools/perf/util/evsel.c            |  7 +++-
+>>>   tools/perf/util/evsel.h            |  1 +
+>>>   tools/perf/util/stat-display.c     |  2 +-
+>>>   tools/perf/util/topdown.c          |  7 ++++
+>>>   tools/perf/util/topdown.h          |  3 +-
+>>>   12 files changed, 166 insertions(+), 60 deletions(-)
+>>>
+>>> -- 
+>>> 2.25.1
+>>>
+> 
 
-To be - clear - this is not a review, so you cannot add Rb tag. If you
-insist on a tag, then it as counted as NAK.
-
-Best regards,
-Krzysztof
+-- 
+Zhengjun Xing

@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6305757CA69
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E9857CA78
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 14:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbiGUMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 08:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S233026AbiGUMNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 08:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiGUMM0 (ORCPT
+        with ESMTP id S233607AbiGUMNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 08:12:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE3085D7C;
-        Thu, 21 Jul 2022 05:12:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A96161D91;
-        Thu, 21 Jul 2022 12:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA86C3411E;
-        Thu, 21 Jul 2022 12:12:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658405544;
-        bh=bjLxvlVXamAjASEle08xmCl8qBx04BWEVs5DHeMu8Mw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ns1cEqWMytm09KDRjusjlPxfR1qr267qTII21k/oxK5j4XXiA6BfiZpii70rEUBj1
-         +mCEtt83eiFLaUG9g0rpuUn4GhB82MYLJ1WPpWns10eHBLSiEUrhykQuWQTR11ICGi
-         4IDZUWNrPIDgRj/Kp2gl4bmvVRzqUpaS2LTw2oZ2ze7xEpSoN59CDBixYSbfBhILJE
-         q7amUFr5BW8PvrA6ixfVgHAjUgKEFt8NpCaXeBxfQHadz/DvzIGYxrvV474QB43l9E
-         HjtcRtdYD78hXIbO/1lpe37h+fKRUGMGsXB9qmb2RoR2smqtcTSuu9WiSHdF0e7IMF
-         Tpf64xF/JT0RQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oEV2W-0003Na-9F; Thu, 21 Jul 2022 14:12:24 +0200
-Date:   Thu, 21 Jul 2022 14:12:24 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        dmitry.baryshkov@linaro.org, quic_abhinavk@quicinc.com,
-        quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v16 0/3] eDP/DP Phy vdda realted function
-Message-ID: <YtlCqPWUCmw01Jon@hovoldconsulting.com>
-References: <1657038556-2231-1-git-send-email-quic_khsieh@quicinc.com>
- <YtkrDcjTGhpaU1e0@hovoldconsulting.com>
- <Ytk2dxEC2n/ffNpD@sirena.org.uk>
- <Ytk+9W0Ur1ibqtw8@sirena.org.uk>
+        Thu, 21 Jul 2022 08:13:33 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0938689F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 05:13:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658405611; x=1689941611;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WVw/GgSsVUJfsjlWtcltTLtLJGGerJroVsUb2oi/Ur0=;
+  b=HM61WMXnqrQYHciwa7pWM3vwTNrKBqM81R4CiuhwJ8oEYecQBHMJZTyO
+   sJ9bpi06uYswUWjITHNJbr5YZfmYbNFTGCTWCB0RsJ2kTb+DJbbQh6tKE
+   npZcED8OwjyvQ9BZDWHIzGmTPQWLAQnLVhq1Ny15eLWo2wMj6qm9hNNpA
+   GwSDEYXB7w6fXK1OB7cm+t0UlsQfMW9F1cRW3U97EGZ3G0sUp1G0ZHLva
+   eWx3F2xvcfCplKLIuDaGOnlSChMfii764admX9f0qW3ICxaBsY7Xp/9p9
+   GZYvnMUOBHFEtUv71lAQMIVJvubciTf59SpgR7qVXfYlcQJbIT9le5VSQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="273874964"
+X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
+   d="scan'208";a="273874964"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 05:13:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,289,1650956400"; 
+   d="scan'208";a="666265537"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Jul 2022 05:13:28 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oEV3Y-000074-0V;
+        Thu, 21 Jul 2022 12:13:28 +0000
+Date:   Thu, 21 Jul 2022 20:12:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:tglx/devel/depthtracking 44/45]
+ arch/x86/lib/putuser.S:81: Error: symbol `__put_user_nocheck_2' is already
+ defined
+Message-ID: <202207212007.ELVbSv77-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="CFA1nl4l5O882w62"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ytk+9W0Ur1ibqtw8@sirena.org.uk>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block tglx/devel/depthtracking
+head:   714d29e3e7e3faac27142424ae2533163ddd3a46
+commit: 825ec2afef752357059c356cf19e8cd6230af560 [44/45] x86/putuser: Provide room for padding
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220721/202207212007.ELVbSv77-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ammarfaizi2/linux-block/commit/825ec2afef752357059c356cf19e8cd6230af560
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block tglx/devel/depthtracking
+        git checkout 825ec2afef752357059c356cf19e8cd6230af560
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
---CFA1nl4l5O882w62
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Thu, Jul 21, 2022 at 12:56:37PM +0100, Mark Brown wrote:
-> On Thu, Jul 21, 2022 at 12:20:31PM +0100, Mark Brown wrote:
->=20
-> > You could add a way to specify constant base loads in DT on either a per
-> > regulator or per consumer basis.
->=20
-> ...and also note that this is only an issue if the system gives
-> permission to change the mode in the constraints which is pretty rare.
+All errors (new ones prefixed by >>):
 
-Yeah, apparently only Qualcomm is using regulator-allow-set-load at the
-moment, but it seems pretty common there.
+   arch/x86/lib/putuser.S: Assembler messages:
+>> arch/x86/lib/putuser.S:81: Error: symbol `__put_user_nocheck_2' is already defined
 
-We should probably just drop that from the platforms affected by this
-particular regression and perhaps later add it back where it makes
-sense (e.g. after making sure all consumers specify a load in some way).
 
-Johan
+vim +81 arch/x86/lib/putuser.S
 
---CFA1nl4l5O882w62
-Content-Type: application/pgp-signature; name="signature.asc"
+    79	
+    80	SYM_FUNC_START(__put_user_nocheck_2)
+  > 81	SYM_INNER_LABEL(__put_user_nocheck_2, SYM_L_GLOBAL)
+    82		ENDBR
+    83		ASM_STAC
+    84	2:	movw %ax,(%_ASM_CX)
+    85		xor %ecx,%ecx
+    86		ASM_CLAC
+    87		RET
+    88	SYM_FUNC_END(__put_user_nocheck_2)
+    89	EXPORT_SYMBOL(__put_user_nocheck_2)
+    90	
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYtlCpAAKCRALxc3C7H1l
-CH3VAP0UC9lDdd/fIlxYLQa+xUSFqHJHrap+vbhZ0Co4s/SlkgD+JXqNWLFDmtEF
-29yeuk3k7WUrvkX9OIjphqSsYKFRzwo=
-=+ChT
------END PGP SIGNATURE-----
-
---CFA1nl4l5O882w62--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

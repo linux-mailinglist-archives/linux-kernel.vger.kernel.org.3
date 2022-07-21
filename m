@@ -2,141 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E91D57CCED
-	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ACD57CCF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 21 Jul 2022 16:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiGUOLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 10:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
+        id S229631AbiGUOMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 10:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbiGUOLR (ORCPT
+        with ESMTP id S229498AbiGUOML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:11:17 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2005052FD5
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:11:14 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id bf13so1765309pgb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 07:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JdLRsvRnZXSge95hUUniiBkKTb/15qbqNRgmQFuXFpQ=;
-        b=U9/GVNr7Qn7GXD9Ir8eRl7CIKSjh+S8N0xIJQVcE0Ek6IRZjcuGRrVPhycCG0BujXm
-         /zs70hdIHMmYtwWARr77YGYwuAFIwyUrW68zLuF1r2iAv4SNEmdZMWsbNH+Q0Itg2dsO
-         AWFV7qZl+ejmr1kHeMaKQn2V2iRlaUgOGl2fkqSLhQNcSD2NCjv+6GfvQ/Q4UgpJNQxq
-         aK5s0IshYbWISsTjE5hvtlIdSq6QXbpyL8U8xHszq9rhHMjztAp07NSAo0i6hF6Txmsa
-         dj0pK98iQCMIK6+A2QJD5/7Erhb2E4dU6YtKq0GPFRfbKl4GR+V5yx0mAn+/1nfvisKw
-         6YcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JdLRsvRnZXSge95hUUniiBkKTb/15qbqNRgmQFuXFpQ=;
-        b=fARW2GCcvAoI9qQkyEHldQZkRLCWYvNwGf0GYYuK1v7lBsZBZMoYAWdSm+dbRhXxxg
-         bpfBIDy39jaegF+wZd8HCHpfocYeRhBF2BQjbH7tUqnkMoqcDxEFCekax3ouoc3ENX28
-         zmbDjNilBQ8z75Nn4CjU331TAGXpWwgg4LOWExMuUleBUQl5G9DOUmI7ryjQG90kadUE
-         ijc52SIlfzIN8sx1y6BBHPEaspFjIUKKSj5m55204q8yRtc4uNYjmYKM/+4tOULXBekp
-         BZF9M/8/E6WnpA72PJKXLNOkvaF3rpemz3TGbW1lufxU3yUykmNV6bWshL6oGTVUywcI
-         GSyA==
-X-Gm-Message-State: AJIora/PvttMqwxuk6hVSM7jkiinFYAdoiudVw96DxyH9GJxi6lIoLIQ
-        16f+Nu+4krNLO/t/JnPTW45vow==
-X-Google-Smtp-Source: AGRyM1s01zL0Y2g/nLveXPvxylj4bvkc9N7+K/k0hCI2a45sUWQDWZ/0MowhBRo7y2SRhY5eioETrA==
-X-Received: by 2002:a63:9041:0:b0:415:c0e8:c588 with SMTP id a62-20020a639041000000b00415c0e8c588mr37681722pge.282.1658412673210;
-        Thu, 21 Jul 2022 07:11:13 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902778c00b0016d1f474653sm1495911pll.52.2022.07.21.07.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 07:11:12 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 14:11:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v2 05/11] KVM: x86: emulator: update the emulation mode
- after CR0 write
-Message-ID: <YtlefGulMwp/WwKv@google.com>
-References: <20220621150902.46126-1-mlevitsk@redhat.com>
- <20220621150902.46126-6-mlevitsk@redhat.com>
- <YtiUq7jm2Z1NTRv3@google.com>
- <532c71cbca049004bd6860508fdc056ae118ab1f.camel@redhat.com>
+        Thu, 21 Jul 2022 10:12:11 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9060751437;
+        Thu, 21 Jul 2022 07:12:09 -0700 (PDT)
+Received: from localhost.localdomain (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPS id 5D22840737BF;
+        Thu, 21 Jul 2022 14:12:05 +0000 (UTC)
+From:   Andrey Strachuk <strochuk@ispras.ru>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Andrey Strachuk <strochuk@ispras.ru>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: [PATCH v3] ACPI/PCI: Remove useless NULL pointer checks
+Date:   Thu, 21 Jul 2022 17:11:33 +0300
+Message-Id: <20220721141133.1431117-1-strochuk@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <532c71cbca049004bd6860508fdc056ae118ab1f.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-07-20 at 23:50 +0000, Sean Christopherson wrote:
-> > On Tue, Jun 21, 2022, Maxim Levitsky wrote:
-> > > CR0.PE toggles real/protected mode, thus its update
-> > > should update the emulation mode.
-> > > 
-> > > This is likely a benign bug because there is no writeback
-> > > of state, other than the RIP increment, and when toggling
-> > > CR0.PE, the CPU has to execute code from a very low memory address.
-> > > 
-> > > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > > ---
-> > >  arch/x86/kvm/emulate.c | 13 ++++++++++++-
-> > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> > > index 6f4632babc4cd8..002687d17f9364 100644
-> > > --- a/arch/x86/kvm/emulate.c
-> > > +++ b/arch/x86/kvm/emulate.c
-> > > @@ -3659,11 +3659,22 @@ static int em_movbe(struct x86_emulate_ctxt *ctxt)
-> > >  
-> > >  static int em_cr_write(struct x86_emulate_ctxt *ctxt)
-> > >  {
-> > > -	if (ctxt->ops->set_cr(ctxt, ctxt->modrm_reg, ctxt->src.val))
-> > > +	int cr_num = ctxt->modrm_reg;
-> > > +	int r;
-> > > +
-> > > +	if (ctxt->ops->set_cr(ctxt, cr_num, ctxt->src.val))
-> > >  		return emulate_gp(ctxt, 0);
-> > >  
-> > >  	/* Disable writeback. */
-> > >  	ctxt->dst.type = OP_NONE;
-> > > +
-> > > +	if (cr_num == 0) {
-> > > +		/* CR0 write might have updated CR0.PE */
-> > 
-> > Or toggled CR0.PG.  
-> 
-> I thought about it but paging actually does not affect the CPU mode.
+Local variable 'p' is initialized by an address of field of acpi_resource, 
+so it does not make sense to compare 'p' with NULL.
 
-Toggling CR0.PG when EFER.LME=1 (and CR4.PAE=1) switches the CPU in and out of
-long mode.  That's why I mentioned the EFER.LMA thing below.  It's also notable
-in that the only reason we don't have to handle CR4 here is because clearing
-CR4.PAE while long is active causes a #GP.  
- 
-> E.g if you are in protected mode, instructions execute the same regardless
-> if you have paging or not.
-> 
-> (There are probably some exceptions but you understand what I mean).
-> 
-> Best regards,
-> 	Maxim Levitsky
-> 
-> > It's probably also worth noting that ->set_cr() handles side
-> > effects to other registers, e.g. the lack of an EFER.LMA update makes this look
-> > suspicious at first glance.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
+---
+ drivers/acpi/pci_link.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/acpi/pci_link.c b/drivers/acpi/pci_link.c
+index 58647051c948..aa1038b8aec4 100644
+--- a/drivers/acpi/pci_link.c
++++ b/drivers/acpi/pci_link.c
+@@ -95,7 +95,7 @@ static acpi_status acpi_pci_link_check_possible(struct acpi_resource *resource,
+ 	case ACPI_RESOURCE_TYPE_IRQ:
+ 		{
+ 			struct acpi_resource_irq *p = &resource->data.irq;
+-			if (!p || !p->interrupt_count) {
++			if (!p->interrupt_count) {
+ 				acpi_handle_debug(handle,
+ 						  "Blank _PRS IRQ resource\n");
+ 				return AE_OK;
+@@ -121,7 +121,7 @@ static acpi_status acpi_pci_link_check_possible(struct acpi_resource *resource,
+ 		{
+ 			struct acpi_resource_extended_irq *p =
+ 			    &resource->data.extended_irq;
+-			if (!p || !p->interrupt_count) {
++			if (!p->interrupt_count) {
+ 				acpi_handle_debug(handle,
+ 						  "Blank _PRS EXT IRQ resource\n");
+ 				return AE_OK;
+@@ -182,7 +182,7 @@ static acpi_status acpi_pci_link_check_current(struct acpi_resource *resource,
+ 	case ACPI_RESOURCE_TYPE_IRQ:
+ 		{
+ 			struct acpi_resource_irq *p = &resource->data.irq;
+-			if (!p || !p->interrupt_count) {
++			if (!p->interrupt_count) {
+ 				/*
+ 				 * IRQ descriptors may have no IRQ# bits set,
+ 				 * particularly those w/ _STA disabled
+@@ -197,7 +197,7 @@ static acpi_status acpi_pci_link_check_current(struct acpi_resource *resource,
+ 		{
+ 			struct acpi_resource_extended_irq *p =
+ 			    &resource->data.extended_irq;
+-			if (!p || !p->interrupt_count) {
++			if (!p->interrupt_count) {
+ 				/*
+ 				 * extended IRQ descriptors must
+ 				 * return at least 1 IRQ
+-- 
+2.25.1
+

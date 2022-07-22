@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4928B57D78D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D0557D790
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233484AbiGVAB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S232630AbiGVADK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiGVABY (ORCPT
+        with ESMTP id S233314AbiGVADI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:01:24 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7666F8F530
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:01:20 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id by8so3648107ljb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:01:20 -0700 (PDT)
+        Thu, 21 Jul 2022 20:03:08 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FA118374;
+        Thu, 21 Jul 2022 17:03:06 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id y141so3118774pfb.7;
+        Thu, 21 Jul 2022 17:03:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TfUx8CmhONPumASQ3Ohn0ZPBwIqk0yRSMBdm0KN2cgU=;
-        b=rOHN3ZGGd0VZ8vpBhxUS3HRRKOp92PUaDlqmaWVQgqErtb6Xo8/DY7Q5ALgGDkl1G8
-         qQ7FlqyStGgGVHuhOQy8qypFsKQl0an3DzVR1DnoI8XA+tnSI9bgkFO0XC0hMI2lE/QL
-         wrMQyRmh4idG2r0aPrIKyi9Ui4tb8TLAnFuCOHGHkKg7V5iR9yCd4zWR1hs2+4bvChdy
-         x40yWVd9k2XjY9Czw6f7QBnQThHo7oCtU7sh2xOK23lJiJx7iwopE2D/670kdQaj0UZG
-         RDlQoapXQoEoN9uzBnp0raGVgaQwy6wESzIK0Be3BQGnm+GFq/VbVNMUye51vkNgxkgT
-         Df8g==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=p8z6RDRXBRo9M6V6DMA4kElO+jhaV+6kExG3kqeP3Bs=;
+        b=m4Iq7KOkI3mytZVy2km6PnWop6b7rkVW3J5c/GIal9LU2KHd0ZixAjbM1h97Huaq8W
+         ZcWXOsankpukwkTFs49R/40BDbhIzvuYb028G5H67whvy7byBgUe72d2kIf+Dk3/5oyH
+         C3vNm+Oawv39X6bzkDJ3/nfuiLr2en/HN+itgRP3S5tfVpCHDBOJBYSIGODXtmgAjW57
+         Sd4xnLS2/UaFMTWeJYDHnWxyhblos/Nq0+nR0GDRV88DNoeQgUf8F6WUmBWx9nmBfGIb
+         qM3AEQDpdLexpwE1kmIxNP0q99mjNTBrGaNykq/tQiNBMQxh/GR3RFUhiDvCCt9Ai582
+         t6xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TfUx8CmhONPumASQ3Ohn0ZPBwIqk0yRSMBdm0KN2cgU=;
-        b=oQIwnHBn5OSsHL+yxHfLbJWKqX3QqG6fP7rEq9IXPucxId3NslvZIX3dd1jbIx+xOs
-         Y7ONUncYXxWskcnKV1KLw96rElJu+Unp7weDPuoGdHjLLokEIa2rpqgRFRLx4XhwQrKw
-         Hr2ALxhIQFN9egy5Xn/nVWY34wlQM4C7hKauFAGFdwP58WpDdpyYpXzq9dTT1Vl2G6T8
-         5lXoYHRTysR7mckRcoqyMXqmCCy7EBMqYS4JYGqTQMBwgs+ZMC6whaa9blxyT9bODOHT
-         9ps92+bEIDUXDtA0/pReO9zNgZMAIF2vFT5glMOIp1CUvQPEXtAmAUzudickiPbuH8Xs
-         DbGg==
-X-Gm-Message-State: AJIora+RcnR9LBatvoWlBmCZkRst3Jk0wkJQJRvYIK8ePi4238Rv1pbP
-        OTysaexknQa+F7yoOcPyOZnW5nhet4coDvn5nDOuHw==
-X-Google-Smtp-Source: AGRyM1s+4jZ2x/29KrEyF0s+DwzE6XpjQADLpLzRnJDAnzkLjFNuegifnNgpwxjZcEU4vwvE6S7KFwmjrYf0PPjgeak=
-X-Received: by 2002:a2e:9d02:0:b0:25d:d6b9:b753 with SMTP id
- t2-20020a2e9d02000000b0025dd6b9b753mr262234lji.344.1658448078269; Thu, 21 Jul
- 2022 17:01:18 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=p8z6RDRXBRo9M6V6DMA4kElO+jhaV+6kExG3kqeP3Bs=;
+        b=ba9a1sr6jcYhWeO/8i0EMqAQp8SyS1su/MVPLv2uOJsd4ZubatdVi0D1Mhc3GRhqv9
+         iETIf7MuqF5hlf1GiuLY9gzQ9TlGjEtiMDGT/PmoGOVSR9tgUdnYnN8mAkA/GZhInoo2
+         3klOC6QSukgVHCmAvNXMaPEuJAfJE8oRox6iUbRLAOAcQTs9iDTF8p+wbPkHzl27MNUx
+         7xdISEi1r6fJiL6aVC7Wy7cviViDlSXhE0x6pJ6IcFOrChGhhDEmDzehfSV02kaCQ4rd
+         4pnlxCP3lOTlzINmpTxYz39pEyQKC3PSgBtNXSqg3VzIrFwqopLnfL6bDjqfNQLNnGVw
+         sVog==
+X-Gm-Message-State: AJIora+JvB67TmoxLAAFs6kBmdZvIYJqRyjSb8V5WOr8cXHvdMwZ8ZN1
+        PosUDvKsSv2e6v+lwwS/1ko=
+X-Google-Smtp-Source: AGRyM1tMQWP/lwE0rgBZ0kXzHY7MT+OXkAEYa+E+jQit/hT4eTpymIYi0OAgrdCgb6Jp2J8GgNIOOQ==
+X-Received: by 2002:a05:6a00:134e:b0:52a:d5b4:19bb with SMTP id k14-20020a056a00134e00b0052ad5b419bbmr687433pfu.45.1658448185456;
+        Thu, 21 Jul 2022 17:03:05 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ik1-20020a170902ab0100b0016c48c52ce4sm2286149plb.204.2022.07.21.17.03.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 17:03:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <5bd3b06c-c86a-6fc6-5a72-717c0d16b6ab@roeck-us.net>
+Date:   Thu, 21 Jul 2022 17:03:03 -0700
 MIME-Version: 1.0
-References: <20220721055728.718573-1-kaleshsingh@google.com>
- <20220721055728.718573-18-kaleshsingh@google.com> <Ytm4ji93wyjRI7Jw@google.com>
-In-Reply-To: <Ytm4ji93wyjRI7Jw@google.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Thu, 21 Jul 2022 17:01:07 -0700
-Message-ID: <CAC_TJveRKqRkfiJr=0JHxRYSqTh3CMANqNkkRNRvj=xwWd6jDg@mail.gmail.com>
-Subject: Re: [PATCH v5 17/17] KVM: arm64: Introduce hyp_dump_backtrace()
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Fuad Tabba <tabba@google.com>, Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.18 000/227] 5.18.13-rc3 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220721182818.743726259@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220721182818.743726259@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,142 +81,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 1:35 PM Oliver Upton <oliver.upton@linux.dev> wrote:
->
-> Hi Kalesh,
->
-> Nifty series! Had the chance to take it for a spin :) Few comments
-> below:
+On 7/21/22 11:34, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.13 release.
+> There are 227 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 23 Jul 2022 18:26:47 +0000.
+> Anything received after that time might be too late.
+> 
 
-Hi Oliver. Thanks for giving it a try :)
+Build results:
+	total: 154 pass: 154 fail: 0
+Qemu test results:
+	total: 489 pass: 489 fail: 0
 
->
-> On Wed, Jul 20, 2022 at 10:57:28PM -0700, Kalesh Singh wrote:
-> > In non-protected nVHE mode, unwinds and dumps the hypervisor backtrace
-> > from EL1. This is possible beacuase the host can directly access the
-> > hypervisor stack pages in non-proteced mode.
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >
-> > Changes in v5:
-> >   - Move code out from nvhe.h header to handle_exit.c, per Marc
-> >   - Fix stacktrace symoblization when CONFIG_RAMDOMIZE_BASE is enabled,
-> >     per Fuad
-> >   - Use regular comments instead of doc comments, per Fuad
-> >
-> >  arch/arm64/kvm/handle_exit.c | 65 +++++++++++++++++++++++++++++++-----
-> >  1 file changed, 56 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-> > index ad568da5c7d7..432b6b26f4ad 100644
-> > --- a/arch/arm64/kvm/handle_exit.c
-> > +++ b/arch/arm64/kvm/handle_exit.c
->
-> [...]
->
-> > @@ -318,6 +319,56 @@ void handle_exit_early(struct kvm_vcpu *vcpu, int exception_index)
-> >               kvm_handle_guest_serror(vcpu, kvm_vcpu_get_esr(vcpu));
-> >  }
-> >
-> > +/*
-> > + * kvm_nvhe_print_backtrace_entry - Symbolizes and prints the HYP stack address
-> > + */
-> > +static void kvm_nvhe_print_backtrace_entry(unsigned long addr,
-> > +                                               unsigned long hyp_offset)
-> > +{
-> > +     unsigned long va_mask = GENMASK_ULL(vabits_actual - 1, 0);
-> > +
-> > +     /* Mask tags and convert to kern addr */
-> > +     addr = (addr & va_mask) + hyp_offset;
-> > +     kvm_err(" [<%016lx>] %pB\n", addr, (void *)(addr + kaslr_offset()));
-> > +}
->
-> It is a bit odd to see this get churned from the last patch. Is it
-> possible to introduce the helper earlier on? In fact, the non-protected
-> patch should come first to layer the series better.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Agreed. pKVM is the one with the extra layer. I'll reorder this in the
-next version.
-
->
-> Also, it seems to me that there isn't much need for the indirection if
-> the pKVM unwinder is made to work around the below function signature:
-
-Ok, I'll fold it into the below function.
-
->
-> <snip>
->
-> > +/*
-> > + * hyp_dump_backtrace_entry - Dump an entry of the non-protected nVHE HYP stacktrace
-> > + *
-> > + * @arg    : the hypervisor offset, used for address translation
-> > + * @where  : the program counter corresponding to the stack frame
-> > + */
-> > +static bool hyp_dump_backtrace_entry(void *arg, unsigned long where)
-> > +{
-> > +     kvm_nvhe_print_backtrace_entry(where, (unsigned long)arg);
-> > +
-> > +     return true;
-> > +}
->
-> </snip>
->
-> > +/*
-> > + * hyp_dump_backtrace - Dump the non-proteced nVHE HYP backtrace.
-> > + *
-> > + * @hyp_offset: hypervisor offset, used for address translation.
-> > + *
-> > + * The host can directly access HYP stack pages in non-protected
-> > + * mode, so the unwinding is done directly from EL1. This removes
-> > + * the need for shared buffers between host and hypervisor for
-> > + * the stacktrace.
-> > + */
-> > +static void hyp_dump_backtrace(unsigned long hyp_offset)
-> > +{
-> > +     struct kvm_nvhe_stacktrace_info *stacktrace_info;
-> > +     struct unwind_state state;
-> > +
-> > +     stacktrace_info = this_cpu_ptr_nvhe_sym(kvm_stacktrace_info);
-> > +
-> > +     kvm_nvhe_unwind_init(&state, stacktrace_info->fp, stacktrace_info->pc);
-> > +
-> > +     kvm_err("Non-protected nVHE HYP call trace:\n");
->
-> I don't see the value in discerning non-protected vs. protected in the
-> preamble, as panic() will dump the kernel commandline which presumably
-> would have a `kvm-arm.mode=protected` in the case of pKVM.
-
-Ok, I'll remove the distinction.
-
->
-> <nit>
->
-> Not entirely your problem, but we should really use a consistent name
-> for that thing we have living at EL2. Hyp or nVHE (but not both) would
-> be appropriate.
->
-
-Right, I think just "nVHE" is probably sufficient. (Open to other suggestions)
-
-> </nit>
->
-> > +     unwind(&state, hyp_dump_backtrace_entry, (void *)hyp_offset);
-> > +     kvm_err("---- End of Non-protected nVHE HYP call trace ----\n");
->
-> Maybe:
->
-> kvm_err("---[ end ${NAME_FOR_EL2} trace ]---");
->
-> (more closely matches the pattern of the arm64 stacktrace)
-
-Agreed.
-
-Thanks,
-Kalesh
-
->
-> --
-> Thanks,
-> Oliver
+Guenter

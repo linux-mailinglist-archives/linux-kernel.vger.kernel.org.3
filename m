@@ -2,107 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7941657E265
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEB857E26B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbiGVNgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
+        id S235162AbiGVNlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiGVNgL (ORCPT
+        with ESMTP id S234812AbiGVNlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:36:11 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFB613FA7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:36:10 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id u12so866595edd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=csCPVk6hB5Ta9ejYwXsButhNH0HX4XzJJybT/ifyFJE=;
-        b=DuvnTvus6TaGwQHQW4LGA+Gl1HZzCv3r14kXIlvJpVG9K0G6Jy/zdPu0lUeYxcFojt
-         bmpnPZTYkymqeob1NPcSLh2Ga6pNCG4DHZU1pMY/X55wTYtav1qVm8PRWt6bF1M9V2Br
-         ixSm9zABPgRzrvOVk8BHvVWnWglevpToAzBpY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=csCPVk6hB5Ta9ejYwXsButhNH0HX4XzJJybT/ifyFJE=;
-        b=DbT2WICf1e3L907p36y6ZzxgA58AwBgC4PewiwbIUtucjr3qJONUGYPvX0PEGUEgH9
-         0ALSQmdbehVyc163VUf+a9oOgVbp2+c4QQx+MQ/c+HcKIIFlgsKjS0HRqNFTl3DzxzBQ
-         Wla3ae54UM52el0E2wzg19xCNouPL+QU35rF/m6flSXaHhMxUNarMjFGK5nsjrwfcBn9
-         tR7toS5AXvndL53aKdyf+A/mBOlOq7e42C2Gjm+QZVvBm6kgmNXxo5p3thtRJtBYooHf
-         8e54yspnxSNkK4vHiht2nhgxGj3DhT+I+GFeAXDV9mwX+iYJDmic4Yos4bGfEyPn231Y
-         1bMg==
-X-Gm-Message-State: AJIora+uD0MrrPNoiPOrAoIs67/BItJjPgahdJB6Xy6SU0DwQzODvSHE
-        HkhQsVT+A4yhYnl7fFpFVD6lmwSP0GB1+IV1WhE=
-X-Google-Smtp-Source: AGRyM1sDzKPoooczk8qnIU4tokp2VItCqAXJb6SUc/IBFGVbZ3LHoejj61wlO8V1Y2Js2EHroIYnLQ==
-X-Received: by 2002:a05:6402:28c8:b0:43a:aba5:efe5 with SMTP id ef8-20020a05640228c800b0043aaba5efe5mr767499edb.2.1658496968907;
-        Fri, 22 Jul 2022 06:36:08 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id ky4-20020a170907778400b0072aadbd48c7sm2010233ejc.84.2022.07.22.06.36.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 06:36:07 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so2513025wmm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:36:07 -0700 (PDT)
-X-Received: by 2002:a05:600c:2e48:b0:3a3:1ce3:3036 with SMTP id
- q8-20020a05600c2e4800b003a31ce33036mr11932470wmf.188.1658496966715; Fri, 22
- Jul 2022 06:36:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220722074755.660258-1-javierm@redhat.com>
-In-Reply-To: <20220722074755.660258-1-javierm@redhat.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 22 Jul 2022 06:35:55 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WR3UP4XMch5z8Hz8GzWRg5cCsK6FVwgoo=HHDnpTwz+g@mail.gmail.com>
-Message-ID: <CAD=FV=WR3UP4XMch5z8Hz8GzWRg5cCsK6FVwgoo=HHDnpTwz+g@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Use dev_err_probe() to avoid
- polluting the log
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Erico Nunes <ernunes@redhat.com>,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 09:41:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E137E1D0F2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:41:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 88AA02054D;
+        Fri, 22 Jul 2022 13:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658497263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uuyaztEJO/U+txt+TpKrVT4oWz325yRVlHDru4X0shc=;
+        b=gabumqZvClIYLtonZ7QRkkmiqS3ZyUOvIjMahdFtEBcZ1LvPkdSYQEQgzcIkJbKcSipAlv
+        FE5CEiVnBp6eX0ZxrWMweKEBmiew4iWsbbz59qjkbMmGcGsLA+ZpOc/ZY5W8CHpoIydvsA
+        LeYf3a8f7jCUnJM5sudY3ZMYDxQhcaA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658497263;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uuyaztEJO/U+txt+TpKrVT4oWz325yRVlHDru4X0shc=;
+        b=PHa4wrnvV89bET21NF6pheiOgMYTKTEH0+M0xZX29BjhJwUYufjp6ymnqHN/nL8t6ja47U
+        qBI4oYPwvWAqdCBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45774134A9;
+        Fri, 22 Jul 2022 13:41:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gTw+EO+o2mKVWQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 22 Jul 2022 13:41:03 +0000
+Date:   Fri, 22 Jul 2022 15:41:02 +0200
+Message-ID: <87h739464x.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+Cc:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
+        <vsujithkumar.reddy@amd.com>, <Vijendar.Mukunda@amd.com>,
+        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
+        <ssabakar@amd.com>, Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        "Charles Keepax" <ckeepax@opensource.cirrus.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] ASoC: amd: acp: Initialize list to store acp_stream during pcm_open
+In-Reply-To: <20220722133530.3314087-1-venkataprasad.potturu@amd.com>
+References: <20220722133530.3314087-1-venkataprasad.potturu@amd.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 22 Jul 2022 15:35:22 +0200,
+Venkata Prasad Potturu wrote:
+> 
+> From: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+> 
+> We are currently allocating acp_stream during pcm_open and saving
+> it in static array corresponds to array index calculated based on
+> cpu dai->driver id. This approach will fail if we have single dai
+> linked to multiple pcm device as we will have same dai->driver id
+> or array index for multiple pcm open. Initialize new linked list
+> stream_list to store opened pcm stream info dynamically.
 
-On Fri, Jul 22, 2022 at 12:48 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> If devm_drm_of_get_bridge() can't find the connected bridge, it returns an
-> ERR_PTR(-EPROBE_DEFER) to indicate that the probe should be deferred.
->
-> But this path also prints an error message, which pollutes the kernel log
-> since is printed on every probe deferral, i.e:
->
->   $ dmesg | grep "failed to create panel bridge" | wc -l
->   38
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+If an IRQ handler refers to the linked list, make sure that no list
+change will happen concurrently during the IRQ handling.  It seems
+that you have no protection for it yet.
+
+
+thanks,
+
+Takashi
+
+> 
+> Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+> Signed-off-by: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+> Reviewed-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 > ---
->
->  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-
-If someone else doesn't beat me to it, I'll apply next week sometime.
+> 
+> Changes since v1:
+>     -- Fix compile error and remove unused variable.
+> 
+>  sound/soc/amd/acp/acp-platform.c | 33 ++++++++++++--------------------
+>  sound/soc/amd/acp/amd.h          |  3 ++-
+>  2 files changed, 14 insertions(+), 22 deletions(-)
+> 
+> diff --git a/sound/soc/amd/acp/acp-platform.c b/sound/soc/amd/acp/acp-platform.c
+> index 10730d33c3b0..20c0f75f7c97 100644
+> --- a/sound/soc/amd/acp/acp-platform.c
+> +++ b/sound/soc/amd/acp/acp-platform.c
+> @@ -94,7 +94,7 @@ static irqreturn_t i2s_irq_handler(int irq, void *data)
+>  	struct acp_resource *rsrc = adata->rsrc;
+>  	struct acp_stream *stream;
+>  	u16 i2s_flag = 0;
+> -	u32 ext_intr_stat, ext_intr_stat1, i;
+> +	u32 ext_intr_stat, ext_intr_stat1;
+>  
+>  	if (!adata)
+>  		return IRQ_NONE;
+> @@ -104,8 +104,7 @@ static irqreturn_t i2s_irq_handler(int irq, void *data)
+>  
+>  	ext_intr_stat = readl(ACP_EXTERNAL_INTR_STAT(adata, rsrc->irqp_used));
+>  
+> -	for (i = 0; i < ACP_MAX_STREAM; i++) {
+> -		stream = adata->stream[i];
+> +	list_for_each_entry(stream, &adata->stream_list, list) {
+>  		if (stream && (ext_intr_stat & stream->irq_bit)) {
+>  			writel(stream->irq_bit,
+>  			       ACP_EXTERNAL_INTR_STAT(adata, rsrc->irqp_used));
+> @@ -146,9 +145,8 @@ static void config_pte_for_stream(struct acp_dev_data *adata, struct acp_stream
+>  	writel(0x01, adata->acp_base + ACPAXI2AXI_ATU_CTRL);
+>  }
+>  
+> -static void config_acp_dma(struct acp_dev_data *adata, int cpu_id, int size)
+> +static void config_acp_dma(struct acp_dev_data *adata, struct acp_stream *stream, int size)
+>  {
+> -	struct acp_stream *stream = adata->stream[cpu_id];
+>  	struct snd_pcm_substream *substream = stream->substream;
+>  	struct acp_resource *rsrc = adata->rsrc;
+>  	dma_addr_t addr = substream->dma_buffer.addr;
+> @@ -174,13 +172,10 @@ static void config_acp_dma(struct acp_dev_data *adata, int cpu_id, int size)
+>  
+>  static int acp_dma_open(struct snd_soc_component *component, struct snd_pcm_substream *substream)
+>  {
+> -	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
+> -	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(soc_runtime, 0);
+>  	struct snd_pcm_runtime *runtime = substream->runtime;
+>  	struct device *dev = component->dev;
+>  	struct acp_dev_data *adata = dev_get_drvdata(dev);
+>  	struct acp_stream *stream;
+> -	int stream_id = cpu_dai->driver->id * 2 + substream->stream;
+>  	int ret;
+>  
+>  	stream = kzalloc(sizeof(*stream), GFP_KERNEL);
+> @@ -188,7 +183,8 @@ static int acp_dma_open(struct snd_soc_component *component, struct snd_pcm_subs
+>  		return -ENOMEM;
+>  
+>  	stream->substream = substream;
+> -	adata->stream[stream_id] = stream;
+> +
+> +	list_add_tail(&stream->list, &adata->stream_list);
+>  
+>  	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+>  		runtime->hw = acp_pcm_hardware_playback;
+> @@ -212,16 +208,13 @@ static int acp_dma_hw_params(struct snd_soc_component *component,
+>  			     struct snd_pcm_substream *substream,
+>  			     struct snd_pcm_hw_params *params)
+>  {
+> -	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
+>  	struct acp_dev_data *adata = snd_soc_component_get_drvdata(component);
+> -	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(soc_runtime, 0);
+>  	struct acp_stream *stream = substream->runtime->private_data;
+> -	int stream_id = cpu_dai->driver->id * 2 + substream->stream;
+>  	u64 size = params_buffer_bytes(params);
+>  
+>  	/* Configure ACP DMA block with params */
+>  	config_pte_for_stream(adata, stream);
+> -	config_acp_dma(adata, stream_id, size);
+> +	config_acp_dma(adata, stream, size);
+>  
+>  	return 0;
+>  }
+> @@ -261,16 +254,11 @@ static int acp_dma_new(struct snd_soc_component *component,
+>  static int acp_dma_close(struct snd_soc_component *component,
+>  			 struct snd_pcm_substream *substream)
+>  {
+> -	struct snd_soc_pcm_runtime *soc_runtime = asoc_substream_to_rtd(substream);
+> -	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(soc_runtime, 0);
+> -	struct device *dev = component->dev;
+> -	struct acp_dev_data *adata = dev_get_drvdata(dev);
+> -	struct acp_stream *stream;
+> -	int stream_id = cpu_dai->driver->id * 2 + substream->stream;
+> +	struct acp_stream *stream = substream->runtime->private_data;
+>  
+> -	stream = adata->stream[stream_id];
+> +	/* Remove entry from list */
+> +	list_del(&stream->list);
+>  	kfree(stream);
+> -	adata->stream[stream_id] = NULL;
+>  
+>  	return 0;
+>  }
+> @@ -305,6 +293,9 @@ int acp_platform_register(struct device *dev)
+>  		dev_err(dev, "Fail to register acp i2s component\n");
+>  		return status;
+>  	}
+> +
+> +	INIT_LIST_HEAD(&adata->stream_list);
+> +
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_NS_GPL(acp_platform_register, SND_SOC_ACP_COMMON);
+> diff --git a/sound/soc/amd/acp/amd.h b/sound/soc/amd/acp/amd.h
+> index af9603724a68..148a9ab6206d 100644
+> --- a/sound/soc/amd/acp/amd.h
+> +++ b/sound/soc/amd/acp/amd.h
+> @@ -91,6 +91,7 @@ struct acp_chip_info {
+>  };
+>  
+>  struct acp_stream {
+> +	struct list_head list;
+>  	struct snd_pcm_substream *substream;
+>  	int irq_bit;
+>  	int dai_id;
+> @@ -123,7 +124,7 @@ struct acp_dev_data {
+>  	struct snd_soc_dai_driver *dai_driver;
+>  	int num_dai;
+>  
+> -	struct acp_stream *stream[ACP_MAX_STREAM];
+> +	struct list_head stream_list;
+>  
+>  	struct snd_soc_acpi_mach *machines;
+>  	struct platform_device *mach_dev;
+> -- 
+> 2.25.1
+> 

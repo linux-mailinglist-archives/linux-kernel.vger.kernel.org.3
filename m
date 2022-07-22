@@ -2,95 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D007757E79D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C0C57E7A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235967AbiGVTpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S236549AbiGVTrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiGVTpQ (ORCPT
+        with ESMTP id S229679AbiGVTrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:45:16 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EEE1121
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:45:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=nquW4uTK4EsRfwtuLuO5LJX7Kp99WKVz9jDKp1qtM5M=;
-        b=LEOoim3HTfBG6Im2MJvLVsNAGyS2uuOEbXscuyokM/Cq0+jDNjlVMdSZVGzbu08uCGgp2NMKTuBbX
-         UQMe5rIIaUj9Pmsl0FPhJ8TjuBkP1JqgsNRmucTpGIuMDBa2CWjPF4vuOik+cZBfoetpaOgJMmaWZH
-         NPCjkgnc4OFVG8bJuL9A444xXFUePYsLaZ9dy14NgloFQLs5z1Tjg8+ZHKaTTgcx8i+xS7SOr1Bil0
-         1QF/vPpeGyH5KLYMgSnUzMdSC1uw3v3W9dklceReos4x3GPaHg4GlPcMnx+r4aGL/Kc6NvhyGyeSHI
-         cv8Dg8ySg6lhHC+K8w0VPrEFVAlJkCw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=nquW4uTK4EsRfwtuLuO5LJX7Kp99WKVz9jDKp1qtM5M=;
-        b=vjNctA/bG7tR/QobV4rEn85FmJNic46NcaPLTwPjT2TY2KPM14A5VnPI9A2CoM6QTh/fdqjMSdpTB
-         GM2I4gaAQ==
-X-HalOne-Cookie: 7913dd9b8a246146ee3aa0d23a7b5d241bb96559
-X-HalOne-ID: cab67a2b-09f6-11ed-8240-d0431ea8bb10
-Received: from mailproxy3.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id cab67a2b-09f6-11ed-8240-d0431ea8bb10;
-        Fri, 22 Jul 2022 19:45:09 +0000 (UTC)
-Date:   Fri, 22 Jul 2022 21:45:07 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Belisko <marek@goldelico.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 1/1] spi/panel: dt-bindings: drop CPHA and CPOL from
- common properties
-Message-ID: <Ytr+Q6kXr+f6dCfi@ravnborg.org>
-References: <20220722191539.90641-1-krzysztof.kozlowski@linaro.org>
- <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
+        Fri, 22 Jul 2022 15:47:10 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D30121E3E;
+        Fri, 22 Jul 2022 12:47:05 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1658519213tfhl2rzf
+Received: from harry-jrlc.. ( [125.70.163.183])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 23 Jul 2022 03:46:40 +0800 (CST)
+X-QQ-SSF: 0100000000200030C000B00A0000020
+X-QQ-FEAT: lO87fmWkX3HCErG+gOK8vO8LaZDVgUXcpbAHnB2mjNmhqHTah2biSvUA5ZYOf
+        gMqA6fP56plzoaJVzSoifa3NrxBXpYQcexZP3YoiKTzemJdkE/63tp0Jl7oK7DhKdrOwmPj
+        QS4luxYerZLyLcQsRbb4AUlnO4n6+7/yIMOkwEbQmVdf9AuPquyW1LyOD37a4AMmpBJhIu/
+        IBrpltBFhXKFrLCgif16lIvkM9hyo1jkT61ztWVyib0wjQuswI66+5B8z8hc8fAG+HRICgK
+        5WUYBIKHQiwFxX0UgtmXYVsYlAo0dfEj1WxNXgYtWKK4yx02Bf6p6p74Fe9Cs/dvEKF4q9C
+        tFt0O5UsdkMPnr+3+2ucYdk3bOVApqjEGF+J66Y2xpyn6FzAecnhUW47n9Dsg==
+X-QQ-GoodBg: 0
+From:   Xin Gao <gaoxin@cdjrlc.com>
+To:     jack@suse.cz
+Cc:     amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xin Gao <gaoxin@cdjrlc.com>
+Subject: [PATCH] fsnotify: Fix comment typo
+Date:   Sat, 23 Jul 2022 03:46:39 +0800
+Message-Id: <20220722194639.18545-1-gaoxin@cdjrlc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+The double `if' is duplicated in line 104, remove one.
 
-On Fri, Jul 22, 2022 at 09:15:39PM +0200, Krzysztof Kozlowski wrote:
-> The spi-cpha and spi-cpol properties are device specific and should be
-> accepted only if device really needs them.  Drop them from common
-> spi-peripheral-props.yaml schema, mention in few panel drivers which use
-> themi
+Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
+---
+ fs/notify/fsnotify.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    "and include instead in the SPI controller bindings."
+diff --git a/fs/notify/fsnotify.c b/fs/notify/fsnotify.c
+index 6eee19d15e8c..a9773167d695 100644
+--- a/fs/notify/fsnotify.c
++++ b/fs/notify/fsnotify.c
+@@ -100,7 +100,7 @@ void fsnotify_sb_delete(struct super_block *sb)
+  * Given an inode, first check if we care what happens to our children.  Inotify
+  * and dnotify both tell their parents about events.  If we care about any event
+  * on a child we run all of our children and set a dentry flag saying that the
+- * parent cares.  Thus when an event happens on a child it can quickly tell if
++ * parent cares.  Thus when an event happens on a child it can quickly tell
+  * if there is a need to find a parent and send the event to the parent.
+  */
+ void __fsnotify_update_child_dentry_flags(struct inode *inode)
+-- 
+2.30.2
 
-I cannot see you do this in the touched bindings.
-
-So I cannot see how for example samsung,ld9040.yaml picks up
-spi-controller.yaml and thus it no longer knows the spi-cpha and spi-cpol
-properties.
-
-Maybe I missed something?
-
-	Sam

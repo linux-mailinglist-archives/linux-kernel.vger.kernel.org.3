@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC0557E2CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F1B57E2D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235079AbiGVOHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 10:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        id S235242AbiGVOMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 10:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiGVOHx (ORCPT
+        with ESMTP id S229605AbiGVOMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 10:07:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 396B79EC76
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 07:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658498871;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l8a/WRegPOdZwKugMYKaaY0XGl8Dn+IbhTpt/OWCmYM=;
-        b=csrz1xSrykPZIysqSbKnNoCsWRCYfRbf8jdKTESCNbQD6mG+5bSmMq783Ej90xWxloXLDb
-        gi3DZdv5nCDx6qCQD8Wzy+rYmFVIB96jw5pisJwya2d+4h9jbpFa9HZqitO7aEIwbuEF/K
-        qvhEmQB122DmJ/nYxJ2tmBIKSbcy8jU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-511-tGF558X-P0qDYDZtWdaE6Q-1; Fri, 22 Jul 2022 10:07:50 -0400
-X-MC-Unique: tGF558X-P0qDYDZtWdaE6Q-1
-Received: by mail-wm1-f70.google.com with SMTP id h65-20020a1c2144000000b003a30cae106cso4488112wmh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 07:07:49 -0700 (PDT)
+        Fri, 22 Jul 2022 10:12:08 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFEC8C17E;
+        Fri, 22 Jul 2022 07:12:07 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id h132so4520570pgc.10;
+        Fri, 22 Jul 2022 07:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rGz1Zajo5FVtqFz5vEyyJRNZNr5LdAGNcIBq+qrZIXM=;
+        b=aF1Bmv8rfFQ5F2xxD5qoZU7OmNpcKkpTA1XMJkqhhml3BlnEGOFtO4RCWFNM+0LdSE
+         flvLhRXyRo8UjZEYY8sOwbnsXZz1S9odCwfLvk7eRu+3VveC0iavNNmxbj7tQv+8c5pu
+         fK41Xyp17MMP0lNAV2VYC5k6U/QAsC3AOaOU1IdjbCOlporZLEfNifCYwv+Ug7tpQTdu
+         ftS4JhXI6MYugpORtjL/35ln926QCCU9soyyRuxbSWqqG9GOKIX0ClrmLB0oVeG1bBR/
+         Ti28xv0mZ5I4pwIbcyVq7RZvtoMMOi4vg4Et0eozqnGmcCNztOQHeME4lYqYpqjm0Rjg
+         hiMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:organization:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=l8a/WRegPOdZwKugMYKaaY0XGl8Dn+IbhTpt/OWCmYM=;
-        b=3ngqM4yb8xrJTGzZy7+ltMDYKCQiATHh9+LqrkXN47FlkWkJJcRDejNW4nsFL2OVu3
-         JrjlERZKw6uzpVI6HmlY5hZS7CyBEHHnKy7hsR4HSzudUCSAQ+xTds8g9ASz1d2Ez8hH
-         6jki/xRWBpJoIPq5LKmp1tUFSN1DKcKmUm7z8uFT5nFrYygJGjsCveQdXQp3E3bum39b
-         SXlfpwVHnCRjTZv50GhJeBshuKbHjWk2bqEGkk8xGYZBXuITDJMPX3EDRgHxofwD+KdL
-         DLU5pH+lGTAszvq5mpaZuH5vXJvYMFUib97AdGRL6tZdkoWSKRPIxa8oh2BptN+/FVAg
-         z0Ug==
-X-Gm-Message-State: AJIora8PFNtA5y2VuH2tXYwu5yPDIg+dkn/nLCCRnjSkLL4n8bUZTy+3
-        yLWrxhLXvs+J2+8dRlgJML6VbRK0PJ3qcfXHCKDP4n49qO0PpJml7Ib3KgEnegpmsUFgpfe/zZP
-        2ANwygXfZVZajGeTSJV63mLF6
-X-Received: by 2002:a5d:53c9:0:b0:21d:62f8:f99f with SMTP id a9-20020a5d53c9000000b0021d62f8f99fmr87941wrw.214.1658498868939;
-        Fri, 22 Jul 2022 07:07:48 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vSshwyGQ0KMdrtp15M6q3/lUK221PemuB2tK0wPeqzQSMsQkjQT4Af4VIpFnru8cRx2EZfXQ==
-X-Received: by 2002:a5d:53c9:0:b0:21d:62f8:f99f with SMTP id a9-20020a5d53c9000000b0021d62f8f99fmr87909wrw.214.1658498868518;
-        Fri, 22 Jul 2022 07:07:48 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:cb00:cd6b:7964:cc7d:b0e6? (p200300cbc707cb00cd6b7964cc7db0e6.dip0.t-ipconnect.de. [2003:cb:c707:cb00:cd6b:7964:cc7d:b0e6])
-        by smtp.gmail.com with ESMTPSA id q5-20020a1ce905000000b003a0323463absm5206666wmc.45.2022.07.22.07.07.47
+        bh=rGz1Zajo5FVtqFz5vEyyJRNZNr5LdAGNcIBq+qrZIXM=;
+        b=y31cGN0XATg30umTryYcKHoh8aiFCH26fni4MnOXWh2fd/Epr2EOYzsyu6rH/7yMAW
+         424Go+rZ27+XEyhf7uArV5di3opRyeCla2gGPn/DH0AYe4wb7nVeBGU3e7G6hyR6KUk2
+         Ym8Qxcxyp6D76m3C0sU0JprOmCysYqYSa4WGjZmKwj36Jdc6fstiDsySOdb5hsEWgpKc
+         Gn88Q8bC27FxQ6X1UkcuMdwgFzSieWKzPz22nYIy4VvyLq+rl8bEQLjFWDNsJQYRK28O
+         1UNvogdFCgdU5oOYywVWvwOVa/q24s3XczsYNA0D+KKEgtklYElucchCRhtzGRdH1ymC
+         S/fQ==
+X-Gm-Message-State: AJIora8DSnGCg9s/MSrpqeKAKjLqKKphEGTaao3deWPZKS87KViuWDU8
+        Hjf/R1hk81K1rFFBXi7hM6w=
+X-Google-Smtp-Source: AGRyM1uW245I0U8aEFTW8t7+bl8YItixbWlQjb0V5VKN1Wo93AfsUMXIeUl6VnNqQdr1GRnfMBAOuA==
+X-Received: by 2002:a63:4953:0:b0:41a:8f88:5705 with SMTP id y19-20020a634953000000b0041a8f885705mr28231pgk.386.1658499126488;
+        Fri, 22 Jul 2022 07:12:06 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 23-20020a17090a0b9700b001ece32cbec9sm5728290pjr.24.2022.07.22.07.12.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 07:07:48 -0700 (PDT)
-Message-ID: <5d6c745e-219c-3abf-a30d-b3fb8e8e752c@redhat.com>
-Date:   Fri, 22 Jul 2022 16:07:47 +0200
+        Fri, 22 Jul 2022 07:12:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d97e9467-c6da-c304-c625-599a76b8b02e@roeck-us.net>
+Date:   Fri, 22 Jul 2022 07:12:02 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/3] selftests: soft-dirty: Add test for mprotect
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] watchdog: f71808e_wdt: Add check for
+ platform_driver_register
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
-References: <20220721183338.27871-1-peterx@redhat.com>
- <20220721183338.27871-3-peterx@redhat.com>
- <8fbbd68f-267c-1e0d-a578-7da4551c4c19@redhat.com>
- <Ytqpz03yRq+DlAdq@xz-m1.local>
- <8fd4d9fa-7370-3d97-20d0-a4dfed914600@redhat.com>
-Organization: Red Hat
-In-Reply-To: <8fd4d9fa-7370-3d97-20d0-a4dfed914600@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+To:     williamsukatube@163.com, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+References: <20220722092503.2938544-1-williamsukatube@163.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220722092503.2938544-1-williamsukatube@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,67 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.07.22 16:00, David Hildenbrand wrote:
-> On 22.07.22 15:44, Peter Xu wrote:
->> On Fri, Jul 22, 2022 at 09:17:34AM +0200, David Hildenbrand wrote:
->>> On 21.07.22 20:33, Peter Xu wrote:
->>>> Add two soft-diryt test cases for mprotect() on both anon or file.
->>>
->>> s/soft-diryt/soft-dirty/
->>
->> Fixed.
->>
->>>
->>>>
->>>> Signed-off-by: Peter Xu <peterx@redhat.com>
->>>> ---
->>>>  tools/testing/selftests/vm/soft-dirty.c | 69 ++++++++++++++++++++++++-
->>>>  1 file changed, 68 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
->>>> index 08ab62a4a9d0..7d93906aa43f 100644
->>>> --- a/tools/testing/selftests/vm/soft-dirty.c
->>>> +++ b/tools/testing/selftests/vm/soft-dirty.c
->>>> @@ -121,13 +121,78 @@ static void test_hugepage(int pagemap_fd, int pagesize)
->>>>  	free(map);
->>>>  }
->>>>  
->>>> +static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
->>>> +{
->>>> +	const char *type[] = {"file", "anon"};
->>>> +	const char *fname = "./soft-dirty-test-file";
->>>> +	int test_fd;
->>>> +	char *map;
->>>
->>> Instead of fname, unlink, open, close, unlink  you can use a tmpfile
->>>
->>> FILE *file;
->>>
->>> file = tmpfile();
->>> if (!file) {
->>> 	ksft_test_result_fail("tmpfile() failed\n");
->>> 	return;
->>> }
->>> test_fd = fileno(file);
->>
->> Note that tmpfile() should by default fetch from /tmp which is very
->> possibly a tmpfs afaict.  It's tricky in this special test case since I
->> don't think tmpfs can trigger this bug (shmem doesn't define page_mkwrite).
->>
+On 7/22/22 02:25, williamsukatube@163.com wrote:
+> From: William Dean <williamsukatube@gmail.com>
 > 
-> I don't think we need that? SOFTDIRTY tracking enabled should be
-> sufficient, or what am I missing?
+> As platform_driver_register() could fail, it should be better
+> to deal with the return value in order to maintain the code
+> consisitency.
 > 
+> Fixes: 27e0fe00a5c61 ("watchdog: f71808e_wdt: refactor to platform device/driver pair")
+> Reported-by: Hacash Robot <hacashRobot@santino.com>
+> Signed-off-by: William Dean <williamsukatube@gmail.com>
 
-I think you're right that it doesn't work with tmpfile. I do wonder why,
-because I'd have thought that it's sufficient for
-vma_wants_writenotify() to return "1" due to the
-vma_soft_dirty_enabled() check.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Hm ....
-
--- 
-Thanks,
-
-David / dhildenb
+> ---
+>   drivers/watchdog/f71808e_wdt.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
+> index 7f59c680de25..6a16d3d0bb1e 100644
+> --- a/drivers/watchdog/f71808e_wdt.c
+> +++ b/drivers/watchdog/f71808e_wdt.c
+> @@ -634,7 +634,9 @@ static int __init fintek_wdt_init(void)
+>   
+>   	pdata.type = ret;
+>   
+> -	platform_driver_register(&fintek_wdt_driver);
+> +	ret = platform_driver_register(&fintek_wdt_driver);
+> +	if (ret)
+> +		return ret;
+>   
+>   	wdt_res.name = "superio port";
+>   	wdt_res.flags = IORESOURCE_IO;
 

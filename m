@@ -2,156 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D92757DB2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AB057DB57
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbiGVHVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S234343AbiGVHd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234363AbiGVHV1 (ORCPT
+        with ESMTP id S233950AbiGVHd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:21:27 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E272018E;
-        Fri, 22 Jul 2022 00:21:24 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lq14q2Tw2zjX5P;
-        Fri, 22 Jul 2022 15:18:35 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Jul
- 2022 15:21:21 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <stable@vger.kernel.org>, <linux-ext4@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
-        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yebin10@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH 5.4] ext4: fix race condition between ext4_ioctl_setflags and ext4_fiemap
-Date:   Fri, 22 Jul 2022 15:33:34 +0800
-Message-ID: <20220722073334.1893924-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 22 Jul 2022 03:33:57 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D63D9823E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1658475231; bh=T33GVH8f5eLsNBuftvVxlcnpfNmKejbXJKmjJ5lvpUk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=guTB4N9RgJi3l17IYvwKjfR/E+cJUrUTz9TupsvIv7hcHB1vATgZGyMXoB8WGLwsq
+         EGHudXUjV30Vrf/yhWnw0qkWhihU2JNCKdOEAAu7zBwGe904Gmqy0HNbAzq0abyCXo
+         xKiOyn7teymo3FcQzK8VSbW4n3bYu+9AXYhGkzlo=
+Received: from [100.100.35.250] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 8C1526061B;
+        Fri, 22 Jul 2022 15:33:51 +0800 (CST)
+Message-ID: <f43b5f40-9e2b-b179-390d-591a73603afa@xen0n.name>
+Date:   Fri, 22 Jul 2022 15:33:51 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
+ Gecko/20100101 Thunderbird/104.0a1
+Subject: Re: [PATCH v2] LoongArch: Remove LOONGARCH_CPUCFG48 and some CSR
+ definitions
+Content-Language: en-US
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>
+References: <1658305979-2073-1-git-send-email-yangtiezhu@loongson.cn>
+ <fc5a891d-e5a9-c02d-08e0-318213cde8f4@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <fc5a891d-e5a9-c02d-08e0-318213cde8f4@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch and problem analysis is based on v4.19 LTS.
-The d3b6f23f7167("ext4: move ext4_fiemap to use iomap framework") patch
-is incorporated in v5.7-rc1. This patch avoids this problem by switching
-to iomap in ext4_fiemap.
+On 2022/7/22 14:58, Tiezhu Yang wrote:
+>
+>
+> On 07/20/2022 04:32 PM, Tiezhu Yang wrote:
+>> According to the configuration information accessible by the CPUCFG
+>> instruction [1] and the Overview of Control and Status Registers [2],
+>> we can not see the descriptions about LOONGARCH_CPUCFG48 (0x30),
+>> LOONGARCH_CSR_PRID (0xc0), LOONGARCH_CSR_MCSR* (0xc0 ~ 0xff) and
+>> LOONGARCH_CSR_UCAWIN* (0x100 ~ 0x109), they are not used in the
+>> current kernel code.
+>>
+>> LOONGARCH_CPUCFG48 may be used only in the firmware layer, it should
+>> not be used in the future for kernel developers, remove the related
+>> LOONGARCH_CPUCFG48 definitions.
+>>
+>> LOONGARCH_CSR_MCSR* is shadow of LOONGARCH_CPUCFG*, no need to access
+>> LOONGARCH_CSR_MCSR* and LOONGARCH_CSR_PRID through CSR instruction,
+>> use CPUCFG instruction to access LOONGARCH_CPUCFG* is enough, so also
+>> remove LOONGARCH_CSR_MCSR* and LOONGARCH_CSR_PRID definitions.
+>>
+>> LOONGARCH_CSR_UCAWIN* may be not implemented in hardware, use CSR
+>> instruction to access them is meaningless, so also remove the related
+>> LOONGARCH_CSR_UCAWIN* definitions.
+>>
+>> The intention of this patch is to keep consistent between the code and
+>> the manual.
+>>
+>> [1] 
+>> https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#the-configuration-information-accessible-by-the-cpucfg-instruction
+>> [2] 
+>> https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#table-overview-of-control-and-status-registers
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>
+>> v2:
+>>   -- Remove LOONGARCH_CSR_PRID and LOONGARCH_CSR_UCAWIN*
+>>   -- Modify the patch subject and update the commit message
+>>
+>>  arch/loongarch/include/asm/loongarch.h | 229 
+>> ---------------------------------
+>>  1 file changed, 229 deletions(-)
+>> Hi all,
+>
+> Are you OK with this change? Any comments will be much appreciated.
 
-Hulk Robot reported a BUG on stable 4.19.252:
-==================================================================
-kernel BUG at fs/ext4/extents_status.c:762!
-invalid opcode: 0000 [#1] SMP KASAN PTI
-CPU: 7 PID: 2845 Comm: syz-executor Not tainted 4.19.252 #46
-RIP: 0010:ext4_es_cache_extent+0x30e/0x370
-[...]
-Call Trace:
- ext4_cache_extents+0x238/0x2f0
- ext4_find_extent+0x785/0xa40
- ext4_fiemap+0x36d/0xe90
- do_vfs_ioctl+0x6af/0x1200
-[...]
-==================================================================
+Sorry for not getting to this earlier; $DAY_JOB is taking its toll on my 
+Linux contributions these days.
 
-Above issue may happen as follows:
--------------------------------------
-           cpu1		    cpu2
-_____________________|_____________________
-do_vfs_ioctl
- ext4_ioctl
-  ext4_ioctl_setflags
-   ext4_ind_migrate
-                        do_vfs_ioctl
-                         ioctl_fiemap
-                          ext4_fiemap
-                           ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)
-                           ext4_fill_fiemap_extents
-    down_write(&EXT4_I(inode)->i_data_sem);
-    ext4_ext_check_inode
-    ext4_clear_inode_flag(inode, EXT4_INODE_EXTENTS)
-    memset(ei->i_data, 0, sizeof(ei->i_data))
-    up_write(&EXT4_I(inode)->i_data_sem);
-                            down_read(&EXT4_I(inode)->i_data_sem);
-                            ext4_find_extent
-                             ext4_cache_extents
-                              ext4_es_cache_extent
-                               BUG_ON(end < lblk)
+IMO, it's probably better to keep the definitions for documentation 
+purposes.
 
-We can easily reproduce this problem with the syzkaller testcase:
-```
-02:37:07 executing program 3:
-r0 = openat(0xffffffffffffff9c, &(0x7f0000000040)='./file0\x00', 0x26e1, 0x0)
-ioctl$FS_IOC_FSSETXATTR(r0, 0x40086602, &(0x7f0000000080)={0x17e})
-mkdirat(0xffffffffffffff9c, &(0x7f00000000c0)='./file1\x00', 0x1ff)
-r1 = openat(0xffffffffffffff9c, &(0x7f0000000100)='./file1\x00', 0x0, 0x0)
-ioctl$FS_IOC_FIEMAP(r1, 0xc020660b, &(0x7f0000000180)={0x0, 0x1, 0x0, 0xef3, 0x6, []}) (async, rerun: 32)
-ioctl$FS_IOC_FSSETXATTR(r1, 0x40086602, &(0x7f0000000140)={0x17e}) (rerun: 32)
-```
-
-To solve this issue, we use __generic_block_fiemap() instead of
-generic_block_fiemap() and add inode_lock_shared to avoid race condition.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/ext4/extents.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index f1bbce4350c4..50f956bda34c 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -5175,16 +5175,21 @@ static int _ext4_fiemap(struct inode *inode,
- 		fieinfo->fi_flags &= ~FIEMAP_FLAG_CACHE;
- 	}
- 
-+	inode_lock_shared(inode);
- 	/* fallback to generic here if not in extents fmt */
- 	if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)) &&
--	    fill == ext4_fill_fiemap_extents)
--		return generic_block_fiemap(inode, fieinfo, start, len,
-+	    fill == ext4_fill_fiemap_extents) {
-+		error = __generic_block_fiemap(inode, fieinfo, start, len,
- 			ext4_get_block);
-+		goto out_unlock;
-+	}
- 
- 	if (fill == ext4_fill_es_cache_info)
- 		ext4_fiemap_flags &= FIEMAP_FLAG_XATTR;
--	if (fiemap_check_flags(fieinfo, ext4_fiemap_flags))
--		return -EBADR;
-+	if (fiemap_check_flags(fieinfo, ext4_fiemap_flags)) {
-+		error = -EBADR;
-+		goto out_unlock;
-+	}
- 
- 	if (fieinfo->fi_flags & FIEMAP_FLAG_XATTR) {
- 		error = ext4_xattr_fiemap(inode, fieinfo);
-@@ -5204,6 +5209,8 @@ static int _ext4_fiemap(struct inode *inode,
- 		 */
- 		error = fill(inode, start_blk, len_blks, fieinfo);
- 	}
-+out_unlock:
-+	inode_unlock_shared(inode);
- 	return error;
- }
- 
--- 
-2.31.1
+As a Loongson employee, you may be aware of the fact that your company's 
+"official" documentation is often lacking, and this information you're 
+removing is not found elsewhere. So for preserving this knowledge, 
+either (1) ask your documentation people to properly record these 
+information in official docs then you can go ahead removing them here, 
+or (2) just keep the content here if (1) isn't doable for any reason. 
+You do want 3rd-parties to freely develop on your platforms, making full 
+use of the products' capabilities, don't you? ;-)
 

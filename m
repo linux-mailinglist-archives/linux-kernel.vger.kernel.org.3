@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756D657E139
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AC157E148
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbiGVMCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 08:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S234422AbiGVMHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 08:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiGVMCq (ORCPT
+        with ESMTP id S233685AbiGVMHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 08:02:46 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7C121E3E;
-        Fri, 22 Jul 2022 05:02:46 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MBNZ8R015014;
-        Fri, 22 Jul 2022 12:02:45 GMT
+        Fri, 22 Jul 2022 08:07:33 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC43BDA3E;
+        Fri, 22 Jul 2022 05:07:32 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MBGsuu020972;
+        Fri, 22 Jul 2022 12:07:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
  subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=ConxAvz+wtlnAFhhOd/rHqKFx7VizaY3VTM5kHutAA0=;
- b=jTx0Md22yUog/411ECa0vir5u/IYcgJYqk7n6jiEzqWtm1DQjH14R7fy3E7wDXZSR8ra
- HH/mIkzd0OCjwxz/F3y6HLRoavkwi3gNjdr8qJ0/78KqZvUqIFgEEpoOeultC0gYEWt7
- tBhGY5ciC1sH/UcYG5onwapZuGSa8D0162gEAe61A16ZkVOniEnRmVE8pC+7z4ipIlYa
- Ng285mu45Dho7CzZex8nPUgC0FHiGOXy0CIxl8qlzZBoMzBzozg9C6b9vnUYSgY6H3k/
- +lmJ3eK78lZ30F6Is7SlAARBw0lVyHdCKMbyNIWgiSDIwJcYzgCAhXaepx5wB9iJHSp7 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hftyw11kb-1
+ in-reply-to; s=pp1; bh=o+BTY/uCMLQWXsj6/f4TbfVVZ0qdoDBQEnzK950VUC0=;
+ b=IQD7FPF3gcg6KE7gIU6/9u9ZFLMf0cC3DH4vM5/231C859/xzYN5gZtrBfDiCqvB2dJn
+ AtZaTkHXGxaQNBI4sC6VllYWQ4bNLpjMQ6LKe2mN0M1Pbujyz80vVVmCj8cQ9J4dL6iz
+ P6CzMVccjkwt71XG45cOKBpwm1vrF+zEd1/F+xmjesufYtKz+ZAucdCd9ih5co1wZNl3
+ 97F1pCMH0Lg03Uv2evsVQY2W2qz/XJg7Z+SplprJe9oBhcSzWowsuFzRnaD6Nav0usRg
+ j6keLppQqCzCAZnsoKgihu97++4k6/PXgDDlapctZM947l1jCAuHmx58LPdlf7lsSfwX fQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hftvr9f8n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 12:02:44 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26MBQntP025941;
-        Fri, 22 Jul 2022 12:02:44 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hftyw11j2-1
+        Fri, 22 Jul 2022 12:07:05 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26MBr9xZ010882;
+        Fri, 22 Jul 2022 12:07:03 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hbmkj885a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 12:02:44 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26MBpvcp013190;
-        Fri, 22 Jul 2022 12:02:41 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3hbmy8p8ba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 12:02:41 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26MC2cL424838606
+        Fri, 22 Jul 2022 12:07:03 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26MC70SL23790004
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 Jul 2022 12:02:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 735BAAE04D;
-        Fri, 22 Jul 2022 12:02:38 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 861F6AE051;
-        Fri, 22 Jul 2022 12:02:37 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.22.197])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 22 Jul 2022 12:02:37 +0000 (GMT)
-Date:   Fri, 22 Jul 2022 14:02:35 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] Documentation: s390: documentation fixes for vfio_ap
- driver
-Message-ID: <YtqR22xzZJdGTpPq@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20220722084946.22965-1-bagasdotme@gmail.com>
+        Fri, 22 Jul 2022 12:07:00 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7582242049;
+        Fri, 22 Jul 2022 12:07:00 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C8AE442041;
+        Fri, 22 Jul 2022 12:06:59 +0000 (GMT)
+Received: from osiris (unknown [9.145.178.215])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 22 Jul 2022 12:06:59 +0000 (GMT)
+Date:   Fri, 22 Jul 2022 14:06:58 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        x86@kernel.org, Will Deacon <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Holger Dengler <dengler@linux.ibm.com>
+Subject: Re: [PATCH v3] random: handle archrandom with multiple longs
+Message-ID: <YtqS4mEVdhyAI8Ri@osiris>
+References: <CAHmME9qTA90=GEr6h1GZh0CjS+6tpe5uuqkYoJVv79h0zd0w1w@mail.gmail.com>
+ <20220719130207.147536-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722084946.22965-1-bagasdotme@gmail.com>
+In-Reply-To: <20220719130207.147536-1-Jason@zx2c4.com>
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JbUPWQYxeSzk0eznlXUgXx8WgSwN5w5s
-X-Proofpoint-ORIG-GUID: wb6M0lt-idyvv69x9zvHp06-s9R1ZGHk
+X-Proofpoint-GUID: BYpjYolDJC7Jn9NzSuNRht8fsbIWP_U-
+X-Proofpoint-ORIG-GUID: BYpjYolDJC7Jn9NzSuNRht8fsbIWP_U-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-22_03,2022-07-21_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- mlxlogscore=614 adultscore=0 impostorscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207220048
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 phishscore=0 mlxscore=0
+ suspectscore=0 clxscore=1011 malwarescore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=571 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207220051
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -97,17 +94,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 03:49:39PM +0700, Bagas Sanjaya wrote:
-> Here is documentation fixes for vfio_ap driver, as recently reported in
-> linux-next.
+On Tue, Jul 19, 2022 at 03:02:07PM +0200, Jason A. Donenfeld wrote:
+> The archrandom interface was originally designed for x86, which supplies
+> RDRAND/RDSEED for receiving random words into registers, resulting in
+> one function to generate an int and another to generate a long. However,
+> other architectures don't follow this.
 > 
-> This series is based on next-20220721.
+> On arm64, the SMCCC TRNG interface can return between 1 and 3 longs. On
+> s390, the CPACF TRNG interface can return arbitrary amounts, with 32
+> longs having the same cost as one. On UML, the os_getrandom() interface
+> can return arbitrary amounts.
+> 
+> So change the api signature to take a "max_longs" parameter designating
+> the maximum number of longs requested, and then return the number of
+> longs generated.
+> 
+> Since callers need to check this return value and loop anyway, each arch
+> implementation does not bother implementing its own loop to try again to
+> fill the maximum number of longs. Additionally, all existing callers
+> pass in a constant max_longs parameter. Taken together, these two things
+> mean that the codegen doesn't really change much for one-word-at-a-time
+> platforms, while performance is greatly improved on platforms such as
+> s390.
+> 
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: H. Peter Anvin <hpa@zytor.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Harald Freudenberger <freude@linux.ibm.com>
+> Acked-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  arch/arm64/include/asm/archrandom.h   | 102 ++++++++++++--------------
+>  arch/arm64/kernel/kaslr.c             |   2 +-
+>  arch/powerpc/include/asm/archrandom.h |  30 ++------
+>  arch/powerpc/kvm/book3s_hv.c          |   2 +-
+>  arch/s390/include/asm/archrandom.h    |  29 ++------
+>  arch/um/include/asm/archrandom.h      |  21 ++----
+>  arch/x86/include/asm/archrandom.h     |  41 +----------
+>  arch/x86/kernel/espfix_64.c           |   2 +-
+>  drivers/char/random.c                 |  45 ++++++++----
+>  include/asm-generic/archrandom.h      |  18 +----
+>  include/linux/random.h                |  12 +--
+>  11 files changed, 116 insertions(+), 188 deletions(-)
 
-Hi Bagas,
-
-The warnings have already fixed.
-Please, send your style changes if you find it approprieate.
-
-FWIW, patch #1 causes a whitespace trailing error.
-
-Thanks!
+For s390:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>

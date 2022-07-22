@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B50757E250
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CA157E252
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiGVNaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S234485AbiGVNat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiGVNaR (ORCPT
+        with ESMTP id S233979AbiGVNaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:30:17 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C2FCE18
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:30:14 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bu1so6498633wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:30:14 -0700 (PDT)
+        Fri, 22 Jul 2022 09:30:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C2882FAA;
+        Fri, 22 Jul 2022 06:30:46 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id b11so8537866eju.10;
+        Fri, 22 Jul 2022 06:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kmvcdC1R3fmwO5Guy8VXsZI1PNcrugW7p15VtMSIhtM=;
-        b=BTaxQaVfgNVdF93aAu2JgdJ8B1t8XcP104h7IUmg4OaHdmo9DNLi1qjojDxoMBX2hx
-         di8CV70H2g6XBoH6TTp0DeOeSUbtusefkeiUESKson5HzXVmF465AgFNMwUmBqV4lNJh
-         BtmBNuY7GrrbYN0bKv4FbcXGGEquy+qWwC4vg4QnZQR6LyotS4ixDeCFGwQq+qC7krlD
-         N+LfpXHMCDK0ZhPbHkQhqB4x0TUJyZAKy3ntuD+VCREUy8Wb2fqxfIpqGicsdONVBVGT
-         tUc5x9WnMZqonnTNXsMbpaQEHOC+oRsm8saJJgNH5mHIBRNhQjgf6MGBaKX5KDRTB9MK
-         LGfg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=loYefRsJFRIddRKsH8gC7LMjbqNjPpq3cIkCYbNRO3E=;
+        b=Rh01wbkfBC5ZZj1hDCS/aCtPIkGp/SWmMyexZiSGbgj4WsZeQCLFgmSbGDbSom5doo
+         O4AlubGbvMbwUZzlI2/SSAaXXshOjtdYmYIYk/Akg+5NPUeBQwGRo7K9tvtkJTg/kfyR
+         ZVKYSrjOMcLUEegv8cI8ok8k6vVdFvm9O169yV5knNWfKeAQ27QZI1hMkR7bKMOQ741b
+         6mLpTktYR//EXQ4vNz3Euvdw+WQHyfmIe5p1zDiJK1Zi5xIXGFPlzunSZvVtSTRDfpqZ
+         1sB8cY2kv9KlNDYpNBw1SjRdxE//5h53sFPntabeydt+go3aQJQdFmFBMO3IIaZizTlG
+         PpIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kmvcdC1R3fmwO5Guy8VXsZI1PNcrugW7p15VtMSIhtM=;
-        b=2Wdoz8U25Lz1u8uzwmEhWyADLiamNxCTIwKRrtmtggT0cEoOtUU5+qny8iJeJAGfLp
-         LThTHAcPC8kwItUmO3r8Ytpw35fcWplubKF7b21aeIBqNee6nFV7lvIUJDq2N9e41Ncl
-         Yk183ztHuLqgTWBdbb9mIpoPbKUczjMdr7YPZXVnsAY8SQH7D3mT1BphmVolCZCOgQF7
-         Wf9QDuMdQjOncny3ijw2B1XgiRk0M+TVPcIUXyT7ULfi/f6opVITJottXk1wBQ5+9Quy
-         SXWML3XgSxz2F4a/dvjoHlendTC2NfuAWT8jGZinAOhiMK3uPTByqFDb2rc6sKcihYM4
-         j1QQ==
-X-Gm-Message-State: AJIora8Po8tJ5L8KxojnnJq7S6sZ2tLrDPUFt2hMiEk5aSzHkMexGlD9
-        fk+eBMPnycfwMI5Skmhb0lvF5g==
-X-Google-Smtp-Source: AGRyM1tpbt0xn/SKoUyioj28SicYBIoVH+uV4pXW5OcZdprVoftvr0rNnw/PeY5O5Kmmt/oq3sQiCA==
-X-Received: by 2002:a05:6000:156f:b0:21d:887f:8ddf with SMTP id 15-20020a056000156f00b0021d887f8ddfmr389035wrz.534.1658496613532;
-        Fri, 22 Jul 2022 06:30:13 -0700 (PDT)
-Received: from [10.2.4.117] (lfbn-nic-1-76-188.w2-15.abo.wanadoo.fr. [2.15.166.188])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05600c358c00b0039c96b97359sm5251171wmq.37.2022.07.22.06.30.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 06:30:13 -0700 (PDT)
-Message-ID: <45c6843e-0447-cf5e-6f1a-3920032ac88c@baylibre.com>
-Date:   Fri, 22 Jul 2022 15:30:11 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=loYefRsJFRIddRKsH8gC7LMjbqNjPpq3cIkCYbNRO3E=;
+        b=uWt9aYvDZuYQR2odmpSzXNx3U04Cl8NkcA0WH3R9fuU+sZvS2YoY5Ww97EG2BakmsT
+         dibRRMIa5Iy/TYemHFX9KvO9Nigvv37l47G4BDBxgbE4bqh04W9Etso+UyozC9J+Tl9N
+         Qz5Wu8dngXxooKNCdcPJpwcHpXTAcXxPZuqC5p8u2ldrgGPATPy9PmtKo7djwThF6KJs
+         6FH4aE8+jMHToNkgZhY31q14I+QmiyObg+LN2vugEiye4kmlq9fXO8GXUKxizTlDzgtn
+         tGqheY+rN2fGtHMrwFw9QBVFCg7HVOG5/9quu/xOcstJI6DPCtpfDNIVzBG/JD4y6WQu
+         UuzA==
+X-Gm-Message-State: AJIora/aDSbXilt2Sd6taClEcKnSdpFhNXeVHqUDXol4H0+8iWVWf1DP
+        6s4JNWhX8pr6uTbAHa0EDU2sbauXvkqvDL48wOp3e/MK
+X-Google-Smtp-Source: AGRyM1uj6Bf98bVaoiFb716jOFlfc4hB5SFO0a70HCy+/nha2uMDwFX1voSmi28H6LB5TNkkH0D/Pz0tyB+e/ciWZho=
+X-Received: by 2002:a17:907:a06f:b0:72b:564c:465b with SMTP id
+ ia15-20020a170907a06f00b0072b564c465bmr519713ejc.344.1658496644409; Fri, 22
+ Jul 2022 06:30:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 08/14] regulator: drivers: Add TI TPS65219 PMIC
- regulators support
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org, nm@ti.com,
-        kristo@kernel.org, khilman@baylibre.com, narmstrong@baylibre.com,
-        msp@baylibre.com, j-keerthy@ti.c, lee.jones@linaro.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220719091742.3221-1-jneanne@baylibre.com>
- <20220719091742.3221-9-jneanne@baylibre.com> <YtayikFdidxXXubS@sirena.org.uk>
- <b89db08e-3a06-5a8d-2c24-eb087ee3ca7e@baylibre.com>
- <YtqabjVY1vRgjZlM@sirena.org.uk>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <YtqabjVY1vRgjZlM@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220719123607.63cbb3c5@canb.auug.org.au> <20220720124732.4aeb3748@canb.auug.org.au>
+ <20220721121618.049b9c00@canb.auug.org.au> <20220722125212.2af3601f@canb.auug.org.au>
+In-Reply-To: <20220722125212.2af3601f@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 22 Jul 2022 09:30:32 -0400
+Message-ID: <CADnq5_NdSQADn7xaLVJzgERist5aMMw07pqZQhSogatotF=y1w@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -0,0 +1,414 @@
- > +// SPDX-License-Identifier: GPL-2.0
- > +/*
- > + * tps65219-regulator.c
- > + *
+On Thu, Jul 21, 2022 at 10:52 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Thu, 21 Jul 2022 12:16:18 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > On Wed, 20 Jul 2022 12:47:32 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c: In function 'dml32_ModeSupportAndSystemConfigurationFull':
+> > > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:3799:1: error: the frame size of 2464 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+> > > >  3799 | } // ModeSupportAndSystemConfigurationFull
+> > > >       | ^
+> > >
+> > > This is still here, but the frame size is down to 2336.
+> >
+> > Today it is down to 2128.
+>
+> And today we are back up to 2152.  I can only imagine that maybe things
+> are being inlined?
 
-Please make the entire comment a C++ one so things look more
-intentional.
+This is driving me crazy, there is almost nothing left on the stack at
+this point.
 
-checkpatch is complaining about that:
+Alex
 
----------------------------------------------------------------------
-v5.19-rc6-PB-MSP1/0005-mfd-drivers-Add-TI-TPS65219-PMIC-support.patch
----------------------------------------------------------------------
-WARNING: Improper SPDX comment style for 'drivers/mfd/tps65219.c', 
-please use '//' instead
-#91: FILE: drivers/mfd/tps65219.c:1:
-+/* SPDX-License-Identifier: GPL-2.0
-
-Let me know if I should ignore checkpatch recommendations here.
+>
+> My compiler (in case it matters):
+>
+> $ x86_64-linux-gnu-gcc --version
+> x86_64-linux-gnu-gcc (Debian 11.2.0-9) 11.2.0
+>
+> --
+> Cheers,
+> Stephen Rothwell

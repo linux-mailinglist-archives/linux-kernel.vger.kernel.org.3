@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDCE57E3D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E7E57E3DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiGVPic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
+        id S233763AbiGVPmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGVPi0 (ORCPT
+        with ESMTP id S231816AbiGVPl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:38:26 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E1513E11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:38:25 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id n20-20020a6b8b14000000b0067c00777874so1894557iod.15
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:38:25 -0700 (PDT)
+        Fri, 22 Jul 2022 11:41:58 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB5333A08
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:41:53 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id j22so9256434ejs.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:41:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QNhoAdkJOYGCxLXCG955jmFipTL24RpGzlTxtZa1urY=;
+        b=TxtGiAqK/5NTEiqtOp73RYwUCkkv7lcxld3R3yrkBkg7ZyF7309NXSljnRcxB92tsP
+         f5ZYnL9+vSwOFyD7Bcgsk8ORCZ2YRTw0wdpWCh3ut2w40WmngM1AMHIoCGeW+fJMjE9Z
+         EKCOqRWKw2qP/6QyNYXS77o5mw/dCPD1SRauI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=lMppGUEb50hZIYPAtBTOe3qW0mUd/jMUvfj5uTqx23M=;
-        b=bg3sKs5n4wLXha7bVi+ULwRNdo0Bq5VlPYbAaS/z3gYMVyUxQwKvGYf2cJuumpxBxp
-         PWCVJffon9j2A/1S2izVdxBnD5fLuAaxT2kdMN2U7GUC9v/+5tkcCRiGxSPxesCiLV42
-         z6gAs6+BaMZwk/2vpCqGnR6TsQDY01gmm5lGum29GhI27nVbkHMPy1yD6EojUjKN10j6
-         E01V57TR1i1MaUsF0aexqK130jKRf1uVOkwQHUzsot0T1L2HMQaSg0Sup0n9UGxd3+Rd
-         vtnY+8KqTdHwu7IGxuPlxKcdkapoc/B3TDBbiOoGaUxLwsYb+UC41dXLpXXHeLNenGnH
-         QYAw==
-X-Gm-Message-State: AJIora9l6SG1HfWHpDdvLlCbjP/E2Y7stgV6/K/xEILVF0jUJwPtmdO+
-        DnwgC6lfb+n7KOBycJA5aDuZ9np8AbTFexehiIRN/pZPQX3P
-X-Google-Smtp-Source: AGRyM1vHa1s1m+S9zIZfCosD7S3la9xNWKcVIxZzZeJRwvqQNLp9hrFyXXohQ34KCeuI2dmBot+eu8V5xXEvGSxuclgUwKdryj6B
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QNhoAdkJOYGCxLXCG955jmFipTL24RpGzlTxtZa1urY=;
+        b=P30Gnvr/q5HP1DIpRMYKGMCFabxAch6rx6ORyhzxq3GfPRIRSy46Bz15/OxPwZ07d3
+         TrMQ9UHJsNWXAkNEpKSblXkAaRqEmPehzrURoeYIW+By3X3g9iJ6PZxjtkC5DhlnBhpx
+         0H+hzOAFkXGpgq9lQIS/OMAWFh0m3eOmybIeiVQvxtkkwg18aa9WSW96gccmnQmjrXLy
+         zZWLr0GvWH4EUAlvgFsNQg0VnxpAo7JWEDMCSk9rFGNfwOEwuvvT/ZVTNCHTI2jAzpJZ
+         I0+7B5vvLPfjve9aW8zp9JaOxeOv6QjY6gytBs6obhnikU+7mZnDYCgF8TrssLIasS4b
+         EY5Q==
+X-Gm-Message-State: AJIora/TN7R9aadNdqbelJR98MHT9VncbsSint9P8+nIlrB1EkGcWnDC
+        2DonHFUWZi6GgBUNbta5/JGoN+t+KKbvk7h8bdM=
+X-Google-Smtp-Source: AGRyM1vG5hdwa/m+uFEg/u2MK07y1XrBCA09U1Xvc4mlqaxFxSBYyzvWKIquw8fxf3jEMrmOfxTmYQ==
+X-Received: by 2002:a17:906:84f7:b0:72b:57c2:5e13 with SMTP id zp23-20020a17090684f700b0072b57c25e13mr413590ejb.702.1658504511630;
+        Fri, 22 Jul 2022 08:41:51 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id g8-20020a170906594800b00722e7e48dfdsm2088501ejr.218.2022.07.22.08.41.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 08:41:49 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id bv24so7031233wrb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:41:49 -0700 (PDT)
+X-Received: by 2002:a05:6000:2c9:b0:21d:bd7d:3af6 with SMTP id
+ o9-20020a05600002c900b0021dbd7d3af6mr341263wry.405.1658504508765; Fri, 22 Jul
+ 2022 08:41:48 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d13:b0:33f:5203:5ab7 with SMTP id
- q19-20020a0566380d1300b0033f52035ab7mr318471jaj.72.1658504305278; Fri, 22 Jul
- 2022 08:38:25 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 08:38:25 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f9821705e4669f6b@google.com>
-Subject: [syzbot] bpf-next build error (4)
-From:   syzbot <syzbot+ea8ff4e064cd21861ec7@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, martin.lau@linux.dev,
-        netdev@vger.kernel.org, pabeni@redhat.com, sdf@google.com,
-        song@kernel.org, syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
+ <20220721033918.v3.2.I7ecbb7eeb58c5e6a33e32a3abf4d6874e6cb725c@changeid>
+ <CAD=FV=WSBgupLFMCZgianck6uTkAyqrG0WK2ChSbNbJdhOPdLA@mail.gmail.com>
+ <4b2fe9d0-f590-0fac-79fa-bb05da1d61df@linaro.org> <CAD=FV=XmaNdc9k98vAwbcN-sm0w_WeqhRsK_AUm3h4LZ5-egmQ@mail.gmail.com>
+ <c2b03863-2249-13e6-98e0-731c1b40d0a9@linaro.org> <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
+ <20220722002210.GA2223409-robh@kernel.org>
+In-Reply-To: <20220722002210.GA2223409-robh@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 22 Jul 2022 08:41:36 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U1yqdPzdtJFu+Rk56TOX1kYX2BZ16XGuMoM+=Re5NA9A@mail.gmail.com>
+Message-ID: <CAD=FV=U1yqdPzdtJFu+Rk56TOX1kYX2BZ16XGuMoM+=Re5NA9A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: arm: qcom: Document additional sku6
+ for sc7180 pazquel
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,40 +89,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+On Thu, Jul 21, 2022 at 5:22 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Jul 21, 2022 at 11:29:13AM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Thu, Jul 21, 2022 at 9:52 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > > On 21/07/2022 18:43, Doug Anderson wrote:
+> > > > Hi,
+> > > >
+> > > > On Thu, Jul 21, 2022 at 9:33 AM Krzysztof Kozlowski
+> > > > <krzysztof.kozlowski@linaro.org> wrote:
+> > > >>
+> > > >> On 21/07/2022 15:37, Doug Anderson wrote:
+> > > >>>
+> > > >>> Not worth sending a new version for, but normally I expect the
+> > > >>> bindings to be patch #1 and the dts change to be patch #2. In any
+> > > >>> case:
+> > > >>>
+> > > >>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > > >>
+> > > >> I would say worth v4, because otherwise patches is not bisectable.
+> > > >
+> > > > You're saying because `dtbs_check` will fail between the two?
+> > >
+> > > Yes
+> >
+> > OK. Then I assume you agree that reversing the order of the patches
+> > won't help, only combining the two patches into one.
+> >
+> >
+> > > > How does
+> > > > flipping the order help? If `dtbs_check` needs to be bisectable then
+> > > > these two need to be one patch, but I was always under the impression
+> > > > that we wanted bindings patches separate from dts patches.
+> > >
+> > > I don't think anyone said that bindings patches must be separate from
+> > > DTS. The only restriction is DTS cannot go with drivers.
+> >
+> > I have always heard that best practice is to have bindings in a patch
+> > by themselves. If I've misunderstood and/or folks have changed their
+> > minds, that's fine, but historically I've been told to keep them
+> > separate.
+>
+> Correct.
+>
+>
+> > > Bindings for boards go pretty often with DTS (subarch). This is exactly
+> > > what maintainers do, e.g.:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/log/?h=arm64-for-5.20
+> > > Bindings for hardware should go via subsystem maintainer (drivers).
+> >
+> > OK, fair that in this case both the bindings and the yaml will land
+> > through the Qualcomm tree. I guess it's really up to Bjorn and whether
+> > he'd prefer "make dtbs_check" to be bisectable or whether he'd prefer
+> > the bindings and dts change to be in separate patches from each other.
+>
+> Bindings go first if applied together because you have to define the
+> binding before you use it. But sometimes things go via multiple trees
+> and that's fine because it's just easier. In that case, the subsystem
+> tree is preferred for bindings (i.e. with the driver). But in this case,
+> Bjorn is the subsystem tree.
 
-HEAD commit:    ac7ac432a67e Merge branch 'New nf_conntrack kfuncs for ins..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=164443d6080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=386b986585586629
-dashboard link: https://syzkaller.appspot.com/bug?extid=ea8ff4e064cd21861ec7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Thanks! I'll interpret your response as:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ea8ff4e064cd21861ec7@syzkaller.appspotmail.com
+1. Keep this as two patches and it's more important to keep dts and
+bindings separate than it is to avoid breaking bisectability of "make
+dtbs_check".
 
-net/bpf/test_run.c:703:40: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:704:40: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:703:1: error: unknown type name 'BTF_ID_FLAGS'
-net/bpf/test_run.c:705:40: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:705:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'BTF_ID_FLAGS'
-net/bpf/test_run.c:712:48: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:705:1: error: unknown type name 'BTF_ID_FLAGS'
-net/bpf/test_run.c:713:45: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:714:45: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:715:45: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:716:45: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:717:45: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:718:53: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:719:53: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
-net/bpf/test_run.c:720:53: error: macro "BTF_ID_FLAGS" requires 3 arguments, but only 2 given
+2. Bindings should have been patch #1, but it's not a massive deal.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+3. I'll assume that Bjorn will yell if he'd like this series re-posted
+with the reverse order.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-Doug

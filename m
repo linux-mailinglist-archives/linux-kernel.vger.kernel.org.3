@@ -2,83 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5939557DAA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E692E57DB01
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234341AbiGVHJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
+        id S234232AbiGVHPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiGVHJP (ORCPT
+        with ESMTP id S232572AbiGVHOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:09:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D30A8E6F8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658473753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W03YUh23JrP2otyQElwrVQuoO95BxhmDO5t8VZsxiZg=;
-        b=XaKcl6Tt7Y4YgiRs1TO/81uTDDURj13FL3x4HUACfGwlbGHI09sX7DuueC7O9Pl7Dcu4Z4
-        YPImVeBlQtwfN5ZDTcTLC6b0nO9s+Sn8vt/Avqpkd13oJ5hzZXv7TOa/E5zxFcgq8ExLDU
-        ugu5zEFjPJ0HU+whhwG1IQTujkFb8yI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-FGEiHQTYNnWWydVDc7msbA-1; Fri, 22 Jul 2022 03:09:10 -0400
-X-MC-Unique: FGEiHQTYNnWWydVDc7msbA-1
-Received: by mail-wm1-f72.google.com with SMTP id i184-20020a1c3bc1000000b003a026f48333so2090668wma.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:09:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=W03YUh23JrP2otyQElwrVQuoO95BxhmDO5t8VZsxiZg=;
-        b=UkDUqCT3rv+pjyzVNDLDmrMWhTkKXvCnHOnC3BpBRwtcXmNEV/BXRe5uiDStaIPfF9
-         2XM+pl4MUeuyxTGZwC9CoaQMd2mMcvJM/eTVA9r89MDMSEJay0kskxhkpT4hUKPrRCR/
-         t8yrJxW89spKtBBfDg+hLff+ylVlwxjZ/LcHFhHGsj6MVj5u99uo6FDvlZcBqyrbtrTG
-         suOgy5ofF3tqmAuPWQkfzrqlN3o1rI1uJHqa9CGxRTgg3edqFe83piMkoMzekYf2JwTp
-         FjVZPj8+19dKD/6K0S1fWYg2M7f6Q7IYzUjcScv1mvi/nU3rPHzP9zap3+maCY+KSdu9
-         20/A==
-X-Gm-Message-State: AJIora8ERj+F5GhVY4QyEH2JggQfPViiDEfJH7wVktHCvobYCkpDJY94
-        +le+h4EcvFIJNy1yWeoNiQMxOrapmG7kJ2yX41XFplzbixFn1mBbsHal2XMekoNa2djXwbLTcGX
-        f9f4/wpsld43I91l3iOpz3uO5
-X-Received: by 2002:a05:600c:4fc5:b0:3a3:2d73:c147 with SMTP id o5-20020a05600c4fc500b003a32d73c147mr8316868wmq.197.1658473749588;
-        Fri, 22 Jul 2022 00:09:09 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vNPXifmqewhxBZfVs3JuSQs7OOt8RXLQG57YuQglvjvnMqQDHZomYGAjWysqcCNy2Su6Xigg==
-X-Received: by 2002:a05:600c:4fc5:b0:3a3:2d73:c147 with SMTP id o5-20020a05600c4fc500b003a32d73c147mr8316827wmq.197.1658473749022;
-        Fri, 22 Jul 2022 00:09:09 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:cb00:cd6b:7964:cc7d:b0e6? (p200300cbc707cb00cd6b7964cc7db0e6.dip0.t-ipconnect.de. [2003:cb:c707:cb00:cd6b:7964:cc7d:b0e6])
-        by smtp.gmail.com with ESMTPSA id q5-20020a1ce905000000b003a0323463absm4039820wmc.45.2022.07.22.00.09.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 00:09:08 -0700 (PDT)
-Message-ID: <e35e42ce-e942-141d-09e7-a3a7868f4abb@redhat.com>
-Date:   Fri, 22 Jul 2022 09:08:59 +0200
+        Fri, 22 Jul 2022 03:14:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0D293C1E;
+        Fri, 22 Jul 2022 00:14:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCD1862188;
+        Fri, 22 Jul 2022 07:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F25C341C6;
+        Fri, 22 Jul 2022 07:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658474042;
+        bh=9mq8X3BGsuBzR6Ln4xciUKT8RQwcULSFGtUPi9jeosE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FLVRrpieLDHN39FkoGOUIAkHKLGpScI1ahdV3AgjGwfrcluvepuBzBT6F2984u3pe
+         YxdD4BK8sy57CBvIm0XSdTFHQJcTcxNfBuwIZ22bE+QsqIcWOa3jZVywdVcsgMnYMl
+         P8eZPra5KWYWA4zPs0rDJwnuri0qsYj5L/yrWJbb40slzWXWuRwOl/sdNhOL0RjjiZ
+         t3hdZX2Thct6y6Piv8vzHp2E9U66v9l12USihLfnS30azOvbROyOeiNtaOmUZhk+ya
+         QY9fg85OhHr4fbM1wBBORT+kBwT4kVrxB6luu3IFOzwg+6fTek78HFSblPNzVzfX+z
+         MqEM0tbLisn/Q==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: [PATCH v4 0/9] make statx() return DIO alignment information
+Date:   Fri, 22 Jul 2022 00:12:19 -0700
+Message-Id: <20220722071228.146690-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
-References: <20220721183338.27871-1-peterx@redhat.com>
- <20220721183338.27871-2-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/3] mm/mprotect: Fix soft-dirty check in
- can_change_pte_writable()
-In-Reply-To: <20220721183338.27871-2-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,109 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.07.22 20:33, Peter Xu wrote:
-> The check wanted to make sure when soft-dirty tracking is enabled we won't
-> grant write bit by accident, as a page fault is needed for dirty tracking.
-> The intention is correct but we didn't check it right because VM_SOFTDIRTY
-> set actually means soft-dirty tracking disabled.  Fix it.
-> 
-> There's another thing tricky about soft-dirty is that, we can't check the
-> vma flag !(vma_flags & VM_SOFTDIRTY) directly but only check it after we
-> checked CONFIG_MEM_SOFT_DIRTY because otherwise VM_SOFTDIRTY will be
-> defined as zero, and !(vma_flags & VM_SOFTDIRTY) will constantly return
-> true.  To avoid misuse, introduce a helper for checking whether vma has
-> soft-dirty tracking enabled.
-> 
+This patchset makes the statx() system call return direct I/O (DIO)
+alignment information.  This allows userspace to easily determine
+whether a file supports DIO, and if so with what alignment restrictions.
 
+Patch 1 adds the basic VFS support for STATX_DIOALIGN.  Patch 2 wires it
+up for all block device files.  The remaining patches wire it up for
+regular files on ext4, f2fs, and xfs.  Support for regular files on
+other filesystems can be added later.
 
-[...]
+I've also written a man-pages patch, which I'm sending separately.
 
-> 
-> Here we attach a Fixes to commit 64fe24a3e05e only for easy tracking, as
-> this patch won't apply to a tree before that point.  However the commit
-> wasn't the source of problem, it's just that then anonymous memory will
-> also suffer from this problem with mprotect().
+Note, f2fs has one corner case where DIO reads are allowed but not DIO
+writes.  The proposed statx fields can't represent this.  My proposal
+(patch 6) is to just eliminate this case, as it seems much too weird.
+But I'd appreciate any feedback on that part.
 
-I'd remove that paragraph and also add
+This patchset applies to v5.19-rc7.
 
-Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
+Changed v3 => v4:
+   - Added xfs support.
 
-That introduced this wrong check for pagecache pages AFAIKS.
+   - Moved the helper function for block devices into block/bdev.c.
+   
+   - Adjusted the ext4 patch to not introduce a bug where misaligned DIO
+     starts being allowed on encrypted files when it gets combined with
+     the patch "iomap: add support for dma aligned direct-io" that is
+     queued in the block tree for 5.20.
 
-We don't care if the patch applies before 64fe24a3e05e, if someone wants to
-backport the fix, they can just adjust it accordingly.
+   - Made a simplification in fscrypt_dio_supported().
 
-> 
-> Fixes: 64fe24a3e05e ("mm/mprotect: try avoiding write faults for exclusive anonymous pages when changing protection")
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  mm/internal.h | 18 ++++++++++++++++++
->  mm/mmap.c     |  2 +-
->  mm/mprotect.c |  2 +-
->  3 files changed, 20 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 15e8cb118832..e2d442e3c0b2 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -860,4 +860,22 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
->  
->  DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
->  
-> +static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
-> +{
-> +	/*
-> +	 * NOTE: we must check this before VM_SOFTDIRTY on soft-dirty
-> +	 * enablements, because when without soft-dirty being compiled in,
-> +	 * VM_SOFTDIRTY is defined as 0x0, then !(vm_flags & VM_SOFTDIRTY)
-> +	 * will be constantly true.
-> +	 */
-> +	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
-> +		return false;
-> +
-> +	/*
-> +	 * Soft-dirty is kind of special: its tracking is enabled when the
-> +	 * vma flags not set.
-> +	 */
-> +	return !(vma->vm_flags & VM_SOFTDIRTY);
-> +}
+Changed v2 => v3:
+   - Dropped the stx_offset_align_optimal field, since its purpose
+     wasn't clearly distinguished from the existing stx_blksize.
 
-That will come in handy in other patches I'm cooking.
+   - Renamed STATX_IOALIGN to STATX_DIOALIGN, to reflect the new focus
+     on DIO only.
 
-> +
->  #endif	/* __MM_INTERNAL_H */
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 125e8903c93c..93f9913409ea 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1518,7 +1518,7 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
->  		return 0;
->  
->  	/* Do we need to track softdirty? */
-> -	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !(vm_flags & VM_SOFTDIRTY))
-> +	if (vma_soft_dirty_enabled(vma))
->  		return 1;
->  
->  	/* Specialty mapping? */
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 0420c3ed936c..c403e84129d4 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -49,7 +49,7 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
->  		return false;
->  
->  	/* Do we need write faults for softdirty tracking? */
-> -	if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
-> +	if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
->  		return false;
->  
->  	/* Do we need write faults for uffd-wp tracking? */
+   - Similarly, renamed stx_{mem,offset}_align_dio to
+     stx_dio_{mem,offset}_align, to reflect the new focus on DIO only.
 
+   - Wired up STATX_DIOALIGN on block device files.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Changed v1 => v2:
+   - No changes.
 
+Eric Biggers (9):
+  statx: add direct I/O alignment information
+  vfs: support STATX_DIOALIGN on block devices
+  fscrypt: change fscrypt_dio_supported() to prepare for STATX_DIOALIGN
+  ext4: support STATX_DIOALIGN
+  f2fs: move f2fs_force_buffered_io() into file.c
+  f2fs: don't allow DIO reads but not DIO writes
+  f2fs: simplify f2fs_force_buffered_io()
+  f2fs: support STATX_DIOALIGN
+  xfs: support STATX_DIOALIGN
+
+ block/bdev.c              | 25 ++++++++++++++++++++
+ fs/crypto/inline_crypt.c  | 49 +++++++++++++++++++--------------------
+ fs/ext4/ext4.h            |  1 +
+ fs/ext4/file.c            | 37 ++++++++++++++++++++---------
+ fs/ext4/inode.c           | 36 ++++++++++++++++++++++++++++
+ fs/f2fs/f2fs.h            | 45 -----------------------------------
+ fs/f2fs/file.c            | 45 ++++++++++++++++++++++++++++++++++-
+ fs/stat.c                 | 14 +++++++++++
+ fs/xfs/xfs_iops.c         |  9 +++++++
+ include/linux/blkdev.h    |  4 ++++
+ include/linux/fscrypt.h   |  7 ++----
+ include/linux/stat.h      |  2 ++
+ include/uapi/linux/stat.h |  4 +++-
+ 13 files changed, 190 insertions(+), 88 deletions(-)
+
+base-commit: ff6992735ade75aae3e35d16b17da1008d753d28
 -- 
-Thanks,
-
-David / dhildenb
+2.37.0
 

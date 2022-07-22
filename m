@@ -2,75 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8357657DEFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E127057DF0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbiGVJmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S235965AbiGVJml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236688AbiGVJmP (ORCPT
+        with ESMTP id S235597AbiGVJmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:42:15 -0400
-Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A2AF18E24;
-        Fri, 22 Jul 2022 02:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=m1ECV
-        qdnL9vLFAtg52t07cQoiFeiu+2qVlTbmuFFzyo=; b=R/NwpOBKUEajhZvsZNQbU
-        HUH7IAWpE4JsXZ4anRX+3UZqaBRJIUQuki7IkIXePm7RLm/whwh34Z+IvjzsCE0J
-        4pmZ24CWCxHPij+RdnDiVzbptk6x4M9K1inIQdYxdlx0eZQXFnTbDvfI842y4Amq
-        XGmp1DP7zEkp7fLe+QxooA=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp3 (Coremail) with SMTP id G9xpCgCXZoCtbtpilxCSQg--.20714S2;
-        Fri, 22 Jul 2022 17:32:30 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] rtc: rs5c372: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 17:32:27 +0800
-Message-Id: <20220722093227.77577-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 05:42:19 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647F01EC57
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:33:16 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id by8so4756240ljb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tAZZ+zZvrQNIBH53DRQidJGGL3IywgMOgKasOQHqRGI=;
+        b=yecc/o33SpG3FJV0705q2XlNAbffHKx037EfzgEpjB95oGMlEEJuMDVgipIXcH1Odo
+         AU92urHlfHEwMBzYNq+7xtxxz1QN9jPvCae//JvoifaUHBSbPdpBHgykid7Q2L+RUHy3
+         jtI89CCN4iNAY5yY80DO5ykohnJDZa6+wsozZGLxZe7uVUktmW5Cll6O1Rlsl8r7i5yE
+         6C7eaioh5drnHTfhAtdR5ic6k23mBXrTM6q1w7Jretkg8HJio2ZiuIL1zmC7ooC+7FAy
+         aHme9eVzQJWo4IsJvN7mARluA8ClLB6ITXe1AqMSlMfeZMxkmYyFzBc+t/JX6mpzcpUo
+         U8rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tAZZ+zZvrQNIBH53DRQidJGGL3IywgMOgKasOQHqRGI=;
+        b=Qf5/ZTTtTP1SkooaTimvIWwxL56BTy3e0Jt9+spvf8/A+A1FpD+AXiykkVe2Wv65iv
+         j/zK5tGXjS9PfEfjBClqHSmWh1BPU7/Ba5poelho5DvAy7X44U2crISfdFISIZm6oKNp
+         I6ztrvIwdONqvFc4cAZ4hoUVzroWMoTEMTs2xBS1y1gDQum4YPHBDCHQm89bVBeID9No
+         FUMi1Qg+HN0ROklebRrlRNJdu5ghG+CgS40pDYOkHLq3AJ0xZU4gyclAGZD2C9kRv+YD
+         4ookoAzmbmqbXKWtmACEiMu8zPU3va+GHx/qM7B9ara0+xTaj1qhlCM2BO2wDScLH0+z
+         z0vQ==
+X-Gm-Message-State: AJIora8RE0P4AkyltcEf5YMvR6yH2JpgQdj/ENZo09Okxt1rayXNBuYa
+        ksLi77FZE4DaLC8k4pyJkTCW3QLUo6dRsyClnrfPFw==
+X-Google-Smtp-Source: AGRyM1tuFeL40FXNplF3DiaFKWMK80dA2FT32q0LOAoiBjUTCYptRGrlgOmrTynjE+KfsV1d7HA14nI3swNVUSJTITg=
+X-Received: by 2002:a2e:a5c9:0:b0:25d:dc6e:1918 with SMTP id
+ n9-20020a2ea5c9000000b0025ddc6e1918mr903972ljp.229.1658482394393; Fri, 22 Jul
+ 2022 02:33:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: G9xpCgCXZoCtbtpilxCSQg--.20714S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr1xtFy8Xw4ruw4rXwb_yoW3WFXEk3
-        yfA34Ika1vvrs3Kw4UZrn5urWF9a1rWrn8Ar18Kasav3y3ur47Ja4kZrsrJr1YqrW5tF9x
-        WrZ3X34kC3WUWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRJb1jDUUUUU==
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiGRpGZFyPdmzQ2QABsg
+References: <20220718082650.9784-1-wangborong@cdjrlc.com>
+In-Reply-To: <20220718082650.9784-1-wangborong@cdjrlc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 22 Jul 2022 11:32:38 +0200
+Message-ID: <CAPDyKFpBc_XZStRb7mwQ_nN-YUnxxmXrqx6hFFxoVG=iJ-VdiQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mmc: sdhci-acpi: Fix comment typo
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     adrian.hunter@intel.com, haibo.chen@nxp.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, kishon@ti.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+On Thu, 21 Jul 2022 at 18:30, Jason Wang <wangborong@cdjrlc.com> wrote:
+>
+> The double `the' is duplicated in the comment, remove one.
+>
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/rtc/rtc-rs5c372.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Jason, these spelling fixups are getting somewhat annoying to me,
+sorry. Don't get me wrong, it's nice to have good readable comments,
+but the patches don't really need to be one line of change per patch.
+Could you perhaps look over all mmc host drivers and fix all spelling
+mistakes in them and send one patch to cover all of them instead?
 
-diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-index cb15983383f5..8d551e15b91a 100644
---- a/drivers/rtc/rtc-rs5c372.c
-+++ b/drivers/rtc/rtc-rs5c372.c
-@@ -150,7 +150,7 @@ static int rs5c_get_regs(struct rs5c372 *rs5c)
- 	 * least 80219 chips; this works around that bug.
- 	 *
- 	 * The third method on the other hand doesn't work for the SMBus-only
--	 * configurations, so we use the the first method there, stripping off
-+	 * configurations, so we use the first method there, stripping off
- 	 * the extra register in the process.
- 	 */
- 	if (rs5c->smbus) {
--- 
-2.25.1
+Kind regards
+Uffe
 
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  drivers/mmc/host/sdhci-acpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/sdhci-acpi.c b/drivers/mmc/host/sdhci-acpi.c
+> index 4cca4c90769b..bddfaba091a9 100644
+> --- a/drivers/mmc/host/sdhci-acpi.c
+> +++ b/drivers/mmc/host/sdhci-acpi.c
+> @@ -648,7 +648,7 @@ static int sdhci_acpi_emmc_amd_probe_slot(struct platform_device *pdev,
+>          *       in reading a garbage value and using the wrong presets.
+>          *
+>          *       Since HS400 and HS200 presets must be identical, we could
+> -        *       instead use the the SDR104 preset register.
+> +        *       instead use the SDR104 preset register.
+>          *
+>          *    If the above issues are resolved we could remove this quirk for
+>          *    firmware that that has valid presets (i.e., SDR12 <= 12 MHz).
+> --
+> 2.35.1
+>

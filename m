@@ -2,358 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F395757E3B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B0257E3B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235760AbiGVPXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
+        id S235765AbiGVPYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235818AbiGVPXr (ORCPT
+        with ESMTP id S231700AbiGVPYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:23:47 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB589F04C;
-        Fri, 22 Jul 2022 08:23:41 -0700 (PDT)
+        Fri, 22 Jul 2022 11:24:33 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB999D53D;
+        Fri, 22 Jul 2022 08:24:31 -0700 (PDT)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MF8vIe001478;
+        Fri, 22 Jul 2022 15:24:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=jfZIRmZMHcjV0iuQprL2TjlOHZ9hyUCdQUnAF4WbdwQ=;
+ b=CNyYkbDOBH1wskPDKf5/g9OAJnYkxxh5Vh0ETIsGTSOEcYn73te+K4vLnppdjEycqePV
+ ybW2+j3SC+KFlRmBoNzsNbUjjvYi/F+5eeDLVkw3wuZKihm4/kZgp2jPrGsngv4Theb+
+ lq36mc+oJP+h7I8j0tH5h0SIY9PSr0ZrwWFwstq1syQhK0JZ8mGNehNIOb3O1xY4vQEx
+ fBeTvbdrhjan4Xf/LlB0uoi2L+2yyjvrM2CDd2FNtgWgcPAZcLuZCr3Hvx04dUpR0FCM
+ gyAB1WUVgG0z+SEoDtal3wmMKeMJf/nTPm9Qt4cAVjv6mre1pWTMuLW8q13OO5um4Vqc 1Q== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3hfx9cg54s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 15:24:16 +0000
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 26F53D2C4;
+        Fri, 22 Jul 2022 15:24:15 +0000 (UTC)
+Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 22 Jul 2022 03:24:12 -1200
+Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
+ p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 22 Jul 2022 03:24:11 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Fri, 22 Jul 2022 03:24:11 -1200
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 22 Jul 2022 03:24:11 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oaQ6ocA3w9uO64+5wteXU6XGyCJ80UzS26W2GnevXu0KhdElST8RPB1JvOjAvoonDLMidPV4BdY9qicpRf0QlnPP6BykA25oiHf/IWvgVh1U2hzNccL03kJbzGCG6zDoPUhG/JmiEo5b0u/dhgXoz1if48tVUUY01zVbyCHqU6HAA/EjBO8aqbL9xUCLCJx2jKCRh++f9nOB1SmCWiC9ugozJDICDhqWGEF1nSkkzqasev5dpPmJzVygQ/0f7dZ3rMMFk7xBnZrAkQyM+08+xljcxv6duLevYw6qqh3w+jV+hWmCgVqATX4NFirdanhUbKza3H1f6hHitOwG5wgeLg==
+ b=aEdBhKGu0Iwdn12OsXaPTYjzP3OFe2tcTe9pXpwNb9Td2q70DIW0L6hgyC5g3vulU7CR4bGCg9/fKhvG1cOwqLJgB+6UomkOX9UFgAcoFlJEjc7pNW86oSsfUPbFeQwtnNBhYtfkEjXfdcM+aHfbOxgcHtYH03Hw50L54NrvzssWOfO0NRhKFd9tQ65VIJumWineO9+cS2U0wNXvSq1Rr1AWGSkfEChW5HmCxgmq6PGRP1kXAYL7sitDHTFBlpf1ChobS6tI85fnZVwLveZGwRoUPw/yBVbVcZQjPgUTxeo6TA2kosT9toz6ANPM4IaOg3K9pRUv+UAeMsQWxc7vlg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DSDZkTkXwfVbN/8DsuU0dnWMiTBOzQj8WlfkPA+swgU=;
- b=UYAk2fvQ33CKwHIhnajeWudAK9PGAqsE419GGTi+1oKhlkljxT+HR/xGRU88+OF02+C7ehxUWiXKO4/QxJVkIBDGT/Tp4ZFD4tvmfLq1HxyGw1axZxUkiIbWnZM0lODMB8xQM+XjcniSX0W/hkU3rCsdKJjyKK8XlMD+IfHfrHh1mgjvsoOI2GQHdh5gfRZZB6+ZGnhOwPVReyYvtSG4aFyTUYXyIUppQSYZUERV7ewMqHTTdBoML8S/b+yj1m1ot78XWMs9sijg6iWl6NUl3JHEK6pUZBudNn0KOBko4vWgOh1Xh8vZrSDozXu1mVwzZs0tmRqt1p+fgAW05tmmDA==
+ bh=jfZIRmZMHcjV0iuQprL2TjlOHZ9hyUCdQUnAF4WbdwQ=;
+ b=iHBloMEQqif/Le7DKlxt0E+v00QzMW8XBUheReP+0jsvjObYGeYc9GMeBRH29lDho9OWbg9jTVzXP1ruTwNCpgw8uVvT8ut9dllWpw1AH4k69GX0qudwg6SOmJJGqJZ4hJNFSCeSRQjxI5Qo/MTVEs9LzYgqAvjwjtZ3nk7cEpvzlkpDNM4baaYPCod6Lk3iga6poSwZRZJL7d0lXi2IZ8fXY7Jo4u4iRKi8EdlPcGZtYwtV91OpN5wZnWNZG5v0BvpmGG5ff4n14vtjBxKFfXvJ0cvyRlMBYJ0IfeQNTbXdZxnUYs8k6Nhudo4tpXqU2HJXldSKYETgPcc3nOBuHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DSDZkTkXwfVbN/8DsuU0dnWMiTBOzQj8WlfkPA+swgU=;
- b=VAXVqR/t5kQkyocmpOJooCtRLFvipB89CTR6zmTzLgRZDwaPAllbuDx259i3yGeUTSIqf1PmzekHbvxwF46ltEBX+wYyibH5d8Xq7yasnFhqdRSsxxljzYqYb9E05Mug6BwnvUv45sqoqW3Y4wkrTYh7Wra64PGZjpJlmLFl5YQ=
-Received: from BY5PR12MB4033.namprd12.prod.outlook.com (2603:10b6:a03:213::22)
- by DM6PR12MB3691.namprd12.prod.outlook.com (2603:10b6:5:1c5::30) with
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:154::8)
+ by PH7PR84MB1837.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:153::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Fri, 22 Jul
- 2022 15:23:36 +0000
-Received: from BY5PR12MB4033.namprd12.prod.outlook.com
- ([fe80::ed39:947f:6d95:63fd]) by BY5PR12MB4033.namprd12.prod.outlook.com
- ([fe80::ed39:947f:6d95:63fd%5]) with mapi id 15.20.5458.019; Fri, 22 Jul 2022
- 15:23:36 +0000
-From:   "Neeli, Srinivas" <srinivas.neeli@amd.com>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "neelisrinivas18@gmail.com" <neelisrinivas18@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "sgoud@xilinx.com" <sgoud@xilinx.com>,
-        "shubhraj@xilinx.com" <shubhraj@xilinx.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Fri, 22 Jul
+ 2022 15:24:10 +0000
+Received: from PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c165:fcd6:a6e7:3f06]) by PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::c165:fcd6:a6e7:3f06%9]) with mapi id 15.20.5458.019; Fri, 22 Jul 2022
+ 15:24:10 +0000
+From:   "Kani, Toshi" <toshi.kani@hpe.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>, "git@xilinx.com" <git@xilinx.com>
-Subject: RE: [PATCH V10 3/3] rtc: zynqmp: Add calibration set and get support
-Thread-Topic: [PATCH V10 3/3] rtc: zynqmp: Add calibration set and get support
-Thread-Index: AQHYiSud22fNRODcnkC45HjQDtDBrK2Kqu9A
-Date:   Fri, 22 Jul 2022 15:23:36 +0000
-Message-ID: <BY5PR12MB4033037009559D6A0BE5571193909@BY5PR12MB4033.namprd12.prod.outlook.com>
-References: <20220626070817.3780977-1-srinivas.neeli@xilinx.com>
- <20220626070817.3780977-3-srinivas.neeli@xilinx.com>
-In-Reply-To: <20220626070817.3780977-3-srinivas.neeli@xilinx.com>
+        Robert Richter <rric@kernel.org>
+Subject: RE: [PATCH v2] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
+Thread-Topic: [PATCH v2] EDAC/ghes: Fix buffer overflow in
+ ghes_edac_register()
+Thread-Index: AQHYnSx3rMQsGJx7KUaiCXMepzwFya2KYV8AgAAhyyA=
+Date:   Fri, 22 Jul 2022 15:24:10 +0000
+Message-ID: <PH7PR84MB1838067F8BC7CCCE6EBBCCC982909@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220721180503.896050-1-toshi.kani@hpe.com>
+ <YtqkMicKdZdPdUWB@zn.tnic>
+In-Reply-To: <YtqkMicKdZdPdUWB@zn.tnic>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2387c310-97ef-44d6-a129-08da6bf625b3
-x-ms-traffictypediagnostic: DM6PR12MB3691:EE_
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-office365-filtering-correlation-id: b16d6978-25d5-4e0b-5d02-08da6bf639bf
+x-ms-traffictypediagnostic: PH7PR84MB1837:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2shCkpwP/JeInPP6k6XyXUDy7SbsH2KDT4t7kYj4mQqYCJ11r+AjuF4neqEtaA/bK/exVgmyvZe0I4pUCcM7jBQsKE5D7M17tHQDLb6AqBOKkQD1085hfhxNWo+o7vsin18INmtCdJv4AYBWWYDYyWKgAfX/WdWP5MVlXqcq3mMUv3t/2qpbzpfhO1xAW3jFKw9YVY/IQL/BE4I7bI9x9hT1YpFVsfwE9j4QdufQHpK3sifYA45790EGpcxbRtN7vMEMtY3lHfDQYp79G+FM2QN0PKy/KWK5z0ItcszEI9dcAib6g7HDHrfuLsLDVIrbcRapm22ABDjsRBLB65/w47LVuCWTUrQfYkdVqM+IMNfm6/9v6BUo3PKPOiQsqNYQh3PuD1o8c/JlnoaSeizfzfYmvgQgdnh8cn5s3oBhGjX3o0TvzHoL4rDM8YUbpZoHVfoutS/oXTiejRFbe6rGjyDRsF/10vjG6hc7x4FQ0WVwtA9njpzmBLAIcQ0VXgdnjo1oEKFpil3nPeAUrwNJ80ZjoRxF8GRykWUK1tBQ71gmsBMn9tEGkmb9Ap97jOhG0XwPbRv+X4ykfoR9ulSdB14tVe8V3ivc1+UJcoq0xb3hjL88vVQtjNKmXVfJaUkaN5u1nWzcyrK2UFgeo3oLDNYASSUQ7yiRLdEAqLDSLrZ60q33sT/7mceqa/uJ3DI4HO/XJOYK5yB1f987ijWvLN4Bcr4LqCphontaF6ZGYaIv8TrJLzOKjAsws1gYZ+scvelhYUX84XJm6asuFWR4znTkuNc0e4JnWzbpe5abfyK10LQpofSvLqlVvIpIoxfm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4033.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(136003)(366004)(376002)(6506007)(7696005)(2906002)(53546011)(122000001)(38100700002)(52536014)(41300700001)(107886003)(83380400001)(33656002)(186003)(9686003)(26005)(54906003)(55016003)(71200400001)(64756008)(66476007)(4326008)(66946007)(8676002)(86362001)(66446008)(76116006)(66556008)(316002)(8936002)(5660300002)(110136005)(7416002)(38070700005)(478600001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: /953sQ4OLFVdMjUDRjUz+JbL3vrLlwrofdeyRE/i+emo6yV3MtF0STdkzszrztzzA7TsMa0OM2aqTkwawjp+BZlEgAdEgLBEWz27z4TvbNNKJ87wBqd2AwjFwhRyzzFjsQOKBwsQcODdGseV1NsiFhjzAYTJBvxkZixtGwsauVtwgkRWF7fb8igfrcC1DM9iLFz6LUB13izQx5fdCi+p+YgvR7TxBJZWgjiYie2kcStXzKIP5th79BW8qfyR5nTQj2vY6+7rU0m/gDyd5y8lKsF5Z8c3bZwEMdMb9WOYw5OXPkxF9K7E7Kk5GROasdARw1KG+3DODDYrWdzje13nwyz/zRLmkmp/8yzmRIXlr/N/QOjBgzZhetHJBDhw40dh75M1tUB7yjs/b9JLqAC5fszVuRmsPcjDdQRhuZaKVhSBPqQ2Uvv6Go86VHT1261r8f+KPccxbGGs3a1VeByoiUX7k+6lcZdMhD/5h7obULOc2WjtdnfZzV0shmENzULje9WwO5THmG8CgzHtaPdU4T1OJSUUuf1ABVs3NzubFAxG8Bq3/XuyfrIDdd5zvdQkYjkNML2+fwJhbJx/tyvN2w6eQYEG+OzZ1TjJVJmd064QSplJfjPKJV+cvBCLYJVSxSxAKQCEiuholF90pLfJaKGwk4IE8M8TJC0YGvm1F6GSt/taVrVyH/spWP3pIDed+xATr025YVV8IrtaPNhX8k+LBooXIWac3++9TtqZmvzLDTA0+b5pGOq44+lR5M7FIu4j8n0Myl+oBPzss9tDNMXYHJAcLJKIrFVwtav5tUI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(366004)(376002)(39860400002)(396003)(136003)(346002)(83380400001)(82960400001)(38070700005)(55016003)(122000001)(186003)(38100700002)(66446008)(64756008)(2906002)(4326008)(8676002)(66476007)(66946007)(76116006)(66556008)(52536014)(4744005)(8936002)(26005)(9686003)(6506007)(478600001)(7696005)(5660300002)(41300700001)(316002)(33656002)(71200400001)(54906003)(6916009)(86362001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BYdIy/u9BBAg6PHY17S2D8Cc3p/vR4FxvH4cFmS59qTbICG9K2rH0e7EL7y9?=
- =?us-ascii?Q?XkFFdZy7Jjouxl4U+HnyzweCx7mH+siaoYo7ix06cJ9hA3ZTm5anfZXoNdLK?=
- =?us-ascii?Q?o28606qTg4Th1BXlwFTPxxruedqM/k7XyufF4w3iHnAmoiUMPiGVdHzmJkkR?=
- =?us-ascii?Q?dgfPiODftukbnTkbj9oQlH9i3kC8vr4jiTBD55jWb4spVUvzsdZbZqphCji1?=
- =?us-ascii?Q?ypAQtxvfYe2pkDhoAFxSrGFgXN7HIEkqOV7LpBxBZG2Ato6DEoxPUFtwV9yE?=
- =?us-ascii?Q?OIGj1YzMy8qqHf2mi83lhEAJPM3gV0dN6/UUAe/QZ3ReutFAlydrf+isaLzN?=
- =?us-ascii?Q?fbDy8Ncf92Lq7PaMIh5P5jdYR0/qjt0jjQE4cggklO1xObD67aMbGkDla1PB?=
- =?us-ascii?Q?lHvU8KXpUAYAlaAbXPxB5rKPQ/quX+5JsN5/mTXmyTBpn9tjaJ4ZE63M9L6v?=
- =?us-ascii?Q?4c7XBYDlq56y0CGYtLRU95EhehoSVkZBPyMFnNLPPro0ns2UqtiI8tW9B1SI?=
- =?us-ascii?Q?yjv1PwqSCsnnQvoc1VgJKaJ5Y7NzLAvv7FXHGq9bAZ+RcUFeADMvg1pxmCM/?=
- =?us-ascii?Q?TxPTwxMZ6dQ6KU7jrIEGLDsN4kg1jjH1fG5esWhdOpGRwcBfrGAinkNleW9j?=
- =?us-ascii?Q?L0QIyVCRyZqSEllHKNlDmJPWHK4C8Dkokc/dvUj31Mtxfu8k/xy2k7QdWwCO?=
- =?us-ascii?Q?q00yaJNj13nC//PW6AOrGj3zADCjRjWaD+P4FfJapzQGy+GhHMwH+QSvRIkK?=
- =?us-ascii?Q?wSjX+k7odNwE1WyPYPsUAFmjwPWdKiBqMTGmOS2Ql0aieKDQ3AsLnlw+fosn?=
- =?us-ascii?Q?asASm53634z6mFMrlNvS96+n3utEjg0/wKD64NqWlLPmBh3tXEKLdZaJEtmZ?=
- =?us-ascii?Q?OwXrsjlO4oiym9Fmz4eiN/kHcFNSEAjjM1z7A8i1wddISUZOcWBh4F8n4eqv?=
- =?us-ascii?Q?db0jDQ7dXJhWzSOSsmRExRK2Fq82OLqRHLTL8AZSnq1L5FYJcW3OlAMwNexH?=
- =?us-ascii?Q?2fe1Ps5qOoVaAup+2G0p3iaEZNqTOLrGFybylToawMg4XW+ffQM0UJRehS6P?=
- =?us-ascii?Q?imwCId4mv38t4v4HdaM7AyElfmZWbZrDL67lWoXkUpCZdb63QOD/BD2rTt37?=
- =?us-ascii?Q?AUfcrn0jjb1ncgDQbQAOJvOCYyMu7fNoamJ/L/Spp3chM1Fb4wEzTB3w3dYl?=
- =?us-ascii?Q?lCMwzeYNgWLzl6Gt8VuraaA7/K1U9xSGd69AUroWUlNYgOj/r15wmnG9OOkA?=
- =?us-ascii?Q?UFyuGYEkYzliesqRkE+bYBFAxOTfUo7dHNJV2Si1TCDIjMq7CDGZgxCyyh4V?=
- =?us-ascii?Q?PR7Hz1d2kamMvqmuBAHIQLpf+Nz2tG30GbANtNK+W3WXbgJbDTUtm0Hr0TSP?=
- =?us-ascii?Q?h4O/mzoSNTRQsssQF2qblc549L1fBE3AYPxLOgC8ip9aEHH7A8NSbcIZzb+/?=
- =?us-ascii?Q?kPqvUS/KBM6qSRKVmR15q+g/hYe6Zhw33TIUSxRBUPxMkxH8errEuNWGKA43?=
- =?us-ascii?Q?6Y8M7MgZZhrMoOKLTwJAAQz2MtOgSq6+QgasY975crHq1e+FfkG1LhPHKUY/?=
- =?us-ascii?Q?Oz75EynV/12FMXfacy8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?anpMY1h3cnUvZ1ZvR0s5bkZwbGhaUXN6QXJoVmxBNjNrWFJnSlpxQzFKTVp3?=
+ =?utf-8?B?T0tTdDI2QVppR0liQTdmVGRKeDVBcGhtd1RpSy9qUjFPSjkvMWRscVN0QXJZ?=
+ =?utf-8?B?SXA3QmpEVEdIVFlIdm1pT2tvb3Z2OTYyUkROMldWWStsT1ZxZlVzcFJtTCts?=
+ =?utf-8?B?M1EvZS9COTVQQmdWR09vdVdudzUyOG16RktnWjd5R0VMd2dKb2lLaTJQRmo1?=
+ =?utf-8?B?K2RzMXB4ZUNXanplQTYvb2Z4RjdDQ0xNV1hTenh6NFF0Q1AxYmtSbWdXYjB3?=
+ =?utf-8?B?WmdReVhZZ3lmOUlYQ2dPQ0FDZUZIdXpiRGFaVDFDbmFYR2wzTDhUR0lDeUly?=
+ =?utf-8?B?RjdJS3JyVDNzajVNVUd3S0pUT0U2S1hIeElrVFcyZXkxc2Q4dDgrNTdRMStJ?=
+ =?utf-8?B?enczYmxSbGpUaTJsRGc0YXpYeVQ3bUhFelpTQnhnZ0tBR2F2bVI3Sk40UHBJ?=
+ =?utf-8?B?MW0vKzhrWCtTY1YvTWxJRk5KT0hjZllYclJ6TW0vb1lwMllYYTF5cUlLbncv?=
+ =?utf-8?B?bkZJQmN5STdkM1NhVnZqc2pPY0hNRWF6dGpYQTQxT0crZGdGQ25DQ1J1eUZX?=
+ =?utf-8?B?aEhBVWdwb1k4UHEwTGxXZTl3bjh6eVE3ek1rQmVGUk9qRG5kWWdQSU9PRFRK?=
+ =?utf-8?B?SXA2bE83UDBoaWhXMGV3OFFVcGk4T1hjUWw2anRyMVl4eTVqaTRQYVJ1emln?=
+ =?utf-8?B?aHE5Y3NSM3cxQUVmQzlKd2VoZ3FBemdVS2VqSDdnUFdlU0hLVUVDOUlnYUJK?=
+ =?utf-8?B?RmFXWlMrbk85WjNWU1lMcUlLekc3b0lPekZGUW5SOWgwSkFnRndVVWlQQ0FM?=
+ =?utf-8?B?WkpKallCRFlyN1F5ZE85S3hLRXVvSDVvckkvREVFcXdkMHNSbTQ1dGlzTXZh?=
+ =?utf-8?B?eGdQRzB3N0dhMjFNQ3RJdTcxaXNaMXd5MzBVSmRWdG8zL0x3bUt3RmZER1lO?=
+ =?utf-8?B?aU1UblZvelNwOEdyMnpmSlNMellRSDhIbDhSYnpaT0NJWWFlWmhCZUowcy9r?=
+ =?utf-8?B?MTNRYnBvWmVvZnQ5USt1Uml3ajc4OHBzc24vbk0rUmF1MENGclo3ZWUrNjBS?=
+ =?utf-8?B?cUxFMjUvSytFaWxzaStWQldXbXU0dFJ5LzJuaDJqSmdMSkp2dXFqMlc3bkIy?=
+ =?utf-8?B?TWRMVWJjK1dOTXlLcyszNTVrZVRVLzVpcFVLenhidTZvZTBxTThrN2VJaXpW?=
+ =?utf-8?B?cTNITTErdVg2aS9Id1NVVWd5elpKWTBlWVpSUlpSNEZQeW5RdllFV2JqOXAv?=
+ =?utf-8?B?aFBrZ2NuV0xGaHFySlA2S1A4eFI0bXRpdjRhRFFReWNSTWkrazNDSUpWL1RN?=
+ =?utf-8?B?eE9LeEJNM2hyZEY0dWlzcWtiL1BuejNibUFzVXg2aFNLVXVlYnRoOG1xa3R1?=
+ =?utf-8?B?TVFmUFNzL01sRWkzMXVLREVvcHFXbmwweUg3Wks2cG0vUTRTUUVaR1NmOWVD?=
+ =?utf-8?B?RldZQmdLcVA1RDlmSEpqRlNzZG9lRkpmWVp3eGM1SzFuUi9TdmVNMlFVQWx0?=
+ =?utf-8?B?UmoxdTdubkVpT0lna2ZUS1pTUXFjMExpdlI0SVMxdHdYWWZzSjBtR2k0b3g4?=
+ =?utf-8?B?dFhBOXZVVjhWdUJhTjZGN1l0aWFtaE1yVjJHY1BScjBEcFFlbkIvWnBDWkhO?=
+ =?utf-8?B?SExyTkhhT2lrclhneHZuVDAxVElDenhvakpydURiZUdjZ01McisyazNoZzZL?=
+ =?utf-8?B?VDVkNnJEZ0llcFFSMDhVRVJvSERlNVFBeXROUEs0c2trNEoxbXpldFdhRlA1?=
+ =?utf-8?B?YnhiSEtIQjllZHYrTzA2Tm1zd3I1R1p4VUZieWpuOWg3SDNPRWY0QVBLZU5U?=
+ =?utf-8?B?UUVMOWVEekJtK2t3RkRBMkdlMTVpYW1NY3B2bW1MR1ZVRlUyQ1pra25LbDdU?=
+ =?utf-8?B?TE1GNzVRWWhuVVBWVjdTRTMrbEJGRDZaeHVTS25VZThCRUI5djJDYVlTQ2N1?=
+ =?utf-8?B?eDYxSlRrUmlvcVZaWGdXUnFVbytIZC93enl2Y2NEaFp6dVpsbmZQSVRsMzN4?=
+ =?utf-8?B?MGQzaEIwT3FTazl3OG5UOGFLMHlhVGJkTS94c1BPejcvalgyT0h2Z1B4Vldo?=
+ =?utf-8?B?NzhFNlBzRkxWTnVqeFhHKzVXWDd4ZG5rV0JCMkNpQ0ZYeGhac2puZ28rYW56?=
+ =?utf-8?Q?BirHDkwAm6DmhJ2tPUP1wUiVA?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4033.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2387c310-97ef-44d6-a129-08da6bf625b3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2022 15:23:36.4533
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: b16d6978-25d5-4e0b-5d02-08da6bf639bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2022 15:24:10.0710
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rVDjuHHpLtLH4Z+zi4J39swpgc8wgT6Fe8ql6qlZc9UozTNallx3zv2JFotWqw0A
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3691
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: J9JMbFY2RGzuLRW/Pzrr001DYPvfQXYeiIZqCKlnMeEeX477HSQRauloq58gaevYQmC8OheFmvqNJOfa14U6AA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR84MB1837
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: u-pdviMaKYv-SAJtD4JH0WyEiAEKArQL
+X-Proofpoint-GUID: u-pdviMaKYv-SAJtD4JH0WyEiAEKArQL
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-22_06,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=617 spamscore=0
+ suspectscore=0 bulkscore=0 malwarescore=0 impostorscore=0 clxscore=1011
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207220065
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Is there any comments on this patch ?.
-
-Thanks
-Neeli Srinivas
-> -----Original Message-----
-> From: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> Sent: Sunday, June 26, 2022 12:38 PM
-> To: a.zummo@towertech.it; alexandre.belloni@bootlin.com;
-> robh+dt@kernel.org; Neeli, Srinivas <srinivas.neeli@amd.com>;
-> neelisrinivas18@gmail.com; krzysztof.kozlowski+dt@linaro.org;
-> michal.simek@xilinx.com; sgoud@xilinx.com; shubhraj@xilinx.com
-> Cc: devicetree@vger.kernel.org; linux-rtc@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git (AMD-Xilinx=
-)
-> <git@amd.com>; git@xilinx.com; Srinivas Neeli <srinivas.neeli@xilinx.com>
-> Subject: [PATCH V10 3/3] rtc: zynqmp: Add calibration set and get support
->=20
-> Zynqmp RTC controller has a calibration feature to compensate time
-> deviation due to input clock inaccuracy.
-> Set and get calibration API's are used for setting and getting calibratio=
-n value
-> from the controller calibration register.
->=20
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> ---
-> Chanes in V10:
-> -None
-> Changes in V9:
-> -None
-> Changes in V8:
-> -None
-> Changes in V7:
-> -Removed calibration default value update from this patch.
-> Changes in V6:
-> -None
-> Changes in V5:
-> -None
-> Changes in V4:
-> -Updated MIN and MAX calibration values.
-> Changes in V3:
-> -Calculated tick_mult using crystal frequency.
-> -Calibration register updating based on crystal frequency in probe.
-> -Supressed MIN an MAX calibration values,Will send separate patch in
-> future.
-> Changes in V2:
-> -Removed unused macro.
-> -Updated code with review comments.
-> ---
->  drivers/rtc/rtc-zynqmp.c | 113 ++++++++++++++++++++++++++++++++-------
->  1 file changed, 94 insertions(+), 19 deletions(-)
->=20
-> diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c index
-> 5da33d760419..1dd389b891fe 100644
-> --- a/drivers/rtc/rtc-zynqmp.c
-> +++ b/drivers/rtc/rtc-zynqmp.c
-> @@ -6,6 +6,7 @@
->   *
->   */
->=20
-> +#include <linux/clk.h>
->  #include <linux/delay.h>
->  #include <linux/init.h>
->  #include <linux/io.h>
-> @@ -40,13 +41,19 @@
->  #define RTC_CALIB_MASK		0x1FFFFF
->  #define RTC_ALRM_MASK          BIT(1)
->  #define RTC_MSEC               1000
-> +#define RTC_FR_MASK		0xF0000
-> +#define RTC_FR_MAX_TICKS	16
-> +#define RTC_PPB			1000000000LL
-> +#define RTC_MIN_OFFSET		-32768000
-> +#define RTC_MAX_OFFSET		32767000
->=20
->  struct xlnx_rtc_dev {
->  	struct rtc_device	*rtc;
->  	void __iomem		*reg_base;
->  	int			alarm_irq;
->  	int			sec_irq;
-> -	unsigned int		calibval;
-> +	struct clk		*rtc_clk;
-> +	unsigned int		freq;
->  };
->=20
->  static int xlnx_rtc_set_time(struct device *dev, struct rtc_time *tm) @@=
- -
-> 61,13 +68,6 @@ static int xlnx_rtc_set_time(struct device *dev, struct
-> rtc_time *tm)
->  	 */
->  	new_time =3D rtc_tm_to_time64(tm) + 1;
->=20
-> -	/*
-> -	 * Writing into calibration register will clear the Tick Counter and
-> -	 * force the next second to be signaled exactly in 1 second period
-> -	 */
-> -	xrtcdev->calibval &=3D RTC_CALIB_MASK;
-> -	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-> -
->  	writel(new_time, xrtcdev->reg_base + RTC_SET_TM_WR);
->=20
->  	/*
-> @@ -173,15 +173,76 @@ static void xlnx_init_rtc(struct xlnx_rtc_dev
-> *xrtcdev)
->  	rtc_ctrl =3D readl(xrtcdev->reg_base + RTC_CTRL);
->  	rtc_ctrl |=3D RTC_BATT_EN;
->  	writel(rtc_ctrl, xrtcdev->reg_base + RTC_CTRL);
-> +}
->=20
-> -	/*
-> -	 * Based on crystal freq of 33.330 KHz
-> -	 * set the seconds counter and enable, set fractions counter
-> -	 * to default value suggested as per design spec
-> -	 * to correct RTC delay in frequency over period of time.
-> +static int xlnx_rtc_read_offset(struct device *dev, long *offset) {
-> +	struct xlnx_rtc_dev *xrtcdev =3D dev_get_drvdata(dev);
-> +	unsigned long long rtc_ppb =3D RTC_PPB;
-> +	unsigned int tick_mult =3D do_div(rtc_ppb, xrtcdev->freq);
-> +	unsigned int calibval;
-> +	long offset_val;
-> +
-> +	calibval =3D readl(xrtcdev->reg_base + RTC_CALIB_RD);
-> +	/* Offset with seconds ticks */
-> +	offset_val =3D calibval & RTC_TICK_MASK;
-> +	offset_val =3D offset_val - RTC_CALIB_DEF;
-> +	offset_val =3D offset_val * tick_mult;
-> +
-> +	/* Offset with fractional ticks */
-> +	if (calibval & RTC_FR_EN)
-> +		offset_val +=3D ((calibval & RTC_FR_MASK) >>
-> RTC_FR_DATSHIFT)
-> +			* (tick_mult / RTC_FR_MAX_TICKS);
-> +	*offset =3D offset_val;
-> +
-> +	return 0;
-> +}
-> +
-> +static int xlnx_rtc_set_offset(struct device *dev, long offset) {
-> +	struct xlnx_rtc_dev *xrtcdev =3D dev_get_drvdata(dev);
-> +	unsigned long long rtc_ppb =3D RTC_PPB;
-> +	unsigned int tick_mult =3D do_div(rtc_ppb, xrtcdev->freq);
-> +	unsigned char fract_tick;
-> +	unsigned int calibval;
-> +	short int  max_tick;
-> +	int fract_offset;
-> +
-> +	if (offset < RTC_MIN_OFFSET || offset > RTC_MAX_OFFSET)
-> +		return -ERANGE;
-> +
-> +	/* Number ticks for given offset */
-> +	max_tick =3D div_s64_rem(offset, tick_mult, &fract_offset);
-> +
-> +	/* Number fractional ticks for given offset */
-> +	if (fract_offset) {
-> +		if (fract_offset < 0) {
-> +			fract_offset =3D fract_offset + tick_mult;
-> +			max_tick--;
-> +		}
-> +		if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-> +			for (fract_tick =3D 1; fract_tick < 16; fract_tick++) {
-> +				if (fract_offset <=3D
-> +				    (fract_tick *
-> +				     (tick_mult / RTC_FR_MAX_TICKS)))
-> +					break;
-> +			}
-> +		}
-> +	}
-> +
-> +	/* Zynqmp RTC uses second and fractional tick
-> +	 * counters for compensation
->  	 */
-> -	xrtcdev->calibval &=3D RTC_CALIB_MASK;
-> -	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-> +	calibval =3D max_tick + RTC_CALIB_DEF;
-> +
-> +	if (fract_tick)
-> +		calibval |=3D RTC_FR_EN;
-> +
-> +	calibval |=3D (fract_tick << RTC_FR_DATSHIFT);
-> +
-> +	writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-> +
-> +	return 0;
->  }
->=20
->  static const struct rtc_class_ops xlnx_rtc_ops =3D { @@ -190,6 +251,8 @@
-> static const struct rtc_class_ops xlnx_rtc_ops =3D {
->  	.read_alarm	  =3D xlnx_rtc_read_alarm,
->  	.set_alarm	  =3D xlnx_rtc_set_alarm,
->  	.alarm_irq_enable =3D xlnx_rtc_alarm_irq_enable,
-> +	.read_offset	  =3D xlnx_rtc_read_offset,
-> +	.set_offset	  =3D xlnx_rtc_set_offset,
->  };
->=20
->  static irqreturn_t xlnx_rtc_interrupt(int irq, void *id) @@ -255,10 +318=
-,22
-> @@ static int xlnx_rtc_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->=20
-> -	ret =3D of_property_read_u32(pdev->dev.of_node, "calibration",
-> -				   &xrtcdev->calibval);
-> -	if (ret)
-> -		xrtcdev->calibval =3D RTC_CALIB_DEF;
-> +	/* Getting the rtc_clk info */
-> +	xrtcdev->rtc_clk =3D devm_clk_get_optional(&pdev->dev, "rtc_clk");
-> +	if (IS_ERR(xrtcdev->rtc_clk)) {
-> +		if (PTR_ERR(xrtcdev->rtc_clk) !=3D -EPROBE_DEFER)
-> +			dev_warn(&pdev->dev, "Device clock not found.\n");
-> +	}
-> +	xrtcdev->freq =3D clk_get_rate(xrtcdev->rtc_clk);
-> +	if (!xrtcdev->freq) {
-> +		ret =3D of_property_read_u32(pdev->dev.of_node,
-> "calibration",
-> +					   &xrtcdev->freq);
-> +		if (ret)
-> +			xrtcdev->freq =3D RTC_CALIB_DEF;
-> +	}
-> +	ret =3D readl(xrtcdev->reg_base + RTC_CALIB_RD);
-> +	if (!ret)
-> +		writel(xrtcdev->freq, (xrtcdev->reg_base + RTC_CALIB_WR));
->=20
->  	xlnx_init_rtc(xrtcdev);
->=20
-> --
-> 2.25.1
-
+Qm9yaXNsYXYgUGV0a292IHdyb3RlOg0KPiBPbiBUaHUsIEp1bCAyMSwgMjAyMiBhdCAxMjowNTow
+M1BNIC0wNjAwLCBUb3NoaSBLYW5pIHdyb3RlOg0KPiA+IFRoZSBmb2xsb3dpbmcgYnVmZmVyIG92
+ZXJmbG93IEJVRyB3YXMgb2JzZXJ2ZWQgb24gYW4gSFBFIHN5c3RlbS4NCj4gPiBnaGVzX2VkYWNf
+cmVnaXN0ZXIoKSBjYWxsZWQgc3RybGVuKCkgb24gYW4gdW5pbml0aWFsaXplZCBsYWJlbCwgd2hp
+Y2ggDQo+ID4gaGFkIG5vbi16ZXJvIHZhbHVlcyBmcm9tIGtyZWFsbG9jX2FycmF5KCkuDQo+IA0K
+PiBJIGVuZGVkIHVwIG1hc3NhZ2luZyBpdCBpbnRvIHRoaXM6DQoNClRoYW5rcyBmb3IgdGhlIHVw
+ZGF0ZSEgIEl0IGxvb2tzIGdvb2QgdG8gbWUuIA0KDQpUb3NoaQ0K

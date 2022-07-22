@@ -2,139 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869CA57DAC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F398057DAAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234239AbiGVHNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S234358AbiGVHNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234363AbiGVHNe (ORCPT
+        with ESMTP id S231585AbiGVHNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:13:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43E9C904FB
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658474013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wsed93BuNRJkapkugRn/nwfX0SXje/qBsJN6NO73XG0=;
-        b=EZhY34hSfqJY8iq9qlgmLM8gVWLfbldZZkKTvsTDmFwfL85hUDW5mX/CYitp5JK6ek4ktj
-        fg83kr9+z3IvkUwgplh8XpcO25HO93lsWkCR6Wn0P9omKb5vNVd8B8ktvMPjaAt5tKMSuA
-        kY1fWlCpi3wL3HQtUQ3LdkwgdhvEuak=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-59-nJF14z1HPKen0hkkn10CoQ-1; Fri, 22 Jul 2022 03:13:24 -0400
-X-MC-Unique: nJF14z1HPKen0hkkn10CoQ-1
-Received: by mail-qt1-f200.google.com with SMTP id cj19-20020a05622a259300b0031f01f3933cso2385349qtb.18
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:13:24 -0700 (PDT)
+        Fri, 22 Jul 2022 03:13:09 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7CE8E6D9;
+        Fri, 22 Jul 2022 00:13:08 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-10dc1b16c12so229085fac.6;
+        Fri, 22 Jul 2022 00:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/5eFAcvX/CKlTrR9jX/d2mPTDiNp5/R1cusUbd4zITc=;
+        b=IAE445tfsoJF+oNXdF/zD/o+xl+j5zuke/2oHbLDrDDG1eK7oMFwzquA9owKIC0akd
+         2wtRxONNq8jxitQ3T9C67se9Vr1rSoQvwlaTscjFzLW1c2a/5F4E5KboDfICs93jZTil
+         0E0IoLVKrsMnxnyYFFQKW2lpHILH6KLPtlg5fey8OufecN3TWNT5SnjkNDpHr+rHZ429
+         3eFW2gX7jaRz0bAt5mhSlzF7pJIgABlYhgd/Y8SaNIi4idYTIuB1mcImAJXFeFE0BWNd
+         CWsx4ux7HI+RoXokQX7/HR+dhEWUyNFu3OZbjpPvIxHLJnUXvkBc4tE4d62xfHQgP7ck
+         4zhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wsed93BuNRJkapkugRn/nwfX0SXje/qBsJN6NO73XG0=;
-        b=zqJw17+sFa2JgQ9fQQciiPg4aL41jrwY+q9uJxMi9Aap+Wj2IU+pGhUz0xFi0fNh6k
-         Batjs4v+xvHnGo1Zd9Bxuyz67EuVp8ZCFRuWwPByNHtqQiYHAT/73nr+RPKpfFAWNdw4
-         HmcGfggMC8HP7je5hZu6j1uYXPcCGD0vYt/LOjhf7gF6abQOj8DouvUn9XhvtaB1NxfM
-         Q6fD9fGnKFy765LXUnKCz8vJ/DvcFfN79vntJs6OUM6X66qothUlvfgcSw3Bepl+ACu1
-         mp7svoj0rYN2ODuMcKwcd8T9GokQGD8diV3wsSXMNbhOfrivT/xH4echyUf1JtjfESEa
-         LCzw==
-X-Gm-Message-State: AJIora8MOEGjnFdaFPBdNrwyxDqRPCjzNoDDwU9nTCjktQVJr/BdhCnd
-        3XNFc2DSNJH9ktbNw90fbCd4ohGkc3j/kQQSxRJTOObAzAUJkx41nTSr+u9+j1cBQwSuVxiwJcc
-        HFhhKdsLDNnoQikdLbAlU+xzz69csToKW+vEqtXH6
-X-Received: by 2002:a0c:be91:0:b0:474:1d6:b1a4 with SMTP id n17-20020a0cbe91000000b0047401d6b1a4mr1734958qvi.108.1658474003806;
-        Fri, 22 Jul 2022 00:13:23 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tEcyOOrz8ulXALLU3lOqBWBPAhsUJqLPMU34S78oArx1JQGAQejfV6MMkgWmFYInqi0IgRkgNkqkYPfZYae8I=
-X-Received: by 2002:a0c:be91:0:b0:474:1d6:b1a4 with SMTP id
- n17-20020a0cbe91000000b0047401d6b1a4mr1734938qvi.108.1658474003579; Fri, 22
- Jul 2022 00:13:23 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/5eFAcvX/CKlTrR9jX/d2mPTDiNp5/R1cusUbd4zITc=;
+        b=Y/3lGgvkKxgsDRBc4EIHfo+tkFuJRKGvuZqYIINfBRo7D4bh6RvdwngogX2EUvjPgv
+         jsIRq1JH9h3lqu1Zem14HXOgBPJC1+riJJmDMLLUzwqWTWKg+ox6o+Zk1O5QW7oE2NoJ
+         tQtZin4ENd8cu1+A0LWXZEMuVF3ebuSt2mAPrXiWhIq3+O2yzTaxcJuIhl5/L1HK1+9y
+         XSw5QVJ2U8g6kEKdARF11DomjWIk1lbShDz7SNVudLWJme6XtsQmFDXkaeRLsDlLqpBv
+         Q2zPDcYgfZ+zZ5nXEA6pkuGf626Mz4uJtX+Ml8cjISESFq/jUtxuS+SSuCXSVVo87DP+
+         iufg==
+X-Gm-Message-State: AJIora9zhecv0+loBcKD2kyuG1FJ8qb4AeVMxtZiSDPDqtEAZz3WKs7w
+        F/yMT57OVl6qOnp1XGAQERzfcfrwMQB9UETHVXeQU3aF
+X-Google-Smtp-Source: AGRyM1sZbAQqRFGT4zktXxYOhlpCSHAdyV2KhO65mrh0zep3NPJ8L+wFTa+SoqqdeFP8ZeriFFgE8FEPylj7lDy66+k=
+X-Received: by 2002:a05:6870:2323:b0:10d:2b6:3519 with SMTP id
+ w35-20020a056870232300b0010d02b63519mr6962462oao.215.1658473987695; Fri, 22
+ Jul 2022 00:13:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721084341.24183-1-qtxuning1999@sjtu.edu.cn> <20220721084341.24183-4-qtxuning1999@sjtu.edu.cn>
-In-Reply-To: <20220721084341.24183-4-qtxuning1999@sjtu.edu.cn>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Fri, 22 Jul 2022 09:12:47 +0200
-Message-ID: <CAJaqyWfgUqdP6mkOUdouvQSst=qc7MOTaigC-EiTg9-gojHqzg@mail.gmail.com>
-Subject: Re: [RFC 3/5] vhost_test: batch used buffer
-To:     Guo Zhi <qtxuning1999@sjtu.edu.cn>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
+References: <20220721061144.35139-1-gene.chen.richtek@gmail.com>
+ <20220721061144.35139-4-gene.chen.richtek@gmail.com> <0675b483-9d51-30bc-a51d-9b9f2a0acb51@roeck-us.net>
+In-Reply-To: <0675b483-9d51-30bc-a51d-9b9f2a0acb51@roeck-us.net>
+From:   Gene Chen <gene.chen.richtek@gmail.com>
+Date:   Fri, 22 Jul 2022 15:12:55 +0800
+Message-ID: <CAE+NS340V5+-QqnO8WAFT3Z2U77P+-hejFUbpCbxieORaPJ2Dw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] usb: typec: tcpci_rt1711h: Add regulator support
+ when source vbus
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Gene Chen <gene_chen@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 10:44 AM Guo Zhi <qtxuning1999@sjtu.edu.cn> wrote:
+Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2022=E5=B9=B47=E6=9C=8821=E6=
+=97=A5 =E9=80=B1=E5=9B=9B =E6=99=9A=E4=B8=8A10:28=E5=AF=AB=E9=81=93=EF=BC=
+=9A
 >
-> Only add to used ring when a batch a buffer have all been used.  And if
-> in order feature negotiated, add randomness to the used buffer's order,
-> test the ability of vhost to reorder batched buffer.
+> On 7/20/22 23:11, Gene Chen wrote:
+> > From: Gene Chen <gene_chen@richtek.com>
+> >
+> > Add regulator support when source vbus
+> >
+> > Signed-off-by: Gene Chen <gene_chen@richtek.com>
+> > ---
+> >   drivers/usb/typec/tcpm/tcpci_rt1711h.c | 28 +++++++++++++++++++++++++=
++
+> >   1 file changed, 28 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec=
+/tcpm/tcpci_rt1711h.c
+> > index 3309ceace2b2..52c9594e531d 100644
+> > --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> > @@ -10,6 +10,7 @@
+> >   #include <linux/i2c.h>
+> >   #include <linux/interrupt.h>
+> >   #include <linux/gpio/consumer.h>
+> > +#include <linux/regulator/consumer.h>
+> >   #include <linux/usb/tcpm.h>
+> >   #include <linux/regmap.h>
+> >   #include "tcpci.h"
+> > @@ -40,6 +41,8 @@ struct rt1711h_chip {
+> >       struct tcpci_data data;
+> >       struct tcpci *tcpci;
+> >       struct device *dev;
+> > +     struct regulator *vbus;
+> > +     bool src_en;
+> >   };
+> >
+> >   static int rt1711h_read16(struct rt1711h_chip *chip, unsigned int reg=
+, u16 *val)
+> > @@ -103,6 +106,26 @@ static int rt1711h_init(struct tcpci *tcpci, struc=
+t tcpci_data *tdata)
+> >
+> >       /* dcSRC.DRP : 33% */
+> >       return rt1711h_write16(chip, RT1711H_RTCTRL16, 330);
+> > +
+> > +}
+> > +
+> > +static int rt1711h_set_vbus(struct tcpci *tcpci, struct tcpci_data *td=
+ata,
+> > +                         bool src, bool snk)
+> > +{
+> > +     struct rt1711h_chip *chip =3D tdata_to_rt1711h(tdata);
+> > +     int ret;
+> > +
+> > +     if (chip->src_en =3D=3D src)
+> > +             return 1;
+> > +
+> > +     if (src)
+> > +             ret =3D regulator_enable(chip->vbus);
+> > +     else
+> > +             ret =3D regulator_disable(chip->vbus);
+> > +
+> > +     if (!ret)
+> > +             chip->src_en =3D src;
+> > +     return ret ? ret : 1;
 >
-> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
-> ---
->  drivers/vhost/test.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/vhost/test.c b/drivers/vhost/test.c
-> index bc8e7fb1e..1c9c40c11 100644
-> --- a/drivers/vhost/test.c
-> +++ b/drivers/vhost/test.c
-> @@ -43,6 +43,9 @@ struct vhost_test {
->  static void handle_vq(struct vhost_test *n)
->  {
->         struct vhost_virtqueue *vq = &n->vqs[VHOST_TEST_VQ];
-> +       struct vring_used_elem *heads = kmalloc(sizeof(*heads)
-> +                       * vq->num, GFP_KERNEL);
-> +       int batch_idx = 0;
->         unsigned out, in;
->         int head;
->         size_t len, total_len = 0;
-> @@ -84,11 +87,21 @@ static void handle_vq(struct vhost_test *n)
->                         vq_err(vq, "Unexpected 0 len for TX\n");
->                         break;
->                 }
-> -               vhost_add_used_and_signal(&n->dev, vq, head, 0);
-> +               heads[batch_idx].id = cpu_to_vhost32(vq, head);
-> +               heads[batch_idx++].len = cpu_to_vhost32(vq, len);
->                 total_len += len;
->                 if (unlikely(vhost_exceeds_weight(vq, 0, total_len)))
->                         break;
->         }
-> +       if (batch_idx) {
-> +               if (vhost_has_feature(vq, VIRTIO_F_IN_ORDER) && batch_idx >= 2) {
-
-Maybe to add a module parameter to test this? Instead of trusting in
-feature negotiation, "unorder_used=1" or something like that.
-
-vhost.c:vhost_add_used_and_signal_n should support receiving buffers
-in order or out of order whether F_IN_ORDER is negotiated or not.
-
-Thanks!
-
-> +                       vhost_add_used_and_signal_n(&n->dev, vq, &heads[batch_idx / 2],
-> +                                                   batch_idx - batch_idx / 2);
-> +                       vhost_add_used_and_signal_n(&n->dev, vq, heads, batch_idx / 2);
-> +               } else {
-> +                       vhost_add_used_and_signal_n(&n->dev, vq, heads, batch_idx);
-> +               }
-> +       }
->
->         mutex_unlock(&vq->mutex);
->  }
-> --
-> 2.17.1
+> Are you sure this is what you want ? Returning 1 bypasses the code settin=
+g
+> the vbus registers in tcpci.c. If that is on purpose it might make sense
+> to explain it.
 >
 
+ACK, return 0 is more compatible with next generation chip,
+and writing tcpci vbus command won't affect to ic if not supported.
+
+> >   }
+> >
+> >   static int rt1711h_set_vconn(struct tcpci *tcpci, struct tcpci_data *=
+tdata,
+> > @@ -246,7 +269,12 @@ static int rt1711h_probe(struct i2c_client *client=
+,
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > +     chip->vbus =3D devm_regulator_get(&client->dev, "vbus");
+> > +     if (IS_ERR(chip->vbus))
+> > +             return PTR_ERR(chip->vbus);
+> > +
+>
+> This makes regulator support mandatory, which so far was not the case.
+> That warrants an explanation why it is not a problem for existing users.
+>
+
+We verified ic behavior as SNK only, because we couldn't add tcpci set
+vbus callback and external boost otg vbus.
+And we use our own type-c state machine and pd policy engine for mass
+production to user.
+
+> Thanks,
+> Guenter
+>
+> >       chip->data.init =3D rt1711h_init;
+> > +     chip->data.set_vbus =3D rt1711h_set_vbus;
+> >       chip->data.set_vconn =3D rt1711h_set_vconn;
+> >       chip->data.start_drp_toggling =3D rt1711h_start_drp_toggling;
+> >       chip->tcpci =3D tcpci_register_port(chip->dev, &chip->data);
+>

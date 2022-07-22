@@ -2,186 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4802E57E5D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C43657E5D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbiGVRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S236058AbiGVRrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235096AbiGVRrA (ORCPT
+        with ESMTP id S235855AbiGVRrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:47:00 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA09893697
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:46:55 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id u14so6301639lju.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4pDf7ez85QHUoBuUMoHgMnyuDNXTg+iV62WcG6bVoxE=;
-        b=k5jT7LN8Fx7VEkTi0XgPQxBYvaHMVqDhNuzeipXMEE2dmex+dbNJnlmZiPyNCJMZ2P
-         Tc+7Z/KTvjKKzxfIihpYVp7o4uYWv8G5KY6JLb6/rgmcyvOEx53QIhkMr1TcCtHZtfjU
-         kR2I+YWQCWY/iBDDjTQS8dhgAfJ/0K0bl8gJSMEbFijjb/Kz5ONZ/AnK82jGsRcYFGlo
-         ww8uAvOc28X7SUpKNAUpNfi0Zd5z6ZTs0jfeIYhKjfVlo595c17U3QvI/4ImkcJcK0D4
-         1kk3nFzKiBm/S5GpZW+EwKlIH5ZfbHo/D94C8C9+GvpeC9PIm2ry3y0jI4UQANy9q4r/
-         XeNQ==
+        Fri, 22 Jul 2022 13:47:16 -0400
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246CC951CB;
+        Fri, 22 Jul 2022 10:47:16 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id x1so3388226plb.3;
+        Fri, 22 Jul 2022 10:47:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4pDf7ez85QHUoBuUMoHgMnyuDNXTg+iV62WcG6bVoxE=;
-        b=sX5XeuyOlceVOdqPP/Lwme4+53/gLljtFOPSw9ScfKVrO7JjOB+h4u4GUQI3dslkAX
-         D8zdvKPrWkMesN7ONjBCS2rN6sy5n+KeF77jirlJtdJMZt+IVNBWNb93mbEdAVp4af55
-         CzcbzEbhIXz6MSOPvpd+O3Uf1RRy4j4B1xDoOGZdoqQYe7AKMgWi0QdPx5WOBGzAmLNn
-         wyjdOshUkP8zDreOtED4f/J1IxeuQm47SqV1enfZKpQYPF1tGz1JdC/6OO+Z1krKEaEp
-         MVyRItc7Lk1/ucx3fD+3adMBsn5WS4TwtJylDvxbplJcslbnMydH/9VokzHdOi6W7mU3
-         cZ+A==
-X-Gm-Message-State: AJIora9ycqwLL6ezhdNq8rDd/OizX1MT3MQvEwmO7dkUVNiNnlyCgMuG
-        RI14+5T3q9h+SmW9LvP/aOt47g==
-X-Google-Smtp-Source: AGRyM1sqFiGr1+mDJ9qbeVsgJ4L1DLzZ2N4yyzMkKPO7XUslPN8IvI+lN6tL17Kpq2z/VwHxUKK3hA==
-X-Received: by 2002:a2e:a5cb:0:b0:25d:7a70:2891 with SMTP id n11-20020a2ea5cb000000b0025d7a702891mr386558ljp.295.1658512013920;
-        Fri, 22 Jul 2022 10:46:53 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id o1-20020a05651205c100b00489c7fb668dsm1163070lfo.182.2022.07.22.10.46.52
+        bh=iGdkXOH2H16F8Hpn2Tgy5CKP/LKypAMrDZQSY+JK7dU=;
+        b=FADGIx/0gSkWSbFMchH2y99NWZJ9RLXrd8kuW+mL4qcrvK6U2oQe5/liUSYQ9JKW1I
+         f+Qlq3GvnH168uOegqmqQ17p0nMn9DTqI7RYyJjmZ0TdSqQv3li6fGALFWOGRKUwBFz3
+         R1gyaaZsn1/lI1KaQgu47m62zN2yu9O0h7KgrqXATKCuEysyHFviYGdpRtqMgELQ91Nx
+         iJ5ONf/nmv2FjSTJCeBZ+QUwDjfw+hSAVBJCD792oJH7BeKSKCRagmDV5VVUdTAeTlwp
+         PXdM8Q1uuJ+GAehishKjaxzmNfCNUF8W/PcyRh+T1A9rUA75I4Cm5JlljcmvGrP4qGWT
+         WQ0A==
+X-Gm-Message-State: AJIora8cv8w00zuHYEvg4A0W5xayHNzR5+1fIbM5Pe3rvlmYhlPeqNT2
+        y1inEdT6U5q3fYo06mLN69hqdIlKEac=
+X-Google-Smtp-Source: AGRyM1vBu7of+c3BIe4do/ZrLP7ttCauBZUaY+0hH7OjkwPbfvjhKrUFzo0woNgcxnLKLfR5odb3dQ==
+X-Received: by 2002:a17:90b:38c1:b0:1f1:f1c1:469c with SMTP id nn1-20020a17090b38c100b001f1f1c1469cmr18589427pjb.106.1658512035356;
+        Fri, 22 Jul 2022 10:47:15 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9cf6:7e29:d977:6fc7? ([2620:15c:211:201:9cf6:7e29:d977:6fc7])
+        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b001640aad2f71sm4013163plk.180.2022.07.22.10.47.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:46:53 -0700 (PDT)
-Message-ID: <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
-Date:   Fri, 22 Jul 2022 19:46:51 +0200
+        Fri, 22 Jul 2022 10:47:14 -0700 (PDT)
+Message-ID: <f798c875-0bb9-add7-d7a3-4ac2a76e85d9@acm.org>
+Date:   Fri, 22 Jul 2022 10:47:12 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
+Subject: Re: [PATCH v2 2/2] block/mq-deadline: Prioritize first request
 Content-Language: en-US
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, tudor.ambarus@microchip.com,
-        p.yadav@ti.com, michael@walle.cc, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
-        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
-        reimu@sudomaker.com
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Wang You <wangyoua@uniontech.com>, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hch@lst.de, jaegeuk@kernel.org, fio@vger.kernel.org,
+        ming.lei@redhat.com, wangxiaohua@uniontech.com
+References: <20220722095120.371212-1-wangyoua@uniontech.com>
+ <20220722095120.371212-3-wangyoua@uniontech.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220722095120.371212-3-wangyoua@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
-> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
-> and the X2000 SoC from Ingenic.
+On 7/22/22 02:51, Wang You wrote:
+> The test hardware is:
+> Kunpeng-920, HW-SAS3508+(MG04ACA400N * 2), RAID0.
+
+What is MG04ACA400N? The test results suggest that it is an SSD but this 
+is something that should be mentioned explicitly.
+
+> - The test hardware is:
+> Hygon C86, MG04ACA400N
+
+What is MG04ACA400N?
+
+> The test command is:
+> fio -ioengine=psync -lockmem=1G -buffered=0 -time_based=1 -direct=1 -iodepth=1
+> -thread -bs=512B -size=110g -numjobs=32 -runtime=300 -group_reporting
+> -name=read -filename=/dev/sdc -ioscheduler=mq-deadline -rw=read[,write,rw]
 > 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
->  .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+> The following is the test data:
+> origin/master:
+> read iops: 15463	write iops: 5949	rw iops: 574,576
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
-> new file mode 100644
-> index 00000000..b7c4cf4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/ingenic,sfc.yaml#
+> nr_sched_batch = 1:
+> read iops: 15082	write iops: 6283	rw iops: 783,786
+> 
+> nr_sched_batch = 1, use deadline_head_request:
+> read iops: 15368	write iops: 6575	rw iops: 907,906
 
-File name should be rather based on first compatible, so
-ingenic,x1000-sfc.yaml
+The above results are low enough such that these could come from a hard 
+disk. However, the test results are hard to interpret since the I/O 
+pattern is neither perfectly sequential nor perfectly random (32 
+sequential jobs). Please provide separate measurements for sequential 
+and random I/O.
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for SFC in Ingenic SoCs
-> +
-> +maintainers:
-> +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> +
-> +description:
-> +  The SPI Flash Controller in Ingenic SoCs.
-> +
+The above results show that this patch makes reading from a hard disk 
+slower. Isn't the primary use case of mq-deadline to make reading from 
+hard disks faster? So why should these two patches be applied if these 
+slow down reading from a hard disk?
 
-You miss here allOf referencing spi-controller.
+Thanks,
 
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - ingenic,x1000-sfc
-> +          - ingenic,x1600-sfc
-> +          - ingenic,x2000-sfc
-> +      - items:
-> +          - enum:
-> +              - ingenic,x1830-sfc
-> +          - const: ingenic,x1000-sfc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: sfc
-
-Remove the clock-names entirely, no benefits.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/ingenic,x1000-cgu.h>
-> +
-> +	sfc: spi@13440000 {
-> +		compatible = "ingenic,x1000-sfc";
-
-
-Use 4 spaces for example indentation.
-
-> +		reg = <0x13440000 0x1000>;
-> +
-> +		interrupt-parent = <&intc>;
-> +		interrupts = <7>;
-> +
-> +		clocks = <&cgu X1000_CLK_SFC>;
-> +		clock-names = "sfc";
-> +
-> +		status = "disabled";
-
-No status in example.
-
-> +	};
-> +...
-
-
-Best regards,
-Krzysztof
+Bart.

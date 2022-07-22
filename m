@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F63857DD0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BFE57DD13
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbiGVJCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
+        id S234318AbiGVJEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbiGVJB6 (ORCPT
+        with ESMTP id S231226AbiGVJEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:01:58 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FCA183B7;
-        Fri, 22 Jul 2022 02:01:57 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id o1so3141668qkg.9;
-        Fri, 22 Jul 2022 02:01:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1DaHwUZ1RE1PYQHo6ho0JHLd5AyS1nGZAw53JopZtuc=;
-        b=gHA/DliFBweURmf9WxF/3yy3xRmX+qMxuXci9T2veXS6XL0DUMI9tWE1mnhX4/hXXJ
-         Hb1Clt6iam/PfK1M8VW9fllklNXOHmxycIUwcXBnnfq1wnC5FCWLuUNgm9UgS4mu7CPf
-         7FPs6icf5y7XJoqGS7iWvZ1mM135NJHjy6lNBQRNbv+Zu9pZkUFby69O3y3MfKvu6Rwt
-         6Zl0pJnnd7+3eKpaYxMGcyc0oUi0rWM8MtOA9GSy2is/m1yW1SE4EPp5DrwVipGb45qu
-         HLcxCigPBQYss48dNiwJ40TmLRgZIA6gmm9IHSD9waQ3F+n/slae1OK0XIT5q9VB9N7u
-         071g==
-X-Gm-Message-State: AJIora+0cnkVKxpMVFowjaSBlbtpI/ErVNYzZWOdkZgGLpLqJ9AZbGhG
-        LeGsxfbetuy6w4fPrLOQPNKVCMxZ7dEeQw==
-X-Google-Smtp-Source: AGRyM1vIPmi34jnrTC5KHNV4WLLQN9Y5oIVAthkOvkY0eQWfeys9E0ccahs5qzsO+RtZ+Dg3cMxhtA==
-X-Received: by 2002:a05:620a:bd4:b0:6ab:8874:4cdc with SMTP id s20-20020a05620a0bd400b006ab88744cdcmr1742339qki.415.1658480516738;
-        Fri, 22 Jul 2022 02:01:56 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id bs16-20020a05620a471000b006b618e006ffsm2989239qkb.2.2022.07.22.02.01.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 02:01:56 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31e560aa854so41036027b3.6;
-        Fri, 22 Jul 2022 02:01:56 -0700 (PDT)
-X-Received: by 2002:a81:4f87:0:b0:31e:7122:16fb with SMTP id
- d129-20020a814f87000000b0031e712216fbmr2224273ywb.358.1658480516055; Fri, 22
- Jul 2022 02:01:56 -0700 (PDT)
+        Fri, 22 Jul 2022 05:04:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8E67E306
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:04:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5723A61ED5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:04:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7DFC341C6;
+        Fri, 22 Jul 2022 09:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658480686;
+        bh=Ky+XxKWde+Zen/5MBVzZaHKroh71kf4j7DurO22Gs+c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r5gRNpuZViNHDGqJerrx9Xou6azKr+P9WSk5KHyGnehmQFHdzl6XvnKlY04uQhKYj
+         8lfeDw6lJYLB7nWniTW48JV0FsIKsL8kzb4YsUPf4oNzZhTcMnWkpM6PPSoZYVBgcc
+         9LJtSyAztfqECbnAvx9FL4CU1sAoZQGqx7LNo9QhoTo91hzhmpcFM+MUo3ouNGXVKN
+         qpOtXJVmPm5ODo/3qgnOWxmMIewF+oZ13eBPf0qonE+ZMMS3M4mmntbxi+Bn4RlsZv
+         zITMB7PJfVxePttP2AEkxXDUDBQDC0aACpJRvX5Bgjz9aZH2jxSclG+ps5JyaThtKt
+         ttKgLsMfwl3sQ==
+Date:   Fri, 22 Jul 2022 10:04:41 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     arnd@arndb.de, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] arm64: run softirqs on the per-CPU IRQ stack
+Message-ID: <20220722090440.GB18125@willie-the-truck>
+References: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
+ <20220708094950.41944-2-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
-References: <20220721165701.17888-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220721165701.17888-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <OS0PR01MB5922D6EC478AE231A06E94B586909@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922D6EC478AE231A06E94B586909@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 22 Jul 2022 11:01:44 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUrmseZEBpsh22U52vivA=wXYo2C8Ke6CvgWSKjwgYByQ@mail.gmail.com>
-Message-ID: <CAMuHMdUrmseZEBpsh22U52vivA=wXYo2C8Ke6CvgWSKjwgYByQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: rzg2l-pinctrl: Add macros
- for IRQ0-7
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220708094950.41944-2-zhengqi.arch@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC maz
+On Fri, Jul 08, 2022 at 05:49:49PM +0800, Qi Zheng wrote:
+> Currently arm64 supports per-CPU IRQ stack, but softirqs
+> are still handled in the task context.
+> 
+> Since any call to local_bh_enable() at any level in the task's
+> call stack may trigger a softirq processing run, which could
+> potentially cause a task stack overflow if the combined stack
+> footprints exceed the stack's size, let's run these softirqs
+> on the IRQ stack as well.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> ---
+>  arch/arm64/Kconfig      |  1 +
+>  arch/arm64/kernel/irq.c | 13 +++++++++++++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 4c1e1d2d2f8b..be0a9f0052ee 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -230,6 +230,7 @@ config ARM64
+>  	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+>  	select TRACE_IRQFLAGS_SUPPORT
+>  	select TRACE_IRQFLAGS_NMI_SUPPORT
+> +	select HAVE_SOFTIRQ_ON_OWN_STACK
+>  	help
+>  	  ARM 64-bit (AArch64) Linux support.
+>  
+> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+> index bda49430c9ea..c36ad20a52f3 100644
+> --- a/arch/arm64/kernel/irq.c
+> +++ b/arch/arm64/kernel/irq.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/vmalloc.h>
+>  #include <asm/daifflags.h>
+>  #include <asm/vmap_stack.h>
+> +#include <asm/exception.h>
+>  
+>  /* Only access this in an NMI enter/exit */
+>  DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
+> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
+>  }
+>  #endif
+>  
+> +#ifndef CONFIG_PREEMPT_RT
+> +static void ____do_softirq(struct pt_regs *regs)
+> +{
+> +	__do_softirq();
+> +}
+> +
+> +void do_softirq_own_stack(void)
+> +{
+> +	call_on_irq_stack(NULL, ____do_softirq);
+> +}
+> +#endif
 
-On Fri, Jul 22, 2022 at 6:34 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > Subject: [PATCH v2 1/2] dt-bindings: pinctrl: rzg2l-pinctrl: Add macros
-> > for IRQ0-7
-> >
-> > Add macros for IRQ0-7 which map to SPI1-8 so that it can be used in
-> > dts/i.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > v1->v2
-> > * New patch
-> > ---
-> >  include/dt-bindings/pinctrl/rzg2l-pinctrl.h | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/include/dt-bindings/pinctrl/rzg2l-pinctrl.h b/include/dt-
-> > bindings/pinctrl/rzg2l-pinctrl.h
-> > index c78ed5e5efb7..6aae2ac206d6 100644
-> > --- a/include/dt-bindings/pinctrl/rzg2l-pinctrl.h
-> > +++ b/include/dt-bindings/pinctrl/rzg2l-pinctrl.h
-> > @@ -20,4 +20,14 @@
-> >  /* Convert a port and pin label to its global pin index */
-> >  #define RZG2L_GPIO(port, pin)        ((port) * RZG2L_PINS_PER_PORT +
-> > (pin))
-> >
-> > +/* IRQ0-7 map to SPI1-8 */
-> > +#define RZG2L_IRQ0   1
-> > +#define RZG2L_IRQ1   2
-> > +#define RZG2L_IRQ2   3
-> > +#define RZG2L_IRQ3   4
-> > +#define RZG2L_IRQ4   5
-> > +#define RZG2L_IRQ5   6
-> > +#define RZG2L_IRQ6   7
-> > +#define RZG2L_IRQ7   8
+Acked-by: Will Deacon <will@kernel.org>
 
-No definition for NMI?
+Please can you repost this at -rc1 and we can queue it up for 5.21?
 
-> > +
->
-> Not sure, may be these macros to be moved to [1]?? as it is nothing to do
-> with rzg2l-pinctrl.
->
-> [1]
-> include/dt-bindings/interrupt-controller/irqc-rzg2l.h
->
-> and binding update to use these macros.
+Thanks,
 
-Indeed.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Will

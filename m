@@ -2,202 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D054D57E4FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B952C57E509
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235548AbiGVRFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S235905AbiGVRGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiGVRFi (ORCPT
+        with ESMTP id S235672AbiGVRF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:05:38 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9ED220FC;
-        Fri, 22 Jul 2022 10:05:37 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:39236)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oEw5l-007IFI-NJ; Fri, 22 Jul 2022 11:05:33 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:59484 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oEw5k-00AACQ-Cs; Fri, 22 Jul 2022 11:05:33 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-References: <20220721172808.585539-1-fred@cloudflare.com>
-Date:   Fri, 22 Jul 2022 12:05:07 -0500
-In-Reply-To: <20220721172808.585539-1-fred@cloudflare.com> (Frederick Lawler's
-        message of "Thu, 21 Jul 2022 12:28:04 -0500")
-Message-ID: <877d45kri4.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 22 Jul 2022 13:05:56 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47A690DAD;
+        Fri, 22 Jul 2022 10:05:51 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26MH5WOt022921
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 13:05:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1658509534; bh=x5NY6/np9zWA3SHR+ZSZe4eQA0yfCvzZw1QpBj5Mtco=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=WAfkNlrXDf4aPxN7fFzehBI53ZqxFDXLOQTBMm9tlVxCimVyVcRdLp72BQwtNN8hq
+         xnW7Cn8hAM7rBFQQoLd1JFmBNn1vV3bbmg6dvHuIqgvNRBTHWardQVG3KR44na1iUy
+         Q5VNv0fFa36STPRhqqf5ChNgiaqZf+HeO6KmofCzQDjYEQGTAl9qIYCi1+CKGeMz83
+         RLVWHW6SaKbQNBKNU8uM738coRNHusUs5825IxfbNZqH96qYWSQROkFt+Xv0wed+E/
+         dvJv92G3yoPkPUTGnPPcR5fMowU+n0Lk23UxHZjySPIMB3xtC+vrIgDeExEtHVwMS7
+         E35MQaRXt7ayg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 785D015C3EF7; Fri, 22 Jul 2022 13:05:32 -0400 (EDT)
+Date:   Fri, 22 Jul 2022 13:05:32 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v4 4/9] ext4: support STATX_DIOALIGN
+Message-ID: <YtrY3A/nC023v+/V@mit.edu>
+References: <20220722071228.146690-1-ebiggers@kernel.org>
+ <20220722071228.146690-5-ebiggers@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oEw5k-00AACQ-Cs;;;mid=<877d45kri4.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18ocw5vbG1LyqBTp8XMLyREW1cVYxPT3iU=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722071228.146690-5-ebiggers@kernel.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Frederick Lawler <fred@cloudflare.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 776 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (1.5%), b_tie_ro: 10 (1.3%), parse: 1.15
-        (0.1%), extract_message_metadata: 17 (2.2%), get_uri_detail_list: 3.8
-        (0.5%), tests_pri_-1000: 32 (4.1%), tests_pri_-950: 1.35 (0.2%),
-        tests_pri_-900: 1.06 (0.1%), tests_pri_-90: 196 (25.3%), check_bayes:
-        195 (25.1%), b_tokenize: 12 (1.6%), b_tok_get_all: 13 (1.7%),
-        b_comp_prob: 3.9 (0.5%), b_tok_touch_all: 162 (20.8%), b_finish: 0.92
-        (0.1%), tests_pri_0: 504 (65.0%), check_dkim_signature: 1.41 (0.2%),
-        check_dkim_adsp: 3.8 (0.5%), poll_dns_idle: 0.89 (0.1%), tests_pri_10:
-        1.80 (0.2%), tests_pri_500: 7 (0.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frederick Lawler <fred@cloudflare.com> writes:
+On Fri, Jul 22, 2022 at 12:12:23AM -0700, Eric Biggers wrote:
+> -static bool ext4_dio_supported(struct kiocb *iocb, struct iov_iter *iter)
+> +/*
+> + * Returns %true if the given DIO request should be attempted with DIO, or
+> + * %false if it should fall back to buffered I/O.
+> + *
+> + * DIO isn't well specified; when it's unsupported (either due to the request
+> + * being misaligned, or due to the file not supporting DIO at all), filesystems
+> + * either fall back to buffered I/O or return EINVAL.  For files that don't use
+> + * any special features like encryption or verity, ext4 has traditionally
+> + * returned EINVAL for misaligned DIO.  iomap_dio_rw() uses this convention too.
+> + * In this case, we should attempt the DIO, *not* fall back to buffered I/O.
+> + *
+> + * In contrast, in cases where DIO is unsupported due to ext4 features, ext4
+> + * traditionally falls back to buffered I/O.
+> + *
+> + * This function implements the traditional ext4 behavior in all these cases.
 
-> While creating a LSM BPF MAC policy to block user namespace creation, we
-> used the LSM cred_prepare hook because that is the closest hook to prevent
-> a call to create_user_ns().
+Heh.  I had been under the impression that misaligned I/O fell back to
+buffered I/O for ext4, since that's what a lot of historical Unix
+systems did.  Obviously, it's not something I've tested since "you
+should never do that".
 
-That description is wrong.  Your goal his is not to limit access to
-the user namespace.  Your goal is to reduce the attack surface of the
-kernel by not allowing some processes access to a user namespace.
+There's actually some interesting discussion about what Linux *should*
+be doing in the futre in this discussion:
 
-You have already said that you don't have concerns about the
-fundamentals of the user namespace, and what it enables only that
-it allows access to exploitable code.
+https://patchwork.ozlabs.org/project/linux-ext4/patch/1461472078-20104-1-git-send-email-tytso@mit.edu/
 
-Achieving the protection you seek requires talking and thinking clearly
-about the goal.
+Including the following from Christoph Hellwig:
+
+https://patchwork.ozlabs.org/project/linux-ext4/patch/1461472078-20104-1-git-send-email-tytso@mit.edu/#1335016
+
+> I've been doing an audit of our direct I/O implementations, and most
+> of them does some form of transparent fallback, including some that
+> only pretend to support O_DIRECT, but do anything special for it at all,
+> while at the same time we go through greast efforts to check a file
+> system actualy supports direct I/O, leading to nasty no-op ->direct_IO
+> implementations as we even got that abstraction wrong.
+> 
+> At this point I wonder if we should simply treat O_DIRECT as a hint
+> and always allow it, and just let the file system optimize for it
+> (skip buffering, require alignment, relaxed Posix atomicy requirements)
+> if it is set.
+
+The thread also mentioned XFS_IOC_DIOINFO and how We Really Should
+have something with equivalent functionality to the VFS --- six years
+ago.  :-)
 
 
+Anyway, this change to ext4 looks good.
 
+Acked-by: Theodore Ts'o <tytso@mit.edu>
 
-I have a couple of deep and fundamental problems with this approach,
-to limiting access to potentially exploitable code.
-
-1) The first is that unless there is a high probability (say 90%) that at
-   any time the only exploitable code in the kernel can only be accessed
-   by an unprivileged user with the help of user namespaces, attackers
-   will just route around this restriction and so it will achieve
-   nothing in practice, while at the same time incur an extra
-   maintenance burden.
-
-2) The second is that there is a long standing problem with code that
-   gets added to the kernel.  Many times new kernel code because it has
-   the potential to confuse suid root executables that code has been
-   made root only.  Over time that results in more and more code running
-   as root to be able to make use of the useful features of the linux
-   kernel.
-
-   One of the goals of the user namespace is to avoid more and more code
-   migrating to running as root.  To achieve that goal ordinary
-   application developers need to be able to assume that typically user
-   namespaces will be available on linux.
-
-   An assumption that ordinary applications like chromium make today.
-
-   Your intentions seem to be to place a capability check so that only
-   root can use user namespaces or something of the sort.  Thus breaking
-   the general availability of user namespaces for ordinary applications
-   on your systems.
-   
-
-My apologies if this has been addressed somewhere in the conversation
-already.  I don't see these issues addressed in the descriptions of your
-patches.
-
-Until these issues are firmly addressed and you are not proposing a
-patch that can only cause regressions in userspace applications.
-
-Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-
->
-> The calls look something like this:
->
->     cred = prepare_creds()
->         security_prepare_creds()
->             call_int_hook(cred_prepare, ...
->     if (cred)
->         create_user_ns(cred)
->
-> We noticed that error codes were not propagated from this hook and
-> introduced a patch [1] to propagate those errors.
->
-> The discussion notes that security_prepare_creds()
-> is not appropriate for MAC policies, and instead the hook is
-> meant for LSM authors to prepare credentials for mutation. [2]
->
-> Ultimately, we concluded that a better course of action is to introduce
-> a new security hook for LSM authors. [3]
->
-> This patch set first introduces a new security_create_user_ns() function
-> and userns_create LSM hook, then marks the hook as sleepable in BPF.
->
-> Links:
-> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
-> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
-> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
->
-> Past discussions:
-> V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
-> V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
->
-> Changes since v2:
-> - Rename create_user_ns hook to userns_create
-> - Use user_namespace as an object opposed to a generic namespace object
-> - s/domB_t/domA_t in commit message
-> Changes since v1:
-> - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
-> - Add selinux: Implement create_user_ns hook patch
-> - Change function signature of security_create_user_ns() to only take
->   struct cred
-> - Move security_create_user_ns() call after id mapping check in
->   create_user_ns()
-> - Update documentation to reflect changes
->
-> Frederick Lawler (4):
->   security, lsm: Introduce security_create_user_ns()
->   bpf-lsm: Make bpf_lsm_userns_create() sleepable
->   selftests/bpf: Add tests verifying bpf lsm userns_create hook
->   selinux: Implement userns_create hook
->
->  include/linux/lsm_hook_defs.h                 |  1 +
->  include/linux/lsm_hooks.h                     |  4 +
->  include/linux/security.h                      |  6 ++
->  kernel/bpf/bpf_lsm.c                          |  1 +
->  kernel/user_namespace.c                       |  5 ++
->  security/security.c                           |  5 ++
->  security/selinux/hooks.c                      |  9 ++
->  security/selinux/include/classmap.h           |  2 +
->  .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
->  .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
->  10 files changed, 160 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
->
-> --
-> 2.30.2
-
-Eric
+							- Ted

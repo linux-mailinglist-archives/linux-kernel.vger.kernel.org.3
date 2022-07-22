@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF8E57E742
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D8A57E74E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236151AbiGVTUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53852 "EHLO
+        id S230443AbiGVTXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiGVTUA (ORCPT
+        with ESMTP id S230486AbiGVTXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:20:00 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6C7904ED
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:19:59 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id r14so6527979ljp.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=a4bYXJlSd1ZgaIpQeG4nLdpNWkpj3aQa+2dbGTYQopQ=;
-        b=WcTfpkknrk7XnISZBeGeU6xAVW/U/1wZ5p+F3nYz/nNB3qtD8M04Y4t5BYwFAClcIy
-         mHZMWH2iJaVCQmAMF6zWYNYFDrlLzGtZAClo8Uli1jABpBC+rRovCHyq0cYEpHBSMeiv
-         /U/ezaNHvXvySC9NeRHqXt8rd3riuUq2diOJDj4fY3b+byRU1qdEn6/be9R8tfplIq2/
-         AV/qX1QMJ3vZmtnSyFNhYa19HPuMFyEO/v6Pg6esZ0LTqgp9HMJT7xbi30GAeeGBoEoK
-         6QU8UQwUcShemor6NM514mp3bzxskBb55Z9pA5tQ5rpGA+XhjPINIouqcqFHnU2lesLo
-         Ilmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a4bYXJlSd1ZgaIpQeG4nLdpNWkpj3aQa+2dbGTYQopQ=;
-        b=eve2UoA4swI7g5LIHRN6gdj4TNb+xF6fVaA7VxlQNtCK4gcdvh/6G/FGZIyU7R1QAn
-         VdAme7mSoiQgA0kPEbk4hT5Ub1llsXNjgabM/f0XskoVMbHR2S1j1W9KURcoR0qjLg+d
-         bcaOVhV6GoLiFJM2pgcjexzuHNav4UNBMz99EvmGjNpY3zPL/XNfjnw8qqQw15okxtol
-         c5jSFSyRd5Puam1A68KRSEN/6TyNdysjtusT3LSQ2Ootm7UKWIg8BNVi7mM45hYipX2z
-         i9eL3e6MlF33NNE2Lv5IHqKRXhH9pNZkSM8ftQCsfeu4saBGYxmgfkzoxI79t742xaeP
-         mkOA==
-X-Gm-Message-State: AJIora/IRNaZl1culRphWHFG8EieeIKFjCGBfn2kEfbAJnmAMLP7MCz+
-        FyEdB9gm72T95wX2QV3DVaPTqQ==
-X-Google-Smtp-Source: AGRyM1t3gMejbNbAPY5Pp5d2e2dazkxDwrEFj4lIc1gTz2EEKoMCen8+k7gl5W807i6wy0W+Vs4K8A==
-X-Received: by 2002:a2e:b894:0:b0:25d:9db3:5160 with SMTP id r20-20020a2eb894000000b0025d9db35160mr482866ljp.25.1658517597181;
-        Fri, 22 Jul 2022 12:19:57 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id r23-20020a2e94d7000000b0025d835fe81esm1276897ljh.115.2022.07.22.12.19.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 12:19:56 -0700 (PDT)
-Message-ID: <0974ebc0-8426-c889-b16a-1d35a4e4309e@linaro.org>
-Date:   Fri, 22 Jul 2022 21:19:55 +0200
+        Fri, 22 Jul 2022 15:23:39 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A35EE5F13D;
+        Fri, 22 Jul 2022 12:23:38 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 94A7192009C; Fri, 22 Jul 2022 21:23:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8971D92009B;
+        Fri, 22 Jul 2022 20:23:36 +0100 (BST)
+Date:   Fri, 22 Jul 2022 20:23:36 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Rob Herring <robh@kernel.org>
+cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um@lists.infradead.org, PCI <linux-pci@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
+In-Reply-To: <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2207222006140.48997@angie.orcam.me.uk>
+References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com> <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014> <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/3] dt-bindings: arm: bcm: Refer to the YAML binding for
- MEMC
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220722184138.2666241-1-f.fainelli@gmail.com>
- <20220722184138.2666241-3-f.fainelli@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220722184138.2666241-3-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 20:41, Florian Fainelli wrote:
-> Remove the list of existing compatible strings and prefer to use the
-> YAML binding which more complete and up to date.
+On Fri, 22 Jul 2022, Rob Herring wrote:
 
-Ah, so this is partial conversion from TXT? Then please squash it with
-previous commit and extend the commit msg.
-
+> > Maybe the right thing to do here is actually to make the default
+> > definitions of these macros non-zero, or to add some sort of ARCH_
+> > flavor of them and move that non-zero requirement closer to where it
+> > comes from?  From the look of it any port that uses the generic port I/O
+> > functions and has 0 for these will be broken in the same way.
+> >
+> > That said, I'm not really a PCI guy so maybe Bjorn or Maciej has a
+> > better idea?
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../devicetree/bindings/arm/bcm/brcm,brcmstb.txt      | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+> >From fu740:
+>                        ranges = <0x81000000  0x0 0x60080000  0x0
+> 0x60080000 0x0 0x10000>,      /* I/O */
+>                                  <0x82000000  0x0 0x60090000  0x0
+> 0x60090000 0x0 0xff70000>,    /* mem */
+>                                  <0x82000000  0x0 0x70000000  0x0
+> 0x70000000 0x0 0x1000000>,    /* mem */
+>                                  <0xc3000000 0x20 0x00000000 0x20
+> 0x00000000 0x20 0x00000000>;  /* mem prefetchable */
 > 
+> So again, how does one get a 0 address handed out when that's not even
+> a valid region according to DT? Is there some legacy stuff that
+> ignores the bridge windows?
 
+ It doesn't matter as <asm/pci.h> just sets it as a generic parameter for 
+the platform, reflecting the limitation of PCI core, which in the course 
+of the discussion referred was found rather infeasible to remove.  The 
+FU740 does not decode to PCI at 0, but another RISC-V device could.  And I 
+think that DT should faithfully describe hardware and not our software 
+limitations.
 
-Best regards,
-Krzysztof
+ Mind that PCI has originated from the x86 world where decoding low 24-bit 
+memory space to ISA has been implied (implicitly decoded on PCI systems by 
+the southbridge) for areas not decoded to DRAM by the memory controller. 
+So the inability of our PCI core to handle MMIO at 0 did not matter at the 
+time it was introduced as the value of 0 would never be used for a memory 
+BAR.
+
+  Maciej

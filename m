@@ -2,181 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7445F57E8F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3B057E8F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbiGVVi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 17:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S231682AbiGVVj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 17:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236137AbiGVViy (ORCPT
+        with ESMTP id S236273AbiGVVjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 17:38:54 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DB9B8512
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:38:53 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 23so5374638pgc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:38:53 -0700 (PDT)
+        Fri, 22 Jul 2022 17:39:23 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19099B8786
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:39:21 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id b26so8164104wrc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9mfWyaAJoqNRd6CIZWDREmNaOiHWPvGxSlRrdfXmYSk=;
-        b=U6n4pS1S313KjljFYwOWUkusI66upqXtV/G1B7AYdEFBF1ugwrGORaxlnM4AxrCMhL
-         bkiT6VcZCA0qLo2KXsRCIG4zs/cpTY+A1xKtnpQ9LmR7mCnQ8LabZnNsX+xdHCW/ShVJ
-         EMbUL8JVjSuT5MV7mFjeXU2EmLcOS95SH8RheCaMSAcdRB5xir65uyir31WyzSVzVTXM
-         IkjqUtFSTxhMOW22GPaevCXAR+chamMqnwzpBcR5pYEeaHMA0KMq2TVfr/cfb0AbQphH
-         C1gPEAyb7UciJY885hZnDacOM5vLTqruF6Dgx9JpnCO4//Rh7ELVtSvscm2bIYnjJAup
-         HP5w==
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=FxcKHw+KeNRqCkk5qROt/9GMubXJxUVMHKA1De+QJz8=;
+        b=P4rzv0+8JfcWUKy1JivKJYMUetypR5ZiNXPA/6TSTJ0YOhLtsMWwVXnQAHjl5ygmW9
+         dSBVgFFBSsuonWbdOk8Ky+8qccZi6wfbk6zGgOEGk0PVttqaVNlAyBadARwj1Y//JgTT
+         wL6bVCh2M0D2piZA9vHUlRbbhnt5btt+pxUjCwafnt83Hj6JsO3UAIXiah1okFR8mkjn
+         XW3LXj5OrIDz9y0dGYXXNmg2sdZwG8rkxjOyqFkSkwPRULwu5FrrylKP4IeJIMyTOz30
+         OH0e6tl4+7ksBnlFP1VAGBJQezXleYMqd17bvJr97uuUoAOxjo7DEfiyq52KAf/qLNWt
+         Shew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9mfWyaAJoqNRd6CIZWDREmNaOiHWPvGxSlRrdfXmYSk=;
-        b=SEO540RS+O4mC3Ebh8697dVuUgYrfb7YSw2AUo+J2Q2TJmI+kgR0U1ZZtnXdbYF6Xm
-         BhzXxnF9aauW24oiKhfdwNPxEcNCL/mBq2CpUusn5Ls2Ysu+ngi3ztuY4OQl1DdunkIi
-         jkId99eZxo71GeOgP3TUmSr7Qn9v1cP8678bcJu2skcS8MlPK6NX2J/xNmaYNrTXAn1i
-         qXg5qD1s2WBOjmhanmxcCipwcyExZJtxStUFtGjtmy7w3p7iK7oFUq9MxgEPLvF0IAl6
-         ruOBpA+whWXUb2na8AsFnYTmWaewEqIRPVzmlIS2ZXbAZKHbSC/zWMLkR5709HUjZD17
-         tdvA==
-X-Gm-Message-State: AJIora+WMgCWfO+GAxZGy7ojbAMYeavKBd20cBlKnDoEDisKs+bQu0OH
-        +XDlQVcLQVQL4OQY+kj6KELcsg==
-X-Google-Smtp-Source: AGRyM1vxW9TitpWGxELq9f+JH5rrVHEPD71/Yq0LYiZ6rY0FKSEsHeQES120sPNMNr6to9yJYb77AA==
-X-Received: by 2002:a63:a748:0:b0:40c:9a36:ff9a with SMTP id w8-20020a63a748000000b0040c9a36ff9amr1402109pgo.545.1658525932834;
-        Fri, 22 Jul 2022 14:38:52 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090a154400b001efa332d365sm3845092pja.33.2022.07.22.14.38.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 14:38:51 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 21:38:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v4 15/25] KVM: VMX: Extend VMX controls macro shenanigans
-Message-ID: <YtsY5xwmlQ6kFtUz@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-16-vkuznets@redhat.com>
- <YtrtdylmyolAHToz@google.com>
- <YtsQ5SkCJXQIuKGS@dev-arch.thelio-3990X>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtsQ5SkCJXQIuKGS@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=FxcKHw+KeNRqCkk5qROt/9GMubXJxUVMHKA1De+QJz8=;
+        b=huCdVcJY0MqTflD2rix8oLnmsUd/59HUun2GvQ2LQpdeAONBpmkOc1voeoMHFXnHD8
+         NnohThd769QvnCBh9ed/zEmeVBUTRE91USPcQR3bERHb1eJ9y/pNrpPsBwdyAAHaJ5wj
+         oDPmDZsWiWYIXmd92pglm/6OhTKt6e8YUIEEjCCQLnSiLzPPdKiEXbEUG8Jy/mShH45j
+         bnnxGALDFsd166LnGyQbUDapk5UTqexPAAPjJ+3zbLEB3p1DxVLwq1xtJmeNY264kMjw
+         tGjUjiUfU/gWEIX2VHyFA16XFhx6AL7dpbGeg32YFxyE0BG57Pu9DsPW7jjBRYTpi7Qe
+         LGkg==
+X-Gm-Message-State: AJIora9NxSB7lbph5t9c2hdpgtqXkp7CL9VBHjLxbX0Gcd5THUxN2hbC
+        n4w1ONxnUJvaez84A4xPnulTWA==
+X-Google-Smtp-Source: AGRyM1tPVIVZfV6qM8vhMpTbxX0oe2mvWjKidKhJrKbIkCzM/uzQTakUQbNW/CotdHpNthpStjOk6Q==
+X-Received: by 2002:a5d:6285:0:b0:21e:6554:5e31 with SMTP id k5-20020a5d6285000000b0021e65545e31mr1109911wru.21.1658525959500;
+        Fri, 22 Jul 2022 14:39:19 -0700 (PDT)
+Received: from smtpclient.apple (global-5-142.n-2.net.cam.ac.uk. [131.111.5.142])
+        by smtp.gmail.com with ESMTPSA id ay36-20020a05600c1e2400b003a2d6c623f3sm10104785wmb.19.2022.07.22.14.39.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Jul 2022 14:39:18 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
+Date:   Fri, 22 Jul 2022 22:39:18 +0100
+Cc:     Rob Herring <robh@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <41B9AC54-DCFE-4055-B950-265B3CBDD842@jrtc27.com>
+References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
+ <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014>
+ <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+ <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022, Nathan Chancellor wrote:
-> On Fri, Jul 22, 2022 at 06:33:27PM +0000, Sean Christopherson wrote:
-> > On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> > > diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> > > index 286c88e285ea..89eaab3495a6 100644
-> > > --- a/arch/x86/kvm/vmx/vmx.h
-> > > +++ b/arch/x86/kvm/vmx/vmx.h
-> > > @@ -467,6 +467,113 @@ static inline u8 vmx_get_rvi(void)
-> > >  	return vmcs_read16(GUEST_INTR_STATUS) & 0xff;
-> > >  }
-> > >  
-> > > +#define __KVM_REQ_VMX_VM_ENTRY_CONTROLS				\
-> > > +	(VM_ENTRY_LOAD_DEBUG_CONTROLS)
-> > > +#ifdef CONFIG_X86_64
-> > > +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> > > +		(__KVM_REQ_VMX_VM_ENTRY_CONTROLS |		\
-> > > +		VM_ENTRY_IA32E_MODE)
-> > 
-> > This breaks 32-bit builds, but at least we know the assert works!
-> > 
-> > vmx_set_efer() toggles VM_ENTRY_IA32E_MODE without a CONFIG_X86_64 guard.  That
-> > should be easy enough to fix since KVM should never allow EFER_LMA.  Compile 
-> > tested patch at the bottom.
-> > 
-> > More problematic is that clang-13 doesn't like the new asserts, and even worse gives
-> > a very cryptic error.  I don't have bandwidth to look into this at the moment, and
-> > probably won't next week either.
-> > 
-> > ERROR: modpost: "__compiletime_assert_533" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > ERROR: modpost: "__compiletime_assert_531" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > ERROR: modpost: "__compiletime_assert_532" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > ERROR: modpost: "__compiletime_assert_530" [arch/x86/kvm/kvm-intel.ko] undefined!
-> > make[2]: *** [scripts/Makefile.modpost:128: modules-only.symvers] Error 1
-> > make[1]: *** [Makefile:1753: modules] Error 2
-> > make[1]: *** Waiting for unfinished jobs....
-> 
-> clang-14 added support for the error and warning attributes, which makes
-> the BUILD_BUG_ON failures look like GCC. With allmodconfig, this
-> becomes:
+On 22 Jul 2022, at 20:55, Arnd Bergmann <arnd@arndb.de> wrote:
+>=20
+> On Fri, Jul 22, 2022 at 6:36 PM Rob Herring <robh@kernel.org> wrote:
+>> On Fri, Jul 22, 2022 at 9:27 AM Palmer Dabbelt <palmer@dabbelt.com> =
+wrote:
+>>=20
+>> =46rom fu740:
+>>                       ranges =3D <0x81000000  0x0 0x60080000  0x0
+>> 0x60080000 0x0 0x10000>,      /* I/O */
+> ...
+>> So again, how does one get a 0 address handed out when that's not =
+even
+>> a valid region according to DT? Is there some legacy stuff that
+>> ignores the bridge windows?
+>=20
+> The PCI-side port number 0x60080000 gets turned into Linux I/O =
+resource 0,
+> which I think is what __pci_assign_resource operates on.
+>=20
+> The other question is why the platform would want to configure the
+> PCI bus to have a PCI I/O space window of size 0x10000 at the address
+> it's mapped into, rather than putting it at address zero. Is this a =
+hardware
+> bug, a bootloader bug, or just badly set up in the DT?
+>=20
+> Putting the PCI address of the I/O space window at port 0 is usually
+> better because it works with PCI devices and drivers that assume that
+> port numbers are below 0xfffff, and makes the PCI port number match
+> the Linux port number.
 
-...
+Possibly related is the (harmless) warning spew seen during boot on
+FreeBSD. The bridge, and all downstream ones, reset to having I/O
+window 0x0-0xfff and memory/prefetch window 0x0-0xfffff (which FreeBSD
+tries to allocate, fails because that=E2=80=99s outside the valid ranges =
+above,
+so it then just paves over with a sane fresh config). Linux resets the
+controller on probe so this is the initial state when enumerating, and
+perhaps that=E2=80=99s not handled so gracefully as on FreeBSD (which =
+also
+resets in device_attach, the second half of what Linux calls probe)?
 
-> As you mentioned in the other comment on this patch, the 'inline'
-> keyword should be '__always_inline' in the BUILD_CONTROLS_SHADOW macro
-> and a couple of other functions need it for BUILD_BUG_ON to see the
-> value all the way through the call chain. The following diff resolves
-> those errors for me, hopefully it is useful!
+Jess
 
-Thanks a ton!  Y'all are like a benevolent Beetlejuice, one needs only to mention
-"clang" and you show up and solve the problem :-)
-
-> Cheers,
-> Nathan
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 4ce7ed835e06..b97ed63ece56 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -790,7 +790,7 @@ static bool msr_write_intercepted(struct vcpu_vmx *vmx, u32 msr)
->  					 MSR_IA32_SPEC_CTRL);
->  }
->  
-> -static void clear_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> +static __always_inline void clear_atomic_switch_msr_special(struct vcpu_vmx *vmx,
->  		unsigned long entry, unsigned long exit)
->  {
->  	vm_entry_controls_clearbit(vmx, entry);
-> @@ -848,7 +848,7 @@ static void clear_atomic_switch_msr(struct vcpu_vmx *vmx, unsigned msr)
->  	vmcs_write32(VM_EXIT_MSR_LOAD_COUNT, m->host.nr);
->  }
->  
-> -static void add_atomic_switch_msr_special(struct vcpu_vmx *vmx,
-> +static __always_inline void add_atomic_switch_msr_special(struct vcpu_vmx *vmx,
->  		unsigned long entry, unsigned long exit,
->  		unsigned long guest_val_vmcs, unsigned long host_val_vmcs,
->  		u64 guest_val, u64 host_val)
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index 758f80c41beb..acefa5b5e1b9 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -597,12 +597,12 @@ static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)		\
->  {										\
->  	return __##lname##_controls_get(vmx->loaded_vmcs);			\
->  }										\
-> -static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)	\
-> +static __always_inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)	\
->  {										\
->  	BUILD_BUG_ON(!(val & (KVM_REQ_VMX_##uname | KVM_OPT_VMX_##uname)));	\
->  	lname##_controls_set(vmx, lname##_controls_get(vmx) | val);		\
->  }										\
-> -static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
-> +static __always_inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)	\
->  {										\
->  	BUILD_BUG_ON(!(val & (KVM_REQ_VMX_##uname | KVM_OPT_VMX_##uname)));	\
->  	lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);		\
-> 
-> > > +#else
-> > > +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> > > +		__KVM_REQ_VMX_VM_ENTRY_CONTROLS
-> > > +#endif

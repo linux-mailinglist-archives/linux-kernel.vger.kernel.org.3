@@ -2,98 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C935457DF1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911AD57DF4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbiGVJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S234721AbiGVJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236648AbiGVJi2 (ORCPT
+        with ESMTP id S236703AbiGVJkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:38:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9EECA742
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:27:09 -0700 (PDT)
-Received: from localhost (unknown [188.24.146.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 80F716601AC4;
-        Fri, 22 Jul 2022 10:27:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658482027;
-        bh=bR415wpcpzInVOGQ1me2DQTG9wsahBgZxpUeugmZq4I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Dk32ejNDLIMGxJmAmpNv5o5jh5RCm70WybaUz7EfJBzMHza2oj+KmRHJz/nKi78uE
-         cTa5+6j9fyTIbX+VW/PswFNWL0+BdX/kDsIL97uZzawV6zbziDJHVbbbSubW2UywLz
-         Z+A4X26aQsqqhJR/EundNctUzBO+kC8+M1ZiWmJkk6t85RhuTQnQ/5qHX5L/Pe+yZs
-         fxQk3obJzuXNEbLufIgoApAzz1MyWt8Kzpc2zUQOKwSA7HIK1/QUnq5dm6GOhNbE0+
-         cP/EmcsUMt2NC/BcfnwljwyYTl1ZSrWG8RJN9+2PgvGUzydUGrTpC5/rUul/mUUVcn
-         CkpK5sbJDJjVg==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v2] ASoC: amd: vangogh: Use non-legacy DAI naming for cs35l41
-Date:   Fri, 22 Jul 2022 12:27:00 +0300
-Message-Id: <20220722092700.8269-1-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.37.1
+        Fri, 22 Jul 2022 05:40:32 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12B65DB3;
+        Fri, 22 Jul 2022 02:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=yKfIz
+        zQLxyVD8Rlhk1R5sQ3hBPvIDShzjIbk3Wq6FGM=; b=CmdA2sNNdAyF5NSTYtJdP
+        aw2t8tlDUPavJUnR9RNCEKUTEQV51ERlQkjI/QnezZG+jpO952521NKtsa9XsxLq
+        2/AdmzYxrj1fXfTm6COPNtfnT/y6xZfiXPBNdefaXJ3kY8DrfnIBhbNRJtd7R0su
+        JT9eJtPAaEKovORowL24YY=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp1 (Coremail) with SMTP id GdxpCgDH0+XfbdpiIqUoPw--.2565S4;
+        Fri, 22 Jul 2022 17:29:26 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, atenart@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] net: macsec: fix potential resource leak in macsec_add_rxsa() and macsec_add_txsa()
+Date:   Fri, 22 Jul 2022 17:29:02 +0800
+Message-Id: <20220722092902.2528745-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GdxpCgDH0+XfbdpiIqUoPw--.2565S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar4rWF4fCF17Zw1xZr43ZFb_yoW8GFyrpa
+        1rZwsrCF1qqrWIg3WDCw4UWFy5XayUtryagry7C3yfua4kJw1rWFy0kFy09Fy5AryxGF4U
+        ZrWvyr47JF1DC37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRIfOxUUUUU=
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiWxlGjGI0VjNM6wACse
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unlike most CODEC drivers, the CS35L41 driver did not have the
-non_legacy_dai_naming set, meaning the corresponding DAI has been
-traditionally registered using the legacy naming: spi-VLV1776:0x
+init_rx_sa() allocates relevant resource for rx_sa->stats and rx_sa->
+key.tfm with alloc_percpu() and macsec_alloc_tfm(). When some error
+occurs after init_rx_sa() is called in macsec_add_rxsa(), the function
+released rx_sa with kfree() without releasing rx_sa->stats and rx_sa->
+key.tfm, which will lead to a resource leak.
 
-The recent migration to the new legacy DAI naming style has implicitly
-corrected that behavior and DAI gets now registered via the non-legacy
-naming, i.e. cs35l41-pcm.
+We should call macsec_rxsa_put() instead of kfree() to decrease the ref
+count of rx_sa and release the relevant resource if the refcount is 0.
+The same bug exists in macsec_add_txsa() for tx_sa as well. This patch
+fixes the above two bugs.
 
-The problem is the acp5x platform driver is now broken as it continues
-to refer to the above mentioned codec using the legacy DAI naming in
-function acp5x_cs35l41_hw_params() and, therefore, the related setup
-is not being executed anymore.
-
-Let's fix that by replacing the obsolete DAI name with the correct one.
-
-Fixes: 129f055a2144 ("ASoC: core: Switch core to new DAI naming flag")
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Fixes: 3cf3227a21d1 ("net: macsec: hardware offloading infrastructure")
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 ---
-Changes in v2:
- - Corrected the SHA for the Fixes commit
- - Added Reviewed-by tag from Charles
+ drivers/net/macsec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- sound/soc/amd/vangogh/acp5x-mach.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
+index 817577e713d7..ac3ff624a8dd 100644
+--- a/drivers/net/macsec.c
++++ b/drivers/net/macsec.c
+@@ -1842,7 +1842,7 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
+ 	return 0;
+ 
+ cleanup:
+-	kfree(rx_sa);
++	macsec_rxsa_put(rx_sa);
+ 	rtnl_unlock();
+ 	return err;
+ }
+@@ -2085,7 +2085,7 @@ static int macsec_add_txsa(struct sk_buff *skb, struct genl_info *info)
+ 
+ cleanup:
+ 	secy->operational = was_operational;
+-	kfree(tx_sa);
++	macsec_txsa_put(tx_sa);
+ 	rtnl_unlock();
+ 	return err;
+ }
+-- 
+2.25.1
 
-diff --git a/sound/soc/amd/vangogh/acp5x-mach.c b/sound/soc/amd/vangogh/acp5x-mach.c
-index 727de46860b1..af3737ef9707 100644
---- a/sound/soc/amd/vangogh/acp5x-mach.c
-+++ b/sound/soc/amd/vangogh/acp5x-mach.c
-@@ -178,8 +178,7 @@ static int acp5x_cs35l41_hw_params(struct snd_pcm_substream *substream,
- 	ret = 0;
- 	for (i = 0; i < num_codecs; i++) {
- 		codec_dai = asoc_rtd_to_codec(rtd, i);
--		if ((strcmp(codec_dai->name, "spi-VLV1776:00") == 0) ||
--		    (strcmp(codec_dai->name, "spi-VLV1776:01") == 0)) {
-+		if (strcmp(codec_dai->name, "cs35l41-pcm") == 0) {
- 			switch (params_rate(params)) {
- 			case 48000:
- 				bclk_val = 1536000;
---
-2.37.1

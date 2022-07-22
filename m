@@ -2,80 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E789257E660
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5B157E662
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235812AbiGVSTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S236064AbiGVST7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiGVSTe (ORCPT
+        with ESMTP id S231304AbiGVST4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:19:34 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB10D6EEAA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:19:32 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a10so6370839ljj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TZ89NCSHpZWO6mCiLEkZnsSyxqredp26c+bp6T/IeXs=;
-        b=HV2GeR6BqM1M0qBzVbeUKHIw4fCOt3RQzgcGZy1wqC6IiFpuwgMNPkh0g8Y/uMaKAH
-         OPH5AMoUcrCuZ6YLo/Ab1VxkoWQukq698ETcZCSPIdkWcbq7JYIwN09+aApa4lzffA9r
-         Bw0mz0Yow33Ut9oatcpEWxyS+qJOZ72yMzlMiouUcy9oQKS1QsCrYtji9b/rl0THTVQT
-         gbbAeLCjm0RHR6pxJwZ5uSbTWJuCDhIPDo94gY67qTUO6epy3MqdVwzFgzLqGdvyxe1v
-         zHDpKFnIKu4CeGxT84s6GCq3UWLhF70ryWeBAW99BThs4Eg8r1rw/tlGkerAtRCAgo88
-         k0MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TZ89NCSHpZWO6mCiLEkZnsSyxqredp26c+bp6T/IeXs=;
-        b=ZERWg7kJeYNSF9GMiiWqxDKgQ7G42gmbj0cnRhcWnTAP3l9ffWtkMO1kZ7kcg+Efb7
-         efzuP19PKDl2cAaZF5JrSSko2FNjvw507ruaWnb/NUbNJPJRk33GNR9zYRs9gIIxJ3iR
-         u8h6y9wFzeLgXiO9Sy+QO9YkJDGOw84ZG/9abQfC6nSajf59GrAMOZBDyPb7vhMzKtbt
-         aRgbydhP6Vs8rCm+bAjF6kqWd1BTiJHauxjX/JGFTF5eYwyQ9nvveE+tJ128cnL96a6v
-         Cx53MtKhHDkcB55Jtx0qkMG8i5E9qXggHwrqw+/tg/QQyV+3XCFHuLnTP1+HYIG9WAvH
-         jo+g==
-X-Gm-Message-State: AJIora/sv0vCqIy7bdTuL7+EAlhIWWCF4fGh84S89Y0pQ/orfD5ds73X
-        CWr9NnSVmts288fixXilddOL0A==
-X-Google-Smtp-Source: AGRyM1t9k6EuxFUL5jwICaF3I0/coOUkurh+jWMFDTooiNiiyxUpIROwoEbytIQYZDtIHnlMr6Elbg==
-X-Received: by 2002:a2e:3209:0:b0:25d:644e:b9d4 with SMTP id y9-20020a2e3209000000b0025d644eb9d4mr401270ljy.13.1658513971230;
-        Fri, 22 Jul 2022 11:19:31 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id k2-20020a2ea262000000b0025d75995a07sm1259660ljm.24.2022.07.22.11.19.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 11:19:30 -0700 (PDT)
-Message-ID: <53d432e9-6715-05c4-d258-896ec38afa4f@linaro.org>
-Date:   Fri, 22 Jul 2022 20:19:27 +0200
+        Fri, 22 Jul 2022 14:19:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B7176E82;
+        Fri, 22 Jul 2022 11:19:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CE8CB829E2;
+        Fri, 22 Jul 2022 18:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB65EC341C6;
+        Fri, 22 Jul 2022 18:19:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658513993;
+        bh=k6b1OiCHUvzlQDFeiOtP3/Y1uQExyI/isDWGGjsSDvE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=F4QyxsZZaE1cG4yP04FDDJkIczej9j//PBhRwylnCNWEC/m3spzKGtqMNdn/wd3dR
+         N3wat2b1324Kv2VkZ1haywridAU2M0dZe+H6gCPK9T1e04Fcnz1rYcxVi8tXdYfH0/
+         5C2uZSbsY20IPHzWNLuXdR6+jZkUcIwP6CCXiydKVpmJO/WLhivKY0XTjwNbRx6Iar
+         fabW1AImuPHVQ9mmgcyicKk/VT6Qu4B3msSQlPZHMKu8MmsuFRcxyE3WnVKwdK4J+o
+         mH1AyiOjr+RoMnLPGuyENCxJpualjPcbTtCo/DuzoP6M4HExD1q86JBDerfCPtKIVt
+         cyPjbQB/AyiEA==
+Date:   Fri, 22 Jul 2022 11:19:51 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/4] netlink: add 'bitmap' attribute type and
+ API
+Message-ID: <20220722111951.6a2fd39c@kernel.org>
+In-Reply-To: <20220722145514.767592-1-alexandr.lobakin@intel.com>
+References: <20220721155950.747251-1-alexandr.lobakin@intel.com>
+        <20220721111318.1b180762@kernel.org>
+        <20220722145514.767592-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] dt-bindings: mediatek: add pinctrl definition for
- mt8188
-Content-Language: en-US
-To:     "hui.liu" <hui.liu@mediatek.com>, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com
-Cc:     johnson.wang@mediatek.com, zhiyong.tao@mediatek.com,
-        sean.wang@mediatek.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220718113813.23787-1-hui.liu@mediatek.com>
- <20220718113813.23787-2-hui.liu@mediatek.com>
- <b28dcbe5-d15f-1c4f-9b3d-650d5c39de6b@linaro.org>
- <08a7209fe198839093b3ef729fc97c1a950e1fbc.camel@mediatek.com>
- <35639a59-4a3d-5aa7-946c-22fbd2f25e89@linaro.org>
- <ea7755e599ad8c06bc04b6249c2a6d0ab3b920f3.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ea7755e599ad8c06bc04b6249c2a6d0ab3b920f3.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,61 +63,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 03:40, hui.liu wrote:
-> Hi, Krzysztof
+On Fri, 22 Jul 2022 16:55:14 +0200 Alexander Lobakin wrote:
+> > I think that straight up bitmap with a fixed word is awkward and leads
+> > to too much boilerplate code. People will avoid using it. What about
+> > implementing a bigint type instead? Needing more than 64b is extremely
+> > rare, so in 99% of the cases the code outside of parsing can keep using
+> > its u8/u16/u32.  
 > 
-> That's the comment about reg and reg-names description:
->>> +  reg:
->>> +    description: |
->>> +      Physical address base for gpio base registers. There are 8
->>> GPIO
->>> +      physical address base in mt8188.
->>
->> Redundant description, skip it. You should list the instead and
->> describe
->> each of it.
->>
->>> +    maxItems: 8
->>> +
->>> +  reg-names:
->>> +    description: |
->>> +      Gpio base register names.
->>
->> Redundant description, skip it.
->>
->>> +    maxItems: 8
->>
->> You need to list the items instead.
-> 
-> I plan to update reg and reg-names as the following:
->   reg:
->     description: |
->       Physical address base for gpio base registers. There are 6
-> different GPIO physical address bases in mt8188.
->     minItems: 6
->     maxItems: 6
+> In-kernel code can still use single unsigned long for some flags if
+> it wouldn't need more than 64 bits in a couple decades and not
+> bother with the bitmap API. Same with userspace -- a single 64 is
+> fine for that API, just pass a pointer to it to send it as a bitmap
+> to the kernel.
 
-You should rather have here items with description:
-items:
- - description: what is it
- - description: what is it
- ....
+Single unsigned long - exactly. What I'm saying is that you need to
+convince people who think they are "clever" by using u8 or u16 for
+flags because it "saves space". Happens a lot, I can tell your from
+reviewing such patches. And to avoid that we should give people a
+"growable" type but starting from smaller sizes than a bitmap.
 
-> 
->   reg-names:
->     items:
->       - const: iocfg0
->       - const: iocfg_rm
->       - const: iocfg_lt
->       - const: iocfg_lm
->       - const: iocfg_rt
->       - const: eint
-> 
-> Is it right?
-> 
-> Thanks.
-> 
+It's about human psychology as observed, not logic, just to be extra
+clear.
 
+A logical argument of smaller importance is that ID types have a
+similar problem, although practically it's even more rare than for
+flags  (I think it did happen once with inodes or some such, tho). 
+So bigint has more uses.
 
-Best regards,
-Krzysztof
+I'd forgo the endianness BTW, it's a distraction at the netlink level.
+There was more reason for it in fixed-size fields.
+
+> Re 64b vs extremely rare -- I would say so 5 years go, but now more
+> and more bitfields run out of 64 bits. Link modes, netdev features,
+> ...
+
+I like how you put the "..." there even tho these are the only two cases
+either of us can think of, right? :) There are hundreds of flags in the
+kernel, two needed to grow into a bitmap. And the problem you're
+working on is with a 16 bit field, or 32 bit filed? Defo not 64b, right?
+
+> Re bigint -- do you mean implementing u128 as a union, like
+> 
+> typedef union __u128 {
+> 	struct {
+> 		u32 b127_96;
+> 		u32 b95_64;
+> 		u32 b63_32;
+> 		u32 b31_0;
+> 	};
+> 	struct {
+> 		u64 b127_64;
+> 		u64 b63_0;
+> 	};
+> #ifdef __HAVE_INT128
+> 	__int128 b127_0;
+> #endif
+> } u128;
+> 
+> ? We have similar feature in one of our internal trees and planning
+> to present generic u128 soon, but this doesn't work well for flags
+> I think.
+
+Actually once a field crosses the biggest natural int size I was
+thinking that the user would go to a bitmap.
+
+So at the netlink level the field is bigint (LE, don't care about BE).
+Kernel side API is:
+
+	nla_get_b8, nla_get_b16, nla_get_b32, nla_get_b64,
+	nla_get_bitmap
+	nla_put_b8, nla_put_b16 etc.
+
+	u16 my_flags_are_so_toight;
+
+	my_flags_are_so_toight = nla_get_b16(attr[BLAA_BLA_BLA_FLAGS]);
+
+The point is - the representation can be more compact than u64 and will
+therefore encourage anyone who doesn't have a strong reason to use
+fixed size fields to switch to the bigint.
+
+Honestly, if we were redoing netlink from scratch today I'd argue there
+should be no fixed width integers in host endian.
+
+> bitmap API and bitops are widely used and familiar to tons of folks,
+> most platforms define their own machine-optimized bitops
+> implementation, arrays of unsigned longs are native...
+> 
+> Re awkward -- all u64 <-> bitmap conversion is implemented in the
+> core code in 4/4 and users won't need doing anything besides one
+> get/set. And still use bitmap/bitops API. Userspace, as I said,
+> can use a single __u64 as long as it fits into 64 bits.
+
+Yes, but people will see a bitmap and think "I don't need a bitmap, 
+I just need X bits".
+
+> Summarizing, I feel like bigints would lead to much more boilerplate
+> in both kernel and user spaces and need to implement a whole new API
+> instead of using the already existing and well-used bitmap one.
+> Continuation of using single objects with fixed size like %NLA_U* or
+> %NLA_BITFIELD_U32 will lead to introducing a new Netlink attr every
+> 32/64 bits (or even 16 like with IP tunnels, that was the initial
+> reason why I started working on those 3 series). As Jake wrote me
+> in PM earlier,
+
+Every netlink attribute carries length. As long as you establish
+correct expectations for parsing there is no need to create new types.
+
+> "I like the concept of an NLA_BITMAP. I could have used this for
+> some of the devlink interfaces we've done, and it definitely feels
+> a bit more natural than being forced to a single u32 bitfield."
+
+Slightly ironic to say "if I could use a larger type I would" 
+and then not use the largest one available? ;) But the point is
+about being flexible when it comes to size, I guess, more than
+bitmap in particular.

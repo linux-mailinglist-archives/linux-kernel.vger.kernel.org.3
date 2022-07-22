@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C668157DCAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E1F57DCB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiGVIof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S234235AbiGVIpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234435AbiGVIob (ORCPT
+        with ESMTP id S234681AbiGVIpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:44:31 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522659EC46;
-        Fri, 22 Jul 2022 01:44:28 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oEoGP-003HLt-7n; Fri, 22 Jul 2022 18:44:02 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 22 Jul 2022 16:44:01 +0800
-Date:   Fri, 22 Jul 2022 16:44:01 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-next@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Adam Guerin <adam.guerin@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Vladis Dronov <vdronov@redhat.com>,
-        Tomasz Kowallik <tomaszx.kowalik@intel.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 1/2] Documentation: qat: Use code block for qat
- sysfs example
-Message-ID: <YtpjUbTZG5R/Y4bW@gondor.apana.org.au>
-References: <20220713085627.175604-1-bagasdotme@gmail.com>
- <20220713085627.175604-2-bagasdotme@gmail.com>
+        Fri, 22 Jul 2022 04:45:07 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4DB29FE11;
+        Fri, 22 Jul 2022 01:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zd5zt
+        uKFxSlU46KHfm8UjZg8ZTcN8/GC4Ij8c++zMk0=; b=moI1hF1TyGRjuzDEKkPjv
+        ANCxkuQZTi9nZYyJKkq6xMkgNzpld7MSsPIIGHzQA/5yOVrGnhvajA1LzcKaWZxs
+        D1Sw/4hbq7IhKy3OvpC60XMlRMYpBzH+8MdYXRf68ZweVJMbiMedWCtBzcWUyQr8
+        WGPRB63SFfJPFmpG/jGOps=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp1 (Coremail) with SMTP id GdxpCgD32+VtY9piI6wiPw--.6757S2;
+        Fri, 22 Jul 2022 16:44:31 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     amitkarwar@gmail.com, siva8118@gmail.com, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] rsi: sdio: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 16:44:17 +0800
+Message-Id: <20220722084417.75880-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220713085627.175604-2-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgD32+VtY9piI6wiPw--.6757S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr13KFWUuw4DZF4Utwb_yoWfZrg_ur
+        1FqFs5Gw1kJ3WxKFW5CFW3ArZak343WFn5A3yYgFySkrZaqrZ3Xr1Skr45Jwn5WryFyF17
+        JwnxXFW8ta4UWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRZOzs7UUUUU==
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRxlGZFc7YxCqBwABsP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 03:56:27PM +0700, Bagas Sanjaya wrote:
-> kernel test robot and Stephen Rothwell reported htmldocs warning:
-> 
-> Documentation/ABI/testing/sysfs-driver-qat:24: WARNING: Unexpected indentation.
-> 
-> The warning isn't caused by Date: field pointed by the warning, but rather
-> by sysfs example that isn't in literal code block.
-> 
-> Add the code block marker.
-> 
-> Link: https://lore.kernel.org/linux-next/20220711204932.333379b4@canb.auug.org.au/
-> Link: https://lore.kernel.org/linux-doc/202207090803.TEGI95qw-lkp@intel.com/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: d4cfb144f60551 ("crypto: qat - expose device config through sysfs for 4xxx")
-> Acked-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-> Cc: Wojciech Ziemba <wojciech.ziemba@intel.com>
-> Cc: Adam Guerin <adam.guerin@intel.com>
-> Cc: Fiona Trahe <fiona.trahe@intel.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Vladis Dronov <vdronov@redhat.com>
-> Cc: Tomasz Kowallik <tomaszx.kowalik@intel.com>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/ABI/testing/sysfs-driver-qat | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Replace 'the the' with 'the' in the comment.
 
-All applied.  Thanks.
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/net/wireless/rsi/rsi_91x_sdio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/rsi/rsi_91x_sdio.c b/drivers/net/wireless/rsi/rsi_91x_sdio.c
+index 9f16128e4ffa..d09998796ac0 100644
+--- a/drivers/net/wireless/rsi/rsi_91x_sdio.c
++++ b/drivers/net/wireless/rsi/rsi_91x_sdio.c
+@@ -796,7 +796,7 @@ static int rsi_sdio_host_intf_write_pkt(struct rsi_hw *adapter,
+  * rsi_sdio_host_intf_read_pkt() - This function reads the packet
+  *				   from the device.
+  * @adapter: Pointer to the adapter data structure.
+- * @pkt: Pointer to the packet data to be read from the the device.
++ * @pkt: Pointer to the packet data to be read from the device.
+  * @length: Length of the data to be read from the device.
+  *
+  * Return: 0 on success, -1 on failure.
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.25.1
+

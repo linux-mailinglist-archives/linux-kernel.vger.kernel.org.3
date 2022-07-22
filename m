@@ -2,178 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1832057DA70
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 08:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE2057DA77
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 08:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234304AbiGVGmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 02:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S234324AbiGVGnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 02:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbiGVGmA (ORCPT
+        with ESMTP id S230089AbiGVGnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 02:42:00 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266BF82441
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 23:41:58 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id c72so1825983edf.8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 23:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Nw8tTjTa/PZO5hmV8CKEncBLO7o0ZFuEQVqbEDoX2Ck=;
-        b=1fvxKtPmWT/wdCB8Zd+JYdxs8+jWy+PbYJowMNwMC0gF27ApS2xraSu5yoKuNS1eFQ
-         FHpKRcCJ5H951J+X3Bf+I+Z8a4PujfT2O2p3PYLwnnXWSQMJp9+u4ckAlCwoPyz4D2aS
-         GgHldmwVfW0UP/nqX63iRccR86IclUpNc7E03wnxaYtX6cQzr+F/YR/Sqf34WA+CvUWC
-         fHU2EdJFJYvIwHyJOLRQdHcJMBaoFSPtmiQdzsV9i+oiC/fS1id0RgejZHND1ZhMQxax
-         BtME/F7QoSXo5wwitIRxypt04Az/pyYq1lae0KhapPwib0E3Uc4ORR8DF60NrwX6G0OJ
-         BPLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Nw8tTjTa/PZO5hmV8CKEncBLO7o0ZFuEQVqbEDoX2Ck=;
-        b=2ARvGmj2nObt4wknuk+bK52ACqnAhiqDsFGF7AMAQq1yxI7TPl8Qcoi9vOeBIby9Hy
-         v5ATYBH9cE8MvDxl1xPEmzCwBaKo6GDSaM/ih1daeIG2EadrspKqIdd/fzPicAHVwkb9
-         pILAJEcH8Dp7Rc45WlGaek244GhCm+ER/M49DZ8Q/BLyjeek87Co4CzVgZyD1s+XU9sS
-         f4hLOoT61U9CQYpuXkmX7HNmli4Ha8+BlY5oDwfiNvdblXPjLMmvL4t7dptlei1nvboF
-         05Yja9LZ7N8WNBaNrE071BJMe3ynwInUU9i43QB6HcsvWdnC5zXMz3VxKxXMuLC7YmF7
-         SgGA==
-X-Gm-Message-State: AJIora/MJtOA22AhR6LnAUAgv/DPjczkdBCznlsUx7Tz2KFWvzw+4SwM
-        VQ5TbLO3ErAkjrmjurchqFVDpw==
-X-Google-Smtp-Source: AGRyM1sj00smfpKwICHzY6SpTgaPGzlA5O2QNHSRwppRFDZebT5XOzOVSijAZ0W9a6cEccpCforGDQ==
-X-Received: by 2002:a05:6402:190e:b0:43a:e914:8c11 with SMTP id e14-20020a056402190e00b0043ae9148c11mr1924522edz.281.1658472116576;
-        Thu, 21 Jul 2022 23:41:56 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id kw26-20020a170907771a00b0072124df085bsm1680382ejc.15.2022.07.21.23.41.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 23:41:55 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 08:41:54 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vikas Gupta <vikas.gupta@broadcom.com>
-Cc:     Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, dsahern@kernel.org,
-        stephen@networkplumber.org, Eric Dumazet <edumazet@google.com>,
-        pabeni@redhat.com, ast@kernel.org, leon@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Michael Chan <michael.chan@broadcom.com>,
-        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: Re: [PATCH net-next v4 1/3] devlink: introduce framework for
- selftests
-Message-ID: <YtpGsndCvUIlBLUs@nanopsycho>
-References: <20220718062032.22426-1-vikas.gupta@broadcom.com>
- <20220721072121.43648-1-vikas.gupta@broadcom.com>
- <20220721072121.43648-2-vikas.gupta@broadcom.com>
- <YtlNGWp0D7M3PXvJ@nanopsycho>
- <CAHLZf_tMsZ-K70oUarNXYRnG10WyHNNVO2KpzECoFRy0C0dQpw@mail.gmail.com>
+        Fri, 22 Jul 2022 02:43:09 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5FC868B9;
+        Thu, 21 Jul 2022 23:43:07 -0700 (PDT)
+X-UUID: 04bcd04a01a742cdb764386f66409ece-20220722
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:a7825040-aa15-4457-9e25-becf99aa36e6,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:4975aa33-b9e4-42b8-b28a-6364427c76bb,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 04bcd04a01a742cdb764386f66409ece-20220722
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <mingjia.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1310787261; Fri, 22 Jul 2022 14:43:03 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 22 Jul 2022 14:43:02 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 22 Jul 2022 14:43:00 +0800
+Message-ID: <cf62ea99e74ea729a38fe7f806cbc06a0c549ddc.camel@mediatek.com>
+Subject: Re: [RESEND] media: mediatek: vcodec: Add to support VP9 inner
+ racing mode
+From:   "mingjia.zhang@mediatek.com" <mingjia.zhang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Fritz Koenig" <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 22 Jul 2022 14:43:00 +0800
+In-Reply-To: <6d8aeee4-9732-1c62-67e0-6e8f56373aa6@collabora.com>
+References: <20220715064938.5812-1-mingjia.zhang@mediatek.com>
+         <6d8aeee4-9732-1c62-67e0-6e8f56373aa6@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHLZf_tMsZ-K70oUarNXYRnG10WyHNNVO2KpzECoFRy0C0dQpw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thu, Jul 21, 2022 at 07:32:08PM CEST, vikas.gupta@broadcom.com wrote:
->Hi Jiri,
->
->
->On Thu, Jul 21, 2022 at 6:27 PM Jiri Pirko <jiri@nvidia.com> wrote:
->>
->> Thu, Jul 21, 2022 at 09:21:19AM CEST, vikas.gupta@broadcom.com wrote:
->> >Add a framework for running selftests.
->> >Framework exposes devlink commands and test suite(s) to the user
->> >to execute and query the supported tests by the driver.
->> >
->> >Below are new entries in devlink_nl_ops
->> >devlink_nl_cmd_selftests_list_doit/dumpit: To query the supported
->> >selftests by the drivers.
->> >devlink_nl_cmd_selftests_run: To execute selftests. Users can
->> >provide a test mask for executing group tests or standalone tests.
->> >
->> >Documentation/networking/devlink/ path is already part of MAINTAINERS &
->> >the new files come under this path. Hence no update needed to the
->> >MAINTAINERS
->> >
->> >Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
->> >Reviewed-by: Michael Chan <michael.chan@broadcom.com>
->> >Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
->> >---
->> > .../networking/devlink/devlink-selftests.rst  |  38 +++
->> > include/net/devlink.h                         |  20 ++
->> > include/uapi/linux/devlink.h                  |  29 +++
->> > net/core/devlink.c                            | 225 ++++++++++++++++++
->> > 4 files changed, 312 insertions(+)
->> > create mode 100644 Documentation/networking/devlink/devlink-selftests.rst
->> >
->> >diff --git a/Documentation/networking/devlink/devlink-selftests.rst b/Documentation/networking/devlink/devlink-selftests.rst
->> >new file mode 100644
->> >index 000000000000..0e9727895987
->> >--- /dev/null
->> >+++ b/Documentation/networking/devlink/devlink-selftests.rst
->> >@@ -0,0 +1,38 @@
->> >+.. SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> >+
->> >+=================
->> >+Devlink Selftests
->> >+=================
->> >+
->> >+The ``devlink-selftests`` API allows executing selftests on the device.
->> >+
->> >+Tests Mask
->> >+==========
->> >+The ``devlink-selftests`` command should be run with a mask indicating
->> >+the tests to be executed.
->> >+
->> >+Tests Description
->> >+=================
->> >+The following is a list of tests that drivers may execute.
->> >+
->> >+.. list-table:: List of tests
->> >+   :widths: 5 90
->> >+
->> >+   * - Name
->> >+     - Description
->> >+   * - ``DEVLINK_SELFTEST_FLASH``
->> >+     - Devices may have the firmware on non-volatile memory on the board, e.g.
->> >+       flash. This particular test helps to run a flash selftest on the device.
->> >+       Implementation of the test is left to the driver/firmware.
->> >+
->> >+example usage
->> >+-------------
->> >+
->> >+.. code:: shell
->> >+
->> >+    # Query selftests supported on the devlink device
->> >+    $ devlink dev selftests show DEV
->> >+    # Query selftests supported on all devlink devices
->> >+    $ devlink dev selftests show
->> >+    # Executes selftests on the device
->> >+    $ devlink dev selftests run DEV test flash
->>
->> "test_id" to be consistend with the attr name and outputs. Please see
->What is "test_id" referring to in this document? Can you please elaborate ?
+Hi Angelo,
 
-"test_id" is consistent with the UAPI netlink attribute name, see
-below.
+Thanks for your reply and useful comments.
 
->
->> below. Devlink cmdline would accept "test" as well, so you can still use
->Are you mentioning the "test" argument in the above devlink command line option?
+In addition to running cts/gts test, I ran the fluster test with
+GStreamer locally. The test result is "Ran 240/303 tests successfully"
 
-Yes, the cmd line accepts shortened option names. So for "test_id", it
-would accept:
-"test_i"
-"test_"
-and "test"
 
-I just wanted to say you, as a user, will be able to still use the
-shortened version, but the option name "test_id" would be consistent
-with UAPI, which is what we usually have.
+Thanks,
+mingjia
+
+
+On Fri, 2022-07-15 at 10:34 +0200, AngeloGioacchino Del Regno wrote:
+> Il 15/07/22 08:49, Mingjia Zhang ha scritto:
+> > In order to reduce decoder latency, enable VP9 inner racing mode.
+> > Send lat trans buffer information to core when trigger lat to work,
+> > need not to wait until lat decode done.
+> > 
+> > Signed-off-by: mingjia zhang <mingjia.zhang@mediatek.com>
+> > ---
+> > CTS/GTS test pass
+> 
+> CTS/GTS passing is a good indication but, please, test with GStreamer
+> (and
+> show the output, as well!).
+> 
+> Thanks,
+> Angelo
+> 
+> > ---
+> >   .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 64 ++++++++++++
+> > -------
+> >   1 file changed, 40 insertions(+), 24 deletions(-)
+> > 
 

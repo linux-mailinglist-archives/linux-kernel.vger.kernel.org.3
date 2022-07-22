@@ -2,90 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C398557E667
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E190957E668
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235359AbiGVSW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S236180AbiGVSW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiGVSWY (ORCPT
+        with ESMTP id S231784AbiGVSW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:22:24 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C245528B0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:22:22 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id j26so6395360lji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pr7T8YmXgcjyBw/qQmjL0IBnyhjt5WfV1o0h0y0cqLo=;
-        b=L7W8z1E+272iyr8qpCt5he+cg50qGQoDR32QNDd8rt0UMBgecUFFEWikptwG58Dond
-         /ZxUWEL8W91YdaFAtrSVZGfxQRKq79fKMnnGHhy32SMZT3IZzR3OmJenh+Nu7lGKbxpW
-         DSXH2ctaVPAk5lTDS+TssAkl6oRoZoe4wFtNa7KDE3iXlJ1MjoitgC26t7IlBFEmCL5Z
-         dgiVtoM9gtJJnVL2zols4FC5BVyK1xHAG3ApGnqnXJQU9cve4Ann6RyN/sfU1kshFTJJ
-         uvUrBULARm6/SpiHp3UFskOTco5gsztk2+jcz8GzJNUxYqdDaSrcNn5coTMYi4qdWnrU
-         m+Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pr7T8YmXgcjyBw/qQmjL0IBnyhjt5WfV1o0h0y0cqLo=;
-        b=LyKkaOjrNJSS91KP9k96a1LqqpxPhT66NB+iMJRlf11Xj+1+9OAHGfVdeCJ7/jxyIw
-         6f/L8stISB0E5z+3MOAAP4YlZnOSD75MwVvEQqDv5A+JiIulZF1yc2HKmo/AHYiPSi8O
-         lPJqHDmsw2KyMKIEk8MowEfY9DTM9bKs2K2o0wMSO7NezusKheyYMZyd3sUtUW7ECzQO
-         YvhrZGMf8uC3so+VPbFYKrWoEU+36q9QoGcEZaxrgo9RL2B11qVIF2CwQp/FsIRCqNKw
-         M7Zm6Y85sYqJdsq2Swb+z7pTjYxCm4wna3N4VOktwWBkaJdWm9EOVR90LxxupTjB0yat
-         wY7Q==
-X-Gm-Message-State: AJIora+rLg2t7Z0Is6xhuOrBIGEhb2h7jDpiROvv6XOHUA38yB2zAqVe
-        Y45JGl6xcdSgSJ2vzm9qgbpJOg==
-X-Google-Smtp-Source: AGRyM1tMPGykBs9w+D78J8rqM8+9tTmCD1BQ2SD16T66bz6Y2GIv2TDv0N7IcScJMAuw816F7z2s4w==
-X-Received: by 2002:a05:651c:220d:b0:25d:5fa0:a83a with SMTP id y13-20020a05651c220d00b0025d5fa0a83amr473229ljq.276.1658514140953;
-        Fri, 22 Jul 2022 11:22:20 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id e28-20020ac25cbc000000b00489c5db8bb6sm1176644lfq.176.2022.07.22.11.22.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 11:22:20 -0700 (PDT)
-Message-ID: <522433ce-7a3d-73a3-cdf0-4e69edbf3de6@linaro.org>
-Date:   Fri, 22 Jul 2022 20:22:18 +0200
+        Fri, 22 Jul 2022 14:22:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6D452DC5;
+        Fri, 22 Jul 2022 11:22:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96472622F6;
+        Fri, 22 Jul 2022 18:22:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 366F0C341C6;
+        Fri, 22 Jul 2022 18:22:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658514144;
+        bh=jbdiUACq987exJvHl+s3+P9nN0vorh+Bfj0OgaiI0dg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AReaDxhZZb1Akt7qwYy0aH3YKObxOUL5KqF4Ex3UMw8dRJHu2w0NoaJDQ0Lfl2+Dc
+         GE5UQVsEG8JTWj8qdKyAKcfGbt8zZPX96LQ2SUJqk1izPF5DJjkfM51fx89+oj8WVo
+         lnkyWzUMtk8fgEFCIqyjk42kPibggbBGYbQMdGgHA9600JQ2/toH1/65nluXXEvY3N
+         lEwG1RuGT61wwtTYnWuy7F/qXyvD7zPYHBFqyt2F4LfHWyBPE8PDJP79uCjPxE+O4z
+         oqPNiZLK9S67JAUXqKwPSF8K+V7LxqROOPhrJLov/ZILkatPZHPTdDbzhUXXZppN0k
+         vr7awmpWxqZ+Q==
+Date:   Fri, 22 Jul 2022 19:22:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] regulator: core: Allow for a base-load per client to
+ come from dts
+Message-ID: <Ytrq2rVMHqedv4+3@sirena.org.uk>
+References: <20220721182622.RFC.1.I8a64b707169cfd73d9309c5eaf5d43b8bc4db988@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220721000658.29537-1-william.zhang@broadcom.com>
- <a635754e-bf41-4058-5fbb-57ead36b7128@linaro.org>
- <883c2ad4c36220b488519a8902ad72bc@milecki.pl>
- <193845cb-6149-1ae6-5eb6-6b01ffcf763b@linaro.org>
- <4b5100e4a6e9e581f4b8ab58e5ca4927@milecki.pl>
- <c5b37e68-dc1f-cdae-83e4-23aa0216db69@linaro.org>
- <1d39bbba3f267086eb2884ffcbf4807b@milecki.pl>
- <e5f3474c-ba7f-7107-064b-74a04b11d7af@gmail.com>
- <15e4a51c-a89f-79ef-1364-ddca6b6f7b83@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <15e4a51c-a89f-79ef-1364-ddca6b6f7b83@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4RMPD34dgBFK6bR+"
+Content-Disposition: inline
+In-Reply-To: <20220721182622.RFC.1.I8a64b707169cfd73d9309c5eaf5d43b8bc4db988@changeid>
+X-Cookie: Yow!  I want my nose in lights!
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,101 +60,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/07/2022 21:35, William Zhang wrote:
-> 
-> 
-> On 07/21/2022 09:43 AM, Florian Fainelli wrote:
->> On 7/21/22 00:50, Rafał Miłecki wrote:
->>> On 2022-07-21 09:36, Krzysztof Kozlowski wrote:
->>>> On 21/07/2022 09:13, Rafał Miłecki wrote:
->>>>>> That's better argument. But what's the benefit of adding generic
->>>>>> compatible? Devices cannot bind to it (it is too generic). Does it
->>>>>> describe the device anyhow? Imagine someone adding compatible
->>>>>> "brcm,all-soc-of-broadcom" - does it make any sense?
-> 
-> 
->>>>>
->>>>> OK, I see it now. I can't think of any case of handling all devices
->>>>> covered with suc a wide brcm,bcmbca binding.
->>>>
->>>> Maybe there is some common part of a SoC which that generic compatible
->>>> would express?
->>>>
->>>> Most archs don't use soc-wide generic compatible, because of reasons I
->>>> mentioned - no actual benefits for anyone from such compatible.
->>>>
->>>> But there are exceptions. I fouun socfpga and apple. The apple sounds as
->>>> mistake to me, because the generic "apple,arm-platform" compatible looks
->>>> like covering all possible Apple ARM platforms. I think Apple ARM
->>>> designs in 20 years will not be compatible at all with current design,
->>>> so such broad compatible is not useful... but that's only my opinion.
->>>
->>> Let's see if William / Broadcom guys can provide a valid argument for
->>> the brcm,bcmbca.
->>
->> It is common practice to provide a generic fallback compatible string for a given chip family/architecture and all of our existing in-tree (and out of tree for that matter) DTSes for Broadcom SoCs do that:
->>
->> - Documentation/devicetree/bindings/arm/bcm/brcm,brcmstb.txt
->> - Documentation/devicetree/bindings/arm/bcm/brcm,ns2.yaml
->> - Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml
->> - Documentation/devicetree/bindings/arm/bcm/brcm,cygnus.yaml
->>
->> list goes on and on, of course the counter examples are bcm2835, bcm4708 etc. although those are both chip and families technically, so I suppose the conflation is appropriate in that case. So the pattern is simple:
->>
->> - outside of Broadcom contributors used convention
->> - inside of Broadcom contributors used another
->>
->> so if nothing else, we ought to be consistent within ourselves as Broadcom insiders, which we are doing here.
->>
->> While the generic fallback may not be in use, it still serves a purpose:
->>
->> - Broadcom likes to create a gazillion of part numbers that are hard to untangle from their original SoC architecture unless you happen to work there so it serves as documentation for others to identify what family they belong to, and what to expect from that
->>
->> - you never know when you might want to be matching on just the generic compatible string of a family and putting it in there costs nothing at all
->>
->> The point of William's patch series is to right a number of wrongs on Broadcom's side:
->>
->> - lack of appropriate involvements at the time Rafal submitted the 4908 support as a "standalone" family, I am to take the blame for suggesting that name in the first place, though I did not know at the time that William and others would ever be contributing upstream
->>
->> - avoid the proliferation of "sub" families within a larger family (BCMBCA) since that serves no purpose other than to make it harder on users to select what they should be selecting in their kernel *and* it makes us inconsistent with arch/arm64/Kconfig.platforms that attempts to reduce those
->>
->> I would conclude by asking you: why is this such a big issue? What *actual* problem does it causes, except maybe setting a precedent that you do not like, but for which you practically should have no reason to care as long as the binding is enforced.
->>
-> Totally agreed.  Just want to emphasize that the main reason of this 
-> change to merge all the bcmbca family chips into the same group for 
-> better organization and reduce the clutter to the kernel source. Think 
-> about 18 bcmbca devices with different changes to yaml, kconfig, 
-> makefile, sub-directory while they actually share many common blocks, 
-> drivers and dts entries.
 
-Your commit does not explain why you are doing it at all. We have all
-this discussion, you put so many arguments, but why none of it is in the
-commit description?
+--4RMPD34dgBFK6bR+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> While nobody would bind a device to brcm,bcmbca (and it can not be 
-> binded because bcmbca,yaml require to prefix with a specific chip), it 
-> is a great way to make it easy for people to understand what device they 
-> are working and look for the bcmbca common driver and other support code 
-> as well. Wouldn't this be good thing to have?
-> 
-> And don't forget we introduced bcmbca awhile back with first SoC 47622 
-> and have set a clear goal for the purpose we are discussing here today:
-> Please see this patch series:
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-April/732867.html
-> "This change introduces Broadcom's ARCH_BCMBCA architecture for
-> armv7 and armv8 based Broadband SoCs. We expect to send additional
-> patches for each SoC in the near future."
-> 
-> And Krzysztof acked that yaml for brcm,bcabca here :
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2022-April/732867.html
+On Thu, Jul 21, 2022 at 06:26:44PM -0700, Douglas Anderson wrote:
 
-and I keep discussing, so bringing it up proves what? That new comments
-appeared?
+> Looking through the current users of regulator_set_load(), all but one
+> or two basically follow the pattern:
 
-> 
-> 
+> 1. Get all the regulators.
+> 2. Go through each regulator and call regulator_set_load() on it with
+>    some value that's sufficient to get the regulator to run in "HPM"
+>    mode.
+> 3. Enable / disable the regulator as needed.
 
+Sure...  I guess these devices are just hoping that their idle currents
+are near enough to zero to be safe.  Having refreshed my mind about how
+all this works that's basically the assumption that Linux is making
+here, that any idle currents will be low enough to be satisified by the
+lowest power state of any practical regulator and we don't need to keep
+track of them.
 
-Best regards,
-Krzysztof
+> Specifically it should be noted that many devices don't really have a
+> need for the low power mode of regulators. Unfortunately the current
+
+What exactly do you mean by "a need for the low power mode of
+regulators"?
+
+> state of the world means that all drivers are cluttered with tables of
+> loads and extra cruft at init time to tell the regulator framework
+> about said loads.
+
+We're only talking about a few lines of code here, and we could make a
+bulk helper to set loads if this is a serious issue.  You could even
+just add some more values in the bulk struct and have it be pure data
+for the drivers, regulator_bulk_get() could see a load and set it.  I
+think this may actually be the bulk of what's concerning you here?
+
+> There are lots of ways we could combine this "base load" with a load
+> that the driver requests. We could:
+> - Add them.
+> - Take the maximum (assume that the "base" is the min).
+> - Only use the "base" load if the driver didn't request one.
+
+This feels a bit mangled, I think largely because you're using the term
+"base load" to refer to something which I *think* you want to be the
+peak load the device might cause when it's actively doing stuff which is
+just very confusing.  If this were being specified per device I'd expect
+that to be the idle rather than active current with a name like that.
+That's just naming, but it does suggest that if we were to put this in
+DT it should be more like the pinctrl equivalents and done as an array
+of currents with matching array of names.
+
+> I have chosen the third option here. If the driver knows better then
+> it can override. Note that the driver can't override to "0". To do
+> that it would just disable the regulator.
+
+I don't like the idea of having platform constraints which we ignore,
+this goes against the general safety principal of the regulator API
+which is that we won't touch the device state unless given explicit
+permission to do so by the platform description.  The general idea is
+to ensure that we can't do anything that might damage the platform
+without approval from the system integrator.
+
+> NOTE: if we want to keep old binary dtb files working with new kernels
+> then we'd still have to keep existing crufty regulator_set_load() in
+> drivers, but hopefully we can stop adding new instances of this, and
+> perhaps eventually people will agree to deprecate old binary dtb files
+> and we can get rid of all the extra code.
+
+To be perfectly honest I'm not sure I see any great advantage here.
+It's moving the performance numbers from the driver into DT which makes
+them ABI which makes them harder to update, and the peak load is going
+to be vulnerable to changes due to driver changes - if we do some
+performance work and manage to start driving a device harder the numbers
+specified in the DT may become wrong.  In general it seems safer to not
+put things into ABI if we don't have to, and a substantial proportion of
+things that might use regulators are off-SoC devices which don't
+generally want or need DT fragments to describe them so we end up having
+to duplicate things in multiple DTs which isn't ideal.
+
+What's big push to put this in DT rather than just make the code pattern
+easier to use?  I'm not totally against it but I'm having a hard time
+getting enthusiastic about it.
+
+I think the underlying thing here (and the reason you're seeing this a
+lot with Qualcomm device specifically) is that Qualcomm have a firmware
+interface to specify loads and wanted to implement selection of a low
+power mode when things are idle in the way that Linux does with the
+get_optimum_mode() interface.  Either they actually have some systems
+where they were able to select different modes when things are running
+or they don't have the thing we have where they discount loads from
+consumers that have removed their enable vote, either way for those
+platforms what's going on currently does seem like a sensible way of
+setting things up.
+
+Other platforms don't bother, I think that's likely to be some
+combination of not caring about anything finer grained than system
+suspend (which especially for Android is totally fair) and modern
+regulators being much more able to to dynamically adapt to load than
+those the code was written for.
+
+--4RMPD34dgBFK6bR+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLa6toACgkQJNaLcl1U
+h9BFmQf/VDVtiR82Fo8H04rSNU1PyK7XtTgzpOnK4XFM0YJ878JOCKFTR/YwU0S4
+Qq9s2VWCjCiJd79Fk7YW0p0q1QkGjvFU6yWCDkiC742brskSoVsK5SOy3xbZeWgN
+lYIalM6WnW12zVNl02Iq5l8X6aCTjQyFrWMtOHdeTKedH4fr5EXlrytoARsq9QwG
+6K5Aaf1Ys8tdO6zUkaJ7fbY9ZnsVtI4GwHC2WUYrGHHmb1suF64tci5a2IBmHYQy
+HEgg1vs6FIr3D8neA3L5UL6Fo15DSxTCSfOqz4XwwLpXw6aC0HaeX6M/p2Btg2CQ
+PZT/VD6Ab+MLtrPdWlgSrIz7pecoxg==
+=PqLG
+-----END PGP SIGNATURE-----
+
+--4RMPD34dgBFK6bR+--

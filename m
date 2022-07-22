@@ -2,186 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860F257E5C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF6257E5C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiGVRmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S235740AbiGVRoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiGVRmd (ORCPT
+        with ESMTP id S233598AbiGVRoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:42:33 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD6B91CDB
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:42:31 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c72so3829778edf.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:42:31 -0700 (PDT)
+        Fri, 22 Jul 2022 13:44:04 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7FE82114
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:03 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id a23so6378630lfm.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kohlschutter-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=N7EQU9MlWTC84hNYcDq54sTO0o6CB2OpePDIIDMkHEg=;
-        b=RAgnXjbIvsoZwcpLh1CBW7DY1j7VdtKawfUE7mkVKf8TvOF6WczItap8eV38eHJwve
-         /rR/mvvGPU+AmyXghjrJZOhHbdNnJvGEzChy2/xUc9kj0D00uvn90rTH2EDe3+ZVNQHs
-         Lp+a2/I7Nv3SkNCfzoDi5MjZ1P5aXJQwMUUEqkhZhpocdLvUqLriTDpK6CkE4/GJ+KBP
-         +zFd326waGpgEr6Ls+zrKh0ssSYcLD54Ihv4CCpdX8InVL8A5Su7/ov9k5TyD2sED2DF
-         Ndj8CELTQI/WrNCkQR0fqvcFUjOBysSNpsAgo3Jx/jWT3YAiOXGzX6EjuhDbWuAHJpFr
-         j3Uw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=77xuwLvbLWnCuxWXuFNg97x/Q/UoNBE8YKOa7koKCQc=;
+        b=Rh6kq8XK5OkVXzo21OvcDTRrF04BNHykHigDPuBygYCTLIgdux2kVy94r293wxck8s
+         4qs4BUupnK1RleRnhoOOwtXEc5b3X6tbm2JNodnr9aw8Q7GRvXwkOBHmiBnJ4Nrc5WBx
+         Pt3YTbMVNR8Z/W/bIzL7KqqcB396MEw/JG8bB6SSqqx1YlH/iLHoyFR466V+lYWc4dL7
+         mKDDmDmSnKmsZh6ODpJ0dJZwO3aB/hcWPI4RmAMAC0ke212JxsfXUJWRAac4K4oWBEr8
+         jKs+6nxq5dJvGrHXjrG1bYLIxnQG8KYQVdRGDdopuJVLU1o8lcmCoMAmKYh9DqEJWOFf
+         6rNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=N7EQU9MlWTC84hNYcDq54sTO0o6CB2OpePDIIDMkHEg=;
-        b=WQnXt4oT9DZ5vSYIWXd47IxUayv92bR5L56V9yIHq1SUvqkDmmq5d3uc2nIRgmXjZz
-         caDp81/+yph0+rR6wB1cUMHMvvzUnOTs2DHOzlFc3UZigiYoUrm+Gzr6DZdKGAzQ1oTG
-         LGbDaRnOxJkO4bzTx8EnJJuy3qOHnG1AJMTIVPtZBlkQpbRZ5WSFl38qfvuNV7fI9MLX
-         f8NzGcuJ+4NPf2jRirbPU9bY0VPJpIagt5UhSXOIsC64pV+FLFRCm2YRQbC4gXeR8LwJ
-         zEV8LW9KdJubFc+vRepqRIk08Qo183lpmqIz9GXf9paz7OjYxndYD/W7/nzxVUNG25TL
-         wFOg==
-X-Gm-Message-State: AJIora9VhOVEsGsLeUhIztmhHoD4F6fdZ1lQbUlEn/QgZ2Mu599otqXy
-        rLJV/P9QJP2VvnnBR7eUkuQ0KA==
-X-Google-Smtp-Source: AGRyM1sBIoB4ad1rdzYX4b4fs9ym/ManTz8+yH9dZ/S0izmo3QreB58en0TuKY9jROlaw5a3t3tvPQ==
-X-Received: by 2002:a05:6402:495:b0:43a:a211:4c86 with SMTP id k21-20020a056402049500b0043aa2114c86mr996718edv.294.1658511749469;
-        Fri, 22 Jul 2022 10:42:29 -0700 (PDT)
-Received: from smtpclient.apple (ip5b434222.dynamic.kabel-deutschland.de. [91.67.66.34])
-        by smtp.gmail.com with ESMTPSA id p9-20020a056402074900b00431962fe5d4sm2861755edy.77.2022.07.22.10.42.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:42:28 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: [PATCH v2] regulator: core: Resolve supply name earlier to prevent
- double-init
-From:   =?utf-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>
-In-Reply-To: <YtlqPbbBceBmekcV@sirena.org.uk>
-Date:   Fri, 22 Jul 2022 19:42:27 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, wens@kernel.org,
-        =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E0925148-3F0E-4DD6-9872-96778BFE39DE@kohlschutter.com>
-References: <3B4AE882-0C28-41E3-9466-F8E301567627@kohlschutter.com>
- <YtlqPbbBceBmekcV@sirena.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=77xuwLvbLWnCuxWXuFNg97x/Q/UoNBE8YKOa7koKCQc=;
+        b=5p+1PG67b50TZfREfbC34KgtN3LWHIBymVhgKD2jxpM/noflj8GTGeZt7PakjvQbE7
+         l+zFd4ME4JQEi5J/JvhrgPixSG3j900mdXTsWgh/YW45SFw1aG5xXfntrM1NOrN4rn9P
+         ddy+GsV788pJerGqeSfDEsTaMs9kXr5/N2sV9+Hi3stlTaJeBSmcxhBHqjxUGnB+K3K0
+         r7w+/rhg233csxoaz7/s/ftp0fqkeIfvVRv67mHYR7Ri117kmRkmoH8WKbxe86Xh8vo5
+         txQzfTZZ4AgZEgxiTXOKEZ889D8/ckvKqExGgEYcx9Hz6QRBlyod67AG1+yDRJqJrXuc
+         wzpA==
+X-Gm-Message-State: AJIora+LRbGv9Z/EOtoGTZXHmS7AZmQyXoGCYpMqCT6RPtyxg/dPYWim
+        Q0+2TEBpKcaIxDCbkK32PhMxjA==
+X-Google-Smtp-Source: AGRyM1u8Z9ofcrLGXlXYmrrX+HN6KSpLHpX2BjExY1LCBBGohOyx5gD2LPLjkWkDgVGABm1aD/B7iw==
+X-Received: by 2002:a05:6512:1381:b0:489:cd0b:3a03 with SMTP id p1-20020a056512138100b00489cd0b3a03mr389336lfa.583.1658511841445;
+        Fri, 22 Jul 2022 10:44:01 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id bd21-20020a05651c169500b0025d6930d014sm1253726ljb.87.2022.07.22.10.43.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 10:44:00 -0700 (PDT)
+Message-ID: <cd830f5c-1760-69e0-d239-3ce1f30daa43@linaro.org>
+Date:   Fri, 22 Jul 2022 19:43:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/5] spi: dt-bindings: add documentation for
+ hpe,gxp-spifi
+Content-Language: en-US
+To:     nick.hawkins@hpe.com
+Cc:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
+References: <20220722172335.33404-1-nick.hawkins@hpe.com>
+ <20220722172335.33404-3-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220722172335.33404-3-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, an unresolved regulator supply reference upon calling
-regulator_register on an always-on or boot-on regulator caused
-set_machine_constraints to be called twice.
+On 22/07/2022 19:23, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> Create documentation for the hpe,gxp-spifi binding to support access to
+> the SPI parts
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> ---
+> 
+> v2:
+>  *Removed extra space around < > for reg
+>  *Changed interrupt-parrent to interrupt-parent
+> ---
+>  .../bindings/spi/hpe,gxp-spifi.yaml           | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> new file mode 100644
+> index 000000000000..346b494ef59b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/hpe,gxp-spifi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP spi controller flash interface
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +  - Jean-Marie Verdun <verdun@hpe.com>
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
 
-This in turn may initialize the regulator twice, leading to voltage
-glitches that are timing-dependent. A simple, unrelated configuration
-change may be enough to hide this problem, only to be surfaced by
-chance.
+Drop the quotes - not needed.
 
-One such example is the SD-Card voltage regulator in a NanoPI R4S that
-would not initialize reliably unless the registration flow was just
-complex enough to allow the regulator to properly reset between calls.
+> +
+> +properties:
+> +  compatible:
+> +    const: hpe,gxp-spifi
+> +
+> +  reg:
+> +    items:
+> +      - description: cfg registers
+> +      - description: data registers
+> +      - description: mapped memory
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    spi@200 {
+> +        compatible = "hpe,gxp-spifi";
+> +        reg = <0x200 0x80>, <0xc000 0x100>, <0x38000000 0x800000>;
+> +        interrupts = <20>;
+> +        interrupt-parent = <&vic0>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        flash@0 {
+> +                reg = <0>;
 
-Fix this by re-arranging regulator_register, trying resolve the
-regulator's supply early enough that set_machine_constraints does not
-need to be called twice.
-
-Signed-off-by: Christian Kohlsch=C3=BCtter <christian@kohlschutter.com>
----
- drivers/regulator/core.c | 51 +++++++++++++++++++++++++---------------
- 1 file changed, 32 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 398c8d6afd4..5c2b97ea633 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -5492,7 +5492,38 @@ regulator_register(const struct regulator_desc =
-*regulator_desc,
- 	BLOCKING_INIT_NOTIFIER_HEAD(&rdev->notifier);
- 	INIT_DELAYED_WORK(&rdev->disable_work, regulator_disable_work);
-=20
--	/* preform any regulator specific init */
-+	/* set regulator constraints */
-+	if (init_data)
-+		rdev->constraints =3D kmemdup(&init_data->constraints,
-+					    sizeof(*rdev->constraints),
-+					    GFP_KERNEL);
-+	else
-+		rdev->constraints =3D =
-kzalloc(sizeof(*rdev->constraints),
-+					    GFP_KERNEL);
-+	if (!rdev->constraints) {
-+		ret =3D -ENOMEM;
-+		goto clean;
-+	}
-+
-+	if (init_data && init_data->supply_regulator)
-+		rdev->supply_name =3D init_data->supply_regulator;
-+	else if (regulator_desc->supply_name)
-+		rdev->supply_name =3D regulator_desc->supply_name;
-+
-+	if ((rdev->supply_name && !rdev->supply) && rdev->constraints
-+		&& (rdev->constraints->always_on || =
-rdev->constraints->boot_on)) {
-+		/* Try to resolve the name of the supplying regulator =
-here first
-+		 * so we prevent double-initializing the regulator, =
-which may
-+		 * cause timing-specific voltage brownouts/glitches that =
-are
-+		 * hard to debug.
-+		 */
-+		ret =3D regulator_resolve_supply(rdev);
-+		if (ret)
-+			rdev_dbg(rdev, "unable to resolve supply early: =
-%pe\n",
-+					 ERR_PTR(ret));
-+	}
-+
-+	/* perform any regulator specific init */
- 	if (init_data && init_data->regulator_init) {
- 		ret =3D init_data->regulator_init(rdev->reg_data);
- 		if (ret < 0)
-@@ -5518,24 +5549,6 @@ regulator_register(const struct regulator_desc =
-*regulator_desc,
- 		    (unsigned long) atomic_inc_return(&regulator_no));
- 	dev_set_drvdata(&rdev->dev, rdev);
-=20
--	/* set regulator constraints */
--	if (init_data)
--		rdev->constraints =3D kmemdup(&init_data->constraints,
--					    sizeof(*rdev->constraints),
--					    GFP_KERNEL);
--	else
--		rdev->constraints =3D =
-kzalloc(sizeof(*rdev->constraints),
--					    GFP_KERNEL);
--	if (!rdev->constraints) {
--		ret =3D -ENOMEM;
--		goto wash;
--	}
--
--	if (init_data && init_data->supply_regulator)
--		rdev->supply_name =3D init_data->supply_regulator;
--	else if (regulator_desc->supply_name)
--		rdev->supply_name =3D regulator_desc->supply_name;
--
- 	ret =3D set_machine_constraints(rdev);
- 	if (ret =3D=3D -EPROBE_DEFER) {
- 		/* Regulator might be in bypass mode and so needs its =
-supply
---=20
-2.36.2
+This has still wrong indentation.
 
 
+
+Best regards,
+Krzysztof

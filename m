@@ -2,46 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C945B57D8F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 05:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C302A57D8FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 05:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbiGVD1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 23:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S231338AbiGVDbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 23:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGVD1P (ORCPT
+        with ESMTP id S229547AbiGVDbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 23:27:15 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9261A9368C;
-        Thu, 21 Jul 2022 20:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5u7RoGzLQzUaoRKGdfln+jG1YUe/P0RSrCB5jT5RLuM=; b=0sMZ7ACkqjUQb6O3VzDVkDhKS1
-        +XwKqrE/tpIKef+upJnJuKhE3bOyDvteAFa6KsBWDQLXCRJEc3NS8XRmUCLaCHfiN3cnV8ASD8AZ0
-        bE/YIYiiP0tv3gPrD5+PwM9/JRO8KP7/5+vHGo2jiyJSw7XNW6EWOfEcntARYMK9l9tY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oEjJh-00B6bG-L8; Fri, 22 Jul 2022 05:27:05 +0200
-Date:   Fri, 22 Jul 2022 05:27:05 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Chunhao Lin <hau@realtek.com>, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] r8169: add support for rtl8168h(revid 0x2a) +
- rtl8211fs fiber application
-Message-ID: <YtoZCaLTMFw8cTem@lunn.ch>
-References: <20220721144550.4405-1-hau@realtek.com>
- <356f4285-1e83-ab14-c890-4131acd8e61d@gmail.com>
+        Thu, 21 Jul 2022 23:31:01 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E351EED1
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 20:31:00 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so3143318pjl.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 20:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/6Cb+8ADjWlGk1byx/gAv/ihrtjQyQM76AvewJ6raf0=;
+        b=BEcZ5flLoTHKRlHcKGFXMGAK7PHpb1lCc5CBQgqqBDPQZQov25dfqyGsbsOsMv58tC
+         UWjpwrPMbpT9fbLDpnXgRFmNstXP+69Ef2iw0cbtTSsGmRVSpa5ezEmPAM9zAdbntHmQ
+         vudbUgEwJCcqnJZluroo91MVQykacN2gKArJBnEZD3JkVhIOqU7bGDha8UJ9nZLUeWjw
+         TVammewdtB4Ni44XWU8JPxA4Vs7a1tnJuCT6gtRAi9rKZUOKxupeFCKPBQ7q3iitiObT
+         fhJbN/aP282dSdyT8SEFzcZKp3w8dJnV7XULvZvmq9IOZAn6IuznR44/ylYwVWiVXr06
+         zAQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/6Cb+8ADjWlGk1byx/gAv/ihrtjQyQM76AvewJ6raf0=;
+        b=k4uQiG8JPhSFIdcCa0DiSDZ7JS3EjpmH+josz0MOFUe6lIwoz0Gb0hnRaCxFH5Cefg
+         z7mWiOoePMGhl5Qc8YgjBbfPFJF6w9iQ89pLkjSy3nDyUZYwJ6RENi5W3L8W7IyXn8jR
+         CjbwRsbsHzhCiiZMDhtG9dWn6iU6KNUddQM6n7nbzz9vkIIT3/LxE2CY5u1rLUzjiZsq
+         4hCMuZcLKT2MHClA1NnnqJd5wFoqacLFBlY5rsbn8PTjgRIeJPlyCv+bS5j/Gg2crq+f
+         UceUaZPcn8tr3Hdr/xkH3Bq8pFqtz17ztDu63zBh9KymAiQo1VRTSK5ZQmTMeWODNviQ
+         W4ag==
+X-Gm-Message-State: AJIora9mePqXthkUX84dr58WYCzuReJH344ffkwnrUMyvIPFykqqKe8S
+        J2f5OCzu3Kmh2g+8nklk4JEeoA==
+X-Google-Smtp-Source: AGRyM1u66qOMhw/FmNyZzsrbRNGdNOEwQPTR6etWVvS2ZFcBdgNrRnpIXpackB09WcUPNKAXdNW/Dw==
+X-Received: by 2002:a17:90b:4c4e:b0:1f0:48e7:7258 with SMTP id np14-20020a17090b4c4e00b001f048e77258mr1748828pjb.223.1658460659802;
+        Thu, 21 Jul 2022 20:30:59 -0700 (PDT)
+Received: from [10.94.58.189] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id r9-20020aa79889000000b005284d10d8f6sm2538884pfl.215.2022.07.21.20.30.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 20:30:59 -0700 (PDT)
+Message-ID: <65d9f79b-be9b-e21e-0624-5c9f2cc0c0b2@bytedance.com>
+Date:   Fri, 22 Jul 2022 11:30:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <356f4285-1e83-ab14-c890-4131acd8e61d@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH 9/9] sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
+Content-Language: en-US
+To:     Chengming Zhou <zhouchengming@bytedance.com>, hannes@cmpxchg.org,
+        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
+        rdunlap@infradead.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com, cgroups@vger.kernel.org
+References: <20220721040439.2651-1-zhouchengming@bytedance.com>
+ <20220721040439.2651-10-zhouchengming@bytedance.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <20220721040439.2651-10-zhouchengming@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,65 +77,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +#define RT_SFP_ST (1)
-> > +#define RT_SFP_OP_W (1)
-> > +#define RT_SFP_OP_R (2)
-> > +#define RT_SFP_TA_W (2)
-> > +#define RT_SFP_TA_R (0)
-> > +
-> > +static void rtl_sfp_if_write(struct rtl8169_private *tp,
-> > +				  struct rtl_sfp_if_mask *sfp_if_mask, u8 reg, u16 val)
-> > +{
-> > +	struct rtl_sfp_if_info sfp_if_info = {0};
-> > +	const u16 mdc_reg = PIN_I_SEL_1;
-> > +	const u16 mdio_reg = PIN_I_SEL_2;
-> > +
-> > +	rtl_select_sfp_if(tp, sfp_if_mask, &sfp_if_info);
-> > +
-> > +	/* change to output mode */
-> > +	r8168_mac_ocp_write(tp, PINOE, sfp_if_info.mdio_oe_o);
-> > +
-> > +	/* init sfp interface */
-> > +	r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info.mdc_pd);
-> > +	r8168_mac_ocp_write(tp, mdio_reg, sfp_if_info.mdio_pu);
-> > +
-> > +	/* preamble 32bit of 1 */
-> > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, 0xffffffff, 32);
-> > +
-> > +	/* opcode write */
-> > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_ST, 2);
-> > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_OP_W, 2);
-> > +
-> > +	/* phy address */
-> > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, sfp_if_mask->phy_addr, 5);
-> > +
-> > +	/* phy reg */
-> > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, reg, 5);
-> > +
-> > +	/* turn-around(TA) */
-> > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_TA_W, 2);
-> > +
-> > +	/* write phy data */
-> > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, val, 16);
+Hi Chengming,
 
-This looks like a bit-banging MDIO bus? If so, please use the kernel
-code, drivers/net/mdio/mdio-bitbang.c. You just need to provide it
-with functions to write and read a bit, and it will do the rest,
-including C45 which you don't seem to support here.
+On 7/21/22 12:04 PM, Chengming Zhou Wrote:
+> Now PSI already tracked workload pressure stall information for
+> CPU, memory and IO. Apart from these, IRQ/SOFTIRQ could have
+> obvious impact on some workload productivity, such as web service
+> workload.
+> 
+> When CONFIG_IRQ_TIME_ACCOUNTING, we can get IRQ/SOFTIRQ delta time
+> from update_rq_clock_task(), in which we can record that delta
+> to CPU curr task's cgroups as PSI_IRQ_FULL status.
 
-> > +static enum rtl_sfp_if_type rtl8168h_check_sfp(struct rtl8169_private *tp)
-> > +{
-> > +	int i;
-> > +	int const checkcnt = 4;
-> > +
-> > +	rtl_sfp_eeprom_write(tp, 0x1f, 0x0000);
-> > +	for (i = 0; i < checkcnt; i++) {
-> > +		if (rtl_sfp_eeprom_read(tp, 0x02) != RTL8211FS_PHY_ID_1 ||
-> > +			rtl_sfp_eeprom_read(tp, 0x03) != RTL8211FS_PHY_ID_2)
-> > +			break;
-> > +	}
+The {soft,}irq affection should be equal to all the runnable tasks
+on that cpu, not only rq->curr. Further I think irqstall is per-cpu
+rather than per-cgroup.
 
-Reading registers 2 and 3 for a PhY idea? Who not just use phylib, and
-a PHY driver?
-
-  Andrew
+Abel

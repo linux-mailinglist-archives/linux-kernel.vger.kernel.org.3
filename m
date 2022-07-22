@@ -2,329 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022C257E6A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD1157E69F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236182AbiGVSgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S235573AbiGVSfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiGVSgP (ORCPT
+        with ESMTP id S229667AbiGVSfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:36:15 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D349C25A;
-        Fri, 22 Jul 2022 11:36:14 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id l24so4247711ion.13;
-        Fri, 22 Jul 2022 11:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ino7IXOaHqMKyaw3vJixiAOpbn79CzPNiK8ELQbPlz8=;
-        b=XHpPvvmdpyJGD922yg2YMzXqPIGNIkE6SzohAeHNKMXN3/64xnj9t+6XoZYCwO1Hoc
-         +yH45+Oxz45BpXi0vjcpmdg0AixDDub1A0+xN/1hFhKEKuN4kGGZ9eI5FpoVwely4rH6
-         AdWTiahSdj+5XCFW4EbvZyWE3Xmpy/tB52FoZNF27fnfCTNdE9B8aK4Nitdf+jICEoAA
-         Mc9G2aZsRdj43fnxSxb6iKlzjiaaMrOprmKQM3ZczHda/bHdhwZStd4Wdwzf90QA3vYF
-         /Kp9WSLbrNbmGiZJOtAs+ulFImUu+2xO1IfO9aMctGH9N6+kfUxNqR1NfRWjOGRf4kgG
-         ePig==
+        Fri, 22 Jul 2022 14:35:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 987FF7B1EB
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658514938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x4xFwLeu27SOsLoPyGfh0+QpaXnP2y9e0sTNZTVE09g=;
+        b=ZSU8m/Ws891r1KZ0KoaIblS3igaqLx51KwqHrT6rTuHspFFqn/uS7d9eaMuH1p6buJ+bxU
+        gSnPI4YXXNu2wkHubeqtjo9WLR2d485JkLimYbNTWVref7gDcNTR0C6ZX8bRJv/cFMWZuc
+        vj3kHzCnDlVC52lE6W4HurWllpe4VJs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-573-qZ3zDxriNZe4EAkXl5rUpw-1; Fri, 22 Jul 2022 14:35:37 -0400
+X-MC-Unique: qZ3zDxriNZe4EAkXl5rUpw-1
+Received: by mail-wm1-f69.google.com with SMTP id v132-20020a1cac8a000000b003a34081050bso1340666wme.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:35:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ino7IXOaHqMKyaw3vJixiAOpbn79CzPNiK8ELQbPlz8=;
-        b=l8GXyXce7LwNj9SBKZrctDqFSFb3cV7AaxbC17ZpKsf7rQsW+93l2eESBti0CUlPIR
-         kw9CeHRcATzxVv3M5SBya5GmmxpLq6YRT6kilpRQyb2mkj5/PqX5ScQPjaLAzVZKZ4jl
-         juLUDNAllDHQkkssz2rDH2QTn/ujyff31GcFzUw2tFcGTNgqujwWkHWARVEWDVavzE8D
-         +m2HWtKCww8pGGCbAD6F9JLMtAsB9/Kf0S6g2DdP7QQIxAyU/FdKdNpvMuFxOrzlB18+
-         IFvfxc1fT0iOtz3Fr9Y6mniWauKZbd5FX0+mLH/7pialqZ4v/y/LUBEAtha0GloHcQE9
-         DGPA==
-X-Gm-Message-State: AJIora9BO1JpxbJ5jnPzsedIAUmuuYBd92Z735Dmhelh1XniscFaevER
-        UQ4t1wKIdROWQDVpBMXbooDom4mSwjNSaofHhns=
-X-Google-Smtp-Source: AGRyM1sxH88UE4fCxrgUC3MpOCqT4XX4yJGsjriF9vUK4ZVhNqLTojFKQMk0uXyUchpLT6/+ijIQdUDT//eht7uc2sA=
-X-Received: by 2002:a05:6638:339b:b0:33f:5a4c:4d8e with SMTP id
- h27-20020a056638339b00b0033f5a4c4d8emr582334jav.93.1658514973503; Fri, 22 Jul
- 2022 11:36:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=x4xFwLeu27SOsLoPyGfh0+QpaXnP2y9e0sTNZTVE09g=;
+        b=QoW4xOAZMGSV9dPb4tMN7lgJUonJ9nim5dDUiF8Sw3WEHFXWRzxgtSyT6PMAGqp+yy
+         ZWHPThRodjha5RrVRMdU34UpbiNAgqkorTISJyEEFAfkVkaKq8UCI9AHvFWlsQTabkT1
+         VIVJhKL+usGoT1WocrWygyw404zToJjS7YXyS25TqiOI78BJifNUd1P78Nx1ZmUC9f69
+         D2WURhImwfBwranWjtDQJDTiWUB4jfSN/xdvaGEBTJeS4FY/H00jJq38IO5rZKOmLM0l
+         UWHKgWyGQBqH85+ycxJ6xABuGRaOE+NiKR9pRgh6F24O/c2HAvOwgmp1JlvSih6CKMxr
+         iiMQ==
+X-Gm-Message-State: AJIora8vxuRGVJb0G8G+XTIudd4DhQo/eGjd516YsS0HUCFy7JdJFXUC
+        w+ERqmcWUdGsoqIbkh/4uhwJTPFktOhdApM2CJf3HtFcKaDuLno2yfty1MwojamTqmw1sBb6r7u
+        ACcJObLbZvN2vrADcmJcxMcEw
+X-Received: by 2002:a5d:6e88:0:b0:21a:3403:9aa0 with SMTP id k8-20020a5d6e88000000b0021a34039aa0mr809577wrz.379.1658514936405;
+        Fri, 22 Jul 2022 11:35:36 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vj3VxCK5vYPoOQFZdp4W63WksitPvwbHwibhhULkPD/K1TdE+Y0eqLKIjUkVErAiw7A0taIA==
+X-Received: by 2002:a5d:6e88:0:b0:21a:3403:9aa0 with SMTP id k8-20020a5d6e88000000b0021a34039aa0mr809570wrz.379.1658514936151;
+        Fri, 22 Jul 2022 11:35:36 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id l37-20020a05600c1d2500b003a33227e49bsm5594126wms.4.2022.07.22.11.35.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 11:35:35 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Vincent Donnefort <vdonnefort@google.com>
+Cc:     peterz@infradead.org, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org, regressions@leemhuis.info,
+        kernel-team@android.com, Derek Dolney <z23@posteo.net>
+Subject: Re: [PATCH v4] cpu/hotplug: Do not bail-out in DYING/STARTING sections
+In-Reply-To: <YtbSP21k1hTKGlqv@google.com>
+References: <20220704131346.2650163-1-vdonnefort@google.com>
+ <xhsmhfsix6ssc.mognet@vschneid.remote.csb> <YtbSP21k1hTKGlqv@google.com>
+Date:   Fri, 22 Jul 2022 19:35:34 +0100
+Message-ID: <xhsmhilnpf11l.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20220722174829.3422466-1-yosryahmed@google.com> <20220722174829.3422466-5-yosryahmed@google.com>
-In-Reply-To: <20220722174829.3422466-5-yosryahmed@google.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Fri, 22 Jul 2022 20:35:34 +0200
-Message-ID: <CAP01T76p7CCj2i4X7PmZiG3G3-Bfx_ygnO0Eg+DnfwLHQiEPbA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/8] bpf: Introduce cgroup iter
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 at 19:52, Yosry Ahmed <yosryahmed@google.com> wrote:
+On 19/07/22 16:48, Vincent Donnefort wrote:
+> On Tue, Jul 19, 2022 at 04:12:03PM +0100, Valentin Schneider wrote:
+>> On 04/07/22 14:13, Vincent Donnefort wrote:
+>> > +static int _cpuhp_invoke_callback_range(bool bringup,
+>> > +					unsigned int cpu,
+>> > +					struct cpuhp_cpu_state *st,
+>> > +					enum cpuhp_state target,
+>> > +					bool nofail)
+>> [...]
+>> > +		if (nofail) {
+>> > +			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
+>> > +				cpu, bringup ? "UP" : "DOWN",
+>> > +				cpuhp_get_step(st->state)->name,
+>> > +				st->state, err);
+>> > +			ret = -1;
+>>
+>> On a single failure we'll get two warns (WARN_ON_ONCE() + pr_warn(), and
+>> then subsequently just the pr_warn()), is that intended?
 >
-> From: Hao Luo <haoluo@google.com>
+> It does, this is to keep the backtrace that used to be here... but now, giving
+> a second thought, we can probably get rid of it and just keep the pr_warn()?
 >
-> Cgroup_iter is a type of bpf_iter. It walks over cgroups in three modes:
+>>
+>> Also, why not have ret = err here?
 >
->  - walking a cgroup's descendants in pre-order.
->  - walking a cgroup's descendants in post-order.
->  - walking a cgroup's ancestors.
->
-> When attaching cgroup_iter, one can set a cgroup to the iter_link
-> created from attaching. This cgroup is passed as a file descriptor and
-> serves as the starting point of the walk. If no cgroup is specified,
-> the starting point will be the root cgroup.
->
-> For walking descendants, one can specify the order: either pre-order or
-> post-order. For walking ancestors, the walk starts at the specified
-> cgroup and ends at the root.
->
-> One can also terminate the walk early by returning 1 from the iter
-> program.
->
-> Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
-> program is called with cgroup_mutex held.
->
-> Currently only one session is supported, which means, depending on the
-> volume of data bpf program intends to send to user space, the number
-> of cgroups that can be walked is limited. For example, given the current
-> buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
-> cgroup, the total number of cgroups that can be walked is 512. This is
-> a limitation of cgroup_iter. If the output data is larger than the
-> buffer size, the second read() will signal EOPNOTSUPP. In order to work
-> around, the user may have to update their program to reduce the volume
-> of data sent to output. For example, skip some uninteresting cgroups.
-> In future, we may extend bpf_iter flags to allow customizing buffer
-> size.
->
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Yonghong Song <yhs@fb.com>
-> ---
->  include/linux/bpf.h                           |   8 +
->  include/uapi/linux/bpf.h                      |  30 +++
->  kernel/bpf/Makefile                           |   3 +
->  kernel/bpf/cgroup_iter.c                      | 252 ++++++++++++++++++
->  tools/include/uapi/linux/bpf.h                |  30 +++
->  .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
->  6 files changed, 325 insertions(+), 2 deletions(-)
->  create mode 100644 kernel/bpf/cgroup_iter.c
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index a97751d845c9..9061618fe929 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -47,6 +47,7 @@ struct kobject;
->  struct mem_cgroup;
->  struct module;
->  struct bpf_func_state;
-> +struct cgroup;
->
->  extern struct idr btf_idr;
->  extern spinlock_t btf_idr_lock;
-> @@ -1717,7 +1718,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
->         int __init bpf_iter_ ## target(args) { return 0; }
->
->  struct bpf_iter_aux_info {
-> +       /* for map_elem iter */
->         struct bpf_map *map;
-> +
-> +       /* for cgroup iter */
-> +       struct {
-> +               struct cgroup *start; /* starting cgroup */
-> +               int order;
-> +       } cgroup;
->  };
->
->  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index ffcbf79a556b..fe50c2489350 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -87,10 +87,30 @@ struct bpf_cgroup_storage_key {
->         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
->  };
->
-> +enum bpf_iter_cgroup_traversal_order {
-> +       BPF_ITER_CGROUP_PRE = 0,        /* pre-order traversal */
-> +       BPF_ITER_CGROUP_POST,           /* post-order traversal */
-> +       BPF_ITER_CGROUP_PARENT_UP,      /* traversal of ancestors up to the root */
-> +};
-> +
->  union bpf_iter_link_info {
->         struct {
->                 __u32   map_fd;
->         } map;
-> +
-> +       /* cgroup_iter walks either the live descendants of a cgroup subtree, or the
-> +        * ancestors of a given cgroup.
-> +        */
-> +       struct {
-> +               /* Cgroup file descriptor. This is root of the subtree if walking
-> +                * descendants; it's the starting cgroup if walking the ancestors.
-> +                * If it is left 0, the traversal starts from the default cgroup v2
-> +                * root. For walking v1 hierarchy, one should always explicitly
-> +                * specify the cgroup_fd.
-> +                */
-> +               __u32   cgroup_fd;
-> +               __u32   traversal_order;
-> +       } cgroup;
->  };
->
->  /* BPF syscall commands, see bpf(2) man-page for more details. */
-> @@ -6136,6 +6156,16 @@ struct bpf_link_info {
->                                         __u32 map_id;
->                                 } map;
->                         };
-> +                       union {
-> +                               struct {
-> +                                       __u64 cgroup_id;
-> +                                       __u32 traversal_order;
-> +                               } cgroup;
-> +                       };
-> +                       /* For new iters, if the first field is larger than __u32,
-> +                        * the struct should be added in the second union. Otherwise,
-> +                        * it will create holes before map_id, breaking uapi.
-> +                        */
->                 } iter;
->                 struct  {
->                         __u32 netns_ino;
-> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> index 057ba8e01e70..00e05b69a4df 100644
-> --- a/kernel/bpf/Makefile
-> +++ b/kernel/bpf/Makefile
-> @@ -24,6 +24,9 @@ endif
->  ifeq ($(CONFIG_PERF_EVENTS),y)
->  obj-$(CONFIG_BPF_SYSCALL) += stackmap.o
->  endif
-> +ifeq ($(CONFIG_CGROUPS),y)
-> +obj-$(CONFIG_BPF_SYSCALL) += cgroup_iter.o
-> +endif
->  obj-$(CONFIG_CGROUP_BPF) += cgroup.o
->  ifeq ($(CONFIG_INET),y)
->  obj-$(CONFIG_BPF_SYSCALL) += reuseport_array.o
-> diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
-> new file mode 100644
-> index 000000000000..1027faed0b8b
-> --- /dev/null
-> +++ b/kernel/bpf/cgroup_iter.c
-> @@ -0,0 +1,252 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (c) 2022 Google */
-> +#include <linux/bpf.h>
-> +#include <linux/btf_ids.h>
-> +#include <linux/cgroup.h>
-> +#include <linux/kernel.h>
-> +#include <linux/seq_file.h>
-> +
-> +#include "../cgroup/cgroup-internal.h"  /* cgroup_mutex and cgroup_is_dead */
-> +
-> +/* cgroup_iter provides three modes of traversal to the cgroup hierarchy.
-> + *
-> + *  1. Walk the descendants of a cgroup in pre-order.
-> + *  2. Walk the descendants of a cgroup in post-order.
-> + *  2. Walk the ancestors of a cgroup.
-> + *
-> + * For walking descendants, cgroup_iter can walk in either pre-order or
-> + * post-order. For walking ancestors, the iter walks up from a cgroup to
-> + * the root.
-> + *
-> + * The iter program can terminate the walk early by returning 1. Walk
-> + * continues if prog returns 0.
-> + *
-> + * The prog can check (seq->num == 0) to determine whether this is
-> + * the first element. The prog may also be passed a NULL cgroup,
-> + * which means the walk has completed and the prog has a chance to
-> + * do post-processing, such as outputing an epilogue.
-> + *
-> + * Note: the iter_prog is called with cgroup_mutex held.
-> + *
-> + * Currently only one session is supported, which means, depending on the
-> + * volume of data bpf program intends to send to user space, the number
-> + * of cgroups that can be walked is limited. For example, given the current
-> + * buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
-> + * cgroup, the total number of cgroups that can be walked is 512. This is
-> + * a limitation of cgroup_iter. If the output data is larger than the
-> + * buffer size, the second read() will signal EOPNOTSUPP. In order to work
-> + * around, the user may have to update their program to reduce the volume
-> + * of data sent to output. For example, skip some uninteresting cgroups.
-> + */
-> +
-> +struct bpf_iter__cgroup {
-> +       __bpf_md_ptr(struct bpf_iter_meta *, meta);
-> +       __bpf_md_ptr(struct cgroup *, cgroup);
-> +};
-> +
-> +struct cgroup_iter_priv {
-> +       struct cgroup_subsys_state *start_css;
-> +       bool terminate;
-> +       int order;
-> +};
-> +
-> +static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
-> +{
-> +       struct cgroup_iter_priv *p = seq->private;
-> +
-> +       mutex_lock(&cgroup_mutex);
-> +
-> +       /* cgroup_iter doesn't support read across multiple sessions. */
-> +       if (*pos > 0)
-> +               return ERR_PTR(-EOPNOTSUPP);
-> +
-> +       ++*pos;
-> +       p->terminate = false;
-> +       if (p->order == BPF_ITER_CGROUP_PRE)
-> +               return css_next_descendant_pre(NULL, p->start_css);
-> +       else if (p->order == BPF_ITER_CGROUP_POST)
-> +               return css_next_descendant_post(NULL, p->start_css);
-> +       else /* BPF_ITER_CGROUP_PARENT_UP */
-> +               return p->start_css;
-> +}
-> +
-> +static int __cgroup_iter_seq_show(struct seq_file *seq,
-> +                                 struct cgroup_subsys_state *css, int in_stop);
-> +
-> +static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
-> +{
-> +       /* pass NULL to the prog for post-processing */
-> +       if (!v)
-> +               __cgroup_iter_seq_show(seq, NULL, true);
-> +       mutex_unlock(&cgroup_mutex);
+> If two states fail, the ret wouldn't mean much, hence a default "-1" just for
+> the WARN_ONCE.
 
-I'm just curious, but would it be a good optimization (maybe in a
-follow up) to move this mutex_unlock before the check on v? That
-allows you to store/buffer some info you want to print as a compressed
-struct in a map, then write the full text to the seq_file outside the
-cgroup_mutex lock in the post-processing invocation.
+Right
 
-It probably also allows you to walk the whole hierarchy, if one
-doesn't want to run into seq_file buffer limit (or it can decide what
-to print within the limit in the post processing invocation), or it
-can use some out of band way (ringbuf, hashmap, etc.) to send the data
-to userspace. But all of this can happen without holding cgroup_mutex
-lock.
+> But if we drop the latter, that would simplify the problem of
+> knowing which error code to return.
+>
+
+We need to drop one of the two, the pr_warn() will probably be more useful
+if/when we need to debug this, so go for it.
+

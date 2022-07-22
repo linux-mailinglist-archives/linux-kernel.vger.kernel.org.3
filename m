@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700AD57E57B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1855757E57E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiGVRZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S235818AbiGVRZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiGVRZ1 (ORCPT
+        with ESMTP id S229567AbiGVRZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:25:27 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DD9D56
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:25:26 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id bv24so7404920wrb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:25:26 -0700 (PDT)
+        Fri, 22 Jul 2022 13:25:29 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C78F6E895
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:25:28 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d16so7393065wrv.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qo8WtVG4n0zTyMgzLgHF96/1qxYxV8ri3HK7ykqwnO8=;
-        b=IK7V1IOiUtkzMNlZe+LF+whif65Ho4BnHQgQT5ZqfEnJBdOdhx+lcnsEqWnONdEIj5
-         37zG5sDarPhLTl8WkWOedv9TArm8RDXVASNCbomlxOJZVtSYWcSdjX/2pK+YEaabocSO
-         vHG5ODih6QIppMO3JhyTpBsN+rCbddhFRKimz/zgyqwR1EnLH1QxtEIvX5/kYonlKosk
-         2BxCBvjDosLoJIIRjCMzRvruT384mua/wXVI+I2tkETcS4K8ZUtaZ57+L+go0dpvv1Pp
-         L0WZjgtsSjEI/qBKh8D7LLxMRKJLuLObV4Ml3SUEGNA59aYtWV92hmkMEOFDlWPgM0w5
-         34Iw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=a7n2hZtI80KPmTpPLk+WQcqOlcrME3gGtY6A0hs9KEo=;
+        b=V5hEqOIlZxHKDmz32ugfWunkvK8ZlLXJUZKjM/p4irElAaKfmltUCmW3rTF5A0eHA7
+         DUHm9jKpIFs4ac+5rA58wAJPbxXaLUb7sBPodI6PqvIJHp7/Q4nYPCmtImtfoytEJoS1
+         vDTxGZi24zyo4szSL1/J+mA6p6761y0QM/KkkTyN+OD8gg/g2hI94EcaynvDlVBWJ1nJ
+         9ohLbwyBT8SyLhwQ9jE41Ty8WbjFfWcLY4rTRyz+XwIdjesyCmTUFHx1Wl7hZqiCmjQj
+         6p1PFJS+F0RxHYHPoUmaEWnm9VmVtvMvqQKW+yxz65dCEffhITziGBTvtHPTFl6lE+54
+         xlcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qo8WtVG4n0zTyMgzLgHF96/1qxYxV8ri3HK7ykqwnO8=;
-        b=t1KwXGhIq5IULvOAEKwQDYc7RW/+QSt6Iy7Y7jKVwW1LlmJhB4zlPpIqeS2BPSIUy+
-         JDPqwyNwMKFiwq0ifSp7BX/sZRnm/ZDuqwAo6bp1Ib+z4RDN6OFX3Gu7QKHDoeWt2qkI
-         GPQqoUbPi7DhNxwThdww2x2b0OKQzNfxNAmXqJo/k8CCNaZdOBwgOpeqDRs4AWVO+dgp
-         NgutJmPpvn1p0eYe3ynYtBrAGzS8ts3sdPeyEi9lf6x7zx9V+QGWI6XsS91ExGP9wXnn
-         dcUWobh5P1W/TKQ+T7RZkjJS8e1n8MhXpXUF1MjiflwHXqW2biqT71j/dEDbcSPiH8W+
-         fAMw==
-X-Gm-Message-State: AJIora+5PWbrXUNgwnZ/JirYRRnZhrFpSthO1dNG3exFYv9r5pxf1EyS
-        DIvb0Vi+YeueovdUWY65A4mWgTKmUJA/ZrEOZDxnFQ==
-X-Google-Smtp-Source: AGRyM1tMBRELkdIUB+WahUZ3HbBB7VpSn07XisByEgMH3WLYDxJwtXXySPT1I4TW5C1OKkrxltUynrrqfqmbgcKRLcA=
-X-Received: by 2002:a5d:6c65:0:b0:21d:b7c0:9930 with SMTP id
- r5-20020a5d6c65000000b0021db7c09930mr626692wrz.500.1658510724540; Fri, 22 Jul
- 2022 10:25:24 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a7n2hZtI80KPmTpPLk+WQcqOlcrME3gGtY6A0hs9KEo=;
+        b=YMuPYirnWH4wJDKyVb+SAWyaDkzTnJezaJ04sUcVirVRg//IexXgwzj1G7wf6n0S+q
+         PO6kNZRU+lAOzxgvgtgYPoacdxfiq2ZBFSDGeg+MRYJ3DBhDtfaFbUlY90WI3g06YM1d
+         4nwSMI8vNCKKBgdrVjT4IW7wCU2ny+rOUmGm0rA3FEnbLOiWisuul33lCrW0Ab0QRSH+
+         u3KzIBBi6UFyhZAaOZnNYOMxiT8AlkwE1gMWipmWNVOQZn9sokCsrheRGpd9b5ea9U5D
+         iGzoACXn+5wrXkyBw+nJTe7N/zDzhWuvbtvwM0g/0+/GD13Uass9uxZS7lu1P1z6rMPB
+         ItsA==
+X-Gm-Message-State: AJIora/BzMxPQu8KBBzXqeSmJjV72hKBagE2g3nvMNU53XxOr424K/By
+        iTfgIjrYiS1MY79rW3DrTFOKBQ==
+X-Google-Smtp-Source: AGRyM1uMVxRjbcOSC5DkF7Jt31dYw/fySGaz4NxzMjasgsmDE7QgZggpovXYSL40Y0/FvKS8jOngQQ==
+X-Received: by 2002:a5d:5742:0:b0:21e:503b:a368 with SMTP id q2-20020a5d5742000000b0021e503ba368mr630742wrw.366.1658510726516;
+        Fri, 22 Jul 2022 10:25:26 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:957f:d36d:87f9:5c17? ([2a05:6e02:1041:c10:957f:d36d:87f9:5c17])
+        by smtp.googlemail.com with ESMTPSA id u24-20020a05600c211800b003a2e655f2e6sm5495374wml.21.2022.07.22.10.25.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 10:25:26 -0700 (PDT)
+Message-ID: <0d962fa0-4ecb-f0d6-3b93-fbf33daab49a@linaro.org>
+Date:   Fri, 22 Jul 2022 19:25:24 +0200
 MIME-Version: 1.0
-References: <20220721055728.718573-1-kaleshsingh@google.com>
- <20220721055728.718573-17-kaleshsingh@google.com> <YtqHDTpnn376Qb7u@google.com>
-In-Reply-To: <YtqHDTpnn376Qb7u@google.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Fri, 22 Jul 2022 10:25:13 -0700
-Message-ID: <CAC_TJvdAa0PnTSiNa4W0QusQYJ7bEGeWD2+i4EsuZL94LjB15Q@mail.gmail.com>
-Subject: Re: [PATCH v5 16/17] KVM: arm64: Introduce pkvm_dump_backtrace()
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Fuad Tabba <tabba@google.com>, Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 11/12] thermal/of: Use thermal trips stored in the
+ thermal zone
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>
+References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
+ <20220710123512.1714714-13-daniel.lezcano@linexp.org>
+ <CAJZ5v0hTQBXbKNurR0p8_MWmcW-EtezUg1oSNLVEYEAdzpeyBA@mail.gmail.com>
+ <5e9f6d35-08ff-4949-67b0-a2feaab79814@linexp.org>
+ <CAJZ5v0hA-JzYbdfoNfXhdNoeL1VLWk3umS=wxEmER=PtMUw17w@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hA-JzYbdfoNfXhdNoeL1VLWk3umS=wxEmER=PtMUw17w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 4:16 AM Oliver Upton <oliver.upton@linux.dev> wrote:
->
-> Hi Kalesh,
->
-> On Wed, Jul 20, 2022 at 10:57:27PM -0700, Kalesh Singh wrote:
->
-> [...]
->
-> > +/*
-> > + * pkvm_dump_backtrace - Dump the protected nVHE HYP backtrace.
-> > + *
-> > + * @hyp_offset: hypervisor offset, used for address translation.
-> > + *
-> > + * Dumping of the pKVM HYP backtrace is done by reading the
-> > + * stack addresses from the shared stacktrace buffer, since the
-> > + * host cannot direclty access hyperviosr memory in protected
-> > + * mode.
-> > + */
-> > +static void pkvm_dump_backtrace(unsigned long hyp_offset)
-> > +{
-> > +     unsigned long *stacktrace_entry
-> > +             = (unsigned long *)this_cpu_ptr_nvhe_sym(pkvm_stacktrace);
-> > +     unsigned long va_mask, pc;
-> > +
-> > +     va_mask = GENMASK_ULL(vabits_actual - 1, 0);
-> > +
-> > +     kvm_err("Protected nVHE HYP call trace:\n");
->
-> This and the footer printks should be put in respective helpers to share
-> between pKVM and non-pKVM backtrace implementations. I imagine users
-> will invariably bake some pattern matching to scrape traces, and it
-> should be consistent between both flavors.
+On 22/07/2022 18:50, Rafael J. Wysocki wrote:
+> On Thu, Jul 21, 2022 at 11:29 PM Daniel Lezcano
+> <daniel.lezcano@linexp.org> wrote:
+>>
+>> On 19/07/2022 20:26, Rafael J. Wysocki wrote:
+>>> On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
+>>> <daniel.lezcano@linexp.org> wrote:
+>>>> Now that we have the thermal trip stored in the thermal zone in a
+>>>> generic way, we can rely on them and remove one indirection we found
+>>>> in the thermal_of code and do one more step forward the removal of the
+>>>> duplicated structures.
+>>>>
+>>>> Cc: Alexandre Bailon <abailon@baylibre.com>
+>>>> Cc: Kevin Hilman <khilman@baylibre.com>
+>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+>>>> ---
+>>>>    drivers/thermal/thermal_of.c | 53 +++++++++++-------------------------
+>>>>    1 file changed, 16 insertions(+), 37 deletions(-)
+>>>>
+>>>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+>>>> index e187461dd396..601552c55d0b 100644
+>>>> --- a/drivers/thermal/thermal_of.c
+>>>> +++ b/drivers/thermal/thermal_of.c
+>>>> @@ -118,12 +118,7 @@ static int of_thermal_set_trips(struct thermal_zone_device *tz,
+>>>>     */
+>>>>    int of_thermal_get_ntrips(struct thermal_zone_device *tz)
+>>>>    {
+>>>> -       struct __thermal_zone *data = tz->devdata;
+>>>> -
+>>>> -       if (!data || IS_ERR(data))
+>>>> -               return -ENODEV;
+>>>> -
+>>>> -       return data->ntrips;
+>>>> +       return tz->ntrips;
+>>> Hasn't this been renamed to num_trips?
+>>
+>> Right, it is changed in patch 12/12
+> 
+> Well, what about combining them, then?
 
-Hi Oliver,
+Yes, absolutely
 
-Ok will split these out into helpers.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
->
-> > +     /* The stack trace is terminated by a null entry */
-> > +     for (; *stacktrace_entry; stacktrace_entry++) {
->
-> At the point we're dumping the backtrace we know that EL2 has already
-> soiled itself, so we shouldn't explicitly depend on it providing NULL
-> terminators. I believe this loop should have an explicit range && NULL
-> check.
-
-Good point, I'll add the additional checks in the next version,
-
-Thanks,
-Kalesh
->
-> --
-> Thanks,
-> Oliver
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

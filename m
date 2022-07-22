@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38B557E0C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B326657E0CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234237AbiGVLWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 07:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S234394AbiGVLaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 07:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiGVLWd (ORCPT
+        with ESMTP id S230134AbiGVLa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 07:22:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7605363910;
-        Fri, 22 Jul 2022 04:22:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25D7AB827CE;
-        Fri, 22 Jul 2022 11:22:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE79C341C6;
-        Fri, 22 Jul 2022 11:22:27 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="A72kHDjI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1658488946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tEMNMB2Z49B1S8tRR73A3k1qlwc8qZ7y2Lb47TLNcJY=;
-        b=A72kHDjIhCKy1SCFFNVSX+Vp2BEvkV7ka1UD5j32SfhxQnO0X7LJ74HcDr+imBz9vI5rhm
-        6080JFv+KzAAK4056Y1qyXv5he1wWynhSKqQTQdQz1e06bV9uLXXkXAsiCX/HmW32WQCQu
-        qilfUhpkwlG/HTO/fr6WxsF3nMcVXzM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 18cc06f4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 22 Jul 2022 11:22:26 +0000 (UTC)
-Date:   Fri, 22 Jul 2022 13:22:22 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Holger Dengler <dengler@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        x86@kernel.org, Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Harald Freudenberger <freude@linux.ibm.com>
-Subject: Re: [PATCH v2] random: handle archrandom in plural words
-Message-ID: <YtqIbrds53EuyqPE@zx2c4.com>
-References: <YtP1+MJ1tNdJA60l@zx2c4.com>
- <20220717200356.75060-1-Jason@zx2c4.com>
- <46c1a7be-080b-3315-50cc-d3c848fd99e3@linux.ibm.com>
+        Fri, 22 Jul 2022 07:30:28 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E090A743F5;
+        Fri, 22 Jul 2022 04:30:26 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Lq6Z42k6Wz686wT;
+        Fri, 22 Jul 2022 19:25:48 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Fri, 22 Jul 2022 13:30:23 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 22 Jul 2022 12:30:20 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>,
+        <yangxingui@huawei.com>, <chenxiang66@hisilicon.com>,
+        <hare@suse.de>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/6] libsas and drivers: NCQ error handling
+Date:   Fri, 22 Jul 2022 19:24:03 +0800
+Message-ID: <1658489049-232850-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <46c1a7be-080b-3315-50cc-d3c848fd99e3@linux.ibm.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,56 +52,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Holger,
+As reported in [0], the pm8001 driver NCQ error handling more or less
+duplicates what libata does in link error handling, as follows:
+- abort all commands
+- do autopsy with read log ext 10 command
+- reset the target to recover
 
-On Fri, Jul 22, 2022 at 10:08:05AM +0200, Holger Dengler wrote:
-> Why not changing the API to take bytes instead of words? Sure, at the
-> moment it looks like all platforms with TRNG support are able to
-> deliver at least one word, but bytes would be more flexible. 
+Indeed for the hisi_sas driver we want to add similar handling for NCQ
+errors.
 
-The idea is to strike a sweet spot between capabilities. S390x is fine
-with byte-level granularity up to arbitrary lengths, while x86 is best
-with word-level granularity of length 1. The happy intersection between
-the two is just word-level granularity of arbitrary length. Yes we
-_could_ introduce a lot of code complexity by cascading the x86 case
-down into smaller and smaller registers, ignoring the fact that it's no
-longer efficient below 32- or 64-bit registers depending on vendor. But
-then we're relying on the inliner to remove all of that extra code,
-since all callers actually only ever want 32 or 64 bytes. Why bloat for
-nothing? The beauty of this approach is that it translates very
-naturally over all the various quirks of architectures without having to
-have a lot of coupling code.
+This series add a new libsas API - sas_ata_link_abort() - to handle host
+NCQ errors, and fixes up pm8001 and hisi_sas drivers to use it. As
+mentioned in the pm8001 changeover patch, I would prefer a better place to
+locate the SATA ABORT command (rather that nexus reset callback).
 
-The other reason is that it's simply not necessary. The primary use for
-this in random.c is to fill a 32- or 64-*byte* block with "some stuff",
-preferring RDSEED, then RDRAND, and finally falling back to RDTSC. These
-correspond with arch_get_random_seed_longs(), arch_get_random_longs(),
-and random_get_entropy() (which is usually get_cycles() underneath),
-respectively. With the cycle counter being (at least) ~word-sized on all
-platforms, keeping the granularity of the arch_get_random_*_longs()
-functions the same lets us fill these with a basic cascade that doesn't
-require a lot of code:
+I would appreciate some testing of the pm8001 change as the read log ext10
+command mostly hangs on my arm64 machine - these arm64 hangs are a known
+issue.
 
-    unsigned long array[whatever];
-    for (i = 0; i < ARRAY_SIZE(array);) {
-        longs = arch_get_random_seed_longs(&array[i], ARRAY_SIZE(array) - i);
-        if (longs) {
-            i += longs;
-            continue;
-        }
-        longs = arch_get_random_longs(&array[i], ARRAY_SIZE(array) - i);
-        if (longs) {
-            i += longs;
-            continue;
-        }
-        array[i++] = random_get_entropy();
-    }
+Finally with these changes we can make the libsas task alloc/free APIs
+private, which they should always have been.
 
-By using a word as the underlying unit, the above cascade generates
-optimal code on basically all archrandom platforms, no matter what their
-byte-vs-word or one-vs-three-vs-many semantics are.
+Based on v5.19-rc6
 
-That's a bit long winded, but hopefully that gives a bit of insight on
-why going from _long -> _longs is so "lazy" looking.
+[0] https://lore.kernel.org/linux-scsi/8fb3b093-55f0-1fab-81f4-e8519810a978@huawei.com/
 
-Jason
+John Garry (5):
+  scsi: pm8001: Modify task abort handling for SATA task
+  scsi: libsas: Add sas_ata_link_abort()
+  scsi: pm8001: Use sas_ata_link_abort() to handle NCQ errors
+  scsi: hisi_sas: Don't issue ATA softreset in hisi_sas_abort_task()
+  scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
+
+Xingui Yang (1):
+  scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
+
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |   5 +-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  22 ++-
+ drivers/scsi/libsas/sas_ata.c          |  10 ++
+ drivers/scsi/libsas/sas_init.c         |   3 -
+ drivers/scsi/libsas/sas_internal.h     |   4 +
+ drivers/scsi/pm8001/pm8001_hwi.c       | 194 +++++++------------------
+ drivers/scsi/pm8001/pm8001_sas.c       |  13 ++
+ drivers/scsi/pm8001/pm8001_sas.h       |   8 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c       | 177 ++--------------------
+ include/scsi/libsas.h                  |   4 -
+ include/scsi/sas_ata.h                 |   5 +
+ 11 files changed, 132 insertions(+), 313 deletions(-)
+
+-- 
+2.35.3
+

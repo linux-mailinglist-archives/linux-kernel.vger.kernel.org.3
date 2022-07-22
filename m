@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C844B57E829
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 22:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222EF57E83B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 22:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbiGVUPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 16:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S236790AbiGVUUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 16:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236770AbiGVUPU (ORCPT
+        with ESMTP id S235563AbiGVUUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 16:15:20 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A737613D0F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 13:15:19 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id u15-20020a25ab0f000000b0066e49f6c461so4402621ybi.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 13:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=c/c766f5IweLiXfTzCwsILplI2BRgHB64Zpkrcr5r4c=;
-        b=IVmB1KhfRC9dhpaTkpIjZ6E3f+Szh9fFdOVOyseY1NVukF8w6zwOAocHq6J1WNgOx7
-         MkeP7D6XmaSW+5oGvdDUL4lzrNGQs+5+3SzlU1AMRuxE8aagduAp2F/E7t9ZmgbuwpjO
-         f306zDfgyelvBDZnfGcG8V+emseVEwfjhn1IjzDmb1pHxpuSwWN5tvBBazNN5/qG4idy
-         0HIiZvpiJVPJ0ZAcKaJCuS/PXvPEoLzAMUJto3JnYgY7Ng6J/iATPcYHANgx87GtHulV
-         wiCPLmIuBvP3zKYVaBGLJd3oDLj4WIAhZAT9wtlrMeNw2yNlJnbECqep3fMPmM0ZgOif
-         HqKg==
+        Fri, 22 Jul 2022 16:20:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1B4E6375
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 13:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658521214;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H0jFzOu3noKQ3ekIyZuGMBqCNF/GGgqTiHfncc0d2IE=;
+        b=cHeL00HP/G0tZekpbgJL4ZkkLcwEuAJNTWUClqkLr7OHvTR5DKus1Ocows8WiszlzOdVYJ
+        6USIhbDrjd2dVS0NE4dUuWqAhlO7frNVrxh3K/2xCzoj/j37VxGCyhHRmSBClm1gf/M/u9
+        kesKiJuBkZdMjI4KwrtuHivQ/e0svG4=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-1P1OA9R8O-qYSWSVB3t1Lg-1; Fri, 22 Jul 2022 16:20:13 -0400
+X-MC-Unique: 1P1OA9R8O-qYSWSVB3t1Lg-1
+Received: by mail-io1-f69.google.com with SMTP id t3-20020a5d81c3000000b0067bcd25f108so2221429iol.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 13:20:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=c/c766f5IweLiXfTzCwsILplI2BRgHB64Zpkrcr5r4c=;
-        b=VRxkKBCYUKpn/g/tcno4G0KPJApzEArh4Hjkgj6NoDA8gwbQzcy+SfomV4enZvgAjl
-         41dzZzVU0tJ/7kz9kYKuMf7QtvrbRseLRkFRu6jVF5ahsgjysBJJVLN1+OXs7RuZQWuf
-         Dghp93L4AvQ6paE2d4PTpoRjuBEfqUHlPDnGX4GzCopUbJCDRzUq4C3tbo5CbMuhAL8L
-         I/u2QGEzaQ0aaZEzUOfemwOC6qONHga6sfXiuDAiJA115rhQekQYLqLCDDZjfgh2DrbI
-         /SuU9BMeRb+LDE8q1zzuTFjfhvc4cddI4nH1xQIMaShLERcOdU4sriCnYsQR+QMxXGWI
-         +ZMQ==
-X-Gm-Message-State: AJIora87ILwQ7CY879UVAaq4CcQLUBlVTLMPRgUFFfshiX2oQO1rz83e
-        5kkc7j2DFdYIJiACEigvVfc4s2ie7YkxOm07rw1N
-X-Google-Smtp-Source: AGRyM1uRjPK6eRsDWx956R4w3PIY9GowmVfxAwibKdWDAaVTmRSzk/CGssJt4ZsxlokH97WRezORFs8FoPg+8IAOZxDR
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:1623:4cce:b896:4e2f])
- (user=axelrasmussen job=sendgmr) by 2002:a25:af93:0:b0:670:7de3:6c30 with
- SMTP id g19-20020a25af93000000b006707de36c30mr1242861ybh.569.1658520918930;
- Fri, 22 Jul 2022 13:15:18 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 13:15:13 -0700
-Message-Id: <20220722201513.1624158-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH] userfaultfd: don't fail on unrecognized features
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H0jFzOu3noKQ3ekIyZuGMBqCNF/GGgqTiHfncc0d2IE=;
+        b=JFIYt3Gb91Ci0IscO4CuZAcgqK4/xyklHWLxfJn/YsxgDQb5SOqpemHsYPVS1gN9Gf
+         uf9sEDSegvATcQbG1c3HcN9wsF1GCZUiGn/p9nD9J4nbYkwyixijO0Wy+BUGkpP7kwq6
+         vA9gmH0EQ3ZUain5VyEHrKIhP+GVx6VWfoQMFKxurSmId2ZF/Kcv6GbJ0qojiIOjW+8I
+         DwphSYhLJHzRYNyzvUXWlzBpm89sETTciWeKeaAV824zZkDP5ycSn8tnncZDa1KPHMx2
+         KIbuQcUBwf6Apolt58z8rEbWgTvw+ZgIZwM7LI5KHdcoR4nvFsx1ImeyT09UO8CWDc45
+         aVaQ==
+X-Gm-Message-State: AJIora87Fnd0rgPRtmL+FGgfUGNpbwxgLG1mqtKYBh2xFPw+Oob2zP0+
+        UkhiHGbBukgvYkkD1QvXEPRgDCyPssYZ5h5sJZFLBxyBfyDt3vrCTEXcwcGNmbCUoAgb60SgZMx
+        gxfshIEfFFj0ktca0DSs3I2H1
+X-Received: by 2002:a05:6638:1643:b0:33f:7f6b:5e39 with SMTP id a3-20020a056638164300b0033f7f6b5e39mr763332jat.54.1658521212652;
+        Fri, 22 Jul 2022 13:20:12 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1upOkUiAnvgRlyhd1ht9n2iE5lbMbPRpFTw/3s38eIjWF/HtEbLvCLsuMB1t/sncdC1jDJbYQ==
+X-Received: by 2002:a05:6638:1643:b0:33f:7f6b:5e39 with SMTP id a3-20020a056638164300b0033f7f6b5e39mr763325jat.54.1658521212382;
+        Fri, 22 Jul 2022 13:20:12 -0700 (PDT)
+Received: from [10.0.0.146] (sandeen.net. [63.231.237.45])
+        by smtp.gmail.com with ESMTPSA id k13-20020a02c76d000000b0033f21999e6csm2377807jao.90.2022.07.22.13.20.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 13:20:11 -0700 (PDT)
+Message-ID: <d8dfa68b-00d8-9853-e2ba-57c2bb54c05a@redhat.com>
+Date:   Fri, 22 Jul 2022 15:20:10 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH] xfs: Fix comment typo
+Content-Language: en-US
+To:     Xin Gao <gaoxin@cdjrlc.com>, djwong@kernel.org
+Cc:     dchinner@redhat.com, chandan.babu@oracle.com,
+        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220722193624.18002-1-gaoxin@cdjrlc.com>
+From:   Eric Sandeen <sandeen@redhat.com>
+In-Reply-To: <20220722193624.18002-1-gaoxin@cdjrlc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The basic interaction for setting up a userfaultfd is, userspace issues
-a UFFDIO_API ioctl, and passes in a set of zero or more feature flags,
-indicating the features they would prefer to use.
+On 7/22/22 2:36 PM, Xin Gao wrote:
+> The double `for' is duplicated in line 3788, remove one.
+> 
+> Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
+> ---
+>  fs/xfs/libxfs/xfs_bmap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
+> index 6833110d1bd4..6f6d87ba29a3 100644
+> --- a/fs/xfs/libxfs/xfs_bmap.c
+> +++ b/fs/xfs/libxfs/xfs_bmap.c
+> @@ -3785,7 +3785,7 @@ xfs_bmapi_trim_map(
+>  		mval->br_startblock = got->br_startblock +
+>  					(*bno - got->br_startoff);
+>  	/*
+> -	 * Return the minimum of what we got and what we asked for for
+> +	 * Return the minimum of what we got and what we asked for
+>  	 * the length.  We can use the len variable here because it is
+>  	 * modified below and we could have been there before coming
+>  	 * here if the first part of the allocation didn't overlap what
 
-Of course, different kernels may support different sets of features
-(depending on kernel version, kconfig options, architecture, etc).
-Userspace's expectations may also not match: perhaps it was built
-against newer kernel headers, which defined some features the kernel
-it's running on doesn't support.
+NAK.
 
-Currently, if userspace passes in a flag we don't recognize, the
-initialization fails and we return -EINVAL. This isn't great, though.
-Userspace doesn't have an obvious way to react to this; sure, one of the
-features I asked for was unavailable, but which one? The only option it
-has is to turn off things "at random" and hope something works.
-
-Instead, modify UFFDIO_API to just ignore any unrecognized feature
-flags. The interaction is now that the initialization will succeed, and
-as always we return the *subset* of feature flags that can actually be
-used back to userspace.
-
-Now userspace has an obvious way to react: it checks if any flags it
-asked for are missing. If so, it can conclude this kernel doesn't
-support those, and it can either resign itself to not using them, or
-fail with an error on its own, or whatever else.
-
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- fs/userfaultfd.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index e943370107d0..4974da1f620c 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1923,10 +1923,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
- 	ret = -EFAULT;
- 	if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
- 		goto out;
--	features = uffdio_api.features;
--	ret = -EINVAL;
--	if (uffdio_api.api != UFFD_API || (features & ~UFFD_API_FEATURES))
--		goto err_out;
-+	/* Ignore unsupported features (userspace built against newer kernel) */
-+	features = uffdio_api.features & UFFD_API_FEATURES;
- 	ret = -EPERM;
- 	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
- 		goto err_out;
--- 
-2.37.1.359.gd136c6c3e2-goog
+The comment is correct.
 

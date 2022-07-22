@@ -2,263 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADB657DBB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3CA57DBB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiGVID5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S234735AbiGVIEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiGVIDy (ORCPT
+        with ESMTP id S229682AbiGVIEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:03:54 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B789B55A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:03:52 -0700 (PDT)
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3B21E3F12A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:03:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658477030;
-        bh=Djzg8Rc7fhB8CahLsgla9ESBnmAj4BWal3tnU/pT7yo=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=YmB/sCemLx/uhUq37DbKjFYGIC9UkhPLqpxP9tKN5pnFxfzVTHOj2GY13eCj7jIhf
-         Ktofc7Rf7NbNG8ikhXJooc5zprpcYytdDIA/p9c7M8K4QqLKCvuOv+jE2ewhHw/zbe
-         Z2f+nqJc5LgfFpV/f6xkUNV+Y79VP61sGS455MuMelXm93lM/8nHiX4Ef26SIPHUY6
-         9ylXyoVQjdixCYQq1NFUErbV4dX7DFK0Qc4MfV0+D7jmuX0RnijJcOfBqgGFYBxyb+
-         KA2STIBxsscQri+e/7WUCp54OACvGjtMZlDZyiFrkYIrxqLvNa2K268M3752r+5GFv
-         6mFAKg//391LQ==
-Received: by mail-wm1-f69.google.com with SMTP id v132-20020a1cac8a000000b003a34081050bso584889wme.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:03:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Djzg8Rc7fhB8CahLsgla9ESBnmAj4BWal3tnU/pT7yo=;
-        b=kDcDX5sc2RpBw+cxyT3iV42m7tTBKHd9t9V2m6Q14oZbdqQJVY0Tt6TtWD+wp9k1YP
-         Ms9DF2+kX8N2yTsmUytCNAwfD4ty8p7lfrQpa3UHLxjH36wUrB9+k9VxixvIu6xfn8ld
-         HX26rlGLohazE/pV/r5QlJOIRCm1nmpRSwpKZrPcl4iSdKS+r2dJ/p7Ir0FYia7Pwscy
-         r8P29tfH4N7nZLD+ffbdvCYvo6tMEiABfM4CinqlOYhNr9iMgrmSWfEt/XOD2Ro/AAAG
-         /zqq4dt0JoLhHKOfdkNRCSolrUZy04NtLnse2PCeoTGc9y4bfp4KKZ4U9JSdVrx8TKg+
-         xA/g==
-X-Gm-Message-State: AJIora9MYCvnybKqLhnPjPp9cMxZ3RSqaaV9ouDfKLowZjnxgIA3rigM
-        r3+3Vh9yIqYoHg4h8C14Gec+XeaPgkeYkALkn3muaXxAnPpKXDCzM1epRgXGm7HXK6hK1hLA5qY
-        DAPgCsKp624EldNEA4b1PPNTd15cRFV6LPgkgXl4V6g==
-X-Received: by 2002:adf:d1c9:0:b0:20f:c3dc:e980 with SMTP id b9-20020adfd1c9000000b0020fc3dce980mr1546705wrd.552.1658477028872;
-        Fri, 22 Jul 2022 01:03:48 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tA1jTiBrAxpC6qHHHD0NVIYpjlM4n6oaJb5EQyYxOibHW6WDgLQ9M4YVcHjnzYvweMnZI90w==
-X-Received: by 2002:adf:d1c9:0:b0:20f:c3dc:e980 with SMTP id b9-20020adfd1c9000000b0020fc3dce980mr1546686wrd.552.1658477028567;
-        Fri, 22 Jul 2022 01:03:48 -0700 (PDT)
-Received: from [192.168.123.67] (ip-062-143-094-109.um16.pools.vodafone-ip.de. [62.143.94.109])
-        by smtp.gmail.com with ESMTPSA id j13-20020a5d448d000000b002167efdd549sm3836255wrq.38.2022.07.22.01.03.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 01:03:48 -0700 (PDT)
-Message-ID: <e485aa49-57e3-25d7-6ac8-0eed50e0d48d@canonical.com>
-Date:   Fri, 22 Jul 2022 10:03:47 +0200
+        Fri, 22 Jul 2022 04:04:45 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04hn0227.outbound.protection.outlook.com [52.100.17.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CCC9B54D;
+        Fri, 22 Jul 2022 01:04:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GpyBeq2h0BTjBTQQTl84XjjVNrY/2GknKCq2ALsq/IK564SbK5dDxhjRFTn99Ett9I3v2mg0hTKvNueJeNBbA8xBQ8NPvIVnFXKnQ5kqMDWRZNsNB1AEyfnIe9FAXuI+MtuWf8gv1iaZ0emL8biaMPsEZS+BCImgRO/37KfyfrnLZDHH3VOwj1jXLFi4rI4hYE8O7npw+goONFsbW8nnRKpUKNpV39KPdCDpGMhKkVuCBWHClwvuoix2jySaZFFdcQqD1hYTdSi5JaruEVY80Ndn9qBy90312DVr4uWj99sXIj9zX/vnQZ70HausrcFFeNTPZMrIWSOCtf4iRrTOZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NPRvuS1lylBXPFPS7bRSqdxncLyN3FrXzLFg1hRG9Ys=;
+ b=FMiwlrHIB7Sb2AgvKtyCc2pLLRJ0iZoDLsCpnJQh188/Agouu43oYrBerpGJ8yNrYNXS6yTvExEbH2W78Sqi/BksVkLIObh3/5h1e2/bAQE4GXIn25qmk4eSApxretftk2epZO3+AMZZHsLnyuq2y0B4mjO5lL+V5gXoRAfydfTuQ51qBs0ZNO+x1kUxcXmoxh5I62vFeMthUtpTpPv84XVNHORCULrpx1Kw/vHCHpcZsKpN+DKmMCGCNZ0AznezM2pgba6DZ4KBpmNODkOW2kjlNadCoIzLKLf9O2duCM6GIaZatNE7O8gfk4PF/YHGl81bhegPAYII8LT7NOt02Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none (sender ip is
+ 193.183.126.23) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=hkma-online.com; dmarc=none action=none
+ header.from=hkma-online.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Husqvarnagroup.onmicrosoft.com; s=selector1-Husqvarnagroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NPRvuS1lylBXPFPS7bRSqdxncLyN3FrXzLFg1hRG9Ys=;
+ b=kX3lXm0vuNHQ/uOJmyi7x5LqHOo1pB3fYZ+KXzSF9wXsfG4V+n5aJeXlZBEr/wnr9qE0JQ5ppEELYyyCQdtwHvSlDMoJBjZTyFA3kmLyKP/9VH4qZ+yFk/4A6AfVpuLeqbxQ1Iw/B2y5SEQItyUJbU+A0YSF6Fdj2dzsDr0ucq4=
+Received: from AS9PR06CA0096.eurprd06.prod.outlook.com (2603:10a6:20b:465::25)
+ by AS8PR04MB8515.eurprd04.prod.outlook.com (2603:10a6:20b:342::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Fri, 22 Jul
+ 2022 08:04:42 +0000
+Received: from AM5EUR02FT084.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:20b:465:cafe::c4) by AS9PR06CA0096.outlook.office365.com
+ (2603:10a6:20b:465::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19 via Frontend
+ Transport; Fri, 22 Jul 2022 08:04:42 +0000
+X-MS-Exchange-Authentication-Results: spf=none (sender IP is 193.183.126.23)
+ smtp.mailfrom=hkma-online.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hkma-online.com;
+Received-SPF: None (protection.outlook.com: hkma-online.com does not designate
+ permitted sender hosts)
+Received: from smtp.husqvarnagroup.com (193.183.126.23) by
+ AM5EUR02FT084.mail.protection.outlook.com (10.152.9.236) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5458.17 via Frontend Transport; Fri, 22 Jul 2022 08:04:41 +0000
+Received: from AS400TGT.CP.ELECTROLUX-NA.COM ([10.80.249.221]) by smtp.husqvarnagroup.com with Microsoft SMTPSVC(8.5.9600.16384);
+         Fri, 22 Jul 2022 10:04:19 +0200
+Received: from [107.161.81.132](107.161.81.132.static.quadranet.com[107.161.81.132])
+        by AS400TGT.CP.ELECTROLUX-NA.COM (IBM i SMTP 7.3.0) with TCP;
+        Fri, 22 Jul 2022 03:04:33 -0500
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.1
-Subject: Re: [PATCH 1/1] riscv: enable Docker requirements in defconfig
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
-        guoren@kernel.org, mchitale@ventanamicro.com,
-        arnaud.pouliquen@foss.st.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <mhng-679f197d-77a0-4dc5-9523-f7b88a22b30b@palmer-mbp2014>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <mhng-679f197d-77a0-4dc5-9523-f7b88a22b30b@palmer-mbp2014>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: Hello ....
+To:     Recipients <eddieyue@hkma-online.com>
+From:   "Mr. Eddie Yue" <eddieyue@hkma-online.com>
+Date:   Fri, 22 Jul 2022 16:04:10 +0800
+Reply-To: eddy@edyue.website
+Message-ID: <SW022024AU1O6YalkXh000095ae@smtp.husqvarnagroup.com>
+X-OriginalArrivalTime: 22 Jul 2022 08:04:19.0723 (UTC) FILETIME=[A55F95B0:01D89DA1]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: de65085c-d94f-464b-93de-08da6bb8d521
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8515:EE_
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?DdIawmxbT5yoSaphJkXL4XSIsSSWhV5ttCO3/wDFvqnzshR1tCv7g9vjEv?=
+ =?iso-8859-1?Q?bSvY7/jsXDXbdgjG0sRR2Vxs/X9DN4jmFPbof3b1a7CnvYLyLa5MTAAtgY?=
+ =?iso-8859-1?Q?jTJZIZ2q4Fq7cdO+owKRHy3RJpdV8Y7Q9Ylq/n+kcJTzuo2U+1ttKJMV4N?=
+ =?iso-8859-1?Q?9o8X+vK8YTxBQddBLwjfXJ5MByV0vJVqSGwmSxHIS5LCmTDnt7ZZN7hHJW?=
+ =?iso-8859-1?Q?HX1Q8f41nQCwblHC3yaJT46wX/zmza2Xo80Ec1CXSxghosB+agZEd1S+Up?=
+ =?iso-8859-1?Q?lC1Ve6lERb6OO2oCeQnWZnVAGawDuxTP3wEBEz0p+Om+shRj49RyXyeL6n?=
+ =?iso-8859-1?Q?XH3sAjeNFUFzwQkR58R+NzBBcQefl+PwtyazTRMBJIOxJT96DeSFuf+U9e?=
+ =?iso-8859-1?Q?dq/bcGlugB1xhcOFViE8fN6eO/aI+RZQ3mZikvkMjLlj5jTPLOcpsjKKfv?=
+ =?iso-8859-1?Q?gEPTz5tDa6EHQrYBPkhYZqyL8rir46LnKDS0h4LgnlXDKlLgfUpJ37Q9Q2?=
+ =?iso-8859-1?Q?ax8l5w88MvTud9YGxQCWn2pDprE+WNrqOjcZk/4gJFX9RJXJdQ5GSq/peL?=
+ =?iso-8859-1?Q?WyKRDU1dCk0Mv1QOYs1NfWNvtbCjN05O88QXYmcS7PS7RR2/WsgCRv38q4?=
+ =?iso-8859-1?Q?zLfEpVlry53KjUoyhRDG2MB3ErX95hnYA97UClIapIgTlaOFb5X6OHWbyv?=
+ =?iso-8859-1?Q?0MTJBx9CwLqzm8z7Er+UzTUZS+oXkKFmpG2D3R7UgbQENMklh+rBzOzthA?=
+ =?iso-8859-1?Q?7vfARWwKHLdeD3msZ2lYobeEsaxJrNg/cu8qMYfJiNd6nGQGF8LJLm1nLY?=
+ =?iso-8859-1?Q?CgD33q3G24riJSMFtdZzTLPz681tHo09AFXuN68NduArbQ4txJiQPUXetQ?=
+ =?iso-8859-1?Q?gSPD9lW9Q7B3S9xIsDK15ulUPF6JpR0Zn5Akqnk24p5sLnPhrUOkhzq8Bz?=
+ =?iso-8859-1?Q?wXQ5YBxvvQMUM+l7o9bQwvdC8LK/ny4Mijxvi3wGVD2ZrPA+g7NWyvQpxo?=
+ =?iso-8859-1?Q?CcD1r7ZEJbnz9p0j8wdbpEt+hVqaRN41U2aCMMVoOVI3eEe8Jsw3qwyPNt?=
+ =?iso-8859-1?Q?21IG6Ir9JvWNZEU9DKB0CiDcjP1phPvNOQpJ7AIc1OzwnVNn3t0IcuGlSX?=
+ =?iso-8859-1?Q?SrGtYazYfOWnXiQ3kTWqzwVcMvaC3tvCMUBLD6EoHa0N2Mw2fdw3CVhSWh?=
+ =?iso-8859-1?Q?EEl/mxJ0DaxjpOaDUGuLhcxwwmwxhUP5Fx5P+JlDryEo8mu8KWdL/BwfAh?=
+ =?iso-8859-1?Q?iYZCkX9GNjbp2Z/BnU08CO27fGmNODw8BaJq1jj3lTrqPcd4lmqxR0Umr0?=
+ =?iso-8859-1?Q?s5efNxE1RVRFSVSX8xuazAG3KWwtGGcyGNN3yDJPvX1Y7qfyjywDszRHpC?=
+ =?iso-8859-1?Q?KXHA9T09iC9yxizsc24KTJecRxdRCcnws+2GoZkO09RxPe5TullVtlfpmC?=
+ =?iso-8859-1?Q?gNSJwNaeyclJtUK9XBQsCw7lFCJNW8GZCyQgXCmrqrnMq+H3gL93RUUT2r?=
+ =?iso-8859-1?Q?U=3D?=
+X-Forefront-Antispam-Report: CIP:193.183.126.23;CTRY:SE;LANG:en;SCL:9;SRV:;IPV:NLI;SFV:SPM;H:smtp.husqvarnagroup.com;PTR:InfoDomainNonexistent;CAT:OSPM;SFS:(13230016)(4636009)(376002)(39860400002)(136003)(346002)(396003)(46966006)(40470700004)(450100002)(41300700001)(40480700001)(9686003)(316002)(26005)(6666004)(508600001)(6200100001)(2906002)(35950700001)(4744005)(70206006)(8676002)(70586007)(82310400005)(7116003)(5660300002)(6862004)(8936002)(83380400001)(81166007)(86362001)(3480700007)(356005)(956004)(82740400003)(40460700003)(336012)(47076005)(62346012);DIR:OUT;SFP:1501;
+X-OriginatorOrg: Husqvarnagroup.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2022 08:04:41.9154
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: de65085c-d94f-464b-93de-08da6bb8d521
+X-MS-Exchange-CrossTenant-Id: 2a1c169e-715a-412b-b526-05da3f8412fa
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=2a1c169e-715a-412b-b526-05da3f8412fa;Ip=[193.183.126.23];Helo=[smtp.husqvarnagroup.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM5EUR02FT084.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8515
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_40,DKIM_ADSP_NXDOMAIN,
+        DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,HK_NAME_MR_MRS,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 07:06, Palmer Dabbelt wrote:
-> On Tue, 07 Jun 2022 17:02:51 PDT (-0700), 
-> heinrich.schuchardt@canonical.com wrote:
->> The defconfig kernel should be able to run Docker.
->>
->> Enable the missing settings according to [1].
->> make savedefconfig eliminates CONFIG_STACKTRACE
->> which is enabled by default.
->>
->> Many of the settings are also needed to run a defconfig kernel
->> on default distro installations or to run snaps.
->>
->> [1] https://github.com/moby/moby/blob/master/contrib/check-config.sh
->>
->> Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
->> ---
->> Cf. [PATCH] arm64: Enable docker support in defconfig
->> https://lore.kernel.org/lkml/20220606140103.32779-1-vincenzo.frascino@arm.com/
->> ---
->>  arch/riscv/configs/defconfig | 65 +++++++++++++++++++++++++++++++++++-
->>  1 file changed, 64 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
->> index 0cc17db8aaba..d4fffcd3cc05 100644
->> --- a/arch/riscv/configs/defconfig
->> +++ b/arch/riscv/configs/defconfig
->> @@ -6,8 +6,18 @@ CONFIG_BPF_SYSCALL=y
->>  CONFIG_IKCONFIG=y
->>  CONFIG_IKCONFIG_PROC=y
->>  CONFIG_CGROUPS=y
->> +CONFIG_MEMCG=y
->> +CONFIG_BLK_CGROUP=y
->>  CONFIG_CGROUP_SCHED=y
->>  CONFIG_CFS_BANDWIDTH=y
->> +CONFIG_RT_GROUP_SCHED=y
->> +CONFIG_CGROUP_PIDS=y
->> +CONFIG_CGROUP_FREEZER=y
->> +CONFIG_CGROUP_HUGETLB=y
->> +CONFIG_CPUSETS=y
->> +CONFIG_CGROUP_DEVICE=y
->> +CONFIG_CGROUP_CPUACCT=y
->> +CONFIG_CGROUP_PERF=y
->>  CONFIG_CGROUP_BPF=y
->>  CONFIG_NAMESPACES=y
->>  CONFIG_USER_NS=y
->> @@ -28,9 +38,11 @@ CONFIG_KVM=m
->>  CONFIG_JUMP_LABEL=y
->>  CONFIG_MODULES=y
->>  CONFIG_MODULE_UNLOAD=y
->> +CONFIG_BLK_DEV_THROTTLING=y
->>  CONFIG_NET=y
->>  CONFIG_PACKET=y
->>  CONFIG_UNIX=y
->> +CONFIG_XFRM_USER=m
->>  CONFIG_INET=y
->>  CONFIG_IP_MULTICAST=y
->>  CONFIG_IP_ADVANCED_ROUTER=y
->> @@ -38,7 +50,43 @@ CONFIG_IP_PNP=y
->>  CONFIG_IP_PNP_DHCP=y
->>  CONFIG_IP_PNP_BOOTP=y
->>  CONFIG_IP_PNP_RARP=y
->> +CONFIG_INET_ESP=m
->> +CONFIG_NETFILTER=y
->> +CONFIG_BRIDGE_NETFILTER=m
->> +CONFIG_NF_CONNTRACK=m
->> +CONFIG_NF_CONNTRACK_FTP=m
->> +CONFIG_NF_CONNTRACK_TFTP=m
->> +CONFIG_NETFILTER_XT_MARK=m
->> +CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
->> +CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
->> +CONFIG_NETFILTER_XT_MATCH_IPVS=m
->> +CONFIG_IP_VS=m
->> +CONFIG_IP_VS_PROTO_TCP=y
->> +CONFIG_IP_VS_PROTO_UDP=y
->> +CONFIG_IP_VS_RR=m
->> +CONFIG_IP_VS_NFCT=y
->> +CONFIG_NF_LOG_ARP=m
->> +CONFIG_NF_LOG_IPV4=m
->> +CONFIG_IP_NF_IPTABLES=m
->> +CONFIG_IP_NF_FILTER=m
->> +CONFIG_IP_NF_TARGET_REJECT=m
->> +CONFIG_IP_NF_NAT=m
->> +CONFIG_IP_NF_TARGET_MASQUERADE=m
->> +CONFIG_IP_NF_TARGET_REDIRECT=m
->> +CONFIG_IP_NF_MANGLE=m
->> +CONFIG_NF_LOG_IPV6=m
->> +CONFIG_IP6_NF_IPTABLES=m
->> +CONFIG_IP6_NF_MATCH_IPV6HEADER=m
->> +CONFIG_IP6_NF_FILTER=m
->> +CONFIG_IP6_NF_TARGET_REJECT=m
->> +CONFIG_IP6_NF_MANGLE=m
->> +CONFIG_BRIDGE=m
->> +CONFIG_BRIDGE_VLAN_FILTERING=y
->> +CONFIG_VLAN_8021Q=m
->> +CONFIG_NET_SCHED=y
->> +CONFIG_NET_CLS_CGROUP=m
->>  CONFIG_NETLINK_DIAG=y
->> +CONFIG_CGROUP_NET_PRIO=y
->>  CONFIG_NET_9P=y
->>  CONFIG_NET_9P_VIRTIO=y
->>  CONFIG_PCI=y
->> @@ -57,7 +105,15 @@ CONFIG_SCSI_VIRTIO=y
->>  CONFIG_ATA=y
->>  CONFIG_SATA_AHCI=y
->>  CONFIG_SATA_AHCI_PLATFORM=y
->> +CONFIG_MD=y
->> +CONFIG_BLK_DEV_DM=m
->> +CONFIG_DM_THIN_PROVISIONING=m
->>  CONFIG_NETDEVICES=y
->> +CONFIG_DUMMY=m
->> +CONFIG_MACVLAN=m
->> +CONFIG_IPVLAN=m
->> +CONFIG_VXLAN=m
->> +CONFIG_VETH=m
->>  CONFIG_VIRTIO_NET=y
->>  CONFIG_MACB=y
->>  CONFIG_E1000E=y
->> @@ -105,7 +161,11 @@ CONFIG_RPMSG_CTRL=y
->>  CONFIG_RPMSG_VIRTIO=y
->>  CONFIG_EXT4_FS=y
->>  CONFIG_EXT4_FS_POSIX_ACL=y
->> +CONFIG_EXT4_FS_SECURITY=y
->> +CONFIG_BTRFS_FS=m
->> +CONFIG_BTRFS_FS_POSIX_ACL=y
->>  CONFIG_AUTOFS4_FS=y
->> +CONFIG_OVERLAY_FS=m
->>  CONFIG_MSDOS_FS=y
->>  CONFIG_VFAT_FS=y
->>  CONFIG_TMPFS=y
->> @@ -119,6 +179,10 @@ CONFIG_ROOT_NFS=y
->>  CONFIG_9P_FS=y
->>  CONFIG_NLS_CODEPAGE_437=y
->>  CONFIG_NLS_ISO8859_1=m
->> +CONFIG_SECURITY=y
->> +CONFIG_SECURITY_SELINUX=y
->> +CONFIG_SECURITY_APPARMOR=y
->> +CONFIG_DEFAULT_SECURITY_DAC=y
->>  CONFIG_CRYPTO_USER_API_HASH=y
->>  CONFIG_CRYPTO_DEV_VIRTIO=y
->>  CONFIG_PRINTK_TIME=y
->> @@ -137,7 +201,6 @@ CONFIG_DEBUG_SPINLOCK=y
->>  CONFIG_DEBUG_MUTEXES=y
->>  CONFIG_DEBUG_RWSEMS=y
->>  CONFIG_DEBUG_ATOMIC_SLEEP=y
->> -CONFIG_STACKTRACE=y
->>  CONFIG_DEBUG_LIST=y
->>  CONFIG_DEBUG_PLIST=y
->>  CONFIG_DEBUG_SG=y
-> 
-> Sorry for being so slow here.  I don't have any issues with this as a 
-> concept, but it makes a handful of my test configs panic on boot.  Seems 
-> like something is tripping up a kasan failure.  I guess it's kind of 
+Hello,
 
-Hello Palmer,
 
-thanks for sharing your test experience. Could you, please, provide the 
-config file and the test configuration that leads the regression.
 
-> arbitrary to call that a regression, as I'm sure it's just uncovering 
-> some issue that already exists, but turning something on in defconfig 
-> that panics with kasan is going to have a bunch of fallout.
-> 
-> It looks like BLK_CGROUP is the problem here, so if you're OK with it 
-> then I'm happy to take the rest of these.  I put that over at 
-> kernel.org/palmer/linux/riscv-docker_no_blk_cgroup, if that's OK I'll 
-> cherry-pick it onto for-next.
+I have an Obligation I will like you to complete for me, I am ready to give=
+ you a commission for your time. Reply for details.
 
-I am fine with cherry picking.
 
-Best regards
+Mr. Eddie Yue
 
-Heinrich
 
-> 
-> There's almost certainly a bug here that warrants fixing.
-
+The information in this email may be confidential and/or legally privileged=
+. It has been sent for the sole use of the intended recipient(s). If you ar=
+e not an intended recipient, you are strictly prohibited from reading, disc=
+losing, distributing, copying or using this email or any of its contents, i=
+n any way whatsoever. If you have received this email in error, please cont=
+act the sender by reply email and destroy all copies of the original messag=
+e. Please also be advised that emails are not a secure form for communicati=
+on, and may contain errors.

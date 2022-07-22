@@ -2,124 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1965E57DCFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F12A57DCF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbiGVIzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S234007AbiGVIy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiGVIyC (ORCPT
+        with ESMTP id S234422AbiGVIyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:54:02 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2117.outbound.protection.outlook.com [40.107.223.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D199FA0B80;
-        Fri, 22 Jul 2022 01:53:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bUT4P7/7GAhzNPvYajhMGiLj4XXUPOgJ/o7ZlKCLaVSdG0pZV3VBFZswIjZMAGJbjuOkEenDHRRAyN3vtbOq7JSKLj4coMmcrWlSCZugiAT5AguRNMaoOcy2zWmEKU3aFwGfiOpTTiz827Tkhz6c2Udj/juKyuWYGZ2u4BWRfSfI6Cao9eTt4TU2OXdjxzv1x7+YlexnpIBVycYUDW8W7BNS3wrSY0QoP64JvTXO3DcGZrWA6psa80RMZ/nyGnyGnwip8fDQa3FOUs5SEZEoOI7MrhbpyEtVJoOqCCHnxhIr7w4F2v93xho02VnQTZZae4cmzTvfauf6SeV17ZqQYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gVwRpbipWuWX8pljeQzZQrRNdqFLoWAYvGc/vW1we4U=;
- b=I7FepW0g/8AeWELhv0dd08JQI594/gIniY4KHceMn34rV8u1AKA6S/kjExHpb96qIrR23HRQj0HVlmsIT9OcWI0dOpoZUVMEI6eops1X8YJ0OP5lw1+bxkKVqizbE2HfGWR/PVwVSwRChGg7KFAEjUhgTJKiYePSffTZMeMoy/AOI+aYO8/gCZkwGVDtovHkgndfxB93ybiFMp/dNdD8u1vt7Bqeu86RlMFMj+arFGrv4oebMh+fuS8CMb+9FGdn4qUWYgLDKsq3dqi5iRME0PIaKeBQ1X29p79oALQ/cVRYnbCBHhWZ5J4xBVS8AezMu0+fzV6PFrq5X1jFKXXzug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gVwRpbipWuWX8pljeQzZQrRNdqFLoWAYvGc/vW1we4U=;
- b=l40/X6xEgKdhCjzgMP1ETAJmmux6HLJhUzTOUaJmZCpTl1rHwuWZQmrDFtOkGVL9fQHXmrKEacG9vW56aDNAAnepRoC8ZY8uTIpzuvMwYlWeuftWJgsRYz9kYBq0O7fXJUk9VoFtYrHYgOXxkWWf3cBi5KSXg0RUni1RyGV/2jE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CO1PR13MB5046.namprd13.prod.outlook.com (2603:10b6:303:f4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.1; Fri, 22 Jul
- 2022 08:53:38 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::a1e6:3e37:b3f3:7576]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::a1e6:3e37:b3f3:7576%9]) with mapi id 15.20.5482.001; Fri, 22 Jul 2022
- 08:53:38 +0000
-Date:   Fri, 22 Jul 2022 10:53:31 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        oss-drivers@corigine.com, netdev@vger.kernel.org
-Subject: Re: [PATCH] nfp: bpf: Fix typo 'the the' in comment
-Message-ID: <Ytpli3DNkg1HlJJ1@corigine.com>
-References: <20220722082027.74046-1-slark_xiao@163.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722082027.74046-1-slark_xiao@163.com>
-X-ClientProxiedBy: AM0PR02CA0102.eurprd02.prod.outlook.com
- (2603:10a6:208:154::43) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Fri, 22 Jul 2022 04:54:08 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A769A0B89;
+        Fri, 22 Jul 2022 01:53:45 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id o1so3132001qkg.9;
+        Fri, 22 Jul 2022 01:53:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mkGCXdGrrR21H+gPhC+HTZtp3NIUq/FDdVR5xNrLgrU=;
+        b=n62ZjNsoIMLr1NMdeouw1ULM32KQyppQ9oSZWuxAEyzWBCSDa0A8+vIFokB4VeidcK
+         rmg9vxGwfmC2SNsTx5rGXjNK4jzn0eG64iW+hMAh97tAYXjD15DAjpFPHhjvwjFMZFTk
+         MpcYb/PtIFg2MkK5NJBqbDsNzXqIe4cbFFwx9k6uWcUbI2+vE7OFNw8GmBT4uPniNSKV
+         g7xz8bJY+qMU97mplvvc8eUNPAD5dITBWd1Ci3ntKhK5+43B1SzxGuOI1whBjelfMku5
+         GOp9JEEsgjFg1Br7HHSAkDulZdj2bOe4Mex+N82z6VSVecxRuIgTH1nrXoIVXGd6YQz8
+         KvUg==
+X-Gm-Message-State: AJIora98V06g36QJ1HXLdRdCLqZrKH8VGioeoMRlIjUBf906/TbRfHOo
+        Mge161S6wXHKs3KQEgKcHG59hUxkq3s89A==
+X-Google-Smtp-Source: AGRyM1tRZaiH7NkhwV1WjAGSZ9ku1vt9TeyqfZKJSRJRCn5R0sYUj7tGBc8Z750GVDs04IR/darABA==
+X-Received: by 2002:a05:620a:4606:b0:6b6:1df6:8ea7 with SMTP id br6-20020a05620a460600b006b61df68ea7mr1734143qkb.276.1658480024470;
+        Fri, 22 Jul 2022 01:53:44 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id s34-20020a05622a1aa200b003177969a48fsm2842952qtc.21.2022.07.22.01.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 01:53:43 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id r3so6970327ybr.6;
+        Fri, 22 Jul 2022 01:53:43 -0700 (PDT)
+X-Received: by 2002:a25:bc8e:0:b0:66e:fe43:645c with SMTP id
+ e14-20020a25bc8e000000b0066efe43645cmr2054022ybk.202.1658480022775; Fri, 22
+ Jul 2022 01:53:42 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b5d5a489-ae83-44e8-5663-08da6bbfaac7
-X-MS-TrafficTypeDiagnostic: CO1PR13MB5046:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: liqj1lfQQvC4j8YN+N7RAd6eRSilZIh551Sd5oDRyj7+M/QjjyzeG2Z80bAlIsGdt1KH9FFhVJkvOkXtx7RGef0WyYu2pc3AS+/ExodyXBhLovYPFIB3GftVA+411Hcqg4KbfXuY+jEHbiBYflacAa8rjqzakLv0aRCKf6KJNiDP8m8fnnJfnqN2o1r8fFetZmzC6hbDhphpfsjm5wpmPc8do89VAs+k33VD8sUkAx6txQXN2YY/b2rzYbX6Esw6rFH7VAD+IHv0AdlEwOResE1zefMOi+1P+E1ymSnO+hQSYbzkbJI0XOWJvFuJpQEZPp5NnBND+tkbBqX7Se+zYlI4zAU3kYDLigLc6cy8q5FfGJlh8SW+TAxtgG71kT0/WEPlwE6gPDlvfBYSPxc+OBpGYrag8mFDkyq9x4JTz/hs6jzcMtF1QTZRD4Ti5iCTSJo6M1MqL5mPBsAzj8k8HQXtteBKWKMT19jJLWBzfyn15WEFI97abpHAV/5Am8qci76VKqDVXwaHV+WisnjP3lWekPJGY/0ew2tzsDGgL7gKd2UikW+/z/2WOvRFOsnn+WraVDQfCGw1YbF77RI+tBi569Cr1ZmdS97tkUpqpTyv+QaGNo+ZtWyMK3EK1igsLkesNB7GrA3ONWELR1NAjCkgEqaCuFnK1z8R19olXM39+kMvQgk4iNsDyobo5hSKr+IkMqkzIBgEnELVumTI9upNDBJEbkXIF0NvtapAe/80mx1XxU1DvPpJzk7YexCo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39830400003)(346002)(376002)(396003)(366004)(136003)(66476007)(186003)(66556008)(4326008)(8676002)(36756003)(52116002)(66946007)(6666004)(41300700001)(2906002)(2616005)(6506007)(6512007)(6916009)(6486002)(558084003)(86362001)(8936002)(44832011)(316002)(5660300002)(38100700002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3ChEa5G3C2j1ilNXtU5hlE8+j1YaIifRrBZn3Pdu/Amr+/ci+qzsYL4O+eQK?=
- =?us-ascii?Q?iP+KtrOR42thNFb2MWjyRq7uGq6jNIblMTlA7uFWZJOqTGVQElMqu+UQ1Ttq?=
- =?us-ascii?Q?Wmrz7V1m7O+RRpUJ5+DyznD/JvjLZPVimc0abZeud8iFyczKhYhANhdQy1Da?=
- =?us-ascii?Q?NhAGx4no2ojIWI1sWsaUPANmN+OnwbzdO4YcZ/KPG5AvhfxOj6U26n3G3PNI?=
- =?us-ascii?Q?W8VR1jJCLQJZzlrKj73zuPj76AT8CV6DP4T9DIK5RdwQvfWcBpWnf2e2Aa84?=
- =?us-ascii?Q?T6NiBgQkA/tEQFOALzXjP8jM2xjZiezCoC3w2ID9KZe0tWoCmBDc9cByaOfE?=
- =?us-ascii?Q?jkHG4rdWyLtquVd5EaGKxsjcAY2ZVnznhPH1AK1oJFFYG2UTGqnERjIzJfyF?=
- =?us-ascii?Q?+O/yvOyYbd98jiEM2o2RPBrMPGKWygLG7PnC19zgkA6WFSStcDGP0vJa8YYQ?=
- =?us-ascii?Q?AYdBvLx2ZNO+2wcH2AmJjc+c3MGXkFivpNT9emkS6df8aq/Jn1E7ZnjH1HwS?=
- =?us-ascii?Q?t/Mz6AKr+fgTYhSDgWkU5DKhhSF6k8jhYxdugr9Ooo3gZxsKvuWBUC0kwjUn?=
- =?us-ascii?Q?gcAa0U2QjyqO6IRv7T05GNSuy3DDYkc2IYdetfgN1sZTZBdLZmSAcMGUnCNA?=
- =?us-ascii?Q?AnGE0Rtnc33si3uuyVZCpohl03TdWZnKtH/QhlBc7cCg0msn4OS0DMSv2r8X?=
- =?us-ascii?Q?u1heNvXtjccGv8tqIC0yrU8qxx7Ao7YpJLmqxUOIt+aY2xKaZDGlsMoCAVoB?=
- =?us-ascii?Q?2vcKIai+aVV6faPgsrIP2EufDMqagmPO6BNrWeObGMs7xfkOADKrBsJK/qI/?=
- =?us-ascii?Q?6MekPXSMNKf6CcMRqZGOlVCPi+nNU7U0ZWBcvhnxrBJ8NQyfCn7I2cWipCau?=
- =?us-ascii?Q?PO8wZxlk7D2x//6dsk4PJh8a2R8uv35TyNDDreQWva9IZmAftTVh8QwUkzE3?=
- =?us-ascii?Q?0djBf8umjXzbHJYXnGbUoXAlcL7yeCC/85AjMQvvW6wI85mvKkRkehKvw3q6?=
- =?us-ascii?Q?oANY40PLjv603qwnGkOrTRDk8JHinCbnG2KaRvG+5kbfh16ayK7P8banvxct?=
- =?us-ascii?Q?hSe9HFI9/wi+/kHvbpooshTNZ7mdbt6i9YC/pij1hBTMp4XQn/eF7wYToVQ6?=
- =?us-ascii?Q?dV4K8t4aGzE9KyuD05PEkQeznZpBzDL3L8SJlyAw5RZI5gEdHDOY5mfzABLX?=
- =?us-ascii?Q?b+BR7PKUtMK7OU3rOCH6sBS/vTIY3CBMhxhcSIsVT7S6XxMyhmxYtl1X5VLO?=
- =?us-ascii?Q?EGUzoH41/nuISkpy98nQpCHrLjFEmVsVseFqQNDIQ/FJk1i2Shtv6+s/vYwC?=
- =?us-ascii?Q?GNJimQPqgx6MCx15xB8K5YIGFlzSW9IaNzxCdqQ39CGaOwpMXkpktAAta1yr?=
- =?us-ascii?Q?c37a8Qd8ArpsmjOWXEzSCexSJXe3/DPuut1w2Ir2D0bTIr5cnIdr9PBbfISi?=
- =?us-ascii?Q?TBIRhWMn10OhkJiWzC27Cvoy8RJGXfcs5bMWumKfm8+69uGso5i2Fi7Ye/RQ?=
- =?us-ascii?Q?NzwA6kMiZmUf9EjPj6Ir3/OeztXYYSXr/WW+EYhHZKZspxTN2G0/IRl9bPlf?=
- =?us-ascii?Q?ui7eUL9SRNSBzlSrSBCWTFBcx5+7i2e4PLTPBzpuwPI6DFsSo5IBkf6qgN+5?=
- =?us-ascii?Q?FzpFEsQJKc0+0lHOkitMoTRWbtRzmX6ieJpt42OrkgXXo0NdHYeUvPRX7s2p?=
- =?us-ascii?Q?H3O2qw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5d5a489-ae83-44e8-5663-08da6bbfaac7
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2022 08:53:37.9305
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HGyEY8AyL9Z6/QlpntnNTDR0NLeqzSh/+CAQy6pPUdgMpOipNr2FLGYrVh1VyK6mUnVf8Q2ERzQyJ09ILlp4Ag/oOwpAhowRvjgfNy+JCXA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB5046
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220630195703.10155-1-bvanassche@acm.org> <20220630195703.10155-3-bvanassche@acm.org>
+ <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
+ <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org> <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
+ <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
+ <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org> <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
+ <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org> <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
+ <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
+In-Reply-To: <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 22 Jul 2022 10:53:31 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
+Message-ID: <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
+        jason600.groome@gmail.com,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 04:20:27PM +0800, Slark Xiao wrote:
-> Replace 'the the' with 'the' in the comment.
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Hoi Bart,
 
-Thanks for noticing this and helping to improve the NFP driver.
+On Thu, Jul 21, 2022 at 8:15 PM Bart Van Assche <bvanassche@acm.org> wrote:
+> On 7/21/22 01:07, Geert Uytterhoeven wrote:
+> > On Wed, Jul 20, 2022 at 8:04 PM Bart Van Assche <bvanassche@acm.org> wrote:
+> >> That's surprising. Is there anything unusual about the test setup that I
+> >> should know, e.g. very small number of CPU cores or a very small queue
+> >> depth of the SATA device? How about adding pr_info() statements at the
+> >> start and end of the following functions and also before the return
+> >> statements in these functions to determine where execution of the START
+> >> command hangs?
+> >> * sd_start_done().
+> >> * sd_start_done_work().
+> >
+> > None of these functions seem to be called at all?
+>
+> That's weird. This means that either sd_submit_start() hangs or that the
+> execution of the START command never finishes. The latter is unlikely
+> since the SCSI error handler is assumed to abort commands that hang. It
+> would also be weird if sd_submit_start() would hang before the START
+> command is submitted since the code flow for submitting the START
+> command is very similar to the code flow for submitting the START
+> command without patch "scsi: sd: Rework asynchronous resume support"
+> (calling scsi_execute()).
 
-Acked-by: Simon Horman <simon.horman@corigine.com>
+I think you misunderstood: none of these functions seem to be called,
+even when reading from hard drive works fine.
+
+> What is also weird is that there are at least two SATA setups on which
+> this code works fine, including my Qemu setup.
+>
+> Although it is possible to enable tracing at boot time, adding the
+> following parameters to the kernel command line would generate too much
+> logging data:
+>
+> tp_printk
+> trace_event=block_rq_complete,block_rq_error,block_rq_insert,block_rq_issue,block_rq_merge,block_rq_remap,block_rq_requeue,scsi_dispatch_cmd_done,scsi_dispatch_cmd_start,scsi_eh_wakeup,scsi_dispatch_cmd_error,scsi_dispatch_cmd_timeout
+> scsi_mod.scsi_logging_level=32256
+>
+> I'm not sure what the best way is to proceed since I cannot reproduce
+> this issue.
+
+During s2idle, the following trace data is generated:
+
+   kworker/u16:9-325     [000] ...2.   230.478731: block_rq_issue: 8,0
+N 0 () 0 + 0 [kworker/u16:9]
+   kworker/u16:9-325     [000] ...2.   230.478745:
+scsi_dispatch_cmd_start: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=0
+cmnd=(SYNCHRONIZE_CACHE - raw=35 00 00 00 00 00 00 00 00 00)
+          <idle>-0       [007] d.h3.   230.478832:
+scsi_dispatch_cmd_done: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=0
+cmnd=(SYNCHRONIZE_CACHE - raw=35 00 00 00 00 00 00 00 00 00)
+result=(driver=DRIVER_OK host=DID_OK message=COMMAND_COMPLETE
+status=SAM_STAT_GOOD)
+          <idle>-0       [000] ..s2.   230.478851: block_rq_complete:
+8,0 N () 18446744073709551615 + 0 [0]
+   kworker/u16:9-325     [000] ...2.   230.483134: block_rq_issue: 8,0
+N 0 () 0 + 0 [kworker/u16:9]
+   kworker/u16:9-325     [000] ...2.   230.483136:
+scsi_dispatch_cmd_start: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=1
+cmnd=(START_STOP - raw=1b 00 00 00 00 00)
+          <idle>-0       [007] d.h3.   230.624530:
+scsi_dispatch_cmd_done: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=1
+cmnd=(START_STOP - raw=1b 00 00 00 00 00) result=(driver=DRIVER_OK
+host=DID_OK message=COMMAND_COMPLETE status=SAM_STAT_GOOD)
+          <idle>-0       [000] d.s4.   230.624634: scsi_eh_wakeup: host_no=0
+          <idle>-0       [000] ..s2.   230.624642: block_rq_complete:
+8,0 N () 18446744073709551615 + 0 [0]
+  kworker/u16:14-1027    [007] d..3.   231.393642: scsi_eh_wakeup: host_no=0
+
+When reading from hard drive after s2idle, no more trace data
+is generated.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

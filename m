@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E4557D7DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1A957D7E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbiGVArh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        id S233397AbiGVAy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGVAre (ORCPT
+        with ESMTP id S229508AbiGVAyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:47:34 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F223695C34;
-        Thu, 21 Jul 2022 17:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658450854; x=1689986854;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HBJqZGyWi9totiLB0aQgThUb1NiiNeVNF5WEw5qkAzU=;
-  b=Fc217rCG75hflZYUUaf+SXGKcNg8UGhS7SKodAsiEJ050oep+mrlLQCw
-   0jbmB4i9TbG8QHgUdi8FeAidwGq1nUz48hESpFWY06X9n8mYau+aHAYRv
-   rgKfqsr2UOvzyAXnD4plCA4WqSEJUqP2lO33BbiO5K1as2y1SLs6zEkzJ
-   IthysamgPQNXGpJtQT6827K/9xyXdsZHqyk5H2dDLUhZ1oASGqP0YMGj/
-   nqSM8chCsDvOL0BW0T7yYkXrPQ7e9CZaKgHxUY5YrV8qE7nUyrMhwzz6v
-   bbmB9ghdftDn3iw6HUWaXGkV9rNco9iyEP5TTUDoy6A+rwQbrYz2kEODI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="288377322"
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="288377322"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 17:47:24 -0700
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="656997021"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 17:47:23 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Only check tasks blocked on leaf rcu_nodes for PREEMPT_RCU
-Date:   Fri, 22 Jul 2022 08:52:13 +0800
-Message-Id: <20220722005213.3511188-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Jul 2022 20:54:53 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2EC95C3F
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:54:52 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id j22so6025159ejs.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:54:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U8J/Z5o8rP43OFNK4dwBwF5FHxDhcbpnryZtpACIPwU=;
+        b=aakNHfhMNCA0Ayjj5tI1Ms0awBaD3YllV8NPK58+gKhSeUP1jJPwOhaWZhyYmdCU+/
+         6BulWvYbOgQK+FnZ0gds7HGdnRuC+2FVN1Vpre7P3BF8b7DbG9CieOE1SxfIBFF9whwq
+         AYQn4tOGAWlb0quQAOQ2AMk8VeEmg75zQzeQIdvyImKWNGHUvH6GSJDAUlgL2EyXzW4x
+         iCqBRjFtavWA5jJU7BSqJ7xa1dJhU/CDE+7SQB3B5qm6V+zQ12QME6KJkaaJOqawRDc2
+         D2JjOosC7qxjEpplxHSnlP1CrtEWAGgCu1cxAf5By3vLp4reWfCmo8S4lJ3RPC41VDin
+         WtFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U8J/Z5o8rP43OFNK4dwBwF5FHxDhcbpnryZtpACIPwU=;
+        b=asbM8RlnQyH9sGmjZO7eWBHPvRulcs6tWvm0+9PKUs4RSuhyUqWDBRoJC2PLQO5RG1
+         qIsgmvboreHQ80YyfEGr7hb86h0+eJiBHYqliIwb0wk46/ZDKu7V83Zw5qct2SPun9GP
+         3dYb2Ssf75f+0S2mhoGq/JRXJmDYNXSvr5iQDgLpTH8O+GpUo63VH1jYWJA5Lwq9wrSK
+         RfVJLt43Eho3wXA1gGDLbGHRJsbp+9HN3OO+9LaUmcuqSHxlLOASG1FQWafwelJZ3eA0
+         YrSin6tr1ywc7VDiyylF2vJEgTnyHbrjvijsECx51gK4ChEoDiK/feOCKqPEuNU0cdzw
+         1YvA==
+X-Gm-Message-State: AJIora/pONIiWNwSP7d4LHZ+YSCcuG8760aUyeV2hPJtpPMglZhTdMX8
+        oHdcMflRfwEg5LzlbwCZklnfa6S/v4/yIPTEYZQfRw==
+X-Google-Smtp-Source: AGRyM1uDxgMvrFAGOH8NXgwd24p1U2/l21XSULTaM0eD9AEgA+DYH5MNUIJIQI2mbjPa9ZYg3esSksCRsYBkV4p1gVA=
+X-Received: by 2002:a17:907:7d8b:b0:72f:2306:329a with SMTP id
+ oz11-20020a1709077d8b00b0072f2306329amr954052ejc.369.1658451290242; Thu, 21
+ Jul 2022 17:54:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220721081026.1247067-1-sadiyakazi@google.com>
+In-Reply-To: <20220721081026.1247067-1-sadiyakazi@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 21 Jul 2022 17:54:38 -0700
+Message-ID: <CAGS_qxoE7F0iWCghO2BmK+-4k-cicriGUaTuE_86oSFP_dBeBQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: kunit: Add CLI args for kunit_tool
+To:     Sadiya Kazi <sadiyakazi@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net, mairacanal@riseup.net,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In PREEMPT_RCU kernel, for multi-node rcu tree, if the RCU read
-critical section is preempted, the current task are only queued
-leaf rcu_node blkd list, for single-node rcu tree, the root node
-is also leaf node.
+On Thu, Jul 21, 2022 at 1:26 AM 'Sadiya Kazi' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> Run_wrapper.rst was missing some command line arguments. Added
+> additional args in the file.
+>
+> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
 
-This commit add rcu_is_leaf_node() to filter out checks for non-leaf
-rcu_node.
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_plugin.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Looks good!
+A minor suggestion down below to go along with what everyone else has said.
 
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index b2219577fbe2..a9df11ec65af 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -693,6 +693,8 @@ static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp)
- 
- 	RCU_LOCKDEP_WARN(preemptible(), "rcu_preempt_check_blocked_tasks() invoked with preemption enabled!!!\n");
- 	raw_lockdep_assert_held_rcu_node(rnp);
-+	if (!rcu_is_leaf_node(rnp))
-+		goto end;
- 	if (WARN_ON_ONCE(rcu_preempt_blocked_readers_cgp(rnp)))
- 		dump_blkd_tasks(rnp, 10);
- 	if (rcu_preempt_has_tasks(rnp) &&
-@@ -703,6 +705,7 @@ static void rcu_preempt_check_blocked_tasks(struct rcu_node *rnp)
- 		trace_rcu_unlock_preempted_task(TPS("rcu_preempt-GPS"),
- 						rnp->gp_seq, t->pid);
- 	}
-+end:
- 	WARN_ON_ONCE(rnp->qsmask);
- }
- 
-@@ -1178,7 +1181,8 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
-  */
- static void rcu_preempt_boost_start_gp(struct rcu_node *rnp)
- {
--	rnp->boost_time = jiffies + RCU_BOOST_DELAY_JIFFIES;
-+	if (rcu_is_leaf_node(rnp))
-+		rnp->boost_time = jiffies + RCU_BOOST_DELAY_JIFFIES;
- }
- 
- /*
--- 
-2.25.1
+> +- ``--qemu_config``: Specifies the path to a file containing a
+> +  custom qemu architecture definition. This should be a python file
+> +  containing a `QemuArchParams` object.
+> +
+> +- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-smp 8".
 
+Minor nit: I think ``-smp 8`` would be a bit better here.
+It feels like it would fit what we did with other example arguments.

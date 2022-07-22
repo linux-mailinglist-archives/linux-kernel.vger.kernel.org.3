@@ -2,71 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798F757E7A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4913757E7AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiGVTv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S236555AbiGVTz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiGVTv4 (ORCPT
+        with ESMTP id S231149AbiGVTz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:51:56 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322028AEF9;
-        Fri, 22 Jul 2022 12:51:51 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1658519506t4knvcvc
-Received: from harry-jrlc.. ( [125.70.163.183])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 23 Jul 2022 03:51:35 +0800 (CST)
-X-QQ-SSF: 0100000000200030C000B00A0000020
-X-QQ-FEAT: v5d6m16HONU6RjYpJcwTIXY2y/kYlrlOUh9nzBxdPV+3mDHO0T3BDtf5vxRrw
-        F6kCWQFo6dGfqgr6HLLPLr9eeDZqgqb1yBDtcYZZOYWYsNjL30WCpZ2uMQGTpyDkUFNUtrK
-        GLk663v9023NxRMV5kAqLn5uIFwCOnM3BAAyCjYtrMcR6Ko7EfUwkgPEnyh/AttqR2VTl2G
-        FmbrjdL6doHNgmVqZCr2LhfrdA4ARFnoaKMrY5IFq21tA1QxvrnXDojKFyc8jUaxToElgLp
-        xFP5hzucSg2xoA5l1grmFLoHSd87SOlwT8Ql/7/UFvga3ZV5uBO9znhOKH3VrE85du7uVQu
-        KXIRF2Z08yJGCau9PDESmSHfYocb7KfGG4fIDP6Yk2tXD7KKZ0=
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] hfsplus: Fix code typo
-Date:   Sat, 23 Jul 2022 03:51:33 +0800
-Message-Id: <20220722195133.18730-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 22 Jul 2022 15:55:26 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EA021252;
+        Fri, 22 Jul 2022 12:55:22 -0700 (PDT)
+Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mg6mM-1nZttn0Psc-00hcEN; Fri, 22 Jul 2022 21:55:21 +0200
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31e7055a61dso58108187b3.11;
+        Fri, 22 Jul 2022 12:55:20 -0700 (PDT)
+X-Gm-Message-State: AJIora/cAMhWTVJkIEDv24U5sMiKCvz1AxLinDg9sI5wyE15NzJd0ynp
+        DL+cE5i/1KKgQ/7+nKeMHR9l3129FrR2shCCjcs=
+X-Google-Smtp-Source: AGRyM1uXuwQnOqTAc2eAgULJ3gnB6/3HxjqG6YsVYm4rwIeb3o/ICJSu11fKuAtGWX5g0pRwxfQ7v0EfBH0rTQPFdhs=
+X-Received: by 2002:a0d:cec1:0:b0:31e:590c:c6e4 with SMTP id
+ q184-20020a0dcec1000000b0031e590cc6e4mr1302476ywd.42.1658519719648; Fri, 22
+ Jul 2022 12:55:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
+ <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014> <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+In-Reply-To: <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 22 Jul 2022 21:55:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
+Message-ID: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
+To:     Rob Herring <robh@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:O3tm97ktOQsIdtuCJXuJ3uCcUUlhuoEFWT3e4rEfl0Fg6Zixcm2
+ 7S8otfg3urwov4ASLkqF0fyWwSzET/3VewEfYR0qJTsRdLkJe9KOmhptWAlt4E8VVWsVAKY
+ VMDKLzLTDPZfEavzbXmAeHZaJgFpgxlMmZQWF8qkGaxv5sy31BO0q4p0V6pDgzaIP+8yHxw
+ jtCUd9MEEok91XBkCvc6A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:36iDOpIY/Hs=:2vXnQwsiyWLk/bjZ/223V9
+ SsohMBwjwbwuUNsHbt33nFvPoMV7gNjldqAuP3jrDfIGZPupYhIFn+JVCTGiH2XiYismwygaS
+ TlcO/t2LpWvz4pBoF7KSkWqOdjkBmj5+ee3hDV12DqqUnAalwDv7oLiqOMi7T1BfnK/aVaNDp
+ GhjU/voDray/WpQbAvbe2eQKkp0C1ZBekdVA8NF3mXT3gF0nDNDft+4rsiGQrSi9Hqgfcyic8
+ jUhzy2ejGQ/yGOGXWPHuQH14z9CbMeWqcoEi85A7v8zCQuPK8pYL1hMyqP4M1E76o5RbqZeRU
+ okavhF4ho+8ACS0Ls+i0eVO9QJfF3OntboEaGeUtc6P3LmfRDsioJxXVEZxliJsQmkSE4pWoc
+ 6UBmHgqwS8wFUiqIslW8LTQixsH2r51+U0rlDeeI2g3DFN8Kv8RdtfysxZlAfdWBTtv7e395t
+ lZA6dir31couJtwrzx8aWP+6qzONW45QIAoVqN3byAyEpln0ADJLeDWF0RxTUvPv7wvQftE4r
+ PA4M07JmuAeE3OSOxyYDF/8PmH9YMqcQslsM0JYROmAHBftj3RmBo4vdZoCOcGZL+vl/2X/T5
+ nqZyPDJ11MC3mlTp8BS5Q/f7eCy8TPb9JY/MfFLE2RK5PsunWF2F9w2wszn5x8ehTnCN7t5Qe
+ wMSrRKIR16+4lpCCri88tssHwCkS+XkI6qsE5ji+YBrBXav6LqamoCYpUH7IDoeIs/HTRMl1h
+ bwRVw7MKNOWgMLHaMjK+aidULTZI/40GY0UE6A==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `free' is duplicated in line 498, remove one.
+On Fri, Jul 22, 2022 at 6:36 PM Rob Herring <robh@kernel.org> wrote:
+> On Fri, Jul 22, 2022 at 9:27 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> From fu740:
+>                        ranges = <0x81000000  0x0 0x60080000  0x0
+> 0x60080000 0x0 0x10000>,      /* I/O */
+...
+> So again, how does one get a 0 address handed out when that's not even
+> a valid region according to DT? Is there some legacy stuff that
+> ignores the bridge windows?
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- fs/hfsplus/btree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The PCI-side port number 0x60080000 gets turned into Linux I/O resource 0,
+which I think is what __pci_assign_resource operates on.
 
-diff --git a/fs/hfsplus/btree.c b/fs/hfsplus/btree.c
-index 66774f4cb4fd..655cf60eabbf 100644
---- a/fs/hfsplus/btree.c
-+++ b/fs/hfsplus/btree.c
-@@ -495,7 +495,7 @@ void hfs_bmap_free(struct hfs_bnode *node)
- 	m = 1 << (~nidx & 7);
- 	byte = data[off];
- 	if (!(byte & m)) {
--		pr_crit("trying to free free bnode "
-+		pr_crit("trying to free bnode "
- 				"%u(%d)\n",
- 			node->this, node->type);
- 		kunmap(page);
--- 
-2.30.2
+The other question is why the platform would want to configure the
+PCI bus to have a PCI I/O space window of size 0x10000 at the address
+it's mapped into, rather than putting it at address zero. Is this a hardware
+bug, a bootloader bug, or just badly set up in the DT?
 
+Putting the PCI address of the I/O space window at port 0 is usually
+better because it works with PCI devices and drivers that assume that
+port numbers are below 0xfffff, and makes the PCI port number match
+the Linux port number.
+
+         Arnd

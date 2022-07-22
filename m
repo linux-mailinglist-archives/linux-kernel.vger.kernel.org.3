@@ -2,148 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2DD57E249
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF8357E24B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiGVN03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S234804AbiGVN0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiGVN01 (ORCPT
+        with ESMTP id S233979AbiGVN0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:26:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DA85F996;
-        Fri, 22 Jul 2022 06:26:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658496386; x=1690032386;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=gL17W1lezZEuItWt/uQj/CQrhmFMClKJKozgU/0ZPjI=;
-  b=Miq+JNsh6k9szRTBVMfHabRsh2YhK0gIm8JvT+55XOgHqWBQa7DDoYmf
-   ifoP2jPqGvXiBplVd8ItNBB36jTjiczh87A/ljNw/kPb1VH/ckNE+3sv1
-   3DRT0YQ+HK004wjYr9nemCRAmzgEfOqt3rv+r9AyDyQtxAuB64o9DUejv
-   Bnb7Fsedu/pZjYbp9hiP7zuHCcpXr8uzONBAXt3QyaVrL1X3bTrjKRC5B
-   rPA7RtYXvATZsKFhPJX63gpqsx0W8pMSFPFKtyqBjQFD7nmLzo2UcbJlM
-   UmGXzVp3r7jCOi+oV0BqD4os+MCdsc2Gy5TbgRIBBOUfIKG1x9NFa6fYx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="288482931"
-X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="288482931"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 06:26:26 -0700
-X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="626560798"
-Received: from lfhuarte-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.148.120])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 06:26:23 -0700
-Message-ID: <ab467244dd03b5f94bafe9068b1c02790033c18c.camel@intel.com>
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>, dave@sr71.net
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 23 Jul 2022 01:26:21 +1200
-In-Reply-To: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Fri, 22 Jul 2022 09:26:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16B789E86;
+        Fri, 22 Jul 2022 06:26:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D4F261FF6;
+        Fri, 22 Jul 2022 13:26:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B03C341C7;
+        Fri, 22 Jul 2022 13:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658496401;
+        bh=0fEpwrFuBVipvDIIa4cpMulMIC3/18dhlWmRDEqu14o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jCGKDLNtShFVXV/NyAVsR2qgDB5CxWb4UZ6VBAmwpbwH6O3W4RBWhh17afWT2ibN5
+         N5DIcmwmEDuRbFQhaPrqC8y75ZLlAGPU6aEudhGbuHd5kDlQGP2TfwUt0VeUi2li5f
+         VoQrEexd0chqnbaABj0wkzsPmyINbumU1YTuTBVoN4xph6i40MT+0oLMGYVDz8Yrs/
+         QvV23OzcANOPhL/BnjcXRJvShQ5KNT3LbMve9e34tflZfA/1cHCjmP7PVdF69iOdIC
+         S96eTLwwC5f5NTpF+CtaTY0CuUsbyaBUZxC9XmBPHCbBzO64DMLyFdbvluPBgI1xsP
+         KBrcm1InZGvjA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oEsg0-0000mm-LM; Fri, 22 Jul 2022 15:26:44 +0200
+Date:   Fri, 22 Jul 2022 15:26:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        linux-pci@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Why set .suppress_bind_attrs even though .remove() implemented?
+Message-ID: <YtqllIHY/R/BbR3V@hovoldconsulting.com>
+References: <20220721204607.xklzyklbgwcgepjm@pali>
+ <20220721222122.GA1754784@bhelgaas>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220721222122.GA1754784@bhelgaas>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-07-20 at 12:13 -0700, Dave Hansen wrote:
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -1022,9 +1022,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_=
-array *array, u32 function)
-> =C2=A0		 * userspace.=C2=A0 ATTRIBUTES.XFRM is not adjusted as userspace =
-is
-> =C2=A0		 * expected to derive it from supported XCR0.
-> =C2=A0		 */
-> -		entry->eax &=3D SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT |
-> -			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SGX_ATTR_PROVISIONKEY | SGX_ATTR_EINIT=
-TOKENKEY |
-> -			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 SGX_ATTR_KSS;
-> +		entry->eax &=3D SGX_ATTR_PRIV_MASK | SGX_ATTR_UNPRIV_MASK;
-> =C2=A0		entry->ebx &=3D 0;
-> =C2=A0		break;
-> =C2=A0	/* Intel PT */
-> --
-> 2.34.1
+On Thu, Jul 21, 2022 at 05:21:22PM -0500, Bjorn Helgaas wrote:
+> [+to Johan for qcom]
+> [-cc Tom, email bounces]
+> 
+> On Thu, Jul 21, 2022 at 10:46:07PM +0200, Pali Rohár wrote:
+> > On Thursday 21 July 2022 14:54:33 Bjorn Helgaas wrote:
 
-Did a quick look at the spec.  It appears ENCLU[EDECCSSA] should be used
-together with AEX-notify.  So besides advertising the new
-SGX_ATTR_ASYNC_EXIT_NOTIFY bit to the KVM guest, I think we should also
-advertise the ENCLU[EDECCSSA] support in guest's CPUID, like below (unteste=
-d)?
+> With suppress_bind_attrs, the user can't manually unbind a device, so
+> we can't get to mvebu_pcie_remove() that way, but since mvebu is a
+> modular driver, I assume we can unload the module and *that* would
+> call mvebu_pcie_remove().  Right?
 
-diff --git a/arch/x86/include/asm/cpufeatures.h
-b/arch/x86/include/asm/cpufeatures.h
-index 6466a58b9cff..d2ebb38b31e7 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -296,6 +296,7 @@
- #define X86_FEATURE_PER_THREAD_MBA     (11*32+ 7) /* "" Per-thread Memory
-Bandwidth Allocation */
- #define X86_FEATURE_SGX1               (11*32+ 8) /* "" Basic SGX */
- #define X86_FEATURE_SGX2               (11*32+ 9) /* "" SGX Enclave Dynami=
-c
-Memory Management (EDMM) */
-+#define X86_FEATURE_SGX_EDECCSSA       (11*32+10) /* "" SGX EDECCSSA user =
-leaf
-function */
-=20
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI           (12*32+ 4) /* AVX VNNI instructions=
- */
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index d47222ab8e6e..121456653417 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -612,7 +612,7 @@ void kvm_set_cpu_caps(void)
-        );
-=20
-        kvm_cpu_cap_init_scattered(CPUID_12_EAX,
--               SF(SGX1) | SF(SGX2)
-+               SF(SGX1) | SF(SGX2) | SF(SGX_EDECCSSA)
-        );
-=20
-        kvm_cpu_cap_mask(CPUID_8000_0001_ECX,
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index a19d473d0184..4e5b8444f161 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -23,6 +23,7 @@ enum kvm_only_cpuid_leafs {
- /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
- #define KVM_X86_FEATURE_SGX1           KVM_X86_FEATURE(CPUID_12_EAX, 0)
- #define KVM_X86_FEATURE_SGX2           KVM_X86_FEATURE(CPUID_12_EAX, 1)
-+#define KVM_X86_FEATURE_SGX_EDECCSSA   KVM_X86_FEATURE(CPUID_12_EAX, 11)
-=20
- struct cpuid_reg {
-        u32 function;
-@@ -78,6 +79,8 @@ static __always_inline u32 __feature_translate(int
-x86_feature)
-                return KVM_X86_FEATURE_SGX1;
-        else if (x86_feature =3D=3D X86_FEATURE_SGX2)
-                return KVM_X86_FEATURE_SGX2;
-+       else if (x86_feature =3D=3D X86_FEATURE_SGX_EDECCSSA)
-+               return KVM_X86_FEATURE_SGX_EDECCSSA;
-=20
-        return x86_feature;
- }
+Correct.
 
+> qcom is a DWC driver, so all the IRQ stuff happens in
+> dw_pcie_host_init().  qcom_pcie_remove() does call
+> dw_pcie_host_deinit(), which calls irq_domain_remove(), but nobody
+> calls irq_dispose_mapping().
+> 
+> I'm thoroughly confused by all this.  But I suspect that maybe I
+> should drop the "make qcom modular" patch because it seems susceptible
+> to this problem:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/qcom&id=41b68c2d097e
+
+That should not be necessary.
+
+As you note above, interrupt handling is implemented in dwc core so if
+there are any issue here at all, which I doubt, then all of the dwc
+drivers that currently can be built as modules would all be broken and
+this would need to be fixed in core.
+
+I've been using the modular pcie-qcom patch for months now, unloading
+and reloading the driver repeatedly to test power sequencing, without
+noticing any problems whatsoever.
+
+Johan

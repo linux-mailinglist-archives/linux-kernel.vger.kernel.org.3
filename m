@@ -2,130 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CBE57D8CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 05:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D82857D8D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 05:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbiGVC75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 22:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        id S233876AbiGVDFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 23:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiGVC7z (ORCPT
+        with ESMTP id S230367AbiGVDFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 22:59:55 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21D39965A;
-        Thu, 21 Jul 2022 19:59:54 -0700 (PDT)
+        Thu, 21 Jul 2022 23:05:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDB2D41
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 20:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658458795; x=1689994795;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=jf5a6eJbd1i8i4tKIsKNe30GC5A0Ds+xBn3mTnf2sZk=;
-  b=SujsOjXPrsVzGM6/P8A+Qf8sflaBKQe2np/vpNC38Y4V2JXLH4+AvTjW
-   LAVPJeF+NcOKjps0U0dNIUjl84hDrfKBzBbIVY7u3kPcPPARV3GsVGDka
-   tCb3QJ336yhz5PXDc24mZW+o6CmTqE863H5H/eAyNQPgwFSNtSqljvkzR
-   tSphqFBDj/tImRSKqe9LVL35yqpx/+l+K5mxZRbx7ORfRdALTsdWtSKCN
-   T5OI/6400VPAVfuSotk7H6WEK6rbMGMc2lhRZagRfSJzz3gHFabEnsBtA
-   4jn25WJ+uxaJnKLCxDlJG4vW6clfypct13mk5u+VYQwuzmDP+7jAtOEgK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="287978444"
+  t=1658459113; x=1689995113;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lUiqkvbqMaJlNM2iQLyFq5L0CRlSmzSB9d0/Op66Wfo=;
+  b=B6KmzxVXqE5BDA7yko2uFSyR0kpEil3OytrJyELN2DZJppG2dLhA39MX
+   V+B27XHM5t8anmfYdnyxybAQtI520myi/pYdk4JNj6RjT4aQXq+X7mF7k
+   T67MuFChlvG+BWcSMFCnQsCTB64vlb6hq4LWG2kp9fPYWwgM2DgNMnrQE
+   /NVpkX4cqFB70Q0YFunqZShx5Vq925ym9BXpbbJtuKRXrl5OVc2dwcPDG
+   /1NRGvx1Q59FG70Zde0Kn5iLmV5kYMyAUA6JAZcmMTNHxtbfdXiRpnS7r
+   9wZsa19VrTJNssaBWrhDxav7DbxJ42Pzp5YgcYSE4zAlmqlzoqk8Dc6pT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="348926528"
 X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="287978444"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 19:59:54 -0700
+   d="scan'208";a="348926528"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 20:05:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="775100917"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 21 Jul 2022 19:59:54 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 21 Jul 2022 19:59:53 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 21 Jul 2022 19:59:53 -0700
-Received: from fmsmsx611.amr.corp.intel.com ([10.18.126.91]) by
- fmsmsx611.amr.corp.intel.com ([10.18.126.91]) with mapi id 15.01.2375.028;
- Thu, 21 Jul 2022 19:59:53 -0700
-From:   "Zhang, Rui" <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: RE: [PATCH] intel: thermal: PCH: Drop ACPI_FADT_LOW_POWER_S0 check
-Thread-Topic: [PATCH] intel: thermal: PCH: Drop ACPI_FADT_LOW_POWER_S0 check
-Thread-Index: AQHYl7WLPGVORxB/C0KdIx9UYpBjiK2DFQsAgABanYCABk5YYA==
-Date:   Fri, 22 Jul 2022 02:59:53 +0000
-Message-ID: <65fe502db8174defba0f21958499cab0@intel.com>
-References: <12013659.O9o76ZdvQC@kreacher>
- <61311732eeea1f45e85537e911e4bb024c0a30b7.camel@intel.com>
- <CAJZ5v0j+FTX4UF-9Y0BQc2mYXQiphsnkt07CALhF7BPtSdDxgg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j+FTX4UF-9Y0BQc2mYXQiphsnkt07CALhF7BPtSdDxgg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-x-originating-ip: [10.108.32.68]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="549020323"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Jul 2022 20:05:11 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oEiyU-0000tc-2d;
+        Fri, 22 Jul 2022 03:05:10 +0000
+Date:   Fri, 22 Jul 2022 11:04:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/020-t6000-dart 7/11]
+ drivers/iommu/apple-dart.c:345:62: error: passing argument 1 of
+ 'atomic64_read' from incompatible pointer type
+Message-ID: <202207221059.KojuhNQ6-lkp@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUmFmYWVsIEouIFd5c29j
-a2kgPHJhZmFlbEBrZXJuZWwub3JnPg0KPiBTZW50OiBNb25kYXksIEp1bHkgMTgsIDIwMjIgMzoz
-OSBBTQ0KPiBUbzogWmhhbmcsIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4NCj4gQ2M6IFJhZmFl
-bCBKLiBXeXNvY2tpIDxyandAcmp3eXNvY2tpLm5ldD47IExpbnV4IFBNIDxsaW51eC0NCj4gcG1A
-dmdlci5rZXJuZWwub3JnPjsgTGludXggQUNQSSA8bGludXgtYWNwaUB2Z2VyLmtlcm5lbC5vcmc+
-OyBMS01MIDxsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9yZz47IE1hcmlvIExpbW9uY2ll
-bGxvIDxtYXJpby5saW1vbmNpZWxsb0BhbWQuY29tPjsNCj4gU3Jpbml2YXMgUGFuZHJ1dmFkYSA8
-c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFU
-Q0hdIGludGVsOiB0aGVybWFsOiBQQ0g6IERyb3AgQUNQSV9GQURUX0xPV19QT1dFUl9TMA0KPiBj
-aGVjaw0KPiBJbXBvcnRhbmNlOiBIaWdoDQo+IA0KPiBPbiBTdW4sIEp1bCAxNywgMjAyMiBhdCA4
-OjE0IEFNIFpoYW5nIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBP
-biBUaHUsIDIwMjItMDctMTQgYXQgMjE6MTEgKzAyMDAsIFJhZmFlbCBKLiBXeXNvY2tpIHdyb3Rl
-Og0KPiA+ID4gRnJvbTogUmFmYWVsIEouIFd5c29ja2kgPHJhZmFlbC5qLnd5c29ja2lAaW50ZWwu
-Y29tPg0KPiA+ID4NCj4gPiA+IElmIEFDUElfRkFEVF9MT1dfUE9XRVJfUzAgaXMgbm90IHNldCwg
-dGhpcyBkb2Vzbid0IG1lYW4gdGhhdCBsb3ctDQo+ID4gPiBwb3dlcg0KPiA+ID4gUzAgaWRsZSBp
-cyBub3QgdXNhYmxlLiAgSXQgbWVyZWx5IG1lYW5zIHRoYXQgdXNpbmcgUzMgb24gdGhlIGdpdmVu
-DQo+ID4gPiBzeXN0ZW0gaXMgbW9yZSBiZW5lZmljaWFsIGZyb20gdGhlIGVuZXJneSBzYXZpbmcg
-cGVyc3BlY3RpdmUgdGhhbg0KPiA+ID4gdXNpbmcgbG93LXBvd2VyIFMwIGlkbGUsIGFzIGxvbmcg
-YXMgUzMgaXMgc3VwcG9ydGVkLg0KPiA+DQo+ID4gQWdyZWVkLg0KPiA+DQo+ID4gPg0KPiA+ID4g
-U3VzcGVuZC10by1pZGxlIGlzIHN0aWxsIGEgdmFsaWQgc3VzcGVuZCBtb2RlIGlmDQo+ID4gPiBB
-Q1BJX0ZBRFRfTE9XX1BPV0VSX1MwDQo+ID4gPiBpcyBub3Qgc2V0IGFuZCB0aGUgcG1fc3VzcGVu
-ZF92aWFfZmlybXdhcmUoKSBjaGVjayBpbg0KPiA+ID4gcGNoX3dwdF9zdXNwZW5kKCkNCj4gPiA+
-IGlzIHN1ZmZpY2llbnQgdG8gZGlzdGluZ3Vpc2ggc3VzcGVuZC10by1pZGxlIGZyb20gUzMsIHNv
-IGRyb3AgdGhlDQo+ID4gPiBjb25mdXNpbmcgQUNQSV9GQURUX0xPV19QT1dFUl9TMCBjaGVjay4N
-Cj4gPg0KPiA+IHRoZSBjb29saW5nIGRlbGF5IGluIHRoZSBzdXNwZW5kIGNhbGxiYWNrIGlzIHRv
-IG1ha2Ugc3VyZSBQQ0gNCj4gPiB0ZW1wZXJhdHVyZSB3b24ndCBibG9jayBTMGl4IGR1cmluZyBz
-MmlkbGUuIFNvIGlmIFMwaXggaXMgbm90DQo+ID4gc3VwcG9ydGVkLCBpdCBpcyBtZWFuaW5nbGVz
-cyB0byBpbnZva2UgdGhlIGNvb2xpbmcgZGVsYXkgZHVyaW5nIHMyaWRsZS4NCj4gDQo+IEJ1dCB0
-aGVyZSBpcyBubyB3YXkgdG8gZGV0ZXJtaW5lIHdoZXRoZXIgb3Igbm90IFMwaXggaXMgc3VwcG9y
-dGVkLiAgSW4NCj4gcGFydGljdWxhciwgQUNQSV9GQURUX0xPV19QT1dFUl9TMCBpcyBub3Qgb25l
-Lg0KPiANCj4gPiBzbyB0aGUgcHJvYmxlbSBpcyB0aGF0IHdlIGRvbid0IGhhdmUgYW4gaW5kaWNh
-dG9yIGZvciBTMGl4IGNhcGFiaWxpdHkuDQo+ID4gQW5kIHRoaXMgYWxzbyBhcHBsaWVzIHRvIGRy
-aXZlcnMvcnRjL3J0Yy1jbW9zLmMsIHdoZXJlIHdlIHVzZSBBQ1BJIFNDSQ0KPiA+IGZvciBydW50
-aW1lIFJUQyB3YWtldXAgaW5zdGVhZCBvZiBIUEVUIGludGVycnVwdCBvbiAiUzBpeCBjYXBhYmxl
-Ig0KPiA+IHBsYXRmb3JtcyBiZWNhdXNlIHRoZSBIUEVUIHRpbWVyIG1heSBibG9jayBTMGl4Lg0K
-PiANCj4gIlMwaXggY2FwYWJsZSIgZG9lc24ndCBtYXR0ZXIuICBXaGF0IG1hdHRlcnMgaXMgd2hl
-dGhlciBvciBub3QgdGhlIGN1cnJlbnQNCj4gdHJhbnNpdGlvbiB1bmRlciB3YXkgaXMgaW50byBT
-MCBvciBpbnRvIHN1c3BlbmQtdG8taWRsZS4gIEluIHRoZSBsYXR0ZXIgY2FzZQ0KPiB0aGVyZSBp
-cyBubyByZWFzb24gdG8gYXZvaWQgZG9pbmcgd2hhdGV2ZXIgaXMgZG9uZSBpbiB0aGUgZXhwZWN0
-YXRpb24gdGhhdA0KPiBTMGl4IG1heSBiZSBlbnRlcmVkIGdvaW5nIGZvcndhcmQuDQoNCk9rYXku
-IEl0IGlzIG5vdCBwZXJmZWN0IGJ1dCB3ZSBoYXZlIHRvIGxpdmUgd2l0aCB0aGlzLg0KDQpBY2tl
-ZC1ieTogWmhhbmcgUnVpIDxydWkuemhhbmdAaW50ZWwuY29tPg0K
+tree:   https://github.com/AsahiLinux/linux bits/020-t6000-dart
+head:   7db03c131045e7fab006d467a7e037dd7cd3cc95
+commit: da3b68972ce1a850fd747f01e05e070f2babe02b [7/11] iommu: dart: Support >64 stream IDs
+config: arm-randconfig-r024-20220721 (https://download.01.org/0day-ci/archive/20220722/202207221059.KojuhNQ6-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/da3b68972ce1a850fd747f01e05e070f2babe02b
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/020-t6000-dart
+        git checkout da3b68972ce1a850fd747f01e05e070f2babe02b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/iommu/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/iommu/apple-dart.c: In function 'apple_dart_domain_flush_tlb':
+>> drivers/iommu/apple-dart.c:345:62: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     345 |                         stream_map.sidmap[j] = atomic64_read(&domain_stream_map->sidmap[j]);
+         |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                              |
+         |                                                              atomic_long_t * {aka atomic_t *}
+   In file included from include/linux/atomic.h:82,
+                    from drivers/iommu/apple-dart.c:14:
+   include/linux/atomic/atomic-instrumented.h:644:33: note: expected 'const atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
+     644 | atomic64_read(const atomic64_t *v)
+         |               ~~~~~~~~~~~~~~~~~~^
+   drivers/iommu/apple-dart.c: In function 'apple_dart_finalize_domain':
+>> drivers/iommu/apple-dart.c:441:38: error: passing argument 1 of 'atomic64_set' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     441 |                         atomic64_set(&dart_domain->stream_maps[i].sidmap[j],
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                      |
+         |                                      atomic_long_t * {aka atomic_t *}
+   include/linux/atomic/atomic-instrumented.h:658:26: note: expected 'atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
+     658 | atomic64_set(atomic64_t *v, s64 i)
+         |              ~~~~~~~~~~~~^
+   drivers/iommu/apple-dart.c: In function 'apple_dart_mod_streams':
+>> drivers/iommu/apple-dart.c:490:45: error: passing argument 2 of 'atomic64_or' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     490 |                                             &domain_maps[i].sidmap[j]);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                             |
+         |                                             atomic_long_t * {aka atomic_t *}
+   include/linux/atomic/atomic-instrumented.h:1015:32: note: expected 'atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
+    1015 | atomic64_or(s64 i, atomic64_t *v)
+         |                    ~~~~~~~~~~~~^
+>> drivers/iommu/apple-dart.c:493:46: error: passing argument 2 of 'atomic64_and' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     493 |                                              &domain_maps[i].sidmap[j]);
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                              |
+         |                                              atomic_long_t * {aka atomic_t *}
+   include/linux/atomic/atomic-instrumented.h:941:33: note: expected 'atomic64_t *' but argument is of type 'atomic_long_t *' {aka 'atomic_t *'}
+     941 | atomic64_and(s64 i, atomic64_t *v)
+         |                     ~~~~~~~~~~~~^
+   cc1: some warnings being treated as errors
+
+
+vim +/atomic64_read +345 drivers/iommu/apple-dart.c
+
+   334	
+   335	static void apple_dart_domain_flush_tlb(struct apple_dart_domain *domain)
+   336	{
+   337		int i, j;
+   338		struct apple_dart_atomic_stream_map *domain_stream_map;
+   339		struct apple_dart_stream_map stream_map;
+   340	
+   341		for_each_stream_map(i, domain, domain_stream_map) {
+   342			stream_map.dart = domain_stream_map->dart;
+   343	
+   344			for (j = 0; j < BITS_TO_LONGS(stream_map.dart->num_streams); j++)
+ > 345				stream_map.sidmap[j] = atomic64_read(&domain_stream_map->sidmap[j]);
+   346	
+   347			apple_dart_hw_invalidate_tlb(&stream_map);
+   348		}
+   349	}
+   350	
+   351	static void apple_dart_flush_iotlb_all(struct iommu_domain *domain)
+   352	{
+   353		apple_dart_domain_flush_tlb(to_dart_domain(domain));
+   354	}
+   355	
+   356	static void apple_dart_iotlb_sync(struct iommu_domain *domain,
+   357					  struct iommu_iotlb_gather *gather)
+   358	{
+   359		apple_dart_domain_flush_tlb(to_dart_domain(domain));
+   360	}
+   361	
+   362	static void apple_dart_iotlb_sync_map(struct iommu_domain *domain,
+   363					      unsigned long iova, size_t size)
+   364	{
+   365		apple_dart_domain_flush_tlb(to_dart_domain(domain));
+   366	}
+   367	
+   368	static phys_addr_t apple_dart_iova_to_phys(struct iommu_domain *domain,
+   369						   dma_addr_t iova)
+   370	{
+   371		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
+   372		struct io_pgtable_ops *ops = dart_domain->pgtbl_ops;
+   373	
+   374		if (!ops)
+   375			return 0;
+   376	
+   377		return ops->iova_to_phys(ops, iova);
+   378	}
+   379	
+   380	static int apple_dart_map_pages(struct iommu_domain *domain, unsigned long iova,
+   381					phys_addr_t paddr, size_t pgsize,
+   382					size_t pgcount, int prot, gfp_t gfp,
+   383					size_t *mapped)
+   384	{
+   385		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
+   386		struct io_pgtable_ops *ops = dart_domain->pgtbl_ops;
+   387	
+   388		if (!ops)
+   389			return -ENODEV;
+   390	
+   391		return ops->map_pages(ops, iova, paddr, pgsize, pgcount, prot, gfp,
+   392				      mapped);
+   393	}
+   394	
+   395	static size_t apple_dart_unmap_pages(struct iommu_domain *domain,
+   396					     unsigned long iova, size_t pgsize,
+   397					     size_t pgcount,
+   398					     struct iommu_iotlb_gather *gather)
+   399	{
+   400		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
+   401		struct io_pgtable_ops *ops = dart_domain->pgtbl_ops;
+   402	
+   403		return ops->unmap_pages(ops, iova, pgsize, pgcount, gather);
+   404	}
+   405	
+   406	static void
+   407	apple_dart_setup_translation(struct apple_dart_domain *domain,
+   408				     struct apple_dart_stream_map *stream_map)
+   409	{
+   410		int i;
+   411		struct io_pgtable_cfg *pgtbl_cfg =
+   412			&io_pgtable_ops_to_pgtable(domain->pgtbl_ops)->cfg;
+   413	
+   414		for (i = 0; i < pgtbl_cfg->apple_dart_cfg.n_ttbrs; ++i)
+   415			apple_dart_hw_set_ttbr(stream_map, i,
+   416					       pgtbl_cfg->apple_dart_cfg.ttbr[i]);
+   417		for (; i < DART_MAX_TTBR; ++i)
+   418			apple_dart_hw_clear_ttbr(stream_map, i);
+   419	
+   420		apple_dart_hw_enable_translation(stream_map);
+   421		apple_dart_hw_invalidate_tlb(stream_map);
+   422	}
+   423	
+   424	static int apple_dart_finalize_domain(struct iommu_domain *domain,
+   425					      struct apple_dart_master_cfg *cfg)
+   426	{
+   427		struct apple_dart_domain *dart_domain = to_dart_domain(domain);
+   428		struct apple_dart *dart = cfg->stream_maps[0].dart;
+   429		struct io_pgtable_cfg pgtbl_cfg;
+   430		int ret = 0;
+   431		int i, j;
+   432	
+   433		mutex_lock(&dart_domain->init_lock);
+   434	
+   435		if (dart_domain->finalized)
+   436			goto done;
+   437	
+   438		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
+   439			dart_domain->stream_maps[i].dart = cfg->stream_maps[i].dart;
+   440			for (j = 0; j < BITS_TO_LONGS(dart->num_streams); j++)
+ > 441				atomic64_set(&dart_domain->stream_maps[i].sidmap[j],
+   442					     cfg->stream_maps[i].sidmap[j]);
+   443		}
+   444	
+   445		pgtbl_cfg = (struct io_pgtable_cfg){
+   446			.pgsize_bitmap = dart->pgsize,
+   447			.ias = 32,
+   448			.oas = dart->hw->oas,
+   449			.coherent_walk = 1,
+   450			.iommu_dev = dart->dev,
+   451		};
+   452	
+   453		dart_domain->pgtbl_ops =
+   454			alloc_io_pgtable_ops(dart->hw->fmt, &pgtbl_cfg, domain);
+   455		if (!dart_domain->pgtbl_ops) {
+   456			ret = -ENOMEM;
+   457			goto done;
+   458		}
+   459	
+   460		domain->pgsize_bitmap = pgtbl_cfg.pgsize_bitmap;
+   461		domain->geometry.aperture_start = 0;
+   462		domain->geometry.aperture_end = DMA_BIT_MASK(32);
+   463		domain->geometry.force_aperture = true;
+   464	
+   465		dart_domain->finalized = true;
+   466	
+   467	done:
+   468		mutex_unlock(&dart_domain->init_lock);
+   469		return ret;
+   470	}
+   471	
+   472	static int
+   473	apple_dart_mod_streams(struct apple_dart_atomic_stream_map *domain_maps,
+   474			       struct apple_dart_stream_map *master_maps,
+   475			       bool add_streams)
+   476	{
+   477		int i, j;
+   478	
+   479		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
+   480			if (domain_maps[i].dart != master_maps[i].dart)
+   481				return -EINVAL;
+   482		}
+   483	
+   484		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
+   485			if (!domain_maps[i].dart)
+   486				break;
+   487			for (j = 0; j < BITS_TO_LONGS(domain_maps[i].dart->num_streams); j++) {
+   488				if (add_streams)
+   489					atomic64_or(master_maps[i].sidmap[j],
+ > 490						    &domain_maps[i].sidmap[j]);
+   491				else
+   492					atomic64_and(~master_maps[i].sidmap[j],
+ > 493						     &domain_maps[i].sidmap[j]);
+   494			}
+   495		}
+   496	
+   497		return 0;
+   498	}
+   499	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

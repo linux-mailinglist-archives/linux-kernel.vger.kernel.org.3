@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AF057E019
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E5857E01C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234848AbiGVKf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S234955AbiGVKhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGVKfz (ORCPT
+        with ESMTP id S229671AbiGVKhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:35:55 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124A48CC8F;
-        Fri, 22 Jul 2022 03:35:54 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id v10so1453331uap.11;
-        Fri, 22 Jul 2022 03:35:54 -0700 (PDT)
+        Fri, 22 Jul 2022 06:37:05 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B82BA24E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:37:04 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id i206so7341483ybc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:37:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZKnuW8mda+Pv5ODyCfzYHYQK47yGtIeMQTcXQHTm4vQ=;
-        b=I5W7LvuxRkO874+1/M/uqpXEGVpFohH0JlBJSXwZFFkWKq8p0MC0R7WLPCseZA2JS3
-         K6f5XQTAPEBao+OfyDWSrRP1l6XSBNiFmRTUaeAcXB+Wo7+qRHvRO6xSQZFVcMZYInbA
-         DHfpMyllmWvLmwD6g1rKPNe+xX3lGd4LfZYMVdY1IQ3uqo/oC0wpMn9ZCVphjQ3XgQ2T
-         Lub7Bwyumq3LX6ft7PPkSDyB0yYf4bd4jiok1HhQ3zjNZMkzGGWkF450AeC82Lyi4jMM
-         1K/sX9K+nqOiWVtPjxmzbkJ2GkvOcmGRLK9VJTVWk535KHoNidA6f27Rvyl2VCeCiOBM
-         HBTw==
+         :cc;
+        bh=LZXV7spB5ZWU5K7GWsoui8Bphj1cNvVhFn/ZvvmSing=;
+        b=bVZoDU6yBgk2+vNGfNBqfVrY4Bt1R0qn5OyV3iEBHCHKM9yV1nsjKOa6DshjGTpWir
+         r0Ve6AdugLmQv7oSS+5GBtIu7jhfGf7rwimSzVlmU+T0DfQgbrVCouQaIZHzVsI+AJQd
+         fF41sKp0flVbUagS9SPWMWkT+Efll2TNkgn0UbJSnBrTuAJWp0HvbF4TsEVRGjnTaaRc
+         2jhcvyMJq1pW3gE8D4GuOPmMtc1KR9jYCb3MSO7SJSi8qk+IMUE4t7y/b4d+w52tG8F0
+         rDkrtkDxXZevCbb28YX3MUV8qrhioOrEU6kOX83xQn+RtkYLJqbJEeOdKDbjPdOPNC2Q
+         iLaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZKnuW8mda+Pv5ODyCfzYHYQK47yGtIeMQTcXQHTm4vQ=;
-        b=gs2H2HtLQfOonv2anFFdKltKYJfLjNRUKnrzPrHw6dsjwdSQ4Nhw8aWNCmyWsId1Ib
-         EYf3ymd1tKis20rfcqY1SX7+/rc+5en1IVGAmY6QkdCPT0NQV/H7N1DcgpgRgQHv3Qku
-         uVu5xaAM4x6hYzWiZWrBjuZkJhoayhk8dQOI8T81o1vCMTQGHqB6Hv0MrBxVBAJmap2r
-         Akev5Y+prZAEuSTvVTCyted5xNrrEYA0sj2f1cPqxV8tnUH3SoJXF9U59tt6RkNWXLrJ
-         caXywvcu1sbueiHyZpNVZ5SkZOVA34zFEeTdM5csj4dHWtlfFv1D3kG90O/E3IBdzZ1d
-         MqMA==
-X-Gm-Message-State: AJIora8QD1zL0OEq2c+Q6SbV2Lo1oib5DZFH+PUBa5JiasBT6pu70Xma
-        YRXl9yWOAFOHDDoO+rkOG2It9bKUZBU4+PpALKM=
-X-Google-Smtp-Source: AGRyM1utRwQRjz3mhWTLtpsFB6mhF2NbXXEDBgFnQ5cwOqFH2vmyeg5LbXrRR4m7MEEgLizLYgYCjg8eUcjJPiQnMaY=
-X-Received: by 2002:ab0:20d7:0:b0:373:5c54:724c with SMTP id
- z23-20020ab020d7000000b003735c54724cmr841210ual.56.1658486153236; Fri, 22 Jul
- 2022 03:35:53 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=LZXV7spB5ZWU5K7GWsoui8Bphj1cNvVhFn/ZvvmSing=;
+        b=OAUC3644QMRoEuZZaHcSkDxRtMSzvQ5UH8Xi1s6t3FVexXEtVlzCn5o7sddLCw87Wv
+         sN4DkvDwO8fpxIFNOgLldhhgW3akpel2cZmUl39ob9RUSpplkMFMEbS+XANwa/KdhSoR
+         XdzH4EWmQiNL2QeO37Rirrxpk9MBjhdZoZDk/uCnhMEtQKLRqg+KSFOgxyb7kc6Y62oq
+         Gbygid87ArlWxLZLi7loVNgBoUq95ol+mWvNb7eF9vQ2a6csjau6CnKQK9OWkodaEHJs
+         WwqrVnwS1eFulxjW/3k6cU5hTyiqbUuSTgvyS/j+BNP1G5NqGK4wExLvH/FAUmacwuNG
+         4HCQ==
+X-Gm-Message-State: AJIora/pbPPsgaWvNhQx9GsPGWGjhItF45KxAaOsKhncW6VYJNrzH/Jc
+        5gNZyJN/Guk4Gt5z2ywL/qJiZSw5A5I+7J46meEEAg==
+X-Google-Smtp-Source: AGRyM1vI4WMTZ8dacZeoMfIM3u0pw8gDKN3iU57tDYVl+x+hIJBD3hOWhpnGx4itgOaWoNFF3b5dHfVnP53BG5K8awI=
+X-Received: by 2002:a25:b0c:0:b0:670:a7c6:5c15 with SMTP id
+ 12-20020a250b0c000000b00670a7c65c15mr2138060ybl.387.1658486223328; Fri, 22
+ Jul 2022 03:37:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220708203052.236290-1-maira.canal@usp.br> <20220708203052.236290-10-maira.canal@usp.br>
-In-Reply-To: <20220708203052.236290-10-maira.canal@usp.br>
-From:   Matthew Auld <matthew.william.auld@gmail.com>
-Date:   Fri, 22 Jul 2022 11:35:26 +0100
-Message-ID: <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
-Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, Arthur Grillo <arthur.grillo@usp.br>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20220722182248.1.I20e96c839200bb75cd6af80384f16c8c01498f57@changeid>
+In-Reply-To: <20220722182248.1.I20e96c839200bb75cd6af80384f16c8c01498f57@changeid>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 22 Jul 2022 12:36:51 +0200
+Message-ID: <CANn89iJehOVme9-3qnHTdhnoKUP36AW=3A232aqBuzLDHDCGxw@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: hci_sync: Use safe loop when adding accept list
+To:     Archie Pusaka <apusaka@google.com>
+Cc:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Archie Pusaka <apusaka@chromium.org>,
+        Zhengping Jiang <jiangzp@google.com>,
+        Michael Sun <michaelfsun@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,16 +78,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Jul 2022 at 21:32, Ma=C3=ADra Canal <maira.canal@usp.br> wrote:
+On Fri, Jul 22, 2022 at 12:23 PM Archie Pusaka <apusaka@google.com> wrote:
 >
-> From: Arthur Grillo <arthur.grillo@usp.br>
+> From: Archie Pusaka <apusaka@chromium.org>
 >
-> Considering the current adoption of the KUnit framework, convert the
-> DRM mm selftest to the KUnit API.
+> When in the middle of adding accept list, the userspace can still
+> remove devices, therefore causing crash if the removed device is
+> the one being processed.
+>
+> Use a safe loop mechanism to guard against deletion while iterating
+> the pending items.
 
-Is there a plan to convert the corresponding selftest IGT that was
-responsible for running this (also drm_buddy) to somehow work with
-kunit? Previously these IGTs were always triggered as part of
-intel-gfx CI, but it looks like they are no longer run[1].
+ "the userspace can still remove devices" is a bit vague.
 
-[1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
+It seems that the issue at hand is that hci_le_add_accept_list_sync() can
+move the current item from  pend_le_conns / pend_le_reports lists ?
+
+Hopefully these lists can not be changed by other threads while
+hci_update_accept_list_sync() is running ?
+
+
+>
+> Below is a sample btsnoop log when user enters wrong passkey when
+> pairing a LE keyboard and the corresponding stacktrace.
+> @ MGMT Event: Command Complete (0x0001) plen 10
+>       Add Device (0x0033) plen 7
+>         Status: Success (0x00)
+>         LE Address: CA:CA:BD:78:37:F9 (Static)
+> < HCI Command: LE Add Device To Accept List (0x08|0x0011) plen 7
+>         Address type: Random (0x01)
+>         Address: CA:CA:BD:78:37:F9 (Static)
+> @ MGMT Event: Device Removed (0x001b) plen 7
+>         LE Address: CA:CA:BD:78:37:F9 (Static)
+> > HCI Event: Command Complete (0x0e) plen 4
+>       LE Add Device To Accept List (0x08|0x0011) ncmd 1
+>         Status: Success (0x00)
+>
+> [  167.409813] Call trace:
+> [  167.409983]  hci_le_add_accept_list_sync+0x64/0x26c
+> [  167.410150]  hci_update_passive_scan_sync+0x5f0/0x6dc
+> [  167.410318]  add_device_sync+0x18/0x24
+> [  167.410486]  hci_cmd_sync_work+0xe8/0x150
+> [  167.410509]  process_one_work+0x140/0x4d0
+> [  167.410526]  worker_thread+0x134/0x2e4
+> [  167.410544]  kthread+0x148/0x160
+> [  167.410562]  ret_from_fork+0x10/0x30
+>
+> Signed-off-by: Archie Pusaka <apusaka@chromium.org>
+
+Please add a Fixes: tag
+
+> Reviewed-by: Zhengping Jiang <jiangzp@google.com>
+> Reviewed-by: Michael Sun <michaelfsun@google.com>
+>
+> ---
+>
+>  net/bluetooth/hci_sync.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+> index 3067d94e7a8e..8e843d34f7de 100644
+> --- a/net/bluetooth/hci_sync.c
+> +++ b/net/bluetooth/hci_sync.c
+> @@ -1863,7 +1863,7 @@ struct sk_buff *hci_read_local_oob_data_sync(struct hci_dev *hdev,
+>   */
+>  static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
+>  {
+> -       struct hci_conn_params *params;
+> +       struct hci_conn_params *params, *tmp;
+>         struct bdaddr_list *b, *t;
+>         u8 num_entries = 0;
+>         bool pend_conn, pend_report;
+> @@ -1930,7 +1930,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
+>          * just abort and return filer policy value to not use the
+>          * accept list.
+>          */
+> -       list_for_each_entry(params, &hdev->pend_le_conns, action) {
+> +       list_for_each_entry_safe(params, tmp, &hdev->pend_le_conns, action) {
+>                 err = hci_le_add_accept_list_sync(hdev, params, &num_entries);
+>                 if (err)
+>                         goto done;
+> @@ -1940,7 +1940,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
+>          * the list of pending reports and also add these to the
+>          * accept list if there is still space. Abort if space runs out.
+>          */
+> -       list_for_each_entry(params, &hdev->pend_le_reports, action) {
+> +       list_for_each_entry_safe(params, tmp, &hdev->pend_le_reports, action) {
+>                 err = hci_le_add_accept_list_sync(hdev, params, &num_entries);
+>                 if (err)
+>                         goto done;
+> --
+> 2.37.1.359.gd136c6c3e2-goog
+>

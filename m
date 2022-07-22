@@ -2,85 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2025057E1D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D47C57E1D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234891AbiGVNBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
+        id S235029AbiGVNC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiGVNA6 (ORCPT
+        with ESMTP id S229936AbiGVNC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:00:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B29AF86C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:00:57 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x91so5781891ede.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=baynEo7vnNm1XYDH0i7dj9nJYt96fbnXE4sQDZAxVtQ=;
-        b=gJmyYtLDyaREVdwZyxpqlcnisGWEXOiTuJ5YWkc7D+Bqb7zBSwwOB4ZFh5n6ZQrA8x
-         pCRiAUwXrJxF0oom8kDQB/sbiXCq8JmA0B8JMecIAt/9ePFqGHfHdbcHtinnuZe6BWWl
-         n9U2yye/18vIVKalHy2/36N0IeK0feOpme1jpM59ifIE93PYuB1PJMLGbSvmA/lnjePE
-         b6tN/esY+/eqTXuopjoHwHEluojCitpttzh/689dpuq+lIDOju9DOO38ExMTI+6uKWE1
-         ltJ0nV/hJZMgya+2XmaT8xvUTbKDZs0d9NckUgwkjcEkZfJZrP3bW6bry5SVCBmyudSX
-         w8LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=baynEo7vnNm1XYDH0i7dj9nJYt96fbnXE4sQDZAxVtQ=;
-        b=HIWy73FgCu/HiLDOIBHSQagpJ5Lk4KIvbzsOI8lzy4RIqg0zlgncPgRqdYu9RXYBR4
-         JCCBO0NZtX7OCpqrj3THdU/SMLy6fe6/IF0NAgiTSqiFZlUiOygEVwhgzl4eJ6i24EI5
-         zb7M4/jVnZwPVTfYAB0v3eFBTGU0gAKvxDm60rNNqPqa0ld6yFLZCxpzcNSBMOd+8BHC
-         mUZSUzvEtIp2cYJBUvKEDmVEWiDWDQLNJPTBG2RHix0Munmm9md+SHpj4pwYtnqt87aN
-         y8j8ym1p3iYQ0pYEfmhi5aCOcztIw8ALHvQ6WjozyFsU3jchZjynmBlAjOaxHDknw9m7
-         8/2w==
-X-Gm-Message-State: AJIora9jJBMt1rqFboyBesQaYvf3LOulfadfr5Z8GaFHkvE4Y9dAvAyc
-        sEzaMarwFSLdD/nVXYWmQcXuU+YwabXcgTOr2sbeag==
-X-Google-Smtp-Source: AGRyM1sfEMb9SVoxsN9BQXeDZdyBMMWHOKQGS3GlRPZlLOUUMleYFQOEwWCeuFpspnuhgXLSul1uaahyl7/RtrX3UHc=
-X-Received: by 2002:a05:6402:26c2:b0:43b:ce7b:648b with SMTP id
- x2-20020a05640226c200b0043bce7b648bmr555241edd.133.1658494855592; Fri, 22 Jul
- 2022 06:00:55 -0700 (PDT)
+        Fri, 22 Jul 2022 09:02:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42DAF878;
+        Fri, 22 Jul 2022 06:02:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 045FF61A44;
+        Fri, 22 Jul 2022 13:02:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820BCC341C6;
+        Fri, 22 Jul 2022 13:02:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658494976;
+        bh=sXtHX633NXttQ52gjkH415MKam/LYec875q3sOrQkSI=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=e4nbcdsQD14H/vyLafcrTolZZ5pzguIDjRmSzSa4iToQwJTn0NOSfHhkYNh7RSlAg
+         Y3Bheovy6BWNZjie2kPUsAw/C2aK0eFuHPEqIbIKhnFRwMs4psaSlNOvxx2FZCj/Km
+         SkwSAtpPPIBmFAAjsx2ryOPs7DGjYbkCghOf7x6NLmEjhaJRLfjnr3ACBBrxtEo5H0
+         BKP7uOl+7YRA+d8GPkelxoWvbIflN8Kv2fAJOu+C8sQ8Z4bjsy80mGolNr1jXm66Uv
+         T5SfuDjRfN14z7Lo4d++kIXu3Zb1waAW7XW6EtIWuZsZrfIunly4gcUT3Qpq7NzBh1
+         Hx6Ju92d80JIw==
+Date:   Fri, 22 Jul 2022 15:02:52 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Artem Borisov <dedsa2002@gmail.com>
+cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: alps: Declare U1_UNICORN_LEGACY support
+In-Reply-To: <20220719145324.8107-1-dedsa2002@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2207221502470.19850@cbobk.fhfr.pm>
+References: <20220719145324.8107-1-dedsa2002@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20220720111432.18321-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220720111432.18321-1-lukas.bulwahn@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 22 Jul 2022 15:00:44 +0200
-Message-ID: <CACRpkdYyHTMYMKwFW5JSNXi+4SiP7=NPQ_uwZHRzPUK9j3EfHA@mail.gmail.com>
-Subject: Re: [PATCH] arm: davinci: remove CPU type detection for DaVinci
- DM644x and DM646x
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 1:14 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+On Tue, 19 Jul 2022, Artem Borisov wrote:
 
-> Commit 7dd33764486d ("ARM: davinci: Delete DM644x board files") and commit
-> b4aed01de486 ("ARM: davinci: Delete DM646x board files") removes the
-> support for DaVinci DM644x and DM646x boards.
->
-> Hence, remove the CPU type detection for those boards as well.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> U1_UNICORN_LEGACY id was added to the driver, but was not declared
+> in the device id table, making it impossible to use.
+> 
+> Fixes: 640e403 ("HID: alps: Add AUI1657 device ID")
+> Signed-off-by: Artem Borisov <dedsa2002@gmail.com>
+> ---
+>  drivers/hid/hid-alps.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hid/hid-alps.c b/drivers/hid/hid-alps.c
+> index 2b986d0dbde4..db146d0f7937 100644
+> --- a/drivers/hid/hid-alps.c
+> +++ b/drivers/hid/hid-alps.c
+> @@ -830,6 +830,8 @@ static const struct hid_device_id alps_id[] = {
+>  		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1_DUAL) },
+>  	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
+>  		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1) },
+> +	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
+> +		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_U1_UNICORN_LEGACY) },
+>  	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
+>  		USB_VENDOR_ID_ALPS_JP, HID_DEVICE_ID_ALPS_T4_BTNLESS) },
+>  	{ }
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Please put this into the SoC patch process.
+Applied, thanks.
 
-Yours,
-Linus Walleij
+-- 
+Jiri Kosina
+SUSE Labs
+

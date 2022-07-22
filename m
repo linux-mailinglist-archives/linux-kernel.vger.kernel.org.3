@@ -2,209 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF4557DF4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8CC57DEF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236512AbiGVJmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S236165AbiGVJmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbiGVJmB (ORCPT
+        with ESMTP id S235303AbiGVJmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Jul 2022 05:42:01 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADD6CC6;
-        Fri, 22 Jul 2022 02:31:40 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id bz13so3099329qtb.7;
-        Fri, 22 Jul 2022 02:31:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/eKtb1gRHrco8cantWWpSRLNBaxxulEKH0F25Dqd8nk=;
-        b=eLtx8SxvSjynZPSDhTIbmnKIXrYffNIICknXUpmLVWPLilFir4eklz65BCfeqdUtI/
-         2OfEefsNyLWzmXHQ9qGnLrVvnLz8b0AVaOL3rH3Q+imUf2BlAY1QtUQgZCRWHB76wOvg
-         HoOsotx9y4Q24H9lYXwh1i3QXndsEw/Xk/nNx6mnr8boyhLk2pntiuTRKEi9rWdW8XOg
-         x7jXdWOP6ebDa5t/PBA6x6sXubIwcG0uSe5bSTCFxIEoVNZkhXUtKJrwtoB0WdOynDSQ
-         6Zjk6h7Vvm8bt/fTi4lIkXa/NMJ7v3z2eg837E9IIQcxmMXAkKqAAKiiMEgvZ8yfMcjP
-         g/Dg==
-X-Gm-Message-State: AJIora82l+B2ekU0kilrAsyNNEHeyRjcEzaylJtSBTQRN9ZvxcBHpL/n
-        HC8J8J/vIWnRQ7Dfu/8aoPRP6oB20PPc+g==
-X-Google-Smtp-Source: AGRyM1sIWrdIdsDIAWqQgpIrcaCr9h2OtFlh44rPh4GfA1rrnP44h9Z+1dmaA27gB7mymKJ/Wcwhxw==
-X-Received: by 2002:a05:622a:5d2:b0:31f:229d:441d with SMTP id d18-20020a05622a05d200b0031f229d441dmr911312qtb.277.1658482298812;
-        Fri, 22 Jul 2022 02:31:38 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id t28-20020a37ea1c000000b006b58d8f6181sm3195045qkj.72.2022.07.22.02.31.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 02:31:38 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id r3so7102300ybr.6;
-        Fri, 22 Jul 2022 02:31:38 -0700 (PDT)
-X-Received: by 2002:a25:aacc:0:b0:66f:f1ca:409c with SMTP id
- t70-20020a25aacc000000b0066ff1ca409cmr2301873ybi.36.1658482297883; Fri, 22
- Jul 2022 02:31:37 -0700 (PDT)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7CEB90
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:31:39 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.24.146.105])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF9506601AC4;
+        Fri, 22 Jul 2022 10:31:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658482298;
+        bh=9obwjyJ+1wqQsOOAQX4IrPl0kRLwK1h9fBoLG2aAqiM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l3PSKczOCoLazgjcsNJNtecODu4S6sAk81ATcCpFYL0WSlXGIgZek6RBG8yztZrdl
+         NXE44gTSUW3GEGBBfA7PyJo+yJq8kV6e3GOqwNWiY4wliTWAUvlRf461tKbuurEUIJ
+         Q5iqa7Hwex73+/ygO4YDeCzyhGTRxw9vp4rbEx+1uhH6Zm8NmtEoHTMKPtHMquszqe
+         6wEA6vWN06QWUGXC7anZszlFIxZGuZDdauuAs40iOMn2Kr1GwJBX75Vo7nsjz5GkFb
+         99YiyaRUalLbk1yM2sA2FiDTMFPvnyF7c49jcDxebruggP/YYYtIRE2u8lnc0fMATE
+         90NzI5SssYHwg==
+Message-ID: <c0fa7b9f-8f0b-da2c-5cd9-550df0b695c8@collabora.com>
+Date:   Fri, 22 Jul 2022 12:31:33 +0300
 MIME-Version: 1.0
-References: <20220721221212.18491-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220721221212.18491-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220721221212.18491-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 22 Jul 2022 11:31:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVy0w8Y-+MegHnjdFkQ7vB1Y=jPY-9atTFT_WTVYOiGLg@mail.gmail.com>
-Message-ID: <CAMuHMdVy0w8Y-+MegHnjdFkQ7vB1Y=jPY-9atTFT_WTVYOiGLg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
- Document RZ/Five SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: amd: vangogh: Use non-legacy DAI naming for cs35l41
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20220721233227.1459374-1-cristian.ciocaltea@collabora.com>
+ <20220722090532.GF92394@ediswmail.ad.cirrus.com>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <20220722090532.GF92394@ediswmail.ad.cirrus.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
 
-On Fri, Jul 22, 2022 at 12:15 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document RZ/Five (R9A07G043) SYSC bindings. SYSC block found on the
-> RZ/Five SoC is almost identical to one found on the RZ/G2L (and alike)
-> SoC's. To differentiate RZ/G2UL from RZ/Five, "-rzfive" is included in
-> the compatible string for the RZ/Five SoC as there are no interrupts
-> from the SYSC block to the core.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 7/22/22 12:05, Charles Keepax wrote:
+> On Fri, Jul 22, 2022 at 02:32:27AM +0300, Cristian Ciocaltea wrote:
+>> Unlike most CODEC drivers, the CS35L41 driver did not have the
+>> non_legacy_dai_naming set, meaning the corresponding DAI has been
+>> traditionally registered using the legacy naming: spi-VLV1776:0x
+>>
+>> The recent migration to the new legacy DAI naming style has implicitly
+>> corrected that behavior and DAI gets now registered via the non-legacy
+>> naming, i.e. cs35l41-pcm.
+>>
+>> The problem is the acp5x platform driver is now broken as it continues
+>> to refer to the above mentioned codec using the legacy DAI naming in
+>> function acp5x_cs35l41_hw_params() and, therefore, the related setup
+>> is not being executed anymore.
+>>
+>> Let's fix that by replacing the obsolete DAI name with the correct one.
+>>
+>> Fixes: bc949a3b4af3 ("ASoC: core: Switch core to new DAI naming flag")
+> 
+> Although sorry just noticed you might want to double check the SHA
+> here, I think the upstream one is 129f055a2144.
 
-Thanks for your patch!
+You are right, thanks for noticing!
+I've done some rebasing/bisecting operations and I forgot to recheck the 
+original commit.. I've just sent v2.
 
-> ---
->  .../soc/renesas/renesas,rzg2l-sysc.yaml       | 56 +++++++++++++------
->  1 file changed, 39 insertions(+), 17 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> index ce2875c89329..bdaf05f8b29b 100644
-> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> @@ -20,35 +20,57 @@ description:
->  properties:
->    compatible:
->      enum:
-> -      - renesas,r9a07g043-sysc # RZ/G2UL
-> -      - renesas,r9a07g044-sysc # RZ/G2{L,LC}
-> -      - renesas,r9a07g054-sysc # RZ/V2L
-> +      - renesas,r9a07g043-rzfive-sysc # RZ/Five
+Regards,
+Cristian
 
-renesas,r9a07g043f-sysc?
-
-But I'm wondering if we really need a different compatible value?
-It looks like both blocks differ only in external wiring, so if
-anything needs to be handled differently (the removed/added registers
-are related to CPU topology), that can be inferred from the system
-topology (or even #ifdef CONFIG_{ARM64,RISCV} ;-)
-
-> +      - renesas,r9a07g043-sysc        # RZ/G2UL
-> +      - renesas,r9a07g044-sysc        # RZ/G2{L,LC}
-> +      - renesas,r9a07g054-sysc        # RZ/V2L
->
->    reg:
->      maxItems: 1
->
-> -  interrupts:
-> -    items:
-> -      - description: CA55/CM33 Sleep/Software Standby Mode request interrupt
-> -      - description: CA55 Software Standby Mode release request interrupt
-> -      - description: CM33 Software Standby Mode release request interrupt
-> -      - description: CA55 ACE Asynchronous Bridge Master/Slave interface deny request interrupt
-> +  interrupts: true
->
-> -  interrupt-names:
-> -    items:
-> -      - const: lpm_int
-> -      - const: ca55stbydone_int
-> -      - const: cm33stbyr_int
-> -      - const: ca55_deny
-> +  interrupt-names: true
->
->  required:
->    - compatible
->    - reg
-> -  - interrupts
-> -  - interrupt-names
->
->  additionalProperties: false
->
-> +allOf:
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - renesas,r9a07g043-rzfive-sysc
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          items:
-> +            - description: CA55/CM33 Sleep/Software Standby Mode request interrupt
-> +            - description: CA55 Software Standby Mode release request interrupt
-> +            - description: CM33 Software Standby Mode release request interrupt
-> +            - description: CA55 ACE Asynchronous Bridge Master/Slave interface deny request interrupt
-> +
-> +        interrupt-names:
-> +          items:
-> +            - const: lpm_int
-> +            - const: ca55stbydone_int
-> +            - const: cm33stbyr_int
-> +            - const: ca55_deny
-> +
-> +      required:
-> +        - interrupts
-> +        - interrupt-names
-> +
-> +    else:
-> +      properties:
-> +        interrupts: false
-> +        interrupt-names: false
-
-Do all interrupts{,-names} have to be moved?
-Wouldn't it be sufficient to just have
-
-    if [...]
-    then:
-        required:
-          - interrupts
-          - interrupt-names
-    else:
-        properties:
-            interrupts: false
-            interrupt-names: false
-
-?
-
-But again, without a new compatible value, you could just make
-interrupts{,-names} not required?
-
-> +
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Thanks,
+> Charles

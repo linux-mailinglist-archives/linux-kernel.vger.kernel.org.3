@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5A957E3BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502F157E3C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbiGVP1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S235389AbiGVP2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiGVP1e (ORCPT
+        with ESMTP id S235110AbiGVP1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:27:34 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0A29EC6B
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:27:32 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y141so4708071pfb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:27:32 -0700 (PDT)
+        Fri, 22 Jul 2022 11:27:50 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494249FE0A
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:27:49 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id f11so4853223plr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JiTsgIyx7zIuebw3jPBiJz5uZKu7LJAxJF1fKKcrwMc=;
-        b=rrckFJbUDVsImQF7IueIbd0/U72biyUAgvOzS+WhlcjHCI3ldV94QbLnmmGX/EQSr+
-         c8TSWho4ZocrCsAjV6gxmPElF1BHN92O4e1VfJB6B8bR82dmtAYAf8QTGOxStbnKVdnF
-         Rr9z7B4FLIxTcqsj3J4Ep53UwR44wRjA2i+TA8UHQ9jC0eqwkKnSRwGNwiYl3JihLKdL
-         1oyg1K4t6/seSECyO7ysuzncwYAIxoww5m1UBmjQwNf0zHUNZHFNBBwqN39nCLjmjVJG
-         LHZtpEy0JFK7N84KO0Jz7kvgGjh7WVGK2YZaqOzvnCz0FdvPKk9PLma/CLmmlb2xLLpZ
-         9q9Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GvsJKETzIYJsxczzHJyFdH4tuugoZF3X8uPibH3AGEA=;
+        b=pBOTejsyvveMutjphsKDBUaGpuKUFc4XMUEms1oWqHa/5DDWVtDdI4Jt3EjD+xFc/z
+         lefXIIdQA+Cngt0ViiJMfjCrvLVsnHzHqwRDK2Iwp+F/DsQ7MV+jwSdKctK/UVf4qygv
+         H9DjCQdrZRApSni5sXt+xLaXiYG25Zfxijifhk0hE+ht3f4BmGce4uebq6+qdbRkvXF4
+         Di9jXoMG8Zd0HM8eZm7sI0+Zx4+CSp5xbwACis0wAgafasGHiEUIBoWctM1PTgtwwZiy
+         KdYKILzZzLb0WE5xs8kDpDEFKexdDtkVlk0ggkCo0iTkHZ7bBwehl1veNh7SQPQf2vU5
+         bXkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=JiTsgIyx7zIuebw3jPBiJz5uZKu7LJAxJF1fKKcrwMc=;
-        b=X2rCxoBPz7eY9VueDQACwiutihYlgfEWDMuyl4Cl5qoQ9/73AtXH6SEyPlVdTXe8zW
-         jC9yx/Ij3LSIw81Z0TdaoOZ9DSBWH5x8nFBt4ZxL5nJTfYM63hzu9VJjcZF034yNohvQ
-         dDvFQCbvPcZsv2rQruqVSNXf9hURo/7Uipw0KWQyz6vtefTqQV8VHOHYb2ip/JTEma6k
-         02R+iLCRJS6o+pYKHLInqAEPFYNxFmZgFZv2JAo25yGPE12whFzOEWE5ooMDVstgEEz2
-         voBybyUTkwSGsTdV7XzN/eV+Lb6TcKYN8wAJsn7wUxRCExK4KYCf3I+2c1l3e4TAwIHr
-         /J/w==
-X-Gm-Message-State: AJIora/UjjCZrPkmpax6CKNMgFqd5ho3lJMmX9nZvR7Tx5BQOzMTQ9wz
-        NMqsHIIKj5rLSeR9Nv0LyWg5Ig==
-X-Google-Smtp-Source: AGRyM1vjiNi3gAsTSR6PPVAuJFh976n3sC3CS18PuJ5NGShYw7q13nR9jGjBImNfgAPUs0Ag9vo1kQ==
-X-Received: by 2002:a65:460b:0:b0:41a:6637:6544 with SMTP id v11-20020a65460b000000b0041a66376544mr257298pgq.511.1658503652107;
-        Fri, 22 Jul 2022 08:27:32 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id p4-20020a17090a930400b001e292e30129sm3562385pjo.22.2022.07.22.08.27.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GvsJKETzIYJsxczzHJyFdH4tuugoZF3X8uPibH3AGEA=;
+        b=oK/UpwujicD9CPgrMG+1gqxSMqVGV+nQ8H0EOzTngsclmpU3+i7sQCFtvrN4bE6CZ8
+         2SciUSj4J5VhG2PbYWU0W/dw4yoRXXcUChoYe+/hmQrKW13UbrugQIvuYW5V9c4URYKh
+         vhbl9KFh6a7GfJgoM146GJ/sTME5g/h0CA4sDxZNBjqg745KANdhCg/12dQPXOOGKMhl
+         k6Dd9gxVRq8T+PNAyaDApW1qT0lYk+WetwaxGN2Z5KX4JaVr4InzXfyQ2lzb6nRDsKgp
+         MJHRwtBe0z4LQ5w7VsK3Y2EHJAv3lg/7mRqUgIcHaGqZIjsdAjIYigpHC8jmtQO8/zOv
+         BKqA==
+X-Gm-Message-State: AJIora8a/Quwjy1v2sh7T/DzEYuNZVtsu9nJM6FbVtltrhCu52qLwASF
+        xRUG8cGsT2tqg2vZH0J22bhhqw==
+X-Google-Smtp-Source: AGRyM1vGuWvC3KxSmAdtBwft7NJW+zK/QU+mBC8yea/Nf0X4k4yfoT+8Hs83yK4wxBTWv1gSlNXYZA==
+X-Received: by 2002:a17:903:1208:b0:16b:81f6:e992 with SMTP id l8-20020a170903120800b0016b81f6e992mr420562plh.55.1658503668507;
+        Fri, 22 Jul 2022 08:27:48 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id m1-20020a170902db0100b0016d295888e3sm3958168plx.241.2022.07.22.08.27.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 08:27:31 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 08:27:31 -0700 (PDT)
-X-Google-Original-Date: Fri, 22 Jul 2022 08:27:30 PDT (-0700)
-Subject:     Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
-In-Reply-To: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
-CC:     shorne@gmail.com, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, catalin.marinas@arm.com,
-        Will Deacon <will@kernel.org>, guoren@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Rob Herring <robh@kernel.org>, bhelgaas@google.com,
-        macro@orcam.me.uk
-Message-ID: <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 22 Jul 2022 08:27:48 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 15:27:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        oliver.upton@linux.dev
+Subject: Re: [PATCH] Revert "KVM: nVMX: Do not expose MPX VMX controls when
+ guest MPX disabled"
+Message-ID: <YtrB8JEuc1Il1EOO@google.com>
+References: <20220722104329.3265411-1-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722104329.3265411-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,153 +72,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 16:06:52 PDT (-0700), Rob Herring wrote:
-> On Tue, Jul 19, 2022 at 9:59 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->>
->> On Sun, 17 Jul 2022 17:41:14 PDT (-0700), shorne@gmail.com wrote:
->> > The asm/pci.h used for many newer architectures share similar
->> > definitions.  Move the common parts to asm-generic/pci.h to allow for
->> > sharing code.
->> >
->> > Two things to note are:
->> >
->> >  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
->> >    these architectures avoid creating that file and add the definition
->> >    to asm/pci.h.
->> >  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
->> >    undefine it after including asm-generic/pci.h.  Why doesn't csky
->> >    define it?
->> >  - pci_get_legacy_ide_irq, This function is only used on architectures
->> >    that support PNP.  It is only maintained for arm64, in other
->> >    architectures it is removed.
->> >
->> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
->> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
->> > Signed-off-by: Stafford Horne <shorne@gmail.com>
->> > ---
->> > Second note on isa_dma_bridge_buggy, this is set on x86 but it it also set in
->> > pci/quirks.c.  We discussed limiting it only to x86 though as its a general
->> > quick triggered by pci ids I think it will be more tricky than we thought so I
->> > will leave as is.  It might be nice to move it out of asm/dma.h and into
->> > asm/pci.h though.
->> >
->> > Since v2:
->> >  - Nothing
->> > Since v1:
->> >  - Remove definition of pci_get_legacy_ide_irq
->> >
->> >  arch/arm64/include/asm/pci.h | 12 +++---------
->> >  arch/csky/include/asm/pci.h  | 24 ++++--------------------
->> >  arch/riscv/include/asm/pci.h | 25 +++----------------------
->> >  arch/um/include/asm/pci.h    | 24 ++----------------------
->> >  include/asm-generic/pci.h    | 36 ++++++++++++++++++++++++++++++++++++
->> >  5 files changed, 48 insertions(+), 73 deletions(-)
->> >  create mode 100644 include/asm-generic/pci.h
->> >
->> > diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
->> > index b33ca260e3c9..1180e83712f5 100644
->> > --- a/arch/arm64/include/asm/pci.h
->> > +++ b/arch/arm64/include/asm/pci.h
->> > @@ -9,7 +9,6 @@
->> >  #include <asm/io.h>
->> >
->> >  #define PCIBIOS_MIN_IO               0x1000
->> > -#define PCIBIOS_MIN_MEM              0
->> >
->> >  /*
->> >   * Set to 1 if the kernel should re-assign all PCI bus numbers
->> > @@ -18,9 +17,6 @@
->> >       (pci_has_flag(PCI_REASSIGN_ALL_BUS))
->> >
->> >  #define arch_can_pci_mmap_wc() 1
->> > -#define ARCH_GENERIC_PCI_MMAP_RESOURCE       1
->> > -
->> > -extern int isa_dma_bridge_buggy;
->> >
->> >  #ifdef CONFIG_PCI
->> >  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->> > @@ -28,11 +24,9 @@ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->> >       /* no legacy IRQ on arm64 */
->> >       return -ENODEV;
->> >  }
->> > -
->> > -static inline int pci_proc_domain(struct pci_bus *bus)
->> > -{
->> > -     return 1;
->> > -}
->> >  #endif  /* CONFIG_PCI */
->> >
->> > +/* Generic PCI */
->> > +#include <asm-generic/pci.h>
->> > +
->> >  #endif  /* __ASM_PCI_H */
->> > diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
->> > index ebc765b1f78b..44866c1ad461 100644
->> > --- a/arch/csky/include/asm/pci.h
->> > +++ b/arch/csky/include/asm/pci.h
->> > @@ -9,26 +9,10 @@
->> >
->> >  #include <asm/io.h>
->> >
->> > -#define PCIBIOS_MIN_IO               0
->> > -#define PCIBIOS_MIN_MEM              0
->> > +/* Generic PCI */
->> > +#include <asm-generic/pci.h>
->> >
->> > -/* C-SKY shim does not initialize PCI bus */
->> > -#define pcibios_assign_all_busses() 1
->> > -
->> > -extern int isa_dma_bridge_buggy;
->> > -
->> > -#ifdef CONFIG_PCI
->> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
->> > -{
->> > -     /* no legacy IRQ on csky */
->> > -     return -ENODEV;
->> > -}
->> > -
->> > -static inline int pci_proc_domain(struct pci_bus *bus)
->> > -{
->> > -     /* always show the domain in /proc */
->> > -     return 1;
->> > -}
->> > -#endif  /* CONFIG_PCI */
->> > +/* csky doesn't use generic pci resource mapping */
->> > +#undef ARCH_GENERIC_PCI_MMAP_RESOURCE
->> >
->> >  #endif  /* __ASM_CSKY_PCI_H */
->> > diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
->> > index 7fd52a30e605..12ce8150cfb0 100644
->> > --- a/arch/riscv/include/asm/pci.h
->> > +++ b/arch/riscv/include/asm/pci.h
->> > @@ -12,29 +12,7 @@
->> >
->> >  #include <asm/io.h>
->> >
->> > -#define PCIBIOS_MIN_IO               0
->> > -#define PCIBIOS_MIN_MEM              0
->>
->> My for-next changes these in bb356ddb78b2 ("RISC-V: PCI: Avoid handing
->> out address 0 to devices").  Do you mind either splitting out the
->> arch/riscv bits or having this in via some sort of shared tag?
->
-> Shouldn't the values not matter here if the IO and mem resources are
-> described in the DT (and don't use 0)? The values of 4 and 16 look
-> odd.
+On Fri, Jul 22, 2022, Paolo Bonzini wrote:
+> Since commit 5f76f6f5ff96 ("KVM: nVMX: Do not expose MPX VMX controls
+> when guest MPX disabled"), KVM has taken ownership of the "load
+> IA32_BNDCFGS" and "clear IA32_BNDCFGS" VMX entry/exit controls,
+> trying to set these bits in the IA32_VMX_TRUE_{ENTRY,EXIT}_CTLS
+> MSRs if the guest's CPUID supports MPX, and clear otherwise.
+> 
+> The intent of the patch was to apply it to L0 in order to work around
+> L1 kernels that lack the fix in commit 691bd4340bef ("kvm: vmx: allow
+> host to access guest MSR_IA32_BNDCFGS", 2017-07-04): by hiding the
+> control bits from L0, L1 hides BNDCFGS from KVM_GET_MSR_INDEX_LIST,
+> and the L1 bug is neutralized even in the lack of commit 691bd4340bef.
+> 
+> This was perhaps a sensible kludge at the time, but a horrible
+> idea in the long term and in fact it has not been extended to
+> other CPUID bits like these:
+> 
+>   X86_FEATURE_LM => VM_EXIT_HOST_ADDR_SPACE_SIZE, VM_ENTRY_IA32E_MODE,
+>                     VMX_MISC_SAVE_EFER_LMA
+> 
+>   X86_FEATURE_TSC => CPU_BASED_RDTSC_EXITING, CPU_BASED_USE_TSC_OFFSETTING,
+>                      SECONDARY_EXEC_TSC_SCALING
+> 
+>   X86_FEATURE_INVPCID_SINGLE => SECONDARY_EXEC_ENABLE_INVPCID
+> 
+>   X86_FEATURE_MWAIT => CPU_BASED_MONITOR_EXITING, CPU_BASED_MWAIT_EXITING
+> 
+>   X86_FEATURE_INTEL_PT => SECONDARY_EXEC_PT_CONCEAL_VMX, SECONDARY_EXEC_PT_USE_GPA,
+>                           VM_EXIT_CLEAR_IA32_RTIT_CTL, VM_ENTRY_LOAD_IA32_RTIT_CTL
+> 
+>   X86_FEATURE_XSAVES => SECONDARY_EXEC_XSAVES
+> 
+> These days it's sort of common knowledge that any MSR in
+> KVM_GET_MSR_INDEX_LIST must allow *at least* setting it with KVM_SET_MSR
+> to a default value, so it is unlikely that something like commit
+> 5f76f6f5ff96 will be needed again.  So revert it, at the potential cost
+> of breaking L1s with a 6 year old kernel.  
 
-The linked thread has a fairly long discussion 
-<https://lore.kernel.org/all/alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk/>.  
-I agree it's odd to have this in arch code: "don't hand out address 0" 
-isn't really a RISC-V constraint (ie, we don't have architecture-defined 
-limitations on these address spaces) but a constraint that comes from 
-the generic port I/O functions and some other related PCI/resource code 
-where the value 0 is a sentinel.
+I would further qualify this with "breaking L1s with an _unpatched_ 6 year old
+kernel".  That fix was tagged for stable and made it way to at least the 4.9 and
+4.4 LTS releases.
 
-Maybe the right thing to do here is actually to make the default 
-definitions of these macros non-zero, or to add some sort of ARCH_ 
-flavor of them and move that non-zero requirement closer to where it 
-comes from?  From the look of it any port that uses the generic port I/O 
-functions and has 0 for these will be broken in the same way.
+> While in principle the L0 owner doesn't control what runs on L1, such an old
+> hypervisor would probably have many other bugs.
 
-That said, I'm not really a PCI guy so maybe Bjorn or Maciej has a 
-better idea?
+And patching KVM to workaround L1 Linux bugs never ends well, e.g. see also the
+hypercall patching snafu.
+
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>

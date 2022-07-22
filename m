@@ -2,72 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926B457E79A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D007757E79D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiGVToB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S235967AbiGVTpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbiGVTn6 (ORCPT
+        with ESMTP id S230486AbiGVTpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:43:58 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747AD9C266;
-        Fri, 22 Jul 2022 12:43:53 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1658519022to35h9sa
-Received: from harry-jrlc.. ( [125.70.163.183])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 23 Jul 2022 03:43:30 +0800 (CST)
-X-QQ-SSF: 0100000000200030C000000A0000020
-X-QQ-FEAT: v5d6m16HONXNHGd6LaI6M2BNMd1VM1HyIJO+rkMS0zesL6zlvVCy5qcxOHNqw
-        NNxkwIuoVTsexRcPopGPy5PsUvtzgOHPRdv6RIZCv2fDWNYu73H0y43cOe2b9cTzFIfGwVX
-        0QukgR93vNU9E8LUWH+Y/o7XfqZSMkU/ybyV6XXOTs/ck48IlGy/qB1NBscCV0x+wXegl37
-        ALeov1zVZl8xkqYFZjVWcAtU5ykeR+9Hn0nxuKA7dUbeutUNf7NddniskTo7xcswbTnwhM7
-        ShIbsrP1A52UBusgOanyeyJ68GwJQ3coiprdLmjQ36UNYiYNLHDrqzZut7AtkSSZnAbzjBE
-        XdoYV46Ox+E8+eH2QHPrj/WZdWm2Mr4HC+Qz2foiNiZfKrZ7bo=
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     djwong@kernel.org
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] xfs: Fix comment typo
-Date:   Sat, 23 Jul 2022 03:43:28 +0800
-Message-Id: <20220722194328.18365-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 22 Jul 2022 15:45:16 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EEE1121
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=nquW4uTK4EsRfwtuLuO5LJX7Kp99WKVz9jDKp1qtM5M=;
+        b=LEOoim3HTfBG6Im2MJvLVsNAGyS2uuOEbXscuyokM/Cq0+jDNjlVMdSZVGzbu08uCGgp2NMKTuBbX
+         UQMe5rIIaUj9Pmsl0FPhJ8TjuBkP1JqgsNRmucTpGIuMDBa2CWjPF4vuOik+cZBfoetpaOgJMmaWZH
+         NPCjkgnc4OFVG8bJuL9A444xXFUePYsLaZ9dy14NgloFQLs5z1Tjg8+ZHKaTTgcx8i+xS7SOr1Bil0
+         1QF/vPpeGyH5KLYMgSnUzMdSC1uw3v3W9dklceReos4x3GPaHg4GlPcMnx+r4aGL/Kc6NvhyGyeSHI
+         cv8Dg8ySg6lhHC+K8w0VPrEFVAlJkCw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=nquW4uTK4EsRfwtuLuO5LJX7Kp99WKVz9jDKp1qtM5M=;
+        b=vjNctA/bG7tR/QobV4rEn85FmJNic46NcaPLTwPjT2TY2KPM14A5VnPI9A2CoM6QTh/fdqjMSdpTB
+         GM2I4gaAQ==
+X-HalOne-Cookie: 7913dd9b8a246146ee3aa0d23a7b5d241bb96559
+X-HalOne-ID: cab67a2b-09f6-11ed-8240-d0431ea8bb10
+Received: from mailproxy3.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id cab67a2b-09f6-11ed-8240-d0431ea8bb10;
+        Fri, 22 Jul 2022 19:45:09 +0000 (UTC)
+Date:   Fri, 22 Jul 2022 21:45:07 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Marek Belisko <marek@goldelico.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 1/1] spi/panel: dt-bindings: drop CPHA and CPOL from
+ common properties
+Message-ID: <Ytr+Q6kXr+f6dCfi@ravnborg.org>
+References: <20220722191539.90641-1-krzysztof.kozlowski@linaro.org>
+ <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `that' is duplicated in line 575, remove one.
+Hi Krzysztof
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- fs/xfs/xfs_trans.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Jul 22, 2022 at 09:15:39PM +0200, Krzysztof Kozlowski wrote:
+> The spi-cpha and spi-cpol properties are device specific and should be
+> accepted only if device really needs them.  Drop them from common
+> spi-peripheral-props.yaml schema, mention in few panel drivers which use
+> themi
 
-diff --git a/fs/xfs/xfs_trans.c b/fs/xfs/xfs_trans.c
-index 82cf0189c0db..d055b0938eb9 100644
---- a/fs/xfs/xfs_trans.c
-+++ b/fs/xfs/xfs_trans.c
-@@ -572,7 +572,7 @@ xfs_trans_apply_sb_deltas(
-  * xfs_trans_unreserve_and_mod_sb() is called to release unused reservations and
-  * apply superblock counter changes to the in-core superblock.  The
-  * t_res_fdblocks_delta and t_res_frextents_delta fields are explicitly NOT
-- * applied to the in-core superblock.  The idea is that that has already been
-+ * applied to the in-core superblock.  The idea is that has already been
-  * done.
-  *
-  * If we are not logging superblock counters, then the inode allocated/free and
--- 
-2.30.2
+    "and include instead in the SPI controller bindings."
 
+I cannot see you do this in the touched bindings.
+
+So I cannot see how for example samsung,ld9040.yaml picks up
+spi-controller.yaml and thus it no longer knows the spi-cpha and spi-cpol
+properties.
+
+Maybe I missed something?
+
+	Sam

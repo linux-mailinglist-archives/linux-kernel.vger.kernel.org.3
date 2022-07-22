@@ -2,63 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB32157DBE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878F157DBF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbiGVILs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
+        id S234825AbiGVIMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiGVILo (ORCPT
+        with ESMTP id S234812AbiGVIL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:11:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577E9CE04;
-        Fri, 22 Jul 2022 01:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ta3rvx+Batm6nlecC0K7iwKchb/Me2mo/w2bTMnndwY=; b=Icpp3ZraJ98dzkqejg7ojIFZlW
-        twhBghYZj8E0XytNLt5zspXTcWQ9DdL0bSjxTxEf8HvC4iii/6mfrgHZqL+86uIfAarieFyUa4mZk
-        QVCe6tpTIigKLnLYC0/U+Cwsn2ooqs/VGY+HpeCzDCbl1QRRbBVyRSGjTTATVDKHepfiwvvOq7X7f
-        9ugB6djOL1o1F2qEXRT2AC456mpMcxlXm8ncni/gOi/3Ur5oa8ATDDRQd+3jGJ9ROxV9fIEMxTsR4
-        heID/JaqnPVRGe58CI6SMsk28zG5vle3mGee6VSe1P61JQnjJxyIwKKABdDlsVZnth2Gd+iXmdprl
-        TTE2a/fA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEnl9-000uTi-6h; Fri, 22 Jul 2022 08:11:43 +0000
-Date:   Fri, 22 Jul 2022 01:11:43 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v4 9/9] xfs: support STATX_DIOALIGN
-Message-ID: <Ytpbv1sDoh8pqWXx@infradead.org>
-References: <20220722071228.146690-1-ebiggers@kernel.org>
- <20220722071228.146690-10-ebiggers@kernel.org>
+        Fri, 22 Jul 2022 04:11:59 -0400
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDE99D1CB;
+        Fri, 22 Jul 2022 01:11:55 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.108.1.79])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id DE2A22454B7;
+        Fri, 22 Jul 2022 08:11:53 +0000 (UTC)
+Received: from localhost.localdomain (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Fri, 22 Jul
+ 2022 10:11:53 +0200
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+To:     <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <andy.shevchenko@gmail.com>, <linux-leds@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Subject: [RESEND PATCH v6 0/3] Add support for the TLC5925
+Date:   Fri, 22 Jul 2022 10:11:43 +0200
+Message-ID: <20220722081146.47262-1-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722071228.146690-10-ebiggers@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG4EX2.emp2.local (172.16.2.32) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 6613817531275426267
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtvddgtdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeejuefhkeelgffhlefhtefhgeektdevvdfgkeeltdehgeeujeeutdehkeeuhffftdenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmoheftddtge
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:12:28AM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Add support for STATX_DIOALIGN to xfs, so that direct I/O alignment
-> restrictions are exposed to userspace in a generic way.
+Resending the v6 of the series.
 
-Looks good:
+Pavel, do you have any comment/suggestion on this series ?
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Thanks,
+
+JJ
+
+
+Original cover-letter:
+
+This series adds the support for the TLC5925 LED controller.
+This LED controller is driven through SPI. There is little internal logic
+and it can be thought of as a deserializer + latches.
+The TLC5925 itself drives up to 16 LEDs, but multiple TLC5925s can be
+chained to drive more.
+
+The first patch describes the dt bindings.
+The second patch implements most of the driver and supports only
+synchronous brightness setting (brightness_set_blocking).
+The last patch implements the non-blocking version (brightness_set).
+
+changes v5->v6:
+ * Make the 'ti,shif-register-length' property optional. The default
+   value is 16: the length of the shift register of a single TLC5925.
+ * fix minor issues in the binding description
+
+ changes v4->v5:
+ * add the headers that the code is a direct user of
+ * replace dev_err() with dev_err_probe() in ->probe()
+ * comestic changes (spaces, alignment and blank lines)
+
+changes v3->v4:
+ * add missing MODULE_DEVICE_TABLE(of, ...) 
+ * use dev_err_probe() to avoid spamming the log in case of deferred probe
+ * use bitmap ops instead of direct memory access + lock
+ * sort headers and a few other cosmetic changes.
+
+changes v2->v3:
+ * fixed the yaml description of the bindings (now passes dt_binding_check)
+ * renamed shit-register-length into ti,shift-register-length and specify
+   its type
+
+changes v1->v2:
+ * renamed property shift_register_length into shift-register-length
+ * add a SPI MODULE_DEVICE_TABLE structure
+ * fixed the yaml description of the bindings (now passes dt_binding_check)
+
+
+Jean-Jacques Hiblot (3):
+  dt-bindings: leds: Add bindings for the TLC5925 controller
+  leds: Add driver for the TLC5925 LED controller
+  leds: tlc5925: Add support for non blocking operations
+
+ .../devicetree/bindings/leds/ti,tlc5925.yaml  | 105 ++++++++++
+ drivers/leds/Kconfig                          |   6 +
+ drivers/leds/Makefile                         |   1 +
+ drivers/leds/leds-tlc5925.c                   | 182 ++++++++++++++++++
+ 4 files changed, 294 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/ti,tlc5925.yaml
+ create mode 100644 drivers/leds/leds-tlc5925.c
+
+-- 
+2.25.1
+

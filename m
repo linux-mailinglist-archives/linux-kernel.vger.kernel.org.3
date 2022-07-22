@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB42557E2E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E66757E2E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiGVOP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 10:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S233830AbiGVOQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 10:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235302AbiGVOPZ (ORCPT
+        with ESMTP id S229880AbiGVOQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 10:15:25 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F5DC29827;
-        Fri, 22 Jul 2022 07:15:23 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,185,1654527600"; 
-   d="scan'208";a="127042277"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 22 Jul 2022 23:15:23 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0AD4C43279E4;
-        Fri, 22 Jul 2022 23:15:19 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
+        Fri, 22 Jul 2022 10:16:29 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A317A024B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 07:16:29 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id va17so8889704ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 07:16:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nxeR7Lo5PYoDSgSUtAiC935tL0yHF6pLSDAauA9BG7w=;
+        b=MR4DklGeYf0D/wYM8Tyks/4W15tt7jHZxpOHeWkrP8SiiLYJgMMJZeb9xKy35RcKBs
+         K02sZymDAJh71V2xCJ/MwdvDF50YToUQ5aK/Gclm4R1CHh8YMaSpCriWuruPQwmdVmmO
+         nAg3zgaWjMnm7XHZdvJjYWVs694bvxq+EB2rg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nxeR7Lo5PYoDSgSUtAiC935tL0yHF6pLSDAauA9BG7w=;
+        b=KWDBaAInDO96OSC8cMSzHqXz3h4iHhotZJqrgZl6DrVlv1gY+iMnehGENkYzCdFhsJ
+         nUzXRw2iQQZSBeg1LjkZK6uzB3nB5MBp9hvDeWKymbLzHazw7aGmBUUVqlwk7IGyYBRB
+         520UXyBiwznjp1v5UVVSQWDVOePflp0/VZRf6s21iaBIrcheDcH2FY3fWER79cjNIMqg
+         t2uT3mU/gCpo06rwN8g/0YIK2JnG+Tsxgu43ZWjAiuxKvDrq0OMEvIAfMpA2ckHlMPsS
+         6AkipoIMgE7i/I+1o7yI9KP1jfdR5TO+w+5fRufzeVS7muxhWLQCBA3QHd9C8v+5wzaj
+         xDLA==
+X-Gm-Message-State: AJIora+7fjKVpSEK1XvffnOHYdWPcjpSbd9gJhVvt6REN9P28jv5gIr7
+        AdV0KvD0QkkrJ1vdUCEPAKXmqkng/s5O0DCJqYA=
+X-Google-Smtp-Source: AGRyM1sGLc89RtJrp1UHBwC31h3XluWoR29LOjYaqjjXEeQUJyRgImRBJciwbkcZM/xpqKV1t1dMGQ==
+X-Received: by 2002:a17:907:a0c7:b0:72f:b204:c281 with SMTP id hw7-20020a170907a0c700b0072fb204c281mr104969ejc.720.1658499387230;
+        Fri, 22 Jul 2022 07:16:27 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id fw9-20020a170907500900b0072aebed5937sm2009462ejc.221.2022.07.22.07.16.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 07:16:26 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id b26so6713015wrc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 07:16:26 -0700 (PDT)
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
+ b13-20020adff90d000000b0020cde324d35mr76737wrr.583.1658499386136; Fri, 22 Jul
+ 2022 07:16:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220722081127.228971-1-jinghung.chen3@hotmail.com> <SG2PR03MB500658668FBB9BE1DC2B3F24CC909@SG2PR03MB5006.apcprd03.prod.outlook.com>
+In-Reply-To: <SG2PR03MB500658668FBB9BE1DC2B3F24CC909@SG2PR03MB5006.apcprd03.prod.outlook.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 22 Jul 2022 07:16:14 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WgzOn7EsGgWd-qkEMccBQQn1id1u_0Ph1V6qExfCEioA@mail.gmail.com>
+Message-ID: <CAD=FV=WgzOn7EsGgWd-qkEMccBQQn1id1u_0Ph1V6qExfCEioA@mail.gmail.com>
+Subject: Re: [PATCH v7 1/3] dt-bindings: arm: qcom: document sc7280 and
+ villager board
+To:     Jimmy Chen <jinghung.chen3@hotmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alan Huang <alan-huang@quanta.corp-partner.google.com>,
         Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 2/2] soc: renesas: Identify RZ/Five SoC
-Date:   Fri, 22 Jul 2022 15:15:06 +0100
-Message-Id: <20220722141506.20171-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220722141506.20171-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220722141506.20171-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for identifying the (R9A07G043) RZ/Five SoC.
+Hi,
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1->v2
-* Replaced RISCV -> RISCV
-* Reused "renesas,r9a07g043-sysc" string for RZ/Five detection
----
- drivers/soc/renesas/Kconfig       | 10 ++++++++++
- drivers/soc/renesas/renesas-soc.c | 13 +++++++++++++
- 2 files changed, 23 insertions(+)
+On Fri, Jul 22, 2022 at 1:11 AM Jimmy Chen <jinghung.chen3@hotmail.com> wrote:
+>
+> This adds a LTE skus for Chromebook Villager to the yaml.
+>
+> Signed-off-by: Jimmy Chen <jinghung.chen3@hotmail.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+> (no changes since v2)
+>
+> Changes in v2:
+> -Add this patch
+>
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 390f52109cb7..f95a1337450d 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -333,6 +333,16 @@ config ARCH_R9A09G011
- 
- endif # ARM64
- 
-+if RISCV
-+
-+config ARCH_R9A07G043
-+	bool "RISC-V Platform support for RZ/Five"
-+	select ARCH_RZG2L
-+	help
-+	  This enables support for the Renesas RZ/Five SoC.
-+
-+endif # RISCV
-+
- config RST_RCAR
- 	bool "Reset Controller support for R-Car" if COMPILE_TEST
- 
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index d171f1b635c7..c0e2c62c76c9 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -50,6 +50,10 @@ static const struct renesas_family fam_rza2 __initconst __maybe_unused = {
- 	.name	= "RZ/A2",
- };
- 
-+static const struct renesas_family fam_rzfive __initconst __maybe_unused = {
-+	.name	= "RZ/Five",
-+};
-+
- static const struct renesas_family fam_rzg1 __initconst __maybe_unused = {
- 	.name	= "RZ/G1",
- 	.reg	= 0xff000044,		/* PRR (Product Register) */
-@@ -102,6 +106,11 @@ static const struct renesas_soc soc_rmobile_a1 __initconst __maybe_unused = {
- 	.id	= 0x40,
- };
- 
-+static const struct renesas_soc soc_rz_five __initconst __maybe_unused = {
-+	.family = &fam_rzfive,
-+	.id     = 0x847c447,
-+};
-+
- static const struct renesas_soc soc_rz_g1h __initconst __maybe_unused = {
- 	.family	= &fam_rzg1,
- 	.id	= 0x45,
-@@ -358,8 +367,12 @@ static const struct of_device_id renesas_socs[] __initconst = {
- 	{ .compatible = "renesas,r8a779g0",	.data = &soc_rcar_v4h },
- #endif
- #if defined(CONFIG_ARCH_R9A07G043)
-+#ifdef CONFIG_RISCV
-+	{ .compatible = "renesas,r9a07g043",	.data = &soc_rz_five },
-+#else
- 	{ .compatible = "renesas,r9a07g043",	.data = &soc_rz_g2ul },
- #endif
-+#endif
- #if defined(CONFIG_ARCH_R9A07G044)
- 	{ .compatible = "renesas,r9a07g044",	.data = &soc_rz_g2l },
- #endif
--- 
-2.25.1
+Please carry forward tags from previous versions unless you've done
+something to justify removing them. From v6:
 
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921EF57E29D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FEB57E2BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbiGVNxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S235374AbiGVN7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbiGVNxP (ORCPT
+        with ESMTP id S235285AbiGVN6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:53:15 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323CB80F64
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:53:14 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id z2-20020a056e02088200b002dc4022c15fso2810245ils.11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:53:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=e9QsGOMfJtRjs9xn7OnAMOPYeDLRMxg6fBr0BlAh6yA=;
-        b=zsb8fUD9qF9GFvUdtiOawKxuoVPZ9zbHnQLN2XWBaH3w+31aDMAxl3IAnABEJBxmkO
-         ONQXB7KvmoDKR0k42SIvbtOmqKzZmmRJizZSNTFojVGg3s89pjIK537+wnaYv5SD1wSW
-         Wujh9GRQh28YSDHk5W9MCB3kmEebzzdL0g7CteokqT6VC05n4oYfC8VRbfiVvAkctzfq
-         9PL+QgxgYu6cOBSGFiYWJRZBZRhHlkPfxFqorXDnasyXqQokFWxdwxXGmLWlhFzhD5a/
-         lHvgso88lmkR8+vu9wwyKhJBSH9q8P62sKf9B+sN/LtZGF98+SN3KiTfUDgYCcpoJ63F
-         N7mw==
-X-Gm-Message-State: AJIora81fVHaEI8roaRs6OdnpEy0Wqv+nHAPuCSy4ggH91sxxJrgYaJy
-        Vwjtjz+o5heFxDR98yKLxPvMxoHsAwRG+KmmFDxB3dVIoiDK
-X-Google-Smtp-Source: AGRyM1vnMFC2YTSrBmwzM/i9nVw8aEOIrMrKgsN8YNh4zNF01tNWEEugq2MEE+uAN0TAHNE5NcuXctAbSAsdWJkv72ECuIX+hqJv
+        Fri, 22 Jul 2022 09:58:51 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3349285D;
+        Fri, 22 Jul 2022 06:58:43 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26MDwRgt016697
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 09:58:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1658498310; bh=rwMfSXAuhEWsFUTOygNd9rda0/OfmfBu3Eumm0Mclbo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=PlF3U8Kn150/Boj/lVTzP1W9sc3hLJv3I3z9WUC6jm49MN6yCyp+K4ZSGovTu2RO5
+         WZBlBsa5lBEyIk4+vEJm0IbCL5FCFVm+k+ygli4YTn9THgzj/1AeOuDIxbXSMwXH90
+         fp27ZkCv1CA8GIZxpEbjoRje8n/iNzk11SlX4xp6HUplAFBK53hr1dvWez1K55uMLC
+         KkDOsD26M9bGMQG+l2Xmx2HJtco7kRqFT2+KWspExsQpNB2NSIgNn6BTeGkJ665bIh
+         TSxab7IedKWQsskiHjGr3l3c3iVBVzwljluBres5s1LZmg5j5ZX46LznHJ9L/ILLJf
+         wYxrtp8z/OkcQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 6672315C3EF7; Fri, 22 Jul 2022 09:58:27 -0400 (EDT)
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     bagasdotme@gmail.com, linux-doc@vger.kernel.org
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-ext4@vger.kernel.org,
+        corbet@lwn.net, Andreas Dilger <adilger.kernel@dilger.ca>,
+        wangjianjian3@huawei.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: ext4: fix cell spacing of table heading on blockmap table
+Date:   Fri, 22 Jul 2022 09:58:11 -0400
+Message-Id: <165849767594.303416.1089496209362973869.b4-ty@mit.edu>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220619072938.7334-1-bagasdotme@gmail.com>
+References: <20220619072938.7334-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1513:b0:33f:6c7c:5cd4 with SMTP id
- b19-20020a056638151300b0033f6c7c5cd4mr47032jat.279.1658497993592; Fri, 22 Jul
- 2022 06:53:13 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 06:53:13 -0700
-In-Reply-To: <5843755.lOV4Wx5bFT@opensuse>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c4d6ac05e465277a@google.com>
-Subject: Re: [syzbot] INFO: task hung in __input_unregister_device (4)
-From:   syzbot <syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com>
-To:     dmitry.torokhov@gmail.com, fmdefrancesco@gmail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, penguin-kernel@i-love.sakura.ne.jp,
-        rydberg@bitmath.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, 19 Jun 2022 14:29:39 +0700, Bagas Sanjaya wrote:
+> Commit 3103084afcf234 ("ext4, doc: remove unnecessary escaping") removes
+> redundant underscore escaping, however the cell spacing in heading row of
+> blockmap table became not aligned anymore, hence triggers malformed table
+> warning:
+> 
+> Documentation/filesystems/ext4/blockmap.rst:3: WARNING: Malformed table.
+> 
+> [...]
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Applied, thanks!
 
-Reported-and-tested-by: syzbot+deb6abc36aad4008f407@syzkaller.appspotmail.com
+[1/1] Documentation: ext4: fix cell spacing of table heading on blockmap table
+      commit: c575a1b2ca24483836031efd717ae94687bc7572
 
-Tested on:
-
-commit:         32f02a21 Revert "platform/chrome: Add Type-C mux set c..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=120269d6080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8be12c1e07a193d9
-dashboard link: https://syzkaller.appspot.com/bug?extid=deb6abc36aad4008f407
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1141355e080000
-
-Note: testing is done by a robot and is best-effort only.
+Best regards,
+-- 
+Theodore Ts'o <tytso@mit.edu>

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F0457D88E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C28957D897
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiGVCZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 22:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S234294AbiGVCZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 22:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiGVCYv (ORCPT
+        with ESMTP id S234282AbiGVCY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 22:24:51 -0400
+        Thu, 21 Jul 2022 22:24:58 -0400
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B2398202
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:24:41 -0700 (PDT)
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618559823B
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:24:45 -0700 (PDT)
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 71F1D3F11D
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:24:40 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C33BE3F12F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:24:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658456680;
-        bh=rPPCOknk12Lnh3nWhsdYWqa1mH1t/OQEcqVOb72oZWk=;
+        s=20210705; t=1658456683;
+        bh=21lfF1OMKLeXFtULRWjRtXARMWFjMfI3d/p5JlAEia8=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=n2BBS9Lhy+oQ9gw9IAEVwHeDdbyuL5KgTNtHCNueFiC/4CEmDCNmAeRl3XMqDYVNS
-         6ZGvTcafLQXAgthuR2whtME5VxeQZPLeDu6l4Dtcgwx4oQuJ6GD3r2iMzD9/I824m6
-         +vAaQ6Ic8VLqWlomWqlae4JRPTAKBcqRLPzKqcPfq+5T17uQyJQUuOhGlvyxo9yLsH
-         PjH+Rr7GCtfocNEOkR87C9aowXyWYgHGYAh9TThKDGGNcX4JQZETPWwkxPLdNAU4iI
-         5xkM3jiHW0InNT8xo0UeRPeMtjzi887pl1bgYK/QInJDY4YYohDTP4mBHrJ+jLH099
-         n9r6HaoLF5+iA==
-Received: by mail-oi1-f198.google.com with SMTP id r69-20020acaa848000000b0033a6ad03126so1686584oie.4
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:24:40 -0700 (PDT)
+        b=Vf7233D7ytA6ZTtX9mLYYWxhKK9hYQtdMFnxeN1tmh3hKfX4TVbolh602Sm5j6+XE
+         IHVJ+gq6i1/7lKF40qeHk4xg7mR9o2HDPkbY1/z1+PJCoUNysK+cuRGeLocuNUmVAV
+         js76IMhzVMHe3yDm4WmsUNLBI94R5idTJFnYvZ0z3L+3h6gAL4BfqOuyJ3hh/Kt4iu
+         XrqtwGSh14MJUYIZtKcDCqdXK7Ns8oYqqmGObQz1fh4Gk6Xzlyirr4zezFytq9r+2m
+         ZMS2R5wGaAKG9vmvZ/EatNqeJ3pzGLR35uyvfbN1Vv6ktiWS0kPh9EEJTGiWKKUoLa
+         Yv5sUkIV0yaEQ==
+Received: by mail-oi1-f197.google.com with SMTP id bx14-20020a0568081b0e00b0033a6f2395aaso1695483oib.2
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:24:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rPPCOknk12Lnh3nWhsdYWqa1mH1t/OQEcqVOb72oZWk=;
-        b=ksSWx1MrFi3zP/AOuekVnOMI+Nu0pfcITrO1O8TbNiAi2fhiUHYKWFBkjyowiRitCd
-         33CUGPAo9vlB2O6y/7Vn97ZrMu0a8yw3G6e2QQ+9w+ul7n/Hl+TpiwExoVIR0l6qsVkl
-         THxU4W0xauSBuq/E4o9n96Tdu3lJhI4WkIfkYBD4OzzfElr0OHUSvU3xjxLHehHx8c/7
-         mnKt2YKqAdJ1wUwlN5Pcsey5mOKSnQaCDOMDNcgKHWjRGsAj89r0tsKQWxBjYUmLKEkh
-         HW6Svz/pKtpV2Y9loe4LZJXs/N8zfXk3fKhCRVpZTOaQaJru+X/aHsmKMTEFiQ0RH8W3
-         hjWQ==
-X-Gm-Message-State: AJIora8DxnOF60Qnpf/WcYZ+Bap3mqbhL+Lc5aMWvcceE0Lh874eYj0p
-        UrMnmIhDnHGNSBM0ys5/f+xwL2O57IGCbINkcIJLwHL/4MhLPOnDPhdvE8KcHi6Tvvw5PYkwm/Z
-        OnfYdnJ/3JV6VteJBDG36k2wejTCZpjR8UDDdJiGfYA==
-X-Received: by 2002:a05:6808:d52:b0:339:c88b:8100 with SMTP id w18-20020a0568080d5200b00339c88b8100mr5817227oik.93.1658456679126;
-        Thu, 21 Jul 2022 19:24:39 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1shUKvZ85RWsVY2FWznWPtQPVSjurfGAiTl4rOQmkm6bAI1hnYtfZhQRHhT4FIYWpHeOcMWbw==
-X-Received: by 2002:a05:6808:d52:b0:339:c88b:8100 with SMTP id w18-20020a0568080d5200b00339c88b8100mr5817215oik.93.1658456678903;
-        Thu, 21 Jul 2022 19:24:38 -0700 (PDT)
+        bh=21lfF1OMKLeXFtULRWjRtXARMWFjMfI3d/p5JlAEia8=;
+        b=ziLgGcYph9bPJXz8H/6oY9ZuWxlTLvV8Kv7Rdh0kTbrwBYTu6i4n/Bw+oh6fffJZ8Y
+         /llLbsAva9hU3QIGsb7KGkuJGXQjCL+OYv+3HmBn8epY99LoKE884IiWya8u/LmFS2CT
+         iGiHS32uyFG56LVe/PJ+7SKZPDUd9AdDe35wqhWTisA9SlYck5gv9VHnSotDBtwxuqJ+
+         vzEALrTAaRV+qGEFt69+FmBhqzkLucYgiP7p+R0PtNGtq+xNqSI0p95h1+RS6F49DV7w
+         T+sn2dx2k7pL8mlMWs63KHoDerkJ7DEe76BZQHDY4BrvQJJJAXsFl7JEJ7bETsHBsh5W
+         tIsQ==
+X-Gm-Message-State: AJIora9isXnwIv2ijpPs9skLskQmAb6Bxtnmf4aSpX109CbbmR0+NStd
+        ZSROQ3BD3R2gG2XcH5GdFTfJI1CmAZ7WCrcGPIItr3KTj27UCvM6UXOkPiOYtizlJhggJ4H5a5F
+        BW/hRVQYdF7xlpQ7neOAaNaQmtTRE/0mHzYJddAQ6HQ==
+X-Received: by 2002:a05:6870:9691:b0:10d:4e09:6d0d with SMTP id o17-20020a056870969100b0010d4e096d0dmr620833oaq.54.1658456682543;
+        Thu, 21 Jul 2022 19:24:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uvU9qJw3xZdY8qLtAMfrO1WVNCSVRdNA2PSo7g3N3dxoTLVc+Yd1R+zm9uxw3Fm3r+ZL9hVg==
+X-Received: by 2002:a05:6870:9691:b0:10d:4e09:6d0d with SMTP id o17-20020a056870969100b0010d4e096d0dmr620824oaq.54.1658456682346;
+        Thu, 21 Jul 2022 19:24:42 -0700 (PDT)
 Received: from mfo-t470.. ([2804:14c:4e1:8732:c479:1206:16fb:ce1f])
-        by smtp.gmail.com with ESMTPSA id k23-20020a056870959700b000f5f4ad194bsm1814528oao.25.2022.07.21.19.24.35
+        by smtp.gmail.com with ESMTPSA id k23-20020a056870959700b000f5f4ad194bsm1814528oao.25.2022.07.21.19.24.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 19:24:38 -0700 (PDT)
+        Thu, 21 Jul 2022 19:24:41 -0700 (PDT)
 From:   Mauricio Faria de Oliveira <mfo@canonical.com>
 To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
@@ -66,9 +66,9 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Iurii Zaikin <yzaikin@google.com>
-Subject: [RFC PATCH 5/6] netfilter: conntrack: use MODULE_SYSCTL_TABLE
-Date:   Thu, 21 Jul 2022 23:24:15 -0300
-Message-Id: <20220722022416.137548-6-mfo@canonical.com>
+Subject: [RFC PATCH 6/6] sysctl: introduce /proc/sys/kernel/modprobe_sysctl_alias
+Date:   Thu, 21 Jul 2022 23:24:16 -0300
+Message-Id: <20220722022416.137548-7-mfo@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220722022416.137548-1-mfo@canonical.com>
 References: <20220722022416.137548-1-mfo@canonical.com>
@@ -83,36 +83,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's take nf_conntrack as an (actually helpful) example and exerciser,
-as it has many sysctl entries, and other module aliases already.
+The goal of the earlier patches is to let sysctl userspace tools
+load the kernel module with a sysctl entry that is not available
+yet in /proc/sys/ when the tool runs (so it can become available).
+
+Let's expose this file for userspace for two reasons:
+
+1) Allow such tools to identify that the running kernel has the
+   code which produces sysctl module aliases, so they could run
+   'modprobe sysctl:<entry>' only when it may actually help.
+
+2) Allow an administrator to hint such tools not to do that, if
+   that is desired for some reason (e.g., rather have the tools
+   fail if something is misconfigured in a critical deployment).
+
+Also add a module parameter for that (proc.modprobe_sysctl_alias),
+for another method that doesn't depend on sysctl tools to be set
+(that wouldn't fail them to try and set it if it's not there yet).
 
 Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
 ---
- net/netfilter/nf_conntrack_standalone.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/proc/proc_sysctl.c  | 8 ++++++++
+ include/linux/module.h | 1 +
+ kernel/sysctl.c        | 9 +++++++++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
-index 05895878610c..2da628f054cf 100644
---- a/net/netfilter/nf_conntrack_standalone.c
-+++ b/net/netfilter/nf_conntrack_standalone.c
-@@ -980,6 +980,8 @@ static struct ctl_table nf_ct_sysctl_table[] = {
- 	{}
- };
- 
-+MODULE_SYSCTL_TABLE(nf_ct_sysctl_table);
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index ebbf8702387e..1e63819fcda8 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -33,6 +33,14 @@ static void check_struct_sysctl_device_id(void)
+ 	BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
+ 			!= offsetof(struct ctl_table, procname));
+ }
 +
- static struct ctl_table nf_ct_netfilter_table[] = {
++/*
++ * Hint sysctl userspace tools whether or not to run modprobe with sysctl alias
++ * ('modprobe sysctl:entry') if they cannot find the file '/proc/sys/.../entry'
++ */
++int modprobe_sysctl_alias = 1;
++module_param(modprobe_sysctl_alias, int, 0644);
++
+ #else
+ static void check_struct_sysctl_device_id(void) {}
+ #endif
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 3010f687df19..5f565491c596 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -304,6 +304,7 @@ struct notifier_block;
+ #ifdef CONFIG_MODULES
+ 
+ extern int modules_disabled; /* for sysctl */
++extern int modprobe_sysctl_alias; /* for proc sysctl */
+ /* Get/put a kernel symbol (calls must be symmetric) */
+ void *__symbol_get(const char *symbol);
+ void *__symbol_get_gpl(const char *symbol);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 15073621cfa8..b396cfcb55fc 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1763,6 +1763,15 @@ static struct ctl_table kern_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dostring,
+ 	},
++#ifdef CONFIG_PROC_SYSCTL
++	{
++		.procname	= "modprobe_sysctl_alias",
++		.data		= &modprobe_sysctl_alias,
++		.maxlen		= sizeof(modprobe_sysctl_alias),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
++#endif
  	{
- 		.procname	= "nf_conntrack_max",
-@@ -991,6 +993,8 @@ static struct ctl_table nf_ct_netfilter_table[] = {
- 	{ }
- };
- 
-+/* MODULE_SYSCTL_TABLE(nf_ct_sysctl_table) already includes nf_conntrack_max. */
-+
- static void nf_conntrack_standalone_init_tcp_sysctl(struct net *net,
- 						    struct ctl_table *table)
- {
+ 		.procname	= "modules_disabled",
+ 		.data		= &modules_disabled,
 -- 
 2.25.1
 

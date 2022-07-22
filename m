@@ -2,115 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334F657E8B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D2D57E8B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbiGVVHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 17:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S235657AbiGVVJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 17:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiGVVHh (ORCPT
+        with ESMTP id S229460AbiGVVJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 17:07:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601B29B56C;
-        Fri, 22 Jul 2022 14:07:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF2C4620DD;
-        Fri, 22 Jul 2022 21:07:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED47C341C6;
-        Fri, 22 Jul 2022 21:07:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658524055;
-        bh=BjE6WAFN8f+7PcLVzym80m/hAtGxPQSDC3WhNnOk+G0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ruDZgOs5bS6n57s1Z4ZCM8Gaa4i+Rbknj2eIDMdbL+yQ2jG/VrQXcHUAWiTYf/x1B
-         Y2lIDYkvubc8UykDSDfJcJk84t3gBNbxr5jLuu2QxyeMf+5SFbPoX3xiR/AbqMc71v
-         akXmZrInkgokuZqMIWBW4cIM1h+FcqP0VZtW05qn319FVKPZMgbIwdKtZVn1GDGexl
-         kTyZ8uNeDJf0jRo+dqCEIYScE9l4Mzy+M0lL9Ti5IMvXV8tAfVKcMJdO/5LC7B9Dm+
-         YbBK4POBUV2yv4HnyO9xMJcNhxXEPofug4D1pZwpXWgWB9+WAo4xmYBWVfxxLuR6+d
-         uB+REBQS4dSrQ==
-Date:   Fri, 22 Jul 2022 16:07:33 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] PCI: Rework pci_scan_slot() and isolated PCI
- functions
-Message-ID: <20220722210733.GA1935162@bhelgaas>
+        Fri, 22 Jul 2022 17:09:09 -0400
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB859B56C;
+        Fri, 22 Jul 2022 14:09:07 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id go3so5375946pjb.0;
+        Fri, 22 Jul 2022 14:09:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C4VMOw5ZurYpzdTyZc4RfmhO3hKlQCRXTQ2X4qGf7UU=;
+        b=i55kXEvOUhO98/sJJyg4Zl6V+vVyjQVHdE5eMDyJ4I9RcsqLeV2JRYaHzkuxQLO0Yj
+         yOojq7w2LtKE/7Fh69fl3LnRrKPoLpcOKXnnnOYRqr3N4yQ89KHv8C7AtOtYa011QI/X
+         06OrFvrDZCTS9fILanCqcT96BshNOa1FLhizY0q1bSpWvRaF1WilnLBr2USYuodhhwmX
+         e9ABPWcfj0VPzkzc0TxLpPZQHlM4Xp5hSCKVD3kpIcDqm9BgChFhNIzqJvx1haQaqspS
+         S/hHEjo0O4W0gPKqYYVG70xlK3RSvNHsJUz0AL5eU8Zk5YTaslGNXxke7Hf98dgv6SWr
+         JvIQ==
+X-Gm-Message-State: AJIora8FoArq3eGOR/cnNW9CzjqBhYOTocTWsfFz8mqheW27GQrp76rD
+        BXIfomoqwZ1NJFF0GUtOe6Q=
+X-Google-Smtp-Source: AGRyM1u/M1jriI4jtBt6NKM2zel0NZ1S2FSZvZVoH/49fSgiaRmP9+LkC705mYhjeXaX7LqAMcI+bA==
+X-Received: by 2002:a17:90b:3890:b0:1f0:2abb:e7d1 with SMTP id mu16-20020a17090b389000b001f02abbe7d1mr19493333pjb.158.1658524146701;
+        Fri, 22 Jul 2022 14:09:06 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:805b:3c64:6a1f:424c? ([2620:15c:211:201:805b:3c64:6a1f:424c])
+        by smtp.gmail.com with ESMTPSA id y65-20020a62ce44000000b00525b61fc3f8sm4415198pfg.40.2022.07.22.14.09.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 14:09:06 -0700 (PDT)
+Message-ID: <f628bd28-612c-9be7-e0e5-457113fe65d6@acm.org>
+Date:   Fri, 22 Jul 2022 14:09:03 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628143100.3228092-1-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] scsi: fix WARNING in scsi_alloc_sgtables
+Content-Language: en-US
+To:     Jason Yan <yanaijie@huawei.com>, martin.petersen@oracle.com,
+        jejb@linux.vnet.ibm.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hare@suse.com, hch@lst.de,
+        syzbot+d44b35ecfb807e5af0b5@syzkaller.appspotmail.com
+References: <20220720025120.3226770-1-yanaijie@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220720025120.3226770-1-yanaijie@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:30:55PM +0200, Niklas Schnelle wrote:
-> Hi Bjorn,
-> 
-> In an earlier version[0], I sought to apply the existing jailhouse special case
-> for isolated PCI functions to s390. As Bjorn noted in[1] there appears to be
-> some potential for cleaning things up and removing duplication.
-> 
-> This series attempts to do this cleanup (Patches 1 through 3) followed by enabling
-> isolated PCI functions for s390 (Patches 4 and 5).
-> 
-> Testing:
-> - On s390 with SR-IOV and a ConnectX NIC with PF 1 but not PF 0 passed throug
->   i.e. the isolated function case. Also of course with just VFs and an NVMe.
-> - On x86_64 on a desktop system where ARI is disabled and with an SR-IOV NIC
->   with non-contiguous VFs as well as the usual other PCI devices.
-> 
-> Thanks,
-> Niklas
-> 
-> [0] https://lore.kernel.org/linux-pci/20220404095346.2324666-1-schnelle@linux.ibm.com/
-> [1] https://lore.kernel.org/linux-pci/20220408224514.GA353445@bhelgaas/
-> 
-> Changes v5 -> v6:
-> - Added a patch (2) which separates the ARI case into its own function
-> - Some whitespace changes to remove unnecesssary empty lines
-> Changes v4 -> v5:
-> - Remove unintended whitespace change in patch 1
-> Changes v3 -> v4:
-> - Use a do {} while loop in pci_scan_slot() as it is simpler (Bjorn)
-> - Explicitly check "fn == 0" as it is not a pointer or bool (Bjorn)
-> - Keep the "!dev" check in the ARI branch of next_fn() (Bjorn)
-> - Moved the "fn == 0 && !dev" condition out of next_fn() into pci_scan_slot().
->   This allows us to keep the "!dev" case in the ARI branch and means there are
->   no new conditions in next_fn() making it easier to verify that its behavior
->   is equivalent to the existing code.
-> - Guard the assignment of dev->multifunction with "fn > 0"
->   instead of "nr > 0". This matches the existing logic more closely and works
->   for the jailhouse case which unconditionally sets dev->multifunction for
->   "fn > 0". This also means fn == 0 is the single "first iteration" test.
-> - Remove some unneeded whitespace in patch 2
-> 
-> Changes v2 -> v3:
-> - Removed now unused nr_devs variable (kernel test robot)
-> 
-> Niklas Schnelle (5):
->   PCI: Clean up pci_scan_slot()
->   PCI: Split out next_ari_fn() from next_fn()
->   PCI: Move jailhouse's isolated function handling to pci_scan_slot()
->   PCI: Extend isolated function probing to s390
->   s390/pci: allow zPCI zbus without a function zero
-> 
->  arch/s390/pci/pci_bus.c    | 82 +++++++++---------------------------
->  drivers/pci/probe.c        | 86 ++++++++++++++++++--------------------
->  include/linux/hypervisor.h |  8 ++++
->  3 files changed, 68 insertions(+), 108 deletions(-)
+On 7/19/22 19:51, Jason Yan wrote:
+> When iovec_count is non-zero and dxfer_len is zero, the sg_io() just
+> genarated a null bio, and finally caused a warning below. To fix it,
+> skip generating a bio for this request if dxfer_len is zero.
 
-Applied to pci/enumeration for v5.20, thanks!
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>

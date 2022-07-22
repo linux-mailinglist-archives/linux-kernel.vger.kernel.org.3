@@ -2,52 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BA757E2BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E9257E2C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiGVN7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
+        id S235404AbiGVN7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiGVN6v (ORCPT
+        with ESMTP id S235559AbiGVN72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:58:51 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58318904D4;
-        Fri, 22 Jul 2022 06:58:43 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26MDwUgW016796
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 09:58:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1658498311; bh=cyLrSzInH7AFiTBUwcPn+0ryt9qDyhkDUN8qT2vZR/A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=cr2HSfGBgScgh4O09NBu7B5gWqKPf3WSdAy7yt42ynvWXnGwVppqzSVHXosezljWm
-         J0N6juG8Ji5tOCP2yIuSMjUu/f4iE42DDt1IA7EcuqkoDYYG5dlLHM+I427FdKfCPu
-         oUUBg4VVMG3/6BIWjeHmtb77/NEcLBi/4PmPuG3jPEhhbRQ8yy1CcGnrqYCn8QlwHj
-         2mQTKmpL9SC8xCiVuawTUxS0/a56FzjAcKZLOnQeeB9MDAdH+v1TmVB4vlByaqz/WD
-         ZLQ7hwRP3dQlHY3842G5/9WpkczH/BC3qS8o/TRAhTqtFvT/YYubKE8LQYrCFmaXo8
-         GAxe1UjLJwtzQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 7D60915C3F0D; Fri, 22 Jul 2022 09:58:27 -0400 (EDT)
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca,
-        Ye Bin <yebin10@huawei.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, jack@suse.cz,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next v2] ext4: fix warning in ext4_iomap_begin as race between bmap and write
-Date:   Fri, 22 Jul 2022 09:58:24 -0400
-Message-Id: <165849767593.303416.2022399899140738469.b4-ty@mit.edu>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220617013935.397596-1-yebin10@huawei.com>
-References: <20220617013935.397596-1-yebin10@huawei.com>
+        Fri, 22 Jul 2022 09:59:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC870AF72F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:59:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658498347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Lo6SGQXmx0XZ7ARbkws6vPSxZjv+F2D6pTsFATwYheI=;
+        b=TtRiW2RTsFQDd8eB3nos88LAG0nqFP3JACuKsA65tASh+e2r/78E1UHE3ANmuTF9jvnAJ/
+        NicOlI+7+gVZuoISzYDxhOuR+JblxgefLsfGR3vGDZ184htC/6cZDAClGOY0dWPOoUx1Oa
+        0tqBWEhkXBa+7uRMN6nA6QQdaEVqnXw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-XI8jaRtxNjOsyfa-QJPxoA-1; Fri, 22 Jul 2022 09:59:05 -0400
+X-MC-Unique: XI8jaRtxNjOsyfa-QJPxoA-1
+Received: by mail-wm1-f70.google.com with SMTP id q19-20020a7bce93000000b003a3264f3de9so1918231wmj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:59:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Lo6SGQXmx0XZ7ARbkws6vPSxZjv+F2D6pTsFATwYheI=;
+        b=TNqXc5NUZwQDKScacbMuJUT5ISNTjW7PzG2/Cv0ulPXMk3fhucn7R50UwmTxbaAEAu
+         mE/rX0v3r3drubeIVrPmap1vQay6G8nd6BCnHlElmq5Sic0/9QUfYk7vNFzOV/+Z1iJC
+         YMXvRRcHH5flgtIOq/QDgZbaAqBppOvhXkNW8gv3CaQzc/+wFLlyOHg+jpMHyk+rWEVH
+         fPKQA0ekb+Qii3JiPnPQ1SRhZZVYK/Qz0r1XTPN20lZfC3Aje/iHT6VTvir1i5cjOBv8
+         KGq41p3sX1p+t7VxSLS84d4Z5OGhPVn95RBBMucGpLBAt00sCqFFhdwz2DicjIptZ/RM
+         zLpA==
+X-Gm-Message-State: AJIora/Uwm9kDHuUMRkzPzzAr1VtFuPaIJyaYqdhjnlkGGn4zu77uLCR
+        Ga7yQc1DSkSm8vxlJ0RQASnmHQcxgLG95YvrEEpjcvge+zovfRih9JHFwZ1C0VFqDhqGNnDQwjL
+        B8h0l/OCiyuvTkcxsdbxxYQ0h
+X-Received: by 2002:a05:600c:5120:b0:3a3:2ae4:fb20 with SMTP id o32-20020a05600c512000b003a32ae4fb20mr596066wms.81.1658498344670;
+        Fri, 22 Jul 2022 06:59:04 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uhOwqaacXSfkLjD4scuuFNVK8E37fO4Ywor2Eut1iuhqnyL2BRE9K+6lyi6PeVntZPDETsMg==
+X-Received: by 2002:a05:600c:5120:b0:3a3:2ae4:fb20 with SMTP id o32-20020a05600c512000b003a32ae4fb20mr596048wms.81.1658498344325;
+        Fri, 22 Jul 2022 06:59:04 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:cb00:cd6b:7964:cc7d:b0e6? (p200300cbc707cb00cd6b7964cc7db0e6.dip0.t-ipconnect.de. [2003:cb:c707:cb00:cd6b:7964:cc7d:b0e6])
+        by smtp.gmail.com with ESMTPSA id f7-20020a1c3807000000b003a3080eacb9sm5196061wma.24.2022.07.22.06.59.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 06:59:04 -0700 (PDT)
+Message-ID: <a85537d0-d828-2049-6f8e-3272156ae1ed@redhat.com>
+Date:   Fri, 22 Jul 2022 15:59:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/3] mm/mprotect: Fix soft-dirty check in
+ can_change_pte_writable()
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+References: <20220721183338.27871-1-peterx@redhat.com>
+ <20220721183338.27871-2-peterx@redhat.com>
+ <e35e42ce-e942-141d-09e7-a3a7868f4abb@redhat.com>
+ <Ytqrb0ffgs+tA+0n@xz-m1.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Ytqrb0ffgs+tA+0n@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,39 +88,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 09:39:35 +0800, Ye Bin wrote:
-> We got issue as follows:
-> ------------[ cut here ]------------
-> WARNING: CPU: 3 PID: 9310 at fs/ext4/inode.c:3441 ext4_iomap_begin+0x182/0x5d0
-> RIP: 0010:ext4_iomap_begin+0x182/0x5d0
-> RSP: 0018:ffff88812460fa08 EFLAGS: 00010293
-> RAX: ffff88811f168000 RBX: 0000000000000000 RCX: ffffffff97793c12
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> RBP: ffff88812c669160 R08: ffff88811f168000 R09: ffffed10258cd20f
-> R10: ffff88812c669077 R11: ffffed10258cd20e R12: 0000000000000001
-> R13: 00000000000000a4 R14: 000000000000000c R15: ffff88812c6691ee
-> FS:  00007fd0d6ff3740(0000) GS:ffff8883af180000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fd0d6dda290 CR3: 0000000104a62000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  iomap_apply+0x119/0x570
->  iomap_bmap+0x124/0x150
->  ext4_bmap+0x14f/0x250
->  bmap+0x55/0x80
->  do_vfs_ioctl+0x952/0xbd0
->  __x64_sys_ioctl+0xc6/0x170
->  do_syscall_64+0x33/0x40
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+On 22.07.22 15:51, Peter Xu wrote:
+> On Fri, Jul 22, 2022 at 09:08:59AM +0200, David Hildenbrand wrote:
+>> On 21.07.22 20:33, Peter Xu wrote:
+>>> The check wanted to make sure when soft-dirty tracking is enabled we won't
+>>> grant write bit by accident, as a page fault is needed for dirty tracking.
+>>> The intention is correct but we didn't check it right because VM_SOFTDIRTY
+>>> set actually means soft-dirty tracking disabled.  Fix it.
+>>>
+>>> There's another thing tricky about soft-dirty is that, we can't check the
+>>> vma flag !(vma_flags & VM_SOFTDIRTY) directly but only check it after we
+>>> checked CONFIG_MEM_SOFT_DIRTY because otherwise VM_SOFTDIRTY will be
+>>> defined as zero, and !(vma_flags & VM_SOFTDIRTY) will constantly return
+>>> true.  To avoid misuse, introduce a helper for checking whether vma has
+>>> soft-dirty tracking enabled.
+>>>
+>>
+>>
+>> [...]
+>>
+>>>
+>>> Here we attach a Fixes to commit 64fe24a3e05e only for easy tracking, as
+>>> this patch won't apply to a tree before that point.  However the commit
+>>> wasn't the source of problem, it's just that then anonymous memory will
+>>> also suffer from this problem with mprotect().
+>>
+>> I'd remove that paragraph and also add
+>>
+>> Fixes: 64e455079e1b ("mm: softdirty: enable write notifications on VMAs after VM_SOFTDIRTY cleared")
+>>
+>> That introduced this wrong check for pagecache pages AFAIKS.
+>>
+>> We don't care if the patch applies before 64fe24a3e05e, if someone wants to
+>> backport the fix, they can just adjust it accordingly.
 > 
-> [...]
+> IMO besides marking the culprit commit, Fixes can also provide input to
+> stable trees to see whether we should try pick some patch up.  What I
+> wanted to express here is we don't need to try pick this patch up before
+> kernel that doesn't have 64fe24a3e05e because it won't apply.
+> 
+> I can attach both Fixes with the hope that it'll help in both cases if
+> you're fine with it, with slight explanations.
 
-Applied, thanks!
+Makes sense. Thanks!
 
-[1/1] ext4: fix warning in ext4_iomap_begin as race between bmap and write
-      commit: b2788f44f61b34468fec945d8ce99b06b7b8b176
-
-Best regards,
 -- 
-Theodore Ts'o <tytso@mit.edu>
+Thanks,
+
+David / dhildenb
+

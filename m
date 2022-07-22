@@ -2,89 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F179157E8DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE94F57E8E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235780AbiGVVYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 17:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S235699AbiGVVcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 17:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiGVVYg (ORCPT
+        with ESMTP id S230482AbiGVVcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 17:24:36 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCCCB5572
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658525076; x=1690061076;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BFyrrU4JpvFwOwtflDL2hKyk+SUGMV4TsEEfCWSIYH8=;
-  b=T67qFuWdMYX7EYwX2zQ3+7U32nn29qRIC0cRRrxft/sYCKvVh1Kdecx/
-   viLfcmm02Ho6ajAV4SE8fQyLZ1Etj2GibDZUtsYqqj5G4mgga56dF7WQt
-   29Zn+vaP+3PchLoOj8i+wG+Gtn4cPVjXcncArz2A/Dv8g/Bqw20g+T4uA
-   BjFqjXuiesob7Hjob5iTwTzjH7obGNVo+xv+j+zg9ElH/JFC5MXmpVm5l
-   YRSwbtZkmDBmSFQlAF2yqpH+f6yGX+J93UQo1nPxBmHIZps3pTbz7giDH
-   cHG87mv/PmDhbWWP+Fa0CT5q+oCPVDEiWWj9LVDmWMh5T8H4EC5J5cPU6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="270444439"
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="270444439"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 14:24:35 -0700
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="657367220"
-Received: from suprajva-mobl1.amr.corp.intel.com (HELO [10.212.247.119]) ([10.212.247.119])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 14:24:34 -0700
-Message-ID: <30220ec4-d35f-4a8a-4c08-959765ea6f26@intel.com>
-Date:   Fri, 22 Jul 2022 14:24:33 -0700
+        Fri, 22 Jul 2022 17:32:18 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EE4AF843
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:32:17 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id f14so4619829qkm.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:32:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1BGyLBuq3meNkdub1LpDqA0SaKJWYBl5yTRibnE/+hE=;
+        b=kAfLZfqnVGSljWjnAtlpkQJDWBJSH4MK+UbIahboS+sE0OI+pVFANMnIulcwGJEHTB
+         uvYoLI2W8mHVG1U32SdvfnHQwwlQHm5nQvuJLAtjhMuw31ks877Jvc7sfa9fKBxIpwgJ
+         DCh8jn0tUYSREZ7iofhjBUZT8RfAN98RBwq8s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1BGyLBuq3meNkdub1LpDqA0SaKJWYBl5yTRibnE/+hE=;
+        b=xDdSNg9iYnA0T5xblq7xWIZXDAkdLJglAEVClwSNFL0VByalCKbvdjGpc19kaO9giU
+         qVA5glAcjgu0P9g1TuSNXU8AutVUDkYgdROARxxeEHTs2nf/FMKVqpCm8ayDoPPbjP/j
+         I4lXZBiL3zgjTQ8YMBOiSr/dn3MyIVT+bYtnMaqJL5iZ6hdawkpqltkQzAI6qpQ8Ogxh
+         roRMMGsWUKmYHMgJqDjpEtDE9FqdpOGpqTjVbFY5jH82m2jgBbANv70HqF8JKF7QwLyf
+         /bwKrULnFP8FhPIkfnYsQK5P4B7aYvQDOTx2JfwDpTKjWHamTo9eko/KrKEdX9qk47mt
+         NjHQ==
+X-Gm-Message-State: AJIora9FsUdkQKxHtH02WIm5idzNWSw7H7GuS7EKxh1HQ8iu01dQaS67
+        vcYoQipPMYNTsG/QwRytH/uEL17A8sqFWA==
+X-Google-Smtp-Source: AGRyM1ueVogzyNnEKniOH7KLiF3z2/QNoYa4glGiiucBzlM+Ve+6eA+egLuG+oZNOoJZpFTWzwF++Q==
+X-Received: by 2002:a37:644b:0:b0:6b5:d62f:7ed with SMTP id y72-20020a37644b000000b006b5d62f07edmr1500662qkb.143.1658525536305;
+        Fri, 22 Jul 2022 14:32:16 -0700 (PDT)
+Received: from jshargo (pool-108-14-42-16.nycmny.fios.verizon.net. [108.14.42.16])
+        by smtp.gmail.com with ESMTPSA id x9-20020a05620a448900b006b614fe291bsm4657187qkp.28.2022.07.22.14.32.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 14:32:16 -0700 (PDT)
+From:   Jim Shargo <jshargo@chromium.org>
+To:     jshargo@google.com,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>
+Cc:     Jim Shargo <jshargo@chromium.org>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] drm/vkms: Merge default_config and device
+Date:   Fri, 22 Jul 2022 17:32:09 -0400
+Message-Id: <20220722213214.1377835-2-jshargo@chromium.org>
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+In-Reply-To: <20220722213214.1377835-1-jshargo@chromium.org>
+References: <20220722213214.1377835-1-jshargo@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org,
-        "Nakajima, Jun" <jun.nakajima@intel.com>
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
- <403cfccb-7fff-ab0b-8ebd-e5b04e631571@intel.com>
- <20220722190524.GA3299911@ls.amr.corp.intel.com>
- <18578c5a-7a35-ab20-467c-80141b0410a8@intel.com>
- <b8ea1778-02c1-b688-896d-dbb231eddf23@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <b8ea1778-02c1-b688-896d-dbb231eddf23@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 14:18, Sathyanarayanan Kuppuswamy wrote:
-> For cases where your platform does not want to support or enable the generic
-> interface (like vsock), isn't it better to have a fallback approach? I am not
-> saying we should have such an ABI for all cases. But attestation is a must-have
-> feature for the TDX guest, and we want to support it in all TD guest platforms.
-> I think the GHCI ABI is added to meet this requirement.
+This is a small refactor to make ConfigFS support easier.
 
-This logic is basically: it's in the spec so it must be useful.  I don't
-buy that, sorry.
+vkms_config is now a member of vkms_device and we now store a top-level
+reference to vkms_device.
+
+This should be a no-op refactor.
+
+Signed-off-by: Jim Shargo <jshargo@chromium.org>
+---
+ drivers/gpu/drm/vkms/vkms_drv.c    | 58 +++++++++---------------------
+ drivers/gpu/drm/vkms/vkms_drv.h    |  5 ++-
+ drivers/gpu/drm/vkms/vkms_output.c |  6 ++--
+ 3 files changed, 22 insertions(+), 47 deletions(-)
+
+diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
+index 0ffe5f0e33f7..81ed9417e511 100644
+--- a/drivers/gpu/drm/vkms/vkms_drv.c
++++ b/drivers/gpu/drm/vkms/vkms_drv.c
+@@ -37,7 +37,7 @@
+ #define DRIVER_MAJOR	1
+ #define DRIVER_MINOR	0
+ 
+-static struct vkms_config *default_config;
++static struct vkms_device *vkms_device;
+ 
+ static bool enable_cursor = true;
+ module_param_named(enable_cursor, enable_cursor, bool, 0444);
+@@ -91,13 +91,9 @@ static void vkms_atomic_commit_tail(struct drm_atomic_state *old_state)
+ 
+ static int vkms_config_show(struct seq_file *m, void *data)
+ {
+-	struct drm_info_node *node = (struct drm_info_node *)m->private;
+-	struct drm_device *dev = node->minor->dev;
+-	struct vkms_device *vkmsdev = drm_device_to_vkms_device(dev);
+-
+-	seq_printf(m, "writeback=%d\n", vkmsdev->config->writeback);
+-	seq_printf(m, "cursor=%d\n", vkmsdev->config->cursor);
+-	seq_printf(m, "overlay=%d\n", vkmsdev->config->overlay);
++	seq_printf(m, "writeback=%d\n", vkms_device->config.writeback);
++	seq_printf(m, "cursor=%d\n", vkms_device->config.cursor);
++	seq_printf(m, "overlay=%d\n", vkms_device->config.overlay);
+ 
+ 	return 0;
+ }
+@@ -158,11 +154,10 @@ static int vkms_modeset_init(struct vkms_device *vkmsdev)
+ 	return vkms_output_init(vkmsdev, 0);
+ }
+ 
+-static int vkms_create(struct vkms_config *config)
++static int vkms_create(void)
+ {
+ 	int ret;
+ 	struct platform_device *pdev;
+-	struct vkms_device *vkms_device;
+ 
+ 	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
+ 	if (IS_ERR(pdev))
+@@ -179,9 +174,11 @@ static int vkms_create(struct vkms_config *config)
+ 		ret = PTR_ERR(vkms_device);
+ 		goto out_devres;
+ 	}
++	
+ 	vkms_device->platform = pdev;
+-	vkms_device->config = config;
+-	config->dev = vkms_device;
++	vkms_device->config.cursor = enable_cursor;
++	vkms_device->config.writeback = enable_writeback;
++	vkms_device->config.overlay = enable_overlay;
+ 
+ 	ret = dma_coerce_mask_and_coherent(vkms_device->drm.dev,
+ 					   DMA_BIT_MASK(64));
+@@ -207,6 +204,8 @@ static int vkms_create(struct vkms_config *config)
+ 
+ 	drm_fbdev_generic_setup(&vkms_device->drm, 0);
+ 
++	vkms_device->initialized = true;
++
+ 	return 0;
+ 
+ out_devres:
+@@ -218,46 +217,23 @@ static int vkms_create(struct vkms_config *config)
+ 
+ static int __init vkms_init(void)
+ {
+-	struct vkms_config *config;
+-
+-	config = kmalloc(sizeof(*config), GFP_KERNEL);
+-	if (!config)
+-		return -ENOMEM;
+-
+-	default_config = config;
+-
+-	config->cursor = enable_cursor;
+-	config->writeback = enable_writeback;
+-	config->overlay = enable_overlay;
+-
+-	return vkms_create(config);
++	return vkms_create();
+ }
+ 
+-static void vkms_destroy(struct vkms_config *config)
++static void __exit vkms_exit(void)
+ {
+ 	struct platform_device *pdev;
+ 
+-	if (!config->dev) {
+-		DRM_INFO("vkms_device is NULL.\n");
++	if (!vkms_device || !vkms_device->initialized) {
+ 		return;
+ 	}
+ 
+-	pdev = config->dev->platform;
++	pdev = vkms_device->platform;
+ 
+-	drm_dev_unregister(&config->dev->drm);
+-	drm_atomic_helper_shutdown(&config->dev->drm);
++	drm_dev_unregister(&vkms_device->drm);
++	drm_atomic_helper_shutdown(&vkms_device->drm);
+ 	devres_release_group(&pdev->dev, NULL);
+ 	platform_device_unregister(pdev);
+-
+-	config->dev = NULL;
+-}
+-
+-static void __exit vkms_exit(void)
+-{
+-	if (default_config->dev)
+-		vkms_destroy(default_config);
+-
+-	kfree(default_config);
+ }
+ 
+ module_init(vkms_init);
+diff --git a/drivers/gpu/drm/vkms/vkms_drv.h b/drivers/gpu/drm/vkms/vkms_drv.h
+index 91e63b12f60f..c7ebc4ee6b14 100644
+--- a/drivers/gpu/drm/vkms/vkms_drv.h
++++ b/drivers/gpu/drm/vkms/vkms_drv.h
+@@ -99,15 +99,14 @@ struct vkms_config {
+ 	bool writeback;
+ 	bool cursor;
+ 	bool overlay;
+-	/* only set when instantiated */
+-	struct vkms_device *dev;
+ };
+ 
+ struct vkms_device {
+ 	struct drm_device drm;
+ 	struct platform_device *platform;
+ 	struct vkms_output output;
+-	const struct vkms_config *config;
++	struct vkms_config config;
++	bool initialized;
+ };
+ 
+ #define drm_crtc_to_vkms_output(target) \
+diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
+index ba0e82ae549a..d0061c82003a 100644
+--- a/drivers/gpu/drm/vkms/vkms_output.c
++++ b/drivers/gpu/drm/vkms/vkms_output.c
+@@ -63,7 +63,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ 	if (IS_ERR(primary))
+ 		return PTR_ERR(primary);
+ 
+-	if (vkmsdev->config->overlay) {
++	if (vkmsdev->config.overlay) {
+ 		for (n = 0; n < NUM_OVERLAY_PLANES; n++) {
+ 			ret = vkms_add_overlay_plane(vkmsdev, index, crtc);
+ 			if (ret)
+@@ -71,7 +71,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ 		}
+ 	}
+ 
+-	if (vkmsdev->config->cursor) {
++	if (vkmsdev->config.cursor) {
+ 		cursor = vkms_plane_init(vkmsdev, DRM_PLANE_TYPE_CURSOR, index);
+ 		if (IS_ERR(cursor))
+ 			return PTR_ERR(cursor);
+@@ -103,7 +103,7 @@ int vkms_output_init(struct vkms_device *vkmsdev, int index)
+ 		goto err_attach;
+ 	}
+ 
+-	if (vkmsdev->config->writeback) {
++	if (vkmsdev->config.writeback) {
+ 		writeback = vkms_enable_writeback_connector(vkmsdev);
+ 		if (writeback)
+ 			DRM_ERROR("Failed to init writeback connector\n");
+-- 
+2.37.1.359.gd136c6c3e2-goog
+

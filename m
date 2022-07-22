@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2EA57E2B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1334657E2C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235279AbiGVN6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S235518AbiGVN72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234763AbiGVN6j (ORCPT
+        with ESMTP id S235371AbiGVN7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:58:39 -0400
+        Fri, 22 Jul 2022 09:59:11 -0400
 Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA5A8BAAC;
-        Fri, 22 Jul 2022 06:58:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC770951DD;
+        Fri, 22 Jul 2022 06:58:47 -0700 (PDT)
 Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
         (authenticated bits=0)
         (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26MDwR8J016699
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26MDwTHw016750
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 09:58:29 -0400
+        Fri, 22 Jul 2022 09:58:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1658498309; bh=KDkvkOaznIAbtg/ZOhrIdeChH7McTYcZFnsNaZUYifM=;
+        t=1658498311; bh=sFpZcIaOd7DnAF9OZCZNzBmIaZ7bPD9+z4NRwNzFCPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=KX51YzoYHxqJv7/BLTWt4OGCnNlNrEdI59qPeq7PDj6TVY+5W98QqcEwZM0WvG9fC
-         Rlp2MkbL/yupOfoSVRwdY3vA14zRNmCFSw5P8ucKTPWP2q9hsYxhDzSnVFerCFqjQH
-         5FwrTuX2Tp0pNubaMzy/eX9KpUTvHmrwj5D5BHNzury/JnSuscP49j3ti5QKf6rP7s
-         kPRJYxARhvA9gKKRyp7ACo3uc6Lffki0XnpxLG2h2qo6pTUK1zleRYpg2huP+qcpxc
-         byU29xGAZTdbPqCNEjZ6ntCrOPS1TKn3UBOjHrdktp6pkv8RSDjowBnTo97XfFiYLt
-         V9YUBFr8mr/lA==
+        b=G6679RwMknwQswmRjxtxbkeCf9ZSVtPB8x0rLCWpKdSvdTs+8g5mrTj42hH571gIJ
+         90awH2+VL0bLEE2Cb4XGnEv7xEMPauskOyPXecr713XgWTEb1OGvWPhYLsu12CIkC6
+         ZdhKRS1owKtpnkw3WMKSQaM3GVbysTI++rhI6DwnlRjJ6L3gTjDrXqEf7aHUu3TNO9
+         kHOdlKJRLOITctal9EdjDAzYV+0HILuEcMsgZ8xNLCIDS7N5VHA3OZMABHap4EBgw4
+         ffQT6VXGqxVVTRHI0Ein5x1g005kt4h5Ppi7W/dBbiF97+xzKSwJgDa8mMLbkB0e+V
+         XRxNi7t29UfiQ==
 Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 6CE5515C3F01; Fri, 22 Jul 2022 09:58:27 -0400 (EDT)
+        id 72D1915C3F04; Fri, 22 Jul 2022 09:58:27 -0400 (EDT)
 From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     jiangjian@cdjrlc.com
-Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca
-Subject: Re: [PATCH] ext4: aligned '*' in comments
-Date:   Fri, 22 Jul 2022 09:58:15 -0400
-Message-Id: <165849767594.303416.9706322073721252641.b4-ty@mit.edu>
+To:     libaokun1@huawei.com, linux-ext4@vger.kernel.org
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, jack@suse.cz, lczerner@redhat.com,
+        yebin10@huawei.com, yi.zhang@huawei.com, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, enwlinux@gmail.com,
+        adilger.kernel@dilger.ca, yukuai3@huawei.com
+Subject: Re: [PATCH v3 0/4] ext4: fix use-after-free in ext4_xattr_set_entry
+Date:   Fri, 22 Jul 2022 09:58:18 -0400
+Message-Id: <165849767593.303416.8631216390537886242.b4-ty@mit.edu>
 X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220621061531.19669-1-jiangjian@cdjrlc.com>
-References: <20220621061531.19669-1-jiangjian@cdjrlc.com>
+In-Reply-To: <20220616021358.2504451-1-libaokun1@huawei.com>
+References: <20220616021358.2504451-1-libaokun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,15 +56,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 14:15:31 +0800, Jiang Jian wrote:
-> The '*' in the comment is not aligned.
+On Thu, 16 Jun 2022 10:13:54 +0800, Baokun Li wrote:
+> This series adds a macro for whether there is space for xattr in
+> ext4 inode, and fixes some problems with this macro.
 > 
+> V1->V2:
+> 	Split the patch to make the logic clearer.
+> 	Rename macro to EXT4_INODE_HAVE_XATTR_SPACE.
+> V2->V3:
+> 	Rename macro to EXT4_INODE_HAS_XATTR_SPACE.
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] ext4: aligned '*' in comments
-      commit: 5f2d635229947b4d1066c24b709c588afb69e393
+[1/4] ext4: add EXT4_INODE_HAS_XATTR_SPACE macro in xattr.h
+      commit: ff528f6b155ce79adf38583a66867d8e54cbd460
+[2/4] ext4: fix use-after-free in ext4_xattr_set_entry
+      commit: 0847102f2b38b43f7352ed8a7f714a291ed1513d
+[3/4] ext4: correct max_inline_xattr_value_size computing
+      commit: 3d783a3751995003002a5f4f6d333c7c02c7966e
+[4/4] ext4: correct the misjudgment in ext4_iget_extra_inode
+      commit: 31c5d92b53629452d669980d17adbd22f2af0d26
 
 Best regards,
 -- 

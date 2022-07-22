@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81D457E37D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1840857E380
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbiGVPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S235647AbiGVPMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiGVPMK (ORCPT
+        with ESMTP id S235619AbiGVPMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:12:10 -0400
+        Fri, 22 Jul 2022 11:12:14 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C9A0951EC;
-        Fri, 22 Jul 2022 08:12:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF93297D70;
+        Fri, 22 Jul 2022 08:12:13 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.93,186,1654527600"; 
-   d="scan'208";a="127045517"
+   d="scan'208";a="127045522"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 23 Jul 2022 00:12:09 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 23 Jul 2022 00:12:13 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 90C7B432D9F0;
-        Sat, 23 Jul 2022 00:12:05 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9EDF6432D9F0;
+        Sat, 23 Jul 2022 00:12:09 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -34,9 +34,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 1/3] dt-bindings: interrupt-controller: Add macros for NMI and IRQ0-7 interrupts present on RZ/G2L SoC
-Date:   Fri, 22 Jul 2022 16:11:53 +0100
-Message-Id: <20220722151155.21100-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 2/3] dt-bindings: interrupt-controller: renesas,rzg2l-irqc: Update description for '#interrupt-cells' property
+Date:   Fri, 22 Jul 2022 16:11:54 +0100
+Message-Id: <20220722151155.21100-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220722151155.21100-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220722151155.21100-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -48,49 +48,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add macros for NMI and IRQ0-7 interrupts which map to SPI0-8 present on
-RZ/G2L (and alike) SoC's so that these can be used in the first cell of
+Update description for '#interrupt-cells' property to utilize the
+RZG2L_{NMI,IRQX} for the first cell defined in the
+include/dt-bindings/interrupt-controller/irqc-rzg2l.h file.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
 v3:
-* New patch as suggested by Biju and Geert.
+* New patch
 ---
- .../interrupt-controller/irqc-rzg2l.h         | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 include/dt-bindings/interrupt-controller/irqc-rzg2l.h
+ .../bindings/interrupt-controller/renesas,rzg2l-irqc.yaml    | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/dt-bindings/interrupt-controller/irqc-rzg2l.h b/include/dt-bindings/interrupt-controller/irqc-rzg2l.h
-new file mode 100644
-index 000000000000..34ce778885a1
---- /dev/null
-+++ b/include/dt-bindings/interrupt-controller/irqc-rzg2l.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * This header provides constants for Renesas RZ/G2L family IRQC bindings.
-+ *
-+ * Copyright (C) 2022 Renesas Electronics Corp.
-+ *
-+ */
-+
-+#ifndef __DT_BINDINGS_IRQC_RZG2L_H
-+#define __DT_BINDINGS_IRQC_RZG2L_H
-+
-+/* NMI maps to SPI0 */
-+#define RZG2L_NMI	0
-+
-+/* IRQ0-7 map to SPI1-8 */
-+#define RZG2L_IRQ0	1
-+#define RZG2L_IRQ1	2
-+#define RZG2L_IRQ2	3
-+#define RZG2L_IRQ3	4
-+#define RZG2L_IRQ4	5
-+#define RZG2L_IRQ5	6
-+#define RZG2L_IRQ6	7
-+#define RZG2L_IRQ7	8
-+
-+#endif /* __DT_BINDINGS_IRQC_RZG2L_H */
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+index 33b90e975e33..ea7db3618b23 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+@@ -31,8 +31,9 @@ properties:
+       - const: renesas,rzg2l-irqc
+ 
+   '#interrupt-cells':
+-    description: The first cell should contain external interrupt number (IRQ0-7) and the
+-                 second cell is used to specify the flag.
++    description: The first cell should contain a macro RZG2L_{NMI,IRQX} included in the
++                 include/dt-bindings/interrupt-controller/irqc-rzg2l.h and the second
++                 cell is used to specify the flag.
+     const: 2
+ 
+   '#address-cells':
 -- 
 2.25.1
 

@@ -2,121 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F05A57E60F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A3F57E615
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236211AbiGVRzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S236250AbiGVR4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbiGVRzg (ORCPT
+        with ESMTP id S236158AbiGVR4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:55:36 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA3812627
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:55:35 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id u20so4176111iob.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gULf0JdF4EwTcvIBHd+ZJRIXMVlWI/0SvCta4rj+NzQ=;
-        b=Kcmz/jeQZjMgKau9sFwMRtbG91c/92RNy+LYNH5xGvTw+a2mKAFvlIslfDbB3wn9M0
-         ohSl8G1tSVgsE3lEon90WfIpK917we7YqMgM/oonhaRI6LS6hER0K2VXRSIx9Se/4Rfz
-         Ms/mdHLDhcNPzLHCTzZx14PDIzPz13q8+UJ8M=
+        Fri, 22 Jul 2022 13:56:13 -0400
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A179D4C619;
+        Fri, 22 Jul 2022 10:56:12 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d7so5151906plr.9;
+        Fri, 22 Jul 2022 10:56:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gULf0JdF4EwTcvIBHd+ZJRIXMVlWI/0SvCta4rj+NzQ=;
-        b=BpCGmZ34dYm1lR7zr1f7iBT5CGbxM3PXh9Bny+j3D/i3wHS7oV2r33VUIXq7ipAkMh
-         +qhN/NcQ0lHAYRKxWHszfWQ5BqPQcTZSkUroZZ0cNqBaDdQNU3FR3Q4X2LiyRWeo9c1w
-         weIh4ADEdzJXXdY66ybWvBrTqDKOG8/SUhxCe8cgNZQRJoW9E75jetbAO1yzH3+eGt4J
-         Pfn7uWRabLHoSn0MYKepu7WizxP/q6zxucrOnaFEkJeOb6o4uEviNdYoLg8D45SEdj4n
-         vTLOq4VC1w7yT6JqmuFQMXz9P+C1OgSMn32nviNCfUDv3fnQ5i32euZ6FLfP30Cn7TV5
-         oM6Q==
-X-Gm-Message-State: AJIora+znLTjUF83g1pVku+GETGIHhN5xJA8qyIfHvCwQ31EZ/LzYl52
-        L66keLmejXbKc5rvIIE8Luv+UYT6rFW5o22X
-X-Google-Smtp-Source: AGRyM1uADQz/Oog7/FEN0V/x7f/VepHTuFcNOoYfZHKw62lN7yzJhKIH/m/T00qA89qebpmkY3ZY4Q==
-X-Received: by 2002:a6b:5d1d:0:b0:67b:e426:78a2 with SMTP id r29-20020a6b5d1d000000b0067be42678a2mr342999iob.42.1658512534463;
-        Fri, 22 Jul 2022 10:55:34 -0700 (PDT)
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com. [209.85.166.53])
-        by smtp.gmail.com with ESMTPSA id k13-20020a02660d000000b00335c0e07abdsm2229074jac.14.2022.07.22.10.55.32
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=K6H8ybl2+ag7idCYOoYVw/oCxdPB2Pr7niRGvSl53OA=;
+        b=NA6Va0F0RIvgen9z1fpVvPHFI0qhOk/O9Pfdmq2MlZ80VgZk3D4Ppaer3AijwbYvQU
+         PYsM34iG2GzdWqYHYB8p8xMoT9bX2kGfWyLS3HVT2LKAY7fAtkHM3bbtL720LW5BMWiI
+         hDzy/UvI5nYcz7CMokFkqicX7cfncbi7mdD2sXRl/sA7XMy5Vfg2ymv9qJk3+VjOiat0
+         Hxc1h1tFXpVtBsRmYe8oe6IrHBf5shpuva2Ft7d4A+fYz6veYQdVUZYYVNM1fWWo4YFD
+         5471sE8189nZw091jvpMua+ogZLtIhwMXb6gCIy75JdwIvdpGAUTBc1UBRk8KFpT3B6g
+         LUAw==
+X-Gm-Message-State: AJIora+DEw3eAKjfbOxpOCKbrXQgyULBf0hUqVMFQgWm9p8CW1/V37DV
+        Kpac/8jM97Vpu2x56Bp9LkE=
+X-Google-Smtp-Source: AGRyM1vCHU8qGyA8pLRAYfvadi7jDT5J7KiHVcv7GaY3IC+IUt3kg/RktDKh1wIJu/8+y40eAeoQfQ==
+X-Received: by 2002:a17:90b:33d2:b0:1f0:3a40:982d with SMTP id lk18-20020a17090b33d200b001f03a40982dmr840647pjb.60.1658512572066;
+        Fri, 22 Jul 2022 10:56:12 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9cf6:7e29:d977:6fc7? ([2620:15c:211:201:9cf6:7e29:d977:6fc7])
+        by smtp.gmail.com with ESMTPSA id q3-20020a170902a3c300b0016c6a6d8967sm4065003plb.83.2022.07.22.10.56.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id h145so4178292iof.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:55:32 -0700 (PDT)
-X-Received: by 2002:a05:6638:1a1a:b0:33f:405d:b1ed with SMTP id
- cd26-20020a0566381a1a00b0033f405db1edmr559102jab.164.1658512531715; Fri, 22
- Jul 2022 10:55:31 -0700 (PDT)
+        Fri, 22 Jul 2022 10:56:11 -0700 (PDT)
+Message-ID: <084e7c5a-f98d-d61e-de81-83525851ecf9@acm.org>
+Date:   Fri, 22 Jul 2022 10:56:09 -0700
 MIME-Version: 1.0
-References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
- <CAD=FV=Uuv0rGg1+8_b=R7SM-g87U_4TipwbNgVTXDd6T=X3qEQ@mail.gmail.com>
-In-Reply-To: <CAD=FV=Uuv0rGg1+8_b=R7SM-g87U_4TipwbNgVTXDd6T=X3qEQ@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 22 Jul 2022 10:55:19 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VmKBjvDqxhrJfh72wZpBMVA1nA=JLVwnx-i92ijZt_bA@mail.gmail.com>
-Message-ID: <CAD=FV=VmKBjvDqxhrJfh72wZpBMVA1nA=JLVwnx-i92ijZt_bA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] arm64: dts: qcom: Add SKU6 for sc7180-trogdor-pazquel-lte-parade
-To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
+        jason600.groome@gmail.com,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220630195703.10155-1-bvanassche@acm.org>
+ <20220630195703.10155-3-bvanassche@acm.org>
+ <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
+ <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
+ <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
+ <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
+ <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
+ <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
+ <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org>
+ <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
+ <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
+ <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 7/22/22 01:53, Geert Uytterhoeven wrote:
+> During s2idle, the following trace data is generated:
+> 
+>     kworker/u16:9-325     [000] ...2.   230.478731: block_rq_issue: 8,0
+> N 0 () 0 + 0 [kworker/u16:9]
+>     kworker/u16:9-325     [000] ...2.   230.478745:
+> scsi_dispatch_cmd_start: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=0
+> cmnd=(SYNCHRONIZE_CACHE - raw=35 00 00 00 00 00 00 00 00 00)
+>            <idle>-0       [007] d.h3.   230.478832:
+> scsi_dispatch_cmd_done: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=0
+> cmnd=(SYNCHRONIZE_CACHE - raw=35 00 00 00 00 00 00 00 00 00)
+> result=(driver=DRIVER_OK host=DID_OK message=COMMAND_COMPLETE
+> status=SAM_STAT_GOOD)
+>            <idle>-0       [000] ..s2.   230.478851: block_rq_complete:
+> 8,0 N () 18446744073709551615 + 0 [0]
+>     kworker/u16:9-325     [000] ...2.   230.483134: block_rq_issue: 8,0
+> N 0 () 0 + 0 [kworker/u16:9]
+>     kworker/u16:9-325     [000] ...2.   230.483136:
+> scsi_dispatch_cmd_start: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=1
+> cmnd=(START_STOP - raw=1b 00 00 00 00 00)
+>            <idle>-0       [007] d.h3.   230.624530:
+> scsi_dispatch_cmd_done: host_no=0 channel=0 id=0 lun=0 data_sgl=0
+> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=1
+> cmnd=(START_STOP - raw=1b 00 00 00 00 00) result=(driver=DRIVER_OK
+> host=DID_OK message=COMMAND_COMPLETE status=SAM_STAT_GOOD)
+>            <idle>-0       [000] d.s4.   230.624634: scsi_eh_wakeup: host_no=0
+>            <idle>-0       [000] ..s2.   230.624642: block_rq_complete:
+> 8,0 N () 18446744073709551615 + 0 [0]
+>    kworker/u16:14-1027    [007] d..3.   231.393642: scsi_eh_wakeup: host_no=0
+> 
+> When reading from hard drive after s2idle, no more trace data
+> is generated.
 
-On Thu, Jul 21, 2022 at 6:36 AM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Wed, Jul 20, 2022 at 8:59 PM Yunlong Jia
-> <yunlong.jia@ecs.corp-partner.google.com> wrote:
-> >
-> > SKU6 is LTE(w/o eSIM)+WIFI+Parade
-> >
-> > Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-> > ---
-> >
-> > Changes in v3:
-> > - Bindings and dts in the same series.
-> >
-> > Changes in v2:
-> > - Put sku6 before sku4.
-> >
-> >  arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+I think the above commands come from the suspend sequence. '1b 00 00 00 
+00 00' stops a block device. The lowest bit in byte 4 needs to be set to 
+start a block device.
 
-We're at a point now where this won't be able to land for at least 2.5
-weeks. As an experiment, I created a staging tree atop the current
-arm64 dts tree and put this there. I'll try to put only things that I
-believe are truly ready to land there, but git hashes won't be stable
-since it's just a staging tree:
+Something that is not yet clear is whether or not sd_submit_start() 
+hangs during the resume process. How about verifying whether or not 
+sd_submit_start() hangs by either issuing SysRq-t or by adding pr_info() 
+statements in that function?
 
-https://github.com/dianders/kernel-staging/commits/qcom/arm64-staging
+Thanks,
 
-I reversed the order of patch #1 and patch #2 when applying as per
-discussion in patch #2.
-
--Doug
+Bart.

@@ -2,79 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C109C57E00D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E8157E00A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235467AbiGVKcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S235249AbiGVKcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGVKcD (ORCPT
+        with ESMTP id S235406AbiGVKcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:32:03 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C2B5052
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:32:00 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id j26so4962118lji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eXqhKXWkyJJg9+g/9EohedHzzZKAjuqa2sFmi97JD9Y=;
-        b=pnVwjwP2epgqugyqrMAsXv6dkAFuOokeRTDVkC6DsP+qX0N8ti0lIHBdgoQII4uwjh
-         t4naAikyweBC0my1Llr1nYwJ/BPKlspVAbhCwPoCgTMoNwdYypjKVxB+5z3pB//FCb5f
-         Oz3YNzSdFiOyLnc8vSoS+c49UYoX4ct9rex+XVYZL+LGaQEQvsI0oqXiljUx4g/DUwP/
-         XQtr7ntRWMBZtOePBlbIMVp0Nv+RhfrAUWMSyNmcqPRQRLWPqncJJ1296PNqH2EkBNyF
-         xW3C/bLFl6hSGtA+CmQiPZPhOfPQB/4FBfUufX51z8LjtLhFudukcFcWT4Vek59IOBwC
-         jO3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eXqhKXWkyJJg9+g/9EohedHzzZKAjuqa2sFmi97JD9Y=;
-        b=TNoqtICutqtMZpj4l8gYZqRjtEguMJT5vDAWsBxF1DVwajSnV1pgSwGiEMxSmPlg8Y
-         xJSjHHWxM0yplHmKZvYfJutvC/7eYdk7fEZDUhXrRGSwb/3YNLPI/KYn1USJhTjz4gRi
-         lt7AfTtmKaMg3hbOb/6zR2WjixPZKp82Qt1l1g5sfGrSttVaQ4lnne63IspZXoRNOZpf
-         +FcrQVkzCvky/t11BErTOj0DJjlhkRDm9FysitB2OsY31Z3giaj20EjRVtecPziWIk0y
-         B08TYatwzHRfGtvvwDuAhFc0KhDW05TzOQBCkdW4IXPtuCbpdtm90B2NS/FEICXWFhAg
-         fgdQ==
-X-Gm-Message-State: AJIora9uO3hnsWACgBEWdp0oVYfiI1PCnZL34bUcz3itcGc79ZCF+AgW
-        S2JJhS0NgG3C67jBe3amBk3AD7Vc9fIr8ZG2m5xpsQ==
-X-Google-Smtp-Source: AGRyM1vQ0cnyWSucVzfKlluxmfyG+Ix//9JlO9f9D6f+QcIc7yr3ZZbF+QXGzK5/C+gU2hxCnErBEvbCnNBO6oH2C1A=
-X-Received: by 2002:a05:651c:1310:b0:25d:efe5:109d with SMTP id
- u16-20020a05651c131000b0025defe5109dmr742781lja.465.1658485917645; Fri, 22
- Jul 2022 03:31:57 -0700 (PDT)
+        Fri, 22 Jul 2022 06:32:17 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75599B555F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=k+VlV
+        RC0HPfrL13ga2tLMhhygRE05MFSOLiB9Y83w0Q=; b=f1+ser1aBNaNxAvkz/QkJ
+        aLMRolftFX9xW6eIdJ53Qn15cgX8ZpdTQEQ/n2IZ1zJgyL/wOR6LIVonmkYkbdDg
+        7PskqjuHgFS5b8qUy5t+8gIsgPf+UNkJOJ1VLgrACKCgzbyViGmKZDpOfzk2FoS8
+        sosatLKB7X2i4KxOqiKzec=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp3 (Coremail) with SMTP id G9xpCgDnn5mgfNpiwdmZQg--.22400S2;
+        Fri, 22 Jul 2022 18:32:02 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     guoren@kernel.org, arnd@arndb.de, palmer@rivosinc.com
+Cc:     linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] uapi: asm-generic: fcntl: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 18:31:58 +0800
+Message-Id: <20220722103158.82218-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-2-elver@google.com>
- <Ytl9L0Zn1PVuL1cB@FVFF77S0Q05N.cambridge.arm.com> <20220722091044.GC18125@willie-the-truck>
- <CACT4Y+ZOXXqxhe4U3ZtQPCj2yrf6Qtjg1q0Kfq8+poAOxGgUew@mail.gmail.com> <20220722101053.GA18284@willie-the-truck>
-In-Reply-To: <20220722101053.GA18284@willie-the-truck>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 22 Jul 2022 12:31:45 +0200
-Message-ID: <CACT4Y+Z0imEHF0jM-f-uYdpfSpfzMpa+bFZfPeQW1ECBDjD9fA@mail.gmail.com>
-Subject: Re: [PATCH v3 01/14] perf/hw_breakpoint: Add KUnit test for
- constraints accounting
-To:     Will Deacon <will@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgDnn5mgfNpiwdmZQg--.22400S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFykGr1UCw1ktw1fXw4DCFg_yoWfXFb_C3
+        yrXrs7Gw1fWF9FgrsrZan7Wr1xKF45GrWkXFWaq34ayrWkK3y8K3Z5Cay7Jr48KrsrurW8
+        Xa4rXrnYqw47ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtxRh3UUUUU==
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBAxZGZGB0LoU5+QAAsI
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,90 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 at 12:11, Will Deacon <will@kernel.org> wrote:
-> > > > [adding Will]
-> > > >
-> > > > On Mon, Jul 04, 2022 at 05:05:01PM +0200, Marco Elver wrote:
-> > > > > Add KUnit test for hw_breakpoint constraints accounting, with various
-> > > > > interesting mixes of breakpoint targets (some care was taken to catch
-> > > > > interesting corner cases via bug-injection).
-> > > > >
-> > > > > The test cannot be built as a module because it requires access to
-> > > > > hw_breakpoint_slots(), which is not inlinable or exported on all
-> > > > > architectures.
-> > > > >
-> > > > > Signed-off-by: Marco Elver <elver@google.com>
-> > > >
-> > > > As mentioned on IRC, I'm seeing these tests fail on arm64 when applied atop
-> > > > v5.19-rc7:
-> > > >
-> > > > | TAP version 14
-> > > > | 1..1
-> > > > |     # Subtest: hw_breakpoint
-> > > > |     1..9
-> > > > |     ok 1 - test_one_cpu
-> > > > |     ok 2 - test_many_cpus
-> > > > |     # test_one_task_on_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> > > > |     Expected IS_ERR(bp) to be false, but is true
-> > > > |     not ok 3 - test_one_task_on_all_cpus
-> > > > |     # test_two_tasks_on_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> > > > |     Expected IS_ERR(bp) to be false, but is true
-> > > > |     not ok 4 - test_two_tasks_on_all_cpus
-> > > > |     # test_one_task_on_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> > > > |     Expected IS_ERR(bp) to be false, but is true
-> > > > |     not ok 5 - test_one_task_on_one_cpu
-> > > > |     # test_one_task_mixed: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> > > > |     Expected IS_ERR(bp) to be false, but is true
-> > > > |     not ok 6 - test_one_task_mixed
-> > > > |     # test_two_tasks_on_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> > > > |     Expected IS_ERR(bp) to be false, but is true
-> > > > |     not ok 7 - test_two_tasks_on_one_cpu
-> > > > |     # test_two_tasks_on_one_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> > > > |     Expected IS_ERR(bp) to be false, but is true
-> > > > |     not ok 8 - test_two_tasks_on_one_all_cpus
-> > > > |     # test_task_on_all_and_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> > > > |     Expected IS_ERR(bp) to be false, but is true
-> > > > |     not ok 9 - test_task_on_all_and_one_cpu
-> > > > | # hw_breakpoint: pass:2 fail:7 skip:0 total:9
-> > > > | # Totals: pass:2 fail:7 skip:0 total:9
-> > > >
-> > > > ... which seems to be becasue arm64 currently forbids per-task
-> > > > breakpoints/watchpoints in hw_breakpoint_arch_parse(), where we have:
-> > > >
-> > > >         /*
-> > > >          * Disallow per-task kernel breakpoints since these would
-> > > >          * complicate the stepping code.
-> > > >          */
-> > > >         if (hw->ctrl.privilege == AARCH64_BREAKPOINT_EL1 && bp->hw.target)
-> > > >                 return -EINVAL;
-> > > >
-> > > > ... which has been the case since day one in commit:
-> > > >
-> > > >   478fcb2cdb2351dc ("arm64: Debugging support")
-> > > >
-> > > > I'm not immediately sure what would be necessary to support per-task kernel
-> > > > breakpoints, but given a lot of that state is currently per-cpu, I imagine it's
-> > > > invasive.
-> > >
-> > > I would actually like to remove HW_BREAKPOINT completely for arm64 as it
-> > > doesn't really work and causes problems for other interfaces such as ptrace
-> > > and kgdb.
-> >
-> > Will it be a localized removal of code that will be easy to revert in
-> > future? Or will it touch lots of code here and there?
-> > Let's say we come up with a very important use case for HW_BREAKPOINT
-> > and will need to make it work on arm64 as well in future.
->
-> My (rough) plan is to implement a lower-level abstraction for handling the
-> underlying hardware resources, so we can layer consumers on top of that
-> instead of funneling through hw_breakpoint. So if we figure out how to make
-> bits of hw_breakpoint work on arm64, then it should just go on top.
->
-> The main pain point for hw_breakpoint is kernel-side {break,watch}points
-> and I think there are open design questions about how they should work
-> on arm64, particularly when considering the interaction with user
-> watchpoints triggering on uaccess routines and the possibility of hitting
-> a kernel watchpoint in irq context.
+Replace 'the the' with 'the' in the comment.
 
-I see. Our main interest would be break/watchpoints on user addresses
-firing from both user-space and kernel (uaccess), so at least on irqs.
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ tools/include/uapi/asm-generic/fcntl.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index 0197042b7dfb..826afd9192d8 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -140,7 +140,7 @@
+  * record  locks, but are "owned" by the open file description, not the
+  * process. This means that they are inherited across fork() like BSD (flock)
+  * locks, and they are only released automatically when the last reference to
+- * the the open file against which they were acquired is put.
++ * the open file against which they were acquired is put.
+  */
+ #define F_OFD_GETLK	36
+ #define F_OFD_SETLK	37
+-- 
+2.25.1
+

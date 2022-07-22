@@ -2,395 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C46957E5C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4802E57E5D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236069AbiGVRoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S235824AbiGVRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236001AbiGVRoJ (ORCPT
+        with ESMTP id S235096AbiGVRrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:44:09 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D69C904DA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:08 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id i126so6308185oih.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:08 -0700 (PDT)
+        Fri, 22 Jul 2022 13:47:00 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA09893697
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:46:55 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id u14so6301639lju.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yzH8RBlWVaD8eYC4JxGLhQXlUu0TLl1/8ifUZNgU8qs=;
-        b=K6r33kZ9a7ckXXG/9yLIrDoalxku4OSJkopklXI1g3FsXv5AQtCpjlqaq4IrfwDEWp
-         FBs7ALBqi3h39obbYDFdJg0DokZn3+RPPdfWIBAdSaEF+pgNcFqTJya2wPren3bnEwUk
-         xtQ147GDH5gZXau/M3Tcx4mXGoW9mkXfF803z8SebShRCoHje8vqOecGIKZZTVK9BWNr
-         69NujmRg6cNR0oV5mPpLvlQe0uhDHcMXpZtYxgQBRA784/B4KMJqihtPzOao+9L8h02k
-         YhCOcJOXklhJtz195zdXmGpq/ufCbQQWcmYD6v98RlFoaL6a3/pDVJ39thtVsvA9D/TE
-         N6rg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4pDf7ez85QHUoBuUMoHgMnyuDNXTg+iV62WcG6bVoxE=;
+        b=k5jT7LN8Fx7VEkTi0XgPQxBYvaHMVqDhNuzeipXMEE2dmex+dbNJnlmZiPyNCJMZ2P
+         Tc+7Z/KTvjKKzxfIihpYVp7o4uYWv8G5KY6JLb6/rgmcyvOEx53QIhkMr1TcCtHZtfjU
+         kR2I+YWQCWY/iBDDjTQS8dhgAfJ/0K0bl8gJSMEbFijjb/Kz5ONZ/AnK82jGsRcYFGlo
+         ww8uAvOc28X7SUpKNAUpNfi0Zd5z6ZTs0jfeIYhKjfVlo595c17U3QvI/4ImkcJcK0D4
+         1kk3nFzKiBm/S5GpZW+EwKlIH5ZfbHo/D94C8C9+GvpeC9PIm2ry3y0jI4UQANy9q4r/
+         XeNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yzH8RBlWVaD8eYC4JxGLhQXlUu0TLl1/8ifUZNgU8qs=;
-        b=B5EI9BKMj0TZ0pT3I6Dd53LmfnRqzYdpElWRCM1dFgOk6cvzwkEj/wvVS8i872eobv
-         caXdM59SA72gkfcTqDCAvtselgy9Dfa40k6X14veCQVpZSTP0pjzfnM3tU/4r/T/jeHI
-         ngGUMKpbOMtyCY/C5kaOLbOKiWxwZRcIc3dDQB/NvPxsCkdeg3YuqTo7GLFqN5UMXrxP
-         nfignSIX5gKStLw3v1lkA2SXPyjsgwOnkE6qr3CHiz7t2rcrPh3JjdlD6SJmP9nDO+fF
-         zBqGubv2ffOhRmOi61QkZbPKUdbraCGBmwRiSOetLX5xU/jrqpwBQ+0FJenw9zEniJ1X
-         utZA==
-X-Gm-Message-State: AJIora+7Y88Di/wwd+ce0uJ2LFGyMmt6nbL4yfELDO4WYCLnVUapTQ/4
-        vLirKZNQ/nMPJcFsLc5BLxStag==
-X-Google-Smtp-Source: AGRyM1t2Sr9gDvWw9G1dQt/ScnFv+WKKNt9oyYGuy8yM7CPHcu/l+yCRo9FElYpeIWPnRpb5T+VBAA==
-X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id bc28-20020a056808171c00b00334934263efmr419145oib.63.1658511847570;
-        Fri, 22 Jul 2022 10:44:07 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1700:42f0:6600:99be:940b:cb7d:ef1])
-        by smtp.gmail.com with ESMTPSA id r127-20020acada85000000b0033a0ef748a8sm2011504oig.54.2022.07.22.10.44.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:44:06 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] hfsplus: Convert kmap() to kmap_local_page() in bnode.c
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <20220720154324.8272-1-fmdefrancesco@gmail.com>
-Date:   Fri, 22 Jul 2022 10:43:59 -0700
-Cc:     Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <DED96F4D-9320-45BE-BD22-89EFEB75001B@dubeyko.com>
-References: <20220720154324.8272-1-fmdefrancesco@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4pDf7ez85QHUoBuUMoHgMnyuDNXTg+iV62WcG6bVoxE=;
+        b=sX5XeuyOlceVOdqPP/Lwme4+53/gLljtFOPSw9ScfKVrO7JjOB+h4u4GUQI3dslkAX
+         D8zdvKPrWkMesN7ONjBCS2rN6sy5n+KeF77jirlJtdJMZt+IVNBWNb93mbEdAVp4af55
+         CzcbzEbhIXz6MSOPvpd+O3Uf1RRy4j4B1xDoOGZdoqQYe7AKMgWi0QdPx5WOBGzAmLNn
+         wyjdOshUkP8zDreOtED4f/J1IxeuQm47SqV1enfZKpQYPF1tGz1JdC/6OO+Z1krKEaEp
+         MVyRItc7Lk1/ucx3fD+3adMBsn5WS4TwtJylDvxbplJcslbnMydH/9VokzHdOi6W7mU3
+         cZ+A==
+X-Gm-Message-State: AJIora9ycqwLL6ezhdNq8rDd/OizX1MT3MQvEwmO7dkUVNiNnlyCgMuG
+        RI14+5T3q9h+SmW9LvP/aOt47g==
+X-Google-Smtp-Source: AGRyM1sqFiGr1+mDJ9qbeVsgJ4L1DLzZ2N4yyzMkKPO7XUslPN8IvI+lN6tL17Kpq2z/VwHxUKK3hA==
+X-Received: by 2002:a2e:a5cb:0:b0:25d:7a70:2891 with SMTP id n11-20020a2ea5cb000000b0025d7a702891mr386558ljp.295.1658512013920;
+        Fri, 22 Jul 2022 10:46:53 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id o1-20020a05651205c100b00489c7fb668dsm1163070lfo.182.2022.07.22.10.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 10:46:53 -0700 (PDT)
+Message-ID: <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
+Date:   Fri, 22 Jul 2022 19:46:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
+Content-Language: en-US
+To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, tudor.ambarus@microchip.com,
+        p.yadav@ti.com, michael@walle.cc, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio,
-
-> On Jul 20, 2022, at 8:43 AM, Fabio M. De Francesco =
-<fmdefrancesco@gmail.com> wrote:
->=20
-> kmap() is being deprecated in favor of kmap_local_page().
->=20
-> Two main problems with kmap(): (1) It comes with an overhead as =
-mapping
-> space is restricted and protected by a global lock for synchronization =
-and
-> (2) it also requires global TLB invalidation when the kmap=E2=80=99s =
-pool wraps
-> and it might block when the mapping space is fully utilized until a =
-slot
-> becomes available.
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can =
-take
-> page faults, and can be called from any context (including =
-interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, =
-the
-> kernel virtual addresses are restored and still valid.
->=20
-> Since its use in bnode.c is safe everywhere, it should be preferred.
->=20
-> Therefore, replace kmap() with kmap_local_page() in bnode.c. Where
-> possible, use the suited standard helpers (memzero_page(), =
-memcpy_page())
-> instead of open coding kmap_local_page() plus memset() or memcpy().
->=20
-
-
-Looks reasonable. Makes sense from my point of view.
-
-Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
-
-Thanks,
-Slava.
-
-
-
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
+> Add the SFC bindings for the X1000 SoC, the X1600 SoC, the X1830 SoC,
+> and the X2000 SoC from Ingenic.
+> 
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > ---
-> fs/hfsplus/bnode.c | 105 +++++++++++++++++++++------------------------
-> 1 file changed, 48 insertions(+), 57 deletions(-)
->=20
-> diff --git a/fs/hfsplus/bnode.c b/fs/hfsplus/bnode.c
-> index 177fae4e6581..3a1c77d0df48 100644
-> --- a/fs/hfsplus/bnode.c
-> +++ b/fs/hfsplus/bnode.c
-> @@ -29,14 +29,12 @@ void hfs_bnode_read(struct hfs_bnode *node, void =
-*buf, int off, int len)
-> 	off &=3D ~PAGE_MASK;
->=20
-> 	l =3D min_t(int, len, PAGE_SIZE - off);
-> -	memcpy(buf, kmap(*pagep) + off, l);
-> -	kunmap(*pagep);
-> +	memcpy_from_page(buf, *pagep, off, l);
->=20
-> 	while ((len -=3D l) !=3D 0) {
-> 		buf +=3D l;
-> 		l =3D min_t(int, len, PAGE_SIZE);
-> -		memcpy(buf, kmap(*++pagep), l);
-> -		kunmap(*pagep);
-> +		memcpy_from_page(buf, *++pagep, 0, l);
-> 	}
-> }
->=20
-> @@ -82,16 +80,14 @@ void hfs_bnode_write(struct hfs_bnode *node, void =
-*buf, int off, int len)
-> 	off &=3D ~PAGE_MASK;
->=20
-> 	l =3D min_t(int, len, PAGE_SIZE - off);
-> -	memcpy(kmap(*pagep) + off, buf, l);
-> +	memcpy_to_page(*pagep, off, buf, l);
-> 	set_page_dirty(*pagep);
-> -	kunmap(*pagep);
->=20
-> 	while ((len -=3D l) !=3D 0) {
-> 		buf +=3D l;
-> 		l =3D min_t(int, len, PAGE_SIZE);
-> -		memcpy(kmap(*++pagep), buf, l);
-> +		memcpy_to_page(*++pagep, 0, buf, l);
-> 		set_page_dirty(*pagep);
-> -		kunmap(*pagep);
-> 	}
-> }
->=20
-> @@ -112,15 +108,13 @@ void hfs_bnode_clear(struct hfs_bnode *node, int =
-off, int len)
-> 	off &=3D ~PAGE_MASK;
->=20
-> 	l =3D min_t(int, len, PAGE_SIZE - off);
-> -	memset(kmap(*pagep) + off, 0, l);
-> +	memzero_page(*pagep, off, l);
-> 	set_page_dirty(*pagep);
-> -	kunmap(*pagep);
->=20
-> 	while ((len -=3D l) !=3D 0) {
-> 		l =3D min_t(int, len, PAGE_SIZE);
-> -		memset(kmap(*++pagep), 0, l);
-> +		memzero_page(*++pagep, 0, l);
-> 		set_page_dirty(*pagep);
-> -		kunmap(*pagep);
-> 	}
-> }
->=20
-> @@ -142,24 +136,20 @@ void hfs_bnode_copy(struct hfs_bnode *dst_node, =
-int dst,
->=20
-> 	if (src =3D=3D dst) {
-> 		l =3D min_t(int, len, PAGE_SIZE - src);
-> -		memcpy(kmap(*dst_page) + src, kmap(*src_page) + src, l);
-> -		kunmap(*src_page);
-> +		memcpy_page(*dst_page, src, *src_page, src, l);
-> 		set_page_dirty(*dst_page);
-> -		kunmap(*dst_page);
->=20
-> 		while ((len -=3D l) !=3D 0) {
-> 			l =3D min_t(int, len, PAGE_SIZE);
-> -			memcpy(kmap(*++dst_page), kmap(*++src_page), l);
-> -			kunmap(*src_page);
-> +			memcpy_page(*++dst_page, 0, *++src_page, 0, l);
-> 			set_page_dirty(*dst_page);
-> -			kunmap(*dst_page);
-> 		}
-> 	} else {
-> 		void *src_ptr, *dst_ptr;
->=20
-> 		do {
-> -			src_ptr =3D kmap(*src_page) + src;
-> -			dst_ptr =3D kmap(*dst_page) + dst;
-> +			dst_ptr =3D kmap_local_page(*dst_page) + dst;
-> +			src_ptr =3D kmap_local_page(*src_page) + src;
-> 			if (PAGE_SIZE - src < PAGE_SIZE - dst) {
-> 				l =3D PAGE_SIZE - src;
-> 				src =3D 0;
-> @@ -171,9 +161,9 @@ void hfs_bnode_copy(struct hfs_bnode *dst_node, =
-int dst,
-> 			}
-> 			l =3D min(len, l);
-> 			memcpy(dst_ptr, src_ptr, l);
-> -			kunmap(*src_page);
-> +			kunmap_local(src_ptr);
-> 			set_page_dirty(*dst_page);
-> -			kunmap(*dst_page);
-> +			kunmap_local(dst_ptr);
-> 			if (!dst)
-> 				dst_page++;
-> 			else
-> @@ -185,6 +175,7 @@ void hfs_bnode_copy(struct hfs_bnode *dst_node, =
-int dst,
-> void hfs_bnode_move(struct hfs_bnode *node, int dst, int src, int len)
-> {
-> 	struct page **src_page, **dst_page;
-> +	void *src_ptr, *dst_ptr;
-> 	int l;
->=20
-> 	hfs_dbg(BNODE_MOD, "movebytes: %u,%u,%u\n", dst, src, len);
-> @@ -202,27 +193,28 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
-dst, int src, int len)
->=20
-> 		if (src =3D=3D dst) {
-> 			while (src < len) {
-> -				memmove(kmap(*dst_page), =
-kmap(*src_page), src);
-> -				kunmap(*src_page);
-> +				dst_ptr =3D kmap_local_page(*dst_page);
-> +				src_ptr =3D kmap_local_page(*src_page);
-> +				memmove(dst_ptr, src_ptr, src);
-> +				kunmap_local(src_ptr);
-> 				set_page_dirty(*dst_page);
-> -				kunmap(*dst_page);
-> +				kunmap_local(dst_ptr);
-> 				len -=3D src;
-> 				src =3D PAGE_SIZE;
-> 				src_page--;
-> 				dst_page--;
-> 			}
-> 			src -=3D len;
-> -			memmove(kmap(*dst_page) + src,
-> -				kmap(*src_page) + src, len);
-> -			kunmap(*src_page);
-> +			dst_ptr =3D kmap_local_page(*dst_page);
-> +			src_ptr =3D kmap_local_page(*src_page);
-> +			memmove(dst_ptr + src, src_ptr + src, len);
-> +			kunmap_local(src_ptr);
-> 			set_page_dirty(*dst_page);
-> -			kunmap(*dst_page);
-> +			kunmap_local(dst_ptr);
-> 		} else {
-> -			void *src_ptr, *dst_ptr;
-> -
-> 			do {
-> -				src_ptr =3D kmap(*src_page) + src;
-> -				dst_ptr =3D kmap(*dst_page) + dst;
-> +				dst_ptr =3D kmap_local_page(*dst_page) + =
-dst;
-> +				src_ptr =3D kmap_local_page(*src_page) + =
-src;
-> 				if (src < dst) {
-> 					l =3D src;
-> 					src =3D PAGE_SIZE;
-> @@ -234,9 +226,9 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
-dst, int src, int len)
-> 				}
-> 				l =3D min(len, l);
-> 				memmove(dst_ptr - l, src_ptr - l, l);
-> -				kunmap(*src_page);
-> +				kunmap_local(src_ptr);
-> 				set_page_dirty(*dst_page);
-> -				kunmap(*dst_page);
-> +				kunmap_local(dst_ptr);
-> 				if (dst =3D=3D PAGE_SIZE)
-> 					dst_page--;
-> 				else
-> @@ -251,26 +243,27 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
-dst, int src, int len)
->=20
-> 		if (src =3D=3D dst) {
-> 			l =3D min_t(int, len, PAGE_SIZE - src);
-> -			memmove(kmap(*dst_page) + src,
-> -				kmap(*src_page) + src, l);
-> -			kunmap(*src_page);
-> +
-> +			dst_ptr =3D kmap_local_page(*dst_page) + src;
-> +			src_ptr =3D kmap_local_page(*src_page) + src;
-> +			memmove(dst_ptr, src_ptr, l);
-> +			kunmap_local(src_ptr);
-> 			set_page_dirty(*dst_page);
-> -			kunmap(*dst_page);
-> +			kunmap_local(dst_ptr);
->=20
-> 			while ((len -=3D l) !=3D 0) {
-> 				l =3D min_t(int, len, PAGE_SIZE);
-> -				memmove(kmap(*++dst_page),
-> -					kmap(*++src_page), l);
-> -				kunmap(*src_page);
-> +				dst_ptr =3D =
-kmap_local_page(*++dst_page);
-> +				src_ptr =3D =
-kmap_local_page(*++src_page);
-> +				memmove(dst_ptr, src_ptr, l);
-> +				kunmap_local(src_ptr);
-> 				set_page_dirty(*dst_page);
-> -				kunmap(*dst_page);
-> +				kunmap_local(dst_ptr);
-> 			}
-> 		} else {
-> -			void *src_ptr, *dst_ptr;
-> -
-> 			do {
-> -				src_ptr =3D kmap(*src_page) + src;
-> -				dst_ptr =3D kmap(*dst_page) + dst;
-> +				dst_ptr =3D kmap_local_page(*dst_page) + =
-dst;
-> +				src_ptr =3D kmap_local_page(*src_page) + =
-src;
-> 				if (PAGE_SIZE - src <
-> 						PAGE_SIZE - dst) {
-> 					l =3D PAGE_SIZE - src;
-> @@ -283,9 +276,9 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
-dst, int src, int len)
-> 				}
-> 				l =3D min(len, l);
-> 				memmove(dst_ptr, src_ptr, l);
-> -				kunmap(*src_page);
-> +				kunmap_local(src_ptr);
-> 				set_page_dirty(*dst_page);
-> -				kunmap(*dst_page);
-> +				kunmap_local(dst_ptr);
-> 				if (!dst)
-> 					dst_page++;
-> 				else
-> @@ -502,14 +495,14 @@ struct hfs_bnode *hfs_bnode_find(struct =
-hfs_btree *tree, u32 num)
-> 	if (!test_bit(HFS_BNODE_NEW, &node->flags))
-> 		return node;
->=20
-> -	desc =3D (struct hfs_bnode_desc *)(kmap(node->page[0]) +
-> -			node->page_offset);
-> +	desc =3D (struct hfs_bnode_desc =
-*)(kmap_local_page(node->page[0]) +
-> +							 =
-node->page_offset);
-> 	node->prev =3D be32_to_cpu(desc->prev);
-> 	node->next =3D be32_to_cpu(desc->next);
-> 	node->num_recs =3D be16_to_cpu(desc->num_recs);
-> 	node->type =3D desc->type;
-> 	node->height =3D desc->height;
-> -	kunmap(node->page[0]);
-> +	kunmap_local(desc);
->=20
-> 	switch (node->type) {
-> 	case HFS_NODE_HEADER:
-> @@ -593,14 +586,12 @@ struct hfs_bnode *hfs_bnode_create(struct =
-hfs_btree *tree, u32 num)
-> 	}
->=20
-> 	pagep =3D node->page;
-> -	memset(kmap(*pagep) + node->page_offset, 0,
-> -	       min_t(int, PAGE_SIZE, tree->node_size));
-> +	memzero_page(*pagep, node->page_offset,
-> +		     min_t(int, PAGE_SIZE, tree->node_size));
-> 	set_page_dirty(*pagep);
-> -	kunmap(*pagep);
-> 	for (i =3D 1; i < tree->pages_per_bnode; i++) {
-> -		memset(kmap(*++pagep), 0, PAGE_SIZE);
-> +		memzero_page(*++pagep, 0, PAGE_SIZE);
-> 		set_page_dirty(*pagep);
-> -		kunmap(*pagep);
-> 	}
-> 	clear_bit(HFS_BNODE_NEW, &node->flags);
-> 	wake_up(&node->lock_wq);
-> --=20
-> 2.37.1
->=20
+>  .../devicetree/bindings/spi/ingenic,sfc.yaml       | 64 ++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+> new file mode 100644
+> index 00000000..b7c4cf4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/ingenic,sfc.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/ingenic,sfc.yaml#
 
+File name should be rather based on first compatible, so
+ingenic,x1000-sfc.yaml
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bindings for SFC in Ingenic SoCs
+> +
+> +maintainers:
+> +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> +
+> +description:
+> +  The SPI Flash Controller in Ingenic SoCs.
+> +
+
+You miss here allOf referencing spi-controller.
+
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - ingenic,x1000-sfc
+> +          - ingenic,x1600-sfc
+> +          - ingenic,x2000-sfc
+> +      - items:
+> +          - enum:
+> +              - ingenic,x1830-sfc
+> +          - const: ingenic,x1000-sfc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: sfc
+
+Remove the clock-names entirely, no benefits.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/ingenic,x1000-cgu.h>
+> +
+> +	sfc: spi@13440000 {
+> +		compatible = "ingenic,x1000-sfc";
+
+
+Use 4 spaces for example indentation.
+
+> +		reg = <0x13440000 0x1000>;
+> +
+> +		interrupt-parent = <&intc>;
+> +		interrupts = <7>;
+> +
+> +		clocks = <&cgu X1000_CLK_SFC>;
+> +		clock-names = "sfc";
+> +
+> +		status = "disabled";
+
+No status in example.
+
+> +	};
+> +...
+
+
+Best regards,
+Krzysztof

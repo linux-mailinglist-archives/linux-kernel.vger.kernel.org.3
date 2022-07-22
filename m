@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D220957DFB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FC857DF78
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234937AbiGVKNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S234883AbiGVKPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiGVKNI (ORCPT
+        with ESMTP id S229704AbiGVKPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:13:08 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4401674784;
-        Fri, 22 Jul 2022 03:13:08 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31e7055a61dso42347997b3.11;
-        Fri, 22 Jul 2022 03:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UF9LLNXxHjO50dQ1kLL/0ALZSieprElxvM0avSId9VE=;
-        b=bbfST+yyd4mUoCCjb1HZRc79+4hnU1velaSMVQZXVPKuVvkUoyjf/xnssHvIdHBrPQ
-         /vGP7uAMpE6nzhsqZK9YgnQvgRa/kbw44WsWhyIeclTxCEIpZMu8hthpaFs3Nwlng40B
-         qn75snDacBp/Jgt2be5wl3enTdzN0jEF9/2CNygYOJIoEOGdqrlpKRsKvYGKaOHKBvr0
-         g6JSNZWCfcPglPR37O/HcNQ3hsU5Ti5TId7LcpxjFu5u5w0LhUnyzppIaBlvaQYMY1dG
-         omJmwPlAHYWFtuJguMFv1A6NMZmI1wCTMlfjszCybIaubBb4c0w8nEiCLDj2jHJGd2SX
-         5dGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UF9LLNXxHjO50dQ1kLL/0ALZSieprElxvM0avSId9VE=;
-        b=JWbmdP5FLS8kSj1HXywdca2yTcoohdRK6JIjh6Vdb2f53BEk7Z6VdVJLDBDTONwvJ2
-         njZ25wlJsI5jcbry/wo67nXnnDjAwrdSutBeMBiFbAszyjHmKB2ZNvHt9dnyCYDUgkCv
-         tt7DHT9YAUB+93TwMl4tLTgfNjrZpoqYFkh+pm6cogwVEs6TbxOqD9eWH1babfogoSuM
-         RBrbcYlWcMbexTrEzJ0ddYCF8IyKIeOcrDYLZGiFucLUxVJEjCae3os0+WEk4oImFYyQ
-         5E+Jha+MWP3GoIuVAjC2ftJSpAue3gTE+cjkRlqNp/r2UIJzwFsDaJrl4XHlV+8QFshe
-         v0fQ==
-X-Gm-Message-State: AJIora9rbAk6wHjVhfM+r+wt+kiTp1uYvc2joc0mZNURgaO0ZMQHqgIp
-        TjvAglh2eW/0DviC5orlyiBF0T/wvwXD00AtYJx2axsYX2g=
-X-Google-Smtp-Source: AGRyM1sN+U64clWGsFoYQzVrnNEbSPXBFNxfr7YdxOyf28vEspCeUsve3sVFFlZ4LDVWDxgDN6VwYjWiqS5DQsMfBsU=
-X-Received: by 2002:a81:5d55:0:b0:31c:dce7:96c9 with SMTP id
- r82-20020a815d55000000b0031cdce796c9mr2355897ywb.519.1658484787468; Fri, 22
- Jul 2022 03:13:07 -0700 (PDT)
+        Fri, 22 Jul 2022 06:15:07 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410047748B;
+        Fri, 22 Jul 2022 03:14:57 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.48.124]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N5W4y-1nPhFb30ry-016vQa; Fri, 22 Jul 2022 12:13:53 +0200
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id 2AD5A3C0C7;
+        Fri, 22 Jul 2022 12:13:36 +0200 (CEST)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id D35264E42; Fri, 22 Jul 2022 12:13:19 +0200 (CEST)
+Date:   Fri, 22 Jul 2022 12:13:19 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kbuild: add dtbs_prepare target
+Message-ID: <Ytp4PyBcCfRsVaG5@bergen.fjasle.eu>
+References: <20220716093122.137494-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <20220721165701.17888-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220721165701.17888-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB5922D6EC478AE231A06E94B586909@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdUrmseZEBpsh22U52vivA=wXYo2C8Ke6CvgWSKjwgYByQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdUrmseZEBpsh22U52vivA=wXYo2C8Ke6CvgWSKjwgYByQ@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 22 Jul 2022 11:12:40 +0100
-Message-ID: <CA+V-a8s8UGhC7hNzfhbDL817Bup6PXM+_UhEJfsEZH0GZB2BYw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: pinctrl: rzg2l-pinctrl: Add macros
- for IRQ0-7
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20220716093122.137494-1-masahiroy@kernel.org>
+Jabber-ID: nicolas@jabber.no
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:kBSYKIANld+Cd82WhQj0ATFo241QPlk9m2Lo9LNLuxwvoUtSFoe
+ SMFA1GDRjr8mDkW9Ve4RGsdf/fC38OftrWKxTtPD7ySiPcJEDncQD/nZG1TP4QweOktO9UE
+ gTz8LYeAYzOYIO2bGcf/AjqKpmTSB55ysCIUt9tvp2Xa5sUPVLX1UPOkoOnaYqU4e4yrDnr
+ rSVTQOAXpCTeKt7pUqtDQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2Kzuzhkgnbs=:QxOY4QgM7lnnYHAt63zcRu
+ h7fZudyRJbGPXieX9UCe0tE7ggda4rRNbN6ds+MgKu/g2gugg1t4QifFxUYyZG5Z0EIHBM2L5
+ YWWUqAI4h93Bt77Rj9WsOcePZUBVRPUfS3aarDHdkH7ZbBEvU6jJZvvjYZJBycF7Xu47IZXqz
+ usgVRiPjODHQUbF1rhAuHA6Q4iTUPMm4UbQfv9XsVIa0aIvYFRIliCaCxX2HqPY4h6QTvsSYU
+ IlgD+gpXhTKR7cCYx73wSae6cvK/CfZSO5OUxe/40PXJHECewQikyB6uuUSP+CkleIJVjxf0c
+ w8HcA9kkP6SXV7GZL7iWajd+4FeM6Vj7zzArSAEy8Gwx/i1UTdgAnn17mABMZa6HSZIxSQ/mk
+ FX7ZVYeeJIO5a/my3mACGV2njgk3RZjH3gIxiQN/e5/whjTcJJSCHSzormDH8sT/dc2ac6bOv
+ fKonYNW+G+ffbAKEpWCXLTzYmfL+C1RaomqZXW6L10i/jS1hH7Ssy+RzuaFHxbN+fiGv0f0oX
+ VDKNmvDCdX0TQsFpPqb08qXSnQO8Yl0WC202iJgOaWS7q05mkpjvY1u5SAP2Gkux0KjCSR/Ou
+ WuPY/mbKyrZXUYf/2JerVYuowL44P5DXuKFH1J0VIE99VjJ+UcHTQHeFjcVvURNxEinuuP1pj
+ Msm3xyu7BF+/1vOVdNivu1TrbApjYq0jYnNGnhuYGZCxNl9n5NL39Zgfn/PuCppDla9qoNKs4
+ z97b7jmZbYFQU8/Ixc/Iz1kL2GUroe/JiQN55Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,53 +70,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Sat, 16 Jul 2022 18:31:22 +0900 Masahiro Yamada wrote:
+> Factor out the common prerequisites for DT compilation into the new
+> target, dtbs_prepare.
+> 
+> Add comments in case you wonder why include/config/kernel.release is
+> the prerequisite. Our policy is that installation targets must not
+> (re)compile any build artifacts in the tree. If we make modules_install
+> depend on include/config/kernel.release and it is executed under the
+> root privilege, it may be owned by root.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+>  Makefile | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index a9bd55edb75e..8aa4dbb8f878 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1367,16 +1367,22 @@ endif
+>  
+>  ifneq ($(dtstree),)
+>  
+> -%.dtb: include/config/kernel.release scripts_dtc
+> +%.dtb: dtbs_prepare
+>  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+>  
+> -%.dtbo: include/config/kernel.release scripts_dtc
+> +%.dtbo: dtbs_prepare
+>  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
 
-Thank you for the review.
+Is there a reason, why both rules are not unified?  I guess it is, but 
+I can't see it.
 
-On Fri, Jul 22, 2022 at 10:01 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> CC maz
->
-> On Fri, Jul 22, 2022 at 6:34 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > Subject: [PATCH v2 1/2] dt-bindings: pinctrl: rzg2l-pinctrl: Add macros
-> > > for IRQ0-7
-> > >
-> > > Add macros for IRQ0-7 which map to SPI1-8 so that it can be used in
-> > > dts/i.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > ---
-> > > v1->v2
-> > > * New patch
-> > > ---
-> > >  include/dt-bindings/pinctrl/rzg2l-pinctrl.h | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > >
-> > > diff --git a/include/dt-bindings/pinctrl/rzg2l-pinctrl.h b/include/dt-
-> > > bindings/pinctrl/rzg2l-pinctrl.h
-> > > index c78ed5e5efb7..6aae2ac206d6 100644
-> > > --- a/include/dt-bindings/pinctrl/rzg2l-pinctrl.h
-> > > +++ b/include/dt-bindings/pinctrl/rzg2l-pinctrl.h
-> > > @@ -20,4 +20,14 @@
-> > >  /* Convert a port and pin label to its global pin index */
-> > >  #define RZG2L_GPIO(port, pin)        ((port) * RZG2L_PINS_PER_PORT +
-> > > (pin))
-> > >
-> > > +/* IRQ0-7 map to SPI1-8 */
-> > > +#define RZG2L_IRQ0   1
-> > > +#define RZG2L_IRQ1   2
-> > > +#define RZG2L_IRQ2   3
-> > > +#define RZG2L_IRQ3   4
-> > > +#define RZG2L_IRQ4   5
-> > > +#define RZG2L_IRQ5   6
-> > > +#define RZG2L_IRQ6   7
-> > > +#define RZG2L_IRQ7   8
->
-> No definition for NMI?
->
-Ok, I will add a macro for NMI.
+>  
+> -PHONY += dtbs dtbs_install dtbs_check
+> -dtbs: include/config/kernel.release scripts_dtc
+> +PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
+> +dtbs: dtbs_prepare
+>  	$(Q)$(MAKE) $(build)=$(dtstree)
+>  
+> +# include/config/kernel.release is not actually required for building DTBs,
+> +# but for installing DTBs because INSTALL_DTBS_PATH contains $(KERNELRELEASE).
+> +# We do not want to move it to dtbs_install. The policy is installation
+> +# targets (, which may run as root) must not modify the tree.
 
-Cheers,
-Prabhakar
+Is the comma after the opening parenthesis intended?
+
+Kind regards,
+Nicolas
+
+> +dtbs_prepare: include/config/kernel.release scripts_dtc
+> +
+>  ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
+>  export CHECK_DTBS=y
+>  dtbs: dt_binding_check
+> -- 
+> 2.34.1

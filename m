@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A88057D877
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB43757D83B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiGVCV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 22:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S233709AbiGVCGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 22:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233530AbiGVCVr (ORCPT
+        with ESMTP id S229441AbiGVCGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 22:21:47 -0400
-Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 243F9974B2;
-        Thu, 21 Jul 2022 19:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ZVmSm
-        fPea/8T1u5ERmrwfoVknS9hHZixK9cuPCErde8=; b=ITRElxZ6ClvFEf+8/lpiG
-        8RZWVf0fOC+Jnu3/3rmQVualgZx0omf81BZdf5KLHb8WocgKkXCqUhF7CGm9yBey
-        e5fa0Hg+T9MRwysM7KgVZVnbkT2LoA+RcVKw/ol3xwaHgmfK8+JxauvbsbTiCspV
-        oMpooCsNUManIJVqGE//wU=
-Received: from localhost.localdomain (unknown [223.104.68.59])
-        by smtp8 (Coremail) with SMTP id DMCowACnfRXMBdpiMfFoOw--.44S2;
-        Fri, 22 Jul 2022 10:05:03 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     awalls@md.metrocast.net, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] media: ivtv: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 10:04:59 +0800
-Message-Id: <20220722020459.64191-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 21 Jul 2022 22:06:44 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9763B951FD
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:06:37 -0700 (PDT)
+X-QQ-mid: bizesmtp64t1658455548t22j4mub
+Received: from harry-jrlc.. ( [125.70.163.183])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 22 Jul 2022 10:05:40 +0800 (CST)
+X-QQ-SSF: 0100000000000030C000000A0000020
+X-QQ-FEAT: 7L1V3dHhUFM9DG3DWfqxxrBLAGcNYhja76O6mjikYtmzuD2j0+RMZ8ER2LIIy
+        iof30pibbsUlHmkAgLWImVm4AGMhzDfXJ4TSVB1hLeeuw/oCpCGc1lcjnUn4mEqN+cNde5M
+        nxYcbw1tsQkFfscVFhcXGbR1aG0GVH3XXN4IkHbGWnPkbgxamcq0IVd7Jfx5DhV7wxVQZol
+        FV8npIvnlsC4Sguk1dCki1dxWryIm3hEuAZMZqBBhnUhTxAS0OVJkU0rbQQ4PIJRqPaYLEt
+        giqK0VDuUzlRTDwGmbv6N7IWnjQbnzyh4cZEpMk0iceks/64jH5hZq612fKP/u0ThGfO/Xc
+        B7jS1/2tgb3LoU9RSA+qwxpYnqIL1XP/ndRvJ0m+jVTuHEPBKGjsyZ2MG9XGw==
+X-QQ-GoodBg: 0
+From:   Xin Gao <gaoxin@cdjrlc.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, Xin Gao <gaoxin@cdjrlc.com>
+Subject: [PATCH] sched: Fix comment typo
+Date:   Fri, 22 Jul 2022 10:05:38 +0800
+Message-Id: <20220722020538.15228-1-gaoxin@cdjrlc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMCowACnfRXMBdpiMfFoOw--.44S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr1rGFy8uw15CF48JFb_yoWfurc_Wr
-        nFqw4xWw4UAF9xtrn2yr1fZF90ga95ua4fAryFyryfJa48ur43WrWqvasrAFnxXF4fuF9r
-        K34jqF15C348KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRiApn5UUUUU==
-X-Originating-IP: [223.104.68.59]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivxBGZFWB0jfvGAAAsL
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+The double `into' is duplicated in line 2515, remove one.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
 ---
- drivers/media/pci/ivtv/ivtv-yuv.c | 2 +-
+ kernel/sched/sched.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/ivtv/ivtv-yuv.c b/drivers/media/pci/ivtv/ivtv-yuv.c
-index e79e8a5a744a..4ba10c34a16a 100644
---- a/drivers/media/pci/ivtv/ivtv-yuv.c
-+++ b/drivers/media/pci/ivtv/ivtv-yuv.c
-@@ -538,7 +538,7 @@ static void ivtv_yuv_handle_vertical(struct ivtv *itv, struct yuv_frame_info *f)
- 	reg_2964 = (reg_2964 << 16) + reg_2964 + (reg_2964 * 46 / 94);
- 
- 	/* Okay, we've wasted time working out the correct value,
--	   but if we use it, it fouls the the window alignment.
-+	   but if we use it, it fouls the window alignment.
- 	   Fudge it to what we want... */
- 	reg_2964 = 0x00010001 + ((reg_2964 & 0x0000FFFF) - (reg_2964 >> 16));
- 	reg_2968 = 0x00010001 + ((reg_2968 & 0x0000FFFF) - (reg_2968 >> 16));
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 1f97f357aacd..9f9d0cf92263 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2506,7 +2506,7 @@ static inline bool rq_order_less(struct rq *rq1, struct rq *rq2)
+ {
+ #ifdef CONFIG_SCHED_CORE
+ 	/*
+-	 * In order to not have {0,2},{1,3} turn into into an AB-BA,
++	 * In order to not have {0,2},{1,3} turn into an AB-BA,
+ 	 * order by core-id first and cpu-id second.
+ 	 *
+ 	 * Notably:
 -- 
-2.25.1
+2.30.2
 

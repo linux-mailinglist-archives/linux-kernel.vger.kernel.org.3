@@ -2,82 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACF857E98D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 00:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5437357E991
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 00:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236611AbiGVWMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 18:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S236441AbiGVWQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 18:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiGVWMj (ORCPT
+        with ESMTP id S231478AbiGVWQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 18:12:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3DDA9B96;
-        Fri, 22 Jul 2022 15:12:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B0A2621EC;
-        Fri, 22 Jul 2022 22:12:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF49C341C6;
-        Fri, 22 Jul 2022 22:12:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658527957;
-        bh=w3sJKIqMYuyJEmV4ZHLE8Ym9r0qhBdmU0MUWwXsPgL8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SMYAG9vlcQiu8b9Jm9ymnp4ld3hsXgnK43/dNxbq7lVWLBisCfI0l6ui3xVM1CX4N
-         t9ieXqU6Cmd8UyLp3OFoazSc8wVuoP2ud6jgPoa4gOLSrdn0VzRlSV3NhQGv8+lD6Y
-         KwJlR3139DnkiiBlc1BYvs4PvmGpinziZ0LguC6tDcMHaE6yQicLX5Ngq05LnhULq+
-         cEzrV2VevxIkUn5fw8ooDEGR0LUb2GcnrCuKHiTpZzA4ERCOym96dbHbz+pg2Lq6dC
-         ic8Efo/ReT9th98VOZZYOxRBf6Or3FX0VUKwFkbf+SS8rhl/6FqmtAOONwF0UxhcvL
-         QdoIsaL+iK0gg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v5.19-rc7
-Date:   Fri, 22 Jul 2022 23:12:27 +0100
-Message-Id: <20220722221236.EDF49C341C6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 18:16:13 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628808B4BB
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 15:16:12 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 23so5431249pgc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 15:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DvsPToDBCg7LtgfTt0+32mRr4nwV5bDezHW9QGpUdCE=;
+        b=tNKubLYYtWNcTQODGehA0A/1OYnUmUt4THz1nqFtzCXg5NEC1cRRSaX5PgITuSDLU6
+         G06p3vx+0Zy/5ssCW97K9rUlLfZc5yFeacry9qdLA/ORmYtTsf+hvAjNC/xJhwylqGqF
+         GDCvsMr0WCfkILIrPPqjC2A917wnhXYY6gdaIIh24eyORjdpEc+eFQw4xlXwr0mFGOr8
+         t0qsu5NCtqCDFbFmwAmnJdfZpcKyrltXlmOvzMeAR2KO9zlFDgaPTuZOo1aTJBLWVqyE
+         ee6wGHg3FjgjATQas4NYJjEgWhWbsJ+6+ttSV6V751uW+K/OWJqRkxFO+p/brT9lNe06
+         X/yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DvsPToDBCg7LtgfTt0+32mRr4nwV5bDezHW9QGpUdCE=;
+        b=VwUDU5trfpvMoP2yKbt4SZuL2/cTwBL4PPH5mU17F2YUGV/18zArzNHv2+gTOvTqqs
+         VwV2Ot9t8WZo4QIzXZfALg+Ms3VlhGza3l7fRiY8150tA6NvYq8AMXzOvyG8NzJFWNaI
+         x8B+crQkIjVcNTE2Ub+Wewt0rQxTZcxSlcNBPD3I5NLxY/NwuYVK9F7C+lWW5oeKBsiY
+         Wz1kQzTVdotvRpnYKXdhe1wR6flsdg1BsiRnjNeXzdKVqwt2rbmJeRETZ6h8nTOGvrvG
+         6z5Jl9d3oxcVG0sD4XpLupa6lbKRk23Ps5Rf0wCjWBtkO/DLdHtuN/0Qm69bZgw3SXel
+         qZFQ==
+X-Gm-Message-State: AJIora8o4q3ermNgPtzVjVRZ5y4DKf+AHz7ImLRpelku8fteCTqI5mWc
+        0BDiJ11VHY9NvLYpJAdM2ODd2A==
+X-Google-Smtp-Source: AGRyM1sIc+nLzUHc1jVYbsv19cRcOoKn0TQ6YwR2BWbngZ0ui0Jg+GMpAVTUImqkVk1IcWXRZVwkvQ==
+X-Received: by 2002:a63:1246:0:b0:41a:58f:9fee with SMTP id 6-20020a631246000000b0041a058f9feemr1538198pgs.413.1658528171605;
+        Fri, 22 Jul 2022 15:16:11 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id 30-20020a63185e000000b0041296bca2a8sm3769062pgy.12.2022.07.22.15.16.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 15:16:10 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 22:16:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
+Message-ID: <Ytshp+D+IT8eaevH@google.com>
+References: <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
+ <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <5db37cc2-4fb1-7a73-c39a-3531260414d0@intel.com>
+ <BYAPR12MB2759AA368C8B6A5F1C31642F8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <YrTq3WfOeA6ehsk6@google.com>
+ <SN6PR12MB276743CBEAD5AFE9033AFE558EB59@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <YtqLhHughuh3KDzH@zn.tnic>
+ <Ytr0t119QrZ8PUBB@google.com>
+ <Ytr5ndnlOQvqWdPP@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ytr5ndnlOQvqWdPP@zn.tnic>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 73d5fe046270281a46344e06bf986c607632f7ea:
+On Fri, Jul 22, 2022, Borislav Petkov wrote:
+> On Fri, Jul 22, 2022 at 07:04:23PM +0000, Sean Christopherson wrote:
+> > I disagree.  Running an old kernel on new hardware with a different RMP layout
+> > should refuse to use SNP, not read/write garbage and likely corrupt the RMP and/or
+> > host memory.
+> 
+> See my example below.
+> 
+> > And IMO, hiding the non-architectural RMP format in SNP-specific code so that we
+> > don't have to churn a bunch of call sites that don't _need_ access to the raw RMP
+> > format is a good idea regardless of whether we want to be optimistic or pessimistic
+> > about future formats.
+> 
+> I don't think I ever objected to that.
 
-  spi: cadence-quadspi: Remove spi_master_put() in probe failure path (2022-07-14 13:26:35 +0100)
+Yar, just wanted to be make sure we're all on the same page, I wasn't entirely
+sure what was get nacked :-)
 
-are available in the Git repository at:
+> > > This is nothing else but normal CPU enablement work - it should be done
+> > > when it is really needed.
+> > > 
+> 
+> <--- this here.
+> 
+> > > Because the opposite can happen: you can add a model check which
+> > > excludes future model X, future model X comes along but does *not*
+> > > change the RMP format and then you're going to have to relax that model
+> > > check again to fix SNP on the new model X.
+> 
+> So constantly adding new models to a list which support a certain
+> version of the RMP format doesn't scale either.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.19-rc7
+Yeah, but either we get AMD to give us an architectural layout or we'll have to
+eat that cost at some point in the future.
 
-for you to fetch changes up to b620aa3a7be346f04ae7789b165937615c6ee8d3:
+> If you corrupt the RMP because your kernel is old, you'll crash and burn
+> very visibly so that you'll be forced to have to look for an updated
+> kernel regardless.
 
-  spi: spi-rspi: Fix PIO fallback on RZ platforms (2022-07-21 17:21:07 +0100)
+Heh, you're definitely more optimistic than me.  I can just see something truly
+ridiculous happening like moving the page size bit and then getting weird behavior
+only when KVM happens to need the page size for some edge case.
 
-----------------------------------------------------------------
-spi: Final fixes for v5.19
-
-A few more small driver specific fixes, this is obviously rather late
-and if you think it's best to leave these until the next release that
-would be reasonable.
-
-----------------------------------------------------------------
-Biju Das (1):
-      spi: spi-rspi: Fix PIO fallback on RZ platforms
-
-Marc Kleine-Budde (1):
-      spi: bcm2835: bcm2835_spi_handle_err(): fix NULL pointer deref for non DMA transfers
-
-Sai Krishna Potthuri (1):
-      spi: spi-cadence: Fix SPI NO Slave Select macro definition
-
- drivers/spi/spi-bcm2835.c | 12 ++++++++----
- drivers/spi/spi-cadence.c |  2 +-
- drivers/spi/spi-rspi.c    |  4 ++++
- 3 files changed, 13 insertions(+), 5 deletions(-)
+Anyways, it's not a sticking point, and I certainly am not volunteering to
+maintain the FMS list...

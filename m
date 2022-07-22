@@ -2,107 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E7757E52A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2BB57E532
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235983AbiGVRQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S236023AbiGVRQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235893AbiGVRPy (ORCPT
+        with ESMTP id S236064AbiGVRQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:15:54 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A641E3E2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:15:53 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id o13-20020a17090ab88d00b001f1ef2109aaso4612680pjr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:15:53 -0700 (PDT)
+        Fri, 22 Jul 2022 13:16:23 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4A124952
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:16:19 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bf9so8603169lfb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:16:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=S5cNbvav8USkmIEO4JyFG7st/81vwwIaAFb/mwn7PBw=;
-        b=ZijylNG/dIr7hWeGOThw0F1FX6gZqPIINac1RikPNL2Vu4wePiDr7jZuU6qIC5cuaG
-         XNRKI0kBU7C3JPm7J/65+xrByvLzo8y3HdvpHHbqFBzAEfRJE7ZnXXTyRgtjt6cfLkY9
-         2MsO7lMPJE3fjnRDwsl6JN0jwfY/JMVyASX8WBCPMS/OJlPJFckOgUmN6cJlGGjYrkei
-         6laVWLPSFcnMjJHQR0Z8ciO2egpgl/YamGSq5ON1PWDG2UVKiYa+aRUx4KAEUdTeFMt8
-         cGxNS2blvqFhWmOAwIYvNE1soe3QsVF6CH2lupiR2xU1Ap49O7N/Al4TmVzxVXOPpCVr
-         mwMg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qzKvnXIunHj3Oe09t7pjgnCJEOdHA12gmzofARgYOME=;
+        b=Eo92qaL4trtnQyMylGrDeeKV8N52OGZdJeqMO8j4DPFBxG970Lp6rmyTOY5N3cKHr6
+         ya3hpXlZiizzbTv4HdI4e+xXwGTBKvxeI/hO46PGeo6+PQM08GcauJg35asuntABAfxB
+         z5x75LH/yCVEA9IEXG/t7M+HBo5kUcCGooIpm0+JLA78wkoOFOuDqXXkzwCQfWtfsH7Z
+         Jo7a7LfLDY1uXEregHEPnZg5TgPXuYnKPGl1FT5RR8rBDJb3O3N2L0I0zdXo+pyONVcV
+         SstaayKDyJYxEV3s5LQ2bY65jDka9OuEseDiLqaI7amQSb260bvOlTCEjvdFBQZ+CZlZ
+         shpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=S5cNbvav8USkmIEO4JyFG7st/81vwwIaAFb/mwn7PBw=;
-        b=ajGDfHZ1AMn3EWi+f0RHBgY6fDBtBHG8mHOzLXN+0K2XAdRaXvJOpt7Rgc/6O/0rhl
-         ic3Bc3w9SKWGDQowSQweDrScJpObz5nN+Atgj3zCFO6hRxptisg812viXgyNQ+RpvqjW
-         /nVaeVKPM1cjLcsZJUpZRTj6l9oqHG7jm+bzOkcRjzxib8huX553r+j9kvJGTeu+CGsq
-         UpdBYsu0oEmjoeJPZAcqyhmWEuS36EF2+jNko3aC8JXvubd6OZ7qDt9hKcNZ0CL7dnfX
-         e9BSM71ylzVYGRcYe8TxU/WuRvVHTyeU1KqUeq1US0Lj1laRdoXkksGcDjmVOlN1tKU3
-         NsWA==
-X-Gm-Message-State: AJIora+z7f94OkOvnfrk7cj/H+MPgsAExUoYRQdwD6Dt5nX5Mn4oad99
-        thDCL1EX94Ls906dfviZltEiO0cKqZUqFg==
-X-Google-Smtp-Source: AGRyM1t7wmAT+3kke9a3GR632MG8LKFNIvuSwnvOkrBbzMVDoTtceecqxaXTlOz1WmmOvfcM1J4KJniDJP7MEA==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:aa7:888a:0:b0:52b:17e8:fd1 with SMTP id
- z10-20020aa7888a000000b0052b17e80fd1mr785288pfe.46.1658510153314; Fri, 22 Jul
- 2022 10:15:53 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 17:15:34 +0000
-In-Reply-To: <20220722171534.3576419-1-dlatypov@google.com>
-Message-Id: <20220722171534.3576419-5-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220722171534.3576419-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v2 5/5] kunit: make kunit_kfree(NULL) a no-op to match kfree()
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qzKvnXIunHj3Oe09t7pjgnCJEOdHA12gmzofARgYOME=;
+        b=Y50vmUDR2/38siHP5rPrDdEajIFdi289soO6yz3ciioyZ6knCct4pi42CnUzW4J5o5
+         EfDoBkXECThDPDuM1ydooFfS2Wvbg+9aA8SvPCP7R/smQAlQnhIF31d+qk+A6vIJp23z
+         j2So6UeKzLOWG7xQ1hO/4GC9TiR+/zTsnZ7X+XA4G47UALUxl8YYMDyUdfVsk67VwqoT
+         EbUmH6bVUe+ouThFKVp16gSOYe3dyfrnPtnWsQ8N9N83uA5EJG9HPxZJTUTgM5LD/CUM
+         PKAR7qyo6PsPwiHX6lQGtIjW9RRupK1myeujm3TBAK3r/6Kcx+fUhynP38iwn95TnpBE
+         ydrA==
+X-Gm-Message-State: AJIora+VqrkgAaN4Nzuoa/UcwF0i6+5k2yc6CBffxN7BQJ3YMNBke9iT
+        cG91XztTPStnLQuk32ggHP6Eog==
+X-Google-Smtp-Source: AGRyM1tm8lG7HIgSNHNOp7qyZEM1JP4mQGHlpvpjhWzODGjdPwwS9kwQuib0Cmd/jns5KE1BaLEg8g==
+X-Received: by 2002:a05:6512:22d2:b0:48a:1ec7:2220 with SMTP id g18-20020a05651222d200b0048a1ec72220mr362226lfu.668.1658510177750;
+        Fri, 22 Jul 2022 10:16:17 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id w24-20020a05651c119800b0025dd5f64d2esm1223031ljo.110.2022.07.22.10.16.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 10:16:17 -0700 (PDT)
+Message-ID: <7c4a07e3-b087-3d44-d350-43e8ed1e10e6@linaro.org>
+Date:   Fri, 22 Jul 2022 19:16:15 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 2/2] dt-bindings: arm: qcom: Document additional sku6
+ for sc7180 pazquel
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
+ <20220721033918.v3.2.I7ecbb7eeb58c5e6a33e32a3abf4d6874e6cb725c@changeid>
+ <CAD=FV=WSBgupLFMCZgianck6uTkAyqrG0WK2ChSbNbJdhOPdLA@mail.gmail.com>
+ <4b2fe9d0-f590-0fac-79fa-bb05da1d61df@linaro.org>
+ <CAD=FV=XmaNdc9k98vAwbcN-sm0w_WeqhRsK_AUm3h4LZ5-egmQ@mail.gmail.com>
+ <c2b03863-2249-13e6-98e0-731c1b40d0a9@linaro.org>
+ <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
+ <20220722002210.GA2223409-robh@kernel.org>
+ <CAD=FV=U1yqdPzdtJFu+Rk56TOX1kYX2BZ16XGuMoM+=Re5NA9A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=U1yqdPzdtJFu+Rk56TOX1kYX2BZ16XGuMoM+=Re5NA9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The real kfree() function will silently return when given a NULL.
-So a user might reasonably think they can write the following code:
-  char *buffer = NULL;
-  if (param->use_buffer) buffer = kunit_kzalloc(test, 10, GFP_KERNEL);
-  ...
-  kunit_kfree(test, buffer);
+On 22/07/2022 17:41, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Jul 21, 2022 at 5:22 PM Rob Herring <robh@kernel.org> wrote:
+>>
+>> On Thu, Jul 21, 2022 at 11:29:13AM -0700, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Thu, Jul 21, 2022 at 9:52 AM Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 21/07/2022 18:43, Doug Anderson wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Thu, Jul 21, 2022 at 9:33 AM Krzysztof Kozlowski
+>>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>>>
+>>>>>> On 21/07/2022 15:37, Doug Anderson wrote:
+>>>>>>>
+>>>>>>> Not worth sending a new version for, but normally I expect the
+>>>>>>> bindings to be patch #1 and the dts change to be patch #2. In any
+>>>>>>> case:
+>>>>>>>
+>>>>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>>>>>>
+>>>>>> I would say worth v4, because otherwise patches is not bisectable.
+>>>>>
+>>>>> You're saying because `dtbs_check` will fail between the two?
+>>>>
+>>>> Yes
+>>>
+>>> OK. Then I assume you agree that reversing the order of the patches
+>>> won't help, only combining the two patches into one.
+>>>
+>>>
+>>>>> How does
+>>>>> flipping the order help? If `dtbs_check` needs to be bisectable then
+>>>>> these two need to be one patch, but I was always under the impression
+>>>>> that we wanted bindings patches separate from dts patches.
+>>>>
+>>>> I don't think anyone said that bindings patches must be separate from
+>>>> DTS. The only restriction is DTS cannot go with drivers.
+>>>
+>>> I have always heard that best practice is to have bindings in a patch
+>>> by themselves. If I've misunderstood and/or folks have changed their
+>>> minds, that's fine, but historically I've been told to keep them
+>>> separate.
+>>
+>> Correct.
+>>
+>>
+>>>> Bindings for boards go pretty often with DTS (subarch). This is exactly
+>>>> what maintainers do, e.g.:
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/log/?h=arm64-for-5.20
+>>>> Bindings for hardware should go via subsystem maintainer (drivers).
+>>>
+>>> OK, fair that in this case both the bindings and the yaml will land
+>>> through the Qualcomm tree. I guess it's really up to Bjorn and whether
+>>> he'd prefer "make dtbs_check" to be bisectable or whether he'd prefer
+>>> the bindings and dts change to be in separate patches from each other.
+>>
+>> Bindings go first if applied together because you have to define the
+>> binding before you use it. But sometimes things go via multiple trees
+>> and that's fine because it's just easier. In that case, the subsystem
+>> tree is preferred for bindings (i.e. with the driver). But in this case,
+>> Bjorn is the subsystem tree.
+> 
+> Thanks! I'll interpret your response as:
+> 
+> 1. Keep this as two patches and it's more important to keep dts and
+> bindings separate than it is to avoid breaking bisectability of "make
+> dtbs_check".
 
-As-is, kunit_kfree() will mark the test as FAILED when buffer is NULL.
-(And in earlier times, it would segfault).
+No one questioned this here...
 
-Let's match the semantics of kfree().
+> 
+> 2. Bindings should have been patch #1, but it's not a massive deal.
 
-Suggested-by: David Gow <davidgow@google.com>
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
-v1 -> v2: add this patch to the series.
----
- lib/kunit/test.c | 3 +++
- 1 file changed, 3 insertions(+)
+This started our discussion and I said it should be a v4 with a proper
+order. It's not massive deal, but hopefully the submitter will learn
+something.
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index c7ca87484968..879c8db36cb5 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -698,6 +698,9 @@ static inline bool kunit_kfree_match(struct kunit *test,
- 
- void kunit_kfree(struct kunit *test, const void *ptr)
- {
-+	if (!ptr)
-+		return;
-+
- 	if (kunit_destroy_resource(test, kunit_kfree_match, (void *)ptr))
- 		KUNIT_FAIL(test, "kunit_kfree: %px already freed or not allocated by kunit", ptr);
- }
--- 
-2.37.1.359.gd136c6c3e2-goog
+> 
+> 3. I'll assume that Bjorn will yell if he'd like this series re-posted
+> with the reverse order.
 
+
+
+Best regards,
+Krzysztof

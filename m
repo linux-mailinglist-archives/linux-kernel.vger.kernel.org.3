@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51F557E4D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E7E57E4D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235940AbiGVQvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
+        id S235987AbiGVQvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235645AbiGVQu5 (ORCPT
+        with ESMTP id S235870AbiGVQu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 22 Jul 2022 12:50:57 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305D329812
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:50:55 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d10so4907944pfd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:50:55 -0700 (PDT)
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2C92A260
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:50:56 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id bh13so4884058pgb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:50:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wi3p6cYevYgSzxpRYQW2/GvJN4seuvoUHVHYEM8rd/c=;
-        b=Zsl/HCR/HfwmXiX43HZ5K1ARQTPoyE5IMqULQVKIo6SK/77BnXc56/Jwf4h3JM5WT8
-         TnpdDx+JdlDtjutzANTIBh8TZ339Ki0MOxYlUXsv0D9GIPmyY02caVS+RNE9mZ80OsDc
-         1loE+ynHVL2rTaVr1bhLzHHF2Is4dV2NVBmu2qz36cSiz9SsGUp9Yur12O5CNmfBzkOv
-         dS94okAjOgJM5DHNwg7PC6jD0vMWNWO2Xg0LdhcePYVmkNUY7m6wH+g92iq11bvHng8T
-         +rsVTJ2WZJuSAARtp2ah0qnYhu4/SKrE/BzJkLm+kh3VTb0Vn+2jAyQxzHlhFTJW8Pc+
-         F1kg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Z3XlA8t9TDZtl4uJYv9cJwWL/SPmBlhXJhsAi+NFr/o=;
+        b=7tomhJF3u9LLXyYKG/mq8DM+QQ5eXZlTmLQ/bRtzbuFTsoGyHBxFMuvLF9qFtb26F0
+         7nLXbAx65p0+2AImCE2S5PQ8m6o5oHJbnmu7aaNWTr9cmaTfyX/W8lpenujNRCaLf7Dx
+         pZ1WFMUz4YOgIr5bZZrSJir6FzhWmkFhsJ85EqoL+hdVXHW/QxnfSaFeDh09LlnVytZi
+         jCUXfBfbQ8tEWhDDuY9lEVL0Pbx0LjXwtUjFT++6Ejxse9NuUgPOiP/1ts68BBDr58U8
+         5oUiDb67b1rZgKGa+zUEfvOfPfGea9NSwkjUv3c1t7fUFb6Ja+kV3bW2HBmJNIJUhAJ6
+         aong==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wi3p6cYevYgSzxpRYQW2/GvJN4seuvoUHVHYEM8rd/c=;
-        b=U63T6Mlx96TFOPMKRowYjHQjQ0OqlU1SwJqdMC1w6IJ1ThjpOuszTpL24BTdqZR9Qs
-         BMrLHGT4ncGdyWQA7lIwalnf0+34jkB/y6ihkmxI8Pgy0vtjsCqakrI896RJCl49JbQG
-         C7nRy6H4zzsxJzzVVBPTvboLi/+GqAuoGfMZrwnY26too2xaPslcDgmkfnpVV+vBg71u
-         qYW0I5vCFYnXQWU1r3Ulv9USd7bT4Snv+JGcy/yKPTiDCGHRsQnzqWYRbkzMpRA4Q/df
-         UBEX3HnkVoEv8tPwiofNt7eNX9SRSdbZTnkRW2GwPLZ0fWDxHDrWzpkiZivXkDIBDQ89
-         Hb2Q==
-X-Gm-Message-State: AJIora/+iK//v3wt8duQ2NZcRpmZh3vOqQUfVIMR6fr+JkRisgOGIv1z
-        glA4lMnV3GojlAJaHdqaYj3xEGDwG52gcQ==
-X-Google-Smtp-Source: AGRyM1sUmQT9VjeiyZDFrDoJUmFACBX5qw8AGfD99c7VfNcKYYrVTY40lygAzTDsFL+55AErgWeb/A==
-X-Received: by 2002:a63:1324:0:b0:419:afb2:af7b with SMTP id i36-20020a631324000000b00419afb2af7bmr542186pgl.367.1658508653963;
-        Fri, 22 Jul 2022 09:50:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Z3XlA8t9TDZtl4uJYv9cJwWL/SPmBlhXJhsAi+NFr/o=;
+        b=H4imSP0FBdNEDs323CfFDw7QgZJq2iEmwz42HSZE1a2/cyBt7d2w3Lv278qvgCkfy5
+         KbKUueuHS7CZmR9MByTqHUSfKLnBTRPDiON8V/yd/HRnYJIc7+yFAAPDhDqAaiNgPAaD
+         zSs2fZDQirrjlK86IMpu2qcS6eesSU3xwLtAisX2QG+dnMfq8FVHwiTeuDEioq5iM9oj
+         CsQ1EJBC4mOqRmcQWOF93P/Onf8XOjacZR7nYe/aXtHCYTLEzmEEV0pSwFXrXS17xo6r
+         uBv+RrxSPtuLffrufC5Pg8Xgad97FUf6FugcdZa/vnV7cGBqISql7M+w3UMEfPf+4TED
+         nj8A==
+X-Gm-Message-State: AJIora+t8ITP+uv6tfHdXGIE6hxk0dz0G8lTt+rBKj0DRbKC/K+patCU
+        UTIjwE7TWOBkw/b7oN6ziFbp7+wHI9o94A==
+X-Google-Smtp-Source: AGRyM1s+HPeBLYkB+YD2xjmmGBSIoqOGqhGo5tNM6KQjvnM0lOzs/Zmq8GIH6N4CmqMxSOzReT4cUQ==
+X-Received: by 2002:a62:4e85:0:b0:52b:3245:ba20 with SMTP id c127-20020a624e85000000b0052b3245ba20mr767732pfb.5.1658508655499;
+        Fri, 22 Jul 2022 09:50:55 -0700 (PDT)
 Received: from atishp.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902ea0700b0016a3f9e4865sm4028476plg.148.2022.07.22.09.50.52
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902ea0700b0016a3f9e4865sm4028476plg.148.2022.07.22.09.50.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 09:50:53 -0700 (PDT)
+        Fri, 22 Jul 2022 09:50:55 -0700 (PDT)
 From:   Atish Patra <atishp@rivosinc.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Atish Patra <atishp@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
         Anup Patel <anup@brainfault.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Atish Patra <atishp@atishpatra.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
@@ -65,10 +65,12 @@ Cc:     Atish Patra <atishp@rivosinc.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Tsukasa OI <research_trasio@irq.a4lg.com>,
         Wei Fu <wefu@redhat.com>
-Subject: [PATCH v7 0/4] Add Sstc extension support 
-Date:   Fri, 22 Jul 2022 09:50:43 -0700
-Message-Id: <20220722165047.519994-1-atishp@rivosinc.com>
+Subject: [PATCH v7 1/4] RISC-V: Add SSTC extension CSR details
+Date:   Fri, 22 Jul 2022 09:50:44 -0700
+Message-Id: <20220722165047.519994-2-atishp@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220722165047.519994-1-atishp@rivosinc.com>
+References: <20220722165047.519994-1-atishp@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,88 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series implements Sstc extension support which was ratified recently.
-Before the Sstc extension, an SBI call is necessary to generate timer
-interrupts as only M-mode have access to the timecompare registers. Thus,
-there is significant latency to generate timer interrupts at kernel.
-For virtualized enviornments, its even worse as the KVM handles the SBI call
-and uses a software timer to emulate the timecomapre register. 
+This patch just introduces the required CSR fields related to the
+SSTC extension.
 
-Sstc extension solves both these problems by defining a stimecmp/vstimecmp
-at supervisor (host/guest) level. It allows kernel to program a timer and
-recieve interrupt without supervisor execution enviornment (M-mode/HS mode)
-intervention.
+Reviewed-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Atish Patra <atishp@rivosinc.com>
+---
+ arch/riscv/include/asm/csr.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-KVM directly updates the vstimecmp as well if the guest kernel invokes the SBI
-call instead of updating stimecmp directly. This is required because KVM will
-enable sstc extension if the hardware supports it unless the VMM explicitly
-disables it for that guest. The hardware is expected to compare the
-vstimecmp at every cycle if sstc is enabled and any stale value in vstimecmp
-will lead to spurious timer interrupts. This also helps maintaining the
-backward compatibility with older kernels.
-
-Similary, the M-mode firmware(OpenSBI) uses stimecmp for older kernel
-without sstc support as STIP bit in mip is read only for hardware with sstc. 
-
-The PATCH 1 & 2 enables the basic infrastructure around Sstc extension while
-PATCH 3 lets kernel use the Sstc extension if it is available in hardware.
-PATCH 4 implements the Sstc extension in KVM.
-
-This series has been tested on Qemu(RV32 & RV64) with additional patches in
-Qemu[2]. This series can also be found at [3].
-
-Changes from v6->v7:
-1. Fixed a compilation error reported by 0-day bot.
-
-Changes from v5->v6:
-1. Moved SSTC extension enum below SVPBMT.
-
-Changes from v4->v5:
-1. Added RB tag.
-2. Changed the pr-format.
-3. Rebased on 5.19-rc7 and kvm-queue.
-4. Moved the henvcfg modification from hardware enable to vcpu_load.
-
-Changes from v3->v4:
-1. Rebased on 5.18-rc6
-2. Unified vstimemp & next_cycles.
-3. Addressed comments in PATCH 3 & 4.
-
-Changes from v2->v3:
-1. Dropped unrelated KVM fixes from this series.
-2. Rebased on 5.18-rc3.
-
-Changes from v1->v2:
-1. Separate the static key from kvm usage
-2. Makde the sstc specific static key local to the driver/clocksource
-3. Moved the vstimecmp update code to the vcpu_timer
-4. Used function pointers instead of static key to invoke vstimecmp vs
-   hrtimer at the run time. This will help in future for migration of vms
-   from/to sstc enabled hardware to non-sstc enabled hardware.
-5. Unified the vstimer & timer to 1 timer as only one of them will be used
-   at runtime.
-
-[1] https://drive.google.com/file/d/1m84Re2yK8m_vbW7TspvevCDR82MOBaSX/view
-[2] https://github.com/atishp04/qemu/tree/sstc_v6
-[3] https://github.com/atishp04/linux/tree/sstc_v7
-
-Atish Patra (4):
-RISC-V: Add SSTC extension CSR details
-RISC-V: Enable sstc extension parsing from DT
-RISC-V: Prefer sstc extension if available
-RISC-V: KVM: Support sstc extension
-
-arch/riscv/include/asm/csr.h            |   5 +
-arch/riscv/include/asm/hwcap.h          |   1 +
-arch/riscv/include/asm/kvm_vcpu_timer.h |   7 ++
-arch/riscv/include/uapi/asm/kvm.h       |   1 +
-arch/riscv/kernel/cpu.c                 |   1 +
-arch/riscv/kernel/cpufeature.c          |   1 +
-arch/riscv/kvm/vcpu.c                   |   8 +-
-arch/riscv/kvm/vcpu_timer.c             | 144 +++++++++++++++++++++++-
-drivers/clocksource/timer-riscv.c       |  25 +++-
-9 files changed, 185 insertions(+), 8 deletions(-)
-
---
+diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+index 17516afc389a..0e571f6483d9 100644
+--- a/arch/riscv/include/asm/csr.h
++++ b/arch/riscv/include/asm/csr.h
+@@ -247,6 +247,9 @@
+ #define CSR_SIP			0x144
+ #define CSR_SATP		0x180
+ 
++#define CSR_STIMECMP		0x14D
++#define CSR_STIMECMPH		0x15D
++
+ #define CSR_VSSTATUS		0x200
+ #define CSR_VSIE		0x204
+ #define CSR_VSTVEC		0x205
+@@ -256,6 +259,8 @@
+ #define CSR_VSTVAL		0x243
+ #define CSR_VSIP		0x244
+ #define CSR_VSATP		0x280
++#define CSR_VSTIMECMP		0x24D
++#define CSR_VSTIMECMPH		0x25D
+ 
+ #define CSR_HSTATUS		0x600
+ #define CSR_HEDELEG		0x602
+-- 
 2.25.1
 

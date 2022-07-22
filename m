@@ -2,73 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BDE57DDE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE41357DD91
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236015AbiGVJUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S235980AbiGVJVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236000AbiGVJU2 (ORCPT
+        with ESMTP id S235898AbiGVJUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:20:28 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE0FBB8CC
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:13:45 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so3708295pjl.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:13:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OFu95XsV5rEYBt/DoXMJzDAz5PRwolc7OS134C8DnKc=;
-        b=0fFghdJIPyc8ja/Ja4cKlCxsHImbwt+x6cqArGd1WjVLRO4xLsTp5Ca04dFVCKuBNy
-         Ta+da7cU7Xo+M+dPdbyJDLrM5tL+bKeXEp3EcjbveyUQCvoKhmEVRi93T35xYtim1vv+
-         GSzumERbIJEqvSZ5EW9yMhkKCP8l/8QVrL8/DMr3lYL0Rd7KamuMNvpZ3iLlt5nFNDKL
-         RfTayBaT+0CLhFuTN8dWH0NxsH0JbbpqgBHNgBx2p5qeUZzS4esMo94tI7Cu+0Kv6oiY
-         Jn5cvW95wnOV/W8+XQk1skB9V70mIOsQdccwk69ISskNQCyRWGc+E/bJeEaHSwE9jTnU
-         IeIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OFu95XsV5rEYBt/DoXMJzDAz5PRwolc7OS134C8DnKc=;
-        b=HaAOHSot6MPDZlD51rB/HilcwSPFRUpldUxyns37J6zIvve2X5d4/bkMh9cx6b+UA1
-         5k+5TJubk+A8dFBrWjF91USuNEz5RfhDN++xA1OAMHbtQv4qmOd7EKTF3CCZQ32aIhno
-         oxgM+/7g2E5OBO4lWQ/sVqr68xfKQcNgqgmruNU+W4GpyPYedlOkt7wakJQ53WDTa/m3
-         6NW/MnQuT9LTFqfGPPTInlhiQl+vhA3I9h/GDwa69BZiwtmrxMktigInAP55X/gLrmNu
-         cMCZSqhaih3xZ3kbhDh8a87YUmAw9u0ysnlWIoA/k8Q9BOLaLmy6gQAXeFIHrwQfevpu
-         ZkEA==
-X-Gm-Message-State: AJIora89UKuVY8Mt79kIMxTBWe3xVnOKBYoDClx1kxuHDbCerQ7QqROr
-        d7BQjHz0icwfkdvKvTQSYzySUA==
-X-Google-Smtp-Source: AGRyM1v6F78+NCt09f2hsDWr95VGuj60HNdNaZDsiSJ72K0JCl0CYXqR5FUuwfkIkofOdUs4kEv6kw==
-X-Received: by 2002:a17:902:c94b:b0:16c:7289:b402 with SMTP id i11-20020a170902c94b00b0016c7289b402mr2486506pla.66.1658481224853;
-        Fri, 22 Jul 2022 02:13:44 -0700 (PDT)
-Received: from [10.4.231.121] ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902778c00b0016d1f474653sm2923403pll.52.2022.07.22.02.13.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 02:13:44 -0700 (PDT)
-Message-ID: <d540aaff-ec6a-3f25-dd79-b27b4ad81b36@bytedance.com>
-Date:   Fri, 22 Jul 2022 17:13:39 +0800
+        Fri, 22 Jul 2022 05:20:39 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75C5BB8FC
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658481235; x=1690017235;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x0IVXe/dQxL+jMGm05hSRrfW+Ktw0b5z0uHvDMRGLwM=;
+  b=FlRD+GiXNtn6jD8bmKtqsLoJfT67uxJ0+lnvGYrS/hYZCbMf2k6JFhRu
+   0RkdHxmug89noA6bVNKoT6Qeb85gMDBjSSqhXu4JB72GQxUX1T0SDG3ZN
+   Mc3gSC+UpNWG2cnjPVCktAxIIzs64hqnzG6A1xPy+uYIzPNPYQxu9nguy
+   QlyfvGDxX5g30GwXfSinzT3tTfLTZyvlr5g3Basoc02dsLV12MaZ+B5K1
+   J/HJUvWB2D9A0Cob9LuTsUHPwSyjv0gSVva5SdiNhRLTT7SeR6vdXl+id
+   bnEbLiQZBqkEEpcAYSRMzuply+j9LwZelUJbJqFRk58BaYkRNaANrDkYS
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="312996692"
+X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
+   d="scan'208";a="312996692"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 02:13:55 -0700
+X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
+   d="scan'208";a="574099527"
+Received: from rdolan-mobl.ger.corp.intel.com (HELO [10.213.216.165]) ([10.213.216.165])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 02:13:52 -0700
+Message-ID: <118ae557-a7cb-10b2-9198-2ceb92948dd7@linux.intel.com>
+Date:   Fri, 22 Jul 2022 10:13:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0
-Subject: Re: [PATCH v1 1/2] arm64: run softirqs on the per-CPU IRQ stack
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] drm/i915: stop using swiotlb
 Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     arnd@arndb.de, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
- <20220708094950.41944-2-zhengqi.arch@bytedance.com>
- <20220722090440.GB18125@willie-the-truck>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20220722090440.GB18125@willie-the-truck>
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     kernel@collabora.com, Christoph Hellwig <hch@lst.de>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220721174307.1085741-1-bob.beckett@collabora.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20220721174307.1085741-1-bob.beckett@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,78 +72,161 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 2022/7/22 17:04, Will Deacon wrote:
-> On Fri, Jul 08, 2022 at 05:49:49PM +0800, Qi Zheng wrote:
->> Currently arm64 supports per-CPU IRQ stack, but softirqs
->> are still handled in the task context.
->>
->> Since any call to local_bh_enable() at any level in the task's
->> call stack may trigger a softirq processing run, which could
->> potentially cause a task stack overflow if the combined stack
->> footprints exceed the stack's size, let's run these softirqs
->> on the IRQ stack as well.
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> ---
->>   arch/arm64/Kconfig      |  1 +
->>   arch/arm64/kernel/irq.c | 13 +++++++++++++
->>   2 files changed, 14 insertions(+)
->>
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index 4c1e1d2d2f8b..be0a9f0052ee 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -230,6 +230,7 @@ config ARM64
->>   	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
->>   	select TRACE_IRQFLAGS_SUPPORT
->>   	select TRACE_IRQFLAGS_NMI_SUPPORT
->> +	select HAVE_SOFTIRQ_ON_OWN_STACK
->>   	help
->>   	  ARM 64-bit (AArch64) Linux support.
->>   
->> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
->> index bda49430c9ea..c36ad20a52f3 100644
->> --- a/arch/arm64/kernel/irq.c
->> +++ b/arch/arm64/kernel/irq.c
->> @@ -22,6 +22,7 @@
->>   #include <linux/vmalloc.h>
->>   #include <asm/daifflags.h>
->>   #include <asm/vmap_stack.h>
->> +#include <asm/exception.h>
->>   
->>   /* Only access this in an NMI enter/exit */
->>   DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
->> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
->>   }
->>   #endif
->>   
->> +#ifndef CONFIG_PREEMPT_RT
->> +static void ____do_softirq(struct pt_regs *regs)
->> +{
->> +	__do_softirq();
->> +}
->> +
->> +void do_softirq_own_stack(void)
->> +{
->> +	call_on_irq_stack(NULL, ____do_softirq);
->> +}
->> +#endif
+On 21/07/2022 18:43, Robert Beckett wrote:
+> Calling swiotlb functions directly is nowadays considered harmful. See
+> https://lore.kernel.org/intel-gfx/20220711082614.GA29487@lst.de/
 > 
-> Acked-by: Will Deacon <will@kernel.org>
+> Replace swiotlb_max_segment() calls with dma_max_mapping_size().
+> In i915_gem_object_get_pages_internal() no longer consider max_segment
+> only if CONFIG_SWIOTLB is enabled. There can be other (iommu related)
+> causes of specific max segment sizes.
+
+This matches my understanding as well. And thanks for writing the patch 
+up, I actually copied you to comment on the timeline of code removal 
+only and did not expect you'd take it on fully. Thanks!
+
+Christoph - ack from you? Also, if we merge it via the normal process it 
+will hit 5.21 only. Does that work for you?
+
+Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+
+Regards,
+
+Tvrtko
+
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: Thomas Hellstrom <thomas.hellstrom@intel.com>
+> Cc: Matthew Auld <matthew.auld@intel.com>
 > 
-> Please can you repost this at -rc1 and we can queue it up for 5.21?
-
-Sure, will do.
-
-Thanks,
-Qi
-
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> ---
+>   drivers/gpu/drm/i915/gem/i915_gem_internal.c | 20 +++++---------------
+>   drivers/gpu/drm/i915/gem/i915_gem_shmem.c    |  2 +-
+>   drivers/gpu/drm/i915/gem/i915_gem_ttm.c      |  4 ++--
+>   drivers/gpu/drm/i915/gem/i915_gem_userptr.c  |  2 +-
+>   drivers/gpu/drm/i915/i915_scatterlist.h      | 16 ----------------
+>   5 files changed, 9 insertions(+), 35 deletions(-)
 > 
-> Thanks,
-> 
-> Will
-
--- 
-Thanks,
-Qi
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> index c698f95af15f..e1aca378d90f 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> @@ -6,7 +6,6 @@
+>   
+>   #include <linux/scatterlist.h>
+>   #include <linux/slab.h>
+> -#include <linux/swiotlb.h>
+>   
+>   #include "i915_drv.h"
+>   #include "i915_gem.h"
+> @@ -38,22 +37,13 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+>   	struct scatterlist *sg;
+>   	unsigned int sg_page_sizes;
+>   	unsigned int npages;
+> -	int max_order;
+> +	int max_order = MAX_ORDER;
+> +	size_t max_segment;
+>   	gfp_t gfp;
+>   
+> -	max_order = MAX_ORDER;
+> -#ifdef CONFIG_SWIOTLB
+> -	if (is_swiotlb_active(obj->base.dev->dev)) {
+> -		unsigned int max_segment;
+> -
+> -		max_segment = swiotlb_max_segment();
+> -		if (max_segment) {
+> -			max_segment = max_t(unsigned int, max_segment,
+> -					    PAGE_SIZE) >> PAGE_SHIFT;
+> -			max_order = min(max_order, ilog2(max_segment));
+> -		}
+> -	}
+> -#endif
+> +	max_segment = dma_max_mapping_size(i915->drm.dev);
+> +	max_segment = max_t(size_t, max_segment, PAGE_SIZE) >> PAGE_SHIFT;
+> +	max_order = min(max_order, ilog2(max_segment));
+>   
+>   	gfp = GFP_KERNEL | __GFP_HIGHMEM | __GFP_RECLAIMABLE;
+>   	if (IS_I965GM(i915) || IS_I965G(i915)) {
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> index 4eed3dd90ba8..b0ec65b7c1da 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+> @@ -194,7 +194,7 @@ static int shmem_get_pages(struct drm_i915_gem_object *obj)
+>   	struct intel_memory_region *mem = obj->mm.region;
+>   	struct address_space *mapping = obj->base.filp->f_mapping;
+>   	const unsigned long page_count = obj->base.size / PAGE_SIZE;
+> -	unsigned int max_segment = i915_sg_segment_size();
+> +	unsigned int max_segment = dma_max_mapping_size(i915->drm.dev);
+>   	struct sg_table *st;
+>   	struct sgt_iter sgt_iter;
+>   	struct page *page;
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> index 5a5cf332d8a5..882f046f4d18 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+> @@ -189,7 +189,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
+>   	struct drm_i915_private *i915 = container_of(bdev, typeof(*i915), bdev);
+>   	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
+>   	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
+> -	const unsigned int max_segment = i915_sg_segment_size();
+> +	const unsigned int max_segment = dma_max_mapping_size(i915->drm.dev);
+>   	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
+>   	struct file *filp = i915_tt->filp;
+>   	struct sgt_iter sgt_iter;
+> @@ -568,7 +568,7 @@ static struct i915_refct_sgt *i915_ttm_tt_get_st(struct ttm_tt *ttm)
+>   	ret = sg_alloc_table_from_pages_segment(st,
+>   			ttm->pages, ttm->num_pages,
+>   			0, (unsigned long)ttm->num_pages << PAGE_SHIFT,
+> -			i915_sg_segment_size(), GFP_KERNEL);
+> +			dma_max_mapping_size(i915_tt->dev), GFP_KERNEL);
+>   	if (ret) {
+>   		st->sgl = NULL;
+>   		return ERR_PTR(ret);
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> index 094f06b4ce33..8a62a71859e6 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> @@ -129,7 +129,7 @@ static void i915_gem_object_userptr_drop_ref(struct drm_i915_gem_object *obj)
+>   static int i915_gem_userptr_get_pages(struct drm_i915_gem_object *obj)
+>   {
+>   	const unsigned long num_pages = obj->base.size >> PAGE_SHIFT;
+> -	unsigned int max_segment = i915_sg_segment_size();
+> +	unsigned int max_segment = dma_max_mapping_size(obj->base.dev->dev);
+>   	struct sg_table *st;
+>   	unsigned int sg_page_sizes;
+>   	struct page **pvec;
+> diff --git a/drivers/gpu/drm/i915/i915_scatterlist.h b/drivers/gpu/drm/i915/i915_scatterlist.h
+> index 9ddb3e743a3e..c9a61b51e99d 100644
+> --- a/drivers/gpu/drm/i915/i915_scatterlist.h
+> +++ b/drivers/gpu/drm/i915/i915_scatterlist.h
+> @@ -9,7 +9,6 @@
+>   
+>   #include <linux/pfn.h>
+>   #include <linux/scatterlist.h>
+> -#include <linux/swiotlb.h>
+>   
+>   #include "i915_gem.h"
+>   
+> @@ -127,21 +126,6 @@ static inline unsigned int i915_sg_dma_sizes(struct scatterlist *sg)
+>   	return page_sizes;
+>   }
+>   
+> -static inline unsigned int i915_sg_segment_size(void)
+> -{
+> -	unsigned int size = swiotlb_max_segment();
+> -
+> -	if (size == 0)
+> -		size = UINT_MAX;
+> -
+> -	size = rounddown(size, PAGE_SIZE);
+> -	/* swiotlb_max_segment_size can return 1 byte when it means one page. */
+> -	if (size < PAGE_SIZE)
+> -		size = PAGE_SIZE;
+> -
+> -	return size;
+> -}
+> -
+>   bool i915_sg_trim(struct sg_table *orig_st);
+>   
+>   /**

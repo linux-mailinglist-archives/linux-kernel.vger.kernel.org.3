@@ -2,162 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF6257E5C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C46957E5C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbiGVRoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S236069AbiGVRoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiGVRoE (ORCPT
+        with ESMTP id S236001AbiGVRoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:44:04 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7FE82114
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:03 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id a23so6378630lfm.10
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:03 -0700 (PDT)
+        Fri, 22 Jul 2022 13:44:09 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D69C904DA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:08 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id i126so6308185oih.4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=77xuwLvbLWnCuxWXuFNg97x/Q/UoNBE8YKOa7koKCQc=;
-        b=Rh6kq8XK5OkVXzo21OvcDTRrF04BNHykHigDPuBygYCTLIgdux2kVy94r293wxck8s
-         4qs4BUupnK1RleRnhoOOwtXEc5b3X6tbm2JNodnr9aw8Q7GRvXwkOBHmiBnJ4Nrc5WBx
-         Pt3YTbMVNR8Z/W/bIzL7KqqcB396MEw/JG8bB6SSqqx1YlH/iLHoyFR466V+lYWc4dL7
-         mKDDmDmSnKmsZh6ODpJ0dJZwO3aB/hcWPI4RmAMAC0ke212JxsfXUJWRAac4K4oWBEr8
-         jKs+6nxq5dJvGrHXjrG1bYLIxnQG8KYQVdRGDdopuJVLU1o8lcmCoMAmKYh9DqEJWOFf
-         6rNg==
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=yzH8RBlWVaD8eYC4JxGLhQXlUu0TLl1/8ifUZNgU8qs=;
+        b=K6r33kZ9a7ckXXG/9yLIrDoalxku4OSJkopklXI1g3FsXv5AQtCpjlqaq4IrfwDEWp
+         FBs7ALBqi3h39obbYDFdJg0DokZn3+RPPdfWIBAdSaEF+pgNcFqTJya2wPren3bnEwUk
+         xtQ147GDH5gZXau/M3Tcx4mXGoW9mkXfF803z8SebShRCoHje8vqOecGIKZZTVK9BWNr
+         69NujmRg6cNR0oV5mPpLvlQe0uhDHcMXpZtYxgQBRA784/B4KMJqihtPzOao+9L8h02k
+         YhCOcJOXklhJtz195zdXmGpq/ufCbQQWcmYD6v98RlFoaL6a3/pDVJ39thtVsvA9D/TE
+         N6rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=77xuwLvbLWnCuxWXuFNg97x/Q/UoNBE8YKOa7koKCQc=;
-        b=5p+1PG67b50TZfREfbC34KgtN3LWHIBymVhgKD2jxpM/noflj8GTGeZt7PakjvQbE7
-         l+zFd4ME4JQEi5J/JvhrgPixSG3j900mdXTsWgh/YW45SFw1aG5xXfntrM1NOrN4rn9P
-         ddy+GsV788pJerGqeSfDEsTaMs9kXr5/N2sV9+Hi3stlTaJeBSmcxhBHqjxUGnB+K3K0
-         r7w+/rhg233csxoaz7/s/ftp0fqkeIfvVRv67mHYR7Ri117kmRkmoH8WKbxe86Xh8vo5
-         txQzfTZZ4AgZEgxiTXOKEZ889D8/ckvKqExGgEYcx9Hz6QRBlyod67AG1+yDRJqJrXuc
-         wzpA==
-X-Gm-Message-State: AJIora+LRbGv9Z/EOtoGTZXHmS7AZmQyXoGCYpMqCT6RPtyxg/dPYWim
-        Q0+2TEBpKcaIxDCbkK32PhMxjA==
-X-Google-Smtp-Source: AGRyM1u8Z9ofcrLGXlXYmrrX+HN6KSpLHpX2BjExY1LCBBGohOyx5gD2LPLjkWkDgVGABm1aD/B7iw==
-X-Received: by 2002:a05:6512:1381:b0:489:cd0b:3a03 with SMTP id p1-20020a056512138100b00489cd0b3a03mr389336lfa.583.1658511841445;
-        Fri, 22 Jul 2022 10:44:01 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id bd21-20020a05651c169500b0025d6930d014sm1253726ljb.87.2022.07.22.10.43.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:44:00 -0700 (PDT)
-Message-ID: <cd830f5c-1760-69e0-d239-3ce1f30daa43@linaro.org>
-Date:   Fri, 22 Jul 2022 19:43:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/5] spi: dt-bindings: add documentation for
- hpe,gxp-spifi
-Content-Language: en-US
-To:     nick.hawkins@hpe.com
-Cc:     broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
-        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
-References: <20220722172335.33404-1-nick.hawkins@hpe.com>
- <20220722172335.33404-3-nick.hawkins@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220722172335.33404-3-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=yzH8RBlWVaD8eYC4JxGLhQXlUu0TLl1/8ifUZNgU8qs=;
+        b=B5EI9BKMj0TZ0pT3I6Dd53LmfnRqzYdpElWRCM1dFgOk6cvzwkEj/wvVS8i872eobv
+         caXdM59SA72gkfcTqDCAvtselgy9Dfa40k6X14veCQVpZSTP0pjzfnM3tU/4r/T/jeHI
+         ngGUMKpbOMtyCY/C5kaOLbOKiWxwZRcIc3dDQB/NvPxsCkdeg3YuqTo7GLFqN5UMXrxP
+         nfignSIX5gKStLw3v1lkA2SXPyjsgwOnkE6qr3CHiz7t2rcrPh3JjdlD6SJmP9nDO+fF
+         zBqGubv2ffOhRmOi61QkZbPKUdbraCGBmwRiSOetLX5xU/jrqpwBQ+0FJenw9zEniJ1X
+         utZA==
+X-Gm-Message-State: AJIora+7Y88Di/wwd+ce0uJ2LFGyMmt6nbL4yfELDO4WYCLnVUapTQ/4
+        vLirKZNQ/nMPJcFsLc5BLxStag==
+X-Google-Smtp-Source: AGRyM1t2Sr9gDvWw9G1dQt/ScnFv+WKKNt9oyYGuy8yM7CPHcu/l+yCRo9FElYpeIWPnRpb5T+VBAA==
+X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id bc28-20020a056808171c00b00334934263efmr419145oib.63.1658511847570;
+        Fri, 22 Jul 2022 10:44:07 -0700 (PDT)
+Received: from smtpclient.apple ([2600:1700:42f0:6600:99be:940b:cb7d:ef1])
+        by smtp.gmail.com with ESMTPSA id r127-20020acada85000000b0033a0ef748a8sm2011504oig.54.2022.07.22.10.44.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Jul 2022 10:44:06 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] hfsplus: Convert kmap() to kmap_local_page() in bnode.c
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <20220720154324.8272-1-fmdefrancesco@gmail.com>
+Date:   Fri, 22 Jul 2022 10:43:59 -0700
+Cc:     Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DED96F4D-9320-45BE-BD22-89EFEB75001B@dubeyko.com>
+References: <20220720154324.8272-1-fmdefrancesco@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 19:23, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> Create documentation for the hpe,gxp-spifi binding to support access to
-> the SPI parts
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> 
+Hi Fabio,
+
+> On Jul 20, 2022, at 8:43 AM, Fabio M. De Francesco =
+<fmdefrancesco@gmail.com> wrote:
+>=20
+> kmap() is being deprecated in favor of kmap_local_page().
+>=20
+> Two main problems with kmap(): (1) It comes with an overhead as =
+mapping
+> space is restricted and protected by a global lock for synchronization =
+and
+> (2) it also requires global TLB invalidation when the kmap=E2=80=99s =
+pool wraps
+> and it might block when the mapping space is fully utilized until a =
+slot
+> becomes available.
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can =
+take
+> page faults, and can be called from any context (including =
+interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, =
+the
+> kernel virtual addresses are restored and still valid.
+>=20
+> Since its use in bnode.c is safe everywhere, it should be preferred.
+>=20
+> Therefore, replace kmap() with kmap_local_page() in bnode.c. Where
+> possible, use the suited standard helpers (memzero_page(), =
+memcpy_page())
+> instead of open coding kmap_local_page() plus memset() or memcpy().
+>=20
+
+
+Looks reasonable. Makes sense from my point of view.
+
+Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
+
+Thanks,
+Slava.
+
+
+
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 > ---
-> 
-> v2:
->  *Removed extra space around < > for reg
->  *Changed interrupt-parrent to interrupt-parent
-> ---
->  .../bindings/spi/hpe,gxp-spifi.yaml           | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
-> new file mode 100644
-> index 000000000000..346b494ef59b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/hpe,gxp-spifi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> fs/hfsplus/bnode.c | 105 +++++++++++++++++++++------------------------
+> 1 file changed, 48 insertions(+), 57 deletions(-)
+>=20
+> diff --git a/fs/hfsplus/bnode.c b/fs/hfsplus/bnode.c
+> index 177fae4e6581..3a1c77d0df48 100644
+> --- a/fs/hfsplus/bnode.c
+> +++ b/fs/hfsplus/bnode.c
+> @@ -29,14 +29,12 @@ void hfs_bnode_read(struct hfs_bnode *node, void =
+*buf, int off, int len)
+> 	off &=3D ~PAGE_MASK;
+>=20
+> 	l =3D min_t(int, len, PAGE_SIZE - off);
+> -	memcpy(buf, kmap(*pagep) + off, l);
+> -	kunmap(*pagep);
+> +	memcpy_from_page(buf, *pagep, off, l);
+>=20
+> 	while ((len -=3D l) !=3D 0) {
+> 		buf +=3D l;
+> 		l =3D min_t(int, len, PAGE_SIZE);
+> -		memcpy(buf, kmap(*++pagep), l);
+> -		kunmap(*pagep);
+> +		memcpy_from_page(buf, *++pagep, 0, l);
+> 	}
+> }
+>=20
+> @@ -82,16 +80,14 @@ void hfs_bnode_write(struct hfs_bnode *node, void =
+*buf, int off, int len)
+> 	off &=3D ~PAGE_MASK;
+>=20
+> 	l =3D min_t(int, len, PAGE_SIZE - off);
+> -	memcpy(kmap(*pagep) + off, buf, l);
+> +	memcpy_to_page(*pagep, off, buf, l);
+> 	set_page_dirty(*pagep);
+> -	kunmap(*pagep);
+>=20
+> 	while ((len -=3D l) !=3D 0) {
+> 		buf +=3D l;
+> 		l =3D min_t(int, len, PAGE_SIZE);
+> -		memcpy(kmap(*++pagep), buf, l);
+> +		memcpy_to_page(*++pagep, 0, buf, l);
+> 		set_page_dirty(*pagep);
+> -		kunmap(*pagep);
+> 	}
+> }
+>=20
+> @@ -112,15 +108,13 @@ void hfs_bnode_clear(struct hfs_bnode *node, int =
+off, int len)
+> 	off &=3D ~PAGE_MASK;
+>=20
+> 	l =3D min_t(int, len, PAGE_SIZE - off);
+> -	memset(kmap(*pagep) + off, 0, l);
+> +	memzero_page(*pagep, off, l);
+> 	set_page_dirty(*pagep);
+> -	kunmap(*pagep);
+>=20
+> 	while ((len -=3D l) !=3D 0) {
+> 		l =3D min_t(int, len, PAGE_SIZE);
+> -		memset(kmap(*++pagep), 0, l);
+> +		memzero_page(*++pagep, 0, l);
+> 		set_page_dirty(*pagep);
+> -		kunmap(*pagep);
+> 	}
+> }
+>=20
+> @@ -142,24 +136,20 @@ void hfs_bnode_copy(struct hfs_bnode *dst_node, =
+int dst,
+>=20
+> 	if (src =3D=3D dst) {
+> 		l =3D min_t(int, len, PAGE_SIZE - src);
+> -		memcpy(kmap(*dst_page) + src, kmap(*src_page) + src, l);
+> -		kunmap(*src_page);
+> +		memcpy_page(*dst_page, src, *src_page, src, l);
+> 		set_page_dirty(*dst_page);
+> -		kunmap(*dst_page);
+>=20
+> 		while ((len -=3D l) !=3D 0) {
+> 			l =3D min_t(int, len, PAGE_SIZE);
+> -			memcpy(kmap(*++dst_page), kmap(*++src_page), l);
+> -			kunmap(*src_page);
+> +			memcpy_page(*++dst_page, 0, *++src_page, 0, l);
+> 			set_page_dirty(*dst_page);
+> -			kunmap(*dst_page);
+> 		}
+> 	} else {
+> 		void *src_ptr, *dst_ptr;
+>=20
+> 		do {
+> -			src_ptr =3D kmap(*src_page) + src;
+> -			dst_ptr =3D kmap(*dst_page) + dst;
+> +			dst_ptr =3D kmap_local_page(*dst_page) + dst;
+> +			src_ptr =3D kmap_local_page(*src_page) + src;
+> 			if (PAGE_SIZE - src < PAGE_SIZE - dst) {
+> 				l =3D PAGE_SIZE - src;
+> 				src =3D 0;
+> @@ -171,9 +161,9 @@ void hfs_bnode_copy(struct hfs_bnode *dst_node, =
+int dst,
+> 			}
+> 			l =3D min(len, l);
+> 			memcpy(dst_ptr, src_ptr, l);
+> -			kunmap(*src_page);
+> +			kunmap_local(src_ptr);
+> 			set_page_dirty(*dst_page);
+> -			kunmap(*dst_page);
+> +			kunmap_local(dst_ptr);
+> 			if (!dst)
+> 				dst_page++;
+> 			else
+> @@ -185,6 +175,7 @@ void hfs_bnode_copy(struct hfs_bnode *dst_node, =
+int dst,
+> void hfs_bnode_move(struct hfs_bnode *node, int dst, int src, int len)
+> {
+> 	struct page **src_page, **dst_page;
+> +	void *src_ptr, *dst_ptr;
+> 	int l;
+>=20
+> 	hfs_dbg(BNODE_MOD, "movebytes: %u,%u,%u\n", dst, src, len);
+> @@ -202,27 +193,28 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
+dst, int src, int len)
+>=20
+> 		if (src =3D=3D dst) {
+> 			while (src < len) {
+> -				memmove(kmap(*dst_page), =
+kmap(*src_page), src);
+> -				kunmap(*src_page);
+> +				dst_ptr =3D kmap_local_page(*dst_page);
+> +				src_ptr =3D kmap_local_page(*src_page);
+> +				memmove(dst_ptr, src_ptr, src);
+> +				kunmap_local(src_ptr);
+> 				set_page_dirty(*dst_page);
+> -				kunmap(*dst_page);
+> +				kunmap_local(dst_ptr);
+> 				len -=3D src;
+> 				src =3D PAGE_SIZE;
+> 				src_page--;
+> 				dst_page--;
+> 			}
+> 			src -=3D len;
+> -			memmove(kmap(*dst_page) + src,
+> -				kmap(*src_page) + src, len);
+> -			kunmap(*src_page);
+> +			dst_ptr =3D kmap_local_page(*dst_page);
+> +			src_ptr =3D kmap_local_page(*src_page);
+> +			memmove(dst_ptr + src, src_ptr + src, len);
+> +			kunmap_local(src_ptr);
+> 			set_page_dirty(*dst_page);
+> -			kunmap(*dst_page);
+> +			kunmap_local(dst_ptr);
+> 		} else {
+> -			void *src_ptr, *dst_ptr;
+> -
+> 			do {
+> -				src_ptr =3D kmap(*src_page) + src;
+> -				dst_ptr =3D kmap(*dst_page) + dst;
+> +				dst_ptr =3D kmap_local_page(*dst_page) + =
+dst;
+> +				src_ptr =3D kmap_local_page(*src_page) + =
+src;
+> 				if (src < dst) {
+> 					l =3D src;
+> 					src =3D PAGE_SIZE;
+> @@ -234,9 +226,9 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
+dst, int src, int len)
+> 				}
+> 				l =3D min(len, l);
+> 				memmove(dst_ptr - l, src_ptr - l, l);
+> -				kunmap(*src_page);
+> +				kunmap_local(src_ptr);
+> 				set_page_dirty(*dst_page);
+> -				kunmap(*dst_page);
+> +				kunmap_local(dst_ptr);
+> 				if (dst =3D=3D PAGE_SIZE)
+> 					dst_page--;
+> 				else
+> @@ -251,26 +243,27 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
+dst, int src, int len)
+>=20
+> 		if (src =3D=3D dst) {
+> 			l =3D min_t(int, len, PAGE_SIZE - src);
+> -			memmove(kmap(*dst_page) + src,
+> -				kmap(*src_page) + src, l);
+> -			kunmap(*src_page);
 > +
-> +title: HPE GXP spi controller flash interface
-> +
-> +maintainers:
-> +  - Nick Hawkins <nick.hawkins@hpe.com>
-> +  - Jean-Marie Verdun <verdun@hpe.com>
-> +
-> +allOf:
-> +  - $ref: "spi-controller.yaml#"
+> +			dst_ptr =3D kmap_local_page(*dst_page) + src;
+> +			src_ptr =3D kmap_local_page(*src_page) + src;
+> +			memmove(dst_ptr, src_ptr, l);
+> +			kunmap_local(src_ptr);
+> 			set_page_dirty(*dst_page);
+> -			kunmap(*dst_page);
+> +			kunmap_local(dst_ptr);
+>=20
+> 			while ((len -=3D l) !=3D 0) {
+> 				l =3D min_t(int, len, PAGE_SIZE);
+> -				memmove(kmap(*++dst_page),
+> -					kmap(*++src_page), l);
+> -				kunmap(*src_page);
+> +				dst_ptr =3D =
+kmap_local_page(*++dst_page);
+> +				src_ptr =3D =
+kmap_local_page(*++src_page);
+> +				memmove(dst_ptr, src_ptr, l);
+> +				kunmap_local(src_ptr);
+> 				set_page_dirty(*dst_page);
+> -				kunmap(*dst_page);
+> +				kunmap_local(dst_ptr);
+> 			}
+> 		} else {
+> -			void *src_ptr, *dst_ptr;
+> -
+> 			do {
+> -				src_ptr =3D kmap(*src_page) + src;
+> -				dst_ptr =3D kmap(*dst_page) + dst;
+> +				dst_ptr =3D kmap_local_page(*dst_page) + =
+dst;
+> +				src_ptr =3D kmap_local_page(*src_page) + =
+src;
+> 				if (PAGE_SIZE - src <
+> 						PAGE_SIZE - dst) {
+> 					l =3D PAGE_SIZE - src;
+> @@ -283,9 +276,9 @@ void hfs_bnode_move(struct hfs_bnode *node, int =
+dst, int src, int len)
+> 				}
+> 				l =3D min(len, l);
+> 				memmove(dst_ptr, src_ptr, l);
+> -				kunmap(*src_page);
+> +				kunmap_local(src_ptr);
+> 				set_page_dirty(*dst_page);
+> -				kunmap(*dst_page);
+> +				kunmap_local(dst_ptr);
+> 				if (!dst)
+> 					dst_page++;
+> 				else
+> @@ -502,14 +495,14 @@ struct hfs_bnode *hfs_bnode_find(struct =
+hfs_btree *tree, u32 num)
+> 	if (!test_bit(HFS_BNODE_NEW, &node->flags))
+> 		return node;
+>=20
+> -	desc =3D (struct hfs_bnode_desc *)(kmap(node->page[0]) +
+> -			node->page_offset);
+> +	desc =3D (struct hfs_bnode_desc =
+*)(kmap_local_page(node->page[0]) +
+> +							 =
+node->page_offset);
+> 	node->prev =3D be32_to_cpu(desc->prev);
+> 	node->next =3D be32_to_cpu(desc->next);
+> 	node->num_recs =3D be16_to_cpu(desc->num_recs);
+> 	node->type =3D desc->type;
+> 	node->height =3D desc->height;
+> -	kunmap(node->page[0]);
+> +	kunmap_local(desc);
+>=20
+> 	switch (node->type) {
+> 	case HFS_NODE_HEADER:
+> @@ -593,14 +586,12 @@ struct hfs_bnode *hfs_bnode_create(struct =
+hfs_btree *tree, u32 num)
+> 	}
+>=20
+> 	pagep =3D node->page;
+> -	memset(kmap(*pagep) + node->page_offset, 0,
+> -	       min_t(int, PAGE_SIZE, tree->node_size));
+> +	memzero_page(*pagep, node->page_offset,
+> +		     min_t(int, PAGE_SIZE, tree->node_size));
+> 	set_page_dirty(*pagep);
+> -	kunmap(*pagep);
+> 	for (i =3D 1; i < tree->pages_per_bnode; i++) {
+> -		memset(kmap(*++pagep), 0, PAGE_SIZE);
+> +		memzero_page(*++pagep, 0, PAGE_SIZE);
+> 		set_page_dirty(*pagep);
+> -		kunmap(*pagep);
+> 	}
+> 	clear_bit(HFS_BNODE_NEW, &node->flags);
+> 	wake_up(&node->lock_wq);
+> --=20
+> 2.37.1
+>=20
 
-Drop the quotes - not needed.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: hpe,gxp-spifi
-> +
-> +  reg:
-> +    items:
-> +      - description: cfg registers
-> +      - description: data registers
-> +      - description: mapped memory
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    spi@200 {
-> +        compatible = "hpe,gxp-spifi";
-> +        reg = <0x200 0x80>, <0xc000 0x100>, <0x38000000 0x800000>;
-> +        interrupts = <20>;
-> +        interrupt-parent = <&vic0>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        flash@0 {
-> +                reg = <0>;
-
-This has still wrong indentation.
-
-
-
-Best regards,
-Krzysztof

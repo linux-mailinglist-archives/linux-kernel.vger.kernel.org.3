@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B6E57EA18
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 00:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5162057EA1D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 01:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236285AbiGVW4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 18:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
+        id S236133AbiGVXCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 19:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236824AbiGVW4m (ORCPT
+        with ESMTP id S229572AbiGVXCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 18:56:42 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FBC37F96;
-        Fri, 22 Jul 2022 15:56:41 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 6so5488797pgb.13;
-        Fri, 22 Jul 2022 15:56:41 -0700 (PDT)
+        Fri, 22 Jul 2022 19:02:46 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4799A3DBFA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:02:45 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id p10-20020a170902e74a00b0016c3f3acb51so3281781plf.16
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:02:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QHz11oQeWHexBI56qDzwQXLxjXmaVbVkx6Bas8PmE/k=;
-        b=Ka+ldo0XLtywqq9IwQWZHdMH1dcCO2laspYwU+Op0InQlgp+ogZlovkLGm0DFFuQ/k
-         fiHpzEjPIHaMSVKJWqqKAWeBY6r3qcMyNITEJD7s8SEqjAuCuzbd94YZN5lT4XOSECli
-         /bnx4vnZI1HO7VFrHsUaEhWya7uD7oaNlBq2TrBrzNACWfrkUPkrdRt7FJlNJ/ntBgKz
-         fkwj4EN9wJVaSiexE7LNp+EqHEhjbJ+Q+OT73Dc9gq7EJqakTbEM50Ci0Dr49BBWyxZ8
-         287X03pnCwfiKX+9xZ0AUU2My1OT8Jhrr7lx37rBQcjMowlf6q37R8vhEIx7paGvCuaE
-         0nmg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=Gvp/73vL/wYhHUzfrA+ck8Wczuy8shTz34sZSNOpQKg=;
+        b=WK6X/HCymmMhe2Mzd8y2j/58pke48wRYsfxle5do6yBeImKUe6NkD1aWKlMeNUj7eb
+         qWztqrOhJgl7pnatCMNFALGK7dHBwY/h1nASnlRM/fe17TSspBkw8QWN6tyDjBfmhCEu
+         d1hJ+CtoqxFPFmfNWnORIJGDtSd6Xo05giuWFq9l1DhKZTAqBT1rg0E1B73qi7KXyJ9I
+         rSc1QxV0JZG5O451pH8VmHxqvTP1mq9dr+Uyk69Hkff9G8OlSF0zf526obnMe2njXfcl
+         Rt1LZtwQ3yB3eyJEnJdjo2cgxlh4NX7kOYQ/AHxHFd7/64TiVjCWK/jGeI/rHGb1to1S
+         tOzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QHz11oQeWHexBI56qDzwQXLxjXmaVbVkx6Bas8PmE/k=;
-        b=T+2SU4YWBdHLfAAOumYvGLMmW1XXcQ04UauV09cDTEqfoMptZvTO1Q283xrffL5qaE
-         XFBHFdHl5tB0FGjwVAXbAnPEJ4Es6eMejmLg2ix/XH0RMX/USWHHGQPKRYi3v7OBnJRK
-         YqRSs7KcXuZckEcZfrqjpSvqeMPf5Q3XjBF1bB07mTh/SkG9sLaM9V2evy7gpaAD7ruH
-         KsqyPSAvxwXeMzbYgyUJkoNsBf7mucEziqQ6WE8IKYXuIL1barZD+WUK0Tw8Nr99p7EB
-         3JPfUF3SEzmi/dDyidoII4AkcMddsZiZpooEkoxvYvONGMmLTJ/Q0KSq3M+dpi1wSgcQ
-         QvKw==
-X-Gm-Message-State: AJIora8f43e8xJ5fm1nfblWx2aXmyTmblxj0r/tFZ9rBIl6C3mF8zIjT
-        CAWkz6/+aFUN+2rqKDtv+tE=
-X-Google-Smtp-Source: AGRyM1ssgspuNhoA5Gk+4Uhjl6x5FR+5SagZFy8Le8E2u02NnQwVlEOFcwcDrNPisPsRABzcoxkccw==
-X-Received: by 2002:a05:6a00:855:b0:52b:213d:fc03 with SMTP id q21-20020a056a00085500b0052b213dfc03mr2139243pfk.31.1658530601024;
-        Fri, 22 Jul 2022 15:56:41 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id v12-20020a17090a6b0c00b001f229f07b27sm4007457pjj.12.2022.07.22.15.56.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 15:56:40 -0700 (PDT)
-Date:   Sat, 23 Jul 2022 07:56:38 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v5 4/4] asm-generic: Add new pci.h and use it
-Message-ID: <YtsrJghwLPf3uj4W@antec>
-References: <YtsaA2Zjqa/XZZou@antec>
- <20220722223146.GA1947394@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722223146.GA1947394@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=Gvp/73vL/wYhHUzfrA+ck8Wczuy8shTz34sZSNOpQKg=;
+        b=E/9v6W63adJkk2VCL9AGC1op5Im3KLT3ydqcl/3EP/aAFXrMeKGZftoxKUgJiHEcPL
+         9ft+d6F01bOIHkbvvObu+r1BS6G3bDUx+bXKr6latLRpwutGPN0Lqkcyr0J0LnAwENH3
+         nESoO0UhAlydiGeW8AtCTTbvMm0rFqHHhX943qKtOTdZ/WSs7tcpc947RdXuOmUcw10R
+         L11sv5XvvpWCe01AO9W8wzztUtHRjH6IlPUBuQMl2z/uhTEgBTNFd8zhlL5th7YwdNMR
+         a7iYoaOFunWx9N2d4c5mMVrz3R/ENGQETQ9sryJQ2k1NstFpO6OFJLk6zBmZMCEotlO0
+         ELwg==
+X-Gm-Message-State: AJIora/V2Wfx3+22vin01ILism86uLg5heAyftv6OtBBkpWUXMIqwjfz
+        gBxRJK8qw6BZ6umfLVndfK/j9hQB3Bg=
+X-Google-Smtp-Source: AGRyM1tBuelDgbLuw8EGH0svy/Xr5MelYsBuu3cp1RWIhrClKaHTLWQWU8s8jF0YKIuNJ/zuupLH1FGBQsQ=
+X-Received: from avagin.kir.corp.google.com ([2620:15c:29:204:5863:d08b:b2f8:4a3e])
+ (user=avagin job=sendgmr) by 2002:aa7:9e9b:0:b0:528:2948:e974 with SMTP id
+ p27-20020aa79e9b000000b005282948e974mr1941123pfq.79.1658530964856; Fri, 22
+ Jul 2022 16:02:44 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 16:02:36 -0700
+Message-Id: <20220722230241.1944655-1-avagin@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
+From:   Andrei Vagin <avagin@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Andrei Vagin <avagin@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jianfeng Tan <henry.tjf@antfin.com>,
+        Adin Scannell <ascannell@google.com>,
+        Konstantin Bogomolov <bogomolov@google.com>,
+        Etienne Perot <eperot@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,19 +74,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 05:31:46PM -0500, Bjorn Helgaas wrote:
-> On Sat, Jul 23, 2022 at 06:43:31AM +0900, Stafford Horne wrote:
-> 
-> > I will respin a v6 as we didn't get a reply on this.  Bjorn are you
-> > planning to apply the series before the upcoming merge window?
-> 
-> I see your v6, and I can apply it.  I only got patches 1, 2, 4
-> (without the csky patch).  Do you want that to go a separate route?  I
-> don't care either way, but not sure it improves things to split it
-> across trees.
+There is a class of applications that use KVM to manage multiple address
+spaces rather than use it as an isolation boundary. In all other terms,
+they are normal processes that execute system calls, handle signals,
+etc. Currently, each time when such a process needs to interact with the
+operation system, it has to switch to host and back to guest. Such
+entire switches are expensive and significantly increase the overhead of
+system calls. The new hypercall reduces this overhead by more than two
+times.
 
-I sent 3/4 directly to you now.  Hopefully you see it.
+The new hypercall runs system calls on the host.  As for native system
+calls, seccomp filters are executed before system calls. It takes one
+argument that is a pointer to a pt_regs structure in the host address
+space. It provides registers to execute a system call according to the
+calling convention. Arguments are passed in %rdi, %rsi, %rdx, %r10, %r8
+and %r9 and a return code is stored in %rax.=C2=A0
 
-Patch 4/4 depends on it in a sense so its best to keep 3/4 together.
+The hypercall returns 0 if a system call has been executed. Otherwise,
+it returns an error code.
 
--Stafford
+This series introduces a new capability that has to be set to enable the
+hypercall. The new hypercall is a backdoor for regular virtual machines,
+so it is disabled by default. There is another standard way to allow
+hypercalls via cpuid. It has not been used because one of the common
+ways to manage them is to request all available features and let them
+all together. In this case, it is a hard requirement that the new
+hypercall can be enabled only intentionally.
+
+=3D Background =3D
+
+gVisor is one such application. It is an application kernel written in
+Go that implements a substantial portion of the Linux system call
+interface. gVisor intercepts application system calls and acts as the
+guest kernel. It has a platform abstraction that implements interception
+of syscalls, basic context switching, and memory mapping functionality.
+Currently, it has two platforms: ptrace and KVM.
+
+The ptrace platform uses PTRACE_SYSEMU to execute user code without
+allowing it to perform host system calls, and it creates stub processes
+to manage user address spaces. This platform is primarily for testing
+needs due to its bad performance.
+
+Another option is the KVM platform. In this case, the Sentry (gVisor
+kernel) can run in a guest ring0 and create/manage multiple address
+spaces. Its performance is much better than the ptrace one, but it is
+still not great compared with the native performance. This change
+optimizes the most critical part, which is the syscall overhead.  The
+idea of using vmcall to execute system calls isn=E2=80=99t new. Two large u=
+sers
+of gVisor (Google and AntFinacial) have out-of-tree code to implement
+such hypercalls.
+
+In the Google kernel, we have a kvm-like subsystem designed especially
+for gVisor. This change is the first step of integrating it into the KVM
+code base and making it available to all Linux users.
+
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Wanpeng Li <wanpengli@tencent.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Jianfeng Tan <henry.tjf@antfin.com>
+Cc: Adin Scannell <ascannell@google.com>
+Cc: Konstantin Bogomolov <bogomolov@google.com>
+Cc: Etienne Perot <eperot@google.com>
+
+Andrei Vagin (5):
+  kernel: add a new helper to execute system calls from kernel code
+  kvm: add controls to enable/disable paravirtualized system calls
+  KVM/x86: add a new hypercall to execute host system calls.
+  selftests/kvm/x86_64: set rax before vmcall
+  selftests/kvm/x86_64: add tests for KVM_HC_HOST_SYSCALL
+
+ Documentation/virt/kvm/x86/hypercalls.rst     |  15 ++
+ arch/x86/entry/common.c                       |  48 ++++++
+ arch/x86/include/asm/syscall.h                |   1 +
+ arch/x86/include/uapi/asm/kvm_para.h          |   2 +
+ arch/x86/kvm/cpuid.c                          |  25 +++
+ arch/x86/kvm/cpuid.h                          |   8 +-
+ arch/x86/kvm/x86.c                            |  37 +++++
+ include/uapi/linux/kvm.h                      |   1 +
+ include/uapi/linux/kvm_para.h                 |   1 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/processor.h  |   4 +
+ .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
+ .../kvm/x86_64/kvm_pv_syscall_test.c          | 145 ++++++++++++++++++
+ 14 files changed, 289 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/kvm_pv_syscall_test.=
+c
+
+--=20
+2.37.0.rc0.161.g10f37bed90-goog
+

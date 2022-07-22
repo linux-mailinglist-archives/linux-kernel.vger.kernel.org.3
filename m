@@ -2,165 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9870A57D7A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1168F57D7AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbiGVAWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
+        id S233672AbiGVAWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGVAWJ (ORCPT
+        with ESMTP id S233628AbiGVAWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:22:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3E92E9D8;
-        Thu, 21 Jul 2022 17:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658449328; x=1689985328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mQ0pC712+OzYYGrUvJ+td313D0F3ym/rOgekLIDwVLs=;
-  b=a1/pje3LeQOuBQ13LJjjQ/HyBC5nY9FpnWUIkEZUrGlqI45jtzC2w7RZ
-   WGYaIDOaNbJkrk3GRF/cVLrNSs7NLjAYUSIDfzzPIzgB7d/aCV0g5l+md
-   HT+grGHApvRebpamf1DrSPZtseNKSm5qLN8NqzPFB/HhFO9RLTJvK6wJV
-   UYrEprZj+B8vDwDI8L7RWO02wO64XYlJwksacSXgnNWkw82AWjhuNORo5
-   5felqfFq7jYncsqDAdQ6ntr2QqhVJL6asY92liUq8YY/jKciNRUdc7xYl
-   TFD90+79UP6BVxy+7kLZnsP+ss0zR4gn+1V0h8gkY26Trn6Tx9iQs1r5W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="351197316"
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="351197316"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 17:22:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
-   d="scan'208";a="740870628"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Jul 2022 17:22:04 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oEgQd-0000lo-2f;
-        Fri, 22 Jul 2022 00:22:03 +0000
-Date:   Fri, 22 Jul 2022 08:21:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yevhen Orlov <yevhen.orlov@plvision.eu>, netdev@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        linux-kernel@vger.kernel.org,
-        Yevhen Orlov <yevhen.orlov@plvision.eu>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Subject: Re: [PATCH net-next v2 6/9] net: marvell: prestera: Add heplers to
- interact with fib_notifier_info
-Message-ID: <202207220859.9D3mfHop-lkp@intel.com>
-References: <20220721221148.18787-7-yevhen.orlov@plvision.eu>
+        Thu, 21 Jul 2022 20:22:15 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F24974E3F;
+        Thu, 21 Jul 2022 17:22:14 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id 1so1639404ill.11;
+        Thu, 21 Jul 2022 17:22:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=37TNQXkegxnNHaxlV6oBSEt0TAcZ2231cTAxeerzb9A=;
+        b=pGC9smnRAob4qn8jwEh6UskjyWnFyBzj4HlbQBKvStLq4Kd0nAw8H1QfX3tjJ91ZeI
+         uhZj4xqpqt5MZto0ys3O9dfFlBMkM57cBqXl0TqdwBzpttEQrE5xte6p8UVxfCXnWFpt
+         pujX1YYyLznd5HPDjPQ/MQqCHV+ft1C9CBw/aNPMUSbBEpYQ0uZskAmNOR0LuOiCeBs+
+         XaxJaR8LsC+b6Ehi5LhPjzFqkJc2LHsclmbiISerjnrt3fc9sz7aJV3JVwYuyF8Otf7u
+         UPRU6UfyvySIJ3+h0/6uE0Q0cwAKsl47pp4MJ14ebn7nh/bPPXgdcDmeYXP7p5w6yXW7
+         pOFA==
+X-Gm-Message-State: AJIora8aJJzpSS8O9Mn2joMjmfYE+MTYTGF/Qzk5xs6verwHNd5NxK7Z
+        AhZf1sMG097E6zNOS3p6Vg==
+X-Google-Smtp-Source: AGRyM1t3xSUTPj8NUaYheUjJGn/Wyn134h6vs453EwhUvdH1zTFkN1/JYZprUAj7UKTKrKlLTtP4HQ==
+X-Received: by 2002:a05:6e02:1c43:b0:2dc:7428:cdef with SMTP id d3-20020a056e021c4300b002dc7428cdefmr413494ilg.4.1658449333103;
+        Thu, 21 Jul 2022 17:22:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id j10-20020a0566022cca00b00674c8448c3csm1442019iow.6.2022.07.21.17.22.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 17:22:12 -0700 (PDT)
+Received: (nullmailer pid 2233392 invoked by uid 1000);
+        Fri, 22 Jul 2022 00:22:10 -0000
+Date:   Thu, 21 Jul 2022 18:22:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Henry Sun <henrysun@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] dt-bindings: arm: qcom: Document additional sku6
+ for sc7180 pazquel
+Message-ID: <20220722002210.GA2223409-robh@kernel.org>
+References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
+ <20220721033918.v3.2.I7ecbb7eeb58c5e6a33e32a3abf4d6874e6cb725c@changeid>
+ <CAD=FV=WSBgupLFMCZgianck6uTkAyqrG0WK2ChSbNbJdhOPdLA@mail.gmail.com>
+ <4b2fe9d0-f590-0fac-79fa-bb05da1d61df@linaro.org>
+ <CAD=FV=XmaNdc9k98vAwbcN-sm0w_WeqhRsK_AUm3h4LZ5-egmQ@mail.gmail.com>
+ <c2b03863-2249-13e6-98e0-731c1b40d0a9@linaro.org>
+ <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721221148.18787-7-yevhen.orlov@plvision.eu>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yevhen,
+On Thu, Jul 21, 2022 at 11:29:13AM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Jul 21, 2022 at 9:52 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > On 21/07/2022 18:43, Doug Anderson wrote:
+> > > Hi,
+> > >
+> > > On Thu, Jul 21, 2022 at 9:33 AM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > >>
+> > >> On 21/07/2022 15:37, Doug Anderson wrote:
+> > >>>
+> > >>> Not worth sending a new version for, but normally I expect the
+> > >>> bindings to be patch #1 and the dts change to be patch #2. In any
+> > >>> case:
+> > >>>
+> > >>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > >>
+> > >> I would say worth v4, because otherwise patches is not bisectable.
+> > >
+> > > You're saying because `dtbs_check` will fail between the two?
+> >
+> > Yes
+> 
+> OK. Then I assume you agree that reversing the order of the patches
+> won't help, only combining the two patches into one.
+> 
+> 
+> > > How does
+> > > flipping the order help? If `dtbs_check` needs to be bisectable then
+> > > these two need to be one patch, but I was always under the impression
+> > > that we wanted bindings patches separate from dts patches.
+> >
+> > I don't think anyone said that bindings patches must be separate from
+> > DTS. The only restriction is DTS cannot go with drivers.
+> 
+> I have always heard that best practice is to have bindings in a patch
+> by themselves. If I've misunderstood and/or folks have changed their
+> minds, that's fine, but historically I've been told to keep them
+> separate.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yevhen-Orlov/net-marvell-prestera-add-nexthop-routes-offloading/20220722-061517
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 5588d628027092e66195097bdf6835ddf64418b3
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220722/202207220859.9D3mfHop-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a6535f7f7b3aea14504cac208c170d413739d5f9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yevhen-Orlov/net-marvell-prestera-add-nexthop-routes-offloading/20220722-061517
-        git checkout a6535f7f7b3aea14504cac208c170d413739d5f9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/marvell/prestera/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/ethernet/marvell/prestera/prestera_router.c: In function 'prestera_kern_fib_info_nhs':
->> drivers/net/ethernet/marvell/prestera/prestera_router.c:274:47: warning: the comparison will always evaluate as 'true' for the address of 'fib6_nh' will never be NULL [-Waddress]
-     274 |                 return fen6_info->rt->fib6_nh ?
-         |                                               ^
-   In file included from include/net/nexthop.h:17,
-                    from drivers/net/ethernet/marvell/prestera/prestera_router.c:10:
-   include/net/ip6_fib.h:206:41: note: 'fib6_nh' declared here
-     206 |         struct fib6_nh                  fib6_nh[];
-         |                                         ^~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c: In function '__prestera_k_arb_fc_apply':
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:466:9: warning: enumeration value 'PRESTERA_FIB_TYPE_UC_NH' not handled in switch [-Wswitch]
-     466 |         switch (fc->lpm_info.fib_type) {
-         |         ^~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c: At top level:
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:262:12: warning: 'prestera_kern_fib_info_nhs' defined but not used [-Wunused-function]
-     262 | static int prestera_kern_fib_info_nhs(struct fib_notifier_info *info)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:230:1: warning: 'prestera_kern_fib_info_nhc' defined but not used [-Wunused-function]
-     230 | prestera_kern_fib_info_nhc(struct fib_notifier_info *info, int n)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:216:1: warning: 'prestera_util_kern_set_nh_offload' defined but not used [-Wunused-function]
-     216 | prestera_util_kern_set_nh_offload(struct fib_nh_common *nhc, bool offloaded, bool trap)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:206:13: warning: 'prestera_util_kern_set_neigh_offload' defined but not used [-Wunused-function]
-     206 | static void prestera_util_kern_set_neigh_offload(struct neighbour *n,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:194:1: warning: 'prestera_util_kern_n_is_reachable' defined but not used [-Wunused-function]
-     194 | prestera_util_kern_n_is_reachable(u32 tb_id,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:135:13: warning: 'prestera_fib_info_is_nh' defined but not used [-Wunused-function]
-     135 | static bool prestera_fib_info_is_nh(struct fib_notifier_info *info)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/marvell/prestera/prestera_router.c:122:13: warning: 'prestera_fib_info_is_direct' defined but not used [-Wunused-function]
-     122 | static bool prestera_fib_info_is_direct(struct fib_notifier_info *info)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+Correct.
 
 
-vim +274 drivers/net/ethernet/marvell/prestera/prestera_router.c
+> > Bindings for boards go pretty often with DTS (subarch). This is exactly
+> > what maintainers do, e.g.:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/log/?h=arm64-for-5.20
+> > Bindings for hardware should go via subsystem maintainer (drivers).
+> 
+> OK, fair that in this case both the bindings and the yaml will land
+> through the Qualcomm tree. I guess it's really up to Bjorn and whether
+> he'd prefer "make dtbs_check" to be bisectable or whether he'd prefer
+> the bindings and dts change to be in separate patches from each other.
 
-   261	
-   262	static int prestera_kern_fib_info_nhs(struct fib_notifier_info *info)
-   263	{
-   264		struct fib6_entry_notifier_info *fen6_info;
-   265		struct fib_entry_notifier_info *fen4_info;
-   266	
-   267		if (info->family == AF_INET) {
-   268			fen4_info = container_of(info, struct fib_entry_notifier_info,
-   269						 info);
-   270			return fib_info_num_path(fen4_info->fi);
-   271		} else if (info->family == AF_INET6) {
-   272			fen6_info = container_of(info, struct fib6_entry_notifier_info,
-   273						 info);
- > 274			return fen6_info->rt->fib6_nh ?
-   275				(fen6_info->rt->fib6_nsiblings + 1) : 0;
-   276		}
-   277	
-   278		return 0;
-   279	}
-   280	
+Bindings go first if applied together because you have to define the 
+binding before you use it. But sometimes things go via multiple trees 
+and that's fine because it's just easier. In that case, the subsystem 
+tree is preferred for bindings (i.e. with the driver). But in this case, 
+Bjorn is the subsystem tree.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Rob

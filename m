@@ -2,65 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF8357E24B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E16857E24D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234804AbiGVN0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S234344AbiGVN2F convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 22 Jul 2022 09:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233979AbiGVN0n (ORCPT
+        with ESMTP id S232973AbiGVN16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:26:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16B789E86;
-        Fri, 22 Jul 2022 06:26:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D4F261FF6;
-        Fri, 22 Jul 2022 13:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B03C341C7;
-        Fri, 22 Jul 2022 13:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658496401;
-        bh=0fEpwrFuBVipvDIIa4cpMulMIC3/18dhlWmRDEqu14o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jCGKDLNtShFVXV/NyAVsR2qgDB5CxWb4UZ6VBAmwpbwH6O3W4RBWhh17afWT2ibN5
-         N5DIcmwmEDuRbFQhaPrqC8y75ZLlAGPU6aEudhGbuHd5kDlQGP2TfwUt0VeUi2li5f
-         VoQrEexd0chqnbaABj0wkzsPmyINbumU1YTuTBVoN4xph6i40MT+0oLMGYVDz8Yrs/
-         QvV23OzcANOPhL/BnjcXRJvShQ5KNT3LbMve9e34tflZfA/1cHCjmP7PVdF69iOdIC
-         S96eTLwwC5f5NTpF+CtaTY0CuUsbyaBUZxC9XmBPHCbBzO64DMLyFdbvluPBgI1xsP
-         KBrcm1InZGvjA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oEsg0-0000mm-LM; Fri, 22 Jul 2022 15:26:44 +0200
-Date:   Fri, 22 Jul 2022 15:26:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Xiaowei Song <songxiaowei@hisilicon.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        linux-pci@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Why set .suppress_bind_attrs even though .remove() implemented?
-Message-ID: <YtqllIHY/R/BbR3V@hovoldconsulting.com>
-References: <20220721204607.xklzyklbgwcgepjm@pali>
- <20220721222122.GA1754784@bhelgaas>
+        Fri, 22 Jul 2022 09:27:58 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE4C89B186
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:27:56 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-45-ONyrBzjjM6S2RqhK5NzQ_A-1; Fri, 22 Jul 2022 14:27:53 +0100
+X-MC-Unique: ONyrBzjjM6S2RqhK5NzQ_A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Fri, 22 Jul 2022 14:27:50 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Fri, 22 Jul 2022 14:27:50 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Peter Zijlstra' <peterz@infradead.org>
+CC:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Collingbourne <pcc@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: RE: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Thread-Topic: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Thread-Index: AQHYnSyhi03gNC/QIkePUsvbFv4MOq2JW8MQgADObYCAADMmIA==
+Date:   Fri, 22 Jul 2022 13:27:50 +0000
+Message-ID: <4a0a9639ce41498e8116dc56a9083955@AcuMS.aculab.com>
+References: <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
+ <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net>
+ <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
+ <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
+ <Ytbnlms90+LBLbrY@google.com>
+ <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
+ <Ytl2vg15Hc0fh8Dl@worktop.programming.kicks-ass.net>
+ <YtmTK93vHWQUFinE@worktop.programming.kicks-ass.net>
+ <CAHk-=whLGENEkjME_v_3P1SwhwjzH4GK2RLA3fn=yQNuyKLBkg@mail.gmail.com>
+ <d0597f7096344b10bfcd95a0ffdbad17@AcuMS.aculab.com>
+ <YtqD96Kq4/Wg+LXQ@worktop.programming.kicks-ass.net>
+In-Reply-To: <YtqD96Kq4/Wg+LXQ@worktop.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220721222122.GA1754784@bhelgaas>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,40 +88,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 05:21:22PM -0500, Bjorn Helgaas wrote:
-> [+to Johan for qcom]
-> [-cc Tom, email bounces]
+From: Peter Zijlstra
+> Sent: 22 July 2022 12:03
 > 
-> On Thu, Jul 21, 2022 at 10:46:07PM +0200, Pali Rohár wrote:
-> > On Thursday 21 July 2022 14:54:33 Bjorn Helgaas wrote:
-
-> With suppress_bind_attrs, the user can't manually unbind a device, so
-> we can't get to mvebu_pcie_remove() that way, but since mvebu is a
-> modular driver, I assume we can unload the module and *that* would
-> call mvebu_pcie_remove().  Right?
-
-Correct.
-
-> qcom is a DWC driver, so all the IRQ stuff happens in
-> dw_pcie_host_init().  qcom_pcie_remove() does call
-> dw_pcie_host_deinit(), which calls irq_domain_remove(), but nobody
-> calls irq_dispose_mapping().
+> On Thu, Jul 21, 2022 at 10:01:12PM +0000, David Laight wrote:
 > 
-> I'm thoroughly confused by all this.  But I suspect that maybe I
-> should drop the "make qcom modular" patch because it seems susceptible
-> to this problem:
+> > Since: "If the callee is a variadic function, then the number of floating
+> > point arguments passed to the function in vector registers must be provided
+> > by the caller in the AL register."
+> >
+> > And that that never happens in the kernel you can use %eax instead
+> > of %r10d.
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/qcom&id=41b68c2d097e
+> Except there's the AMD BTC thing and we should (compiler patch seems
+> MIA) have an unconditional: 'xor %eax,%eax' in front of every function
+> call.
 
-That should not be necessary.
+I've just read https://www.amd.com/system/files/documents/technical-guidance-for-mitigating-branch-type-confusion_v7_20220712.pdf
 
-As you note above, interrupt handling is implemented in dwc core so if
-there are any issue here at all, which I doubt, then all of the dwc
-drivers that currently can be built as modules would all be broken and
-this would need to be fixed in core.
+It doesn't seem to suggest clearing registers except as a vague
+'might help' before a function return (to limit what the speculated
+code can do.
 
-I've been using the modular pcie-qcom patch for months now, unloading
-and reloading the driver repeatedly to test power sequencing, without
-noticing any problems whatsoever.
+The only advantage I can think of for 'xor ax,ax' is that it is done as
+a register rename - and isn't dependant on older instructions.
+So it might reduce some pipeline stalls.
 
-Johan
+I'm guessing that someone might find a 'gadget' that depends on %eax
+and it may be possible to find somewhere that leaves an arbitrary
+value in it.
+It is also about the only register that isn't live!
+
+> (The official mitigation strategy was CALL; LFENCE IIRC, but that's so
+> horrible nobody is actually considering that)
+> 
+> Yes, the suggested sequence ends with rax being zero, but since we start
+> the speculation before that result is computed that's not good enough I
+> suspect.
+
+The speculated code can't use the 'wrong' %eax value.
+The only problem is that reading from -4(%r11) is likely to be a
+D$ miss giving plenty of time for the cpu to execute 'crap'.
+But I'm not sure a later 'xor ax,ax' helps.
+(OTOH this is all horrid and makes my brian hurt.)
+
+AFAICT with BTC you 'just lose'.
+I thought it was bad enough that some cpu used the BTB for predicted
+conditional jumps - but using it to decide 'this must be a branch
+instruction' seems especially broken.
+
+Seems the best thing to do with those cpu is to run an embedded
+system with a busybox+buildroot userspace where almost everything
+runs as root :-)
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

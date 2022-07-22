@@ -2,195 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AA257E917
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131A157E953
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbiGVVuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 17:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
+        id S236682AbiGVVzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 17:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235910AbiGVVuE (ORCPT
+        with ESMTP id S236509AbiGVVz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 17:50:04 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA42AB878A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:50:03 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id h22so4481901qta.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lY5HwzJY1HkC64NTT7rUzz8AV8+0iYgX1A3GOOVUboY=;
-        b=gGSSMB3IuQ03GboemI4CuYy3gKQ3itbdhDripv2Bf+5aLkKcbxEm9Jnu1zZXTRqono
-         TXJSA1bwkt2PbWgNi5oXyZ1jbxHwdKSM9vFC2pDtqwsX9sJ2+RAPB8rYGSyCHM9B+2KE
-         /aw+T4CksZacPn6Na5E9FJpGS9Hc5wZbMmyz0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lY5HwzJY1HkC64NTT7rUzz8AV8+0iYgX1A3GOOVUboY=;
-        b=bZm/Dt12ypYIThDq4u+cIGERjqraWHE223lgMqf4GnaVu054RkKCZSrcyyohLzVc32
-         +rYL54ZcYFhZA1djy5BcRPdM0j76m2wy1e/TIcsTZm3O9dwRCTYWvu4dIbR4fp7zmWdu
-         AmrMAew0/aiUA3OCHtwZkGbmfbcKyHt1si/MicbkpbgcqH4u09XrXAR6JpOikTk3/XPt
-         jhYox18jt6oxo+nizwx+OvU0u19olsdrOzN+nwY04N34tc9B/OvcHSTDlGZQrDefwjeu
-         gwH/8dlxCzvagz31Ciwka3uQPgJ0r5cKnfvoCaNGnzueFtqJBJN/PuBm8Boez6otX8au
-         PLUw==
-X-Gm-Message-State: AJIora+xYOROZD0az5ZRn5LQzv6wv2FrYdrZLbEYwXx7mZzLTYAdsBoa
-        fyRMnt8Fi9fBLDSgEsDRJaz72Zd9VYV36DYq
-X-Google-Smtp-Source: AGRyM1t0bg10Rc1JMRJaH05Q/CdwawRrdAHKfoEN8GtAxOYBq6POcf0qA1/DpBwWt1/i1yyXyEb5Mw==
-X-Received: by 2002:ac8:5e0d:0:b0:31f:239c:99c6 with SMTP id h13-20020ac85e0d000000b0031f239c99c6mr1969906qtx.189.1658526602771;
-        Fri, 22 Jul 2022 14:50:02 -0700 (PDT)
-Received: from jshargo (pool-108-14-42-16.nycmny.fios.verizon.net. [108.14.42.16])
-        by smtp.gmail.com with ESMTPSA id h22-20020ac87156000000b0031ef622a6a2sm3399575qtp.17.2022.07.22.14.50.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 14:50:02 -0700 (PDT)
-From:   Jim Shargo <jshargo@chromium.org>
-To:     jshargo@google.com,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Jim Shargo <jshargo@chromium.org>, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] drm/vkms: Add ConfigFS Support
-Date:   Fri, 22 Jul 2022 17:50:01 -0400
-Message-Id: <20220722215001.1380608-1-jshargo@chromium.org>
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+        Fri, 22 Jul 2022 17:55:29 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743D56325;
+        Fri, 22 Jul 2022 14:55:28 -0700 (PDT)
+Received: from toolbox.int.toradex.com ([81.221.243.92]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LfCzm-1ni9kn3EyG-00opOG;
+ Fri, 22 Jul 2022 23:54:58 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/12] ARM: arm64: dts/clk: imx8mm: indentation whitespace cleanup
+Date:   Fri, 22 Jul 2022 23:54:33 +0200
+Message-Id: <20220722215445.3548530-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:Pa80ww+a5pcL8EDvRAjSLBvyasPlxCO3ZVMijNfrAbcgdn2N3JB
+ kyCbv1Pbe4+2OAZsVr5vPiNbpGRgS43UTgs5RLlryJ/Hk6oeJQ0PqjViBFHA2pTkaDBo7TK
+ A36HlZcMg6mJPvFFvacX5Et0tamRcvxN24Gkqr6sExg+TXuUFl57bXXbMdTCG5Ic3+yX8Ch
+ DLPLc29C+3X7KNv92Z5PA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7EOL6CV7BbY=:PcUb/OfF2nACHOicKQCah8
+ t2aZ9m7YthG14oKwuHt4q137TcAEQ6+s1eY5J2yoZnr6jtrh7LKDMc1guWNb/HmVQftDCDaMP
+ fm8Tn1e7ODrqvj3cOAKMpTFX98KQXaurwTXT4ZK8+l6Rlsx3ZsleutNHoncvoEYJiHilrknJZ
+ Adym3S4+DvLvXGw4AMOaWNgTswvjqJ7o/f/CLwz9IFrEcFkntAmeDC4XxUJ2eZ4g+FeU36Omd
+ Ju1Xnxrb5bfWSmOfCMK1UQpYifial2yq7c8XDQYzBuR0/vKKa0p+Nh+jXn1AVv+cnqP+QgDUs
+ mkNiGqjPCvxwVWUyH4OiH/IL6XiApsv20uWaOF/tGkHOHufM76Ag/JiXTRfi5QKw3z8n/+pI3
+ dFsK3CIic7Hb/enkQ32pLZvmXH1mty0EvR15E+LKuQ3JVOQr5LODawkulSzgUXss89o+3C/Ig
+ 8qjZF+kQnuEF2iy4q/Ssli+nPorB1VIc3SrxSPtbeN/6RdVtHnyzg2w8MgMTvBXgeREyMGmrL
+ 1+DvQgb8P9/xPUpBboOB2BtjBdrbRVJCqLpJlYvdNZzrhQPNdMLM/p3uzUUazGZOpPdV/4kWK
+ asv5BtsW0BW0HCAUXgiE1F3dDIf4Ev43gf5EG38xgi8N+WWnhqpaMhNfTMxmHyUx5fyBZDAgN
+ ugWX/LHuNCIn7PzUVMVtCFblRW0RRBqYniRIKwGAhBL7lNBikw2z8UgyNOREv55/a6Ud1m5hG
+ 9zzjqaDjdgLBd5WEfJVysjGTugXxcMfcE7t1zQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intro
-=====
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This patchset adds basic ConfigFS support to VKMS, allowing users to
-build new DRM devices with user-defined DRM objects and object
-relationships by creating, writing, and symlinking files.
 
-Usage
-=====
+While synchronising them imx device trees with U-Boot I stumbled over
+various checkpatch warnings. This series addresses those trivial
+indentation and/or whitespace cleanups.
 
-Modprobe VKMS and mount ConfigFS:
+Changes in v2:
+- The GPL part of the boilerplate license was actually GPL-2.0 only.
+- Add Alexander's acked-by. Thanks!
+- Add Lucas' acked-by. Thanks!
 
-  $ mkdir -p /config/; mount -t configfs
-  $ modprobe vkms enable_overlay=1 enable_cursor=1 enable_writeback=1
+Marcel Ziswiler (12):
+  ARM: dts: imx6-sabrelite: change to use SPDX identifiers
+  ARM: dts: imx6qdl-mba6: don't use multiple blank lines
+  ARM: dts: imx6qdl: phytec: no spaces at start of line, indent use tabs
+  ARM: dts: imx6qdl-sabre: change to use SPDX identifiers
+  ARM: dts: imx7d-pico: indent use tabs, no spaces at start of line
+  ARM: dts: vf610: no spaces in indent but tabs
+  ARM: dts: vf610-twr: indent use tabs, no spaces at start of line
+  ARM: dts: vf610: don't use multiple blank lines
+  arm64: dts: imx8mm-venice-gw72xx-0x: blank line at end of file
+  arm64: dts: imx8mp-verdin: don't use multiple blank lines
+  arm64: dts: mnt-reform2: don't use multiple blank lines
+  clk: imx8mm: don't use multiple blank lines
 
-This will create a `/config/vkms` directory, where users may create
-new VKMS devices. The standard default device is still created, so
-existing use-cases should be unaffected.
-
-Creating a new device happens in three stages:
-
-  1) Create a new directory to represent a new device:
-       $ mkdir /config/vkms/dev
-
-  2) Populate the new device with crtcs, planes, connectors, encoders,
-     and CRTCs by mkdir'ing in the appropriate directories. Connect the
-     objects via symlinks.
-
-  3) To register the device:
-       $ echo 1 > /config/vkms/dev/is_registered
-
-If the write is successful, you have a new VKMS device ready to use!
-
-See the updated vkms.rst for more details and a full example.
-
-Changes within VKMS
-===================
-
-The most meaningful change within VKMS is the introduction of a list
-of "cards" representing individual virtual drivers. Each card
-maintains its own devices, arrays of objects, and output/writeback
-machinery.
-
-Until cards are registered, all of their data lives in within the
-ConfigFS tree. Only during registration do we interface with DRM at
-all to create the device.
-
-Due to limitations with ConfigFS, the default device is a special
-case, without all of the objects represented in its ConfigFS
-directory.
-
-Testing
-=======
-
-Suspend tests are not working in my VM, so I skipped those. Otherwise,
-here are the tests that I have been running:
-
-  $ igt-gpu-tools/scripts/run-tests.sh -x ".*suspend.*" \
-        -t ".*kms_flip.*" \
-        -t ".*kms_writeback.*" \
-        -t ".*kms_cursor_crc*" \
-        -t ".*kms_plane.*"
-
-I've observed no changes between passed/failed tests before and after
-my changes on the default device.
-
-IGT revision: eddc67c5c85b8ee6eb4d13752ca43da5073dc985
-
-I'll also note that I've been working on a VKMS test suite in IGT that
-exercises the new ConfigFS behavior, and that it's a work-in-progress.
-
-Future Work
-===========
-
-This should be the biggest and most invasive change in VKMS to make it
-more configurable and able to mimic real devices. That said, it should
-serve as a basis for additional useful features, including:
-
-  - Simulating hot-plugging by keeping the connectors directory live
-    and allowing users to add/remove connectors after the device is
-    registered.
-  - Additional properties could be turned on and off, or tuned, based
-    on files within object directories. For instance, GAMMA/DEGAMMA
-    LUT sizes could be configurable per-device, or support for
-    individual formats could be turned on and off.
-
-Additional Notes
-================
-
-This is my first kernel patchset, and though I've had it reviewed by
-my team (with a lot of of kernel/drm expertise), I recommend reading
-it with a bit of extra scrutiny. As you can tell by the fact this
-didn't get mailed with the other patches :P.
-
-Thanks!
-
-Jim Shargo (5):
-  drm/vkms: Merge default_config and device
-  drm/vkms: VKMS now supports more than one "card"
-  drm/vkms: Support multiple objects (crtcs, etc.) per card
-  drm/vkms: Add ConfigFS scaffolding to VKMS
-  drm/vkms: Support registering configfs devices
-
- Documentation/gpu/vkms.rst            |  76 ++++
- drivers/gpu/drm/Kconfig               |   1 +
- drivers/gpu/drm/vkms/Makefile         |   1 +
- drivers/gpu/drm/vkms/vkms_composer.c  |  28 +-
- drivers/gpu/drm/vkms/vkms_configfs.c  | 546 ++++++++++++++++++++++++++
- drivers/gpu/drm/vkms/vkms_crtc.c      |  88 +++--
- drivers/gpu/drm/vkms/vkms_drv.c       | 204 ++++++----
- drivers/gpu/drm/vkms/vkms_drv.h       | 173 ++++++--
- drivers/gpu/drm/vkms/vkms_output.c    | 335 +++++++++++++---
- drivers/gpu/drm/vkms/vkms_plane.c     |  43 +-
- drivers/gpu/drm/vkms/vkms_writeback.c |  27 +-
- 11 files changed, 1288 insertions(+), 234 deletions(-)
- create mode 100644 drivers/gpu/drm/vkms/vkms_configfs.c
+ arch/arm/boot/dts/imx6q-sabrelite.dts         | 37 +------------------
+ arch/arm/boot/dts/imx6qdl-mba6.dtsi           |  1 -
+ .../dts/imx6qdl-phytec-mira-peb-av-02.dtsi    |  2 +-
+ arch/arm/boot/dts/imx6qdl-sabrelite.dtsi      | 37 +------------------
+ arch/arm/boot/dts/imx7d-pico.dtsi             | 10 ++---
+ arch/arm/boot/dts/vf610-pinfunc.h             |  2 +-
+ arch/arm/boot/dts/vf610-twr.dts               |  2 +-
+ arch/arm/boot/dts/vf610.dtsi                  |  1 -
+ .../dts/freescale/imx8mm-venice-gw72xx-0x.dts |  1 -
+ .../boot/dts/freescale/imx8mp-verdin.dtsi     |  1 -
+ .../boot/dts/freescale/imx8mq-mnt-reform2.dts |  1 -
+ include/dt-bindings/clock/imx8mm-clock.h      |  1 -
+ 12 files changed, 10 insertions(+), 86 deletions(-)
 
 -- 
-2.37.1.359.gd136c6c3e2-goog
+2.35.1
 

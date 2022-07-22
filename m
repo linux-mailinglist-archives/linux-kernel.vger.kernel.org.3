@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8F057D7BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C8257D7C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbiGVA1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S233846AbiGVA2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiGVA1q (ORCPT
+        with ESMTP id S233823AbiGVA2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:27:46 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E15C89E84;
-        Thu, 21 Jul 2022 17:27:44 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id l24so2616238ion.13;
-        Thu, 21 Jul 2022 17:27:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A9LvynJxe0rCoPzcWA/a2z9MnHe9fzfAmnZLQao5YE4=;
-        b=5Sg8yG6FctNga7dzguT02WpfwDlLPoM/nR1XfXDYI4ct1+DQHu96OB6UZmtBwieeex
-         AHhqd/u3meZc/tH5TwjG33HTOvlUjndNL0XeBa8vjgO1RzqVwrs/kYVvnERjq5hTpe8t
-         xBrdLyo1gU4YuKpr2MrEOz41d+ioxhRjDAHe+1tIkmRIUYCBKeVathyXvW7Fp4QDfyww
-         V97JQVbUBhGB0QfN1jUTN0cOzpToZcDCWIAhek7K+ohXoitb4V0xlQJBvEK5tWDFFeAq
-         yNxI5TwCW28nD5lXrEvwkmry9N8z++3EsQ97G2AHLcgdcl5jIZ+CAvnzMWHS/CA5rYCC
-         Dwdw==
-X-Gm-Message-State: AJIora+JEkMDATPfWcUcHp+Fpieulm3YSnPSszZ6kiyJEjIVT7ZfW1Ub
-        TaAXeRdXgPHcyA/lpD1YKw==
-X-Google-Smtp-Source: AGRyM1uKEwGqiQ/Z9aZ83MzaBv/qqZB45fvT+eCioKSO8RtevK4Osdshp0UwcAy+wcfB8VcdIGXIaQ==
-X-Received: by 2002:a05:6638:160c:b0:33f:54c7:ee69 with SMTP id x12-20020a056638160c00b0033f54c7ee69mr470125jas.65.1658449663359;
-        Thu, 21 Jul 2022 17:27:43 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c6-20020a056e020cc600b002dd143ee62esm1105139ilj.14.2022.07.21.17.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 17:27:42 -0700 (PDT)
-Received: (nullmailer pid 2243073 invoked by uid 1000);
-        Fri, 22 Jul 2022 00:27:41 -0000
-Date:   Thu, 21 Jul 2022 18:27:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mauri Sandberg <maukka@ext.kapsi.fi>
-Cc:     pali@kernel.org, thomas.petazzoni@bootlin.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, gregory.clement@bootlin.com, kw@linux.com,
-        andrew@lunn.ch, linux-arm-kernel@lists.infradead.org,
-        bhelgaas@google.com, linux@armlinux.org.uk,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sebastian.hesselbarth@gmail.com
-Subject: Re: [PATCH 1/2] dt-bindings: PCI: mvebu: Add orion5x compatible
-Message-ID: <20220722002741.GA2243040-robh@kernel.org>
-References: <20220718202843.6766-1-maukka@ext.kapsi.fi>
- <20220718202843.6766-2-maukka@ext.kapsi.fi>
+        Thu, 21 Jul 2022 20:28:01 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61F588F19;
+        Thu, 21 Jul 2022 17:27:59 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VK2d9Zb_1658449676;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VK2d9Zb_1658449676)
+          by smtp.aliyun-inc.com;
+          Fri, 22 Jul 2022 08:27:57 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] md: remove unneeded semicolon
+Date:   Fri, 22 Jul 2022 08:27:55 +0800
+Message-Id: <20220722002755.71703-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718202843.6766-2-maukka@ext.kapsi.fi>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 23:28:41 +0300, Mauri Sandberg wrote:
-> Add a compatible string to bindings to indicate that orion5x PCIe is
-> supported too.
-> 
-> Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
-> ---
->  Documentation/devicetree/bindings/pci/mvebu-pci.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Eliminate the following coccicheck warning:
+./drivers/md/md.c:8208:2-3: Unneeded semicolon
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/md/md.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 673a39042208..2b2267be5c32 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -8205,7 +8205,7 @@ static void *md_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+ 			break;
+ 		mddev = next_mddev;
+ 		tmp = mddev->all_mddevs.next;
+-	};
++	}
+ 	spin_unlock(&all_mddevs_lock);
+ 
+ 	if (to_put)
+-- 
+2.20.1.7.g153144c
+

@@ -2,87 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9792757DC2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0FD57DC34
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234935AbiGVITi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
+        id S234892AbiGVIUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234871AbiGVIT3 (ORCPT
+        with ESMTP id S230490AbiGVIUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:19:29 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4ED9E29C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:19:27 -0700 (PDT)
-Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 5FBCC2FEE81;
-        Fri, 22 Jul 2022 10:19:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1658477965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cci7jBXhFRtk5ihk6QaoRMJ+OENLYFwI05tf7c5cNPc=;
-        b=7t6VG7QCrBIAh1uskrzbCbgEodirJ3W2nKObvOlTTL+NxolV9LAVkfZy3aTK9XaQRJN1Dz
-        s9DSxvpbXobHjCSU5T2JkZJZ68/qVWFwrMTnbbGU8Xz6zh+xavDVYJM0KotVz2m5C3Fcf/
-        EM04XVt6dUOgnkZfbKRGARrn2O7gNQDJbF9b+71AlUF8UqNFr9y8P0jQE3AMgmJwC+9C8q
-        D2dy+UnflVHzZJRfzSavEQPWQJLcUFYaeworrYe4HkJ+MgK1C2/GMvFileC1csxXFxmmyP
-        03lfQ6dKjVpvOHJpPYJRM08Nj1yqIeHbGC0bohniD+/MDrrvzOrzUx+tVwVjBA==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-gpio@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, Bert Vermeulen <bert@biot.com>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v1 2/2] MAINTAINERS: add info for Realtek Otto GPIO
-Date:   Fri, 22 Jul 2022 10:19:17 +0200
-Message-Id: <d162ec319ff67b77e375c2f2aa24eb297325d7c2.1658477809.git.sander@svanheule.net>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1658477809.git.sander@svanheule.net>
-References: <cover.1658477809.git.sander@svanheule.net>
+        Fri, 22 Jul 2022 04:20:51 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 844419E295;
+        Fri, 22 Jul 2022 01:20:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=9rGVT
+        KZCgVP5GWbgtbLzKr5CKnoplaDI6xwXj00AGQo=; b=ePHBgu4vNYmgVDmtmsi73
+        U8fiptE7wxnXzndxiGwtbDjrIey5C6HkuspMvM7fvN+HRsln69lxT7ay8d5bF7Ah
+        8GURkBUxA2saij6Dn2CKJUUxVs8eayM21CmJ//yFE5ZjmN5SWXI6ZgzF7JOiBWw5
+        PEVMX62w6GdRQFaVzBLIOM=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp4 (Coremail) with SMTP id HNxpCgCHyHjMXdpiZcp1QA--.20845S2;
+        Fri, 22 Jul 2022 16:20:30 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     simon.horman@corigine.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        oss-drivers@corigine.com, netdev@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] nfp: bpf: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 16:20:27 +0800
+Message-Id: <20220722082027.74046-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: HNxpCgCHyHjMXdpiZcp1QA--.20845S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr1DJr1fCF48AFW5ZFb_yoW3uFcEkw
+        1UuFyfGa15GFs0kw47Cw4Ygas2y3yDZF1fuFs3K3ySv34Ykr48Xasa9rZ8Xwn8ur4UAFZI
+        q3sxJFyUAayjyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRCrWo3UUUUU==
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRw5GZFc7YxBofAAAsg
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an entry with the files for the Realtek Otto GPIO driver with myself
-as maintainer. I am already listed as maintainer in the device tree
-binding itself, but the driver had no explicit maintainer info yet.
+Replace 'the the' with 'the' in the comment.
 
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/ethernet/netronome/nfp/bpf/jit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 651616ed8ae2..b173f9e3ee3c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17009,6 +17009,13 @@ S:	Maintained
- F:	include/sound/rt*.h
- F:	sound/soc/codecs/rt*
+diff --git a/drivers/net/ethernet/netronome/nfp/bpf/jit.c b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
+index e31f8fbbc696..df2ab5cbd49b 100644
+--- a/drivers/net/ethernet/netronome/nfp/bpf/jit.c
++++ b/drivers/net/ethernet/netronome/nfp/bpf/jit.c
+@@ -4233,7 +4233,7 @@ static void nfp_bpf_opt_ldst_gather(struct nfp_prog *nfp_prog)
+ 			}
  
-+REALTEK OTTO GPIO
-+M:	Sander Vanheule <sander@svanheule.net>
-+L:	linux-gpio@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/gpio/realtek,otto-gpio.yaml
-+F:	drivers/gpio/gpio-realtek-otto.c
-+
- REALTEK OTTO WATCHDOG
- M:	Sander Vanheule <sander@svanheule.net>
- L:	linux-watchdog@vger.kernel.org
+ 			/* If the chain is ended by an load/store pair then this
+-			 * could serve as the new head of the the next chain.
++			 * could serve as the new head of the next chain.
+ 			 */
+ 			if (curr_pair_is_memcpy(meta1, meta2)) {
+ 				head_ld_meta = meta1;
 -- 
-2.36.1
+2.25.1
 

@@ -2,163 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B4A57D7AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F3657D7B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbiGVAZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S232034AbiGVAZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiGVAZF (ORCPT
+        with ESMTP id S229701AbiGVAZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:25:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CD62E9D8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:25:03 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id g1so4071249edb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T+jSm49KfUYG5RhGRq72Xx7Q+0SpyncIbR4IwkZUcPE=;
-        b=XxZ+xsTfqHc5yjsY1Ryxp5yNP3TbAnty9tQNkC/zAyHdMw9qTL9WknfOc6BYk7CBwr
-         Uo5E2gZzdnaIcbdWbi3Gk1TPuPkh0x9RCKMcwGsxwYKQMowSuD3E66Ou10SASq6e2GqF
-         DXrjW9tGWfObIxDuxZ+hESxFu+/cb9K2qp+l5uoP7l1rLFwiizuxgBwmZo8yXrBYrjyN
-         pNsTC5E0mC0XDiRjridjW023zMNF7ZZuTCTPuDMaVX6blU86/8l/lHvqxH5E6+1ZKQMX
-         hoLWS7dlqn0QYTNkvfQrzP6W3uaFpm6VKIiOuQlePW3vjlrHENCmp9eoZPDCEjIHjftL
-         mefw==
+        Thu, 21 Jul 2022 20:25:49 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BA3774B2;
+        Thu, 21 Jul 2022 17:25:49 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id y197so1785891iof.12;
+        Thu, 21 Jul 2022 17:25:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T+jSm49KfUYG5RhGRq72Xx7Q+0SpyncIbR4IwkZUcPE=;
-        b=svlGtZ/E0MI+cdlzdsQSCjcgf6SxtFMvooskvc+aodlx9SaHTU02zGMi/WEdXCf/Xx
-         YwrRHUzz5MVpwgFSe3tqS1XtwWerIXVjBA9PwTDAW4RdF2qIJB9g2cms6Prs7Xh817rA
-         YhEUxtxlIkHms1MY2SzDZAg4wCmMVJjX4PYBjeA3w301Dn8k4y8ejVtZfUizX8339ELZ
-         6DYt6p09S0aUVlUi1lSZ3ojugs8YkhLEotZ4vMCrcv/BkHxNqNL8EimeW5HVqWeeohUg
-         LOMdLbONwJKsY2NN3g9W+PYhe/EzpjlJoNvwmqXsSnJFgLkCaL/QiKGOmvNjUxoxTLlq
-         666Q==
-X-Gm-Message-State: AJIora9ET4rMXkKgvO5NCmEtaMqc4kRKb/JqVo8b1xjmqLo9bMeKd/b2
-        ufzV2zKO4bswwg8oPQ5J1tVJ8L2eteunwWGWpik7ig==
-X-Google-Smtp-Source: AGRyM1sEecyNIEXWcjY+YZG5ShpQUpGqjIkWEVj6V5QstDHGZLRFssfV9P9uHVtjrqmKV1UbLeMuPVtGv+VVI7lVfVU=
-X-Received: by 2002:a05:6402:2997:b0:43b:247b:89cb with SMTP id
- eq23-20020a056402299700b0043b247b89cbmr905683edb.91.1658449501795; Thu, 21
- Jul 2022 17:25:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5rm4BFsSvYv37lsR3SyeGRLmP7dFOqjTJ+9txhzXmzk=;
+        b=VF78yF4xK5RjpGPKhLcpS/da7sjELiLqGNK/grj3Qkbk7zt6VXEBGDCNxQc8ypj0oK
+         syw0FjHIHAyjz65pJOSp+T5yrYkeXksI6Nx/DTfpbhA+2qFmX/0VQUZP2WlHNzwikVcv
+         MSbS2rS4yoYVMc+2BgCy6s0DNihULmTi/PmnXiZwCe75hZ5RMhZZ1PqUrcSHUIhDUtDz
+         9Zk6Iva1ShdfLu4/pPAxxfPo65ZzlA5OQhKPmOXdG7XvthZ4qOK5qML4e/GSjI+/VXKO
+         cxj+4R3DsnWIZgapINGdBJdDzh9Jnn/nSrnTypoXYOMSeeJyG3tbJvDu7A+lJ0WcdVEs
+         1dtQ==
+X-Gm-Message-State: AJIora9+8/hMbPdpIM1y/NH9UlYFyKpiqHGsj5KIbll6Gt8BSyanAgQ2
+        1YkzynBaWJS3miTX3grW/g==
+X-Google-Smtp-Source: AGRyM1sU8bwcGjBEm0B3fkhvJdN7Glv0yQo9ZDLlq0aLwwezKmTVfOOZZ4cOs/i+bFBJvmc/Hb+Lgg==
+X-Received: by 2002:a6b:fe13:0:b0:67c:3ed1:3cd0 with SMTP id x19-20020a6bfe13000000b0067c3ed13cd0mr381193ioh.53.1658449548266;
+        Thu, 21 Jul 2022 17:25:48 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id k83-20020a6bba56000000b0067beb49f801sm1498462iof.2.2022.07.21.17.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 17:25:47 -0700 (PDT)
+Received: (nullmailer pid 2240200 invoked by uid 1000);
+        Fri, 22 Jul 2022 00:25:46 -0000
+Date:   Thu, 21 Jul 2022 18:25:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc:     christophe.jaillet@wanadoo.fr, krzysztof.kozlowski+dt@linaro.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        amelie.delaunay@foss.st.com, linux-kernel@vger.kernel.org,
+        alexandre.torgue@foss.st.com, heikki.krogerus@linux.intel.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: usb: typec: add bindings for stm32g0
+ controller
+Message-ID: <20220722002546.GA2240166-robh@kernel.org>
+References: <20220713120842.560902-1-fabrice.gasnier@foss.st.com>
+ <20220713120842.560902-2-fabrice.gasnier@foss.st.com>
 MIME-Version: 1.0
-References: <20220721081026.1247067-1-sadiyakazi@google.com> <CABVgOS=iOkquTXEPdS1skRj7Bda-H-REDW8mozziEYjn8RnRnw@mail.gmail.com>
-In-Reply-To: <CABVgOS=iOkquTXEPdS1skRj7Bda-H-REDW8mozziEYjn8RnRnw@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 21 Jul 2022 20:24:50 -0400
-Message-ID: <CAFd5g46ssneHhqg8uXSZZ0=GP8DyqYq2xvQp5tK+cuUV2aVbrA@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: Add CLI args for kunit_tool
-To:     David Gow <davidgow@google.com>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220713120842.560902-2-fabrice.gasnier@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 7:54 PM David Gow <davidgow@google.com> wrote:
->
-> On Thu, Jul 21, 2022 at 4:26 PM Sadiya Kazi <sadiyakazi@google.com> wrote:
+On Wed, 13 Jul 2022 14:08:40 +0200, Fabrice Gasnier wrote:
+> Add DT schema documentation for the STM32G0 Type-C PD (Power Delivery)
+> controller.
+> STM32G0 provides an integrated USB Type-C and power delivery interface.
+> It can be programmed with a firmware to handle UCSI protocol over I2C
+> interface. A GPIO is used as an interrupt line.
+> It may be used as a wakeup source, so use optional "wakeup-source" and
+> "power-domains" properties to support wakeup.
+> The firmware itself may be flashed or later updated (optional). Choice is
+> let to the application to allow firmware update. A default firmware could
+> be already programmed in production and be customized (to not allow it).
+> So the firmware-name is made optional to represent this option.
+> 
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+> Changes in v3:
+> - Add connector to the required properties as pointed out by Krzysztof.
+>   Update commit message to explain why the firmware-name is optional.
+> Changes in v2:
+> - Krzysztof's review comments: update commit message, use ports, use
+>   unevaluatedProperties: false for usb-connector schema, define maxItems
+>   for power-domains, adopt generic node names, remove quotes
+> ---
+>  .../bindings/usb/st,typec-stm32g0.yaml        | 91 +++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
+> 
 
-[...]
-
-> >  Documentation/dev-tools/kunit/run_wrapper.rst | 60 ++++++++++++++++++-
-> >  1 file changed, 59 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-> > index 5e560f2c5fca..600af7ac5f88 100644
-> > --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> > +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-
-[...]
-
-> > @@ -257,3 +257,61 @@ command line arguments:
-> >              added or modified. Instead, enable all tests
-> >              which have satisfied dependencies by adding
-> >              ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
-> > +
-> > +- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
-> > +  file. For example:
-> > +
-> > +  - ``lib/kunit/.kunitconfig`` can be the path of the file.
-> > +
-> > +  - ``lib/kunit`` can be the directory in which the file is located.
-> > +
-> > +  This file is used to build and run with a predefined set of tests
-> > +  and their dependencies. For example, to run tests for a given subsystem.
-> > +
-> > +- ``--kconfig_add``: Specifies additional configuration options to be
-> > +  appended to the ``.kunitconfig`` file.
-> > +  For example, ``./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y``.
-> > +
->
-> Just FYI, this example won't work as-is until KASAN for UML is merged.
-> It's already sitting in uml/next, so this shouldn't be a problem:
-> https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git/commit/?h=next&id=5b301409e8bc5d7fad2ee138be44c5c529dd0874
->
-> But if you want to try it on 5.19 or the current kunit branch, you'll
-> need to add, e.g., --arch=x86_64
->
-> > +- ``--arch``: Runs tests on the specified architecture. The architecture
-> > +  specified must match the Kbuild ARCH environment variable.
->
-> I'm not quite sold on 'must match the Kbuild ARCH environment
-> variable'. That seems to imply to me that you need to set ARCH= _and_
-> use --arch. Instead, --arch itself sets ARCH=, so the values use the
-> same names.
-
-Agreed, I was just about to reply with a comment to the same effect.
-
-> > +  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on QEMU.
-> > +  Default is `um`.
-> > +
-> > +- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
-> > +  same argument as passed to the ``CROSS_COMPILE`` variable used by
-> > +  Kbuild. This will be the prefix for the toolchain
-> > +  binaries such as GCC. For example:
-> > +
-> > +  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
-> > +    our system.
-> > +
-> > +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
-> > +    if we have downloaded the microblaze toolchain from the 0-day
-> > +    website to a specified path in our home directory called toolchains.
-> > +
-> > +- ``--qemu_config``: Specifies the path to a file containing a
-> > +  custom qemu architecture definition. This should be a python file
-> > +  containing a `QemuArchParams` object.
-> > +
-> > +- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-smp 8".
-> > +
-> > +- ``--jobs``: Specifies the number of jobs (commands) to run simultaneously.4
-> > +  By default, this is set to the number of cores on your system.
-> > +
-> > +- ``--timeout``: Specifies the maximum number of seconds allowed for all tests to run.
-> > +  This does not include the time taken to build the tests.
-> > +
-> > +- ``--kernel_args``: Specifies additional kernel command-line arguments. Might be repeated.
->
-> Nit: maybe "can be repeated"? As it's the reader of this documentation
-> who will likely be doing the repeating. Or "may be repeated"?
-
-+1
-
-[...]
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C39F57DB67
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3C757DB68
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbiGVHlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S234036AbiGVHlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiGVHk5 (ORCPT
+        with ESMTP id S234263AbiGVHlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:40:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D871A058
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:40:57 -0700 (PDT)
+        Fri, 22 Jul 2022 03:41:10 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F171A394
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:41:07 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BDE071F939;
-        Fri, 22 Jul 2022 07:40:55 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1A9881FA92;
+        Fri, 22 Jul 2022 07:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658475655; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1658475666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=OOK9jeAkpSAAXIPdi6m/dY3irn4Jx4DFH4XWFPvYvuo=;
-        b=ZdDgKCyldkGfkvXNAEk7PVSq8MWc4ksmiE5Z1UbcAD5rmTK6OIGjBt17ZcjH73QrELUN+l
-        VqsUnLLb4OQ1X3ui0khZl74qsn6cwHExce/pxXD8wqEErxCdP4qlVXhxl1GqeubXWYeHUJ
-        5zXQL9w7FjTDzvoQ5edWzOwn5JQ8eJs=
+        bh=CnUN+XqAHOK8ejFr0N76bGTcfWmGXZPNXDRVVL/b/LE=;
+        b=I4nGwyHwVp8jzVjwYuIslRxwt9cXyv64WNcDECIgqqO9ThcefSaMIehFs5lIDiFoglKVPx
+        V5KMDw5LpX1jG725hWSMBocDzk21CVVH8+JgRsNpB5xRLbJY8j4XyIludbdl/QHSZVtKQ5
+        +7/tC7l35R6wsRvHHy+4skW9O58ksno=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658475655;
+        s=susede2_ed25519; t=1658475666;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=OOK9jeAkpSAAXIPdi6m/dY3irn4Jx4DFH4XWFPvYvuo=;
-        b=vy2r+0BsyNHmsc4UJFDGBBa1ZrXC5jJCEoy40VcrOCzZ5jhFVMwaHZmNEgD6a2fqTWDana
-        tx7Wwbc/nOH+fYCA==
+        bh=CnUN+XqAHOK8ejFr0N76bGTcfWmGXZPNXDRVVL/b/LE=;
+        b=RijFl/LuyfizoSbN/IKT/v7/r3HPQf678UrRCuDsN5O5BWkJZJ/Bn6XwAy3VoHATWbTmUk
+        wfP0s5REe2FH5GDw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 922C113ABC;
-        Fri, 22 Jul 2022 07:40:55 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC12D13ABC;
+        Fri, 22 Jul 2022 07:41:05 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id lnjQIodU2mKnNAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 22 Jul 2022 07:40:55 +0000
-Date:   Fri, 22 Jul 2022 09:40:55 +0200
-Message-ID: <871qud61dk.wl-tiwai@suse.de>
+        id I00WMZFU2mLFNAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 22 Jul 2022 07:41:05 +0000
+Date:   Fri, 22 Jul 2022 09:41:05 +0200
+Message-ID: <87zgh14msu.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     shaomin Deng <dengshaomin@cdjrlc.com>
 Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: emu10k1: Fix typo in comments
-In-Reply-To: <20220721150528.22099-1-dengshaomin@cdjrlc.com>
-References: <20220721150528.22099-1-dengshaomin@cdjrlc.com>
+Subject: Re: [PATCH] ALSA: asihpi: Fix typo in comments
+In-Reply-To: <20220721155517.2438-1-dengshaomin@cdjrlc.com>
+References: <20220721155517.2438-1-dengshaomin@cdjrlc.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 17:05:28 +0200,
+On Thu, 21 Jul 2022 17:55:17 +0200,
 shaomin Deng wrote:
 > 
-> Remove the rebundant word "in" in comments.
+> Delete the repeated word "in" in comments.
 > 
 > Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
 

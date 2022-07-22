@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CFC57E786
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0FE57E78B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiGVTiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S236515AbiGVTjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiGVTiO (ORCPT
+        with ESMTP id S229986AbiGVTjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:38:14 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9B52889;
-        Fri, 22 Jul 2022 12:38:14 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297665329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7665:329c:23ff:fea6:a903])
+        Fri, 22 Jul 2022 15:39:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F76774DEC
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:39:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A74851EC0666;
-        Fri, 22 Jul 2022 21:38:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658518688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oqMlhQ+9AS8F60PcU1q78Rrrk17ahXV0byauFO5z1UU=;
-        b=pfCUktwvWkG8U+aXBptEc75Naz9avVy8tj8mgVyoRbOzAP4tbeOUfcsyB1cEHRJQiRYHNN
-        OszJAzeSOi6AAD3WDUvaBlLpfBrkiXm9Br3wdsTCPfwl/qdjJMF6lwdg4DjjaBwlGllUqz
-        9n5XyBv4JtYXEaGzrdzUq78AGYDJkNM=
-Date:   Fri, 22 Jul 2022 21:38:04 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
-Message-ID: <Ytr8nCL6pa2Q1kWy@zn.tnic>
-References: <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
- <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <5db37cc2-4fb1-7a73-c39a-3531260414d0@intel.com>
- <BYAPR12MB2759AA368C8B6A5F1C31642F8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <YrTq3WfOeA6ehsk6@google.com>
- <SN6PR12MB276743CBEAD5AFE9033AFE558EB59@SN6PR12MB2767.namprd12.prod.outlook.com>
- <YtqLhHughuh3KDzH@zn.tnic>
- <Ytr0t119QrZ8PUBB@google.com>
- <Ytr5ndnlOQvqWdPP@zn.tnic>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4C66B82A1A
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 19:39:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11267C341CA;
+        Fri, 22 Jul 2022 19:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658518773;
+        bh=pTCw8ObXsDCRk0h5jJUavUZSjr/XJYr7gxR45qvE8nY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UDjmED47uZ+4Boj+sIyCQNmprg449KHHSlhBH261Qa+HAVgZy1Go92lIzsIU9sVsI
+         SQb+2985ikSNT6tvxCIz7vbL0Su/LiBjnOnJjZaV5Ckprqn2fAqE6crpbOIqmTDVMP
+         2ne0mNp3nTqGzPLapehEd4A2sm95OzK07BVEVdQw2r+vGUeOB32FkzSAdSS04mwA3e
+         OjOvl4mXPpCxz7SObHP2oGfwufxXFLmI9g6Z9PzucP3n0r+QAAKBCu2qQTp3qYmi95
+         XIHaX5dX67/7F0L2Iqvb3avwbVyGApFPuKf9iLgyGvzew5Ch+A+SFyfIh5q39z0eoc
+         oUBUHMAks2fbQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+In-Reply-To: <20220722092700.8269-1-cristian.ciocaltea@collabora.com>
+References: <20220722092700.8269-1-cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH v2] ASoC: amd: vangogh: Use non-legacy DAI naming for cs35l41
+Message-Id: <165851877179.1163063.11067472493999733976.b4-ty@kernel.org>
+Date:   Fri, 22 Jul 2022 20:39:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ytr5ndnlOQvqWdPP@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-d952f
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Btw,
+On Fri, 22 Jul 2022 12:27:00 +0300, Cristian Ciocaltea wrote:
+> Unlike most CODEC drivers, the CS35L41 driver did not have the
+> non_legacy_dai_naming set, meaning the corresponding DAI has been
+> traditionally registered using the legacy naming: spi-VLV1776:0x
+> 
+> The recent migration to the new legacy DAI naming style has implicitly
+> corrected that behavior and DAI gets now registered via the non-legacy
+> naming, i.e. cs35l41-pcm.
+> 
+> [...]
 
-what could work is to spec only a *version* field somewhere in the HW or
-FW which says which version the RMP header has.
+Applied to
 
-Then, OS would check that field and if it doesn't support that certain
-version, it'll bail.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-I'd need to talk to folks first, though, what the whole story is behind
-not spec-ing the RMP format...
+Thanks!
 
--- 
-Regards/Gruss,
-    Boris.
+[1/1] ASoC: amd: vangogh: Use non-legacy DAI naming for cs35l41
+      commit: b340128432a2b8849cc34f9653d7c43c83102bbd
 
-https://people.kernel.org/tglx/notes-about-netiquette
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

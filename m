@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD0F57E00F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C109C57E00D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiGVKcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S235467AbiGVKcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGVKb6 (ORCPT
+        with ESMTP id S229538AbiGVKcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:31:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D47B504B;
-        Fri, 22 Jul 2022 03:31:57 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id e15so5334281edj.2;
-        Fri, 22 Jul 2022 03:31:57 -0700 (PDT)
+        Fri, 22 Jul 2022 06:32:03 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C2B5052
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:32:00 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id j26so4962118lji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:32:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IFnsmnbjcLlYoAr+xu6Ngnb6y3ZV0ANVWM4gMEJHPHs=;
-        b=ODcKD8AKT8ZDFo1Dq1Me1oMI0j3JdBF/BczXgmiYMw21AhSv0qxXSpkVlPAFbQHi3w
-         JcUMMZ+2Z0VrdUZ4t53DgWZDjo0dkP2ECKnmqlb0vaHElM6lMjXhZ2xtP1fLuFhtjIwm
-         li9GhqCYir0h+IoaJ0IEOhpfO6l8enuHGnWR94y2kAlWQrudeiaW6flY4Kx1QT0sCAig
-         262JebI8msFNSZE/iF3Uic+zO4uarea7WPSf6rBSmp7MqZV5lPrwdCgAIjYqAbNbPvai
-         IJXNwlOmaUcCqOUMov2mmvucDBFjIA3MJ3fZLE8Uz+CQvUuzWaErz6x1qYDdjS0RbS03
-         +Aeg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eXqhKXWkyJJg9+g/9EohedHzzZKAjuqa2sFmi97JD9Y=;
+        b=pnVwjwP2epgqugyqrMAsXv6dkAFuOokeRTDVkC6DsP+qX0N8ti0lIHBdgoQII4uwjh
+         t4naAikyweBC0my1Llr1nYwJ/BPKlspVAbhCwPoCgTMoNwdYypjKVxB+5z3pB//FCb5f
+         Oz3YNzSdFiOyLnc8vSoS+c49UYoX4ct9rex+XVYZL+LGaQEQvsI0oqXiljUx4g/DUwP/
+         XQtr7ntRWMBZtOePBlbIMVp0Nv+RhfrAUWMSyNmcqPRQRLWPqncJJ1296PNqH2EkBNyF
+         xW3C/bLFl6hSGtA+CmQiPZPhOfPQB/4FBfUufX51z8LjtLhFudukcFcWT4Vek59IOBwC
+         jO3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IFnsmnbjcLlYoAr+xu6Ngnb6y3ZV0ANVWM4gMEJHPHs=;
-        b=VGe9u5PzAx5Q5YHPvJG7oGOQzXHEqY+PhVTJFD8z1kUEvrGD/Nr85Z/aVlMK+bTjqv
-         zfs9qM4GmQq6TBJRy7FlX8h/rVBRjgeeYK5NO8PHiWWgpVawZeJVBL0ZRGaH5GehCPVn
-         Oyf0R2ch+A7jXShoPfABXTL11YyqBiYQFwMbalnzndDSvOxJzKdUxRsQZ88YftLpza4u
-         X5x7UNUjYPTpQCS6ygkwIRPYe/Rb9C4OXNmNa7DPMmziaVgeFKxTE6YB15+pTDY7XG0h
-         UznM+G7V8u62Ho9rLWrOA1lWP9kfeMnC3A7B4z52Vzgm6AX7DxIVqTbGdOu+4K3L2jSD
-         UHvw==
-X-Gm-Message-State: AJIora9aOge5R0e8YbClG+c2abit9a1epmYfioIaR1EktUnaX+h+e98n
-        m/etckYkwwYxELSwb/lPBmM=
-X-Google-Smtp-Source: AGRyM1s4VWxM8kdBPaogcz5EkWQVbnvREQtxatII7yHeZJssaVyWzvpJpywlE5aDi7jeDqYKENptAQ==
-X-Received: by 2002:a05:6402:28c3:b0:43a:6d78:1b64 with SMTP id ef3-20020a05640228c300b0043a6d781b64mr2866830edb.93.1658485915793;
-        Fri, 22 Jul 2022 03:31:55 -0700 (PDT)
-Received: from felia.fritz.box (200116b826e64200edeeb77a6a94b0d2.dip.versatel-1u1.de. [2001:16b8:26e6:4200:edee:b77a:6a94:b0d2])
-        by smtp.gmail.com with ESMTPSA id lu44-20020a170906faec00b006fe9ec4ba9esm1856159ejb.52.2022.07.22.03.31.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 03:31:54 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Tomer Maimon <tmaimon77@gmail.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify entry for ARM/NUVOTON NPCM ARCHITECTURE
-Date:   Fri, 22 Jul 2022 12:31:29 +0200
-Message-Id: <20220722103129.22998-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eXqhKXWkyJJg9+g/9EohedHzzZKAjuqa2sFmi97JD9Y=;
+        b=TNoqtICutqtMZpj4l8gYZqRjtEguMJT5vDAWsBxF1DVwajSnV1pgSwGiEMxSmPlg8Y
+         xJSjHHWxM0yplHmKZvYfJutvC/7eYdk7fEZDUhXrRGSwb/3YNLPI/KYn1USJhTjz4gRi
+         lt7AfTtmKaMg3hbOb/6zR2WjixPZKp82Qt1l1g5sfGrSttVaQ4lnne63IspZXoRNOZpf
+         +FcrQVkzCvky/t11BErTOj0DJjlhkRDm9FysitB2OsY31Z3giaj20EjRVtecPziWIk0y
+         B08TYatwzHRfGtvvwDuAhFc0KhDW05TzOQBCkdW4IXPtuCbpdtm90B2NS/FEICXWFhAg
+         fgdQ==
+X-Gm-Message-State: AJIora9uO3hnsWACgBEWdp0oVYfiI1PCnZL34bUcz3itcGc79ZCF+AgW
+        S2JJhS0NgG3C67jBe3amBk3AD7Vc9fIr8ZG2m5xpsQ==
+X-Google-Smtp-Source: AGRyM1vQ0cnyWSucVzfKlluxmfyG+Ix//9JlO9f9D6f+QcIc7yr3ZZbF+QXGzK5/C+gU2hxCnErBEvbCnNBO6oH2C1A=
+X-Received: by 2002:a05:651c:1310:b0:25d:efe5:109d with SMTP id
+ u16-20020a05651c131000b0025defe5109dmr742781lja.465.1658485917645; Fri, 22
+ Jul 2022 03:31:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-2-elver@google.com>
+ <Ytl9L0Zn1PVuL1cB@FVFF77S0Q05N.cambridge.arm.com> <20220722091044.GC18125@willie-the-truck>
+ <CACT4Y+ZOXXqxhe4U3ZtQPCj2yrf6Qtjg1q0Kfq8+poAOxGgUew@mail.gmail.com> <20220722101053.GA18284@willie-the-truck>
+In-Reply-To: <20220722101053.GA18284@willie-the-truck>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 22 Jul 2022 12:31:45 +0200
+Message-ID: <CACT4Y+Z0imEHF0jM-f-uYdpfSpfzMpa+bFZfPeQW1ECBDjD9fA@mail.gmail.com>
+Subject: Re: [PATCH v3 01/14] perf/hw_breakpoint: Add KUnit test for
+ constraints accounting
+To:     Will Deacon <will@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, linux-sh@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,37 +82,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 08e950449c62 ("dt-binding: clk: npcm845: Add binding for Nuvoton
-NPCM8XX Clock") obviously adds nuvoton,npcm845-clk.h, but the file entry in
-MAINTAINERS, added with commit 3670d2ec13ee ("arm64: npcm: Add support for
-Nuvoton NPCM8XX BMC SoC") then refers to nuvoton,npcm8xx-clock.h.
+On Fri, 22 Jul 2022 at 12:11, Will Deacon <will@kernel.org> wrote:
+> > > > [adding Will]
+> > > >
+> > > > On Mon, Jul 04, 2022 at 05:05:01PM +0200, Marco Elver wrote:
+> > > > > Add KUnit test for hw_breakpoint constraints accounting, with various
+> > > > > interesting mixes of breakpoint targets (some care was taken to catch
+> > > > > interesting corner cases via bug-injection).
+> > > > >
+> > > > > The test cannot be built as a module because it requires access to
+> > > > > hw_breakpoint_slots(), which is not inlinable or exported on all
+> > > > > architectures.
+> > > > >
+> > > > > Signed-off-by: Marco Elver <elver@google.com>
+> > > >
+> > > > As mentioned on IRC, I'm seeing these tests fail on arm64 when applied atop
+> > > > v5.19-rc7:
+> > > >
+> > > > | TAP version 14
+> > > > | 1..1
+> > > > |     # Subtest: hw_breakpoint
+> > > > |     1..9
+> > > > |     ok 1 - test_one_cpu
+> > > > |     ok 2 - test_many_cpus
+> > > > |     # test_one_task_on_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
+> > > > |     Expected IS_ERR(bp) to be false, but is true
+> > > > |     not ok 3 - test_one_task_on_all_cpus
+> > > > |     # test_two_tasks_on_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
+> > > > |     Expected IS_ERR(bp) to be false, but is true
+> > > > |     not ok 4 - test_two_tasks_on_all_cpus
+> > > > |     # test_one_task_on_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
+> > > > |     Expected IS_ERR(bp) to be false, but is true
+> > > > |     not ok 5 - test_one_task_on_one_cpu
+> > > > |     # test_one_task_mixed: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
+> > > > |     Expected IS_ERR(bp) to be false, but is true
+> > > > |     not ok 6 - test_one_task_mixed
+> > > > |     # test_two_tasks_on_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
+> > > > |     Expected IS_ERR(bp) to be false, but is true
+> > > > |     not ok 7 - test_two_tasks_on_one_cpu
+> > > > |     # test_two_tasks_on_one_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
+> > > > |     Expected IS_ERR(bp) to be false, but is true
+> > > > |     not ok 8 - test_two_tasks_on_one_all_cpus
+> > > > |     # test_task_on_all_and_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
+> > > > |     Expected IS_ERR(bp) to be false, but is true
+> > > > |     not ok 9 - test_task_on_all_and_one_cpu
+> > > > | # hw_breakpoint: pass:2 fail:7 skip:0 total:9
+> > > > | # Totals: pass:2 fail:7 skip:0 total:9
+> > > >
+> > > > ... which seems to be becasue arm64 currently forbids per-task
+> > > > breakpoints/watchpoints in hw_breakpoint_arch_parse(), where we have:
+> > > >
+> > > >         /*
+> > > >          * Disallow per-task kernel breakpoints since these would
+> > > >          * complicate the stepping code.
+> > > >          */
+> > > >         if (hw->ctrl.privilege == AARCH64_BREAKPOINT_EL1 && bp->hw.target)
+> > > >                 return -EINVAL;
+> > > >
+> > > > ... which has been the case since day one in commit:
+> > > >
+> > > >   478fcb2cdb2351dc ("arm64: Debugging support")
+> > > >
+> > > > I'm not immediately sure what would be necessary to support per-task kernel
+> > > > breakpoints, but given a lot of that state is currently per-cpu, I imagine it's
+> > > > invasive.
+> > >
+> > > I would actually like to remove HW_BREAKPOINT completely for arm64 as it
+> > > doesn't really work and causes problems for other interfaces such as ptrace
+> > > and kgdb.
+> >
+> > Will it be a localized removal of code that will be easy to revert in
+> > future? Or will it touch lots of code here and there?
+> > Let's say we come up with a very important use case for HW_BREAKPOINT
+> > and will need to make it work on arm64 as well in future.
+>
+> My (rough) plan is to implement a lower-level abstraction for handling the
+> underlying hardware resources, so we can layer consumers on top of that
+> instead of funneling through hw_breakpoint. So if we figure out how to make
+> bits of hw_breakpoint work on arm64, then it should just go on top.
+>
+> The main pain point for hw_breakpoint is kernel-side {break,watch}points
+> and I think there are open design questions about how they should work
+> on arm64, particularly when considering the interaction with user
+> watchpoints triggering on uaccess routines and the possibility of hitting
+> a kernel watchpoint in irq context.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
-
-Repair this file reference in ARM/NUVOTON NPCM ARCHITECTURE.
-
-Fixes: 3670d2ec13ee ("arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Arnd, please pick this patch on top of the commits above.
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7d14a446df13..e2734926f6ce 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2488,7 +2488,7 @@ F:	arch/arm64/boot/dts/nuvoton/
- F:	drivers/*/*npcm*
- F:	drivers/*/*/*npcm*
- F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
--F:	include/dt-bindings/clock/nuvoton,npcm8xx-clock.h
-+F:	include/dt-bindings/clock/nuvoton,npcm845-clk.h
- 
- ARM/NUVOTON WPCM450 ARCHITECTURE
- M:	Jonathan Neuschäfer <j.neuschaefer@gmx.net>
--- 
-2.17.1
-
+I see. Our main interest would be break/watchpoints on user addresses
+firing from both user-space and kernel (uaccess), so at least on irqs.

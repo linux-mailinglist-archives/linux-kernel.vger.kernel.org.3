@@ -2,131 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C0757DF09
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F7957DF25
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbiGVJr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
+        id S233587AbiGVJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiGVJrb (ORCPT
+        with ESMTP id S235430AbiGVJrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:47:31 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D62E384;
-        Fri, 22 Jul 2022 02:44:27 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id x11so3096718qts.13;
-        Fri, 22 Jul 2022 02:44:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=njvi007IPZLoUToBw/3oPRzvfKBBxiE1LtWmOJ0CDkM=;
-        b=faaBiu8PQbrF0hbtgBRSJKQfxe0bl+oozsq1LPinmpqtNTODqltOTuUUpmMCgHE1Fe
-         zfDxD3TnET4fLEPA9b7UQf1J+Ac9wPLz+fHDC5A9OK1Z8PdT4zxs1KKlQgz8HYQrPVkA
-         4mHdHYalAQGGijiugIfoB6Sh4NisZp/9T5BJgw/Dacu9tbVZnYkmQyuNg61vIhjKpQnQ
-         jlXuTStEVdsYmDFDc9lIfLKNaIBHJmS8yXxUJfvEgU/Id+ZJL4bnQvHrniO8kapUdnTs
-         j2RipDTqt8liV36R/Tj5vVkbBngiLDe2/rAvF1vq9hjpWrS+kWF0lK4xNvGgfMtbWHi1
-         niRA==
-X-Gm-Message-State: AJIora8aEbrl2qN8zJzE8nqEaGCXtEJwrvVlvnt/g4aTr+UOe+ql3xwF
-        3lFPCIWy5goeH19kasI7ZtuJZdUq6OgMXw==
-X-Google-Smtp-Source: AGRyM1stuifbRMfdMmPCQQ/E1nqIXx4qgUrTCGdhSiCs7VO/WrjQkFiSdAqof610M7C3BSZa0Rt+uA==
-X-Received: by 2002:a05:622a:613:b0:31e:f64a:6d88 with SMTP id z19-20020a05622a061300b0031ef64a6d88mr2201717qta.321.1658483066664;
-        Fri, 22 Jul 2022 02:44:26 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id x27-20020a05620a0b5b00b006b5e43466ebsm2918821qkg.59.2022.07.22.02.44.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 02:44:26 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id b143so5900800yba.11;
-        Fri, 22 Jul 2022 02:44:26 -0700 (PDT)
-X-Received: by 2002:a05:6902:38c:b0:670:b6bc:6ed5 with SMTP id
- f12-20020a056902038c00b00670b6bc6ed5mr2008042ybs.604.1658483065858; Fri, 22
- Jul 2022 02:44:25 -0700 (PDT)
+        Fri, 22 Jul 2022 05:47:36 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA1288B4A1;
+        Fri, 22 Jul 2022 02:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=oCUel
+        Tv043ICb5AHgO2RDvogVgnSWRF3XguHcIruvNY=; b=XoMEhtct0Gv3iP3hu4OG1
+        gzf9WjkShUGmNhOHgrWzfge+udGa7S/8bkQ5B9728VPa9Aq5fH1E0oajpwh9Aqvv
+        p08WwQKMMVjnsn1+Ib/Lj3OljYK6KIrrmw5LTNpiQVdR/tenYG68C+axFlt7LFin
+        t6EV84e4AizwRi3BUxNlsI=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp4 (Coremail) with SMTP id HNxpCgD3NneAcdpiiaeBQA--.23115S2;
+        Fri, 22 Jul 2022 17:44:33 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com, hare@suse.de
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] scsi: fcoe: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 17:44:29 +0800
+Message-Id: <20220722094429.78346-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220721015605.20651-1-slark_xiao@163.com> <20220721154110.fqp7n6f7ij22vayp@kafai-mbp.dhcp.thefacebook.com>
- <21cac0ea.18f.182218041f7.Coremail.slark_xiao@163.com> <874jzamhxe.fsf@meer.lwn.net>
- <6ca59494-cc64-d85c-98e8-e9bef2a04c15@infradead.org>
-In-Reply-To: <6ca59494-cc64-d85c-98e8-e9bef2a04c15@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 22 Jul 2022 11:44:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWSCHW4WzXPr95SyAQ3OnMdyO9_PNLAMA_38osV2LMt=Q@mail.gmail.com>
-Message-ID: <CAMuHMdWSCHW4WzXPr95SyAQ3OnMdyO9_PNLAMA_38osV2LMt=Q@mail.gmail.com>
-Subject: Re: [PATCH v2] docs: Fix typo in comment
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Slark Xiao <slark_xiao@163.com>,
-        kafai <kafai@fb.com>, Baoquan He <bhe@redhat.com>,
-        vgoyal <vgoyal@redhat.com>, dyoung <dyoung@redhat.com>,
-        ast <ast@kernel.org>, daniel <daniel@iogearbox.net>,
-        andrii <andrii@kernel.org>, "martin.lau" <martin.lau@linux.dev>,
-        song <song@kernel.org>, yhs <yhs@fb.com>,
-        "john.fastabend" <john.fastabend@gmail.com>,
-        kpsingh <kpsingh@kernel.org>, sdf <sdf@google.com>,
-        haoluo <haoluo@google.com>, jolsa <jolsa@kernel.org>,
-        "william.gray" <william.gray@linaro.org>,
-        dhowells <dhowells@redhat.com>, peterz <peterz@infradead.org>,
-        mingo <mingo@redhat.com>, will <will@kernel.org>,
-        longman <longman@redhat.com>,
-        "boqun.feng" <boqun.feng@gmail.com>, tglx <tglx@linutronix.de>,
-        bigeasy <bigeasy@linutronix.de>,
-        kexec <kexec@lists.infradead.org>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-cachefs <linux-cachefs@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HNxpCgD3NneAcdpiiaeBQA--.23115S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr4UCFy5Cr18GF1rJFb_yoW3tFgEgw
+        4UtrZ2kw18tF97Jw1rtF15ZayIyw40v3Wfur4vg3ySvay5XrsrAw1vvrn5ZrWUK39rXF9r
+        Jr1DXr1Fyr47GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtzuX3UUUUU==
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQlGZGBbEb1xAAAAs4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 8:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 7/21/22 11:36, Jonathan Corbet wrote:
-> > "Slark Xiao" <slark_xiao@163.com> writes:
-> >
-> >> May I know the maintainer of one subsystem could merge the changes
-> >> contains lots of subsystem?  I also know this could be filtered by
-> >> grep and sed command, but that patch would have dozens of maintainers
-> >> and reviewers.
-> >
-> > Certainly I don't think I can merge a patch touching 166 files across
-> > the tree.  This will need to be broken down by subsystem, and you may
-> > well find that there are some maintainers who don't want to deal with
-> > this type of minor fix.
->
-> We have also seen cases where "the the" should be replaced by "then the"
-> or some other pair of words, so some of these changes could fall into
-> that category.
+Replace 'the the' with 'the' in the comment.
 
-Yes we have:
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    --- a/arch/m68k/coldfire/intc-2.c
-    +++ b/arch/m68k/coldfire/intc-2.c
-    @@ -7,7 +7,7 @@
-      * family, the 5270, 5271, 5274, 5275, and the 528x family which
-have two such
-      * controllers, and the 547x and 548x families which have only one of them.
-      *
-    - * The external 7 fixed interrupts are part the the Edge Port unit of these
-    + * The external 7 fixed interrupts are part the Edge Port unit of these
-      * ColdFire parts. They can be configured as level or edge triggered.
-      *
-      * (C) Copyright 2009-2011, Greg Ungerer <gerg@snapgear.com>
+diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+index 39e16eab47aa..28e8b9f1e1a4 100644
+--- a/drivers/scsi/fcoe/fcoe_ctlr.c
++++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+@@ -205,7 +205,7 @@ static int fcoe_sysfs_fcf_add(struct fcoe_fcf *new)
+ 		 * that doesn't have a priv (fcf was deleted). However,
+ 		 * libfcoe will always delete FCFs before trying to add
+ 		 * them. This is ensured because both recv_adv and
+-		 * age_fcfs are protected by the the fcoe_ctlr's mutex.
++		 * age_fcfs are protected by the fcoe_ctlr's mutex.
+ 		 * This means that we should never get a FCF with a
+ 		 * non-NULL priv pointer.
+ 		 */
+-- 
+2.25.1
 
-And that's already been fixed
-https://lore.kernel.org/lkml/6fe2468a-9664-30f7-7f17-9093289eb4b6@linux-m68k.org
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

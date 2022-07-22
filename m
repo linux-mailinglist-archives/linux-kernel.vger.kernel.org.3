@@ -2,116 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5AC57E6AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF4557E6B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234614AbiGVSh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S235970AbiGVSiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiGVSh4 (ORCPT
+        with ESMTP id S235468AbiGVSiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:37:56 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E3FA026C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:37:54 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id z25so9016432lfr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pZNADembFWMrMyIeeoU2sLzijZgUqqEN6vVBxD7cEAs=;
-        b=GsqhyOyvPqQLTvBum+zuJxJdCWumdKt28rH2mPmYbBK74XD17jt60KtD0pMHpo/hya
-         vb9wzTzbNdeHuA/5g/kHobFtb0+H7CYDfb4AvZumRqW3JnejJKFeINvR34dlTLchYXjz
-         j0UREVOivqXUfB4/IgLh/3GwMH3nmWpkN29OsnadwZiyJhvuC8Ke+A7q5rONII1LLIRN
-         ur9/WC2nNosjE3LvdRSxF0kGBq3CGOT6wxtYRhP1t3tA3RPVu4/9VS+clhFLMjMPW09o
-         1TD97bVIN/s+O48yV/5C3XwcnVszKfIepyHe6JQqce4HYChtqdx1Ean31k2MwSuBhPl2
-         mZzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pZNADembFWMrMyIeeoU2sLzijZgUqqEN6vVBxD7cEAs=;
-        b=5yInyY4RxTOUqDgNBQv5nUoPXvvjCG8XhZ209lNPHibR8mnoXJXK86bV55I1LaKwou
-         fCHjEZOXLAt+3iYUzBVLZt7LIcMVOEm6CSLyGshV3KIHYoUitzBJ0gkRJiAHHxA9nvP1
-         vsrjsr4W+AT4a7Zzr4WoUKmk2C1VcKjpYxDdq2SENo8g1QVXri6U+NfVTnviNBqlvhbq
-         VYBeOEh7gPvf4pWKh1hvH/0pGnkPwCVVYxJYDo6lIp2iyVx2BWYXvgd384EMFWzp3OJh
-         4f1J/bbxOR/oHsj2IxzRLO5Rb0LBGwxnkAx/TVGe2utyxTN80Q4orj6cZ8Rx3EKOFmoU
-         AxJg==
-X-Gm-Message-State: AJIora/qRg8uwAQbaFC8qRYuxk6tX9ua0ZRxxot5uwo9rtSkF2n8LsK4
-        oUD2lH9yyLR/GzTu0ePHI+QNhA==
-X-Google-Smtp-Source: AGRyM1t4tkeV7OyDpZcsS6qCtak/AfOICQG9L4dyANvy9yS4TYY7Ac7Z+0mbnuyWn6CiHaHsFou02A==
-X-Received: by 2002:a05:6512:2622:b0:481:5b17:58e7 with SMTP id bt34-20020a056512262200b004815b1758e7mr478609lfb.600.1658515073264;
-        Fri, 22 Jul 2022 11:37:53 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id d15-20020a0565123d0f00b0048a7222eb8bsm1008194lfv.135.2022.07.22.11.37.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 11:37:52 -0700 (PDT)
-Message-ID: <1a03d894-3f4c-fb57-5f05-ad7bf11f5488@linaro.org>
-Date:   Fri, 22 Jul 2022 20:37:49 +0200
+        Fri, 22 Jul 2022 14:38:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA83A0B85;
+        Fri, 22 Jul 2022 11:38:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9655060DFE;
+        Fri, 22 Jul 2022 18:38:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84CDDC341C6;
+        Fri, 22 Jul 2022 18:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658515097;
+        bh=yxyq7a2jEomP2Y5qR7Uos8qn+okY3YhRz9MvehQfMm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CyVXVug3Nt+MsbZ5O8hBnwnxJct6PxB1vaAqG5BncvrWRZQMPrwlx2VIgZcOxuaKG
+         PePaAF34ef570pSN/VMZnMvjubUenVsFmzaQGze3jZxDAmBpdJMg0ui4q2lflJAZGq
+         OiIk4kUkcNiJnXAtNKCe+99LK5qQkwnECayBVNRMIK7SCYQtHzr66wR9koJ0PQJ0kj
+         //0NH17AqRSVDSx/se9np9lyjYAGiSXIh2ws0b0NDZXbQp1mbTqUPfb4Kz6YGYV1rU
+         g2h0PkcPQ8C+UcRT4s2C/TwOd1qjUBJdpri4V1z5EuZ7Zprg3b5y+i6yFrfXwLSU6/
+         IqjMUFA1hO9yg==
+Date:   Fri, 22 Jul 2022 19:38:09 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+Subject: Re: [PATCH 3/3] SPI: Ingenic: Add SFC support for Ingenic SoCs.
+Message-ID: <YtrukeLk9fInqQIL@sirena.org.uk>
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/6] dt-bindings: panel: explicitly list SPI CPHA and CPOL
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Nishant Malpani <nish.malpani25@gmail.com>,
-        Dragos Bogdan <dragos.bogdan@analog.com>,
-        Nuno Sa <nuno.sa@analog.com>,
-        Jean-Baptiste Maneyrol <jmaneyrol@invensense.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Belisko <marek@goldelico.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Christian Eggers <ceggers@arri.de>,
-        Beniamin Bia <beniamin.bia@analog.com>,
-        Stefan Popa <stefan.popa@analog.com>,
-        Oskar Andero <oskar.andero@gmail.com>,
-        =?UTF-8?Q?M=c3=a5rten_Lindahl?= <martenli@axis.com>,
-        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
-        Cristian Pop <cristian.pop@analog.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Matheus Tavares <matheus.bernardino@usp.br>,
-        Sankar Velliangiri <navin@linumiz.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Stefan Wahren <stefan.wahren@in-tech.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20220721153155.245336-1-krzysztof.kozlowski@linaro.org>
- <20220721153155.245336-2-krzysztof.kozlowski@linaro.org>
- <20220721193004.GA1783390-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220721193004.GA1783390-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u7Z7lZkjhnzZyt/z"
+Content-Disposition: inline
+In-Reply-To: <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
+X-Cookie: Yow!  I want my nose in lights!
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,49 +65,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/07/2022 21:30, Rob Herring wrote:
-> On Thu, Jul 21, 2022 at 05:31:50PM +0200, Krzysztof Kozlowski wrote:
->> The spi-cpha and spi-cpol properties are device specific and should be
->> accepted only if device really needs them.  Explicitly list them in
->> device bindings in preparation of their removal from generic
->> spi-peripheral-props.yaml schema.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  .../bindings/display/panel/lgphilips,lb035q02.yaml   | 10 ++++++++++
->>  .../bindings/display/panel/samsung,ld9040.yaml       | 10 ++++++++++
->>  .../bindings/display/panel/samsung,lms380kf01.yaml   | 12 +++++++++---
->>  .../bindings/display/panel/samsung,lms397kf04.yaml   | 12 +++++++++---
->>  .../bindings/display/panel/samsung,s6d27a1.yaml      | 12 +++++++++---
->>  .../bindings/display/panel/sitronix,st7789v.yaml     | 10 ++++++++++
->>  .../devicetree/bindings/display/panel/tpo,td.yaml    | 10 ++++++++++
->>  7 files changed, 67 insertions(+), 9 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml b/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
->> index 5e4e0e552c2f..0bd7bbad5b94 100644
->> --- a/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
->> +++ b/Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml
->> @@ -21,6 +21,16 @@ properties:
->>    enable-gpios: true
->>    port: true
->>  
->> +  spi-cpha:
->> +    type: boolean
->> +    description:
->> +      The device requires shifted clock phase (CPHA) mode.
->> +
->> +  spi-cpol:
->> +    type: boolean
->> +    description:
->> +      The device requires inverse clock polarity (CPOL) mode.
-> 
-> Not great duplicating the type and description everywhere.
-> 
-> We can move the definition back to spi-controller.yaml, so then that 
-> does type checking of the property, but not presence/absence checks.
 
-If I understand correctly, all client devices (which do no reference
-spi-controller) will need to explicitly mention CPHA/CPOL. Good idea.
+--u7Z7lZkjhnzZyt/z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Sat, Jul 23, 2022 at 12:48:30AM +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
+ Yanjie) wrote:
+
+This looks mostly good, a few small issues though:
+
+> +++ b/drivers/spi/spi-ingenic-sfc.c
+> @@ -0,0 +1,662 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +/*
+> + * Ingenic SoCs SPI Flash Controller Driver
+
+Please make the entire comment a C++ one so things look more
+intentional.
+
+> +static irqreturn_t ingenic_sfc_irq_handler(int irq, void *data)
+> +{
+> +	struct ingenic_sfc *sfc =3D data;
+> +
+> +	writel(0x1f, sfc->base + SFC_REG_INTC);
+> +
+> +	complete(&sfc->completion);
+> +
+> +	return IRQ_HANDLED;
+> +}
+
+This doesn't pay any attention to any status registers in the chip so
+won't work if the interrupt is shared and won't notice any error reports
+=66rom the device...
+
+> +static int ingenic_sfc_setup(struct spi_device *spi)
+> +{
+> +	struct ingenic_sfc *sfc =3D spi_controller_get_devdata(spi->master);
+> +	unsigned long rate;
+> +	int ret, val;
+> +
+> +	if (!spi->max_speed_hz)
+> +		return -EINVAL;
+> +
+> +	ret =3D clk_set_rate(sfc->clk, spi->max_speed_hz * 2);
+> +	if (ret)
+> +		return -EINVAL;
+
+The setup() operation should be safe for use on one device while another
+device is active.  It's not going to be a problem until there's a
+version of the IP with more than one chip select, but that could happen
+some time (and someone might decide to make a board using GPIO chip
+selects...) but this should really go into the data path.
+
+> +	ret =3D clk_prepare_enable(sfc->clk);
+> +	if (ret)
+> +		goto err_put_master;
+
+Nothing ever disables this clock.  It might also be nice to enable the
+clock only when the controller is in use, that bit is not super
+important though.
+
+> +	ret =3D devm_request_irq(&pdev->dev, sfc->irq, ingenic_sfc_irq_handler,=
+ 0,
+> +			dev_name(&pdev->dev), sfc);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to request irq%d, ret =3D %d\n", sfc->irq,=
+ ret);
+> +		goto err_put_master;
+> +	}
+
+It's not safe to use devm here...
+
+> +	ret =3D devm_spi_register_controller(&pdev->dev, ctlr);
+> +	if (ret)
+> +		goto err_put_master;
+
+=2E..unregistering the controller may free the driver data structure and
+the interrupt handler uses it so we could attempt to use freed data in
+the window between the controller being unregistered and the interrupt
+being freed.
+
+--u7Z7lZkjhnzZyt/z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLa7pAACgkQJNaLcl1U
+h9BufAf+ML3z6pqB+9VRx2uVE2vDguPss14L7VVj8Szqp0T4Dmx4QF9s0u6QKqxP
+9UUQHAEdO1N6Vh2SSdBGvOPPrChYaAWW3eA/t7ODFbynEkJ1+bq/UPQrVfOln8hs
+8hEnsS1N3XHn4CRSfVBGsw4+FxsIG3t+sSXSHEqI8uk9aBJ2GUgWZepEJheNFK4a
+NF6bAJnK896B73olJr0deNlCfhsvSiUqaAE5fxsLuWY7Ur1LNBG8JV5WvHGNEJkR
+dknDfQL0Y4nWWlffbKz6VReB6dFvFGETgGfIDepjsxvznoXqAMdNYtwixpu5dVuO
+hh/q4B5v95rS4/BjakpMCs+Jmw3Psw==
+=c0js
+-----END PGP SIGNATURE-----
+
+--u7Z7lZkjhnzZyt/z--

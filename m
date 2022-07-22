@@ -2,150 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85C057E34D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2398857E352
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiGVO42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 10:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
+        id S235007AbiGVO7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 10:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiGVO40 (ORCPT
+        with ESMTP id S229519AbiGVO7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 10:56:26 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AE357E02;
-        Fri, 22 Jul 2022 07:56:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658501785; x=1690037785;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gDcg3PLNEPvDKVILS1xOIMGfvYZpYQr+B01TmuZK9uM=;
-  b=PQHm8Gt8g5HdK4hN9y7OOo4kVUUDbXkRqzpZQTPnc+KmjQ562kQPysST
-   d8vK9WOP3wA2EGh/3e//8r1S7Lw9EWN4DJLC2xICSnBMtbWbxHBSX5pmP
-   6D6xCseS5Qb2dciSkA7MGWfUTJad3ce5xHchKAhX5GcoCVpAVysNOhdOf
-   onSGOlGpC6vXcYKPHc++B/fOcwMiKnOOf6KcFJ0pnFpcbcO2HGqoJaBRm
-   85N6NsEg1g0GKYqBVQrpMyRgX15OM9rODm6s3MbF+mzKJj1YIr2uX/H8P
-   X8vdnCflw5LDmbiyJu1a0W4Jfz83lCAUPEVhoOaQxiiZ/lywoEAEexT4N
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="288499181"
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="288499181"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 07:56:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="844794732"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jul 2022 07:56:21 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 26MEuKBd003452;
-        Fri, 22 Jul 2022 15:56:20 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/4] netlink: add 'bitmap' attribute type and API
-Date:   Fri, 22 Jul 2022 16:55:14 +0200
-Message-Id: <20220722145514.767592-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220721111318.1b180762@kernel.org>
-References: <20220721155950.747251-1-alexandr.lobakin@intel.com> <20220721111318.1b180762@kernel.org>
+        Fri, 22 Jul 2022 10:59:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01735A15F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 07:59:45 -0700 (PDT)
+Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbeckett)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 937E86601ACC;
+        Fri, 22 Jul 2022 15:59:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658501983;
+        bh=VmqLDraaLfKZR2Ma3IcNFp3UY4zzt7fDoeTYsfTMBBc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O0aFXr+MPtbp4AuSScl/KP9LE5FBgUkQijW8QidZKATnRE3pFwTqxWp+5ylYwPSSt
+         TCw2kupSEbU/f0uv31NZ/fkJUlUq9lHooSGonqpcLc+SJeETW46uhnjiecvlLfnufw
+         3RWLVL9A1NbNDBCPpcd48XVHxcEP8ypgucavWuskAjOnVGNswvD9S0MLOX+ADBSy8R
+         H0SE4d5TVKzq+Zc4L0KlusPySZFJnIRqXCq5zo4hjPbQsplc1DXsS4hVgUkadH2wNA
+         D2mS/ZDf5LF83u9nd/TtaJbbSbZ9q3WZGTGg9fLwnychYGtoFORhXjmvwOu79C030L
+         l9nTLnz+YMx+w==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm/i915: stop using swiotlb
+Date:   Fri, 22 Jul 2022 15:59:19 +0100
+Message-Id: <20220722145920.1513509-1-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
-Date: Thu, 21 Jul 2022 11:13:18 -0700
+Calling swiotlb functions directly is nowadays considered harmful. See
+https://lore.kernel.org/intel-gfx/20220711082614.GA29487@lst.de/
 
-> On Thu, 21 Jul 2022 17:59:46 +0200 Alexander Lobakin wrote:
-> > BTW, Ethtool bitsets provide similar functionality, but it operates
-> > with u32s (u64 is more convenient and optimal on most platforms) and
-> > Netlink bitmaps is a generic interface providing policies and data
-> > verification (Ethtool bitsets are declared simply as %NLA_BINARY),
-> > generic getters/setters etc.
-> 
-> Are you saying we don't need the other two features ethtool bitmaps
-> provide? Masking and compact vs named representations?
+Replace swiotlb_max_segment() calls with dma_max_mapping_size().
+In i915_gem_object_get_pages_internal() no longer consider max_segment
+only if CONFIG_SWIOTLB is enabled. There can be other (iommu related)
+causes of specific max segment sizes.
 
-Nah I didn't say that. I'm not too familiar with Ethtool bitsets,
-just know that they're represented as arrays of u32s.
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: Thomas Hellstrom <thomas.hellstrom@intel.com>
+Cc: Matthew Auld <matthew.auld@intel.com>
 
-> 
-> I think that straight up bitmap with a fixed word is awkward and leads
-> to too much boilerplate code. People will avoid using it. What about
-> implementing a bigint type instead? Needing more than 64b is extremely
-> rare, so in 99% of the cases the code outside of parsing can keep using
-> its u8/u16/u32.
+v2: - restore UINT_MAX clamp in i915_sg_segment_size()
+    - drop PAGE_SIZE check as it will always be >= PAGE_SIZE
 
-In-kernel code can still use single unsigned long for some flags if
-it wouldn't need more than 64 bits in a couple decades and not
-bother with the bitmap API. Same with userspace -- a single 64 is
-fine for that API, just pass a pointer to it to send it as a bitmap
-to the kernel.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+---
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c | 19 ++++---------------
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c    |  2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c      |  4 ++--
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c  |  2 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h      | 16 +++-------------
+ 5 files changed, 11 insertions(+), 32 deletions(-)
 
-Re 64b vs extremely rare -- I would say so 5 years go, but now more
-and more bitfields run out of 64 bits. Link modes, netdev features,
-...
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+index c698f95af15f..24f37658f1bb 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+@@ -6,7 +6,6 @@
+ 
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
+-#include <linux/swiotlb.h>
+ 
+ #include "i915_drv.h"
+ #include "i915_gem.h"
+@@ -38,22 +37,12 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+ 	struct scatterlist *sg;
+ 	unsigned int sg_page_sizes;
+ 	unsigned int npages;
+-	int max_order;
++	int max_order = MAX_ORDER;
++	unsigned int max_segment;
+ 	gfp_t gfp;
+ 
+-	max_order = MAX_ORDER;
+-#ifdef CONFIG_SWIOTLB
+-	if (is_swiotlb_active(obj->base.dev->dev)) {
+-		unsigned int max_segment;
+-
+-		max_segment = swiotlb_max_segment();
+-		if (max_segment) {
+-			max_segment = max_t(unsigned int, max_segment,
+-					    PAGE_SIZE) >> PAGE_SHIFT;
+-			max_order = min(max_order, ilog2(max_segment));
+-		}
+-	}
+-#endif
++	max_segment = i915_sg_segment_size(i915->drm.dev) >> PAGE_SHIFT;
++	max_order = min(max_order, ilog2(max_segment));
+ 
+ 	gfp = GFP_KERNEL | __GFP_HIGHMEM | __GFP_RECLAIMABLE;
+ 	if (IS_I965GM(i915) || IS_I965G(i915)) {
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+index 4eed3dd90ba8..34b9c76cd8e6 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+@@ -194,7 +194,7 @@ static int shmem_get_pages(struct drm_i915_gem_object *obj)
+ 	struct intel_memory_region *mem = obj->mm.region;
+ 	struct address_space *mapping = obj->base.filp->f_mapping;
+ 	const unsigned long page_count = obj->base.size / PAGE_SIZE;
+-	unsigned int max_segment = i915_sg_segment_size();
++	unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
+ 	struct sg_table *st;
+ 	struct sgt_iter sgt_iter;
+ 	struct page *page;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+index 5a5cf332d8a5..7a828c9c0f6d 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -189,7 +189,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
+ 	struct drm_i915_private *i915 = container_of(bdev, typeof(*i915), bdev);
+ 	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
+ 	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
+-	const unsigned int max_segment = i915_sg_segment_size();
++	const unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
+ 	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
+ 	struct file *filp = i915_tt->filp;
+ 	struct sgt_iter sgt_iter;
+@@ -568,7 +568,7 @@ static struct i915_refct_sgt *i915_ttm_tt_get_st(struct ttm_tt *ttm)
+ 	ret = sg_alloc_table_from_pages_segment(st,
+ 			ttm->pages, ttm->num_pages,
+ 			0, (unsigned long)ttm->num_pages << PAGE_SHIFT,
+-			i915_sg_segment_size(), GFP_KERNEL);
++			i915_sg_segment_size(i915_tt->dev), GFP_KERNEL);
+ 	if (ret) {
+ 		st->sgl = NULL;
+ 		return ERR_PTR(ret);
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+index 094f06b4ce33..dfc35905dba2 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+@@ -129,7 +129,7 @@ static void i915_gem_object_userptr_drop_ref(struct drm_i915_gem_object *obj)
+ static int i915_gem_userptr_get_pages(struct drm_i915_gem_object *obj)
+ {
+ 	const unsigned long num_pages = obj->base.size >> PAGE_SHIFT;
+-	unsigned int max_segment = i915_sg_segment_size();
++	unsigned int max_segment = i915_sg_segment_size(obj->base.dev->dev);
+ 	struct sg_table *st;
+ 	unsigned int sg_page_sizes;
+ 	struct page **pvec;
+diff --git a/drivers/gpu/drm/i915/i915_scatterlist.h b/drivers/gpu/drm/i915/i915_scatterlist.h
+index 9ddb3e743a3e..45b9c18ddc0b 100644
+--- a/drivers/gpu/drm/i915/i915_scatterlist.h
++++ b/drivers/gpu/drm/i915/i915_scatterlist.h
+@@ -9,7 +9,7 @@
+ 
+ #include <linux/pfn.h>
+ #include <linux/scatterlist.h>
+-#include <linux/swiotlb.h>
++#include <linux/dma-mapping.h>
+ 
+ #include "i915_gem.h"
+ 
+@@ -127,19 +127,9 @@ static inline unsigned int i915_sg_dma_sizes(struct scatterlist *sg)
+ 	return page_sizes;
+ }
+ 
+-static inline unsigned int i915_sg_segment_size(void)
++static inline unsigned int i915_sg_segment_size(struct device *dev)
+ {
+-	unsigned int size = swiotlb_max_segment();
+-
+-	if (size == 0)
+-		size = UINT_MAX;
+-
+-	size = rounddown(size, PAGE_SIZE);
+-	/* swiotlb_max_segment_size can return 1 byte when it means one page. */
+-	if (size < PAGE_SIZE)
+-		size = PAGE_SIZE;
+-
+-	return size;
++	return max_t(size_t, UINT_MAX, dma_max_mapping_size(dev));
+ }
+ 
+ bool i915_sg_trim(struct sg_table *orig_st);
+-- 
+2.25.1
 
-Re bigint -- do you mean implementing u128 as a union, like
-
-typedef union __u128 {
-	struct {
-		u32 b127_96;
-		u32 b95_64;
-		u32 b63_32;
-		u32 b31_0;
-	};
-	struct {
-		u64 b127_64;
-		u64 b63_0;
-	};
-#ifdef __HAVE_INT128
-	__int128 b127_0;
-#endif
-} u128;
-
-? We have similar feature in one of our internal trees and planning
-to present generic u128 soon, but this doesn't work well for flags
-I think.
-bitmap API and bitops are widely used and familiar to tons of folks,
-most platforms define their own machine-optimized bitops
-implementation, arrays of unsigned longs are native...
-
-Re awkward -- all u64 <-> bitmap conversion is implemented in the
-core code in 4/4 and users won't need doing anything besides one
-get/set. And still use bitmap/bitops API. Userspace, as I said,
-can use a single __u64 as long as it fits into 64 bits.
-
-Summarizing, I feel like bigints would lead to much more boilerplate
-in both kernel and user spaces and need to implement a whole new API
-instead of using the already existing and well-used bitmap one.
-Continuation of using single objects with fixed size like %NLA_U* or
-%NLA_BITFIELD_U32 will lead to introducing a new Netlink attr every
-32/64 bits (or even 16 like with IP tunnels, that was the initial
-reason why I started working on those 3 series). As Jake wrote me
-in PM earlier,
-
-"I like the concept of an NLA_BITMAP. I could have used this for
-some of the devlink interfaces we've done, and it definitely feels
-a bit more natural than being forced to a single u32 bitfield."
-
-Thanks,
-Olek

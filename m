@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7589157DCED
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB3D57DCE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbiGVIvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S235199AbiGVIwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235061AbiGVIug (ORCPT
+        with ESMTP id S235137AbiGVIwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:50:36 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4F931DCA;
-        Fri, 22 Jul 2022 01:50:33 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d7so4029039plr.9;
-        Fri, 22 Jul 2022 01:50:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WMLMbhzpQ8BYCKUc89U899ul04BiM4aI/9He03oT5uc=;
-        b=duF24r2Mh/zRTYtQOAshatj9u415FRbTrhKlEf3cjpV57Heczae2zKForLZUgVcTIj
-         ibUj2DTGe4mcVs5yOgqhngG7UJ4mKzxnEzebg6MChYG8DHwJtj2SE+pMyC9f+d2AKaxl
-         yAXXf1jgaFSXRAVzm6KnetZlKLwPn0fvUcVbYgKsalOoKvVYi2/dpaOT8GWMLBvbuoAa
-         IL7qRg7ghT5+z3OFTSXzs3i+Oq+3s8SMCR6c70kxPvNLlfC26d+jmpUuBREDvsHQMNRw
-         p/0doIb4Z2iLKRfBiWQCnfITS6Hc4/kimbOb4IaWD84fCdzFFDwV7RH9XjrpI3LD+HAp
-         1cJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WMLMbhzpQ8BYCKUc89U899ul04BiM4aI/9He03oT5uc=;
-        b=zyUslw7Lc8Hm56nJ4q5r6mvhjMXTqcQyjZUeBc/BmI+/k3mJvosqFKfl7iewifOSBG
-         eCysyUjfXhuQlHxta8bQJWWPFiHlhBmRygfn0lGZp5jBjo2TxBx/BmwnLTl/1Vl1xFxJ
-         Zju1N5MC3sa7o1GCdbIp7M2EZ7mRIouPhQvwmA+kKo9yGdkVELN4P3qdR153ZklONPYc
-         7QKkj2cnoMwvRxf5stEIosuwSQUzEBdtedUiBEN7Wo7hLponPQzugGzC9DwEWqATwZFe
-         i3CZ4mp2DyrUpTvB5BWGP2k7CKQLgWD9Jgfmxq/hhFHDHhDsPhST0gj7ztFuVW0mG80N
-         9RQA==
-X-Gm-Message-State: AJIora+sDJ+PBwQ0vgE5YoMdg+bGHEehnIdV2uqweLuRHEMqpMH59jrG
-        0oZyh0vLDR/PoWI33QIYrR8=
-X-Google-Smtp-Source: AGRyM1ulLh5mC4aId6RvlA5MUpQyoZ+n5mnzh95GyZAc0cRin4lIZGT5yP5tox1MRsNbRAOatdEjyA==
-X-Received: by 2002:a17:90a:9409:b0:1f0:e171:f2bd with SMTP id r9-20020a17090a940900b001f0e171f2bdmr2867699pjo.245.1658479833324;
-        Fri, 22 Jul 2022 01:50:33 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-91.three.co.id. [180.214.233.91])
-        by smtp.gmail.com with ESMTPSA id i7-20020a056a00224700b0051b8e7765edsm3227658pfu.67.2022.07.22.01.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 01:50:32 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id CEAFC104986; Fri, 22 Jul 2022 15:50:23 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH 8/8] Documentation: s390: add vfio-ap-locking documentation to table of contents index
-Date:   Fri, 22 Jul 2022 15:49:47 +0700
-Message-Id: <20220722084946.22965-9-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220722084946.22965-1-bagasdotme@gmail.com>
-References: <20220722084946.22965-1-bagasdotme@gmail.com>
+        Fri, 22 Jul 2022 04:52:24 -0400
+Received: from smtpbg501.qq.com (smtpbg501.qq.com [203.205.250.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43239B9C1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:51:39 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1658479880tvwfy0qv
+Received: from bupt-poweredger310.tendawifi.co ( [223.72.68.172])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 22 Jul 2022 16:51:19 +0800 (CST)
+X-QQ-SSF: 01400000002000B0V000B00A0000000
+X-QQ-FEAT: R3vftN8GVq+7+a8rsE5Vq0K470afRMomw7k6aHZzPiSoUvyVrZmCHCdzV0xCv
+        p0ZmVEi6GF60uG4nh2g9hGI9iFdwT30Gs9GNkEgblQDov8iAlzb8OLBZo4qjN9VKnvrat35
+        suLSiYTPG4w2R4mNW6h9I5I9WFOU3LzGb34AQE8zDJRxlsF8cUFYj1kbxvgsTRBixYuECSk
+        A4q0ZvE66OJFnQdaFxURLXL6ohoBdTtLsR5cz2vp0AqZ/BwW0kinbSEt/Xuc9ni5Ly8CQuz
+        rUQM7UI9SLmsGZABTryLaQNd97l0jvCu9lU2BrFAVQuBrJB6msX0APlMJAs8TPmHqbef2QC
+        PW+C/9ADbdTkM3ZVp6fbAHbcxF4Urt3JTxOQ0I5Bww5f8ngGpnMTLxF6wQ5CjH86JqOFmZm
+        tnalZMBgkZA=
+X-QQ-GoodBg: 2
+From:   Yan Xinyu <sdlyyxy@bupt.edu.cn>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yan Xinyu <sdlyyxy@bupt.edu.cn>
+Subject: [PATCH v3] USB: serial: usb_wwan: replace DTR/RTS magic numbers with macros
+Date:   Fri, 22 Jul 2022 16:50:40 +0800
+Message-Id: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_NONE,T_SPF_HELO_TEMPERROR autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vfio-ap-locking.rst documentation is missing from s390 index, so:
+The usb_wwan_send_setup function generates DTR/RTS signals in compliance
+with CDC ACM standard. This patch changes magic numbers in this function
+to equivalent macros.
 
-Documentation/s390/vfio-ap-locking.rst: WARNING: document isn't included in any toctree
-
-Add missing documentation to the index.
-
-Link: https://lore.kernel.org/linux-next/20220721201058.2a276286@canb.auug.org.au/
-Fixes: e32d3827f3d5b2 ("s390/Docs: new doc describing lock usage by the vfio_ap device driver")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
 ---
- Documentation/s390/index.rst | 1 +
- 1 file changed, 1 insertion(+)
+v1->v2:
+ * Fix Signed-off-by name.
+v2->v3:
+ * Use already defined ACM_CTRL_DTR and ACM_CTRL_RTS in drivers/usb/class/cdc-acm.h
+---
+ drivers/usb/serial/usb_wwan.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/s390/index.rst b/Documentation/s390/index.rst
-index b10ca919255738..73c79bf586fd60 100644
---- a/Documentation/s390/index.rst
-+++ b/Documentation/s390/index.rst
-@@ -12,6 +12,7 @@ s390 Architecture
-     qeth
-     s390dbf
-     vfio-ap
-+    vfio-ap-locking
-     vfio-ccw
-     zfcpdump
-     common_io
+diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+index dab38b63eaf7..5c8303bd3676 100644
+--- a/drivers/usb/serial/usb_wwan.c
++++ b/drivers/usb/serial/usb_wwan.c
+@@ -29,8 +29,10 @@
+ #include <linux/bitops.h>
+ #include <linux/uaccess.h>
+ #include <linux/usb.h>
++#include <linux/usb/cdc.h>
+ #include <linux/usb/serial.h>
+ #include <linux/serial.h>
++#include "../class/cdc-acm.h"
+ #include "usb-wwan.h"
+ 
+ /*
+@@ -48,9 +50,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+ 	portdata = usb_get_serial_port_data(port);
+ 
+ 	if (portdata->dtr_state)
+-		val |= 0x01;
++		val |= ACM_CTRL_DTR;
+ 	if (portdata->rts_state)
+-		val |= 0x02;
++		val |= ACM_CTRL_RTS;
+ 
+ 	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
+ 
+@@ -59,8 +61,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+ 		return res;
+ 
+ 	res = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+-				0x22, 0x21, val, ifnum, NULL, 0,
+-				USB_CTRL_SET_TIMEOUT);
++				USB_CDC_REQ_SET_CONTROL_LINE_STATE,
++				USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
++				val, ifnum, NULL, 0, USB_CTRL_SET_TIMEOUT);
+ 
+ 	usb_autopm_put_interface(port->serial->interface);
+ 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
+
+
 

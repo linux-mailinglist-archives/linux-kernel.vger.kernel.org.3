@@ -2,163 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C28957D897
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8D757D894
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiGVCZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 22:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S234284AbiGVCZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 22:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234282AbiGVCY6 (ORCPT
+        with ESMTP id S234237AbiGVCZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 22:24:58 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618559823B
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:24:45 -0700 (PDT)
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C33BE3F12F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1658456683;
-        bh=21lfF1OMKLeXFtULRWjRtXARMWFjMfI3d/p5JlAEia8=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=Vf7233D7ytA6ZTtX9mLYYWxhKK9hYQtdMFnxeN1tmh3hKfX4TVbolh602Sm5j6+XE
-         IHVJ+gq6i1/7lKF40qeHk4xg7mR9o2HDPkbY1/z1+PJCoUNysK+cuRGeLocuNUmVAV
-         js76IMhzVMHe3yDm4WmsUNLBI94R5idTJFnYvZ0z3L+3h6gAL4BfqOuyJ3hh/Kt4iu
-         XrqtwGSh14MJUYIZtKcDCqdXK7Ns8oYqqmGObQz1fh4Gk6Xzlyirr4zezFytq9r+2m
-         ZMS2R5wGaAKG9vmvZ/EatNqeJ3pzGLR35uyvfbN1Vv6ktiWS0kPh9EEJTGiWKKUoLa
-         Yv5sUkIV0yaEQ==
-Received: by mail-oi1-f197.google.com with SMTP id bx14-20020a0568081b0e00b0033a6f2395aaso1695483oib.2
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:24:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=21lfF1OMKLeXFtULRWjRtXARMWFjMfI3d/p5JlAEia8=;
-        b=ziLgGcYph9bPJXz8H/6oY9ZuWxlTLvV8Kv7Rdh0kTbrwBYTu6i4n/Bw+oh6fffJZ8Y
-         /llLbsAva9hU3QIGsb7KGkuJGXQjCL+OYv+3HmBn8epY99LoKE884IiWya8u/LmFS2CT
-         iGiHS32uyFG56LVe/PJ+7SKZPDUd9AdDe35wqhWTisA9SlYck5gv9VHnSotDBtwxuqJ+
-         vzEALrTAaRV+qGEFt69+FmBhqzkLucYgiP7p+R0PtNGtq+xNqSI0p95h1+RS6F49DV7w
-         T+sn2dx2k7pL8mlMWs63KHoDerkJ7DEe76BZQHDY4BrvQJJJAXsFl7JEJ7bETsHBsh5W
-         tIsQ==
-X-Gm-Message-State: AJIora9isXnwIv2ijpPs9skLskQmAb6Bxtnmf4aSpX109CbbmR0+NStd
-        ZSROQ3BD3R2gG2XcH5GdFTfJI1CmAZ7WCrcGPIItr3KTj27UCvM6UXOkPiOYtizlJhggJ4H5a5F
-        BW/hRVQYdF7xlpQ7neOAaNaQmtTRE/0mHzYJddAQ6HQ==
-X-Received: by 2002:a05:6870:9691:b0:10d:4e09:6d0d with SMTP id o17-20020a056870969100b0010d4e096d0dmr620833oaq.54.1658456682543;
-        Thu, 21 Jul 2022 19:24:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uvU9qJw3xZdY8qLtAMfrO1WVNCSVRdNA2PSo7g3N3dxoTLVc+Yd1R+zm9uxw3Fm3r+ZL9hVg==
-X-Received: by 2002:a05:6870:9691:b0:10d:4e09:6d0d with SMTP id o17-20020a056870969100b0010d4e096d0dmr620824oaq.54.1658456682346;
-        Thu, 21 Jul 2022 19:24:42 -0700 (PDT)
-Received: from mfo-t470.. ([2804:14c:4e1:8732:c479:1206:16fb:ce1f])
-        by smtp.gmail.com with ESMTPSA id k23-20020a056870959700b000f5f4ad194bsm1814528oao.25.2022.07.21.19.24.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 19:24:41 -0700 (PDT)
-From:   Mauricio Faria de Oliveira <mfo@canonical.com>
-To:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: [RFC PATCH 6/6] sysctl: introduce /proc/sys/kernel/modprobe_sysctl_alias
-Date:   Thu, 21 Jul 2022 23:24:16 -0300
-Message-Id: <20220722022416.137548-7-mfo@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220722022416.137548-1-mfo@canonical.com>
-References: <20220722022416.137548-1-mfo@canonical.com>
+        Thu, 21 Jul 2022 22:25:39 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CB7820F40;
+        Thu, 21 Jul 2022 19:25:19 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.12.77.33])
+        by mail-app4 (Coremail) with SMTP id cS_KCgDn6Mx_CtpiRg0IAQ--.0S4;
+        Fri, 22 Jul 2022 10:25:03 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     dongchun.zhu@mediatek.com, zhengsq@rock-chips.com,
+        mchehab@kernel.org, matthias.bgg@gmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v0] media: i2c: fix the erroneous pointer initializer
+Date:   Fri, 22 Jul 2022 10:24:59 +0800
+Message-Id: <20220722022459.5030-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: cS_KCgDn6Mx_CtpiRg0IAQ--.0S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4rtw47GF1UtrykurW8tFb_yoW8ZFy5pF
+        ZrX34akryYgr4jqF17J3yUuFyYga1xJFy8KFW3uw15ZFWUCryIvryftF4Yyr1kGrWDKa4I
+        qw1rtrW3Aa1xAF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The goal of the earlier patches is to let sysctl userspace tools
-load the kernel module with a sysctl entry that is not available
-yet in /proc/sys/ when the tool runs (so it can become available).
+There are obvious errors for the initializer of ov02a10_i2c_driver,
+ov2682_i2c_driver, and ov5695_i2c_driver as the code intended to assign
+"address of function pointer" to function pointer. This patch fixes them
+by removing redundant & operators.
 
-Let's expose this file for userspace for two reasons:
-
-1) Allow such tools to identify that the running kernel has the
-   code which produces sysctl module aliases, so they could run
-   'modprobe sysctl:<entry>' only when it may actually help.
-
-2) Allow an administrator to hint such tools not to do that, if
-   that is desired for some reason (e.g., rather have the tools
-   fail if something is misconfigured in a critical deployment).
-
-Also add a module parameter for that (proc.modprobe_sysctl_alias),
-for another method that doesn't depend on sysctl tools to be set
-(that wouldn't fail them to try and set it if it's not there yet).
-
-Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
 ---
- fs/proc/proc_sysctl.c  | 8 ++++++++
- include/linux/module.h | 1 +
- kernel/sysctl.c        | 9 +++++++++
- 3 files changed, 18 insertions(+)
+ drivers/media/i2c/ov02a10.c | 4 ++--
+ drivers/media/i2c/ov2685.c  | 4 ++--
+ drivers/media/i2c/ov5695.c  | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index ebbf8702387e..1e63819fcda8 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -33,6 +33,14 @@ static void check_struct_sysctl_device_id(void)
- 	BUILD_BUG_ON(offsetof(struct sysctl_device_id, procname)
- 			!= offsetof(struct ctl_table, procname));
- }
-+
-+/*
-+ * Hint sysctl userspace tools whether or not to run modprobe with sysctl alias
-+ * ('modprobe sysctl:entry') if they cannot find the file '/proc/sys/.../entry'
-+ */
-+int modprobe_sysctl_alias = 1;
-+module_param(modprobe_sysctl_alias, int, 0644);
-+
- #else
- static void check_struct_sysctl_device_id(void) {}
- #endif
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 3010f687df19..5f565491c596 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -304,6 +304,7 @@ struct notifier_block;
- #ifdef CONFIG_MODULES
- 
- extern int modules_disabled; /* for sysctl */
-+extern int modprobe_sysctl_alias; /* for proc sysctl */
- /* Get/put a kernel symbol (calls must be symmetric) */
- void *__symbol_get(const char *symbol);
- void *__symbol_get_gpl(const char *symbol);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 15073621cfa8..b396cfcb55fc 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1763,6 +1763,15 @@ static struct ctl_table kern_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dostring,
+diff --git a/drivers/media/i2c/ov02a10.c b/drivers/media/i2c/ov02a10.c
+index 0f08c05333ea..5d205454ca4e 100644
+--- a/drivers/media/i2c/ov02a10.c
++++ b/drivers/media/i2c/ov02a10.c
+@@ -1004,8 +1004,8 @@ static struct i2c_driver ov02a10_i2c_driver = {
+ 		.pm = &ov02a10_pm_ops,
+ 		.of_match_table = ov02a10_of_match,
  	},
-+#ifdef CONFIG_PROC_SYSCTL
-+	{
-+		.procname	= "modprobe_sysctl_alias",
-+		.data		= &modprobe_sysctl_alias,
-+		.maxlen		= sizeof(modprobe_sysctl_alias),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+	},
-+#endif
- 	{
- 		.procname	= "modules_disabled",
- 		.data		= &modules_disabled,
+-	.probe_new	= &ov02a10_probe,
+-	.remove		= &ov02a10_remove,
++	.probe_new	= ov02a10_probe,
++	.remove		= ov02a10_remove,
+ };
+ module_i2c_driver(ov02a10_i2c_driver);
+ 
+diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
+index b6e010ea3249..4b9f4f3a0194 100644
+--- a/drivers/media/i2c/ov2685.c
++++ b/drivers/media/i2c/ov2685.c
+@@ -832,8 +832,8 @@ static struct i2c_driver ov2685_i2c_driver = {
+ 		.pm = &ov2685_pm_ops,
+ 		.of_match_table = of_match_ptr(ov2685_of_match),
+ 	},
+-	.probe		= &ov2685_probe,
+-	.remove		= &ov2685_remove,
++	.probe		= ov2685_probe,
++	.remove		= ov2685_remove,
+ };
+ 
+ module_i2c_driver(ov2685_i2c_driver);
+diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
+index 910309783885..59da66f4f810 100644
+--- a/drivers/media/i2c/ov5695.c
++++ b/drivers/media/i2c/ov5695.c
+@@ -1395,8 +1395,8 @@ static struct i2c_driver ov5695_i2c_driver = {
+ 		.pm = &ov5695_pm_ops,
+ 		.of_match_table = of_match_ptr(ov5695_of_match),
+ 	},
+-	.probe		= &ov5695_probe,
+-	.remove		= &ov5695_remove,
++	.probe		= ov5695_probe,
++	.remove		= ov5695_remove,
+ };
+ 
+ module_i2c_driver(ov5695_i2c_driver);
 -- 
-2.25.1
+2.36.1
 

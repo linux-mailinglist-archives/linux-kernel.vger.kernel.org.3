@@ -2,107 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CAA57D80E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 03:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5364257D80F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 03:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbiGVBlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 21:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S232919AbiGVBmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 21:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGVBk7 (ORCPT
+        with ESMTP id S229441AbiGVBmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 21:40:59 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9918E11153;
-        Thu, 21 Jul 2022 18:40:58 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id f3-20020a17090ac28300b001f22d62bfbcso2535976pjt.0;
-        Thu, 21 Jul 2022 18:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wQ4PwxJdfeRuNFlBgfKXQzk/YsoiF4IpRVdTPSkrj58=;
-        b=hq4fXVwKlhrxu5/HkzmMTJXI58duVtf5bcwzWDTb+EtRHfvCIAr1DVRQgfUnlAcV05
-         RI+gw00avBdTD5q1pS8nF1EhK8X+KWIizO5aAgKpCu0VdStgIj556c3G0cd19iCFdFeb
-         JcUd3UOQbRQeuDe+7DduZqongYVr6JmfA5oK1LKlmBweXYHGH81iOG/HzIXkMHROh4VX
-         X8RHYTZgL3ISwOpXG7C9xrHrViEL/bNuOb4dQTZLj5AccQrg9AWwDMWys1q5b8/9raS4
-         4zeiok5CSjOQug+vIsMLy7El5CoV20N2jgbvOqybBL9fQNW66gcx1wNIyqVrJ83/KpIL
-         zRUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wQ4PwxJdfeRuNFlBgfKXQzk/YsoiF4IpRVdTPSkrj58=;
-        b=XwEDPRCEUU8tGZLKWgIU+FmwjNveAW2LaTUGPLafaLXv12J+q7UXQ78KouRylDWiGT
-         0945s4PuNoOLNc8ZzW8nz+LZKKq5+qyeBnmqzU9KF2g3jUsJs5myUgSqrKpQbDYfQh/e
-         hRLGAsNC+MYKFxUcApJ3Y9zgbQMLoVIu6CdLsf2Qg03oVu6rYxQSR8tzmSSae6aoCflK
-         rIIvlgUUglYTPABvud8/JPNaAgac+8M+DVjq4N5papEozKbisEbxk+xiU26v/qFfpQVs
-         fENeZm/7FxN/uledd45GwbUWEJolIh/hvXdNcn+JwxFxUbHLrEfkeXatxADyL704hLOF
-         FBaA==
-X-Gm-Message-State: AJIora9z+UTSQV1Rx1vW78TdzjgUccXqQIGOU+WwyL110OjmkXBCU61n
-        lkGpSrgGyT1zZ8N85c4DvXc=
-X-Google-Smtp-Source: AGRyM1ttGkNHj4rBoCrfvrWDPH8ttiNUx2pwkiSRVGCKVMLCgCOu/R4Bw2sjCT07NlZoEM0kf3MkOw==
-X-Received: by 2002:a17:90b:3a88:b0:1f2:199d:2ceb with SMTP id om8-20020a17090b3a8800b001f2199d2cebmr1351864pjb.196.1658454057976;
-        Thu, 21 Jul 2022 18:40:57 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-36.three.co.id. [116.206.28.36])
-        by smtp.gmail.com with ESMTPSA id x27-20020aa7941b000000b005251f4596f0sm2434829pfo.107.2022.07.21.18.40.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 18:40:57 -0700 (PDT)
-Message-ID: <f918aa10-2d75-815f-d75a-52ef3ffa7776@gmail.com>
-Date:   Fri, 22 Jul 2022 08:40:50 +0700
+        Thu, 21 Jul 2022 21:42:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E9820F8;
+        Thu, 21 Jul 2022 18:42:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E952461FA2;
+        Fri, 22 Jul 2022 01:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC4BC3411E;
+        Fri, 22 Jul 2022 01:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658454168;
+        bh=PUyBpsVmRXM3a3LLiAPSq+ZaOk7fRfAc8f9l84o/C3s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cc5ACvakfQDV3FQLxCSYnR5n8pzEywRpm6MUk+ytF0Nr7UlVB4/mjhtE1COsKyY5D
+         4uYjaoqyFkMAEO5POyPIVNRcxQqX26hAJPcgzgUlnGE6L9QFnbXKxLJmzwieJ66rGL
+         Qq2Q4RRlw5etTIoJjYH7LudbkKZd4snlaqxWnw8qClOT7qhQK0eAWLsZ1DzfWCYXFc
+         Nh4qGSH05iq+mDbfIKC7a2SQSk9Z5xsLcAdzFjkDtLnJbaL2wV/C2N5gdu1rTtn9pH
+         YZL//xNhdGiw+/98IE8JhEi/VnrRhTvm2uFkRX79GT+alNn0BVTVXZf9EoEcEsrKSE
+         YTUcB9zl5Wvtg==
+Date:   Thu, 21 Jul 2022 18:42:47 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Chunhao Lin <hau@realtek.com>
+Cc:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] r8169: add support for rtl8168h(revid 0x2a) +
+ rtl8211fs fiber application
+Message-ID: <20220721184243.31ace75f@kicinski-fedora-PC1C0HJN>
+In-Reply-To: <20220721144550.4405-1-hau@realtek.com>
+References: <20220721144550.4405-1-hau@realtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [GIT PULL 25/42] Documentation: kvm: extend KVM_S390_ZPCI_OP
- subheading underline
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        frankja@linux.ibm.com, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        thuth@redhat.com, david@redhat.com,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org
-References: <20220721161302.156182-1-imbrenda@linux.ibm.com>
- <20220721161302.156182-26-imbrenda@linux.ibm.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220721161302.156182-26-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/21/22 23:12, Claudio Imbrenda wrote:
-> From: Bagas Sanjaya <bagasdotme@gmail.com>
-> 
-> Stephen Rothwell reported the htmldocs warning:
-> 
-> Documentation/virt/kvm/api.rst:5959: WARNING: Title underline too short.
-> 
-> 4.137 KVM_S390_ZPCI_OP
-> --------------------
-> 
-> The warning is due to subheading underline on KVM_S390_ZPCI_OP section is
-> short of 2 dashes.
-> 
-> Extend the underline to fix the warning.
-> 
+On Thu, 21 Jul 2022 22:45:50 +0800 Chunhao Lin wrote:
+> rtl8168h(revid 0x2a) + rtl8211fs is for fiber related application.
+> rtl8168h will control rtl8211fs via its eeprom or gpo pins.
+> Fiber module will be connected to rtl8211fs. The link speed between
+> rtl8168h and rtl8211fs is decied by fiber module.
 
-Thanks for picking this up!
+Compiler says:
 
-Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+drivers/net/ethernet/realtek/r8169_main.c:614:24: warning: symbol 'rtl_sfp_if_eeprom_mask' was not declared. Should it be static?
+drivers/net/ethernet/realtek/r8169_main.c:617:24: warning: symbol 'rtl_sfp_if_gpo_mask' was not declared. Should it be static?

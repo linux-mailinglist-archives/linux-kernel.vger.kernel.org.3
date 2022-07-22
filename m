@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DE057DC64
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4169057DF4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbiGVIb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S236578AbiGVJhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiGVIby (ORCPT
+        with ESMTP id S236426AbiGVJgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:31:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615E99E78A;
-        Fri, 22 Jul 2022 01:31:53 -0700 (PDT)
+        Fri, 22 Jul 2022 05:36:49 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9009DC8A;
+        Fri, 22 Jul 2022 02:25:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658478713; x=1690014713;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658481926; x=1690017926;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=uv07SzM5PWTt1IVQuWHDCVeHL3I17tUX88W1yhEAfGk=;
-  b=Lhy5jvwu90NJ7gdKMPIIfYuQ85pf9L39j38JfJ3JErfSNcOXmb5hutTT
-   ZUUXR/+FXrE8uq3+o6eHJCfyl3Y4EC3FWPBZ/r+DWhvGl3yd6wHnCDNQ/
-   YfzEymxIDMdCdhXWsN+FF64aBA6rSZXwYn5Ew3qRR0UdOovdXJlrCtTuZ
-   23khOisxGersi0DSJGITTa8SN1kiSu4uAezyUK+VZHbMdD1Odtrbz6Lqw
-   zW+kwVlNGJG5otnCVdBrbQEpIUhlfXwKtEWpPm9D8a2Tu9jomss6dQXfn
-   tLerFdbPPPgilSCUj6Y/25fg5ydRW7wS0WIfP+Ci/qfLosdsMYeD8z/5b
+  bh=+QND/riB95eOwELi/wTu+6LY1w/6ea6HUDOUh0x5LJc=;
+  b=FB5KAOw+wRMLoLBVNlDdEEjTWEisN4ub06wcvirkUcn5aDx0ZijvWGMo
+   MQw2kN5UAyEss5Z3Y/1XIciVOv6MdT3CBh6rwwZoejtH1AUxuGmT8SOhn
+   iS24iDEMT260jOGXOIFk2sIlPM/L+dsxt8C4b1lZU1PepDIfhHOpnK5/8
+   E99/Fk/zsMugAP1oksPSuQ/IxzUQ+p+dMFtzX2NZIEa2SMHp6SJLKEB9X
+   VRQ8cR6dJUVQGxOrWgoE4yXLxItZowb19elbVD552a+LcsjzJjpF5xpeZ
+   qwQgIZ8qIizCYuAdweKYgcUmXkZ4LGCdTWvJjnYRWfXSRlZicKIYpgBCM
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="288022524"
 X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="288022524"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 01:31:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="666603605"
-Received: from linux-pnp-server-12.sh.intel.com ([10.239.176.103])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Jul 2022 01:31:49 -0700
-From:   Jiebin Sun <jiebin.sun@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, songmuchun@bytedance.com,
-        akpm@linux-foundation.org, tim.c.chen@intel.com,
-        ying.huang@intel.com, amadeuszx.slawinski@linux.intel.com,
-        tianyou.li@intel.com, wangyang.guo@intel.com,
-        jiebin sun <jiebin.sun@intel.com>
-Subject: [PATCH] mm: Remove the redundant updating of stats_flush_threshold
-Date:   Sat, 23 Jul 2022 00:49:49 +0800
-Message-Id: <20220722164949.47760-1-jiebin.sun@intel.com>
-X-Mailer: git-send-email 2.31.1
+   d="scan'208";a="169043264"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jul 2022 02:25:23 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 22 Jul 2022 02:25:21 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 22 Jul 2022 02:25:16 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Woojung Huh <woojung.huh@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Arun Ramadoss" <arun.ramadoss@microchip.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [Patch net-next v1 0/9] net: dsa: microchip: add support for phylink mac config and link up
+Date:   Fri, 22 Jul 2022 14:54:50 +0530
+Message-ID: <20220722092459.18653-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jiebin sun <jiebin.sun@intel.com>
+This patch series add support common phylink mac config and link up for the ksz
+series switches. At present, ksz8795 and ksz9477 doesn't implement the phylink
+mac config and link up. It configures the mac interface in the port setup hook.
+ksz8830 series switch does not mac link configuration. For lan937x switches, in
+the part support patch series has support only for MII and RMII configuration.
+Some group of switches have some register address and bit fields common and
+others are different. So, this patch aims to have common phylink implementation
+which configures the register based on the chip id.
 
-Remove the redundant updating of stats_flush_threshold. If the
-global var stats_flush_threshold has exceeded the trigger value
-for __mem_cgroup_flush_stats, further increment is unnecessary.
+Changes in v1
+- Squash the reading rgmii value from dt to patch which apply the rgmii value
+- Created the new function ksz_port_set_xmii_speed
+- Seperated the namespace values for xmii_ctrl_0 and xmii_ctrl_1 register
+- Applied the rgmii delay value based on the rx/tx-internal-delay-ps
 
-Apply the patch and test the pts/hackbench-1.0.0 Count:4 (160 threads).
+Arun Ramadoss (9):
+  net: dsa: microchip: add common gigabit set and get function
+  net: dsa: microchip: add common ksz port xmii speed selection function
+  net: dsa: microchip: add common duplex and flow control function
+  net: dsa: microchip: add support for common phylink mac link up
+  net: dsa: microchip: lan937x: add support for configuing xMII register
+  net: dsa: microchip: apply rgmii tx and rx delay in phylink mac config
+  net: dsa: microchip: ksz9477: use common xmii function
+  net: dsa: microchip: ksz8795: use common xmii function
+  net: dsa: microchip: add support for phylink mac config
 
-Score gain: 1.95x
-Reduce CPU cycles in __mod_memcg_lruvec_state (44.88% -> 0.12%)
+ drivers/net/dsa/microchip/ksz8795.c      |  40 ---
+ drivers/net/dsa/microchip/ksz8795_reg.h  |   8 -
+ drivers/net/dsa/microchip/ksz9477.c      | 183 +-----------
+ drivers/net/dsa/microchip/ksz9477_reg.h  |  24 --
+ drivers/net/dsa/microchip/ksz_common.c   | 342 ++++++++++++++++++++++-
+ drivers/net/dsa/microchip/ksz_common.h   |  46 +++
+ drivers/net/dsa/microchip/lan937x.h      |   8 +-
+ drivers/net/dsa/microchip/lan937x_main.c | 125 +++------
+ drivers/net/dsa/microchip/lan937x_reg.h  |  32 ++-
+ 9 files changed, 453 insertions(+), 355 deletions(-)
 
-CPU: ICX 8380 x 2 sockets
-Core number: 40 x 2 physical cores
-Benchmark: pts/hackbench-1.0.0 Count:4 (160 threads)
 
-Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
----
- mm/memcontrol.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index abec50f31fe6..9e8c6f24c694 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -626,7 +626,14 @@ static inline void memcg_rstat_updated(struct mem_cgroup *memcg, int val)
- 
- 	x = __this_cpu_add_return(stats_updates, abs(val));
- 	if (x > MEMCG_CHARGE_BATCH) {
--		atomic_add(x / MEMCG_CHARGE_BATCH, &stats_flush_threshold);
-+		/*
-+		 * If stats_flush_threshold exceeds the threshold
-+		 * (>num_online_cpus()), cgroup stats update will be triggered
-+		 * in __mem_cgroup_flush_stats(). Increasing this var further
-+		 * is redundant and simply adds overhead in atomic update.
-+		 */
-+		if (atomic_read(&stats_flush_threshold) <= num_online_cpus())
-+			atomic_add(x / MEMCG_CHARGE_BATCH, &stats_flush_threshold);
- 		__this_cpu_write(stats_updates, 0);
- 	}
- }
+base-commit: b66eb3a6e427b059101c6c92ac2ddd899014634c
 -- 
-2.31.1
+2.36.1
 

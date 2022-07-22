@@ -2,135 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA4C57DBFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E54257DC04
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbiGVIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S234370AbiGVIOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiGVING (ORCPT
+        with ESMTP id S234611AbiGVINq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:13:06 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069239CE08
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1658477577; bh=LWDnby6DHYYfy30ljiAO8OPFEpGRu2tko2sxtbpJc08=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=snqK9ZpooW8OVA3dP+6M4juLxvS1m+kdPwWjXflikrCQtp5yGNDHbEf4qsOnXf7oP
-         jPnT0yyxhn6h4//K9REa7IhGA4qayhsJjJbJRAK6HLnk1nxlztXwrzNEahu/QwF39w
-         eb9kEvuKKmqrAACTItvMB1seMLF8uXWZwmF0ro2M=
-Received: from [100.100.35.250] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5676F6061B;
-        Fri, 22 Jul 2022 16:12:57 +0800 (CST)
-Message-ID: <a1978090-b2d6-5176-808c-6aa1561a8926@xen0n.name>
-Date:   Fri, 22 Jul 2022 16:12:55 +0800
+        Fri, 22 Jul 2022 04:13:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB2BC9E2A9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658477618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HFrJKjNNYU0491FNuTI8t6vKob0kktI0zA4xaCL8j/E=;
+        b=bMbf+oBVlrk1twJb30ICPIS1DGfAnG1YtQ1QVSvqzxK2Vq9+qqVHsAf1LOcs711+icfxEd
+        k0z8sbJD+IsLjav+hptHGGN6NUun5cLLpfSI2DKp5kwPWP4Nf8RoC8cNhAlcPmKsaGGrlh
+        G8/Hib4Q22u/UyFmTHxYg9aR+PRkiTE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-c4TO6L02OaKrvqahv0XTMg-1; Fri, 22 Jul 2022 04:13:36 -0400
+X-MC-Unique: c4TO6L02OaKrvqahv0XTMg-1
+Received: by mail-wm1-f71.google.com with SMTP id v67-20020a1cac46000000b003a2be9fa09cso2174114wme.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:13:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HFrJKjNNYU0491FNuTI8t6vKob0kktI0zA4xaCL8j/E=;
+        b=AlS5dzTts4DLpan39S5onZkhkJ1Rt9OiDHZ8dTWEwiRIC5BLZBzcOYHfnIrVzuN/VG
+         zBsZLHZKtO/DyN7eOZiNfE+hE5vjQxVxQxOVaEDNGCZiLpIWU9WPO2+QIExL8Pz6iirb
+         ABETNcUt/UaBMKMk3xhPoIcDsr8Va4Ga+GZhJKFJdQn0hfI+0X+b5GO3HCOtTmfQZBFj
+         EWdE6C2Tr9WVoroWauAjtfK8qk9fH7Ul69Q9+xY90zQ0AA3T2+eSUMH3ee7uXwo2y8f3
+         nygTj62Baf5+069KchggVSuUFmjyc5GLyPljpYWod3/vup1MAVj6LYCw5Ury1RusSZp9
+         qWaQ==
+X-Gm-Message-State: AJIora8DeE6+U2RY+LaxzsfkOzItds2W0pRpkvi7bAEGvQeUKhRrwubr
+        GLgNCVTnq9vxqoRcIiOzfixtLWlLy42G4X5cZ9J2iWaxAS24/zrEu1AfXSxDL/MvehxfYXYCh7t
+        sJqEXlnKwF7J+t2h9bDDrfMjRRpZMQNBzcNtsDH/f
+X-Received: by 2002:a1c:1901:0:b0:3a3:1be3:4df2 with SMTP id 1-20020a1c1901000000b003a31be34df2mr1603459wmz.146.1658477615393;
+        Fri, 22 Jul 2022 01:13:35 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tVB+HIi9H23yr75K8PX/2qN+oLoitA0TnKRsCF5mFx9I8K+Vyw9ABD6g/5ZglB5xC20l6aZRQ/i9F1r2pHv/8=
+X-Received: by 2002:a1c:1901:0:b0:3a3:1be3:4df2 with SMTP id
+ 1-20020a1c1901000000b003a31be34df2mr1603426wmz.146.1658477614949; Fri, 22 Jul
+ 2022 01:13:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0)
- Gecko/20100101 Thunderbird/104.0a1
-Subject: Re: [PATCH 2/2] LoongArch: Remove unused variable
-Content-Language: en-US
-To:     Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220720072152.3894559-1-maobibo@loongson.cn>
- <20220720072152.3894559-2-maobibo@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220720072152.3894559-2-maobibo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220717101323.370245-1-xianting.tian@linux.alibaba.com>
+In-Reply-To: <20220717101323.370245-1-xianting.tian@linux.alibaba.com>
+From:   Dave Young <dyoung@redhat.com>
+Date:   Fri, 22 Jul 2022 16:13:23 +0800
+Message-ID: <CALu+AoTpiQh7NUJJZs+6A7MCUNWJq=NeSimoF=AVHpRptd36eA@mail.gmail.com>
+Subject: Re: [Crash-utility] [PATCH 0/5] Fixups to work with crash tool
+To:     "Discussion list for crash utility usage, maintenance and development" 
+        <crash-utility@redhat.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, huanyi.xj@alibaba-inc.com,
+        hschauhan@nulltrace.org,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, heinrich.schuchardt@canonical.com,
+        linux-riscv@lists.infradead.org, kexec@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 2022/7/20 15:21, Bibo Mao wrote:
-> There are some variables never used or referenced, this patch
-> removes these varaibles and make the code cleaner.
+On Sun, 17 Jul 2022 at 18:13, Xianting Tian
+<xianting.tian@linux.alibaba.com> wrote:
 >
-> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> ---
->   arch/loongarch/include/asm/loongson.h | 12 ------------
->   arch/loongarch/kernel/env.c           | 20 --------------------
->   2 files changed, 32 deletions(-)
+> I ever sent the patch 1,2 in the link:
+> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-2-xianting.tian@linux.alibaba.com/
+> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/
+> And patch 3,4 in the link:
+> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/
+> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/
 >
-> diff --git a/arch/loongarch/include/asm/loongson.h b/arch/loongarch/include/asm/loongson.h
-> index 6a8038725ba7..2df649e73371 100644
-> --- a/arch/loongarch/include/asm/loongson.h
-> +++ b/arch/loongarch/include/asm/loongson.h
-> @@ -39,18 +39,6 @@ extern const struct plat_smp_ops loongson3_smp_ops;
->   
->   #define MAX_PACKAGES 16
->   
-> -/* Chip Config register of each physical cpu package */
-> -extern u64 loongson_chipcfg[MAX_PACKAGES];
-> -#define LOONGSON_CHIPCFG(id) (*(volatile u32 *)(loongson_chipcfg[id]))
-> -
-> -/* Chip Temperature register of each physical cpu package */
-> -extern u64 loongson_chiptemp[MAX_PACKAGES];
-> -#define LOONGSON_CHIPTEMP(id) (*(volatile u32 *)(loongson_chiptemp[id]))
-> -
-> -/* Freq Control register of each physical cpu package */
-> -extern u64 loongson_freqctrl[MAX_PACKAGES];
-> -#define LOONGSON_FREQCTRL(id) (*(volatile u32 *)(loongson_freqctrl[id]))
-> -
->   #define xconf_readl(addr) readl(addr)
->   #define xconf_readq(addr) readq(addr)
->   
-> diff --git a/arch/loongarch/kernel/env.c b/arch/loongarch/kernel/env.c
-> index 467946ecf451..82b478a5c665 100644
-> --- a/arch/loongarch/kernel/env.c
-> +++ b/arch/loongarch/kernel/env.c
-> @@ -17,21 +17,6 @@ u64 efi_system_table;
->   struct loongson_system_configuration loongson_sysconf;
->   EXPORT_SYMBOL(loongson_sysconf);
->   
-> -u64 loongson_chipcfg[MAX_PACKAGES];
-> -u64 loongson_chiptemp[MAX_PACKAGES];
-> -u64 loongson_freqctrl[MAX_PACKAGES];
-> -unsigned long long smp_group[MAX_PACKAGES];
-> -
-> -static void __init register_addrs_set(u64 *registers, const u64 addr, int num)
-> -{
-> -	u64 i;
-> -
-> -	for (i = 0; i < num; i++) {
-> -		*registers = (i << 44) | addr;
-> -		registers++;
-> -	}
-> -}
-> -
->   void __init init_environ(void)
->   {
->   	int efi_boot = fw_arg0;
-> @@ -50,11 +35,6 @@ void __init init_environ(void)
->   	efi_memmap_init_early(&data);
->   	memblock_reserve(data.phys_map & PAGE_MASK,
->   			 PAGE_ALIGN(data.size + (data.phys_map & ~PAGE_MASK)));
-> -
-> -	register_addrs_set(smp_group, TO_UNCACHE(0x1fe01000), 16);
-> -	register_addrs_set(loongson_chipcfg, TO_UNCACHE(0x1fe00180), 16);
-> -	register_addrs_set(loongson_chiptemp, TO_UNCACHE(0x1fe0019c), 16);
-> -	register_addrs_set(loongson_freqctrl, TO_UNCACHE(0x1fe001d0), 16);
->   }
->   
->   static int __init init_cpu_fullname(void)
+> This patch series just put these patches together, and with a new patch 5.
+> these five patches are the fixups for kexec, vmcore and improvements
+> for vmcoreinfo and memory layout dump.
+>
+> The main changes in the five patchs as below,
+> Patch 1: Add a fast call path of crash_kexec() as other Arch(x86, arm64) do.
+> Patch 2: use __smp_processor_id() instead of smp_processor_id() to cleanup
+>          the console prints.
+> Patch 3: Add VM layout, va bits, ram base to vmcoreinfo, which can simplify
+>          the development of crash tool as ARM64 already did
+>          (arch/arm64/kernel/crash_core.c).
+> Patch 4: Add modules to virtual kernel memory layout dump.
+> Patch 5: Fixup to get correct kernel mode PC for vmcore
+>
+> With these 5 patches(patch 3 is must), crash tool can work well to analyze
+> a vmcore. The patches for crash tool for RISCV64 is in the link:
+> https://lore.kernel.org/linux-riscv/20220717042929.370022-1-xianting.tian@linux.alibaba.com/
+>
+> Xianting Tian (5):
+>   RISC-V: Fixup fast call of crash_kexec()
+>   RISC-V: use __smp_processor_id() instead of smp_processor_id()
+>   RISC-V: Add arch_crash_save_vmcoreinfo support
 
-These information, although removed here, are actually available in the 
-official docs repo [1], so no harm in cleaning the code. Thanks.
+Vmcoreinfo changes need to be documented in
+Documentation/admin-guide/kdump/vmcoreinfo.rst
 
-Reviewed-by: WANG Xuerui <git@xen0n.name>
+Otherwise, I suggest to always cc kexec mail list (added in cc) for
+kexec | kdump patches.
 
-[1]: 
-https://loongson.github.io/LoongArch-Documentation/Loongson-3A5000-usermanual-EN.html
+
+>   riscv: Add modules to virtual kernel memory layout dump
+>   RISC-V: Fixup getting correct current pc
+>
+>  arch/riscv/kernel/Makefile          |  1 +
+>  arch/riscv/kernel/crash_core.c      | 29 +++++++++++++++++++++++++++++
+>  arch/riscv/kernel/crash_save_regs.S |  2 +-
+>  arch/riscv/kernel/machine_kexec.c   |  2 +-
+>  arch/riscv/kernel/traps.c           |  4 ++++
+>  arch/riscv/mm/init.c                |  4 ++++
+>  6 files changed, 40 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/riscv/kernel/crash_core.c
+>
+> --
+> 2.17.1
+>
+> --
+> Crash-utility mailing list
+> Crash-utility@redhat.com
+> https://listman.redhat.com/mailman/listinfo/crash-utility
+> Contribution Guidelines: https://github.com/crash-utility/crash/wiki
+>
+
+Thanks
+Dave
 

@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBB857D869
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8674B57D86B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 04:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiGVCQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 22:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S229938AbiGVCQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 22:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbiGVCPv (ORCPT
+        with ESMTP id S234091AbiGVCQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 22:15:51 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1919B97A2E
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:14:55 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id D03033200A0F;
-        Thu, 21 Jul 2022 22:14:53 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute3.internal (MEProxy); Thu, 21 Jul 2022 22:14:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1658456093; x=1658542493; bh=H0tl7PYIst
-        6EluLo0kFgVp0YPK66a1VCVK0YVnBYtdQ=; b=XMr/vzsqtjUhx4qJ6nIKZoOgwx
-        Il101nyVf4Qawew0CVXD+BdBg004WJPtgMwIrK/iT6+dp35c30ma9CifwhqMqdc3
-        G/D3kl8lONv4B28QYi/poVspfW7QqNRDHKLDYQNPM8nEHAbcUlrMYlIYpbZOLTnk
-        sZRp6J9418yZYy7bOQ1c2ULYUBWE5IJDg/WMInq3JPfZefZ7+kMcGQCk/VXzyVNw
-        YhansR1LXwbbZqAxXZkcToqpUv+3YP6mh099TfJS/LM9dajL/cPFqjXmQ0DBXJAj
-        gR62K+7BloTkG+MeKNbXiM7NrAMnNIcKEn3JAqFQxDlRbafrMTAmg8KG/e6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658456093; x=1658542493; bh=H0tl7PYIst6EluLo0kFgVp0YPK66
-        a1VCVK0YVnBYtdQ=; b=29tyYDOZyrky5oAbH/mdbhoNzxgmajpnmN4F2I1bsfZE
-        bos/mYrXPSTtP3HD629aitLHz4HxnIHNsDU9T5dO2ta469bAOOqxcH5Y7UzStPjx
-        wcK53Qy7Ter9VBb+PinjLGVqlRXfWIUJPnU8mBTrKyn7dhJkYhZvj7sRKGIqME8z
-        PaGYEIuQN8EELkcFQcAqDPIw+KkgWlzZ7k8uqDI8J7jQEnk7/LdkCeWl6IaiDZws
-        6O7oMILMhG8EcIGcjCtHIKpdn+d/xKMyQK0z8UUtwePKS4ailyQlVykqiRLDAByD
-        mcRGcEvriesLdJHcAbOKDd2tHJJ/PmpTaJHytxRoww==
-X-ME-Sender: <xms:GwjaYicYlejJwx799R_14Wvpol1rns_pOpQZ1xi3Ef7WX9TCnA_cyA>
-    <xme:GwjaYsNuGFmGkRBraQ50Z5p_fj1M5PG3iGEN_nsjdmR8t3k3wO1UyZCFZGcoKSU8a
-    TWUUpGH8KNFF5odWQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtuddgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
-    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
-    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnughrvgifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:GwjaYjizDhAVIdpkkVpWfm54-tDyei5hQuTDjmaD1EP5C6Kq5-T1eg>
-    <xmx:GwjaYv8Kyhf-GyJIiErN0oYjYV-9nzzxD_yzRpj41HLchsAZ8nV-wA>
-    <xmx:GwjaYuuMPyiW2-Ohp796VPmZFuVD4UJNGyATHMr7HokYZvUKJvMTOQ>
-    <xmx:HQjaYijVJHWT_PaZ2jlGAtYQIjoCb74kL9xJS2QOG1aXtbAaRnBzDw>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7007E1700082; Thu, 21 Jul 2022 22:14:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-755-g3e1da8b93f-fm-20220708.002-g3e1da8b9
-Mime-Version: 1.0
-Message-Id: <0503175d-944d-4ffa-ba39-ff99797e78a1@www.fastmail.com>
-In-Reply-To: <20220603123904.30714-1-linmq006@gmail.com>
-References: <20220603123904.30714-1-linmq006@gmail.com>
-Date:   Fri, 22 Jul 2022 11:44:31 +0930
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Miaoqian Lin" <linmq006@gmail.com>,
-        "Joel Stanley" <joel@jms.id.au>,
-        "Chia-Wei, Wang" <chiawei_wang@aspeedtech.com>,
-        "Patrick Venture" <venture@google.com>,
-        "Robert Lippert" <roblip@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] soc: aspeed: Fix IRQ check in aspeed_lpc_snoop_config_irq
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 21 Jul 2022 22:16:38 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E5262F9
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:16:37 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 17so3397278pfy.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 19:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xe422so7ud5t4YBuAP/W7X4X+zOAjoGHV1YSVXSBWHs=;
+        b=UdnkYII0Mpk5gU0mPLoZ2kG0/OaBeGUAjgxOzrlE+RJPmHsy1ze+cw7/7CzyOwl/m6
+         3c9ZWSWpY1zC3E2/C6du47ou8KFtaz5aSQViJNcTai3NYKQ3mQR7vQUSq6qmjMUbdoTU
+         LeGWmh0TGSxm7RQ4m6tSe63+kOTqRZ40O9iY0vAzaVIjNYXk2vyfI/wvqF0gepZ3Dl1q
+         uWDhenbsKj1wwazDWAXb5o+dRllBXJG6X5v0PgnXoeX4WJs5nLhsjbXQvePgdZ+AKw3O
+         fAUyfQMuW11vXuLj9ebBhbjoXyUck8Xvi7WmYb+ZzcKxhX+6/ibjwqRxUzomAk2IDTkn
+         iMCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Xe422so7ud5t4YBuAP/W7X4X+zOAjoGHV1YSVXSBWHs=;
+        b=3vJMd7Z66Z+A0vO2a6Px+UudZdzNbwy2rc1zvgUBs2FQlxoJ7JwVNnKK4t3CS4AX9X
+         Fn9dmBeO4bBXCtZXSbO351yKbDvU+HEy0oXJvmMhw6jo2dnmBlTbEqEMmKqtRH6eGpcH
+         ZUwdV/XizdcsMPoERNGQ1P8Cme5NhDc+FGQCucMFv4N8N3gimXHj0mGvEGtMqDCTTzVn
+         mbetIpTn4qMPjyvUdtZUVbPrjPn97IGQMJiZrUHk24mPaTo9DLb1xIF0VMFxS7Wzo/J2
+         1oHD61vji7Fs5AyyhLgaueMGxXnleqvA1zm4b1vsq6EaGfDeon6l35wh2qTvXK0SrQaS
+         TS4g==
+X-Gm-Message-State: AJIora8axLCUicUtGuSj4UyPG9afoaV5alVu6nTJ6A6ykFJPne7tynlR
+        B4Oad88k1L7GOw34WANH4mmDEA==
+X-Google-Smtp-Source: AGRyM1uh0a9LLTCNKRh+u/DKFqJBSZpJ4ioHEmsFBqJSyNsfFlXf07R8aGw3AcdIjWwCL7tIyFH2WQ==
+X-Received: by 2002:aa7:9afa:0:b0:528:bbf7:e444 with SMTP id y26-20020aa79afa000000b00528bbf7e444mr1127722pfp.71.1658456196235;
+        Thu, 21 Jul 2022 19:16:36 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id f5-20020aa79d85000000b00525161431f5sm2448652pfq.36.2022.07.21.19.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 19:16:35 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 19:16:35 -0700 (PDT)
+X-Google-Original-Date: Thu, 21 Jul 2022 18:56:05 PDT (-0700)
+Subject:     Re: [PATCH 0/2] riscv: Add macro for multiple nop instructions
+In-Reply-To: <20220607143059.1054074-1-heiko@sntech.de>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, mick@ics.forth.gr,
+        samuel@sholland.org, cmuellner@linux.com, philipp.tomsich@vrull.eu,
+        Christoph Hellwig <hch@lst.de>, heiko@sntech.de
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     heiko@sntech.de
+Message-ID: <mhng-24b00ffb-dcaa-40b3-8da3-2c2fe26ea3aa@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Fri, 3 Jun 2022, at 22:09, Miaoqian Lin wrote:
-> platform_get_irq() returns negative error number instead 0 on failure.
-> And the doc of platform_get_irq() provides a usage example:
+On Tue, 07 Jun 2022 07:30:57 PDT (-0700), heiko@sntech.de wrote:
+> Some cases need multiple nop instructions and arm64 already has a
+> nice helper for not needing to write all of them out but instead
+> use a helper to add n nops.
 >
->     int irq = platform_get_irq(pdev, 0);
->     if (irq < 0)
->         return irq;
+> So add a similar thing to riscv and convert the T-Head PMA
+> alternative to use it.
 >
-> Fix the check of return value to catch errors correctly.
 >
-> Fixes: 9f4f9ae81d0a ("drivers/misc: add Aspeed LPC snoop driver")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> Heiko Stuebner (2):
+>   riscv: introduce nops and __nops macros for NOP sequences
+>   riscv: convert the t-head pbmt errata to use the __nops macro
+>
+>  arch/riscv/include/asm/asm.h         | 15 +++++++++++++++
+>  arch/riscv/include/asm/barrier.h     |  2 ++
+>  arch/riscv/include/asm/errata_list.h |  8 +-------
+>  3 files changed, 18 insertions(+), 7 deletions(-)
 
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Thanks, these are on for-next.  I had to fix up some minor conflicts, but
+hopefuly nothing went wrong.

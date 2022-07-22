@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93F957E493
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CA057E497
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbiGVQlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S235837AbiGVQln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235292AbiGVQlI (ORCPT
+        with ESMTP id S229937AbiGVQll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:41:08 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D4F32048
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9SLaDrK5tRcSR7Loc6X3TUEFVyae8NMhj0dJu7y1PB8=; b=rbMjdKZFn2TfSM7eZbFp5WUAeb
-        ERtNUKiK40IFpqA04fz2tZJ0yFt6Eo++0oYQBI4s5F4ZHiVr/oS2xlxlPsC39sAZB7ARQsPt7dOmT
-        uWJcGl8cV+xS5MknYhvd2C6fp0gu0IejlOIlHZbZPhwbe9HW7IeDlVifbOInoca6JqnJ9AguLhDZ3
-        vL7qgnnh/m0uQ67ZZ64pp8J0l2U7WqQxcWXLV0QIfCaC2GS+DUTpCEIrNIDaHNwUQNlminnMZC344
-        /YdaITUaWyhsod26DHyKQ3kO2us1UM+ZiUC6+9w68OaRydutYz20WfpV2n3hfaNX7zrx0q+XKfv5m
-        ZTL+nfUg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEvi7-007zu1-3e; Fri, 22 Jul 2022 16:41:07 +0000
-Date:   Fri, 22 Jul 2022 09:41:07 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH 0/3] dm-verity: optionally use tasklets in dm-verity
-Message-ID: <YtrTI/CJMoLihA/1@infradead.org>
-References: <20220722093823.4158756-1-nhuck@google.com>
+        Fri, 22 Jul 2022 12:41:41 -0400
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0EC5FACB;
+        Fri, 22 Jul 2022 09:41:40 -0700 (PDT)
+Received: from [44.168.19.21] (unknown [86.242.59.24])
+        (Authenticated sender: f6bvp@free.fr)
+        by smtp3-g21.free.fr (Postfix) with ESMTPSA id 38A8E13F895;
+        Fri, 22 Jul 2022 18:41:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1658508098;
+        bh=rlcF3KgIs0FMFe9DKk3wBQxyYNlE9M2DFSh/Q2odekM=;
+        h=Date:To:Cc:References:Subject:From:In-Reply-To:From;
+        b=ahw2VbGbUP6QfXSmCLtzpCFUpFes8gs8rTT//nHE/flfU+k1ldDPxjM58lvu63KDq
+         +erobcPtQctDBFvw9/Ao6V8WmQax6xi36BXfQ2NQOsuw3glZIkJnJPadpV1r8Ku04p
+         asSWQI5ATDnAkkhaCCo3cNvUEHcw5rDYNnjDHizh2gjRLJLy/QDop5lOyGkZlXToup
+         RrRsne8WIdxmcJQFgS0ABz0VLFTQ+wjJrnNAZuICDBdRcUtj1UtfwQo09fHNuMn96h
+         FdxsgJgOtwQi9bsdKK1xKDdRAsnf/qWjmJjCxKeQdGGCiRpbKChP4Lp3M0KR7mxaH0
+         IaoHdQ4uH15vw==
+Message-ID: <9c033c36-c291-1927-079b-b4aee5f7ac08@free.fr>
+Date:   Fri, 22 Jul 2022 18:41:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722093823.4158756-1-nhuck@google.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, duoming@zju.edu.cn, edumazet@google.com,
+        f6bvp@free.fr, linux-hams@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, ralf@linux-mips.org
+References: <20220715154314.510ca2fb@kernel.org>
+Subject: Re: [PATCH] net: rose: fix unregistered netdevice: waiting for rose0
+ to become free
+Content-Language: en-US
+From:   Bernard f6bvp <f6bvp@free.fr>
+Organization: Dimension Parabole
+In-Reply-To: <20220715154314.510ca2fb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We've been tying to kill off task lets for about 15 years.  I don't
-think adding new users will make you a whole lot of friends..
+Here is the context.
 
-On Fri, Jul 22, 2022 at 09:38:20AM +0000, Nathan Huckleberry wrote:
-> Using tasklets for disk verification can reduce IO latency.  When there are
-> accelerated hash instructions it is often better to compute the hash immediately
-> using a tasklet rather than deferring verification to a work-queue.  This
-> reduces time spent waiting to schedule work-queue jobs, but requires spending
-> slightly more time in interrupt context.
-> 
-> A tasklet can only be used for verification if all the required hashes are
-> already in the dm-bufio cache.  If verification cannot be done in a tasklet, we
-> fallback the existing work-queue implementation.
-> 
-> To allow tasklets to query the dm-bufio cache, the dm-bufio code must not sleep.
-> This patchset adds a flag to dm-bufio that disallows sleeping.
-> 
-> The following shows a speed comparison of random reads on a dm-verity device.
-> The dm-verity device uses a 1G ramdisk for data and a 1G ramdisk for hashes.
-> One test was run using tasklets and one test was run using the existing
-> work-queue solution.  Both tests were run when the dm-bufio cache was hot.  The
-> tasklet implementation performs significantly better since there is no time
-> waiting for work-queue jobs to be scheduled.
-> 
-> # /data/fio /data/tasklet.fio | grep READ
->    READ: bw=181MiB/s (190MB/s), 181MiB/s-181MiB/s (190MB/s-190MB/s), io=512MiB
->    (537MB), run=2827-2827msec
-> # /data/fio /data/workqueue.fio | grep READ
->    READ: bw=23.6MiB/s (24.8MB/s), 23.6MiB/s-23.6MiB/s (24.8MB/s-24.8MB/s),
->    io=512MiB (537MB), run=21688-21688msec
-> 
-> Nathan Huckleberry (3):
->   dm-bufio: Add flags for dm_bufio_client_create
->   dm-bufio: Add DM_BUFIO_GET_CANT_SLEEP
->   dm-verity: Add try_verify_in_tasklet
-> 
->  drivers/md/dm-bufio.c                         | 29 +++++--
->  drivers/md/dm-ebs-target.c                    |  3 +-
->  drivers/md/dm-integrity.c                     |  2 +-
->  drivers/md/dm-snap-persistent.c               |  2 +-
->  drivers/md/dm-verity-fec.c                    |  4 +-
->  drivers/md/dm-verity-target.c                 | 87 ++++++++++++++++---
->  drivers/md/dm-verity.h                        |  5 ++
->  drivers/md/persistent-data/dm-block-manager.c |  3 +-
->  include/linux/dm-bufio.h                      |  8 +-
->  9 files changed, 119 insertions(+), 24 deletions(-)
-> 
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
-> 
----end quoted text---
+This patch adds dev_put(dev) in order to allow removal of rose module
+after use of AX25 and ROSE via rose0 device.
+
+Otherwise when trying to remove rose module via rmmod rose an infinite
+loop message was displayed on all consoles with xx being a random number.
+
+unregistered_netdevice: waiting for rose0 to become free. Usage count = xx
+
+unregistered_netdevice: waiting for rose0 to become free. Usage count = xx
+
+...
+
+With the patch it is ok to rmmod rose.
+
+This bug appeared with kernel 4.10 and has been only partially repaired 
+by adding two dev_put(dev).
+
+Signed-off-by: Bernard Pidoux <f6bvp@free.fr>
+
+---
+  net/rose/af_rose.c | 2 ++
+  1 file changed, 2 insertions(+)
+
+diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
+index bf2d986a6bc3..4163171ce3a6 100644
+--- a/net/rose/af_rose.c
++++ b/net/rose/af_rose.c
+@@ -711,6 +711,8 @@ static int rose_bind(struct socket *sock, struct 
+sockaddr *uaddr, int addr_len)
+      rose_insert_socket(sk);
+
+      sock_reset_flag(sk, SOCK_ZAPPED);
++
++    dev_put(dev);
+
+      return 0;
+  }
+-- 
+2.34.1
+
+[master da21d19e920d] [PATCH] net: rose: fix unregistered netdevice: 
+waiting for rose0 to become free
+  Date: Mon Jul 18 16:23:54 2022 +0200
+  1 file changed, 2 insertions(+)
+
+

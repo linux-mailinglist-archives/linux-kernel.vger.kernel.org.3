@@ -2,222 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B44E57DFBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA4057DFC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbiGVKZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S234807AbiGVKZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbiGVKZE (ORCPT
+        with ESMTP id S235143AbiGVKZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:25:04 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C549C275;
-        Fri, 22 Jul 2022 03:24:58 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id g1so3252361qki.7;
-        Fri, 22 Jul 2022 03:24:58 -0700 (PDT)
+        Fri, 22 Jul 2022 06:25:06 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9250B9D53E
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:24:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id oy13so7845567ejb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EOEXLOldU7ZOXJVFuOzzIy1TJAM2KQnM9rtTSEMd8Is=;
+        b=Z5hOVzONR2hSjRiyIpxdvM0KIHcqCLzpk7zVnvTl4U4q0oGJ+R8P1MSOShCivcDGPg
+         w8hwkX8kyTjjAAIk2mOyB0xkssTj/6xp6+a184MJvz9UeZvrql57jfD+xFo7ENa3Qrc8
+         sANHEoKz+JtJ7cRXPj+cmURudkULMeTEs0ykQbzpj8OsfhkMdf7L0McBepSGu3461xKW
+         CYiPiZ+KlveknszWEKo+3uOnsp5wt7wKAI+sSz8udVjsRPZVmBxI0lwUcFYr3ck9C7z2
+         TuVFMN2spFkZ4bZcReL/03ezepwh79rnn5AOa+K8IkYMOquX1hg7Ni/r1TtIMHn0etDe
+         qGpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nZH509W1fDdZf+E9OLY1sYyTxMMIeDobeLQYLua0VlU=;
-        b=EjuLf1eyQxaQ0md9WksvrtKUS7xMoobZKbQD0kVSg+HEofejarDTuBXKng67SQfeS8
-         t0xdz3oZlgQ30iXKSzqroqvgInn+mEeWwtI7DmUYgGo7dy07seJT8/t586O6nEVDOGNg
-         LLR6i2E8KcaZjgWdBfmu+oONXYvSS+Rz37JvtvvPkqg6e3GVe6CzIoFr9PHL5hK7BjIS
-         K7OEBWApzZcNYBTd5MtnZP7dO/TIiHs2t/IJs1OO3QXhffwODb/ozqZeUSHMZkmjmSqs
-         5UyKJR/+F15liyzNmHWQglAlbfOENbCiIMmRaTA67Lqefjxf73QDINSJ4ZodIdi4ZbGO
-         tQ4g==
-X-Gm-Message-State: AJIora+Ao3wJbKRr/ToaDDPFXn+Ra0UCu9xI7hVZir4+GcpcfPHnXeot
-        JvOHb8M81z+57I4QPpVukV89Ld0oJ/q0Cg==
-X-Google-Smtp-Source: AGRyM1vQKiumGVsdfSBHnzBICNwjDOGKujpwtDpME55MRZxZ3K3g0GpCzHL/hbPCVYEVQXx/plLFUw==
-X-Received: by 2002:a05:620a:29ce:b0:6a7:1379:62d4 with SMTP id s14-20020a05620a29ce00b006a7137962d4mr1958995qkp.604.1658485497113;
-        Fri, 22 Jul 2022 03:24:57 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id j18-20020a05620a411200b006af10bd3635sm3131220qko.57.2022.07.22.03.24.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 03:24:56 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31e67c46ba2so43013207b3.2;
-        Fri, 22 Jul 2022 03:24:56 -0700 (PDT)
-X-Received: by 2002:a81:4f87:0:b0:31e:7122:16fb with SMTP id
- d129-20020a814f87000000b0031e712216fbmr2473121ywb.358.1658485496374; Fri, 22
- Jul 2022 03:24:56 -0700 (PDT)
+        bh=EOEXLOldU7ZOXJVFuOzzIy1TJAM2KQnM9rtTSEMd8Is=;
+        b=ZwfTCZQEwCzUqaowYMs/y2E6vX/+EZbsNBevZNHwm8lfiXMI3pQEEVSWWHMDEFxZYe
+         7CFJqHeYQyDmHh7nbyBswx8PbBsyAspzedwqoh/Q0wbZ/JBU0bwOHKLv10O/jLPUNW1L
+         2+FxH+7MNWDypfYmiFXV8xlv1OSar9a8OqnaIBIUi6Bj+XURa4FQmWZv6Ozv8XQC9ZG+
+         gwvKRBOvs/QgFz1sNdUjzJRVjfj2kSi7JKIWLG6tNBalsiQn0OSknc1Y/mVE9BPoeKAx
+         ++YsjryhnPu3caopL9lWKrvvqjUdhluL8fQPaRixI3+0X9/IuILgAEjkxmI8yRQM4Evf
+         UsEw==
+X-Gm-Message-State: AJIora+0UmPL/oi6b+5GTFTT0Cu0O78OzThCtcbVmBhxeb+buu55hZoG
+        0mJ7BAZCkEB5wnwyQb/9si7WhvHoOUzGM3/dMl8kvw==
+X-Google-Smtp-Source: AGRyM1vFYiAtSA3wjdx/WgQoZqrPge2ctC3H+IT42M19E6+c398L6CTRywieE5NphxcXhV4vq3frhmFGe2h4M/MlBmY=
+X-Received: by 2002:a17:907:2888:b0:72b:8f41:1405 with SMTP id
+ em8-20020a170907288800b0072b8f411405mr2483664ejc.564.1658485497471; Fri, 22
+ Jul 2022 03:24:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721221212.18491-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220721221212.18491-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdVy0w8Y-+MegHnjdFkQ7vB1Y=jPY-9atTFT_WTVYOiGLg@mail.gmail.com> <CA+V-a8tddFVQnJjKSg9MTKB-Hh3X=2OwsU+THis+KFEfz7KB=g@mail.gmail.com>
-In-Reply-To: <CA+V-a8tddFVQnJjKSg9MTKB-Hh3X=2OwsU+THis+KFEfz7KB=g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 22 Jul 2022 12:24:45 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWzakUT4vEV=MSw+tCReXn0mng1XPKf6iE-5S8q-XQjnw@mail.gmail.com>
-Message-ID: <CAMuHMdWzakUT4vEV=MSw+tCReXn0mng1XPKf6iE-5S8q-XQjnw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
- Document RZ/Five SoC
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220712163823.428126-1-sudip.mukherjee@sifive.com>
+ <20220712163823.428126-3-sudip.mukherjee@sifive.com> <3a9877d0-3cc5-6452-764b-d07b38c72b00@microchip.com>
+ <CAHyZL-fK-d+dPWG63dcFUz17uP-sG4bnSFVW_gt16snnOVTzpQ@mail.gmail.com>
+In-Reply-To: <CAHyZL-fK-d+dPWG63dcFUz17uP-sG4bnSFVW_gt16snnOVTzpQ@mail.gmail.com>
+From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Date:   Fri, 22 Jul 2022 11:24:46 +0100
+Message-ID: <CAHyZL-c9iSd8=CaQ00Nptea4cqp9f7oqS5VefT3vfcr2J3hmSQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mtd: spi-nor: add support for Quad Page Program to no_sfdp_flags
+To:     Tudor Ambarus <Tudor.Ambarus@microchip.com>
+Cc:     Pratyush Yadav <p.yadav@ti.com>, Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hi Tudor,
 
-On Fri, Jul 22, 2022 at 12:21 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Fri, Jul 22, 2022 at 10:31 AM Geert Uytterhoeven
-> <geert@linux-m68k.org> wrote:
-> > On Fri, Jul 22, 2022 at 12:15 AM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > Document RZ/Five (R9A07G043) SYSC bindings. SYSC block found on the
-> > > RZ/Five SoC is almost identical to one found on the RZ/G2L (and alike)
-> > > SoC's. To differentiate RZ/G2UL from RZ/Five, "-rzfive" is included in
-> > > the compatible string for the RZ/Five SoC as there are no interrupts
-> > > from the SYSC block to the core.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Thanks for your patch!
-> >
-> > > ---
-> > >  .../soc/renesas/renesas,rzg2l-sysc.yaml       | 56 +++++++++++++------
-> > >  1 file changed, 39 insertions(+), 17 deletions(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> > > index ce2875c89329..bdaf05f8b29b 100644
-> > > --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> > > +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> > > @@ -20,35 +20,57 @@ description:
-> > >  properties:
-> > >    compatible:
-> > >      enum:
-> > > -      - renesas,r9a07g043-sysc # RZ/G2UL
-> > > -      - renesas,r9a07g044-sysc # RZ/G2{L,LC}
-> > > -      - renesas,r9a07g054-sysc # RZ/V2L
-> > > +      - renesas,r9a07g043-rzfive-sysc # RZ/Five
-> >
-> > renesas,r9a07g043f-sysc?
-> >
-> Agreed.
+On Mon, Jul 18, 2022 at 7:49 PM Sudip Mukherjee
+<sudip.mukherjee@sifive.com> wrote:
 >
-> > But I'm wondering if we really need a different compatible value?
-> > It looks like both blocks differ only in external wiring, so if
-> > anything needs to be handled differently (the removed/added registers
-> > are related to CPU topology), that can be inferred from the system
-> > topology (or even #ifdef CONFIG_{ARM64,RISCV} ;-)
+> On Mon, Jul 18, 2022 at 6:02 PM <Tudor.Ambarus@microchip.com> wrote:
 > >
-> Good point, but I wonder if we would end up in too many #ifdef
-> CONFIG_{ARM64,RISCV} checks. If thats OK I will stick with
-> "renesas,r9a07g043-sysc"
+> > On 7/12/22 19:38, Sudip Mukherjee wrote:
+> > > [You don't often get email from sudip.mukherjee@sifive.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> > >
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > >
+> > > Some flash chips which does not have a SFDP table can support Quad
+> > > Input Page Program. Enable it in hwcaps if defined.
+> > >
 >
-> > > +      - renesas,r9a07g043-sysc        # RZ/G2UL
-> > > +      - renesas,r9a07g044-sysc        # RZ/G2{L,LC}
-> > > +      - renesas,r9a07g054-sysc        # RZ/V2L
-> > >
-> > >    reg:
-> > >      maxItems: 1
-> > >
-> > > -  interrupts:
-> > > -    items:
-> > > -      - description: CA55/CM33 Sleep/Software Standby Mode request interrupt
-> > > -      - description: CA55 Software Standby Mode release request interrupt
-> > > -      - description: CM33 Software Standby Mode release request interrupt
-> > > -      - description: CA55 ACE Asynchronous Bridge Master/Slave interface deny request interrupt
-> > > +  interrupts: true
-> > >
-> > > -  interrupt-names:
-> > > -    items:
-> > > -      - const: lpm_int
-> > > -      - const: ca55stbydone_int
-> > > -      - const: cm33stbyr_int
-> > > -      - const: ca55_deny
-> > > +  interrupt-names: true
-> > >
-> > >  required:
-> > >    - compatible
-> > >    - reg
-> > > -  - interrupts
-> > > -  - interrupt-names
-> > >
-> > >  additionalProperties: false
-> > >
-> > > +allOf:
-> > > +  - if:
-> > > +      not:
-> > > +        properties:
-> > > +          compatible:
-> > > +            contains:
-> > > +              enum:
-> > > +                - renesas,r9a07g043-rzfive-sysc
-> > > +    then:
-> > > +      properties:
-> > > +        interrupts:
-> > > +          items:
-> > > +            - description: CA55/CM33 Sleep/Software Standby Mode request interrupt
-> > > +            - description: CA55 Software Standby Mode release request interrupt
-> > > +            - description: CM33 Software Standby Mode release request interrupt
-> > > +            - description: CA55 ACE Asynchronous Bridge Master/Slave interface deny request interrupt
-> > > +
-> > > +        interrupt-names:
-> > > +          items:
-> > > +            - const: lpm_int
-> > > +            - const: ca55stbydone_int
-> > > +            - const: cm33stbyr_int
-> > > +            - const: ca55_deny
-> > > +
-> > > +      required:
-> > > +        - interrupts
-> > > +        - interrupt-names
-> > > +
-> > > +    else:
-> > > +      properties:
-> > > +        interrupts: false
-> > > +        interrupt-names: false
-> >
-> > Do all interrupts{,-names} have to be moved?
-> > Wouldn't it be sufficient to just have
-> >
-> Agreed.
+> <snip>
 >
-> >     if [...]
-> >     then:
-> >         required:
-> >           - interrupts
-> >           - interrupt-names
-> >     else:
-> >         properties:
-> >             interrupts: false
-> >             interrupt-names: false
+> > > diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> > > index 58fbedc94080f..dde636bdb1a7c 100644
+> > > --- a/drivers/mtd/spi-nor/core.h
+> > > +++ b/drivers/mtd/spi-nor/core.h
+> > > @@ -462,6 +462,7 @@ struct spi_nor_fixups {
+> > >   *   SPI_NOR_OCTAL_READ:      flash supports Octal Read.
+> > >   *   SPI_NOR_OCTAL_DTR_READ:  flash supports octal DTR Read.
+> > >   *   SPI_NOR_OCTAL_DTR_PP:    flash supports Octal DTR Page Program.
+> > > + *   SPI_NOR_QUAD_PP:         flash supports Quad Input Page Program.
 > >
-> > ?
-> >
-> > But again, without a new compatible value, you could just make
-> > interrupts{,-names} not required?
-> >
-> You mean we just make it optional for all the SoC's?
+> > You don't need this flag if your flash supports the 4-byte Address
+> > Instruction Table. Does you flash support it? Can you dump all the
+> > SFDP tables, please?
+>
+> Not sure what the correct way to dump sfdp is. I did this from sysfs.
 
-Indeed.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+I tried decoding this SFDP table and I think the parameters table says
+it has "3-Byte only addressing".
+So, I guess that means it does not support 4-byte Address Instruction
+Table. And the datasheet
+says it supports "Quad Input Page Program (3-byte Address)".
+My existing patchset works for Quad Input Page Program, and I can send
+a v2 with the previous
+patch and this merged together (as you suggested) or I can try
+enabling sfdp for this chip and then use
+a fixup_flags to enable "Quad Input Page Program" which I think will
+be more complicated.
+Which one will you suggest?
 
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards
+Sudip

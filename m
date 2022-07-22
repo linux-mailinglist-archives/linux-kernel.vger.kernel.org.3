@@ -2,98 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9421357E44E
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E18057E451
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbiGVQYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S235302AbiGVQZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiGVQYm (ORCPT
+        with ESMTP id S230501AbiGVQZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:24:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1F58AB31;
-        Fri, 22 Jul 2022 09:24:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 245A2621BD;
-        Fri, 22 Jul 2022 16:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801EFC341C6;
-        Fri, 22 Jul 2022 16:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658507080;
-        bh=ERD6L0tGWO0x9Vzt+94y6IPYs2il1yz7+hLCIIQ9VMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M7syBNh7Q+slzlSg95Ty+U3caUx3OkvdZKYgFaT6zO7YKN9OsdTxAXKpzM/fQ8EUj
-         8laTCMg9BidYfI43AVNQjAskrSgTEIhdawoWcCWFN1EAKRyOqivbfv7qK9N59+Vvnq
-         ixHzlI/3Lkn2UIyRqLOaAICt3NyJKQeAO9La4LBsM3B/cUM9f6Cxa2XXZSNWSWP4n7
-         eKglhO2cux23pKTuvR31k1jROOcx4Jvj6L34W3fwmJ0EjPxsmlZpViqsKNhWnWhV8U
-         qZwtGZ8Kg87h7OJAYIWHEdlyKK+giZJRMb/S/JIukT8Eyn8v4Et7jPN0R8WTIdRmRv
-         SETEtPcVhPZPQ==
-Date:   Fri, 22 Jul 2022 09:24:39 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v4 9/9] xfs: support STATX_DIOALIGN
-Message-ID: <YtrPRysafr5KK3NQ@magnolia>
-References: <20220722071228.146690-1-ebiggers@kernel.org>
- <20220722071228.146690-10-ebiggers@kernel.org>
+        Fri, 22 Jul 2022 12:25:34 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B994F7539C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:25:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p11so3600906lfu.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hardline-pl.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2cHLZsYSzu3vlQWq2uTFZBxgK+nHwwF/vJBUwns59Ds=;
+        b=n5bJ2manL/cCWuwR0ZJd2UvjhGDXg9VMCs+OvLl8bGyfqKipgVkFHueBbViZ2lEBA1
+         6NKiKenhcTxri61yQIaTCHoiV6+sOqsgzuGab5gL8C3miq/ows4KAHWtKz6TrXJvEGmf
+         j4Dffqm/p76WMCjN/vqMZ7AG/++q67fMOnnx7kbUwLmSYewy2QwjAYS4w5V8bf3xo54H
+         4wkmllD15xq9EMw/cMlQcIe4twyMyi2w2808mTnrFhPlse51W3MSJ42rC9GL+9+wc0zQ
+         88JuNMU3uUiozQmZoQhCNIpSzTJFN0MeFUMQJbKOOE6ZqdFbVJFwttBW/m5ZhwknQU6a
+         4Xag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2cHLZsYSzu3vlQWq2uTFZBxgK+nHwwF/vJBUwns59Ds=;
+        b=VgUJJVSaFpc0DCPfx+KtPKsQ8hi9KHpUE4zY79qQGKi2qjFPHEhWKHaAShJcrzzAvN
+         SvSMhRH+SuUr39yBu03QmWl4ZNEmAAzPttKOtNfTM5mKjAPDL4ng1AqcfZgLMO/p3+oz
+         ebKenMGJv7BzH58HtV4EL+SzEEoWG+cxzndkBV/wqYUbDezgvm2BFzTBsVtkXxn9cbIy
+         GNfFPiwI6dbzIn9yBXQiLAiorq4qu9uIRZJ+iOG7MinJztuV83J7YfFHjiGoWb0f9Kmu
+         M3E0oeVvjnom5BK4LgIrbwWJ9VAFk3AnuUTtKAMS+u6utKKZTvT1ghPxVLAGQXdxPB3j
+         ORFQ==
+X-Gm-Message-State: AJIora+ygI31opN4MyMsw+lNdy1e/jVNtWaFfyZHCDHUMnew6gG+T3iN
+        spaojzU2BlsfFgqYtqwU3PUDZQ==
+X-Google-Smtp-Source: AGRyM1sPLTtJuvAxH41K5c4T5wV2zD6vvOVSwpXKE6dWwQy/OWWh7eYNR6Txk9u9vVFJK0Gagcmh7g==
+X-Received: by 2002:a05:6512:3092:b0:489:dece:5539 with SMTP id z18-20020a056512309200b00489dece5539mr276918lfd.269.1658507130797;
+        Fri, 22 Jul 2022 09:25:30 -0700 (PDT)
+Received: from localhost (89-64-117-232.dynamic.chello.pl. [89.64.117.232])
+        by smtp.gmail.com with ESMTPSA id b1-20020a2eb901000000b0025c8c3747bbsm1209127ljb.37.2022.07.22.09.25.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 09:25:30 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 18:25:29 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal@hardline.pl>
+To:     =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>
+Cc:     Matthew Auld <matthew.william.auld@gmail.com>,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        siqueirajordao@riseup.net, David Airlie <airlied@linux.ie>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, n@nfraprado.net,
+        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net,
+        magalilemes00@gmail.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kunit-dev@googlegroups.com, mwen@igalia.com,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+        tales.aparecida@gmail.com,
+        kernel list <linux-kernel@vger.kernel.org>,
+        leandro.ribeiro@collabora.com,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
+Message-ID: <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-10-maira.canal@usp.br>
+ <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
+ <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220722071228.146690-10-ebiggers@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:12:28AM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On Fri, Jul 22, 2022 at 08:04:51AM -0300, Maíra Canal wrote:
+> On 7/22/22 07:35, Matthew Auld wrote:
+> > On Fri, 8 Jul 2022 at 21:32, Maíra Canal <maira.canal@usp.br> wrote:
+> >>
+> >> From: Arthur Grillo <arthur.grillo@usp.br>
+> >>
+> >> Considering the current adoption of the KUnit framework, convert the
+> >> DRM mm selftest to the KUnit API.
+> > 
+> > Is there a plan to convert the corresponding selftest IGT that was
+> > responsible for running this (also drm_buddy) to somehow work with
+> > kunit? Previously these IGTs were always triggered as part of
+> > intel-gfx CI, but it looks like they are no longer run[1].
+> > 
+> > [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
 > 
-> Add support for STATX_DIOALIGN to xfs, so that direct I/O alignment
-> restrictions are exposed to userspace in a generic way.
+> Hi Matthew,
 > 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> Isabella sent a while ago a patch to IGT adding KUnit compatibility to
+> IGT [1], but there wasn't any feedback on the patch. I believe that soon
+> she will resend the series in order to make all KUnit DRM tests run on IGT.
+> 
+> Any feedback on the patch is welcomed so that we can fix this issue as
+> soon as possible.
+> 
+> [1] https://patchwork.freedesktop.org/patch/489985/
+> 
+> Best Regards,
+> - Maíra Canal
 
-LGTM
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+Hi.
 
---D
+Instead of going back to using IGT for *unit* tests, it would be a better idea
+to adjust the CI to just run the tests once at "build" time (just like e.g.
+checkpatch).
 
-> ---
->  fs/xfs/xfs_iops.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/fs/xfs/xfs_iops.c b/fs/xfs/xfs_iops.c
-> index 29f5b8b8aca69a..bac3f56141801e 100644
-> --- a/fs/xfs/xfs_iops.c
-> +++ b/fs/xfs/xfs_iops.c
-> @@ -605,6 +605,15 @@ xfs_vn_getattr(
->  		stat->blksize = BLKDEV_IOSIZE;
->  		stat->rdev = inode->i_rdev;
->  		break;
-> +	case S_IFREG:
-> +		if (request_mask & STATX_DIOALIGN) {
-> +			struct xfs_buftarg	*target = xfs_inode_buftarg(ip);
-> +
-> +			stat->result_mask |= STATX_DIOALIGN;
-> +			stat->dio_mem_align = target->bt_logical_sectorsize;
-> +			stat->dio_offset_align = target->bt_logical_sectorsize;
-> +		}
-> +		fallthrough;
->  	default:
->  		stat->blksize = xfs_stat_blksize(ip);
->  		stat->rdev = 0;
-> -- 
-> 2.37.0
-> 
+We would then stop executing the same test multiple times on different machines
+(note that both DRM selftests and i915 "mock" selftests are pure unit tests - in
+other words, they don't need the hardware to be present), which would save some
+(small) amount of machine-time that can be utilized to do something that
+actually needs the hardware.
+
+Plus there's no need to maintain the kunit-runner in IGT.
+Note - we're currently going to lose "DMESG-WARN" detection if we go this route,
+but this is something that can be improved on the kunit-side.
+
+-Michał

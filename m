@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0807E57D9C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 07:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BCF57D9C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 07:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbiGVFXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 01:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S229692AbiGVFYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 01:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiGVFW4 (ORCPT
+        with ESMTP id S229505AbiGVFYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 01:22:56 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF94D868BE;
-        Thu, 21 Jul 2022 22:22:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VK3pGzr_1658467343;
-Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VK3pGzr_1658467343)
-          by smtp.aliyun-inc.com;
-          Fri, 22 Jul 2022 13:22:49 +0800
-From:   Liu Song <liusong@linux.alibaba.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] blk-mq: avoid potential infinite loop in __blk_mq_alloc_request
-Date:   Fri, 22 Jul 2022 13:22:23 +0800
-Message-Id: <1658467343-55843-1-git-send-email-liusong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 22 Jul 2022 01:24:08 -0400
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04258868BE
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 22:24:07 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id El8uolwqo9xlAEl8uoA2Wm; Fri, 22 Jul 2022 07:24:05 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 22 Jul 2022 07:24:05 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     James Smart <james.smart@broadcom.com>,
+        Ram Vegesna <ram.vegesna@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH] scsi: elx: efct: Avoid open coded arithmetic in memory allocation
+Date:   Fri, 22 Jul 2022 07:24:03 +0200
+Message-Id: <09772a4478dae212604459a32b68337f7dc1f902.1658467368.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Song <liusong@linux.alibaba.com>
+kmalloc_array()/kcalloc() should be used to avoid potential overflow when
+a multiplication is needed to compute the size of the requested memory.
 
-If "blk_mq_get_tag" returns BLK_MQ_NO_TAG because the value of
-"tags->nr_reserved_tags" is 0, it will fall into an infinite loop in
-"__blk_mq_alloc_requests", so borrow BLK_MQ_REQ_NOWAIT to exit the loop.
+So turn a kzalloc()+explicit size computation into an equivalent kcalloc().
 
-Because "blk_mq_alloc_data" objects are allocated on the stack, changing
-the content of flags will not generate extra impact.
-
-Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- block/blk-mq-tag.c | 1 +
- 1 file changed, 1 insertion(+)
+Discussion about it at:
+   https://lore.kernel.org/all/eab847fe-8d17-1a38-b55e-e68a2f6a1829@linux-m68k.org/
+---
+ drivers/scsi/elx/efct/efct_io.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 2dcd738..6f1d6e6 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -139,6 +139,7 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- 	if (data->flags & BLK_MQ_REQ_RESERVED) {
- 		if (unlikely(!tags->nr_reserved_tags)) {
- 			WARN_ON_ONCE(1);
-+			data->flags |= BLK_MQ_REQ_NOWAIT;
- 			return BLK_MQ_NO_TAG;
+diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
+index c612f0a48839..1ae2e4e950ef 100644
+--- a/drivers/scsi/elx/efct/efct_io.c
++++ b/drivers/scsi/elx/efct/efct_io.c
+@@ -56,7 +56,7 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
  		}
- 		bt = &tags->breserved_tags;
+ 
+ 		/* Allocate SGL */
+-		io->sgl = kzalloc(sizeof(*io->sgl) * num_sgl, GFP_KERNEL);
++		io->sgl = kcalloc(num_sgl, sizeof(*io->sgl), GFP_KERNEL);
+ 		if (!io->sgl) {
+ 			efct_io_pool_free(io_pool);
+ 			return NULL;
 -- 
-1.8.3.1
+2.34.1
 

@@ -2,117 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D676957E756
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDA657E758
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbiGVTZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S235975AbiGVTZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbiGVTZU (ORCPT
+        with ESMTP id S231784AbiGVTZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:25:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AC413F93;
-        Fri, 22 Jul 2022 12:25:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 22 Jul 2022 15:25:24 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C38617AB3;
+        Fri, 22 Jul 2022 12:25:23 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297665329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7665:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B57D86192A;
-        Fri, 22 Jul 2022 19:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F02C341C6;
-        Fri, 22 Jul 2022 19:25:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658517918;
-        bh=xuKtXsTHkn0pTkQYNaGYt7up+YxyXAU6zKa8/F8cb4Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GvVYEz0XVqnnIsn/hR7I+ZMQYYiGNijjl3vDCaO3PrCyIBGadxMl1Lym1d6CZOFYU
-         jXG3IRvDRcyb1jtrPEFjCf5zUoP1AwSdyVmbGXq0yYYGtEsJeJ3rzXHkEP8zMWsLWA
-         2jdQlEMa0uoblsJ9U3ojOVp/Q5wQ1QnLymTnQ9q4hNURDXqCiHF8801S03fKjNh1B2
-         AKez12l/WgOBFyzQOwiVFeBJdQIetKO91HmKRJfq+M0B+CyPrynklOF+JT31gyUwAq
-         I+RPJ0zEhdSeLfy2qcnFOTDAsg+t2kpfsh90wjFjfxtUAoSCOATz+l7efrG+mFtcU4
-         duPVtPhCFkcog==
-Date:   Fri, 22 Jul 2022 21:25:12 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: staging: media: zoran: Deleted dead code
-Message-ID: <20220722212512.265cc13d@coco.lan>
-In-Reply-To: <614ce7e3-ff4e-5d76-e940-2aa222535743@gmail.com>
-References: <20220722182622.23719-1-abhijeet.srivastava2308@gmail.com>
-        <614ce7e3-ff4e-5d76-e940-2aa222535743@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D2EA11EC0666;
+        Fri, 22 Jul 2022 21:25:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658517917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nT/WxNPGWSJTO6+kQuM3FOwCYg2A+BIY4xCaAU3c0V8=;
+        b=AC06S3LGPe5h73iTbcHpi4ZGg7ColSwTlaajXCs+e2KG0bBZaYA37zBljXeX8xeIuwK+vo
+        N/Dhea004+suCjTz60jAA9AWk2lXFYO7Ag6Vb5jbmotR9u08XqNiDH9vftOXWD/nvlDQtH
+        9edeomcKPYV/j5sCa5NTw6mjO8PhysQ=
+Date:   Fri, 22 Jul 2022 21:25:17 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
+Message-ID: <Ytr5ndnlOQvqWdPP@zn.tnic>
+References: <681e4e45-eff1-600c-9b81-1fa9bdf24232@intel.com>
+ <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
+ <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <5db37cc2-4fb1-7a73-c39a-3531260414d0@intel.com>
+ <BYAPR12MB2759AA368C8B6A5F1C31642F8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <YrTq3WfOeA6ehsk6@google.com>
+ <SN6PR12MB276743CBEAD5AFE9033AFE558EB59@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <YtqLhHughuh3KDzH@zn.tnic>
+ <Ytr0t119QrZ8PUBB@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Ytr0t119QrZ8PUBB@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, 22 Jul 2022 20:52:29 +0200
-Philipp Hortmann <philipp.g.hortmann@gmail.com> escreveu:
+On Fri, Jul 22, 2022 at 07:04:23PM +0000, Sean Christopherson wrote:
+> I disagree.  Running an old kernel on new hardware with a different RMP layout
+> should refuse to use SNP, not read/write garbage and likely corrupt the RMP and/or
+> host memory.
 
-> On 7/22/22 20:26, Abhijeet Srivastava wrote:
-> > Deleted part of code in block comment
+See my example below.
+
+> And IMO, hiding the non-architectural RMP format in SNP-specific code so that we
+> don't have to churn a bunch of call sites that don't _need_ access to the raw RMP
+> format is a good idea regardless of whether we want to be optimistic or pessimistic
+> about future formats.
+
+I don't think I ever objected to that.
+
+> > This is nothing else but normal CPU enablement work - it should be done
+> > when it is really needed.
 > > 
-> > Signed-off-by: Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
-> > ---
-> >   drivers/staging/media/zoran/zoran_driver.c | 9 ---------
-> >   1 file changed, 9 deletions(-)
-> > 
-> > diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-> > index b408c1d4e0a7..836edf623571 100644
-> > --- a/drivers/staging/media/zoran/zoran_driver.c
-> > +++ b/drivers/staging/media/zoran/zoran_driver.c
-> > @@ -746,11 +746,6 @@ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
-> >   	.vidioc_enum_input		    = zoran_enum_input,
-> >   	.vidioc_g_input			    = zoran_g_input,
-> >   	.vidioc_s_input			    = zoran_s_input,
-> > -
-> > -/*	.vidioc_enum_output		    = zoran_enum_output,
-> > - *	.vidioc_g_output		    = zoran_g_output,
-> > - *	.vidioc_s_output		    = zoran_s_output,
-> > - */
-> >   	.vidioc_g_std			    = zoran_g_std,
-> >   	.vidioc_s_std			    = zoran_s_std,
-> >   	.vidioc_create_bufs		    = vb2_ioctl_create_bufs,
-> > @@ -762,13 +757,9 @@ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
-> >   	.vidioc_streamon		    = vb2_ioctl_streamon,
-> >   	.vidioc_streamoff		    = vb2_ioctl_streamoff,
-> >   	.vidioc_enum_fmt_vid_cap	    = zoran_enum_fmt_vid_cap,
-> > -/*	.vidioc_enum_fmt_vid_out	    = zoran_enum_fmt_vid_out,*/
-> >   	.vidioc_g_fmt_vid_cap		    = zoran_g_fmt_vid_cap,
-> > -/*	.vidioc_g_fmt_vid_out               = zoran_g_fmt_vid_out,*/
-> >   	.vidioc_s_fmt_vid_cap		    = zoran_s_fmt_vid_cap,
-> > -/*	.vidioc_s_fmt_vid_out               = zoran_s_fmt_vid_out,*/
-> >   	.vidioc_try_fmt_vid_cap		    = zoran_try_fmt_vid_cap,
-> > -/*	.vidioc_try_fmt_vid_out		    = zoran_try_fmt_vid_out,*/
-> >   	.vidioc_subscribe_event             = v4l2_ctrl_subscribe_event,
-> >   	.vidioc_unsubscribe_event           = v4l2_event_unsubscribe,
-> >   };  
-> 
-> Why does the subject line start with "media:" The subsystem is 
-> "staging:" so the subject should start with "staging: media: ..."
-> 
-> I have no clue if this is accepted.
 
-The subsystem is media. The drivers for both drivers/media and
-drivers/staging/media have the same maintainers. The "staging" is 
-just a place where we place stuff that are either not ready for
-upstream or are under deprecation.
+<--- this here.
 
-So, we expect that all subjects start with media:. I prefer if 
-they don't have "staging" at the subject, as makes the driver
-logs more coherent when they're moved in/out staging dir.
+> > Because the opposite can happen: you can add a model check which
+> > excludes future model X, future model X comes along but does *not*
+> > change the RMP format and then you're going to have to relax that model
+> > check again to fix SNP on the new model X.
 
-Regards,
-Mauro
+So constantly adding new models to a list which support a certain
+version of the RMP format doesn't scale either.
+
+If you corrupt the RMP because your kernel is old, you'll crash and burn
+very visibly so that you'll be forced to have to look for an updated
+kernel regardless.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

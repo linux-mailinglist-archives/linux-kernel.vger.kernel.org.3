@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FCB57E437
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB23157E43B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiGVQQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+        id S235577AbiGVQSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiGVQQs (ORCPT
+        with ESMTP id S230501AbiGVQSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:16:48 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B06FD4;
-        Fri, 22 Jul 2022 09:16:46 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 26MGGL52061918;
-        Fri, 22 Jul 2022 11:16:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1658506582;
-        bh=08PwfHBp1fRyc02qP294VlTMgUbHFS8jzINDzdDZnxc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=DyD146mnXS6SnL91b4jDyoEvMxap92DghfdyWRa6UQTDYylbwrmLImf1YJomfvkAn
-         DDWy1vsLJy0v4AlFCzxd8lglpHv9ZQ2Rg/MENCCKDbGnlrPEaKTHBbtp3W5YOlcf3l
-         IzwGK/3a90lphq6ZflVziQzQhEhTgJz1A92HuKLc=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 26MGGL7N018124
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 Jul 2022 11:16:21 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 22
- Jul 2022 11:16:21 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 22 Jul 2022 11:16:21 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 26MGGLwu121736;
-        Fri, 22 Jul 2022 11:16:21 -0500
-Date:   Fri, 22 Jul 2022 11:16:21 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Darren Etheridge <detheridge@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Krunal Bhargav <k-bhargav@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] dt-bindings: display: ti,am65x-dss: Add port
- properties for DSS
-Message-ID: <20220722161621.p35apy5mstpgqhef@reverence>
-References: <20220719080845.22122-1-a-bhatia1@ti.com>
- <20220719080845.22122-2-a-bhatia1@ti.com>
- <20220720232845.GA4164694-robh@kernel.org>
+        Fri, 22 Jul 2022 12:18:08 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2251DFD4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:18:05 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id g12so4865279pfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H3JvjBk5rZE8CylMCyXbpA9801AN+xNrDTvZ4epSXkg=;
+        b=Zvxq3QTNpkDSkq1tK84gybTjc+mVOOo5e5HuakpNkJdweRp032xFQMkmFvRxEhHMUn
+         3aFHS6UETE8+Zj/6VdIBJhwJWSx8ijdOWBqkju379FLK6DjWBvyjQAA2wqhpwUbiEnQL
+         nRRrR98+qAC6SYJE7AVbb9biUyAK0ke4bZZboZD6HlneCWhoyQ3d/vKH75K41q3Mo/iW
+         fsDxOrVzY0dT3iWrq6eRvRCD7O+aip2ekMgJ0qaPw48UBdLBExl3fRpdJPD83mdkf7c2
+         UQyIxCl8NZV+VPNOOgZRV3Slbw3+16/34QSW2sNkfF+JPuOWU5+jQat3/XPx8bkFg/kV
+         6Z5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=H3JvjBk5rZE8CylMCyXbpA9801AN+xNrDTvZ4epSXkg=;
+        b=FaRl98P38OqjC3eKrrd1iq+Z6IqkrbxDZkJiNouj0GQqvKUo8gzGcKMl9QXPqUYG++
+         RcJZbYWc0mZnA36SofFQ+8qCQkpPhp3mDhjCMn2xxJV03iVXLaPuL4kaM11h/adgqK6t
+         bLcffb4QacG534wAMcP/5/N8/AdTSqPZTssSqBUAGmv6gTH7gaGAmWA7fW110Q7lQ9V8
+         VcRdfKrlJG+Onhr3mEpmBOOlKDSq1imcM1Yo8QJeoeMH07/1Qm+0673kfIch8GZxX5eD
+         uJomAKQyfUw6UZOdXm8HBR/VOHNTAoTRD9t4khG1wzECXZy2BYQwy8mu2Sz28K8FzV6v
+         3KpQ==
+X-Gm-Message-State: AJIora+hZ9DqpF7X/lH026FBbnvUhA/axmyvokbwOJQynGnu4IgFh2iu
+        7zarm3lI27Ly88JSOWY3ZvG8dEmVtCDPpmXvcCY=
+X-Google-Smtp-Source: AGRyM1uXxhWO/DeUEIRwooeBofbzNK9MYQD6dG142de1EM9XYp98gEDWYmIb+zcFNVD1VBtYoOI56A==
+X-Received: by 2002:a62:ea01:0:b0:52b:39ec:a72f with SMTP id t1-20020a62ea01000000b0052b39eca72fmr563667pfh.52.1658506684452;
+        Fri, 22 Jul 2022 09:18:04 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:d01c:7038:50b4:cec9:4ce:e06f])
+        by smtp.googlemail.com with ESMTPSA id x5-20020a170902ec8500b0016d21c1b26csm3963621plg.170.2022.07.22.09.18.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 09:18:03 -0700 (PDT)
+From:   Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
+Cc:     abhijeet.srivastava2308@gmail.com,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Rebecca Mckeever <remckee0@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Vihas Makwana <makvihas@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] staging: r8188eu: Inserted empty line after declarations
+Date:   Fri, 22 Jul 2022 21:46:31 +0530
+Message-Id: <20220722161744.14914-1-abhijeet.srivastava2308@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220720232845.GA4164694-robh@kernel.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:28-20220720, Rob Herring wrote:
-> > On the bridge side R0->R2, G0->G1, B0->B2 would be tied to ground.
-> > The bridge sees 24bits of data,  but the lsb's are always zero.
-> 
-> Unless the bridge ignores the LSBs, that's not the right way to do 16 to 
-> 24 bit. The LSBs should be connected to the MSB of the color component 
-> to get full color range.
+Warning found by checkpatch.pl script.
+Signed-off-by: Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
+---
+v2: 
+	- Fix my name on the patch
+v3:
+	- Fix commit message
+v4:
+	- Fix body of explanation
+ drivers/staging/r8188eu/core/rtw_cmd.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I unfortunately cannot point specifics without violating NDAs, so
-will just give a broad perspective.
-
-Correct, this is not ideal, but in certain scenarios with limited
-pins (due to iovoltage groups), we are indeed starting to see this
-kind of usage model starting to pop up. Tradeoff is in a limit on
-image quality, but that tends to be acceptable in certain lower cost
-solutions.
-
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index 5b6a891b5d67..6fbf6e4234cf 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -25,6 +25,7 @@ void rtw_free_evt_priv(struct	evt_priv *pevtpriv)
+ 
+ 	while (!rtw_cbuf_empty(pevtpriv->c2h_queue)) {
+ 		void *c2h = rtw_cbuf_pop(pevtpriv->c2h_queue);
++
+ 		if (c2h && c2h != (void *)pevtpriv)
+ 			kfree(c2h);
+ 	}
+@@ -323,6 +324,7 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+ 	/* prepare ssid list */
+ 	if (ssid) {
+ 		int i;
++
+ 		for (i = 0; i < ssid_num && i < RTW_SSID_SCAN_AMOUNT; i++) {
+ 			if (ssid[i].SsidLength) {
+ 				memcpy(&psurveyPara->ssid[i], &ssid[i], sizeof(struct ndis_802_11_ssid));
+@@ -334,6 +336,7 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
+ 	/* prepare channel list */
+ 	if (ch) {
+ 		int i;
++
+ 		for (i = 0; i < ch_num && i < RTW_CHANNEL_SCAN_AMOUNT; i++) {
+ 			if (ch[i].hw_value && !(ch[i].flags & RTW_IEEE80211_CHAN_DISABLED)) {
+ 				memcpy(&psurveyPara->ch[i], &ch[i], sizeof(struct rtw_ieee80211_channel));
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.34.1
+

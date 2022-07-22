@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C48457E827
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 22:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C844B57E829
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 22:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236779AbiGVUPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 16:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S234091AbiGVUPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 16:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiGVUPR (ORCPT
+        with ESMTP id S236770AbiGVUPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 16:15:17 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83A16475;
-        Fri, 22 Jul 2022 13:15:14 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y4so7086024edc.4;
-        Fri, 22 Jul 2022 13:15:14 -0700 (PDT)
+        Fri, 22 Jul 2022 16:15:20 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A737613D0F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 13:15:19 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id u15-20020a25ab0f000000b0066e49f6c461so4402621ybi.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 13:15:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc;
-        bh=8j0f8kcDZKNlClj0tfXDBIvaZa8cH3iU8GMAMU1+gOA=;
-        b=q6qoXTr6dfiDJ0nyok8qUoXLu2ys9+yRIy9fRN3v3yq0eKGqjwpaOOYNBafQO+usLo
-         fVJ7FwTywsy+RYGwnRLnZUuVHhVc2wLR5NsE3OB2PNUYT9GmOLNKPA+/xNTUHF7X2yYg
-         evJjMVBDJHlUugF5xntkXgYbqkTIPFF3CzyhBleq/yUfdJpeF/t4ob84o2nl2v6Ote2d
-         D2iILOFx6RYsywwSvRYVqbS1gsgOZrPsb9Ie+2ddLV8DDQToBgtgK+p+aOolqyfPd+u9
-         cfWNaj2MYz3/lySlO7GW5ngsbRaxbLupOXk2qtJA1m8dah8SjJFravZNN7+Nzt6690nr
-         lSPg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=c/c766f5IweLiXfTzCwsILplI2BRgHB64Zpkrcr5r4c=;
+        b=IVmB1KhfRC9dhpaTkpIjZ6E3f+Szh9fFdOVOyseY1NVukF8w6zwOAocHq6J1WNgOx7
+         MkeP7D6XmaSW+5oGvdDUL4lzrNGQs+5+3SzlU1AMRuxE8aagduAp2F/E7t9ZmgbuwpjO
+         f306zDfgyelvBDZnfGcG8V+emseVEwfjhn1IjzDmb1pHxpuSwWN5tvBBazNN5/qG4idy
+         0HIiZvpiJVPJ0ZAcKaJCuS/PXvPEoLzAMUJto3JnYgY7Ng6J/iATPcYHANgx87GtHulV
+         wiCPLmIuBvP3zKYVaBGLJd3oDLj4WIAhZAT9wtlrMeNw2yNlJnbECqep3fMPmM0ZgOif
+         HqKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
-        bh=8j0f8kcDZKNlClj0tfXDBIvaZa8cH3iU8GMAMU1+gOA=;
-        b=pjwcg7u5N9mn7ASAfy3NyExqNZbK7i99xD/HXdI7sd8SP+PBLiY9FazJLqps+w/vRb
-         g1eMq3i6CdZCdYTtqJmjqmEzCJ55HjuyfuZHg0L5+VscdG7IFjYn2P6F9F7BZ8o9Epm4
-         p+zN4pd4iXbI8yly3a8O5j1AbmCMZvzUHpEGHJ2pYqofBi9QjoEmbGNcZfR3YtmGjsFy
-         1y4/q4Q+W2yMUrcyvZrQIVG7JD/W7MU22oDyAmJvfodiqoX6cpMj4njlh6/Y67uuvG6X
-         dHue/IE0rgyWNflf7buEmo0Ux3V2iBGgE93hiZfinG4zNGiMpivbu/4IrkYUP7xn3Kmh
-         AKmQ==
-X-Gm-Message-State: AJIora9ibLIcurYlIiVM4xWkKXTmcy4T+/kQnrcgqPRzyZCBgBI1GBFY
-        /3yjj5ahCf/7m+lnC7MCQm4=
-X-Google-Smtp-Source: AGRyM1skF55kV2PsDCz/VqH97+SGixBfyJouwQcU6lPMdag6XwQLdiZUaABv7ZwcjkVsxTY5xSQpJQ==
-X-Received: by 2002:a05:6402:1117:b0:43b:c965:549e with SMTP id u23-20020a056402111700b0043bc965549emr1493693edv.366.1658520913332;
-        Fri, 22 Jul 2022 13:15:13 -0700 (PDT)
-Received: from krava ([83.240.63.177])
-        by smtp.gmail.com with ESMTPSA id w7-20020aa7dcc7000000b0043a83f77b59sm3008685edu.48.2022.07.22.13.15.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 13:15:12 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 22 Jul 2022 22:15:11 +0200
-To:     Lee Jones <lee@kernel.org>
-Cc:     Yonghong Song <yhs@fb.com>, Jiri Olsa <olsajiri@gmail.com>,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/1] bpf: Drop unprotected find_vpid() in favour of
- find_get_pid()
-Message-ID: <YtsFT1yFtb7UW2Xu@krava>
-References: <20220721111430.416305-1-lee@kernel.org>
- <Ytk+/npvvDGg9pBP@krava>
- <Ytk/jT+zyNZpafgn@google.com>
- <YtlDPYQWDcORbP0o@krava>
- <fbc98bb0-a2d6-a450-e6fc-878701e5906d@fb.com>
- <Ytm92NYx4SyKN4Nm@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ytm92NYx4SyKN4Nm@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=c/c766f5IweLiXfTzCwsILplI2BRgHB64Zpkrcr5r4c=;
+        b=VRxkKBCYUKpn/g/tcno4G0KPJApzEArh4Hjkgj6NoDA8gwbQzcy+SfomV4enZvgAjl
+         41dzZzVU0tJ/7kz9kYKuMf7QtvrbRseLRkFRu6jVF5ahsgjysBJJVLN1+OXs7RuZQWuf
+         Dghp93L4AvQ6paE2d4PTpoRjuBEfqUHlPDnGX4GzCopUbJCDRzUq4C3tbo5CbMuhAL8L
+         I/u2QGEzaQ0aaZEzUOfemwOC6qONHga6sfXiuDAiJA115rhQekQYLqLCDDZjfgh2DrbI
+         /SuU9BMeRb+LDE8q1zzuTFjfhvc4cddI4nH1xQIMaShLERcOdU4sriCnYsQR+QMxXGWI
+         +ZMQ==
+X-Gm-Message-State: AJIora87ILwQ7CY879UVAaq4CcQLUBlVTLMPRgUFFfshiX2oQO1rz83e
+        5kkc7j2DFdYIJiACEigvVfc4s2ie7YkxOm07rw1N
+X-Google-Smtp-Source: AGRyM1uRjPK6eRsDWx956R4w3PIY9GowmVfxAwibKdWDAaVTmRSzk/CGssJt4ZsxlokH97WRezORFs8FoPg+8IAOZxDR
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:1623:4cce:b896:4e2f])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:af93:0:b0:670:7de3:6c30 with
+ SMTP id g19-20020a25af93000000b006707de36c30mr1242861ybh.569.1658520918930;
+ Fri, 22 Jul 2022 13:15:18 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 13:15:13 -0700
+Message-Id: <20220722201513.1624158-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH] userfaultfd: don't fail on unrecognized features
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,67 +68,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 09:58:00PM +0100, Lee Jones wrote:
-> On Thu, 21 Jul 2022, Yonghong Song wrote:
-> 
-> > 
-> > 
-> > On 7/21/22 5:14 AM, Jiri Olsa wrote:
-> > > On Thu, Jul 21, 2022 at 12:59:09PM +0100, Lee Jones wrote:
-> > > > On Thu, 21 Jul 2022, Jiri Olsa wrote:
-> > > > 
-> > > > > On Thu, Jul 21, 2022 at 12:14:30PM +0100, Lee Jones wrote:
-> > > > > > The documentation for find_pid() clearly states:
-> > > 
-> > > typo find_vpid
-> > > 
-> > > > > > 
-> > > > > >    "Must be called with the tasklist_lock or rcu_read_lock() held."
-> > > > > > 
-> > > > > > Presently we do neither.
-> > > 
-> > > just curious, did you see crash related to this or you just spot that
-> > > 
-> > > > > > 
-> > > > > > In an ideal world we would wrap the in-lined call to find_vpid() along
-> > > > > > with get_pid_task() in the suggested rcu_read_lock() and have done.
-> > > > > > However, looking at get_pid_task()'s internals, it already does that
-> > > > > > independently, so this would lead to deadlock.
-> > > > > 
-> > > > > hm, we can have nested rcu_read_lock calls, right?
-> > > > 
-> > > > I assumed not, but that might be an oversight on my part.
-> > 
-> > From kernel documentation, nested rcu_read_lock is allowed.
-> > https://www.kernel.org/doc/Documentation/RCU/Design/Requirements/Requirements.html
-> > 
-> > RCU's grace-period guarantee allows updaters to wait for the completion of
-> > all pre-existing RCU read-side critical sections. An RCU read-side critical
-> > section begins with the marker rcu_read_lock() and ends with the marker
-> > rcu_read_unlock(). These markers may be nested, and RCU treats a nested set
-> > as one big RCU read-side critical section. Production-quality
-> > implementations of rcu_read_lock() and rcu_read_unlock() are extremely
-> > lightweight, and in fact have exactly zero overhead in Linux kernels built
-> > for production use with CONFIG_PREEMPT=n.
-> > 
-> > > > 
-> > > > Would that be your preference?
-> > > 
-> > > seems simpler than calling get/put for ppid
-> > 
-> > The current implementation seems okay since we can hide
-> > rcu_read_lock() inside find_get_pid(). We can also avoid
-> > nested rcu_read_lock(), which is although allowed but
-> > not pretty.
-> 
-> Right, this was my thinking.
-> 
-> Happy to go with whatever you guys decide though.
-> 
-> Make the call and I'll rework, or not.
+The basic interaction for setting up a userfaultfd is, userspace issues
+a UFFDIO_API ioctl, and passes in a set of zero or more feature flags,
+indicating the features they would prefer to use.
 
-ok, I can live with the current version ;-) could you please resend
-with fixed changelog?
+Of course, different kernels may support different sets of features
+(depending on kernel version, kconfig options, architecture, etc).
+Userspace's expectations may also not match: perhaps it was built
+against newer kernel headers, which defined some features the kernel
+it's running on doesn't support.
 
-thanks,
-jirka
+Currently, if userspace passes in a flag we don't recognize, the
+initialization fails and we return -EINVAL. This isn't great, though.
+Userspace doesn't have an obvious way to react to this; sure, one of the
+features I asked for was unavailable, but which one? The only option it
+has is to turn off things "at random" and hope something works.
+
+Instead, modify UFFDIO_API to just ignore any unrecognized feature
+flags. The interaction is now that the initialization will succeed, and
+as always we return the *subset* of feature flags that can actually be
+used back to userspace.
+
+Now userspace has an obvious way to react: it checks if any flags it
+asked for are missing. If so, it can conclude this kernel doesn't
+support those, and it can either resign itself to not using them, or
+fail with an error on its own, or whatever else.
+
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ fs/userfaultfd.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index e943370107d0..4974da1f620c 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1923,10 +1923,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
+ 	ret = -EFAULT;
+ 	if (copy_from_user(&uffdio_api, buf, sizeof(uffdio_api)))
+ 		goto out;
+-	features = uffdio_api.features;
+-	ret = -EINVAL;
+-	if (uffdio_api.api != UFFD_API || (features & ~UFFD_API_FEATURES))
+-		goto err_out;
++	/* Ignore unsupported features (userspace built against newer kernel) */
++	features = uffdio_api.features & UFFD_API_FEATURES;
+ 	ret = -EPERM;
+ 	if ((features & UFFD_FEATURE_EVENT_FORK) && !capable(CAP_SYS_PTRACE))
+ 		goto err_out;
+-- 
+2.37.1.359.gd136c6c3e2-goog
+

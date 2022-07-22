@@ -2,165 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC39E57E573
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4BB57E56B
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbiGVRYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
+        id S236138AbiGVRXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235946AbiGVRXx (ORCPT
+        with ESMTP id S236103AbiGVRWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:23:53 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C22980F5E
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:23:37 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id va17so9743491ejb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/clfG4bokvt4j/ATqK3EbX5MJ0abz1lTIwYUzcWrb0A=;
-        b=Q9Tcvp3Z3YKuPcNcL+jFWegHbKeruo+XcF8knqc3eyJHd5EeqOeypzFLZOemycFHKu
-         FzmqrANNM8Pj+BDQ/5bUfxihA0bBJXBwz/07nQDcUd7PDBXGwiM8/MDV0KwAzSiqgxDh
-         Sxu66dZ/tSTtKF2mxkO31MHfO86Zv5u1CMoiA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/clfG4bokvt4j/ATqK3EbX5MJ0abz1lTIwYUzcWrb0A=;
-        b=mEcKcXbrskH+DTBthop/20Gn+AgYxUP6YOPgZAPQW6EW6y9HvN6wrtkoIu84gL0Po9
-         klOvKYO05uU3pJmyNDZSRtBDnO6T0s47/Y6ItKlFp4S9jMUt0T1xIzceE887HeLJf+FF
-         pMI3u32WnJMpo+z3yd+l3sgCe7mNzCZMJi3Z0mFziJhUh5hvhnEvSl+qCcHjhuAr0elN
-         BVpNpMPTSMVvSckIk+LiDEbbfaIBTYppeweWrDXIWE7w2mhhO8I7g4Ak89MBLuHJWUwY
-         qh6zfS1BGP13PAatl7VB+GTzgISQF+IZoxYWxXSE2PMVBRbaUzzZ2QVOnVRivqSYgUf9
-         +wtQ==
-X-Gm-Message-State: AJIora8aviT+6cWfdW7ybNNZcX6DORs3CFq0TAz2m19i1Wb9fME7ufvf
-        QiGTyIZWpAKixgjFAT8fdWvgVCJPHqoudQC/
-X-Google-Smtp-Source: AGRyM1tKeLd/UacbBiXM4wX8u2tumsofpcBEdtuSBoD4OOVL/4KvzprbD/jnNmloXyU9DsfQ1q4NwA==
-X-Received: by 2002:a17:907:3fa8:b0:72b:5895:f54f with SMTP id hr40-20020a1709073fa800b0072b5895f54fmr746337ejc.464.1658510607969;
-        Fri, 22 Jul 2022 10:23:27 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id ec34-20020a0564020d6200b0043ba80364f2sm2815483edb.33.2022.07.22.10.23.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:23:25 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id l15so3349002wro.11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:23:24 -0700 (PDT)
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
- b13-20020adff90d000000b0020cde324d35mr600325wrr.583.1658510604287; Fri, 22
- Jul 2022 10:23:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
- <20220721033918.v3.2.I7ecbb7eeb58c5e6a33e32a3abf4d6874e6cb725c@changeid>
- <CAD=FV=WSBgupLFMCZgianck6uTkAyqrG0WK2ChSbNbJdhOPdLA@mail.gmail.com>
- <4b2fe9d0-f590-0fac-79fa-bb05da1d61df@linaro.org> <CAD=FV=XmaNdc9k98vAwbcN-sm0w_WeqhRsK_AUm3h4LZ5-egmQ@mail.gmail.com>
- <c2b03863-2249-13e6-98e0-731c1b40d0a9@linaro.org> <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
- <8a4999b9-862e-f698-28b9-42d26f680367@linaro.org>
-In-Reply-To: <8a4999b9-862e-f698-28b9-42d26f680367@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 22 Jul 2022 10:23:11 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XBCC6HwUzKJ51LBkfWpXcbY9QepVZfNzQJp3qADzkkQg@mail.gmail.com>
-Message-ID: <CAD=FV=XBCC6HwUzKJ51LBkfWpXcbY9QepVZfNzQJp3qADzkkQg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] dt-bindings: arm: qcom: Document additional sku6
- for sc7180 pazquel
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 13:22:54 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6DE6716A;
+        Fri, 22 Jul 2022 10:22:52 -0700 (PDT)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MGVtvE022983;
+        Fri, 22 Jul 2022 17:22:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id; s=pps0720;
+ bh=oXRW8hD74lU/IWWM5ZJT6FERYDCHxkb6M5KB/I1oOkM=;
+ b=SDVyL2O7CszHGVdV4llLqZ+ET56BM60JqjZz4FgslnuTnvQKzTkM/nRLlUUFRSB5yNeA
+ BXKnyCQqZxTkfNSypiKL41YCkPpdAVFJGtVZRDe0b8/apC92NOJWVwjNCKCCm9tlQnxb
+ d/BGPvWL2yiqC7qA5oDEMDke59kAJZGMzsoJaoLvn/lLdkjtMAtACzcHGp3L/aHVsf1k
+ cFy7/GimtYNP+NQXMUeENxjH9YW44d55CB+WFBkB7gsIGkaxkzwIw+9QfE4JZSVy68Pu
+ Wlgctnxg660nr/ztP8TSDJHijpnAm8zJrFf+M1xdh2FcH5X5DLLR713HanTI7h+jwjLd vg== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3hfx9cgyx5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 17:22:26 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 5C0BC132D6;
+        Fri, 22 Jul 2022 17:22:25 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id EF9FA807916;
+        Fri, 22 Jul 2022 17:22:23 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     nick.hawkins@hpe.com
+Cc:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
+Subject: [PATCH v2 0/5] Add SPI Driver to HPE GXP Architecture
+Date:   Fri, 22 Jul 2022 12:23:30 -0500
+Message-Id: <20220722172335.33404-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: mlqQN_WzmYUDZveRQAQsaIu1-vm_Oe7V
+X-Proofpoint-GUID: mlqQN_WzmYUDZveRQAQsaIu1-vm_Oe7V
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-22_06,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=435 spamscore=0
+ suspectscore=0 bulkscore=0 malwarescore=0 impostorscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207220073
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-On Fri, Jul 22, 2022 at 10:14 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 21/07/2022 20:29, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Thu, Jul 21, 2022 at 9:52 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 21/07/2022 18:43, Doug Anderson wrote:
-> >>> Hi,
-> >>>
-> >>> On Thu, Jul 21, 2022 at 9:33 AM Krzysztof Kozlowski
-> >>> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>
-> >>>> On 21/07/2022 15:37, Doug Anderson wrote:
-> >>>>>
-> >>>>> Not worth sending a new version for, but normally I expect the
-> >>>>> bindings to be patch #1 and the dts change to be patch #2. In any
-> >>>>> case:
-> >>>>>
-> >>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> >>>>
-> >>>> I would say worth v4, because otherwise patches is not bisectable.
-> >>>
-> >>> You're saying because `dtbs_check` will fail between the two?
-> >>
-> >> Yes
-> >
-> > OK. Then I assume you agree that reversing the order of the patches
-> > won't help, only combining the two patches into one.
-> >
-> >
-> >>> How does
-> >>> flipping the order help? If `dtbs_check` needs to be bisectable then
-> >>> these two need to be one patch, but I was always under the impression
-> >>> that we wanted bindings patches separate from dts patches.
-> >>
-> >> I don't think anyone said that bindings patches must be separate from
-> >> DTS. The only restriction is DTS cannot go with drivers.
-> >
-> > I have always heard that best practice is to have bindings in a patch
-> > by themselves.
->
-> Yes, bindings must be separate patch, no one here objects this. You said
-> they cannot go together via one maintainer tree or I misunderstood?
->
-> > If I've misunderstood and/or folks have changed their
-> > minds, that's fine, but historically I've been told to keep them
-> > separate.
->
-> Nothing changed. Bindings must be separate. They will be applied by
-> maintainer and, if correctly ordered, this is bisectable.
+Changes since v2:
+ *Changed the CONFIG_SPI_GXP from y to m in defconfig
+ *Removed extra space around < > for reg in hpe,gxp-spifi.yaml
+ *Changed interrupt-parrent to interrupt-parent in hpe,gxp-spifi.yaml
+ *Removed repeated include file in spi-gxp.c
+ *Removed unnecessary initialization of ret variable in spi-gxp.c
+ *Removed conditional variable checks where failure is not possible in
+  spi-gxp.c
+ *Removed unecessary variable cs in spi-gxp.c
+ *Removed blank gxp-spifi-remove function in spi-gxp.c
+ *Fixed error messages so they are not repetitive
 
-OK, I think this is the disconnect here.
+The GXP supports 3 separate SPI interfaces to accommodate the system
+flash, core flash, and other functions. The SPI engine supports variable
+clock frequency, selectable 3-byte or 4-byte addressing and a
+configurable x1, x2, and x4 command/address/data modes. The memory
+buffer for reading and writing ranges between 256 bytes and 8KB. This
+driver supports access to the core flash and bios part.
 
-No matter what order Jimmy's patches land in, it won't be bisectable
-from the standpoint of "make dtbs_check". This is what I've been
-trying to say.
+Nick Hawkins (5):
+  spi: spi-gxp: Add support for HPE GXP SoCs
+  spi: dt-bindings: add documentation for hpe,gxp-spifi
+  ARM: dts: hpe: Add spi driver node
+  ARM: configs: multi_v7_defconfig: Enable HPE GXP SPI driver
+  MAINTAINERS: add spi support to GXP
 
-* If the bindings land first then the device tree won't have sku6 and
-will fail "make dtbs_check"
+ .../bindings/spi/hpe,gxp-spifi.yaml           |  56 +++
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  58 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                |  21 +-
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ drivers/spi/Kconfig                           |   7 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-gxp.c                         | 325 ++++++++++++++++++
+ 8 files changed, 470 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+ create mode 100644 drivers/spi/spi-gxp.c
 
-* If the dts lands first then the bindings won't have sku6 and will
-fail "make dtbs_check".
+-- 
+2.17.1
 
-Am I missing something?
-
-So when you said "I don't think anyone said that bindings patches must
-be separate from DTS" and that you cared about "make dtbs_check" being
-bisectable that you were saying you wanted these squashed into one
-patch. I guess that's not the case.
-
--Doug

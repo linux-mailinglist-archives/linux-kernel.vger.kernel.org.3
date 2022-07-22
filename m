@@ -2,133 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F61F57E272
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C6B57E280
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiGVNl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S234449AbiGVNoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbiGVNlx (ORCPT
+        with ESMTP id S229605AbiGVNow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:41:53 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622C713E36
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:41:52 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id j26so5513049lji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dx7D0BqkkDvjmBT9gC4DV9N7HZuC2AWyX/zQVsh2Lhg=;
-        b=Mav9qQe7Hay6uovpG8VBsmTfL/xzD90QiB1XmORe5cOsqAXIlePMrDnpAKjk2SPHlU
-         kb5Ut7GMhYSuGugphdGTCzl4QS6dVbBemaHVAe/68tr5YLIdKH+1dl3Be+60VFt6Mw1X
-         89ZZ7H+XeGTtXT+aoENzLnwYujx0UEFEHIllUI+2lj18vV6lg2lkpPDYX2L9dVq8r5Mu
-         ohtc/xno0dA+uaPEz0e57vbqZPXDLbKUqdzl3NXPeMXzZjWy8P656YDqqiKQAcIZgP12
-         9CxD2oRBzvv/UqkEIIr6I79Mj6do1s20CN+FUt2qGuSgsOMDu5gIKWU0Uw89VqdLMCEK
-         WJOw==
+        Fri, 22 Jul 2022 09:44:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB7105A164
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658497490;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dWRpA1oxrDhiiXkeV9SXJ/F3tpuLhpf/KYwSClNmv+Q=;
+        b=Uusg2UMZY1fOiOM3HjpP07qPeiB9sVa3K0WsCPdp5jCn0boeUXWBCBpNpY3JJgOG3in3P7
+        9+ZR8yJQyozqfFZbxNp2gvx0tC8j11M9ljjFSmb5ZqyekNVD8vthnGXMc7XL7i/cu4CNaG
+        4gwBeGv9T9+DuaA9tcmciUCRQ6xP2+E=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-400-YKXp6rfQNpykicoH6ZEmUQ-1; Fri, 22 Jul 2022 09:44:49 -0400
+X-MC-Unique: YKXp6rfQNpykicoH6ZEmUQ-1
+Received: by mail-qv1-f69.google.com with SMTP id p6-20020a0c8c86000000b004731e63c75bso3060661qvb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:44:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dx7D0BqkkDvjmBT9gC4DV9N7HZuC2AWyX/zQVsh2Lhg=;
-        b=i3kgreyAKjvyjc4hwQB4lhTCW6Qyn6TVqcxeKcWhrjNstUZkqKUBvl2W3uJvnyCUCh
-         QVphDtkg+BbI2+vIU51N1KIVZ0B78gLa17mYvyGvjSQ5aatJVKPxLhPGtbsHVkXWtuHm
-         peLhv2s7RE6vsgkQCF7ZdSNKD0l/cjdLi9tRA9RguIGiH68DsPJjhPee5J4afR2A2DMF
-         ALpc4chRTm0ZnlQmSjaeyKqEs3ZooQrH2AR5H4sGqC5LFIIiAAa3la290DbdOlAI8Bpy
-         qdXNJuhIT1wEjicsVkzcMxeglXIOAv9fOXNq/gu3c4cp3vUntA/b6PvXDMC2NIQKF96/
-         ljAg==
-X-Gm-Message-State: AJIora+85B5kOhouV6vQ9wF0im54IzgPABABj/q3qaBpgeChUAR/pw8S
-        ofF1ZxA5UafOGRpnvu/D9SH9RGZU4Q5ZaYZhBlW/mG97fWEkzw==
-X-Google-Smtp-Source: AGRyM1vqDflld4FdeS1YXh0RjgxlOzCf0nGqPxhUwqvkb5F6yDAk/Z183xcr0L3QZpAS70KrFAFPlj5+eHC8c+4k4GY=
-X-Received: by 2002:a2e:bd0e:0:b0:25a:88b3:9af6 with SMTP id
- n14-20020a2ebd0e000000b0025a88b39af6mr24943ljq.363.1658497309800; Fri, 22 Jul
- 2022 06:41:49 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dWRpA1oxrDhiiXkeV9SXJ/F3tpuLhpf/KYwSClNmv+Q=;
+        b=R4qti0QSuT1fkyXjZosdPuYW5I103RXtiykTL+ivt8b1hQI4PM07IQ+nLeYn35eaTc
+         x/lixE1dcidOtkUqw/mOGR+wcs1OSnWDf03zLz/JoLWWl1C6V60K+utX/cXOarxLItyl
+         JPRDEXCsDJS6jFkthOz2yBtvmHZFnkJmG2z2l0vwJtFQ+ywtZk/c+jKr56yXjk34Bpcy
+         EE1FC5ePC+AaEf8CLd2g8MGYR7U0O1TjpXIlHD/+SObU/mDQqdo6x/xvltYuCTev4htX
+         G91KioprusStZ7HYDKzGawzDLkqVom+kcow1JGLw5H78/wQ7ih+8v0n63r7AAySAHmMz
+         L6ZQ==
+X-Gm-Message-State: AJIora+Y9F/tRQOfnRv5ihLZqCHuwxNy+PRem2ZrqLEsKT10p/UobSpB
+        DLzQ0BAJ/PDkAqoI6wSkR7bp82JJLB7gNubuX83uxPdCDQxy+LjU/P3/GygEQI5uTDIU4/OlLGG
+        wfF4CI7o/tUg5tuGG5sAZuyB1
+X-Received: by 2002:a05:622a:1348:b0:31f:f43:7b0 with SMTP id w8-20020a05622a134800b0031f0f4307b0mr104023qtk.542.1658497489252;
+        Fri, 22 Jul 2022 06:44:49 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vKzrn573LpWJtRxxYtx4oCk45bHJ2Ynw6wt+cSmM7wiFCel74/dsXZJXHafRdPD13PIVMvKg==
+X-Received: by 2002:a05:622a:1348:b0:31f:f43:7b0 with SMTP id w8-20020a05622a134800b0031f0f4307b0mr104007qtk.542.1658497489026;
+        Fri, 22 Jul 2022 06:44:49 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id m12-20020a05620a290c00b006b5d9a1d326sm3784492qkp.83.2022.07.22.06.44.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 06:44:48 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 09:44:47 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v3 2/3] selftests: soft-dirty: Add test for mprotect
+Message-ID: <Ytqpz03yRq+DlAdq@xz-m1.local>
+References: <20220721183338.27871-1-peterx@redhat.com>
+ <20220721183338.27871-3-peterx@redhat.com>
+ <8fbbd68f-267c-1e0d-a578-7da4551c4c19@redhat.com>
 MIME-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-2-elver@google.com>
- <Ytl9L0Zn1PVuL1cB@FVFF77S0Q05N.cambridge.arm.com> <20220722091044.GC18125@willie-the-truck>
- <CACT4Y+ZOXXqxhe4U3ZtQPCj2yrf6Qtjg1q0Kfq8+poAOxGgUew@mail.gmail.com>
- <20220722101053.GA18284@willie-the-truck> <CACT4Y+Z0imEHF0jM-f-uYdpfSpfzMpa+bFZfPeQW1ECBDjD9fA@mail.gmail.com>
- <20220722110305.GA18336@willie-the-truck>
-In-Reply-To: <20220722110305.GA18336@willie-the-truck>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 22 Jul 2022 15:41:38 +0200
-Message-ID: <CACT4Y+aLiNNt3ESZUKHT9U8duN-TMK561nC7Htx9y3R7afCV4g@mail.gmail.com>
-Subject: Re: [PATCH v3 01/14] perf/hw_breakpoint: Add KUnit test for
- constraints accounting
-To:     Will Deacon <will@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8fbbd68f-267c-1e0d-a578-7da4551c4c19@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 at 13:03, Will Deacon <will@kernel.org> wrote:
-> > > > > > On Mon, Jul 04, 2022 at 05:05:01PM +0200, Marco Elver wrote:
-> > > > > > I'm not immediately sure what would be necessary to support per-task kernel
-> > > > > > breakpoints, but given a lot of that state is currently per-cpu, I imagine it's
-> > > > > > invasive.
-> > > > >
-> > > > > I would actually like to remove HW_BREAKPOINT completely for arm64 as it
-> > > > > doesn't really work and causes problems for other interfaces such as ptrace
-> > > > > and kgdb.
-> > > >
-> > > > Will it be a localized removal of code that will be easy to revert in
-> > > > future? Or will it touch lots of code here and there?
-> > > > Let's say we come up with a very important use case for HW_BREAKPOINT
-> > > > and will need to make it work on arm64 as well in future.
-> > >
-> > > My (rough) plan is to implement a lower-level abstraction for handling the
-> > > underlying hardware resources, so we can layer consumers on top of that
-> > > instead of funneling through hw_breakpoint. So if we figure out how to make
-> > > bits of hw_breakpoint work on arm64, then it should just go on top.
-> > >
-> > > The main pain point for hw_breakpoint is kernel-side {break,watch}points
-> > > and I think there are open design questions about how they should work
-> > > on arm64, particularly when considering the interaction with user
-> > > watchpoints triggering on uaccess routines and the possibility of hitting
-> > > a kernel watchpoint in irq context.
-> >
-> > I see. Our main interest would be break/watchpoints on user addresses
-> > firing from both user-space and kernel (uaccess), so at least on irqs.
->
-> Interesting. Do other architectures report watchpoint hits on user
-> addresses from kernel uaccess? It feels like this might be surprising to
-> some users, and it opens up questions about accesses using different virtual
-> aliases (e.g. via GUP) or from other entities as well (e.g. firmware,
-> KVM guests, DMA).
+On Fri, Jul 22, 2022 at 09:17:34AM +0200, David Hildenbrand wrote:
+> On 21.07.22 20:33, Peter Xu wrote:
+> > Add two soft-diryt test cases for mprotect() on both anon or file.
+> 
+> s/soft-diryt/soft-dirty/
 
-x86 supports this.
-There is that attr.exclude_kernel flag that requires special permissions:
-https://elixir.bootlin.com/linux/v5.19-rc7/source/kernel/events/core.c#L12061
-https://elixir.bootlin.com/linux/v5.19-rc7/source/kernel/events/core.c#L9323
-But if I understand correctly, it only filters out delivery, the HW
-breakpoint fires even if attr.exclude_kernel is set.
+Fixed.
 
-We also wanted to relax this permission check somewhat:
-https://lore.kernel.org/all/20220601093502.364142-1-elver@google.com/
+> 
+> > 
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  tools/testing/selftests/vm/soft-dirty.c | 69 ++++++++++++++++++++++++-
+> >  1 file changed, 68 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/vm/soft-dirty.c b/tools/testing/selftests/vm/soft-dirty.c
+> > index 08ab62a4a9d0..7d93906aa43f 100644
+> > --- a/tools/testing/selftests/vm/soft-dirty.c
+> > +++ b/tools/testing/selftests/vm/soft-dirty.c
+> > @@ -121,13 +121,78 @@ static void test_hugepage(int pagemap_fd, int pagesize)
+> >  	free(map);
+> >  }
+> >  
+> > +static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
+> > +{
+> > +	const char *type[] = {"file", "anon"};
+> > +	const char *fname = "./soft-dirty-test-file";
+> > +	int test_fd;
+> > +	char *map;
+> 
+> Instead of fname, unlink, open, close, unlink  you can use a tmpfile
+> 
+> FILE *file;
+> 
+> file = tmpfile();
+> if (!file) {
+> 	ksft_test_result_fail("tmpfile() failed\n");
+> 	return;
+> }
+> test_fd = fileno(file);
 
-Yes, if the kernel maps the page at a different virtual address, then
-the breakpoint won't fire I think.
-Don't know what are the issues with firmware/KVM.
+Note that tmpfile() should by default fetch from /tmp which is very
+possibly a tmpfs afaict.  It's tricky in this special test case since I
+don't think tmpfs can trigger this bug (shmem doesn't define page_mkwrite).
+
+I wanted to create under this dir to make the best possible bet to trigger
+the bug. E.g. major fs will works like xfs, btrfs, extN.  It'll stop work
+if someone clones the Linux repo under tmpfs but it's rare.
+
+> 
+> > +
+> > +	if (anon) {
+> > +		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
+> > +			   MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+> > +		if (!map)
+> > +			ksft_exit_fail_msg("anon mmap failed\n");
+> > +	} else {
+> > +		unlink(fname);
+> > +		test_fd = open(fname, O_RDWR | O_CREAT);
+> > +		if (test_fd < 0) {
+> > +			ksft_test_result_skip("Test %s huge page allocation\n", __func__);
+> 
+> Wrong copy-paste I assume :)
+
+Yeh :) I'll fix it.
+
+> 
+> > +			return;
+> > +		}
+> > +		ftruncate(test_fd, pagesize);
+> > +		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
+> > +			   MAP_SHARED, test_fd, 0);
+> > +		if (!map)
+> > +			ksft_exit_fail_msg("file mmap failed\n");
+> > +	}
+> > +
+> 
+> Apart from that LGTM.
+
+Thanks,
+
+-- 
+Peter Xu
+

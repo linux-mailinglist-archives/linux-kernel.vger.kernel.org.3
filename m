@@ -2,119 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BFE57DD13
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAB757DD25
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbiGVJEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33592 "EHLO
+        id S235082AbiGVJGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbiGVJEs (ORCPT
+        with ESMTP id S234679AbiGVJG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:04:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8E67E306
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:04:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5723A61ED5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7DFC341C6;
-        Fri, 22 Jul 2022 09:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658480686;
-        bh=Ky+XxKWde+Zen/5MBVzZaHKroh71kf4j7DurO22Gs+c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r5gRNpuZViNHDGqJerrx9Xou6azKr+P9WSk5KHyGnehmQFHdzl6XvnKlY04uQhKYj
-         8lfeDw6lJYLB7nWniTW48JV0FsIKsL8kzb4YsUPf4oNzZhTcMnWkpM6PPSoZYVBgcc
-         9LJtSyAztfqECbnAvx9FL4CU1sAoZQGqx7LNo9QhoTo91hzhmpcFM+MUo3ouNGXVKN
-         qpOtXJVmPm5ODo/3qgnOWxmMIewF+oZ13eBPf0qonE+ZMMS3M4mmntbxi+Bn4RlsZv
-         zITMB7PJfVxePttP2AEkxXDUDBQDC0aACpJRvX5Bgjz9aZH2jxSclG+ps5JyaThtKt
-         ttKgLsMfwl3sQ==
-Date:   Fri, 22 Jul 2022 10:04:41 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     arnd@arndb.de, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] arm64: run softirqs on the per-CPU IRQ stack
-Message-ID: <20220722090440.GB18125@willie-the-truck>
-References: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
- <20220708094950.41944-2-zhengqi.arch@bytedance.com>
+        Fri, 22 Jul 2022 05:06:26 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E1E83F39
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:06:23 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26M5SHGJ029230;
+        Fri, 22 Jul 2022 04:05:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=fUH/IDEchZ9dPIGJX0NwZHAYP1mAyq3V+B8mNGztKLE=;
+ b=RgzJDEj5WdcqKgU6kDfNFDQt6Sc9JLuq1s3B4/1AlTltHfanM5vjWNIq36o3faCI6k8x
+ KRUmqMJzG1gTEo68gerNIIDYZgLdGL9+rpxeXNv1QNCU9ECAI64xwgGKvPrqqmDAB1pg
+ 2jLbWri/ImwOqkn1jcNmA9Mkg62bQu7iDHZbAsQ/497lurs8yWo4Q63u/cynsAAnW/XE
+ 2dB4t68pBJ39NXr7TQAoezq/vbR9rEAgOYu5yEewBwKWPR52sEoquM1pjuOrrpefUYbn
+ X9y3P6aquSc9e/oKGD1DcsY9SWo9mATU7HgQzxv9k7mJtdASO2rV+h02U2cUvOVAZGSJ sQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3hdxffbnb0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 04:05:34 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 22 Jul
+ 2022 04:05:32 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1118.9 via Frontend Transport; Fri, 22 Jul 2022 04:05:32 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CB63D46B;
+        Fri, 22 Jul 2022 09:05:32 +0000 (UTC)
+Date:   Fri, 22 Jul 2022 09:05:32 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
+Subject: Re: [PATCH] ASoC: amd: vangogh: Use non-legacy DAI naming for cs35l41
+Message-ID: <20220722090532.GF92394@ediswmail.ad.cirrus.com>
+References: <20220721233227.1459374-1-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220708094950.41944-2-zhengqi.arch@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220721233227.1459374-1-cristian.ciocaltea@collabora.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: xPwS9w7hBwax5mWU939OdQEsh3UOH1LT
+X-Proofpoint-GUID: xPwS9w7hBwax5mWU939OdQEsh3UOH1LT
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 05:49:49PM +0800, Qi Zheng wrote:
-> Currently arm64 supports per-CPU IRQ stack, but softirqs
-> are still handled in the task context.
+On Fri, Jul 22, 2022 at 02:32:27AM +0300, Cristian Ciocaltea wrote:
+> Unlike most CODEC drivers, the CS35L41 driver did not have the
+> non_legacy_dai_naming set, meaning the corresponding DAI has been
+> traditionally registered using the legacy naming: spi-VLV1776:0x
 > 
-> Since any call to local_bh_enable() at any level in the task's
-> call stack may trigger a softirq processing run, which could
-> potentially cause a task stack overflow if the combined stack
-> footprints exceed the stack's size, let's run these softirqs
-> on the IRQ stack as well.
+> The recent migration to the new legacy DAI naming style has implicitly
+> corrected that behavior and DAI gets now registered via the non-legacy
+> naming, i.e. cs35l41-pcm.
 > 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  arch/arm64/Kconfig      |  1 +
->  arch/arm64/kernel/irq.c | 13 +++++++++++++
->  2 files changed, 14 insertions(+)
+> The problem is the acp5x platform driver is now broken as it continues
+> to refer to the above mentioned codec using the legacy DAI naming in
+> function acp5x_cs35l41_hw_params() and, therefore, the related setup
+> is not being executed anymore.
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 4c1e1d2d2f8b..be0a9f0052ee 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -230,6 +230,7 @@ config ARM64
->  	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
->  	select TRACE_IRQFLAGS_SUPPORT
->  	select TRACE_IRQFLAGS_NMI_SUPPORT
-> +	select HAVE_SOFTIRQ_ON_OWN_STACK
->  	help
->  	  ARM 64-bit (AArch64) Linux support.
->  
-> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
-> index bda49430c9ea..c36ad20a52f3 100644
-> --- a/arch/arm64/kernel/irq.c
-> +++ b/arch/arm64/kernel/irq.c
-> @@ -22,6 +22,7 @@
->  #include <linux/vmalloc.h>
->  #include <asm/daifflags.h>
->  #include <asm/vmap_stack.h>
-> +#include <asm/exception.h>
->  
->  /* Only access this in an NMI enter/exit */
->  DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
-> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
->  }
->  #endif
->  
-> +#ifndef CONFIG_PREEMPT_RT
-> +static void ____do_softirq(struct pt_regs *regs)
-> +{
-> +	__do_softirq();
-> +}
-> +
-> +void do_softirq_own_stack(void)
-> +{
-> +	call_on_irq_stack(NULL, ____do_softirq);
-> +}
-> +#endif
+> Let's fix that by replacing the obsolete DAI name with the correct one.
+> 
+> Fixes: bc949a3b4af3 ("ASoC: core: Switch core to new DAI naming flag")
 
-Acked-by: Will Deacon <will@kernel.org>
-
-Please can you repost this at -rc1 and we can queue it up for 5.21?
+Although sorry just noticed you might want to double check the SHA
+here, I think the upstream one is 129f055a2144.
 
 Thanks,
-
-Will
+Charles

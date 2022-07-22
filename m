@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4535857E6FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BD657E70F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236082AbiGVTFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S233679AbiGVTJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiGVTFd (ORCPT
+        with ESMTP id S231149AbiGVTJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:05:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8A123176;
-        Fri, 22 Jul 2022 12:05:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67A64B829D9;
-        Fri, 22 Jul 2022 19:05:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C0BBC341C6;
-        Fri, 22 Jul 2022 19:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658516730;
-        bh=BcYlBmHpFAfaJKaeLyB1SeFxMDCNn/CWCGkkHpq+7ZM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WC+kd93S/DIU2dDixNQ8lmwuoZzHA7u+FDJHfL/DPb5b9hcG9OlPJvpJ/mVYFhz4R
-         s0w5XmWqXrr4djavNg+H7Hm00US97vcK52m5a4WKPq8X8Ri+eOHrGN8/k15fOwepnL
-         8mnCPK5VNfjMXkm4FB782IiPoA8CIsm3oaMXhII03YRpU4gCX4/oYgG+TW8YD2LCmS
-         q4KwhQMPY6Oqf77krHHx6Wx/2L6/13OPkaI35aSYivGStzcfbIq74ueS+d94nQmqnZ
-         7tS6zJEnxGHMr8E360XxCXt46AYNDYA7QfJ63X10hX5S2yB8RAjZAF3mmfV+T52rBS
-         9O1Y2wbdn/E7g==
-Date:   Fri, 22 Jul 2022 21:05:25 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-5.19-rc8
-Message-ID: <Ytr09aZMfeDU6M24@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        Fri, 22 Jul 2022 15:09:16 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F554A8758
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:09:15 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id w15so1009741lft.11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=agwqNyhPe1FeeyYaMTDHEC3Ht61jYjxP8kET6Q9I/XI=;
+        b=p+2pB5PP+KgyPEcCIY1TAcSiDWDHn0nKDspRXpW5tnGMyasTYkH5W0FzLoBMi8z8W3
+         q5ZLCIV10fBuUN2h3UfsShR3uasMeNNQ+mp5LzjLxEE6qLzQ+LSaSaj0OBtN5GdADbFA
+         mmmzCKVxed2beqy3svpPUCphmDRAcUezEh/cm8n/R43G5l3WUeBIO/4rEnmBhS+hFOmO
+         nT2aB85U/6Ceoj/moQNpZoC62NbwN/Zpvy47tvPnsiMLkH4H1X+gBXM6M5NKm2sMoI5w
+         HMX60zZsbqYA5oOsKkGGVBU6c1fkReH4E8EJb+AhBoYy3VuuDJTvMnDtgWZVnEFtOK/S
+         414g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=agwqNyhPe1FeeyYaMTDHEC3Ht61jYjxP8kET6Q9I/XI=;
+        b=VS4D1QtPiH3gIkQHBne+8iIylxXtiQzsfElbo2GpHiUq5Dj7keV1Gavz+w3v66djKS
+         X6QubUKCFM9i2C+I8kfmOHTzhec243GQOrOx9WvMocNMYq5VomXZwSuR2iwEBmPyWyY8
+         B01Xl21igPo9VdtNrblfSEIFyyVHPU0YdBUb2lJ61S2ANFguaAjqSvdwsQ4+PnL6cuFw
+         zrr4N/YS5lRbLqcWGRrGx/VhaMPkvpWOy8OqQX3mZd32D0w75AQSlryo4R1ipvTjb/d0
+         xeVwicPxgPhZF6v7hiQ8dsGKMFetYQ/fI4BqejGnDvT87SbaNs0LT10mbd2Xj89VLI/Z
+         wKCg==
+X-Gm-Message-State: AJIora8JpLY/vRMaQvxAGGQRcu4yZWJeXte0721tu6yK3GNogy2BXj0+
+        4uiIpyW5CgqsEEseC/JVR3Axug==
+X-Google-Smtp-Source: AGRyM1vrJb5gr0c+TaBQHWdyH6KSvy36h8k9Zss3iTOI5ZP89fCdFS2ZhtGeeudzCrXoW6iEGA6zBg==
+X-Received: by 2002:a19:ca5d:0:b0:48a:74a6:2f10 with SMTP id h29-20020a19ca5d000000b0048a74a62f10mr546514lfj.153.1658516953879;
+        Fri, 22 Jul 2022 12:09:13 -0700 (PDT)
+Received: from krzk-bin.home (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id p14-20020a2ea4ce000000b0025de944cc84sm1050189ljm.93.2022.07.22.12.09.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 12:09:13 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] spi: dt-bindings: spi-controller: correct example indentation
+Date:   Fri, 22 Jul 2022 21:09:10 +0200
+Message-Id: <20220722190910.76865-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="m98DaZT1dZ1LiDWw"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Example DTS mixed two with four-space indentation.  Preferred is four
+spaces, for readability.
 
---m98DaZT1dZ1LiDWw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/spi/spi-controller.yaml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
+diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+index e105faec937d..655713fba7e2 100644
+--- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+@@ -150,9 +150,9 @@ examples:
+         };
+ 
+         flash@2 {
+-          compatible = "jedec,spi-nor";
+-          spi-max-frequency = <50000000>;
+-          reg = <2>, <3>;
+-          stacked-memories = /bits/ 64 <0x10000000 0x10000000>;
++            compatible = "jedec,spi-nor";
++            spi-max-frequency = <50000000>;
++            reg = <2>, <3>;
++            stacked-memories = /bits/ 64 <0x10000000 0x10000000>;
+         };
+     };
+-- 
+2.34.1
 
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-5.19-rc8
-
-for you to fetch changes up to 4ca8ca873d454635c20d508261bfc0081af75cf8:
-
-  i2c: cadence: Change large transfer count reset logic to be unconditional (2022-07-16 14:44:12 +0200)
-
-----------------------------------------------------------------
-Two driver bugfixes and a typo fix
-
-----------------------------------------------------------------
-Flavio Suligoi (1):
-      i2c: imx: fix typo in comment
-
-Robert Hancock (1):
-      i2c: cadence: Change large transfer count reset logic to be unconditional
-
-Vadim Pasternak (1):
-      i2c: mlxcpld: Fix register setting for 400KHz frequency
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Shubhrajyoti Datta (1):
-      (Rev.) i2c: cadence: Change large transfer count reset logic to be unconditional
-
- drivers/i2c/busses/i2c-cadence.c | 30 +++++-------------------------
- drivers/i2c/busses/i2c-imx.c     |  2 +-
- drivers/i2c/busses/i2c-mlxcpld.c |  2 +-
- 3 files changed, 7 insertions(+), 27 deletions(-)
-
---m98DaZT1dZ1LiDWw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLa9PUACgkQFA3kzBSg
-Kba3Iw//cfOWzDMluynuNwyniNBDMKTtEFLqCHz35q4en1RHCKOC+glkZTklFn4T
-09IWJyxYB4s39fWEE54jhYE973BpZJZG04FRhTtxd158OAz35euASytOv/n190hP
-w+Eq9jkTCDxCDslm6cunTV/RLeWHzukNyQc0yLiBd83P4bA55azAMuSfypC7haRZ
-N5aftRhJ9O1BI+2GY7SBek6Q/DgZIXliHUdwwEg6haAjAhgcbUyGm9EKuHK1Ruj1
-iTJ5ZzHa0lsNB1PQHIZXHaJdXjMFKJPgzToHVxcpBrSUZzSPrCSVglYrMLrZPXw2
-8XG40xPd4zKUw126W0h5sOagSo8++8SnpfIJpitkvaDoQro/q++9oGawWtP8slMn
-eWsqqIj8q1Xm3TEg/UZgFFEpcQSoAwoxLlYVOPy31OvSpvhP2P+qlmHiGm6FxZ26
-MklUts9qtMI1Bt7oVc5h5g1nuri6ZjdmoK7Foj/h3HnoHzVcUw9jEKlbpnVDGnZd
-FUpOcnLnBDJSUjybgPLv80KcPsk3ltLaCVBrOKGwe9fQ2hh3O54csxwg8WxHp1iW
-qXGG6DKj1dOhQ3JNeYf37HVfOnp6Whl0p2ORBGx6EfN2CFeQcseDlk8ZVSmUNwgc
-8gfVao1VM8obL6GlYLnjfnbYmJFs1gTNtYxZh4t6GsPka0sO3ew=
-=c1k1
------END PGP SIGNATURE-----
-
---m98DaZT1dZ1LiDWw--

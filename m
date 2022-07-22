@@ -2,126 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228FE57E734
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CA557E731
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbiGVTTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S235895AbiGVTS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbiGVTS4 (ORCPT
+        with ESMTP id S232331AbiGVTSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:18:56 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9983A5925F;
-        Fri, 22 Jul 2022 12:18:53 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297665329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7665:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2AC521EC0657;
-        Fri, 22 Jul 2022 21:18:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658517528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=S7Nu4/eHKss0+qmBB7cZDNC3Q4DWm75cDoGs5TXikHo=;
-        b=LIx6g/LXOmTk6uDJhPVmnoqKJ4EyZUKtMASYEeKCWrJykfa0uvj2XCpcPqEFKveUw1OzcC
-        jVAmUcMNmbHoXPYgcGrCxhHJjA8xsZN1P/OyU403HZxaEvzq24nYzbK8bDBP+UCbWNjFE+
-        qFKSWzhGfIcthc/2fyBXoBfWXC1k5XQ=
-Date:   Fri, 22 Jul 2022 21:18:44 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Message-ID: <Ytr4FCV2xPGUBLqs@zn.tnic>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
- <YtltYRuL+2uQkYUK@zn.tnic>
- <ebcf2979-45fc-8d41-cc28-ac8da0d24245@intel.com>
+        Fri, 22 Jul 2022 15:18:55 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633D55E31F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:18:54 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id k19so6513782lji.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Kjnz9jnBzE7TgHYD4icOZx+MB0ePlqFO/pSn3BcmO+0=;
+        b=zrdZV1N8rcljnnm792VSjQ58hdKWLtfgPqKQdfcSLXzUErMw+skmwdSXV2F1TitH/J
+         NXuvWrAerVaTlGh64K45PDLNZTuQHps12d5me3DX8ZH+ldaHlB9pjB4/jMARTYbq1mDC
+         At2wOShU5RXVlK1WMDpuOxXf0+b8seAI639XdkJnWGDlUJNVEw+NrXluQNBlMVrgHYFu
+         IoQENpAAY67ayReLSP6wxkz7wKMI734bKY81eb6+d64imahKqTz7wNKWoTii6KD+qhKv
+         T30tdvfqWDd7ikzgol6ERulCLyJ/niszNvhehaE7QBt7nMOzDRKQQL0F61U4Ospmw5FP
+         rqGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Kjnz9jnBzE7TgHYD4icOZx+MB0ePlqFO/pSn3BcmO+0=;
+        b=dv8QsfmbdAPJAbU9JLHcBrIly/vcovhsYtNZW1FtpZlSEvRnzKNnFK0gn2zReH45ry
+         9ZnFh2y88ZurVbsKKC5yKHwNYc5plJVzJotFbSmcMYpHkR2tFsrzaW7WllyBFcDqzm3K
+         HbAyrfr6VA6hIlRl+hgtPE5POElxLb25CMmKGmpttKEe3MhTTX/S7jlhE7erdjajCT4p
+         80RHyKbvjm0yfnnTQIbAbYrH7chE5gKdre+QLsSI7zPVzLeFhWTUJRx8hj8OV8VLLnRw
+         1DfkK6hV/GEPvMkWj/1cSK3QvKfSHyzZT4lbcIHiYhkB4pWOLv3xd6sjjFDu2Ffz8Xfu
+         6MPA==
+X-Gm-Message-State: AJIora/31b9bqIUrf+q9M23p2SbA8C/8I5QQT00iHG8qS/2bP1fWkFHR
+        FU1gq2V5wr0PPZBWAGbUJcz8VA==
+X-Google-Smtp-Source: AGRyM1tCLElgP8uPh4Z9md/fxoYz+LRieaRoF2qyv6YfjK5RUT+HTsr3Y0dq0yujq9NNuHAuCiG6qg==
+X-Received: by 2002:a05:651c:20e:b0:25d:521d:66e2 with SMTP id y14-20020a05651c020e00b0025d521d66e2mr517200ljn.258.1658517532596;
+        Fri, 22 Jul 2022 12:18:52 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id o8-20020ac24e88000000b00484edac69ccsm1214228lfr.43.2022.07.22.12.18.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 12:18:52 -0700 (PDT)
+Message-ID: <85199046-b1ff-0b41-0938-172c55b7a4c5@linaro.org>
+Date:   Fri, 22 Jul 2022 21:18:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ebcf2979-45fc-8d41-cc28-ac8da0d24245@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] dt-bindings: memory-controller: Document Broadcom STB
+ MEMC
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220722184138.2666241-1-f.fainelli@gmail.com>
+ <20220722184138.2666241-2-f.fainelli@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220722184138.2666241-2-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 08:49:31AM -0700, Dave Hansen wrote:
-> Acceptance is slow and the heavy lifting is done inside the TDX module.
->  It involves flushing old aliases out of the caches and initializing the
-> memory integrity metadata for every cacheline.  This implementation does
-> acceptance in 2MB chunks while holding a global lock.
+On 22/07/2022 20:41, Florian Fainelli wrote:
+> Document the Broadcom STB memory controller which is a trivial binding
+> for now with a set of compatible strings and single register.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../memory-controllers/brcm,memc.yaml         | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/brcm,memc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/brcm,memc.yaml b/Documentation/devicetree/bindings/memory-controllers/brcm,memc.yaml
+> new file mode 100644
+> index 000000000000..a629734f0cd0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/memory-controllers/brcm,memc.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/memory-controllers/brcm,memc.yaml#
 
-Oh, fun.
+Filename like first compatible, so: brcm,brcmstb-memc-ddr.yaml
 
-> So, those (effective) 2MB clflush+memset's (plus a few thousand cycles
-> for the hypercall/tdcall transitions)
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Memory controller (MEMC) for Broadcom STB
+> +
+> +maintainers:
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - brcm,brcmstb-memc-ddr-rev-b.1.x
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.0
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.1
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.2
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.3
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.5
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.6
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.7
+> +          - brcm,brcmstb-memc-ddr-rev-b.2.8
+> +          - brcm,brcmstb-memc-ddr-rev-b.3.0
+> +          - brcm,brcmstb-memc-ddr-rev-b.3.1
+> +          - brcm,brcmstb-memc-ddr-rev-c.1.0
+> +          - brcm,brcmstb-memc-ddr-rev-c.1.1
+> +          - brcm,brcmstb-memc-ddr-rev-c.1.2
+> +          - brcm,brcmstb-memc-ddr-rev-c.1.3
+> +          - brcm,brcmstb-memc-ddr-rev-c.1.4
+> +      - const: brcm,brcmstb-memc-ddr
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    memory-controller@9902000 {
+> +        compatible = "brcm,brcmstb-memc-ddr-rev-c.1.1",
+> +                        "brcm,brcmstb-memc-ddr";
 
-So this sounds strange - page validation on AMD - judging by the
-pseudocode of the PVALIDATE insn - does a bunch of sanity checks on the
-gVA of the page and then installs it into the RMP and also "PVALIDATE
-performs the same segmentation and paging checks as a 1-byte read.
-PVALIDATE does not invalidate TLB caches."
+Could you align it with previous quote "?
 
-But that still sounds a lot less work than what the TDX module needs to
-do...
+Other than that, looks ok, but anyway this will have to wait for merge
+window to finish.
 
-> can't happen in parallel. They are serialized and must wait on each
-> other.
+> +        reg = <0x9902000 0x600>;
+> +    };
 
-Ofc, the Intel version of the RMP table needs to be protected. :-)
 
-> If you have a few hundred CPUs all trying to allocate memory (say,
-> doing the first kernel compile after a reboot), this is going to be
-> very, very painful for a while.
->
-> That said, I think this is the right place to _start_. There is going
-> to need to be some kind of follow-on solution (likely background
-> acceptance of some kind). But, even with that solution, *this* code
-> is still needed to handle the degenerate case where the background
-> accepter can't keep up with foreground memory needs.
-
-I'm still catering to the view that it should be a two-tier thing: you
-validate during boot a certain amount - say 4G - a size for which the
-boot delay is acceptable and you do the rest on-demand along with a
-background accepter.
-
-That should give you the best of both worlds...
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best regards,
+Krzysztof

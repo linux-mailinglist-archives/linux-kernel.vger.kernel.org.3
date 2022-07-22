@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FD957E1F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5FA57E1F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbiGVNEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
+        id S235464AbiGVNEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235368AbiGVNEL (ORCPT
+        with ESMTP id S235405AbiGVNEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:04:11 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4CAF970;
-        Fri, 22 Jul 2022 06:04:10 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id o7so7552776lfq.9;
-        Fri, 22 Jul 2022 06:04:10 -0700 (PDT)
+        Fri, 22 Jul 2022 09:04:14 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E369AAF960;
+        Fri, 22 Jul 2022 06:04:12 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id m12so6460804lfj.4;
+        Fri, 22 Jul 2022 06:04:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lP/jBdxtlvbqvrCkJL3Z7fkeonR4hZLm7YdyaYMKfFs=;
-        b=Qs9scKC2u5aLHQ9jg8i68FaDiKjVOEhPY4+aOzyx/Retd7GfkjEE1AZ14c+1Pao0n7
-         HyfYSpFS9TW7y1RY759Mvu/6jU9u5iwW3roYIt/C/5ucPX9Txnxfk6zVjuf/uizs5DBu
-         sHA+5uujRRecAqqPiccsbQpg0GcfG2GP15JEJIJxXOvnj+ikE+hKfDKvxYrzodLOTtUS
-         mbiLtzGwEnmS5ocuDDZ+zMXevrTCe36+giQQenWbcCPTfba+/SN736iwTWlgzkgFjmXB
-         m2LcVaU92AjAICcQ0DJCgSQfJZHOx1gr2aR5GiKmbyDSd9k59rz/ce0QjNfEaiEOX3d3
-         ZgtQ==
+        bh=knFtpsDUHJLhvP+nNFn6yLtZbr5Vu25n0owL6mtc+zk=;
+        b=f6lRXuyAwcbLJbExmbcb5sJghYbagvLVgGeF83P5SMaORdUIkKD3raS8+xn3Qo6p/K
+         R+tbv3jZOIk1tPSdvi2k4j/OZJe9pWTECqMCXBeYJTfHxaS1LpKJyw1jb7Q3oXwlYhOI
+         lpChgYzRxnINoWr6dgXMIODiXpUzUJmcIoWQmGZ9vJKlEtLHgOAn6qHcNmxxKltc4y2W
+         ejya4dI4jrSKng+K2Ahcmqkm+6nu18c9WU2BNJ81jnqOc4BfrKz+haZDRvraBS3syccC
+         g8OGUzeYGTHcjevRYl0g7UTmJyPwWy5yWTNq59bxucl74P+m1nwtpf3b0iSl1Cr5Xyrh
+         PRDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lP/jBdxtlvbqvrCkJL3Z7fkeonR4hZLm7YdyaYMKfFs=;
-        b=S2FYC/5yxLWqBoCU88YdOCPcBX7saA/3lxbbsDjcoh+eV2nhUOM9pnRdaD9U5K4F3V
-         ZJgU+amMB7gZsWYy22qjoTYI8RefjFV/EY+waBziBlz1x9wFHgJwSY3jUWw3nggyDvqw
-         e0qJwHQw/zS5MjoDOVYqmYeBgGE18GuHD7XnHR1mShiso2xaZzXxpEkv6IaID2HzdCEz
-         geBBHUAPC6qey5D70Z17zD8QYZTQHJ8tMs29lafiqE2Vgwgdc0rgJfqxCudSBtBJ32l5
-         vV1hGb3YhXsGWJlps6nIOjgjHiheKiP6L3oz/cY5G0HLRLY5Fp7PEMIEugdN5zqRapdC
-         Hz0Q==
-X-Gm-Message-State: AJIora+q1hdblpdcNnoD0a8Vog9bYTa92ezAjPaqDdOqhRsArzA3NEgY
-        9i5OXTFE5ZgyMeI4TBn8+yo=
-X-Google-Smtp-Source: AGRyM1vEc8KNR3meV8qcOJz4YyltHvZlYFpJ/VKAVw1o6/x3ODjm67DX0h9yYu13xw0KVtwWWFUXFQ==
-X-Received: by 2002:a05:6512:114d:b0:48a:783c:c13f with SMTP id m13-20020a056512114d00b0048a783cc13fmr179833lfg.355.1658495048832;
-        Fri, 22 Jul 2022 06:04:08 -0700 (PDT)
+        bh=knFtpsDUHJLhvP+nNFn6yLtZbr5Vu25n0owL6mtc+zk=;
+        b=FG6YoDetvFRnUOFwkI8rSgd6Espv+POwR16Br2RpQH4tdzQ/A5QVJdpvooG+YbNBPW
+         6cbwS+RsTszUVDo17U7q+OZwPCqM8vZNqMJ2ZbkyjrVETyGxWgSjjEFZ55YUhGStJgRs
+         wZfcRqjW2xNvHOeNyrg18KkiOjRhBO9cOvO74v2icT9C2hes1Gs7Suz+tue2u9z6Tq8N
+         y3EK6Yx7SA6C3xPgoYXb5WphCxliaCWXXwGGuA4pykt8qKgJFxT5q0+EQou0PRRldvyj
+         kRRGqaVfR2lKNt9fD4CPact7P/1JHDJaC/pkN5BoZWiPdDzWd6LK9rOEbdZEKVjg3Nyr
+         qHvA==
+X-Gm-Message-State: AJIora/RBfEeTMfHYMkVmbkLgTnOc6OjjWyZ/80YRKoR4rya7OsppZBr
+        AeABi6KFXNYwm3NsL4oRXbQ=
+X-Google-Smtp-Source: AGRyM1sFcAFfYMUJaH4oxbzjmlCO0Bjv6SAAGINlAquwJJU9mqZcGgvbgV7etlXVUt4w8kVFapWWmg==
+X-Received: by 2002:a05:6512:12c8:b0:489:efbf:18d1 with SMTP id p8-20020a05651212c800b00489efbf18d1mr194117lfg.192.1658495051239;
+        Fri, 22 Jul 2022 06:04:11 -0700 (PDT)
 Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id s18-20020a056512203200b004786d37229csm1039673lfs.155.2022.07.22.06.04.07
+        by smtp.gmail.com with ESMTPSA id s18-20020a056512203200b004786d37229csm1039673lfs.155.2022.07.22.06.04.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 06:04:08 -0700 (PDT)
+        Fri, 22 Jul 2022 06:04:10 -0700 (PDT)
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Kent Gustavsson <kent@minoris.se>,
@@ -57,10 +57,11 @@ To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 6/9] iio: adc: mcp3911: add support for interrupts
-Date:   Fri, 22 Jul 2022 15:07:23 +0200
-Message-Id: <20220722130726.7627-7-marcus.folkesson@gmail.com>
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 7/9] dt-bindings: iio: adc: mcp3911: add microchip,data-ready-hiz entry
+Date:   Fri, 22 Jul 2022 15:07:24 +0200
+Message-Id: <20220722130726.7627-8-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220722130726.7627-1-marcus.folkesson@gmail.com>
 References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
@@ -76,108 +77,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make it possible to read values upon interrupts.
-Configure Data Ready Signal Output Pin to either HiZ or push-pull and
-use it as interrupt source.
+The Data Ready Output Pin is either hard wired to work as high
+impedance or push-pull. Make it configurable.
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/iio/adc/mcp3911.c | 53 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ .../devicetree/bindings/iio/adc/microchip,mcp3911.yaml     | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-index 96c0a2a50c7c..7db2c75da4ac 100644
---- a/drivers/iio/adc/mcp3911.c
-+++ b/drivers/iio/adc/mcp3911.c
-@@ -29,6 +29,7 @@
- #define MCP3911_REG_GAIN		0x09
+diff --git a/Documentation/devicetree/bindings/iio/adc/microchip,mcp3911.yaml b/Documentation/devicetree/bindings/iio/adc/microchip,mcp3911.yaml
+index 95ab285f4eba..57a16380f864 100644
+--- a/Documentation/devicetree/bindings/iio/adc/microchip,mcp3911.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/microchip,mcp3911.yaml
+@@ -36,6 +36,13 @@ properties:
+     description: IRQ line of the ADC
+     maxItems: 1
  
- #define MCP3911_REG_STATUSCOM		0x0a
-+#define MCP3911_STATUSCOM_DRHIZ         BIT(12)
- #define MCP3911_STATUSCOM_READ		GENMASK(7, 6)
- #define MCP3911_STATUSCOM_CH1_24WIDTH	BIT(4)
- #define MCP3911_STATUSCOM_CH0_24WIDTH	BIT(3)
-@@ -62,6 +63,7 @@ struct mcp3911 {
- 	struct regulator *vref;
- 	struct clk *clki;
- 	u32 dev_addr;
-+	struct iio_trigger *trig;
- 	struct {
- 		u32 channels[MCP3911_NUM_CHANNELS];
- 		s64 ts __aligned(8);
-@@ -346,6 +348,23 @@ static void mcp3911_cleanup_regulator(void *_adc)
- 	regulator_disable(adc->vref);
- }
- 
-+static int mcp3911_set_trigger_state(struct iio_trigger *trig, bool enable)
-+{
-+	struct mcp3911 *adc = iio_trigger_get_drvdata(trig);
++  microchip,data-ready-hiz:
++    description:
++      Data Ready Pin Inactive State Control
++      true = The DR pin state is high-impedance when data are NOT ready
++      false = The DR pin state is a logic high when data are NOT ready
++    type: boolean
 +
-+	if (enable)
-+		enable_irq(adc->spi->irq);
-+	else
-+		disable_irq(adc->spi->irq);
-+
-+	return 0;
-+}
-+
-+static const struct iio_trigger_ops mcp3911_trigger_ops = {
-+	.validate_device = iio_trigger_validate_own_device,
-+	.set_trigger_state = mcp3911_set_trigger_state,
-+};
-+
- static int mcp3911_probe(struct spi_device *spi)
- {
- 	struct iio_dev *indio_dev;
-@@ -409,6 +428,15 @@ static int mcp3911_probe(struct spi_device *spi)
- 	if (ret)
- 		return ret;
- 
-+	if (device_property_read_bool(&adc->spi->dev, "microchip,data-ready-hiz"))
-+		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
-+				0, 2);
-+	else
-+		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
-+				MCP3911_STATUSCOM_DRHIZ, 2);
-+	if (ret)
-+		return ret;
-+
- 	indio_dev->name = spi_get_device_id(spi)->name;
- 	indio_dev->modes = INDIO_DIRECT_MODE;
- 	indio_dev->info = &mcp3911_info;
-@@ -419,6 +447,31 @@ static int mcp3911_probe(struct spi_device *spi)
- 
- 	mutex_init(&adc->lock);
- 
-+	if (spi->irq > 0) {
-+		adc->trig = devm_iio_trigger_alloc(&spi->dev, "%s-dev%d",
-+				indio_dev->name,
-+				iio_device_id(indio_dev));
-+		if (!adc->trig)
-+			return PTR_ERR(adc->trig);
-+
-+		adc->trig->ops = &mcp3911_trigger_ops;
-+		iio_trigger_set_drvdata(adc->trig, adc);
-+		ret = devm_iio_trigger_register(&spi->dev, adc->trig);
-+		if (ret)
-+			return ret;
-+
-+		/*
-+		 * The device generates interrupts as long as it is powered up.
-+		 * Some platforms might not allow the option to power it down so
-+		 * don't enable the interrupt to avoid extra load on the system.
-+		 */
-+		ret = devm_request_irq(&spi->dev, spi->irq,
-+				&iio_trigger_generic_data_rdy_poll, IRQF_NO_AUTOEN | IRQF_ONESHOT,
-+				indio_dev->name, adc->trig);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
- 			NULL,
- 			mcp3911_trigger_handler, NULL);
+   microchip,device-addr:
+     description: Device address when multiple MCP3911 chips are present on the same SPI bus.
+     $ref: /schemas/types.yaml#/definitions/uint32
 -- 
 2.36.1
 

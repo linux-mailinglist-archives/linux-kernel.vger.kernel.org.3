@@ -2,136 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE4457DCFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A341E57DD05
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbiGVI4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S232171AbiGVJAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234097AbiGVI4r (ORCPT
+        with ESMTP id S230409AbiGVJAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:56:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B699FE34;
-        Fri, 22 Jul 2022 01:56:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A1F2E20110;
-        Fri, 22 Jul 2022 08:56:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658480205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lmN457l342bZ9EFH1Ju438RxoGjbsmMhC9149+6qZUI=;
-        b=Y35tg3PPtJ5HwtKLxyeHzIvDD+Nbb4Wdcpp3aJmkaseG+SqFr8Ll1LfGsq83uy2Fk9CFn5
-        eifG4v72SLCz6HNMlnwfwdof6kwWNzzk34NUqKBVUj2OchAlJtiRe7WbR8FyTuNhghl5nu
-        oce0G0ZaerPWx4ExFUQlHlpL/YZJoDg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31C08134A9;
-        Fri, 22 Jul 2022 08:56:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HYZXCU1m2mI6VwAAMHmgww
-        (envelope-from <nborisov@suse.com>); Fri, 22 Jul 2022 08:56:45 +0000
-Message-ID: <15cdbd02-5d62-95e2-c1f5-2261554a66fe@suse.com>
-Date:   Fri, 22 Jul 2022 11:56:44 +0300
+        Fri, 22 Jul 2022 05:00:17 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26009CCC
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:00:14 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-31e560aa854so40991887b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v/5aGhRoCHpFwV3qQjvwLeTWWInrloa7ON/9UyObNn4=;
+        b=MWcTGmD4Lx9Tkn9xBtsn+tr4EuHYDuek8ixUxVXKG/QroY3v5SujnvaIyt/2cSewOr
+         SIdK1qzvtsCQzdic/vSqYZDMTw0rXnCsoMB16nUi1H3uLAU1F4f7NINnYD4tKdvOdv2s
+         qUdc6xHkVnzOmaZdWMw9bBOHRcdL5SFfmDD/F2flOTqqhR0/V9N8a8YFykjhZxB/6ka5
+         ydR429E1KfZ6O/Ecr8Ng1ETKE24IjX9WUW3CF/cMZ5CC1GI1HH8CNXq9l80XZB7aHrLu
+         t5AwszV265/1e+fLhJf1xOYIXqMeZlzTIZ7ygojq7Gz6R3b/0Uo1nnYanzDEd4SROqj+
+         B/iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v/5aGhRoCHpFwV3qQjvwLeTWWInrloa7ON/9UyObNn4=;
+        b=ZRYXGVIm3ANa2oFDS5oNkcMywKlwyCR43Ef/cGPz1WnX8LnILP4kdPmCecuduZvIk1
+         diMtJm+UJPEdPpWx/v/cRR64gQ6wsWTvGZhRWke/GU0NMw8h+og9CFde/chNQRdfsx4u
+         sjLEl3uZEVpUIBtGvatpIZAEe24jYhpQCk8SPe5nispoXHn/Sl+aLHgAhgSHgBTg0Hju
+         ik6nSx9y7rDbEizQTO9HWHQaauHL6GNAISpI7H48vf7+qrevlcTWK7hVM6EC7f0sypT1
+         CmuRjTNsACRE4hgH/oVD8Oe2FsLyeOYm4zrfop2otooqgFUvFNWMqDOGYMEnFNDU21wY
+         udUQ==
+X-Gm-Message-State: AJIora+Zrw+40+8bh39n/uyo26NRK5npUJ5oa3rwWg7u+E9RKdmNuYMd
+        PX3pjpPs5yuJ2l1F7PvV2t80Yt6flZ+k1aUuwT+dxA==
+X-Google-Smtp-Source: AGRyM1ul/j0oQNstfeNuzgp2pIBZKLG0rMmpW8fWszcMoX39RJsUGt6YqesJD7QxVVnQBMZtE5nzkCJYQRVA+3hdXxE=
+X-Received: by 2002:a05:690c:730:b0:31e:6237:533e with SMTP id
+ bt16-20020a05690c073000b0031e6237533emr2203648ywb.55.1658480412986; Fri, 22
+ Jul 2022 02:00:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] fs: btrfs: fix a possible use-after-free bug caused by
- incorrect error handling in prepare_to_relocate()
-Content-Language: en-US
-To:     Zixuan Fu <r33s3n6@gmail.com>, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, TOTE Robot <oslab@tsinghua.edu.cn>
-References: <20220721074829.2905233-1-r33s3n6@gmail.com>
-From:   Nikolay Borisov <nborisov@suse.com>
-In-Reply-To: <20220721074829.2905233-1-r33s3n6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722074153.2454007-1-william.xuanziyang@huawei.com>
+In-Reply-To: <20220722074153.2454007-1-william.xuanziyang@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 22 Jul 2022 11:00:01 +0200
+Message-ID: <CANn89iKWr-VJVus9GbafrghR2MKUz64sX9fg1YA=oHE0SYdZCg@mail.gmail.com>
+Subject: Re: [net] ipv6/addrconf: fix a null-ptr-deref bug for ip6_ptr
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 22, 2022 at 9:42 AM Ziyang Xuan
+<william.xuanziyang@huawei.com> wrote:
+>
+> Change net device's MTU to smaller than IPV6_MIN_MTU or unregister
+> device while matching route. That may trigger null-ptr-deref bug
+> for ip6_ptr probability as following.
+>
+> Reproducer as following:
+> Firstly, prepare conditions:
+> $ip netns add ns1
+> $ip netns add ns2
+> $ip link add veth1 type veth peer name veth2
+> $ip link set veth1 netns ns1
+> $ip link set veth2 netns ns2
+> $ip netns exec ns1 ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1
+> $ip netns exec ns2 ip -6 addr add 2001:0db8:0:f101::2/64 dev veth2
+> $ip netns exec ns1 ifconfig veth1 up
+> $ip netns exec ns2 ifconfig veth2 up
+> $ip netns exec ns1 ip -6 route add 2000::/64 dev veth1 metric 1
+> $ip netns exec ns2 ip -6 route add 2001::/64 dev veth2 metric 1
+>
+> Secondly, execute the following two commands in two ssh windows
+> respectively:
+> $ip netns exec ns1 sh
+> $while true; do ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1; ip -6 route add 2000::/64 dev veth1 metric 1; ping6 2000::2; done
+>
+> $ip netns exec ns1 sh
+> $while true; do ip link set veth1 mtu 1000; ip link set veth1 mtu 1500; sleep 5; done
+>
+> And in order to increase the probability of reproduce,
+> we can add mdelay() in find_match() as following:
+>
+> static bool find_match(struct fib6_nh *nh, u32 fib6_flags,
+>         if (nh->fib_nh_flags & RTNH_F_DEAD)
+>                 goto out;
+>
+> +       mdelay(1000);
+
+But adding a mdelay() in an rcu_read_lock() should not be possible.
+
+I guess this means _this_ function is not properly using rcu protection.
+
+>         if (ip6_ignore_linkdown(nh->fib_nh_dev) &&
+>             nh->fib_nh_flags & RTNH_F_LINKDOWN &&
+>             !(strict & RT6_LOOKUP_F_IGNORE_LINKSTATE))
+>
+> =========================================================
+> BUG: KASAN: null-ptr-deref in find_match.part.0+0x70/0x134
+> Read of size 4 at addr 0000000000000308 by task ping6/263
+>
+> CPU: 2 PID: 263 Comm: ping6 Not tainted 5.19.0-rc7+ #14
+> Call trace:
+>  dump_backtrace+0x1a8/0x230
+>  show_stack+0x20/0x70
+>  dump_stack_lvl+0x68/0x84
+>  print_report+0xc4/0x120
+>  kasan_report+0x84/0x120
+>  __asan_load4+0x94/0xd0
+>  find_match.part.0+0x70/0x134
+>  __find_rr_leaf+0x408/0x470
+>  fib6_table_lookup+0x264/0x540
+>  ip6_pol_route+0xf4/0x260
+>  ip6_pol_route_output+0x58/0x70
+>  fib6_rule_lookup+0x1a8/0x330
+>  ip6_route_output_flags_noref+0xd8/0x1a0
+>  ip6_route_output_flags+0x58/0x160
+>  ip6_dst_lookup_tail+0x5b4/0x85c
+>  ip6_dst_lookup_flow+0x98/0x120
+>  rawv6_sendmsg+0x49c/0xc70
+>  inet_sendmsg+0x68/0x94
+>  sock_sendmsg+0x8c/0xb0
+>
+> It is because ip6_ptr has been assigned to NULL in addrconf_ifdown(),
+> and ip6_ignore_linkdown() in find_match() accesses ip6_ptr directly.
+> Although find_match() routine is under rcu_read_lock(), but there is
+> not synchronize_net() before assign NULL to make rcu grace period end.
+>
+
+This is not how RCU works.
+
+> So we can add synchronize_net() before assign ip6_ptr to NULL in
+> addrconf_ifdown() to fix the null-ptr-deref bug.
+
+This does not make sense to me.
+
+>
+> Fixes: 8814c4b53381 ("[IPV6] ADDRCONF: Convert addrconf_lock to RCU.")
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
+>  net/ipv6/addrconf.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+> index 49cc6587dd77..63d33b29ad21 100644
+> --- a/net/ipv6/addrconf.c
+> +++ b/net/ipv6/addrconf.c
+> @@ -3757,6 +3757,7 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
+>                 idev->dead = 1;
+>
+>                 /* protected by rtnl_lock */
+> +               synchronize_net();
+
+I do not think we want yet another expensive synchronize_net(),
+especially  before setting ip6_ptr to NULL
 
 
-On 21.07.22 г. 10:48 ч., Zixuan Fu wrote:
-> In btrfs_relocate_block_group(), the structure variable rc is allocated.
-> Then btrfs_relocate_block_group() calls relocate_block_group() ->
-> prepare_to_relocate() -> set_reloc_control(), and assigns rc to the
-> variable fs_info->reloc_ctl. When prepare_to_relocate() returns, it
-> calls btrfs_commit_transaction() -> btrfs_start_dirty_block_groups()
 
-nit: transaction commit can fail for a number of reasons, not 
-necessarily enomem, even due to ENOSPC errors or faulty hardware.
-
-> -> btrfs_alloc_path() -> kmem_cache_zalloc(), which may fail. When the
-> failure occurs, btrfs_relocate_block_group() detects the error and frees
-> rc and doesn't set fs_info->reloc_ctl to NULL. After that, in
-> btrfs_init_reloc_root(), rc is retrieved from fs_info->reloc_ctl and
-> then used, which may cause a use-after-free bug.
-> 
-> This possible bug can be triggered by calling btrfs_ioctl_balance()
-> before calling btrfs_ioctl_defrag().
-> 
-> To fix this possible bug, in prepare_to_relocate(), an if statement
-> is added to check whether btrfs_commit_transaction() fails. If the
-> failure occurs, unset_reloc_control() is called to set
-> fs_info->reloc_ctl to NULL.
-> 
-> The error log in our fault-injection testing is shown as follows:
-> 
-> [   58.751070] BUG: KASAN: use-after-free in btrfs_init_reloc_root+0x7ca/0x920 [btrfs]
-> ...
-> [   58.753577] Call Trace:
-> ...
-> [   58.755800]  kasan_report+0x45/0x60
-> [   58.756066]  btrfs_init_reloc_root+0x7ca/0x920 [btrfs]
-> [   58.757304]  record_root_in_trans+0x792/0xa10 [btrfs]
-> [   58.757748]  btrfs_record_root_in_trans+0x463/0x4f0 [btrfs]
-> [   58.758231]  start_transaction+0x896/0x2950 [btrfs]
-> [   58.758661]  btrfs_defrag_root+0x250/0xc00 [btrfs]
-> [   58.759083]  btrfs_ioctl_defrag+0x467/0xa00 [btrfs]
-> [   58.759513]  btrfs_ioctl+0x3c95/0x114e0 [btrfs]
-> ...
-> [   58.768510] Allocated by task 23683:
-> [   58.768777]  ____kasan_kmalloc+0xb5/0xf0
-> [   58.769069]  __kmalloc+0x227/0x3d0
-> [   58.769325]  alloc_reloc_control+0x10a/0x3d0 [btrfs]
-> [   58.769755]  btrfs_relocate_block_group+0x7aa/0x1e20 [btrfs]
-> [   58.770228]  btrfs_relocate_chunk+0xf1/0x760 [btrfs]
-> [   58.770655]  __btrfs_balance+0x1326/0x1f10 [btrfs]
-> [   58.771071]  btrfs_balance+0x3150/0x3d30 [btrfs]
-> [   58.771472]  btrfs_ioctl_balance+0xd84/0x1410 [btrfs]
-> [   58.771902]  btrfs_ioctl+0x4caa/0x114e0 [btrfs]
-> ...
-> [   58.773337] Freed by task 23683:
-> ...
-> [   58.774815]  kfree+0xda/0x2b0
-> [   58.775038]  free_reloc_control+0x1d6/0x220 [btrfs]
-> [   58.775465]  btrfs_relocate_block_group+0x115c/0x1e20 [btrfs]
-> [   58.775944]  btrfs_relocate_chunk+0xf1/0x760 [btrfs]
-> [   58.776369]  __btrfs_balance+0x1326/0x1f10 [btrfs]
-> [   58.776784]  btrfs_balance+0x3150/0x3d30 [btrfs]
-> [   58.777185]  btrfs_ioctl_balance+0xd84/0x1410 [btrfs]
-> [   58.777621]  btrfs_ioctl+0x4caa/0x114e0 [btrfs]
-> ...
-> 
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
-
-
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
+>                 RCU_INIT_POINTER(dev->ip6_ptr, NULL);
+>
+>                 /* Step 1.5: remove snmp6 entry */
+> --
+> 2.25.1
+>

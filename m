@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C499657E12C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BE657E12E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiGVMAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 08:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S234877AbiGVMAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 08:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiGVMAS (ORCPT
+        with ESMTP id S232125AbiGVMAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 08:00:18 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B171B7EA;
+        Fri, 22 Jul 2022 08:00:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88B0E03D;
         Fri, 22 Jul 2022 05:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658491215; x=1690027215;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=nRBWTIjqR+EBo83QXnR7YxxBrSXGYH7OV2uGt4ob61E=;
-  b=UK5tnF1bJF4MAafHTS53h023yyOiDai9Td1R19AwJYX8KoKZnl4YsSBv
-   yNMF5LKIX4uAPkJfCoi2k8tmmvitqVH0eOO4r97J/spCFZFVQQjrnab5T
-   M4g7/sb7BUCixn44w1yDsVVUGLhbwlOlHjHGC4CH+VGqP2kd32qjdcUo6
-   +7eqzQCD9nZ/I1l/PBkl3PZh6kpELhJpOr3hjWR+9uoUjVHqcW38bAuYX
-   uwvoeApFqWUkqICPqotiz20l4T3Br85xI4uw5QLiC654ABI73t3uheOVK
-   6/spCJrBVEoYMG7+1vPWMrO7tktfl9PQkLDYpglMQPLgL4AcPdlEJBACP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="288470404"
-X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="288470404"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 05:00:14 -0700
-X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="657189243"
-Received: from dstoll-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.44.132])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 05:00:10 -0700
-Date:   Fri, 22 Jul 2022 14:00:09 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Chris Wilson <chris.p.wilson@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Fei Yang <fei.yang@intel.com>,
-        Thomas =?iso-8859-15?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>
-Subject: Re: [PATCH v2 05/21] drm/i915/gt: Skip TLB invalidations once wedged
-Message-ID: <YtqRSXXiON8Oed96@alfio.lan>
-References: <cover.1657800199.git.mchehab@kernel.org>
- <f20bd21c94610dae59824b8040e5a9400de6f963.1657800199.git.mchehab@kernel.org>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F5061E86;
+        Fri, 22 Jul 2022 12:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C8785C341C7;
+        Fri, 22 Jul 2022 12:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658491214;
+        bh=1j7PW/sFyD9QjxYJpGlIH5c6bmVwAeW+UkAQK9QsJSE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EhwAVBDnksS07Kke8xZwIGKi1vMn2nNHCkJF/8y2wG7fBPpUhCXYrdN5izT51TCvk
+         r3a21taZpHuLLEJFzcphVWivIJaEdK92VX/rTVXYvlokZpiqd5K16XAdLYwy+S/cnN
+         mMtNy1dT+LxaA36tr8xaMBY9xeYJfbse49L7E7+gka83o7+HgGtWn+Gv1+t0Xcw81c
+         l0PyPp1ymrJo+aXPMzDYQElIyqxSgOc6CwCWQfBI6RTMtjjxMiLzwUWrgLgPuGnX80
+         2vxc1WF68gzAIIIjVpg6mF7SxgmrRqZxvWrJpcoTqy/5WBCzYTX5CIOLcSaUhctzOr
+         z2fq2GCgpC53Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A69A9E451BB;
+        Fri, 22 Jul 2022 12:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f20bd21c94610dae59824b8040e5a9400de6f963.1657800199.git.mchehab@kernel.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] caif: Fix bitmap data type in "struct caifsock"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165849121467.11142.18393766946931766129.git-patchwork-notify@kernel.org>
+Date:   Fri, 22 Jul 2022 12:00:14 +0000
+References: <b7a88272148a30cf2d0a97f2e82260a0dcb370a1.1658346566.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <b7a88272148a30cf2d0a97f2e82260a0dcb370a1.1658346566.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Hello:
 
-On Thu, Jul 14, 2022 at 01:06:10PM +0100, Mauro Carvalho Chehab wrote:
-> From: Chris Wilson <chris.p.wilson@intel.com>
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 20 Jul 2022 21:49:46 +0200 you wrote:
+> Bitmap are "unsigned long", so use it instead of a "u32" to make things
+> more explicit.
 > 
-> Skip all further TLB invalidations once the device is wedged and
-> had been reset, as, on such cases, it can no longer process instructions
-> on the GPU and the user no longer has access to the TLB's in each engine.
+> While at it, remove some useless cast (and leading spaces) when using the
+> bitmap API.
 > 
-> That helps to reduce the performance regression introduced by TLB
-> invalidate logic.
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
-> Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
-> Cc: Fei Yang <fei.yang@intel.com>
-> Cc: Andi Shyti <andi.shyti@linux.intel.com>
-> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> [...]
 
-I haven't read any concern from Tvrtko here, in any case:
+Here is the summary with links:
+  - caif: Fix bitmap data type in "struct caifsock"
+    https://git.kernel.org/netdev/net/c/8ee18e2a9e7b
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-thanks,
-Andi
+

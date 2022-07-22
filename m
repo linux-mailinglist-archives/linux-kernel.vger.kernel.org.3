@@ -2,334 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8629F57DEA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA99657DDA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235790AbiGVJRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S236239AbiGVJXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbiGVJQU (ORCPT
+        with ESMTP id S236188AbiGVJWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:16:20 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB49B5070
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:11:56 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id g17so4092529plh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:11:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=24+TxujgV3rUEF1of+Gq33eXW5NFSbE6j4kj4fO+oaM=;
-        b=Zds9d6bhjfEA5B8w6CLN086P1nk5guHANR55R5Et+tWtTn2F5wJ2CT2a6esYtMXcxZ
-         09XdCSxaBZDa/2ZRcCsvgxg4XbHn/50131bv4tvgklnIg3ij+3PgA4ruDQlwG4kxvo75
-         sma+4JrvBO+cv0WBujeZdQd4fRJYZITFVmbo0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=24+TxujgV3rUEF1of+Gq33eXW5NFSbE6j4kj4fO+oaM=;
-        b=YdKbylOgTenbNxXMYVprxcCD1Va0PPIjSX7NjpfW6kNKLTdKsqyd1b6smx0y88rlwZ
-         y/xOWEmI7uz66YSXLQLRUr5oTxkazCpT2iNrMmPTn42XEFITsmkOyXXZMY8CluGO4t5l
-         twmgAxBR/lTGnFBnG7V1hl/Uin/CNwC3R1WP8x+CyXCsR+w2bsqUlWGsK3IDEgy3Zbej
-         /kAwcqAOJiQR9DyuL+vW8bqb+s4qSCSGctBxDY3Mu+4IyxIevEFqY75fwa9msqJIUm0A
-         k8uGtlEtUydfViikcGUJq8jv+YCVX5tXvxztE/JA2p5BlwYyp1v21KWfbIF7f2EJr+1W
-         +wQQ==
-X-Gm-Message-State: AJIora/54GhQGThbV4L0fabQTKiZ6uDvsOJTKmDKTUBI+GzbbvXhwtCr
-        I1Rxqrppo1LW0n4dxorsyKi+9Q==
-X-Google-Smtp-Source: AGRyM1vIdS6HyYlM9oBvMWJocM2ed2QJe6CjvpjDFm/v4jAcqI04NcKCeYxzE1cYmvIuDMoEAxKebg==
-X-Received: by 2002:a17:90a:ea04:b0:1f2:242d:e2af with SMTP id w4-20020a17090aea0400b001f2242de2afmr12332387pjy.45.1658481115707;
-        Fri, 22 Jul 2022 02:11:55 -0700 (PDT)
-Received: from rahul_yocto_ubuntu18.ibn.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id p64-20020a622943000000b0052b9351737fsm3429978pfp.92.2022.07.22.02.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 02:11:55 -0700 (PDT)
-From:   Vikas Gupta <vikas.gupta@broadcom.com>
-To:     jiri@nvidia.com, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, dsahern@kernel.org,
-        stephen@networkplumber.org, edumazet@google.com, pabeni@redhat.com,
-        ast@kernel.org, leon@kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, michael.chan@broadcom.com,
-        andrew.gospodarek@broadcom.com,
-        Vikas Gupta <vikas.gupta@broadcom.com>
-Subject: [PATCH net-next v5 2/2] bnxt_en: implement callbacks for devlink selftests
-Date:   Fri, 22 Jul 2022 14:41:29 +0530
-Message-Id: <20220722091129.2271-3-vikas.gupta@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220722091129.2271-1-vikas.gupta@broadcom.com>
-References: <20220722091129.2271-1-vikas.gupta@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cb5e4b05e46139ba"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_TVD_MIME_NO_HEADERS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 05:22:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40654C06D1;
+        Fri, 22 Jul 2022 02:14:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F80C61F4F;
+        Fri, 22 Jul 2022 09:14:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6639EC341C6;
+        Fri, 22 Jul 2022 09:14:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658481279;
+        bh=JlIyOuUj9JLLrDz59NnPWuShcfTAFWu4/c6+Co6rN1M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QIn9zc+NmrWiDGWDJ3dfP9Z6FPzBoRHK6J0+WIAVjHEr7DxAxoG91Y/E5c4JzSwur
+         6Ib91jylP7TZ48YE9sKAlRvvrB0uPH56b82/BYWXVM25GSvor9qoq+m1azfUvV6W5P
+         R9RO39sNlqroVYryqb+irkoMDQh20mJbpn3v8mgU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH 5.15 55/89] x86/bugs: Add retbleed=ibpb
+Date:   Fri, 22 Jul 2022 11:11:29 +0200
+Message-Id: <20220722091136.440367216@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220722091133.320803732@linuxfoundation.org>
+References: <20220722091133.320803732@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000cb5e4b05e46139ba
+From: Peter Zijlstra <peterz@infradead.org>
 
-Add callbacks
-=============
-.selftest_check: returns true for flash selftest.
-.selftest_run: runs a flash selftest.
+commit 3ebc170068885b6fc7bedda6c667bb2c4d533159 upstream.
 
-Also, refactor NVM APIs so that they can be
-used with devlink and ethtool both.
+jmp2ret mitigates the easy-to-attack case at relatively low overhead.
+It mitigates the long speculation windows after a mispredicted RET, but
+it does not mitigate the short speculation window from arbitrary
+instruction boundaries.
 
-Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
+On Zen2, there is a chicken bit which needs setting, which mitigates
+"arbitrary instruction boundaries" down to just "basic block boundaries".
+
+But there is no fix for the short speculation window on basic block
+boundaries, other than to flush the entire BTB to evict all attacker
+predictions.
+
+On the spectrum of "fast & blurry" -> "safe", there is (on top of STIBP
+or no-SMT):
+
+  1) Nothing		System wide open
+  2) jmp2ret		May stop a script kiddy
+  3) jmp2ret+chickenbit  Raises the bar rather further
+  4) IBPB		Only thing which can count as "safe".
+
+Tentative numbers put IBPB-on-entry at a 2.5x hit on Zen2, and a 10x hit
+on Zen1 according to lmbench.
+
+  [ bp: Fixup feature bit comments, document option, 32-bit build fix. ]
+
+Suggested-by: Andrew Cooper <Andrew.Cooper3@citrix.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/ethernet/broadcom/bnxt/bnxt_devlink.c | 61 +++++++++++++++++++
- .../net/ethernet/broadcom/bnxt/bnxt_ethtool.c | 24 ++++----
- .../net/ethernet/broadcom/bnxt/bnxt_ethtool.h | 12 ++++
- 3 files changed, 85 insertions(+), 12 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |    3 +
+ arch/x86/entry/Makefile                         |    2 -
+ arch/x86/entry/entry.S                          |   22 ++++++++++++
+ arch/x86/include/asm/cpufeatures.h              |    2 -
+ arch/x86/include/asm/nospec-branch.h            |    8 +++-
+ arch/x86/kernel/cpu/bugs.c                      |   43 ++++++++++++++++++------
+ 6 files changed, 67 insertions(+), 13 deletions(-)
+ create mode 100644 arch/x86/entry/entry.S
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-index 6b3d4f4c2a75..27214fd1ee94 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c
-@@ -20,6 +20,8 @@
- #include "bnxt_ulp.h"
- #include "bnxt_ptp.h"
- #include "bnxt_coredump.h"
-+#include "bnxt_nvm_defs.h"
-+#include "bnxt_ethtool.h"
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4978,6 +4978,9 @@
+ 				       disabling SMT if necessary for
+ 				       the full mitigation (only on Zen1
+ 				       and older without STIBP).
++			ibpb	     - mitigate short speculation windows on
++				       basic block boundaries too. Safe, highest
++				       perf impact.
+ 			unret        - force enable untrained return thunks,
+ 				       only effective on AMD f15h-f17h
+ 				       based systems.
+--- a/arch/x86/entry/Makefile
++++ b/arch/x86/entry/Makefile
+@@ -11,7 +11,7 @@ CFLAGS_REMOVE_common.o		= $(CC_FLAGS_FTR
  
- static void __bnxt_fw_recover(struct bnxt *bp)
- {
-@@ -610,6 +612,63 @@ static int bnxt_dl_reload_up(struct devlink *dl, enum devlink_reload_action acti
- 	return rc;
- }
+ CFLAGS_common.o			+= -fno-stack-protector
  
-+static bool bnxt_nvm_test(struct bnxt *bp, struct netlink_ext_ack *extack)
-+{
-+	u32 datalen;
-+	u16 index;
-+	u8 *buf;
+-obj-y				:= entry_$(BITS).o thunk_$(BITS).o syscall_$(BITS).o
++obj-y				:= entry.o entry_$(BITS).o thunk_$(BITS).o syscall_$(BITS).o
+ obj-y				+= common.o
+ 
+ obj-y				+= vdso/
+--- /dev/null
++++ b/arch/x86/entry/entry.S
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Common place for both 32- and 64-bit entry routines.
++ */
 +
-+	if (bnxt_find_nvram_item(bp->dev, BNX_DIR_TYPE_VPD,
-+				 BNX_DIR_ORDINAL_FIRST, BNX_DIR_EXT_NONE,
-+				 &index, NULL, &datalen) || !datalen) {
-+		NL_SET_ERR_MSG_MOD(extack, "nvm test vpd entry error");
-+		return false;
-+	}
++#include <linux/linkage.h>
++#include <asm/export.h>
++#include <asm/msr-index.h>
 +
-+	buf = kzalloc(datalen, GFP_KERNEL);
-+	if (!buf) {
-+		NL_SET_ERR_MSG_MOD(extack, "insufficient memory for nvm test");
-+		return false;
-+	}
++.pushsection .noinstr.text, "ax"
 +
-+	if (bnxt_get_nvram_item(bp->dev, index, 0, datalen, buf)) {
-+		NL_SET_ERR_MSG_MOD(extack, "nvm test vpd read error");
-+		goto err;
-+	}
++SYM_FUNC_START(entry_ibpb)
++	movl	$MSR_IA32_PRED_CMD, %ecx
++	movl	$PRED_CMD_IBPB, %eax
++	xorl	%edx, %edx
++	wrmsr
++	RET
++SYM_FUNC_END(entry_ibpb)
++/* For KVM */
++EXPORT_SYMBOL_GPL(entry_ibpb);
 +
-+	if (bnxt_flash_nvram(bp->dev, BNX_DIR_TYPE_VPD, BNX_DIR_ORDINAL_FIRST,
-+			     BNX_DIR_EXT_NONE, 0, 0, buf, datalen)) {
-+		NL_SET_ERR_MSG_MOD(extack, "nvm test vpd write error");
-+		goto err;
-+	}
-+
-+	return true;
-+
-+err:
-+	kfree(buf);
-+	return false;
-+}
-+
-+static bool bnxt_dl_selftest_check(struct devlink *dl, unsigned int test_id,
-+				   struct netlink_ext_ack *extack)
-+{
-+	return test_id == DEVLINK_ATTR_SELFTEST_TEST_ID_FLASH;
-+}
-+
-+static enum devlink_selftest_test_status bnxt_dl_selftest_run(struct devlink *dl,
-+							      unsigned int test_id,
-+							      struct netlink_ext_ack *extack)
-+{
-+	struct bnxt *bp = bnxt_get_bp_from_dl(dl);
-+
-+	if (test_id == DEVLINK_ATTR_SELFTEST_TEST_ID_FLASH)
-+		return bnxt_nvm_test(bp, extack) ?
-+				DEVLINK_SELFTEST_TEST_STATUS_PASS :
-+				DEVLINK_SELFTEST_TEST_STATUS_FAIL;
-+
-+	return DEVLINK_SELFTEST_TEST_STATUS_SKIP;
-+}
-+
- static const struct devlink_ops bnxt_dl_ops = {
- #ifdef CONFIG_BNXT_SRIOV
- 	.eswitch_mode_set = bnxt_dl_eswitch_mode_set,
-@@ -622,6 +681,8 @@ static const struct devlink_ops bnxt_dl_ops = {
- 	.reload_limits	  = BIT(DEVLINK_RELOAD_LIMIT_NO_RESET),
- 	.reload_down	  = bnxt_dl_reload_down,
- 	.reload_up	  = bnxt_dl_reload_up,
-+	.selftest_check	  = bnxt_dl_selftest_check,
-+	.selftest_run	  = bnxt_dl_selftest_run,
++.popsection
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -294,7 +294,7 @@
+ #define X86_FEATURE_PER_THREAD_MBA	(11*32+ 7) /* "" Per-thread Memory Bandwidth Allocation */
+ #define X86_FEATURE_SGX1		(11*32+ 8) /* "" Basic SGX */
+ #define X86_FEATURE_SGX2		(11*32+ 9) /* "" SGX Enclave Dynamic Memory Management (EDMM) */
+-/* FREE!				(11*32+10) */
++#define X86_FEATURE_ENTRY_IBPB		(11*32+10) /* "" Issue an IBPB on kernel entry */
+ /* FREE!				(11*32+11) */
+ #define X86_FEATURE_RETPOLINE		(11*32+12) /* "" Generic Retpoline mitigation for Spectre variant 2 */
+ #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -123,14 +123,17 @@
+  * return thunk isn't mapped into the userspace tables (then again, AMD
+  * typically has NO_MELTDOWN).
+  *
+- * Doesn't clobber any registers but does require a stable stack.
++ * While zen_untrain_ret() doesn't clobber anything but requires stack,
++ * entry_ibpb() will clobber AX, CX, DX.
+  *
+  * As such, this must be placed after every *SWITCH_TO_KERNEL_CR3 at a point
+  * where we have a stack but before any RET instruction.
+  */
+ .macro UNTRAIN_RET
+ #ifdef CONFIG_RETPOLINE
+-	ALTERNATIVE "", "call zen_untrain_ret", X86_FEATURE_UNRET
++	ALTERNATIVE_2 "",						\
++	              "call zen_untrain_ret", X86_FEATURE_UNRET,	\
++		      "call entry_ibpb", X86_FEATURE_ENTRY_IBPB
+ #endif
+ .endm
+ 
+@@ -144,6 +147,7 @@
+ 
+ extern void __x86_return_thunk(void);
+ extern void zen_untrain_ret(void);
++extern void entry_ibpb(void);
+ 
+ #ifdef CONFIG_RETPOLINE
+ 
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -798,6 +798,7 @@ static enum spectre_v2_mitigation spectr
+ enum retbleed_mitigation {
+ 	RETBLEED_MITIGATION_NONE,
+ 	RETBLEED_MITIGATION_UNRET,
++	RETBLEED_MITIGATION_IBPB,
+ 	RETBLEED_MITIGATION_IBRS,
+ 	RETBLEED_MITIGATION_EIBRS,
+ };
+@@ -806,11 +807,13 @@ enum retbleed_mitigation_cmd {
+ 	RETBLEED_CMD_OFF,
+ 	RETBLEED_CMD_AUTO,
+ 	RETBLEED_CMD_UNRET,
++	RETBLEED_CMD_IBPB,
  };
  
- static const struct devlink_ops bnxt_vf_dl_ops;
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-index 7191e5d74208..87eb5362ad70 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-@@ -2176,14 +2176,14 @@ static void bnxt_print_admin_err(struct bnxt *bp)
- 	netdev_info(bp->dev, "PF does not have admin privileges to flash or reset the device\n");
- }
+ const char * const retbleed_strings[] = {
+ 	[RETBLEED_MITIGATION_NONE]	= "Vulnerable",
+ 	[RETBLEED_MITIGATION_UNRET]	= "Mitigation: untrained return thunk",
++	[RETBLEED_MITIGATION_IBPB]	= "Mitigation: IBPB",
+ 	[RETBLEED_MITIGATION_IBRS]	= "Mitigation: IBRS",
+ 	[RETBLEED_MITIGATION_EIBRS]	= "Mitigation: Enhanced IBRS",
+ };
+@@ -840,6 +843,8 @@ static int __init retbleed_parse_cmdline
+ 			retbleed_cmd = RETBLEED_CMD_AUTO;
+ 		} else if (!strcmp(str, "unret")) {
+ 			retbleed_cmd = RETBLEED_CMD_UNRET;
++		} else if (!strcmp(str, "ibpb")) {
++			retbleed_cmd = RETBLEED_CMD_IBPB;
+ 		} else if (!strcmp(str, "nosmt")) {
+ 			retbleed_nosmt = true;
+ 		} else {
+@@ -854,11 +859,13 @@ static int __init retbleed_parse_cmdline
+ early_param("retbleed", retbleed_parse_cmdline);
  
--static int bnxt_find_nvram_item(struct net_device *dev, u16 type, u16 ordinal,
--				u16 ext, u16 *index, u32 *item_length,
--				u32 *data_length);
-+int bnxt_find_nvram_item(struct net_device *dev, u16 type, u16 ordinal,
-+			 u16 ext, u16 *index, u32 *item_length,
-+			 u32 *data_length);
+ #define RETBLEED_UNTRAIN_MSG "WARNING: BTB untrained return thunk mitigation is only effective on AMD/Hygon!\n"
+-#define RETBLEED_COMPILER_MSG "WARNING: kernel not compiled with RETPOLINE or -mfunction-return capable compiler!\n"
++#define RETBLEED_COMPILER_MSG "WARNING: kernel not compiled with RETPOLINE or -mfunction-return capable compiler; falling back to IBPB!\n"
+ #define RETBLEED_INTEL_MSG "WARNING: Spectre v2 mitigation leaves CPU vulnerable to RETBleed attacks, data leaks possible!\n"
  
--static int bnxt_flash_nvram(struct net_device *dev, u16 dir_type,
--			    u16 dir_ordinal, u16 dir_ext, u16 dir_attr,
--			    u32 dir_item_len, const u8 *data,
--			    size_t data_len)
-+int bnxt_flash_nvram(struct net_device *dev, u16 dir_type,
-+		     u16 dir_ordinal, u16 dir_ext, u16 dir_attr,
-+		     u32 dir_item_len, const u8 *data,
-+		     size_t data_len)
+ static void __init retbleed_select_mitigation(void)
  {
- 	struct bnxt *bp = netdev_priv(dev);
- 	struct hwrm_nvm_write_input *req;
-@@ -2836,8 +2836,8 @@ static int bnxt_get_nvram_directory(struct net_device *dev, u32 len, u8 *data)
- 	return rc;
- }
++	bool mitigate_smt = false;
++
+ 	if (!boot_cpu_has_bug(X86_BUG_RETBLEED) || cpu_mitigations_off())
+ 		return;
  
--static int bnxt_get_nvram_item(struct net_device *dev, u32 index, u32 offset,
--			       u32 length, u8 *data)
-+int bnxt_get_nvram_item(struct net_device *dev, u32 index, u32 offset,
-+			u32 length, u8 *data)
- {
- 	struct bnxt *bp = netdev_priv(dev);
- 	int rc;
-@@ -2871,9 +2871,9 @@ static int bnxt_get_nvram_item(struct net_device *dev, u32 index, u32 offset,
- 	return rc;
- }
+@@ -870,11 +877,21 @@ static void __init retbleed_select_mitig
+ 		retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
+ 		break;
  
--static int bnxt_find_nvram_item(struct net_device *dev, u16 type, u16 ordinal,
--				u16 ext, u16 *index, u32 *item_length,
--				u32 *data_length)
-+int bnxt_find_nvram_item(struct net_device *dev, u16 type, u16 ordinal,
-+			 u16 ext, u16 *index, u32 *item_length,
-+			 u32 *data_length)
- {
- 	struct hwrm_nvm_find_dir_entry_output *output;
- 	struct hwrm_nvm_find_dir_entry_input *req;
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h
-index a59284215e78..a8ecef8ab82c 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.h
-@@ -58,5 +58,17 @@ int bnxt_flash_package_from_fw_obj(struct net_device *dev, const struct firmware
- int bnxt_get_pkginfo(struct net_device *dev, char *ver, int size);
- void bnxt_ethtool_init(struct bnxt *bp);
- void bnxt_ethtool_free(struct bnxt *bp);
-+int bnxt_find_nvram_item(struct net_device *dev, u16 type, u16 ordinal,
-+			 u16 ext, u16 *index, u32 *item_length,
-+			 u32 *data_length);
-+int bnxt_find_nvram_item(struct net_device *dev, u16 type, u16 ordinal,
-+			 u16 ext, u16 *index, u32 *item_length,
-+			 u32 *data_length);
-+int bnxt_flash_nvram(struct net_device *dev, u16 dir_type,
-+		     u16 dir_ordinal, u16 dir_ext, u16 dir_attr,
-+		     u32 dir_item_len, const u8 *data,
-+		     size_t data_len);
-+int bnxt_get_nvram_item(struct net_device *dev, u32 index, u32 offset,
-+			u32 length, u8 *data);
++	case RETBLEED_CMD_IBPB:
++		retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
++		break;
++
+ 	case RETBLEED_CMD_AUTO:
+ 	default:
+ 		if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+-		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
+-			retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
++		    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
++
++			if (IS_ENABLED(CONFIG_RETPOLINE) &&
++			    IS_ENABLED(CONFIG_CC_HAS_RETURN_THUNK))
++				retbleed_mitigation = RETBLEED_MITIGATION_UNRET;
++			else
++				retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
++		}
  
- #endif
--- 
-2.31.1
+ 		/*
+ 		 * The Intel mitigation (IBRS) was already selected in
+@@ -890,26 +907,34 @@ static void __init retbleed_select_mitig
+ 		if (!IS_ENABLED(CONFIG_RETPOLINE) ||
+ 		    !IS_ENABLED(CONFIG_CC_HAS_RETURN_THUNK)) {
+ 			pr_err(RETBLEED_COMPILER_MSG);
+-			retbleed_mitigation = RETBLEED_MITIGATION_NONE;
+-			break;
++			retbleed_mitigation = RETBLEED_MITIGATION_IBPB;
++			goto retbleed_force_ibpb;
+ 		}
+ 
+ 		setup_force_cpu_cap(X86_FEATURE_RETHUNK);
+ 		setup_force_cpu_cap(X86_FEATURE_UNRET);
+ 
+-		if (!boot_cpu_has(X86_FEATURE_STIBP) &&
+-		    (retbleed_nosmt || cpu_mitigations_auto_nosmt()))
+-			cpu_smt_disable(false);
+-
+ 		if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+ 		    boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
+ 			pr_err(RETBLEED_UNTRAIN_MSG);
++
++		mitigate_smt = true;
++		break;
++
++	case RETBLEED_MITIGATION_IBPB:
++retbleed_force_ibpb:
++		setup_force_cpu_cap(X86_FEATURE_ENTRY_IBPB);
++		mitigate_smt = true;
+ 		break;
+ 
+ 	default:
+ 		break;
+ 	}
+ 
++	if (mitigate_smt && !boot_cpu_has(X86_FEATURE_STIBP) &&
++	    (retbleed_nosmt || cpu_mitigations_auto_nosmt()))
++		cpu_smt_disable(false);
++
+ 	/*
+ 	 * Let IBRS trump all on Intel without affecting the effects of the
+ 	 * retbleed= cmdline option.
 
 
---000000000000cb5e4b05e46139ba
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-I7qKxvF8Yo7eGTnHRTa99J+6yTd88AKVuhM5TEhpC8cS7qvrQXJje+Uing2xWC4FH76LEWIFH0Pt
-x8C1WoCU0ClXHU/XfzH2mYrFANBSCeP1Co6QdEfRAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGHZpa2FzLmd1cHRhQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUc6J11rH3s6PyZQ0zIVZHIuP20Yw
-DQYJKoZIhvcNAQELBQADggEBALvCjXn9gy9a2nU/Ey0nphGZefIP33ggiyuKnmqwBt7Wk/uDHIIc
-kkIlqtTbo0x0PqphS9A23CxCDjKqZq2WN34fL5MMW83nrK0vqnPloCaxy9/6yuLbottBY4STNuvA
-mQ//Whh+PE+DZadqiDbxXbos3IH8AeFXH4A1zIqIrc0Um2/CSD/T6pvu9QrchtvemfP0z/f1Bk+8
-QbQ4ARVP93WV1I13US69evWXw+mOv9VnejShU9PMcDK203xjXbBOi9Hm+fthrWfwIyGoC5aEf7vd
-PKkEDt4VZ9RbudZU/c3N8+kURaHNtrvu2K+mQs5w/AF7HYZThqmOzQJnvMRjuL8xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwYjepatB64S625eswwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIF3Ns1+C0TMCK2i4Z8FtBNupyBr0jMl2KYxv
-TxWZ6URlMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDcyMjA5
-MTE1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQAhYMZfr2amd1xqRio6zcx2trr0417QuIIFXqMpm+CTysb5nu+WJza5
-CuNnk13XHg+U/xvOUSlB5HUqCoh9ZsGM57aZlMe940A+elLPtnNusY+vaj2okJZibA0CCW/jt5lP
-bSYy4TT21NXh5xBC0IA9OR3gMyRcPo2Vf+YSPA6m6WONVP7vDT5MG0tYeuKJFXAa7wCVN3UYg4QO
-S5SuD6kl0VjmGr2LYs7nyMFbjB30hf2Z3PzhVBFWAYT5J6zXwWwWtDXyO3g6fm/eK7nPf8WwhYsW
-DsE2uck4J4kfTwU0TGFBKoMVajUnDPsU1pc2BudwPdsqDVGF5g14O+z91h+M
---000000000000cb5e4b05e46139ba--

@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF53157E8C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A1257E8C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235668AbiGVVTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 17:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S233627AbiGVVTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 17:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235780AbiGVVTH (ORCPT
+        with ESMTP id S229522AbiGVVTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 17:19:07 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1BA81496
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:19:02 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y9so5426069pff.12
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Oc5PTr+hvWvMjG9OJoUlCT4BEowktVJZckyg6eEiGZE=;
-        b=eTAMEfddQglL1AT8gkFvkoYqCUn7WpbKEQMvs6GG4oI5Bc0veeCsdPwD63uxibZ2kF
-         enfgN6MXjdQe8mmwCDXItiguLo9OOzOwjVRO1b/vA+PsLVpRxtfc/UzLrWEfk+pd2nV2
-         z4qdGKxONyOS0rxjLij+6dlvhHjE12VJjINNJ69wIbHN2CvOFkdCfS7uCgvnp8Pkl0Ad
-         IPJk9L4EA/ovS8wud+uzxq+GO1zrUUWhEWl3tvdl7g+NVng1d0kV0VJhQHLoHb63LSwg
-         /etGTXNdbO6LCtcVfecjnR9SMlzIB3Hnltg/sGsC7Lu1NhEwjMWlT+E8roYHuoE99Zjf
-         Rn/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Oc5PTr+hvWvMjG9OJoUlCT4BEowktVJZckyg6eEiGZE=;
-        b=1DLINQTz8b4ffzcAK7Z7gXwslLE03CRuT99r0NB0umckNpzSrdF2ccNkw1fSf5m0FU
-         C+lGHCJDhotXajJzB+afu5Rm0FXp514li1rvSsngspWKbHhP7yCEfJiR93h7q0pelpet
-         jC1d9xib0cMdk47QG+H0gawMDMkmr1oafQA5dP4Iop3uPM11fT0uw7hpdTcndoUwMbvF
-         evyc+nXNAnECp5yxu8dfwOU0GjklcqKACHfW9lp35ZQozDHNZEE+LJJGc1YRfUo8BME/
-         96pvmCJh0NbHC6p0ndwYnBZf3iugQ4btmTiox3PMUh1QfISKWHFW7Wh16BkMQXPv37gG
-         p2Og==
-X-Gm-Message-State: AJIora8eMly3vyxesd4s+wJW+GH7W4XvzOLkPfDR1kNr8IF5Y0FXebA2
-        +7x3DE7PbCclmYr+kbsg7IxqMOLVWiaF7g==
-X-Google-Smtp-Source: AGRyM1tYXDMc3XqQvOOGhNhgbL5TID9KFoJ8Sa1bAObqRjclUX4VF72rxdFgWadSGCjuy2s/9WWAFw==
-X-Received: by 2002:a63:6c87:0:b0:419:b667:6622 with SMTP id h129-20020a636c87000000b00419b6676622mr1364682pgc.495.1658524740956;
-        Fri, 22 Jul 2022 14:19:00 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b0016c59b38254sm4259744plg.127.2022.07.22.14.19.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 14:19:00 -0700 (PDT)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Stafford Horne <shorne@gmail.com>,
-        Richard Henderson <richard.henderson@linaro.org>
-Subject: [PATCH] MAINTAINERS: Update Richard Henderson's address
-Date:   Sat, 23 Jul 2022 06:18:54 +0900
-Message-Id: <20220722211854.802252-1-shorne@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 22 Jul 2022 17:19:00 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B5681496
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658524739; x=1690060739;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JNEVeaQpNIkYZAQkbOrI2gpmynzCWz40l3qhi8iEsRE=;
+  b=UbMRaaza35Bw5ubQVD7drpUvNxYYG8JUOolBnBM4Z5CO1XRCavYB2Ny8
+   355+RDvU02vtpruOJuiPTi/9GfNGjRfGEqq3C6YfGa9KfQLX8PyYNIEJ3
+   77LkSDXh+tjlI4F1gXUtUJpWvjc6Nx9wWoEV+8NbkS1l6oUQyOgcETutd
+   4HwQTe8BFYnb2UNVe9z7i5USuen2C30NXCCWWEs53MQ1J0Kt2YWXvlA9H
+   UzUvVybtNkVWMYn6nPFDovDk31qU/Jr5yFJ2hUMULzcadyHzxNozS1Gie
+   mSyUkzgVQ1y8lhuvuVWAXs1l2a/G/GoJVaEuUgK1J4GyFaoWURvguQtgh
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="267802562"
+X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
+   d="scan'208";a="267802562"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 14:18:59 -0700
+X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
+   d="scan'208";a="574311344"
+Received: from atsunori-mobl1.amr.corp.intel.com (HELO [10.251.22.108]) ([10.251.22.108])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 14:18:58 -0700
+Message-ID: <b8ea1778-02c1-b688-896d-dbb231eddf23@linux.intel.com>
+Date:   Fri, 22 Jul 2022 14:18:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org,
+        "Nakajima, Jun" <jun.nakajima@intel.com>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <403cfccb-7fff-ab0b-8ebd-e5b04e631571@intel.com>
+ <20220722190524.GA3299911@ls.amr.corp.intel.com>
+ <18578c5a-7a35-ab20-467c-80141b0410a8@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <18578c5a-7a35-ab20-467c-80141b0410a8@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Richards address at twiddle.net no longer works and we are getting
-bounces.
++ Jun
 
-This patch updates to his Linaro address.
+On 7/22/22 12:13 PM, Dave Hansen wrote:
+> On 7/22/22 12:05, Isaku Yamahata wrote:
+>>> So, the quote portion of this is basically a bidirectional blob sender.
+>>>  It's to send a blob between guest userspace to host userspace.
+>>>
+>>> Do we *REALLY* need specific driver functionality for this?  For
+>>> instance, is there no existing virtio device that can send blobs back
+>>> and forth?
+>> It's virtio-vsock.  If virtio-vsock is available, the communication works.
+>> However, some users would like to disable virtio-vsock on their environment for
+>> some reasons.  Even virtio at all.  Especially for confidential computing use
+>> case.  It's their choice.  It can't be assumed that virtio is available.
+>>
+>> The goal is VMM-agnostic (but TDX-specific) interface for that.
+> 
+> You're basically saying that every confidential computing technology
+> should have its own host user <-> guest kernel <-> guest user ABI.
+> That's insanity.  If we do this, we need *one* interface that says "talk
+> to the hypervisor" that's common for all hypervisors and hardware
+> vendors, or at least more than *one*.
+> 
+> We don't need a way to talk to hypervisors for Intel systems and another
+> for AMD and yet another on whatever.
 
-Cc: Richard Henderson <richard.henderson@linaro.org>
-Signed-off-by: Stafford Horne <shorne@gmail.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For cases where your platform does not want to support or enable the generic
+interface (like vsock), isn't it better to have a fallback approach? I am not
+saying we should have such an ABI for all cases. But attestation is a must-have
+feature for the TDX guest, and we want to support it in all TD guest platforms.
+I think the GHCI ABI is added to meet this requirement.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f679152bdbad..e64ca0ac6db7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -797,7 +797,7 @@ S:	Maintained
- F:	drivers/staging/media/sunxi/cedrus/
- 
- ALPHA PORT
--M:	Richard Henderson <rth@twiddle.net>
-+M:	Richard Henderson <richard.henderson@linaro.org>
- M:	Ivan Kokshaysky <ink@jurassic.park.msu.ru>
- M:	Matt Turner <mattst88@gmail.com>
- L:	linux-alpha@vger.kernel.org
+Jun/Isaku, if you are aware of the exact requirement for this hypercall, please
+share it. Also let us know your comments on this topic.
+
 -- 
-2.36.1
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

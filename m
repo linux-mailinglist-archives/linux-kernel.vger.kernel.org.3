@@ -2,316 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A6457DF1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7DA57DEF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbiGVJqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S236730AbiGVJrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiGVJqC (ORCPT
+        with ESMTP id S234839AbiGVJqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:46:02 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A47216
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:41:26 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 75so7133290ybf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ycm+e+uAb5Qzvt79A/I5jn2CMOtivv09bxdwgVxuNho=;
-        b=nuPbVUJ2h5IkopZ2wsiKtrnKSrdpA/kpT6VdQq3XDPNe3tUplH99hLC7GMmXUxQUAl
-         we9hc7Nhq9Wc1jCwkKsqV6YTc/SnGw+BhBD+LeldOWf/zc/YT5UEMYAiIKODOi5+Z5if
-         Q13GSxH+uutZ3CWusGRYjgjCV2FeHuTFlOoHefsUhvNh6jD7tJmYMzUGTb8urhWLISXM
-         spQuo/e1rz3e4SGDbbYIkY7df8I/3cbBML3J87uBSDGD8mbLyOYy6Kpy3C/rVgDvQFox
-         ET9aV0ah2UtGgaMsZ3M9MCNN2u/6gwH2LAIK7zLtBzPUqauF/Aa0zCE+AnMpx/NL37rg
-         iAFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ycm+e+uAb5Qzvt79A/I5jn2CMOtivv09bxdwgVxuNho=;
-        b=dtMZMbXmxPbhjw7wBAaAcl3FaukoZWPO7HyRVHm1jSmRWxiMBDDmTgvFMCv9su9iAx
-         wP0DlBMjTOR9luxuEykkGLs0TecSVjh4UjMksnY25ha9TpGmK2rj28URSBSFebpB40oy
-         lv63ItU29VN5JImf5AHEYMQT/mygx6XQCpWx/VfdXq0MYUg1Yv/SXCNywuot9oTt178+
-         luOPdoQLQqOIOVu9c2GjgrvZKoTqpZjyyUutZKWccKb+t2hSZiWFD4LnOB/q0mT6lpcC
-         cAdyZHuq6vNxTGClvhtixGbYSpyUpv3/GJ3bNFYqDkMWVD5aJXeTiKtTruvsCAQeGzQf
-         YP2w==
-X-Gm-Message-State: AJIora9h7wGFf7EcMmaUtWqJXT/PD8hOIHoir2jazJJ8ICuxUa5BbhI1
-        bxHcu6k5tCxe+ki6r1SfMOY+JdmIUCl0DeOVKO9xQQ==
-X-Google-Smtp-Source: AGRyM1vYtA1iLdFcCvKRU5CjBWV8sFMkJtG9HlvobiYsw3i+wW6WBAesmbCNjROZoOgra/bx3UMtVDh86/0F/E+JjEI=
-X-Received: by 2002:a25:d9d4:0:b0:670:7b19:92cd with SMTP id
- q203-20020a25d9d4000000b006707b1992cdmr2020397ybg.223.1658482885374; Fri, 22
- Jul 2022 02:41:25 -0700 (PDT)
+        Fri, 22 Jul 2022 05:46:07 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD73C1FCCD;
+        Fri, 22 Jul 2022 02:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=EpMX8
+        /85w5IOZQMQqccD2jp1bdPhwiHl8+z2tnsG7GQ=; b=GSlKV9TTSDaIwHf8qjG1H
+        N7E9Ass9uDkQ9jDzQPWoYtETovvQwthDCF29TWx7ufYNvMU0rF8K/+JoB+WDqcWJ
+        bC3fi6i1bDNmKan0XkOlGiNBAWho7p80M87xxS0WOFGtnTgzeOFugUoOwAR5JvNZ
+        1AZFoB2SSVWh+FSWKGeZsA=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp1 (Coremail) with SMTP id GdxpCgDn79fkcNpiH5UqPw--.3252S2;
+        Fri, 22 Jul 2022 17:41:58 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        anil.gurumurthy@qlogic.com, sudarsana.kalluru@qlogic.com,
+        linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] scsi: bfa: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 17:41:54 +0800
+Message-Id: <20220722094154.78107-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220705060014.10050-1-vidyas@nvidia.com> <CACT4zj8oTthEA8uEpSYQYURcc4qqp20xfw+DRaH=cS9NHGgZtw@mail.gmail.com>
- <CAAd53p6RQ6GPkwWBTeqhOx_WXNLL8jrTe9n-zogaA_02QiDeUw@mail.gmail.com>
-In-Reply-To: <CAAd53p6RQ6GPkwWBTeqhOx_WXNLL8jrTe9n-zogaA_02QiDeUw@mail.gmail.com>
-From:   Lukasz Majczak <lma@semihalf.com>
-Date:   Fri, 22 Jul 2022 11:41:14 +0200
-Message-ID: <CAFJ_xbqJkXK7-O_kyF=Hrqu0gwskVLUfeK9mWSB1qM8XapLgSQ@mail.gmail.com>
-Subject: Re: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for suspend/resume
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Ben Chuang <benchuanggli@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, refactormyself@gmail.com, kw@linux.com,
-        rajatja@google.com, kenny@panix.com, treding@nvidia.com,
-        jonathanh@nvidia.com, abhsahu@nvidia.com, sagupta@nvidia.com,
-        linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgDn79fkcNpiH5UqPw--.3252S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr4UKF43KrW8Xw17Awb_yoW3trbEva
+        nFq3yIgw15CFZ7twnxAr1Fvry5Zw42vryrur1SvF13uayFvFWDXFyvvw1fZ348GFnrur9F
+        q3yqqw1akw4UWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRXa9IDUUUUU==
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivx5GZFWB0jzPCgABs9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pt., 22 lip 2022 o 09:31 Kai-Heng Feng <kai.heng.feng@canonical.com> napisa=
-=C5=82(a):
->
-> On Fri, Jul 15, 2022 at 6:38 PM Ben Chuang <benchuanggli@gmail.com> wrote=
-:
-> >
-> > On Tue, Jul 5, 2022 at 2:00 PM Vidya Sagar <vidyas@nvidia.com> wrote:
-> > >
-> > > Previously ASPM L1 Substates control registers (CTL1 and CTL2) weren'=
-t
-> > > saved and restored during suspend/resume leading to L1 Substates
-> > > configuration being lost post-resume.
-> > >
-> > > Save the L1 Substates control registers so that the configuration is
-> > > retained post-resume.
-> > >
-> > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> > > Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >
-> > Hi Vidya,
-> >
-> > I tested this patch on kernel v5.19-rc6.
-> > The test device is GL9755 card reader controller on Intel i5-10210U RVP=
-.
-> > This patch can restore L1SS after suspend/resume.
-> >
-> > The test results are as follows:
-> >
-> > After Boot:
-> > #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
-> >         Capabilities: [110 v1] L1 PM Substates
-> >                 L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
-> > ASPM_L1.1+ L1_PM_Substates+
-> >                           PortCommonModeRestoreTime=3D255us
-> > PortTPowerOnTime=3D3100us
-> >                 L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1=
-.1+
-> >                            T_CommonMode=3D0us LTR1.2_Threshold=3D314572=
-8ns
-> >                 L1SubCtl2: T_PwrOn=3D3100us
-> >
-> >
-> > After suspend/resume without this patch.
-> > #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
-> >         Capabilities: [110 v1] L1 PM Substates
-> >                 L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
-> > ASPM_L1.1+ L1_PM_Substates+
-> >                           PortCommonModeRestoreTime=3D255us
-> > PortTPowerOnTime=3D3100us
-> >                 L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1=
-.1-
-> >                            T_CommonMode=3D0us LTR1.2_Threshold=3D0ns
-> >                 L1SubCtl2: T_PwrOn=3D10us
-> >
-> >
-> > After suspend/resume with this patch.
-> > #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
-> >         Capabilities: [110 v1] L1 PM Substates
-> >                 L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
-> > ASPM_L1.1+ L1_PM_Substates+
-> >                           PortCommonModeRestoreTime=3D255us
-> > PortTPowerOnTime=3D3100us
-> >                 L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1=
-.1+
-> >                            T_CommonMode=3D0us LTR1.2_Threshold=3D314572=
-8ns
-> >                 L1SubCtl2: T_PwrOn=3D3100us
-> >
-> >
-> > Tested-by: Ben Chuang <benchuanggli@gmail.com>
->
-> Forgot to add mine:
-> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->
-> >
-> > Best regards,
-> > Ben Chuang
-> >
-> >
-> > > ---
-> > > Hi,
-> > > Kenneth R. Crudup <kenny@panix.com>, Could you please verify this pat=
-ch
-> > > on your laptop (Dell XPS 13) one last time?
-> > > IMHO, the regression observed on your laptop with an old version of t=
-he patch
-> > > could be due to a buggy old version BIOS in the laptop.
-> > >
-> > > Thanks,
-> > > Vidya Sagar
-> > >
-> > >  drivers/pci/pci.c       |  7 +++++++
-> > >  drivers/pci/pci.h       |  4 ++++
-> > >  drivers/pci/pcie/aspm.c | 44 +++++++++++++++++++++++++++++++++++++++=
-++
-> > >  3 files changed, 55 insertions(+)
-> > >
-> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > index cfaf40a540a8..aca05880aaa3 100644
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -1667,6 +1667,7 @@ int pci_save_state(struct pci_dev *dev)
-> > >                 return i;
-> > >
-> > >         pci_save_ltr_state(dev);
-> > > +       pci_save_aspm_l1ss_state(dev);
-> > >         pci_save_dpc_state(dev);
-> > >         pci_save_aer_state(dev);
-> > >         pci_save_ptm_state(dev);
-> > > @@ -1773,6 +1774,7 @@ void pci_restore_state(struct pci_dev *dev)
-> > >          * LTR itself (in the PCIe capability).
-> > >          */
-> > >         pci_restore_ltr_state(dev);
-> > > +       pci_restore_aspm_l1ss_state(dev);
-> > >
-> > >         pci_restore_pcie_state(dev);
-> > >         pci_restore_pasid_state(dev);
-> > > @@ -3489,6 +3491,11 @@ void pci_allocate_cap_save_buffers(struct pci_=
-dev *dev)
-> > >         if (error)
-> > >                 pci_err(dev, "unable to allocate suspend buffer for L=
-TR\n");
-> > >
-> > > +       error =3D pci_add_ext_cap_save_buffer(dev, PCI_EXT_CAP_ID_L1S=
-S,
-> > > +                                           2 * sizeof(u32));
-> > > +       if (error)
-> > > +               pci_err(dev, "unable to allocate suspend buffer for A=
-SPM-L1SS\n");
-> > > +
-> > >         pci_allocate_vc_save_buffers(dev);
-> > >  }
-> > >
-> > > diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> > > index e10cdec6c56e..92d8c92662a4 100644
-> > > --- a/drivers/pci/pci.h
-> > > +++ b/drivers/pci/pci.h
-> > > @@ -562,11 +562,15 @@ void pcie_aspm_init_link_state(struct pci_dev *=
-pdev);
-> > >  void pcie_aspm_exit_link_state(struct pci_dev *pdev);
-> > >  void pcie_aspm_pm_state_change(struct pci_dev *pdev);
-> > >  void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
-> > > +void pci_save_aspm_l1ss_state(struct pci_dev *dev);
-> > > +void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
-> > >  #else
-> > >  static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) {=
- }
-> > >  static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) {=
- }
-> > >  static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) {=
- }
-> > >  static inline void pcie_aspm_powersave_config_link(struct pci_dev *p=
-dev) { }
-> > > +static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
-> > > +static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) =
-{ }
-> > >  #endif
-> > >
-> > >  #ifdef CONFIG_PCIE_ECRC
-> > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > > index a96b7424c9bc..2c29fdd20059 100644
-> > > --- a/drivers/pci/pcie/aspm.c
-> > > +++ b/drivers/pci/pcie/aspm.c
-> > > @@ -726,6 +726,50 @@ static void pcie_config_aspm_l1ss(struct pcie_li=
-nk_state *link, u32 state)
-> > >                                 PCI_L1SS_CTL1_L1SS_MASK, val);
-> > >  }
-> > >
-> > > +void pci_save_aspm_l1ss_state(struct pci_dev *dev)
-> > > +{
-> > > +       int aspm_l1ss;
-> > > +       struct pci_cap_saved_state *save_state;
-> > > +       u32 *cap;
-> > > +
-> > > +       if (!pci_is_pcie(dev))
-> > > +               return;
-> > > +
-> > > +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1S=
-S);
-> > > +       if (!aspm_l1ss)
-> > > +               return;
-> > > +
-> > > +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1S=
-S);
-> > > +       if (!save_state)
-> > > +               return;
-> > > +
-> > > +       cap =3D (u32 *)&save_state->cap.data[0];
-> > > +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, cap++);
-> > > +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, cap++);
-> > > +}
-> > > +
-> > > +void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
-> > > +{
-> > > +       int aspm_l1ss;
-> > > +       struct pci_cap_saved_state *save_state;
-> > > +       u32 *cap;
-> > > +
-> > > +       if (!pci_is_pcie(dev))
-> > > +               return;
-> > > +
-> > > +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1S=
-S);
-> > > +       if (!aspm_l1ss)
-> > > +               return;
-> > > +
-> > > +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1S=
-S);
-> > > +       if (!save_state)
-> > > +               return;
-> > > +
-> > > +       cap =3D (u32 *)&save_state->cap.data[0];
-> > > +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *cap++=
-);
-> > > +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, *cap++=
-);
-> > > +}
-> > > +
-> > >  static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
-> > >  {
-> > >         pcie_capability_clear_and_set_word(pdev, PCI_EXP_LNKCTL,
-> > > --
-> > > 2.17.1
-> > >
+Replace 'the the' with 'the' in the comment.
 
-Hi,
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/scsi/bfa/bfa_fcs_rport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-With this patch (and also mentioned
-https://lore.kernel.org/all/20220509073639.2048236-1-kai.heng.feng@canonica=
-l.com/)
-applied on 5.10 (chromeos-5.10) I am observing problems after
-suspend/resume with my WiFi card - it looks like whole communication
-via PCI fails. Attaching logs (dmesg, lspci -vvv before suspend/resume
-and after) https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff22911=
-109dfb91ab0fc0e3
+diff --git a/drivers/scsi/bfa/bfa_fcs_rport.c b/drivers/scsi/bfa/bfa_fcs_rport.c
+index c21aa37b8adb..dd78bea3e111 100644
+--- a/drivers/scsi/bfa/bfa_fcs_rport.c
++++ b/drivers/scsi/bfa/bfa_fcs_rport.c
+@@ -1971,7 +1971,7 @@ bfa_fcs_rport_gidpn_response(void *fcsarg, struct bfa_fcxp_s *fcxp, void *cbarg,
+ 			/*
+ 			 * Device's PID has changed. We need to cleanup
+ 			 * and re-login. If there is another device with
+-			 * the the newly discovered pid, send an scn notice
++			 * the newly discovered pid, send an scn notice
+ 			 * so that its new pid can be discovered.
+ 			 */
+ 			list_for_each(qe, &rport->port->rport_q) {
+-- 
+2.25.1
 
-I played a little bit with this code and it looks like the
-pci_write_config_dword() to the PCI_L1SS_CTL1 breaks it (don't know
-why, not a PCI expert).
-
-Best regards,
-Lukasz

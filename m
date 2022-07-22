@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B952C57E509
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F00D57E504
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbiGVRGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:06:12 -0400
+        id S235656AbiGVRF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:05:58 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbiGVRF4 (ORCPT
+        with ESMTP id S235468AbiGVRFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:05:56 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47A690DAD;
-        Fri, 22 Jul 2022 10:05:51 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-118-63.bstnma.fios.verizon.net [173.48.118.63])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 26MH5WOt022921
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 22 Jul 2022 13:05:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1658509534; bh=x5NY6/np9zWA3SHR+ZSZe4eQA0yfCvzZw1QpBj5Mtco=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=WAfkNlrXDf4aPxN7fFzehBI53ZqxFDXLOQTBMm9tlVxCimVyVcRdLp72BQwtNN8hq
-         xnW7Cn8hAM7rBFQQoLd1JFmBNn1vV3bbmg6dvHuIqgvNRBTHWardQVG3KR44na1iUy
-         Q5VNv0fFa36STPRhqqf5ChNgiaqZf+HeO6KmofCzQDjYEQGTAl9qIYCi1+CKGeMz83
-         RLVWHW6SaKbQNBKNU8uM738coRNHusUs5825IxfbNZqH96qYWSQROkFt+Xv0wed+E/
-         dvJv92G3yoPkPUTGnPPcR5fMowU+n0Lk23UxHZjySPIMB3xtC+vrIgDeExEtHVwMS7
-         E35MQaRXt7ayg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 785D015C3EF7; Fri, 22 Jul 2022 13:05:32 -0400 (EDT)
-Date:   Fri, 22 Jul 2022 13:05:32 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v4 4/9] ext4: support STATX_DIOALIGN
-Message-ID: <YtrY3A/nC023v+/V@mit.edu>
-References: <20220722071228.146690-1-ebiggers@kernel.org>
- <20220722071228.146690-5-ebiggers@kernel.org>
+        Fri, 22 Jul 2022 13:05:54 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F30C3DBC4
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:05:48 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 6so9036631ybc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aw2PaK01gLFUmg2cehol2FzcRVoOSHEH5YEZkfy6lqI=;
+        b=jHvD23AgyIr8lOrwD83G+oMuXTrXNyLfcfoAdokDMgTU9L3AeRBxQ8SDFKu85ydP3y
+         nn3qDbmovqF4KxCoZ32sZu8CSe85F2Bkrr/bqosnmjFgDNQbRv6IO2pMQxojFcZWVT7p
+         XuKRoAVmjQKTc/YqY0jKU2NXgUlzrcSFIPR+HRaCa4+gWNuT4dm03sn2NdR72xKjFeJH
+         Df+Xd+l5y05qJ2Q9bhJKHj3NwbcOzJPRfMm4Xd8WL4qmpHbWf0yvlkX4mjDFdFnDVS3t
+         U12KIGDOj9+1hoAuQNB6kuU7FDKyQOZxYrK15Tng9gmlJEm7sSPJhXiYzPIoq7Pe3ynM
+         D4fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aw2PaK01gLFUmg2cehol2FzcRVoOSHEH5YEZkfy6lqI=;
+        b=Ku5syir9U94Xllv2ToXvf6Ip/lsRZmWdIPbULcAWvqXKTJL4lkRgfZu+XgqWMQL1se
+         A3wmXR7kj1mC73vNdfUB78kARqWA5gtbHnMen5/kRQ1h8/8nmy5v9tip0drHzRQOmNQO
+         y0pCETeJ6fjSRyXZZDfcUR0Cc+5zNmNdSOVF5jHzmpKdUE59VFDCkZnsUEZglJUNxcPh
+         JCFssroB80FrCupBlgdiXghvaYhdoN73kUEIw2Hf+RV1DgD+H9++s2IwU/4hqMsb6i2J
+         oQbMg6hHnR1oX57mhaUm8dxZ79CTlCzJNQ4n9SDUQ/tKFRadG3xY1isCWT7jpeFRLlhA
+         EgLQ==
+X-Gm-Message-State: AJIora9P9V1N3e+yvKkk/hGSjBoO7FUI+vVa5xyrnLcoMNiZWpocFkI1
+        6GHI454MmJBPGI26Y903B46KFwoT6mH2otsbeWWGQQ==
+X-Google-Smtp-Source: AGRyM1s+IzU1RE9tZU6+mgt8o78KCnZh7JSUj2eV3h9j4aBLZxrPLgvyPH3cIgD++7399WVLzKga+rkXkqPbCiX0ilw=
+X-Received: by 2002:a25:2603:0:b0:66f:774d:e222 with SMTP id
+ m3-20020a252603000000b0066f774de222mr779851ybm.407.1658509546561; Fri, 22 Jul
+ 2022 10:05:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722071228.146690-5-ebiggers@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220715154314.510ca2fb@kernel.org> <9c033c36-c291-1927-079b-b4aee5f7ac08@free.fr>
+In-Reply-To: <9c033c36-c291-1927-079b-b4aee5f7ac08@free.fr>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 22 Jul 2022 19:05:34 +0200
+Message-ID: <CANn89i+-THx+jTzsLDxaX9diV4hz7z4mYqwn2CjtydFp+U4gow@mail.gmail.com>
+Subject: Re: [PATCH] net: rose: fix unregistered netdevice: waiting for rose0
+ to become free
+To:     Bernard f6bvp <f6bvp@free.fr>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Duoming Zhou <duoming@zju.edu.cn>, linux-hams@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Ralf Baechle <ralf@linux-mips.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,57 +72,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:12:23AM -0700, Eric Biggers wrote:
-> -static bool ext4_dio_supported(struct kiocb *iocb, struct iov_iter *iter)
-> +/*
-> + * Returns %true if the given DIO request should be attempted with DIO, or
-> + * %false if it should fall back to buffered I/O.
-> + *
-> + * DIO isn't well specified; when it's unsupported (either due to the request
-> + * being misaligned, or due to the file not supporting DIO at all), filesystems
-> + * either fall back to buffered I/O or return EINVAL.  For files that don't use
-> + * any special features like encryption or verity, ext4 has traditionally
-> + * returned EINVAL for misaligned DIO.  iomap_dio_rw() uses this convention too.
-> + * In this case, we should attempt the DIO, *not* fall back to buffered I/O.
-> + *
-> + * In contrast, in cases where DIO is unsupported due to ext4 features, ext4
-> + * traditionally falls back to buffered I/O.
-> + *
-> + * This function implements the traditional ext4 behavior in all these cases.
+On Fri, Jul 22, 2022 at 6:41 PM Bernard f6bvp <f6bvp@free.fr> wrote:
+>
+> Here is the context.
+>
+> This patch adds dev_put(dev) in order to allow removal of rose module
+> after use of AX25 and ROSE via rose0 device.
+>
+> Otherwise when trying to remove rose module via rmmod rose an infinite
+> loop message was displayed on all consoles with xx being a random number.
+>
+> unregistered_netdevice: waiting for rose0 to become free. Usage count = xx
+>
+> unregistered_netdevice: waiting for rose0 to become free. Usage count = xx
+>
+> ...
+>
+> With the patch it is ok to rmmod rose.
+>
+> This bug appeared with kernel 4.10 and has been only partially repaired
+> by adding two dev_put(dev).
+>
+> Signed-off-by: Bernard Pidoux <f6bvp@free.fr>
+>
+> ---
+>   net/rose/af_rose.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/net/rose/af_rose.c b/net/rose/af_rose.c
+> index bf2d986a6bc3..4163171ce3a6 100644
+> --- a/net/rose/af_rose.c
+> +++ b/net/rose/af_rose.c
+> @@ -711,6 +711,8 @@ static int rose_bind(struct socket *sock, struct
+> sockaddr *uaddr, int addr_len)
+>       rose_insert_socket(sk);
+>
+>       sock_reset_flag(sk, SOCK_ZAPPED);
+> +
+> +    dev_put(dev);
 
-Heh.  I had been under the impression that misaligned I/O fell back to
-buffered I/O for ext4, since that's what a lot of historical Unix
-systems did.  Obviously, it's not something I've tested since "you
-should never do that".
+But, we have at line 698 :
 
-There's actually some interesting discussion about what Linux *should*
-be doing in the futre in this discussion:
+rose->device        = dev;
 
-https://patchwork.ozlabs.org/project/linux-ext4/patch/1461472078-20104-1-git-send-email-tytso@mit.edu/
+So we can not keep a pointer to a device without holding a reference on it.
 
-Including the following from Christoph Hellwig:
-
-https://patchwork.ozlabs.org/project/linux-ext4/patch/1461472078-20104-1-git-send-email-tytso@mit.edu/#1335016
-
-> I've been doing an audit of our direct I/O implementations, and most
-> of them does some form of transparent fallback, including some that
-> only pretend to support O_DIRECT, but do anything special for it at all,
-> while at the same time we go through greast efforts to check a file
-> system actualy supports direct I/O, leading to nasty no-op ->direct_IO
-> implementations as we even got that abstraction wrong.
-> 
-> At this point I wonder if we should simply treat O_DIRECT as a hint
-> and always allow it, and just let the file system optimize for it
-> (skip buffering, require alignment, relaxed Posix atomicy requirements)
-> if it is set.
-
-The thread also mentioned XFS_IOC_DIOINFO and how We Really Should
-have something with equivalent functionality to the VFS --- six years
-ago.  :-)
+As a bonus we could convert these dev_put() to new infra added with
+CONFIG_NET_DEV_REFCNT_TRACKER=y
 
 
-Anyway, this change to ext4 looks good.
 
-Acked-by: Theodore Ts'o <tytso@mit.edu>
-
-							- Ted
+>
+>       return 0;
+>   }
+> --
+> 2.34.1
+>
+> [master da21d19e920d] [PATCH] net: rose: fix unregistered netdevice:
+> waiting for rose0 to become free
+>   Date: Mon Jul 18 16:23:54 2022 +0200
+>   1 file changed, 2 insertions(+)
+>
+>

@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4248057D9AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 06:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5511757D9AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 06:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiGVErX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 00:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S232834AbiGVEsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 00:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiGVErU (ORCPT
+        with ESMTP id S229547AbiGVEsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 00:47:20 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD8E55A3;
-        Thu, 21 Jul 2022 21:47:19 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id bb16so4541709oib.11;
-        Thu, 21 Jul 2022 21:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/vmP9s72Bad+zjJeWAyuYUrRse9QKTisgeD/ZZJLIT8=;
-        b=N8A6hIm4GgOAmOVwqSaOXJ+8HtUPtcRmobA5uC5/TWbP1rvEw/O9ISX4watCdO0izn
-         wRjWKP2+rUb+BUfLym2QtOAmIfunAsrJ8VfGOB8ESQxSctcZM4TzrTdDMoNHWQKrfiuE
-         m+cVilw1lBOLzriftx46rhGiO8qpiGY3jp+LJpQVVuzJD1oop/V+L9C8ymNslLTGUCOp
-         CF235Mwc2kkpspsClLRyGgJGFwRCu9x1IGsrW7stIgwSoVsrQxpcf4x6g8uCcOFjXQFr
-         HC/7FP0Nm1GwdQcDVtcgFcuED4KssS4dspmGT9r35vr2CEvgUAWiKIRIdW+cvT8i9WAm
-         BWoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/vmP9s72Bad+zjJeWAyuYUrRse9QKTisgeD/ZZJLIT8=;
-        b=Wyqkv4sSmSqJCeYoy06EwUjqEcb5xl8p4Z3fizqe2PSTp9YqBzfMuMFt/3Y5Ubrh9r
-         dBAvdxquuQM+vWBvbslPJjmFcZYTVL/rPgSLls0oaRgGvR9kt+3tcHIyEDlW56Mkcro2
-         KKcjr2Q7a8Fpk3o9UQhEygeVDs76SOPskB7+wImkzb07iS2QFsdILpiY3OP0bWwqpK5R
-         qR5o0SovItxAUiKYpGiNvextgNs8s+VlNuwOIrFJiJgtm78DRgUZi1BtNr6sy2JrLds1
-         d8PVeIHrT1S0iIxn7Xvx/0MFY15RIwc0LnFcR05oja6pWCeUYqVOkc3Yw6R/y9HMBiny
-         wkZQ==
-X-Gm-Message-State: AJIora8MDxSnzIAwc95TNGwjInFOYfTfa/9K6msopWKa59XX0cJ0O3sH
-        M1kaOJp/4bSreAkIROKYf9oNVCk7pW7Ts7ZI02SHHH/6L6kEng==
-X-Google-Smtp-Source: AGRyM1tyRzY8MKTE+llnbWBeG8pkKan4y5TpOI+s1ZzxiZCdCuXKJ/wVy8u8SzwyCgbBxFhO96ADGHGDo9RqLUMkEtA=
-X-Received: by 2002:a05:6808:13d6:b0:33a:aae5:853f with SMTP id
- d22-20020a05680813d600b0033aaae5853fmr3636767oiw.147.1658465237871; Thu, 21
- Jul 2022 21:47:17 -0700 (PDT)
+        Fri, 22 Jul 2022 00:48:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF693638;
+        Thu, 21 Jul 2022 21:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=h9kQnWAcSF9Yzs1kL6Yq0lTdcDF4ILi/uKX3XcZK1Lc=; b=DKol8CNimLCjlsLlkrpqMcvesu
+        UwIgNox3kdcPY+7ays69SEIGRmBcI5N2qad6gRCnCB+VZrPiFBKTQRXPkt1xfl5ZI7lMp1xZNjmEM
+        m/gqB9HHcxf+LUt6OZWGePzTlOZ3+CCbrG8ngtLNoGAnlipFmod0wmqGGy3IoCl41V6VFiDJdhXk0
+        18ZUDNQwSTwqkJ48xsApRFd++ILTC4kny7GXZ5FJCr9waGOGH0xyYsPdoVPzeNCh4mmqQmr539zsN
+        h+LY74d9D+IDr2SijGiBZH3bb4Yp3qajQ08liXyXNP113h8wtsPiomJJYDWqq3aPCOOPlb8JB7imj
+        ZD5LDKfw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEkal-00HYNi-8O; Fri, 22 Jul 2022 04:48:47 +0000
+Date:   Thu, 21 Jul 2022 21:48:47 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Hannes Reinecke <hare@suse.de>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 1/2] nvme-auth: Fix off by one checks
+Message-ID: <YtosL0gGow56siA5@infradead.org>
+References: <YtU/bFMYRCrx6tgp@kili>
 MIME-Version: 1.0
-References: <20220719090948.612921-1-zys.zljxml@gmail.com> <Ytj9pHgPmp9rYeku@unreal>
-In-Reply-To: <Ytj9pHgPmp9rYeku@unreal>
-From:   Katrin Jo <zys.zljxml@gmail.com>
-Date:   Fri, 22 Jul 2022 12:47:06 +0800
-Message-ID: <CAOaDN_TJ7vD=jLYUh+ZZFDYchfim_4FgjeRgYDEbV-qjiRS6HA@mail.gmail.com>
-Subject: Re: [PATCH] RDMA/cxgb4: Cleanup unused assignments
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     bharat@chelsio.com, jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Yushan Zhou <katrinzhou@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtU/bFMYRCrx6tgp@kili>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 3:18 PM Leon Romanovsky <leon@kernel.org> wrote:
->
-> On Tue, Jul 19, 2022 at 05:09:48PM +0800, zys.zljxml@gmail.com wrote:
-> > From: Yushan Zhou <katrinzhou@tencent.com>
-> >
-> > The variable err is reassigned before the assigned value works.
-> > Cleanup unused assignments reported by Coverity.
-> >
-> > Addresses-Coverity: ("UNUSED_VALUE")
-> > Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
-> > ---
-> >  drivers/infiniband/hw/cxgb4/cm.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/infiniband/hw/cxgb4/cm.c b/drivers/infiniband/hw/cxgb4/cm.c
-> > index c16017f6e8db..3462fe991f93 100644
-> > --- a/drivers/infiniband/hw/cxgb4/cm.c
-> > +++ b/drivers/infiniband/hw/cxgb4/cm.c
-> > @@ -1590,7 +1590,6 @@ static int process_mpa_reply(struct c4iw_ep *ep, struct sk_buff *skb)
-> >                                       insuff_ird = 1;
-> >                       }
-> >                       if (insuff_ird) {
-> > -                             err = -ENOMEM;
-> >                               ep->ird = resp_ord;
-> >                               ep->ord = resp_ird;
-> >                       }
-> > @@ -1655,7 +1654,7 @@ static int process_mpa_reply(struct c4iw_ep *ep, struct sk_buff *skb)
-> >               attrs.ecode = MPA_NOMATCH_RTR;
-> >               attrs.next_state = C4IW_QP_STATE_TERMINATE;
-> >               attrs.send_term = 1;
-> > -             err = c4iw_modify_qp(ep->com.qp->rhp, ep->com.qp,
-> > +             c4iw_modify_qp(ep->com.qp->rhp, ep->com.qp,
-> >                               C4IW_QP_ATTR_NEXT_STATE, &attrs, 1);
-> >               err = -ENOMEM;
->
-> I would prefer do not overwrite errors returned from the functions
-> unless it is really necessary.
->
-> Can anyone from chelsio help here?
->
-> Thanks
->
-> >               disconnect = 1;
-> > @@ -1674,7 +1673,7 @@ static int process_mpa_reply(struct c4iw_ep *ep, struct sk_buff *skb)
-> >               attrs.ecode = MPA_INSUFF_IRD;
-> >               attrs.next_state = C4IW_QP_STATE_TERMINATE;
-> >               attrs.send_term = 1;
-> > -             err = c4iw_modify_qp(ep->com.qp->rhp, ep->com.qp,
-> > +             c4iw_modify_qp(ep->com.qp->rhp, ep->com.qp,
-> >                               C4IW_QP_ATTR_NEXT_STATE, &attrs, 1);
-> >               err = -ENOMEM;
-> >               disconnect = 1;
-> > --
-> > 2.27.0
-> >
+Hannes, can you review these please?
 
-The issue is that, in the original code, there were 2 subsequent
-assignments to the `err` variable. I assume this is not expected. (I
-tried to keep the exact same behavior as original code in this patch)
-
-Should we keep the first assignment (c4iw_modify_qp), or the second
-assignment (-ENOMEM)? I'd really appreciate some help here.
-
-Best Regards,
-Katrin
+On Mon, Jul 18, 2022 at 02:09:32PM +0300, Dan Carpenter wrote:
+> The > ARRAY_SIZE() checks need to be >= ARRAY_SIZE() to prevent reading
+> one element beyond the end of the arrays.
+> 
+> Fixes: a476416bb57b ("nvme: implement In-Band authentication")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> The MAINTAINERS file needs to be updated for this new code.
+> 
+>  drivers/nvme/common/auth.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/nvme/common/auth.c b/drivers/nvme/common/auth.c
+> index 0c86ebce59d2..bfb16fec0aed 100644
+> --- a/drivers/nvme/common/auth.c
+> +++ b/drivers/nvme/common/auth.c
+> @@ -55,7 +55,7 @@ static struct nvme_auth_dhgroup_map {
+>  
+>  const char *nvme_auth_dhgroup_name(u8 dhgroup_id)
+>  {
+> -	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
+> +	if ((dhgroup_id >= ARRAY_SIZE(dhgroup_map)) ||
+>  	    !dhgroup_map[dhgroup_id].name ||
+>  	    !strlen(dhgroup_map[dhgroup_id].name))
+>  		return NULL;
+> @@ -65,7 +65,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_name);
+>  
+>  const char *nvme_auth_dhgroup_kpp(u8 dhgroup_id)
+>  {
+> -	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
+> +	if ((dhgroup_id >= ARRAY_SIZE(dhgroup_map)) ||
+>  	    !dhgroup_map[dhgroup_id].kpp ||
+>  	    !strlen(dhgroup_map[dhgroup_id].kpp))
+>  		return NULL;
+> @@ -113,7 +113,7 @@ static struct nvme_dhchap_hash_map {
+>  
+>  const char *nvme_auth_hmac_name(u8 hmac_id)
+>  {
+> -	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
+> +	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
+>  	    !hash_map[hmac_id].hmac ||
+>  	    !strlen(hash_map[hmac_id].hmac))
+>  		return NULL;
+> @@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_hmac_name);
+>  
+>  const char *nvme_auth_digest_name(u8 hmac_id)
+>  {
+> -	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
+> +	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
+>  	    !hash_map[hmac_id].digest ||
+>  	    !strlen(hash_map[hmac_id].digest))
+>  		return NULL;
+> @@ -148,7 +148,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_hmac_id);
+>  
+>  size_t nvme_auth_hmac_hash_len(u8 hmac_id)
+>  {
+> -	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
+> +	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
+>  	    !hash_map[hmac_id].hmac ||
+>  	    !strlen(hash_map[hmac_id].hmac))
+>  		return 0;
+> -- 
+> 2.35.1
+> 
+> 
+---end quoted text---

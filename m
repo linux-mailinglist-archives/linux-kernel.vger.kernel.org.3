@@ -2,203 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AD157E5C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC2557E5C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236177AbiGVRkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S234251AbiGVRmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236149AbiGVRkT (ORCPT
+        with ESMTP id S235652AbiGVRmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:40:19 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426E215FC8;
-        Fri, 22 Jul 2022 10:40:18 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31e7c4b593fso54758377b3.13;
-        Fri, 22 Jul 2022 10:40:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=monAexa3iUsCYtrn0IpBfOizieq2Utu+6SqlwdWc9qA=;
-        b=rNzyHFnogbOn2dDC/04TYPraklXkWboLv8fA1SBNKJkGZOODZbLknC4K3Axehi3Anb
-         8J6tBu5Q7g/mmouVKNJmHJm9nagE2n32MxWUetfqmPalyM3CKPlVIC0bsJOrcKGM7xVh
-         Z3J62rqjFSPRprIBpXCPPRk0oBYmEJe7M3XQD7F1DariJCsBONvYg1iHsU5ZiBY0asZw
-         rHNcbjUPHIQnZzmUUyLK1BjlSQ1B3/zo5F6j0jCqOnXm3xDg3sTugcBgy+HdrECgkg7S
-         7S82X7mgKI2cQ742hMa/VDBOpOwzXrSnaeWbAKEuX30baUKQqWaDL48YhS+hmZRpFVmV
-         bKBA==
-X-Gm-Message-State: AJIora9Vt3jwrj3QzdD2NqEhOH6KNQtxFr5bThoQI4/F59LuUzFmFBoQ
-        vwO2r1ewRkfKVCWBjJ+zaLbXv3k3NQ5OuMp8oy0=
-X-Google-Smtp-Source: AGRyM1tXyDVbo8AAjHKlh3F3yO0MwrRCNMm5ABdKO/V6cOCBkIJLUJgRjzC4ELd6Cpne64Avu2Xw0nfa/yPX5i4PNvk=
-X-Received: by 2002:a0d:cf84:0:b0:31e:7901:19e9 with SMTP id
- r126-20020a0dcf84000000b0031e790119e9mr846126ywd.7.1658511617417; Fri, 22 Jul
- 2022 10:40:17 -0700 (PDT)
+        Fri, 22 Jul 2022 13:42:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5714389AA7;
+        Fri, 22 Jul 2022 10:42:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9B20622A1;
+        Fri, 22 Jul 2022 17:42:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B8AC341C6;
+        Fri, 22 Jul 2022 17:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658511734;
+        bh=quYbYLH0rHeFJlaVYrPF8bVK2cgDFseKzvrCpw+Lg2Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VHV+I3BbDY1+CE3K4k/Dp8KFhccvyDsM/13/YgPHKNojN/gRWo76bFeFNlKxWYgua
+         acSNtQ8h/IRIFole4Pzo38a6l1Nb0CY0+MYdIg2A81NQGSoeREf++AH9gy8i6jNQL6
+         X+T8+SD4Ad7RhIu5OqyRMVHH4yvgPfPJLdIuLe4WkBjPh70nfFsSMKGFnzHQCfnr2T
+         WWEiT8nypPlp00Olw2tHVlBM0lkj9ggNqtEQ4u7cCubkQ9f+W9qyBiA0gchQMd1+yw
+         kjiEmC2w27MuKmHoCdrHEU3tnjEBbVT3ACcEMOXcsSrunYsW0V/FojwEveJjVACo3o
+         Mv7g3ZSqfn1DQ==
+Date:   Fri, 22 Jul 2022 12:42:12 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lukasz Majczak <lma@semihalf.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ben Chuang <benchuanggli@gmail.com>,
+        Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, refactormyself@gmail.com, kw@linux.com,
+        rajatja@google.com, kenny@panix.com, treding@nvidia.com,
+        jonathanh@nvidia.com, abhsahu@nvidia.com, sagupta@nvidia.com,
+        linux-pci@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for
+ suspend/resume
+Message-ID: <20220722174212.GA1911979@bhelgaas>
 MIME-Version: 1.0
-References: <20220718145038.1114379-1-daniel.lezcano@linaro.org>
- <20220718145038.1114379-3-daniel.lezcano@linaro.org> <CAJZ5v0hj0kMRNBqO_0SqsAAY8Rb8h2NrWOYogDLgGZnCtiTEwg@mail.gmail.com>
- <117c778a-4496-4d49-e73d-06fa3efa4d09@linaro.org> <CAJZ5v0gjfeyiS8rUoPpa3sMrofw1ZyQe=+P6pvPbeirs07F+Qw@mail.gmail.com>
- <8926eed7-436f-5f1a-7036-0e1520bd3a0b@linaro.org>
-In-Reply-To: <8926eed7-436f-5f1a-7036-0e1520bd3a0b@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Jul 2022 19:40:04 +0200
-Message-ID: <CAJZ5v0icAE1t4+VsEq71FiUjQXr1LJeokBiuGTxvsHByedfmhw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] thermal/core: Build ascending ordered indexes for
- the trip points
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFJ_xbqJkXK7-O_kyF=Hrqu0gwskVLUfeK9mWSB1qM8XapLgSQ@mail.gmail.com>
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:15 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 21/07/2022 13:25, Rafael J. Wysocki wrote:
-> > On Thu, Jul 21, 2022 at 12:59 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 19/07/2022 20:56, Rafael J. Wysocki wrote:
-> >>> On Mon, Jul 18, 2022 at 4:50 PM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> By convention the trips points are declared in the ascending
-> >>>> temperature order. However, no specification for the device tree, ACPI
-> >>>> or documentation tells the trip points must be ordered this way.
-> >>>>
-> >>>> In the other hand, we need those to be ordered to browse them at the
-> >>>
-> >>> s/In/On/
-> >>>
-> >>>> thermal events.
-> >>>
-> >>> What if they are all inspected every time?
-> >>
-> >> My bad, my sentence is confusing. The trip point are browsed every time
-> >> and we need to have them ordered to detect correctly the thermal events.
+On Fri, Jul 22, 2022 at 11:41:14AM +0200, Lukasz Majczak wrote:
+> pt., 22 lip 2022 o 09:31 Kai-Heng Feng <kai.heng.feng@canonical.com> napisał(a):
+> > On Fri, Jul 15, 2022 at 6:38 PM Ben Chuang <benchuanggli@gmail.com> wrote:
+> > > On Tue, Jul 5, 2022 at 2:00 PM Vidya Sagar <vidyas@nvidia.com> wrote:
+> > > >
+> > > > Previously ASPM L1 Substates control registers (CTL1 and CTL2) weren't
+> > > > saved and restored during suspend/resume leading to L1 Substates
+> > > > configuration being lost post-resume.
+> > > >
+> > > > Save the L1 Substates control registers so that the configuration is
+> > > > retained post-resume.
+> > > >
+> > > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> > > > Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
+> > >
+> > > Hi Vidya,
+> > >
+> > > I tested this patch on kernel v5.19-rc6.
+> > > The test device is GL9755 card reader controller on Intel i5-10210U RVP.
+> > > This patch can restore L1SS after suspend/resume.
+> > >
+> > > The test results are as follows:
+> > >
+> > > After Boot:
+> > > #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> > >         Capabilities: [110 v1] L1 PM Substates
+> > >                 L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+> > > ASPM_L1.1+ L1_PM_Substates+
+> > >                           PortCommonModeRestoreTime=255us
+> > > PortTPowerOnTime=3100us
+> > >                 L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+> > >                            T_CommonMode=0us LTR1.2_Threshold=3145728ns
+> > >                 L1SubCtl2: T_PwrOn=3100us
+> > >
+> > >
+> > > After suspend/resume without this patch.
+> > > #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> > >         Capabilities: [110 v1] L1 PM Substates
+> > >                 L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+> > > ASPM_L1.1+ L1_PM_Substates+
+> > >                           PortCommonModeRestoreTime=255us
+> > > PortTPowerOnTime=3100us
+> > >                 L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
+> > >                            T_CommonMode=0us LTR1.2_Threshold=0ns
+> > >                 L1SubCtl2: T_PwrOn=10us
+> > >
+> > >
+> > > After suspend/resume with this patch.
+> > > #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+> > >         Capabilities: [110 v1] L1 PM Substates
+> > >                 L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+> > > ASPM_L1.1+ L1_PM_Substates+
+> > >                           PortCommonModeRestoreTime=255us
+> > > PortTPowerOnTime=3100us
+> > >                 L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+> > >                            T_CommonMode=0us LTR1.2_Threshold=3145728ns
+> > >                 L1SubCtl2: T_PwrOn=3100us
+> > >
+> > >
+> > > Tested-by: Ben Chuang <benchuanggli@gmail.com>
 > >
-> > I see.
+> > Forgot to add mine:
+> > Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > >
-> > So this mostly is a preparation for patch 4, isn't it?
->
-> Yes, it is correct
->
-> >>>> But if we assume they are ordered and change the code
-> >>>> based on this assumption, any platform with shuffled trip points
-> >>>> description will be broken (if they exist).
-> >>>>
-> >>>> Instead of taking the risk of breaking the existing platforms, use an
-> >>>> array of temperature ordered trip identifiers and make it available
-> >>>> for the code needing to browse the trip points in an ordered way.
-> >>>
-> >>> Well, having ops->get_trip_temp() suggests that the trip temperatures
-> >>> can be dynamic.  Is the ordering guaranteed to be preserved in that
-> >>> case?
-> >>
-> >> The number of trips can not be changed. It is fixed when the thermal
-> >> zone is created AFAICT.
-> >
-> > The current code appears to assume that and I think that this is a
-> > reasonable expectation.
-> >
-> >> The get_trip_temp() is just a way to let the
-> >> different driver declare their own trip structure which is actually
-> >> something I'm trying to fix by moving the structure thermal_trip inside
-> >> the thermal zone. But that is a longer and separate work.
-> >
-> > Well, I'm not sure.
-> >
-> > Trip point temperatures can be set via trip_point_temp_store() at
-> > least in principle.  How is it guaranteed that this won't affect the
-> > ordering?
->
-> Right, that is a good point. I don't see a logical use case where a trip
-> point will be set below or above the previous or the next one, so the
-> order should be kept.
+> > >
+> > > Best regards,
+> > > Ben Chuang
+> > >
+> > >
+> > > > ---
+> > > > Hi,
+> > > > Kenneth R. Crudup <kenny@panix.com>, Could you please verify this patch
+> > > > on your laptop (Dell XPS 13) one last time?
+> > > > IMHO, the regression observed on your laptop with an old version of the patch
+> > > > could be due to a buggy old version BIOS in the laptop.
+> > > >
+> > > > Thanks,
+> > > > Vidya Sagar
+> > > >
+> > > >  drivers/pci/pci.c       |  7 +++++++
+> > > >  drivers/pci/pci.h       |  4 ++++
+> > > >  drivers/pci/pcie/aspm.c | 44 +++++++++++++++++++++++++++++++++++++++++
+> > > >  3 files changed, 55 insertions(+)
+> > > >
+> > > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > > > index cfaf40a540a8..aca05880aaa3 100644
+> > > > --- a/drivers/pci/pci.c
+> > > > +++ b/drivers/pci/pci.c
+> > > > @@ -1667,6 +1667,7 @@ int pci_save_state(struct pci_dev *dev)
+> > > >                 return i;
+> > > >
+> > > >         pci_save_ltr_state(dev);
+> > > > +       pci_save_aspm_l1ss_state(dev);
+> > > >         pci_save_dpc_state(dev);
+> > > >         pci_save_aer_state(dev);
+> > > >         pci_save_ptm_state(dev);
+> > > > @@ -1773,6 +1774,7 @@ void pci_restore_state(struct pci_dev *dev)
+> > > >          * LTR itself (in the PCIe capability).
+> > > >          */
+> > > >         pci_restore_ltr_state(dev);
+> > > > +       pci_restore_aspm_l1ss_state(dev);
+> > > >
+> > > >         pci_restore_pcie_state(dev);
+> > > >         pci_restore_pasid_state(dev);
+> > > > @@ -3489,6 +3491,11 @@ void pci_allocate_cap_save_buffers(struct pci_dev *dev)
+> > > >         if (error)
+> > > >                 pci_err(dev, "unable to allocate suspend buffer for LTR\n");
+> > > >
+> > > > +       error = pci_add_ext_cap_save_buffer(dev, PCI_EXT_CAP_ID_L1SS,
+> > > > +                                           2 * sizeof(u32));
+> > > > +       if (error)
+> > > > +               pci_err(dev, "unable to allocate suspend buffer for ASPM-L1SS\n");
+> > > > +
+> > > >         pci_allocate_vc_save_buffers(dev);
+> > > >  }
+> > > >
+> > > > diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> > > > index e10cdec6c56e..92d8c92662a4 100644
+> > > > --- a/drivers/pci/pci.h
+> > > > +++ b/drivers/pci/pci.h
+> > > > @@ -562,11 +562,15 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev);
+> > > >  void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+> > > >  void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+> > > >  void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+> > > > +void pci_save_aspm_l1ss_state(struct pci_dev *dev);
+> > > > +void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
+> > > >  #else
+> > > >  static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+> > > >  static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+> > > >  static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+> > > >  static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
+> > > > +static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
+> > > > +static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) { }
+> > > >  #endif
+> > > >
+> > > >  #ifdef CONFIG_PCIE_ECRC
+> > > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > > > index a96b7424c9bc..2c29fdd20059 100644
+> > > > --- a/drivers/pci/pcie/aspm.c
+> > > > +++ b/drivers/pci/pcie/aspm.c
+> > > > @@ -726,6 +726,50 @@ static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
+> > > >                                 PCI_L1SS_CTL1_L1SS_MASK, val);
+> > > >  }
+> > > >
+> > > > +void pci_save_aspm_l1ss_state(struct pci_dev *dev)
+> > > > +{
+> > > > +       int aspm_l1ss;
+> > > > +       struct pci_cap_saved_state *save_state;
+> > > > +       u32 *cap;
+> > > > +
+> > > > +       if (!pci_is_pcie(dev))
+> > > > +               return;
+> > > > +
+> > > > +       aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
+> > > > +       if (!aspm_l1ss)
+> > > > +               return;
+> > > > +
+> > > > +       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
+> > > > +       if (!save_state)
+> > > > +               return;
+> > > > +
+> > > > +       cap = (u32 *)&save_state->cap.data[0];
+> > > > +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, cap++);
+> > > > +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, cap++);
+> > > > +}
+> > > > +
+> > > > +void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
+> > > > +{
+> > > > +       int aspm_l1ss;
+> > > > +       struct pci_cap_saved_state *save_state;
+> > > > +       u32 *cap;
+> > > > +
+> > > > +       if (!pci_is_pcie(dev))
+> > > > +               return;
+> > > > +
+> > > > +       aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
+> > > > +       if (!aspm_l1ss)
+> > > > +               return;
+> > > > +
+> > > > +       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
+> > > > +       if (!save_state)
+> > > > +               return;
+> > > > +
+> > > > +       cap = (u32 *)&save_state->cap.data[0];
+> > > > +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *cap++);
+> > > > +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, *cap++);
+> > > > +}
+> > > > +
+> > > >  static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
+> > > >  {
+> > > >         pcie_capability_clear_and_set_word(pdev, PCI_EXP_LNKCTL,
+> > > > --
+> > > > 2.17.1
+> > > >
+> 
+> Hi,
+> 
+> With this patch (and also mentioned
+> https://lore.kernel.org/all/20220509073639.2048236-1-kai.heng.feng@canonical.com/)
+> applied on 5.10 (chromeos-5.10) I am observing problems after
+> suspend/resume with my WiFi card - it looks like whole communication
+> via PCI fails. Attaching logs (dmesg, lspci -vvv before suspend/resume
+> and after) https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff22911109dfb91ab0fc0e3
+> 
+> I played a little bit with this code and it looks like the
+> pci_write_config_dword() to the PCI_L1SS_CTL1 breaks it (don't know
+> why, not a PCI expert).
 
-Good.
+Thanks a lot for testing this!  I'm not quite sure what to make of the
+results since v5.10 is fairly old (Dec 2020) and I don't know what
+other changes are in chromeos-5.10.
 
-> However, strictly speaking, nothing prevents that
-> so I guess we need to reorder the trips when one is changed. It should
-> be a one line call.
+Random observations, no analysis below.  This from your dmesg
+certainly looks like PCI reads failing and returning ~0:
 
-Or modify trip_point_temp_store() to preserve the ordering of trip
-points (which would be way simpler if trip point temperatures were
-stored as numbers in a sorted array - see below).
+  Timeout waiting for hardware access (CSR_GP_CNTRL 0xffffffff)
+  iwlwifi 0000:01:00.0: 00000000: ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff
+  iwlwifi 0000:01:00.0: Device gone - attempting removal
+  Hardware became unavailable upon resume. This could be a software issue prior to suspend or a hardware issue.
 
->
-> >>> Anyway, if they need to be sorted, why don't we just sort them
-> >>> properly instead of adding this extra array?
-> >>
-> >> We can not because ATM the trip points array is private to the different
-> >> sensors.
-> >
-> > Well, the core could create an array or list of trip points for the
-> > thermal zone during registration and populate it from the
-> > driver-provided data.  Then, it could be sorted at the creation time.
->
->
-> There won't be any benefit ATM.
+And then we re-enumerate 01:00.0 and it looks like it may have been
+reset (BAR is 0):
 
-What about less overhead?  And the code being easier to understand?
-And no hidden assumptions?  Hmm??
+  pci 0000:01:00.0: [8086:095a] type 00 class 0x028000
+  pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff 64bit]
 
-> The get_trip_temp/type/hyst ops are
-> called all over the place. If we create a second sorted trip point array
-> and use it in the core code, then all those ops should be replaced to
-> use the sorted array instead of addressing the private trip structure.
+lspci diffs from before/after suspend:
 
-Right.
+   00:14.0 PCI bridge: Intel Corporation Celeron N3350/Pentium N4200/Atom E3900 Series PCI Express Port B #1 (rev fb) (prog-if 00 [Normal decode])
+     Bus: primary=00, secondary=01, subordinate=01, sec-latency=64
+  -               DevSta: CorrErr- NonFatalErr+ FatalErr- UnsupReq+ AuxPwr+ TransPend-
+  +               DevSta: CorrErr+ NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
+  -               LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+  +               LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+  -               LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+  +               LnkSta2: Current De-emphasis Level: -3.5dB, EqualizationComplete- EqualizationPhase1-
+  -       Capabilities: [150 v0] Null
+  -       Capabilities: [200 v1] L1 PM Substates
+  -               L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
+  -                         PortCommonModeRestoreTime=40us PortTPowerOnTime=10us
+  -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+  -                          T_CommonMode=40us LTR1.2_Threshold=98304ns
+  -               L1SubCtl2: T_PwrOn=60us
 
-> A big deal in terms of changes.
+The DevSta differences might be BIOS bugs, probably not relevant.
+Interesting that ASPM is disabled, maybe didn't get enabled after
+re-enumerating 01:00.0?  Strange that the L1 PM Substates capability
+disappeared.
 
-It is not overwhelming in my view.
+   01:00.0 Network controller: Intel Corporation Wireless 7265 (rev 59)
+		  LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+  -                       ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
+  +                       ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+	  Capabilities: [154 v1] L1 PM Substates
+		  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
+			    PortCommonModeRestoreTime=30us PortTPowerOnTime=60us
+  -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+  -                          T_CommonMode=0us LTR1.2_Threshold=98304ns
+  +               L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
+  +                          T_CommonMode=0us LTR1.2_Threshold=0ns
 
-> If we don't do the ops changes, then it is simpler to have an array of
-> index->trip id and the impact is small.
->
-> But I agree we should have a sorted trip array per thermal zone and stop
-> using the ops->get_trip_temp|type|hyst. That is part of the work I'm
-> doing in parallel to cleanup the thermal-of and I've the plan to migrate
-> all the sensors to use the struct thermal_trip instead of private data.
->  From there we will be able to get rid of the get_trip[*] and the sorted
-> trip indexes array.
+Dmesg claimed we reconfigured common clock config.  Maybe ASPM didn't
+get reinitialized after re-enumeration?  Looks like we didn't restore
+L1SubCtl1.
 
-Well, what about making the core use struct thermal_trip internally in
-the first place?
-
-Except that I don't like the np member of that one.
-
-> All these changes are not feasible in the short term.
-
-They can be made in the opposite direction, starting at the core
-level.  Then, it would be clear where you were going.
-
-> I would like to
-> keep the indexes trip array approach to fix the trip cross events which
-> is broken right now and then go forward with the struct thermal_trip
-> changes and the thermal-of cleanups I've sent last week.
->
-> Does it sound reasonable ?
-
-I'm not convinced about the need to make the code more complicated if
-the overall direction is to simplify it.
-
-I understand that you want to avoid regressing things, but you want to
-make these changes eventually anyway, so why to you think that the
-risk of regressing things would be smaller in the future, after making
-the code more complicated than it is now?  Sounds counter-intuitive to
-me.
+Bjorn

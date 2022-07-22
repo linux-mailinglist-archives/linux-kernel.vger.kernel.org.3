@@ -2,70 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D725B57D815
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 03:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2219557D817
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 03:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiGVBsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 21:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S233176AbiGVBsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 21:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiGVBsB (ORCPT
+        with ESMTP id S229508AbiGVBsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 21:48:01 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A6D972D8
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 18:47:56 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1658454472t5saw605
-Received: from harry-jrlc.. ( [125.70.163.183])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 22 Jul 2022 09:47:47 +0800 (CST)
-X-QQ-SSF: 0100000000000030C000000A0000020
-X-QQ-FEAT: iQygIJK8D+fJ/gB1c8hy7EMrB92aFy80KT+cy3Z8AHlzWXecaEdV/s9v3FOMf
-        sx1UTOzGA7ZAIJGZgLfrqloD6aEx32z05acI/0n5AdYSG04pm7w6GIYPlU2ak1NUt7ZpuH2
-        vnCur2nCV+bQjZSiqZzhhNCxVJMoxxcziCK0V5dbntFzAXwkAoQlbz0xmXGFThSXabV4Ork
-        itYd8kVdStu6ggcuhG51rMKGP8azUnbkwgFmxQfMoF7X5XWpK+uD+E0Qj/YX8ynlL4MnC0p
-        JNszs/MvJzE3P0UM3dvWN/u/jQAGldyV+1bgGcf4p6dXlgGvP7rw8Izj/LcxdmfwQLKxRuv
-        0k3gmVHXUyccbeHnWeKh4mp/SIp14TzYBceuMQF
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     terrelln@fb.com
-Cc:     linux-kernel@vger.kernel.org, Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] lib: zstd: Fix comment typo
-Date:   Fri, 22 Jul 2022 09:47:45 +0800
-Message-Id: <20220722014745.14614-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 21 Jul 2022 21:48:22 -0400
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9A6D972D8;
+        Thu, 21 Jul 2022 18:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=aKN9G
+        rPpUB3VkgLNbdmd4hl3W/u3Va2puFbeMm1q2Lc=; b=oJ4WcqIvSCKt2R1gt4m4G
+        1WbWKM/70yAgGHRsopJ6ukAn4bbPjCtmZu4OHWN8d2qmCHpmCh5cZeRcf02L1L6z
+        2s28J3CjoitgAj9GnQ2jV/20QiM5ob8KeJWnRhYhZmhOmxcQ4sXfBKewjjk60PO8
+        zQ1IQhUnbSo+M6c6w6gX0Y=
+Received: from localhost.localdomain (unknown [223.104.68.59])
+        by smtp8 (Coremail) with SMTP id DMCowADnLMvNAdpiVr1mOw--.510S2;
+        Fri, 22 Jul 2022 09:48:00 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] media: dvb-frontends: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 09:47:55 +0800
+Message-Id: <20220722014755.63338-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: DMCowADnLMvNAdpiVr1mOw--.510S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyDGw4rurW7Kw47WF15Arb_yoW8Xr15p3
+        yDtryI9FZYg3Waqr1kJ3WUWF98tan5XFy0kw17Aan3ZF1fuFy3Xr4DtayUAr13Xa1fGFsF
+        q3ZIqry2kwn3tw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRm-e8UUUUU=
+X-Originating-IP: [223.104.68.59]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivxBFZFWB0jZ7sQACs2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `when' is duplicated in line 999, remove one.
+Replace 'the the' with 'the' in the comment.
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- lib/zstd/decompress/zstd_decompress.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-frontends/tda1002x.h | 2 +-
+ drivers/media/dvb-frontends/tda10048.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/lib/zstd/decompress/zstd_decompress.c b/lib/zstd/decompress/zstd_decompress.c
-index b4d81d84479a..6928e85f9d19 100644
---- a/lib/zstd/decompress/zstd_decompress.c
-+++ b/lib/zstd/decompress/zstd_decompress.c
-@@ -996,7 +996,7 @@ size_t ZSTD_decompress(void* dst, size_t dstCapacity, const void* src, size_t sr
- size_t ZSTD_nextSrcSizeToDecompress(ZSTD_DCtx* dctx) { return dctx->expected; }
- 
+diff --git a/drivers/media/dvb-frontends/tda1002x.h b/drivers/media/dvb-frontends/tda1002x.h
+index 60a0952c1bca..00491bea9975 100644
+--- a/drivers/media/dvb-frontends/tda1002x.h
++++ b/drivers/media/dvb-frontends/tda1002x.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
  /*
-- * Similar to ZSTD_nextSrcSizeToDecompress(), but when when a block input can be streamed,
-+ * Similar to ZSTD_nextSrcSizeToDecompress(), but when a block input can be streamed,
-  * we allow taking a partial block as the input. Currently only raw uncompressed blocks can
-  * be streamed.
-  *
+     TDA10021/TDA10023  - Single Chip Cable Channel Receiver driver module
+-			 used on the the Siemens DVB-C cards
++			 used on the Siemens DVB-C cards
+ 
+     Copyright (C) 1999 Convergence Integrated Media GmbH <ralph@convergence.de>
+     Copyright (C) 2004 Markus Schulz <msc@antzsystem.de>
+diff --git a/drivers/media/dvb-frontends/tda10048.c b/drivers/media/dvb-frontends/tda10048.c
+index d1d206ebdedd..0b3f6999515e 100644
+--- a/drivers/media/dvb-frontends/tda10048.c
++++ b/drivers/media/dvb-frontends/tda10048.c
+@@ -1118,7 +1118,7 @@ struct dvb_frontend *tda10048_attach(const struct tda10048_config *config,
+ 		state->pll_pfactor = 0;
+ 	}
+ 
+-	/* Establish any defaults the the user didn't pass */
++	/* Establish any defaults the user didn't pass */
+ 	tda10048_establish_defaults(&state->frontend);
+ 
+ 	/* Set the xtal and freq defaults */
 -- 
-2.30.2
+2.25.1
 

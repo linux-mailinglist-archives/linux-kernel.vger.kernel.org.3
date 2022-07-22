@@ -2,203 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2977C57E480
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CB757E484
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235770AbiGVQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        id S235799AbiGVQgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiGVQfe (ORCPT
+        with ESMTP id S229567AbiGVQgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:35:34 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92C290D9C;
-        Fri, 22 Jul 2022 09:35:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658507733; x=1690043733;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wct04tBZUBn/SLi+Q6yHNMxbcUkF4qzPsiApqCX08Nk=;
-  b=jPNL1uwrw+myR0PDEiK1JdAF7IPeU0yu50Un7ABj8jR0rn7sSjaaRrQ0
-   KIV64X5eG+FPmLT24W8kTvNwLSx92qqOv/JAADdTn9CAMTsIe3DhrGUjI
-   /Upw9f0EI7J0Td9rmgrHvJE+YUqzCBMOnh7MlGlVx+uBKD2GghMW6ycdC
-   0EPiGDw31Su3ky/huz9gyVFjTG7n/24Z8XFIFBYVrjqC9O+0wugkSV3cr
-   tWL6hDl180MSLFhdhcCgdlBokPqBvOM0gzCb64kG+SrOlIKbD+CKC1pAV
-   WLgzvmATHrNhoEMb2L+rpGQq1EUDnp41EnshmID9UDRLUmT5Y7X5Mj7Gv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="286111314"
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="286111314"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 09:35:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="701716621"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Jul 2022 09:35:27 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oEvcd-0001bt-0B;
-        Fri, 22 Jul 2022 16:35:27 +0000
-Date:   Sat, 23 Jul 2022 00:35:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, l.stach@pengutronix.de
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, aford173@gmail.com,
-        Markus.Niebel@ew.tq-group.com, alexander.stein@ew.tq-group.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V4 5/8] soc: imx: add i.MX8MP HDMI blk ctrl HDCP/HRV
-Message-ID: <202207230052.uIae3wom-lkp@intel.com>
-References: <20220722125730.3428017-6-peng.fan@oss.nxp.com>
+        Fri, 22 Jul 2022 12:36:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E1FCE07;
+        Fri, 22 Jul 2022 09:36:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E5E5B8296D;
+        Fri, 22 Jul 2022 16:36:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25DE9C341C6;
+        Fri, 22 Jul 2022 16:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658507809;
+        bh=QvtylitPgJHwkxI60rDk7regVvGnoYVxaRSt9ICAKf8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=M9j0uO4MFq5+QCSs2pbVtqQWQmZs1G2CVcSlFU0B4BO5nLLTRWQTeaLDVwU2HTcgK
+         z26a+WHYUdxvbvcNjuus/MoA0JCW4yb7yCUbtEIt5wresfDTgZOYgD8Laow8HhuSMl
+         XAgYGWLa94FkEX9wTUiRhvRwJFIJ9JiroNvWgS8Vp8sTaOgz8JUwKl86aCZenIJNLB
+         rWJm0pwPhW7D+fGnd4PBT205otGTSJKxj5BGj2Tm9U+RH6xVlB1Y+/+v6CDiR0kuch
+         aelv4xSHjqlj7PcJTJ0Gw2x5PESHVvI7Xvqa8Dfr97kVf3v+HJosBh+zvfr+p640H9
+         7htZpi5MKFmig==
+Received: by mail-vs1-f49.google.com with SMTP id k129so4807326vsk.2;
+        Fri, 22 Jul 2022 09:36:49 -0700 (PDT)
+X-Gm-Message-State: AJIora8nA98O9oVGOsBb7L9XbVZv8NHiokgUHkJNl+2/IHFtwg1i5ojF
+        FH4vYhLeeR8Jrce300IV53p6sn/M7I/3EWqkfQ==
+X-Google-Smtp-Source: AGRyM1uWhGX+etc+342QMYfQjmA2giDXHKBGiyzp4++TdSmI/uchUQLzp2Q6hnGpgIxXHKzp2ZVUKAJRo7p2eytPGXw=
+X-Received: by 2002:a67:c088:0:b0:358:bb1:fdf7 with SMTP id
+ x8-20020a67c088000000b003580bb1fdf7mr292345vsi.85.1658507808011; Fri, 22 Jul
+ 2022 09:36:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722125730.3428017-6-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
+ <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014>
+In-Reply-To: <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 22 Jul 2022 10:36:36 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+Message-ID: <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, macro@orcam.me.uk,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um@lists.infradead.org, PCI <linux-pci@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Peng,
+On Fri, Jul 22, 2022 at 9:27 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Thu, 21 Jul 2022 16:06:52 PDT (-0700), Rob Herring wrote:
+> > On Tue, Jul 19, 2022 at 9:59 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> >>
+> >> On Sun, 17 Jul 2022 17:41:14 PDT (-0700), shorne@gmail.com wrote:
+> >> > The asm/pci.h used for many newer architectures share similar
+> >> > definitions.  Move the common parts to asm-generic/pci.h to allow for
+> >> > sharing code.
+> >> >
+> >> > Two things to note are:
+> >> >
+> >> >  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
+> >> >    these architectures avoid creating that file and add the definition
+> >> >    to asm/pci.h.
+> >> >  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
+> >> >    undefine it after including asm-generic/pci.h.  Why doesn't csky
+> >> >    define it?
+> >> >  - pci_get_legacy_ide_irq, This function is only used on architectures
+> >> >    that support PNP.  It is only maintained for arm64, in other
+> >> >    architectures it is removed.
+> >> >
+> >> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> >> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
+> >> > Signed-off-by: Stafford Horne <shorne@gmail.com>
+> >> > ---
+> >> > Second note on isa_dma_bridge_buggy, this is set on x86 but it it also set in
+> >> > pci/quirks.c.  We discussed limiting it only to x86 though as its a general
+> >> > quick triggered by pci ids I think it will be more tricky than we thought so I
+> >> > will leave as is.  It might be nice to move it out of asm/dma.h and into
+> >> > asm/pci.h though.
+> >> >
+> >> > Since v2:
+> >> >  - Nothing
+> >> > Since v1:
+> >> >  - Remove definition of pci_get_legacy_ide_irq
+> >> >
+> >> >  arch/arm64/include/asm/pci.h | 12 +++---------
+> >> >  arch/csky/include/asm/pci.h  | 24 ++++--------------------
+> >> >  arch/riscv/include/asm/pci.h | 25 +++----------------------
+> >> >  arch/um/include/asm/pci.h    | 24 ++----------------------
+> >> >  include/asm-generic/pci.h    | 36 ++++++++++++++++++++++++++++++++++++
+> >> >  5 files changed, 48 insertions(+), 73 deletions(-)
+> >> >  create mode 100644 include/asm-generic/pci.h
+> >> >
+> >> > diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
+> >> > index b33ca260e3c9..1180e83712f5 100644
+> >> > --- a/arch/arm64/include/asm/pci.h
+> >> > +++ b/arch/arm64/include/asm/pci.h
+> >> > @@ -9,7 +9,6 @@
+> >> >  #include <asm/io.h>
+> >> >
+> >> >  #define PCIBIOS_MIN_IO               0x1000
+> >> > -#define PCIBIOS_MIN_MEM              0
+> >> >
+> >> >  /*
+> >> >   * Set to 1 if the kernel should re-assign all PCI bus numbers
+> >> > @@ -18,9 +17,6 @@
+> >> >       (pci_has_flag(PCI_REASSIGN_ALL_BUS))
+> >> >
+> >> >  #define arch_can_pci_mmap_wc() 1
+> >> > -#define ARCH_GENERIC_PCI_MMAP_RESOURCE       1
+> >> > -
+> >> > -extern int isa_dma_bridge_buggy;
+> >> >
+> >> >  #ifdef CONFIG_PCI
+> >> >  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+> >> > @@ -28,11 +24,9 @@ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+> >> >       /* no legacy IRQ on arm64 */
+> >> >       return -ENODEV;
+> >> >  }
+> >> > -
+> >> > -static inline int pci_proc_domain(struct pci_bus *bus)
+> >> > -{
+> >> > -     return 1;
+> >> > -}
+> >> >  #endif  /* CONFIG_PCI */
+> >> >
+> >> > +/* Generic PCI */
+> >> > +#include <asm-generic/pci.h>
+> >> > +
+> >> >  #endif  /* __ASM_PCI_H */
+> >> > diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
+> >> > index ebc765b1f78b..44866c1ad461 100644
+> >> > --- a/arch/csky/include/asm/pci.h
+> >> > +++ b/arch/csky/include/asm/pci.h
+> >> > @@ -9,26 +9,10 @@
+> >> >
+> >> >  #include <asm/io.h>
+> >> >
+> >> > -#define PCIBIOS_MIN_IO               0
+> >> > -#define PCIBIOS_MIN_MEM              0
+> >> > +/* Generic PCI */
+> >> > +#include <asm-generic/pci.h>
+> >> >
+> >> > -/* C-SKY shim does not initialize PCI bus */
+> >> > -#define pcibios_assign_all_busses() 1
+> >> > -
+> >> > -extern int isa_dma_bridge_buggy;
+> >> > -
+> >> > -#ifdef CONFIG_PCI
+> >> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+> >> > -{
+> >> > -     /* no legacy IRQ on csky */
+> >> > -     return -ENODEV;
+> >> > -}
+> >> > -
+> >> > -static inline int pci_proc_domain(struct pci_bus *bus)
+> >> > -{
+> >> > -     /* always show the domain in /proc */
+> >> > -     return 1;
+> >> > -}
+> >> > -#endif  /* CONFIG_PCI */
+> >> > +/* csky doesn't use generic pci resource mapping */
+> >> > +#undef ARCH_GENERIC_PCI_MMAP_RESOURCE
+> >> >
+> >> >  #endif  /* __ASM_CSKY_PCI_H */
+> >> > diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
+> >> > index 7fd52a30e605..12ce8150cfb0 100644
+> >> > --- a/arch/riscv/include/asm/pci.h
+> >> > +++ b/arch/riscv/include/asm/pci.h
+> >> > @@ -12,29 +12,7 @@
+> >> >
+> >> >  #include <asm/io.h>
+> >> >
+> >> > -#define PCIBIOS_MIN_IO               0
+> >> > -#define PCIBIOS_MIN_MEM              0
+> >>
+> >> My for-next changes these in bb356ddb78b2 ("RISC-V: PCI: Avoid handing
+> >> out address 0 to devices").  Do you mind either splitting out the
+> >> arch/riscv bits or having this in via some sort of shared tag?
+> >
+> > Shouldn't the values not matter here if the IO and mem resources are
+> > described in the DT (and don't use 0)? The values of 4 and 16 look
+> > odd.
+>
+> The linked thread has a fairly long discussion
+> <https://lore.kernel.org/all/alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk/>.
+> I agree it's odd to have this in arch code: "don't hand out address 0"
+> isn't really a RISC-V constraint (ie, we don't have architecture-defined
+> limitations on these address spaces) but a constraint that comes from
+> the generic port I/O functions and some other related PCI/resource code
+> where the value 0 is a sentinel.
 
-Thank you for the patch! Yet something to improve:
+If you look at arm32, we have a variable for PCIBIOS_MIN_MEM because
+pre-DT what platforms required was all over the place. Nothing using
+DT needs to set that variable. And arm64 uses 0 without problems. In
+all those platforms, none of them have the same restrictions? So it is
+still curious to me how PCIBIOS_MIN_MEM matters for Risc-V.
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on linus/master v5.19-rc7 next-20220722]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I/O is different as Arnd said, but I'd imagine we could just set the
+min to 4 in the generic header and be done with it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220722-205748
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: arm-buildonly-randconfig-r004-20220722 (https://download.01.org/0day-ci/archive/20220723/202207230052.uIae3wom-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/9f38a755e912ffee8cd2b25002016da6e121f448
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220722-205748
-        git checkout 9f38a755e912ffee8cd2b25002016da6e121f448
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/soc/imx/
+> Maybe the right thing to do here is actually to make the default
+> definitions of these macros non-zero, or to add some sort of ARCH_
+> flavor of them and move that non-zero requirement closer to where it
+> comes from?  From the look of it any port that uses the generic port I/O
+> functions and has 0 for these will be broken in the same way.
+>
+> That said, I'm not really a PCI guy so maybe Bjorn or Maciej has a
+> better idea?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+From fu740:
+                       ranges = <0x81000000  0x0 0x60080000  0x0
+0x60080000 0x0 0x10000>,      /* I/O */
+                                 <0x82000000  0x0 0x60090000  0x0
+0x60090000 0x0 0xff70000>,    /* mem */
+                                 <0x82000000  0x0 0x70000000  0x0
+0x70000000 0x0 0x1000000>,    /* mem */
+                                 <0xc3000000 0x20 0x00000000 0x20
+0x00000000 0x20 0x00000000>;  /* mem prefetchable */
 
-All errors (new ones prefixed by >>):
+So again, how does one get a 0 address handed out when that's not even
+a valid region according to DT? Is there some legacy stuff that
+ignores the bridge windows?
 
->> drivers/soc/imx/imx8mp-blk-ctrl.c:375:4: error: field designator 'path_names' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
-                   .path_names = (const char *[]){"hrv"},
-                    ^
->> drivers/soc/imx/imx8mp-blk-ctrl.c:376:4: error: field designator 'num_paths' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
-                   .num_paths = 1,
-                    ^
-   drivers/soc/imx/imx8mp-blk-ctrl.c:383:4: error: field designator 'path_names' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
-                   .path_names = (const char *[]){"hdcp"},
-                    ^
-   drivers/soc/imx/imx8mp-blk-ctrl.c:384:4: error: field designator 'num_paths' does not refer to any field in type 'const struct imx8mp_blk_ctrl_domain_data'
-                   .num_paths = 1,
-                    ^
->> drivers/soc/imx/imx8mp-blk-ctrl.c:394:17: error: invalid application of 'sizeof' to an incomplete type 'const struct imx8mp_blk_ctrl_domain_data[]'
-           .num_domains = ARRAY_SIZE(imx8mp_hdmi_domain_data),
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
-   5 errors generated.
-
-
-vim +375 drivers/soc/imx/imx8mp-blk-ctrl.c
-
-   326	
-   327	static const struct imx8mp_blk_ctrl_domain_data imx8mp_hdmi_domain_data[] = {
-   328		[IMX8MP_HDMIBLK_PD_IRQSTEER] = {
-   329			.name = "hdmiblk-irqsteer",
-   330			.clk_names = (const char *[]){ "apb" },
-   331			.num_clks = 1,
-   332			.gpc_name = "irqsteer",
-   333		},
-   334		[IMX8MP_HDMIBLK_PD_LCDIF] = {
-   335			.name = "hdmiblk-lcdif",
-   336			.clk_names = (const char *[]){ "axi", "apb" },
-   337			.num_clks = 2,
-   338			.gpc_name = "lcdif",
-   339		},
-   340		[IMX8MP_HDMIBLK_PD_PAI] = {
-   341			.name = "hdmiblk-pai",
-   342			.clk_names = (const char *[]){ "apb" },
-   343			.num_clks = 1,
-   344			.gpc_name = "pai",
-   345		},
-   346		[IMX8MP_HDMIBLK_PD_PVI] = {
-   347			.name = "hdmiblk-pvi",
-   348			.clk_names = (const char *[]){ "apb" },
-   349			.num_clks = 1,
-   350			.gpc_name = "pvi",
-   351		},
-   352		[IMX8MP_HDMIBLK_PD_TRNG] = {
-   353			.name = "hdmiblk-trng",
-   354			.clk_names = (const char *[]){ "apb" },
-   355			.num_clks = 1,
-   356			.gpc_name = "trng",
-   357		},
-   358		[IMX8MP_HDMIBLK_PD_HDMI_TX] = {
-   359			.name = "hdmiblk-hdmi-tx",
-   360			.clk_names = (const char *[]){ "apb", "ref_266m" },
-   361			.num_clks = 2,
-   362			.gpc_name = "hdmi-tx",
-   363		},
-   364		[IMX8MP_HDMIBLK_PD_HDMI_TX_PHY] = {
-   365			.name = "hdmiblk-hdmi-tx-phy",
-   366			.clk_names = (const char *[]){ "apb", "ref_24m" },
-   367			.num_clks = 2,
-   368			.gpc_name = "hdmi-tx-phy",
-   369		},
-   370		[IMX8MP_HDMIBLK_PD_HRV] = {
-   371			.name = "hdmiblk-hrv",
-   372			.clk_names = (const char *[]){ "axi", "apb" },
-   373			.num_clks = 2,
-   374			.gpc_name = "hrv",
- > 375			.path_names = (const char *[]){"hrv"},
- > 376			.num_paths = 1,
-   377		},
-   378		[IMX8MP_HDMIBLK_PD_HDCP] = {
-   379			.name = "hdmiblk-hdcp",
-   380			.clk_names = (const char *[]){ "axi", "apb" },
-   381			.num_clks = 2,
-   382			.gpc_name = "hdcp",
-   383			.path_names = (const char *[]){"hdcp"},
-   384			.num_paths = 1,
-   385		},
-   386	};
-   387	
-   388	static const struct imx8mp_blk_ctrl_data imx8mp_hdmi_blk_ctl_dev_data = {
-   389		.max_reg = 0x23c,
-   390		.power_on = imx8mp_hdmi_blk_ctrl_power_on,
-   391		.power_off = imx8mp_hdmi_blk_ctrl_power_off,
-   392		.power_notifier_fn = imx8mp_hdmi_power_notifier,
-   393		.domains = imx8mp_hdmi_domain_data,
- > 394		.num_domains = ARRAY_SIZE(imx8mp_hdmi_domain_data),
-   395	};
-   396	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Rob

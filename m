@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A1257E473
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4EF57E478
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235687AbiGVQcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
+        id S235718AbiGVQcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiGVQcX (ORCPT
+        with ESMTP id S235296AbiGVQcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:32:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB9893639;
-        Fri, 22 Jul 2022 09:32:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A82FBB82970;
-        Fri, 22 Jul 2022 16:32:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59770C341C6;
-        Fri, 22 Jul 2022 16:32:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658507539;
-        bh=9kjRTVDxL24Wa+68T4xaPpTYLmzvbSMN20xX2dxrB8g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=icBna0IWzDzuvLGufKYYwp3fkc8pRyl7ILh2N+bdXNC1iPTVoM0JORs0pV2YaQBVz
-         Dn1UbPnqqQP9pizgMGAEcsx5tX2ZOVzuEX1AbEQ3x1dn695O3l3C6QclFxrjmHnVA9
-         NamWnaf2Et59G3UOAsXG7SurBZJtMJqG7HYGLxE6h1AE1ZP6zfU0ZAL2B5WfjNZNNx
-         83MvuOF7NkAbfz/jId+XGbTyW0ETGtLxBjdH6sz7ia0qqk4eFEB0k/O4d1t9cw/ns+
-         ydzb6a46SRXdSi40XD+gcuTRm7C5PozIJG6VgxIzex6Zcorf457MGnco2D1Nc4VE3k
-         +FIQdWH/zmbqQ==
-Date:   Fri, 22 Jul 2022 09:32:18 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v4 1/9] statx: add direct I/O alignment information
-Message-ID: <YtrREiRZ4Qrdte6t@magnolia>
-References: <20220722071228.146690-1-ebiggers@kernel.org>
- <20220722071228.146690-2-ebiggers@kernel.org>
+        Fri, 22 Jul 2022 12:32:51 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5F193696
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:32:49 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id q5so4967789plr.11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pHkzVngUg8JraIw7WAXXxeWawYCL64dfVzj3JndI8ec=;
+        b=DE2j5M49eA0g6LUo3qmfRgAkAVCAZ25hPgegh6+UVPoOmTzpn8rAXFkIP0oOfwXvha
+         UztqAnN2YyS9d8hnn7uqvYA3yyl1F1VywFKiMoYWa+giIVfo/vo1+HQzt+DEkym5RUDO
+         WhiCT49Jgu0Rreh3e8zCKN1zUEw+zKQUtTHgk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pHkzVngUg8JraIw7WAXXxeWawYCL64dfVzj3JndI8ec=;
+        b=cV+k26WmvTeybf/x+cROAJfeQ/0HA149NJE21IpcJSOwzlUc/jl08JwDOPsYv404S8
+         mUqNStkpoT/27jARrHbe5LZ89bgkXf2kThKKUns9v/vDh+enKq6YRHrVgZEZbH0001um
+         N1h0azsZCgRK8cWhYyLqBQbFBG7F8oSqph1WtYTUMGhOC6wCfV+KUdgLgXn8cQTt4eVu
+         2DrKI7UZSV/6104TV79cKltp9VlOBFbZ4J/buqEc1angOocNmKJlWtNQnnzuqjVxXH75
+         ScKHNt2pH1+0KVcXeXINMsOsYk+8ShQ/1Nx1BTie38TDuYM2fiWSa7YdSssPr9c2kpJn
+         lLDg==
+X-Gm-Message-State: AJIora8GTVsQUsYidRftCYZmURDjNp1zdS4M36cox0mUWH9fqXa6YpGS
+        oILBpetYTcQc5tuvy0Xo9BUVMw==
+X-Google-Smtp-Source: AGRyM1uRxtJn7DjJ7STDDPVY6rF/tZpRTUckHUDOghrPwyx+1x6dBFGv2TK/4Y/5TjP2KcWVjgY+gg==
+X-Received: by 2002:a17:902:bb91:b0:16c:3f7f:6df0 with SMTP id m17-20020a170902bb9100b0016c3f7f6df0mr672035pls.99.1658507569276;
+        Fri, 22 Jul 2022 09:32:49 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:42b0:2897:3725:985a])
+        by smtp.gmail.com with UTF8SMTPSA id u8-20020a1709026e0800b001640aad2f71sm3943818plk.180.2022.07.22.09.32.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 09:32:48 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH v24 1/2] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+Date:   Fri, 22 Jul 2022 09:32:44 -0700
+Message-Id: <20220722093238.v24.1.I7a1a6448d50bdd38e6082204a9818c59cc7a9bfd@changeid>
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722071228.146690-2-ebiggers@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,118 +72,249 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:12:20AM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Traditionally, the conditions for when DIO (direct I/O) is supported
-> were fairly simple.  For both block devices and regular files, DIO had
-> to be aligned to the logical block size of the block device.
-> 
-> However, due to filesystem features that have been added over time (e.g.
-> multi-device support, data journalling, inline data, encryption, verity,
-> compression, checkpoint disabling, log-structured mode), the conditions
-> for when DIO is allowed on a regular file have gotten increasingly
-> complex.  Whether a particular regular file supports DIO, and with what
-> alignment, can depend on various file attributes and filesystem mount
-> options, as well as which block device(s) the file's data is located on.
-> 
-> Moreover, the general rule of DIO needing to be aligned to the block
-> device's logical block size is being relaxed to allow user buffers (but
-> not file offsets) aligned to the DMA alignment instead
-> (https://lore.kernel.org/linux-block/20220610195830.3574005-1-kbusch@fb.com/T/#u).
-> 
-> XFS has an ioctl XFS_IOC_DIOINFO that exposes DIO alignment information.
-> Uplifting this to the VFS is one possibility.  However, as discussed
-> (https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u),
-> this ioctl is rarely used and not known to be used outside of
-> XFS-specific code.  It was also never intended to indicate when a file
-> doesn't support DIO at all, nor was it intended for block devices.
-> 
-> Therefore, let's expose this information via statx().  Add the
-> STATX_DIOALIGN flag and two new statx fields associated with it:
-> 
-> * stx_dio_mem_align: the alignment (in bytes) required for user memory
->   buffers for DIO, or 0 if DIO is not supported on the file.
-> 
-> * stx_dio_offset_align: the alignment (in bytes) required for file
->   offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
->   on the file.  This will only be nonzero if stx_dio_mem_align is
->   nonzero, and vice versa.
-> 
-> Note that as with other statx() extensions, if STATX_DIOALIGN isn't set
-> in the returned statx struct, then these new fields won't be filled in.
-> This will happen if the file is neither a regular file nor a block
-> device, or if the file is a regular file and the filesystem doesn't
-> support STATX_DIOALIGN.  It might also happen if the caller didn't
-> include STATX_DIOALIGN in the request mask, since statx() isn't required
-> to return unrequested information.
-> 
-> This commit only adds the VFS-level plumbing for STATX_DIOALIGN.  For
-> regular files, individual filesystems will still need to add code to
-> support it.  For block devices, a separate commit will wire it up too.
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+Add nodes for the onboard USB hub on trogdor devices. Remove the
+'always-on' property from the hub regulator, since the regulator
+is now managed by the onboard_usb_hub driver.
 
-Looks good to me,
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+For anyone using trogdor-based devices on Linux, it should be
+noted that this requires "CONFIG_USB_ONBOARD_HUB=y".
 
---D
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+---
+This series depends on 3a6bf4a08142 ("usb: core: hub: Create platform
+devices for onboard hubs in hub_probe()") which landed in -next [1].
 
-> ---
->  fs/stat.c                 | 2 ++
->  include/linux/stat.h      | 2 ++
->  include/uapi/linux/stat.h | 4 +++-
->  3 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/stat.c b/fs/stat.c
-> index 9ced8860e0f35d..a7930d74448304 100644
-> --- a/fs/stat.c
-> +++ b/fs/stat.c
-> @@ -611,6 +611,8 @@ cp_statx(const struct kstat *stat, struct statx __user *buffer)
->  	tmp.stx_dev_major = MAJOR(stat->dev);
->  	tmp.stx_dev_minor = MINOR(stat->dev);
->  	tmp.stx_mnt_id = stat->mnt_id;
-> +	tmp.stx_dio_mem_align = stat->dio_mem_align;
-> +	tmp.stx_dio_offset_align = stat->dio_offset_align;
->  
->  	return copy_to_user(buffer, &tmp, sizeof(tmp)) ? -EFAULT : 0;
->  }
-> diff --git a/include/linux/stat.h b/include/linux/stat.h
-> index 7df06931f25d85..ff277ced50e9fd 100644
-> --- a/include/linux/stat.h
-> +++ b/include/linux/stat.h
-> @@ -50,6 +50,8 @@ struct kstat {
->  	struct timespec64 btime;			/* File creation time */
->  	u64		blocks;
->  	u64		mnt_id;
-> +	u32		dio_mem_align;
-> +	u32		dio_offset_align;
->  };
->  
->  #endif
-> diff --git a/include/uapi/linux/stat.h b/include/uapi/linux/stat.h
-> index 1500a0f58041ae..7cab2c65d3d7fc 100644
-> --- a/include/uapi/linux/stat.h
-> +++ b/include/uapi/linux/stat.h
-> @@ -124,7 +124,8 @@ struct statx {
->  	__u32	stx_dev_minor;
->  	/* 0x90 */
->  	__u64	stx_mnt_id;
-> -	__u64	__spare2;
-> +	__u32	stx_dio_mem_align;	/* Memory buffer alignment for direct I/O */
-> +	__u32	stx_dio_offset_align;	/* File offset alignment for direct I/O */
->  	/* 0xa0 */
->  	__u64	__spare3[12];	/* Spare space for future expansion */
->  	/* 0x100 */
-> @@ -152,6 +153,7 @@ struct statx {
->  #define STATX_BASIC_STATS	0x000007ffU	/* The stuff in the normal stat struct */
->  #define STATX_BTIME		0x00000800U	/* Want/got stx_btime */
->  #define STATX_MNT_ID		0x00001000U	/* Got stx_mnt_id */
-> +#define STATX_DIOALIGN		0x00002000U	/* Want/got direct I/O alignment info */
->  
->  #define STATX__RESERVED		0x80000000U	/* Reserved for future struct statx expansion */
->  
-> -- 
-> 2.37.0
-> 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=3a6bf4a08142826698121bef16b244dcf50a6431
+
+Changes in v24:
+- renamed 'companion-hub' to 'peer-hub' according to the change
+  in the binding
+
+Changes in v23:
+- added note about enabling CONFIG_USB_ONBOARD_HUB to the commit
+  message
+
+Changes in v22:
+- none
+
+Changes in v21:
+- patch dropped from onboard_usb_hub series
+
+Changes in v20:
+- renamed hub labels to 'usb_hub_2/3_x'
+- added comment for 'regulator-boot-on' of 'pp3300_hub'
+- added 'Reviewed-by' tags from Stephen and Doug
+
+Changes in v19:
+- none
+
+Changes in v18:
+- also adjust config for pompom rev1
+
+Changes in v17:
+- none
+
+Changes in v16:
+- none
+
+Changes in v15:
+- none
+
+Changes in v14:
+- none
+
+Changes in v13:
+- none
+
+Changes in v12:
+- none
+
+Changes in v11:
+- rebased on qcom/arm64-for-5.14 (with the rest of the series)
+
+Changes in v10:
+- keep 'regulator-boot-on' property
+- updated commit message
+
+Changes in v9:
+- none
+
+Changes in v8:
+- none
+
+Changes in v7:
+- rebased on qcom/arm64-for-5.13 (with the rest of the series)
+
+Changes in v6:
+- added 'companion-hub' entry to both USB devices
+- added 'vdd-supply' also to hub@2
+
+Changes in v5:
+- patch added to the series
+
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++----------
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++------
+ .../dts/qcom/sc7180-trogdor-pompom-r1.dts     | 11 ++++------
+ .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++----------
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 20 ++++++++++++++++++-
+ 5 files changed, 44 insertions(+), 37 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
+index bfbf26fd2cd4..d49de65aa960 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
+@@ -16,17 +16,6 @@ / {
+ 	compatible = "google,lazor-rev0", "qcom,sc7180";
+ };
+ 
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
+-};
+-
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
+-};
+-
+ &sn65dsi86_out {
+ 	/*
+ 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
+@@ -35,3 +24,11 @@ &sn65dsi86_out {
+ 	 */
+ 	lane-polarities = <1 0>;
+ };
++
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
++
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
+index d45a59afd7fc..80c7108bc51b 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
+@@ -16,13 +16,11 @@ / {
+ 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
+ };
+ 
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
++
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
+ 
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
+index 76a130bad60a..8467ff41e6d5 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
+@@ -34,13 +34,10 @@ &pm6150_adc_tm {
+ 	/delete-node/ charger-thermistor@0;
+ };
+ 
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
+ 
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
+index 59a23d0e9651..bc097d1b1b23 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
+@@ -44,17 +44,6 @@ &panel {
+ 	compatible = "auo,b116xa01";
+ };
+ 
+-&pp3300_hub {
+-	/* pp3300_l7c is used to power the USB hub */
+-	/delete-property/regulator-always-on;
+-	/delete-property/regulator-boot-on;
+-};
+-
+-&pp3300_l7c {
+-	regulator-always-on;
+-	regulator-boot-on;
+-};
+-
+ &sdhc_2 {
+ 	status = "okay";
+ };
+@@ -63,6 +52,14 @@ &trackpad {
+ 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
+ };
+ 
++&usb_hub_2_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
++
++&usb_hub_3_x {
++	 vdd-supply = <&pp3300_l7c>;
++};
++
+ /* PINCTRL - modifications to sc7180-trogdor.dtsi */
+ 
+ &trackpad_int_1v8_odl {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index b5f534db135a..eae22e6e97c1 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -299,7 +299,7 @@ pp3300_hub: pp3300-hub-regulator {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&en_pp3300_hub>;
+ 
+-		regulator-always-on;
++		/* The BIOS leaves this regulator on */
+ 		regulator-boot-on;
+ 
+ 		vin-supply = <&pp3300_a>;
+@@ -936,6 +936,24 @@ &usb_1 {
+ 
+ &usb_1_dwc3 {
+ 	dr_mode = "host";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	/* 2.x hub on port 1 */
++	usb_hub_2_x: hub@1 {
++		compatible = "usbbda,5411";
++		reg = <1>;
++		vdd-supply = <&pp3300_hub>;
++		peer-hub = <&usb_hub_3_x>;
++	};
++
++	/* 3.x hub on port 2 */
++	usb_hub_3_x: hub@2 {
++		compatible = "usbbda,411";
++		reg = <2>;
++		vdd-supply = <&pp3300_hub>;
++		peer-hub = <&usb_hub_2_x>;
++	};
+ };
+ 
+ &usb_1_hsphy {
+-- 
+2.37.1.359.gd136c6c3e2-goog
+

@@ -2,142 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1168F57D7AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B4A57D7AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbiGVAWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S232324AbiGVAZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbiGVAWP (ORCPT
+        with ESMTP id S229696AbiGVAZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:22:15 -0400
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F24974E3F;
-        Thu, 21 Jul 2022 17:22:14 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id 1so1639404ill.11;
-        Thu, 21 Jul 2022 17:22:14 -0700 (PDT)
+        Thu, 21 Jul 2022 20:25:05 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CD62E9D8
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:25:03 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id g1so4071249edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T+jSm49KfUYG5RhGRq72Xx7Q+0SpyncIbR4IwkZUcPE=;
+        b=XxZ+xsTfqHc5yjsY1Ryxp5yNP3TbAnty9tQNkC/zAyHdMw9qTL9WknfOc6BYk7CBwr
+         Uo5E2gZzdnaIcbdWbi3Gk1TPuPkh0x9RCKMcwGsxwYKQMowSuD3E66Ou10SASq6e2GqF
+         DXrjW9tGWfObIxDuxZ+hESxFu+/cb9K2qp+l5uoP7l1rLFwiizuxgBwmZo8yXrBYrjyN
+         pNsTC5E0mC0XDiRjridjW023zMNF7ZZuTCTPuDMaVX6blU86/8l/lHvqxH5E6+1ZKQMX
+         hoLWS7dlqn0QYTNkvfQrzP6W3uaFpm6VKIiOuQlePW3vjlrHENCmp9eoZPDCEjIHjftL
+         mefw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=37TNQXkegxnNHaxlV6oBSEt0TAcZ2231cTAxeerzb9A=;
-        b=pGC9smnRAob4qn8jwEh6UskjyWnFyBzj4HlbQBKvStLq4Kd0nAw8H1QfX3tjJ91ZeI
-         uhZj4xqpqt5MZto0ys3O9dfFlBMkM57cBqXl0TqdwBzpttEQrE5xte6p8UVxfCXnWFpt
-         pujX1YYyLznd5HPDjPQ/MQqCHV+ft1C9CBw/aNPMUSbBEpYQ0uZskAmNOR0LuOiCeBs+
-         XaxJaR8LsC+b6Ehi5LhPjzFqkJc2LHsclmbiISerjnrt3fc9sz7aJV3JVwYuyF8Otf7u
-         UPRU6UfyvySIJ3+h0/6uE0Q0cwAKsl47pp4MJ14ebn7nh/bPPXgdcDmeYXP7p5w6yXW7
-         pOFA==
-X-Gm-Message-State: AJIora8aJJzpSS8O9Mn2joMjmfYE+MTYTGF/Qzk5xs6verwHNd5NxK7Z
-        AhZf1sMG097E6zNOS3p6Vg==
-X-Google-Smtp-Source: AGRyM1t3xSUTPj8NUaYheUjJGn/Wyn134h6vs453EwhUvdH1zTFkN1/JYZprUAj7UKTKrKlLTtP4HQ==
-X-Received: by 2002:a05:6e02:1c43:b0:2dc:7428:cdef with SMTP id d3-20020a056e021c4300b002dc7428cdefmr413494ilg.4.1658449333103;
-        Thu, 21 Jul 2022 17:22:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j10-20020a0566022cca00b00674c8448c3csm1442019iow.6.2022.07.21.17.22.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 17:22:12 -0700 (PDT)
-Received: (nullmailer pid 2233392 invoked by uid 1000);
-        Fri, 22 Jul 2022 00:22:10 -0000
-Date:   Thu, 21 Jul 2022 18:22:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] dt-bindings: arm: qcom: Document additional sku6
- for sc7180 pazquel
-Message-ID: <20220722002210.GA2223409-robh@kernel.org>
-References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
- <20220721033918.v3.2.I7ecbb7eeb58c5e6a33e32a3abf4d6874e6cb725c@changeid>
- <CAD=FV=WSBgupLFMCZgianck6uTkAyqrG0WK2ChSbNbJdhOPdLA@mail.gmail.com>
- <4b2fe9d0-f590-0fac-79fa-bb05da1d61df@linaro.org>
- <CAD=FV=XmaNdc9k98vAwbcN-sm0w_WeqhRsK_AUm3h4LZ5-egmQ@mail.gmail.com>
- <c2b03863-2249-13e6-98e0-731c1b40d0a9@linaro.org>
- <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T+jSm49KfUYG5RhGRq72Xx7Q+0SpyncIbR4IwkZUcPE=;
+        b=svlGtZ/E0MI+cdlzdsQSCjcgf6SxtFMvooskvc+aodlx9SaHTU02zGMi/WEdXCf/Xx
+         YwrRHUzz5MVpwgFSe3tqS1XtwWerIXVjBA9PwTDAW4RdF2qIJB9g2cms6Prs7Xh817rA
+         YhEUxtxlIkHms1MY2SzDZAg4wCmMVJjX4PYBjeA3w301Dn8k4y8ejVtZfUizX8339ELZ
+         6DYt6p09S0aUVlUi1lSZ3ojugs8YkhLEotZ4vMCrcv/BkHxNqNL8EimeW5HVqWeeohUg
+         LOMdLbONwJKsY2NN3g9W+PYhe/EzpjlJoNvwmqXsSnJFgLkCaL/QiKGOmvNjUxoxTLlq
+         666Q==
+X-Gm-Message-State: AJIora9ET4rMXkKgvO5NCmEtaMqc4kRKb/JqVo8b1xjmqLo9bMeKd/b2
+        ufzV2zKO4bswwg8oPQ5J1tVJ8L2eteunwWGWpik7ig==
+X-Google-Smtp-Source: AGRyM1sEecyNIEXWcjY+YZG5ShpQUpGqjIkWEVj6V5QstDHGZLRFssfV9P9uHVtjrqmKV1UbLeMuPVtGv+VVI7lVfVU=
+X-Received: by 2002:a05:6402:2997:b0:43b:247b:89cb with SMTP id
+ eq23-20020a056402299700b0043b247b89cbmr905683edb.91.1658449501795; Thu, 21
+ Jul 2022 17:25:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220721081026.1247067-1-sadiyakazi@google.com> <CABVgOS=iOkquTXEPdS1skRj7Bda-H-REDW8mozziEYjn8RnRnw@mail.gmail.com>
+In-Reply-To: <CABVgOS=iOkquTXEPdS1skRj7Bda-H-REDW8mozziEYjn8RnRnw@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 21 Jul 2022 20:24:50 -0400
+Message-ID: <CAFd5g46ssneHhqg8uXSZZ0=GP8DyqYq2xvQp5tK+cuUV2aVbrA@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: kunit: Add CLI args for kunit_tool
+To:     David Gow <davidgow@google.com>
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:29:13AM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Thu, Jul 21, 2022 at 9:52 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
+On Thu, Jul 21, 2022 at 7:54 PM David Gow <davidgow@google.com> wrote:
+>
+> On Thu, Jul 21, 2022 at 4:26 PM Sadiya Kazi <sadiyakazi@google.com> wrote:
+
+[...]
+
+> >  Documentation/dev-tools/kunit/run_wrapper.rst | 60 ++++++++++++++++++-
+> >  1 file changed, 59 insertions(+), 1 deletion(-)
 > >
-> > On 21/07/2022 18:43, Doug Anderson wrote:
-> > > Hi,
-> > >
-> > > On Thu, Jul 21, 2022 at 9:33 AM Krzysztof Kozlowski
-> > > <krzysztof.kozlowski@linaro.org> wrote:
-> > >>
-> > >> On 21/07/2022 15:37, Doug Anderson wrote:
-> > >>>
-> > >>> Not worth sending a new version for, but normally I expect the
-> > >>> bindings to be patch #1 and the dts change to be patch #2. In any
-> > >>> case:
-> > >>>
-> > >>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> > >>
-> > >> I would say worth v4, because otherwise patches is not bisectable.
-> > >
-> > > You're saying because `dtbs_check` will fail between the two?
-> >
-> > Yes
-> 
-> OK. Then I assume you agree that reversing the order of the patches
-> won't help, only combining the two patches into one.
-> 
-> 
-> > > How does
-> > > flipping the order help? If `dtbs_check` needs to be bisectable then
-> > > these two need to be one patch, but I was always under the impression
-> > > that we wanted bindings patches separate from dts patches.
-> >
-> > I don't think anyone said that bindings patches must be separate from
-> > DTS. The only restriction is DTS cannot go with drivers.
-> 
-> I have always heard that best practice is to have bindings in a patch
-> by themselves. If I've misunderstood and/or folks have changed their
-> minds, that's fine, but historically I've been told to keep them
-> separate.
+> > diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+> > index 5e560f2c5fca..600af7ac5f88 100644
+> > --- a/Documentation/dev-tools/kunit/run_wrapper.rst
+> > +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
 
-Correct.
+[...]
 
+> > @@ -257,3 +257,61 @@ command line arguments:
+> >              added or modified. Instead, enable all tests
+> >              which have satisfied dependencies by adding
+> >              ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
+> > +
+> > +- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
+> > +  file. For example:
+> > +
+> > +  - ``lib/kunit/.kunitconfig`` can be the path of the file.
+> > +
+> > +  - ``lib/kunit`` can be the directory in which the file is located.
+> > +
+> > +  This file is used to build and run with a predefined set of tests
+> > +  and their dependencies. For example, to run tests for a given subsystem.
+> > +
+> > +- ``--kconfig_add``: Specifies additional configuration options to be
+> > +  appended to the ``.kunitconfig`` file.
+> > +  For example, ``./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y``.
+> > +
+>
+> Just FYI, this example won't work as-is until KASAN for UML is merged.
+> It's already sitting in uml/next, so this shouldn't be a problem:
+> https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git/commit/?h=next&id=5b301409e8bc5d7fad2ee138be44c5c529dd0874
+>
+> But if you want to try it on 5.19 or the current kunit branch, you'll
+> need to add, e.g., --arch=x86_64
+>
+> > +- ``--arch``: Runs tests on the specified architecture. The architecture
+> > +  specified must match the Kbuild ARCH environment variable.
+>
+> I'm not quite sold on 'must match the Kbuild ARCH environment
+> variable'. That seems to imply to me that you need to set ARCH= _and_
+> use --arch. Instead, --arch itself sets ARCH=, so the values use the
+> same names.
 
-> > Bindings for boards go pretty often with DTS (subarch). This is exactly
-> > what maintainers do, e.g.:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/log/?h=arm64-for-5.20
-> > Bindings for hardware should go via subsystem maintainer (drivers).
-> 
-> OK, fair that in this case both the bindings and the yaml will land
-> through the Qualcomm tree. I guess it's really up to Bjorn and whether
-> he'd prefer "make dtbs_check" to be bisectable or whether he'd prefer
-> the bindings and dts change to be in separate patches from each other.
+Agreed, I was just about to reply with a comment to the same effect.
 
-Bindings go first if applied together because you have to define the 
-binding before you use it. But sometimes things go via multiple trees 
-and that's fine because it's just easier. In that case, the subsystem 
-tree is preferred for bindings (i.e. with the driver). But in this case, 
-Bjorn is the subsystem tree.
+> > +  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on QEMU.
+> > +  Default is `um`.
+> > +
+> > +- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
+> > +  same argument as passed to the ``CROSS_COMPILE`` variable used by
+> > +  Kbuild. This will be the prefix for the toolchain
+> > +  binaries such as GCC. For example:
+> > +
+> > +  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
+> > +    our system.
+> > +
+> > +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
+> > +    if we have downloaded the microblaze toolchain from the 0-day
+> > +    website to a specified path in our home directory called toolchains.
+> > +
+> > +- ``--qemu_config``: Specifies the path to a file containing a
+> > +  custom qemu architecture definition. This should be a python file
+> > +  containing a `QemuArchParams` object.
+> > +
+> > +- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-smp 8".
+> > +
+> > +- ``--jobs``: Specifies the number of jobs (commands) to run simultaneously.4
+> > +  By default, this is set to the number of cores on your system.
+> > +
+> > +- ``--timeout``: Specifies the maximum number of seconds allowed for all tests to run.
+> > +  This does not include the time taken to build the tests.
+> > +
+> > +- ``--kernel_args``: Specifies additional kernel command-line arguments. Might be repeated.
+>
+> Nit: maybe "can be repeated"? As it's the reader of this documentation
+> who will likely be doing the repeating. Or "may be repeated"?
 
-Rob
++1
+
+[...]

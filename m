@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD1157E69F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EAA57E6A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235573AbiGVSfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S235367AbiGVShb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiGVSfk (ORCPT
+        with ESMTP id S229667AbiGVSh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:35:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 987FF7B1EB
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:35:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658514938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x4xFwLeu27SOsLoPyGfh0+QpaXnP2y9e0sTNZTVE09g=;
-        b=ZSU8m/Ws891r1KZ0KoaIblS3igaqLx51KwqHrT6rTuHspFFqn/uS7d9eaMuH1p6buJ+bxU
-        gSnPI4YXXNu2wkHubeqtjo9WLR2d485JkLimYbNTWVref7gDcNTR0C6ZX8bRJv/cFMWZuc
-        vj3kHzCnDlVC52lE6W4HurWllpe4VJs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-573-qZ3zDxriNZe4EAkXl5rUpw-1; Fri, 22 Jul 2022 14:35:37 -0400
-X-MC-Unique: qZ3zDxriNZe4EAkXl5rUpw-1
-Received: by mail-wm1-f69.google.com with SMTP id v132-20020a1cac8a000000b003a34081050bso1340666wme.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:35:37 -0700 (PDT)
+        Fri, 22 Jul 2022 14:37:29 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFBBA0261;
+        Fri, 22 Jul 2022 11:37:28 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q16so5085838pgq.6;
+        Fri, 22 Jul 2022 11:37:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ej2WVkUxUYTDrM6G5icPO6pi2Y+gt8Tz8/iPBFzqldw=;
+        b=CxfnBezogJppxJMIB+LqSLSFzQxgDerC24XHnd9HqQSxaxBpe9PPNZI91y7QW+6fWI
+         +mGOhejwEy3o1lx5KhZM4ZHMmlTobRm6YP5VyHiEPC1RS3nzLm+E6SqlHyoOpyq9C3EZ
+         xhTk8QawpuPnxCyDKizyZ7Dv+ZZMHdBTJx02CscjymrrZOl5+X1/N4pmUUrxyre8bdk4
+         KJu3hP69O9rnjQ7nVjUX9iqF9v8nxUTkTi2S4tDVwy6mcEQ9lRgf+Hs7Ndn0MtidXuDE
+         TLvCWEvCi0rc0vCAlSrrA0e9MG6jjcs696hVOHiLrCHM9T4D3+J7rDcxbIIOcHABmtWw
+         3jUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=x4xFwLeu27SOsLoPyGfh0+QpaXnP2y9e0sTNZTVE09g=;
-        b=QoW4xOAZMGSV9dPb4tMN7lgJUonJ9nim5dDUiF8Sw3WEHFXWRzxgtSyT6PMAGqp+yy
-         ZWHPThRodjha5RrVRMdU34UpbiNAgqkorTISJyEEFAfkVkaKq8UCI9AHvFWlsQTabkT1
-         VIVJhKL+usGoT1WocrWygyw404zToJjS7YXyS25TqiOI78BJifNUd1P78Nx1ZmUC9f69
-         D2WURhImwfBwranWjtDQJDTiWUB4jfSN/xdvaGEBTJeS4FY/H00jJq38IO5rZKOmLM0l
-         UWHKgWyGQBqH85+ycxJ6xABuGRaOE+NiKR9pRgh6F24O/c2HAvOwgmp1JlvSih6CKMxr
-         iiMQ==
-X-Gm-Message-State: AJIora8vxuRGVJb0G8G+XTIudd4DhQo/eGjd516YsS0HUCFy7JdJFXUC
-        w+ERqmcWUdGsoqIbkh/4uhwJTPFktOhdApM2CJf3HtFcKaDuLno2yfty1MwojamTqmw1sBb6r7u
-        ACcJObLbZvN2vrADcmJcxMcEw
-X-Received: by 2002:a5d:6e88:0:b0:21a:3403:9aa0 with SMTP id k8-20020a5d6e88000000b0021a34039aa0mr809577wrz.379.1658514936405;
-        Fri, 22 Jul 2022 11:35:36 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vj3VxCK5vYPoOQFZdp4W63WksitPvwbHwibhhULkPD/K1TdE+Y0eqLKIjUkVErAiw7A0taIA==
-X-Received: by 2002:a5d:6e88:0:b0:21a:3403:9aa0 with SMTP id k8-20020a5d6e88000000b0021a34039aa0mr809570wrz.379.1658514936151;
-        Fri, 22 Jul 2022 11:35:36 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id l37-20020a05600c1d2500b003a33227e49bsm5594126wms.4.2022.07.22.11.35.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 11:35:35 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Vincent Donnefort <vdonnefort@google.com>
-Cc:     peterz@infradead.org, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, regressions@leemhuis.info,
-        kernel-team@android.com, Derek Dolney <z23@posteo.net>
-Subject: Re: [PATCH v4] cpu/hotplug: Do not bail-out in DYING/STARTING sections
-In-Reply-To: <YtbSP21k1hTKGlqv@google.com>
-References: <20220704131346.2650163-1-vdonnefort@google.com>
- <xhsmhfsix6ssc.mognet@vschneid.remote.csb> <YtbSP21k1hTKGlqv@google.com>
-Date:   Fri, 22 Jul 2022 19:35:34 +0100
-Message-ID: <xhsmhilnpf11l.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ej2WVkUxUYTDrM6G5icPO6pi2Y+gt8Tz8/iPBFzqldw=;
+        b=zv/kBW9viDaNlkYc5K/WVsWdDGCih0LCrNXyQhIHQRIT59Bf+R31M19O+k55j6P62K
+         DJC524xkVWS1Bd4z1TgCbDUPIC6KBjy1iAK06IKS5uKM2qnqPdB98tu50SBcUS0iXbnY
+         NsyNkj+VRwNhxi3lFUZL/g7diIQDlqUfeYYNOlHR0sU7TTc923y2UNDyXnDLEZGALdxL
+         h0YWFwvWpckB0plIMiLkUZaWgumJQfW1ScOz1aPJ04uWOiB9rhoZdNiKwn5e9npu78lT
+         9tC6J9YbwD0EwtiGbVhICH7hU7KNxYjC3OmI+TepdaNNWioHEVgH5nQHpb4tieJDof+D
+         D/Sg==
+X-Gm-Message-State: AJIora/uO0vmDRnOajXoYns12mYGE4PJmgKpEkKxSkHXEKzjFbnU2xbW
+        cb3JxszUzTQRYyYnXYsoxpfNcmztc2U=
+X-Google-Smtp-Source: AGRyM1tLJEpfCsHPHuL34QdrfslUObK5ir3cH2DWZOUMhWhN1+T6HC6Fa1BR/R0ouWB+Y1S8JbDXpQ==
+X-Received: by 2002:a05:6a00:150d:b0:52b:1ffb:503c with SMTP id q13-20020a056a00150d00b0052b1ffb503cmr1270101pfu.44.1658515047808;
+        Fri, 22 Jul 2022 11:37:27 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 13-20020a62170d000000b0052ba782f4cbsm4303613pfx.7.2022.07.22.11.37.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 11:37:27 -0700 (PDT)
+Message-ID: <3b394210-baf8-be77-d84f-aa869f687e74@gmail.com>
+Date:   Fri, 22 Jul 2022 11:37:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 5.18 00/70] 5.18.14-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220722090650.665513668@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220722090650.665513668@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/07/22 16:48, Vincent Donnefort wrote:
-> On Tue, Jul 19, 2022 at 04:12:03PM +0100, Valentin Schneider wrote:
->> On 04/07/22 14:13, Vincent Donnefort wrote:
->> > +static int _cpuhp_invoke_callback_range(bool bringup,
->> > +					unsigned int cpu,
->> > +					struct cpuhp_cpu_state *st,
->> > +					enum cpuhp_state target,
->> > +					bool nofail)
->> [...]
->> > +		if (nofail) {
->> > +			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
->> > +				cpu, bringup ? "UP" : "DOWN",
->> > +				cpuhp_get_step(st->state)->name,
->> > +				st->state, err);
->> > +			ret = -1;
->>
->> On a single failure we'll get two warns (WARN_ON_ONCE() + pr_warn(), and
->> then subsequently just the pr_warn()), is that intended?
->
-> It does, this is to keep the backtrace that used to be here... but now, giving
-> a second thought, we can probably get rid of it and just keep the pr_warn()?
->
->>
->> Also, why not have ret = err here?
->
-> If two states fail, the ret wouldn't mean much, hence a default "-1" just for
-> the WARN_ONCE.
+On 7/22/22 02:06, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.14 release.
+> There are 70 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 24 Jul 2022 09:06:00 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.14-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Right
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, and built tested with BMIPS_GENERIC:
 
-> But if we drop the latter, that would simplify the problem of
-> knowing which error code to return.
->
-
-We need to drop one of the two, the pr_warn() will probably be more useful
-if/when we need to debug this, so go for it.
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

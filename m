@@ -2,152 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9853557DF85
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2325D57DFAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiGVKXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S234545AbiGVKYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbiGVKXj (ORCPT
+        with ESMTP id S229671AbiGVKYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:23:39 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6228D5C7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:23:38 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id bd7-20020a656e07000000b00412a946da8eso2224570pgb.20
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=hBY0IJGvt2jUk2Z9CmQ7C6mkhe5vlF82u2blKwho5Mw=;
-        b=KibTanT7hOnEd+7E4Vg8YmsyhYwS2LYcPHC595oEHzyTeOsx9D/IvnI1qfQ4dKui0z
-         68cdSTR2hWoGbXfwHzZzwcxy7K6G87aRWlHR89SX15NeBH4oCgKd5nLz3VSLXXad1xdR
-         SVIQEbIhp4u3jrpwoIfq80J1RSb4nC/5A+jrfIhQ1MjIldWmx28U7LHMg2ktroWgMnK5
-         iiFjDSNCAl6rjjXAiYG594fy6I/jy2t/w+a4qb8AeMW9+rEyZBKx7KOXUJipMdJg9Vcx
-         yF3/oANduwV1UvIctvAtBPDRrU0NXLoBa6kGuBZK+9umy0hottJBhlPPivg81qwfhrJr
-         v6Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=hBY0IJGvt2jUk2Z9CmQ7C6mkhe5vlF82u2blKwho5Mw=;
-        b=6+t9fqSIokLQC4mPPGet3jjtH5JuO9Cgm1R3r5cdvyeFIlX192qngsdk2yD2J09jcN
-         Rm34u6ETau4diTXItqDEQXp3pAdWHTBx3Gk83lWS0bXqn1kYmZ8RCOoUVIRo/cXLhs0V
-         8qWuH4xq3fr91Ze1pcxefbrWVl8Rr5AmEO34ke+N8onyG0dKelmicjzEpD/XR2JIisrZ
-         K+EHD8JTs0Qzgukpu8+SAqdeJh3+Pjq7e/LgbXjRd4Do5bAMd2a3NEhJiWh8ZEkOzfze
-         Fh7KuGftnYatAZGpcBSbvh16ozHD38xm1goEUp3XwYKlksqxze2XHFfpaJppdomSRGGf
-         5aTA==
-X-Gm-Message-State: AJIora9cNkpqRhnROFubfK714sPFT6gIQM5YF3QxFzglhusjqmMMxuVz
-        3i8bQGOhMStpQriKyso1tKg7a+x8os5h
-X-Google-Smtp-Source: AGRyM1usGPR5zIG3GM+0W7vlI1ncHH6VPG7LalUXm1vbL88XAZTxlmvluhzpJyRCRTJJ8AYQrXhBEElHFLjM
-X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:4ceb:6376:128b:2c25])
- (user=apusaka job=sendgmr) by 2002:a05:6a00:1a44:b0:528:6af7:ff4a with SMTP
- id h4-20020a056a001a4400b005286af7ff4amr2806413pfv.78.1658485418118; Fri, 22
- Jul 2022 03:23:38 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 18:23:30 +0800
-Message-Id: <20220722182248.1.I20e96c839200bb75cd6af80384f16c8c01498f57@changeid>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH] Bluetooth: hci_sync: Use safe loop when adding accept list
-From:   Archie Pusaka <apusaka@google.com>
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Zhengping Jiang <jiangzp@google.com>,
-        Michael Sun <michaelfsun@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 06:24:20 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D6C8B4A1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=JewJGBF/2Yab/pmC1U9UTeyXT/BvvNgrbp/cLHueN5Y=; b=jFaBp6/UMaerRjoV1IOxXTri7p
+        47fnsk42NxU//aRxORE9jGiXh7qCRLCDAlH+jFh7WmwXlp59rCHoYE9HuwtmYiwgRUxTLDFDAm9uO
+        76W3YJyx3MS8E4UglGD9FIUXgHFklY/CYtVc5i2kOlfKcrEiiKNwQZT95eP2wxFwrqMA5csKeBmpg
+        SWG9xvft1oP8zqUAljWyht0vf5TI7uORrQDda0EupXfNV68elSz882/zIk+yXlHMq3IOJif3u0cag
+        zXYBO8JzES159fL559KFT7UfaGoxEgHRN7hqU9XTOQN4l126SvwUMBO1PudXGIqRQOkyRehpyU5w3
+        DYPrf7mw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEpoi-005pge-El; Fri, 22 Jul 2022 10:23:32 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 13E0098029B; Fri, 22 Jul 2022 12:23:31 +0200 (CEST)
+Date:   Fri, 22 Jul 2022 12:23:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Collingbourne <pcc@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Message-ID: <Ytp6ooFQMLr3/h6v@worktop.programming.kicks-ass.net>
+References: <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net>
+ <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
+ <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
+ <Ytbnlms90+LBLbrY@google.com>
+ <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
+ <Ytl2vg15Hc0fh8Dl@worktop.programming.kicks-ass.net>
+ <YtmTK93vHWQUFinE@worktop.programming.kicks-ass.net>
+ <CAHk-=whLGENEkjME_v_3P1SwhwjzH4GK2RLA3fn=yQNuyKLBkg@mail.gmail.com>
+ <YtmagFcae43wzwCf@worktop.programming.kicks-ass.net>
+ <YtnsTs8XkPS4nXdi@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtnsTs8XkPS4nXdi@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
+On Thu, Jul 21, 2022 at 05:16:14PM -0700, Sami Tolvanen wrote:
 
-When in the middle of adding accept list, the userspace can still
-remove devices, therefore causing crash if the removed device is
-the one being processed.
+> That looks good to me. I updated my LLVM tree to generate this code
+> for the checks:
+> 
+> https://github.com/samitolvanen/llvm-project/commits/kcfi
 
-Use a safe loop mechanism to guard against deletion while iterating
-the pending items.
+Thanks!
 
-Below is a sample btsnoop log when user enters wrong passkey when
-pairing a LE keyboard and the corresponding stacktrace.
-@ MGMT Event: Command Complete (0x0001) plen 10
-      Add Device (0x0033) plen 7
-        Status: Success (0x00)
-        LE Address: CA:CA:BD:78:37:F9 (Static)
-< HCI Command: LE Add Device To Accept List (0x08|0x0011) plen 7
-        Address type: Random (0x01)
-        Address: CA:CA:BD:78:37:F9 (Static)
-@ MGMT Event: Device Removed (0x001b) plen 7
-        LE Address: CA:CA:BD:78:37:F9 (Static)
-> HCI Event: Command Complete (0x0e) plen 4
-      LE Add Device To Accept List (0x08|0x0011) ncmd 1
-        Status: Success (0x00)
+The alignment thing you added:
 
-[  167.409813] Call trace:
-[  167.409983]  hci_le_add_accept_list_sync+0x64/0x26c
-[  167.410150]  hci_update_passive_scan_sync+0x5f0/0x6dc
-[  167.410318]  add_device_sync+0x18/0x24
-[  167.410486]  hci_cmd_sync_work+0xe8/0x150
-[  167.410509]  process_one_work+0x140/0x4d0
-[  167.410526]  worker_thread+0x134/0x2e4
-[  167.410544]  kthread+0x148/0x160
-[  167.410562]  ret_from_fork+0x10/0x30
+  // Emit int3 padding before the type information to maintain alignment.
+  // The X86::MOV32ri instruction we emit is 5 bytes long.
+  uint64_t Padding = offsetToAlignment(5, MF.getAlignment());
+  while (Padding--)
+    EmitAndCountInstruction(MCInstBuilder(X86::INT3));
 
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Zhengping Jiang <jiangzp@google.com>
-Reviewed-by: Michael Sun <michaelfsun@google.com>
+Doesn't seem to quite do what we want though.
 
----
+When I use -fpatchable-function-entry=16,16 we effectively get a 32 byte
+prefix on every function:
 
- net/bluetooth/hci_sync.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+0000000000000000 <__cfi___traceiter_sched_kthread_stop>:
+       0:       cc                      int3
+       1:       cc                      int3
+       2:       cc                      int3
+       3:       cc                      int3
+       4:       cc                      int3
+       5:       cc                      int3
+       6:       cc                      int3
+       7:       cc                      int3
+       8:       cc                      int3
+       9:       cc                      int3
+       a:       cc                      int3
+       b:       b8 26 b1 df 98          mov    $0x98dfb126,%eax
+      10:       90                      nop
+      11:       90                      nop
+      12:       90                      nop
+      13:       90                      nop
+      14:       90                      nop
+      15:       90                      nop
+      16:       90                      nop
+      17:       90                      nop
+      18:       90                      nop
+      19:       90                      nop
+      1a:       90                      nop
+      1b:       90                      nop
+      1c:       90                      nop
+      1d:       90                      nop
+      1e:       90                      nop
+      1f:       90                      nop
 
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 3067d94e7a8e..8e843d34f7de 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -1863,7 +1863,7 @@ struct sk_buff *hci_read_local_oob_data_sync(struct hci_dev *hdev,
-  */
- static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
- {
--	struct hci_conn_params *params;
-+	struct hci_conn_params *params, *tmp;
- 	struct bdaddr_list *b, *t;
- 	u8 num_entries = 0;
- 	bool pend_conn, pend_report;
-@@ -1930,7 +1930,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
- 	 * just abort and return filer policy value to not use the
- 	 * accept list.
- 	 */
--	list_for_each_entry(params, &hdev->pend_le_conns, action) {
-+	list_for_each_entry_safe(params, tmp, &hdev->pend_le_conns, action) {
- 		err = hci_le_add_accept_list_sync(hdev, params, &num_entries);
- 		if (err)
- 			goto done;
-@@ -1940,7 +1940,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
- 	 * the list of pending reports and also add these to the
- 	 * accept list if there is still space. Abort if space runs out.
- 	 */
--	list_for_each_entry(params, &hdev->pend_le_reports, action) {
-+	list_for_each_entry_safe(params, tmp, &hdev->pend_le_reports, action) {
- 		err = hci_le_add_accept_list_sync(hdev, params, &num_entries);
- 		if (err)
- 			goto done;
--- 
-2.37.1.359.gd136c6c3e2-goog
+And given the parameters, that's indeed the only option. However, given
+I can scribble the type thing just fine when moving to FineIBT and the
+whole Skylake depth tracking only needs 10 bytes, I figured I'd try:
+-fpatchable-function-entry=11,11 instead. But that resulted in
+unalignment:
 
+0000000000000000 <__cfi___traceiter_sched_kthread_stop>:
+       0:       cc                      int3
+       1:       cc                      int3
+       2:       cc                      int3
+       3:       cc                      int3
+       4:       cc                      int3
+       5:       cc                      int3
+       6:       cc                      int3
+       7:       cc                      int3
+       8:       cc                      int3
+       9:       cc                      int3
+       a:       cc                      int3
+       b:       b8 26 b1 df 98          mov    $0x98dfb126,%eax
+      10:       90                      nop
+      11:       90                      nop
+      12:       90                      nop
+      13:       90                      nop
+      14:       90                      nop
+      15:       90                      nop
+      16:       90                      nop
+      17:       90                      nop
+      18:       90                      nop
+      19:       90                      nop
+      1a:       90                      nop
+
+000000000000001b <__traceiter_sched_kthread_stop>:
+
+However, if I change clang like so:
+
+ llvm/lib/Target/X86/X86AsmPrinter.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/llvm/lib/Target/X86/X86AsmPrinter.cpp b/llvm/lib/Target/X86/X86AsmPrinter.cpp
+index 789597f8ef1a..6c94313a197d 100644
+--- a/llvm/lib/Target/X86/X86AsmPrinter.cpp
++++ b/llvm/lib/Target/X86/X86AsmPrinter.cpp
+@@ -124,9 +124,15 @@ void X86AsmPrinter::emitKCFITypeId(const MachineFunction &MF,
+     OutStreamer->emitSymbolAttribute(FnSym, MCSA_ELF_TypeFunction);
+   OutStreamer->emitLabel(FnSym);
+ 
++  int64_t PrefixNops = 0;
++  (void)MF.getFunction()
++      .getFnAttribute("patchable-function-prefix")
++      .getValueAsString()
++      .getAsInteger(10, PrefixNops);
++
+   // Emit int3 padding before the type information to maintain alignment.
+   // The X86::MOV32ri instruction we emit is 5 bytes long.
+-  uint64_t Padding = offsetToAlignment(5, MF.getAlignment());
++  uint64_t Padding = offsetToAlignment(5+PrefixNops, MF.getAlignment());
+   while (Padding--)
+     EmitAndCountInstruction(MCInstBuilder(X86::INT3));
+ 
+
+Then it becomes:
+
+0000000000000000 <__cfi___traceiter_sched_kthread_stop>:
+       0:       b8 26 b1 df 98          mov    $0x98dfb126,%eax
+       5:       90                      nop
+       6:       90                      nop
+       7:       90                      nop
+       8:       90                      nop
+       9:       90                      nop
+       a:       90                      nop
+       b:       90                      nop
+       c:       90                      nop
+       d:       90                      nop
+       e:       90                      nop
+       f:       90                      nop
+
+0000000000000010 <__traceiter_sched_kthread_stop>:
+
+and things are 'good' again, except for functions that don't get a kcfi
+preamble, those are unaligned... I couldn't find where the
+patchable-function-prefix nops are generated to fix this up :/
+
+
+Also; could you perhaps add a switch to supress ENDBR for functions with
+a kCFI preamble ?

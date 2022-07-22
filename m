@@ -2,158 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFBA57E68F
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C046657E692
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236344AbiGVSdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S236361AbiGVSdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiGVSdh (ORCPT
+        with ESMTP id S236366AbiGVSdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:33:37 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1AD5A8AE
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:33:32 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so4920643pjf.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=noDnWIH945nYgd1IiYOQ6TJtVYekdnDkLQnIipIagMU=;
-        b=jVhPFnyqezO242A9rU/EcxTdX+FAeH8OuE27PfesXzWSky/o9OqxHPqlu1jhIBcG4P
-         HuuyY/2BeItQYXyjdqD7rR6I5JHv4PwObRmJWn79HVdTtrcwBLu77JGwYaACBaQcrsdg
-         UPeXEH78SV/8c3jWgOPSA3AN/lgMcxqvF9jKDxThSjGnA7V1L24uCn+o69bbHkWmHsSa
-         xHxyuM3ERDTjMx+OQS7OtvXOull1CofacQb+GU/KQxMSDg0O7DPyQ0bNdg9uO4x9buBs
-         CF/6HZKBv4nUA0bVUdy72SuU1jGygvLJfnXsDPF/BJE00VFB0x90dpa8q2rfignc1e9z
-         PsHw==
+        Fri, 22 Jul 2022 14:33:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 943DF9FE02
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658514827;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cuAxCjPb5JwgxHvfPH5uVtncIHsSNNJ86IoETDkzjWI=;
+        b=VkQ3V3glT11ihfQbjIHCHlr0yn6Udp4bQi8C+Qw5E2pcRkaXv7z7Yj9e6mdD3UPdwCuKgg
+        p8gra1UZTjo0GRvie1NmMwsAxw4FjP56JKvSZ3bJTvsiCgqrve/fPz1SCuMQ/usEzU9zSy
+        xZHma3JFnbRuQoj278Mwc7r6hn44HzA=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-359-OSNAjzr8PCyOtlcVASd4UA-1; Fri, 22 Jul 2022 14:33:46 -0400
+X-MC-Unique: OSNAjzr8PCyOtlcVASd4UA-1
+Received: by mail-qk1-f199.google.com with SMTP id o13-20020a05620a2a0d00b006b46c5414b0so4345983qkp.23
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:33:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=noDnWIH945nYgd1IiYOQ6TJtVYekdnDkLQnIipIagMU=;
-        b=2OZrVzsLqkIRB7D8nogFoosWXHVfkA+9RVdkfR8Pdr5Vt4GlUyD3wakJ6OBYlO0Swv
-         AAFxIpsrNXXPjrCujR24XaCiyA8p6heSpgC7fetnls2GOkA3fruA3vYnisCfyIDX++Tk
-         qxWMl+QXip6ERafnltfFUbyzhSVo3FDzz9EcSs674wRkfRjbUZaZ2RI5lHIagVy6VeUe
-         Le2nu2UT0vzh4jX7sYthFLigmUoMml4rgtRFJfO0aHlGDscfDa2wHUcDzulcm5mlPBvB
-         P7vN63HvCQVax7NGSgQolNiyiWqkMiEdrhE2MHPu1SKKTGcif0OY1FvmjKfMhTTTim71
-         6BzQ==
-X-Gm-Message-State: AJIora86ZWwfIphHA9aa/jeWXla/z8WdEq5Imf7pQ8fu/40Wd3vOgmXk
-        +ruq2KIOgwBRHDrddSFwQHEy0g==
-X-Google-Smtp-Source: AGRyM1vooHqa5wrwrNbFSpSF2H5z7YmhDdBJN9zSZYd034/OZ1dr/E7PbcgBA1tQXU9huTb7+YBNZA==
-X-Received: by 2002:a17:90b:4f41:b0:1f0:4785:b9a8 with SMTP id pj1-20020a17090b4f4100b001f04785b9a8mr18151723pjb.224.1658514812148;
-        Fri, 22 Jul 2022 11:33:32 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id a16-20020aa78e90000000b0052b29fd7982sm4202604pfr.85.2022.07.22.11.33.31
+        bh=cuAxCjPb5JwgxHvfPH5uVtncIHsSNNJ86IoETDkzjWI=;
+        b=GE6fnYnQVTX2Tyo/XxDrbuq/tIdFKEDY58uumXFsxAoYabaBEdCJyiJga5el3/Fl7f
+         kIyDH/tf85uJjcKjU1aIC1KZvSwxUqozu1wmHGNrnLDxhoRwhqjdTVoFTPay2TkUBoUx
+         gDc3Z1o48wPBqGP9JHET3hgdrrDMarFvOUL80/Pd3qIyIBw62vZPxV0cVfomTPAm2u2R
+         LvByGFCJjNK+0v2BOSqZCn8cWglz9LHPOSysTyouYD6qdwfBZ2s8BYJeZU7d2qDDDDAi
+         lv1S/6DW3tpnUwINFWKf66ctxI60rZ5MVPb9yF1bv1xzpcIXfNFCYuHoZglBA4uaQpy0
+         O6EA==
+X-Gm-Message-State: AJIora8AEx41mprVebUqb5UTkSvqismSR+zw9hkvn9wvBmaj6YtNkusd
+        FtmkCqLGvJzsH7ml04msLqzrMidbNUSenFsBxIuuHNXkgyUNL2QTauZhTkD2tfUYq71IjoV30hK
+        wUe4oE76lf8MAj9XOTTeyFNQ=
+X-Received: by 2002:a05:6214:d66:b0:473:7906:ac4f with SMTP id 6-20020a0562140d6600b004737906ac4fmr1312619qvs.126.1658514825963;
+        Fri, 22 Jul 2022 11:33:45 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uwdMklIfR1RPb6muiHD6u2FhgP1jhA5kPEp8IEKapJ297TmS1h5GutOZjOQ2Ki8tYs42IJtg==
+X-Received: by 2002:a05:6214:d66:b0:473:7906:ac4f with SMTP id 6-20020a0562140d6600b004737906ac4fmr1312606qvs.126.1658514825674;
+        Fri, 22 Jul 2022 11:33:45 -0700 (PDT)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id v17-20020a05620a0f1100b006b55036fd3fsm3882891qkl.70.2022.07.22.11.33.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 11:33:31 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 18:33:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 15/25] KVM: VMX: Extend VMX controls macro shenanigans
-Message-ID: <YtrtdylmyolAHToz@google.com>
-References: <20220714091327.1085353-1-vkuznets@redhat.com>
- <20220714091327.1085353-16-vkuznets@redhat.com>
+        Fri, 22 Jul 2022 11:33:45 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 14:33:44 -0400
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mike Snitzer <snitzer@kernel.org>,
+        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>,
+        dm-devel@redhat.com, Sami Tolvanen <samitolvanen@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH 0/3] dm-verity: optionally use tasklets in dm-verity
+Message-ID: <YtrtiP2p8xnRdC3S@redhat.com>
+References: <20220722093823.4158756-1-nhuck@google.com>
+ <YtrTI/CJMoLihA/1@infradead.org>
+ <cabd732a-9942-3ece-8141-c0bc6378faca@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220714091327.1085353-16-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cabd732a-9942-3ece-8141-c0bc6378faca@acm.org>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index 286c88e285ea..89eaab3495a6 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -467,6 +467,113 @@ static inline u8 vmx_get_rvi(void)
->  	return vmcs_read16(GUEST_INTR_STATUS) & 0xff;
->  }
->  
-> +#define __KVM_REQ_VMX_VM_ENTRY_CONTROLS				\
-> +	(VM_ENTRY_LOAD_DEBUG_CONTROLS)
-> +#ifdef CONFIG_X86_64
-> +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> +		(__KVM_REQ_VMX_VM_ENTRY_CONTROLS |		\
-> +		VM_ENTRY_IA32E_MODE)
+On Fri, Jul 22 2022 at  2:12P -0400,
+Bart Van Assche <bvanassche@acm.org> wrote:
 
-This breaks 32-bit builds, but at least we know the assert works!
+> On 7/22/22 09:41, Christoph Hellwig wrote:
+> > We've been tying to kill off task lets for about 15 years.  I don't
+> > think adding new users will make you a whole lot of friends..
+> 
+> +1 for not using tasklets. At least in Android the real-time thread
+> scheduling latency is important. Tasklets are not visible to the scheduler
+> and hence cause latency spikes for real-time threads. These latency spikes
+> can be observed by users, e.g. if the real-time thread is involved in audio
+> playback.
 
-vmx_set_efer() toggles VM_ENTRY_IA32E_MODE without a CONFIG_X86_64 guard.  That
-should be easy enough to fix since KVM should never allow EFER_LMA.  Compile 
-tested patch at the bottom.
+OK, then android wouldn't set the _optional_ "try_verify_in_tasklet"
 
-More problematic is that clang-13 doesn't like the new asserts, and even worse gives
-a very cryptic error.  I don't have bandwidth to look into this at the moment, and
-probably won't next week either.
-
-ERROR: modpost: "__compiletime_assert_533" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "__compiletime_assert_531" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "__compiletime_assert_532" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "__compiletime_assert_530" [arch/x86/kvm/kvm-intel.ko] undefined!
-make[2]: *** [scripts/Makefile.modpost:128: modules-only.symvers] Error 1
-make[1]: *** [Makefile:1753: modules] Error 2
-make[1]: *** Waiting for unfinished jobs....
-
-
-> +#else
-> +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
-> +		__KVM_REQ_VMX_VM_ENTRY_CONTROLS
-> +#endif
-
-EFER.LMA patch, compile tested only.
-
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Fri, 22 Jul 2022 18:26:21 +0000
-Subject: [PATCH] KVM: VMX: Don't toggle VM_ENTRY_IA32E_MODE for 32-bit
- kernels/KVM
-
-Don't toggle VM_ENTRY_IA32E_MODE in 32-bit kernels/KVM and instead bug
-the VM if KVM attempts to run the guest with EFER.LMA=1.  KVM doesn't
-support running 64-bit guests with 32-bit hosts.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index bff97babf381..8623607e596d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2894,10 +2894,15 @@ int vmx_set_efer(struct kvm_vcpu *vcpu, u64 efer)
- 		return 0;
-
- 	vcpu->arch.efer = efer;
-+#ifdef CONFIG_X86_64
- 	if (efer & EFER_LMA)
- 		vm_entry_controls_setbit(vmx, VM_ENTRY_IA32E_MODE);
- 	else
- 		vm_entry_controls_clearbit(vmx, VM_ENTRY_IA32E_MODE);
-+#else
-+	if (KVM_BUG_ON(efer & EFER_LMA, vcpu->kvm))
-+		return 1;
-+#endif
-
- 	vmx_setup_uret_msrs(vmx);
- 	return 0;
-
-base-commit: e22e2665637151a321433b2bb705f5c3b8da40bc
---
+Mike
 

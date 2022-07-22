@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0F357E976
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 00:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8E257E977
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 00:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbiGVWFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 18:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
+        id S236720AbiGVWFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 18:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiGVWFr (ORCPT
+        with ESMTP id S229667AbiGVWFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 18:05:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35076E2C1;
-        Fri, 22 Jul 2022 15:05:46 -0700 (PDT)
+        Fri, 22 Jul 2022 18:05:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D4472BE5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 15:05:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F40E621DD;
-        Fri, 22 Jul 2022 22:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5D5C341CB;
-        Fri, 22 Jul 2022 22:05:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 243A2621E1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 22:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B925C341CE;
+        Fri, 22 Jul 2022 22:05:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658527545;
-        bh=dlW2CQz7TWp6qIiSdmuvBHnY6y1qDLdv1Y57CrSoo9s=;
+        s=k20201202; t=1658527548;
+        bh=oU/aXEm4nJoyqONNRlbDnt9H4TtoyZTFmxF9qtTL25w=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=bq1FJmzvcM+BRuBbyq2synnPToejL8zu+N/RCRfBxAd+K5pUa9xHiD8H4MlwYe8ft
-         T4AQfaIjbrNPtDX5NiGxOaMpEngXp++3c+2qGFw1t2Hr48TLYMngEaDEUQQzu0Sod5
-         Y9muRh5wrVhBz0h58jId9A+Zf3dgHWtNYUF1VQxWEUTI2aOrpeD6ePkqGq67lCC7GH
-         tfqVGAH7bzN10fhIi+XF38BvDvtV1lq91cMnmH4QsGKubSphpb5rOvujFgOzCnelHQ
-         qFwpDxSrgFtX6RX7RbDvPRiIol6FVcteY/dVpEdWX9IHPrOnMFg+ehq6RU/i7wtuj+
-         g+SbNZa2hqc2Q==
+        b=D/cuEjPr3ARaTBbeeLJyFTN981UU44GqLg/VbzfQWmk5sdYSjMxvejQxyKg9aBQTW
+         DZganrXGblOtY6BFf3ahqTgSDcZzmA5h0iAclGx0rpIUJxHYQmVVzuf+I9Fd1JCFVz
+         PGurpeKaJSBpFamkef1HElOFijqpJ97p5Va32Pi4CwTiJhIWypaUTtRCDa5JSfYdhq
+         ANtbL/9LICjXxTeWi41X6F+41IxyZtU6bhYIRl33aHZk3H7QFO+PG+6TwGwfdQAV8w
+         xXzYFyx7Nxvjyxe5dIb+zclOh/jnhB6oOQcjHgdl87vqoAVEkfKpOcgjB4fl0hcEUu
+         koUNRNe3o8Pew==
 From:   Mark Brown <broonie@kernel.org>
-To:     Ryan.Wanner@microchip.com, lgirdwood@gmail.com,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        robh+dt@kernel.org, alexandre.belloni@bootlin.com,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220722152945.2950807-1-Ryan.Wanner@microchip.com>
-References: <20220722152945.2950807-1-Ryan.Wanner@microchip.com>
-Subject: Re: [PATCH v2] ASoC: dt-bindings: atmel-i2s: Convert to json-schema
-Message-Id: <165852754322.1234289.5406223462611245285.b4-ty@kernel.org>
-Date:   Fri, 22 Jul 2022 23:05:43 +0100
+To:     syed sabakareem <Syed.SabaKareem@amd.com>,
+        alsa-devel@alsa-project.org
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Sunil-kumar.Dommati@amd.com, Jaroslav Kysela <perex@perex.cz>,
+        vijendar.mukunda@amd.com, mario.limonciello@amd.com,
+        Alexander.Deucher@amd.com,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Takashi Iwai <tiwai@suse.com>, markpearson@lenovo.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Basavaraj.Hiregoudar@amd.com
+In-Reply-To: <20220722134603.316668-1-Syed.SabaKareem@amd.com>
+References: <20220722134603.316668-1-Syed.SabaKareem@amd.com>
+Subject: Re: [PATCH] ASoC: amd: yc: Update DMI table entries
+Message-Id: <165852754583.1234289.15095760330208840152.b4-ty@kernel.org>
+Date:   Fri, 22 Jul 2022 23:05:45 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,13 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 08:29:45 -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+On Fri, 22 Jul 2022 19:15:32 +0530, syed sabakareem wrote:
+> Removed intel DMI product id's 21AW/21AX/21D8/21D9/21BN/21BQ
+> in DMI table and updated DMI entry for AMD platform X13 Gen 3
+> platform 21CM/21CN.
 > 
-> Convert atmel i2s devicetree binding to json-schema.
-> Change file name to match json-schema naming.
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216267
 > 
 > 
+> [...]
 
 Applied to
 
@@ -71,8 +77,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: dt-bindings: atmel-i2s: Convert to json-schema
-      commit: 6f78675445ca243229303cd72898c4a2b95a2bc0
+[1/1] ASoC: amd: yc: Update DMI table entries
+      commit: be0aa8d4b0fcb4532bf7973141e911998ab39508
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,142 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3352F57E671
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C7457E67A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbiGVSYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S235992AbiGVS0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbiGVSY1 (ORCPT
+        with ESMTP id S231304AbiGVS0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:24:27 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248AB9B570
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:24:26 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id t1so8898017lft.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:24:26 -0700 (PDT)
+        Fri, 22 Jul 2022 14:26:33 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F4A6E88E;
+        Fri, 22 Jul 2022 11:26:32 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id c139so5145254pfc.2;
+        Fri, 22 Jul 2022 11:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=y4PUfnBxYpq9HSb+fauW+K364XPSFPA2RCgwysiSwtk=;
-        b=POp8xz8gqsVDeOEnSV/znwpLLT/7mt1y58ijKtYQv6llFmQcKLiM0tfuj9mzKssBKm
-         2Lv5tr+E76TkfjZA+va5wO6hvWlCrFMa30uPQt1voOY7asDLbyv6q7M4Py75une3UypE
-         93MAw89KTptjHuWOD5VJr69Wt3YGrVuAbLbHftnh0K0wJ5Jjx/FQBpB4VrhE8i0eQwQa
-         wE5p2vXX/NXWoCwXcLIu8/sDZqRRXXHk0SASmNsfQaXGBTopm5pMbzv9Ku9GU3ruKoW2
-         EdeqWolvfW/bZQptiziFbwaTAWDV8J3JF+pxi2BkQ3ryfjE29/CyCaNR8Ut7D7HfMzHn
-         XmaQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U1Vpm+Ol39J44Ip/w/HGMbvmcj0WPHsL80jPsnskDEw=;
+        b=CIGDJTjDuxvqk+hCAVZdusqUVAB4D0wVz5qJlyJOS1t/EvRJV94W6dZYKkmoSp5htk
+         85ooyVSgoL9yjlHJdM4YDgysnOay2oPLsQxV/rIxWIm8Zgh+7SxljgH9WF8y+m+LNBqO
+         haHm4fnrh9Tyc+Go6wHoM8L9WTGyeY2QCM33mmTnCjlkL8OGlXahSv/+899vGQVbsbbK
+         iBDcJrO/pFAUcDftanvX7cAnnwfbJ4Gn22olrqlzxChGUcdif1Iqlu+N1ygzF5LaDlPH
+         Pgo77iJjki4ipA6pJSQPXRjRdvEfypfvoRlseeKoijA7jP5J/b9xRJwKDpgXXOlncLrv
+         Lojg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=y4PUfnBxYpq9HSb+fauW+K364XPSFPA2RCgwysiSwtk=;
-        b=CepDfJKED/UZ6yU0p+TsFEvvQh88ky0mDd3zWNdwR9t/0VYBxoSI5jWHCmylExtnnf
-         gper+bn6Ei8VBaW9kbbCBSuj8v05q2NqCePyzj8GLIZ2nUutkXYElk+CMgLbJePczVuX
-         4vZmX6JfOWme8zYOX/Obz3a18PGHGt+03ApMWFBGeFKw3+A9KEaTIr6qZ79joGoJQYOs
-         Uu8/rq6MNMACdfNIKG/r+HSLD1GlieFXNH61vFZGXzzFGCFRa6BrpnQnahAuBbaV+zPo
-         JG1JQadmWMYtfIL2/xIAS+OUV2nr/CoYF+xQcLRKOjQQwVUIsdgnJYCuSUcwMIfQo3ut
-         aShg==
-X-Gm-Message-State: AJIora+v90LBAXZF/4+1A4hIg9iTBxcZj50301n83UZzyy2e/KzP0I/K
-        hRRbsc6/Xy9XQOKz3s91fmDgkw==
-X-Google-Smtp-Source: AGRyM1us6rSOUrvpiq6AQc8XjSdjL0FZeX63+7AyN+7xrpuEnWAHs+uGC22kUuETgJIr17SRL6nggw==
-X-Received: by 2002:a05:6512:1683:b0:47f:78ca:8ac5 with SMTP id bu3-20020a056512168300b0047f78ca8ac5mr452500lfb.663.1658514264494;
-        Fri, 22 Jul 2022 11:24:24 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id 8-20020ac25f08000000b0048a6bb9418esm1172037lfq.295.2022.07.22.11.24.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 11:24:23 -0700 (PDT)
-Message-ID: <3b60aa59-c40e-11d0-c6d5-dc1b022ec349@linaro.org>
-Date:   Fri, 22 Jul 2022 20:24:21 +0200
+        bh=U1Vpm+Ol39J44Ip/w/HGMbvmcj0WPHsL80jPsnskDEw=;
+        b=JPsEVwZMdJw0pBgLhJ1gjdA1JTZRGEn73GYbhVD4+gaqf80zUtS/UUk7c/n7+CW8tm
+         4YR1C18ITVdJMl2xkrAIv2bvTjwK5I2/X3Pbl28vHEIV1Af0Zj1YJbyHAVFOI9Zn9Ht8
+         DoHYmXuUQOur12kX+pSvtrLhkkatVL5zFPL3ou0cJv6zCQqDjLFnEY0M6gBrBqfo1XJ7
+         L1G6NC+k5tfNUdQ6wA0b93jBS1/8w40w6Awmy1dv1v9P35QWvHv7XZLbgnovt7fcXirI
+         J8mx3pogOlGNkYIuJ3jBkIfFEXMnN78GFTaQ5kl/0pi/jGOgBSfuXL72EY7a8WYCTpGM
+         lPNQ==
+X-Gm-Message-State: AJIora8THTi7lcJd0BP5wFzjrcnM+69wYxVLVkuSor2nilY5ZIEkZPKA
+        QWDiYMCHQSqUikCxKqD5zN0=
+X-Google-Smtp-Source: AGRyM1s3AfvMh+6Az1vFDMlygz2ppZ+CXyD+YBPfhW1Rh2oGSjnY+p3TwbFP2r7HMBo+hBDNTVCFFA==
+X-Received: by 2002:a63:ff4c:0:b0:412:b100:786b with SMTP id s12-20020a63ff4c000000b00412b100786bmr874215pgk.537.1658514391994;
+        Fri, 22 Jul 2022 11:26:31 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:d01c:7038:fdc9:680c:9dce:420d])
+        by smtp.googlemail.com with ESMTPSA id n8-20020a170902e54800b0016d21c1b265sm2173044plf.275.2022.07.22.11.26.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 11:26:31 -0700 (PDT)
+From:   Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
+Cc:     abhijeet.srivastava2308@gmail.com,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: staging: media: zoran: Deleted dead code
+Date:   Fri, 22 Jul 2022 23:56:17 +0530
+Message-Id: <20220722182622.23719-1-abhijeet.srivastava2308@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220721000658.29537-1-william.zhang@broadcom.com>
- <a635754e-bf41-4058-5fbb-57ead36b7128@linaro.org>
- <883c2ad4c36220b488519a8902ad72bc@milecki.pl>
- <193845cb-6149-1ae6-5eb6-6b01ffcf763b@linaro.org>
- <bbc67617-9137-28d4-8d6f-a36507923010@broadcom.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bbc67617-9137-28d4-8d6f-a36507923010@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 02:07, William Zhang wrote:
-> 
-> 
-> On 07/21/2022 12:01 AM, Krzysztof Kozlowski wrote:
->> On 21/07/2022 08:51, Rafał Miłecki wrote:
->>> On 2022-07-21 08:44, Krzysztof Kozlowski wrote:
->>>> On 21/07/2022 02:06, William Zhang wrote:
->>>>> Append "brcm,bcmbca" to BCM4908 chip family compatible strings. Add
->>>>> generic 4908 board entry.
->>>>
->>>> This does not explain at all why you are doing it. Improve your commit
->>>> messages.
->>>
->>> To clarify it from my side (and maybe help a bit):
->>>
->>> 1. As I understand it BCMBCA is a one big family of SoCs.
->>> 2. BCM4908 is a subset of that family (a subfamily?) designed for a
->>>      specific group of devices.
->>>
->>> If that's correct I think William it's what you should describe in your
->>> commit message. That would make binding more accurate and should be a
->>> good argument for your change (I believe).
->>
->> That's better argument. But what's the benefit of adding generic
->> compatible? Devices cannot bind to it (it is too generic). Does it
->> describe the device anyhow? Imagine someone adding compatible
->> "brcm,all-soc-of-broadcom" - does it make any sense?
->>
-> In case you were also referring the generic 4908 board compatible string 
-> brcm,bcm94908, this is for a bare bone 4908 board dts that only enables 
+Deleted part of code in block comment
 
-No, we refer to the contents of the patch, so bcmbca compatible.
+Signed-off-by: Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
+---
+ drivers/staging/media/zoran/zoran_driver.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-I did not see you introducing here bcm4908 compatible.
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index b408c1d4e0a7..836edf623571 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -746,11 +746,6 @@ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
+ 	.vidioc_enum_input		    = zoran_enum_input,
+ 	.vidioc_g_input			    = zoran_g_input,
+ 	.vidioc_s_input			    = zoran_s_input,
+-
+-/*	.vidioc_enum_output		    = zoran_enum_output,
+- *	.vidioc_g_output		    = zoran_g_output,
+- *	.vidioc_s_output		    = zoran_s_output,
+- */
+ 	.vidioc_g_std			    = zoran_g_std,
+ 	.vidioc_s_std			    = zoran_s_std,
+ 	.vidioc_create_bufs		    = vb2_ioctl_create_bufs,
+@@ -762,13 +757,9 @@ static const struct v4l2_ioctl_ops zoran_ioctl_ops = {
+ 	.vidioc_streamon		    = vb2_ioctl_streamon,
+ 	.vidioc_streamoff		    = vb2_ioctl_streamoff,
+ 	.vidioc_enum_fmt_vid_cap	    = zoran_enum_fmt_vid_cap,
+-/*	.vidioc_enum_fmt_vid_out	    = zoran_enum_fmt_vid_out,*/
+ 	.vidioc_g_fmt_vid_cap		    = zoran_g_fmt_vid_cap,
+-/*	.vidioc_g_fmt_vid_out               = zoran_g_fmt_vid_out,*/
+ 	.vidioc_s_fmt_vid_cap		    = zoran_s_fmt_vid_cap,
+-/*	.vidioc_s_fmt_vid_out               = zoran_s_fmt_vid_out,*/
+ 	.vidioc_try_fmt_vid_cap		    = zoran_try_fmt_vid_cap,
+-/*	.vidioc_try_fmt_vid_out		    = zoran_try_fmt_vid_out,*/
+ 	.vidioc_subscribe_event             = v4l2_ctrl_subscribe_event,
+ 	.vidioc_unsubscribe_event           = v4l2_event_unsubscribe,
+ };
+-- 
+2.34.1
 
-> ARM cpu subsystem, memory and uart. It can be used on all 4908 based 
-> Broadcom reference boards and customer board. It is especially useful 
-> for initial board bring up and one can load this generic board and start 
-> work and debug from the console. Also would be helpful to do a quick 
-> verification of new kernel version when there is cpu subsystem related 
-> change.
-> 
-> I guess my mindset already assume people are now familiar with this 
-> model of bcmbca binding addition for a new SoC since we introduced the 
-> bcmbca arch with first soc 47622 and 10+ other socs late. But sure I 
-> agree and I will update the commit message with more details in addition 
-> to what the cover letter says.
-
-
-
-Best regards,
-Krzysztof

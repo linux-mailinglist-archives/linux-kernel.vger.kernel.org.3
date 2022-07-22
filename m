@@ -2,104 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCD157E4CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51F557E4D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbiGVQui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S235940AbiGVQvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbiGVQuc (ORCPT
+        with ESMTP id S235645AbiGVQu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:50:32 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD9263F8;
-        Fri, 22 Jul 2022 09:50:31 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31e560aa854so53694567b3.6;
-        Fri, 22 Jul 2022 09:50:31 -0700 (PDT)
+        Fri, 22 Jul 2022 12:50:57 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305D329812
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:50:55 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d10so4907944pfd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:50:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wi3p6cYevYgSzxpRYQW2/GvJN4seuvoUHVHYEM8rd/c=;
+        b=Zsl/HCR/HfwmXiX43HZ5K1ARQTPoyE5IMqULQVKIo6SK/77BnXc56/Jwf4h3JM5WT8
+         TnpdDx+JdlDtjutzANTIBh8TZ339Ki0MOxYlUXsv0D9GIPmyY02caVS+RNE9mZ80OsDc
+         1loE+ynHVL2rTaVr1bhLzHHF2Is4dV2NVBmu2qz36cSiz9SsGUp9Yur12O5CNmfBzkOv
+         dS94okAjOgJM5DHNwg7PC6jD0vMWNWO2Xg0LdhcePYVmkNUY7m6wH+g92iq11bvHng8T
+         +rsVTJ2WZJuSAARtp2ah0qnYhu4/SKrE/BzJkLm+kh3VTb0Vn+2jAyQxzHlhFTJW8Pc+
+         F1kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ExEbscQZTCAMoS6RueRD8hllPVfb47k9WrjDpmmW1xE=;
-        b=cf3u6js1nrdm6Tv0GO02N4l3gzKOfRz5U+gcynsLwm/MblgAxYnYdWe+pbV2ll6/A1
-         4KAvTJzkvTewHX9m/UyDqRI/La2qJX7vaL40D45NUWKSTENRkIpLCN6NmRpINS/X1Yzg
-         9gl6gkfBRCJHi3i5uDgBeF5JalN/0K2uRSbtRH7GLgjBRvdfN/9WWYF7SmswfrIQ7+IB
-         j5/N+0pK6yqso5DTJDF4Vir2GNxeH+zaSXt/cmJE6kdUkhes/CDQ8o1MXFvQ1Zxkc7IU
-         7h6KwROYqqNVpg/sopO+tAzEG3AO38t+Wyd820fqOuWp1ehhKFLPiJAyeEoEjgPaRaDi
-         fezg==
-X-Gm-Message-State: AJIora9PCFpmsrP6oQB9F9PlBaqXMC7SWS9qlSPSw6IfoNzEuWkjiotw
-        gaH4aUHktQDfLWyoq60OQr8BdXrCcz1Lw00yJ5w=
-X-Google-Smtp-Source: AGRyM1u9d2vgqbxFxy1xBm+vdO9nqxuLVB41o+iHG8g351Kh3BE0yMR3mRLBQqP/z6VOzD3egQQum0lw7jwB3Nls6bA=
-X-Received: by 2002:a81:78c6:0:b0:31e:848b:6e2 with SMTP id
- t189-20020a8178c6000000b0031e848b06e2mr596773ywc.301.1658508630476; Fri, 22
- Jul 2022 09:50:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
- <20220710123512.1714714-13-daniel.lezcano@linexp.org> <CAJZ5v0hTQBXbKNurR0p8_MWmcW-EtezUg1oSNLVEYEAdzpeyBA@mail.gmail.com>
- <5e9f6d35-08ff-4949-67b0-a2feaab79814@linexp.org>
-In-Reply-To: <5e9f6d35-08ff-4949-67b0-a2feaab79814@linexp.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Jul 2022 18:50:17 +0200
-Message-ID: <CAJZ5v0hA-JzYbdfoNfXhdNoeL1VLWk3umS=wxEmER=PtMUw17w@mail.gmail.com>
-Subject: Re: [PATCH v5 11/12] thermal/of: Use thermal trips stored in the
- thermal zone
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wi3p6cYevYgSzxpRYQW2/GvJN4seuvoUHVHYEM8rd/c=;
+        b=U63T6Mlx96TFOPMKRowYjHQjQ0OqlU1SwJqdMC1w6IJ1ThjpOuszTpL24BTdqZR9Qs
+         BMrLHGT4ncGdyWQA7lIwalnf0+34jkB/y6ihkmxI8Pgy0vtjsCqakrI896RJCl49JbQG
+         C7nRy6H4zzsxJzzVVBPTvboLi/+GqAuoGfMZrwnY26too2xaPslcDgmkfnpVV+vBg71u
+         qYW0I5vCFYnXQWU1r3Ulv9USd7bT4Snv+JGcy/yKPTiDCGHRsQnzqWYRbkzMpRA4Q/df
+         UBEX3HnkVoEv8tPwiofNt7eNX9SRSdbZTnkRW2GwPLZ0fWDxHDrWzpkiZivXkDIBDQ89
+         Hb2Q==
+X-Gm-Message-State: AJIora/+iK//v3wt8duQ2NZcRpmZh3vOqQUfVIMR6fr+JkRisgOGIv1z
+        glA4lMnV3GojlAJaHdqaYj3xEGDwG52gcQ==
+X-Google-Smtp-Source: AGRyM1sUmQT9VjeiyZDFrDoJUmFACBX5qw8AGfD99c7VfNcKYYrVTY40lygAzTDsFL+55AErgWeb/A==
+X-Received: by 2002:a63:1324:0:b0:419:afb2:af7b with SMTP id i36-20020a631324000000b00419afb2af7bmr542186pgl.367.1658508653963;
+        Fri, 22 Jul 2022 09:50:53 -0700 (PDT)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902ea0700b0016a3f9e4865sm4028476plg.148.2022.07.22.09.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 09:50:53 -0700 (PDT)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Wei Fu <wefu@redhat.com>
+Subject: [PATCH v7 0/4] Add Sstc extension support 
+Date:   Fri, 22 Jul 2022 09:50:43 -0700
+Message-Id: <20220722165047.519994-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:29 PM Daniel Lezcano
-<daniel.lezcano@linexp.org> wrote:
->
-> On 19/07/2022 20:26, Rafael J. Wysocki wrote:
-> > On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
-> > <daniel.lezcano@linexp.org> wrote:
-> >> Now that we have the thermal trip stored in the thermal zone in a
-> >> generic way, we can rely on them and remove one indirection we found
-> >> in the thermal_of code and do one more step forward the removal of the
-> >> duplicated structures.
-> >>
-> >> Cc: Alexandre Bailon <abailon@baylibre.com>
-> >> Cc: Kevin Hilman <khilman@baylibre.com>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> >> ---
-> >>   drivers/thermal/thermal_of.c | 53 +++++++++++-------------------------
-> >>   1 file changed, 16 insertions(+), 37 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> >> index e187461dd396..601552c55d0b 100644
-> >> --- a/drivers/thermal/thermal_of.c
-> >> +++ b/drivers/thermal/thermal_of.c
-> >> @@ -118,12 +118,7 @@ static int of_thermal_set_trips(struct thermal_zone_device *tz,
-> >>    */
-> >>   int of_thermal_get_ntrips(struct thermal_zone_device *tz)
-> >>   {
-> >> -       struct __thermal_zone *data = tz->devdata;
-> >> -
-> >> -       if (!data || IS_ERR(data))
-> >> -               return -ENODEV;
-> >> -
-> >> -       return data->ntrips;
-> >> +       return tz->ntrips;
-> > Hasn't this been renamed to num_trips?
->
-> Right, it is changed in patch 12/12
+This series implements Sstc extension support which was ratified recently.
+Before the Sstc extension, an SBI call is necessary to generate timer
+interrupts as only M-mode have access to the timecompare registers. Thus,
+there is significant latency to generate timer interrupts at kernel.
+For virtualized enviornments, its even worse as the KVM handles the SBI call
+and uses a software timer to emulate the timecomapre register. 
 
-Well, what about combining them, then?
+Sstc extension solves both these problems by defining a stimecmp/vstimecmp
+at supervisor (host/guest) level. It allows kernel to program a timer and
+recieve interrupt without supervisor execution enviornment (M-mode/HS mode)
+intervention.
+
+KVM directly updates the vstimecmp as well if the guest kernel invokes the SBI
+call instead of updating stimecmp directly. This is required because KVM will
+enable sstc extension if the hardware supports it unless the VMM explicitly
+disables it for that guest. The hardware is expected to compare the
+vstimecmp at every cycle if sstc is enabled and any stale value in vstimecmp
+will lead to spurious timer interrupts. This also helps maintaining the
+backward compatibility with older kernels.
+
+Similary, the M-mode firmware(OpenSBI) uses stimecmp for older kernel
+without sstc support as STIP bit in mip is read only for hardware with sstc. 
+
+The PATCH 1 & 2 enables the basic infrastructure around Sstc extension while
+PATCH 3 lets kernel use the Sstc extension if it is available in hardware.
+PATCH 4 implements the Sstc extension in KVM.
+
+This series has been tested on Qemu(RV32 & RV64) with additional patches in
+Qemu[2]. This series can also be found at [3].
+
+Changes from v6->v7:
+1. Fixed a compilation error reported by 0-day bot.
+
+Changes from v5->v6:
+1. Moved SSTC extension enum below SVPBMT.
+
+Changes from v4->v5:
+1. Added RB tag.
+2. Changed the pr-format.
+3. Rebased on 5.19-rc7 and kvm-queue.
+4. Moved the henvcfg modification from hardware enable to vcpu_load.
+
+Changes from v3->v4:
+1. Rebased on 5.18-rc6
+2. Unified vstimemp & next_cycles.
+3. Addressed comments in PATCH 3 & 4.
+
+Changes from v2->v3:
+1. Dropped unrelated KVM fixes from this series.
+2. Rebased on 5.18-rc3.
+
+Changes from v1->v2:
+1. Separate the static key from kvm usage
+2. Makde the sstc specific static key local to the driver/clocksource
+3. Moved the vstimecmp update code to the vcpu_timer
+4. Used function pointers instead of static key to invoke vstimecmp vs
+   hrtimer at the run time. This will help in future for migration of vms
+   from/to sstc enabled hardware to non-sstc enabled hardware.
+5. Unified the vstimer & timer to 1 timer as only one of them will be used
+   at runtime.
+
+[1] https://drive.google.com/file/d/1m84Re2yK8m_vbW7TspvevCDR82MOBaSX/view
+[2] https://github.com/atishp04/qemu/tree/sstc_v6
+[3] https://github.com/atishp04/linux/tree/sstc_v7
+
+Atish Patra (4):
+RISC-V: Add SSTC extension CSR details
+RISC-V: Enable sstc extension parsing from DT
+RISC-V: Prefer sstc extension if available
+RISC-V: KVM: Support sstc extension
+
+arch/riscv/include/asm/csr.h            |   5 +
+arch/riscv/include/asm/hwcap.h          |   1 +
+arch/riscv/include/asm/kvm_vcpu_timer.h |   7 ++
+arch/riscv/include/uapi/asm/kvm.h       |   1 +
+arch/riscv/kernel/cpu.c                 |   1 +
+arch/riscv/kernel/cpufeature.c          |   1 +
+arch/riscv/kvm/vcpu.c                   |   8 +-
+arch/riscv/kvm/vcpu_timer.c             | 144 +++++++++++++++++++++++-
+drivers/clocksource/timer-riscv.c       |  25 +++-
+9 files changed, 185 insertions(+), 8 deletions(-)
+
+--
+2.25.1
+

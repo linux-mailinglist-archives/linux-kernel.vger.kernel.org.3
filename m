@@ -2,78 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BA957E5B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DDD57E5B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236120AbiGVRfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S236157AbiGVRgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236065AbiGVRfl (ORCPT
+        with ESMTP id S231421AbiGVRgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:35:41 -0400
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780D5140DB;
-        Fri, 22 Jul 2022 10:35:40 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so8748208pjq.4;
-        Fri, 22 Jul 2022 10:35:40 -0700 (PDT)
+        Fri, 22 Jul 2022 13:36:07 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C18E8C588
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:36:06 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id o12so6249128ljc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=siI7/lD81kyWLQyF5/WV8DbZeAWnZDkinKrf8vJZ9AQ=;
+        b=G2yZ9ZDC+GHFFgMKdqoofXT8fAAOL5E/soGuGLEBu11gQckoorXPxw9IS78d2w1qiR
+         f31mMLqaAf4UmprVakQTiPZ5Qv4YTwjY1LYXNIioKuzGx0rRrYNC1RoHDk19kYLUUECt
+         uB40RencH11PrSF5EjoGNepdrL/jgL/XAmqW+fuN3SdzMyz5ej2YqGydCYhh4ruoxnxs
+         5a25dzgWSJpS3ZSqClnzkjAGZWTiVH9HnRxYDc+6CBzbiW6zkOonAaE+/PbOsaRWDlur
+         BR7YEmEKzVSy1wdsWwvcy/o2YQKOPkGIWx2kvXEmGcNBP2fr66F2WSLa32EI7o4YvmlP
+         0+ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=UoXi1nudRHl+6dVP3UV/0Pn5DwnhU1+hJ70HZ4cZSbk=;
-        b=NOol5CJcU5mgDelr7GNlH2f9fa5lLJLKzbnGhfPFiWBxYlgq78HQTVpK4Gmqxgaglf
-         +fAI+oSlQ2hOVSkHFPPYUMwZutVLAxKLuQ6/dAUuPUdImoe5QsIno8I3wkwc4k/MoWx+
-         tHLeKBVmt1M/ayRmJb1jm137JidjSNxqaW+tkM4pSmiOi46mUCKvxqA/zV7vJ14Dh4Hp
-         KgfkPa5XpCc/E2UILZ53X5x4vGq7liVpTrtI+vNZK7DlPWKWoi2V6ejfL0zmmbqJFuOC
-         OKn5gZm7nMZ0/K6J60ZiPRTz9w7narR8Rz+ycdJ430nFEYKjYI+JKym3Whh5Dcu/ai8j
-         l9JQ==
-X-Gm-Message-State: AJIora+5h/FUKH/KIrARbchSms8tVrxUMKGHp9jU9r59ESJ9JMbnn5uj
-        LbMZKqxEcOplsGwH8cRA0xU=
-X-Google-Smtp-Source: AGRyM1ug8+OjA7LmfwWCaRJ98IxRXR0KGkO8l6q+/OcfxHEcFV54X9sIv5D8dzSBKHPI2xw6FHUnMw==
-X-Received: by 2002:a17:903:1207:b0:16a:7e87:dad3 with SMTP id l7-20020a170903120700b0016a7e87dad3mr902343plh.99.1658511339806;
-        Fri, 22 Jul 2022 10:35:39 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:9cf6:7e29:d977:6fc7? ([2620:15c:211:201:9cf6:7e29:d977:6fc7])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170903234400b0016bea26bb2asm2195573plh.245.2022.07.22.10.35.38
+        bh=siI7/lD81kyWLQyF5/WV8DbZeAWnZDkinKrf8vJZ9AQ=;
+        b=opw1uHSRz1scpuktB3XQu/Cj2lvknpaBzTCxE/aE8a20zrtD86MT73oGV6f99hZ0xK
+         x4IED0eYMaS9keJJNQxZoG7XOun3eSYvmTnPkS2NQuXhfL+humvUZVfJ6AhS3RbcEOib
+         lhMWHPzZPbzd558IHLfsM8YmRrJCwrRvfOk3lKhDw6v3fcgSaAwuCVQ1CMeqlpTWC7gc
+         cRqJsMF9HX+oAidaAH77Ox0RRX8FfYXqTN0wrXNP6QWArwSRIBLTABVGzrZsGPfmMsY6
+         wbbZCUGKaIQUvOj1EA+iv8qHHpi6yolfb6AsdqrKV15quafi1GdQwHaizvLafXQ0RxSB
+         JP+Q==
+X-Gm-Message-State: AJIora8TmEXvMuetn6W/92TPpLXsN11g/Hg/iyXAwO05+Jl/dd4i2SwT
+        lF2Z0hahq8GNA4x52uuA34/boQ==
+X-Google-Smtp-Source: AGRyM1ugHJdaM+Sgsif3zEWtynxobA/cIJhsISRhil968uqOXy7mRTTqFcH/dcHqHHvr3AyxCeLIrQ==
+X-Received: by 2002:a2e:bc17:0:b0:25d:50b7:74fa with SMTP id b23-20020a2ebc17000000b0025d50b774famr377988ljf.444.1658511364370;
+        Fri, 22 Jul 2022 10:36:04 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id c23-20020a056512325700b0048374164e22sm1159225lfr.193.2022.07.22.10.36.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:35:39 -0700 (PDT)
-Message-ID: <da0fe451-c036-cd18-7eb2-55c51c104ab5@acm.org>
-Date:   Fri, 22 Jul 2022 10:35:37 -0700
+        Fri, 22 Jul 2022 10:36:03 -0700 (PDT)
+Message-ID: <4133c99a-b6a1-6a17-0ad8-f3bf6f8ab176@linaro.org>
+Date:   Fri, 22 Jul 2022 19:36:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] block: Introduce nr_sched_batch sys interface
+Subject: Re: [PATCH v4 3/5] PCI: axis: Add ARTPEC-8 PCIe controller driver
 Content-Language: en-US
-To:     Wang You <wangyoua@uniontech.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hch@lst.de, jaegeuk@kernel.org, fio@vger.kernel.org,
-        ming.lei@redhat.com, wangxiaohua@uniontech.com
-References: <20220722095120.371212-1-wangyoua@uniontech.com>
- <20220722095120.371212-2-wangyoua@uniontech.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220722095120.371212-2-wangyoua@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     wangseok.lee@samsung.com,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>,
+        Yeeun Kim <yeeun119.kim@samsung.com>
+References: <20220721205819.GA1753070@bhelgaas>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220721205819.GA1753070@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 02:51, Wang You wrote:
-> The function of this patch is to add an nr_sched_batch interface under
-> /sys/block/sdx/queue/, which can be used to set the number of batching
-> requests. Of course, the default value is nr_requests and will follow
-> nr_request when it has not been changed.
+On 21/07/2022 22:58, Bjorn Helgaas wrote:
+> On Thu, Jul 21, 2022 at 11:04:00AM +0200, Krzysztof Kozlowski wrote:
+>> On 20/07/2022 08:01, Wangseok Lee wrote:
+>>> Add support Axis, ARTPEC-8 SoC. ARTPEC-8 is the SoC platform of Axis
+>>> Communications. This is based on arm64 and support GEN4 & 2lane. This
+>>> PCIe controller is based on DesignWare Hardware core and uses DesignWare
+>>> core functions to implement the driver. "pcie-artpec6. c" supports artpec6
+>>> and artpec7 H/W. artpec8 can not be expanded because H/W configuration is
+>>> completely different from artpec6/7. PHY and sub controller are different.
+>>>
+>>> Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+>>> Signed-off-by: Jaeho Cho <jaeho79.cho@samsung.com>
+>>> ---
+>>> v3->v4 :
+>>> -Remove unnecessary enum type
+>>> -Fix indentation
+>>>
+>>
+>> Thanks for the changes. This starts to look good, however I am not going
+>> to ack it. This is also not a strong NAK, as I would respect Bjorn and
+>> other maintainers decision.
+>>
+>> I don't like the approach of creating only Artpec-8 specific driver.
+>> Samsung heavily reuses its block in all Exynos devices. Now it re-uses
+>> them for other designs as well. Therefore, even if merging with existing
+>> Exynos PCIe driver is not feasible (we had such discussions), I expect
+>> this to cover all Samsung Foundry PCIe devices. From all current designs
+>> up to future licensed blocks, including some new Samsung Exynos SoC. Or
+>> at least be ready for it.
+> 
+> I would certainly prefer fewer drivers but I don't know enough about
+> the underlying IP and the places it's integrated to to know what's
+> practical.  The only way I could figure that out would be by manually
+> comparing the drivers for similarity.  I assume/expect all driver
+> authors are doing that.
 
-Do we need this new parameter? How does the performance of reducing 
-nr_requests compare to configuring nr_sched_batch?
+Merging with existing Exynos PCIe driver (and phy) might be indeed
+tricky, as existing one does not support that much as here. However I
+really expect that all current designs from Samsung - Exynos SoC, Artpec
+and for other customers - have very similar PCIe thus this should be a
+generic, new generation Samsung PCIe driver. If designed that way, also
+the naming should be back Samsung specific, no Axis/Artpec.
 
-Thanks,
-
-Bart.
+Best regards,
+Krzysztof

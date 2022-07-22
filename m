@@ -2,43 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E2957E246
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E6457E248
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234516AbiGVNXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S230151AbiGVNZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiGVNXl (ORCPT
+        with ESMTP id S229593AbiGVNZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:23:41 -0400
-Received: from redcrew.org (redcrew.org [37.157.195.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA518CEAE
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:23:40 -0700 (PDT)
-Received: from server.danny.cz (85-71-161-19.rce.o2.cz [85.71.161.19])
-        by redcrew.org (Postfix) with ESMTP id D7B52A0C;
-        Fri, 22 Jul 2022 15:23:38 +0200 (CEST)
-Received: from talos.danny.cz (unknown [IPv6:2001:470:5c11:160:47df:83f6:718e:218])
-        by server.danny.cz (Postfix) with SMTP id 4D41A11AA6B;
-        Fri, 22 Jul 2022 15:23:38 +0200 (CEST)
-Date:   Fri, 22 Jul 2022 15:23:38 +0200
-From:   Dan =?UTF-8?B?SG9yw6Fr?= <dan@danny.cz>
-To:     Michael Ellerman <michael@ellerman.id.au>
-Cc:     amd-gfx@lists.freedesktop.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Alex Deucher <alexdeucher@gmail.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] amdgpu: re-enable DCN for ppc64le
-Message-Id: <20220722152338.da89f3c445f503ab3b349e78@danny.cz>
-In-Reply-To: <87o7xhcoqh.fsf@mpe.ellerman.id.au>
-References: <20220722082122.571974-1-dan@danny.cz>
-        <87o7xhcoqh.fsf@mpe.ellerman.id.au>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; powerpc64le-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Fri, 22 Jul 2022 09:25:50 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEED17E27
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658496349; x=1690032349;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CQGUvO2K9TI8BbBLpol11ijJKaA1jgD/XoHq2bke1Mc=;
+  b=A6koaUMznbJIIykfpqXNaOWDbyCyNKNqn2JgtE+BP7EbaVq3hsuDOzRr
+   X1dB+jAp7jc/yt11EFBmPre6J0atCVRanEMzSJk2gtFCG3jgs7ljPhSUz
+   vq+yuxmQwmxSdvboXBGn/HftXgQBUfU5eRQZJS99uEZdU5E7o4HjfQ7Mw
+   NyWMg7lhmzm7wJlzpVljhIvDW3ceZn6Pt/MyCkbqnU3fgpFigiW/NEs2B
+   dlxWhgOe2NCzG97XR+okPRZQsmit07xSHhF121ycL/MVQZtXMrAQbaRqS
+   ew3ysIYkYv/uLqwxW5oDb15II2jCTbAqwFqsKfa+fx8fPy8h/3xut2ENi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="287315075"
+X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
+   d="scan'208";a="287315075"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 06:25:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
+   d="scan'208";a="626560640"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Jul 2022 06:25:47 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oEsf4-0001TI-1l;
+        Fri, 22 Jul 2022 13:25:46 +0000
+Date:   Fri, 22 Jul 2022 21:25:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.07.19b] BUILD SUCCESS
+ 77cc4d2a1adf35feb0520e13065a7d875ecd5033
+Message-ID: <62daa530.basR/n+ZYNuKMXLx%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,71 +62,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 22:32:06 +1000
-Michael Ellerman <michael@ellerman.id.au> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.07.19b
+branch HEAD: 77cc4d2a1adf35feb0520e13065a7d875ecd5033  squash! rcu: Switch polled grace-period APIs to ->gp_seq_polled
 
-> Hi Dan,
-> 
-> [ Cc += linuxppc-dev  ]
-> 
-> Dan Horák <dan@danny.cz> writes:
-> > Commit d11219ad53dc disabled the DCN driver for all platforms that
-> > define PPC64 due long build issues during "make allmodconfig" using
-> > cross-compilation. Cross-compilation defaults to the ppc64_defconfig
-> > and thus big-endian toolchain configuration. The ppc64le platform uses a
-> > different ABI and doesn't suffer from the build issues.
-> 
-> Unfortunately it's a bit messier than that.
+elapsed time: 889m
 
-yes, seems it is :-)
+configs tested: 39
+configs skipped: 2
 
-> The build error occurs when the compiler is built to use a 64-bit long
-> double type.
-> 
-> The ppc64le ABI document says that long double should be 128-bits, but
-> there are ppc64le compilers out there that are configured to use 64-bit
-> long double, notably the kernel.org crosstool compilers.
-> 
-> So just testing for CPU_LITTLE_ENDIAN means we'll still get build errors
-> on those compilers.
-> 
-> But I think we can detect the long double size and key off that. Can you
-> test the patch below works for you?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-yes, it does work, meaning it defines AMD_DC_DCN on Fedora/ppc64le (and
-build is OK)
+gcc tested configs:
+x86_64                           alldefconfig
+parisc64                            defconfig
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+arc                  randconfig-r043-20220721
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
 
+clang tested configs:
+mips                           mtx1_defconfig
+mips                      pic32mzda_defconfig
+powerpc                 mpc836x_mds_defconfig
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220721
+hexagon              randconfig-r045-20220721
+riscv                randconfig-r042-20220721
+s390                 randconfig-r044-20220721
 
-		Dan
-
-> 
-> cheers
-> 
-> 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 7aa12e88c580..e9f8cd50af99 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -281,6 +281,9 @@ config PPC
->  	# Please keep this list sorted alphabetically.
->  	#
->  
-> +config PCC_LONG_DOUBLE_128
-> +	def_bool $(success,test "$(shell,echo __LONG_DOUBLE_128__ | $(CC) -E -P -)" = 1)
-> +
->  config PPC_BARRIER_NOSPEC
->  	bool
->  	default y
-> diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
-> index b4029c0d5d8c..ec6771e87e73 100644
-> --- a/drivers/gpu/drm/amd/display/Kconfig
-> +++ b/drivers/gpu/drm/amd/display/Kconfig
-> @@ -6,7 +6,7 @@ config DRM_AMD_DC
->  	bool "AMD DC - Enable new display engine"
->  	default y
->  	select SND_HDA_COMPONENT if SND_HDA_CORE
-> -	select DRM_AMD_DC_DCN if (X86 || PPC64) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
-> +	select DRM_AMD_DC_DCN if (X86 || PPC_LONG_DOUBLE_128) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
->  	help
->  	  Choose this option if you want to use the new display engine
->  	  support for AMDGPU. This adds required support for Vega and
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

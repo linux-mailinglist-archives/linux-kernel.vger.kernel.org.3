@@ -2,58 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5344157E389
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8738C57E387
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235725AbiGVPMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S235660AbiGVPMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235720AbiGVPMi (ORCPT
+        with ESMTP id S235673AbiGVPMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:12:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34409E7A7
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:12:37 -0700 (PDT)
-Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbeckett)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C81E6601ACC;
-        Fri, 22 Jul 2022 16:12:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658502756;
-        bh=7kxqIhkpFGzA8g1mO3RcDy33zlRVQ9b4n6SfLajQTFE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=A0Xo+vsk5A7BpQmmpevs9QUudkjsBbh+Gs+ldVahhj8C3krro4cuyAhRA+EGu1FQd
-         5dSBKbg1zLYaGhWcna+yNwCVe/SvMhrMsZk0UGa3wDUfpR5aKR5mhBONvUXK3+9ycQ
-         qvcwIZRCq1gAyDgTelNtWY9518J2Z2aHk57hcvrfgCZBIv932HxJy3UnXA7ez1dlWP
-         qOozJJSHKTMZdWbSYI1Zyh2yujAlEZtbmrKnNALjRX7QgNAO5OB1/C2UtplFW7PWK6
-         ty92vThvDBl8oGwwhFRS5llMve0kdaYRVGJkwVJLensPn37nVt0LkN9H7MCa2QXCUq
-         VW4GWbFUM7Ebw==
-From:   Robert Beckett <bob.beckett@collabora.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] drm/i915: stop using swiotlb
-Date:   Fri, 22 Jul 2022 16:12:04 +0100
-Message-Id: <20220722151204.1534489-1-bob.beckett@collabora.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 11:12:32 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5E59B9CF;
+        Fri, 22 Jul 2022 08:12:31 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E751F6D5;
+        Fri, 22 Jul 2022 17:12:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1658502749;
+        bh=DXTUVhnD7UCa264sFWauhAcnoJt+rJGc8XdQ19Hbdfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wmnow4r+byOMKl4yDuTEuXhmM4CZDIojks+lk+Nl43pbY2r/zDHbLnqK31LFq315J
+         gyZJOpB7gF1jgSKU9rxKZXpFbb7B9a64A0c5DapFXKWdVeSWKHycX/FkhSqY8Xu4zW
+         kPlhnsDwjB/YbRXHayljpWbFcZUP8py61QZEg3MM=
+Date:   Fri, 22 Jul 2022 18:12:27 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     mchehab@kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: uvc: Fix typo 'the the' in comment
+Message-ID: <Ytq+W2f81fh86YFN@pendragon.ideasonboard.com>
+References: <20220722071343.71527-1-slark_xiao@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220722071343.71527-1-slark_xiao@163.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,156 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Calling swiotlb functions directly is nowadays considered harmful. See
-https://lore.kernel.org/intel-gfx/20220711082614.GA29487@lst.de/
+Hi Slark,
 
-Replace swiotlb_max_segment() calls with dma_max_mapping_size().
-In i915_gem_object_get_pages_internal() no longer consider max_segment
-only if CONFIG_SWIOTLB is enabled. There can be other (iommu related)
-causes of specific max segment sizes.
+Thank you for the patch.
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc: Thomas Hellstrom <thomas.hellstrom@intel.com>
-Cc: Matthew Auld <matthew.auld@intel.com>
+On Fri, Jul 22, 2022 at 03:13:43PM +0800, Slark Xiao wrote:
+> Replace 'the the' with 'the' in the comment.
+> 
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 
-v2: - restore UINT_MAX clamp in i915_sg_segment_size()
-    - drop PAGE_SIZE check as it will always be >= PAGE_SIZE
-v3: - actually clamp to UINT_MAX in i915_sg_segment_size()
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_internal.c | 19 ++++---------------
- drivers/gpu/drm/i915/gem/i915_gem_shmem.c    |  2 +-
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c      |  4 ++--
- drivers/gpu/drm/i915/gem/i915_gem_userptr.c  |  2 +-
- drivers/gpu/drm/i915/i915_scatterlist.h      | 16 +++-------------
- 5 files changed, 11 insertions(+), 32 deletions(-)
+> ---
+>  drivers/media/usb/uvc/uvc_video.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index 6d3dfa4e0bb2..5aaee916045d 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -1077,7 +1077,7 @@ static int uvc_video_decode_start(struct uvc_streaming *stream,
+>  	}
+>  
+>  	/* Synchronize to the input stream by waiting for the FID bit to be
+> -	 * toggled when the the buffer state is not UVC_BUF_STATE_ACTIVE.
+> +	 * toggled when the buffer state is not UVC_BUF_STATE_ACTIVE.
+>  	 * stream->last_fid is initialized to -1, so the first isochronous
+>  	 * frame will always be in sync.
+>  	 *
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
-index c698f95af15f..24f37658f1bb 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
-@@ -6,7 +6,6 @@
- 
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
--#include <linux/swiotlb.h>
- 
- #include "i915_drv.h"
- #include "i915_gem.h"
-@@ -38,22 +37,12 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
- 	struct scatterlist *sg;
- 	unsigned int sg_page_sizes;
- 	unsigned int npages;
--	int max_order;
-+	int max_order = MAX_ORDER;
-+	unsigned int max_segment;
- 	gfp_t gfp;
- 
--	max_order = MAX_ORDER;
--#ifdef CONFIG_SWIOTLB
--	if (is_swiotlb_active(obj->base.dev->dev)) {
--		unsigned int max_segment;
--
--		max_segment = swiotlb_max_segment();
--		if (max_segment) {
--			max_segment = max_t(unsigned int, max_segment,
--					    PAGE_SIZE) >> PAGE_SHIFT;
--			max_order = min(max_order, ilog2(max_segment));
--		}
--	}
--#endif
-+	max_segment = i915_sg_segment_size(i915->drm.dev) >> PAGE_SHIFT;
-+	max_order = min(max_order, ilog2(max_segment));
- 
- 	gfp = GFP_KERNEL | __GFP_HIGHMEM | __GFP_RECLAIMABLE;
- 	if (IS_I965GM(i915) || IS_I965G(i915)) {
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-index 4eed3dd90ba8..34b9c76cd8e6 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-@@ -194,7 +194,7 @@ static int shmem_get_pages(struct drm_i915_gem_object *obj)
- 	struct intel_memory_region *mem = obj->mm.region;
- 	struct address_space *mapping = obj->base.filp->f_mapping;
- 	const unsigned long page_count = obj->base.size / PAGE_SIZE;
--	unsigned int max_segment = i915_sg_segment_size();
-+	unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
- 	struct sg_table *st;
- 	struct sgt_iter sgt_iter;
- 	struct page *page;
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-index 5a5cf332d8a5..7a828c9c0f6d 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-@@ -189,7 +189,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
- 	struct drm_i915_private *i915 = container_of(bdev, typeof(*i915), bdev);
- 	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
- 	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
--	const unsigned int max_segment = i915_sg_segment_size();
-+	const unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
- 	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
- 	struct file *filp = i915_tt->filp;
- 	struct sgt_iter sgt_iter;
-@@ -568,7 +568,7 @@ static struct i915_refct_sgt *i915_ttm_tt_get_st(struct ttm_tt *ttm)
- 	ret = sg_alloc_table_from_pages_segment(st,
- 			ttm->pages, ttm->num_pages,
- 			0, (unsigned long)ttm->num_pages << PAGE_SHIFT,
--			i915_sg_segment_size(), GFP_KERNEL);
-+			i915_sg_segment_size(i915_tt->dev), GFP_KERNEL);
- 	if (ret) {
- 		st->sgl = NULL;
- 		return ERR_PTR(ret);
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-index 094f06b4ce33..dfc35905dba2 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
-@@ -129,7 +129,7 @@ static void i915_gem_object_userptr_drop_ref(struct drm_i915_gem_object *obj)
- static int i915_gem_userptr_get_pages(struct drm_i915_gem_object *obj)
- {
- 	const unsigned long num_pages = obj->base.size >> PAGE_SHIFT;
--	unsigned int max_segment = i915_sg_segment_size();
-+	unsigned int max_segment = i915_sg_segment_size(obj->base.dev->dev);
- 	struct sg_table *st;
- 	unsigned int sg_page_sizes;
- 	struct page **pvec;
-diff --git a/drivers/gpu/drm/i915/i915_scatterlist.h b/drivers/gpu/drm/i915/i915_scatterlist.h
-index 9ddb3e743a3e..48a8ce67371a 100644
---- a/drivers/gpu/drm/i915/i915_scatterlist.h
-+++ b/drivers/gpu/drm/i915/i915_scatterlist.h
-@@ -9,7 +9,7 @@
- 
- #include <linux/pfn.h>
- #include <linux/scatterlist.h>
--#include <linux/swiotlb.h>
-+#include <linux/dma-mapping.h>
- 
- #include "i915_gem.h"
- 
-@@ -127,19 +127,9 @@ static inline unsigned int i915_sg_dma_sizes(struct scatterlist *sg)
- 	return page_sizes;
- }
- 
--static inline unsigned int i915_sg_segment_size(void)
-+static inline unsigned int i915_sg_segment_size(struct device *dev)
- {
--	unsigned int size = swiotlb_max_segment();
--
--	if (size == 0)
--		size = UINT_MAX;
--
--	size = rounddown(size, PAGE_SIZE);
--	/* swiotlb_max_segment_size can return 1 byte when it means one page. */
--	if (size < PAGE_SIZE)
--		size = PAGE_SIZE;
--
--	return size;
-+	return min_t(size_t, UINT_MAX, dma_max_mapping_size(dev));
- }
- 
- bool i915_sg_trim(struct sg_table *orig_st);
 -- 
-2.25.1
+Regards,
 
+Laurent Pinchart

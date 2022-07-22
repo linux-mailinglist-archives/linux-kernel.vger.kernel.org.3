@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CB057E22C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BF757E241
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbiGVNTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
+        id S233608AbiGVNVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiGVNTk (ORCPT
+        with ESMTP id S235110AbiGVNVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:19:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412F7A0257
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:19:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 22 Jul 2022 09:21:03 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6252B89E89;
+        Fri, 22 Jul 2022 06:20:59 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297665329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7665:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CA37D374B5;
-        Fri, 22 Jul 2022 13:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658495977; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=KrGoc2Vun/9e4eTJmeJ025qkk25JgKacUbd13yUyq14=;
-        b=P5HfKlNEvivcXN3MgIY3+wDKgVBpZxZ1UYgL3Fd0kuV3OfK4ds2A8gIGG/C0CxTd9m8BOg
-        GfcMwA+InZDc+KUr09sVHpFeWAxG6MM6ZDL7qH7pINwTD4LpZlTxIqlcf08LwUXiUA9+qr
-        apV8a7lzOl3ebanHYcBVBm3e/IzM74g=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 80B0B13AB3;
-        Fri, 22 Jul 2022 13:19:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Gl2dHOmj2mJ3UAAAMHmgww
-        (envelope-from <nborisov@suse.com>); Fri, 22 Jul 2022 13:19:37 +0000
-From:   Nikolay Borisov <nborisov@suse.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-kernel@vger.kernel.org, agruenba@redhat.com,
-        Nikolay Borisov <nborisov@suse.com>
-Subject: [PATCH] iov_iter: Microoptimize fault_in_iov_iter_(writable|readable)
-Date:   Fri, 22 Jul 2022 16:19:32 +0300
-Message-Id: <20220722131932.3453128-1-nborisov@suse.com>
-X-Mailer: git-send-email 2.25.1
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E72C31EC0373;
+        Fri, 22 Jul 2022 15:20:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658496054;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jqIWKFzofK/hquuTs8gPLhPJxEinKZkFL/u4Q+zV6r0=;
+        b=eQ8zEqv7LeRk1n4XE+/eUIK2fFcfUkJlYiEwxLsxM4qIu6xWXYnXKa2glEqsw9FpxErs1P
+        Zl+RKTk+gmGWptsaw5UlPgp4OF0sqq0LBYSh+mmrY4tYKUVz2CXYBsgj1T0tMbQg8SGMbO
+        t+ER55ATGBjAEo30ir4cqUaT3deZeCA=
+Date:   Fri, 22 Jul 2022 15:20:50 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Toshi Kani <toshi.kani@hpe.com>
+Cc:     mchehab@kernel.org, elliott@hpe.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Richter <rric@kernel.org>
+Subject: Re: [PATCH v2] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
+Message-ID: <YtqkMicKdZdPdUWB@zn.tnic>
+References: <20220721180503.896050-1-toshi.kani@hpe.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220721180503.896050-1-toshi.kani@hpe.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -57,137 +50,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inverting the condition inside the 2 functions results in reduced nesting
-as well as saving 20 bytes of generated codeu as well as eliminating a mandatory
-branch when a proper userspace iov iter is passed:
++ fix Robert's address.
 
-add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-20 (-20)
-Function                                     old     new   delta
-fault_in_iov_iter_writeable                  131     121     -10
-fault_in_iov_iter_readable                   131     121     -10
+On Thu, Jul 21, 2022 at 12:05:03PM -0600, Toshi Kani wrote:
+> The following buffer overflow BUG was observed on an HPE system.
+> ghes_edac_register() called strlen() on an uninitialized label,
+> which had non-zero values from krealloc_array().
 
-That's because in the original version the compiler duplicates the
-function epilogue right after the initial branch, resulting in the
-following code:
+I ended up massaging it into this:
 
-0x000000000000081c <+12>:    je     0x828 <fault_in_iov_iter_readable+24>
-0x000000000000081e <+14>:    pop    %rbx
-0x000000000000081f <+15>:    mov    %r12,%rax
-0x0000000000000822 <+18>:    pop    %rbp
-0x0000000000000823 <+19>:    pop    %r12
-0x0000000000000825 <+21>:    pop    %r13
-0x0000000000000827 <+23>:    retq
-0x0000000000000828 <+24>:    cmp    %rsi,0x10(%rdi) ;loop begins
-
-There is always a branch penalty before actual executioni begins,
-whilst with this patch the generated code is:
-
-0x00000000000004ac <+12>:    jne    0x507 <fault_in_iov_iter_readable+103>
-0x00000000000004ae <+14>:    cmp    %rsi,0x10(%rdi)
-
-The branch is taken only when the passed in iter is not an iovec
-
-Signed-off-by: Nikolay Borisov <nborisov@suse.com>
 ---
- lib/iov_iter.c | 76 +++++++++++++++++++++++++-------------------------
- 1 file changed, 38 insertions(+), 38 deletions(-)
+From: Toshi Kani <toshi.kani@hpe.com>
+Date: Thu, 21 Jul 2022 12:05:03 -0600
+Subject: [PATCH] EDAC/ghes: Set the DIMM label unconditionally
 
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 0b64695ab632..897148d9cd12 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -443,26 +443,26 @@ static size_t copy_page_to_iter_pipe(struct page *page, size_t offset, size_t by
-  */
- size_t fault_in_iov_iter_readable(const struct iov_iter *i, size_t size)
- {
--	if (iter_is_iovec(i)) {
--		size_t count = min(size, iov_iter_count(i));
--		const struct iovec *p;
--		size_t skip;
--
--		size -= count;
--		for (p = i->iov, skip = i->iov_offset; count; p++, skip = 0) {
--			size_t len = min(count, p->iov_len - skip);
--			size_t ret;
--
--			if (unlikely(!len))
--				continue;
--			ret = fault_in_readable(p->iov_base + skip, len);
--			count -= len - ret;
--			if (ret)
--				break;
--		}
--		return count + size;
-+	size_t count = min(size, iov_iter_count(i));
-+	const struct iovec *p;
-+	size_t skip;
-+
-+	if (!iter_is_iovec(i))
-+		return 0;
-+
-+	size -= count;
-+	for (p = i->iov, skip = i->iov_offset; count; p++, skip = 0) {
-+		size_t len = min(count, p->iov_len - skip);
-+		size_t ret;
-+
-+		if (unlikely(!len))
-+			continue;
-+		ret = fault_in_readable(p->iov_base + skip, len);
-+		count -= len - ret; // reduce count by the number faulted in
-+		if (ret)
-+			break;
- 	}
--	return 0;
-+	return count + size;
+The commit in Fixes enforced that both the bank and device strings
+passed to dimm_setup_label() are not NULL.
+
+However, there are BIOSes, for example on a
+
+  HPE ProLiant DL360 Gen10/ProLiant DL360 Gen10, BIOS U32 03/15/2019
+
+which don't populate both strings:
+
+  Handle 0x0020, DMI type 17, 84 bytes
+  Memory Device
+          Array Handle: 0x0013
+          Error Information Handle: Not Provided
+          Total Width: 72 bits
+          Data Width: 64 bits
+          Size: 32 GB
+          Form Factor: DIMM
+          Set: None
+          Locator: PROC 1 DIMM 1        <===== device
+          Bank Locator: Not Specified   <===== bank
+
+This results in a buffer overflow because ghes_edac_register() calls
+strlen() on an uninitialized label, which had non-zero values left over
+from krealloc_array():
+
+  detected buffer overflow in __fortify_strlen
+   ------------[ cut here ]------------
+   kernel BUG at lib/string_helpers.c:983!
+   invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+   CPU: 1 PID: 1 Comm: swapper/0 Tainted: G          I       5.18.6-200.fc36.x86_64 #1
+   Hardware name: HPE ProLiant DL360 Gen10/ProLiant DL360 Gen10, BIOS U32 03/15/2019
+   RIP: 0010:fortify_panic
+   ...
+   Call Trace:
+    <TASK>
+    ghes_edac_register.cold
+    ghes_probe
+    platform_probe
+    really_probe
+    __driver_probe_device
+    driver_probe_device
+    __driver_attach
+    ? __device_attach_driver
+    bus_for_each_dev
+    bus_add_driver
+    driver_register
+    acpi_ghes_init
+    acpi_init
+    ? acpi_sleep_proc_init
+    do_one_initcall
+
+Change dimm_setup_label() to always initialize the label and use
+"N/A" in case bank or device is null.
+
+  [ bp: Rewrite commit message. ]
+
+Fixes: cb51a371d08e ("EDAC/ghes: Setup DIMM label from DMI and use it in error reports")
+Signed-off-by: Toshi Kani <toshi.kani@hpe.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Tested-by: Robert Elliott <elliott@hpe.com>
+Link: https://lore.kernel.org/r/20220719220124.760359-1-toshi.kani@hpe.com
+---
+ drivers/edac/ghes_edac.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
+index 59b0bedc9c24..fcab10e26b43 100644
+--- a/drivers/edac/ghes_edac.c
++++ b/drivers/edac/ghes_edac.c
+@@ -103,9 +103,9 @@ static void dimm_setup_label(struct dimm_info *dimm, u16 handle)
+ 
+ 	dmi_memdev_name(handle, &bank, &device);
+ 
+-	/* both strings must be non-zero */
+-	if (bank && *bank && device && *device)
+-		snprintf(dimm->label, sizeof(dimm->label), "%s %s", bank, device);
++	snprintf(dimm->label, sizeof(dimm->label), "%s %s",
++		 (bank && *bank) ? bank : "N/A",
++		 (device && *device) ? device : "N/A");
  }
- EXPORT_SYMBOL(fault_in_iov_iter_readable);
+ 
+ static void assign_dmi_dimm_info(struct dimm_info *dimm, struct memdev_dmi_entry *entry)
+-- 
+2.35.1
 
-@@ -482,26 +482,26 @@ EXPORT_SYMBOL(fault_in_iov_iter_readable);
-  */
- size_t fault_in_iov_iter_writeable(const struct iov_iter *i, size_t size)
- {
--	if (iter_is_iovec(i)) {
--		size_t count = min(size, iov_iter_count(i));
--		const struct iovec *p;
--		size_t skip;
--
--		size -= count;
--		for (p = i->iov, skip = i->iov_offset; count; p++, skip = 0) {
--			size_t len = min(count, p->iov_len - skip);
--			size_t ret;
--
--			if (unlikely(!len))
--				continue;
--			ret = fault_in_safe_writeable(p->iov_base + skip, len);
--			count -= len - ret;
--			if (ret)
--				break;
--		}
--		return count + size;
-+	size_t count = min(size, iov_iter_count(i));
-+	const struct iovec *p;
-+	size_t skip;
-+
-+	if (!iter_is_iovec(i))
-+		return 0;
-+
-+	size -= count;
-+	for (p = i->iov, skip = i->iov_offset; count; p++, skip = 0) {
-+		size_t len = min(count, p->iov_len - skip);
-+		size_t ret;
-+
-+		if (unlikely(!len))
-+			continue;
-+		ret = fault_in_safe_writeable(p->iov_base + skip, len);
-+		count -= len - ret;
-+		if (ret)
-+			break;
- 	}
--	return 0;
-+	return count + size;
- }
- EXPORT_SYMBOL(fault_in_iov_iter_writeable);
+-- 
+Regards/Gruss,
+    Boris.
 
---
-2.25.1
-
+https://people.kernel.org/tglx/notes-about-netiquette

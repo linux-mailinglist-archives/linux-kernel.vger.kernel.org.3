@@ -2,99 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11BC57DC86
+	by mail.lfdr.de (Postfix) with ESMTP id 811EA57DC85
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235008AbiGVIgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S235034AbiGVIfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235066AbiGVIgI (ORCPT
+        with ESMTP id S235044AbiGVIfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:36:08 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F4C930F;
-        Fri, 22 Jul 2022 01:36:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=gDnvx
-        N3EUKuK0M9fJJMz6oVgcemRIUzoLMmBDl69xs4=; b=MvEiMlaZOJ7ub90d/jSjb
-        q/isILIofYeOVoW3l7k4JOzKN1d2C11aqCGYkHWCwdjdG6jGXXpk6Yo79LORkahV
-        veatotGNAQmtvwIXFjHbxqPoMPdmP9c7TaRYdIx/SgFFx54zTjMM6SfxHcxGCewa
-        Y5ZU+zoQE82MLrQC5XztUY=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp4 (Coremail) with SMTP id HNxpCgCny8QmYdpinwd4QA--.6833S2;
-        Fri, 22 Jul 2022 16:34:48 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, gregory.greenman@intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] iwlwifi: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 16:34:44 +0800
-Message-Id: <20220722083444.75126-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 04:35:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A6805FEE;
+        Fri, 22 Jul 2022 01:35:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17E981063;
+        Fri, 22 Jul 2022 01:35:31 -0700 (PDT)
+Received: from bogus (unknown [10.57.14.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3996C3F766;
+        Fri, 22 Jul 2022 01:35:24 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 09:35:20 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH 1/2] dt-bindings: arm: coresight: Add 'power-domains'
+ property
+Message-ID: <20220722083520.coovqsa2pv7mnifp@bogus>
+References: <20220721212718.1980905-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgCny8QmYdpinwd4QA--.6833S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyDCw47CFy5ZrW8Cw4DJwb_yoW8ZF18pa
-        yUuFZFgr15tan8Ka48ta1xCF98W3W5tw4qkFWDtwn8ZFs3Jw1Sqr129Fy5Gw10krW5J3Wa
-        kF1jyF15AFn5trDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEg4fNUUUUU=
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDQhGZFaEKBskOgAAsY
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721212718.1980905-1-robh@kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+On Thu, Jul 21, 2022 at 03:27:14PM -0600, Rob Herring wrote:
+> Coresight components may be in a power domain which is the case for the Arm
+> Juno board. Allow a single 'power-domains' entry for Coresight components.
+>
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/net/wireless/intel/iwlwifi/fw/api/tx.h    | 4 ++--
- drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I assume the maxItems can be changed in case if some platforms have multiple
+power domains especially for some per CPU coresight ETR/debug components.
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
-index ecc6706f66ed..194de9545989 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
-@@ -200,7 +200,7 @@ enum iwl_tx_offload_assist_bz {
-  *	cleared. Combination of RATE_MCS_*
-  * @sta_id: index of destination station in FW station table
-  * @sec_ctl: security control, TX_CMD_SEC_*
-- * @initial_rate_index: index into the the rate table for initial TX attempt.
-+ * @initial_rate_index: index into the rate table for initial TX attempt.
-  *	Applied if TX_CMD_FLG_STA_RATE_MSK is set, normally 0 for data frames.
-  * @reserved2: reserved
-  * @key: security key
-@@ -858,7 +858,7 @@ struct iwl_extended_beacon_notif {
- 
- /**
-  * enum iwl_dump_control - dump (flush) control flags
-- * @DUMP_TX_FIFO_FLUSH: Dump MSDUs until the the FIFO is empty
-+ * @DUMP_TX_FIFO_FLUSH: Dump MSDUs until the FIFO is empty
-  *	and the TFD queues are empty.
-  */
- enum iwl_dump_control {
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c b/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
-index a3cefbc43e80..abf8585bf3bd 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
-@@ -29,7 +29,7 @@ u8 iwl_mvm_get_channel_width(struct cfg80211_chan_def *chandef)
- 
- /*
-  * Maps the driver specific control channel position (relative to the center
-- * freq) definitions to the the fw values
-+ * freq) definitions to the fw values
-  */
- u8 iwl_mvm_get_ctrl_pos(struct cfg80211_chan_def *chandef)
- {
--- 
-2.25.1
+But for now, it looks good.
 
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+--
+Regards,
+Sudeep

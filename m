@@ -2,133 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDA657E758
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E8057E762
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbiGVTZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S235178AbiGVT3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbiGVTZY (ORCPT
+        with ESMTP id S231784AbiGVT3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:25:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C38617AB3;
-        Fri, 22 Jul 2022 12:25:23 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297665329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7665:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D2EA11EC0666;
-        Fri, 22 Jul 2022 21:25:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658517917;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nT/WxNPGWSJTO6+kQuM3FOwCYg2A+BIY4xCaAU3c0V8=;
-        b=AC06S3LGPe5h73iTbcHpi4ZGg7ColSwTlaajXCs+e2KG0bBZaYA37zBljXeX8xeIuwK+vo
-        N/Dhea004+suCjTz60jAA9AWk2lXFYO7Ag6Vb5jbmotR9u08XqNiDH9vftOXWD/nvlDQtH
-        9edeomcKPYV/j5sCa5NTw6mjO8PhysQ=
-Date:   Fri, 22 Jul 2022 21:25:17 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
-Message-ID: <Ytr5ndnlOQvqWdPP@zn.tnic>
-References: <681e4e45-eff1-600c-9b81-1fa9bdf24232@intel.com>
- <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
- <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <5db37cc2-4fb1-7a73-c39a-3531260414d0@intel.com>
- <BYAPR12MB2759AA368C8B6A5F1C31642F8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <YrTq3WfOeA6ehsk6@google.com>
- <SN6PR12MB276743CBEAD5AFE9033AFE558EB59@SN6PR12MB2767.namprd12.prod.outlook.com>
- <YtqLhHughuh3KDzH@zn.tnic>
- <Ytr0t119QrZ8PUBB@google.com>
+        Fri, 22 Jul 2022 15:29:30 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1921EAD4;
+        Fri, 22 Jul 2022 12:29:29 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id c3so4380672qko.1;
+        Fri, 22 Jul 2022 12:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E/lAne3sWA7x+h1qQlZwY2RlcJ4V/1aOGrEnwYJSEqE=;
+        b=EOYXN1DWUDR7ro4rrVKShowkaEln3JbgK/2l8Hwjvfnfbp9kMOFo/TRFukmr3/H3Bi
+         YwOHSGzhd3Vg9NvflSJFJLW4uzz4yv8qq4ijh3ComKOrXYrUIuo00JmvNMZLcZ9dDOuc
+         GC6svKPYQj4wFfD0JHi++H1SuSOHPKlWYUKNpo2daSZAWhvtVy7XzoMmkwuIxUPH8sTG
+         J829iLNitSxiAsjX9QFZo5fmAbUjYLC1PSFvBbpjDkB7SL6rzUevhGie5wk+sLxP3Lyu
+         DMAtRP6v+S7TaSL7XWqsoeG5GYbOteovu0QA02n/MxHlr7nXx+873emMA/38pTO5PIN0
+         tO9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E/lAne3sWA7x+h1qQlZwY2RlcJ4V/1aOGrEnwYJSEqE=;
+        b=QctKpkw1wFADc7qpzTx39DP8wQBKo+msJPW5FEeP/TpA6mtO7iHyuW45P48hdpByVk
+         5pJNm1CGlXVbxj8Sj82r8Kn68Rpy6x++sR5OjPuGwySbv/bDQl5PC3kGoMg7XCuyG4RM
+         TL3JqFOzU8NezO1Hk17f5JIrKQ5uWTSLr6nIOnmsic8Nx6KRXayRYPEi+s+YHH2wkRK9
+         ntMeJXThfAZYLXaADEJvtvIC99jgqSJi5mx7XPe3tDy0lyv6/MXodoSNTfPqB/nVbhQi
+         dNpAkWMGUt/f10rsYrG7T+KuQyWYzEEvHEhm3eroXYozq1i9J9WHd3ighwhi0bxdrLlW
+         0SNA==
+X-Gm-Message-State: AJIora+UOqyop5SBIzuQ+AozVSVkmlgcepcQxg+ca3hCMfJsX/h/zDQl
+        w8NWz4ofUpz37cL4LPuQFZsoDhrR1Qw=
+X-Google-Smtp-Source: AGRyM1tAezT3qSnSL7vVzjjbYkhwAQwQU9/v5Ht5yxZUm154jcTp4PBelIotRewaRt8XWGdQQt6kPw==
+X-Received: by 2002:ae9:e8d0:0:b0:6b5:bee3:51a7 with SMTP id a199-20020ae9e8d0000000b006b5bee351a7mr1131365qkg.345.1658518168509;
+        Fri, 22 Jul 2022 12:29:28 -0700 (PDT)
+Received: from localhost (c-69-254-185-160.hsd1.fl.comcast.net. [69.254.185.160])
+        by smtp.gmail.com with ESMTPSA id ck11-20020a05622a230b00b0031eeefd896esm3413388qtb.3.2022.07.22.12.29.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 12:29:28 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 12:29:27 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bitmap tree
+Message-ID: <Ytr6l2CHG8lbU+8Z@yury-laptop>
+References: <20220722191657.1d7282c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ytr0t119QrZ8PUBB@google.com>
+In-Reply-To: <20220722191657.1d7282c2@canb.auug.org.au>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 07:04:23PM +0000, Sean Christopherson wrote:
-> I disagree.  Running an old kernel on new hardware with a different RMP layout
-> should refuse to use SNP, not read/write garbage and likely corrupt the RMP and/or
-> host memory.
+On Fri, Jul 22, 2022 at 07:16:57PM +1000, Stephen Rothwell wrote:
+> Hi all,
+ ...
 
-See my example below.
+> I am not sure which commit caused this.  Though I suspect
+> 
+>   bbe8fb1a3c53 ("lib/nodemask: inline next_node_in() and node_random()")
+> 
+> which added the include of random.h to nodemask.h
+> 
+> I have used the bitmap tree from next-20220721 for today.
 
-> And IMO, hiding the non-architectural RMP format in SNP-specific code so that we
-> don't have to churn a bunch of call sites that don't _need_ access to the raw RMP
-> format is a good idea regardless of whether we want to be optimistic or pessimistic
-> about future formats.
+Hi Stephen,
 
-I don't think I ever objected to that.
+You're right. The problem in the last patch of the series. I've got
+the fix already, and testing it now.
 
-> > This is nothing else but normal CPU enablement work - it should be done
-> > when it is really needed.
-> > 
+I'll drop the bbe8fb1a3c53 and submit it separately together with
+header fix.
 
-<--- this here.
-
-> > Because the opposite can happen: you can add a model check which
-> > excludes future model X, future model X comes along but does *not*
-> > change the RMP format and then you're going to have to relax that model
-> > check again to fix SNP on the new model X.
-
-So constantly adding new models to a list which support a certain
-version of the RMP format doesn't scale either.
-
-If you corrupt the RMP because your kernel is old, you'll crash and burn
-very visibly so that you'll be forced to have to look for an updated
-kernel regardless.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Yury

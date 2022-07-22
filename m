@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BCC57DA56
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 08:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B7957DA5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 08:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbiGVGeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 02:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
+        id S234273AbiGVGfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 02:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiGVGeB (ORCPT
+        with ESMTP id S234235AbiGVGfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 02:34:01 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FF784D4E5;
-        Thu, 21 Jul 2022 23:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=QSsw+
-        n12VZ5Mt9M8vjVWAmnvanUDHuoSYkmFZCbq7AY=; b=hRouYzf4/ggxwt5AfsHZV
-        cFQluoPp/JOWo9U+Bf4Vf7JrALvukRL9CuJbAR2AsatDcxcydNyQGtsfTBX4JUNQ
-        KEKRrqt6sRGrvtZP+x9w4Wg8Cz7RlSGxLLgcFb3t/9V2IyjmaovpvtY5rPJ6T6KF
-        /ZsXbm6LcTGyRwIr6+ubec=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp4 (Coremail) with SMTP id HNxpCgD3L3DGRNpigOxlQA--.19561S2;
-        Fri, 22 Jul 2022 14:33:44 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     prabhakar.csengg@gmail.com, mchehab@kernel.org,
-        laurent.pinchart@ideasonboard.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] media: platform: ti: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 14:33:41 +0800
-Message-Id: <20220722063341.69913-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 02:35:45 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8011432ED4
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 23:35:39 -0700 (PDT)
+X-UUID: d771a68285c6494a964511ceb0fcd37f-20220722
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:921bd2d0-ebcf-4cd2-b27a-63423fb4c8c6,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:46c22cd8-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: d771a68285c6494a964511ceb0fcd37f-20220722
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <kuan-ying.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 742952687; Fri, 22 Jul 2022 14:35:32 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 22 Jul 2022 14:35:31 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 22 Jul 2022 14:35:31 +0800
+From:   Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <chinwen.chang@mediatek.com>,
+        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] scripts: Fix no space expression between sp and offset
+Date:   Fri, 22 Jul 2022 14:35:28 +0800
+Message-ID: <20220722063529.7166-1-Kuan-Ying.Lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgD3L3DGRNpigOxlQA--.19561S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFyDXFy8ZFyUJrWxWr4xXrb_yoW8WFWUpF
-        WDK3yxArWqgr1qqw4DAw1kuFW3Aw1SvFWjkry3u3s3uan8ZFWqyr18tFySyF9rXFWfZFy3
-        JF1rtw13WFs5ur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEyxRnUUUUU=
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivwhGZFWB0jrEuAAAsV
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,40 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+When I use older version aarch64 objdump (2.24) to disassemble
+aarch64 vmlinux, I get the result like below.
+There is no space between sp and offset.
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+ffff800008010000 <dw_apb_ictl_handle_irq>:
+ffff800008010000:       d503233f        hint    #0x19
+ffff800008010004:       a9bc7bfd        stp     x29, x30, [sp,#-64]!
+ffff800008010008:       90011e60        adrp    x0, ffff80000a3dc000 <num_ictlrs>
+ffff80000801000c:       910003fd        mov     x29, sp
+ffff800008010010:       a9025bf5        stp     x21, x22, [sp,#32]
+
+When I use newer version aarch64 objdump (2.35), I get
+the result like below.
+
+ffff800008010000 <dw_apb_ictl_handle_irq>:
+ffff800008010000:       d503233f        paciasp
+ffff800008010004:       a9bc7bfd        stp     x29, x30, [sp, #-64]!
+ffff800008010008:       90011e60        adrp    x0, ffff80000a3dc000 <num_ictlrs>
+ffff80000801000c:       910003fd        mov     x29, sp
+ffff800008010010:       a9025bf5        stp     x21, x22, [sp, #32]
+
+Add no space support of regular expression for old version objdump.
+
+Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 ---
- drivers/media/platform/ti/davinci/vpbe.c | 2 +-
- drivers/media/platform/ti/omap3isp/isp.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ scripts/checkstack.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/ti/davinci/vpbe.c b/drivers/media/platform/ti/davinci/vpbe.c
-index 5f0aeb744e81..509ecc84624e 100644
---- a/drivers/media/platform/ti/davinci/vpbe.c
-+++ b/drivers/media/platform/ti/davinci/vpbe.c
-@@ -280,7 +280,7 @@ static int vpbe_set_default_output(struct vpbe_device *vpbe_dev)
-  * vpbe_get_output - Get output
-  * @vpbe_dev: vpbe device ptr
-  *
-- * return current vpbe output to the the index
-+ * return current vpbe output to the index
-  */
- static unsigned int vpbe_get_output(struct vpbe_device *vpbe_dev)
- {
-diff --git a/drivers/media/platform/ti/omap3isp/isp.c b/drivers/media/platform/ti/omap3isp/isp.c
-index 4c937f3f323e..f99dda7337b9 100644
---- a/drivers/media/platform/ti/omap3isp/isp.c
-+++ b/drivers/media/platform/ti/omap3isp/isp.c
-@@ -1528,7 +1528,7 @@ void omap3isp_print_status(struct isp_device *isp)
-  * To solve this problem power management support is split into prepare/complete
-  * and suspend/resume operations. The pipelines are stopped in prepare() and the
-  * ISP clocks get disabled in suspend(). Similarly, the clocks are re-enabled in
-- * resume(), and the the pipelines are restarted in complete().
-+ * resume(), and the pipelines are restarted in complete().
-  *
-  * TODO: PM dependencies between the ISP and sensors are not modelled explicitly
-  * yet.
+diff --git a/scripts/checkstack.pl b/scripts/checkstack.pl
+index d2c38584ece6..e404b6b11295 100755
+--- a/scripts/checkstack.pl
++++ b/scripts/checkstack.pl
+@@ -56,7 +56,7 @@ my (@stack, $re, $dre, $sub, $x, $xs, $funcre, $min_stack);
+ 	if ($arch =~ '^(aarch|arm)64$') {
+ 		#ffffffc0006325cc:       a9bb7bfd        stp     x29, x30, [sp, #-80]!
+ 		#a110:       d11643ff        sub     sp, sp, #0x590
+-		$re = qr/^.*stp.*sp, \#-([0-9]{1,8})\]\!/o;
++		$re = qr/^.*stp.*sp, ?\#-([0-9]{1,8})\]\!/o;
+ 		$dre = qr/^.*sub.*sp, sp, #(0x$x{1,8})/o;
+ 	} elsif ($arch eq 'arm') {
+ 		#c0008ffc:	e24dd064	sub	sp, sp, #100	; 0x64
 -- 
-2.25.1
+2.18.0
 

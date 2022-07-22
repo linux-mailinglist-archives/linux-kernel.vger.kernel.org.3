@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E5857E01C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E82357E020
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiGVKhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S234952AbiGVKiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGVKhF (ORCPT
+        with ESMTP id S234497AbiGVKiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:37:05 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B82BA24E
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:37:04 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id i206so7341483ybc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LZXV7spB5ZWU5K7GWsoui8Bphj1cNvVhFn/ZvvmSing=;
-        b=bVZoDU6yBgk2+vNGfNBqfVrY4Bt1R0qn5OyV3iEBHCHKM9yV1nsjKOa6DshjGTpWir
-         r0Ve6AdugLmQv7oSS+5GBtIu7jhfGf7rwimSzVlmU+T0DfQgbrVCouQaIZHzVsI+AJQd
-         fF41sKp0flVbUagS9SPWMWkT+Efll2TNkgn0UbJSnBrTuAJWp0HvbF4TsEVRGjnTaaRc
-         2jhcvyMJq1pW3gE8D4GuOPmMtc1KR9jYCb3MSO7SJSi8qk+IMUE4t7y/b4d+w52tG8F0
-         rDkrtkDxXZevCbb28YX3MUV8qrhioOrEU6kOX83xQn+RtkYLJqbJEeOdKDbjPdOPNC2Q
-         iLaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LZXV7spB5ZWU5K7GWsoui8Bphj1cNvVhFn/ZvvmSing=;
-        b=OAUC3644QMRoEuZZaHcSkDxRtMSzvQ5UH8Xi1s6t3FVexXEtVlzCn5o7sddLCw87Wv
-         sN4DkvDwO8fpxIFNOgLldhhgW3akpel2cZmUl39ob9RUSpplkMFMEbS+XANwa/KdhSoR
-         XdzH4EWmQiNL2QeO37Rirrxpk9MBjhdZoZDk/uCnhMEtQKLRqg+KSFOgxyb7kc6Y62oq
-         Gbygid87ArlWxLZLi7loVNgBoUq95ol+mWvNb7eF9vQ2a6csjau6CnKQK9OWkodaEHJs
-         WwqrVnwS1eFulxjW/3k6cU5hTyiqbUuSTgvyS/j+BNP1G5NqGK4wExLvH/FAUmacwuNG
-         4HCQ==
-X-Gm-Message-State: AJIora/pbPPsgaWvNhQx9GsPGWGjhItF45KxAaOsKhncW6VYJNrzH/Jc
-        5gNZyJN/Guk4Gt5z2ywL/qJiZSw5A5I+7J46meEEAg==
-X-Google-Smtp-Source: AGRyM1vI4WMTZ8dacZeoMfIM3u0pw8gDKN3iU57tDYVl+x+hIJBD3hOWhpnGx4itgOaWoNFF3b5dHfVnP53BG5K8awI=
-X-Received: by 2002:a25:b0c:0:b0:670:a7c6:5c15 with SMTP id
- 12-20020a250b0c000000b00670a7c65c15mr2138060ybl.387.1658486223328; Fri, 22
- Jul 2022 03:37:03 -0700 (PDT)
+        Fri, 22 Jul 2022 06:38:19 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB3F0BA267;
+        Fri, 22 Jul 2022 03:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qZA/V
+        SBXMttJiclEn3xajTp90qDk6AxMWBxPRPF+xvo=; b=hFDJO2JEPI6xzsHZlDWe+
+        pg7FRIkNCHsaWjT4EFEpnDJQGT04StiPcLRSdEJmKGyNzLoLniqsBdzsuaOnrF9Z
+        DR75RkRoAojms3cv9B7NJkpLvSCzEbcFBS0OysZ6l7BTDi9cEpqv3V9G/VFw1qlB
+        JwAAtuQYyKEiKp3Za3E+j0=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp3 (Coremail) with SMTP id G9xpCgA30ZLqfdpiFX2aQg--.5948S2;
+        Fri, 22 Jul 2022 18:37:32 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, john.garry@huawei.com, will@kernel.org,
+        james.clark@arm.com, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] perf: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 18:37:28 +0800
+Message-Id: <20220722103728.82854-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220722182248.1.I20e96c839200bb75cd6af80384f16c8c01498f57@changeid>
-In-Reply-To: <20220722182248.1.I20e96c839200bb75cd6af80384f16c8c01498f57@changeid>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 22 Jul 2022 12:36:51 +0200
-Message-ID: <CANn89iJehOVme9-3qnHTdhnoKUP36AW=3A232aqBuzLDHDCGxw@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_sync: Use safe loop when adding accept list
-To:     Archie Pusaka <apusaka@google.com>
-Cc:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Zhengping Jiang <jiangzp@google.com>,
-        Michael Sun <michaelfsun@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID: G9xpCgA30ZLqfdpiFX2aQg--.5948S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gw1xJrW7ZryDtF1xCr13CFg_yoWxKrWDpF
+        s7CwsIyr1kW3ZYq3Z5Aw4xXw1fu3yxAan8Kw1Sy3y7Zr43Xrn2qFWfKw1Yva47Xws5AFWa
+        vws8WryUZFyrCFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pNjg2dUUUUU=
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJQxGZGAJpKgOWQAAs5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,95 +56,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:23 PM Archie Pusaka <apusaka@google.com> wrote:
->
-> From: Archie Pusaka <apusaka@chromium.org>
->
-> When in the middle of adding accept list, the userspace can still
-> remove devices, therefore causing crash if the removed device is
-> the one being processed.
->
-> Use a safe loop mechanism to guard against deletion while iterating
-> the pending items.
+Replace 'the the' with 'the' in the comment.
 
- "the userspace can still remove devices" is a bit vague.
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ tools/perf/Documentation/perf-diff.txt                        | 2 +-
+ tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json | 2 +-
+ tools/perf/pmu-events/arch/x86/silvermont/pipeline.json       | 2 +-
+ tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json     | 2 +-
+ tools/perf/util/cs-etm.c                                      | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-It seems that the issue at hand is that hci_le_add_accept_list_sync() can
-move the current item from  pend_le_conns / pend_le_reports lists ?
+diff --git a/tools/perf/Documentation/perf-diff.txt b/tools/perf/Documentat=
+ion/perf-diff.txt
+index be65bd55ab2a..b77957ac288b 100644
+--- a/tools/perf/Documentation/perf-diff.txt
++++ b/tools/perf/Documentation/perf-diff.txt
+@@ -285,7 +285,7 @@ If specified the 'Weighted diff' column is displayed wi=
+th value 'd' computed as:
+=20
+   - period being the hist entry period value
+=20
+-  - WEIGHT-A/WEIGHT-B being user supplied weights in the the '-c' option
++  - WEIGHT-A/WEIGHT-B being user supplied weights in the '-c' option
+     behind ':' separator like '-c wdiff:1,2'.
+     - WEIGHT-A being the weight of the data file
+     - WEIGHT-B being the weight of the baseline data file
+diff --git a/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json =
+b/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
+index aa460d0c4851..59ab88de1b37 100644
+--- a/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/cascadelakex/uncore-other.json
+@@ -1923,7 +1923,7 @@
+         "EventCode": "0x25",
+         "EventName": "UNC_UPI_RxL0P_POWER_CYCLES",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts cycles when the the receive side (Rx)=
+ of the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a m=
+ode where we disable 60% of the UPI lanes, decreasing our bandwidth in orde=
+r to save power.",
++        "PublicDescription": "Counts cycles when the receive side (Rx) of =
+the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a mode =
+where we disable 60% of the UPI lanes, decreasing our bandwidth in order to=
+ save power.",
+         "Unit": "UPI LL"
+     },
+     {
+diff --git a/tools/perf/pmu-events/arch/x86/silvermont/pipeline.json b/tool=
+s/perf/pmu-events/arch/x86/silvermont/pipeline.json
+index 03a4c7f26698..3278c7d1654d 100644
+--- a/tools/perf/pmu-events/arch/x86/silvermont/pipeline.json
++++ b/tools/perf/pmu-events/arch/x86/silvermont/pipeline.json
+@@ -257,7 +257,7 @@
+         "Counter": "0,1",
+         "EventCode": "0xCA",
+         "EventName": "NO_ALLOC_CYCLES.NOT_DELIVERED",
+-        "PublicDescription": "The NO_ALLOC_CYCLES.NOT_DELIVERED event is u=
+sed to measure front-end inefficiencies, i.e. when front-end of the machine=
+ is not delivering micro-ops to the back-end and the back-end is not stalle=
+d. This event can be used to identify if the machine is truly front-end bou=
+nd.  When this event occurs, it is an indication that the front-end of the =
+machine is operating at less than its theoretical peak performance.  Backgr=
+ound: We can think of the processor pipeline as being divided into 2 broade=
+r parts: Front-end and Back-end. Front-end is responsible for fetching the =
+instruction, decoding into micro-ops (uops) in machine understandable forma=
+t and putting them into a micro-op queue to be consumed by back end. The ba=
+ck-end then takes these micro-ops, allocates the required resources.  When =
+all resources are ready, micro-ops are executed. If the back-end is not rea=
+dy to accept micro-ops from the front-end, then we do not want to count the=
+se as front-end bottlenecks.  However, whenever we have bottlenecks in the =
+back-end, we will have allocation unit stalls and eventually forcing the fr=
+ont-end to wait until the back-end is ready to receive more UOPS. This even=
+t counts the cycles only when back-end is requesting more uops and front-en=
+d is not able to provide them. Some examples of conditions that cause front=
+-end efficiencies are: Icache misses, ITLB misses, and decoder restrictions=
+ that limit the the front-end bandwidth.",
++        "PublicDescription": "The NO_ALLOC_CYCLES.NOT_DELIVERED event is u=
+sed to measure front-end inefficiencies, i.e. when front-end of the machine=
+ is not delivering micro-ops to the back-end and the back-end is not stalle=
+d. This event can be used to identify if the machine is truly front-end bou=
+nd.  When this event occurs, it is an indication that the front-end of the =
+machine is operating at less than its theoretical peak performance.  Backgr=
+ound: We can think of the processor pipeline as being divided into 2 broade=
+r parts: Front-end and Back-end. Front-end is responsible for fetching the =
+instruction, decoding into micro-ops (uops) in machine understandable forma=
+t and putting them into a micro-op queue to be consumed by back end. The ba=
+ck-end then takes these micro-ops, allocates the required resources.  When =
+all resources are ready, micro-ops are executed. If the back-end is not rea=
+dy to accept micro-ops from the front-end, then we do not want to count the=
+se as front-end bottlenecks.  However, whenever we have bottlenecks in the =
+back-end, we will have allocation unit stalls and eventually forcing the fr=
+ont-end to wait until the back-end is ready to receive more UOPS. This even=
+t counts the cycles only when back-end is requesting more uops and front-en=
+d is not able to provide them. Some examples of conditions that cause front=
+-end efficiencies are: Icache misses, ITLB misses, and decoder restrictions=
+ that limit the front-end bandwidth.",
+         "SampleAfterValue": "200003",
+         "UMask": "0x50"
+     },
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json b/to=
+ols/perf/pmu-events/arch/x86/skylakex/uncore-other.json
+index aa0f67613c4a..0c96e6924d62 100644
+--- a/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/skylakex/uncore-other.json
+@@ -1852,7 +1852,7 @@
+         "EventCode": "0x25",
+         "EventName": "UNC_UPI_RxL0P_POWER_CYCLES",
+         "PerPkg": "1",
+-        "PublicDescription": "Counts cycles when the the receive side (Rx)=
+ of the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a m=
+ode where we disable 60% of the UPI lanes, decreasing our bandwidth in orde=
+r to save power.",
++        "PublicDescription": "Counts cycles when the receive side (Rx) of =
+the Intel Ultra Path Interconnect(UPI) is in L0p power mode. L0p is a mode =
+where we disable 60% of the UPI lanes, decreasing our bandwidth in order to=
+ save power.",
+         "Unit": "UPI LL"
+     },
+     {
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 8b95fb3c4d7b..16db965ac995 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -1451,7 +1451,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
+ 		 * tidq->packet->instr_count represents the number of
+ 		 * instructions in the current etm packet.
+ 		 *
+-		 * Period instructions (Pi) contains the the number of
++		 * Period instructions (Pi) contains the number of
+ 		 * instructions executed after the sample point(n) from the
+ 		 * previous etm packet.  This will always be less than
+ 		 * etm->instructions_sample_period.
+--=20
+2.25.1
 
-Hopefully these lists can not be changed by other threads while
-hci_update_accept_list_sync() is running ?
-
-
->
-> Below is a sample btsnoop log when user enters wrong passkey when
-> pairing a LE keyboard and the corresponding stacktrace.
-> @ MGMT Event: Command Complete (0x0001) plen 10
->       Add Device (0x0033) plen 7
->         Status: Success (0x00)
->         LE Address: CA:CA:BD:78:37:F9 (Static)
-> < HCI Command: LE Add Device To Accept List (0x08|0x0011) plen 7
->         Address type: Random (0x01)
->         Address: CA:CA:BD:78:37:F9 (Static)
-> @ MGMT Event: Device Removed (0x001b) plen 7
->         LE Address: CA:CA:BD:78:37:F9 (Static)
-> > HCI Event: Command Complete (0x0e) plen 4
->       LE Add Device To Accept List (0x08|0x0011) ncmd 1
->         Status: Success (0x00)
->
-> [  167.409813] Call trace:
-> [  167.409983]  hci_le_add_accept_list_sync+0x64/0x26c
-> [  167.410150]  hci_update_passive_scan_sync+0x5f0/0x6dc
-> [  167.410318]  add_device_sync+0x18/0x24
-> [  167.410486]  hci_cmd_sync_work+0xe8/0x150
-> [  167.410509]  process_one_work+0x140/0x4d0
-> [  167.410526]  worker_thread+0x134/0x2e4
-> [  167.410544]  kthread+0x148/0x160
-> [  167.410562]  ret_from_fork+0x10/0x30
->
-> Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-
-Please add a Fixes: tag
-
-> Reviewed-by: Zhengping Jiang <jiangzp@google.com>
-> Reviewed-by: Michael Sun <michaelfsun@google.com>
->
-> ---
->
->  net/bluetooth/hci_sync.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 3067d94e7a8e..8e843d34f7de 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -1863,7 +1863,7 @@ struct sk_buff *hci_read_local_oob_data_sync(struct hci_dev *hdev,
->   */
->  static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
->  {
-> -       struct hci_conn_params *params;
-> +       struct hci_conn_params *params, *tmp;
->         struct bdaddr_list *b, *t;
->         u8 num_entries = 0;
->         bool pend_conn, pend_report;
-> @@ -1930,7 +1930,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
->          * just abort and return filer policy value to not use the
->          * accept list.
->          */
-> -       list_for_each_entry(params, &hdev->pend_le_conns, action) {
-> +       list_for_each_entry_safe(params, tmp, &hdev->pend_le_conns, action) {
->                 err = hci_le_add_accept_list_sync(hdev, params, &num_entries);
->                 if (err)
->                         goto done;
-> @@ -1940,7 +1940,7 @@ static u8 hci_update_accept_list_sync(struct hci_dev *hdev)
->          * the list of pending reports and also add these to the
->          * accept list if there is still space. Abort if space runs out.
->          */
-> -       list_for_each_entry(params, &hdev->pend_le_reports, action) {
-> +       list_for_each_entry_safe(params, tmp, &hdev->pend_le_reports, action) {
->                 err = hci_le_add_accept_list_sync(hdev, params, &num_entries);
->                 if (err)
->                         goto done;
-> --
-> 2.37.1.359.gd136c6c3e2-goog
->

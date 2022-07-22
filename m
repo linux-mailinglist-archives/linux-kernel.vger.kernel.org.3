@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A82D57D7BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8F057D7BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbiGVA1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
+        id S233780AbiGVA1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiGVA1t (ORCPT
+        with ESMTP id S229740AbiGVA1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:27:49 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B667089E84
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:27:48 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id mf4so5957026ejc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 17:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=g8LjdHcJfvd8YmhDIih7Ks8me5dObMZ6e8AXUp56raU=;
-        b=BsQsfvGgyeYZi82xZDqX+P2W04pN9KR+LTK93LlfoKtMiWdcqitTz7n0a+wzMZnBmX
-         0+oJ+HOrxD2UUnQnT56VBQXbsubOZ78EGgbxOpvish0OgPrJwZkbIfVACV8LYP1B34eE
-         mmjGM5Jjk7CnvOuki/Rcc5RTGHkkSmK83+qrpnN8ttq7vYZ/XKSHKu6RxSa7yQuwfIXh
-         ELGGEfmRamNz7ztRLV9gmbmLWhDRWFrlJCXnKX4EDrzUw7FaK23Dnpsoas6vd0MRDdpS
-         b72uXbgecKTKvEREvvKry/SKURjD51wglq4SZDLLzf8tOS9GUopBcbjukjBxnkQQaQYV
-         gjhQ==
+        Thu, 21 Jul 2022 20:27:46 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E15C89E84;
+        Thu, 21 Jul 2022 17:27:44 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id l24so2616238ion.13;
+        Thu, 21 Jul 2022 17:27:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=g8LjdHcJfvd8YmhDIih7Ks8me5dObMZ6e8AXUp56raU=;
-        b=YlKnE8Mh6O1nmbjrTUrRhGNKENTiYSe9KJn3AeA62HeD5wGGj7PALjXQypnpRRRJx4
-         uma//iYw+jZDRy4MbbZjewB4jg4X+SCNc6AJYZ9gO1YFC7WX6MhqFbSo+Gyk27zPPsCj
-         d3W2hnbgNP1zgikA4vsLyRNxVfgbzHLjVpNcVeiZ3bnnY283BY3lB7Wjb4W2K6CDsTLM
-         /u3pSM0XiJH/2O+Jm6NwKcB2tlvjG1O3eIVcnUsqL/9e1WDmShtQUr1iz6rEfr2Pmray
-         zgx2fhAuNHFnDXlrovtpx+hUD0QigYVqPpUa0RF1TWI4N/hA2mCowoIt2Jd4XoKazaFW
-         Q4rw==
-X-Gm-Message-State: AJIora/hENjsD+5OYfaBPdzcbpxhF3iEHIMZlDsRIdoltZwJhJr35R7U
-        S7cIL4RO0Y67UCNSTzhqcKg6rTRBReM+JmLu44rISw==
-X-Google-Smtp-Source: AGRyM1vq5VWTUYVzBMVm+KUthT2XGD1FCuiW4X+F6LzMCRExEnmP+kSdpX9emtp7LBfHWwPcOPS+QGObA1ckEX9DS50=
-X-Received: by 2002:a17:907:2c75:b0:72b:3431:2a0a with SMTP id
- ib21-20020a1709072c7500b0072b34312a0amr1001744ejc.234.1658449666967; Thu, 21
- Jul 2022 17:27:46 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A9LvynJxe0rCoPzcWA/a2z9MnHe9fzfAmnZLQao5YE4=;
+        b=5Sg8yG6FctNga7dzguT02WpfwDlLPoM/nR1XfXDYI4ct1+DQHu96OB6UZmtBwieeex
+         AHhqd/u3meZc/tH5TwjG33HTOvlUjndNL0XeBa8vjgO1RzqVwrs/kYVvnERjq5hTpe8t
+         xBrdLyo1gU4YuKpr2MrEOz41d+ioxhRjDAHe+1tIkmRIUYCBKeVathyXvW7Fp4QDfyww
+         V97JQVbUBhGB0QfN1jUTN0cOzpToZcDCWIAhek7K+ohXoitb4V0xlQJBvEK5tWDFFeAq
+         yNxI5TwCW28nD5lXrEvwkmry9N8z++3EsQ97G2AHLcgdcl5jIZ+CAvnzMWHS/CA5rYCC
+         Dwdw==
+X-Gm-Message-State: AJIora+JEkMDATPfWcUcHp+Fpieulm3YSnPSszZ6kiyJEjIVT7ZfW1Ub
+        TaAXeRdXgPHcyA/lpD1YKw==
+X-Google-Smtp-Source: AGRyM1uKEwGqiQ/Z9aZ83MzaBv/qqZB45fvT+eCioKSO8RtevK4Osdshp0UwcAy+wcfB8VcdIGXIaQ==
+X-Received: by 2002:a05:6638:160c:b0:33f:54c7:ee69 with SMTP id x12-20020a056638160c00b0033f54c7ee69mr470125jas.65.1658449663359;
+        Thu, 21 Jul 2022 17:27:43 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id c6-20020a056e020cc600b002dd143ee62esm1105139ilj.14.2022.07.21.17.27.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 17:27:42 -0700 (PDT)
+Received: (nullmailer pid 2243073 invoked by uid 1000);
+        Fri, 22 Jul 2022 00:27:41 -0000
+Date:   Thu, 21 Jul 2022 18:27:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mauri Sandberg <maukka@ext.kapsi.fi>
+Cc:     pali@kernel.org, thomas.petazzoni@bootlin.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org, gregory.clement@bootlin.com, kw@linux.com,
+        andrew@lunn.ch, linux-arm-kernel@lists.infradead.org,
+        bhelgaas@google.com, linux@armlinux.org.uk,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sebastian.hesselbarth@gmail.com
+Subject: Re: [PATCH 1/2] dt-bindings: PCI: mvebu: Add orion5x compatible
+Message-ID: <20220722002741.GA2243040-robh@kernel.org>
+References: <20220718202843.6766-1-maukka@ext.kapsi.fi>
+ <20220718202843.6766-2-maukka@ext.kapsi.fi>
 MIME-Version: 1.0
-References: <20220721081026.1247067-1-sadiyakazi@google.com>
-In-Reply-To: <20220721081026.1247067-1-sadiyakazi@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 21 Jul 2022 20:27:35 -0400
-Message-ID: <CAFd5g47jfm8dZ=3jwdy2Vhy+PgAW8JLAPmikhAUVTc-udKZjNA@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: Add CLI args for kunit_tool
-To:     Sadiya Kazi <sadiyakazi@google.com>
-Cc:     davidgow@google.com, skhan@linuxfoundation.org, corbet@lwn.net,
-        mairacanal@riseup.net, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718202843.6766-2-maukka@ext.kapsi.fi>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 4:26 AM Sadiya Kazi <sadiyakazi@google.com> wrote:
->
-> Run_wrapper.rst was missing some command line arguments. Added
-> additional args in the file.
->
-> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+On Mon, 18 Jul 2022 23:28:41 +0300, Mauri Sandberg wrote:
+> Add a compatible string to bindings to indicate that orion5x PCIe is
+> supported too.
+> 
+> Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
+> ---
+>  Documentation/devicetree/bindings/pci/mvebu-pci.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Aside from the small nits pointed out by Ma=C3=ADra and David, this looks g=
-ood to me.
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Rob Herring <robh@kernel.org>

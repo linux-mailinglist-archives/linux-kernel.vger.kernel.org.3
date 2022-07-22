@@ -2,144 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810BD57E3B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5A957E3BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiGVP0y convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 22 Jul 2022 11:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        id S232365AbiGVP1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGVP0v (ORCPT
+        with ESMTP id S231178AbiGVP1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:26:51 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BC859EC5C;
-        Fri, 22 Jul 2022 08:26:48 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 26MFQW5J0014317, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 26MFQW5J0014317
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Fri, 22 Jul 2022 23:26:32 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 22 Jul 2022 23:26:37 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 22 Jul 2022 23:26:36 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600]) by
- RTEXMBS04.realtek.com.tw ([fe80::415c:a915:a507:e600%5]) with mapi id
- 15.01.2308.027; Fri, 22 Jul 2022 23:26:36 +0800
-From:   Hau <hau@realtek.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net-next] r8169: add support for rtl8168h(revid 0x2a) + rtl8211fs fiber application
-Thread-Topic: [PATCH net-next] r8169: add support for rtl8168h(revid 0x2a) +
- rtl8211fs fiber application
-Thread-Index: AQHYnRCVRrASn8LKuEagRDBDIpqm962Iwo2AgABzCoCAAU5IgA==
-Date:   Fri, 22 Jul 2022 15:26:36 +0000
-Message-ID: <146c30d91ffd4514a23f52ac1bac24dd@realtek.com>
-References: <20220721144550.4405-1-hau@realtek.com>
- <356f4285-1e83-ab14-c890-4131acd8e61d@gmail.com> <YtoZCaLTMFw8cTem@lunn.ch>
-In-Reply-To: <YtoZCaLTMFw8cTem@lunn.ch>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.129]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/7/22_=3F=3F_12:44:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 11:27:34 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0A29EC6B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:27:32 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y141so4708071pfb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JiTsgIyx7zIuebw3jPBiJz5uZKu7LJAxJF1fKKcrwMc=;
+        b=rrckFJbUDVsImQF7IueIbd0/U72biyUAgvOzS+WhlcjHCI3ldV94QbLnmmGX/EQSr+
+         c8TSWho4ZocrCsAjV6gxmPElF1BHN92O4e1VfJB6B8bR82dmtAYAf8QTGOxStbnKVdnF
+         Rr9z7B4FLIxTcqsj3J4Ep53UwR44wRjA2i+TA8UHQ9jC0eqwkKnSRwGNwiYl3JihLKdL
+         1oyg1K4t6/seSECyO7ysuzncwYAIxoww5m1UBmjQwNf0zHUNZHFNBBwqN39nCLjmjVJG
+         LHZtpEy0JFK7N84KO0Jz7kvgGjh7WVGK2YZaqOzvnCz0FdvPKk9PLma/CLmmlb2xLLpZ
+         9q9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=JiTsgIyx7zIuebw3jPBiJz5uZKu7LJAxJF1fKKcrwMc=;
+        b=X2rCxoBPz7eY9VueDQACwiutihYlgfEWDMuyl4Cl5qoQ9/73AtXH6SEyPlVdTXe8zW
+         jC9yx/Ij3LSIw81Z0TdaoOZ9DSBWH5x8nFBt4ZxL5nJTfYM63hzu9VJjcZF034yNohvQ
+         dDvFQCbvPcZsv2rQruqVSNXf9hURo/7Uipw0KWQyz6vtefTqQV8VHOHYb2ip/JTEma6k
+         02R+iLCRJS6o+pYKHLInqAEPFYNxFmZgFZv2JAo25yGPE12whFzOEWE5ooMDVstgEEz2
+         voBybyUTkwSGsTdV7XzN/eV+Lb6TcKYN8wAJsn7wUxRCExK4KYCf3I+2c1l3e4TAwIHr
+         /J/w==
+X-Gm-Message-State: AJIora/UjjCZrPkmpax6CKNMgFqd5ho3lJMmX9nZvR7Tx5BQOzMTQ9wz
+        NMqsHIIKj5rLSeR9Nv0LyWg5Ig==
+X-Google-Smtp-Source: AGRyM1vjiNi3gAsTSR6PPVAuJFh976n3sC3CS18PuJ5NGShYw7q13nR9jGjBImNfgAPUs0Ag9vo1kQ==
+X-Received: by 2002:a65:460b:0:b0:41a:6637:6544 with SMTP id v11-20020a65460b000000b0041a66376544mr257298pgq.511.1658503652107;
+        Fri, 22 Jul 2022 08:27:32 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id p4-20020a17090a930400b001e292e30129sm3562385pjo.22.2022.07.22.08.27.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 08:27:31 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 08:27:31 -0700 (PDT)
+X-Google-Original-Date: Fri, 22 Jul 2022 08:27:30 PDT (-0700)
+Subject:     Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
+In-Reply-To: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
+CC:     shorne@gmail.com, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, catalin.marinas@arm.com,
+        Will Deacon <will@kernel.org>, guoren@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Rob Herring <robh@kernel.org>, bhelgaas@google.com,
+        macro@orcam.me.uk
+Message-ID: <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> > > +#define RT_SFP_ST (1)
-> > > +#define RT_SFP_OP_W (1)
-> > > +#define RT_SFP_OP_R (2)
-> > > +#define RT_SFP_TA_W (2)
-> > > +#define RT_SFP_TA_R (0)
-> > > +
-> > > +static void rtl_sfp_if_write(struct rtl8169_private *tp,
-> > > +				  struct rtl_sfp_if_mask *sfp_if_mask, u8 reg,
-> u16 val) {
-> > > +	struct rtl_sfp_if_info sfp_if_info = {0};
-> > > +	const u16 mdc_reg = PIN_I_SEL_1;
-> > > +	const u16 mdio_reg = PIN_I_SEL_2;
-> > > +
-> > > +	rtl_select_sfp_if(tp, sfp_if_mask, &sfp_if_info);
-> > > +
-> > > +	/* change to output mode */
-> > > +	r8168_mac_ocp_write(tp, PINOE, sfp_if_info.mdio_oe_o);
-> > > +
-> > > +	/* init sfp interface */
-> > > +	r8168_mac_ocp_write(tp, mdc_reg, sfp_if_info.mdc_pd);
-> > > +	r8168_mac_ocp_write(tp, mdio_reg, sfp_if_info.mdio_pu);
-> > > +
-> > > +	/* preamble 32bit of 1 */
-> > > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, 0xffffffff, 32);
-> > > +
-> > > +	/* opcode write */
-> > > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_ST, 2);
-> > > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_OP_W, 2);
-> > > +
-> > > +	/* phy address */
-> > > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, sfp_if_mask->phy_addr, 5);
-> > > +
-> > > +	/* phy reg */
-> > > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, reg, 5);
-> > > +
-> > > +	/* turn-around(TA) */
-> > > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, RT_SFP_TA_W, 2);
-> > > +
-> > > +	/* write phy data */
-> > > +	rtl_sfp_shift_bit_in(tp, &sfp_if_info, val, 16);
-> 
-> This looks like a bit-banging MDIO bus? If so, please use the kernel code,
-> drivers/net/mdio/mdio-bitbang.c. You just need to provide it with functions
-> to write and read a bit, and it will do the rest, including C45 which you don't
-> seem to support here.
+On Thu, 21 Jul 2022 16:06:52 PDT (-0700), Rob Herring wrote:
+> On Tue, Jul 19, 2022 at 9:59 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>
+>> On Sun, 17 Jul 2022 17:41:14 PDT (-0700), shorne@gmail.com wrote:
+>> > The asm/pci.h used for many newer architectures share similar
+>> > definitions.  Move the common parts to asm-generic/pci.h to allow for
+>> > sharing code.
+>> >
+>> > Two things to note are:
+>> >
+>> >  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
+>> >    these architectures avoid creating that file and add the definition
+>> >    to asm/pci.h.
+>> >  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
+>> >    undefine it after including asm-generic/pci.h.  Why doesn't csky
+>> >    define it?
+>> >  - pci_get_legacy_ide_irq, This function is only used on architectures
+>> >    that support PNP.  It is only maintained for arm64, in other
+>> >    architectures it is removed.
+>> >
+>> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
+>> > Signed-off-by: Stafford Horne <shorne@gmail.com>
+>> > ---
+>> > Second note on isa_dma_bridge_buggy, this is set on x86 but it it also set in
+>> > pci/quirks.c.  We discussed limiting it only to x86 though as its a general
+>> > quick triggered by pci ids I think it will be more tricky than we thought so I
+>> > will leave as is.  It might be nice to move it out of asm/dma.h and into
+>> > asm/pci.h though.
+>> >
+>> > Since v2:
+>> >  - Nothing
+>> > Since v1:
+>> >  - Remove definition of pci_get_legacy_ide_irq
+>> >
+>> >  arch/arm64/include/asm/pci.h | 12 +++---------
+>> >  arch/csky/include/asm/pci.h  | 24 ++++--------------------
+>> >  arch/riscv/include/asm/pci.h | 25 +++----------------------
+>> >  arch/um/include/asm/pci.h    | 24 ++----------------------
+>> >  include/asm-generic/pci.h    | 36 ++++++++++++++++++++++++++++++++++++
+>> >  5 files changed, 48 insertions(+), 73 deletions(-)
+>> >  create mode 100644 include/asm-generic/pci.h
+>> >
+>> > diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
+>> > index b33ca260e3c9..1180e83712f5 100644
+>> > --- a/arch/arm64/include/asm/pci.h
+>> > +++ b/arch/arm64/include/asm/pci.h
+>> > @@ -9,7 +9,6 @@
+>> >  #include <asm/io.h>
+>> >
+>> >  #define PCIBIOS_MIN_IO               0x1000
+>> > -#define PCIBIOS_MIN_MEM              0
+>> >
+>> >  /*
+>> >   * Set to 1 if the kernel should re-assign all PCI bus numbers
+>> > @@ -18,9 +17,6 @@
+>> >       (pci_has_flag(PCI_REASSIGN_ALL_BUS))
+>> >
+>> >  #define arch_can_pci_mmap_wc() 1
+>> > -#define ARCH_GENERIC_PCI_MMAP_RESOURCE       1
+>> > -
+>> > -extern int isa_dma_bridge_buggy;
+>> >
+>> >  #ifdef CONFIG_PCI
+>> >  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+>> > @@ -28,11 +24,9 @@ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+>> >       /* no legacy IRQ on arm64 */
+>> >       return -ENODEV;
+>> >  }
+>> > -
+>> > -static inline int pci_proc_domain(struct pci_bus *bus)
+>> > -{
+>> > -     return 1;
+>> > -}
+>> >  #endif  /* CONFIG_PCI */
+>> >
+>> > +/* Generic PCI */
+>> > +#include <asm-generic/pci.h>
+>> > +
+>> >  #endif  /* __ASM_PCI_H */
+>> > diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
+>> > index ebc765b1f78b..44866c1ad461 100644
+>> > --- a/arch/csky/include/asm/pci.h
+>> > +++ b/arch/csky/include/asm/pci.h
+>> > @@ -9,26 +9,10 @@
+>> >
+>> >  #include <asm/io.h>
+>> >
+>> > -#define PCIBIOS_MIN_IO               0
+>> > -#define PCIBIOS_MIN_MEM              0
+>> > +/* Generic PCI */
+>> > +#include <asm-generic/pci.h>
+>> >
+>> > -/* C-SKY shim does not initialize PCI bus */
+>> > -#define pcibios_assign_all_busses() 1
+>> > -
+>> > -extern int isa_dma_bridge_buggy;
+>> > -
+>> > -#ifdef CONFIG_PCI
+>> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+>> > -{
+>> > -     /* no legacy IRQ on csky */
+>> > -     return -ENODEV;
+>> > -}
+>> > -
+>> > -static inline int pci_proc_domain(struct pci_bus *bus)
+>> > -{
+>> > -     /* always show the domain in /proc */
+>> > -     return 1;
+>> > -}
+>> > -#endif  /* CONFIG_PCI */
+>> > +/* csky doesn't use generic pci resource mapping */
+>> > +#undef ARCH_GENERIC_PCI_MMAP_RESOURCE
+>> >
+>> >  #endif  /* __ASM_CSKY_PCI_H */
+>> > diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
+>> > index 7fd52a30e605..12ce8150cfb0 100644
+>> > --- a/arch/riscv/include/asm/pci.h
+>> > +++ b/arch/riscv/include/asm/pci.h
+>> > @@ -12,29 +12,7 @@
+>> >
+>> >  #include <asm/io.h>
+>> >
+>> > -#define PCIBIOS_MIN_IO               0
+>> > -#define PCIBIOS_MIN_MEM              0
+>>
+>> My for-next changes these in bb356ddb78b2 ("RISC-V: PCI: Avoid handing
+>> out address 0 to devices").  Do you mind either splitting out the
+>> arch/riscv bits or having this in via some sort of shared tag?
+>
+> Shouldn't the values not matter here if the IO and mem resources are
+> described in the DT (and don't use 0)? The values of 4 and 16 look
+> odd.
 
-I will try to use these functions.
+The linked thread has a fairly long discussion 
+<https://lore.kernel.org/all/alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk/>.  
+I agree it's odd to have this in arch code: "don't hand out address 0" 
+isn't really a RISC-V constraint (ie, we don't have architecture-defined 
+limitations on these address spaces) but a constraint that comes from 
+the generic port I/O functions and some other related PCI/resource code 
+where the value 0 is a sentinel.
 
-> > > +static enum rtl_sfp_if_type rtl8168h_check_sfp(struct
-> > > +rtl8169_private *tp) {
-> > > +	int i;
-> > > +	int const checkcnt = 4;
-> > > +
-> > > +	rtl_sfp_eeprom_write(tp, 0x1f, 0x0000);
-> > > +	for (i = 0; i < checkcnt; i++) {
-> > > +		if (rtl_sfp_eeprom_read(tp, 0x02) != RTL8211FS_PHY_ID_1 ||
-> > > +			rtl_sfp_eeprom_read(tp, 0x03) !=
-> RTL8211FS_PHY_ID_2)
-> > > +			break;
-> > > +	}
-> 
-> Reading registers 2 and 3 for a PhY idea? Who not just use phylib, and a PHY
-> driver?
-> 
->   Andrew
+Maybe the right thing to do here is actually to make the default 
+definitions of these macros non-zero, or to add some sort of ARCH_ 
+flavor of them and move that non-zero requirement closer to where it 
+comes from?  From the look of it any port that uses the generic port I/O 
+functions and has 0 for these will be broken in the same way.
 
-Reading register 2 and 3, it is for checking hardware use which pin(eeprom or gpo) to connect to RTL8211FS.
-
-> ------Please consider the environment before printing this e-mail.
+That said, I'm not really a PCI guy so maybe Bjorn or Maciej has a 
+better idea?

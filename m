@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2A857E4EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EFF57E4F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiGVRAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S232418AbiGVRD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiGVRAH (ORCPT
+        with ESMTP id S229839AbiGVRDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:00:07 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC3B2DD;
-        Fri, 22 Jul 2022 10:00:05 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31e7055a61dso53783087b3.11;
-        Fri, 22 Jul 2022 10:00:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=iD/RsD0e1/AY5YXptAbQ0YMY7CfmX34mV0YyWFWCnqY=;
-        b=m1HhRMi+IPTMR8AN+GCcbZdn0588cFlebn8ZHzuKk6x1XQS5IyGaPNZwDizzkRffiW
-         uu04K9lwD6JCxvjRQwDmkMW/PQnN0aDWUjKSHkflb+fYJtwXUo7rjlO3m30PKApE1aFM
-         87AkmpuE03kfrwTic4VD0KxdWD6kSp6AclEEZj6GOjwbxaBUlLKC/9UXrfm0WCygo+P1
-         4yY2gBh5zPddRN4uyZGQxO0FpEPM9iDxihiYQ/UtztykAa+BUHYHAUp0A91e0Lput2xV
-         LQIiS6+WoU72BCj3q9dyEv/fb9zVfpYrkC56RbQi+z4gjg46gD/RWFyHVEUpBZWPDp8I
-         7Jcg==
-X-Gm-Message-State: AJIora8r9g2JNASlFQXjvP859kkL6VYZDcPzRpBrLEZyq+EVZ5JayabN
-        FqTcj6odfp+yp7fMdKTRpVyv6Aj9ETuWfS347EwHpqlb
-X-Google-Smtp-Source: AGRyM1vVDTvs9u/fVT6+LQGTnjmfn8/vtK5YhSrI2f4pW7OswwplMRiqcFXJjK9N2b34/RT3MAD2F11GXSBgn9JhYWE=
-X-Received: by 2002:a81:1a11:0:b0:31e:4549:d667 with SMTP id
- a17-20020a811a11000000b0031e4549d667mr667631ywa.196.1658509204641; Fri, 22
- Jul 2022 10:00:04 -0700 (PDT)
+        Fri, 22 Jul 2022 13:03:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8CE13EA7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:03:54 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 19:03:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658509431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MoW3LDeqiTY0nuzhPANH/f/OIkFt4fdCcIJ/GQpSa9M=;
+        b=zw9S3TD3czrnmWI+lDF95w9FqbVEhAdDla1KDruMU7Dnv9SjxNRbNatl4nK8q9Ak1aRaLB
+        Qfe+yq1zykied5UPOJs0YS8DQi3czob6tVDGwIqtbs+pUOqWmbvcZmne3wIXtrMae/Qlph
+        wk4RnxU2CUKLxhDoH8g+fA6DoPsHouYiiEROb4FCd/7ZItl8oJ1lZJP67Rg7TOLJr5psNC
+        c37kuLktHVobLJu1ygo9iG8n7BaPb4Dna2fAyBjIexLyV0QWXzG5gCquudH27x8oc0dI12
+        aMQkFcefttuP2w/lZT7EGGGFULUhWF2GYVV5yJbz7o2nCUZaNQawGd93aaTulw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658509431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MoW3LDeqiTY0nuzhPANH/f/OIkFt4fdCcIJ/GQpSa9M=;
+        b=cw/jqKKjJy5mffwGbALFLcVO5YNnNFkBA+r+Ua+ABHvuzNiGjQ5oQSRTDCcznW4ABWvXt1
+        VdSuT90C8ZxnKDCg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2] printk: Skip console drivers on PREEMPT_RT.
+Message-ID: <YtrYdXWGb0NQLKNA@linutronix.de>
+References: <YtgjtfjYVMQrzFTK@linutronix.de>
+ <87y1wn3g3g.fsf@jogness.linutronix.de>
+ <Ytgu17hATM8iqdGC@linutronix.de>
+ <87ilnrn06u.fsf@jogness.linutronix.de>
+ <Ytj3PisFjOfS9L0Y@linutronix.de>
+ <YtqakGJAQzw/IPul@alley>
 MIME-Version: 1.0
-References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
- <20220710123512.1714714-12-daniel.lezcano@linexp.org> <CAJZ5v0hJNUm1kyF7XdK1EiLNg6DmihBMbrZZsxgOjvi-xq3=cQ@mail.gmail.com>
- <c75d5dca-17d5-6542-b0aa-46ed036567c7@linexp.org>
-In-Reply-To: <c75d5dca-17d5-6542-b0aa-46ed036567c7@linexp.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Jul 2022 18:59:51 +0200
-Message-ID: <CAJZ5v0gOeoz7ifDWwKW0D2h8WUJmLeDCF2bD8hu5Sm--BOPLVA@mail.gmail.com>
-Subject: Re: [PATCH v5 10/12] thermal/of: Store the trips in the thermal zone
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YtqakGJAQzw/IPul@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:31 PM Daniel Lezcano
-<daniel.lezcano@linexp.org> wrote:
->
-> On 19/07/2022 20:24, Rafael J. Wysocki wrote:
-> > On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
-> > <daniel.lezcano@linexp.org> wrote:
-> >> As the thermal zone contains the trip point, we can store them
-> >> directly when registering the thermal zone. That will allow another
-> >> step forward to remove the duplicate thermal zone structure we find in
-> >> the thermal_of code.
-> >>
-> >> Cc: Alexandre Bailon <abailon@baylibre.com>
-> >> Cc: Kevin Hilman <khilman@baylibre.com>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-> >> ---
-> >>   drivers/thermal/thermal_of.c | 8 +++-----
-> >>   1 file changed, 3 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> >> index 19243c57b3f4..e187461dd396 100644
-> >> --- a/drivers/thermal/thermal_of.c
-> >> +++ b/drivers/thermal/thermal_of.c
-> >> @@ -1119,11 +1119,9 @@ int __init of_parse_thermal_zones(void)
-> >>                  tzp->slope = tz->slope;
-> >>                  tzp->offset = tz->offset;
-> >>
-> >> -               zone = thermal_zone_device_register(child->name, tz->ntrips,
-> >> -                                                   mask, tz,
-> >> -                                                   ops, tzp,
-> >> -                                                   tz->passive_delay,
-> >> -                                                   tz->polling_delay);
-> >> +               zone = thermal_zone_device_register_with_trips(child->name, tz->trips, tz->ntrips,
-> >> +                                                              mask, tz, ops, tzp, tz->passive_delay,
-> >> +                                                              tz->polling_delay);
-> >>                  if (IS_ERR(zone)) {
-> >>                          pr_err("Failed to build %pOFn zone %ld\n", child,
-> >>                                 PTR_ERR(zone));
-> >> --
-> > IMO it would be less confusing if this was merged with the patch
-> > introducing thermal_zone_device_register_with_trips().
->
-> You suggest to merge 8,9 and 10, right ?
+On 2022-07-22 14:39:44 [+0200], Petr Mladek wrote:
+> On Thu 2022-07-21 08:50:38, Sebastian Andrzej Siewior wrote:
+> > printk might be invoked in a context with disabled interrupts and or
+> > preemption and additionally disables interrupts before it invokes the
+> > console drivers. This is behaviour is not compatible with PREEMPT_RT.
+>=20
+> Maybe I do not understand it correctly. It sounds like we could not
+> disable interrupts when interrupts or preemption is already disabled.
+> Like nested disablement of interrupts is bad.
+>=20
+> Is this a generic rule? Is is about the nesting?
 
-Yes, if that makes sense.
+You must not invoke the console drivers with disabled interrupts. This is
+bad. So even if the context you were called from has interrupts enabled
+then in console_emit_next_record() you have printk_safe_enter_irqsave()
+before call_console_driver() which disables interrupts and this is bad.
+More below=E2=80=A6
 
-Generally speaking, I prefer the changes in every patch to be
-self-contained, unless the patch would be too large this way or it
-would cross boundaries of many subsystems.
+> Or is is somehow specific to the console drivers called from printk()
+> directly? Do you always want to disable here because it might
+> be an atomic context and they might take too long?
+
+You can't acquire a sleeping lock with disabled interrupts and or
+preemption. Therefore the console drivers must not be invoked because
+they need to acquire a sleeping lock(s).
+
+> I guess that the sentence "additionally disables interrupts before
+> it invokes the console drivers" is not really important" and it confused =
+me.
+
+This refers to printk_safe_enter_irqsave(). You could argue that it is
+safe to invoke the console drivers if the context, in which printk() is
+invoked, is safe. However this is not possible because printk disables
+interrupts prio invoking the console drivers as just explained.
+Therefore I don't see a way how to invoke the console drivers on RT as
+of v5.19-rc7.
+
+>=20
+> > Disable console printing until the return of atomic consoles and the
+> > printing thread. This allows to retrieve the log buffer from user space
+> > which is not possible by disable printk.
+>=20
+> I guess that this is for RT tree because the kthreads and the atomic
+> consoles are still not in the mainline.
+
+I would like to have this applied to the v5.20 upstream tree and then
+revoked once the missing bits have been  merged. Based on what I see,
+there shouldn't be any road blocks.
+
+> > --- a/kernel/printk/printk.c
+> > +++ b/kernel/printk/printk.c
+> > @@ -2843,6 +2843,16 @@ void console_unlock(void)
+> >  	}
+> > =20
+> >  	/*
+> > +	 * On PREEMPT_RT it is not possible to invoke console drivers with
+> > +	 * disabled interrupts and or preemption. Therefore all drivers are
+> > +	 * skipped and the output can be retrieved from the buffer.
+> > +	 */
+> > +	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
+> > +		__console_unlock();
+> > +		return;
+> > +	}
+>=20
+> Do you want this even in panic() or early boot?
+
+yes. I don't see a way to invoke the console drivers without the
+print-kthread.
+
+> AFAIK, only the serial console has atomic write() callback in the RT
+> tree. Is this the only console used by RT kernel users in practice?
+
+The atomic console is made for emergencies. Everything else should be
+written using the printk thread.
+
+>=20
+> > +	/*
+> >  	 * Console drivers are called with interrupts disabled, so
+> >  	 * @console_may_schedule should be cleared before; however, we may
+> >  	 * end up dumping a lot of lines, for example, if called from
+>=20
+> Best Regards,
+> Petr
+
+Sebastian

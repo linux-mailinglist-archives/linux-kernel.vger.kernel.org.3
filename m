@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8552F57E783
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CFC57E786
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236471AbiGVThp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S236498AbiGVTiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbiGVThl (ORCPT
+        with ESMTP id S229986AbiGVTiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:37:41 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2106B5A2CA;
-        Fri, 22 Jul 2022 12:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658518661; x=1690054661;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eGASKklxPUMMORdAKbavodrFNdgNugvERNiFn1gNMxc=;
-  b=gVJ/v8XKJZi5aYBTDaIcai59QLtYl1oxxAyZc2Pdv4vIP3rK9XcsDG3O
-   aCvSG+ISFwDs4EXI6Yu4y4jDgih09HUyMrKcn6mtvDsw19y6CU53XJdFi
-   7Q9Px6FajDEb5eiRsWFLFfaK89TbJt3KF3vbGwCPiTzBfK71ssle3mkLd
-   wFkLEZZ8R1jeUvqav1hwCCDdRFy6s4psESn6obYk4zev56yWWWH3sNLTw
-   tq9BSih7aFTT79b/kIsGS9pzR04D+9MXu7AzCYMBzTKjQjEwnsQUq8QrY
-   BWhekkMNNpxWpG0hk1wW5mAxsvC/2smYKakKfj5pLBJJWNU4hZJFJgOp+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="287405644"
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="287405644"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 12:37:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="598954157"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Jul 2022 12:37:35 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oEySt-0001l7-0J;
-        Fri, 22 Jul 2022 19:37:35 +0000
-Date:   Sat, 23 Jul 2022 03:37:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, l.stach@pengutronix.de
-Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, laurent.pinchart@ideasonboard.com,
-        marex@denx.de, paul.elder@ideasonboard.com, aford173@gmail.com,
-        Markus.Niebel@ew.tq-group.com, alexander.stein@ew.tq-group.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, aisheng.dong@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V4 8/8] arm64: dts: imx8mp: add VPU blk ctrl node
-Message-ID: <202207230318.E5ye0CU1-lkp@intel.com>
-References: <20220722125730.3428017-9-peng.fan@oss.nxp.com>
+        Fri, 22 Jul 2022 15:38:14 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9B52889;
+        Fri, 22 Jul 2022 12:38:14 -0700 (PDT)
+Received: from zn.tnic (p200300ea97297665329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7665:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A74851EC0666;
+        Fri, 22 Jul 2022 21:38:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658518688;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=oqMlhQ+9AS8F60PcU1q78Rrrk17ahXV0byauFO5z1UU=;
+        b=pfCUktwvWkG8U+aXBptEc75Naz9avVy8tj8mgVyoRbOzAP4tbeOUfcsyB1cEHRJQiRYHNN
+        OszJAzeSOi6AAD3WDUvaBlLpfBrkiXm9Br3wdsTCPfwl/qdjJMF6lwdg4DjjaBwlGllUqz
+        9n5XyBv4JtYXEaGzrdzUq78AGYDJkNM=
+Date:   Fri, 22 Jul 2022 21:38:04 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Kalra, Ashish" <Ashish.Kalra@amd.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: Re: [PATCH Part2 v6 05/49] x86/sev: Add RMP entry lookup helpers
+Message-ID: <Ytr8nCL6pa2Q1kWy@zn.tnic>
+References: <BYAPR12MB27595CF4328B15F0F9573D188EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <99d72d58-a9bb-d75c-93af-79d497dfe176@intel.com>
+ <BYAPR12MB275984F14B1E103935A103D98EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <5db37cc2-4fb1-7a73-c39a-3531260414d0@intel.com>
+ <BYAPR12MB2759AA368C8B6A5F1C31642F8EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
+ <YrTq3WfOeA6ehsk6@google.com>
+ <SN6PR12MB276743CBEAD5AFE9033AFE558EB59@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <YtqLhHughuh3KDzH@zn.tnic>
+ <Ytr0t119QrZ8PUBB@google.com>
+ <Ytr5ndnlOQvqWdPP@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220722125730.3428017-9-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ytr5ndnlOQvqWdPP@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Peng,
+Btw,
 
-Thank you for the patch! Yet something to improve:
+what could work is to spec only a *version* field somewhere in the HW or
+FW which says which version the RMP header has.
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on linus/master v5.19-rc7 next-20220722]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Then, OS would check that field and if it doesn't support that certain
+version, it'll bail.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220722-205748
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: arm64-randconfig-r005-20220721 (https://download.01.org/0day-ci/archive/20220723/202207230318.E5ye0CU1-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/48de78c570ec370c4fe2dfd6d426fe665416eb21
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/imx-add-i-MX8MP-hdmi-blk-ctrl-hdcp-hrv-and-vpu-blk-ctrl/20220722-205748
-        git checkout 48de78c570ec370c4fe2dfd6d426fe665416eb21
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/freescale/imx8mp.dtsi:1181.26-27 syntax error
-   FATAL ERROR: Unable to parse input tree
+I'd need to talk to folks first, though, what the whole story is behind
+not spec-ing the RMP format...
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

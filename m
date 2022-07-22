@@ -2,184 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3537157E49B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BC157E4A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiGVQmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S235850AbiGVQsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiGVQmn (ORCPT
+        with ESMTP id S229771AbiGVQs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:42:43 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362C45FACB;
-        Fri, 22 Jul 2022 09:42:42 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id p10so976143lfd.9;
-        Fri, 22 Jul 2022 09:42:42 -0700 (PDT)
+        Fri, 22 Jul 2022 12:48:28 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D36993C2D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:48:27 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id mf4so9567124ejc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xaaf0HNzWmhDoOucX+0h5VHGXwYwMIslA/bCLi1nrKE=;
-        b=Tsv4sFokS0GU1gqG5yQV9meI5UgcZgAA02hdyFj6DPzNfI/Jhiaimb1AH7mMmLmFom
-         ZQTnIIviPL6htMofuiWUC2iF3QJS6zylSGB44BwZ7SEhgdRv1MWwIHwWZdcVG9OKiB3A
-         OHjgHABF2qu7kb9qHNZLDvpoJVOiI7kUKC43DILGvSjjpCh+39RVQlMTCC396DRQjGCb
-         zSfrevchflsmFmr/2OhN5dwIdMqyh78n5YYfPNIWGO/pzudXsfKo/oSLkNL7PeXkJNlp
-         TshNwCOVcomL98xN3etQSU8zZCPeA/cO+HLwjW0O/Lig7v8tVRpWkSLnqbt4N2n1H/eb
-         G0RQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fisLtN+BT8yvjNjBHC8GEVzMGlmsArMjpv7WMGpL1uk=;
+        b=hGsxQRAaQ1NlnX6V2KJC5urP5Fisa69TIHv/c7JEryUv+CY0+Rbb4BMqZEfVB+u2nS
+         IyUkAm5nmu3nGwemICYDJOBjhpJH/OR3iXElWoEVTyoWXZrfGtsZXmbYJiZ+TwDLDeTU
+         +9DLqHj3bSOuUMesZoZg8cWXUSEWtmt+B6YWw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xaaf0HNzWmhDoOucX+0h5VHGXwYwMIslA/bCLi1nrKE=;
-        b=hlRZE6Lm6v0ZzYmqpboRa8/FfYevverxNsWVW1jeUtL7Mf4nu0MEcHSfuXk2T4JZjd
-         HHm//sgNHFeOpLnIPWmGB7kcEvQWwvgXTsfZBGGTqUTrWqQsr24fgaWq/Wf1VNfcbdg3
-         hVcfXJ3AfqPTnS5svMY7Ws7Zp6A6FG6D/YPiPVGJuxYE15F0502RJFS62pqNJ7P23UyA
-         Id+4kTVtJFZq5lA9hDsBPuexvqtoNHhVo0qvvx7+U75Syg2GjhcGQU/ax9+t5Ck3pHON
-         rTxmlrCJqzU9AvGn7bMDgE0V/Yi1+I/H/9Ye893p7FhEqeiOfkjQhABiJO7N4SJxj+i1
-         nkFg==
-X-Gm-Message-State: AJIora+e/yJd3egAYFhKfPc3l5WMPODPG+AeYnrzVt6HHuLbMIpuvWe6
-        1Zdx34tKvWJ0V7yMswTUu8tDael0atxOkA==
-X-Google-Smtp-Source: AGRyM1sTHqgBReLbiOi3fH7YqUujhX7RaKusK8BFbdtr+bXhcXex5n7DvpxnnZENJkIIUIAK9M/fJw==
-X-Received: by 2002:a05:6512:b27:b0:489:e045:394e with SMTP id w39-20020a0565120b2700b00489e045394emr332687lfu.202.1658508160232;
-        Fri, 22 Jul 2022 09:42:40 -0700 (PDT)
-Received: from [192.168.1.4] (broadband-188-32-106-30.ip.moscow.rt.ru. [188.32.106.30])
-        by smtp.gmail.com with ESMTPSA id p15-20020a19f00f000000b0047255d2110asm1140388lfc.57.2022.07.22.09.42.39
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fisLtN+BT8yvjNjBHC8GEVzMGlmsArMjpv7WMGpL1uk=;
+        b=yfdgv6BtpWAmiLNUrDRiiUfdjbd6AF2mYBu/CyoGoOd5Q+d2/ahSXj14abfIbAE1r/
+         mYTuTDhLg4hW82NPSSTCOixQNslk6agcePd8c0/0KnoyGpL/Qs8OAgbNeVI3d501X9NK
+         dERDWes1uHGCrviFnzBqyevSyOqnyfz1l7kyNPN4YLzANmkJm9po4pWUBB2t6uJjpji3
+         sk/CANtT3P+Hei9IOgCO60/VA4Bg9pFkaJTOLEuilMNP4iv1dgCorBsQhhqTpO3mPY08
+         kXF1+MGqVaIsqlg1h991Xe3R5AT+9sxAb7DRJkX4z1+zpaKRmF2VybhChgsMJe5XT0Cn
+         Hp+w==
+X-Gm-Message-State: AJIora9SuaREzfrKxwtMzjdC9Ek4kCqSX23WIb8wyMMguJN5NJXCpwGn
+        IgHQyMdsorqBlkIf2YcJAvNTuv48VkU1hwmd
+X-Google-Smtp-Source: AGRyM1vPE3ej7inhhMFRCn+FO0X2/mHVmompoQ4yudJF7Ad0ipdZJUCww3YOEILRyoeFAFt6ayJGJA==
+X-Received: by 2002:a17:906:84f0:b0:72b:72b6:c7b2 with SMTP id zp16-20020a17090684f000b0072b72b6c7b2mr600817ejb.642.1658508505551;
+        Fri, 22 Jul 2022 09:48:25 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id gr19-20020a170906e2d300b0072b592ee073sm2212782ejb.147.2022.07.22.09.48.21
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 09:42:39 -0700 (PDT)
-Message-ID: <3995754e-064b-6091-ccb0-224c3e698af2@gmail.com>
-Date:   Fri, 22 Jul 2022 19:42:38 +0300
+        Fri, 22 Jul 2022 09:48:22 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id h8so7282161wrw.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:48:21 -0700 (PDT)
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
+ b13-20020adff90d000000b0020cde324d35mr508625wrr.583.1658508501016; Fri, 22
+ Jul 2022 09:48:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC] futex2: add NUMA awareness
-Content-Language: en-US
-To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-Cc:     linux-api@vger.kernel.org, fweimer@redhat.com,
-        linux-kernel@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        libc-alpha@sourceware.org, Davidlohr Bueso <dave@stgolabs.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <36a8f60a-69b2-4586-434e-29820a64cd88@igalia.com>
- <74ba5239-27b0-299e-717c-595680cd52f9@gmail.com>
- <8bfd13a7-ed02-00dd-63a1-7144f2e55ef0@igalia.com>
-From:   Andrey Semashev <andrey.semashev@gmail.com>
-In-Reply-To: <8bfd13a7-ed02-00dd-63a1-7144f2e55ef0@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220721152314.RFC.1.Ie333b3e4aff6e4a5b58c4aa805e030e561be8773@changeid>
+ <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com>
+In-Reply-To: <269f2610-425b-f296-dcfc-89bdc2e1d587@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 22 Jul 2022 09:48:07 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
+Message-ID: <CAD=FV=XSVXasU5PMR2kL0WQjQ458xDePuTGd1m14_v9JO5B6oA@mail.gmail.com>
+Subject: Re: [RFC PATCH] drm/edid: Make 144 Hz not preferred on Sharp LQ140M1JW46
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@gmail.com>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/14/22 18:00, André Almeida wrote:
-> Hi Andrey,
-> 
-> Thanks for the feedback.
-> 
-> Às 08:01 de 14/07/22, Andrey Semashev escreveu:
->> On 7/14/22 06:18, André Almeida wrote:
-> [...]
->>>
->>> Feedback? Who else should I CC?
->>
->> Just a few questions:
->>
->> Do I understand correctly that notifiers won't be able to wake up
->> waiters unless they know on which node they are waiting?
->>
-> 
-> If userspace is using NUMA_FLAG, yes. Otherwise all futexes would be
-> located in the default node, and userspace doesn't need to know which
-> one is the default.
-> 
->> Is it possible to wait on a futex on different nodes?
-> 
-> Yes, given that you specify `.hint = id` with the proper node id.
+Hi,
 
-So any given futex_wake(FUTEX_NUMA) operates only within its node, right?
+On Fri, Jul 22, 2022 at 9:37 AM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>
+> + sankeerth
+>
+> Hi Doug
+>
+> On 7/21/2022 3:23 PM, Douglas Anderson wrote:
+> > The Sharp LQ140M1JW46 panel is on the Qualcomm sc7280 CRD reference
+> > board. This panel supports 144 Hz and 60 Hz. In the EDID, the 144 Hz
+> > mode is listed first and thus is marked preferred. The EDID decode I
+> > ran says:
+> >
+> >    First detailed timing includes the native pixel format and preferred
+> >    refresh rate.
+> >
+> >    ...
+> >
+> >    Detailed Timing Descriptors:
+> >      DTD 1:  1920x1080  143.981 Hz  16:9   166.587 kHz  346.500 MHz
+> >                   Hfront   48 Hsync  32 Hback  80 Hpol N
+> >                   Vfront    3 Vsync   5 Vback  69 Vpol N
+> >      DTD 2:  1920x1080   59.990 Hz  16:9    69.409 kHz  144.370 MHz
+> >                   Hfront   48 Hsync  32 Hback  80 Hpol N
+> >                   Vfront    3 Vsync   5 Vback  69 Vpol N
+> >
+> > I'm proposing here that the above is actually a bug and that the 60 Hz
+> > mode really should be considered preferred by Linux.
+> >
+> > The argument here is that this is a laptop panel and on a laptop we
+> > know power will always be a concern. Presumably even if someone using
+> > this panel wanted to use 144 Hz for some use cases they would only do
+> > so dynamically and would still want the default to be 60 Hz.
+> >
+> > Let's change the default to 60 Hz using a standard quirk.
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+>
+> Yes, we were aware that 144Hz was getting picked. We found that while
+> debugging the screen corruption issue.
+>
+> Well, yes power would be less with 60Hz but so will be the performance.
 
->> Is it possible to wake waiters on a futex on all nodes? When a single
->> (or N, where N is not "all") waiter is woken, which node is selected? Is
->> there a rotation of nodes, so that nodes are not skewed in terms of
->> notified waiters?
-> 
-> Regardless of which node the waiter process is running, what matter is
-> in which node the futex hash table is. So for instance if we have:
-> 
-> 	struct futex32_numa f = {.value = 0, hint = 2};
-> 
-> And now we add some waiters for this futex:
-> 
-> Thread 1, running on node 3:
-> 
-> 	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-> 
-> Thread 2, running on node 0:
-> 
-> 	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-> 
-> Thread 3, running on node 2:
-> 
-> 	futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-> 
-> And then, Thread 4, running on node 3:
-> 
-> 	futex_wake(&f, 2, FUTEX_NUMA | FUTEX_32);
-> 
-> Now, two waiter would wake up (e.g. T1 and T3, node 3 and 2) and they
-> are from different nodes. futex_wake() doesn't provide guarantees of
-> which waiter will be selected, so I can't say which node would be
-> selected.
+What performance specifically will be less with 60 Hz? In general the
+sc7280 CPU is a bit memory-bandwidth constrained and the LCD refresh
+from memory is a non-trivial part of that. Reducing to 60 Hz will
+relieve some of the memory bandwidth pressure and will actually allow
+tasks on the CPU to run _faster_. I guess the downside is that some
+animations might be a little less smooth...
 
-In this example, T1, T2 and T3 are all blocking on node 2 (since all of
-them presumably specify hint == 2), right? In this sense, it doesn't
-matter which node they are running on, what matters is what node they
-block on.
 
-What I'm asking is can I wake all threads blocked on all nodes on the
-same futex? That is, is the following possible?
+> The test teams have been validating with 144Hz so far so we are checking
+> internally with the team whether its OKAY to goto 60Hz now since that
+> kind of invalidates the testing they have been doing.
 
-  // I'm using hint == -1 to indicate the current node
-  // of the calling thread for waiters and all nodes for notifiers
-  struct futex32_numa f = {.value = 0, .hint = -1};
+You're worried that the panel itself won't work well at 60 Hz, or
+something else about the system won't? The whole system in general
+needs to work well with 60 Hz displays and I expect them to be much
+more common than 144 Hz displays. Quite honestly if switching to 60 Hz
+uncovers a problem that would be a huge benefit of landing this patch
+because it would mean we'd find it now rather than down the road when
+someone hooks up a different panel.
 
-  Thread 1, running on node 3, blocks on node 3:
-
-  futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-
-  Thread 2, running on node 0, blocks on node 0:
-
-  futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-
-  Thread 3, running on node 2, blocks on node 2:
-
-  futex_wait(&f, 0, FUTEX_NUMA | FUTEX_32, NULL);
-
-  And then, Thread 4, running on whatever node:
-
-  futex_wake(&f, -1, FUTEX_NUMA | FUTEX_32);
-
-Here, futex_wake would wake T1, T2 and T3. Or:
-
-  futex_wake(&f, 1, FUTEX_NUMA | FUTEX_32);
-
-Here, futex_wake would wake any one of T1, T2 or T3.
-
-> There's no policy for fairness/starvation for futex_wake(). Do
-> you think this would be important for the NUMA case?
-
-I'm not sure yet. If there isn't a cross-node behavior like in my
-example above then, I suppose, it falls to the userspace to ensure fair
-rotation of the wakeups on different nodes. If there is functionality
-like this, I imagine, some sort of fairness would be desired.
+-Doug

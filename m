@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A3757E1CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2025057E1D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiGVNAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S234891AbiGVNBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGVNAA (ORCPT
+        with ESMTP id S233210AbiGVNA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:00:00 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3400589E9E;
-        Fri, 22 Jul 2022 05:59:59 -0700 (PDT)
-Received: from mail-oa1-f46.google.com ([209.85.160.46]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MPp0l-1nseHW1fVr-00MuPL; Fri, 22 Jul 2022 14:59:57 +0200
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-10d6e8990b9so6196136fac.7;
-        Fri, 22 Jul 2022 05:59:56 -0700 (PDT)
-X-Gm-Message-State: AJIora+6WOhSd7cvJnowuvD68w5wG0UkUeJKAcxr5+48QdNgaFm1Xdms
-        4H2MhASEBaydmp9zy90gNQSjmUXlfB0lkLP6KOI=
-X-Google-Smtp-Source: AGRyM1vMjRHI1IDUKbv+qzBIY07jN7IIb+WM6l11w0OpthFdMwRbJ5FA5xnOLQhwQ+CrcLNxnU4NQipl0zyL1l9OZjU=
-X-Received: by 2002:a05:6870:6114:b0:10c:6bf:542f with SMTP id
- s20-20020a056870611400b0010c06bf542fmr7505287oae.188.1658494795774; Fri, 22
- Jul 2022 05:59:55 -0700 (PDT)
+        Fri, 22 Jul 2022 09:00:58 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B29AF86C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:00:57 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x91so5781891ede.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:00:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=baynEo7vnNm1XYDH0i7dj9nJYt96fbnXE4sQDZAxVtQ=;
+        b=gJmyYtLDyaREVdwZyxpqlcnisGWEXOiTuJ5YWkc7D+Bqb7zBSwwOB4ZFh5n6ZQrA8x
+         pCRiAUwXrJxF0oom8kDQB/sbiXCq8JmA0B8JMecIAt/9ePFqGHfHdbcHtinnuZe6BWWl
+         n9U2yye/18vIVKalHy2/36N0IeK0feOpme1jpM59ifIE93PYuB1PJMLGbSvmA/lnjePE
+         b6tN/esY+/eqTXuopjoHwHEluojCitpttzh/689dpuq+lIDOju9DOO38ExMTI+6uKWE1
+         ltJ0nV/hJZMgya+2XmaT8xvUTbKDZs0d9NckUgwkjcEkZfJZrP3bW6bry5SVCBmyudSX
+         w8LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=baynEo7vnNm1XYDH0i7dj9nJYt96fbnXE4sQDZAxVtQ=;
+        b=HIWy73FgCu/HiLDOIBHSQagpJ5Lk4KIvbzsOI8lzy4RIqg0zlgncPgRqdYu9RXYBR4
+         JCCBO0NZtX7OCpqrj3THdU/SMLy6fe6/IF0NAgiTSqiFZlUiOygEVwhgzl4eJ6i24EI5
+         zb7M4/jVnZwPVTfYAB0v3eFBTGU0gAKvxDm60rNNqPqa0ld6yFLZCxpzcNSBMOd+8BHC
+         mUZSUzvEtIp2cYJBUvKEDmVEWiDWDQLNJPTBG2RHix0Munmm9md+SHpj4pwYtnqt87aN
+         y8j8ym1p3iYQ0pYEfmhi5aCOcztIw8ALHvQ6WjozyFsU3jchZjynmBlAjOaxHDknw9m7
+         8/2w==
+X-Gm-Message-State: AJIora9jJBMt1rqFboyBesQaYvf3LOulfadfr5Z8GaFHkvE4Y9dAvAyc
+        sEzaMarwFSLdD/nVXYWmQcXuU+YwabXcgTOr2sbeag==
+X-Google-Smtp-Source: AGRyM1sfEMb9SVoxsN9BQXeDZdyBMMWHOKQGS3GlRPZlLOUUMleYFQOEwWCeuFpspnuhgXLSul1uaahyl7/RtrX3UHc=
+X-Received: by 2002:a05:6402:26c2:b0:43b:ce7b:648b with SMTP id
+ x2-20020a05640226c200b0043bce7b648bmr555241edd.133.1658494855592; Fri, 22 Jul
+ 2022 06:00:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722103129.22998-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220722103129.22998-1-lukas.bulwahn@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 22 Jul 2022 14:59:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2gLvpLMEyejJtg8J5TLPjuPRUc-aJwTK2Og9pLeQT2Ww@mail.gmail.com>
-Message-ID: <CAK8P3a2gLvpLMEyejJtg8J5TLPjuPRUc-aJwTK2Og9pLeQT2Ww@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: rectify entry for ARM/NUVOTON NPCM ARCHITECTURE
+References: <20220720111432.18321-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220720111432.18321-1-lukas.bulwahn@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 22 Jul 2022 15:00:44 +0200
+Message-ID: <CACRpkdYyHTMYMKwFW5JSNXi+4SiP7=NPQ_uwZHRzPUK9j3EfHA@mail.gmail.com>
+Subject: Re: [PATCH] arm: davinci: remove CPU type detection for DaVinci
+ DM644x and DM646x
 To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:vxJmmzc8DRXX+kvwjV07yQQad7WNG7IWbOgiOTVmaIhV5jFvaD9
- e3JKdxxLKmfJlR5QNgN0enXdF3WCt3KF0vWAhgFoAbm+2oNdBjqF0Z4PfbXxY+5j4L/mlXc
- kvPoz5xEjy+xfjQDf3WgszkaiwAdGNVuzKgGvrBrL+zfQWpPVJtyzHkw5xSP96njb9rpugm
- 7tSurz0LB9pUNvXcWzkKA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OIISGVn7qQ8=:DR3DLaJnztGYHVl2p5yxPH
- yprnhtwmF5GNvg7JIaNWCNTqjLYNV5bXvt75ngyWoIW9TOZY8SNfSrW2Ek0YbI/NLkBH6xj5T
- thiRh8tAZPEiuxPJ6dqmMIqPzx81qsulQ3ZdKyTnmf/xIX4QePre0PFFmhPNTWvGNTqb0j9hQ
- pJni2ARqGjIza/ZjILRFaCyL7PSE9DP0qKCtd5esYjtBLxnLkDyLJHLg0OAPGZIUd7y/B3NVj
- aYUgvS16tLRAh2+qCeoUq9Xy9hZq+0ZRKzgYKSqBEsE/+uwVv3+IOYlE+XyN1wkUoBHiTWgvp
- HmYFkso+CFCEUI3kUopO7R0LGdo+Kj2QKAsXscoJt9AW4rTpvd+gOc1+YGQv3oeiKgSGJyy/d
- waae2Evb4INvvBn2wMlNj7JjY9oloJrcC2xGhfd48aHAIwoo3dBz+K4O2FPMSPBRtMF+ubMyL
- 9AzJZ5TgCG2UT3FmAGKah3N50vdSF3S7dRXZD9VJzzU+7aVYvfOiD2Qh4zarA0MjCApE/mEzX
- NUCG9HNgGPJl0eR2z4ZryGxjPw/pvllR32i5EYB0lkGgjmgpHCXZTCbGiiq1eio5WdlAkjH8q
- 2GslEU8NnUjfWH6yBv9vs4Bn3OjrSPMdaQKoV3bF8SNg1swoYtI5cyo708s/iyHT6jlwvd0ht
- VypV6zuUGzZmMzWx9slFDoMhEw0s9QXUxmoaj4CiEwnSOgsHW37i1PeU/p8IyRBAaJ7S0v368
- BeC9YDK2jFSX1us5jPeick/NzziB6cayxQ9dT11F9vBLsPFJwg8BxWWvCJci7V/6KP1DCa+Ei
- clw3yPZk9ebnfJqAcuq8K5DQPbWNCPG6dojIC/MExeIZn2Al2ubt+MfqFGUkk6T3bKzH1WW3p
- 3gpxaPJzFtmAnQY2mfQQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:31 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+On Wed, Jul 20, 2022 at 1:14 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+
+> Commit 7dd33764486d ("ARM: davinci: Delete DM644x board files") and commit
+> b4aed01de486 ("ARM: davinci: Delete DM646x board files") removes the
+> support for DaVinci DM644x and DM646x boards.
 >
-> Commit 08e950449c62 ("dt-binding: clk: npcm845: Add binding for Nuvoton
-> NPCM8XX Clock") obviously adds nuvoton,npcm845-clk.h, but the file entry in
-> MAINTAINERS, added with commit 3670d2ec13ee ("arm64: npcm: Add support for
-> Nuvoton NPCM8XX BMC SoC") then refers to nuvoton,npcm8xx-clock.h.
+> Hence, remove the CPU type detection for those boards as well.
 >
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
->
-> Repair this file reference in ARM/NUVOTON NPCM ARCHITECTURE.
->
-> Fixes: 3670d2ec13ee ("arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC")
 > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Arnd, please pick this patch on top of the commits above.
 
-Done, thanks!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Please put this into the SoC patch process.
 
-      Arnd
+Yours,
+Linus Walleij

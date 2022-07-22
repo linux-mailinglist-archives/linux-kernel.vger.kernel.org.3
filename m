@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6602F57DB33
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8031B57DB41
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbiGVHY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S230514AbiGVH3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiGVHYy (ORCPT
+        with ESMTP id S229627AbiGVH3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:24:54 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B502871F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:24:52 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oEn1h-0005HS-AH; Fri, 22 Jul 2022 09:24:45 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, guoren@kernel.org,
-        mick@ics.forth.gr, alexandre.ghiti@canonical.com,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, huanyi.xj@alibaba-inc.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: Re: [PATCH 4/5] riscv: Add modules to virtual kernel memory layout dump
-Date:   Fri, 22 Jul 2022 09:24:44 +0200
-Message-ID: <7405851.EvYhyI6sBW@diego>
-In-Reply-To: <20220717101323.370245-5-xianting.tian@linux.alibaba.com>
-References: <20220717101323.370245-1-xianting.tian@linux.alibaba.com> <20220717101323.370245-5-xianting.tian@linux.alibaba.com>
+        Fri, 22 Jul 2022 03:29:30 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1CDC972CA
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hmh2V
+        SRjRLodrsAW7x5oJgozIuK5DOps7uTD8a8Stn4=; b=i0VOSoTcwBIZhDrjeMixC
+        AOmtsQMh6o9ca0k1920ZyycsahgdL54mKYtT7XNTl5LEcvtWmOA1oZYGjkqHlQNT
+        Ze25Dkg3YRy0ksekbyeZ4kkDPwwNAfBsmAG5jKTTMwWz+k6GwoE51uGcgijkn17w
+        PZ6409zp3/7q6Wa4bKPhyc=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp1 (Coremail) with SMTP id GdxpCgAXJ3K8UdpiQH8YPw--.5756S2;
+        Fri, 22 Jul 2022 15:29:03 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     han.xu@nxp.com, miquel.raynal@bootlin.com, vigneshr@ti.com,
+        richard@nod.at
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] mtd: rawnand: gpmi: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 15:28:50 +0800
+Message-Id: <20220722072850.72797-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgAXJ3K8UdpiQH8YPw--.5756S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr1xJFWDCw45ury7Awb_yoWfGFgEgw
+        nFya4xCw1UGr1qvF1SkFn8Xryjy3yFgw1UZr1FgrZIvan8GrZ3A3WDAwnFyF17uwnrC3W3
+        G3Wrtw13Kw1kGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRpT5B5UUUUU==
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJR9GZGAJpKX6GwAAsR
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, 17. Juli 2022, 12:13:22 CEST schrieb Xianting Tian:
-> Modules always live before the kernel, MODULES_END is fixed but
-> MODULES_VADDR isn't fixed, it depends on the kernel size.
-> Let's add it to virtual kernel memory layout dump.
-> 
-> As MODULES is only defined for CONFIG_64BIT, so we dump it when
-> CONFIG_64BIT=y.
-> 
-> eg,
-> MODULES_VADDR - MODULES_END
-> 0xffffffff01133000 - 0xffffffff80000000
-> 
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Replace 'the the' with 'the' in the comment.
 
-I'm still not sure if it would be better to define MODULES_* constants
-even on 32bit (with their VMALLOC_START etc values) and prevent
-needing the CONFIG_64BIT ifdef, but that's for others to decide :-)
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The below also looks good, so
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-> ---
->  arch/riscv/mm/init.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index d466ec670e1f..2c4a64e97aec 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -135,6 +135,10 @@ static void __init print_vm_layout(void)
->  		(unsigned long)VMEMMAP_END);
->  	print_ml("vmalloc", (unsigned long)VMALLOC_START,
->  		(unsigned long)VMALLOC_END);
-> +#ifdef CONFIG_64BIT
-> +	print_ml("modules", (unsigned long)MODULES_VADDR,
-> +		(unsigned long)MODULES_END);
-> +#endif
->  	print_ml("lowmem", (unsigned long)PAGE_OFFSET,
->  		(unsigned long)high_memory);
->  	if (IS_ENABLED(CONFIG_64BIT)) {
-> 
-
-
-
+diff --git a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+index 889e40329956..0893320d250b 100644
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -1359,7 +1359,7 @@ static int gpmi_alloc_dma_buffer(struct gpmi_nand_data *this)
+ /*
+  * Handles block mark swapping.
+  * It can be called in swapping the block mark, or swapping it back,
+- * because the the operations are the same.
++ * because the operations are the same.
+  */
+ static void block_mark_swapping(struct gpmi_nand_data *this,
+ 				void *payload, void *auxiliary)
+-- 
+2.25.1
 

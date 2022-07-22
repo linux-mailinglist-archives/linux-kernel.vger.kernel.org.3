@@ -2,97 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4AD57E53D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDDF57E53F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236036AbiGVRS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S236048AbiGVRS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbiGVRS1 (ORCPT
+        with ESMTP id S235584AbiGVRS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:18:27 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56F61CFDD;
-        Fri, 22 Jul 2022 10:18:25 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id y4so6635725edc.4;
-        Fri, 22 Jul 2022 10:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=foxH3rHhRPgtf4syZS9ZyQqEcF6wD+SNSuScXFbUvG0=;
-        b=QxBPhnrSOWqnIJd43lGO0/gWcM8avq0E8xAoznnlwOdLvCCXkZD8K3UwrpYbHEVdUX
-         jQfJKUrV05E+0+2xarcUGpaO2se43L/3/xYdUsvvu95Z6WBiGEG3WwAJw6Ku2vjWcyx/
-         MjYKk1Tf2JMx90waYb5Z0hMmSziBGDdTtuc0XO1dryK6bdlslawz/xmt/KDPYb14xhOY
-         dace6GBzHw5oWcl/KeC2E1Z66phUK/HMP+95GDCXiKxEjcF7RQdXRyENVqO+9UkvLzf5
-         OAAjRH2IVOJhjuOS3aYG/K/ooNRat0oK4gJ46U+LyZlhRF62NlQN3gnSiCRekDoXo8L2
-         24eQ==
+        Fri, 22 Jul 2022 13:18:57 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DD31CFDD;
+        Fri, 22 Jul 2022 10:18:57 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id r3so9115324ybr.6;
+        Fri, 22 Jul 2022 10:18:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=foxH3rHhRPgtf4syZS9ZyQqEcF6wD+SNSuScXFbUvG0=;
-        b=TAby+sEBzZM+InBpWjHkyCfDsuIq1HIPcnShnngIZ1Rdw2E8AzK4yR9LaXuS9w93rv
-         G2BB4Bc575P38VH0Y/L4pyCO1A5HNiVDfq56NoVNP85BDx4sFXGDUV0GuoRCAcfN0uAA
-         qd0fjJG2HHcyPSc+5nxRNVZFcxbM5TX/UuKghgHuij2axNqnIE/146EaJz+dwujHW1RU
-         YAGo5RKnkwCcYYCuG9p5loeyfojM/N6GXbFCsM1vy0vCFgDE8vBNPhrkT1XvwVi+7SW1
-         KmeYVkwJTeNmswVXfP5BueJrUJqTPKdMdCIrV+xDpXKuqi7p7KTzUOVi4+28cWTxBsc2
-         xqAg==
-X-Gm-Message-State: AJIora/4Zhf+wMYxtFE4XsJUhnxz8UI8VJQPMg3NIgPk/hyOxbF4sb77
-        zVEZEdBcteyCkq7OeZcEpOsHW7yrDF9rYQ==
-X-Google-Smtp-Source: AGRyM1v14b6KQLZqGhKGEQKVL1vQWfB+6T5FoNKkvPj0AwUq2PkMI5vnQlIBGGBE1Z0ffuH51zMsWQ==
-X-Received: by 2002:a05:6402:5167:b0:43b:b6fe:f4d6 with SMTP id d7-20020a056402516700b0043bb6fef4d6mr894486ede.316.1658510304046;
-        Fri, 22 Jul 2022 10:18:24 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id w7-20020aa7dcc7000000b0043a83f77b59sm2823150edu.48.2022.07.22.10.18.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:18:23 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <0f8dde12-576b-1579-38c9-496306aeeb81@redhat.com>
-Date:   Fri, 22 Jul 2022 19:18:22 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=XPCuVtxNHlRTKlO2xHRASVydOgpgbtbD+QagU1qAmdw=;
+        b=E0nwYNvI+c9quWZTSwOlaQIz4pxQSrj+7jYBh82UKaXW4U+LszwK/gzPXV3ppfwDTs
+         UdLeecCLIFFy6c1yIYvTmC0ix6HUwvFcUxe2GL6zD8T/mNce6rF3dEZn8xHAT464e3lQ
+         s8c+XW6KEnrhQWPKj4hXpJ8y+7nwhs/c1UWgNcdjnx46QlhNasDHnG8Lht36LW1qP8eG
+         BUemZgjvIsGIQJ4CseeW7SGdwyFTYzeN87PlQ6df8fk9gf4V2pO0i1G83gdSazQ04hD7
+         VD8g4HU4FovGlgJWL07HLmJnr/rBFhdSqzewGUGASupHko8Z+EorrmVparToIyDG0/A2
+         9wow==
+X-Gm-Message-State: AJIora+WYj9MFP/NYbPMVI31yxJU794LzFTY5aTPEHdym8ww7VOyAxYJ
+        sW3c9qHSf+NtsR2zw9sSq+EDCdBJ1ytKAye3CgA=
+X-Google-Smtp-Source: AGRyM1u/k29rH+6mfzpP04mnE9lq4/p8jyPsJI0js3/dd3ZYQr8IymakHorHfnCiVLMkno5891dJtRYcDioDw+Vq7E4=
+X-Received: by 2002:a25:828f:0:b0:670:22f9:f7eb with SMTP id
+ r15-20020a25828f000000b0067022f9f7ebmr879346ybk.137.1658510336244; Fri, 22
+ Jul 2022 10:18:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Revert "KVM: nVMX: Do not expose MPX VMX controls when
- guest MPX disabled"
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        oliver.upton@linux.dev
-References: <20220722104329.3265411-1-pbonzini@redhat.com>
- <YtrB8JEuc1Il1EOO@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YtrB8JEuc1Il1EOO@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220722084314.17816-1-di.shen@unisoc.com>
+In-Reply-To: <20220722084314.17816-1-di.shen@unisoc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Jul 2022 19:18:42 +0200
+Message-ID: <CAJZ5v0iKWH2QkztewmJXiqGwnzBxCo5MWni9Q3VODwV+huvuQA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/1] thermal/sysfs: Clear cooling_device_stats_attr_group
+ before initialized
+To:     Di Shen <di.shen@unisoc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        jeson.gao@unisoc.com, xuewen.yan@unisoc.com, cindygm567@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 17:27, Sean Christopherson wrote:
->> So revert it, at the potential cost
->> of breaking L1s with a 6 year old kernel.
-> I would further qualify this with "breaking L1s with an_unpatched_  6 year old
-> kernel".  That fix was tagged for stable and made it way to at least the 4.9 and
-> 4.4 LTS releases.
-> 
+On Fri, Jul 22, 2022 at 10:44 AM Di Shen <di.shen@unisoc.com> wrote:
+>
+> There's a space allocated for cooling_device_stats_attr_group
+> within cooling_device_attr_groups. This space is shared by all
+> cooling devices.
 
-Well, there _are_ people that use very old kernels and keep them 
-up-to-date with fixes for only critical CVEs (for example by, ehm, 
-paying my employer to do so).  But still it's way way unlikely for them 
-to be used as L1 in a nested setup, whether on their own hardware or in 
-the cloud.
+That's correct.
 
-I pushed everything to kvm/queue, but depending on what you post it may 
-be deferred to 5.21.
+> If the stats structure of one cooling device successfully
+> creates stats sysfs. After that, another cooling device fails
+> to get max_states in cooling_device_stats_setup(). It can
+> return directly without initializing the stats structure, but
+> the cooling_device_stats_attr_group is still the attribute
+> group of the last cooling device.
 
-Paolo
+I cannot parse the above, sorry.
+
+For example, how can a "stats structure of one cooling device" create
+anything?   As a data structure, it is a passive entity, so it doesn't
+carry out any actions.
+
+I think (but I am not sure) that you are referring to the error code
+path in which the ->get_max_state() callback fails for a cooling
+device after cooling_device_stats_setup() has completed successfully
+for another one.
+
+> At this time, read or write stats sysfs nodes can cause kernel
+> crash. Like the following, kernel crashed when
+> 'cat time_in_state_ms'.
+>
+> [<5baac8d4>] panic+0x1b4/0x3c8
+> [<9d287b0f>] arm_notify_die+0x0/0x78
+> [<094fc22c>] __do_kernel_fault+0x94/0xa4
+> [<3b4b69a4>] do_page_fault+0xd4/0x364
+> [<23793e7a>] do_translation_fault+0x38/0xc0
+> [<6e5cc52a>] do_DataAbort+0x4c/0xd0
+> [<a28c16b8>] __dabt_svc+0x5c/0xa0
+> [<747516ae>] _raw_spin_lock+0x20/0x60
+> [<9a9e4cd4>] time_in_state_ms_show+0x28/0x148
+> [<cb78325e>] dev_attr_show+0x38/0x64
+> [<aea3e364>] sysfs_kf_seq_show+0x8c/0xf0
+> [<c0a843ab>] seq_read+0x244/0x620
+> [<b316b374>] vfs_read+0xd8/0x218
+> [<3aebf5fa>] sys_read+0x80/0xe4
+> [<7cf100f5>] ret_fast_syscall+0x0/0x28
+> [<08cbe22f>] 0xbe8c1198
+>
+> stats sysfs:
+> phone:/sys/class/thermal/cooling_device2/stats # ls
+> reset  time_in_state_ms  total_trans  trans_table
+>
+> The same as cat total_trans, trans_table, and echo reset.
+>
+> To avoid kernel crash, this patch set clears the
+> cooling_device_attr_groups before stats structure is initialized.
+>
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> ---
+>  drivers/thermal/thermal_sysfs.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 1c4aac8464a7..e3fae63fa0f7 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -817,6 +817,9 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>         unsigned long states;
+>         int var;
+>
+> +       var = ARRAY_SIZE(cooling_device_attr_groups) - 2;
+> +       cooling_device_attr_groups[var] = NULL;
+> +
+>         if (cdev->ops->get_max_state(cdev, &states))
+>                 return;
+>
+> --

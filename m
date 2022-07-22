@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEAA57DE2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53B457DDB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235340AbiGVJLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S235388AbiGVJQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235277AbiGVJLF (ORCPT
+        with ESMTP id S235603AbiGVJPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:11:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08251A0246
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:09:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7962D61F05
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:09:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9E2C341CE;
-        Fri, 22 Jul 2022 09:09:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658480972;
-        bh=QQARAL8ZRGtJnkmOAlwG2vpBW61GGATrU3fd8wEd2E8=;
-        h=Date:From:To:Subject:From;
-        b=FSBam89IHk8yTHAJd/n7DMeV0qmZaPp4kvWnoB7uNRhSGYYzserkXXqea0tgQ7EIr
-         orVXe7hHXRnseEA6ygiBE4FeVlBgsKUZEdoXn2Km81wxhWYHh89G3RPyDKdQErt09+
-         fn1qt+AbPGWO+6pvnpkJWc6XFSJ9bP3xt3/Wqt7QN7hZJbfa2G6VoqaP5eBBjpUtT3
-         /c8FRieKurNl+ajzEq/43SmyxuHc1nD4EaRrvlN/49LQse4vQRrLskB+h9bdUYtsEH
-         EU2hOkkdUVNEpE1za3GLh6Zd9LiAhv7VclsJAt+B+M926bd9LXiJIIVWN+GGKE9qAs
-         OFXmHSLa5SjUQ==
-Received: by pali.im (Postfix)
-        id 99A2920A2; Fri, 22 Jul 2022 11:09:29 +0200 (CEST)
-Date:   Fri, 22 Jul 2022 11:09:29 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Regression: Linux v5.15+ does not boot on Freescale P2020
-Message-ID: <20220722090929.mwhmxxdd7yioxqpz@pali>
+        Fri, 22 Jul 2022 05:15:11 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98786AF968;
+        Fri, 22 Jul 2022 02:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=91/Cz
+        mrD4UcYML5SAR5j+BLCyBjt7JlxCwJDNjNiLWU=; b=LwPBn9yS3DiBcL7TB1K++
+        VAS7FGnkEown749bm1RuE4o5TAS9H399G44V1ChN525XvorcA/HxaZB/ykQDMmsO
+        uoF5MnFAFVMbgcBsTE/3BTu+Eit6HcAJlUKbm90r9OLlOolfFo5lJ1FKeJKIV4v3
+        46crBEiAbOzZokLjoSKn/I=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp3 (Coremail) with SMTP id G9xpCgAHyoN4adpiosiOQg--.7264S2;
+        Fri, 22 Jul 2022 17:10:18 +0800 (CST)
+From:   williamsukatube@163.com
+To:     tglx@linutronix.de, maz@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
+        William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH] irqchip: mips-gic: check the return value of ioremap() in gic_of_init()
+Date:   Fri, 22 Jul 2022 17:10:08 +0800
+Message-Id: <20220722091008.2937238-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgAHyoN4adpiosiOQg--.7264S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtFWrAFW8ZF47Jw1kGr1rWFg_yoWDGrgE93
+        WYgFZxAFW8Ar18GFW7WrW7Z34UJ34kuF1vgr48ta43XrWxuw4xGr1avr15X3WUWFn2krZ8
+        CrZ5Z34IyF17AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5t73PUUUUU==
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbB6BNGg2BHJoYekAAAs3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: William Dean <williamsukatube@gmail.com>
 
-Trying to boot mainline Linux kernel v5.15+, including current version
-from master branch, on Freescale P2020 does not work. Kernel does not
-print anything to serial console, seems that it does not work and after
-timeout watchdog reset the board.
+The function ioremap() in gic_of_init() can fail, so
+its return value should be checked.
 
-I run git bisect and it found following commit:
+Fixes: 4bdc0d676a643 ("remove ioremap_nocache and devm_ioremap_nocache")
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ drivers/irqchip/irq-mips-gic.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-9401f4e46cf6965e23738f70e149172344a01eef is the first bad commit
-commit 9401f4e46cf6965e23738f70e149172344a01eef
-Author: Christophe Leroy <christophe.leroy@csgroup.eu>
-Date:   Tue Mar 2 08:48:11 2021 +0000
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+index ff89b36267dd..a1f6d955794a 100644
+--- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -734,6 +734,10 @@ static int __init gic_of_init(struct device_node *node,
+ 	}
+ 
+ 	mips_gic_base = ioremap(gic_base, gic_len);
++	if (!mips_gic_base) {
++		pr_err("Failed to ioremap gic_base\n");
++		return -ENOMEM;
++	}
+ 
+ 	gicconfig = read_gic_config();
+ 	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);
+-- 
+2.25.1
 
-    powerpc: Use lwarx/ldarx directly instead of PPC_LWARX/LDARX macros
-
-    Force the eh flag at 0 on PPC32.
-
-    Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-    Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-    Link: https://lore.kernel.org/r/1fc81f07cabebb875b963e295408cc3dd38c8d85.1614674882.git.christophe.leroy@csgroup.eu
-
-:040000 040000 fe6747e45736dfcba74914a9445e5f70f5120600 96358d08b65d3200928a973efb5b969b3d45f2b0 M      arch
-
-
-If I revert this commit then kernel boots correctly. It also boots fine
-if I revert this commit on top of master branch.
-
-Freescale P2020 has two 32-bit e500 powerpc cores.
-
-Any idea why above commit is causing crash of the kernel? And why it is
-needed? Could eh flag set to 0 cause deadlock?
-
-I have looked into e500 Reference Manual for lwarx instruction (page 562)
-https://www.nxp.com/files-static/32bit/doc/ref_manual/EREF_RM.pdf and
-both 0 and 1 values for EH flag should be supported.

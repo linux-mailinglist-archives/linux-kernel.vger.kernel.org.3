@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBEE57E065
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B5D57E073
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235132AbiGVLDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 07:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S235422AbiGVLEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 07:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiGVLDU (ORCPT
+        with ESMTP id S235202AbiGVLD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 07:03:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7CFB5560;
-        Fri, 22 Jul 2022 04:03:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CFC2B827D0;
-        Fri, 22 Jul 2022 11:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583BEC341C6;
-        Fri, 22 Jul 2022 11:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658487793;
-        bh=gajyD+WJ9t3ABvxX9BRkdBmZElhbZ0gxOqXZEcwzeL8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FLZZhI4AskrmWJuqTjEnLzl7OlDfW7QZDHepbLOlKZ9dkU4H6MHPaT2C9eQoT+pbD
-         m6dWfWODUPVQIVIa8+X3Bla19vIpFCKYFGGQeRuBOE4TqVBs3kTQXIzbkhT1ssMCUK
-         ZvR3ZdpVl52M16vAgIcpmr2w86Ju+5Ej0g/y83+FmVxuQaGZltnalBoJEIwiqY9QrU
-         OpV24R93x7+Po9kumEaYY+XgtvJSUhlj+SMOyoj14EfBSxVrvO5D+uqhjbzpULYASd
-         YU6oYeMowXkpsdPof+5cqLPVMTzTFuVtT0clcvPHEViwayDVQlQ8/XhADtEBnIydJo
-         CIRQ3Qy5K962A==
-Date:   Fri, 22 Jul 2022 12:03:06 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Marco Elver <elver@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        Fri, 22 Jul 2022 07:03:59 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C50BDA03
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 04:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s+t+9Vi0tpfxV3Q74dVVAy3AQF79iNwAMp4hPA+2T1A=; b=ksMVr3GZZdqiAN8bDPfkOkJvTY
+        yIjVKpnsS8eOb1LfWH3noPuu6p8r1c34KD1crfHTX2hHyp2RofJTrfgycHEoS/0/ttHyn2jCQxBvZ
+        sVYjfo00V9WEBguox4ilxq5qb0haRUZhMuBiDl+DH18FADl7U17AncEXGKS0LLGW3WYC+5J49688G
+        quQEEb/l0YOHCZqJI5M6KIWDf1/khMY3JXunr9Xv9/YCVpzWNo2Yx+UbU+EStwNHGHrM5/kW3Cqhl
+        8SD8Am76MwlYDbyCaPsACHUqPmuMC62RNq2/FRINqZiFSttgjEkSY5jZmkkGLiQc8lzlPbEP3qtGs
+        5UOfhwDw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEqRF-005q8w-Hr; Fri, 22 Jul 2022 11:03:21 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1290298029B; Fri, 22 Jul 2022 13:03:20 +0200 (CEST)
+Date:   Fri, 22 Jul 2022 13:03:19 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/14] perf/hw_breakpoint: Add KUnit test for
- constraints accounting
-Message-ID: <20220722110305.GA18336@willie-the-truck>
-References: <20220704150514.48816-1-elver@google.com>
- <20220704150514.48816-2-elver@google.com>
- <Ytl9L0Zn1PVuL1cB@FVFF77S0Q05N.cambridge.arm.com>
- <20220722091044.GC18125@willie-the-truck>
- <CACT4Y+ZOXXqxhe4U3ZtQPCj2yrf6Qtjg1q0Kfq8+poAOxGgUew@mail.gmail.com>
- <20220722101053.GA18284@willie-the-truck>
- <CACT4Y+Z0imEHF0jM-f-uYdpfSpfzMpa+bFZfPeQW1ECBDjD9fA@mail.gmail.com>
+        Joao Moreira <joao@overdrivepizza.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Johannes Wikner <kwikner@ethz.ch>,
+        Alyssa Milburn <alyssa.milburn@linux.intel.com>,
+        Jann Horn <jannh@google.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "Nuzman, Joseph" <joseph.nuzman@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Gross, Jurgen" <jgross@suse.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Collingbourne <pcc@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [patch 00/38] x86/retbleed: Call depth tracking mitigation
+Message-ID: <YtqD96Kq4/Wg+LXQ@worktop.programming.kicks-ass.net>
+References: <CAHk-=wj6U3UamfLLV+rPu1WmKG_w3p0Bg=YbQcG1DxHpmP40Ag@mail.gmail.com>
+ <YtXzgWnbTQH48JGR@worktop.programming.kicks-ass.net>
+ <CAHk-=wiJNViWKCCrDPByGWmVVXuEKhRGykx4q8diXSxEqGfOMw@mail.gmail.com>
+ <CAHk-=wjmUeB=_s6jcBUNoAT4GHv-aF1Mzqa6G1X4k+dcHDs1Mg@mail.gmail.com>
+ <Ytbnlms90+LBLbrY@google.com>
+ <Ythv7NqofIAHp3bf@worktop.programming.kicks-ass.net>
+ <Ytl2vg15Hc0fh8Dl@worktop.programming.kicks-ass.net>
+ <YtmTK93vHWQUFinE@worktop.programming.kicks-ass.net>
+ <CAHk-=whLGENEkjME_v_3P1SwhwjzH4GK2RLA3fn=yQNuyKLBkg@mail.gmail.com>
+ <d0597f7096344b10bfcd95a0ffdbad17@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+Z0imEHF0jM-f-uYdpfSpfzMpa+bFZfPeQW1ECBDjD9fA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d0597f7096344b10bfcd95a0ffdbad17@AcuMS.aculab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:31:45PM +0200, Dmitry Vyukov wrote:
-> On Fri, 22 Jul 2022 at 12:11, Will Deacon <will@kernel.org> wrote:
-> > > > > On Mon, Jul 04, 2022 at 05:05:01PM +0200, Marco Elver wrote:
-> > > > > I'm not immediately sure what would be necessary to support per-task kernel
-> > > > > breakpoints, but given a lot of that state is currently per-cpu, I imagine it's
-> > > > > invasive.
-> > > >
-> > > > I would actually like to remove HW_BREAKPOINT completely for arm64 as it
-> > > > doesn't really work and causes problems for other interfaces such as ptrace
-> > > > and kgdb.
-> > >
-> > > Will it be a localized removal of code that will be easy to revert in
-> > > future? Or will it touch lots of code here and there?
-> > > Let's say we come up with a very important use case for HW_BREAKPOINT
-> > > and will need to make it work on arm64 as well in future.
-> >
-> > My (rough) plan is to implement a lower-level abstraction for handling the
-> > underlying hardware resources, so we can layer consumers on top of that
-> > instead of funneling through hw_breakpoint. So if we figure out how to make
-> > bits of hw_breakpoint work on arm64, then it should just go on top.
-> >
-> > The main pain point for hw_breakpoint is kernel-side {break,watch}points
-> > and I think there are open design questions about how they should work
-> > on arm64, particularly when considering the interaction with user
-> > watchpoints triggering on uaccess routines and the possibility of hitting
-> > a kernel watchpoint in irq context.
+On Thu, Jul 21, 2022 at 10:01:12PM +0000, David Laight wrote:
+
+> Since: "If the callee is a variadic function, then the number of floating
+> point arguments passed to the function in vector registers must be provided
+> by the caller in the AL register."
 > 
-> I see. Our main interest would be break/watchpoints on user addresses
-> firing from both user-space and kernel (uaccess), so at least on irqs.
+> And that that never happens in the kernel you can use %eax instead
+> of %r10d.
 
-Interesting. Do other architectures report watchpoint hits on user
-addresses from kernel uaccess? It feels like this might be surprising to
-some users, and it opens up questions about accesses using different virtual
-aliases (e.g. via GUP) or from other entities as well (e.g. firmware,
-KVM guests, DMA).
+Except there's the AMD BTC thing and we should (compiler patch seems
+MIA) have an unconditional: 'xor %eax,%eax' in front of every function
+call.
 
-Will
+(The official mitigation strategy was CALL; LFENCE IIRC, but that's so
+horrible nobody is actually considering that)
+
+Yes, the suggested sequence ends with rax being zero, but since we start
+the speculation before that result is computed that's not good enough I
+suspect.

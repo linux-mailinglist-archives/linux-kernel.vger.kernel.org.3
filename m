@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5511757D9AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 06:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAC057D9AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 06:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiGVEsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 00:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S232830AbiGVEtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 00:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiGVEsu (ORCPT
+        with ESMTP id S229547AbiGVEtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 00:48:50 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CF693638;
-        Thu, 21 Jul 2022 21:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=h9kQnWAcSF9Yzs1kL6Yq0lTdcDF4ILi/uKX3XcZK1Lc=; b=DKol8CNimLCjlsLlkrpqMcvesu
-        UwIgNox3kdcPY+7ays69SEIGRmBcI5N2qad6gRCnCB+VZrPiFBKTQRXPkt1xfl5ZI7lMp1xZNjmEM
-        m/gqB9HHcxf+LUt6OZWGePzTlOZ3+CCbrG8ngtLNoGAnlipFmod0wmqGGy3IoCl41V6VFiDJdhXk0
-        18ZUDNQwSTwqkJ48xsApRFd++ILTC4kny7GXZ5FJCr9waGOGH0xyYsPdoVPzeNCh4mmqQmr539zsN
-        h+LY74d9D+IDr2SijGiBZH3bb4Yp3qajQ08liXyXNP113h8wtsPiomJJYDWqq3aPCOOPlb8JB7imj
-        ZD5LDKfw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEkal-00HYNi-8O; Fri, 22 Jul 2022 04:48:47 +0000
-Date:   Thu, 21 Jul 2022 21:48:47 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Hannes Reinecke <hare@suse.de>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 1/2] nvme-auth: Fix off by one checks
-Message-ID: <YtosL0gGow56siA5@infradead.org>
-References: <YtU/bFMYRCrx6tgp@kili>
+        Fri, 22 Jul 2022 00:49:49 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1C793638
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 21:49:47 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ss3so6552601ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 21:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1zgKFONMAPUnEZdif9mwsS1RgNyE/IjZaTchcJxAMaU=;
+        b=fLGzzFvhPVbsLb1WK14VBOQMUFx9+DHe333kbwp2CdISyNeDXFAcMO0fbvByMVj9+G
+         1wVQVpL6LTLc3wrkC6fK3j0+WbZeEcejycSsmMiz/l3PQvxstFs9iZFB18Bu+TFaxGoF
+         QG04LinNAWz9m7W+bnzYZXjFND6cx0n34UnQMskMHDjzb2mcAm9weohqnIerND4yVs0t
+         bMOu5hdZ7hcmXbqvwed/RiG7ExU6Jfucv278pbnSGaRIxGURY7is/FuuX4qpmFqn8gsZ
+         bCvPXkutQ6uFcH+ze0f8ocYn5Zj6HmxFC7Gw+eOn4hsRNSZLwhY/rrSxb88sO64piAn3
+         LdQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1zgKFONMAPUnEZdif9mwsS1RgNyE/IjZaTchcJxAMaU=;
+        b=TPk2YgAFYoPjU16Nq51ySypJ+q+ix5sg9rz7qQmkbbU45P2yHbIcKNngL3DR36G1G9
+         YjkOX/VnbZQ39kueCWAWx3hmbJOsmg5gmJ3+tG1nErqnQDv9wQe8G9Qg8y/LXCoNT3Op
+         WrsF4E1Tcw8H9E8Ulh4S240mekX9XXh1YgNna2aVeiZHhHpUnzUXWnf7Guy9jek62UT6
+         5tGSHTGWQLxuORJ5UUGKbi4UMrrYFLmKHOfeBLVnBrTNhX0fDoUs8qbBZNA2D26kUIzT
+         eEI05p/ZdrZ+kr0DKVzrqPV1j+OQe+bKpHCC3hHEoB0a/ZmE1qGRyGzwP8zc+BarGE+Q
+         1HkA==
+X-Gm-Message-State: AJIora85rJfPr2e5klV0//tAj0GsPrMQrf5aUSNpmabpju73Ky6/BvhP
+        Kel3nl9suwxKYPKzEu/VzG0b8KiqP+4=
+X-Google-Smtp-Source: AGRyM1sMG2+NAd9ylOZyoM9OoIAxRtk2Z3XZC1xab3vRWup2a/WqJRRaxBdbwFnfFSNwHpLBrAOuhg==
+X-Received: by 2002:a17:907:6e12:b0:72e:6774:cb80 with SMTP id sd18-20020a1709076e1200b0072e6774cb80mr1546317ejc.504.1658465385834;
+        Thu, 21 Jul 2022 21:49:45 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f2e:6979:bc71:385a:5363:16f9? (p200300c78f2e6979bc71385a536316f9.dip0.t-ipconnect.de. [2003:c7:8f2e:6979:bc71:385a:5363:16f9])
+        by smtp.gmail.com with ESMTPSA id kx23-20020a170907775700b0071c6dc728b2sm1540338ejc.86.2022.07.21.21.49.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 21:49:45 -0700 (PDT)
+Message-ID: <99475d8c-d556-18b7-ba14-465b19e1472e@gmail.com>
+Date:   Fri, 22 Jul 2022 06:49:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtU/bFMYRCrx6tgp@kili>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] staging: r8188eu: Inserted empty line after
+ declarations
+Content-Language: en-US
+To:     Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Rebecca Mckeever <remckee0@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Vihas Makwana <makvihas@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220721141051.45447-1-abhijeet.srivastava2308@gmail.com>
+ <20220721141407.45663-1-abhijeet.srivastava2308@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220721141407.45663-1-abhijeet.srivastava2308@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hannes, can you review these please?
-
-On Mon, Jul 18, 2022 at 02:09:32PM +0300, Dan Carpenter wrote:
-> The > ARRAY_SIZE() checks need to be >= ARRAY_SIZE() to prevent reading
-> one element beyond the end of the arrays.
+On 7/21/22 16:12, Abhijeet Srivastava wrote:
+> Warning found by checkpatch.pl script. Resending this patch after
+> correcting my Username
 > 
-> Fixes: a476416bb57b ("nvme: implement In-Band authentication")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Abhijeet Srivastava<abhijeet.srivastava2308@gmail.com>
 > ---
-> The MAINTAINERS file needs to be updated for this new code.
-> 
->  drivers/nvme/common/auth.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/nvme/common/auth.c b/drivers/nvme/common/auth.c
-> index 0c86ebce59d2..bfb16fec0aed 100644
-> --- a/drivers/nvme/common/auth.c
-> +++ b/drivers/nvme/common/auth.c
-> @@ -55,7 +55,7 @@ static struct nvme_auth_dhgroup_map {
->  
->  const char *nvme_auth_dhgroup_name(u8 dhgroup_id)
->  {
-> -	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
-> +	if ((dhgroup_id >= ARRAY_SIZE(dhgroup_map)) ||
->  	    !dhgroup_map[dhgroup_id].name ||
->  	    !strlen(dhgroup_map[dhgroup_id].name))
->  		return NULL;
-> @@ -65,7 +65,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_dhgroup_name);
->  
->  const char *nvme_auth_dhgroup_kpp(u8 dhgroup_id)
->  {
-> -	if ((dhgroup_id > ARRAY_SIZE(dhgroup_map)) ||
-> +	if ((dhgroup_id >= ARRAY_SIZE(dhgroup_map)) ||
->  	    !dhgroup_map[dhgroup_id].kpp ||
->  	    !strlen(dhgroup_map[dhgroup_id].kpp))
->  		return NULL;
-> @@ -113,7 +113,7 @@ static struct nvme_dhchap_hash_map {
->  
->  const char *nvme_auth_hmac_name(u8 hmac_id)
->  {
-> -	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
-> +	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
->  	    !hash_map[hmac_id].hmac ||
->  	    !strlen(hash_map[hmac_id].hmac))
->  		return NULL;
-> @@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_hmac_name);
->  
->  const char *nvme_auth_digest_name(u8 hmac_id)
->  {
-> -	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
-> +	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
->  	    !hash_map[hmac_id].digest ||
->  	    !strlen(hash_map[hmac_id].digest))
->  		return NULL;
-> @@ -148,7 +148,7 @@ EXPORT_SYMBOL_GPL(nvme_auth_hmac_id);
->  
->  size_t nvme_auth_hmac_hash_len(u8 hmac_id)
->  {
-> -	if ((hmac_id > ARRAY_SIZE(hash_map)) ||
-> +	if ((hmac_id >= ARRAY_SIZE(hash_map)) ||
->  	    !hash_map[hmac_id].hmac ||
->  	    !strlen(hash_map[hmac_id].hmac))
->  		return 0;
-> -- 
-> 2.35.1
-> 
-> 
----end quoted text---
+> v2:
+> 	- Fix my name on the patch
+> v3:
+> 	- Fix commit message
+
+Why is the "Resending this patch after correcting my Username" still in 
+the body of the explanation?
+
+Regards,
+
+Philipp
+
+

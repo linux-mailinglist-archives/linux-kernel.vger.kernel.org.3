@@ -2,120 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB23157E43B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D0257E439
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235577AbiGVQSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S235553AbiGVQQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiGVQSI (ORCPT
+        with ESMTP id S232511AbiGVQQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:18:08 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2251DFD4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:18:05 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id g12so4865279pfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:18:05 -0700 (PDT)
+        Fri, 22 Jul 2022 12:16:48 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B97140F1;
+        Fri, 22 Jul 2022 09:16:47 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id j22so9416460ejs.2;
+        Fri, 22 Jul 2022 09:16:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H3JvjBk5rZE8CylMCyXbpA9801AN+xNrDTvZ4epSXkg=;
-        b=Zvxq3QTNpkDSkq1tK84gybTjc+mVOOo5e5HuakpNkJdweRp032xFQMkmFvRxEhHMUn
-         3aFHS6UETE8+Zj/6VdIBJhwJWSx8ijdOWBqkju379FLK6DjWBvyjQAA2wqhpwUbiEnQL
-         nRRrR98+qAC6SYJE7AVbb9biUyAK0ke4bZZboZD6HlneCWhoyQ3d/vKH75K41q3Mo/iW
-         fsDxOrVzY0dT3iWrq6eRvRCD7O+aip2ekMgJ0qaPw48UBdLBExl3fRpdJPD83mdkf7c2
-         UQyIxCl8NZV+VPNOOgZRV3Slbw3+16/34QSW2sNkfF+JPuOWU5+jQat3/XPx8bkFg/kV
-         6Z5w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=97WFVBFeJ/mP7POIyyy1UP0JWOMgZ/bOiCTe1ETU5XI=;
+        b=DPr5GbzJ9gljq8DfC08aakia49SnfaLxsujJZQI7oAQIHdY1grFo4OcBO4dxciU+Qa
+         Or/8tRV8tnIpJ6L8w0iBpM939aGWIBdUIb2ZNSxQzwAj0uIZ6XE13dGUGQzsNipcg9ms
+         tNsO/k+a8prGjijrm4qyOaNWV7VDKznCJNtZD37vsxaAynSdg9lFsqrMGb91IKAuu6tt
+         THrcBbNLQrN2V6v1jn3kyOpm7/cv7uoR3GgfFs9r9BnqO4bX4WeoF4WjEVmGvH3fW1Is
+         jL+u6LyLUyyWEepxJfwOJF/sXhEbu3kloQstYAVH+wMbj89Qwd4H8WyGvPErw6PHUx0/
+         Lbog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H3JvjBk5rZE8CylMCyXbpA9801AN+xNrDTvZ4epSXkg=;
-        b=FaRl98P38OqjC3eKrrd1iq+Z6IqkrbxDZkJiNouj0GQqvKUo8gzGcKMl9QXPqUYG++
-         RcJZbYWc0mZnA36SofFQ+8qCQkpPhp3mDhjCMn2xxJV03iVXLaPuL4kaM11h/adgqK6t
-         bLcffb4QacG534wAMcP/5/N8/AdTSqPZTssSqBUAGmv6gTH7gaGAmWA7fW110Q7lQ9V8
-         VcRdfKrlJG+Onhr3mEpmBOOlKDSq1imcM1Yo8QJeoeMH07/1Qm+0673kfIch8GZxX5eD
-         uJomAKQyfUw6UZOdXm8HBR/VOHNTAoTRD9t4khG1wzECXZy2BYQwy8mu2Sz28K8FzV6v
-         3KpQ==
-X-Gm-Message-State: AJIora+hZ9DqpF7X/lH026FBbnvUhA/axmyvokbwOJQynGnu4IgFh2iu
-        7zarm3lI27Ly88JSOWY3ZvG8dEmVtCDPpmXvcCY=
-X-Google-Smtp-Source: AGRyM1uXxhWO/DeUEIRwooeBofbzNK9MYQD6dG142de1EM9XYp98gEDWYmIb+zcFNVD1VBtYoOI56A==
-X-Received: by 2002:a62:ea01:0:b0:52b:39ec:a72f with SMTP id t1-20020a62ea01000000b0052b39eca72fmr563667pfh.52.1658506684452;
-        Fri, 22 Jul 2022 09:18:04 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:d01c:7038:50b4:cec9:4ce:e06f])
-        by smtp.googlemail.com with ESMTPSA id x5-20020a170902ec8500b0016d21c1b26csm3963621plg.170.2022.07.22.09.18.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 09:18:03 -0700 (PDT)
-From:   Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
-Cc:     abhijeet.srivastava2308@gmail.com,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Vihas Makwana <makvihas@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] staging: r8188eu: Inserted empty line after declarations
-Date:   Fri, 22 Jul 2022 21:46:31 +0530
-Message-Id: <20220722161744.14914-1-abhijeet.srivastava2308@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=97WFVBFeJ/mP7POIyyy1UP0JWOMgZ/bOiCTe1ETU5XI=;
+        b=k889UcTzbHcOn3s2Tk+dZ7AMEX08HpvqjQdbFp6PTYSjU+RrELOc1PCyZBM1hCd6Dm
+         s2oisZKynsN8nYNUYka002cZIAf0FD4g1mDpGRECllmmh0NMmd3Sm12jx+PzhPPxQSb2
+         u4Qm4pgMPth7wnHkZ3p8wHqNqTxr8UF9uX62QqD8BjP7C9uL1AxQMLVD+m7yEqZimQW5
+         gSrDKHwTHrO1KkyTb3tNqP/5w2YZINZLzIq9x3g0V1ym2UIKNpzi7VQow1BLNLlk8Oa1
+         KtuZISiFZ0IHHleRYHQppuH2MwbI8gyWMGMPJ+HqVXW+K0ffFow78Xq2X1FofSHHlCuZ
+         D03A==
+X-Gm-Message-State: AJIora+6orXxjz7G992ffRTKj9zy4L9Tzx5QpVKydG2xBMA967RA/X2d
+        rl+51D2u1CrQqYJQkt4Oq25CGPETsJ5wc9LnpOOVjWO7TH4=
+X-Google-Smtp-Source: AGRyM1v1fHCwpN/hlsbBmFOHa0gm/aGOOZHGLRZMX0jdSmOSXL/mCoYZb8NkvX8F2/xv5DnONwmLJbh9lwhOEJ1Cqrg=
+X-Received: by 2002:a17:906:9b86:b0:6fe:d37f:b29d with SMTP id
+ dd6-20020a1709069b8600b006fed37fb29dmr488369ejc.327.1658506605946; Fri, 22
+ Jul 2022 09:16:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220721153625.1282007-3-benjamin.tissoires@redhat.com> <20220722084556.1342406-1-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220722084556.1342406-1-benjamin.tissoires@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 22 Jul 2022 09:16:34 -0700
+Message-ID: <CAADnVQLypx8Yd7L4GByGNEJaWgg0R6ukNV9hz0ge1+ZdW4mdgQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 02/24] bpf/verifier: allow kfunc to read user
+ provided context
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Warning found by checkpatch.pl script.
-Signed-off-by: Abhijeet Srivastava <abhijeet.srivastava2308@gmail.com>
----
-v2: 
-	- Fix my name on the patch
-v3:
-	- Fix commit message
-v4:
-	- Fix body of explanation
- drivers/staging/r8188eu/core/rtw_cmd.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Fri, Jul 22, 2022 at 1:46 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> When a kfunc was trying to access data from context in a syscall eBPF
+> program, the verifier was rejecting the call.
+> This is because the syscall context is not known at compile time, and
+> so we need to check this when actually accessing it.
+>
+> Check for the valid memory access and allow such situation to happen.
+>
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> ---
+>
+> changes in v8:
+> - fixup comment
+> - return -EACCESS instead of -EINVAL for consistency
+>
+> changes in v7:
+> - renamed access_t into atype
+> - allow zero-byte read
+> - check_mem_access() to the correct offset/size
+>
+> new in v6
+> ---
+>  kernel/bpf/verifier.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7c1e056624f9..c807c5d7085a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
+>         struct bpf_map *map_ptr;
+>         bool raw_mode;
+>         bool pkt_access;
+> +       bool is_kfunc;
+>         u8 release_regno;
+>         int regno;
+>         int access_size;
+> @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+>                                    struct bpf_call_arg_meta *meta)
+>  {
+>         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
+> +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+>         u32 *max_access;
+>
+>         switch (base_type(reg->type)) {
+> @@ -5223,6 +5225,24 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+>                                 env,
+>                                 regno, reg->off, access_size,
+>                                 zero_size_allowed, ACCESS_HELPER, meta);
+> +       case PTR_TO_CTX:
+> +               /* in case of a kfunc called in a program of type SYSCALL, the context is
+> +                * user supplied, so not computed statically.
+> +                * Dynamically check it now
+> +                */
+> +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 5b6a891b5d67..6fbf6e4234cf 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -25,6 +25,7 @@ void rtw_free_evt_priv(struct	evt_priv *pevtpriv)
- 
- 	while (!rtw_cbuf_empty(pevtpriv->c2h_queue)) {
- 		void *c2h = rtw_cbuf_pop(pevtpriv->c2h_queue);
-+
- 		if (c2h && c2h != (void *)pevtpriv)
- 			kfree(c2h);
- 	}
-@@ -323,6 +324,7 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
- 	/* prepare ssid list */
- 	if (ssid) {
- 		int i;
-+
- 		for (i = 0; i < ssid_num && i < RTW_SSID_SCAN_AMOUNT; i++) {
- 			if (ssid[i].SsidLength) {
- 				memcpy(&psurveyPara->ssid[i], &ssid[i], sizeof(struct ndis_802_11_ssid));
-@@ -334,6 +336,7 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
- 	/* prepare channel list */
- 	if (ch) {
- 		int i;
-+
- 		for (i = 0; i < ch_num && i < RTW_CHANNEL_SCAN_AMOUNT; i++) {
- 			if (ch[i].hw_value && !(ch[i].flags & RTW_IEEE80211_CHAN_DISABLED)) {
- 				memcpy(&psurveyPara->ch[i], &ch[i], sizeof(struct rtw_ieee80211_channel));
--- 
-2.34.1
+prog_type check looks a bit odd here.
+Can we generalize with
+if (!env->ops->convert_ctx_access
 
+In other words any program type that doesn't have ctx rewrites can
+use helpers to access ctx fields ?
+
+Also why kfunc only?
+It looks safe to allow normal helpers as well.

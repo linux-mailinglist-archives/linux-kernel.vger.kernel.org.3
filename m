@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A6B57DB2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C0657DB0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbiGVHRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S234348AbiGVHSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234536AbiGVHRh (ORCPT
+        with ESMTP id S234346AbiGVHRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:17:37 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181B8B33
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:17:01 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id t127so3588197vsb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:17:01 -0700 (PDT)
+        Fri, 22 Jul 2022 03:17:46 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1346370
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:17:44 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id m8so4774538edd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:17:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oSWCzyyi5A473F09U+VaQnX1hvRxVtUcH+BPYGqOwMw=;
-        b=phMS3u4dG0RDRkFoL5//kQJVpEoveww37/02BA+AafOIl9LwjUYqwXjZhH5uCVgn1U
-         IvTdGfm22QxNwkYjqw0apNFP0fcLbozonxbdYjvF3Q9slfEcN1apNAbwGEiNgm1s45Og
-         tTE5RGrW5Rip8lZDf68qakiZ0P3xqDNAtKm7kBbjm+Phavfg/pbYn9o90CfZxuws+MmT
-         66PwaQa505wrJ1DS+lwFuEUdra/BBMiIX7jRUzrbUKSC9Zw1Mpr3VGbw+7+JBihod/Pg
-         GwyaMDjM3AULZpVZdYWXQ+MuBfIdOL2zXwp8d+PyvmTLIFfGExkBh00gVmYNw2o7dLVg
-         M+wg==
+        bh=B4Hy5WgIDA8MDhrVZeCSzDh9bIrR7DewLXi+Th66sO4=;
+        b=VdeANNwCgjhfUld5l1Pc3g0E7LeDnDhLCBfGR0v3Hvw1QqvbErcHV/IeKhh/V4uswb
+         98nwmgJN175BsxWhBi6zmb0TJT8/E0Dqa6IDfMy1ZU2Q1hXEB0HvVlYb1HyU7ILlDpSg
+         O9E2qDzXKgJGNP5WaZ9Ztx/HkaX5VVyKjQB4PI0+PyzUlGpoHoel9TnSHg93LW23eWqy
+         iXHzA7n5W3kbfr+kpR19mf4HAS2uPZ/U9rBYQOf/nFNkM2zoUtM2PlD8JbG2yDU5J3Lm
+         Uq3Q+C5tO4doplog5qpcyoJFO/xPFtF5B2NIHz+pBhYzKuK2XuhNRZkev/nSSy8XB6LN
+         +LPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oSWCzyyi5A473F09U+VaQnX1hvRxVtUcH+BPYGqOwMw=;
-        b=2DS20gN9uRUmWv8oZhJkCX2xkXUWlNleksol+sbNsHTBwz6ohmkvmJm3k0Agx+3Fmh
-         jeRmFVQnXYFHjSunVhWPhObqxyowhsypAf25chZSPWlFFs+Wrwbxrt7/H+e9GJBisypM
-         px+HkO4m2VTiqXX8Eu0+yW46lUzHVbz4JYplFlPZHPG1FiwY6Qt6oMsHvNOSOfPAJ+Cv
-         LLQEREZVgYLJVC7iEbhEcdEKnPipZv1TwUtOnm/FHulnSHz/4ir9qpTqXeioWlaMHmg4
-         AyQHQjQ7R736lQHQLIDQW2KeYAPhPMg/qIOay0k8PT/h0vokYVDRVIEWUfScFUIH6dUE
-         kE/A==
-X-Gm-Message-State: AJIora8eFHbHZaoW06CkLKPGtySvkcWpDmizbAYSIi6uG/qo9yOprVTM
-        bnHEYuGH/Wj29H/dTfFGs1i7LHWAc2WiEWm1ZlkyUQ==
-X-Google-Smtp-Source: AGRyM1vVm+aeEwAMuJ8JhB3whC0qiIozlB+QFjISziJWEqhPPIKjG9m+/5XSdCmeV1y6jE8uRCEn4Soea5qsifWsvKw=
-X-Received: by 2002:a05:6102:381:b0:357:a112:adc7 with SMTP id
- m1-20020a056102038100b00357a112adc7mr610910vsq.38.1658474220111; Fri, 22 Jul
- 2022 00:17:00 -0700 (PDT)
+        bh=B4Hy5WgIDA8MDhrVZeCSzDh9bIrR7DewLXi+Th66sO4=;
+        b=LnL4AaNRCiJgvVE4BcuNNdPnKf4GAEw0LF3rnna9bgQm/vusS0Wjqg6jogxyl5Ytfl
+         wl4zejUDzy96XRjIgTlq2PkuWhD+YfZxMkipZpW6oAPQ4P8HjXAdabM7sHKDtP7Nk3fP
+         sGAfkrYuDIb+hu6SdHNpTWwu0IVWWTP+9JvgE0PWB7H3InMIdAVBKHT1xxLzZrnRY7Iz
+         H1D1E5W0HH5xF6Xq584BHM0Xn5PCQPscBGXHxNj1l3OoLB4wxCdn8NDXkFNCVA+u2Z7g
+         mNulzy2GZ7Qv6IoXmEzEBu4pClKkg4b/HwaajfNgCCjKFEPPrs5F1s864Ak/pick/awO
+         O9NQ==
+X-Gm-Message-State: AJIora+49Heynqk/d06CkA13ltKvf6mMQznijbm+U3OWzBqd2xJcMdeQ
+        33UoLB0bpiCBH/Pz+pp8PlhFtsf9YbQFQ+ppdaThkA==
+X-Google-Smtp-Source: AGRyM1uvxQhLbdSsrYRIkBBgMe5Qn2G5+7VHHnmOdmo9zB5hNuUqbyaX4qH2arEh1pgjXjdOWeiXYi8MgYTaYN3DdhQ=
+X-Received: by 2002:a05:6402:26d6:b0:43a:daa5:9f12 with SMTP id
+ x22-20020a05640226d600b0043adaa59f12mr2038424edd.408.1658474263288; Fri, 22
+ Jul 2022 00:17:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220721180214.3223778-1-dlatypov@google.com> <20220721180214.3223778-3-dlatypov@google.com>
-In-Reply-To: <20220721180214.3223778-3-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 22 Jul 2022 15:16:49 +0800
-Message-ID: <CABVgOS=bEq3K+0SU+1E8e6ZguBb0WV9UYNBaT5O+hydAe8p2WQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] kunit: make kunit_kfree() only work on pointers from
- kunit_malloc() and friends
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+References: <20220721073909.23318-1-srinivas.neeli@xilinx.com>
+In-Reply-To: <20220721073909.23318-1-srinivas.neeli@xilinx.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 22 Jul 2022 09:17:32 +0200
+Message-ID: <CAMRc=Mefhk4i8_1j2=JO63SwfHEb3TrRMj45+CC1i1DUr8VULw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: gpio-xilinx: Fix integer overflow
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        neelisrinivas18@gmail.com, shubhrajyoti.datta@xilinx.com,
+        srinivas.neeli@amd.com, sgoud@xilinx.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        git@xilinx.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,134 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 2:02 AM 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Thu, Jul 21, 2022 at 9:39 AM Srinivas Neeli
+<srinivas.neeli@xilinx.com> wrote:
 >
-> kunit_kfree() exists to clean up allocations from kunit_kmalloc() and
-> friends early instead of waiting for this to happen automatically at the
-> end of the test.
+> Current implementation is not able to configure more than 32 pins
+> due to incorrect data type. So type casting with unsigned long
+> to avoid it.
 >
-> But it can be used on *anything* registered with the kunit resource API.
->
-> E.g. the last 2 statements are equivalent:
->   struct kunit_resource *res = something();
->   kfree(res->data);
->   kunit_put_resource(res);
->
-> The problem is that there could be multiple resources that point to the
-> same `data`.
->
-> E.g. you can have a named resource acting as a pseudo-global variable in
-> a test. If you point it to data allocated with kunit_kmalloc(), then
-> calling `kunit_kfree(ptr)` has the chance to delete either the named
-> resource or to kfree `ptr`.
-> Which one it does depends on the order the resources are registered as
-> kunit_kfree() will delete resources in LIFO order.
->
-> So this patch restricts kunit_kfree() to only working on resources
-> created by kunit_kmalloc(). Calling it is therefore guaranteed to free
-> the memory, not do anything else.
->
-> Note: kunit_resource_instance_match() wasn't used outside of KUnit, so
-> it should be safe to remove from the public interface. It's also
-> generally dangerous, as shown above, and shouldn't be used.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Fixes: 02b3f84d9080 ("xilinx: Switch to use bitmap APIs")
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
 > ---
-
-This is basically part of a sneaky, but sensible trend to make
-resources more obviously "typed". Given how many issues that can
-cause, this is definitely a worthwhile change.
-
-I have some plans to further refactor some of the resources stuff down
-the line (and to improve the documentation somewhat), so something not
-dissimilar to this was going to happen eventually.
-
-In any case,
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  include/kunit/resource.h | 16 ----------------
->  lib/kunit/kunit-test.c   |  7 +++++++
->  lib/kunit/test.c         | 10 ++++++++--
->  3 files changed, 15 insertions(+), 18 deletions(-)
+>  drivers/gpio/gpio-xilinx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-> index 09c2b34d1c61..cf6fb8f2ac1b 100644
-> --- a/include/kunit/resource.h
-> +++ b/include/kunit/resource.h
-> @@ -300,22 +300,6 @@ typedef bool (*kunit_resource_match_t)(struct kunit *test,
->                                        struct kunit_resource *res,
->                                        void *match_data);
+> diff --git a/drivers/gpio/gpio-xilinx.c b/drivers/gpio/gpio-xilinx.c
+> index b6d3a57e27ed..7f8e2fed2988 100644
+> --- a/drivers/gpio/gpio-xilinx.c
+> +++ b/drivers/gpio/gpio-xilinx.c
+> @@ -99,7 +99,7 @@ static inline void xgpio_set_value32(unsigned long *map, int bit, u32 v)
+>         const unsigned long offset = (bit % BITS_PER_LONG) & BIT(5);
 >
-> -/**
-> - * kunit_resource_instance_match() - Match a resource with the same instance.
-> - * @test: Test case to which the resource belongs.
-> - * @res: The resource.
-> - * @match_data: The resource pointer to match against.
-> - *
-> - * An instance of kunit_resource_match_t that matches a resource whose
-> - * allocation matches @match_data.
-> - */
-> -static inline bool kunit_resource_instance_match(struct kunit *test,
-> -                                                struct kunit_resource *res,
-> -                                                void *match_data)
-> -{
-> -       return res->data == match_data;
-> -}
-> -
->  /**
->   * kunit_resource_name_match() - Match a resource with the same name.
->   * @test: Test case to which the resource belongs.
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index 13d0bd8b07a9..4df0335d0d06 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -161,6 +161,13 @@ static void kunit_resource_test_alloc_resource(struct kunit *test)
->         kunit_put_resource(res);
+>         map[index] &= ~(0xFFFFFFFFul << offset);
+> -       map[index] |= v << offset;
+> +       map[index] |= (unsigned long)v << offset;
 >  }
 >
-> +static inline bool kunit_resource_instance_match(struct kunit *test,
-> +                                                struct kunit_resource *res,
-> +                                                void *match_data)
-> +{
-> +       return res->data == match_data;
-> +}
-> +
->  /*
->   * Note: tests below use kunit_alloc_and_get_resource(), so as a consequence
->   * they have a reference to the associated resource that they must release
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 0fb2771ca03e..82019a78462e 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -689,12 +689,18 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
->  }
->  EXPORT_SYMBOL_GPL(kunit_kmalloc_array);
->
-> +static inline bool kunit_kfree_match(struct kunit *test,
-> +                                    struct kunit_resource *res, void *match_data)
-> +{
-> +       /* Only match resources allocated with kunit_kmalloc() and friends. */
-> +       return res->free == kunit_kmalloc_array_free && res->data == match_data;
-> +}
-> +
->  void kunit_kfree(struct kunit *test, const void *ptr)
->  {
->         struct kunit_resource *res;
->
-> -       res = kunit_find_resource(test, kunit_resource_instance_match,
-> -                                 (void *)ptr);
-> +       res = kunit_find_resource(test, kunit_kfree_match, (void *)ptr);
->
->         /*
->          * Removing the resource from the list of resources drops the
+>  static inline int xgpio_regoffset(struct xgpio_instance *chip, int ch)
 > --
-> 2.37.1.359.gd136c6c3e2-goog
+> 2.17.1
 >
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220721180214.3223778-3-dlatypov%40google.com.
+
+Applied, thanks!
+
+Bart

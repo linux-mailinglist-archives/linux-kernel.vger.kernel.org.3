@@ -2,129 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A3F57E615
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759EF57E61D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236250AbiGVR4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S236289AbiGVR6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236158AbiGVR4N (ORCPT
+        with ESMTP id S235292AbiGVR6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:56:13 -0400
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A179D4C619;
-        Fri, 22 Jul 2022 10:56:12 -0700 (PDT)
-Received: by mail-pl1-f176.google.com with SMTP id d7so5151906plr.9;
-        Fri, 22 Jul 2022 10:56:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K6H8ybl2+ag7idCYOoYVw/oCxdPB2Pr7niRGvSl53OA=;
-        b=NA6Va0F0RIvgen9z1fpVvPHFI0qhOk/O9Pfdmq2MlZ80VgZk3D4Ppaer3AijwbYvQU
-         PYsM34iG2GzdWqYHYB8p8xMoT9bX2kGfWyLS3HVT2LKAY7fAtkHM3bbtL720LW5BMWiI
-         hDzy/UvI5nYcz7CMokFkqicX7cfncbi7mdD2sXRl/sA7XMy5Vfg2ymv9qJk3+VjOiat0
-         Hxc1h1tFXpVtBsRmYe8oe6IrHBf5shpuva2Ft7d4A+fYz6veYQdVUZYYVNM1fWWo4YFD
-         5471sE8189nZw091jvpMua+ogZLtIhwMXb6gCIy75JdwIvdpGAUTBc1UBRk8KFpT3B6g
-         LUAw==
-X-Gm-Message-State: AJIora+DEw3eAKjfbOxpOCKbrXQgyULBf0hUqVMFQgWm9p8CW1/V37DV
-        Kpac/8jM97Vpu2x56Bp9LkE=
-X-Google-Smtp-Source: AGRyM1vCHU8qGyA8pLRAYfvadi7jDT5J7KiHVcv7GaY3IC+IUt3kg/RktDKh1wIJu/8+y40eAeoQfQ==
-X-Received: by 2002:a17:90b:33d2:b0:1f0:3a40:982d with SMTP id lk18-20020a17090b33d200b001f03a40982dmr840647pjb.60.1658512572066;
-        Fri, 22 Jul 2022 10:56:12 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:9cf6:7e29:d977:6fc7? ([2620:15c:211:201:9cf6:7e29:d977:6fc7])
-        by smtp.gmail.com with ESMTPSA id q3-20020a170902a3c300b0016c6a6d8967sm4065003plb.83.2022.07.22.10.56.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:56:11 -0700 (PDT)
-Message-ID: <084e7c5a-f98d-d61e-de81-83525851ecf9@acm.org>
-Date:   Fri, 22 Jul 2022 10:56:09 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] scsi: sd: Rework asynchronous resume support
+        Fri, 22 Jul 2022 13:58:03 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87B65A14B;
+        Fri, 22 Jul 2022 10:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658512682; x=1690048682;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=xW2SYVOgh4nIyD0QWhReFtVoFFXTUHDlPI8kPQCqskY=;
+  b=CjMmDdiHe81cMSlA0BTyST43kDIJOD7OUaq+lRvMc9jxc167AA2a5xPL
+   8JNyK+xsDItk9v/pIqoiQcSQuh03PwpZGZ3JL735x9VlrXRJNnlvgNS6B
+   /oK/J8e8KRLI0GD998Und+yyDTtKPnNRsQ6dBwSX+yijYXEFOpf24EWml
+   6omqJTB/cdb8sgDnjC/T6O6ajt1fkXUOYFkbnwrrDzWwVeZUVa85YI0px
+   EBUNNrqvMaeYBmsJK90EXV3jgaIGgSmReP6AoEMbmpUUPZBhVSheZahqH
+   fjp0iu3z7NE4gH3EO0yb6jL91jHVAS1wxIcuj/MI142pa6sd97sYnOu8b
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="286134671"
+X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
+   d="scan'208";a="286134671"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 10:58:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
+   d="scan'208";a="725497569"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jul 2022 10:57:59 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Fri, 22 Jul 2022 10:57:59 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Fri, 22 Jul 2022 10:57:58 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Fri, 22 Jul 2022 10:57:58 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.174)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Fri, 22 Jul 2022 10:57:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ff8b5VjiPQ7Lr1+NoEv3rDVAxaGPJ7by6mT07lYknob1MNOMzetwyQveHsP4QHCDssjdT/SjRZaFuO82sHr0N6zfi41usG43R0W7nOyFomPuh/XWQEcy1Ai97xRklkRak1QhGO0H6wM8yEhGj0L41YhGnilfd3V1grQ1LIdkxhsNInj5Enw8UjpxlobggkPB2KuualSSDK1XQBp4NFGJ+sN2CjQLQX1d+1WY2YdHUjSiRbyYZlQ7lvaE1PbkN7PYN7guNAmn3Jp8qj7TuVakR/pQfxf+5B6Ghi+294SqAYJ0P7BsBPd7BZTAQfZVTLwKzsYWuPVRpbBSMEnTPnWThQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xW2SYVOgh4nIyD0QWhReFtVoFFXTUHDlPI8kPQCqskY=;
+ b=W22mju6Gw9z3EQaSO9blk4OeZjFYrA4YO63CPHd6r426T2UjDSk4ZT8SLLoSdFjrQTpBwb86h3zPHKTDiY0TAJIaK/uuluB0nt4O46QB6WYGacesb+JlGXS7ictndXKE7koAbppppuf8goVNtEOnuns31AZOjr/d2K2uQsp6wzXYWjGce/zmUdzWHiBnUypldpShukGA+TIM2knPXej2KZuXFWrv5tu/3LrYD3PBnXyVrGcCuPxvZb1HgB0O/f3ycqCYuROs0oYtbYEaGoQ7XT2GRO9XeEnPNpBrwgxT0fFXL+JgQD4VaiKUSC1P88VOoPkyfpP6+IqPPNrK4N/TQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB4107.namprd11.prod.outlook.com (2603:10b6:5:198::24)
+ by SJ0PR11MB5005.namprd11.prod.outlook.com (2603:10b6:a03:2d3::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Fri, 22 Jul
+ 2022 17:57:56 +0000
+Received: from DM6PR11MB4107.namprd11.prod.outlook.com
+ ([fe80::fc6e:95eb:15c0:847c]) by DM6PR11MB4107.namprd11.prod.outlook.com
+ ([fe80::fc6e:95eb:15c0:847c%3]) with mapi id 15.20.5458.019; Fri, 22 Jul 2022
+ 17:57:56 +0000
+From:   "Chen, Tim C" <tim.c.chen@intel.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        "Sun, Jiebin" <jiebin.sun@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "amadeuszx.slawinski@linux.intel.com" 
+        <amadeuszx.slawinski@linux.intel.com>,
+        "Li, Tianyou" <tianyou.li@intel.com>,
+        "Guo, Wangyang" <wangyang.guo@intel.com>
+Subject: RE: [PATCH] mm: Remove the redundant updating of
+ stats_flush_threshold
+Thread-Topic: [PATCH] mm: Remove the redundant updating of
+ stats_flush_threshold
+Thread-Index: AQHYnaWE7yyZOgM2eEyGrUJNmSgBKa2Kn0CAgAAOJCA=
+Date:   Fri, 22 Jul 2022 17:57:56 +0000
+Message-ID: <DM6PR11MB410736BFD198D38BBCE9E064DC909@DM6PR11MB4107.namprd11.prod.outlook.com>
+References: <20220722164949.47760-1-jiebin.sun@intel.com>
+ <YtrY5V+dZl4+Gtz4@castle>
+In-Reply-To: <YtrY5V+dZl4+Gtz4@castle>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>, ericspero@icloud.com,
-        jason600.groome@gmail.com,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220630195703.10155-1-bvanassche@acm.org>
- <20220630195703.10155-3-bvanassche@acm.org>
- <alpine.DEB.2.22.394.2207191125130.1006766@ramsan.of.borg>
- <db19ed29-e7f9-e5b0-3a6c-f2812078a07d@acm.org>
- <CAMuHMdVzsgSYtbJQnaigNax_JbxPsQfU+gHcteS-ojWbxUdMfw@mail.gmail.com>
- <CAMuHMdWtxBj8ug7AHTqentF8UD4jpO2sgoWWcQCOvEKLJtdq8A@mail.gmail.com>
- <506ca1a6-1122-5755-fc74-60f7c7bfbd0d@acm.org>
- <CAMuHMdVQ2K2v8jpsFfOMk99DG_sBB4_ioiQRroC7K_Ov1wvp9w@mail.gmail.com>
- <6f70e742-9d8a-f389-0482-0ba9696bf445@acm.org>
- <CAMuHMdVc+ATGV-=R3uV6RyF0-mZiuKv7HpmogRBgqGVyO-MKWg@mail.gmail.com>
- <54e20a27-a10b-b77a-e950-1d3398e2e907@acm.org>
- <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAMuHMdURQpAEGgv4cY7v0rqzs12v2TT=Amt26Y0OoBSW7YAoaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.6.500.17
+dlp-reaction: no-action
+dlp-product: dlpe-windows
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 58dc55e7-ad14-4f38-9c2d-08da6c0bb52a
+x-ms-traffictypediagnostic: SJ0PR11MB5005:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3blp/63hNoUdwfKVFBEmGqAZdKhG5R6ZPvJlSPIVZ/Pl+0iW9LVTobDqv8+NdX4dUcnoxUSzYgg+Ufuj0zT7eBtPhkNmnko3IuN/5FF8llre0lqj8iBb12CRecSiNHDH9PJkhR63Koo5VXNLm1na8iBdtGeUHcyhjvYFlRFyvBR8onAciWQoGG0wtX9nXD/+BFTqX70FXDIrFTIkwp4AOk40X7cKDupnlmZHJ3LQzlqxy8ZflDnvl4BXQv8seuDU7sbnXMvHReE9Q8ySM4WyIdor8b1f9cJqGMQnBKl0q8vB65cDLmZfmbvZiGQ6COXdrEppD0JU/Pr+GKfbCQSj41jEFfqr43c5xjimUkGUCyl4ArJwoPC+d4Nc0fuos+VayNkGEBWMr3GFvQEzIb4IBRNMGNi9MmQ12JDLuz+qoZGjA9Fzjbl8ny3ogo1+aCvUZypITp+ncodabZOkItS6aQYMtEjbeMcwKZnA5hHbyIFBHgLawP9K+WiOeh8hXOK7oKxGRlGQYpIU2K8HMX8dqoiih25Lj1NQOYLPOL79X+obf2Xs+Q+rAjq/TEuM0jeszeviiFY76exFrAYjFHdER8hODgceRAE45BhzLa1888h5kbweYp+o+j3FLa5UoKjmSZibbqEYOr2QwRvOizJYelwSG6f1nSXYBeL5Nz4hvkXiYy3cv6UwxZRdp6WR35eaE+Kk0FHacC+NeyjIp5B7ESkDqA4tzKXr3K5CHTGYuNRwN/zG1Wx6nGVPBVTIbhYgNNcwesEYCuHk4wV5kzmSvtZrtvjHUYWtAMY+7KqH8mvKF5R2UMGvP+THuGq8qoPq
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(39860400002)(136003)(366004)(346002)(54906003)(6636002)(110136005)(41300700001)(316002)(71200400001)(38100700002)(478600001)(122000001)(83380400001)(26005)(38070700005)(7696005)(6506007)(9686003)(82960400001)(186003)(4744005)(2906002)(5660300002)(52536014)(33656002)(7416002)(8936002)(76116006)(66476007)(66446008)(66946007)(4326008)(86362001)(66556008)(64756008)(8676002)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vXeCIb3tu05ao2n5HtsVg45Ma/6NJ2s0OaTJzJBD55Lozj0z6OFFGtvtQr9I?=
+ =?us-ascii?Q?7v+V2ClEOS1G+j0QjyKN5MbNq1GMnrT43V4MGD3eaIJ4z5ODYUlpvJLYMF5V?=
+ =?us-ascii?Q?JjAuCMKYOVDsYpbkwTzNupYEc14iN1Zb3Uzjx/fzCIOZ8ySYb1N+sVeE0x7K?=
+ =?us-ascii?Q?ZpZetihoNHDCwto+wl7TD+xQ7ncl0HzZUgyOimOPmZQVzzEBdVZ6ozMRTlNB?=
+ =?us-ascii?Q?a1FBlQ4Zq0Zv8zT3KNcMtGgc5aPefqgRIMN3f99uE0r+NheTu31jBafRstVS?=
+ =?us-ascii?Q?8BKcnVWSLeYEGjFBJXC66aM2ixZZhWRByAlhuBTJ6iCwt2T9eqxurV0wDGMh?=
+ =?us-ascii?Q?LHsBcAQAjKJlo/inVhPVbOItIPF+Q8PW7yvXje2bKnDh5qlNaPvrLhSJt9Hl?=
+ =?us-ascii?Q?DFnqDsJ1q9XquIg56MEZyFXjBGWq+b9FW+BGnDch8qemUgw5WFM+saeWl8KH?=
+ =?us-ascii?Q?1AIgZYC2R7ejt+U8WFi845IGBKkQn9CNuF/gyHp5p4uT0zltxfg5WdX+vNvr?=
+ =?us-ascii?Q?QZY1EScd7Oew6d94GJlymkhcudIGk1V39QeFPT2oEA7FrpMF1cAiHatdUgYS?=
+ =?us-ascii?Q?nBS/x6EoKSUtYWLavjfdVYEaSdOoFoYciivUj3OYgF+3n23x4qRWDTeAmZAc?=
+ =?us-ascii?Q?RBy1K2MaBNtHWjxUXANmfdvSj2cxFXvXHDXWOIyGlO8CfLTB4MppFgGRWBzB?=
+ =?us-ascii?Q?+2Z5HFzskMuX0fKdFl6h8GJJrpsknwq3CmJ+hXI3t2AsmRw8JI9iHO4u+X8U?=
+ =?us-ascii?Q?VRt3w9UmqoT8mYzKizCaVzBElkx8aKeN2qtOEOL08kFvmqJqHvy5XcESS9nJ?=
+ =?us-ascii?Q?/tsZQ/12Oafh5exfN68NM7nS90wFLugtZumtX6ADZgtKb3+DJPFMEPPFxisJ?=
+ =?us-ascii?Q?78NY1HlscA8VBJlMcy0ncH0fNj9rZhFcQLny0Mx/j0hZq4igWOlufvySOMJO?=
+ =?us-ascii?Q?E45GWx1ShGW7US4SWjbhEjbcPDEf5gMK7i5JS74DrvHNE9uRk8Xljan1yzoq?=
+ =?us-ascii?Q?AojUpDSL6sxRb7UL1AzHePfd2+3LuFjs3XLCHeKlcmf+nS4r8tctS2+4LmO7?=
+ =?us-ascii?Q?sFGs7dUNnngJ31Leq1SgDDLJpKV2GXM6HDKAyZs88JrFHarQ7pmu4NybIYcE?=
+ =?us-ascii?Q?+zKlWNnBhN+O93aBKPxXEAe7+455KzMO4sBE9wxKmw8PwAeoIP0YdZNZxq/A?=
+ =?us-ascii?Q?beWux2pwil1TEet9MZZnuXIOUoD1GsAYJySSmeJwCx+o80eR/PY9gmu30P9B?=
+ =?us-ascii?Q?My+ep2PZ01TWKFYncwmnsQHRkhlGHGqjDdGfzSHZZ687KgOp1H/kvfqJIHNF?=
+ =?us-ascii?Q?qB6Um7S5A72AFIwaCFkV3JN/P2HYgHEZKc8KgG8UGMKpwFdDlCRXokGVJ7Fv?=
+ =?us-ascii?Q?r+q4fKUEJtHAjTJqOBWzl6g1pWW9p+N9CkaygUM3KHnOzuBKvAsxrvwuxN42?=
+ =?us-ascii?Q?FbCEWaDr4KTEeC2fHrjCKdUHsIP16jqmd4maBuy0Mj70SQE6FCBPzaT9jNAI?=
+ =?us-ascii?Q?VUTZOrwPYKbCh4pu/a74md8K0jRuFLR8BiLNvLO25DMfZXM1JmlCIfwzk8G9?=
+ =?us-ascii?Q?VZuC+dJ5DHvXdBeZ0MsdGnDyvYURykHT3n1ACW1S?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58dc55e7-ad14-4f38-9c2d-08da6c0bb52a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2022 17:57:56.5942
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ojLXAPWEs7066FiQLOCmFHCU1LOVSipe0KfIZ8Hyh0nwzgj8o+WAaLdAIDEs5+nGzHbX07Pb/mijmo7QqX6b5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5005
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 01:53, Geert Uytterhoeven wrote:
-> During s2idle, the following trace data is generated:
-> 
->     kworker/u16:9-325     [000] ...2.   230.478731: block_rq_issue: 8,0
-> N 0 () 0 + 0 [kworker/u16:9]
->     kworker/u16:9-325     [000] ...2.   230.478745:
-> scsi_dispatch_cmd_start: host_no=0 channel=0 id=0 lun=0 data_sgl=0
-> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=0
-> cmnd=(SYNCHRONIZE_CACHE - raw=35 00 00 00 00 00 00 00 00 00)
->            <idle>-0       [007] d.h3.   230.478832:
-> scsi_dispatch_cmd_done: host_no=0 channel=0 id=0 lun=0 data_sgl=0
-> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=0
-> cmnd=(SYNCHRONIZE_CACHE - raw=35 00 00 00 00 00 00 00 00 00)
-> result=(driver=DRIVER_OK host=DID_OK message=COMMAND_COMPLETE
-> status=SAM_STAT_GOOD)
->            <idle>-0       [000] ..s2.   230.478851: block_rq_complete:
-> 8,0 N () 18446744073709551615 + 0 [0]
->     kworker/u16:9-325     [000] ...2.   230.483134: block_rq_issue: 8,0
-> N 0 () 0 + 0 [kworker/u16:9]
->     kworker/u16:9-325     [000] ...2.   230.483136:
-> scsi_dispatch_cmd_start: host_no=0 channel=0 id=0 lun=0 data_sgl=0
-> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=1
-> cmnd=(START_STOP - raw=1b 00 00 00 00 00)
->            <idle>-0       [007] d.h3.   230.624530:
-> scsi_dispatch_cmd_done: host_no=0 channel=0 id=0 lun=0 data_sgl=0
-> prot_sgl=0 prot_op=SCSI_PROT_NORMAL driver_tag=0 scheduler_tag=1
-> cmnd=(START_STOP - raw=1b 00 00 00 00 00) result=(driver=DRIVER_OK
-> host=DID_OK message=COMMAND_COMPLETE status=SAM_STAT_GOOD)
->            <idle>-0       [000] d.s4.   230.624634: scsi_eh_wakeup: host_no=0
->            <idle>-0       [000] ..s2.   230.624642: block_rq_complete:
-> 8,0 N () 18446744073709551615 + 0 [0]
->    kworker/u16:14-1027    [007] d..3.   231.393642: scsi_eh_wakeup: host_no=0
-> 
-> When reading from hard drive after s2idle, no more trace data
-> is generated.
+>
+>On Sat, Jul 23, 2022 at 12:49:49AM +0800, Jiebin Sun wrote:
+>> From: jiebin sun <jiebin.sun@intel.com>
+>>
+>> Remove the redundant updating of stats_flush_threshold. If the global
+>> var stats_flush_threshold has exceeded the trigger value for
+>> __mem_cgroup_flush_stats, further increment is unnecessary.
+>>
+>> Apply the patch and test the pts/hackbench-1.0.0 Count:4 (160 threads).
+>>
+>> Score gain: 1.95x
+>> Reduce CPU cycles in __mod_memcg_lruvec_state (44.88% -> 0.12%)
+>>
+>> CPU: ICX 8380 x 2 sockets
+>> Core number: 40 x 2 physical cores
+>> Benchmark: pts/hackbench-1.0.0 Count:4 (160 threads)
+>>
+>> Signed-off-by: Jiebin Sun <jiebin.sun@intel.com>
+>
+>Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+>
+>Good optimization, thanks!
 
-I think the above commands come from the suspend sequence. '1b 00 00 00 
-00 00' stops a block device. The lowest bit in byte 4 needs to be set to 
-start a block device.
+Looks good. Nice performance improvement.
 
-Something that is not yet clear is whether or not sd_submit_start() 
-hangs during the resume process. How about verifying whether or not 
-sd_submit_start() hangs by either issuing SysRq-t or by adding pr_info() 
-statements in that function?
-
-Thanks,
-
-Bart.
+Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>

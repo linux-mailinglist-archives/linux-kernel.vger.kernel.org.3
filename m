@@ -2,230 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24C657E3C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A636457E3CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbiGVP3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S235231AbiGVPa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiGVP3c (ORCPT
+        with ESMTP id S232331AbiGVPay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:29:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FB39EC5C;
-        Fri, 22 Jul 2022 08:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1658503769; x=1690039769;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JJMg/JItXY2a7h4X5arrjc+qdPJvmFrq4BolHcVj9J4=;
-  b=I1Rgg3PDozqVcR0bh7YAgGEsrGTY7/ldKQe8tvd5fFFteSHPytDTbw3t
-   vAB3BGMSzR/KY63B6yycIWrOLPKzsbMbbUQyScw0X/tbNqtd6ROiGC1fA
-   O+Sh75GtDzkcF9o1qfWHY4Io3fE+xYIZozVOv5AQKKMtdnCtEVtF73jm4
-   GcRDietnGujrPVRe7ces+uPiRaccIebaJKL/pIQLYPUikE6cSv3QlSn8H
-   bUnb6iWNHTzUBZLFWUldwE4fXbhNvjIbaqR05PlEx7AY1SdnjPtEsVFp5
-   jS0fOORaexRnp/CcQnqMg1fQIhgzP/QEZHihcF1+0Vbs+mPu3x6h2HblK
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="169088011"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jul 2022 08:29:28 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 22 Jul 2022 08:29:27 -0700
-Received: from ryan-Precision-5560.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 22 Jul 2022 08:29:27 -0700
-From:   <Ryan.Wanner@microchip.com>
-To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Ryan Wanner" <Ryan.Wanner@microchip.com>
-Subject: [PATCH v2] ASoC: dt-bindings: atmel-i2s: Convert to json-schema
-Date:   Fri, 22 Jul 2022 08:29:45 -0700
-Message-ID: <20220722152945.2950807-1-Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 22 Jul 2022 11:30:54 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E51861137;
+        Fri, 22 Jul 2022 08:30:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3B6AF38191;
+        Fri, 22 Jul 2022 15:30:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658503852; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PY0km1b0c4QCpa5lX65f+GqyyO69GGtiugaAUPVq0/8=;
+        b=TvL/mQHkAM+yTOvUaVY1orKzq7Tv1pgSyGAtnqEvKAqcKMBM/zZUHOu2kIAlkDhuoxdica
+        F4HXvtxEKIKF34FkPRF6rsCNsNpxz2qdqnvC5wY6btIfCqMcy8en+fwgY9vlcqJUeUUdo3
+        pNV5J2eFg0x7TARJJ1BIurqykaBmA3k=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 11D822C15A;
+        Fri, 22 Jul 2022 15:30:51 +0000 (UTC)
+Date:   Fri, 22 Jul 2022 17:30:48 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        kernel-team@fb.com, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Breno Leitao <leitao@debian.org>
+Subject: Re: [PATCH,RFC] livepatch: fix race between fork and
+ klp_reverse_transition
+Message-ID: <YtrCqMLUqJlcoqIo@alley>
+References: <20220720121023.043738bb@imladris.surriel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720121023.043738bb@imladris.surriel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+On Wed 2022-07-20 12:10:23, Rik van Riel wrote:
+> When a KLP fails to apply, klp_reverse_transition will clear the
+> TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
+> which are not on the task list yet.
+> 
+> Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
+> parent to the child early on, in dup_task_struct -> setup_thread_stack.
+> 
+> Much later, klp_copy_process will set child->patch_state to match
+> that of the parent.
+> 
+> However, the parent's patch_state may have been changed by KLP loading
+> or unloading since it was initially copied over into the child.
+> 
+> This results in the KLP code occasionally hitting this warning in
+> klp_complete_transition:
+> 
+>         for_each_process_thread(g, task) {
+>                 WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
+>                 task->patch_state = KLP_UNDEFINED;
+>         }
 
-Convert atmel i2s devicetree binding to json-schema.
-Change file name to match json-schema naming.
+I see.
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
-Note: running dtbs_check will fail unless updated with this patch,
-https://lore.kernel.org/linux-arm-kernel/20220707215812.193008-1-Ryan.Wanner@microchip.com/
+> This patch will set, or clear, the TIF_PATCH_PENDING flag in the child
+> process depending on whether or not it is needed at the time
+> klp_copy_process is called, at a point in copy_process where the
+> tasklist_lock is held exclusively, preventing races with the KLP
+> code.
+> 
+> This should prevent this warning from triggering again in the
+> future.
+> 
+> I have not yet figured out whether this would also help with races in
+> the other direction, where the child process fails to have TIF_PATCH_PENDING
+> set and somehow misses a transition, or whether the retries in
+> klp_try_complete_transition would catch that task and help it transition
+> later.
+> 
+> Signed-off-by: Rik van Riel <riel@surriel.com>
+> Reported-by: Breno Leitao <leitao@debian.org>
+> ---
+>  kernel/livepatch/transition.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> index 5d03a2ad1066..7a90ad5e9224 100644
+> --- a/kernel/livepatch/transition.c
+> +++ b/kernel/livepatch/transition.c
+> @@ -612,7 +612,15 @@ void klp_copy_process(struct task_struct *child)
+>  {
+>  	child->patch_state = current->patch_state;
+>  
+> -	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
+> +	/*
+> +	 * The parent process may have gone through a KLP transition since
+> +	 * the thread flag was copied in setup_thread_stack earlier. Set
+> +	 * the flag according to whether this task needs a KLP transition.
+> +	 */
+> +	if (child->patch_state != klp_target_state)
+> +		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
+> +	else
+> +		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
+>  }
 
-v1 -> v2:
-- Fix formatting for clock description.
-- Fix formatting for dma description.
+I am afraid that it is more complicated.
 
- .../bindings/sound/atmel,sama5d2-i2s.yaml     | 85 +++++++++++++++++++
- .../devicetree/bindings/sound/atmel-i2s.txt   | 46 ----------
- 2 files changed, 85 insertions(+), 46 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
- delete mode 100644 Documentation/devicetree/bindings/sound/atmel-i2s.txt
+If the parent process might have gone through a KLP transition
+then also the transition might have finished and klp_target_state might be
+KLP_UNDEFINED. We must not set TIF_PATCH_PENDING in this case.
 
-diff --git a/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml b/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
-new file mode 100644
-index 000000000000..0cd1ff89baed
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/atmel,sama5d2-i2s.yaml
-@@ -0,0 +1,85 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/atmel,sama5d2-i2s.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Atmel I2S controller
-+
-+maintainers:
-+  - Nicolas Ferre <nicolas.ferre@microchip.com>
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+  - Claudiu Beznea <claudiu.beznea@microchip.com>
-+
-+description:
-+  Atmel I2S (Inter-IC Sound Controller) bus is the standard
-+  interface for connecting audio devices, such as audio codecs.
-+
-+properties:
-+  compatible:
-+    const: atmel,sama5d2-i2s
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Peripheral clock
-+      - description: Generated clock (Optional)
-+      - description: I2S mux clock (Optional). Set
-+          with gclk when Master Mode is required.
-+    minItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: pclk
-+      - const: gclk
-+      - const: muxclk
-+    minItems: 1
-+
-+  dmas:
-+    items:
-+      - description: TX DMA Channel
-+      - description: RX DMA Channel
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - dmas
-+  - dma-names
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/dma/at91.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    i2s@f8050000 {
-+        compatible = "atmel,sama5d2-i2s";
-+        reg = <0xf8050000 0x300>;
-+        interrupts = <54 IRQ_TYPE_LEVEL_HIGH 7>;
-+        dmas = <&dma0
-+                (AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
-+                AT91_XDMAC_DT_PERID(31))>,
-+               <&dma0
-+                (AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
-+                AT91_XDMAC_DT_PERID(32))>;
-+        dma-names = "tx", "rx";
-+        clocks = <&i2s0_clk>, <&i2s0_gclk>, <&i2s0muxck>;
-+        clock-names = "pclk", "gclk", "muxclk";
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_i2s0_default>;
-+    };
-diff --git a/Documentation/devicetree/bindings/sound/atmel-i2s.txt b/Documentation/devicetree/bindings/sound/atmel-i2s.txt
-deleted file mode 100644
-index 40549f496a81..000000000000
---- a/Documentation/devicetree/bindings/sound/atmel-i2s.txt
-+++ /dev/null
-@@ -1,46 +0,0 @@
--* Atmel I2S controller
--
--Required properties:
--- compatible:     Should be "atmel,sama5d2-i2s".
--- reg:            Should be the physical base address of the controller and the
--                  length of memory mapped region.
--- interrupts:     Should contain the interrupt for the controller.
--- dmas:           Should be one per channel name listed in the dma-names property,
--                  as described in atmel-dma.txt and dma.txt files.
--- dma-names:      Two dmas have to be defined, "tx" and "rx".
--                  This IP also supports one shared channel for both rx and tx;
--                  if this mode is used, one "rx-tx" name must be used.
--- clocks:         Must contain an entry for each entry in clock-names.
--                  Please refer to clock-bindings.txt.
--- clock-names:    Should be one of each entry matching the clocks phandles list:
--                  - "pclk" (peripheral clock) Required.
--                  - "gclk" (generated clock) Optional (1).
--                  - "muxclk" (I2S mux clock) Optional (1).
--
--Optional properties:
--- pinctrl-0:      Should specify pin control groups used for this controller.
--- princtrl-names: Should contain only one value - "default".
--
--
--(1) : Only the peripheral clock is required. The generated clock and the I2S
--      mux clock are optional and should only be set together, when Master Mode
--      is required.
--
--Example:
--
--	i2s@f8050000 {
--		compatible = "atmel,sama5d2-i2s";
--		reg = <0xf8050000 0x300>;
--		interrupts = <54 IRQ_TYPE_LEVEL_HIGH 7>;
--		dmas = <&dma0
--			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
--			 AT91_XDMAC_DT_PERID(31))>,
--		       <&dma0
--			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
--			 AT91_XDMAC_DT_PERID(32))>;
--		dma-names = "tx", "rx";
--		clocks = <&i2s0_clk>, <&i2s0_gclk>, <&i2s0muxck>;
--		clock-names = "pclk", "gclk", "muxclk";
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_i2s0_default>;
--	};
--- 
-2.34.1
+Now, we might race with klp_complete_transition() at any stage. It
+might be before or after setting task->patch_state = KLP_UNDEFINED.
+And it might be before or after setting klp_target_state =
+KLP_UNDEFINED.
 
+The great thing is that we could not race with
+klp_update_patch_state() that would be migrating current because
+we are current.
+
+So, the easiest solution would be to copy the flag from current
+once again here:
+
+
+/* Called from copy_process() during fork */
+void klp_copy_process(struct task_struct *child)
+{
+	/*
+	 * The parent process may have gone through a KLP transition since
+	 * the thread flag was copied in setup_thread_stack earlier.
+	 * Copy also the flag once again here.
+	 *
+	 * The operation is serialized against all klp_*_transition()
+	 * operations by tasklist_lock. The only exception is
+	 * klp_update_patch_state(current). But it could not race
+	 * because we are current.
+	 */
+	if (test_tsk_thread_flag(current, TIF_PATCH_PENDING))
+		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
+	else
+		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
+
+	child->patch_state = current->patch_state;
+}
+
+
+I hope that I did not miss anything. It is Friday.
+
+Best Regards,
+Petr

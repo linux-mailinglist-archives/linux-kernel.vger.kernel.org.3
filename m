@@ -2,57 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D7957E244
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E2957E246
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbiGVNWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
+        id S234516AbiGVNXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiGVNWs (ORCPT
+        with ESMTP id S229605AbiGVNXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:22:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9A814093
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658496168; x=1690032168;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4dCRYxzaSN3QlF3PmmCPrNOQ9lt9BRBjpw+0cUrvqJ0=;
-  b=LoWpDyQeu5Yzn75vhVmSwhKwZesF740GEQpz+uVgPdMYBU20SXl8pn2t
-   Yuoa9F+8RuK+DGu+TgM8ke9+JwisIwWEDH29Il5/k2Wmovh5zBiqrAV3W
-   lreK+c0dN9LWkM+irFaKzfGAN1FXaJo86Q9tmBT2g39hLaMJ8Ka29u7rT
-   fwwqH5Ixst3rf1IqAoptzgXvZaMrG/ahAqLUz5t8zb5RkDVU/kW0QqMCE
-   C/jnuPBtwM/Nz4yh+bityDTh+82eINDmV21HXqq7lAl41mdngzmpTEN87
-   kLRo1OY9JFdXTHBU389OmwMm/Mr2i/YVitEhzxhKGqdwymcBAryWzhZhE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="351305197"
-X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="351305197"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 06:22:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,185,1654585200"; 
-   d="scan'208";a="631562556"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jul 2022 06:22:47 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oEscA-0001T0-1F;
-        Fri, 22 Jul 2022 13:22:46 +0000
-Date:   Fri, 22 Jul 2022 21:22:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kbusch:dma-prereg-v3-wip 5/6] arc-elf-ld: rsrc.c:undefined
- reference to `io_dma_unmap'
-Message-ID: <202207222145.oh14nNlu-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Fri, 22 Jul 2022 09:23:41 -0400
+Received: from redcrew.org (redcrew.org [37.157.195.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA518CEAE
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 06:23:40 -0700 (PDT)
+Received: from server.danny.cz (85-71-161-19.rce.o2.cz [85.71.161.19])
+        by redcrew.org (Postfix) with ESMTP id D7B52A0C;
+        Fri, 22 Jul 2022 15:23:38 +0200 (CEST)
+Received: from talos.danny.cz (unknown [IPv6:2001:470:5c11:160:47df:83f6:718e:218])
+        by server.danny.cz (Postfix) with SMTP id 4D41A11AA6B;
+        Fri, 22 Jul 2022 15:23:38 +0200 (CEST)
+Date:   Fri, 22 Jul 2022 15:23:38 +0200
+From:   Dan =?UTF-8?B?SG9yw6Fr?= <dan@danny.cz>
+To:     Michael Ellerman <michael@ellerman.id.au>
+Cc:     amd-gfx@lists.freedesktop.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Alex Deucher <alexdeucher@gmail.com>,
+        <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] amdgpu: re-enable DCN for ppc64le
+Message-Id: <20220722152338.da89f3c445f503ab3b349e78@danny.cz>
+In-Reply-To: <87o7xhcoqh.fsf@mpe.ellerman.id.au>
+References: <20220722082122.571974-1-dan@danny.cz>
+        <87o7xhcoqh.fsf@mpe.ellerman.id.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; powerpc64le-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,34 +46,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git dma-prereg-v3-wip
-head:   4625fa7adf745334c0a2eb635121d587df797b29
-commit: 1390adeaee356151aeb13383e6ee1ad1c5798816 [5/6] io_uring: add support for dma pre-mapping
-config: arc-randconfig-s041-20220721 (https://download.01.org/0day-ci/archive/20220722/202207222145.oh14nNlu-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=1390adeaee356151aeb13383e6ee1ad1c5798816
-        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
-        git fetch --no-tags kbusch dma-prereg-v3-wip
-        git checkout 1390adeaee356151aeb13383e6ee1ad1c5798816
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
+On Fri, 22 Jul 2022 22:32:06 +1000
+Michael Ellerman <michael@ellerman.id.au> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Hi Dan,
+> 
+> [ Cc += linuxppc-dev  ]
+> 
+> Dan Horák <dan@danny.cz> writes:
+> > Commit d11219ad53dc disabled the DCN driver for all platforms that
+> > define PPC64 due long build issues during "make allmodconfig" using
+> > cross-compilation. Cross-compilation defaults to the ppc64_defconfig
+> > and thus big-endian toolchain configuration. The ppc64le platform uses a
+> > different ABI and doesn't suffer from the build issues.
+> 
+> Unfortunately it's a bit messier than that.
 
-All errors (new ones prefixed by >>):
+yes, seems it is :-)
 
-   arc-elf-ld: arc-elf-ld: DWARF error: could not find abbrev number 1914737
-   io_uring/rsrc.o: in function `io_buffer_unmap':
-   rsrc.c:(.text+0x2a6): undefined reference to `io_dma_unmap'
->> arc-elf-ld: rsrc.c:(.text+0x2a6): undefined reference to `io_dma_unmap'
+> The build error occurs when the compiler is built to use a 64-bit long
+> double type.
+> 
+> The ppc64le ABI document says that long double should be 128-bits, but
+> there are ppc64le compilers out there that are configured to use 64-bit
+> long double, notably the kernel.org crosstool compilers.
+> 
+> So just testing for CPU_LITTLE_ENDIAN means we'll still get build errors
+> on those compilers.
+> 
+> But I think we can detect the long double size and key off that. Can you
+> test the patch below works for you?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+yes, it does work, meaning it defines AMD_DC_DCN on Fedora/ppc64le (and
+build is OK)
+
+
+		Dan
+
+> 
+> cheers
+> 
+> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 7aa12e88c580..e9f8cd50af99 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -281,6 +281,9 @@ config PPC
+>  	# Please keep this list sorted alphabetically.
+>  	#
+>  
+> +config PCC_LONG_DOUBLE_128
+> +	def_bool $(success,test "$(shell,echo __LONG_DOUBLE_128__ | $(CC) -E -P -)" = 1)
+> +
+>  config PPC_BARRIER_NOSPEC
+>  	bool
+>  	default y
+> diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+> index b4029c0d5d8c..ec6771e87e73 100644
+> --- a/drivers/gpu/drm/amd/display/Kconfig
+> +++ b/drivers/gpu/drm/amd/display/Kconfig
+> @@ -6,7 +6,7 @@ config DRM_AMD_DC
+>  	bool "AMD DC - Enable new display engine"
+>  	default y
+>  	select SND_HDA_COMPONENT if SND_HDA_CORE
+> -	select DRM_AMD_DC_DCN if (X86 || PPC64) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
+> +	select DRM_AMD_DC_DCN if (X86 || PPC_LONG_DOUBLE_128) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
+>  	help
+>  	  Choose this option if you want to use the new display engine
+>  	  support for AMDGPU. This adds required support for Vega and

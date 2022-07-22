@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C1157E8EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB40157E8EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235670AbiGVVep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 17:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S236139AbiGVVfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 17:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiGVVen (ORCPT
+        with ESMTP id S229522AbiGVVfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 17:34:43 -0400
-Received: from ixit.cz (ip-94-112-206-30.bb.vodafone.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9F8AF843;
-        Fri, 22 Jul 2022 14:34:40 -0700 (PDT)
-Received: from [10.0.0.163] (_gateway [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 3F0D12007F;
-        Fri, 22 Jul 2022 23:34:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1658525677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IGvDGHRGx9ntEIidHJIFw9uv8+buMKH8bvNvMLSCf3w=;
-        b=JLDpM72YTJgPfeMefMM/Npbs8Lz5xh8x96C9nbsVInesHuNWAYVJlE2xZci7XT/G6977iB
-        QryG4NMu0iCW1oC39FBrAjqxAsEjSKXKWfY9KHCoibx8LPrFZrHVodqTwr1V7L8sxhnVY0
-        RWDKL7bZJJShW1kY3WrUu6L9P4PMbSA=
-Message-ID: <b228bc62-c307-0662-3a6e-e3408c328178@ixit.cz>
-Date:   Fri, 22 Jul 2022 23:34:36 +0200
+        Fri, 22 Jul 2022 17:35:47 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15CEAF843
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:35:45 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id r82so6944165oig.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 14:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc;
+        bh=9WScczfM7tLHRbQ7a/K4AEWRZApP20xQzhsemglgp/Y=;
+        b=aLHUbGrR02PJ4ixgBCGa1InFsJsCBWmLb2s2PpIhGy6R5aKyboeaDnWdT3NQtekc6V
+         guUdfehOHU3dYQN5slembq6V1+7iHhqE61aDtlHhYlcvIOxfMgEqx+9VlgODK5G6JwyL
+         w772qBXwsgHaqQuVb7pycZ6D1xynJieCfB6vQRBrA+be1RSnYN3cD7+Jl8sCkMKaWcR1
+         Lae57Ow2LzlcDbwYmpMRe0H7IsW49D8XLHXhHddViCjpEGgMbfgydUPfu/jBSMLqkFDM
+         rM/AY1XdzxTerV/nYq2OpfFgNxEM6r/+RDFEOT513F82amDb7HkJoh4MXMSi+ZQF54ZC
+         7TNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9WScczfM7tLHRbQ7a/K4AEWRZApP20xQzhsemglgp/Y=;
+        b=7p0lZf1Vc4aaRPcqpnDIblSH4/BwxaDa/Wv2itrS6siLeABH1VL7/M8T69dx5M90lR
+         6J5Au3P1Qwwz4ejvRY1Fn6qFOJuYelhnwnufYPZqXkaZBo7H5uxqaTPYn0AQRbe4IyIo
+         7V5Pj/Li0Q2kDvG6voiWwT/LBaipW/Auy6tKZOuw2isY3Aeg0v49/V75zFTKX3jV5D8p
+         w/Z01LwE71ILo4VuDrqMeMxVLxjvaWoam15/Y4qXa7K+6gtg37PWgRvls1DTzIN5qWyq
+         WNwedCYcDfr6epdD2Bo9Leo3erNrPfvTWPEiV8TVpFbdh/V0MZqRAsEt7YhR2oRoXkmk
+         V2Gg==
+X-Gm-Message-State: AJIora9Pwbnj9ZA6g7ealPuTlzZuZE6eH5sy9Q/S/rgcynKK3ewYFU53
+        CoU3U0D+5958dKvKWcTAyDqpObeivDOWWZ1aRBu9Sw==
+X-Google-Smtp-Source: AGRyM1t5gcrsQUWx4KEK+HMA0HWzJU9lnY7v9J33qzIx1kJA7cVjNjW4XbO0pElZifCJQTZMaEZHTjePbIUjqSPjkUc=
+X-Received: by 2002:a05:6808:1b28:b0:33a:b03e:5d1 with SMTP id
+ bx40-20020a0568081b2800b0033ab03e05d1mr3893621oib.112.1658525744847; Fri, 22
+ Jul 2022 14:35:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
- Thunderbird/103.0
-Subject: Re: [PATCH v5] dt-bindings: firmware: convert Qualcomm SCM binding to
- the yaml
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220708090431.30437-1-david@ixit.cz>
- <20220711225705.GA422079-robh@kernel.org>
-Content-Language: en-US
-From:   David Heidelberg <david@ixit.cz>
-In-Reply-To: <20220711225705.GA422079-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 22 Jul 2022 14:35:34 -0700
+Message-ID: <CALMp9eT4-hVw9Gwp00K59JstS52vidSRcV0WW5qEhJvaY6aR5g@mail.gmail.com>
+Subject: RFC: The hypervisor's responsibility to stuff the RSB
+To:     kvm list <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Paul Turner <pjt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/2022 00:57, Rob Herring wrote:
-> On Fri, Jul 08, 2022 at 11:04:31AM +0200, David Heidelberg wrote:
->> Convert Qualcomm SCM firmware binding to the yaml format.
->>
->> This commit also:
->>   - adds qcom,scm-mdm9607 into list which has only core clock
->>   - adds qcom,scm-sm6125, qcom,scm-ipq6018
->>   - #reset-cells, because the property is already used
->>
->> Signed-off-by: David Heidelberg <david@ixit.cz>
->> --
-> Should be '---' in order to be removed automatically when applying.
-typo, sorry.
+Now that Retbleed has drawn everyone's attention back to Skylake's
+RSBA behavior, I've been hearing murmurings about the hypervisor's
+responsibility to stuff the RSB on VM-entry when running on RSBA
+parts.
+
+Referring back to Intel's paper, "Retpoline: A Branch Target Injection
+Mitigation," it does say:
+
+> There are also a number of events that happen asynchronously from normal =
+program execution that can result in an empty RSB. Software may use =E2=80=
+=9CRSB stuffing=E2=80=9D sequences whenever these asynchronous events occur=
+:
 >
->> v5:
->>   - add qcom,scm-sdx65 from new commit to txt binding
->>   - add freshly merged qcom,scm-sc8280xp
->>   - add interconnects
->>   - add accidentally removed # from #include directive
->>   - move mdm9607 to 3 clocks (thx @Guru)
->>   - fix compatible string in example
->> v4:
->>   - added clocks minItems and maxItems
->>   - removed quotes from $id and $schema
->>   - adjusted description of TCSR HW block
->> v3:
->>   - add preceding patches for ARM and arm64 adding missing compatible strings
->>   - extended with missing compatible strings
->>   - added two additional maintainers, see https://lkml.org/lkml/2022/6/23/1969
->> v2:
->>   - changed maintainer to Bjorn
->>   - document #reset-cells
->>
->>   .../devicetree/bindings/firmware/qcom,scm.txt |  61 --------
->>   .../bindings/firmware/qcom,scm.yaml           | 147 ++++++++++++++++++
->>   2 files changed, 147 insertions(+), 61 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.txt
->>   create mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> Doesn't apply for me, so I'm assuming this will go via QCom tree.
-if you want to merge it, I can rebase it against your tree?
+> 1. Interrupts/NMIs/traps/aborts/exceptions which increase call depth.
+> 2. System Management Interrupts (SMI) (see BIOS/Firmware Interactions).
+> 3. Host VMEXIT/VMRESUME/VMENTER.
+> 4. Microcode update load (WRMSR 0x79) on another logical processor of the=
+ same core.
 >
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Software may avoid RSB underflow by inserting an =E2=80=9CRSB stuffing=E2=
+=80=9D sequence following all of the above conditions.
 
--- 
-David Heidelberg
-Consultant Software Engineer
+KVM *does* stuff the RSB on VM-exit, to protect the host kernel.
+However, it fails to stuff the RSB on VM-entry. Stuffing the RSB on
+VM-entry is necessary to protect the guest if KVM has made any unsafe
+changes to the RSB, such as reducing its depth. Though Intel doesn't
+spell it out, the responsibility of the hypervisor on VM-entry is much
+the same as the responsibility of the SMI handler on RSM.
 
-Matrix: @okias:matrix.org
+For reference, here's the "BIOS/Firmware Interactions" section of the
+aforementioned paper, referenced above:
 
+> System Management Interrupt (SMI) handlers can leave the RSB in a state t=
+hat OS code does not expect. In order to avoid RSB underflow on return from=
+ SMI, an SMI handler may implement RSB stuffing (for parts identified in Ta=
+ble 5) before returning from System Management Mode (SMM). Updated SMI hand=
+lers are provided via system BIOS updates.
+
+I don't really want to do this, but I don't want to be negligent, either.
+
+Thoughts?

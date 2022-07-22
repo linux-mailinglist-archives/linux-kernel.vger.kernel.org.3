@@ -2,108 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C296757D9DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 07:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D0157D9DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 07:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiGVFyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 01:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
+        id S231392AbiGVF52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 01:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiGVFyl (ORCPT
+        with ESMTP id S229505AbiGVF5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 01:54:41 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B590F4599E;
-        Thu, 21 Jul 2022 22:54:40 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id v5so2185971wmj.0;
-        Thu, 21 Jul 2022 22:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wtRd1qvdAKI4EiqU/d5bQkZ1Mrj4m7B9tT4Xan5GhTI=;
-        b=BDiR6U2zwdJvi1bgWd+EbtZ4G8s3dznN6s7t0FQJCYoSQz8HSSmBb2HTO6UuLVTXkW
-         StUgQltjbn1CZPDKFsHKbs71rUcuhk/B0r4kJdlAi0W3A/b9DWFcbUn51Q3P6GoQYT+a
-         m+V6vZv/3iAbNONDfOkFdn+5Q33GhIV5hurq0sOyYHDAatcuMy1XHlcQyzlqTBklZ4gG
-         /8yGvtOYjtauBPkc8yTRDWAXD12Iqche042qwU4EYH94m0Z7jFq8DuREC8m4lg1ajV/A
-         yL3vaxR3TyXnBLqkbL6VGqLSb1jKwYMKsmdvyPMfVarQ1Wk1PMpliIBConM9TW0ybohF
-         lrBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wtRd1qvdAKI4EiqU/d5bQkZ1Mrj4m7B9tT4Xan5GhTI=;
-        b=6feF64nuF0oXtj3GnLEUBQn7esmEX8bgh0mnSc21+pBH1UBwKUNG5AsJkM83aIoWZ1
-         hw1yg8iI2DDwiQVDsiX9YiQ+wI80KYh2JKNUpVULSCOxus1jkHIToqwFRbTvDYPv5l/U
-         lcEsK1IbM0pHfA0cSVub+kbMmXZNwkSf59RjxiqpZZhJCbgesSIayw+5bpzMxnPcpDcW
-         ZlK/x6hSMg90zj5FAQ05H5iwbnQyQSHsn5CGOkPl3mq3oTcyeMN1TZl108fyPDe2+9ul
-         5SwAyyyzfSAnTwFFr71N7CPbvUTCtvaCmMhU5iASD57W0arI1XevZGnv2TrCUUz/cuOy
-         AWVg==
-X-Gm-Message-State: AJIora9kkFNbswBF9SKeeJodl/poLcxzAojVeHbol+QxtHcIg5qt9EDN
-        V7DC24hBSSmx0U+fJkbnyslKk96JtgOcbaCI4Dg=
-X-Google-Smtp-Source: AGRyM1sk5ZU8IaLqqOKTh8qEVRx2CGlK0jDA7F9hx80lQ4G89IRyzzwbhpGCOInmUan1a4J3jx8v3pPF7yFxyL4Fyao=
-X-Received: by 2002:a05:600c:6014:b0:3a3:14c9:bef1 with SMTP id
- az20-20020a05600c601400b003a314c9bef1mr10924439wmb.112.1658469279167; Thu, 21
- Jul 2022 22:54:39 -0700 (PDT)
+        Fri, 22 Jul 2022 01:57:25 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A334A51A36
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 22:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658469443; x=1690005443;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Um0ffUX77L/N/JswSJjQanUKab3kt3+NmTAg6H3ENko=;
+  b=TVUz7VlsmGoXIuZRrU0veeFMpDG6xRaSRA5lsH6IpE6CPJkqUWhnZtq+
+   rHsHQOoF4G4UeWDAsykH/tqUnlo2EPDhgKeBctVy0qeIaTd3jg3rVIbx6
+   pr0UEnoBRyQExtyNBz3RVgQ5JTkcoyzQC+k4mTuPPgp6PnfgKGxHZ/wct
+   3iNnLgwPDKANrS+CMBBoxEcWWk7oB2XxOJNokyr4Zoqr9dEcl+rzBMfrx
+   moVMGRQUSSzqIW6p+RLCG3J2NDjgcdbl797grcOyRfbmartWz48lDRet4
+   LH6QVT8s7SvJWufnIUKN/4rcdEq/RH85UnwT64KzLlh907kpmXMJjmr6A
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10415"; a="274097755"
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="274097755"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 22:57:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,184,1654585200"; 
+   d="scan'208";a="626432812"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jul 2022 22:57:21 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oElf7-00013E-0n;
+        Fri, 22 Jul 2022 05:57:21 +0000
+Date:   Fri, 22 Jul 2022 13:56:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [arnd-playground:orion-pci-cleanup 3/5]
+ arch/arm/plat-orion/pcie.c:301:2: error: call to undeclared function
+ 'pci_add_resource'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202207221319.pet6mCTR-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220721044307.48641-1-frattaroli.nicolas@gmail.com>
-In-Reply-To: <20220721044307.48641-1-frattaroli.nicolas@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Fri, 22 Jul 2022 07:54:28 +0200
-Message-ID: <CAMdYzYohVLwOu94tv1FV9FVO7TRjBhA0nH6nWOgRCpBrxcujqg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: Lower sd speed on quartz64-b
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 6:43 AM Nicolas Frattaroli
-<frattaroli.nicolas@gmail.com> wrote:
->
-> The previously stated speed of sdr-104 is too high for the hardware
-> to reliably communicate with some fast SD cards.
->
-> Lower this to sd-uhs-sdr50 to fix this.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git orion-pci-cleanup
+head:   f154fdd063e0f8e231dbe3c06b03fbb1ec0ffb8c
+commit: b8537f0e3f6c609d0d723bb8c098919b5f515d5d [3/5] ARM: orion: simplify PCI code
+config: arm-randconfig-r021-20220718 (https://download.01.org/0day-ci/archive/20220722/202207221319.pet6mCTR-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=b8537f0e3f6c609d0d723bb8c098919b5f515d5d
+        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
+        git fetch --no-tags arnd-playground orion-pci-cleanup
+        git checkout b8537f0e3f6c609d0d723bb8c098919b5f515d5d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-I can confirm this is necessary. Thanks!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Peter Geis <pgwipeout@gmail.com>
+All errors (new ones prefixed by >>):
 
->
-> Fixes: dcc8c66bef79 ("arm64: dts: rockchip: add Pine64 Quartz64-B device tree")
->
-> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> index 02d5f5a8ca03..528bb4e8ac77 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
-> @@ -506,7 +506,7 @@ &sdmmc0 {
->         disable-wp;
->         pinctrl-names = "default";
->         pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
-> -       sd-uhs-sdr104;
-> +       sd-uhs-sdr50;
->         vmmc-supply = <&vcc3v3_sd>;
->         vqmmc-supply = <&vccio_sd>;
->         status = "okay";
-> --
-> 2.37.1
->
+>> arch/arm/plat-orion/pcie.c:301:2: error: call to undeclared function 'pci_add_resource'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           pci_add_resource(&bridge->windows, &iomem_resource);
+           ^
+   arch/arm/plat-orion/pcie.c:301:2: note: did you mean 'pci_find_resource'?
+   include/linux/pci.h:1844:32: note: 'pci_find_resource' declared here
+   static inline struct resource *pci_find_resource(struct pci_dev *dev,
+                                  ^
+   arch/arm/plat-orion/pcie.c:347:26: error: use of undeclared identifier 'pci_common_swizzle'
+                           bridge->swizzle_irq = pci_common_swizzle;
+                                                 ^
+>> arch/arm/plat-orion/pcie.c:349:10: error: call to undeclared function 'pci_host_probe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ret = pci_host_probe(bridge);
+                                 ^
+   3 errors generated.
+
+
+vim +/pci_add_resource +301 arch/arm/plat-orion/pcie.c
+
+   295	
+   296	static int orion_pci_init_resource(int nr, struct pci_host_bridge *bridge)
+   297	{
+   298		struct orion_pci_sys_data *sys = pci_host_bridge_priv(bridge);
+   299		int ret;
+   300	
+ > 301		pci_add_resource(&bridge->windows, &iomem_resource);
+   302	
+   303		sys->io_res.start = (nr * SZ_64K) ?  : pcibios_min_io;
+   304		sys->io_res.end = (nr + 1) * SZ_64K - 1;
+   305		sys->io_res.flags = IORESOURCE_IO;
+   306		sys->io_res.name = sys->io_res_name;
+   307		sprintf(sys->io_res_name, "PCI%d I/O", nr);
+   308	
+   309		ret = request_resource(&ioport_resource, &sys->io_res);
+   310		if (ret) {
+   311			pr_err("PCI: unable to allocate I/O port region (%d)\n", ret);
+   312			return ret;
+   313		}
+   314		pci_add_resource(&bridge->windows, &sys->io_res);
+   315	
+   316		return 0;
+   317	}
+   318	
+   319	void orion_pci_probe(int nr_controllers,
+   320		int (*setup)(int nr, struct pci_host_bridge *),
+   321		int (*map_irq)(const struct pci_dev *dev, u8 slot, u8 pin))
+   322	{
+   323		int ret;
+   324		int nr, busnr;
+   325	
+   326		pci_add_flags(PCI_REASSIGN_ALL_BUS);
+   327	
+   328		for (nr = busnr = 0; nr < nr_controllers; nr++) {
+   329			struct pci_host_bridge *bridge;
+   330	
+   331			bridge = pci_alloc_host_bridge(
+   332					sizeof(struct orion_pci_sys_data));
+   333			if (WARN(!bridge, "PCI: unable to allocate bridge!"))
+   334				break;
+   335	
+   336			bridge->busnr   = busnr;
+   337			ret = setup(nr, bridge);
+   338	
+   339			if (ret > 0) {
+   340				ret = orion_pci_init_resource(nr, bridge);
+   341				if (ret)  {
+   342					pci_free_host_bridge(bridge);
+   343					break;
+   344				}
+   345	
+   346				bridge->map_irq = map_irq;
+   347				bridge->swizzle_irq = pci_common_swizzle;
+   348	
+ > 349				ret = pci_host_probe(bridge);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A64157E718
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83C657E720
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbiGVTNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S235586AbiGVTOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiGVTNn (ORCPT
+        with ESMTP id S231149AbiGVTOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:13:43 -0400
+        Fri, 22 Jul 2022 15:14:47 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E898E6D3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:13:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51925A6F9F;
+        Fri, 22 Jul 2022 12:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658517222; x=1690053222;
+  t=1658517285; x=1690053285;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=YoJQ8g3alU7LX3m6yJN6hMCGycY7i0kWZrAaTQOKp5I=;
-  b=ZyF/9NosOSo5Se8zTWt9L2nrNOoWjnt8q/yuv9Cq46McO7UwKmyO6sAT
-   0oFAC3u0PeNmfJ5+vYBFoJceWmJjq8y9+xId0Lmj48ZlwBGyEMD2N4DVd
-   3UoaEWlGWL80hYOI3jwkbDnKVLUPy2kFI4jYPK36ExWzgxmYGOlPlCfnE
-   8xx6jhoMsJ5vPRT8MzVYnr97i/K0h0uH2UlWF3O2RlDy+DbEE9bZQKFtS
-   G+W0Re+edhTip8vjHgOVSPQR+hEacfhLrm3uv4MPvwO8TAlDrNpsFCxfd
-   gJ9PO9Bjaxr7VaDqVdapaNhJ9ZFh78fRRvHpsUFlHu6HX7b5j9p2EvqCW
+  bh=byfGDtmkRkASevcEx81TQf4ng/7TX7hruHD1iCw+1aE=;
+  b=gJRyAx3X+J69kA4NaBh26aap/sU8iO4YWokQT7tC2TYjYwiv5JiSvEdq
+   CP6WKkPihaEhmYYeCVHaMcIYx8WDqOX4oKs+y3JnbeQiygsCLhlNwVnpg
+   bwqVM+Fe6uZyeMYWDsR6GzLlfvw/uondmTuT1RtWreQPthQQr6JJFdamj
+   V3WwzQC4EyMWMGmzrXGEjPeos8qlgo33hJTRVQNrrZdb3fVXtG/wd2onM
+   UMwV7BVgNiUn8FbcNuJibrZCWWMHRSgVLFjSOvk63fN4v2IXp4wQiig7z
+   Ys0cLshCx/E+q6qZnXPruGeca3+WjvUI7/148GrD5mUrLOriIHDcYLkC0
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="349088845"
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="349089077"
 X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="349088845"
+   d="scan'208";a="349089077"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 12:13:25 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 12:14:44 -0700
 X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="926157886"
+   d="scan'208";a="926158163"
 Received: from jnoah-mobl.amr.corp.intel.com (HELO [10.209.71.211]) ([10.209.71.211])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 12:13:24 -0700
-Message-ID: <18578c5a-7a35-ab20-467c-80141b0410a8@intel.com>
-Date:   Fri, 22 Jul 2022 12:13:23 -0700
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 12:14:43 -0700
+Message-ID: <effbeeb0-6980-84e1-bb7e-75a279d6d834@intel.com>
+Date:   Fri, 22 Jul 2022 12:14:42 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
+ Notification
 Content-Language: en-US
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>, dave@sr71.net,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
- <403cfccb-7fff-ab0b-8ebd-e5b04e631571@intel.com>
- <20220722190524.GA3299911@ls.amr.corp.intel.com>
+        "H. Peter Anvin" <hpa@zytor.com>, Kai Huang <kai.huang@intel.com>,
+        Haitao Huang <haitao.huang@linux.intel.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
+ <YthcXSTfjoM+jjvN@google.com>
+ <00b07459-5512-b00b-636b-f35845ec369f@intel.com>
+ <YtrzwbLZjc+jURDI@google.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220722190524.GA3299911@ls.amr.corp.intel.com>
+In-Reply-To: <YtrzwbLZjc+jURDI@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -77,25 +72,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 12:05, Isaku Yamahata wrote:
->> So, the quote portion of this is basically a bidirectional blob sender.
->>  It's to send a blob between guest userspace to host userspace.
->>
->> Do we *REALLY* need specific driver functionality for this?  For
->> instance, is there no existing virtio device that can send blobs back
->> and forth?
-> It's virtio-vsock.  If virtio-vsock is available, the communication works.
-> However, some users would like to disable virtio-vsock on their environment for
-> some reasons.  Even virtio at all.  Especially for confidential computing use
-> case.  It's their choice.  It can't be assumed that virtio is available.
-> 
-> The goal is VMM-agnostic (but TDX-specific) interface for that.
+On 7/22/22 12:00, Sean Christopherson wrote:
+> 		/*
+> 		 * Assert that KVM explicitly allows or denies exposing all
+> 		 * features, i.e. detect attempts to add kernel support without
+> 		 * also updating KVM.
+> 		 */
+> 		BUILD_BUG_ON((KVM_SGX_ATTR_ALLOWED_MASK | KVM_SGX_ATTR_DENIED_MASK) !=
+> 			     (SGX_ATTR_PRIV_MASK | SGX_ATTR_UNPRIV_MASK));
 
-You're basically saying that every confidential computing technology
-should have its own host user <-> guest kernel <-> guest user ABI.
-That's insanity.  If we do this, we need *one* interface that says "talk
-to the hypervisor" that's common for all hypervisors and hardware
-vendors, or at least more than *one*.
-
-We don't need a way to talk to hypervisors for Intel systems and another
-for AMD and yet another on whatever.
+Looks good to me.  I'll do that for the next version.  Thanks!

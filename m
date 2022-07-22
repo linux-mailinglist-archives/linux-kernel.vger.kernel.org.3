@@ -2,89 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B101B57EA5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 01:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3653D57EA61
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 01:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236108AbiGVXlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 19:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S236444AbiGVXlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 19:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiGVXlH (ORCPT
+        with ESMTP id S236333AbiGVXlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 19:41:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 877F22E681
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658533265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=97bI5QgLIfV0Wdh5TUgNrSdu9yYHB/M82pkoGIrwijE=;
-        b=CeUQHDqpnskclmqcRpf48Sym2miLx3Kq0F/3j2CW//3Mstuon84uODoYi1ySZdLdUTdTBV
-        aMoL7oGq+L6YGXhmtX4DPlCykd0VZwAnIBNvUcNcFao4aVQgnygsbGDtpsaxVtTPXfp9W4
-        sNw/S8WsPbhg6CRmW56PpYglqHiCARQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-NGjStmuSOoeskmoxzp3mDg-1; Fri, 22 Jul 2022 19:41:04 -0400
-X-MC-Unique: NGjStmuSOoeskmoxzp3mDg-1
-Received: by mail-wm1-f72.google.com with SMTP id c126-20020a1c3584000000b003a02fa133ceso3078612wma.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:41:04 -0700 (PDT)
+        Fri, 22 Jul 2022 19:41:47 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E39EC40
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:41:46 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so5453687pjl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=cAsBcLqW/j10OPe10nECHhYviVbD1h1TXA0nTgOdmqs=;
+        b=C61i6+fG5SVbtUyJgdugCrOYXfNPORT+bMCi3jhy3CJPRst5DCeQAgv3YS6YDHyrbx
+         CM6Vdi8x3GdL9SdtB5jEt8pcevCTHNC8LCwFzLAdp3iFXxPAB5OBDgGtHOmMvLqnRUYk
+         f04ZpJCCojLFyTi+ODrur/jN0m3+2uhQnu4DGt6dnx5Raos1faX5JoSvvgDA60KK/Snz
+         3BcL+rH1alPvmtKtKMRh9e6NxT+jU59lt/PpXqjYi8eqpcCJS7Km3MxW2so3s9ZuGzSy
+         9BuAjA6s4y9JAdSZibrgmaLVfsBW44BKvbusfizAC2Qiz18vqvBbPzDtl23viSnurAkr
+         SSgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=97bI5QgLIfV0Wdh5TUgNrSdu9yYHB/M82pkoGIrwijE=;
-        b=TOTSHKtggni6h66aa0q+ePhEw5BtaDitghpsEbDdsPJwdQJkgHm8hoKg1KkeLB3ooa
-         nGOw2VM4Fbo9kfxH3FFpJe6NArR8fP+AFFZdzVxrCj8YpvEghufIpQRMXN4ew/ipGrfv
-         PlZW1C59ED9J6TcHrtFAmG/Cei6PynPBi2fzQ4fqDukMUXCFgmUkqLQJ35dLe72KMWOl
-         Sn8Vmt3SqPTyEhnye9EL1L8X4iv4XX2YdlhM6s2tXQCBjtXEvBZJZuqPAICTcNaUpWsU
-         Pge5ZIKcPBmNeKtJiRP3CX1lMqF0q/iPQI/4QyUlqfz513F/0+XpdzWOrVzdwEs4ZMIZ
-         FvGg==
-X-Gm-Message-State: AJIora9gTH3dZtYal4a8VfxFw8YWbc+K0bm23r9BUEGBP8Lbo4xZDHsI
-        UkrqPqrR+w0DviRhqLVgFUt1ZTmQbEs9q0e6/lA5VhxFW+Fr+QFHPYa7uJ6L7Fq8kz+s3uDe7Jy
-        vtQV5eF6ZQYcHX52EcBAkkhit
-X-Received: by 2002:a05:600c:1914:b0:3a3:4476:36f1 with SMTP id j20-20020a05600c191400b003a3447636f1mr2498468wmq.205.1658533263238;
-        Fri, 22 Jul 2022 16:41:03 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vZl5vBvV9oaQlXAWarpxnm0CK2ceKfdcr+DpcSHyKu4xh9ne3vQ7GxzdPJaOTMkBhI81Ta7g==
-X-Received: by 2002:a05:600c:1914:b0:3a3:4476:36f1 with SMTP id j20-20020a05600c191400b003a3447636f1mr2498461wmq.205.1658533262948;
-        Fri, 22 Jul 2022 16:41:02 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r67-20020a1c2b46000000b003a308e9a192sm10205489wmr.30.2022.07.22.16.41.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 16:41:02 -0700 (PDT)
-Message-ID: <6f5f6fbb-5a6c-3bc3-20f7-1a97854434b0@redhat.com>
-Date:   Sat, 23 Jul 2022 01:41:01 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=cAsBcLqW/j10OPe10nECHhYviVbD1h1TXA0nTgOdmqs=;
+        b=mApqg1YOIOUSpzudQEggVHfF++s4Dm+nfcNpiprLtFfMJrVaOeFxDJTbbKb8zTTy9M
+         kgAga0M8sGYvkqlqReIVp4yfj7RHneQvOwS2MtYX5QwvXaLYHV+nKm5AqwyfzoC7UAck
+         WIZ8fjpeLPlFz2TU2vPhCe1JFF+MBlU4oQH325Ti3ZqWKLI+ny4z7VRf3V128KymdIl/
+         6vSPV5je3jCTA/OEXrDDVm3e8UVoGSlRPQ7BIkHl6pG6fSoFqCjV2EGj7bmAK/BgXf+V
+         ChbqK6HUTRPOgQU68OWFS7zim4rgvpvleTVKXRVQeQ+mprtseH0ULkzKp22ImzLA3kHm
+         A+Zw==
+X-Gm-Message-State: AJIora/GRNOkDXgpiswSyore0GSaZa7pVTZYQSHgHZTwltREyAGtiHGV
+        Ajp0txEE2F1GycKCjhkGi+yPkg==
+X-Google-Smtp-Source: AGRyM1sPwCGTWigi08or9T0Rgi8HbUKCEiny/H3q4FyAL/Rub3pvp1ZQoiSIt9IlfP4WKXTmWhvjew==
+X-Received: by 2002:a17:903:32c2:b0:16c:3c8d:3807 with SMTP id i2-20020a17090332c200b0016c3c8d3807mr2151575plr.173.1658533305818;
+        Fri, 22 Jul 2022 16:41:45 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170903228200b0015ee60ef65bsm4368264plh.260.2022.07.22.16.41.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 16:41:45 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 23:41:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrei Vagin <avagin@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jianfeng Tan <henry.tjf@antfin.com>,
+        Adin Scannell <ascannell@google.com>,
+        Konstantin Bogomolov <bogomolov@google.com>,
+        Etienne Perot <eperot@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
+Message-ID: <Yts1tUfPxdPH5XGs@google.com>
+References: <20220722230241.1944655-1-avagin@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Use dev_err_probe() to avoid
- polluting the log
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Robert Foss <robert.foss@linaro.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Erico Nunes <ernunes@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-References: <20220722074755.660258-1-javierm@redhat.com>
- <CAD=FV=WR3UP4XMch5z8Hz8GzWRg5cCsK6FVwgoo=HHDnpTwz+g@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAD=FV=WR3UP4XMch5z8Hz8GzWRg5cCsK6FVwgoo=HHDnpTwz+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220722230241.1944655-1-avagin@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,38 +83,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/22 15:35, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Jul 22, 2022 at 12:48 AM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
->>
->> If devm_drm_of_get_bridge() can't find the connected bridge, it returns an
->> ERR_PTR(-EPROBE_DEFER) to indicate that the probe should be deferred.
->>
->> But this path also prints an error message, which pollutes the kernel log
->> since is printed on every probe deferral, i.e:
->>
->>   $ dmesg | grep "failed to create panel bridge" | wc -l
->>   38
->>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
->> ---
->>
->>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 7 +++----
->>  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> If someone else doesn't beat me to it, I'll apply next week sometime.
-> 
++x86 maintainers, patch 1 most definitely needs acceptance from folks beyond KVM.
 
-I've pushed this to drm-misc (drm-misc-next). Thanks all!
+On Fri, Jul 22, 2022, Andrei Vagin wrote:
+> Another option is the KVM platform. In this case, the Sentry (gVisor
+> kernel) can run in a guest ring0 and create/manage multiple address
+> spaces. Its performance is much better than the ptrace one, but it is
+> still not great compared with the native performance. This change
+> optimizes the most critical part, which is the syscall overhead.
 
--- 
-Best regards,
+What exactly is the source of the syscall overhead, and what alternatives have
+been explored?  Making arbitrary syscalls from within KVM is mildly terrifying.
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+> The idea of using vmcall to execute system calls isn’t new. Two large users
+> of gVisor (Google and AntFinacial) have out-of-tree code to implement such
+> hypercalls.
+>
+> In the Google kernel, we have a kvm-like subsystem designed especially
+> for gVisor. This change is the first step of integrating it into the KVM
+> code base and making it available to all Linux users.
 
+Can you please lay out the complete set of changes that you will be proposing?
+Doesn't have to be gory details, but at a minimum there needs to be a high level
+description that very clearly defines the scope of what changes you want to make
+and what the end result will look like.
+
+It's practically impossible to review this series without first understanding the
+bigger picture, e.g. if KVM_HC_HOST_SYSCALL is ultimately useless without the other
+bits you plan to upstream, then merging it without a high level of confidence that
+the other bits are acceptable is a bad idea since it commits KVM to supporting
+unused ABI.

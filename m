@@ -2,277 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5BF57DD8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BDE57DDE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 11:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbiGVJUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S236015AbiGVJUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236058AbiGVJTP (ORCPT
+        with ESMTP id S236000AbiGVJU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:19:15 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAA7175AB
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:13:21 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id t3so5131930edd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:13:21 -0700 (PDT)
+        Fri, 22 Jul 2022 05:20:28 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE0FBB8CC
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:13:45 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so3708295pjl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JSAECi8sgajhN4HPSrW/tW526BrlCSjcOiM42VddLYA=;
-        b=QC/4tQNMWDsqBRLAmCHARVYXQFTe7n0gdL6ig+xVAHPRJJ5pZcXuQSdEUB/iIi3Fh8
-         wZR+Qlu1LZqFZJ0sPrV7xY8GTuvWwl+JcDb5NbIWTBElatsQW+jzUehlUGQ2BkGZFLmP
-         6ECsPxKpFJUrYODW/r6WbpNW+IoRNT3EheCykftKk6Eb21NaOxSo7E4J9XXxq26N5RpK
-         dflg8EIRghDqvuOEPtU3EBZuM1EIDTSpH7LmLzDQYQqNkXOsurW5S6G4LBkzYNBsqIfS
-         mj0UxAbdPRgQNMQcxx50EfGi84OcwWlW6XH4TvPR7YshM1iGnVeHcT0fbuCcr/Ln2Ctv
-         a0Gw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OFu95XsV5rEYBt/DoXMJzDAz5PRwolc7OS134C8DnKc=;
+        b=0fFghdJIPyc8ja/Ja4cKlCxsHImbwt+x6cqArGd1WjVLRO4xLsTp5Ca04dFVCKuBNy
+         Ta+da7cU7Xo+M+dPdbyJDLrM5tL+bKeXEp3EcjbveyUQCvoKhmEVRi93T35xYtim1vv+
+         GSzumERbIJEqvSZ5EW9yMhkKCP8l/8QVrL8/DMr3lYL0Rd7KamuMNvpZ3iLlt5nFNDKL
+         RfTayBaT+0CLhFuTN8dWH0NxsH0JbbpqgBHNgBx2p5qeUZzS4esMo94tI7Cu+0Kv6oiY
+         Jn5cvW95wnOV/W8+XQk1skB9V70mIOsQdccwk69ISskNQCyRWGc+E/bJeEaHSwE9jTnU
+         IeIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JSAECi8sgajhN4HPSrW/tW526BrlCSjcOiM42VddLYA=;
-        b=Y+Ztnoi2X1Jg5xP9Oc4DwL1VCb+8jEy7JGbmN7pNLdpMUd8zkFXye/P5PvM062eIiG
-         0/3qlkoc9Woh2GQmgLr9zUj0CLl0R0pUfiCWoPdLmj5KndAdMbmnpcCU+nXMRO8r7Mus
-         XkAgmaJ7vTSXdeT5IKlDi7LylsU1UFfTnO4MOc19nz0q65JGQVo7NtIF+KiBU6UJgQJV
-         ez+7J7SeGADhaCcOB9+uaV0XOH6rKAbu0kA4/7Vq1Nz7h9Z2jNzLCDnXeqBs01oUQfFg
-         idZVy7vAvwAwa5Mi88xKBY8iTFLQbZoIBir4i9x+cqEU2YiB+8jWQ5RzEoOiZmeF1aWQ
-         s3mw==
-X-Gm-Message-State: AJIora9kTQkZSFfsg9UE2vkYTTrDDNBas0MIH24eijk6CgiKO9SesrJ/
-        SpneEKkNoyxlZ1xUzyqrlyhU5Q==
-X-Google-Smtp-Source: AGRyM1s61pYE1oFmicK9kBMG/TYCWQHDXwh6f4kdIxuT5FdGXlphF0OGM4Opshh0goHUmL8SR3yJSA==
-X-Received: by 2002:a05:6402:331e:b0:43b:cd65:a3ed with SMTP id e30-20020a056402331e00b0043bcd65a3edmr2491102eda.118.1658481199973;
-        Fri, 22 Jul 2022 02:13:19 -0700 (PDT)
-Received: from blmsp ([2001:4090:a243:806e:25e7:daa:8208:ceb])
-        by smtp.gmail.com with ESMTPSA id p9-20020a056402074900b00431962fe5d4sm2217523edy.77.2022.07.22.02.13.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 02:13:19 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 11:13:17 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] soc: mediatek: Add support of WAYEN operations
-Message-ID: <20220722091317.c2phi3c24kpendbg@blmsp>
-References: <20220530204214.913251-1-fparent@baylibre.com>
- <20220530204214.913251-2-fparent@baylibre.com>
- <fc9f18aa-fc32-c1ec-9056-e6158d0bd1ce@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OFu95XsV5rEYBt/DoXMJzDAz5PRwolc7OS134C8DnKc=;
+        b=HaAOHSot6MPDZlD51rB/HilcwSPFRUpldUxyns37J6zIvve2X5d4/bkMh9cx6b+UA1
+         5k+5TJubk+A8dFBrWjF91USuNEz5RfhDN++xA1OAMHbtQv4qmOd7EKTF3CCZQ32aIhno
+         oxgM+/7g2E5OBO4lWQ/sVqr68xfKQcNgqgmruNU+W4GpyPYedlOkt7wakJQ53WDTa/m3
+         6NW/MnQuT9LTFqfGPPTInlhiQl+vhA3I9h/GDwa69BZiwtmrxMktigInAP55X/gLrmNu
+         cMCZSqhaih3xZ3kbhDh8a87YUmAw9u0ysnlWIoA/k8Q9BOLaLmy6gQAXeFIHrwQfevpu
+         ZkEA==
+X-Gm-Message-State: AJIora89UKuVY8Mt79kIMxTBWe3xVnOKBYoDClx1kxuHDbCerQ7QqROr
+        d7BQjHz0icwfkdvKvTQSYzySUA==
+X-Google-Smtp-Source: AGRyM1v6F78+NCt09f2hsDWr95VGuj60HNdNaZDsiSJ72K0JCl0CYXqR5FUuwfkIkofOdUs4kEv6kw==
+X-Received: by 2002:a17:902:c94b:b0:16c:7289:b402 with SMTP id i11-20020a170902c94b00b0016c7289b402mr2486506pla.66.1658481224853;
+        Fri, 22 Jul 2022 02:13:44 -0700 (PDT)
+Received: from [10.4.231.121] ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902778c00b0016d1f474653sm2923403pll.52.2022.07.22.02.13.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 02:13:44 -0700 (PDT)
+Message-ID: <d540aaff-ec6a-3f25-dd79-b27b4ad81b36@bytedance.com>
+Date:   Fri, 22 Jul 2022 17:13:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fc9f18aa-fc32-c1ec-9056-e6158d0bd1ce@gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0
+Subject: Re: [PATCH v1 1/2] arm64: run softirqs on the per-CPU IRQ stack
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>
+Cc:     arnd@arndb.de, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220708094950.41944-1-zhengqi.arch@bytedance.com>
+ <20220708094950.41944-2-zhengqi.arch@bytedance.com>
+ <20220722090440.GB18125@willie-the-truck>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20220722090440.GB18125@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
 
-On Fri, Jun 17, 2022 at 04:20:55PM +0200, Matthias Brugger wrote:
-> 
-> 
-> On 30/05/2022 22:42, Fabien Parent wrote:
-> > From: Alexandre Bailon <abailon@baylibre.com>
-> > 
-> > This updates the power domain to support WAYEN operations.
-> 
-> Please explain better what the WAYEN operation is. Never heard of that word.
 
-Thanks, I will clarify this in v2. I had to look it up myself. It is
-basically called 'way_en' in the documents and controls the output
-paths of the different units. You can select which 'ways' are enabled
-with these bits. This is a bit that is present in many registers and it
-is necessary for mt8365 to control it for the power domains.
+On 2022/7/22 17:04, Will Deacon wrote:
+> On Fri, Jul 08, 2022 at 05:49:49PM +0800, Qi Zheng wrote:
+>> Currently arm64 supports per-CPU IRQ stack, but softirqs
+>> are still handled in the task context.
+>>
+>> Since any call to local_bh_enable() at any level in the task's
+>> call stack may trigger a softirq processing run, which could
+>> potentially cause a task stack overflow if the combined stack
+>> footprints exceed the stack's size, let's run these softirqs
+>> on the IRQ stack as well.
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> ---
+>>   arch/arm64/Kconfig      |  1 +
+>>   arch/arm64/kernel/irq.c | 13 +++++++++++++
+>>   2 files changed, 14 insertions(+)
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 4c1e1d2d2f8b..be0a9f0052ee 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -230,6 +230,7 @@ config ARM64
+>>   	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+>>   	select TRACE_IRQFLAGS_SUPPORT
+>>   	select TRACE_IRQFLAGS_NMI_SUPPORT
+>> +	select HAVE_SOFTIRQ_ON_OWN_STACK
+>>   	help
+>>   	  ARM 64-bit (AArch64) Linux support.
+>>   
+>> diff --git a/arch/arm64/kernel/irq.c b/arch/arm64/kernel/irq.c
+>> index bda49430c9ea..c36ad20a52f3 100644
+>> --- a/arch/arm64/kernel/irq.c
+>> +++ b/arch/arm64/kernel/irq.c
+>> @@ -22,6 +22,7 @@
+>>   #include <linux/vmalloc.h>
+>>   #include <asm/daifflags.h>
+>>   #include <asm/vmap_stack.h>
+>> +#include <asm/exception.h>
+>>   
+>>   /* Only access this in an NMI enter/exit */
+>>   DEFINE_PER_CPU(struct nmi_ctx, nmi_contexts);
+>> @@ -71,6 +72,18 @@ static void init_irq_stacks(void)
+>>   }
+>>   #endif
+>>   
+>> +#ifndef CONFIG_PREEMPT_RT
+>> +static void ____do_softirq(struct pt_regs *regs)
+>> +{
+>> +	__do_softirq();
+>> +}
+>> +
+>> +void do_softirq_own_stack(void)
+>> +{
+>> +	call_on_irq_stack(NULL, ____do_softirq);
+>> +}
+>> +#endif
+> 
+> Acked-by: Will Deacon <will@kernel.org>
+> 
+> Please can you repost this at -rc1 and we can queue it up for 5.21?
 
-Best,
-Markus
+Sure, will do.
+
+Thanks,
+Qi
 
 > 
-> Regards,
-> Matthias
+> Thanks,
 > 
-> > This is required by the mt8365 for the MM power domain.
-> > 
-> > Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> > Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> > ---
-> >   drivers/soc/mediatek/mtk-pm-domains.c | 64 +++++++++++++++++++++------
-> >   drivers/soc/mediatek/mtk-pm-domains.h | 27 ++++++-----
-> >   2 files changed, 67 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-> > index 5ced254b082b..90b91b3b19a8 100644
-> > --- a/drivers/soc/mediatek/mtk-pm-domains.c
-> > +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-> > @@ -44,6 +44,7 @@ struct scpsys_domain {
-> >   	struct clk_bulk_data *subsys_clks;
-> >   	struct regmap *infracfg;
-> >   	struct regmap *smi;
-> > +	struct regmap *infracfg_nao;
-> >   	struct regulator *supply;
-> >   };
-> > @@ -116,23 +117,38 @@ static int scpsys_sram_disable(struct scpsys_domain *pd)
-> >   					MTK_POLL_TIMEOUT);
-> >   }
-> > -static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd, struct regmap *regmap)
-> > +static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd,
-> > +				      struct regmap *regmap, struct regmap *infracfg_nao)
-> >   {
-> >   	int i, ret;
-> >   	for (i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
-> > -		u32 val, mask = bpd[i].bus_prot_mask;
-> > +		u32 mask = bpd[i].bus_prot_mask;
-> > +		u32 val = mask, sta_mask = mask;
-> > +		struct regmap *ack_regmap = regmap;
-> >   		if (!mask)
-> >   			break;
-> > +		if (bpd[i].wayen) {
-> > +			if (!infracfg_nao)
-> > +				return -ENODEV;
-> > +
-> > +			val = 0;
-> > +			sta_mask = bpd[i].bus_prot_sta_mask;
-> > +			ack_regmap = infracfg_nao;
-> > +		}
-> > +
-> >   		if (bpd[i].bus_prot_reg_update)
-> > -			regmap_set_bits(regmap, bpd[i].bus_prot_set, mask);
-> > +			regmap_update_bits(regmap, bpd[i].bus_prot_set, mask, val);
-> >   		else
-> >   			regmap_write(regmap, bpd[i].bus_prot_set, mask);
-> > -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
-> > -					       val, (val & mask) == mask,
-> > +		if (bpd[i].ignore_clr_ack)
-> > +			continue;
-> > +
-> > +		ret = regmap_read_poll_timeout(ack_regmap, bpd[i].bus_prot_sta,
-> > +					       val, (val & sta_mask) == sta_mask,
-> >   					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> >   		if (ret)
-> >   			return ret;
-> > @@ -145,34 +161,49 @@ static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
-> >   {
-> >   	int ret;
-> > -	ret = _scpsys_bus_protect_enable(pd->data->bp_infracfg, pd->infracfg);
-> > +	ret = _scpsys_bus_protect_enable(pd->data->bp_infracfg,
-> > +			pd->infracfg, pd->infracfg_nao);
-> >   	if (ret)
-> >   		return ret;
-> > -	return _scpsys_bus_protect_enable(pd->data->bp_smi, pd->smi);
-> > +	return _scpsys_bus_protect_enable(pd->data->bp_smi, pd->smi, NULL);
-> >   }
-> > +#define mask_cond(wayen, val, mask) \
-> > +	((wayen && ((val & mask) == mask)) || (!wayen && !(val & mask)))
-> > +
-> >   static int _scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
-> > -				       struct regmap *regmap)
-> > +				       struct regmap *regmap, struct regmap *infracfg_nao)
-> >   {
-> >   	int i, ret;
-> >   	for (i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
-> > -		u32 val, mask = bpd[i].bus_prot_mask;
-> > +		u32 val = 0, mask = bpd[i].bus_prot_mask;
-> > +		u32 sta_mask = mask;
-> > +		struct regmap *ack_regmap = regmap;
-> >   		if (!mask)
-> >   			continue;
-> > +		if (bpd[i].wayen) {
-> > +			if (!infracfg_nao)
-> > +				return -ENODEV;
-> > +
-> > +			val = mask;
-> > +			sta_mask = bpd[i].bus_prot_sta_mask;
-> > +			ack_regmap = infracfg_nao;
-> > +		}
-> > +
-> >   		if (bpd[i].bus_prot_reg_update)
-> > -			regmap_clear_bits(regmap, bpd[i].bus_prot_clr, mask);
-> > +			regmap_update_bits(regmap, bpd[i].bus_prot_clr, mask, val);
-> >   		else
-> >   			regmap_write(regmap, bpd[i].bus_prot_clr, mask);
-> >   		if (bpd[i].ignore_clr_ack)
-> >   			continue;
-> > -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
-> > -					       val, !(val & mask),
-> > +		ret = regmap_read_poll_timeout(ack_regmap, bpd[i].bus_prot_sta,
-> > +					       val, mask_cond(bpd[i].wayen, val, sta_mask),
-> >   					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> >   		if (ret)
-> >   			return ret;
-> > @@ -185,11 +216,12 @@ static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
-> >   {
-> >   	int ret;
-> > -	ret = _scpsys_bus_protect_disable(pd->data->bp_smi, pd->smi);
-> > +	ret = _scpsys_bus_protect_disable(pd->data->bp_smi, pd->smi, NULL);
-> >   	if (ret)
-> >   		return ret;
-> > -	return _scpsys_bus_protect_disable(pd->data->bp_infracfg, pd->infracfg);
-> > +	return _scpsys_bus_protect_disable(pd->data->bp_infracfg,
-> > +			pd->infracfg, pd->infracfg_nao);
-> >   }
-> >   static int scpsys_regulator_enable(struct regulator *supply)
-> > @@ -363,6 +395,10 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
-> >   			return ERR_CAST(pd->smi);
-> >   	}
-> > +	pd->infracfg_nao = syscon_regmap_lookup_by_phandle_optional(node, "mediatek,infracfg_nao");
-> > +	if (IS_ERR(pd->infracfg_nao))
-> > +		return ERR_CAST(pd->infracfg_nao);
-> > +
-> >   	num_clks = of_clk_get_parent_count(node);
-> >   	if (num_clks > 0) {
-> >   		/* Calculate number of subsys_clks */
-> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-> > index daa24e890dd4..a3955d960233 100644
-> > --- a/drivers/soc/mediatek/mtk-pm-domains.h
-> > +++ b/drivers/soc/mediatek/mtk-pm-domains.h
-> > @@ -39,23 +39,28 @@
-> >   #define SPM_MAX_BUS_PROT_DATA		6
-> > -#define _BUS_PROT(_mask, _set, _clr, _sta, _update, _ignore) {	\
-> > -		.bus_prot_mask = (_mask),			\
-> > -		.bus_prot_set = _set,				\
-> > -		.bus_prot_clr = _clr,				\
-> > -		.bus_prot_sta = _sta,				\
-> > -		.bus_prot_reg_update = _update,			\
-> > -		.ignore_clr_ack = _ignore,			\
-> > +#define _BUS_PROT(_mask, _sta_mask, _set, _clr, _sta, _update, _ignore, _wayen) {	\
-> > +		.bus_prot_mask = (_mask),				\
-> > +		.bus_prot_set = _set,					\
-> > +		.bus_prot_clr = _clr,					\
-> > +		.bus_prot_sta = _sta,					\
-> > +		.bus_prot_sta_mask = _sta_mask,				\
-> > +		.bus_prot_reg_update = _update,				\
-> > +		.ignore_clr_ack = _ignore,				\
-> > +		.wayen = _wayen,					\
-> >   	}
-> >   #define BUS_PROT_WR(_mask, _set, _clr, _sta)			\
-> > -		_BUS_PROT(_mask, _set, _clr, _sta, false, false)
-> > +		_BUS_PROT(_mask, _mask, _set, _clr, _sta, false, false, false)
-> >   #define BUS_PROT_WR_IGN(_mask, _set, _clr, _sta)		\
-> > -		_BUS_PROT(_mask, _set, _clr, _sta, false, true)
-> > +		_BUS_PROT(_mask, _mask, _set, _clr, _sta, false, true, false)
-> >   #define BUS_PROT_UPDATE(_mask, _set, _clr, _sta)		\
-> > -		_BUS_PROT(_mask, _set, _clr, _sta, true, false)
-> > +		_BUS_PROT(_mask, _mask, _set, _clr, _sta, true, false, false)
-> > +
-> > +#define BUS_PROT_WAYEN(_en_mask, _sta_mask, _set, _sta)		\
-> > +		_BUS_PROT(_en_mask, _sta_mask, _set, _set, _sta, true, false, true)
-> >   #define BUS_PROT_UPDATE_TOPAXI(_mask)				\
-> >   		BUS_PROT_UPDATE(_mask,				\
-> > @@ -68,8 +73,10 @@ struct scpsys_bus_prot_data {
-> >   	u32 bus_prot_set;
-> >   	u32 bus_prot_clr;
-> >   	u32 bus_prot_sta;
-> > +	u32 bus_prot_sta_mask;
-> >   	bool bus_prot_reg_update;
-> >   	bool ignore_clr_ack;
-> > +	bool wayen;
-> >   };
-> >   /**
-> 
+> Will
+
+-- 
+Thanks,
+Qi

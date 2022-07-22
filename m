@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A2957E6E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8E557E6E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235672AbiGVS5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S236301AbiGVS6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiGVS5f (ORCPT
+        with ESMTP id S236001AbiGVS6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:57:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24F7564E1;
-        Fri, 22 Jul 2022 11:57:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EA2A60EF5;
-        Fri, 22 Jul 2022 18:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E4EC341C6;
-        Fri, 22 Jul 2022 18:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658516253;
-        bh=qlEQPdf/GEeiUyuZqjpiKhRwwr7dWbJkJKm74rG3gHs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZGN2F3osr2Hq6PPOQhOQ1WeOpiCkN0aTbcI154Js7LbHdACxRictYupgPmRkj0YOm
-         KaxMujrBOXVITl+gkBHSpoEJ4Vi9BNIL0BDBiBc5SXX69HEKrVdTGbc/xUTLGnhECE
-         RyguhwKcwHJPR1y8pEastYamufBv956gW1ottf49KfeGF5IugfxDV5r3zOWh5+JqmP
-         JOqJdIpmfqvq0Q2r28sMpQFXcDt3F7ezx6NxJ7LnRmpNmVFKpJ6zMZy9SWOruNb5H4
-         ZRCCIytU+J9x80IHBCtrT5WpjHCV1U1qV9ZTYdzCKYEoPQJW+DvbvmqERDiGzuRYrO
-         e3MM8tTzWWemw==
-Date:   Fri, 22 Jul 2022 19:57:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] spi: npcm-pspi: Add NPCM845 peripheral SPI support
-Message-ID: <YtrzF9BFJrXfxiz0@sirena.org.uk>
-References: <20220722114136.251415-1-tmaimon77@gmail.com>
- <20220722114136.251415-3-tmaimon77@gmail.com>
- <afae04e0-76a3-1bcb-5b47-9944fa9ab2c0@linaro.org>
- <YtrvyyMGm64hFG5j@sirena.org.uk>
- <0c8688d5-b0c1-8cc1-ec27-292acbb38dfc@linaro.org>
+        Fri, 22 Jul 2022 14:58:01 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4D1904D8
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:58:00 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id m8so6887624edd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:58:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CFtWv8cujsml9Nm915ayXL51uD/obgxi8OyaZQUdDOE=;
+        b=EoUYvGEmiLqZvCHAadV8xm3zldGQR/AXQXlplxHKyoH+GrNylYMUcu/cP++VqO2kQj
+         Jn6jLRt8ddpSkCTTFV05lNnMWPFZbYpaE1l9/iaVHhsqS04FE30XEhi5KRPIpzUecWk7
+         ln4SJtufGrukvBkolkbObTwkHMbWnl355APQo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CFtWv8cujsml9Nm915ayXL51uD/obgxi8OyaZQUdDOE=;
+        b=K2hRjbfL9ldUW7/jCYgSOpKJVsrpNmJaERl/3wNl/1Y3RTpahZbMqG/LPTZk4FNbHg
+         tvVcpZ2/OP5/LObLa4jxjwUPNp3UzjIp6YTDZXwGqbh6zuQq7muSi1Pxxj3iAO97jLT9
+         Ea+qXD0+zjQA6/HErf/t5ZKlhOQAzuQ9MjJ73lvmy+qNQyGuahldh1uBh9elIodxSBcz
+         HS/xU/pYtiPO1G35qEyxTj7ymgu+xOWkSalr2pkQr+WthMTYVeFvKmJF97Xslmh/8u6x
+         oIyATpg0R0fYMeXfNIXLKTTiWZaKOFilk4Wn5+kMKG7uSmVUN0wxUi/DKN0Rler71meQ
+         X1Yw==
+X-Gm-Message-State: AJIora/6AeZ9TtzvrHkPHQSCXRhWYeuTajioJFsccAKomOmS+iC7/Ijn
+        5XJNCKuAiJH5F/J25s5Hp3S8oLUNlPwZSB/g
+X-Google-Smtp-Source: AGRyM1sME3hRO/2VTA0BAyIHR2wRYbfLC5kbuypmAO2IYlwZmrm3qaYBZSOxJhEXwylMWSEaCeC8dw==
+X-Received: by 2002:a05:6402:84a:b0:423:fe99:8c53 with SMTP id b10-20020a056402084a00b00423fe998c53mr1260221edz.195.1658516278832;
+        Fri, 22 Jul 2022 11:57:58 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1709066a8400b0070f7d1c5a18sm2286732ejr.55.2022.07.22.11.57.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 11:57:57 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id d8so7668858wrp.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:57:57 -0700 (PDT)
+X-Received: by 2002:a05:6000:1049:b0:21e:584f:3574 with SMTP id
+ c9-20020a056000104900b0021e584f3574mr838736wrx.274.1658516276828; Fri, 22 Jul
+ 2022 11:57:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UbxSBqEr8U0AN/GQ"
-Content-Disposition: inline
-In-Reply-To: <0c8688d5-b0c1-8cc1-ec27-292acbb38dfc@linaro.org>
-X-Cookie: Yow!  I want my nose in lights!
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <YtpXh0QHWwaEWVAY@debian> <CAHk-=wipavrPuNPqiZ_zMP8EdbLKnnTkFukVCWm8FmCTUth4gQ@mail.gmail.com>
+ <CADVatmPkXQ3mJpdTvaHxN4qmacYBhvzz=nxduQn-y+QUz4Pu2Q@mail.gmail.com>
+In-Reply-To: <CADVatmPkXQ3mJpdTvaHxN4qmacYBhvzz=nxduQn-y+QUz4Pu2Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 22 Jul 2022 11:57:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whjFd-2j1qCsqdsakwcH=QML2BJBCpN2+rg10Y+PMGOOg@mail.gmail.com>
+Message-ID: <CAHk-=whjFd-2j1qCsqdsakwcH=QML2BJBCpN2+rg10Y+PMGOOg@mail.gmail.com>
+Subject: Re: mainline build failure due to b67fbebd4cf9 ("mmu_gather: Force
+ tlb-flush VM_PFNMAP vmas")
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 22, 2022 at 10:20 AM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> That fixes the alpha build failure.
+> If you commit it today then my nightly builds can test other
+> combinations of all other arch also.
 
---UbxSBqEr8U0AN/GQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks.
 
-On Fri, Jul 22, 2022 at 08:47:24PM +0200, Krzysztof Kozlowski wrote:
-> On 22/07/2022 20:43, Mark Brown wrote:
+It's commit 7fb5e5083190 ("mmu_gather: fix the
+CONFIG_MMU_GATHER_NO_RANGE case") in my tree now.
 
-> > ...with a fallback list required by the bindings so the driver actually
-> > binds.  Note that bindings are currently not in YAML format so there'd
-> > be even less enforcement of that than normal, and as they're currently
-> > written the bindings don't require fallback.
+I decided to not amend the commit, so it doesn't have your tested-by,
+only your reported-by, but I put the link your report (this thread),
+so it's kind of there.
 
-> Yes, the bindings document should be rephrased but we were living like
-> that for few years. :)
-
-The binding document as it stands only has one compatible, there's no
-existing problem with it other than the YAML conversion.  If we're
-adding something new that requires a fallback we should be explicit
-about that rather than have something that's actively misleading where
-previously things were clear.  I don't mind if we add the compatible to
-the driver or document the requirement for the fallback but we should do
-one of the two.
-
---UbxSBqEr8U0AN/GQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLa8xcACgkQJNaLcl1U
-h9CC6Af+Kw0oDGAT+xBaRBeKTXmSgfg/pO7Y8Mf9MVM+HhbN19e3qM65lfnixOKg
-fcMyys82+nUBbEDFf77vFrXDJzaPNjsNdDBfczogsFMkJDhNO0bPwMs4Op1T444k
-Bp/OYMF3fxgsrparA9XaVn3J4g25TZeNq9z3YaJ4eXtmLFbUybaLFF8KaN3byzLm
-0aAcUtXMB4v7jaa+x6GBNhMQ2NkLUUEEGltmV78/l6w/PTCvjwGH6EpB69mmWFDM
-dHxqz/Ac6Y/TiiR3ZgaHdbJBjOfOydiyINeMHyeGE5P6Xn5KCVvl41kIaq3g6rG7
-sGK66BmAjWTb1mDHmmwM7wa+WbjHLQ==
-=yVCU
------END PGP SIGNATURE-----
-
---UbxSBqEr8U0AN/GQ--
+                   Linus

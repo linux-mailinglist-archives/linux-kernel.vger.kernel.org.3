@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4BF57DF11
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3997857DF02
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234985AbiGVJox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S235092AbiGVJo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiGVJo2 (ORCPT
+        with ESMTP id S234643AbiGVJob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:44:28 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E97BB8C5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:38:50 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31e63e48e49so35224497b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:38:50 -0700 (PDT)
+        Fri, 22 Jul 2022 05:44:31 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EAABB8E0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:38:52 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id m123-20020a253f81000000b0066ff6484995so3324897yba.22
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=EdBwhDB1kTfOuaZ44XnXqAFiApYJfH6lT/hr3SDnJ/w=;
-        b=gPVLoOuKJt62FkkLy8/2yUn70N9cMwMg0NqDjsY+Frsa95mUBpYG68nMSa0FlEBDLd
-         iXKK/rDCH1qzi2geeyk73a+raqj9Q36BvBNH5xp9fCWSLHVCibioJcnlTZYIVxMxzXqq
-         IeqUfW1fM+/ypF6f2quRJdn2sMscnROePSbn/Fy0lzhzJP/D2nE0ElTYzDXvx8W71FHg
-         qCLcQ+YcJODw5bXSHcaC8KO0Yb8EsrlZpxc89qJizbABdwf05Qd39DbF6ASL7fb34Dxb
-         n85N1RtO5VzPNQE/OrW1DFOTJPNg0KS8BiKXbnmtiM65ENnrtSb4791mDMmlMYgRYXMP
-         0jXQ==
+        bh=0HvoRxN2Vq0/Bi3xt58hq8m4jj9hpFn+i7fw2drMGQc=;
+        b=rQP+Tru3fYyh2EUytXVRTQMhbH4x9vMaL4BCxtqbAMHLZeOSnAzZETqPWY1yuNQdt+
+         wBT5SXNEJZirRIcmB/75TQkdR8/ZDn7n0zIV8/wfsfQdlVwu3J9gq9UVC+DCEWZcHK9t
+         1UQb/rDV1iVdWFKxVVtTMLHp57Dg9AiKDYKElHq0R7xIduVsHkqNjZXJjc1iccHM4fJE
+         jfMfmm9Te2uAVd+/y0Gh3MDgcVDs+iTiVxK5LeZU41d0NWfwdBAz5eDI23Mg9auSxrGg
+         kLJCrc9E+m/2DFovGiEVLwZUfuBN+hUm6bqypCIroe0/K2DaG1yzoBAc0s4lWceU0IeI
+         Jm+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=EdBwhDB1kTfOuaZ44XnXqAFiApYJfH6lT/hr3SDnJ/w=;
-        b=oYeW67a46D0pHcMMhLs2OuvKkq4PponEFp7PFog5rSdExKGzCD5aRALSoDRSAypyxn
-         JVIVXHLFgXbeP7RqiiHFAA9onGtnwzBHvUpKUHuqs0fSxL3r58T5ufEb5Pb4YNPvLu1A
-         DCZO54PFDo6lAYc8m96/GozlSVjf1aadAT8cxqmK9eMS15BqNpNoSX6QUAOlnCjTAYPc
-         5h8HC4s2oqcnOQqN85yynpwJHEmeE2iLJ85CrurKLuu3iYNwXQz+oHFdqoY3jHfvsHLY
-         rd7L7hEHcs9shko2amzm7YedbgbmGvOaqpYZg8SqCCG/8H0AcIwOzFDhV0WZ1L5114fj
-         Nqug==
-X-Gm-Message-State: AJIora9BM8xzmdkISKfbqCIVfz/iA1jm6raTA6YtumhxMSnAP5qaPOBj
-        hY7JDDNaC2uZe6/l/P4byt2YTlP6I64afEMj7NDmNTZ+bDahwAl/bcJyUHIQSjB4rsmOTeq7b7q
-        Fe7fJBq/vbASs6t79CXwjmKK5dsXLgE6F4Lv4DrkkJ5QmxywiHo3z1mZkBeDxC5VU9Qo=
-X-Google-Smtp-Source: AGRyM1v/0YsN7N1ZDNPpQQjFr5qD9ZaFHhp2KlBQW9DYS5Wzckg6JL2WrqE3KHHwbiqK6mFr34QSFCzL7g==
+        bh=0HvoRxN2Vq0/Bi3xt58hq8m4jj9hpFn+i7fw2drMGQc=;
+        b=UpvQ/9kM9oPFWP1otYU4Q3PT0y1PYapk75soNqSOywnnG+oBmueH9uHIK/TgIrquyR
+         kRVseWaOQbznDusSMHRRXRN/gDtDrS6Cf6ZhAYjilOUC8kflGO+jcuvftk20lbBpLPLo
+         y2jp26mQ1P3DMW/Ubzw25y4Oyti2+zYs1g9mxkMxvp8INYLNAvi5YLp94kPEwozlXenX
+         FrVPnqMucD2M0ukLXiYWgsHukdWXRA49Yz7a70h3WFhXk+s0TDlof/Wdz0SJDDd/NoHW
+         0nIJ8IqwDCh9ABrizqcfkwb5dwtJMPyk6UEN0KJMxJC6CRyHZkCagCysOA63fUDftHl+
+         xmqA==
+X-Gm-Message-State: AJIora/e9y8P9p0ydiZEiA2lpFo9JG4hgtYCDpJpGGpI7VNj2t7lvuHQ
+        pLffzbM+TosUOKGvLBcUKq1dj/Td5TBVyT7woHT9+5YGGv8vrUi9n9RnTrR6HpuBHKgA2FIytOh
+        BgGUC/sPtDsMkVsSUyWwjAVNI7rNQT7sJfIOcrnx8efZ5GuMWBn+qMs0xfyzjZkN+QZg=
+X-Google-Smtp-Source: AGRyM1vrqyRWf0OgG6fTxyUyuG16olDyk74u0WLdD/aZC47eoaJHVQNRfVoKKDTJI4OkFZyLIEFXkpH0+Q==
 X-Received: from nhuck.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:39cc])
- (user=nhuck job=sendgmr) by 2002:a25:71d7:0:b0:670:403b:a74f with SMTP id
- m206-20020a2571d7000000b00670403ba74fmr2198395ybc.239.1658482729838; Fri, 22
- Jul 2022 02:38:49 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 09:38:21 +0000
+ (user=nhuck job=sendgmr) by 2002:a25:fc21:0:b0:670:8160:a9f9 with SMTP id
+ v33-20020a25fc21000000b006708160a9f9mr2134064ybd.513.1658482731701; Fri, 22
+ Jul 2022 02:38:51 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 09:38:22 +0000
 In-Reply-To: <20220722093823.4158756-1-nhuck@google.com>
-Message-Id: <20220722093823.4158756-2-nhuck@google.com>
+Message-Id: <20220722093823.4158756-3-nhuck@google.com>
 Mime-Version: 1.0
 References: <20220722093823.4158756-1-nhuck@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH 1/3] dm-bufio: Add flags for dm_bufio_client_create
+Subject: [PATCH 2/3] dm-bufio: Add DM_BUFIO_GET_CANT_SLEEP
 From:   Nathan Huckleberry <nhuck@google.com>
 To:     linux-kernel@vger.kernel.org, dm-devel@redhat.com,
         Alasdair Kergon <agk@redhat.com>,
@@ -72,139 +72,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a flags argument to dm_bufio_client_create and update all the
-callers.  This is in preparation to add the DM_BUFIO_GET_CANT_SLEEP
-flag.
+Add an optional flag that ensures dm_bufio_get does not sleep.  This
+allows the dm-bufio cache to be queried from interrupt context.
+
+To ensure that dm-bufio does not sleep, dm-bufio must use a spinlock
+instead of a mutex.  Additionally, to avoid deadlocks, special care must
+be taken so that dm-bufio does not sleep while holding the spinlock.
+
+DM_BUFIO_GET_CANT_SLEEP is useful in some contexts, such as dm-verity,
+so that we can query the dm-bufio cache in a tasklet.  If the required
+data is cached, processing can be handled immediately in the tasklet
+instead of waiting for a work-queue job to be scheduled.  This can
+reduce latency when there is high CPU load and memory pressure.
 
 Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 ---
- drivers/md/dm-bufio.c                         | 3 ++-
- drivers/md/dm-ebs-target.c                    | 3 ++-
- drivers/md/dm-integrity.c                     | 2 +-
- drivers/md/dm-snap-persistent.c               | 2 +-
- drivers/md/dm-verity-fec.c                    | 4 ++--
- drivers/md/dm-verity-target.c                 | 2 +-
- drivers/md/persistent-data/dm-block-manager.c | 3 ++-
- include/linux/dm-bufio.h                      | 3 ++-
- 8 files changed, 13 insertions(+), 9 deletions(-)
+ drivers/md/dm-bufio.c    | 26 ++++++++++++++++++++++----
+ include/linux/dm-bufio.h |  5 +++++
+ 2 files changed, 27 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/md/dm-bufio.c b/drivers/md/dm-bufio.c
-index 5ffa1dcf84cf..ad5603eb12e3 100644
+index ad5603eb12e3..3edeca7cfca6 100644
 --- a/drivers/md/dm-bufio.c
 +++ b/drivers/md/dm-bufio.c
-@@ -1717,7 +1717,8 @@ static unsigned long dm_bufio_shrink_count(struct shrinker *shrink, struct shrin
- struct dm_bufio_client *dm_bufio_client_create(struct block_device *bdev, unsigned block_size,
- 					       unsigned reserved_buffers, unsigned aux_size,
- 					       void (*alloc_callback)(struct dm_buffer *),
--					       void (*write_callback)(struct dm_buffer *))
-+					       void (*write_callback)(struct dm_buffer *),
-+					       unsigned int flags)
+@@ -81,6 +81,8 @@
+  */
+ struct dm_bufio_client {
+ 	struct mutex lock;
++	spinlock_t spinlock;
++	unsigned long spinlock_flags;
+ 
+ 	struct list_head lru[LIST_SIZE];
+ 	unsigned long n_buffers[LIST_SIZE];
+@@ -90,6 +92,7 @@ struct dm_bufio_client {
+ 	s8 sectors_per_block_bits;
+ 	void (*alloc_callback)(struct dm_buffer *);
+ 	void (*write_callback)(struct dm_buffer *);
++	bool may_sleep;
+ 
+ 	struct kmem_cache *slab_buffer;
+ 	struct kmem_cache *slab_cache;
+@@ -167,17 +170,26 @@ struct dm_buffer {
+ 
+ static void dm_bufio_lock(struct dm_bufio_client *c)
  {
- 	int r;
- 	struct dm_bufio_client *c;
-diff --git a/drivers/md/dm-ebs-target.c b/drivers/md/dm-ebs-target.c
-index 0221fa63f888..c90f9b9b1f02 100644
---- a/drivers/md/dm-ebs-target.c
-+++ b/drivers/md/dm-ebs-target.c
-@@ -312,7 +312,8 @@ static int ebs_ctr(struct dm_target *ti, unsigned int argc, char **argv)
- 		goto bad;
+-	mutex_lock_nested(&c->lock, dm_bufio_in_request());
++	if (c->may_sleep)
++		mutex_lock_nested(&c->lock, dm_bufio_in_request());
++	else
++		spin_lock_irqsave_nested(&c->spinlock, c->spinlock_flags, dm_bufio_in_request());
+ }
+ 
+ static int dm_bufio_trylock(struct dm_bufio_client *c)
+ {
+-	return mutex_trylock(&c->lock);
++	if (c->may_sleep)
++		return mutex_trylock(&c->lock);
++	else
++		return spin_trylock_irqsave(&c->spinlock, c->spinlock_flags);
+ }
+ 
+ static void dm_bufio_unlock(struct dm_bufio_client *c)
+ {
+-	mutex_unlock(&c->lock);
++	if (c->may_sleep)
++		mutex_unlock(&c->lock);
++	else
++		spin_unlock_irqrestore(&c->spinlock, c->spinlock_flags);
+ }
+ 
+ /*----------------------------------------------------------------*/
+@@ -878,7 +890,7 @@ static struct dm_buffer *__alloc_buffer_wait_no_callback(struct dm_bufio_client
+ 	 * be allocated.
+ 	 */
+ 	while (1) {
+-		if (dm_bufio_cache_size_latch != 1) {
++		if (dm_bufio_cache_size_latch != 1 && c->may_sleep) {
+ 			b = alloc_buffer(c, GFP_NOWAIT | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN);
+ 			if (b)
+ 				return b;
+@@ -1041,6 +1053,7 @@ static struct dm_buffer *__bufio_new(struct dm_bufio_client *c, sector_t block,
+ 	if (nf == NF_GET && unlikely(test_bit(B_READING, &b->state)))
+ 		return NULL;
+ 
++
+ 	b->hold_count++;
+ 	__relink_lru(b, test_bit(B_DIRTY, &b->state) ||
+ 		     test_bit(B_WRITING, &b->state));
+@@ -1748,12 +1761,17 @@ struct dm_bufio_client *dm_bufio_client_create(struct block_device *bdev, unsign
+ 	c->alloc_callback = alloc_callback;
+ 	c->write_callback = write_callback;
+ 
++	c->may_sleep = true;
++	if (flags & DM_BUFIO_GET_CANT_SLEEP)
++		c->may_sleep = false;
++
+ 	for (i = 0; i < LIST_SIZE; i++) {
+ 		INIT_LIST_HEAD(&c->lru[i]);
+ 		c->n_buffers[i] = 0;
  	}
  
--	ec->bufio = dm_bufio_client_create(ec->dev->bdev, to_bytes(ec->u_bs), 1, 0, NULL, NULL);
-+	ec->bufio = dm_bufio_client_create(ec->dev->bdev, to_bytes(ec->u_bs), 1,
-+		0, NULL, NULL, 0);
- 	if (IS_ERR(ec->bufio)) {
- 		ti->error = "Cannot create dm bufio client";
- 		r = PTR_ERR(ec->bufio);
-diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
-index 3d5a0ce123c9..a508073d8414 100644
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -4439,7 +4439,7 @@ static int dm_integrity_ctr(struct dm_target *ti, unsigned argc, char **argv)
- 	}
+ 	mutex_init(&c->lock);
++	spin_lock_init(&c->spinlock);
+ 	INIT_LIST_HEAD(&c->reserved_buffers);
+ 	c->need_reserved_buffers = reserved_buffers;
  
- 	ic->bufio = dm_bufio_client_create(ic->meta_dev ? ic->meta_dev->bdev : ic->dev->bdev,
--			1U << (SECTOR_SHIFT + ic->log2_buffer_sectors), 1, 0, NULL, NULL);
-+			1U << (SECTOR_SHIFT + ic->log2_buffer_sectors), 1, 0, NULL, NULL, 0);
- 	if (IS_ERR(ic->bufio)) {
- 		r = PTR_ERR(ic->bufio);
- 		ti->error = "Cannot initialize dm-bufio";
-diff --git a/drivers/md/dm-snap-persistent.c b/drivers/md/dm-snap-persistent.c
-index 3bb5cff5d6fc..aaa699749c3b 100644
---- a/drivers/md/dm-snap-persistent.c
-+++ b/drivers/md/dm-snap-persistent.c
-@@ -494,7 +494,7 @@ static int read_exceptions(struct pstore *ps,
- 
- 	client = dm_bufio_client_create(dm_snap_cow(ps->store->snap)->bdev,
- 					ps->store->chunk_size << SECTOR_SHIFT,
--					1, 0, NULL, NULL);
-+					1, 0, NULL, NULL, 0);
- 
- 	if (IS_ERR(client))
- 		return PTR_ERR(client);
-diff --git a/drivers/md/dm-verity-fec.c b/drivers/md/dm-verity-fec.c
-index cea2b3789736..23cffce56403 100644
---- a/drivers/md/dm-verity-fec.c
-+++ b/drivers/md/dm-verity-fec.c
-@@ -749,7 +749,7 @@ int verity_fec_ctr(struct dm_verity *v)
- 
- 	f->bufio = dm_bufio_client_create(f->dev->bdev,
- 					  f->io_size,
--					  1, 0, NULL, NULL);
-+					  1, 0, NULL, NULL, 0);
- 	if (IS_ERR(f->bufio)) {
- 		ti->error = "Cannot initialize FEC bufio client";
- 		return PTR_ERR(f->bufio);
-@@ -765,7 +765,7 @@ int verity_fec_ctr(struct dm_verity *v)
- 
- 	f->data_bufio = dm_bufio_client_create(v->data_dev->bdev,
- 					       1 << v->data_dev_block_bits,
--					       1, 0, NULL, NULL);
-+					       1, 0, NULL, NULL, 0);
- 	if (IS_ERR(f->data_bufio)) {
- 		ti->error = "Cannot initialize FEC data bufio client";
- 		return PTR_ERR(f->data_bufio);
-diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-index d6dbd47492a8..5d3fc58a3c34 100644
---- a/drivers/md/dm-verity-target.c
-+++ b/drivers/md/dm-verity-target.c
-@@ -1266,7 +1266,7 @@ static int verity_ctr(struct dm_target *ti, unsigned argc, char **argv)
- 
- 	v->bufio = dm_bufio_client_create(v->hash_dev->bdev,
- 		1 << v->hash_dev_block_bits, 1, sizeof(struct buffer_aux),
--		dm_bufio_alloc_callback, NULL);
-+		dm_bufio_alloc_callback, NULL, 0);
- 	if (IS_ERR(v->bufio)) {
- 		ti->error = "Cannot initialize dm-bufio";
- 		r = PTR_ERR(v->bufio);
-diff --git a/drivers/md/persistent-data/dm-block-manager.c b/drivers/md/persistent-data/dm-block-manager.c
-index 54c089a50b15..11935864f50f 100644
---- a/drivers/md/persistent-data/dm-block-manager.c
-+++ b/drivers/md/persistent-data/dm-block-manager.c
-@@ -391,7 +391,8 @@ struct dm_block_manager *dm_block_manager_create(struct block_device *bdev,
- 	bm->bufio = dm_bufio_client_create(bdev, block_size, max_held_per_thread,
- 					   sizeof(struct buffer_aux),
- 					   dm_block_manager_alloc_callback,
--					   dm_block_manager_write_callback);
-+					   dm_block_manager_write_callback,
-+					   0);
- 	if (IS_ERR(bm->bufio)) {
- 		r = PTR_ERR(bm->bufio);
- 		kfree(bm);
 diff --git a/include/linux/dm-bufio.h b/include/linux/dm-bufio.h
-index 90bd558a17f5..e21480715255 100644
+index e21480715255..2a78f0cb8e71 100644
 --- a/include/linux/dm-bufio.h
 +++ b/include/linux/dm-bufio.h
-@@ -24,7 +24,8 @@ struct dm_bufio_client *
- dm_bufio_client_create(struct block_device *bdev, unsigned block_size,
- 		       unsigned reserved_buffers, unsigned aux_size,
- 		       void (*alloc_callback)(struct dm_buffer *),
--		       void (*write_callback)(struct dm_buffer *));
-+		       void (*write_callback)(struct dm_buffer *),
-+		       unsigned int flags);
+@@ -17,6 +17,11 @@
+ struct dm_bufio_client;
+ struct dm_buffer;
  
++/*
++ * Flags for dm_bufio_client_create
++ */
++#define DM_BUFIO_GET_CANT_SLEEP 0x1
++
  /*
-  * Release a buffered IO cache.
+  * Create a buffered IO cache on a given device
+  */
 -- 
 2.37.1.359.gd136c6c3e2-goog
 

@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A9357E0E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFD257E0F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234855AbiGVLk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 07:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
+        id S229811AbiGVLlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 07:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231975AbiGVLkS (ORCPT
+        with ESMTP id S229704AbiGVLlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 07:40:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00FB12AE2;
-        Fri, 22 Jul 2022 04:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42887B82826;
-        Fri, 22 Jul 2022 11:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B3B4DC341CB;
-        Fri, 22 Jul 2022 11:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658490013;
-        bh=FyaVIacDns7u0w7NfmF1dTQPf29rkwCwbbFsDaA2nFY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OpHaIM5/bnEf3cMl36I/luWlOd7kJnRGifnVXZYVZJgpv6oPeEu1mUDNm66uJEguT
-         hDVSjaSbplba6BkhXrSh3PedL/UShRQLLZtivKPL9KCW4qnWIOaSJZK53Ru8e9rAbO
-         mwIg//tdByxIU64QZrAaPevu73+dIYosg3v3tP+IcsUF9tcp03OsDE4Jm1OtlYIRJK
-         pNTmyiv/okyhxuOZVv4lcVq9dZwq3FMhzYSVwnVPY3dXsMF8plebRvGdQp1GnRMjcN
-         bKDt2ZVd83Jou1/gOwOKGdd8p3Nf5zXYorTweXUDfdoxgbV/Nhpw30ZflrjYOtb7c0
-         t+slX849DZp9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98942E451BC;
-        Fri, 22 Jul 2022 11:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 22 Jul 2022 07:41:47 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C424B5C90;
+        Fri, 22 Jul 2022 04:41:43 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 070CF1C80ED9;
+        Fri, 22 Jul 2022 19:41:41 +0800 (CST)
+Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Fri, 22 Jul
+ 2022 19:41:40 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS03.nuvoton.com
+ (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Fri, 22 Jul
+ 2022 19:41:40 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Fri, 22 Jul 2022 19:41:40 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 9538663A20; Fri, 22 Jul 2022 14:41:39 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <openbmc@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v2 0/2] spi: npcm-pspi: add Arbel NPCM8XX support 
+Date:   Fri, 22 Jul 2022 14:41:34 +0300
+Message-ID: <20220722114136.251415-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dt-bindings: net: ethernet-controller: Rework 'fixed-link'
- schema
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165849001362.931.15978104001255172124.git-patchwork-notify@kernel.org>
-Date:   Fri, 22 Jul 2022 11:40:13 +0000
-References: <20220719215100.1876577-1-robh@kernel.org>
-In-Reply-To: <20220719215100.1876577-1-robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+This patch set adds Arbel NPCM8XX Peripheral SPI (PSPI) support to PSPI NPCM
+driver.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+This patch set was separated from the full duplex patch.
+https://lore.kernel.org/lkml/YtlES7MX6nJr8l+L@sirena.org.uk/
 
-On Tue, 19 Jul 2022 15:50:59 -0600 you wrote:
-> While the if/then schemas mostly work, there's a few issues. The 'allOf'
-> schema will also be true if 'fixed-link' is not an array or object as a
-> false 'if' schema (without an 'else') will be true. In the array case
-> doesn't set the type (uint32-array) in the 'then' clause. In the node case,
-> 'additionalProperties' is missing.
-> 
-> Rework the schema to use oneOf with each possible type.
-> 
-> [...]
+Addressed comments from:
+ - Mark Brown : https://www.spinics.net/lists/kernel/msg4447178.html
 
-Here is the summary with links:
-  - dt-bindings: net: ethernet-controller: Rework 'fixed-link' schema
-    https://git.kernel.org/netdev/net/c/17161c341de0
+Changes since version 1:
+ - Adding comptible npcm845 in the driver. 
 
-You are awesome, thank you!
+The NPCM PSPI driver tested on NPCM845 evaluation board.
+
+Tomer Maimon (2):
+  dt-binding: spi: npcm-pspi: Add npcm845 compatible
+  spi: npcm-pspi: Add NPCM845 peripheral SPI support
+
+ Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt | 3 ++-
+ drivers/spi/spi-npcm-pspi.c                                 | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.33.0
 

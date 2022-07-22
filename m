@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB2957DC54
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE2457DC58
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbiGVI12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S231487AbiGVI1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiGVI11 (ORCPT
+        with ESMTP id S234984AbiGVI1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:27:27 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 924DF9B9C3;
-        Fri, 22 Jul 2022 01:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=AWklX
-        y87aAjJGpkYMEqAbUQ8m/hTyCJ+QZEc8p4iaYo=; b=aFWESxcB9jjmFLPcxcwR6
-        16Ct1Q03mNIzWtsbfiDv+x5nXPOaVaQDNqvgFWEk00eB+DDGq6z6Q8YX8jjJn5Vu
-        Ehtraigx9pGpsqvZQ03LThlNBQXbqw0zMmOsFMMKx/s66wQvppzBmhIYJpAhOVJs
-        UxzHpJCoHAeyt7I4I3q28g=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp4 (Coremail) with SMTP id HNxpCgBntYVQX9pilNF2QA--.22010S2;
-        Fri, 22 Jul 2022 16:26:58 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, loic.poulain@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, wcn36xx@lists.infradead.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] wireless: ath: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 16:26:53 +0800
-Message-Id: <20220722082653.74553-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 04:27:38 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CFD9E7BD
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:27:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VK4RflD_1658478452;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VK4RflD_1658478452)
+          by smtp.aliyun-inc.com;
+          Fri, 22 Jul 2022 16:27:32 +0800
+From:   Jeffle Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v4] erofs: update ctx->pos for every emitted dirent
+Date:   Fri, 22 Jul 2022 16:27:32 +0800
+Message-Id: <20220722082732.30935-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgBntYVQX9pilNF2QA--.22010S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCFWfWw17CFWDCryfAF17Awb_yoW5CFyUpF
-        WrC392kr1kJF4DXw4xJF48AF95GanxKr9Fkr1vv34rZrW8AFn5KFyYgFWfAFyDta1DG3Wa
-        vF1Utry7GFnaq37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE66w-UUUUU=
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRxJGZFc7YxB8MQAAsl
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+From: Hongnan Li <hongnan.li@linux.alibaba.com>
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
+erofs_readdir update ctx->pos after filling a batch of dentries
+and it may cause dir/files duplication for NFS readdirplus which
+depends on ctx->pos to fill dir correctly. So update ctx->pos for
+every emitted dirent in erofs_fill_dentries to fix it.
+
+Also fix the update of ctx->pos when the initial file position has
+exceeded nameoff.
+
+Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
+Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
+Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
 ---
- drivers/net/wireless/ath/ath6kl/hif.h       | 2 +-
- drivers/net/wireless/ath/ath6kl/sdio.c      | 2 +-
- drivers/net/wireless/ath/ath9k/ar9003_phy.c | 2 +-
- drivers/net/wireless/ath/wcn36xx/hal.h      | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ fs/erofs/dir.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath6kl/hif.h b/drivers/net/wireless/ath/ath6kl/hif.h
-index f9d3f3a5edfe..ba16b98c872d 100644
---- a/drivers/net/wireless/ath/ath6kl/hif.h
-+++ b/drivers/net/wireless/ath/ath6kl/hif.h
-@@ -92,7 +92,7 @@ struct bus_request {
-  *     emode - This indicates the whether the command is to be executed in a
-  *             blocking or non-blocking fashion (HIF_SYNCHRONOUS/
-  *             HIF_ASYNCHRONOUS). The read/write data paths in HTC have been
-- *             implemented using the asynchronous mode allowing the the bus
-+ *             implemented using the asynchronous mode allowing the bus
-  *             driver to indicate the completion of operation through the
-  *             registered callback routine. The requirement primarily comes
-  *             from the contexts these operations get called from (a driver's
-diff --git a/drivers/net/wireless/ath/ath6kl/sdio.c b/drivers/net/wireless/ath/ath6kl/sdio.c
-index 6b51a2dceadc..8a43c48ec1cf 100644
---- a/drivers/net/wireless/ath/ath6kl/sdio.c
-+++ b/drivers/net/wireless/ath/ath6kl/sdio.c
-@@ -1185,7 +1185,7 @@ static int ath6kl_sdio_bmi_read(struct ath6kl *ar, u8 *buf, u32 len)
- 	 *        Wait for first 4 bytes to be in FIFO
- 	 *        If CONSERVATIVE_BMI_READ is enabled, also wait for
- 	 *        a BMI command credit, which indicates that the ENTIRE
--	 *        response is available in the the FIFO
-+	 *        response is available in the FIFO
- 	 *
- 	 *  CASE 3: length > 128
- 	 *        Wait for the first 4 bytes to be in FIFO
-diff --git a/drivers/net/wireless/ath/ath9k/ar9003_phy.c b/drivers/net/wireless/ath/ath9k/ar9003_phy.c
-index dc0e5ea25673..090ff0600c81 100644
---- a/drivers/net/wireless/ath/ath9k/ar9003_phy.c
-+++ b/drivers/net/wireless/ath/ath9k/ar9003_phy.c
-@@ -1744,7 +1744,7 @@ static void ar9003_hw_spectral_scan_config(struct ath_hw *ah,
- 	REG_SET_BIT(ah, AR_PHY_RADAR_0, AR_PHY_RADAR_0_FFT_ENA);
- 	REG_SET_BIT(ah, AR_PHY_SPECTRAL_SCAN, AR_PHY_SPECTRAL_SCAN_ENABLE);
+diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
+index 18e59821c597..47c85f1b80d8 100644
+--- a/fs/erofs/dir.c
++++ b/fs/erofs/dir.c
+@@ -22,10 +22,9 @@ static void debug_one_dentry(unsigned char d_type, const char *de_name,
+ }
  
--	/* on AR93xx and newer, count = 0 will make the the chip send
-+	/* on AR93xx and newer, count = 0 will make the chip send
- 	 * spectral samples endlessly. Check if this really was intended,
- 	 * and fix otherwise.
- 	 */
-diff --git a/drivers/net/wireless/ath/wcn36xx/hal.h b/drivers/net/wireless/ath/wcn36xx/hal.h
-index 874746b5993c..a1afe1f85f0e 100644
---- a/drivers/net/wireless/ath/wcn36xx/hal.h
-+++ b/drivers/net/wireless/ath/wcn36xx/hal.h
-@@ -4142,7 +4142,7 @@ struct wcn36xx_hal_dump_cmd_rsp_msg {
- 	/* Length of the responce message */
- 	u32 rsp_length;
+ static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
+-			       void *dentry_blk, unsigned int *ofs,
++			       void *dentry_blk, struct erofs_dirent *de,
+ 			       unsigned int nameoff, unsigned int maxsize)
+ {
+-	struct erofs_dirent *de = dentry_blk + *ofs;
+ 	const struct erofs_dirent *end = dentry_blk + nameoff;
  
--	/* FIXME: Currently considering the the responce will be less than
-+	/* FIXME: Currently considering the responce will be less than
- 	 * 100bytes */
- 	u8 rsp_buffer[DUMPCMD_RSP_BUFFER];
- } __packed;
+ 	while (de < end) {
+@@ -59,9 +58,8 @@ static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
+ 			/* stopped by some reason */
+ 			return 1;
+ 		++de;
+-		*ofs += sizeof(struct erofs_dirent);
++		ctx->pos += sizeof(struct erofs_dirent);
+ 	}
+-	*ofs = maxsize;
+ 	return 0;
+ }
+ 
+@@ -95,7 +93,7 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+ 				  "invalid de[0].nameoff %u @ nid %llu",
+ 				  nameoff, EROFS_I(dir)->nid);
+ 			err = -EFSCORRUPTED;
+-			goto skip_this;
++			break;
+ 		}
+ 
+ 		maxsize = min_t(unsigned int,
+@@ -106,17 +104,17 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+ 			initial = false;
+ 
+ 			ofs = roundup(ofs, sizeof(struct erofs_dirent));
++			ctx->pos = blknr_to_addr(i) + ofs;
+ 			if (ofs >= nameoff)
+ 				goto skip_this;
+ 		}
+ 
+-		err = erofs_fill_dentries(dir, ctx, de, &ofs,
++		err = erofs_fill_dentries(dir, ctx, de, (void *)de + ofs,
+ 					  nameoff, maxsize);
+-skip_this:
+-		ctx->pos = blknr_to_addr(i) + ofs;
+-
+ 		if (err)
+ 			break;
++skip_this:
++		ctx->pos = blknr_to_addr(i) + maxsize;
+ 		++i;
+ 		ofs = 0;
+ 	}
 -- 
-2.25.1
+2.27.0
 

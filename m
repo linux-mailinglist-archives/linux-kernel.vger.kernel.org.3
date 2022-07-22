@@ -2,82 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F2C57D7C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF9957D7C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 02:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiGVA20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 20:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S233870AbiGVA2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 20:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbiGVA2W (ORCPT
+        with ESMTP id S233884AbiGVA2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 20:28:22 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4B489E84;
-        Thu, 21 Jul 2022 17:28:22 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id x64so2651383iof.1;
-        Thu, 21 Jul 2022 17:28:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WO428di4LZg8IxMV7xo6JPUaQZ3IN14jbIhbdoqPskE=;
-        b=x45Op0fCwKwPXaigBr6HOSWuJXfHTuNqQwIvBkSVqnavnOMrDCphboTyOc2PRFHqB6
-         0UIds36h927vAr2h6Y+3SeArQ0VosvgixKNfctdqN8tQfSlDPhinUUBZU2nvnAeLbgvI
-         56fNzzlgAcMywKPUbNMz8uwpK3ZQWjn54lUx4jIwck0hTHCEzlEgKYY++XbiP79ZHsKK
-         5P/O4fWBYa1NuNVqbhGA6J/4XKGCEuQToTEFFb9FStbervnt/zFQLfJN02Am9RLNmSnM
-         aJ2rImRkQNOuAM1CeMGhFIYzGNQ1Iylnx2m2KJlB4Hbqt/1SuD+g/fmrhSRHseu5k1Ty
-         T31g==
-X-Gm-Message-State: AJIora9SEC1ymffENdAtgKW7sjuc7kaiaDU33djVCfNbC/T1NAT2O/WG
-        BYsXejbhFABUW8qpXFOpJls3RmzUAw==
-X-Google-Smtp-Source: AGRyM1tnKNCMQpavV/Li+Xqtngb52FH2eaXYek41EtPrXz1E9fo6RX2b6MkumPquG7NKq97OHOGzcg==
-X-Received: by 2002:a05:6638:300f:b0:335:b12d:3126 with SMTP id r15-20020a056638300f00b00335b12d3126mr430318jak.210.1658449701331;
-        Thu, 21 Jul 2022 17:28:21 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id w29-20020a02b0dd000000b00335d7c314b1sm1397030jah.53.2022.07.21.17.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 17:28:20 -0700 (PDT)
-Received: (nullmailer pid 2243972 invoked by uid 1000);
-        Fri, 22 Jul 2022 00:28:19 -0000
-Date:   Thu, 21 Jul 2022 18:28:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, l.stach@pengutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, Peng Fan <peng.fan@nxp.com>,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        festevam@gmail.com, p.zabel@pengutronix.de, aisheng.dong@nxp.com,
-        s.hauer@pengutronix.de
-Subject: Re: [PATCH V6 1/6] dt-bindings: soc: add i.MX93 SRC
-Message-ID: <20220722002819.GA2243938-robh@kernel.org>
-References: <20220719073541.197788-1-peng.fan@oss.nxp.com>
- <20220719073541.197788-2-peng.fan@oss.nxp.com>
+        Thu, 21 Jul 2022 20:28:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBC295C17;
+        Thu, 21 Jul 2022 17:28:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF4DEB826E2;
+        Fri, 22 Jul 2022 00:28:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 567B9C3411E;
+        Fri, 22 Jul 2022 00:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658449708;
+        bh=zlL75xRrx57HJY0xsOBH0q+zchdcxrbFdFBjnUn01MI=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=sXXcIH5zf10BAPYH8Tc7pj4YOP9WJSsWDbgCEqBFQFluNxbudnj+2mEOBvUK24+jh
+         zfoZZv3nGIKa9QGyPNmGM7OOf5UeHnzs9XXdgtHKTAeXYDs/U7YLros1/gsgQ3qYfs
+         kYmv0dECLJ4wOR26mvDVH5QSIs8j5WSdzo2dP76cm1vbKzWpVfGvxP0/mURc5e3XpZ
+         XzT8XXVNCmclx1UAIN3gJwAFIWem1rPQXSOKPO7oXOlsAiR86bPYxPm2L7RRhTGj7S
+         u2d1BkBAMVAsA4Dyj/8LhaCprZa1xqy+KsKgQtFTG2paAM2g5R3cJAIOsLyEoFEnUt
+         uQKjcuyZqhT8w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CCA595C03A4; Thu, 21 Jul 2022 17:28:25 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 17:28:25 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        zhangfei.gao@linaro.org, chenxiang66@hisilicon.com,
+        shameerali.kolothum.thodi@huawei.com, pbonzini@redhat.com,
+        quic_neeraju@quicinc.com, maz@kernel.org, yueluck@163.com
+Subject: [GIT PULL] Urgent fix for expedited SRCU v5.19 boot-speed regression
+Message-ID: <20220722002825.GA2848736@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719073541.197788-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,URG_BIZ autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 15:35:36 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add bindings for i.MX93 System Reset Controller(SRC). SRC supports
-> resets and power gating for mixes.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../bindings/soc/imx/fsl,imx93-src.yaml       | 96 +++++++++++++++++++
->  1 file changed, 96 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
-> 
+Hello, Linus,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This pull request fixes a severe boot-speed regression for embedded
+systems running in virtual environments, which are commonly
+used for development and debugging.  This regression bloats the
+edit/compile/boot/debug cycle, causing considerable pain.  Hence the
+urgent pull request into v5.19 rather than waiting for the upcoming
+merge window.
+
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu-urgent.2022.07.21a
+
+for you to fetch changes up to 4f2bfd9494a072d58203600de6bedd72680e612a:
+
+  srcu: Make expedited RCU grace periods block even less frequently (2022-07-19 11:39:59 -0700)
+
+----------------------------------------------------------------
+Urgent RCU pull request for v5.19
+
+This pull request contains a pair of commits that fix 282d8998e997 ("srcu:
+Prevent expedited GPs and blocking readers from consuming CPU"), which
+was itself a fix to an SRCU expedited grace-period problem that could
+prevent kernel live patching (KLP) from completing.  That SRCU fix for
+KLP introduced large (as in minutes) boot-time delays to embedded Linux
+kernels running on qemu/KVM.  These delays were due to the emulation of
+certain MMIO operations controlling memory layout, which were emulated
+with one expedited grace period per access.  Common configurations
+required thousands of boot-time MMIO accesses, and thus thousands of
+boot-time expedited SRCU grace periods.
+
+In these configurations, the occasional sleeps that allowed KLP to proceed
+caused excessive boot delays.  These commits preserve enough sleeps to
+permit KLP to proceed, but few enough that the virtual embedded kernels
+still boot reasonably quickly.
+
+This represents a regression introduced in the v5.19 merge window,
+and the bug is causing significant inconvenience, hence this pull request.
+
+----------------------------------------------------------------
+Neeraj Upadhyay (1):
+      srcu: Make expedited RCU grace periods block even less frequently
+
+Paul E. McKenney (1):
+      srcu: Block less aggressively for expedited grace periods
+
+ Documentation/admin-guide/kernel-parameters.txt | 18 +++++
+ kernel/rcu/srcutree.c                           | 98 +++++++++++++++++++------
+ 2 files changed, 92 insertions(+), 24 deletions(-)

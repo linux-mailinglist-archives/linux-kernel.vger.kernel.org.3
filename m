@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF8F57DAA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DC157DAFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234349AbiGVHMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S234444AbiGVHOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbiGVHMg (ORCPT
+        with ESMTP id S234340AbiGVHOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:12:36 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00C68E6D9
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:12:35 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id t127so3581116vsb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MJkZzeVVeqhbCaOr3UHCo90jJ8JW+y4qvEiv5AJYV5g=;
-        b=mPi+BYZsM370KV1+AJ253wEcfMvB/dbaoY94gEfN2i23iwUpsQ+MSu2Q0Sk0MfhYhs
-         aAqTzv15IWOkI+Er1x0QmYqaf1X+PMWOqFqqrAkve/mYKnwkR+336EqLnZ8n1mrIdGD1
-         zQ11Vjbl8XBCe5U9gGYiq/oay0+N7WD3FNMJHFhGDkXqpLZ1ra8Y/OlX+9Imn6m24d59
-         Ab6EJj88QIMb9e5b9Sb2FmdwFciCLUQKx+4A4lcQaPiRiluAwivw5I/HmYaEGQXWqY9M
-         QvTM6mJ9gZFI3lsivTIZ7AC9ySe616sbw7T0xqQfZn5EiEDNTwFNFD+Q3nIIMua+GCvm
-         R6Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MJkZzeVVeqhbCaOr3UHCo90jJ8JW+y4qvEiv5AJYV5g=;
-        b=McnqSwHn9RkNJSK/QA0AON4VRKwAvrCHlKK8ZieHItXGmxUTmfwkRVMLm9D12jpjwc
-         6RPMZ6pAxM398IU0nrxNILpJtgYpxRkriTB34eoD/O7DfGs+DaB0AL9MiPFla4ICukeM
-         iaX19NcDi7+RX9CVKKmCRmyDC3dXqNdH5L5kiRrLCm9Une1onBHVjeTat8TMoXUsNxO+
-         n3KF4aslih6p3EgdVQuvbUhmGnPTrAjEOV024n4+uMrHbAR6CFHzzqC/BQJJzlia7ZS0
-         47uMi/3NDVPfFe/uigej2EtnVN0aToEiXuGcDXpVvQt1FSXNpJWa/pscTZecMEln2O0/
-         WVRw==
-X-Gm-Message-State: AJIora8B4JPAxuJxXqSRgBly93rkKUlq/7I/jPKQKRSd1B2ddxuaDVVG
-        zWbsVSpe8qAEgYwU30WJQVsph2KeaEFV1pNC9UQC/cU8dD4=
-X-Google-Smtp-Source: AGRyM1tuOGn73TS9hgd/PmlURX4CDi++p6g/fvA0RBMMzEPeVR6kLiAvCKt6grhdA94W0CcN677tGOl+QyZL3X6vKhU=
-X-Received: by 2002:a67:c895:0:b0:357:48d2:fa1 with SMTP id
- v21-20020a67c895000000b0035748d20fa1mr659259vsk.22.1658473954680; Fri, 22 Jul
- 2022 00:12:34 -0700 (PDT)
+        Fri, 22 Jul 2022 03:14:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16A0951C4;
+        Fri, 22 Jul 2022 00:14:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B534621A1;
+        Fri, 22 Jul 2022 07:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1C6C385A2;
+        Fri, 22 Jul 2022 07:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658474044;
+        bh=d+gWaf5KF5ulzUXfYdXRVW3moWPvOd4xhr1Z99HXtok=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ecmAOyRk83sVidXkCqPXM0AvJI/hX0NNO3+GMSbA65CKnQ6xYihQgCnuxl01RTOZy
+         Z7R4dpODT1qt3s4ZE2XTxOX2/qmbkHFuLqMkJY81Kw+lFM25FWN1SbnpwZ35/ILD48
+         51HoNht6KIakI3oAuZYe6K3sP3x01RGcjbdNB7ewTgTdBIdpdaDNjYlqvLliwEbIU/
+         V/HvXpi0vjnN1SaD5DmV3DxDWD7IIQg0elzH7uAYXZQuY/CsgdG/eSh8CJHKHUYMuc
+         AysHmjopOy2sP3MsRAbqf8HwTxLez/ocsTeVUR9x1bQXwrxB2RvDFX/Xyydjxq27n7
+         ztoUQcXuh7mEA==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: [PATCH v4 5/9] f2fs: move f2fs_force_buffered_io() into file.c
+Date:   Fri, 22 Jul 2022 00:12:24 -0700
+Message-Id: <20220722071228.146690-6-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220722071228.146690-1-ebiggers@kernel.org>
+References: <20220722071228.146690-1-ebiggers@kernel.org>
 MIME-Version: 1.0
-References: <20220721180214.3223778-1-dlatypov@google.com> <20220721180214.3223778-2-dlatypov@google.com>
-In-Reply-To: <20220721180214.3223778-2-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 22 Jul 2022 15:12:23 +0800
-Message-ID: <CABVgOSn7-H63BDDQcsZ-c3ZWDCSrP43uY5eYsqG+w2LEGJqODw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kunit: drop test pointer in string_stream_fragment
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f49da805e45f8e5e"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,165 +56,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f49da805e45f8e5e
-Content-Type: text/plain; charset="UTF-8"
+From: Eric Biggers <ebiggers@google.com>
 
-On Fri, Jul 22, 2022 at 2:02 AM 'Daniel Latypov' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> We already store the `struct kunit *test` in the string_stream object
-> itself, so we need don't need to store a copy of this pointer in every
-> fragment in the stream.
->
-> Drop it, getting string_stream_fragment down the bare minimum: a
-> list_head and the `char *` with the actual fragment.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+f2fs_force_buffered_io() is only used in file.c, so move it into there.
+No behavior change.  This makes it easier to review later patches.
 
-Yup, this is definitely redundant now. Thanks!
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ fs/f2fs/f2fs.h | 45 ---------------------------------------------
+ fs/f2fs/file.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+), 45 deletions(-)
 
-Reviewed-by: David Gow <davidgow@google.com>
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 7869e749700fc2..d187b7d7ed2435 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4426,17 +4426,6 @@ static inline void f2fs_i_compr_blocks_update(struct inode *inode,
+ 	f2fs_mark_inode_dirty_sync(inode, true);
+ }
+ 
+-static inline int block_unaligned_IO(struct inode *inode,
+-				struct kiocb *iocb, struct iov_iter *iter)
+-{
+-	unsigned int i_blkbits = READ_ONCE(inode->i_blkbits);
+-	unsigned int blocksize_mask = (1 << i_blkbits) - 1;
+-	loff_t offset = iocb->ki_pos;
+-	unsigned long align = offset | iov_iter_alignment(iter);
+-
+-	return align & blocksize_mask;
+-}
+-
+ static inline bool f2fs_allow_multi_device_dio(struct f2fs_sb_info *sbi,
+ 								int flag)
+ {
+@@ -4447,40 +4436,6 @@ static inline bool f2fs_allow_multi_device_dio(struct f2fs_sb_info *sbi,
+ 	return sbi->aligned_blksize;
+ }
+ 
+-static inline bool f2fs_force_buffered_io(struct inode *inode,
+-				struct kiocb *iocb, struct iov_iter *iter)
+-{
+-	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+-	int rw = iov_iter_rw(iter);
+-
+-	if (!fscrypt_dio_supported(inode))
+-		return true;
+-	if (fsverity_active(inode))
+-		return true;
+-	if (f2fs_compressed_file(inode))
+-		return true;
+-
+-	/* disallow direct IO if any of devices has unaligned blksize */
+-	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
+-		return true;
+-	/*
+-	 * for blkzoned device, fallback direct IO to buffered IO, so
+-	 * all IOs can be serialized by log-structured write.
+-	 */
+-	if (f2fs_sb_has_blkzoned(sbi))
+-		return true;
+-	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
+-		if (block_unaligned_IO(inode, iocb, iter))
+-			return true;
+-		if (F2FS_IO_ALIGNED(sbi))
+-			return true;
+-	}
+-	if (is_sbi_flag_set(F2FS_I_SB(inode), SBI_CP_DISABLED))
+-		return true;
+-
+-	return false;
+-}
+-
+ static inline bool f2fs_need_verity(const struct inode *inode, pgoff_t idx)
+ {
+ 	return fsverity_active(inode) &&
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index bd14cef1b08fd2..5e5c97fccfb4ee 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -808,6 +808,51 @@ int f2fs_truncate(struct inode *inode)
+ 	return 0;
+ }
+ 
++static int block_unaligned_IO(struct inode *inode, struct kiocb *iocb,
++			      struct iov_iter *iter)
++{
++	unsigned int i_blkbits = READ_ONCE(inode->i_blkbits);
++	unsigned int blocksize_mask = (1 << i_blkbits) - 1;
++	loff_t offset = iocb->ki_pos;
++	unsigned long align = offset | iov_iter_alignment(iter);
++
++	return align & blocksize_mask;
++}
++
++static inline bool f2fs_force_buffered_io(struct inode *inode,
++				struct kiocb *iocb, struct iov_iter *iter)
++{
++	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++	int rw = iov_iter_rw(iter);
++
++	if (!fscrypt_dio_supported(inode))
++		return true;
++	if (fsverity_active(inode))
++		return true;
++	if (f2fs_compressed_file(inode))
++		return true;
++
++	/* disallow direct IO if any of devices has unaligned blksize */
++	if (f2fs_is_multi_device(sbi) && !sbi->aligned_blksize)
++		return true;
++	/*
++	 * for blkzoned device, fallback direct IO to buffered IO, so
++	 * all IOs can be serialized by log-structured write.
++	 */
++	if (f2fs_sb_has_blkzoned(sbi))
++		return true;
++	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
++		if (block_unaligned_IO(inode, iocb, iter))
++			return true;
++		if (F2FS_IO_ALIGNED(sbi))
++			return true;
++	}
++	if (is_sbi_flag_set(F2FS_I_SB(inode), SBI_CP_DISABLED))
++		return true;
++
++	return false;
++}
++
+ int f2fs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 		 struct kstat *stat, u32 request_mask, unsigned int query_flags)
+ {
+-- 
+2.37.0
 
-Cheers,
--- David
-
->  lib/kunit/string-stream.c | 10 +++++-----
->  lib/kunit/string-stream.h |  1 -
->  2 files changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index a2496abef152..f5ae79c37400 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -22,7 +22,6 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
->         if (!frag)
->                 return ERR_PTR(-ENOMEM);
->
-> -       frag->test = test;
->         frag->fragment = kunit_kmalloc(test, len, gfp);
->         if (!frag->fragment)
->                 return ERR_PTR(-ENOMEM);
-> @@ -30,11 +29,12 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
->         return frag;
->  }
->
-> -static void string_stream_fragment_destroy(struct string_stream_fragment *frag)
-> +static void string_stream_fragment_destroy(struct kunit *test,
-> +                                          struct string_stream_fragment *frag)
->  {
->         list_del(&frag->node);
-> -       kunit_kfree(frag->test, frag->fragment);
-> -       kunit_kfree(frag->test, frag);
-> +       kunit_kfree(test, frag->fragment);
-> +       kunit_kfree(test, frag);
->  }
->
->  int string_stream_vadd(struct string_stream *stream,
-> @@ -89,7 +89,7 @@ static void string_stream_clear(struct string_stream *stream)
->                                  frag_container_safe,
->                                  &stream->fragments,
->                                  node) {
-> -               string_stream_fragment_destroy(frag_container);
-> +               string_stream_fragment_destroy(stream->test, frag_container);
->         }
->         stream->length = 0;
->         spin_unlock(&stream->lock);
-> diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
-> index 494dee0f24bd..b669f9a75a94 100644
-> --- a/lib/kunit/string-stream.h
-> +++ b/lib/kunit/string-stream.h
-> @@ -14,7 +14,6 @@
->  #include <linux/stdarg.h>
->
->  struct string_stream_fragment {
-> -       struct kunit *test;
->         struct list_head node;
->         char *fragment;
->  };
-> --
-> 2.37.1.359.gd136c6c3e2-goog
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220721180214.3223778-2-dlatypov%40google.com.
-
---000000000000f49da805e45f8e5e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBe
-fLSrtwN9RIXQTFYP1nJAuOL69zkcDRqkrdmPyTqEnDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjIwNzEyMzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAB3n5tl096euRhCBULdmJ
-rGIC7Sj1XYeHZi7tQt5LDGocuBeI+i5Lf0PhUbfNGrg6NvmzXwHm2y+uo5JeC5KBMM/RH8OHiv0U
-IEtL/plF1SyuLrzZUYWTwoa+BkWVqS3op5MWWy9p6OgS+XJ0cnjdU4S9YiW+q2cqPzypP+l/7ZSu
-3CEtcnEkMGyamBQLjmUODe79xRsAORu5pY+SYpRUM/2D1AcdcSkrTqQg942fFPfwOTheeGuwDlH6
-uta3mp3kzoBtA5QiSce89e3Vkpl4wtZleNdORfKwW5kWnjCGrc2wKTI84JjnBZEmOw8uek6EMvhO
-S7AdZOzUKyqOpFPbYQ==
---000000000000f49da805e45f8e5e--

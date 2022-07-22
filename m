@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61E757D958
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 06:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E20457D962
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 06:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiGVEPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 00:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S230384AbiGVESv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 00:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiGVEPu (ORCPT
+        with ESMTP id S229479AbiGVESu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 00:15:50 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CD222BF6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 21:15:49 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bp15so6552163ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 21:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc;
-        bh=KPpMtjYycKsWO8I/2HQoLfLw+bGthVnZUbY/Sz4won8=;
-        b=l9NTA96MbQS2WQTpP0ZGntinKVYwq9qxqk5waWcwikJTZOpQCrb4DPsKAI94TozmXl
-         Znx0pSiCL3jRcXvNI0qnRY6Rh8SNse6fL5MP9g/meVlyM005jaruUxZpv7gOA6w4bNVG
-         kKvUQkrNozDtXTpp2SFoznf/FU3WBvZH2S0e/F/p6bs9nopLZXT3VNlmon3G6VL8UJWQ
-         XPKNzjL+uRbeMzQdzpjKgEh1lr0qFkqEMLmi8SJOSG5qWXS15X8lCVvW1tEeIXl6d7SJ
-         F1LBS3nSylYVtDfElmatgsb2Mg97kNFetuut5/ZXQeVfw31Yud1lzemwY7EC24OuCQzc
-         S/3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=KPpMtjYycKsWO8I/2HQoLfLw+bGthVnZUbY/Sz4won8=;
-        b=ogJS8jSgb+xn0j3q22TqpXGD/7RL8wj1uFHTIF80unReVJLHC/0c3bpQTPlIPS68Kr
-         TKOTo6+g+O7KkbI1PqAWrYt104bHpi+HL0o+5nbqyaGNjIMtvaW9kYxYEIVXz/pHli9f
-         7SpO44xwG1c1W3Ot9ssFam4lS77NvmxZuCMvhPrPDC4gzLEueBJkJeb0g2/P0RgUSMUI
-         mfHUXUuLYE9M3QBIBDqT0RKmINr4gepGRtebX91orviXtMdQUb0QEVcSySyfSLKQVAHs
-         pdx5ZKntO/GV07SSxxrlePT3CTBr1Bn16LAFMX6mfOEUhoy5TbbA4iDvSR5Um01kQfxk
-         Az5A==
-X-Gm-Message-State: AJIora+LZUU4ODIli5NbJnqytAOFHHJHprMgaFYjdYIHloO1PVSPy9tv
-        QYvtE7xS1zVY4BrUPP1g0cXsNxE+aL19KLH1sIM=
-X-Google-Smtp-Source: AGRyM1vGB5026zxlcfevkvyTQRDxff9xNnhge1ch/G0mmL8B2YsA8Nv6qchY5uEHv0BxATxfDL5yiVNYi+l8GoMrClU=
-X-Received: by 2002:a17:907:96ac:b0:72f:1dea:5b66 with SMTP id
- hd44-20020a17090796ac00b0072f1dea5b66mr1574100ejc.266.1658463347975; Thu, 21
- Jul 2022 21:15:47 -0700 (PDT)
+        Fri, 22 Jul 2022 00:18:50 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546E097489;
+        Thu, 21 Jul 2022 21:18:46 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 26M4IWK8014154;
+        Fri, 22 Jul 2022 13:18:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 26M4IWK8014154
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658463514;
+        bh=Ok0nOaP8oSs4IsxJgNmxPBZo8Rj007X6d6MNVegX7o4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LILVG5vXh/gx1pg20dkI23AA+joRtwJIvR4opJPw/Wl4OavC6gbljUAo7XGEum154
+         eyJbT0ofZkTI7qVX1hRJA3UtEV/EkZdIktTXJWX2a0tk3xEWx0NbjsLnqNtI5UINfp
+         DDNS/gycvdXIlucqTcYJeIBYDweRCLmfyBE2JylmXLhHqKGR8Jb0lusuOgMronzbIf
+         CBEIKc7irOCA0pQctVPNnaoqcuOkFDkSmDwWq7ae8IjOTWuG8JhQkAjD6JEirK033l
+         YoIMiEAZcdOFje7hcyI4ij5QJRp1dWSceBg1r9Wnzcd2CE/YHp+a1Cmv47aKps8f8+
+         SOyrOumC9zAxg==
+X-Nifty-SrcIP: [209.85.221.47]
+Received: by mail-wr1-f47.google.com with SMTP id d16so4881085wrv.10;
+        Thu, 21 Jul 2022 21:18:33 -0700 (PDT)
+X-Gm-Message-State: AJIora/ZSkVB0tXL5nX1+8yr6kY8lHo9i1/G9CtQQDfnTOdcAwYICAXr
+        XxdxXPUbIPpgQFunFhzOMfUJ9SNyUPJdGA08yJ4=
+X-Google-Smtp-Source: AGRyM1u5nfm43QHHmAHAOm+9cxM7c8Tn1/hWbXKtPajhve+bG846G4KjqKggTUGEwubKaGd3M8kNT3hnvqT8ZbqPwlg=
+X-Received: by 2002:adf:d1e2:0:b0:21d:d40b:d816 with SMTP id
+ g2-20020adfd1e2000000b0021dd40bd816mr953262wrd.682.1658463512097; Thu, 21 Jul
+ 2022 21:18:32 -0700 (PDT)
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 22 Jul 2022 14:15:37 +1000
-Message-ID: <CAPM=9tx177pqAbBTC586NRwr+kbx=_pQjQwKpFjB+442m-uSdw@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.19-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220720232332.2720091-1-justinstitt@google.com>
+ <CAKwvOdnSjyOdCZZ9AegCyfns3bvH3fbtbVgdThO2+rJAE=1bag@mail.gmail.com> <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
+In-Reply-To: <YtlsY2A2ZWK97Y8O@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 22 Jul 2022 13:17:55 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
+Message-ID: <CAK7LNASi_yrPhf0wv+0nqRcNhhbwUn-PzHvuiV2W1EsTqd_D8Q@mail.gmail.com>
+Subject: Re: [PATCH] Makefile.extrawarn: re-enable -Wformat for clang
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Justin Stitt <justinstitt@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,131 +65,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Jul 22, 2022 at 12:10 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Thu, Jul 21, 2022 at 07:27:34AM -0700, Nick Desaulniers wrote:
+> > On Wed, Jul 20, 2022 at 4:23 PM Justin Stitt <justinstitt@google.com> wrote:
+> > >
+> > > There's been an ongoing mission to re-enable the -Wformat warning for
+> > > Clang. A previous attempt at enabling the warning showed that there were
+> > > many instances of this warning throughout the codebase. The sheer amount
+> > > of these warnings really polluted builds and thus -Wno-format was added
+> > > to _temporarily_ toggle them off.
+> > >
+> > > After many patches the warning has largely been eradicated for x86,
+> > > x86_64, arm, and arm64 on a variety of configs. The time to enable the
+> > > warning has never been better as it seems for the first time we are
+> > > ahead of them and can now solve them as they appear rather than tackling
+> > > from a backlog.
+> > >
+> > > As to the root cause of this large backlog of warnings, Clang seems to
+> > > pickup on some more nuanced cases of format warnings caused by implicit
+> > > integer conversion as well as default argument promotions from
+> > > printf-like functions.
+> > >
+> > >
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/378
+> > > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > Signed-off-by: Justin Stitt <justinstitt@google.com>
+> > > ---
+> > > Previous attempt: (https://patchwork.kernel.org/project/linux-kbuild/patch/20190201210853.244043-1-jflat@chromium.org/)
+> > >
+> > > Note:
+> > > For this patch to land on its feet, the plethora of supporting patches that
+> > > fixed various -Wformat warnings need to be picked up. Thanfully, a lot
+> > > of them have!
+> > >
+> > > Here are the patches still waiting to be picked up:
+> > > * https://lore.kernel.org/all/20220718230626.1029318-1-justinstitt@google.com/
+> > > * https://lore.kernel.org/all/20220711222919.2043613-1-justinstitt@google.com/
+> >
+> > Hi Masahiro, Nathan, and Tom,
+> > What are your thoughts for _when_ in the release cycle this should be
+> > picked up?  I worry that if we don't remove this soon, we will
+> > backslide, and more -Wformat issues will crop up making removing this
+> > in the future like digging in sand.  Justin has chased down many
+> > instances of this warning, and I'm happy to help clean up fallout from
+> > landing this.
+>
+> Let me do a series of builds with the two patches above against
+> next-20220721 to see if there are any instances of this warning across
+> the less frequently tested architectures then I will review/ack this.
+>
+> I don't think we need to worry much about backslide, as -Wformat is
+> enabled with W=1, which the 0day folks already test with, so new
+> instances of this warning should get reported to the authors when they
+> are introduced so they can be fixed immediately. However, I would still
+> like to see this applied sooner rather than later, although I would also
+> like us to be completely warning clean before doing so, especially with
+> -Werror now being selected with all{mod,yes}config. -rc8 is this Sunday
+> and final should be July 31st so I think this could be applied at some
+> point between those two dates then maybe sent to Linus for a late pull
+> request once all other trees have been merged but that is ultimately up
+> to Masahiro.
 
-Fixes for this week. The main one is the i915 firmware fix for the
-phoronix reported issue. I've written some firmware guidelines as a
-result, should land in -next soon. Otherwise a few amdgpu fixes, a
-scheduler fix, ttm fix and two other minor ones.
+OK, I think that will be good timing.
+Please ping me if I forget to pick it up.
 
-Regards,
-Dave.
+I still worry about my pull request being rejected.
 
-drm-fixes-2022-07-22:
-drm fixes for 5.19-rc8
 
-scheduler:
-- scheduling while atomic fix
 
-ttm:
-- locking fix
 
-edp:
-- variable typo fix
 
-i915:
-- add back support for v69 firmware on ADL-P.
+>
+> Cheers,
+> Nathan
+>
+> > >
+> > >  scripts/Makefile.extrawarn | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > >
+> > > diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> > > index f5f0d6f09053..9bbaf7112a9b 100644
+> > > --- a/scripts/Makefile.extrawarn
+> > > +++ b/scripts/Makefile.extrawarn
+> > > @@ -47,7 +47,6 @@ else
+> > >
+> > >  ifdef CONFIG_CC_IS_CLANG
+> > >  KBUILD_CFLAGS += -Wno-initializer-overrides
+> > > -KBUILD_CFLAGS += -Wno-format
+> > >  KBUILD_CFLAGS += -Wno-sign-compare
+> > >  KBUILD_CFLAGS += -Wno-format-zero-length
+> > >  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+> > > --
+> > > 2.37.0.170.g444d1eabd0-goog
+> > >
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
 
-amdgpu:
-- Drop redundant buffer cleanup that can lead to a segfault
-- Add a bo_list mutex to avoid possible list corruption in CS
-- dmub notification fix
 
-imx:
-- fix error path
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28=
-:
 
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-07-22
-
-for you to fetch changes up to 7f5ec14a4e07a2a78fbde069709d5c8806882be2:
-
-  Merge tag 'drm-misc-fixes-2022-07-21' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2022-07-22
-12:19:45 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.19-rc8
-
-scheduler:
-- scheduling while atomic fix
-
-ttm:
-- locking fix
-
-edp:
-- variable typo fix
-
-i915:
-- add back support for v69 firmware on ADL-P.
-
-amdgpu:
-- Drop redundant buffer cleanup that can lead to a segfault
-- Add a bo_list mutex to avoid possible list corruption in CS
-- dmub notification fix
-
-imx:
-- fix error path
-
-----------------------------------------------------------------
-Christian K=C3=B6nig (1):
-      drm/ttm: fix locking in vmap/vunmap TTM GEM helpers
-
-Daniele Ceraolo Spurio (1):
-      drm/i915/guc: support v69 in parallel to v70
-
-Dave Airlie (3):
-      Merge tag 'drm-intel-fixes-2022-07-20-1' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'amd-drm-fixes-5.19-2022-07-20' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-misc-fixes-2022-07-21' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-
-Dmitry Osipenko (1):
-      drm/scheduler: Don't kill jobs in interrupt context
-
-Liang He (1):
-      drm/imx/dcss: Add missing of_node_put() in fail path
-
-Luben Tuikov (1):
-      drm/amdgpu: Protect the amdgpu_bo_list list with a mutex v2
-
-Matthew Brost (1):
-      drm/i915/guc: Support programming the EU priority in the GuC descript=
-or
-
-N=C3=ADcolas F. R. A. Prado (1):
-      drm/panel-edp: Fix variable typo when saving hpd absent delay from DT
-
-Stylon Wang (1):
-      drm/amd/display: Fix new dmub notification enabling in DM
-
-xinhui pan (1):
-      drm/amdgpu: Remove one duplicated ef removal
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c   |   6 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.c        |   3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_bo_list.h        |   4 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             |  16 +-
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  27 +-
- drivers/gpu/drm/drm_gem_ttm_helper.c               |   9 +-
- drivers/gpu/drm/i915/gt/intel_context_types.h      |  11 +-
- .../gpu/drm/i915/gt/intel_execlists_submission.c   |  12 +-
- drivers/gpu/drm/i915/gt/intel_lrc.h                |  10 -
- drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h   |   3 +
- drivers/gpu/drm/i915/gt/uc/intel_guc.h             |   5 +
- drivers/gpu/drm/i915/gt/uc/intel_guc_fwif.h        |  45 +++
- drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  | 374 +++++++++++++++++=
-+---
- drivers/gpu/drm/i915/gt/uc/intel_uc_fw.c           |  56 ++-
- drivers/gpu/drm/i915/gt/uc/intel_uc_fw.h           |   7 +
- drivers/gpu/drm/imx/dcss/dcss-dev.c                |   3 +
- drivers/gpu/drm/panel/panel-edp.c                  |   2 +-
- drivers/gpu/drm/scheduler/sched_entity.c           |   6 +-
- include/drm/gpu_scheduler.h                        |   4 +-
- 19 files changed, 505 insertions(+), 98 deletions(-)
+-- 
+Best Regards
+Masahiro Yamada

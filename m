@@ -2,48 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F6A57DF79
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF04C57DFAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbiGVKKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S231732AbiGVKTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiGVKKr (ORCPT
+        with ESMTP id S234195AbiGVKTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:10:47 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E7FD193ED
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=naYs/
-        0hvcPG1kmcd0zhyIiSbdDvvP+aOMnYV8xDrKUI=; b=PPNUMLYTVaGrOvvR+47dU
-        /xTGgrK03+glV+mk7jz6zN6x5qjE0au5TAtoryrl9s2i2oyJM/2witl0ZmrS26JD
-        iCVkZJOKpVdvVapMA9kYL0GKZawqlz49WxpI4+xJ7yIPfWZCCm/K2uQSD8VF1cSp
-        apiXl1fE6XxjLgNZo7xTJA=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp5 (Coremail) with SMTP id HdxpCgDn7zujd9piHZy5Pg--.21851S2;
-        Fri, 22 Jul 2022 18:10:45 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.orgg,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] fs: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 18:10:41 +0800
-Message-Id: <20220722101041.80370-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 06:19:09 -0400
+X-Greylist: delayed 487 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Jul 2022 03:19:06 PDT
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3987B1C5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:19:06 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4Lq4vg2j6Kz1r0nJ;
+        Fri, 22 Jul 2022 12:10:54 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4Lq4vf4FwVz1qqkp;
+        Fri, 22 Jul 2022 12:10:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id rbkTNUbe7Ccr; Fri, 22 Jul 2022 12:10:53 +0200 (CEST)
+X-Auth-Info: 5V4d3Fnr8BDMPb3jkQu0EDJRSLyYFrjOv2Xdf5FYdjjFzWdHQsnOnSqJzPDYV4V9
+Received: from igel.home (ppp-46-244-169-212.dynamic.mnet-online.de [46.244.169.212])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 22 Jul 2022 12:10:53 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id 6F9AD2C3A72; Fri, 22 Jul 2022 12:10:52 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        huanyi.xj@alibaba-inc.com, heinrich.schuchardt@canonical.com,
+        k-hagio-ab@nec.com, hschauhan@nulltrace.org
+Subject: Re: [PATCH 4/5] riscv: Add modules to virtual kernel memory layout
+ dump
+References: <20220717101323.370245-1-xianting.tian@linux.alibaba.com>
+        <20220717101323.370245-5-xianting.tian@linux.alibaba.com>
+X-Yow:  You must be a CUB SCOUT!!  Have you made your MONEY-DROP today??
+Date:   Fri, 22 Jul 2022 12:10:52 +0200
+In-Reply-To: <20220717101323.370245-5-xianting.tian@linux.alibaba.com>
+        (Xianting Tian's message of "Sun, 17 Jul 2022 18:13:22 +0800")
+Message-ID: <87wnc5xxsj.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.90 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgDn7zujd9piHZy5Pg--.21851S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUAr4kWrWDGw17XF1UZFb_yoW3WFg_A3
-        Z7Jw4I9w4YvF1Igw47A3WSqF4Fg3yrCF15XF4rJr9Fvas5ZrsI93Z3tFWUta1rWr17GF15
-        W3Zagw1rZw13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtzuX3UUUUU==
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivwVGZFWB0j0lkQAAsX
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,26 +65,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+On Jul 17 2022, Xianting Tian wrote:
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- include/linux/fs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index d466ec670e1f..2c4a64e97aec 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -135,6 +135,10 @@ static void __init print_vm_layout(void)
+>  		(unsigned long)VMEMMAP_END);
+>  	print_ml("vmalloc", (unsigned long)VMALLOC_START,
+>  		(unsigned long)VMALLOC_END);
+> +#ifdef CONFIG_64BIT
+> +	print_ml("modules", (unsigned long)MODULES_VADDR,
+> +		(unsigned long)MODULES_END);
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index f0f71d93e24f..f2a1aefbbce4 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3070,7 +3070,7 @@ extern void evict_inodes(struct super_block *sb);
- void dump_mapping(const struct address_space *);
- 
- /*
-- * Userspace may rely on the the inode number being non-zero. For example, glibc
-+ * Userspace may rely on the inode number being non-zero. For example, glibc
-  * simply ignores files with zero i_ino in unlink() and other places.
-  *
-  * As an additional complication, if userspace was compiled with
+#ifdef MODULES_VADDR ?
+
 -- 
-2.25.1
-
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."

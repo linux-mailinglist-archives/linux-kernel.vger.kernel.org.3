@@ -2,94 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B038E57E68D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFBA57E68F
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 20:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236339AbiGVScA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 14:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
+        id S236344AbiGVSdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 14:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236335AbiGVSbz (ORCPT
+        with ESMTP id S231304AbiGVSdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:31:55 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A600390D8F
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:31:53 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id a10so6403794ljj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:31:53 -0700 (PDT)
+        Fri, 22 Jul 2022 14:33:37 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1AD5A8AE
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:33:32 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so4920643pjf.2
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 11:33:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hrYf+kS/eMHYzQ1cCDYyuj5+w2jPGUuJe7GfAQ3ZFAc=;
-        b=YvABktm3E6d/2fWtcKrw990CSH6WCkg7XgxgrPltc+EvNEeDY7qel28BKQZNlwRWm1
-         DUkrCYuihV0XGw/eufExSOV0IY7v23Z6Wrfd59cXCSt5YRhrbKKcVbamkVrQphwWog9/
-         eo3xuUHDSwDWxo5+XO4Qq9TZTS2LSCVjnOxOhIItb2i8jIboTrKjsUPER8szLIyT+WeV
-         05K96+NwGsyhHaZAPy76OoALnNI9a2kBxSAxcF0YThx6JuzMkhxFoMXzSfOijT21XoWC
-         2QCzy4sFTOhSuerp2yEi0XvYnGARXwvWzxBmvP9ZhDR9nOYdNkNkJFBi9wdPle8FNLim
-         aZ0A==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=noDnWIH945nYgd1IiYOQ6TJtVYekdnDkLQnIipIagMU=;
+        b=jVhPFnyqezO242A9rU/EcxTdX+FAeH8OuE27PfesXzWSky/o9OqxHPqlu1jhIBcG4P
+         HuuyY/2BeItQYXyjdqD7rR6I5JHv4PwObRmJWn79HVdTtrcwBLu77JGwYaACBaQcrsdg
+         UPeXEH78SV/8c3jWgOPSA3AN/lgMcxqvF9jKDxThSjGnA7V1L24uCn+o69bbHkWmHsSa
+         xHxyuM3ERDTjMx+OQS7OtvXOull1CofacQb+GU/KQxMSDg0O7DPyQ0bNdg9uO4x9buBs
+         CF/6HZKBv4nUA0bVUdy72SuU1jGygvLJfnXsDPF/BJE00VFB0x90dpa8q2rfignc1e9z
+         PsHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hrYf+kS/eMHYzQ1cCDYyuj5+w2jPGUuJe7GfAQ3ZFAc=;
-        b=SxjVCLzOe00TNEuuO7wnQtKJ99CDWu975VKCfAZqIsmfAz3/V6BmfV+OEw4Edhtio8
-         rsjM+S/LoU0r1pGR6WN1z8Uk5ANmh7p2O2L2jrekeDGOKbZirQoiW+WWb8+KBb/bfcWi
-         Flj4eTaa+7/lEI84wtBKq7UtboS8jb5kP5Vy0Sv0RhgYjVDq8k6zXcI1M93jSSOPX0kp
-         FkdAn+ayXGLGV0kHbHkJ+E2iZvdGdvdi2EBu+b2duGxDWRcK9blMi/HVE46VB+7oJHJ2
-         Gr+o4rxlssRndACVqwGvsuejSwovJNHn4DbLuY2QVU1m7rlbokba2IlmV5YV9JZ8+fUC
-         1Dtg==
-X-Gm-Message-State: AJIora/XXL0hWOM1fE3lbUmaWOkttX/tUouAlkmKl2SbP/y6jsstrSpE
-        52fHGCSMMnjnHRpdDEqslBrxeA==
-X-Google-Smtp-Source: AGRyM1tsEhq4uRAMKypq9Eg45aRVXJYgskfWdEsALlbCtw03xaoSeghNBTZkggCr9SYq92KU6YMHuw==
-X-Received: by 2002:a2e:b7c7:0:b0:25d:d901:c2af with SMTP id p7-20020a2eb7c7000000b0025dd901c2afmr450469ljo.244.1658514711970;
-        Fri, 22 Jul 2022 11:31:51 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id j2-20020a056512344200b0047f84ec0ac0sm1189905lfr.69.2022.07.22.11.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 11:31:51 -0700 (PDT)
-Message-ID: <1f51fa3a-8f51-a873-d0f5-bc945c3bbf22@linaro.org>
-Date:   Fri, 22 Jul 2022 20:31:48 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=noDnWIH945nYgd1IiYOQ6TJtVYekdnDkLQnIipIagMU=;
+        b=2OZrVzsLqkIRB7D8nogFoosWXHVfkA+9RVdkfR8Pdr5Vt4GlUyD3wakJ6OBYlO0Swv
+         AAFxIpsrNXXPjrCujR24XaCiyA8p6heSpgC7fetnls2GOkA3fruA3vYnisCfyIDX++Tk
+         qxWMl+QXip6ERafnltfFUbyzhSVo3FDzz9EcSs674wRkfRjbUZaZ2RI5lHIagVy6VeUe
+         Le2nu2UT0vzh4jX7sYthFLigmUoMml4rgtRFJfO0aHlGDscfDa2wHUcDzulcm5mlPBvB
+         P7vN63HvCQVax7NGSgQolNiyiWqkMiEdrhE2MHPu1SKKTGcif0OY1FvmjKfMhTTTim71
+         6BzQ==
+X-Gm-Message-State: AJIora86ZWwfIphHA9aa/jeWXla/z8WdEq5Imf7pQ8fu/40Wd3vOgmXk
+        +ruq2KIOgwBRHDrddSFwQHEy0g==
+X-Google-Smtp-Source: AGRyM1vooHqa5wrwrNbFSpSF2H5z7YmhDdBJN9zSZYd034/OZ1dr/E7PbcgBA1tQXU9huTb7+YBNZA==
+X-Received: by 2002:a17:90b:4f41:b0:1f0:4785:b9a8 with SMTP id pj1-20020a17090b4f4100b001f04785b9a8mr18151723pjb.224.1658514812148;
+        Fri, 22 Jul 2022 11:33:32 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id a16-20020aa78e90000000b0052b29fd7982sm4202604pfr.85.2022.07.22.11.33.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 11:33:31 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 18:33:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 15/25] KVM: VMX: Extend VMX controls macro shenanigans
+Message-ID: <YtrtdylmyolAHToz@google.com>
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-16-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: net: cdns,macb: Add versal compatible
- string
-Content-Language: en-US
-To:     Harini Katakam <harini.katakam@xilinx.com>,
-        nicolas.ferre@microchip.com, davem@davemloft.net,
-        claudiu.beznea@microchip.com, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
-        harini.katakam@amd.com, devicetree@vger.kernel.org,
-        radhey.shyam.pandey@xilinx.com
-References: <20220722110330.13257-1-harini.katakam@xilinx.com>
- <20220722110330.13257-2-harini.katakam@xilinx.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220722110330.13257-2-harini.katakam@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714091327.1085353-16-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 13:03, Harini Katakam wrote:
-> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> 
-> Add versal compatible string.
+On Thu, Jul 14, 2022, Vitaly Kuznetsov wrote:
+> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+> index 286c88e285ea..89eaab3495a6 100644
+> --- a/arch/x86/kvm/vmx/vmx.h
+> +++ b/arch/x86/kvm/vmx/vmx.h
+> @@ -467,6 +467,113 @@ static inline u8 vmx_get_rvi(void)
+>  	return vmcs_read16(GUEST_INTR_STATUS) & 0xff;
+>  }
+>  
+> +#define __KVM_REQ_VMX_VM_ENTRY_CONTROLS				\
+> +	(VM_ENTRY_LOAD_DEBUG_CONTROLS)
+> +#ifdef CONFIG_X86_64
+> +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
+> +		(__KVM_REQ_VMX_VM_ENTRY_CONTROLS |		\
+> +		VM_ENTRY_IA32E_MODE)
+
+This breaks 32-bit builds, but at least we know the assert works!
+
+vmx_set_efer() toggles VM_ENTRY_IA32E_MODE without a CONFIG_X86_64 guard.  That
+should be easy enough to fix since KVM should never allow EFER_LMA.  Compile 
+tested patch at the bottom.
+
+More problematic is that clang-13 doesn't like the new asserts, and even worse gives
+a very cryptic error.  I don't have bandwidth to look into this at the moment, and
+probably won't next week either.
+
+ERROR: modpost: "__compiletime_assert_533" [arch/x86/kvm/kvm-intel.ko] undefined!
+ERROR: modpost: "__compiletime_assert_531" [arch/x86/kvm/kvm-intel.ko] undefined!
+ERROR: modpost: "__compiletime_assert_532" [arch/x86/kvm/kvm-intel.ko] undefined!
+ERROR: modpost: "__compiletime_assert_530" [arch/x86/kvm/kvm-intel.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:128: modules-only.symvers] Error 1
+make[1]: *** [Makefile:1753: modules] Error 2
+make[1]: *** Waiting for unfinished jobs....
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +#else
+> +	#define KVM_REQ_VMX_VM_ENTRY_CONTROLS			\
+> +		__KVM_REQ_VMX_VM_ENTRY_CONTROLS
+> +#endif
 
+EFER.LMA patch, compile tested only.
 
-Best regards,
-Krzysztof
+---
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 22 Jul 2022 18:26:21 +0000
+Subject: [PATCH] KVM: VMX: Don't toggle VM_ENTRY_IA32E_MODE for 32-bit
+ kernels/KVM
+
+Don't toggle VM_ENTRY_IA32E_MODE in 32-bit kernels/KVM and instead bug
+the VM if KVM attempts to run the guest with EFER.LMA=1.  KVM doesn't
+support running 64-bit guests with 32-bit hosts.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index bff97babf381..8623607e596d 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2894,10 +2894,15 @@ int vmx_set_efer(struct kvm_vcpu *vcpu, u64 efer)
+ 		return 0;
+
+ 	vcpu->arch.efer = efer;
++#ifdef CONFIG_X86_64
+ 	if (efer & EFER_LMA)
+ 		vm_entry_controls_setbit(vmx, VM_ENTRY_IA32E_MODE);
+ 	else
+ 		vm_entry_controls_clearbit(vmx, VM_ENTRY_IA32E_MODE);
++#else
++	if (KVM_BUG_ON(efer & EFER_LMA, vcpu->kvm))
++		return 1;
++#endif
+
+ 	vmx_setup_uret_msrs(vmx);
+ 	return 0;
+
+base-commit: e22e2665637151a321433b2bb705f5c3b8da40bc
+--
+

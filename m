@@ -2,103 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5943257E19A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D0A57E19D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbiGVMsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 08:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S234549AbiGVMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 08:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235198AbiGVMs3 (ORCPT
+        with ESMTP id S229832AbiGVMtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 08:48:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E6A9B1BA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 05:48:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A8EE61F32
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D49D4C341C6;
-        Fri, 22 Jul 2022 12:48:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658494101;
-        bh=A3PD/iBpdUVc6XMGatL8EReF7qKXiMvSVxBYCt3N/IQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=WNXXEhny9JV3eScg/Pmy2l/tXCbGqDYAPW1nz2h14NzN7eMlNrw2Og7z7oqwKtcUb
-         RIksLa2sljIzaD/RqBbd8wuDvt1ogo+UYJEy9ImtFInc0TsNH838fcennlfrMZ5HhR
-         tLIPltZIqyvGWrZN0z27s13vtg+7GKzLOX99E8FLISiZ8jaDareXDZ/uzwqdJUOBVX
-         VmsJvTmz5uc/UnqJnu2WNQx0L6OhemJGcoWY0ga4gxfadicqDN//IAtSpB4uN9QCcy
-         ueZLUDqEipKBnytIxnaUF8OEnDR2Gol6vxjPiFxrFq5rRD7rorrBoT+Zh57lnUIgak
-         dx2LsBuhy56EQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org,
-        syed sabakareem <Syed.SabaKareem@amd.com>
-Cc:     Sunil-kumar.Dommati@amd.com, Alexander.Deucher@amd.com,
-        vijendar.mukunda@amd.com, Takashi Iwai <tiwai@suse.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Hiregoudar@amd.com,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <20220721061035.91139-1-Syed.SabaKareem@amd.com>
-References: <20220721061035.91139-1-Syed.SabaKareem@amd.com>
-Subject: Re: [PATCH 1/5] ASoC: amd: add RPL Platform acp header file
-Message-Id: <165849409858.139149.7568411438322284849.b4-ty@kernel.org>
-Date:   Fri, 22 Jul 2022 13:48:18 +0100
+        Fri, 22 Jul 2022 08:49:35 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6168997D79
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 05:49:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VK557-E_1658494167;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VK557-E_1658494167)
+          by smtp.aliyun-inc.com;
+          Fri, 22 Jul 2022 20:49:28 +0800
+Subject: Re: [PATCH 4/5] riscv: Add modules to virtual kernel memory layout
+ dump
+To:     Andreas Schwab <schwab@linux-m68k.org>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        huanyi.xj@alibaba-inc.com, heinrich.schuchardt@canonical.com,
+        k-hagio-ab@nec.com, hschauhan@nulltrace.org
+References: <20220717101323.370245-1-xianting.tian@linux.alibaba.com>
+ <20220717101323.370245-5-xianting.tian@linux.alibaba.com>
+ <87wnc5xxsj.fsf@igel.home>
+From:   tianxianting <xianting.tian@linux.alibaba.com>
+Message-ID: <cef36a7e-f652-3c65-2627-5147291b83ea@linux.alibaba.com>
+Date:   Fri, 22 Jul 2022 20:49:27 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <87wnc5xxsj.fsf@igel.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-d952f
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 11:39:58 +0530, syed sabakareem wrote:
-> From: Syed Saba Kareem <Syed.SabaKareem@amd.com>
-> 
-> Add ACP register header file for RPL platform.
-> 
-> 
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/5] ASoC: amd: add RPL Platform acp header file
-      commit: d6a2cc9a80c2fdc10f7fde3f5f57c72e99f3bd5e
-[2/5] ASoC: amd: add ACP PCI driver for RPL platform
-      commit: 003b9a96f27635e534452b174733c5f1ceec0b56
-[3/5] ASoC: amd: add RPL Platform init/de-init functions
-      commit: 10599205417ee3b1d29093c85bc210c9040a6bd4
-[4/5] ASoC: amd: add RPL Platform pci driver pm-ops
-      commit: bc1100f29d1d0bfcd36ba3690a945235ffe149c8
-[5/5] ASoC: amd: enable RPL Platform acp drivers build
-      commit: 4fb35936a374758d5065b0a015c565436685c378
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+在 2022/7/22 下午6:10, Andreas Schwab 写道:
+> On Jul 17 2022, Xianting Tian wrote:
+>
+>> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+>> index d466ec670e1f..2c4a64e97aec 100644
+>> --- a/arch/riscv/mm/init.c
+>> +++ b/arch/riscv/mm/init.c
+>> @@ -135,6 +135,10 @@ static void __init print_vm_layout(void)
+>>   		(unsigned long)VMEMMAP_END);
+>>   	print_ml("vmalloc", (unsigned long)VMALLOC_START,
+>>   		(unsigned long)VMALLOC_END);
+>> +#ifdef CONFIG_64BIT
+>> +	print_ml("modules", (unsigned long)MODULES_VADDR,
+>> +		(unsigned long)MODULES_END);
+> #ifdef MODULES_VADDR ?
+Maybe CONFIG_64BIT is better, it shows more infos(64bit defined, 32bit 
+not). If use MODULES_VADD, people may doubt which conditions 
+MODULES_VADD is not defined?
+>

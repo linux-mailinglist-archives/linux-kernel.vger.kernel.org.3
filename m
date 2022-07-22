@@ -2,116 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD3E57E383
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5344157E389
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbiGVPMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
+        id S235725AbiGVPMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235655AbiGVPMU (ORCPT
+        with ESMTP id S235720AbiGVPMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:12:20 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2BDE9748E;
-        Fri, 22 Jul 2022 08:12:18 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.93,186,1654527600"; 
-   d="scan'208";a="128798713"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 23 Jul 2022 00:12:17 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id C3D1E432D9F7;
-        Sat, 23 Jul 2022 00:12:13 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 3/3] arm64: dts: renesas: rzg2l-smarc-som: Add PHY interrupt support for ETH{0/1}
-Date:   Fri, 22 Jul 2022 16:11:55 +0100
-Message-Id: <20220722151155.21100-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220722151155.21100-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220722151155.21100-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 11:12:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34409E7A7
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:12:37 -0700 (PDT)
+Received: from hermes-devbox.fritz.box (82-71-8-225.dsl.in-addr.zen.co.uk [82.71.8.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbeckett)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C81E6601ACC;
+        Fri, 22 Jul 2022 16:12:36 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658502756;
+        bh=7kxqIhkpFGzA8g1mO3RcDy33zlRVQ9b4n6SfLajQTFE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=A0Xo+vsk5A7BpQmmpevs9QUudkjsBbh+Gs+ldVahhj8C3krro4cuyAhRA+EGu1FQd
+         5dSBKbg1zLYaGhWcna+yNwCVe/SvMhrMsZk0UGa3wDUfpR5aKR5mhBONvUXK3+9ycQ
+         qvcwIZRCq1gAyDgTelNtWY9518J2Z2aHk57hcvrfgCZBIv932HxJy3UnXA7ez1dlWP
+         qOozJJSHKTMZdWbSYI1Zyh2yujAlEZtbmrKnNALjRX7QgNAO5OB1/C2UtplFW7PWK6
+         ty92vThvDBl8oGwwhFRS5llMve0kdaYRVGJkwVJLensPn37nVt0LkN9H7MCa2QXCUq
+         VW4GWbFUM7Ebw==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     kernel@collabora.com, Robert Beckett <bob.beckett@collabora.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] drm/i915: stop using swiotlb
+Date:   Fri, 22 Jul 2022 16:12:04 +0100
+Message-Id: <20220722151204.1534489-1-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ3 for ETH0
-and ETH1 respectively.
+Calling swiotlb functions directly is nowadays considered harmful. See
+https://lore.kernel.org/intel-gfx/20220711082614.GA29487@lst.de/
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Replace swiotlb_max_segment() calls with dma_max_mapping_size().
+In i915_gem_object_get_pages_internal() no longer consider max_segment
+only if CONFIG_SWIOTLB is enabled. There can be other (iommu related)
+causes of specific max segment sizes.
+
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: Thomas Hellstrom <thomas.hellstrom@intel.com>
+Cc: Matthew Auld <matthew.auld@intel.com>
+
+v2: - restore UINT_MAX clamp in i915_sg_segment_size()
+    - drop PAGE_SIZE check as it will always be >= PAGE_SIZE
+v3: - actually clamp to UINT_MAX in i915_sg_segment_size()
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
-v2->v3
-* Included irqc-rzg2l.h header
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c | 19 ++++---------------
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c    |  2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c      |  4 ++--
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c  |  2 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h      | 16 +++-------------
+ 5 files changed, 11 insertions(+), 32 deletions(-)
 
-v1->v2
-* Used macros of IRQ numbers
----
- arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
-index 9410796c8ad6..c4faff092380 100644
---- a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
-+++ b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
-@@ -6,6 +6,7 @@
-  */
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+index c698f95af15f..24f37658f1bb 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+@@ -6,7 +6,6 @@
  
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irqc-rzg2l.h>
- #include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
+-#include <linux/swiotlb.h>
  
- /* SW1[2] should be at position 2/OFF to enable 64 GB eMMC */
-@@ -94,6 +95,8 @@ phy0: ethernet-phy@7 {
- 		compatible = "ethernet-phy-id0022.1640",
- 			     "ethernet-phy-ieee802.3-c22";
- 		reg = <7>;
-+		interrupt-parent = <&irqc>;
-+		interrupts = <RZG2L_IRQ2 IRQ_TYPE_LEVEL_LOW>;
- 		rxc-skew-psec = <2400>;
- 		txc-skew-psec = <2400>;
- 		rxdv-skew-psec = <0>;
-@@ -120,6 +123,8 @@ phy1: ethernet-phy@7 {
- 		compatible = "ethernet-phy-id0022.1640",
- 			     "ethernet-phy-ieee802.3-c22";
- 		reg = <7>;
-+		interrupt-parent = <&irqc>;
-+		interrupts = <RZG2L_IRQ3 IRQ_TYPE_LEVEL_LOW>;
- 		rxc-skew-psec = <2400>;
- 		txc-skew-psec = <2400>;
- 		rxdv-skew-psec = <0>;
-@@ -171,7 +176,8 @@ eth0_pins: eth0 {
- 			 <RZG2L_PORT_PINMUX(25, 0, 1)>, /* ET0_RXD0 */
- 			 <RZG2L_PORT_PINMUX(25, 1, 1)>, /* ET0_RXD1 */
- 			 <RZG2L_PORT_PINMUX(26, 0, 1)>, /* ET0_RXD2 */
--			 <RZG2L_PORT_PINMUX(26, 1, 1)>; /* ET0_RXD3 */
-+			 <RZG2L_PORT_PINMUX(26, 1, 1)>, /* ET0_RXD3 */
-+			 <RZG2L_PORT_PINMUX(1, 0, 1)>;  /* IRQ2 */
- 	};
+ #include "i915_drv.h"
+ #include "i915_gem.h"
+@@ -38,22 +37,12 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+ 	struct scatterlist *sg;
+ 	unsigned int sg_page_sizes;
+ 	unsigned int npages;
+-	int max_order;
++	int max_order = MAX_ORDER;
++	unsigned int max_segment;
+ 	gfp_t gfp;
  
- 	eth1_pins: eth1 {
-@@ -189,7 +195,8 @@ eth1_pins: eth1 {
- 			 <RZG2L_PORT_PINMUX(34, 1, 1)>, /* ET1_RXD0 */
- 			 <RZG2L_PORT_PINMUX(35, 0, 1)>, /* ET1_RXD1 */
- 			 <RZG2L_PORT_PINMUX(35, 1, 1)>, /* ET1_RXD2 */
--			 <RZG2L_PORT_PINMUX(36, 0, 1)>; /* ET1_RXD3 */
-+			 <RZG2L_PORT_PINMUX(36, 0, 1)>, /* ET1_RXD3 */
-+			 <RZG2L_PORT_PINMUX(1, 1, 1)>;  /* IRQ3 */
- 	};
+-	max_order = MAX_ORDER;
+-#ifdef CONFIG_SWIOTLB
+-	if (is_swiotlb_active(obj->base.dev->dev)) {
+-		unsigned int max_segment;
+-
+-		max_segment = swiotlb_max_segment();
+-		if (max_segment) {
+-			max_segment = max_t(unsigned int, max_segment,
+-					    PAGE_SIZE) >> PAGE_SHIFT;
+-			max_order = min(max_order, ilog2(max_segment));
+-		}
+-	}
+-#endif
++	max_segment = i915_sg_segment_size(i915->drm.dev) >> PAGE_SHIFT;
++	max_order = min(max_order, ilog2(max_segment));
  
- 	gpio-sd0-pwr-en-hog {
+ 	gfp = GFP_KERNEL | __GFP_HIGHMEM | __GFP_RECLAIMABLE;
+ 	if (IS_I965GM(i915) || IS_I965G(i915)) {
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+index 4eed3dd90ba8..34b9c76cd8e6 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
+@@ -194,7 +194,7 @@ static int shmem_get_pages(struct drm_i915_gem_object *obj)
+ 	struct intel_memory_region *mem = obj->mm.region;
+ 	struct address_space *mapping = obj->base.filp->f_mapping;
+ 	const unsigned long page_count = obj->base.size / PAGE_SIZE;
+-	unsigned int max_segment = i915_sg_segment_size();
++	unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
+ 	struct sg_table *st;
+ 	struct sgt_iter sgt_iter;
+ 	struct page *page;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+index 5a5cf332d8a5..7a828c9c0f6d 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -189,7 +189,7 @@ static int i915_ttm_tt_shmem_populate(struct ttm_device *bdev,
+ 	struct drm_i915_private *i915 = container_of(bdev, typeof(*i915), bdev);
+ 	struct intel_memory_region *mr = i915->mm.regions[INTEL_MEMORY_SYSTEM];
+ 	struct i915_ttm_tt *i915_tt = container_of(ttm, typeof(*i915_tt), ttm);
+-	const unsigned int max_segment = i915_sg_segment_size();
++	const unsigned int max_segment = i915_sg_segment_size(i915->drm.dev);
+ 	const size_t size = (size_t)ttm->num_pages << PAGE_SHIFT;
+ 	struct file *filp = i915_tt->filp;
+ 	struct sgt_iter sgt_iter;
+@@ -568,7 +568,7 @@ static struct i915_refct_sgt *i915_ttm_tt_get_st(struct ttm_tt *ttm)
+ 	ret = sg_alloc_table_from_pages_segment(st,
+ 			ttm->pages, ttm->num_pages,
+ 			0, (unsigned long)ttm->num_pages << PAGE_SHIFT,
+-			i915_sg_segment_size(), GFP_KERNEL);
++			i915_sg_segment_size(i915_tt->dev), GFP_KERNEL);
+ 	if (ret) {
+ 		st->sgl = NULL;
+ 		return ERR_PTR(ret);
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+index 094f06b4ce33..dfc35905dba2 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+@@ -129,7 +129,7 @@ static void i915_gem_object_userptr_drop_ref(struct drm_i915_gem_object *obj)
+ static int i915_gem_userptr_get_pages(struct drm_i915_gem_object *obj)
+ {
+ 	const unsigned long num_pages = obj->base.size >> PAGE_SHIFT;
+-	unsigned int max_segment = i915_sg_segment_size();
++	unsigned int max_segment = i915_sg_segment_size(obj->base.dev->dev);
+ 	struct sg_table *st;
+ 	unsigned int sg_page_sizes;
+ 	struct page **pvec;
+diff --git a/drivers/gpu/drm/i915/i915_scatterlist.h b/drivers/gpu/drm/i915/i915_scatterlist.h
+index 9ddb3e743a3e..48a8ce67371a 100644
+--- a/drivers/gpu/drm/i915/i915_scatterlist.h
++++ b/drivers/gpu/drm/i915/i915_scatterlist.h
+@@ -9,7 +9,7 @@
+ 
+ #include <linux/pfn.h>
+ #include <linux/scatterlist.h>
+-#include <linux/swiotlb.h>
++#include <linux/dma-mapping.h>
+ 
+ #include "i915_gem.h"
+ 
+@@ -127,19 +127,9 @@ static inline unsigned int i915_sg_dma_sizes(struct scatterlist *sg)
+ 	return page_sizes;
+ }
+ 
+-static inline unsigned int i915_sg_segment_size(void)
++static inline unsigned int i915_sg_segment_size(struct device *dev)
+ {
+-	unsigned int size = swiotlb_max_segment();
+-
+-	if (size == 0)
+-		size = UINT_MAX;
+-
+-	size = rounddown(size, PAGE_SIZE);
+-	/* swiotlb_max_segment_size can return 1 byte when it means one page. */
+-	if (size < PAGE_SIZE)
+-		size = PAGE_SIZE;
+-
+-	return size;
++	return min_t(size_t, UINT_MAX, dma_max_mapping_size(dev));
+ }
+ 
+ bool i915_sg_trim(struct sg_table *orig_st);
 -- 
 2.25.1
 

@@ -2,108 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4913757E7AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C317B57E7B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236555AbiGVTz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S236582AbiGVT43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiGVTz0 (ORCPT
+        with ESMTP id S231149AbiGVT40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:55:26 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EA021252;
-        Fri, 22 Jul 2022 12:55:22 -0700 (PDT)
-Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mg6mM-1nZttn0Psc-00hcEN; Fri, 22 Jul 2022 21:55:21 +0200
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31e7055a61dso58108187b3.11;
-        Fri, 22 Jul 2022 12:55:20 -0700 (PDT)
-X-Gm-Message-State: AJIora/cAMhWTVJkIEDv24U5sMiKCvz1AxLinDg9sI5wyE15NzJd0ynp
-        DL+cE5i/1KKgQ/7+nKeMHR9l3129FrR2shCCjcs=
-X-Google-Smtp-Source: AGRyM1uXuwQnOqTAc2eAgULJ3gnB6/3HxjqG6YsVYm4rwIeb3o/ICJSu11fKuAtGWX5g0pRwxfQ7v0EfBH0rTQPFdhs=
-X-Received: by 2002:a0d:cec1:0:b0:31e:590c:c6e4 with SMTP id
- q184-20020a0dcec1000000b0031e590cc6e4mr1302476ywd.42.1658519719648; Fri, 22
- Jul 2022 12:55:19 -0700 (PDT)
+        Fri, 22 Jul 2022 15:56:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354259C27B;
+        Fri, 22 Jul 2022 12:56:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=ZosF4/sMc0ihmX47ZtSXWJLh9VlS4bzSsfv/BETdwF4=; b=VNhO9L3HEMflnvHx6vsxrwdWR6
+        BeMsUX5k5thgO5ceMSltwRfdDNQWHw+slUvZMJF45URjzjQ5t5orJLjccfNNLVm9hE6NWLyla9sVK
+        DUETIYMZSceOB1HrGZsftTEV9OHhGsKOmWu0qWiWOc4qTm3K06uxzC6at2pm0mP2SkjWzylGhaAsy
+        lTnNeEdIEnfgUc/7nAoeqnAJheKRqrETrRi3SGS3sD8zs/fgcO8TZyt+Y02zuUpLUN4kTq7qSapud
+        zBOQYKE9BXo6z6MRWlVu9REjeS7eiA1KnbqJzHReMVKXPbAYgtT63wFw/+jZThS9GF06guioAuLmt
+        YLCk674g==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oEykt-009cUn-Fz; Fri, 22 Jul 2022 19:56:11 +0000
+Message-ID: <d0c9c894-bfff-e3ee-c1be-84b7690a7a86@infradead.org>
+Date:   Fri, 22 Jul 2022 12:56:09 -0700
 MIME-Version: 1.0
-References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
- <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014> <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
-In-Reply-To: <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 22 Jul 2022 21:55:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
-Message-ID: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
-To:     Rob Herring <robh@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:O3tm97ktOQsIdtuCJXuJ3uCcUUlhuoEFWT3e4rEfl0Fg6Zixcm2
- 7S8otfg3urwov4ASLkqF0fyWwSzET/3VewEfYR0qJTsRdLkJe9KOmhptWAlt4E8VVWsVAKY
- VMDKLzLTDPZfEavzbXmAeHZaJgFpgxlMmZQWF8qkGaxv5sy31BO0q4p0V6pDgzaIP+8yHxw
- jtCUd9MEEok91XBkCvc6A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:36iDOpIY/Hs=:2vXnQwsiyWLk/bjZ/223V9
- SsohMBwjwbwuUNsHbt33nFvPoMV7gNjldqAuP3jrDfIGZPupYhIFn+JVCTGiH2XiYismwygaS
- TlcO/t2LpWvz4pBoF7KSkWqOdjkBmj5+ee3hDV12DqqUnAalwDv7oLiqOMi7T1BfnK/aVaNDp
- GhjU/voDray/WpQbAvbe2eQKkp0C1ZBekdVA8NF3mXT3gF0nDNDft+4rsiGQrSi9Hqgfcyic8
- jUhzy2ejGQ/yGOGXWPHuQH14z9CbMeWqcoEi85A7v8zCQuPK8pYL1hMyqP4M1E76o5RbqZeRU
- okavhF4ho+8ACS0Ls+i0eVO9QJfF3OntboEaGeUtc6P3LmfRDsioJxXVEZxliJsQmkSE4pWoc
- 6UBmHgqwS8wFUiqIslW8LTQixsH2r51+U0rlDeeI2g3DFN8Kv8RdtfysxZlAfdWBTtv7e395t
- lZA6dir31couJtwrzx8aWP+6qzONW45QIAoVqN3byAyEpln0ADJLeDWF0RxTUvPv7wvQftE4r
- PA4M07JmuAeE3OSOxyYDF/8PmH9YMqcQslsM0JYROmAHBftj3RmBo4vdZoCOcGZL+vl/2X/T5
- nqZyPDJ11MC3mlTp8BS5Q/f7eCy8TPb9JY/MfFLE2RK5PsunWF2F9w2wszn5x8ehTnCN7t5Qe
- wMSrRKIR16+4lpCCri88tssHwCkS+XkI6qsE5ji+YBrBXav6LqamoCYpUH7IDoeIs/HTRMl1h
- bwRVw7MKNOWgMLHaMjK+aidULTZI/40GY0UE6A==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] Documentation/filesystems/proc.rst: document procfs
+ inode timestamps
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, ebiederm@xmission.com,
+        corbet@lwn.net, keescook@chromium.org, yzaikin@google.com
+Cc:     songmuchun@bytedance.com, zhangyuchen.lcr@bytedance.com,
+        dhowells@redhat.com, deepa.kernel@gmail.com, hch@lst.de,
+        linux-doc@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220722162934.1888835-1-mcgrof@kernel.org>
+ <20220722162934.1888835-3-mcgrof@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220722162934.1888835-3-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 6:36 PM Rob Herring <robh@kernel.org> wrote:
-> On Fri, Jul 22, 2022 at 9:27 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> From fu740:
->                        ranges = <0x81000000  0x0 0x60080000  0x0
-> 0x60080000 0x0 0x10000>,      /* I/O */
-...
-> So again, how does one get a 0 address handed out when that's not even
-> a valid region according to DT? Is there some legacy stuff that
-> ignores the bridge windows?
+Hi--
 
-The PCI-side port number 0x60080000 gets turned into Linux I/O resource 0,
-which I think is what __pci_assign_resource operates on.
+On 7/22/22 09:29, Luis Chamberlain wrote:
+> The timestamps for procfs files are not well understood and can
+> confuse users and developers [0] in particular for the timestamp
+> for the start time or a process. Clarify what they mean and that
+> they are a reflection of the ephemeral nature of the filesystem
+> inodes.
+> 
+> The procfs inodes are created when you first read them and then
+> stuffed in the page cache. If the page cache and indodes are
+> reclaimed they can be removed, and re-created with a new timestamp
+> after read again. Document this little bit of tribal knowledge.
+> 
+> [0] https://lkml.kernel.org/r/20220721081617.36103-1-zhangyuchen.lcr@bytedance.com
+> Reported-by: Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  Documentation/filesystems/proc.rst | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index 9fd5249f1a5f..9defe9af683a 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -59,6 +59,15 @@ The proc  file  system acts as an interface to internal data structures in the
+>  kernel. It  can  be  used to obtain information about the system and to change
+>  certain kernel parameters at runtime (sysctl).
+>  
+> +The proc files are dynamic in nature and allow for developers to make the
 
-The other question is why the platform would want to configure the
-PCI bus to have a PCI I/O space window of size 0x10000 at the address
-it's mapped into, rather than putting it at address zero. Is this a hardware
-bug, a bootloader bug, or just badly set up in the DT?
+Awkward. How about:
 
-Putting the PCI address of the I/O space window at port 0 is usually
-better because it works with PCI devices and drivers that assume that
-port numbers are below 0xfffff, and makes the PCI port number match
-the Linux port number.
+   The proc files are dynamic and allow for the content to be changed each time
+   a file is read.
 
-         Arnd
+> +content to be changed each time a file is read. The proc files and directories
+
+                                                   The proc files and directory
+
+> +inodes are created when someone first reads a respective proc file or directory,
+> +as such the timestamps of the proc files reflect this time. As with other
+> +filesystems, these proc inodes can be removed through reclaim under memory
+> +pressure and so the timestamps of the proc files can change if the proc files
+> +are destroyed and re-created (echo 3 > /proc/sys/vm/drop_caches forces and
+> +illustrate the reclaim of inodes and page cache).
+> +
+>  First, we'll  take  a  look  at the read-only parts of /proc. In Chapter 2, we
+>  show you how you can use /proc/sys to change settings.
+
+Thanks.
+-- 
+~Randy

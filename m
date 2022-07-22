@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180BB57DEF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C815F57DF23
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbiGVJuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 05:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        id S234383AbiGVJuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 05:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235267AbiGVJuE (ORCPT
+        with ESMTP id S235432AbiGVJuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 05:50:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2231B22
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:48:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44895621D3
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD7CC341C6;
-        Fri, 22 Jul 2022 09:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658483318;
-        bh=zqyxHm2IT834QgHNgluqGebEd9cxm9eIOwtg4tyJnnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tkDfLlq9RARf1Fq5klYQL9R1fcypGt7a+2+XTrzB5bBXsCwhIZhjtJjrLiMKTb4rO
-         T2qhINVNCn87eAkrLm8YgRdgZacjnn+s+9bXfDybuM7zuaScNLks6qzZZduK8TDcvY
-         TGFP/ruRoZ6oFsvHNqkxSykxIHOBDktb7dRn5gckLYq8ejHEz/O1JuGOuU42kPECS9
-         vlEn+28zXAzUQc/V+hd1jq8O09Gj+03+ECTNTjaotxbSrPKuNdqu+zOJ4PN3WXfe/f
-         3JJ0vgqiLI0BOUrM8ESUEDU6Y4xx+bXjjYvaMc9mefD+QpmLAuq8xkH6ny0XEcCYPL
-         BJ5HL4pwhKCLA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oEpGy-0007TA-Gm; Fri, 22 Jul 2022 11:48:41 +0200
-Date:   Fri, 22 Jul 2022 11:48:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>
-Subject: Re: [PATCH] drm/panel-edp: add AUO B133UAN02.1 panel entry
-Message-ID: <YtpyeCHojFovBKxv@hovoldconsulting.com>
-References: <20220711075202.21775-1-johan+linaro@kernel.org>
+        Fri, 22 Jul 2022 05:50:06 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C79D1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 02:49:01 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26M5Vgns024448;
+        Fri, 22 Jul 2022 04:48:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=RqguWUk1rJeah6sayFgpV4hCcMGCEveOejOkfdvaauI=;
+ b=WXJYmOr26IMQ/c/8qoDhCKkRgnDcdsn0o3x0IWMIEW2bwOfsP6KBm5a/Fr5+F905Hb88
+ udC2qq4EStnbvpYh4+JP8Php7wcMbTmPxdrnGWhU4mEmujfRKB2QPtWRg9h09bw/0Fkg
+ jVMuQeDwDuBuHoQDKsX4GOoDzHlJw0lO0/zUZQ+5NMW3QzeaDVtVpRU36JHeZYmHWDPx
+ lmey11RTpKGeOGBemc5Mj8x4ejqAx9U4DhNU3zBZHdn+HkovXaoXesnJL5iztxhVbUJ0
+ W1UNzZ07g1rH/LlqLj3EvJhzNMtBiI2t5hATG/kdDfF0i3UioDwPwHtEFsLQgvOaHh3A 4w== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3hdrqfm7mt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 04:48:53 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 22 Jul
+ 2022 04:48:51 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1118.9 via Frontend Transport; Fri, 22 Jul 2022 04:48:51 -0500
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9BC8146B;
+        Fri, 22 Jul 2022 09:48:51 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <lgirdwood@gmail.com>, <patches@opensource.cirrus.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] firmware: cs_dsp: Add pre_stop callback
+Date:   Fri, 22 Jul 2022 10:48:50 +0100
+Message-ID: <20220722094851.92521-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711075202.21775-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 0IoHYEQNb1QF9zb0f0-Z1f0CO81vWuai
+X-Proofpoint-GUID: 0IoHYEQNb1QF9zb0f0-Z1f0CO81vWuai
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 09:52:02AM +0200, Johan Hovold wrote:
-> Add an eDP panel entry for AUO B133UAN02.1.
-> 
-> Due to lack of documentation, use the delay_200_500_e50 timings like
-> some other AUO entries for now.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+The code already has a post_stop callback, add a matching pre_stop
+callback to the client_ops that is called before execution is stopped.
+This callback provides a convenient place for the client code to
+communicate with the DSP before it is stopped.
 
-Any comments to this one?
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ drivers/firmware/cirrus/cs_dsp.c       | 3 +++
+ include/linux/firmware/cirrus/cs_dsp.h | 4 +++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-It looks like it hasn't shown up in the dri-devel patchwork and just
-want to make sure it isn't lost.
+diff --git a/drivers/firmware/cirrus/cs_dsp.c b/drivers/firmware/cirrus/cs_dsp.c
+index 7dad6f57d9704..b402f841d72cf 100644
+--- a/drivers/firmware/cirrus/cs_dsp.c
++++ b/drivers/firmware/cirrus/cs_dsp.c
+@@ -2725,6 +2725,9 @@ void cs_dsp_stop(struct cs_dsp *dsp)
+ 
+ 	mutex_lock(&dsp->pwr_lock);
+ 
++	if (dsp->client_ops->pre_stop)
++		dsp->client_ops->pre_stop(dsp);
++
+ 	dsp->running = false;
+ 
+ 	if (dsp->ops->stop_core)
+diff --git a/include/linux/firmware/cirrus/cs_dsp.h b/include/linux/firmware/cirrus/cs_dsp.h
+index 30055706cce21..6ab230218df0e 100644
+--- a/include/linux/firmware/cirrus/cs_dsp.h
++++ b/include/linux/firmware/cirrus/cs_dsp.h
+@@ -189,7 +189,8 @@ struct cs_dsp {
+  * @control_remove:	Called under the pwr_lock when a control is destroyed
+  * @pre_run:		Called under the pwr_lock by cs_dsp_run() before the core is started
+  * @post_run:		Called under the pwr_lock by cs_dsp_run() after the core is started
+- * @post_stop:		Called under the pwr_lock by cs_dsp_stop()
++ * @pre_stop:		Called under the pwr_lock by cs_dsp_stop() before the core is stopped
++ * @post_stop:		Called under the pwr_lock by cs_dsp_stop() after the core is stopped
+  * @watchdog_expired:	Called when a watchdog expiry is detected
+  *
+  * These callbacks give the cs_dsp client an opportunity to respond to events
+@@ -200,6 +201,7 @@ struct cs_dsp_client_ops {
+ 	void (*control_remove)(struct cs_dsp_coeff_ctl *ctl);
+ 	int (*pre_run)(struct cs_dsp *dsp);
+ 	int (*post_run)(struct cs_dsp *dsp);
++	void (*pre_stop)(struct cs_dsp *dsp);
+ 	void (*post_stop)(struct cs_dsp *dsp);
+ 	void (*watchdog_expired)(struct cs_dsp *dsp);
+ };
+-- 
+2.30.2
 
-Rob Clark mentioned something about a spam filter on IRC.
-
-> ---
->  drivers/gpu/drm/panel/panel-edp.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-> index fe3897b86665..30f69cd8f9ee 100644
-> --- a/drivers/gpu/drm/panel/panel-edp.c
-> +++ b/drivers/gpu/drm/panel/panel-edp.c
-> @@ -1845,6 +1845,7 @@ static const struct panel_delay delay_100_500_e200 = {
->   * Sort first by vendor, then by product ID.
->   */
->  static const struct edp_panel_entry edp_panels[] = {
-> +	EDP_PANEL_ENTRY('A', 'U', 'O', 0x1e9b, &delay_200_500_e50, "B133UAN02.1"),
->  	EDP_PANEL_ENTRY('A', 'U', 'O', 0x405c, &auo_b116xak01.delay, "B116XAK01"),
->  	EDP_PANEL_ENTRY('A', 'U', 'O', 0x615c, &delay_200_500_e50, "B116XAN06.1"),
->  	EDP_PANEL_ENTRY('A', 'U', 'O', 0x8594, &delay_200_500_e50, "B133UAN01.0"),
-
-Johan

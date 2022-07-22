@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE7657E4EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2A857E4EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235550AbiGVQ5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        id S235520AbiGVRAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiGVQ5g (ORCPT
+        with ESMTP id S229839AbiGVRAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:57:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440FA2ED4A;
-        Fri, 22 Jul 2022 09:57:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE3FDB82916;
-        Fri, 22 Jul 2022 16:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42CEC341C6;
-        Fri, 22 Jul 2022 16:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658509053;
-        bh=2JPvXW4Xs4y082sNgh7Jgp6vGpJzfM0B/xZSitHtnnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KrfcOJ0bCYkOI/T5eju1dyjyQuhaCVKs9rz2XK2Gj98yTr7Ne/svMoJWcFvmCdypN
-         2xR3KCs0UCn99fXyo8Ydvtk+EiLc4F9TmuGzDL4MOl+5kRv1W2A6H1hZMFhhfwu9wV
-         ZCy2UddFbpfe+pbeQMw0sN7voWUPhW/sWqQOkvxffBIqfy6cvC8EDa7cPIfet1//aL
-         dIrwn5stol3VkKgG1Lfs5sDlJnk66EPyarE5b9N5KgIB+4YUgRHdtxepmFm1qw5M8s
-         XavS12IHX2/uHTrHwxKMz2x9XW/EXe/XUSDwtD6DL0YpqNrmxTkaOJTiGZ2yBlt4hR
-         f/iIVQNxl/IEw==
-Date:   Fri, 22 Jul 2022 18:57:25 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:BROADCOM BRCMSTB I2C DRIVER" <linux-i2c@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] i2c: brcmstb: Use dev_name() for adapter name
-Message-ID: <YtrW9aT3loXCRPDq@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        "open list:BROADCOM BRCMSTB I2C DRIVER" <linux-i2c@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>
-References: <20220719040611.13979-1-f.fainelli@gmail.com>
+        Fri, 22 Jul 2022 13:00:07 -0400
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC3B2DD;
+        Fri, 22 Jul 2022 10:00:05 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31e7055a61dso53783087b3.11;
+        Fri, 22 Jul 2022 10:00:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=iD/RsD0e1/AY5YXptAbQ0YMY7CfmX34mV0YyWFWCnqY=;
+        b=m1HhRMi+IPTMR8AN+GCcbZdn0588cFlebn8ZHzuKk6x1XQS5IyGaPNZwDizzkRffiW
+         uu04K9lwD6JCxvjRQwDmkMW/PQnN0aDWUjKSHkflb+fYJtwXUo7rjlO3m30PKApE1aFM
+         87AkmpuE03kfrwTic4VD0KxdWD6kSp6AclEEZj6GOjwbxaBUlLKC/9UXrfm0WCygo+P1
+         4yY2gBh5zPddRN4uyZGQxO0FpEPM9iDxihiYQ/UtztykAa+BUHYHAUp0A91e0Lput2xV
+         LQIiS6+WoU72BCj3q9dyEv/fb9zVfpYrkC56RbQi+z4gjg46gD/RWFyHVEUpBZWPDp8I
+         7Jcg==
+X-Gm-Message-State: AJIora8r9g2JNASlFQXjvP859kkL6VYZDcPzRpBrLEZyq+EVZ5JayabN
+        FqTcj6odfp+yp7fMdKTRpVyv6Aj9ETuWfS347EwHpqlb
+X-Google-Smtp-Source: AGRyM1vVDTvs9u/fVT6+LQGTnjmfn8/vtK5YhSrI2f4pW7OswwplMRiqcFXJjK9N2b34/RT3MAD2F11GXSBgn9JhYWE=
+X-Received: by 2002:a81:1a11:0:b0:31e:4549:d667 with SMTP id
+ a17-20020a811a11000000b0031e4549d667mr667631ywa.196.1658509204641; Fri, 22
+ Jul 2022 10:00:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cayvkFeF54kDgeU+"
-Content-Disposition: inline
-In-Reply-To: <20220719040611.13979-1-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220710123512.1714714-1-daniel.lezcano@linexp.org>
+ <20220710123512.1714714-12-daniel.lezcano@linexp.org> <CAJZ5v0hJNUm1kyF7XdK1EiLNg6DmihBMbrZZsxgOjvi-xq3=cQ@mail.gmail.com>
+ <c75d5dca-17d5-6542-b0aa-46ed036567c7@linexp.org>
+In-Reply-To: <c75d5dca-17d5-6542-b0aa-46ed036567c7@linexp.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 22 Jul 2022 18:59:51 +0200
+Message-ID: <CAJZ5v0gOeoz7ifDWwKW0D2h8WUJmLeDCF2bD8hu5Sm--BOPLVA@mail.gmail.com>
+Subject: Re: [PATCH v5 10/12] thermal/of: Store the trips in the thermal zone
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jul 21, 2022 at 11:31 PM Daniel Lezcano
+<daniel.lezcano@linexp.org> wrote:
+>
+> On 19/07/2022 20:24, Rafael J. Wysocki wrote:
+> > On Sun, Jul 10, 2022 at 2:35 PM Daniel Lezcano
+> > <daniel.lezcano@linexp.org> wrote:
+> >> As the thermal zone contains the trip point, we can store them
+> >> directly when registering the thermal zone. That will allow another
+> >> step forward to remove the duplicate thermal zone structure we find in
+> >> the thermal_of code.
+> >>
+> >> Cc: Alexandre Bailon <abailon@baylibre.com>
+> >> Cc: Kevin Hilman <khilman@baylibre.com>
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> >> ---
+> >>   drivers/thermal/thermal_of.c | 8 +++-----
+> >>   1 file changed, 3 insertions(+), 5 deletions(-)
+> >>
+> >> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> >> index 19243c57b3f4..e187461dd396 100644
+> >> --- a/drivers/thermal/thermal_of.c
+> >> +++ b/drivers/thermal/thermal_of.c
+> >> @@ -1119,11 +1119,9 @@ int __init of_parse_thermal_zones(void)
+> >>                  tzp->slope = tz->slope;
+> >>                  tzp->offset = tz->offset;
+> >>
+> >> -               zone = thermal_zone_device_register(child->name, tz->ntrips,
+> >> -                                                   mask, tz,
+> >> -                                                   ops, tzp,
+> >> -                                                   tz->passive_delay,
+> >> -                                                   tz->polling_delay);
+> >> +               zone = thermal_zone_device_register_with_trips(child->name, tz->trips, tz->ntrips,
+> >> +                                                              mask, tz, ops, tzp, tz->passive_delay,
+> >> +                                                              tz->polling_delay);
+> >>                  if (IS_ERR(zone)) {
+> >>                          pr_err("Failed to build %pOFn zone %ld\n", child,
+> >>                                 PTR_ERR(zone));
+> >> --
+> > IMO it would be less confusing if this was merged with the patch
+> > introducing thermal_zone_device_register_with_trips().
+>
+> You suggest to merge 8,9 and 10, right ?
 
---cayvkFeF54kDgeU+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, if that makes sense.
 
-On Mon, Jul 18, 2022 at 09:06:10PM -0700, Florian Fainelli wrote:
-> This make it easier to disambiguate the different i2c controllers
-> present in a system, and then correlating with /proc/interrupts allows
-> to know which instance is interrupt driven and which one is not.
->=20
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Applied to for-next, thanks!
-
-
---cayvkFeF54kDgeU+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLa1vUACgkQFA3kzBSg
-KbYWIw/7BCfCCQ1Jb9DYSQ6jhixPh0Onwd5mRIIgb5BNl5AA7UU9RiQcVTvRH7wv
-29zxqYBBo8UGGJMJpAbiijpXgxiZHvDk97INvVuTGRKe2uUbMLC+HrJyb8hdtUgB
-8Xs6FHv32rvVQ1buKt0Chww6RFd/jwQnUfWojwiKSsjbVHvlZ7WYv/++gDZnQomO
-MwyJhp4NVNEJAw3b6WZXnjZgI9LXuYlgS4ClSZ3Bfj6n3TiuEB3+wVUloX4yAtkX
-1AfcUqlnQgUYs3lThVrDgMML+uHPTuXZT6ebQD1/7KRBRDxsQnHAioiE8yBuQLVZ
-3xi/J3IKwtwF9FWOfUdLuf/PGgASC+hCscvDFhBjlu6mcTpZfGZ5COh8IeWPKdKp
-ck0pXPQ52DDlL7BJuTa7MQ5w97rWjbUpuxFYfURvz2nShwLxaPiKLWd/I0LTfZCG
-J2B+/tygDlzg5KcJXMYZ82clRHcj/WePzXU9qiNcEpsgdDbr0vEt8ezgyEdJAJ71
-iit5yZ7SEBoHQu/4igvMY4kXv+I8RgoH8UBri613E8lgSuhqj7LzrVGMQXDiT9CC
-4+nicHb3N1VKm7q8kJXeoYOpB7bjfVNK2q0dxsmWOnGjsUqFm/K+8HLKMf9iibWm
-Cek7CMNlVOM7nwiG3xQcL6OKJ10e6O8+qaQp7OLUPCKjkOxFKjY=
-=XECj
------END PGP SIGNATURE-----
-
---cayvkFeF54kDgeU+--
+Generally speaking, I prefer the changes in every patch to be
+self-contained, unless the patch would be too large this way or it
+would cross boundaries of many subsystems.

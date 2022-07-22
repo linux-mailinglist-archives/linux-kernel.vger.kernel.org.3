@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1730557DB32
+	by mail.lfdr.de (Postfix) with ESMTP id 6602F57DB33
 	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbiGVHZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S234472AbiGVHY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbiGVHY7 (ORCPT
+        with ESMTP id S231742AbiGVHYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:24:59 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0667D33343;
-        Fri, 22 Jul 2022 00:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=0XohY
-        BRikB8/6sXDjRE0wVub5cSWVvlneePJic88d7Q=; b=oFvxFL+yTLh7AwKMqu8Mx
-        7YgUiyxoSzMvHF/vtBDatmAJjGLchJ8qmox79CA2Sfpo/Zv33wToCXcXJTFxltBJ
-        ET6QpTO6L2j6ImnpEwhF9MMmmL3C43ItT4cDMukWA8sXqAWyZoPHyBXQWcPvzqof
-        k1aKhxg16VJsoYYl07VTPU=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp1 (Coremail) with SMTP id GdxpCgDn9aW9UNpiXNUXPw--.19829S2;
-        Fri, 22 Jul 2022 15:24:47 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] mmc: sdhci-acpi: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 15:24:43 +0800
-Message-Id: <20220722072443.72471-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 03:24:54 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B502871F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:24:52 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oEn1h-0005HS-AH; Fri, 22 Jul 2022 09:24:45 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, guoren@kernel.org,
+        mick@ics.forth.gr, alexandre.ghiti@canonical.com,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, huanyi.xj@alibaba-inc.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: Re: [PATCH 4/5] riscv: Add modules to virtual kernel memory layout dump
+Date:   Fri, 22 Jul 2022 09:24:44 +0200
+Message-ID: <7405851.EvYhyI6sBW@diego>
+In-Reply-To: <20220717101323.370245-5-xianting.tian@linux.alibaba.com>
+References: <20220717101323.370245-1-xianting.tian@linux.alibaba.com> <20220717101323.370245-5-xianting.tian@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgDn9aW9UNpiXNUXPw--.19829S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUWr45Jr4fuF47uw1UGFg_yoWfJrb_CF
-        y5C397uF48CFWvgw18K3ySvry8ta98urs7Xr1FgrW3uw1rX3yUXa1vvr1kXr15WrWjkFZx
-        Cw15Xw1fCw1akjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRuYLyJUUUUU==
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivwBGZFWB0jtN2AAAs1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+Am Sonntag, 17. Juli 2022, 12:13:22 CEST schrieb Xianting Tian:
+> Modules always live before the kernel, MODULES_END is fixed but
+> MODULES_VADDR isn't fixed, it depends on the kernel size.
+> Let's add it to virtual kernel memory layout dump.
+> 
+> As MODULES is only defined for CONFIG_64BIT, so we dump it when
+> CONFIG_64BIT=y.
+> 
+> eg,
+> MODULES_VADDR - MODULES_END
+> 0xffffffff01133000 - 0xffffffff80000000
+> 
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/mmc/host/sdhci-acpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm still not sure if it would be better to define MODULES_* constants
+even on 32bit (with their VMALLOC_START etc values) and prevent
+needing the CONFIG_64BIT ifdef, but that's for others to decide :-)
 
-diff --git a/drivers/mmc/host/sdhci-acpi.c b/drivers/mmc/host/sdhci-acpi.c
-index 4cca4c90769b..bddfaba091a9 100644
---- a/drivers/mmc/host/sdhci-acpi.c
-+++ b/drivers/mmc/host/sdhci-acpi.c
-@@ -648,7 +648,7 @@ static int sdhci_acpi_emmc_amd_probe_slot(struct platform_device *pdev,
- 	 *       in reading a garbage value and using the wrong presets.
- 	 *
- 	 *       Since HS400 and HS200 presets must be identical, we could
--	 *       instead use the the SDR104 preset register.
-+	 *       instead use the SDR104 preset register.
- 	 *
- 	 *    If the above issues are resolved we could remove this quirk for
- 	 *    firmware that that has valid presets (i.e., SDR12 <= 12 MHz).
--- 
-2.25.1
+The below also looks good, so
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
+> ---
+>  arch/riscv/mm/init.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index d466ec670e1f..2c4a64e97aec 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -135,6 +135,10 @@ static void __init print_vm_layout(void)
+>  		(unsigned long)VMEMMAP_END);
+>  	print_ml("vmalloc", (unsigned long)VMALLOC_START,
+>  		(unsigned long)VMALLOC_END);
+> +#ifdef CONFIG_64BIT
+> +	print_ml("modules", (unsigned long)MODULES_VADDR,
+> +		(unsigned long)MODULES_END);
+> +#endif
+>  	print_ml("lowmem", (unsigned long)PAGE_OFFSET,
+>  		(unsigned long)high_memory);
+>  	if (IS_ENABLED(CONFIG_64BIT)) {
+> 
+
+
+
 

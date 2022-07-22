@@ -2,34 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1554557E9E4
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 00:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB5657E9E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 00:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237082AbiGVWkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 18:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S237024AbiGVWkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 18:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236966AbiGVWkB (ORCPT
+        with ESMTP id S236945AbiGVWkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 18:40:01 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D9B20F47;
-        Fri, 22 Jul 2022 15:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658529498; x=1690065498;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GKC8VfcyGF4rHCVnV7RvZpNWBnM1QHRzWAdSlQXvS9I=;
-  b=SXXqrNYw4fxD8U99utCIfrl/T4mAmwfrD/sbG5fAZAvzMaRwF8PRRtIh
-   CvSa9ozqhYrWFiPng7NWgpGJ267YElNVb/nMiG0qSiV+eNZlIpkamLCqV
-   JeJZiTHf05VXHAyVMx5k/pc+dMG/P4qTlEIyaIcaVs8iQlB/E9WJDOkBI
-   U=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Jul 2022 15:37:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 15:37:25 -0700
+        Fri, 22 Jul 2022 18:40:16 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E22AFB5C;
+        Fri, 22 Jul 2022 15:38:41 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MMP3Z8024841;
+        Fri, 22 Jul 2022 22:37:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=KE+Fl0ZxBTCz3b0DZd6BUNq+L+lHnmfuXs5O5UWd4b4=;
+ b=YiMuaUuIzZWknGyc3kqln3xW5yr+DVvW2MFEnJghOi22UNcAHVqCUhHp/7cAj4MuhRZ2
+ UPeJPk1WqAMxpKS1sPN/Of3RYoGZSdCLJfNxVPbWioj/yDYN1aSPjwVzREfKnQkMu7qp
+ z14/Erx2FsxJclqc4X3SXjAH7Gms3xxCtLP8W1CmGK4yzDsEUoP6YdCkPDl1DKlvZ+Bi
+ Y3kBZa+ChLPWZubCOSYWwrOmFH0WcRtiWqTSeSm2XsKHxtpdnySbFlk/jem18hFKaj7x
+ nfZfLdeTUTX3YnwTxrkiVczC8c7PPsm5fpuMVabZUfqNmCW37o6oWGc/jS/f25CjTHuM xw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hfkm5agrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 22:37:27 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26MMbQkE005708
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 22:37:26 GMT
 Received: from hu-gurus-sd.qualcomm.com (10.80.80.8) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -44,77 +49,67 @@ CC:     David Heidelberg <david@ixit.cz>,
         Rajendra Nayak <quic_rjendra@quicinc.com>,
         Elliot Berman <quic_eberman@quicinc.com>,
         Guru Das Srinagesh <quic_gurus@quicinc.com>
-Subject: [PATCH v2 0/5] SCM: Add support for wait-queue aware firmware
-Date:   Fri, 22 Jul 2022 15:37:13 -0700
-Message-ID: <1658529438-9234-1-git-send-email-quic_gurus@quicinc.com>
+Subject: [PATCH v2 1/5] dt-bindings: firmware: qcom-scm: Add "allow-multi-call" property
+Date:   Fri, 22 Jul 2022 15:37:14 -0700
+Message-ID: <1658529438-9234-2-git-send-email-quic_gurus@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1658529438-9234-1-git-send-email-quic_gurus@quicinc.com>
+References: <1658529438-9234-1-git-send-email-quic_gurus@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hwYcZ1ZyuwxsYzKt85qhncwdTMsIbtXG
+X-Proofpoint-ORIG-GUID: hwYcZ1ZyuwxsYzKt85qhncwdTMsIbtXG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-22_06,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 adultscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 mlxlogscore=875 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207220091
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series enables the QCOM SCM driver to support firmware (FW) versions
-that expect the high-level OS (HLOS) to be tolerant of SCM call requests not
-being processed right away and, instead, being placed on a wait-queue in FW and
-processed accordingly.
+For firmware that supports it, allow multiple SCM calls to be passed
+down to it by removing the serialization lock in the SCM driver.
 
-The problem this feature is fixing is as follows. In a scenario where there is
-a VM in addition to HLOS (and an underlying hypervisor):
-
-1. HLOS makes an SMC call on core 5
-2. The hypervisor scheduling interrupt interrupts this SMC call.
-3. The hypervisor schedules the VM on core 5.
-4. The VM makes an SMC call on core 5.
-5. The SMC call is non-interruptibly stuck on FW spinlock on core 5.
-6. HLOS cannot reschedule since core 5 is not responding to Reschedule IPIs.
-7. Watchdog timer expires waiting for core 5.
-
-This problem is solved by FW returning a new return code SCM_WAITQ_SLEEP to
-HLOS right away when it is overwhelmed by the VM's SMC call. HLOS then places
-the call on a wait-queue and wakes it up when it receives an interrupt that
-signifies "all-clear".
-
-This new design also supports scenarios involving only HLOS (and no other VMs).
-Such scenarios make use of a second new return code SCM_WAITQ_WAKE.
-
-There are three new SMC calls also being defined in this design that, together
-with the two new return codes, form the handshake protocol between Linux and
-FW.
-
-This design is also backwards-compatible with existing firmware versions that
-do not support this feature.
-
----
-v2:
-- Changes made to patches 4 and 5 are listed therein.
-- Rebased dt-bindings on top of the YAML conversion patch [1].
+This patch is based on this YAML conversion patch [1] that is in-flight
+currently.
 
 [1] https://lore.kernel.org/lkml/20220708090431.30437-1-david@ixit.cz/
+
+Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
 ---
+ Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Guru Das Srinagesh (5):
-  dt-bindings: firmware: qcom-scm: Add "allow-multi-call" property
-  firmware: qcom: scm: Optionally remove SCM call serialization
-  dt-bindings: firmware: qcom-scm: Add optional interrupt
-  firmware: qcom: scm: Add wait-queue helper functions
-  firmware: qcom: scm: Add wait-queue handling logic
-
- .../devicetree/bindings/firmware/qcom,scm.yaml     |  10 ++
- drivers/firmware/qcom_scm-smc.c                    | 140 +++++++++++++++++++--
- drivers/firmware/qcom_scm.c                        | 125 +++++++++++++++++-
- drivers/firmware/qcom_scm.h                        |  14 +++
- 4 files changed, 279 insertions(+), 10 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index 9fdeee0..e279fd2 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -70,6 +70,11 @@ properties:
+   '#reset-cells':
+     const: 1
+ 
++  allow-multi-call:
++    description:
++      Specify this flag to remove SCM call serialization. Need to ensure that
++      the firmware being used supports this feature first.
++
+   qcom,dload-mode:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+     items:
 -- 
 2.7.4
 

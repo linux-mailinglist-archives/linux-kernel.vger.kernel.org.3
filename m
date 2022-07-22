@@ -2,71 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A41F57E770
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05B057E772
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236300AbiGVTdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S236327AbiGVTdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbiGVTdG (ORCPT
+        with ESMTP id S236043AbiGVTdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:33:06 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FE14D4E5;
-        Fri, 22 Jul 2022 12:32:58 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1658518368t5bo1ksf
-Received: from harry-jrlc.. ( [125.70.163.183])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 23 Jul 2022 03:32:13 +0800 (CST)
-X-QQ-SSF: 0100000000000030C000B00A0000020
-X-QQ-FEAT: MvcY5ctQrZ+448wqI7+R4ff8SABg5kVWa7DJFhHYAsqFlMxgsYb48aetd0HDs
-        I6Bucy6liltHz4B+jgMxu29h06UvGmwvj0suzI529vddHW/e9PTxqPY9shER/Q3e8DvrZFg
-        999rpyVtsTFVRDdL06ZQVzqZeokvPFxuQwgBzj1p9dascRLSaPJ/kMZFyb3tn0IIawau3FB
-        EfRh8cgpNO3Ute6rBa8GVHF2kiTFIWQ5IBPLc0+UxL0NLcU/OoAisktnQjAvqt03TIc0mKg
-        v3HKC7EPCwBxXYLgtrAwkF0RIz6wqjc6QEEC3pt5JBTuDJLWd9abto+fjxAfvCIYvTqh88U
-        JQ7EWobh9Kw/omMZuQ=
-X-QQ-GoodBg: 0
-From:   Xin Gao <gaoxin@cdjrlc.com>
-To:     djwong@kernel.org
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xin Gao <gaoxin@cdjrlc.com>
-Subject: [PATCH] xfs: Fix comment typo
-Date:   Sat, 23 Jul 2022 03:32:11 +0800
-Message-Id: <20220722193211.17816-1-gaoxin@cdjrlc.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 22 Jul 2022 15:33:47 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C00E51417
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:33:46 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id ez10so10100486ejc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5oxdEkaXhPUPJ0/wg8u+2Mtd7O2U9x1Gsa0zT2Q8HEI=;
+        b=AlchECHHpMCmJUfcd9XT4anSGSwKj6kI8rL4ug7CUkzF0c+Zl7l3WdjAG1QTrrCb1E
+         StFM3SktZ73zgPPJjWwM4c3sMwE33SabwU+emB+euYjp4ZavzFtevKyQ/KG7ukT+QXH+
+         S03QYCh35HMcieKY5zm2HOgUzHVsGv8bR6lZ845gBP3e9gaB2/he6UeIKEZZe5e/hSVu
+         YK7WEveP2VKqpIKx7PAVa0hA4ni2A40EFnt9lQKUvwpdyF2lImGa/PK2eZgXUL8c0opx
+         lIeoqKqq6PfWhdIeUDZKia/QRekmb/H2PVw9YPbBkA4hpxKkLGAX9DbBTz+c8iBUeMKY
+         /97Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5oxdEkaXhPUPJ0/wg8u+2Mtd7O2U9x1Gsa0zT2Q8HEI=;
+        b=vOyqeD9p5YFqN/KXNPiQ+MNjva+d137LvLWwGJK5U9QQXgz3T10yS8Qh/joxqkuKYk
+         3OS/NwjFeuKKBEEUqvd6Mg2taLpXWviSGWVLEOjx0z9pENSn5l+n+nVjglvRt4TyMECe
+         AHTPGb6+gHeoYXX8ncFRR7hOJjZ6A3shEUOJCk8er2eQKU69XBygNQ1rS1KvKUyssdGL
+         VgVxa74hPAOQsKmtCL+Ze/E4rTlTffwsZzksD7seGHzsEu0XCWu1EXbXc/6N+OK/YCuE
+         wW+u4Gbb8rHcQqIlyYmi8Fv4AwCOr/UPO78AEUnOzclTfK/QXWgIthXhrasjrsJndr+/
+         1FIw==
+X-Gm-Message-State: AJIora/woONZK7LEWhVt5dZOKPbh9hu2qkcp3xQazR+dMl8vikJEYtw7
+        OOZkRxz9cXvCfh3tg+LFtehRxV8bg0z5tLjcnpAI2A==
+X-Google-Smtp-Source: AGRyM1ueRgegb/NuFRFXw6Zcn8CLw5PNh/V2nLuAycY8OBnDhqkNTHiFuefKd1+oJEhTgof5l/I1Cut0a1iCGZleGeM=
+X-Received: by 2002:a17:907:7294:b0:72b:1ae:9c47 with SMTP id
+ dt20-20020a170907729400b0072b01ae9c47mr1066032ejc.253.1658518424523; Fri, 22
+ Jul 2022 12:33:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+References: <20220722090650.665513668@linuxfoundation.org>
+In-Reply-To: <20220722090650.665513668@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 23 Jul 2022 01:03:33 +0530
+Message-ID: <CA+G9fYuya-ovYrsVeb6hFMH9jPDkg59SBTVCJnsV+K=b5NXywA@mail.gmail.com>
+Subject: Re: [PATCH 5.18 00/70] 5.18.14-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `being' is duplicated in line 553, remove one.
+On Fri, 22 Jul 2022 at 14:38, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.18.14 release.
+> There are 70 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 24 Jul 2022 09:06:00 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.18.14-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.18.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Xin Gao <gaoxin@cdjrlc.com>
----
- fs/xfs/xfs_inode_item.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/fs/xfs/xfs_inode_item.c b/fs/xfs/xfs_inode_item.c
-index 721def0639fd..d1c5d0658779 100644
---- a/fs/xfs/xfs_inode_item.c
-+++ b/fs/xfs/xfs_inode_item.c
-@@ -550,7 +550,7 @@ xfs_inode_item_push(
- 
- 	if (!bp || (ip->i_flags & XFS_ISTALE)) {
- 		/*
--		 * Inode item/buffer is being being aborted due to cluster
-+		 * Inode item/buffer is being aborted due to cluster
- 		 * buffer deletion. Trigger a log force to have that operation
- 		 * completed and items removed from the AIL before the next push
- 		 * attempt.
--- 
-2.30.2
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.18.14-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.18.y
+* git commit: 4142b06492bc82bde362db55d6f29b0e2e509091
+* git describe: v5.18.13-71-g4142b06492bc
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.18.y/build/v5.18=
+.13-71-g4142b06492bc
+
+## Test Regressions (compared to v5.18.12)
+No test regressions found.
+
+## Metric Regressions (compared to v5.18.12)
+No metric regressions found.
+
+## Test Fixes (compared to v5.18.12)
+No test fixes found.
+
+## Metric Fixes (compared to v5.18.12)
+No metric fixes found.
+
+## Test result summary
+total: 131100, pass: 119324, fail: 970, skip: 10006, xfail: 800
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 308 total, 308 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 54 passed, 2 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

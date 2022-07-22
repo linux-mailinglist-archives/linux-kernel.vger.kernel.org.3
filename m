@@ -2,212 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0419557D9B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 07:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9044057D9B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 07:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiGVFFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 01:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S233628AbiGVFGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 01:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiGVFFA (ORCPT
+        with ESMTP id S229783AbiGVFGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 01:05:00 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AC12A40E;
-        Thu, 21 Jul 2022 22:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=asODde90Fe99CD/7037EAdFEELjMHmpfutuUG7tUMtw=; b=EbxHkWrLQKjioOqreWsRtwi0BB
-        bgDVV7unChEfeR/HS9HZiyh6T2XfVtNwyC3I/onp0TQpBXHyDWKYkHanNPhz04Ek7NSKRVJOyXWzE
-        2Yo3gzYgeFb0J4/SVM6D7+ybWev5m0RGMMSz6Wi+QcTEbNIyfyA/Np67k7LB/Dk7wUBBxZfPRx9sR
-        8ha+QudaNuysXUNfUTpRitcG9Z/ugSlBkMdZp1/OcIe8PtlVj4W6P/8uIKgGjSddAXBY0Rof/5KsZ
-        McXkISB7585Oo1E9ioKBTt74h8Z1OUh68UuYosbI9J2Aikw+Haikjupz4DRxeyhoK/lQTzsj3lWQX
-        1BH6e8/g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oEkqL-0000oV-F5; Fri, 22 Jul 2022 05:04:53 +0000
-Date:   Thu, 21 Jul 2022 22:04:53 -0700
-From:   "hch@infradead.org" <hch@infradead.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: Re: [PATCH] swiotlb: Clean up some coding style and minor issues
-Message-ID: <Ytov9VdwIv5HVsbr@infradead.org>
-References: <20220722033846.950237-1-ltykernel@gmail.com>
- <PH0PR21MB3025A8991E4126A6B92126D9D7909@PH0PR21MB3025.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025A8991E4126A6B92126D9D7909@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 01:06:15 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11DF31202
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 22:06:13 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id v21so3726424plo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 21 Jul 2022 22:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OeAEb6m+vs0K6TzHjVslsYokInaDYI8paxIh3nITk2s=;
+        b=gq+gjVuI5oEnVYfLfTDvZ5ntscQruzWfR+vpir7zzrcoEkUPIhNkSjLtSMxcmNvAeS
+         Qc1AD5vrX4HYm90PTx+rBgxImMOO1y6QF8aruimcURW4LCaOWztk7okO3kWQuh8Jzrmt
+         c6zlCdjE6MMrbx8ELpZ5OAAtHvx0yVD14ctnJmslpj/kmEtHVPYQ0E8NgkykV+yzOuxv
+         JFn3FazakyKEAEeu33yg+Gz6Wf6vagJ/rq/4IeALnfxutbI1tVo07IZzYX1vve1Fpnau
+         xF/SgF7SA7lnmzNDi85YN29lSwNkZdZ22NHdf0XZuBdWX5LDsZAXFurLAD5igdRWEyw7
+         U2ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=OeAEb6m+vs0K6TzHjVslsYokInaDYI8paxIh3nITk2s=;
+        b=rWb7GsT8wOf2dm1SLANTD/caQapKrGnWxhsu/1QTUucNB70G26QnZi8eJSGNxPrlTU
+         TRSmBpFBwIqExxXX8RIzrul1QijjRGZpj4iX5c5JT3NjuVfcXFK/Ihk8+tjNPVB7i5WZ
+         qBT6KD61w9Ea5HxLlwmnnGQbZyaFUx8fijd65N02cD2qxaRw1DuGN4/aKLsMhBj2fKGR
+         fxqYMYBqg2/iUdYTjSkI4NfV7ZLWwi6TzNWuGNHHBm1ymM4lIapp1c45oCvZwMVlGCaa
+         rwXQ51g7WQpGA2uWv2Fc7NDLJOp1TEEoq4jUEJ1eBTrcr2N7/62c6UulaJWkwSunbK7n
+         +TLw==
+X-Gm-Message-State: AJIora96Xvr4S18sqL8rSRlGne7atrTk7vA3VEKNAhfL+vj8gjqXuFY8
+        r03QagGAe3v2XHtjAvxGx8w7Ug==
+X-Google-Smtp-Source: AGRyM1uPEXgg7OPeYTjBfySXHjjqcKW7dS4wxQPOLqobukl0wOIqeNB8TKUO70OkdT9OUMvWx69ezg==
+X-Received: by 2002:a17:902:7fc3:b0:16c:78aa:88b0 with SMTP id t3-20020a1709027fc300b0016c78aa88b0mr1729015plb.81.1658466373179;
+        Thu, 21 Jul 2022 22:06:13 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id mm3-20020a17090b358300b001ef95232570sm4455917pjb.52.2022.07.21.22.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 22:06:11 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 22:06:11 -0700 (PDT)
+X-Google-Original-Date: Thu, 21 Jul 2022 22:06:09 PDT (-0700)
+Subject:     Re: [PATCH 1/1] riscv: enable Docker requirements in defconfig
+In-Reply-To: <20220608000251.55271-1-heinrich.schuchardt@canonical.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
+        guoren@kernel.org, mchitale@ventanamicro.com,
+        arnaud.pouliquen@foss.st.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, heinrich.schuchardt@canonical.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     heinrich.schuchardt@canonical.com
+Message-ID: <mhng-679f197d-77a0-4dc5-9523-f7b88a22b30b@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 04:03:21AM +0000, Michael Kelley (LINUX) wrote:
-> I think you missed one of the bugs I pointed out in my previous
-> comments.  In the function rmem_swiotlb_device_init(), the two
-> calls to kfree() in the error path are in the wrong order.   It's a
-> path that will probably never happen, but it still should be fixed.
+On Tue, 07 Jun 2022 17:02:51 PDT (-0700), heinrich.schuchardt@canonical.com wrote:
+> The defconfig kernel should be able to run Docker.
+>
+> Enable the missing settings according to [1].
+> make savedefconfig eliminates CONFIG_STACKTRACE
+> which is enabled by default.
+>
+> Many of the settings are also needed to run a defconfig kernel
+> on default distro installations or to run snaps.
+>
+> [1] https://github.com/moby/moby/blob/master/contrib/check-config.sh
+>
+> Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+> ---
+> Cf. [PATCH] arm64: Enable docker support in defconfig
+> https://lore.kernel.org/lkml/20220606140103.32779-1-vincenzo.frascino@arm.com/
+> ---
+>  arch/riscv/configs/defconfig | 65 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 64 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index 0cc17db8aaba..d4fffcd3cc05 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -6,8 +6,18 @@ CONFIG_BPF_SYSCALL=y
+>  CONFIG_IKCONFIG=y
+>  CONFIG_IKCONFIG_PROC=y
+>  CONFIG_CGROUPS=y
+> +CONFIG_MEMCG=y
+> +CONFIG_BLK_CGROUP=y
+>  CONFIG_CGROUP_SCHED=y
+>  CONFIG_CFS_BANDWIDTH=y
+> +CONFIG_RT_GROUP_SCHED=y
+> +CONFIG_CGROUP_PIDS=y
+> +CONFIG_CGROUP_FREEZER=y
+> +CONFIG_CGROUP_HUGETLB=y
+> +CONFIG_CPUSETS=y
+> +CONFIG_CGROUP_DEVICE=y
+> +CONFIG_CGROUP_CPUACCT=y
+> +CONFIG_CGROUP_PERF=y
+>  CONFIG_CGROUP_BPF=y
+>  CONFIG_NAMESPACES=y
+>  CONFIG_USER_NS=y
+> @@ -28,9 +38,11 @@ CONFIG_KVM=m
+>  CONFIG_JUMP_LABEL=y
+>  CONFIG_MODULES=y
+>  CONFIG_MODULE_UNLOAD=y
+> +CONFIG_BLK_DEV_THROTTLING=y
+>  CONFIG_NET=y
+>  CONFIG_PACKET=y
+>  CONFIG_UNIX=y
+> +CONFIG_XFRM_USER=m
+>  CONFIG_INET=y
+>  CONFIG_IP_MULTICAST=y
+>  CONFIG_IP_ADVANCED_ROUTER=y
+> @@ -38,7 +50,43 @@ CONFIG_IP_PNP=y
+>  CONFIG_IP_PNP_DHCP=y
+>  CONFIG_IP_PNP_BOOTP=y
+>  CONFIG_IP_PNP_RARP=y
+> +CONFIG_INET_ESP=m
+> +CONFIG_NETFILTER=y
+> +CONFIG_BRIDGE_NETFILTER=m
+> +CONFIG_NF_CONNTRACK=m
+> +CONFIG_NF_CONNTRACK_FTP=m
+> +CONFIG_NF_CONNTRACK_TFTP=m
+> +CONFIG_NETFILTER_XT_MARK=m
+> +CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=m
+> +CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+> +CONFIG_NETFILTER_XT_MATCH_IPVS=m
+> +CONFIG_IP_VS=m
+> +CONFIG_IP_VS_PROTO_TCP=y
+> +CONFIG_IP_VS_PROTO_UDP=y
+> +CONFIG_IP_VS_RR=m
+> +CONFIG_IP_VS_NFCT=y
+> +CONFIG_NF_LOG_ARP=m
+> +CONFIG_NF_LOG_IPV4=m
+> +CONFIG_IP_NF_IPTABLES=m
+> +CONFIG_IP_NF_FILTER=m
+> +CONFIG_IP_NF_TARGET_REJECT=m
+> +CONFIG_IP_NF_NAT=m
+> +CONFIG_IP_NF_TARGET_MASQUERADE=m
+> +CONFIG_IP_NF_TARGET_REDIRECT=m
+> +CONFIG_IP_NF_MANGLE=m
+> +CONFIG_NF_LOG_IPV6=m
+> +CONFIG_IP6_NF_IPTABLES=m
+> +CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+> +CONFIG_IP6_NF_FILTER=m
+> +CONFIG_IP6_NF_TARGET_REJECT=m
+> +CONFIG_IP6_NF_MANGLE=m
+> +CONFIG_BRIDGE=m
+> +CONFIG_BRIDGE_VLAN_FILTERING=y
+> +CONFIG_VLAN_8021Q=m
+> +CONFIG_NET_SCHED=y
+> +CONFIG_NET_CLS_CGROUP=m
+>  CONFIG_NETLINK_DIAG=y
+> +CONFIG_CGROUP_NET_PRIO=y
+>  CONFIG_NET_9P=y
+>  CONFIG_NET_9P_VIRTIO=y
+>  CONFIG_PCI=y
+> @@ -57,7 +105,15 @@ CONFIG_SCSI_VIRTIO=y
+>  CONFIG_ATA=y
+>  CONFIG_SATA_AHCI=y
+>  CONFIG_SATA_AHCI_PLATFORM=y
+> +CONFIG_MD=y
+> +CONFIG_BLK_DEV_DM=m
+> +CONFIG_DM_THIN_PROVISIONING=m
+>  CONFIG_NETDEVICES=y
+> +CONFIG_DUMMY=m
+> +CONFIG_MACVLAN=m
+> +CONFIG_IPVLAN=m
+> +CONFIG_VXLAN=m
+> +CONFIG_VETH=m
+>  CONFIG_VIRTIO_NET=y
+>  CONFIG_MACB=y
+>  CONFIG_E1000E=y
+> @@ -105,7 +161,11 @@ CONFIG_RPMSG_CTRL=y
+>  CONFIG_RPMSG_VIRTIO=y
+>  CONFIG_EXT4_FS=y
+>  CONFIG_EXT4_FS_POSIX_ACL=y
+> +CONFIG_EXT4_FS_SECURITY=y
+> +CONFIG_BTRFS_FS=m
+> +CONFIG_BTRFS_FS_POSIX_ACL=y
+>  CONFIG_AUTOFS4_FS=y
+> +CONFIG_OVERLAY_FS=m
+>  CONFIG_MSDOS_FS=y
+>  CONFIG_VFAT_FS=y
+>  CONFIG_TMPFS=y
+> @@ -119,6 +179,10 @@ CONFIG_ROOT_NFS=y
+>  CONFIG_9P_FS=y
+>  CONFIG_NLS_CODEPAGE_437=y
+>  CONFIG_NLS_ISO8859_1=m
+> +CONFIG_SECURITY=y
+> +CONFIG_SECURITY_SELINUX=y
+> +CONFIG_SECURITY_APPARMOR=y
+> +CONFIG_DEFAULT_SECURITY_DAC=y
+>  CONFIG_CRYPTO_USER_API_HASH=y
+>  CONFIG_CRYPTO_DEV_VIRTIO=y
+>  CONFIG_PRINTK_TIME=y
+> @@ -137,7 +201,6 @@ CONFIG_DEBUG_SPINLOCK=y
+>  CONFIG_DEBUG_MUTEXES=y
+>  CONFIG_DEBUG_RWSEMS=y
+>  CONFIG_DEBUG_ATOMIC_SLEEP=y
+> -CONFIG_STACKTRACE=y
+>  CONFIG_DEBUG_LIST=y
+>  CONFIG_DEBUG_PLIST=y
+>  CONFIG_DEBUG_SG=y
 
-That is already fixed in the dma-mapping tree:
+Sorry for being so slow here.  I don't have any issues with this as a 
+concept, but it makes a handful of my test configs panic on boot.  Seems 
+like something is tripping up a kasan failure.  I guess it's kind of 
+arbitrary to call that a regression, as I'm sure it's just uncovering 
+some issue that already exists, but turning something on in defconfig 
+that panics with kasan is going to have a bunch of fallout.
 
-http://git.infradead.org/users/hch/dma-mapping.git/commitdiff/4a97739474c402e0a14cf6a432f1920262f6811c
+It looks like BLK_CGROUP is the problem here, so if you're OK with it 
+then I'm happy to take the rest of these.  I put that over at 
+kernel.org/palmer/linux/riscv-docker_no_blk_cgroup, if that's OK I'll 
+cherry-pick it onto for-next.
 
-> The other fixes look good to me.
-
-Can you make that a formal Reviewed-by?
-
-> 
-> Michael
-> 
-> > Fixes: 26ffb91fa5e0 ("swiotlb: split up the global swiotlb lock")
-> > Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> > ---
-> >  .../admin-guide/kernel-parameters.txt         |  3 +-
-> >  kernel/dma/swiotlb.c                          | 42 ++++++++++++-------
-> >  2 files changed, 30 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt
-> > b/Documentation/admin-guide/kernel-parameters.txt
-> > index 4a6ad177d4b8..ddca09550f76 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -5907,7 +5907,8 @@
-> >  			Format: { <int> [,<int>] | force | noforce }
-> >  			<int> -- Number of I/O TLB slabs
-> >  			<int> -- Second integer after comma. Number of swiotlb
-> > -				 areas with their own lock. Must be power of 2.
-> > +				 areas with their own lock. Will be rounded up
-> > +				 to a power of 2.
-> >  			force -- force using of bounce buffers even if they
-> >  			         wouldn't be automatically used by the kernel
-> >  			noforce -- Never use bounce buffers (for debugging)
-> > diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> > index c39483bf067d..5752db98a1f2 100644
-> > --- a/kernel/dma/swiotlb.c
-> > +++ b/kernel/dma/swiotlb.c
-> > @@ -96,7 +96,13 @@ struct io_tlb_slot {
-> > 
-> >  static void swiotlb_adjust_nareas(unsigned int nareas)
-> >  {
-> > -	if (!is_power_of_2(nareas))
-> > +	/*
-> > +	 * Set area number to 1 when input area number
-> > +	 * is zero.
-> > +	 */
-> > +	if (!nareas)
-> > +		nareas  = 1;
-> > +	else if (!is_power_of_2(nareas))
-> >  		nareas = roundup_pow_of_two(nareas);
-> > 
-> >  	default_nareas = nareas;
-> > @@ -270,6 +276,7 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem,
-> > phys_addr_t start,
-> >  	for (i = 0; i < mem->nareas; i++) {
-> >  		spin_lock_init(&mem->areas[i].lock);
-> >  		mem->areas[i].index = 0;
-> > +		mem->areas[i].used = 0;
-> >  	}
-> > 
-> >  	for (i = 0; i < mem->nslabs; i++) {
-> > @@ -353,8 +360,8 @@ void __init swiotlb_init_remap(bool addressing_limit, unsigned
-> > int flags,
-> >  		panic("%s: Failed to allocate %zu bytes align=0x%lx\n",
-> >  		      __func__, alloc_size, PAGE_SIZE);
-> > 
-> > -	mem->areas = memblock_alloc(sizeof(struct io_tlb_area) *
-> > -		default_nareas, SMP_CACHE_BYTES);
-> > +	mem->areas = memblock_alloc(array_size(sizeof(struct io_tlb_area),
-> > +		default_nareas), SMP_CACHE_BYTES);
-> >  	if (!mem->areas)
-> >  		panic("%s: Failed to allocate mem->areas.\n", __func__);
-> > 
-> > @@ -479,7 +486,7 @@ void __init swiotlb_exit(void)
-> >  		free_pages((unsigned long)mem->slots, get_order(slots_size));
-> >  	} else {
-> >  		memblock_free_late(__pa(mem->areas),
-> > -				   mem->nareas * sizeof(struct io_tlb_area));
-> > +				   array_size(sizeof(*mem->areas), mem->nareas));
-> >  		memblock_free_late(mem->start, tbl_size);
-> >  		memblock_free_late(__pa(mem->slots), slots_size);
-> >  	}
-> > @@ -593,11 +600,12 @@ static unsigned int wrap_area_index(struct io_tlb_mem
-> > *mem, unsigned int index)
-> >   * Find a suitable number of IO TLB entries size that will fit this request and
-> >   * allocate a buffer from that IO TLB pool.
-> >   */
-> > -static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
-> > -		struct io_tlb_area *area, int area_index,
-> > -		struct device *dev, phys_addr_t orig_addr,
-> > +static int swiotlb_do_find_slots(struct device *dev,
-> > +		int area_index, phys_addr_t orig_addr,
-> >  		size_t alloc_size, unsigned int alloc_align_mask)
-> >  {
-> > +	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
-> > +	struct io_tlb_area *area = mem->areas + area_index;
-> >  	unsigned long boundary_mask = dma_get_seg_boundary(dev);
-> >  	dma_addr_t tbl_dma_addr =
-> >  		phys_to_dma_unencrypted(dev, mem->start) & boundary_mask;
-> > @@ -686,13 +694,12 @@ static int swiotlb_find_slots(struct device *dev, phys_addr_t
-> > orig_addr,
-> >  		size_t alloc_size, unsigned int alloc_align_mask)
-> >  {
-> >  	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
-> > -	int start = raw_smp_processor_id() & ((1U << __fls(mem->nareas)) - 1);
-> > +	int start = raw_smp_processor_id() & (mem->nareas - 1);
-> >  	int i = start, index;
-> > 
-> >  	do {
-> > -		index = swiotlb_do_find_slots(mem, mem->areas + i, i,
-> > -					      dev, orig_addr, alloc_size,
-> > -					      alloc_align_mask);
-> > +		index = swiotlb_do_find_slots(dev, i, orig_addr,
-> > +					      alloc_size, alloc_align_mask);
-> >  		if (index >= 0)
-> >  			return index;
-> >  		if (++i >= mem->nareas)
-> > @@ -903,17 +910,24 @@ bool is_swiotlb_active(struct device *dev)
-> >  }
-> >  EXPORT_SYMBOL_GPL(is_swiotlb_active);
-> > 
-> > +static int io_tlb_used_get(void *data, u64 *val)
-> > +{
-> > +	*val = mem_used(&io_tlb_default_mem);
-> > +
-> > +	return 0;
-> > +}
-> > +DEFINE_DEBUGFS_ATTRIBUTE(fops_io_tlb_used, io_tlb_used_get, NULL, "%llu\n");
-> > +
-> >  static void swiotlb_create_debugfs_files(struct io_tlb_mem *mem,
-> >  					 const char *dirname)
-> >  {
-> > -	unsigned long used = mem_used(mem);
-> > -
-> >  	mem->debugfs = debugfs_create_dir(dirname, io_tlb_default_mem.debugfs);
-> >  	if (!mem->nslabs)
-> >  		return;
-> > 
-> >  	debugfs_create_ulong("io_tlb_nslabs", 0400, mem->debugfs, &mem->nslabs);
-> > -	debugfs_create_ulong("io_tlb_used", 0400, mem->debugfs, &used);
-> > +	debugfs_create_file_unsafe("io_tlb_used", 0400, mem->debugfs, NULL,
-> > +			&fops_io_tlb_used);
-> >  }
-> > 
-> >  static int __init __maybe_unused swiotlb_create_default_debugfs(void)
-> > --
-> > 2.25.1
-> 
----end quoted text---
+There's almost certainly a bug here that warrants fixing.

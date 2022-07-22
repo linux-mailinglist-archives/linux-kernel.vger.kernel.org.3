@@ -2,178 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01A257E58A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385A057E58C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 19:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235898AbiGVR0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 13:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
+        id S235709AbiGVR2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 13:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbiGVR0k (ORCPT
+        with ESMTP id S231229AbiGVR2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:26:40 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E90771BE1
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:26:39 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id z25so8743772lfr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:26:39 -0700 (PDT)
+        Fri, 22 Jul 2022 13:28:33 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3007B37D
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:28:32 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h8so7424709wrw.1
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 10:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qoN3gDHWVDLFAUm42xgoSLsUq4+PL4CyeQJ0bjtEpCU=;
-        b=ve4ktK15OM0pfiMIrqujRlezfMGvsEQ5YAqFux57vtJ3J20/mY8UAzgLg0HYm9+N0u
-         47DSWQ4U+8NAqESzQcHSEuXsrh6z6hFoIIPVXAOnzYapERTRn/arZX134XW7HojrduPm
-         j3aXxulLfoKC9EnQf91v4gAF1rFUJQAjANXYapg0REhSI+MckWQA7/YSXRscN2wXptKX
-         I7VUzN7iixc9WPegThHkQErY2lzuneQJ3ooy9JDLp5aHN9CgJKLQ3hjPNRRjtMxdfWqD
-         K/MvnpJlCBOquEp1u040AFUgxkZYV2LyqvPkfJvlLsA/1A7kHv2pilYQSS9CZfLHy5uW
-         paeg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iwlo3BqFTDCGoeQJZWI9pHBVdatv5K3XsvNJ8Oj1ml0=;
+        b=EvrScfvXzo/TRQoNEGgStFwBfwgOXLAWI14neyWBoektfW3yQaQaUzJpfRCq2CSE8W
+         eC7GoUHSUfnidEnJkSl+J3F7RZOYOHW9MPCzeQrlMWCCjPuIftWDJhS6Gvr8jFiP6A28
+         A1eJ0Ccw5PjBaXUFVN7egE0wEozabHciz42onTJgCN4386Td3elkdLV1HpAqyCAx2lFH
+         pKEvmNRV6gplzqZXvBW+DxTxSHVoaul2LwwHR0ZjmJb7+A8EuTLZ7snpMVJa35SE+alg
+         QEtEfxm4xbQXV08ULk1GvbAjnrVS2cttW+/TOmIYJXmhQ5GIHmfYnLns3gfCcIHOUynn
+         nIiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qoN3gDHWVDLFAUm42xgoSLsUq4+PL4CyeQJ0bjtEpCU=;
-        b=yAbXwXz+V7o0WnMTps5+SOVjTTUDQFdt9DaxknXEh44pBn2iAeipaYUcLidJHmb+Qs
-         8AKrNhm/2B4khgc6NO9uXKfQcnKKb6PcuikoTavTzyvM7pxZOQFTsjHrDq5m+f6ccFYt
-         DQ1D8/jWfje7JuhYRpM33SvkHuYk+/NixqocKwoonI6agTGGoS5S0M2CGDVmYXojjpHG
-         WmfHu6nUQfkFM/+57jYywk/AuPBHtXpnODy6Mb7qYYMehApRVqB26dk55NZg0GDe3hKe
-         dROZojKi7FasyE+g8mwojqrYYj4or0OlYHtAe3UMMl9kp4EKuFBS9Co2J3GIruc3CDhA
-         mMew==
-X-Gm-Message-State: AJIora+xdHj85TCpm83WEeQx9n4K2FH/6Ipxj90a98xWw0niGaW4HyJP
-        +KAFISVV1ff8F+2zp/3RF4nuhg==
-X-Google-Smtp-Source: AGRyM1tWDz3YFjB2oREEYfHT63bgnHfvazVkGCurcjXwv9zhQAkymmmPouZ7MaolfC9GM8Hvk+Iykw==
-X-Received: by 2002:ac2:5989:0:b0:48a:74a6:8658 with SMTP id w9-20020ac25989000000b0048a74a68658mr384428lfn.660.1658510797594;
-        Fri, 22 Jul 2022 10:26:37 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id k12-20020a2eb74c000000b0025d40241c1dsm1252846ljo.6.2022.07.22.10.26.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 10:26:37 -0700 (PDT)
-Message-ID: <9b6b5e2a-a78d-9aac-5eca-e8231ba6db55@linaro.org>
-Date:   Fri, 22 Jul 2022 19:26:35 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iwlo3BqFTDCGoeQJZWI9pHBVdatv5K3XsvNJ8Oj1ml0=;
+        b=cWkWOJUUyXtvVYObJPqwOiI/bbQnUBxoc+x0A9rNL/9xHXQE4MOobdMSvh/lVT+0VY
+         4MRA5rNyvH0cGj0HtTlt0LuC/hKdcoJliEoz3TjWLJsmlSfUwQO4L4R2OQ//lm4KHmN5
+         WmEx3GeBALu2RAOmQbDrLszE2UEqP/ne1ZhjVoGT1oQMhQMLrd1iHCQmmwmf4y+uwHXX
+         Y60YmqHGIotlGBfM+iVC3QfnyqIkvWxC+8/bQo0FvMFQGJFD+/bl62SUxgyJb3mkHk1d
+         LEBztMiy/ETADiGbDKv3bJiYEnemj9uW4PhdiN+G89INtWeygvkeRQtnwcqveA7k0mmF
+         1m3Q==
+X-Gm-Message-State: AJIora8G4IrZUzpFnRLU81fGi/fFUDmC5tL3anWFFUPRvMp87Gn7GCGX
+        KQmif699l0A3D75meqtZEUPq5DXqmwGTTj09KvNuKQ==
+X-Google-Smtp-Source: AGRyM1u4ikPl/LtayDssTs6DxZSbbt9+bh3MqXwxRj6V6FITNQSGqxV7Y7eunshdDHKNYuaCM56/nHqbH6WDzqJYZxs=
+X-Received: by 2002:a05:6000:1e04:b0:21d:7ec3:fe5a with SMTP id
+ bj4-20020a0560001e0400b0021d7ec3fe5amr693779wrb.116.1658510910254; Fri, 22
+ Jul 2022 10:28:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 2/2] dt-bindings: arm: qcom: Document additional sku6
- for sc7180 pazquel
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Henry Sun <henrysun@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <20220721033918.v3.1.I10519ca1bf88233702a90e296088808d18cdc7b1@changeid>
- <20220721033918.v3.2.I7ecbb7eeb58c5e6a33e32a3abf4d6874e6cb725c@changeid>
- <CAD=FV=WSBgupLFMCZgianck6uTkAyqrG0WK2ChSbNbJdhOPdLA@mail.gmail.com>
- <4b2fe9d0-f590-0fac-79fa-bb05da1d61df@linaro.org>
- <CAD=FV=XmaNdc9k98vAwbcN-sm0w_WeqhRsK_AUm3h4LZ5-egmQ@mail.gmail.com>
- <c2b03863-2249-13e6-98e0-731c1b40d0a9@linaro.org>
- <CAD=FV=XKC_fbBzna8TgiPRmPH_=AQ3ckv2EEjoNvayKQ83Uciw@mail.gmail.com>
- <8a4999b9-862e-f698-28b9-42d26f680367@linaro.org>
- <CAD=FV=XBCC6HwUzKJ51LBkfWpXcbY9QepVZfNzQJp3qADzkkQg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=XBCC6HwUzKJ51LBkfWpXcbY9QepVZfNzQJp3qADzkkQg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220721055728.718573-1-kaleshsingh@google.com>
+ <20220721055728.718573-13-kaleshsingh@google.com> <YtrDU9TRjNWCTPVg@google.com>
+In-Reply-To: <YtrDU9TRjNWCTPVg@google.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Fri, 22 Jul 2022 10:28:19 -0700
+Message-ID: <CAC_TJvcdc=gRG5fYr16gQikHLedtH=RyasXvgNsMufUNtBEXRg@mail.gmail.com>
+Subject: Re: [PATCH v5 12/17] KVM: arm64: Save protected-nVHE (pKVM) hyp stacktrace
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Fuad Tabba <tabba@google.com>, Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 19:23, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Jul 22, 2022 at 10:14 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 21/07/2022 20:29, Doug Anderson wrote:
->>> Hi,
->>>
->>> On Thu, Jul 21, 2022 at 9:52 AM Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 21/07/2022 18:43, Doug Anderson wrote:
->>>>> Hi,
->>>>>
->>>>> On Thu, Jul 21, 2022 at 9:33 AM Krzysztof Kozlowski
->>>>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>>>
->>>>>> On 21/07/2022 15:37, Doug Anderson wrote:
->>>>>>>
->>>>>>> Not worth sending a new version for, but normally I expect the
->>>>>>> bindings to be patch #1 and the dts change to be patch #2. In any
->>>>>>> case:
->>>>>>>
->>>>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->>>>>>
->>>>>> I would say worth v4, because otherwise patches is not bisectable.
->>>>>
->>>>> You're saying because `dtbs_check` will fail between the two?
->>>>
->>>> Yes
->>>
->>> OK. Then I assume you agree that reversing the order of the patches
->>> won't help, only combining the two patches into one.
->>>
->>>
->>>>> How does
->>>>> flipping the order help? If `dtbs_check` needs to be bisectable then
->>>>> these two need to be one patch, but I was always under the impression
->>>>> that we wanted bindings patches separate from dts patches.
->>>>
->>>> I don't think anyone said that bindings patches must be separate from
->>>> DTS. The only restriction is DTS cannot go with drivers.
->>>
->>> I have always heard that best practice is to have bindings in a patch
->>> by themselves.
->>
->> Yes, bindings must be separate patch, no one here objects this. You said
->> they cannot go together via one maintainer tree or I misunderstood?
->>
->>> If I've misunderstood and/or folks have changed their
->>> minds, that's fine, but historically I've been told to keep them
->>> separate.
->>
->> Nothing changed. Bindings must be separate. They will be applied by
->> maintainer and, if correctly ordered, this is bisectable.
-> 
-> OK, I think this is the disconnect here.
-> 
-> No matter what order Jimmy's patches land in, it won't be bisectable
-> from the standpoint of "make dtbs_check". This is what I've been
-> trying to say.
-> 
-> * If the bindings land first then the device tree won't have sku6 and
-> will fail "make dtbs_check"
-> 
-> * If the dts lands first then the bindings won't have sku6 and will
-> fail "make dtbs_check".
-> 
-> Am I missing something?
-
-Ah, you're right... The patch changes the bindings of a board instead of
-bringing a new variant. Yeah, this cannot be bisectable if kept
-separate, thus order does no matter.
-
-> 
-> So when you said "I don't think anyone said that bindings patches must
-> be separate from DTS" and that you cared about "make dtbs_check" being
-> bisectable that you were saying you wanted these squashed into one
-> patch. I guess that's not the case.
+On Fri, Jul 22, 2022 at 8:33 AM Oliver Upton <oliver.upton@linux.dev> wrote:
 >
+> Hi Kalesh,
+>
+> On Wed, Jul 20, 2022 at 10:57:23PM -0700, Kalesh Singh wrote:
+> > In protected nVHE mode, the host cannot access private owned hypervisor
+> > memory. Also the hypervisor aims to remains simple to reduce the attack
+> > surface and does not provide any printk support.
+> >
+> > For the above reasons, the approach taken to provide hypervisor stacktraces
+> > in protected mode is:
+> >    1) Unwind and save the hyp stack addresses in EL2 to a shared buffer
+> >       with the host (done in this patch).
+> >    2) Delegate the dumping and symbolization of the addresses to the
+> >       host in EL1 (later patch in the series).
+> >
+> > On hyp_panic(), the hypervisor prepares the stacktrace before returning to
+> > the host.
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > ---
+>
+> Tried reworking this a bit and here is what I arrived at, WDYT?
+> Untested, of course :)
 
-Best regards,
-Krzysztof
+Hi Oliver,
+
+I think what you have is a lot cleaner. :) I'll incorporate it for the
+next spin.
+
+Thanks,
+Kalesh
+
+>
+> --
+> Thanks,
+> Oliver
+>
+> diff --git a/arch/arm64/include/asm/stacktrace/nvhe.h b/arch/arm64/include/asm/stacktrace/nvhe.h
+> index 3078501f8e22..05d7e03e0a8c 100644
+> --- a/arch/arm64/include/asm/stacktrace/nvhe.h
+> +++ b/arch/arm64/include/asm/stacktrace/nvhe.h
+> @@ -21,6 +21,23 @@
+>
+>  #include <asm/stacktrace/common.h>
+>
+> +/*
+> + * kvm_nvhe_unwind_init - Start an unwind from the given nVHE HYP fp and pc
+> + *
+> + * @state : unwind_state to initialize
+> + * @fp    : frame pointer at which to start the unwinding.
+> + * @pc    : program counter at which to start the unwinding.
+> + */
+> +static inline void kvm_nvhe_unwind_init(struct unwind_state *state,
+> +                                       unsigned long fp,
+> +                                       unsigned long pc)
+> +{
+> +       unwind_init_common(state, NULL);
+> +
+> +       state->fp = fp;
+> +       state->pc = pc;
+> +}
+> +
+>  static inline bool on_accessible_stack(const struct task_struct *tsk,
+>                                        unsigned long sp, unsigned long size,
+>                                        struct stack_info *info)
+> diff --git a/arch/arm64/kvm/hyp/nvhe/stacktrace.c b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> index 96c8b93320eb..644276fb02af 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/stacktrace.c
+> @@ -11,4 +11,69 @@ DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack)
+>
+>  #ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
+>  DEFINE_PER_CPU(unsigned long [NVHE_STACKTRACE_SIZE/sizeof(long)], pkvm_stacktrace);
+> +
+> +/*
+> + * pkvm_save_backtrace_entry - Saves a protected nVHE HYP stacktrace entry
+> + *
+> + * @arg    : the index of the entry in the stacktrace buffer
+> + * @where  : the program counter corresponding to the stack frame
+> + *
+> + * Save the return address of a stack frame to the shared stacktrace buffer.
+> + * The host can access this shared buffer from EL1 to dump the backtrace.
+> + */
+> +static bool pkvm_save_backtrace_entry(void *arg, unsigned long where)
+> +{
+> +       unsigned long *stacktrace = this_cpu_ptr(pkvm_stacktrace);
+> +       int *idx = (int *)arg;
+> +
+> +       /*
+> +        * Need 2 free slots: 1 for current entry and 1 for the
+> +        * delimiter.
+> +        */
+> +       if (*idx > ARRAY_SIZE(pkvm_stacktrace) - 2)
+> +               return false;
+> +
+> +       stacktrace[*idx] = where;
+> +       stacktrace[++*idx] = 0UL;
+> +
+> +       return true;
+> +}
+> +
+> +/*
+> + * pkvm_save_backtrace - Saves the protected nVHE HYP stacktrace
+> + *
+> + * @fp : frame pointer at which to start the unwinding.
+> + * @pc : program counter at which to start the unwinding.
+> + *
+> + * Save the unwinded stack addresses to the shared stacktrace buffer.
+> + * The host can access this shared buffer from EL1 to dump the backtrace.
+> + */
+> +static void pkvm_save_backtrace(unsigned long fp, unsigned long pc)
+> +{
+> +       struct unwind_state state;
+> +       int idx = 0;
+> +
+> +       kvm_nvhe_unwind_init(&state, fp, pc);
+> +
+> +       unwind(&state, pkvm_save_backtrace_entry, &idx);
+> +}
+> +#else /* !CONFIG_PROTECTED_NVHE_STACKTRACE */
+> +static void pkvm_save_backtrace(unsigned long fp, unsigned long pc)
+> +{
+> +}
+>  #endif /* CONFIG_PROTECTED_NVHE_STACKTRACE */
+> +
+> +/*
+> + * kvm_nvhe_prepare_backtrace - prepare to dump the nVHE backtrace
+> + *
+> + * @fp : frame pointer at which to start the unwinding.
+> + * @pc : program counter at which to start the unwinding.
+> + *
+> + * Saves the information needed by the host to dump the nVHE hypervisor
+> + * backtrace.
+> + */
+> +void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
+> +{
+> +       if (is_protected_kvm_enabled())
+> +               pkvm_save_backtrace(fp, pc);
+> +}
+> diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+> index 6db801db8f27..64e13445d0d9 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/switch.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+> @@ -34,6 +34,8 @@ DEFINE_PER_CPU(struct kvm_host_data, kvm_host_data);
+>  DEFINE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
+>  DEFINE_PER_CPU(unsigned long, kvm_hyp_vector);
+>
+> +extern void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc);
+> +
+>  static void __activate_traps(struct kvm_vcpu *vcpu)
+>  {
+>         u64 val;
+> @@ -375,6 +377,10 @@ asmlinkage void __noreturn hyp_panic(void)
+>                 __sysreg_restore_state_nvhe(host_ctxt);
+>         }
+>
+> +       /* Prepare to dump kvm nvhe hyp stacktrace */
+> +       kvm_nvhe_prepare_backtrace((unsigned long)__builtin_frame_address(0),
+> +                                  _THIS_IP_);
+> +
+>         __hyp_do_panic(host_ctxt, spsr, elr, par);
+>         unreachable();
+>  }

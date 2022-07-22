@@ -2,182 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E32057DF5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F6A57DF79
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 12:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiGVKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 06:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
+        id S234652AbiGVKKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 06:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbiGVKKI (ORCPT
+        with ESMTP id S229538AbiGVKKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:10:08 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFA3BC3;
-        Fri, 22 Jul 2022 03:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=I/TeU7vG/TCOeE+ZVogJWf8GrihqAvOKUnOuXWXxgFM=; b=gpVqBUulvPzgezoxNMRIKP2SGb
-        drQsSP3WP7roNnSXfozLzw/HXwmUhHl6WR2lUaAps63KJzLx0TCnLASXZnAIJx5SMuck8cObaFgwM
-        vzNPCbt4GJj5qOJ0FNb6uENG4gEuaeddmhI1bzhN8Qvm5XmcSt1pUYwjtTd9pY24AQqRo+ZlMWZ2G
-        y99Xl5/V7lmuCggMcxw2zEVQ64M5+9T5f94ZWp5/hDP0Q+plfcZ+LTNEBZCf9z9divaWjTeC5pZq8
-        dBxbIZfpbkmwsfJuTRIfnH42EIveQsG7kzEO/AKy5VXUsmtfJxrEhfTupUaMsNT9hafFmCf91agHB
-        hpDb90ng==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33504)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oEpbc-0006lj-R2; Fri, 22 Jul 2022 11:10:00 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oEpba-0005k8-67; Fri, 22 Jul 2022 11:09:58 +0100
-Date:   Fri, 22 Jul 2022 11:09:58 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [Patch net-next v1 3/9] net: dsa: microchip: add common duplex
- and flow control function
-Message-ID: <Ytp3dl5l9jkp94lU@shell.armlinux.org.uk>
-References: <20220722092459.18653-1-arun.ramadoss@microchip.com>
- <20220722092459.18653-4-arun.ramadoss@microchip.com>
+        Fri, 22 Jul 2022 06:10:47 -0400
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E7FD193ED
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 03:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=naYs/
+        0hvcPG1kmcd0zhyIiSbdDvvP+aOMnYV8xDrKUI=; b=PPNUMLYTVaGrOvvR+47dU
+        /xTGgrK03+glV+mk7jz6zN6x5qjE0au5TAtoryrl9s2i2oyJM/2witl0ZmrS26JD
+        iCVkZJOKpVdvVapMA9kYL0GKZawqlz49WxpI4+xJ7yIPfWZCCm/K2uQSD8VF1cSp
+        apiXl1fE6XxjLgNZo7xTJA=
+Received: from localhost.localdomain (unknown [112.97.59.29])
+        by smtp5 (Coremail) with SMTP id HdxpCgDn7zujd9piHZy5Pg--.21851S2;
+        Fri, 22 Jul 2022 18:10:45 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.orgg,
+        Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] fs: Fix typo 'the the' in comment
+Date:   Fri, 22 Jul 2022 18:10:41 +0800
+Message-Id: <20220722101041.80370-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722092459.18653-4-arun.ramadoss@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgDn7zujd9piHZy5Pg--.21851S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWUAr4kWrWDGw17XF1UZFb_yoW3WFg_A3
+        Z7Jw4I9w4YvF1Igw47A3WSqF4Fg3yrCF15XF4rJr9Fvas5ZrsI93Z3tFWUta1rWr17GF15
+        W3Zagw1rZw13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRtzuX3UUUUU==
+X-Originating-IP: [112.97.59.29]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivwVGZFWB0j0lkQAAsX
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Replace 'the the' with 'the' in the comment.
 
-On Fri, Jul 22, 2022 at 02:54:53PM +0530, Arun Ramadoss wrote:
-> +void ksz_set_fullduplex(struct ksz_device *dev, int port, bool val)
-> +{
-> +	const u8 *bitval = dev->info->xmii_ctrl0;
-> +	const u16 *regs = dev->info->regs;
-> +	u8 data8;
-> +
-> +	ksz_pread8(dev, port, regs[P_XMII_CTRL_0], &data8);
-> +
-> +	data8 &= ~P_MII_DUPLEX_M;
-> +
-> +	if (val)
-> +		data8 |= FIELD_PREP(P_MII_DUPLEX_M,
-> +				    bitval[P_MII_FULL_DUPLEX]);
-> +	else
-> +		data8 |= FIELD_PREP(P_MII_DUPLEX_M,
-> +				    bitval[P_MII_HALF_DUPLEX]);
-> +
-> +	ksz_pwrite8(dev, port, regs[P_XMII_CTRL_0], data8);
-> +}
-> +
-> +void ksz_set_tx_pause(struct ksz_device *dev, int port, bool val)
-> +{
-> +	const u32 *masks = dev->info->masks;
-> +	const u16 *regs = dev->info->regs;
-> +	u8 data8;
-> +
-> +	ksz_pread8(dev, port, regs[P_XMII_CTRL_0], &data8);
-> +
-> +	if (val)
-> +		data8 |= masks[P_MII_TX_FLOW_CTRL];
-> +	else
-> +		data8 &= ~masks[P_MII_TX_FLOW_CTRL];
-> +
-> +	ksz_pwrite8(dev, port, regs[P_XMII_CTRL_0], data8);
-> +}
-> +
-> +void ksz_set_rx_pause(struct ksz_device *dev, int port, bool val)
-> +{
-> +	const u32 *masks = dev->info->masks;
-> +	const u16 *regs = dev->info->regs;
-> +	u8 data8;
-> +
-> +	ksz_pread8(dev, port, regs[P_XMII_CTRL_0], &data8);
-> +
-> +	if (val)
-> +		data8 |= masks[P_MII_RX_FLOW_CTRL];
-> +	else
-> +		data8 &= ~masks[P_MII_RX_FLOW_CTRL];
-> +
-> +	ksz_pwrite8(dev, port, regs[P_XMII_CTRL_0], data8);
-> +}
-> +
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ include/linux/fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Having looked through all the proposed patches and noticed that these
-three functions are always called serially. What is the reason to make
-these separate functions which all read the same register, modify a
-single bit, and then write it back.
-
-What we end up with is the following sequence:
-
-- read P_XMII_CTRL_0
-- udpate P_MII_HALF_DUPLEX bit
-- write P_XMII_CTRL_0
-- read P_XMII_CTRL_0
-- update P_MII_TX_FLOW_CTRL bit
-- write P_XMII_CTRL_0
-- read P_XMII_CTRL_0
-- update P_MII_RX_FLOW_CTRL bit
-- write P_XMII_CTRL_0
-
-whereas the original code did:
-
-- read P_XMII_CTRL_0
-- udpate P_MII_HALF_DUPLEX, P_MII_TX_FLOW_CTRL and P_MII_RX_FLOW_CTRL
-  bits
-- write P_XMII_CTRL_0
-
-which was much more efficient, not only in terms of CPU cycles, but also
-IO cycles and code size.
-
-You could do this instead:
-
-	u8 mask, val, ctrl0;
-
-	mask = P_MII_DUPLEX_M | masks[P_MII_TX_FLOW_CTRL] |
-	       masks[P_MII_RX_FLOW_CTRL];
-
-	if (duplex == DUPLEX_FULL)
-		val = FIELD_PREP(P_MII_DUPLEX_M, bitval[P_MII_FULL_DUPLEX]);
-	else
-		val = FIELD_PREP(P_MII_DUPLEX_M, bitval[P_MII_HALF_DUPLEX]);
-
-	if (tx_pause)
-		val |= masks[P_MII_TX_FLOW_CTRL];
-	
-	if (rx_pause)
-		val |= masks[P_MII_RX_FLOW_CTRL];
-	
-	ksz_pread8(dev, port, REG_PORT_XMII_CTRL_0, &ctrl0);
-	ctrl0 = (ctrl0 & ~mask) | val;
-	ksz_pwrite8(dev, port, REG_PORT_XMII_CTRL_0, ctrl0);
-
-and maybe convert that last three lines into a helper, ksz_pmodify8()
-which could be useful in other parts of the driver where you do a
-read-modify-write operation on a register.
-
-Thanks.
-
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index f0f71d93e24f..f2a1aefbbce4 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -3070,7 +3070,7 @@ extern void evict_inodes(struct super_block *sb);
+ void dump_mapping(const struct address_space *);
+ 
+ /*
+- * Userspace may rely on the the inode number being non-zero. For example, glibc
++ * Userspace may rely on the inode number being non-zero. For example, glibc
+  * simply ignores files with zero i_ino in unlink() and other places.
+  *
+  * As an additional complication, if userspace was compiled with
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.25.1
+

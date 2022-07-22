@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5162057EA1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 01:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914B557EA1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 01:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236133AbiGVXCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 19:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
+        id S236815AbiGVXC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 19:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGVXCq (ORCPT
+        with ESMTP id S236451AbiGVXCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 19:02:46 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4799A3DBFA
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:02:45 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id p10-20020a170902e74a00b0016c3f3acb51so3281781plf.16
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:02:45 -0700 (PDT)
+        Fri, 22 Jul 2022 19:02:53 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7D485FA0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:02:51 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31e559f6840so49094857b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 16:02:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=Gvp/73vL/wYhHUzfrA+ck8Wczuy8shTz34sZSNOpQKg=;
-        b=WK6X/HCymmMhe2Mzd8y2j/58pke48wRYsfxle5do6yBeImKUe6NkD1aWKlMeNUj7eb
-         qWztqrOhJgl7pnatCMNFALGK7dHBwY/h1nASnlRM/fe17TSspBkw8QWN6tyDjBfmhCEu
-         d1hJ+CtoqxFPFmfNWnORIJGDtSd6Xo05giuWFq9l1DhKZTAqBT1rg0E1B73qi7KXyJ9I
-         rSc1QxV0JZG5O451pH8VmHxqvTP1mq9dr+Uyk69Hkff9G8OlSF0zf526obnMe2njXfcl
-         Rt1LZtwQ3yB3eyJEnJdjo2cgxlh4NX7kOYQ/AHxHFd7/64TiVjCWK/jGeI/rHGb1to1S
-         tOzg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=FiHaCQhNDin1qEUasBSBeGavty7GfFuR81E7xhz62HI=;
+        b=c1rAayLK7iuzyanIxPd2s407NjMvZS1gAWHbj2TnvKwoSzsJmhT2/rBhCxrzweD5bv
+         goe/abBy7tIHD2PSW9W9YnBYWHFtXFPEamWfSvSBZq2LF7vTzdC7PyirE6re1S8KkYnZ
+         1AJn7Tt3KERZ2wW11owVtqmqOZlc0m6dMwpkpTXh+j1tK0hRBz29NOXYSq0Ytm9thELs
+         gN8CHKC3AqZVebQZ86fJSV7cGNQw6305dLKxSNP9nt7krqnR1itpC6y2U7KVV1R8MlAy
+         e73WJF8p/Qw4XVS91CV+aHr0vsi6LVWd59DTfIH6QGon7pVTvQDEz98LU2Oh2LHM2NzL
+         fBvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=Gvp/73vL/wYhHUzfrA+ck8Wczuy8shTz34sZSNOpQKg=;
-        b=E/9v6W63adJkk2VCL9AGC1op5Im3KLT3ydqcl/3EP/aAFXrMeKGZftoxKUgJiHEcPL
-         9ft+d6F01bOIHkbvvObu+r1BS6G3bDUx+bXKr6latLRpwutGPN0Lqkcyr0J0LnAwENH3
-         nESoO0UhAlydiGeW8AtCTTbvMm0rFqHHhX943qKtOTdZ/WSs7tcpc947RdXuOmUcw10R
-         L11sv5XvvpWCe01AO9W8wzztUtHRjH6IlPUBuQMl2z/uhTEgBTNFd8zhlL5th7YwdNMR
-         a7iYoaOFunWx9N2d4c5mMVrz3R/ENGQETQ9sryJQ2k1NstFpO6OFJLk6zBmZMCEotlO0
-         ELwg==
-X-Gm-Message-State: AJIora/V2Wfx3+22vin01ILism86uLg5heAyftv6OtBBkpWUXMIqwjfz
-        gBxRJK8qw6BZ6umfLVndfK/j9hQB3Bg=
-X-Google-Smtp-Source: AGRyM1tBuelDgbLuw8EGH0svy/Xr5MelYsBuu3cp1RWIhrClKaHTLWQWU8s8jF0YKIuNJ/zuupLH1FGBQsQ=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=FiHaCQhNDin1qEUasBSBeGavty7GfFuR81E7xhz62HI=;
+        b=IvEctyyqydgF9lBsWLkGbRaeS+a9yEv+5vRNf+GsXMKglvPOXSI7H2AiHx1SoGhzrF
+         U31WTxW2BRHkW8w6mvHpSXtw/LnRsicr3DX5HheAkiPeYKTQ6W0dMPxlFAm92sc0txKo
+         ATMi7vdSPSPQ2KosD+9aF4DQ2HkeCH3DEaGzvSoLxPUvKIr5Ycwg87VWa1cJJQ6biCil
+         twmqGWzW2tWVqeAm8ZekkokjcMGx9mjoA59nm9O5GGVRO6Vjyo6AaQoSDSc+DNswliYj
+         yFllNYPAtBtkskFl+mHeyXAleQeJkPEVKPx/gNPAzvZXcBlCw9JgYM8ygm8Rs08nFCT5
+         vPpw==
+X-Gm-Message-State: AJIora980lVEVuCG0voA1eZgGVkvCAz8PsUWXBjezYqVZ15HtP0/jx3q
+        P2MNzR0gyYGSYlDSaEoQOjjQ58//eQA=
+X-Google-Smtp-Source: AGRyM1t+zExx1lMHouATchHS9iV5z5PPTi5UzQWlQv/TLkhoMSChcKNIDdA7jkdLJ9eLFt4X/Rtsejoq1PI=
 X-Received: from avagin.kir.corp.google.com ([2620:15c:29:204:5863:d08b:b2f8:4a3e])
- (user=avagin job=sendgmr) by 2002:aa7:9e9b:0:b0:528:2948:e974 with SMTP id
- p27-20020aa79e9b000000b005282948e974mr1941123pfq.79.1658530964856; Fri, 22
- Jul 2022 16:02:44 -0700 (PDT)
-Date:   Fri, 22 Jul 2022 16:02:36 -0700
-Message-Id: <20220722230241.1944655-1-avagin@google.com>
+ (user=avagin job=sendgmr) by 2002:a25:7e42:0:b0:670:9c92:d1ab with SMTP id
+ z63-20020a257e42000000b006709c92d1abmr1933632ybc.638.1658530971110; Fri, 22
+ Jul 2022 16:02:51 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 16:02:37 -0700
+In-Reply-To: <20220722230241.1944655-1-avagin@google.com>
+Message-Id: <20220722230241.1944655-2-avagin@google.com>
 Mime-Version: 1.0
+References: <20220722230241.1944655-1-avagin@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
+Subject: [PATCH 1/5] kernel: add a new helper to execute system calls from
+ kernel code
 From:   Andrei Vagin <avagin@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
@@ -63,7 +66,6 @@ Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         Konstantin Bogomolov <bogomolov@google.com>,
         Etienne Perot <eperot@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
@@ -74,95 +76,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a class of applications that use KVM to manage multiple address
-spaces rather than use it as an isolation boundary. In all other terms,
-they are normal processes that execute system calls, handle signals,
-etc. Currently, each time when such a process needs to interact with the
-operation system, it has to switch to host and back to guest. Such
-entire switches are expensive and significantly increase the overhead of
-system calls. The new hypercall reduces this overhead by more than two
-times.
+This helper will be used to implement a kvm hypercall to call host
+system calls.
 
-The new hypercall runs system calls on the host.  As for native system
-calls, seccomp filters are executed before system calls. It takes one
-argument that is a pointer to a pt_regs structure in the host address
-space. It provides registers to execute a system call according to the
-calling convention. Arguments are passed in %rdi, %rsi, %rdx, %r10, %r8
-and %r9 and a return code is stored in %rax.=C2=A0
+The new helper executes seccomp rules and calls trace_sys_{enter,exit}
+hooks. But it intentionally doesn't call ptrace hooks because calling
+syscalls are not linked with the current process state.
 
-The hypercall returns 0 if a system call has been executed. Otherwise,
-it returns an error code.
+Signed-off-by: Andrei Vagin <avagin@google.com>
+---
+ arch/x86/entry/common.c        | 50 ++++++++++++++++++++++++++++++++++
+ arch/x86/include/asm/syscall.h |  1 +
+ 2 files changed, 51 insertions(+)
 
-This series introduces a new capability that has to be set to enable the
-hypercall. The new hypercall is a backdoor for regular virtual machines,
-so it is disabled by default. There is another standard way to allow
-hypercalls via cpuid. It has not been used because one of the common
-ways to manage them is to request all available features and let them
-all together. In this case, it is a hard requirement that the new
-hypercall can be enabled only intentionally.
-
-=3D Background =3D
-
-gVisor is one such application. It is an application kernel written in
-Go that implements a substantial portion of the Linux system call
-interface. gVisor intercepts application system calls and acts as the
-guest kernel. It has a platform abstraction that implements interception
-of syscalls, basic context switching, and memory mapping functionality.
-Currently, it has two platforms: ptrace and KVM.
-
-The ptrace platform uses PTRACE_SYSEMU to execute user code without
-allowing it to perform host system calls, and it creates stub processes
-to manage user address spaces. This platform is primarily for testing
-needs due to its bad performance.
-
-Another option is the KVM platform. In this case, the Sentry (gVisor
-kernel) can run in a guest ring0 and create/manage multiple address
-spaces. Its performance is much better than the ptrace one, but it is
-still not great compared with the native performance. This change
-optimizes the most critical part, which is the syscall overhead.  The
-idea of using vmcall to execute system calls isn=E2=80=99t new. Two large u=
-sers
-of gVisor (Google and AntFinacial) have out-of-tree code to implement
-such hypercalls.
-
-In the Google kernel, we have a kvm-like subsystem designed especially
-for gVisor. This change is the first step of integrating it into the KVM
-code base and making it available to all Linux users.
-
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Wanpeng Li <wanpengli@tencent.com>
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc: Jianfeng Tan <henry.tjf@antfin.com>
-Cc: Adin Scannell <ascannell@google.com>
-Cc: Konstantin Bogomolov <bogomolov@google.com>
-Cc: Etienne Perot <eperot@google.com>
-
-Andrei Vagin (5):
-  kernel: add a new helper to execute system calls from kernel code
-  kvm: add controls to enable/disable paravirtualized system calls
-  KVM/x86: add a new hypercall to execute host system calls.
-  selftests/kvm/x86_64: set rax before vmcall
-  selftests/kvm/x86_64: add tests for KVM_HC_HOST_SYSCALL
-
- Documentation/virt/kvm/x86/hypercalls.rst     |  15 ++
- arch/x86/entry/common.c                       |  48 ++++++
- arch/x86/include/asm/syscall.h                |   1 +
- arch/x86/include/uapi/asm/kvm_para.h          |   2 +
- arch/x86/kvm/cpuid.c                          |  25 +++
- arch/x86/kvm/cpuid.h                          |   8 +-
- arch/x86/kvm/x86.c                            |  37 +++++
- include/uapi/linux/kvm.h                      |   1 +
- include/uapi/linux/kvm_para.h                 |   1 +
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/x86_64/processor.h  |   4 +
- .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
- .../kvm/x86_64/kvm_pv_syscall_test.c          | 145 ++++++++++++++++++
- 14 files changed, 289 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86_64/kvm_pv_syscall_test.=
-c
-
---=20
-2.37.0.rc0.161.g10f37bed90-goog
+diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
+index 6c2826417b33..7f4c172a9a4e 100644
+--- a/arch/x86/entry/common.c
++++ b/arch/x86/entry/common.c
+@@ -19,6 +19,7 @@
+ #include <linux/nospec.h>
+ #include <linux/syscalls.h>
+ #include <linux/uaccess.h>
++#include <trace/events/syscalls.h>
+ 
+ #ifdef CONFIG_XEN_PV
+ #include <xen/xen-ops.h>
+@@ -37,6 +38,55 @@
+ 
+ #ifdef CONFIG_X86_64
+ 
++/*
++ * do_ksyscall_64 executes a system call. This helper can be used from the
++ * kernel code.
++ */
++bool do_ksyscall_64(int nr, struct pt_regs *regs)
++{
++	struct task_struct *task = current;
++	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
++	/*
++	 * Convert negative numbers to very high and thus out of range
++	 * numbers for comparisons.
++	 */
++	unsigned int unr = nr;
++
++#ifdef CONFIG_IA32_EMULATION
++	if (task->thread_info.status & TS_COMPAT)
++		return false;
++#endif
++
++	if (work & SYSCALL_WORK_SECCOMP) {
++		struct seccomp_data sd;
++		unsigned long args[6];
++
++		sd.nr = nr;
++		sd.arch = AUDIT_ARCH_X86_64;
++		syscall_get_arguments(task, regs, args);
++		sd.args[0] = args[0];
++		sd.args[1] = args[1];
++		sd.args[2] = args[2];
++		sd.args[3] = args[3];
++		sd.args[4] = args[4];
++		sd.args[5] = args[5];
++		sd.instruction_pointer = regs->ip;
++		if (__secure_computing(&sd) == -1)
++			return false;
++	}
++
++	if (likely(unr >= NR_syscalls))
++		return false;
++
++	unr = array_index_nospec(unr, NR_syscalls);
++
++	trace_sys_enter(regs, unr);
++	regs->ax = sys_call_table[unr](regs);
++	trace_sys_exit(regs, syscall_get_return_value(task, regs));
++	return true;
++}
++EXPORT_SYMBOL_GPL(do_ksyscall_64);
++
+ static __always_inline bool do_syscall_x64(struct pt_regs *regs, int nr)
+ {
+ 	/*
+diff --git a/arch/x86/include/asm/syscall.h b/arch/x86/include/asm/syscall.h
+index 5b85987a5e97..6cde1ddeb50b 100644
+--- a/arch/x86/include/asm/syscall.h
++++ b/arch/x86/include/asm/syscall.h
+@@ -126,6 +126,7 @@ static inline int syscall_get_arch(struct task_struct *task)
+ 		? AUDIT_ARCH_I386 : AUDIT_ARCH_X86_64;
+ }
+ 
++bool do_ksyscall_64(int nr, struct pt_regs *regs);
+ void do_syscall_64(struct pt_regs *regs, int nr);
+ void do_int80_syscall_32(struct pt_regs *regs);
+ long do_fast_syscall_32(struct pt_regs *regs);
+-- 
+2.37.1.359.gd136c6c3e2-goog
 

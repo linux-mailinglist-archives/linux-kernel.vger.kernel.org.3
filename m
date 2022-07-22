@@ -2,26 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6705457E946
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840B857E957
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 23:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbiGVVzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 17:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S236741AbiGVV4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 17:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236447AbiGVVzZ (ORCPT
+        with ESMTP id S236566AbiGVVzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 17:55:25 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1DCDE9C;
-        Fri, 22 Jul 2022 14:55:23 -0700 (PDT)
+        Fri, 22 Jul 2022 17:55:32 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB83C22534;
+        Fri, 22 Jul 2022 14:55:31 -0700 (PDT)
 Received: from toolbox.int.toradex.com ([81.221.243.92]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MKpGg-1oF0bu47CS-0006R2;
- Fri, 22 Jul 2022 23:55:03 +0200
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MQ4Bx-1o9loQ1lch-005LdP;
+ Fri, 22 Jul 2022 23:55:05 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -30,33 +29,33 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 02/12] ARM: dts: imx6qdl-mba6: don't use multiple blank lines
-Date:   Fri, 22 Jul 2022 23:54:35 +0200
-Message-Id: <20220722215445.3548530-3-marcel@ziswiler.com>
+Subject: [PATCH v2 03/12] ARM: dts: imx6qdl: phytec: no spaces at start of line, indent use tabs
+Date:   Fri, 22 Jul 2022 23:54:36 +0200
+Message-Id: <20220722215445.3548530-4-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220722215445.3548530-1-marcel@ziswiler.com>
 References: <20220722215445.3548530-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:HgVZp8uugr991YsIEXxXp+Nn0wfyTlePiZbW0uG2yqq6p7Y28kt
- 0A5hbIjYpM5SZBtsSNJM2Z8Lqu1iXLaDt0ssNh41o+Gisw/YIsyZzBsILe13lr4Z9ZsAcjf
- C1FoB/2nyDXEmqYr5fFxDkWokJrD7EvPXELPSxrdtrmmanX2NsCQieEpX141D6teCxn8ybB
- mWvkXZglP/WPXf5ewxavw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5h1ru4zxD+U=:KGil5eeBEbOdV5YYlz2yyA
- cmScE2zSdaXqceIiW223AFu0te/IAUNsp+nuq8WpCwHq/OMOARo3ln9VKhKRiVCAIhnIjhgm7
- a6eU26q7vdeaG3+dNIZwwHojJmdgfZOEoV1KB0twM/OxNWD26Z9LJ1blHfncAqARjWDdzOwqT
- LZ6PFrC3GsTn05wixcpsXfNjYjToSIMkKvbhxn5barXnQyVq6jN/cct9n3BbA8N58oB+xPdE3
- pe3m7HBc93ntHVWPwdCGXtzWMwx+36DBfeMcxD9hIcXuXNoJVgqUxq9y1gzARNHK4wOJw9KYC
- PLKiHRNCaW/kO6PzEPRsFnxZZ27vb0Plal9bzRwfmz4lnZjA9CEFUnEuRY1d9CubHqkL5Uzxy
- xVDuurukHgv4i5y23JAT2/MGIUodCU/io/t1pXnUro/qGzRYOjsAGUd+VFxielZqHHU9Qficj
- 36Q4+rVWyNM5nX1gikvbT2y98snuLB6qcKd1JcmPhbrG9DQV+7+VU+jaXmnoX0YWR1punRvbh
- IhrY3zP+YKgD1F9gjYZvuWCgFVxRENig5sQ8rvB3rMO6G51iRPmgs27c4tpTvraIHStQcLhr2
- zX//3msI44vawcolqOp0ubm2qGGenfMxb0Y8U3Jmj8hgVzh7e5WJe7+DsaLyYRoth8kbxoI5M
- fC1F0gb8oaVJlA4MSy+8dgHa1ZTO/ytb1UDXvIksN+n8VSZWhh1pFkKNqjDG0sZMdp3YPAYUE
- qli0ZrTxiAQCOlzUh6Hmo5zd3u9Zt9wTmrcFAKmAbwab3IRjOYFDtuQBoHw=
+X-Provags-ID: V03:K1:brHYG2L9NnoyFfSRkD8nkD5k6dEkGXl1svX1O//cLM2WspZ/PM+
+ v/mmP1oVLZSDqCqA9eMYbFqATqSO9Y44s+V5zf3odldeGekPnp+Vkv0tmCxCUnbq/F9tigP
+ fo/yVbP2B1mURu71c6F+7scYnRztMwGtXpVtUuZhNFTmDXrKgeDM2gCEcpcns0IjG3P2WFw
+ 1BsAanmglNq19xqosgnhg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:L2PI+EvTnWk=:SWd/nPPBdRXpU19rJrrdww
+ JhxExYVDFkrhMCbl1d9eByvGnGs2KwxMo0ihGVEZSbJgIbv5PCtyFRddFooEOwImFS2GApv5/
+ QfF3UxHZqapxQddvVDQH5/lSSlseN0BOYrektRex5LfmWYIGd5E76/gq99JkfEyI1fbaFt6rb
+ 449EpQQYmPR7rA2BE9uFESRLBUPUWqDT25WyWRm28PssjbryLgIexqXM4jEJHogAvdW/OYk/E
+ WWSTWffUu2cpPd5tvQQBtT/iCeUSCpDOcUwmbhwsvb/TYmGkRPWBu0npzefQzHFjgCjbZe5n+
+ 5RvvGaIe+PfnfdUk4t6ho8ZCIH0hvBmTDmTeSFDPi2mhC8SKwpBjxhT6NFiUbg7Z7ck7G2PGF
+ nG9FwDkaTImaCbXJ5bdcgkSHY2SbdwxZWBZNwk4LYWlFYw6TAfVEPRkq+XL/bTDv55DRTBZ+x
+ hY1HrD0WIoO7eW6R/QFhVRysny0ptkjnUBwtQIX2RYNOk4PREyyQDd34zIhZdlvJFha/wzMjr
+ HTqpHEvVG0h1tsh4lwiKxrIG+mgETqk65hIdelJbRr9UZFid9kF5iPn+n8YHQOQMAkPxe1Rgv
+ inojuiEklLvX2OOAvwTIFFwcBzzwLU5UrHj0sD6S96aeQTWu627pqzMR0cNTe5Lm19mi+frFi
+ uxKwrGhVAcipKNFdn/FX4vBmKGbxF/1kqt4u8ZQwHEQn4JggFaLFZFqp7XZlS0Hlb+7KmvIgV
+ WIpkDk71kK473O6i786JrmzuK4SyEW+opBqdA5y5WYQ+cHD2CvQGQyNMMhg=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,34 +64,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Avoid the following checkpatch warning:
+Avoid the following checkpatch warnings:
 
-arch/arm/boot/dts/imx6qdl-mba6.dtsi:247: check: Please don't use
- multiple blank lines
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-av-02.dtsi:67: error: code
+ indent should use tabs where possible
+arch/arm/boot/dts/imx6qdl-phytec-mira-peb-av-02.dtsi:67: warning:
+ please, no spaces at the start of a line
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
 ---
 
-Changes in v2:
-- Add Alexander's acked-by. Thanks!
+(no changes since v1)
 
- arch/arm/boot/dts/imx6qdl-mba6.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/boot/dts/imx6qdl-phytec-mira-peb-av-02.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-mba6.dtsi b/arch/arm/boot/dts/imx6qdl-mba6.dtsi
-index f4dca20669d6..78555a618851 100644
---- a/arch/arm/boot/dts/imx6qdl-mba6.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-mba6.dtsi
-@@ -244,7 +244,6 @@ &uart2 {
- 	status = "okay";
+diff --git a/arch/arm/boot/dts/imx6qdl-phytec-mira-peb-av-02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-mira-peb-av-02.dtsi
+index 393475cb0f4d..0020dbb1722c 100644
+--- a/arch/arm/boot/dts/imx6qdl-phytec-mira-peb-av-02.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-phytec-mira-peb-av-02.dtsi
+@@ -64,7 +64,7 @@ edt_ft5x06: touchscreen@38 {
+ 		interrupt-parent = <&gpio3>;
+ 		interrupts = <2 IRQ_TYPE_NONE>;
+ 		status = "disabled";
+-        };
++	};
  };
  
--
- &uart3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart3>;
+ &ipu1_di0_disp0 {
 -- 
 2.35.1
 

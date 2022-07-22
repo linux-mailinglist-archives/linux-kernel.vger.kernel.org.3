@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B328F57E1DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1994357E1DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 15:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbiGVNEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 09:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49290 "EHLO
+        id S235307AbiGVNEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 09:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234435AbiGVNEB (ORCPT
+        with ESMTP id S235198AbiGVNEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:04:01 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01162AF949;
-        Fri, 22 Jul 2022 06:04:01 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id a23so5143311lfm.10;
-        Fri, 22 Jul 2022 06:04:00 -0700 (PDT)
+        Fri, 22 Jul 2022 09:04:02 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F860AF87C;
+        Fri, 22 Jul 2022 06:04:02 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id z22so7540410lfu.7;
+        Fri, 22 Jul 2022 06:04:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gtx1POFQfGcm6rMrqG9zNaho/uQFWTyjs4Tf3lJFOcg=;
-        b=fJ4TxTo8srrpzKU87PviIHDVWYPWfk5KEqerQY7surMDSJcklaqAfJU/cYN4vA/QVo
-         6pfF1uFiHXk7SdsVl0D+pKyH8KDXPqzZ39G05Nb2uoCiMVNDw/Pk5hmD0nG5ILpwb4Lb
-         /m9JwBh5X+rEXlzmKnc3AJa15q3DHY2CgaI+ALCAA9SsJvY/Wdsq45eMsSjOQBMNDZnA
-         wPRaaDHJJVLFSvfkNLTgELT2n4uHVPFIAs9Az+RdyVkh2vSb8eQ4TP/LoVkdvXOkX9yP
-         Lt1BS+8l2rz4k+nqU1hX9gjVrSPIwHUS3IuoFH88mad3eiMaRSal4306btU9C19AD6PW
-         Kw6w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=mqpNQIvQ4UFsQ79e0nCaBDrArkXcARxy0hgxZyWDOKM=;
+        b=QK5I9K0SkBTkC+qKkrxU9HL4SH5j2qXYf2qTNB0XJzYdsjeKH7XTHxHlXwj0OGTy54
+         Zp0T8PuSmzKrbmSlcNPKqS6UMMhwrvGl8Rtv6Hcp8y22eG1W7X9WLLVeeDOGjKte2U5L
+         StEdDx1Kff+jR3zHtm9MPfIrNeHUNVx7DOzvYkOfr6TCkHhznNe31A+fHEzLdpzsyZCp
+         +Z/azhxW10Z3iVIK+t93xYm+ERFoMmqVaYywp0IDoBgZlbqNflC6YuPcnjZaAs9/fKNO
+         i4/xgTWRpb7ZBkN7xuYsFoc0h51c6qDj/8Tsc1dfIa1jRo+U8vEcZ1kpYBx4xRXo0Lw/
+         gtIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gtx1POFQfGcm6rMrqG9zNaho/uQFWTyjs4Tf3lJFOcg=;
-        b=HCZCs98YFIZjJXno1kXk7QU2xE+1IgBnjPZp8Zd3KZKFgfhoaSQ/u7IY3CiViMnYJp
-         w8tmaWmkYLIeWUgsWaSr6LwwwMnOnyw7AEmpimrxBJXICp5CaOFd/nnQK36oxIDatjc+
-         QyHKh4vshpKs4A8UaIUtiMkbYEjgICmF3WATnK8iKaD6/Xa1hV/TFl1HAjDTyEFhSxUS
-         3HVATIJZOHoU+8cfGt3UVr4ad9QC5B7xSv90u7gr9Evx13+RYylVDctzIQdoXmeRQy2z
-         niCMpzdArczsUMgS9jSrLAMkMzcGWsKj+6/q9Jmg5q16yj4tQGqB9vVa8i0tADjilKi9
-         ubkQ==
-X-Gm-Message-State: AJIora+hSjt1+HGgzQO7w6+2GG3pE5oAafuhyGw3ASDILmGXMZuCIjAd
-        ZeRdYs+CEG9H7Ok0jhZtzfo=
-X-Google-Smtp-Source: AGRyM1sESBw/ngj8wF18Z6xJhKlZwLijIJqWMren1QpYZ+ohaNUhCpGPBjRDGSJ61Mtm1iQbMd/yTw==
-X-Received: by 2002:ac2:530b:0:b0:486:6982:5ab5 with SMTP id c11-20020ac2530b000000b0048669825ab5mr193269lfh.138.1658495039206;
-        Fri, 22 Jul 2022 06:03:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mqpNQIvQ4UFsQ79e0nCaBDrArkXcARxy0hgxZyWDOKM=;
+        b=JShJi02c/M6v8EOrX/4ZoViwsqCjMkXudUu1HgIlXBNff1be9nGKybmpRb38uVw3+r
+         qCidUYjEhHZEXnbvPngUEsNq4mShZOqzmHf1eyJYP0eQoGrnxVCf5q7SvCjzKPqldDtZ
+         FxVvzhaibwfbQp/ZVCLbnLI5Zv0YYWKaNHpTxzcsPEWd0hk77Lo4O3tG1JFuChNdPD5F
+         ZwowEC20FFSH3sjYz3T8IWQgHYdQYumEmY3WFp1pImhPiyJD86LBoiqK2qVr143+8wqi
+         rlFVh7BRV0y1jDjuqoK4CtPEWWDwX0jqC/nUHfEOhwibJE2NRwtVQdGngY9LhJz+3MfM
+         jSKQ==
+X-Gm-Message-State: AJIora8ZWES4C/TIcVE8koX8ayY5R7dwax5fhE3LqyBKPxtutImiQEM1
+        uI2/O/TlnQ5q99Be/+nx/3A=
+X-Google-Smtp-Source: AGRyM1tadi/g4Nz573WLxQA6eU9xz8pa1F6BWQQQkXtEK0Pye2b3OdmE6QcQN9a9rBtJvkfCzIpKfQ==
+X-Received: by 2002:a05:6512:22c2:b0:485:8c7a:530d with SMTP id g2-20020a05651222c200b004858c7a530dmr170384lfu.459.1658495040364;
+        Fri, 22 Jul 2022 06:04:00 -0700 (PDT)
 Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id s18-20020a056512203200b004786d37229csm1039673lfs.155.2022.07.22.06.03.57
+        by smtp.gmail.com with ESMTPSA id s18-20020a056512203200b004786d37229csm1039673lfs.155.2022.07.22.06.03.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 06:03:58 -0700 (PDT)
+        Fri, 22 Jul 2022 06:03:59 -0700 (PDT)
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Kent Gustavsson <kent@minoris.se>,
@@ -58,10 +58,12 @@ To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/9] Improve MCP3911 driver
-Date:   Fri, 22 Jul 2022 15:07:17 +0200
-Message-Id: <20220722130726.7627-1-marcus.folkesson@gmail.com>
+Subject: [PATCH v4 1/9] iio: adc: mcp3911: make use of the sign bit
+Date:   Fri, 22 Jul 2022 15:07:18 +0200
+Message-Id: <20220722130726.7627-2-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220722130726.7627-1-marcus.folkesson@gmail.com>
+References: <20220722130726.7627-1-marcus.folkesson@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,41 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The device supports negative values as well.
 
-This patch series intend to fix bugs and improve functionality of the
-MCP3911 driver.
-The main features added are
-- Support for buffers
-- Interrupt driven readings
-- Support for oversampling ratio
-- Support for set scale values (Gain)
+Fixes: 3a89b289df5d ("iio: adc: add support for mcp3911")
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/iio/adc/mcp3911.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Among the bug fixes, there are changes in the formula for calculate raw
-value and a fix for mismatch in the devicetree property.
-
-Another general improvement for the driver is to use managed resources
-for all allocated resources.
-
-General changes for the series:
-
-v3:
-- Drop Phase patch
-- Add Fixes tags for those patches that are fixes
-- Move Fixes patches to the beginning of the patchset
-
-v4:
-- Split up devm-cleanup functions 
-- Cosmetic cleanups
-- Add
-    select IIO_BUFFER
-    select IIO_TRIGGERED_BUFFER
-    To Kconfig
-- Add .endianness = IIO_BE
-
-
-Best regards,
-Marcus Folkesson
-
-
+diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+index 1cb4590fe412..f581cefb6719 100644
+--- a/drivers/iio/adc/mcp3911.c
++++ b/drivers/iio/adc/mcp3911.c
+@@ -113,6 +113,8 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
+ 		if (ret)
+ 			goto out;
+ 
++		*val = sign_extend32(*val, 23);
++
+ 		ret = IIO_VAL_INT;
+ 		break;
+ 
+-- 
+2.36.1
 

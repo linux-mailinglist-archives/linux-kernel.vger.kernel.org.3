@@ -2,155 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8925357D8E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 05:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8890A57D8E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 05:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbiGVDP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 21 Jul 2022 23:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S233582AbiGVDLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 21 Jul 2022 23:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiGVDPr (ORCPT
+        with ESMTP id S230367AbiGVDLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 21 Jul 2022 23:15:47 -0400
-X-Greylist: delayed 436 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jul 2022 20:15:45 PDT
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0982AE0A;
-        Thu, 21 Jul 2022 20:15:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 412B2580E19;
-        Thu, 21 Jul 2022 23:08:28 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 21 Jul 2022 23:08:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1658459308; x=1658462908; bh=uG2Rb1C0Ih
-        Z7yNKCi2bEM3jWfHG2vQqfIOk05YbeD9M=; b=ogDLl2oDCCPHk3XNtlhynR8Zjk
-        TDPmvhYleBdslcmUW/nckL9llYKjnYFGMPaWypTc5FNV6yurPxvTAEvqdC//bmtL
-        z39ubYj+NoYOqP5Li6Xz8CTOP852Rf/8vVpMgHJEskQMpKxDb54vA4KeiqRoZXE4
-        HI0ShzQYBdYlhxEzWdq3lsOToCBL0SI0OTnJCdhLm7uwaJzZWAmM8ltySw6eQH+5
-        1CVy+YK29/M+u2plbMR8irXREM6sNgjYcZyQQsGl8uvoP0qtAyOHg0jZAmb3U4QW
-        Kf4rbd5b+CAQ+ksp1pDEatCFLC51H7wibEdJLDkvz0povmJYV2rXV6FiEFqQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658459308; x=1658462908; bh=uG2Rb1C0IhZ7yNKCi2bEM3jWfHG2
-        vQqfIOk05YbeD9M=; b=MolbHctsNv9+0mlUjQfoD9ynCHqeDnP1/IY1PIt31Rb4
-        VNqFSWAqbmldv57MoU2na54NhgE0Ci4GsUUBGxZBZN602VYdcJCKKYDNOyZgDZP+
-        ZSQ2D7IRtw6/JaBZxMd1nLV0eUdW6wMminPPBvAeC210pIKQFuWCi1Rv5qTMsjt7
-        DSrnaNkrHlsWpDWfxKr5ZF3T5gqVihuJ9xJMInQyjgzVDngdwRbGYCAD6WPXJm4U
-        2UyvTWVzTVX/YAqXPCtRtE9G1ENOwYnnk0WW8mdK11/iMHVDe/b84VE3io/l7oU+
-        t1TkIAdqSTJXxDEGRNkwvzjECfLr1p/xSrOtUh48AQ==
-X-ME-Sender: <xms:qxTaYuT3ELuogtUlMWehkn7wiokqvJR0eq8qIan_AB77XF-QufXeZA>
-    <xme:qxTaYjyAFms7oc4WejYcPugxA2a5aaom-4ihM7xLDoZIz6Vk8ZSJdoCrRtHoomcSA
-    jr0t5l6RyC38AAmDxk>
-X-ME-Received: <xmr:qxTaYr3ZegZfhPf4nQXK_A3KSYGMPAGKhW10MMQvTLsMmx2UqbdS1xxYJg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtuddgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpefrvghtvghrucffvghlvghvohhrhigrshcuoehpvghtvghr
-    sehpjhgurdguvghvqeenucggtffrrghtthgvrhhnpeduteeihfffleeuveekgedugfeffe
-    ehtdeguefffffhleehgfduueejjeekfeeukeenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehpvghtvghrsehpjhgurdguvghv
-X-ME-Proxy: <xmx:qxTaYqDvDQcx5MFaWwBennRuNTDQC3CzvRDK2OAj_wD_inTErMdRRQ>
-    <xmx:qxTaYniL_GlzhC6WZ9lz_bobQ5iVDstqi1EivBClVJbJmd7LCeJOkg>
-    <xmx:qxTaYmrOWymW8h5IpOXYCiVeNW4NermOusi1M-KSAxMpxxj8LR7yRw>
-    <xmx:rBTaYoWrN1zmWnQBKL2krLcIkgqjlktgel9L6_pN9WDjHEDXhnkZQ_AH_G4>
-Feedback-ID: i9e814621:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Jul 2022 23:08:26 -0400 (EDT)
-Date:   Thu, 21 Jul 2022 20:08:24 -0700
-From:   Peter Delevoryas <peter@pjd.dev>
-To:     ryan_chen <ryan_chen@aspeedtech.com>
-Cc:     brendanhiggins@google.com, benh@kernel.crashing.org,
-        joel@jms.id.au, andrew@aj.id.au, linux-i2c@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: aspeed: Fix slave mode unexpected irq handler
-Message-ID: <YtoUqH6uSNEKBbt5@pdel-mbp>
-References: <20220531093140.28770-1-ryan_chen@aspeedtech.com>
+        Thu, 21 Jul 2022 23:11:06 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B47191BEBF;
+        Thu, 21 Jul 2022 20:11:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6h2N+
+        wVtwTpvgrUCLikpNV+DWbwPlk278dYKE8sSdoQ=; b=Jl2x+vZS+vFEXKCwf+fd7
+        VPaMZJ5fNiPmCQawiebdcpPOMBwh2HZu2wQHc7oUotwMBJbXksFYFoGOIZBvVAW9
+        L5XerxDxbqjWWD3IbzGi/yscR2ouIhyd7G6vPnCqtsqweisrpLjxONQnnr9DGNqQ
+        n9kjBgz2aofgPmY1h1apV0=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp10 (Coremail) with SMTP id DsCowABXewT4FNpivduNOg--.631S2;
+        Fri, 22 Jul 2022 11:09:47 +0800 (CST)
+From:   williamsukatube@163.com
+To:     kabel@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH] watchdog: armada_37xx_wdt: check the return value of devm_ioremap() in armada_37xx_wdt_probe()
+Date:   Fri, 22 Jul 2022 11:09:38 +0800
+Message-Id: <20220722030938.2925156-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220531093140.28770-1-ryan_chen@aspeedtech.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowABXewT4FNpivduNOg--.631S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtFWrZF1xWF4ftrW5Zr4kCrg_yoWDGrgEkr
+        W7A34xWrs2kr1jqw10qwsFv3409Fn0vF1DXw1rtFWfG3yxur47trWDZrn5W34UZaykGFy7
+        Jrn8ZF4Y9r13ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5_pnPUUUUU==
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBSRtGg1aEEOzvlQAAsD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 31, 2022 at 05:31:40PM +0800, ryan_chen wrote:
-> When i2c master send the new i2c transfer immediately
-> after stop. the i2c slave will see the stop and new
-> address match stage together. And it needs handle the
-> stop first. otherwise will occur unexpected handle
-> isr.
+From: William Dean <williamsukatube@gmail.com>
 
-I think it would be helpful if you could include some driver trace messages to
-indicate the sequence of events that lead you to make this change, like an
-example of the problem happening.
+The function devm_ioremap() in armada_37xx_wdt_probe() can fail, so
+its return value should be checked.
 
-> 
-> Fixes: f327c686d3ba ("i2c: aspeed: added drover for Aspeed I2C)
+Fixes: 54e3d9b518c8a ("watchdog: Add support for Armada 37xx CPU watchdog")
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ drivers/watchdog/armada_37xx_wdt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Typo on "drover"? Actually, slave support wasn't included in this commit. I
-think it should be:
+diff --git a/drivers/watchdog/armada_37xx_wdt.c b/drivers/watchdog/armada_37xx_wdt.c
+index 1635f421ef2c..854b1cc723cb 100644
+--- a/drivers/watchdog/armada_37xx_wdt.c
++++ b/drivers/watchdog/armada_37xx_wdt.c
+@@ -274,6 +274,8 @@ static int armada_37xx_wdt_probe(struct platform_device *pdev)
+ 	if (!res)
+ 		return -ENODEV;
+ 	dev->reg = devm_ioremap(&pdev->dev, res->start, resource_size(res));
++	if (!dev->reg)
++		return -ENOMEM;
+ 
+ 	/* init clock */
+ 	dev->clk = devm_clk_get(&pdev->dev, NULL);
+-- 
+2.25.1
 
-Fixes: f9eb91350bb2 ("i2c: aspeed: added slave support for Aspeed I2C driver")
-
-> Signed-off-by: ryan_chen <ryan_chen@aspeedtech.com>
-> ---
->  drivers/i2c/busses/i2c-aspeed.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-aspeed.c b/drivers/i2c/busses/i2c-aspeed.c
-> index 771e53d3d197..9f21e090ce47 100644
-> --- a/drivers/i2c/busses/i2c-aspeed.c
-> +++ b/drivers/i2c/busses/i2c-aspeed.c
-> @@ -252,6 +252,12 @@ static u32 aspeed_i2c_slave_irq(struct aspeed_i2c_bus *bus, u32 irq_status)
->  
->  	/* Slave was requested, restart state machine. */
->  	if (irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH) {
-> +		if (irq_status & ASPEED_I2CD_INTR_NORMAL_STOP &&
-> +			bus->slave_state == ASPEED_I2C_SLAVE_WRITE_RECEIVED) {
-> +			irq_handled |= ASPEED_I2CD_INTR_NORMAL_STOP;
-> +			irq_status &= ~ASPEED_I2CD_INTR_NORMAL_STOP;
-> +			i2c_slave_event(slave, I2C_SLAVE_STOP, &value);
-> +		}
-
-Ok, we might receive the STOP and START signals at the same time.
-
-So, we need to make sure that we handle the STOP first. [1]
-
-Why is this within the START case then? Can't we untangle this from the START
-handling?
-
-irq_status & ASPEED_I2CD_INTR_SLAVE_MATCH means SLAVE START, right?
-
-We know we're in slave mode already because this is the slave IRQ handler.
-
-And we can access the state of the bus through bus->slave_state, to see if it's
-a spurious STOP or an expected one.
-
-It would also be nice to unify the STOP handling code too, to make sure this
-matches the normal STOP path that already exists below here.
-
-[1] Although if that's the case, it seems like we might need to handle the
-START first sometimes, depending on the current state, right?
-
-Can we have the reverse case, where we see a START and the matching STOP
-simultaneously? Perhaps that's already handled properly by the code since
-it's structured chronologically.
-
->  		irq_handled |= ASPEED_I2CD_INTR_SLAVE_MATCH;
->  		bus->slave_state = ASPEED_I2C_SLAVE_START;
->  	}
-> -- 
-> 2.17.1
-> 

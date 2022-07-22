@@ -2,123 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443F757DB55
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D92757DB2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 09:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbiGVHd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 03:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S234498AbiGVHVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 03:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiGVHdY (ORCPT
+        with ESMTP id S234363AbiGVHV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:33:24 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0253797D79
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:33:23 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 72so3813156pge.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 00:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aBbLSX1JockKc7+DXzMhzivNTlzRCnKzS9NOsdu1GjE=;
-        b=FH5lfoYy5vxWwh++51JNpjlucwlsQS4ixmz+0B3NZkoe7RPCjTMHjThSddtl0swkZl
-         9T4ukJZEb1V3D9PIKn1QSBahL4OsSxSyt8Ev8RV4nP+gW5w5H2fIC/DbwpMSiWPA2ABJ
-         9FSCGJfesuGhbecSsxNaGU78fp4xK1ZtEG/Np1qnnavUKZQATQlqlnvHMnPQ00jbhhsT
-         ZaIaZWJolnaAzbuXrVkj8YgfeHBhH8cSKbNy7isQ8DnR22sFEzBY+JDKCN7FQU7X7pO6
-         9kesoGgKTzbUtS+7SlzHe9ECnLkHLRESFh5vhGRoZ0tXFvogf0IDqb82FrSDH0kDDKH0
-         +zyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aBbLSX1JockKc7+DXzMhzivNTlzRCnKzS9NOsdu1GjE=;
-        b=3v3V29E8u8HUpcTeca1XJXZRKzhXvC0XMVjlbz4ZQznXm6szoq9WNkeC4qPx4Jy3DX
-         1+idvrnz67shSziTxgtYzeAOzyXRc+24fK+cNbgHbrngudmWQ/XchOhBgnYQZIhWDAKa
-         9Ad7JYT/ZHq/jBoXaNBhCFkylCiGmbNCpV3uMhZ+NVq6RQk15w1a4lF9dYKD4Uc6i9F+
-         WZIx7YzdoiFj0sU6VYFPdpq6qh8jBETmCmqLgbBjAXt/rUJC4pGmsngZglKlkye/+iOG
-         suyZBgQQ1xAM1fLgjcAwvc0xIgemMhCaaRz0P5JhdkwBQsrYlwe7v/zxYs3cEKo4rxnx
-         PA0A==
-X-Gm-Message-State: AJIora9Hk+8LyXuJQz/o1vHskiUfmr2pIbj6GmothaVpW+9QJAPCkYaV
-        MTRHztIEUE2+/VN2uruyp8e27A==
-X-Google-Smtp-Source: AGRyM1tIBYKqs//Fx7yUJnJ9z6HtvRCo591eHv4D/RHr1WN4SAHATgGqm640z6NmQmxJ17TqLF2vKg==
-X-Received: by 2002:a65:6a05:0:b0:3db:27cb:9123 with SMTP id m5-20020a656a05000000b003db27cb9123mr2047983pgu.497.1658475202162;
-        Fri, 22 Jul 2022 00:33:22 -0700 (PDT)
-Received: from [10.255.164.21] ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id 193-20020a6307ca000000b0041a27e7284bsm2763448pgh.48.2022.07.22.00.33.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 00:33:21 -0700 (PDT)
-Message-ID: <ab445d4d-70d2-9e6f-dd1d-9e71f00c1796@bytedance.com>
-Date:   Fri, 22 Jul 2022 15:33:14 +0800
+        Fri, 22 Jul 2022 03:21:27 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E272018E;
+        Fri, 22 Jul 2022 00:21:24 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lq14q2Tw2zjX5P;
+        Fri, 22 Jul 2022 15:18:35 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 22 Jul
+ 2022 15:21:21 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <stable@vger.kernel.org>, <linux-ext4@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
+        <enwlinux@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yebin10@huawei.com>, <yukuai3@huawei.com>,
+        <libaokun1@huawei.com>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH 5.4] ext4: fix race condition between ext4_ioctl_setflags and ext4_fiemap
+Date:   Fri, 22 Jul 2022 15:33:34 +0800
+Message-ID: <20220722073334.1893924-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.1
-Subject: Re: [PATCH 9/9] sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
-Content-Language: en-US
-To:     Abel Wu <wuyun.abel@bytedance.com>, hannes@cmpxchg.org,
-        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
-        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
-        rdunlap@infradead.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, cgroups@vger.kernel.org
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-10-zhouchengming@bytedance.com>
- <65d9f79b-be9b-e21e-0624-5c9f2cc0c0b2@bytedance.com>
- <ce22fa9d-aad0-fc23-d304-14fdd27130f4@bytedance.com>
- <5e5d41e2-5f89-8c52-11e5-0c55c5595a88@bytedance.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <5e5d41e2-5f89-8c52-11e5-0c55c5595a88@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/22 15:14, Abel Wu wrote:
-> On 7/22/22 2:13 PM, Chengming Zhou Wrote:
->> On 2022/7/22 11:30, Abel Wu wrote:
->>> Hi Chengming,
->>>
->>> On 7/21/22 12:04 PM, Chengming Zhou Wrote:
->>>> Now PSI already tracked workload pressure stall information for
->>>> CPU, memory and IO. Apart from these, IRQ/SOFTIRQ could have
->>>> obvious impact on some workload productivity, such as web service
->>>> workload.
->>>>
->>>> When CONFIG_IRQ_TIME_ACCOUNTING, we can get IRQ/SOFTIRQ delta time
->>>> from update_rq_clock_task(), in which we can record that delta
->>>> to CPU curr task's cgroups as PSI_IRQ_FULL status.
->>>
->>> The {soft,}irq affection should be equal to all the runnable tasks
->>> on that cpu, not only rq->curr. Further I think irqstall is per-cpu
->>> rather than per-cgroup.
->>
->> Although IRQ/SOFTIRQ is per-cpu, it's the rq->curr who own the CPU at the time
->> and pay for it, meanwhile other groups would be thought as PSI_CPU_FULL.
-> 
-> I don't think rq->curr pays for it if you mean consuming quota here.
+This patch and problem analysis is based on v4.19 LTS.
+The d3b6f23f7167("ext4: move ext4_fiemap to use iomap framework") patch
+is incorporated in v5.7-rc1. This patch avoids this problem by switching
+to iomap in ext4_fiemap.
 
-Yes, it makes rq->curr's groups look more productive than it actually is,
-which are clearly different from other groups.
+Hulk Robot reported a BUG on stable 4.19.252:
+==================================================================
+kernel BUG at fs/ext4/extents_status.c:762!
+invalid opcode: 0000 [#1] SMP KASAN PTI
+CPU: 7 PID: 2845 Comm: syz-executor Not tainted 4.19.252 #46
+RIP: 0010:ext4_es_cache_extent+0x30e/0x370
+[...]
+Call Trace:
+ ext4_cache_extents+0x238/0x2f0
+ ext4_find_extent+0x785/0xa40
+ ext4_fiemap+0x36d/0xe90
+ do_vfs_ioctl+0x6af/0x1200
+[...]
+==================================================================
 
-> And it doesn't seem appropriate to let other groups treat it as cpu
-> stall because the rq->curr is also the victim rather than the one
-> causes stall (so it's different from rq->curr causing memstall and
-> observed as cpustall by others).
+Above issue may happen as follows:
+-------------------------------------
+           cpu1		    cpu2
+_____________________|_____________________
+do_vfs_ioctl
+ ext4_ioctl
+  ext4_ioctl_setflags
+   ext4_ind_migrate
+                        do_vfs_ioctl
+                         ioctl_fiemap
+                          ext4_fiemap
+                           ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)
+                           ext4_fill_fiemap_extents
+    down_write(&EXT4_I(inode)->i_data_sem);
+    ext4_ext_check_inode
+    ext4_clear_inode_flag(inode, EXT4_INODE_EXTENTS)
+    memset(ei->i_data, 0, sizeof(ei->i_data))
+    up_write(&EXT4_I(inode)->i_data_sem);
+                            down_read(&EXT4_I(inode)->i_data_sem);
+                            ext4_find_extent
+                             ext4_cache_extents
+                              ext4_es_cache_extent
+                               BUG_ON(end < lblk)
 
-IMHO, we don't care who causes stall, instead we care about what affects
-workload productivity.
+We can easily reproduce this problem with the syzkaller testcase:
+```
+02:37:07 executing program 3:
+r0 = openat(0xffffffffffffff9c, &(0x7f0000000040)='./file0\x00', 0x26e1, 0x0)
+ioctl$FS_IOC_FSSETXATTR(r0, 0x40086602, &(0x7f0000000080)={0x17e})
+mkdirat(0xffffffffffffff9c, &(0x7f00000000c0)='./file1\x00', 0x1ff)
+r1 = openat(0xffffffffffffff9c, &(0x7f0000000100)='./file1\x00', 0x0, 0x0)
+ioctl$FS_IOC_FIEMAP(r1, 0xc020660b, &(0x7f0000000180)={0x0, 0x1, 0x0, 0xef3, 0x6, []}) (async, rerun: 32)
+ioctl$FS_IOC_FSSETXATTR(r1, 0x40086602, &(0x7f0000000140)={0x17e}) (rerun: 32)
+```
 
+To solve this issue, we use __generic_block_fiemap() instead of
+generic_block_fiemap() and add inode_lock_shared to avoid race condition.
 
-> 
->>
->> So I think it's reasonable to account this IRQ/SOFTIRQ delta to rq->curr's groups
->> as PSI_IRQ_FULL pressure stall. And per-cpu IRQ stall can also get from psi_system.
->>
-> 
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/ext4/extents.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index f1bbce4350c4..50f956bda34c 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -5175,16 +5175,21 @@ static int _ext4_fiemap(struct inode *inode,
+ 		fieinfo->fi_flags &= ~FIEMAP_FLAG_CACHE;
+ 	}
+ 
++	inode_lock_shared(inode);
+ 	/* fallback to generic here if not in extents fmt */
+ 	if (!(ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS)) &&
+-	    fill == ext4_fill_fiemap_extents)
+-		return generic_block_fiemap(inode, fieinfo, start, len,
++	    fill == ext4_fill_fiemap_extents) {
++		error = __generic_block_fiemap(inode, fieinfo, start, len,
+ 			ext4_get_block);
++		goto out_unlock;
++	}
+ 
+ 	if (fill == ext4_fill_es_cache_info)
+ 		ext4_fiemap_flags &= FIEMAP_FLAG_XATTR;
+-	if (fiemap_check_flags(fieinfo, ext4_fiemap_flags))
+-		return -EBADR;
++	if (fiemap_check_flags(fieinfo, ext4_fiemap_flags)) {
++		error = -EBADR;
++		goto out_unlock;
++	}
+ 
+ 	if (fieinfo->fi_flags & FIEMAP_FLAG_XATTR) {
+ 		error = ext4_xattr_fiemap(inode, fieinfo);
+@@ -5204,6 +5209,8 @@ static int _ext4_fiemap(struct inode *inode,
+ 		 */
+ 		error = fill(inode, start_blk, len_blks, fieinfo);
+ 	}
++out_unlock:
++	inode_unlock_shared(inode);
+ 	return error;
+ }
+ 
+-- 
+2.31.1
+

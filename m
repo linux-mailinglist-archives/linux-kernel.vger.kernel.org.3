@@ -2,47 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0566F57E6EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739B457E6F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 21:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235937AbiGVTBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 15:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S235646AbiGVTCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 15:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiGVTBS (ORCPT
+        with ESMTP id S231304AbiGVTCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 15:01:18 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F8B9DEF0;
-        Fri, 22 Jul 2022 12:01:17 -0700 (PDT)
-Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1oExtb-00037l-8j;
-        Fri, 22 Jul 2022 15:01:07 -0400
-Date:   Fri, 22 Jul 2022 15:01:06 -0400
-From:   Rik van Riel <riel@surriel.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kernel-team@fb.com, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Breno Leitao <leitao@debian.org>
-Subject: [PATCH v2] livepatch: fix race between fork and
- klp_reverse_transition
-Message-ID: <20220722150106.683f3704@imladris.surriel.com>
-In-Reply-To: <YtrCqMLUqJlcoqIo@alley>
-References: <20220720121023.043738bb@imladris.surriel.com>
-        <YtrCqMLUqJlcoqIo@alley>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Fri, 22 Jul 2022 15:02:31 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9BAA0245
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:02:31 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id w12so6863080edd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 12:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=avUZAWhiQeTD+s8eqp0tD4ouniDUp1tW0xSwM3iWcgw=;
+        b=LQvK3/tRTOcgvuVGh+M5/GehEEKi8faPfo/xJ6f9D43mmpKXwOaISdjz4xj7ofQ3yW
+         nPB0jd/IGzNmmADKc5f/o8Z1yT3yJ4Ca3eSheu30Eeovk4IgF8opO+bA5YqMns9iiHfR
+         WMJs/ryDGoq7evSTWEfckh14Ncv8IdNXpgMI9u6EJSwT7BzPgKPloTVj3HFFgeZvQmYU
+         e7nW2VAIZGhmkFVSt0X5l5kmtmuporEn8F86CAraj11WA4xluBQ1+iXMZ2A2ycS+rcv7
+         Df9OlLO/B/s+Fo55AAmrAiuWWwOFeveMF6OGRk1yl4jArlzvpo39JhK5fc1Fvg3aqT/c
+         b4SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=avUZAWhiQeTD+s8eqp0tD4ouniDUp1tW0xSwM3iWcgw=;
+        b=jc2+vYbAPY8qAGk3uRG7Y/tvyCZE0NMo5Vfk23O9xZTkzbkM7Z4kNLxBkBemUa5Zok
+         wKvLgDxUxbTdYi3IQR3NHmmSm5JZLfM2wcmUHsR0FdJRlQiKFjxfx1NRFbuQShiQWj1R
+         ZWvp3z2LDvlzXDMzvpRrkNFw3Ag/ozXaXi/LLe1aOe0zrO+fYmWbJUHKyf5/M7lUD7iK
+         0HidxURCesyZcPBtuFYPrA5b/PZ/+255d/OUjWQ+fbCo/ogNh8MJuYTx1i+XDvwEV32n
+         Am0SLQyNC2Okj2Ifpo0QUANobc4M5G1SS0DhkejXBGh7Bb+fUgr4QCd7YjoTMQ0hWGHI
+         vqvw==
+X-Gm-Message-State: AJIora8aaPoyI4KDLBMZq8yMEHJ//UToDCh38+dbUWSwt8kUsORebZBs
+        ak0DGy2pHQem1ll5/eWHllUHlQ43zwq4gqXQW1Y=
+X-Google-Smtp-Source: AGRyM1vcdXkBOl/stulqTvLKIOZCE184bWWQit0ItjjwTNQf2Kc3Skz6cCZYUoQ9QmLUBeWNcN0z7ZoFi4KRjDqiH38=
+X-Received: by 2002:a05:6402:d0a:b0:437:f9a1:8493 with SMTP id
+ eb10-20020a0564020d0a00b00437f9a18493mr1289163edb.226.1658516549449; Fri, 22
+ Jul 2022 12:02:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220721060946.46462-1-slark_xiao@163.com>
+In-Reply-To: <20220721060946.46462-1-slark_xiao@163.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 22 Jul 2022 15:02:17 -0400
+Message-ID: <CADnq5_PXyhGrU-XixQqDv+mdNU0rAqnGsVp2b_tfu=7h0COihA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd: Fix typo 'the the' in comment
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, daniel@ffwll.ch, airlied@linux.ie,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,82 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2: a better approach, suggested by Petr (thank you)
----8<---
+Applied.  Thanks!
 
-When a KLP fails to apply, klp_reverse_transition will clear the
-TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
-which are not on the task list yet.
+Alex
 
-Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
-parent to the child early on, in dup_task_struct -> setup_thread_stack.
-
-Much later, klp_copy_process will set child->patch_state to match
-that of the parent.
-
-However, the parent's patch_state may have been changed by KLP loading
-or unloading since it was initially copied over into the child.
-
-This results in the KLP code occasionally hitting this warning in
-klp_complete_transition:
-
-        for_each_process_thread(g, task) {
-                WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
-                task->patch_state = KLP_UNDEFINED;
-        }
-
-This patch will set, or clear, the TIF_PATCH_PENDING flag in the child
-process depending on whether or not it is needed at the time
-klp_copy_process is called, at a point in copy_process where the
-tasklist_lock is held exclusively, preventing races with the KLP
-code.
-
-This should prevent this warning from triggering again in the
-future.
-
-I have not yet figured out whether this would also help with races in
-the other direction, where the child process fails to have TIF_PATCH_PENDING
-set and somehow misses a transition, or whether the retries in
-klp_try_complete_transition would catch that task and help it transition
-later.
-
-Signed-off-by: Rik van Riel <riel@surriel.com>
-Reported-by: Breno Leitao <leitao@debian.org>
----
- kernel/livepatch/transition.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index 5d03a2ad1066..30187b1d8275 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -610,9 +610,23 @@ void klp_reverse_transition(void)
- /* Called from copy_process() during fork */
- void klp_copy_process(struct task_struct *child)
- {
--	child->patch_state = current->patch_state;
- 
--	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
-+	/*
-+	 * The parent process may have gone through a KLP transition since
-+	 * the thread flag was copied in setup_thread_stack earlier. Bring
-+	 * the task flag up to date with the parent here.
-+	 *
-+	 * The operation is serialized against all klp_*_transition()
-+	 * operations by the tasklist_lock. The only exception is
-+	 * klp_update_patch_state(current), but we cannot race with
-+	 * that because we are current.
-+	 */
-+	if (test_tsk_thread_flag(current, TIF_PATCH_PENDING))
-+		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
-+	else
-+		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
-+
-+	child->patch_state = current->patch_state;
- }
- 
- /*
--- 
-2.35.1
-
-
+On Thu, Jul 21, 2022 at 3:26 AM Slark Xiao <slark_xiao@163.com> wrote:
+>
+> Replace 'the the' with 'the' in the comment.
+>
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c | 2 +-
+>  drivers/gpu/drm/amd/include/atombios.h    | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
+> index ff659d4f772b..8adeb7469f1e 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
+> @@ -47,7 +47,7 @@
+>   * for GPU/CPU synchronization.  When the fence is written,
+>   * it is expected that all buffers associated with that fence
+>   * are no longer in use by the associated ring on the GPU and
+> - * that the the relevant GPU caches have been flushed.
+> + * that the relevant GPU caches have been flushed.
+>   */
+>
+>  struct amdgpu_fence {
+> diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+> index 1f9df4e7509b..15943bc21bc5 100644
+> --- a/drivers/gpu/drm/amd/include/atombios.h
+> +++ b/drivers/gpu/drm/amd/include/atombios.h
+> @@ -3255,8 +3255,8 @@ ucMaxNBVoltageHigh:     Voltage regulator dependent PWM value. High 8 bits of  t
+>  ucMinNBVoltageHigh:     Voltage regulator dependent PWM value. High 8 bits of the value for the min voltage.Set this one to 0x00 if VC without PWM or no VC at all.
+>
+>
+> -usInterNBVoltageLow:    Voltage regulator dependent PWM value. The value makes the the voltage >=Min NB voltage but <=InterNBVoltageHigh. Set this to 0x0000 if VC without PWM or no VC at all.
+> -usInterNBVoltageHigh:   Voltage regulator dependent PWM value. The value makes the the voltage >=InterNBVoltageLow but <=Max NB voltage.Set this to 0x0000 if VC without PWM or no VC at all.
+> +usInterNBVoltageLow:    Voltage regulator dependent PWM value. The value makes the voltage >=Min NB voltage but <=InterNBVoltageHigh. Set this to 0x0000 if VC without PWM or no VC at all.
+> +usInterNBVoltageHigh:   Voltage regulator dependent PWM value. The value makes the voltage >=InterNBVoltageLow but <=Max NB voltage.Set this to 0x0000 if VC without PWM or no VC at all.
+>  */
+>
+>
+> --
+> 2.25.1
+>

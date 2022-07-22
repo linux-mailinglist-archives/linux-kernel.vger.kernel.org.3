@@ -2,144 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A99C57E47B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2C257E47E
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 18:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235772AbiGVQdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 12:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S235764AbiGVQeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 12:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235752AbiGVQc7 (ORCPT
+        with ESMTP id S234012AbiGVQeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:32:59 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7F69965A
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:32:56 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id bf13so4811977pgb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:32:56 -0700 (PDT)
+        Fri, 22 Jul 2022 12:34:18 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF1B93697
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:34:17 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g12so4899285pfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 09:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IusqkAi12UkDRpxOqe5d+steBgvYPF1P177Hc5F7MjQ=;
-        b=DpCEW4VfqPFdfl/zi4G3wiRIJC5E6AT1Fp15VyxrdjVkV7k/smBEKKfZPOBrN5xL2y
-         R0kWUB7XgPKpG1gklBR1k/B12m3qGBj4vQljirixvhrVKxbmUj9gniiCQcdaMHa9PBSi
-         6YZPQjh76JQ6pzsHyTGOUsznK2sx9R/6IZ+zE=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Cuktg7do6AYKEIAo+TdIr91FV4JqL1g1w6zTqnC0jaY=;
+        b=bBDlBH13JIXtLxG6Alxt3OynRcx4j90VZj4px70koq7WXtp9g6ruYqhKbRdJdgFH/V
+         iYpLoETeFpzvLwsUiSeWHiLihHBqNUacJ4aeXbhoMaKgwv2K1YlUkXA7rIhDtzdu8SS1
+         7LCKH+CxitJTSVa7SEdoRtg9obijkJZ86szTWPZ3cqRY2+51/pmV2G40npiciXwzTPew
+         J32f6saUZsQ9b/4Nz/sgrL/L6t5QhggYT5j8362CN2P2BxnWu3K17J/QuUAp1uYwVn8J
+         MXHJyGb7/7ywzVq/cXIlEhQ/AccmfLET8P5pbBIagSda82uOhEuWxHk96Z38UbhZGhSu
+         KL2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IusqkAi12UkDRpxOqe5d+steBgvYPF1P177Hc5F7MjQ=;
-        b=rEhQiZhb7eWVmWSCr8yoYW9zIdIO1teTK08mmrntRTwn7D6zsdGS4GeorVrrb6Evjh
-         MY4PEY0edJ3w1FngY6/eOArJ3rtfYpQ8VgmY2JKE4XxYY+pyUS6dL2hhzi6UlD8Xd1Ua
-         jr4+a2GzNqQ2w4IeW1CBoGhSsqSiLgNSaZbbC92qWb8tW8qH5fXdMzPVnBDgT5WMkpVd
-         M5N0qqp82RryPp7OzdLSu1qmyuKqwYtDNcFbo2Pgsr0RxGz1sn9zbBAv2piMaNmKlHOg
-         pckz6WouzdcrGgaBTNaLT/+e/mlFFYzqRcIy6yVepocrQJ7PWDgCj3AkNevnN/+4Dktw
-         dLlQ==
-X-Gm-Message-State: AJIora8Xq+U+eXRhHilfiRwkCkQMTii7NIftTWHDwdjmhYs+1QxTtS5f
-        oo/s0Qi+b947i3aSQ+g/jwxdNQ==
-X-Google-Smtp-Source: AGRyM1tQGj7yROA244zt5l+vYLlHTkva9Qxq523ok9iT1yZ78hqApGuetIH3LfAEimjd/KI2mMzayQ==
-X-Received: by 2002:a63:164d:0:b0:416:4bc:1c28 with SMTP id 13-20020a63164d000000b0041604bc1c28mr532460pgw.302.1658507571832;
-        Fri, 22 Jul 2022 09:32:51 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:42b0:2897:3725:985a])
-        by smtp.gmail.com with UTF8SMTPSA id u12-20020a170902e80c00b0016a11b7472csm3987832plg.166.2022.07.22.09.32.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 09:32:50 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH v24 2/2] arm64: dts: qcom: sc7280-herobrine: Add nodes for onboard USB hub
-Date:   Fri, 22 Jul 2022 09:32:45 -0700
-Message-Id: <20220722093238.v24.2.I18481b296484eec47bdc292a31fa46fa8c655ca9@changeid>
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-In-Reply-To: <20220722093238.v24.1.I7a1a6448d50bdd38e6082204a9818c59cc7a9bfd@changeid>
-References: <20220722093238.v24.1.I7a1a6448d50bdd38e6082204a9818c59cc7a9bfd@changeid>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Cuktg7do6AYKEIAo+TdIr91FV4JqL1g1w6zTqnC0jaY=;
+        b=PsGBey2fD4W+NrOOZmAF9DHQyDKWi8E2naD4Ri17x4NRHlHBjfTGxX6VW/3HdWQCwq
+         UZjRZ9W32ttiYBrhwFmV+t3dTWSHMUOIt7jgqPekrv3tzvLkrHpBWVzy3KRtINZ+3SYU
+         b/oP/w1S7TEvYcF1uNXWPXDGjG8gvHqYTbeJ0tvUlbCl/Y8jNLOZSAvuJHnJzPDP2Bsx
+         STfXCvoDe9nSts7MUTIlb/EDPEHbDZ3PIBdnkSmYGrpie22eSuV6zkslvqXw2L6KswoP
+         vyBh4aoyyk67xDFrsDCGYdslXU0EHAeLTufIOjEyt+YD4fxEGpixNuIwHIxHmIMRFcK1
+         NTuw==
+X-Gm-Message-State: AJIora+vKVX76qbROqopLg2J05sFDq0VMg52hEkEuTSUoZzzRFGht9D7
+        ivMOyvHqumExlH5q1aHVeTbWlQ==
+X-Google-Smtp-Source: AGRyM1sHTzpID1U1BXhZwQnXEV//9IjOyMD87/Wa6PBw/9FDkGOYzTEz7JPFoAUsZ6ITDWjqH+OSFQ==
+X-Received: by 2002:a65:6b96:0:b0:41a:617f:e193 with SMTP id d22-20020a656b96000000b0041a617fe193mr507766pgw.85.1658507656093;
+        Fri, 22 Jul 2022 09:34:16 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa7970f000000b00525302fe9c4sm4138221pfg.190.2022.07.22.09.34.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 09:34:15 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 16:34:11 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        oliver.upton@linux.dev
+Subject: Re: [PATCH] Revert "KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
+ VM-{Entry,Exit} control"
+Message-ID: <YtrRg03bsPVJLSBx@google.com>
+References: <20220722104328.3265326-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722104328.3265326-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for the onboard USB hub on herobrine devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+On Fri, Jul 22, 2022, Paolo Bonzini wrote:
+> This reverts commit 03a8871add95213827e2bea84c12133ae5df952e.
+> 
+> Since commit 03a8871add95 ("KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
+> VM-{Entry,Exit} control"), KVM has taken ownership of the "load
+> IA32_PERF_GLOBAL_CTRL" VMX entry/exit control bits, trying to set these
+> bits in the IA32_VMX_TRUE_{ENTRY,EXIT}_CTLS MSRs if the guest's CPUID
+> supports the architectural PMU (CPUID[EAX=0Ah].EAX[7:0]=1), and clear
+> otherwise.
+> 
+> This was a misguided attempt at mimicking what commit 5f76f6f5ff96
+> ("KVM: nVMX: Do not expose MPX VMX controls when guest MPX disabled",
+> 2018-10-01) did for MPX.  However, that commit was a workaround for
+> another KVM bug and not something that should be imitated.  Mucking with
+> the VMX MSRs creates a subtle, difficult to maintain ABI as KVM must
+> ensure that any internal changes, e.g. to how KVM handles _any_ guest
+> CPUID changes, yield the same functional result.  Therefore, KVM's policy
+> is to let userspace have full control of the guest vCPU model so long
+> as the host kernel is not at risk.
+> 
+> And that's the snag: setting the bit must not cause any harm to the host,
+> therefore we need to be sure that the kvm_set_msr will actually succeed.
 
-This requires "CONFIG_USB_ONBOARD_HUB=y".
+() on functions please.
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
+> Furthermore, it is plausible to have a hypervisor that sets the controls
+> unconditionally and just leaves GUEST/HOST_IA32_PERF_GLOBAL_CTRL to 0, and
+> we don't want to regress that case.  The simplest way to handle
+> both issues is to skip the call to kvm_set_msr if the value of
+> MSR_CORE_PERF_GLOBAL_CTRL is not changing.  This covers trivially the case
+> where the PMU is not available and the only acceptable value of the MSR is
+> zero, because nonzero values are filtered in nested_vmx_check_host_state
 
-Changes in v24:
-- renamed 'companion-hub' to 'peer-hub' according to the change
-  in the binding
+()
 
-Changes in v23:
-- added note about CONFIG_USB_ONBOARD_HUB to the commit message
-- added 'Reviewed-by' tags from Stephen and Doug
+> and nested_vmx_check_guest_state.
 
-Changes in v22:
-- patch added to the series
+Hmm, this is just trading one hack for another.  The real problem is that KVM
+has a WARN that can be triggered by userspace sending a misconfigured vCPU model.
 
- .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 21 ++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+And calling kvm_set_msr() iff the value is changing is trivial to exploit, e.g.
+userspace does KVM_SET_CPUID with a valid PMU and stuffs MSR_CORE_PERF_GLOBAL_CTRL
+to a non-zero value then does a "bad" KVM_SET_CPUID and a nested VM-Enter.  An
+even more devious attack would be to do back-to-back KVM_SET_CPUID to get a valid
+pmu->global_ctrl_mask with pmu->version==0 (which is a bug in intel_pmu_refresh())
+in order to bypass this check:
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index 3f8996c00b05..1fd381a903de 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -144,8 +144,8 @@ pp3300_hub: pp3300-hub-regulator {
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 
-+		/* The BIOS leaves this regulator on */
- 		regulator-boot-on;
--		regulator-always-on;
- 
- 		gpio = <&tlmm 157 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
-@@ -596,6 +596,25 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.x hub on port 1 */
-+	usb_hub_2_x: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		peer-hub = <&usb_hub_3_x>;
-+	};
-+
-+	/* 3.x hub on port 2 */
-+	usb_hub_3_x: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		peer-hub = <&usb_hub_2_x>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.37.1.359.gd136c6c3e2-goog
+	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
+	    CC(!kvm_valid_perf_global_ctrl(vcpu_to_pmu(vcpu),
+					   vmcs12->guest_ia32_perf_global_ctrl)))
+		return -EINVAL;
 
+and then nested VM-Enter with a non-zero guest_ia32_perf_global_ctrl.
+
+Blech, I was going to type up a suggested "flow", but untangling this requires
+multiple patches (there are multiple bugs).  I'll just send a series with this as
+a pure revert of 03a8871add95213827e2bea84c12133ae5df952e as the last patch.
+
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/nested.c    | 26 +++-----------------------
+>  arch/x86/kvm/vmx/nested.h    |  2 --
+>  arch/x86/kvm/vmx/pmu_intel.c |  3 ---
+>  3 files changed, 3 insertions(+), 28 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index c1c85fd75d42..6d25de9ebefa 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -2623,6 +2623,7 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+>  	}
+>  
+>  	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
+> +	    vmcs12->guest_ia32_perf_global_ctrl != vcpu_to_pmu(vcpu)->global_ctrl &&
+>  	    WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
+>  				     vmcs12->guest_ia32_perf_global_ctrl))) {
+>  		*entry_failure_code = ENTRY_FAIL_DEFAULT;
+> @@ -4333,7 +4334,8 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
+>  		vmcs_write64(GUEST_IA32_PAT, vmcs12->host_ia32_pat);
+>  		vcpu->arch.pat = vmcs12->host_ia32_pat;
+>  	}
+> -	if (vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
+> +	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
+> +	    && vmcs12->host_ia32_perf_global_ctrl != vcpu_to_pmu(vcpu)->global_ctrl)
+
+Should be a moot point, but put the "&&" on the first line.
+
+>  		WARN_ON_ONCE(kvm_set_msr(vcpu, MSR_CORE_PERF_GLOBAL_CTRL,
+>  					 vmcs12->host_ia32_perf_global_ctrl));
+>  

@@ -2,61 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A916F57E31B
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0891C57E317
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 16:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiGVOhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 10:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
+        id S233468AbiGVOhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 10:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiGVOhh (ORCPT
+        with ESMTP id S229441AbiGVOhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 10:37:37 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F9A81B23;
-        Fri, 22 Jul 2022 07:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658500656; x=1690036656;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=c878p5FoHN/RYplpI6p+2OurxrBStAIGWnF3dLZff2c=;
-  b=I7H3denxYk3H51H1W5wjDOUQCLcn56p/9Yh6eBDSkOKRXbc99/DEMxcr
-   SItOHonT7pjgxbEWBDRS/MSPTzJI9qOOtsS93Jyh+Zpaqav+ffh2oPAk7
-   3GahGmrLL6cbmRncO4E/B8czY/FoeXEtLWpgM8wAGIA5/rY6dkr+JVwo4
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Jul 2022 07:37:36 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 07:37:36 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Jul 2022 07:37:35 -0700
-Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 22 Jul 2022 07:37:32 -0700
-From:   Parikshit Pareek <quic_ppareek@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Parikshit Pareek <quic_ppareek@quicinc.com>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: introduce sa8540p-ride dts
-Date:   Fri, 22 Jul 2022 20:07:11 +0530
-Message-ID: <20220722143711.17563-1-quic_ppareek@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 22 Jul 2022 10:37:17 -0400
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9108A7FE5F
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 07:37:16 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 2FF685D1; Fri, 22 Jul 2022 16:37:15 +0200 (CEST)
+Date:   Fri, 22 Jul 2022 16:37:13 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/amd: Disable guest vapic logging during early
+ kdump init
+Message-ID: <Ytq2GRX7UJjvXk4w@8bytes.org>
+References: <20220721003439.403435-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721003439.403435-1-jsnitsel@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,58 +39,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create new dts file specific for Qdrive board based on sa8540p chipset.
-Introduce common dtsi file sa8295p-adp.dtsi, to be included for adp and
-Qdrive board.
+On Wed, Jul 20, 2022 at 05:34:39PM -0700, Jerry Snitselaar wrote:
+> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+> index 1d08f87e734b..2b00d7f28df7 100644
+> --- a/drivers/iommu/amd/init.c
+> +++ b/drivers/iommu/amd/init.c
+> @@ -815,6 +815,11 @@ static void free_ga_log(struct amd_iommu *iommu)
+>  #endif
+>  }
+>  
+> +static void iommu_ga_log_disable(struct amd_iommu *iommu)
+> +{
+> +	iommu_feature_disable(iommu, CONTROL_GALOG_EN);
+> +}
+> +
+>  static int iommu_ga_log_enable(struct amd_iommu *iommu)
+>  {
+>  #ifdef CONFIG_IRQ_REMAP
+> @@ -2504,6 +2509,7 @@ static void early_enable_iommus(void)
+>  		for_each_iommu(iommu) {
+>  			iommu_disable_command_buffer(iommu);
+>  			iommu_disable_event_buffer(iommu);
+> +			iommu_ga_log_disable(iommu);
+>  			iommu_enable_command_buffer(iommu);
+>  			iommu_enable_event_buffer(iommu);
+>  			iommu_enable_ga(iommu);
 
-Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
----
+Looks about right, but I also let Suravee comment on this.
 
-Changes since v1:
-- Add , after year 2022, in the license header
-- Rename the dtsi which is suitable for common to many ADP boards
-- Correct the allignment in the Makefile
-- Split the patch in introducing common dtsi file, and adding new board
-  file
-
- arch/arm64/boot/dts/qcom/Makefile             |  1 +
- arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 9e2a13d75f9d..dffcc15b4ead 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -51,6 +51,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sa8540p-adp-ride.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-new file mode 100644
-index 000000000000..e3d0190adf6e
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sa8xxxp-auto-adp.dtsi"
-+
-+/ {
-+	model = "Qualcomm SA8540 ADP";
-+	compatible = "qcom,sa8540p-adp-ride", "qcom,sa8540p";
-+};
--- 
-2.17.1
-
+Disabling the GA-Log under a device still using it should hopefully not
+put it into some undefined state.

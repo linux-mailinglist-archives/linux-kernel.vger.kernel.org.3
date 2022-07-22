@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99B757E15A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBBF57E160
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 14:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiGVMSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 08:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S234023AbiGVMUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 08:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiGVMSj (ORCPT
+        with ESMTP id S229704AbiGVMUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 08:18:39 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0012F01E;
-        Fri, 22 Jul 2022 05:18:37 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id sz17so8273270ejc.9;
-        Fri, 22 Jul 2022 05:18:37 -0700 (PDT)
+        Fri, 22 Jul 2022 08:20:17 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7201813F54
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 05:20:15 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id r24so3342416qtx.6
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 05:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=CqpBW1kjZKS5TbNlu9QNscZqjrocfBTKosDo2l0WxdM=;
-        b=JAgTikgqys0BU5lh0gzJigI2XttDfFyTny+eSxF/HE5AC63ff5bU1uaZ0BzoMpP4Xq
-         JijOHnEey6CSg00QFx7kBXCWRoHZJeVGHx7SM6NKU5S411b+gy1U1eHUvAdJDCW67R6g
-         5qLgW/UUf/2xJ6sATptZx8BFVPls9lpCi1B3VwFiIUjuo8YXTQcDVv7sZ6SnpG+cQW4g
-         hLSqT0hw7HCK2otzTaOmjQbWyoSjmAqpQsXGTDOsgYxe0f56KUqaKGfHmGvKVLlq9MXI
-         9QI5hujVJgq5/YQtMUTnX27wHj9gr66lkAAzS/ktZYk8P5rtYeYGdvG5wzNSt3/S73kS
-         sd7w==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:date:message-id:in-reply-to:references:user-agent
+         :subject:mime-version:content-transfer-encoding;
+        bh=kIKMl7lknNmrR7/g3+eBdSau4//c4Zzr0QaeUiEir7A=;
+        b=cHhHjmlahYQ+EmtKYhfCB8KTNgvpM7+cBXuWAwrqR7qvzNU8+HhLRnTdPxxvFVeHh3
+         1nUaRHsHw8NQy+w+KEbL1WitYxDtz85JVMIVI6ao9QwCutRBsbMgBOX4RICVcuV9E3oe
+         AWc4nmne8ushnOtD6AFil/8ViyNXbqrdkinYxQ3k4aucoZdSrbdYliPQjWq0MBJj/Bn8
+         JL9k1d5L3NzOCtYoIbyj6v7UD2hB1lFi0USJqy10hnlWJwfYP2r/1IG2soYO4rnBxTgq
+         H4IMse2/xdiaEKZwKqcUw9ZoKLvnfHoeFJLzprkjkdjavu6OyvtAFHUEfzaDx+u7Zpd5
+         vOhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=CqpBW1kjZKS5TbNlu9QNscZqjrocfBTKosDo2l0WxdM=;
-        b=RCUnqUUFuVbP6+49Broo0aBQNhvymUtjnGeEEDrNKxHN7I3iX5tXpl9ZZ4rOYxU+0I
-         sIA10YqXQgbv5RKnVBsA2t/Wei+yaPQL/zVio7BSF87MydunyZYTEvs+UHZkBHhcVE7x
-         nLHfx2Vtizw/4EWU2oqUAcEBMGQC6N49oXvgG0uwF7G5I7Y2oTFKkX1DdueXVqcGyhVS
-         bn3kHAira5T1xeuIJJBA2GZxOfocYU28yIgEdkJZ9HQbp/yCvgcHx9PCH1RQ6w30+ZY8
-         tD1oA0+zGMqq3J9BSQp6G6NM3fe+y6wJAqI093zRmdCCxfcS/JV+3J7RmBz1Txj/2FKO
-         neQA==
-X-Gm-Message-State: AJIora8xrxLs8DfBaImSatWuPsMpQZctSWzDIYGRsC73MHHVNGLzHO4/
-        i+qHyP3V0wZQnG+MUHBCt48=
-X-Google-Smtp-Source: AGRyM1stUIp4zWap+2uKu/60jfi858DmwklKehCGWFlYeBJxwYCna7Sn7KJH6tNiqiCbk9RB9vW9HQ==
-X-Received: by 2002:a17:906:cc52:b0:72b:114e:c56c with SMTP id mm18-20020a170906cc5200b0072b114ec56cmr298824ejb.144.1658492316338;
-        Fri, 22 Jul 2022 05:18:36 -0700 (PDT)
-Received: from felia.fritz.box (200116b826e64200edeeb77a6a94b0d2.dip.versatel-1u1.de. [2001:16b8:26e6:4200:edee:b77a:6a94:b0d2])
-        by smtp.gmail.com with ESMTPSA id f21-20020a17090631d500b0072ee7b51d9asm1964129ejf.39.2022.07.22.05.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 05:18:35 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] x86/configs: update configs in x86_debug.config
-Date:   Fri, 22 Jul 2022 14:18:15 +0200
-Message-Id: <20220722121815.27535-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:subject:mime-version
+         :content-transfer-encoding;
+        bh=kIKMl7lknNmrR7/g3+eBdSau4//c4Zzr0QaeUiEir7A=;
+        b=EEuH+RWVbHVU+ZTq6yensx0Y/txf8sut8OXv9JesJ0X5MKaJY+N4VGJ4DEUhkkLZG6
+         l4chjrtNH4dleM+FdX4IXRLfBDgABfQ2Rtqsji8vZL7zVAY7Umg1GbURR8oK1NiY8wN+
+         4GcMV0u2/V+1NikxdYNvslCy66aXF/SSAYva/Gseh7Hsb6y7MUGniHArsbX2JxHQIHgj
+         wXiwNKqxajgyN0w7ETYLCPQ+w1X9SOMY8jPELeEFnyMdKHvyS5FQrrFjSGyDeWUKrvo/
+         Zgzv1Un8coXQCZ3vidcuaqxz3I7PyzWo4IkRJr4xn7tebobZ98BuKD+1wV6ntAvF+Owk
+         tbsQ==
+X-Gm-Message-State: AJIora+QLoXUl6871JyjaL26v+0KmY+PPKwEQNCvKY4M3671nKmsb9zd
+        e4qmbX9ZiCB3bIScqBG9IWu2
+X-Google-Smtp-Source: AGRyM1vRv8Pg5YMxgoX//w7Bar4An6ugLUhEpTDVLqgE1K9tMb0kLUN+xQP5nT2rrJ4QhsOwsmCzBg==
+X-Received: by 2002:ac8:7f8e:0:b0:31f:10bc:f5d7 with SMTP id z14-20020ac87f8e000000b0031f10bcf5d7mr140040qtj.561.1658492414525;
+        Fri, 22 Jul 2022 05:20:14 -0700 (PDT)
+Received: from [10.130.209.145] (mobile-166-170-54-234.mycingular.net. [166.170.54.234])
+        by smtp.gmail.com with ESMTPSA id m1-20020a05620a24c100b006b259b5dd12sm3456272qkn.53.2022.07.22.05.20.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 22 Jul 2022 05:20:13 -0700 (PDT)
+From:   Paul Moore <paul@paul-moore.com>
+To:     Martin KaFai Lau <kafai@fb.com>,
+        Frederick Lawler <fred@cloudflare.com>
+CC:     <kpsingh@kernel.org>, <revest@chromium.org>,
+        <jackmanb@chromium.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <jmorris@namei.org>,
+        <serge@hallyn.com>, <stephen.smalley.work@gmail.com>,
+        <eparis@parisplace.org>, <shuah@kernel.org>, <brauner@kernel.org>,
+        <casey@schaufler-ca.com>, <ebiederm@xmission.com>,
+        <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+        <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <kernel-team@cloudflare.com>, <cgzones@googlemail.com>,
+        <karl@bigbadwolfsecurity.com>
+Date:   Fri, 22 Jul 2022 08:20:10 -0400
+Message-ID: <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+In-Reply-To: <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+References: <20220721172808.585539-1-fred@cloudflare.com>
+ <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+User-Agent: AquaMail/1.37.0 (build: 103700163)
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4675ff05de2d ("kmemcheck: rip it out") removes kmemcheck and its
-corresponding build config KMEMCHECK.
+On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
 
-Commit 0f620cefd775 ("objtool: Rename "VMLINUX_VALIDATION" ->
-"NOINSTR_VALIDATION"") renamed the debug config option.
+> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>> used the LSM cred_prepare hook because that is the closest hook to preve=
+nt
+>> a call to create_user_ns().
+>>
+>> The calls look something like this:
+>>
+>> cred =3D prepare_creds()
+>> security_prepare_creds()
+>> call_int_hook(cred_prepare, ...
+>> if (cred)
+>> create_user_ns(cred)
+>>
+>> We noticed that error codes were not propagated from this hook and
+>> introduced a patch [1] to propagate those errors.
+>>
+>> The discussion notes that security_prepare_creds()
+>> is not appropriate for MAC policies, and instead the hook is
+>> meant for LSM authors to prepare credentials for mutation. [2]
+>>
+>> Ultimately, we concluded that a better course of action is to introduce
+>> a new security hook for LSM authors. [3]
+>>
+>> This patch set first introduces a new security_create_user_ns() function
+>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+> Patch 1 and 4 still need review from the lsm/security side.
 
-Adjust x86_debug.config to those changes in debug configs.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- kernel/configs/x86_debug.config | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+This patchset is in my review queue and assuming everything checks out, I e=
+xpect to merge it after the upcoming merge window closes.
 
-diff --git a/kernel/configs/x86_debug.config b/kernel/configs/x86_debug.config
-index dcd86f32f4ed..6fac5b405334 100644
---- a/kernel/configs/x86_debug.config
-+++ b/kernel/configs/x86_debug.config
-@@ -7,12 +7,11 @@ CONFIG_DEBUG_SLAB=y
- CONFIG_DEBUG_KMEMLEAK=y
- CONFIG_DEBUG_PAGEALLOC=y
- CONFIG_SLUB_DEBUG_ON=y
--CONFIG_KMEMCHECK=y
- CONFIG_DEBUG_OBJECTS=y
- CONFIG_DEBUG_OBJECTS_ENABLE_DEFAULT=1
- CONFIG_GCOV_KERNEL=y
- CONFIG_LOCKDEP=y
- CONFIG_PROVE_LOCKING=y
- CONFIG_SCHEDSTATS=y
--CONFIG_VMLINUX_VALIDATION=y
-+CONFIG_NOINSTR_VALIDATION=y
- CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
--- 
-2.17.1
+I would also need an ACK from the BPF LSM folks, but they're CC'd on this p=
+atchset.
+
+--
+paul-moore.com
+
 

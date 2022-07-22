@@ -2,160 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA43A57E366
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D4757E36C
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 17:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235497AbiGVPH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 11:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S232972AbiGVPId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 11:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbiGVPHY (ORCPT
+        with ESMTP id S235502AbiGVPIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:07:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DF48810B;
-        Fri, 22 Jul 2022 08:07:23 -0700 (PDT)
-Received: from zn.tnic (p200300ea97297665329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:7665:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DCB0B1EC04E4;
-        Fri, 22 Jul 2022 17:07:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658502438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3Hc0Vuv3k27qn5hRTK62cKaY/chLQcEx0JaH2giHRug=;
-        b=fFn7fCbE9fzF8IoOrgQ/x1EoTFvBSRPNJLjiw+qpNnOmbOf65mkhNsyc0cETIHlUak1sm/
-        qOkO8NF/s4BDSD8YxmO71pol1top4QIOpBgu/2bqpyTZC67PPk7hajToBOT++7Gm1GT4fO
-        nwOhQ/PnGxR+T4CmEfYCAQnMLgFMbSM=
-Date:   Fri, 22 Jul 2022 17:07:13 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Marc Orr <marcorr@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
- memory
-Message-ID: <Ytq9IWopJS4EGqEq@zn.tnic>
-References: <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic>
- <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic>
- <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
- <YtcnQbiRgZPtR+rQ@zn.tnic>
- <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
- <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com>
- <YteWPj7HytPrcplB@zn.tnic>
- <CAA03e5H8-n23eZ5sMWLQADpJ+AQCrhMoDng_aiw3-C5cPHEwnA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAA03e5H8-n23eZ5sMWLQADpJ+AQCrhMoDng_aiw3-C5cPHEwnA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 11:08:32 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3241A88F37
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:08:30 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26MENVeq007256;
+        Fri, 22 Jul 2022 15:08:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=nUADTmTOViYJUoOL2poj7e8y6wxZSdNyN8C0LFw6b6g=;
+ b=jBMnBQW+COtoS2GvW0iAnVN1c3HVh6OsC0FB2in2/itjARvqTUEIrslu9Ia2P215FAr7
+ CJnqEeMYEhKawmP7o9EICYAss5qGBlm/ntn9B3cWk95uMGQIRg0xUoixUbBMUJo+1ZaF
+ yOstFb6iKRW6B8ti73+YNkT3h3L+jG99tM7XKJmq56UjPxUXalg/boe/XAxk4TAag5h3
+ zuAJGfJyYbDC0htC9kUnQ7qLz8TPR8kCJiE4WBgJQFl7c+9mvXoJObO01fRCXOPXgDM0
+ /k5mUWK932yeozN/RUqU9T4Iny3AIX3SJBeAOXFCWT3SvCuLp6rVwFLRktPfOPxXpaJv ww== 
+Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hfs5arsfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 22 Jul 2022 15:08:19 +0000
+Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 26MF8FOB012573;
+        Fri, 22 Jul 2022 15:08:15 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTPS id 3hc6rjn0k2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 22 Jul 2022 15:08:15 +0000
+Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26MF8Fve012568;
+        Fri, 22 Jul 2022 15:08:15 GMT
+Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 26MF8Fbb012567;
+        Fri, 22 Jul 2022 15:08:15 +0000
+Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
+        id 20E4E21029A4; Fri, 22 Jul 2022 23:08:14 +0800 (CST)
+From:   Kassey Li <quic_yingangl@quicinc.com>
+To:     akpm@linux-foundation.org
+Cc:     Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
+        iamjoonsoo.kim@lge.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm/page_owner.c: allow page_owner with given start_pfn/count
+Date:   Fri, 22 Jul 2022 23:08:10 +0800
+Message-Id: <20220722150810.27740-1-quic_yingangl@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: EYlyzmaQTzIVM6rs4ixBFCEZUq27NRMJ
+X-Proofpoint-ORIG-GUID: EYlyzmaQTzIVM6rs4ixBFCEZUq27NRMJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-22_06,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 mlxlogscore=763 phishscore=0
+ clxscore=1011 bulkscore=0 suspectscore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207220064
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 10:03:40AM -0700, Marc Orr wrote:
-> Generally, no. But the problem with tags is that distros tag their
-> images wrong sometimes. And that leads to problems. For example, I
-> just got a bug assigned to me yesterday about some ARM image tagged as
-> SEV_CAPABLE. Oops. Lol :-). (Though, I'm pretty sure we won't try to
-> boot an ARM image on a non-ARM host anyway; but it's still wrong...)
+by default, page_owner iterates all page from min_low_pfn to
+max_pfn, this cost too much time if we want an alternative pfn range.
 
-Yeah, even if, let it crash'n'burn - people will notice pretty quickly.
+with this patch it allows user to set pfn range to dump the page_onwer.
 
-> That being said, this lazy accept problem is sort of a special case,
-> since it requires deploying code to the guest FW and the guest kernel.
-> I'm still relatively new at all of this, but other than the
-> SNP/TDX-enlightenment patches themselves,  I haven't really seen any
-> other examples of this. So that goes back to my previous question. Is
-> this going to happen a lot more?
+Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+---
+ mm/page_owner.c | 45 ++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 42 insertions(+), 3 deletions(-)
 
-Good question.
-
-Unfortunately, not even the architects of coco could give you an answer
-because, as you see yourself, those additional features like memory
-acceptance, live migration, etc keep changing - the whole coco thing is
-pretty much a moving target.
-
-For example, if someone comes along and says, err, see, I have this live
-migration helper and that thing runs as an EFI executable and it is so
-much better...
-
-Not saying it'll happen but it could. I hope you're catching my drift.
-
-> If not, I can definitely see value in the argument to skip the
-> complexity of the FW/kernel feature negotiation.
->
-> Another thing I thought of since my last reply, that's mostly an
-> internal solution to this problem on our side: Going back to Dave's
-> 10k-foot view of the different angles of how to solve this. For "1.
-> Deal with that at the host level configuration", I'm thinking we could
-> tag the images with their internal guest kernel version. For example,
-> if an image has a 5.15 kernel, then we could have a `KERNEL_5_15` tag.
-> This would then allow us to have logic in the guest FW like:
-> 
-> if (guest_kernel_is_at_least(/*major=*/5, /*minor=*/15)
->      enable_lazy_accept = true;
-
-Well, I don't want to spoil your idea but imagine distros like SLE or
-others backport features into old kernels. All of a sudden 5.14 or older
-can do memory acceptance too. And then that version-based scheme falls
-apart.
-
-So I'm guessing it would probably be better to explicitly tag distro
-images. Thing is, once all needed support gets in, you can drop the tags
-and simply say, you don't support those old images anymore and assume
-all required support is there and implicit...
-
-> Also, tagging images with their underlying kernel versions still seems
-> susceptible to mis-labeling. But this seems like it can be mostly
-> "fixed" via automation (e.g., write a tool to boot the guest and ask
-> it what it's kernel version is and use the result to attach the tag).
-
-I'll do you one better: boot the image and check for all required
-features and produce tags. Or do not accept the image as a possible coco
-image. And so on.
-
-Thx.
-
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index e4c6f3f1695b..79c634d11ee6 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -41,6 +41,39 @@ static depot_stack_handle_t dummy_handle;
+ static depot_stack_handle_t failure_handle;
+ static depot_stack_handle_t early_handle;
+ 
++static u64 start_pfn;
++static u64 end_pfn;
++
++static int debugfs_start_pfn_u64_set(void *data, u64 val)
++{
++	if (val < min_low_pfn || val > max_pfn)
++		return -EINVAL;
++	start_pfn = val;
++	return 0;
++}
++static int debugfs_start_pfn_u64_get(void *data, u64 *val)
++{
++	*val = start_pfn;
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(fops_start_pfn, debugfs_start_pfn_u64_get,
++	debugfs_start_pfn_u64_set, "%lld\n");
++
++static int debugfs_end_pfn_u64_set(void *data, u64 val)
++{
++	if (val > max_pfn || val < start_pfn)
++		return -EINVAL;
++	end_pfn = val;
++	return 0;
++}
++static int debugfs_end_pfn_u64_get(void *data, u64 *val)
++{
++	*val = end_pfn;
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(fops_end_pfn, debugfs_end_pfn_u64_get,
++	debugfs_end_pfn_u64_set, "%lld\n");
++
+ static void init_early_allocated_pages(void);
+ 
+ static int __init early_page_owner_param(char *buf)
+@@ -497,7 +530,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 		return -EINVAL;
+ 
+ 	page = NULL;
+-	pfn = min_low_pfn + *ppos;
++	pfn = start_pfn + *ppos;
+ 
+ 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
+ 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
+@@ -506,7 +539,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 	drain_all_pages(NULL);
+ 
+ 	/* Find an allocated page */
+-	for (; pfn < max_pfn; pfn++) {
++	for (; pfn < end_pfn; pfn++) {
+ 		/*
+ 		 * If the new page is in a new MAX_ORDER_NR_PAGES area,
+ 		 * validate the area as existing, skip it if not
+@@ -561,7 +594,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 			continue;
+ 
+ 		/* Record the next PFN to read in the file offset */
+-		*ppos = (pfn - min_low_pfn) + 1;
++		*ppos = (pfn - start_pfn) + 1;
+ 
+ 		return print_page_owner(buf, count, pfn, page,
+ 				page_owner, handle);
+@@ -671,6 +704,12 @@ static int __init pageowner_init(void)
+ 
+ 	debugfs_create_file("page_owner", 0400, NULL, NULL,
+ 			    &proc_page_owner_operations);
++	debugfs_create_file("page_owner_start_pfn", 0644, NULL, NULL,
++				&fops_start_pfn);
++	debugfs_create_file("page_owner_end_pfn", 0644, NULL, NULL,
++				&fops_end_pfn);
++	start_pfn = min_low_pfn;
++	end_pfn = max_pfn;
+ 
+ 	return 0;
+ }
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9946957E07A
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766D057E07D
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 13:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiGVLGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 07:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S233716AbiGVLHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 07:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGVLGq (ORCPT
+        with ESMTP id S229880AbiGVLHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 07:06:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB2240BDE;
-        Fri, 22 Jul 2022 04:06:44 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lq65D6DTXzkXQ5;
-        Fri, 22 Jul 2022 19:04:16 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 22 Jul 2022 19:06:41 +0800
-Subject: Re: [net] ipv6/addrconf: fix a null-ptr-deref bug for ip6_ptr
-To:     Eric Dumazet <edumazet@google.com>
-CC:     David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220722074153.2454007-1-william.xuanziyang@huawei.com>
- <CANn89iKWr-VJVus9GbafrghR2MKUz64sX9fg1YA=oHE0SYdZCg@mail.gmail.com>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <3e1a132a-c3b0-8e5d-ca23-1c02617d14cc@huawei.com>
-Date:   Fri, 22 Jul 2022 19:06:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <CANn89iKWr-VJVus9GbafrghR2MKUz64sX9fg1YA=oHE0SYdZCg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 22 Jul 2022 07:07:30 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3E2501B6;
+        Fri, 22 Jul 2022 04:07:29 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z13so6006021wro.13;
+        Fri, 22 Jul 2022 04:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=va9r0QVLDrzUBKfwOlAVVXjIk9+Gr+10/tXbE/MbkSw=;
+        b=QJPSqQeNeUS/qsGSgTA78nYzcxlb9VFNzBc0ISV8jX262S799ScyRSkmFq3qyWKJd8
+         Gkry15oWAYgGLktPECDR7KMNKw4AcYK1uUnC3Rf9se0aIuLJ/aUEAcuGtb5b6Mgb8t7F
+         /q8g873gkB9cxZ5tgtlQ8poBpo4hNk8ht5AA0m3/OGy1JKO06w+zynAyaHpR5faO/whW
+         acuyfJTlc71qKjZIWAehu5g1u/siHaTxJdvxr+xMHx3upMv/RAb7EpA285saZXr8BtXZ
+         UPR7ampwTkXuxmuI323H2IR5KhcD3VujGAhMZ+4YyqG33NPUAWtq8FG8WQV9lrYOKJAM
+         T8FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=va9r0QVLDrzUBKfwOlAVVXjIk9+Gr+10/tXbE/MbkSw=;
+        b=eAINoVQK19DGXIkAP1xdQh60C9gOWSoVDXHWjVu1PbAp3uoC24UVKR7D9KSMlSvrqC
+         Ek/2iLaP+On3S0R55P4ZdyexwlmpmIlP/b9J2WzDtsQZ63s03E/Cb1bCDwY8QcHwIOA4
+         5XS79G63HnlQ82vvg5RyH6srLEf6awnY3pUlgx4tB4FNY8GFFl3oxp6DkbRXEwlwEMEg
+         X7ARCNaNQN664QwNvepksoFx0sS1q70BLTeRzqi+ZdZ+SCjjTQHjkhLnf5tzfxDySd7g
+         bcBKAbg82l8JnSl8z1jtaId+MKefHjQWqD75sNsPQisnmxTzILbEOPLPDRTHzfo5DPGy
+         jDoA==
+X-Gm-Message-State: AJIora+i7oqPCuwwrGN7l0kK2n37cf8E6PM2PLOI3HYQ/wZIkGS+PquX
+        zlQ3sYmo2X1epjojaajgm/gpvObzLEU=
+X-Google-Smtp-Source: AGRyM1s1DyyQ730C8rTg4zM/Mx1fOod5LKx8nGSMzVjlSyMZyzOz3bay+m3QhU/YTH+4pBys4tClHQ==
+X-Received: by 2002:a05:6000:1888:b0:21d:beeb:785c with SMTP id a8-20020a056000188800b0021dbeeb785cmr2188576wri.34.1658488047525;
+        Fri, 22 Jul 2022 04:07:27 -0700 (PDT)
+Received: from felia.fritz.box (200116b826e64200edeeb77a6a94b0d2.dip.versatel-1u1.de. [2001:16b8:26e6:4200:edee:b77a:6a94:b0d2])
+        by smtp.gmail.com with ESMTPSA id g3-20020a5d5543000000b0021e4bc9edbfsm4248964wrw.112.2022.07.22.04.07.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 04:07:25 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2] asm-generic: remove a broken and needless ifdef conditional
+Date:   Fri, 22 Jul 2022 13:07:11 +0200
+Message-Id: <20220722110711.16569-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,158 +66,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Jul 22, 2022 at 9:42 AM Ziyang Xuan
-> <william.xuanziyang@huawei.com> wrote:
->>
->> Change net device's MTU to smaller than IPV6_MIN_MTU or unregister
->> device while matching route. That may trigger null-ptr-deref bug
->> for ip6_ptr probability as following.
->>
->> Reproducer as following:
->> Firstly, prepare conditions:
->> $ip netns add ns1
->> $ip netns add ns2
->> $ip link add veth1 type veth peer name veth2
->> $ip link set veth1 netns ns1
->> $ip link set veth2 netns ns2
->> $ip netns exec ns1 ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1
->> $ip netns exec ns2 ip -6 addr add 2001:0db8:0:f101::2/64 dev veth2
->> $ip netns exec ns1 ifconfig veth1 up
->> $ip netns exec ns2 ifconfig veth2 up
->> $ip netns exec ns1 ip -6 route add 2000::/64 dev veth1 metric 1
->> $ip netns exec ns2 ip -6 route add 2001::/64 dev veth2 metric 1
->>
->> Secondly, execute the following two commands in two ssh windows
->> respectively:
->> $ip netns exec ns1 sh
->> $while true; do ip -6 addr add 2001:0db8:0:f101::1/64 dev veth1; ip -6 route add 2000::/64 dev veth1 metric 1; ping6 2000::2; done
->>
->> $ip netns exec ns1 sh
->> $while true; do ip link set veth1 mtu 1000; ip link set veth1 mtu 1500; sleep 5; done
->>
->> And in order to increase the probability of reproduce,
->> we can add mdelay() in find_match() as following:
->>
->> static bool find_match(struct fib6_nh *nh, u32 fib6_flags,
->>         if (nh->fib_nh_flags & RTNH_F_DEAD)
->>                 goto out;
->>
->> +       mdelay(1000);
-> 
-> But adding a mdelay() in an rcu_read_lock() should not be possible.
-> 
-> I guess this means _this_ function is not properly using rcu protection.
+Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
+falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
+in the reference) in ./include/asm-generic/io.h.
 
-This just to increase the probability during reproducing.
+Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
 
-The problem needs ip6_ptr assigned to NULL in addrconf_ifdown() firstly,
-then accesses ip6_ptr without any NULL check in ip6_ignore_linkdown().
+GENERIC_DEVMEM_IS_ALLOWED
+Referencing files: include/asm-generic/io.h
 
-	cpu0						cpu1
-fib6_table_lookup [ under rcu_read_lock() ]
-__find_rr_leaf [ traverse fib6_info list ]
-						addrconf_notify [ NETDEV_CHANGEMTU ]
-						addrconf_ifdown
-						RCU_INIT_POINTER(dev->ip6_ptr, NULL)
-find_match
-ip6_ignore_linkdown
+The actual fix, though, is simply to not to make this function declaration
+dependent on any kernel config. For architectures that intend to use
+the generic version, the arch's 'select GENERIC_LIB_DEVMEM_IS_ALLOWED' will
+lead to picking the function definition, and for other architectures, this
+function is simply defined elsewhere.
 
-static inline bool ip6_ignore_linkdown(const struct net_device *dev)
-{
-	const struct inet6_dev *idev = __in6_dev_get(dev);
+The wrong '#ifndef' on a non-existing config symbol also always had the
+same effect (although more by mistake than by intent). So, there is no
+functional change.
 
-	// without NULL check, access idev directly. If idev is NULL, null-ptr-deref occur.
-	return !!idev->cnf.ignore_routes_with_linkdown;
-}
+Remove this broken and needless ifdef conditional.
 
-> 
->>         if (ip6_ignore_linkdown(nh->fib_nh_dev) &&
->>             nh->fib_nh_flags & RTNH_F_LINKDOWN &&
->>             !(strict & RT6_LOOKUP_F_IGNORE_LINKSTATE))
->>
->> =========================================================
->> BUG: KASAN: null-ptr-deref in find_match.part.0+0x70/0x134
->> Read of size 4 at addr 0000000000000308 by task ping6/263
->>
->> CPU: 2 PID: 263 Comm: ping6 Not tainted 5.19.0-rc7+ #14
->> Call trace:
->>  dump_backtrace+0x1a8/0x230
->>  show_stack+0x20/0x70
->>  dump_stack_lvl+0x68/0x84
->>  print_report+0xc4/0x120
->>  kasan_report+0x84/0x120
->>  __asan_load4+0x94/0xd0
->>  find_match.part.0+0x70/0x134
->>  __find_rr_leaf+0x408/0x470
->>  fib6_table_lookup+0x264/0x540
->>  ip6_pol_route+0xf4/0x260
->>  ip6_pol_route_output+0x58/0x70
->>  fib6_rule_lookup+0x1a8/0x330
->>  ip6_route_output_flags_noref+0xd8/0x1a0
->>  ip6_route_output_flags+0x58/0x160
->>  ip6_dst_lookup_tail+0x5b4/0x85c
->>  ip6_dst_lookup_flow+0x98/0x120
->>  rawv6_sendmsg+0x49c/0xc70
->>  inet_sendmsg+0x68/0x94
->>  sock_sendmsg+0x8c/0xb0
->>
->> It is because ip6_ptr has been assigned to NULL in addrconf_ifdown(),
->> and ip6_ignore_linkdown() in find_match() accesses ip6_ptr directly.
->> Although find_match() routine is under rcu_read_lock(), but there is
->> not synchronize_net() before assign NULL to make rcu grace period end.
->>
-> 
-> This is not how RCU works.
-> 
->> So we can add synchronize_net() before assign ip6_ptr to NULL in
->> addrconf_ifdown() to fix the null-ptr-deref bug.
-> 
-> This does not make sense to me.
-> 
->>
->> Fixes: 8814c4b53381 ("[IPV6] ADDRCONF: Convert addrconf_lock to RCU.")
->> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->> ---
->>  net/ipv6/addrconf.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
->> index 49cc6587dd77..63d33b29ad21 100644
->> --- a/net/ipv6/addrconf.c
->> +++ b/net/ipv6/addrconf.c
->> @@ -3757,6 +3757,7 @@ static int addrconf_ifdown(struct net_device *dev, bool unregister)
->>                 idev->dead = 1;
->>
->>                 /* protected by rtnl_lock */
->> +               synchronize_net();
-> 
-> I do not think we want yet another expensive synchronize_net(),
-> especially  before setting ip6_ptr to NULL
+Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+v1: https://lore.kernel.org/all/20211006145859.9564-1-lukas.bulwahn@gmail.com/
 
-Maybe the following solution can be considered.
+Arnd, please pick this v2 for your asm-generic branch. 
 
-diff --git a/include/net/addrconf.h b/include/net/addrconf.h
-index f7506f08e505..c04f359655b8 100644
---- a/include/net/addrconf.h
-+++ b/include/net/addrconf.h
-@@ -405,6 +405,9 @@ static inline bool ip6_ignore_linkdown(const struct net_device *dev)
- {
-        const struct inet6_dev *idev = __in6_dev_get(dev);
 
-+       if (unlikely(!idev))
-+               return true;
-+
-        return !!idev->cnf.ignore_routes_with_linkdown;
+ include/asm-generic/io.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index ce4c90601300..a68f8fbf423b 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -1221,9 +1221,7 @@ static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
  }
+ #endif
+ 
+-#ifndef CONFIG_GENERIC_DEVMEM_IS_ALLOWED
+ extern int devmem_is_allowed(unsigned long pfn);
+-#endif
+ 
+ #endif /* __KERNEL__ */
+ 
+-- 
+2.17.1
 
-> 
-> 
-> 
->>                 RCU_INIT_POINTER(dev->ip6_ptr, NULL);
->>
->>                 /* Step 1.5: remove snmp6 entry */
->> --
->> 2.25.1
->>
-> .
-> 

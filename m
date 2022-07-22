@@ -2,68 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C22D57DBBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C6657DBBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 22 Jul 2022 10:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234776AbiGVIIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 04:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S234484AbiGVIHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 04:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbiGVIH4 (ORCPT
+        with ESMTP id S229682AbiGVIHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 04:07:56 -0400
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FF29B9F8
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:07:53 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1658477265tai0jwlc
-Received: from eureka.localdomain ( [123.124.208.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 22 Jul 2022 16:07:30 +0800 (CST)
-X-QQ-SSF: 01400000002000B0D000000A0000020
-X-QQ-FEAT: BlNBQFNV1ZVeA8rU1SPzmwZ7u+0PdTPHCpU9vugeV7vnr1MKcjuqSYaan6vBb
-        MZ8N+01b4UX+1rLUDgiBxMXLGp5UqhbH0dQ984MbYhSdqFEmxdLatNF/1TaIdt55bxHnMQv
-        ZZVImDrujg/0IoFGT0xHn99JpnDritGlkSlQ9nvgdzPjvAGyaNwPYQ6kKx2Oho4EdxeIale
-        1uzGP9aKqCQC34kW7zxO84sJco5dmkpAi1HKst+X4eN9qbSkzJhSVcKyEHMAZHpayNh2qT6
-        grkFygt7hfG2t9jZ4vgPIaUxFirqXwdb8LJ+feXuEPLyF7nxGNyv5g0atEadhyfVA/RuIeV
-        zXAZmxfqc4ShUgqIr2GylkRfoBjuPf0f2w2v0XglXYSAYNtELx1J04YwTjuFNq9qI0Hhqv3
-        /b9JuUM7mM4=
-X-QQ-GoodBg: 1
-From:   Wang You <wangyoua@uniontech.com>
-To:     bvanassche@acm.org
-Cc:     axboe@kernel.dk, fio@vger.kernel.org, hch@lst.de,
-        jaegeuk@kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ming.lei@redhat.com,
-        wangxiaohua@uniontech.com, wangyoua@uniontech.com
-Subject: Re: [PATCH 1/2] block: Introduce nr_sched_batch sys interface
-Date:   Fri, 22 Jul 2022 16:07:30 +0800
-Message-Id: <20220722080730.363800-1-wangyoua@uniontech.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <21e7c959-6365-8029-d26d-985ff888333e@acm.org>
-References: <21e7c959-6365-8029-d26d-985ff888333e@acm.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 04:07:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F91A9B576
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 01:07:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B37266138B
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 08:07:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 215C3C341C6;
+        Fri, 22 Jul 2022 08:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658477268;
+        bh=ArMP6+H2VqRCpQ6HR0t51RGFDWByuXnQDn/27Yz7/g8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KSnH2SnT4Dxj0152oLHytdvMtbeCRLGb451qsqbiTDBJN7LvqPPFJBkYNZy/8rONt
+         6CA0rQsd9iLh9EcHvvGZxIELWufBQ5TKB99lcp+RxPfMQ07dwfrIksesyQ8nNFnZMC
+         hYF3NlzI3wVoNI+F4WOP5KWhxBLzioq+iYGRSqqoC1XQWVCXdX7LcqiqDwgck1aoVs
+         12oRLKQ0LVRtCgEw+iD0wKlEEx3eS01PqQSbJ+mKQ9amiagE586Kzjjls5Rr1TJEN+
+         5CdTUdgOgDdf8QDEFNR5f96JQ2DmgthySzVw2N2Qd63WnlKJKTzyc2+cun4QraPILG
+         VNzLV+FNRJewA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oEnhK-009GzO-2o;
+        Fri, 22 Jul 2022 09:07:46 +0100
+Date:   Fri, 22 Jul 2022 09:07:45 +0100
+Message-ID: <87r12dy3hq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V18 00/13] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <CAAhV-H4LXGE1mPQDf1wbuaCuB1G02RG1JA-B78+pNTPwwwKPWw@mail.gmail.com>
+References: <1658314292-35346-1-git-send-email-lvjianmin@loongson.cn>
+        <874jzcyrjl.wl-maz@kernel.org>
+        <CAAhV-H4LXGE1mPQDf1wbuaCuB1G02RG1JA-B78+pNTPwwwKPWw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@kernel.org, lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> How can reducing the number of batched requests increase performance?
+Hi Huacai,
 
-> Please provide performance numbers.
+On Fri, 22 Jul 2022 03:25:23 +0100,
+Huacai Chen <chenhuacai@kernel.org> wrote:
+> 
+> Hi, Marc,
+> 
+> On Wed, Jul 20, 2022 at 7:03 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Wed, 20 Jul 2022 11:51:19 +0100,
+> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> > >
+> > > LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> > > LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> > > version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> > > boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> > > are already added in the ACPI Specification 6.5(which may be published in
+> > > early June this year and the board is reviewing the draft).
+> > >
+> > > Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+> > > work together with LS7A chipsets. The irq chips in LoongArch computers
+> > > include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+> > > Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller), PCH-PIC
+> > > (Main Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+> > > in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> >
+> > [...]
+> >
+> > OK, that's 4 versions in quick succession, so I suggest we stop the
+> > bikeshedding and focus on getting this actually merged.
+> >
+> > I'm going to stick this in a branch and throw it at -next. Any change
+> > will need to go on top of it, no rebasing. If anything that breaks
+> > cannot be fixed easily, I will drop the branch.
+> Thank you very much for this series finally get merged.
+> But there is a question that has puzzled me for a long time so I want
+> to consult with you: Why exporting fwnode_handle in the driver is
+> acceptable but exporting irqdomain is not? In my opinion, exporting
+> irqdomain is more simple and direct because it can avoid
+> irq_find_matching_fwnode() in the consumer side.
 
-The test data of the original patch is in [PATCH 2/2], including the case 
-of nr_sched_batch = 1, and then I will organize the data of different 
-hardware in PATCH v2.
+The idea is that creating a mapping is normally driven by the code
+that parses firmware tables, be it DT or ACPI. That code normally only
+has access to something that eventually derives into a fwnode.
+irqdomains should only be a concern for the IRQ stack itself, and not
+the firmware interface.
 
-Thanks,
+Now, your architecture breaks some of the fundamentals of what we have
+tried to do over the past 10 years, which is to separate the FW
+interface from the IRQ code, because you can't describe the topology
+in the firmware tables and are stuck with some in-code flow.
 
-Wang.
+We have two choices:
 
+- Either we let you break the above separation and start exposing
+  irqdomains everywhere outside of the IRQ stack,
 
+- Or we turn your arch code into its own firmware interface, and make
+  it drive the IRQ code as DT/ACPI would normally do.
+
+I have decided to go for the latter, because I don't think the
+LoongArch model is a good one. I'm convinced that eventually you will
+have to redesign a FW interface that allows full topology discovery
+(probably similar to IORT, should you stick with the ACPI model), and
+that the current code will become a historical artefact.
+
+And I really don't want this legacy in the core code.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

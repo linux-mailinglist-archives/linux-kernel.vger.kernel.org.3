@@ -2,140 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F98457EC8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDDC57EC8F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbiGWHog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 03:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S233599AbiGWHuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 03:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiGWHod (ORCPT
+        with ESMTP id S230240AbiGWHuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 03:44:33 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0094F1B5;
-        Sat, 23 Jul 2022 00:44:31 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id bu1so9194454wrb.9;
-        Sat, 23 Jul 2022 00:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tei8gU0z/ZZIONH6z+6TkIT0lbdV8NKJKoJnizWNnK8=;
-        b=D9I1oN72Ingdt2jgFG/SHwWaWOicdYnHo4aWcILnsJm4hhP3fu0jFxL+MfEMW9/HCb
-         4proD9X/CVY0pIwd+9PSmlYZlHFIqbadwOWS2u9ifCv9a4DTX7tYyKp4JBi1sdOBhxgo
-         bse7FusIgVUXpOCCoxvcXncuFRbcSHNH2saLkHyJY1wUQ8+mdRJpjtb/MZja+xoWz6Xg
-         DWSmzE4Dew2IkFambF9RLXohV8uYkTaaP1iaRIk6alcIm+iXyAWwKdQ7vs7or2zXRLoc
-         nxM8RtsxLCnYl5d88AcPkbaMBQw1xcjwlH0RGQ/ComepbrmTCIyEtAiHRyCUZmr2ohMv
-         oMYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tei8gU0z/ZZIONH6z+6TkIT0lbdV8NKJKoJnizWNnK8=;
-        b=Jhdt3eRyTzGkoeYSnERAtrswLruIslJUdxu4toBpKuFJG/l10BBHnMWMi/TM2B/DNz
-         TYkXmhTmJwziJF5JJJRK9ZseLTqPiSbnazJCBZdLTkxbsI2AD59WOM6EdGvIi1u80VaA
-         pbHxb4yTipFuTlzL4LxNKsYNndQrvdtSxAoY5MrHF2wI1iO3EDSiPZjETzA7jOq/H0aO
-         nfUcxOXyVKMaQKgUNDg3fDgyKG9+pfqGcLh9yiUlC2nhAaz4FMgMas3TOHp2W1SlbB1n
-         MWERq/8N7BARyp8pzXkIgnhUdJbX9jhYPn+DaGCYHKI/QbWuCpU1TodufYo9vQr5EcOW
-         RiOg==
-X-Gm-Message-State: AJIora8CoxaXoxX4z6P7Ygbuz6D5qxdDjzLI35eH7T1cyWVPlTUzlM9S
-        QwHXcoQ+6SAx+d+F2tBV+oTmF7ZFKR3BnQ==
-X-Google-Smtp-Source: AGRyM1uG+qSB9PlXY5p3neoZG2v5dChhA+3d1+xtdwn1vMGM4cVHu5hzFk2yf4cA5lJVz3BbVLe9rg==
-X-Received: by 2002:a5d:4352:0:b0:21e:4984:e607 with SMTP id u18-20020a5d4352000000b0021e4984e607mr2019855wrr.66.1658562270420;
-        Sat, 23 Jul 2022 00:44:30 -0700 (PDT)
-Received: from reki (62-44-238.netrun.cytanet.com.cy. [62.228.44.238])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0a4700b003a31f71c5b8sm13450506wmq.27.2022.07.23.00.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 00:44:30 -0700 (PDT)
-Date:   Sat, 23 Jul 2022 10:44:28 +0300
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <20220723104428.26941d85@reki>
-In-Reply-To: <Ytuip1C2LPmAxQxV@kroah.com>
-References: <20220719194337.64c490e0@canb.auug.org.au>
-        <20220719132559.3348c163@reki>
-        <YtaUYmzTfKmx0Ek0@kroah.com>
-        <20220723101428.347d941e@reki>
-        <Ytuip1C2LPmAxQxV@kroah.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 23 Jul 2022 03:50:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697FCB1EB
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 00:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658562612; x=1690098612;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2DPWEocs9So/VlQFT3+uJ204CFqtkS0MP6MrUFITSao=;
+  b=kS8j1XMGT4YM+hDHtFclXKixRwAUHciW6am07ecXyaqfe+KEYWlRCoeT
+   YYlD9zusVwr1zcw0NK7EYSqmvPvByaBoVbpUQUN0xgdG+5lGjhk7cs39k
+   lQYarHSsAS4P/x2wBkE1WCLjEVqv6+UGAsN67M2ExjIr60qFYrCL8i8EZ
+   CP9R9Wc4y2JT5XReMSUPg/8J+a7iV9fRXGflrL+teHw32YqlzlvWljyL+
+   ysFLODQ55sCmHVHIycOacvP5LfV9gQ+ubZn1dhU1A7OVm1QPXnoO8uFMV
+   h2QhJXRKA3fWp7iOkxHstmpmQiXm1eNbgN/tlIFElnETovLQSeRJsK5mV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="288632081"
+X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
+   d="scan'208";a="288632081"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 00:50:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
+   d="scan'208";a="926306442"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Jul 2022 00:50:10 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oF9tp-0002PN-2A;
+        Sat, 23 Jul 2022 07:50:09 +0000
+Date:   Sat, 23 Jul 2022 15:49:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:tj/cgroup/for-next 7/8]
+ kernel/cgroup/cgroup.c:1310:39: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared
+Message-ID: <202207231547.F1PGIJ5n-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=92 Sat, 23 Jul 2022 09:26:31 +0200
-Greg KH <greg@kroah.com> wrote:
+tree:   https://github.com/ammarfaizi2/linux-block tj/cgroup/for-next
+head:   c87b1452249c69cdec70d5de64ea81f56e1ba3f8
+commit: 79276d9e0dda30071b9a98045a3efa7e0a76938b [7/8] cgroup: Make !percpu threadgroup_rwsem operations optional
+config: arm64-buildonly-randconfig-r001-20220721 (https://download.01.org/0day-ci/archive/20220723/202207231547.F1PGIJ5n-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/79276d9e0dda30071b9a98045a3efa7e0a76938b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block tj/cgroup/for-next
+        git checkout 79276d9e0dda30071b9a98045a3efa7e0a76938b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/cgroup/
 
-> On Sat, Jul 23, 2022 at 10:14:28AM +0300, Maxim Devaev wrote:
-> > On Tue, 19 Jul 2022 13:24:18 +0200
-> > Greg KH <greg@kroah.com> wrote:
-> >  =20
-> > > On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote: =20
-> > > > =D0=92 Tue, 19 Jul 2022 19:43:37 +1000
-> > > > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > >    =20
-> > > > > Hi all,
-> > > > >=20
-> > > > > After merging the usb tree, today's linux-next build (htmldocs) p=
-roduced
-> > > > > this warning:
-> > > > >=20
-> > > > > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WA=
-RNING: Malformed table.
-> > > > > Text in column margin in table line 14.
-> > > > >=20
-> > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > > file            The path to the backing file for the LUN.
-> > > > >                 Required if LUN is not marked as removable.
-> > > > > ro              Flag specifying access to the LUN shall be
-> > > > >                 read-only. This is implied if CD-ROM emulation
-> > > > >                 is enabled as well as when it was impossible
-> > > > >                 to open "filename" in R/W mode.
-> > > > > removable       Flag specifying that LUN shall be indicated as
-> > > > >                 being removable.
-> > > > > cdrom           Flag specifying that LUN shall be reported as
-> > > > >                 being a CD-ROM.
-> > > > > nofua           Flag specifying that FUA flag
-> > > > >                 in SCSI WRITE(10,12)
-> > > > > forced_eject    This write-only file is useful only when
-> > > > >                 the function is active. It causes the backing
-> > > > >                 file to be forcibly detached from the LUN,
-> > > > >                 regardless of whether the host has allowed it.
-> > > > >                 Any non-zero number of bytes written will
-> > > > >                 result in ejection.
-> > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > >=20
-> > > > > Introduced by commit
-> > > > >=20
-> > > > >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attrib=
-ute")
-> > > > >    =20
-> > > >=20
-> > > > Sorry. Should I send a patch?   =20
-> > >=20
-> > > Yes please. =20
-> >=20
-> > JFYI the patch has been sent to linux-docs@, etc. I forgot to add you t=
-o CC. =20
->=20
-> Then I'll not be able to take it into my tree to fix this up :(
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Ooops. Okay, I've sent it as with v2 tag and added your linuxfoundation add=
-r to CC.
+All error/warnings (new ones prefixed by >>):
+
+>> kernel/cgroup/cgroup.c:1308:6: warning: no previous prototype for 'cgroup_favor_dynmods' [-Wmissing-prototypes]
+    1308 | void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup.c: In function 'cgroup_favor_dynmods':
+>> kernel/cgroup/cgroup.c:1310:39: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+    1310 |         bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
+         |                                       ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup.c:1310:39: note: each undeclared identifier is reported only once for each function it appears in
+   kernel/cgroup/cgroup.c: In function 'cgroup2_parse_param':
+   kernel/cgroup/cgroup.c:1912:31: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+    1912 |                 ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup.c: In function 'apply_cgroup_root_flags':
+   kernel/cgroup/cgroup.c:1942:51: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+    1942 |                                      root_flags & CGRP_ROOT_FAVOR_DYNMODS);
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup.c: In function 'cgroup_show_options':
+   kernel/cgroup/cgroup.c:1960:35: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+    1960 |         if (cgrp_dfl_root.flags & CGRP_ROOT_FAVOR_DYNMODS)
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup.c: In function 'init_cgroup_root':
+   kernel/cgroup/cgroup.c:2013:37: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+    2013 |         root->flags = ctx->flags & ~CGRP_ROOT_FAVOR_DYNMODS;
+         |                                     ^~~~~~~~~~~~~~~~~~~~~~~
+--
+   kernel/cgroup/cgroup-v1.c: In function 'cgroup1_show_options':
+>> kernel/cgroup/cgroup-v1.c:878:27: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+     878 |         if (root->flags & CGRP_ROOT_FAVOR_DYNMODS)
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup-v1.c:878:27: note: each undeclared identifier is reported only once for each function it appears in
+   kernel/cgroup/cgroup-v1.c: In function 'cgroup1_parse_param':
+   kernel/cgroup/cgroup-v1.c:970:31: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+     970 |                 ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup-v1.c: In function 'cgroup1_root_to_use':
+>> kernel/cgroup/cgroup-v1.c:1227:17: error: implicit declaration of function 'cgroup_favor_dynmods' [-Werror=implicit-function-declaration]
+    1227 |                 cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
+         |                 ^~~~~~~~~~~~~~~~~~~~
+   kernel/cgroup/cgroup-v1.c:1227:57: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
+    1227 |                 cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
+         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/CGRP_ROOT_FAVOR_DYNMODS +1310 kernel/cgroup/cgroup.c
+
+  1307	
+> 1308	void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
+  1309	{
+> 1310		bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
+  1311	
+  1312		/* see the comment above CGRP_ROOT_FAVOR_DYNMODS definition */
+  1313		if (favor && !favoring) {
+  1314			rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
+  1315			root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+  1316		} else if (!favor && favoring) {
+  1317			rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
+  1318			root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
+  1319		}
+  1320	}
+  1321	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

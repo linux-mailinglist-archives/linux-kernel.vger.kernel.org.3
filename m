@@ -2,59 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDDC57EC8F
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D9657EC93
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbiGWHuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 03:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S234340AbiGWHwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 03:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiGWHuO (ORCPT
+        with ESMTP id S230240AbiGWHwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 03:50:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697FCB1EB
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 00:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658562612; x=1690098612;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2DPWEocs9So/VlQFT3+uJ204CFqtkS0MP6MrUFITSao=;
-  b=kS8j1XMGT4YM+hDHtFclXKixRwAUHciW6am07ecXyaqfe+KEYWlRCoeT
-   YYlD9zusVwr1zcw0NK7EYSqmvPvByaBoVbpUQUN0xgdG+5lGjhk7cs39k
-   lQYarHSsAS4P/x2wBkE1WCLjEVqv6+UGAsN67M2ExjIr60qFYrCL8i8EZ
-   CP9R9Wc4y2JT5XReMSUPg/8J+a7iV9fRXGflrL+teHw32YqlzlvWljyL+
-   ysFLODQ55sCmHVHIycOacvP5LfV9gQ+ubZn1dhU1A7OVm1QPXnoO8uFMV
-   h2QhJXRKA3fWp7iOkxHstmpmQiXm1eNbgN/tlIFElnETovLQSeRJsK5mV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="288632081"
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="288632081"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 00:50:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="926306442"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Jul 2022 00:50:10 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oF9tp-0002PN-2A;
-        Sat, 23 Jul 2022 07:50:09 +0000
-Date:   Sat, 23 Jul 2022 15:49:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:tj/cgroup/for-next 7/8]
- kernel/cgroup/cgroup.c:1310:39: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared
-Message-ID: <202207231547.F1PGIJ5n-lkp@intel.com>
+        Sat, 23 Jul 2022 03:52:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2690A1758B
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 00:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658562727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lJTjyETsZNAo1P5N7bdIAit9hr9njNCUE7Bu1UytZ4o=;
+        b=NWEfVvDOwMLlqkIkvd8lLRsYvbAsCNK3bMd0ik4STn3CpqElZZyt+kON7z5POjzf2EzQiv
+        TeGiX1+h7Z2x8XYcqgBEUQGKwkaWmclsF0ZcKztzYWa3rARHYDZcXN+aRVDLCcLcAXaqF4
+        VBlFbnaV8aHOSwkKsKCW8JG33s/64dQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-2ytnlvEDOQuvuN4AmPiVgw-1; Sat, 23 Jul 2022 03:52:05 -0400
+X-MC-Unique: 2ytnlvEDOQuvuN4AmPiVgw-1
+Received: by mail-ed1-f72.google.com with SMTP id h15-20020a056402280f00b0043bd8412fe0so1254368ede.16
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 00:52:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lJTjyETsZNAo1P5N7bdIAit9hr9njNCUE7Bu1UytZ4o=;
+        b=K9BHJC8MxNsBQKEARCyHWWf8OkdATdYUVPuA51hcaQ3MSiJ/S1ubdc4xT3Gq5/01xJ
+         +PROrI3n4Yn+qa8vZqFQj8Syk5s4S/FzgSaPBQ7f0KWBFqLwAazz1kWtE9MqDMfZZSFR
+         2KxXxhuy697n5VVymVPXdlCZBWnC4/VkJWAz1qYSMhMZUZE/wL5RRWUF4IHnc87h3bpj
+         yIUj2bG2jORui+oedPCGwJIKtWmM94vaHYpmNnGCBLfQc5CPlIBq/GD9F3DlgTcQ8dZ6
+         5zlMya8KQd4SjPSVqGJW2ItQ7J2sZmXBa2KtuU//oK823H87dLdig6HF+Wl5xgmqyZSi
+         xzDg==
+X-Gm-Message-State: AJIora8rJbxXSrrKjvuFiXiIqd64H3T9u/yCvHl513DPmFPiHZ+QMCfY
+        r05AIwJlUqLLrGwpm+rmTd9MmsCmMpfxF8+D5wSRtOmdyB2iaGO7G6zO+3jQtyTP5jAGEMu7MGa
+        4Mw8Ebxc5XGIgLtBX0TwbLb0v
+X-Received: by 2002:a17:906:58d0:b0:72e:e25a:46e7 with SMTP id e16-20020a17090658d000b0072ee25a46e7mr2727037ejs.459.1658562722478;
+        Sat, 23 Jul 2022 00:52:02 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vyVGVozt0cw8AcViZHx16PlOGgbrv2BKkHYcD1TrQ0KkRk9MpV/mbIJWx50rqcVOj1gwbcUA==
+X-Received: by 2002:a17:906:58d0:b0:72e:e25a:46e7 with SMTP id e16-20020a17090658d000b0072ee25a46e7mr2727032ejs.459.1658562722281;
+        Sat, 23 Jul 2022 00:52:02 -0700 (PDT)
+Received: from goa-sendmail ([93.56.169.184])
+        by smtp.gmail.com with ESMTPSA id g19-20020a056402115300b0043bbc29de5fsm3640746edw.73.2022.07.23.00.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 00:52:01 -0700 (PDT)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 5.19-rc8
+Date:   Sat, 23 Jul 2022 09:51:59 +0200
+Message-Id: <20220723075159.865703-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,89 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block tj/cgroup/for-next
-head:   c87b1452249c69cdec70d5de64ea81f56e1ba3f8
-commit: 79276d9e0dda30071b9a98045a3efa7e0a76938b [7/8] cgroup: Make !percpu threadgroup_rwsem operations optional
-config: arm64-buildonly-randconfig-r001-20220721 (https://download.01.org/0day-ci/archive/20220723/202207231547.F1PGIJ5n-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/79276d9e0dda30071b9a98045a3efa7e0a76938b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block tj/cgroup/for-next
-        git checkout 79276d9e0dda30071b9a98045a3efa7e0a76938b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/cgroup/
+Linus,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The following changes since commit 79629181607e801c0b41b8790ac4ee2eb5d7bc3e:
 
-All error/warnings (new ones prefixed by >>):
+  KVM: emulate: do not adjust size of fastop and setcc subroutines (2022-07-15 07:49:40 -0400)
 
->> kernel/cgroup/cgroup.c:1308:6: warning: no previous prototype for 'cgroup_favor_dynmods' [-Wmissing-prototypes]
-    1308 | void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup.c: In function 'cgroup_favor_dynmods':
->> kernel/cgroup/cgroup.c:1310:39: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-    1310 |         bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup.c:1310:39: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/cgroup/cgroup.c: In function 'cgroup2_parse_param':
-   kernel/cgroup/cgroup.c:1912:31: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-    1912 |                 ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup.c: In function 'apply_cgroup_root_flags':
-   kernel/cgroup/cgroup.c:1942:51: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-    1942 |                                      root_flags & CGRP_ROOT_FAVOR_DYNMODS);
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup.c: In function 'cgroup_show_options':
-   kernel/cgroup/cgroup.c:1960:35: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-    1960 |         if (cgrp_dfl_root.flags & CGRP_ROOT_FAVOR_DYNMODS)
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup.c: In function 'init_cgroup_root':
-   kernel/cgroup/cgroup.c:2013:37: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-    2013 |         root->flags = ctx->flags & ~CGRP_ROOT_FAVOR_DYNMODS;
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~
---
-   kernel/cgroup/cgroup-v1.c: In function 'cgroup1_show_options':
->> kernel/cgroup/cgroup-v1.c:878:27: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-     878 |         if (root->flags & CGRP_ROOT_FAVOR_DYNMODS)
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup-v1.c:878:27: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/cgroup/cgroup-v1.c: In function 'cgroup1_parse_param':
-   kernel/cgroup/cgroup-v1.c:970:31: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-     970 |                 ctx->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup-v1.c: In function 'cgroup1_root_to_use':
->> kernel/cgroup/cgroup-v1.c:1227:17: error: implicit declaration of function 'cgroup_favor_dynmods' [-Werror=implicit-function-declaration]
-    1227 |                 cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
-         |                 ^~~~~~~~~~~~~~~~~~~~
-   kernel/cgroup/cgroup-v1.c:1227:57: error: 'CGRP_ROOT_FAVOR_DYNMODS' undeclared (first use in this function)
-    1227 |                 cgroup_favor_dynmods(root, ctx->flags & CGRP_ROOT_FAVOR_DYNMODS);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-vim +/CGRP_ROOT_FAVOR_DYNMODS +1310 kernel/cgroup/cgroup.c
+for you to fetch changes up to cf5029d5dd7cb0aaa53250fa9e389abd231606b3:
 
-  1307	
-> 1308	void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
-  1309	{
-> 1310		bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
-  1311	
-  1312		/* see the comment above CGRP_ROOT_FAVOR_DYNMODS definition */
-  1313		if (favor && !favoring) {
-  1314			rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
-  1315			root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
-  1316		} else if (!favor && favoring) {
-  1317			rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
-  1318			root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
-  1319		}
-  1320	}
-  1321	
+  KVM: x86: Protect the unused bits in MSR exiting flags (2022-07-19 14:04:18 -0400)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+----------------------------------------------------------------
+* Check for invalid flags to KVM_CAP_X86_USER_SPACE_MSR
+
+* Fix use of sched_setaffinity in selftests
+
+* Sync kernel headers to tools
+
+* Fix KVM_STATS_UNIT_MAX
+
+----------------------------------------------------------------
+Aaron Lewis (1):
+      KVM: x86: Protect the unused bits in MSR exiting flags
+
+Gavin Shan (1):
+      KVM: selftests: Fix target thread to be migrated in rseq_test
+
+Oliver Upton (1):
+      KVM: stats: Fix value for KVM_STATS_UNIT_MAX for boolean stats
+
+Paolo Bonzini (1):
+      tools headers UAPI: Sync linux/kvm.h with the kernel sources
+
+ Documentation/virt/kvm/api.rst          | 2 +-
+ arch/x86/kvm/x86.c                      | 8 ++++++++
+ include/uapi/linux/kvm.h                | 2 +-
+ tools/include/uapi/linux/kvm.h          | 3 ++-
+ tools/testing/selftests/kvm/rseq_test.c | 8 +++++---
+ 5 files changed, 17 insertions(+), 6 deletions(-)
+

@@ -2,80 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C039B57EEEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 13:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DE157EEF5
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 13:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233669AbiGWLMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 07:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S237114AbiGWLO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 07:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiGWLMO (ORCPT
+        with ESMTP id S236690AbiGWLOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 07:12:14 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADD62A27A
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 04:12:13 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id m9-20020a6b7b49000000b0067c0331524cso2612002iop.21
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 04:12:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=kSEPk2gR5UfYg7ejNXWHJjGcK8BWdPT0bnqKdUjv0Xc=;
-        b=5zSN4jbg6yyOJCCCHwwX2rzso/GTWS5heayrXyZWrR8Eiua1JsdyuDeOECjRQBdNxo
-         hQYSASMpxo9XCGXg0wvLrTDOiEKRqpsvMxLKnKxH52bWlEyPqwOPzWmErC41t0LzZpr3
-         LBJIHlohtSANmCjgXnGJ+/0lyhbb9NlhRuwQ5Y+Sh7TPQcGW07mR18Uxh3dKmCIBUsyP
-         mO+PpznLwscZJp+qVO18Z+0ASlpvs68/mK9amWhbuBrjucYM0kim12sRDgEKfcyPJGOl
-         wsh+CLWSli+RCdBBg8wwFYoVu/NlKnxJLcaXYMAo2DtKE1BPTVIGYtkyQEA5/IrRpgxb
-         uYgw==
-X-Gm-Message-State: AJIora+yWvynQffVxvblLRRNi2AGW16RhIkALnyYtMUAvEG6FdYWO+YA
-        7OUkKX1kb+c528gYIjhFT0CPPVYPg2syJlwL1UGp1Q4kp4rE
-X-Google-Smtp-Source: AGRyM1uDrwlfaO9bep5C8GKeB0JMcclfsFXKNBpHLwJ6CuERxqxLhtmt66U8Qc9s146Q7tOzC4h05jOI7Iyk8+IvlkQgmGdNs1Nj
+        Sat, 23 Jul 2022 07:14:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CF82A70A;
+        Sat, 23 Jul 2022 04:14:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9807CB80882;
+        Sat, 23 Jul 2022 11:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F347C341D3;
+        Sat, 23 Jul 2022 11:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658574859;
+        bh=unUMya6BPYpKOwprp7McozAEYE9y437U/0E90Qn/PR4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Idm4+tMyOetJHMHm/JAVCocTOpDhH/4+H8/qgaG+NFgUICBZPSdxOWI37JM3gj4jD
+         V/OvQrda6hV48GHEYYyJr2xsCS8G0WxITIICAUzHNOeUZHGM8byaEfem/GklOYd5gH
+         JvghH3cTxQxj28q6wqE6BgHdL5BWoCOKeQD8R3DFh9Y9y2hrqspCAFre0Q7odymkit
+         PbfzEelwOOQoCJa+SsljsBScBGvZh0aG6+dBH7mGbVmOQ0OV1xq+h5inC3QVGFjkIl
+         B3CNOrcxJO9NYFM0Lzb9ojZddR7wJ5tbrspEtad7+ovslybBfnYDXxmHSdkrls8L8o
+         /yiwejtDXqhMA==
+Received: by mail-ot1-f50.google.com with SMTP id k8-20020a9d4b88000000b0061c7f8c4f77so5129723otf.10;
+        Sat, 23 Jul 2022 04:14:19 -0700 (PDT)
+X-Gm-Message-State: AJIora+IxwLs6tqUO9pbknYlbmjwFcX38q6whwJZ7u+Q0w0WAAdlDeWH
+        /PW/VId2baDobTihv5AEhd/exMYxegSTGbM7zYs=
+X-Google-Smtp-Source: AGRyM1toSHzLLGvC9FLzuNt3t1myK6Yjo1zRCx/Yq65wM9j6V/TSj8mKNgSzLkZMi7xH4yhMSuJHvm32vnmmswjz4II=
+X-Received: by 2002:a05:6830:441f:b0:61c:a5bb:9c6a with SMTP id
+ q31-20020a056830441f00b0061ca5bb9c6amr1524623otv.265.1658574858208; Sat, 23
+ Jul 2022 04:14:18 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9383:0:b0:67b:adc2:c053 with SMTP id
- c3-20020a5d9383000000b0067badc2c053mr1432522iol.102.1658574733153; Sat, 23
- Jul 2022 04:12:13 -0700 (PDT)
-Date:   Sat, 23 Jul 2022 04:12:13 -0700
-In-Reply-To: <000000000000cbe0e605e0caa8e0@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cdbe1105e4770541@google.com>
-Subject: Re: [syzbot] possible deadlock in corrupted
-From:   syzbot <syzbot+5c3c53e6db862466e7b6@syzkaller.appspotmail.com>
-To:     chuck.lever@oracle.com, jlayton@kernel.org,
-        johannes.berg@intel.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nbd@nbd.name,
-        syzkaller-bugs@googlegroups.com, toke@kernel.org,
-        viro@zeniv.linux.org.uk
+References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
+ <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
+ <20220718172159.4vwjzrfthelovcty@black.fi.intel.com> <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
+ <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
+ <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
+ <YtcCWfCQuEsVhH6W@zn.tnic> <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
+ <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
+ <YtcnQbiRgZPtR+rQ@zn.tnic> <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
+ <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com> <ffb4ae72-7fd4-d2a0-df10-3969cf8ca07f@intel.com>
+In-Reply-To: <ffb4ae72-7fd4-d2a0-df10-3969cf8ca07f@intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 23 Jul 2022 13:14:07 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHEc=vEt=CtfdiPEsUe2i8QogAi+jvtY6h1awo7GZ-nRg@mail.gmail.com>
+Message-ID: <CAMj1kXHEc=vEt=CtfdiPEsUe2i8QogAi+jvtY6h1awo7GZ-nRg@mail.gmail.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Marc Orr <marcorr@google.com>, Borislav Petkov <bp@alien8.de>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Yao, Jiewen" <jiewen.yao@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Thu, 21 Jul 2022 at 19:13, Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 7/19/22 17:26, Marc Orr wrote:
+> > - Dave's suggestion to "2. Boot some intermediate thing like a
+> > bootloader that does acceptance ..." is pretty clever! So if upstream
+> > thinks this FW-kernel negotiation is not a good direction, maybe we
+> > (Google) can pursue this idea to avoid introducing yet another tag on
+> > our images.
+>
+> I'm obviously speaking only for myself here and not for "upstream" as a
+> whole, but I clearly don't like the FW/kernel negotiation thing.  It's a
+> permanent pain in our necks to solve a very temporary problem.
 
-commit f856373e2f31ffd340e47e2b00027bd4070f74b3
-Author: Felix Fietkau <nbd@nbd.name>
-Date:   Tue May 31 19:08:24 2022 +0000
+EFI is basically our existing embodiment of this fw/kernel negotiation
+thing, and iff we need it, I have no objection to using it for this
+purpose, i.e., to allow the firmware to infer whether or not it should
+accept all available memory on behalf of the OS before exiting boot
+services. But if we don't need this, even better.
 
-    wifi: mac80211: do not wake queues on a vif that is being stopped
+What I strongly object to is inventing a new bespoke way for the
+firmware to make inferences about the capabilities of the image by
+inspecting fields in the file representation of the image (which is
+not guaranteed by EFI to be identical to its in-memory representation,
+as, e.g., the PE/COFF header could be omitted by a loader without
+violating the spec)
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11363672080000
-start commit:   3abc3ae553c7 Merge tag '9p-for-5.19-rc4' of https://github..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=574cf8e4f636f8ff
-dashboard link: https://syzkaller.appspot.com/bug?extid=5c3c53e6db862466e7b6
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16545ce4080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1087453ff00000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: wifi: mac80211: do not wake queues on a vif that is being stopped
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+As for the intermediate thing: yes, that would be a valuable thing to
+have in OVMF (and I will gladly take EDK2 patches that implement
+this). However, I'm not sure how you decide whether or not this thing
+should be active or not, doesn't that just move the problem around?

@@ -2,76 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F4E57F18A
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 22:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DD457F18E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 22:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236266AbiGWU4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 16:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S238758AbiGWU5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 16:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiGWU4w (ORCPT
+        with ESMTP id S236829AbiGWU5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 16:56:52 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B402C18396
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 13:56:50 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id b16so237370lfb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 13:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=BSddQZU4tvxR23/v1w3cQiBY/TQtEQeiurrpTf9SqqA=;
-        b=D4+v3raDZoCrf761Th36KUpA2Zw5VnhnOBMwfmqlwEtRrFOOSEMl1es0SpIxuzqNoB
-         lSgZgfDrN5s4durJatNnpOq/wQfgJn/Djes1LhP28s5IMFF6ETIIYGgvDwtKvaDTTaBI
-         WxBVR+lALaO2OdhyQMMbQkH6s4t3u/F7AtjUQyw60UjIc53HKoP8TSHhjD00EIeFVbL8
-         T+YWsRRkPnXNza6dgVyh5rDn8//nYYU0sgHEX0naBMQuPkco3q0HSomtGuF414rhJOPe
-         3EXgbTkZNmRBLe01fyaIoToKelJ7IdcLJ2UuWnT5/yFwNlrxJ3KOFdjzxZBCkT3qXuZD
-         obHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BSddQZU4tvxR23/v1w3cQiBY/TQtEQeiurrpTf9SqqA=;
-        b=eRIArTSWMZ+WzkC5uxPgwWaXe1ZedESrbDD5gJNIGMBy7MQ8ywpVTyps+XqKCiqnxq
-         ZbQVXENSDWxgZlhirjISSaP6HCSxQiS4tfcF3kO+TwM2wqqQLIQoKQFTzFZAL2nABW0B
-         EjvikMMeD0x0dDl3KmfWcSaBxf0wYNXLL2tZay4lkAFFkAc+qxBjfrAJaeVHkDM18eUy
-         23JnBikSeYserd2vqxwn93cedxiUQ3u2heuzUzHJvZrhuu8yonEnadwjaW5MOf2RRf5Z
-         5+Q1W3othVfWwzWGdnDcV8Svi+O8eXjvAqC2Bxy+HmZvLhCJgitc+ZiIMQOmKQdbw5AY
-         aSaQ==
-X-Gm-Message-State: AJIora+F9q17DxwMkSipKeuQwKX1o6Xn/HQQIKLroxTAGzzqUQSEWM2u
-        6cARY1CTDK7WAxEw4tpisxnAtw==
-X-Google-Smtp-Source: AGRyM1vu3x5Eguf+cpjJ//lggceGbEIs3f64Bw0DXVLRSc/hW1Uplx6a+UOVP8Sr6mEbZzQzjD1KOw==
-X-Received: by 2002:a05:6512:33c3:b0:48a:83a9:52e1 with SMTP id d3-20020a05651233c300b0048a83a952e1mr937646lfg.344.1658609808654;
-        Sat, 23 Jul 2022 13:56:48 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id j10-20020a056512028a00b0048a86146831sm174867lfp.186.2022.07.23.13.56.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 13:56:48 -0700 (PDT)
-Message-ID: <7d6595c2-1200-9c27-dac9-8f76ea743447@linaro.org>
-Date:   Sat, 23 Jul 2022 22:56:46 +0200
+        Sat, 23 Jul 2022 16:57:05 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F211183AB
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 13:57:03 -0700 (PDT)
+Received: from [192.168.1.101] (abxj77.neoplus.adsl.tpnet.pl [83.9.3.77])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 4558C40521;
+        Sat, 23 Jul 2022 22:57:00 +0200 (CEST)
+Message-ID: <6a33d026-9f30-358e-8498-dbe315fccc5b@somainline.org>
+Date:   Sat, 23 Jul 2022 22:56:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/3] ARM: qcom_defconfig: order items with
- savedefconfig
+Subject: Re: [PATCH v3 2/3] dt-bindings: clock: add SM6375 QCOM global clock
+ bindings
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220721155356.248319-1-krzysztof.kozlowski@linaro.org>
- <2246145.ElGaqSPkdT@g550jk> <c5150e83-0e50-3be6-b6bd-bf30fe5e94d1@linaro.org>
- <2109260.irdbgypaU6@g550jk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2109260.irdbgypaU6@g550jk>
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220723100135.91784-1-konrad.dybcio@somainline.org>
+ <20220723100135.91784-2-konrad.dybcio@somainline.org>
+ <27154a09-d79b-7814-22ec-c84496596abc@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <27154a09-d79b-7814-22ec-c84496596abc@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,31 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/07/2022 20:52, Luca Weiss wrote:
-> On Samstag, 23. Juli 2022 20:44:08 CEST Krzysztof Kozlowski wrote:
->> On 23/07/2022 20:17, Luca Weiss wrote:
->>> On Samstag, 23. Juli 2022 19:36:17 CEST Krzysztof Kozlowski wrote:
->>>> On 23/07/2022 11:58, Luca Weiss wrote:
->>>>> See also
->>>>> https://lore.kernel.org/linux-arm-msm/20191104210943.101393-1-luca@z3ntu
->>>>> .x
->>>>> yz/ (never applied for some reason)
->>>>
->>>> Mentioned patch is incorrect so should not be applied - it removes at
->>>> least TMPFS which is not desired. I did not check other removed symbols.
->>>
->>> For this example: TMPFS is still enabled after this, it's selected by
->>> other
->>> options, like DRM or COMMON_CLK.
+
+
+On 23.07.2022 19:46, Krzysztof Kozlowski wrote:
+> On 23/07/2022 12:01, Konrad Dybcio wrote:
+>> Add device tree bindings for global clock controller for SM6375 SoCs.
 >>
->> I know, it does not matter. We had this case (with DEBUGFS and probably
->> others) and the decision was - user visible symbols must no be removed
->> by savedefconfig.
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>> Changes since v2:
+>> - reference qcom,gcc.yaml
+>>
+>>  .../bindings/clock/qcom,sm6375-gcc.yaml       |  48 ++++
+>>  include/dt-bindings/clock/qcom,sm6375-gcc.h   | 234 ++++++++++++++++++
+>>  2 files changed, 282 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+>>  create mode 100644 include/dt-bindings/clock/qcom,sm6375-gcc.h
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+>> new file mode 100644
+>> index 000000000000..fb1c36888d18
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+>> @@ -0,0 +1,48 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/clock/qcom,sm6375-gcc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Global Clock & Reset Controller Binding for SM6375
+>> +
+>> +maintainers:
+>> +  - Konrad Dybcio <konrad.dybcio@somainline.org>
+>> +
+>> +description: |
+>> +  Qualcomm global clock control module which supports the clocks, resets and
+>> +  power domains on SM6375
+>> +
+>> +  See also:
+>> +  - dt-bindings/clock/qcom,sm6375-gcc.h
+>> +
+>> +allOf:
+>> +  - $ref: qcom,gcc.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: qcom,sm6375-gcc
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Board XO source
+>> +      - description: Board XO Active-Only source
+>> +      - description: Sleep clock source
 > 
-> So savedefconfig is "broken" (not doing the correct thing) then or what? Sounds 
-> like a topic for kconfig maintainers?
+> What happened to clock-names?
+> 
+>> +
+> 
+> I would assume these are required for the clock controller... and they
+> were before, so what happened?
+I dropped them in v2, as with switching the .c driver to use the
+index matching, they are no longer used.
 
-I agree.
-
-Best regards,
-Krzysztof
+Konrad
+> 
+> 
+> Best regards,
+> Krzysztof

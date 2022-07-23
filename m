@@ -2,96 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7449B57EF11
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 13:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CE757EF12
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 13:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbiGWLlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 07:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S235201AbiGWLn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 07:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiGWLlA (ORCPT
+        with ESMTP id S230010AbiGWLnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 07:41:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBF0E0AE;
-        Sat, 23 Jul 2022 04:40:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2E70B80906;
-        Sat, 23 Jul 2022 11:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861D4C341C0;
-        Sat, 23 Jul 2022 11:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658576456;
-        bh=WIe7y2pDQXUhDeALdGhb6ETAfomqWoK+C8ML8M8aVoo=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=VdQ+FC6yid26Gl9nR8I8J2XCtC33TtALCQn8iOhhIt+tWHZQo04szuLwJnUcMC0BK
-         DfJ/K1FubRiuOtYAP/NZT7LnssE/fqZcLoVY9SpIflX4N7KD6pL83svaavsk9taacE
-         g98dUVwsy/3phWLNTSBOjOgnjTqzX/oYSNaG2rbeW+pIyko/nQ3jh1Xm4+9suv/DwW
-         IoSROhatn48/e53MztcN+4By/vOBo+z2bOiu5/LXwTEEHCrV/lkAEfd4JmpR++VfAw
-         Jvlkyrb5QphyhkKHORBCt9fzwstnab8NL88FaypmVxBxHqwkLFVOL/bP3EwrYfki+/
-         T5g1pT/d9aYvA==
-Date:   Sat, 23 Jul 2022 13:40:53 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Stefan Hansson <newbie13xd@gmail.com>
-cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: PROBLEM: Regression likely in hid_uclogic driver breaks Huion
- Inspiroy H640 drawing tablet
-In-Reply-To: <9e16d503-2203-57ed-d6af-61fea0c3e10b@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2207231339500.19850@cbobk.fhfr.pm>
-References: <9e16d503-2203-57ed-d6af-61fea0c3e10b@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Sat, 23 Jul 2022 07:43:23 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AD71BE8E
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 04:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658576602; x=1690112602;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nfnCHYoMY2tDPyXHKF0xWuuQt4+rPKGgT4kXodGeX08=;
+  b=N0ZDzDqOoFhEwVMsUPDagbDLQNC+Lvt6cNHd6Pd7lT8XgdfpxbSaIK+9
+   +cdpPUnxNzKF8gSfkrG2jUA7+hk9W+xZ5oOdHB9HnENLBhrLxP0rJ2IQD
+   JirTglfF6B4jDYBMWBvVCb2t1jhotjBy8vbHyG1rFD3D7k8PZKcpj4zrm
+   GPM0Yt1OuLDCP0T7LWdjGAD2K7l/B+jan9YRKgrzRp/YIfH+oKfhuq5Ss
+   e27hMCLxqQ5A4DroKPN3J/FNeCF8OADkvUkogC8Zw8S67TOt0oURgKU7M
+   1Tzis8cKinQuRmlU2acgr7lGnqhF8zkCpjdUj9groypSWztP4O4721WK0
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="351459202"
+X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
+   d="scan'208";a="351459202"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 04:43:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
+   d="scan'208";a="574461537"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 23 Jul 2022 04:43:20 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFDXT-0002Y5-15;
+        Sat, 23 Jul 2022 11:43:19 +0000
+Date:   Sat, 23 Jul 2022 19:42:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Atish Patra <Atish.Patra@wdc.com>,
+        linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>
+Subject: [atishp04:sstc_v6 5/5] arch/riscv/kvm/vcpu_timer.c:302:23: warning:
+ variable 'csr' set but not used
+Message-ID: <202207231936.SWNvXLnK-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022, Stefan Hansson wrote:
+tree:   https://github.com/atishp04/linux sstc_v6
+head:   c20c842325eb8261b2a0a034aad746505475fef7
+commit: c20c842325eb8261b2a0a034aad746505475fef7 [5/5] RISC-V: KVM: Support sstc extension
+config: riscv-randconfig-c006-20220721 (https://download.01.org/0day-ci/archive/20220723/202207231936.SWNvXLnK-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/atishp04/linux/commit/c20c842325eb8261b2a0a034aad746505475fef7
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 sstc_v6
+        git checkout c20c842325eb8261b2a0a034aad746505475fef7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
 
-> Hi!
-> 
-> Somewhere between Linux 5.17.6 and 5.18.11 the Huion tablet I have stopped
-> working properly. In GNOME Control Center it is identified as Huion New 1060
-> Plus, however that's a different tablet than the one I have. Mine is a Huion
-> Inspiroy H640, and it uses the hid_uclogic driver.
-> 
-> With Linux 5.17.6, the tablet works as expected with all the buttons being
-> detected and the stylus being usable. With 5.18.11, the buttons work fine but
-> the stylus does not work correctly. The first time I approach the tablet with
-> the stylus it works properly, i.e., the cursor on my screen moves around and
-> follows the stylus around the tablet as expected. It continues working like
-> this until I remove the stylus from the tablet. After I remove it from the
-> tablet, the cursor never gets controlled by the stylus again. I can see that
-> the tablet detects the stylus (it has a small indicator light), but the cursor
-> doesn't move when I approach the tablet again. To clarify, with Linux 5.17.6,
-> the cursor moves around just fine when I remove and then put it back to the
-> tablet, just as you would expected.
-> 
-> It may also be worth noting that it worked fine when I previously used it
-> around six months ago, although I'm not sure what version of Linux I was using
-> at that time (whatever Fedora shipped back then). I also tried reproducing it
-> with yesterday's linux-next and Linux 5.19.0-RC7, and the behaviour was the
-> same as 5.18.11. I am currently trying to bisect this, but it's not going very
-> fast as I currently only have access to a dual core laptop from 2014, so
-> building Linux takes a good while.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for the report. CCing José who has been doing a lot of work in this 
-area recently, maybe he has an immediate idea.
+All warnings (new ones prefixed by >>):
 
-If not, perhaps bisecting the hid-uclogic.c commits between the two 
-kernels would be the quickest option.
+>> arch/riscv/kvm/vcpu_timer.c:302:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
+           struct kvm_vcpu_csr *csr;
+                                ^
+   arch/riscv/kvm/vcpu_timer.c:327:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
+           struct kvm_vcpu_csr *csr;
+                                ^
+   2 warnings generated.
+
+
+vim +/csr +302 arch/riscv/kvm/vcpu_timer.c
+
+   299	
+   300	void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
+   301	{
+ > 302		struct kvm_vcpu_csr *csr;
+   303		struct kvm_vcpu_timer *t = &vcpu->arch.timer;
+   304	
+   305		kvm_riscv_vcpu_update_timedelta(vcpu);
+   306	
+   307		if (!t->sstc_enabled)
+   308			return;
+   309	
+   310		csr = &vcpu->arch.guest_csr;
+   311	#if defined(CONFIG_32BIT)
+   312		csr_write(CSR_VSTIMECMP, (u32)t->next_cycles);
+   313		csr_write(CSR_VSTIMECMPH, (u32)(t->next_cycles >> 32));
+   314	#else
+   315		csr_write(CSR_VSTIMECMP, t->next_cycles);
+   316	#endif
+   317	
+   318		/* timer should be enabled for the remaining operations */
+   319		if (unlikely(!t->init_done))
+   320			return;
+   321	
+   322		kvm_riscv_vcpu_timer_unblocking(vcpu);
+   323	}
+   324	
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BED957EC47
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 08:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67B157EC56
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 08:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbiGWGVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 02:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S233378AbiGWGdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 02:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiGWGV1 (ORCPT
+        with ESMTP id S229836AbiGWGdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 02:21:27 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E88E1054C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 23:21:26 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id a10so7605143ljj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 23:21:26 -0700 (PDT)
+        Sat, 23 Jul 2022 02:33:40 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA65452450
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 23:33:35 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id a7so1534488vkl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 23:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=aGoDJrYv/23a7xlVt3keHbO9Kwx3iNZ53WhEz8TdkfQ=;
-        b=WUyGaf/xC7V9q35DuikG4Kdt/JjnMLBbO+0gvLZYS9qvth4ajRny1t4vu0t4sKPdhw
-         H0letsAkPqVCSo9p82iEnUlRFvnlzh+XmclV/tg8mwV7pWOrk4/yOc1fXgUWAt0F5pkq
-         VOsV1wpEWJFf8EeIpmFWiDHJiw8n4Va/bvbqFm7vKfi995VWDGm+MjgCeIh0Czt/qx98
-         PxgJueZFjm0K0xCOkDx8czeyFXGQDMLxQ28NIvcASap4T6Wer2zAkx+kkG/6FDYbxXKM
-         zIyrCkHYlgGXmAWEAl/4PEOAJquRIeCb8g/oQGfv88C0ZQSQkRNZi5HP6mw/4Z9ad9Nb
-         dT4w==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BfpIOV/6ZvhwkFNNi8F5n6UGeETzcQ0Ic7VQTjCcaxA=;
+        b=T8THoq6U5rrJ6eOYnptWyaffD33E8b6arT8i7Fvu3PMM8WjwopfPP7FK1MCR60/LUT
+         60AtWKe+av+lrxVtHbOkq/NrgxArG9NWpVkOG5aeXSb6XMu6rClL+ux9fBwdxEbNhuqm
+         XUNCmj12Ktce3ApVxwtETXUylNRuzEhZOswTa6YdbyZOHYH78pzWpJWwlf5NQCQNNidK
+         xBojGlWIXKPodPmAwsuVy87Ad/RTWLR9YR08ZcqELX6Hkj5d1MPhq3h/wkOGSXAA75A7
+         cKeoulaRK+6zV4LFnZuO8ZT9RO38M+MBT9hsYhy5WuNHt8vmJ1ZMjH8RCUG7OjKAvB2x
+         nUmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=aGoDJrYv/23a7xlVt3keHbO9Kwx3iNZ53WhEz8TdkfQ=;
-        b=bJNGHFOqJXHKYMyaf+xxwV3hLsSM4SDIB159ZDx4KqIbClL1pNV91KrMhoZ+o8yJSM
-         W9UHC4sZbeFK7x4exflMvEqgtlCl4egvbt5DeYlXU3LpODJVQhHufdVPv3U6/ccxLGQA
-         674A1qZmyV/baY3pJ8U2wmQ065jno7u7PTG9ov8g5hz6jS1qX+uqZF68d1mAkFNfZuUI
-         OUINVTyerKTF80mB6ZaX+WAJPyE9hDSM2dnj0rD8gDOgumLWtNJzubfMzkDk+i08w2Kb
-         cUwcKjMPMpFgEbGRss0WeslpSzXoeWNFo9H3SWcEoVDlJwUMwU0b5jPQ2ZlLBBe4qkzm
-         stug==
-X-Gm-Message-State: AJIora9NrtM59sIV9rJDlhs7KkWO/lC1F3XJLOnomfLziHMvvO2hz4H8
-        ryTLPNkkeaQ+nydA9M3ripBs/Sq3WztNVqN+Ojc=
-X-Google-Smtp-Source: AGRyM1voAqdIMIkVXY7KLAF4FWry6fKaeV5BXUCWiMjZ9S4Xrs3LwoWP/Eh7UsQBZEAiVHZJiyTW5WAPjsY9AySxtXA=
-X-Received: by 2002:a2e:7d14:0:b0:25d:d787:ab9b with SMTP id
- y20-20020a2e7d14000000b0025dd787ab9bmr1120372ljc.164.1658557284881; Fri, 22
- Jul 2022 23:21:24 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BfpIOV/6ZvhwkFNNi8F5n6UGeETzcQ0Ic7VQTjCcaxA=;
+        b=bsb11lYLp2cA7IcZH9P7SL2ynsWiBLaEmiefmlHu7fHS55AmfetfQ9Q/iNwTNblfvR
+         5Os02KX7RLv5lTWk89cZCQLZ5QGWqsLd1EFbYR6q4k8MhM2/F3WYgsuXyWRR1z4k0OKr
+         766lqcjHVBewbam+2rtJb4tPTJ3UKSeQBKmVkaRfxcnJimyk+X2b9SVtApV9GJKnHuSt
+         iRgIFCryUyMVcfe9GOKMz32Gk3CLIcq7s6xt28B3OQ+VPhZweDs8AvZunad7UZOowW7g
+         APHoug0ujL63zElUCi72OFubcWFBrW88ZdBmBA3kj9rc1UYMlVCMCInS5nWsggLi6+ru
+         Rn+w==
+X-Gm-Message-State: AJIora+Iu1XR4A+6nYcacC2A93Qs4nfimuP5P3oiHuTMZ1gUTKUcMmUS
+        UUE6JaPFNflY+KawYBgjf5tuff3JmFw30H2MhoNTeg==
+X-Google-Smtp-Source: AGRyM1tRd8CzElUHBeDtzmGnV1yUfi7c8RHRAmVBCaCVgIsof/b/Ob6GDs1QKgyF8YI4pAW5kXGdCY+RBq7EcApefuw=
+X-Received: by 2002:a1f:bf54:0:b0:375:fdf2:e014 with SMTP id
+ p81-20020a1fbf54000000b00375fdf2e014mr938673vkf.4.1658558014485; Fri, 22 Jul
+ 2022 23:33:34 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab3:6bfa:0:b0:1d7:b50d:ebdf with HTTP; Fri, 22 Jul 2022
- 23:21:23 -0700 (PDT)
-Reply-To: sophiaernest566@gmail.com
-From:   Sophia Ernest <simondornoo690@gmail.com>
-Date:   Fri, 22 Jul 2022 22:21:23 -0800
-Message-ID: <CAOSTSM4JSgPro8aouVzfr8w86oPn6gwQ64Ows4XTSJ-bZKTJaA@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
+References: <20220722171534.3576419-1-dlatypov@google.com> <20220722171534.3576419-5-dlatypov@google.com>
+In-Reply-To: <20220722171534.3576419-5-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 23 Jul 2022 14:33:23 +0800
+Message-ID: <CABVgOS=pbEhUn3Hm7hrtQSQcqmj9a5T1MXNgomtbjsFc1RaphA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] kunit: make kunit_kfree(NULL) a no-op to match kfree()
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:229 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5176]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [simondornoo690[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [simondornoo690[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [sophiaernest566[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On Sat, Jul 23, 2022 at 1:15 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> The real kfree() function will silently return when given a NULL.
+> So a user might reasonably think they can write the following code:
+>   char *buffer = NULL;
+>   if (param->use_buffer) buffer = kunit_kzalloc(test, 10, GFP_KERNEL);
+>   ...
+>   kunit_kfree(test, buffer);
+>
+> As-is, kunit_kfree() will mark the test as FAILED when buffer is NULL.
+> (And in earlier times, it would segfault).
+>
+> Let's match the semantics of kfree().
+>
+> Suggested-by: David Gow <davidgow@google.com>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+> v1 -> v2: add this patch to the series.
+> ---
 
-I wonder why you continue neglecting my emails. Please, acknowledge
-the receipt of this message in reference to the subject above as I
-intend to send to you the details of the mail. Sometimes, try to check
-your spam box because most of these correspondences fall out sometimes
-in SPAM folder.
+Thanks! This looks good to me, and worked with a basic test.
 
-Best regards,
-Sophia
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  lib/kunit/test.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index c7ca87484968..879c8db36cb5 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -698,6 +698,9 @@ static inline bool kunit_kfree_match(struct kunit *test,
+>
+>  void kunit_kfree(struct kunit *test, const void *ptr)
+>  {
+> +       if (!ptr)
+> +               return;
+> +
+>         if (kunit_destroy_resource(test, kunit_kfree_match, (void *)ptr))
+>                 KUNIT_FAIL(test, "kunit_kfree: %px already freed or not allocated by kunit", ptr);
+>  }
+> --
+> 2.37.1.359.gd136c6c3e2-goog
+>

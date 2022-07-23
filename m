@@ -2,76 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7070157F083
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 19:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC6357F08A
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 19:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbiGWRDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 13:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
+        id S236201AbiGWRG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 13:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235317AbiGWRDl (ORCPT
+        with ESMTP id S230005AbiGWRG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 13:03:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D7718391;
-        Sat, 23 Jul 2022 10:03:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B5B8B80932;
-        Sat, 23 Jul 2022 17:03:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1197C341C7;
-        Sat, 23 Jul 2022 17:03:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658595818;
-        bh=jkF1ciNW7Z8XW8uh/SwhU5vndEkIN8sjBSUYzVN4iJI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=REmIPo5/LADR3wCzjYcpFgILT6tgBP81AL21H/GKH7pHw/YUmlxv6M/s250sNvxG0
-         RC5AB/bZVdqyynar///GRmf4DXsyGC9/Bg249CX5iOGrwjXfCn7ADBAX3poKep8Nwe
-         N1vopikMXDSqc7X20KMphX6HdhDFsOO1gl+N/H9iJKNy5chhLbFL55wTXH3idgFn2J
-         o01LFduqN9Ob00Pbc1Ium2LJ890NJ4U7K+ehbz+sMVtGiP+7X+HnmFQq5L1+wKVvNM
-         H7svA1804j6bHvOb7QlmmN3qG/N66DYQb9+w8ZK8jEpr3s9/v3X7s+fwPoaK0sY9RB
-         ViCjRlhe/4CQA==
-Message-ID: <b4c65355-6ef8-7704-adc4-34aeed5d152c@kernel.org>
-Date:   Sat, 23 Jul 2022 11:03:35 -0600
+        Sat, 23 Jul 2022 13:06:26 -0400
+Received: from out28-1.mail.aliyun.com (out28-1.mail.aliyun.com [115.124.28.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D27A1AF2E;
+        Sat, 23 Jul 2022 10:06:23 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07462738|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0428046-0.00500691-0.952188;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=23;RT=23;SR=0;TI=SMTPD_---.Obm0Iun_1658595976;
+Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Obm0Iun_1658595976)
+          by smtp.aliyun-inc.com;
+          Sun, 24 Jul 2022 01:06:18 +0800
+Subject: Re: [PATCH 3/3] SPI: Ingenic: Add SFC support for Ingenic SoCs.
+To:     Mark Brown <broonie@kernel.org>
+Cc:     tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
+ <YtrukeLk9fInqQIL@sirena.org.uk>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <89d22457-8c62-e441-3bf4-2734ec2a45e1@wanyeetech.com>
+Date:   Sun, 24 Jul 2022 01:06:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH net-next v6 1/2] devlink: introduce framework for
- selftests
+In-Reply-To: <YtrukeLk9fInqQIL@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Vikas Gupta <vikas.gupta@broadcom.com>
-Cc:     jiri@nvidia.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        stephen@networkplumber.org, edumazet@google.com, pabeni@redhat.com,
-        ast@kernel.org, leon@kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, michael.chan@broadcom.com,
-        andrew.gospodarek@broadcom.com
-References: <20220723042206.8104-1-vikas.gupta@broadcom.com>
- <20220723042206.8104-2-vikas.gupta@broadcom.com>
- <20220723091600.1277e903@kernel.org>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220723091600.1277e903@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/23/22 10:16 AM, Jakub Kicinski wrote:
-> Any thoughts on running:
-> 
-> 	sed -i '/_SELFTEST/ {s/_TEST_/_/g}' $patch
-> 
-> on this patch? For example DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS
-> is 40 characters long, ain't nobody typing that, and _TEST is repeated..
-> 
+Hi Mark,
 
-+1
+On 2022/7/23 上午2:38, Mark Brown wrote:
+> On Sat, Jul 23, 2022 at 12:48:30AM +0800, 周琰杰 (Zhou Yanjie) wrote:
+>
+> This looks mostly good, a few small issues though:
+>
+>> +++ b/drivers/spi/spi-ingenic-sfc.c
+>> @@ -0,0 +1,662 @@
+>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +/*
+>> + * Ingenic SoCs SPI Flash Controller Driver
+> Please make the entire comment a C++ one so things look more
+> intentional.
+
+
+I'm sorry, I didn't understand well what you meant :(
+Could you please explain a little more detail?
+
+
+>
+>> +static irqreturn_t ingenic_sfc_irq_handler(int irq, void *data)
+>> +{
+>> +	struct ingenic_sfc *sfc = data;
+>> +
+>> +	writel(0x1f, sfc->base + SFC_REG_INTC);
+>> +
+>> +	complete(&sfc->completion);
+>> +
+>> +	return IRQ_HANDLED;
+>> +}
+> This doesn't pay any attention to any status registers in the chip so
+> won't work if the interrupt is shared and won't notice any error reports
+> from the device...
+
+
+This interrupt is exclusively owned by SFC, do we still
+need to perform the operation you said? I haven't done
+these operations before because I want to minimize the
+overhead and avoid affecting performance.
+
+
+>
+>> +static int ingenic_sfc_setup(struct spi_device *spi)
+>> +{
+>> +	struct ingenic_sfc *sfc = spi_controller_get_devdata(spi->master);
+>> +	unsigned long rate;
+>> +	int ret, val;
+>> +
+>> +	if (!spi->max_speed_hz)
+>> +		return -EINVAL;
+>> +
+>> +	ret = clk_set_rate(sfc->clk, spi->max_speed_hz * 2);
+>> +	if (ret)
+>> +		return -EINVAL;
+> The setup() operation should be safe for use on one device while another
+> device is active.  It's not going to be a problem until there's a
+> version of the IP with more than one chip select, but that could happen
+> some time (and someone might decide to make a board using GPIO chip
+> selects...) but this should really go into the data path.
+
+
+Sure, I will change it in the next version.
+
+
+>> +	ret = clk_prepare_enable(sfc->clk);
+>> +	if (ret)
+>> +		goto err_put_master;
+> Nothing ever disables this clock.  It might also be nice to enable the
+> clock only when the controller is in use, that bit is not super
+> important though.
+
+
+Sure, will add it.
+
+
+>
+>> +	ret = devm_request_irq(&pdev->dev, sfc->irq, ingenic_sfc_irq_handler, 0,
+>> +			dev_name(&pdev->dev), sfc);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "Failed to request irq%d, ret = %d\n", sfc->irq, ret);
+>> +		goto err_put_master;
+>> +	}
+> It's not safe to use devm here...
+
+
+Sure, will fix it in the next version.
+
+
+>
+>> +	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+>> +	if (ret)
+>> +		goto err_put_master;
+> ...unregistering the controller may free the driver data structure and
+> the interrupt handler uses it so we could attempt to use freed data in
+> the window between the controller being unregistered and the interrupt
+> being freed.
+
+
+Sure.
+
+
+Thanks and best regards!
+
+

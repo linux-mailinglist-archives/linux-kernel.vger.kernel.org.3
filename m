@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBD457ED0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 11:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8AC57ED10
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 11:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237223AbiGWJZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 05:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S237232AbiGWJ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 05:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiGWJZv (ORCPT
+        with ESMTP id S230216AbiGWJ1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 05:25:51 -0400
+        Sat, 23 Jul 2022 05:27:09 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DC913D22
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 02:25:46 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1658568280tzvi1vyk
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31C3BE0A;
+        Sat, 23 Jul 2022 02:27:01 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1658568403tlofweog
 Received: from localhost.localdomain ( [125.70.163.183])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 23 Jul 2022 17:24:38 +0800 (CST)
-X-QQ-SSF: 01000000002000F0U000B00A0000000
-X-QQ-FEAT: CR3LFp2JE4lL1GLCr4icph6+qQFBccuI/ZemMcyWA7bPB5CinROu62HTGBe+L
-        RezNBmLkE2Kn831ezk3xivGhwn40wFxvvdawTQQ1vAW/7keeVRId81pC+TgaBC5Bz0DtpnX
-        dk+wiaSta+Y2kedmDSMXUIafVbypCTjJeyAziMAxPjW7pS5qCvAzCGlF+nEXJ9cVzGut+wn
-        aXonOGYNLKlMqb26Knki8ILjVmHV6QRgGRUTMD+5uhyMaak43bRvx127hZ+sV6SfN8dc8gX
-        9TGUr3WgoF7rfZqCS21kGL92zLE6iUW+oZTQ0KS2iERrloNw5JnAXLV9ail3mRho/oFeVxZ
-        SmHtC+mELLuBnr41bVzSqvK5FMF416bHdlsCFHcfpJXD7j26cv65hAD8mH+GAEhwQZlfyYs
+        id ; Sat, 23 Jul 2022 17:26:42 +0800 (CST)
+X-QQ-SSF: 01000000002000F0U000B00A0000020
+X-QQ-FEAT: aBJFcW+uBGYxmhiel1Ariazskd9+D+7oHz6uF3Ic9MWYJmAb0KJoF8BIJsc2d
+        gX71ra4b/xRLT1DPAgjk43NBzxYUZbVvNstmp8aV0EQNLXoeFUiboIxYSpdUQjGqTCh9fYr
+        WPSGNQEJ/f/3WrUiMLui/FwQE4W0GBjBqZ37EaYSI6+9tMB5KF7jJggpVWfENqEmq4UrOt0
+        aZY+CbqZiaQOVFMO4RB2dMU++5kqZ4DcXaljshuiqWjXBAC/tqd9V+J74Nx7v0Or4Arr+23
+        j/QYDTdEMsLr+wpS+A7gR7AmBjqi6CmbzRLGemhgBQXzKt2E04YWgeOXOneKYrAokOiNEQ7
+        urdivmEZun8PSLjNsM3I6oYj3/rflmiKdz6KufOxGubMmBlU2OsGqq/QeP21nun+U8USPoD
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     paulus@samba.org
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org,
-        christophe.leroy@csgroup.eu, joel@jms.id.au, npiggin@gmail.com,
-        hbathini@linux.ibm.com, lkp@intel.com, Julia.Lawall@inria.fr,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] powerpc: Remove the static variable initialisations to 0
-Date:   Sat, 23 Jul 2022 17:24:36 +0800
-Message-Id: <20220723092436.7149-1-wangborong@cdjrlc.com>
+To:     davem@davemloft.net
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] crypto: tcrypt - Remove the static variable initialisations to NULL
+Date:   Sat, 23 Jul 2022 17:26:40 +0800
+Message-Id: <20220723092640.7559-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,27 +48,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialise global and static variable to 0 is always unnecessary.
+Initialise global and static variable to NULL is always unnecessary.
 Remove the unnecessary initialisations.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- arch/powerpc/kexec/core_64.c | 2 +-
+ crypto/tcrypt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kexec/core_64.c b/arch/powerpc/kexec/core_64.c
-index c2bea9db1c1e..2407214e3f41 100644
---- a/arch/powerpc/kexec/core_64.c
-+++ b/arch/powerpc/kexec/core_64.c
-@@ -135,7 +135,7 @@ notrace void kexec_copy_flush(struct kimage *image)
+diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
+index f56d1a9cf0a7..59eb8ec36664 100644
+--- a/crypto/tcrypt.c
++++ b/crypto/tcrypt.c
+@@ -58,7 +58,7 @@
+  */
+ static unsigned int sec;
  
- #ifdef CONFIG_SMP
- 
--static int kexec_all_irq_disabled = 0;
-+static int kexec_all_irq_disabled;
- 
- static void kexec_smp_down(void *arg)
- {
+-static char *alg = NULL;
++static char *alg;
+ static u32 type;
+ static u32 mask;
+ static int mode;
 -- 
 2.35.1
 

@@ -2,145 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCFF57EFEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBD257EFEE
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236132AbiGWO7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 10:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
+        id S237429AbiGWPBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 11:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbiGWO7U (ORCPT
+        with ESMTP id S229563AbiGWPBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 10:59:20 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E949C12A8D;
-        Sat, 23 Jul 2022 07:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1658588358; x=1690124358;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=hXw6lief2QZ2WQudsE+EN2zQR2zo6ZYyCSbPh7JqVig=;
-  b=CIJ1YTFLIVRT1kb6K0sQtT/3pYXm9XqvgDCQuR4LcZsgZ9GwrN2yQIGE
-   8V2ipQIWDNAuUaCeEbx9BXt1J9vsvlnXseujJ0GzFYrf+0yABlA5GyH8/
-   wREhUqaPRzdF/ispV2sD86V2TmKTzoalRYVrmdVdiBtdZDp7QYJxpiGxl
-   uzKmdLGIx31TQZJ+SKzvSSnKeAdU99fjrv9Iq0AYXtYhqEJkGrQ1gbsqM
-   r4KY82K5/XdTE03FtY3s/wZnsAUd9RPj6KZ0oLf8DoexLRSoyS3jbdbp2
-   7FnbKupfHLB+0x8fL4VLn3c1A2O1ykgz4UKOvg68ng3h56lqtR0i36m5X
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,188,1654531200"; 
-   d="scan'208";a="211665164"
-Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
-  by ob1.hgst.iphmx.com with ESMTP; 23 Jul 2022 22:59:14 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gPZhYEcTLDpgMm3TJ6O0xguHC4zJQKuPP5iN39P6k0HA1qWJmQITPS48O11mx6KmZX5iPXRlQW9Fyoi802wjSu36F5HSh6Z81MFhyikfPa83GTkxJc8h2EzU3UFhFv93wjT6KHnKtZ7sBY2KVzH8B4ExSfT5XhEBxwVygdFkomNnYpmthhaRYULjgQZ0+aiEWrPZN++MtZvZuWmUoX0esjQsMi8sI2EeZ8BbGe56GMg7+QmwYRuLMrXhMg0zuXvlEiTMb3CDJS1du+u7heacCfmmA8bkZ8I5DTLGGZ4Dwfr+Nby5eW6larU3bDSj/yIzR3l/1ADuSzn2YfyQsuXlow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vwMfDQudjSET6EeHyREmW+YSyRzRP5ERCCxI00LDGy4=;
- b=OGa678LBk9+I5Be0M42qGSH7JG5V1bc2LLOhYQZvThs/T1gP0sbUZzyWgl2w23a+eJZaxxJ7dysEviCwzLzNtsugzeURbK+r4TyXJ4SrjqiWrkTCW7C4LcpVye/gqlfiy5QqCSUrwnDCSP/Jao/wwNxDNXNNM2aQESOvdajJkOYVBoSqyVMoBqmkVEvrRYs7+7w2tdXLtriHTbIx24v558GON+f43wvUR+0hM4/4IelWvO46t3Lp63yLsJZGfOBQ1exc8zNdCq1aw35TJBcMWm+73aaStjsGhaq9eQl5SmAz/eSNB/9VP3Qfkp6zX4OuKFmHf2XCkK18PwTU7H3Rhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Sat, 23 Jul 2022 11:01:22 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9602418B07
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 08:01:18 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id z25so11903031lfr.2
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 08:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vwMfDQudjSET6EeHyREmW+YSyRzRP5ERCCxI00LDGy4=;
- b=CI/jcRexMBuDM8pucV9x7Eo92VGK9+r0d08go2oWxwn6yRjNinWC2EmE5Isk8q+VO3baE3KAuG8CCsPrhbhiQ80wbFQkobMKdxVw8ppNemgkP5s8jWNcivaKgbwbEWD03dHXJqDhPuads7TbHYu6tKDWowSe+JgcOax+5U+Bi0g=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- MWHPR0401MB3674.namprd04.prod.outlook.com (2603:10b6:301:77::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20; Sat, 23 Jul
- 2022 14:59:14 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::5d26:82d8:6c89:9e31]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::5d26:82d8:6c89:9e31%8]) with mapi id 15.20.5458.021; Sat, 23 Jul 2022
- 14:59:14 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Can Guo <quic_cang@quicinc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>
-CC:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
-Thread-Topic: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
-Thread-Index: AQHYmz2OvInxSH8TlUq8qOHvad4nHq2MEbFQ
-Date:   Sat, 23 Jul 2022 14:59:14 +0000
-Message-ID: <DM6PR04MB6575048E121B56FDA56DA27DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
- <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
-In-Reply-To: <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b22f9a0d-46c2-47fd-6d33-08da6cbbe8aa
-x-ms-traffictypediagnostic: MWHPR0401MB3674:EE_
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: I5pDJMXXJvaOWJWYBBAKFFaaGZF19mKw+alwTNw+PUGCuYaHib79cQWWlDsr7qQIwmNOtu7TUI6Ac3yzEtAQf/FEu3EttD7/G1Ax63QmqbQMXnLl0lqNE5plqxTvPyWhjm5k+JGIn/lub2DnOFTefSfQSbU4Wy/kPdKSj3LnHf8W9s4f4BeoyIwETIxqEdVNnPaE+EY2wg9ExLUcQ2qBtq42DhSHfssCTkjGkxG6HupSNYTHsyLWOo1yYySGWynuAp4RFdsWKnvHNsmKpcGucN5joXVbQd9dZUNXRLkFOFples+PG5SiPonUSvapOUaFYYdNn097Sr9GIcD+xGSPSEIab8mZBa58NAbzcHS4fUCqxtSXQ2RC790KYelz25gnrWUQ/hS+SXNDvfVkl2d/fz3MuLOkH8YS4xA+BuOBF8PtwQ5aNlmABNKH3g5wjAdXWlinKklMIa75HuEnzlTw0/iUlv6rtjBWJmeFOJexBb7poq4IvjPz3SdGDhZ/EeNaEKlOG8Ni/lP11fYqNJGqCu8XzjWkFxdp3xBfoGn03S6mNjVG7JYK4TlApGQgCXwgy0HtDg3GqsfFhTIaoRoEO6n+gv+DQBpaW4eLw01ZL4L7YIRVNRtJGe2wKCQf6xZscIT4Vb741lm7yBH7T/89aCHk+BeEsfPlRkLUG8GbkSvs4gTs3YEwf6Yg8W6GNGhzEXMbmyphgFMeXi2K5/d2onUyTBOBl/+Jb6bs0UDUUcILtJiDWQKbsW+u6PxkcuOXqwVr+BiCp8KqJGpMTTKTZ7FN3rZHACDMdOigoERGVn1CA0Cn4BjOf0OMHxdvMtdqOZNhgCQ+szqR+a+WgvrBTg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(41300700001)(7416002)(71200400001)(8936002)(86362001)(6506007)(7696005)(26005)(2906002)(478600001)(66476007)(64756008)(66946007)(9686003)(76116006)(66556008)(8676002)(4326008)(66446008)(316002)(55016003)(52536014)(5660300002)(110136005)(558084003)(33656002)(54906003)(82960400001)(921005)(38070700005)(186003)(38100700002)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FUKqyzQ7fJzD6/mXjt2+9Ua07MNYZUUFUMQwuBpcj1c3Njq/K5N4MbJBcF/x?=
- =?us-ascii?Q?voDq8ZW/CBCjXMWvmc63dXVL+ta60kf76YYIlfSJQqJlG2phQC2UpOKbBtOm?=
- =?us-ascii?Q?m71kJ+t4AUCs1kg68sbc2C98NcQfQOH6Bo8l8Jg44OBbTwWeLPv750SdNWPx?=
- =?us-ascii?Q?ywirkqgIXnB5loJ+jo8tTbkt2nOyJTw62aGkmvJpIOGI4F1tIxREVW+LN1uZ?=
- =?us-ascii?Q?w9yznKlFKBxcy4JRz1pNuXg7YhlO/0mU2uJSUmZZ1jnaMZtCHKB9EEYo9qM+?=
- =?us-ascii?Q?Z/KQEm/7x10nfBkK71yMhkudZiwmoysaHGq61SdZTmmB1dDdVCEnbnkhvpVJ?=
- =?us-ascii?Q?CDYAmS+tuAnCA/h46iPmjxS38yGZWUNHOBYjYuzvXmNPOD3dFWrNNP2+E2fP?=
- =?us-ascii?Q?jUvU9ZnBatbAfedTaJJ7N1m+PGbPDGDOnOOq/b2uk8lQVCGPFtkzmuIkeZzg?=
- =?us-ascii?Q?02wIjmvdX4pFphEyiu0A2iGksJA4dl9isMum81mXfMBe7PzxnhGcETyh633K?=
- =?us-ascii?Q?ySNPn5ckd6pqQaDYiukRBN32Yc/CoFPcZbahprK5PWzFBQYuJqQWb2S+ojut?=
- =?us-ascii?Q?N6ytpNBq7pwDUR+bxnozFhgCnPDKs7nndHoriTRjbY/QsQfciz6GeP895rzd?=
- =?us-ascii?Q?MeAWX+ZRT2xX8mrpY10Ehfbc171DtvdHo8px+oHi+Ph8Niu/Di/UfT2PKUDx?=
- =?us-ascii?Q?o9h/y0bFHL37Rywnjrf2BLzE0vM/X1A5kLcDHg9G2qfxY9xJDQQ+fbdvnXA7?=
- =?us-ascii?Q?XgAo1DJ/ZyLqfbEp6J6CdHZ7MuXX9zZxN6RE11vA1gBhTLcyHvPmZWvvHDl6?=
- =?us-ascii?Q?SbMxyzT78GfBysSHiqHUTEy2OzBEZ8U/4NmPay0PwbE+CEThzchvhLo5bE8H?=
- =?us-ascii?Q?fCh6L/u7u+6T+h9mg0rFwixEbS+K+dt8cGBaIfWFNk7+SHhABAgYyM5kvqme?=
- =?us-ascii?Q?jPqAbwTeae9YvxqmlTOaBCPO+P5dAJDm/1Jph+NOr0sEVjWdJRPsvadi+/Td?=
- =?us-ascii?Q?x20UiCcvFtCr59581SdLwdej6SIncaJyivkbGrT+Q6Yy31VIcq5BxHpIfUx4?=
- =?us-ascii?Q?jiOG1MKC01ufpPNek8zmscUQtAvTHKolFSzpJYsaHqxg/zgtN7mG0epHXo83?=
- =?us-ascii?Q?DETNYSKDDEt8o0Eb/ucccR8Vh1EqFDpqfFjBTIS14jqhtmhHASqd9OWSkb+v?=
- =?us-ascii?Q?5OEqXCx/xbJPNlexSMJbp9CdLpp9viHt/qIFaoP+Vu5MbnUVdrA32vK9P+LZ?=
- =?us-ascii?Q?HI/jmhiQ280S8onNnUcubyeTtp04EkaA7rXTva7GH5NahXLd7kk+XjuLIk+G?=
- =?us-ascii?Q?O59iTtUMnWCrZAL1Dz7bgUejCskyVVu2W5V7YK/5OgtWS4f6QxdCbgO2yKRM?=
- =?us-ascii?Q?GehpkQ1C/fKtvEzWVfocxuqXqU1Em9PXsJhqGEmNPDJI1c/01hoZDaYYDhzn?=
- =?us-ascii?Q?B+ED4/Aat6Zop9V6ZRMkZ/vGCE6XmdJ7oh4bHDZkT7LMhc5C86xenf/Vl2+p?=
- =?us-ascii?Q?OLt3tydIB5VWeYiLT9pcQucvsgX18MTq/CaZdLHvnJAFMbYmeoZfgOo+wdtG?=
- =?us-ascii?Q?TECPfDKybxMIvJjDLLE2y4HK4rsSwsi9z5YxlQRT?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=df1a1ON82mJRm7u8zpIQEzMVAI2RgJjvuxN29oe9aTY=;
+        b=SGX8DKfJbANM7ObJGZ9SQ29n2+hWhWOBdT5Oq5Cc2G+0yROStATNhHO2ocYgaPCdQ3
+         KwRl454mYSr5paexAJAfJa0IdTuqllfSd5iWPHxZ85fuYwx3L86Q3AqmXmpFm4KCEqJi
+         omvzdViDZLx4nv4fhp+YQLju8LT6OqzHEjklXKcvk+jqHTy2qoi2b42Ad0S8bNJwW1zm
+         GnSj2fmXDlblhJT546UhdZNh8wvdA+Q5LhF+PSEn68d+aWJ1hin2SRqXoggHkwZctyUH
+         9Jo5LwUuWT3+uNXtnfPYIY+oc/hmmdkiUK85z61K2eQxbchKJYlDlq3P343hXuQbi5YO
+         4VyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=df1a1ON82mJRm7u8zpIQEzMVAI2RgJjvuxN29oe9aTY=;
+        b=zWTWxVnMl+TfPvG/lzgyL3WsqjWIa889aEIoUWJRAPEQwJyv7Z2XaYPDZk/GQeDTrY
+         vu8k+gBx6It5az48QsI4Iy1zqRMutFFyZiiRQwbXeHKVUbgvn5edJNmOydRQiWvOh9qB
+         1pHnNrGtY3xMjojaiaiOMh+ylKJ+wQ5UmgG/PVY7Tl9n2e9gxkZhd3lD4vLvO4bzv22W
+         hUmsNghKor9ORTxlfLZq2ZVJIzMh1tPI9GXMlmK4kyzWSE7lQ8GdF/oxiji1IHZ3aERx
+         0MIN9C8Wsbxq9AXhzWZs2gtryu3rnE2lqpUsFeVZ2Uszx94ik9LdV6OiV9QvDsdgBuwp
+         2CyQ==
+X-Gm-Message-State: AJIora8jUfnmYBlUW9BtROP0HWt8BkFJb+D31qWx5rc/79QVrLngNHNU
+        fdzftI9V0SimLSKFQykN1U4=
+X-Google-Smtp-Source: AGRyM1sY+L72B2F1cTITRjjg/7W4ev8UCloBGC8T4oH++f+4LdVFI8Xp5K3Y3ju7p7x7/XFkr+ewyw==
+X-Received: by 2002:a19:e34d:0:b0:48a:6613:44bd with SMTP id c13-20020a19e34d000000b0048a661344bdmr2025877lfk.36.1658588476538;
+        Sat, 23 Jul 2022 08:01:16 -0700 (PDT)
+Received: from [192.168.2.145] ([109.252.119.232])
+        by smtp.googlemail.com with ESMTPSA id a14-20020a05651c030e00b0025d476dc71csm1634107ljp.106.2022.07.23.08.01.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Jul 2022 08:01:16 -0700 (PDT)
+Message-ID: <f5e99dbb-7008-dcf8-3e85-2f161056b37a@gmail.com>
+Date:   Sat, 23 Jul 2022 18:01:09 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b22f9a0d-46c2-47fd-6d33-08da6cbbe8aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2022 14:59:14.3889
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zD7++7WlFuAqlLr6NdPq9sdfaO0ejPbl6wpySatotHnBpgOpb3TAARBbQqFZ0gOANufM/lZ9a7EhglbQzjEajg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0401MB3674
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v12 22/69] mm/mmap: change do_brk_flags() to expand
+ existing VMA and add do_brk_munmap()
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>
+Cc:     Yu Zhao <yuzhao@google.com>
+References: <20220720021727.17018-1-Liam.Howlett@oracle.com>
+ <20220720021727.17018-23-Liam.Howlett@oracle.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220720021727.17018-23-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,10 +80,434 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +#define MCQ_ROP_OFFSET_n(p, i) \
-> +       hba->mcq_rop[(p)].offset + hba->mcq_rop[(p)].stride * (i)
-Can you please explain the 0x100 stride thing?
-Theoretically, each rop set is 48Bytes long, or did I get it wrong?=20
+20.07.2022 05:17, Liam Howlett пишет:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> Avoid allocating a new VMA when it a vma modification can occur.  When a
+> brk() can expand or contract a VMA, then the single store operation will
+> only modify one index of the maple tree instead of causing a node to split
+> or coalesce.  This avoids unnecessary allocations/frees of maple tree
+> nodes and VMAs.
+> 
+> Move some limit & flag verifications out of the do_brk_flags() function to
+> use only relevant checks in the code path of bkr() and vm_brk_flags().
+> 
+> Set the vma to check if it can expand in vm_brk_flags() if extra criteria
+> are met.
+> 
+> Drop userfaultfd from do_brk_flags() path and only use it in
+> vm_brk_flags() path since that is the only place a munmap will happen.
+> 
+> Add a wraper for munmap for the brk case called do_brk_munmap().
+> 
+> Link: https://lkml.kernel.org/r/20220504011345.662299-7-Liam.Howlett@oracle.com
+> Link: https://lkml.kernel.org/r/20220621204632.3370049-23-Liam.Howlett@oracle.com
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> Cc: SeongJae Park <sj@kernel.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  mm/mmap.c | 239 ++++++++++++++++++++++++++++++++++++++++--------------
+>  1 file changed, 179 insertions(+), 60 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 02d2fd90af80..33b408653201 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -194,17 +194,40 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)
+>  	return next;
+>  }
+>  
+> -static int do_brk_flags(unsigned long addr, unsigned long request, unsigned long flags,
+> -		struct list_head *uf);
+> +/*
+> + * check_brk_limits() - Use platform specific check of range & verify mlock
+> + * limits.
+> + * @addr: The address to check
+> + * @len: The size of increase.
+> + *
+> + * Return: 0 on success.
+> + */
+> +static int check_brk_limits(unsigned long addr, unsigned long len)
+> +{
+> +	unsigned long mapped_addr;
+> +
+> +	mapped_addr = get_unmapped_area(NULL, addr, len, 0, MAP_FIXED);
+> +	if (IS_ERR_VALUE(mapped_addr))
+> +		return mapped_addr;
+> +
+> +	return mlock_future_check(current->mm, current->mm->def_flags, len);
+> +}
+> +static int do_brk_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+> +			 unsigned long newbrk, unsigned long oldbrk,
+> +			 struct list_head *uf);
+> +static int do_brk_flags(struct ma_state *mas, struct vm_area_struct *brkvma,
+> +			unsigned long addr, unsigned long request,
+> +			unsigned long flags);
+>  SYSCALL_DEFINE1(brk, unsigned long, brk)
+>  {
+>  	unsigned long newbrk, oldbrk, origbrk;
+>  	struct mm_struct *mm = current->mm;
+> -	struct vm_area_struct *next;
+> +	struct vm_area_struct *brkvma, *next = NULL;
+>  	unsigned long min_brk;
+>  	bool populate;
+>  	bool downgraded = false;
+>  	LIST_HEAD(uf);
+> +	MA_STATE(mas, &mm->mm_mt, 0, 0);
+>  
+>  	if (mmap_write_lock_killable(mm))
+>  		return -EINTR;
+> @@ -246,35 +269,52 @@ SYSCALL_DEFINE1(brk, unsigned long, brk)
+>  
+>  	/*
+>  	 * Always allow shrinking brk.
+> -	 * __do_munmap() may downgrade mmap_lock to read.
+> +	 * do_brk_munmap() may downgrade mmap_lock to read.
+>  	 */
+>  	if (brk <= mm->brk) {
+>  		int ret;
+>  
+> +		/* Search one past newbrk */
+> +		mas_set(&mas, newbrk);
+> +		brkvma = mas_find(&mas, oldbrk);
+> +		BUG_ON(brkvma == NULL);
+> +		if (brkvma->vm_start >= oldbrk)
+> +			goto out; /* mapping intersects with an existing non-brk vma. */
+>  		/*
+> -		 * mm->brk must to be protected by write mmap_lock so update it
+> -		 * before downgrading mmap_lock. When __do_munmap() fails,
+> -		 * mm->brk will be restored from origbrk.
+> +		 * mm->brk must be protected by write mmap_lock.
+> +		 * do_brk_munmap() may downgrade the lock,  so update it
+> +		 * before calling do_brk_munmap().
+>  		 */
+>  		mm->brk = brk;
+> -		ret = __do_munmap(mm, newbrk, oldbrk-newbrk, &uf, true);
+> -		if (ret < 0) {
+> -			mm->brk = origbrk;
+> -			goto out;
+> -		} else if (ret == 1) {
+> +		mas.last = oldbrk - 1;
+> +		ret = do_brk_munmap(&mas, brkvma, newbrk, oldbrk, &uf);
+> +		if (ret == 1)  {
+>  			downgraded = true;
+> -		}
+> -		goto success;
+> +			goto success;
+> +		} else if (!ret)
+> +			goto success;
+> +
+> +		mm->brk = origbrk;
+> +		goto out;
+>  	}
+>  
+> -	/* Check against existing mmap mappings. */
+> -	next = find_vma(mm, oldbrk);
+> +	if (check_brk_limits(oldbrk, newbrk - oldbrk))
+> +		goto out;
+> +
+> +	/*
+> +	 * Only check if the next VMA is within the stack_guard_gap of the
+> +	 * expansion area
+> +	 */
+> +	mas_set(&mas, oldbrk);
+> +	next = mas_find(&mas, newbrk - 1 + PAGE_SIZE + stack_guard_gap);
+>  	if (next && newbrk + PAGE_SIZE > vm_start_gap(next))
+>  		goto out;
+>  
+> +	brkvma = mas_prev(&mas, mm->start_brk);
+>  	/* Ok, looks good - let it rip. */
+> -	if (do_brk_flags(oldbrk, newbrk-oldbrk, 0, &uf) < 0)
+> +	if (do_brk_flags(&mas, brkvma, oldbrk, newbrk - oldbrk, 0) < 0)
+>  		goto out;
+> +
+>  	mm->brk = brk;
+>  
+>  success:
+> @@ -2805,38 +2845,55 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+>  }
+>  
+>  /*
+> - *  this is really a simplified "do_mmap".  it only handles
+> - *  anonymous maps.  eventually we may be able to do some
+> - *  brk-specific accounting here.
+> + * brk_munmap() - Unmap a parital vma.
+> + * @mas: The maple tree state.
+> + * @vma: The vma to be modified
+> + * @newbrk: the start of the address to unmap
+> + * @oldbrk: The end of the address to unmap
+> + * @uf: The userfaultfd list_head
+> + *
+> + * Returns: 1 on success.
+> + * unmaps a partial VMA mapping.  Does not handle alignment, downgrades lock if
+> + * possible.
+>   */
+> -static int do_brk_flags(unsigned long addr, unsigned long len,
+> -			unsigned long flags, struct list_head *uf)
+> +static int do_brk_munmap(struct ma_state *mas, struct vm_area_struct *vma,
+> +			 unsigned long newbrk, unsigned long oldbrk,
+> +			 struct list_head *uf)
+>  {
+> -	struct mm_struct *mm = current->mm;
+> -	struct vm_area_struct *vma, *prev;
+> -	pgoff_t pgoff = addr >> PAGE_SHIFT;
+> -	int error;
+> -	unsigned long mapped_addr;
+> -	validate_mm_mt(mm);
+> -
+> -	/* Until we need other flags, refuse anything except VM_EXEC. */
+> -	if ((flags & (~VM_EXEC)) != 0)
+> -		return -EINVAL;
+> -	flags |= VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
+> -
+> -	mapped_addr = get_unmapped_area(NULL, addr, len, 0, MAP_FIXED);
+> -	if (IS_ERR_VALUE(mapped_addr))
+> -		return mapped_addr;
+> +	struct mm_struct *mm = vma->vm_mm;
+> +	int ret;
+>  
+> -	error = mlock_future_check(mm, mm->def_flags, len);
+> -	if (error)
+> -		return error;
+> +	arch_unmap(mm, newbrk, oldbrk);
+> +	ret = __do_munmap(mm, newbrk, oldbrk - newbrk, uf, true);
+> +	validate_mm_mt(mm);
+> +	return ret;
+> +}
+>  
+> -	/* Clear old maps, set up prev and uf */
+> -	if (munmap_vma_range(mm, addr, len, &prev, uf))
+> -		return -ENOMEM;
+> +/*
+> + * do_brk_flags() - Increase the brk vma if the flags match.
+> + * @mas: The maple tree state.
+> + * @addr: The start address
+> + * @len: The length of the increase
+> + * @vma: The vma,
+> + * @flags: The VMA Flags
+> + *
+> + * Extend the brk VMA from addr to addr + len.  If the VMA is NULL or the flags
+> + * do not match then create a new anonymous VMA.  Eventually we may be able to
+> + * do some brk-specific accounting here.
+> + */
+> +static int do_brk_flags(struct ma_state *mas, struct vm_area_struct *vma,
+> +			unsigned long addr, unsigned long len,
+> +			unsigned long flags)
+> +{
+> +	struct mm_struct *mm = current->mm;
+> +	struct vm_area_struct *prev = NULL;
+>  
+> -	/* Check against address space limits *after* clearing old maps... */
+> +	validate_mm_mt(mm);
+> +	/*
+> +	 * Check against address space limits by the changed size
+> +	 * Note: This happens *after* clearing old mappings in some code paths.
+> +	 */
+> +	flags |= VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
+>  	if (!may_expand_vm(mm, flags, len >> PAGE_SHIFT))
+>  		return -ENOMEM;
+>  
+> @@ -2846,30 +2903,56 @@ static int do_brk_flags(unsigned long addr, unsigned long len,
+>  	if (security_vm_enough_memory_mm(mm, len >> PAGE_SHIFT))
+>  		return -ENOMEM;
+>  
+> -	/* Can we just expand an old private anonymous mapping? */
+> -	vma = vma_merge(mm, prev, addr, addr + len, flags,
+> -			NULL, NULL, pgoff, NULL, NULL_VM_UFFD_CTX, NULL);
+> -	if (vma)
+> -		goto out;
+> -
+>  	/*
+> -	 * create a vma struct for an anonymous mapping
+> +	 * Expand the existing vma if possible; Note that singular lists do not
+> +	 * occur after forking, so the expand will only happen on new VMAs.
+>  	 */
+> -	vma = vm_area_alloc(mm);
+> -	if (!vma) {
+> -		vm_unacct_memory(len >> PAGE_SHIFT);
+> -		return -ENOMEM;
+> +	if (vma &&
+> +	    (!vma->anon_vma || list_is_singular(&vma->anon_vma_chain)) &&
+> +	    ((vma->vm_flags & ~VM_SOFTDIRTY) == flags)) {
+> +		mas->index = vma->vm_start;
+> +		mas->last = addr + len - 1;
+> +		vma_adjust_trans_huge(vma, addr, addr + len, 0);
+> +		if (vma->anon_vma) {
+> +			anon_vma_lock_write(vma->anon_vma);
+> +			anon_vma_interval_tree_pre_update_vma(vma);
+> +		}
+> +		vma->vm_end = addr + len;
+> +		vma->vm_flags |= VM_SOFTDIRTY;
+> +		if (mas_store_gfp(mas, vma, GFP_KERNEL))
+> +			goto mas_expand_failed;
+> +
+> +		if (vma->anon_vma) {
+> +			anon_vma_interval_tree_post_update_vma(vma);
+> +			anon_vma_unlock_write(vma->anon_vma);
+> +		}
+> +		khugepaged_enter_vma(vma, flags);
+> +		goto out;
+>  	}
+> +	prev = vma;
+> +
+> +	/* create a vma struct for an anonymous mapping */
+> +	vma = vm_area_alloc(mm);
+> +	if (!vma)
+> +		goto vma_alloc_fail;
+>  
+>  	vma_set_anonymous(vma);
+>  	vma->vm_start = addr;
+>  	vma->vm_end = addr + len;
+> -	vma->vm_pgoff = pgoff;
+> +	vma->vm_pgoff = addr >> PAGE_SHIFT;
+>  	vma->vm_flags = flags;
+>  	vma->vm_page_prot = vm_get_page_prot(flags);
+> -	if (vma_link(mm, vma, prev))
+> -		goto no_vma_link;
+> +	mas_set_range(mas, vma->vm_start, addr + len - 1);
+> +	if (mas_store_gfp(mas, vma, GFP_KERNEL))
+> +		goto mas_store_fail;
+>  
+> +	mm->map_count++;
+> +
+> +	if (!prev)
+> +		prev = mas_prev(mas, 0);
+> +
+> +	__vma_link_list(mm, vma, prev);
+> +	mm->map_count++;
+>  out:
+>  	perf_event_mmap(vma);
+>  	mm->total_vm += len >> PAGE_SHIFT;
+> @@ -2880,18 +2963,29 @@ static int do_brk_flags(unsigned long addr, unsigned long len,
+>  	validate_mm_mt(mm);
+>  	return 0;
+>  
+> -no_vma_link:
+> +mas_store_fail:
+>  	vm_area_free(vma);
+> +vma_alloc_fail:
+> +	vm_unacct_memory(len >> PAGE_SHIFT);
+> +	return -ENOMEM;
+> +
+> +mas_expand_failed:
+> +	if (vma->anon_vma) {
+> +		anon_vma_interval_tree_post_update_vma(vma);
+> +		anon_vma_unlock_write(vma->anon_vma);
+> +	}
+>  	return -ENOMEM;
+>  }
+>  
+>  int vm_brk_flags(unsigned long addr, unsigned long request, unsigned long flags)
+>  {
+>  	struct mm_struct *mm = current->mm;
+> +	struct vm_area_struct *vma = NULL;
+>  	unsigned long len;
+>  	int ret;
+>  	bool populate;
+>  	LIST_HEAD(uf);
+> +	MA_STATE(mas, &mm->mm_mt, addr, addr);
+>  
+>  	len = PAGE_ALIGN(request);
+>  	if (len < request)
+> @@ -2902,13 +2996,38 @@ int vm_brk_flags(unsigned long addr, unsigned long request, unsigned long flags)
+>  	if (mmap_write_lock_killable(mm))
+>  		return -EINTR;
+>  
+> -	ret = do_brk_flags(addr, len, flags, &uf);
+> +	/* Until we need other flags, refuse anything except VM_EXEC. */
+> +	if ((flags & (~VM_EXEC)) != 0)
+> +		return -EINVAL;
+> +
+> +	ret = check_brk_limits(addr, len);
+> +	if (ret)
+> +		goto limits_failed;
+> +
+> +	if (find_vma_intersection(mm, addr, addr + len))
+> +		ret = do_munmap(mm, addr, len, &uf);
+> +
+> +	if (ret)
+> +		goto munmap_failed;
+> +
+> +	vma = mas_prev(&mas, 0);
+> +	if (!vma || vma->vm_end != addr || vma_policy(vma) ||
+> +	    !can_vma_merge_after(vma, flags, NULL, NULL,
+> +				 addr >> PAGE_SHIFT, NULL_VM_UFFD_CTX, NULL))
+> +		vma = NULL;
+> +
+> +	ret = do_brk_flags(&mas, vma, addr, len, flags);
+>  	populate = ((mm->def_flags & VM_LOCKED) != 0);
+>  	mmap_write_unlock(mm);
+>  	userfaultfd_unmap_complete(mm, &uf);
+>  	if (populate && !ret)
+>  		mm_populate(addr, len);
+>  	return ret;
+> +
+> +munmap_failed:
+> +limits_failed:
+> +	mmap_write_unlock(mm);
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL(vm_brk_flags);
+>  
 
-Thanks,
-Avri
+Hello,
+
+I cannot complete booting into graphics environment on ARM32 because
+do_brk_flags() now crashes with a BUG_ON() on a recent linux-next and
+this patch should be the cause. Please take a look, thanks in advance.
+
+------------[ cut here ]------------
+kernel BUG at lib/maple_tree.c:911!
+Internal error: Oops - BUG: 0 [#1] SMP ARM
+Modules linked in:
+CPU: 1 PID: 692 Comm: kwin_x11 Not tainted
+5.19.0-rc7-next-20220722-00130-g1583ab12487b #21
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+PC is at mas_update_gap+0xac/0x1a8
+LR is at 0xcc343e00
+pc : [<c0747314>]    lr : [<cc343e00>]    psr: 60080013
+sp : f1299ac8  ip : 999b6000  fp : f1299ae4
+r10: c1062588  r9 : 00000023  r8 : 00000001
+r7 : 0000001f  r6 : cc0ea6a8  r5 : 00000000  r4 : f1299f54
+r3 : 00000000  r2 : c25a2000  r1 : 999b6000  r0 : 00000000
+Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 0d28404a  DAC: 00000051
+Register r0 information: NULL pointer
+Register r1 information: non-paged memory
+Register r2 information: slab mm_struct start c25a2000 pointer offset 0
+size 168
+Register r3 information: NULL pointer
+Register r4 information: 2-page vmalloc region starting at 0xf1298000
+allocated at kernel_clone+0x64/0x43c
+Register r5 information: NULL pointer
+Register r6 information: slab maple_node start cc0ea600 pointer offset 168
+Register r7 information: non-paged memory
+Register r8 information: non-paged memory
+Register r9 information: non-paged memory
+Register r10 information: non-slab/vmalloc memory
+Register r11 information: 2-page vmalloc region starting at 0xf1298000
+allocated at kernel_clone+0x64/0x43c
+Register r12 information: non-paged memory
+Process kwin_x11 (pid: 692, stack limit = 0x976e11bf)
+...
+Backtrace:
+ mas_update_gap from mas_wr_modify+0x1b4/0x1898
+ r7:0000001f r6:00000000 r5:f1299e90 r4:f1299f54
+ mas_wr_modify from mas_wr_store_entry+0x138/0x4d8
+ r10:cd26febc r9:00000023 r8:f1299f54 r7:00000cc0 r6:cd21d600 r5:f1299f54
+ r4:f1299e90
+ mas_wr_store_entry from mas_store_gfp+0x64/0x154
+ r9:00000023 r8:f1299f54 r7:00000cc0 r6:cd21d600 r5:cd26fea0 r4:f1299f54
+ mas_store_gfp from do_brk_flags+0x21c/0x318
+ r10:cd26febc r9:00000023 r8:f1299f54 r7:0097a000 r6:cd26fec4 r5:c25a2000
+ r4:cd26fea0
+ do_brk_flags from sys_brk+0x27c/0x3c8
+ r10:c25a2038 r9:00957000 r8:00000000 r7:cd21d600 r6:0097a000 r5:00957000
+ r4:c25a2000
+ sys_brk from ret_fast_syscall+0x0/0x1c

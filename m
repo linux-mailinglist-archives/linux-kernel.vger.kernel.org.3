@@ -2,135 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1F157EFF8
+	by mail.lfdr.de (Postfix) with ESMTP id 29BCA57EFF7
 	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238392AbiGWPI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 11:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S238227AbiGWPId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 11:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237394AbiGWPIZ (ORCPT
+        with ESMTP id S237394AbiGWPIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 11:08:25 -0400
-Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918E91A814;
-        Sat, 23 Jul 2022 08:08:23 -0700 (PDT)
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id F41DF122FCF;
-        Sat, 23 Jul 2022 17:08:20 +0200 (CEST)
-Received: from mail4.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id DCB43122F7D;
-        Sat, 23 Jul 2022 17:08:20 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail4.swissbit.com (Postfix) with ESMTPS;
-        Sat, 23 Jul 2022 17:08:20 +0200 (CEST)
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Sat, 23 Jul
- 2022 17:08:20 +0200
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.1118.009; Sat, 23 Jul 2022 17:08:20 +0200
-From:   Christian Loehle <CLoehle@hyperstone.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] mmc: block: Dont report successful writes with errors
-Thread-Topic: [PATCH] mmc: block: Dont report successful writes with errors
-Thread-Index: Adibg9VERWQQSIdlTuivPV3k9XDqxwC0zsEAABMWzRA=
-Date:   Sat, 23 Jul 2022 15:08:19 +0000
-Message-ID: <a66fe29560f545e18b91af57f4d0dddb@hyperstone.com>
-References: <ca06b94aa48a484d965744e64e17a4ef@hyperstone.com>
- <992cc198-6c7c-977a-1af8-56665e939cc9@intel.com>
-In-Reply-To: <992cc198-6c7c-977a-1af8-56665e939cc9@intel.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.242.2.2]
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sat, 23 Jul 2022 11:08:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E591A814;
+        Sat, 23 Jul 2022 08:08:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FBC260B7B;
+        Sat, 23 Jul 2022 15:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76267C341D7;
+        Sat, 23 Jul 2022 15:08:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658588909;
+        bh=JKFXmQp5waJvFePZ5Eo1ghy1swS0GuRdJRrA5CrHhB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gMnH8+cYonPoPu/Bj4xhVhPDtAJoQgfLu438n8dLWQ/V7Ma37f80AUOMkf9mYiceL
+         sXoluEwd7HymFvaW5Ts4ZJctCgW0yWqZ1EmC7ne02X86HJGkr7YIOKV1baHWPypGVu
+         9k2EYNp1g4jKBL8UYrtDARYEYquVdSCKBgHjGwfo=
+Date:   Sat, 23 Jul 2022 17:08:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Sasha Levin <sashal@kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [linux-stable-rc:linux-5.10.y 644/7104] synclink.c:undefined
+ reference to `free_dma'
+Message-ID: <YtwO6yaYaf5Eu1Md@kroah.com>
+References: <202207220652.CGm6UUjK-lkp@intel.com>
+ <CAK8P3a0vZrXxNp3YhrxFjFunHgxSZBKD9Y4darSODgeFAukCeQ@mail.gmail.com>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27034.000
-X-TMASE-Result: 10--4.711100-10.000000
-X-TMASE-MatchedRID: 1GZI+iG+Mtc4HKI/yaqRm65i3jK3KDOon5nfR7I2dFOHOV1iX68qKZ7Y
-        WhVRsZwuIvrftAIhWmLy9zcRSkKatU5gqNn1dvU1HPYwOJi6PLmZIt4iAQN6P7wYtb0g7YwtBjZ
-        Q69nTLPVuf5ur5byPpRQ8VZs5oN9QYLmTo2ikrFg6N/cDgNNi4flSepWcgdLP6qtOp7YOMMlQCs
-        mfAegbdDn/DTK/G3ZxulzBJJSWP21LbsC+B4mg0CrLqyE6Ur/jfXuxEzIWjBGlc781fidezAscY
-        S3HCNn/YTwbBN/UFRUT7Tkc5T/JSErr3NDc5w2WqhcdnP91eXEzNsXWBvGVBi37aLwPsRkKo8WM
-        kQWv6iUVR7DQWX/WkQGLeSok4rrZC24oEZ6SpSkj80Za3RRg8OMGRmokYZ2no23odnq30xqsDWA
-        6LWYOMzradVtJbrOo2+HkU2X4rVw=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 1d0dd61e-ded5-4032-b68a-dd49c6f8bbe4-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0vZrXxNp3YhrxFjFunHgxSZBKD9Y4darSODgeFAukCeQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pk9uIDE5LzA3LzIyIDE4OjM0LCBDaHJpc3RpYW4gTG9laGxlIHdyb3RlOg0KPj4gQmUgYXMgY29u
-c2VydmF0aXZlIGFib3V0IHN1Y2Nlc3NmdWwgd3JpdGUgcmVwb3J0aW5nIHRvIHRoZSBibG9jayBs
-YXllciANCj4+IGZvciBTUEkgYXMgd2l0aCBub3JtYWwgU0QgYW5kIE1NQy4NCj4+IFRoYXQgbWVh
-bnMgb24gYW55IGVycm9ycyBieXRlc194ZmVyZWQgaXMgaWdub3JlZCBhbmQgdGhlIHdob2xlIHdy
-aXRlIA0KPj4gbXVzdCBiZSByZXBlYXRlZC4NCj4+IA0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0
-aWFuIExvZWhsZSA8Y2xvZWhsZUBoeXBlcnN0b25lLmNvbT4NCj4+IC0tLQ0KPj4gIGRyaXZlcnMv
-bW1jL2NvcmUvYmxvY2suYyB8IDYgKysrKystDQo+PiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0
-aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPj4gDQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tbWMv
-Y29yZS9ibG9jay5jIGIvZHJpdmVycy9tbWMvY29yZS9ibG9jay5jIGluZGV4IA0KPj4gZjRhMTI4
-MTY1OGRiLi42M2QxYzA1NTgyYTkgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL21tYy9jb3JlL2Js
-b2NrLmMNCj4+ICsrKyBiL2RyaXZlcnMvbW1jL2NvcmUvYmxvY2suYw0KPj4gQEAgLTE3NjUsOCAr
-MTc2NSwxMiBAQCBzdGF0aWMgYm9vbCBtbWNfYmxrX3N0YXR1c19lcnJvcihzdHJ1Y3QgcmVxdWVz
-dCAqcmVxLCB1MzIgc3RhdHVzKQ0KPj4gIAlzdHJ1Y3QgbW1jX3F1ZXVlICptcSA9IHJlcS0+cS0+
-cXVldWVkYXRhOw0KPj4gIAl1MzIgc3RvcF9lcnJfYml0czsNCj4+ICANCj4+ICsJLyoNCj4+ICsJ
-ICogRWl0aGVyIHdyaXRlIHRpbWVkIG91dCBkdXJpbmcgYnVzeSBhbmQgZGF0YS0+ZXJyb3IgaXMg
-c2V0DQo+PiArCSAqIG9yIHdlIGFjdHVhbGx5IHJlY2VpdmVkIGEgdmFsaWQgUjIgYW5kIGNoZWNr
-IGZvciBlcnJvciBiaXRzLg0KPj4gKwkgKi8NCj4+ICAJaWYgKG1tY19ob3N0X2lzX3NwaShtcS0+
-Y2FyZC0+aG9zdCkpDQo+PiAtCQlyZXR1cm4gZmFsc2U7DQo+PiArCQlyZXR1cm4gYnJxLT5kYXRh
-LmVycm9yIHx8ICEhc3RhdHVzOw0KPg0KPlRoaXMgZnVuY3Rpb24gaXMgZm9yIGNoZWNraW5nIHN0
-YXR1cywgc28gYnJxLT5kYXRhLmVycm9yIGRvZXMgbm90IGJlbG9uZyBoZXJlLiAgQWxzbyBpdCB3
-b3VsZCBiZSBtb3JlIHJlYWRhYmxlIHRvIHVzZSBhIGRlZmluZSBlLmcuDQo+DQo+CQlyZXR1cm4g
-c3RhdHVzICYgU1BJX1IyX0VSUk9SUzsNCj4NCj5JIHRoaW5rIGNsZWFyaW5nIGJ5dGVzX3hmZXJl
-ZCBmb3IgU1BJIGJycS0+ZGF0YS5lcnJvciBzaG91bGQgYmUgYSBzZXBhcmF0ZSBwYXRjaCwgYW5k
-IHlvdSB3b3VsZCBuZWVkIHRvIGV4cGxhaW4gYSBiaXQgbW9yZSBmb3IgdGhhdCBjYXNlIHRvby4N
-Cg0KSSB1bmRlcnN0YW5kIHRoYXQsIGJ1dCB0aGVyZSBpcyBubyB3YXkgb2YgY2hlY2tpbmcgc3Rh
-dHVzIGluIFNQSSBtb2RlLg0KVGhlIGJlaGF2aW9yIG9mIG1tYyBibG9jayBpcyBvbmx5IGNoYW5n
-ZWQgaW4gYSBtaW5vciB3YXkgaGVyZSBhbnl3YXksIHRoYXQgaXMsIGNoZWNraW5nIGZvciBzdGF0
-dXMgaXMgZG9uZSBvbmUgbW9yZSB0aW1lIHRoYW4gYmVmb3JlLg0KSWYgYnJxLT5kYXRhLmVycm9y
-IGlzIHNldCBkaXJlY3RseSBhZnRlciBhIHdyaXRlIGUuZy4gdGhlbiBieXRlc194ZmVyZWQgaXMg
-YWxyZWFkeSAwLg0KTXkgaW50ZW50aW9uIHdhcyBtb3N0bHkgdG8gaW1wcm92ZSBvbiB0aGUgZmxv
-dyBvZiB0aGUgcmVjb3ZlcnkgYW5kIGdldCB0aGUgbW1jX2lzX2hvc3Rfc3BpIG91dCBvZiB0aGVy
-ZSBmb3IgdGhlIG1vc3QgcGFydCB3aXRoIGZ1dHVyZSBwYXRjaGVzLg0KQWZ0ZXIgYWxsIGl0IGZl
-ZWxzIHdlaXJkIHRvIGRvIGEgc2luZ2xlIHN0ZXAgcmVhZCByZXRyeSBiZWZvcmUgZW5zdXJpbmcg
-YSBmaXhfc3RhdGUsIGFuZCBJIHJhbiBpbnRvIHRoYXQgcXVpdGUgb2Z0ZW4uDQpVbmZvcnR1bmF0
-ZWx5LCBJIG5vdyByZWFsaXplZCB0aGF0IGZpeF9zdGF0ZSBjYW5ub3QgcHJvcGVybHkgYmUgaW1w
-bGVtZW50ZWQgd2l0aGluIHRoZSBzcGVjIG9yIGV2ZW4gcmVhbC13b3JsZCBjYXJkJ3MgYmVoYXZp
-b3IgYW5kIEkgd29uJ3QgYmUgdGFraW5nIHRoaXMgZnVydGhlci4NClRoZSBiZXN0IGF0dGVtcHQg
-SSBjYW1lIHVwIHdpdGggaXMgZG9pbmcgYSBsb29wIG9mIENNRDEyIGFuZCBDTUQxMyBpbiBTUEkg
-YW5kIGlmIENNRDEyIHdhcyBJTExFR0FMIGFuZCBDTUQxMiBoYXMgbm8gYml0cyBzZXQsIHN0YXRl
-IGlzIGZpeGVkLg0KQnV0IENNRDEyIGlzIG9ubHkgZGVmaW5lZCBmb3IgbXVsdGlwbGUgYmxvY2sg
-dHJhbnNmZXJzIGluIFNQSSBhbmQgY2FyZHMgdHJlYXQgaXQgZGlmZmVyZW50bHkgb24gZS5nLiBD
-TUQxNyB0cmFuc2ZlcnMuDQpJbnN0ZWFkIEkgd291bGQganVzdCBkbyBhIHNvZnQgcmVzZXQgZm9y
-IFNQSSBhbmQgcmV0cnkgYW5kIG1heWJlIGluY3JlYXNlIHRoZSByZWFkIHRpbWVvdXQgb2YgMTAw
-bXMgd2hpY2ggbGFyZ2VyIFNEIGNhcmRzIGNhbiBmYWlsIHNvbWV0aW1lcy4NCkFueXdheSBzaW5j
-ZSBTUEkgaW5pdGlhbGl6YXRpb24gaXMgcXVpdGUgZmFzdCwgZXNwZWNpYWxseSBmb3Igc29mdCBy
-ZXNldHMgdGhlcmUgaXMgbGlrZWx5IG5vIHJlY292ZXJ5IHRvIGJlYXQgdGhhdCBwZXJmb3JtYW5j
-ZS13aXNlLg0KSSB3aWxsIHNlbmQgYW4gUkZDIGZvciB0aGUgc29mdCByZXNldCBpbiB0aGUgY29t
-aW5nIGRheXMuDQpJZiBub3QgSSB3b3VsZCBhdCBsZWFzdCBhZGQgdGhlICFtbWNfaXNfaG9zdF9z
-cGkgY29uZGl0aW9uIGZvciBjYWxsaW5nIG1tY19ibGtfc3RhdHVzX2Vycm9yIHRvIG1ha2UgaXQg
-YSBiaXQgbW9yZSBjbGVhciB0aGF0IHRoaXMgZnVuY3Rpb24gZG9lcyBkbyB3aGF0IGlzIGludGVu
-ZGVkIGZvciBTUEkgY2FyZHMuDQoNClJlZ2FyZHMsDQpDaHJpc3RpYW4NCg0KSHlwZXJzdG9uZSBH
-bWJIIHwgUmVpY2hlbmF1c3RyLiAzOWEgIHwgNzg0NjcgS29uc3RhbnoKTWFuYWdpbmcgRGlyZWN0
-b3I6IERyLiBKYW4gUGV0ZXIgQmVybnMuCkNvbW1lcmNpYWwgcmVnaXN0ZXIgb2YgbG9jYWwgY291
-cnRzOiBGcmVpYnVyZyBIUkIzODE3ODI=
+On Fri, Jul 22, 2022 at 02:58:32PM +0200, Arnd Bergmann wrote:
+> Hi Greg,
+> 
+> I looked at this report for 5.10.y:
+> 
+> On Fri, Jul 22, 2022 at 12:20 AM kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi Arnd,
+> >
+> > FYI, the error/warning still remains.
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > head:   7748091a31277b35d55bffa6fecda439d8526366
+> > commit: 87ae522e467e17a13b796e2cb595f9c3943e4d5e [644/7104] m68knommu: only set CONFIG_ISA_DMA_API for ColdFire sub-arch
+> > config: m68k-randconfig-r011-20220721 (https://download.01.org/0day-ci/archive/20220722/202207220652.CGm6UUjK-lkp@intel.com/config)
+> > compiler: m68k-linux-gcc (GCC) 12.1.0
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=87ae522e467e17a13b796e2cb595f9c3943e4d5e
+> >         git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+> >         git fetch --no-tags linux-stable-rc linux-5.10.y
+> >         git checkout 87ae522e467e17a13b796e2cb595f9c3943e4d5e
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    m68k-linux-ld: section .rodata VMA [0000000000002000,00000000005fa837] overlaps section .text VMA [0000000000000400,0000000000ffa6bf]
+> >    m68k-linux-ld: drivers/tty/synclink.o: in function `mgsl_release_resources':
+> > >> synclink.c:(.text+0xd1a): undefined reference to `free_dma'
+> 
+> This can be addressed by either backporting f95a387cdeb3 ("m68k: coldfire: drop
+> ISA_DMA_API support") or by reverting the 87ae522e467e ("m68knommu: only
+> set CONFIG_ISA_DMA_API for ColdFire sub-arch"), which is not actually needed
+> on 5.10.
 
+I've now reverted it, thanks.
+
+greg k-h

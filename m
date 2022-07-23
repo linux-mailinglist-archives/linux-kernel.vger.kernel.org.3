@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9243657EF6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F06E57EF72
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237439AbiGWORk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 10:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S237498AbiGWOTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 10:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiGWORi (ORCPT
+        with ESMTP id S237479AbiGWOTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 10:17:38 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C04F2C3;
-        Sat, 23 Jul 2022 07:17:37 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id e132so6599313pgc.5;
-        Sat, 23 Jul 2022 07:17:37 -0700 (PDT)
+        Sat, 23 Jul 2022 10:19:22 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8103183BC;
+        Sat, 23 Jul 2022 07:19:21 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id v13so2219314wru.12;
+        Sat, 23 Jul 2022 07:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iy3Y3lD3PO74W8Het/zkyRyD8CcEacldwVGPN3h0yJs=;
-        b=ZxXKz/F4T1if8NpcwsPo+6cBfgUkiyEfQPafk7ppyjuI3vBmFW4zKf3A8mJct2DDUR
-         u1jeZLxE2TPZPreuFIWaeS+cJ6uNBO0QNecKVzpoWBgTyuiGokCFzguv8+Ye6DoNsqph
-         b7Ca1XkjvIqdm3QM2q851K06D8zhpy4gsVZh9BotXcsUBrWh0V6WTVq/J6Ol9pnI2y39
-         aR5zl7xA9d1+ESyHdIxO5VNQotkvjll38mG1390iXlW0DSgrjVNd16yeXb3+Ot8GRTr3
-         gWtzUpj7halua5Qdj/5uCp+4c2Gn0q0i8GTcVyqHsh8SVBSQNyXju0RU0d2gEmBvEswy
-         CnZA==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aYMXugLjT0vmNOXEeLojAK5w6cmZ7Tah5JaZ/yMlBCI=;
+        b=j0qBVYVwvRXkHMCXLVlTTYZsQUz8XfCvkJ3uIs2rJ2rr8NCyDc2lvBRJcZ/GAwwANq
+         M7Sj5V+5zLTF5TlUwAeOrkBrQ35Js3gUK2vXBhjgSMzF0hZwnDAXVb6gWBj3UmFml7OG
+         dclEJgoP1FXgQHeqpxYG0DdvT+D+BbVOyb6fQHjmokxeSoOMXaahTh9l62fZc1MEDYAJ
+         TPyvFwA0OrIuGbZ3/I1TlVtf3dEPk8mzJdlDm428Nc2ew7Tgng/ekgMdzEbFdRUvGk0H
+         5O3t4V+Qr4IuHQotyeCkgh9Yi+tUvMan2+N4KJbr2+jTES6Kefb/YPY12pF4N8QnkMS6
+         m50w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=iy3Y3lD3PO74W8Het/zkyRyD8CcEacldwVGPN3h0yJs=;
-        b=KT0bKt2Ed4a3LqHvYQjXTTB4aTK0bQSQD91AZ7I+CNcE1lylBTTIqy+Ld7VNjynWry
-         I1S4xazhK5rWWpk2MNWiGq4Kwt8rHVR/sWjfa2VA+iPOJXqmzmnlsYIT1WowoXFCwWCP
-         FkXB9MAVSXittneTt7nebPCVDKVjJZZTBAyCK3J2clMcp/U89Z/XJtF4qTRKT5G2/WmP
-         4bvWebTl8LskWcwP7ooVYvm6W3dRGMH1ikC1Lk1Av/WpkcpIRSHKw3L/Sw9Nbnd65IfZ
-         JxyHJXksqg2vJy6nUi/egofFs4VH+B0/az4gMr9PnnMolzXO+rLxJBi1mL5H/tNGuIZl
-         BWoA==
-X-Gm-Message-State: AJIora+dlZTTqyEUduT7jORi1TVOwMUKeHoAEGS/5p6bR6UH1EMoUIx1
-        g6wAhbKgBSlWEqa+5p0rchU=
-X-Google-Smtp-Source: AGRyM1ujYcP1yJgo+rDWSQwkI1xmC664v7RFo3ceP60DbAGIHHuY64vv8Yl0GaJDqLuvD6dm4WA5kg==
-X-Received: by 2002:a05:6a00:1745:b0:52a:f0d3:ae7 with SMTP id j5-20020a056a00174500b0052af0d30ae7mr5066230pfc.72.1658585856394;
-        Sat, 23 Jul 2022 07:17:36 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j13-20020a170903024d00b0016d1b70872asm5818692plh.134.2022.07.23.07.17.35
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aYMXugLjT0vmNOXEeLojAK5w6cmZ7Tah5JaZ/yMlBCI=;
+        b=Yxlkzk9nm9YQdqreVmWBWRM044bP9OJLEcHno/IDlMjKYKJ17boToVDWiIbniewd+P
+         GAFTSF3sV/iM/RYQLBIchaWqt5EGmAnDT0NA1Uu6lzY1+BIpJKLJ74h0MJdQ950BOigs
+         rlckla7cd4DTgFh9fcn2GyaovLxuNAeWYTabAsbO+Mp5B0XQ9wiql+/c5jDjTSFTCkrr
+         TzoOdYELMe6KUN2tfDxdIvuuDY5U8B1hjTffEI4NVl8jLxsg94JZYchZ9pBce/iMcye0
+         1qu5At0VVxPKMPPncU8dD0mIIOQUQgafkKrpHBvgZjtCKPoUBYwGaJIWFK/IA1se1jxT
+         RM9Q==
+X-Gm-Message-State: AJIora/DUauyaZ8Xglnr4C53I48RRwIr3fCt3nV+QbkLHEUkcZ+D+BqZ
+        QzPk4gmJTmwhvPeddxevW54=
+X-Google-Smtp-Source: AGRyM1tafSBERDDiC7xk72RGPmBW1LaiMW5F+J5OLFIGabVLT7Ud7KMl0dnp+hX6v8XpDdJPEQ+QvQ==
+X-Received: by 2002:a05:6000:1548:b0:21d:acfc:29f5 with SMTP id 8-20020a056000154800b0021dacfc29f5mr2817360wry.520.1658585959679;
+        Sat, 23 Jul 2022 07:19:19 -0700 (PDT)
+Received: from localhost.localdomain (host-87-7-207-127.retail.telecomitalia.it. [87.7.207.127])
+        by smtp.googlemail.com with ESMTPSA id l18-20020a05600c1d1200b003a04d19dab3sm21011960wms.3.2022.07.23.07.19.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 07:17:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Jul 2022 07:17:34 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: Add pwmX_fan_channel attribute
-Message-ID: <20220723141734.GC2979894@roeck-us.net>
-References: <20220723033820.22612-1-W_Armin@gmx.de>
- <20220723033820.22612-2-W_Armin@gmx.de>
+        Sat, 23 Jul 2022 07:19:19 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [net-next PATCH v3 00/14] net: dsa: qca8k: code split for qca8k
+Date:   Sat, 23 Jul 2022 16:18:31 +0200
+Message-Id: <20220723141845.10570-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723033820.22612-2-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,97 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 05:38:19AM +0200, Armin Wolf wrote:
-> Until now, userspace software needs to guess which
-> PWM channel is associated with which fan channel by
-> probing each PWM output and watch for fan speed changes.
-> This proccess is error-prone and unreliable.
-> 
-> Some hwmon chips, especially firmware-based ones, already
-> know which PWM output is associated with which fan channel.
-> 
-> Allow such chips to export this knowledge to userspace.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+This is needed ad ipq4019 SoC have an internal switch that is
+based on qca8k with very minor changes. The general function is equal.
 
-All of the chips I am aware of have a fixed association from pwm channel
-output to fan input. None I am aware of make this association configurable.
-I do not see the value of this attribute.
+Because of this we split the driver to common and specific code.
 
-Guenter
+As the common function needs to be moved to a different file to be
+reused, we had to convert every remaining user of qca8k_read/write/rmw
+to regmap variant.
+We had also to generilized the special handling for the ethtool_stats
+function that makes use of the autocast mib. (ipq4019 will have a
+different tagger and use mmio so it could be quicker to use mmio instead
+of automib feature)
+And we had to convert the regmap read/write to bulk implementation to
+drop the special function that makes use of it. This will be compatible
+with ipq4019 and at the same time permits normal switch to use the eth
+mgmt way to send the entire ATU table read/write in one go.
 
-> ---
->  Documentation/ABI/testing/sysfs-class-hwmon | 8 ++++++++
->  Documentation/hwmon/sysfs-interface.rst     | 3 +++
->  drivers/hwmon/hwmon.c                       | 1 +
->  include/linux/hwmon.h                       | 2 ++
->  4 files changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-hwmon b/Documentation/ABI/testing/sysfs-class-hwmon
-> index 7271781a23b2..f3d653bcf736 100644
-> --- a/Documentation/ABI/testing/sysfs-class-hwmon
-> +++ b/Documentation/ABI/testing/sysfs-class-hwmon
-> @@ -315,6 +315,14 @@ Description:
-> 
->  		RW
-> 
-> +What:		/sys/class/hwmon/hwmonX/pwmY_fan_channel
-> +Description:
-> +		Select which fan channel is controlled by this PWM output.
-> +
-> +		Valid fan channel/PWM output combinations are chip-dependent.
-> +
-> +		RW
-> +
->  What:		/sys/class/hwmon/hwmonX/pwmY_auto_channels_temp
->  Description:
->  		Select which temperature channels affect this PWM output in
-> diff --git a/Documentation/hwmon/sysfs-interface.rst b/Documentation/hwmon/sysfs-interface.rst
-> index 209626fb2405..17fcec03d3c5 100644
-> --- a/Documentation/hwmon/sysfs-interface.rst
-> +++ b/Documentation/hwmon/sysfs-interface.rst
-> @@ -209,6 +209,9 @@ PWM
->  `pwm[1-*]_freq`
->  		Base PWM frequency in Hz.
-> 
-> +`pwm[1-*]_fan_channel`
-> +                Select which fan channel is controlled by this PWM output.
-> +
->  `pwm[1-*]_auto_channels_temp`
->  		Select which temperature channels affect this PWM output in
->  		auto mode.
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 2e2cd79d89eb..8c2d7574c461 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -604,6 +604,7 @@ static const char * const hwmon_pwm_attr_templates[] = {
->  	[hwmon_pwm_enable] = "pwm%d_enable",
->  	[hwmon_pwm_mode] = "pwm%d_mode",
->  	[hwmon_pwm_freq] = "pwm%d_freq",
-> +	[hwmon_pwm_fan_channel] = "pwm%d_fan_channel",
->  	[hwmon_pwm_auto_channels_temp] = "pwm%d_auto_channels_temp",
->  };
-> 
-> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
-> index 14325f93c6b2..9d40cc1e520f 100644
-> --- a/include/linux/hwmon.h
-> +++ b/include/linux/hwmon.h
-> @@ -332,6 +332,7 @@ enum hwmon_pwm_attributes {
->  	hwmon_pwm_enable,
->  	hwmon_pwm_mode,
->  	hwmon_pwm_freq,
-> +	hwmon_pwm_fan_channel,
->  	hwmon_pwm_auto_channels_temp,
->  };
-> 
-> @@ -339,6 +340,7 @@ enum hwmon_pwm_attributes {
->  #define HWMON_PWM_ENABLE		BIT(hwmon_pwm_enable)
->  #define HWMON_PWM_MODE			BIT(hwmon_pwm_mode)
->  #define HWMON_PWM_FREQ			BIT(hwmon_pwm_freq)
-> +#define HWMON_PWM_FAN_CHANNEL		BIT(hwmon_pwm_fan_channel)
->  #define HWMON_PWM_AUTO_CHANNELS_TEMP	BIT(hwmon_pwm_auto_channels_temp)
-> 
->  enum hwmon_intrusion_attributes {
-> --
-> 2.30.2
-> 
+v3:
+- Squash more patch to skip even more "migration patch"
+- Add new patch to cache match data in priv struct
+- Fix extra space
+- Drop unnecessary cast to qca8k_priv from void pointers
+v2:
+- Rework patch to drop dependency with bulk regmap (will be
+  converted later)
+- Split the split patch to additional patch
+- Rework autocast_mib function and move it to match data
+
+Christian Marangi (14):
+  net: dsa: qca8k: cache match data to speed up access
+  net: dsa: qca8k: make mib autocast feature optional
+  net: dsa: qca8k: move mib struct to common code
+  net: dsa: qca8k: move qca8k read/write/rmw and reg table to common
+    code
+  net: dsa: qca8k: move qca8k bulk read/write helper to common code
+  net: dsa: qca8k: move mib init function to common code
+  net: dsa: qca8k: move port set status/eee/ethtool stats function to
+    common code
+  net: dsa: qca8k: move bridge functions to common code
+  net: dsa: qca8k: move set age/MTU/port enable/disable functions to
+    common code
+  net: dsa: qca8k: move port FDB/MDB function to common code
+  net: dsa: qca8k: move port mirror functions to common code
+  net: dsa: qca8k: move port VLAN functions to common code
+  net: dsa: qca8k: move port LAG functions to common code
+  net: dsa: qca8k: move read_switch_id function to common code
+
+ drivers/net/dsa/qca/Makefile                  |    1 +
+ drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} | 1716 +++--------------
+ drivers/net/dsa/qca/qca8k-common.c            | 1240 ++++++++++++
+ drivers/net/dsa/qca/qca8k.h                   |  100 +
+ 4 files changed, 1584 insertions(+), 1473 deletions(-)
+ rename drivers/net/dsa/qca/{qca8k.c => qca8k-8xxx.c} (63%)
+ create mode 100644 drivers/net/dsa/qca/qca8k-common.c
+
+-- 
+2.36.1
+

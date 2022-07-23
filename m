@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6657957EC15
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 06:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2924657EC19
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 06:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236598AbiGWE1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 00:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S236806AbiGWEd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 00:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGWE1H (ORCPT
+        with ESMTP id S229450AbiGWEd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 00:27:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167D712AF6;
-        Fri, 22 Jul 2022 21:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658550425; x=1690086425;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=p32WojUus5yQvIGYicEbXPwQzncOSK5v30pgKhW98Ss=;
-  b=Z0KdV5ej56RhTv7dgjmQJAps9Zq/qW9V94ZpqDF+FUWS1iHj1OgXZeF7
-   sfVHID2E7h+z9Mcy1kKICW9vyUO8T//F2dqAED0wL4mhkyvqvMls6Ayz8
-   QcylFNKCxWNdYOXujZ5YoBow35U0J1d3T9kWnidnrWLOWw4hBT4xZK1wK
-   XZJDYTi636JJIFaYIjoJKBuBm2CEHyWM0xVYw7Emcxg3l4Ab0KN2dqLvy
-   wTtJ/kdX4omfb+PozLSfnD1urHWSa3ev3KDZY0Yk/gFRGep4wX+vX+nQV
-   2oVxkCwtwNY6Z1CLqB/NWoOEkUDyjSz7Xd86VYZBAEiPv/Q0zMNcRbyx4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="313179590"
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="313179590"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 21:27:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="574399997"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Jul 2022 21:27:02 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oF6jG-0002GD-0j;
-        Sat, 23 Jul 2022 04:27:02 +0000
-Date:   Sat, 23 Jul 2022 12:26:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused
- variable 'rcar_drif_of_table'
-Message-ID: <202207231223.j1VC50Wj-lkp@intel.com>
+        Sat, 23 Jul 2022 00:33:28 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17D3BBA4F0;
+        Fri, 22 Jul 2022 21:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=uXlb1
+        r3BbJdtgryVnq7yMNYfh6mt8p4E1um7vBRzrRs=; b=jrVHDzAIIIvcEoC6nuvpW
+        4jmC5YBYAG4erNe21gAUefQ2zG9mcO5scJz6oqgUc0Kx9SXlj/1opoDJg8KLelcX
+        4ERMHuZk9HObyYWKTAmM3wepaB/ypsCQGsePLtkDIOFCeatPQx+HnfND/4iXbp4w
+        Ko7y4mrxujgKcQn5hj7WBU=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp3 (Coremail) with SMTP id G9xpCgBnBZfeedtiEC0yQw--.2963S2;
+        Sat, 23 Jul 2022 12:32:32 +0800 (CST)
+From:   williamsukatube@163.com
+To:     bence98@sch.bme.hu, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH] i2c: cp2615: check the return value of kzalloc()
+Date:   Sat, 23 Jul 2022 12:32:29 +0800
+Message-Id: <20220723043229.2953386-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgBnBZfeedtiEC0yQw--.2963S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WF48Kr1xXr47uF47Gry7trb_yoW8Ww13pF
+        1fCF4DCr4Uta42gr4DZry8XFySgw1rGF9rJrW7tasxZryxZr95Jw1jgr1rZFWrAFWUKr12
+        qayDt3WxuF1kur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bwT5LUUUUU=
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/1tbiNwBHg1WBo2wCAQAAsr
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+From: William Dean <williamsukatube@gmail.com>
 
-FYI, the error/warning still remains.
+kzalloc() is a memory allocation function which can return NULL when
+some internal memory errors happen. So it is better to check the
+return value of it to prevent potential wrong memory access or
+memory leak.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   70664fc10c0d722ec79d746d8ac1db8546c94114
-commit: ee4a77a32b39064fdab0aa2b36bbd35ebf57e077 media: platform: place Renesas drivers on a separate dir
-date:   4 months ago
-config: hexagon-randconfig-r034-20220721 (https://download.01.org/0day-ci/archive/20220723/202207231223.j1VC50Wj-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/renesas/
+Fixes: 4a7695429eade ("i2c: cp2615: add i2c driver for Silicon Labs' CP2615 Digital Audio Bridge")
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ drivers/i2c/busses/i2c-cp2615.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused variable 'rcar_drif_of_table' [-Wunused-const-variable]
-   static const struct of_device_id rcar_drif_of_table[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/rcar_drif_of_table +1470 drivers/media/platform/renesas/rcar_drif.c
-
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1466  
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1467  static SIMPLE_DEV_PM_OPS(rcar_drif_pm_ops, rcar_drif_suspend,
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1468  			 rcar_drif_resume);
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1469  
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12 @1470  static const struct of_device_id rcar_drif_of_table[] = {
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1471  	{ .compatible = "renesas,rcar-gen3-drif" },
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1472  	{ }
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1473  };
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1474  MODULE_DEVICE_TABLE(of, rcar_drif_of_table);
-7625ee981af166d drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1475  
-
-:::::: The code at line 1470 was first introduced by commit
-:::::: 7625ee981af166ddb569e2e6c0006e2af471326f [media] media: platform: rcar_drif: Add DRIF support
-
-:::::: TO: Ramesh Shanmugasundaram <ramesh.shanmugasundaram@bp.renesas.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
+diff --git a/drivers/i2c/busses/i2c-cp2615.c b/drivers/i2c/busses/i2c-cp2615.c
+index 3ded28632e4c..7c9403346615 100644
+--- a/drivers/i2c/busses/i2c-cp2615.c
++++ b/drivers/i2c/busses/i2c-cp2615.c
+@@ -171,11 +171,17 @@ cp2615_i2c_recv(struct usb_interface *usbif, unsigned char tag, void *buf)
+ /* Checks if the IOP is functional by querying the part's ID */
+ static int cp2615_check_iop(struct usb_interface *usbif)
+ {
+-	struct cp2615_iop_msg *msg = kzalloc(sizeof(*msg), GFP_KERNEL);
+-	struct cp2615_iop_accessory_info *info = (struct cp2615_iop_accessory_info *)&msg->data;
++	struct cp2615_iop_msg *msg;
++	struct cp2615_iop_accessory_info *info;
+ 	struct usb_device *usbdev = interface_to_usbdev(usbif);
+-	int res = cp2615_init_iop_msg(msg, iop_GetAccessoryInfo, NULL, 0);
++	int res;
++
++	msg = kzalloc(sizeof(*msg), GFP_KERNEL);
++	if (!msg)
++		return -ENOMEM;
+ 
++	info = (struct cp2615_iop_accessory_info *)&msg->data;
++	res = cp2615_init_iop_msg(msg, iop_GetAccessoryInfo, NULL, 0);
+ 	if (res)
+ 		goto out;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

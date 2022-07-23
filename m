@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA9A57EF5B
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB40057EF5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234992AbiGWODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 10:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
+        id S237318AbiGWOEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 10:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236970AbiGWODl (ORCPT
+        with ESMTP id S236970AbiGWOEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 10:03:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E7118352;
-        Sat, 23 Jul 2022 07:03:39 -0700 (PDT)
+        Sat, 23 Jul 2022 10:04:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BA317070;
+        Sat, 23 Jul 2022 07:04:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27411B80933;
-        Sat, 23 Jul 2022 14:03:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 446A9C341C0;
-        Sat, 23 Jul 2022 14:03:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F6F76142E;
+        Sat, 23 Jul 2022 14:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C049C341C0;
+        Sat, 23 Jul 2022 14:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658585016;
-        bh=XqGMGbWcq/P/xI62FKVCA6GKm6TlYQEjhChvhcH8c6c=;
+        s=korg; t=1658585060;
+        bh=i1hxM7Ujsdhm0k5s+lkC/ZUWIW+MTz2oWW+dSJcQLC8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2v4Ogmb1fTi6SwT/Cl8Yh7GOWTfgYMWnRtwFzv4NkzAvLBEQ4id717IHS/adN5rmh
-         ScFUmUAENhzejbd4i51Tmupu3c2iNmwZxV75dfibaN3amEb+eP2d10ZlngTPGZVDpV
-         tHnNtGv970qVPIm8c6jnOVFxSNJyNyM8ylAXKHOA=
-Date:   Sat, 23 Jul 2022 16:03:33 +0200
+        b=bM4kEy1UjIF7GQ2Cqma5PvVIa4l9Ycx641e8SXLbUQjuzhfNV56YWb8GsGgVDVbPn
+         UD+qsJz0rlBCL23S82Ol4/5NHIVKM6lLBE8KEJ2VpZm0LZwd7qrTvDEcnFQqXYNB0T
+         M8EUJwv32dszihD48D1JbVOhmHUcB4tpWGYhCUPM=
+Date:   Sat, 23 Jul 2022 16:04:17 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Siddh Raman Pant <code@siddh.me>
 Cc:     David Howells <dhowells@redhat.com>,
@@ -43,7 +43,7 @@ Cc:     David Howells <dhowells@redhat.com>,
         syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com
 Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing
  watch_queue
-Message-ID: <Ytv/tUrdK1ZTn4Uk@kroah.com>
+Message-ID: <Ytv/4Tljvlt0PJ2r@kroah.com>
 References: <20220723135447.199557-1-code@siddh.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -84,12 +84,7 @@ On Sat, Jul 23, 2022 at 07:24:47PM +0530, Siddh Raman Pant via Linux-kernel-ment
 >  
 > -	spin_unlock_bh(&wqueue->lock);
 >  	rcu_read_unlock();
-> +
-> +	/* Clearing the watch queue, so we should clean the associated pipe. */
-> +#ifdef CONFIG_WATCH_QUEUE
 
-You should not use #ifdef in .c files, it's unmaintainable over time.
+Also you now have a spinlock held when calling rcu_read_unlock(), are
+you sure that's ok?
 
-thanks,
-
-greg k-h

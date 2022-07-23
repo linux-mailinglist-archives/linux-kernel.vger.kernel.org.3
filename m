@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5173C57F051
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 18:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E8357F055
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 18:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238168AbiGWQFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 12:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S237674AbiGWQF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 12:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237749AbiGWQFc (ORCPT
+        with ESMTP id S235761AbiGWQFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 12:05:32 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C60E13D26;
-        Sat, 23 Jul 2022 09:05:31 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id e16so5663127qka.5;
-        Sat, 23 Jul 2022 09:05:31 -0700 (PDT)
+        Sat, 23 Jul 2022 12:05:35 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A76312D1C;
+        Sat, 23 Jul 2022 09:05:33 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id g24so5469998qtu.2;
+        Sat, 23 Jul 2022 09:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5nDAYvxjqoqYv4CiPZFdwdt1qKBcvG3S4hJKhHvUo8c=;
-        b=OcStqwwDXt317Tx3CnxxyuO6eb3rnZMu4XbaxLYL8p+lQkx9103QBwV2HJWEz/J/bZ
-         HkTXmZRfiOte7ihgH/RB6vyWORks6sZmfpHQIzmaucnm7cPsZtZDLhn56vEyY/oKkJTB
-         aQlN7Wc5Pq17aBhpqNuOFQbbg62qdZtHkJ5Fo3s6mjvxKxExvm4T3cCdqOvq1n+n1Keg
-         yMMlOU5TO2SpWYwqs+5GvHB2CfRahPctGmnLM4wZl+t/VtzGXLSno07tH96WutMhZalZ
-         tuixP037yYQzz6tt6h0p8qwm3Yve4ozsY+temv6DUGSbptXlwD9nF+BaAA0l5SN7E8kf
-         Ugwg==
+        bh=RRh/lgowSZKwlrqSAIM+AXj1JQXPB0nQcMkjWO75yN0=;
+        b=VITZlLcXLkztAtaMoZMH2uwfA4YCmrCOzVG2UzPSczZGKEMli1yBDcIEducbWtX+d3
+         X6mmHEHcMP3BS80Un3zB6jP48FUG8OXaNG1i6pPPyXNRYIEhihEnGI5imGruRrX/vDVm
+         fONe9dhQ2eNnsFKsF0sz5vJbXd7oioPpgWNqmXNbI4KuGA+6jVjxBlR8K5/+6y/IbOYq
+         PWWT7N//56Qa1K/021hvELn8ZgRAt2oujOMVAQh52DGtoqNCtbgFKH4FSKMTop64ZB2G
+         IgYNEPFfI27h24JOTZz3du3kZjzc56JIjfFlMb+HeaF3ndhnxJJ0pv1BRHrgvMndRl4E
+         K8aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5nDAYvxjqoqYv4CiPZFdwdt1qKBcvG3S4hJKhHvUo8c=;
-        b=DyALGH9dQwCVv/3aI7dsNjda4jzr6jSYTMK8/ZuomQ+E+prXsY66woICN+ZD5hmyZW
-         5Y7TnGNH7I8160UrMryJoue35b5MFSlkGmTWLyGb6I7RB6xp6SQDYjQqAjRdBSgV9Sud
-         rMbGGjm271tMrZcMXFp1HpJ1Q9ClZxNvX4hc7i0MjhXd1VE8YPK+0Py1fqRHWXvzKEzz
-         YUyElB1nMnK7pkqwVs6a5nl/DP2wP9QeGIxAxGJx38ZKWz3iBqU1ORVrknmqfHraZ4OG
-         zcfZwZpgRViND0f+mg+oFdeEDJVj+yWu82k9IEAM2v8subl0dM/rtLNse8jw0aE+Vmrw
-         Jb1g==
-X-Gm-Message-State: AJIora8IwYYqu2VmnQ3gIecyNFJDg+v2S0IKS6d49UhlI/ZFfI0WOgS8
-        tcNTCGrBDfk8eMkwBVfIYsw=
-X-Google-Smtp-Source: AGRyM1vHmh0NnQ22YfdtqQNEZ1+j/81rWPwOg5S0PbsmGQWJjRKSL1V9mVpRVRg/TWrj9akx7FrXEA==
-X-Received: by 2002:ae9:e715:0:b0:6b5:db75:150e with SMTP id m21-20020ae9e715000000b006b5db75150emr3726044qka.23.1658592330601;
-        Sat, 23 Jul 2022 09:05:30 -0700 (PDT)
+        bh=RRh/lgowSZKwlrqSAIM+AXj1JQXPB0nQcMkjWO75yN0=;
+        b=PKLZRNJ0LlQhazKiHW1chY2VbPrvDCkGNUKB2Ydmbas1ekZeWoS9GGu6MU8aRHmO17
+         kUaNR8FbAnnUVvkvorXSGBRxKfsZkDCFhsGgZFNvDzVJwrPyAJSYvaFfWsdkF+nq4s4U
+         IthTVSZ6Pjmv6IcdryctzNblVrWq61nav6jvP4C9CTmPS+IUl/fJNZDOe/f57SZz5TYu
+         4vKBDjMxWmEVqiDQWqdPxgwFdoqyqZ7IXJNGP+UFm3NZYaBDFBDp3H9abEa17W32iVb7
+         v0JX1EjFgmDuOhu5pwUNJPTyzmXYSjhasYkWO+s5pnK0XzoXiaYzLZQrCeYXY/l1K5D5
+         6c1w==
+X-Gm-Message-State: AJIora/vnPISPUc1D+JlclP8dQQk2Rv2YqZ8gByn6KRCAxPz+cMbPvt0
+        VPdB1JbmqUH1gpEozJYZj8A=
+X-Google-Smtp-Source: AGRyM1uSOVMmVb2guEjISEkaJbd+WmqsXSU0Jwb09U16Q0L6rS6Ps27VAtckaI5wtpgjMW7Szi6bhw==
+X-Received: by 2002:a05:622a:1ba5:b0:31f:55c:f033 with SMTP id bp37-20020a05622a1ba500b0031f055cf033mr4399340qtb.300.1658592332453;
+        Sat, 23 Jul 2022 09:05:32 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.28
+        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 09:05:29 -0700 (PDT)
+        Sat, 23 Jul 2022 09:05:31 -0700 (PDT)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -63,10 +63,10 @@ Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         clin@suse.com, giulio.benetti@benettiengineering.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH v5 07/12] clk: imx: Update pllv3 to support i.MXRT1170
-Date:   Sat, 23 Jul 2022 12:05:08 -0400
-Message-Id: <20220723160513.271692-8-Mr.Bossman075@gmail.com>
+        linux-gpio@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 08/12] dt-bindings: imx: Add clock binding for i.MXRT1170
+Date:   Sat, 23 Jul 2022 12:05:09 -0400
+Message-Id: <20220723160513.271692-9-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
 References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
@@ -82,196 +82,313 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MXRT1170 has a pll that has the multiplier bits inverted and
-cannot be changed add IMX_PLLV3_GENERICV2.
+Add the clock binding doc for i.MXRT1170.
 
-The i.MXRT1170 also has the lock bit moved as well as the
-power bit inverted the power bit also is in different locations on each
-pll control register.
-
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 V1 -> V2:
- - Nothing done
+ - Change to GPL-2.0-only
 V2 -> V3:
- - Nothing done
+ - Change to (GPL-2.0-only OR BSD-2-Clause)
 V3 -> V4:
  - Nothing done
 V4 -> V5:
- - Add __imx_clk_hw_pllv3 to change power bit
- - Add BM_PLL_POWER and imx_clk_hw_pllv3 to header
- - Remove imx_clk_hw_pll3_powerbit
+ - Nothing done
 ---
- drivers/clk/imx/clk-pllv3.c | 57 +++++++++++++++++++++++++++++++++----
- drivers/clk/imx/clk.h       | 11 +++++++
- 2 files changed, 62 insertions(+), 6 deletions(-)
+ include/dt-bindings/clock/imxrt1170-clock.h | 282 ++++++++++++++++++++
+ 1 file changed, 282 insertions(+)
+ create mode 100644 include/dt-bindings/clock/imxrt1170-clock.h
 
-diff --git a/drivers/clk/imx/clk-pllv3.c b/drivers/clk/imx/clk-pllv3.c
-index eea32f87c60a..68b1498cafe1 100644
---- a/drivers/clk/imx/clk-pllv3.c
-+++ b/drivers/clk/imx/clk-pllv3.c
-@@ -21,8 +21,8 @@
- #define PLL_VF610_NUM_OFFSET	0x20
- #define PLL_VF610_DENOM_OFFSET	0x30
- 
--#define BM_PLL_POWER		(0x1 << 12)
- #define BM_PLL_LOCK		(0x1 << 31)
-+#define BM_PLL_LOCK_V2		(0x1 << 29)
- #define IMX7_ENET_PLL_POWER	(0x1 << 5)
- #define IMX7_DDR_PLL_POWER	(0x1 << 20)
- 
-@@ -34,6 +34,7 @@
-  * @base:	 base address of PLL registers
-  * @power_bit:	 pll power bit mask
-  * @powerup_set: set power_bit to power up the PLL
-+ * @lock_bit:	 pll lock bit mask
-  * @div_mask:	 mask of divider bits
-  * @div_shift:	 shift of divider bits
-  * @ref_clock:	reference clock rate
-@@ -48,6 +49,7 @@ struct clk_pllv3 {
- 	void __iomem	*base;
- 	u32		power_bit;
- 	bool		powerup_set;
-+	u32		lock_bit;
- 	u32		div_mask;
- 	u32		div_shift;
- 	unsigned long	ref_clock;
-@@ -65,7 +67,7 @@ static int clk_pllv3_wait_lock(struct clk_pllv3 *pll)
- 	if ((pll->powerup_set && !val) || (!pll->powerup_set && val))
- 		return 0;
- 
--	return readl_relaxed_poll_timeout(pll->base, val, val & BM_PLL_LOCK,
-+	return readl_relaxed_poll_timeout(pll->base, val, val & pll->lock_bit,
- 					  500, PLL_LOCK_TIMEOUT);
- }
- 
-@@ -101,7 +103,7 @@ static int clk_pllv3_is_prepared(struct clk_hw *hw)
- {
- 	struct clk_pllv3 *pll = to_clk_pllv3(hw);
- 
--	if (readl_relaxed(pll->base) & BM_PLL_LOCK)
-+	if (readl_relaxed(pll->base) & pll->lock_bit)
- 		return 1;
- 
- 	return 0;
-@@ -155,6 +157,39 @@ static const struct clk_ops clk_pllv3_ops = {
- 	.set_rate	= clk_pllv3_set_rate,
- };
- 
-+static int clk_pllv3_genericv2_set_rate(struct clk_hw *hw, unsigned long rate,
-+		unsigned long parent_rate)
-+{
-+	struct clk_pllv3 *pll = to_clk_pllv3(hw);
-+	u32 val, div;
+diff --git a/include/dt-bindings/clock/imxrt1170-clock.h b/include/dt-bindings/clock/imxrt1170-clock.h
+new file mode 100644
+index 000000000000..be0dd6089059
+--- /dev/null
++++ b/include/dt-bindings/clock/imxrt1170-clock.h
+@@ -0,0 +1,282 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright(C) 2022
++ * Author(s): Jesse Taube <Mr.Bossman075@gmail.com>
++ */
 +
-+	div = (readl_relaxed(pll->base) >> pll->div_shift) & pll->div_mask;
-+	val = (div == 0) ? parent_rate * 22 : parent_rate * 20;
++#ifndef __DT_BINDINGS_CLOCK_IMXRT1170_H
++#define __DT_BINDINGS_CLOCK_IMXRT1170_H
 +
-+	if (rate == val)
-+		return 0;
++#define IMXRT1170_CLK_DUMMY			0
++#define IMXRT1170_CLK_OSC			1
++#define IMXRT1170_CLK_OSC_32K			2
++#define IMXRT1170_CLK_RCOSC_16M			3
++#define IMXRT1170_CLK_RCOSC_48M			4
++#define IMXRT1170_CLK_RCOSC_48M_DIV2		5
++#define IMXRT1170_CLK_RCOSC_400M		6
++#define IMXRT1170_CLK_PLL_ARM_PRE		7
++#define IMXRT1170_CLK_PLL_ARM_BYPASS		8
++#define IMXRT1170_CLK_PLL_ARM_DIV		9
++#define IMXRT1170_CLK_PLL_ARM			10
++#define IMXRT1170_CLK_PLL_AUDIO			11
++#define IMXRT1170_CLK_PLL_VIDEO			12
++#define IMXRT1170_CLK_PLL1			13
++#define IMXRT1170_CLK_PLL1_DIV2			14
++#define IMXRT1170_CLK_PLL1_DIV5			15
++#define IMXRT1170_CLK_PLL2_PRE			16
++#define IMXRT1170_CLK_PLL2_BYPASS		17
++#define IMXRT1170_CLK_PLL2			18
++#define IMXRT1170_CLK_PLL2_PFD0			19
++#define IMXRT1170_CLK_PLL2_PFD1			20
++#define IMXRT1170_CLK_PLL2_PFD2			21
++#define IMXRT1170_CLK_PLL2_PFD3			22
++#define IMXRT1170_CLK_PLL3_PRE			23
++#define IMXRT1170_CLK_PLL3_BYPASS		24
++#define IMXRT1170_CLK_PLL3			25
++#define IMXRT1170_CLK_PLL3_DIV2_GATE		26
++#define IMXRT1170_CLK_PLL3_DIV2			27
++#define IMXRT1170_CLK_PLL3_PFD0			28
++#define IMXRT1170_CLK_PLL3_PFD1			29
++#define IMXRT1170_CLK_PLL3_PFD2			30
++#define IMXRT1170_CLK_PLL3_PFD3			31
++#define IMXRT1170_CLK_M7_SEL			32
++#define IMXRT1170_CLK_M7_GATE			33
++#define IMXRT1170_CLK_M7			34
++#define IMXRT1170_CLK_M4_SEL			35
++#define IMXRT1170_CLK_M4_GATE			36
++#define IMXRT1170_CLK_M4			37
++#define IMXRT1170_CLK_BUS_SEL			38
++#define IMXRT1170_CLK_BUS_GATE			39
++#define IMXRT1170_CLK_BUS			40
++#define IMXRT1170_CLK_BUS_LPSR_SEL		41
++#define IMXRT1170_CLK_BUS_LPSR_GATE		42
++#define IMXRT1170_CLK_BUS_LPSR			43
++#define IMXRT1170_CLK_SEMC_SEL			44
++#define IMXRT1170_CLK_SEMC_GATE			45
++#define IMXRT1170_CLK_SEMC			46
++#define IMXRT1170_CLK_CSSYS_SEL			47
++#define IMXRT1170_CLK_CSSYS_GATE		48
++#define IMXRT1170_CLK_CSSYS			49
++#define IMXRT1170_CLK_CSTRACE_SEL		50
++#define IMXRT1170_CLK_CSTRACE_GATE		51
++#define IMXRT1170_CLK_CSTRACE			52
++#define IMXRT1170_CLK_M4_SYSTICK_SEL		53
++#define IMXRT1170_CLK_M4_SYSTICK_GATE		54
++#define IMXRT1170_CLK_M4_SYSTICK		55
++#define IMXRT1170_CLK_M7_SYSTICK_SEL		56
++#define IMXRT1170_CLK_M7_SYSTICK_GATE		57
++#define IMXRT1170_CLK_M7_SYSTICK		58
++#define IMXRT1170_CLK_ADC1_SEL			59
++#define IMXRT1170_CLK_ADC1_GATE			60
++#define IMXRT1170_CLK_ADC1			61
++#define IMXRT1170_CLK_ADC2_SEL			62
++#define IMXRT1170_CLK_ADC2_GATE			63
++#define IMXRT1170_CLK_ADC2			64
++#define IMXRT1170_CLK_ACMP_SEL			65
++#define IMXRT1170_CLK_ACMP_GATE			66
++#define IMXRT1170_CLK_ACMP			67
++#define IMXRT1170_CLK_FLEXIO1_SEL		68
++#define IMXRT1170_CLK_FLEXIO1_GATE		69
++#define IMXRT1170_CLK_FLEXIO1			70
++#define IMXRT1170_CLK_FLEXIO2_SEL		71
++#define IMXRT1170_CLK_FLEXIO2_GATE		72
++#define IMXRT1170_CLK_FLEXIO2			73
++#define IMXRT1170_CLK_GPT1_SEL			74
++#define IMXRT1170_CLK_GPT1_GATE			75
++#define IMXRT1170_CLK_GPT1			76
++#define IMXRT1170_CLK_GPT2_SEL			77
++#define IMXRT1170_CLK_GPT2_GATE			78
++#define IMXRT1170_CLK_GPT2			79
++#define IMXRT1170_CLK_GPT3_SEL			80
++#define IMXRT1170_CLK_GPT3_GATE			81
++#define IMXRT1170_CLK_GPT3			82
++#define IMXRT1170_CLK_GPT4_SEL			83
++#define IMXRT1170_CLK_GPT4_GATE			84
++#define IMXRT1170_CLK_GPT4			85
++#define IMXRT1170_CLK_GPT5_SEL			86
++#define IMXRT1170_CLK_GPT5_GATE			87
++#define IMXRT1170_CLK_GPT5			88
++#define IMXRT1170_CLK_GPT6_SEL			89
++#define IMXRT1170_CLK_GPT6_GATE			90
++#define IMXRT1170_CLK_GPT6			91
++#define IMXRT1170_CLK_FLEXSPI1_SEL		92
++#define IMXRT1170_CLK_FLEXSPI1_GATE		93
++#define IMXRT1170_CLK_FLEXSPI1			94
++#define IMXRT1170_CLK_FLEXSPI2_SEL		95
++#define IMXRT1170_CLK_FLEXSPI2_GATE		96
++#define IMXRT1170_CLK_FLEXSPI2			97
++#define IMXRT1170_CLK_CAN1_SEL			98
++#define IMXRT1170_CLK_CAN1_GATE			99
++#define IMXRT1170_CLK_CAN1			100
++#define IMXRT1170_CLK_CAN2_SEL			101
++#define IMXRT1170_CLK_CAN2_GATE			102
++#define IMXRT1170_CLK_CAN2			103
++#define IMXRT1170_CLK_CAN3_SEL			104
++#define IMXRT1170_CLK_CAN3_GATE			105
++#define IMXRT1170_CLK_CAN3			106
++#define IMXRT1170_CLK_LPUART1_SEL		107
++#define IMXRT1170_CLK_LPUART1_GATE		108
++#define IMXRT1170_CLK_LPUART1			109
++#define IMXRT1170_CLK_LPUART2_SEL		110
++#define IMXRT1170_CLK_LPUART2_GATE		111
++#define IMXRT1170_CLK_LPUART2			112
++#define IMXRT1170_CLK_LPUART3_SEL		113
++#define IMXRT1170_CLK_LPUART3_GATE		114
++#define IMXRT1170_CLK_LPUART3			115
++#define IMXRT1170_CLK_LPUART4_SEL		116
++#define IMXRT1170_CLK_LPUART4_GATE		117
++#define IMXRT1170_CLK_LPUART4			118
++#define IMXRT1170_CLK_LPUART5_SEL		119
++#define IMXRT1170_CLK_LPUART5_GATE		120
++#define IMXRT1170_CLK_LPUART5			121
++#define IMXRT1170_CLK_LPUART6_SEL		122
++#define IMXRT1170_CLK_LPUART6_GATE		123
++#define IMXRT1170_CLK_LPUART6			124
++#define IMXRT1170_CLK_LPUART7_SEL		125
++#define IMXRT1170_CLK_LPUART7_GATE		126
++#define IMXRT1170_CLK_LPUART7			127
++#define IMXRT1170_CLK_LPUART8_SEL		128
++#define IMXRT1170_CLK_LPUART8_GATE		129
++#define IMXRT1170_CLK_LPUART8			130
++#define IMXRT1170_CLK_LPUART9_SEL		131
++#define IMXRT1170_CLK_LPUART9_GATE		132
++#define IMXRT1170_CLK_LPUART9			133
++#define IMXRT1170_CLK_LPUART10_SEL		134
++#define IMXRT1170_CLK_LPUART10_GATE		135
++#define IMXRT1170_CLK_LPUART10			136
++#define IMXRT1170_CLK_LPUART11_SEL		137
++#define IMXRT1170_CLK_LPUART11_GATE		138
++#define IMXRT1170_CLK_LPUART11			139
++#define IMXRT1170_CLK_LPUART12_SEL		140
++#define IMXRT1170_CLK_LPUART12_GATE		141
++#define IMXRT1170_CLK_LPUART12			142
++#define IMXRT1170_CLK_LPI2C1_SEL		143
++#define IMXRT1170_CLK_LPI2C1_GATE		144
++#define IMXRT1170_CLK_LPI2C1			145
++#define IMXRT1170_CLK_LPI2C2_SEL		146
++#define IMXRT1170_CLK_LPI2C2_GATE		147
++#define IMXRT1170_CLK_LPI2C2			148
++#define IMXRT1170_CLK_LPI2C3_SEL		149
++#define IMXRT1170_CLK_LPI2C3_GATE		150
++#define IMXRT1170_CLK_LPI2C3			151
++#define IMXRT1170_CLK_LPI2C4_SEL		152
++#define IMXRT1170_CLK_LPI2C4_GATE		153
++#define IMXRT1170_CLK_LPI2C4			154
++#define IMXRT1170_CLK_LPI2C5_SEL		155
++#define IMXRT1170_CLK_LPI2C5_GATE		156
++#define IMXRT1170_CLK_LPI2C5			157
++#define IMXRT1170_CLK_LPI2C6_SEL		158
++#define IMXRT1170_CLK_LPI2C6_GATE		159
++#define IMXRT1170_CLK_LPI2C6			160
++#define IMXRT1170_CLK_LPSPI1_SEL		161
++#define IMXRT1170_CLK_LPSPI1_GATE		162
++#define IMXRT1170_CLK_LPSPI1			163
++#define IMXRT1170_CLK_LPSPI2_SEL		164
++#define IMXRT1170_CLK_LPSPI2_GATE		165
++#define IMXRT1170_CLK_LPSPI2			166
++#define IMXRT1170_CLK_LPSPI3_SEL		167
++#define IMXRT1170_CLK_LPSPI3_GATE		168
++#define IMXRT1170_CLK_LPSPI3			169
++#define IMXRT1170_CLK_LPSPI4_SEL		170
++#define IMXRT1170_CLK_LPSPI4_GATE		171
++#define IMXRT1170_CLK_LPSPI4			172
++#define IMXRT1170_CLK_LPSPI5_SEL		173
++#define IMXRT1170_CLK_LPSPI5_GATE		174
++#define IMXRT1170_CLK_LPSPI5			175
++#define IMXRT1170_CLK_LPSPI6_SEL		176
++#define IMXRT1170_CLK_LPSPI6_GATE		177
++#define IMXRT1170_CLK_LPSPI6			178
++#define IMXRT1170_CLK_EMV1_SEL			179
++#define IMXRT1170_CLK_EMV1_GATE			180
++#define IMXRT1170_CLK_EMV1			181
++#define IMXRT1170_CLK_EMV2_SEL			182
++#define IMXRT1170_CLK_EMV2_GATE			183
++#define IMXRT1170_CLK_EMV2			184
++#define IMXRT1170_CLK_ENET1_SEL			185
++#define IMXRT1170_CLK_ENET1_GATE		186
++#define IMXRT1170_CLK_ENET1			187
++#define IMXRT1170_CLK_ENET2_SEL			188
++#define IMXRT1170_CLK_ENET2_GATE		189
++#define IMXRT1170_CLK_ENET2			190
++#define IMXRT1170_CLK_ENET_QOS_SEL		191
++#define IMXRT1170_CLK_ENET_QOS_GATE		192
++#define IMXRT1170_CLK_ENET_QOS			193
++#define IMXRT1170_CLK_ENET_25M_SEL		194
++#define IMXRT1170_CLK_ENET_25M_GATE		195
++#define IMXRT1170_CLK_ENET_25M			196
++#define IMXRT1170_CLK_ENET_TIMER1_SEL		197
++#define IMXRT1170_CLK_ENET_TIMER1_GATE		198
++#define IMXRT1170_CLK_ENET_TIMER1		199
++#define IMXRT1170_CLK_ENET_TIMER2_SEL		200
++#define IMXRT1170_CLK_ENET_TIMER2_GATE		201
++#define IMXRT1170_CLK_ENET_TIMER2		202
++#define IMXRT1170_CLK_ENET_TIMER3_SEL		203
++#define IMXRT1170_CLK_ENET_TIMER3_GATE		204
++#define IMXRT1170_CLK_ENET_TIMER3		205
++#define IMXRT1170_CLK_USDHC1_SEL		206
++#define IMXRT1170_CLK_USDHC1_GATE		207
++#define IMXRT1170_CLK_USDHC1			208
++#define IMXRT1170_CLK_USDHC2_SEL		209
++#define IMXRT1170_CLK_USDHC2_GATE		210
++#define IMXRT1170_CLK_USDHC2			211
++#define IMXRT1170_CLK_ASRC_SEL			212
++#define IMXRT1170_CLK_ASRC_GATE			213
++#define IMXRT1170_CLK_ASRC			214
++#define IMXRT1170_CLK_MQS_SEL			215
++#define IMXRT1170_CLK_MQS_GATE			216
++#define IMXRT1170_CLK_MQS			217
++#define IMXRT1170_CLK_MIC_SEL			218
++#define IMXRT1170_CLK_MIC_GATE			219
++#define IMXRT1170_CLK_MIC			220
++#define IMXRT1170_CLK_SPDIF_SEL			221
++#define IMXRT1170_CLK_SPDIF_GATE		222
++#define IMXRT1170_CLK_SPDIF			223
++#define IMXRT1170_CLK_SAI1_SEL			224
++#define IMXRT1170_CLK_SAI1_GATE			225
++#define IMXRT1170_CLK_SAI1			226
++#define IMXRT1170_CLK_SAI2_SEL			227
++#define IMXRT1170_CLK_SAI2_GATE			228
++#define IMXRT1170_CLK_SAI2			229
++#define IMXRT1170_CLK_SAI3_SEL			230
++#define IMXRT1170_CLK_SAI3_GATE			231
++#define IMXRT1170_CLK_SAI3			232
++#define IMXRT1170_CLK_SAI4_SEL			233
++#define IMXRT1170_CLK_SAI4_GATE			234
++#define IMXRT1170_CLK_SAI4			235
++#define IMXRT1170_CLK_GC355_SEL			236
++#define IMXRT1170_CLK_GC355_GATE		237
++#define IMXRT1170_CLK_GC355			238
++#define IMXRT1170_CLK_LCDIF_SEL			239
++#define IMXRT1170_CLK_LCDIF_GATE		240
++#define IMXRT1170_CLK_LCDIF			241
++#define IMXRT1170_CLK_LCDIFV2_SEL		242
++#define IMXRT1170_CLK_LCDIFV2_GATE		243
++#define IMXRT1170_CLK_LCDIFV2			244
++#define IMXRT1170_CLK_MIPI_REF_SEL		245
++#define IMXRT1170_CLK_MIPI_REF_GATE		246
++#define IMXRT1170_CLK_MIPI_REF			247
++#define IMXRT1170_CLK_MIPI_ESC_SEL		248
++#define IMXRT1170_CLK_MIPI_ESC_GATE		249
++#define IMXRT1170_CLK_MIPI_ESC			250
++#define IMXRT1170_CLK_CSI2_SEL			251
++#define IMXRT1170_CLK_CSI2_GATE			252
++#define IMXRT1170_CLK_CSI2			253
++#define IMXRT1170_CLK_CSI2_ESC_SEL		254
++#define IMXRT1170_CLK_CSI2_ESC_GATE		255
++#define IMXRT1170_CLK_CSI2_ESC			256
++#define IMXRT1170_CLK_CSI2_UI_SEL		257
++#define IMXRT1170_CLK_CSI2_UI_GATE		258
++#define IMXRT1170_CLK_CSI2_UI			259
++#define IMXRT1170_CLK_CSI_SEL			260
++#define IMXRT1170_CLK_CSI_GATE			261
++#define IMXRT1170_CLK_CSI			262
++#define IMXRT1170_CLK_CKO1_SEL			263
++#define IMXRT1170_CLK_CKO1_GATE			264
++#define IMXRT1170_CLK_CKO1			265
++#define IMXRT1170_CLK_CKO2_SEL			266
++#define IMXRT1170_CLK_CKO2_GATE			267
++#define IMXRT1170_CLK_CKO2			268
++#define IMXRT1170_CLK_USB			269
++#define IMXRT1170_CLK_END			270
 +
-+	return -EINVAL;
-+}
-+
-+static unsigned long clk_pllv3_genericv2_recalc_rate(struct clk_hw *hw,
-+					   unsigned long parent_rate)
-+{
-+	struct clk_pllv3 *pll = to_clk_pllv3(hw);
-+	u32 div = (readl_relaxed(pll->base) >> pll->div_shift)  & pll->div_mask;
-+
-+	return (div == 0) ? parent_rate * 22 : parent_rate * 20;
-+}
-+
-+static const struct clk_ops clk_pllv3_genericv2_ops = {
-+	.prepare	= clk_pllv3_prepare,
-+	.unprepare	= clk_pllv3_unprepare,
-+	.is_prepared	= clk_pllv3_is_prepared,
-+	.recalc_rate	= clk_pllv3_genericv2_recalc_rate,
-+	.round_rate	= clk_pllv3_round_rate,
-+	.set_rate	= clk_pllv3_genericv2_set_rate,
-+};
-+
- static unsigned long clk_pllv3_sys_recalc_rate(struct clk_hw *hw,
- 					       unsigned long parent_rate)
- {
-@@ -407,9 +442,9 @@ static const struct clk_ops clk_pllv3_enet_ops = {
- 	.recalc_rate	= clk_pllv3_enet_recalc_rate,
- };
- 
--struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
-+struct clk_hw *__imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
- 			  const char *parent_name, void __iomem *base,
--			  u32 div_mask)
-+			  u32 div_mask, u8 pwr_bit)
- {
- 	struct clk_pllv3 *pll;
- 	const struct clk_ops *ops;
-@@ -421,11 +456,21 @@ struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
- 	if (!pll)
- 		return ERR_PTR(-ENOMEM);
- 
--	pll->power_bit = BM_PLL_POWER;
-+	pll->power_bit = pwr_bit;
-+	pll->lock_bit = BM_PLL_LOCK;
- 	pll->num_offset = PLL_NUM_OFFSET;
- 	pll->denom_offset = PLL_DENOM_OFFSET;
- 
- 	switch (type) {
-+	case IMX_PLLV3_GENERICV2:
-+		pll->lock_bit = BM_PLL_LOCK_V2;
-+		pll->powerup_set = true;
-+		ops = &clk_pllv3_genericv2_ops;
-+		break;
-+	case IMX_PLLV3_SYSV2:
-+		pll->lock_bit = BM_PLL_LOCK_V2;
-+		pll->powerup_set = true;
-+		fallthrough;
- 	case IMX_PLLV3_SYS:
- 		ops = &clk_pllv3_sys_ops;
- 		break;
-diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
-index 5061a06468df..782100b2846d 100644
---- a/drivers/clk/imx/clk.h
-+++ b/drivers/clk/imx/clk.h
-@@ -6,6 +6,8 @@
- #include <linux/spinlock.h>
- #include <linux/clk-provider.h>
- 
-+#define BM_PLL_POWER		(0x1 << 12)
-+
- extern spinlock_t imx_ccm_lock;
- extern bool mcore_booted;
- 
-@@ -102,6 +104,11 @@ extern struct imx_fracn_gppll_clk imx_fracn_gppll;
- 	to_clk(clk_hw_register_gate2(dev, name, parent_name, flags, reg, bit_idx, \
- 				cgr_val, cgr_mask, clk_gate_flags, lock, share_count))
- 
-+#define imx_clk_hw_pllv3(name, parent_names, num_parents, parent,       \
-+				bypass1, bypass2, base, flags)          \
-+	__imx_clk_hw_pllv3(name, parent_names, num_parents, parent,     \
-+				bypass1, bypass2, base, flags, BM_PLL_POWER)
-+
- #define imx_clk_pllv3(type, name, parent_name, base, div_mask) \
- 	to_clk(imx_clk_hw_pllv3(type, name, parent_name, base, div_mask))
- 
-@@ -242,6 +249,8 @@ struct clk_hw *imx_clk_hw_sscg_pll(const char *name,
- 
- enum imx_pllv3_type {
- 	IMX_PLLV3_GENERIC,
-+	IMX_PLLV3_GENERICV2,
-+	IMX_PLLV3_SYSV2,
- 	IMX_PLLV3_SYS,
- 	IMX_PLLV3_USB,
- 	IMX_PLLV3_USB_VF610,
-@@ -253,6 +262,8 @@ enum imx_pllv3_type {
- 	IMX_PLLV3_AV_IMX7,
- };
- 
-+void imx_clk_hw_pll3_powerbit(struct clk_hw *hw, u8 shift);
-+
- struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
- 		const char *parent_name, void __iomem *base, u32 div_mask);
- 
++#endif /* __DT_BINDINGS_CLOCK_IMXRT1170_H */
 -- 
 2.36.1
 

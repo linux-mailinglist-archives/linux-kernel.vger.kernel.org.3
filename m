@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F071A57F122
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 21:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4B557F12C
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 21:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbiGWTXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 15:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        id S235585AbiGWT1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 15:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiGWTXK (ORCPT
+        with ESMTP id S229632AbiGWT1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 15:23:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE47F15721;
-        Sat, 23 Jul 2022 12:23:09 -0700 (PDT)
+        Sat, 23 Jul 2022 15:27:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61FE1056F;
+        Sat, 23 Jul 2022 12:27:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A24CEB80D30;
-        Sat, 23 Jul 2022 19:23:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9BCC341C7;
-        Sat, 23 Jul 2022 19:23:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3476C60EE7;
+        Sat, 23 Jul 2022 19:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7A7DC341C0;
+        Sat, 23 Jul 2022 19:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658604187;
-        bh=akajAUG1QC/XKyQpsuifzMWjlfcK/HopTgtr+xNmlZA=;
+        s=k20201202; t=1658604452;
+        bh=ZbgxQl+rg3lKvC7krfve+T2jrFIJNpWda+6LzKO5bVE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Af6Z8/xGb8u65JNORPb435b/4lNHaNKVO7S24xEsFsUyyo9q+0wE3CAgcZFpbBUtB
-         1UjeuQ+7YeD71zp8R3JJmCY+l4szIJUCm0bVp5TjX3iLpkf13ohbbYj8ESRE57THv8
-         GVCmtX/1K92I8r2J50h36h9g5SKxqlJkWE7XZC/HOyVkzp42yPma/NpCufyy6fLC9l
-         KDmHzkTXWBx3KiD67JSz36IvB55L1HqnuDAgiBnZgVcb+om4l3ZQxTPJZdf69hGrAw
-         SFkwuJ64vfmu4E57TQxge/uYIDm4X0LTaQOtY1qgv5kbDAXPGTo3YvEp8d/Q2AJqek
-         qaGJe4sgUVdiQ==
-Date:   Sat, 23 Jul 2022 20:23:03 +0100
+        b=jYfTItcNNWxzBrd2FdZDyCAXbhBbBfRu6EzxX5X+STOAA/Y/i0EoAlW9TYLCmUhp5
+         j92DwmQLLnTL+z9beMk2cPqFaFWxw96Buz/TlW12WDm2X1c8xFEVhUqkLhA/hJ97qF
+         Sthq4TF8XMIIJrw99MSMgs2FYhcRhEAOa88kw+tufLbCE7Wvo6cWt/hG+F2ZH2jMeq
+         WAWi0Vhr4OgaV8diwe6XHa5F6gjUl5UebPE9nHjKzc6dAhfKafMiSUSDcMI5BGn31F
+         SHSB1SGr+T248fdxtS2BoLvAe1iW99KEgwswGV2wKRa7hSR5yQk7BEqQbt4JxdfvM6
+         onT5zTynAQeIw==
+Date:   Sat, 23 Jul 2022 20:27:28 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] regulator: core: Allow for a base-load per client to
- come from dts
-Message-ID: <YtxKl/GRKGZJwNN/@sirena.org.uk>
-References: <20220721182622.RFC.1.I8a64b707169cfd73d9309c5eaf5d43b8bc4db988@changeid>
- <Ytrq2rVMHqedv4+3@sirena.org.uk>
- <CAD=FV=U-qZQwRdLA8AVwYdcuj_PQEULTnhm3osFybaFmtvjmHg@mail.gmail.com>
- <YtxHwUe4W7+u3Lk3@sirena.org.uk>
+To:     Mike Yang <reimu@sudomaker.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
+Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
+Message-ID: <YtxLoPOykLDTzTn9@sirena.org.uk>
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
+ <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
+ <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
+ <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6mXHQkzeOVkfm08V"
+        protocol="application/pgp-signature"; boundary="TbMQOSOuune2YTJx"
 Content-Disposition: inline
-In-Reply-To: <YtxHwUe4W7+u3Lk3@sirena.org.uk>
+In-Reply-To: <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
 X-Cookie: Necessity is a mother.
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -66,43 +70,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---6mXHQkzeOVkfm08V
+--TbMQOSOuune2YTJx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Sat, Jul 23, 2022 at 08:11:01PM +0100, Mark Brown wrote:
+On Sun, Jul 24, 2022 at 02:47:14AM +0800, Mike Yang wrote:
+> On 7/24/22 01:43, Krzysztof Kozlowski wrote:
+> > On 23/07/2022 18:50, Zhou Yanjie wrote:
 
-> The more I think about this the more I think that what's
-> practically going on here fits better with the mode interface
-> than the load one, normally I'd not like doing a run around the
-> abstractions the underlying thing is offering but it really does
-> seem like someone has to bite the bullet and do that runaround
-> and it's probably going to be less work all round at the
-> regulator level.
+> >> No offense, does it really need to be named that way?
+> >> I can't seem to find documentation with instructions on this :(
 
-Actually thinking about it even more for most cases it may even
-just be that we need to add some number to the load request while
-the regulator is powered on, the existing system-load property
-would probably do the trick here if putting things in DT.
-Depending on if the firmware counts loads from things that voted
-off or not the driver might need to do an update on the load when
-enabling and disabling.  That is less of an end run around the
-abstraction, though it does cause issues for the system-load's
-intended use so perhaps a separate property might be safer.
+...
 
---6mXHQkzeOVkfm08V
+> > All bindings are to follow this rule, so I don't understand why you
+> > think it is an exception for you?
+
+> Zhou didn't ask you to make an exception. They have a valid
+> point and they're asking why.
+
+> You may want to avoid further incidents of this kind by stop
+> being bossy and actually writing a guideline of naming these
+> .yaml files and publish it somewhere online.
+
+Yeah, I do have to say that I was also completely unaware that
+there was any enforced convention here.
+
+--TbMQOSOuune2YTJx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLcSpYACgkQJNaLcl1U
-h9CpwQf9HmNPRo3NQ/JbDdeqQ/4n6RntC+qmeA+2T+RZUxCVJl0DPdFSrrpyEXbj
-dlUkbzGRSrMxjlge+9K9dvglDwtoMGm/jREidvqvfGCC+X/6Bff8GRpwMPPHLCVC
-WV/r5xz2Np7uwgBRh+BKNVCzLHbkSM58ei++hbRimsblzV62V5UKpOW8hp4Hmu+/
-4SFG2vc8sZC5mCay8N1mtm2Ymm2J8TXdnMqqtxkjPxooaxwpE2bYMxOZJA3T/u/U
-vXOJCoGBoANGaydosb4yLiFm+79OVeKn5BgcZEzTBksXV+r/eSr1/hq24dP8+bbi
-NqVyNT+O5Syg8lpiD1P//c21appptw==
-=QfC+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLcS6AACgkQJNaLcl1U
+h9B16Af+OB537q2iAFHtuzDZyT8beLFm5e80sPm2/JK6DK39SDS56/LU25TuqiQo
+JICSdChsFLOntnTc+3yLvssDYmtu+9niHfjBbG3zbA4IU7n2tH5zC8ks0BZnHG1y
+Ca58/ofXK99lB5wPUVB7eH9ccEVPfQ03/Ezb7gD435htmmn4ZBV3idkJkhezOxG/
+kgEJDtu7iJiaMNViADXs2AHGyCrAcgRSJKAtWByb1e8Cguh+CpuLKR6kzbs+IDGp
+fnCzAS4YOJmZGAO0P7mc4789Bxy3+v4s2mJSaZWRD2UGIZllBcoLxyWDtgAKIGB0
+FNxFe0cCP1mEKNoLaxf1rLh4gwlkZQ==
+=bYHr
 -----END PGP SIGNATURE-----
 
---6mXHQkzeOVkfm08V--
+--TbMQOSOuune2YTJx--

@@ -2,133 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E32557EEA8
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 12:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A1E57EEA9
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 12:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239595AbiGWKVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 06:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S239188AbiGWKWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 06:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239395AbiGWKVW (ORCPT
+        with ESMTP id S239266AbiGWKWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 06:21:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2E9EB5A0;
-        Sat, 23 Jul 2022 03:10:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77F3D6135C;
-        Sat, 23 Jul 2022 10:10:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCB2C341C0;
-        Sat, 23 Jul 2022 10:10:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658571051;
-        bh=Mhj0fxlNgLETsShHldqHVQieQooTSHPA5ALqygMSW9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mFrRfKLLwEMY5fsQxtg5TlPPTlBY8DCVrwPaG6oFEY90c9w/4fxPeTYSahHprzAch
-         WyfLmUmQ8qAyCWvvBBRYdEgQKpx9rJti2j+VLflIWN8vV1sJTfze4oRam+Dqjh8jJm
-         msDsS20skul7L+8iykXqxGNP3dKq3noIrW8eomos=
-Date:   Sat, 23 Jul 2022 12:10:48 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     akpm@linux-foundation.org, feng.tang@intel.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [RFC PATCH] devres: avoid over memory allocation with managed
- memory allocation
-Message-ID: <YtvJKF+2wSD57NbO@kroah.com>
-References: <92ec2f78e8d38f68da95d9250cf3f86b2fbe78ad.1658570017.git.christophe.jaillet@wanadoo.fr>
+        Sat, 23 Jul 2022 06:22:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531FF1D8A;
+        Sat, 23 Jul 2022 03:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658571114; x=1690107114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rMa2OJS/UU2W2a1y38QJ76HuiC1jErjNS75ABX0n6eA=;
+  b=PsVL7xjkU1AeYv5L+wcGltgGeiiua7+jH/fjUVeo3xD2yxdW2gD+9nQO
+   5gItBDuBYvr+j9nEtugYw1cazhSJtHPmXydlgPPHTe8qzC2K2vvykg4Fu
+   XFTwqff2Kl+EyRul20AwG4cqIp8BxT26K0qsi3UFQ1LZiRJQL6FtVUtW2
+   G4eHLfpWEGrtSowhYqNaeIqNoyC76Dyr0AmyD7lns5pKz9OIi0Meswkbm
+   6SQYbrAk2YeHwNmOyj8FhUZJs+nQGPCcJ4eEuEOGmGqGaLv6CHQbgJymS
+   mRGs9PjHMgXaLmkbt+8X1p5Q+/MokdPqMp4AM9Z+eL0KSS9a+hDfIJww5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="286219664"
+X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
+   d="scan'208";a="286219664"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 03:11:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
+   d="scan'208";a="666939418"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jul 2022 03:11:17 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFC6P-0002VN-0m;
+        Sat, 23 Jul 2022 10:11:17 +0000
+Date:   Sat, 23 Jul 2022 18:11:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yevhen Orlov <yevhen.orlov@plvision.eu>, netdev@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-kernel@vger.kernel.org,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+Subject: Re: [PATCH net-next v2 6/9] net: marvell: prestera: Add heplers to
+ interact with fib_notifier_info
+Message-ID: <202207231823.Q46D3E5G-lkp@intel.com>
+References: <20220721221148.18787-7-yevhen.orlov@plvision.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <92ec2f78e8d38f68da95d9250cf3f86b2fbe78ad.1658570017.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220721221148.18787-7-yevhen.orlov@plvision.eu>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 12:04:33PM +0200, Christophe JAILLET wrote:
-> On one side, when using devm_kmalloc(), a memory overhead is added in order
-> to keep track of the data needed to release the resources automagically.
-> 
-> On the other side, kmalloc() also rounds-up the required memory size in
-> order to ease memory reuse and avoid memory fragmentation.
-> 
-> Both behavior together can lead to some over memory allocation which can
-> be avoided.
-> 
-> For example:
->   - if 4096 bytes of managed memory is required
->   - "4096 + sizeof(struct devres_node)" bytes are required to the memory
-> allocator
->   - 8192 bytes are allocated and nearly half of it is wasted
-> 
-> In such a case, it would be better to really allocate 4096 bytes of memory
-> and record an "action" to perform the kfree() when needed.
-> 
-> On my 64 bits system:
->    sizeof(struct devres_node) = 40
->    sizeof(struct action_devres) = 16
-> 
-> So, a devm_add_action() call will allocate 56, rounded up to 64 bytes.
-> 
-> kmalloc() uses hunks of 8k, 4k, 2k, 1k, 512, 256, 192, 128, 96, 64, 32, 16,
-> 8 bytes.
-> 
-> So in order to save some memory, if the 256 bytes boundary is crossed
-> because of the overhead of devm_kmalloc(), 2 distinct memory allocations
-> make sense.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is only a RFC to get feed-back on the proposed approach.
-> 
-> It is compile tested only.
-> I don't have numbers to see how much memory could be saved.
-> I don't have numbers on the performance impact.
-> 
-> Should this makes sense to anyone, I would really appreciate getting some
-> numbers from others to confirm if it make sense or not.
-> 
-> 
-> The idea of this patch came to me because of a discussion initiated by
-> Feng Tang <feng.tang@intel.com>. He proposes to track wasted memory
-> allocation in order to give hints on where optimizations can be done.
-> 
-> My approach is to avoid part of these allocations when due to the usage of
-> a devm_ function.
-> 
-> 
-> The drawbacks I see are:
->    - code is more complex
->    - this concurs to memory fragmentation because there will be 2 memory
->      allocations, instead of just 1
->    - this is slower for every memory allocation because of the while loop
->      and tests
->    - the magic 256 constant is maybe not relevant on all systems
->    - some places of the kernel already take advantage of this over memory
->      allocation. So unpredictable impacts can occur somewhere! (see [1],
->      which is part of the [2] thread)
->    - this makes some assumption in devres.c on how memory allocation works,
->      which is not a great idea :(
-> 
-> The advantages I see:
->    - in some cases, it saves some memory :)
->    - fragmentation is not necessarily an issue, devm_ allocated memory
->      are rarely freed, right?
+Hi Yevhen,
 
-I think devm_  allocated memory does not happen that much, try it on
-your systems and see!
+Thank you for the patch! Perhaps something to improve:
 
-Numbers would be great to have, can you run some benchmarks?  Try it on
-a "common" SoC device (raspberry pi?) and a desktop to compare.
+[auto build test WARNING on net-next/master]
 
-thanks,
+url:    https://github.com/intel-lab-lkp/linux/commits/Yevhen-Orlov/net-marvell-prestera-add-nexthop-routes-offloading/20220722-061517
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 5588d628027092e66195097bdf6835ddf64418b3
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220723/202207231823.Q46D3E5G-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a6535f7f7b3aea14504cac208c170d413739d5f9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yevhen-Orlov/net-marvell-prestera-add-nexthop-routes-offloading/20220722-061517
+        git checkout a6535f7f7b3aea14504cac208c170d413739d5f9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/marvell/prestera/
 
-greg k-h
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/marvell/prestera/prestera_router.c:274:25: warning: address of array 'fen6_info->rt->fib6_nh' will always evaluate to 'true' [-Wpointer-bool-conversion]
+                   return fen6_info->rt->fib6_nh ?
+                          ~~~~~~~~~~~~~~~^~~~~~~ ~
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:466:10: warning: enumeration value 'PRESTERA_FIB_TYPE_UC_NH' not handled in switch [-Wswitch]
+           switch (fc->lpm_info.fib_type) {
+                   ^~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:122:13: warning: unused function 'prestera_fib_info_is_direct' [-Wunused-function]
+   static bool prestera_fib_info_is_direct(struct fib_notifier_info *info)
+               ^
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:135:13: warning: unused function 'prestera_fib_info_is_nh' [-Wunused-function]
+   static bool prestera_fib_info_is_nh(struct fib_notifier_info *info)
+               ^
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:194:1: warning: unused function 'prestera_util_kern_n_is_reachable' [-Wunused-function]
+   prestera_util_kern_n_is_reachable(u32 tb_id,
+   ^
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:206:13: warning: unused function 'prestera_util_kern_set_neigh_offload' [-Wunused-function]
+   static void prestera_util_kern_set_neigh_offload(struct neighbour *n,
+               ^
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:216:1: warning: unused function 'prestera_util_kern_set_nh_offload' [-Wunused-function]
+   prestera_util_kern_set_nh_offload(struct fib_nh_common *nhc, bool offloaded, bool trap)
+   ^
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:230:1: warning: unused function 'prestera_kern_fib_info_nhc' [-Wunused-function]
+   prestera_kern_fib_info_nhc(struct fib_notifier_info *info, int n)
+   ^
+   drivers/net/ethernet/marvell/prestera/prestera_router.c:262:12: warning: unused function 'prestera_kern_fib_info_nhs' [-Wunused-function]
+   static int prestera_kern_fib_info_nhs(struct fib_notifier_info *info)
+              ^
+   9 warnings generated.
+
+
+vim +274 drivers/net/ethernet/marvell/prestera/prestera_router.c
+
+   261	
+   262	static int prestera_kern_fib_info_nhs(struct fib_notifier_info *info)
+   263	{
+   264		struct fib6_entry_notifier_info *fen6_info;
+   265		struct fib_entry_notifier_info *fen4_info;
+   266	
+   267		if (info->family == AF_INET) {
+   268			fen4_info = container_of(info, struct fib_entry_notifier_info,
+   269						 info);
+   270			return fib_info_num_path(fen4_info->fi);
+   271		} else if (info->family == AF_INET6) {
+   272			fen6_info = container_of(info, struct fib6_entry_notifier_info,
+   273						 info);
+ > 274			return fen6_info->rt->fib6_nh ?
+   275				(fen6_info->rt->fib6_nsiblings + 1) : 0;
+   276		}
+   277	
+   278		return 0;
+   279	}
+   280	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

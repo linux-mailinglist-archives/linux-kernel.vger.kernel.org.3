@@ -2,427 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C7F57F07E
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 18:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FBA57F082
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 19:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237749AbiGWQxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 12:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        id S232793AbiGWRDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 13:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiGWQx3 (ORCPT
+        with ESMTP id S230005AbiGWRD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 12:53:29 -0400
-Received: from out28-97.mail.aliyun.com (out28-97.mail.aliyun.com [115.124.28.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB92C1C936;
-        Sat, 23 Jul 2022 09:53:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436284|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0127137-0.00210745-0.985179;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=24;RT=24;SR=0;TI=SMTPD_---.Oblc.Cs_1658595190;
-Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Oblc.Cs_1658595190)
-          by smtp.aliyun-inc.com;
-          Sun, 24 Jul 2022 00:53:12 +0800
-Subject: Re: [PATCH 3/3] SPI: Ingenic: Add SFC support for Ingenic SoCs.
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
-        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
-        reimu@sudomaker.com
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
- <1a0245c3-5659-573a-c74d-c2145a564b76@linaro.org>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <4904a283-8ede-3147-078a-b64318513b07@wanyeetech.com>
-Date:   Sun, 24 Jul 2022 00:53:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <1a0245c3-5659-573a-c74d-c2145a564b76@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Sat, 23 Jul 2022 13:03:29 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2088.outbound.protection.outlook.com [40.107.244.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8434B17E26;
+        Sat, 23 Jul 2022 10:03:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B7Y72nYeZmNpYRsoLe7lfBRdYOFRNw9QyAe3yX9aprTOgw8j9ZiB9SRrIWN6APGM0rSpKNNOfqNEyWqu9MZTC4QlqeZcIMfsk4pPsBEXJ7iX0sQbQooNofKyD95tQgjDLQ79OqRIeaEf3tjbQ2JNIWr395JEYU+UNR4fMxaR4d7pwzEnboosm4yohR6qrrV2reSC+LJ6MBmM+z8qOrO0Mxs1n1cSIcSYN7ZbdDStpIsQ69DiwQ7WzEEE5rdKzK3qkORaiHtxVDqJzg2co7nc9JbNhSKj1SoHssX7+BfC1WQN4jvDQQJOHpQNIFX8pjQaJjIg1JPOp6wJ78DL+k+EEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bOJHxwtZZctbrUHzkG0kvn0wfNuRIkd/+L3nhQ8tYIw=;
+ b=YOUCjKnaYT8iXhb76J20nFELobYOQtKYorcqZXmIYBx6zSuAyucwHgQqM2YtoJ7ebRyRCvZbEecCNc/91oLmGO8AvjiIqTLO0OWSZwngqekh3PQRgqVT4l/3KF4dZl69eyvTN4F8aaUKYc0Ubb0NnsCZNt4NNCahZFPMTc8SijbhdngD6YuY+iQmEf00KgRXdFiY/a6Ks2NNBVfNBMXK+xr1WeafGsgr85VITsoacGug5lDxazkkceua3UgQaoW9/7PQhbrbKcBow3tpbu/51Erz4okyiQYC9oTtTWeuBV+FfpL0dDwrdc77j8xlxYwYsqgKDvTr9g29SiV8fur7Yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bOJHxwtZZctbrUHzkG0kvn0wfNuRIkd/+L3nhQ8tYIw=;
+ b=aIoryY5APoZtN5wb9HU+C72GvV28eLZ/H/wWx7QIe69i89gZN6NHhADdmDpotYrKMq0UT6hLAQSZxPM06U439cIHG9u5evz/fs6RXeCWJE5BJWbKl2qBRLA2Z/VSi3M6iHzqRgPgiBc7RslFKFe6LUZaYRnYQxh5L9IzXxsItgaNCfrzlQj+1+xL1PfzP97x2Uf9ijaAMTBwsWmr3sNHSC/rIVq0QzIpde88T6Z3tKeR/8IXH7MoH4j1FlZM3lTt3tZ71S4PnDkRXRmSOuTiHnN1NWNPW6uEt32jtAwnUOLebmUbNf3sjl9kg9e7PxhKW8nMrg9DAUGeKU+GnFzAtA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by MN2PR12MB3309.namprd12.prod.outlook.com (2603:10b6:208:106::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Sat, 23 Jul
+ 2022 17:03:25 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::9437:8b73:188e:66e2]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::9437:8b73:188e:66e2%7]) with mapi id 15.20.5458.021; Sat, 23 Jul 2022
+ 17:03:24 +0000
+Message-ID: <86522aa5-2855-0f73-ddb2-a2b50b2fd1b7@nvidia.com>
+Date:   Sat, 23 Jul 2022 22:33:11 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for
+ suspend/resume
 Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Lukasz Majczak <lma@semihalf.com>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Ben Chuang <benchuanggli@gmail.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, refactormyself@gmail.com, kw@linux.com,
+        rajatja@google.com, kenny@panix.com, treding@nvidia.com,
+        jonathanh@nvidia.com, abhsahu@nvidia.com, sagupta@nvidia.com,
+        linux-pci@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20220722174212.GA1911979@bhelgaas>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <20220722174212.GA1911979@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA1PR01CA0074.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00::14)
+ To BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dbfb9b1b-16e2-4505-1ccf-08da6ccd40f6
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3309:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n7awOvLmXYmEQUeHo6imJY9ceCcSkPKc4c3sCqW+ZG9zUBniZLxnGlXKUMYkRjyoIdab+ijS4mhzraNimVuxS7TM7wf46T7gMrNehetmx01y/zV4eex2As35bjDBpWOdYsDOVVKZmCUab36cFLnY405cQDeDB4L2JFk3gtjNSAiZwHXXP5LQyJZ9D/fWzWTTHClzzflkts7CMPgaiWiOGjifj4lZlKABdQkJyVvMton1lV8+Q2jUOy/eNBAczgRj7yb+YN34lFqPP/VNWDAy3EMFvNDokZLkC3peVMFshmJ1UZzlz1aHOORkhJZxdTbMJJd1MWv2rdVB927afJudgMW5Om44s62QSvFuvF9rCMiNUbobuu0KEQMiDGXaPHwZsLz+NJpKKLCEyzkPI4ttvW9RwuUZ7tZt+b0crM0G0Y6To3G+7Y5N446YzW+lTE8tKIgkCLzNJuRutRtoPcfUDngUYXjWi9wn9Zw48GoYg+VelNbU+rlKjtBzrWIBkDc7OgFUHEWzEJGyot3QXbkzsNFlubnvLT/CT2H4huOYJYDYRN21WYopXx1fGDf+dyP1Ip/xhWhIQmB6JY8huWPb4KVM93fFLk+r1jIxgvN5egMxWkcKBlYQ3vW5oIPHRWodz4Fe11nIR7TvBuU+mriIUouHfmP3Qun9d1hnBOEhYtfkN8AcoGqp2cTLpfj4QbhvCuWlQGFu+k9akcY0dW9socZIpNYssBbivsTz7tRZ4BXLfTo5AHt2kmSgiGRz+kRq77XkGOS4TjQkD/2rRjEubEvN08Zn3f27PH8mhjTj1In/+oUzSpdfF9Oh4/GLAbG7fa/lCszhKThRT5CAH6KWfNgrh8t/SFzvKyBF7xFyeOShamsZs5BfxSewhzQIuRnlnKf6vSXAkAC8rscfx8gPOc5FtaGugE2PVPeLDOy8X62D0yEmEarqfMvBdHIe/MEH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(366004)(376002)(346002)(2616005)(6506007)(186003)(83380400001)(54906003)(31686004)(6512007)(110136005)(41300700001)(36756003)(6666004)(30864003)(15650500001)(38100700002)(26005)(66476007)(2906002)(19627235002)(7416002)(5660300002)(53546011)(478600001)(66946007)(966005)(66556008)(6486002)(316002)(8936002)(4326008)(31696002)(8676002)(86362001)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RTZrYTZpYVRUc1RLSkEydEljMlB6WloyZjRMelFmNEZkUGxQRkVHN2YvRUhZ?=
+ =?utf-8?B?a3VObjZ1bjBSN1ZmVzBGalQ0VzZTQmpLQUVaNkpERFRGb0dBeWo5amtjeHlk?=
+ =?utf-8?B?bHpCY0h5UFlhczJtclphb1pPSm0yTm51ZFgyRS9WRkhlUFd4K2djai9HZXVZ?=
+ =?utf-8?B?NnlUUC9obnIxQzQ5VU1vbWUxWkFmRElVMThWSFZCdDdvZ2tzK2dKMFJQaXBV?=
+ =?utf-8?B?LzV0SCtWTGUrYjRURTRaN3E3OHBLS0dEQWlnZHcrUCtZZ25oU2JuMlM3Y2ZH?=
+ =?utf-8?B?MzJNRkw1bW1WL2w1eTkydm1PMmJWaXhRcGdJaytrSGxLSWpCM2s5eFVUM1hR?=
+ =?utf-8?B?TmFqaWxaWEVVYmxhU0lUNTVkcW1ybTFpOGhPL3doYk5PVDc2N0NXMFVaOUd6?=
+ =?utf-8?B?a2dhajA3UEFXUHlkZFE4akgzbGdIUG9tS0NxR0RtZ3JvcVdEOTRBNkhESU84?=
+ =?utf-8?B?QVFGYXFqbEljK1ViT0IvbTRaUE5iS3liY0dYQi9TbjdTUmhoUGZlRUMwZmU3?=
+ =?utf-8?B?a2J2cDA4bmZCbjRZUkRQMGtvejkyRVZicUNrUVRGNTNTRTlXd3VDVERicCsy?=
+ =?utf-8?B?WGZiWmE2bzgxTkE5SFFUNFJwOU5aSWF3SERrSnVNMnk3ZVEwbDltOWMxT3Ro?=
+ =?utf-8?B?YzZxZHFzQkpCQXlMUjgwS0lhQkZnOSt6YjljVHpvNHJkb3puVVdXaU5qaFpu?=
+ =?utf-8?B?K3pZbW85alQwYVBvRisxUC9LRmc1K2M3Z0pmT1JzZ3lzazk3b1FhSzJueWZv?=
+ =?utf-8?B?Uy9jNEFLYTZ0YXhhUy9BSmYrR0xkOWI3VkdUYlZFQnJjVFYwbVhESytrdkJw?=
+ =?utf-8?B?ODV3NUdENWdUUENXdHhsM2tyeEw2eXZ3eStNamNLZWx5WDhwRzF0TWFpYm5J?=
+ =?utf-8?B?REY3ZWx2emp5dXByMjNjQVFrdWtlZmR2a3ZuSkYxd2w2TEtQUzhpZ1lnbkU5?=
+ =?utf-8?B?dUJUUVR4WFVLbXg5S3BqU1FkVTJhUnFQVmJPV2d0OW5xNmtpeDhCdWlQS1hX?=
+ =?utf-8?B?U0pTMUpDMEdqT3lNTWhnSFBrMlVKcW52V2tabHZETk9HZTl5cVdRS3orNTAw?=
+ =?utf-8?B?TmNDaGRTMVpVdGxWSmd6NGpLVmtVamZIbnkvNDhXV1NHcllwMjZvMkpVMTZF?=
+ =?utf-8?B?TXpqYTB5TWR3eFUxdFpyQkZRUlZWYmVwT2htVEVjd0M2WXRjRnlsc2pHb2Q4?=
+ =?utf-8?B?aUZTbUpCQldkZ0QvaEoyV3F0U1Y4NC93bDk1VGloM3l4T1BSQ05pbStFMm5r?=
+ =?utf-8?B?YVR1SVR6U21UNGV5UUFyb08wT0NiR1NNWFBqbytUUU5Qb1hTQTNJZUpicE55?=
+ =?utf-8?B?bStCLzJJTTBUeTNvUFNKTGEvZDB0OXJzMi82QndVdWtwNjJvZk14b3lqL2kx?=
+ =?utf-8?B?UUhyUlV2T1U4QmVJL3E0NzFmZngyMlM3SHNRRTNTUWZlUzJ5a2FFWGVxcGRo?=
+ =?utf-8?B?ZTVWT3ltYm1YOFNzcFh5NllxTTA3SGc0R1NvR2hCRGpnQWxpMFVaY3ZvOWFu?=
+ =?utf-8?B?S25KQ0NCK281amRVMHorRHBKcWVuZVAzQ2VJZ1VLZ3pWRXlzc2grVUxlNjJ6?=
+ =?utf-8?B?VmQ0a1FWY0swckcyemtOTW5lK09ML081ZVBPaDNycW4rQXRZcS9UUGJvc1pP?=
+ =?utf-8?B?M2J1RTBjdGFnd2pFaHVGSDF2M2NCQXpWeDBrL1Jqb0UyanNKNjNiRlFzS0lC?=
+ =?utf-8?B?a1cwdXE5dGhsQVl2V0llS2MvSzhYRHdHS3orVEtTZUt0NlFxNTQxNXRoSVVv?=
+ =?utf-8?B?QTRUK0JEekd4UzA2K0lIUHdIRFUxQWNJNkV1dFFtWm1Ud1MrV3BCQVhSRHB5?=
+ =?utf-8?B?N0RuOEdkM2gybFZOdS9jNEdLTGx2S3dZbkJRQWZvT1FkVHdOeTNzMHZNMzNO?=
+ =?utf-8?B?TURCVDFSZU0rc3M2K3l2OWhaam5BM2hkMjBvc0dObFdaZ0xXaXczTU44Y29v?=
+ =?utf-8?B?RVRtRmlqaDdreDU4MjdiblFPRjZTc05NaTVVVUFtMkR3aXNqWmhrWTNyQ09k?=
+ =?utf-8?B?TFRQZE92ZSt6Q3Vhdis4MUZYSDJsKzVUbkNOWmFZeG96S1loUG0vUUhYRHJQ?=
+ =?utf-8?B?U1VyaXY5K3hMWHk0Ny9NWXV3ems3RGszbk1GQnBua1pmWGQyK2VJdlhYSWFj?=
+ =?utf-8?Q?WKiGSRWlxsqLthD+Jfhqv+Ed1?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbfb9b1b-16e2-4505-1ccf-08da6ccd40f6
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2022 17:03:24.5156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3VcTJg9sRGRx5tYQMfJrlC1yDl+9+6HVZLk2CcVmw+qKI+Tqf0gadFFnyVoXhvuWJKghgr/QAjkyAGfH6/6K4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3309
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Agree with Bjorn's observations.
+The fact that the L1SS capability registers themselves disappeared in 
+the root port post resume indicates that there seems to be something 
+wrong with the BIOS itself.
+Could you please check from that perspective?
 
-On 2022/7/23 上午2:07, Krzysztof Kozlowski wrote:
-> On 22/07/2022 18:48, 周琰杰 (Zhou Yanjie) wrote:
->> Add SFC support for the X1000 SoC, the X1600 SoC, and the X2000 SoC
->> from Ingenic.
+Thanks,
+Vidya Sagar
+
+
+On 7/22/2022 11:12 PM, Bjorn Helgaas wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Fri, Jul 22, 2022 at 11:41:14AM +0200, Lukasz Majczak wrote:
+>> pt., 22 lip 2022 o 09:31 Kai-Heng Feng <kai.heng.feng@canonical.com> napisał(a):
+>>> On Fri, Jul 15, 2022 at 6:38 PM Ben Chuang <benchuanggli@gmail.com> wrote:
+>>>> On Tue, Jul 5, 2022 at 2:00 PM Vidya Sagar <vidyas@nvidia.com> wrote:
+>>>>>
+>>>>> Previously ASPM L1 Substates control registers (CTL1 and CTL2) weren't
+>>>>> saved and restored during suspend/resume leading to L1 Substates
+>>>>> configuration being lost post-resume.
+>>>>>
+>>>>> Save the L1 Substates control registers so that the configuration is
+>>>>> retained post-resume.
+>>>>>
+>>>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+>>>>> Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
+>>>>
+>>>> Hi Vidya,
+>>>>
+>>>> I tested this patch on kernel v5.19-rc6.
+>>>> The test device is GL9755 card reader controller on Intel i5-10210U RVP.
+>>>> This patch can restore L1SS after suspend/resume.
+>>>>
+>>>> The test results are as follows:
+>>>>
+>>>> After Boot:
+>>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+>>>>          Capabilities: [110 v1] L1 PM Substates
+>>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+>>>> ASPM_L1.1+ L1_PM_Substates+
+>>>>                            PortCommonModeRestoreTime=255us
+>>>> PortTPowerOnTime=3100us
+>>>>                  L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+>>>>                             T_CommonMode=0us LTR1.2_Threshold=3145728ns
+>>>>                  L1SubCtl2: T_PwrOn=3100us
+>>>>
+>>>>
+>>>> After suspend/resume without this patch.
+>>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+>>>>          Capabilities: [110 v1] L1 PM Substates
+>>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+>>>> ASPM_L1.1+ L1_PM_Substates+
+>>>>                            PortCommonModeRestoreTime=255us
+>>>> PortTPowerOnTime=3100us
+>>>>                  L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
+>>>>                             T_CommonMode=0us LTR1.2_Threshold=0ns
+>>>>                  L1SubCtl2: T_PwrOn=10us
+>>>>
+>>>>
+>>>> After suspend/resume with this patch.
+>>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
+>>>>          Capabilities: [110 v1] L1 PM Substates
+>>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+>>>> ASPM_L1.1+ L1_PM_Substates+
+>>>>                            PortCommonModeRestoreTime=255us
+>>>> PortTPowerOnTime=3100us
+>>>>                  L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+>>>>                             T_CommonMode=0us LTR1.2_Threshold=3145728ns
+>>>>                  L1SubCtl2: T_PwrOn=3100us
+>>>>
+>>>>
+>>>> Tested-by: Ben Chuang <benchuanggli@gmail.com>
+>>>
+>>> Forgot to add mine:
+>>> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>>
+>>>>
+>>>> Best regards,
+>>>> Ben Chuang
+>>>>
+>>>>
+>>>>> ---
+>>>>> Hi,
+>>>>> Kenneth R. Crudup <kenny@panix.com>, Could you please verify this patch
+>>>>> on your laptop (Dell XPS 13) one last time?
+>>>>> IMHO, the regression observed on your laptop with an old version of the patch
+>>>>> could be due to a buggy old version BIOS in the laptop.
+>>>>>
+>>>>> Thanks,
+>>>>> Vidya Sagar
+>>>>>
+>>>>>   drivers/pci/pci.c       |  7 +++++++
+>>>>>   drivers/pci/pci.h       |  4 ++++
+>>>>>   drivers/pci/pcie/aspm.c | 44 +++++++++++++++++++++++++++++++++++++++++
+>>>>>   3 files changed, 55 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+>>>>> index cfaf40a540a8..aca05880aaa3 100644
+>>>>> --- a/drivers/pci/pci.c
+>>>>> +++ b/drivers/pci/pci.c
+>>>>> @@ -1667,6 +1667,7 @@ int pci_save_state(struct pci_dev *dev)
+>>>>>                  return i;
+>>>>>
+>>>>>          pci_save_ltr_state(dev);
+>>>>> +       pci_save_aspm_l1ss_state(dev);
+>>>>>          pci_save_dpc_state(dev);
+>>>>>          pci_save_aer_state(dev);
+>>>>>          pci_save_ptm_state(dev);
+>>>>> @@ -1773,6 +1774,7 @@ void pci_restore_state(struct pci_dev *dev)
+>>>>>           * LTR itself (in the PCIe capability).
+>>>>>           */
+>>>>>          pci_restore_ltr_state(dev);
+>>>>> +       pci_restore_aspm_l1ss_state(dev);
+>>>>>
+>>>>>          pci_restore_pcie_state(dev);
+>>>>>          pci_restore_pasid_state(dev);
+>>>>> @@ -3489,6 +3491,11 @@ void pci_allocate_cap_save_buffers(struct pci_dev *dev)
+>>>>>          if (error)
+>>>>>                  pci_err(dev, "unable to allocate suspend buffer for LTR\n");
+>>>>>
+>>>>> +       error = pci_add_ext_cap_save_buffer(dev, PCI_EXT_CAP_ID_L1SS,
+>>>>> +                                           2 * sizeof(u32));
+>>>>> +       if (error)
+>>>>> +               pci_err(dev, "unable to allocate suspend buffer for ASPM-L1SS\n");
+>>>>> +
+>>>>>          pci_allocate_vc_save_buffers(dev);
+>>>>>   }
+>>>>>
+>>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+>>>>> index e10cdec6c56e..92d8c92662a4 100644
+>>>>> --- a/drivers/pci/pci.h
+>>>>> +++ b/drivers/pci/pci.h
+>>>>> @@ -562,11 +562,15 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev);
+>>>>>   void pcie_aspm_exit_link_state(struct pci_dev *pdev);
+>>>>>   void pcie_aspm_pm_state_change(struct pci_dev *pdev);
+>>>>>   void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
+>>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev);
+>>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
+>>>>>   #else
+>>>>>   static inline void pcie_aspm_init_link_state(struct pci_dev *pdev) { }
+>>>>>   static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev) { }
+>>>>>   static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev) { }
+>>>>>   static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev) { }
+>>>>> +static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) { }
+>>>>> +static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev) { }
+>>>>>   #endif
+>>>>>
+>>>>>   #ifdef CONFIG_PCIE_ECRC
+>>>>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+>>>>> index a96b7424c9bc..2c29fdd20059 100644
+>>>>> --- a/drivers/pci/pcie/aspm.c
+>>>>> +++ b/drivers/pci/pcie/aspm.c
+>>>>> @@ -726,6 +726,50 @@ static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
+>>>>>                                  PCI_L1SS_CTL1_L1SS_MASK, val);
+>>>>>   }
+>>>>>
+>>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev)
+>>>>> +{
+>>>>> +       int aspm_l1ss;
+>>>>> +       struct pci_cap_saved_state *save_state;
+>>>>> +       u32 *cap;
+>>>>> +
+>>>>> +       if (!pci_is_pcie(dev))
+>>>>> +               return;
+>>>>> +
+>>>>> +       aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
+>>>>> +       if (!aspm_l1ss)
+>>>>> +               return;
+>>>>> +
+>>>>> +       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
+>>>>> +       if (!save_state)
+>>>>> +               return;
+>>>>> +
+>>>>> +       cap = (u32 *)&save_state->cap.data[0];
+>>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, cap++);
+>>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, cap++);
+>>>>> +}
+>>>>> +
+>>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
+>>>>> +{
+>>>>> +       int aspm_l1ss;
+>>>>> +       struct pci_cap_saved_state *save_state;
+>>>>> +       u32 *cap;
+>>>>> +
+>>>>> +       if (!pci_is_pcie(dev))
+>>>>> +               return;
+>>>>> +
+>>>>> +       aspm_l1ss = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L1SS);
+>>>>> +       if (!aspm_l1ss)
+>>>>> +               return;
+>>>>> +
+>>>>> +       save_state = pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L1SS);
+>>>>> +       if (!save_state)
+>>>>> +               return;
+>>>>> +
+>>>>> +       cap = (u32 *)&save_state->cap.data[0];
+>>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *cap++);
+>>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, *cap++);
+>>>>> +}
+>>>>> +
+>>>>>   static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
+>>>>>   {
+>>>>>          pcie_capability_clear_and_set_word(pdev, PCI_EXP_LNKCTL,
+>>>>> --
+>>>>> 2.17.1
+>>>>>
 >>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>   drivers/spi/Kconfig           |   9 +
->>   drivers/spi/Makefile          |   1 +
->>   drivers/spi/spi-ingenic-sfc.c | 662 ++++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 672 insertions(+)
->>   create mode 100644 drivers/spi/spi-ingenic-sfc.c
+>> Hi,
 >>
->> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
->> index 3b1044e..1077bd3 100644
->> --- a/drivers/spi/Kconfig
->> +++ b/drivers/spi/Kconfig
->> @@ -437,6 +437,15 @@ config SPI_INGENIC
->>   	  To compile this driver as a module, choose M here: the module
->>   	  will be called spi-ingenic.
->>   
->> +config SPI_INGENIC_SFC
->> +	tristate "Ingenic SoCs SPI Flash Controller"
->> +	depends on MACH_INGENIC || COMPILE_TEST
->> +	help
->> +	  This enables support for the Ingenic SoCs SPI flash controller.
->> +
->> +	  To compile this driver as a module, choose M here: the module
->> +	  will be called ingenic-sfc.
->> +
->>   config SPI_INTEL
->>   	tristate
->>   
->> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
->> index 0f44eb6..f3e42c0 100644
->> --- a/drivers/spi/Makefile
->> +++ b/drivers/spi/Makefile
->> @@ -62,6 +62,7 @@ obj-$(CONFIG_SPI_HISI_SFC_V3XX)		+= spi-hisi-sfc-v3xx.o
->>   obj-$(CONFIG_SPI_IMG_SPFI)		+= spi-img-spfi.o
->>   obj-$(CONFIG_SPI_IMX)			+= spi-imx.o
->>   obj-$(CONFIG_SPI_INGENIC)		+= spi-ingenic.o
->> +obj-$(CONFIG_SPI_INGENIC_SFC)	+= spi-ingenic-sfc.o
->>   obj-$(CONFIG_SPI_INTEL)			+= spi-intel.o
->>   obj-$(CONFIG_SPI_INTEL_PCI)		+= spi-intel-pci.o
->>   obj-$(CONFIG_SPI_INTEL_PLATFORM)	+= spi-intel-platform.o
->> diff --git a/drivers/spi/spi-ingenic-sfc.c b/drivers/spi/spi-ingenic-sfc.c
->> new file mode 100644
->> index 00000000..a565546
->> --- /dev/null
->> +++ b/drivers/spi/spi-ingenic-sfc.c
->> @@ -0,0 +1,662 @@
->> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +/*
->> + * Ingenic SoCs SPI Flash Controller Driver
->> + * Copyright (c) 2022 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> + */
->> +
->> +#include <linux/bitfield.h>
->> +#include <linux/bitops.h>
->> +#include <linux/clk.h>
->> +#include <linux/completion.h>
->> +#include <linux/dma-mapping.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/iopoll.h>
->> +#include <linux/module.h>
->> +#include <linux/mtd/mtd.h>
->> +#include <linux/of_device.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/slab.h>
->> +#include <linux/spi/spi.h>
->> +#include <linux/spi/spi-mem.h>
->> +
->> +/* SFC register offsets */
->> +#define SFC_REG_GLB						0x0000
->> +#define SFC_REG_DEV_CONF				0x0004
->> +#define SFC_REG_DEV_STA_EXP				0x0008
->> +#define SFC_REG_DEV_STA_RT				0x000c
->> +#define SFC_REG_DEV_STA_MSK				0x0010
->> +#define SFC_REG_TRAN_CONF(n)			(0x0014 + n * 4)
->> +#define SFC_REG_TRAN_CFG0(n)			(0x0014 + n * 4)
->> +#define SFC_REG_TRAN_LEN				0x002c
->> +#define SFC_REG_DEV_ADDR(n)				(0x0030 + n * 4)
->> +#define SFC_REG_DEV_ADDR_PLUS(n)		(0x0048 + n * 4)
->> +#define SFC_REG_MEM_ADDR				0x0060
->> +#define SFC_REG_TRIG					0x0064
->> +#define SFC_REG_SR						0x0068
->> +#define SFC_REG_SCR						0x006c
->> +#define SFC_REG_INTC					0x0070
->> +#define SFC_REG_FSM						0x0074
->> +#define SFC_REG_CGE						0x0078
->> +#define SFC_REG_TRAN_CFG1(n)			(0x009c + n * 4)
->> +#define SFC_REG_DR						0x1000
->> +
->> +/* bits within the GLB register */
->> +#define GLB_TRAN_DIR_MASK				GENMASK(13, 13)
->> +#define GLB_TRAN_DIR_WRITE				0x1
->> +#define GLB_TRAN_DIR_READ				0x0
->> +#define GLB_THRESHOLD_MASK				GENMASK(12, 7)
->> +#define GLB_OP_MODE_MASK				GENMASK(6, 6)
->> +#define GLB_OP_MODE_DMA					0x1
->> +#define GLB_OP_MODE_SLAVE				0x0
->> +#define GLB_PHASE_NUM_MASK				GENMASK(5, 3)
->> +#define GLB_WP_EN						BIT(2)
->> +#define GLB_BURST_MD_MASK				GENMASK(1, 0)
->> +#define GLB_BURST_MD_INCR32				0x3
->> +#define GLB_BURST_MD_INCR16				0x2
->> +#define GLB_BURST_MD_INCR8				0x1
->> +#define GLB_BURST_MD_INCR4				0x0
->> +
->> +/* bits within the DEV_CONF register */
->> +#define DEV_CONF_SMP_DELAY_MASK			GENMASK(20, 16)
->> +#define DEV_CONF_SMP_DELAY_180DEG		0x4
->> +#define DEV_CONF_SMP_DELAY_HALF_CYCLE	0x1
->> +#define DEV_CONF_CMD_TYPE_MASK			GENMASK(15, 15)
->> +#define DEV_CONF_CMD_TYPE_16BIT			0x1
->> +#define DEV_CONF_CMD_TYPE_8BIT			0x0
->> +#define DEV_CONF_STA_TYPE_MASK			GENMASK(14, 13)
->> +#define DEV_CONF_THOLD_MASK				GENMASK(12, 11)
->> +#define DEV_CONF_TSETUP_MASK			GENMASK(10, 9)
->> +#define DEV_CONF_TSH_MASK				GENMASK(8, 5)
->> +#define DEV_CONF_CPHA					BIT(4)
->> +#define DEV_CONF_CPOL					BIT(3)
->> +#define DEV_CONF_CE_DL					BIT(2)
->> +#define DEV_CONF_HOLD_DL				BIT(1)
->> +#define DEV_CONF_WP_DL					BIT(0)
->> +
->> +/* bits within the TRAN_CONF(n) register */
->> +#define TRAN_CONF_TRAN_MODE_MASK		GENMASK(31, 29)
->> +#define TRAN_CONF_ADDR_WIDTH_MASK		GENMASK(28, 26)
->> +#define TRAN_CONF_POLL_EN				BIT(25)
->> +#define TRAN_CONF_CMD_EN				BIT(24)
->> +#define TRAN_CONF_PHASE_FORMAT_MASK		GENMASK(23, 23)
->> +#define TRAN_CONF_DMY_BITS_MASK			GENMASK(22, 17)
->> +#define TRAN_CONF_DATA_EN				BIT(16)
->> +#define TRAN_CONF_CMD_MASK				GENMASK(15, 0)
->> +
->> +/* bits within the TRIG register */
->> +#define TRIG_FLUSH						BIT(2)
->> +#define TRIG_STOP						BIT(1)
->> +#define TRIG_START						BIT(0)
->> +
->> +/* bits within the SR register */
->> +#define SR_FIFO_NUM_MASK				GENMASK(22, 16)
->> +#define SR_END							BIT(4)
->> +#define SR_TRAN_REQ						BIT(3)
->> +#define SR_RECE_REQ						BIT(2)
->> +#define SR_OVER							BIT(1)
->> +#define SR_UNDER						BIT(0)
->> +
->> +/* bits within the SCR register */
->> +#define SCR_CLR_END						BIT(4)
->> +#define SCR_CLR_TREQ					BIT(3)
->> +#define SCR_CLR_RREQ					BIT(2)
->> +#define SCR_CLR_OVER					BIT(1)
->> +#define SCR_CLR_UNDER					BIT(0)
->> +
->> +/* bits within the INTC register */
->> +#define INTC_MASK_END					BIT(4)
->> +#define INTC_MASK_TREQ					BIT(3)
->> +#define INTC_MASK_RREQ					BIT(2)
->> +#define INTC_MASK_OVER					BIT(1)
->> +#define INTC_MASK_UNDER					BIT(0)
->> +
->> +/* bits within the TRAN_CFG1(n) register */
->> +#define TRAN_CFG1_TRAN_MODE_MASK		GENMASK(7, 4)
->> +
->> +#define TRAN_MODE_STANDARD				0
->> +#define TRAN_MODE_DUAL_DATA				1
->> +#define TRAN_MODE_DUAL_IO				2
->> +#define TRAN_MODE_DUAL_FULL				3
->> +#define TRAN_MODE_QUAD_DATA				5
->> +#define TRAN_MODE_QUAD_IO				6
->> +#define TRAN_MODE_QUAD_FULL				7
->> +#define TRAN_MODE_OCTAL_DATA			9
->> +#define TRAN_MODE_OCTAL_IO				10
->> +#define TRAN_MODE_OCTAL_FULL			11
->> +
->> +#define INGENIC_SFC_FIFO_SIZE			(64 * 4)
->> +
->> +#define INGENIC_SFC_TRANSFER_TIMEOUT	1000
->> +
->> +enum ingenic_sfc_version {
->> +	ID_X1000,
->> +	ID_X1600,
->> +	ID_X2000,
->> +};
->> +
->> +struct ingenic_soc_info {
->> +	enum ingenic_sfc_version version;
->> +
-> No need for blank line.
->
->> +	unsigned int max_bus_width;
->> +
-> Remove as well.
->
->> +	const u32 tran_mode_mask;
->> +};
->> +
->> +struct ingenic_sfc {
->> +	const struct ingenic_soc_info *soc_info;
->> +
->> +	void __iomem *base;
->> +	struct device *dev;
->> +	struct clk *clk;
->> +	int irq;
->> +
->> +	struct completion completion;
->> +};
->> +
->> +static irqreturn_t ingenic_sfc_irq_handler(int irq, void *data)
->> +{
->> +	struct ingenic_sfc *sfc = data;
->> +
->> +	writel(0x1f, sfc->base + SFC_REG_INTC);
->> +
->> +	complete(&sfc->completion);
->> +
->> +	return IRQ_HANDLED;
->> +}
->> +
->> +static int ingenic_sfc_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
->> +{
->> +	uintptr_t addr = (uintptr_t)op->data.buf.in;
->> +
->> +	if (op->data.nbytes > INGENIC_SFC_FIFO_SIZE && !IS_ALIGNED(addr, 4))
->> +		op->data.nbytes = INGENIC_SFC_FIFO_SIZE;
->> +
->> +	return 0;
->> +}
->> +
->> +static bool ingenic_sfc_supports_op(struct spi_mem *mem, const struct spi_mem_op *op)
->> +{
->> +	struct spi_device *spi = mem->spi;
->> +	struct ingenic_sfc *sfc = spi_controller_get_devdata(spi->master);
->> +	uintptr_t addr = (uintptr_t)op->data.buf.in;
->> +
->> +	/* The controller only supports Standard SPI mode, Duall mode, Quad mode and Octal mode. */
->> +	if (op->cmd.buswidth > sfc->soc_info->max_bus_width ||
->> +		op->addr.buswidth > sfc->soc_info->max_bus_width ||
->> +		op->dummy.buswidth > sfc->soc_info->max_bus_width ||
->> +		op->data.buswidth > sfc->soc_info->max_bus_width)
->> +		return false;
->> +
->> +	/* Max 32 dummy clock cycles supported */
->> +	if (op->dummy.nbytes && op->dummy.nbytes * 8 / op->dummy.buswidth > 32)
->> +		return false;
->> +
->> +	/* Max rx data length, check controller limits and alignment */
->> +	if (op->data.dir == SPI_MEM_DATA_IN &&
->> +		op->data.nbytes > INGENIC_SFC_FIFO_SIZE && !IS_ALIGNED(addr, 4))
->> +		return false;
->> +
->> +	/* Max 6 bytes address width supported */
->> +	if (op->addr.nbytes > 6)
->> +		return false;
->> +
->> +	return spi_mem_default_supports_op(mem, op);
->> +}
->> +
->> +static void ingenic_sfc_set_transfer_mode(struct ingenic_sfc *sfc, const struct spi_mem_op *op)
->> +{
->> +	int val;
->> +
->> +	val = readl(sfc->base + (sfc->soc_info->version >= ID_X1600 ?
->> +			SFC_REG_TRAN_CFG1(0) : SFC_REG_TRAN_CONF(0)));
-> This is no really readable.
-
-
-Sure, I will change it in the next version.
-
-
->> +	val &= ~sfc->soc_info->tran_mode_mask;
->> +	if (op->cmd.buswidth == 8)
->> +		val |= (TRAN_MODE_OCTAL_FULL << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->cmd.buswidth == 4)
->> +		val |= (TRAN_MODE_QUAD_FULL << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->cmd.buswidth == 2)
->> +		val |= (TRAN_MODE_DUAL_FULL << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->addr.buswidth == 8)
->> +		val |= (TRAN_MODE_OCTAL_IO << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->addr.buswidth == 4)
->> +		val |= (TRAN_MODE_QUAD_IO << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->addr.buswidth == 2)
->> +		val |= (TRAN_MODE_DUAL_IO << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->data.buswidth == 8)
->> +		val |= (TRAN_MODE_OCTAL_DATA << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->data.buswidth == 4)
->> +		val |= (TRAN_MODE_QUAD_DATA << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else if (op->data.buswidth == 2)
->> +		val |= (TRAN_MODE_DUAL_DATA << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	else
->> +		val |= (TRAN_MODE_STANDARD << (ffs(sfc->soc_info->tran_mode_mask) - 1)) &
->> +				sfc->soc_info->tran_mode_mask;
->> +	writel(val, sfc->base + (sfc->soc_info->version >= ID_X1600 ?
->> +			SFC_REG_TRAN_CFG1(0) : SFC_REG_TRAN_CONF(0)));
-> Not readable.
-
-
-Will change it.
-
-
->
->> +}
->> +
->> +/*
->> + * We only need PIO mode to handle the SPI_MEM_NO_DATA transfers,
->> + * and the unaligned accesses in SPI_MEM_DATA_IN transfers.
->> + */
-> (...)
->
->> +	sfc->dev = &pdev->dev;
->> +
->> +	platform_set_drvdata(pdev, sfc);
->> +
->> +	ret = devm_request_irq(&pdev->dev, sfc->irq, ingenic_sfc_irq_handler, 0,
->> +			dev_name(&pdev->dev), sfc);
->> +	if (ret) {
->> +		dev_err(&pdev->dev, "Failed to request irq%d, ret = %d\n", sfc->irq, ret);
->> +		goto err_put_master;
->> +	}
->> +
->> +	ctlr->bus_num = -1;
->> +	ctlr->num_chipselect = 1;
->> +	ctlr->mem_ops = &ingenic_sfc_mem_ops;
->> +	ctlr->dev.of_node = pdev->dev.of_node;
->> +	ctlr->setup = ingenic_sfc_setup;
->> +	ctlr->mode_bits = SPI_CPHA | SPI_CPOL |
->> +			SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_DUAL | SPI_TX_QUAD;
->> +	if (sfc->soc_info->version >= ID_X2000)
->> +		ctlr->mode_bits |= SPI_RX_OCTAL | SPI_TX_OCTAL;
->> +
->> +	ret = devm_spi_register_controller(&pdev->dev, ctlr);
->> +	if (ret)
->> +		goto err_put_master;
->> +
->> +	return 0;
->> +
->> +err_put_master:
->> +	spi_master_put(ctlr);
-> What about unpreparing clocks? Is it part of spi_master_put()?
-
-
-Will add it in the next version.
-
-
-Thanks and beset regards!
-
-
->> +
->> +	return ret;
->> +}
->> +
->> +static const struct ingenic_soc_info x1000_soc_info = {
->> +	.version = ID_X1000,
->> +
-> No need for blank lines after each field.
->
->
-> Best regards,
-> Krzysztof
+>> With this patch (and also mentioned
+>> https://lore.kernel.org/all/20220509073639.2048236-1-kai.heng.feng@canonical.com/)
+>> applied on 5.10 (chromeos-5.10) I am observing problems after
+>> suspend/resume with my WiFi card - it looks like whole communication
+>> via PCI fails. Attaching logs (dmesg, lspci -vvv before suspend/resume
+>> and after) https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff22911109dfb91ab0fc0e3
+>>
+>> I played a little bit with this code and it looks like the
+>> pci_write_config_dword() to the PCI_L1SS_CTL1 breaks it (don't know
+>> why, not a PCI expert).
+> 
+> Thanks a lot for testing this!  I'm not quite sure what to make of the
+> results since v5.10 is fairly old (Dec 2020) and I don't know what
+> other changes are in chromeos-5.10.
+> 
+> Random observations, no analysis below.  This from your dmesg
+> certainly looks like PCI reads failing and returning ~0:
+> 
+>    Timeout waiting for hardware access (CSR_GP_CNTRL 0xffffffff)
+>    iwlwifi 0000:01:00.0: 00000000: ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff
+>    iwlwifi 0000:01:00.0: Device gone - attempting removal
+>    Hardware became unavailable upon resume. This could be a software issue prior to suspend or a hardware issue.
+> 
+> And then we re-enumerate 01:00.0 and it looks like it may have been
+> reset (BAR is 0):
+> 
+>    pci 0000:01:00.0: [8086:095a] type 00 class 0x028000
+>    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff 64bit]
+> 
+> lspci diffs from before/after suspend:
+> 
+>     00:14.0 PCI bridge: Intel Corporation Celeron N3350/Pentium N4200/Atom E3900 Series PCI Express Port B #1 (rev fb) (prog-if 00 [Normal decode])
+>       Bus: primary=00, secondary=01, subordinate=01, sec-latency=64
+>    -               DevSta: CorrErr- NonFatalErr+ FatalErr- UnsupReq+ AuxPwr+ TransPend-
+>    +               DevSta: CorrErr+ NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
+>    -               LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+>    +               LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+>    -               LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+>    +               LnkSta2: Current De-emphasis Level: -3.5dB, EqualizationComplete- EqualizationPhase1-
+>    -       Capabilities: [150 v0] Null
+>    -       Capabilities: [200 v1] L1 PM Substates
+>    -               L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
+>    -                         PortCommonModeRestoreTime=40us PortTPowerOnTime=10us
+>    -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+>    -                          T_CommonMode=40us LTR1.2_Threshold=98304ns
+>    -               L1SubCtl2: T_PwrOn=60us
+> 
+> The DevSta differences might be BIOS bugs, probably not relevant.
+> Interesting that ASPM is disabled, maybe didn't get enabled after
+> re-enumerating 01:00.0?  Strange that the L1 PM Substates capability
+> disappeared.
+> 
+>     01:00.0 Network controller: Intel Corporation Wireless 7265 (rev 59)
+>                    LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+>    -                       ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
+>    +                       ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+>            Capabilities: [154 v1] L1 PM Substates
+>                    L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
+>                              PortCommonModeRestoreTime=30us PortTPowerOnTime=60us
+>    -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+
+>    -                          T_CommonMode=0us LTR1.2_Threshold=98304ns
+>    +               L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
+>    +                          T_CommonMode=0us LTR1.2_Threshold=0ns
+> 
+> Dmesg claimed we reconfigured common clock config.  Maybe ASPM didn't
+> get reinitialized after re-enumeration?  Looks like we didn't restore
+> L1SubCtl1.
+> 
+> Bjorn
+> 

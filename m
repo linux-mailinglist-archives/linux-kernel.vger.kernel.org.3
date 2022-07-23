@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0740757EB98
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 04:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6E257EB9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 05:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiGWC4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 22:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
+        id S235826AbiGWDCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 23:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGWC4I (ORCPT
+        with ESMTP id S229572AbiGWDCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 22:56:08 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DDFDEC4
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 19:56:05 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LqW8908tszjWx1;
-        Sat, 23 Jul 2022 10:53:13 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 23 Jul 2022 10:56:00 +0800
-Subject: Re: [PATCH 5/5] hugetlbfs: fix confusing hugetlbfs stat
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-CC:     <akpm@linux-foundation.org>, <songmuchun@bytedance.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220721131637.6306-1-linmiaohe@huawei.com>
- <20220721131637.6306-6-linmiaohe@huawei.com> <YtnvFBn8tSm7y/mV@monkey>
- <f277d8ac-8091-78b4-e168-5dfd87314889@huawei.com> <Ytsq6TEsXzyedpH+@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <e6e2de0d-ee72-4572-75c5-02cb27e7ae95@huawei.com>
-Date:   Sat, 23 Jul 2022 10:56:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <Ytsq6TEsXzyedpH+@monkey>
+        Fri, 22 Jul 2022 23:02:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFADDECC;
+        Fri, 22 Jul 2022 20:02:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CE0EB82B1E;
+        Sat, 23 Jul 2022 03:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E43CC341C6;
+        Sat, 23 Jul 2022 03:02:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658545346;
+        bh=RmHNidHcM6XnyksPN/PZ9Th3H+UhaPw4mbqV8BGr+lk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=eu/SahGnm2hDYt+NNv6xEtT/DRemsy7UcVl/gxuxomUCXoPIbz5QwEzpuI3xmeDCz
+         6CvunG/RROezKcPISJH/AZKEfl5SA9kYZ2cAm8q9MYDhCFWJhnpEhB1LjdF5nWszvo
+         yxQ0h13kwPxBbjHoh9Qb4cPngEMrGcd8vfJT9cQ2BxmLzVqEXOjGCcaU3evhGVcTln
+         ozPywvOhwtK+zhKYTPA2I/JIH1oVMEIwqP8BXwi82kEdk2hgJcTXMdVmSXvzcxerr7
+         /5IotM9Y4VfFM3U5UH2+NHcLu0JYjN+Wqs3J2ch54DBiyzrtJ3KZpebnwAwHq6R/KY
+         l9JO+hwonW7yw==
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
+References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com> <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com> <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
+Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Olof Johansson <olof@lixom.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Thomas G leixner <tglx@linutronix.de>,
+        Patrick Venture <venture@google.com>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Nancy Yuen <yuenn@google.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Date:   Fri, 22 Jul 2022 20:02:24 -0700
+User-Agent: alot/0.10
+Message-Id: <20220723030226.8E43CC341C6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/23 6:55, Mike Kravetz wrote:
-> On 07/22/22 14:38, Miaohe Lin wrote:
->> On 2022/7/22 8:28, Mike Kravetz wrote:
->>> On 07/21/22 21:16, Miaohe Lin wrote:
->>>> When size option is not specified, f_blocks, f_bavail and f_bfree will be
->>>> set to -1 instead of 0. Likewise, when nr_inodes is not specified, f_files
->>>> and f_ffree will be set to -1 too. Check max_hpages and max_inodes against
->>>> -1 first to make sure 0 is reported for max/free/used when no limit is set
->>>> as the comment states.
->>>
->>> Just curious, where are you seeing values reported as -1?  The check
->>
->> From the standard statvfs() function.
->>
->>> for sbinfo->spool was supposed to handle these cases.  Seems like it
->>
->> sbinfo->spool could be created when ctx->max_hpages == -1 while
->> ctx->min_hpages != -1 in hugetlbfs_fill_super.
->>
->>> should handle the max_hpages == -1 case.  But, it doesn't look like it
->>> considers the max_inodes == -1 case.
->>>
->>> If I create/mount a hugetlb filesystem without specifying size or nr_inodes,
->>> df seems to report zero instead of -1.
->>>
->>> Just want to understand the reasoning behind the change.
-> 
-> Thanks for the additional information (and test program)!
-> 
->>From the hugetlbfs documentation:
-> "If the ``size``, ``min_size`` or ``nr_inodes`` option is not provided on
->  command line then no limits are set."
-> 
-> So, having those values set to -1 indicates there is no limit set.
-> 
-> With this change, 0 is reported for the case where there is no limit set as
-> well as the case where the max value is 0.
+Quoting Tomer Maimon (2022-07-19 03:04:43)
+> On Mon, 18 Jul 2022 at 22:14, Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> >
+> > So the clk and reset driver should be the same driver, or one driver
+> > should register the other and use the auxiliary bus to express the
+> > relationship. That way we know that the drivers are tightly coupled and
+> > aren't going to stomp over each other.
+> I think it is very problematic to use the same driver for the reset
+> and the clocks also because The NPCM reset driver is an old driver
+> that was used also to the older NPCM BMC SoC so it will be problematic
+> to use the clock and reset driver in the same space.
+> indeed the reset and clocks are using the same memory region but they
+> are not using the same registers, is it not enough?
+> Please be aware that the NPCM reset driver is checking that it is
+> using the reset registers before calling I/O functions.
 
-IMHO, 0 should not be a valid max value otherwise there will be no hugetlb pages
-to use. It should mean there's no limit. But maybe I'm wrong.
+To put it simply, platform device drivers should use platform device
+APIs. The platform device APIs hide the fact that the firmware is ACPI
+or DT or nothing at all. The usage of of_address_to_resource() is
+problematic.
 
-> 
-> There may be some value in reporting -1 as is done today.
+After converting that to platform APIs you'll get janitor style cleanups
+trying to convert to devm_platform_ioremap_resource(). We'll have to
+discuss this again when that happens, even if there's a comment in the
+code indicating we can't reserve the IO space because there's another
+driver. These problems have happened in the past, fun times!
 
-There still be a inconsistency:
-
-If the ``size`` and ``min_size`` isn't specified, then reported max value is 0.
-But if ``min_size`` is specified while ``size`` isn't specified, the reported
-max value is -1.
-
-> 
-> To be honest, I am not sure what is the correct behavior here.  Unless
-> there is a user visible issue/problem, I am hesitant to change.  Other
-> opinions are welcome.
-
-Yes, it might be better to keep it as is. Maybe we could change the comment to
-reflect what the current behavior is like below?
-
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 44da9828e171..f03b1a019cc0 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -1080,7 +1080,7 @@ static int hugetlbfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-        buf->f_bsize = huge_page_size(h);
-        if (sbinfo) {
-                spin_lock(&sbinfo->stat_lock);
--               /* If no limits set, just report 0 for max/free/used
-+               /* If no limits set, just report 0 or -1 for max/free/used
-                 * blocks, like simple_statfs() */
-                if (sbinfo->spool) {
-                        spin_lock_irq(&sbinfo->spool->lock);
-
-> 
-
-No strong opinion to keep this patch or above change. Many thanks for your comment and reply. :)
-
+Furthermore, in DT, reg properties aren't supposed to overlap. When that
+happens it usually indicates the DT is being written to describe driver
+structure instead of the IP blocks that are delivered by the hardware
+engineer. In this case it sounds like a combined clk and reset IP block
+because they piled all the SoC glue stuff into a register range. Are
+there more features in this IO range?

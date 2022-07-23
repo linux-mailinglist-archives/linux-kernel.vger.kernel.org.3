@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7873757EBDA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 06:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C3857EBDF
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 06:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiGWEQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 00:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        id S232788AbiGWEVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 00:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGWEQJ (ORCPT
+        with ESMTP id S229611AbiGWEVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 00:16:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221BA74DE0;
-        Fri, 22 Jul 2022 21:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658549766; x=1690085766;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qi4Vo2BGFenUFFuQzdEqAlJ8D1th20Bp3/R/v6klphc=;
-  b=JVEGsjNhCwmTCc7XdbJXrkNQj3y1vTbU1ZWr/nmB4G8NSOGcafMdDsfP
-   Vqg2sLbZQ252+LwBrLOwN1s/7YaHe0tl8Z15qkupI7K5VRMQufP1pEj5k
-   3o4ErH8bLBGVhYX7neiviEdgpn/QLvISm1qlxwDBW6pitJ+UM8hBdPWvB
-   mmc45HOqqV1CSKdkJXmnDunRUoqGTkOXCM6oPGK0ChFmnHsCekpI03DJc
-   n4IQug0QKCahWB/Sl3dH+PuLx74NjwscR2eTkWO1g/jZkjWfOB5FSSL+u
-   paGV6nYWJe+j1IUM6QWEds4c2sX0Pz+odPm9rB6A8bW4jaP36mSspZM/3
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="351438807"
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="351438807"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 21:16:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="775424893"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jul 2022 21:16:02 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oF6Yb-0002Ff-33;
-        Sat, 23 Jul 2022 04:16:01 +0000
-Date:   Sat, 23 Jul 2022 12:15:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        devicetree@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: msm8916-samsung-e2015: Add
- initial common dtsi
-Message-ID: <202207231229.wqK1Zic2-lkp@intel.com>
-References: <20220721235333.75282-1-linmengbo0689@protonmail.com>
+        Sat, 23 Jul 2022 00:21:50 -0400
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1167981B11
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 21:21:49 -0700 (PDT)
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 52A75802DBCA
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 04:21:49 +0000 (UTC)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id E639A10047DA5
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 04:21:27 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id F6droq4yCUff9F6droIBAm; Sat, 23 Jul 2022 04:21:27 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=e7XD9Yl/ c=1 sm=1 tr=0 ts=62db7747
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RgO8CyIxsXoA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:In-Reply-To:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oqbjFExM1po2IJmpduVSlOR3gTC2IIFOtIDz7rNwOyQ=; b=vmSwpzKnG6MytnNE0NLgb2/5IA
+        FnatHM//LWZCtNz8aYrn59KWu3xwNERV8nAS+ml1Tl6RN8TpGl7dugW+dXJbVbgGswr8iKYgjbLJJ
+        0weiZevPV1aHxmrLfxD2lf/Dt0v1/bD/PTaqqU0XCFZvIhYeNss0f+fOKBH0FCyelmuZvCyYzwayP
+        ocEx9WboCqBczFlxEN5uev1EsVkQvA0ADTkr45qgqWqvIJgla946gl8r+JbMp8FvhsZmUv/07obpy
+        ziwWEyLOARNtbZ4bqN/KoxzK7QqsjhV2LlTqfs2myYxIkUecUvNuTtuvwwv3RIi9u1zGk4mSyPNGA
+        FH/qLAyg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:37130 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oF6dp-002TKL-US;
+        Fri, 22 Jul 2022 22:21:26 -0600
+Subject: Re: [PATCH 5.15 00/89] 5.15.57-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220722091133.320803732@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220722091133.320803732@linuxfoundation.org>
+Message-ID: <b00091f3-3522-7bbb-8c29-c81a4af5daa4@w6rz.net>
+Date:   Fri, 22 Jul 2022 21:21:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721235333.75282-1-linmengbo0689@protonmail.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oF6dp-002TKL-US
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:37130
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Meng-Bo",
+On 7/22/22 2:10 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.57 release.
+> There are 89 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 24 Jul 2022 09:10:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.57-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thank you for the patch! Yet something to improve:
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v5.19-rc7]
-[cannot apply to soc/for-next next-20220722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Ron Economos <re@w6rz.net>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lin-Meng-Bo/Add-Samsung-Galaxy-E5-E7-Grand-Max-device-trees/20220722-075631
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220723/202207231229.wqK1Zic2-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/00d1983861bc6f4389e307fe7758e3b0329b6222
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lin-Meng-Bo/Add-Samsung-Galaxy-E5-E7-Grand-Max-device-trees/20220722-075631
-        git checkout 00d1983861bc6f4389e307fe7758e3b0329b6222
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi:36.2-22 Properties must precede subnodes
-   FATAL ERROR: Unable to parse input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

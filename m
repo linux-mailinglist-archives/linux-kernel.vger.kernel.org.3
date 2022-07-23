@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC75E57F204
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 01:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFDA57F208
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 01:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbiGWXCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 19:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        id S239021AbiGWXIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 19:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiGWXB6 (ORCPT
+        with ESMTP id S231551AbiGWXIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 19:01:58 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1C91A063
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 16:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658617317; x=1690153317;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+qYeABImKkCa3/hprWAOVdAiMmIb+T3f66Lu/PXSCnU=;
-  b=Tyvha+3GvHlC3V0dzcRe1TwtVX+RyXFuiyOr1Sq8mrro3BxjW09W5iVa
-   dA6iZK+jcIaKs38IaYXWVX/pVqtMnvSWEFWM2EmEurTrXQ8NZ5Jbpx+hZ
-   8BIK0yIvyvlhSob9e0HaCfotTCKO0ZLpvP4UEnCR0Cl++Ht5HLc0bYdo+
-   DjwtYC3VFEvIukbCIx8MepDzvIivvvNrAuFlokIonqIIL2xMwZQe11BPa
-   B+6rrpN9KhpHlQIpw/hOFAyY7Xz9dW4FwhyzGYeM42SyeM5yTrw4yo9j1
-   Gy2YN9xkq76o4LNXXqCScb6A4df1IQ3npb8oIdqFmPuJVajqjBC4RJr56
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288678860"
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="288678860"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 16:01:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="725771892"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 23 Jul 2022 16:01:55 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFO8B-0003Cb-0S;
-        Sat, 23 Jul 2022 23:01:55 +0000
-Date:   Sun, 24 Jul 2022 07:01:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/xtensa/lib/kcsan-stubs.c:6:6: sparse: sparse: symbol
- '__atomic_store_8' was not declared. Should it be static?
-Message-ID: <202207240618.RpyqtnDw-lkp@intel.com>
+        Sat, 23 Jul 2022 19:08:52 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A6D1AF3B;
+        Sat, 23 Jul 2022 16:08:52 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 068E7835;
+        Sun, 24 Jul 2022 01:08:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1658617730;
+        bh=oMPjA2BvNp/YCMxb7BqldubcYPaRTw9LHXiZCdAXXrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y8DpnlNE2Q9vSYbEM/zJ7nk8zLyVk87cDTNYspcFPZ8bEmhE/2gRS35yqRfXLiH3q
+         tBi6nTglDYRHfaGBOlfFoYf6PNKnxCMVjdqOBgsXCR5ifVojq4giiWDGkOWLIDBf/y
+         XfYlKfjWc0xrV8ibEnUtAqiCbNOdphKKhCcx1xqE=
+Date:   Sun, 24 Jul 2022 02:08:46 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 10/12] arm64: dts: imx8mp-verdin: don't use multiple
+ blank lines
+Message-ID: <Ytx/fhvTMz9gmJgb@pendragon.ideasonboard.com>
+References: <20220722215445.3548530-1-marcel@ziswiler.com>
+ <20220722215445.3548530-11-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220722215445.3548530-11-marcel@ziswiler.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   515f71412bb73ebd7f41f90e1684fc80b8730789
-commit: 725aea873261e8d986e527838fde2a721f0962d8 xtensa: enable KCSAN
-date:   3 months ago
-config: xtensa-randconfig-s052-20220724 (https://download.01.org/0day-ci/archive/20220724/202207240618.RpyqtnDw-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=725aea873261e8d986e527838fde2a721f0962d8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 725aea873261e8d986e527838fde2a721f0962d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=xtensa SHELL=/bin/bash
+Hi Marcel,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you for the patch.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/xtensa/lib/kcsan-stubs.c:6:6: sparse: sparse: symbol '__atomic_store_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:11:5: sparse: sparse: symbol '__atomic_load_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:16:5: sparse: sparse: symbol '__atomic_exchange_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:21:6: sparse: sparse: symbol '__atomic_compare_exchange_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:26:5: sparse: sparse: symbol '__atomic_fetch_add_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:31:5: sparse: sparse: symbol '__atomic_fetch_sub_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:36:5: sparse: sparse: symbol '__atomic_fetch_and_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:41:5: sparse: sparse: symbol '__atomic_fetch_or_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:46:5: sparse: sparse: symbol '__atomic_fetch_xor_8' was not declared. Should it be static?
->> arch/xtensa/lib/kcsan-stubs.c:51:5: sparse: sparse: symbol '__atomic_fetch_nand_8' was not declared. Should it be static?
+On Fri, Jul 22, 2022 at 11:54:43PM +0200, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> Avoid the following checkpatch warning:
+> 
+> arch/arm/boot/dts/imx8mp-verdin.dtsi:281: check: Please don't use
+>  multiple blank lines
+> 
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-vim +/__atomic_store_8 +6 arch/xtensa/lib/kcsan-stubs.c
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-     5	
-   > 6	void __atomic_store_8(volatile void *p, u64 v, int i)
-     7	{
-     8		BUG();
-     9	}
-    10	
-  > 11	u64 __atomic_load_8(const volatile void *p, int i)
-    12	{
-    13		BUG();
-    14	}
-    15	
-  > 16	u64 __atomic_exchange_8(volatile void *p, u64 v, int i)
-    17	{
-    18		BUG();
-    19	}
-    20	
-  > 21	bool __atomic_compare_exchange_8(volatile void *p1, void *p2, u64 v, bool b, int i1, int i2)
-    22	{
-    23		BUG();
-    24	}
-    25	
-  > 26	u64 __atomic_fetch_add_8(volatile void *p, u64 v, int i)
-    27	{
-    28		BUG();
-    29	}
-    30	
-  > 31	u64 __atomic_fetch_sub_8(volatile void *p, u64 v, int i)
-    32	{
-    33		BUG();
-    34	}
-    35	
-  > 36	u64 __atomic_fetch_and_8(volatile void *p, u64 v, int i)
-    37	{
-    38		BUG();
-    39	}
-    40	
-  > 41	u64 __atomic_fetch_or_8(volatile void *p, u64 v, int i)
-    42	{
-    43		BUG();
-    44	}
-    45	
-  > 46	u64 __atomic_fetch_xor_8(volatile void *p, u64 v, int i)
-    47	{
-    48		BUG();
-    49	}
-    50	
-  > 51	u64 __atomic_fetch_nand_8(volatile void *p, u64 v, int i)
+> ---
+> 
+> (no changes since v1)
+> 
+>  arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> index c5987bdbb383..f062fdbb2719 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> @@ -286,7 +286,6 @@ &flexcan1 {
+>  	status = "disabled";
+>  };
+>  
+> -
+>  /* Verdin CAN_2 */
+>  &flexcan2 {
+>  	pinctrl-names = "default";
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+
+Laurent Pinchart

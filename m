@@ -2,93 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DE157EEF5
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 13:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E97357EEF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 13:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237114AbiGWLO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 07:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S234103AbiGWLOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 07:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236690AbiGWLOX (ORCPT
+        with ESMTP id S230272AbiGWLOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 07:14:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CF82A70A;
-        Sat, 23 Jul 2022 04:14:21 -0700 (PDT)
+        Sat, 23 Jul 2022 07:14:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EC92A40E;
+        Sat, 23 Jul 2022 04:14:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9807CB80882;
-        Sat, 23 Jul 2022 11:14:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F347C341D3;
-        Sat, 23 Jul 2022 11:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658574859;
-        bh=unUMya6BPYpKOwprp7McozAEYE9y437U/0E90Qn/PR4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Idm4+tMyOetJHMHm/JAVCocTOpDhH/4+H8/qgaG+NFgUICBZPSdxOWI37JM3gj4jD
-         V/OvQrda6hV48GHEYYyJr2xsCS8G0WxITIICAUzHNOeUZHGM8byaEfem/GklOYd5gH
-         JvghH3cTxQxj28q6wqE6BgHdL5BWoCOKeQD8R3DFh9Y9y2hrqspCAFre0Q7odymkit
-         PbfzEelwOOQoCJa+SsljsBScBGvZh0aG6+dBH7mGbVmOQ0OV1xq+h5inC3QVGFjkIl
-         B3CNOrcxJO9NYFM0Lzb9ojZddR7wJ5tbrspEtad7+ovslybBfnYDXxmHSdkrls8L8o
-         /yiwejtDXqhMA==
-Received: by mail-ot1-f50.google.com with SMTP id k8-20020a9d4b88000000b0061c7f8c4f77so5129723otf.10;
-        Sat, 23 Jul 2022 04:14:19 -0700 (PDT)
-X-Gm-Message-State: AJIora+IxwLs6tqUO9pbknYlbmjwFcX38q6whwJZ7u+Q0w0WAAdlDeWH
-        /PW/VId2baDobTihv5AEhd/exMYxegSTGbM7zYs=
-X-Google-Smtp-Source: AGRyM1toSHzLLGvC9FLzuNt3t1myK6Yjo1zRCx/Yq65wM9j6V/TSj8mKNgSzLkZMi7xH4yhMSuJHvm32vnmmswjz4II=
-X-Received: by 2002:a05:6830:441f:b0:61c:a5bb:9c6a with SMTP id
- q31-20020a056830441f00b0061ca5bb9c6amr1524623otv.265.1658574858208; Sat, 23
- Jul 2022 04:14:18 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A5CD611D5;
+        Sat, 23 Jul 2022 11:14:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E01AC341C0;
+        Sat, 23 Jul 2022 11:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658574852;
+        bh=aCuZ0M+4YE8MKjBvTC0gvsyOg8TY7R5BmGA6TqYNNbY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PHI5NcbLMc0Eg3ognzkYaXlblpq3MYs4Ko+y9xpGYhIh0SCCaO+Uri/t4Z6DrR2+f
+         3/hMl0wjAM0TFJR1GtYm3P7SOUy3KzGIQltz2gkUW9HXp1GnMnUWPrji5I6E1Sxigu
+         75TRharK/IJrNYSQZM/nP9WK2YSNEDdKzQgr5HIQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.15.57
+Date:   Sat, 23 Jul 2022 13:14:08 +0200
+Message-Id: <1658574849159138@kroah.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220627223808.ihgy3epdx6ofll43@black.fi.intel.com>
- <CAMj1kXEdS9SzFZZ4WGH6sR0WDCOgYDZ3Geg6X2sqSnQ-CXXpZA@mail.gmail.com>
- <20220718172159.4vwjzrfthelovcty@black.fi.intel.com> <CAAH4kHYR+VkSJ5J8eWmeaEvstuRz_EuqVQqPfwmp5dhNGRyJwQ@mail.gmail.com>
- <CAAH4kHaHJo4NUb72tHeica4a34hq5u_QP6d6Vuzngf6EqTJ8Aw@mail.gmail.com>
- <CAAH4kHaB2tL+sAn0NAciu5DQeX5hpNkDees=n=f83S=Ph9Y6tw@mail.gmail.com>
- <YtcCWfCQuEsVhH6W@zn.tnic> <CAMj1kXEKtcieycyyFMyuLKJK61FgaDwtLieC0N47W1Sa5LaBsA@mail.gmail.com>
- <YtcgxxMyFTReuuRw@zn.tnic> <bb7479df-7871-9861-600d-c2fed783b659@intel.com>
- <YtcnQbiRgZPtR+rQ@zn.tnic> <22d54786-bc12-ecc5-2b37-cbaa56090aa8@intel.com>
- <CAA03e5FMEyswDhoXRJ5U_n9RG4QM524aQYpF4473ydnAVJr1PA@mail.gmail.com> <ffb4ae72-7fd4-d2a0-df10-3969cf8ca07f@intel.com>
-In-Reply-To: <ffb4ae72-7fd4-d2a0-df10-3969cf8ca07f@intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 23 Jul 2022 13:14:07 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHEc=vEt=CtfdiPEsUe2i8QogAi+jvtY6h1awo7GZ-nRg@mail.gmail.com>
-Message-ID: <CAMj1kXHEc=vEt=CtfdiPEsUe2i8QogAi+jvtY6h1awo7GZ-nRg@mail.gmail.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Marc Orr <marcorr@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dionna Amalie Glaze <dionnaglaze@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Yao, Jiewen" <jiewen.yao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -98,33 +49,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 19:13, Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 7/19/22 17:26, Marc Orr wrote:
-> > - Dave's suggestion to "2. Boot some intermediate thing like a
-> > bootloader that does acceptance ..." is pretty clever! So if upstream
-> > thinks this FW-kernel negotiation is not a good direction, maybe we
-> > (Google) can pursue this idea to avoid introducing yet another tag on
-> > our images.
->
-> I'm obviously speaking only for myself here and not for "upstream" as a
-> whole, but I clearly don't like the FW/kernel negotiation thing.  It's a
-> permanent pain in our necks to solve a very temporary problem.
+I'm announcing the release of the 5.15.57 kernel.
 
-EFI is basically our existing embodiment of this fw/kernel negotiation
-thing, and iff we need it, I have no objection to using it for this
-purpose, i.e., to allow the firmware to infer whether or not it should
-accept all available memory on behalf of the OS before exiting boot
-services. But if we don't need this, even better.
+All users of the 5.15 kernel series must upgrade.
 
-What I strongly object to is inventing a new bespoke way for the
-firmware to make inferences about the capabilities of the image by
-inspecting fields in the file representation of the image (which is
-not guaranteed by EFI to be identical to its in-memory representation,
-as, e.g., the PE/COFF header could be omitted by a loader without
-violating the spec)
+The updated 5.15.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-As for the intermediate thing: yes, that would be a valuable thing to
-have in OVMF (and I will gladly take EDK2 patches that implement
-this). However, I'm not sure how you decide whether or not this thing
-should be active or not, doesn't that just move the problem around?
+thanks,
+
+greg k-h
+
+------------
+
+ Documentation/admin-guide/kernel-parameters.txt |   25 
+ Makefile                                        |    9 
+ arch/um/kernel/um_arch.c                        |    8 
+ arch/x86/Kconfig                                |  103 ++-
+ arch/x86/Makefile                               |    2 
+ arch/x86/entry/Makefile                         |    2 
+ arch/x86/entry/calling.h                        |   72 ++
+ arch/x86/entry/entry.S                          |   22 
+ arch/x86/entry/entry_32.S                       |    2 
+ arch/x86/entry/entry_64.S                       |   88 ++-
+ arch/x86/entry/entry_64_compat.S                |   21 
+ arch/x86/entry/vdso/Makefile                    |    1 
+ arch/x86/entry/vsyscall/vsyscall_emu_64.S       |    9 
+ arch/x86/include/asm/GEN-for-each-reg.h         |   14 
+ arch/x86/include/asm/alternative.h              |    2 
+ arch/x86/include/asm/asm-prototypes.h           |   18 
+ arch/x86/include/asm/cpufeatures.h              |   12 
+ arch/x86/include/asm/disabled-features.h        |   21 
+ arch/x86/include/asm/linkage.h                  |    8 
+ arch/x86/include/asm/msr-index.h                |   13 
+ arch/x86/include/asm/nospec-branch.h            |  134 ++--
+ arch/x86/include/asm/static_call.h              |   17 
+ arch/x86/include/asm/traps.h                    |    2 
+ arch/x86/include/asm/unwind_hints.h             |   14 
+ arch/x86/kernel/alternative.c                   |  260 ++++++++
+ arch/x86/kernel/cpu/amd.c                       |   46 +
+ arch/x86/kernel/cpu/bugs.c                      |  475 +++++++++++++---
+ arch/x86/kernel/cpu/common.c                    |   61 +-
+ arch/x86/kernel/cpu/cpu.h                       |    2 
+ arch/x86/kernel/cpu/hygon.c                     |    6 
+ arch/x86/kernel/cpu/scattered.c                 |    1 
+ arch/x86/kernel/ftrace.c                        |    7 
+ arch/x86/kernel/head_32.S                       |    1 
+ arch/x86/kernel/head_64.S                       |    5 
+ arch/x86/kernel/module.c                        |   15 
+ arch/x86/kernel/process.c                       |    2 
+ arch/x86/kernel/relocate_kernel_32.S            |   25 
+ arch/x86/kernel/relocate_kernel_64.S            |   23 
+ arch/x86/kernel/static_call.c                   |   49 +
+ arch/x86/kernel/traps.c                         |   19 
+ arch/x86/kernel/vmlinux.lds.S                   |   23 
+ arch/x86/kvm/emulate.c                          |   33 -
+ arch/x86/kvm/svm/vmenter.S                      |   18 
+ arch/x86/kvm/vmx/nested.c                       |    2 
+ arch/x86/kvm/vmx/run_flags.h                    |    8 
+ arch/x86/kvm/vmx/vmenter.S                      |  164 ++---
+ arch/x86/kvm/vmx/vmx.c                          |   76 +-
+ arch/x86/kvm/vmx/vmx.h                          |    6 
+ arch/x86/kvm/x86.c                              |    4 
+ arch/x86/lib/memmove_64.S                       |    7 
+ arch/x86/lib/retpoline.S                        |  133 ++--
+ arch/x86/mm/mem_encrypt_boot.S                  |   10 
+ arch/x86/net/bpf_jit_comp.c                     |  179 ++----
+ arch/x86/net/bpf_jit_comp32.c                   |   22 
+ arch/x86/platform/efi/efi_thunk_64.S            |    5 
+ arch/x86/xen/setup.c                            |    6 
+ arch/x86/xen/xen-asm.S                          |   30 -
+ arch/x86/xen/xen-head.S                         |    5 
+ arch/x86/xen/xen-ops.h                          |    6 
+ drivers/base/cpu.c                              |    8 
+ drivers/idle/intel_idle.c                       |   43 +
+ include/linux/cpu.h                             |    2 
+ include/linux/kvm_host.h                        |    2 
+ include/linux/objtool.h                         |    9 
+ scripts/Makefile.build                          |    1 
+ scripts/link-vmlinux.sh                         |    3 
+ security/Kconfig                                |   11 
+ tools/arch/x86/include/asm/cpufeatures.h        |   12 
+ tools/arch/x86/include/asm/disabled-features.h  |   21 
+ tools/arch/x86/include/asm/msr-index.h          |   13 
+ tools/include/linux/objtool.h                   |    9 
+ tools/objtool/arch/x86/decode.c                 |  145 ----
+ tools/objtool/builtin-check.c                   |    4 
+ tools/objtool/check.c                           |  701 ++++++++++++++++++++----
+ tools/objtool/elf.c                             |   84 --
+ tools/objtool/include/objtool/arch.h            |    3 
+ tools/objtool/include/objtool/builtin.h         |    2 
+ tools/objtool/include/objtool/cfi.h             |    2 
+ tools/objtool/include/objtool/check.h           |   10 
+ tools/objtool/include/objtool/elf.h             |    9 
+ tools/objtool/include/objtool/objtool.h         |    1 
+ tools/objtool/objtool.c                         |    1 
+ tools/objtool/orc_gen.c                         |   15 
+ tools/objtool/special.c                         |    8 
+ 84 files changed, 2519 insertions(+), 953 deletions(-)
+
+Alexandre Chartre (2):
+      x86/bugs: Report AMD retbleed vulnerability
+      x86/bugs: Add AMD retbleed= boot parameter
+
+Andrew Cooper (1):
+      x86/cpu/amd: Enumerate BTC_NO
+
+Arnaldo Carvalho de Melo (2):
+      tools arch x86: Sync the msr-index.h copy with the kernel sources
+      tools headers cpufeatures: Sync with the kernel sources
+
+Ben Hutchings (1):
+      x86/xen: Fix initialisation in hypercall_page after rethunk
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.57
+
+Jiri Slaby (1):
+      x86/asm/32: Fix ANNOTATE_UNRET_SAFE use on 32-bit
+
+Josh Poimboeuf (12):
+      x86/bugs: Do IBPB fallback check only once
+      x86/speculation: Fix RSB filling with CONFIG_RETPOLINE=n
+      x86/speculation: Fix firmware entry SPEC_CTRL handling
+      x86/speculation: Fix SPEC_CTRL write on SMT state change
+      x86/speculation: Use cached host SPEC_CTRL value for guest entry/exit
+      x86/speculation: Remove x86_spec_ctrl_mask
+      objtool: Re-add UNWIND_HINT_{SAVE_RESTORE}
+      KVM: VMX: Flatten __vmx_vcpu_run()
+      KVM: VMX: Convert launched argument to flags
+      KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS
+      KVM: VMX: Fix IBRS handling after vmexit
+      x86/speculation: Fill RSB on vmexit for IBRS
+
+Kim Phillips (3):
+      x86/sev: Avoid using __x86_return_thunk
+      x86/bugs: Enable STIBP for JMP2RET
+      x86/bugs: Remove apostrophe typo
+
+Konrad Rzeszutek Wilk (1):
+      x86/kexec: Disable RET on kexec
+
+Lai Jiangshan (4):
+      x86/traps: Use pt_regs directly in fixup_bad_iret()
+      x86/entry: Switch the stack after error_entry() returns
+      x86/entry: Move PUSH_AND_CLEAR_REGS out of error_entry()
+      x86/entry: Don't call error_entry() for XENPV
+
+Nathan Chancellor (1):
+      x86/speculation: Use DECLARE_PER_CPU for x86_spec_ctrl_current
+
+Paolo Bonzini (1):
+      KVM: emulate: do not adjust size of fastop and setcc subroutines
+
+Pawan Gupta (3):
+      x86/speculation: Add spectre_v2=ibrs option to support Kernel IBRS
+      x86/bugs: Add Cannon lake to RETBleed affected CPU list
+      x86/speculation: Disable RRSBA behavior
+
+Peter Zijlstra (50):
+      objtool: Classify symbols
+      objtool: Explicitly avoid self modifying code in .altinstr_replacement
+      objtool: Shrink struct instruction
+      objtool,x86: Replace alternatives with .retpoline_sites
+      objtool: Introduce CFI hash
+      x86/retpoline: Remove unused replacement symbols
+      x86/asm: Fix register order
+      x86/asm: Fixup odd GEN-for-each-reg.h usage
+      x86/retpoline: Move the retpoline thunk declarations to nospec-branch.h
+      x86/retpoline: Create a retpoline thunk array
+      x86/alternative: Implement .retpoline_sites support
+      x86/alternative: Handle Jcc __x86_indirect_thunk_\reg
+      x86/alternative: Try inline spectre_v2=retpoline,amd
+      x86/alternative: Add debug prints to apply_retpolines()
+      bpf,x86: Simplify computing label offsets
+      bpf,x86: Respect X86_FEATURE_RETPOLINE*
+      objtool: Default ignore INT3 for unreachable
+      x86/entry: Remove skip_r11rcx
+      x86/kvm/vmx: Make noinstr clean
+      x86/cpufeatures: Move RETPOLINE flags to word 11
+      x86/retpoline: Cleanup some #ifdefery
+      x86/retpoline: Swizzle retpoline thunk
+      x86/retpoline: Use -mfunction-return
+      x86: Undo return-thunk damage
+      x86,objtool: Create .return_sites
+      x86,static_call: Use alternative RET encoding
+      x86/ftrace: Use alternative RET encoding
+      x86/bpf: Use alternative RET encoding
+      x86/kvm: Fix SETcc emulation for return thunks
+      x86/vsyscall_emu/64: Don't use RET in vsyscall emulation
+      x86: Use return-thunk in asm code
+      x86/entry: Avoid very early RET
+      objtool: Treat .text.__x86.* as noinstr
+      x86: Add magic AMD return-thunk
+      x86/bugs: Keep a per-CPU IA32_SPEC_CTRL value
+      x86/bugs: Optimize SPEC_CTRL MSR writes
+      x86/bugs: Split spectre_v2_select_mitigation() and spectre_v2_user_select_mitigation()
+      x86/bugs: Report Intel retbleed vulnerability
+      intel_idle: Disable IBRS during long idle
+      objtool: Update Retpoline validation
+      x86/xen: Rename SYS* entry points
+      x86/xen: Add UNTRAIN_RET
+      x86/bugs: Add retbleed=ibpb
+      objtool: Add entry UNRET validation
+      x86/cpu/amd: Add Spectral Chicken
+      x86/common: Stamp out the stepping madness
+      x86/retbleed: Add fine grained Kconfig knobs
+      x86/entry: Move PUSH_AND_CLEAR_REGS() back into error_entry
+      um: Add missing apply_returns()
+      x86: Use -mindirect-branch-cs-prefix for RETPOLINE builds
+
+Thadeu Lima de Souza Cascardo (6):
+      x86/realmode: build with -D__DISABLE_EXPORTS
+      objtool: skip non-text sections when adding return-thunk sites
+      x86/entry: Add kernel IBRS implementation
+      x86/bugs: Do not enable IBPB-on-entry when IBPB is not supported
+      efi/x86: use naked RET on mixed mode call wrapper
+      x86/kvm: fix FASTOP_SIZE when return thunks are enabled
+
+Thomas Gleixner (1):
+      x86/static_call: Serialize __static_call_fixup() properly
+

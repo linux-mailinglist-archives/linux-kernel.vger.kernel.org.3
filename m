@@ -2,76 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5D357ECDE
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 11:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB49E57ECEF
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 11:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235301AbiGWJEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 05:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S237080AbiGWJK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 05:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiGWJES (ORCPT
+        with ESMTP id S231272AbiGWJK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 05:04:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD9018388;
-        Sat, 23 Jul 2022 02:04:18 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sat, 23 Jul 2022 05:10:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C59B7663;
+        Sat, 23 Jul 2022 02:10:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BFBEE388C3;
-        Sat, 23 Jul 2022 09:04:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1658567056;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=kr6ax75RDQM75AhdKI4ptNi7kDlOeTak+FEaRlVGM4I=;
-        b=yo3zB7etkuPGt+bGvrpBt2lv+Lxd+OxBg/JoDlAahJT4h5CMpDY+YvMb5OQPKEH3PBY4tp
-        pkp0W7XmxIw1ZQTQzxaeGzNqmgdcHX1W7qaFwbhq/uBya8dlxMo8jXEtA/iQCkB85kKFjx
-        n8lywq6gD5z+Q+zHiQ4yr7uBCn5ymws=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1658567056;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=kr6ax75RDQM75AhdKI4ptNi7kDlOeTak+FEaRlVGM4I=;
-        b=l1CD94y5zzZi9zGwBgPqS4NPWSNF/IrK+Z6FTkvJGpiczX7hxBiYSDrXwfW1OsmJ5k5JG7
-        3CBHiuH4lrq27wBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 658FB13483;
-        Sat, 23 Jul 2022 09:04:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /dZ4FZC522LkJQAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Sat, 23 Jul 2022 09:04:16 +0000
-Date:   Sat, 23 Jul 2022 11:04:14 +0200
-From:   Petr Vorel <pvorel@suse.cz>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Takashi Iwai <tiwai@suse.de>, Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] exfat: Expand exfat_err() and co directly to pr_*()
- macro
-Message-ID: <Ytu5jtYxBLSWVemC@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722142916.29435-4-tiwai@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1790B82C18;
+        Sat, 23 Jul 2022 09:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BB2C341C0;
+        Sat, 23 Jul 2022 09:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658567422;
+        bh=vFrd/H8zW4hCO4fFUiAu/WJ/KqGbXHTrFQ20cwdiKCE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Fk4w3UlWVXeaErCqbjt+L1lf3ygfMwvG4KgK/LGA1nccvWXfeAYTCxsnkLbsJSBm7
+         koBfAYJLeVULaFz4ZBUCpy+xq5P0rzmYnbQmsEXctvI7uWvzD7/b160oSo2z8Sw3mo
+         hywOITj6Ws8+O6TthsGnXi4B2xMVYqoM0d8FyatefkUpgU/CSwiXJLIgh99vnLq+yk
+         RFWgvbC6TxwBO1Hkw3PLt4VdyqSv3+zpUd92OuZhQtkYN5rTzgRmMcLXfzNTVIGbUr
+         xLAhAK9DtYSECYHix1ylbx1jxHqUjrpQDXjNT02h1taJYmDsI3IAd9pifW9tfHfOKC
+         IqUR7MJpHlJWA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oFB9Q-009Vj4-2V;
+        Sat, 23 Jul 2022 10:10:20 +0100
+Date:   Sat, 23 Jul 2022 10:10:19 +0100
+Message-ID: <87h738xkhw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     William Dean <williamsukatube@gmail.com>
+Cc:     williamsukatube@163.com, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsbogend@alpha.franken.de, fancer.lancer@gmail.com,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: Re: [PATCH] irqchip: mips-gic: check the return value of ioremap() in gic_of_init()
+In-Reply-To: <CAK6EE7=AWA1fV6j7903V-PTFnUDa70itkbkxv7vBVNrRGAoV+w@mail.gmail.com>
+References: <20220722091008.2937238-1-williamsukatube@163.com>
+        <87mtd1y02y.wl-maz@kernel.org>
+        <CAK6EE7=AWA1fV6j7903V-PTFnUDa70itkbkxv7vBVNrRGAoV+w@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: williamsukatube@gmail.com, williamsukatube@163.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de, fancer.lancer@gmail.com, hacashRobot@santino.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Sat, 23 Jul 2022 03:57:18 +0100,
+William Dean <williamsukatube@gmail.com> wrote:
+> 
+> Thans for your advice.
+> 
+> > Erm... No. The issue was definitely there before (just look at the
+> > patch you quote here).
+> 
+> Do you mean that I wrote the fixes-tag wrong?  I just checked it, it was
+> introduced by the earlier commit fbea754123ae5d9678295398c98e91f1b2159e5b,
+> if you mean that, I will send patch v2
 
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
+Not even that. Here's what this patch has:
 
-Kind regards,
-Petr
+-       mips_gic_base = ioremap_nocache(gic_base_addr, gic_addrspace_size);
++       if (mips_cm_present()) {
++               write_gcr_gic_base(gic_base | CM_GCR_GIC_BASE_GICEN);
++               /* Ensure GIC region is enabled before trying to access it */
++               __sync();
++       }
++
++       mips_gic_base = ioremap_nocache(gic_base, gic_len);
+ 
+        gicconfig = read_gic_config();
+        gic_shared_intrs = gicconfig & GIC_CONFIG_NUMINTERRUPTS;
+
+Still no check for the ioremap result. You can actually trace it all
+the way down to 39b8d5254246a ("[MIPS] Add support for MIPS CMP
+platform."), which introduced that code initially. But is it worth
+referencing such an old commit? No.
+
+To be honest, given how early this code executes, failing to ioremap
+something is utterly unlikely, and adding the check is mostly about
+being pedantic.
+
+It is also worth noting that most of the use of this variable are
+guarded by mips_gic_present(), which actually checks for mips_gic_base
+being NULL and that the driver actually *ignores* such mapping.
+
+Given that, I'm not sure this deserves an actual Fixes: tag. This is
+completely harmless. Just resend the patch with a correct SoB, and
+I'll queue it.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

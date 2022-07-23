@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA46357F13B
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 21:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6082C57F13E
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 22:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiGWT6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 15:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
+        id S235117AbiGWUA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 16:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiGWT5u (ORCPT
+        with ESMTP id S230005AbiGWUAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 15:57:50 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDF315A27
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 12:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PwVH6vt15LeATQ38DNL3tNTLJeOyYpoLWnS4bRbeGts=;
-  b=OtE8DUoTHO4xgxAPWNvpcPNMR4EBVL/BuskmX7G7tNtDbrpx/inXoewk
-   jafGANyMyRXNgDDr4x8BWbw8LDWvaT0Nb/eOvXs4kuHJV5nEepABL84w5
-   fr57XaW6KIwIayD0PiFNIp5VZ1wi2kAH0JxwlSm9G7vrtXKAJQLqaIa68
-   0=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.93,189,1654552800"; 
-   d="scan'208";a="46678311"
-Received: from ip-153.net-89-2-7.rev.numericable.fr (HELO hadrien) ([89.2.7.153])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 21:57:46 +0200
-Date:   Sat, 23 Jul 2022 21:57:46 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Dave Jiang <dave.jiang@intel.com>
-cc:     linux-kernel@vger.kernel.org, kbuild-all@lists.01.org
-Subject: [djiang:cxl-security 14/16] drivers/cxl/security.c:174:59-60: disable:
- first occurrence line 177, second occurrence line 181 (fwd)
-Message-ID: <alpine.DEB.2.22.394.2207232156500.2855@hadrien>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 23 Jul 2022 16:00:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF1E015707
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 13:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658606421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YO9dcmk0QXd/wQEuwbD9vAV95IqlIKI9spJSz1SGPuU=;
+        b=ibRAEwO+4C4xWFuS7ezXjxay1DrrGH3VBf75OUNi8eP180eUCXzBxbzYCjCt2MJLjwksPj
+        +oI2kKCSC3H9rCgR8hTnExee+BP0tD9RWoP1lcR8Fec0a/qtOPjeH/rsMm+rswasSOmge6
+        fiFlxb1KO7vD0J8N4uvoVehsAbGG/kE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-y-FHcB0FM-OKSTN-i7bgAw-1; Sat, 23 Jul 2022 16:00:18 -0400
+X-MC-Unique: y-FHcB0FM-OKSTN-i7bgAw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19B598037AA;
+        Sat, 23 Jul 2022 20:00:18 +0000 (UTC)
+Received: from llong.com (unknown [10.22.16.48])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A878F492C3B;
+        Sat, 23 Jul 2022 20:00:17 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] intel_idle: Fix false positive RCU splats due to incorrect hardirqs state
+Date:   Sat, 23 Jul 2022 15:59:32 -0400
+Message-Id: <20220723195932.1302575-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Double initialization of disable, with different values.  See lies 177 and
-181.
+Commit 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
+uses raw_local_irq_enable/local_irq_disable() around call to
+__intel_idle() in intel_idle_irq().
 
-julia
+With interrupt enabled, timer tick interrupt can happen and a
+subsequently call to __do_softirq() may change the lockdep hardirqs state
+of a debug kernel back to 'on'. This will result in a mismatch between
+the cpu hardirqs state (off) and the lockdep hardirqs state (on) causing
+a number of false positive "WARNING: suspicious RCU usage" splats.
 
----------- Forwarded message ----------
-Date: Sat, 23 Jul 2022 13:06:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: kbuild@lists.01.org
-Cc: lkp@intel.com, Julia Lawall <julia.lawall@lip6.fr>
-Subject: [djiang:cxl-security 14/16] drivers/cxl/security.c:174:59-60: disable:
-    first occurrence line 177, second occurrence line 181
+Fix that by using local_irq_disable() to disable interrupt in
+intel_idle_irq().
 
-CC: kbuild-all@lists.01.org
-BCC: lkp@intel.com
-CC: linux-kernel@vger.kernel.org
-TO: Dave Jiang <dave.jiang@intel.com>
+Fixes: 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ drivers/idle/intel_idle.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-security
-head:   a9e386b59eef5db739f0706d734daa39759dab96
-commit: dd8bf96f3460deaf322b580b58df9f59d33ea99f [14/16] nvdimm/cxl/pmem: Add support for master passphrase disable security command
-:::::: branch date: 29 hours ago
-:::::: commit date: 34 hours ago
-config: ia64-randconfig-c031-20220721 (https://download.01.org/0day-ci/archive/20220723/202207231241.SmvofeIK-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 12.1.0
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-
-cocci warnings: (new ones prefixed by >>)
->> drivers/cxl/security.c:174:59-60: disable: first occurrence line 177, second occurrence line 181
-
-vim +174 drivers/cxl/security.c
-
-6d0464a727cb70c Dave Jiang 2022-07-12  173
-fcbefd0f597c3ba Dave Jiang 2022-07-06 @174  static const struct nvdimm_security_ops __cxl_security_ops = {
-fcbefd0f597c3ba Dave Jiang 2022-07-06  175  	.get_flags = cxl_pmem_get_security_flags,
-5dce760e11e79cb Dave Jiang 2022-07-11  176  	.change_key = cxl_pmem_security_change_key,
-6a299141fd67c72 Dave Jiang 2022-07-12 @177  	.disable = cxl_pmem_security_disable,
-4aac0070d1a6c80 Dave Jiang 2022-07-12  178  	.freeze = cxl_pmem_security_freeze,
-abef64ac4e6fcd4 Dave Jiang 2022-07-12  179  	.unlock = cxl_pmem_security_unlock,
-6d0464a727cb70c Dave Jiang 2022-07-12  180  	.erase = cxl_pmem_security_passphrase_erase,
-dd8bf96f3460dea Dave Jiang 2022-07-13 @181  	.disable = cxl_pmem_security_disable_master,
-fcbefd0f597c3ba Dave Jiang 2022-07-06  182  };
-fcbefd0f597c3ba Dave Jiang 2022-07-06  183
-
-:::::: The code at line 174 was first introduced by commit
-:::::: fcbefd0f597c3baeb916aca4f94bcbfca3571763 cxl/pmem: Introduce nvdimm_security_ops with ->get_flags() operation
-
-:::::: TO: Dave Jiang <dave.jiang@intel.com>
-:::::: CC: Dave Jiang <dave.jiang@intel.com>
-
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index f5c6802aa6c3..907700d1e78e 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -162,7 +162,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+ 
+ 	raw_local_irq_enable();
+ 	ret = __intel_idle(dev, drv, index);
+-	raw_local_irq_disable();
++
++	/*
++	 * The lockdep hardirqs state may be changed to 'on' with timer
++	 * tick interrupt followed by __do_softirq(). Use local_irq_disable()
++	 * to keep the hardirqs state correct.
++	 */
++	local_irq_disable();
+ 
+ 	return ret;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

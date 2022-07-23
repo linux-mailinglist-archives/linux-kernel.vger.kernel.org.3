@@ -2,242 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AF657EC6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF6957EC72
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236660AbiGWHVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 03:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
+        id S232568AbiGWH0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 03:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiGWHVp (ORCPT
+        with ESMTP id S229723AbiGWH0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 03:21:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783324B482;
-        Sat, 23 Jul 2022 00:21:43 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Lqd4g0lDTzGp7n;
-        Sat, 23 Jul 2022 15:20:35 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 23 Jul 2022 15:21:41 +0800
-Received: from [10.67.103.212] (10.67.103.212) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 23 Jul 2022 15:21:40 +0800
-Subject: Re: [PATCH v5 3/3] crypto: hisilicon/qm - defining the device
- isolation strategy
-To:     Greg KH <gregkh@linuxfoundation.org>
-References: <20220708070820.43958-1-yekai13@huawei.com>
- <20220708070820.43958-4-yekai13@huawei.com> <YsfeMgbP+bxstf+7@kroah.com>
- <7cd8e1f3-b4a2-8aae-7b6e-99c5ceb5f17f@huawei.com>
-CC:     <herbert@gondor.apana.org.au>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wangzhou1@hisilicon.com>
-From:   "yekai(A)" <yekai13@huawei.com>
-Message-ID: <4b34587e-562e-faeb-57c3-fd6793779107@huawei.com>
-Date:   Sat, 23 Jul 2022 15:21:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Sat, 23 Jul 2022 03:26:43 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16E2388F;
+        Sat, 23 Jul 2022 00:26:42 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id C000132008FB;
+        Sat, 23 Jul 2022 03:26:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 23 Jul 2022 03:26:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1658561198; x=
+        1658647598; bh=5Ir+MjFNAiyfriqu201Q2DsSmCwNyWbos3Bln1LDuEY=; b=R
+        wM+zTeDX2Rh5aCnfspDGdokKpWDm8poehxkcTiVh1/R3GPX9hMDZRtYCPNsjZdMp
+        uXB8YScVK6o9Pws7j8b8EKKyYDilZ9pdM96lORr6oYQK4RnpmtcKqk5f6zQmJy59
+        zX4YgYQwPavAZI0fTmM80zrX65HrmtXBwMktw8btIikLo1GCKjPQgNP5DEOIc3CU
+        aTLNXtg0bHh2a6Dmwdx9dZukBRu9pu1rAFgqHyXHraa6cP1f9tEAOOXmT8CmAJWD
+        KntkVBhfCbM7bbHm0JWRQxbgrjLZaC4ETT24YbXalafqhBP8k0wAB2Nyq0zEJid/
+        lBHAosASE4/17SeODzaPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658561198; x=
+        1658647598; bh=5Ir+MjFNAiyfriqu201Q2DsSmCwNyWbos3Bln1LDuEY=; b=q
+        r2vEBdIfhBrUmnn4QOiFmxtadMeICfZjUUSZFYIwdFpm0ImmY18iv8giOBnQud72
+        dQucaW1RYj0XfFijWxgO9pCq2Xu3JPeXPmfBZudsQYfPoXrHR+kB12kukkElxc/5
+        9igumapg4xJYR2krCsjgrjqcPVmB6YTnQWGuvrEcHva1AJvvlCpsBF39U/P1dTun
+        wbupFv98RiyN9lsSbt3mXloYji8FEgtqvFXJ87jI+3rom04vXXAlV5iCozAArvnR
+        y2lQynoSzT/vzIpW2Kdr3K2YrHR7ozP2qZYShzaWghJaKSPgyvlf32wFtYDSOS6v
+        RBZNf4yTpAxBPLxFkRNaQ==
+X-ME-Sender: <xms:raLbYrvlngzjuz-yC2mA1TEd3oDkG75P2eTGdnQSkSbLnJSgyjnZXA>
+    <xme:raLbYsfuZ1zJdqdhAOURunf-ickMEYhGjjN_0EJC2Nb3n51o8jSmyGTJzlTWC5zyX
+    9Cskd8e9_8szA>
+X-ME-Received: <xmr:raLbYuzMm2Gy0BF1pFfnSqh59t0qoifWUiEXWS_jsOHE4kU5v3SL_Wj8Wz8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtfedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepifhr
+    vghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgf
+    ekffeifeeiveekleetjedvtedvtdeludfgvdfhteejjeeiudeltdefffefvdeinecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrh
+    horghhrdgtohhm
+X-ME-Proxy: <xmx:raLbYqO05V-_8ugduzUeFvzs83wf7vPFFwULgsOrD4JPBCi7hY27Gw>
+    <xmx:raLbYr8foFGVfKgCietIly8f9TqPJvAMsbyQ0OzAXxpTeDUU2007aw>
+    <xmx:raLbYqW6rQS9ZFtQbMEXdRRnrfBz1PAKcv5-UaKZpAkNh51VP92zRQ>
+    <xmx:rqLbYrwvTVYr2X8YUUh-ICSNMdGj3ox82XtqWvh9pHqdWYeXmjvxTw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 23 Jul 2022 03:26:37 -0400 (EDT)
+Date:   Sat, 23 Jul 2022 09:26:31 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the usb tree
+Message-ID: <Ytuip1C2LPmAxQxV@kroah.com>
+References: <20220719194337.64c490e0@canb.auug.org.au>
+ <20220719132559.3348c163@reki>
+ <YtaUYmzTfKmx0Ek0@kroah.com>
+ <20220723101428.347d941e@reki>
 MIME-Version: 1.0
-In-Reply-To: <7cd8e1f3-b4a2-8aae-7b6e-99c5ceb5f17f@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.212]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220723101428.347d941e@reki>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jul 23, 2022 at 10:14:28AM +0300, Maxim Devaev wrote:
+> On Tue, 19 Jul 2022 13:24:18 +0200
+> Greg KH <greg@kroah.com> wrote:
+> 
+> > On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote:
+> > > В Tue, 19 Jul 2022 19:43:37 +1000
+> > > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >   
+> > > > Hi all,
+> > > > 
+> > > > After merging the usb tree, today's linux-next build (htmldocs) produced
+> > > > this warning:
+> > > > 
+> > > > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WARNING: Malformed table.
+> > > > Text in column margin in table line 14.
+> > > > 
+> > > > ===========     ==============================================
+> > > > file            The path to the backing file for the LUN.
+> > > >                 Required if LUN is not marked as removable.
+> > > > ro              Flag specifying access to the LUN shall be
+> > > >                 read-only. This is implied if CD-ROM emulation
+> > > >                 is enabled as well as when it was impossible
+> > > >                 to open "filename" in R/W mode.
+> > > > removable       Flag specifying that LUN shall be indicated as
+> > > >                 being removable.
+> > > > cdrom           Flag specifying that LUN shall be reported as
+> > > >                 being a CD-ROM.
+> > > > nofua           Flag specifying that FUA flag
+> > > >                 in SCSI WRITE(10,12)
+> > > > forced_eject    This write-only file is useful only when
+> > > >                 the function is active. It causes the backing
+> > > >                 file to be forcibly detached from the LUN,
+> > > >                 regardless of whether the host has allowed it.
+> > > >                 Any non-zero number of bytes written will
+> > > >                 result in ejection.
+> > > > ===========     ==============================================
+> > > > 
+> > > > Introduced by commit
+> > > > 
+> > > >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
+> > > >   
+> > > 
+> > > Sorry. Should I send a patch?  
+> > 
+> > Yes please.
+> 
+> JFYI the patch has been sent to linux-docs@, etc. I forgot to add you to CC.
 
-
-On 2022/7/21 16:14, yekai(A) wrote:
->
->
-> On 2022/7/8 15:35, Greg KH wrote:
->> On Fri, Jul 08, 2022 at 03:08:20PM +0800, Kai Ye wrote:
->>> Define the device isolation strategy by the device driver. The
->>> user configures a frequency value by uacce interface. If the
->>> slot reset frequency exceeds the value of setting for a certain
->>> period of time, the device will not be available in user space.
->>> The time window is one hour. The VF device use the PF device
->>> isolation strategy. All the hardware errors are processed by PF
->>> driver. This solution can be used for other drivers.
->>>
->>> Signed-off-by: Kai Ye <yekai13@huawei.com>
->>> ---
->>>  drivers/crypto/hisilicon/qm.c | 163 +++++++++++++++++++++++++++++++---
->>>  include/linux/hisi_acc_qm.h   |   9 ++
->>>  2 files changed, 160 insertions(+), 12 deletions(-)
->>>
->>> diff --git a/drivers/crypto/hisilicon/qm.c
->>> b/drivers/crypto/hisilicon/qm.c
->>> index ad83c194d664..8eb3b790a655 100644
->>> --- a/drivers/crypto/hisilicon/qm.c
->>> +++ b/drivers/crypto/hisilicon/qm.c
->>> @@ -417,6 +417,16 @@ struct hisi_qm_resource {
->>>      struct list_head list;
->>>  };
->>>
->>> +/**
->>> + * struct qm_hw_err - Structure describing the device errors
->>> + * @list: hardware error list
->>> + * @timestamp: timestamp when the error occurred
->>> + */
->>> +struct qm_hw_err {
->>> +    struct list_head list;
->>> +    unsigned long long timestamp;
->>> +};
->>> +
->>>  struct hisi_qm_hw_ops {
->>>      int (*get_vft)(struct hisi_qm *qm, u32 *base, u32 *number);
->>>      void (*qm_db)(struct hisi_qm *qm, u16 qn,
->>> @@ -3410,6 +3420,111 @@ static long hisi_qm_uacce_ioctl(struct
->>> uacce_queue *q, unsigned int cmd,
->>>      return 0;
->>>  }
->>>
->>> +/**
->>> + * qm_hw_err_isolate() - Try to isolate the uacce device with its VFs
->>> + * according to user's configuration of isolation strategy. Warning:
->>> this
->>> + * API should be called while there the users on this device are
->>> suspended
->>> + * by slot resetting preparation of PCI AER.
->>> + * @qm: the uacce device
->>> + */
->>> +static int qm_hw_err_isolate(struct hisi_qm *qm)
->>> +{
->>> +    struct qm_hw_err *err, *tmp, *hw_err;
->>> +    struct qm_err_isolate *isolate;
->>> +    u32 count = 0;
->>> +
->>> +    isolate = &qm->isolate_data;
->>> +
->>> +#define SECONDS_PER_HOUR    3600
->>> +
->>> +    /* All the hw errs are processed by PF driver */
->>> +    if (qm->uacce->is_vf || isolate->is_isolate ||
->>> +        !isolate->hw_err_isolate_hz)
->>> +        return 0;
->>> +
->>> +    hw_err = kzalloc(sizeof(*hw_err), GFP_ATOMIC);
->>
->> Why atomic?  What lock is held here?
->
-> Atomic is not required. So use GFP_KERNEL.
->>
->>> +    if (!hw_err)
->>> +        return -ENOMEM;
->>> +
->>> +    mutex_lock(&isolate->isolate_lock);
->>> +    hw_err->timestamp = jiffies;
->>> +    list_for_each_entry_safe(err, tmp, &isolate->uacce_hw_errs, list) {
->>> +        if ((hw_err->timestamp - err->timestamp) / HZ >
->>> +            SECONDS_PER_HOUR) {
->>
->> No possiblity of wrapping the timestamp?
-> I do not understand this suggestion, Can you show more detail in this
-> suggestion?
->
->>
->>> +            list_del(&err->list);
->>> +            kfree(err);
->>> +        } else {
->>> +            count++;
->>> +        }
->>> +    }
->>> +    list_add(&hw_err->list, &isolate->uacce_hw_errs);
->>> +    mutex_unlock(&isolate->isolate_lock);
->>> +
->>> +    if (count >= isolate->hw_err_isolate_hz)
->>> +        isolate->is_isolate = true;
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static void qm_hw_err_destroy(struct hisi_qm *qm)
->>> +{
->>> +    struct qm_hw_err *err, *tmp;
->>> +
->>> +    mutex_lock(&qm->isolate_data.isolate_lock);
->>> +    list_for_each_entry_safe(err, tmp,
->>> &qm->isolate_data.uacce_hw_errs, list) {
->>> +        list_del(&err->list);
->>> +        kfree(err);
->>> +    }
->>> +    mutex_unlock(&qm->isolate_data.isolate_lock);
->>> +}
->>> +
->>> +static enum uacce_dev_state hisi_qm_get_isolate_state(struct
->>> uacce_device *uacce)
->>> +{
->>> +    struct hisi_qm *qm = uacce->priv;
->>> +    struct hisi_qm *pf_qm;
->>> +
->>> +    if (uacce->is_vf)
->>> +        pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
->>> +    else
->>> +        pf_qm = qm;
->>> +
->>> +    return pf_qm->isolate_data.is_isolate ?
->>> +            UACCE_DEV_ISOLATE : UACCE_DEV_NORMAL;
->>> +}
->>> +
->>> +static int hisi_qm_isolate_strategy_write(struct uacce_device *uacce,
->>> +                      u32 freq)
->>> +{
->>> +    struct hisi_qm *qm = uacce->priv;
->>> +
->>> +    /* Must be set by PF */
->>> +    if (uacce->is_vf)
->>> +        return -EINVAL;
->>
->> But the value passed to you is not invalid, something else went wrong.
->> Are you sure this is the correct error?
-> use EPERM instead of EINVAL.
->>
->>> +
->>> +    if (qm->isolate_data.is_isolate)
->>> +        return -EINVAL;
->>
->> Same here, why is this correct?
-> use EPERM instead of EINVAL.
->>
->>> +
->>> +    qm->isolate_data.hw_err_isolate_hz = freq;
->>
->> No validation of the value passed to you?  It can be anything?
-The range has been verified by the UACCE. So do not need to check again.
-
->>
->>> +
->>> +    /* After the policy is updated, need to reset the hardware err
->>> list */
->>> +    qm_hw_err_destroy(qm);
->>
->> No error checking?
-> Due to the process is clean list. So no error checking is required.
->>
->> thanks,
->>
->> greg k-h
->> .
->>
->
-> Thanks
->
-> Kai
-> .
->
-
-Thanks
-
-Kai
+Then I'll not be able to take it into my tree to fix this up :(

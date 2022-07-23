@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CC257ECAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 10:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA5E57ECB4
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 10:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237008AbiGWIQt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 23 Jul 2022 04:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S237062AbiGWIYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 04:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiGWIQq (ORCPT
+        with ESMTP id S229770AbiGWIYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 04:16:46 -0400
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA471186E3;
-        Sat, 23 Jul 2022 01:16:45 -0700 (PDT)
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id 9F0FF120EDF;
-        Sat, 23 Jul 2022 08:16:44 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id 8B1EA1A;
-        Sat, 23 Jul 2022 08:16:43 +0000 (UTC)
-Message-ID: <23290590dcf9f97187f59d655ce817a8aa658833.camel@perches.com>
-Subject: Re: [PATCH 3/4] exfat: Expand exfat_err() and co directly to pr_*()
- macro
-From:   Joe Perches <joe@perches.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-fsdevel@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
+        Sat, 23 Jul 2022 04:24:06 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8203140BDF
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 01:24:04 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a10so7782258ljj.5
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 01:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xmn9d8wzhnb5rJgQvodKI4xlV+AmvezLKvvvO2g+5Xw=;
+        b=q3rCjGjHxIsteFA+mGheCmcGphALCC5qQyvL1IWmxpnh/N/PFGUT5COeKVE2CyVQhk
+         u1ccqAadoN5RaUzUFxGnVlmNRpR4Bmug1TiVJtmttUclLGh4iV1ApGMhNXZLrmf7usKT
+         /2AWyFOtZwIOGMz3CBRAWrWxDtd7HE3/hQAFfvaKyDX+VupLFyXWF1Ys4d34FZdzkkiM
+         neZRjmR6j3q+ji+arzdGcyrx3JYPOF6wWkhJOyG8RKTbWWIf9Wo5PD7D66zztAEMVfz5
+         XCppdaNqOcPxkGnnoE4sdIkB/ecyiaek6jJot9RHHZiAGIEQJ2x/8uU+KsRDTUCUsFTq
+         9Zmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xmn9d8wzhnb5rJgQvodKI4xlV+AmvezLKvvvO2g+5Xw=;
+        b=kscwQu5RkUN8b5ZKQ9UMGmizdhSUpHOwApOk0MXUng6SUB2P9EBSbGVRWdG+QHVgFT
+         1745bTaPJ2fKrD4z+UEOh0WeGmxAyRsm9icQTRDtARkTOw6Ft1R9sLGBVnBw2xQVUQat
+         24i2y72ahq1x45bNGK7OvugLMmP10ISI82IB8LF03Q81bUjtSpmgEA1b1Tp6fwhO8XF1
+         1hvkZSNi4gM89T/TU1XxL86OXpJH4TN3dhl2YTltWdLng8WHz0nxQ5I45UxvhobbgeO2
+         YADzpNG1Z9FGFF1FtEC5GJ889pdMbKDn3kO8Gzt1ac70Y6YrT+6qfOzsuAyNW3fp2K2l
+         FPrQ==
+X-Gm-Message-State: AJIora9tdzH8Zp3tzZmfISmZKT1r9JjppTD6Jyw9Zuo+mTFPauAxHYpG
+        O1bT/fjNlEbuiyO7OAKNbgZsUQ==
+X-Google-Smtp-Source: AGRyM1sSYW8ZLNTSp/sYr7jGuU90PzmK4d+zJ/DDks0XWBPtFsmcrMWTuXSmSg0Z1dCOKCZ/lekjgQ==
+X-Received: by 2002:a2e:92c8:0:b0:25d:6ddf:e71d with SMTP id k8-20020a2e92c8000000b0025d6ddfe71dmr1166082ljh.170.1658564642591;
+        Sat, 23 Jul 2022 01:24:02 -0700 (PDT)
+Received: from krzk-bin.home (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id n22-20020a05651203f600b004886508ca5csm1545801lfq.68.2022.07.23.01.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 01:24:01 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Sat, 23 Jul 2022 01:16:42 -0700
-In-Reply-To: <87edyc2r2e.wl-tiwai@suse.de>
-References: <20220722142916.29435-1-tiwai@suse.de>
-         <20220722142916.29435-4-tiwai@suse.de>
-         <0350c21bcfdc896f2b912363f221958d41ebf1e1.camel@perches.com>
-         <87edyc2r2e.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] dt-bindings: soc: qcom: smd: reference SMD edge schema
+Date:   Sat, 23 Jul 2022 10:23:57 +0200
+Message-Id: <20220723082358.39544-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Stat-Signature: tdn6xufrza8anjua993f5owtjeb7ex3a
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 8B1EA1A
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/oHwr3Rx2pLfHMEwKBkij8cn0YKk0+wyU=
-X-HE-Tag: 1658564203-726879
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-07-23 at 10:04 +0200, Takashi Iwai wrote:
-> On Sat, 23 Jul 2022 09:42:12 +0200, Joe Perches wrote:
-> > On Fri, 2022-07-22 at 16:29 +0200, Takashi Iwai wrote:
-> > > Currently the error and info messages handled by exfat_err() and co
-> > > are tossed to exfat_msg() function that does nothing but passes the
-> > > strings with printk() invocation.  Not only that this is more overhead
-> > > by the indirect calls, but also this makes harder to extend for the
-> > > debug print usage; because of the direct printk() call, you cannot
-> > > make it for dynamic debug or without debug like the standard helpers
-> > > such as pr_debug() or dev_dbg().
-> > > 
-> > > For addressing the problem, this patch replaces exfat_msg() function
-> > > with a macro to expand to pr_*() directly.  This allows us to create
-> > > exfat_debug() macro that is expanded to pr_debug() (which output can
-> > > gracefully suppressed via dyndbg).
-> > []
-> > > diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
-> > []
-> > > @@ -508,14 +508,19 @@ void __exfat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
-> > >  #define exfat_fs_error_ratelimit(sb, fmt, args...) \
-> > >  		__exfat_fs_error(sb, __ratelimit(&EXFAT_SB(sb)->ratelimit), \
-> > >  		fmt, ## args)
-> > > -void exfat_msg(struct super_block *sb, const char *lv, const char *fmt, ...)
-> > > -		__printf(3, 4) __cold;
-> > > +
-> > > +/* expand to pr_xxx() with prefix */
-> > > +#define exfat_msg(sb, lv, fmt, ...) \
-> > > +	pr_##lv("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
-> > > +
-> > >  #define exfat_err(sb, fmt, ...)						\
-> > > -	exfat_msg(sb, KERN_ERR, fmt, ##__VA_ARGS__)
-> > > +	exfat_msg(sb, err, fmt, ##__VA_ARGS__)
-> > >  #define exfat_warn(sb, fmt, ...)					\
-> > > -	exfat_msg(sb, KERN_WARNING, fmt, ##__VA_ARGS__)
-> > > +	exfat_msg(sb, warn, fmt, ##__VA_ARGS__)
-> > >  #define exfat_info(sb, fmt, ...)					\
-> > > -	exfat_msg(sb, KERN_INFO, fmt, ##__VA_ARGS__)
-> > > +	exfat_msg(sb, info, fmt, ##__VA_ARGS__)
-> > > +#define exfat_debug(sb, fmt, ...)					\
-> > > +	exfat_msg(sb, debug, fmt, ##__VA_ARGS__)
-> > 
-> > I think this would be clearer using pr_<level> directly instead
-> > of an indirecting macro that uses concatenation of <level> that
-> > obscures the actual use of pr_<level>
-> > 
-> > Either: (and this first option would be my preference)
-> > 
-> > #define exfat_err(sb, fmt, ...) \
-> > 	pr_err("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
-> > #define exfat_warn(sb, fmt, ...) \
-> > 	pr_warn("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
-> > etc...
-> 
-> IMO, it's a matter of taste, and I don't mind either way.
-> Just let me know.
-> 
-> > or using an indirecting macro:
-> > 
-> > #define exfat_printk(pr_level, sb, fmt, ...)	\
-> > 	pr_level("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
-> 
-> Is pr_level() defined anywhere...?
+The child node of smd is an SMD edge representing remote subsystem.
+Bring back missing reference from previously sent patch (disappeared
+when applying).
 
-no
+Link: https://lore.kernel.org/r/20220517070113.18023-9-krzysztof.kozlowski@linaro.org
+Fixes: 385fad1303af ("dt-bindings: remoteproc: qcom,smd-edge: define re-usable schema for smd-edge")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-$ git grep -w pr_level
-$ 
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml
+index 62bebb5f83bc..9b3efe97f47c 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml
+@@ -21,7 +21,7 @@ properties:
+ 
+ patternProperties:
+   "^.*-edge|rpm$":
+-    type: object
++    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
+     description:
+       Each subnode of the SMD node represents a remote subsystem or a remote
+       processor of some sort - or in SMD language an "edge". The name of the
+-- 
+2.34.1
 

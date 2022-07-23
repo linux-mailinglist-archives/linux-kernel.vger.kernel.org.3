@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3298E57EBBD
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 05:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FAF57EBCD
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 05:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbiGWDoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 23:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S236017AbiGWD5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 23:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGWDo2 (ORCPT
+        with ESMTP id S229469AbiGWD5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 23:44:28 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2F977A7C;
-        Fri, 22 Jul 2022 20:44:27 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id DE2435C00A8;
-        Fri, 22 Jul 2022 23:44:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 22 Jul 2022 23:44:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1658547866; x=1658634266; bh=9EVYFQs3TfjexPazUkgkLFWSM4eN+61vSya
-        zDvU3JXY=; b=RcBEtNP8oYQgdE7PhROvqMVJnmJebGH9Dxpv/SnrKBJk1fDlr1v
-        fZgw30SFvmeZbNGJCV3k5YwBly3Ik0M5cDx8Si33qIyKNg3uaG3xPQ27/+JLvfwS
-        VvDy4Lenhc8igbigKtRiQmg+ojnjnyDBG70Ueo8OZZhsXioKaMQgnZYR3erfwXKZ
-        rqUOS2AAMVbPvQ2pxBxKdtercd7sXCV2I/gxt+dlI92XaawMv+aIsENFQX8/sRNT
-        3f9mHVsKt/XthsHhiCjnjdaQBK0uOHYF/v1pC48hzRv+YRYgCI149TP8GmugOypp
-        r/DzRapvNBkF7KsXTlR6Ni+4re4tD7/ytQQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1658547866; x=1658634266; bh=9EVYFQs3Tfjex
-        PazUkgkLFWSM4eN+61vSyazDvU3JXY=; b=Y/A0P4Tc/sW0dbP6uJYXE3eVZJQ1E
-        rtbAL/RtaQhhliRjoxxYyHKVGpxcAmDpAf8n4bT73/d3kbJuRaBKPrxMh9K38E35
-        1OB+14RaUsVux01fx9FB7JNlmUh2JAsxuTuDRxrG03ALZr5TDJJpcu7lxoZAhDKU
-        dDX90LldNTeBcW3qttqZTPZ+FKDP4dtQiLqPw5p8pqshnMw9f4Yy6XZ18B+iwLYT
-        2Z+LjCQabPi4MftzQmGj4x5lOGsGpnCJR/KbCVp06fgumYWD9CLvqakJN1VRt1+N
-        kw7HhV5ZSM1h/nLn3PCbXt6hz4gGaPD9swFyB155/cA8q1QfBpGBjwo9w==
-X-ME-Sender: <xms:mm7bYlifrfwiqP6Eofstz2tcMXFdkTOkxhITL8mHS9UcKjaFmy57hg>
-    <xme:mm7bYqAELBC_seMCrcWT8S8O8keJhKCneeFAybJbTFbOH_yQR38J3CvtJKljGdz7_
-    jQLLT9wG6M-5kQ>
-X-ME-Received: <xmr:mm7bYlEQxmkJOAc7QR7nP_jXVY3f4lE8BTfs4G-3uOlT3RXMVm4ELAF2YSgrJwzPvBrycRtOtZ5s>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtfedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepjeffjefggfeugeduvedvjeekgfeh
-    gffhhfffjeetkeelueefffetfffhtdduheetnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:mm7bYqQkjYnHgxLSmK1-Qd4BoLcndVGukJH4M1hB-NMEiHzvkp5cZw>
-    <xmx:mm7bYiy2d5v7Wz8YC3woQOpp0ZjG0XaUBTSnAd3rf3nBm2zazrUsfg>
-    <xmx:mm7bYg61GlnDmWZrIuw5t9cmmRguh4_ET4UkGLaFcHu4pHoCbbbDpw>
-    <xmx:mm7bYpq0QN_InW8uGxoBnzhUmlI6S7nf-JBWwIoEaSvSVGmXzXakXg>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 Jul 2022 23:44:26 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH 4.9] Ignore failure to unmap -1
-Date:   Fri, 22 Jul 2022 23:44:11 -0400
-Message-Id: <20220723034415.1560-2-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220723034415.1560-1-demi@invisiblethingslab.com>
-References: <20220723034415.1560-1-demi@invisiblethingslab.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 22 Jul 2022 23:57:15 -0400
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B43AC74DDA;
+        Fri, 22 Jul 2022 20:57:12 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [106.117.76.127])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCHbah+cdtiivhQAQ--.2627S2;
+        Sat, 23 Jul 2022 11:56:57 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net] netrom: fix sleep in atomic context bugs in timer handlers
+Date:   Sat, 23 Jul 2022 11:56:46 +0800
+Message-Id: <20220723035646.29857-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCHbah+cdtiivhQAQ--.2627S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrW5AFW8AF4kuFWxKw17ZFb_yoW8GrWfpF
+        WxKF9IyF4qqw1UA3ykGw48u34Yvw1rJF4UC34v9r4Fy3s0qryDJFWjkFWjqF4v9rWxWayY
+        qFs0vw1UJF12yFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r48
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb2g4DUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgkAAVZdtay7fgACsf
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Upstream commit 166d3863231667c4f64dee72b77d1102cdfad11f ]
+There are sleep in atomic context bugs in timer handlers of netrom
+such as nr_t1timer_expiry(), nr_t2timer_expiry(), nr_heartbeat_expiry(),
+nr_idletimer_expiry() and so on.
 
-The error paths of gntdev_mmap() can call unmap_grant_pages() even
-though not all of the pages have been successfully mapped.  This will
-trigger the WARN_ON()s in __unmap_grant_pages_done().  The number of
-warnings can be very large; I have observed thousands of lines of
-warnings in the systemd journal.
+The root cause is kmemdup() with GFP_KERNEL parameter that may sleep
+could be called by different timer handlers which is in interrupt context.
 
-Avoid this problem by only warning on unmapping failure if the handle
-being unmapped is not -1.  The handle field of any page that was not
-successfully mapped will be -1, so this catches all cases where
-unmapping can legitimately fail.
+One of the call paths that could trigger bug is shown below:
 
-Suggested-by: Juergen Gross <jgross@suse.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
-Fixes: 36cd49b071fc ("xen/gntdev: Avoid blocking in unmap_grant_pages()")
+      (interrupt context)
+nr_heartbeat_expiry
+  nr_write_internal
+    nr_transmit_buffer
+      nr_route_frame
+        nr_add_node
+          kmemdup(..,GFP_KERNEL) //may sleep
+
+This patch changes gfp_t parameter of kmemdup in nr_add_node()
+from GFP_KERNEL to GFP_ATOMIC in order to prevent sleep in atomic
+context bugs.
+
+Fixes: eafff86d3bd8 ("[NETROM]: Use kmemdup")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 ---
- drivers/xen/gntdev.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/netrom/nr_route.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
-index 2c3248e71e9c1a3e032b847d177b02855cdda1a1..a6585854a85fc6fffc16c3498ba73fbee84ad6ca 100644
---- a/drivers/xen/gntdev.c
-+++ b/drivers/xen/gntdev.c
-@@ -390,7 +390,8 @@ static void __unmap_grant_pages_done(int result,
- 	unsigned int offset = data->unmap_ops - map->unmap_ops;
- 
- 	for (i = 0; i < data->count; i++) {
--		WARN_ON(map->unmap_ops[offset+i].status);
-+		WARN_ON(map->unmap_ops[offset+i].status &&
-+			map->unmap_ops[offset+i].handle != -1);
- 		pr_debug("unmap handle=%d st=%d\n",
- 			map->unmap_ops[offset+i].handle,
- 			map->unmap_ops[offset+i].status);
+diff --git a/net/netrom/nr_route.c b/net/netrom/nr_route.c
+index baea3cbd76c..1ddcf13de6a 100644
+--- a/net/netrom/nr_route.c
++++ b/net/netrom/nr_route.c
+@@ -163,7 +163,7 @@ static int __must_check nr_add_node(ax25_address *nr, const char *mnemonic,
+ 		if (ax25_digi != NULL && ax25_digi->ndigi > 0) {
+ 			nr_neigh->digipeat = kmemdup(ax25_digi,
+ 						     sizeof(*ax25_digi),
+-						     GFP_KERNEL);
++						     GFP_ATOMIC);
+ 			if (nr_neigh->digipeat == NULL) {
+ 				kfree(nr_neigh);
+ 				if (nr_node)
 -- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+2.17.1
+

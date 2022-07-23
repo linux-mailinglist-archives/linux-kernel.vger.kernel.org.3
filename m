@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A78057F0DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 20:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7AF57F0E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 20:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbiGWSDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 14:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S237514AbiGWSGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 14:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbiGWSDE (ORCPT
+        with ESMTP id S232265AbiGWSGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 14:03:04 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BFE1C105
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 11:03:03 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so5623618otb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 11:03:03 -0700 (PDT)
+        Sat, 23 Jul 2022 14:06:38 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3D518E3F
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 11:06:37 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id r14so8756490ljp.2
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 11:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WRkur15cbv2HIRYMbArrqhaeelLjJmhq/Gio5OxAhMU=;
-        b=vKqum8N5wk9gptsVz7o8RIiAdEXUKXMBQNvEvreDqVM/baoLBDBQJBI65vl3WuSb+I
-         DJKkdkk0RQo6H1sjx/pwRFKPve8lcdtPSw3gxtgSEfhkJOivIwXBnv45rAj+8Qa1dbn/
-         t0fcZMabvbysnT0cxCPMbFtwiO2qmQNVWUtG7ftvdTH4/nHWXrRM0lzuFch76fQ+yBE0
-         JDwSYP831pH2xIpreBPqvRm3MpG7daYRQEeho/+09tNU+3P6vvjA9d6nsl8mV3/AILWV
-         xxi7QV1RnxZle4/pAt6w731MAOSnQIgB5gDAwRFhRzYZgKqiMYnYOIdvqoKnWbXtA5sm
-         aguA==
+        bh=xE6PfpX9DPBqVU42t03L6pTGjzCn9yf1x5xibIRYZmI=;
+        b=PAMBYrAuqOWSquLIq2jwj49iBHeaVmdqTfwb5J/hVRlrMG5QzPGoA9DLNyoM5ztf5p
+         F/A7h1kGKMOu9rKXRJln9IRSEINPnmQWKDD4UX7vm9DT1lm29SsR42omhWU3nr1Xdn3U
+         X28Brm9lmwdTO1gJRPF1khOnZ9qAbc4U6SST5moUdcfOK1XBqAlaJG+X7XsY8ekN39Qa
+         v7ATtmIHrhVRXU0TZ4Ypq4/0nCnBmEHMJf5/UgWjq18PQWMsLGd9oWjqoH4/25p3K400
+         KKqrZiJQHwqcCm3lFX/BTTYO7uy9YPx0HJbDg/kKFVlDvZ701lnsgvnPmnk3gZP3NKhB
+         F86Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=WRkur15cbv2HIRYMbArrqhaeelLjJmhq/Gio5OxAhMU=;
-        b=cLPr5Et4Hm9CcxQKKJ+PbN2EIdLTpnCOkpVJZf0x2rbQtALldjLe4r1at6qvX/m6C9
-         Qw+gF8pZpLQ/DUhhCwTkDxeeg7YHFQPuexV6sIddNROLf59yxWrpoQRA3aiJM8O3LMp4
-         oRoj4X96hxI791izUkUBYr1pRjekudeT8IDnfKRxaAb+VSlX7Iz7XV0+sY2Tf4HmMZhP
-         /JGtWvddyM6f7t0GXOYP5CdWwaBKXNVMj/uceeKXQcf3tYZXb3yDtiCyDBSywSU6wmsC
-         UemaRY0DbnB2Ts5WgnH4ySia8qc1dFA5sRpvSCFdetyFWdC9PbTTHdzS2IsQN0Gl+AtF
-         eX5Q==
-X-Gm-Message-State: AJIora9VEssiH5Sueirh9Lx6eHYRDVELiHT1snueXgka60qA5+KaSrTV
-        GCJLkCRY5uQw5B2yUTLIW7j4smr2fooUEQ==
-X-Google-Smtp-Source: AGRyM1vQwRGJ757Q54Are2CStWkmm2lHzMgkZG0ii3Tau5E/b72lokV43KOPWQwORtJM4t/7uWu5Ug==
-X-Received: by 2002:a05:6830:d13:b0:618:b519:5407 with SMTP id bu19-20020a0568300d1300b00618b5195407mr2097718otb.219.1658599383072;
-        Sat, 23 Jul 2022 11:03:03 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.75.211])
-        by smtp.gmail.com with ESMTPSA id n132-20020acaef8a000000b00335cad84fe9sm3062445oih.29.2022.07.23.11.03.00
+        bh=xE6PfpX9DPBqVU42t03L6pTGjzCn9yf1x5xibIRYZmI=;
+        b=F83R3HVYxinXBylU6sy3mmDz+nwd/TRxEI6EGlXyLKBKA3ktr8GlzekTNSVp47UrEv
+         mkbwM/2bBeZ4JHACU5YwwjKIW7F0g7nyStDA6p2h9BBPbHof3rAPDV5dPFiFHgjcABSE
+         UgOnshNNNQPN8M1nzdfS7D7EBZQQT4MoehW+8jb1tJMDRUNkxxLMAAiZNgB7tnPBvIVE
+         H6piw3iYRszJyFrJ6fHo1mSq7WxyOKtHHhNQhVKaDAIA74scZXVFHyOPnyJ3SIK4h0Nb
+         BK8q+AFHPf0qQO7pJ5BJ6gPwArH5Ved7b/M4CgYUeqIdMRa1OsoEj8xPgsSc8Enwv05y
+         xYew==
+X-Gm-Message-State: AJIora/8H7HVQbPPbuC94TGk5orl7ymE6qdpTL7Qfj+I/ESnd2E5h+ZP
+        TUi6onfFjiP+XulnagtcvfxbAQ==
+X-Google-Smtp-Source: AGRyM1v6qpIaJNGUb/yO7sFCtnP37Miy/u2XDkyAqNEfeXL2MtAJZr14lu+suanBtLzkxy+tyHOP/Q==
+X-Received: by 2002:a2e:9e1a:0:b0:25d:f9db:92f7 with SMTP id e26-20020a2e9e1a000000b0025df9db92f7mr1093961ljk.243.1658599595304;
+        Sat, 23 Jul 2022 11:06:35 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id q6-20020a0565123a8600b00489de206812sm1745826lfu.151.2022.07.23.11.06.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 11:03:01 -0700 (PDT)
-Message-ID: <26338676-278d-3cb3-2622-fa89ea79ada4@linaro.org>
-Date:   Sat, 23 Jul 2022 13:03:00 -0500
+        Sat, 23 Jul 2022 11:06:34 -0700 (PDT)
+Message-ID: <0af4796b-701b-dd3c-7fb5-57f3b20b40c0@linaro.org>
+Date:   Sat, 23 Jul 2022 20:06:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 5.10 000/148] 5.10.133-rc1 review
+Subject: Re: [PATCH v3 2/5] spi: dt-bindings: add documentation for
+ hpe,gxp-spifi
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220723095224.302504400@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220723095224.302504400@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     nick.hawkins@hpe.com
+Cc:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
+References: <20220722214920.40485-1-nick.hawkins@hpe.com>
+ <20220722214920.40485-3-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220722214920.40485-3-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -77,115 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 23/07/22 04:53, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.133 release.
-> There are 148 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 22/07/2022 23:49, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> Responses should be made by Mon, 25 Jul 2022 09:50:18 +0000.
-> Anything received after that time might be too late.
+> Create documentation for the hpe,gxp-spifi binding to support access to
+> the SPI parts
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.133-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 > 
-> thanks,
+> ---
+> v3:
+>  *Fix indentation
+> v2:
+>  *Removed extra space around < > for reg
+>  *Changed interrupt-parrent to interrupt-parent
+> ---
+>  .../bindings/spi/hpe,gxp-spifi.yaml           | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
 > 
-> greg k-h
+> diff --git a/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> new file mode 100644
+> index 000000000000..09b0c3fa5ec1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/hpe,gxp-spifi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP spi controller flash interface
+> +
+> +maintainers:
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +  - Jean-Marie Verdun <verdun@hpe.com>
+> +
+> +allOf:
+> +  - $ref: "spi-controller.yaml#"
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.133-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 00d1152b116251d5f40936f24f9ef31f52eba544
-* git describe: v5.10.132-149-g00d1152b1162
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.132-149-g00d1152b1162
-
-## No test regressions (compared to v5.10.132)
-
-## No metric regressions (compared to v5.10.132)
-
-## No test fixes (compared to v5.10.132)
-
-## No metric fixes (compared to v5.10.132)
-
-## Test result summary
-total: 138017, pass: 124391, fail: 610, skip: 12308, xfail: 708
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 308 total, 308 passed, 0 failed
-* arm64: 62 total, 60 passed, 2 failed
-* i386: 52 total, 50 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 54 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
+What about my comment here?
 
 
-Greetings!
 
-Daniel Díaz
-daniel.diaz@linaro.org
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

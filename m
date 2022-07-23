@@ -2,92 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBF957EFC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EED57EFC4
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbiGWOgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 10:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S238288AbiGWOjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 10:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238214AbiGWOgJ (ORCPT
+        with ESMTP id S238452AbiGWOjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 10:36:09 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F4EDF44;
-        Sat, 23 Jul 2022 07:36:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1658586938; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=P14KMg7Zc246bVkhisdefrW6lxfNpldYDDzSVYqK0RNGk9phCJMo14SjMus4YHD71M+5L2KIkmKCotIBvpC75T1AV0i/xtcICFJGXTWecTOBXJJ1dF/pG8KgRV7i1n/G/MOCTYB3TdJ09BvyjejLMcRnvVEubEF7XMSqSBdlUvc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1658586938; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=+F8VEZ1Z9Pj1QEwW5vQk6MFoPQK/TpHHEams4IFBR5o=; 
-        b=FxX9ttl/jntH3qcSUk2myZJl+keN4fVeE4RmdRYUXjqmBShsPp5xdWWBJO8yV7vMbAQuVqi7IPRVCQSdDEspii/9GPc30fxqNgmvcYD6QR4ZtlanEvi32HmoflggMi5YW4yZpa1aKalHoe4nLyMSQbg9FqmEws7cx0Q9V+2qtSA=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658586938;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=+F8VEZ1Z9Pj1QEwW5vQk6MFoPQK/TpHHEams4IFBR5o=;
-        b=KbKtqbecy0QVLwF36Avuvq0fq3nBQzaO+KqXMun669P08qJxDt7fvskseBUZ4R7t
-        cTs6071CJGosVhZvQ8XdOnOXoaVh2LQncYcURGrR/WZQY3cuz8PAOwLIH98iv85dnFb
-        VFUYNXf4lA5olE3VDQVY+gjJ0JHKYPDTkaOu+WPU=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 165858692779635.69655596083135; Sat, 23 Jul 2022 20:05:27 +0530 (IST)
-Date:   Sat, 23 Jul 2022 20:05:27 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     "David Howells" <dhowells@redhat.com>,
-        "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "James Morris" <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-security-modules" <linux-security-module@vger.kernel.org>,
-        "keyrings" <keyrings@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <1822b7c129a.14411444236159.6380883938307880248@siddh.me>
-In-Reply-To: <YtwAHGISvlgXgXZM@kroah.com>
-References: <20220723135035.199188-1-code@siddh.me> <YtwAHGISvlgXgXZM@kroah.com>
-Subject: Re: [PATCH] keys/keyctl: Use kfree_rcu instead of kfree
+        Sat, 23 Jul 2022 10:39:14 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA5315A1A
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 07:39:13 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id c14-20020a056e020bce00b002dd1cb7ce4dso2923645ilu.22
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 07:39:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=iiJ9q/IhJM4GZC/IZGK4lpPpea/vBzanjxDRvbBYUcs=;
+        b=HnYQSh1tOf6dWvJ8XorK1cWh7rvvZ+vE/027DxbveST81qQCf3PdjIQR3IEvq+W/fJ
+         BaWomrPeNf7GCgB560q2kOuwkYr/vpiQ1A4SYEbDjXT++3kdvvUR27aoYjeJHc7iQJfK
+         9MfvF6Y3a48B8DQcl4bs08KILIVPHjfNz85CVgSQYh6hDoOGIbf9alzc+UO/T98h4SWl
+         5ba1IsWi/fqzg9oWBa3qKLUub+vpVe4T+W2/CBNMD8mITL4kcZ7NbAjaIf38r6fm0Nd8
+         vbEqh0EXRIfQC9chVEEQTglZUUT85bC3z3OI8TJoPbFae2I30CWh8DXFAE3M/kkDbMTh
+         n9UA==
+X-Gm-Message-State: AJIora9Z39l3s+uIqLnsBMR1qSvMZ84diEV4iaUEdbowGZXQ+ESKd6N2
+        DE6VbcF447nEC92mg5SfDXfSugrwUW3F+ozh/FBKwtcGgumL
+X-Google-Smtp-Source: AGRyM1taDDCQcUyRo7MBM1NrUg2fD+i1YBlVB3WV4pC0B1mBPapFN//TimwiqEu8Qs1BqCgtwsjuysJdUEuqToYYcBVN3AdN83DF
 MIME-Version: 1.0
+X-Received: by 2002:a05:6638:1a08:b0:33f:4b10:1958 with SMTP id
+ cd8-20020a0566381a0800b0033f4b101958mr1904951jab.220.1658587152490; Sat, 23
+ Jul 2022 07:39:12 -0700 (PDT)
+Date:   Sat, 23 Jul 2022 07:39:12 -0700
+In-Reply-To: <20220723142031.2316-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000dac0205e479ea39@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in post_one_notification
+From:   syzbot <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 23 Jul 2022 19:35:16 +0530  Greg KH <gregkh@linuxfoundation.org> wrote:
-> That does not explain why this change is needed.  What problem does this
-> solve?  Why use RCU if you don't have to?  What functionality did you
-> just change in this commit and why?
+Hello,
 
-We can avoid a race condition wherein some process tries to access them while
-they are being freed. For instance, the comment on `watch_queue_clear()` also
-states that:
-        /*
-         * Remove all the watches that are contributory to a queue.  This has the
-         * potential to race with removal of the watches by the destruction of the
-         * objects being watched or with the distribution of notifications.
-         */
-And an RCU read critical section is initiated in that function, so we should
-use kfree_rcu() to not unintentionally free it while it is in the critical
-section.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> And how was this tested?
+Reported-and-tested-by: syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com
 
-It compiles locally for me, and I used syzbot on this along with testing the
-other `watch_queue_clear` patch, which generated no errors.
+Tested on:
 
-Thanks,
-Siddh
+commit:         551acdc3 Merge tag 'net-5.17-final' of git://git.kerne..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=133a814a080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e006319d4b3bc11a
+dashboard link: https://syzkaller.appspot.com/bug?extid=c70d87ac1d001f29a058
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13b8c83c080000
+
+Note: testing is done by a robot and is best-effort only.

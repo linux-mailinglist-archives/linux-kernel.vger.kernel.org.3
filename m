@@ -2,96 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499CD57EC9F
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 10:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C999B57ECA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 10:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbiGWIAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 04:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S231783AbiGWIEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 04:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiGWIAJ (ORCPT
+        with ESMTP id S230217AbiGWIEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 04:00:09 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6B41DF
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 01:00:06 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id bh13so6155922pgb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 01:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+lfnDOjXhW7oeG1YfdtLm2gXojFDgdLapEjPNrm2eGM=;
-        b=P+d5RjY4Kh2suZ/56c+y0VXrKklcrHEDMb74mAOWHVESlUV9kC1/+NnMJDrPi0kDrr
-         iE4UITe/OxQnb8eRCcuSEl0YOPU5qxu93RdJD2PQW+l3gu/wTpLDE9UDh+2IA4RM4jAo
-         lTKrtTxgOkfLS44KLNaNMGS2t9dVZhBdigo8TCgODn3/96rKJLG4wcwPL6HtGhlEZpqJ
-         xyMbhQOG3V9mscZalmDhjely9aVDLWVoO7R0r06NS/NrrRqGYzvrSTpPR0nstKdkFMPg
-         3ArlREqd9fLo6bEvySQBWNDYD20Hts96q5OtrjQTM0qNyotZZdlGKrmIRdE3NwN4Ddpc
-         Ae5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+lfnDOjXhW7oeG1YfdtLm2gXojFDgdLapEjPNrm2eGM=;
-        b=TV59NIa9A/2j6oq4jQcZ3QJPwf6zBDMBiQOOpXPTbLO4RH9lhfGLm5zBPxDaSd/vy1
-         Mgju4Yu+cG7tDhjokqKMSa1czi4zJ0wbU1KBHeACbyJ1yY44MDLQ6h/VDYQ5b4H7ut8Z
-         ljIep1BZDVXNcKAW1Z0fPAjCAOFx8uu/uZT01Mu7tgorh+XCROjSJGbfRQiTDOIMAUAs
-         cB75F0V/F85u2Uva7+cea2XkSyGXgF1VRCJXI1bD7ptAg9YQ1yKYMj2OH/Hwe5ryOuKM
-         Qgasdnu5AdPft74VuX1oPKIvg4s2stc0+3smju61aUWuB+8cuQBY2HzQ3uo+QTa8irMb
-         8p2g==
-X-Gm-Message-State: AJIora/HhtcbjkuifKtqwinWgWtGo5mo2YRVD4mS/e91IvwdLd0qwmUi
-        5R3NAMDZoJqvQ/8RvF9+dXk=
-X-Google-Smtp-Source: AGRyM1s1LPV6UAsJk1cWI9v18U6ylR2x3JT4IywPniYlyfHVl9UFa45nZNpShuvzDO3wWgVixEMRew==
-X-Received: by 2002:a65:6c05:0:b0:41a:d13f:f0fb with SMTP id y5-20020a656c05000000b0041ad13ff0fbmr1070388pgu.393.1658563205817;
-        Sat, 23 Jul 2022 01:00:05 -0700 (PDT)
-Received: from localhost.localdomain ([223.79.193.31])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa7970f000000b00525302fe9c4sm5245646pfg.190.2022.07.23.01.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 01:00:05 -0700 (PDT)
-From:   John Sanpe <sanpeqf@gmail.com>
-To:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        John Sanpe <sanpeqf@gmail.com>
-Subject: [PATCH] lib/lru_cache: Fixed array overflow caused by incorrect boundary handling.
-Date:   Sat, 23 Jul 2022 15:59:31 +0800
-Message-Id: <20220723075931.163245-1-sanpeqf@gmail.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sat, 23 Jul 2022 04:04:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493BD15FE1;
+        Sat, 23 Jul 2022 01:04:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BC130386FE;
+        Sat, 23 Jul 2022 08:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658563449; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y9QhawCkHKsCiHHgfi8GWHnlEnHkEPLxtn8NZEM6LSY=;
+        b=utorI0k/pk3RICH03mAA2PG7LoWXNki4Wi1Qrk/0iwrxbkp9KhsQGOSD8WnSbqQP1yXRac
+        +zqoKEL7F2e3viCe4EZrqmtlj6sbUspVcOiNzX5XJiUopUp3uW7vSv06RSGtkOhrRgsnxO
+        vm4e2/vgXM3oym6T5QsC0/SaOrV4Iac=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658563449;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y9QhawCkHKsCiHHgfi8GWHnlEnHkEPLxtn8NZEM6LSY=;
+        b=te239ay+Rhoi2TvqvwNKOjFkS/95RSnnF7C5ErBWDMbKuwQrCOFht9hnIUwhMdwjmHFzu0
+        XD3j5amzFiiJAmCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 95BB913A92;
+        Sat, 23 Jul 2022 08:04:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IqbJI3mr22IyFAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 23 Jul 2022 08:04:09 +0000
+Date:   Sat, 23 Jul 2022 10:04:09 +0200
+Message-ID: <87edyc2r2e.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-fsdevel@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] exfat: Expand exfat_err() and co directly to pr_*() macro
+In-Reply-To: <0350c21bcfdc896f2b912363f221958d41ebf1e1.camel@perches.com>
+References: <20220722142916.29435-1-tiwai@suse.de>
+        <20220722142916.29435-4-tiwai@suse.de>
+        <0350c21bcfdc896f2b912363f221958d41ebf1e1.camel@perches.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This problem occurs when malloc element failed on the first time.
-At this time, the counter i is 0. When it's released, we subtract 1
-in advance without checking, which will cause i to become UINT_MAX,
-resulting in array overflow.
+On Sat, 23 Jul 2022 09:42:12 +0200,
+Joe Perches wrote:
+> 
+> On Fri, 2022-07-22 at 16:29 +0200, Takashi Iwai wrote:
+> > Currently the error and info messages handled by exfat_err() and co
+> > are tossed to exfat_msg() function that does nothing but passes the
+> > strings with printk() invocation.  Not only that this is more overhead
+> > by the indirect calls, but also this makes harder to extend for the
+> > debug print usage; because of the direct printk() call, you cannot
+> > make it for dynamic debug or without debug like the standard helpers
+> > such as pr_debug() or dev_dbg().
+> > 
+> > For addressing the problem, this patch replaces exfat_msg() function
+> > with a macro to expand to pr_*() directly.  This allows us to create
+> > exfat_debug() macro that is expanded to pr_debug() (which output can
+> > gracefully suppressed via dyndbg).
+> []
+> > diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
+> []
+> > @@ -508,14 +508,19 @@ void __exfat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
+> >  #define exfat_fs_error_ratelimit(sb, fmt, args...) \
+> >  		__exfat_fs_error(sb, __ratelimit(&EXFAT_SB(sb)->ratelimit), \
+> >  		fmt, ## args)
+> > -void exfat_msg(struct super_block *sb, const char *lv, const char *fmt, ...)
+> > -		__printf(3, 4) __cold;
+> > +
+> > +/* expand to pr_xxx() with prefix */
+> > +#define exfat_msg(sb, lv, fmt, ...) \
+> > +	pr_##lv("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+> > +
+> >  #define exfat_err(sb, fmt, ...)						\
+> > -	exfat_msg(sb, KERN_ERR, fmt, ##__VA_ARGS__)
+> > +	exfat_msg(sb, err, fmt, ##__VA_ARGS__)
+> >  #define exfat_warn(sb, fmt, ...)					\
+> > -	exfat_msg(sb, KERN_WARNING, fmt, ##__VA_ARGS__)
+> > +	exfat_msg(sb, warn, fmt, ##__VA_ARGS__)
+> >  #define exfat_info(sb, fmt, ...)					\
+> > -	exfat_msg(sb, KERN_INFO, fmt, ##__VA_ARGS__)
+> > +	exfat_msg(sb, info, fmt, ##__VA_ARGS__)
+> > +#define exfat_debug(sb, fmt, ...)					\
+> > +	exfat_msg(sb, debug, fmt, ##__VA_ARGS__)
+> 
+> I think this would be clearer using pr_<level> directly instead
+> of an indirecting macro that uses concatenation of <level> that
+> obscures the actual use of pr_<level>
+> 
+> Either: (and this first option would be my preference)
+> 
+> #define exfat_err(sb, fmt, ...) \
+> 	pr_err("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+> #define exfat_warn(sb, fmt, ...) \
+> 	pr_warn("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
+> etc...
 
-Signed-off-by: John Sanpe <sanpeqf@gmail.com>
----
- lib/lru_cache.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+IMO, it's a matter of taste, and I don't mind either way.
+Just let me know.
 
-diff --git a/lib/lru_cache.c b/lib/lru_cache.c
-index 52313acbfa62..04d95de92602 100644
---- a/lib/lru_cache.c
-+++ b/lib/lru_cache.c
-@@ -147,7 +147,7 @@ struct lru_cache *lc_create(const char *name, struct kmem_cache *cache,
- 		return lc;
- 
- 	/* else: could not allocate all elements, give up */
--	for (i--; i; i--) {
-+	while (i--) {
- 		void *p = element[i];
- 		kmem_cache_free(cache, p - e_off);
- 	}
--- 
-2.36.1
+> or using an indirecting macro:
+> 
+> #define exfat_printk(pr_level, sb, fmt, ...)	\
+> 	pr_level("exFAT-fs (%s): " fmt "\n", (sb)->s_id, ##__VA_ARGS__)
 
+Is pr_level() defined anywhere...?
+
+> 
+> and btw, there are multiple uses of exfat_<level> output with a
+> unnecessary and duplicated '\n' that the macro already adds that
+> should be removed:
+> 
+> $ git grep -P -n '\bexfat_(err|warn|info).*\\n' fs/exfat/
+> fs/exfat/fatent.c:334:                  exfat_err(sb, "sbi->clu_srch_ptr is invalid (%u)\n",
+> fs/exfat/nls.c:674:                     exfat_err(sb, "failed to read sector(0x%llx)\n",
+> fs/exfat/super.c:467:           exfat_err(sb, "bogus sector size bits : %u\n",
+> fs/exfat/super.c:476:           exfat_err(sb, "bogus sectors bits per cluster : %u\n",
+
+Right, that should be addressed in another patch.
+
+
+thanks,
+
+Takashi

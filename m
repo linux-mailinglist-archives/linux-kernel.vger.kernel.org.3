@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC39757F004
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05F757F001
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237402AbiGWPQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 11:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34112 "EHLO
+        id S234203AbiGWPQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 11:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237617AbiGWPQF (ORCPT
+        with ESMTP id S234469AbiGWPQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 11:16:05 -0400
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A90F12AAE
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 08:16:03 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id FGr4o1zigAZYmFGr4oQ8Sf; Sat, 23 Jul 2022 17:16:01 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 23 Jul 2022 17:16:01 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <c522ee04-4183-c2ff-8c35-ce2bbbc1bc95@wanadoo.fr>
-Date:   Sat, 23 Jul 2022 17:15:46 +0200
+        Sat, 23 Jul 2022 11:16:34 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A051116C
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 08:16:33 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id r24so5398502qtx.6
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 08:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1YtoaxKMgqFbgqvJGmE9UgUWogTVn2ODlS5NDKP18O4=;
+        b=l70Mjul+h5Radj6oYylQbwVHGY3QUu7zaSKdRfgIGh0bM0TzCyjqOhUar6wHErd6EX
+         t5Bm0eJw4hItL8gAg+3Z12HnzpdvlWWBJ+84BbqL+VxgCpMq4rLb7uA4PUPeABcOX3CN
+         yiXg8uBQzgmRLG8m7/c5+XCPbIJDEBv+OkDC+peI5Gze3/5JN9ORxzhaP9/d0XInj+No
+         vrjxrQuwX3nv97nExdt+/UfxJycoa69OoiQNamE7+6nTQeuunvFHMk2+D4uL4rg8NQDk
+         4UxLEdNBHUsZz3K2MXZbFW3/mwWmWrs36Axtnc3iKq/0AO6xTeDxiYArdfmzwroYFE79
+         MIVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1YtoaxKMgqFbgqvJGmE9UgUWogTVn2ODlS5NDKP18O4=;
+        b=1i5ZcXgAR6hG2UXg0NGTN3x4XhdTN5P2yL3I+csPN/ZqIZCgyYG38nwGsF5E7wd2BN
+         hcIjUYpSThxRry6W9NIo7972PMTeLmjY7a4JFHqL7SdXlQFaMdQjTben0Um6Zf1G0pI9
+         jIPKGmYX/4nCkOnz1bUr8kJJ32XCdR8KtuXeh/uz3/jhe0oXfb40JcgO4l5KUY0IAR4o
+         iGRetfRWXE3oL5yspEgnIFRIa2PfRC43sJifw4Uai3DoPJYIKp/AmrXYGqV76Zj0eEIY
+         TYrn0OzugFf3aStaxerO3W41CNvjZ7OLLSREEHemmAFuiQErKoo24nE+Yi5wdqL/nG1H
+         gRXw==
+X-Gm-Message-State: AJIora+ojf0vTmuF0BK2KAAlRC5KoFHpNKACuQwoHNq8h4LuEkRRXHey
+        6uLjw6diUNku7cNGiYwmzx+ErV53ugEIKgaXLtkByg==
+X-Google-Smtp-Source: AGRyM1vf2WiEVwlCT9YnJ6xSz8XxbYlaFhc+nO7qQld2E/tiZpgFlxDUCYVy3R1USbP9Fxb0o+uxaD6jJVvwa2mVA/Q=
+X-Received: by 2002:a05:622a:178a:b0:31e:f9ff:c685 with SMTP id
+ s10-20020a05622a178a00b0031ef9ffc685mr4423061qtk.62.1658589393102; Sat, 23
+ Jul 2022 08:16:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 3/3] SPI: Ingenic: Add SFC support for Ingenic SoCs.
-Content-Language: fr
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, tudor.ambarus@microchip.com,
-        p.yadav@ti.com, michael@walle.cc, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
-        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
-        reimu@sudomaker.com
-Newsgroups: gmane.linux.ports.mips,gmane.linux.drivers.mtd,gmane.linux.kernel.spi.devel,gmane.linux.kernel,gmane.linux.drivers.devicetree
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220723145558.25210-1-ansuelsmth@gmail.com> <20220723145558.25210-4-ansuelsmth@gmail.com>
+In-Reply-To: <20220723145558.25210-4-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 23 Jul 2022 18:16:22 +0300
+Message-ID: <CAA8EJpq+Ovuz3zht+=2KKmXE3gB55JidAYEs8dsSNZiggmA5=g@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] clk: qcom: lcc-ipq806x: use ARRAY_SIZE for num_parents
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 22/07/2022 à 18:48, 周琰杰 (Zhou Yanjie) a écrit :
-> Add SFC support for the X1000 SoC, the X1600 SoC, and the X2000 SoC
-> from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
->   drivers/spi/Kconfig           |   9 +
->   drivers/spi/Makefile          |   1 +
->   drivers/spi/spi-ingenic-sfc.c | 662 ++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 672 insertions(+)
->   create mode 100644 drivers/spi/spi-ingenic-sfc.c
-> 
+On Sat, 23 Jul 2022 at 17:56, Christian Marangi <ansuelsmth@gmail.com> wrote:
+>
+> Use ARRAY_SIZE for num_parents instead of raw number to prevent any
+> confusion/mistake.
+>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-[...]
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> +static int ingenic_sfc_probe(struct platform_device *pdev)
-> +{
-> +	struct ingenic_sfc *sfc;
-> +	struct spi_controller *ctlr;
-> +	int ret;
-> +
-> +	ctlr = spi_alloc_master(&pdev->dev, sizeof(*sfc));
-> +	if (!ctlr)
-> +		return -ENOMEM;
 
-devm_spi_alloc_master()? (+ error handling simplification)
-Or there should be a .remove() function.
-
-CJ
-
-> +
-> +	sfc = spi_controller_get_devdata(ctlr);
-> +
-> +	sfc->soc_info = of_device_get_match_data(&pdev->dev);
-> +	if (!sfc->soc_info) {
-> +		dev_err(&pdev->dev, "No of match data provided\n");
-> +		ret = -ENODEV;
-> +		goto err_put_master;
-> +	}
-> +
-
-[...]
+-- 
+With best wishes
+Dmitry

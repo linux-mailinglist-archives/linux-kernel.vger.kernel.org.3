@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A1457EB13
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 03:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBCC57EB18
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 03:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbiGWBYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 21:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S236405AbiGWBah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 21:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236563AbiGWBXr (ORCPT
+        with ESMTP id S229461AbiGWBad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 21:23:47 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C05B97A11
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:23:41 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id k11-20020a170902ce0b00b0016a15fe2627so3473762plg.22
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:23:41 -0700 (PDT)
+        Fri, 22 Jul 2022 21:30:33 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5BD15713
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:30:31 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id r142-20020a632b94000000b0041a18177a5dso3058698pgr.10
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=btEsTIYySxPVQ4hIglgkyTpjS/v7UG71CQDMcqqOrRE=;
-        b=drLQt2LDSl7jNOcsHF3VkSAntBfgOcE3aoog0eZYYNxZW9kHPgZFN+oRzHmfyaACAk
-         UrfxUyFA9DbBL14mdrQ+kuaJxOnT4gPmMCWin5z2MS9M06j8dkxe2BaekZrj5X1zFZqh
-         BaV5P20RK38wOFTUh2q3D1r7Ac2RddSEJJyL17p6hvzPb6eGYo1CxKBQKJj9D0IfHv7s
-         IeY8qOtkJtZFE3ukbxZgTu3600E/onAUSfzX85nah37URUu/xX+gHeFolVBvzqG6qft6
-         iHWglqluCmhGRmMMfgs30X8YvQ260GV6ZmGftkJKgZdAbE22Ogl2fj1tUDJE+0KpgE6e
-         XELw==
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=T2BlS9fiXQwfYfA9NCHRCPS0v7PhSvHsuXGq1KjbYXY=;
+        b=sNPwYftGBbnNzm7D0kIMjJbhsaqMg9FSxG7nGCE+zAJwIBORx0FeL2uKRqNPR20pyB
+         YQLu8L22Rcejlrfysm58w79udzt4DyOItbN4dyF7OYbX/giW0LtoQOJXAKsgt+0HHeK6
+         pNq6HRnLia7ZxD/AMqcCEP+umj2D6X6Cn55evVyTaNxxU7p/+xOrfeTOmvTU6mLSSHoi
+         ih/hGUrpfaxkvG7d1ULhSV/VEFjecffsMM9vqxQ91KG3H83sGEDsFIcEzVmljo/7qyuW
+         QO9Ll3Naw6466tdVEApChx2yPvNjbslL42juORaxBhokKyeuWDTb64WYntk0ZSeEFBA4
+         IeJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=btEsTIYySxPVQ4hIglgkyTpjS/v7UG71CQDMcqqOrRE=;
-        b=kUImT28Fc0iXjzIc9kRpkJILDzcwWBuCeedijwIXHzGpR6ipAALN0Up7zgyiPQkca3
-         E2xG8Xwh3W3ZO2kXQropfRpyVA+u5ZFc5UVuIGHuWp04o2V4KnV1KNHo0E7TdWy5tghq
-         fqAk5eQCqED7K4KR8CoxuB8jIkEeE2pk5SyU1D1Eq/wW4fOKFjOVyf/1MEMP9VPRjK9k
-         YETom0htNsE8xJlH3mNoOuFsf6k0HVUcd3BS9/DDh0lyYyWVwIxCSHgj63Yl1lIss2+w
-         DLbBF1pZsbWADUcaEEq12KfYHWd7vej4TDtgMuqv7fqDGIxhL983sltNQvus/qOSDRaQ
-         G5ZQ==
-X-Gm-Message-State: AJIora+tHcBkYxIgowHhLV58pHEkIuSVvHxDyPWUKzNCOImBLHuJj9L7
-        ep2faKnVyW1nzOjuniPPcVHT0WuuPAQ=
-X-Google-Smtp-Source: AGRyM1sBRjjvfJHZxZleZVjvWlLUsAJbEr6jx32pYFSyaLvCmqP+8OZpoJ/fFI+Xp8ppSGRuP/12F0/BEJ0=
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=T2BlS9fiXQwfYfA9NCHRCPS0v7PhSvHsuXGq1KjbYXY=;
+        b=dgjxB2ycjGRUMJXisHdVmqGtVD3nQSsaMXzM85SvrNX3Mp2En8UErwxGTEgVcOUkVp
+         AglwhW/r9YZcGzbwEquhHcdSZAcPVwPNxFqYvWqxTjlXwdk5K4aYzXkX3NWSRpFPb42R
+         3NueJwFEOoHC36KiMbXYdbjwYtlhQo3mJ4wveWGT8SZB9TiENHhecp3nNADEJSSUlTyy
+         wEMcehDgTDqluy683+DrEu+DNsmRs8oWhPdCRjmhUztkX4fEcuUw61tFt8DuIBWmI3zN
+         /qgvbYxoVEtV8ki+CuT9QCiTVlhaR7sP8gmOFJImc0C6kU5zyd3Uj+9z+v3d2Efv6i1F
+         /E9w==
+X-Gm-Message-State: AJIora+B82FnYbWSfBJT0I+l8o/rvXoP6ammIjOVHhdL2d7Ov6QTrc1h
+        fhvy/2BqoKL5sES2ag7MmObfFTul6t8=
+X-Google-Smtp-Source: AGRyM1t85oK8vpIGc5IfuSQYKRDW1+A7RKin+XGcwcBlqJifpnU7mGMNFq3anb1shsAblnGcruDOWdjpWy4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:b92:b0:52a:e60d:dfbb with SMTP id
- g18-20020a056a000b9200b0052ae60ddfbbmr2602461pfj.72.1658539420974; Fri, 22
- Jul 2022 18:23:40 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:4b50:b0:1f0:5643:fa5c with SMTP id
+ mi16-20020a17090b4b5000b001f05643fa5cmr21032656pjb.131.1658539831499; Fri, 22
+ Jul 2022 18:30:31 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 23 Jul 2022 01:23:25 +0000
-In-Reply-To: <20220723012325.1715714-1-seanjc@google.com>
-Message-Id: <20220723012325.1715714-7-seanjc@google.com>
+Date:   Sat, 23 Jul 2022 01:30:29 +0000
+Message-Id: <20220723013029.1753623-1-seanjc@google.com>
 Mime-Version: 1.0
-References: <20220723012325.1715714-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v2 6/6] KVM: x86/mmu: explicitly check nx_hugepage in disallowed_hugepage_adjust()
+Subject: [PATCH] KVM: x86/mmu: Treat NX as a valid SPTE bit for NPT
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Ben Gardon <bgardon@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,80 +66,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mingwei Zhang <mizhang@google.com>
+Treat the NX bit as valid when using NPT, as KVM will set the NX bit when
+the NX huge page mitigation is enabled (mindblowing) and trigger the WARN
+that fires on reserved SPTE bits being set.
 
-Explicitly check if a NX huge page is disallowed when determining if a page
-fault needs to be forced to use a smaller sized page. KVM incorrectly
-assumes that the NX huge page mitigation is the only scenario where KVM
-will create a shadow page instead of a huge page. Any scenario that causes
-KVM to zap leaf SPTEs may result in having a SP that can be made huge
-without violating the NX huge page mitigation. E.g. disabling of dirty
-logging, zapping from mmu_notifier due to page migration, guest MTRR
-changes that affect the viability of a huge page, etc...
+KVM has required NX support for SVM since commit b26a71a1a5b9 ("KVM: SVM:
+Refuse to load kvm_amd if NX support is not available") for exactly this
+reason, but apparently it never occurred to anyone to actually test NPT
+with the mitigation enabled.
 
-Fixes: b8e8c8303ff2 ("kvm: mmu: ITLB_MULTIHIT mitigation")
+  ------------[ cut here ]------------
+  spte = 0x800000018a600ee7, level = 2, rsvd bits = 0x800f0000001fe000
+  WARNING: CPU: 152 PID: 15966 at arch/x86/kvm/mmu/spte.c:215 make_spte+0x327/0x340 [kvm]
+  Hardware name: Google, Inc. Arcadia_IT_80/Arcadia_IT_80, BIOS 10.48.0 01/27/2022
+  RIP: 0010:make_spte+0x327/0x340 [kvm]
+  Call Trace:
+   <TASK>
+   tdp_mmu_map_handle_target_level+0xc3/0x230 [kvm]
+   kvm_tdp_mmu_map+0x343/0x3b0 [kvm]
+   direct_page_fault+0x1ae/0x2a0 [kvm]
+   kvm_tdp_page_fault+0x7d/0x90 [kvm]
+   kvm_mmu_page_fault+0xfb/0x2e0 [kvm]
+   npf_interception+0x55/0x90 [kvm_amd]
+   svm_invoke_exit_handler+0x31/0xf0 [kvm_amd]
+   svm_handle_exit+0xf6/0x1d0 [kvm_amd]
+   vcpu_enter_guest+0xb6d/0xee0 [kvm]
+   ? kvm_pmu_trigger_event+0x6d/0x230 [kvm]
+   vcpu_run+0x65/0x2c0 [kvm]
+   kvm_arch_vcpu_ioctl_run+0x355/0x610 [kvm]
+   kvm_vcpu_ioctl+0x551/0x610 [kvm]
+   __se_sys_ioctl+0x77/0xc0
+   __x64_sys_ioctl+0x1d/0x20
+   do_syscall_64+0x44/0xa0
+   entry_SYSCALL_64_after_hwframe+0x46/0xb0
+   </TASK>
+  ---[ end trace 0000000000000000 ]---
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
-[sean: add barrier comments, use spte_to_sp()]
+Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c     | 17 +++++++++++++++--
- arch/x86/kvm/mmu/tdp_mmu.c |  6 ++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index ed3cfb31853b..97980528bf4a 100644
+index 8e477333a263..3e1317325e1f 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3092,6 +3092,19 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
- 	    cur_level == fault->goal_level &&
- 	    is_shadow_present_pte(spte) &&
- 	    !is_large_pte(spte)) {
-+		u64 page_mask;
-+
-+		/*
-+		 * Ensure nx_huge_page_disallowed is read after checking for a
-+		 * present shadow page.  A different vCPU may be concurrently
-+		 * installing the shadow page if mmu_lock is held for read.
-+		 * Pairs with the smp_wmb() in kvm_tdp_mmu_map().
-+		 */
-+		smp_rmb();
-+
-+		if (!spte_to_sp(spte)->nx_huge_page_disallowed)
-+			return;
-+
- 		/*
- 		 * A small SPTE exists for this pfn, but FNAME(fetch)
- 		 * and __direct_map would like to create a large PTE
-@@ -3099,8 +3112,8 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
- 		 * patching back for them into pfn the next 9 bits of
- 		 * the address.
- 		 */
--		u64 page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
--				KVM_PAGES_PER_HPAGE(cur_level - 1);
-+		page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
-+			    KVM_PAGES_PER_HPAGE(cur_level - 1);
- 		fault->pfn |= fault->gfn & page_mask;
- 		fault->goal_level--;
- 	}
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index fea22dc481a0..313092d4931a 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1194,6 +1194,12 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
- 			tdp_mmu_init_child_sp(sp, &iter);
+@@ -4735,7 +4735,7 @@ reset_tdp_shadow_zero_bits_mask(struct kvm_mmu *context)
  
- 			sp->nx_huge_page_disallowed = fault->huge_page_disallowed;
-+			/*
-+			 * Ensure nx_huge_page_disallowed is visible before the
-+			 * SP is marked present, as mmu_lock is held for read.
-+			 * Pairs with the smp_rmb() in disallowed_hugepage_adjust().
-+			 */
-+			smp_wmb();
- 
- 			if (tdp_mmu_link_sp(kvm, &iter, sp, true)) {
- 				tdp_mmu_free_sp(sp);
+ 	if (boot_cpu_is_amd())
+ 		__reset_rsvds_bits_mask(shadow_zero_check, reserved_hpa_bits(),
+-					context->root_role.level, false,
++					context->root_role.level, true,
+ 					boot_cpu_has(X86_FEATURE_GBPAGES),
+ 					false, true);
+ 	else
+
+base-commit: 1a4d88a361af4f2e91861d632c6a1fe87a9665c2
 -- 
 2.37.1.359.gd136c6c3e2-goog
 

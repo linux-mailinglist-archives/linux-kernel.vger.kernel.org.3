@@ -2,150 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF2D57EEE6
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 12:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33AC57EEEA
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 12:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237411AbiGWKyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 06:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S239371AbiGWK7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 06:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiGWKyQ (ORCPT
+        with ESMTP id S230399AbiGWK7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 06:54:16 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB5D11441;
-        Sat, 23 Jul 2022 03:54:14 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id n7so5293533ioo.7;
-        Sat, 23 Jul 2022 03:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YL9wCFcJM1S8aQnJbcoxTMo6SNRCJK/vq4C87hsQwpU=;
-        b=icTe+7uDRr7EXvhDnSXmpnK61DUvZdhBUV1EG52pxLeRH5b4Fp++sDQy0J4X6UI8Eh
-         uGZ7po3LSPCe4MqV6mvQgXp1tKpRTebwdxMFJqJnbVMiOOXYa56IKetWOYEVjupA+mbG
-         twO9t0rDvPLv/LnZwpC1PRjDAm98sUoNPLu5bilwe8uwhUF/REZaKCxGvUR+DG4GwupY
-         96lp4Ne9iS5xiYgOuBNA8rdG3KGBiukHG3Dv1+RXor7fuWoy4onvrQzoGHG68D12evdN
-         qopZqWfKVBQL30UA+lFKUymH1m/li+cOtP1l6Nh3OB+i2U+cnnDaysukc+2hdfwqKlvW
-         HKMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YL9wCFcJM1S8aQnJbcoxTMo6SNRCJK/vq4C87hsQwpU=;
-        b=fet/zYR/MdL65rLypuuwdS1sVnKizFS5itMVT6eLBp3mJD2ioFOkRfXJuKSSZizSrS
-         N1918QxgOWSsRXE/Y2J077OsTQ8OHi82NuW8PxJmyKbMXH25xmB+QSBCZml41tEkFpWL
-         meQ4MoAO2p02fVLqVw83TgewTIQdxGajPG5HSJ6t4ID1P6cNXZA/8nEtXczDe//OXOeQ
-         qWlV3lWXfbe9rRq6gM/W1Sc+bNyRJV47d6uvIRAvNs4HDYfMrAOpn36hQJxSlDsjxtLJ
-         CfQulUJoOilyChWeguQ5i63jQ4Y24qv/L/LNrK9KBDlTbSxml2gDqJCHIPMWP/wbrAOc
-         0Jkw==
-X-Gm-Message-State: AJIora/tK2fYHnenzpMrE5fhRXgPxpm95H2HTranHVHZB7MwFuhESIMy
-        5aVGUDfcWpTqdm4z20vsofcC+NHORPIDQfj0reE=
-X-Google-Smtp-Source: AGRyM1szkUECVWGAESedupd4SaLkQ477HkV5GtL8kMwaKob8JG7T9RM44BdYJtK/AyD8uGaMcylKdTpDzbiO3Mi3N/w=
-X-Received: by 2002:a05:6638:1602:b0:341:3e1f:d862 with SMTP id
- x2-20020a056638160200b003413e1fd862mr1696518jas.24.1658573654111; Sat, 23 Jul
- 2022 03:54:14 -0700 (PDT)
+        Sat, 23 Jul 2022 06:59:34 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCF11CFC0
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 03:59:31 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1658573961tz10fe20
+Received: from eureka.localdomain ( [123.124.208.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 23 Jul 2022 18:59:09 +0800 (CST)
+X-QQ-SSF: 01400000002000B0D000B00A0000020
+X-QQ-FEAT: 4rCmCcmdMHfwis57XlYAPZfJdHJIxkKNcwfR4eFB0vZN/Pzx6uJfciJh7n054
+        lVJvDLJ+negW15WQMWccV6GExZ/LlNYWlxKKf3+qMYqLuvwQ/D3boqidj+aiShvFxaZgme2
+        4kn+D+afWkNCf4eoZPf0ziVTYWv7hWET0Yvt2Ypv5hgwvsO36g3TVzxjNcG/JBs/J/DZPma
+        NVGfCJ5EGrrdM+4QVPMm9RqPhirigUk8UMqTNj1fG2hzu7QrbDcxKjzLjsI9gfNVLAr4zHl
+        N4hNDAprzRHmzRT5Zu4eserDeuXbo4jvk+McsmlEcBwHsCr9sP+38bmR2U5PdLUZmqSdWcI
+        rErMgv8rUAwPaH4Tc3oYAlBjZDZ6QWxHb3v77Zk+qVEbcKMT9dWpS1b4KBR3Ff0DE3t7Vic
+X-QQ-GoodBg: 2
+From:   Wang You <wangyoua@uniontech.com>
+To:     bvanassche@acm.org
+Cc:     axboe@kernel.dk, fio@vger.kernel.org, hch@lst.de,
+        jaegeuk@kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ming.lei@redhat.com,
+        wangxiaohua@uniontech.com, wangyoua@uniontech.com
+Subject: Re: [PATCH v2 2/2] block/mq-deadline: Prioritize first request
+Date:   Sat, 23 Jul 2022 18:59:09 +0800
+Message-Id: <20220723105909.440050-1-wangyoua@uniontech.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <f798c875-0bb9-add7-d7a3-4ac2a76e85d9@acm.org>
+References: <f798c875-0bb9-add7-d7a3-4ac2a76e85d9@acm.org>
 MIME-Version: 1.0
-References: <20220717133759.8479-1-khalid.masum.92@gmail.com>
- <3ea0ea90-48bf-ce19-e014-9443d732e831@gmail.com> <CAABMjtHiet1_SRvLBhoNxeEh865rwtZCkb510JmFPkHFMd5chQ@mail.gmail.com>
- <CABBYNZJVv=pJv60P6fYZh65JU+BV5agGfXEh4VenxELEXqtDsA@mail.gmail.com>
-In-Reply-To: <CABBYNZJVv=pJv60P6fYZh65JU+BV5agGfXEh4VenxELEXqtDsA@mail.gmail.com>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Sat, 23 Jul 2022 16:54:03 +0600
-Message-ID: <CAABMjtEDHLRGVHrjPaCyuTX0SBODVcS+U+G+xS+YQH=23zk=hg@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_core: Use ERR_PTR instead of NULL
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 5:04 AM Luiz Augusto von Dentz
-<luiz.dentz@gmail.com> wrote:
->
-> Hi Khalid,
->
-> On Sun, Jul 17, 2022 at 11:34 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
-> >
-> > On Sun, Jul 17, 2022 at 10:17 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
-> > >
-> > > Hi Khalid,
-> > >
-> > > Khalid Masum <khalid.masum.92@gmail.com> says:
-> > > > Failure of kzalloc to allocate memory is not reported. Return Error
-> > > > pointer to ENOMEM if memory allocation fails. This will increase
-> > > > readability and will make the function easier to use in future.
-> > > >
-> > > > Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> > > > ---
-> > >
-> > > [snip]
-> > >
-> > > > index a0f99baafd35..ea50767e02bf 100644
-> > > > --- a/net/bluetooth/hci_core.c
-> > > > +++ b/net/bluetooth/hci_core.c
-> > > > @@ -2419,7 +2419,7 @@ struct hci_dev *hci_alloc_dev_priv(int sizeof_priv)
-> > > >
-> > > >       hdev = kzalloc(alloc_size, GFP_KERNEL);
-> > > >       if (!hdev)
-> > > > -             return NULL;
-> > > > +             return ERR_PTR(-ENOMEM);
-> > > >
-> > >
-> > > This will break all callers of hci_alloc_dev(). All callers expect NULL
-> > > in case of an error, so you will leave them with wrong pointer.
-> >
-> > You are right. All callers of hci_alloc_dev() need to be able to handle
-> > the error pointer. I shall send a V2 with all the callers of hci_alloc_dev
-> > handling the ERR_PTR.
-> >
-> > > Also, allocation functionS return an error only in case of ENOMEM, so
-> > > initial code is fine, IMO
-> > >
->
-> If there just a single error like ENOMEM then Id say this is fine,
-> just as it is fine for kzalloc.
->
-> > I think it makes the memory allocation error handling look to be a bit
-> > different from what we usually do while allocating memory which is,
-> > returning an error or an error pointer. Here we are returning a NULL
-> > without any context, making it a bit unreadable. So I think returning
-> > an error pointer is better. If I am not mistaken, this also complies with
-> > the return convention:
-> > https://www.kernel.org/doc/htmldocs/kernel-hacking/convention-returns.html
->
-> Not sure if that would apply to code that is basically a wrapper of kzalloc.
+> What is MG04ACA400N?
 
-I got you.
-> > > Thanks,
-> > > --Pavel Skripkin
-> >
-> >
-> > Thanks,
-> >   -- Khalid Masum
->
->
->
-> --
-> Luiz Augusto von Dentz
+It is a Toshiba 7200 RPM hard drive.
+
+> The above results are low enough such that these could come from a hard 
+> disk. However, the test results are hard to interpret since the I/O 
+> pattern is neither perfectly sequential nor perfectly random (32 
+> sequential jobs). Please provide separate measurements for sequential 
+> and random I/O.
+
+> The above results show that this patch makes reading from a hard disk 
+> slower. Isn't the primary use case of mq-deadline to make reading from 
+> hard disks faster? So why should these two patches be applied if these 
+> slow down reading from a hard disk?
+
+The data of MG04ACA400N on the raid controller is obviously different from 
+the single disk, especially the reading data, I did not expect this situation, 
+the data on the raid controller made me mistakenly think that the same applies 
+to HDD.
+
+I will re-analyze the impact of this patch on the HDD later, please ignore it 
+for now.
+
+Also, can I ask? If using fio or other tools, how should testing be done to get 
+more accurate and convincing data? Such as the perfectly sequential and random I/O 
+performance you mentioned above (fio's multi-threaded test does result in neither 
+perfectly sequential nor perfectly random, but single thread dispatch is too slow, 
+and cannot play the merge and sorting ability of elv).
 
 Thanks,
-  -- Khalid Masum
+
+Wang.
+
+

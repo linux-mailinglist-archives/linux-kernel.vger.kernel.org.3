@@ -2,139 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF6957EC72
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E360B57EC74
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbiGWH0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 03:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S235005AbiGWHea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 03:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiGWH0n (ORCPT
+        with ESMTP id S229708AbiGWHe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 03:26:43 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16E2388F;
-        Sat, 23 Jul 2022 00:26:42 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id C000132008FB;
-        Sat, 23 Jul 2022 03:26:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 23 Jul 2022 03:26:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1658561198; x=
-        1658647598; bh=5Ir+MjFNAiyfriqu201Q2DsSmCwNyWbos3Bln1LDuEY=; b=R
-        wM+zTeDX2Rh5aCnfspDGdokKpWDm8poehxkcTiVh1/R3GPX9hMDZRtYCPNsjZdMp
-        uXB8YScVK6o9Pws7j8b8EKKyYDilZ9pdM96lORr6oYQK4RnpmtcKqk5f6zQmJy59
-        zX4YgYQwPavAZI0fTmM80zrX65HrmtXBwMktw8btIikLo1GCKjPQgNP5DEOIc3CU
-        aTLNXtg0bHh2a6Dmwdx9dZukBRu9pu1rAFgqHyXHraa6cP1f9tEAOOXmT8CmAJWD
-        KntkVBhfCbM7bbHm0JWRQxbgrjLZaC4ETT24YbXalafqhBP8k0wAB2Nyq0zEJid/
-        lBHAosASE4/17SeODzaPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658561198; x=
-        1658647598; bh=5Ir+MjFNAiyfriqu201Q2DsSmCwNyWbos3Bln1LDuEY=; b=q
-        r2vEBdIfhBrUmnn4QOiFmxtadMeICfZjUUSZFYIwdFpm0ImmY18iv8giOBnQud72
-        dQucaW1RYj0XfFijWxgO9pCq2Xu3JPeXPmfBZudsQYfPoXrHR+kB12kukkElxc/5
-        9igumapg4xJYR2krCsjgrjqcPVmB6YTnQWGuvrEcHva1AJvvlCpsBF39U/P1dTun
-        wbupFv98RiyN9lsSbt3mXloYji8FEgtqvFXJ87jI+3rom04vXXAlV5iCozAArvnR
-        y2lQynoSzT/vzIpW2Kdr3K2YrHR7ozP2qZYShzaWghJaKSPgyvlf32wFtYDSOS6v
-        RBZNf4yTpAxBPLxFkRNaQ==
-X-ME-Sender: <xms:raLbYrvlngzjuz-yC2mA1TEd3oDkG75P2eTGdnQSkSbLnJSgyjnZXA>
-    <xme:raLbYsfuZ1zJdqdhAOURunf-ickMEYhGjjN_0EJC2Nb3n51o8jSmyGTJzlTWC5zyX
-    9Cskd8e9_8szA>
-X-ME-Received: <xmr:raLbYuzMm2Gy0BF1pFfnSqh59t0qoifWUiEXWS_jsOHE4kU5v3SL_Wj8Wz8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtfedguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepifhr
-    vghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgf
-    ekffeifeeiveekleetjedvtedvtdeludfgvdfhteejjeeiudeltdefffefvdeinecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrh
-    horghhrdgtohhm
-X-ME-Proxy: <xmx:raLbYqO05V-_8ugduzUeFvzs83wf7vPFFwULgsOrD4JPBCi7hY27Gw>
-    <xmx:raLbYr8foFGVfKgCietIly8f9TqPJvAMsbyQ0OzAXxpTeDUU2007aw>
-    <xmx:raLbYqW6rQS9ZFtQbMEXdRRnrfBz1PAKcv5-UaKZpAkNh51VP92zRQ>
-    <xmx:rqLbYrwvTVYr2X8YUUh-ICSNMdGj3ox82XtqWvh9pHqdWYeXmjvxTw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 23 Jul 2022 03:26:37 -0400 (EDT)
-Date:   Sat, 23 Jul 2022 09:26:31 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the usb tree
-Message-ID: <Ytuip1C2LPmAxQxV@kroah.com>
-References: <20220719194337.64c490e0@canb.auug.org.au>
- <20220719132559.3348c163@reki>
- <YtaUYmzTfKmx0Ek0@kroah.com>
- <20220723101428.347d941e@reki>
+        Sat, 23 Jul 2022 03:34:28 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B8CD5A164;
+        Sat, 23 Jul 2022 00:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Ou64X
+        cGXcxxJqUURiTJIAC7Xl0xWJ6QNV6r7RUuijgU=; b=ODwoCwnlgxzxPYi/nfRAu
+        PhWPt868LoohwtfPxtSqkRs5n0YEnxba+y/5mR+XNM6iw1NXiUZvMAQarIR85ges
+        z2jfrMMnUxZZltG9bLk8o0FjAh5rJXfsPojd3NpEIz7OysqynxTduJKWuFInXB6R
+        Fv6AZ5LNIOqSTrXU/TGjCI=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp2 (Coremail) with SMTP id GtxpCgAXJ6cIpNtihfkcQw--.2846S2;
+        Sat, 23 Jul 2022 15:32:27 +0800 (CST)
+From:   williamsukatube@163.com
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-afs@lists.infradead.org
+Cc:     dhowells@redhat.com, marc.dionne@auristor.com,
+        William Dean <williamsukatube@gmail.com>,
+        Hacash Robot <hacashRobot@santino.com>
+Subject: [PATCH net-next] net: delete extra space and tab in blank line
+Date:   Sat, 23 Jul 2022 15:32:22 +0800
+Message-Id: <20220723073222.2961602-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220723101428.347d941e@reki>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GtxpCgAXJ6cIpNtihfkcQw--.2846S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrKw1rtFy7Kw4fXr1fWF17ZFb_yoW8JrW7pa
+        y3Aa42krWxAry3Xr18Ar18Gr98Xan8Wa43G3929w4FqFn3GFWxtF1fKw4UWFs5WFW0qFW3
+        Zr40qw4rG3Z2yrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bw5rcUUUUU=
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBSQtHg1aEEPhEPgAAsG
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 10:14:28AM +0300, Maxim Devaev wrote:
-> On Tue, 19 Jul 2022 13:24:18 +0200
-> Greg KH <greg@kroah.com> wrote:
-> 
-> > On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote:
-> > > В Tue, 19 Jul 2022 19:43:37 +1000
-> > > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >   
-> > > > Hi all,
-> > > > 
-> > > > After merging the usb tree, today's linux-next build (htmldocs) produced
-> > > > this warning:
-> > > > 
-> > > > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WARNING: Malformed table.
-> > > > Text in column margin in table line 14.
-> > > > 
-> > > > ===========     ==============================================
-> > > > file            The path to the backing file for the LUN.
-> > > >                 Required if LUN is not marked as removable.
-> > > > ro              Flag specifying access to the LUN shall be
-> > > >                 read-only. This is implied if CD-ROM emulation
-> > > >                 is enabled as well as when it was impossible
-> > > >                 to open "filename" in R/W mode.
-> > > > removable       Flag specifying that LUN shall be indicated as
-> > > >                 being removable.
-> > > > cdrom           Flag specifying that LUN shall be reported as
-> > > >                 being a CD-ROM.
-> > > > nofua           Flag specifying that FUA flag
-> > > >                 in SCSI WRITE(10,12)
-> > > > forced_eject    This write-only file is useful only when
-> > > >                 the function is active. It causes the backing
-> > > >                 file to be forcibly detached from the LUN,
-> > > >                 regardless of whether the host has allowed it.
-> > > >                 Any non-zero number of bytes written will
-> > > >                 result in ejection.
-> > > > ===========     ==============================================
-> > > > 
-> > > > Introduced by commit
-> > > > 
-> > > >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
-> > > >   
-> > > 
-> > > Sorry. Should I send a patch?  
-> > 
-> > Yes please.
-> 
-> JFYI the patch has been sent to linux-docs@, etc. I forgot to add you to CC.
+From: William Dean <williamsukatube@gmail.com>
 
-Then I'll not be able to take it into my tree to fix this up :(
+delete extra space and tab in blank line, there is no functional change.
+
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ net/ethtool/cabletest.c | 2 +-
+ net/rxrpc/protocol.h    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/ethtool/cabletest.c b/net/ethtool/cabletest.c
+index 920aac02fe39..06a151165c31 100644
+--- a/net/ethtool/cabletest.c
++++ b/net/ethtool/cabletest.c
+@@ -356,7 +356,7 @@ int ethnl_act_cable_test_tdr(struct sk_buff *skb, struct genl_info *info)
+ 	ethnl_parse_header_dev_put(&req_info);
+ 	return ret;
+ }
+- 
++
+ int ethnl_cable_test_amplitude(struct phy_device *phydev,
+ 			       u8 pair, s16 mV)
+ {
+diff --git a/net/rxrpc/protocol.h b/net/rxrpc/protocol.h
+index 49bb972539aa..d2cf8e1d218f 100644
+--- a/net/rxrpc/protocol.h
++++ b/net/rxrpc/protocol.h
+@@ -57,7 +57,7 @@ struct rxrpc_wire_header {
+ 
+ 	uint8_t		userStatus;	/* app-layer defined status */
+ #define RXRPC_USERSTATUS_SERVICE_UPGRADE 0x01	/* AuriStor service upgrade request */
+-	
++
+ 	uint8_t		securityIndex;	/* security protocol ID */
+ 	union {
+ 		__be16	_rsvd;		/* reserved */
+-- 
+2.25.1
+

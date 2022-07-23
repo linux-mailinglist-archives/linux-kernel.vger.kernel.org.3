@@ -2,131 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B354757ECB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 10:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3CA57ECA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 10:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiGWIYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 04:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S236696AbiGWIMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 04:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236972AbiGWIYH (ORCPT
+        with ESMTP id S230371AbiGWIMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 04:24:07 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456CC419B6
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 01:24:06 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id b21so768319ljk.8
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 01:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uzzbvpcg92Vbq8cJiUX3FDJ4W3Mjvx8Z9ViLMy+/Iz0=;
-        b=Cps9dw8np9iAWjKLFJuS1W1hsqiaDqmn2ucE7ToyztqPWHvlnSu2mNr5uYcLGCsJCt
-         tAC9OiyjVsvpCZJxaEfww2Dy5AWXb14vGJrz0v0Km8Yv5MegvB/RRADkQng4k2Z93ris
-         fhVYcaocO0vfAU+uCbFfazw2BkCpRQuIefpdyENlc2HiSLev89LYF1B2YvmCNWS9oT17
-         +1OXLs3gITMbV6Onchfdd7mkz12evzcqmDx3NCTWPdLX9vbFHv4PP5YPSLBEMqnM1jk5
-         oHZemE5TKf4YM66PNyZRbUosunHyFKkfgVmaQoiimOdBj1eGfWhDdkCjtEUaZzEhxYZN
-         0PoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uzzbvpcg92Vbq8cJiUX3FDJ4W3Mjvx8Z9ViLMy+/Iz0=;
-        b=3ZTDDmYzr/0w7mwnccoQXUmIU8tK17RxXxQUnsh4yIWKqe7flzPg8yrQxsQ3Jp9Vl/
-         MaD286HI6Kp8ZPiSa3BKk29wlDYbNoLgj14mEtN7wUaCBDbTQgWuMbuiKUBAStFL8GVN
-         +DNHlPVdX2AUQBYeeMcUmjQO2ZetLfpAqw66Z84XhsbrmP6BYi47tYmrf+IBu9V0mUl7
-         uK6TRc8yXH9X0ynCQq8ZZMGCEGhmFkmWyo6FHXQ5jEA11RG6+1phVGgD+27y3wfb8/xm
-         Bsb297P3iRbk7eAISt9+6iZ4qsnwCNsIBEJr9Usxr7scPrO5ibyVcSjjEpxVAZ8bSo5V
-         Yg6g==
-X-Gm-Message-State: AJIora+m27buYZm9Bc7hGLT04koMKEBQo4ZR5M2KHf1Bg32gin6qquPG
-        VaQb5sTxGto8NCXHC9SL60yIvA==
-X-Google-Smtp-Source: AGRyM1vL5hOgF0NC4f4hiyfHgxovQf/IcINrfQ3sxHEt7eJkUJjP+rW3wnpLzsb9MXEXUoVJWs3RGQ==
-X-Received: by 2002:a05:651c:4cb:b0:25d:9a43:16fd with SMTP id e11-20020a05651c04cb00b0025d9a4316fdmr1171257lji.493.1658564644447;
-        Sat, 23 Jul 2022 01:24:04 -0700 (PDT)
-Received: from krzk-bin.home (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id n22-20020a05651203f600b004886508ca5csm1545801lfq.68.2022.07.23.01.24.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 01:24:03 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] dt-bindings: soc: qcom: smd-rpm: extend example
-Date:   Sat, 23 Jul 2022 10:23:58 +0200
-Message-Id: <20220723082358.39544-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220723082358.39544-1-krzysztof.kozlowski@linaro.org>
-References: <20220723082358.39544-1-krzysztof.kozlowski@linaro.org>
+        Sat, 23 Jul 2022 04:12:21 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC91217AA4;
+        Sat, 23 Jul 2022 01:12:17 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4LqfC00FwYzKFpv;
+        Sat, 23 Jul 2022 16:11:08 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgAXFWhdrdtiiutfBA--.45581S4;
+        Sat, 23 Jul 2022 16:12:15 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     joe@perches.com, josef@toxicpanda.com, axboe@kernel.dk,
+        yukuai3@huawei.com, houtao1@huawei.com
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com
+Subject: [PATCH v2] nbd: add missing definition of pr_fmt
+Date:   Sat, 23 Jul 2022 16:24:27 +0800
+Message-Id: <20220723082427.3890655-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgAXFWhdrdtiiutfBA--.45581S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw1rKr1UZw4rXF4DAw1xuFg_yoW8Xw13pF
+        4qkFZYkFyvkrW2kFn7G3WI9F15t3WkJFWfK3yxCayFyrZxAr13Cr4DtFyFvF1kJrWIkw4a
+        vF1DJay0vFs7Wr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+        XdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace existing limited example with proper code for Qualcomm Resource
-Power Manager (RPM) over SMD based on MSM8916.  This also fixes the
-example's indentation.
+From: Yu Kuai <yukuai3@huawei.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+commit 1243172d5894 ("nbd: use pr_err to output error message") tries
+to define pr_fmt and use short pr_err() to output error message,
+however, the definition is missed.
+
+This patch also remove existing "nbd:" inside pr_err().
+
+Fixes: 1243172d5894 ("nbd: use pr_err to output error message")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- .../bindings/soc/qcom/qcom,smd-rpm.yaml       | 33 +++++++++++++++----
- 1 file changed, 27 insertions(+), 6 deletions(-)
+Changes in v2, suggested by Joe
+ - move pr_fmt() to before any #include, so that #undef can be remove
+ - remove existing "nbd:"
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-index 50f834563e19..09d5bfa920f2 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
-@@ -92,12 +92,33 @@ examples:
-             qcom,ipc = <&apcs 8 0>;
-             qcom,smd-edge = <15>;
+ drivers/block/nbd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index f5d098a148cb..2a709daefbc4 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -11,6 +11,8 @@
+  * (part of code stolen from loop.c)
+  */
  
--                rpm-requests {
--                        compatible = "qcom,rpm-msm8974";
--                        qcom,smd-channels = "rpm_requests";
-+            rpm-requests {
-+                compatible = "qcom,rpm-msm8916";
-+                qcom,smd-channels = "rpm_requests";
++#define pr_fmt(fmt) "nbd: " fmt
 +
-+                clock-controller {
-+                    compatible = "qcom,rpmcc-msm8916", "qcom,rpmcc";
-+                    #clock-cells = <1>;
-+                    clocks = <&xo_board>;
-+                    clock-names = "xo";
-+                };
+ #include <linux/major.h>
  
--                        /* Regulator nodes to follow */
-+                power-controller {
-+                    compatible = "qcom,msm8916-rpmpd";
-+                    #power-domain-cells = <1>;
-+                    operating-points-v2 = <&rpmpd_opp_table>;
-+
-+                    rpmpd_opp_table: opp-table {
-+                        compatible = "operating-points-v2";
-+
-+                        opp-1 {
-+                            opp-level = <1>;
-+                        };
-+                        opp-2 {
-+                            opp-level = <2>;
-+                        };
-+                    };
-                 };
-             };
--     };
--...
-+        };
-+    };
+ #include <linux/blkdev.h>
+@@ -1950,7 +1952,7 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
+ 			     test_bit(NBD_DISCONNECT_REQUESTED, &nbd->flags)) ||
+ 			    !refcount_inc_not_zero(&nbd->refs)) {
+ 				mutex_unlock(&nbd_index_mutex);
+-				pr_err("nbd: device at index %d is going down\n",
++				pr_err("device at index %d is going down\n",
+ 					index);
+ 				return -EINVAL;
+ 			}
+@@ -1961,7 +1963,7 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
+ 	if (!nbd) {
+ 		nbd = nbd_dev_add(index, 2);
+ 		if (IS_ERR(nbd)) {
+-			pr_err("nbd: failed to add new device\n");
++			pr_err("failed to add new device\n");
+ 			return PTR_ERR(nbd);
+ 		}
+ 	}
 -- 
-2.34.1
+2.31.1
 

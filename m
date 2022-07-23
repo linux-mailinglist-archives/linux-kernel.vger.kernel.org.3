@@ -2,121 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820E657EB7B
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 04:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A0757EB82
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 04:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236913AbiGWCLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 22:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S236951AbiGWCO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 22:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiGWCLD (ORCPT
+        with ESMTP id S236232AbiGWCOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 22:11:03 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC7F12625;
-        Fri, 22 Jul 2022 19:11:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jmOM9rhu89OCTAj9iwXnaed1XvgTBZbLKOgJoLtWpxlvQyqBEe1b8z8XXbaH4N+OuCWwTDeCF8xUm/1MQ2C1X1AjJpWFDttE0ZFozZYxhA68OvOditqBzPH+nBM/LhDhCywDpPuOHh2WwDsA7YOd+AhVBNvbCf9RLc2AtHIaF5tlY6v0AtBftv620Ak/GUH/B+95t+lsHaC9NjJ/9+o4pZwGfc/0nSMolSNXiWaUyMtht+tip8mD11ebiAAeE9enW0b3CznQyMLXVm5DxNsp2I6AIzOQUSFuYtVc6x56rPkdLxHM6iC9WlZ+yMs+tXWkyl7MUcGOEem4xbxPIhV/Ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TY575vzFQFXTMHwI7BldBhG4flA4mttfKtr6gENEj7Q=;
- b=jPpnql7ODmhL6bLeF+xyW8FxYCbp+cFTvKBKIFKOUqAQ/A0i8QuNApcZEC771PGl4g85MmkjhsadAGnL3nS1si8T4qVOJfPUHI2K2odVh8iy7C37ArSrGQMv27trsprqYqOMZZW3tozEjLFf0MrGXPU+CIhhdKkUWd/FPGqZflSZcz1qYn3Jn9PdiltH/xcUJjlnP01e1O88j3FXmQCvki0zU5P/xqDhgOTnW8KAqxbVstKvqj+e0UlLWynlaGChI5jPpkeFWOVLNGa56FP97cWp2smzqlhf/3FECqumOH+6QOqi2sqrlp+wppBJLY4AXx8425E0a6Hc/k9hqqwKcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TY575vzFQFXTMHwI7BldBhG4flA4mttfKtr6gENEj7Q=;
- b=MRZ5fD7lH9k1+CTokdu7Y0GYfP9vVHLY7cuHWBoeEvia4rcOyTViZP2E+OXUX2ZHwLAfhm0ncDeUoc7F0vJpcevzn0qAA6DJvdg9XEKZrPTpH6GJgheMSmcYobktGgfqYWsm8ReH9vGppPijvpPUFYQqUUYmyBkhlmHj4D3Q9sn3T8s2giKQMTTpZw1sroeYEP/yzPZJKgA3Qvskgc7K+/7xIRki7Wqhxzf2bXTuwuBWIiUtEWDSX9UD8aWC75+fKExxVsZ0A7xHvcTiQt9Pto/8nsu0KiZmNiPeoZ19exl9os5QJkXE1UfSMzhqbp+lgwDnBwD9Y8gL8ov/XmPGlA==
-Received: from DM6PR13CA0071.namprd13.prod.outlook.com (2603:10b6:5:134::48)
- by MN2PR12MB3133.namprd12.prod.outlook.com (2603:10b6:208:c7::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.20; Sat, 23 Jul
- 2022 02:11:00 +0000
-Received: from DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:134:cafe::8c) by DM6PR13CA0071.outlook.office365.com
- (2603:10b6:5:134::48) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.2 via Frontend
- Transport; Sat, 23 Jul 2022 02:11:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT023.mail.protection.outlook.com (10.13.173.96) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5458.17 via Frontend Transport; Sat, 23 Jul 2022 02:10:59 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Sat, 23 Jul 2022 02:10:59 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.26; Fri, 22 Jul 2022 19:10:58 -0700
-Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26 via Frontend
- Transport; Fri, 22 Jul 2022 19:10:57 -0700
-Date:   Fri, 22 Jul 2022 19:10:56 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     <kwankhede@nvidia.com>, <corbet@lwn.net>, <hca@linux.ibm.com>,
-        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
-        <zhenyuw@linux.intel.com>, <zhi.a.wang@intel.com>,
-        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
-        <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <farman@linux.ibm.com>,
-        <mjrosato@linux.ibm.com>, <pasic@linux.ibm.com>,
-        <vneethv@linux.ibm.com>, <oberpar@linux.ibm.com>,
-        <freude@linux.ibm.com>, <akrowiak@linux.ibm.com>,
-        <jjherne@linux.ibm.com>, <cohuck@redhat.com>, <jgg@nvidia.com>,
-        <kevin.tian@intel.com>, <hch@infradead.org>,
-        <jchrist@linux.ibm.com>, <kvm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-s390@vger.kernel.org>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <terrence.xu@intel.com>
-Subject: Re: [PATCH v3 00/10] Update vfio_pin/unpin_pages API
-Message-ID: <YttYsIS34sSrYC2T@Asurada-Nvidia>
-References: <20220708224427.1245-1-nicolinc@nvidia.com>
- <20220722161129.21059262.alex.williamson@redhat.com>
- <Ytsu07eGHS9B7HY8@Asurada-Nvidia>
- <20220722181800.56093444.alex.williamson@redhat.com>
- <YttDAfDEnrlhcZix@Asurada-Nvidia>
- <20220722190901.262a1978.alex.williamson@redhat.com>
+        Fri, 22 Jul 2022 22:14:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63620550DE
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 19:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658542494; x=1690078494;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EWBnpyQ5vvpv4RH5JNb39sXUSCGSaq3sr26h68Er0G8=;
+  b=NVROl13asz0T3gDt459wWNTLjFNdJ1XCdJ3PvLo1CnRc+wQPtRpY3ee1
+   EpuRd3dl3vRMWCGUeqxp7vzMjWHJ5i/yE7DxWxKUaIFwPz+HTE4p36oHD
+   uhUm7lRYoGVVH0EQpTeK4Ceq7ejG4OHGelnVNY8nLaSC04/ibL6rK4KWd
+   of/0nDrQ0JQzXoPvXl/fvaTExeIC0q6kQWfHRSKL9nDS9MZ7agg9/vgNt
+   89ylm5bXVvrVvNFCHEE1fCl7R6+42zwYLM4nwHVCoFlYUqJ6wopOXZ97C
+   oiRTnC5B2tVWbmB0tHrI093lVx3QENmVMy/YZiHrZuH2i76/11/oBTYpK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="288195251"
+X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
+   d="scan'208";a="288195251"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 19:14:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
+   d="scan'208";a="725604996"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jul 2022 19:14:52 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oF4fL-00024C-2p;
+        Sat, 23 Jul 2022 02:14:51 +0000
+Date:   Sat, 23 Jul 2022 10:13:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Redpath <chris.redpath@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>
+Subject: [jsarha:topic/cros-sof-v4.14-rebase 1457/9999]
+ kernel/sched/fair.c:7171 find_energy_efficient_cpu() warn: inconsistent
+ indenting
+Message-ID: <202207231015.TQ62MYh3-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722190901.262a1978.alex.williamson@redhat.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 683b32bb-f04d-4164-c7bf-08da6c50963e
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3133:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: skcMmkHis/56Vvc11wM70RZP8aaykckCteE8rW6HKrvXs9sCA7Jm0H2c0/OtusJuHiT0zalLu8Z1zdAeCVZmrhqWb7LsDGDFX5AEP9S8QZwkfqN6TrG8cjyPWbyW6HiwfI7Q4TUcIQ3CiS9Xmb4iuXmavFkUknpBKViY+wGeo5ZdTXqtT+rktePIOL5rpAG4M8Cb9Rij8iA45E0tS4M2e2gYB5IhkFVU1Fz8s1z61eyAQnRzjO6htKP+AvgCUhWFiVPSijYXo65CIq79nPdqVFT5Ie+4HpnpfBqdtMRe4Z6T5AAfVzmn8++uWVsr3HvJJmlLMpIeGtjwXp7EyJ5yWL4V5EL+jdD8XfKYed/sMe45b+pqACa8UdDp6+HSS5TDQV6974tHt16geHrG97BcsOLZwfRwQjXWRRQbxa+W4/PAvxKRqb8aVUKnGTUa687Z9DjaNe5c737VDTVYp3p3S/WZLpEora+TNRAz0oIrZ73qDW/vPed0jNVmBiB7st/xAoRpB851Mfgqu6MzTrLExJPZqkjjZf/9706+fbIv3ak5p2zXtHmvCfzlnsNI8eKCYKehKB8npzbT5saLwtK3aZdb7Fl0egaz4z0d+pptW7D3Y3K6bHC5FuMKDZNmT58dQwLavOHkb2QHxfc2qku71wc1y5W/MgDe0jFRF3TyyC+gA8lhlCtJS9ewPZlBX6/L8uul34RrGp07TJ54bONxKyXLb0/mm9dDpe27tXqMA1/z2xhaXYEQT28pUWyTAp8tltpZPuX9nPHwKRaqNFAPxdNxVv69vvQaEUZW8/6z0I9G0pC+jtCU1OATjkkjYqJ4ggmzkV/HeRfpJvaLB31cS+V/u5Buh8sjXVN7IHDa8yg04Dv7cJVLFuCrvLIQLkluyGyfetevElzk3erf1ezVqvDX9IECe75NQ1P8gQgDykY=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(136003)(39860400002)(346002)(36840700001)(46966006)(40470700004)(186003)(5660300002)(7406005)(966005)(6916009)(54906003)(478600001)(81166007)(8936002)(82740400003)(356005)(7416002)(70586007)(8676002)(316002)(86362001)(40460700003)(70206006)(47076005)(426003)(4326008)(336012)(36860700001)(9686003)(26005)(33716001)(41300700001)(2906002)(4744005)(82310400005)(55016003)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2022 02:10:59.8976
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 683b32bb-f04d-4164-c7bf-08da6c50963e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3133
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,15 +63,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 07:09:01PM -0600, Alex Williamson wrote:
+tree:   https://github.com/jsarha/linux topic/cros-sof-v4.14-rebase
+head:   18a233f3f676a98dde00947535d99ab1a54da340
+commit: e56a97123c10e6d5ca2ce9a0f1329f02f79f2319 [1457/9999] ANDROID: Add find_best_target to minimise energy calculation overhead
+config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220723/202207231015.TQ62MYh3-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
 
-> > So, I think that I should send a v4, given that the patches aren't
-> > officially applied?
-> 
-> Yep, please rebase on current vfio next branch.  Thanks,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sent. And they are on Github, basing on linux-vfio next too:
-https://github.com/nicolinc/iommufd/commits/vfio_pin_pages-v4
+smatch warnings:
+kernel/sched/fair.c:7171 find_energy_efficient_cpu() warn: inconsistent indenting
 
-Thanks!
-Nic
+vim +7171 kernel/sched/fair.c
+
+  7092	
+  7093	/*
+  7094	 * Needs to be called inside rcu_read_lock critical section.
+  7095	 * sd is a pointer to the sched domain we wish to use for an
+  7096	 * energy-aware placement option.
+  7097	 */
+  7098	static int find_energy_efficient_cpu(struct sched_domain *sd,
+  7099					     struct task_struct *p,
+  7100					     int cpu, int prev_cpu,
+  7101					     int sync)
+  7102	{
+  7103		int use_fbt = sched_feat(FIND_BEST_TARGET);
+  7104		int cpu_iter, eas_cpu_idx = EAS_CPU_NXT;
+  7105		int energy_cpu = prev_cpu;
+  7106		struct energy_env *eenv;
+  7107	
+  7108		if (sysctl_sched_sync_hint_enable && sync) {
+  7109			if (cpumask_test_cpu(cpu, &p->cpus_allowed)) {
+  7110				return cpu;
+  7111			}
+  7112		}
+  7113	
+  7114		/* take ownership of our per-cpu data structure */
+  7115		eenv = get_eenv(p, prev_cpu);
+  7116		if (eenv->max_cpu_count < 2)
+  7117			return energy_cpu;
+  7118	
+  7119		if(!use_fbt) {
+  7120			/*
+  7121			 * using this function outside wakeup balance will not supply
+  7122			 * an sd ptr. Instead, fetch the highest level with energy data.
+  7123			 */
+  7124			if (!sd)
+  7125				sd = rcu_dereference(per_cpu(sd_ea, prev_cpu));
+  7126	
+  7127			for_each_cpu_and(cpu_iter, &p->cpus_allowed, sched_domain_span(sd)) {
+  7128				unsigned long spare;
+  7129	
+  7130				/* prev_cpu already in list */
+  7131				if (cpu_iter == prev_cpu)
+  7132					continue;
+  7133	
+  7134				spare = capacity_spare_wake(cpu_iter, p);
+  7135	
+  7136				if (spare * 1024 < capacity_margin * task_util(p))
+  7137					continue;
+  7138	
+  7139				/* Add CPU candidate */
+  7140				eenv->cpu[eas_cpu_idx++].cpu_id = cpu_iter;
+  7141				eenv->max_cpu_count = eas_cpu_idx;
+  7142	
+  7143				/* stop adding CPUs if we have no space left */
+  7144				if (eas_cpu_idx >= eenv->eenv_cpu_count)
+  7145					break;
+  7146			}
+  7147		} else {
+  7148			int boosted = (schedtune_task_boost(p) > 0);
+  7149			int prefer_idle;
+  7150	
+  7151			/*
+  7152			 * give compiler a hint that if sched_features
+  7153			 * cannot be changed, it is safe to optimise out
+  7154			 * all if(prefer_idle) blocks.
+  7155			 */
+  7156			prefer_idle = sched_feat(EAS_PREFER_IDLE) ?
+  7157					(schedtune_prefer_idle(p) > 0) : 0;
+  7158	
+  7159			eenv->max_cpu_count = EAS_CPU_BKP+1;
+  7160	
+  7161			/* Find a cpu with sufficient capacity */
+  7162			eenv->cpu[EAS_CPU_NXT].cpu_id = find_best_target(p,
+  7163					&eenv->cpu[EAS_CPU_BKP].cpu_id,
+  7164					boosted, prefer_idle);
+  7165	
+  7166			/* take note if no backup was found */
+  7167			if (eenv->cpu[EAS_CPU_BKP].cpu_id < 0)
+  7168				eenv->max_cpu_count = EAS_CPU_BKP;
+  7169	
+  7170			/* take note if no target was found */
+> 7171			 if (eenv->cpu[EAS_CPU_NXT].cpu_id < 0)
+  7172				 eenv->max_cpu_count = EAS_CPU_NXT;
+  7173		}
+  7174	
+  7175		if (eenv->max_cpu_count == EAS_CPU_NXT) {
+  7176			/*
+  7177			 * we did not find any energy-awareness
+  7178			 * candidates beyond prev_cpu, so we will
+  7179			 * fall-back to the regular slow-path.
+  7180			 */
+  7181			return energy_cpu;
+  7182		}
+  7183	
+  7184		/* find most energy-efficient CPU */
+  7185		eas_cpu_idx = select_energy_cpu_idx(eenv);
+  7186		energy_cpu = eenv->cpu[eas_cpu_idx].cpu_id;
+  7187	
+  7188		return energy_cpu;
+  7189	}
+  7190	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

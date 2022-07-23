@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4920957F019
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B9A57F025
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237539AbiGWP3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 11:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S233797AbiGWPoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 11:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237315AbiGWP27 (ORCPT
+        with ESMTP id S229478AbiGWPoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 11:28:59 -0400
-Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2532A1572F;
-        Sat, 23 Jul 2022 08:28:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1658590106; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=Lyjuq3kiDlanKDvP/FngdV62QpvsxmDaU5Bf+c3GbUalfmW6ZEWpY05vprmkOb4UKS1qt9ui3VWDaJHnbOE5c/Ws2a8QSNyl0bCZvnL7e0A3xHSK3iCcY/I81QtLtdZNctgc6wJI/7yZsTiROcQxouOXIsTPTQJvxzSTT+dpVbM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1658590106; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=QUHKy4OgEaxbVLogauALC7ife9v5t5FcKwUzAh8eIRk=; 
-        b=d8O36cgk9f1UBst/XKKzVWaBE4ME9VwSVq+41afy41XVED9ZLZrF9mRmn80zvSHR3nK32RNEoDz6j4UPV0Kb3K7Cy0g6aQlmJgKl9zLhl8HGccPL9G27/yLAnMH6ZNgCHtZXgZOtZHG7rIrNuNZs+uPhCO4HQ00IzVifsYwENcI=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658590106;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=QUHKy4OgEaxbVLogauALC7ife9v5t5FcKwUzAh8eIRk=;
-        b=AX7PeCKipWcL4pk8J9TO01kdzl+FTf3hwvGlt+7TUbONwtwX2oQ4FVcUxIkFRrnp
-        95+19S3rjYI8FzxWHoruMEhjExplwoKmgzCItwqK8hXj2lryYStue6oE1zPGifkDdXB
-        Nmece5GqZ/d/8lyQkNlSscw9ZzenEB8oS+K38+bk=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1658590095403354.57172593740086; Sat, 23 Jul 2022 20:58:15 +0530 (IST)
-Date:   Sat, 23 Jul 2022 20:58:15 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "James Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
-        "David Howells" <dhowells@redhat.com>,
-        "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "James Morris" <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-security-modules" <linux-security-module@vger.kernel.org>,
-        "keyrings" <keyrings@vger.kernel.org>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <1822bac680f.53b862f8236953.7679004564726067655@siddh.me>
-In-Reply-To: <f58c2c8a157714e1860caee9bb005ec469ddb72e.camel@HansenPartnership.com>
-References: <20220723135035.199188-1-code@siddh.me>
-         <YtwAHGISvlgXgXZM@kroah.com>
-         <1822b7c129a.14411444236159.6380883938307880248@siddh.me> <f58c2c8a157714e1860caee9bb005ec469ddb72e.camel@HansenPartnership.com>
-Subject: Re: [PATCH] keys/keyctl: Use kfree_rcu instead of kfree
+        Sat, 23 Jul 2022 11:44:02 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6751EEC0
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 08:44:01 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id os14so13321888ejb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 08:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vzbWWqxYeYmLDBePzGJZG4u77RbNrENkiUPgbd2i+ek=;
+        b=C76uGIWVZX1OHxEG4XznyoLri0sHiDUk31pJHae/yAP2qUBtoyvVFJ6AiqWk5xwsf4
+         xpuzkyKMKqio802O4NGA24Yz1Z9ZmWxQ/Jb2tRRJOPlSdMmkynMaKh2sMWncAaTpe9Mv
+         4ln/lZH/BwkjqkDboNJcpl8unxEuILWMvUZtSNGZ5lFGzoGsfG0R1JyfAynoKdqpp3Mc
+         qdRNNcy3WCit/52vpRbDEU/McVzTaCZ2oKCP7po2TBt92wH+6wjQWvfSRLf0SZCPa0Pz
+         2WmsHD1KZWBoqHqjwJzUwiyWK/hsGn+g0LQjTTw1a6UEveNxcGxiBa19x7SivDPVLs4C
+         Ro9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vzbWWqxYeYmLDBePzGJZG4u77RbNrENkiUPgbd2i+ek=;
+        b=jk7cgEx2pnj6F/0fre7xydIlOKJCcIneABvkPxUcJXppLJPxX/5f0U1iTA1WcexmgC
+         RBAnoVR/ZJAwzRDULGLqjCtQ3jO0TUojghVG+TdiZYAJTSz+x0RC39bN0r7Q95TdbnKk
+         7L+j+pFcuW1q1OhYkKbdaafi8b5Q03dCOYpFSd8CEzpN9/qGCZu38XERV3kkQ7gmEXNb
+         XJzsnby7yGmZghvpO9QG1wY40GUfPRzTbd4zmBg48HbhqcYeKgqQLvk6tOUcrgtKxL0U
+         uRsCPESplpY5m+IFp08gKjbFpvK0eSXPCZ/KQ8o0JPrX0jm1/d+IOZz4uGUiQ/BdFpvt
+         CDog==
+X-Gm-Message-State: AJIora+J4uBUOX4Ychc5/Is5LKo99GdjN3ZBPVyifxzTosk99C1Ebhiw
+        xwg4QQCiozGwqdEGEKeZqVOCRA==
+X-Google-Smtp-Source: AGRyM1vlA9IvYPgdQRXjnokImcQLgvSSbSzQxehA3bchGJ58rbFWaNZECNVjDmku9kf5pVwoBj17qg==
+X-Received: by 2002:a17:907:7b87:b0:72e:d45a:17af with SMTP id ne7-20020a1709077b8700b0072ed45a17afmr3833010ejc.73.1658591039932;
+        Sat, 23 Jul 2022 08:43:59 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170906090c00b0072af56103casm3214985ejd.220.2022.07.23.08.43.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 08:43:59 -0700 (PDT)
+Date:   Sat, 23 Jul 2022 17:43:58 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Vikas Gupta <vikas.gupta@broadcom.com>
+Cc:     jiri@nvidia.com, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        dsahern@kernel.org, stephen@networkplumber.org,
+        edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
+        leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
+        michael.chan@broadcom.com, andrew.gospodarek@broadcom.com
+Subject: Re: [PATCH net-next v6 1/2] devlink: introduce framework for
+ selftests
+Message-ID: <YtwXPt1VzGQr/6Bg@nanopsycho>
+References: <20220723042206.8104-1-vikas.gupta@broadcom.com>
+ <20220723042206.8104-2-vikas.gupta@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220723042206.8104-2-vikas.gupta@broadcom.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 23 Jul 2022 20:20:49 +0530  James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
-> That doesn't apply in this case, does it?  watch and wlist are locally
-> allocated and neither has been made externally visible if the error leg
-> is taken, so they should just be locally freed, which is what the code
-> was doing before this proposed patch.
+Sat, Jul 23, 2022 at 06:22:05AM CEST, vikas.gupta@broadcom.com wrote:
+>Add a framework for running selftests.
+>Framework exposes devlink commands and test suite(s) to the user
+>to execute and query the supported tests by the driver.
+>
+>Below are new entries in devlink_nl_ops
+>devlink_nl_cmd_selftests_show_doit/dumpit: To query the supported
+>selftests by the drivers.
+>devlink_nl_cmd_selftests_run: To execute selftests. Users can
+>provide a test mask for executing group tests or standalone tests.
+>
+>Documentation/networking/devlink/ path is already part of MAINTAINERS &
+>the new files come under this path. Hence no update needed to the
+>MAINTAINERS
+>
+>Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
+>Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+>Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
 
-You are correct.
-
-Sorry for this, I should have looked at it for a tad bit more.
-
-Thanks,
-Siddh
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>

@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A98157EF25
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 14:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6D857EF28
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 14:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiGWMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 08:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S233422AbiGWMnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 08:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGWMjk (ORCPT
+        with ESMTP id S229462AbiGWMnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 08:39:40 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA74FDF59
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 05:39:39 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id b34so2976449ljr.7
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 05:39:39 -0700 (PDT)
+        Sat, 23 Jul 2022 08:43:46 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08491CFF2
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 05:43:41 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y9so6538593pff.12
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 05:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=sBMjEwgF7MUS7+DdbZklHB7SYLW9sIZnm/K9xMtXH4E=;
-        b=p1geE7uXR3tgT6OWNrx9O9NKNmUANZXtnOfnVG+ZhdGOk4vrd+Ld/fD7kPuMO8uYt8
-         bFxudZxqHG1Nm+BHgGw9o03RqehfxvTgCN7ztfYe1F+hQK+9zG9aU6Ngc8m9lMYFDzJH
-         PIQlxtu7lOJKwwQDlyjOjtJaewZLKoz8SPPVOySMAET+djIDg3AfbX/3or60AZ0ggYqo
-         FUUypj8p7yg5I5klC5LHsC51K2QX86zv+ysez0nEPs8GDb6v7bkICi8OWRjIPPfm3Bph
-         tFCgz3p/8QtNl0nBwTp1u9dHv4ocpR/81gNtf/fMNWEcPL/Wb+pkUwbk8/H3UT59vXPc
-         NMsA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=ReiBAAOfgFnloPVte6r4tHNGKHUp1kRjmGGIHVuKdbw=;
+        b=i8BJrGCsQ3WZJI2TVFnQ4ARVI0OUYZP08MKFayK4E9aTiMUhTJG6Q5267xqRbOEREW
+         /4peAhKCXe+N850DtC30mW66r8swYQIvluw9f2pPBcruZYi+ITTWkUQVMqq/h1lzcJ86
+         qg13L2cJsNfWgITLKH8IvKmjL+Ox1LuJ665Zez0O4iWN+zNuO3ezbhPANXPPJ7PYnjJi
+         maVSmZoQY3Ns3BDsK+yCJ2ZNOQJUCSbHMgmfUsCfQ6iZuFzuZYEBvVobMPBQvRcUA3Mj
+         EqYuF92WcVd1MfbTNI4gcGzD/gfOJHShDPBlvFzsVOwQKVX/y4WrqUM0TLszUypwQJeG
+         s8pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=sBMjEwgF7MUS7+DdbZklHB7SYLW9sIZnm/K9xMtXH4E=;
-        b=wRciKiaJNyXcmdzQYp9k5mGtFXPT7SPNK4eZgIKv/ms3cKjzOoLEnEw24+Dx3jcYVd
-         Nk76Nez7JvZAUHAasX55Eh3a5fEl25mGPug5E62bKDvy+AmdHq5YRkqBesu2BUe6oJr2
-         zmbGq0LRPvM834Rbd8jgKLf6z+3E8lYWIN6tNudGGmSxOuOJPmCVCnkIq5XVhy7DHaIF
-         JcB0pl+beYf+8Z9ONNxyuaQd0ekq0ESTWKTOTspgRzOqz3vgIsBb8tuA31BJ7hcfsa4+
-         DMnEicLUTCqVVGGZmaQIH46iVO4sGNYjCWW/L0KpymRVCPGY03L/ln6brUecEkItclW5
-         eWYA==
-X-Gm-Message-State: AJIora+GEI1RE9bFF/4XTup7j37WdWAGPHkDdULsSV3eBForcyfnRaN5
-        uEbq8vPdUdv3Ohq3lNReuOLZvMttrPV2UGUzYO4=
-X-Google-Smtp-Source: AGRyM1vnvmT2wkXBB46PDP5hojL19YpZyUEmfc+gqpzw4PpofD9/0928u1+NmjUwQ5hBM1f89kXXYxIjLpDrQnEUjnQ=
-X-Received: by 2002:a2e:bd13:0:b0:244:da2f:ff4d with SMTP id
- n19-20020a2ebd13000000b00244da2fff4dmr1444260ljq.213.1658579977694; Sat, 23
- Jul 2022 05:39:37 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ReiBAAOfgFnloPVte6r4tHNGKHUp1kRjmGGIHVuKdbw=;
+        b=jZo6q6Hkw9r02vFmKW0xeJrjw0ZQpovu7Mi++7B/jctbLoG3oCw31UFt52LRxyCySX
+         mT5fNHOyDn9FHRrRm10MMfANwUoI4ZW11GATkT8byUAhO8q4eeT1OEqBY7JkbFn9G0LT
+         Eef6Dw45dnp9/eRmGwlAbj2lgskWlKVKL4pB1yLcKpyjbXhrTvLnRQ3kOmPNlQOL7RPQ
+         2115z1ernvSmJf/bWwRmDmS4Zl/3Ccqx1nstMr0rdlvdi9YzYC+fd6wIqrbSV12kRPM/
+         yzK4env/BPVYOTBtmliaZ6DPz335TODqJPN3l32HLYpjdfJSiVv4t43e0WkXxa5dbrc6
+         qPcQ==
+X-Gm-Message-State: AJIora8qPuS65SP6GFJ1xR3632+XamhSBQosqwkEdkNjLm5rvFtbVZ2K
+        wakXAEzIqfiussQ5+gUvw1/jEGBFJqoS9w==
+X-Google-Smtp-Source: AGRyM1vbJUPTuqJWkVG+0vq/JWI6qv3IpJUOS3swpO2q2RR4mE/fGoX6PyPd10s4p5N3a3OjoeGogA==
+X-Received: by 2002:a62:ea18:0:b0:52a:c12b:9313 with SMTP id t24-20020a62ea18000000b0052ac12b9313mr4504191pfh.49.1658580221399;
+        Sat, 23 Jul 2022 05:43:41 -0700 (PDT)
+Received: from ?IPV6:2602:ae:1549:801:2d4f:84b3:76fd:8a95? ([2602:ae:1549:801:2d4f:84b3:76fd:8a95])
+        by smtp.gmail.com with ESMTPSA id d2-20020a170902654200b0016cf8f0bdd5sm5578609pln.108.2022.07.23.05.43.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Jul 2022 05:43:40 -0700 (PDT)
+Message-ID: <8c0ad12a-6101-8ba7-f3bf-0be6a9e6054e@linaro.org>
+Date:   Sat, 23 Jul 2022 05:43:38 -0700
 MIME-Version: 1.0
-From:   eli hug <elihug9412@gmail.com>
-Date:   Sat, 23 Jul 2022 18:09:25 +0530
-Message-ID: <CABxgt50wvg8+1jHepe+1+xALVw8xyzY-RwKENv8CgLEKC94t0A@mail.gmail.com>
-Subject: Thank you for your order
-To:     paypalbackned73@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] MAINTAINERS: Update Richard Henderson's address
+Content-Language: en-US
+To:     Stafford Horne <shorne@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220722211854.802252-1-shorne@gmail.com>
+From:   Richard Henderson <richard.henderson@linaro.org>
+In-Reply-To: <20220722211854.802252-1-shorne@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AHello Customer,
-                              24/7 PayPal Billing Department
+On 7/23/22 02:48, Stafford Horne wrote:
+> Richards address at twiddle.net no longer works and we are getting
+> bounces.
+> 
+> This patch updates to his Linaro address.
+> 
+> Cc: Richard Henderson <richard.henderson@linaro.org>
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
+> ---
+>   MAINTAINERS | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f679152bdbad..e64ca0ac6db7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -797,7 +797,7 @@ S:	Maintained
+>   F:	drivers/staging/media/sunxi/cedrus/
+>   
+>   ALPHA PORT
+> -M:	Richard Henderson <rth@twiddle.net>
+> +M:	Richard Henderson <richard.henderson@linaro.org>
+>   M:	Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+>   M:	Matt Turner <mattst88@gmail.com>
+>   L:	linux-alpha@vger.kernel.org
 
-                                               +1 (8 8 8) - 2 1 5 - 8
-3 8 8
+Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
 
-Thank you for choosing PayPal for placing your order  BITCOIN(BTC) on
-July 23th,2022
-
-We would like to inform you about your recent purchase of $256.55
- This charge will reflect in your account within 24 hours.
-Product information
-
-
-Product Price         : $256.55
-Invoice               : ZXCV#346DFG
-Item Name             : BITCOIN(BTC)
-Quantity              : 1
-Payment method        : PAYPAL
-
-Please do not reply this email. We are unable to respond to enquiries
-sent to this address.
-For immediate answers to your questions,
-PayPal Billing Department toll-free for USA & Canada +1 (8 8 8) - 2 1
-5 - 8 3 8 8
-
-PayPal
-2211 North First Street 2211 North First Street
-San Jose California 95131
-United States
+r~

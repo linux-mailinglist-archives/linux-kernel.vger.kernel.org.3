@@ -2,127 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CE757EF12
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 13:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A98157EF25
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 14:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235201AbiGWLn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 07:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S232087AbiGWMjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 08:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiGWLnX (ORCPT
+        with ESMTP id S229462AbiGWMjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 07:43:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AD71BE8E
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 04:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658576602; x=1690112602;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nfnCHYoMY2tDPyXHKF0xWuuQt4+rPKGgT4kXodGeX08=;
-  b=N0ZDzDqOoFhEwVMsUPDagbDLQNC+Lvt6cNHd6Pd7lT8XgdfpxbSaIK+9
-   +cdpPUnxNzKF8gSfkrG2jUA7+hk9W+xZ5oOdHB9HnENLBhrLxP0rJ2IQD
-   JirTglfF6B4jDYBMWBvVCb2t1jhotjBy8vbHyG1rFD3D7k8PZKcpj4zrm
-   GPM0Yt1OuLDCP0T7LWdjGAD2K7l/B+jan9YRKgrzRp/YIfH+oKfhuq5Ss
-   e27hMCLxqQ5A4DroKPN3J/FNeCF8OADkvUkogC8Zw8S67TOt0oURgKU7M
-   1Tzis8cKinQuRmlU2acgr7lGnqhF8zkCpjdUj9groypSWztP4O4721WK0
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="351459202"
-X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
-   d="scan'208";a="351459202"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 04:43:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,188,1654585200"; 
-   d="scan'208";a="574461537"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Jul 2022 04:43:20 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFDXT-0002Y5-15;
-        Sat, 23 Jul 2022 11:43:19 +0000
-Date:   Sat, 23 Jul 2022 19:42:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Atish Patra <Atish.Patra@wdc.com>,
-        linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>
-Subject: [atishp04:sstc_v6 5/5] arch/riscv/kvm/vcpu_timer.c:302:23: warning:
- variable 'csr' set but not used
-Message-ID: <202207231936.SWNvXLnK-lkp@intel.com>
+        Sat, 23 Jul 2022 08:39:40 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA74FDF59
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 05:39:39 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id b34so2976449ljr.7
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 05:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=sBMjEwgF7MUS7+DdbZklHB7SYLW9sIZnm/K9xMtXH4E=;
+        b=p1geE7uXR3tgT6OWNrx9O9NKNmUANZXtnOfnVG+ZhdGOk4vrd+Ld/fD7kPuMO8uYt8
+         bFxudZxqHG1Nm+BHgGw9o03RqehfxvTgCN7ztfYe1F+hQK+9zG9aU6Ngc8m9lMYFDzJH
+         PIQlxtu7lOJKwwQDlyjOjtJaewZLKoz8SPPVOySMAET+djIDg3AfbX/3or60AZ0ggYqo
+         FUUypj8p7yg5I5klC5LHsC51K2QX86zv+ysez0nEPs8GDb6v7bkICi8OWRjIPPfm3Bph
+         tFCgz3p/8QtNl0nBwTp1u9dHv4ocpR/81gNtf/fMNWEcPL/Wb+pkUwbk8/H3UT59vXPc
+         NMsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=sBMjEwgF7MUS7+DdbZklHB7SYLW9sIZnm/K9xMtXH4E=;
+        b=wRciKiaJNyXcmdzQYp9k5mGtFXPT7SPNK4eZgIKv/ms3cKjzOoLEnEw24+Dx3jcYVd
+         Nk76Nez7JvZAUHAasX55Eh3a5fEl25mGPug5E62bKDvy+AmdHq5YRkqBesu2BUe6oJr2
+         zmbGq0LRPvM834Rbd8jgKLf6z+3E8lYWIN6tNudGGmSxOuOJPmCVCnkIq5XVhy7DHaIF
+         JcB0pl+beYf+8Z9ONNxyuaQd0ekq0ESTWKTOTspgRzOqz3vgIsBb8tuA31BJ7hcfsa4+
+         DMnEicLUTCqVVGGZmaQIH46iVO4sGNYjCWW/L0KpymRVCPGY03L/ln6brUecEkItclW5
+         eWYA==
+X-Gm-Message-State: AJIora+GEI1RE9bFF/4XTup7j37WdWAGPHkDdULsSV3eBForcyfnRaN5
+        uEbq8vPdUdv3Ohq3lNReuOLZvMttrPV2UGUzYO4=
+X-Google-Smtp-Source: AGRyM1vnvmT2wkXBB46PDP5hojL19YpZyUEmfc+gqpzw4PpofD9/0928u1+NmjUwQ5hBM1f89kXXYxIjLpDrQnEUjnQ=
+X-Received: by 2002:a2e:bd13:0:b0:244:da2f:ff4d with SMTP id
+ n19-20020a2ebd13000000b00244da2fff4dmr1444260ljq.213.1658579977694; Sat, 23
+ Jul 2022 05:39:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   eli hug <elihug9412@gmail.com>
+Date:   Sat, 23 Jul 2022 18:09:25 +0530
+Message-ID: <CABxgt50wvg8+1jHepe+1+xALVw8xyzY-RwKENv8CgLEKC94t0A@mail.gmail.com>
+Subject: Thank you for your order
+To:     paypalbackned73@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/atishp04/linux sstc_v6
-head:   c20c842325eb8261b2a0a034aad746505475fef7
-commit: c20c842325eb8261b2a0a034aad746505475fef7 [5/5] RISC-V: KVM: Support sstc extension
-config: riscv-randconfig-c006-20220721 (https://download.01.org/0day-ci/archive/20220723/202207231936.SWNvXLnK-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/atishp04/linux/commit/c20c842325eb8261b2a0a034aad746505475fef7
-        git remote add atishp04 https://github.com/atishp04/linux
-        git fetch --no-tags atishp04 sstc_v6
-        git checkout c20c842325eb8261b2a0a034aad746505475fef7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+AHello Customer,
+                              24/7 PayPal Billing Department
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+                                               +1 (8 8 8) - 2 1 5 - 8
+3 8 8
 
-All warnings (new ones prefixed by >>):
+Thank you for choosing PayPal for placing your order  BITCOIN(BTC) on
+July 23th,2022
 
->> arch/riscv/kvm/vcpu_timer.c:302:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
-           struct kvm_vcpu_csr *csr;
-                                ^
-   arch/riscv/kvm/vcpu_timer.c:327:23: warning: variable 'csr' set but not used [-Wunused-but-set-variable]
-           struct kvm_vcpu_csr *csr;
-                                ^
-   2 warnings generated.
+We would like to inform you about your recent purchase of $256.55
+ This charge will reflect in your account within 24 hours.
+Product information
 
 
-vim +/csr +302 arch/riscv/kvm/vcpu_timer.c
+Product Price         : $256.55
+Invoice               : ZXCV#346DFG
+Item Name             : BITCOIN(BTC)
+Quantity              : 1
+Payment method        : PAYPAL
 
-   299	
-   300	void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
-   301	{
- > 302		struct kvm_vcpu_csr *csr;
-   303		struct kvm_vcpu_timer *t = &vcpu->arch.timer;
-   304	
-   305		kvm_riscv_vcpu_update_timedelta(vcpu);
-   306	
-   307		if (!t->sstc_enabled)
-   308			return;
-   309	
-   310		csr = &vcpu->arch.guest_csr;
-   311	#if defined(CONFIG_32BIT)
-   312		csr_write(CSR_VSTIMECMP, (u32)t->next_cycles);
-   313		csr_write(CSR_VSTIMECMPH, (u32)(t->next_cycles >> 32));
-   314	#else
-   315		csr_write(CSR_VSTIMECMP, t->next_cycles);
-   316	#endif
-   317	
-   318		/* timer should be enabled for the remaining operations */
-   319		if (unlikely(!t->init_done))
-   320			return;
-   321	
-   322		kvm_riscv_vcpu_timer_unblocking(vcpu);
-   323	}
-   324	
+Please do not reply this email. We are unable to respond to enquiries
+sent to this address.
+For immediate answers to your questions,
+PayPal Billing Department toll-free for USA & Canada +1 (8 8 8) - 2 1
+5 - 8 3 8 8
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+PayPal
+2211 North First Street 2211 North First Street
+San Jose California 95131
+United States

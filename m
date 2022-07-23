@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFC857EB1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 03:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD9657EB22
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 03:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbiGWBxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 21:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        id S236928AbiGWByA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 21:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiGWBxK (ORCPT
+        with ESMTP id S237004AbiGWBxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 21:53:10 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD5E73587
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:53:09 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id b10so5710569pjq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:53:09 -0700 (PDT)
+        Fri, 22 Jul 2022 21:53:55 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCB5BA4F5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:53:41 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j2-20020a2597c2000000b0064b3e54191aso4949702ybo.20
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 18:53:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=zOMb5JQq7oT4D4mCscu+rB2TXNo1OHAZ5Z1k9q2pmg4=;
-        b=X+SR+9JQxGmSIJAuRLWqRvFNr5sA17kNdIeoczXoQ5GthCHW9R9pFITkKnj/F4xkXM
-         yefY20WDhjHl4plOW8VKsgv1v0NfBRFxfICKLMeO84AL5jLjvq5IVU78BX/yUZkdJ5MS
-         s4dVKN7/InHy2mI3kkOkVecKXQfoTOUwoOwKl76TWUxCMUpvX2YeId5rfKquxPB56G1g
-         iBW7fWtS5yFYWGukovhANWHm7GLm6Cn7AlvF/jLA1QWPimoiB8a+4sYKEXNGsqqtDwW4
-         o61R8ABDkUl0iFzvS1lh5HlNHh6ORnmmsbWx8l8u64W1UBhPmlgtwSPbK5jW4m53bk21
-         7koQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=QzVlb8qpExa5uUedfnq5+iu4UDDUWMU5VkWdWsn02VU=;
+        b=EQ6PtzwOdEHEABoyy6OuSzp7qYw4y6N5wBrufelHeYXwo1W09/iCMaOl5JqQ5JinYS
+         Hwj/otSOhvtAXXr+HylbgzHrTTXP9M7R3vdzkg9YE6CSGtrHeW0oZSxSxY2vcfS9BUNN
+         8JJH5Du7lQz6KTZqRqpNKUUNQKM9SWJxjRkaxexKiOwlNSPI2jbVDPLR6mNfiuRWTSEZ
+         1cUJB3xaOHJ283IsF+6PIXpcLIDdJaiwL6zQKopaoT1ry7LPKRewkaXAJ8xgIThfN7SO
+         9Gfq0HgWbxMAEFVLGpnpoPnXgrDE24wRfqCpakD1SL+wleRkxyy2AkOdlg2RYnohUSe5
+         zQ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zOMb5JQq7oT4D4mCscu+rB2TXNo1OHAZ5Z1k9q2pmg4=;
-        b=WyQEHsBNg5secZuZVJjKQZBCcSW7OtWQO+fFfyAy9JxD0piMCqRLmBXhzOCKuykUjW
-         5p4471ZxwMTLSUsh3uAuTIL3RP6MGGpF/Qer48c00ybRmbXM1pNcaJHaRcseXFabhSGs
-         OVXJS+N8MdXhS52cCJ6j8z/FUfc/347xU2Z4i+sozTaZKZTwgjFBssiXv+ptd/j9AoAK
-         nwf87G3wmkAXHcshWwzYeHgN02dDrwxaLuDjuFZrXxb14f9fpM3R6X6xPiKUAKzUWHJy
-         QWuJhEXVBTlRvIN3NYRaPjQMBEfUGtQAVfrNfCn22SLuknPnwuErBubEg5kQh1cR5Riq
-         jTLw==
-X-Gm-Message-State: AJIora8L9U1gef/zM6iZ6AvNqc6rQBuTc1ox2G7To1qQw1K6eqcg3jM/
-        4ePC1kt5mkjxTk3H+IeKJwc=
-X-Google-Smtp-Source: AGRyM1tHEYoT3ayrsB98JEcmHXHTdU2hX7cPvrnxPbmiiFeGAt3ch8zSdaXZ50rY0p1NjwmsZKpSQg==
-X-Received: by 2002:a17:902:a418:b0:16c:9ee2:8a02 with SMTP id p24-20020a170902a41800b0016c9ee28a02mr2249570plq.46.1658541188582;
-        Fri, 22 Jul 2022 18:53:08 -0700 (PDT)
-Received: from localhost.localdomain (c-73-241-94-58.hsd1.ca.comcast.net. [73.241.94.58])
-        by smtp.gmail.com with ESMTPSA id f64-20020a17090a28c600b001ef7c7564fdsm6250855pjd.21.2022.07.22.18.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 18:53:08 -0700 (PDT)
-From:   Ryan Lee <ryan.lee.analog@gmail.com>
-X-Google-Original-From: Ryan Lee <ryans.lee@analog.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, steve@sk2.org, ryans.lee@analog.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     ryan.lee.analog@gmail.com
-Subject: [PATCH] ASoC: max98373: Removing 0x203E from the volatile reg
-Date:   Fri, 22 Jul 2022 18:52:20 -0700
-Message-Id: <20220723015220.4169-1-ryans.lee@analog.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=QzVlb8qpExa5uUedfnq5+iu4UDDUWMU5VkWdWsn02VU=;
+        b=7CwzU5MG79bW/83bRqVDsa0Lx2pxdKD/bF0Nd+ITtP21U7Xo4OJCv2lwB9g7UGS9Bs
+         JqWDXvjpFhcaix38bQ4kaz/mQVuMPd828dkg348251m9zsxL16ZFkZxEVlJ3vpD6c6oM
+         wFKQPFuCRbyGFsaxUfVkqMLRH/jAm5N54Cl4Fa31q6PBfuITgN6BK4mAbjZLMhKdlJZK
+         QdJz0E5cQ2ld4f5aH6ETduWparhl1WRqXxS/yhzfqI0FaesEmyIWxZFjJzBNPPvJC3SN
+         xn1Zvm8dNxKP4wNMMF0Skav7hCeqnqPhacWpFgaoLQwOeP85ulJOdl9wtDfm/qVxjg4x
+         rfQQ==
+X-Gm-Message-State: AJIora9Fr1/X1h6NgB4oPuHPVZkZZSudIoQxoHYSIIwypGtuEuwQE9S/
+        TwuR35RomgyXv9YthtYuIlz9R2I=
+X-Google-Smtp-Source: AGRyM1tVcqNkVZYGojbcmD7lQ2+N12RkCDbcUNv/niNww7XOfScR5g01ii92VGPPiFLionB4KtJOLH0=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:2571:bd04:907d:d32f])
+ (user=pcc job=sendgmr) by 2002:a81:4746:0:b0:31e:a8fc:5db2 with SMTP id
+ u67-20020a814746000000b0031ea8fc5db2mr2210782ywa.395.1658541220146; Fri, 22
+ Jul 2022 18:53:40 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 18:53:31 -0700
+Message-Id: <20220723015331.1607029-1-pcc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH] of/fdt: Clean up early_init_dt_reserve_memory_arch()
+From:   Peter Collingbourne <pcc@google.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Peter Collingbourne <pcc@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +65,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 0x203E speaker gain register should be non-volatile.
-This register value was not able to be synced because it was marked as
-volatile.
+As of commit 18250b43f7b6 ("of: fdt: Remove
+early_init_dt_reserve_memory_arch() override capability") this is
+no longer an arch hook, so rename it to remove the confusing _arch
+suffix. Also remove some unnecessary indirection from all but one of
+the callers by calling memblock_reserve() directly instead.
 
-Signed-off-by: Ryan Lee <ryans.lee@analog.com>
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Link: https://linux-review.googlesource.com/id/I3362bdd92ae6e47e8f5bac01aa228d32f9d01aad
 ---
- sound/soc/codecs/max98373-i2c.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/of/fdt.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/sound/soc/codecs/max98373-i2c.c b/sound/soc/codecs/max98373-i2c.c
-index 4fe065ece17c..3e04c7f0cce4 100644
---- a/sound/soc/codecs/max98373-i2c.c
-+++ b/sound/soc/codecs/max98373-i2c.c
-@@ -442,7 +442,6 @@ static bool max98373_volatile_reg(struct device *dev, unsigned int reg)
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index a8f5b6532165..ac43f1788c1b 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -477,8 +477,8 @@ void *initial_boot_params __ro_after_init;
+ 
+ static u32 of_fdt_crc32;
+ 
+-static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+-					phys_addr_t size, bool nomap)
++static int __init early_init_dt_reserve_memory(phys_addr_t base,
++					       phys_addr_t size, bool nomap)
  {
- 	switch (reg) {
- 	case MAX98373_R2000_SW_RESET ... MAX98373_R2009_INT_FLAG3:
--	case MAX98373_R203E_AMP_PATH_GAIN:
- 	case MAX98373_R2054_MEAS_ADC_PVDD_CH_READBACK:
- 	case MAX98373_R2055_MEAS_ADC_THERM_CH_READBACK:
- 	case MAX98373_R20B6_BDE_CUR_STATE_READBACK:
+ 	if (nomap) {
+ 		/*
+@@ -525,7 +525,7 @@ static int __init __reserved_mem_reserve_reg(unsigned long node,
+ 		size = dt_mem_next_cell(dt_root_size_cells, &prop);
+ 
+ 		if (size &&
+-		    early_init_dt_reserve_memory_arch(base, size, nomap) == 0) {
++		    early_init_dt_reserve_memory(base, size, nomap) == 0) {
+ 			pr_debug("Reserved memory: reserved region for node '%s': base %pa, size %lu MiB\n",
+ 				uname, &base, (unsigned long)(size / SZ_1M));
+ 			if (!nomap)
+@@ -644,7 +644,7 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
+ 		if (!size)
+ 			break;
+-		early_init_dt_reserve_memory_arch(base, size, false);
++		memblock_reserve(base, size);
+ 	}
+ 
+ 	fdt_scan_reserved_mem();
+@@ -661,9 +661,8 @@ void __init early_init_fdt_reserve_self(void)
+ 		return;
+ 
+ 	/* Reserve the dtb region */
+-	early_init_dt_reserve_memory_arch(__pa(initial_boot_params),
+-					  fdt_totalsize(initial_boot_params),
+-					  false);
++	memblock_reserve(__pa(initial_boot_params),
++			 fdt_totalsize(initial_boot_params));
+ }
+ 
+ /**
 -- 
-2.37.0
+2.37.1.359.gd136c6c3e2-goog
 

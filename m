@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11F057F018
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4920957F019
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 17:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbiGWP24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 11:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S237539AbiGWP3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 11:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiGWP2y (ORCPT
+        with ESMTP id S237315AbiGWP27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 11:28:54 -0400
+        Sat, 23 Jul 2022 11:28:59 -0400
 Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3CE6463;
-        Sat, 23 Jul 2022 08:28:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1658590104; cv=none; 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2532A1572F;
+        Sat, 23 Jul 2022 08:28:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1658590106; cv=none; 
         d=zohomail.in; s=zohoarc; 
-        b=SfXn29km/qJz/tyr1mEVbXFLg9lP11bJxbf9W4N664oeLlxSJXky7g+FNxTWxKTRXBnDKR5ip/ZuLKVkL1VQIKNNxkYuOzwrL0h6EPjABeKK6TpjaxaEgk9TJdZGerKYJYvuFYQRuCJqLBi7wBWX1uFR+FDG2Zj6ZZUMtUQkiDY=
+        b=Lyjuq3kiDlanKDvP/FngdV62QpvsxmDaU5Bf+c3GbUalfmW6ZEWpY05vprmkOb4UKS1qt9ui3VWDaJHnbOE5c/Ws2a8QSNyl0bCZvnL7e0A3xHSK3iCcY/I81QtLtdZNctgc6wJI/7yZsTiROcQxouOXIsTPTQJvxzSTT+dpVbM=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1658590104; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=c1lQAq9l2Vi8XJIR9+FZPadcoaYjnJn9vuGp/Q5uuoE=; 
-        b=a9OW8xI5fv1pW1A++gMs6sE9pCgr33942KvaplJ/Mu/4WGKFchUg3nwSmmfGw7lbXurGZZl5ZbOmq+5GbFcFWDenuxf4v93fIfIPtZv2E217/bxQ1TsCfjp0UWPbbBCuyFxGWSnbapDiCeHnUDlea0TS3kp+0pwiBPEJB5pWjVc=
+        t=1658590106; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=QUHKy4OgEaxbVLogauALC7ife9v5t5FcKwUzAh8eIRk=; 
+        b=d8O36cgk9f1UBst/XKKzVWaBE4ME9VwSVq+41afy41XVED9ZLZrF9mRmn80zvSHR3nK32RNEoDz6j4UPV0Kb3K7Cy0g6aQlmJgKl9zLhl8HGccPL9G27/yLAnMH6ZNgCHtZXgZOtZHG7rIrNuNZs+uPhCO4HQ00IzVifsYwENcI=
 ARC-Authentication-Results: i=1; mx.zohomail.in;
         dkim=pass  header.i=siddh.me;
         spf=pass  smtp.mailfrom=code@siddh.me;
         dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658590104;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658590106;
         s=zmail; d=siddh.me; i=code@siddh.me;
         h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=c1lQAq9l2Vi8XJIR9+FZPadcoaYjnJn9vuGp/Q5uuoE=;
-        b=lwAEDaBcqbpoTMrbx8xU+XgUjI5zEmh8ONCKOEoT+C37vmL0x1s1g+b0XpP6ZKON
-        HYRGQOIj0oxNDYVUyds4QpDjYj6nJJbXnOYBnN6qXe5rsEWchmmtcbx8c15nrSOODxJ
-        0Y/pjeP6CJJ+5mNFcMbvSL4PDN/fWLPmqN7pEsy8=
+        bh=QUHKy4OgEaxbVLogauALC7ife9v5t5FcKwUzAh8eIRk=;
+        b=AX7PeCKipWcL4pk8J9TO01kdzl+FTf3hwvGlt+7TUbONwtwX2oQ4FVcUxIkFRrnp
+        95+19S3rjYI8FzxWHoruMEhjExplwoKmgzCItwqK8hXj2lryYStue6oE1zPGifkDdXB
+        Nmece5GqZ/d/8lyQkNlSscw9ZzenEB8oS+K38+bk=
 Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1658590092355322.4350711864895; Sat, 23 Jul 2022 20:58:12 +0530 (IST)
-Date:   Sat, 23 Jul 2022 20:58:12 +0530
+        with SMTP id 1658590095403354.57172593740086; Sat, 23 Jul 2022 20:58:15 +0530 (IST)
+Date:   Sat, 23 Jul 2022 20:58:15 +0530
 From:   Siddh Raman Pant <code@siddh.me>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     "David Howells" <dhowells@redhat.com>,
+To:     "James Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "David Howells" <dhowells@redhat.com>,
         "Jarkko Sakkinen" <jarkko@kernel.org>,
         "James Morris" <jmorris@namei.org>,
         "Serge E. Hallyn" <serge@hallyn.com>,
@@ -47,11 +48,11 @@ Cc:     "David Howells" <dhowells@redhat.com>,
         "linux-kernel-mentees" 
         <linux-kernel-mentees@lists.linuxfoundation.org>,
         "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <1822bac5c28.17c2e13a236951.2030393349322231875@siddh.me>
-In-Reply-To: <YtwI/3/Qp3lSKuls@kroah.com>
+Message-ID: <1822bac680f.53b862f8236953.7679004564726067655@siddh.me>
+In-Reply-To: <f58c2c8a157714e1860caee9bb005ec469ddb72e.camel@HansenPartnership.com>
 References: <20220723135035.199188-1-code@siddh.me>
- <YtwAHGISvlgXgXZM@kroah.com>
- <1822b7c129a.14411444236159.6380883938307880248@siddh.me> <YtwI/3/Qp3lSKuls@kroah.com>
+         <YtwAHGISvlgXgXZM@kroah.com>
+         <1822b7c129a.14411444236159.6380883938307880248@siddh.me> <f58c2c8a157714e1860caee9bb005ec469ddb72e.camel@HansenPartnership.com>
 Subject: Re: [PATCH] keys/keyctl: Use kfree_rcu instead of kfree
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
@@ -69,28 +70,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 23 Jul 2022 20:13:11 +0530  Greg KH <gregkh@linuxfoundation.org> wrote:
-> You need to explain all of this in a changelog text.  Don't say what you
-> do, but say why you are doing it.
+On Sat, 23 Jul 2022 20:20:49 +0530  James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
+> That doesn't apply in this case, does it?  watch and wlist are locally
+> allocated and neither has been made externally visible if the error leg
+> is taken, so they should just be locally freed, which is what the code
+> was doing before this proposed patch.
 
-Okay, I will keep this in mind next time.
+You are correct.
 
-> > > And how was this tested?
-> > 
-> > It compiles locally for me, and I used syzbot on this along with testing the
-> > other `watch_queue_clear` patch, which generated no errors.
-> 
-> How does the watch queue stuff relate to this keyctl logic?
-> 
-> Again, be specific as to why you are doing things.
+Sorry for this, I should have looked at it for a tad bit more.
 
-It doesn't relate, I just wanted to say that syzbot didn't crash too (I had
-this change in the same branch as that patch for testing, and syzbot compiled
-it successfully).
-
-Sorry for the confusion.
-
-Though now as James has pointed out, this patch isn't needed.
-
-Apologies,
+Thanks,
 Siddh

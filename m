@@ -2,59 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403D357EAEA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 02:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6600957EAF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 03:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237048AbiGWA4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 20:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
+        id S233032AbiGWBCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 21:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbiGWA40 (ORCPT
+        with ESMTP id S229572AbiGWBCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 20:56:26 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D691CB76C
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 17:54:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658537661; x=1690073661;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UmhGtKJFMMjflf8JYn+tkERQD/1DxXTK6pIJaSBKdwk=;
-  b=ZfFOHVb6CKfrdD+t+LA1h2cX3Hu9dWLS6Ve5WE9E6BOkTk3O7B7GIBZQ
-   aJZTMhaXDq0DYS5FVBcuZB4WdZb1cyrE8PbRevlLtAFwFKmdUVU+PyBuH
-   MX5IkwQ7/smQuSMq9WLYjhrQLpO/HIGgYPVHIu2XTLCJ4dy1vBgGS5wuR
-   EKAEBvLBgXkYy+rU+Camg4ypkrzGAu/NjAckP7pvpIl5XlYXpurczfcJK
-   gGkg7kW1RtHDURsHwCbwgiQ4z3ZVyI9dRbVSuVwNUr6IYEFugwawqngNV
-   O+RRlZUZLx+lw65d2P6Xu7jPwi4n55aJ4w/AC/G7fp9/+4YGbKX6/gBIl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="267826340"
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="267826340"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 17:53:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,186,1654585200"; 
-   d="scan'208";a="549356158"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 22 Jul 2022 17:53:48 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oF3Ot-0001yl-1V;
-        Sat, 23 Jul 2022 00:53:47 +0000
-Date:   Sat, 23 Jul 2022 08:52:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: security/keys/trusted-keys/trusted_tpm2.c:42:6: warning: mixing
- declarations and code is incompatible with standards before C99
-Message-ID: <202207230823.zcrjNiOI-lkp@intel.com>
+        Fri, 22 Jul 2022 21:02:38 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7793D13E18;
+        Fri, 22 Jul 2022 18:02:37 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id c12so217137ede.3;
+        Fri, 22 Jul 2022 18:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jlyu+Ezdns1o/Dl+mNDx1dSSzCArmmCHe5zOulHCgYY=;
+        b=PZsBl5ooCfsAyfBssviyiVR5Tq1jj7pKvSq+8EIYiuLRuANId3eEJ8Cfne0oRH5tST
+         cNckwvwkYNCJil7c4bHdQwdq+1j/ZICMbKPDmupGpGkjuYuypwIlqr25b/2zb8nGj+L7
+         8X6BT7i0cfdvLYah+oB/+uw18/v7O2tlssjrHraunx39DcQd6oIsFM91LN1KRUjOeySk
+         107g886IDOhDMfSuVZ8M22SN2x2lCSM95MlNgPfYmjNiwur+gHG+g9710+/nPbgwn0jJ
+         VB2nk9BZ+suPliZX/YIqKiK3alTptYuhcFjUg7RbgvcF8nWJZFV9um7H8k3hL7Y+Q5TY
+         PsjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jlyu+Ezdns1o/Dl+mNDx1dSSzCArmmCHe5zOulHCgYY=;
+        b=f7YRrftJNREBJlYrmrtZIE7CNplfquASOus+izDvxXFHwmFsTmEzz0fG3wdNAkCK03
+         LKUCZpwEEbQ4VIFGp22EMkOvzC+Opjp4gskkWXEf9ZqlzWRs4OrQNwKMg0qwRAky2Wfa
+         OKZxuBmjtvfijbmM3YeBHyGKJHn740vJyOgpQUQsJaQK4bgYoZzPHBvc+/vTZcSOEkTe
+         gvKrOGc17J4UzzEUsh5y/pDCiuZulKtuda2IgoYZT/mg2TIApSeA38yO1ebxK1fagh7d
+         whTwxAVxSa8YbnoCYqkYX6bZoeapaH2dxqqbdo+5/m0VPNw3C4c6wHsimS92M/9suPrS
+         CHCA==
+X-Gm-Message-State: AJIora+SkjvqIVttqYrJPHpcqZ0i4xNMXu/EGGQrCNqBCQJaIwJCpSCs
+        aFlYsyn+m8UnzE28ZeDpDNQ=
+X-Google-Smtp-Source: AGRyM1sAMP8KHkAWh5bS378ppL8TdO4StC0sEC6TB/Rq2m5BGNgizfRRhPByQs8fPv0/46kAMhGelA==
+X-Received: by 2002:a05:6402:524d:b0:43a:72fe:76b7 with SMTP id t13-20020a056402524d00b0043a72fe76b7mr2211131edd.398.1658538155443;
+        Fri, 22 Jul 2022 18:02:35 -0700 (PDT)
+Received: from opensuse.localnet (host-79-56-6-250.retail.telecomitalia.it. [79.56.6.250])
+        by smtp.gmail.com with ESMTPSA id r10-20020a1709061baa00b0071cef8bafc3sm2549153ejg.1.2022.07.22.18.02.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 18:02:34 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Benjamin LaHaise <bcrl@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, nvdimm@lists.linux.dev,
+        io-uring@vger.kernel.org, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] fs: Call kmap_local_page() in copy_string_kernel()
+Date:   Sat, 23 Jul 2022 03:02:32 +0200
+Message-ID: <2115146.irdbgypaU6@opensuse>
+In-Reply-To: <Ytnr3IhSkDOjqbZ1@iweiny-desk3>
+References: <20220710100136.25496-1-fmdefrancesco@gmail.com> <Ytnr3IhSkDOjqbZ1@iweiny-desk3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,108 +89,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220722-162642/Jianglei-Nie/KEYS-trusted-Fix-memory-leak-in-tpm2_key_encode/20220608-211954
-head:   7112e578934830db95743922ab0d46d2f4b7dff4
-commit: 7112e578934830db95743922ab0d46d2f4b7dff4 KEYS: trusted: Fix memory leak in tpm2_key_encode()
-date:   16 hours ago
-config: hexagon-randconfig-r023-20220721 (https://download.01.org/0day-ci/archive/20220723/202207230823.zcrjNiOI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 72686d68c137551cce816416190a18d45b4d4e2a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7112e578934830db95743922ab0d46d2f4b7dff4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220722-162642/Jianglei-Nie/KEYS-trusted-Fix-memory-leak-in-tpm2_key_encode/20220608-211954
-        git checkout 7112e578934830db95743922ab0d46d2f4b7dff4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash security/keys/trusted-keys/
+On venerd=C3=AC 22 luglio 2022 02:14:20 CEST Ira Weiny wrote:
+> On Sun, Jul 10, 2022 at 12:01:36PM +0200, Fabio M. De Francesco wrote:
+> > The use of kmap_atomic() is being deprecated in favor of=20
+kmap_local_page().
+> >=20
+> > With kmap_local_page(), the mappings are per thread, CPU local, not
+> > globally visible and can take page faults. Furthermore, the mappings=20
+can be
+> > acquired from any context (including interrupts).
+> >=20
+> > Therefore, use kmap_local_page() in copy_string_kernel() instead of
+> > kmap_atomic().
+> >=20
+> > Tested with xfstests on a QEMU + KVM 32-bits VM booting a kernel with
+> > HIGHMEM64GB enabled.
+> >=20
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> >=20
+> > I sent a first patch to fs/exec.c for converting kmap() and=20
+kmap_atomic()
+> > to kmap_local_page():
+> > https://lore.kernel.org/lkml/20220630163527.9776-1-fmdefrancesco@gmail.=
+com/
+> >=20
+> > Some days ago, Ira Weiny, while he was reviewing that patch, made me=20
+notice
+> > that I had overlooked a second kmap_atomic() in the same file (thanks):
+> > https://lore.kernel.org/lkml/YsiQptk19txHrG4c@iweiny-desk3/
+> >=20
+> > I've been asked to send this as an additional change. This is why there=
+=20
+will
+> > not be any second version of that previous patch.
+> >=20
+> >  fs/exec.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/fs/exec.c b/fs/exec.c
+> > index 4a2129c0d422..5fa652ca5823 100644
+> > --- a/fs/exec.c
+> > +++ b/fs/exec.c
+> > @@ -639,11 +639,11 @@ int copy_string_kernel(const char *arg, struct=20
+linux_binprm *bprm)
+> >  		page =3D get_arg_page(bprm, pos, 1);
+> >  		if (!page)
+> >  			return -E2BIG;
+> > -		kaddr =3D kmap_atomic(page);
+> > +		kaddr =3D kmap_local_page(page);
+> >  		flush_arg_page(bprm, pos & PAGE_MASK, page);
+>=20
+> I really question why we can't use memcpy_to_page() here and move the
+> flush_arg_page() prior to the mapping?
+>=20
+> flush_arg_page() only calls flush_cache_page() which does not need the
+> mapping to work correctly AFAICT.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+You're right here. I'm sorry for being so lazy and not checking that=20
+flush_arg_page() does not need to be called while the task holds the local=
+=20
+mapping :-(
 
-All warnings (new ones prefixed by >>):
+In v2 I'll move flush_arg_page() one line above memcpy_to_page().
 
->> security/keys/trusted-keys/trusted_tpm2.c:42:6: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-           u8 *work = scratch, *work1;
-               ^
-   1 warning generated.
+Thanks for your comment,
+
+=46abio
+
+>=20
+> Ira
+>=20
+> >  		memcpy(kaddr + offset_in_page(pos), arg,=20
+bytes_to_copy);
+> >  		flush_dcache_page(page);
+> > -		kunmap_atomic(kaddr);
+> > +		kunmap_local(kaddr);
+> >  		put_arg_page(page);
+> >  	}
+> > =20
+> > --=20
+> > 2.36.1
+> >=20
+>=20
 
 
-vim +42 security/keys/trusted-keys/trusted_tpm2.c
 
-f2219745250f38 James Bottomley 2021-01-27   30  
-f2219745250f38 James Bottomley 2021-01-27   31  static int tpm2_key_encode(struct trusted_key_payload *payload,
-f2219745250f38 James Bottomley 2021-01-27   32  			   struct trusted_key_options *options,
-f2219745250f38 James Bottomley 2021-01-27   33  			   u8 *src, u32 len)
-f2219745250f38 James Bottomley 2021-01-27   34  {
-7112e578934830 Jianglei Nie    2022-07-22   35  	int ret;
-f2219745250f38 James Bottomley 2021-01-27   36  	const int SCRATCH_SIZE = PAGE_SIZE;
-7112e578934830 Jianglei Nie    2022-07-22   37  	u8 *scratch;
-7112e578934830 Jianglei Nie    2022-07-22   38  
-7112e578934830 Jianglei Nie    2022-07-22   39  	scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
-7112e578934830 Jianglei Nie    2022-07-22   40  	if (!scratch)
-7112e578934830 Jianglei Nie    2022-07-22   41  		return -ENOMEM;
-f2219745250f38 James Bottomley 2021-01-27  @42  	u8 *work = scratch, *work1;
-f2219745250f38 James Bottomley 2021-01-27   43  	u8 *end_work = scratch + SCRATCH_SIZE;
-f2219745250f38 James Bottomley 2021-01-27   44  	u8 *priv, *pub;
-f2219745250f38 James Bottomley 2021-01-27   45  	u16 priv_len, pub_len;
-f2219745250f38 James Bottomley 2021-01-27   46  
-f2219745250f38 James Bottomley 2021-01-27   47  	priv_len = get_unaligned_be16(src) + 2;
-f2219745250f38 James Bottomley 2021-01-27   48  	priv = src;
-f2219745250f38 James Bottomley 2021-01-27   49  
-f2219745250f38 James Bottomley 2021-01-27   50  	src += priv_len;
-f2219745250f38 James Bottomley 2021-01-27   51  
-f2219745250f38 James Bottomley 2021-01-27   52  	pub_len = get_unaligned_be16(src) + 2;
-f2219745250f38 James Bottomley 2021-01-27   53  	pub = src;
-f2219745250f38 James Bottomley 2021-01-27   54  
-f2219745250f38 James Bottomley 2021-01-27   55  	work = asn1_encode_oid(work, end_work, tpm2key_oid,
-f2219745250f38 James Bottomley 2021-01-27   56  			       asn1_oid_len(tpm2key_oid));
-f2219745250f38 James Bottomley 2021-01-27   57  
-f2219745250f38 James Bottomley 2021-01-27   58  	if (options->blobauth_len == 0) {
-f2219745250f38 James Bottomley 2021-01-27   59  		unsigned char bool[3], *w = bool;
-f2219745250f38 James Bottomley 2021-01-27   60  		/* tag 0 is emptyAuth */
-f2219745250f38 James Bottomley 2021-01-27   61  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
-7112e578934830 Jianglei Nie    2022-07-22   62  		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-7112e578934830 Jianglei Nie    2022-07-22   63  			ret = PTR_ERR(w);
-7112e578934830 Jianglei Nie    2022-07-22   64  			goto err;
-7112e578934830 Jianglei Nie    2022-07-22   65  		}
-f2219745250f38 James Bottomley 2021-01-27   66  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
-f2219745250f38 James Bottomley 2021-01-27   67  	}
-f2219745250f38 James Bottomley 2021-01-27   68  
-f2219745250f38 James Bottomley 2021-01-27   69  	/*
-f2219745250f38 James Bottomley 2021-01-27   70  	 * Assume both octet strings will encode to a 2 byte definite length
-f2219745250f38 James Bottomley 2021-01-27   71  	 *
-f2219745250f38 James Bottomley 2021-01-27   72  	 * Note: For a well behaved TPM, this warning should never
-f2219745250f38 James Bottomley 2021-01-27   73  	 * trigger, so if it does there's something nefarious going on
-f2219745250f38 James Bottomley 2021-01-27   74  	 */
-f2219745250f38 James Bottomley 2021-01-27   75  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-7112e578934830 Jianglei Nie    2022-07-22   76  		 "BUG: scratch buffer is too small")) {
-7112e578934830 Jianglei Nie    2022-07-22   77  		ret = -EINVAL;
-7112e578934830 Jianglei Nie    2022-07-22   78  		goto err;
-7112e578934830 Jianglei Nie    2022-07-22   79  	}
-f2219745250f38 James Bottomley 2021-01-27   80  
-f2219745250f38 James Bottomley 2021-01-27   81  	work = asn1_encode_integer(work, end_work, options->keyhandle);
-f2219745250f38 James Bottomley 2021-01-27   82  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
-f2219745250f38 James Bottomley 2021-01-27   83  	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
-f2219745250f38 James Bottomley 2021-01-27   84  
-f2219745250f38 James Bottomley 2021-01-27   85  	work1 = payload->blob;
-f2219745250f38 James Bottomley 2021-01-27   86  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
-f2219745250f38 James Bottomley 2021-01-27   87  				     scratch, work - scratch);
-7112e578934830 Jianglei Nie    2022-07-22   88  	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-7112e578934830 Jianglei Nie    2022-07-22   89  		ret = PTR_ERR(work1);
-7112e578934830 Jianglei Nie    2022-07-22   90  		goto err;
-7112e578934830 Jianglei Nie    2022-07-22   91  	}
-f2219745250f38 James Bottomley 2021-01-27   92  
-7112e578934830 Jianglei Nie    2022-07-22   93  	kfree(scratch);
-f2219745250f38 James Bottomley 2021-01-27   94  	return work1 - payload->blob;
-7112e578934830 Jianglei Nie    2022-07-22   95  
-7112e578934830 Jianglei Nie    2022-07-22   96  err:
-7112e578934830 Jianglei Nie    2022-07-22   97  	kfree(scratch);
-7112e578934830 Jianglei Nie    2022-07-22   98  	return ret;
-f2219745250f38 James Bottomley 2021-01-27   99  }
-f2219745250f38 James Bottomley 2021-01-27  100  
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

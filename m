@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617CD57F065
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 18:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6B457F069
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 18:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236217AbiGWQGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 12:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        id S235761AbiGWQQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 12:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbiGWQFz (ORCPT
+        with ESMTP id S230092AbiGWQQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 12:05:55 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CC71A055;
-        Sat, 23 Jul 2022 09:05:42 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id h22so5471365qta.3;
-        Sat, 23 Jul 2022 09:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HHu8G218PxZ+Sh+oW/8wfgk5SyIyArOnxoBZLnzyMqw=;
-        b=JgZQUaG41TPYe1fXoXfnUQeRR7A+iKI3mbd+K+XIGcvqNHNJOtXcHcjPLSlyUOp8UH
-         Yr5NOLVqqg2swISs0RxWyJUwBdpgAochSvT2eb+8PuaxdP6zrJ8z2cp19yWvaV4R84ff
-         sp6+w/XGCRbXEglYdQ+iMN9ok2fNAOmtelOc9B58lHqzx/QxsE6xrArOrXdRfr+TSAOt
-         yapOpTxb8z6JpoNvXeFwpbgcRHFtK0FRpNfe6Ekd69ad4rSu4qKm7MHo7S79CNB8+36T
-         E7HPZDd68Yp5GwjuBHdv08FUBinhW6+Yekhaad51ZEgfDNJ8UiJARtZ25kNvkgChXGG8
-         03kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HHu8G218PxZ+Sh+oW/8wfgk5SyIyArOnxoBZLnzyMqw=;
-        b=NEWzffMQ0YmFb0yneiHlSlDlv0tq0vD8I+gbR5k5psTtxqjKZdzJ6UQvW3IHghnzMI
-         a5RUUUxoC6iJiTlNIWJjucqB6+nz8S3LYbSz5uht8CMuUift4Fy1lK9FqD9NsYUc4mWC
-         xfVWAkoMcsV1EuTbeRywNEdSyme7q79And11frIl3BcGT4AqB87qUC4zqX5RG5de0XEn
-         /KQ6FJ+s6dLoFbGBFInfXTorswmQXlN3gxLzbwCBd9xp3jdzg9YLXD4UzM1GqTGG3p4A
-         kMBAkm26NbfzriyEvH4w8/dXtEUoicjy5/QOoq2bvFydteGLwTl/i/R6rumOh1hATyMj
-         uUuQ==
-X-Gm-Message-State: AJIora8+ZXabWyfXmwS04MCyZyFlU4FSzlJDBi57qrjE12zSYG28NHbl
-        wJ01GSdUhaxFYD5hYM0Dkuk=
-X-Google-Smtp-Source: AGRyM1sty4J5XwW0ag/HITj7AIF93o93sOTihlZLsA/vbrWYDOL9pkU2KBAi8b1tZv8BQv2qmaeS3A==
-X-Received: by 2002:ac8:5a86:0:b0:31e:d114:1964 with SMTP id c6-20020ac85a86000000b0031ed1141964mr4297753qtc.572.1658592340969;
-        Sat, 23 Jul 2022 09:05:40 -0700 (PDT)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac87f44000000b0031eb3af3ffesm4935046qtk.52.2022.07.23.09.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 09:05:40 -0700 (PDT)
-From:   Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To:     linux-imx@nxp.com
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
-        linus.walleij@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
-        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
-        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
-        cniedermaier@dh-electronics.com, Mr.Bossman075@gmail.com,
-        clin@suse.com, giulio.benetti@benettiengineering.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH v5 12/12] ARM: imxrt_defconfig: Add i.MXRT1170
-Date:   Sat, 23 Jul 2022 12:05:13 -0400
-Message-Id: <20220723160513.271692-13-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
-References: <20220723160513.271692-1-Mr.Bossman075@gmail.com>
+        Sat, 23 Jul 2022 12:16:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC4D26C0;
+        Sat, 23 Jul 2022 09:16:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA14CB80D11;
+        Sat, 23 Jul 2022 16:16:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AEBC341C0;
+        Sat, 23 Jul 2022 16:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658592962;
+        bh=5MOxEYpXVUBFaJ0FpfgHvTDZGmLFTcWpraTlxekql4k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=frsc0R1pS19ocHwvrxmsJeY4nl3B956wc+jcCj7pRc/ivbynk/22F68FxBP2jcx0q
+         gNHaQs4kF28x9rRebcrZnawx/BwJ6yQNAOqoNMrtl5NluUFytfGWnO3YEZl1V1FYEp
+         O9894eFoeAK7AkjjlmqG7NQFitNaIr7YtWVjxopn7hslSkfwM3CxxEfGf3nlCPcUIB
+         +8ulNT2/WU9tqKBp1bTlFd1SXnqCZcOeX9dUIg5MPh4ACt4J4N+WLNOqQTXjehbMWL
+         wygJnB7Vet8gNtssjy/G1zNSu0RdJWgsnH/HNwG7g7tRDWlvnpYdZ6Efim9dCFLWOi
+         9t3KNrEBdOC8A==
+Date:   Sat, 23 Jul 2022 09:16:00 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vikas Gupta <vikas.gupta@broadcom.com>
+Cc:     jiri@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        dsahern@kernel.org, stephen@networkplumber.org,
+        edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
+        leon@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
+        michael.chan@broadcom.com, andrew.gospodarek@broadcom.com
+Subject: Re: [PATCH net-next v6 1/2] devlink: introduce framework for
+ selftests
+Message-ID: <20220723091600.1277e903@kernel.org>
+In-Reply-To: <20220723042206.8104-2-vikas.gupta@broadcom.com>
+References: <20220723042206.8104-1-vikas.gupta@broadcom.com>
+        <20220723042206.8104-2-vikas.gupta@broadcom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MXRT1170 pinctrl, clocks imxrt_defconfig.
-Add support for CHIPIDEA usb host and usb gadget and other usb drives.
+On Sat, 23 Jul 2022 09:52:05 +0530 Vikas Gupta wrote:
+> +enum devlink_attr_selftest_test_id {
+> +	DEVLINK_ATTR_SELFTEST_TEST_ID_UNSPEC,
+> +	DEVLINK_ATTR_SELFTEST_TEST_ID_FLASH,	/* flag */
+> +
+> +	__DEVLINK_ATTR_SELFTEST_TEST_ID_MAX,
+> +	DEVLINK_ATTR_SELFTEST_TEST_ID_MAX = __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX - 1
+> +};
+> +
+> +enum devlink_selftest_test_status {
+> +	DEVLINK_SELFTEST_TEST_STATUS_SKIP,
+> +	DEVLINK_SELFTEST_TEST_STATUS_PASS,
+> +	DEVLINK_SELFTEST_TEST_STATUS_FAIL
+> +};
+> +
+> +enum devlink_attr_selftest_result {
+> +	DEVLINK_ATTR_SELFTEST_RESULT_UNSPEC,
+> +	DEVLINK_ATTR_SELFTEST_RESULT,			/* nested */
+> +	DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID,		/* u32,
+> +							 * enum devlink_attr_selftest_test_id
+> +							 */
+> +	DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS,	/* u8,
+> +							 * enum devlink_selftest_test_status
+> +							 */
+> +
+> +	__DEVLINK_ATTR_SELFTEST_RESULT_MAX,
+> +	DEVLINK_ATTR_SELFTEST_RESULT_MAX = __DEVLINK_ATTR_SELFTEST_RESULT_MAX - 1
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1 -> V2:
- - Remove USB_CONFIGFS*
-V2 -> V3:
- - Nothing done
-V3 -> V4:
- - Nothing done
-V4 -> V5:
- - Nothing done
----
- arch/arm/configs/imxrt_defconfig | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Any thoughts on running:
 
-diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-index 52dba3762996..b3a013686255 100644
---- a/arch/arm/configs/imxrt_defconfig
-+++ b/arch/arm/configs/imxrt_defconfig
-@@ -17,7 +17,23 @@ CONFIG_SERIAL_FSL_LPUART=y
- CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
- CONFIG_SERIAL_DEV_BUS=y
- CONFIG_PINCTRL_IMXRT1050=y
-+CONFIG_PINCTRL_IMXRT1170=y
- CONFIG_GPIO_MXC=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_DYNAMIC_MINORS=y
-+CONFIG_USB_OTG=y
-+CONFIG_USB_OTG_FSM=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_FSL=y
-+CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_UDC=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_MXS_PHY=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_MASS_STORAGE=y
- CONFIG_MMC=y
- CONFIG_MMC_SDHCI=y
- CONFIG_MMC_SDHCI_PLTFM=y
-@@ -25,6 +41,7 @@ CONFIG_MMC_SDHCI_ESDHC_IMX=y
- CONFIG_DMADEVICES=y
- CONFIG_FSL_EDMA=y
- CONFIG_CLK_IMXRT1050=y
-+CONFIG_CLK_IMXRT1170=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
- CONFIG_EXT4_FS_SECURITY=y
--- 
-2.36.1
+	sed -i '/_SELFTEST/ {s/_TEST_/_/g}' $patch
 
+on this patch? For example DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS
+is 40 characters long, ain't nobody typing that, and _TEST is repeated..
+
+Otherwise LGTM!

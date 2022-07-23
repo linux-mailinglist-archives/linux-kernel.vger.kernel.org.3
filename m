@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9313557ECFC
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 11:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7AF57ED03
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 11:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbiGWJRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 05:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S237176AbiGWJWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 05:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiGWJRB (ORCPT
+        with ESMTP id S232785AbiGWJWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 05:17:01 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1543A183AA;
-        Sat, 23 Jul 2022 02:17:00 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bp17so11133090lfb.3;
-        Sat, 23 Jul 2022 02:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MpbRYZMbv+jsnwV7MLcEk0n+dTDfgsvtYSW0HPusRN8=;
-        b=Qud1zLUs/DxmtSFhkAv3+CaeM83rll0gBLUF7bapo3ljdA8LTQOlOi10Au+WXGV6cc
-         eroshfe8cdOs5eCNIlR0WRSYWjJSP1+KuJiRb8LkGwLQl3VEP/dzrPYvycS/DPRV0RXN
-         P3fcrJ/Wp1Th4156zMfYxxSE/QA3dzBQWFkjFEhWNgUrOlMN0Fjv5kW7RIKhuGTPzmNu
-         b4hDzQybOqDA9HNp7fLawfrxhxy4jLJOULGx5Y/oPjtbbeo1rU177Mx7F5OD80GLx3jQ
-         NmWsnqfaxn/arR/14uYW3TsXugWWLbE72H5Zr9zPdoTt21gyPqI4DLZuEGUT8IIOqYkc
-         jBAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MpbRYZMbv+jsnwV7MLcEk0n+dTDfgsvtYSW0HPusRN8=;
-        b=Rt783eUbw6CLxvxETOulwkHm/HvLFqrVGnspohmUTR0KO6YsRZgascHMto0kqKnwMw
-         Ur5csztN79yCyG0cysGw+vA9nhd0TY9RO2+eEdTK+qv/jYYuudUiADQegLeTvJsavlS2
-         GVudIXjaOZFYewt9DBOvwsb28pfFhMZCU4UDXWhmk0gDzavhEj5DyVWcyRMNkbQco/nL
-         XJ4c7rFEcJIUe0bXs2oBlXqySSUmWgHPO5VPSzE0rea6C/J3Pap+iv+EBHlLAJOkuFjV
-         5RnJ5OCf8oEuhjvrnvHIhKhisSo1CTpI42SYIO63a898TNPiqeFX7kJS8NtspYfg3ogq
-         yIHg==
-X-Gm-Message-State: AJIora8roVQyAJtBxiAiLmUHd1qXmiLaAO5OKOpgLnNRHzeXinGH67Bo
-        fM1Kwi1q0RdWaY3KCSudzWw=
-X-Google-Smtp-Source: AGRyM1sWDymWFb5do1pFCZJUNtOlr5Nz4HXKKz4M3kn41Y+Jl+c6o0nmjoAfR59gir6JpKfQLtda4A==
-X-Received: by 2002:a05:6512:1153:b0:48a:2836:692f with SMTP id m19-20020a056512115300b0048a2836692fmr1412627lfg.650.1658567818334;
-        Sat, 23 Jul 2022 02:16:58 -0700 (PDT)
-Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id q9-20020a056512210900b0048646c0af5csm1550636lfr.263.2022.07.23.02.16.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 02:16:57 -0700 (PDT)
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Update Microchip MCP3911 to Maintained
-Date:   Sat, 23 Jul 2022 11:20:30 +0200
-Message-Id: <20220723092030.260812-1-marcus.folkesson@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 23 Jul 2022 05:22:49 -0400
+Received: from smtpbg.qq.com (unknown [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315C7101E7;
+        Sat, 23 Jul 2022 02:22:43 -0700 (PDT)
+X-QQ-mid: bizesmtp89t1658568153ta68gvag
+Received: from localhost.localdomain ( [125.70.163.183])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 23 Jul 2022 17:22:32 +0800 (CST)
+X-QQ-SSF: 01000000002000F0U000B00A0000020
+X-QQ-FEAT: XBN7tc9DADJ43OkaAz2JfV5ErFMn90b2HStIVW8LIUKuOgnydgnI6Krvii5q0
+        X2A4YgUOftGzv+FxcU6Y6JqPFh0yxWVFXTgfwI7vbQJu29RWzLiyrOYn/xlv6kuucwhCHkq
+        RTZW/C2S+d8vuvdFAxR2tNEAVXezZ5zZZ6Xub7nkG+0Wiyzv6wZYdKVXBpnpvIbKLyq4i4j
+        gdDaYqweMeGIPTocPiN3TNpvpvIw5l7eRzDrdQMHFCXK2pQO+a0NPMVd65GXGR0YRxj7nGE
+        YCWaWLVJrgZt30b1Bavsu6u4aKTHD3Gw+ij9cyaBI7eMIOpR0+OXIu2ijkhafl2E1eSRGvF
+        M58mwVZ3jJXIv9iGPcCzK1f48fZunmIJaiOxezn9rVgXJaT762LHE/8LYpFZJlqi/iMulqf
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     ink@jurassic.park.msu.ru
+Cc:     rth@twiddle.net, mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] alpha: Remove the static variable initialisations to 0
+Date:   Sat, 23 Jul 2022 17:22:00 +0800
+Message-Id: <20220723092200.6659-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The actual status of the code is Maintained.
+Initialise global and static variable to 0 is always unnecessary.
+Remove the unnecessary initialisations.
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc: Kent Gustavsson <kent@minoris.se>
-Cc: Jonathan Cameron <jic23@kernel.org>
-Cc: linux-iio <linux-iio@vger.kernel.org>
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- MAINTAINERS | 2 +-
+ arch/alpha/kernel/pci.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 85147ee391d5..47dcbfabedf9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13085,7 +13085,7 @@ MICROCHIP MCP3911 ADC DRIVER
- M:	Marcus Folkesson <marcus.folkesson@gmail.com>
- M:	Kent Gustavsson <kent@minoris.se>
- L:	linux-iio@vger.kernel.org
--S:	Supported
-+S:	Maintained
- F:	Documentation/devicetree/bindings/iio/adc/microchip,mcp3911.yaml
- F:	drivers/iio/adc/mcp3911.c
+diff --git a/arch/alpha/kernel/pci.c b/arch/alpha/kernel/pci.c
+index 64fbfb0763b2..bce5f07c1d79 100644
+--- a/arch/alpha/kernel/pci.c
++++ b/arch/alpha/kernel/pci.c
+@@ -210,7 +210,7 @@ static struct pdev_srm_saved_conf *srm_saved_configs;
+ static void pdev_save_srm_config(struct pci_dev *dev)
+ {
+ 	struct pdev_srm_saved_conf *tmp;
+-	static int printed = 0;
++	static int printed;
  
+ 	if (!alpha_using_srm || pci_has_flag(PCI_PROBE_ONLY))
+ 		return;
 -- 
-2.36.1
+2.35.1
 

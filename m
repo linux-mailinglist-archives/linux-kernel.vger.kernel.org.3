@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EC457F0AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 19:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2F557F0B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 19:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238295AbiGWRi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 13:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S238402AbiGWRjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 13:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiGWRix (ORCPT
+        with ESMTP id S233301AbiGWRjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 13:38:53 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628C71EECA;
-        Sat, 23 Jul 2022 10:38:52 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id h8so10448616wrw.1;
-        Sat, 23 Jul 2022 10:38:52 -0700 (PDT)
+        Sat, 23 Jul 2022 13:39:22 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075381CB09;
+        Sat, 23 Jul 2022 10:39:21 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id q18so7338wrx.8;
+        Sat, 23 Jul 2022 10:39:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xqVXsscgCH6erCyqegMGrNDrb/gZIIh41mQ/X7d4CwE=;
-        b=epkcDzeSadElm5A/w7sVPbGgodEMKhjrz1y1/EUxPRWHA67DMmqtwqkFmmvxVeCaXV
-         08a0XvcFlT1bmb1h8H/QB4oesWRx+7sztKvIV4pAyA0Sc/hfxafk83haS9mulaxNYbKM
-         ARP3fholyjvSyNnzjV5kWAvabUXAEugw3d4WPPx5wZJp74etmFEcbdjBdokXqOElQkf8
-         IzPe2Vt3As6H399j/EwpPRFhBGw53x3dNBZCHa4GFs3Y5iyUUMwz9zYSMCzWee7hAQwZ
-         yR0Ouim2KORYXzwi0yznsE6QZBI7ZR5TTic4Mo09i84gA3wA+ChHPZu9ggxnKdBFB1VR
-         ENdQ==
+        bh=zzKvabAQ9jjSWAsm1T30XNhl11T/+dn1uQJeygF+aPc=;
+        b=E+LLely54PMiThLHEU9/UC6Tl6VE5OO2ByLQmuNc10fuyZvJ1GXcERwovm7lKfWr9r
+         bkEif9s5OtFDX2Pl37LsI8Qvqwt+2V3krhJOfPLgzbTmiwXF5lp73JzgdQc1XxO9nyEo
+         FEl5bBsaI4/zHxVY+nE7NJJEzqTr2lDY60fB2WRAkM2khg9PiXD7sjy7kCDHfk6DGAl0
+         n2Rx3ekurvdpyQrorSQy6/N65SAB2XAGrFO8h2jYy55QXJdQ2Mo1Nn8OoYLR+QNT3Jm7
+         B79QuhGAs0V4Tvlh2Hhi94vvhQlmQMwAz76HlP8Y6JM5gonL1X3eX7/AHSzxFEiHLKeW
+         LgvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xqVXsscgCH6erCyqegMGrNDrb/gZIIh41mQ/X7d4CwE=;
-        b=IYTvJOW01tTHzylk6LBSKNnxhYHmagl1TGAW5scf30FDjPriwMjI6YXBIjigyyBp9h
-         KrPJ0nZY0Ps8QS51id3QK7PTcbVbS3LYE81hMyLPdwb/3we2FcsOyt1CjaatKT2jUX8D
-         ks7UQa14fmYJHFulTJqq0XoQkANnhs4A49FMB/KTwdwuAM7/ZwgskbM7T/6Xw92ginoi
-         TMvPausnQc+BVxTx3ZvEEVQZ5JBn/51Ighey9/Ue+zeIGY8ZtlqOox5tiOFCwIPKiiw1
-         PP3K69iHc8uWkk27PZZRpLxV4Kqf/mwGzNCjyjd9cJMVC92Zxc+V5/ENwYAy+blUeSsn
-         84dg==
-X-Gm-Message-State: AJIora+73Or5Wbrj9g5SddF/5jfN2mI0uDBiqr1aff29dMdDyWrk/xr7
-        00vEhYTaf+YTBXjpAxgZOuaumf0Np1bhfw==
-X-Google-Smtp-Source: AGRyM1s5ugsGiQe8xWhsTUXVWMw4k5l9n8IKz/eJ0YRLTg+TuMmRXbbT3Xzte2yVlt2LL8FwAHaz2Q==
-X-Received: by 2002:a5d:4d90:0:b0:21e:48ef:c5b with SMTP id b16-20020a5d4d90000000b0021e48ef0c5bmr3197899wru.701.1658597930552;
-        Sat, 23 Jul 2022 10:38:50 -0700 (PDT)
+        bh=zzKvabAQ9jjSWAsm1T30XNhl11T/+dn1uQJeygF+aPc=;
+        b=eD7wQSRz68qR/ZNjSkwlrH3yHy2WDHWhY0e4cuUUlBLCzr7NRh7XeItzcrmOvoDZDI
+         gIuC8pzV4PiRMFvOSAuG7s9RIr1TDGxNLJjIKvqusuJM9ptfJnpOYXdEh1elbEYd5I95
+         q7iJt3OHJ36ilSBTguIY9iloNI1td77TjKhWLXRE2MfWj2XmjQIg2eBpuE02ZsUcBOkv
+         VIcGrasBh3eL9rG8T0soIxplgTQ+0/A5SlvWGt+P7aKabsX7cj+7gG6L+LxSZM4loxFj
+         WI/jixGfgTbnbmpC3KLHlG0joJR/ucote7kjAefWE02YX/YQWPIUovaSDCH/gHZXWNlc
+         SWHQ==
+X-Gm-Message-State: AJIora/TFIdjsGeUCiEL823gRlj4uf7xM5tb9VFjTPWNG4RnXOBIiORz
+        kaYML5thtpMW/DIldDCJcEkEvyOpp7APdA==
+X-Google-Smtp-Source: AGRyM1v/O5skSZgpCgwOvvaUUpTiShMlcy3F7aOJQmng5OmekLyOytb3QhQNN0k+w+uAJ1kczuijXg==
+X-Received: by 2002:adf:f04e:0:b0:21e:48df:a13d with SMTP id t14-20020adff04e000000b0021e48dfa13dmr3293101wro.278.1658597959129;
+        Sat, 23 Jul 2022 10:39:19 -0700 (PDT)
 Received: from xps-work.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id s3-20020a05600c384300b003a2d47d3051sm9926160wmr.41.2022.07.23.10.38.49
+        by smtp.gmail.com with ESMTPSA id r67-20020a1c2b46000000b003a308e9a192sm12636030wmr.30.2022.07.23.10.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 10:38:50 -0700 (PDT)
+        Sat, 23 Jul 2022 10:39:18 -0700 (PDT)
 From:   Angel Iglesias <ang.iglesiasg@gmail.com>
 To:     linux-iio@vger.kernel.org
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Paul Cercueil <paul@crapouillou.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/5] iio: pressure: bmp280: simplify driver initialization logic
-Date:   Sat, 23 Jul 2022 19:38:43 +0200
-Message-Id: <44a301d5605bcf5b30ae60b21d0b312717b938bc.1658597501.git.ang.iglesiasg@gmail.com>
+Subject: [PATCH v4 3/5] iio: pressure: bmp280: Fix alignment for DMA safety
+Date:   Sat, 23 Jul 2022 19:39:10 +0200
+Message-Id: <e6f4055d1c2a535e645ce6c25091dd5b40cd5a2f.1658597501.git.ang.iglesiasg@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1658597501.git.ang.iglesiasg@gmail.com>
 References: <cover.1658597501.git.ang.iglesiasg@gmail.com>
@@ -75,249 +75,379 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplified common initialization logic of different sensor types
-unifying calibration and initial configuration recovery.
+Adds a DMA-safe buffer to driver data struct to store raw data from sensor
 
-Default config param values of each sensor type are stored inside
-chip_info structure and used to initialize sensor data struct instance.
-
-The auxiliar functions for read each sensor type calibration are converted
-to a callback available on the chip_info struct.
+Updated calibration read functions to use DMA-safe buffers as well.
+In this case, as calibration data is only read at sensor initialization,
+the buffers are allocated with kmalloc and freed after being processed.
 
 Suggested-by: Jonathan Cameron <jic23@kernel.org>
 Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 ---
- drivers/iio/pressure/bmp280-core.c | 91 ++++++++++++++++++------------
- 1 file changed, 54 insertions(+), 37 deletions(-)
+ drivers/iio/pressure/bmp280-core.c | 164 ++++++++++++++++++-----------
+ 1 file changed, 103 insertions(+), 61 deletions(-)
 
 diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index fe7aa81e7cc9..60fba199c7a0 100644
+index 60fba199c7a0..9311eeec8473 100644
 --- a/drivers/iio/pressure/bmp280-core.c
 +++ b/drivers/iio/pressure/bmp280-core.c
-@@ -107,19 +107,28 @@ struct bmp280_data {
+@@ -29,6 +29,7 @@
+ #include <linux/completion.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/random.h>
++#include <asm/unaligned.h>
+ 
+ #include "bmp280.h"
+ 
+@@ -36,7 +37,19 @@
+  * These enums are used for indexing into the array of calibration
+  * coefficients for BMP180.
+  */
+-enum { AC1, AC2, AC3, AC4, AC5, AC6, B1, B2, MB, MC, MD };
++enum {
++	AC1 = 0,
++	AC2 = 2,
++	AC3 = 4,
++	AC4 = 6,
++	AC5 = 8,
++	AC6 = 10,
++	B1 = 12,
++	B2 = 14,
++	MB = 16,
++	MC = 18,
++	MD = 20,
++};
+ 
+ struct bmp180_calib {
+ 	s16 AC1;
+@@ -104,6 +117,12 @@ struct bmp280_data {
+ 	 * calculation.
+ 	 */
+ 	s32 t_fine;
++
++	/*
++	 * DMA (thus cache coherency maintenance) may require the
++	 * transfer buffers to live in their own cache lines.
++	 */
++	u8 buf[3] __aligned(IIO_DMA_MINALIGN);
  };
  
  struct bmp280_chip_info {
-+	unsigned int id_reg;
-+
-+	int num_channels;
-+	unsigned int start_up_time;
-+
- 	const int *oversampling_temp_avail;
- 	int num_oversampling_temp_avail;
-+	int oversampling_temp_default;
+@@ -135,8 +154,18 @@ struct bmp280_chip_info {
+  * These enums are used for indexing into the array of compensation
+  * parameters for BMP280.
+  */
+-enum { T1, T2, T3 };
+-enum { P1, P2, P3, P4, P5, P6, P7, P8, P9 };
++enum { T1 = 0, T2 = 2, T3 = 4 };
++enum {
++	P1 = 0,
++	P2 = 2,
++	P3 = 4,
++	P4 = 6,
++	P5 = 8,
++	P6 = 10,
++	P7 = 12,
++	P8 = 14,
++	P9 = 16,
++};
  
- 	const int *oversampling_press_avail;
- 	int num_oversampling_press_avail;
-+	int oversampling_press_default;
- 
- 	const int *oversampling_humid_avail;
- 	int num_oversampling_humid_avail;
-+	int oversampling_humid_default;
- 
- 	int (*chip_config)(struct bmp280_data *);
- 	int (*read_temp)(struct bmp280_data *, int *);
- 	int (*read_press)(struct bmp280_data *, int *, int *);
- 	int (*read_humid)(struct bmp280_data *, int *, int *);
-+	int (*read_calib)(struct bmp280_data *, unsigned int);
- };
- 
- /*
-@@ -147,15 +156,14 @@ static const struct iio_chan_spec bmp280_channels[] = {
- 	},
- };
- 
--static int bmp280_read_calib(struct bmp280_data *data,
--			     struct bmp280_calib *calib,
--			     unsigned int chip)
-+static int bmp280_read_calib(struct bmp280_data *data, unsigned int chip)
+ static const struct iio_chan_spec bmp280_channels[] = {
+ 	{
+@@ -159,51 +188,59 @@ static const struct iio_chan_spec bmp280_channels[] = {
+ static int bmp280_read_calib(struct bmp280_data *data, unsigned int chip)
  {
  	int ret;
++	u8 *t_buf;
++	u8 *p_buf;
  	unsigned int tmp;
- 	__le16 l16;
- 	__be16 b16;
+-	__le16 l16;
+-	__be16 b16;
  	struct device *dev = data->dev;
-+	struct bmp280_calib *calib = &data->calib.bmp280;
- 	__le16 t_buf[BMP280_COMP_TEMP_REG_COUNT / 2];
- 	__le16 p_buf[BMP280_COMP_PRESS_REG_COUNT / 2];
+ 	struct bmp280_calib *calib = &data->calib.bmp280;
+-	__le16 t_buf[BMP280_COMP_TEMP_REG_COUNT / 2];
+-	__le16 p_buf[BMP280_COMP_PRESS_REG_COUNT / 2];
  
-@@ -640,15 +648,22 @@ static int bmp280_chip_config(struct bmp280_data *data)
- static const int bmp280_oversampling_avail[] = { 1, 2, 4, 8, 16 };
++	t_buf = kmalloc(BMP280_COMP_TEMP_REG_COUNT, GFP_KERNEL);
++	if (!t_buf)
++		return -ENOMEM;
+ 	/* Read temperature calibration values. */
+ 	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_TEMP_START,
+ 			       t_buf, BMP280_COMP_TEMP_REG_COUNT);
+ 	if (ret < 0) {
+ 		dev_err(data->dev,
+ 			"failed to read temperature calibration parameters\n");
++		kfree(t_buf);
+ 		return ret;
+ 	}
  
- static const struct bmp280_chip_info bmp280_chip_info = {
-+	.id_reg = BMP280_REG_ID,
-+	.start_up_time = 2000,
-+	.num_channels = 2,
-+
- 	.oversampling_temp_avail = bmp280_oversampling_avail,
- 	.num_oversampling_temp_avail = ARRAY_SIZE(bmp280_oversampling_avail),
-+	.oversampling_temp_default = ilog2(2),
+ 	/* Toss the temperature calibration data into the entropy pool */
+ 	add_device_randomness(t_buf, sizeof(t_buf));
  
- 	.oversampling_press_avail = bmp280_oversampling_avail,
- 	.num_oversampling_press_avail = ARRAY_SIZE(bmp280_oversampling_avail),
-+	.oversampling_press_default = ilog2(16),
+-	calib->T1 = le16_to_cpu(t_buf[T1]);
+-	calib->T2 = le16_to_cpu(t_buf[T2]);
+-	calib->T3 = le16_to_cpu(t_buf[T3]);
++	calib->T1 = get_unaligned_le16(&t_buf[T1]);
++	calib->T2 = get_unaligned_le16(&t_buf[T2]);
++	calib->T3 = get_unaligned_le16(&t_buf[T3]);
++	kfree(t_buf);
  
- 	.chip_config = bmp280_chip_config,
- 	.read_temp = bmp280_read_temp,
- 	.read_press = bmp280_read_press,
-+	.read_calib = bmp280_read_calib,
- };
++	p_buf = kmalloc(BMP280_COMP_PRESS_REG_COUNT, GFP_KERNEL);
++	if (!p_buf)
++		return -ENOMEM;
+ 	/* Read pressure calibration values. */
+ 	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_PRESS_START,
+ 			       p_buf, BMP280_COMP_PRESS_REG_COUNT);
+ 	if (ret < 0) {
+ 		dev_err(data->dev,
+ 			"failed to read pressure calibration parameters\n");
++		kfree(p_buf);
+ 		return ret;
+ 	}
  
- static int bme280_chip_config(struct bmp280_data *data)
-@@ -670,19 +685,27 @@ static int bme280_chip_config(struct bmp280_data *data)
- }
+ 	/* Toss the pressure calibration data into the entropy pool */
+ 	add_device_randomness(p_buf, sizeof(p_buf));
  
- static const struct bmp280_chip_info bme280_chip_info = {
-+	.id_reg = BMP280_REG_ID,
-+	.start_up_time = 2000,
-+	.num_channels = 3,
-+
- 	.oversampling_temp_avail = bmp280_oversampling_avail,
- 	.num_oversampling_temp_avail = ARRAY_SIZE(bmp280_oversampling_avail),
-+	.oversampling_temp_default = ilog2(2),
+-	calib->P1 = le16_to_cpu(p_buf[P1]);
+-	calib->P2 = le16_to_cpu(p_buf[P2]);
+-	calib->P3 = le16_to_cpu(p_buf[P3]);
+-	calib->P4 = le16_to_cpu(p_buf[P4]);
+-	calib->P5 = le16_to_cpu(p_buf[P5]);
+-	calib->P6 = le16_to_cpu(p_buf[P6]);
+-	calib->P7 = le16_to_cpu(p_buf[P7]);
+-	calib->P8 = le16_to_cpu(p_buf[P8]);
+-	calib->P9 = le16_to_cpu(p_buf[P9]);
++	calib->P1 = get_unaligned_le16(&p_buf[P1]);
++	calib->P2 = get_unaligned_le16(&p_buf[P2]);
++	calib->P3 = get_unaligned_le16(&p_buf[P3]);
++	calib->P4 = get_unaligned_le16(&p_buf[P4]);
++	calib->P5 = get_unaligned_le16(&p_buf[P5]);
++	calib->P6 = get_unaligned_le16(&p_buf[P6]);
++	calib->P7 = get_unaligned_le16(&p_buf[P7]);
++	calib->P8 = get_unaligned_le16(&p_buf[P8]);
++	calib->P9 = get_unaligned_le16(&p_buf[P9]);
++	kfree(p_buf);
  
- 	.oversampling_press_avail = bmp280_oversampling_avail,
- 	.num_oversampling_press_avail = ARRAY_SIZE(bmp280_oversampling_avail),
-+	.oversampling_press_default = ilog2(16),
+ 	/*
+ 	 * Read humidity calibration values.
+@@ -222,12 +259,12 @@ static int bmp280_read_calib(struct bmp280_data *data, unsigned int chip)
+ 	}
+ 	calib->H1 = tmp;
  
- 	.oversampling_humid_avail = bmp280_oversampling_avail,
- 	.num_oversampling_humid_avail = ARRAY_SIZE(bmp280_oversampling_avail),
-+	.oversampling_humid_default = ilog2(16),
+-	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H2, &l16, 2);
++	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H2, data->buf, 2);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to read H2 comp value\n");
+ 		return ret;
+ 	}
+-	calib->H2 = sign_extend32(le16_to_cpu(l16), 15);
++	calib->H2 = get_unaligned_le16(data->buf);
  
- 	.chip_config = bme280_chip_config,
- 	.read_temp = bmp280_read_temp,
- 	.read_press = bmp280_read_press,
- 	.read_humid = bmp280_read_humid,
-+	.read_calib = bmp280_read_calib,
- };
+ 	ret = regmap_read(data->regmap, BMP280_REG_COMP_H3, &tmp);
+ 	if (ret < 0) {
+@@ -236,20 +273,20 @@ static int bmp280_read_calib(struct bmp280_data *data, unsigned int chip)
+ 	}
+ 	calib->H3 = tmp;
  
- static int bmp180_measure(struct bmp280_data *data, u8 ctrl_meas)
-@@ -748,11 +771,11 @@ static int bmp180_read_adc_temp(struct bmp280_data *data, int *val)
+-	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H4, &b16, 2);
++	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H4, data->buf, 2);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to read H4 comp value\n");
+ 		return ret;
+ 	}
+-	calib->H4 = sign_extend32(((be16_to_cpu(b16) >> 4) & 0xff0) |
+-				  (be16_to_cpu(b16) & 0xf), 11);
++	calib->H4 = sign_extend32(((get_unaligned_be16(data->buf) >> 4) & 0xff0) |
++				  (get_unaligned_be16(data->buf) & 0xf), 11);
+ 
+-	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H5, &l16, 2);
++	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H5, data->buf, 2);
+ 	if (ret < 0) {
+ 		dev_err(dev, "failed to read H5 comp value\n");
+ 		return ret;
+ 	}
+-	calib->H5 = sign_extend32(((le16_to_cpu(l16) >> 4) & 0xfff), 11);
++	calib->H5 = sign_extend32(((get_unaligned_le16(data->buf) >> 4) & 0xfff), 11);
+ 
+ 	ret = regmap_read(data->regmap, BMP280_REG_COMP_H6, &tmp);
+ 	if (ret < 0) {
+@@ -344,16 +381,15 @@ static int bmp280_read_temp(struct bmp280_data *data,
+ 			    int *val)
+ {
+ 	int ret;
+-	__be32 tmp = 0;
+ 	s32 adc_temp, comp_temp;
+ 
+-	ret = regmap_bulk_read(data->regmap, BMP280_REG_TEMP_MSB, &tmp, 3);
++	ret = regmap_bulk_read(data->regmap, BMP280_REG_TEMP_MSB, data->buf, 3);
+ 	if (ret < 0) {
+ 		dev_err(data->dev, "failed to read temperature\n");
+ 		return ret;
+ 	}
+ 
+-	adc_temp = be32_to_cpu(tmp) >> 12;
++	adc_temp = get_unaligned_be24(data->buf) >> 4;
+ 	if (adc_temp == BMP280_TEMP_SKIPPED) {
+ 		/* reading was skipped */
+ 		dev_err(data->dev, "reading temperature skipped\n");
+@@ -377,7 +413,6 @@ static int bmp280_read_press(struct bmp280_data *data,
+ 			     int *val, int *val2)
+ {
+ 	int ret;
+-	__be32 tmp = 0;
+ 	s32 adc_press;
+ 	u32 comp_press;
+ 
+@@ -386,13 +421,13 @@ static int bmp280_read_press(struct bmp280_data *data,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = regmap_bulk_read(data->regmap, BMP280_REG_PRESS_MSB, &tmp, 3);
++	ret = regmap_bulk_read(data->regmap, BMP280_REG_PRESS_MSB, data->buf, 3);
+ 	if (ret < 0) {
+ 		dev_err(data->dev, "failed to read pressure\n");
+ 		return ret;
+ 	}
+ 
+-	adc_press = be32_to_cpu(tmp) >> 12;
++	adc_press = get_unaligned_be24(data->buf) >> 4;
+ 	if (adc_press == BMP280_PRESS_SKIPPED) {
+ 		/* reading was skipped */
+ 		dev_err(data->dev, "reading pressure skipped\n");
+@@ -408,7 +443,6 @@ static int bmp280_read_press(struct bmp280_data *data,
+ 
+ static int bmp280_read_humid(struct bmp280_data *data, int *val, int *val2)
+ {
+-	__be16 tmp;
+ 	int ret;
+ 	s32 adc_humidity;
+ 	u32 comp_humidity;
+@@ -418,13 +452,13 @@ static int bmp280_read_humid(struct bmp280_data *data, int *val, int *val2)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = regmap_bulk_read(data->regmap, BMP280_REG_HUMIDITY_MSB, &tmp, 2);
++	ret = regmap_bulk_read(data->regmap, BMP280_REG_HUMIDITY_MSB, data->buf, 2);
+ 	if (ret < 0) {
+ 		dev_err(data->dev, "failed to read humidity\n");
+ 		return ret;
+ 	}
+ 
+-	adc_humidity = be16_to_cpu(tmp);
++	adc_humidity = get_unaligned_be16(data->buf);
+ 	if (adc_humidity == BMP280_HUMIDITY_SKIPPED) {
+ 		/* reading was skipped */
+ 		dev_err(data->dev, "reading humidity skipped\n");
+@@ -755,56 +789,65 @@ static int bmp180_measure(struct bmp280_data *data, u8 ctrl_meas)
+ 
+ static int bmp180_read_adc_temp(struct bmp280_data *data, int *val)
+ {
+-	__be16 tmp;
+ 	int ret;
+ 
+ 	ret = bmp180_measure(data, BMP180_MEAS_TEMP);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_bulk_read(data->regmap, BMP180_REG_OUT_MSB, &tmp, 2);
++	ret = regmap_bulk_read(data->regmap, BMP180_REG_OUT_MSB, data->buf, 2);
+ 	if (ret)
+ 		return ret;
+ 
+-	*val = be16_to_cpu(tmp);
++	*val = get_unaligned_be16(data->buf);
+ 
  	return 0;
  }
  
--static int bmp180_read_calib(struct bmp280_data *data,
--			     struct bmp180_calib *calib)
-+static int bmp180_read_calib(struct bmp280_data *data, unsigned int chip)
+ static int bmp180_read_calib(struct bmp280_data *data, unsigned int chip)
  {
++	struct bmp180_calib *calib = &data->calib.bmp180;
++	u8 *buf;
  	int ret;
  	int i;
-+	struct bmp180_calib *calib = &data->calib.bmp180;
- 	__be16 buf[BMP180_REG_CALIB_COUNT / 2];
+-	struct bmp180_calib *calib = &data->calib.bmp180;
+-	__be16 buf[BMP180_REG_CALIB_COUNT / 2];
++
++	buf = kmalloc(BMP180_REG_CALIB_COUNT, GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
  
  	ret = regmap_bulk_read(data->regmap, BMP180_REG_CALIB_START, buf,
-@@ -913,17 +936,24 @@ static const int bmp180_oversampling_temp_avail[] = { 1 };
- static const int bmp180_oversampling_press_avail[] = { 1, 2, 4, 8 };
+-			       sizeof(buf));
++			       BMP180_REG_CALIB_COUNT);
  
- static const struct bmp280_chip_info bmp180_chip_info = {
-+	.id_reg = BMP280_REG_ID,
-+	.start_up_time = 2000,
-+	.num_channels = 2,
-+
- 	.oversampling_temp_avail = bmp180_oversampling_temp_avail,
- 	.num_oversampling_temp_avail =
- 		ARRAY_SIZE(bmp180_oversampling_temp_avail),
-+	.oversampling_temp_default = ilog2(1),
- 
- 	.oversampling_press_avail = bmp180_oversampling_press_avail,
- 	.num_oversampling_press_avail =
- 		ARRAY_SIZE(bmp180_oversampling_press_avail),
-+	.oversampling_press_default = ilog2(8),
- 
- 	.chip_config = bmp180_chip_config,
- 	.read_temp = bmp180_read_temp,
- 	.read_press = bmp180_read_press,
-+	.read_calib = bmp180_read_calib,
- };
- 
- static irqreturn_t bmp085_eoc_irq(int irq, void *d)
-@@ -993,6 +1023,7 @@ int bmp280_common_probe(struct device *dev,
- 	int ret;
- 	struct iio_dev *indio_dev;
- 	struct bmp280_data *data;
-+	const struct bmp280_chip_info *chip_info;
- 	unsigned int chip_id;
- 	struct gpio_desc *gpiod;
- 
-@@ -1011,30 +1042,25 @@ int bmp280_common_probe(struct device *dev,
- 
- 	switch (chip) {
- 	case BMP180_CHIP_ID:
--		indio_dev->num_channels = 2;
--		data->chip_info = &bmp180_chip_info;
--		data->oversampling_press = ilog2(8);
--		data->oversampling_temp = ilog2(1);
--		data->start_up_time = 10000;
-+		chip_info = &bmp180_chip_info;
- 		break;
- 	case BMP280_CHIP_ID:
--		indio_dev->num_channels = 2;
--		data->chip_info = &bmp280_chip_info;
--		data->oversampling_press = ilog2(16);
--		data->oversampling_temp = ilog2(2);
--		data->start_up_time = 2000;
-+		chip_info = &bmp280_chip_info;
- 		break;
- 	case BME280_CHIP_ID:
--		indio_dev->num_channels = 3;
--		data->chip_info = &bme280_chip_info;
--		data->oversampling_press = ilog2(16);
--		data->oversampling_humid = ilog2(16);
--		data->oversampling_temp = ilog2(2);
--		data->start_up_time = 2000;
-+		chip_info = &bme280_chip_info;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
-+	data->chip_info = chip_info;
-+
-+	/* apply initial values from chip info structure */
-+	indio_dev->num_channels = chip_info->num_channels;
-+	data->oversampling_press = chip_info->oversampling_press_default;
-+	data->oversampling_humid = chip_info->oversampling_humid_default;
-+	data->oversampling_temp = chip_info->oversampling_temp_default;
-+	data->start_up_time = chip_info->start_up_time;
- 
- 	/* Bring up regulators */
- 	regulator_bulk_set_supply_names(data->supplies,
-@@ -1071,7 +1097,8 @@ int bmp280_common_probe(struct device *dev,
- 	}
- 
- 	data->regmap = regmap;
--	ret = regmap_read(regmap, BMP280_REG_ID, &chip_id);
-+
-+	ret = regmap_read(regmap, data->chip_info->id_reg, &chip_id);
- 	if (ret < 0)
+-	if (ret < 0)
++	if (ret < 0) {
++		kfree(buf);
  		return ret;
- 	if (chip_id != chip) {
-@@ -1091,21 +1118,11 @@ int bmp280_common_probe(struct device *dev,
- 	 * non-volatile memory during production". Let's read them out at probe
- 	 * time once. They will not change.
- 	 */
--	if (chip_id  == BMP180_CHIP_ID) {
--		ret = bmp180_read_calib(data, &data->calib.bmp180);
--		if (ret < 0) {
--			dev_err(data->dev,
--				"failed to read calibration coefficients\n");
--			return ret;
--		}
--	} else if (chip_id == BMP280_CHIP_ID || chip_id == BME280_CHIP_ID) {
--		ret = bmp280_read_calib(data, &data->calib.bmp280, chip_id);
--		if (ret < 0) {
--			dev_err(data->dev,
--				"failed to read calibration coefficients\n");
--			return ret;
--		}
--	}
-+
-+	ret = data->chip_info->read_calib(data, chip_id);
-+	if (ret < 0)
-+		return dev_err_probe(data->dev, ret,
-+				     "failed to read calibration coefficients\n");
++	}
  
- 	/*
- 	 * Attempt to grab an optional EOC IRQ - only the BMP085 has this
+ 	/* None of the words has the value 0 or 0xFFFF */
+-	for (i = 0; i < ARRAY_SIZE(buf); i++) {
+-		if (buf[i] == cpu_to_be16(0) || buf[i] == cpu_to_be16(0xffff))
++	for (i = 0; i < BMP180_REG_CALIB_COUNT; i += 2) {
++		if (get_unaligned_be16(&buf[i]) == cpu_to_be16(0) ||
++		    get_unaligned_be16(&buf[i]) == cpu_to_be16(0xffff)) {
++			kfree(buf);
+ 			return -EIO;
++		}
+ 	}
+ 
+ 	/* Toss the calibration data into the entropy pool */
+-	add_device_randomness(buf, sizeof(buf));
+-
+-	calib->AC1 = be16_to_cpu(buf[AC1]);
+-	calib->AC2 = be16_to_cpu(buf[AC2]);
+-	calib->AC3 = be16_to_cpu(buf[AC3]);
+-	calib->AC4 = be16_to_cpu(buf[AC4]);
+-	calib->AC5 = be16_to_cpu(buf[AC5]);
+-	calib->AC6 = be16_to_cpu(buf[AC6]);
+-	calib->B1 = be16_to_cpu(buf[B1]);
+-	calib->B2 = be16_to_cpu(buf[B2]);
+-	calib->MB = be16_to_cpu(buf[MB]);
+-	calib->MC = be16_to_cpu(buf[MC]);
+-	calib->MD = be16_to_cpu(buf[MD]);
+-
++	add_device_randomness(buf, BMP180_REG_CALIB_COUNT);
++
++	calib->AC1 = get_unaligned_be16(&buf[AC1]);
++	calib->AC2 = get_unaligned_be16(&buf[AC2]);
++	calib->AC3 = get_unaligned_be16(&buf[AC3]);
++	calib->AC4 = get_unaligned_be16(&buf[AC4]);
++	calib->AC5 = get_unaligned_be16(&buf[AC5]);
++	calib->AC6 = get_unaligned_be16(&buf[AC6]);
++	calib->B1 = get_unaligned_be16(&buf[B1]);
++	calib->B2 = get_unaligned_be16(&buf[B2]);
++	calib->MB = get_unaligned_be16(&buf[MB]);
++	calib->MC = get_unaligned_be16(&buf[MC]);
++	calib->MD = get_unaligned_be16(&buf[MD]);
++
++	kfree(buf);
+ 	return 0;
+ }
+ 
+@@ -852,18 +895,17 @@ static int bmp180_read_temp(struct bmp280_data *data, int *val)
+ static int bmp180_read_adc_press(struct bmp280_data *data, int *val)
+ {
+ 	int ret;
+-	__be32 tmp = 0;
+ 	u8 oss = data->oversampling_press;
+ 
+ 	ret = bmp180_measure(data, BMP180_MEAS_PRESS_X(oss));
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_bulk_read(data->regmap, BMP180_REG_OUT_MSB, &tmp, 3);
++	ret = regmap_bulk_read(data->regmap, BMP180_REG_OUT_MSB, data->buf, 3);
+ 	if (ret)
+ 		return ret;
+ 
+-	*val = (be32_to_cpu(tmp) >> 8) >> (8 - oss);
++	*val = get_unaligned_be24(data->buf) >> (8 - oss);
+ 
+ 	return 0;
+ }
 -- 
 2.37.1
 

@@ -2,122 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D073857F1E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 00:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F418557F1EA
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 00:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbiGWWpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 18:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S234960AbiGWWuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 18:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231551AbiGWWpg (ORCPT
+        with ESMTP id S229875AbiGWWuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 18:45:36 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD7765B7
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 15:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=9INdeDdiGGjVt7kAmmoK6Sl85fUEVz9OggNQttQyITU=; b=iEsWqBiXCDMyzZJa6Hvg8cM+hZ
-        p0YYapIULjVVkRypytDhxPPPS9bg/jwUZuewbJ+TddQM4CFJmf8LQUYwi04UsEEYLE3k1VizScj7Q
-        8ctZwbmgY6nbL0ZfWIi7NXYFT60adtJclCW8b/h98DYOMlEPWNcbFOL2IT984KegXA/2lpwg4YVkM
-        dAxnMcqKSQRV8QDHZ+82hoT0lBmYWt3eLZXz/JWJDfWcRiPFMIbZxiPvmxgNv+HMs6e6sRiZGplsX
-        BSGWCzJy7QBWILikc0aX+Uh4GUY22PMvzwewdj+Whc7ETF/IzWnlnlWoC1Lwf9k7x4/OleKSHmR38
-        gqP85gIA==;
-Received: from [165.90.126.25] (helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oFNs2-0042At-4W; Sun, 24 Jul 2022 00:45:14 +0200
-Date:   Sat, 23 Jul 2022 21:45:00 -0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, mripard@kernel.org,
-        christian.koenig@amd.com, emma@anholt.net,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH RESEND 08/10] drm/v3d: use idr_init_base() to initialize
- v3d_priv->perfmon.idr
-Message-ID: <20220723224500.w6pezv3ojgu2d6qi@mail.igalia.com>
-References: <20220720132830.193747-1-dakr@redhat.com>
- <20220720132830.193747-9-dakr@redhat.com>
+        Sat, 23 Jul 2022 18:50:18 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D605FF7;
+        Sat, 23 Jul 2022 15:50:16 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so7195278wme.0;
+        Sat, 23 Jul 2022 15:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9+SGmh+zQFQNeqS1nDQMpNKAHLBf8ILAcQLa/iYZ68w=;
+        b=I6zZngK3VVgtj67O2D5LjmT+jF8X+BMMukA7BCYamHgUJ8AvTIMrz53CKg0wpvK/3a
+         sNl6U/bDUcqN6z8l+3d4MK/ARRO8iM/DYSLuss7o7T0hfx3aYB6zR18ZbrCd/83KntJA
+         0donLFzZHADhxPKFgsdpejxV1A5M1efs/UHpMy78nmCP3oHPh9BqeWwkomtjxkWLG0/U
+         XV4o2NsxozeZDe7t+E5Z0cMhvVtgN67lxFfLrzHO3KPM/wbVUeWseGEnMSxPU16psKVZ
+         2VvpPX/nVJ8CZ5MlwjdAbRm2/FsY5cU+7y+46XS5pSFSckGNIIp42bmZsISm6xBdXkJN
+         svyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9+SGmh+zQFQNeqS1nDQMpNKAHLBf8ILAcQLa/iYZ68w=;
+        b=tiCKd21Or54cCFq6bE6EvU7y4CzukRmCLgSViNqOkSsa8U0qNKCLsXiYgvXNywwXlf
+         r98agPfOd9N2kVn8tJKYx/d3piyLHg9s1aH/7n70G7MDTKyACdtZJoGaIzC7DP+msunl
+         vo9qLvJ5hN58vatBoJ0P3K/xCND+7r/UCL9k6mXGQv0aKrdinYWuOkWHPp/ja6IHi8zA
+         ZlBqetx6ea5XjcfZPtfOBS/zX4xcQI3NsPIWS198V3ZJ1cB6UZOqsnufCvy4qEoH77IK
+         2NCUxS4sPb4rs1WY8/bXX65VT0h9A+Ao5/oDlxb9oW1RIqm8GhRrGGYryVOvS7RPOiub
+         56JA==
+X-Gm-Message-State: AJIora8GvR5Flnhfb2bdPNswVvjNxtEXqrfKnGxXk+tcFTdcCvv5ngiG
+        1fl0xNXWKi0EYSyv7bJUf2kBs2tHIdQ=
+X-Google-Smtp-Source: AGRyM1tb6ICS759gCOl045iJoxWtM+A1P/mUHsqx0egO5+irjQhLPHn2BqpnifLH1FH0OmR9U2Wbng==
+X-Received: by 2002:a7b:cd15:0:b0:3a3:1d69:5201 with SMTP id f21-20020a7bcd15000000b003a31d695201mr3909731wmj.10.1658616614468;
+        Sat, 23 Jul 2022 15:50:14 -0700 (PDT)
+Received: from xws.localdomain (pd9ea3743.dip0.t-ipconnect.de. [217.234.55.67])
+        by smtp.gmail.com with ESMTPSA id x3-20020adff0c3000000b0021deba99142sm7799284wro.40.2022.07.23.15.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 15:50:14 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Subject: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure Application
+Date:   Sun, 24 Jul 2022 00:49:45 +0200
+Message-Id: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7efy5bucdwv7jzri"
-Content-Disposition: inline
-In-Reply-To: <20220720132830.193747-9-dakr@redhat.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On modern Qualcomm platforms, access to EFI variables is restricted to
+the secure world / TrustZone, i.e. the Trusted Execution Environment
+(TrEE or TEE) as Qualcomm seems to call it. To access EFI variables, we
+therefore need to talk to the UEFI Secure Application (uefisecapp),
+residing in the TrEE.
 
---7efy5bucdwv7jzri
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds support for accessing EFI variables on those platforms.
 
-On 07/20, Danilo Krummrich wrote:
-> idr_init_base(), implemented by commit 6ce711f27500 ("idr: Make 1-based
-> IDRs more efficient"), let us set an arbitrary base other than
-> idr_init(), which uses base 0.
->=20
-> Since, for this IDR, no ID < 1 is ever requested/allocated, using
-> idr_init_base(&idr, 1) avoids unnecessary tree walks.
->=20
-> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
-> Acked-by: Christian K=F6nig <christian.koenig@amd.com>
-> ---
->  drivers/gpu/drm/v3d/v3d_perfmon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/v3d/v3d_perfmon.c b/drivers/gpu/drm/v3d/v3d_=
-perfmon.c
-> index f6a88abccc7d..48aaaa972c49 100644
-> --- a/drivers/gpu/drm/v3d/v3d_perfmon.c
-> +++ b/drivers/gpu/drm/v3d/v3d_perfmon.c
-> @@ -95,7 +95,7 @@ struct v3d_perfmon *v3d_perfmon_find(struct v3d_file_pr=
-iv *v3d_priv, int id)
->  void v3d_perfmon_open_file(struct v3d_file_priv *v3d_priv)
->  {
->  	mutex_init(&v3d_priv->perfmon.lock);
-> -	idr_init(&v3d_priv->perfmon.idr);
-> +	idr_init_base(&v3d_priv->perfmon.idr, 1);
+To do this, we first need to add some SCM call functions used to manage
+and talk to Secure Applications. A very small subset of this interface
+is added in the second patch (whereas the first one exports the required
+functions for that). Interface specifications are extracted from [1].
+While this does not (yet) support re-entrant SCM calls (including
+callbacks and listeners), this is enough to talk to the aforementioned
+uefisecapp on a couple of platforms (I've tested this on a Surface Pro X
+and heard reports from Lenovo Flex 5G, Lenovo Thinkpad x13s, and Lenovo
+Yoga C630 devices).
 
-Reviewed-by: Melissa Wen <mwen@igalia.com>
+The third patch adds a client driver for uefisecapp, installing the
+respective efivar operations. The application interface has been reverse
+engineered from the Windows QcTrEE8180.sys driver.
 
-Thanks
+Apart from uefisecapp, there are more Secure Applications running that
+we might want to support in the future. For example, on the Surface Pro
+X (sc8180x-based), the TPM is also managed via one.
 
->  }
-> =20
->  static int v3d_perfmon_idr_del(int id, void *elem, void *data)
-> --=20
-> 2.36.1
->=20
+I'm not sure whether this should go to drivers/firmware or to
+drivers/soc/qcom. I've put this into firmware as all of this is
+essentially an interface to the secure firmware running in the TrustZone
+(and SCM stuff is handled here already), but please let me know if I
+should move this.
 
---7efy5bucdwv7jzri
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
+Max
 
------BEGIN PGP SIGNATURE-----
+[1]: https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/blob/auto-kernel.lnx.4.14.c34/drivers/misc/qseecom.c
 
-iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmLced8ACgkQwqF3j0dL
-ehwGIw/+LUNPvk78JTm0C8+zpXW9CrRPyarEFWTgL6cZSa0dyd/ssidCxMUx7pjs
-G9YBT60Aq7k/TP0wYcebKKXY2UkPrrPrrIRMqpSarTFqMa9d9XBT3KFlgiYrtGI9
-gCAwEPOi/o5oKphAXvRP9KWC6qcZyCPhUPmHsCMRBOsvY3HYvyj+EYb90d0jrwY0
-ZdbNzVsHTDikQfKMttZo2kWYwNhSfcCO0qKMx7ccj7FssJmTeB2Rf8vRIOiChfIe
-B0614Rp7UmUkXlTrK57YzWMWNRegVWbE6EVGm7E5ojRZjio87RJVcYGJG0YelQ9Y
-E778NCZffqfoQiQzf7PLq0qef6LvbOBUZGqbYcLA1qMu0R1AGtBHrvhUXuVUNlsD
-eMCHYmAUBK6byXJCOx9zW44iFSFaSJIyw0eiNu3oCXdxkKXCUitn+EvymPyVKEDQ
-ilJprF8nuM4nGkDszQn/UiZychB4C2VpDveVFdNo6G8PONjaq6dx7QQasAuNAbYZ
-n3n0Co8+T72vfnbMm5DNTks0JaFrCoSevpTVCQSE9iEqVSFE5i3uVDpcbzyb/0CJ
-CvgiWMqBS7Yl+bXtRKD4HllJ+YsIhEl9N0dwbdGxJ7OSZ7jcHYb6TTKl9b1y/qf3
-qbuPBlL9zQ+7WjZfh7WDGrxpdwnr/X8+xXduHHTcOX4UbnC7AyM=
-=GlXz
------END PGP SIGNATURE-----
+Maximilian Luz (4):
+  firmware: qcom_scm: Export SCM call functions
+  firmware: Add support for Qualcomm Trusted Execution Environment SCM
+    calls
+  firmware: Add support for Qualcomm UEFI Secure Application
+  dt-bindings: firmware: Add Qualcomm UEFI Secure Application client
 
---7efy5bucdwv7jzri--
+ .../firmware/qcom,tee-uefisecapp.yaml         |  38 +
+ MAINTAINERS                                   |  14 +
+ drivers/firmware/Kconfig                      |  20 +
+ drivers/firmware/Makefile                     |   2 +
+ drivers/firmware/qcom_scm.c                   | 118 ++-
+ drivers/firmware/qcom_scm.h                   |  47 --
+ drivers/firmware/qcom_tee.c                   | 213 +++++
+ drivers/firmware/qcom_tee_uefisecapp.c        | 761 ++++++++++++++++++
+ include/linux/qcom_scm.h                      |  49 ++
+ include/linux/qcom_tee.h                      | 179 ++++
+ 10 files changed, 1355 insertions(+), 86 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
+ create mode 100644 drivers/firmware/qcom_tee.c
+ create mode 100644 drivers/firmware/qcom_tee_uefisecapp.c
+ create mode 100644 include/linux/qcom_tee.h
+
+-- 
+2.37.1
+

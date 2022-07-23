@@ -2,131 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36D857EC61
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B58257EC66
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 09:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbiGWHA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 03:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S235508AbiGWHOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 03:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiGWHAX (ORCPT
+        with ESMTP id S229728AbiGWHOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 03:00:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3A1A18F
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 00:00:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61F64B82B92
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 07:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBB0C341C0;
-        Sat, 23 Jul 2022 07:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658559616;
-        bh=tm9xPYy/QSGHj/QDQyA2Dywv8TAfehEcXfMDxQl0Qlg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e/XYLhBJX+ol32mnT9TBbBbIOjloHmvUPEHP7Q7xkdJaUwSwzhUcL40QyU7di4edW
-         Um4QAZ9sNCCHcoHgxMrEza+DZ/TnEeoODNbD5mU99bhzFs3JMjCBurd7EufO3JO737
-         GJBZE9wP1Bi3YWavwYyr51CrVaYzheOCpLBujtiM=
-Date:   Sat, 23 Jul 2022 09:00:08 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
-Cc:     perex@perex.cz, tiwai@suse.com, consult.awy@gmail.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        syzkaller@googlegroups.com, fleischermarius@googlemail.com,
-        its.priyanka.bose@gmail.com
-Subject: Re: KASAN: vmalloc-out-of-bounds Write in snd_pcm_hw_params
-Message-ID: <YtuceCr5OCJcDatJ@kroah.com>
-References: <CANX2M5Zw_zW6ez0_wvaXL1pbLnR2jWY=T7MgkT=4a-zNkiwVig@mail.gmail.com>
+        Sat, 23 Jul 2022 03:14:34 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E6846DA0;
+        Sat, 23 Jul 2022 00:14:33 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id n12so9154927wrc.8;
+        Sat, 23 Jul 2022 00:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kFbhz9YIcWYk8daO1/U52qJaNS5RPsFummR8Ag7sOH0=;
+        b=nzblBlrUeZu2ABoGQG1E4Pxd6n3acJBTSkuopD/9LZV1tu+1sCOGFu0RVNuA/i/DmI
+         JLUc+fx2zET53Wm+8fjovbKGPbBRfsc5fd/4Zx9L+z/p0AjRpL29VqIQx7VAzuWZ3Yb9
+         TlBN9PHz6dxTMWZT1ZGAXlQBOSLVLSccPMccdAVt3W/+4ESOdJr8Ehzm/tCrtOMsplMr
+         pqxE0OABN/RG9cuBukTbDbiRH0IoF57i9ef5BC8v+QGRQYNXGluIhPo/2uar7PogxTzU
+         n9x33tXdIOaRkkR9pYHDswEmsc5xAo0RkVOmVWaDVDUCZZ8IMfejvzSSwGNiGbxAosgA
+         1k6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kFbhz9YIcWYk8daO1/U52qJaNS5RPsFummR8Ag7sOH0=;
+        b=afSl1AVZcOAau+r+ADAMKJUKfSaZ5q1NqrQwZm60lyA25gGrQ0iSYnLKgV3iLBUm8n
+         jUYPZDoE0PwDG8llfYcu/Cf1ZKc7SrzNTtXvpJ3qJa2D6tQOBNeojk43ak0cQ5cb8QOO
+         IBrV/jZi6oBD3+n1MUARDysYEqxeJUXQLelgyDXzCycux/borlJpukW/0rwnhlSigVfj
+         6wcFBjvFP1AzJbxK23DnAGKLOH1EXEsbPPlyfEnFfiJCx6xjqHEm8t6xyBEbRruodWvd
+         2q3sXRPNFEU2F7+z9XL3Q/Ke8QpQ1OqVMw5JTx0To9FdoirWAKPLaF0vNnWqXxD8aB+9
+         0lyQ==
+X-Gm-Message-State: AJIora+7CdXzK8QMN8TuxYb+Bw905FWJ7W9X/ohMxkt/uK7EUoKKSHDC
+        ynlTD7blO8m6a1E19MPCZWEVzi0Zu3440A==
+X-Google-Smtp-Source: AGRyM1uMDcu67+t+bD8sku9/QUBXwQLqRL9EFwrgpKCq73Qj3OxM5KwmH2W+ANTQBLfoRgB5ceOZ2w==
+X-Received: by 2002:a5d:4689:0:b0:21e:477c:bb9e with SMTP id u9-20020a5d4689000000b0021e477cbb9emr2036555wrq.517.1658560471355;
+        Sat, 23 Jul 2022 00:14:31 -0700 (PDT)
+Received: from reki (62-44-238.netrun.cytanet.com.cy. [62.228.44.238])
+        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b0021d65675583sm6126304wrr.52.2022.07.23.00.14.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 00:14:30 -0700 (PDT)
+Date:   Sat, 23 Jul 2022 10:14:28 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Greg KH <greg@kroah.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the usb tree
+Message-ID: <20220723101428.347d941e@reki>
+In-Reply-To: <YtaUYmzTfKmx0Ek0@kroah.com>
+References: <20220719194337.64c490e0@canb.auug.org.au>
+        <20220719132559.3348c163@reki>
+        <YtaUYmzTfKmx0Ek0@kroah.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANX2M5Zw_zW6ez0_wvaXL1pbLnR2jWY=T7MgkT=4a-zNkiwVig@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 09:37:52AM -0700, Dipanjan Das wrote:
-> Hi,
-> 
-> We would like to report the following bug which has been found by our
-> modified version of syzkaller.
-> 
-> ======================================================
-> description: KASAN: vmalloc-out-of-bounds Write in snd_pcm_hw_params
-> affected file: sound/core/pcm_native.c
-> kernel version: 5.10.131
-> kernel commit: de62055f423f5dcb548f74cebd68f03c8903f73a
-> git tree: upstream
-> kernel config: https://syzkaller.appspot.com/x/.config?x=e49433cfed49b7d9
-> crash reproducer: attached
-> ======================================================
-> Crash log:
-> ======================================================
-> BUG: KASAN: vmalloc-out-of-bounds in memset include/linux/string.h:384 [inline]
-> BUG: KASAN: vmalloc-out-of-bounds in snd_pcm_hw_params+0x19b0/0x1db0
-> sound/core/pcm_native.c:799
-> Write of size 2097152 at addr ffffc900113b2000 by task syz-executor.5/14437
-> 
-> CPU: 1 PID: 14437 Comm: syz-executor.5 Tainted: G           OE     5.10.131+ #3
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x107/0x163 lib/dump_stack.c:118
->  print_address_description.constprop.0.cold+0x5/0x4f7 mm/kasan/report.c:385
->  __kasan_report mm/kasan/report.c:545 [inline]
->  kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
->  check_memory_region_inline mm/kasan/generic.c:194 [inline]
->  check_memory_region+0x187/0x1e0 mm/kasan/generic.c:200
->  memset+0x20/0x40 mm/kasan/common.c:85
->  memset include/linux/string.h:384 [inline]
->  snd_pcm_hw_params+0x19b0/0x1db0 sound/core/pcm_native.c:799
->  snd_pcm_kernel_ioctl+0xd1/0x240 sound/core/pcm_native.c:3401
->  snd_pcm_oss_change_params_locked+0x17b6/0x3aa0 sound/core/oss/pcm_oss.c:965
->  snd_pcm_oss_change_params+0x76/0xd0 sound/core/oss/pcm_oss.c:1107
->  snd_pcm_oss_make_ready+0xb7/0x170 sound/core/oss/pcm_oss.c:1166
->  snd_pcm_oss_set_trigger.isra.0+0x34f/0x770 sound/core/oss/pcm_oss.c:2074
->  snd_pcm_oss_poll+0x679/0xb40 sound/core/oss/pcm_oss.c:2858
->  vfs_poll include/linux/poll.h:90 [inline]
->  do_pollfd fs/select.c:872 [inline]
->  do_poll fs/select.c:920 [inline]
->  do_sys_poll+0x63c/0xe40 fs/select.c:1014
->  __do_sys_poll fs/select.c:1079 [inline]
->  __se_sys_poll fs/select.c:1067 [inline]
->  __x64_sys_poll+0x18c/0x490 fs/select.c:1067
->  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> RIP: 0033:0x7f095de4f4ed
-> Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
-> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f095bdffbe8 EFLAGS: 00000246 ORIG_RAX: 0000000000000007
-> RAX: ffffffffffffffda RBX: 00007f095df6df60 RCX: 00007f095de4f4ed
-> RDX: 0000000000000009 RSI: 0000000000000001 RDI: 00000000200000c0
-> RBP: 00007f095bdffc40 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000001d
-> R13: 00007ffff286ceff R14: 00007f095df6df60 R15: 00007f095bdffd80
-> 
-> 
-> Memory state around the buggy address:
->  ffffc900115b1d00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->  ffffc900115b1d80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> >ffffc900115b1e00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->                    ^
->  ffffc900115b1e80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->  ffffc900115b1f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> ==================================================================
+On Tue, 19 Jul 2022 13:24:18 +0200
+Greg KH <greg@kroah.com> wrote:
 
-Wondeful, do you have a fix for this that solves the reported problem
-that you have tested with the reproducer?
+> On Tue, Jul 19, 2022 at 01:25:59PM +0300, Maxim Devaev wrote:
+> > =D0=92 Tue, 19 Jul 2022 19:43:37 +1000
+> > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >  =20
+> > > Hi all,
+> > >=20
+> > > After merging the usb tree, today's linux-next build (htmldocs) produ=
+ced
+> > > this warning:
+> > >=20
+> > > Documentation/ABI/testing/configfs-usb-gadget-mass-storage:17: WARNIN=
+G: Malformed table.
+> > > Text in column margin in table line 14.
+> > >=20
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > file            The path to the backing file for the LUN.
+> > >                 Required if LUN is not marked as removable.
+> > > ro              Flag specifying access to the LUN shall be
+> > >                 read-only. This is implied if CD-ROM emulation
+> > >                 is enabled as well as when it was impossible
+> > >                 to open "filename" in R/W mode.
+> > > removable       Flag specifying that LUN shall be indicated as
+> > >                 being removable.
+> > > cdrom           Flag specifying that LUN shall be reported as
+> > >                 being a CD-ROM.
+> > > nofua           Flag specifying that FUA flag
+> > >                 in SCSI WRITE(10,12)
+> > > forced_eject    This write-only file is useful only when
+> > >                 the function is active. It causes the backing
+> > >                 file to be forcibly detached from the LUN,
+> > >                 regardless of whether the host has allowed it.
+> > >                 Any non-zero number of bytes written will
+> > >                 result in ejection.
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >=20
+> > > Introduced by commit
+> > >=20
+> > >   421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
+> > >  =20
+> >=20
+> > Sorry. Should I send a patch? =20
+>=20
+> Yes please.
 
-thanks,
-
-greg k-h
+JFYI the patch has been sent to linux-docs@, etc. I forgot to add you to CC.

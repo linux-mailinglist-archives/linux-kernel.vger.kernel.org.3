@@ -2,113 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4B557F12C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 21:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A91857F12F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 21:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbiGWT1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 15:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
+        id S236194AbiGWT22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 15:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiGWT1e (ORCPT
+        with ESMTP id S229632AbiGWT2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 15:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61FE1056F;
-        Sat, 23 Jul 2022 12:27:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3476C60EE7;
-        Sat, 23 Jul 2022 19:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7A7DC341C0;
-        Sat, 23 Jul 2022 19:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658604452;
-        bh=ZbgxQl+rg3lKvC7krfve+T2jrFIJNpWda+6LzKO5bVE=;
+        Sat, 23 Jul 2022 15:28:25 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FC41A803;
+        Sat, 23 Jul 2022 12:28:16 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.49.77]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N0G9p-1nJwwl29Rv-00xO4Q; Sat, 23 Jul 2022 21:27:40 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id 9155C3C0AD; Sat, 23 Jul 2022 21:27:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1658604452; bh=5dOBQSoGfDi2GpyYLUB7CO3HcDaHKUtWgbJke65oXTc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jYfTItcNNWxzBrd2FdZDyCAXbhBbBfRu6EzxX5X+STOAA/Y/i0EoAlW9TYLCmUhp5
-         j92DwmQLLnTL+z9beMk2cPqFaFWxw96Buz/TlW12WDm2X1c8xFEVhUqkLhA/hJ97qF
-         Sthq4TF8XMIIJrw99MSMgs2FYhcRhEAOa88kw+tufLbCE7Wvo6cWt/hG+F2ZH2jMeq
-         WAWi0Vhr4OgaV8diwe6XHa5F6gjUl5UebPE9nHjKzc6dAhfKafMiSUSDcMI5BGn31F
-         SHSB1SGr+T248fdxtS2BoLvAe1iW99KEgwswGV2wKRa7hSR5yQk7BEqQbt4JxdfvM6
-         onT5zTynAQeIw==
-Date:   Sat, 23 Jul 2022 20:27:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mike Yang <reimu@sudomaker.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
-        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
-Message-ID: <YtxLoPOykLDTzTn9@sirena.org.uk>
-References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
- <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
- <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
- <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
- <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
+        b=orMNljqk+ulcwjzM2c6TW5a71GPVV3k+fVeiiMEO4zmcA12hQkSJPmJwm/CSOOXTZ
+         9c9754lP2DMnl4E0EjMPzWbRMYz18fY0njrgUuLxZmgKdcsDis+02V5RI+l3Ff+bJ+
+         a8S81rekIOVeVwN2caxtQQfwbzYgyCfDhxUfoOMQ=
+Date:   Sat, 23 Jul 2022 21:27:32 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] kbuild: add dtbs_prepare target
+Message-ID: <YtxLpPj0djE31TF+@fjasle.eu>
+References: <20220716093122.137494-1-masahiroy@kernel.org>
+ <Ytp4PyBcCfRsVaG5@bergen.fjasle.eu>
+ <CAK7LNASFLKfDaPgWRzq2dw0939eLbcn5Y4A-qtSEfZs9BDecRg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TbMQOSOuune2YTJx"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
-X-Cookie: Necessity is a mother.
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNASFLKfDaPgWRzq2dw0939eLbcn5Y4A-qtSEfZs9BDecRg@mail.gmail.com>
+X-Provags-ID: V03:K1:wR4IwQRS/1Mifo7X+NbINbAXF5HoSVGNQYQz0U29GcAYHmGu7nG
+ tafFuOVWjGGfVcRwfI3aM3l4XC7MBBWRKjsfv/RcRHPPijng2ctuO9dbaVPmcSG/vE+dj1Q
+ 558tPWuW8hCEmlYjWaUKkKqKuEYDKxMqvKQ0SBMXZYmIHVt0kVxEr/AVCqFxG4KsZEgFrS2
+ jntijyJeitSOVXi9ds5Ng==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:r7XI++cQT70=:T9sc2ikKwR00BAwnHqGh1i
+ TR1zyVuyFPFcPJk2CVDVKKOrZY+Q8QuvIA3r0WlQDDrFuRDqVRCBsloqOthIifQ2g1t5dzAlR
+ KJIWQyRR4enhOOOEGlucixRFpB7TvbSM6OyGV9yVjJiwbLOE/GGRG8s20KHxOlsT/FhweUEEh
+ 5cWxZ+a/rJXgkUaG2Ywe4gaB04Gnupot5t06GUqiDAdZa9eP2clZ1+RLBYVwMWaMYCIklJNTM
+ 9SxHS7ot42mOUrpdP6wrKYM3dLdVXe3Mdx9iEE6kGqk3bVlrQyfQY8+Tj3F21/KvhMU676ex5
+ LKOVNd5gVVwB2i0+mpCgIjjwUK/lxamsbnth2QgpASNjr/ucgo2xKkyShQmSGJ6YhIlUyxHNM
+ DF4yQvEqa/hVEvBH5p1VeZauy/ZegmXJOHc+c4+MLAYc9wGeqaM0LhmpJoqMr+ArDG/dWvlO0
+ Qg/xSrmJ+mwLaK+gIEq0j6T8tFdmPsSmFTPu08InWktMEaxb0341So4grjjmDwEkXIrqgMqVG
+ nERMN4zb4ySxXaWlyk0Cah+NYe1jI7aAZ8w6VhRAIkq5K14rE0AJIu331bUj063LccgVfHjkq
+ 412+X9ayQfZ6yc/4eW5ZzfNVCLubDEl/izS/6SfE/LO6Rc1Caqg5wzllM6qpzfqLw4jC4k0Gv
+ Yqn3lbcl2G5hx2EEn6i2bU30KAP1WKJigtGxgzbXaP5Ayp+AHEAcLzRCtZDINO7pfaHFZrXIu
+ 9RZgcZqz9PPyyQdI4b/BeClgeYezRLO1VxW/jQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jul 23, 2022 at 09:33:03AM +0900, Masahiro Yamada wrote:
+> On Fri, Jul 22, 2022 at 7:14 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
+> >
+> > On Sat, 16 Jul 2022 18:31:22 +0900 Masahiro Yamada wrote:
+> > > Factor out the common prerequisites for DT compilation into the new
+> > > target, dtbs_prepare.
+> > >
+> > > Add comments in case you wonder why include/config/kernel.release is
+> > > the prerequisite. Our policy is that installation targets must not
+> > > (re)compile any build artifacts in the tree. If we make modules_install
+> > > depend on include/config/kernel.release and it is executed under the
+> > > root privilege, it may be owned by root.
+> > >
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > >  Makefile | 14 ++++++++++----
+> > >  1 file changed, 10 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/Makefile b/Makefile
+> > > index a9bd55edb75e..8aa4dbb8f878 100644
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -1367,16 +1367,22 @@ endif
+> > >
+> > >  ifneq ($(dtstree),)
+> > >
+> > > -%.dtb: include/config/kernel.release scripts_dtc
+> > > +%.dtb: dtbs_prepare
+> > >       $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+> > >
+> > > -%.dtbo: include/config/kernel.release scripts_dtc
+> > > +%.dtbo: dtbs_prepare
+> > >       $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+> >
+> > Is there a reason, why both rules are not unified?  I guess it is, but
+> > I can't see it.
+> 
+> 
+> 
+> See the GNU Make manual:
+> https://www.gnu.org/software/make/manual/html_node/Pattern-Examples.html
+> 
+> The last paragraph, "This pattern rule has two targets ..."
+> 
+> 
+> 
+> %.dtb %.dtbo: dtbs_prepare
+>          ...
+> 
+> means foo.dtb and foo.dtbo are generated at the same
+> time by the rule.  This is strange.
 
---TbMQOSOuune2YTJx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+uh, I'm working with Makefile since years but I wasn't aware of that. Thanks a
+lot for the pointer and explanation!
 
-On Sun, Jul 24, 2022 at 02:47:14AM +0800, Mike Yang wrote:
-> On 7/24/22 01:43, Krzysztof Kozlowski wrote:
-> > On 23/07/2022 18:50, Zhou Yanjie wrote:
+Kind regards,
+Nicolas
 
-> >> No offense, does it really need to be named that way?
-> >> I can't seem to find documentation with instructions on this :(
+> 
+> >
+> > >
+> > > -PHONY += dtbs dtbs_install dtbs_check
+> > > -dtbs: include/config/kernel.release scripts_dtc
+> > > +PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
+> > > +dtbs: dtbs_prepare
+> > >       $(Q)$(MAKE) $(build)=$(dtstree)
+> > >
+> > > +# include/config/kernel.release is not actually required for building DTBs,
+> > > +# but for installing DTBs because INSTALL_DTBS_PATH contains $(KERNELRELEASE).
+> > > +# We do not want to move it to dtbs_install. The policy is installation
+> > > +# targets (, which may run as root) must not modify the tree.
+> >
+> > Is the comma after the opening parenthesis intended?
+> 
+> 
+> I will rephrase the comment in v2.
+> 
+> 
+> 
+> 
+> >
+> > Kind regards,
+> > Nicolas
+> >
+> > > +dtbs_prepare: include/config/kernel.release scripts_dtc
+> > > +
+> > >  ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
+> > >  export CHECK_DTBS=y
+> > >  dtbs: dt_binding_check
+> > > --
+> > > 2.34.1
+> 
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
 
-...
-
-> > All bindings are to follow this rule, so I don't understand why you
-> > think it is an exception for you?
-
-> Zhou didn't ask you to make an exception. They have a valid
-> point and they're asking why.
-
-> You may want to avoid further incidents of this kind by stop
-> being bossy and actually writing a guideline of naming these
-> .yaml files and publish it somewhere online.
-
-Yeah, I do have to say that I was also completely unaware that
-there was any enforced convention here.
-
---TbMQOSOuune2YTJx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLcS6AACgkQJNaLcl1U
-h9B16Af+OB537q2iAFHtuzDZyT8beLFm5e80sPm2/JK6DK39SDS56/LU25TuqiQo
-JICSdChsFLOntnTc+3yLvssDYmtu+9niHfjBbG3zbA4IU7n2tH5zC8ks0BZnHG1y
-Ca58/ofXK99lB5wPUVB7eH9ccEVPfQ03/Ezb7gD435htmmn4ZBV3idkJkhezOxG/
-kgEJDtu7iJiaMNViADXs2AHGyCrAcgRSJKAtWByb1e8Cguh+CpuLKR6kzbs+IDGp
-fnCzAS4YOJmZGAO0P7mc4789Bxy3+v4s2mJSaZWRD2UGIZllBcoLxyWDtgAKIGB0
-FNxFe0cCP1mEKNoLaxf1rLh4gwlkZQ==
-=bYHr
------END PGP SIGNATURE-----
-
---TbMQOSOuune2YTJx--
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --

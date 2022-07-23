@@ -2,173 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692B257EAA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 02:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A255057EAA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 02:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbiGWA33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 22 Jul 2022 20:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S232454AbiGWAeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 22 Jul 2022 20:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGWA30 (ORCPT
+        with ESMTP id S229572AbiGWAeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 22 Jul 2022 20:29:26 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489D389672
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 17:29:25 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10d6ddda695so8253280fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 17:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XMJLK4N2d4z2/xpDSbgYVPQ0Elbz9cHd//yyo9mjRjE=;
-        b=Jhr3P4pTESjuxQwPIictRPqfMcuCjWtUBrDyroeCNcICrJc6LxCb4H0EyET5JnpSMd
-         XDx6lLSrqEOtCnpGAe2AExylN9Agt6X7Zqbb6FcRf7NdFKEGcx95RF+/Z8J6bP5ONORO
-         wG1OMLM7lhCQAxPhd/NbHo632jhBUqU+NN4pS5iereARDmvcU0lod/1KdbUs32GcNnUd
-         xo6G3S5D/tiCbuRAvoUuWlw46UH+hPIlaLjH0xI2mHweheNtAtPoYArDRG3DTVd87hSJ
-         W0wQqtjb+XWZ0TXUtD8JifIwS2UCdctr2gHw2zHhmm+GQ95/1roZg+LzCoBqXVT1MQ7H
-         BuSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XMJLK4N2d4z2/xpDSbgYVPQ0Elbz9cHd//yyo9mjRjE=;
-        b=C9xq4tPT1/Gcdq1KhJJ4AYvrD4i9o5VSYTlXqVHiRzhhaYbcgIyx/IP/5PehTzLeyt
-         rUty14cnATCYd0ilyJ1MYr6Vfc4eVzQUXkMSP9iE5F8EQ18r8qV7j3gXJagGgKpl0RZq
-         8xI2O3tkupdsqQw3FeLTFeMKxi3YgFbaUfIdE8P7UZ94YZxtqtwzqAHQJ/OTL0bqmt3r
-         bL1C5pyuM/CcnsK7oKWSNH3lQHfSBk/7Zemcz3Ht+g2RbzsuQynJuirdWq1/FKl76as/
-         UvfKysa1ldDq2bkoFCFCwKB9q0PMVmhkFw3VJRggHXqc9ZLdnRy+stJqTABBf5+0BNJh
-         +puA==
-X-Gm-Message-State: AJIora8cOQ6DWsjlKFdnMKReNambXT1razKdWHzL1Qh8C9U9+QPDCX6z
-        93Er4rxzM94Z4hRbvQE/4sdXtA==
-X-Google-Smtp-Source: AGRyM1tCTcWe90z0MM9J9/c7EoRTCWxHMKek0a8/PeZFTw2MzmGKZsUe/j9Ar7345GylSDGdj8qm9Q==
-X-Received: by 2002:a05:6870:c189:b0:101:b203:d870 with SMTP id h9-20020a056870c18900b00101b203d870mr8788813oad.267.1658536164645;
-        Fri, 22 Jul 2022 17:29:24 -0700 (PDT)
-Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id cm36-20020a056870b62400b000fb2aa6eef2sm2939297oab.32.2022.07.22.17.29.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 17:29:24 -0700 (PDT)
-Message-ID: <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
-Date:   Fri, 22 Jul 2022 19:29:21 -0500
+        Fri, 22 Jul 2022 20:34:23 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43798246D;
+        Fri, 22 Jul 2022 17:34:21 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 26N0Y09R021050;
+        Sat, 23 Jul 2022 09:34:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 26N0Y09R021050
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658536441;
+        bh=RVyxmU6w2hKmkKjVqxY3k5xGesiVVZUE6Qda81Yil5U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CnaaStUm5lwcDDgnvcoHtRhI9g9Hj2UD0mFivWgQ9TXC0e+wcSWDICqtgCA4VVyNZ
+         KOUayWTnng3O06XB7hnZuM68DqZVAwNL02hOc/8sdwj1bC5Wp1eP1AbusZbWAjweUq
+         y/nZnSCii48PwPhIAUr7ZMLVBRpBb98+1MQ3Pe5vr+AiDJ6txtMt5ctgo0DsbzvUVi
+         Y/QlM4vi5hGcmlIQbks7nXsGaOmVm2X5gjgsfWSoQthW3sbnX6ZN6NQ3h8UB/HLZnB
+         gLR3BnEybJgHj7QNOnBysG66U1Gih3iUx8S9G2spveERabUd8uTSPiv916QuAr3kGX
+         JH+iLSowUm73w==
+X-Nifty-SrcIP: [209.85.221.52]
+Received: by mail-wr1-f52.google.com with SMTP id n12so8503947wrc.8;
+        Fri, 22 Jul 2022 17:34:01 -0700 (PDT)
+X-Gm-Message-State: AJIora85ecYxX3IjRSFU5UWh5lvr8EDURw2noW0pg/FUazQNcox2gQ41
+        lm8oFblg9vMGA1vOK69vOPSGlU4cSSsM/63TWqM=
+X-Google-Smtp-Source: AGRyM1sq0fCTIgtFFn2MLkvMra5q7ss5/nqd6TfpnI/TBo055eWmc2bnOhR4KMgJSEGaHvnv7WiWQKxzYhABCTobl4A=
+X-Received: by 2002:a05:6000:104c:b0:21d:87bf:63a2 with SMTP id
+ c12-20020a056000104c00b0021d87bf63a2mr1319505wrx.461.1658536439845; Fri, 22
+ Jul 2022 17:33:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
- <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
- <25673493-4171-62b0-f696-1316d115f388@kali.org>
- <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220716093122.137494-1-masahiroy@kernel.org> <Ytp4PyBcCfRsVaG5@bergen.fjasle.eu>
+In-Reply-To: <Ytp4PyBcCfRsVaG5@bergen.fjasle.eu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 23 Jul 2022 09:33:03 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASFLKfDaPgWRzq2dw0939eLbcn5Y4A-qtSEfZs9BDecRg@mail.gmail.com>
+Message-ID: <CAK7LNASFLKfDaPgWRzq2dw0939eLbcn5Y4A-qtSEfZs9BDecRg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: add dtbs_prepare target
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 7/22/22 12:30 PM, Krzysztof Kozlowski wrote:
-> On 22/07/2022 03:22, Steev Klimaszewski wrote:
->> Hi Krzysztof,
->>
->> On 7/20/22 2:28 PM, Krzysztof Kozlowski wrote:
->>> The SDM845 comes with few instances of Bandwidth Monitor.  The already
->>> supported one monitors traffic between CPU and Last Level Cache
->>> Controller (LLCC) and in downstream sources is called BWMON v4 (or v4 of
->>> register layout).
->>>
->>> SDM845 also has also BWMON instance measuring traffic between LLCC and
->>> memory with different register layout: called v5.
->>>
->>> Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>    arch/arm64/boot/dts/qcom/sdm845.dtsi | 37 ++++++++++++++++++++++++++++
->>>    1 file changed, 37 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>> index fe14f7e7523b..4aab464e2bd6 100644
->>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->>> @@ -2053,6 +2053,43 @@ llcc: system-cache-controller@1100000 {
->>>    			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->>>    		};
->>>    
->>> +		pmu@114a000 {
->>> +			compatible = "qcom,sdm845-llcc-bwmon";
->>> +			reg = <0 0x0114a000 0 0x1000>;
->>> +			interrupts = <GIC_SPI 580 IRQ_TYPE_LEVEL_HIGH>;
->>> +			interconnects = <&mem_noc MASTER_LLCC 3 &mem_noc SLAVE_EBI1 3>;
->>> +
->>> +			operating-points-v2 = <&llcc_bwmon_opp_table>;
->>> +
->>> +			llcc_bwmon_opp_table: opp-table {
->>> +				compatible = "operating-points-v2";
->>> +
->>> +				/*
->>> +				 * The interconnect path bandwidth taken from
->>> +				 * cpu4_opp_table bandwidth for gladiator_noc-mem_noc
->>> +				 * interconnect.  This also matches the
->>> +				 * bandwidth table of qcom,llccbw (qcom,bw-tbl,
->>> +				 * bus width: 4 bytes) from msm-4.9 downstream
->>> +				 * kernel.
->>> +				 */
->>> +				opp-0 {
->>> +					opp-peak-kBps = <800000>;
->>> +				};
->>> +				opp-1 {
->>> +					opp-peak-kBps = <1804000>;
->>> +				};
->>> +				opp-2 {
->>> +					opp-peak-kBps = <3072000>;
->>> +				};
->>> +				opp-3 {
->>> +					opp-peak-kBps = <5412000>;
->>> +				};
->>> +				opp-4 {
->>> +					opp-peak-kBps = <7216000>;
->>> +				};
->>> +			};
->>> +		};
->>> +
->>>    		pmu@1436400 {
->>>    			compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
->>>    			reg = <0 0x01436400 0 0x600>;
->>
->> With this series applied, testing on a Lenovo Yoga C630, which has an
->> SDM850, I see the following:
->>
->> [    3.673660] qcom-bwmon 114a000.pmu: can't request region for resource
->> [mem 0x0114a000-0x0114afff]
->> [    3.673673] qcom-bwmon 114a000.pmu: error -EBUSY: failed to map bwmon
->> registers
->> [    3.673678] qcom-bwmon: probe of 114a000.pmu failed with error -16
->>
-> Thanks for the report. What are you running there? `uname -r`? Maybe
-> your secure world uses it?
+On Fri, Jul 22, 2022 at 7:14 PM Nicolas Schier <nicolas@fjasle.eu> wrote:
 >
-> Best regards,
-> Krzysztof
+> On Sat, 16 Jul 2022 18:31:22 +0900 Masahiro Yamada wrote:
+> > Factor out the common prerequisites for DT compilation into the new
+> > target, dtbs_prepare.
+> >
+> > Add comments in case you wonder why include/config/kernel.release is
+> > the prerequisite. Our policy is that installation targets must not
+> > (re)compile any build artifacts in the tree. If we make modules_install
+> > depend on include/config/kernel.release and it is executed under the
+> > root privilege, it may be owned by root.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  Makefile | 14 ++++++++++----
+> >  1 file changed, 10 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index a9bd55edb75e..8aa4dbb8f878 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1367,16 +1367,22 @@ endif
+> >
+> >  ifneq ($(dtstree),)
+> >
+> > -%.dtb: include/config/kernel.release scripts_dtc
+> > +%.dtb: dtbs_prepare
+> >       $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+> >
+> > -%.dtbo: include/config/kernel.release scripts_dtc
+> > +%.dtbo: dtbs_prepare
+> >       $(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+>
+> Is there a reason, why both rules are not unified?  I guess it is, but
+> I can't see it.
 
-Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra 
-patches on top, the bwmon set included.  It's possible that secure world 
-uses it, but I do not know enough about that to say one way or the other.
 
--- steev
 
+See the GNU Make manual:
+https://www.gnu.org/software/make/manual/html_node/Pattern-Examples.html
+
+The last paragraph, "This pattern rule has two targets ..."
+
+
+
+%.dtb %.dtbo: dtbs_prepare
+         ...
+
+means foo.dtb and foo.dtbo are generated at the same
+time by the rule.  This is strange.
+
+
+
+
+
+>
+> >
+> > -PHONY += dtbs dtbs_install dtbs_check
+> > -dtbs: include/config/kernel.release scripts_dtc
+> > +PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
+> > +dtbs: dtbs_prepare
+> >       $(Q)$(MAKE) $(build)=$(dtstree)
+> >
+> > +# include/config/kernel.release is not actually required for building DTBs,
+> > +# but for installing DTBs because INSTALL_DTBS_PATH contains $(KERNELRELEASE).
+> > +# We do not want to move it to dtbs_install. The policy is installation
+> > +# targets (, which may run as root) must not modify the tree.
+>
+> Is the comma after the opening parenthesis intended?
+
+
+I will rephrase the comment in v2.
+
+
+
+
+>
+> Kind regards,
+> Nicolas
+>
+> > +dtbs_prepare: include/config/kernel.release scripts_dtc
+> > +
+> >  ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
+> >  export CHECK_DTBS=y
+> >  dtbs: dt_binding_check
+> > --
+> > 2.34.1
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,155 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6571F57EC3D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 08:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BED957EC47
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 08:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbiGWGGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 02:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S233810AbiGWGVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 02:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiGWGGJ (ORCPT
+        with ESMTP id S229723AbiGWGV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 02:06:09 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D3513F98
-        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 23:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658556368; x=1690092368;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0U04/hlhxSMkFEfSnteCgKSBOKLy0iO+QpRplCLAmUg=;
-  b=Y0w7F7iKtpuzYdYo/yJX66ZYuLQ5mK8dTWZNSDDz+oCm8V5e6Sas4Up6
-   OIGJveZlB7oRBYdqPHPRFx0mE7+XUz1gm2zBz8NjeAsDx5sppN97jrTu7
-   HWrlqY/MwuPIpJi8YrgUeuwPytgfL8wRXAFBCWc1wCbcNj9MdInW67UPM
-   c+64bxVztzxBY4Y+aCYhKU/qP3pnwhfF4zpZ063Teok2ggsiTK/JLkjom
-   zI5KBenVp4j3aarLRJxRbP2PC+J9Sb5ttUxAS3cnruL7LBWORlOQzSKWr
-   V8diEQUZIVZHHmpeY5Cj2+PJcHl+4oUySHUuZWLp+BCinjbSB3EzYBg0m
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10416"; a="267222188"
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="267222188"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2022 23:06:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,187,1654585200"; 
-   d="scan'208";a="574413752"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 22 Jul 2022 23:06:06 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oF8H7-0002JR-1E;
-        Sat, 23 Jul 2022 06:06:05 +0000
-Date:   Sat, 23 Jul 2022 14:05:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 57262d2c56b8c67c5d29a2e81b740a8d26174dc3
-Message-ID: <62db8fc6.25C2K02cAHkaxp3Z%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 23 Jul 2022 02:21:27 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E88E1054C
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 23:21:26 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id a10so7605143ljj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 22 Jul 2022 23:21:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=aGoDJrYv/23a7xlVt3keHbO9Kwx3iNZ53WhEz8TdkfQ=;
+        b=WUyGaf/xC7V9q35DuikG4Kdt/JjnMLBbO+0gvLZYS9qvth4ajRny1t4vu0t4sKPdhw
+         H0letsAkPqVCSo9p82iEnUlRFvnlzh+XmclV/tg8mwV7pWOrk4/yOc1fXgUWAt0F5pkq
+         VOsV1wpEWJFf8EeIpmFWiDHJiw8n4Va/bvbqFm7vKfi995VWDGm+MjgCeIh0Czt/qx98
+         PxgJueZFjm0K0xCOkDx8czeyFXGQDMLxQ28NIvcASap4T6Wer2zAkx+kkG/6FDYbxXKM
+         zIyrCkHYlgGXmAWEAl/4PEOAJquRIeCb8g/oQGfv88C0ZQSQkRNZi5HP6mw/4Z9ad9Nb
+         dT4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=aGoDJrYv/23a7xlVt3keHbO9Kwx3iNZ53WhEz8TdkfQ=;
+        b=bJNGHFOqJXHKYMyaf+xxwV3hLsSM4SDIB159ZDx4KqIbClL1pNV91KrMhoZ+o8yJSM
+         W9UHC4sZbeFK7x4exflMvEqgtlCl4egvbt5DeYlXU3LpODJVQhHufdVPv3U6/ccxLGQA
+         674A1qZmyV/baY3pJ8U2wmQ065jno7u7PTG9ov8g5hz6jS1qX+uqZF68d1mAkFNfZuUI
+         OUINVTyerKTF80mB6ZaX+WAJPyE9hDSM2dnj0rD8gDOgumLWtNJzubfMzkDk+i08w2Kb
+         cUwcKjMPMpFgEbGRss0WeslpSzXoeWNFo9H3SWcEoVDlJwUMwU0b5jPQ2ZlLBBe4qkzm
+         stug==
+X-Gm-Message-State: AJIora9NrtM59sIV9rJDlhs7KkWO/lC1F3XJLOnomfLziHMvvO2hz4H8
+        ryTLPNkkeaQ+nydA9M3ripBs/Sq3WztNVqN+Ojc=
+X-Google-Smtp-Source: AGRyM1voAqdIMIkVXY7KLAF4FWry6fKaeV5BXUCWiMjZ9S4Xrs3LwoWP/Eh7UsQBZEAiVHZJiyTW5WAPjsY9AySxtXA=
+X-Received: by 2002:a2e:7d14:0:b0:25d:d787:ab9b with SMTP id
+ y20-20020a2e7d14000000b0025dd787ab9bmr1120372ljc.164.1658557284881; Fri, 22
+ Jul 2022 23:21:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab3:6bfa:0:b0:1d7:b50d:ebdf with HTTP; Fri, 22 Jul 2022
+ 23:21:23 -0700 (PDT)
+Reply-To: sophiaernest566@gmail.com
+From:   Sophia Ernest <simondornoo690@gmail.com>
+Date:   Fri, 22 Jul 2022 22:21:23 -0800
+Message-ID: <CAOSTSM4JSgPro8aouVzfr8w86oPn6gwQ64Ows4XTSJ-bZKTJaA@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:229 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5176]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [simondornoo690[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [simondornoo690[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [sophiaernest566[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 57262d2c56b8c67c5d29a2e81b740a8d26174dc3  selftests/nolibc: Avoid generated files being committed
+Greetings,
 
-elapsed time: 1720m
+I wonder why you continue neglecting my emails. Please, acknowledge
+the receipt of this message in reference to the subject above as I
+intend to send to you the details of the mail. Sometimes, try to check
+your spam box because most of these correspondences fall out sometimes
+in SPAM folder.
 
-configs tested: 74
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                 mpc834x_itx_defconfig
-m68k                          atari_defconfig
-m68k                                defconfig
-sh                          r7785rp_defconfig
-sparc                       sparc64_defconfig
-sh                             sh03_defconfig
-powerpc                     sequoia_defconfig
-xtensa                           alldefconfig
-csky                                defconfig
-arm                          gemini_defconfig
-powerpc                       ppc64_defconfig
-ia64                             allmodconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-arc                               allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20220721
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-arm                       mainstone_defconfig
-mips                        bcm63xx_defconfig
-powerpc                     ksi8560_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                     akebono_defconfig
-powerpc                 mpc8272_ads_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220721
-hexagon              randconfig-r045-20220721
-riscv                randconfig-r042-20220721
-s390                 randconfig-r044-20220721
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Sophia

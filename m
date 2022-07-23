@@ -2,72 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E2B57EF3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 15:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CBE57EF3D
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 15:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbiGWNmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 09:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S234598AbiGWNnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 09:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGWNmM (ORCPT
+        with ESMTP id S229469AbiGWNnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 09:42:12 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ABD65D9
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 06:42:09 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id i9-20020a056e021b0900b002dd12dfd5b6so4378186ilv.16
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 06:42:09 -0700 (PDT)
+        Sat, 23 Jul 2022 09:43:02 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA4F641D
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 06:43:01 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id x1so4970026plb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 06:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=74P+O8sp5lm0Sg+UxTgNRhPNuNgtyuLNzL/6fehWii8=;
+        b=cb9KopSME0jgsnIYppaXVDtaldungGRFtZ0C312W7DD3noIbLzEoG5Fa1ocTgHkXaj
+         ev47B/UYsERE/Nc1T9UxI0BCfZF97//epatiKgkIcx1JIbfjVBZiukq+M1248pWh4uMb
+         91voPmAk7fdFlzbNf/jdDYC4Z69TiYBjd1/Rk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=f7HYHx9fnFqWx0fVQu8neY0gvnObCgN2cJwzVmyarl4=;
-        b=hY7cjkUAvSypfs7GMs9dCePgN6kY70ZTE4nCFLqv6jv3T7WGmLtPjiL3aMwAPHa1Pm
-         nz8YvE1eDU1yYkAO3OHGG/EY+nV/7b9K82vyPeCERzM5XNm2iKjJ7hKxJg5xLm2QEmJN
-         ITx8ELSPZ6A+4k+13gahrLUzwSZyrw1e3NruBSf81Zl8MXJRPSF3N0I88lqoSyu2XCRj
-         VRIblM99jE0R/DMfmzYgXDllY/A1U176dhZhC3eMDMOAaz9LvnO2GNDs6ZHeuWKlzaVT
-         scuF4ihePnk+FeJ7gV8uhhaL3kGfFYo4xSFdhZdxQXQH8mk1Fl+mfSXDcG6ktf3aUw6+
-         Seow==
-X-Gm-Message-State: AJIora9tAhd1fZjKaOwQy9c84VasXi1coVGBG8dD9K6PUqFf8EZ7CfKZ
-        JcI2U66BSA2eUQ8SYn4p5oPWNs5pHwybUn4cLlftWQnlE7U1
-X-Google-Smtp-Source: AGRyM1uCI/EYxhqk/qAHognYhHpxDLHaBiohr+z/M3MqwgmS6RLj84xrqGVKU5NBq4XfYHW53tXAnv29/aHiZqzwuLkODA8/0Y90
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=74P+O8sp5lm0Sg+UxTgNRhPNuNgtyuLNzL/6fehWii8=;
+        b=NVFHb68qxu86TXaR8K4nPr1w9wiMsQj06clhcolNcgc7IdgagW/Z+E8ZbM+NKMfsgR
+         rlkplTMvo9N4GveUVLA+b0AX4a4tox5nZHLdYePrHnBETkSCy/t7ZrsG5NThr/fj6gkx
+         b/Ik9cYVDKCtIWtC0xZwnYFJJ6xYiRGc/WlcOLrSJpmvhUlK3OGDrQQoN3MkFqz5mahl
+         XvZrezVJ/eW6H+wZ7ybY2gA0vXFAbtciShOJ2+8483ImlXPSxF+BarQWtiWEoWoBmTFT
+         kyrKRg4DlHBNaoSS3mmDOLioJqVcQO1mF+Z/M5aPycE9wiwY6/6zOjSnelTM27VgDsG3
+         FcSg==
+X-Gm-Message-State: AJIora+pgDZpZU0oEAvFO9vGSSkeOttdv0ViwjgV1NkYo7GzreKCvfMU
+        OOKKGNhVUtIm5ocR/WZX/H6UbA==
+X-Google-Smtp-Source: AGRyM1sByCtQL20f2n6BkvzsUI/95ohfg27wPbdftUGAk9oS174EzDS/7gH9vcSzem0b0LufuyeMPw==
+X-Received: by 2002:a17:90b:1c8e:b0:1f1:b5a8:330f with SMTP id oo14-20020a17090b1c8e00b001f1b5a8330fmr22633471pjb.179.1658583780802;
+        Sat, 23 Jul 2022 06:43:00 -0700 (PDT)
+Received: from [127.0.0.1] (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y17-20020a63ce11000000b00419acadde52sm5161337pgf.46.2022.07.23.06.43.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Jul 2022 06:43:00 -0700 (PDT)
+Date:   Sat, 23 Jul 2022 06:42:57 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Justin Stitt <justinstitt@google.com>, ndesaulniers@google.com
+CC:     arnd@arndb.de, gregkh@linuxfoundation.org, justinstitt@google.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, trix@redhat.com
+Subject: Re: [PATCH v2] drivers: lkdtm: fix clang -Wformat warning
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220721215706.4153027-1-justinstitt@google.com>
+References: <CAKwvOd=wn=tbX7ixs9a=4zoVSbAU1qP-6NE04hGG9dzvo0zFJw@mail.gmail.com> <20220721215706.4153027-1-justinstitt@google.com>
+Message-ID: <9306DFB1-1873-481F-898D-CE141D0C32A5@chromium.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:15ca:b0:33f:594a:52ba with SMTP id
- i10-20020a05663815ca00b0033f594a52bamr1764126jat.217.1658583728995; Sat, 23
- Jul 2022 06:42:08 -0700 (PDT)
-Date:   Sat, 23 Jul 2022 06:42:08 -0700
-In-Reply-To: <1822b3971d7.6eb03239234291.5206322384521184060@siddh.me>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ff41ec05e4791d37@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in post_one_notification
-From:   syzbot <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
-To:     christophe.jaillet@wanadoo.fr, code@siddh.me, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com
+On July 21, 2022 2:57:06 PM PDT, Justin Stitt <justinstitt@google=2Ecom> w=
+rote:
+>When building with Clang we encounter the following warning
+>(ARCH=3Dhexagon + CONFIG_FRAME_WARN=3D0):
+>| =2E=2E/drivers/misc/lkdtm/bugs=2Ec:107:3: error: format specifies type
+>| 'unsigned long' but the argument has type 'int' [-Werror,-Wformat]
+>|                 REC_STACK_SIZE, recur_count);
+>|                 ^~~~~~~~~~~~~~
+>
+>Cast REC_STACK_SIZE to `unsigned long` to match format specifier `%lu`
+>as well as maintain symmetry with `#define REC_STACK_SIZE
+>(_AC(CONFIG_FRAME_WARN, UL) / 2)`=2E
+>
+>Link: https://github=2Ecom/ClangBuiltLinux/linux/issues/378
+>Reported-by: Nathan Chancellor <nathan@kernel=2Eorg>
+>Suggested-by: Nathan Chancellor <nathan@kernel=2Eorg>
+>Suggested-by: Nick Desaulniers <ndesaulniers@google=2Ecom>
+>Signed-off-by: Justin Stitt <justinstitt@google=2Ecom>
 
-Tested on:
+Thanks!
 
-commit:         778e6ace kernel/watch_queue: Make pipe NULL while clea..
-git tree:       https://github.com/siddhpant/linux.git post_one_notification
-console output: https://syzkaller.appspot.com/x/log.txt?x=13049d52080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=95c061eee05f8e15
-dashboard link: https://syzkaller.appspot.com/bug?extid=c70d87ac1d001f29a058
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Acked-by: Kees Cook <keescook@chromium=2Eorg>
+Fixes: 24cccab42c419 ("lkdtm/bugs: Adjust recursion test to avoid elision"=
+)
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+
+--=20
+Kees Cook

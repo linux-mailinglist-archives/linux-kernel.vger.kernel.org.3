@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC76D57EF92
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E76357EFA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 16:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238020AbiGWOWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 10:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S237757AbiGWO0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 10:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237883AbiGWOWP (ORCPT
+        with ESMTP id S237596AbiGWO0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 10:22:15 -0400
-Received: from mail-4325.protonmail.ch (mail-4325.protonmail.ch [185.70.43.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0291122B3B;
-        Sat, 23 Jul 2022 07:21:15 -0700 (PDT)
-Date:   Sat, 23 Jul 2022 14:21:05 +0000
+        Sat, 23 Jul 2022 10:26:16 -0400
+Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6901913FAE;
+        Sat, 23 Jul 2022 07:26:14 -0700 (PDT)
+Date:   Sat, 23 Jul 2022 14:26:01 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1658586072; x=1658845272;
-        bh=SihTKt45aRpcxX9AMLARdfazz57gHKVVDZNki8wzPh8=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:
-         Cc:Date:Subject:Reply-To:Feedback-ID:Message-ID;
-        b=ppGnTOJRS6a09VAzeykPPsGl8ZqncmNFguz2ICyPauWV6Sxclwg2AXV10w350MPkm
-         Qmty8HkCK2Ro0sCCVcfOeVO+uFiyMuboHZWx/4eCzo+TklBmkjfejHItGbUJuDnwMY
-         VJQ6TDItV5K1j2R2zsRIt0ucW94DZHkcEPXv1NynL8DsoAoUDgLpp35UCAR5q0VifF
-         69m6aW2VW01rDP+GPbXtZQ0IGDUon0jQ/D6hLGEMG5fJXZAqouvnucUoBqfdrYDTrC
-         S/LFAFgQJp0QBIhn/B9VmdT/4u2+7oNkGHL0IbYQYLVtuU44Z0kz5TNyJ9wu8pitLz
-         9SB0DyQiv+A8g==
+        s=protonmail3; t=1658586372; x=1658845572;
+        bh=ph/BH8TFIdui5b1wztqyHzHEFVewDjjzagbyk8wG7Qc=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=tukH4GRXpvQitDBnxdBN92m1/tL/zSeC7OckUQNZC+MrIGgU6/pg2YUzOCuQ2IHyq
+         BlbjpMCyYVCuV9FWKFAEgxWuKYY5jYGcycyqMb2E2NXYfoeAgZUAM0Tb2WhyEo4p3I
+         rbk5221/4FC7J4zxh45FrgQUUZBzJN7L0TuKeNUbhJMfK9SoymKiEiqzKU0Ee0InxX
+         c+6HLZoCKN3HQa5q4ZiUQFAiRQ+0r7hwzjRxbiwasNl851Cp1sK5rpBD/TyGpMU6p7
+         cxfQZK/B+sALGf72VWRVwIsgbUVXSx30L9gLu195PVwszdo0PWbE4KHqk6iS19ZEuO
+         y9vg4P209e+SA==
 To:     devicetree@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -39,8 +40,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         Nikita Travkin <nikita@trvn.ru>,
         ~postmarketos/upstreaming@lists.sr.ht
 Reply-To: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [PATCH v5 0/4] Add Samsung Galaxy E5/E7/Grand Max device trees
-Message-ID: <20220723141835.136196-1-linmengbo0689@protonmail.com>
+Subject: [PATCH v5 2/4] arm64: dts: qcom: msm8916-samsung-e2015: Add initial common dtsi
+Message-ID: <20220723142448.136514-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20220723141835.136196-1-linmengbo0689@protonmail.com>
+References: <20220723141835.136196-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -55,22 +58,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v5: Fix Error:
-arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi:36.2-22 Properti=
-es
-must precede subnodes
-Restore Acked-by tag in the dt-bindings patch
-v4: Disable i2c2 until lis2hh12 accelerometer is fixed.
-Add GPIO LEDs for Grand Max.
-v3: Add a cover letter and changelog
-v2: Add dt-bindings documentation
-
 Samsung Galaxy E5, E7 and Grand Max are smartphones using the MSM8916 SoC
 released in 2015.
 
 e2015 and a2015 are similar, with some differences in accelerometer,
 MUIC and Vibrator. The common parts are shared in
 msm8916-samsung-a2015-common.dtsi to reduce duplication.
+
+Add a common device tree for with initial support for:
+
+- GPIO keys and vibrator
+- GPIO LEDs for Grand Max
+- Hall sensor (except Grand Max)
+- SDHCI (internal and external storage)
+- USB Device Mode
+- UART (on USB connector via the SM5504 MUIC)
+- WCNSS (WiFi/BT)
+- Regulators
+- S3FWRN5 NFC (except Grand Max)
 
 The three devices (and all other variants of E5/E7/Grand Max released in
 2015) are very similar, with some differences in display, touchscreen,
@@ -93,4 +98,233 @@ MSM8916 devices.
 Maybe someone finds a way to boot ARM64 Linux on those device at some
 point. In this case I expect that this device tree can be simply used
 as-is.
+
+Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+---
+ arch/arm64/boot/dts/qcom/Makefile             |  3 +
+ .../qcom/msm8916-samsung-e2015-common.dtsi    | 47 ++++++++++++++++
+ .../boot/dts/qcom/msm8916-samsung-e5.dts      | 24 ++++++++
+ .../boot/dts/qcom/msm8916-samsung-e7.dts      | 29 ++++++++++
+ .../dts/qcom/msm8916-samsung-grandmax.dts     | 56 +++++++++++++++++++
+ 5 files changed, 159 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.d=
+tsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-e5.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-e7.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
+
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/M=
+akefile
+index 2f8aec2cc6db..941494553b9e 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -15,6 +15,9 @@ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-longcheer-l8910.dt=
+b
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-mtp.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-a3u-eur.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-a5u-eur.dtb
++dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-e5.dtb
++dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-e7.dtb
++dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-grandmax.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-j5.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-samsung-serranove.dtb
+ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8916-wingtech-wt88047.dtb
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi b/a=
+rch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
+new file mode 100644
+index 000000000000..3677fd81b6c1
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include "msm8916-samsung-a2015-common.dtsi"
++
++/ {
++=09i2c-muic {
++=09=09/* SM5504 MUIC instead of SM5502 */
++=09=09/delete-node/ extcon@25;
++
++=09=09muic: extcon@14 {
++=09=09=09compatible =3D "siliconmitus,sm5504-muic";
++=09=09=09reg =3D <0x14>;
++
++=09=09=09interrupt-parent =3D <&msmgpio>;
++=09=09=09interrupts =3D <12 IRQ_TYPE_EDGE_FALLING>;
++
++=09=09=09pinctrl-names =3D "default";
++=09=09=09pinctrl-0 =3D <&muic_int_default>;
++=09=09};
++=09};
++
++=09vibrator: vibrator {
++=09=09compatible =3D "gpio-vibrator";
++=09=09enable-gpios =3D <&msmgpio 76 GPIO_ACTIVE_HIGH>;
++
++=09=09pinctrl-names =3D "default";
++=09=09pinctrl-0 =3D <&motor_en_default>;
++=09};
++};
++
++&blsp_i2c2 {
++=09/* lis2hh12 accelerometer instead of BMC150 */
++=09status =3D "disabled";
++
++=09/delete-node/ accelerometer@10;
++=09/delete-node/ magnetometer@12;
++};
++
++&msmgpio {
++=09motor_en_default: motor-en-default {
++=09=09pins =3D "gpio76";
++=09=09function =3D "gpio";
++
++=09=09drive-strength =3D <2>;
++=09=09bias-disable;
++=09};
++};
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e5.dts b/arch/arm64/b=
+oot/dts/qcom/msm8916-samsung-e5.dts
+new file mode 100644
+index 000000000000..777eb934eb4b
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e5.dts
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/dts-v1/;
++
++#include "msm8916-samsung-e2015-common.dtsi"
++
++/*
++ * NOTE: The original firmware from Samsung can only boot ARM32 kernels on=
+ some
++ * variants.
++ * Unfortunately, the firmware is signed and cannot be replaced easily.
++ * There seems to be no way to boot ARM64 kernels on 32-bit devices at the
++ * moment, even though the hardware would support it.
++ *
++ * However, it is possible to use this device tree by compiling an ARM32 k=
+ernel
++ * instead. For clarity and build testing this device tree is maintained n=
+ext
++ * to the other MSM8916 device trees. However, it is actually used through
++ * arch/arm/boot/dts/qcom-msm8916-samsung-e5.dts
++ */
++
++/ {
++=09model =3D "Samsung Galaxy E5";
++=09compatible =3D "samsung,e5", "qcom,msm8916";
++=09chassis-type =3D "handset";
++};
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-e7.dts b/arch/arm64/b=
+oot/dts/qcom/msm8916-samsung-e7.dts
+new file mode 100644
+index 000000000000..b412b61ca258
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-e7.dts
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/dts-v1/;
++
++#include "msm8916-samsung-e2015-common.dtsi"
++
++/*
++ * NOTE: The original firmware from Samsung can only boot ARM32 kernels on=
+ some
++ * variants.
++ * Unfortunately, the firmware is signed and cannot be replaced easily.
++ * There seems to be no way to boot ARM64 kernels on 32-bit devices at the
++ * moment, even though the hardware would support it.
++ *
++ * However, it is possible to use this device tree by compiling an ARM32 k=
+ernel
++ * instead. For clarity and build testing this device tree is maintained n=
+ext
++ * to the other MSM8916 device trees. However, it is actually used through
++ * arch/arm/boot/dts/qcom-msm8916-samsung-e7.dts
++ */
++
++/ {
++=09model =3D "Samsung Galaxy E7";
++=09compatible =3D "samsung,e7", "qcom,msm8916";
++=09chassis-type =3D "handset";
++};
++
++&pm8916_l17 {
++=09regulator-min-microvolt =3D <3000000>;
++=09regulator-max-microvolt =3D <3000000>;
++};
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts b/arch/a=
+rm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
+new file mode 100644
+index 000000000000..74c07a970317
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-grandmax.dts
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/dts-v1/;
++
++#include "msm8916-samsung-e2015-common.dtsi"
++#include <dt-bindings/leds/common.h>
++
++/*
++ * NOTE: The original firmware from Samsung can only boot ARM32 kernels on=
+ some
++ * variants.
++ * Unfortunately, the firmware is signed and cannot be replaced easily.
++ * There seems to be no way to boot ARM64 kernels on 32-bit devices at the
++ * moment, even though the hardware would support it.
++ *
++ * However, it is possible to use this device tree by compiling an ARM32 k=
+ernel
++ * instead. For clarity and build testing this device tree is maintained n=
+ext
++ * to the other MSM8916 device trees. However, it is actually used through
++ * arch/arm/boot/dts/qcom-msm8916-samsung-grandmax.dts
++ */
++
++/ {
++=09model =3D "Samsung Galaxy Grand Max";
++=09compatible =3D "samsung,grandmax", "qcom,msm8916";
++=09chassis-type =3D "handset";
++
++=09/delete-node/ gpio-hall-sensor;
++=09/delete-node/ i2c-nfc;
++=09/delete-node/ i2c-tkey;
++
++=09gpio-leds {
++=09=09compatible =3D "gpio-leds";
++=09=09keyled {
++=09=09=09gpios =3D <&msmgpio 60 GPIO_ACTIVE_HIGH>;
++=09=09=09pinctrl-names =3D "default";
++=09=09=09pinctrl-0 =3D <&gpio_leds_default>;
++=09=09};
++=09};
++};
++
++&vibrator {
++=09enable-gpios =3D <&msmgpio 72 GPIO_ACTIVE_HIGH>;
++};
++
++&msmgpio {
++=09gpio_leds_default: gpio-led-default {
++=09=09pins =3D "gpio60";
++=09=09function =3D "gpio";
++
++=09=09drive-strength =3D <2>;
++=09=09bias-disable;
++=09};
++};
++
++&motor_en_default {
++=09pins =3D "gpio72";
++};
+--
+2.30.2
+
 

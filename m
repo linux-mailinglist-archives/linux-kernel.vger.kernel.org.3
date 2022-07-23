@@ -2,384 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB44757F214
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 01:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98F457F212
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 01:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiGWX0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 19:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S239046AbiGWXYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 19:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239028AbiGWX0h (ORCPT
+        with ESMTP id S231493AbiGWXYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 19:26:37 -0400
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 23 Jul 2022 16:26:33 PDT
-Received: from m228-10.mailgun.net (m228-10.mailgun.net [159.135.228.10])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 34BA815726
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 16:26:33 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mixtli.metztli.it; q=dns/txt;
- s=mx; t=1658618793; x=1658827593; h=From: From: Date: Message-Id: To:
- To: Subject: Subject: Sender: Sender;
- bh=Wy7nM5HJLshLtphD4ZPaviHkvdj76zQlNqP1yxJy+JA=; b=m4z1ipsERgvXrmIyYBJbN2bU7uQf6jgmHwgVI3bFhSNxY+dO548hjyMyXEGifq7GGHI/9X7N
- OQBhbXdHKLIK/XX6aMMRjfD2r31ASbGZENWuJgR7fknyb/408TheKuOghzfhl0QOKNmrN15N
- 9V2F2dk5+O8aEbjvXNJAmh5MLbM=
-X-Mailgun-Sending-Ip: 159.135.228.10
-X-Mailgun-Sid: WyIxYzIzYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgIjE3YjU0Il0=
-Received: from tezcatlipoca.metztli.it
- (99-130-254-3.lightspeed.sntcca.sbcglobal.net [99.130.254.3]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 62dc827a3bbaff15a0204e7f (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Sat, 23 Jul 2022 23:21:30 GMT
-Sender: jose.r.r=metztli.com@mixtli.metztli.it
-Received: by tezcatlipoca.metztli.it (Postfix, from userid 1000)
-        id C0ECCA51662; Sat, 23 Jul 2022 16:22:11 -0700 (PDT)
-Subject: Issues with Reiser4 SFRN 4.0.2 modified patch for Linux 5.17.xy
-To:     <edward.shishkin@gmail.com>, <reiserfs-devel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-X-Mailer: mail (GNU Mailutils 3.10)
-Message-Id: <20220723232211.C0ECCA51662@tezcatlipoca.metztli.it>
-Date:   Sat, 23 Jul 2022 16:22:11 -0700 (PDT)
-From:   Metztli Information Technology <jose.r.r@metztli.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sat, 23 Jul 2022 19:24:12 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F7012775;
+        Sat, 23 Jul 2022 16:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1658618640;
+        bh=p4gGVnOg7wiHmitkIGdgKM6HNW3HKIzEzNyi+6h6cXY=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=CXu8EB0IGFykOIfjgTqO6mrWlVwlf8Uf9T9qTW02wIEzqwGJW3vUV7tn8qpE7YECF
+         BCExIMZWAy5gKwdMH+b43eUCS8M7MjRDNPGEpMvGszVI3tt3dOMQn8UVYQDx93W9zb
+         1O650oKbumX8SBvCXUWJPuMIG94UbglqwZOElgms=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MdefJ-1ngKhq3OHR-00ZgGI; Sun, 24
+ Jul 2022 01:24:00 +0200
+Message-ID: <6b203ca9-8232-d695-e88c-c50119875e3a@gmx.com>
+Date:   Sun, 24 Jul 2022 07:23:54 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] btrfs: change btrfs_insert_file_extent() to
+ btrfs_insert_hole_extent()
+Content-Language: en-US
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Cc:     Omar Sandoval <osandov@osandov.com>
+References: <41e212570f521d9c0838b5ab8e66da0f942c7f46.1658615058.git.sweettea-kernel@dorminy.me>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <41e212570f521d9c0838b5ab8e66da0f942c7f46.1658615058.git.sweettea-kernel@dorminy.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ugxkW65iQVooPRhxmPSSmJpqduefDYbEXsiQ8HfNR7QvUJC1qGN
+ f4m96/CyHY7RfvW+gyKHLZjt8MbUPmWvuWZ7HMdVtmkBj3RDa0oVXtOIg9DS+f8CJ1lb7VH
+ YqQlWSClkg4HtIpDia24F6P/cZRdkjIHSqchHEoGQSVkgGUPipIYAxg+K70vRXA3LkKyCXu
+ 4zMYrSQZ4TnplEO6p+C8w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kJSQjE6uEqs=:LxWlI9vlLVHfkuvL0Dlg3N
+ Ggqb436iTKrnFtl1+NL6qsv/O+QvJ8TOxEl8bkzLBjJ1xu876nxAmn4oAnG5H5iH5duuvsoTT
+ XoH/oiCSWGr6g2S00OBqvyRRgFCLTBnDzQP4tWbHvYGoydheq5PywBeV6WNkXVKsojTm2KrhB
+ BOIDgjut8OkUvd1j1mKMiXho1JJ1mNNGSFXsobF1P0gQQCRaH5wEpnz/K9g/ZLMOJwyu7qxj1
+ dKK9KAB2orkOijbrdOEGNjBl5BL8UdoagZuRtvqk88WG3mykZaZRmrneiv0bw888GRO38jZQA
+ xftCUubzRy4ZJKGJOGUqjBIiWrN5jRFFNMJzDZbKpeJJYFwOCTU0h7y1c7bbhLySRuEou9zHp
+ 2jZUCVN02anIElnaza7M63gLFZQCa8MPyXrgPG1WFj0UKTRaEOhiVFgSttGZbFu1GXWqoFe1a
+ CqMszfX+F2zfWl4gBJZMEbP6Pn59CsYEiFJMP8CVaO7mSUl46LwSSjcWgyOJHkS3sXAh3ck6i
+ 8A9BbEkcplCHSqpOVdskuMlxksbTh/3XyqixERRmmvU2vAZYYRL8cv/7MioLJhC11H4C2Yxr/
+ zK7fi1D05qkWMzAMzgJ1wrA2Z4QCxjLDhEGIMbFcJqkDv+rfbuoF8dJJ69RBK3mEuTQyWO8Kc
+ Cwg3fgrqPlXlpTAHHhIK7EXFmgzZPNc/l6byA0tP6vBgeJmZ8HJdX6suT329fPkD58bmIx3HA
+ ofaNxFNEQSuigzhxuZMN/ea7+KIMaeSGBxFn+XL3tsrsrtt2YXw2ejnt6B6vidDukPzflL/Br
+ J9uzlQn3PJKvjvwBVyFTvqSmVXzsCf9u8bVnmG4cfu7dwzJz/cKvXoifOz7P5iKxWMUUq2IBA
+ Ei1uKXZe1gq5CC3chatzHArZTAdsjWvgCmRCBjLDaEUTUrUyAHyl6Eun6CHFccxdLQH9UwdL7
+ w1H6HdjYx9PH6Ay3e7w1tc90DsqwlYAw7NDsbLNVKdH+4KTjRTiBENQ9JVCgVhGr5QOtRbuGq
+ ix8ALxOFhsqda6amMjjjoqV5eIX6cRW1fAfH4BxCFzQic4jbX6mwtukihX6QaQgBjbOU3Hdff
+ vv6fu4NGxSh97bJbckH+QFxtTybMnM9ZWLQnoIS5mBfIobZehUTw+wpWA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Niltze [Hello], Ed-
-
-Having experienced hanging issue(s) with reiser4-for-5.16.patch.gz I decided to apply the patch to kernel 5.17.6/5.17.12 --
-modifying the patch as I proceede along; here is my modified patch for linux 5.17.xy:
-< https://metztli.blog/nochtli/tliltic?download=926 >
-
-I have been running that reiser4 SFRN 4.0.2 -patched kernel for 42+ days
-< https://metztli.it/bullseye/reiser4.0.2-amd-ryzen.png >
- in an online server, ruby, LEMP, etc., where
-the only issue I experience is related to memory depletion, i.e., when building a kernel and/or sustained data intensive operations.
-
-Similarly, running Intel version of kernel locally but interacting with desktop userland applications often degrades the
-performance of the system by introducing a hang-like condition (see concatenated dmesg tail subsequently after the three(3) dotted segment below).
-
-As Debian Bullseye backports is now at kernel 5.18.xy, I have tried to enhance your reiser4 patch to target that kernel as my Reiser4 netboot installers depend on it. Nevertheless, I have not succeeded in properly patching that newer kernel. Any updates would be appreciated.
-
-...
-[44950.574859] INFO: task umount:21534 blocked for more than 120 seconds.
-[44950.574871]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[44950.574874] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[44950.574876] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[44950.574882] Call Trace:
-[44950.574885]  <TASK>
-[44950.574889]  __schedule+0x307/0x9e0
-[44950.574901]  schedule+0x4e/0xc0
-[44950.574906]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[44950.574913]  ? fsnotify_grab_connector+0x20/0x90
-[44950.574919]  deactivate_super+0x2c/0x40
-[44950.574926]  cleanup_mnt+0x131/0x190
-[44950.574932]  task_work_run+0x5c/0x90
-[44950.574936]  exit_to_user_mode_prepare+0x200/0x210
-[44950.574943]  syscall_exit_to_user_mode+0x18/0x40
-[44950.574947]  do_syscall_64+0x48/0xc0
-[44950.574952]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[44950.574957] RIP: 0033:0x7f506e43ce27
-[44950.574961] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[44950.574965] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[44950.574967] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[44950.574969] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[44950.574971] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[44950.574973] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[44950.574977]  </TASK>
-[45071.406956] INFO: task umount:21534 blocked for more than 241 seconds.
-[45071.406972]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45071.406977] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45071.406982] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45071.406994] Call Trace:
-[45071.406998]  <TASK>
-[45071.407006]  __schedule+0x307/0x9e0
-[45071.407027]  schedule+0x4e/0xc0
-[45071.407034]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45071.407043]  ? fsnotify_grab_connector+0x20/0x90
-[45071.407053]  deactivate_super+0x2c/0x40
-[45071.407062]  cleanup_mnt+0x131/0x190
-[45071.407070]  task_work_run+0x5c/0x90
-[45071.407076]  exit_to_user_mode_prepare+0x200/0x210
-[45071.407084]  syscall_exit_to_user_mode+0x18/0x40
-[45071.407089]  do_syscall_64+0x48/0xc0
-[45071.407098]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45071.407107] RIP: 0033:0x7f506e43ce27
-[45071.407112] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45071.407119] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45071.407122] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45071.407125] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45071.407128] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45071.407131] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45071.407137]  </TASK>
-[45192.238981] INFO: task umount:21534 blocked for more than 362 seconds.
-[45192.239006]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45192.239013] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45192.239018] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45192.239032] Call Trace:
-[45192.239038]  <TASK>
-[45192.239045]  __schedule+0x307/0x9e0
-[45192.239070]  schedule+0x4e/0xc0
-[45192.239082]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45192.239095]  ? fsnotify_grab_connector+0x20/0x90
-[45192.239111]  deactivate_super+0x2c/0x40
-[45192.239124]  cleanup_mnt+0x131/0x190
-[45192.239138]  task_work_run+0x5c/0x90
-[45192.239148]  exit_to_user_mode_prepare+0x200/0x210
-[45192.239160]  syscall_exit_to_user_mode+0x18/0x40
-[45192.239169]  do_syscall_64+0x48/0xc0
-[45192.239182]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45192.239195] RIP: 0033:0x7f506e43ce27
-[45192.239203] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45192.239212] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45192.239218] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45192.239222] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45192.239227] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45192.239232] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45192.239241]  </TASK>
-[45313.075008] INFO: task umount:21534 blocked for more than 483 seconds.
-[45313.075038]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45313.075050] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45313.075059] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45313.075078] Call Trace:
-[45313.075083]  <TASK>
-[45313.075091]  __schedule+0x307/0x9e0
-[45313.075117]  schedule+0x4e/0xc0
-[45313.075130]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45313.075144]  ? fsnotify_grab_connector+0x20/0x90
-[45313.075159]  deactivate_super+0x2c/0x40
-[45313.075173]  cleanup_mnt+0x131/0x190
-[45313.075186]  task_work_run+0x5c/0x90
-[45313.075197]  exit_to_user_mode_prepare+0x200/0x210
-[45313.075209]  syscall_exit_to_user_mode+0x18/0x40
-[45313.075218]  do_syscall_64+0x48/0xc0
-[45313.075231]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45313.075243] RIP: 0033:0x7f506e43ce27
-[45313.075252] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45313.075261] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45313.075267] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45313.075272] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45313.075276] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45313.075281] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45313.075290]  </TASK>
-[45433.903013] INFO: task umount:21534 blocked for more than 604 seconds.
-[45433.903038]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45433.903045] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45433.903050] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45433.903064] Call Trace:
-[45433.903069]  <TASK>
-[45433.903077]  __schedule+0x307/0x9e0
-[45433.903102]  schedule+0x4e/0xc0
-[45433.903114]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45433.903128]  ? fsnotify_grab_connector+0x20/0x90
-[45433.903143]  deactivate_super+0x2c/0x40
-[45433.903157]  cleanup_mnt+0x131/0x190
-[45433.903170]  task_work_run+0x5c/0x90
-[45433.903182]  exit_to_user_mode_prepare+0x200/0x210
-[45433.903193]  syscall_exit_to_user_mode+0x18/0x40
-[45433.903202]  do_syscall_64+0x48/0xc0
-[45433.903215]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45433.903227] RIP: 0033:0x7f506e43ce27
-[45433.903236] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45433.903246] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45433.903252] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45433.903256] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45433.903261] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45433.903266] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45433.903275]  </TASK>
-[45554.735055] INFO: task umount:21534 blocked for more than 724 seconds.
-[45554.735078]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45554.735085] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45554.735090] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45554.735105] Call Trace:
-[45554.735110]  <TASK>
-[45554.735119]  __schedule+0x307/0x9e0
-[45554.735144]  schedule+0x4e/0xc0
-[45554.735156]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45554.735169]  ? fsnotify_grab_connector+0x20/0x90
-[45554.735184]  deactivate_super+0x2c/0x40
-[45554.735199]  cleanup_mnt+0x131/0x190
-[45554.735211]  task_work_run+0x5c/0x90
-[45554.735222]  exit_to_user_mode_prepare+0x200/0x210
-[45554.735234]  syscall_exit_to_user_mode+0x18/0x40
-[45554.735243]  do_syscall_64+0x48/0xc0
-[45554.735255]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45554.735268] RIP: 0033:0x7f506e43ce27
-[45554.735276] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45554.735286] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45554.735292] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45554.735296] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45554.735301] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45554.735306] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45554.735315]  </TASK>
-[45675.567002] INFO: task umount:21534 blocked for more than 845 seconds.
-[45675.567025]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45675.567033] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45675.567038] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45675.567052] Call Trace:
-[45675.567058]  <TASK>
-[45675.567066]  __schedule+0x307/0x9e0
-[45675.567090]  schedule+0x4e/0xc0
-[45675.567102]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45675.567116]  ? fsnotify_grab_connector+0x20/0x90
-[45675.567131]  deactivate_super+0x2c/0x40
-[45675.567145]  cleanup_mnt+0x131/0x190
-[45675.567158]  task_work_run+0x5c/0x90
-[45675.567168]  exit_to_user_mode_prepare+0x200/0x210
-[45675.567180]  syscall_exit_to_user_mode+0x18/0x40
-[45675.567189]  do_syscall_64+0x48/0xc0
-[45675.567201]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45675.567214] RIP: 0033:0x7f506e43ce27
-[45675.567222] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45675.567231] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45675.567237] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45675.567242] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45675.567246] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45675.567251] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45675.567260]  </TASK>
-[45796.398969] INFO: task umount:21534 blocked for more than 966 seconds.
-[45796.398994]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45796.399002] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45796.399007] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45796.399021] Call Trace:
-[45796.399027]  <TASK>
-[45796.399035]  __schedule+0x307/0x9e0
-[45796.399060]  schedule+0x4e/0xc0
-[45796.399072]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45796.399085]  ? fsnotify_grab_connector+0x20/0x90
-[45796.399100]  deactivate_super+0x2c/0x40
-[45796.399114]  cleanup_mnt+0x131/0x190
-[45796.399127]  task_work_run+0x5c/0x90
-[45796.399138]  exit_to_user_mode_prepare+0x200/0x210
-[45796.399149]  syscall_exit_to_user_mode+0x18/0x40
-[45796.399158]  do_syscall_64+0x48/0xc0
-[45796.399170]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45796.399182] RIP: 0033:0x7f506e43ce27
-[45796.399191] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45796.399201] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45796.399206] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45796.399211] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45796.399216] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45796.399221] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45796.399230]  </TASK>
-[45917.231038] INFO: task umount:21534 blocked for more than 1087 seconds.
-[45917.231062]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[45917.231070] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[45917.231075] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[45917.231089] Call Trace:
-[45917.231094]  <TASK>
-[45917.231102]  __schedule+0x307/0x9e0
-[45917.231127]  schedule+0x4e/0xc0
-[45917.231139]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[45917.231152]  ? fsnotify_grab_connector+0x20/0x90
-[45917.231168]  deactivate_super+0x2c/0x40
-[45917.231181]  cleanup_mnt+0x131/0x190
-[45917.231194]  task_work_run+0x5c/0x90
-[45917.231205]  exit_to_user_mode_prepare+0x200/0x210
-[45917.231217]  syscall_exit_to_user_mode+0x18/0x40
-[45917.231226]  do_syscall_64+0x48/0xc0
-[45917.231238]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[45917.231251] RIP: 0033:0x7f506e43ce27
-[45917.231259] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[45917.231269] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[45917.231275] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[45917.231279] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[45917.231284] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[45917.231289] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[45917.231298]  </TASK>
-[46038.062935] INFO: task umount:21534 blocked for more than 1208 seconds.
-[46038.062959]       Tainted: G            E     5.17.0-3+reiser4.0.2-amd64 #1 Debian 5.17.12-2+reiser4.0.2
-[46038.062967] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[46038.062972] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[46038.062987] Call Trace:
-[46038.062992]  <TASK>
-[46038.063000]  __schedule+0x307/0x9e0
-[46038.063024]  schedule+0x4e/0xc0
-[46038.063036]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[46038.063050]  ? fsnotify_grab_connector+0x20/0x90
-[46038.063065]  deactivate_super+0x2c/0x40
-[46038.063079]  cleanup_mnt+0x131/0x190
-[46038.063092]  task_work_run+0x5c/0x90
-[46038.063103]  exit_to_user_mode_prepare+0x200/0x210
-[46038.063115]  syscall_exit_to_user_mode+0x18/0x40
-[46038.063123]  do_syscall_64+0x48/0xc0
-[46038.063135]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[46038.063149] RIP: 0033:0x7f506e43ce27
-[46038.063161] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[46038.063175] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[46038.063184] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[46038.063192] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[46038.063200] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[46038.063209] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[46038.063221]  </TASK>
-[51091.892156] sysrq: Show Blocked State
-[51091.892227] task:kworker/u16:3   state:D stack:    0 pid:21032 ppid:     2 flags:0x00004000
-[51091.892234] Workqueue: writeback wb_workfn (flush-8:0)
-[51091.892243] Call Trace:
-[51091.892245]  <TASK>
-[51091.892249]  __schedule+0x307/0x9e0
-[51091.892258]  schedule+0x4e/0xc0
-[51091.892263]  io_schedule+0x47/0x70
-[51091.892268]  folio_wait_bit_common+0x147/0x390
-[51091.892274]  ? file_fdatawait_range+0x20/0x20
-[51091.892278]  folio_wait_writeback+0x28/0x80
-[51091.892285]  jwait_io+0x4b/0x60 [reiser4]
-[51091.892310]  reiser4_write_logs+0x897/0xc70 [reiser4]
-[51091.892341]  ? commit_txnh+0x3db/0x580 [reiser4]
-[51091.892367]  ? reiser4_txn_restart+0x1e/0x70 [reiser4]
-[51091.892392]  ? flush_some_atom+0x330/0x570 [reiser4]
-[51091.892418]  ? reiser4_writeout+0x10a/0x180 [reiser4]
-[51091.892447]  ? reiser4_writeback_inodes+0xb0/0xe0 [reiser4]
-[51091.892474]  ? writeback_sb_inodes+0x8f/0xb0
-[51091.892478]  ? __writeback_inodes_wb+0x4c/0xe0
-[51091.892482]  ? wb_writeback+0x1d7/0x2c0
-[51091.892486]  ? wb_workfn+0x2ed/0x510
-[51091.892489]  ? psi_task_switch+0xbc/0x1f0
-[51091.892493]  ? _raw_spin_unlock+0x16/0x30
-[51091.892497]  ? process_one_work+0x1e5/0x3b0
-[51091.892501]  ? rescuer_thread+0x390/0x390
-[51091.892504]  ? worker_thread+0x50/0x3a0
-[51091.892506]  ? rescuer_thread+0x390/0x390
-[51091.892509]  ? kthread+0xe7/0x110
-[51091.892513]  ? kthread_complete_and_exit+0x20/0x20
-[51091.892517]  ? ret_from_fork+0x22/0x30
-[51091.892523]  </TASK>
-[51091.892527] task:umount          state:D stack:    0 pid:21534 ppid:  3155 flags:0x00004000
-[51091.892531] Call Trace:
-[51091.892533]  <TASK>
-[51091.892535]  __schedule+0x307/0x9e0
-[51091.892541]  schedule+0x4e/0xc0
-[51091.892545]  rwsem_down_write_slowpath+0x2a7/0x5a0
-[51091.892549]  ? fsnotify_grab_connector+0x20/0x90
-[51091.892556]  deactivate_super+0x2c/0x40
-[51091.892561]  cleanup_mnt+0x131/0x190
-[51091.892567]  task_work_run+0x5c/0x90
-[51091.892571]  exit_to_user_mode_prepare+0x200/0x210
-[51091.892576]  syscall_exit_to_user_mode+0x18/0x40
-[51091.892580]  do_syscall_64+0x48/0xc0
-[51091.892585]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[51091.892590] RIP: 0033:0x7f506e43ce27
-[51091.892594] RSP: 002b:00007ffff5f00c78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-[51091.892597] RAX: 0000000000000000 RBX: 00007f506e560264 RCX: 00007f506e43ce27
-[51091.892600] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000055ff1a1c0f90
-[51091.892601] RBP: 000055ff1a1bc9a0 R08: 0000000000000000 R09: 00007ffff5effa20
-[51091.892603] R10: 000055ff1a1c0fb0 R11: 0000000000000246 R12: 0000000000000000
-[51091.892605] R13: 000055ff1a1c0f90 R14: 000055ff1a1bcab0 R15: 000055ff1a1bcbd0
-[51091.892609]  </TASK>
 
 
-Best Professional Regards.
+On 2022/7/24 06:25, Sweet Tea Dorminy wrote:
+> From: Omar Sandoval <osandov@osandov.com>
+>
+> btrfs_insert_file_extent() is only ever used to insert holes, so rename
+> it and remove the redundant parameters.
+>
+> Signed-off-by: Omar Sandoval <osandov@osandov.com>
+> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
 
-Jose R R
-http://metztli.it
----------------------------------------------------------------------------------------------
-Download Metztli Reiser4: Debian Bullseye w/ Linux 5.16.20 AMD64
----------------------------------------------------------------------------------------------
-feats ZSTD compression https://sf.net/projects/metztli-reiser4/
----------------------------------------------------------------------------------------------
-or SFRN 5.1.3, Metztli Reiser5 https://sf.net/projects/debian-reiser4/
--------------------------------------------------------------------------------------------
-Official current Reiser4 resources: https://reiser4.wiki.kernel.org/
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+
+Thanks,
+Qu
+> ---
+>   fs/btrfs/ctree.h     |  9 +++------
+>   fs/btrfs/file-item.c | 21 +++++++++------------
+>   fs/btrfs/file.c      |  4 ++--
+>   fs/btrfs/inode.c     |  4 ++--
+>   fs/btrfs/tree-log.c  | 13 +++++--------
+>   5 files changed, 21 insertions(+), 30 deletions(-)
+>
+> diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
+> index 4db85b9dc7ed..3482eea0f1b8 100644
+> --- a/fs/btrfs/ctree.h
+> +++ b/fs/btrfs/ctree.h
+> @@ -3258,12 +3258,9 @@ int btrfs_find_orphan_item(struct btrfs_root *roo=
+t, u64 offset);
+>   int btrfs_del_csums(struct btrfs_trans_handle *trans,
+>   		    struct btrfs_root *root, u64 bytenr, u64 len);
+>   blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bi=
+o, u8 *dst);
+> -int btrfs_insert_file_extent(struct btrfs_trans_handle *trans,
+> -			     struct btrfs_root *root,
+> -			     u64 objectid, u64 pos,
+> -			     u64 disk_offset, u64 disk_num_bytes,
+> -			     u64 num_bytes, u64 offset, u64 ram_bytes,
+> -			     u8 compression, u8 encryption, u16 other_encoding);
+> +int btrfs_insert_hole_extent(struct btrfs_trans_handle *trans,
+> +			     struct btrfs_root *root, u64 objectid, u64 pos,
+> +			     u64 num_bytes);
+>   int btrfs_lookup_file_extent(struct btrfs_trans_handle *trans,
+>   			     struct btrfs_root *root,
+>   			     struct btrfs_path *path, u64 objectid,
+> diff --git a/fs/btrfs/file-item.c b/fs/btrfs/file-item.c
+> index c828f971a346..29999686d234 100644
+> --- a/fs/btrfs/file-item.c
+> +++ b/fs/btrfs/file-item.c
+> @@ -129,12 +129,9 @@ static inline u32 max_ordered_sum_bytes(struct btrf=
+s_fs_info *fs_info,
+>   	return ncsums * fs_info->sectorsize;
+>   }
+>
+> -int btrfs_insert_file_extent(struct btrfs_trans_handle *trans,
+> +int btrfs_insert_hole_extent(struct btrfs_trans_handle *trans,
+>   			     struct btrfs_root *root,
+> -			     u64 objectid, u64 pos,
+> -			     u64 disk_offset, u64 disk_num_bytes,
+> -			     u64 num_bytes, u64 offset, u64 ram_bytes,
+> -			     u8 compression, u8 encryption, u16 other_encoding)
+> +			     u64 objectid, u64 pos, u64 num_bytes)
+>   {
+>   	int ret =3D 0;
+>   	struct btrfs_file_extent_item *item;
+> @@ -157,16 +154,16 @@ int btrfs_insert_file_extent(struct btrfs_trans_ha=
+ndle *trans,
+>   	leaf =3D path->nodes[0];
+>   	item =3D btrfs_item_ptr(leaf, path->slots[0],
+>   			      struct btrfs_file_extent_item);
+> -	btrfs_set_file_extent_disk_bytenr(leaf, item, disk_offset);
+> -	btrfs_set_file_extent_disk_num_bytes(leaf, item, disk_num_bytes);
+> -	btrfs_set_file_extent_offset(leaf, item, offset);
+> +	btrfs_set_file_extent_disk_bytenr(leaf, item, 0);
+> +	btrfs_set_file_extent_disk_num_bytes(leaf, item, 0);
+> +	btrfs_set_file_extent_offset(leaf, item, 0);
+>   	btrfs_set_file_extent_num_bytes(leaf, item, num_bytes);
+> -	btrfs_set_file_extent_ram_bytes(leaf, item, ram_bytes);
+> +	btrfs_set_file_extent_ram_bytes(leaf, item, num_bytes);
+>   	btrfs_set_file_extent_generation(leaf, item, trans->transid);
+>   	btrfs_set_file_extent_type(leaf, item, BTRFS_FILE_EXTENT_REG);
+> -	btrfs_set_file_extent_compression(leaf, item, compression);
+> -	btrfs_set_file_extent_encryption(leaf, item, encryption);
+> -	btrfs_set_file_extent_other_encoding(leaf, item, other_encoding);
+> +	btrfs_set_file_extent_compression(leaf, item, 0);
+> +	btrfs_set_file_extent_encryption(leaf, item, 0);
+> +	btrfs_set_file_extent_other_encoding(leaf, item, 0);
+>
+>   	btrfs_mark_buffer_dirty(leaf);
+>   out:
+> diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
+> index 687fb372093f..d199275adfa4 100644
+> --- a/fs/btrfs/file.c
+> +++ b/fs/btrfs/file.c
+> @@ -2520,8 +2520,8 @@ static int fill_holes(struct btrfs_trans_handle *t=
+rans,
+>   	}
+>   	btrfs_release_path(path);
+>
+> -	ret =3D btrfs_insert_file_extent(trans, root, btrfs_ino(inode),
+> -			offset, 0, 0, end - offset, 0, end - offset, 0, 0, 0);
+> +	ret =3D btrfs_insert_hole_extent(trans, root, btrfs_ino(inode), offset=
+,
+> +				       end - offset);
+>   	if (ret)
+>   		return ret;
+>
+> diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+> index ecc5fa3343fc..f2c83ef8d4aa 100644
+> --- a/fs/btrfs/inode.c
+> +++ b/fs/btrfs/inode.c
+> @@ -5022,8 +5022,8 @@ static int maybe_insert_hole(struct btrfs_root *ro=
+ot, struct btrfs_inode *inode,
+>   		return ret;
+>   	}
+>
+> -	ret =3D btrfs_insert_file_extent(trans, root, btrfs_ino(inode),
+> -			offset, 0, 0, len, 0, len, 0, 0, 0);
+> +	ret =3D btrfs_insert_hole_extent(trans, root, btrfs_ino(inode), offset=
+,
+> +				       len);
+>   	if (ret) {
+>   		btrfs_abort_transaction(trans, ret);
+>   	} else {
+> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+> index dcf75a8daa20..f99fd0a08902 100644
+> --- a/fs/btrfs/tree-log.c
+> +++ b/fs/btrfs/tree-log.c
+> @@ -5219,10 +5219,9 @@ static int btrfs_log_holes(struct btrfs_trans_han=
+dle *trans,
+>   			 * leafs from the log root.
+>   			 */
+>   			btrfs_release_path(path);
+> -			ret =3D btrfs_insert_file_extent(trans, root->log_root,
+> -						       ino, prev_extent_end, 0,
+> -						       0, hole_len, 0, hole_len,
+> -						       0, 0, 0);
+> +			ret =3D btrfs_insert_hole_extent(trans, root->log_root,
+> +						       ino, prev_extent_end,
+> +						       hole_len);
+>   			if (ret < 0)
+>   				return ret;
+>
+> @@ -5251,10 +5250,8 @@ static int btrfs_log_holes(struct btrfs_trans_han=
+dle *trans,
+>
+>   		btrfs_release_path(path);
+>   		hole_len =3D ALIGN(i_size - prev_extent_end, fs_info->sectorsize);
+> -		ret =3D btrfs_insert_file_extent(trans, root->log_root,
+> -					       ino, prev_extent_end, 0, 0,
+> -					       hole_len, 0, hole_len,
+> -					       0, 0, 0);
+> +		ret =3D btrfs_insert_hole_extent(trans, root->log_root, ino,
+> +					       prev_extent_end, hole_len);
+>   		if (ret < 0)
+>   			return ret;
+>   	}

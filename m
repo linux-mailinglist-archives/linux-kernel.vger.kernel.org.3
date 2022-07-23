@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662E257EC5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 08:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F1D57EC5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 08:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235421AbiGWGlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 02:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S236406AbiGWGpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 02:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiGWGls (ORCPT
+        with ESMTP id S235993AbiGWGpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 02:41:48 -0400
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D17464E11;
-        Fri, 22 Jul 2022 23:41:46 -0700 (PDT)
+        Sat, 23 Jul 2022 02:45:01 -0400
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B36067CBD;
+        Fri, 22 Jul 2022 23:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=kucPn
-        kJPET0vErhB73+JEC1LgKSF0wQdv8SoTfgnP4A=; b=BJPrKQh/vhuRZ+NC2pWDR
-        CdpiBHLOLW/NSN7g8tEdAnk1FGze9taU8hIvGb6YjmsJLY5wQCT+MWbVm+X61YOe
-        AEJqFQv9B92eAreMcQj1qzrh847UFCVf43Gq+jNbpSeKj3x23XKtbJqLP6egnjwJ
-        fBIl3GTzD8PRkQ8vmLc3dI=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KZDSp
+        PbIpEXdoyPYRgzx3dJeJEfWOtuL5cZbKBw/Vis=; b=VLu6Z0eNZG3SkGB4YFD9l
+        dZn1eUrxVQXRPfjHRtru5bJ45/pksdesKPaXQFYBul9lfHN3Q5OCIDWoPHYE+GWR
+        7Eyc+d8VldlaCUEi8U1y9oLZ/7l/fbbqYfkssTYxCX0l+8OE3vmlWqgPP8cv9wFg
+        u0OY7qsb6aDG4ISCYSRdKk=
 Received: from localhost.localdomain (unknown [123.58.221.99])
-        by smtp4 (Coremail) with SMTP id HNxpCgCX5ITfl9titVQzQQ--.40765S2;
-        Sat, 23 Jul 2022 14:40:32 +0800 (CST)
+        by smtp2 (Coremail) with SMTP id GtxpCgDnRemdmNtiRiIVQw--.40677S2;
+        Sat, 23 Jul 2022 14:43:43 +0800 (CST)
 From:   williamsukatube@163.com
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        William Dean <williamsukatube@gmail.com>,
+To:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kishon@ti.com, lpieralisi@kernel.org, kw@linux.com,
+        bhelgaas@google.com, William Dean <williamsukatube@gmail.com>,
         Hacash Robot <hacashRobot@santino.com>
-Subject: [PATCH] scsi: lpfc: check the return value of alloc_workqueue()
-Date:   Sat, 23 Jul 2022 14:40:27 +0800
-Message-Id: <20220723064027.2956623-1-williamsukatube@163.com>
+Subject: [PATCH] PCI: endpoint: check the return value of alloc_workqueue()
+Date:   Sat, 23 Jul 2022 14:43:39 +0800
+Message-Id: <20220723064339.2957069-1-williamsukatube@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgCX5ITfl9titVQzQQ--.40765S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtFWxCF4UXF4kAFykZw1xuFg_yoWDAwb_ua
-        y8ZF1xXws5GF1xAasrJr43Z3sI9r48XFnxu3Z0qryrCr4xZF1kWFs8WFn8X3yUArn5JFyD
-        Ga1rX3y0yr13ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5uwZ7UUUUU==
+X-CM-TRANSID: GtxpCgDnRemdmNtiRiIVQw--.40677S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrtFWxXr1DWr1DKF18CF1fCrg_yoW8Jr18pr
+        Z3Cry0yrW8tw4UGF45Xr4kAr9xAa1qg347ZryfWw4ava1xGFyrK3ykta43tFZrGrWUXw4r
+        tFZ8Xa4aqF1UAr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bF9N3UUUUU=
 X-Originating-IP: [123.58.221.99]
-X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbBiAFHg1aECKfLXAAAsn
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/1tbiNx9Hg1WBo2yi3QAAsI
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -55,30 +54,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: William Dean <williamsukatube@gmail.com>
 
-The function alloc_workqueue() in lpfc_sli4_driver_resource_setup() can
+The function alloc_workqueue() in epf_ntb_init() can
 fail, but there is no check of its return value. To fix this bug, its
 return value should be checked with new error handling code.
 
-Fixes: 3cee98db2610f ("scsi: lpfc: Fix crash on driver unload in wq free")
+Fixes: 8b821cf761503 ("PCI: endpoint: Add EP function driver to provide NTB functionality")
 Reported-by: Hacash Robot <hacashRobot@santino.com>
 Signed-off-by: William Dean <williamsukatube@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pci/endpoint/functions/pci-epf-ntb.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 750dd1e9f2cc..8e9594f4ed16 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -7958,6 +7958,8 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c b/drivers/pci/endpoint/functions/pci-epf-ntb.c
+index 9a00448c7e61..41d85591cd1e 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
++++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
+@@ -2124,6 +2124,11 @@ static int __init epf_ntb_init(void)
  
- 	/* The lpfc_wq workqueue for deferred irq use */
- 	phba->wq = alloc_workqueue("lpfc_wq", WQ_MEM_RECLAIM, 0);
-+	if (!phba->wq)
+ 	kpcintb_workqueue = alloc_workqueue("kpcintb", WQ_MEM_RECLAIM |
+ 					    WQ_HIGHPRI, 0);
++	if (!kpcintb_workqueue) {
++		pr_err("Failed to alloc kpcintb workqueue\n");
 +		return -ENOMEM;
- 
- 	/*
- 	 * Initialize timers used by driver
++	}
++
+ 	ret = pci_epf_register_driver(&epf_ntb_driver);
+ 	if (ret) {
+ 		destroy_workqueue(kpcintb_workqueue);
 -- 
 2.25.1
 

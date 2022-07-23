@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6561857F0DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 19:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A78057F0DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 20:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238628AbiGWR7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 13:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S234988AbiGWSDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 14:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234988AbiGWR7F (ORCPT
+        with ESMTP id S232265AbiGWSDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 13:59:05 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4111AD8D
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 10:59:03 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bp17so12328118lfb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 10:59:03 -0700 (PDT)
+        Sat, 23 Jul 2022 14:03:04 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BFE1C105
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 11:03:03 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id cb12-20020a056830618c00b00616b871cef3so5623618otb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 11:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WrZoUp11W0oJ7GzKnkdxiwVjorx/oxQvW0Vj4xR4LoY=;
-        b=UjYnYTBQk0sh/4YSJFi9BGlebU/cPzp6/AY6+KOc+8pjm0affROpmQDsqgi3hgsJZT
-         K6X4WrA1dna+RzS8NYMyO2O2ERM/8dbBPdJ5poMXuaRaXFaMn8CY5mxdNHxlURudjJ7J
-         jE30zo379S+CQtKMur4EtZk+pj1N8QweHza8oA+7EKFEmQoDapCeB5sVRcMmXzeQLuy4
-         pNAJCslzl59wb31yh0pnXu5voUhoW4WyshgiSr8C+DFfSFUBA1yqj6QhAjzQfzBtvD7x
-         3jMhhEz2iH4sfav2XyfNplKqcvuj9PA8XcsUmqTenERcSyUeYthtqvBTIv4NQa17K90Z
-         RF/A==
+        bh=WRkur15cbv2HIRYMbArrqhaeelLjJmhq/Gio5OxAhMU=;
+        b=vKqum8N5wk9gptsVz7o8RIiAdEXUKXMBQNvEvreDqVM/baoLBDBQJBI65vl3WuSb+I
+         DJKkdkk0RQo6H1sjx/pwRFKPve8lcdtPSw3gxtgSEfhkJOivIwXBnv45rAj+8Qa1dbn/
+         t0fcZMabvbysnT0cxCPMbFtwiO2qmQNVWUtG7ftvdTH4/nHWXrRM0lzuFch76fQ+yBE0
+         JDwSYP831pH2xIpreBPqvRm3MpG7daYRQEeho/+09tNU+3P6vvjA9d6nsl8mV3/AILWV
+         xxi7QV1RnxZle4/pAt6w731MAOSnQIgB5gDAwRFhRzYZgKqiMYnYOIdvqoKnWbXtA5sm
+         aguA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=WrZoUp11W0oJ7GzKnkdxiwVjorx/oxQvW0Vj4xR4LoY=;
-        b=35r5eLo7wgk1rhU1Hw4Yy4l/C8LHWdDJv4o/r4g6kPOTJVu4wmsG2CxAmXLvxxgY9Y
-         qm0c9X51bx0/KaF6q577dF2IIyWV2h30FDE7ok5Nd+uq8v5WEStcXl+koqAFf1HLi3fe
-         ItAxG5iMkHxoPZ+0CF4q73V5xy4VKAH09EyqjYt9Pd2LErk4TU9kOiVfm4YkBcCMdrSS
-         2uoabDauPADZaPzCuA0jDxUvyR77v25bnOCxTJfrZZVhAN46OEkQZAB7UYqpONWff+wg
-         lDurL1WL6wTEFnxuyLH8o2vPQJ/+OsDOnDQN5vkgKsAGgiKGAU9MNBAigXW6OmI+6r3d
-         +3sw==
-X-Gm-Message-State: AJIora9oGdP6TEV3uv7OgX1a4ko/KOYx0eXZJfUUvd/BceLI5EhVB+Q2
-        OwGxfwNxjkJH7OaF7DHO9s4abg==
-X-Google-Smtp-Source: AGRyM1u9xwp+l/U6cPMKiF3f9DWLlcwDi6AqtsHxH9+/vkSXzDhIjHcrxdsv166bJL04Ed4DSg8S8A==
-X-Received: by 2002:a05:6512:1109:b0:489:e782:b6bc with SMTP id l9-20020a056512110900b00489e782b6bcmr2170578lfg.648.1658599142265;
-        Sat, 23 Jul 2022 10:59:02 -0700 (PDT)
-Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
-        by smtp.gmail.com with ESMTPSA id w29-20020a197b1d000000b0047f647414efsm1753886lfc.190.2022.07.23.10.59.00
+        bh=WRkur15cbv2HIRYMbArrqhaeelLjJmhq/Gio5OxAhMU=;
+        b=cLPr5Et4Hm9CcxQKKJ+PbN2EIdLTpnCOkpVJZf0x2rbQtALldjLe4r1at6qvX/m6C9
+         Qw+gF8pZpLQ/DUhhCwTkDxeeg7YHFQPuexV6sIddNROLf59yxWrpoQRA3aiJM8O3LMp4
+         oRoj4X96hxI791izUkUBYr1pRjekudeT8IDnfKRxaAb+VSlX7Iz7XV0+sY2Tf4HmMZhP
+         /JGtWvddyM6f7t0GXOYP5CdWwaBKXNVMj/uceeKXQcf3tYZXb3yDtiCyDBSywSU6wmsC
+         UemaRY0DbnB2Ts5WgnH4ySia8qc1dFA5sRpvSCFdetyFWdC9PbTTHdzS2IsQN0Gl+AtF
+         eX5Q==
+X-Gm-Message-State: AJIora9VEssiH5Sueirh9Lx6eHYRDVELiHT1snueXgka60qA5+KaSrTV
+        GCJLkCRY5uQw5B2yUTLIW7j4smr2fooUEQ==
+X-Google-Smtp-Source: AGRyM1vQwRGJ757Q54Are2CStWkmm2lHzMgkZG0ii3Tau5E/b72lokV43KOPWQwORtJM4t/7uWu5Ug==
+X-Received: by 2002:a05:6830:d13:b0:618:b519:5407 with SMTP id bu19-20020a0568300d1300b00618b5195407mr2097718otb.219.1658599383072;
+        Sat, 23 Jul 2022 11:03:03 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.75.211])
+        by smtp.gmail.com with ESMTPSA id n132-20020acaef8a000000b00335cad84fe9sm3062445oih.29.2022.07.23.11.03.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Jul 2022 10:59:01 -0700 (PDT)
-Message-ID: <135be705-24f9-13b8-6939-0eaa569434d7@linaro.org>
-Date:   Sat, 23 Jul 2022 19:59:00 +0200
+        Sat, 23 Jul 2022 11:03:01 -0700 (PDT)
+Message-ID: <26338676-278d-3cb3-2622-fa89ea79ada4@linaro.org>
+Date:   Sat, 23 Jul 2022 13:03:00 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/3] Documentation: sysfs: Document Broadcom STB memc
- sysfs knobs
+Subject: Re: [PATCH 5.10 000/148] 5.10.133-rc1 review
 Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20220722201043.2731570-1-f.fainelli@gmail.com>
- <20220722201043.2731570-3-f.fainelli@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220722201043.2731570-3-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220723095224.302504400@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220723095224.302504400@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -82,47 +77,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/07/2022 22:10, Florian Fainelli wrote:
-> Document the "srpd" and "frequency" sysfs attributes exposed by
-> the brcmstb_memc driver.
+Hello!
+
+On 23/07/22 04:53, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.133 release.
+> There are 148 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../ABI/testing/sysfs-platform-brcmstb-memc       | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+> Responses should be made by Mon, 25 Jul 2022 09:50:18 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-platform-brcmstb-memc b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
-> new file mode 100644
-> index 000000000000..2bf0f58e412c
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
-> @@ -0,0 +1,15 @@
-> +What:		/sys/devices/platform/*/*/*/*/srpd
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.133-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-That's a lot of */. Are you sure it is correct path? Didn't you include
-here some driver-related path components? Can you paste in email full
-path as an example?
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> +Date:		July 2022
-> +KernelVersion:	5.21
-> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
-> +Description:
-> +		Self Refresh Power Down (SRPD) inactivity timeout counted in
-> +		internal DDR controller clock cycles. Possible values range
-> +		from 0 (disable inactivity timeout) to 65535 (0xffff).
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Using hex suggests one should write there hex? If so, skip decimal...
-You describe the user interface, not hardware registers.
+## Build
+* kernel: 5.10.133-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 00d1152b116251d5f40936f24f9ef31f52eba544
+* git describe: v5.10.132-149-g00d1152b1162
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.132-149-g00d1152b1162
 
-> +
-> +What:		/sys/devices/platform/*/*/*/*/frequency
-> +Date:		July 2022
-> +KernelVersion:	5.21
-> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
-> +Description:
-> +		DDR PHY frequency in Hz.
+## No test regressions (compared to v5.10.132)
+
+## No metric regressions (compared to v5.10.132)
+
+## No test fixes (compared to v5.10.132)
+
+## No metric fixes (compared to v5.10.132)
+
+## Test result summary
+total: 138017, pass: 124391, fail: 610, skip: 12308, xfail: 708
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 308 total, 308 passed, 0 failed
+* arm64: 62 total, 60 passed, 2 failed
+* i386: 52 total, 50 passed, 2 failed
+* mips: 45 total, 45 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 54 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
 
 
-Best regards,
-Krzysztof
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org

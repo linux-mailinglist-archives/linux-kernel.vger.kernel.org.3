@@ -2,89 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5EF57EEB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 12:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1962157EEB6
+	for <lists+linux-kernel@lfdr.de>; Sat, 23 Jul 2022 12:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239506AbiGWK0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 06:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
+        id S239664AbiGWK0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 06:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239463AbiGWKZ4 (ORCPT
+        with ESMTP id S239612AbiGWK0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 06:25:56 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83C1558F1
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 03:15:47 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id FCAfojRi96UQiFCAfo9DSp; Sat, 23 Jul 2022 12:15:45 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 23 Jul 2022 12:15:45 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <a7096e65-14e3-5a99-e34d-fe924a753591@wanadoo.fr>
-Date:   Sat, 23 Jul 2022 12:15:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/3] clk: qcom: Add global clock controller driver for
- SM6375
-Content-Language: fr
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20220723100135.91784-1-konrad.dybcio@somainline.org>
- <20220723100135.91784-3-konrad.dybcio@somainline.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220723100135.91784-3-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 23 Jul 2022 06:26:21 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3FE743C7
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 03:17:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 018B520D97;
+        Sat, 23 Jul 2022 10:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658571420; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dlvbdgXo8fZoWYxYl9CDOkJfqtiXJ4xUtfPsj6ix8I4=;
+        b=cE9nJx4AMAeGT6pQwExbaMuSNqt/yNiXS/ExAUEwLPhdIFjclpAt0in6hl/R0XD/im69+n
+        HmbuZIWhUJVzIEEsqH0pNwR1XQtdnyeu6wwMgId4X0pmUK/qEsfHUs+0I9CRW9QSzO9Z9b
+        PgKMA6xnZdYp+7UfSZA+iaNcs1zsrDo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658571420;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dlvbdgXo8fZoWYxYl9CDOkJfqtiXJ4xUtfPsj6ix8I4=;
+        b=UWfRXGVo4KAK3jap/jHHgTTUp2CDvNk4xYaB49KQj6eKXoQt5i6DLWq7KtTuoHDJ96SXYV
+        0WgpDqGbPTXGAeBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AE0F013A92;
+        Sat, 23 Jul 2022 10:16:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YSOjKZvK22JROwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 23 Jul 2022 10:16:59 +0000
+Date:   Sat, 23 Jul 2022 12:16:59 +0200
+Message-ID: <874jz82kx0.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, perex@perex.cz,
+        tiwai@suse.com, consult.awy@gmail.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com,
+        fleischermarius@googlemail.com, its.priyanka.bose@gmail.com
+Subject: Re: KASAN: vmalloc-out-of-bounds Write in snd_pcm_hw_params
+In-Reply-To: <YtuceCr5OCJcDatJ@kroah.com>
+References: <CANX2M5Zw_zW6ez0_wvaXL1pbLnR2jWY=T7MgkT=4a-zNkiwVig@mail.gmail.com>
+        <YtuceCr5OCJcDatJ@kroah.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 23/07/2022 à 12:01, Konrad Dybcio a écrit :
-> Add support for the global clock controller found on SM6375.
+On Sat, 23 Jul 2022 09:00:08 +0200,
+Greg KH wrote:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-> Changes since v2:
-> - use parent_hws where applicable
+> On Fri, Jul 22, 2022 at 09:37:52AM -0700, Dipanjan Das wrote:
+> > Hi,
+> > 
+> > We would like to report the following bug which has been found by our
+> > modified version of syzkaller.
+> > 
+> > ======================================================
+> > description: KASAN: vmalloc-out-of-bounds Write in snd_pcm_hw_params
+> > affected file: sound/core/pcm_native.c
+> > kernel version: 5.10.131
+> > kernel commit: de62055f423f5dcb548f74cebd68f03c8903f73a
+> > git tree: upstream
+> > kernel config: https://syzkaller.appspot.com/x/.config?x=e49433cfed49b7d9
+> > crash reproducer: attached
+> > ======================================================
+> > Crash log:
+> > ======================================================
+> > BUG: KASAN: vmalloc-out-of-bounds in memset include/linux/string.h:384 [inline]
+> > BUG: KASAN: vmalloc-out-of-bounds in snd_pcm_hw_params+0x19b0/0x1db0
+> > sound/core/pcm_native.c:799
+> > Write of size 2097152 at addr ffffc900113b2000 by task syz-executor.5/14437
+> > 
+> > CPU: 1 PID: 14437 Comm: syz-executor.5 Tainted: G           OE     5.10.131+ #3
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> > 1.13.0-1ubuntu1.1 04/01/2014
+> > Call Trace:
+> >  __dump_stack lib/dump_stack.c:77 [inline]
+> >  dump_stack+0x107/0x163 lib/dump_stack.c:118
+> >  print_address_description.constprop.0.cold+0x5/0x4f7 mm/kasan/report.c:385
+> >  __kasan_report mm/kasan/report.c:545 [inline]
+> >  kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
+> >  check_memory_region_inline mm/kasan/generic.c:194 [inline]
+> >  check_memory_region+0x187/0x1e0 mm/kasan/generic.c:200
+> >  memset+0x20/0x40 mm/kasan/common.c:85
+> >  memset include/linux/string.h:384 [inline]
+> >  snd_pcm_hw_params+0x19b0/0x1db0 sound/core/pcm_native.c:799
+> >  snd_pcm_kernel_ioctl+0xd1/0x240 sound/core/pcm_native.c:3401
+> >  snd_pcm_oss_change_params_locked+0x17b6/0x3aa0 sound/core/oss/pcm_oss.c:965
+> >  snd_pcm_oss_change_params+0x76/0xd0 sound/core/oss/pcm_oss.c:1107
+> >  snd_pcm_oss_make_ready+0xb7/0x170 sound/core/oss/pcm_oss.c:1166
+> >  snd_pcm_oss_set_trigger.isra.0+0x34f/0x770 sound/core/oss/pcm_oss.c:2074
+> >  snd_pcm_oss_poll+0x679/0xb40 sound/core/oss/pcm_oss.c:2858
+> >  vfs_poll include/linux/poll.h:90 [inline]
+> >  do_pollfd fs/select.c:872 [inline]
+> >  do_poll fs/select.c:920 [inline]
+> >  do_sys_poll+0x63c/0xe40 fs/select.c:1014
+> >  __do_sys_poll fs/select.c:1079 [inline]
+> >  __se_sys_poll fs/select.c:1067 [inline]
+> >  __x64_sys_poll+0x18c/0x490 fs/select.c:1067
+> >  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> > RIP: 0033:0x7f095de4f4ed
+> > Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+> > 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+> > 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007f095bdffbe8 EFLAGS: 00000246 ORIG_RAX: 0000000000000007
+> > RAX: ffffffffffffffda RBX: 00007f095df6df60 RCX: 00007f095de4f4ed
+> > RDX: 0000000000000009 RSI: 0000000000000001 RDI: 00000000200000c0
+> > RBP: 00007f095bdffc40 R08: 0000000000000000 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000001d
+> > R13: 00007ffff286ceff R14: 00007f095df6df60 R15: 00007f095bdffd80
+> > 
+> > 
+> > Memory state around the buggy address:
+> >  ffffc900115b1d00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >  ffffc900115b1d80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > >ffffc900115b1e00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+> >                    ^
+> >  ffffc900115b1e80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+> >  ffffc900115b1f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+> > ==================================================================
 > 
->   drivers/clk/qcom/Kconfig      |    8 +
->   drivers/clk/qcom/Makefile     |    1 +
->   drivers/clk/qcom/gcc-sm6375.c | 3931 +++++++++++++++++++++++++++++++++
->   3 files changed, 3940 insertions(+)
->   create mode 100644 drivers/clk/qcom/gcc-sm6375.c
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 415ae4ffab48..ef81eda01649 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -672,6 +672,14 @@ config SM_GCC_6350
->   	  Say Y if you want to use peripheral devices such as UART,
->   	  SPI, I2C, USB, SD/UFS, PCIe etc.
->   
-> +config SM_GCC_6375
-> +	tristate "SM6350 Global Clock Controller"
+> Wondeful, do you have a fix for this that solves the reported problem
+> that you have tested with the reproducer?
 
-Nit: SM6375?
+... or at least more detailed information.
 
-> +	select QCOM_GDSC
-> +	help
-> +	  Support for the global clock controller on SM6375 devices.
-> +	  Say Y if you want to use peripheral devices such as UART,
-> +	  SPI, I2C, USB, SD/UFS etc.
-> +
+The given log snippet alone doesn't help for further analysis, as it
+doesn't show which device / driver is involved.  The code is the
+common helper and the condition for the trigger might be depending on
+the driver side.  The full kernel log might show which driver (IIUC,
+it's /dev/adsp1) is in place.
+
+Last but not least, you should check whether it's specific to your
+5.10.x kernel or it's also seen with the latest upstream, too.
+
+
+thanks,
+
+Takashi

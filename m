@@ -2,184 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB7657F4DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FF757F4E2
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 14:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbiGXL6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 07:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S231768AbiGXMJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 08:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGXL6l (ORCPT
+        with ESMTP id S229450AbiGXMJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 07:58:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83477175A0
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 04:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658663920; x=1690199920;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KM20Px9+IUMc5pfne0smI8tn/OJ7VtEBAo/304bGylA=;
-  b=OLglnXW+BL7XBcqP48a32jlzQU2OOVz5ZKEnCdKSsKvnBmlmTDZhTJ6H
-   d8N9wqk2/pTJ8Oj3Yu/rBZgkRYSg/1FRYdMnZQ25CblLmmOB8HL10UTYS
-   gytxWs69yHb6NieK8at4KXWxI5o29VwvEoBvny2mhxvJRcZRB4nOVFi6D
-   sRez6qUZzVpfwS9wsXXK3SwEuWSX5FTJMYbRxu/6I2kayl1z0rzUlkpED
-   Fs62To3QsNcxkE7Fy6UUJAun42R9oMa3RWfDGR39u9bKOlVZNhDLgGRMR
-   jgFsxJX2vdAL8hET7nDkmmSdNqKu4y5A74p7cZbWFuvoUaX3ceQhqwQ2L
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="373841591"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="373841591"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 04:58:40 -0700
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="657793537"
-Received: from zjiang1-mobl.ccr.corp.intel.com (HELO [10.249.170.155]) ([10.249.170.155])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 04:58:35 -0700
-Message-ID: <e4719cdb-6046-46cf-e63d-a1e7968ffefb@linux.intel.com>
-Date:   Sun, 24 Jul 2022 19:58:33 +0800
+        Sun, 24 Jul 2022 08:09:17 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360AC175B1;
+        Sun, 24 Jul 2022 05:09:16 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so4825085wmm.4;
+        Sun, 24 Jul 2022 05:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TuaZlSjI8Gr3uFZtjKix4F/O72z/L1CxsKBvamkDb9g=;
+        b=CIczQQVHcpEMDUwb1mJxLsQHu5bxF1+/HtkEgx98+M5WdLQDNxUccwaY44QO0VZHkl
+         oDe8+ugM9HUAdQ8vdSgfMAijNDqKQScCoQMGJb+UYylC8v482tzvLHlm421BeqTdREeu
+         ViDLkDKh0fNpEqQDDjBMR4tHyvWVC5Q5YCVSnAx+fNki/tvMmxU8tut0vvWAwpfHiesi
+         vx/p4IUwPN0dwiuOcI4n3NCzCqnJzra+JAM9EPAcwmxT7gHZF9mzfYu8rpssZQIYr9pF
+         3QnNMCnG3qap0FvpW7MgniWsUrzAS7T3JMOqkMesuv+fK5l1cZBPNf5TCKVQ6TiayHJU
+         BEWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TuaZlSjI8Gr3uFZtjKix4F/O72z/L1CxsKBvamkDb9g=;
+        b=sdAMGrFmkDUzYJy5t22xJB51HB/mdSxtkE6PB/BudMsvSQwLPf9UTBhMWndBQCOwdI
+         6fq/MzcUJBjX+p2kFjWP77FnCdRGBjTd20Wz1uat9Iq/Usta8TfDShISgN54xgCEjojJ
+         HgFIDNRvs3g8SmnKRfD8sEXH9R26+jfKSmPrEYwN6Wd1fg0hmzz3u7FHiit6frkKcZ25
+         D8SMXheUOPPuQqSTneN30ol8K/bq1gMB/6wLiwZuTUNGi3apiSLKtGWPGXPUPw/um8Iz
+         Zv6UyF7iq1KB/3o7Vxlxv+Xxe8vIcJmRG6lWPs3S53S8JIdcj+AWGTk8qdlCAN+j6Hlr
+         lL2A==
+X-Gm-Message-State: AJIora/FSsfzrseKr9pW1heZCBrVggcaEhvPvIKbu5AN7zdPqo/5jvh6
+        LH4l06moNpuep8hevGLkmXM=
+X-Google-Smtp-Source: AGRyM1sABbJX/NfOxdyBYbEO9fabdBu0ikYoMRVKH4vkAHdYfEBZkk6/Dk9c48z/ijU8ylWsRa4FgA==
+X-Received: by 2002:a05:600c:3582:b0:3a3:3b00:cb25 with SMTP id p2-20020a05600c358200b003a33b00cb25mr5374622wmq.170.1658664554661;
+        Sun, 24 Jul 2022 05:09:14 -0700 (PDT)
+Received: from [192.168.0.104] ([77.126.166.31])
+        by smtp.gmail.com with ESMTPSA id n186-20020a1ca4c3000000b003a32438c518sm14509967wme.6.2022.07.24.05.09.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 05:09:14 -0700 (PDT)
+Message-ID: <09038324-65ed-8529-2f6c-671a15a8fb84@gmail.com>
+Date:   Sun, 24 Jul 2022 15:09:11 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v10 07/12] arm-smmu-v3/sva: Add SVA domain support
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH net-next V3 0/3] Introduce and use NUMA distance metrics
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-8-baolu.lu@linux.intel.com>
- <20220723142009.GG79279@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220723142009.GG79279@nvidia.com>
+To:     Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220719162339.23865-1-tariqt@nvidia.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20220719162339.23865-1-tariqt@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/23 22:20, Jason Gunthorpe wrote:
-> On Tue, Jul 05, 2022 at 01:07:05PM +0800, Lu Baolu wrote:
->> Add support for SVA domain allocation and provide an SVA-specific
->> iommu_domain_ops.
->>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
->> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
->> ---
->>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  6 ++
->>   .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 69 +++++++++++++++++++
->>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  3 +
->>   3 files changed, 78 insertions(+)
->>
->> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
->> index d2ba86470c42..96399dd3a67a 100644
->> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
->> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
->> @@ -758,6 +758,7 @@ struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm);
->>   void arm_smmu_sva_unbind(struct iommu_sva *handle);
->>   u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle);
->>   void arm_smmu_sva_notifier_synchronize(void);
->> +struct iommu_domain *arm_smmu_sva_domain_alloc(void);
->>   #else /* CONFIG_ARM_SMMU_V3_SVA */
->>   static inline bool arm_smmu_sva_supported(struct arm_smmu_device *smmu)
->>   {
->> @@ -803,5 +804,10 @@ static inline u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle)
->>   }
->>   
->>   static inline void arm_smmu_sva_notifier_synchronize(void) {}
->> +
->> +static inline struct iommu_domain *arm_smmu_sva_domain_alloc(void)
->> +{
->> +	return NULL;
->> +}
->>   #endif /* CONFIG_ARM_SMMU_V3_SVA */
->>   #endif /* _ARM_SMMU_V3_H */
->> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
->> index f155d406c5d5..fc4555dac5b4 100644
->> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
->> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
->> @@ -549,3 +549,72 @@ void arm_smmu_sva_notifier_synchronize(void)
->>   	 */
->>   	mmu_notifier_synchronize();
->>   }
->> +
->> +static int arm_smmu_sva_set_dev_pasid(struct iommu_domain *domain,
->> +				      struct device *dev, ioasid_t id)
->> +{
->> +	int ret = 0;
->> +	struct mm_struct *mm;
->> +	struct iommu_sva *handle;
->> +
->> +	if (domain->type != IOMMU_DOMAIN_SVA)
->> +		return -EINVAL;
-> 
-> Not needed, this function is only called from the sva ops, other
-> domain types are impossible, we don't need sanity tests in drivers
-> 
->> +	mm = domain->mm;
->> +	if (WARN_ON(!mm))
->> +		return -ENODEV;
-> 
-> Also guarenteed by core code, don't need sanity tests
 
-Above two updated. Thanks!
 
+On 7/19/2022 7:23 PM, Tariq Toukan wrote:
+> Hi,
 > 
->> +static void arm_smmu_sva_block_dev_pasid(struct iommu_domain *domain,
->> +					 struct device *dev, ioasid_t id)
->> +{
->> +	struct mm_struct *mm = domain->mm;
->> +	struct arm_smmu_bond *bond = NULL, *t;
->> +	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
->> +
->> +	mutex_lock(&sva_lock);
->> +	list_for_each_entry(t, &master->bonds, list) {
->> +		if (t->mm == mm) {
->> +			bond = t;
->> +			break;
+> Implement and expose CPU spread API based on the scheduler's
+> sched_numa_find_closest().  Use it in mlx5 and enic device drivers.  This
+> replaces the binary NUMA preference (local / remote) with an improved one
+> that minds the actual distances, so that remote NUMAs with short distance
+> are preferred over farther ones.
 > 
-> This doesn't seem like what I would expect, the domain should be used
-> at the key in these datastructures, not the mm..
-
-Both Intel and arm-smmu-v3 SVA code have room to cleanup. I've discussed
-this with Jean. We will cleanup and refactor the individual drivers in
-separated series.
-
+> This has significant performance implications when using NUMA-aware
+> memory allocations, improving the throughput and CPU utilization.
 > 
->> index ae8ec8df47c1..a30b252e2f95 100644
->> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> @@ -1999,6 +1999,9 @@ static struct iommu_domain *arm_smmu_domain_alloc(unsigned type)
->>   {
->>   	struct arm_smmu_domain *smmu_domain;
->>   
->> +	if (type == IOMMU_DOMAIN_SVA)
->> +		return arm_smmu_sva_domain_alloc();
+> Regards,
+> Tariq
 > 
-> If no drivers are sharing any code with their other alloc paths perhaps we
-> should have a dedicated op for SVA?
+> v3:
+> - Introduce the logic as a common API instead of being mlx5 specific.
+> - Add implementation to enic device driver.
+> - Use non-atomic version of __cpumask_clear_cpu.
+> 
 
-AFAICS, Robin is refactoring the domain allocation interfaces. How about
-leaving this until we finalize the interface?
-
-Best regards,
-baolu
+Comments on V2 were addressed.
+Please let me now of any other comments on this V3.

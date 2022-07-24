@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEF057F516
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 14:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73A657F518
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 14:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbiGXMgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 08:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
+        id S233507AbiGXMhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 08:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGXMgF (ORCPT
+        with ESMTP id S229450AbiGXMht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 08:36:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F59E0BF
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 05:36:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658666162; x=1690202162;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=50FGdPaYbE9bf8GxcA1c2YFF5erLru83QL9sb0OkJNs=;
-  b=XRtFZlO/tUw5kkZWM58fSsdooR6viNA/BA3RW0/CQcDOFNijIRhXMC2F
-   eNNjQW40gfKD6nkSO5fZt3H4wJB+3A8ymXxTGphxXWY6NBEih/zSFju4z
-   N4ANrODGmoL6yPkPGL+pONHDOHszNqbZwvHi8ZOjkFoHgfE11CC82SajT
-   Nt7KTVoMqajFFb0wW2b9LAQOJFKe6JjtVaONjSzHY/wmOlXueSdVsD0JJ
-   tbcWvBDa1HxQ/dXRNcF9ju5tm0J+LU0TE0SUX4l4n3v0M5hQfak4N9A7l
-   ba3TJ88sWUCN8vRJvHHBhe1JneYUNBZWswL6i0yGbb+demwnQY6YTpl7h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267933356"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="267933356"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 05:36:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="926572573"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Jul 2022 05:36:00 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFapz-0003rl-1r;
-        Sun, 24 Jul 2022 12:35:59 +0000
-Date:   Sun, 24 Jul 2022 20:35:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jude Shih <shenshih@amd.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.15 42/131]
- drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:633: warning:
- expecting prototype for dmub_aux_setconfig_reply_callback(). Prototype was
- for dmub_aux_setconfig_callback() instead
-Message-ID: <202207242010.Z8o6RAVI-lkp@intel.com>
+        Sun, 24 Jul 2022 08:37:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0121FD15
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 05:37:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658666267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=G0f3MDsyJEdQb5fcMCp5m0x+k6cu5Bh/NA8aL6IfSBI=;
+        b=HS7n3Ltyhs5Fo28ioDSe60g9kj4xtMNdxh8ErBVMsEJoHGXR5o/QjJCDrtQFFiYvPHhHDI
+        pHf9JzjY43q57hT9NPsbnmZnNtbcq8R79DZqMfDFsqHpZJjtLghSya9IOu4u4wNrBrAtBD
+        UeqvyZbibwBAtS6tvA7BWw1p6W86La8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-398-Km_CnkspP3yMb0Ta_uRRdg-1; Sun, 24 Jul 2022 08:37:46 -0400
+X-MC-Unique: Km_CnkspP3yMb0Ta_uRRdg-1
+Received: by mail-wm1-f72.google.com with SMTP id i184-20020a1c3bc1000000b003a026f48333so4802386wma.4
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 05:37:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=G0f3MDsyJEdQb5fcMCp5m0x+k6cu5Bh/NA8aL6IfSBI=;
+        b=DEKs1+GtkVriDd6OjHnSG4UW4P985OwquLoMG2mGM+xDSfHSQOdKUgxdQfOdrG3Hgu
+         2HBb7iLoFR+y+GO0HTSiBEMTMw90qCqvivi9yPcqUO8w2aUPFKfDK0wsXZkviwgb6XLm
+         CyyrvercSctn2MkguFofii5yNwy6Dt1B6ZntHhyvtw7bLHx/DdPKqgt71SS2QQBmV/K8
+         xmJXkguehQWaq6vHzLjjO2ECWbtQZo+dRBWqYPV/9/cijNWqazTx+qdKCR0AeloDQVPA
+         2aOaFyJnKkWcDMwcjmC2b790SGyPl6htITuPBL+EJnhwHDaSx+lC6qIW/jBXoB1lEaYq
+         h/Ow==
+X-Gm-Message-State: AJIora/aV+OmCmDI/WfuZ+7ZHyT3DpvLtHAkM5L/j9lyrRtWIUUklgAw
+        c6u2VQsO9cIhCBaJO8muXsrBSN6hgx98ZBK72oQb1zRP0Jym4k0MmtdZrdLS9i+aFtDaWF0mB5N
+        jFMOvKrrgvpktPB01tX646BN34sI5HX/yVkPbJqj4TL5wj3PPWLEpq+FcmaUJBRc4c2LJO8wIdO
+        o=
+X-Received: by 2002:a05:6000:2c8:b0:21d:b356:5f21 with SMTP id o8-20020a05600002c800b0021db3565f21mr5325418wry.515.1658666265112;
+        Sun, 24 Jul 2022 05:37:45 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ug4YTsIGIBNBnXCQXnAEtS3vid0LdX10qcNDlCxc235fu3aeC6pJksAYEP5BAkqCWq0SUwHQ==
+X-Received: by 2002:a05:6000:2c8:b0:21d:b356:5f21 with SMTP id o8-20020a05600002c800b0021db3565f21mr5325389wry.515.1658666264736;
+        Sun, 24 Jul 2022 05:37:44 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l4-20020a05600012c400b0021e4829d359sm9368925wrx.39.2022.07.24.05.37.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 05:37:44 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm: Prevent modeset helpers to access an uninitialized drm_mode_config
+Date:   Sun, 24 Jul 2022 14:37:41 +0200
+Message-Id: <20220724123741.1268536-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,51 +81,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.15
-head:   5de1f462672e72669ad0ac037800c4d64ad6a891
-commit: 263f18aecda9dd2f3e776a7cfebebca3dc3925d4 [42/131] drm/amd/display: Support for DMUB HPD interrupt handling
-config: parisc-allmodconfig (https://download.01.org/0day-ci/archive/20220724/202207242010.Z8o6RAVI-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/263f18aecda9dd2f3e776a7cfebebca3dc3925d4
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/5.15
-        git checkout 263f18aecda9dd2f3e776a7cfebebca3dc3925d4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/gpu/drm/
+DRM drivers initialize the mode configuration with drmm_mode_config_init()
+and that function (among other things) initializes mutexes that are later
+used by modeset helpers.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+But the helpers should only attempt to grab those locks if the mode config
+was properly initialized. Otherwise it can lead to kernel oops. An example
+is when a DRM driver using the component framework does not initialize the
+drm_mode_config, because its .bind callback was not being executed due one
+of its expected sub-devices' driver failing to probe.
 
-All warnings (new ones prefixed by >>):
+Some drivers check the struct drm_driver.registered field as an indication
+on whether their .shutdown callback should call helpers to tearn down the
+mode configuration or not, but most drivers just assume that it is always
+safe to call helpers such as drm_atomic_helper_shutdown() during shutdown.
 
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:633: warning: expecting prototype for dmub_aux_setconfig_reply_callback(). Prototype was for dmub_aux_setconfig_callback() instead
+Let make the DRM core more robust and prevent this to happen, by marking a
+struct drm_mode_config as initialized during drmm_mode_config_init(). that
+way helpers can check for it and not attempt to grab uninitialized mutexes.
 
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-vim +633 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
+ drivers/gpu/drm/drm_mode_config.c  | 4 ++++
+ drivers/gpu/drm/drm_modeset_lock.c | 6 ++++++
+ include/drm/drm_mode_config.h      | 8 ++++++++
+ 3 files changed, 18 insertions(+)
 
-   622	
-   623	/**
-   624	 * dmub_aux_setconfig_reply_callback - Callback for AUX or SET_CONFIG command.
-   625	 * @adev: amdgpu_device pointer
-   626	 * @notify: dmub notification structure
-   627	 *
-   628	 * Dmub AUX or SET_CONFIG command completion processing callback
-   629	 * Copies dmub notification to DM which is to be read by AUX command.
-   630	 * issuing thread and also signals the event to wake up the thread.
-   631	 */
-   632	void dmub_aux_setconfig_callback(struct amdgpu_device *adev, struct dmub_notification *notify)
- > 633	{
-   634		if (adev->dm.dmub_notify)
-   635			memcpy(adev->dm.dmub_notify, notify, sizeof(struct dmub_notification));
-   636		if (notify->type == DMUB_NOTIFICATION_AUX_REPLY)
-   637			complete(&adev->dm.dmub_aux_transfer_done);
-   638	}
-   639	
-
+diff --git a/drivers/gpu/drm/drm_mode_config.c b/drivers/gpu/drm/drm_mode_config.c
+index 59b34f07cfce..db649f97120b 100644
+--- a/drivers/gpu/drm/drm_mode_config.c
++++ b/drivers/gpu/drm/drm_mode_config.c
+@@ -456,6 +456,8 @@ int drmm_mode_config_init(struct drm_device *dev)
+ 		dma_resv_fini(&resv);
+ 	}
+ 
++	dev->mode_config.initialized = true;
++
+ 	return drmm_add_action_or_reset(dev, drm_mode_config_init_release,
+ 					NULL);
+ }
+@@ -549,6 +551,8 @@ void drm_mode_config_cleanup(struct drm_device *dev)
+ 	idr_destroy(&dev->mode_config.tile_idr);
+ 	idr_destroy(&dev->mode_config.object_idr);
+ 	drm_modeset_lock_fini(&dev->mode_config.connection_mutex);
++
++	dev->mode_config.initialized = false;
+ }
+ EXPORT_SYMBOL(drm_mode_config_cleanup);
+ 
+diff --git a/drivers/gpu/drm/drm_modeset_lock.c b/drivers/gpu/drm/drm_modeset_lock.c
+index 918065982db4..d6a81cb88123 100644
+--- a/drivers/gpu/drm/drm_modeset_lock.c
++++ b/drivers/gpu/drm/drm_modeset_lock.c
+@@ -444,6 +444,9 @@ EXPORT_SYMBOL(drm_modeset_unlock);
+  *
+  * See also: DRM_MODESET_LOCK_ALL_BEGIN() and DRM_MODESET_LOCK_ALL_END()
+  *
++ * This function must only be called after drmm_mode_config_init(), since it
++ * takes locks that are initialized as part of the initial mode configuration.
++ *
+  * Returns: 0 on success or a negative error-code on failure.
+  */
+ int drm_modeset_lock_all_ctx(struct drm_device *dev,
+@@ -454,6 +457,9 @@ int drm_modeset_lock_all_ctx(struct drm_device *dev,
+ 	struct drm_plane *plane;
+ 	int ret;
+ 
++	if (WARN_ON(!dev->mode_config.initialized))
++		return -EINVAL;
++
+ 	ret = drm_modeset_lock(&dev->mode_config.connection_mutex, ctx);
+ 	if (ret)
+ 		return ret;
+diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
+index 6b5e01295348..d2e1a6d7dcc2 100644
+--- a/include/drm/drm_mode_config.h
++++ b/include/drm/drm_mode_config.h
+@@ -954,6 +954,14 @@ struct drm_mode_config {
+ 	struct drm_atomic_state *suspend_state;
+ 
+ 	const struct drm_mode_config_helper_funcs *helper_private;
++
++	/**
++	 * @initialized:
++	 *
++	 * Internally used by modeset helpers such as drm_modeset_lock_all_ctx()
++	 * to determine if the mode configuration has been properly initialized.
++	 */
++	bool initialized;
+ };
+ 
+ int __must_check drmm_mode_config_init(struct drm_device *dev);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

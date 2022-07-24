@@ -2,62 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E4457F6FE
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 22:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF14E57F6FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 22:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiGXUP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 16:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S231407AbiGXUPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 16:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiGXUPZ (ORCPT
+        with ESMTP id S230342AbiGXUPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 16:15:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3544FF05
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 13:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658693724; x=1690229724;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/XKglUVOJEyHIJU/H7Lc4uf6RHd+Ys8toBysJ7PENuc=;
-  b=mFREogcfJAYzqYuq1R6CT36+kvIe7wojfUTxumFpK+nQM8HZZmNGyqNa
-   xfhc3F98DkwRHC8BJ6H7d9VfUHVBqb5RDDezWzirq3crDQk3AKbKVh/ne
-   swwQEP17CkFBE631LPd30ihTsglpwywfdHS3DAHTmw81lAl2p3TXAJDEp
-   IfSYeRxfi2uQyHxuLlBH3ekZ/Ha1LMdDD8Sew0pwUx4/reLusxzFTXyrF
-   dp7aPYnAhpbSNCySSRpjKx+YvGaPruUN46LKA7tGjZqdTP3PIAfWSIQK0
-   U3ZRY85fNB/oxBLIyqRgPHq3Hwcuwu84PELCg2mRbqfSJqIf6zLkW6eE9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="373872305"
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="373872305"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 13:15:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="926656655"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Jul 2022 13:15:22 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFi0X-0004EZ-1C;
-        Sun, 24 Jul 2022 20:15:21 +0000
-Date:   Mon, 25 Jul 2022 04:14:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Justin M. Forbes" <jforbes@fedoraproject.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: [linux-stable-rc:linux-5.15.y 6874/8723]
- arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version
- 4.6 of GCC
-Message-ID: <202207250449.BYMZbIA2-lkp@intel.com>
+        Sun, 24 Jul 2022 16:15:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 063A625F2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 13:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658693711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kZz4b5LoajqAvsUTBnBgNSgY5TJeL+gVGY7SLqZJsYs=;
+        b=hquihfS/37wY+Dek6VkgEtddJHF9p1GGFoOfMKSTmRyEVKYqxN8OznUi+HlO9NuSElTTbE
+        PZw/HfV+xM8jGrTjveWXiJxixqGrPIHijuXU0uywIi7Hno6wX54QGgceSgO1tX3nyZn0WT
+        NDm3C7zi9wEP23EbnpPX5UfyqlqK900=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-O6FkCqEuOl61U3soYR6ZTQ-1; Sun, 24 Jul 2022 16:15:07 -0400
+X-MC-Unique: O6FkCqEuOl61U3soYR6ZTQ-1
+Received: by mail-wm1-f69.google.com with SMTP id h65-20020a1c2144000000b003a30cae106cso7562797wmh.8
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 13:15:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kZz4b5LoajqAvsUTBnBgNSgY5TJeL+gVGY7SLqZJsYs=;
+        b=EJs01S0llEoXKgDoDUiw3wzujRWgqQ7SOXcKk6M+SmjVCZ+uEUC0J/gSovEUEJnPpl
+         1fiUvFfapJLv0zNV6SYTcT54BXmsqeN1kIdItwcRqVfFDJCP0mCFpMU9x657OHTAKIEi
+         H5/1D4L2EXzS8gx86FOctsT+X0Vzkkt2C8jNcqaqcQKGsAhGnmtyh5RJfy9loYZ81VOZ
+         bmml3yahcqCNiPpU0RCX09amkG+VDp5vMNrwyRxRxWd7lDmUxj/eWaMLN1/kAkfOOh7B
+         ZDJU79V8GowHd/zt//L1n8ifoTfoO2COg1uS1XPO9i864uWAP0sIJ/Vx7BR7vK8+FHX5
+         GKQQ==
+X-Gm-Message-State: AJIora/6ue0uCP0V6y8GOFaUpkTs5P7nSNOLp2sOiew2BnyBBVpYmjo1
+        SAr3NN0HA2uN8Ar35mp5fOVaD9oEavFNuiaXw7BtVzOs5y0azQEvkdKBCc7rq1buuxnDrL+A87D
+        cTvBvJ/4cVXbK9w9NwH4hNZx8
+X-Received: by 2002:a05:600c:4e94:b0:3a3:4448:62cc with SMTP id f20-20020a05600c4e9400b003a3444862ccmr6292854wmq.108.1658693705161;
+        Sun, 24 Jul 2022 13:15:05 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uuRx/wU5NQqtwBn5eDMRUu4h4Xzgsm5XmvnoiDQbrqTXU/ISSTDKN57eKI3H4AHbrm5rUtyw==
+X-Received: by 2002:a05:600c:4e94:b0:3a3:4448:62cc with SMTP id f20-20020a05600c4e9400b003a3444862ccmr6292836wmq.108.1658693704845;
+        Sun, 24 Jul 2022 13:15:04 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b12-20020a05600c4e0c00b003a2fde6ef62sm12180954wmq.7.2022.07.24.13.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 13:15:04 -0700 (PDT)
+Message-ID: <efcccedb-58e0-13a8-5c21-2e519e9fc335@redhat.com>
+Date:   Sun, 24 Jul 2022 22:15:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] drm/msm: Make .remove and .shutdown HW shutdown
+ consistent
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220724111327.1195693-1-javierm@redhat.com>
+ <CAA8EJppEpPe4nfZ_kvNen6shSvgyUoL3adSQfhhCGCS2VmVZhQ@mail.gmail.com>
+ <6b3f98db-83bf-41cd-b23d-79b455a06ebd@redhat.com>
+ <630a6654-0305-f3a8-e062-f13a0074d35a@redhat.com>
+ <CAA8EJpr1xf9mkfT-FhK9M58syMnWCFXozWHH9L_gxtXOqgh0yw@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAA8EJpr1xf9mkfT-FhK9M58syMnWCFXozWHH9L_gxtXOqgh0yw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,61 +92,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   a9e2d8e52e1c0d87c0fa4f9d2d38e210aabed515
-commit: e16cc79b0f916069de223bdb567fa0bc2ccd18a5 [6874/8723] lib/crypto: add prompts back to crypto libraries
-config: arm-buildonly-randconfig-r006-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250449.BYMZbIA2-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=e16cc79b0f916069de223bdb567fa0bc2ccd18a5
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout e16cc79b0f916069de223bdb567fa0bc2ccd18a5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On 7/24/22 22:10, Dmitry Baryshkov wrote:
+> On Sun, 24 Jul 2022 at 22:51, Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+>>
+>> On 7/24/22 20:47, Javier Martinez Canillas wrote:
+>>> Hello Dmitry,
+>>
+>> [...]
+>>
+>>>> Now there is no point in having this as a separate function. Could you
+>>>
+>>> The only reason why I kept this was to avoid duplicating the same comment
+>>> in two places. I thought that an inline function would be better than that.
+>>>
+>>>> please inline it?
+>>>>
+>>
+>> Or do you mean inline it as dropping the wrapper helper and just call to
+>> drm_atomic_helper_shutdown() in both callbacks ? I'm OK with that but as
+>> mentioned then we should probably have to duplicate the comment.
+>>
+>> Since is marked as inline anyways, the resulting code should be the same.
+> 
+> Yes, I'd like for you to drop the wrapper. I'm fine with duplicating
+> the comment, since it will be in place where it matters (before
+> checking ddev->registered) rather than just stating the contract for
+> the wrapper (which can be easily ignored).
+> 
+> (And yes, I do read patches and commit messages before commenting.)
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
-   #warning This code requires at least version 4.6 of GCC
-    ^
-   1 warning generated.
-
-
-vim +30 arch/arm/lib/xor-neon.c
-
-01956597cbc46d Ard Biesheuvel 2013-05-17  16  
-01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
-01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
-01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
-01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
-01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
-01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
-01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
-01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
-01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
-01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
-01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
-01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
-01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
-01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
-01956597cbc46d Ard Biesheuvel 2013-05-17  32  
-
-:::::: The code at line 30 was first introduced by commit
-:::::: 01956597cbc46df072f20f90a40eebe356200c38 ARM: crypto: add NEON accelerated XOR implementation
-
-:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-:::::: CC: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+OK. I'll post a v3 tomorrow doing that then. Sorry for the misunderstanding.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

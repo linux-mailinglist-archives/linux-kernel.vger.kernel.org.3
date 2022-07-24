@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9475E57F4BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAF657F4B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiGXKwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 06:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S231585AbiGXLA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 07:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGXKwa (ORCPT
+        with ESMTP id S229462AbiGXLAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 06:52:30 -0400
-X-Greylist: delayed 239 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 24 Jul 2022 03:52:25 PDT
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F771277B;
-        Sun, 24 Jul 2022 03:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=skogtun.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jRTxHY+3oumoRJBcTtxrjwhVP8T6AjbX7SwAwTUS/fA=; b=RAeVT921F6Z7MgUnX8ri9bFlen
-        nKKKEw+ELvqJNehseL1TPLtgYGnmhsUW9hiOs13UShey1bh4j+OpCBN4aWUn0GjIpwdDyw99DMOaI
-        gft7KaCHxIVs1jCLIhGyt4e7yOR2IGukayenZ2tYatJc2OrbeZwih32dchcw5uKTmr0PaNxQgzPBM
-        gYAMsFrz6PGR2Swhxdf9Y6YpBnVKfKitH8w+RW/xszLjlNf0ddPbozWqS0JkvukyGIMrzIATf6Xgc
-        N3WEguyl/dkv0rVAt5CjRZI6QdS2RKP1kWFN+vmmjlhAqkLJ8pSn8+w3XKXjct4m1JeFAd7GcbuYT
-        jCdYrnGQ==;
-Received: from 236.51-175-223.customer.lyse.net ([51.175.223.236]:60626 helo=[192.168.1.162])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <harald@skogtun.org>)
-        id 1oFZ9r-0001wF-Jr; Sun, 24 Jul 2022 12:48:23 +0200
-Message-ID: <e24fa505-3472-61c2-68ff-c728c5f10717@skogtun.org>
-Date:   Sun, 24 Jul 2022 12:48:18 +0200
+        Sun, 24 Jul 2022 07:00:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F72E64C6
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 04:00:24 -0700 (PDT)
+Date:   Sun, 24 Jul 2022 11:00:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658660421;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yJW+dt5eAcXnvma6LPfcUwm+T9G0Jk72nagiTEpj6vI=;
+        b=yLzeC/4pyyebwYdzpSZkFLr8Il+lMuUFuK7LUGGU6mIUv5/lY1MjGlN/nTIDVoBit4l1Ep
+        KwBtjMuuA+Uq9P1uFhYY9lx0yUcPmOOWbqpU2VsXRktVLO4+sMLkoRVN06k5ItjiH6TyLB
+        z9iae6Vi8QSiyx58azbqjagnZrq2EWOS4f4cGV+CcRSH5xEwlaMRsXlccyc3utdPSvYJCt
+        lHN6hYaL/PqyploHqzgehRY3qm7x7nUUFfijGp1oRd+4aVX4k59i6AMsTPeFbtLR1ABmF0
+        uCdzQgUEdswtsQUNxFB2e9QOZN10CxzukAxYRDI4gzV3w5dck1qAa95Db2Ydhg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658660421;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yJW+dt5eAcXnvma6LPfcUwm+T9G0Jk72nagiTEpj6vI=;
+        b=0LOdaRxnm3j48kXMMI0CEXxtTh099dNRsK/7Vx34TziktBEzl6lSDZDbm8jU00YxhQ1LPj
+        pM9rlFrYSihbSQBA==
+From:   "irqchip-bot for William Dean" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/mips-gic: Check the return value
+ of ioremap() in gic_of_init()
+Cc:     Hacash Robot <hacashRobot@santino.com>,
+        William Dean <williamsukatube@163.com>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220723100128.2964304-1-williamsukatube@163.com>
+References: <20220723100128.2964304-1-williamsukatube@163.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] hfsplus: Fix code typo
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>, Xin Gao <gaoxin@cdjrlc.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220722195133.18730-1-gaoxin@cdjrlc.com>
- <YtsXiPPmQ5cqVsqp@casper.infradead.org>
-From:   Harald Arnesen <harald@skogtun.org>
-In-Reply-To: <YtsXiPPmQ5cqVsqp@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <165866041980.15455.8736055814592911853.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Matthew Wilcox [22/07/2022 23.32]:
+Commit-ID:     71349cc85e5930dce78ed87084dee098eba24b59
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/71349cc85e5930dce78ed87084dee098eba24b59
+Author:        William Dean <williamsukatube@163.com>
+AuthorDate:    Sat, 23 Jul 2022 18:01:28 +08:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Sun, 24 Jul 2022 10:54:44 +01:00
 
-> On Sat, Jul 23, 2022 at 03:51:33AM +0800, Xin Gao wrote:
->> The double `free' is duplicated in line 498, remove one.
-> 
-> This is wrong.  The intended meaning here is "trying to free bnode
-> which is already free".  Please don't send patches for code you don't
-> understand.
+irqchip/mips-gic: Check the return value of ioremap() in gic_of_init()
 
-Perhaps inserting an "a" in the message would make it clearer?
-(pr_crit("trying to free a free bnode ")
--- 
-Hilsen Harald
+The function ioremap() in gic_of_init() can fail, so
+its return value should be checked.
+
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@163.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220723100128.2964304-1-williamsukatube@163.com
+---
+ drivers/irqchip/irq-mips-gic.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+index ff89b36..a1f6d95 100644
+--- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -734,6 +734,10 @@ static int __init gic_of_init(struct device_node *node,
+ 	}
+ 
+ 	mips_gic_base = ioremap(gic_base, gic_len);
++	if (!mips_gic_base) {
++		pr_err("Failed to ioremap gic_base\n");
++		return -ENOMEM;
++	}
+ 
+ 	gicconfig = read_gic_config();
+ 	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);

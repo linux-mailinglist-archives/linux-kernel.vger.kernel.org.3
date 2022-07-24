@@ -2,90 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1505D57F4AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 12:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC3B57F4B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 12:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbiGXKZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 06:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S231218AbiGXKb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 06:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiGXKZr (ORCPT
+        with ESMTP id S229513AbiGXKbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 06:25:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B1CE40
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 03:25:46 -0700 (PDT)
+        Sun, 24 Jul 2022 06:31:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C0815720
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 03:31:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5AA461028
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 10:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CFFC3411E;
-        Sun, 24 Jul 2022 10:25:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E23C3B80D3F
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 10:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D09DC3411E;
+        Sun, 24 Jul 2022 10:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658658345;
-        bh=llr3NpuOtsHJafurgE+1bQ5Ai0owsCdalYBPSeJB2ok=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nhwUVI+T0cKTEoyz/KO7x19M282NEi+oeGqWBgdbZMW5Sjwf7TgvBpMgdgk/9HCki
-         /ZipPK4EMgLx8/SgMgiyKnhwNixw4I3jfzTVdSwGRQSB+JdAy5NrDUmcGMHi8L5BXa
-         Tzny134OVZRyabb1SN1ov6mxmjvlcD73jStFSZwKrd2Q58txFveoJ+mwuDDJqqEO24
-         WSOxyWIM1gs0PquPB2H7pmHb6dAfweVhON9a/z5Y/MgAAkOzuwWPDjOsduxQ6qzIW4
-         q013bsNztDTFV7P3VFKPuOFslIJ36UXEmbTMaepLGo7UHXUqghI/zMInDxOJxZlinj
-         EoJIFGPkXbbjA==
-Message-ID: <daecf6fe-6e12-ea6f-5463-747fdd0dd52e@kernel.org>
-Date:   Sun, 24 Jul 2022 18:25:40 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] f2fs: Delete f2fs_copy_page() and replace with
- memcpy_page()
-Content-Language: en-US
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>
-References: <20220717083613.3861-1-fmdefrancesco@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220717083613.3861-1-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1658658680;
+        bh=Wn3JIP8jLlSewLhGI7VhvO2klsr9IKr4l5DF4GHNwTs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Yj5CFV0HzTx0yN4+ZlUicubHbruWtCzJQsuPGB857cIY7WAh7Dki4NUGYRkBsXvGh
+         UVVbcIiXBVt4BEL6IKSjZj6w8AsseJzceFdWBk8+PiMm0G8ge/y5nxHXhoHJ1EXohr
+         M0AG4ZegiUrkzPtWog1OrNgaaX3qMOgAq1XO2iouanj/sno7YQujw/7BjZCuUNBbRQ
+         8rckFYPW3/zUwfXchmxjTXh/UifPA2BT3wpBlSZrgv21gRXu9Itn3BGV6Nj0JpWh3l
+         E4HKgO+AS1pk5TjyzlC6fR3LoSwtFr3o9/Ss9yHH0vbBbcOXyUYZWZjGxfWEhsh/N2
+         qJJ1UykfKKoiA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oFYtK-009fYt-0z;
+        Sun, 24 Jul 2022 11:31:18 +0100
+Date:   Sun, 24 Jul 2022 11:31:17 +0100
+Message-ID: <874jz6dcp6.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Biwen Li <biwen.li@nxp.com>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: Re: [PATCH v2] irqchip/ls-extirq: use raw spinlocks for regmap to avoid invalid wait context
+In-Reply-To: <20220722204019.969272-1-vladimir.oltean@nxp.com>
+References: <20220722204019.969272-1-vladimir.oltean@nxp.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: vladimir.oltean@nxp.com, linux-kernel@vger.kernel.org, lee.jones@linaro.org, tglx@linutronix.de, linux@rasmusvillemoes.dk, arnd@arndb.de, Zhiqiang.Hou@nxp.com, biwen.li@nxp.com, sean.anderson@seco.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/17 16:36, Fabio M. De Francesco wrote:
-> f2fs_copy_page() is a wrapper around two kmap() + one memcpy() from/to
-> the mapped pages. It unnecessarily duplicates a kernel API and it makes
-> use of kmap(), which is being deprecated in favor of kmap_local_page().
+On Fri, 22 Jul 2022 21:40:19 +0100,
+Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
 > 
-> Two main problems with kmap(): (1) It comes with an overhead as mapping
-> space is restricted and protected by a global lock for synchronization and
-> (2) it also requires global TLB invalidation when the kmap’s pool wraps
-> and it might block when the mapping space is fully utilized until a slot
-> becomes available.
+> The irqchip->irq_set_type method is called by __irq_set_trigger() under
+> the desc->lock raw spinlock.
 > 
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Therefore, its
-> use in __clone_blkaddrs() is safe and should be preferred.
+> The ls-extirq implementation, ls_extirq_irq_set_type(), uses an MMIO
+> regmap created by of_syscon_register(), which uses plain spinlocks
+> (the kind that are sleepable on RT).
 > 
-> Delete f2fs_copy_page() and use a plain memcpy_page() in the only one
-> site calling the removed function. memcpy_page() avoids open coding two
-> kmap_local_page() + one memcpy() between the two kernel virtual addresses.
+> Therefore, this is an invalid locking scheme for which we get a kernel
+> splat stating just that ("[ BUG: Invalid wait context ]"), because the
+> context in which the plain spinlock may sleep is atomic due to the raw
+> spinlock. We need to go raw spinlocks all the way.
 > 
-> Suggested-by: Christoph Hellwig <hch@infradead.org>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Make this driver create its own MMIO regmap, with use_raw_spinlock=true,
+> and stop relying on syscon to provide it. Since the regmap we got from
+> syscon belonged to the parent and this one belongs to us, the offset to
+> the INTPCR register is now 0, because of the address translation that
+> takes place through the device tree.
+> 
+> Another complication that we need to deal with is the fact that we need
+> to parse the 'little-endian'/'big-endian' specifiers that exist in
+> device trees for the parent ourselves now, since we no longer involve
+> syscon.
+> 
+> And yet one final complication, due to the fact that this driver uses
+> IRQCHIP_DECLARE rather than traditional platform devices with probe and
+> remove methods, is that we cannot use devres, so we need to implement a
+> full-blown cleanup procedure on the error path.
+> 
+> This patch depends on commit 67021f25d952 ("regmap: teach regmap to use
+> raw spinlocks if requested in the config").
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+This information doesn't belong to the commit message (and please read
+the documentation about the use of "This patch").
 
-Thanks,
+> 
+> Fixes: 0dcd9f872769 ("irqchip: Add support for Layerscape external interrupt lines")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+> v1->v2: create a separate regmap for the ls-extirq driver rather than
+>         relying on the one provided by syscon or modifying that.
+> 
+> For reference, v1 is at:
+> https://lore.kernel.org/lkml/20210825205041.927788-3-vladimir.oltean@nxp.com/
+> 
+> For extra reviewer convenience, the ls-extirq appears in the following
+> SoC device trees:
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi#L289
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi#L249
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi#L319
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi#L325
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi#L682
+> https://elixir.bootlin.com/linux/v5.18.13/source/arch/arm/boot/dts/ls1021a.dtsi#L182
+> 
+> Patch tested on LX2160A and LS1021A.
+> 
+>  drivers/irqchip/irq-ls-extirq.c | 81 +++++++++++++++++++++++----------
+>  1 file changed, 58 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-ls-extirq.c b/drivers/irqchip/irq-ls-extirq.c
+> index 853b3972dbe7..94a22642b3f2 100644
+> --- a/drivers/irqchip/irq-ls-extirq.c
+> +++ b/drivers/irqchip/irq-ls-extirq.c
+> @@ -6,7 +6,7 @@
+>  #include <linux/irqchip.h>
+>  #include <linux/irqdomain.h>
+>  #include <linux/of.h>
+> -#include <linux/mfd/syscon.h>
+> +#include <linux/of_address.h>
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+>  
+> @@ -16,8 +16,7 @@
+>  #define LS1021A_SCFGREVCR 0x200
+>  
+>  struct ls_extirq_data {
+> -	struct regmap		*syscon;
+> -	u32			intpcr;
+> +	struct regmap		*regmap;
+>  	bool			is_ls1021a_or_ls1043a;
+>  	u32			nirq;
+>  	struct irq_fwspec	map[MAXIRQ];
+> @@ -51,7 +50,10 @@ ls_extirq_set_type(struct irq_data *data, unsigned int type)
+>  	default:
+>  		return -EINVAL;
+>  	}
+> -	regmap_update_bits(priv->syscon, priv->intpcr, mask, value);
+> +	/* INTPCR is the only register of our regmap,
+> +	 * therefore its offset is 0
+> +	 */
+
+For multi-line comments, please use the normal kernel comment style,
+not the one that is mandated for net.
+
+> +	regmap_update_bits(priv->regmap, 0, mask, value);
+>  
+>  	return irq_chip_set_type_parent(data, type);
+>  }
+> @@ -143,48 +145,81 @@ ls_extirq_parse_map(struct ls_extirq_data *priv, struct device_node *node)
+>  static int __init
+>  ls_extirq_of_init(struct device_node *node, struct device_node *parent)
+>  {
+> -
+> +	struct regmap_config extirq_regmap_config = {
+> +		.name = "intpcr",
+> +		.reg_bits = 32,
+> +		.val_bits = 32,
+> +		.reg_stride = 4,
+> +		.use_raw_spinlock = true,
+> +	};
+>  	struct irq_domain *domain, *parent_domain;
+>  	struct ls_extirq_data *priv;
+> +	void __iomem *base;
+>  	int ret;
+>  
+>  	parent_domain = irq_find_host(parent);
+>  	if (!parent_domain) {
+>  		pr_err("Cannot find parent domain\n");
+> -		return -ENODEV;
+> +		ret = -ENODEV;
+> +		goto err_irq_find_host;
+>  	}
+>  
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> -	if (!priv)
+> -		return -ENOMEM;
+> -
+> -	priv->syscon = syscon_node_to_regmap(node->parent);
+> -	if (IS_ERR(priv->syscon)) {
+> -		ret = PTR_ERR(priv->syscon);
+> -		pr_err("Failed to lookup parent regmap\n");
+> -		goto out;
+> +	if (!priv) {
+> +		ret = -ENOMEM;
+> +		goto err_alloc_priv;
+> +	}
+> +
+> +	/* All extirq OF nodes are under a scfg/syscon node with
+> +	 * the 'ranges' property
+> +	 */
+> +	base = of_iomap(node, 0);
+> +	if (!base) {
+> +		pr_err("Cannot ioremap OF node %pOF\n", node);
+> +		ret = -ENOMEM;
+> +		goto err_iomap;
+>  	}
+> -	ret = of_property_read_u32(node, "reg", &priv->intpcr);
+> -	if (ret) {
+> -		pr_err("Missing INTPCR offset value\n");
+> -		goto out;
+> +
+> +	/* Parse the parent device's DT node for an endianness specification */
+> +	if (of_property_read_bool(parent, "big-endian"))
+> +		extirq_regmap_config.val_format_endian = REGMAP_ENDIAN_BIG;
+> +	else if (of_property_read_bool(parent, "little-endian"))
+> +		extirq_regmap_config.val_format_endian = REGMAP_ENDIAN_LITTLE;
+> +	else if (of_property_read_bool(parent, "native-endian"))
+> +		extirq_regmap_config.val_format_endian = REGMAP_ENDIAN_NATIVE;
+
+All of this should be rewritten to use of_device_is_big_endian(), and
+reduce the whole thing to two cases (I don't think native endian makes
+much sense anyway). I also wonder what the result is if none of these
+properties is present...
+
+> +
+> +	priv->regmap = regmap_init_mmio(NULL, base, &extirq_regmap_config);
+> +	if (IS_ERR(priv->regmap)) {
+> +		pr_err("Cannot create MMIO regmap: %pe\n", priv->regmap);
+> +		ret = PTR_ERR(priv->regmap);
+> +		goto err_regmap_init;
+
+Finally, what is the actual benefit of using a regmap here? It seems
+like a very roundabout way of performing a RMW on a register whilst
+holding a lock... Passing NULL for a device to regmap_init_mmio() also
+seems to be an extremely rare idiom (only 5 cases in the tree), and
+this doesn't seem completely right to me.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

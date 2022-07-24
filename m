@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E5157F7BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 02:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF3E57F7B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 01:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiGYAAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 20:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S232237AbiGXXiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 19:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGYAAt (ORCPT
+        with ESMTP id S229451AbiGXXiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 20:00:49 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94342AD9;
-        Sun, 24 Jul 2022 17:00:47 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LrgDC6q68z4xD9;
-        Mon, 25 Jul 2022 10:00:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658707245;
-        bh=Mzb3S0zhZB5099fE67pDAVxb56KP80OzxcaKW0EISm4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DgUMjRBwp9f/zH6r0ab6rLwj5/GA4Lc3D6JLjBb3X4Gq8REVy2zglhLlDF/Bs10jy
-         qJkfVoqNmEKV2Ykxy7j2u8ofUcDtyuaXzXMHyYydg9U+j+X1M50SMtpU9jPP3NqDWK
-         rBSEU/6HaaZMue3gSdbfFdK7derfSu/PDsc5Qx8D+EhARekrSFWY+AKUPE42pJfhSn
-         yLeo8oAgqiuHLFkvPRe0skf92NbjJH7ER2yDUK4QMCpDNeWlQY/IEIPgPfuDRUf+VM
-         GOvChjTIRJrgpvGfp43ZTJyUGwTP1kfO8nygsMUO1/jHxKvya/sNYlfDgfX1WZsD5v
-         Iz/i/E75FUZ+g==
-Date:   Mon, 25 Jul 2022 09:33:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: linux-next: manual merge of the risc-v tree with Linus' tree
-Message-ID: <20220725093316.2a3a7b05@canb.auug.org.au>
+        Sun, 24 Jul 2022 19:38:13 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D11FD22;
+        Sun, 24 Jul 2022 16:38:11 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id ss3so17548635ejc.11;
+        Sun, 24 Jul 2022 16:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zry4/Dnu3duQwGon0guy4XCJ4bIwk7GLsI711tvINGE=;
+        b=mXLbCdtnED17zPc6VHdf4G2FqaK+372fB1thKbOBo4XMR+ekH2taFb0C7L4C67lC9i
+         GaqdlIFBnTzJITyUrBwLIaq+McdQgaIeo0FIeUAGhu/TXkTNqO6Hz4uTjZVfhUp2qAu9
+         5Mm7tY4PYLZ+hZWQ0j295Hy/hPl1x8vgXGiqj3mChvBVTGKUolD2YGOegi+9a2BuZfK+
+         FTxKitQBTU4mF0xOos365ML7J0MOXS0kV8Bkzb/xshn36m4Qyjv4u4BCYmxWR6tYlmbI
+         qXEKGHDAzHN9lHQG+imHrovn5XTBM6JZMzCAfv80yBzz3/q2jaAEfTvfXMStzbnXZ+Ri
+         s7/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zry4/Dnu3duQwGon0guy4XCJ4bIwk7GLsI711tvINGE=;
+        b=vbpyiA5WEgw+7yJUZSDljdy3NQu9x7gXyJINAWbWlJ9l7jDV7QicMBvUAEgYhTJwTY
+         VMtg9Nz+mlcHJahkZiOiXApmzte04kvP6Ywv6T3i+K68vSdZmQMWFrlXehX4HIvPhiIk
+         0sq6iE8PBewnwbdC/x09u9Z7SNtmnnfUz1p6vbrkyQCbMsxW8Y7mptAYJkkSwyRXVYoq
+         h/5lUh7RPFzg2oW2cW9VmDbzDwRzwYF0KIBG/56V9Rn1vLbJ1i+Y5a0RGUhUkc1b+0x3
+         th4nORlLaZd4zbFp/PPKYUtRYwSnolo01bJWYPaGw7JY91055XyZ/4VKlI9UKuIXB5ZF
+         Bj/Q==
+X-Gm-Message-State: AJIora/ay+6+Z0H+AJz2nnqgg8JsqdLPqAb15S4idV8CdS1TcNly9fOT
+        FL1hxM30YnbCyW97ZNBFN00=
+X-Google-Smtp-Source: AGRyM1tHmMp0RqSfGlUzi/WFEL62th3+01CTxKT+PYryHncJ+6BdWa6F15F8VqTPwVdmgvaniVt/KQ==
+X-Received: by 2002:a17:907:7fa5:b0:72b:755a:b77e with SMTP id qk37-20020a1709077fa500b0072b755ab77emr7895461ejc.474.1658705890282;
+        Sun, 24 Jul 2022 16:38:10 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id ez20-20020a056402451400b0043bc61348casm6132674edb.65.2022.07.24.16.38.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 16:38:09 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 02:38:07 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Marcin Wojtas <mw@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk, jaz@semihalf.com,
+        tn@semihalf.com
+Subject: Re: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for
+ CPU/DSA ports
+Message-ID: <20220724233807.bthah6ctjadl35by@skbuf>
+References: <20220714010021.1786616-1-mw@semihalf.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/y.lNQ2AI/mgks3NtZRsevPe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220714010021.1786616-1-mw@semihalf.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,83 +74,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/y.lNQ2AI/mgks3NtZRsevPe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Marcin,
 
-Hi all,
+On Thu, Jul 14, 2022 at 03:00:21AM +0200, Marcin Wojtas wrote:
+> Commit 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
+> stopped relying on SPEED_MAX constant and hardcoded speed settings
+> for the switch ports and rely on phylink configuration.
+> 
+> It turned out, however, that when the relevant code is called,
+> the mac_capabilites of CPU/DSA port remain unset.
+> mv88e6xxx_setup_port() is called via mv88e6xxx_setup() in
+> dsa_tree_setup_switches(), which precedes setting the caps in
+> phylink_get_caps down in the chain of dsa_tree_setup_ports().
+> 
+> As a result the mac_capabilites are 0 and the default speed for CPU/DSA
+> port is 10M at the start. To fix that execute phylink_get_caps() callback
+> which fills port's mac_capabilities before they are processed.
+> 
+> Fixes: 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
+> Signed-off-by: Marcin Wojtas <mw@semihalf.com>
+> ---
+>  drivers/net/dsa/mv88e6xxx/chip.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+> index 37b649501500..9fab76f256bb 100644
+> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> @@ -3293,7 +3293,12 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
+>  	 * port and all DSA ports to their maximum bandwidth and full duplex.
+>  	 */
+>  	if (dsa_is_cpu_port(ds, port) || dsa_is_dsa_port(ds, port)) {
+> -		unsigned long caps = dp->pl_config.mac_capabilities;
+> +		unsigned long caps;
+> +
+> +		if (ds->ops->phylink_get_caps)
+> +			ds->ops->phylink_get_caps(ds, port, &dp->pl_config);
+> +
+> +		caps = dp->pl_config.mac_capabilities;
 
-Today's linux-next merge of the risc-v tree got a conflict in:
+We'll need this bug fixed in net-next one way or another.
+If you resend this patch, please change the following:
 
-  arch/riscv/include/asm/errata_list.h
+(1) it's silly to (a) check for the presence of ds->ops->phylink_get_caps and
+    (b) do an indirect function call when you know that the implementation is
+    mv88e6xxx_get_caps(). So just call that.
 
-between commit:
+(2) please don't touch &dp->pl_config, just create an on-stack
+    struct phylink_config pl_config, and let DSA do its thing with
+    &dp->pl_config whenever the timing of dsa_port_phylink_create() is.
 
-  e83031564137 ("riscv: Fix ALT_THEAD_PMA's asm parameters")
-
-from Linus' tree and commit:
-
-  9c2ea4a36364 ("riscv: convert the t-head pbmt errata to use the __nops ma=
-cro")
-
-from the risc-v tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/riscv/include/asm/errata_list.h
-index 416ead0f9a65,e4ee53551343..000000000000
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@@ -68,19 -68,13 +68,13 @@@ asm(ALTERNATIVE_2("li %0, 0\t\nnop"
-   */
-  #define ALT_THEAD_PMA(_val)						\
-  asm volatile(ALTERNATIVE(						\
-- 	"nop\n\t"							\
-- 	"nop\n\t"							\
-- 	"nop\n\t"							\
-- 	"nop\n\t"							\
-- 	"nop\n\t"							\
-- 	"nop\n\t"							\
-- 	"nop",								\
-+ 	__nops(7),							\
- -	"li      t3, %2\n\t"						\
- -	"slli    t3, t3, %4\n\t"					\
- +	"li      t3, %1\n\t"						\
- +	"slli    t3, t3, %3\n\t"					\
-  	"and     t3, %0, t3\n\t"					\
-  	"bne     t3, zero, 2f\n\t"					\
- -	"li      t3, %3\n\t"						\
- -	"slli    t3, t3, %4\n\t"					\
- +	"li      t3, %2\n\t"						\
- +	"slli    t3, t3, %3\n\t"					\
-  	"or      %0, %0, t3\n\t"					\
-  	"2:",  THEAD_VENDOR_ID,						\
-  		ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)		\
-
-
---Sig_/y.lNQ2AI/mgks3NtZRsevPe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLd1rwACgkQAVBC80lX
-0Gx8Mgf/aJaFoirExIuQx9TeAihT0lfk6p6S53tS8abnEduHH1L2JXsaQZKQdhZ0
-Wm95CjbJ9xehMu6DLXkMZmIDAWV8O0Hrj1z8rNntNhDUxxW09irV70vQmnF0phAP
-L6C8tOsSvJTe53s7w6si11G+e0irVgAF/f9/wN8NuAgaB9YRuUiqIqqfCInFep5D
-qbE90iYiZaw2W8HN8mruRLFe+x8p86T6A+FhtsYTaFeLtx4BNz86QvJNHxsQZPXj
-/kb86DDubHH49RIixs3/3oPKwMm4n2o6hInykSsCzx8brZ1qCy4wc1z+uXZiO5jj
-jnGCp4odBs2qg7tTsYJOUwWVAZcVIw==
-=X1Xr
------END PGP SIGNATURE-----
-
---Sig_/y.lNQ2AI/mgks3NtZRsevPe--
+>  
+>  		if (chip->info->ops->port_max_speed_mode)
+>  			mode = chip->info->ops->port_max_speed_mode(port);
+> -- 
+> 2.29.0
+> 

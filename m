@@ -2,163 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4908957F6B9
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2510757F6BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiGXTst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 15:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S230414AbiGXTvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 15:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiGXTsr (ORCPT
+        with ESMTP id S229492AbiGXTvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 15:48:47 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6C4EE1F
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:48:45 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1oFhak-0007Uy-Ps; Sun, 24 Jul 2022 21:48:42 +0200
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2022-07-24]
-Date:   Sun, 24 Jul 2022 19:48:41 +0000
-Message-Id: <165869171256.283493.2326902986633030609@leemhuis.info>
-X-Mailer: git-send-email 2.37.1
-Content-Type: text/plain; charset="utf-8"
+        Sun, 24 Jul 2022 15:51:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DF51D11C
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658692261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r9inbt98jsYkVMrgoCWp1i9QvqhbBgRlizGTcBJDaPI=;
+        b=F2QmdkMHRJ9XKtEZ3ZwE3LjTtbwD287c+DKw/q3Lgmb/hPQ/GN5HECXt3CTxuqOQOY700h
+        vjBQCHzelbVxHaoZuPUOECE5lX57qUuJK+1rk9hwFXsvdHoMEmlhnjRc83nke8RzrzI0yB
+        yJgElZCtzDIO33jygAAjYv+iiXrnuKs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-407-ltWnvOQmOmuTUexfmqfJiQ-1; Sun, 24 Jul 2022 15:50:59 -0400
+X-MC-Unique: ltWnvOQmOmuTUexfmqfJiQ-1
+Received: by mail-wm1-f72.google.com with SMTP id v67-20020a1cac46000000b003a2be9fa09cso5109719wme.3
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:50:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=r9inbt98jsYkVMrgoCWp1i9QvqhbBgRlizGTcBJDaPI=;
+        b=e72cMTlTYpk+zPH6oOXzpErj2xF/DEaHKof0XMaLvPFEk3euacx7jeNSB7F7m1fRHt
+         UwWWM+y0U2dqsBkf8XaDIP1DNbc0CEYhyV02uhN49cScd4rZc1VAb4LgY+OWNrzbIz8H
+         IbVCtiF/fWWNcJEbBsevkmsO1kSMpw5anlBEkw0CpBmVLzOllIz/dRogIG3csPcEiux0
+         kDHd3CBwr9ApphxdBqNQIk6EyujfPAHIFPF8uSNbwkbvYU5rqg4R3UTuiPHXoxb5FoMZ
+         BNRK7Qa8lpnOFgp5QwEXwzp4CVsk6uJwgIpAVFPit7d6Rt2vRdQDo6QhU5VrdUZtTuPK
+         2hWQ==
+X-Gm-Message-State: AJIora8zt4K/DBAKLWrQv7Yvw4t3W9Dp9q2fs0JtDr5mulxHXvqEELOZ
+        a1csq8bW6iJjneVj5C+iLtpFzZUjDYzFbxp6N0BXcWojRgNHTOmloFuWVbx8qRDAVVPx6bqm0Wj
+        8hiJQwnMZeocLIFB3fxsuCtL7
+X-Received: by 2002:a05:600c:4fd5:b0:3a3:4664:6d55 with SMTP id o21-20020a05600c4fd500b003a346646d55mr6458332wmq.73.1658692258573;
+        Sun, 24 Jul 2022 12:50:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uoDoNu1JLD2TNJP7ydWkOxddGEuigmdMNKn4c8VjBMMj5w1Ik7ZxaOU03qLsLDrorqkPvlCw==
+X-Received: by 2002:a05:600c:4fd5:b0:3a3:4664:6d55 with SMTP id o21-20020a05600c4fd500b003a346646d55mr6458323wmq.73.1658692258383;
+        Sun, 24 Jul 2022 12:50:58 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003a30fbde91dsm17433209wms.20.2022.07.24.12.50.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 12:50:57 -0700 (PDT)
+Message-ID: <630a6654-0305-f3a8-e062-f13a0074d35a@redhat.com>
+Date:   Sun, 24 Jul 2022 21:50:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1658692125;db11c0c6;
-X-HE-SMSGID: 1oFhak-0007Uy-Ps
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] drm/msm: Make .remove and .shutdown HW shutdown
+ consistent
+Content-Language: en-US
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220724111327.1195693-1-javierm@redhat.com>
+ <CAA8EJppEpPe4nfZ_kvNen6shSvgyUoL3adSQfhhCGCS2VmVZhQ@mail.gmail.com>
+ <6b3f98db-83bf-41cd-b23d-79b455a06ebd@redhat.com>
+In-Reply-To: <6b3f98db-83bf-41cd-b23d-79b455a06ebd@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus! Below is the report from regzbot listing all regression from
-this cycle that the bot and I are aware of. Let me please highlight two
-things:
+On 7/24/22 20:47, Javier Martinez Canillas wrote:
+> Hello Dmitry,
 
-* The following patch fixing a build bug reported three times now, that
-didn't get any reaction from the maintainer since it was posted six days
-ago:
-https://lore.kernel.org/lkml/20220717231105.33005-1-kilobyte@angband.pl/
+[...]
 
-* The virtio regression is kinda fixed by c346dae4f3fb already, but
-there is a patch in the branch Michael usually uses to sent patches to
-you that he for one reason or another hasn't sent your way yet:
-https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=vhost&idj9720576cd00d30722c5f755bd17d4cfa9df636
-I asked what's up here a few days ago, but sadly got no reply.
+>> Now there is no point in having this as a separate function. Could you
+> 
+> The only reason why I kept this was to avoid duplicating the same comment
+> in two places. I thought that an inline function would be better than that.
+> 
+>> please inline it?
+>>
 
-HTH, Ciao, Thorsten
+Or do you mean inline it as dropping the wrapper helper and just call to
+drm_atomic_helper_shutdown() in both callbacks ? I'm OK with that but as
+mentioned then we should probably have to duplicate the comment.
 
----
-Hi, this is regzbot, the Linux kernel regression tracking bot.
+Since is marked as inline anyways, the resulting code should be the same.
 
-Currently I'm aware of 23 regressions in linux-mainline. Find the
-current status below and the latest on the web:
+-- 
+Best regards,
 
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-========================================================
-current cycle (v5.18.. aka v5.19-rc), culprit identified
-========================================================
-
-
-[BUILD BUG] regression from certs: Move load_certificate_list() to be with the asymmetric keys code
----------------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20220712104554.408dbf42@gandalf.local.home/
-https://lore.kernel.org/lkml/20220712104554.408dbf42@gandalf.local.home/
-
-By Steven Rostedt; 12 days ago; 3 activities, latest 6 days ago.
-Introduced in 60050ffe3d77 (v5.19-rc4)
-
-Recent activities from: Adam Borowski (2)
-
-One patch associated with this regression:
-* [PATCH] certs: make system keyring depend on x509 parser
-  https://lore.kernel.org/lkml/20220718135034.51457-1-kilobyte@angband.pl/
-  6 days ago, by Adam Borowski
-
-Noteworthy links:
-* [PATCH] certs: make system keyring depend on x509 parser
-  https://lore.kernel.org/lkml/20220717231105.33005-1-kilobyte@angband.pl/
-  6 days ago, by Adam Borowski; thread monitored.
-
-
-[ *NEW* ] fs: recent changes to copy_file_range behavior breakage
------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/YtTM8GYn0/HkSoet@squish.home.loc/
-https://lore.kernel.org/regressions/YtTM8GYn0%2FHkSoet@squish.home.loc/
-
-By Paul Thompson; 6 days ago; 2 activities, latest 6 days ago.
-Introduced in 868f9f2f8e00 (v5.19-rc5)
-
-Recent activities from: Amir Goldstein (1), Paul Thompson (1)
-
-
-virtio_balloon regression in 5.19-rc3
--------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/64c567bc77c4fbe7bfe37467cc1c89d24a45c37a.camel@decadent.org.uk/
-https://lore.kernel.org/virtualization/64c567bc77c4fbe7bfe37467cc1c89d24a45c37a.camel@decadent.org.uk/
-
-By Ben Hutchings; 34 days ago; 22 activities, latest 14 days ago.
-Introduced in 8b4ec69d7e09 (v5.19-rc1)
-
-Fix incoming:
-* virtio: VIRTIO_HARDEN_NOTIFICATION is broken
-  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=6a9720576cd00d30722c5f755bd17d4cfa9df636
-
-
-====================================================
-current cycle (v5.18.. aka v5.19-rc), unkown culprit
-====================================================
-
-
-PM: hibernate: Sound Distortion on boot
----------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/46fd7a73-06fd-a8a0-8530-0ecf9b18c08d@dragonslave.de/
-https://lore.kernel.org/lkml/46fd7a73-06fd-a8a0-8530-0ecf9b18c08d@dragonslave.de/
-
-By Daniel Exner; 12 days ago; 5 activities, latest 10 days ago.
-Introduced in v5.19-rc1..v5.19-rc4
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/165808300299.1270116.2805091955648892933@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/

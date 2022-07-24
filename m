@@ -2,198 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C1957F44E
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAB557F450
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbiGXJNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S230504AbiGXJO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 05:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiGXJNn (ORCPT
+        with ESMTP id S229486AbiGXJOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:13:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4816814034
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:13:42 -0700 (PDT)
+        Sun, 24 Jul 2022 05:14:54 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF9B14086
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:14:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658654022; x=1690190022;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AzxZtybqvJM0/ZZ2jKJszUtZP/9aLY29CH9nP0hU6Gc=;
-  b=WpCocqoy6hO5jonLZ8Du0ed3+sgygYlMXuFo55TGeyuwpWqu9Euo1df7
-   uMZAFo6JMZg+xsuP22UnLADWIY8gzFmKq+iJX26jHInAQwN2oJmDzsdUr
-   FGBeYKju/XfBimujQTPohT5IXJUIqrijVi2EZiBtB0tXiSS9wd7A5l59e
-   H0Cwt1ijQw4jYE2Ar+ZE3f4RmYXU/Wy49l1UUM/p+493fD74v4kUXnsqh
-   BUJ9TE0KqNJbtMldNJgK/g09ljg/HuKH6wjnkPlF0BN3gFZDGPhXkETSw
-   t1wPpyyCrqI4WeDndYh+ELWAxFdeXgBRxU+pCBmalNB+fIYI8P/Bcge9l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="313270940"
+  t=1658654093; x=1690190093;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OTXqHOO8WYsNZtbkBYD1+ynPZaYAk4JdOmi56ur1hf4=;
+  b=dQZbOz1d4ahguFwTLycpQIu89yei99F3phk7i0Z35JXNEpNv1+qazR13
+   Pb7G2J7PcQ1DmkcafMwNg4mqlTEOHE/VV2XWiywxOVTLX4kZigPRi1H0f
+   2RMgjHg/sJf8/ZdK+w4ebY8vwAsfSbxzrEK3ObUWuCMVU/nQ7ZX5Fc8B+
+   iS1ZVdKyk4AwF3nFiWChmYjeOa6NzUodnU5WT2r1f7Pgf/E3jMMd7af80
+   nJZgppccF58rCF6t9OuVGMMGNmUngw/TLWCByQ0q1O0EdAyq147sFuOlt
+   /ZsDlgUpBoStGyYdd1RrSLl6CwcoK0c6/rrOKd/AHSnunWCDd0eFyUaWl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="351523879"
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="313270940"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:13:41 -0700
+   d="scan'208";a="351523879"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:14:52 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="657763568"
-Received: from zjiang1-mobl.ccr.corp.intel.com (HELO [10.249.170.155]) ([10.249.170.155])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:13:37 -0700
-Message-ID: <5d353fe4-b642-992e-ef42-7d7f8b2edf7e@linux.intel.com>
-Date:   Sun, 24 Jul 2022 17:13:35 +0800
+   d="scan'208";a="688732829"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2022 02:14:51 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFXhK-0003kz-12;
+        Sun, 24 Jul 2022 09:14:50 +0000
+Date:   Sun, 24 Jul 2022 17:14:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/for-next-fam1] BUILD SUCCESS
+ fa90052f7f800f3ec08923893126ada962c44028
+Message-ID: <62dd0d5c.VFs5sTouu/wGl2e8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
- interface
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-5-baolu.lu@linux.intel.com>
- <20220723141118.GD79279@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220723141118.GD79279@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/23 22:11, Jason Gunthorpe wrote:
->> +void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
->> +			       ioasid_t pasid)
->> +{
->> +	struct iommu_group *group = iommu_group_get(dev);
->> +
->> +	mutex_lock(&group->mutex);
->> +	domain->ops->block_dev_pasid(domain, dev, pasid);
-> I still really this OP, it is nonsense to invoke 'block_dev_pasid' on
-> a domain, it should be on the iommu ops and it should not take in a
-> domain parameter. This is why I prefer we write it as
-> 
-> domain->ops->set_dev_pasid(group->blocking_domain, dev, pasid);
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/for-next-fam1
+branch HEAD: fa90052f7f800f3ec08923893126ada962c44028  media: pci: cx18-scb.h: Replace one-element array with flexible-array member
 
-I originally plan to refactor this after both Intel and ARM SMMUv3
-drivers have real blocking domain supports. After revisiting this, it
-seems that the only difficulty is how to check whether a domain is a
-blocking domain. I am going to use below checking code:
+elapsed time: 720m
 
-+	/*
-+	 * Detach the domain if a blocking domain is set. Check the
-+	 * right domain type once the IOMMU driver supports a real
-+	 * blocking domain.
-+	 */
-+	if (!domain || domain->type == IOMMU_DOMAIN_UNMANAGED) {
+configs tested: 113
+configs skipped: 4
 
-Does this work for you?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The incremental changes look like below:
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+i386                          randconfig-c001
+um                                  defconfig
+arm                           h5000_defconfig
+mips                  decstation_64_defconfig
+mips                         mpc30x_defconfig
+powerpc                     pq2fads_defconfig
+mips                       bmips_be_defconfig
+x86_64                              defconfig
+mips                         bigsur_defconfig
+sh                          rsk7269_defconfig
+sh                     magicpanelr2_defconfig
+sh                          r7785rp_defconfig
+parisc                           alldefconfig
+m68k                          amiga_defconfig
+mips                 decstation_r4k_defconfig
+arm                           stm32_defconfig
+arm                           tegra_defconfig
+sh                                  defconfig
+parisc                generic-64bit_defconfig
+mips                           jazz_defconfig
+xtensa                           allyesconfig
+m68k                          sun3x_defconfig
+xtensa                    smp_lx200_defconfig
+arm                         nhk8815_defconfig
+powerpc                     tqm8548_defconfig
+openrisc                         alldefconfig
+ia64                         bigsur_defconfig
+loongarch                           defconfig
+parisc64                         alldefconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+loongarch                         allnoconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220724
+ia64                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+mips                             allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220724
+riscv                randconfig-r042-20220724
+s390                 randconfig-r044-20220724
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 6633c7b040b8..9f8748b51630 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -890,22 +890,23 @@ static int intel_svm_set_dev_pasid(struct 
-iommu_domain *domain,
-  	int ret = 0;
+clang tested configs:
+mips                          malta_defconfig
+powerpc                 mpc832x_mds_defconfig
+mips                        bcm63xx_defconfig
+mips                           mtx1_defconfig
+riscv                    nommu_virt_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                     ppa8548_defconfig
+mips                      malta_kvm_defconfig
+mips                           rs90_defconfig
+powerpc                   microwatt_defconfig
+powerpc                 mpc8272_ads_defconfig
+arm                        spear3xx_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+hexagon              randconfig-r041-20220724
+hexagon              randconfig-r045-20220724
 
-  	mutex_lock(&pasid_mutex);
--	sva = intel_svm_bind_mm(iommu, dev, mm);
--	if (IS_ERR(sva))
--		ret = PTR_ERR(sva);
-+	/*
-+	 * Detach the domain if a blocking domain is set. Check the
-+	 * right domain type once the IOMMU driver supports a real
-+	 * blocking domain.
-+	 */
-+	if (!domain || domain->type == IOMMU_DOMAIN_UNMANAGED) {
-+		intel_svm_unbind_mm(dev, pasid);
-+	} else {
-+		sva = intel_svm_bind_mm(iommu, dev, mm);
-+		if (IS_ERR(sva))
-+			ret = PTR_ERR(sva);
-+	}
-  	mutex_unlock(&pasid_mutex);
-
-  	return ret;
-  }
-
--static void intel_svm_block_dev_pasid(struct iommu_domain *domain,
--				      struct device *dev, ioasid_t pasid)
--{
--	mutex_lock(&pasid_mutex);
--	intel_svm_unbind_mm(dev, pasid);
--	mutex_unlock(&pasid_mutex);
--}
--
-  static void intel_svm_domain_free(struct iommu_domain *domain)
-  {
-  	kfree(to_dmar_domain(domain));
-@@ -913,7 +914,6 @@ static void intel_svm_domain_free(struct 
-iommu_domain *domain)
-
-  static const struct iommu_domain_ops intel_svm_domain_ops = {
-  	.set_dev_pasid		= intel_svm_set_dev_pasid,
--	.block_dev_pasid	= intel_svm_block_dev_pasid,
-  	.free			= intel_svm_domain_free,
-  };
-
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index efe6a58eee48..a7f7a611fcce 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -3262,7 +3262,7 @@ void iommu_detach_device_pasid(struct iommu_domain 
-*domain, struct device *dev,
-  	struct iommu_group *group = iommu_group_get(dev);
-
-  	mutex_lock(&group->mutex);
--	domain->ops->block_dev_pasid(domain, dev, pasid);
-+	domain->ops->set_dev_pasid(group->blocking_domain, dev, pasid);
-  	WARN_ON(xa_erase(&group->pasid_array, pasid) != domain);
-  	mutex_unlock(&group->mutex);
-
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index ba6543f4c6a2..c52dccb86460 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -283,7 +283,6 @@ struct iommu_ops {
-   * @attach_dev: attach an iommu domain to a device
-   * @detach_dev: detach an iommu domain from a device
-   * @set_dev_pasid: set an iommu domain to a pasid of device
-- * @block_dev_pasid: block pasid of device from using iommu domain
-   * @map: map a physically contiguous memory region to an iommu domain
-   * @map_pages: map a physically contiguous set of pages of the same 
-size to
-   *             an iommu domain.
-@@ -306,8 +305,6 @@ struct iommu_domain_ops {
-  	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
-  	int (*set_dev_pasid)(struct iommu_domain *domain, struct device *dev,
-  			     ioasid_t pasid);
--	void (*block_dev_pasid)(struct iommu_domain *domain, struct device *dev,
--				ioasid_t pasid);
-
-  	int (*map)(struct iommu_domain *domain, unsigned long iova,
-  		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
-
-Best regards,
-baolu
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

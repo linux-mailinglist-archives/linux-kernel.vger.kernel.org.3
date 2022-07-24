@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8750D57F4A6
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 12:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E7857F4A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 12:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbiGXKQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 06:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S229925AbiGXKQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 06:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiGXKQJ (ORCPT
+        with ESMTP id S229450AbiGXKQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 06:16:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE991F5A2;
-        Sun, 24 Jul 2022 03:16:07 -0700 (PDT)
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LrJsr6BWnzkWR3;
-        Sun, 24 Jul 2022 18:13:36 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Jul 2022 18:16:05 +0800
-Received: from huawei.com (10.67.175.34) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 24 Jul
- 2022 18:16:04 +0800
-From:   Ren Zhijie <renzhijie2@huawei.com>
-To:     <hongxing.zhu@nxp.com>, <l.stach@pengutronix.de>,
-        <lpieralisi@kernel.org>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>
-CC:     <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Ren Zhijie <renzhijie2@huawei.com>
-Subject: [PATCH -next] PCI: imx6: Fix build error unused-function
-Date:   Sun, 24 Jul 2022 18:13:53 +0800
-Message-ID: <20220724101353.127875-1-renzhijie2@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sun, 24 Jul 2022 06:16:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAFC9FDF;
+        Sun, 24 Jul 2022 03:16:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56FD86102A;
+        Sun, 24 Jul 2022 10:16:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14614C3411E;
+        Sun, 24 Jul 2022 10:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658657759;
+        bh=O48nzOi2R9qh/OWeuXuKdIr+sSdg6b0BKHyG9bM2AlM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HK08MJbbuX/2xeE7knccMg1L3ztoSF1Q7UvZZX/WEM4G4jU7ehUy8UeVydTLHY/hm
+         HHEgXlhBn0JPwmEPsx9M6TB7pbFiHZj8EMjXwsBryBQ+sr+UUBDJTfQjngJWZIfjVp
+         AJ5L1FbsiQ3Q3DA52C6x820W8Nk50D/g7LRe0vSeKWJubwyDG2JRU138k/MYICim1o
+         fHL/izzaRAUipaVmeW+beQkbT1h9oiQ5cvYXoD+ldpYoE+Dp+RaN3NAq2qghbcBmdb
+         wjbHOAC4KwCAyuqOTXKJplX1MckID2mE/1wrFXIKo9FucMXbs0CAoFVKl72jqwieW1
+         Dr99gM5d4DuZw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jianglei Nie <niejianglei2021@163.com>, sj@kernel.org,
+        akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] mm/damon/reclaim: fix potential memory leak in damon_reclaim_init()
+Date:   Sun, 24 Jul 2022 10:15:57 +0000
+Message-Id: <20220724101557.3137-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <YtzyXCR/OCLYRSPx@kroah.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.34]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,49 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CONFIG_PM_SLEEP is not set,
-make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will be failed, like this:
+Hi Jianglei and Greg,
 
-drivers/pci/controller/dwc/pci-imx6.c:973:13: error: ‘imx6_pcie_host_exit’ defined but not used [-Werror=unused-function]
- static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
-             ^~~~~~~~~~~~~~~~~~~
-drivers/pci/controller/dwc/pci-imx6.c:904:13: error: ‘imx6_pcie_stop_link’ defined but not used [-Werror=unused-function]
- static void imx6_pcie_stop_link(struct dw_pcie *pci)
-             ^~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-make[4]: *** [drivers/pci/controller/dwc/pci-imx6.o] Error 1
+On Sun, 24 Jul 2022 09:18:52 +0200 Greg KH <gregkh@linuxfoundation.org> wrote:
 
-These two functions imx6_pcie_host_exit() and imx6_pcie_stop_link() only be called by imx6_pcie_suspend_noirq(), which was warpped by CONFIG_PM_SLEEP.
-To fix build error unused-function, use __maybe_unused to attach them.
+> On Sun, Jul 24, 2022 at 02:52:24PM +0800, Jianglei Nie wrote:
+> > damon_reclaim_init() allocates a memory chunk for ctx with
+> > damon_new_ctx(). When damon_select_ops() fails, ctx is not released, which
+> > will lead to a memory leak.
+> > 
+> > We should release the ctx with damon_destroy_ctx() when damon_select_ops()
+> > fails to fix the memory leak.
+> > 
+> > Fixes: 4d69c3457821 ("mm/damon/reclaim: use damon_select_ops() instead of damon_{v,p}a_set_operations()")
+> > Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> > ---
+> >  mm/damon/reclaim.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+> > index 4b07c29effe9..0b3c7396cb90 100644
+> > --- a/mm/damon/reclaim.c
+> > +++ b/mm/damon/reclaim.c
+> > @@ -441,8 +441,10 @@ static int __init damon_reclaim_init(void)
+> >  	if (!ctx)
+> >  		return -ENOMEM;
+> >  
+> > -	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
+> > +	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
+> > +		damon_destroy_ctx(ctx);
+> >  		return -EINVAL;
+> > +	}
+> >  
+> >  	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
+> >  	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
+> > -- 
+> > 2.25.1
+> > 
+> 
+> <formletter>
+> 
+> This is not the correct way to submit patches for inclusion in the
+> stable kernel tree.  Please read:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> for how to do this properly.
+> 
+> </formletter>
 
-Fixes: 25ae5434c3de ("PCI: imx6: Reformat suspend callback to keep symmetric with resume")
-Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
----
- drivers/pci/controller/dwc/pci-imx6.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thank you for the notice, Greg.  Jianglei, please read that great document.
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 55e109d1ab27..533f5ef68e94 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -901,7 +901,7 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
- 	return 0;
- }
- 
--static void imx6_pcie_stop_link(struct dw_pcie *pci)
-+static void __maybe_unused imx6_pcie_stop_link(struct dw_pcie *pci)
- {
- 	struct device *dev = pci->dev;
- 
-@@ -970,7 +970,7 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
- 	return ret;
- }
- 
--static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
-+static void __maybe_unused imx6_pcie_host_exit(struct dw_pcie_rp *pp)
- {
- 	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
- 	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
--- 
-2.17.1
+And Andrew already added the 'Fixes:' and 'Cc: stable@' tags in the patch when
+he added[1] it in the mm tree.  Hence I think this would be merged in the
+appropriate stable series once it gets merged in the mainline.
 
+[1] https://lore.kernel.org/mm-commits/20220717004946.7AD93C34114@smtp.kernel.org/
+
+
+Thanks,
+SJ

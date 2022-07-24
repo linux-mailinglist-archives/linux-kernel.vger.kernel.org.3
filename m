@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2510757F6BC
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E666257F6BF
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiGXTvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 15:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S229850AbiGXTzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 15:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiGXTvD (ORCPT
+        with ESMTP id S229469AbiGXTzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 15:51:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DF51D11C
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658692261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r9inbt98jsYkVMrgoCWp1i9QvqhbBgRlizGTcBJDaPI=;
-        b=F2QmdkMHRJ9XKtEZ3ZwE3LjTtbwD287c+DKw/q3Lgmb/hPQ/GN5HECXt3CTxuqOQOY700h
-        vjBQCHzelbVxHaoZuPUOECE5lX57qUuJK+1rk9hwFXsvdHoMEmlhnjRc83nke8RzrzI0yB
-        yJgElZCtzDIO33jygAAjYv+iiXrnuKs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-ltWnvOQmOmuTUexfmqfJiQ-1; Sun, 24 Jul 2022 15:50:59 -0400
-X-MC-Unique: ltWnvOQmOmuTUexfmqfJiQ-1
-Received: by mail-wm1-f72.google.com with SMTP id v67-20020a1cac46000000b003a2be9fa09cso5109719wme.3
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:50:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=r9inbt98jsYkVMrgoCWp1i9QvqhbBgRlizGTcBJDaPI=;
-        b=e72cMTlTYpk+zPH6oOXzpErj2xF/DEaHKof0XMaLvPFEk3euacx7jeNSB7F7m1fRHt
-         UwWWM+y0U2dqsBkf8XaDIP1DNbc0CEYhyV02uhN49cScd4rZc1VAb4LgY+OWNrzbIz8H
-         IbVCtiF/fWWNcJEbBsevkmsO1kSMpw5anlBEkw0CpBmVLzOllIz/dRogIG3csPcEiux0
-         kDHd3CBwr9ApphxdBqNQIk6EyujfPAHIFPF8uSNbwkbvYU5rqg4R3UTuiPHXoxb5FoMZ
-         BNRK7Qa8lpnOFgp5QwEXwzp4CVsk6uJwgIpAVFPit7d6Rt2vRdQDo6QhU5VrdUZtTuPK
-         2hWQ==
-X-Gm-Message-State: AJIora8zt4K/DBAKLWrQv7Yvw4t3W9Dp9q2fs0JtDr5mulxHXvqEELOZ
-        a1csq8bW6iJjneVj5C+iLtpFzZUjDYzFbxp6N0BXcWojRgNHTOmloFuWVbx8qRDAVVPx6bqm0Wj
-        8hiJQwnMZeocLIFB3fxsuCtL7
-X-Received: by 2002:a05:600c:4fd5:b0:3a3:4664:6d55 with SMTP id o21-20020a05600c4fd500b003a346646d55mr6458332wmq.73.1658692258573;
-        Sun, 24 Jul 2022 12:50:58 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uoDoNu1JLD2TNJP7ydWkOxddGEuigmdMNKn4c8VjBMMj5w1Ik7ZxaOU03qLsLDrorqkPvlCw==
-X-Received: by 2002:a05:600c:4fd5:b0:3a3:4664:6d55 with SMTP id o21-20020a05600c4fd500b003a346646d55mr6458323wmq.73.1658692258383;
-        Sun, 24 Jul 2022 12:50:58 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003a30fbde91dsm17433209wms.20.2022.07.24.12.50.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Jul 2022 12:50:57 -0700 (PDT)
-Message-ID: <630a6654-0305-f3a8-e062-f13a0074d35a@redhat.com>
-Date:   Sun, 24 Jul 2022 21:50:56 +0200
+        Sun, 24 Jul 2022 15:55:23 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C54645B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658692522; x=1690228522;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yrxPz4DhxJLOrncZSUwVp7mct2pqGzN+SdqBum4/69g=;
+  b=F8WigzRPSLeWoIg5Q/8eku2lUk2jflkbdQVubNq+GHzQYt+Z0lYiZEQ2
+   PWMazDt2NAcNvJG0cOQoA1xiklalam3S04qOm8ni7uT9+O11lWev1FJPG
+   cX1QAbsbKjGJ5W7ugByPsbIrnCDY+Nst1whQLCq+y4zbfk5Mq14bBk0lF
+   qmDbVH9g0pSIT4GzGyOqQ9ERaBJLnNO27bbAO5qRuSpAFIGSaKH+isERG
+   HNe+ezFxpovvbRadLBWC1hmDVzeG0DIt1jG53NRb1IChyOAePaIfp18SG
+   RmbkBHcUjO4U+fupHejmGp8nBHv9S6Y1oQqBsyfiTTnEoYU3fr9JaAd+P
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288326244"
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="288326244"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 12:55:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="741612455"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Jul 2022 12:55:21 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFhhA-0004DJ-26;
+        Sun, 24 Jul 2022 19:55:20 +0000
+Date:   Mon, 25 Jul 2022 03:54:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jcmvbkbc-xtensa:xtensa-5.19-rochester 12/13]
+ arch/xtensa/mm/tlb.c:218:6: warning: no previous prototype for
+ 'dump_tlb_entry'
+Message-ID: <202207250312.HBDnpUhY-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] drm/msm: Make .remove and .shutdown HW shutdown
- consistent
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220724111327.1195693-1-javierm@redhat.com>
- <CAA8EJppEpPe4nfZ_kvNen6shSvgyUoL3adSQfhhCGCS2VmVZhQ@mail.gmail.com>
- <6b3f98db-83bf-41cd-b23d-79b455a06ebd@redhat.com>
-In-Reply-To: <6b3f98db-83bf-41cd-b23d-79b455a06ebd@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/24/22 20:47, Javier Martinez Canillas wrote:
-> Hello Dmitry,
+tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-5.19-rochester
+head:   a9635269505502dd939295e872fd5e6933ee9876
+commit: 50e205d64d5f6b858c9b1447e258af4ad0d80b42 [12/13] WIP: xtensa: add dump_tlb
+config: xtensa-buildonly-randconfig-r004-20220718 (https://download.01.org/0day-ci/archive/20220725/202207250312.HBDnpUhY-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jcmvbkbc/linux-xtensa/commit/50e205d64d5f6b858c9b1447e258af4ad0d80b42
+        git remote add jcmvbkbc-xtensa https://github.com/jcmvbkbc/linux-xtensa
+        git fetch --no-tags jcmvbkbc-xtensa xtensa-5.19-rochester
+        git checkout 50e205d64d5f6b858c9b1447e258af4ad0d80b42
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash arch/xtensa/mm/
 
-[...]
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
->> Now there is no point in having this as a separate function. Could you
-> 
-> The only reason why I kept this was to avoid duplicating the same comment
-> in two places. I thought that an inline function would be better than that.
-> 
->> please inline it?
->>
+All warnings (new ones prefixed by >>):
 
-Or do you mean inline it as dropping the wrapper helper and just call to
-drm_atomic_helper_shutdown() in both callbacks ? I'm OK with that but as
-mentioned then we should probably have to duplicate the comment.
+>> arch/xtensa/mm/tlb.c:218:6: warning: no previous prototype for 'dump_tlb_entry' [-Wmissing-prototypes]
+     218 | void dump_tlb_entry(unsigned w, unsigned e, bool dtlb)
+         |      ^~~~~~~~~~~~~~
+>> arch/xtensa/mm/tlb.c:231:6: warning: no previous prototype for 'dump_tlb' [-Wmissing-prototypes]
+     231 | void dump_tlb(void)
+         |      ^~~~~~~~
+   arch/xtensa/mm/tlb.c:292:6: warning: no previous prototype for 'check_tlb_sanity' [-Wmissing-prototypes]
+     292 | void check_tlb_sanity(void)
+         |      ^~~~~~~~~~~~~~~~
 
-Since is marked as inline anyways, the resulting code should be the same.
+
+vim +/dump_tlb_entry +218 arch/xtensa/mm/tlb.c
+
+   217	
+ > 218	void dump_tlb_entry(unsigned w, unsigned e, bool dtlb)
+   219	{
+   220		unsigned tlbidx = w | (e << PAGE_SHIFT);
+   221		unsigned r0 = dtlb ?
+   222			read_dtlb_virtual(tlbidx) : read_itlb_virtual(tlbidx);
+   223		unsigned r1 = dtlb ?
+   224			read_dtlb_translation(tlbidx) : read_itlb_translation(tlbidx);
+   225		unsigned vpn = (r0 & PAGE_MASK) | (e << PAGE_SHIFT);
+   226	
+   227		pr_info("%cTLB[%d][%d]: v=%08x, p=%08x, vaddr=%08x\n",
+   228			dtlb ? 'D' : 'I', w, e, r0, r1, vpn);
+   229	}
+   230	
+ > 231	void dump_tlb(void)
+   232	{
+   233		unsigned w, e;
+   234	
+   235		for (w = 7; w < 9; ++w)
+   236			for (e = 0; e < 4; ++e)
+   237				dump_tlb_entry(w, e, 1);
+   238	}
+   239	
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,155 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F6F57F44A
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A38257F44C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbiGXJHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S230413AbiGXJKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 05:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiGXJHI (ORCPT
+        with ESMTP id S229825AbiGXJKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:07:08 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E27165A8;
-        Sun, 24 Jul 2022 02:07:07 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t1so13866080lft.8;
-        Sun, 24 Jul 2022 02:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=twHHobYLA9lRy1K5OK4RAuGFOI4ai78W7xr1iypX7js=;
-        b=VUAVlC4793nwMj0kejd/LhnswSxMM1OmuJnU+Y7zuLWh8lITr/u5/kEmAjG8nOedw1
-         3D8L48ZYToS9vbVLlbDtBLTuHeAgwUX75/c7/F1jEtQZmDwoYOq59g9/Lvh3Rz0n9KxE
-         VZ1VQFUJLTG+Lgc3XAVicvaSEWojoQxVrcXTAnh1vSxZolGik5ggF6+NI+LDZvLilTv+
-         czXZLmxjbN3FhsuRqAy5kOBufRBN6cIoCSUTAQardjBDcYSpf3bVH5I94V4qB1lpCdOH
-         jDf/QBEvPtpnaszZW7KcMkQzFl5sCmSyTA9WplsVWipGLd4rmk+asNaSMk7N7qf2ot5s
-         AWZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=twHHobYLA9lRy1K5OK4RAuGFOI4ai78W7xr1iypX7js=;
-        b=sZVGnbMXPj+CDknV38b4KBWevIf1fw/rmmOUuKAFwajE2uspw2E1FZdh8PUV8bSy11
-         rdND8T8A2e4PJcryu+nr9DVKDfRztD7e8ld+/SV+lKpYsUR+CkorkWmo/mhJ25S3A3JZ
-         aF+ohJzVoVmnaQiW1nQ6ZkOn6BL0TUbjThkuEVdjJ2UlFmr2vguQ6xCmZq0Aw3uU553U
-         ratiHYtvb7GjNoEfWrGlAEkO7FtBsTsgo4qmZWExcv7agZeKAb3g+89lXAxx9LfPQN8h
-         SbfFWIVefy9j3xJ58As5PmVp5dsoDN6UWB/T3I63gqoJxC14RHhMYaGGHlV8I8PPYt05
-         Ki6g==
-X-Gm-Message-State: AJIora85jSXeCZk7DRWp+IusOtq+ZH/mlubCXbKqZPtZaLo8G+xtMzws
-        6y+X1sNumBatb1J3kaDvaEwA9TGK3vGsBRYfBAo=
-X-Google-Smtp-Source: AGRyM1vDCtTZd7D/kRrJ5xi2dNk8sTtQOjt4UXxL6XCbt6MQn01Nys6x/RDb3QuYl6R/HvowptRbbh75st7Lo99vuaw=
-X-Received: by 2002:a05:6512:693:b0:48a:7c23:1896 with SMTP id
- t19-20020a056512069300b0048a7c231896mr2976280lfe.111.1658653626041; Sun, 24
- Jul 2022 02:07:06 -0700 (PDT)
+        Sun, 24 Jul 2022 05:10:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90354E0;
+        Sun, 24 Jul 2022 02:10:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45BE6B80D47;
+        Sun, 24 Jul 2022 09:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89F0C3411E;
+        Sun, 24 Jul 2022 09:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658653814;
+        bh=89M89dfnkToEcgLfJ1AqZkSAL9rrseeGP4EToMudOEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I/Z7Ws5HTMSzhQcqS6mi+man7/Ww4lmw9Y1pxNsHH8JwA5kM6BVD0BluSupLjX5CR
+         zq8Edxx5sDPmAY2qUbCbBtOviNND9OntjCngyRheSLTB0Zo1usi2T8y3TwwEUvWnJx
+         1a+k+wGi0UxOMVQKBcBUxf2/gXm70A10x1FZX/0exOqdTNlYU8j7EBapeay+R2/9cw
+         NO6E1gKIUS7TZipdZD3+SV734ysfhM9bCQMJjv9y3AvU4xdWVg4kENr86ehZ890YKF
+         BBP7QrZAmhN/AgvgkNNXb8FKhkVzj4wyOB85i9DklWLN1tlM/3S2Ei+oI2NOGd+qvA
+         Xwl2E2ISOpLQw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oFXd0-00013C-TP; Sun, 24 Jul 2022 11:10:22 +0200
+Date:   Sun, 24 Jul 2022 11:10:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Yan Xinyu <sdlyyxy@bupt.edu.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: usb_wwan: replace DTR/RTS magic numbers
+ with macros
+Message-ID: <Yt0MfqQQTwe4ztuN@hovoldconsulting.com>
+References: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
 MIME-Version: 1.0
-References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com>
- <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
- <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
- <20220723030226.8E43CC341C6@smtp.kernel.org>
-In-Reply-To: <20220723030226.8E43CC341C6@smtp.kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Sun, 24 Jul 2022 12:06:54 +0300
-Message-ID: <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas G leixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nancy Yuen <yuenn@google.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Fri, Jul 22, 2022 at 04:50:40PM +0800, Yan Xinyu wrote:
+> The usb_wwan_send_setup function generates DTR/RTS signals in compliance
+> with CDC ACM standard. This patch changes magic numbers in this function
+> to equivalent macros.
+> 
+> Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+> ---
+> v1->v2:
+>  * Fix Signed-off-by name.
+> v2->v3:
+>  * Use already defined ACM_CTRL_DTR and ACM_CTRL_RTS in drivers/usb/class/cdc-acm.h
+> ---
+>  drivers/usb/serial/usb_wwan.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+> index dab38b63eaf7..5c8303bd3676 100644
+> --- a/drivers/usb/serial/usb_wwan.c
+> +++ b/drivers/usb/serial/usb_wwan.c
+> @@ -29,8 +29,10 @@
+>  #include <linux/bitops.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/usb.h>
+> +#include <linux/usb/cdc.h>
+>  #include <linux/usb/serial.h>
+>  #include <linux/serial.h>
+> +#include "../class/cdc-acm.h"
 
-Thanks for your detailed explanation!
+If we are to use common defines, these would need to be added to
+linux/usb/cdc.h first (parts of which are exposed to user space).
 
-On Sat, 23 Jul 2022 at 06:02, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Tomer Maimon (2022-07-19 03:04:43)
-> > On Mon, 18 Jul 2022 at 22:14, Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > >
-> > > So the clk and reset driver should be the same driver, or one driver
-> > > should register the other and use the auxiliary bus to express the
-> > > relationship. That way we know that the drivers are tightly coupled and
-> > > aren't going to stomp over each other.
-> > I think it is very problematic to use the same driver for the reset
-> > and the clocks also because The NPCM reset driver is an old driver
-> > that was used also to the older NPCM BMC SoC so it will be problematic
-> > to use the clock and reset driver in the same space.
-> > indeed the reset and clocks are using the same memory region but they
-> > are not using the same registers, is it not enough?
-> > Please be aware that the NPCM reset driver is checking that it is
-> > using the reset registers before calling I/O functions.
->
-> To put it simply, platform device drivers should use platform device
-> APIs. The platform device APIs hide the fact that the firmware is ACPI
-> or DT or nothing at all. The usage of of_address_to_resource() is
-> problematic.
->
-> After converting that to platform APIs you'll get janitor style cleanups
-> trying to convert to devm_platform_ioremap_resource(). We'll have to
-> discuss this again when that happens, even if there's a comment in the
-> code indicating we can't reserve the IO space because there's another
-> driver. These problems have happened in the past, fun times!
->
-> Furthermore, in DT, reg properties aren't supposed to overlap. When that
-> happens it usually indicates the DT is being written to describe driver
-> structure instead of the IP blocks that are delivered by the hardware
-> engineer. In this case it sounds like a combined clk and reset IP block
-> because they piled all the SoC glue stuff into a register range. Are
-> there more features in this IO range?
+Note that we already have at least three copies of these defines in the
+tree.
 
-No, this range only combined the reset and clock together, but it
-combined in a way that we cannot split it to two or even three
-different registers...
+I'm fine with adding another copy for now and not have to deal with with
+naming and cross driver updates. What do you think, Greg?
 
-I do see a way to combine the clock and the reset driver, the NPCM
-reset driver is serving other NPCM BMC's.
-Should we use regmap to handle the clock registers instead of ioremap?
+>  #include "usb-wwan.h"
+>  
+>  /*
+> @@ -48,9 +50,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+>  	portdata = usb_get_serial_port_data(port);
+>  
+>  	if (portdata->dtr_state)
+> -		val |= 0x01;
+> +		val |= ACM_CTRL_DTR;
+>  	if (portdata->rts_state)
+> -		val |= 0x02;
+> +		val |= ACM_CTRL_RTS;
+>  
+>  	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
+>  
+> @@ -59,8 +61,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
+>  		return res;
+>  
+>  	res = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+> -				0x22, 0x21, val, ifnum, NULL, 0,
+> -				USB_CTRL_SET_TIMEOUT);
+> +				USB_CDC_REQ_SET_CONTROL_LINE_STATE,
+> +				USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
+> +				val, ifnum, NULL, 0, USB_CTRL_SET_TIMEOUT);
+>  
+>  	usb_autopm_put_interface(port->serial->interface);
 
-Best regards,
+Looks good otherwise.
 
-Tomer
+Johan

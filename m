@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF4657F2B1
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EF857F2B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237078AbiGXCiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 22:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S235210AbiGXCtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 22:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXCiw (ORCPT
+        with ESMTP id S229602AbiGXCtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 22:38:52 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2343F18B3A
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:38:51 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id l23so14787138ejr.5
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:38:51 -0700 (PDT)
+        Sat, 23 Jul 2022 22:49:39 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB7139B;
+        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y9so7534768pff.12;
+        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9zI9fBZxwujK6HOrkcYBco4BzV/k8u6DXtuv9ktQciI=;
-        b=Yp0tmsA0Qgu18B4cpMBdnP4DFvvoU787t3cqjpi4dITjh4U1HqUhLA7hcJRXDZ6Dxy
-         KjhMC5//RVacmjTYad02NtptqI4ZsUK0vV+H/SsxmvAxDY4R18ZfzpG10MbU5cTZKOvZ
-         2K1UDks1Bn/8UwLP6HdAVvTck5ByL8fY2FZiFH/lPU4S7HxjfYhxnB+zC7v5L6sziqGS
-         Clut9fh2QPn0MG0lJ8TAF1dx40zs/O/5mxbiYAxUA4EOBjkYoadKiu0yKO8c2Sk/FkJD
-         cbWFKb21rVQ447FfVxlIjh10mOnjaw7JbtpMMU7jEDPLQsEbmIfj5+5EnKn40LQXU/Ae
-         wzMw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
+        b=JpptwV03fN+pOYghJzEYoh4JLL/XC8Ly3sK+VAc2fYzO9PLQ5aWJUp31mjVV9FqupM
+         33uZjBtqtSBi/98glrdRi2L3R1j+cI5YqMUMWUo0K6Zm01IgQPbn5UL8fIMgRhLpqZLk
+         d76O9uR8bDjfrNgvSoKaxk+QLT1TD0LUFxzq9DHurAq5zVQavTyqSgrW1VMpXDQ6i3Gr
+         NoEPi0xun6zF+LZCDSVyNHwiuYIMQ38ot0X959afjv88i4mByuNumOfJbieL0MDHQ2dx
+         LN0kphXd2WxeAvmYyIMyPFuSf8KbdqdWj+6Irtm0BPlJcSrxw+oYLGUtT+Dn0ur6psSU
+         dDUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9zI9fBZxwujK6HOrkcYBco4BzV/k8u6DXtuv9ktQciI=;
-        b=ueXcdNxnFogU9Wp5dpz2MjdmME064Vq2TrZE1DgEZVS4cZ4z/VBMq1re1R5DRHScg4
-         9/lyG90x25A/08pu/yHniz/lQztseCQXL9MOTpXp9zv4rl9jiPWrtkV1rl+hF+nDK+dv
-         83GRQ3BOjm17FCA4hJ8FcLzMFT8VXC7pbOb8plFJDoCvwAaZGxro/Da+N1SDYiYPU+lt
-         NNSO48HtveTsTqMbWZjQ6kl4PHbLiYJg5ke4Vf8eCfot6vYftfWfVNUOvM0dINe9WXwY
-         DRXENCnYgLowftBVOPHtSHpfEdNLAaRxJsglpklATtfH60E8Buya208ysewVJwHK36SY
-         AG8g==
-X-Gm-Message-State: AJIora8APNPLLZCVz6706QahTiJ9sU250vGiO4Et0sphdjVatIQrKjI4
-        ePyCz2A4GXECn6aFJXvyvAaGnA==
-X-Google-Smtp-Source: AGRyM1sU/kaBPW9U0Le4UQnAgfrq9J1IHnM7bIODzZLJDJMqGlniJXVZSfTisN8/kFNKWxPqFHPaqQ==
-X-Received: by 2002:a17:907:1623:b0:72b:64e3:878a with SMTP id hb35-20020a170907162300b0072b64e3878amr5289467ejc.185.1658630329495;
-        Sat, 23 Jul 2022 19:38:49 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (ec2-18-144-7-244.us-west-1.compute.amazonaws.com. [18.144.7.244])
-        by smtp.gmail.com with ESMTPSA id gr19-20020a170906e2d300b0072b2f95d5d1sm3733919ejb.170.2022.07.23.19.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 19:38:48 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 10:38:40 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chang Rui <changruinj@gmail.com>
-Subject: Re: [RFC PATCH v1] perf symbol: Correct address for bss symbols
-Message-ID: <20220724023840.GA82137@leoy-ThinkPad-X240s>
-References: <20220710012204.2390293-1-leo.yan@linaro.org>
- <CAP-5=fX_fT7e9tqDBKXh_1CQ8w80iOXCGz2kJT_nHpY6wYWqmQ@mail.gmail.com>
- <20220711172706.rtfd6pp2pochmdre@google.com>
- <20220712040538.GB10379@leoy-ThinkPad-X240s>
- <CAFP8O3+dQi8b6C_f9bTb0TFpEmNjsroBv4agUpRKps2p3hpP+A@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=gSZBqo+GJpbLxWO7KUPdX/NIEOZXi3uHA6I5/h9Ae88=;
+        b=KF5ykfctosdrnLdPTUEG+R0xomxdK1a/+ahtBkuc0l2ctwxurXPtnPSIuq3lGxHEEQ
+         mk9NHq/kU+Vft/6R9AX2kp8t//ckQo8yUcfpQfT94RqHDTUQcRxRUTYzzbPg2D6gZ6R4
+         0xcsgQwO6TYoWS2HzO9ut/iXaVfFhgaT23FYGBv6wusIYD6ymAqoDw/c+MDfGMRotv39
+         4Zo2D26pxs42ZT0ij7X/31udvpOfiaoEGjApgvfmR+DPmyRKO27c0QTaALeQ9SiPWBRP
+         fquABb1+nM7jDK4gendiikEZ8dHYBe9qNiW/WfwNhWTtAcHYDWXnlq8uBeyyX1EvjcZB
+         9D3w==
+X-Gm-Message-State: AJIora9VIAmnAQYnubOFfGIM9WSdBH4yn27UQsOzpUl65hA6IsORDqbv
+        yE6LnaSuC+R+63TWAIbhtew=
+X-Google-Smtp-Source: AGRyM1soUkXAdCXAvC/wf3HF5Sb42PzXzKJdqZxcowDy2J3LxksJuS4HfcKY1yxdZlNZoo/Ul4XJGw==
+X-Received: by 2002:a63:4b62:0:b0:41a:e5be:fe23 with SMTP id k34-20020a634b62000000b0041ae5befe23mr1290555pgl.140.1658630978263;
+        Sat, 23 Jul 2022 19:49:38 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-16.three.co.id. [180.214.233.16])
+        by smtp.gmail.com with ESMTPSA id o42-20020a17090a0a2d00b001f21f0f6d7csm7819116pjo.25.2022.07.23.19.49.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 Jul 2022 19:49:37 -0700 (PDT)
+Message-ID: <5e13ade3-10a5-4eaf-2d9c-aa03fc23a374@gmail.com>
+Date:   Sun, 24 Jul 2022 09:49:33 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFP8O3+dQi8b6C_f9bTb0TFpEmNjsroBv4agUpRKps2p3hpP+A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] docs: fixed table margin in
+ configfs-usb-gadget-mass-storage
+Content-Language: en-US
+To:     Maxim Devaev <mdevaev@gmail.com>, linux-doc@vger.kernel.org
+Cc:     linux-next@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, sfr@canb.auug.org.au
+References: <20220723101432.72178-1-mdevaev@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220723101432.72178-1-mdevaev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fangrui,
-
-On Tue, Jul 12, 2022 at 08:29:52PM -0700, Fangrui Song wrote:
-
-[...]
-
-> > We need to create symbol info for not only .text section but also for
-> > .data section and .bss sectionṡ.  So based on the data address, we can
-> > know what's the symbol for the data access.
-> >
-> > But I need to correct the description for "st_value" [1]: In
-> > executable and shared object files, st_value holds a virtual address.
-> > To make these files' symbols more useful for the dynamic linker, the
-> > section offset (file interpretation) gives way to a virtual address
-> > (memory interpretation) for which the section number is irrelevant.
-> >
-> > So perf tool uses the formula "st_value - sh_addr + sh_offset" to
-> > convert from the memory address to file address.  But it calculates
-> > the wrong file address because "sh_offset" doesn't respect the
-> > alignment.
+On 7/23/22 17:14, Maxim Devaev wrote:
+> After merging forced_eject patch, there was a broken margin
+> in the configfs parameters table in the ABI documentation.
+> This patch fixes it.
 > 
-> Thanks for the explanation. I think st_value - p_vaddr + p_offset  may
-> be a better formula where p_vaddr/p_offset is from the PT_LOAD program
-> header.
-> 
-> For a SHT_NOBITS section, sh_offset may not be accurate, but PT_LOAD
-> has precise information.
 
-Thanks a lot for suggestion, it's very helpful and reasonable for me!
+Hi Maxim,
 
-I struggled a bit for considering two things.  One is how to refactor
-kernel symbol parsing with PT_LOAD program headers, because the kernel
-symbol parsing is relative complex for both kernel symbols and module
-symbols, this is why I didn't move furthermore for refactoring kernel
-symbol parsing.
+I think the patch message can be improved, like:
 
-The second thing is I observe there have some spurious symbols with
-'st_value' are zeros.  So there have an extra fixing for this case.
+"Commit 421c8d9a20da ("usb: gadget: f_mass_storage: forced_eject attribute")
+ adds force_eject entry to config-usb-gadget-mass-storage table.
+ However, the table border for attribute name is short by one `=`,
+ which triggers Sphinx warning.
 
-Welcome comments or suggestions for the new patch set:
-https://lore.kernel.org/lkml/20220724022857.2621520-1-leo.yan@linaro.org/T/#t
+ Extend the border to cover the now-longest entry."
 
-Thanks,
-Leo
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara

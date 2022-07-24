@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738FC57F3ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 10:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DF357F3F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 10:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239497AbiGXIGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 04:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S233362AbiGXIL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 04:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiGXIGe (ORCPT
+        with ESMTP id S229486AbiGXIL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 04:06:34 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538B1DF28;
-        Sun, 24 Jul 2022 01:06:33 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v13so4105868wru.12;
-        Sun, 24 Jul 2022 01:06:33 -0700 (PDT)
+        Sun, 24 Jul 2022 04:11:26 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2798B15FFA;
+        Sun, 24 Jul 2022 01:11:25 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m17so11604687wrw.7;
+        Sun, 24 Jul 2022 01:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HRdU5JtuY9ef3rVZKjUZZjPh20tou+CtkwGg5+ahh00=;
-        b=c6WfNPEv00bRY+G76Bisyk/YuLO3xl7eLE/joEw5OhmvD0Cgq12trBU3l5aMdASe7A
-         g19qf3nDXKmRXFlOnWwK5iHyaPUlp6Pr3nF8Lr7SoV87M1F566tWH48QUDmScUUHIgpT
-         tphPuwtrafZLiANVKIdENxb65B1I4Di5p/I3JkHEhA4d1YPItaIKSwQdwjeXJ+mAVYkb
-         r2Ph+FbHUM+d7uRatncBJAfd+prsUhZwLDrSk0V4yVHo7hzX/TnMIh+X/rl+oe8/uM4i
-         8BB8oIJymjCtP0Z25mSKb+ax1JpGCV1DEFlTxktzO+ruBQCKOd00rXnslhJChsdmR3yt
-         9Njw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4j2cZN1zYQwRk4mpzSYDT0FtltzsuIeHx0BCJeg+1MI=;
+        b=FDC1RPQ342icpKEeFzetsAQN1Q1CFXtM5cASqyAfrvxxiF0Mi9rDkVLxxGPfS7UXJ+
+         Q3096eUT8BRnrsCb1iY6+0aENWYYoP9qOg+K3yblDf62ndrmf/huBe8vHUeFwDB1nges
+         xqpwsVcbZuRIKHOo9oMu3N2pcEkXHECcFHDaCYfHg8U4oxbeckCHueqb67SdxJdMxj3z
+         wGkeSF/bcFcMQzvlLVdVJ4Gayv17AmSXKOCEqm8HY6VzWhVidZLl0ldUzmX11zvvy4dM
+         chgw6+MRG4eYzqo6i4YV17MMFk+/v1VPkhLngGm8PBJdzOXdYwCQtAHn2ubDmGZiyaGJ
+         2Kgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HRdU5JtuY9ef3rVZKjUZZjPh20tou+CtkwGg5+ahh00=;
-        b=WcLepLiz6WAw2fquh2ciuX+XWkoTeiTnCRIVaE7oQWnaZ4WA2qK/+01lxf7jmCLVSo
-         2K8TseAOLj7jIt0wocDfxYcvMJkSFd8vg9v/sC5PLWr7yGE5l5fCOnzz/YPsUaz4n5sa
-         WirjW0w/GC1UgdxQjV1MeBsND/3kIEcu6eTetMqURks8OioFhodugnosuMhW0MTIm/H5
-         n+n+3V9UhsDTSK2Imdji59nrDyjQqKSbL9AODs1K+xNpwMf4IA9/48QOwswmdKFLbiH1
-         XOUirtHac+h4z7GPgOctEGHOnPLBGEUmQ4d1hVTI5o4YHj5HAQCh04AzrVyvTGt2V6N/
-         QXQQ==
-X-Gm-Message-State: AJIora+ApSO89gqIjAAGZOOuFxoTB1zczTVjftC8E80Ti2ujw2lodvVM
-        uKhDYQyV5G+9LzcLqp2nVXQ=
-X-Google-Smtp-Source: AGRyM1vpN+Wd+kw63oObUTEuMlgBYqIu9tMJiDj02N4d/FRk2koGW10bLMjoWMiP4xRM8B6JuBVGww==
-X-Received: by 2002:a5d:6082:0:b0:21e:6bae:a4e8 with SMTP id w2-20020a5d6082000000b0021e6baea4e8mr4753761wrt.658.1658649991049;
-        Sun, 24 Jul 2022 01:06:31 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id a21-20020a05600c349500b003a317ee3036sm10735976wmq.2.2022.07.24.01.06.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 01:06:30 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 09:06:28 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/148] 5.10.133-rc1 review
-Message-ID: <Ytz9hLXOuoGSwHMc@debian>
-References: <20220723095224.302504400@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4j2cZN1zYQwRk4mpzSYDT0FtltzsuIeHx0BCJeg+1MI=;
+        b=l0gxzgmCYxHRAVIp5XxDGt1o/iSTc/MCkrBHp+Ap8emEozMZsc4UIafbByRZuK/+aI
+         fEkh4ESR7tiK7y1N8LD8uk3P5Vuqdhyb+oBnL7/LiSDB5pqHlN6ZH3clf7g+HR8KR73h
+         dowLBFHeGElvbZ0XouVMyZrfjzy4vo0ADdPg8mMi8PKjzl6fQU/nQonkfZP49zK1acBx
+         IuDYAW24Vchk66b4DPB0yVoOUL9mJmJyv6K0Gcrfyd0WbrT2WTF7sEHiLUxtqQxjgyGo
+         zvoGRqJXUaPyeZG+O5SoVv6gZzpExUFnZi5wE/29azPTRC0iSKwj87nr6iwIUtiv9XhA
+         LU2A==
+X-Gm-Message-State: AJIora9BOWD4MKgevDjND85idVpGVBqHPMS2V8M+SmcxxM6ueWSwTwel
+        imLVLnck47kO6caa20Ln9VArPe9zmcnfSKoy/wA=
+X-Google-Smtp-Source: AGRyM1tdv7lj8flnITHW2lunWgSsEX+G51gI971XJKu/diR64iG8Iwygok8RSeTQqFi6tcZnZuQKp/riuVo+gjUzxAo=
+X-Received: by 2002:a5d:42c4:0:b0:21e:2cd4:a72e with SMTP id
+ t4-20020a5d42c4000000b0021e2cd4a72emr4545412wrr.249.1658650283641; Sun, 24
+ Jul 2022 01:11:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723095224.302504400@linuxfoundation.org>
+References: <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+ <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+ <20220717134610.k3nw6mam256yxj37@skbuf> <20220717140325.p5ox5mhqedbyyiz4@skbuf>
+ <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com>
+ <20220717183852.oi6yg4tgc5vonorp@skbuf> <CAKUejP7WyL2r03EiZU4hA63u2e=Wz3KM4X=rDdji5pdZ0ptaZg@mail.gmail.com>
+ <20220721114540.ovm22rtnwqs77nfb@skbuf>
+In-Reply-To: <20220721114540.ovm22rtnwqs77nfb@skbuf>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Sun, 24 Jul 2022 10:09:11 +0200
+Message-ID: <CAKUejP6xR81p1QeSCnDP_3uh9owafdYr1pifeCzekzUvU3_dPw@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,39 +86,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Jul 21, 2022 at 1:45 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> On Sun, Jul 17, 2022 at 09:20:57PM +0200, Hans S wrote:
+>
+> I'm only pointing out the obvious here, we need an opt in for MAB, and
+> the implemented behavior I've seen here kind of points to mapping this
+> to "+learning +locked", where the learning process creates locked FDB entries.
 
-On Sat, Jul 23, 2022 at 11:53:32AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.133 release.
-> There are 148 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Mon, 25 Jul 2022 09:50:18 +0000.
-> Anything received after that time might be too late.
-
-Build test (gcc version 11.3.1 20220706):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1556
-[2]. https://openqa.qa.codethink.co.uk/tests/1557
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+I can go with the reasoning for the opt in for MAB, but disabling link
+local learning system wide I don't think is a good idea, unless
+someone can ensure me that it does not impact something else.
+In general locked ports should never learn from link local, which is a
+problem if they do, which suggests to me that this patch should
+eventually be accepted as the best solution.

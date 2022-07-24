@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FF757F4E2
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 14:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA1A57F4EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 14:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbiGXMJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 08:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
+        id S233008AbiGXMYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 08:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGXMJR (ORCPT
+        with ESMTP id S231669AbiGXMYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 08:09:17 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360AC175B1;
-        Sun, 24 Jul 2022 05:09:16 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so4825085wmm.4;
-        Sun, 24 Jul 2022 05:09:16 -0700 (PDT)
+        Sun, 24 Jul 2022 08:24:36 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B8C13F8F
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 05:24:34 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id f3-20020a17090ac28300b001f22d62bfbcso6495794pjt.0
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 05:24:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TuaZlSjI8Gr3uFZtjKix4F/O72z/L1CxsKBvamkDb9g=;
-        b=CIczQQVHcpEMDUwb1mJxLsQHu5bxF1+/HtkEgx98+M5WdLQDNxUccwaY44QO0VZHkl
-         oDe8+ugM9HUAdQ8vdSgfMAijNDqKQScCoQMGJb+UYylC8v482tzvLHlm421BeqTdREeu
-         ViDLkDKh0fNpEqQDDjBMR4tHyvWVC5Q5YCVSnAx+fNki/tvMmxU8tut0vvWAwpfHiesi
-         vx/p4IUwPN0dwiuOcI4n3NCzCqnJzra+JAM9EPAcwmxT7gHZF9mzfYu8rpssZQIYr9pF
-         3QnNMCnG3qap0FvpW7MgniWsUrzAS7T3JMOqkMesuv+fK5l1cZBPNf5TCKVQ6TiayHJU
-         BEWg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l+btaMwUX7v8ihc2NfU+GcnNfj68sCUMhrZsdXfz3fc=;
+        b=LQbS1Q5tT8sKQMuJa2PUmTLNPX1oC6UJahF2ymKRWfYZWAuKu0Q2OyyG7o9DrO21c/
+         OzCE4OfpdV5WEYRM5sgEgoVbcfQ0uzxzmgOUJCl5PDDx0SuGJMlLB4MPd/9KpGNjWDwO
+         2xPMExcLzg4ySr5zSFw9dpQhhZ+OWYsWT7He5jMr/Cr6PKvsSCSeUQqj5fKpZ816OGxm
+         MvRdH8YKxrImk2zF1qmXtrp7QAuzM0R4+j8Xl002IJ0AApJBk/XuS6umo6Zi4EO7F1jY
+         8lzbFi/SIg0QAE7lzjukjdGmy4+5TEyyeYYCdmBm3M2JlydxMHkRH8wBu62jrLtsZWxk
+         eR5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=TuaZlSjI8Gr3uFZtjKix4F/O72z/L1CxsKBvamkDb9g=;
-        b=sdAMGrFmkDUzYJy5t22xJB51HB/mdSxtkE6PB/BudMsvSQwLPf9UTBhMWndBQCOwdI
-         6fq/MzcUJBjX+p2kFjWP77FnCdRGBjTd20Wz1uat9Iq/Usta8TfDShISgN54xgCEjojJ
-         HgFIDNRvs3g8SmnKRfD8sEXH9R26+jfKSmPrEYwN6Wd1fg0hmzz3u7FHiit6frkKcZ25
-         D8SMXheUOPPuQqSTneN30ol8K/bq1gMB/6wLiwZuTUNGi3apiSLKtGWPGXPUPw/um8Iz
-         Zv6UyF7iq1KB/3o7Vxlxv+Xxe8vIcJmRG6lWPs3S53S8JIdcj+AWGTk8qdlCAN+j6Hlr
-         lL2A==
-X-Gm-Message-State: AJIora/FSsfzrseKr9pW1heZCBrVggcaEhvPvIKbu5AN7zdPqo/5jvh6
-        LH4l06moNpuep8hevGLkmXM=
-X-Google-Smtp-Source: AGRyM1sABbJX/NfOxdyBYbEO9fabdBu0ikYoMRVKH4vkAHdYfEBZkk6/Dk9c48z/ijU8ylWsRa4FgA==
-X-Received: by 2002:a05:600c:3582:b0:3a3:3b00:cb25 with SMTP id p2-20020a05600c358200b003a33b00cb25mr5374622wmq.170.1658664554661;
-        Sun, 24 Jul 2022 05:09:14 -0700 (PDT)
-Received: from [192.168.0.104] ([77.126.166.31])
-        by smtp.gmail.com with ESMTPSA id n186-20020a1ca4c3000000b003a32438c518sm14509967wme.6.2022.07.24.05.09.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Jul 2022 05:09:14 -0700 (PDT)
-Message-ID: <09038324-65ed-8529-2f6c-671a15a8fb84@gmail.com>
-Date:   Sun, 24 Jul 2022 15:09:11 +0300
+        bh=l+btaMwUX7v8ihc2NfU+GcnNfj68sCUMhrZsdXfz3fc=;
+        b=5rR3XF48W5RlzhP4C+7vJf+30jbQPH63bBBy082ZBHfUs+nuDydrV5dKCJzTFSiOE0
+         zO/tCC/EQPM55Wo8+m7CrHXiowMtuD+DGwO9VklLRZjRvpmSsm71vOhf/8JcVOVgCyA6
+         H4/Ji62C0aLgSCLZGovhFy3ekijNnE4Jai7wVJWPgo7zePYv1AGJE4Z+Dy1Yv0nfRrH1
+         +X+461BedrCN641gFmtSb9tMwSIhZIEeBRMCBSUWumBKun6ZR4lKAWTzzgCH+P2UeBVO
+         SZ4waHnKVdC9+RrftshthfaB9o5D27/BlOy+5pyUfrIXD9pkdOgh6IRYpcBRz1GsSD3C
+         eDVQ==
+X-Gm-Message-State: AJIora+w8mWglofTC8/dYGPmFKul7+7rXy2blIpyoQdbuximrjO8XmIs
+        L86CqmU0dNm9vvTa/Kp5uXz6XA==
+X-Google-Smtp-Source: AGRyM1sYCvCsRCtt9w8IPY37YxQScow1V24ahLiJixa54hS9ywLAnMc+zhN4WByor+lecg8MO6xl5A==
+X-Received: by 2002:a17:90b:1d01:b0:1f2:104:6424 with SMTP id on1-20020a17090b1d0100b001f201046424mr9063527pjb.101.1658665473874;
+        Sun, 24 Jul 2022 05:24:33 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1709027ed700b0016c0474fbd0sm7048133plb.34.2022.07.24.05.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 05:24:33 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-pm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org, rafael@kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Subject: [PATCH v2 0/5] Add support for tsens controller reinit via trustzone
+Date:   Sun, 24 Jul 2022 17:54:19 +0530
+Message-Id: <20220724122424.2509021-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next V3 0/3] Introduce and use NUMA distance metrics
-Content-Language: en-US
-To:     Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20220719162339.23865-1-tariqt@nvidia.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20220719162339.23865-1-tariqt@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20220701145815.2037993-1-bhupesh.sharma@linaro.org/
+- Addressed several comments from Bjorn regarding locking, serialization
+  etc received on v1.
+- Addressed Konrad's concerns about the tsens controller found on sm6375
+  SoC which seems to start in a bad state or is disabled when entering
+  the linux world.
+- This series would depend on sm6375 tsens controller changes being
+  added by Konrad. It is based on linux-next (master branch) tip.
 
+Some versions of Qualcomm tsens controller might enter a
+'bad state' causing sensor temperatures/interrupts status
+to be in an 'invalid' state.
 
-On 7/19/2022 7:23 PM, Tariq Toukan wrote:
-> Hi,
-> 
-> Implement and expose CPU spread API based on the scheduler's
-> sched_numa_find_closest().  Use it in mlx5 and enic device drivers.  This
-> replaces the binary NUMA preference (local / remote) with an improved one
-> that minds the actual distances, so that remote NUMAs with short distance
-> are preferred over farther ones.
-> 
-> This has significant performance implications when using NUMA-aware
-> memory allocations, improving the throughput and CPU utilization.
-> 
-> Regards,
-> Tariq
-> 
-> v3:
-> - Introduce the logic as a common API instead of being mlx5 specific.
-> - Add implementation to enic device driver.
-> - Use non-atomic version of __cpumask_clear_cpu.
-> 
+It is recommended to re-initialize the tsens controller
+via trustzone (secure registers) using scm call(s) when that
+happens.
 
-Comments on V2 were addressed.
-Please let me now of any other comments on this V3.
+This patchset adds the support for the same.
+
+Cc: bjorn.andersson@linaro.org
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: Thara Gopinath <thara.gopinath@gmail.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-arm-msm@vger.kernel.org
+
+Bhupesh Sharma (5):
+  firmware: qcom: scm: Add support for tsens reinit workaround
+  thermal: qcom: tsens: Add hooks for supplying platform specific reinit
+    quirks
+  thermal: qcom: tsens: Add driver support for re-initialization quirk
+  thermal: qcom: tsens: Add reinit quirk support for tsens v2
+    controllers
+  thermal: qcom: tsens: Add reinit quirk support for sm6375 controller
+
+ drivers/firmware/qcom_scm.c     |  15 +++
+ drivers/firmware/qcom_scm.h     |   4 +
+ drivers/thermal/qcom/tsens-v2.c |  15 +++
+ drivers/thermal/qcom/tsens.c    | 213 ++++++++++++++++++++++++++++++++
+ drivers/thermal/qcom/tsens.h    |  18 ++-
+ include/linux/qcom_scm.h        |   2 +
+ 6 files changed, 266 insertions(+), 1 deletion(-)
+
+-- 
+2.35.3
+

@@ -2,191 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758AF57F44F
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C1957F44E
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiGXJOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S231414AbiGXJNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 05:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbiGXJN4 (ORCPT
+        with ESMTP id S229453AbiGXJNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:13:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2690140FB
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:13:53 -0700 (PDT)
+        Sun, 24 Jul 2022 05:13:43 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4816814034
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658654033; x=1690190033;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S8yacHJXY1eIaVyYy6ILxmvNuFxGPUTaDRap+4gYMOk=;
-  b=R97U+MgKxpHm8aVXGAfhW6cSfY95nyqRI3iO9lfEZY3UwX/g+ce8Ng8L
-   SRqCPmCd3DQdBW5PIrCL7Kduo8+tLd/bwsxJ/Hjl7DcXS2z5pfnCwZSoA
-   rkkmLXbMXNNc86T5V6YmhXg0XkvQFBI4AFO9DOZqrM6yaI0+h8NJ7PZCA
-   KHfFgm2VHEhvoNJPH5i/y3V9gSPADU73XfWV011oI5XWYsrvBc0urYRYX
-   wobor+qbXFdq2lz1lT48QTrIgFdsHD7conAtyXBXMVrBaxeuYy63TH+Rj
-   NxWvFfNX58m9UJzBMD10qJsndUC/rB9bj+7Wz5llOz4gOTaqRNVbSyM69
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="373832384"
+  t=1658654022; x=1690190022;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AzxZtybqvJM0/ZZ2jKJszUtZP/9aLY29CH9nP0hU6Gc=;
+  b=WpCocqoy6hO5jonLZ8Du0ed3+sgygYlMXuFo55TGeyuwpWqu9Euo1df7
+   uMZAFo6JMZg+xsuP22UnLADWIY8gzFmKq+iJX26jHInAQwN2oJmDzsdUr
+   FGBeYKju/XfBimujQTPohT5IXJUIqrijVi2EZiBtB0tXiSS9wd7A5l59e
+   H0Cwt1ijQw4jYE2Ar+ZE3f4RmYXU/Wy49l1UUM/p+493fD74v4kUXnsqh
+   BUJ9TE0KqNJbtMldNJgK/g09ljg/HuKH6wjnkPlF0BN3gFZDGPhXkETSw
+   t1wPpyyCrqI4WeDndYh+ELWAxFdeXgBRxU+pCBmalNB+fIYI8P/Bcge9l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="313270940"
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="373832384"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:13:53 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="313270940"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:13:41 -0700
 X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="632033812"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 Jul 2022 02:13:50 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFXgM-0003kt-0y;
-        Sun, 24 Jul 2022 09:13:50 +0000
-Date:   Sun, 24 Jul 2022 17:12:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Haijun Liu <haijun.liu@mediatek.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Subject: include/asm-generic/io.h:464:31: error: performing pointer
- arithmetic on a null pointer has undefined behavior
-Message-ID: <202207241754.eU3B7NSo-lkp@intel.com>
+   d="scan'208";a="657763568"
+Received: from zjiang1-mobl.ccr.corp.intel.com (HELO [10.249.170.155]) ([10.249.170.155])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:13:37 -0700
+Message-ID: <5d353fe4-b642-992e-ef42-7d7f8b2edf7e@linux.intel.com>
+Date:   Sun, 24 Jul 2022 17:13:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
+ interface
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
+ <20220705050710.2887204-5-baolu.lu@linux.intel.com>
+ <20220723141118.GD79279@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220723141118.GD79279@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Haijun,
+On 2022/7/23 22:11, Jason Gunthorpe wrote:
+>> +void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
+>> +			       ioasid_t pasid)
+>> +{
+>> +	struct iommu_group *group = iommu_group_get(dev);
+>> +
+>> +	mutex_lock(&group->mutex);
+>> +	domain->ops->block_dev_pasid(domain, dev, pasid);
+> I still really this OP, it is nonsense to invoke 'block_dev_pasid' on
+> a domain, it should be on the iommu ops and it should not take in a
+> domain parameter. This is why I prefer we write it as
+> 
+> domain->ops->set_dev_pasid(group->blocking_domain, dev, pasid);
+> 
 
-FYI, the error/warning still remains.
+I originally plan to refactor this after both Intel and ARM SMMUv3
+drivers have real blocking domain supports. After revisiting this, it
+seems that the only difficulty is how to check whether a domain is a
+blocking domain. I am going to use below checking code:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   515f71412bb73ebd7f41f90e1684fc80b8730789
-commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 net: wwan: t7xx: Add core components
-date:   3 months ago
-config: s390-randconfig-r035-20220724 (https://download.01.org/0day-ci/archive/20220724/202207241754.eU3B7NSo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/wwan/t7xx/
++	/*
++	 * Detach the domain if a blocking domain is set. Check the
++	 * right domain type once the IOMMU driver supports a real
++	 * blocking domain.
++	 */
++	if (!domain || domain->type == IOMMU_DOMAIN_UNMANAGED) {
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Does this work for you?
 
-All errors (new ones prefixed by >>):
+The incremental changes look like below:
 
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
->> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   12 errors generated.
+diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+index 6633c7b040b8..9f8748b51630 100644
+--- a/drivers/iommu/intel/svm.c
++++ b/drivers/iommu/intel/svm.c
+@@ -890,22 +890,23 @@ static int intel_svm_set_dev_pasid(struct 
+iommu_domain *domain,
+  	int ret = 0;
 
+  	mutex_lock(&pasid_mutex);
+-	sva = intel_svm_bind_mm(iommu, dev, mm);
+-	if (IS_ERR(sva))
+-		ret = PTR_ERR(sva);
++	/*
++	 * Detach the domain if a blocking domain is set. Check the
++	 * right domain type once the IOMMU driver supports a real
++	 * blocking domain.
++	 */
++	if (!domain || domain->type == IOMMU_DOMAIN_UNMANAGED) {
++		intel_svm_unbind_mm(dev, pasid);
++	} else {
++		sva = intel_svm_bind_mm(iommu, dev, mm);
++		if (IS_ERR(sva))
++			ret = PTR_ERR(sva);
++	}
+  	mutex_unlock(&pasid_mutex);
 
-vim +464 include/asm-generic/io.h
+  	return ret;
+  }
 
-3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
-9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
-9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
-9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
-9216efafc52ff9 Thierry Reding 2014-10-01  455   */
-9216efafc52ff9 Thierry Reding 2014-10-01  456  
-f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
-f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
-214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
-9216efafc52ff9 Thierry Reding 2014-10-01  460  {
-87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
-87fe2d543f8173 Sinan Kaya     2018-04-05  462  
-87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
-87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
-abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
-87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
-9216efafc52ff9 Thierry Reding 2014-10-01  467  }
-9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
-9216efafc52ff9 Thierry Reding 2014-10-01  469  
+-static void intel_svm_block_dev_pasid(struct iommu_domain *domain,
+-				      struct device *dev, ioasid_t pasid)
+-{
+-	mutex_lock(&pasid_mutex);
+-	intel_svm_unbind_mm(dev, pasid);
+-	mutex_unlock(&pasid_mutex);
+-}
+-
+  static void intel_svm_domain_free(struct iommu_domain *domain)
+  {
+  	kfree(to_dmar_domain(domain));
+@@ -913,7 +914,6 @@ static void intel_svm_domain_free(struct 
+iommu_domain *domain)
 
-:::::: The code at line 464 was first introduced by commit
-:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
+  static const struct iommu_domain_ops intel_svm_domain_ops = {
+  	.set_dev_pasid		= intel_svm_set_dev_pasid,
+-	.block_dev_pasid	= intel_svm_block_dev_pasid,
+  	.free			= intel_svm_domain_free,
+  };
 
-:::::: TO: Sinan Kaya <okaya@codeaurora.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index efe6a58eee48..a7f7a611fcce 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -3262,7 +3262,7 @@ void iommu_detach_device_pasid(struct iommu_domain 
+*domain, struct device *dev,
+  	struct iommu_group *group = iommu_group_get(dev);
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  	mutex_lock(&group->mutex);
+-	domain->ops->block_dev_pasid(domain, dev, pasid);
++	domain->ops->set_dev_pasid(group->blocking_domain, dev, pasid);
+  	WARN_ON(xa_erase(&group->pasid_array, pasid) != domain);
+  	mutex_unlock(&group->mutex);
+
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index ba6543f4c6a2..c52dccb86460 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -283,7 +283,6 @@ struct iommu_ops {
+   * @attach_dev: attach an iommu domain to a device
+   * @detach_dev: detach an iommu domain from a device
+   * @set_dev_pasid: set an iommu domain to a pasid of device
+- * @block_dev_pasid: block pasid of device from using iommu domain
+   * @map: map a physically contiguous memory region to an iommu domain
+   * @map_pages: map a physically contiguous set of pages of the same 
+size to
+   *             an iommu domain.
+@@ -306,8 +305,6 @@ struct iommu_domain_ops {
+  	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
+  	int (*set_dev_pasid)(struct iommu_domain *domain, struct device *dev,
+  			     ioasid_t pasid);
+-	void (*block_dev_pasid)(struct iommu_domain *domain, struct device *dev,
+-				ioasid_t pasid);
+
+  	int (*map)(struct iommu_domain *domain, unsigned long iova,
+  		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
+
+Best regards,
+baolu

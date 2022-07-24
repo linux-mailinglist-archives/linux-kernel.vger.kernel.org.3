@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734A957F699
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 20:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA1D57F69C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 20:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbiGXSrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 14:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S233266AbiGXStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 14:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGXSrq (ORCPT
+        with ESMTP id S229887AbiGXSte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 14:47:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7EFCDFFE
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658688464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xHhcfGRCAjt5E9OSivN130xjZgYbsf/HAXgqsJ2fhnE=;
-        b=c+eFMsCNXftjo+73cgj9J7U4Sgb9Dn9BMuO0388Sxh82d9gSuYMcIQw/29t5/iGlYISpgo
-        8ypZEvKXsCQHO6T8cb1JzPFF9EmuP/wktwyM/QlckciEKd4xOahyNQmFc9fcOyeMjlqQIW
-        tXwOKDgPjBwhkBhu9XWImUM6CYtOZC4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-2qKy-7aMNpia-gchAnTRsQ-1; Sun, 24 Jul 2022 14:47:43 -0400
-X-MC-Unique: 2qKy-7aMNpia-gchAnTRsQ-1
-Received: by mail-wm1-f72.google.com with SMTP id f21-20020a1cc915000000b003a3551598a1so408120wmb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:47:43 -0700 (PDT)
+        Sun, 24 Jul 2022 14:49:34 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6878A10FDD
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:49:32 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31ee6eb9862so14795857b3.5
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=CyQL7MKXYchL5tTvsD0JYNk64GMjDP+y6COH4opWt5c=;
+        b=K2NrJLardIVtCkzGxfGyx9w1e2G0DqV8NySM2KRf0YX2f0MSi17pGB+ccX3gLyghAm
+         kGxEDos9vuwGOOWLNROiY/5KyRpLYNQBi31BLJ9lmThyzhO30UKYrv56fdvYU0BGET3N
+         96Q4GKwALa/7Mso6+sGGhzrLXU/7RwviZJHvlxC6R4aBm1sln/RZh/rRJKV27iJ+nQJ4
+         9EcaUBIC0Ty+fcKleQ3zriOi61B5YaomxY6DBO3H7gmwI5t2R0Mjay61zY8GgoXflfIF
+         NyGL6aNG/itTJj1kP53lyeuyPLJADvyqIAx4ExskkNpRZvuQzgEOc3Q3SybEOFVX53N5
+         APtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
          :content-transfer-encoding;
-        bh=xHhcfGRCAjt5E9OSivN130xjZgYbsf/HAXgqsJ2fhnE=;
-        b=S/lsYrz5tsn/+fZI8JpWZvdYxFs2hJJv588F/npwOEBaD1atd5FjWqg1+Fo6LlHPTd
-         KdAFhWwOEtqKbtW+1W3scZXqwCH+VRMIehawPNOWQb/c1LeLxLyNLwEYm4RhYUs0nvV9
-         QreXPdEBrjsAxt73fzKV+bwCiIby27WvdRHbU1nPC3IKLCwnEnHjFFxs3KnLavVymtHD
-         YDUakHpLzgXgDhSBY0908wgVnvrWvXG0319ySox8QLMfpFUTt3IjVPK1BXoKNvtWt7wd
-         yLnwEjOsj0WqEA+A7PLFiV7c8aXLwNw6vCmMoAtUa7ayqoDCrY4D0XokzF8MIWAPW95Q
-         RRKA==
-X-Gm-Message-State: AJIora/OS1SBTWfU6GoruY3c0fMHCCmy82+KPtMZRTXEHu3rqmXzwiSN
-        r4wIbds+iYBULtI4cjDix3N3KEvVqtpQGZvXSaQCSVb6ik0yRvK962+aDkM5TeIAgCmzRkIYg2S
-        ERIcwBV4q5fADEEV6vIDnkSW2
-X-Received: by 2002:a05:600c:284a:b0:3a2:ffb7:b56f with SMTP id r10-20020a05600c284a00b003a2ffb7b56fmr18986260wmb.134.1658688461906;
-        Sun, 24 Jul 2022 11:47:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v//byKmdQgT5WvEWcDFD958f9+TODdjybZDGMctnTVoovPF22h8szxUHlYNCu+EncFlDUATg==
-X-Received: by 2002:a05:600c:284a:b0:3a2:ffb7:b56f with SMTP id r10-20020a05600c284a00b003a2ffb7b56fmr18986246wmb.134.1658688461720;
-        Sun, 24 Jul 2022 11:47:41 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id o8-20020a05600c378800b003a2e7c13a3asm11441121wmr.42.2022.07.24.11.47.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Jul 2022 11:47:41 -0700 (PDT)
-Message-ID: <6b3f98db-83bf-41cd-b23d-79b455a06ebd@redhat.com>
-Date:   Sun, 24 Jul 2022 20:47:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] drm/msm: Make .remove and .shutdown HW shutdown
- consistent
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220724111327.1195693-1-javierm@redhat.com>
- <CAA8EJppEpPe4nfZ_kvNen6shSvgyUoL3adSQfhhCGCS2VmVZhQ@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAA8EJppEpPe4nfZ_kvNen6shSvgyUoL3adSQfhhCGCS2VmVZhQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        bh=CyQL7MKXYchL5tTvsD0JYNk64GMjDP+y6COH4opWt5c=;
+        b=hBIocsOsnFjMT87mG6eczADD/jmcbXYHU3uWIfVYqbbaCg3ygAdwDcNVNV/s5rTPCM
+         jpOoMI1P0QFSKXg/IgwRRG41imKRvLteDqg+knZruyAscvUXA6Ti+p8MyDjtrR/eRq3E
+         5OQUYIqAGCABNk0v1WGjh6LyaUrnlbfbJ3/bB/KrWNE6Zz1SVnnAE2BrQr4bVOARYNKG
+         bJRzkeNb7JdLIrtf9L8ud+z+BXJ7OVDT649cgkXKBu3iu9xWTXWvNW7JTHFzAGo6vIel
+         SAfROKbpz4RR6e5ZId5Osb2GYJDQ8r0rcUCfQ2w6pPJaBAmaDB5Yv17FL4BPKh76Q1eo
+         nHGQ==
+X-Gm-Message-State: AJIora9o4QzXZZilR4zgDdwLVrKLqJP9zvxv5UtzzQHPxw4RIQekMZ3Y
+        ZIwK1gKegAewYA4Hwy7VdDUjqmtetsB3VRt/
+X-Google-Smtp-Source: AGRyM1tDodNaX42YIwcy2DTouI3cFX/Tf78qtdwkGH4a003LwEodYVqIB2UmB0DXTxg8beRYHlhQ/9ZGfAYMhnI1
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP
+ id i4-20020a815404000000b0031cc24d94b0mr7175739ywb.502.1658688571667; Sun, 24
+ Jul 2022 11:49:31 -0700 (PDT)
+Date:   Sun, 24 Jul 2022 18:47:59 +0000
+Message-Id: <20220724184758.1723925-1-sadiyakazi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v3] Documentation: kunit: Add CLI args for kunit_tool
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net, mairacanal@riseup.net
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,62 +69,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dmitry,
+Run_wrapper.rst was missing some command line arguments. Added
+additional args in the file.
 
-Thanks for your feedback.
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220721081026.1247067-1-sadiyakazi=
+@google.com/
+-Added a code block for =E2=80=94kconfig_add argument to make the styling c=
+onsistent
+-Slightly changed the words for =E2=80=94arch argument
+-Changed QEMU to qemu wherever applicable for the cli args
+-Changed the style for ``-smp 8``
+-Changed "Might be repeated" to "may be repeated=E2=80=9D for kernel_args
 
-On 7/24/22 20:36, Dmitry Baryshkov wrote:
-> On Sun, 24 Jul 2022 at 14:13, Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
 
-[...]
 
->>
->> +/*
->> + * Shutdown the hw if we're far enough along where things might be on.
->> + * If we run this too early, we'll end up panicking in any variety of
->> + * places. Since we don't register the drm device until late in
->> + * msm_drm_init, drm_dev->registered is used as an indicator that the
->> + * shutdown will be successful.
->> + *
->> + * This function must only be called if drm_dev->registered is true.
->> + */
->> +static inline void msm_shutdown_hw(struct drm_device *dev)
->> +{
->> +       drm_atomic_helper_shutdown(dev);
->> +}
-> 
-> Now there is no point in having this as a separate function. Could you
+---
+ Documentation/dev-tools/kunit/run_wrapper.rst | 61 ++++++++++++++++++-
+ 1 file changed, 60 insertions(+), 1 deletion(-)
 
-The only reason why I kept this was to avoid duplicating the same comment
-in two places. I thought that an inline function would be better than that.
-
-> please inline it?
->
-
-That's already the case. Sorry but I have to ask, do you read my patches
-before commenting? I have the feeling that is the second time that you ask
-for something that was already done in the patch.
- 
-[...]
-
->>
->> -       if (!priv || !priv->kms)
->> -               return;
->> -
->> -       drm_atomic_helper_shutdown(drm);
-> 
-> It might be worth repeating the comment here.
->
-
-As mentioned I thought about it. But then decided that an inline function would
-be better to have the comment just in one place. I don't have a strong opinion
-though so I could change if others agree that duplicating the comment is better.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/=
+dev-tools/kunit/run_wrapper.rst
+index 5e560f2c5fca..ed3715fef32d 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -233,7 +233,7 @@ Command-Line Arguments
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ kunit_tool has a number of other command-line arguments which can
+-be useful for our test environment. Below the most commonly used
++be useful for our test environment. Below are the most commonly used
+ command line arguments:
+=20
+ - ``--help``: Lists all available options. To list common options,
+@@ -257,3 +257,62 @@ command line arguments:
+             added or modified. Instead, enable all tests
+             which have satisfied dependencies by adding
+             ``CONFIG_KUNIT_ALL_TESTS=3Dy`` to your ``.kunitconfig``.
++
++- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitco=
+nfig``
++  file. For example:
++
++  - ``lib/kunit/.kunitconfig`` can be the path of the file.
++
++  - ``lib/kunit`` can be the directory in which the file is located.
++
++  This file is used to build and run with a predefined set of tests
++  and their dependencies. For example, to run tests for a given subsystem.
++
++- ``--kconfig_add``: Specifies additional configuration options to be
++  appended to the ``.kunitconfig`` file. For example:
++  .. code-block::
++	./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=3Dy
++
++- ``--arch``: Runs tests on the specified architecture. The architecture
++  argument is same as the Kbuild ARCH environment variable.
++  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on qe=
+mu.
++  Default is `um`.
++
++- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
++  same argument as passed to the ``CROSS_COMPILE`` variable used by
++  Kbuild. This will be the prefix for the toolchain
++  binaries such as GCC. For example:
++
++  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
++    our system.
++
++  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/mi=
+croblaze-linux``
++    if we have downloaded the microblaze toolchain from the 0-day
++    website to a specified path in our home directory called toolchains.
++
++- ``--qemu_config``: Specifies the path to a file containing a
++  custom qemu architecture definition. This should be a python file
++  containing a `QemuArchParams` object.
++
++- ``--qemu_args``: Specifies additional qemu arguments, for example, ``-sm=
+p 8``.
++
++- ``--jobs``: Specifies the number of jobs (commands) to run simultaneousl=
+y.
++  By default, this is set to the number of cores on your system.
++
++- ``--timeout``: Specifies the maximum number of seconds allowed for all t=
+ests to run.
++  This does not include the time taken to build the tests.
++
++- ``--kernel_args``: Specifies additional kernel command-line arguments. M=
+ay be repeated.
++
++- ``--run_isolated``: If set, boots the kernel for each individual suite/t=
+est.
++  This is useful for debugging a non-hermetic test, one that
++  might pass/fail based on what ran before it.
++
++- ``--raw_output``: If set, generates unformatted output from kernel. Poss=
+ible options are:
++
++   - ``all``: To view the full kernel output, use ``--raw_output=3Dall``.
++
++   - ``kunit``: This is the default option and filters to KUnit output. Us=
+e ``--raw_output`` or ``--raw_output=3Dkunit``.
++
++- ``--json``: If set, stores the test results in a JSON format and prints =
+to `stdout` or
++  saves to a file if a filename is specified.
+--=20
+2.37.1.359.gd136c6c3e2-goog
 

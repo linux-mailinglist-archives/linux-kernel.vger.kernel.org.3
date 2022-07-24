@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2BB57F45C
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4633757F45F
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiGXJ1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S232303AbiGXJ2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 05:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiGXJ1w (ORCPT
+        with ESMTP id S230469AbiGXJ2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:27:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE5D14097
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:27:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0D29A342FF;
-        Sun, 24 Jul 2022 09:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658654869; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RiAigcucyYIQlb8CgIXBEyKvw2DQzHMhjEP8AdPqS9c=;
-        b=OOYvCp2JcARfAYlyfvOpRuQ6gEMeJVkRgWLjrervXu7HTWa/dudo5KQxBEhGcZzHHplS1Q
-        zq2d2dlrAMl7otC35BUI5d/19C2U0YDMVgGvpL5m9iorI0zTcLaYU4WJlFhMCgyeAHH5HZ
-        S9m64yz54wFdXQn/f+553jeeEqqhoRo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658654869;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RiAigcucyYIQlb8CgIXBEyKvw2DQzHMhjEP8AdPqS9c=;
-        b=fNfgrE0Q0+02tey88wqHMKKqawxaPhF69SdwgFbwvumAgJ7DRWNczFF+iPNr/wdL8emMaB
-        LGslc2nQwahDngBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF51613A91;
-        Sun, 24 Jul 2022 09:27:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lYXzOZQQ3WKUTQAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 24 Jul 2022 09:27:48 +0000
-Date:   Sun, 24 Jul 2022 11:27:44 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] perf/urgent for v5.19-rc8
-Message-ID: <Yt0QkASKgozBD253@zn.tnic>
+        Sun, 24 Jul 2022 05:28:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D9B14037;
+        Sun, 24 Jul 2022 02:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658654926; x=1690190926;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=t7ZE0FC8tCkKrFMZykyQb3aNE67a/iby4CnvmhR6I3Y=;
+  b=nCReLHBKYLU8wsLNYRcPm8YgEmNkQQUXzRsd5D/Y12gRIgmK2ynOsPtn
+   lO7+foKUo8DY2SrQVDFO8jVVjwUB/ugwqnUGpy9tDbhCmyMvYyJFrjkyo
+   MgD65WHB7OqIsoGbGNmA+vzPVS8wXqL4L0RSwgb42Hn0FtbJvYer7ZaEz
+   BIYXJoxo2UeSYiYZWWWt0RiGJOi6oGu4j99uuKwKDgSH0dyhoxe1JvXqL
+   boDnoIuV3QFc8NsPa72hY9Mu7/oAacEvHKjKwS9TOAxt25gH2+LcuzEoB
+   z8rq4M2FT09Dyun3oJxBeK/L1+EpgRVL0L4La1l637ufavQPCrrut6Sm8
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
+   d="scan'208";a="173571567"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jul 2022 02:28:46 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 24 Jul 2022 02:28:44 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.28 via Frontend Transport; Sun, 24 Jul 2022 02:28:31 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Woojung Huh <woojung.huh@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Russell King" <linux@armlinux.org.uk>
+Subject: [Patch net-next v2 0/9] net: dsa: microchip: add support for phylink mac config and link up
+Date:   Sun, 24 Jul 2022 14:58:14 +0530
+Message-ID: <20220724092823.24567-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This patch series add support common phylink mac config and link up for the ksz
+series switches. At present, ksz8795 and ksz9477 doesn't implement the phylink
+mac config and link up. It configures the mac interface in the port setup hook.
+ksz8830 series switch does not mac link configuration. For lan937x switches, in
+the part support patch series has support only for MII and RMII configuration.
+Some group of switches have some register address and bit fields common and
+others are different. So, this patch aims to have common phylink implementation
+which configures the register based on the chip id.
 
-please pull a single urgent perf fix for 5.19.
+Changes in v2
+- combined the modification of duplex, tx_pause and rx_pause into single
+  function.
 
-Thx.
+Changes in v1
+- Squash the reading rgmii value from dt to patch which apply the rgmii value
+- Created the new function ksz_port_set_xmii_speed
+- Seperated the namespace values for xmii_ctrl_0 and xmii_ctrl_1 register
+- Applied the rgmii delay value based on the rx/tx-internal-delay-ps
 
----
+Arun Ramadoss (9):
+  net: dsa: microchip: add common gigabit set and get function
+  net: dsa: microchip: add common ksz port xmii speed selection function
+  net: dsa: microchip: add common duplex and flow control function
+  net: dsa: microchip: add support for common phylink mac link up
+  net: dsa: microchip: lan937x: add support for configuing xMII register
+  net: dsa: microchip: apply rgmii tx and rx delay in phylink mac config
+  net: dsa: microchip: ksz9477: use common xmii function
+  net: dsa: microchip: ksz8795: use common xmii function
+  net: dsa: microchip: add support for phylink mac config
 
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28:
+ drivers/net/dsa/microchip/ksz8795.c      |  40 ---
+ drivers/net/dsa/microchip/ksz8795_reg.h  |   8 -
+ drivers/net/dsa/microchip/ksz9477.c      | 183 +------------
+ drivers/net/dsa/microchip/ksz9477_reg.h  |  24 --
+ drivers/net/dsa/microchip/ksz_common.c   | 312 ++++++++++++++++++++++-
+ drivers/net/dsa/microchip/ksz_common.h   |  54 ++++
+ drivers/net/dsa/microchip/lan937x.h      |   8 +-
+ drivers/net/dsa/microchip/lan937x_main.c | 125 +++------
+ drivers/net/dsa/microchip/lan937x_reg.h  |  32 ++-
+ 9 files changed, 431 insertions(+), 355 deletions(-)
 
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v5.19_rc8
-
-for you to fetch changes up to b0380e13502adf7dd8be4c47d622c3522aae6c63:
-
-  perf/x86/intel/lbr: Fix unchecked MSR access error on HSW (2022-07-20 19:24:55 +0200)
-
-----------------------------------------------------------------
-- Reorganize the perf LBR init code so that a TSX quirk is applied early
-  enough in order for the LBR MSR access to not #GP
-
-----------------------------------------------------------------
-Kan Liang (1):
-      perf/x86/intel/lbr: Fix unchecked MSR access error on HSW
-
- arch/x86/events/intel/lbr.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
-
+base-commit: 502c6f8cedcce7889ccdefeb88ce36b39acd522f
 -- 
-Regards/Gruss,
-    Boris.
+2.36.1
 
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)

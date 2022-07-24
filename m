@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDC457F578
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 16:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7C157F57B
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 16:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiGXOR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 10:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S231230AbiGXOSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 10:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbiGXORZ (ORCPT
+        with ESMTP id S229979AbiGXOSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 10:17:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEC313D1E;
-        Sun, 24 Jul 2022 07:17:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 556C361119;
-        Sun, 24 Jul 2022 14:17:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355D2C3411E;
-        Sun, 24 Jul 2022 14:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658672242;
-        bh=V14su3s0vMymi8OyOA1Ru5I3M66rriYV2936dRUwlYg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LB3gxht1FklKBLDs4wid74ry8qJNf7dQtsd5vutP2Me1sYNsYJp4uS8ZrWsuvP24p
-         0j/h/MnvFxLtQr5lh/cbN3dJH12HmR5vC+qSvj+oXXiu+isOKISv1fTZ8Nxp6PsOyQ
-         t0961D2PYZvzSqQp5Qcj1pSWZ8S77w7IYDfTfoxE=
-Date:   Sun, 24 Jul 2022 16:17:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     David Collins <quic_collinsd@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Ankit Gupta <ankgupta@codeaurora.org>,
-        Gilad Avidov <gavidov@codeaurora.org>, stable@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spmi: trace: fix stack-out-of-bound access in SPMI
- tracing functions
-Message-ID: <Yt1Ub72AbEEIUZ/U@kroah.com>
-References: <20220627235512.2272783-1-quic_collinsd@quicinc.com>
- <20220724065052.DDBC6C3411E@smtp.kernel.org>
+        Sun, 24 Jul 2022 10:18:05 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CD013CFC
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 07:18:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658672284; x=1690208284;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=r25DWjiX7sbnAPxb+ZFv2bzJI+SP4JHE3swdFz26Eg8=;
+  b=bJEIhFLl0HWtbaTaICqLcEnOS04n3P+pN+dV3kds+wN5xU+K0VtCy0xU
+   HwT7+fIObcmjGOo8JYJ5LeCqs5c+R7Xhwd4JwzMtkw/pMG2LFdFZ/aL6o
+   4pdHfKFjFbbKmYmtApRl5NbI3UktQZg8rqeaK0oOr1DMUQ/lfe/Qg2LYN
+   NgK4XwxWaOwDQlnyRJbY+38fucMUKHmkWsTJnwzfthVfgi4LRwWm0tIAE
+   ZHNwWTqviSOv5gX1y8OA1s1pWIo5xVuKX03d0+d5saVrU0aex2doxbeFp
+   B73aaF7z1JMADz+j1qOgM1UAf0/RmsnAXmEzAmP4CsOAxSQFz7c8STm8H
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="373851607"
+X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
+   d="scan'208";a="373851607"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 07:18:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
+   d="scan'208";a="926591677"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Jul 2022 07:18:02 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFcQk-0003uj-0S;
+        Sun, 24 Jul 2022 14:18:02 +0000
+Date:   Sun, 24 Jul 2022 22:17:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/percpu.c:3007:59: warning: the comparison will always evaluate as
+ 'true' for the address of 'pglist' will never be NULL
+Message-ID: <202207242252.HNteQE9R-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220724065052.DDBC6C3411E@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 11:50:50PM -0700, Stephen Boyd wrote:
-> Quoting David Collins (2022-06-27 16:55:12)
-> > trace_spmi_write_begin() and trace_spmi_read_end() both call
-> > memcpy() with a length of "len + 1".  This leads to one extra
-> > byte being read beyond the end of the specified buffer.  Fix
-> > this out-of-bound memory access by using a length of "len"
-> > instead.
-> > 
-> > Here is a KASAN log showing the issue:
-> > 
-> > BUG: KASAN: stack-out-of-bounds in trace_event_raw_event_spmi_read_end+0x1d0/0x234
-> > Read of size 2 at addr ffffffc0265b7540 by task thermal@2.0-ser/1314
-> > ...
-> > Call trace:
-> >  dump_backtrace+0x0/0x3e8
-> >  show_stack+0x2c/0x3c
-> >  dump_stack_lvl+0xdc/0x11c
-> >  print_address_description+0x74/0x384
-> >  kasan_report+0x188/0x268
-> >  kasan_check_range+0x270/0x2b0
-> >  memcpy+0x90/0xe8
-> >  trace_event_raw_event_spmi_read_end+0x1d0/0x234
-> >  spmi_read_cmd+0x294/0x3ac
-> >  spmi_ext_register_readl+0x84/0x9c
-> >  regmap_spmi_ext_read+0x144/0x1b0 [regmap_spmi]
-> >  _regmap_raw_read+0x40c/0x754
-> >  regmap_raw_read+0x3a0/0x514
-> >  regmap_bulk_read+0x418/0x494
-> >  adc5_gen3_poll_wait_hs+0xe8/0x1e0 [qcom_spmi_adc5_gen3]
-> >  ...
-> >  __arm64_sys_read+0x4c/0x60
-> >  invoke_syscall+0x80/0x218
-> >  el0_svc_common+0xec/0x1c8
-> >  ...
-> > 
-> > addr ffffffc0265b7540 is located in stack of task thermal@2.0-ser/1314 at offset 32 in frame:
-> >  adc5_gen3_poll_wait_hs+0x0/0x1e0 [qcom_spmi_adc5_gen3]
-> > 
-> > this frame has 1 object:
-> >  [32, 33) 'status'
-> > 
-> > Memory state around the buggy address:
-> >  ffffffc0265b7400: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
-> >  ffffffc0265b7480: 04 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
-> > >ffffffc0265b7500: 00 00 00 00 f1 f1 f1 f1 01 f3 f3 f3 00 00 00 00
-> >                                            ^
-> >  ffffffc0265b7580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> >  ffffffc0265b7600: f1 f1 f1 f1 01 f2 07 f2 f2 f2 01 f3 00 00 00 00
-> > ==================================================================
-> > 
-> > Fixes: a9fce374815d ("spmi: add command tracepoints for SPMI")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-> > ---
-> 
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> 
-> Greg, can you pick this up directly? I don't have anything else for this
-> cycle.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   515f71412bb73ebd7f41f90e1684fc80b8730789
+commit: 23f917169ef157aa7a6bf80d8c4aad6f1282852c mm: percpu: add generic pcpu_fc_alloc/free funciton
+date:   6 months ago
+config: mips-buildonly-randconfig-r003-20220724 (https://download.01.org/0day-ci/archive/20220724/202207242252.HNteQE9R-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=23f917169ef157aa7a6bf80d8c4aad6f1282852c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 23f917169ef157aa7a6bf80d8c4aad6f1282852c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Now queued up, thanks.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-greg k-h
+All warnings (new ones prefixed by >>):
+
+   mm/percpu.c: In function 'pcpu_fc_alloc':
+>> mm/percpu.c:3007:59: warning: the comparison will always evaluate as 'true' for the address of 'pglist' will never be NULL [-Waddress]
+    3007 |         if (node == NUMA_NO_NODE || !node_online(node) || !NODE_DATA(node)) {
+         |                                                           ^
+   In file included from arch/mips/include/asm/mmzone.h:12,
+                    from include/linux/mmzone.h:1099,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:10,
+                    from include/linux/memblock.h:13,
+                    from mm/percpu.c:73:
+   arch/mips/include/asm/mach-ip27/mmzone.h:19:28: note: 'pglist' declared here
+      19 |         struct pglist_data pglist;
+         |                            ^~~~~~
+
+
+vim +3007 mm/percpu.c
+
+  2995	
+  2996	static void * __init pcpu_fc_alloc(unsigned int cpu, size_t size, size_t align,
+  2997					   pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn)
+  2998	{
+  2999		const unsigned long goal = __pa(MAX_DMA_ADDRESS);
+  3000	#ifdef CONFIG_NUMA
+  3001		int node = NUMA_NO_NODE;
+  3002		void *ptr;
+  3003	
+  3004		if (cpu_to_nd_fn)
+  3005			node = cpu_to_nd_fn(cpu);
+  3006	
+> 3007		if (node == NUMA_NO_NODE || !node_online(node) || !NODE_DATA(node)) {
+  3008			ptr = memblock_alloc_from(size, align, goal);
+  3009			pr_info("cpu %d has no node %d or node-local memory\n",
+  3010				cpu, node);
+  3011			pr_debug("per cpu data for cpu%d %zu bytes at 0x%llx\n",
+  3012				 cpu, size, (u64)__pa(ptr));
+  3013		} else {
+  3014			ptr = memblock_alloc_try_nid(size, align, goal,
+  3015						     MEMBLOCK_ALLOC_ACCESSIBLE,
+  3016						     node);
+  3017	
+  3018			pr_debug("per cpu data for cpu%d %zu bytes on node%d at 0x%llx\n",
+  3019				 cpu, size, node, (u64)__pa(ptr));
+  3020		}
+  3021		return ptr;
+  3022	#else
+  3023		return memblock_alloc_from(size, align, goal);
+  3024	#endif
+  3025	}
+  3026	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

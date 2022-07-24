@@ -2,131 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B976C57F4D4
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C317957F4D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233526AbiGXLgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 07:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S233666AbiGXLs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 07:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiGXLgB (ORCPT
+        with ESMTP id S229618AbiGXLsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 07:36:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD72195AA
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 04:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658662560; x=1690198560;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tYwA7UW5Hg0l8T5ZjQdhHfUuI3eav6VYn3z+782NLiQ=;
-  b=mOkBmhFLk7yhwMlSre7sKDXqYw120Ej/rx38iOfWQ65hA7AGlKQA7fd+
-   lNiYpTrNKm/ALLslhzntZF60eN8PEEyG/03T58cMHGWffyz41xHmcUBq8
-   WTNg0TH3t7Nw/CjkAlBJZvjq/ShLNmyVjKPpaOg2wjxbuin8++o/6I+c4
-   RZt6gfsRnmqacqO7fRa+13BQLI8D+zQHXn4Pus2bQBFcxHj1qUmS+wM9c
-   wqOmEUDSIRvNAi0TZTqtkScUf7BPuLpGWUGkHkcvjqX+vrWkqez/1Uy68
-   EDofS4jOVAJg2XQRNA/U85pqtg1Ai8rdoa6I/pJgK29pPd/wTJL10HCGP
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288719589"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="288719589"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 04:36:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="574708575"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 04:35:58 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFZtu-0003px-06;
-        Sun, 24 Jul 2022 11:35:58 +0000
-Date:   Sun, 24 Jul 2022 19:34:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sean Paul <seanpaul@chromium.org>,
-        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
-        "Kristian H. Kristensen" <hoegsberg@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 1155/6555]
- drivers/gpu/drm/drm_atomic_uapi.c:1052: Error: unrecognized opcode `csrs
- sstatus,a3'
-Message-ID: <202207241948.010TSkxB-lkp@intel.com>
+        Sun, 24 Jul 2022 07:48:54 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3740013F10;
+        Sun, 24 Jul 2022 04:48:53 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h8so12257563wrw.1;
+        Sun, 24 Jul 2022 04:48:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GeCHift1a8zScCrrH9f61+/mv/on6JpccsDhJ3uucWk=;
+        b=bUG7Zdi8h9xqYVFqGSU/z1/Sw+4Zk3neRnslH2wA4ee/Ssv/3O8a5TUdDNiA4O3hDz
+         eJwog+SNHGvgqij1hVFHK3O3ZDJn2tNPDpAxMq7aEWe7GE6qxygq7rnfajv9ioGe6UCR
+         P8RMvbFSy0fuzzthjGCH4ch8izFFrfrMbNQJVMbIZoaAtvkWhDaNJ8Zrjt6JunlxZUSH
+         HV6mV9755JgF2ERQpPM52SL3Ij8ZaU7j8pKYXOtcRxTTOo6nzx+Hm/vLNEVuHsZXcPZt
+         CfMLD0Hm2T8+H2fD7U0SVXYfKeBQnnrek1yNlSEtpEuvvd1l8O4a9vgKYSHzq7SkGOWE
+         KIfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GeCHift1a8zScCrrH9f61+/mv/on6JpccsDhJ3uucWk=;
+        b=3F/nK2i7ToZNdMxVbRM4JAFVNaAFUhXpp73OWftGSCjjNyTpUmya9YBzztIK9WJ30i
+         4N8LcCFJlRonjiTQ5pYSVA3FmWgLND8mtgFUw6AhKwxukAY/Ui3rAcx4QRLZee2FNJM3
+         +3DuCSkDhZv4vdsJMHjUWOKsY1h3byUq0scQeaBqeSztMJ7lx3P263iejADL9PYgngCg
+         t7aU3WaDEY7kAeSPLNi9XpQsRZLAF7yAg9D9qPyYi9n1QUF1xawNvN4neYiVHA2RpDjT
+         5HjLxovusedU6SUfFWsaGBVgNk+9gD6ohjD2vsA9zN4QkmLRTkIDGKWKFuyTPirHupCF
+         nK6A==
+X-Gm-Message-State: AJIora+cGVrtv2U2v2J0TLS4stYeYKMEI+sGEr720FHtEHKZg2mrs66T
+        L3eyeRYEiBiHc5nS9dWlhc58v7PBt4Q=
+X-Google-Smtp-Source: AGRyM1uLnehANX7egU4d4z1tfke5a6PmX063+q2eEY2Z15hhzfbm03NvMQcUPUpwrZIMU2vVfSByiQ==
+X-Received: by 2002:a05:6000:2aa:b0:21d:ac4f:587c with SMTP id l10-20020a05600002aa00b0021dac4f587cmr5217809wry.675.1658663331621;
+        Sun, 24 Jul 2022 04:48:51 -0700 (PDT)
+Received: from elementary ([94.73.33.57])
+        by smtp.gmail.com with ESMTPSA id e13-20020a5d65cd000000b0021e47386eb8sm9294552wrw.2.2022.07.24.04.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 04:48:51 -0700 (PDT)
+Date:   Sun, 24 Jul 2022 13:48:49 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Stefan Hansson <newbie13xd@gmail.com>,
+        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: PROBLEM: Regression likely in hid_uclogic driver breaks Huion
+ Inspiroy H640 drawing tablet
+Message-ID: <20220724114849.GA32182@elementary>
+References: <9e16d503-2203-57ed-d6af-61fea0c3e10b@gmail.com>
+ <nycvar.YFH.7.76.2207231339500.19850@cbobk.fhfr.pm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <nycvar.YFH.7.76.2207231339500.19850@cbobk.fhfr.pm>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: dfdec43d0411076dc70591a0496a0824a8620695 [1155/6555] UPSTREAM: drm: extract drm_atomic_uapi.c
-config: riscv-randconfig-r042-20220724 (https://download.01.org/0day-ci/archive/20220724/202207241948.010TSkxB-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/dfdec43d0411076dc70591a0496a0824a8620695
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout dfdec43d0411076dc70591a0496a0824a8620695
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash M=drivers/gpu/drm
+Hi!
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for CCing me Jiří.
 
-All errors (new ones prefixed by >>):
+On Fri, 22 Jul 2022, Stefan Hansson wrote: 
+> Hi!
+> 
+> Somewhere between Linux 5.17.6 and 5.18.11 the Huion tablet I have stopped
+> working properly. In GNOME Control Center it is identified as Huion New 1060
+> Plus, however that's a different tablet than the one I have. Mine is a Huion
+> Inspiroy H640, and it uses the hid_uclogic driver.
+> 
+> With Linux 5.17.6, the tablet works as expected with all the buttons being
+> detected and the stylus being usable. With 5.18.11, the buttons work fine but
+> the stylus does not work correctly. The first time I approach the tablet with
+> the stylus it works properly, i.e., the cursor on my screen moves around and
+> follows the stylus around the tablet as expected. It continues working like
+> this until I remove the stylus from the tablet. After I remove it from the
+> tablet, the cursor never gets controlled by the stylus again. I can see that
+> the tablet detects the stylus (it has a small indicator light), but the cursor
+> doesn't move when I approach the tablet again. To clarify, with Linux 5.17.6,
+> the cursor moves around just fine when I remove and then put it back to the
+> tablet, just as you would expected.
+> 
+> It may also be worth noting that it worked fine when I previously used it
+> around six months ago, although I'm not sure what version of Linux I was using
+> at that time (whatever Fedora shipped back then). I also tried reproducing it
+> with yesterday's linux-next and Linux 5.19.0-RC7, and the behaviour was the
+> same as 5.18.11. I am currently trying to bisect this, but it's not going very
+> fast as I currently only have access to a dual core laptop from 2014, so
+> building Linux takes a good while.
 
-   drivers/gpu/drm/drm_atomic_uapi.c: In function 'complete_signaling':
-   drivers/gpu/drm/drm_atomic_uapi.c:1193:26: warning: variable 'crtc' set but not used [-Wunused-but-set-variable]
-    1193 |         struct drm_crtc *crtc;
-         |                          ^~~~
-   drivers/gpu/drm/drm_atomic_uapi.c: Assembler messages:
->> drivers/gpu/drm/drm_atomic_uapi.c:1052: Error: unrecognized opcode `csrs sstatus,a3'
->> drivers/gpu/drm/drm_atomic_uapi.c:1052: Error: unrecognized opcode `csrc sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:1230: Error: unrecognized opcode `csrs sstatus,s6'
-   drivers/gpu/drm/drm_atomic_uapi.c:1230: Error: unrecognized opcode `csrc sstatus,s6'
-   drivers/gpu/drm/drm_atomic_uapi.c:466: Error: unrecognized opcode `csrs sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:466: Error: unrecognized opcode `csrc sstatus,a3'
->> drivers/gpu/drm/drm_atomic_uapi.c:366: Error: unrecognized opcode `csrs sstatus,a2'
->> drivers/gpu/drm/drm_atomic_uapi.c:366: Error: unrecognized opcode `csrc sstatus,a2'
-   drivers/gpu/drm/drm_atomic_uapi.c:1297: Error: unrecognized opcode `csrs sstatus,s5'
-   drivers/gpu/drm/drm_atomic_uapi.c:1297: Error: unrecognized opcode `csrc sstatus,s5'
-   drivers/gpu/drm/drm_atomic_uapi.c:1314: Error: unrecognized opcode `csrs sstatus,s5'
-   drivers/gpu/drm/drm_atomic_uapi.c:1314: Error: unrecognized opcode `csrc sstatus,s5'
-   drivers/gpu/drm/drm_atomic_uapi.c:1327: Error: unrecognized opcode `csrs sstatus,s5'
-   drivers/gpu/drm/drm_atomic_uapi.c:1327: Error: unrecognized opcode `csrc sstatus,s5'
+Thanks a lot for reporting the issue.
 
+HUION and other non-Wacom tablets are handled by the UCLogic driver.
+This driver is present in the kernel but its changes were deployed
+and tested first in the DIGImend driver:
+https://github.com/DIGImend/digimend-kernel-drivers
 
-vim +1052 drivers/gpu/drm/drm_atomic_uapi.c
+A while ago, I started including in the kernel the code present in
+DIGImend. At this moment, 5.19.0-RC7 and DIGImend have the same code
+(well, 5.19 has more features, but they don't affect your tablet).
 
-  1044	
-  1045	static int setup_out_fence(struct drm_out_fence_state *fence_state,
-  1046				   struct dma_fence *fence)
-  1047	{
-  1048		fence_state->fd = get_unused_fd_flags(O_CLOEXEC);
-  1049		if (fence_state->fd < 0)
-  1050			return fence_state->fd;
-  1051	
-> 1052		if (put_user(fence_state->fd, fence_state->out_fence_ptr))
-  1053			return -EFAULT;
-  1054	
-  1055		fence_state->sync_file = sync_file_create(fence);
-  1056		if (!fence_state->sync_file)
-  1057			return -ENOMEM;
-  1058	
-  1059		return 0;
-  1060	}
-  1061	
+I'm telling you this because it might be easier for you to bisect the
+changes in the DIGImend driver as it builds way faster than the kernel.
+Let me know if you need help bisecting it and I'll do my best to help
+you.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Is this your device?
+https://www.huion.com/pen_tablet/Inspiroy/H640P.html
+
+It is affordable, so I ordered it. I don't have any HUION devices to
+debug and this is a good excuse to buy one ;)
+I'll let you know how it goes once I receive it.
+
+Jose

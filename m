@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094FB57F5C1
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 17:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBF457F5C5
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 17:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbiGXPXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 11:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S234006AbiGXP05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 11:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiGXPX0 (ORCPT
+        with ESMTP id S230501AbiGXP0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 11:23:26 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE6111C23
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 08:23:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VKDjFUF_1658676193;
-Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKDjFUF_1658676193)
-          by smtp.aliyun-inc.com;
-          Sun, 24 Jul 2022 23:23:14 +0800
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr, alexandre.ghiti@canonical.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, huanyi.xj@alibaba-inc.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [PATCH V2 5/5] riscv64: crash_core: Export kernel vm layout, phys_ram_base
-Date:   Sun, 24 Jul 2022 23:23:05 +0800
-Message-Id: <20220724152305.1037212-6-xianting.tian@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220724152305.1037212-1-xianting.tian@linux.alibaba.com>
-References: <20220724152305.1037212-1-xianting.tian@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 24 Jul 2022 11:26:55 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9191E2620
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 08:26:50 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1658676396t1qsw34p
+Received: from localhost.localdomain ( [218.17.40.236])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 24 Jul 2022 23:26:21 +0800 (CST)
+X-QQ-SSF: 01400000002000B0E000000A0000000
+X-QQ-FEAT: B4Sc/jD84f6PXBhR4tnsAGZtkTllm7tFUcI0J/sU/bqKRBLXPEkcJXN1TiBSN
+        SU6IYrmHgbkG3RymtuU/GmYwXg8MZ626/r2Mk/8Cu4flSh9XYNIBWv4AmNG78bK1n3evay2
+        hRs7D13QV1IRXRjc9bYKA6cOeeYlcV9eWFIXJXqWM+1Tpp8l+UDudYHmYMUjroO198pL7At
+        nn8phpyhjNbvFkfsVobYa3eO7H0wh1Kl0lBPcl5AFsBTcLrz3KQESJoafdLqHueO9cBEQo0
+        lnCsg8S4e+/KP2j2gFqLvIhOrZpEVzTpGlzOv6KLT5OskVxqNPDQ6LgJZL71yfflKD9FHNK
+        9nKyusuTP4FR8dOq+C4uQBceLthm2TB21cqfBXTKRpanDxRYTDndn42ZK1h8jJmS9pfl6NI
+        nT/DtcvL3Ys=
+X-QQ-GoodBg: 2
+From:   Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, yuhongf@szu.edu.cn,
+        caoyixuan2019@email.szu.edu.cn,
+        Shenghong Han <hanshenghong2019@email.szu.edu.cn>,
+        Jiajian Ye <yejiajian2018@email.szu.edu.cn>
+Subject: [PATCH 1/2] fix three trivival places
+Date:   Sun, 24 Jul 2022 23:25:33 +0800
+Message-Id: <20220724152534.9239-1-hanshenghong2019@email.szu.edu.cn>
+X-Mailer: git-send-email 2.30.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign4
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These infos are needed by the kdump crash tool. Since these values change
-from time to time, it is preferable to export them via vmcoreinfo than to
-change the crash's code frequently.
+Some dirty work:
+1.Rename some Variables.
+2.Some if-statement was missed at Commit ebbeae36387c,so make up them.
 
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Signed-off-by: Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+Signed-off-by: Jiajian Ye <yejiajian2018@email.szu.edu.cn>
 ---
- .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ tools/vm/page_owner_sort.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-index 8419019b6a88..7d89a9d041c4 100644
---- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
-+++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-@@ -595,3 +595,34 @@ X2TLB
- -----
+diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
+index ec2e67c85..fb103aaf4 100644
+--- a/tools/vm/page_owner_sort.c
++++ b/tools/vm/page_owner_sort.c
+@@ -63,7 +63,7 @@ enum ALLOCATOR_BIT {
+ };
+ enum ARG_TYPE {
+ 	ARG_TXT, ARG_COMM, ARG_STACKTRACE, ARG_ALLOC_TS, ARG_FREE_TS,
+-	ARG_CULL_TIME, ARG_PAGE_NUM, ARG_PID, ARG_TGID, ARG_UNKNOWN, ARG_FREE,
++	ARG_TIMES, ARG_TOTAL_MEM, ARG_PID, ARG_TGID, ARG_UNKNOWN, ARG_FREE,
+ 	ARG_ALLOCATOR
+ };
+ enum SORT_ORDER {
+@@ -402,7 +402,11 @@ static char *get_comm(char *buf)
  
- Indicates whether the crashed kernel enabled SH extended mode.
-+
-+RISCV64
-+=====
-+
-+VA_BITS
-+-------
-+
-+The maximum number of bits for virtual addresses. Used to compute the
-+virtual memory ranges.
-+
-+PAGE_OFFSET
-+-----------
-+
-+Indicates the virtual kernel start address of direct-mapped RAM region.
-+
-+phys_ram_base
-+------------
-+
-+Indicates the start physical RAM address.
-+
-+MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END
-+-----------------------------------------------------------------------------
-+KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
-+----------------------------------------------------------------------
-+
-+Used to get the correct ranges:
-+	MODULES_VADDR ~ MODULES_END : Kernel module space.
-+	VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
-+	VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
-+	KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
-+	KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
+ static int get_arg_type(const char *arg)
+ {
+-	if (!strcmp(arg, "pid") || !strcmp(arg, "p"))
++	if (!strcmp(arg, "times") || !strcmp(arg, "t"))
++		return ARG_TIMES;
++	else if (!strcmp(arg, "memory") || !strcmp(arg, "m"))
++		return ARG_TOTAL_MEM;
++	else if (!strcmp(arg, "pid") || !strcmp(arg, "p"))
+ 		return ARG_PID;
+ 	else if (!strcmp(arg, "tgid") || !strcmp(arg, "tg"))
+ 		return ARG_TGID;
+@@ -599,7 +603,11 @@ static bool parse_sort_args(const char *arg_str)
+ 
+ 		int arg_type = get_arg_type(args[i]+offset);
+ 
+-		if (arg_type == ARG_PID)
++		if (arg_type == ARG_TIMES)
++			sc.cmps[i] = compare_num;
++		else if (arg_type == ARG_TOTAL_MEM)
++			sc.cmps[i] = compare_page_num;
++		else if (arg_type == ARG_PID)
+ 			sc.cmps[i] = compare_pid;
+ 		else if (arg_type == ARG_TGID)
+ 			sc.cmps[i] = compare_tgid;
 -- 
-2.17.1
+2.30.1
+
+
 

@@ -2,218 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B5D57F5FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 18:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE0C57F600
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 18:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbiGXQVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 12:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S232757AbiGXQad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 12:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGXQVM (ORCPT
+        with ESMTP id S229649AbiGXQab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 12:21:12 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D399101F4
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 09:21:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658679671; x=1690215671;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=68I9TlIjaf+ZiKbRkY/eYJ5y3EbpwZfWUtEzzcbAvP4=;
-  b=V30nc5EjSUXE5zli6NrWMf8tIoNN1pv2Bu3/le+TMmKn/bssRybuF+Ru
-   xFZYfBIMjW12DsbVdP/EYAyhJECdTNWDkAw0x1yA8uUH2gLqD8j4qiZrE
-   F6xfpsyUQhLTnyNX8li1WlZDNMeWrhMOji77AzDGQ+ZEsohJK9fgg3Hli
-   IB6HHoinWYtkufBp5cQ5gefccPwKaKPcAD8IRCV5wnyp+m8dt62JvQjB6
-   9yjDJBUqU3/0twG3JhkFaRRH4lwSLNKxgnjRJjs1AhEa+kOJaq1kx57l1
-   nBAow8qMWCNjxdMSi75Wa73+QyOxdB8elzp9oEJKa0D2TnRtptRPH4U9T
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288314263"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="288314263"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 09:21:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="667212046"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Jul 2022 09:21:08 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFeLs-000412-04;
-        Sun, 24 Jul 2022 16:21:08 +0000
-Date:   Mon, 25 Jul 2022 00:20:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: drivers/clocksource/timer-nps.c:84:52: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202207250025.oCc99b1T-lkp@intel.com>
+        Sun, 24 Jul 2022 12:30:31 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E211117F;
+        Sun, 24 Jul 2022 09:30:30 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h132so8328797pgc.10;
+        Sun, 24 Jul 2022 09:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=PQJ0FjQXDR/Sgw7KF5CLi/PBTOkjGRDxr2OlSvwVCgs=;
+        b=dJq6c9Chb97lR3PsMmJiDNB1A3Os+7nE2/mIIVFyohygMEhnqdBBP92irGn2lgMTjO
+         qIgi0qdYDIz+YyejDe2TCqVzEaZ2rp6M7EwzXmfkwgpcCbCsB4MCaT7yzRVWbN4+b5gB
+         3kEhwiNJBNjCalJfyiXkIkMNyuJ6S/YifKY6Noy4Bu7Pe736uxx7AVXWaS74696ZhdVa
+         f8ynOrfHy3SmyhzR8nrumjNlGRkiInenemmX2b+F/vTthkctNjdAxDXwQ0A1H/SNM4vu
+         j3gVI7lKOwZkKQwQaoStD8Ej9PCSB+2UGANHbetoFdADp69ZFrGTa/HLntOwosn1thur
+         /r0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=PQJ0FjQXDR/Sgw7KF5CLi/PBTOkjGRDxr2OlSvwVCgs=;
+        b=qKmnCKTsWKXpzupcQwqNSqOlQRx1blL/kToy31Wo1qg43JJjJ00x+S239S0z4uXXGr
+         SMF88KvZnRa0TFHcJDLfMhlCHqaqss7WK+otKGkGAaQAGcyY+JJTuBk2Ct0qCYK4L0VI
+         xOkIFpWS8Ziefi/bU3b+r8pjKmA8pRaW/KGwAtCDz6aOhblvIHpD0Nocg/SWAs1Zy+L4
+         Egwoz56F4coG3vZ73v+nRkSybLn+C0wWO+nJ0YI04VQVnCyqRx3guXHDggJ911vxXl/c
+         NgmcOLjDFZAYjeEGYRqv6qexmUEjfe4eaCqkKYnFnuAKkB6fafdLEN9NxZAX7Q8iPtjU
+         GMLQ==
+X-Gm-Message-State: AJIora9ooUcG33mfI/JH7baihMNyjz0DrOjEdwLCikbOFe2QKaaRKJ3F
+        Na2deAV9Tfa88zp3X06+/Xs=
+X-Google-Smtp-Source: AGRyM1v3Bep1LzW8UiA21lihgQvk/dJHCVnGKEOYzLt8xWNPrd/bkwPhBik3gMDfNSYWGnNhEB9W9g==
+X-Received: by 2002:a65:524a:0:b0:41a:996c:a2c6 with SMTP id q10-20020a65524a000000b0041a996ca2c6mr7703761pgp.528.1658680229196;
+        Sun, 24 Jul 2022 09:30:29 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x22-20020aa79416000000b005289fad1bbesm7967695pfo.94.2022.07.24.09.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 09:30:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e948e1e7-88d4-954f-64c8-f0e5a83a3ee8@roeck-us.net>
+Date:   Sun, 24 Jul 2022 09:30:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220723033820.22612-1-W_Armin@gmx.de>
+ <20220723033820.22612-2-W_Armin@gmx.de>
+ <20220723141734.GC2979894@roeck-us.net>
+ <7f5c4c26-aa4d-eb97-2188-690c9e11f9a4@gmx.de>
+ <4005c025-4722-53ab-116c-6bd1b37f4d41@roeck-us.net>
+ <9d621e8c-6e62-b0e3-9a6a-c2e904b00971@gmx.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] hwmon: Add pwmX_fan_channel attribute
+In-Reply-To: <9d621e8c-6e62-b0e3-9a6a-c2e904b00971@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   515f71412bb73ebd7f41f90e1684fc80b8730789
-commit: 8f28ca6bd8211214faf717677bbffe375c2a6072 iomap: constify ioreadX() iomem argument (as in generic implementation)
-date:   1 year, 11 months ago
-config: openrisc-randconfig-s051-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250025.oCc99b1T-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f28ca6bd8211214faf717677bbffe375c2a6072
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8f28ca6bd8211214faf717677bbffe375c2a6072
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/clk/imx/ drivers/clocksource/ drivers/media/ drivers/mfd/ drivers/phy/mediatek/ drivers/tty/serial/
+On 7/24/22 09:06, Armin Wolf wrote:
+[ ... ]
+> It would be indeed better if userspace software like pwmconfig would
+> use an internal list containing the names of all hwmon chips for which
+> the pwm to fan mappings are known.
+> I will add a note to the documentation of dell-smm-hwmon about the
+> pwm to fan mapping so userspace software knows about this.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+That is effectively the fancontrol configuration file. pwmconfig is
+supposed to assist in determining how that configuration file should
+look like. Having some file added to pwmcontrol to determine how the
+fancontrol configuration file should look like seems a bit off-track.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/clocksource/timer-nps.c:84:52: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got void * @@
-   drivers/clocksource/timer-nps.c:84:52: sparse:     expected void const [noderef] __iomem *
-   drivers/clocksource/timer-nps.c:84:52: sparse:     got void *
-   drivers/clocksource/timer-nps.c:103:37: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __iomem * @@     got void ** @@
-   drivers/clocksource/timer-nps.c:103:37: sparse:     expected void [noderef] __iomem *
-   drivers/clocksource/timer-nps.c:103:37: sparse:     got void **
---
->> drivers/tty/serial/ucc_uart.c:264:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:264:21: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:264:21: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:268:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:268:21: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:268:21: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:286:6: sparse: sparse: symbol 'qe_uart_set_mctrl' was not declared. Should it be static?
-   drivers/tty/serial/ucc_uart.c:347:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:347:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:347:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:348:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:348:17: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:348:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:348:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:348:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:348:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:350:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:350:21: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:350:21: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:369:18: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:369:18: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:369:18: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:382:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:382:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:382:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:383:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:383:17: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:383:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:383:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:383:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:383:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:386:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:386:21: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:386:21: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:474:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:474:26: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:474:26: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:481:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:481:21: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:481:21: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:512:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:512:17: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:512:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:512:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:512:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:512:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:515:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:515:21: sparse:     expected void const [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:515:21: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:604:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:604:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:604:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:605:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be32 * @@
-   drivers/tty/serial/ucc_uart.c:605:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:605:17: sparse:     got restricted __be32 *
-   drivers/tty/serial/ucc_uart.c:606:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:606:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:606:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:612:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:612:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:612:9: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:613:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be32 * @@
-   drivers/tty/serial/ucc_uart.c:613:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:613:9: sparse:     got restricted __be32 *
-   drivers/tty/serial/ucc_uart.c:614:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:614:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:614:9: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:625:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:625:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:625:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:626:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be32 * @@
-   drivers/tty/serial/ucc_uart.c:626:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:626:17: sparse:     got restricted __be32 *
-   drivers/tty/serial/ucc_uart.c:627:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:627:17: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:627:17: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:637:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:637:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:637:9: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:638:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be32 * @@
-   drivers/tty/serial/ucc_uart.c:638:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:638:9: sparse:     got restricted __be32 *
-   drivers/tty/serial/ucc_uart.c:639:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:639:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:639:9: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:653:46: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct ucc_uart_pram *uccup @@     got struct ucc_uart_pram [noderef] __iomem *uccup @@
-   drivers/tty/serial/ucc_uart.c:653:46: sparse:     expected struct ucc_uart_pram *uccup
-   drivers/tty/serial/ucc_uart.c:653:46: sparse:     got struct ucc_uart_pram [noderef] __iomem *uccup
-   drivers/tty/serial/ucc_uart.c:661:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got unsigned char * @@
-   drivers/tty/serial/ucc_uart.c:661:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:661:9: sparse:     got unsigned char *
-   drivers/tty/serial/ucc_uart.c:662:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got unsigned char * @@
-   drivers/tty/serial/ucc_uart.c:662:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:662:9: sparse:     got unsigned char *
-   drivers/tty/serial/ucc_uart.c:663:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:663:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:663:9: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:664:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
-   drivers/tty/serial/ucc_uart.c:664:9: sparse:     expected void [noderef] __iomem *
-   drivers/tty/serial/ucc_uart.c:664:9: sparse:     got restricted __be16 *
-   drivers/tty/serial/ucc_uart.c:665:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got restricted __be16 * @@
+What you are talking about is really the idea of providing a number of
+sample configuration files with the fancontrol (or lm-sensors) package,
+similar to the various sensors.conf files. That doesn't belong into
+the hwmon kernel documentation. It should be part of the lm-sensors
+package.
 
-vim +84 drivers/clocksource/timer-nps.c
+Guenter
 
-a53224577e317d Noam Camus      2015-10-17  79  
-a5a1d1c2914b53 Thomas Gleixner 2016-12-21  80  static u64 nps_clksrc_read(struct clocksource *clksrc)
-a53224577e317d Noam Camus      2015-10-17  81  {
-a53224577e317d Noam Camus      2015-10-17  82  	int cluster = raw_smp_processor_id() >> NPS_CLUSTER_OFFSET;
-a53224577e317d Noam Camus      2015-10-17  83  
-a5a1d1c2914b53 Thomas Gleixner 2016-12-21 @84  	return (u64)ioread32be(nps_msu_reg_low_addr[cluster]);
-a53224577e317d Noam Camus      2015-10-17  85  }
-a53224577e317d Noam Camus      2015-10-17  86  
+> Sorry for bothering you.
+> 
+> Armin Wolf
+> 
+>>> In contrast, many firmware-based chips do know which pwm channel
+>>> output controls which
+>>> fan channel. One example might be the dell-smm-hwmon driver and the
+>>> gpio-fan driver.
+>>>
+>>> In this case, making the attribute RO would indeed make sense.
+>>>
+>>
+>> Unless the attribute is used to configure the chip, it does not make
+>> sense
+>> in the first place. Also note that gpio-fan is usually configured using
+>> devicetree properties, _and_ it only has a single set of fan/pwm
+>> properties,
+>> so a sysfs attribute would always return 1 and make make even less
+>> sense there.
+>>
+>> Guenter
+>>
+>>> Armin Wolf
+>>>
+>>>>> ---
+>>>>>   Documentation/ABI/testing/sysfs-class-hwmon | 8 ++++++++
+>>>>>   Documentation/hwmon/sysfs-interface.rst     | 3 +++
+>>>>>   drivers/hwmon/hwmon.c                       | 1 +
+>>>>>   include/linux/hwmon.h                       | 2 ++
+>>>>>   4 files changed, 14 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> b/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> index 7271781a23b2..f3d653bcf736 100644
+>>>>> --- a/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> +++ b/Documentation/ABI/testing/sysfs-class-hwmon
+>>>>> @@ -315,6 +315,14 @@ Description:
+>>>>>
+>>>>>           RW
+>>>>>
+>>>>> +What:        /sys/class/hwmon/hwmonX/pwmY_fan_channel
+>>>>> +Description:
+>>>>> +        Select which fan channel is controlled by this PWM output.
+>>>>> +
+>>>>> +        Valid fan channel/PWM output combinations are chip-dependent.
+>>>>> +
+>>>>> +        RW
+>>>>> +
+>>>>>   What: /sys/class/hwmon/hwmonX/pwmY_auto_channels_temp
+>>>>>   Description:
+>>>>>           Select which temperature channels affect this PWM output in
+>>>>> diff --git a/Documentation/hwmon/sysfs-interface.rst
+>>>>> b/Documentation/hwmon/sysfs-interface.rst
+>>>>> index 209626fb2405..17fcec03d3c5 100644
+>>>>> --- a/Documentation/hwmon/sysfs-interface.rst
+>>>>> +++ b/Documentation/hwmon/sysfs-interface.rst
+>>>>> @@ -209,6 +209,9 @@ PWM
+>>>>>   `pwm[1-*]_freq`
+>>>>>           Base PWM frequency in Hz.
+>>>>>
+>>>>> +`pwm[1-*]_fan_channel`
+>>>>> +                Select which fan channel is controlled by this PWM
+>>>>> output.
+>>>>> +
+>>>>>   `pwm[1-*]_auto_channels_temp`
+>>>>>           Select which temperature channels affect this PWM output in
+>>>>>           auto mode.
+>>>>> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+>>>>> index 2e2cd79d89eb..8c2d7574c461 100644
+>>>>> --- a/drivers/hwmon/hwmon.c
+>>>>> +++ b/drivers/hwmon/hwmon.c
+>>>>> @@ -604,6 +604,7 @@ static const char * const
+>>>>> hwmon_pwm_attr_templates[] = {
+>>>>>       [hwmon_pwm_enable] = "pwm%d_enable",
+>>>>>       [hwmon_pwm_mode] = "pwm%d_mode",
+>>>>>       [hwmon_pwm_freq] = "pwm%d_freq",
+>>>>> +    [hwmon_pwm_fan_channel] = "pwm%d_fan_channel",
+>>>>>       [hwmon_pwm_auto_channels_temp] = "pwm%d_auto_channels_temp",
+>>>>>   };
+>>>>>
+>>>>> diff --git a/include/linux/hwmon.h b/include/linux/hwmon.h
+>>>>> index 14325f93c6b2..9d40cc1e520f 100644
+>>>>> --- a/include/linux/hwmon.h
+>>>>> +++ b/include/linux/hwmon.h
+>>>>> @@ -332,6 +332,7 @@ enum hwmon_pwm_attributes {
+>>>>>       hwmon_pwm_enable,
+>>>>>       hwmon_pwm_mode,
+>>>>>       hwmon_pwm_freq,
+>>>>> +    hwmon_pwm_fan_channel,
+>>>>>       hwmon_pwm_auto_channels_temp,
+>>>>>   };
+>>>>>
+>>>>> @@ -339,6 +340,7 @@ enum hwmon_pwm_attributes {
+>>>>>   #define HWMON_PWM_ENABLE        BIT(hwmon_pwm_enable)
+>>>>>   #define HWMON_PWM_MODE            BIT(hwmon_pwm_mode)
+>>>>>   #define HWMON_PWM_FREQ            BIT(hwmon_pwm_freq)
+>>>>> +#define HWMON_PWM_FAN_CHANNEL BIT(hwmon_pwm_fan_channel)
+>>>>>   #define HWMON_PWM_AUTO_CHANNELS_TEMP
+>>>>> BIT(hwmon_pwm_auto_channels_temp)
+>>>>>
+>>>>>   enum hwmon_intrusion_attributes {
+>>>>> -- 
+>>>>> 2.30.2
+>>>>>
+>>
 
-:::::: The code at line 84 was first introduced by commit
-:::::: a5a1d1c2914b5316924c7893eb683a5420ebd3be clocksource: Use a plain u64 instead of cycle_t
-
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3541C57F493
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA28457F499
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 12:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbiGXJ4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S229993AbiGXKAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 06:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234214AbiGXJ4C (ORCPT
+        with ESMTP id S229462AbiGXKAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:56:02 -0400
-Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44BAD126
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:55:56 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 09:55:44 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1658656554; x=1658915754;
-        bh=JRcaGadoJSWUp388kLH0FateOfociPuBOP6jmYHh0XE=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=NgmzzJBkVnRPAuu1I31pjFUcbpga81SpDAc3zwR7u9TXMxkNNlaZ7AHjCIeZg5K/h
-         LxaIJJf++DcjBULQHf89sfYht/j6X2Tg5KoS4zq8NkktsfrBOOfyji31Wfd+In/pJv
-         /eVLf7Urr1XSXlhiYpuNLP5cMzvS+33PTNAaWf3+p83j14VDl5GV9aFmECEpIuz14A
-         3elkPKOL6zPHkjOGvOgmkoA+Sce/Nf1ZKKWExQZyUCiEw65ZjCwhs0hWhqAQm4DQtB
-         iE1i8rupzYOWMR6MjyVsa6Ks2MHv3X4VyltQNRrrSByc5dy4zvRLkg0yLzvH7//Lya
-         mklCK4z4j4FPg==
-To:     devicetree@vger.kernel.org
-From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, soc@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Reply-To: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [PATCH v7 5/5] arm64: dts: qcom: msm8916-samsung-a2015: Rename touchscreen analog regulator
-Message-ID: <20220724095438.14252-1-linmengbo0689@protonmail.com>
-In-Reply-To: <20220724095039.13568-1-linmengbo0689@protonmail.com>
-References: <20220724095039.13568-1-linmengbo0689@protonmail.com>
-Feedback-ID: 40467236:user:proton
+        Sun, 24 Jul 2022 06:00:07 -0400
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 165A96545;
+        Sun, 24 Jul 2022 03:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=XNmwLBbu7C
+        n4RBsBpxbvsfvUtnfDMErEAESnr4Ll0p8=; b=o8u4oguqWqUODT50NEjHpmvR0C
+        2bBiId0gTT3ZwdYzd6FY5vM6nr2RY1BfeBHZHj2DyDzQpGG6r1A21tRe2vfG0DpO
+        SiSYMYBCSXxh46Cpx87ILuPS6Am8peP+vLG/B3yJNnnlZGGJiUPlX5Thm7Lvu1mV
+        KORNJaZ07TMC6K1kQ=
+Received: from localhost.localdomain (unknown [111.192.161.139])
+        by app2 (Coremail) with SMTP id XQUFCgDnWBjQF91ic2uzAA--.33588S4;
+        Sun, 24 Jul 2022 17:58:49 +0800 (CST)
+From:   Xin Xiong <xiongx18@fudan.edu.cn>
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        =?UTF-8?q?=E2=80=9CDavid=20S=20=2E=20Miller=20?= 
+        <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        James Morris <jmorris@namei.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: [PATCH] xfrm: fix refcount leak in __xfrm_policy_check()
+Date:   Sun, 24 Jul 2022 17:55:58 +0800
+Message-Id: <20220724095557.4350-1-xiongx18@fudan.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: XQUFCgDnWBjQF91ic2uzAA--.33588S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw13Cr1fuw18KF4kAw1DJrb_yoWkCFb_C3
+        4xX3WxWwn3tF1xWF40vw4kAr9ag3s293WkW3yxtas2q340qrWSgFy8Xr9xWF4xWr4qgF15
+        tas5WrykAw15ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbf8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjAsqPUUUUU==
+X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiARAREFKp5C7+owAAs8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-reg_vdd_tsp: regulator-vdd-tsp is actually used as an analog regulator for
-touchscreen on all of a2015 and e2015 devices.
-Rename it into reg_vdd_tsp_a: regulator-vdd-tsp-a to reduce confusion.
+The issue happens on an error path in __xfrm_policy_check(). When the
+fetching process of the object `pols[1]` fails, the function simply
+returns 0, forgetting to decrement the reference count of `pols[0]`,
+which is incremented earlier by either xfrm_sk_policy_lookup() or
+xfrm_policy_lookup(). This may result in memory leaks.
 
-Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Fix it by decreasing the reference count of `pols[0]` in that path.
+
+Fixes: 134b0fc544ba ("IPsec: propagate security module errors up from flow_cache_lookup")
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi | 4 ++--
- arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts       | 4 ++--
- arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts       | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ net/xfrm/xfrm_policy.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi b/a=
-rch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-index 9b4b7de7cec2..2ac7ee3dd7c2 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-@@ -61,9 +61,9 @@ hall-sensor {
- =09=09};
- =09};
-
--=09reg_vdd_tsp: regulator-vdd-tsp {
-+=09reg_vdd_tsp_a: regulator-vdd-tsp-a {
- =09=09compatible =3D "regulator-fixed";
--=09=09regulator-name =3D "vdd_tsp";
-+=09=09regulator-name =3D "vdd_tsp_a";
- =09=09regulator-min-microvolt =3D <3300000>;
- =09=09regulator-max-microvolt =3D <3300000>;
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts b/arch/ar=
-m64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-index 4ba11b020f9b..d86d20f28d23 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a3u-eur.dts
-@@ -73,8 +73,8 @@ touchscreen@20 {
- =09=09touchscreen-size-x =3D <540>;
- =09=09touchscreen-size-y =3D <960>;
-
--=09=09vdd-supply =3D <&reg_vdd_tsp>;
--=09=09vddo-supply =3D <&pm8916_l6>;
-+=09=09vcca-supply =3D <&reg_vdd_tsp_a>;
-+=09=09vdd-supply =3D <&pm8916_l6>;
-
- =09=09pinctrl-names =3D "default";
- =09=09pinctrl-0 =3D <&ts_int_default>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts b/arch/ar=
-m64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-index d978c9ac179d..76b6e8550121 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a5u-eur.dts
-@@ -42,7 +42,7 @@ touchscreen@48 {
- =09=09touchscreen-size-x =3D <720>;
- =09=09touchscreen-size-y =3D <1280>;
-
--=09=09avdd-supply =3D <&reg_vdd_tsp>;
-+=09=09avdd-supply =3D <&reg_vdd_tsp_a>;
- =09=09vdd-supply =3D <&pm8916_l6>;
-
- =09=09pinctrl-names =3D "default";
---
-2.30.2
-
+diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
+index f1a0bab920a5..4f8bbb825abc 100644
+--- a/net/xfrm/xfrm_policy.c
++++ b/net/xfrm/xfrm_policy.c
+@@ -3599,6 +3599,7 @@ int __xfrm_policy_check(struct sock *sk, int dir, struct sk_buff *skb,
+ 		if (pols[1]) {
+ 			if (IS_ERR(pols[1])) {
+ 				XFRM_INC_STATS(net, LINUX_MIB_XFRMINPOLERROR);
++				xfrm_pol_put(pols[0]);
+ 				return 0;
+ 			}
+ 			pols[1]->curlft.use_time = ktime_get_real_seconds();
+-- 
+2.25.1
 

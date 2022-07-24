@@ -2,95 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B5557F3A2
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C94157F3A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239169AbiGXHTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 03:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S239250AbiGXHUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 03:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238921AbiGXHS6 (ORCPT
+        with ESMTP id S238921AbiGXHUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 03:18:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7C518B20;
-        Sun, 24 Jul 2022 00:18:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A29FEB80D2D;
-        Sun, 24 Jul 2022 07:18:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85E2C341C0;
-        Sun, 24 Jul 2022 07:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658647135;
-        bh=cilKIlwRX04/ZKOXRDFJP5xqs9Q3uNUGrabQaZJDLLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j3WH1Wi1dbsD67j89JBDezOse91s5xYCoDwsT6nHSrW4o7eLNPdwJoMEVL9XYG44E
-         v+peqz/qnKjCwVbrSC6aUeMO3x8XiHy44MncJU6eieR2h4MxGWAsXbaQlWjS1y6Jax
-         uwbP74TrDuvey7rGo+63ttT9Ma+huBfPZD7pTpbo=
-Date:   Sun, 24 Jul 2022 09:18:52 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] mm/damon/reclaim: fix potential memory leak in
- damon_reclaim_init()
-Message-ID: <YtzyXCR/OCLYRSPx@kroah.com>
-References: <20220724065224.2555966-1-niejianglei2021@163.com>
+        Sun, 24 Jul 2022 03:20:01 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3567183B1;
+        Sun, 24 Jul 2022 00:19:56 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so11596558pjq.4;
+        Sun, 24 Jul 2022 00:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6Ei+8mnSSOURXVLx0NWbMHoyoyHTmjADjelWo1luek4=;
+        b=i0U+GSKdH41sf2XWwxT0jwDek92oy3bYs8gPOwEdzlFObHdqTaPqtzDdmZxtGK8TJU
+         ihuZtfTybeKhtIsjDYrfKkgHjiLJkS0UUhB4gm3dZ8lFMT01PHHFABp0hPz045vy/tqz
+         XtbuXWrm8wDvbeaaPHNKzOF9D4WOob897P2r1UpFtfnR0k1GPRdCQ4ppKIb2OADuLPw7
+         97H1nS/0ZFYAGkrLKDcIR+eCJ2/cWFXuoLDxjEjFpXNc61LdYw+1LbmaFO/ZoeAT439G
+         nPnYD7//JL1GyJlR4RDsSKn+Tm/GPThchRHBECGmEg2+2dXTTtul86HMAmFc4UGWyabW
+         uzww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6Ei+8mnSSOURXVLx0NWbMHoyoyHTmjADjelWo1luek4=;
+        b=genZ4hB6Rb8pkecRfz0KCUWtX8LMVTNqkqhwzfxvezf31gl2RTaV0FzQWXjuXa3riw
+         Txqby+IrRkumoASb9EEd0z+Z/FOSZsVf4cMmL2W1GWsFwgIJ2Kkd1Ya+NxVDZwgUsDkZ
+         CRPPOmPD0AQmwmUrtDylQsD7eMga5ZNH/BKVlyKUIHOKGUSaFve0RIWXxx4FAOAayefq
+         uld45vZKwmfQov3Vy6u6UOVZF7YGRcRR4iq2+f9zR1gPS8LNKT1jwaIo6/NY2LLg2zWz
+         HqHXZA7a0V4PF/Lyx0x6X22nU9QhIMhjqlShMYs8rD7AsUY/s+NtI2mpiH4FLFrJ46Dr
+         T60Q==
+X-Gm-Message-State: AJIora/Xz1iAY7LYS+rOAGw1vXhDCIDlrTSrSyBxaMvFzseln8BDZFJ2
+        iwUeA8Hr09rmL7ik1lyJ6EQ=
+X-Google-Smtp-Source: AGRyM1veXKP8LWOab5MbpA5zjkiYmlZ4AkWw1xSkLjdj/9tgKwEKiT6QwMFJtIFDqU/t5sMwXAjwyg==
+X-Received: by 2002:a17:90b:48d2:b0:1f2:4a4d:8b35 with SMTP id li18-20020a17090b48d200b001f24a4d8b35mr8614501pjb.26.1658647196164;
+        Sun, 24 Jul 2022 00:19:56 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id y9-20020aa79ae9000000b0052b4b6e5545sm7276464pfp.173.2022.07.24.00.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 00:19:55 -0700 (PDT)
+Date:   Sun, 24 Jul 2022 16:19:53 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Richard Henderson <richard.henderson@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] MAINTAINERS: Update Richard Henderson's address
+Message-ID: <YtzymRkPkewIQ3w3@antec>
+References: <20220722211854.802252-1-shorne@gmail.com>
+ <8c0ad12a-6101-8ba7-f3bf-0be6a9e6054e@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220724065224.2555966-1-niejianglei2021@163.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8c0ad12a-6101-8ba7-f3bf-0be6a9e6054e@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 02:52:24PM +0800, Jianglei Nie wrote:
-> damon_reclaim_init() allocates a memory chunk for ctx with
-> damon_new_ctx(). When damon_select_ops() fails, ctx is not released, which
-> will lead to a memory leak.
+On Sat, Jul 23, 2022 at 05:43:38AM -0700, Richard Henderson wrote:
+> On 7/23/22 02:48, Stafford Horne wrote:
+> > Richards address at twiddle.net no longer works and we are getting
+> > bounces.
+> > 
+> > This patch updates to his Linaro address.
+> > 
+> > Cc: Richard Henderson <richard.henderson@linaro.org>
+> > Signed-off-by: Stafford Horne <shorne@gmail.com>
+> > ---
+> >   MAINTAINERS | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index f679152bdbad..e64ca0ac6db7 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -797,7 +797,7 @@ S:	Maintained
+> >   F:	drivers/staging/media/sunxi/cedrus/
+> >   ALPHA PORT
+> > -M:	Richard Henderson <rth@twiddle.net>
+> > +M:	Richard Henderson <richard.henderson@linaro.org>
+> >   M:	Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> >   M:	Matt Turner <mattst88@gmail.com>
+> >   L:	linux-alpha@vger.kernel.org
 > 
-> We should release the ctx with damon_destroy_ctx() when damon_select_ops()
-> fails to fix the memory leak.
-> 
-> Fixes: 4d69c3457821 ("mm/damon/reclaim: use damon_select_ops() instead of damon_{v,p}a_set_operations()")
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
->  mm/damon/reclaim.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-> index 4b07c29effe9..0b3c7396cb90 100644
-> --- a/mm/damon/reclaim.c
-> +++ b/mm/damon/reclaim.c
-> @@ -441,8 +441,10 @@ static int __init damon_reclaim_init(void)
->  	if (!ctx)
->  		return -ENOMEM;
->  
-> -	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
-> +	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
-> +		damon_destroy_ctx(ctx);
->  		return -EINVAL;
-> +	}
->  
->  	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
->  	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
-> -- 
-> 2.25.1
-> 
+> Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
 
-<formletter>
+Ccing other alpha maintainers,
+Ccing Arnd too as he might be interested.
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+Thanks, could this be added to the alpha patches tree?
 
-</formletter>
+-Stafford

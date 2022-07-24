@@ -2,72 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A511457F2CA
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 06:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B4057F2CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 06:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiGXEBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 00:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
+        id S231183AbiGXECx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 00:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiGXEBP (ORCPT
+        with ESMTP id S229445AbiGXECt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 00:01:15 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF54DCE22
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 21:01:13 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id a26-20020a6b661a000000b0067be5b57f45so3195822ioc.16
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 21:01:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=uiSef85sbzNzSxFDZMDAnpVD09PJlwSE8afzRsP7STM=;
-        b=6CVQTbuAR3x2qNNQ3bR9agbPEXsfPr7wFJaB2GGHDQFYmlXUL3bJPNybCfMddCdYmB
-         pg+dphqc84xK2ICUbxI3h4RWdAGYwaeW04VqQE+hGXB7gPk3i4yWKpOoe0vsoSDplgaD
-         wsf7aWDQM2CB02kGXtesPwcwKkKRXsqZT+3dPJdsxCY6jFLwkqJf+GOT/o343z5ee6Ng
-         89Zjo/jc7S4DjJzTQnqDUEvrtylLQ1/qUwaWJG5tWlD+ZD9iEq8Ckj6PYohzRcoMzhmx
-         GZwqjTkCvuGb9gAf2LCcSIWc7dCbNjw2hrY838f0qKpPzbbLyQkbslqUmbRBnThFITNQ
-         k2bQ==
-X-Gm-Message-State: AJIora8KDMRmTbnsnKcw+2IoXJyyfydeqF1CsIe2MizDvrUr9baPxclA
-        QOTtz+METnu2A+UMoWgcM3RTytIETd016tgaABmxbpRc0x9r
-X-Google-Smtp-Source: AGRyM1sh21V80mILNdGD3LAVAthcX5SqWgp9wgMX/KlxJR54IdhfGvmANEJQ9C3dSwog4T63WGs0mjj7FcbetxCPzG4KL4tFH1qb
+        Sun, 24 Jul 2022 00:02:49 -0400
+Received: from sender-of-o53.zoho.in (sender-of-o53.zoho.in [103.117.158.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE2EE0DA;
+        Sat, 23 Jul 2022 21:02:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1658635334; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=FKgmmK4qST/lw4r8NbvBMwkC47maL+Vn68jcKSRRTr9yN5eVH4djyiPYot/BeAWI7wD+EDBi9zGwVl/SkkKMoqlVSAguglKUp6BsMNpx5QM/DI2mApiid5zHu5I+T1MLb8QTXwTMQ1SoFBbLyKb0/EB/4gF4ywkRVjOmCMBQWuU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1658635334; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=ZsIO24j3JVV1dGHrjewZL3uR5Q3eQ+kXFdkNGODCBfw=; 
+        b=A59IBYy8EidnQCVDDH7KxoNqOBZ9Q+XVz8nTwAhv90pXatlvgF+kE4wvy+CQ1Rsas5pKchSzux0yU4vcY3nHW2XjhtaUf84fCLONRthl/TUI7839DZfPqFOdaBH2kEh59xjt5vx0+T0m0cWtGvLXFcJVuHFyV93l5kR3qcit1Qw=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658635334;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=ZsIO24j3JVV1dGHrjewZL3uR5Q3eQ+kXFdkNGODCBfw=;
+        b=ByFyVWEXVlIkXz4FEwz3wvsZXLYNGsn1uC9hrdpSw2a7Bnw0Gwvy5h3jGPDjGQs0
+        AYebS12UWXLtXXZJB2Qv2PiSPDnIODcoFj8g/KtpZ81TMsYFDZEmOSQ2AG6oJxQ4tEy
+        0RbilO/qxVyAlqRZN7ZdzUrIuIVIewzV0MxahS74=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1658635323452803.7680563486452; Sun, 24 Jul 2022 09:32:03 +0530 (IST)
+Date:   Sun, 24 Jul 2022 09:32:03 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Khalid Masum" <khalid.masum.92@gmail.com>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "syzbot+c70d87ac1d001f29a058" 
+        <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>,
+        "linux-kernel-mentees" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        "linux-security-modules" <linux-security-module@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "David Howells" <dhowells@redhat.com>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Message-ID: <1822e5e8826.6da46246626262.8013427986163664185@siddh.me>
+In-Reply-To: <CAABMjtEHCy=YcfqYfsQdqt9pWHHRoOLYHiRCsj8HjZVfAOB+6A@mail.gmail.com>
+References: <20220723135447.199557-1-code@siddh.me> <Ytv/tUrdK1ZTn4Uk@kroah.com>
+ <1822b76775c.69c52873236056.4849193904753307696@siddh.me> <CAABMjtEHCy=YcfqYfsQdqt9pWHHRoOLYHiRCsj8HjZVfAOB+6A@mail.gmail.com>
+Subject: Re: [PATCH] kernel/watch_queue: Make pipe NULL while clearing
+ watch_queue
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d92:b0:341:4d9a:7d52 with SMTP id
- l18-20020a0566380d9200b003414d9a7d52mr2871505jaj.28.1658635273297; Sat, 23
- Jul 2022 21:01:13 -0700 (PDT)
-Date:   Sat, 23 Jul 2022 21:01:13 -0700
-In-Reply-To: <1822e4b6e21.562f3a5d626157.1197655428248513205@siddh.me>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000046e89e05e4851ee1@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in post_one_notification
-From:   syzbot <syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com>
-To:     christophe.jaillet@wanadoo.fr, code@siddh.me, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_RED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, 24 Jul 2022 09:15:27 +0530  Khalid Masum <khalid.masum.92@gmail.com> wrote:
+> On Sat, Jul 23, 2022 at 8:29 PM Siddh Raman Pant via
+> Linux-kernel-mentees <linux-kernel-mentees@lists.linuxfoundation.org>
+> wrote:
+> >
+> > On Sat, 23 Jul 2022 19:33:33 +0530  Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > You should not use #ifdef in .c files, it's unmaintainable over time.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> > >
+> >
+> > I used it because it is used in the same way in fs/pipe.c too (please check the
+> > stated line number).
+> >
+> > That, in turn, is because `watch_queue` member in the `pipe_inode_info` struct
+> > is defined that way (see line 80 of include/linux/pipe_fs_i.h), so I am forced
+> > to use the ifdef guard.
+> >
+> Maybe, we can use the IS_ENABLED macro here to avoid ifdef in the .c file as
+> suggested here:
+> https://www.kernel.org/doc/html/v4.10/process/coding-style.html#conditional-compilation
+> 
+> if(IS_ENABLED(CONFIG_WATCH_QUEUE)){
+>      ...
+> }
+> 
+> > Thanks,
+> > Siddh
+> 
+> Thanks,
+>   -- Khalid Masum
+ 
+I have looked at it again. The guard is superfluous in watch_queue.c (don't
+need it since we are already in watch queue), hence I am sending v2 with it
+removed.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+c70d87ac1d001f29a058@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         fa4c07d9 kernel/watch_queue: Make pipe NULL while clea..
-git tree:       https://github.com/siddhpant/linux.git post_one_notification
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f5cf52080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=95c061eee05f8e15
-dashboard link: https://syzkaller.appspot.com/bug?extid=c70d87ac1d001f29a058
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+Thanks,
+Siddh

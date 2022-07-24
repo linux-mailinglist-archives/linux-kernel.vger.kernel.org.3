@@ -2,141 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B080B57F441
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A154E57F445
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiGXJF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S229520AbiGXJGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 05:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGXJF5 (ORCPT
+        with ESMTP id S229450AbiGXJGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:05:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9448F5AF
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:05:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7BACC343E3;
-        Sun, 24 Jul 2022 09:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658653554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=icWguinNdv2tLZI7utBPPQIv3Li+zlifa1Q6cdj52oI=;
-        b=JcrITGjQRAuLXq8eIzLmafNw2wbD/9NDSn+zmTBOxxNEkNnrflc5xJ6sknfcKkZbeFgazV
-        /hWEW8IFDcmoabRbp+MVNdIDeWhAWfveEpYRQF4sV0YMNwqpWmF247EVG1Niulf71YGjYp
-        b0C+KKyIxB8rW0dgqd4X1vAN4mNKlwc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658653554;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=icWguinNdv2tLZI7utBPPQIv3Li+zlifa1Q6cdj52oI=;
-        b=/IlngSDlAdjkBtZRxxPW7moMKu6qyajdm9PHrQLpUo9wAeaHmcmjLSUKNNTG3LGB9/X9mT
-        lK0ke4f7IbCCVGDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 689C713A8D;
-        Sun, 24 Jul 2022 09:05:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7AThGHIL3WIQRwAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 24 Jul 2022 09:05:54 +0000
-Date:   Sun, 24 Jul 2022 11:05:49 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for v5.19-rc8
-Message-ID: <Yt0LbbTNZyrM0pVw@zn.tnic>
+        Sun, 24 Jul 2022 05:06:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34502165A8
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658653596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0rgI7ZvLoF/2I7hj7OPDobDAAixr8lx8606jK11C1Ug=;
+        b=FNaKccR6T6dfA/G4mf9uWBLxFzSMiPDXEN5ZkVB72r7V+KBdjUTcigh0wlbiu2XxBbLjXu
+        4xqk+aObteH4RGcfCnJmHsYz/NT6yxM5ndSpYIiinkxCFlof79HWqfkgefrReR/vHhqJhb
+        UfSNVEbRMLHqGor7rNh/FxmHyEr+aJ0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-45-TmpUY7DONHuVDjFd70miIw-1; Sun, 24 Jul 2022 05:06:27 -0400
+X-MC-Unique: TmpUY7DONHuVDjFd70miIw-1
+Received: by mail-wm1-f71.google.com with SMTP id h65-20020a1c2144000000b003a30cae106cso6937073wmh.8
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:06:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0rgI7ZvLoF/2I7hj7OPDobDAAixr8lx8606jK11C1Ug=;
+        b=l27Kq7qhQVP+0rwVXpr+Nw/uVjSI5sxZxfdioCOwqa3+tCnj+tkTSEa44gNDeCZWyd
+         elT05V5m7A/8ETpnolu65H/2IF2fREl3K8eqd0LhixQKh6viJMePAl21HfrsjUz/sOUy
+         y+Zm938tz176yUc0jtCv5tcj6fIasd5DGC9RTTFbriNBTpLaxjFHiYtfq9uM4pAKmjC5
+         v4nfrB40lDl64UjQ02SNcKcLa4lK7UhfKRdY6rtkYw1j3FcG6McD12ZgVIC7n2Mw/Dh2
+         UCGELn1O8d0xNGN4AemSv2HaMJYuSxaRaSauskECtMSsC6JklUxPJP6VsBWY6e07e701
+         8Vjw==
+X-Gm-Message-State: AJIora/L71HoU6sZI4YQP1Lbk9fk0l7ZVThaU9CMvcFsnkYDxhKSB00j
+        53CIxcgwS+wCOdugFN0JK3lLkDQwJ/iz2lN35s/HrPUmJfQKzf4zftTtwqz/Cfs13Hsqm0WEpgV
+        PeT7ytoI0qcU9FaD333qRVW/b
+X-Received: by 2002:a05:600c:4f89:b0:3a3:31a5:87f9 with SMTP id n9-20020a05600c4f8900b003a331a587f9mr11283154wmq.149.1658653586118;
+        Sun, 24 Jul 2022 02:06:26 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1upbEJz+hVLYetsHfwF/nFR/6sqHMBakgcujGYHz0NqH/7bHxc1i+KjazGfs5KOD1FhQMoNKA==
+X-Received: by 2002:a05:600c:4f89:b0:3a3:31a5:87f9 with SMTP id n9-20020a05600c4f8900b003a331a587f9mr11283134wmq.149.1658653585774;
+        Sun, 24 Jul 2022 02:06:25 -0700 (PDT)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id q184-20020a1c43c1000000b003a302fb9df7sm13972584wma.21.2022.07.24.02.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 02:06:25 -0700 (PDT)
+Message-ID: <7dc80ce9-83d5-2dc2-f660-fb8f6162c893@redhat.com>
+Date:   Sun, 24 Jul 2022 11:06:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] drm/msm: Make .remove and .shutdown HW shutdown
+ consistent
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220723210825.564922-1-javierm@redhat.com>
+ <CAA8EJpqr3GmQ3=p5_02dAnrK8HrUsf1yYxVKZL6g27eZXZ_U8w@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAA8EJpqr3GmQ3=p5_02dAnrK8HrUsf1yYxVKZL6g27eZXZ_U8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 7/24/22 10:53, Dmitry Baryshkov wrote:
+> On Sun, 24 Jul 2022 at 00:09, Javier Martinez Canillas
 
-please pull a couple more retbleed fallout fixes.
+[...]
 
-It looks like their urgency is decreasing so it seems like we've managed
-to catch whatever snafus the limited -rc testing has exposed. Maybe
-we're getting ready... :)
+>> -
+>>         /*
+>>          * Shutdown the hw if we're far enough along where things might be on.
+>>          * If we run this too early, we'll end up panicking in any variety of
+>> @@ -205,10 +199,21 @@ static int msm_drm_uninit(struct device *dev)
+>>          * msm_drm_init, drm_dev->registered is used as an indicator that the
+>>          * shutdown will be successful.
+>>          */
+>> -       if (ddev->registered) {
+>> +       if (dev->registered)
+>> +               drm_atomic_helper_shutdown(dev);
+>> +}
+>> +
+>> +static int msm_drm_uninit(struct device *dev)
+>> +{
+>> +       struct platform_device *pdev = to_platform_device(dev);
+>> +       struct msm_drm_private *priv = platform_get_drvdata(pdev);
+>> +       struct drm_device *ddev = priv->dev;
+>> +       struct msm_kms *kms = priv->kms;
+>> +       int i;
+>> +
+>> +       if (ddev->registered)
+>>                 drm_dev_unregister(ddev);
+> 
+> No. The drm_dev_unregister() should come before drm_atomic_helper_shutdown().
+>
 
-Thx.
+I'm not sure to understand what you meant here, since drm_dev_unregister() is
+called before drm_atomic_helper_shutdown() that's called in msm_shutdown_hw().
+ 
+> Also drm_dev_unregister() should not be a part of .shutdown callback.
+> See the documentation in the drm_drv.c
+>
 
----
+It is not right now, msm_shutdown_hw() only calls drm_atomic_helper_shutdown()
+but drm_dev_unregister() is still called from the msm_drm_uninit() function.
+ 
+Now, your comment made me realize that there's a bug in this patch since after
+the drm_dev_unregister(), dev->registered will be set to false and so in the
+.remove -> .unbind path drm_atomic_helper_shutdown() will never be executed.
 
-The following changes since commit ff6992735ade75aae3e35d16b17da1008d753d28:
-
-  Linux 5.19-rc7 (2022-07-17 13:30:22 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.19_rc8
-
-for you to fetch changes up to b648ab487f31bc4c38941bc770ea97fe394304bb:
-
-  x86/speculation: Make all RETbleed mitigations 64-bit only (2022-07-23 18:45:11 +0200)
-
-----------------------------------------------------------------
-- Make retbleed mitigations 64-bit only (32-bit will need a bit more
-work if even needed, at all).
-
-- Prevent return thunks patching of the LKDTM modules as it is not needed there
-
-- Avoid writing the SPEC_CTRL MSR on every kernel entry on eIBRS parts
-
-- Enhance error output of apply_returns() when it fails to patch a return thunk
-
-- A sparse fix to the sev-guest module
-
-- Protect EFI fw calls by issuing an IBPB on AMD
-
-----------------------------------------------------------------
-Ben Hutchings (1):
-      x86/speculation: Make all RETbleed mitigations 64-bit only
-
-Josh Poimboeuf (1):
-      lkdtm: Disable return thunks in rodata.c
-
-Kees Cook (1):
-      x86/alternative: Report missing return thunk details
-
-Pawan Gupta (1):
-      x86/bugs: Warn when "ibrs" mitigation is selected on Enhanced IBRS parts
-
-Peter Zijlstra (1):
-      x86/amd: Use IBPB for firmware calls
-
-Tom Lendacky (1):
-      virt: sev-guest: Pass the appropriate argument type to iounmap()
-
- arch/x86/Kconfig                        |  8 ++++----
- arch/x86/Makefile                       |  1 +
- arch/x86/include/asm/cpufeatures.h      |  1 +
- arch/x86/include/asm/nospec-branch.h    |  2 ++
- arch/x86/kernel/alternative.c           |  4 +++-
- arch/x86/kernel/cpu/bugs.c              | 14 +++++++++++++-
- drivers/misc/lkdtm/Makefile             |  9 ++++++---
- drivers/virt/coco/sev-guest/sev-guest.c |  9 ++++++---
- 8 files changed, 36 insertions(+), 12 deletions(-)
+I guess one option is to do the if (dev->registered) check in the callers but
+then it won't really be worth it to have a helper and we could just add that
+check in msm_drv_shutdown() to conditionally call drm_atomic_helper_shutdown().
 
 -- 
-Regards/Gruss,
-    Boris.
+Best regards,
 
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ED357F625
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 19:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5968057F627
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 19:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiGXRZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 13:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S229765AbiGXRYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 13:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiGXRY7 (ORCPT
+        with ESMTP id S229492AbiGXRYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 13:24:59 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B6610FDF;
-        Sun, 24 Jul 2022 10:24:57 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id b21so3681021ljk.8;
-        Sun, 24 Jul 2022 10:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kEqMaeNBAGPeiVakMqD7j5ZbFrxHuSRmgJ0iAS3vjNY=;
-        b=NNkXMHViFoZ9XvY+WmaxJHFCHP9huFcvHDFPeQucD7Pq/bjQ2hMam2o3ew8PyHFSPB
-         u0ELI5Y1OgVVNqvnLu8iThCYZ8ff2t1Y0M9M+XlLrvkpGRVJTknwEoffssQAmp5rorut
-         Ja4PPJ+V5cyGTeD8s8zcEkdDuu3LZhvzin0IHvJ8/dtYgvTHLl0QdA6fr9XaKtEbpejl
-         d4LRtePzAbzdARDf4mfjHMe6if6cVynb8tOMc910TjLxcsW60jAG0UtfxJscBiwKv8+F
-         pTKCspHe6Q7Ud1mnS3kQ2Mgktxt3l1OSE8LxVKy8/71QBj26uhIuiNJArz5nJLT1kLEk
-         eRjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kEqMaeNBAGPeiVakMqD7j5ZbFrxHuSRmgJ0iAS3vjNY=;
-        b=e2Ud5SOtXS+7HvAtw+8g1X/PQrtLLld3L5IlCDfPddm70u99Qm1Y2aKu5e+qaTYXzi
-         ApaQ7OVhFk3DZwjaBb/H1/1QZ9nM9r1UbVJm8YvorLmf13k7iWPeOftEbOHSMNjQU61r
-         byFoTFKhyCN9rwOjj4UijEIyD9oA7/KJ9Y921xnnxZ0zCN8S4pZSapU1PcFpycxT1/dS
-         o7YOP9cqnBoxKHfQTfwOtvZQbseJrMvVKMm1jLLzHPKTAIiWNQ6OBuxERzS2y4XAH+Wv
-         XOQozmNdRDtOPDCFYLyNSlrZYD3zZj3FWOTSCtA/kWTKqPxyyOam7reTx/I8mhVscZK8
-         W7Nw==
-X-Gm-Message-State: AJIora/GjNDYoakBlUPo45raCgDuvBUNBBNh2LXpImN3a07b15Qxz6ww
-        z+w/QPp+IZxlbin4n3dvFfMoOyDPDICYapsNS0I=
-X-Google-Smtp-Source: AGRyM1s6qutVwGep7Lod+dAs/FagMiAfGMUmr7f4JLMbL3iontxFpS2aG4C+FPLeB417Db94zBsPSw==
-X-Received: by 2002:a05:651c:151:b0:25d:e967:23e1 with SMTP id c17-20020a05651c015100b0025de96723e1mr2831769ljd.346.1658683496133;
-        Sun, 24 Jul 2022 10:24:56 -0700 (PDT)
-Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
-        by smtp.gmail.com with ESMTPSA id d7-20020a19f247000000b0048a73d83b7csm1928322lfk.133.2022.07.24.10.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 10:24:55 -0700 (PDT)
-From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] ARM: dts: qcom: pm8226: Add node for the GPIOs
-Date:   Sun, 24 Jul 2022 20:24:39 +0300
-Message-Id: <20220724172442.87830-2-matti.lehtimaki@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220724172442.87830-1-matti.lehtimaki@gmail.com>
-References: <20220724172442.87830-1-matti.lehtimaki@gmail.com>
+        Sun, 24 Jul 2022 13:24:45 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19009E00A
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 10:24:44 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 666715C00C4;
+        Sun, 24 Jul 2022 13:24:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sun, 24 Jul 2022 13:24:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1658683481; x=
+        1658769881; bh=EeV+NW65LBch6mNGDCLaD34T6kF11Zy8g4cFp+FfFpE=; b=m
+        hcSLTA/X5S34jIznRsDMB58z1ovfW7VrGARmMvEhIrUs1o6DMHxEqiW3HLnvHNfU
+        Ura+VB8voaJQ/yjEEY9tj2ojbd93aILI8N7qnUgwpStwG2TOhnGOrsoMAjNSxR87
+        1ZPZDnmxiBPwlLAIp/hkUP/P3dN4OYwPVW6mg5IHZS7njbb8qI0UUlTx9Wns62Sd
+        2EpcqNBdtisir4/3WwVk635fvnZOeVbylHBWROXfMUIRFKQlZ68zogIT7LhUZfZJ
+        tFwcKbKZXsoz9SXFXMMP/wl4+L2S/5PHcs1VT5yhGs990BTMqqCOMdUe/EPhNFcK
+        YiBuBa7AYJXZIbjCTcpdw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1658683481; x=
+        1658769881; bh=EeV+NW65LBch6mNGDCLaD34T6kF11Zy8g4cFp+FfFpE=; b=c
+        nJWRDAYNaKT4xPxchZ0Xi4zjs2FbLYgfLW6Whbw4hy4E/UUKF9ucormtJlZrmlxX
+        AjjTRn8sSBcYh+0o33N8zgUkDnh5X0EFUiaRYsr/Gs/PZGoSxKjXiSYRELrJLoAC
+        8utw7pR61PaC78tFNHzFtijGYNZVxP6r6oGHeGgr/F1CLYNKLD5/x74Yusksnqg3
+        F1RZN0E1UQ8A0pQTLVN1JTjtRCDEmqkOvrxwEme1JY1KMnkmzrnL/Ve2fuk9Fkqb
+        66szOc3MRQQoMF4qgK6ZNWUP1kBnXm9/NZH4W+BqeEKith338x8uxKJKntFDPfqN
+        J+3ODcg2U2Ztbp8slieTA==
+X-ME-Sender: <xms:WIDdYpf1RNRqXIHwvyLFh0NTvgwRpt2a5dmqlvjilIYfoeW-s23zQg>
+    <xme:WIDdYnNXLPdyyDjVNhNE5jB-qZ6qYQFbjGkEUfVU7q6acl0d7vmFiuigV_b7sYEDW
+    52BEgZozYH5OtJiWA>
+X-ME-Received: <xmr:WIDdYijm1mMUEDj9HckjAhtAlgeF5kIZ09gGWyvGf5t7xgXmhV-7wNd8xibHW6dTOGXmSmmwRrr6yOcZgfxMHuW-SUq6UcHPDjeYPIMQGmiS0sAa4b8wSPtVAQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtiedguddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefuvfevfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgr
+    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
+    cuggftrfgrthhtvghrnheptdevhfehhefgvdekteffleduueduheduuedvtdevleelkeev
+    vdeuvdeihfekueehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:WYDdYi9bC7ej5a8z5_P5LSGugFEfQegcAqHhGKvLZh4Ymy15wt6ULg>
+    <xmx:WYDdYlvRWTGxxavkNUOWxjx4HpexuiepRTFa5MCIE7FdlIN8OZya6Q>
+    <xmx:WYDdYhGCICBWtHj9wioMiBHwVl9bN3P62nn9axM3ccqRj4N77gDWnw>
+    <xmx:WYDdYtK4FpZnBRyjneEv-dfhu9sRCXk2ocidw2oreqp1nPp580pYmQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 24 Jul 2022 13:24:40 -0400 (EDT)
+Subject: Re: [PATCH 0/2] riscv: Add macro for multiple nop instructions
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     heiko@sntech.de, Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <mhng-24b00ffb-dcaa-40b3-8da3-2c2fe26ea3aa@palmer-mbp2014>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <d684ed27-2530-4470-a320-80baadbb6197@sholland.org>
+Date:   Sun, 24 Jul 2022 12:24:40 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <mhng-24b00ffb-dcaa-40b3-8da3-2c2fe26ea3aa@palmer-mbp2014>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PM8226 provides 8 GPIOs. Add a node to support them.
+Hi Palmer,
 
-Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
----
-(no changes since v2)
+On 7/21/22 9:16 PM, Palmer Dabbelt wrote:
+> On Tue, 07 Jun 2022 07:30:57 PDT (-0700), heiko@sntech.de wrote:
+>> Some cases need multiple nop instructions and arm64 already has a
+>> nice helper for not needing to write all of them out but instead
+>> use a helper to add n nops.
+>>
+>> So add a similar thing to riscv and convert the T-Head PMA
+>> alternative to use it.
+>>
+>>
+>> Heiko Stuebner (2):
+>>   riscv: introduce nops and __nops macros for NOP sequences
+>>   riscv: convert the t-head pbmt errata to use the __nops macro
+>>
+>>  arch/riscv/include/asm/asm.h         | 15 +++++++++++++++
+>>  arch/riscv/include/asm/barrier.h     |  2 ++
+>>  arch/riscv/include/asm/errata_list.h |  8 +-------
+>>  3 files changed, 18 insertions(+), 7 deletions(-)
+> 
+> Thanks, these are on for-next.  I had to fix up some minor conflicts, but
+> hopefuly nothing went wrong.
 
-Changes in v2:
-  - Rename pm8226 gpio node
----
- arch/arm/boot/dts/qcom-pm8226.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+The conflicts are because the patch was sent on top of fixes, specifically
+e83031564137 ("riscv: Fix ALT_THEAD_PMA's asm parameters"). Since you applied
+this patch without pulling fixes in to for-next, now for-next conflicts with master.
 
-diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
-index 9b7d9d04ded6..0c10fa16a0f3 100644
---- a/arch/arm/boot/dts/qcom-pm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
-@@ -90,6 +90,16 @@ pm8226_mpps: mpps@a000 {
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 		};
-+
-+		pm8226_gpios: gpio@c000 {
-+			compatible = "qcom,pm8226-gpio", "qcom,spmi-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&pm8226_gpios 0 0 8>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
- 	};
- 
- 	pm8226_1: pm8226@1 {
--- 
-2.34.1
-
+Regards,
+Samuel

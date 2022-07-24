@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541FB57F422
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 10:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB29E57F426
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 10:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiGXIjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 04:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
+        id S231142AbiGXIlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 04:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXIja (ORCPT
+        with ESMTP id S229602AbiGXIk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 04:39:30 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A0514082
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 01:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658651968; x=1690187968;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ziLiSEQbzWjCi7B0eTZt1SCYgRe+J/hqHUnOduqyHUc=;
-  b=feEi8R8a/CyYKdMJmPO8NqJU75K8CYcLCvrNFcnh/5B81F0xfWGLcWFr
-   qPbIeYRXECyRc34iuqcJRHFjnTqFMVcVPoNIXFziyrqvreOhiY3vTMT+j
-   I/ABpQkJHddcUl0ofArXB7bEJ8H7r6pNMNZcBoUR05NqGng8hJoAgFPoo
-   HMaQuPMXK7M7gd3N/2CElFN2Imqb4RqMbevFuKa9P82IIaRyl9G+cEQdi
-   o4rQfKE8F5VZMgvIlxMN5qiJCGwOxpkfNRvb4Zy8HDW8jk+UinUaczK4P
-   kZjNKenDgMAdkxBnqxa8br5uMTnnldosCpk0cpquBnR4vCDhNN8QQJAWO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288285000"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="288285000"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 01:39:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="657758458"
-Received: from zjiang1-mobl.ccr.corp.intel.com (HELO [10.249.170.155]) ([10.249.170.155])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 01:39:23 -0700
-Message-ID: <b31ce6fd-4202-e7bb-61de-3120c1e06825@linux.intel.com>
-Date:   Sun, 24 Jul 2022 16:39:21 +0800
+        Sun, 24 Jul 2022 04:40:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D27140D5;
+        Sun, 24 Jul 2022 01:40:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 619CFB80D17;
+        Sun, 24 Jul 2022 08:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1022AC3411E;
+        Sun, 24 Jul 2022 08:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658652054;
+        bh=geZDnhQN0JqHvu8hmttukiCncgxnvnvKVBmeNXsnVnU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JOgwtLNBWGM1vPT4bySBecq9IwdfGY5cmzBxD14i05KWjZUcBAyLOhp52jwXgidA9
+         /1hn9FRw1A6AYx5htACyj/r6AChc03kRcyJu6P+uQXvlCNNF3mih9IVvIMfugA64yz
+         QDTTzjivjQ7b6FQdj+VIijMbcP35yO2051N9iSI99Nvrq+sJvAPFBylaVGvw9/REIr
+         rVfMV8loSr3vKdCYvji1013xA7Jf9HbmGLCegECLD4fGgQqERIvMAIfDdqI6V1B3ny
+         1sudJqKB6Olbj33YjRaYDe2OES5DaBsP2NcUvEX+n813gKy11rj4vUmOqNa5XdujVx
+         7FDu45Sscm7PQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oFXAc-0000mZ-6v; Sun, 24 Jul 2022 10:41:02 +0200
+Date:   Sun, 24 Jul 2022 10:41:02 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Yonglin Tan <yonglin.tan@outlook.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Quectel EM060K modem
+Message-ID: <Yt0FnnVh47y8aMtn@hovoldconsulting.com>
+References: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
- interface
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-5-baolu.lu@linux.intel.com>
- <20220723141118.GD79279@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220723141118.GD79279@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MEYP282MB23740DC78FB0DE954C59D3DEFD8F9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/23 22:11, Jason Gunthorpe wrote:
->> +	xa_erase(&group->pasid_array, pasid);
-> It is worth checking that the value returned from xa_erase is domain
-> and WARN_ON if not, since we are passing domain in..
+On Tue, Jul 19, 2022 at 07:28:00PM +0800, Yonglin Tan wrote:
+> Add usb product id entry for the Quectel EM060K module.
+> 
+> "MBIM mode": DIAG + NMEA + AT + MODEM + MBIM
+> 
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=030b Rev= 5.04
+> S:  Manufacturer=Quectel
+> S:  Product=EM060K-GL
+> S:  SerialNumber=89fb57db
+> C:* #Ifs= 7 Cfg#= 1 Atr=a0 MxPwr=500mA
+> A:  FirstIf#= 8 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 8 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+> E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+> I:  If#= 9 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:* If#= 9 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#=12 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=70 Driver=(none)
+> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Yes, will do like this:
+What's this last interface used for?
 
-WARN_ON(xa_erase(&group->pasid_array, pasid) != domain);
-
-Best regards,
-baolu
+Johan

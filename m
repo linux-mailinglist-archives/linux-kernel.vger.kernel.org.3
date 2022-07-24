@@ -2,111 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05AE57F5B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 17:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504C757F5BC
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 17:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233285AbiGXPWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 11:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S233689AbiGXPXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 11:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiGXPWH (ORCPT
+        with ESMTP id S229699AbiGXPXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 11:22:07 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAA811C07;
-        Sun, 24 Jul 2022 08:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=RG/BJ3Nv9HakG4zVWqCXWL3uZp6IBIbE/vdVZRgFNzw=;
-        t=1658676126; x=1659885726; b=hyxJq9tjqYBSUs+yl2lXhjEasadf4QDDhUQtDVBgBTsOCXy
-        dXAS1NdbzZAH8t2GUlNLJhRhD49LM6qQYr6ikt7VEwb372PnhXfEw2eIErL3/1g/NmcQS7A1MmBoj
-        M7sI/c7TKKmGWAVMuqOX0QISRHvCSzFTYdLMvn4EDRAsr7qLMVn4yGnhfPIrpN9AlVZXuznPdF7KL
-        MRGo6/1aZIACWmI+uYVqBv6MGHPydotxxqBIszWJT+2aLy/cMHaEc5ZyPntvis9Hxxu9S7XG2Yi0g
-        ypD4kw1ai5Re/1SorP2ClE+MC/OBt+Q4GXVXOTKFomMo1MmltlwK5AiDCvwoP4Gg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1oFdQP-006zmj-2a;
-        Sun, 24 Jul 2022 17:21:45 +0200
-Message-ID: <4f8ab262d98ba2a4d0e106e127c171e75b52ad47.camel@sipsolutions.net>
-Subject: Re: [PATCH] docs: driver-api: firmware: add driver firmware
- guidelines. (v3)
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Dave Airlie <airlied@gmail.com>, torvalds@linux-foundation.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        gregkh@linuxfoundation.org, Daniel Vetter <daniel@ffwll.ch>,
-        mcgrof@kernel.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.sf.net,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
-        linux-block@vger.kernel.org, Dave Airlie <airlied@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Harry Wentland <harry.wentland@amd.com>
-Date:   Sun, 24 Jul 2022 17:21:43 +0200
-In-Reply-To: <20220721044352.3110507-1-airlied@gmail.com>
-References: <20220721044352.3110507-1-airlied@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
-MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 24 Jul 2022 11:23:17 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B28B11C08
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 08:23:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VKDkjNB_1658676187;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKDkjNB_1658676187)
+          by smtp.aliyun-inc.com;
+          Sun, 24 Jul 2022 23:23:08 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr, alexandre.ghiti@canonical.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, huanyi.xj@alibaba-inc.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [PATCH V2 0/5] Fixups to work with crash tool
+Date:   Sun, 24 Jul 2022 23:23:00 +0800
+Message-Id: <20220724152305.1037212-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-21 at 14:43 +1000, Dave Airlie wrote:
->=20
-> +Users switching to a newer kernel should *not* have to install newer
-> +firmware files to keep their hardware working. At the same time updated
-> +firmware files must not cause any regressions for users of older kernel
-> +releases.
+I ever sent the patch 1 in the link:
+https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/
+And patch 2,3 in the link:
+https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/
+https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/
 
-That seems sane, and certainly something we've done in wireless in the
-past.
+This patch series just put these patches together, and with two new patch 4, 5.
+these five patches are the fixups for machine_kexec, kernel mode PC for vmcore
+and improvements for vmcoreinfo and memory layout dump.
 
-> +* Firmware files shall be designed in a way that it allows checking for
-> +  firmware ABI version changes. It is recommended that firmware files be
-> +  versioned with at least a major/minor version. It is suggested that
-> +  the firmware files in linux-firmware be named with some device
-> +  specific name, and just the major version. The firmware version should
-> +  be stored in the firmware header, or as an exception, as part of the
-> +  firmware file name,
+The main changes in the five patchs as below,
+Patch 1: use __smp_processor_id() instead of smp_processor_id() to cleanup
+	 the console prints.
+Patch 2: Add VM layout, va bits, ram base to vmcoreinfo, which can simplify
+	 the development of crash tool as ARM64 already did
+	 (arch/arm64/kernel/crash_core.c).
+Patch 3: Add modules to virtual kernel memory layout dump.
+Patch 4: Fixup to get correct kernel mode PC for vmcore.
+Patch 5: Updates vmcoreinfo.rst.
 
-Eh, I went to write a whole paragraph here and then read it again ...
-Maybe this should say "[t]he _full_ firmware version", to contrast with
-the previous sentence mentioning the "major version".
+With these 5 patches(patch 2 is must), crash tool can work well to analyze
+a vmcore. The patches for crash tool for RISCV64 is in the link:
+https://lore.kernel.org/linux-riscv/20220718025346.411758-1-xianting.tian@linux.alibaba.com/
 
->  in order to let the driver detact any non-ABI
+Changes v1 -> v2:
+ 1, remove the patch "Add a fast call path of crash_kexec()" from this series
+ of patches, as it already applied to riscv git.
+ https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
+ 2, add 'Reviewed-by' based on the comments of v1.  
 
-typo - 'detect'
+Xianting Tian (5):
+  RISC-V: use __smp_processor_id() instead of smp_processor_id()
+  RISC-V: Add arch_crash_save_vmcoreinfo support
+  riscv: Add modules to virtual kernel memory layout dump
+  RISC-V: Fixup getting correct current pc
+  riscv64: crash_core: Export kernel vm layout, phys_ram_base
 
-> +  fixes/changes. The firmware files in linux-firmware should be
-> +  overwritten with the newest compatible major version.
->=20
+ .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
+ arch/riscv/kernel/Makefile                    |  1 +
+ arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
+ arch/riscv/kernel/crash_save_regs.S           |  2 +-
+ arch/riscv/kernel/machine_kexec.c             |  2 +-
+ arch/riscv/mm/init.c                          |  4 +++
+ 6 files changed, 67 insertions(+), 2 deletions(-)
+ create mode 100644 arch/riscv/kernel/crash_core.c
 
-That's also a bit confusing IMHO - did that mean "minor version"? Or
-something? I mean ... if you overwrite a file that has the major version
-in the filename then by definition it is the same major version?
+-- 
+2.17.1
 
-> +  This means no major version bumps without the kernel retaining
-> +  backwards compatibility for the older major versions.
-
-Strictly reading this might require aeons of support for firmware
-version, if you have a release cadence of them like every 6 weeks for a
-new _major_ version (yes, because APIs change), then that's rather
-harsh. In practice we've often done this, but I think some reasonable
-cut-off could/should be there, such as dropping support after a
-reasonably long time frame (say a year?)
-
-Often though that's less a question of "does it still work" and rather
-one of "do I still support that" and the answer for the latter is
-obviously "no" much quicker than the former.
-
-johannes

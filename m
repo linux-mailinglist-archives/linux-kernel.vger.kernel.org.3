@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3525C57F35B
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 07:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7C157F360
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 07:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiGXFXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 01:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S235712AbiGXFkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 01:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233273AbiGXFXg (ORCPT
+        with ESMTP id S233285AbiGXFko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 01:23:36 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F50518E28
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 22:23:35 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id y15so7712230plp.10
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 22:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DVcGMUg63ZuyRPGB+ax8hjQYbRon/AMmT/KHY/uYZvM=;
-        b=N44XlBThF9hr0YdMwSqE/Y8pqxRR0qN7YJASl4rflgM929JO2OHiZZC3Tt9eG//5Mr
-         bksL1BeskWKeL5+tl9ML0hAeD7Let4DHvVZSj7JFppsP/flZNhp6Da/GQWkoLVAXSh8s
-         82e7TBIoe4GdJG6yXOEIHcpmNUlm7f/fn9WNB3cKy4tk+dM61JaL7pv9BDmkhR3Hg+4d
-         t7kXbus2/xDk2L+LnvvVhOq8HahOafa68USNdYtJbENOlK4n63nPvYYam3OSv1utrz74
-         p/zGFwbWqP/wO/YM7ylhCE6XkzL3+7D5gDaAhDM83sP/Q4tSMfEOZittVPXU3zMjOyfg
-         wRTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DVcGMUg63ZuyRPGB+ax8hjQYbRon/AMmT/KHY/uYZvM=;
-        b=k3wXXlC8SaOHnlnjkMGwN8qCeVp2LLaCGqNrOxWdQZ6ncuIxIkC+RHCZ315jX9EBvH
-         s5EFJ4+BEb1cGe5sGDntVianjt39fWnVwjXv/y2KJmoieelsB3gys9rQk081arNP69AY
-         qroa/tfKj+mbcc7o2GCSlr6sSi6YKTMlJTcrTPAx4xmOHD4IzvoXRdUEUewUq33ur7++
-         wJP3AMmJy1eoOC4+8LiDyeZXVTkzX2iBelPXZVVyYnxLHdmSnFt5jnWhDM5sCN9n77SU
-         a13bHtgW32f/9LWqbQCDdvvJh4hhn499CXKAaLUHVdw3lGQwTnx95rKSzqxQVaVqhNnq
-         yrlw==
-X-Gm-Message-State: AJIora8WvkXFbomeAn6jEqc2VI/RkFP7jPzrinRTWRa8XzMIbXRYekfN
-        b//CGxoLS+IGa6Q+4HKmPNkB5w==
-X-Google-Smtp-Source: AGRyM1t3x6rRtN3QukoCbgl9JRd33Dij9jGSlDj01WFH5DH93wV4aRi8wtun5sMyW9geJeJSJAFQSw==
-X-Received: by 2002:a17:90a:17e1:b0:1f2:2ff2:6cae with SMTP id q88-20020a17090a17e100b001f22ff26caemr17913677pja.196.1658640214217;
-        Sat, 23 Jul 2022 22:23:34 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (ec2-18-144-7-244.us-west-1.compute.amazonaws.com. [18.144.7.244])
-        by smtp.gmail.com with ESMTPSA id p64-20020a622943000000b0052b9351737fsm7036475pfp.92.2022.07.23.22.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 22:23:33 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 13:23:27 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] perf symbol: Skip recording symbols in
- '.gnu.warning.*' sections
-Message-ID: <20220724052327.GB82137@leoy-ThinkPad-X240s>
-References: <20220724022857.2621520-1-leo.yan@linaro.org>
- <20220724022857.2621520-3-leo.yan@linaro.org>
- <CAFP8O3LJq1rt6i0_rAW5pShUiA=FJ38ceb4Ps0KmLdCNzC9xbQ@mail.gmail.com>
+        Sun, 24 Jul 2022 01:40:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A849D140AC
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 22:40:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658641243; x=1690177243;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3nI5X01Dh6IyD7hFrhUwCh3/XGjZuDdxbiFmhDVbdQI=;
+  b=EMnmc1ncUjGBqXJeNgIAYrXiUCDE0dnjNzLe4MF6Rf9IPmMUDIG7+hmZ
+   MbjY4DiC23iEZSYKfl1uGdQ8b71S/Ke4lr/+u7XRam9TwOGYUNp+RNrQp
+   TizqRoSNEgkmnNsC/Fgwxi65Qa844h5oPFtQC50p2oYWUcq/G2irYOQkn
+   jdY8blDLQ9ab/XJ05B5bOzdO36yrdXdXMHFR4FUPThIcFCBqpKyzJwIs2
+   kYt+ySkTbLZ+dAiPDd01fPRp5s/AxJjumI4waDYjiDVojeTDPR3/lFhR5
+   4Ci++dNJBFf3U6u4XRYEUqy6uZZxD7+pvfv0oZ3EQiC2yqa9ImPWHII80
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="286276459"
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="286276459"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 22:40:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="667104768"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jul 2022 22:40:41 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFUM4-0003bV-2K;
+        Sun, 24 Jul 2022 05:40:40 +0000
+Date:   Sun, 24 Jul 2022 13:39:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dennis Cagle <d-cagle@codeaurora.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [linux-stable-rc:linux-4.9.y 967/2229]
+ drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <202207241311.Dv86CbAo-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFP8O3LJq1rt6i0_rAW5pShUiA=FJ38ceb4Ps0KmLdCNzC9xbQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 08:42:20PM -0700, Fangrui Song wrote:
-> On Sat, Jul 23, 2022 at 7:29 PM Leo Yan <leo.yan@linaro.org> wrote:
-> >
-> > Some symbols are observed their 'st_value' field are zeros.  E.g.
-> > libc.so.6 in Ubuntu contains a symbol '__evoke_link_warning_getwd' which
-> > resides in the '.gnu.warning.getwd' section, unlike normal symbols, this
-> > kind of symbols are only used for linker warning.
-> >
-> > This patch skips to record symbols from '.gnu.warning.*' sections by
-> > detecting the sub string '.gnu.warning' is contained in section name.
-> >
-> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> 
-> Presumably __evoke_link_warning_getwd is due to `clang -fuse-ld=lld
-> -static ...` on a file calling the deprecated getwd.
-> GNU ld and gold implement a .gnu.warning.* feature which removes the
-> section. ld.lld just ignores this section as the usefulness of the
-> functionality is unclear.
-> 
-> The section .gnu.warning.getwd does not have the SHF_ALLOC flag. Such
-> sections are not part of memory images and I think it is more generic
-> ignoring all symbols residing in a non-SHF_ALLOC section.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+head:   65be5f5665a580424a7b1102f1a04c4259c559b5
+commit: a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e [967/2229] ion: Protect kref from userspace manipulation
+config: mips-randconfig-r034-20220719 (https://download.01.org/0day-ci/archive/20220724/202207241311.Dv86CbAo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-4.9.y
+        git checkout a8200613c8c9fbaf7b55d4d438376ebaf0c4ce7e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/staging/android/ion/
 
-Good point!  Will refine the patch for this and send out soon.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks a lot, Fangrui.
+All warnings (new ones prefixed by >>):
+
+>> drivers/staging/android/ion/ion-ioctl.c:71:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (--handle->user_ref_count == 0)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/android/ion/ion-ioctl.c:74:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/staging/android/ion/ion-ioctl.c:71:2: note: remove the 'if' if its condition is always true
+           if (--handle->user_ref_count == 0)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/staging/android/ion/ion-ioctl.c:69:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +71 drivers/staging/android/ion/ion-ioctl.c
+
+    65	
+    66	/* Must hold the client lock */
+    67	static int user_ion_handle_put_nolock(struct ion_handle *handle)
+    68	{
+    69		int ret;
+    70	
+  > 71		if (--handle->user_ref_count == 0)
+    72			ret = ion_handle_put_nolock(handle);
+    73	
+    74		return ret;
+    75	}
+    76	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

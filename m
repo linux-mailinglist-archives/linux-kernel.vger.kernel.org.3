@@ -2,38 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2764457F3C0
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A496257F3C2
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239613AbiGXHej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 03:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S239645AbiGXHhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 03:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiGXHeg (ORCPT
+        with ESMTP id S232311AbiGXHhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 03:34:36 -0400
+        Sun, 24 Jul 2022 03:37:23 -0400
 Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2434F193C0;
-        Sun, 24 Jul 2022 00:34:31 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1658648066t1s2i30p
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D80613F30;
+        Sun, 24 Jul 2022 00:37:18 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1658648218tccj66q4
 Received: from localhost.localdomain ( [125.70.163.183])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 24 Jul 2022 15:34:24 +0800 (CST)
+        id ; Sun, 24 Jul 2022 15:36:56 +0800 (CST)
 X-QQ-SSF: 01000000002000007000B00A0000000
-X-QQ-FEAT: C2zsvWT0ctUWXDOTcu3pJEc41TwaG0zSWMyQ2km6vLP6PGGCrLxu76vRpP8k3
-        rKW+9pIyghwqvmIW9JMXEnOxyeY2cmVeA6md4hK7gdV9mzUMUaG39NSr2p1nJqvZoObldOv
-        9UiJZcid/XTQRMmDJmvGZSEVM1KuJ7MJ6aikR9j1G79xmgVvfFC0MkaVxJYNhNMEyHTPFlZ
-        WjGGIknZoboSLDQyLbg5dAzGf0mHtvrIL8+53lPOnN41SAlv2OTqCSh16LVsczh/RMA3hA8
-        F3fVUtgmzcnZgd7jHw1lz2LhWY4u2AdeV6agL84Bm9S9nSdWLu+omFf0J4N2v2wglwdQKSP
-        dX3HtFOsfk9fFq9/+Yhi5L0V3poI4sUce3+i7lBgawii87OTqM=
+X-QQ-FEAT: 7jw2iSiCazoMav4Yzpx3ytw6EPmuPE4/jr5WrcEa/tATwFc9DCuRRags72aEm
+        Ni4wJKPcbIzFuMp9rzpXMacoJrYGVH3rW/3F0kQ+/mgtJPAL1MOL57hrgwv4ZYZwPYfiCKM
+        T8rwhYhM+7rwqqgy4cydyqW+VX6w8F+YgXIqnqrnd/Hona7FX0NSw0M9BTWNDtHPcHIFDxt
+        t6zCE2HGk0bQZpekv88T2NWDfoI3fA6ghFcYA3yw2VKGa+FQLXPzPdHArsm6u0peE4dH+mU
+        mNDfJblYFIwudRKXCOxpcsmC+QEaXdpRsLPfUTueF9Gl+Bf6jRTEKRUN8WIOxNA5vZebPeA
+        4qqWGSF2YQnpSWSaPpaRc6Nlk/HI8E37yaR3YjmVD4lGMyMXuJ88gYJ3udjHQ==
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch, wangqing@vivo.com, dan.carpenter@oracle.com,
+        bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] drivers/remoteproc: fix repeated words in comments
-Date:   Sun, 24 Jul 2022 15:34:18 +0800
-Message-Id: <20220724073418.15793-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] msm/adreno: fix repeated words in comments
+Date:   Sun, 24 Jul 2022 15:36:50 +0800
+Message-Id: <20220724073650.16460-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,22 +56,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/remoteproc/remoteproc_core.c | 2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 02a04ab34a23..e3e68b5051bb 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -970,7 +970,7 @@ static int rproc_handle_carveout(struct rproc *rproc,
- 		return 0;
- 	}
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+index 9f76f5b15759..9303a011b81d 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+@@ -1277,7 +1277,7 @@ static int a6xx_gmu_rpmh_arc_votes_init(struct device *dev, u32 *votes,
+ 		}
  
--	/* Register carveout in in list */
-+	/* Register carveout in list */
- 	carveout = rproc_mem_entry_init(dev, NULL, 0, rsc->len, rsc->da,
- 					rproc_alloc_carveout,
- 					rproc_release_carveout, rsc->name);
+ 		/*
+-		 * Look for a level in in the secondary list that matches. If
++		 * Look for a level in the secondary list that matches. If
+ 		 * nothing fits, use the maximum non zero vote
+ 		 */
+ 
 -- 
 2.36.1
 

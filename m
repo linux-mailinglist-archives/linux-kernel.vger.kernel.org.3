@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F7D57F276
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 03:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A599757F27A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 03:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239099AbiGXBYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 21:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S239268AbiGXBYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 21:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiGXBYU (ORCPT
+        with ESMTP id S239077AbiGXBYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 21:24:20 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C78165BB
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 18:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658625859; x=1690161859;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0zcHayIvMltXVPaIrLswah13KrVDXAYgwLHpMQhwB2k=;
-  b=KJ8pTYZmSZTajgTvLJiZ9AXBFriwsZTKQDakEdYe6bEkdoE8fo0S2Xa6
-   SfFEyvh5E0Ab5BCLpU57YCz+etZqJgGDOLsGQRyVO2eBW+SFEycl1zUsr
-   ZMt7ULBkWQ/dRUJPHnmJhf8HEEucdVOmitl7Udr6pmZSu6kGV68oaeK7o
-   2mnVxjaXoPzgvE666uD2tvFN9E3XU17kevk3vIq0dOq11shH21R6c6mxP
-   xNd9hZYqwh2z4A0IaqBb6uTEEU56nO3Z4e8dBHqlwLMsumfYVxAeYxQ80
-   5/mALmwB/7UwK8NwUoh/SG+n0k9sTjJs6d62TBl7xTO10nK4ge/35T6RK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="274363943"
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="274363943"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 18:24:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="926465824"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Jul 2022 18:24:17 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFQLw-0003Lr-2j;
-        Sun, 24 Jul 2022 01:24:16 +0000
-Date:   Sun, 24 Jul 2022 09:24:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: arch/arm64/kernel/proton-pack.c:1117:13: warning: no previous
- prototype for 'spectre_bhb_patch_clearbhb'
-Message-ID: <202207240915.0vl43AvY-lkp@intel.com>
+        Sat, 23 Jul 2022 21:24:51 -0400
+Received: from out28-51.mail.aliyun.com (out28-51.mail.aliyun.com [115.124.28.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88B3186D0;
+        Sat, 23 Jul 2022 18:24:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09999388|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0805319-0.0018128-0.917655;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=23;RT=23;SR=0;TI=SMTPD_---.Oc.heif_1658625883;
+Received: from 192.168.10.152(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Oc.heif_1658625883)
+          by smtp.aliyun-inc.com;
+          Sun, 24 Jul 2022 09:24:45 +0800
+Subject: Re: [PATCH 3/3] SPI: Ingenic: Add SFC support for Ingenic SoCs.
+To:     Mark Brown <broonie@kernel.org>
+Cc:     tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, aidanmacdonald.0x0@gmail.com,
+        tmn505@gmail.com, paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com,
+        reimu@sudomaker.com
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-4-git-send-email-zhouyanjie@wanyeetech.com>
+ <YtrukeLk9fInqQIL@sirena.org.uk>
+ <89d22457-8c62-e441-3bf4-2734ec2a45e1@wanyeetech.com>
+ <YtxMwyRghFKS/vu5@sirena.org.uk>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <1404dd8d-475e-b3b6-a3da-4eeddca3070b@wanyeetech.com>
+Date:   Sun, 24 Jul 2022 09:24:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <YtxMwyRghFKS/vu5@sirena.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,61 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+Hi Mark,
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   515f71412bb73ebd7f41f90e1684fc80b8730789
-commit: 228a26b912287934789023b4132ba76065d9491c arm64: Use the clearbhb instruction in mitigations
-date:   5 months ago
-config: arm64-alldefconfig (https://download.01.org/0day-ci/archive/20220724/202207240915.0vl43AvY-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=228a26b912287934789023b4132ba76065d9491c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 228a26b912287934789023b4132ba76065d9491c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/arm64/kernel/proton-pack.c:564:13: warning: no previous prototype for 'spectre_v4_patch_fw_mitigation_enable' [-Wmissing-prototypes]
-     564 | void __init spectre_v4_patch_fw_mitigation_enable(struct alt_instr *alt,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/proton-pack.c:584:13: warning: no previous prototype for 'smccc_patch_fw_mitigation_conduit' [-Wmissing-prototypes]
-     584 | void __init smccc_patch_fw_mitigation_conduit(struct alt_instr *alt,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/proton-pack.c:1048:14: warning: no previous prototype for 'spectre_bhb_patch_loop_mitigation_enable' [-Wmissing-prototypes]
-    1048 | void noinstr spectre_bhb_patch_loop_mitigation_enable(struct alt_instr *alt,
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/proton-pack.c:1059:14: warning: no previous prototype for 'spectre_bhb_patch_fw_mitigation_enabled' [-Wmissing-prototypes]
-    1059 | void noinstr spectre_bhb_patch_fw_mitigation_enabled(struct alt_instr *alt,
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/proton-pack.c:1070:14: warning: no previous prototype for 'spectre_bhb_patch_loop_iter' [-Wmissing-prototypes]
-    1070 | void noinstr spectre_bhb_patch_loop_iter(struct alt_instr *alt,
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/proton-pack.c:1091:14: warning: no previous prototype for 'spectre_bhb_patch_wa3' [-Wmissing-prototypes]
-    1091 | void noinstr spectre_bhb_patch_wa3(struct alt_instr *alt,
-         |              ^~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/kernel/proton-pack.c:1117:13: warning: no previous prototype for 'spectre_bhb_patch_clearbhb' [-Wmissing-prototypes]
-    1117 | void __init spectre_bhb_patch_clearbhb(struct alt_instr *alt,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+On 2022/7/24 上午3:32, Mark Brown wrote:
+> On Sun, Jul 24, 2022 at 01:06:16AM +0800, Zhou Yanjie wrote:
+>> On 2022/7/23 上午2:38, Mark Brown wrote:
+>>>> +++ b/drivers/spi/spi-ingenic-sfc.c
+>>>> @@ -0,0 +1,662 @@
+>>>> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +/*
+>>>> + * Ingenic SoCs SPI Flash Controller Driver
+>>> Please make the entire comment a C++ one so things look more
+>>> intentional.
+>> I'm sorry, I didn't understand well what you meant :(
+>> Could you please explain a little more detail?
+> The above comment block uses both C /* */ and C++ // style comments,
+> please make it just use the C++ style.
 
 
-vim +/spectre_bhb_patch_clearbhb +1117 arch/arm64/kernel/proton-pack.c
+Sure, will do in the next version.
 
-  1115	
-  1116	/* Patched to NOP when not supported */
-> 1117	void __init spectre_bhb_patch_clearbhb(struct alt_instr *alt,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>>>> +static irqreturn_t ingenic_sfc_irq_handler(int irq, void *data)
+>>>> +{
+>>>> +	struct ingenic_sfc *sfc = data;
+>>>> +
+>>>> +	writel(0x1f, sfc->base + SFC_REG_INTC);
+>>>> +
+>>>> +	complete(&sfc->completion);
+>>>> +
+>>>> +	return IRQ_HANDLED;
+>>>> +}
+>>> This doesn't pay any attention to any status registers in the chip so
+>>> won't work if the interrupt is shared and won't notice any error reports
+>>> from the device...
+>> This interrupt is exclusively owned by SFC, do we still
+>> need to perform the operation you said? I haven't done
+>> these operations before because I want to minimize the
+>> overhead and avoid affecting performance.
+> Even if the device is not shared is there no possibility that the
+> device can report an unexpected interrupt status?  It's not just
+> the sharing case, it's also the fact that it looks like there's a
+> status being reported but we're not checking it so if anything
+> goes wrong then we're less likely to notice.  I'd worry about
+> data corruption.
+
+
+Sure, I will change this in the next version.
+
+
+Thanks and best regards!
+
+

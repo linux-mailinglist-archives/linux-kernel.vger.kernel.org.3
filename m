@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB6657F763
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 00:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5CE57F76A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 00:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbiGXWkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 18:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S231891AbiGXWsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 18:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiGXWkA (ORCPT
+        with ESMTP id S229618AbiGXWsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 18:40:00 -0400
+        Sun, 24 Jul 2022 18:48:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F951056B
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 15:39:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C16ACE30
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 15:48:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41E0D611F1
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 22:39:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8655C3411E;
-        Sun, 24 Jul 2022 22:39:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0534611FB
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 22:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0ACC341C0
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 22:48:04 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OIo+gX7r"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="qAFp1JIM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1658702396;
+        t=1658702882;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qwwPwwf8qoP83WuKgLNvp+yCb0Gwetm9WwYQMbMcL3s=;
-        b=OIo+gX7rmSX+g39zbesRVfqjC3U//gxNk03U5YiB9zk6EAq9kmTtoe3uq4kVaJgNBzXeDK
-        0DRtPPMa5EZoC/945dYKIwf5qw8QMJnDe3SU5eQpOzyLWMy0/WGp5Dpp5BJlrgzIs8fROj
-        75U711KkfeHRPQPuZVtgQ0ZL7/uilTA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0f3c01f5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 24 Jul 2022 22:39:55 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 00:39:53 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     kernel test robot <lkp@intel.com>, ardb@kernel.org
-Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723]
- arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version
- 4.6 of GCC
-Message-ID: <Yt3KObFVIUI2mFGt@zx2c4.com>
-References: <202207250449.BYMZbIA2-lkp@intel.com>
+        bh=lzuSl3dxwIYIDZF4lZFJvzhnSJM1/WXSFLmwNOT9hlg=;
+        b=qAFp1JIM3bp4ZJkRcPUc1I6MXyLO5U1Gv9D6VbfkESug8oc+KDEMA27wRiFlnRBDQSNxs/
+        azjK9yP5Lv8sI+y3vcBU80QDDUgIMfhvQTzrH1VJNUJXSRGzc0rSsG5d6LBrrzkHClEn1w
+        KactQS76DeFVyIxbJId4zp7JWXzATxk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 219336fc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Sun, 24 Jul 2022 22:48:02 +0000 (UTC)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-31e7ca45091so93192547b3.3
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 15:48:02 -0700 (PDT)
+X-Gm-Message-State: AJIora+zmgvGOxF/rnRqbSoBg8zxepsmWisoV/rcGgwnIUqm6i6+MwPZ
+        8R1PCqOYq48vmEyCUIjY4XjkkooQRoB+0WyVd/0=
+X-Google-Smtp-Source: AGRyM1uBMjFY1+oZ0uGP/skNRN1JUeazAmEPygDqL4fRgAqZIS2VP+LTcFy+qvQmEzIgotp6FwKOvCHwhE+IX7ritXs=
+X-Received: by 2002:a0d:cc05:0:b0:31e:6ee8:2fdd with SMTP id
+ o5-20020a0dcc05000000b0031e6ee82fddmr7833707ywd.414.1658702880868; Sun, 24
+ Jul 2022 15:48:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202207250449.BYMZbIA2-lkp@intel.com>
+References: <CAHmME9qTA90=GEr6h1GZh0CjS+6tpe5uuqkYoJVv79h0zd0w1w@mail.gmail.com>
+ <20220719130207.147536-1-Jason@zx2c4.com>
+In-Reply-To: <20220719130207.147536-1-Jason@zx2c4.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 25 Jul 2022 00:47:50 +0200
+X-Gmail-Original-Message-ID: <CAHmME9o7cNRPxy+WuM6-13ak9RNo1UH8-4qMArSACLs8LYAt8g@mail.gmail.com>
+Message-ID: <CAHmME9o7cNRPxy+WuM6-13ak9RNo1UH8-4qMArSACLs8LYAt8g@mail.gmail.com>
+Subject: Re: [PATCH v3] random: handle archrandom with multiple longs
+To:     Borislav Petkov <bp@suse.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -64,39 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
+Hey Borislav (or other x86ers),
 
-On Mon, Jul 25, 2022 at 04:14:48AM +0800, kernel test robot wrote:
-> All warnings (new ones prefixed by >>):
-> 
-> >> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
->    #warning This code requires at least version 4.6 of GCC
->     ^
->    1 warning generated.
-> 
-> 
-> vim +30 arch/arm/lib/xor-neon.c
-> 
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  16  
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
-> 01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
-> 01956597cbc46d Ard Biesheuvel 2013-05-17  32  
+On Tue, Jul 19, 2022 at 3:02 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> The archrandom interface was originally designed for x86, which supplies
+> RDRAND/RDSEED for receiving random words into registers, resulting in
+> one function to generate an int and another to generate a long. However,
+> other architectures don't follow this.
+>
+> On arm64, the SMCCC TRNG interface can return between 1 and 3 longs. On
+> s390, the CPACF TRNG interface can return arbitrary amounts, with 32
+> longs having the same cost as one. On UML, the os_getrandom() interface
+> can return arbitrary amounts.
+>
+> So change the api signature to take a "max_longs" parameter designating
+> the maximum number of longs requested, and then return the number of
+> longs generated.
+>
+> Since callers need to check this return value and loop anyway, each arch
+> implementation does not bother implementing its own loop to try again to
+> fill the maximum number of longs. Additionally, all existing callers
+> pass in a constant max_longs parameter. Taken together, these two things
+> mean that the codegen doesn't really change much for one-word-at-a-time
+> platforms, while performance is greatly improved on platforms such as
+> s390.
 
-Does this file need a depends on ≥4.6 thing in Kconfig? Or is something
-else happening here since 4.6 isn't even supported by the kernel these
-days?
+This patch now has acks from Heiko, Catalin, Mark, and Michael,
+covering the arm, ppc, and s390 changes. The changes to s390 and arm
+were non-trivial so those acks were quite meaningful. On x86 and ppc,
+the code compiles down to basically the same assembly and the change
+really doesn't matter at all. Nonetheless, I thought I should give you
+a final poke in case you want to ack or nack this, lest I step on the
+tip.git of your shoes.
 
 Jason

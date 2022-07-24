@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F1F57F398
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501A357F399
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbiGXHIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 03:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S238302AbiGXHKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 03:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiGXHIB (ORCPT
+        with ESMTP id S229483AbiGXHKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 03:08:01 -0400
+        Sun, 24 Jul 2022 03:10:32 -0400
 Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6861570B
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 00:07:55 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1658646464tvo35g03
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A0613D11
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 00:10:27 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1658646617tjaeqp23
 Received: from localhost.localdomain ( [125.70.163.183])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 24 Jul 2022 15:07:42 +0800 (CST)
+        id ; Sun, 24 Jul 2022 15:10:16 +0800 (CST)
 X-QQ-SSF: 01000000002000007000B00A0000000
-X-QQ-FEAT: Y5/s5IBMBZKyIROfgtPjanP2EtS6sNh99EoxSLr08yk8ftkXPyGnSwaAMtyi8
-        /qAoEtHxB3DhA6Nt8kou+UVeYRNMvVxU4Yu3FCxk5eqng7nt+gktyOLtozYIlxepklUBZVO
-        GKSge38owMgussSFcxdJHPoFCvvZ3dySUBfj5+siHZAT9fhGuMUOl8pXV3WPSArx3SvQYi+
-        UD9deJWmPUQwUgxIUfx3MTLbRKgKLa64U085pUhAZjW1Ve3TQtXRRo4P3YD1hAM+D+XD591
-        PvC+IaXq5QJn0QzJj65WCIx9r0CM6qm0PGEmO9gDCcUiJChmclBYXOOHkIhdXZJKA2uaKZ1
-        xIcx8SSXEhWWO4uaqOT16ByFQ25KxUKdrASIsGriSby3ibQcjg=
+X-QQ-FEAT: 7jw2iSiCazpDLTDr4HOaN8SJ7zetT2RY2zS9DJNDlFgShqayluQZkuTk9rVYG
+        eF1lNTbG9EbW4E48abZnaPlsnX3zTUBHLau+d8Z55dx54fMOBMTamppm83BchDEwGqNkm87
+        oDjAzdZ90VkFTuXuTGooGQTjd/RR71fp/9OAvDKpKKIf2VHnNE8NPwXcpp/gQkzQJzCi0YO
+        iCwALCPvCnOA+mRDhjAZTNFBKIu41VmXf0zkI1WwVCYTzQ1kSR63LgesCIISD9c8+gJcLLP
+        5W2yAtIOxaZxuw9pb92j79nWQ/MRwzJ5SukUVe0bA6dK/diZKAEbKtQPAhPpskulI3viNLi
+        t5H7Bk+tgONF4RzB/oUTGfQfhv3BHgwPEVR/bpf71LSCcUTE4s=
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
 To:     perex@perex.cz, tiwai@suse.com
 Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] pci/emu10k1: fix repeated words in comments
-Date:   Sun, 24 Jul 2022 15:07:36 +0800
-Message-Id: <20220724070736.8624-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] pci/asihpi: fix repeated words in comments
+Date:   Sun, 24 Jul 2022 15:10:09 +0800
+Message-Id: <20220724071009.9274-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,22 +51,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- sound/pci/emu10k1/memory.c | 2 +-
+ sound/pci/asihpi/hpi6205.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/pci/emu10k1/memory.c b/sound/pci/emu10k1/memory.c
-index 9d26535f3fa3..edb3f1763719 100644
---- a/sound/pci/emu10k1/memory.c
-+++ b/sound/pci/emu10k1/memory.c
-@@ -324,7 +324,7 @@ snd_emu10k1_alloc_pages(struct snd_emu10k1 *emu, struct snd_pcm_substream *subst
- 		return NULL;
- 	}
- 	/* fill buffer addresses but pointers are not stored so that
--	 * snd_free_pci_page() is not called in in synth_free()
-+	 * snd_free_pci_page() is not called in synth_free()
- 	 */
- 	idx = 0;
- 	for (page = blk->first_page; page <= blk->last_page; page++, idx++) {
+diff --git a/sound/pci/asihpi/hpi6205.c b/sound/pci/asihpi/hpi6205.c
+index 3d6914c64c4a..27e11b5f70b9 100644
+--- a/sound/pci/asihpi/hpi6205.c
++++ b/sound/pci/asihpi/hpi6205.c
+@@ -445,7 +445,7 @@ void HPI_6205(struct hpi_message *phm, struct hpi_response *phr)
+ /* SUBSYSTEM */
+ 
+ /** Create an adapter object and initialise it based on resource information
+- * passed in in the message
++ * passed in the message
+  * *** NOTE - you cannot use this function AND the FindAdapters function at the
+  * same time, the application must use only one of them to get the adapters ***
+  */
 -- 
 2.36.1
 

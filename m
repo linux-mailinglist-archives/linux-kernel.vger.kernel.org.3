@@ -2,165 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39D457F6AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139DA57F6B5
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbiGXTNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 15:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
+        id S229782AbiGXTYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 15:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiGXTNV (ORCPT
+        with ESMTP id S229469AbiGXTYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 15:13:21 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DF1DFFC
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:13:20 -0700 (PDT)
+        Sun, 24 Jul 2022 15:24:22 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ABAEE13
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:24:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658690000; x=1690226000;
+  t=1658690661; x=1690226661;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/APqt5Mi98G4cmT3Lgm2ScN+tpJjK5pjgrurXgiAjEw=;
-  b=fEpqnab6m80pLYnLBEAylRm4Zox5GJSTSw5MVxP5gw3gMSwlbzQkbYob
-   eCx4KaoEIfkFrhfTng0f8HhpEjKyvrjn0221HcfwOTwM2OLY6Ml4FxIiv
-   p7GjuvWXc+duyqAF0SWbxkE+lIfuGpyy+4AFSTykm6KoTyd3k6skWBWXK
-   E0rT8VibwVYqA/me70t7qffiEPqgHlcuy7DPj2mNPo0JqzpVGY6W8Sl4S
-   5sqJbPerHDu+Gq5OGhhkxEw4o47okIHtZyIkn/lbGxUsDwyh/+fYCZmdf
-   fWIBV5+E14BanlM7UiD2KVBJ/sAPLIb3PmtPAJbwFLGBnFRPdw5VoioYB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288324154"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="288324154"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 12:13:19 -0700
+  bh=SvohAPZa96BaN4XatnHwvZCfyOEADAbXgNY9qfj6dHM=;
+  b=J3yxLm3u+0Jc8Xj9/D3AO3UdsGt6Ww311meAigJrDOW8WihzXLHK0GqQ
+   eD0GK5TDMN2z1s2HxqPmm3SLy/fJBeAFrxnL8jT58UuGLeZ3zBmLHrm4u
+   qRsg2WRdlJ4vGs4umYCvQi/A3jRZ4HrqSTfNHnM+Dx4IIFR6LWaBVbRmP
+   TBHSKbxLVTpvTpSxGQK7ll//02AMyTNy25VWnBv93I2jnGSAK2IHTXJ76
+   m6x55Z07DhPWfQfL/jGZ+00dgnaapk0tFD3Ravnh3u+Ni2isMcZSSX2fa
+   WM6oiW3EyZ3sV+QaKH1JzC/WXSKqmtsI0eYCayP/MV6P0177owYitWWty
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="351561459"
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="351561459"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 12:24:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="596469455"
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="574789620"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 24 Jul 2022 12:13:18 -0700
+  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 12:24:19 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oFh2T-0004A5-27;
-        Sun, 24 Jul 2022 19:13:17 +0000
-Date:   Mon, 25 Jul 2022 03:13:15 +0800
+        id 1oFhD8-0004B3-1k;
+        Sun, 24 Jul 2022 19:24:18 +0000
+Date:   Mon, 25 Jul 2022 03:23:34 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>
-Subject: security/keys/trusted-keys/trusted_tpm2.c:42:9: warning: ISO C90
- forbids mixed declarations and code
-Message-ID: <202207250316.ZEbQokZd-lkp@intel.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Atish Patra <Atish.Patra@wdc.com>,
+        linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>
+Subject: [atishp04:sstc_v5 4/5] drivers/clocksource/timer-riscv.c:185:6:
+ error: call to undeclared function 'riscv_isa_extension_available'; ISO C99
+ and later do not support implicit function declarations
+Message-ID: <202207250359.HbTGzcp8-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220722-162642/Jianglei-Nie/KEYS-trusted-Fix-memory-leak-in-tpm2_key_encode/20220608-211954
-head:   7112e578934830db95743922ab0d46d2f4b7dff4
-commit: 7112e578934830db95743922ab0d46d2f4b7dff4 KEYS: trusted: Fix memory leak in tpm2_key_encode()
-date:   2 days ago
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220725/202207250316.ZEbQokZd-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+tree:   https://github.com/atishp04/linux sstc_v5
+head:   1b65346e11303beea1c67b3557ae56aee68e7a57
+commit: 69d668ba2592b6ce82b8d08c327097ccfd69b600 [4/5] RISC-V: Prefer sstc extension if available
+config: riscv-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220725/202207250359.HbTGzcp8-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 0c1b32717bcffcf8edf95294e98933bd4c1e76ed)
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/7112e578934830db95743922ab0d46d2f4b7dff4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220722-162642/Jianglei-Nie/KEYS-trusted-Fix-memory-leak-in-tpm2_key_encode/20220608-211954
-        git checkout 7112e578934830db95743922ab0d46d2f4b7dff4
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/atishp04/linux/commit/69d668ba2592b6ce82b8d08c327097ccfd69b600
+        git remote add atishp04 https://github.com/atishp04/linux
+        git fetch --no-tags atishp04 sstc_v5
+        git checkout 69d668ba2592b6ce82b8d08c327097ccfd69b600
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash security/keys/trusted-keys/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clocksource/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   security/keys/trusted-keys/trusted_tpm2.c: In function 'tpm2_key_encode':
->> security/keys/trusted-keys/trusted_tpm2.c:42:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-      42 |         u8 *work = scratch, *work1;
-         |         ^~
+>> drivers/clocksource/timer-riscv.c:185:6: error: call to undeclared function 'riscv_isa_extension_available'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (riscv_isa_extension_available(NULL, SSTC)) {
+               ^
+>> drivers/clocksource/timer-riscv.c:185:42: error: use of undeclared identifier 'SSTC'
+           if (riscv_isa_extension_available(NULL, SSTC)) {
+                                                   ^
+   2 errors generated.
 
 
-vim +42 security/keys/trusted-keys/trusted_tpm2.c
+vim +/riscv_isa_extension_available +185 drivers/clocksource/timer-riscv.c
 
-f2219745250f38 James Bottomley 2021-01-27   30  
-f2219745250f38 James Bottomley 2021-01-27   31  static int tpm2_key_encode(struct trusted_key_payload *payload,
-f2219745250f38 James Bottomley 2021-01-27   32  			   struct trusted_key_options *options,
-f2219745250f38 James Bottomley 2021-01-27   33  			   u8 *src, u32 len)
-f2219745250f38 James Bottomley 2021-01-27   34  {
-7112e578934830 Jianglei Nie    2022-07-22   35  	int ret;
-f2219745250f38 James Bottomley 2021-01-27   36  	const int SCRATCH_SIZE = PAGE_SIZE;
-7112e578934830 Jianglei Nie    2022-07-22   37  	u8 *scratch;
-7112e578934830 Jianglei Nie    2022-07-22   38  
-7112e578934830 Jianglei Nie    2022-07-22   39  	scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
-7112e578934830 Jianglei Nie    2022-07-22   40  	if (!scratch)
-7112e578934830 Jianglei Nie    2022-07-22   41  		return -ENOMEM;
-f2219745250f38 James Bottomley 2021-01-27  @42  	u8 *work = scratch, *work1;
-f2219745250f38 James Bottomley 2021-01-27   43  	u8 *end_work = scratch + SCRATCH_SIZE;
-f2219745250f38 James Bottomley 2021-01-27   44  	u8 *priv, *pub;
-f2219745250f38 James Bottomley 2021-01-27   45  	u16 priv_len, pub_len;
-f2219745250f38 James Bottomley 2021-01-27   46  
-f2219745250f38 James Bottomley 2021-01-27   47  	priv_len = get_unaligned_be16(src) + 2;
-f2219745250f38 James Bottomley 2021-01-27   48  	priv = src;
-f2219745250f38 James Bottomley 2021-01-27   49  
-f2219745250f38 James Bottomley 2021-01-27   50  	src += priv_len;
-f2219745250f38 James Bottomley 2021-01-27   51  
-f2219745250f38 James Bottomley 2021-01-27   52  	pub_len = get_unaligned_be16(src) + 2;
-f2219745250f38 James Bottomley 2021-01-27   53  	pub = src;
-f2219745250f38 James Bottomley 2021-01-27   54  
-f2219745250f38 James Bottomley 2021-01-27   55  	work = asn1_encode_oid(work, end_work, tpm2key_oid,
-f2219745250f38 James Bottomley 2021-01-27   56  			       asn1_oid_len(tpm2key_oid));
-f2219745250f38 James Bottomley 2021-01-27   57  
-f2219745250f38 James Bottomley 2021-01-27   58  	if (options->blobauth_len == 0) {
-f2219745250f38 James Bottomley 2021-01-27   59  		unsigned char bool[3], *w = bool;
-f2219745250f38 James Bottomley 2021-01-27   60  		/* tag 0 is emptyAuth */
-f2219745250f38 James Bottomley 2021-01-27   61  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
-7112e578934830 Jianglei Nie    2022-07-22   62  		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode")) {
-7112e578934830 Jianglei Nie    2022-07-22   63  			ret = PTR_ERR(w);
-7112e578934830 Jianglei Nie    2022-07-22   64  			goto err;
-7112e578934830 Jianglei Nie    2022-07-22   65  		}
-f2219745250f38 James Bottomley 2021-01-27   66  		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
-f2219745250f38 James Bottomley 2021-01-27   67  	}
-f2219745250f38 James Bottomley 2021-01-27   68  
-f2219745250f38 James Bottomley 2021-01-27   69  	/*
-f2219745250f38 James Bottomley 2021-01-27   70  	 * Assume both octet strings will encode to a 2 byte definite length
-f2219745250f38 James Bottomley 2021-01-27   71  	 *
-f2219745250f38 James Bottomley 2021-01-27   72  	 * Note: For a well behaved TPM, this warning should never
-f2219745250f38 James Bottomley 2021-01-27   73  	 * trigger, so if it does there's something nefarious going on
-f2219745250f38 James Bottomley 2021-01-27   74  	 */
-f2219745250f38 James Bottomley 2021-01-27   75  	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-7112e578934830 Jianglei Nie    2022-07-22   76  		 "BUG: scratch buffer is too small")) {
-7112e578934830 Jianglei Nie    2022-07-22   77  		ret = -EINVAL;
-7112e578934830 Jianglei Nie    2022-07-22   78  		goto err;
-7112e578934830 Jianglei Nie    2022-07-22   79  	}
-f2219745250f38 James Bottomley 2021-01-27   80  
-f2219745250f38 James Bottomley 2021-01-27   81  	work = asn1_encode_integer(work, end_work, options->keyhandle);
-f2219745250f38 James Bottomley 2021-01-27   82  	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
-f2219745250f38 James Bottomley 2021-01-27   83  	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
-f2219745250f38 James Bottomley 2021-01-27   84  
-f2219745250f38 James Bottomley 2021-01-27   85  	work1 = payload->blob;
-f2219745250f38 James Bottomley 2021-01-27   86  	work1 = asn1_encode_sequence(work1, work1 + sizeof(payload->blob),
-f2219745250f38 James Bottomley 2021-01-27   87  				     scratch, work - scratch);
-7112e578934830 Jianglei Nie    2022-07-22   88  	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-7112e578934830 Jianglei Nie    2022-07-22   89  		ret = PTR_ERR(work1);
-7112e578934830 Jianglei Nie    2022-07-22   90  		goto err;
-7112e578934830 Jianglei Nie    2022-07-22   91  	}
-f2219745250f38 James Bottomley 2021-01-27   92  
-7112e578934830 Jianglei Nie    2022-07-22   93  	kfree(scratch);
-f2219745250f38 James Bottomley 2021-01-27   94  	return work1 - payload->blob;
-7112e578934830 Jianglei Nie    2022-07-22   95  
-7112e578934830 Jianglei Nie    2022-07-22   96  err:
-7112e578934830 Jianglei Nie    2022-07-22   97  	kfree(scratch);
-7112e578934830 Jianglei Nie    2022-07-22   98  	return ret;
-f2219745250f38 James Bottomley 2021-01-27   99  }
-f2219745250f38 James Bottomley 2021-01-27  100  
+   117	
+   118	static int __init riscv_timer_init_dt(struct device_node *n)
+   119	{
+   120		int cpuid, hartid, error;
+   121		struct device_node *child;
+   122		struct irq_domain *domain;
+   123	
+   124		hartid = riscv_of_processor_hartid(n);
+   125		if (hartid < 0) {
+   126			pr_warn("Not valid hartid for node [%pOF] error = [%d]\n",
+   127				n, hartid);
+   128			return hartid;
+   129		}
+   130	
+   131		cpuid = riscv_hartid_to_cpuid(hartid);
+   132		if (cpuid < 0) {
+   133			pr_warn("Invalid cpuid for hartid [%d]\n", hartid);
+   134			return cpuid;
+   135		}
+   136	
+   137		if (cpuid != smp_processor_id())
+   138			return 0;
+   139	
+   140		domain = NULL;
+   141		child = of_get_compatible_child(n, "riscv,cpu-intc");
+   142		if (!child) {
+   143			pr_err("Failed to find INTC node [%pOF]\n", n);
+   144			return -ENODEV;
+   145		}
+   146		domain = irq_find_host(child);
+   147		of_node_put(child);
+   148		if (!domain) {
+   149			pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+   150			return -ENODEV;
+   151		}
+   152	
+   153		riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+   154		if (!riscv_clock_event_irq) {
+   155			pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+   156			return -ENODEV;
+   157		}
+   158	
+   159		pr_info("%s: Registering clocksource cpuid [%d] hartid [%d]\n",
+   160		       __func__, cpuid, hartid);
+   161		error = clocksource_register_hz(&riscv_clocksource, riscv_timebase);
+   162		if (error) {
+   163			pr_err("RISCV timer register failed [%d] for cpu = [%d]\n",
+   164			       error, cpuid);
+   165			return error;
+   166		}
+   167	
+   168		sched_clock_register(riscv_sched_clock, 64, riscv_timebase);
+   169	
+   170		error = request_percpu_irq(riscv_clock_event_irq,
+   171					    riscv_timer_interrupt,
+   172					    "riscv-timer", &riscv_clock_event);
+   173		if (error) {
+   174			pr_err("registering percpu irq failed [%d]\n", error);
+   175			return error;
+   176		}
+   177	
+   178		error = cpuhp_setup_state(CPUHP_AP_RISCV_TIMER_STARTING,
+   179				 "clockevents/riscv/timer:starting",
+   180				 riscv_timer_starting_cpu, riscv_timer_dying_cpu);
+   181		if (error)
+   182			pr_err("cpu hp setup state failed for RISCV timer [%d]\n",
+   183			       error);
+   184	
+ > 185		if (riscv_isa_extension_available(NULL, SSTC)) {
+   186			pr_info("Timer interrupt in S-mode is available via sstc extension\n");
+   187			static_branch_enable(&riscv_sstc_available);
+   188		}
+   189	
+   190		return error;
+   191	}
+   192	
 
 -- 
 0-DAY CI Kernel Test Service

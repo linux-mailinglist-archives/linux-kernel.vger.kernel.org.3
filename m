@@ -2,179 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D68357F434
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 10:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0951E57F435
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 10:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiGXIxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 04:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S231827AbiGXIx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 04:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiGXIxN (ORCPT
+        with ESMTP id S231414AbiGXIxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 04:53:13 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD5B1409C
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 01:53:12 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id q3so5555876qvp.5
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 01:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jgawh2EwihBd+a9lkA4EHRm1K3v8qTFFJ9wLspYH2QI=;
-        b=oP/YYuYQKuwrP2KQvp7PfKrUV/SuFMxjgF33t+HQhvVrZfJyVUpj/50MmgMm8v2BAI
-         GjdDidp2kaGGDpEzgAXB6DBoASTffUG+uNyjxPjxLPqzDSBLLEI+DcyyGN1RUBZDnCq3
-         m1tYdtuTuICDz6KQbqTHBcwHG9rAMZHZ8yQwuktIHX3aGNwOZBVDiWhFt8/js4P0Qv67
-         FMIoBDcgtBH+60ixxJ95O86+XJe16I1yce/1YetaVdKd/nYx9yGaHhdqk/sNsE00e40U
-         eUWPeSWVBDQs6aHpI4oJo83TeHn2LSt7BxGrS6UaYPFkn1Ut1nvbWFrNG8COiGqVJKYm
-         1/bQ==
+        Sun, 24 Jul 2022 04:53:25 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD8315714
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 01:53:24 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id w5-20020a056e021c8500b002dcb397284dso5357596ill.5
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 01:53:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jgawh2EwihBd+a9lkA4EHRm1K3v8qTFFJ9wLspYH2QI=;
-        b=OfahQMfFl3Gru1Y2zbWaDD1e0zZBkshokpIj6jcikLis6t5cL0z7CAmsuQR2q6F04e
-         RUeFrBVkUKmAni+nPSvo1TOzGYb/OAlyGFh9hx6uJMRyaGhtIykur4hU9Uxc1ZFniK+m
-         PS3sazevtd0Fkw2bbjSUFoLvvUl0cxM/598V73/j4ENAAPic9vVJJCe5f6WAhMiDAJI4
-         l1FYL9ar2kuhl/Muq283uzjFV0XlPNHWHRplM6tNn4fOjBc/6Mx7SKHrgnoQ3muUWxIK
-         h1MAKjdL8ORy/tsgaLDKDE/bunt4/jzJlXRENwsZrbYnJIbrNORFH8wvbsT1C4kH4/WG
-         /oYg==
-X-Gm-Message-State: AJIora8adnWlBOzaVkj0gJo1kpbC218oCp/WhrxpVLif3gh91ZewpqQC
-        9OxdWhw7yQlzhwH0av2f19BsaC0dd9D3mX6JE64RSg==
-X-Google-Smtp-Source: AGRyM1t7U0ON5sWUG5Mxe3T8h/XHO3G+sNbnQkI4I7EAIsSJAQKa4GMRQVwizRVbpFaMulRrYTFjUlTPMWsN9IOAQGI=
-X-Received: by 2002:a0c:8ecc:0:b0:473:2fa4:df7c with SMTP id
- y12-20020a0c8ecc000000b004732fa4df7cmr6098115qvb.55.1658652791805; Sun, 24
- Jul 2022 01:53:11 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=AO7PREUYv+nfrjbwbYMkqRJTeiRWWTiw5vqtaXtpbtA=;
+        b=H/Eq04V3Eha/fOsfyiVDk+n+bCL7UYeoPMkCgScJ+LtkCkaBLhHt1wdborr2Ci+qAD
+         xkGX6/CXzgKTpkcUVlXzEhL7iCMMgMMehwf4eDW6gtzcma4F+debQULZh8y9zs+rTarX
+         HauwmWvrmrELw11nkwzyJ1d0TUsZAtcJZ/+Ev93MOecT4Ll1fPrBia4NC4U++K5P5RBM
+         CiknDnz5Yb4lu9MnBbnqyLg/kwQALSPxzCXvt7bKn2o5gCZ+aPI/uiHxVwxM8Fgm7O0s
+         rsKkedyU7DwZxaIrJmPpELWOq91KedJUA43NEWASwzthCf2sJ3s2Qc6OJb7oNs820y+A
+         xN0A==
+X-Gm-Message-State: AJIora8+lBByCZ180Wc0jXjDnjs18cH/05jyhumWziJ9flMyZCve1hq0
+        C0DeFy5ecjexejn+VtqAKBjeXuvWpQ/q4Z22+y/B5CLsj2qW
+X-Google-Smtp-Source: AGRyM1uM1oPUyMj0Ln7ZwkRBA5KZ8XSY348AfwZbC08Od2dJe9jvODpfUw0TGZgv/H0Vx+A0viHThixcq+QpxylufVrMHzKf8tnI
 MIME-Version: 1.0
-References: <20220723210825.564922-1-javierm@redhat.com>
-In-Reply-To: <20220723210825.564922-1-javierm@redhat.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 24 Jul 2022 11:53:00 +0300
-Message-ID: <CAA8EJpqr3GmQ3=p5_02dAnrK8HrUsf1yYxVKZL6g27eZXZ_U8w@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: Make .remove and .shutdown HW shutdown consistent
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
+X-Received: by 2002:a05:6602:1587:b0:67c:b28:6e90 with SMTP id
+ e7-20020a056602158700b0067c0b286e90mr2648662iow.16.1658652803347; Sun, 24 Jul
+ 2022 01:53:23 -0700 (PDT)
+Date:   Sun, 24 Jul 2022 01:53:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000263bc305e489338a@google.com>
+Subject: [syzbot] kernel BUG in ntfs_lookup_inode_by_name
+From:   syzbot <syzbot+d532380eef771ac0034b@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linux-kernel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Jul 2022 at 00:09, Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Drivers' .remove and .shutdown callbacks are executed on different code
-> paths. The former is called when a device is removed from the bus, while
-> the latter is called at system shutdown time to quiesce the device.
->
-> This means that some overlap exists between the two, because both have to
-> take care of properly shutting down the hardware. But currently the logic
-> used in these two callbacks isn't consistent in msm drivers, which could
-> lead to kernel oops.
->
-> For example, on .remove the component is deleted and its .unbind callback
-> leads to the hardware being shutdown but only if the DRM device has been
-> marked as registered.
->
-> That check doesn't exist in the .shutdown logic and this can lead to the
-> driver calling drm_atomic_helper_shutdown() for a DRM device that hasn't
-> been properly initialized.
->
-> A situation when this can happen is when a driver for an expected device
-> fails to probe, since the .bind callback will never be executed.
->
-> This bug was attempted to be fixed in commit 623f279c7781 ("drm/msm: fix
-> shutdown hook in case GPU components failed to bind"), but unfortunately
-> it still happens in some cases.
->
-> Rather than trying to keep fixing in both places, let's unify in a single
-> helper function that could be used for the two callbacks.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
->
->  drivers/gpu/drm/msm/msm_drv.c | 31 +++++++++++++++++--------------
->  1 file changed, 17 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index 1ed4cd09dbf8..669891bd6f09 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -190,14 +190,8 @@ static int vblank_ctrl_queue_work(struct msm_drm_private *priv,
->         return 0;
->  }
->
-> -static int msm_drm_uninit(struct device *dev)
-> +static void msm_shutdown_hw(struct drm_device *dev)
->  {
-> -       struct platform_device *pdev = to_platform_device(dev);
-> -       struct msm_drm_private *priv = platform_get_drvdata(pdev);
-> -       struct drm_device *ddev = priv->dev;
-> -       struct msm_kms *kms = priv->kms;
-> -       int i;
-> -
->         /*
->          * Shutdown the hw if we're far enough along where things might be on.
->          * If we run this too early, we'll end up panicking in any variety of
-> @@ -205,10 +199,21 @@ static int msm_drm_uninit(struct device *dev)
->          * msm_drm_init, drm_dev->registered is used as an indicator that the
->          * shutdown will be successful.
->          */
-> -       if (ddev->registered) {
-> +       if (dev->registered)
-> +               drm_atomic_helper_shutdown(dev);
-> +}
-> +
-> +static int msm_drm_uninit(struct device *dev)
-> +{
-> +       struct platform_device *pdev = to_platform_device(dev);
-> +       struct msm_drm_private *priv = platform_get_drvdata(pdev);
-> +       struct drm_device *ddev = priv->dev;
-> +       struct msm_kms *kms = priv->kms;
-> +       int i;
-> +
-> +       if (ddev->registered)
->                 drm_dev_unregister(ddev);
+Hello,
 
-No. The drm_dev_unregister() should come before drm_atomic_helper_shutdown().
+syzbot found the following issue on:
 
-Also drm_dev_unregister() should not be a part of .shutdown callback.
-See the documentation in the drm_drv.c
+HEAD commit:    ca85855bdcae Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=157a16dc080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a01cb298f103d7e3
+dashboard link: https://syzkaller.appspot.com/bug?extid=d532380eef771ac0034b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148f69c2080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1534cc4a080000
 
-> -               drm_atomic_helper_shutdown(ddev);
-> -       }
-> +       msm_shutdown_hw(ddev);
->
->         /* We must cancel and cleanup any pending vblank enable/disable
->          * work before msm_irq_uninstall() to avoid work re-enabling an
-> @@ -1242,10 +1247,8 @@ void msm_drv_shutdown(struct platform_device *pdev)
->         struct msm_drm_private *priv = platform_get_drvdata(pdev);
->         struct drm_device *drm = priv ? priv->dev : NULL;
->
-> -       if (!priv || !priv->kms)
-> -               return;
-> -
-> -       drm_atomic_helper_shutdown(drm);
-> +       if (drm)
-> +               msm_shutdown_hw(drm);
->  }
->
->  static struct platform_driver msm_platform_driver = {
-> --
-> 2.37.1
->
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14032ec2080000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16032ec2080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12032ec2080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d532380eef771ac0034b@syzkaller.appspotmail.com
+
+ntfs: (device loop0): map_mft_record_page(): Mft record 0xa is corrupt.  Run chkdsk.
+ntfs: (device loop0): map_mft_record(): Failed with error code 5.
+ntfs: (device loop0): ntfs_read_locked_inode(): Failed with error code -5.  Marking corrupt inode 0xa as bad.  Run chkdsk.
+ntfs: (device loop0): load_and_init_upcase(): Failed to load $UpCase from the volume. Using default.
+ntfs: volume version 3.1.
+ntfs: (device loop0): map_mft_record_page(): Mft record 0x2 is corrupt.  Run chkdsk.
+------------[ cut here ]------------
+kernel BUG at fs/ntfs/dir.c:86!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3611 Comm: syz-executor707 Not tainted 5.19.0-rc7-syzkaller-00005-gca85855bdcae #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
+RIP: 0010:ntfs_lookup_inode_by_name+0xe4b/0x2ef0 fs/ntfs/dir.c:86
+Code: df 48 c1 ea 03 80 3c 02 00 0f 85 ec 1d 00 00 48 8b 44 24 50 49 8d 5c 24 07 48 c7 00 00 00 00 00 e9 1e fa ff ff e8 f5 af d9 fe <0f> 0b e8 ee af d9 fe 0f 0b e8 e7 af d9 fe 48 8b 74 24 70 4c 89 e1
+RSP: 0018:ffffc9000347fa30 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000008000 RCX: 0000000000000000
+RDX: ffff888020e05880 RSI: ffffffff82a0bc6b RDI: 0000000000000003
+RBP: ffff88807bfb8000 R08: 0000000000000003 R09: 0000000000004000
+R10: 0000000000008000 R11: 000000000008a07a R12: ffff88807ce82050
+R13: ffff88807bfb8000 R14: ffff88807bfb8230 R15: ffff88807ce82000
+FS:  00005555555a3300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000560fe0051808 CR3: 0000000072caa000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ load_and_init_quota fs/ntfs/super.c:1367 [inline]
+ load_system_files fs/ntfs/super.c:2103 [inline]
+ ntfs_fill_super+0x59f5/0x9080 fs/ntfs/super.c:2891
+ mount_bdev+0x34d/0x410 fs/super.c:1367
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6deea26afa
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdf3ff3938 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffdf3ff3990 RCX: 00007f6deea26afa
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffdf3ff3950
+RBP: 00007ffdf3ff3950 R08: 00007ffdf3ff3990 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000020001208
+R13: 0000000000000003 R14: 0000000000000004 R15: 00000000000000ab
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:ntfs_lookup_inode_by_name+0xe4b/0x2ef0 fs/ntfs/dir.c:86
+Code: df 48 c1 ea 03 80 3c 02 00 0f 85 ec 1d 00 00 48 8b 44 24 50 49 8d 5c 24 07 48 c7 00 00 00 00 00 e9 1e fa ff ff e8 f5 af d9 fe <0f> 0b e8 ee af d9 fe 0f 0b e8 e7 af d9 fe 48 8b 74 24 70 4c 89 e1
+RSP: 0018:ffffc9000347fa30 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000008000 RCX: 0000000000000000
+RDX: ffff888020e05880 RSI: ffffffff82a0bc6b RDI: 0000000000000003
+RBP: ffff88807bfb8000 R08: 0000000000000003 R09: 0000000000004000
+R10: 0000000000008000 R11: 000000000008a07a R12: ffff88807ce82050
+R13: ffff88807bfb8000 R14: ffff88807bfb8230 R15: ffff88807ce82000
+FS:  00005555555a3300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000560fe0051808 CR3: 0000000072caa000 CR4: 0000000000350ef0
 
 
--- 
-With best wishes
-Dmitry
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

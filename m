@@ -2,209 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9860E57F456
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17A157F458
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiGXJVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S231848AbiGXJX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 05:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiGXJVk (ORCPT
+        with ESMTP id S229513AbiGXJXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:21:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2B3D1400C
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:21:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658654499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CQD2xwofWiChWZD5Abuxut34tayqB/fYJMY5NWUwUE4=;
-        b=ZKq/E7MBFRSdX5E6lugjzRME4c6FJx1tlhnAewTdqWYNJsVH7nwI62sptTcc1fmT6Xlg7J
-        xBMiPdsPh6xjXs90V+GAUYDSDGBbJpY6p398yppKSWXIGIivbYlMEYtG9PobEhDwTlxUrP
-        Cg2oPoY4gnqu3OC+3wiKge5HJpEEOVU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-IaQ39q1COeqt5w5VNmRDxQ-1; Sun, 24 Jul 2022 05:21:37 -0400
-X-MC-Unique: IaQ39q1COeqt5w5VNmRDxQ-1
-Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b003a30d86cb2dso6955504wma.5
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:21:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=CQD2xwofWiChWZD5Abuxut34tayqB/fYJMY5NWUwUE4=;
-        b=I6STOwAyPwWJJ66ceBscX854vZ6WWowrY/VHZn+Y+tbB945uZwt8GHkvkLY+d4HHc7
-         yPdq6lyKKzxdguFIgmmYVYbwnREaeDS3gq3oAkeYM8kIJG5S9NrjJH+Ns3GeYbkctjb9
-         4w49NQ6WjcPjUW/WzwAyPVrR7g9fUv9Nuy3HmSoBluiRgq7Icg9yJvOpeh3RO+j8PnYn
-         n9N+cMKYMBVlVNnOXJcLSwZfYl2gJ51QAaFuRaSOC1TfF5C7n2Dth84uno0qMC478dTu
-         ZVfXi0buK3wJGLzIEZmI6CyL4pTiIVimxytuXhiizjNEY4QhD/ZkaN1dAq+LUmEME73B
-         Sktg==
-X-Gm-Message-State: AJIora8sEZofP8HA86dDsIyHeeT7eAsXI1i/IhXdzPZIUAoa+MQLNtcv
-        kWj6Ijj06E5wYsH5GUEDow2OBMIrHr6nQp/OzxTju6RUr2xFx4IsGijutoSdRSfYl+nas3nXnHX
-        EN9rIRf9mJY5KDc21KweuJ+lu
-X-Received: by 2002:a05:600c:4fd4:b0:3a3:2c30:5749 with SMTP id o20-20020a05600c4fd400b003a32c305749mr4934461wmq.62.1658654495770;
-        Sun, 24 Jul 2022 02:21:35 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sQfFgxOgsOMpNytIhcbpqDEMBVPLcSwYXjuVdhK+uj3/JGPUaDozysqkQPXiHOH96z5Cmryw==
-X-Received: by 2002:a05:600c:4fd4:b0:3a3:2c30:5749 with SMTP id o20-20020a05600c4fd400b003a32c305749mr4934436wmq.62.1658654495413;
-        Sun, 24 Jul 2022 02:21:35 -0700 (PDT)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g18-20020a05600c001200b003a31169a7f4sm13892191wmc.12.2022.07.24.02.21.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Jul 2022 02:21:34 -0700 (PDT)
-Message-ID: <b28c1fab-4476-8856-fca5-5f205af4b2c5@redhat.com>
-Date:   Sun, 24 Jul 2022 11:21:33 +0200
+        Sun, 24 Jul 2022 05:23:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA52314097
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 02:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658654633; x=1690190633;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jb0Iq4zpqCCRUvGbgpuWGXaZAmNRPnFO3rIirjOV4zY=;
+  b=Wj+AqI5KW9I73hHA9gVVdY8+gmG05F8oCtne4k0tU/pwcePGOtWkoOfs
+   eZhRUpOqNfghFkii7whoSoNRE7SN2uYCFShdHYXUdPJUlJD5r5ucCSw+2
+   +UkDayJlmnAIkrdMIpRape6KbOcCNCzgCV7cF/XyF2qzVByB0FRF3nZ5F
+   uHEiZ3MCW//TxGloKXRGgdCOyCoeu1Gf3GvcHEDKF70PXV+81voSgVv71
+   7M+M0spquDv7lR62ljooZ2UaSmu3cTmf30lyQuytW1nAm6MXuSCuNiwN4
+   pWrkmGl033fhuW4xbEXgoDhJuaKRpPiG25UVNJzfthapcK8W5OBSMos/k
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="349227211"
+X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
+   d="scan'208";a="349227211"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 02:23:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
+   d="scan'208";a="599296136"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 24 Jul 2022 02:23:51 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFXq3-0003lW-0Q;
+        Sun, 24 Jul 2022 09:23:51 +0000
+Date:   Sun, 24 Jul 2022 17:23:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [steev:lenovo-x13s-next-20220722 8/141]
+ drivers/phy/qualcomm/phy-qcom-qmp.h:189: warning:
+ "QSERDES_V4_TX_CLKBUF_ENABLE" redefined
+Message-ID: <202207241704.6t2VrWQx-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/msm: Make .remove and .shutdown HW shutdown
- consistent
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220723210825.564922-1-javierm@redhat.com>
- <CAA8EJpqr3GmQ3=p5_02dAnrK8HrUsf1yYxVKZL6g27eZXZ_U8w@mail.gmail.com>
- <7dc80ce9-83d5-2dc2-f660-fb8f6162c893@redhat.com>
-In-Reply-To: <7dc80ce9-83d5-2dc2-f660-fb8f6162c893@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/24/22 11:06, Javier Martinez Canillas wrote:
+tree:   https://github.com/steev/linux lenovo-x13s-next-20220722
+head:   78d0b0fc70a9e217a976f3f8f1239d1ceb39f2f4
+commit: 5269d6cef9825d8d40bb77450e9a4cd5b4d3475f [8/141] phy: qcom-qmp: Add sc8280xp USB/DP combo phys
+config: loongarch-randconfig-r003-20220724 (https://download.01.org/0day-ci/archive/20220724/202207241704.6t2VrWQx-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/steev/linux/commit/5269d6cef9825d8d40bb77450e9a4cd5b4d3475f
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev lenovo-x13s-next-20220722
+        git checkout 5269d6cef9825d8d40bb77450e9a4cd5b4d3475f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/phy/
 
-[...]
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> I guess one option is to do the if (dev->registered) check in the callers but
-> then it won't really be worth it to have a helper and we could just add that
-> check in msm_drv_shutdown() to conditionally call drm_atomic_helper_shutdown().
-> 
+All warnings (new ones prefixed by >>):
 
-By the way, the motivation of this patch is to fix a kernel oops during poweroff:
+   In file included from drivers/phy/qualcomm/phy-qcom-edp.c:26:
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:189: warning: "QSERDES_V4_TX_CLKBUF_ENABLE" redefined
+     189 | #define QSERDES_V4_TX_CLKBUF_ENABLE                     0x08
+         | 
+   In file included from drivers/phy/qualcomm/phy-qcom-qmp.h:16:
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:12: note: this is the location of the previous definition
+      12 | #define QSERDES_V4_TX_CLKBUF_ENABLE                     0x008
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:190: warning: "QSERDES_V4_TX_TX_EMP_POST1_LVL" redefined
+     190 | #define QSERDES_V4_TX_TX_EMP_POST1_LVL                  0x0c
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:13: note: this is the location of the previous definition
+      13 | #define QSERDES_V4_TX_TX_EMP_POST1_LVL                  0x00c
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:191: warning: "QSERDES_V4_TX_TX_DRV_LVL" redefined
+     191 | #define QSERDES_V4_TX_TX_DRV_LVL                        0x14
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:15: note: this is the location of the previous definition
+      15 | #define QSERDES_V4_TX_TX_DRV_LVL                        0x014
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:192: warning: "QSERDES_V4_TX_RESET_TSYNC_EN" redefined
+     192 | #define QSERDES_V4_TX_RESET_TSYNC_EN                    0x1c
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:17: note: this is the location of the previous definition
+      17 | #define QSERDES_V4_TX_RESET_TSYNC_EN                    0x01c
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:193: warning: "QSERDES_V4_TX_PRE_STALL_LDO_BOOST_EN" redefined
+     193 | #define QSERDES_V4_TX_PRE_STALL_LDO_BOOST_EN            0x20
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:18: note: this is the location of the previous definition
+      18 | #define QSERDES_V4_TX_PRE_STALL_LDO_BOOST_EN            0x020
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:194: warning: "QSERDES_V4_TX_TX_BAND" redefined
+     194 | #define QSERDES_V4_TX_TX_BAND                           0x24
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:19: note: this is the location of the previous definition
+      19 | #define QSERDES_V4_TX_TX_BAND                           0x024
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:195: warning: "QSERDES_V4_TX_INTERFACE_SELECT" redefined
+     195 | #define QSERDES_V4_TX_INTERFACE_SELECT                  0x2c
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:21: note: this is the location of the previous definition
+      21 | #define QSERDES_V4_TX_INTERFACE_SELECT                  0x02c
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:196: warning: "QSERDES_V4_TX_RES_CODE_LANE_TX" redefined
+     196 | #define QSERDES_V4_TX_RES_CODE_LANE_TX                  0x34
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:23: note: this is the location of the previous definition
+      23 | #define QSERDES_V4_TX_RES_CODE_LANE_TX                  0x034
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:197: warning: "QSERDES_V4_TX_RES_CODE_LANE_RX" redefined
+     197 | #define QSERDES_V4_TX_RES_CODE_LANE_RX                  0x38
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:24: note: this is the location of the previous definition
+      24 | #define QSERDES_V4_TX_RES_CODE_LANE_RX                  0x038
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:198: warning: "QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX" redefined
+     198 | #define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX           0x3c
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:25: note: this is the location of the previous definition
+      25 | #define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX           0x03c
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:199: warning: "QSERDES_V4_TX_RES_CODE_LANE_OFFSET_RX" redefined
+     199 | #define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_RX           0x40
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:26: note: this is the location of the previous definition
+      26 | #define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_RX           0x040
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:200: warning: "QSERDES_V4_TX_TRANSCEIVER_BIAS_EN" redefined
+     200 | #define QSERDES_V4_TX_TRANSCEIVER_BIAS_EN               0x54
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:31: note: this is the location of the previous definition
+      31 | #define QSERDES_V4_TX_TRANSCEIVER_BIAS_EN               0x054
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:201: warning: "QSERDES_V4_TX_HIGHZ_DRVR_EN" redefined
+     201 | #define QSERDES_V4_TX_HIGHZ_DRVR_EN                     0x58
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:32: note: this is the location of the previous definition
+      32 | #define QSERDES_V4_TX_HIGHZ_DRVR_EN                     0x058
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:202: warning: "QSERDES_V4_TX_TX_POL_INV" redefined
+     202 | #define QSERDES_V4_TX_TX_POL_INV                        0x5c
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:33: note: this is the location of the previous definition
+      33 | #define QSERDES_V4_TX_TX_POL_INV                        0x05c
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:203: warning: "QSERDES_V4_TX_PARRATE_REC_DETECT_IDLE_EN" redefined
+     203 | #define QSERDES_V4_TX_PARRATE_REC_DETECT_IDLE_EN        0x60
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:34: note: this is the location of the previous definition
+      34 | #define QSERDES_V4_TX_PARRATE_REC_DETECT_IDLE_EN        0x060
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:204: warning: "QSERDES_V4_TX_LANE_MODE_1" redefined
+     204 | #define QSERDES_V4_TX_LANE_MODE_1                       0x84
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:43: note: this is the location of the previous definition
+      43 | #define QSERDES_V4_TX_LANE_MODE_1                       0x084
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:205: warning: "QSERDES_V4_TX_LANE_MODE_2" redefined
+     205 | #define QSERDES_V4_TX_LANE_MODE_2                       0x88
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:44: note: this is the location of the previous definition
+      44 | #define QSERDES_V4_TX_LANE_MODE_2                       0x088
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:206: warning: "QSERDES_V4_TX_RCV_DETECT_LVL_2" redefined
+     206 | #define QSERDES_V4_TX_RCV_DETECT_LVL_2                  0x9c
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:49: note: this is the location of the previous definition
+      49 | #define QSERDES_V4_TX_RCV_DETECT_LVL_2                  0x09c
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:207: warning: "QSERDES_V4_TX_TRAN_DRVR_EMP_EN" redefined
+     207 | #define QSERDES_V4_TX_TRAN_DRVR_EMP_EN                  0xb8
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:56: note: this is the location of the previous definition
+      56 | #define QSERDES_V4_TX_TRAN_DRVR_EMP_EN                  0x0b8
+         | 
+>> drivers/phy/qualcomm/phy-qcom-qmp.h:208: warning: "QSERDES_V4_TX_TX_INTERFACE_MODE" redefined
+     208 | #define QSERDES_V4_TX_TX_INTERFACE_MODE                 0xbc
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:57: note: this is the location of the previous definition
+      57 | #define QSERDES_V4_TX_TX_INTERFACE_MODE                 0x0bc
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp.h:209: warning: "QSERDES_V4_TX_PWM_GEAR_1_DIVIDER_BAND0_1" redefined
+     209 | #define QSERDES_V4_TX_PWM_GEAR_1_DIVIDER_BAND0_1        0xd8
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:64: note: this is the location of the previous definition
+      64 | #define QSERDES_V4_TX_PWM_GEAR_1_DIVIDER_BAND0_1        0x0d8
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp.h:210: warning: "QSERDES_V4_TX_PWM_GEAR_2_DIVIDER_BAND0_1" redefined
+     210 | #define QSERDES_V4_TX_PWM_GEAR_2_DIVIDER_BAND0_1        0xdC
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:65: note: this is the location of the previous definition
+      65 | #define QSERDES_V4_TX_PWM_GEAR_2_DIVIDER_BAND0_1        0x0dc
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp.h:211: warning: "QSERDES_V4_TX_PWM_GEAR_3_DIVIDER_BAND0_1" redefined
+     211 | #define QSERDES_V4_TX_PWM_GEAR_3_DIVIDER_BAND0_1        0xe0
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:66: note: this is the location of the previous definition
+      66 | #define QSERDES_V4_TX_PWM_GEAR_3_DIVIDER_BAND0_1        0x0e0
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp.h:212: warning: "QSERDES_V4_TX_PWM_GEAR_4_DIVIDER_BAND0_1" redefined
+     212 | #define QSERDES_V4_TX_PWM_GEAR_4_DIVIDER_BAND0_1        0xe4
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:67: note: this is the location of the previous definition
+      67 | #define QSERDES_V4_TX_PWM_GEAR_4_DIVIDER_BAND0_1        0x0e4
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp.h:213: warning: "QSERDES_V4_TX_VMODE_CTRL1" redefined
+     213 | #define QSERDES_V4_TX_VMODE_CTRL1                       0xe8
+         | 
+   drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v4.h:68: note: this is the location of the previous definition
+      68 | #define QSERDES_V4_TX_VMODE_CTRL1                       0x0e8
+         | 
 
-[  169.495897] systemd-shutdown[1]: Powering off.                                                                                                                                                                                             
-[  169.500466] kvm: exiting hardware virtualization                                                                                                                                                                                           
-[  169.554787] platform wifi-firmware.0: Removing from iommu group 12                                                                                                                                                                         
-[  169.610238] platform video-firmware.0: Removing from iommu group 10                                                                                                                                                                        
-[  169.682164] ------------[ cut here ]------------
-[  169.686909] WARNING: CPU: 6 PID: 1 at drivers/gpu/drm/drm_modeset_lock.c:317 drm_modeset_lock_all_ctx+0x3c4/0x3d0   
-[  169.697450] Modules linked in: af_alg rtl8192cu rtl_usb cros_ec_sensors rtl8192c_common cros_ec_sensors_core rtlwifi industrialio_triggered_buffer venus_enc venus_dec sbs_battery kfifo_buf cros_ec_typec videobuf2_dma_contig hid_multito
-uch cros_usbpd_logger typec cros_ec_chardev cros_usbpd_charger videobuf2_memops ath10k_snoc ath10k_core hci_uart btqca venus_core btbcm ath mac80211 bluetooth v4l2_mem2mem videobuf2_v4l2 libarc4 videobuf2_common qcom_spmi_adc_tm5 qrtr cfg
-80211 videodev qcom_spmi_adc5 qcom_q6v5_mss ecdh_generic qcom_pil_info ecc qcom_vadc_common mc crct10dif_ce qcom_spmi_temp_alarm rfkill qcom_q6v5 spi_geni_qcom qcom_sysmon qcom_common qmi_helpers snd_soc_max98357a socinfo ip6_tables ip_ta
-bles x_tables ipmi_devintf ipmi_msghandler fuse zram zsmalloc ipv6                                                     
-[  169.767126] CPU: 6 PID: 1 Comm: systemd-shutdow Tainted: G        W         5.19.0-rc7+ #20                         
-[  169.775691] Hardware name: Google CoachZ (rev3+) (DT)
-[  169.780874] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)                                         
-[  169.788021] pc : drm_modeset_lock_all_ctx+0x3c4/0x3d0
-[  169.793205] lr : drm_modeset_lock_all_ctx+0x48/0x3d0
-[  169.798299] sp : ffff80000805bb80
-[  169.801701] x29: ffff80000805bb80 x28: ffff327c00128000 x27: 0000000000000000                                       
-[  169.809025] x26: 0000000000000000 x25: 0000000000000001 x24: ffffc95d820ec030                                       
-[  169.816349] x23: ffff327c00bbd090 x22: ffffc95d8215eca0 x21: ffff327c039c5800                                       
-[  169.823674] x20: ffff327c039c5988 x19: ffff80000805bbe8 x18: 0000000000000034                                       
-[  169.830998] x17: 000000040044ffff x16: ffffc95d80cac920 x15: 0000000000000000                                       
-[  169.838322] x14: 0000000000000315 x13: 0000000000000315 x12: 0000000000000000                                       
-[  169.845646] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000                                       
-[  169.852971] x8 : ffff80000805bc28 x7 : 0000000000000000 x6 : 0000000000000000                                       
-[  169.860295] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000                                       
-[  169.867619] x2 : ffff327c00128000 x1 : 0000000000000000 x0 : ffff327c039c59b0                                       
-[  169.874944] Call trace:                                 
-[  169.877467]  drm_modeset_lock_all_ctx+0x3c4/0x3d0
-[  169.882297]  drm_atomic_helper_shutdown+0x70/0x134
-[  169.887217]  msm_drv_shutdown+0x30/0x40
-[  169.891159]  platform_shutdown+0x28/0x40
-[  169.895191]  device_shutdown+0x148/0x350
-[  169.899221]  kernel_power_off+0x38/0x80
-[  169.903163]  __do_sys_reboot+0x288/0x2c0
-[  169.907192]  __arm64_sys_reboot+0x28/0x34
-[  169.911309]  invoke_syscall+0x48/0x114
-[  169.915162]  el0_svc_common.constprop.0+0x44/0xec
-[  169.919992]  do_el0_svc+0x2c/0xc0
-[  169.923394]  el0_svc+0x2c/0x84
-[  169.926535]  el0t_64_sync_handler+0x11c/0x150
-[  169.931013]  el0t_64_sync+0x18c/0x190
-[  169.934777] ---[ end trace 0000000000000000 ]---
-[  169.939557] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000018
-[  169.948574] Mem abort info:                                                                                         
-[  169.951452]   ESR = 0x0000000096000004           
-[  169.955307]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  169.960765]   SET = 0, FnV = 0                                                                                      
-[  169.963901]   EA = 0, S1PTW = 0                                                                                     
-[  169.967127]   FSC = 0x04: level 0 translation fault
-[  169.972136] Data abort info:
-[  169.975093]   ISV = 0, ISS = 0x00000004
-[  169.979037]   CM = 0, WnR = 0
-[  169.982083] user pgtable: 4k pages, 48-bit VAs, pgdp=000000010eab1000                                               
-[  169.988697] [0000000000000018] pgd=0000000000000000, p4d=0000000000000000                                           
-[  169.995669] Internal error: Oops: 96000004 [#1] PREEMPT SMP                                                         
-[  170.001396] Modules linked in: af_alg rtl8192cu rtl_usb cros_ec_sensors rtl8192c_common cros_ec_sensors_core rtlwifi industrialio_triggered_buffer venus_enc venus_dec sbs_battery kfifo_buf cros_ec_typec videobuf2_dma_contig hid_multito
-uch cros_usbpd_logger typec cros_ec_chardev cros_usbpd_charger videobuf2_memops ath10k_snoc ath10k_core hci_uart btqca venus_core btbcm ath mac80211 bluetooth v4l2_mem2mem videobuf2_v4l2 libarc4 videobuf2_common qcom_spmi_adc_tm5 qrtr cfg
-80211 videodev qcom_spmi_adc5 qcom_q6v5_mss ecdh_generic qcom_pil_info ecc qcom_vadc_common mc crct10dif_ce qcom_spmi_temp_alarm rfkill qcom_q6v5 spi_geni_qcom qcom_sysmon qcom_common qmi_helpers snd_soc_max98357a socinfo ip6_tables ip_ta
-bles x_tables ipmi_devintf ipmi_msghandler fuse zram zsmalloc ipv6                                                     
-[  170.071041] CPU: 6 PID: 1 Comm: systemd-shutdow Tainted: G        W         5.19.0-rc7+ #20                         
-[  170.079614] Hardware name: Google CoachZ (rev3+) (DT)
-[  170.084801] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)                                         
-[  170.091941] pc : ww_mutex_lock+0x28/0x32c
-[  170.096064] lr : drm_modeset_lock_all_ctx+0x1b0/0x3d0
-[  170.101254] sp : ffff80000805bb50
-[  170.104658] x29: ffff80000805bb50 x28: ffff327c00128000 x27: 0000000000000000                                       
-[  170.111977] x26: 0000000000000000 x25: 0000000000000001 x24: 0000000000000018                                       
-[  170.119296] x23: ffff80000805bc10 x22: ffff327c039c5ad8 x21: ffff327c039c5800                                       
-[  170.126615] x20: ffff80000805bbe8 x19: 0000000000000018 x18: 0000000000000034                                       
-[  170.133933] x17: 000000040044ffff x16: ffffc95d80cac920 x15: 0000000000000000                                       
-[  170.141252] x14: 0000000000000315 x13: 0000000000000315 x12: 0000000000000000                                       
-[  170.148571] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000                                       
-[  170.155890] x8 : ffff80000805bc28 x7 : 0000000000000000 x6 : 0000000000000000                                       
-[  170.163209] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000                                       
-[  170.170528] x2 : ffff327c00128000 x1 : 0000000000000000 x0 : 0000000000000018                                       
-[  170.177847] Call trace:                                 
-[  170.180364]  ww_mutex_lock+0x28/0x32c
-[  170.184127]  drm_modeset_lock_all_ctx+0x1b0/0x3d0
-[  170.188957]  drm_atomic_helper_shutdown+0x70/0x134
-[  170.193876]  msm_drv_shutdown+0x30/0x40
-[  170.197820]  platform_shutdown+0x28/0x40
-[  170.201854]  device_shutdown+0x148/0x350
-[  170.205888]  kernel_power_off+0x38/0x80
-[  170.209832]  __do_sys_reboot+0x288/0x2c0
-[  170.213866]  __arm64_sys_reboot+0x28/0x34
-[  170.217990]  invoke_syscall+0x48/0x114
-[  170.221843]  el0_svc_common.constprop.0+0x44/0xec
-[  170.226672]  do_el0_svc+0x2c/0xc0
-[  170.230079]  el0_svc+0x2c/0x84
-[  170.233215]  el0t_64_sync_handler+0x11c/0x150
-[  170.237686]  el0t_64_sync+0x18c/0x190
-[  170.241451] Code: aa0103f4 d503201f d2800001 aa0103e3 (c8e37c02)                                                    
-[  170.247704] ---[ end trace 0000000000000000 ]---
-[  170.252457] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b                                 
-[  170.260654] Kernel Offset: 0x495d77c00000 from 0xffff800008000000                                                   
-[  170.266910] PHYS_OFFSET: 0xffffcd8500000000
-[  170.271212] CPU features: 0x800,00c2a015,19801c82
-[  170.276042] Memory Limit: none                                                                                      
-[  170.279183] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+
+vim +/QSERDES_V4_TX_CLKBUF_ENABLE +189 drivers/phy/qualcomm/phy-qcom-qmp.h
+
+   187	
+   188	/* Only for QMP V4 PHY - TX registers */
+ > 189	#define QSERDES_V4_TX_CLKBUF_ENABLE			0x08
+ > 190	#define QSERDES_V4_TX_TX_EMP_POST1_LVL			0x0c
+ > 191	#define QSERDES_V4_TX_TX_DRV_LVL			0x14
+ > 192	#define QSERDES_V4_TX_RESET_TSYNC_EN			0x1c
+ > 193	#define QSERDES_V4_TX_PRE_STALL_LDO_BOOST_EN		0x20
+ > 194	#define QSERDES_V4_TX_TX_BAND				0x24
+ > 195	#define QSERDES_V4_TX_INTERFACE_SELECT			0x2c
+ > 196	#define QSERDES_V4_TX_RES_CODE_LANE_TX			0x34
+ > 197	#define QSERDES_V4_TX_RES_CODE_LANE_RX			0x38
+ > 198	#define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_TX 		0x3c
+ > 199	#define QSERDES_V4_TX_RES_CODE_LANE_OFFSET_RX 		0x40
+ > 200	#define QSERDES_V4_TX_TRANSCEIVER_BIAS_EN		0x54
+ > 201	#define QSERDES_V4_TX_HIGHZ_DRVR_EN			0x58
+ > 202	#define QSERDES_V4_TX_TX_POL_INV			0x5c
+ > 203	#define QSERDES_V4_TX_PARRATE_REC_DETECT_IDLE_EN	0x60
+ > 204	#define QSERDES_V4_TX_LANE_MODE_1			0x84
+ > 205	#define QSERDES_V4_TX_LANE_MODE_2			0x88
+ > 206	#define QSERDES_V4_TX_RCV_DETECT_LVL_2			0x9c
+ > 207	#define QSERDES_V4_TX_TRAN_DRVR_EMP_EN			0xb8
+ > 208	#define QSERDES_V4_TX_TX_INTERFACE_MODE			0xbc
+ > 209	#define QSERDES_V4_TX_PWM_GEAR_1_DIVIDER_BAND0_1	0xd8
+ > 210	#define QSERDES_V4_TX_PWM_GEAR_2_DIVIDER_BAND0_1	0xdC
+ > 211	#define QSERDES_V4_TX_PWM_GEAR_3_DIVIDER_BAND0_1	0xe0
+ > 212	#define QSERDES_V4_TX_PWM_GEAR_4_DIVIDER_BAND0_1	0xe4
+ > 213	#define QSERDES_V4_TX_VMODE_CTRL1			0xe8
+   214	#define QSERDES_V4_TX_PI_QEC_CTRL			0x104
+   215	
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

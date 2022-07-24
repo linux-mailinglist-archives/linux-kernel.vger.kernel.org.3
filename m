@@ -2,128 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A34257F4B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 12:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9475E57F4BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbiGXKla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 06:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S230285AbiGXKwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 06:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGXKl2 (ORCPT
+        with ESMTP id S229462AbiGXKwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 06:41:28 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C02A269
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 03:41:27 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so5500357ilu.17
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 03:41:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=gkvQ37tFI06glUdd4oh7VQpcud1L0XJ8uToS1d1FP2Q=;
-        b=4h99dRb6UqvWAUBkX3u+TANbQQ7kiJL3Yo/Z+1HKagZyxw7VfYpm+OMgFxnpBPmiJs
-         5GWOc3cjLx3djCMPgQR+3CdY+UqADGNrm5+VdSuOGQTCV6PifQQZUufxb46hYC3ox6pS
-         J4H5tbDsPBonyoaqLMogXD+Didhxicxh/IZXko3IE/b87AI0SvJN4VABGWHnPunX2owa
-         TvThc+u8LI2jgUDLu5adQvHBnCOuch2KDZmvzQ3vyfFjOpnS32hZDvHC73CxDu6saupe
-         1Fx/PiTATIBEgG3qZDJhL0ASEmpoG6ux+9Kd9Fw7MEQ442SOn4SFDhtV+FRa5+RdYQq0
-         qRbQ==
-X-Gm-Message-State: AJIora+uIdVKqmatAUrmFsMKQZPXq5GflzYqJA1WtOt8rgcv8wuBbS5P
-        MAi3VkbV6bwI5YlljAYIvD0a1ZmU5/5udo0g3xL3iE6OkQxC
-X-Google-Smtp-Source: AGRyM1sfHZzIglP/EV115Y3kwYJS/9VcS8QLbIHZ/8DyOKaduZEmpZywwTF1uIHt4p+3BrLJ/MHJF2ZTNcH9PNzylXPqGvrt4v+O
+        Sun, 24 Jul 2022 06:52:30 -0400
+X-Greylist: delayed 239 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 24 Jul 2022 03:52:25 PDT
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F771277B;
+        Sun, 24 Jul 2022 03:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=skogtun.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jRTxHY+3oumoRJBcTtxrjwhVP8T6AjbX7SwAwTUS/fA=; b=RAeVT921F6Z7MgUnX8ri9bFlen
+        nKKKEw+ELvqJNehseL1TPLtgYGnmhsUW9hiOs13UShey1bh4j+OpCBN4aWUn0GjIpwdDyw99DMOaI
+        gft7KaCHxIVs1jCLIhGyt4e7yOR2IGukayenZ2tYatJc2OrbeZwih32dchcw5uKTmr0PaNxQgzPBM
+        gYAMsFrz6PGR2Swhxdf9Y6YpBnVKfKitH8w+RW/xszLjlNf0ddPbozWqS0JkvukyGIMrzIATf6Xgc
+        N3WEguyl/dkv0rVAt5CjRZI6QdS2RKP1kWFN+vmmjlhAqkLJ8pSn8+w3XKXjct4m1JeFAd7GcbuYT
+        jCdYrnGQ==;
+Received: from 236.51-175-223.customer.lyse.net ([51.175.223.236]:60626 helo=[192.168.1.162])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <harald@skogtun.org>)
+        id 1oFZ9r-0001wF-Jr; Sun, 24 Jul 2022 12:48:23 +0200
+Message-ID: <e24fa505-3472-61c2-68ff-c728c5f10717@skogtun.org>
+Date:   Sun, 24 Jul 2022 12:48:18 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c45:b0:2dc:dc24:c103 with SMTP id
- d5-20020a056e021c4500b002dcdc24c103mr3031769ilg.132.1658659286662; Sun, 24
- Jul 2022 03:41:26 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 03:41:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000095c6a005e48ab50f@google.com>
-Subject: [syzbot] WARNING in nsim_map_alloc_elem
-From:   syzbot <syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] hfsplus: Fix code typo
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>, Xin Gao <gaoxin@cdjrlc.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220722195133.18730-1-gaoxin@cdjrlc.com>
+ <YtsXiPPmQ5cqVsqp@casper.infradead.org>
+From:   Harald Arnesen <harald@skogtun.org>
+In-Reply-To: <YtsXiPPmQ5cqVsqp@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+Matthew Wilcox [22/07/2022 23.32]:
 
-HEAD commit:    b77ffb30cfc5 libbpf: fix an snprintf() overflow check
-git tree:       bpf-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16a7f652080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=386b986585586629
-dashboard link: https://syzkaller.appspot.com/bug?extid=ad24705d3fd6463b18c6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=102ad7c6080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d71a9c080000
+> On Sat, Jul 23, 2022 at 03:51:33AM +0800, Xin Gao wrote:
+>> The double `free' is duplicated in line 498, remove one.
+> 
+> This is wrong.  The intended meaning here is "trying to free bnode
+> which is already free".  Please don't send patches for code you don't
+> understand.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ad24705d3fd6463b18c6@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3609 at mm/page_alloc.c:5402 __alloc_pages+0x39e/0x510 mm/page_alloc.c:5402
-Modules linked in:
-CPU: 0 PID: 3609 Comm: syz-executor427 Not tainted 5.19.0-rc5-syzkaller-01146-gb77ffb30cfc5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-RIP: 0010:__alloc_pages+0x39e/0x510 mm/page_alloc.c:5402
-Code: ff ff 00 0f 84 33 fe ff ff 80 ce 01 e9 2b fe ff ff 83 fe 0a 0f 86 3e fd ff ff 80 3d d2 70 e9 0b 00 75 09 c6 05 c9 70 e9 0b 01 <0f> 0b 45 31 f6 e9 8d fe ff ff 65 ff 05 21 55 45 7e 48 c7 c0 a0 16
-RSP: 0018:ffffc900030cf9c0 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 1ffff92000619f39 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 000000000000000b RDI: 0000000000000000
-RBP: 0000000000140cc0 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: 000000000000000b
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000400002
-FS:  0000555556dfc300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000001b8ef000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
- kmalloc_order+0x34/0xf0 mm/slab_common.c:945
- kmalloc_order_trace+0x14/0x120 mm/slab_common.c:961
- kmalloc include/linux/slab.h:605 [inline]
- nsim_map_alloc_elem+0x119/0x2e0 drivers/net/netdevsim/bpf.c:357
- nsim_bpf_map_alloc drivers/net/netdevsim/bpf.c:512 [inline]
- nsim_bpf+0x8b3/0x1050 drivers/net/netdevsim/bpf.c:573
- bpf_map_offload_ndo+0x132/0x1e0 kernel/bpf/offload.c:359
- bpf_map_offload_map_alloc+0x243/0x450 kernel/bpf/offload.c:394
- find_and_alloc_map kernel/bpf/syscall.c:131 [inline]
- map_create kernel/bpf/syscall.c:1102 [inline]
- __sys_bpf+0x8b8/0x5750 kernel/bpf/syscall.c:4936
- __do_sys_bpf kernel/bpf/syscall.c:5058 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5056 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:5056
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f1f9a4a1ba9
-Code: 28 c3 e8 4a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffebe3a1e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fffebe3a1f8 RCX: 00007f1f9a4a1ba9
-RDX: 0000000000000048 RSI: 0000000020000100 RDI: 0000000000000000
-RBP: 0000000000000003 R08: bb1414ac00000000 R09: bb1414ac00000000
-R10: bb1414ac00000000 R11: 0000000000000246 R12: 00007fffebe3a200
-R13: 00007fffebe3a1f4 R14: 0000000000000003 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Perhaps inserting an "a" in the message would make it clearer?
+(pr_crit("trying to free a free bnode ")
+-- 
+Hilsen Harald

@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E666257F6BF
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA6657F6C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiGXTzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 15:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S230263AbiGXT7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 15:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGXTzX (ORCPT
+        with ESMTP id S231601AbiGXT7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 15:55:23 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C54645B
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658692522; x=1690228522;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yrxPz4DhxJLOrncZSUwVp7mct2pqGzN+SdqBum4/69g=;
-  b=F8WigzRPSLeWoIg5Q/8eku2lUk2jflkbdQVubNq+GHzQYt+Z0lYiZEQ2
-   PWMazDt2NAcNvJG0cOQoA1xiklalam3S04qOm8ni7uT9+O11lWev1FJPG
-   cX1QAbsbKjGJ5W7ugByPsbIrnCDY+Nst1whQLCq+y4zbfk5Mq14bBk0lF
-   qmDbVH9g0pSIT4GzGyOqQ9ERaBJLnNO27bbAO5qRuSpAFIGSaKH+isERG
-   HNe+ezFxpovvbRadLBWC1hmDVzeG0DIt1jG53NRb1IChyOAePaIfp18SG
-   RmbkBHcUjO4U+fupHejmGp8nBHv9S6Y1oQqBsyfiTTnEoYU3fr9JaAd+P
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288326244"
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="288326244"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 12:55:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="741612455"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jul 2022 12:55:21 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFhhA-0004DJ-26;
-        Sun, 24 Jul 2022 19:55:20 +0000
-Date:   Mon, 25 Jul 2022 03:54:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jcmvbkbc-xtensa:xtensa-5.19-rochester 12/13]
- arch/xtensa/mm/tlb.c:218:6: warning: no previous prototype for
- 'dump_tlb_entry'
-Message-ID: <202207250312.HBDnpUhY-lkp@intel.com>
+        Sun, 24 Jul 2022 15:59:16 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3820CDFD9
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:59:15 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z22so11634781edd.6
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rnfLZsTFzFa0wqaySCmIaHsg/ndbi17KUWIR0LUjjyQ=;
+        b=JRxmHxqa/8WyYdLNsPP/DYXO/hthdlrx/29N3AFRHH1fHMKLHHyRKqJCTersUcrlxR
+         NiQDS0i29vQ9gwen5RX8XpxUpAJkbFL93fsb0NUWINl5o046HwRW5ffoYKn4/qL6mTwz
+         Tdx55KkzwGPTfsDXFU6cNRJacMJUe/NQve4r4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rnfLZsTFzFa0wqaySCmIaHsg/ndbi17KUWIR0LUjjyQ=;
+        b=ktJIL3vmFvDARj/vgZ2LnyMsi+OkIQAbyD0waYpCeFmyUCq+gZNJ9LLTLdSwejNTFY
+         UO6kaGakWe9OIE2cNwhBi7+2B/4kbFxvQEggo7Ef2ncLtDmRiHk7iVgyWTtTeS9AtpuZ
+         eq55jGANEB5Gc1Uhe6H+HJqNv3TFxcpTwOrJgUR5UePLa456l5WTAw3fZi74RGKDLCnE
+         YNaNsc2b2lc1sX6xgiJonTXUwoVF22HbADqD2gnlrCfp9r7ZO5mLdnPhmjQOi27/rTAP
+         by1H8aunBLRRv2ubWY1BNAVaSzKku76rtTOUfJBotuToJG9TT1zKG27KczbHv0m111f2
+         tQYw==
+X-Gm-Message-State: AJIora9VEi4YT2V4jLjxWD+8z5XlJc2D87jQZu/xNoiZl8HmSOYFap3e
+        Fc6uj6LzQ/L5ccVzeqyiCy34aFlFSqju0P/d
+X-Google-Smtp-Source: AGRyM1sdy4sMSCN5GMsA0FqQR7NCXp4RbGWChrHJuZHdGhlZgo/3dBHfX/OmRGZpT5rRQJn6EhOuDA==
+X-Received: by 2002:a05:6402:331c:b0:43b:c62e:24dd with SMTP id e28-20020a056402331c00b0043bc62e24ddmr9864713eda.325.1658692753126;
+        Sun, 24 Jul 2022 12:59:13 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906301100b00722e50e259asm4508458ejz.102.2022.07.24.12.59.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Jul 2022 12:59:12 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id b26so13341740wrc.2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:59:12 -0700 (PDT)
+X-Received: by 2002:a05:6000:1a88:b0:21d:aa97:cb16 with SMTP id
+ f8-20020a0560001a8800b0021daa97cb16mr5948645wry.97.1658692752059; Sun, 24 Jul
+ 2022 12:59:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <165869171256.283493.2326902986633030609@leemhuis.info>
+In-Reply-To: <165869171256.283493.2326902986633030609@leemhuis.info>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 24 Jul 2022 12:58:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjZ8snqJmoyhHjZCYVP5bMmNWzQMkDZ6LtNr1YKEg4A9w@mail.gmail.com>
+Message-ID: <CAHk-=wjZ8snqJmoyhHjZCYVP5bMmNWzQMkDZ6LtNr1YKEg4A9w@mail.gmail.com>
+Subject: Re: Linux regressions report for mainline [2022-07-24]
+To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-5.19-rochester
-head:   a9635269505502dd939295e872fd5e6933ee9876
-commit: 50e205d64d5f6b858c9b1447e258af4ad0d80b42 [12/13] WIP: xtensa: add dump_tlb
-config: xtensa-buildonly-randconfig-r004-20220718 (https://download.01.org/0day-ci/archive/20220725/202207250312.HBDnpUhY-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jcmvbkbc/linux-xtensa/commit/50e205d64d5f6b858c9b1447e258af4ad0d80b42
-        git remote add jcmvbkbc-xtensa https://github.com/jcmvbkbc/linux-xtensa
-        git fetch --no-tags jcmvbkbc-xtensa xtensa-5.19-rochester
-        git checkout 50e205d64d5f6b858c9b1447e258af4ad0d80b42
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash arch/xtensa/mm/
+On Sun, Jul 24, 2022 at 12:48 PM Regzbot (on behalf of Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> * The following patch fixing a build bug reported three times now, that
+> didn't get any reaction from the maintainer since it was posted six days
+> ago:
+> https://lore.kernel.org/lkml/20220717231105.33005-1-kilobyte@angband.pl/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ok. DavidH is on vacation, so I just picked that up directly.
 
-All warnings (new ones prefixed by >>):
+> * The virtio regression is kinda fixed by c346dae4f3fb already, but
+> there is a patch in the branch Michael usually uses to sent patches to
+> you that he for one reason or another hasn't sent your way yet:
+> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=vhost&idj9720576cd00d30722c5f755bd17d4cfa9df636
+> I asked what's up here a few days ago, but sadly got no reply.
 
->> arch/xtensa/mm/tlb.c:218:6: warning: no previous prototype for 'dump_tlb_entry' [-Wmissing-prototypes]
-     218 | void dump_tlb_entry(unsigned w, unsigned e, bool dtlb)
-         |      ^~~~~~~~~~~~~~
->> arch/xtensa/mm/tlb.c:231:6: warning: no previous prototype for 'dump_tlb' [-Wmissing-prototypes]
-     231 | void dump_tlb(void)
-         |      ^~~~~~~~
-   arch/xtensa/mm/tlb.c:292:6: warning: no previous prototype for 'check_tlb_sanity' [-Wmissing-prototypes]
-     292 | void check_tlb_sanity(void)
-         |      ^~~~~~~~~~~~~~~~
+I'll let this be for now. It's more of a "don't do that then" thing,
 
+> [ *NEW* ] fs: recent changes to copy_file_range behavior breakage
 
-vim +/dump_tlb_entry +218 arch/xtensa/mm/tlb.c
+This seems to be a "damned if you do, damned if you don't", in that
+different versions of libtorrent seem to expect different behaviors.
 
-   217	
- > 218	void dump_tlb_entry(unsigned w, unsigned e, bool dtlb)
-   219	{
-   220		unsigned tlbidx = w | (e << PAGE_SHIFT);
-   221		unsigned r0 = dtlb ?
-   222			read_dtlb_virtual(tlbidx) : read_itlb_virtual(tlbidx);
-   223		unsigned r1 = dtlb ?
-   224			read_dtlb_translation(tlbidx) : read_itlb_translation(tlbidx);
-   225		unsigned vpn = (r0 & PAGE_MASK) | (e << PAGE_SHIFT);
-   226	
-   227		pr_info("%cTLB[%d][%d]: v=%08x, p=%08x, vaddr=%08x\n",
-   228			dtlb ? 'D' : 'I', w, e, r0, r1, vpn);
-   229	}
-   230	
- > 231	void dump_tlb(void)
-   232	{
-   233		unsigned w, e;
-   234	
-   235		for (w = 7; w < 9; ++w)
-   236			for (e = 0; e < 4; ++e)
-   237				dump_tlb_entry(w, e, 1);
-   238	}
-   239	
+I think we're leaving it be, so that there's just one behavior going
+forward, rather than vacillate between two and making things just
+worse and oscillate depending on which one people use.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Not good, but there doesn't seem to be a good case.
+
+               Linus

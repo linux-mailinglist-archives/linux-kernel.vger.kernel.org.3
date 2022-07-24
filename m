@@ -2,185 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9331457F69F
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 20:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9832857F6A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 21:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbiGXSzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 14:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S233409AbiGXTBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 15:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGXSzc (ORCPT
+        with ESMTP id S229547AbiGXTA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 14:55:32 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9169265C3
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:55:31 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id h18so7000007qvr.12
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:55:31 -0700 (PDT)
+        Sun, 24 Jul 2022 15:00:59 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3172FE0A3
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:00:57 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id r14so10859131ljp.2
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 12:00:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BZIDWbd+e5/Q1G0dFyLVjy7eyY4n93CGPNpfz9ufq8k=;
-        b=Y/x3X31uJTRvN69iA8JzEhHsItKIPMJZshfa+bd/jj0BgkTh5+YrF4nH/331x6eMQ8
-         ZimP5N8WljYAKCHUHQXUPtfODti54bLmHHssHC3psGmOQ1x2wL3vQWNzdKDe5wdqY3Sa
-         tEReokYrGMZF6VWR0PXKEKEnxrWKpGqOKOII6pOM7iD6OEh9wHH6gbtJlxOa0w+HDBvK
-         9WfCPqQgstBgL0M8Y8v4nLRaNoDtXdvFpPH7qjMoFZtUSAk55b9biOIBVAKndTmQ/5YB
-         3f1zBf5/kDr20EFdT3GvoeW7mw+Zi37ltG/fe8mnf4SIy6WKBXP/Shnia+sPWYXMFBKw
-         SlMA==
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=IHMS+b3mDvwpMK/cDzCHPu0P8GmbIu/+yms/GdH73sw=;
+        b=bGoaywtkZGEkQcPy7njuO4/w2RIeQ8rTyMvn/sPnQGQHf7HI2fFosOMJHoe8O/EFZD
+         ATJh/+apUsVSQGCZLO76zcRQo3QGvEu7/h8P/ks09vxKIEOwIrK2R5fpR0HjfpJoDLzG
+         3mZ30+8eBEup5Qw2rfgqy7o2P3bm52UgwxB3Gy+bDwuEldlGxTrft5rZdkrrFr9kRgjz
+         Cx/nKlpK/s8rYsZJPncxqe2DnEw3oUNwl559lLrlA6lVrHMC2ps0Dso+sFCZ/bQ3vXEj
+         e/bQ/yG00YkdiGL9PfMzo12zRc4QGeRJfovBfO0t6UoXHE0NbvHNnRK1d93KDZ+hRTYy
+         hqxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BZIDWbd+e5/Q1G0dFyLVjy7eyY4n93CGPNpfz9ufq8k=;
-        b=cERucvWTILGBNBVK7u8msyiT6W6MRVXbtQ7Ze8YDUt3G/5Iyon+R/cY9/cfItHxYya
-         h5Arq0TXQapsJ2ugZovzQJh0h6aXSvLIY6i9T8ax2J/kfaSVoNZXWcOa89ONnEKwPsfO
-         +SRG9cBiCPCRg6v4LKdPwyAQCHjbz4cb3VwxAfIoMA37usuRPivsC8ubPB4wH8GKpHLC
-         oFGlPBqBbP19wg+P5wLCmsSsMIJIpaN1a2R/0KXxxQY40UUthnoEgy+3Nr7QJRFAIT/T
-         L5CaSynQlqklgWF+dzoxRMEKFMGbpnX7ydvJWvB29+6xyTpNLZbQQIr2eMiPH/q1iu8/
-         tMRA==
-X-Gm-Message-State: AJIora9L3hE7vnzO2wJWrBrmtH4jBDfyezz7mkd8Uiow/rw0tqPAJw8o
-        Yan0yj2v/tMJaYDeMRttTjin4RHVdkb3IE+7f+hRIA==
-X-Google-Smtp-Source: AGRyM1uhtAz31vRN2vTHNL4YCaPo/HzrRPqWvsF7BYkwB/9AbIB+WVtU7Zfj39rHx4IiBz8rcO0fuw5kZtT4pTTl5BA=
-X-Received: by 2002:ad4:5761:0:b0:473:7861:69d1 with SMTP id
- r1-20020ad45761000000b00473786169d1mr8093947qvx.73.1658688930682; Sun, 24 Jul
- 2022 11:55:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=IHMS+b3mDvwpMK/cDzCHPu0P8GmbIu/+yms/GdH73sw=;
+        b=xqLsB+jyiYP4vIGOMq1wG35BqpS7LeuTz0AVvH5b/DlCo6H8/mGnoN27IgDnqP+biG
+         1tGVcGazuyyE+1MSC8AbwP3fIApwwajCy+2LxI6C9dfdbwubNKbhg0tpXIWStpbcR9WL
+         7nXMHxHMnAVNwQht5xSJK/Gy8768v4Bd9KJja47bHwsAHjRYsrZtgD8wdktoeS9czFzr
+         V5eF75d3xjeIMzGCrTJ3GTG45/7JmZQaYKzvHQcbZPE+BNjzyxixrE8ykaMFZsMdsNhM
+         u6HbL6iQf5NpT6eXG1QPRO6uVel7b1ccvOGT3s+xV9c09Zz0ia8CZoosHtyRXHVPdhgV
+         ujlg==
+X-Gm-Message-State: AJIora+i7SYuQw0oFLZ0Vc9IiHKYWWSjJ7gYaggASxOtI65/amQHnYN+
+        TSsmGXgpGu8FCe7/WyjxUhufEA==
+X-Google-Smtp-Source: AGRyM1s3nkMSDXcI+L/mB7ooKMNuJV1ByJdw0mt62IXB8zpkiu3HoHqH2vGvbsiChaGMnLUzrpw2vw==
+X-Received: by 2002:a05:651c:1241:b0:25d:5484:75d3 with SMTP id h1-20020a05651c124100b0025d548475d3mr3233113ljh.45.1658689255220;
+        Sun, 24 Jul 2022 12:00:55 -0700 (PDT)
+Received: from localhost (h-46-59-88-103.A463.priv.bahnhof.se. [46.59.88.103])
+        by smtp.gmail.com with ESMTPSA id p13-20020a2ea4cd000000b0025e0396786dsm404345ljm.93.2022.07.24.12.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 12:00:54 -0700 (PDT)
+Date:   Sun, 24 Jul 2022 21:00:53 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+        khilman@baylibre.com, abailon@baylibre.com, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
+Message-ID: <Yt2W5UCXaB3Memzg@oden.dyn.berto.se>
+References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
+ <20220710212423.681301-18-daniel.lezcano@linexp.org>
+ <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
+ <18ade2d0-ebda-0526-71f3-65a0b2685068@linexp.org>
 MIME-Version: 1.0
-References: <20220724172442.87830-1-matti.lehtimaki@gmail.com> <20220724172442.87830-4-matti.lehtimaki@gmail.com>
-In-Reply-To: <20220724172442.87830-4-matti.lehtimaki@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 24 Jul 2022 21:55:19 +0300
-Message-ID: <CAA8EJpqUH_v1GXEYF62Z3DBtFu_305_h4D36aCnBr38bo5HoJw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab
- 4 10.1 (SM-T530)
-To:     =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <18ade2d0-ebda-0526-71f3-65a0b2685068@linexp.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Jul 2022 at 20:25, Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.c=
-om> wrote:
->
-> Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
-> based on the apq8026 platform.
->
-> Currently supported are accelerometer sensor, hall sensor,
-> internal storage, physical buttons (power & volume), screen
-> (based on simple-framebuffer set up by the bootloader), sdcard,
-> touchscreen and USB.
->
-> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> ---
-> Changes in v3:
->   - Fix sdhc_2 bus width
->   - Reorder includes
->
-> Changes in v2:
->   - Change codename to matisse-wifi
->   - Remove msm-id, not needed when lk2nd is used
->   - Remove unused labels from reserved memory regions
->   - Rename muic node
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 469 ++++++++++++++++++
->  2 files changed, 470 insertions(+)
->  create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.d=
-ts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 5112f493f494..8bac4f4f8656 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1010,6 +1010,7 @@ dtb-$(CONFIG_ARCH_QCOM) +=3D \
->         qcom-apq8016-sbc.dtb \
->         qcom-apq8026-asus-sparrow.dtb \
->         qcom-apq8026-lg-lenok.dtb \
-> +       qcom-apq8026-samsung-matisse-wifi.dtb \
->         qcom-apq8060-dragonboard.dtb \
->         qcom-apq8064-cm-qs600.dtb \
->         qcom-apq8064-ifc6410.dtb \
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/ar=
-ch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> new file mode 100644
-> index 000000000000..78a119107069
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> @@ -0,0 +1,469 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2022, Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/input/input.h>
-> +#include "qcom-msm8226.dtsi"
-> +#include "qcom-pm8226.dtsi"
-> +
-> +/delete-node/ &smem_region;
+Hi Daniel,
 
-Please move this to the /reserved-memory node. having it there would
-help understanding that we are just changing the address.
+On 2022-07-24 20:27:54 +0200, Daniel Lezcano wrote:
+> 
+> Hi Niklas,
+> 
+> I tried to reproduce the issue but without success.
+> 
+> What sensor are you using ?
 
-> +
-> +/ {
-> +       model =3D "Samsung Galaxy Tab 4 10.1";
-> +       compatible =3D "samsung,matisse-wifi", "qcom,apq8026";
-> +       chassis-type =3D "tablet";
-> +
+I was using rcar_gen3_thermal.
 
-[skipped]
+I did my tests starting on v5.19-rc7 and then picked '[PATCH v5 00/12] 
+thermal OF rework' from [1] and finally applied this full series on-top 
+of that. If you have a branch or some specific test you wish me to try 
+I'm happy to so.
 
-> +       i2c-muic {
-> +               compatible =3D "i2c-gpio";
+1. https://lore.kernel.org/lkml/20220710123512.1714714-1-daniel.lezcano@linexp.org/
 
-Is there any reason for using i2c-gpio rather than blsp_i2c4?
-According to the pinctrl-msm8226, gpio14/15 can be mapped to the blsp.
+> 
+> 
+> On 19/07/2022 11:10, Niklas Söderlund wrote:
+> > Hi Daniel,
+> > 
+> > Thanks for your work.
+> > 
+> > On 2022-07-10 23:24:07 +0200, Daniel Lezcano wrote:
+> > > The thermal OF code has a new API allowing to migrate the OF
+> > > initialization to a simpler approach.
+> > > 
+> > > Use this new API.
+> > I tested this together with the series it depends on and while
+> > temperature monitoring seems to work fine it breaks the emul_temp
+> > interface (/sys/class/thermal/thermal_zone2/emul_temp).
+> > 
+> > Before this change I can write a temperature to this file and have it
+> > trigger actions, in my test-case changing the cooling state, which I
+> > observe in /sys/class/thermal/cooling_device0/cur_state.
+> > 
+> > Likewise before this change I could trip the critical trip-point that
+> > would power off the board using the emul_temp interface, this too no
+> > longer works,
+> > 
+> >      echo 120000 > /sys/class/thermal/thermal_zone2/emul_temp
+> > 
+> > Is this an intention change of the new API?
+> 
+> 
+> 
+> 
 
-> +               sda-gpios =3D <&tlmm 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN=
-)>;
-> +               scl-gpios =3D <&tlmm 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN=
-)>;
-> +
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&muic_i2c_default_state>;
-> +
-> +               #address-cells =3D <1>;
-> +               #size-cells =3D <0>;
-> +
-> +               muic: usb-switch@25 {
-> +                       compatible =3D "siliconmitus,sm5502-muic";
-> +                       reg =3D <0x25>;
-> +
-> +                       interrupt-parent =3D <&tlmm>;
-> +                       interrupts =3D <67 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +                       pinctrl-names =3D "default";
-> +                       pinctrl-0 =3D <&muic_int_default_state>;
-> +               };
-> +       };
-
-[skipped]
-
-
---=20
-With best wishes
-Dmitry
+-- 
+Kind Regards,
+Niklas Söderlund

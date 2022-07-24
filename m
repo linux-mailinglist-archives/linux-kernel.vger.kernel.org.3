@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E22657F5D1
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 17:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36C457F5D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 17:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234362AbiGXPey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 11:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S233493AbiGXPe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 11:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234266AbiGXPeu (ORCPT
+        with ESMTP id S234303AbiGXPew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 11:34:50 -0400
+        Sun, 24 Jul 2022 11:34:52 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B413F11C0B
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 08:34:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B73911C2E
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 08:34:52 -0700 (PDT)
 Received: from dslb-178-004-201-227.178.004.pools.vodafone-ip.de ([178.4.201.227] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1oFdcy-0004Lf-KE; Sun, 24 Jul 2022 17:34:44 +0200
+        id 1oFdd0-0004Lf-2s; Sun, 24 Jul 2022 17:34:46 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 1/2] staging: r8188eu: remove OnAtim prototype
-Date:   Sun, 24 Jul 2022 17:33:48 +0200
-Message-Id: <20220724153349.138741-2-martin@kaiser.cx>
+Subject: [PATCH 2/2] staging: r8188eu: remove DoReserved prototype
+Date:   Sun, 24 Jul 2022 17:33:49 +0200
+Message-Id: <20220724153349.138741-3-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220724153349.138741-1-martin@kaiser.cx>
 References: <20220724153349.138741-1-martin@kaiser.cx>
@@ -44,8 +44,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OnAtim function was removed in commit 6d933902c609 ("staging: r8188eu:
-remove OnAtim"). Remove the prototype as well.
+The DoReserved function was removed in commit 869ddbfccdea ("staging:
+r8188eu: remove dummy entries from OnAction_tbl"). Remove the prototype
+as well.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
@@ -53,18 +54,18 @@ Signed-off-by: Martin Kaiser <martin@kaiser.cx>
  1 file changed, 2 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/include/rtw_mlme_ext.h b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-index c630700ea657..83d0980b5bf6 100644
+index 83d0980b5bf6..2d7856c74542 100644
 --- a/drivers/staging/r8188eu/include/rtw_mlme_ext.h
 +++ b/drivers/staging/r8188eu/include/rtw_mlme_ext.h
-@@ -550,8 +550,6 @@ unsigned int DoReserved(struct adapter *padapter,
+@@ -546,8 +546,6 @@ unsigned int OnProbeReq(struct adapter *padapter,
  			struct recv_frame *precv_frame);
+ unsigned int OnProbeRsp(struct adapter *padapter,
+ 			struct recv_frame *precv_frame);
+-unsigned int DoReserved(struct adapter *padapter,
+-			struct recv_frame *precv_frame);
  unsigned int OnBeacon(struct adapter *padapter,
  		      struct recv_frame *precv_frame);
--unsigned int OnAtim(struct adapter *padapter,
--		    struct recv_frame *precv_frame);
  unsigned int OnDisassoc(struct adapter *padapter,
- 			struct recv_frame *precv_frame);
- unsigned int OnAuth(struct adapter *padapter,
 -- 
 2.30.2
 

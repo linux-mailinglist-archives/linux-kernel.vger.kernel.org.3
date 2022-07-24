@@ -2,330 +2,724 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BFA57F245
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 02:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E8B57F24F
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 02:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239135AbiGXAxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 20:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        id S239167AbiGXAy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 20:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239128AbiGXAw5 (ORCPT
+        with ESMTP id S239065AbiGXAyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 20:52:57 -0400
-Received: from box.fidei.email (box.fidei.email [71.19.144.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E7417073;
-        Sat, 23 Jul 2022 17:52:52 -0700 (PDT)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id D9D8980794;
-        Sat, 23 Jul 2022 20:52:49 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1658623971; bh=0O9sMfDXdAc6wkH1XjE1SmNcbIiQipNcY+DsjhEUBO4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FtqQKVWDNJ0UcwVS7cw9iBQ8e/DgHGtHfyJLiIYLRjkt5FaG+e/iFlQIPiJe65T13
-         Flm+1hkDG5quyg7y0OydAd6xMylyTpMlm8gy3rJgg4DAxY5lqeGyI7QjCQ1lS/VdHq
-         l+gfrfC0E9o5i0jdhLw6xlgiO9ZETkjUSNOsVOPrn7eBjtGtkzpGIjZChEPtIPjrRJ
-         WvjDzNovqLALZj8pSTf/xm+YxjzsLBfSEUa/bxPREa9tR9+3XLjoEa5ePQSSQFL7KR
-         HXLzUWVUeFtpmPOZBPCs+eTLv+d29cQGl/gzPvT3pvUKMmOHKQ84f28kJsDqMgTQSG
-         +Zre5rpgkKJZg==
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-To:     "Theodore Y . Ts'o " <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, osandov@osandov.com,
-        kernel-team@fb.com
-Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Subject: [PATCH RFC 4/4] fscrypt: Add new encryption policy for btrfs.
-Date:   Sat, 23 Jul 2022 20:52:28 -0400
-Message-Id: <675dd03f1a4498b09925fbf93cc38b8430cb7a59.1658623235.git.sweettea-kernel@dorminy.me>
-In-Reply-To: <cover.1658623235.git.sweettea-kernel@dorminy.me>
-References: <cover.1658623235.git.sweettea-kernel@dorminy.me>
+        Sat, 23 Jul 2022 20:54:20 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CBF15711
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 17:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658624057; x=1690160057;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M9y+vG5BDZkxT/eGc/C5jum/3bvTJ3A34mAKeoZ6CGQ=;
+  b=X5YL69kiNw7XbSXhYZdesEfSLALUhCaOQ6U749ev8sUlVs+R5SOdszfv
+   AFYWlyaBFWIdTK4/6jAwvW/J6sAG2xu8BiL7fkicUVYBEfRCANmOmI7fC
+   xfLR1hcx6KkVXUIuj1ftAIJO0j8g17AfU+kTtqFxNGJS4aehehVGW9L8J
+   P6ZtUTL5AHa8kEJABJSWpsDhiypn2Gse/4B+cCUDvm3xMomwv8MiX6Bvq
+   oPKhuFS/R3v1XcqtIpIbwyjZL2BGHH+XgNbdPSafGHSaUW7wC0KwJEJSg
+   GMJzQKTWMbu7w/EcYmTecgyIpNIfBckwp6rZKoynKhfvpqxke9sTMHee5
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="287516763"
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="287516763"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 17:54:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="626995775"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Jul 2022 17:54:15 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFPss-0003JZ-2N;
+        Sun, 24 Jul 2022 00:54:14 +0000
+Date:   Sun, 24 Jul 2022 08:53:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kas:lam 5/13] drivers/acpi/apei/erst-dbg.c:73:22: sparse: sparse:
+ incorrect type in assignment (different address spaces)
+Message-ID: <202207240823.vYaPrLLL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certain filesystems may want to use IVs generated and stored outside of
-fscrypt's inode-based IV generation policies.  In particular, btrfs can
-have multiple inodes referencing a single block of data, and moves
-logical data blocks to different physical locations on disk; these two
-features mean inode or physical-location-based IV generation policies
-will not work for btrfs. For these or similar reasons, such filesystems
-may want to implement their own IV generation and storage for data
-blocks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+head:   8f1ad76e5cd0e91e574027038c51ace7789f8401
+commit: badfa95b53ee2d7247e30f8ba0d418d162f6523d [5/13] x86/uaccess: Provide untagged_addr() and remove tags before address check
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220724/202207240823.vYaPrLLL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/commit/?id=badfa95b53ee2d7247e30f8ba0d418d162f6523d
+        git remote add kas https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git
+        git fetch --no-tags kas lam
+        git checkout badfa95b53ee2d7247e30f8ba0d418d162f6523d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Plumbing each such filesystem's internals into fscrypt for IV generation
-would be ungainly and fragile. Thus, this change adds a new policy,
-IV_FROM_FS, and a new operation function pointer, get_fs_derived_iv.  If
-this policy is selected, the filesystem is required to provide the
-function pointer, which populates the IV for a particular data block.
-The IV buffer passed to get_fs_derived_iv() is pre-populated with the
-inode contexts' nonce, in case the filesystem would like to use this
-information; for btrfs, this is used for filename encryption.  Any
-filesystem using this policy is expected to appropriately generate and
-store a persistent random IV for each block of data.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Filesystems implementing this policy are expected to be incompatible
-with existing IV generation policies, so if the function pointer is set,
-only dummy or IV_FROM_FS policies are permitted. If there is a
-filesystem which allows other policies as well as IV_FROM_FS, it may be
-better to expose the policy to filesystems, so they can determine
-whether any given policy is compatible with their operation.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/acpi/apei/erst-dbg.c:73:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/acpi/apei/erst-dbg.c:73:22: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/acpi/apei/erst-dbg.c:73:22: sparse:     got unsigned int *
+--
+>> fs/orangefs/devorangefs-req.c:605:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed int [noderef] __user *__ptr_clean @@     got signed int * @@
+   fs/orangefs/devorangefs-req.c:605:26: sparse:     expected signed int [noderef] __user *__ptr_clean
+   fs/orangefs/devorangefs-req.c:605:26: sparse:     got signed int *
+   fs/orangefs/devorangefs-req.c:609:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed int [noderef] __user *__ptr_clean @@     got signed int * @@
+   fs/orangefs/devorangefs-req.c:609:26: sparse:     expected signed int [noderef] __user *__ptr_clean
+   fs/orangefs/devorangefs-req.c:609:26: sparse:     got signed int *
+   fs/orangefs/devorangefs-req.c:614:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed int [noderef] __user *__ptr_clean @@     got signed int * @@
+   fs/orangefs/devorangefs-req.c:614:26: sparse:     expected signed int [noderef] __user *__ptr_clean
+   fs/orangefs/devorangefs-req.c:614:26: sparse:     got signed int *
+   fs/orangefs/devorangefs-req.c:254:28: sparse: sparse: context imbalance in 'orangefs_devreq_read' - different lock contexts for basic block
+--
+>> drivers/misc/xilinx_sdfec.c:735:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int enum xsdfec_order [noderef] __user *__ptr_clean @@     got unsigned int enum xsdfec_order * @@
+   drivers/misc/xilinx_sdfec.c:735:15: sparse:     expected unsigned int enum xsdfec_order [noderef] __user *__ptr_clean
+   drivers/misc/xilinx_sdfec.c:735:15: sparse:     got unsigned int enum xsdfec_order *
+>> drivers/misc/xilinx_sdfec.c:760:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected bool [noderef] __user *__ptr_clean @@     got bool * @@
+   drivers/misc/xilinx_sdfec.c:760:15: sparse:     expected bool [noderef] __user *__ptr_clean
+   drivers/misc/xilinx_sdfec.c:760:15: sparse:     got bool *
+   drivers/misc/xilinx_sdfec.c:787:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected bool [noderef] __user *__ptr_clean @@     got bool * @@
+   drivers/misc/xilinx_sdfec.c:787:15: sparse:     expected bool [noderef] __user *__ptr_clean
+   drivers/misc/xilinx_sdfec.c:787:15: sparse:     got bool *
+--
+>> drivers/watchdog/cpu5wdt.c:157:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/cpu5wdt.c:157:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/cpu5wdt.c:157:24: sparse:     got int *
+   drivers/watchdog/cpu5wdt.c:159:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/cpu5wdt.c:159:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/cpu5wdt.c:159:24: sparse:     got int *
+   drivers/watchdog/cpu5wdt.c:161:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/cpu5wdt.c:161:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/cpu5wdt.c:161:21: sparse:     got int *
+--
+>> drivers/watchdog/acquirewdt.c:131:37: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char const [noderef] __user *__ptr_clean @@     got char const * @@
+   drivers/watchdog/acquirewdt.c:131:37: sparse:     expected char const [noderef] __user *__ptr_clean
+   drivers/watchdog/acquirewdt.c:131:37: sparse:     got char const *
+>> drivers/watchdog/acquirewdt.c:161:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/acquirewdt.c:161:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/acquirewdt.c:161:24: sparse:     got int *
+   drivers/watchdog/acquirewdt.c:165:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/acquirewdt.c:165:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/acquirewdt.c:165:21: sparse:     got int *
+   drivers/watchdog/acquirewdt.c:182:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/acquirewdt.c:182:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/acquirewdt.c:182:24: sparse:     got int *
+--
+>> drivers/watchdog/wafer5823wdt.c:109:37: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char const [noderef] __user *__ptr_clean @@     got char const * @@
+   drivers/watchdog/wafer5823wdt.c:109:37: sparse:     expected char const [noderef] __user *__ptr_clean
+   drivers/watchdog/wafer5823wdt.c:109:37: sparse:     got char const *
+>> drivers/watchdog/wafer5823wdt.c:143:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/wafer5823wdt.c:143:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/wafer5823wdt.c:143:24: sparse:     got int *
+   drivers/watchdog/wafer5823wdt.c:149:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/wafer5823wdt.c:149:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/wafer5823wdt.c:149:21: sparse:     got int *
+   drivers/watchdog/wafer5823wdt.c:170:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/wafer5823wdt.c:170:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/wafer5823wdt.c:170:21: sparse:     got int *
+   drivers/watchdog/wafer5823wdt.c:179:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/wafer5823wdt.c:179:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/wafer5823wdt.c:179:24: sparse:     got int *
+--
+>> drivers/watchdog/sbc60xxwdt.c:180:37: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char const [noderef] __user *__ptr_clean @@     got char const * @@
+   drivers/watchdog/sbc60xxwdt.c:180:37: sparse:     expected char const [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc60xxwdt.c:180:37: sparse:     got char const *
+>> drivers/watchdog/sbc60xxwdt.c:237:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/sbc60xxwdt.c:237:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc60xxwdt.c:237:24: sparse:     got int *
+   drivers/watchdog/sbc60xxwdt.c:241:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/sbc60xxwdt.c:241:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc60xxwdt.c:241:21: sparse:     got int *
+   drivers/watchdog/sbc60xxwdt.c:259:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/sbc60xxwdt.c:259:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc60xxwdt.c:259:21: sparse:     got int *
+   drivers/watchdog/sbc60xxwdt.c:270:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/sbc60xxwdt.c:270:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc60xxwdt.c:270:24: sparse:     got int *
+--
+>> drivers/watchdog/smsc37b787_wdt.c:404:37: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char const [noderef] __user *__ptr_clean @@     got char const * @@
+   drivers/watchdog/smsc37b787_wdt.c:404:37: sparse:     expected char const [noderef] __user *__ptr_clean
+   drivers/watchdog/smsc37b787_wdt.c:404:37: sparse:     got char const *
+>> drivers/watchdog/smsc37b787_wdt.c:444:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/smsc37b787_wdt.c:444:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/smsc37b787_wdt.c:444:24: sparse:     got int *
+   drivers/watchdog/smsc37b787_wdt.c:446:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/smsc37b787_wdt.c:446:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/smsc37b787_wdt.c:446:24: sparse:     got int *
+   drivers/watchdog/smsc37b787_wdt.c:451:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/smsc37b787_wdt.c:451:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/smsc37b787_wdt.c:451:21: sparse:     got int *
+   drivers/watchdog/smsc37b787_wdt.c:468:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/smsc37b787_wdt.c:468:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/smsc37b787_wdt.c:468:21: sparse:     got int *
+   drivers/watchdog/smsc37b787_wdt.c:482:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/smsc37b787_wdt.c:482:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/smsc37b787_wdt.c:482:24: sparse:     got int *
+--
+>> drivers/watchdog/sbc_epx_c3.c:119:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/sbc_epx_c3.c:119:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc_epx_c3.c:119:24: sparse:     got int *
+   drivers/watchdog/sbc_epx_c3.c:121:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/sbc_epx_c3.c:121:21: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc_epx_c3.c:121:21: sparse:     got int *
+   drivers/watchdog/sbc_epx_c3.c:139:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   drivers/watchdog/sbc_epx_c3.c:139:24: sparse:     expected int [noderef] __user *__ptr_clean
+   drivers/watchdog/sbc_epx_c3.c:139:24: sparse:     got int *
+--
+>> kernel/kcov.c:711:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   kernel/kcov.c:711:21: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   kernel/kcov.c:711:21: sparse:     got unsigned int *
+--
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/stats.c:148:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/stats.c:148:17: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/stats.c:148:17: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/stop_task.c:73:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
+   kernel/sched/stop_task.c:73:38: sparse:     expected struct task_struct *curr
+   kernel/sched/stop_task.c:73:38: sparse:     got struct task_struct [noderef] __rcu *curr
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/topology.c:481:19: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct perf_domain *pd @@     got struct perf_domain [noderef] __rcu *pd @@
+   kernel/sched/topology.c:481:19: sparse:     expected struct perf_domain *pd
+   kernel/sched/topology.c:481:19: sparse:     got struct perf_domain [noderef] __rcu *pd
+   kernel/sched/topology.c:643:49: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sched_domain *parent @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/topology.c:643:49: sparse:     expected struct sched_domain *parent
+   kernel/sched/topology.c:643:49: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/topology.c:714:50: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sched_domain *parent @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/topology.c:714:50: sparse:     expected struct sched_domain *parent
+   kernel/sched/topology.c:714:50: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/topology.c:721:55: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain [noderef] __rcu *[noderef] __rcu child @@     got struct sched_domain *[assigned] tmp @@
+   kernel/sched/topology.c:721:55: sparse:     expected struct sched_domain [noderef] __rcu *[noderef] __rcu child
+   kernel/sched/topology.c:721:55: sparse:     got struct sched_domain *[assigned] tmp
+   kernel/sched/topology.c:731:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] tmp @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/topology.c:731:29: sparse:     expected struct sched_domain *[assigned] tmp
+   kernel/sched/topology.c:731:29: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/topology.c:736:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/topology.c:736:20: sparse:     expected struct sched_domain *sd
+   kernel/sched/topology.c:736:20: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/topology.c:757:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] tmp @@     got struct sched_domain [noderef] __rcu *sd @@
+   kernel/sched/topology.c:757:13: sparse:     expected struct sched_domain *[assigned] tmp
+   kernel/sched/topology.c:757:13: sparse:     got struct sched_domain [noderef] __rcu *sd
+   kernel/sched/topology.c:919:70: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sched_domain *sd @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:919:70: sparse:     expected struct sched_domain *sd
+   kernel/sched/topology.c:919:70: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:948:59: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sched_domain *sd @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:948:59: sparse:     expected struct sched_domain *sd
+   kernel/sched/topology.c:948:59: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:994:57: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sched_domain *sd @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:994:57: sparse:     expected struct sched_domain *sd
+   kernel/sched/topology.c:994:57: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:996:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *sibling @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:996:25: sparse:     expected struct sched_domain *sibling
+   kernel/sched/topology.c:996:25: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:1004:55: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sched_domain *sd @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:1004:55: sparse:     expected struct sched_domain *sd
+   kernel/sched/topology.c:1004:55: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:1006:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *sibling @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:1006:25: sparse:     expected struct sched_domain *sibling
+   kernel/sched/topology.c:1006:25: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:1076:62: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sched_domain *sd @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:1076:62: sparse:     expected struct sched_domain *sd
+   kernel/sched/topology.c:1076:62: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:1180:40: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sched_domain *child @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:1180:40: sparse:     expected struct sched_domain *child
+   kernel/sched/topology.c:1180:40: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:1589:43: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sched_domain [noderef] __rcu *child @@     got struct sched_domain *child @@
+   kernel/sched/topology.c:1589:43: sparse:     expected struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:1589:43: sparse:     got struct sched_domain *child
+   kernel/sched/topology.c:2186:31: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain [noderef] __rcu *parent @@     got struct sched_domain *sd @@
+   kernel/sched/topology.c:2186:31: sparse:     expected struct sched_domain [noderef] __rcu *parent
+   kernel/sched/topology.c:2186:31: sparse:     got struct sched_domain *sd
+   kernel/sched/topology.c:2289:57: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/topology.c:2289:57: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/topology.c:2289:57: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/topology.c:2310:56: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sched_domain *child @@     got struct sched_domain [noderef] __rcu *child @@
+   kernel/sched/topology.c:2310:56: sparse:     expected struct sched_domain *child
+   kernel/sched/topology.c:2310:56: sparse:     got struct sched_domain [noderef] __rcu *child
+   kernel/sched/topology.c:2309:57: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/topology.c:2309:57: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/topology.c:2309:57: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/topology.c:2357:57: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/topology.c:2357:57: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/topology.c:2357:57: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/build_utility.c: note: in included file:
+>> kernel/sched/core_sched.c:180:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long [noderef] __user *__ptr_clean @@     got unsigned long long * @@
+   kernel/sched/core_sched.c:180:23: sparse:     expected unsigned long long [noderef] __user *__ptr_clean
+   kernel/sched/core_sched.c:180:23: sparse:     got unsigned long long *
+   kernel/sched/core_sched.c:275:37: sparse: sparse: incompatible types in conditional expression (different address spaces):
+   kernel/sched/core_sched.c:275:37: sparse:    struct task_struct *
+   kernel/sched/core_sched.c:275:37: sparse:    struct task_struct [noderef] __rcu *
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/psi.c:143:1: sparse: sparse: symbol 'psi_cgroups_enabled' was not declared. Should it be static?
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/sched.h:1737:9: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/sched.h:1737:9: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/sched.h:1737:9: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/sched.h:1750:9: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/sched.h:1750:9: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/sched.h:1750:9: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/sched.h:1737:9: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/sched.h:1737:9: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/sched.h:1737:9: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/sched.h:1750:9: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sched_domain *[assigned] sd @@     got struct sched_domain [noderef] __rcu *parent @@
+   kernel/sched/sched.h:1750:9: sparse:     expected struct sched_domain *[assigned] sd
+   kernel/sched/sched.h:1750:9: sparse:     got struct sched_domain [noderef] __rcu *parent
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/topology.c:949:31: sparse: sparse: dereference of noderef expression
+   kernel/sched/topology.c:1610:19: sparse: sparse: dereference of noderef expression
+   kernel/sched/topology.c:2340:51: sparse: sparse: dereference of noderef expression
+   kernel/sched/topology.c:2341:49: sparse: sparse: dereference of noderef expression
+   kernel/sched/topology.c:2343:52: sparse: sparse: dereference of noderef expression
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/sched.h:1177:30: sparse: sparse: context imbalance in 'sched_core_update_cookie' - wrong count at exit
+   kernel/sched/build_utility.c: note: in included file:
+   kernel/sched/psi.c:746:13: sparse: sparse: dereference of noderef expression
+   kernel/sched/psi.c:770:38: sparse: sparse: dereference of noderef expression
+   kernel/sched/psi.c:990:6: sparse: sparse: context imbalance in 'cgroup_move_task' - different lock contexts for basic block
+--
+>> drivers/fpga/dfl.c:1837:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/fpga/dfl.c:1837:16: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/fpga/dfl.c:1837:16: sparse:     got unsigned int *
+--
+>> drivers/tee/tee_core.c:447:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long [noderef] __user *__ptr_clean @@     got unsigned long long * @@
+   drivers/tee/tee_core.c:447:29: sparse:     expected unsigned long long [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:447:29: sparse:     got unsigned long long *
+   drivers/tee/tee_core.c:448:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long [noderef] __user *__ptr_clean @@     got unsigned long long * @@
+   drivers/tee/tee_core.c:448:29: sparse:     expected unsigned long long [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:448:29: sparse:     got unsigned long long *
+   drivers/tee/tee_core.c:449:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long [noderef] __user *__ptr_clean @@     got unsigned long long * @@
+   drivers/tee/tee_core.c:449:29: sparse:     expected unsigned long long [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:449:29: sparse:     got unsigned long long *
+   drivers/tee/tee_core.c:454:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long [noderef] __user *__ptr_clean @@     got unsigned long long * @@
+   drivers/tee/tee_core.c:454:29: sparse:     expected unsigned long long [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:454:29: sparse:     got unsigned long long *
+>> drivers/tee/tee_core.c:516:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:516:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:516:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:517:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:517:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:517:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:518:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:518:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:518:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:586:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:586:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:586:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:587:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:587:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:587:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:699:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:699:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:699:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:717:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:717:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:717:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:718:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:718:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:718:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:797:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:797:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:797:13: sparse:     got unsigned int *
+   drivers/tee/tee_core.c:798:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   drivers/tee/tee_core.c:798:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   drivers/tee/tee_core.c:798:13: sparse:     got unsigned int *
+--
+>> drivers/xen/gntdev.c:817:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed short [noderef] __user *__ptr_clean @@     got signed short * @@
+   drivers/xen/gntdev.c:817:13: sparse:     expected signed short [noderef] __user *__ptr_clean
+   drivers/xen/gntdev.c:817:13: sparse:     got signed short *
+--
+>> drivers/xen/privcmd.c:375:31: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   drivers/xen/privcmd.c:375:31: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   drivers/xen/privcmd.c:375:31: sparse:     got unsigned long *
+   drivers/xen/privcmd.c:559:35: sparse: sparse: cast removes address space '__user' of expression
+   drivers/xen/privcmd.c:559:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] [usertype] __user *[addressable] [assigned] user_gfn @@     got unsigned long [usertype] * @@
+   drivers/xen/privcmd.c:559:32: sparse:     expected unsigned long [noderef] [usertype] __user *[addressable] [assigned] user_gfn
+   drivers/xen/privcmd.c:559:32: sparse:     got unsigned long [usertype] *
+   drivers/xen/privcmd.c:686:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[usertype] h @@     got void [noderef] __user *uptr @@
+   drivers/xen/privcmd.c:686:17: sparse:     expected void *[usertype] h
+   drivers/xen/privcmd.c:686:17: sparse:     got void [noderef] __user *uptr
+--
+   sound/core/control.c:815:17: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:815:26: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:816:17: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:816:26: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:835:48: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:1529:40: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+>> sound/core/control.c:1638:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/control.c:1638:13: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/control.c:1638:13: sparse:     got int *
+   sound/core/control.c:1642:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/control.c:1642:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/control.c:1642:21: sparse:     got int *
+   sound/core/control.c:1779:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/control.c:1779:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/control.c:1779:24: sparse:     got int *
+   sound/core/control.c:1820:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/control.c:1820:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/control.c:1820:24: sparse:     got int *
+--
+>> sound/core/timer.c:2044:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/timer.c:2044:13: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/timer.c:2044:13: sparse:     got int *
+   sound/core/timer.c:2083:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/timer.c:2083:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/timer.c:2083:24: sparse:     got int *
+   sound/core/timer.c:790:25: sparse: sparse: context imbalance in 'snd_timer_process_callbacks' - unexpected unlock
+--
+>> sound/core/pcm.c:92:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/pcm.c:92:29: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/pcm.c:92:29: sparse:     got int *
+   sound/core/pcm.c:97:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/pcm.c:97:29: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/pcm.c:97:29: sparse:     got int *
+>> sound/core/pcm.c:112:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm.c:112:29: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm.c:112:29: sparse:     got unsigned int *
+   sound/core/pcm.c:114:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/pcm.c:114:29: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/pcm.c:114:29: sparse:     got int *
+   sound/core/pcm.c:119:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm.c:119:29: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm.c:119:29: sparse:     got unsigned int *
+   sound/core/pcm.c:155:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/pcm.c:155:29: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/pcm.c:155:29: sparse:     got int *
+--
+>> sound/core/pcm_native.c:1082:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:1082:20: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:1082:20: sparse:     got unsigned int *
+   sound/core/pcm_native.c:1108:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:1108:20: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:1108:20: sparse:     got unsigned int *
+   sound/core/pcm_native.c:3039:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3039:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3039:13: sparse:     got unsigned int *
+   sound/core/pcm_native.c:3134:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3134:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3134:13: sparse:     got unsigned int *
+   sound/core/pcm_native.c:3135:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3135:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3135:13: sparse:     got unsigned int *
+   sound/core/pcm_native.c:3136:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3136:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3136:13: sparse:     got unsigned int *
+>> sound/core/pcm_native.c:3171:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected restricted snd_pcm_state_t [noderef] __user *__ptr_clean @@     got restricted snd_pcm_state_t * @@
+   sound/core/pcm_native.c:3171:13: sparse:     expected restricted snd_pcm_state_t [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3171:13: sparse:     got restricted snd_pcm_state_t *
+   sound/core/pcm_native.c:3172:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3172:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3172:13: sparse:     got unsigned int *
+>> sound/core/pcm_native.c:3173:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed int [noderef] __user *__ptr_clean @@     got signed int * @@
+   sound/core/pcm_native.c:3173:13: sparse:     expected signed int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3173:13: sparse:     got signed int *
+   sound/core/pcm_native.c:3174:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed int [noderef] __user *__ptr_clean @@     got signed int * @@
+   sound/core/pcm_native.c:3174:13: sparse:     expected signed int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3174:13: sparse:     got signed int *
+   sound/core/pcm_native.c:3175:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected restricted snd_pcm_state_t [noderef] __user *__ptr_clean @@     got restricted snd_pcm_state_t * @@
+   sound/core/pcm_native.c:3175:13: sparse:     expected restricted snd_pcm_state_t [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3175:13: sparse:     got restricted snd_pcm_state_t *
+   sound/core/pcm_native.c:3176:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed int [noderef] __user *__ptr_clean @@     got signed int * @@
+   sound/core/pcm_native.c:3176:13: sparse:     expected signed int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3176:13: sparse:     got signed int *
+   sound/core/pcm_native.c:3177:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed int [noderef] __user *__ptr_clean @@     got signed int * @@
+   sound/core/pcm_native.c:3177:13: sparse:     expected signed int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3177:13: sparse:     got signed int *
+   sound/core/pcm_native.c:3178:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3178:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3178:13: sparse:     got unsigned int *
+   sound/core/pcm_native.c:3179:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3179:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3179:13: sparse:     got unsigned int *
+>> sound/core/pcm_native.c:3191:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/pcm_native.c:3191:13: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3191:13: sparse:     got int *
+>> sound/core/pcm_native.c:3208:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed long [noderef] __user *__ptr_clean @@     got signed long * @@
+   sound/core/pcm_native.c:3208:13: sparse:     expected signed long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3208:13: sparse:     got signed long *
+   sound/core/pcm_native.c:3216:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed long [noderef] __user *__ptr_clean @@     got signed long * @@
+   sound/core/pcm_native.c:3216:13: sparse:     expected signed long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3216:13: sparse:     got signed long *
+   sound/core/pcm_native.c:3233:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed long [noderef] __user *__ptr_clean @@     got signed long * @@
+   sound/core/pcm_native.c:3233:13: sparse:     expected signed long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3233:13: sparse:     got signed long *
+   sound/core/pcm_native.c:3246:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed long [noderef] __user *__ptr_clean @@     got signed long * @@
+   sound/core/pcm_native.c:3246:13: sparse:     expected signed long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3246:13: sparse:     got signed long *
+>> sound/core/pcm_native.c:3257:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   sound/core/pcm_native.c:3257:13: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3257:13: sparse:     got unsigned long *
+   sound/core/pcm_native.c:3259:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   sound/core/pcm_native.c:3259:13: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3259:13: sparse:     got unsigned long *
+   sound/core/pcm_native.c:3262:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   sound/core/pcm_native.c:3262:13: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3262:13: sparse:     got unsigned long *
+   sound/core/pcm_native.c:3273:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   sound/core/pcm_native.c:3273:13: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3273:13: sparse:     got unsigned long *
+   sound/core/pcm_native.c:3275:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   sound/core/pcm_native.c:3275:13: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3275:13: sparse:     got unsigned long *
+   sound/core/pcm_native.c:3278:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long [noderef] __user *__ptr_clean @@     got unsigned long * @@
+   sound/core/pcm_native.c:3278:13: sparse:     expected unsigned long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3278:13: sparse:     got unsigned long *
+   sound/core/pcm_native.c:3302:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/pcm_native.c:3302:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3302:24: sparse:     got int *
+   sound/core/pcm_native.c:3310:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_native.c:3310:21: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3310:21: sparse:     got unsigned int *
+   sound/core/pcm_native.c:3357:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected signed long [noderef] __user *__ptr_clean @@     got signed long * @@
+   sound/core/pcm_native.c:3357:21: sparse:     expected signed long [noderef] __user *__ptr_clean
+   sound/core/pcm_native.c:3357:21: sparse:     got signed long *
+   sound/core/pcm_native.c:95:1: sparse: sparse: context imbalance in 'snd_pcm_group_lock' - different lock contexts for basic block
+   sound/core/pcm_native.c:96:1: sparse: sparse: context imbalance in 'snd_pcm_group_unlock' - unexpected unlock
+   sound/core/pcm_native.c:97:1: sparse: sparse: context imbalance in 'snd_pcm_group_lock_irq' - different lock contexts for basic block
+   sound/core/pcm_native.c:98:1: sparse: sparse: context imbalance in 'snd_pcm_group_unlock_irq' - unexpected unlock
+   sound/core/pcm_native.c:145:9: sparse: sparse: context imbalance in 'snd_pcm_stream_lock_nested' - different lock contexts for basic block
+   sound/core/pcm_native.c:171:9: sparse: sparse: context imbalance in '_snd_pcm_stream_lock_irqsave' - different lock contexts for basic block
+   sound/core/pcm_native.c:184:9: sparse: sparse: context imbalance in '_snd_pcm_stream_lock_irqsave_nested' - different lock contexts for basic block
+   sound/core/pcm_native.c:201:39: sparse: sparse: context imbalance in 'snd_pcm_stream_unlock_irqrestore' - unexpected unlock
+   sound/core/pcm_native.c:1261:44: sparse: sparse: context imbalance in 'snd_pcm_action_group' - unexpected unlock
+   sound/core/pcm_native.c:1331:37: sparse: sparse: context imbalance in 'snd_pcm_stream_group_ref' - different lock contexts for basic block
+--
+>> sound/core/pcm_lib.c:2436:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_lib.c:2436:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_lib.c:2436:13: sparse:     got unsigned int *
+   sound/core/pcm_lib.c:2446:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_lib.c:2446:21: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_lib.c:2446:21: sparse:     got unsigned int *
+   sound/core/pcm_lib.c:2447:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_lib.c:2447:21: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_lib.c:2447:21: sparse:     got unsigned int *
+   sound/core/pcm_lib.c:2457:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_lib.c:2457:29: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_lib.c:2457:29: sparse:     got unsigned int *
+   sound/core/pcm_lib.c:2462:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned int [noderef] __user *__ptr_clean @@     got unsigned int * @@
+   sound/core/pcm_lib.c:2462:13: sparse:     expected unsigned int [noderef] __user *__ptr_clean
+   sound/core/pcm_lib.c:2462:13: sparse:     got unsigned int *
+--
+>> sound/core/oss/pcm_oss.c:2608:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2608:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2608:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2610:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2610:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2610:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2636:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2636:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2636:21: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2641:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2641:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2641:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2646:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2646:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2646:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2648:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2648:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2648:21: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2654:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2654:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2654:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2659:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2659:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2659:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2661:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2661:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2661:21: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2666:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2666:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2666:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2671:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2671:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2671:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2673:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2673:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2673:21: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2678:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2678:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2678:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2683:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2683:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2683:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2690:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2690:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2690:21: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2695:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2695:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2695:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2697:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2697:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2697:21: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2704:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2704:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2704:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2717:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2717:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2717:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2722:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2722:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2722:24: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2724:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2724:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2724:21: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2750:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2750:25: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2750:25: sparse:     got int *
+   sound/core/oss/pcm_oss.c:2753:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/pcm_oss.c:2753:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/pcm_oss.c:2753:24: sparse:     got int *
+--
+>> sound/core/oss/mixer_oss.c:335:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:335:29: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:335:29: sparse:     got int *
+   sound/core/oss/mixer_oss.c:340:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:340:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:340:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:342:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:342:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:342:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:344:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:344:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:344:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:349:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:349:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:349:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:354:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:354:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:354:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:359:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:359:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:359:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:364:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:364:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:364:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:369:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:369:32: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:369:32: sparse:     got int *
+   sound/core/oss/mixer_oss.c:373:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:373:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:373:21: sparse:     got int *
+   sound/core/oss/mixer_oss.c:378:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:378:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:378:24: sparse:     got int *
+   sound/core/oss/mixer_oss.c:383:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/oss/mixer_oss.c:383:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/oss/mixer_oss.c:383:24: sparse:     got int *
+--
+>> sound/core/seq/oss/seq_oss_timer.c:224:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_timer.c:224:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_timer.c:224:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_timer.c:229:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_timer.c:229:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_timer.c:229:24: sparse:     got int *
+   sound/core/seq/oss/seq_oss_timer.c:243:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_timer.c:243:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_timer.c:243:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_timer.c:247:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_timer.c:247:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_timer.c:247:21: sparse:     got int *
+--
+>> sound/core/seq/oss/seq_oss_ioctl.c:97:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:97:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:97:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:104:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:104:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:104:24: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:109:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:109:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:109:24: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:112:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:112:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:112:24: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:115:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:115:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:115:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:120:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:120:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:120:24: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:123:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:123:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:123:24: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:126:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:126:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:126:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:129:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:129:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:129:24: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:132:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:132:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:132:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:150:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:150:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:150:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:162:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:162:21: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:162:21: sparse:     got int *
+   sound/core/seq/oss/seq_oss_ioctl.c:169:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected int [noderef] __user *__ptr_clean @@     got int * @@
+   sound/core/seq/oss/seq_oss_ioctl.c:169:24: sparse:     expected int [noderef] __user *__ptr_clean
+   sound/core/seq/oss/seq_oss_ioctl.c:169:24: sparse:     got int *
 
-Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
----
- fs/crypto/crypto.c           | 28 ++++++++++++++++++++++++++--
- fs/crypto/fscrypt_private.h  |  4 ++--
- fs/crypto/inline_crypt.c     | 20 ++++++++++++++------
- fs/crypto/keysetup.c         |  5 +++++
- fs/crypto/policy.c           | 16 +++++++++++++++-
- include/linux/fscrypt.h      | 21 ++++++++++++++++++++-
- include/uapi/linux/fscrypt.h |  1 +
- 7 files changed, 83 insertions(+), 12 deletions(-)
+vim +73 drivers/acpi/apei/erst-dbg.c
 
-diff --git a/fs/crypto/crypto.c b/fs/crypto/crypto.c
-index e78be66bbf01..3c29c437ae0b 100644
---- a/fs/crypto/crypto.c
-+++ b/fs/crypto/crypto.c
-@@ -69,6 +69,20 @@ void fscrypt_free_bounce_page(struct page *bounce_page)
- }
- EXPORT_SYMBOL(fscrypt_free_bounce_page);
- 
-+int fscrypt_mode_ivsize(struct inode *inode)
-+{
-+	struct fscrypt_info *ci;
-+
-+	if (!fscrypt_needs_contents_encryption(inode))
-+		return 0;
-+
-+	ci = inode->i_crypt_info;
-+	if (WARN_ON_ONCE(!ci))
-+		return 0;
-+	return ci->ci_mode->ivsize;
-+}
-+EXPORT_SYMBOL(fscrypt_mode_ivsize);
-+
- /*
-  * Generate the IV for the given logical block number within the given file.
-  * For filenames encryption, lblk_num == 0.
-@@ -81,13 +95,23 @@ void fscrypt_generate_iv(union fscrypt_iv *iv, u64 lblk_num,
- 			 const struct fscrypt_info *ci)
- {
- 	u8 flags = fscrypt_policy_flags(&ci->ci_policy);
-+	struct inode *inode = ci->ci_inode;
- 
- 	memset(iv, 0, ci->ci_mode->ivsize);
-+	if (flags & FSCRYPT_POLICY_FLAG_IV_FROM_FS) {
-+		const struct fscrypt_operations *s_cop = inode->i_sb->s_cop;
-+		/* Provide the nonce in case the filesystem wants to use it */
-+		memcpy(iv->nonce, ci->ci_nonce, FSCRYPT_FILE_NONCE_SIZE);
-+		s_cop->get_fs_defined_iv(iv->raw, ci->ci_mode->ivsize, inode,
-+					 lblk_num);
-+		return;
-+	}
-+
- 
- 	if (flags & FSCRYPT_POLICY_FLAG_IV_INO_LBLK_64) {
- 		WARN_ON_ONCE(lblk_num > U32_MAX);
--		WARN_ON_ONCE(ci->ci_inode->i_ino > U32_MAX);
--		lblk_num |= (u64)ci->ci_inode->i_ino << 32;
-+		WARN_ON_ONCE(inode->i_ino > U32_MAX);
-+		lblk_num |= (u64)inode->i_ino << 32;
- 	} else if (flags & FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32) {
- 		WARN_ON_ONCE(lblk_num > U32_MAX);
- 		lblk_num = (u32)(ci->ci_hashed_ino + lblk_num);
-diff --git a/fs/crypto/fscrypt_private.h b/fs/crypto/fscrypt_private.h
-index 6b4c8094cc7b..084c6ba1e766 100644
---- a/fs/crypto/fscrypt_private.h
-+++ b/fs/crypto/fscrypt_private.h
-@@ -279,8 +279,6 @@ fscrypt_msg(const struct inode *inode, const char *level, const char *fmt, ...);
- #define fscrypt_err(inode, fmt, ...)		\
- 	fscrypt_msg((inode), KERN_ERR, fmt, ##__VA_ARGS__)
- 
--#define FSCRYPT_MAX_IV_SIZE	32
--
- union fscrypt_iv {
- 	struct {
- 		/* logical block number within the file */
-@@ -326,6 +324,7 @@ int fscrypt_init_hkdf(struct fscrypt_hkdf *hkdf, const u8 *master_key,
- #define HKDF_CONTEXT_DIRHASH_KEY	5 /* info=file_nonce		*/
- #define HKDF_CONTEXT_IV_INO_LBLK_32_KEY	6 /* info=mode_num||fs_uuid	*/
- #define HKDF_CONTEXT_INODE_HASH_KEY	7 /* info=<empty>		*/
-+#define HKDF_CONTEXT_IV_FROM_FS_KEY	8 /* info=mode_num	*/
- 
- int fscrypt_hkdf_expand(const struct fscrypt_hkdf *hkdf, u8 context,
- 			const u8 *info, unsigned int infolen,
-@@ -498,6 +497,7 @@ struct fscrypt_master_key {
- 	struct fscrypt_prepared_key mk_direct_keys[FSCRYPT_MODE_MAX + 1];
- 	struct fscrypt_prepared_key mk_iv_ino_lblk_64_keys[FSCRYPT_MODE_MAX + 1];
- 	struct fscrypt_prepared_key mk_iv_ino_lblk_32_keys[FSCRYPT_MODE_MAX + 1];
-+	struct fscrypt_prepared_key mk_iv_from_fs_keys[FSCRYPT_MODE_MAX + 1];
- 
- 	/* Hash key for inode numbers.  Initialized only when needed. */
- 	siphash_key_t		mk_ino_hash_key;
-diff --git a/fs/crypto/inline_crypt.c b/fs/crypto/inline_crypt.c
-index 90f3e68f166e..8a8330caadfa 100644
---- a/fs/crypto/inline_crypt.c
-+++ b/fs/crypto/inline_crypt.c
-@@ -476,14 +476,22 @@ u64 fscrypt_limit_io_blocks(const struct inode *inode, u64 lblk, u64 nr_blocks)
- 		return nr_blocks;
- 
- 	ci = inode->i_crypt_info;
--	if (!(fscrypt_policy_flags(&ci->ci_policy) &
--	      FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32))
--		return nr_blocks;
- 
--	/* With IV_INO_LBLK_32, the DUN can wrap around from U32_MAX to 0. */
-+	if (fscrypt_policy_flags(&ci->ci_policy) &
-+	    FSCRYPT_POLICY_FLAG_IV_FROM_FS) {
-+		return 1;
-+	}
- 
--	dun = ci->ci_hashed_ino + lblk;
-+	if ((fscrypt_policy_flags(&ci->ci_policy) &
-+	      FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32)) {
-+		/*
-+		 * With IV_INO_LBLK_32, the DUN can wrap around from U32_MAX to
-+		 * 0.
-+		 */
-+		dun = ci->ci_hashed_ino + lblk;
-+		return min_t(u64, nr_blocks, (u64)U32_MAX + 1 - dun);
-+	}
- 
--	return min_t(u64, nr_blocks, (u64)U32_MAX + 1 - dun);
-+	return nr_blocks;
- }
- EXPORT_SYMBOL_GPL(fscrypt_limit_io_blocks);
-diff --git a/fs/crypto/keysetup.c b/fs/crypto/keysetup.c
-index c35711896bd4..62b30b567c0d 100644
---- a/fs/crypto/keysetup.c
-+++ b/fs/crypto/keysetup.c
-@@ -323,6 +323,11 @@ static int fscrypt_setup_v2_file_key(struct fscrypt_info *ci,
- 		 */
- 		err = setup_per_mode_enc_key(ci, mk, mk->mk_direct_keys,
- 					     HKDF_CONTEXT_DIRECT_KEY, false);
-+	} else if (ci->ci_policy.v2.flags & FSCRYPT_POLICY_FLAG_IV_FROM_FS) {
-+		err = setup_per_mode_enc_key(ci, mk,
-+					     mk->mk_iv_from_fs_keys,
-+					     HKDF_CONTEXT_IV_FROM_FS_KEY,
-+					     false);
- 	} else if (ci->ci_policy.v2.flags &
- 		   FSCRYPT_POLICY_FLAG_IV_INO_LBLK_64) {
- 		/*
-diff --git a/fs/crypto/policy.c b/fs/crypto/policy.c
-index 5763462af9e8..878650b8e3e7 100644
---- a/fs/crypto/policy.c
-+++ b/fs/crypto/policy.c
-@@ -199,7 +199,8 @@ static bool fscrypt_supported_v2_policy(const struct fscrypt_policy_v2 *policy,
- 	if (policy->flags & ~(FSCRYPT_POLICY_FLAGS_PAD_MASK |
- 			      FSCRYPT_POLICY_FLAG_DIRECT_KEY |
- 			      FSCRYPT_POLICY_FLAG_IV_INO_LBLK_64 |
--			      FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32)) {
-+			      FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32 |
-+			      FSCRYPT_POLICY_FLAG_IV_FROM_FS)) {
- 		fscrypt_warn(inode, "Unsupported encryption flags (0x%02x)",
- 			     policy->flags);
- 		return false;
-@@ -208,6 +209,7 @@ static bool fscrypt_supported_v2_policy(const struct fscrypt_policy_v2 *policy,
- 	count += !!(policy->flags & FSCRYPT_POLICY_FLAG_DIRECT_KEY);
- 	count += !!(policy->flags & FSCRYPT_POLICY_FLAG_IV_INO_LBLK_64);
- 	count += !!(policy->flags & FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32);
-+	count += !!(policy->flags & FSCRYPT_POLICY_FLAG_IV_FROM_FS);
- 	if (count > 1) {
- 		fscrypt_warn(inode, "Mutually exclusive encryption flags (0x%02x)",
- 			     policy->flags);
-@@ -235,6 +237,18 @@ static bool fscrypt_supported_v2_policy(const struct fscrypt_policy_v2 *policy,
- 					  32, 32))
- 		return false;
- 
-+	if ((policy->flags & FSCRYPT_POLICY_FLAG_IV_FROM_FS) &&
-+	    !inode->i_sb->s_cop->get_fs_defined_iv)
-+		return false;
-+
-+	/*
-+	 * If the filesystem defines its own IVs, presumably it does so because
-+	 * no existing policy works, so disallow other policies.
-+	 */
-+	if (inode->i_sb->s_cop->get_fs_defined_iv &&
-+	    !(policy->flags & FSCRYPT_POLICY_FLAG_IV_FROM_FS))
-+		return false;
-+
- 	if (memchr_inv(policy->__reserved, 0, sizeof(policy->__reserved))) {
- 		fscrypt_warn(inode, "Reserved bits set in encryption policy");
- 		return false;
-diff --git a/include/linux/fscrypt.h b/include/linux/fscrypt.h
-index 1686b25f6d9c..3ebca02c4ba0 100644
---- a/include/linux/fscrypt.h
-+++ b/include/linux/fscrypt.h
-@@ -94,6 +94,12 @@ struct fscrypt_nokey_name {
- /* Maximum value for the third parameter of fscrypt_operations.set_context(). */
- #define FSCRYPT_SET_CONTEXT_MAX_SIZE	40
- 
-+/*
-+ * Maximum size needed for an IV. Defines the size of the buffer passed to a
-+ * get_fs_defined_iv() function.
-+ */
-+#define FSCRYPT_MAX_IV_SIZE	32
-+
- #ifdef CONFIG_FS_ENCRYPTION
- 
- /*
-@@ -198,7 +204,13 @@ struct fscrypt_operations {
- 	 */
- 	void (*get_ino_and_lblk_bits)(struct super_block *sb,
- 				      int *ino_bits_ret, int *lblk_bits_ret);
--
-+	/*
-+	 * Generate an IV for a given inode and lblk number, for filesystems
-+	 * where additional filesystem-internal information is necessary to
-+	 * keep the IV stable.
-+	 */
-+	void (*get_fs_defined_iv)(u8 *iv, int ivsize, struct inode *inode,
-+				  u64 lblk_num);
- 	/*
- 	 * Return the number of block devices to which the filesystem may write
- 	 * encrypted file contents.
-@@ -317,6 +329,8 @@ static inline struct page *fscrypt_pagecache_page(struct page *bounce_page)
- 
- void fscrypt_free_bounce_page(struct page *bounce_page);
- 
-+int fscrypt_mode_ivsize(struct inode *inode);
-+
- /* policy.c */
- int fscrypt_have_same_policy(struct inode *inode1, struct inode *inode2);
- int fscrypt_ioctl_set_policy(struct file *filp, const void __user *arg);
-@@ -492,6 +506,11 @@ static inline void fscrypt_free_bounce_page(struct page *bounce_page)
- {
- }
- 
-+static inline int fscrypt_mode_ivsize(struct inode *inode)
-+{
-+	return 0;
-+}
-+
- /* policy.c */
- static inline int fscrypt_ioctl_set_policy(struct file *filp,
- 					   const void __user *arg)
-diff --git a/include/uapi/linux/fscrypt.h b/include/uapi/linux/fscrypt.h
-index 9f4428be3e36..3fbde7668b07 100644
---- a/include/uapi/linux/fscrypt.h
-+++ b/include/uapi/linux/fscrypt.h
-@@ -20,6 +20,7 @@
- #define FSCRYPT_POLICY_FLAG_DIRECT_KEY		0x04
- #define FSCRYPT_POLICY_FLAG_IV_INO_LBLK_64	0x08
- #define FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32	0x10
-+#define FSCRYPT_POLICY_FLAG_IV_FROM_FS		0x20
- 
- /* Encryption algorithms */
- #define FSCRYPT_MODE_AES_256_XTS		1
+885b976fada5bc Huang Ying 2011-02-21  54  
+2ff729d506e8db Huang Ying 2010-08-12  55  static long erst_dbg_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+2ff729d506e8db Huang Ying 2010-08-12  56  {
+2ff729d506e8db Huang Ying 2010-08-12  57  	int rc;
+2ff729d506e8db Huang Ying 2010-08-12  58  	u64 record_id;
+2ff729d506e8db Huang Ying 2010-08-12  59  	u32 record_count;
+2ff729d506e8db Huang Ying 2010-08-12  60  
+2ff729d506e8db Huang Ying 2010-08-12  61  	switch (cmd) {
+2ff729d506e8db Huang Ying 2010-08-12  62  	case APEI_ERST_CLEAR_RECORD:
+2ff729d506e8db Huang Ying 2010-08-12  63  		rc = copy_from_user(&record_id, (void __user *)arg,
+2ff729d506e8db Huang Ying 2010-08-12  64  				    sizeof(record_id));
+2ff729d506e8db Huang Ying 2010-08-12  65  		if (rc)
+2ff729d506e8db Huang Ying 2010-08-12  66  			return -EFAULT;
+2ff729d506e8db Huang Ying 2010-08-12  67  		return erst_clear(record_id);
+2ff729d506e8db Huang Ying 2010-08-12  68  	case APEI_ERST_GET_RECORD_COUNT:
+2ff729d506e8db Huang Ying 2010-08-12  69  		rc = erst_get_record_count();
+2ff729d506e8db Huang Ying 2010-08-12  70  		if (rc < 0)
+2ff729d506e8db Huang Ying 2010-08-12  71  			return rc;
+2ff729d506e8db Huang Ying 2010-08-12  72  		record_count = rc;
+2ff729d506e8db Huang Ying 2010-08-12 @73  		rc = put_user(record_count, (u32 __user *)arg);
+2ff729d506e8db Huang Ying 2010-08-12  74  		if (rc)
+2ff729d506e8db Huang Ying 2010-08-12  75  			return rc;
+2ff729d506e8db Huang Ying 2010-08-12  76  		return 0;
+2ff729d506e8db Huang Ying 2010-08-12  77  	default:
+2ff729d506e8db Huang Ying 2010-08-12  78  		return -ENOTTY;
+2ff729d506e8db Huang Ying 2010-08-12  79  	}
+2ff729d506e8db Huang Ying 2010-08-12  80  }
+2ff729d506e8db Huang Ying 2010-08-12  81  
+
+:::::: The code at line 73 was first introduced by commit
+:::::: 2ff729d506e8db82d76a93bc963df4d0a4d46b57 ACPI, APEI, ERST debug support
+
+:::::: TO: Huang Ying <ying.huang@intel.com>
+:::::: CC: Len Brown <len.brown@intel.com>
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

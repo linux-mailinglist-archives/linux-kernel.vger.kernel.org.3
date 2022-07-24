@@ -2,595 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DFB57F621
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 19:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF0A57F634
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 19:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbiGXRZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 13:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        id S231349AbiGXRdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 13:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiGXRZE (ORCPT
+        with ESMTP id S229774AbiGXRdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 13:25:04 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042E610FEB;
-        Sun, 24 Jul 2022 10:25:02 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id m12so13820857lfj.4;
-        Sun, 24 Jul 2022 10:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6GRiW2zkx25/goI4FZW0/S+Tv9QEr9m8FlebSmvbDHo=;
-        b=oCV7jnmT2Mn3GzR8zuZrmsR54vl1bceoXVXZGlmgCKwYkFi7FFhLyhSPWYizu0TkDC
-         YzbhDoxeZsydWWdVh8rSmUJys/Km9r01e0veLHkpZNIA5kFw3i6BdLl8BJ2s0CKRR7jp
-         HIFiUMTZQNy0DzvElv9bJHoZhoFSMyraPsvkT1sFNe9pDbxMw6b374SBiq11lLIm6+SJ
-         Bu4XVPyQid1tSn0gA+e02HQK6k1qKmEfcK8E3a+/7/yROIPyp01la6a7KerXaOEvNyx1
-         i8WJVy60Ion4+Im9c9VdgducZmfCKI/7Ux9Fhdc6Jg7CCWh6ZMSnc6N76Jm7QNhVsanl
-         r15w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6GRiW2zkx25/goI4FZW0/S+Tv9QEr9m8FlebSmvbDHo=;
-        b=a6zYbiZrMkjmZM+QaGjBFjSlXRCj/Z5NRNPSrUrnHh0SKUrssCNIF7BYwxIDZlKH7l
-         jaLKLW/pQOKiRloKAR/oX00HSYa/uEsdv4RKLTqOjy7bUGUbaS5KFg53MtKhKu3SrAKh
-         OD2TUSlJmvfv7Ad0rbBHrrI9dqmkExVSkn9/qtCBKeaMl44yqjjXODS6Kq0cY1pjDBch
-         Cx0u/3ztBNUAnBFW+L9+aL76GEmlgbldPV3wl67mUtVoUqmOGuRTwCgzxUpw/XLU0om2
-         sZoQVibpqJj1rAcxpEYC9zskO/oGb19iZhElloIu38gISVOHaoicqflEs1jE8NCytmow
-         FSCQ==
-X-Gm-Message-State: AJIora+SB6APTwspT+mtuj8Caq15OjHnbZeiJWVNU5V/i+GD+4SOj9zf
-        RIPRAATAhyDm27e9vvCAmKin6dpsq+VXX2FZuss=
-X-Google-Smtp-Source: AGRyM1sVJKHPCbU/lFubT0Gz2Y/V9cLgOJEUvlvhXCEphn7A+Ff4fO0BdhdPdktXxhEHHufGAXN7Mg==
-X-Received: by 2002:a05:6512:1092:b0:48a:766e:7e20 with SMTP id j18-20020a056512109200b0048a766e7e20mr3438776lfg.646.1658683500229;
-        Sun, 24 Jul 2022 10:25:00 -0700 (PDT)
-Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
-        by smtp.gmail.com with ESMTPSA id d7-20020a19f247000000b0048a73d83b7csm1928322lfk.133.2022.07.24.10.24.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 10:24:59 -0700 (PDT)
-From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab 4 10.1 (SM-T530)
-Date:   Sun, 24 Jul 2022 20:24:41 +0300
-Message-Id: <20220724172442.87830-4-matti.lehtimaki@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220724172442.87830-1-matti.lehtimaki@gmail.com>
-References: <20220724172442.87830-1-matti.lehtimaki@gmail.com>
-MIME-Version: 1.0
+        Sun, 24 Jul 2022 13:33:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FB4B1E0;
+        Sun, 24 Jul 2022 10:33:03 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26OHLhq2028818;
+        Sun, 24 Jul 2022 17:32:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=BugUo7+Rp/RwZIaEcq3DD0ZapE/5+gvowHMudMhvOZE=;
+ b=shlUDNpQkZgWJnBI1FkGkPVU+vFRJoIQzmB3D2PlJVqIrpqTMrf0j385IDtmeR68fqNl
+ KV9U/qmmqKZBcGYzcMU2nSKYc/Az5VHeErCHqlWOUKmzQFt0FdBE1PDd6jU0n8dDU1OP
+ 0w+42DnGrmzD5k4Y8TRqYaTyOC6fw3r8+MNM/05FDuOQE2LVceHQh0jRqbnXrlTE2qZW
+ S4FPcw4zq0VlNGI2i2bdM3hs0gGEz1BNOe4QVS2oeukGbHMvOzcb7tZJRQ+UPWkijUho
+ ALGw6+CPRdS8Lzdu1kGY4Xad+Q65GItlbmv7HDsvUoVjB614A0Fp1/6MjXmxU2ZbIxiG og== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhadr84bm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 24 Jul 2022 17:32:08 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26OHLlQ5028909;
+        Sun, 24 Jul 2022 17:32:07 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhadr84bf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 24 Jul 2022 17:32:07 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26OHLFGZ028731;
+        Sun, 24 Jul 2022 17:32:06 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma04dal.us.ibm.com with ESMTP id 3hg9899xq8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 24 Jul 2022 17:32:06 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26OHW46S40305132
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 24 Jul 2022 17:32:04 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E7F56E052;
+        Sun, 24 Jul 2022 17:32:04 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 567516E04E;
+        Sun, 24 Jul 2022 17:31:56 +0000 (GMT)
+Received: from [9.65.220.76] (unknown [9.65.220.76])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Sun, 24 Jul 2022 17:31:55 +0000 (GMT)
+Message-ID: <240cc182-4628-bef4-2b99-47331b0874f1@linux.ibm.com>
+Date:   Sun, 24 Jul 2022 20:31:53 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
+ RMPUPDATE and PSMASH instruction
+Content-Language: en-US
+To:     Ashish Kalra <Ashish.Kalra@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, jroedel@suse.de,
+        thomas.lendacky@amd.com, hpa@zytor.com, ardb@kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
+        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        tobin@ibm.com, bp@alien8.de, michael.roth@amd.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
+        Dov Murik <dovmurik@linux.ibm.com>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xdiTVv2ibwldcYKv5fB7fxmxRBBxQGv1
+X-Proofpoint-GUID: nsiIU9BuCIfho9vMX2pH8fcPIaN8VMQL
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-23_02,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 spamscore=0 clxscore=1011 malwarescore=0
+ mlxlogscore=999 mlxscore=0 suspectscore=0 impostorscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207240077
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
-based on the apq8026 platform.
+Hi Ashish,
 
-Currently supported are accelerometer sensor, hall sensor,
-internal storage, physical buttons (power & volume), screen
-(based on simple-framebuffer set up by the bootloader), sdcard,
-touchscreen and USB.
+On 21/06/2022 2:02, Ashish Kalra wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> The RMPUPDATE instruction writes a new RMP entry in the RMP Table. The
+> hypervisor will use the instruction to add pages to the RMP table. See
+> APM3 for details on the instruction operations.
+> 
+> The PSMASH instruction expands a 2MB RMP entry into a corresponding set of
+> contiguous 4KB-Page RMP entries. The hypervisor will use this instruction
+> to adjust the RMP entry without invalidating the previous RMP entry.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/include/asm/sev.h | 11 ++++++
+>  arch/x86/kernel/sev.c      | 72 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 83 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index cb16f0e5b585..6ab872311544 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -85,7 +85,9 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
+>  
+>  /* RMP page size */
+>  #define RMP_PG_SIZE_4K			0
+> +#define RMP_PG_SIZE_2M			1
+>  #define RMP_TO_X86_PG_LEVEL(level)	(((level) == RMP_PG_SIZE_4K) ? PG_LEVEL_4K : PG_LEVEL_2M)
+> +#define X86_TO_RMP_PG_LEVEL(level)	(((level) == PG_LEVEL_4K) ? RMP_PG_SIZE_4K : RMP_PG_SIZE_2M)
+>  
+>  /*
+>   * The RMP entry format is not architectural. The format is defined in PPR
+> @@ -126,6 +128,15 @@ struct snp_guest_platform_data {
+>  	u64 secrets_gpa;
+>  };
+>  
+> +struct rmpupdate {
+> +	u64 gpa;
+> +	u8 assigned;
+> +	u8 pagesize;
+> +	u8 immutable;
+> +	u8 rsvd;
+> +	u32 asid;
+> +} __packed;
+> +
+>  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>  extern struct static_key_false sev_es_enable_key;
+>  extern void __sev_es_ist_enter(struct pt_regs *regs);
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index 59e7ec6b0326..f6c64a722e94 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -2429,3 +2429,75 @@ int snp_lookup_rmpentry(u64 pfn, int *level)
+>  	return !!rmpentry_assigned(e);
+>  }
+>  EXPORT_SYMBOL_GPL(snp_lookup_rmpentry);
+> +
+> +int psmash(u64 pfn)
+> +{
+> +	unsigned long paddr = pfn << PAGE_SHIFT;
+> +	int ret;
+> +
+> +	if (!pfn_valid(pfn))
+> +		return -EINVAL;
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+> +		return -ENXIO;
+> +
+> +	/* Binutils version 2.36 supports the PSMASH mnemonic. */
+> +	asm volatile(".byte 0xF3, 0x0F, 0x01, 0xFF"
+> +		      : "=a"(ret)
+> +		      : "a"(paddr)
+> +		      : "memory", "cc");
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(psmash);
+> +
+> +static int rmpupdate(u64 pfn, struct rmpupdate *val)
+> +{
+> +	unsigned long paddr = pfn << PAGE_SHIFT;
+> +	int ret;
+> +
+> +	if (!pfn_valid(pfn))
+> +		return -EINVAL;
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+> +		return -ENXIO;
+> +
+> +	/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
+> +	asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
+> +		     : "=a"(ret)
+> +		     : "a"(paddr), "c"((unsigned long)val)
+> +		     : "memory", "cc");
+> +	return ret;
+> +}
+> +
+> +int rmp_make_private(u64 pfn, u64 gpa, enum pg_level level, int asid, bool immutable)
+> +{
+> +	struct rmpupdate val;
+> +
+> +	if (!pfn_valid(pfn))
+> +		return -EINVAL;
+> +
 
-Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
----
-Changes in v3:
-  - Fix sdhc_2 bus width
-  - Reorder includes
+Should we add more checks on the arguments?
 
-Changes in v2:
-  - Change codename to matisse-wifi
-  - Remove msm-id, not needed when lk2nd is used
-  - Remove unused labels from reserved memory regions
-  - Rename muic node
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 469 ++++++++++++++++++
- 2 files changed, 470 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+1. asid must be > 0
+2. gpa must be aligned according to 'level'
+3. gpa must be below the maximal address for the guest
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 5112f493f494..8bac4f4f8656 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1010,6 +1010,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
- 	qcom-apq8016-sbc.dtb \
- 	qcom-apq8026-asus-sparrow.dtb \
- 	qcom-apq8026-lg-lenok.dtb \
-+	qcom-apq8026-samsung-matisse-wifi.dtb \
- 	qcom-apq8060-dragonboard.dtb \
- 	qcom-apq8064-cm-qs600.dtb \
- 	qcom-apq8064-ifc6410.dtb \
-diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-new file mode 100644
-index 000000000000..78a119107069
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-@@ -0,0 +1,469 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, Matti Lehtimäki <matti.lehtimaki@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/input/input.h>
-+#include "qcom-msm8226.dtsi"
-+#include "qcom-pm8226.dtsi"
-+
-+/delete-node/ &smem_region;
-+
-+/ {
-+	model = "Samsung Galaxy Tab 4 10.1";
-+	compatible = "samsung,matisse-wifi", "qcom,apq8026";
-+	chassis-type = "tablet";
-+
-+	aliases {
-+		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
-+		mmc1 = &sdhc_2; /* SDC2 SD card slot */
-+		display0 = &framebuffer0;
-+	};
-+
-+	chosen {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		stdout-path = "display0";
-+
-+		framebuffer0: framebuffer@3200000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x3200000 0x800000>;
-+			width = <1280>;
-+			height = <800>;
-+			stride = <(1280 * 3)>;
-+			format = "r8g8b8";
-+		};
-+	};
-+
-+	gpio-hall-sensor {
-+		compatible = "gpio-keys";
-+
-+		event-hall-sensor {
-+			label = "Hall Effect Sensor";
-+			gpios = <&tlmm 110 GPIO_ACTIVE_HIGH>;
-+			interrupts = <&tlmm 110 IRQ_TYPE_EDGE_FALLING>;
-+			linux,input-type = <EV_SW>;
-+			linux,code = <SW_LID>;
-+			debounce-interval = <15>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		autorepeat;
-+
-+		key-home {
-+			label = "Home";
-+			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_HOMEPAGE>;
-+			debounce-interval = <15>;
-+		};
-+
-+		key-volume-down {
-+			label = "Volume Down";
-+			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			debounce-interval = <15>;
-+		};
-+
-+		key-volume-up {
-+			label = "Volume Up";
-+			gpios = <&tlmm 106 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEUP>;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	i2c-muic {
-+		compatible = "i2c-gpio";
-+		sda-gpios = <&tlmm 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+		scl-gpios = <&tlmm 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&muic_i2c_default_state>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		muic: usb-switch@25 {
-+			compatible = "siliconmitus,sm5502-muic";
-+			reg = <0x25>;
-+
-+			interrupt-parent = <&tlmm>;
-+			interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
-+
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&muic_int_default_state>;
-+		};
-+	};
-+
-+	reg_tsp_1p8v: regulator-tsp-1p8v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "tsp_1p8v";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+
-+		gpio = <&tlmm 31 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tsp_en_default_state>;
-+	};
-+
-+	reg_tsp_3p3v: regulator-tsp-3p3v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "tsp_3p3v";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		gpio = <&tlmm 73 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tsp_en1_default_state>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		framebuffer@3200000 {
-+			reg = <0x3200000 0x800000>;
-+			no-map;
-+		};
-+
-+		mpss@8400000 {
-+			reg = <0x08400000 0x1f00000>;
-+			no-map;
-+		};
-+
-+		mba@a300000 {
-+			reg = <0x0a300000 0x100000>;
-+			no-map;
-+		};
-+
-+		reserved@cb00000 {
-+			reg = <0x0cb00000 0x700000>;
-+			no-map;
-+		};
-+
-+		wcnss@d200000 {
-+			reg = <0x0d200000 0x700000>;
-+			no-map;
-+		};
-+
-+		adsp@d900000 {
-+			reg = <0x0d900000 0x1800000>;
-+			no-map;
-+		};
-+
-+		venus@f100000 {
-+			reg = <0x0f100000 0x500000>;
-+			no-map;
-+		};
-+
-+		smem_region: smem@fa00000 {
-+			reg = <0xfa00000 0x100000>;
-+			no-map;
-+		};
-+
-+		reserved@fb00000 {
-+			reg = <0x0fb00000 0x260000>;
-+			no-map;
-+		};
-+
-+		rfsa@fd60000 {
-+			reg = <0x0fd60000 0x20000>;
-+			no-map;
-+		};
-+
-+		rmtfs@fd80000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0x0fd80000 0x180000>;
-+			no-map;
-+
-+			qcom,client-id = <1>;
-+		};
-+	};
-+};
-+
-+&blsp1_i2c2 {
-+	status = "okay";
-+
-+	accelerometer@1d {
-+		compatible = "st,lis2hh12";
-+		reg = <0x1d>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <54 IRQ_TYPE_LEVEL_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&accel_int_default_state>;
-+
-+		st,drdy-int-pin = <1>;
-+
-+		vdd-supply = <&pm8226_l19>;
-+		vddio-supply = <&pm8226_lvs1>;
-+	};
-+};
-+
-+&blsp1_i2c5 {
-+	status = "okay";
-+
-+	touchscreen@4a {
-+		compatible = "atmel,maxtouch";
-+		reg = <0x4a>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tsp_int_rst_default_state>;
-+
-+		reset-gpios = <&pm8226_gpios 6 GPIO_ACTIVE_LOW>;
-+
-+		vdd-supply = <&reg_tsp_1p8v>;
-+		vdda-supply = <&reg_tsp_3p3v>;
-+	};
-+};
-+
-+&rpm_requests {
-+	pm8226-regulators {
-+		compatible = "qcom,rpm-pm8226-regulators";
-+
-+		pm8226_s3: s3 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8226_s4: s4 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_s5: s5 {
-+			regulator-min-microvolt = <1150000>;
-+			regulator-max-microvolt = <1150000>;
-+		};
-+
-+		pm8226_l1: l1 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8226_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8226_l3: l3 {
-+			regulator-min-microvolt = <750000>;
-+			regulator-max-microvolt = <1337500>;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l4: l4 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8226_l5: l5 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8226_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l7: l7 {
-+			regulator-min-microvolt = <1850000>;
-+			regulator-max-microvolt = <1850000>;
-+		};
-+
-+		pm8226_l8: l8 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l9: l9 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+
-+		pm8226_l10: l10 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_l14: l14 {
-+			regulator-min-microvolt = <2750000>;
-+			regulator-max-microvolt = <2750000>;
-+		};
-+
-+		pm8226_l15: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8226_l16: l16 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3350000>;
-+		};
-+
-+		pm8226_l17: l17 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+
-+			regulator-system-load = <200000>;
-+			regulator-allow-set-load;
-+			regulator-always-on;
-+		};
-+
-+		pm8226_l18: l18 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8226_l19: l19 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8226_l20: l20 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+		};
-+
-+		pm8226_l21: l21 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8226_l22: l22 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8226_l23: l23 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8226_l24: l24 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8226_l25: l25 {
-+			regulator-min-microvolt = <1775000>;
-+			regulator-max-microvolt = <2125000>;
-+		};
-+
-+		pm8226_l26: l26 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8226_l27: l27 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8226_l28: l28 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8226_lvs1: lvs1 {};
-+	};
-+};
-+
-+&sdhc_1 {
-+	status = "okay";
-+
-+	vmmc-supply = <&pm8226_l17>;
-+	vqmmc-supply = <&pm8226_l6>;
-+
-+	bus-width = <8>;
-+	non-removable;
-+};
-+
-+&sdhc_2 {
-+	status = "okay";
-+
-+	vmmc-supply = <&pm8226_l18>;
-+	vqmmc-supply = <&pm8226_l21>;
-+
-+	bus-width = <4>;
-+	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
-+};
-+
-+&tlmm {
-+	accel_int_default_state: accel-int-default-state {
-+		pins = "gpio54";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	muic_i2c_default_state: muic-i2c-default-state {
-+		pins = "gpio14", "gpio15";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	muic_int_default_state: muic-int-default-state {
-+		pins = "gpio67";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_en_default_state: tsp-en-default-state {
-+		pins = "gpio31";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_en1_default_state: tsp-en1-default-state {
-+		pins = "gpio73";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_int_rst_default_state: tsp-int-rst-default-state {
-+		pins = "gpio17";
-+		function = "gpio";
-+		drive-strength = <10>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&usb {
-+	status = "okay";
-+	extcon = <&muic>, <&muic>;
-+};
-+
-+&usb_hs_phy {
-+	extcon = <&muic>;
-+	v1p8-supply = <&pm8226_l10>;
-+	v3p3-supply = <&pm8226_l20>;
-+};
--- 
-2.34.1
+"Note that the guest physical address space is limited according to
+CPUID Fn80000008_EAX and thus the GPAs used by the firmware in
+measurement calculation are equally limited. Hypervisors should not
+attempt to map pages outside of this limit."
+(-SNP ABI spec page 86, section 8.17 SNP_LAUNCH_UPDATE)
 
+
+But note that in patch 28 of this series we have:
+
++		/* Transition the VMSA page to a firmware state. */
++		ret = rmp_make_private(pfn, -1, PG_LEVEL_4K, sev->asid, true);
+
+That (u64)(-1) value for the gpa argument violates conditions 2 and 3
+from my list above.
+
+And indeed when calculating measurements we see that the GPA value
+for the VMSA pages is 0x0000FFFF_FFFFF000, and not (u64)(-1). [1] [2]
+
+Instead of checks, we can mask the gpa argument so that rmpupdate will
+get the correct value.  Not sure which approach is preferable.
+
+
+[1] https://github.com/IBM/sev-snp-measure/blob/90f6e59831d20e44d03d5ee19388f624fca87291/sevsnpmeasure/gctx.py#L40
+[2] https://github.com/slp/snp-digest-rs/blob/0e5a787e99069944467151101ae4db474793d657/src/main.rs#L86
+
+
+-Dov
+
+
+> +	memset(&val, 0, sizeof(val));
+> +	val.assigned = 1;
+> +	val.asid = asid;
+> +	val.immutable = immutable;
+> +	val.gpa = gpa;
+> +	val.pagesize = X86_TO_RMP_PG_LEVEL(level);
+> +
+> +	return rmpupdate(pfn, &val);
+> +}
+> +EXPORT_SYMBOL_GPL(rmp_make_private);
+> +
+> +int rmp_make_shared(u64 pfn, enum pg_level level)
+> +{
+> +	struct rmpupdate val;
+> +
+> +	if (!pfn_valid(pfn))
+> +		return -EINVAL;
+> +
+> +	memset(&val, 0, sizeof(val));
+> +	val.pagesize = X86_TO_RMP_PG_LEVEL(level);
+> +
+> +	return rmpupdate(pfn, &val);
+> +}
+> +EXPORT_SYMBOL_GPL(rmp_make_shared);

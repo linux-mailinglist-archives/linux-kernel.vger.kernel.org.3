@@ -2,76 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2CB57F536
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 15:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A60457F53A
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 15:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiGXN1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 09:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S233738AbiGXNbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 09:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiGXN1N (ORCPT
+        with ESMTP id S229462AbiGXNbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 09:27:13 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F0B11C0F
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 06:27:12 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id l17-20020a056e02067100b002dc8a10b55eso5694412ilt.1
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 06:27:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=1OtCs4tBRDhs9/PfenuS07eTKFYGPd02xNCaqa46XUQ=;
-        b=d5FVfojfmlLMfwHA8iqVAKUEwU14dUYi9l0gYR53RQRxZoGv+CE0J3a2Hs3LVuQNK2
-         eL0CNTAUNTYxznB6lyRYruEEcqWu2GNaLm7eoHLl46HBVQKPdNt5PLoUdG+q70OAjJW4
-         qRpu0cHtMkbxwZqNZWxQh9RmGC6/lR1rRc8c/CM3koYZ+ANjFUeogy/9x3fn+zHTQHAA
-         9zJR3bQo66zP/EscpIj2uMeU9dCsqA+fcrzebMBnXef+lwh2NyuGzZMvrcr7z5gPOOMA
-         BZW8zXCuDXA+TjX9Q/Qm4iKRPl39n5/SU1q5B/Z9uRVMtlzmXK0QZjn4GeI05AamiQS0
-         Il/A==
-X-Gm-Message-State: AJIora+1F74M9+WwARUtEf2Zd/S5y4b29FvfICI9zhVCLDsfmWjFblPu
-        0Q0SJfQ4Caw1ahQBPchfjZIW6Tn7eI0Dc+G26qL87ku2wYcm
-X-Google-Smtp-Source: AGRyM1urrbP6vE+R8yGNoQznJkjyIBCM2GKV7Zhd+I8se5caWMw67cvKcc0cSWgPBT5HcL4UPDWOl8SOWAdNB+FviTOmEX1/SX5Z
+        Sun, 24 Jul 2022 09:31:15 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69632BF4B;
+        Sun, 24 Jul 2022 06:31:06 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.48.234]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N1M4p-1nVmS50YI7-012qlY; Sun, 24 Jul 2022 15:30:22 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id C24B13C0C7; Sun, 24 Jul 2022 15:30:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1658669418; bh=NxfacbS/vhBHPqYb8uO1w1qDGketwG5gsFpiG+2IG2M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xgsEdEBc2oET/75yHWkBDUpDiCsviWleCn7bTtEwSLJx9bkSqvRqxJy7fwNfwJi40
+         K32uYdTFiBjl/i4dvLjJaQzkKLrtVmPNHbkXnS7ozpeV32CuWK0Wat+yiyGIcHrav0
+         9MCDmWiGVCy8SDSc9Y6VArKMX74Vgv+bU5QK1MXo=
+Date:   Sun, 24 Jul 2022 15:30:18 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: add dtbs_prepare target
+Message-ID: <Yt1JavRlr5XStp0+@fjasle.eu>
+References: <20220724095919.436126-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6911:0:b0:67b:f03b:74c1 with SMTP id
- e17-20020a6b6911000000b0067bf03b74c1mr2699546ioc.58.1658669232183; Sun, 24
- Jul 2022 06:27:12 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 06:27:12 -0700
-In-Reply-To: <20220724125520.2680-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000625ed505e48d067f@google.com>
-Subject: Re: [syzbot] WARNING in p9_client_destroy
-From:   syzbot <syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220724095919.436126-1-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:7aZuP66KtFFHI7mmNnclqkg4ZGeICy49EYom7chv0x1Sd1qp1XI
+ TTL9sWofH5rg9g6fXTMZZ3tq0x0Bc8TrzhI+k5ALwBIp3udeAGOSi84sU4nGlMN+9CBPbJY
+ xT9OR9eV3s523UNzi+/JglR1TQecBK+vlq3at3Gn7Xtt0AMvOq6dqvLhjxfAMKbGPqeE/bk
+ d2cGG4LtyZplM/XOaCtUw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nCI0pjo1QU8=:4QpIYaY8pygI/C7Cawq0KW
+ c2vEU3FwwWOFKTdauKBXX3ZPBW6oXV8vYtfyHa7SPdMNXR4oBf5in5yQvt5nb7eRInlYGCwgu
+ ao9p5p395bQUyVY0hgcx013h7IQbY+lNvX0E8izzKBCeZgThfKyQycbbyv9ggZVnecCN6FeRT
+ pqYl3kSKyLNFqMNZkFA+N9o491/dj2LvhThooyNTnI3bIckIV8MA3F2dHtZrpYd646i7UX9jk
+ nSvz0ozx/Wjvwth73Tna/KnWzMAU1N1naXaSxFUGs6r9uGjiLN0BYe2CxzCEsEvsmwSvYP0Rw
+ g+L8vsQkLuZJoZY+l05rMquHezcZ1fOHF1CWs2BY/1ALr8NJQjP/E+mhr9dje+p0uCyt6KsxK
+ OvbtUuZ55718wm7ZhAaq8NkDyrz4tA9XLAf+vTBpNRptYpi/8Xgvsy6REW3g4y5lVWosVoMIN
+ d6Op8DsYq0JQwV9YAN3ZCd9B7/KAOinNeRXWZnhT6OElTuaa0snf+qbRlg54Gqvu4UDGyARWV
+ UfMWm0UHdDZJQ1pCTb5JyO/E+XGHBbnUZfcTzan30+RBPP9wyyeIQKmmYfHtD7m8JoGdUPwBa
+ N+M9ZmyBpTqhYjtPiDXHZheyHBxv8GVdFjqUjSpLbxHkUd+MlteaG7IW6CYw6eB5pCsD95dYH
+ Q8sLWcbtq1abhRTC4+GAyc5AV4S0VpeJO/b82Sef+aolUSQMtSIoyLBZZbvHBKP40v3r7W98B
+ AxZj+aKqNVgnsmINk8F/Su/t3F23Vummc1xV6Q==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Jul 24, 2022 at 06:59:19PM +0900, Masahiro Yamada wrote:
+> Date:   Sun, 24 Jul 2022 18:59:19 +0900
+> From: Masahiro Yamada <masahiroy@kernel.org>
+> To: linux-kbuild@vger.kernel.org
+> Cc: Nicolas Schier <nicolas@fjasle.eu>, Masahiro Yamada
+>  <masahiroy@kernel.org>, Michal Marek <michal.lkml@markovi.net>, Nick
+>  Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org
+> Subject: [PATCH v2] kbuild: add dtbs_prepare target
+> Message-Id: <20220724095919.436126-1-masahiroy@kernel.org>
+> X-Mailer: git-send-email 2.34.1
+> List-ID: <linux-kbuild.vger.kernel.org>
+> X-Mailing-List: linux-kbuild@vger.kernel.org
+> 
+> Factor out the common prerequisites for DT compilation into the new
+> target, dtbs_prepare.
+> 
+> Add comments to explain why include/config/kernel.release is the
+> prerequisite. Our policy is that installation targets must not rebuild
+> anything in the tree. If 'make modules_install' is executed as root,
+> include/config/kernel.release may be owned by root.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-syzbot tried to test the proposed patch but the build/boot failed:
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-./include/net/9p/client.h:128:13: error: duplicate member 'reqs'
-net/9p/client.c:288:19: error: passing argument 1 of 'idr_alloc' from incompatible pointer type [-Werror=incompatible-pointer-types]
-net/9p/client.c:291:19: error: passing argument 1 of 'idr_alloc' from incompatible pointer type [-Werror=incompatible-pointer-types]
-net/9p/client.c:336:17: error: passing argument 1 of 'idr_find' from incompatible pointer type [-Werror=incompatible-pointer-types]
-net/9p/client.c:370:13: error: passing argument 1 of 'idr_remove' from incompatible pointer type [-Werror=incompatible-pointer-types]
-net/9p/client.c:407:21: error: passing argument 1 of 'idr_get_next' from incompatible pointer type [-Werror=incompatible-pointer-types]
-net/9p/client.c:1024:11: error: passing argument 1 of 'idr_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+> 
+> Changes for v2:
+>  - rephase the comment more concise
+> 
+>  Makefile | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index dee707c98bbe..a2a030f41e65 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1370,16 +1370,21 @@ endif
+>  
+>  ifneq ($(dtstree),)
+>  
+> -%.dtb: include/config/kernel.release scripts_dtc
+> +%.dtb: dtbs_prepare
+>  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+>  
+> -%.dtbo: include/config/kernel.release scripts_dtc
+> +%.dtbo: dtbs_prepare
+>  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+>  
+> -PHONY += dtbs dtbs_install dtbs_check
+> -dtbs: include/config/kernel.release scripts_dtc
+> +PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
+> +dtbs: dtbs_prepare
+>  	$(Q)$(MAKE) $(build)=$(dtstree)
+>  
+> +# include/config/kernel.release is actually needed when installing DTBs because
+> +# INSTALL_DTBS_PATH contains $(KERNELRELEASE). However, we do not want to make
+> +# dtbs_install depend on it as dtbs_install may run as root.
+> +dtbs_prepare: include/config/kernel.release scripts_dtc
+> +
+>  ifneq ($(filter dtbs_check, $(MAKECMDGOALS)),)
+>  export CHECK_DTBS=y
+>  dtbs: dt_binding_check
+> -- 
+> 2.34.1
 
-
-Tested on:
-
-commit:         cb71b93c Add linux-next specific files for 20220628
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e28cdb7ebd0f2389ca4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10707be6080000
-
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --

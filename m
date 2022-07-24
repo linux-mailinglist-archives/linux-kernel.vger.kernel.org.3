@@ -2,138 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33BE57F4CD
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448F957F4D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbiGXLPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 07:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S230197AbiGXLbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 07:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiGXLO6 (ORCPT
+        with ESMTP id S229618AbiGXLbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 07:14:58 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B7517E27;
-        Sun, 24 Jul 2022 04:14:57 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bn9so1312784wrb.9;
-        Sun, 24 Jul 2022 04:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7yegliwNnjd7kIkZ4b5lHO5AyQPvCCSbxyixcu2qaVA=;
-        b=CFFfX9KoMVdmA4EHR/VnfHTcBI4DoVRI7tV7dPl+DJ7FnsEe4+P1ztF1wtZxl+Tz9p
-         jCv464spey43ae4c18DRn7wlkQUqVt99udJKVgV1fR5fhPs3Ej7PCjEJUclmv8N84i4D
-         TGThUM+TfGHixVdige1ODNwzxA7hagvAmvQqffWrlR0VxWfSqZF+HOjLtHX9VjQJx3av
-         zk3eLuJpe59oLq5ZuG6A8O2wIZSG0aQuY5inVoHFQB9GbxkqLnrJRiCsgwoGwL+E2mvX
-         jeMjAG4ZeHhQ68rc2Rn/WCz3D88OlAdDpnHRz3kYQDrRwoSU0twDZ4GGZyUB1UjuM6Gl
-         Ba/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7yegliwNnjd7kIkZ4b5lHO5AyQPvCCSbxyixcu2qaVA=;
-        b=Hh4NKaZ2LFivovm3n+ZkeamnbWs+t71O/+Er/vTJAUgZTU3j4RUNF0of2fQH3uE5Dw
-         Lq8AC128rRx4bU4NCvuBsfZElgzseiCv+gFBXI99qNepWGg9IDxKoQMf124XKATEoSTl
-         B1xg84VjEHPxHP7dGtZJAncDG2PFihMbvMAIqiDO21QOMUCXy58jfds261J5f39rf9h0
-         NUqGl3byTVRRy2AsMRE4fNU5v6psqNkOSF+GTGpAxt6oyIJitHGZV0JWm9eA1MkMoPWi
-         uLSaaHa6a9GECFRS7XvEebKFXaBqHK74r1ZfcNS2yRP0fu8ANFbnkfVzgFtftF/gAhfN
-         zTzQ==
-X-Gm-Message-State: AJIora+olAqHdJqm6z8BhMJVtvDrhbmVYhbRfhlXNEnYukvY/l3dX77R
-        XO9jYzpB9lK2MZudaZp629s=
-X-Google-Smtp-Source: AGRyM1vcfHsrokcENKMMZszoABULy5nHkMEkPesgYVM4lMftp0c3DGYWPqDvWj04zr9Mma01RDp1Wg==
-X-Received: by 2002:a5d:64c1:0:b0:21d:ac34:d086 with SMTP id f1-20020a5d64c1000000b0021dac34d086mr4881825wri.319.1658661295841;
-        Sun, 24 Jul 2022 04:14:55 -0700 (PDT)
-Received: from elementary ([94.73.33.57])
-        by smtp.gmail.com with ESMTPSA id n12-20020a05600c3b8c00b003a2ed2a40e4sm15703494wms.17.2022.07.24.04.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 04:14:55 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 13:14:53 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     spbnick@gmail.com, jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC] UCLogic: Filtering unsupported HUION tablets
-Message-ID: <20220724111453.GA31129@elementary>
-References: <20220718172953.6817-1-jose.exposito89@gmail.com>
- <20debb4d623f057b77ad9d2f5909540baf750c13.camel@hadess.net>
+        Sun, 24 Jul 2022 07:31:52 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9628A13DC0
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 04:31:50 -0700 (PDT)
+Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id EE6A1300123;
+        Sun, 24 Jul 2022 13:31:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1658662308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=r4p/LO7rkSuxBJrp4/6ulEDygdxTI11/iUY0y2ia+8I=;
+        b=Avn3hY54OFAAyzGLx8sa5BXh9bq0PRYGAsycJBWhbnkjM6MnQYwIeIsntCUWAFjBriLXQG
+        uSQDlAfC+1E02IsrhiEiPL0pVNkwKFIwyrDp2TL7VE8/4EMHCFYnEVjn6FvN1qeKiFMtCz
+        3ltpSqxhGML1Ok9ngaDNNhJOVfCSWgIf61HuAAgoZ5Cl2iWnnVGTElVkSsZkyycIj9nWmx
+        S+pCiq/LoufLwYTGCuJhmwGIX8JItZgYSPlUY1UfFjkYfx8SDl9taXCZqYC1sHrUHkd8eP
+        lmPlLPvIWgaGxP5wnP+PxYDKy5inKio+bQW7NtiyyM3mde1QWHrdDIjchj9kVw==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     linux-gpio@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Jan Hoffmann <jan@3e8.eu>, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2] gpio: realtek-otto: switch to 32-bit I/O
+Date:   Sun, 24 Jul 2022 13:31:41 +0200
+Message-Id: <20220724113141.51646-1-sander@svanheule.net>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20debb4d623f057b77ad9d2f5909540baf750c13.camel@hadess.net>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 11:39:06AM +0200, Bastien Nocera wrote:
-> On Mon, 2022-07-18 at 19:29 +0200, José Expósito wrote:
-> > Hi!
-> > 
-> > No code yet, just a kind request for comments and hopefully some
-> > wisdom
-> > and experience from Nikolai dealing with HUION devices.
-> > 
-> > HUION keeps reusing the same vendor and product IDs for their
-> > devices.
-> > This makes it really difficult to differentiate between devices and
-> > handle them in the kernel and also in user space.
-> > 
-> > Reusing IDs could introduce a problem:
-> > 
-> > If HUION, or other vendor following the same practices, releases a
-> > new
-> > tablet with a duplicated product ID, the UCLogic driver would handle
-> > it.
-> > The device might work with the existing code or it might fail because
-> > of
-> > a new feature or a whole different firmware.
-> > 
-> > As far as I know, at the moment there is not a mechanism in place to
-> > avoid this situation.
-> > I think that it'd be better to ignore those devices in UCLogic and
-> > let
-> > the HID generic driver handle them because using HID generic would
-> > provide a basic user experience while using UCLogic might fail to
-> > probe
-> > the tablet.
-> > 
-> > DIGImend's web already provides a nice list of supported devices:
-> > http://digimend.github.io/tablets/
-> > 
-> > So, I wonder:
-> > 
-> >  - Do you think it makes sense to ignore untested devices?
-> >  - If the answer is yes, do we have a better option than checking the
-> >    device name against an allow-list? It'd be great to hear other
-> >    people's ideas.
-> 
-> I don't think it makes sense to ignore untested devices, unless you
-> know for a fact they won't work.
-> 
-> But if the name is part of detecting the device, it would certainly
-> make sense to use that as part of the identifier for the device, rather
-> than just the USB VIP:PID.
+By using 16-bit I/O on the GPIO peripheral, which is apparently not safe
+on MIPS, the IMR can end up containing garbage. This then results in
+interrupt triggers for lines that don't have an interrupt source
+associated. The irq_desc lookup fails, and the ISR will not be cleared,
+keeping the CPU busy until reboot, or until another IMR operation
+restores the correct value. This situation appears to happen very
+rarely, for < 0.5% of IMR writes.
 
-Agreed, I also think that adding the name to the vendor/product IDs
-pair would be a better identifier. However, at this point, we don't 
-have that information for all supported tablets, so I guess that we
-will have to fix new tablets reusing the VIP:PID as they are
-released.
+Instead of using 8-bit or 16-bit I/O operations on the 32-bit memory
+mapped peripheral registers, switch to using 32-bit I/O only, operating
+on the entire bank for all single bit line settings. For 2-bit line
+settings, with 16-bit port values, stick to manual (un)packing.
 
-It is unfortunate, but we'll have to deal with it.
+This issue has been seen on RTL8382M (HPE 1920-16G), RTL8391M (Netgear
+GS728TP v2), and RTL8393M (D-Link DGS-1210-52 F3, Zyxel GS1900-48).
 
-Thanks a lot for your comments!
-Jose
+Reported-by: Luiz Angelo Daros de Luca <luizluca@gmail.com> # DGS-1210-52
+Reported-by: Birger Koblitz <mail@birger-koblitz.de> # GS728TP
+Reported-by: Jan Hoffmann <jan@3e8.eu> # 1920-16G
+Cc: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
+---
+Changes since v1:
+Link: https://lore.kernel.org/all/20220723094957.73880-1-sander@svanheule.net/
+  - Add tags for issue reporters
+  - Rename {read,write}32() to bank_{read,write}(), to give a better
+    semantic meaning to these functions
+  - Rework IMR handling to also be line-based instead of port-based
+---
+ drivers/gpio/gpio-realtek-otto.c | 166 ++++++++++++++++---------------
+ 1 file changed, 85 insertions(+), 81 deletions(-)
 
-> You should be able to add the product strings in the .driver_data, and
-> check them in probe().
-> 
-> Cheers
+diff --git a/drivers/gpio/gpio-realtek-otto.c b/drivers/gpio/gpio-realtek-otto.c
+index ea2ae6006c71..f03429823b98 100644
+--- a/drivers/gpio/gpio-realtek-otto.c
++++ b/drivers/gpio/gpio-realtek-otto.c
+@@ -48,10 +48,20 @@
+  * @lock: Lock for accessing the IRQ registers and values
+  * @intr_mask: Mask for interrupts lines
+  * @intr_type: Interrupt type selection
++ * @bank_read: Read a bank setting as a single 32-bit value
++ * @bank_write: Write a bank setting as a single 32-bit value
++ * @imr_line_pos: Bit shift of an IRQ line's IMR value.
++ *
++ * The DIR, DATA, and ISR registers consist of four 8-bit port values, packed
++ * into a single 32-bit register. Use @bank_read (@bank_write) to get (assign)
++ * a value from (to) these registers. The IMR register consists of four 16-bit
++ * port values, packed into two 32-bit registers. Use @imr_line_pos to get the
++ * bit shift of the 2-bit field for a line's IMR settings. Shifts larger than
++ * 32 overflow into the second register.
+  *
+  * Because the interrupt mask register (IMR) combines the function of IRQ type
+  * selection and masking, two extra values are stored. @intr_mask is used to
+- * mask/unmask the interrupts for a GPIO port, and @intr_type is used to store
++ * mask/unmask the interrupts for a GPIO line, and @intr_type is used to store
+  * the selected interrupt types. The logical AND of these values is written to
+  * IMR on changes.
+  */
+@@ -61,10 +71,11 @@ struct realtek_gpio_ctrl {
+ 	void __iomem *cpumask_base;
+ 	struct cpumask cpu_irq_maskable;
+ 	raw_spinlock_t lock;
+-	u16 intr_mask[REALTEK_GPIO_PORTS_PER_BANK];
+-	u16 intr_type[REALTEK_GPIO_PORTS_PER_BANK];
+-	unsigned int (*port_offset_u8)(unsigned int port);
+-	unsigned int (*port_offset_u16)(unsigned int port);
++	u8 intr_mask[REALTEK_GPIO_MAX];
++	u8 intr_type[REALTEK_GPIO_MAX];
++	u32 (*bank_read)(void __iomem *reg);
++	void (*bank_write)(void __iomem *reg, u32 value);
++	unsigned int (*line_imr_pos)(unsigned int line);
+ };
+ 
+ /* Expand with more flags as devices with other quirks are added */
+@@ -103,14 +114,22 @@ static struct realtek_gpio_ctrl *irq_data_to_ctrl(struct irq_data *data)
+  * port. The two interrupt mask registers store two bits per GPIO, so use u16
+  * values.
+  */
+-static unsigned int realtek_gpio_port_offset_u8(unsigned int port)
++static u32 realtek_gpio_bank_read_swapped(void __iomem *reg)
+ {
+-	return port;
++	return ioread32be(reg);
+ }
+ 
+-static unsigned int realtek_gpio_port_offset_u16(unsigned int port)
++static void realtek_gpio_bank_write_swapped(void __iomem *reg, u32 value)
+ {
+-	return 2 * port;
++	iowrite32be(value, reg);
++}
++
++static unsigned int realtek_gpio_line_imr_pos_swapped(unsigned int line)
++{
++	unsigned int port_pin = line % 8;
++	unsigned int port = line / 8;
++
++	return 2 * (8 * (port ^ 1) + port_pin);
+ }
+ 
+ /*
+@@ -121,66 +140,67 @@ static unsigned int realtek_gpio_port_offset_u16(unsigned int port)
+  * per GPIO, so use u16 values. The first register contains ports 1 and 0, the
+  * second ports 3 and 2.
+  */
+-static unsigned int realtek_gpio_port_offset_u8_rev(unsigned int port)
++static u32 realtek_gpio_bank_read(void __iomem *reg)
+ {
+-	return 3 - port;
++	return ioread32(reg);
+ }
+ 
+-static unsigned int realtek_gpio_port_offset_u16_rev(unsigned int port)
++static void realtek_gpio_bank_write(void __iomem *reg, u32 value)
+ {
+-	return 2 * (port ^ 1);
++	iowrite32(value, reg);
+ }
+ 
+-static void realtek_gpio_write_imr(struct realtek_gpio_ctrl *ctrl,
+-	unsigned int port, u16 irq_type, u16 irq_mask)
++static unsigned int realtek_gpio_line_imr_pos(unsigned int line)
+ {
+-	iowrite16(irq_type & irq_mask,
+-		ctrl->base + REALTEK_GPIO_REG_IMR + ctrl->port_offset_u16(port));
++	return 2 * line;
+ }
+ 
+-static void realtek_gpio_clear_isr(struct realtek_gpio_ctrl *ctrl,
+-	unsigned int port, u8 mask)
++static void realtek_gpio_clear_isr(struct realtek_gpio_ctrl *ctrl, u32 mask)
+ {
+-	iowrite8(mask, ctrl->base + REALTEK_GPIO_REG_ISR + ctrl->port_offset_u8(port));
++	ctrl->bank_write(ctrl->base + REALTEK_GPIO_REG_ISR, mask);
+ }
+ 
+-static u8 realtek_gpio_read_isr(struct realtek_gpio_ctrl *ctrl, unsigned int port)
++static u32 realtek_gpio_read_isr(struct realtek_gpio_ctrl *ctrl)
+ {
+-	return ioread8(ctrl->base + REALTEK_GPIO_REG_ISR + ctrl->port_offset_u8(port));
++	return ctrl->bank_read(ctrl->base + REALTEK_GPIO_REG_ISR);
+ }
+ 
+-/* Set the rising and falling edge mask bits for a GPIO port pin */
+-static u16 realtek_gpio_imr_bits(unsigned int pin, u16 value)
++/* Set the rising and falling edge mask bits for a GPIO pin */
++static void realtek_gpio_update_line_imr(struct realtek_gpio_ctrl *ctrl, unsigned int line)
+ {
+-	return (value & REALTEK_GPIO_IMR_LINE_MASK) << 2 * pin;
++	void __iomem *reg = ctrl->base + REALTEK_GPIO_REG_IMR;
++	unsigned int line_shift = ctrl->line_imr_pos(line);
++	unsigned int shift = line_shift % 32;
++	u32 irq_type = ctrl->intr_type[line];
++	u32 irq_mask = ctrl->intr_mask[line];
++	u32 reg_val;
++
++	reg += 4 * (line_shift / 32);
++	reg_val = ioread32(reg);
++	reg_val &= ~(REALTEK_GPIO_IMR_LINE_MASK << shift);
++	reg_val |= (irq_type & irq_mask & REALTEK_GPIO_IMR_LINE_MASK) << shift;
++	iowrite32(reg_val, reg);
+ }
+ 
+ static void realtek_gpio_irq_ack(struct irq_data *data)
+ {
+ 	struct realtek_gpio_ctrl *ctrl = irq_data_to_ctrl(data);
+ 	irq_hw_number_t line = irqd_to_hwirq(data);
+-	unsigned int port = line / 8;
+-	unsigned int port_pin = line % 8;
+ 
+-	realtek_gpio_clear_isr(ctrl, port, BIT(port_pin));
++	realtek_gpio_clear_isr(ctrl, BIT(line));
+ }
+ 
+ static void realtek_gpio_irq_unmask(struct irq_data *data)
+ {
+ 	struct realtek_gpio_ctrl *ctrl = irq_data_to_ctrl(data);
+ 	unsigned int line = irqd_to_hwirq(data);
+-	unsigned int port = line / 8;
+-	unsigned int port_pin = line % 8;
+ 	unsigned long flags;
+-	u16 m;
+ 
+ 	gpiochip_enable_irq(&ctrl->gc, line);
+ 
+ 	raw_spin_lock_irqsave(&ctrl->lock, flags);
+-	m = ctrl->intr_mask[port];
+-	m |= realtek_gpio_imr_bits(port_pin, REALTEK_GPIO_IMR_LINE_MASK);
+-	ctrl->intr_mask[port] = m;
+-	realtek_gpio_write_imr(ctrl, port, ctrl->intr_type[port], m);
++	ctrl->intr_mask[line] = REALTEK_GPIO_IMR_LINE_MASK;
++	realtek_gpio_update_line_imr(ctrl, line);
+ 	raw_spin_unlock_irqrestore(&ctrl->lock, flags);
+ }
+ 
+@@ -188,16 +208,11 @@ static void realtek_gpio_irq_mask(struct irq_data *data)
+ {
+ 	struct realtek_gpio_ctrl *ctrl = irq_data_to_ctrl(data);
+ 	unsigned int line = irqd_to_hwirq(data);
+-	unsigned int port = line / 8;
+-	unsigned int port_pin = line % 8;
+ 	unsigned long flags;
+-	u16 m;
+ 
+ 	raw_spin_lock_irqsave(&ctrl->lock, flags);
+-	m = ctrl->intr_mask[port];
+-	m &= ~realtek_gpio_imr_bits(port_pin, REALTEK_GPIO_IMR_LINE_MASK);
+-	ctrl->intr_mask[port] = m;
+-	realtek_gpio_write_imr(ctrl, port, ctrl->intr_type[port], m);
++	ctrl->intr_mask[line] = 0;
++	realtek_gpio_update_line_imr(ctrl, line);
+ 	raw_spin_unlock_irqrestore(&ctrl->lock, flags);
+ 
+ 	gpiochip_disable_irq(&ctrl->gc, line);
+@@ -207,10 +222,8 @@ static int realtek_gpio_irq_set_type(struct irq_data *data, unsigned int flow_ty
+ {
+ 	struct realtek_gpio_ctrl *ctrl = irq_data_to_ctrl(data);
+ 	unsigned int line = irqd_to_hwirq(data);
+-	unsigned int port = line / 8;
+-	unsigned int port_pin = line % 8;
+ 	unsigned long flags;
+-	u16 type, t;
++	u8 type;
+ 
+ 	switch (flow_type & IRQ_TYPE_SENSE_MASK) {
+ 	case IRQ_TYPE_EDGE_FALLING:
+@@ -229,11 +242,8 @@ static int realtek_gpio_irq_set_type(struct irq_data *data, unsigned int flow_ty
+ 	irq_set_handler_locked(data, handle_edge_irq);
+ 
+ 	raw_spin_lock_irqsave(&ctrl->lock, flags);
+-	t = ctrl->intr_type[port];
+-	t &= ~realtek_gpio_imr_bits(port_pin, REALTEK_GPIO_IMR_LINE_MASK);
+-	t |= realtek_gpio_imr_bits(port_pin, type);
+-	ctrl->intr_type[port] = t;
+-	realtek_gpio_write_imr(ctrl, port, t, ctrl->intr_mask[port]);
++	ctrl->intr_type[line] = type;
++	realtek_gpio_update_line_imr(ctrl, line);
+ 	raw_spin_unlock_irqrestore(&ctrl->lock, flags);
+ 
+ 	return 0;
+@@ -244,28 +254,21 @@ static void realtek_gpio_irq_handler(struct irq_desc *desc)
+ 	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
+ 	struct realtek_gpio_ctrl *ctrl = gpiochip_get_data(gc);
+ 	struct irq_chip *irq_chip = irq_desc_get_chip(desc);
+-	unsigned int lines_done;
+-	unsigned int port_pin_count;
+ 	unsigned long status;
+ 	int offset;
+ 
+ 	chained_irq_enter(irq_chip, desc);
+ 
+-	for (lines_done = 0; lines_done < gc->ngpio; lines_done += 8) {
+-		status = realtek_gpio_read_isr(ctrl, lines_done / 8);
+-		port_pin_count = min(gc->ngpio - lines_done, 8U);
+-		for_each_set_bit(offset, &status, port_pin_count)
+-			generic_handle_domain_irq(gc->irq.domain, offset + lines_done);
+-	}
++	status = realtek_gpio_read_isr(ctrl);
++	for_each_set_bit(offset, &status, gc->ngpio)
++		generic_handle_domain_irq(gc->irq.domain, offset);
+ 
+ 	chained_irq_exit(irq_chip, desc);
+ }
+ 
+-static inline void __iomem *realtek_gpio_irq_cpu_mask(struct realtek_gpio_ctrl *ctrl,
+-	unsigned int port, int cpu)
++static inline void __iomem *realtek_gpio_irq_cpu_mask(struct realtek_gpio_ctrl *ctrl, int cpu)
+ {
+-	return ctrl->cpumask_base + ctrl->port_offset_u8(port) +
+-		REALTEK_GPIO_PORTS_PER_BANK * cpu;
++	return ctrl->cpumask_base + REALTEK_GPIO_PORTS_PER_BANK * cpu;
+ }
+ 
+ static int realtek_gpio_irq_set_affinity(struct irq_data *data,
+@@ -273,12 +276,10 @@ static int realtek_gpio_irq_set_affinity(struct irq_data *data,
+ {
+ 	struct realtek_gpio_ctrl *ctrl = irq_data_to_ctrl(data);
+ 	unsigned int line = irqd_to_hwirq(data);
+-	unsigned int port = line / 8;
+-	unsigned int port_pin = line % 8;
+ 	void __iomem *irq_cpu_mask;
+ 	unsigned long flags;
+ 	int cpu;
+-	u8 v;
++	u32 v;
+ 
+ 	if (!ctrl->cpumask_base)
+ 		return -ENXIO;
+@@ -286,15 +287,15 @@ static int realtek_gpio_irq_set_affinity(struct irq_data *data,
+ 	raw_spin_lock_irqsave(&ctrl->lock, flags);
+ 
+ 	for_each_cpu(cpu, &ctrl->cpu_irq_maskable) {
+-		irq_cpu_mask = realtek_gpio_irq_cpu_mask(ctrl, port, cpu);
+-		v = ioread8(irq_cpu_mask);
++		irq_cpu_mask = realtek_gpio_irq_cpu_mask(ctrl, cpu);
++		v = ctrl->bank_read(irq_cpu_mask);
+ 
+ 		if (cpumask_test_cpu(cpu, dest))
+-			v |= BIT(port_pin);
++			v |= BIT(line);
+ 		else
+-			v &= ~BIT(port_pin);
++			v &= ~BIT(line);
+ 
+-		iowrite8(v, irq_cpu_mask);
++		ctrl->bank_write(irq_cpu_mask, v);
+ 	}
+ 
+ 	raw_spin_unlock_irqrestore(&ctrl->lock, flags);
+@@ -307,16 +308,17 @@ static int realtek_gpio_irq_set_affinity(struct irq_data *data,
+ static int realtek_gpio_irq_init(struct gpio_chip *gc)
+ {
+ 	struct realtek_gpio_ctrl *ctrl = gpiochip_get_data(gc);
+-	unsigned int port;
++	u32 mask_all = GENMASK(gc->ngpio, 0);
++	unsigned int line;
+ 	int cpu;
+ 
+-	for (port = 0; (port * 8) < gc->ngpio; port++) {
+-		realtek_gpio_write_imr(ctrl, port, 0, 0);
+-		realtek_gpio_clear_isr(ctrl, port, GENMASK(7, 0));
++	for (line = 0; line < gc->ngpio; line++)
++		realtek_gpio_update_line_imr(ctrl, line);
+ 
+-		for_each_cpu(cpu, &ctrl->cpu_irq_maskable)
+-			iowrite8(GENMASK(7, 0), realtek_gpio_irq_cpu_mask(ctrl, port, cpu));
+-	}
++	realtek_gpio_clear_isr(ctrl, mask_all);
++
++	for_each_cpu(cpu, &ctrl->cpu_irq_maskable)
++		ctrl->bank_write(realtek_gpio_irq_cpu_mask(ctrl, cpu), mask_all);
+ 
+ 	return 0;
+ }
+@@ -387,12 +389,14 @@ static int realtek_gpio_probe(struct platform_device *pdev)
+ 
+ 	if (dev_flags & GPIO_PORTS_REVERSED) {
+ 		bgpio_flags = 0;
+-		ctrl->port_offset_u8 = realtek_gpio_port_offset_u8_rev;
+-		ctrl->port_offset_u16 = realtek_gpio_port_offset_u16_rev;
++		ctrl->bank_read = realtek_gpio_bank_read;
++		ctrl->bank_write = realtek_gpio_bank_write;
++		ctrl->line_imr_pos = realtek_gpio_line_imr_pos;
+ 	} else {
+ 		bgpio_flags = BGPIOF_BIG_ENDIAN_BYTE_ORDER;
+-		ctrl->port_offset_u8 = realtek_gpio_port_offset_u8;
+-		ctrl->port_offset_u16 = realtek_gpio_port_offset_u16;
++		ctrl->bank_read = realtek_gpio_bank_read_swapped;
++		ctrl->bank_write = realtek_gpio_bank_write_swapped;
++		ctrl->line_imr_pos = realtek_gpio_line_imr_pos_swapped;
+ 	}
+ 
+ 	err = bgpio_init(&ctrl->gc, dev, 4,
+-- 
+2.36.1
+

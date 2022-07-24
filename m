@@ -2,85 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D50257F538
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 15:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88C957F53E
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 15:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiGXNaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 09:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
+        id S229723AbiGXNnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 09:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGXNag (ORCPT
+        with ESMTP id S229570AbiGXNnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 09:30:36 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC6EDF7E;
-        Sun, 24 Jul 2022 06:30:33 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so7977189pjf.2;
-        Sun, 24 Jul 2022 06:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hJTWsmGHbh86Ca8Ccu63Ml/CUjCqMMCMq8qVbi37eTA=;
-        b=oaQ+hEfjnwIKZKpERyXea3T4r8DEyS/NZDvcKN5Mn8Mx4DBA7jLrar9pxxzJYkLj71
-         p0flG63Suq5DKaWEcXj87eX5LKBNkRFQUCCCe/IiFWMCKDJD7BxgemV5KrLj7OKRkkwl
-         ieuBfA3JG3LmA3rMMsVp4oagiHhKb97VxG0ctJ39hhlAEpENIpSwsdTlqkUx8iXAvOGW
-         J32Tl4VMvydRxA8RvIfe19pBzw/8FLhtF1dGw7Bu5MeEtGeela3fkTyS7m2rWfSw0+bq
-         WBgtOvwDbXhydlzrUi/EFqs9SymLfWcTlUxHqFvjlVfynRQs93lAcc3M6C3TaEKSWAmu
-         53Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hJTWsmGHbh86Ca8Ccu63Ml/CUjCqMMCMq8qVbi37eTA=;
-        b=vG1s6sLi9u6cFxaPwQW0O6dLF63Ak/0Z8UscdFP+WL3GylCSrp3whfoFInul5UPmtt
-         BRYyNexUOVXuFB0665zMbsgxT2/+O/bJjnaxz4oz4uYd9ssSZJXKwKoJQS4LSc4v240N
-         ZEt7uinU6CuY78hQ3vss0/CJ8B/JgjCO7+ficAyivuUyWnxKwXkxwgegvXnR+Y75Z5ot
-         yEI7vftyIBiUTNzvKlJAIYzBRT3K0QaGAhiIrd5RL9I0bxxKJ3aTw4pSQLlSJfAaKAse
-         m6ucUNnPz0ZqDsYgWKbBgYxvddNvH70myV8NksI8AprkR6gwN0q1kJeWj4rWTxAPQuOU
-         /qfQ==
-X-Gm-Message-State: AJIora9ONIoBoo0urV4SI3KreJc1ZqyxFS+azo1F+SpDCfGhLa3a+0uG
-        MmeJ3IWT9N/Qg8igELGz8EAxIfYO9gIEtw==
-X-Google-Smtp-Source: AGRyM1s4sjal3zMdndzOlqX2N100d0xr+fvpyFBFsxfTMYlSzPYIIxgaYuogmZ7unvQS1lswI4RXJQ==
-X-Received: by 2002:a17:90a:2b89:b0:1f2:5860:f9aa with SMTP id u9-20020a17090a2b8900b001f25860f9aamr9958615pjd.40.1658669433248;
-        Sun, 24 Jul 2022 06:30:33 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:6:8000::a31c? ([2404:f801:9000:18:efed::a31c])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170902bb8500b0016d3d907146sm5386677pls.191.2022.07.24.06.30.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Jul 2022 06:30:32 -0700 (PDT)
-Message-ID: <6f9b2b0f-f893-8135-f49b-9b6b44ef408f@gmail.com>
-Date:   Sun, 24 Jul 2022 21:30:29 +0800
+        Sun, 24 Jul 2022 09:43:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A30E0AA;
+        Sun, 24 Jul 2022 06:43:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC27DB80D32;
+        Sun, 24 Jul 2022 13:43:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9279CC3411E;
+        Sun, 24 Jul 2022 13:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658670180;
+        bh=maUBUTNvw0Eg0uVI0eTfJ37pCQzM3v+3MOLAjM/O4Dw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uhOxHNmuPO8N7ia5ENwOhWBb/UJwNbxm70SQCqg55A0iLJEuDHw86etfiTDFaGh0b
+         RR4SiAf/Df2jO6UR7KI8Jwi6qYyVuDP7c073nCU4zPffAQiuNiIYwDm05Qy4cetjL6
+         GAWflP+r3wDg1WrpfYq0NcYN4tPtSRLI60ZFfwfk=
+Date:   Sun, 24 Jul 2022 15:42:55 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        sashal@kernel.org, edumazet@google.com,
+        steffen.klassert@secunet.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        syzkaller@googlegroups.com, fleischermarius@googlemail.com,
+        its.priyanka.bose@gmail.com
+Subject: Re: general protection fault in sock_def_error_report
+Message-ID: <Yt1MX1Z6z0y82i1I@kroah.com>
+References: <CANX2M5Yphi3JcCsMf3HgPPkk9XCfOKO85gyMdxQf3_O74yc1Hg@mail.gmail.com>
+ <Ytzy9IjGXziLaVV0@kroah.com>
+ <CANX2M5bxA5FF2Z8PFFc2p-OxkhOJQ8y=8PGF1kdLsJo+C92_gQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] swiotlb: Clean up some coding style and minor issues
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com, Tianyu Lan <tiala@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-References: <20220722033846.950237-1-ltykernel@gmail.com>
- <YtrAsjp0Fs0ThBa7@infradead.org>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <YtrAsjp0Fs0ThBa7@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANX2M5bxA5FF2Z8PFFc2p-OxkhOJQ8y=8PGF1kdLsJo+C92_gQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/22/2022 11:22 PM, Christoph Hellwig wrote:
-> I've applied this, but then dropped the debugfs changes.  I can't find
-> any good reason why we'd use the _unsafe variant here.  Can you resend
-> that bit and write a commit log clearly documenting the considerations
-> for it?
+On Sun, Jul 24, 2022 at 12:40:09AM -0700, Dipanjan Das wrote:
+> On Sun, Jul 24, 2022 at 12:26 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sat, Jul 23, 2022 at 03:07:09PM -0700, Dipanjan Das wrote:
+> > > Hi,
+> > >
+> > > We would like to report the following bug which has been found by our
+> > > modified version of syzkaller.
+> >
+> > Do you have a fix for this issue?  Without that, it's a bit harder as:
+> 
+> We will try to root cause the issue and provide a fix, if possible.
+> 
+> >
+> > > ======================================================
+> > > description: general protection fault in sock_def_error_report
+> > > affected file: net/core/sock.c
+> > > kernel version: 5.4.206
+> >
+> > You are using a very old kernel version, and we have loads of other
+> > syzbot-reported issues to resolve that trigger on newer kernels.
+> 
+> Since 5.4.206 is a longterm release kernel, we were under the
+> impression that the community is still accepting fixes and patches for
+> the same. I understand that adding another bug to the already pending
+> queue of syzbot reported issues is not going to help the developers
+> much. Therefore, we will definitely try our best to analyze the issue
+> and provide a fix in the coming days. Can you please confirm that it
+> is worth the effort for the longterm release kernels?
 
-Sure. I will do that.
+It is worth the effort if the problem is still in the latest kernel
+release as that is the only place that new development happens.  If the
+issue is not reproducible on Linus's current releases, then finding the
+change that solved the problem is also good so that we can then backport
+it to the stable/long term kernel release for everyone to benefit from.
+
+So does your reproducer still work on the latest 5.19-rc7 release?
+
+thanks,
+
+greg k-h

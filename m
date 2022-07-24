@@ -2,113 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBFA57F2AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65C257F2AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236729AbiGXC32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 22:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S236030AbiGXCgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 22:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXC3Y (ORCPT
+        with ESMTP id S229602AbiGXCgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 22:29:24 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B861758F
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:29:23 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id os14so14769864ejb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PfMO/BGX2+jJxfN9ahYbmi/+LL8s/bQoBxmXikSDXCk=;
-        b=afRW92YaBcZT+SnGG0a9yWoGr0mPAyyhrSY/yxzjFDRcCO0HuWxrgam/ZR2Qozj5uL
-         DZ9KCBVwzbe+s+OBey5IG2kwx2/Ma6ltJUK+0N9pYYB9zJB3LCRk2HOTIW2rCtHGUsXy
-         0smLXXaZZrjCqM13byw8vWPv8tyE8WbsqcRJDlOSh6CRaolMs4reaXrSd1yV7i+4GnCE
-         YNV1ZYm0Scrv8Pqj4HfMfFzkaWdJvpr42sWmGwJSUXHBEkgwJS7ZjtelCeT2y13MJ/rf
-         WMdvPhvaTxWtYZeXoy//hmgq7bfZsNSc1ag7xexoFHl7Ty6hxnhBKFR4ZBXnF6LM/6T/
-         QB5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PfMO/BGX2+jJxfN9ahYbmi/+LL8s/bQoBxmXikSDXCk=;
-        b=1rLavudzo+OWDJvFCSuwX+IjkEdcgNivksdOoCxxkDhdxmIevoD757YQft6Rh70LQ2
-         AmwwiDXOKAdTECY2rIFnC8ya6UP2jObhmo4j49r5uDBuZpBwXUYIOGoRLAa4sP2T12zV
-         FgKHkbELO2JI17ksbzAWBR2xrjbrtJTmodINDlRrOOPq2esUWtmi+PgP8Gbe5Vbb31/J
-         NBIaLsL38ITlsWHWxB5vgi4D96CYYX3ZI+jj5YVIOz9zpWliu5HTASxF3ielTSbWvg9T
-         ZeFf6uJrcC/hDtmFd9klDWGT0nqQJKZrM+1t3JXDg6wSiCAZAk6XRaxQ7DBOIxchsUAq
-         5rUQ==
-X-Gm-Message-State: AJIora8ZwR8WcB8FtT/YVsKTzSTcx3pyqr5KiUSndatKzpuN5frcHjYt
-        d/jrxgNHSVk37LYvBYOEqD6INg==
-X-Google-Smtp-Source: AGRyM1t1qvJDy/VhgGyRy+o0TM8z1YHIOxx+yvx2j34wNXfDx6shWP3Xxbi6F+KsHZfvjhVgk22O9A==
-X-Received: by 2002:a17:906:ef8b:b0:72b:45a2:2232 with SMTP id ze11-20020a170906ef8b00b0072b45a22232mr5009261ejb.484.1658629762151;
-        Sat, 23 Jul 2022 19:29:22 -0700 (PDT)
-Received: from leo-build-box.lan (ec2-18-144-7-244.us-west-1.compute.amazonaws.com. [18.144.7.244])
-        by smtp.gmail.com with ESMTPSA id 7-20020a170906318700b0072b31307a79sm3741524ejy.60.2022.07.23.19.29.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 19:29:21 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 2/2] perf symbol: Skip recording symbols in '.gnu.warning.*' sections
-Date:   Sun, 24 Jul 2022 10:28:57 +0800
-Message-Id: <20220724022857.2621520-3-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220724022857.2621520-1-leo.yan@linaro.org>
-References: <20220724022857.2621520-1-leo.yan@linaro.org>
+        Sat, 23 Jul 2022 22:36:23 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6D713DE2
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658630183; x=1690166183;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KPXnMjwUWbhG1S05SL+/0f8BnL00yR9HZFn5WbmLJGY=;
+  b=CQPH78iI5dDlXQXt9N9j267PeqnEXfifmEyOHmBblJzoRT0pdnuFpY6L
+   qVpvPoF7wXRbc0kIxingxVNSkk3WpLBHjIx2BUrlk7Y7Vztdvze+aMVuU
+   N1Grk9YgZn4gn5QaM8mkWIpaJL6IinRap9Z+bRQoSXwNlXj0U6HbMm0Yh
+   188HoJC932qKjYNYrtJjH13GUPNXz7LzJV4m6wZ3JXCqiZoe2RjB7rbY7
+   D5Iln/OHx0eqWl5oRAAgPhecRGShBPQlVnMO+LnVPsavGwcRlVhGGNVNN
+   4GdFiUWmQUGgyojTqizqCJOx6zRbo1Yve746fgpztnMps76WrLPrquXML
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288266471"
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="288266471"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 19:36:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="688675685"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2022 19:36:20 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFRTf-0003Pt-1k;
+        Sun, 24 Jul 2022 02:36:19 +0000
+Date:   Sun, 24 Jul 2022 10:35:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Niklas Cassel <niklas.cassel@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <andy.gross@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Evan Green <evgreen@chromium.org>
+Subject: [jsarha:topic/cros-sof-v4.19 923/6555]
+ drivers/soc/qcom/qcom_gsbi.c:125:34: warning: 'tcsr_dt_match' defined but
+ not used
+Message-ID: <202207241059.TJ6DBg9u-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some symbols are observed their 'st_value' field are zeros.  E.g.
-libc.so.6 in Ubuntu contains a symbol '__evoke_link_warning_getwd' which
-resides in the '.gnu.warning.getwd' section, unlike normal symbols, this
-kind of symbols are only used for linker warning.
+tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
+head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
+commit: cb830e93e29574f6eae7ecd6f709905e15c245cb [923/6555] UPSTREAM: soc: qcom: Allow COMPILE_TEST of qcom SoC Kconfigs
+config: i386-buildonly-randconfig-r004-20220718 (https://download.01.org/0day-ci/archive/20220724/202207241059.TJ6DBg9u-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/jsarha/linux/commit/cb830e93e29574f6eae7ecd6f709905e15c245cb
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/cros-sof-v4.19
+        git checkout cb830e93e29574f6eae7ecd6f709905e15c245cb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mailbox/ drivers/soc/qcom/
 
-This patch skips to record symbols from '.gnu.warning.*' sections by
-detecting the sub string '.gnu.warning' is contained in section name.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/util/symbol-elf.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index ef6ced5c5746..4b621e355c0e 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -1277,6 +1277,14 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
- 
- 		section_name = elf_sec__name(&shdr, secstrs);
- 
-+		/*
-+		 * A symbol coming from ".gnu.warning.*" sections is used to
-+		 * generate linker warnings, its 'sym.st_value' field usually
-+		 * is zero, skip to record it.
-+		 */
-+		if (strstr(section_name, ".gnu.warning"))
-+			continue;
-+
- 		/* On ARM, symbols for thumb functions have 1 added to
- 		 * the symbol address as a flag - remove it */
- 		if ((ehdr.e_machine == EM_ARM) &&
+>> drivers/soc/qcom/qcom_gsbi.c:125:34: warning: 'tcsr_dt_match' defined but not used [-Wunused-const-variable=]
+     125 | static const struct of_device_id tcsr_dt_match[] = {
+         |                                  ^~~~~~~~~~~~~
+
+
+vim +/tcsr_dt_match +125 drivers/soc/qcom/qcom_gsbi.c
+
+e5fdad68d47ed3 Andy Gross          2015-02-09  124  
+e5fdad68d47ed3 Andy Gross          2015-02-09 @125  static const struct of_device_id tcsr_dt_match[] = {
+e5fdad68d47ed3 Andy Gross          2015-02-09  126  	{ .compatible = "qcom,tcsr-ipq8064", .data = &config_ipq8064},
+e5fdad68d47ed3 Andy Gross          2015-02-09  127  	{ .compatible = "qcom,tcsr-apq8064", .data = &config_apq8064},
+e5fdad68d47ed3 Andy Gross          2015-02-09  128  	{ .compatible = "qcom,tcsr-msm8960", .data = &config_msm8960},
+e5fdad68d47ed3 Andy Gross          2015-02-09  129  	{ .compatible = "qcom,tcsr-msm8660", .data = &config_msm8660},
+e5fdad68d47ed3 Andy Gross          2015-02-09  130  	{ },
+fa9eb3241895d2 Srinivas Kandagatla 2014-09-23  131  };
+fa9eb3241895d2 Srinivas Kandagatla 2014-09-23  132  
+
+:::::: The code at line 125 was first introduced by commit
+:::::: e5fdad68d47ed344832b7ca4e18b2e9708d8141e soc: qcom: gsbi: Add support for ADM CRCI muxing
+
+:::::: TO: Andy Gross <agross@codeaurora.org>
+:::::: CC: Kumar Gala <galak@codeaurora.org>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

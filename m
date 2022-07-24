@@ -2,127 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EB557F217
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 01:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB63257F21C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 02:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbiGWXwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 19:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S233371AbiGXADU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 20:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiGWXwS (ORCPT
+        with ESMTP id S229772AbiGXADR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 19:52:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E871F9FC9;
-        Sat, 23 Jul 2022 16:52:16 -0700 (PDT)
+        Sat, 23 Jul 2022 20:03:17 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4138AB1C7;
+        Sat, 23 Jul 2022 17:03:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658620336; x=1690156336;
+  t=1658620996; x=1690156996;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rN1To4w81kkDR5odmME9HZKNEMuJa2D6WZFyhrEIYKU=;
-  b=Yq1sTWUMwgkpQaBGjjT1UNi6mEI3RyaESoHN4g9yRC2N1mzzk7nj8sjJ
-   8mrZfTuR4giWtJOj47ezH2R84BQtEWqyGx8TC6zd91pEtuWLti4UGwfIi
-   Syaq5AUmho+UYlXUQXN1PWgcIMIiZBM68mBtlSD0tFribwELJgo+Aay1u
-   u9oQOefxOJUTyQLW+TBWq6f/oYkPk5noMZ6uxh0DuoI/uHIl2ecpff6KL
-   SrAPzY4LZcjtIOb5vg7tNgugG35b63fHNEPDHGgZktAWm5Awm6+fBdilM
-   bMQRlff103TRdEaDB0fSf9SRtJHQRB2Ld8P/tzp9KL5UfQiqIp2MWDBcs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="313239775"
+  bh=zdUMQgrLcsLxpWMQ+qHMebQPAzBlscSo+I4+DRErpy0=;
+  b=J1DaH9BZXZhBrmOr2zi2wr4O1cwaxPwFN2jbtNRYRwg77PmYzbGrOwi6
+   DAA0aU5ZyumBbq0Fd9KYx/rJI7qRlGeLowUiK2IXDUqifPcB24Y/EFfKE
+   +9jJrouMhHHE5bX6/yTcDjE3nnjeQb2jRpba0Ei73sqwHboonNnFASAMS
+   fO1SkvpDfyeM7218qUQ88fHXo0r8u1wwmkt/M8fQWmnmVkvv/kprXEIFu
+   ePxV3Zo4PC8noK+lp0kGkQvpT0cNYqMKCPFPlOVLrrUj+m+bnk8mkJ8vs
+   dJEy9LlOn6LTB/Q1svVy0BXskf47Fv9lLQHf7/dBjPuYKMcQURm/gx3Hy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="270537536"
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="313239775"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 16:52:16 -0700
+   d="scan'208";a="270537536"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 17:03:15 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="688656719"
+   d="scan'208";a="574583740"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2022 16:52:12 -0700
+  by orsmga006.jf.intel.com with ESMTP; 23 Jul 2022 17:03:13 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oFOuq-0003FZ-0B;
-        Sat, 23 Jul 2022 23:52:12 +0000
-Date:   Sun, 24 Jul 2022 07:52:01 +0800
+        id 1oFP5U-0003G5-19;
+        Sun, 24 Jul 2022 00:03:12 +0000
+Date:   Sun, 24 Jul 2022 08:02:19 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>, linux-iio@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
         linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v3 03/14] net: dsa: qca8k: move mib struct to
- common code
-Message-ID: <202207240750.2zRvF1Qu-lkp@intel.com>
-References: <20220723141845.10570-4-ansuelsmth@gmail.com>
+Subject: Re: [PATCH v4 4/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+Message-ID: <202207240750.OtA1GvLw-lkp@intel.com>
+References: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220723141845.10570-4-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+Hi Angel,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on net-next/master]
+[auto build test ERROR on 180c6cb6b9b79c55b79e8414f4c0208f2463af7d]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-dsa-qca8k-code-split-for-qca8k/20220723-222259
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 502c6f8cedcce7889ccdefeb88ce36b39acd522f
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220724/202207240750.2zRvF1Qu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
+url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220724-014146
+base:   180c6cb6b9b79c55b79e8414f4c0208f2463af7d
+config: m68k-randconfig-r025-20220724 (https://download.01.org/0day-ci/archive/20220724/202207240750.OtA1GvLw-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/21c0b9bac2dea29fbb83f818459e7d6f6c74e83e
+        # https://github.com/intel-lab-lkp/linux/commit/eb385b5ff634acc29a3d9f20847e62ec73484fcb
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-Marangi/net-dsa-qca8k-code-split-for-qca8k/20220723-222259
-        git checkout 21c0b9bac2dea29fbb83f818459e7d6f6c74e83e
+        git fetch --no-tags linux-review Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220724-014146
+        git checkout eb385b5ff634acc29a3d9f20847e62ec73484fcb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/qca/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/net/dsa/qca/qca8k-8xxx.c:3208:9: error: initializer element is not a compile-time constant
-           .ops = qca8xxx_ops,
-                  ^~~~~~~~~~~
-   drivers/net/dsa/qca/qca8k-8xxx.c:3214:9: error: initializer element is not a compile-time constant
-           .ops = qca8xxx_ops,
-                  ^~~~~~~~~~~
-   drivers/net/dsa/qca/qca8k-8xxx.c:3220:9: error: initializer element is not a compile-time constant
-           .ops = qca8xxx_ops,
-                  ^~~~~~~~~~~
-   3 errors generated.
-
-
-vim +3208 drivers/net/dsa/qca/qca8k-8xxx.c
-
-7f6400ae8410e85 drivers/net/dsa/qca/qca8k.c Christian Marangi 2022-07-23  3203  
-f477d1c8bdbef4f drivers/net/dsa/qca8k.c     Christian Marangi 2021-10-14  3204  static const struct qca8k_match_data qca8327 = {
-f477d1c8bdbef4f drivers/net/dsa/qca8k.c     Christian Marangi 2021-10-14  3205  	.id = QCA8K_ID_QCA8327,
-f477d1c8bdbef4f drivers/net/dsa/qca8k.c     Christian Marangi 2021-10-14  3206  	.reduced_package = true,
-c126f118b330ccf drivers/net/dsa/qca8k.c     Christian Marangi 2021-11-22  3207  	.mib_count = QCA8K_QCA832X_MIB_COUNT,
-7f6400ae8410e85 drivers/net/dsa/qca/qca8k.c Christian Marangi 2022-07-23 @3208  	.ops = qca8xxx_ops,
-f477d1c8bdbef4f drivers/net/dsa/qca8k.c     Christian Marangi 2021-10-14  3209  };
-f477d1c8bdbef4f drivers/net/dsa/qca8k.c     Christian Marangi 2021-10-14  3210  
+>> ERROR: modpost: "__divdi3" [drivers/iio/pressure/bmp280.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service

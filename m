@@ -2,182 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA1D57F69C
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 20:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9331457F69F
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 20:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbiGXStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 14:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
+        id S232398AbiGXSzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 14:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiGXSte (ORCPT
+        with ESMTP id S229469AbiGXSzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 14:49:34 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6878A10FDD
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:49:32 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31ee6eb9862so14795857b3.5
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:49:32 -0700 (PDT)
+        Sun, 24 Jul 2022 14:55:32 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9169265C3
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:55:31 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id h18so7000007qvr.12
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 11:55:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=CyQL7MKXYchL5tTvsD0JYNk64GMjDP+y6COH4opWt5c=;
-        b=K2NrJLardIVtCkzGxfGyx9w1e2G0DqV8NySM2KRf0YX2f0MSi17pGB+ccX3gLyghAm
-         kGxEDos9vuwGOOWLNROiY/5KyRpLYNQBi31BLJ9lmThyzhO30UKYrv56fdvYU0BGET3N
-         96Q4GKwALa/7Mso6+sGGhzrLXU/7RwviZJHvlxC6R4aBm1sln/RZh/rRJKV27iJ+nQJ4
-         9EcaUBIC0Ty+fcKleQ3zriOi61B5YaomxY6DBO3H7gmwI5t2R0Mjay61zY8GgoXflfIF
-         NyGL6aNG/itTJj1kP53lyeuyPLJADvyqIAx4ExskkNpRZvuQzgEOc3Q3SybEOFVX53N5
-         APtg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BZIDWbd+e5/Q1G0dFyLVjy7eyY4n93CGPNpfz9ufq8k=;
+        b=Y/x3X31uJTRvN69iA8JzEhHsItKIPMJZshfa+bd/jj0BgkTh5+YrF4nH/331x6eMQ8
+         ZimP5N8WljYAKCHUHQXUPtfODti54bLmHHssHC3psGmOQ1x2wL3vQWNzdKDe5wdqY3Sa
+         tEReokYrGMZF6VWR0PXKEKEnxrWKpGqOKOII6pOM7iD6OEh9wHH6gbtJlxOa0w+HDBvK
+         9WfCPqQgstBgL0M8Y8v4nLRaNoDtXdvFpPH7qjMoFZtUSAk55b9biOIBVAKndTmQ/5YB
+         3f1zBf5/kDr20EFdT3GvoeW7mw+Zi37ltG/fe8mnf4SIy6WKBXP/Shnia+sPWYXMFBKw
+         SlMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=CyQL7MKXYchL5tTvsD0JYNk64GMjDP+y6COH4opWt5c=;
-        b=hBIocsOsnFjMT87mG6eczADD/jmcbXYHU3uWIfVYqbbaCg3ygAdwDcNVNV/s5rTPCM
-         jpOoMI1P0QFSKXg/IgwRRG41imKRvLteDqg+knZruyAscvUXA6Ti+p8MyDjtrR/eRq3E
-         5OQUYIqAGCABNk0v1WGjh6LyaUrnlbfbJ3/bB/KrWNE6Zz1SVnnAE2BrQr4bVOARYNKG
-         bJRzkeNb7JdLIrtf9L8ud+z+BXJ7OVDT649cgkXKBu3iu9xWTXWvNW7JTHFzAGo6vIel
-         SAfROKbpz4RR6e5ZId5Osb2GYJDQ8r0rcUCfQ2w6pPJaBAmaDB5Yv17FL4BPKh76Q1eo
-         nHGQ==
-X-Gm-Message-State: AJIora9o4QzXZZilR4zgDdwLVrKLqJP9zvxv5UtzzQHPxw4RIQekMZ3Y
-        ZIwK1gKegAewYA4Hwy7VdDUjqmtetsB3VRt/
-X-Google-Smtp-Source: AGRyM1tDodNaX42YIwcy2DTouI3cFX/Tf78qtdwkGH4a003LwEodYVqIB2UmB0DXTxg8beRYHlhQ/9ZGfAYMhnI1
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a81:5404:0:b0:31c:c24d:94b0 with SMTP
- id i4-20020a815404000000b0031cc24d94b0mr7175739ywb.502.1658688571667; Sun, 24
- Jul 2022 11:49:31 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 18:47:59 +0000
-Message-Id: <20220724184758.1723925-1-sadiyakazi@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v3] Documentation: kunit: Add CLI args for kunit_tool
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net, mairacanal@riseup.net
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BZIDWbd+e5/Q1G0dFyLVjy7eyY4n93CGPNpfz9ufq8k=;
+        b=cERucvWTILGBNBVK7u8msyiT6W6MRVXbtQ7Ze8YDUt3G/5Iyon+R/cY9/cfItHxYya
+         h5Arq0TXQapsJ2ugZovzQJh0h6aXSvLIY6i9T8ax2J/kfaSVoNZXWcOa89ONnEKwPsfO
+         +SRG9cBiCPCRg6v4LKdPwyAQCHjbz4cb3VwxAfIoMA37usuRPivsC8ubPB4wH8GKpHLC
+         oFGlPBqBbP19wg+P5wLCmsSsMIJIpaN1a2R/0KXxxQY40UUthnoEgy+3Nr7QJRFAIT/T
+         L5CaSynQlqklgWF+dzoxRMEKFMGbpnX7ydvJWvB29+6xyTpNLZbQQIr2eMiPH/q1iu8/
+         tMRA==
+X-Gm-Message-State: AJIora9L3hE7vnzO2wJWrBrmtH4jBDfyezz7mkd8Uiow/rw0tqPAJw8o
+        Yan0yj2v/tMJaYDeMRttTjin4RHVdkb3IE+7f+hRIA==
+X-Google-Smtp-Source: AGRyM1uhtAz31vRN2vTHNL4YCaPo/HzrRPqWvsF7BYkwB/9AbIB+WVtU7Zfj39rHx4IiBz8rcO0fuw5kZtT4pTTl5BA=
+X-Received: by 2002:ad4:5761:0:b0:473:7861:69d1 with SMTP id
+ r1-20020ad45761000000b00473786169d1mr8093947qvx.73.1658688930682; Sun, 24 Jul
+ 2022 11:55:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220724172442.87830-1-matti.lehtimaki@gmail.com> <20220724172442.87830-4-matti.lehtimaki@gmail.com>
+In-Reply-To: <20220724172442.87830-4-matti.lehtimaki@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 24 Jul 2022 21:55:19 +0300
+Message-ID: <CAA8EJpqUH_v1GXEYF62Z3DBtFu_305_h4D36aCnBr38bo5HoJw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] ARM: dts: qcom: Add support for Samsung Galaxy Tab
+ 4 10.1 (SM-T530)
+To:     =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Run_wrapper.rst was missing some command line arguments. Added
-additional args in the file.
+On Sun, 24 Jul 2022 at 20:25, Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.c=
+om> wrote:
+>
+> Add a device tree for the Samsung Galaxy Tab 4 10.1 (SM-T530) wifi tablet
+> based on the apq8026 platform.
+>
+> Currently supported are accelerometer sensor, hall sensor,
+> internal storage, physical buttons (power & volume), screen
+> (based on simple-framebuffer set up by the bootloader), sdcard,
+> touchscreen and USB.
+>
+> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+> ---
+> Changes in v3:
+>   - Fix sdhc_2 bus width
+>   - Reorder includes
+>
+> Changes in v2:
+>   - Change codename to matisse-wifi
+>   - Remove msm-id, not needed when lk2nd is used
+>   - Remove unused labels from reserved memory regions
+>   - Rename muic node
+> ---
+>  arch/arm/boot/dts/Makefile                    |   1 +
+>  .../dts/qcom-apq8026-samsung-matisse-wifi.dts | 469 ++++++++++++++++++
+>  2 files changed, 470 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.d=
+ts
+>
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 5112f493f494..8bac4f4f8656 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1010,6 +1010,7 @@ dtb-$(CONFIG_ARCH_QCOM) +=3D \
+>         qcom-apq8016-sbc.dtb \
+>         qcom-apq8026-asus-sparrow.dtb \
+>         qcom-apq8026-lg-lenok.dtb \
+> +       qcom-apq8026-samsung-matisse-wifi.dtb \
+>         qcom-apq8060-dragonboard.dtb \
+>         qcom-apq8064-cm-qs600.dtb \
+>         qcom-apq8064-ifc6410.dtb \
+> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/ar=
+ch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> new file mode 100644
+> index 000000000000..78a119107069
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> @@ -0,0 +1,469 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2022, Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/input/input.h>
+> +#include "qcom-msm8226.dtsi"
+> +#include "qcom-pm8226.dtsi"
+> +
+> +/delete-node/ &smem_region;
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
----
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20220721081026.1247067-1-sadiyakazi=
-@google.com/
--Added a code block for =E2=80=94kconfig_add argument to make the styling c=
-onsistent
--Slightly changed the words for =E2=80=94arch argument
--Changed QEMU to qemu wherever applicable for the cli args
--Changed the style for ``-smp 8``
--Changed "Might be repeated" to "may be repeated=E2=80=9D for kernel_args
+Please move this to the /reserved-memory node. having it there would
+help understanding that we are just changing the address.
+
+> +
+> +/ {
+> +       model =3D "Samsung Galaxy Tab 4 10.1";
+> +       compatible =3D "samsung,matisse-wifi", "qcom,apq8026";
+> +       chassis-type =3D "tablet";
+> +
+
+[skipped]
+
+> +       i2c-muic {
+> +               compatible =3D "i2c-gpio";
+
+Is there any reason for using i2c-gpio rather than blsp_i2c4?
+According to the pinctrl-msm8226, gpio14/15 can be mapped to the blsp.
+
+> +               sda-gpios =3D <&tlmm 14 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN=
+)>;
+> +               scl-gpios =3D <&tlmm 15 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN=
+)>;
+> +
+> +               pinctrl-names =3D "default";
+> +               pinctrl-0 =3D <&muic_i2c_default_state>;
+> +
+> +               #address-cells =3D <1>;
+> +               #size-cells =3D <0>;
+> +
+> +               muic: usb-switch@25 {
+> +                       compatible =3D "siliconmitus,sm5502-muic";
+> +                       reg =3D <0x25>;
+> +
+> +                       interrupt-parent =3D <&tlmm>;
+> +                       interrupts =3D <67 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +                       pinctrl-names =3D "default";
+> +                       pinctrl-0 =3D <&muic_int_default_state>;
+> +               };
+> +       };
+
+[skipped]
 
 
-
----
- Documentation/dev-tools/kunit/run_wrapper.rst | 61 ++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/=
-dev-tools/kunit/run_wrapper.rst
-index 5e560f2c5fca..ed3715fef32d 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -233,7 +233,7 @@ Command-Line Arguments
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
- kunit_tool has a number of other command-line arguments which can
--be useful for our test environment. Below the most commonly used
-+be useful for our test environment. Below are the most commonly used
- command line arguments:
-=20
- - ``--help``: Lists all available options. To list common options,
-@@ -257,3 +257,62 @@ command line arguments:
-             added or modified. Instead, enable all tests
-             which have satisfied dependencies by adding
-             ``CONFIG_KUNIT_ALL_TESTS=3Dy`` to your ``.kunitconfig``.
-+
-+- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitco=
-nfig``
-+  file. For example:
-+
-+  - ``lib/kunit/.kunitconfig`` can be the path of the file.
-+
-+  - ``lib/kunit`` can be the directory in which the file is located.
-+
-+  This file is used to build and run with a predefined set of tests
-+  and their dependencies. For example, to run tests for a given subsystem.
-+
-+- ``--kconfig_add``: Specifies additional configuration options to be
-+  appended to the ``.kunitconfig`` file. For example:
-+  .. code-block::
-+	./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=3Dy
-+
-+- ``--arch``: Runs tests on the specified architecture. The architecture
-+  argument is same as the Kbuild ARCH environment variable.
-+  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on qe=
-mu.
-+  Default is `um`.
-+
-+- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
-+  same argument as passed to the ``CROSS_COMPILE`` variable used by
-+  Kbuild. This will be the prefix for the toolchain
-+  binaries such as GCC. For example:
-+
-+  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
-+    our system.
-+
-+  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/mi=
-croblaze-linux``
-+    if we have downloaded the microblaze toolchain from the 0-day
-+    website to a specified path in our home directory called toolchains.
-+
-+- ``--qemu_config``: Specifies the path to a file containing a
-+  custom qemu architecture definition. This should be a python file
-+  containing a `QemuArchParams` object.
-+
-+- ``--qemu_args``: Specifies additional qemu arguments, for example, ``-sm=
-p 8``.
-+
-+- ``--jobs``: Specifies the number of jobs (commands) to run simultaneousl=
-y.
-+  By default, this is set to the number of cores on your system.
-+
-+- ``--timeout``: Specifies the maximum number of seconds allowed for all t=
-ests to run.
-+  This does not include the time taken to build the tests.
-+
-+- ``--kernel_args``: Specifies additional kernel command-line arguments. M=
-ay be repeated.
-+
-+- ``--run_isolated``: If set, boots the kernel for each individual suite/t=
-est.
-+  This is useful for debugging a non-hermetic test, one that
-+  might pass/fail based on what ran before it.
-+
-+- ``--raw_output``: If set, generates unformatted output from kernel. Poss=
-ible options are:
-+
-+   - ``all``: To view the full kernel output, use ``--raw_output=3Dall``.
-+
-+   - ``kunit``: This is the default option and filters to KUnit output. Us=
-e ``--raw_output`` or ``--raw_output=3Dkunit``.
-+
-+- ``--json``: If set, stores the test results in a JSON format and prints =
-to `stdout` or
-+  saves to a file if a filename is specified.
 --=20
-2.37.1.359.gd136c6c3e2-goog
-
+With best wishes
+Dmitry

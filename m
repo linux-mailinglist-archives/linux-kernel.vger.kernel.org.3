@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAF657F4B9
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF9357F4BF
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 13:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiGXLA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 07:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S232187AbiGXLBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 07:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGXLAZ (ORCPT
+        with ESMTP id S229462AbiGXLBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 07:00:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F72E64C6
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 04:00:24 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 11:00:19 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658660421;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJW+dt5eAcXnvma6LPfcUwm+T9G0Jk72nagiTEpj6vI=;
-        b=yLzeC/4pyyebwYdzpSZkFLr8Il+lMuUFuK7LUGGU6mIUv5/lY1MjGlN/nTIDVoBit4l1Ep
-        KwBtjMuuA+Uq9P1uFhYY9lx0yUcPmOOWbqpU2VsXRktVLO4+sMLkoRVN06k5ItjiH6TyLB
-        z9iae6Vi8QSiyx58azbqjagnZrq2EWOS4f4cGV+CcRSH5xEwlaMRsXlccyc3utdPSvYJCt
-        lHN6hYaL/PqyploHqzgehRY3qm7x7nUUFfijGp1oRd+4aVX4k59i6AMsTPeFbtLR1ABmF0
-        uCdzQgUEdswtsQUNxFB2e9QOZN10CxzukAxYRDI4gzV3w5dck1qAa95Db2Ydhg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658660421;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJW+dt5eAcXnvma6LPfcUwm+T9G0Jk72nagiTEpj6vI=;
-        b=0LOdaRxnm3j48kXMMI0CEXxtTh099dNRsK/7Vx34TziktBEzl6lSDZDbm8jU00YxhQ1LPj
-        pM9rlFrYSihbSQBA==
-From:   "irqchip-bot for William Dean" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/mips-gic: Check the return value
- of ioremap() in gic_of_init()
-Cc:     Hacash Robot <hacashRobot@santino.com>,
-        William Dean <williamsukatube@163.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220723100128.2964304-1-williamsukatube@163.com>
-References: <20220723100128.2964304-1-williamsukatube@163.com>
-MIME-Version: 1.0
-Message-ID: <165866041980.15455.8736055814592911853.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 24 Jul 2022 07:01:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D95B4B7;
+        Sun, 24 Jul 2022 04:01:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FF761026;
+        Sun, 24 Jul 2022 11:01:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E601DC3411E;
+        Sun, 24 Jul 2022 11:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658660492;
+        bh=1UK/FMBldkCTGcjOUZegKtGA+BZ9JHu+kJka8Z/YOqU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tgtSlNvxll67Cu/fXKCuxO3u3sz4lfbGfIE/tNpj/4sXY2X0xV+3izbJeeScuZ92s
+         K7ZBYR+6KVNC7mvsuNoPqLW2woxEFsx46CBW/JlGzrDhXD+gB/fjwyvOfJ/JgBPaSX
+         y9e94iCV3nXpB0JP3zi4jG8PzMd+CHuoQErUC9PR2ZnB297Tde3bAbdvS8Nn2C0wuw
+         lX0JpmSaHNBhzhtkQzDIQ8DPEo2E+/2LoRCjkIk+19paENrqsQLszCGbx+tX009/TG
+         9S/Fbk9SeQjH+uFI/XliaRd2jOSzgSn068Lol+2rIf2cBrbRC8KVhqVI/cVERMV0zt
+         HL5Z6pQsFPgQQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oFZMX-009fji-LS;
+        Sun, 24 Jul 2022 12:01:29 +0100
+Date:   Sun, 24 Jul 2022 12:01:28 +0100
+Message-ID: <8735eqdbav.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: interrupt-controller: renesas,rzg2l-irqc: Update description for '#interrupt-cells' property
+In-Reply-To: <20220722151155.21100-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220722151155.21100-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220722151155.21100-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.mahadev-lad.rj@bp.renesas.com, geert+renesas@glider.be, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, prabhakar.csengg@gmail.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Fri, 22 Jul 2022 16:11:54 +0100,
+Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> 
+> Update description for '#interrupt-cells' property to utilize the
+> RZG2L_{NMI,IRQX} for the first cell defined in the
+> include/dt-bindings/interrupt-controller/irqc-rzg2l.h file.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v3:
+> * New patch
+> ---
+>  .../bindings/interrupt-controller/renesas,rzg2l-irqc.yaml    | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> index 33b90e975e33..ea7db3618b23 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> @@ -31,8 +31,9 @@ properties:
+>        - const: renesas,rzg2l-irqc
+>  
+>    '#interrupt-cells':
+> -    description: The first cell should contain external interrupt number (IRQ0-7) and the
+> -                 second cell is used to specify the flag.
+> +    description: The first cell should contain a macro RZG2L_{NMI,IRQX} included in the
+> +                 include/dt-bindings/interrupt-controller/irqc-rzg2l.h and the second
+> +                 cell is used to specify the flag.
 
-Commit-ID:     71349cc85e5930dce78ed87084dee098eba24b59
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/71349cc85e5930dce78ed87084dee098eba24b59
-Author:        William Dean <williamsukatube@163.com>
-AuthorDate:    Sat, 23 Jul 2022 18:01:28 +08:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sun, 24 Jul 2022 10:54:44 +01:00
+I think a binding should be self describing, and not rely on an opaque
+macro. Mentioning that there is a macro that encodes it is fine, but
+the values are what matter, specially when considering that other OSs
+could (and should be able to) write their own DTs from scratch without
+depending on something that is very much Linux-specific.
 
-irqchip/mips-gic: Check the return value of ioremap() in gic_of_init()
+Thanks,
 
-The function ioremap() in gic_of_init() can fail, so
-its return value should be checked.
+	M.
 
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@163.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220723100128.2964304-1-williamsukatube@163.com
----
- drivers/irqchip/irq-mips-gic.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index ff89b36..a1f6d95 100644
---- a/drivers/irqchip/irq-mips-gic.c
-+++ b/drivers/irqchip/irq-mips-gic.c
-@@ -734,6 +734,10 @@ static int __init gic_of_init(struct device_node *node,
- 	}
- 
- 	mips_gic_base = ioremap(gic_base, gic_len);
-+	if (!mips_gic_base) {
-+		pr_err("Failed to ioremap gic_base\n");
-+		return -ENOMEM;
-+	}
- 
- 	gicconfig = read_gic_config();
- 	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,131 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF3E57F7B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 01:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F84057F7B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 01:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbiGXXiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 19:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S232676AbiGXXjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 19:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiGXXiN (ORCPT
+        with ESMTP id S229437AbiGXXjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 19:38:13 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D11FD22;
-        Sun, 24 Jul 2022 16:38:11 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id ss3so17548635ejc.11;
-        Sun, 24 Jul 2022 16:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zry4/Dnu3duQwGon0guy4XCJ4bIwk7GLsI711tvINGE=;
-        b=mXLbCdtnED17zPc6VHdf4G2FqaK+372fB1thKbOBo4XMR+ekH2taFb0C7L4C67lC9i
-         GaqdlIFBnTzJITyUrBwLIaq+McdQgaIeo0FIeUAGhu/TXkTNqO6Hz4uTjZVfhUp2qAu9
-         5Mm7tY4PYLZ+hZWQ0j295Hy/hPl1x8vgXGiqj3mChvBVTGKUolD2YGOegi+9a2BuZfK+
-         FTxKitQBTU4mF0xOos365ML7J0MOXS0kV8Bkzb/xshn36m4Qyjv4u4BCYmxWR6tYlmbI
-         qXEKGHDAzHN9lHQG+imHrovn5XTBM6JZMzCAfv80yBzz3/q2jaAEfTvfXMStzbnXZ+Ri
-         s7/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zry4/Dnu3duQwGon0guy4XCJ4bIwk7GLsI711tvINGE=;
-        b=vbpyiA5WEgw+7yJUZSDljdy3NQu9x7gXyJINAWbWlJ9l7jDV7QicMBvUAEgYhTJwTY
-         VMtg9Nz+mlcHJahkZiOiXApmzte04kvP6Ywv6T3i+K68vSdZmQMWFrlXehX4HIvPhiIk
-         0sq6iE8PBewnwbdC/x09u9Z7SNtmnnfUz1p6vbrkyQCbMsxW8Y7mptAYJkkSwyRXVYoq
-         h/5lUh7RPFzg2oW2cW9VmDbzDwRzwYF0KIBG/56V9Rn1vLbJ1i+Y5a0RGUhUkc1b+0x3
-         th4nORlLaZd4zbFp/PPKYUtRYwSnolo01bJWYPaGw7JY91055XyZ/4VKlI9UKuIXB5ZF
-         Bj/Q==
-X-Gm-Message-State: AJIora/ay+6+Z0H+AJz2nnqgg8JsqdLPqAb15S4idV8CdS1TcNly9fOT
-        FL1hxM30YnbCyW97ZNBFN00=
-X-Google-Smtp-Source: AGRyM1tHmMp0RqSfGlUzi/WFEL62th3+01CTxKT+PYryHncJ+6BdWa6F15F8VqTPwVdmgvaniVt/KQ==
-X-Received: by 2002:a17:907:7fa5:b0:72b:755a:b77e with SMTP id qk37-20020a1709077fa500b0072b755ab77emr7895461ejc.474.1658705890282;
-        Sun, 24 Jul 2022 16:38:10 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id ez20-20020a056402451400b0043bc61348casm6132674edb.65.2022.07.24.16.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 16:38:09 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 02:38:07 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk, jaz@semihalf.com,
-        tn@semihalf.com
-Subject: Re: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for
- CPU/DSA ports
-Message-ID: <20220724233807.bthah6ctjadl35by@skbuf>
-References: <20220714010021.1786616-1-mw@semihalf.com>
+        Sun, 24 Jul 2022 19:39:42 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E796101DA
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 16:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658705981; x=1690241981;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cmcc62Z22WVmqvg95FJmm2mKK7QSEaTKlickELw2Lc4=;
+  b=gb6C46omSjV/6c6iiKhZ2rHLR1qfRJLhEC6VRZpRZWW+hbdgCeXgMN4P
+   FZr1ccpGhrSe9z+n3l3A9qkbFDNCDCXxEIW3ZkgMrZKJXns3sdxfwy0PV
+   3mgISmAjT3xg/68kso2SjLR3YelDYGfrphBVxiVya66OF2wJcM/kJ1oV7
+   81PtjlBUKb7I/pXQDtiYMw7tXmlGg1MDONVGuZXeRB1VyfpkqH9j/fThB
+   SPTQAA5T6sPKyraC9RaFOxs3XFNjQnxK0z3SszOXt528dx5uTNb/P+rk4
+   47a6SnoWDbw+lcdjKmGvvGAMoV2+Ax5iMPRKGvVh8Hl22FZ04rx86DrAG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="274439225"
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="274439225"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 16:39:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
+   d="scan'208";a="627225588"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 24 Jul 2022 16:39:34 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFlC9-0004PZ-35;
+        Sun, 24 Jul 2022 23:39:33 +0000
+Date:   Mon, 25 Jul 2022 07:39:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [congwang:sch_bpf 6/7] net/core/filter.c:10694:31: sparse: sparse:
+ symbol 'tc_qdisc_verifier_ops' was not declared. Should it be static?
+Message-ID: <202207250703.q4wpPOoI-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220714010021.1786616-1-mw@semihalf.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcin,
+tree:   https://github.com/congwang/linux.git sch_bpf
+head:   0be7ca64fe67b71e74518da3e635ccd8d67e01ac
+commit: 0bec1c7a1a13130703df8fdaf637f22901b0a99e [6/7] net_sched: introduce eBPF based Qdisc
+config: arm64-randconfig-s032-20220724 (https://download.01.org/0day-ci/archive/20220725/202207250703.q4wpPOoI-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/congwang/linux/commit/0bec1c7a1a13130703df8fdaf637f22901b0a99e
+        git remote add congwang https://github.com/congwang/linux.git
+        git fetch --no-tags congwang sch_bpf
+        git checkout 0bec1c7a1a13130703df8fdaf637f22901b0a99e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash net/core/
 
-On Thu, Jul 14, 2022 at 03:00:21AM +0200, Marcin Wojtas wrote:
-> Commit 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
-> stopped relying on SPEED_MAX constant and hardcoded speed settings
-> for the switch ports and rely on phylink configuration.
-> 
-> It turned out, however, that when the relevant code is called,
-> the mac_capabilites of CPU/DSA port remain unset.
-> mv88e6xxx_setup_port() is called via mv88e6xxx_setup() in
-> dsa_tree_setup_switches(), which precedes setting the caps in
-> phylink_get_caps down in the chain of dsa_tree_setup_ports().
-> 
-> As a result the mac_capabilites are 0 and the default speed for CPU/DSA
-> port is 10M at the start. To fix that execute phylink_get_caps() callback
-> which fills port's mac_capabilities before they are processed.
-> 
-> Fixes: 3c783b83bd0f ("net: dsa: mv88e6xxx: get rid of SPEED_MAX setting")
-> Signed-off-by: Marcin Wojtas <mw@semihalf.com>
-> ---
->  drivers/net/dsa/mv88e6xxx/chip.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-> index 37b649501500..9fab76f256bb 100644
-> --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> @@ -3293,7 +3293,12 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
->  	 * port and all DSA ports to their maximum bandwidth and full duplex.
->  	 */
->  	if (dsa_is_cpu_port(ds, port) || dsa_is_dsa_port(ds, port)) {
-> -		unsigned long caps = dp->pl_config.mac_capabilities;
-> +		unsigned long caps;
-> +
-> +		if (ds->ops->phylink_get_caps)
-> +			ds->ops->phylink_get_caps(ds, port, &dp->pl_config);
-> +
-> +		caps = dp->pl_config.mac_capabilities;
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-We'll need this bug fixed in net-next one way or another.
-If you resend this patch, please change the following:
+sparse warnings: (new ones prefixed by >>)
+   net/core/filter.c:5980:9: sparse: sparse: switch with no cases
+   net/core/filter.c:6021:9: sparse: sparse: switch with no cases
+   net/core/filter.c:1411:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sock_filter const *filter @@     got struct sock_filter [noderef] __user *filter @@
+   net/core/filter.c:1411:39: sparse:     expected struct sock_filter const *filter
+   net/core/filter.c:1411:39: sparse:     got struct sock_filter [noderef] __user *filter
+   net/core/filter.c:1489:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sock_filter const *filter @@     got struct sock_filter [noderef] __user *filter @@
+   net/core/filter.c:1489:39: sparse:     expected struct sock_filter const *filter
+   net/core/filter.c:1489:39: sparse:     got struct sock_filter [noderef] __user *filter
+   net/core/filter.c:10671:31: sparse: sparse: symbol 'sk_filter_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10678:27: sparse: sparse: symbol 'sk_filter_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10682:31: sparse: sparse: symbol 'tc_cls_act_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10690:27: sparse: sparse: symbol 'tc_cls_act_prog_ops' was not declared. Should it be static?
+>> net/core/filter.c:10694:31: sparse: sparse: symbol 'tc_qdisc_verifier_ops' was not declared. Should it be static?
+>> net/core/filter.c:10702:27: sparse: sparse: symbol 'tc_qdisc_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10706:31: sparse: sparse: symbol 'xdp_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10717:31: sparse: sparse: symbol 'cg_skb_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10723:27: sparse: sparse: symbol 'cg_skb_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10727:31: sparse: sparse: symbol 'lwt_in_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10733:27: sparse: sparse: symbol 'lwt_in_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10737:31: sparse: sparse: symbol 'lwt_out_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10743:27: sparse: sparse: symbol 'lwt_out_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10747:31: sparse: sparse: symbol 'lwt_xmit_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10754:27: sparse: sparse: symbol 'lwt_xmit_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10758:31: sparse: sparse: symbol 'lwt_seg6local_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10764:27: sparse: sparse: symbol 'lwt_seg6local_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10768:31: sparse: sparse: symbol 'cg_sock_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10774:27: sparse: sparse: symbol 'cg_sock_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10777:31: sparse: sparse: symbol 'cg_sock_addr_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10783:27: sparse: sparse: symbol 'cg_sock_addr_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10786:31: sparse: sparse: symbol 'sock_ops_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10792:27: sparse: sparse: symbol 'sock_ops_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10795:31: sparse: sparse: symbol 'sk_skb_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10802:27: sparse: sparse: symbol 'sk_skb_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10805:31: sparse: sparse: symbol 'sk_msg_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10812:27: sparse: sparse: symbol 'sk_msg_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10815:31: sparse: sparse: symbol 'flow_dissector_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10821:27: sparse: sparse: symbol 'flow_dissector_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:1910:43: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __wsum [usertype] diff @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1910:43: sparse:     expected restricted __wsum [usertype] diff
+   net/core/filter.c:1910:43: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1913:36: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be16 [usertype] old @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1913:36: sparse:     expected restricted __be16 [usertype] old
+   net/core/filter.c:1913:36: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1913:42: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be16 [usertype] new @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1913:42: sparse:     expected restricted __be16 [usertype] new
+   net/core/filter.c:1913:42: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1916:36: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be32 [usertype] from @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1916:36: sparse:     expected restricted __be32 [usertype] from
+   net/core/filter.c:1916:36: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1916:42: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be32 [usertype] to @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1916:42: sparse:     expected restricted __be32 [usertype] to
+   net/core/filter.c:1916:42: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1961:59: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __wsum [usertype] diff @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1961:59: sparse:     expected restricted __wsum [usertype] diff
+   net/core/filter.c:1961:59: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1964:52: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be16 [usertype] from @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1964:52: sparse:     expected restricted __be16 [usertype] from
+   net/core/filter.c:1964:52: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1964:58: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __be16 [usertype] to @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1964:58: sparse:     expected restricted __be16 [usertype] to
+   net/core/filter.c:1964:58: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1967:52: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be32 [usertype] from @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1967:52: sparse:     expected restricted __be32 [usertype] from
+   net/core/filter.c:1967:52: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1967:58: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __be32 [usertype] to @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1967:58: sparse:     expected restricted __be32 [usertype] to
+   net/core/filter.c:1967:58: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:2013:28: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long long @@     got restricted __wsum @@
+   net/core/filter.c:2013:28: sparse:     expected unsigned long long
+   net/core/filter.c:2013:28: sparse:     got restricted __wsum
+   net/core/filter.c:2035:35: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long long @@     got restricted __wsum [usertype] csum @@
+   net/core/filter.c:2035:35: sparse:     expected unsigned long long
+   net/core/filter.c:2035:35: sparse:     got restricted __wsum [usertype] csum
 
-(1) it's silly to (a) check for the presence of ds->ops->phylink_get_caps and
-    (b) do an indirect function call when you know that the implementation is
-    mv88e6xxx_get_caps(). So just call that.
+vim +/tc_qdisc_verifier_ops +10694 net/core/filter.c
 
-(2) please don't touch &dp->pl_config, just create an on-stack
-    struct phylink_config pl_config, and let DSA do its thing with
-    &dp->pl_config whenever the timing of dsa_port_phylink_create() is.
+ 10693	
+ 10694	const struct bpf_verifier_ops tc_qdisc_verifier_ops = {
+ 10695		.get_func_proto		= tc_qdisc_func_proto,
+ 10696		.is_valid_access	= tc_cls_act_is_valid_access,
+ 10697		.convert_ctx_access	= tc_cls_act_convert_ctx_access,
+ 10698		.gen_prologue		= tc_cls_act_prologue,
+ 10699		.gen_ld_abs		= bpf_gen_ld_abs,
+ 10700	};
+ 10701	
+ 10702	const struct bpf_prog_ops tc_qdisc_prog_ops = {
+ 10703		.test_run		= bpf_prog_test_run_skb,
+ 10704	};
+ 10705	
 
->  
->  		if (chip->info->ops->port_max_speed_mode)
->  			mode = chip->info->ops->port_max_speed_mode(port);
-> -- 
-> 2.29.0
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

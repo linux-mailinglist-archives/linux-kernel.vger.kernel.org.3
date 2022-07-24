@@ -2,114 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65C257F2AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A8B57F2B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236030AbiGXCgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 22:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S236503AbiGXCiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 22:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXCgX (ORCPT
+        with ESMTP id S229602AbiGXCiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 22:36:23 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6D713DE2
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658630183; x=1690166183;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KPXnMjwUWbhG1S05SL+/0f8BnL00yR9HZFn5WbmLJGY=;
-  b=CQPH78iI5dDlXQXt9N9j267PeqnEXfifmEyOHmBblJzoRT0pdnuFpY6L
-   qVpvPoF7wXRbc0kIxingxVNSkk3WpLBHjIx2BUrlk7Y7Vztdvze+aMVuU
-   N1Grk9YgZn4gn5QaM8mkWIpaJL6IinRap9Z+bRQoSXwNlXj0U6HbMm0Yh
-   188HoJC932qKjYNYrtJjH13GUPNXz7LzJV4m6wZ3JXCqiZoe2RjB7rbY7
-   D5Iln/OHx0eqWl5oRAAgPhecRGShBPQlVnMO+LnVPsavGwcRlVhGGNVNN
-   4GdFiUWmQUGgyojTqizqCJOx6zRbo1Yve746fgpztnMps76WrLPrquXML
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="288266471"
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="288266471"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 19:36:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="688675685"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2022 19:36:20 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFRTf-0003Pt-1k;
-        Sun, 24 Jul 2022 02:36:19 +0000
-Date:   Sun, 24 Jul 2022 10:35:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <andy.gross@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Evan Green <evgreen@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 923/6555]
- drivers/soc/qcom/qcom_gsbi.c:125:34: warning: 'tcsr_dt_match' defined but
- not used
-Message-ID: <202207241059.TJ6DBg9u-lkp@intel.com>
+        Sat, 23 Jul 2022 22:38:14 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4CD13DE2
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:38:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VKC1zl0_1658630286;
+Received: from 192.168.1.4(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKC1zl0_1658630286)
+          by smtp.aliyun-inc.com;
+          Sun, 24 Jul 2022 10:38:08 +0800
+Subject: Re: [Crash-utility] [PATCH 0/5] Fixups to work with crash tool
+To:     Dave Young <dyoung@redhat.com>,
+        "Discussion list for crash utility usage, maintenance and development" 
+        <crash-utility@redhat.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
+        guoren@kernel.org, mick@ics.forth.gr,
+        alexandre.ghiti@canonical.com, huanyi.xj@alibaba-inc.com,
+        hschauhan@nulltrace.org, linux-kernel@vger.kernel.org,
+        heinrich.schuchardt@canonical.com, linux-riscv@lists.infradead.org,
+        kexec@lists.infradead.org
+References: <20220717101323.370245-1-xianting.tian@linux.alibaba.com>
+ <CALu+AoTpiQh7NUJJZs+6A7MCUNWJq=NeSimoF=AVHpRptd36eA@mail.gmail.com>
+From:   tianxianting <xianting.tian@linux.alibaba.com>
+Message-ID: <afbf1692-9942-b337-4195-a38c0cba793e@linux.alibaba.com>
+Date:   Sun, 24 Jul 2022 10:38:06 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALu+AoTpiQh7NUJJZs+6A7MCUNWJq=NeSimoF=AVHpRptd36eA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: cb830e93e29574f6eae7ecd6f709905e15c245cb [923/6555] UPSTREAM: soc: qcom: Allow COMPILE_TEST of qcom SoC Kconfigs
-config: i386-buildonly-randconfig-r004-20220718 (https://download.01.org/0day-ci/archive/20220724/202207241059.TJ6DBg9u-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/jsarha/linux/commit/cb830e93e29574f6eae7ecd6f709905e15c245cb
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout cb830e93e29574f6eae7ecd6f709905e15c245cb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mailbox/ drivers/soc/qcom/
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/soc/qcom/qcom_gsbi.c:125:34: warning: 'tcsr_dt_match' defined but not used [-Wunused-const-variable=]
-     125 | static const struct of_device_id tcsr_dt_match[] = {
-         |                                  ^~~~~~~~~~~~~
-
-
-vim +/tcsr_dt_match +125 drivers/soc/qcom/qcom_gsbi.c
-
-e5fdad68d47ed3 Andy Gross          2015-02-09  124  
-e5fdad68d47ed3 Andy Gross          2015-02-09 @125  static const struct of_device_id tcsr_dt_match[] = {
-e5fdad68d47ed3 Andy Gross          2015-02-09  126  	{ .compatible = "qcom,tcsr-ipq8064", .data = &config_ipq8064},
-e5fdad68d47ed3 Andy Gross          2015-02-09  127  	{ .compatible = "qcom,tcsr-apq8064", .data = &config_apq8064},
-e5fdad68d47ed3 Andy Gross          2015-02-09  128  	{ .compatible = "qcom,tcsr-msm8960", .data = &config_msm8960},
-e5fdad68d47ed3 Andy Gross          2015-02-09  129  	{ .compatible = "qcom,tcsr-msm8660", .data = &config_msm8660},
-e5fdad68d47ed3 Andy Gross          2015-02-09  130  	{ },
-fa9eb3241895d2 Srinivas Kandagatla 2014-09-23  131  };
-fa9eb3241895d2 Srinivas Kandagatla 2014-09-23  132  
-
-:::::: The code at line 125 was first introduced by commit
-:::::: e5fdad68d47ed344832b7ca4e18b2e9708d8141e soc: qcom: gsbi: Add support for ADM CRCI muxing
-
-:::::: TO: Andy Gross <agross@codeaurora.org>
-:::::: CC: Kumar Gala <galak@codeaurora.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+在 2022/7/22 下午4:13, Dave Young 写道:
+> Hi,
+>
+> On Sun, 17 Jul 2022 at 18:13, Xianting Tian
+> <xianting.tian@linux.alibaba.com> wrote:
+>> I ever sent the patch 1,2 in the link:
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-2-xianting.tian@linux.alibaba.com/
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/
+>> And patch 3,4 in the link:
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/
+>>
+>> This patch series just put these patches together, and with a new patch 5.
+>> these five patches are the fixups for kexec, vmcore and improvements
+>> for vmcoreinfo and memory layout dump.
+>>
+>> The main changes in the five patchs as below,
+>> Patch 1: Add a fast call path of crash_kexec() as other Arch(x86, arm64) do.
+>> Patch 2: use __smp_processor_id() instead of smp_processor_id() to cleanup
+>>           the console prints.
+>> Patch 3: Add VM layout, va bits, ram base to vmcoreinfo, which can simplify
+>>           the development of crash tool as ARM64 already did
+>>           (arch/arm64/kernel/crash_core.c).
+>> Patch 4: Add modules to virtual kernel memory layout dump.
+>> Patch 5: Fixup to get correct kernel mode PC for vmcore
+>>
+>> With these 5 patches(patch 3 is must), crash tool can work well to analyze
+>> a vmcore. The patches for crash tool for RISCV64 is in the link:
+>> https://lore.kernel.org/linux-riscv/20220717042929.370022-1-xianting.tian@linux.alibaba.com/
+>>
+>> Xianting Tian (5):
+>>    RISC-V: Fixup fast call of crash_kexec()
+>>    RISC-V: use __smp_processor_id() instead of smp_processor_id()
+>>    RISC-V: Add arch_crash_save_vmcoreinfo support
+> Vmcoreinfo changes need to be documented in
+> Documentation/admin-guide/kdump/vmcoreinfo.rst
+>
+> Otherwise, I suggest to always cc kexec mail list (added in cc) for
+> kexec | kdump patches.
+>
+> thanks, I will fix it in v3.
+>>    riscv: Add modules to virtual kernel memory layout dump
+>>    RISC-V: Fixup getting correct current pc
+>>
+>>   arch/riscv/kernel/Makefile          |  1 +
+>>   arch/riscv/kernel/crash_core.c      | 29 +++++++++++++++++++++++++++++
+>>   arch/riscv/kernel/crash_save_regs.S |  2 +-
+>>   arch/riscv/kernel/machine_kexec.c   |  2 +-
+>>   arch/riscv/kernel/traps.c           |  4 ++++
+>>   arch/riscv/mm/init.c                |  4 ++++
+>>   6 files changed, 40 insertions(+), 2 deletions(-)
+>>   create mode 100644 arch/riscv/kernel/crash_core.c
+>>
+>> --
+>> 2.17.1
+>>
+>> --
+>> Crash-utility mailing list
+>> Crash-utility@redhat.com
+>> https://listman.redhat.com/mailman/listinfo/crash-utility
+>> Contribution Guidelines: https://github.com/crash-utility/crash/wiki
+>>
+> Thanks
+> Dave

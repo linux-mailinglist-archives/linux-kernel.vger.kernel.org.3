@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65A657F60C
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 18:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2CA57F60F
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 18:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233281AbiGXQtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 12:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S231651AbiGXQyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 12:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbiGXQtu (ORCPT
+        with ESMTP id S229471AbiGXQyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 12:49:50 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF1D10FD9
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 09:49:49 -0700 (PDT)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LrTYd0ZvQz67Kvx;
-        Mon, 25 Jul 2022 00:45:09 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Jul 2022 18:49:47 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 24 Jul 2022 17:49:44 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <will@kernel.org>, <catalin.marinas@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>,
-        <olof@lixom.net>, <soc@kernel.org>
-CC:     <jpoimboe@kernel.org>, <linux-kernel@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH 2/2] arm64: defconfig: Enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-Date:   Mon, 25 Jul 2022 00:43:24 +0800
-Message-ID: <1658681004-132191-3-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
-References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+        Sun, 24 Jul 2022 12:54:22 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6770BBE3F;
+        Sun, 24 Jul 2022 09:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=rd7gfuHS1mYyrmMLm2WVSQ9W4kvSVg++rNp13+sTY1A=; b=letdUExvJuCNd4JAb3hIJ/ZtIt
+        AYjBE+BD0KSDaIhpX4vNW62fLdIBCCSwXv5j4SOmIeJCdzFA7iM7PYio/J3YKrOp+VsiZyL9uV+ln
+        jR53Rpikh48zuZXN2KMqFjV1zm3I2UOQ+Wt7hcSjoUuOJjJhnXy3bXkxUXdYbnd/3eXk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oFerf-00BNKY-Mg; Sun, 24 Jul 2022 18:53:59 +0200
+Date:   Sun, 24 Jul 2022 18:53:59 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Cc:     michal.simek@xilinx.com, nicolas.ferre@microchip.com,
+        claudiu.beznea@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        gregkh@linuxfoundation.org, ronak.jain@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, git@xilinx.com, git@amd.com
+Subject: Re: [PATCH net-next 2/2] net: macb: Add zynqmp SGMII dynamic
+ configuration support
+Message-ID: <Yt15J6fO5j9jxFxp@lunn.ch>
+References: <1658477520-13551-1-git-send-email-radhey.shyam.pandey@amd.com>
+ <1658477520-13551-3-git-send-email-radhey.shyam.pandey@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1658477520-13551-3-git-send-email-radhey.shyam.pandey@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable
-from a choice") faddr2line has stopped working by default as it relies
-on CONFIG_DEBUG_INFO.
+> +		ret = of_property_read_u32_array(pdev->dev.of_node, "power-domains",
+> +						 pm_info, ARRAY_SIZE(pm_info));
+> +		if (ret < 0) {
+> +			dev_err(&pdev->dev, "Failed to read power management information\n");
+> +			return ret;
+> +		}
+> +		ret = zynqmp_pm_set_gem_config(pm_info[1], GEM_CONFIG_FIXED, 0);
+> +		if (ret < 0)
+> +			return ret;
+> +
 
-Enable CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT to get it working again,
-which seems the sensible config option to use.
+Documentation/devicetree/bindings/net/cdns,macb.yaml says:
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+  power-domains:
+    maxItems: 1
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index de662de0bb4d..43e3550afa45 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1311,6 +1311,7 @@ CONFIG_CRYPTO_DEV_HISI_TRNG=m
- CONFIG_CMA_SIZE_MBYTES=32
- CONFIG_PRINTK_TIME=y
- CONFIG_DEBUG_KERNEL=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
--- 
-2.35.3
+Yet you are using pm_info[1]?
 
+    Andrew

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1677157F3D1
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9022057F3D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239727AbiGXHoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 03:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S239733AbiGXHsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 03:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239286AbiGXHog (ORCPT
+        with ESMTP id S235555AbiGXHsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 03:44:36 -0400
+        Sun, 24 Jul 2022 03:48:33 -0400
 Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A1F13F70;
-        Sun, 24 Jul 2022 00:44:31 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1658648655tmzdjpev
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4315D12ACB;
+        Sun, 24 Jul 2022 00:48:28 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1658648874txic6mjy
 Received: from localhost.localdomain ( [125.70.163.183])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 24 Jul 2022 15:44:14 +0800 (CST)
+        id ; Sun, 24 Jul 2022 15:47:53 +0800 (CST)
 X-QQ-SSF: 01000000002000007000B00A0000000
-X-QQ-FEAT: R3vftN8GVq/qDXrZgEQi06I7LENlcC8HMBZ/q+Bff9x5LZoGMCKlUqf47rDPl
-        B+k3UVjF8GoFjkQJJByjZen5OVhVal+nbBr2Py0ZUTQW5n0sFkvRUw/ZYuheuuHivIVT5OK
-        UuGz5HC3Lbqmk3K2BJG0gSZ486Wf62gumwvHGul5sJlEf4ZueG5Qv0hPTU9lW0BbUnGbi2w
-        6iNEMjMyxoW0Q63kBT/7IkjBmk+HSIb+BBexYreKqjtbMbYEYeWHYWYcnc87f8JhPV2ug9j
-        pBS+09K3FAEInL4ce9kU0O8rAIuL03/LIIMvxwhcnhYhEHvzokl5er69BUSnIOFb9aFiiZE
-        GptgHVTrQnS9qk9kXmRV4q27Wu86mhFUvDjjbJUrv5JEPrZwPlFDWwteFdJvQ==
+X-QQ-FEAT: 7jw2iSiCazriGTijezmDdhAg1CmcIVF3SK01r3qE/a1g8cuJYpyvxnj5tPdzV
+        KQ3UX9d66lxni7Jn9iKw/Lw+rcOrxJUH2l9U9xo8sdvtWqlYoYOprqko0vDA9lzO4jx1HxR
+        DX3w9ojplaP6mhx32saO9Jerim+DWeXvxBtRFZUPBySTKQgHN8uWq0dVGZsPtAIq8MyjeG8
+        +Qd8AGyCUa3xlPV9s2CxJ7b23XiS2J/v2pcil8Vv0PJkrZEtZcqaMU4abumgnLqbU3E2yoN
+        gN5x/8pBEnZJ+Vh8hoRv6O///3RauPKlhD4YyKIQT9/G8WHIqqv1fggKqnS3XdXN/df7IvP
+        3Mkfp/1oEM91oWead+jwKewbIEYiyBXKgZE7/QogP7uyGkw4oq6Qe15KjahvA==
 X-QQ-GoodBg: 0
 From:   wangjianli <wangjianli@cdjrlc.com>
-To:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        leon@kernel.org
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] hw/qib: fix repeated words in comments
-Date:   Sun, 24 Jul 2022 15:44:07 +0800
-Message-Id: <20220724074407.18552-1-wangjianli@cdjrlc.com>
+Subject: [PATCH] sfc/falcon: fix repeated words in comments
+Date:   Sun, 24 Jul 2022 15:47:46 +0800
+Message-Id: <20220724074746.19550-1-wangjianli@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,22 +52,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 ---
- drivers/infiniband/hw/qib/qib_iba7220.c | 2 +-
+ drivers/net/ethernet/sfc/falcon/net_driver.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/qib/qib_iba7220.c b/drivers/infiniband/hw/qib/qib_iba7220.c
-index 37b628a162e0..6af57067c32e 100644
---- a/drivers/infiniband/hw/qib/qib_iba7220.c
-+++ b/drivers/infiniband/hw/qib/qib_iba7220.c
-@@ -58,7 +58,7 @@ static void qib_set_ib_7220_lstate(struct qib_pportdata *, u16, u16);
- /*
-  * This file contains almost all the chip-specific register information and
-  * access functions for the QLogic QLogic_IB 7220 PCI-Express chip, with the
-- * exception of SerDes support, which in in qib_sd7220.c.
-+ * exception of SerDes support, which in qib_sd7220.c.
-  */
- 
- /* Below uses machine-generated qib_chipnum_regs.h file */
+diff --git a/drivers/net/ethernet/sfc/falcon/net_driver.h b/drivers/net/ethernet/sfc/falcon/net_driver.h
+index a381cf9ec4f3..a2c7139f2b32 100644
+--- a/drivers/net/ethernet/sfc/falcon/net_driver.h
++++ b/drivers/net/ethernet/sfc/falcon/net_driver.h
+@@ -679,7 +679,7 @@ union ef4_multicast_hash {
+  * @n_rx_channels: Number of channels used for RX (= number of RX queues)
+  * @n_tx_channels: Number of channels used for TX
+  * @rx_ip_align: RX DMA address offset to have IP header aligned in
+- *	in accordance with NET_IP_ALIGN
++ *	accordance with NET_IP_ALIGN
+  * @rx_dma_len: Current maximum RX DMA length
+  * @rx_buffer_order: Order (log2) of number of pages for each RX buffer
+  * @rx_buffer_truesize: Amortised allocation size of an RX buffer,
 -- 
 2.36.1
 

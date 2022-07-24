@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF5857F2A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59E057F2AB
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 04:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239037AbiGXCCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 22:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S232173AbiGXC3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 22:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiGXCCF (ORCPT
+        with ESMTP id S229602AbiGXC3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 22:02:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A717B11C19;
-        Sat, 23 Jul 2022 19:02:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40D2DB80D3E;
-        Sun, 24 Jul 2022 02:02:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C80C341C0;
-        Sun, 24 Jul 2022 02:02:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658628121;
-        bh=P7SNPqf+kK7Uv5jaRDdQvqwL+CiGRzt4kUYwRGuMwuM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YJjZPL/MEDF7Q2m0BsBorqsKTC+7h5i+R/udBxD0IuxUYQvVrek2cohPL6C7rPK8C
-         BOIHeWQ47tSvQSwI94gwdGleMtB23vMKEb3haUxSBCX5/JlAvuYeArRveRVG8+3QEo
-         +6VFDKSDJMw9FFgBBLmQ+cLOLNGbS7+uaGXorNhz/GJCbEk9IrfBzoGFQqA3lvEqT/
-         IubqfaoIUl1E/s1tqxFU+K/t7aGL7ohNdS7zbDj5qO6rB7Bo3don7Mrfl370ed4tyB
-         ne38gcQUbi3ov4JkM1ULuc7Y1gl4VeaGWhJHpDSVd+ASvcC0gltl164iKK43cuILr1
-         i1plHjvIsYaNg==
-Date:   Sat, 23 Jul 2022 19:01:59 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH v4 6/9] f2fs: don't allow DIO reads but not DIO writes
-Message-ID: <YtyoF89iOg8gs7hj@google.com>
-References: <20220722071228.146690-1-ebiggers@kernel.org>
- <20220722071228.146690-7-ebiggers@kernel.org>
+        Sat, 23 Jul 2022 22:29:13 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3787B16582
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:29:11 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id i13so883256edj.11
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 19:29:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rYzJ/KBEGXFJxA0AV9DmAz0hhVRdBd/r7tm5Wxe7raI=;
+        b=KFOqdLBCD8Xg81CNdH4v/1KIBTWYBuYdQumkOl0oI8pprxO0/DvtsLMACszAPZ/dkW
+         kiHkYhcWhzhj1srAng1Sjn0s5Tj3HVmVVgDDmYy8pCZ9pxBN64n67ONsGRssp/agJ63z
+         4sWgQ6jL+UssQ/BzfUWLBa8QWHDF3/vrkylKAginAeGboHAKipcqEW2ved7ZKDhCiIsQ
+         cm3W12663uuefDhd0vxVHlCPiQa1H3+1NbOHo9mBb5wmKqRNXjnxMQQxmw7sO0dhq+nL
+         A6LN6F0rYrmDfcFnCSdhnwE45x7IMR6jEGjpIecfM2pS4IORi3qFgwrzTd4jUbr/HowF
+         MWTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rYzJ/KBEGXFJxA0AV9DmAz0hhVRdBd/r7tm5Wxe7raI=;
+        b=FbbgKCrr0b3H7Rw6fme+QjOX1AdHdamDQqXrFj7xdeaLuujXr1NxLRUsAruZKrFTMu
+         S3icMcfPcVmHZfolOu8ztKJJu8uKZU/B+IZ41PrfK5AkrJPv6nvw2itFz5VsttbM1/0i
+         wk4nwKQAUTE1v4uz22Oi7utMeDhNMeXunFTSQWVUMUPhMGvzHDzgnSqiEA0j45Tt4UAW
+         tT75Tf/gr70PX+dwkYMGQoPpUx7EZB1jm5jLz6Tdd5lsArurgB2DOp2JZlvd1ZdYZ+e3
+         dNEx7O9Y9HUVqetqebWJMtXoXR8J631d3Azyk5Wccg+9/8nmEK3/fWKLg0x3OKe/hDqO
+         5pag==
+X-Gm-Message-State: AJIora/E4JdehwJP+6VhJFoqqDbRuF4JgWq1CZZ+siq+jJwI6d0DR2Uf
+        oPupyV3rZx9zmxOsbzYL/wu8lA==
+X-Google-Smtp-Source: AGRyM1smGIjmMXKTtd7ztWaQhoMBnZtXh4WiTlkKTJwmBvaoM+ROoXUWQuKLap5Y6Gxj/KfhjajtNw==
+X-Received: by 2002:a05:6402:13:b0:439:ffe8:bec9 with SMTP id d19-20020a056402001300b00439ffe8bec9mr6798189edu.297.1658629749572;
+        Sat, 23 Jul 2022 19:29:09 -0700 (PDT)
+Received: from leo-build-box.lan (ec2-18-144-7-244.us-west-1.compute.amazonaws.com. [18.144.7.244])
+        by smtp.gmail.com with ESMTPSA id 7-20020a170906318700b0072b31307a79sm3741524ejy.60.2022.07.23.19.29.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Jul 2022 19:29:08 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v2 0/2] perf symbol: Minor fixing
+Date:   Sun, 24 Jul 2022 10:28:55 +0800
+Message-Id: <20220724022857.2621520-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220722071228.146690-7-ebiggers@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,47 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/22, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Currently, if an f2fs filesystem is mounted with the mode=lfs and
-> io_bits mount options, DIO reads are allowed but DIO writes are not.
-> Allowing DIO reads but not DIO writes is an unusual restriction, which
-> is likely to be surprising to applications, namely any application that
-> both reads and writes from a file (using O_DIRECT).  This behavior is
-> also incompatible with the proposed STATX_DIOALIGN extension to statx.
-> Given this, let's drop the support for DIO reads in this configuration.
+This patch set contains two minor fixing for parsing symbols.
 
-IIRC, we allowed DIO reads since applications complained a lower performance.
-So, I'm afraid this change will make another confusion to users. Could
-you please apply the new bahavior only for STATX_DIOALIGN?
+The first patch changes to use program header for parsing symbols of
+user space executable and shared objects.  Since kernel's symbol parsing
+is more complex than userspace for support both kernel symbols and module
+symbols, this is why this patch set uses conservative way and doesn't
+change kernel symbols parsing.
 
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  fs/f2fs/file.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index 5e5c97fccfb4ee..ad0212848a1ab9 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -823,7 +823,6 @@ static inline bool f2fs_force_buffered_io(struct inode *inode,
->  				struct kiocb *iocb, struct iov_iter *iter)
->  {
->  	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-> -	int rw = iov_iter_rw(iter);
->  
->  	if (!fscrypt_dio_supported(inode))
->  		return true;
-> @@ -841,7 +840,7 @@ static inline bool f2fs_force_buffered_io(struct inode *inode,
->  	 */
->  	if (f2fs_sb_has_blkzoned(sbi))
->  		return true;
-> -	if (f2fs_lfs_mode(sbi) && (rw == WRITE)) {
-> +	if (f2fs_lfs_mode(sbi)) {
->  		if (block_unaligned_IO(inode, iocb, iter))
->  			return true;
->  		if (F2FS_IO_ALIGNED(sbi))
-> -- 
-> 2.37.0
+The second patch is to detect symbols from '.gnu.warning.*' sections,
+these symbols are used for linker warning, skip to record them to
+avoid spurious symbols.
+
+Changes from v1:
+- Changed to use program header / PT_LOAD segments to parse symbols for
+  userspace executable and shared object files (Fangrui).
+
+
+Leo Yan (2):
+  perf symbol: Correct address for bss symbols
+  perf symbol: Skip recording symbols in '.gnu.warning.*' sections
+
+ tools/perf/util/symbol-elf.c | 53 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBD057F385
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 08:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C5C57F38E
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 08:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234789AbiGXGxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 02:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
+        id S235805AbiGXG7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 02:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiGXGxc (ORCPT
+        with ESMTP id S229483AbiGXG7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 02:53:32 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF75A18B00;
-        Sat, 23 Jul 2022 23:53:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Dx2Ld
-        mmelaSG129Gndk1nriYSQBQ1KJZz167f8rv7V0=; b=D911up3lsqiL0jdoI26JR
-        yYjcKRZI5nv1gDQF0P4jbLZqx47PsFfycw9PALK4cHmT9f1ncX7luVBCHV4BAox6
-        oSpfev8rkwqCt2k4j3dRHLVgbhQjSC1yzHEx9yzkAmNSEkucuISCx1zTEDa2OrzZ
-        VIr6eZSWEH+bAJ2Dt5aM2A=
-Received: from localhost.localdomain (unknown [123.112.69.106])
-        by smtp1 (Coremail) with SMTP id GdxpCgCHoeQq7NxidFSvQA--.22213S4;
-        Sun, 24 Jul 2022 14:52:41 +0800 (CST)
-From:   Jianglei Nie <niejianglei2021@163.com>
-To:     sj@kernel.org, akpm@linux-foundation.org
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: [PATCH] mm/damon/reclaim: fix potential memory leak in damon_reclaim_init()
-Date:   Sun, 24 Jul 2022 14:52:24 +0800
-Message-Id: <20220724065224.2555966-1-niejianglei2021@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 24 Jul 2022 02:59:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC17913CC9;
+        Sat, 23 Jul 2022 23:59:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3045B60F06;
+        Sun, 24 Jul 2022 06:59:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF70C3411E;
+        Sun, 24 Jul 2022 06:59:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658645950;
+        bh=0bzSie0qzgwC5yG2upCpzGwq7ZL0AMvfjZJyIDgHWsU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cyU6aFBUnqQKr5JmNQAjfof3PL05+k7V51ZduPJoPXTm+X8sFhXxpTOx7d5Ria/v8
+         s9OXDmfyp6DDXEuQkxpF/v7lFoGO+rqhpT/kud3qwuZ8mSFBq0BGxdT9SpqpNU3ykA
+         hkaMecAW6b4yI6UQlYe68Aq4f/M7wwiQ+ZIQ1ZZ3tL31hd1vPnWZhH9HNdtZg2ETTl
+         K5IfIMvV5tjpgIfivkcyBsZVV2C3l+PBa11MI4voCnVUhM/CrACuS2raIRyHhaY/Ap
+         +zwKnBQ5ebF+iek3XajfnO3MQct9+musKgcb2+Zwyv+9zGlmPip+DxynD1cmZaTyqv
+         DBqAq/wJgFw1A==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] clk fixes for v5.19-rc7
+Date:   Sat, 23 Jul 2022 23:59:09 -0700
+Message-Id: <20220724065909.1484190-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgCHoeQq7NxidFSvQA--.22213S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GFyfKr13WF1fXF1fXF1fWFg_yoWkGFXEka
-        12qr9rua1DXayFy3ZrCw1fGr1xZrW8GrykXFWIy347AFyrKrn7Xry8Xrs3Xr17u34UAry2
-        vFs7Zas8Zr129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRibAwPUUUUU==
-X-Originating-IP: [123.112.69.106]
-X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiWxlIjGI0VkuIuQAAs8
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-damon_reclaim_init() allocates a memory chunk for ctx with
-damon_new_ctx(). When damon_select_ops() fails, ctx is not released, which
-will lead to a memory leak.
+The following changes since commit a79e69c8714f416bd324952d06d1dd7bce3f35bf:
 
-We should release the ctx with damon_destroy_ctx() when damon_select_ops()
-fails to fix the memory leak.
+  MAINTAINERS: add include/dt-bindings/clock to COMMON CLK FRAMEWORK (2022-06-15 17:19:02 -0700)
 
-Fixes: 4d69c3457821 ("mm/damon/reclaim: use damon_select_ops() instead of damon_{v,p}a_set_operations()")
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
----
- mm/damon/reclaim.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index 4b07c29effe9..0b3c7396cb90 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -441,8 +441,10 @@ static int __init damon_reclaim_init(void)
- 	if (!ctx)
- 		return -ENOMEM;
- 
--	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
-+	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
-+		damon_destroy_ctx(ctx);
- 		return -EINVAL;
-+	}
- 
- 	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
- 	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
+  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+
+for you to fetch changes up to 25c2a075eb6a3031813b6051bd10dfc22c36a2a4:
+
+  clk: lan966x: Fix the lan966x clock gate register address (2022-07-19 00:04:10 -0700)
+
+----------------------------------------------------------------
+One more fix to set the correct IO mapping for a clk gate in the lan966x
+driver.
+
+----------------------------------------------------------------
+Herve Codina (1):
+      clk: lan966x: Fix the lan966x clock gate register address
+
+ drivers/clk/clk-lan966x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 -- 
-2.25.1
-
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git

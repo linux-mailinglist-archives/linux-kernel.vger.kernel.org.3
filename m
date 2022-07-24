@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3859657F3A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AB957F3B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 09:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239282AbiGXHVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 03:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S239535AbiGXH0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 03:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiGXHVF (ORCPT
+        with ESMTP id S232718AbiGXH0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 03:21:05 -0400
-Received: from smtpbg.qq.com (biz-43-154-54-12.mail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E49B11
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 00:20:59 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1658647256tsc6wua4
-Received: from localhost.localdomain ( [125.70.163.183])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 24 Jul 2022 15:20:55 +0800 (CST)
-X-QQ-SSF: 01000000002000007000B00A0000000
-X-QQ-FEAT: f+zPZQOarc9x+DFPvz5UO7M17Dkak6UjTYErqqYvLy4fMHU+GCNKuD0Ekb081
-        3sTQCbgNS/kvqajoYW/GwVAoyaBHXXNh4Eg8k/mPdO8rfaGt1fCUGDkLbbiQ9j/c2Vx9gzU
-        48P1qz+OdwKh4Loaw/oVazPjd0qv9/DpElzKVUj4PDWYP6JiIf6BEQQtkApyHcM384kBZAw
-        552uanuTJcDNmGNNtbhfXiJ8twAi+qEbVB4Kcv6QrAsNPFKMeQ95VzIZ1M0lOguTz9rLv/K
-        3NRyZlkG4+M2utcydHa7kjxqx+hERzzon9bYsYDSUcVkr6KD/4UXKqPYDN8fp2HNPt4NzBc
-        t5UL0ocIEs+Ejk7Wi7wDAvOJ1wPiVJsdWUnGQuR
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     willy@infradead.org
-Cc:     linux-kernel@vger.kernel.org, wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] fs/romfs: fix repeated words in comments
-Date:   Sun, 24 Jul 2022 15:20:38 +0800
-Message-Id: <20220724072038.11775-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 24 Jul 2022 03:26:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FDF183AD;
+        Sun, 24 Jul 2022 00:26:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D336BB80D55;
+        Sun, 24 Jul 2022 07:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4006C3411E;
+        Sun, 24 Jul 2022 07:26:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658647561;
+        bh=Emejayh0Y4QHcbVh21R49rZQWuW3RtQHlzxgRGGnYlc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UpeBt++h5Jf5aldtILQikJ6NslggjmLlP7G6nVodzhaRZ3yYtcCfMrOSnCmsgnWV3
+         +r/d2XJy08+7drQxUJJ1nKzaxX2d+EAHOVBPYKANhufeyXhlKhCt2j2///+BXFKCzC
+         zmvt44hvqbRLHQvFeVrE9K9+eei7036EA8mDdUrE=
+Date:   Sun, 24 Jul 2022 09:21:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dipanjan Das <mail.dipanjan.das@gmail.com>
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        sashal@kernel.org, edumazet@google.com,
+        steffen.klassert@secunet.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        syzkaller@googlegroups.com, fleischermarius@googlemail.com,
+        its.priyanka.bose@gmail.com
+Subject: Re: general protection fault in sock_def_error_report
+Message-ID: <Ytzy9IjGXziLaVV0@kroah.com>
+References: <CANX2M5Yphi3JcCsMf3HgPPkk9XCfOKO85gyMdxQf3_O74yc1Hg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RDNS_DYNAMIC,
-        SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANX2M5Yphi3JcCsMf3HgPPkk9XCfOKO85gyMdxQf3_O74yc1Hg@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'in'.
+On Sat, Jul 23, 2022 at 03:07:09PM -0700, Dipanjan Das wrote:
+> Hi,
+> 
+> We would like to report the following bug which has been found by our
+> modified version of syzkaller.
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- fs/romfs/super.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Do you have a fix for this issue?  Without that, it's a bit harder as:
 
-diff --git a/fs/romfs/super.c b/fs/romfs/super.c
-index c59b230d55b4..b30bbba7001f 100644
---- a/fs/romfs/super.c
-+++ b/fs/romfs/super.c
-@@ -40,7 +40,7 @@
-  *			2.3.9		clean up usage of ENOENT/negative
-  *					  dentries in lookup
-  *					clean up page flags setting
-- *					  (error, uptodate, locking) in
-+ *					  (error, uptodate, locking)
-  *					  in read_folio
-  *					use init_special_inode for
-  *					  fifos/sockets (and streamline) in
--- 
-2.36.1
+> ======================================================
+> description: general protection fault in sock_def_error_report
+> affected file: net/core/sock.c
+> kernel version: 5.4.206
 
+You are using a very old kernel version, and we have loads of other
+syzbot-reported issues to resolve that trigger on newer kernels.
+
+thanks,
+
+greg k-h

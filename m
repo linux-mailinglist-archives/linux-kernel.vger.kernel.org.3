@@ -2,133 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F8557F346
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 06:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF17557F347
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 06:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236704AbiGXEtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 00:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
+        id S232017AbiGXE6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 00:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiGXEtq (ORCPT
+        with ESMTP id S229453AbiGXE6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 00:49:46 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2438B165BC
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 21:49:45 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id gn24so7562740pjb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 21:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MGeOSS7IwsrulAO7mISG9adf/2TuM6Nm2MfykxxtGL4=;
-        b=nG4q9DMqu8FyzmwuubvC3drX/BWKgcBdHRf7acV94r4MXUEIjqsn4sDZmlthMnJgsW
-         FmuMmDTUp1BSvVThVdT98YsQ6SV5rveZSbUqVYmi/Yv3wVAO8mKcOw3DhHWlj8ovmNhp
-         vzmRrp1xZziEA/x4X8FLaC1SVDf7742BLJ/eE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MGeOSS7IwsrulAO7mISG9adf/2TuM6Nm2MfykxxtGL4=;
-        b=JnflnIGl/IR4Imtpr69jEjq/2ooqAMYv0mmkC1HDBrL5P5fsaQc/XovClfJY5MR5Q5
-         N9r5AEKCPKyiUFleT0zQAxKStHt7ruEcDZ/dzcQCkdUJfytCQzDOvNejzvIBHz+ZCVUM
-         IlkY5ZnPDEB3D8M+prdyXyqipmBD++B43bfgGtC4coUqAMmGBPwso1fPQm8mH6qFFoX7
-         2vvIAem6yjebMxCOB9yKEIgSmPZOcGPE65As8FUbHJg8WNaw1U/sPsq7yHlPV1XFG6V9
-         5YaBR9JeJQM5Ew/JJhtuiKUX+AtEejFLvZ5Cy/tpp1YXkuDfT4NvlQFv6cP/QSzig2wT
-         UkVQ==
-X-Gm-Message-State: AJIora91YnQ3fhoZrVzhzqurjOpM66M0iuQsSnLkNc0sh65XPN9VZ3kd
-        HCVERzRBsZ8ZPqmHvRnn1ep0cg==
-X-Google-Smtp-Source: AGRyM1ufn/RToD4DIsXUfLSVL+hoRb/uCvpZEL0lJEAg7RsH4iG7cA6EohiG/e42jbYDw2dvgWnwUg==
-X-Received: by 2002:a17:90b:4d8c:b0:1f2:396d:c3b7 with SMTP id oj12-20020a17090b4d8c00b001f2396dc3b7mr15960217pjb.175.1658638183225;
-        Sat, 23 Jul 2022 21:49:43 -0700 (PDT)
-Received: from 25d43a3e58cb ([203.220.223.63])
-        by smtp.gmail.com with ESMTPSA id g26-20020aa79f1a000000b005256c9c3957sm6793426pfr.108.2022.07.23.21.49.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Jul 2022 21:49:42 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 04:49:35 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/148] 5.10.133-rc1 review
-Message-ID: <20220724044935.GA1706719@25d43a3e58cb>
-References: <20220723095224.302504400@linuxfoundation.org>
+        Sun, 24 Jul 2022 00:58:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79D0183BF
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 21:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658638720; x=1690174720;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GUaULa1J7RNGAM1hVBKNWN/czkZa2DSE0AoXiaBwBuQ=;
+  b=mxzfVi0Aam9mRCr70FQy66CZCXaO43OMLqeIqoUGy240QijNK83eIl3/
+   w3UA0nwAx9sZ7ZBEfY5fy1fs9IJi+iRiJ+dvFVTeGxAT4ThJqp4uP9xKU
+   wCM0jFRjWWJgsZliEEg4IARYmgtclpj8Xa7Hvqq2kinfq60OT4IXF1VXW
+   K00orzRX/OJg2Y4C5hdKwUhFiW/MOzVYuBepzD3IL/Pcs4LjmAWZ5aLaF
+   QeMJbUddGn/Jub4o3gmdE5KeN6E8JKuK1Vv8NAUv9djOJ/3bE21OIfdO3
+   lAGSPa6775SVTjm/zU6zeWWpI2TezS4BHyC4VytGJWa9Y7dD0ATWJH04n
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267288578"
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="267288578"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 21:58:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="549602074"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 23 Jul 2022 21:58:39 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFThO-0003ZQ-11;
+        Sun, 24 Jul 2022 04:58:38 +0000
+Date:   Sun, 24 Jul 2022 12:58:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 1ad094e97207be677c2a3c2f28fc76e2a754c5d6
+Message-ID: <62dcd174.9yTzxzQb9S9FQ3c+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220723095224.302504400@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 11:53:32AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.133 release.
-> There are 148 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Mon, 25 Jul 2022 09:50:18 +0000.
-> Anything received after that time might be too late.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 1ad094e97207be677c2a3c2f28fc76e2a754c5d6  Merge x86/core into tip/master
 
-Hi Greg,
+elapsed time: 721m
 
-5.10.133-rc1 tested.
+configs tested: 111
+configs skipped: 5
 
-Run tested on:
-- Intel Skylake x86_64 (nuc6 i5-6260U)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sh                               alldefconfig
+arm                          lpd270_defconfig
+m68k                            mac_defconfig
+um                                  defconfig
+arm                           h5000_defconfig
+mips                  decstation_64_defconfig
+mips                         mpc30x_defconfig
+powerpc                     pq2fads_defconfig
+mips                       bmips_be_defconfig
+mips                         bigsur_defconfig
+sh                          rsk7269_defconfig
+sh                     magicpanelr2_defconfig
+sh                          r7785rp_defconfig
+parisc                           alldefconfig
+m68k                          amiga_defconfig
+mips                 decstation_r4k_defconfig
+sh                        sh7763rdp_defconfig
+m68k                         amcore_defconfig
+arm                            hisi_defconfig
+sh                         ap325rxa_defconfig
+xtensa                  nommu_kc705_defconfig
+arm                           stm32_defconfig
+arm                           tegra_defconfig
+sh                                  defconfig
+parisc                generic-64bit_defconfig
+riscv                               defconfig
+powerpc                 mpc837x_rdb_defconfig
+mips                          rb532_defconfig
+openrisc                         alldefconfig
+powerpc                     tqm8548_defconfig
+m68k                       m5208evb_defconfig
+sh                            titan_defconfig
+arm                            pleb_defconfig
+ia64                         bigsur_defconfig
+loongarch                           defconfig
+parisc64                         alldefconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+loongarch                         allnoconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220724
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220724
+riscv                randconfig-r042-20220724
+s390                 randconfig-r044-20220724
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
 
-Logs from: Intel Skylake x86_64 (nuc6 i5-6260U) 
-nuc6:~ # dmesg
-[    0.000000] microcode: microcode updated early to revision 0xe2, date = 2020-07-14
-[    0.000000] Linux version 5.10.133-rc1 (docker@0dae7cb4c0f4) (x86_64-libreelec-linux-gnu-gcc-10.2.0 (GCC) 10.2.0, GNU ld (GNU Binutils) 2.35.1) #1 SMP Sat Jul 23 11:54:48 UTC 2022
-[    0.000000] DMI:  /NUC6i5SYB, BIOS SYSKLi35.86A.0073.2020.0909.1625 09/09/2020
-...
-[    0.243172] Last level iTLB entries: 4KB 64, 2MB 8, 4MB 8
-[    0.243178] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
-[    0.243181] Spectre V2 : Mitigation: IBRS
-[    0.243182] Spectre V2 : Spectre v2 / SpectreRSB mitigation: Filling RSB on context switch
-[    0.243183] RETBleed: Mitigation: IBRS
-[    0.243186] Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
-[    0.243188] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl and seccomp
-[    0.243196] MDS: Mitigation: Clear CPU buffers
-[    0.243197] MMIO Stale Data: Mitigation: Clear CPU buffers
-[    0.243201] SRBDS: Mitigation: Microcode
-...
-[    0.313120] MDS CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html for more details.
-[    0.313120] MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.
+clang tested configs:
+mips                          malta_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                       mainstone_defconfig
+mips                        qi_lb60_defconfig
+mips                        bcm63xx_defconfig
+riscv                    nommu_virt_defconfig
+arm                  colibri_pxa270_defconfig
+powerpc                     ppa8548_defconfig
+mips                      malta_kvm_defconfig
+mips                           rs90_defconfig
+powerpc                   microwatt_defconfig
+powerpc                 mpc8272_ads_defconfig
+arm                        spear3xx_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220724
+hexagon              randconfig-r045-20220724
 
-nuc6:~ # lscpu | grep -e Vulnerability -e "Model name"
-Model name:                      Intel(R) Core(TM) i5-6260U CPU @ 1.80GHz
-Vulnerability Itlb multihit:     Processor vulnerable
-Vulnerability L1tf:              Mitigation; PTE Inversion
-Vulnerability Mds:               Mitigation; Clear CPU buffers; SMT vulnerable
-Vulnerability Meltdown:          Mitigation; PTI
-Vulnerability Mmio stale data:   Mitigation; Clear CPU buffers; SMT vulnerable
-Vulnerability Retbleed:          Mitigation; IBRS
-Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp
-Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization
-Vulnerability Spectre v2:        Mitigation; IBRS, IBPB conditional, RSB filling
-Vulnerability Srbds:             Mitigation; Microcode
-Vulnerability Tsx async abort:   Not affected
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

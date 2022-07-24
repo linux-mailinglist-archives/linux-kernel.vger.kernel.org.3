@@ -2,162 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762E957F567
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 16:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456BF57F56D
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 16:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiGXOE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 10:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S230318AbiGXOHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 10:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGXOE5 (ORCPT
+        with ESMTP id S229519AbiGXOHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 10:04:57 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E372112621
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 07:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658671496; x=1690207496;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4SB7MknA24m1jUG2lvk0lBvwcZyqcGj7Lokl0Nv3fhk=;
-  b=CxlLKRZl99+3Tk8lXzRN8gTj9VR0K4IV5HGgc2MH4tUHuB6JVWYTb+iO
-   pApM9ph5uDQYs4/gTw9+B0V0aVjbcRDc/arlmAGHYR7SYOSZE3FRb9FVL
-   G6pH/h9Pb70oef5rtJZGJN/+DXGBLHvtR4CpIjSRBCGfW+JwuQ/INiZxf
-   2yqcuhxPETTIyiOHYdvEjtlx57GUwFXMfzr3wxpj6Jcp9mAVhELUVTi3r
-   j7qL15YlfjuHs5zyVSInps/yHFDsCyxXJmiU6gEu3OQpik1lgko8H4PVM
-   gCKPebPN+sEZnfxTdAPlDHMu3tiJViZnn+EmDVhvuHREc8vSesy5iGIAs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267320782"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="267320782"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 07:04:56 -0700
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="657820532"
-Received: from zjiang1-mobl.ccr.corp.intel.com (HELO [10.249.170.155]) ([10.249.170.155])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 07:04:52 -0700
-Message-ID: <487b533a-b289-eee7-0bd8-3be36c6e00e3@linux.intel.com>
-Date:   Sun, 24 Jul 2022 22:04:50 +0800
+        Sun, 24 Jul 2022 10:07:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C9C12081;
+        Sun, 24 Jul 2022 07:07:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E04E9B80D6F;
+        Sun, 24 Jul 2022 14:07:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5FA4C3411E;
+        Sun, 24 Jul 2022 14:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658671628;
+        bh=8M7BOhJC3uQH8rASRwbeRyZFf2TIKf/jhNMs5Aktxv8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qknRIul1qOo9GY2cJYINWiTMn6tsXslYLvM/2ShXeY5TFQJMbXQB3MsPSP5jWPXEZ
+         u+Tyb7xseRogdlBDRJH21YKJg22G3VgmwLC6+l4mpN2CIgO82lyJBmX/+clpEoEUJK
+         f9JEGTc0LWjY1YuvyY2+cJgFocM2yXuDK++1fu4yS7teP9FyD8MAr9x3qd0iUTdkSe
+         pRR4ezmioSeDkzicqbvgfCySzfdPSCyteED9/lnjH70MeZefxUQtxlyKWOTUm2q7c8
+         lHhkux3XXkV7lQrH57yRU6/1Wx8uSKXFdhQMmNTGm7uUkPUnRiJzKVdZ6LOogp5SYx
+         URJMf5Z4KGu9Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oFcGL-0003G4-1n; Sun, 24 Jul 2022 16:07:17 +0200
+Date:   Sun, 24 Jul 2022 16:07:17 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: usb_wwan: replace DTR/RTS magic numbers
+ with macros
+Message-ID: <Yt1SFXlwbW1JCohE@hovoldconsulting.com>
+References: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
+ <Yt0MfqQQTwe4ztuN@hovoldconsulting.com>
+ <Yt1OPKNlWZuMrZv4@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v10 10/12] iommu: Prepare IOMMU domain for IOPF
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-11-baolu.lu@linux.intel.com>
- <20220723143334.GJ79279@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220723143334.GJ79279@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yt1OPKNlWZuMrZv4@kroah.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/23 22:33, Jason Gunthorpe wrote:
-> On Tue, Jul 05, 2022 at 01:07:08PM +0800, Lu Baolu wrote:
->> This adds some mechanisms around the iommu_domain so that the I/O page
->> fault handling framework could route a page fault to the domain and
->> call the fault handler from it.
->>
->> Add pointers to the page fault handler and its private data in struct
->> iommu_domain. The fault handler will be called with the private data
->> as a parameter once a page fault is routed to the domain. Any kernel
->> component which owns an iommu domain could install handler and its
->> private parameter so that the page fault could be further routed and
->> handled.
->>
->> This also prepares the SVA implementation to be the first consumer of
->> the per-domain page fault handling model. The I/O page fault handler
->> for SVA is copied to the SVA file with mmget_not_zero() added before
->> mmap_read_lock().
->>
->> Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
->> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
->> Tested-by: Tony Zhu <tony.zhu@intel.com>
->> ---
->>   include/linux/iommu.h         |  3 ++
->>   drivers/iommu/iommu-sva-lib.h |  8 +++++
->>   drivers/iommu/io-pgfault.c    |  7 +++++
->>   drivers/iommu/iommu-sva-lib.c | 58 +++++++++++++++++++++++++++++++++++
->>   drivers/iommu/iommu.c         |  4 +++
->>   5 files changed, 80 insertions(+)
->>
->> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
->> index ae0cfca064e6..47610f21d451 100644
->> --- a/include/linux/iommu.h
->> +++ b/include/linux/iommu.h
->> @@ -105,6 +105,9 @@ struct iommu_domain {
->>   	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
->>   	struct iommu_domain_geometry geometry;
->>   	struct iommu_dma_cookie *iova_cookie;
->> +	enum iommu_page_response_code (*iopf_handler)(struct iommu_fault *fault,
->> +						      void *data);
->> +	void *fault_data;
->>   	union {
->>   		struct {
->>   			iommu_fault_handler_t handler;
+On Sun, Jul 24, 2022 at 03:50:52PM +0200, Greg Kroah-Hartman wrote:
+> On Sun, Jul 24, 2022 at 11:10:22AM +0200, Johan Hovold wrote:
+> > On Fri, Jul 22, 2022 at 04:50:40PM +0800, Yan Xinyu wrote:
+> > > The usb_wwan_send_setup function generates DTR/RTS signals in compliance
+> > > with CDC ACM standard. This patch changes magic numbers in this function
+> > > to equivalent macros.
+> > > 
+> > > Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
+> > > ---
+> > > v1->v2:
+> > >  * Fix Signed-off-by name.
+> > > v2->v3:
+> > >  * Use already defined ACM_CTRL_DTR and ACM_CTRL_RTS in drivers/usb/class/cdc-acm.h
+> > > ---
+> > >  drivers/usb/serial/usb_wwan.c | 11 +++++++----
+> > >  1 file changed, 7 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+> > > index dab38b63eaf7..5c8303bd3676 100644
+> > > --- a/drivers/usb/serial/usb_wwan.c
+> > > +++ b/drivers/usb/serial/usb_wwan.c
+> > > @@ -29,8 +29,10 @@
+> > >  #include <linux/bitops.h>
+> > >  #include <linux/uaccess.h>
+> > >  #include <linux/usb.h>
+> > > +#include <linux/usb/cdc.h>
+> > >  #include <linux/usb/serial.h>
+> > >  #include <linux/serial.h>
+> > > +#include "../class/cdc-acm.h"
+> > 
+> > If we are to use common defines, these would need to be added to
+> > linux/usb/cdc.h first (parts of which are exposed to user space).
+> > 
+> > Note that we already have at least three copies of these defines in the
+> > tree.
+> > 
+> > I'm fine with adding another copy for now and not have to deal with with
+> > naming and cross driver updates. What do you think, Greg?
 > 
-> Why do we need two falut callbacks? The only difference is that one is
-> recoverable and the other is not, right?
-> 
-> Can we run both down the same op?
+> I think Yan should write a patch series to unify these and make it
+> right, instead of just papering over it all.
 
-The iommu_fault_handler_t is for report_iommu_fault() which could be
-replaced with the newer iommu_report_device_fault().
+Ok, I just fear it will be more work for us since that involves
+decisions like whether it should be added to the uapi header, and then
+we get into naming, etc. But we're in no rush.
 
-https://lore.kernel.org/linux-iommu/Yo4Nw9QyllT1RZbd@myrica/
+> Also this "../" stuff in a
+> #include directive is not ok, I wouldn't recommend this change be taken
+> as-is.
 
-> 
->> +/*
->> + * I/O page fault handler for SVA
->> + */
->> +enum iommu_page_response_code
->> +iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
->> +{
->> +	vm_fault_t ret;
->> +	struct vm_area_struct *vma;
->> +	struct mm_struct *mm = data;
->> +	unsigned int access_flags = 0;
->> +	unsigned int fault_flags = FAULT_FLAG_REMOTE;
->> +	struct iommu_fault_page_request *prm = &fault->prm;
->> +	enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
->> +
->> +	if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
->> +		return status;
->> +
->> +	if (IS_ERR_OR_NULL(mm) || !mmget_not_zero(mm))
-> 
-> Do not use IS_ERR_ON_NULL. mm should never be null here since the
-> fault handler should have been removed from the domain before the
-> fault_data is changed.
+That was never an option, but I'd be ok with taking the v2 which added
+defines for the constants directly in the driver.
 
-Yes. Updated.
-
-Best regards,
-baolu
-
+Johan

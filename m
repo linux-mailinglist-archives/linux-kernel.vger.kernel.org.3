@@ -2,193 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF17557F347
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 06:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DED57F34B
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 07:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiGXE6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 00:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S234311AbiGXFEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 01:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiGXE6l (ORCPT
+        with ESMTP id S229453AbiGXFEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 00:58:41 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79D0183BF
-        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 21:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658638720; x=1690174720;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GUaULa1J7RNGAM1hVBKNWN/czkZa2DSE0AoXiaBwBuQ=;
-  b=mxzfVi0Aam9mRCr70FQy66CZCXaO43OMLqeIqoUGy240QijNK83eIl3/
-   w3UA0nwAx9sZ7ZBEfY5fy1fs9IJi+iRiJ+dvFVTeGxAT4ThJqp4uP9xKU
-   wCM0jFRjWWJgsZliEEg4IARYmgtclpj8Xa7Hvqq2kinfq60OT4IXF1VXW
-   K00orzRX/OJg2Y4C5hdKwUhFiW/MOzVYuBepzD3IL/Pcs4LjmAWZ5aLaF
-   QeMJbUddGn/Jub4o3gmdE5KeN6E8JKuK1Vv8NAUv9djOJ/3bE21OIfdO3
-   lAGSPa6775SVTjm/zU6zeWWpI2TezS4BHyC4VytGJWa9Y7dD0ATWJH04n
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="267288578"
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="267288578"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 21:58:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="549602074"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Jul 2022 21:58:39 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFThO-0003ZQ-11;
-        Sun, 24 Jul 2022 04:58:38 +0000
-Date:   Sun, 24 Jul 2022 12:58:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 1ad094e97207be677c2a3c2f28fc76e2a754c5d6
-Message-ID: <62dcd174.9yTzxzQb9S9FQ3c+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 24 Jul 2022 01:04:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8084C1401E;
+        Sat, 23 Jul 2022 22:04:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68C1260C2B;
+        Sun, 24 Jul 2022 05:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04D04C341C0;
+        Sun, 24 Jul 2022 05:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658639059;
+        bh=0YmwIbeEqbGTfnGTxrbInMGVDmmA6ehx3ymKh4+1zvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pAFuAD88/i3LadcYlmqVylb0mY7Z/PcTS3qPHPxC6meDSwqTW01cslhoCgcrdHPSM
+         wabuQtt3bMWa7OX8wc12VXoK3cbrleicU+NMR4ilPc2bEk80yasu8Qx99vKkrvnLdx
+         QCYgSDO6XnWEZg2picy4Iv/0I4SWIeDYaq3BQcZauxp8o3VPH5Vay0K3JSHkILGLes
+         rBpqN1zGkLlVo+rBs5o+Rgd3LgTzb04PdLAs/Z4F7qAniBUxkDIrlYrtuEll7UP5t1
+         X6SU9LTitl/YRfQS+RvCDsi8Ohz68U5p60lMdrxkz68txK0wRfL2BOoQVDZjHgcpPe
+         Qeq1yDwd4EvBg==
+Date:   Sun, 24 Jul 2022 07:04:12 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] i2c: qcom-geni: Use the correct return value
+Message-ID: <YtzSzKmakEWe1usg@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220717035027.2135106-1-bjorn.andersson@linaro.org>
+ <20220717035027.2135106-2-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iwzItzDUiQg+EaOu"
+Content-Disposition: inline
+In-Reply-To: <20220717035027.2135106-2-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 1ad094e97207be677c2a3c2f28fc76e2a754c5d6  Merge x86/core into tip/master
 
-elapsed time: 721m
+--iwzItzDUiQg+EaOu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-configs tested: 111
-configs skipped: 5
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> -	return num;
+> +	return ret;
 
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-sh                               alldefconfig
-arm                          lpd270_defconfig
-m68k                            mac_defconfig
-um                                  defconfig
-arm                           h5000_defconfig
-mips                  decstation_64_defconfig
-mips                         mpc30x_defconfig
-powerpc                     pq2fads_defconfig
-mips                       bmips_be_defconfig
-mips                         bigsur_defconfig
-sh                          rsk7269_defconfig
-sh                     magicpanelr2_defconfig
-sh                          r7785rp_defconfig
-parisc                           alldefconfig
-m68k                          amiga_defconfig
-mips                 decstation_r4k_defconfig
-sh                        sh7763rdp_defconfig
-m68k                         amcore_defconfig
-arm                            hisi_defconfig
-sh                         ap325rxa_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                           stm32_defconfig
-arm                           tegra_defconfig
-sh                                  defconfig
-parisc                generic-64bit_defconfig
-riscv                               defconfig
-powerpc                 mpc837x_rdb_defconfig
-mips                          rb532_defconfig
-openrisc                         alldefconfig
-powerpc                     tqm8548_defconfig
-m68k                       m5208evb_defconfig
-sh                            titan_defconfig
-arm                            pleb_defconfig
-ia64                         bigsur_defconfig
-loongarch                           defconfig
-parisc64                         alldefconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-loongarch                         allnoconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220724
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220724
-riscv                randconfig-r042-20220724
-s390                 randconfig-r044-20220724
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
+Not quite. Kdoc describes the retval in i2c_transfer.
 
-clang tested configs:
-mips                          malta_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                       mainstone_defconfig
-mips                        qi_lb60_defconfig
-mips                        bcm63xx_defconfig
-riscv                    nommu_virt_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                     ppa8548_defconfig
-mips                      malta_kvm_defconfig
-mips                           rs90_defconfig
-powerpc                   microwatt_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                        spear3xx_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
+2136  * i2c_transfer - execute a single or combined I2C message
+2137  * @adap: Handle to I2C bus
+2138  * @msgs: One or more messages to execute before STOP is issued to
+2139  *      terminate the operation; each message begins with a START.
+2140  * @num: Number of messages to be executed.
+2141  *
+2142  * Returns negative errno, else the number of messages executed.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I agree this needs better documentation in i2c.h, I will fix it.
+
+
+--iwzItzDUiQg+EaOu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLc0sgACgkQFA3kzBSg
+KbbfPw//W/0Wnk/u8fl/F5yc2lx7popFfxQ1t+LqVOzXsTYCb5XHbqe+/4mHVrBz
+hwEY+GgFY5xHeK7Q/PE64YvQcvL4nkP2VF60kLaY2OsPGcQBZHLlp6oJ6Hnms4AL
+vo0XlI7IDFZLWRSDIMGhQs7RQ5R1gCQpdzsQoFrNl5q1RZer+gMmJ72+6yZzTd9G
+xeJZ77S0K721BB6g1qsdB4jtAIi0IjAihH9zfHrvI6snGVdyPF/9iKM0ow3ds1RW
+Vgld3o3EvRUSKwBrttHRVUwquETxz/ljFEW9097A6zi+j6A/J3xNqhEsflHe7sgn
+5nmQSl92m1FWDBtbOU3rcJ8H30z7xyxoAqagORBs7DRHHDkfz/CKNDjV8WHpPUrM
+wCu+HJZ8Brd+XaFlSBL69TMNUTGOpYA8vSKjm9n82CDQdqcNJLSF0GJunsnqMX0u
+RsQbuL48HOGewWt3Sytc4jpIy+qcvWcRjnjZflKQ7gre16OBVOg05tlzV1BLpatg
+SMaJ85vT/vLq7gC4bjAOoScg+os/yE3y9D2CeJ19yeMBOHEGBw0DC2USe1kVlKxN
+yZEZ4t5+qseKVnDtQGaGjgMow6LYqAXISKWoOUrfSvCmtsyM/bww9Hgu28zdheqp
+EW56Uanjz2P1T2grLm7E3rcTlXKy+6XhvITNrkoldvPjyKXDkP0=
+=omuO
+-----END PGP SIGNATURE-----
+
+--iwzItzDUiQg+EaOu--

@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F208157F229
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 02:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52C757F231
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 02:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbiGXAXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 23 Jul 2022 20:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S235625AbiGXAm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 23 Jul 2022 20:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiGXAXS (ORCPT
+        with ESMTP id S229912AbiGXAmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 23 Jul 2022 20:23:18 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8560A140AD;
-        Sat, 23 Jul 2022 17:23:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658622197; x=1690158197;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FkfucsltimmyJei0ltMaCIfrrDXHIuYViPxYpvd7rpc=;
-  b=l6u+Pun/6gGsP8L2yeXVpK1pawYqgHVxgajcNweozN+BFZ+9sGpYu1h9
-   8x4FWb4Z7s7M6T6wgHKlRsuWb17/A/kbJhVCiTFBaxj7g4usof1+20qNE
-   9cIPWolrQ35kGcTvQYdrirYT6j+YZgxSqW5q08HK/9NeITiZgxZkbWQH6
-   s3T3Cs7E/iG1r5oU5B9uk4OxLwJN+z6nxUkINea8xmuyE+mgB4e8cKYu0
-   unADpiUfK1WBKFbLTuyulMObznjhrFWRaOvDIFhJGf2S1B+ceNisTVgdm
-   uCf2QHWoD8o0ILM/kRYfo7w8bjOXN8a9LsI7IW4ul8A9azTNbcG4wMx63
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="270538612"
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="270538612"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 17:23:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
-   d="scan'208";a="741434139"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Jul 2022 17:23:14 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFPOr-0003Hn-1y;
-        Sun, 24 Jul 2022 00:23:13 +0000
-Date:   Sun, 24 Jul 2022 08:22:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>, linux-iio@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/5] iio: pressure: bmp280: Add support for BMP380
- sensor family
-Message-ID: <202207240827.C5K7s1KU-lkp@intel.com>
-References: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
+        Sat, 23 Jul 2022 20:42:24 -0400
+X-Greylist: delayed 228 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 23 Jul 2022 17:42:23 PDT
+Received: from mx07-0057a101.pphosted.com (mx07-0057a101.pphosted.com [205.220.184.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4239217064
+        for <linux-kernel@vger.kernel.org>; Sat, 23 Jul 2022 17:42:23 -0700 (PDT)
+Received: from pps.filterd (m0214197.ppops.net [127.0.0.1])
+        by mx07-0057a101.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26O0ODUt029320;
+        Sun, 24 Jul 2022 02:38:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=westermo.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=12052020; bh=Dr9mIdFoxA+uJnGlPkvj4VSnpdpSXDs2SgCUQNfNjKE=;
+ b=nBl/TcZxeWvchbrTOCqezCv0aEfVn95IgnPj2u+WqkGWAzZegCWNW0XGe/4gODDNUg66
+ Se7jDnanEM8GjWDar9Z3Slyp+1XPbrnY1VegjX99+TAYKHrZcWe7+5PuiPZ0F/6C/ULF
+ JE8QX5jfEjVSmPOGh+Nt9Ba2obc356JDnasrcQQGM4Ly/dNavsnS6aWf2DvddyP/mgTX
+ 86uDxWoHW6C+Wc5ZUG12CKzpMOEaEuASxrw8eWlmzTdsVuJHqfh/sxDonruehUcYWf5Y
+ qfNzIii2ZX31PUX6FRD8CnLYccUeD20g8HFv980Rus9HH1y3P6LhYUXSxzDtxkqIkh3d Xw== 
+Received: from mail.beijerelectronics.com ([195.67.87.131])
+        by mx07-0057a101.pphosted.com (PPS) with ESMTPS id 3hg5bbgrky-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 24 Jul 2022 02:38:04 +0200
+Received: from Orpheus.nch.westermo.com (172.29.100.2) by
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.2375.17; Sun, 24 Jul 2022 02:38:00 +0200
+From:   Matthias May <matthias.may@westermo.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <nicolas.dichtel@6wind.com>,
+        <eyal.birger@gmail.com>, <linux-kernel@vger.kernel.org>,
+        Matthias May <matthias.may@westermo.com>
+Subject: [PATCH 0/2 net-next] geneve: fix TOS inheriting
+Date:   Sun, 24 Jul 2022 02:37:39 +0200
+Message-ID: <20220724003741.57816-1-matthias.may@westermo.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.29.100.2]
+X-ClientProxiedBy: wsevst-s0023.westermo.com (192.168.130.120) To
+ EX01GLOBAL.beijerelectronics.com (10.101.10.25)
+X-Proofpoint-GUID: L-hfHzRnloXqbZLBCKDLL-DFgxcspLTq
+X-Proofpoint-ORIG-GUID: L-hfHzRnloXqbZLBCKDLL-DFgxcspLTq
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angel,
+Currently when the TOS of an encapsulated frame is inherited,
+the 6 DSCP bits are cut down to 3 original TOS bits.
+Compare to other L2 tunneling protocols (gretap, vxlan) this
+is unexpected.
+IPv4 and IPv6 have both this behaviour but for different reasons.
 
-Thank you for the patch! Yet something to improve:
+For IPv4 the bits are lost in the routing table lookup.
+The patch copies the full tos out before the lookup and uses the copy.
 
-[auto build test ERROR on 180c6cb6b9b79c55b79e8414f4c0208f2463af7d]
+For IPv6 the RT_TOS macro cuts off the 3 bits.
+I'm not really familiar with the IPv6 code, but to me it seems as
+if this part of the code only uses the TOS for the flowlabel.
+Is there any reason why the flowlabel should be restricted to these
+3 bits? The patch simply removes the usage of this macro, but i don't
+know if there was a specific intention behind that. I can't find any
+immediate breakage, but then again my IPv6 testing is fairly limited.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220724-014146
-base:   180c6cb6b9b79c55b79e8414f4c0208f2463af7d
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220724/202207240827.C5K7s1KU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/eb385b5ff634acc29a3d9f20847e62ec73484fcb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Angel-Iglesias/Add-support-for-pressure-sensor-Bosch-BMP380/20220724-014146
-        git checkout eb385b5ff634acc29a3d9f20847e62ec73484fcb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Matthias May (2):
+  geneve: fix TOS inheriting for ipv4
+  geneve: fix TOS inheriting for ipv6
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__divdi3" [drivers/iio/pressure/bmp280.ko] undefined!
+ drivers/net/geneve.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

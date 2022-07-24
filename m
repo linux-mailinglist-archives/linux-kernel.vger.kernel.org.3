@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048E357F601
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 18:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBE657F609
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 18:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbiGXQbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 12:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S230009AbiGXQpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 12:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiGXQbJ (ORCPT
+        with ESMTP id S229492AbiGXQpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 12:31:09 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2007011477
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 09:31:06 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id a18-20020a05600c349200b003a30de68697so6784565wmq.0
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 09:31:06 -0700 (PDT)
+        Sun, 24 Jul 2022 12:45:06 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38E0DFDF;
+        Sun, 24 Jul 2022 09:45:02 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d17so12677383lfa.12;
+        Sun, 24 Jul 2022 09:45:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vwmHKWFDT+EF3UFGxnIVN4ln9oL/VoZExBNeZ8SwUlo=;
-        b=i3aMTYks0VKvRrw6hNkEf4pg2pQkPMFfqcXgLBWJAYspOmgY8mrJIXW4n08Qk/LN6Q
-         MhRAW7GLxY/sWiVUD4xWdnrp+LEC4PiRc1j2mcqqg+s6lZd6HREQtgBgZ4xUG5o0FhJv
-         Cqt2byFkb59gZQEBoRGQdTASprvwgPd/3fH04IGvBxFkkfHsp9Nn5Whmq/XkgmDUg4Ve
-         VbpX5mpxrQjnYp7vpXzTOaX4CH7KtUwe79zM342PdexqcwqdMVGLlJym1UvDCOqmvNrF
-         HG/zfXkf/poP4misp+AfUajW2YwUCKD0plAqupLg0E8AexHmU+rkYWKpIgaNyEtZweNT
-         eOEg==
+        bh=MuA7bUK1vPsyvnnRjvygkOnBLlHAQP1fUUPE8cGCTKU=;
+        b=P5sgjKwsaoaJMZA2RBJQY1WlmL17hTLIgSoNSzbH+ZRSUCHAw5EXC5g6W/Alg2tTrw
+         DjMLBhpOJlA9mxpvI/oJH0eLDr6knefcxQsMROBAP4XUomHb9Pw+BtPrXw6uSQmpP3cQ
+         Y3C8pK63hyXtEC9sIm2L9aRxFZKKxiAttsWJ8x7MQ1tVPa2SqcMmmM86QkI1t6NPCh2p
+         nbntf860xxsFYixNA2btRSD2EtOQPFJcEEr2T6QcJsriDdabHvVxCIrIHoMhiIqQey8Y
+         POujt9BfNuuFhc996M4QKXTdLvGUTd85izfhOJF3clFPb9B2EVmY+Kc5bMMa8vfTHJgA
+         ttJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vwmHKWFDT+EF3UFGxnIVN4ln9oL/VoZExBNeZ8SwUlo=;
-        b=Th0J2Zy17IWEVdO6ynQDafsuvB0JOcWkzHBZXMuoEjkK6nS1EDliD8Cqz5nb+FiEdk
-         aI01kiEmAqmMQPA7bimKeA6HtiBsVcUmkWu+kA6mYHqF6Fv6dixxpDikRgmoaGJvEDSK
-         6rW/xGAyg0sz7UnEApaL6Q2pfLc2VkdjVMAOnnHpEUihk1oXrxRnWgOrip+YLiDF/Djv
-         O5bKPE27IO4PMxloG91EnfRj0n52d5ZYDfPSJ/Ca/o8dzNuIpEDCNmK8cA4x9N1tnoSi
-         l7LpPx01CxXKmICqzOYLLYAKMWHrEwmczUtGrwP/LyRMx50Cl3l0t7xHBttPgvBT4bzN
-         tt4Q==
-X-Gm-Message-State: AJIora8KdsFUpMOMNQg1djOP5AOtpQANhmNkWwG+33BwzVPJuPmcon5o
-        yaIW7TApFw9wnZrw84e3oH90WA==
-X-Google-Smtp-Source: AGRyM1spY+uBQ8rMFx8tCu2udBcI01FoWufstT9z+G4mUpi86kQIxUVItfrc6i6rcUn6f34EJhQy4Q==
-X-Received: by 2002:a05:600c:1e29:b0:3a3:d15:e6fb with SMTP id ay41-20020a05600c1e2900b003a30d15e6fbmr19593305wmb.5.1658680264539;
-        Sun, 24 Jul 2022 09:31:04 -0700 (PDT)
-Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
-        by smtp.gmail.com with ESMTPSA id k6-20020a5d5186000000b0021e571a99d5sm9084948wrv.17.2022.07.24.09.31.02
+        bh=MuA7bUK1vPsyvnnRjvygkOnBLlHAQP1fUUPE8cGCTKU=;
+        b=Oo9acZHguwck0H52Ppn2bzzcAuPXCiZ1e1UaVJ+4NXsHxnkowAhGj/Qjts4sryTJ7e
+         LhtkdJbMl/hKTnus57hoQvL2xiaiZG/SpEd26tMk1Tjt0EULN0bFhljqM5A729e6kFMx
+         dY4vTmeyLd0JzEhYXETrM25VUF/DkysgIBOy8hX1TnS19hi7VlLJmMHVXbIxnG/8WnIk
+         ljd72KDJQcms8nnnHFU/plaG4Bme33fqRL8xOw0xQ+sFxvpLNz+kraVL1ln+uO7NgRNv
+         pVcukQ7c8Up2GAXm1xYGILxqrTGudKqR5zkr1dP47yIWj3qsCkSDqtTUOR8HP/IHuRja
+         prqQ==
+X-Gm-Message-State: AJIora+lm3Q2lW4Knh95CCHcVHU8+3ND1MsPoYfDZY/nC/92ypj6oMCe
+        UmYTOhyP6teOofM/Rxs2izpYr/oXW0cLRu1GL0U=
+X-Google-Smtp-Source: AGRyM1vuxEcTb3Pr3xKx2cO93efjRep/PFRh2eJQYA9lgkVEvc3wcAZdwerS2VOq+2rfD7IrhEh/GQ==
+X-Received: by 2002:a05:6512:13a1:b0:47f:787b:4e6a with SMTP id p33-20020a05651213a100b0047f787b4e6amr3112530lfa.64.1658681100823;
+        Sun, 24 Jul 2022 09:45:00 -0700 (PDT)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
+        by smtp.gmail.com with ESMTPSA id k12-20020a2eb74c000000b0025d40241c1dsm2267566ljo.6.2022.07.24.09.44.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 09:31:03 -0700 (PDT)
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, paskripkin@gmail.com,
-        straube.linux@gmail.com, martin@kaiser.cx, abdun.nihaal@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: convert rtw_pwr_wakeup to correct error code semantics
-Date:   Sun, 24 Jul 2022 17:30:55 +0100
-Message-Id: <20220724163055.961-1-phil@philpotter.co.uk>
-X-Mailer: git-send-email 2.36.1
+        Sun, 24 Jul 2022 09:45:00 -0700 (PDT)
+From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To:     linux-iio@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] iio: st_sensors: Retry ID verification on failure
+Date:   Sun, 24 Jul 2022 19:43:15 +0300
+Message-Id: <20220724164316.68393-1-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,198 +76,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the rtw_pwr_wakeup function to use 0 on success and -EPERM on
-error - in all places where we handle this response, we use either -1 or
--EPERM currently anyway, which are equivalent. Also, for other places
-along the same call chain where we are using -1, use -EPERM.
+Some sensors do not always start fast enough to read a valid ID from
+registers at first attempt. Let's retry at most 3 times with short sleep
+in between to fix random timing issues.
 
-This gets the driver closer to removal of the non-standard _SUCCESS and
-_FAIL definitions, which are inverted compared to the standard in-kernel
-error code mechanism.
-
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_p2p.c       |  4 +--
- drivers/staging/r8188eu/core/rtw_pwrctrl.c   | 10 +++---
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 32 ++++++++++----------
- 3 files changed, 23 insertions(+), 23 deletions(-)
+ drivers/iio/common/st_sensors/st_sensors_core.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_p2p.c b/drivers/staging/r8188eu/core/rtw_p2p.c
-index c306aafa183b..bd654d4ff8b4 100644
---- a/drivers/staging/r8188eu/core/rtw_p2p.c
-+++ b/drivers/staging/r8188eu/core/rtw_p2p.c
-@@ -1888,7 +1888,7 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
+diff --git a/drivers/iio/common/st_sensors/st_sensors_core.c b/drivers/iio/common/st_sensors/st_sensors_core.c
+index 9910ba1da085..106f7953683e 100644
+--- a/drivers/iio/common/st_sensors/st_sensors_core.c
++++ b/drivers/iio/common/st_sensors/st_sensors_core.c
+@@ -21,6 +21,8 @@
  
- 	if (role == P2P_ROLE_DEVICE || role == P2P_ROLE_CLIENT || role == P2P_ROLE_GO) {
- 		/* leave IPS/Autosuspend */
--		if (rtw_pwr_wakeup(padapter) == _FAIL) {
-+		if (rtw_pwr_wakeup(padapter)) {
- 			ret = _FAIL;
- 			goto exit;
- 		}
-@@ -1902,7 +1902,7 @@ int rtw_p2p_enable(struct adapter *padapter, enum P2P_ROLE role)
- 		init_wifidirect_info(padapter, role);
+ #include "st_sensors_core.h"
  
- 	} else if (role == P2P_ROLE_DISABLE) {
--		if (rtw_pwr_wakeup(padapter) == _FAIL) {
-+		if (rtw_pwr_wakeup(padapter)) {
- 			ret = _FAIL;
- 			goto exit;
- 		}
-diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-index cf9020a73933..1cef3ef4d5f1 100644
---- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-+++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
-@@ -381,24 +381,24 @@ int rtw_pwr_wakeup(struct adapter *padapter)
- 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
- 	unsigned long timeout = jiffies + msecs_to_jiffies(3000);
- 	unsigned long deny_time;
--	int ret = _SUCCESS;
-+	int ret = 0;
++#define VERIFY_ID_RETRY_COUNT 3
++
+ int st_sensors_write_data_with_mask(struct iio_dev *indio_dev,
+ 				    u8 reg_addr, u8 mask, u8 data)
+ {
+@@ -619,11 +621,18 @@ EXPORT_SYMBOL_NS(st_sensors_get_settings_index, IIO_ST_SENSORS);
+ int st_sensors_verify_id(struct iio_dev *indio_dev)
+ {
+ 	struct st_sensor_data *sdata = iio_priv(indio_dev);
+-	int wai, err;
++	int wai, err, i;
  
- 	while (pwrpriv->ps_processing && time_before(jiffies, timeout))
- 		msleep(10);
- 
- 	/* I think this should be check in IPS, LPS, autosuspend functions... */
- 	if (check_fwstate(pmlmepriv, _FW_LINKED)) {
--		ret = _SUCCESS;
-+		ret = 0;
- 		goto exit;
- 	}
- 
- 	if (pwrpriv->rf_pwrstate == rf_off && ips_leave(padapter) == _FAIL) {
--		ret = _FAIL;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
- 	if (padapter->bDriverStopped || !padapter->bup || !padapter->hw_init_completed) {
--		ret = _FAIL;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
-@@ -439,7 +439,7 @@ int rtw_pm_set_ips(struct adapter *padapter, u8 mode)
- 		return 0;
- 	} else if (mode == IPS_NONE) {
- 		rtw_ips_mode_req(pwrctrlpriv, mode);
--		if ((padapter->bSurpriseRemoved == 0) && (rtw_pwr_wakeup(padapter) == _FAIL))
-+		if ((padapter->bSurpriseRemoved == 0) && rtw_pwr_wakeup(padapter))
- 			return -EFAULT;
- 	} else {
- 		return -EINVAL;
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 930bb4aea435..e0ae0c3c51f8 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -689,7 +689,7 @@ static int rtw_wx_set_mode(struct net_device *dev, struct iw_request_info *a,
- 
- 
- 
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
-+	if (rtw_pwr_wakeup(padapter)) {
- 		ret = -EPERM;
- 		goto exit;
- 	}
-@@ -933,13 +933,13 @@ static int rtw_wx_set_wap(struct net_device *dev,
- 
- 
- 
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
--		ret = -1;
-+	if (rtw_pwr_wakeup(padapter)) {
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
- 	if (!padapter->bup) {
--		ret = -1;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
-@@ -1049,23 +1049,23 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
- 	struct ndis_802_11_ssid ssid[RTW_SSID_SCAN_AMOUNT];
- 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
- 
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
--		ret = -1;
-+	if (rtw_pwr_wakeup(padapter)) {
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
- 	if (padapter->bDriverStopped) {
--		ret = -1;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
- 	if (!padapter->bup) {
--		ret = -1;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
- 	if (!padapter->hw_init_completed) {
--		ret = -1;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
-@@ -1164,7 +1164,7 @@ static int rtw_wx_set_scan(struct net_device *dev, struct iw_request_info *a,
- 	}
- 
- 	if (!_status)
--		ret = -1;
-+		ret = -EPERM;
- 
- exit:
- 
-@@ -1252,13 +1252,13 @@ static int rtw_wx_set_essid(struct net_device *dev,
- 
- 	uint ret = 0, len;
- 
--	if (_FAIL == rtw_pwr_wakeup(padapter)) {
--		ret = -1;
-+	if (rtw_pwr_wakeup(padapter)) {
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
- 	if (!padapter->bup) {
--		ret = -1;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
-@@ -1268,7 +1268,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
- 	}
- 
- 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE)) {
--		ret = -1;
-+		ret = -EPERM;
- 		goto exit;
- 	}
- 
-@@ -1301,7 +1301,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
- 				}
- 
- 				if (!rtw_set_802_11_infrastructure_mode(padapter, pnetwork->network.InfrastructureMode)) {
--					ret = -1;
-+					ret = -EPERM;
- 					spin_unlock_bh(&queue->lock);
- 					goto exit;
- 				}
-@@ -1312,7 +1312,7 @@ static int rtw_wx_set_essid(struct net_device *dev,
- 		spin_unlock_bh(&queue->lock);
- 		rtw_set_802_11_authentication_mode(padapter, authmode);
- 		if (!rtw_set_802_11_ssid(padapter, &ndis_ssid)) {
--			ret = -1;
-+			ret = -EPERM;
- 			goto exit;
- 		}
- 	}
+ 	if (sdata->sensor_settings->wai_addr) {
+-		err = regmap_read(sdata->regmap,
+-				  sdata->sensor_settings->wai_addr, &wai);
++		for (i = 0; i < VERIFY_ID_RETRY_COUNT; i++) {
++			err = regmap_read(sdata->regmap,
++					  sdata->sensor_settings->wai_addr, &wai);
++
++			if (!err && sdata->sensor_settings->wai == wai)
++				return 0;
++
++			msleep(20);
++		}
+ 		if (err < 0) {
+ 			dev_err(&indio_dev->dev,
+ 				"failed to read Who-Am-I register.\n");
 -- 
-2.36.1
+2.34.1
 

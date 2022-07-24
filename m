@@ -2,83 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D76C57F530
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 15:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3339557F531
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 15:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbiGXNRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 09:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S232908AbiGXNVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 09:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGXNRS (ORCPT
+        with ESMTP id S229462AbiGXNVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 09:17:18 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85259E0E5
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 06:17:17 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i8-20020a056e020d8800b002d931252904so5741874ilj.23
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 06:17:17 -0700 (PDT)
+        Sun, 24 Jul 2022 09:21:53 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BF7B4A5
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 06:21:51 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d10so8181754pfd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 06:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=yCaTZ6AUan3y8YqGHPIq2wk6gRvHTQrg/g6BBWDxZRk=;
+        b=RsTpKwxRBL0QC5O4xnKokcqEbegyKFewsZHh5OTVbkf81jt0TOEqj6cMkuyFdCSnxa
+         Xwn1iyXquOPegAcFqa3I2AkdyN7fK90fOpQpuoq5QTwVAQPwRw5h1e+XXPcWm+mK/qfK
+         48rwox04Wnqtiidmr7ywkwDHkDZ76EYA6b6plIBPye2zLtjKfk+t+mKBOS7UHDI12//9
+         /i2kOvdIBlkr3Ddv3genAar65LdMPCrd0B3IjUOR5fxS6ETlzEJ9LmWUEMF16c+36HXy
+         Bn12bPD0CSuqk48m+r4MjWNZ4wKvejYXUFP/pwt5ib+fd13SQ/ELTXhsvJzNIhGXq5mS
+         rcRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=hjEUNMgdvQs7+SQfFq8IM6gLNyCL0JlcuMD7/mHIX5A=;
-        b=yBG9xaBmIQA8z3aHagprBkOpFRKP42Myx6POOPQASLCOyLK4PWHRmjWqTlJTgZ0lvD
-         OZlgCtXg1LtkdBU/43mX7SqFm/Uz7BjjTgf/S4UYza79/I+6DYNf2n5N/JSYjQ6olCRV
-         m6ioyScbRoeZma8WefuXA/eBKLNQOelY/rYqX+hxAfB7P1lfY6U0UrOpqYo5wM314DdZ
-         cEK5KGsgpTDPLFef2c218QEeWgkGXfNvylxdgoYZfSCX8os356/y/F+WvIuFVm2lbcMO
-         raB7RA7UUCcWw26h5f+4rOZ5XHS9OFfwpkXcaXez6EhRwTM8U8SjkEzO43I9t4jgptVI
-         SKEw==
-X-Gm-Message-State: AJIora9/qgFzVHQnUzSg7KR5I6fxYSgLLwNi64zpnXf+VZbAdP+eG12m
-        otYOItmITG18J/Ik+gawiOzJNrMXEdpJXEnDvNHFsLQkxwMO
-X-Google-Smtp-Source: AGRyM1u73sB/d40+FJtdvxjS5zQsJTrRiTiu0Z8RQGmxOnP1tvrQ7TjhLqZC76uGpi9cdO/lQahHFSbrR4hSNom7Q5/LF/pUMjbT
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c45:b0:2dc:dc24:c103 with SMTP id
- d5-20020a056e021c4500b002dcdc24c103mr3199320ilg.132.1658668636866; Sun, 24
- Jul 2022 06:17:16 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 06:17:16 -0700
-In-Reply-To: <00000000000011f0c905d9097a62@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e6917605e48ce2bf@google.com>
-Subject: Re: [syzbot] WARNING in p9_client_destroy
-From:   syzbot <syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, asmadeus@codewreck.org,
-        davem@davemloft.net, edumazet@google.com, elver@google.com,
-        ericvh@gmail.com, hdanton@sina.com, k.kahurani@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
-        pabeni@redhat.com, rientjes@google.com,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, vbabka@suse.cz
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yCaTZ6AUan3y8YqGHPIq2wk6gRvHTQrg/g6BBWDxZRk=;
+        b=hmVn/Usg6n8NItqraeCEhqh+IisxHmWfTGFJ5rcXL6UjmHUNSe5V6vlc4xTDc1iw1W
+         GMM8Jrqy3sDx2T9+aeKrd81W7fRcbvIgJhpU8KFRYPJegzLe0yXlxuXGaUJNqPLcLGe7
+         nitiKjxdF+kZxkD4lADUTpSC6JB1My/08Gq66dUtvahJX1REIOxWQ05UECkJuNhyYq7P
+         aZMV0HmJmcOULTrWjK7Bb/QVSYQd79WTCyH9FGMfpJmy3R2oEgla4BGacj7n1STe68kr
+         LoQr6f7ZcCA/Gh1MmcUhLVw+dbYyVnp8IGQwxgqTaAv23krZ379vdXMk6XKbsIodLANo
+         0Tcg==
+X-Gm-Message-State: AJIora8i2/AoeRtQI4kQsfPRFoujU/kZqWbAzmZ88rQrdQAsnxo9P7NK
+        O+fY7RySbZY53sVfbA24o5g=
+X-Google-Smtp-Source: AGRyM1vIxQlx4B0EXKsDDofEXRxcl+OyFM+qSaqj/+f0s3zA3EqaGrGEWjur9YEbguCnkhZEGf2tXQ==
+X-Received: by 2002:a05:6a00:10ca:b0:4f7:5af4:47b6 with SMTP id d10-20020a056a0010ca00b004f75af447b6mr8687114pfu.6.1658668910896;
+        Sun, 24 Jul 2022 06:21:50 -0700 (PDT)
+Received: from Negi ([68.181.16.133])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902654a00b0016d1e514ec5sm7144017pln.139.2022.07.24.06.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 06:21:50 -0700 (PDT)
+From:   Soumya Negi <soumya.negi97@gmail.com>
+To:     Anton Altaparmakov <anton@tuxera.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Soumya Negi <soumya.negi97@gmail.com>,
+        linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] ntfs: Ensure $Extend is a directory
+Date:   Sun, 24 Jul 2022 06:21:07 -0700
+Message-Id: <20220724132107.1163-1-soumya.negi97@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Fixes Syzbot bug: kernel BUG in ntfs_lookup_inode_by_name
+https://syzkaller.appspot.com/bug?id=32cf53b48c1846ffc25a185a2e92e170d1a95d71
 
-commit 7302e91f39a81a9c2efcf4bc5749d18128366945
-Author: Marco Elver <elver@google.com>
-Date:   Fri Jan 14 22:03:58 2022 +0000
+Check whether $Extend is a directory or not( for NTFS3.0+) while loading
+system files. If it isn't(as in the case of this bug where the mft record for
+$Extend contains a regular file), load_system_files() returns false.
 
-    mm/slab_common: use WARN() if cache still has objects on destroy
+Reported-by: syzbot+30b7f850c6d98ea461d2@syzkaller.appspotmail.com
+Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+---
+ fs/ntfs/super.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=142882ce080000
-start commit:   cb71b93c2dc3 Add linux-next specific files for 20220628
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=162882ce080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=122882ce080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=badbc1adb2d582eb
-dashboard link: https://syzkaller.appspot.com/bug?extid=5e28cdb7ebd0f2389ca4
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=156f74ee080000
+diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
+index 5ae8de09b271..18e2902531f9 100644
+--- a/fs/ntfs/super.c
++++ b/fs/ntfs/super.c
+@@ -2092,10 +2092,15 @@ static bool load_system_files(ntfs_volume *vol)
+ 	// TODO: Initialize security.
+ 	/* Get the extended system files' directory inode. */
+ 	vol->extend_ino = ntfs_iget(sb, FILE_Extend);
+-	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino)) {
++	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino) ||
++	    !S_ISDIR(vol->extend_ino->i_mode)) {
++		static const char *es1 = "$Extend is not a directory";
++		static const char *es2 = "Failed to load $Extend";
++		const char *es = !S_ISDIR(vol->extend_ino->i_mode) ? es1 : es2;
++
+ 		if (!IS_ERR(vol->extend_ino))
+ 			iput(vol->extend_ino);
+-		ntfs_error(sb, "Failed to load $Extend.");
++		ntfs_error(sb, "%s.", es);
+ 		goto iput_sec_err_out;
+ 	}
+ #ifdef NTFS_RW
+-- 
+2.17.1
 
-Reported-by: syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com
-Fixes: 7302e91f39a8 ("mm/slab_common: use WARN() if cache still has objects on destroy")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection

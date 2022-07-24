@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4132457F489
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0622A57F48C
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 11:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233922AbiGXJzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 05:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S234182AbiGXJzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 05:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbiGXJzl (ORCPT
+        with ESMTP id S233960AbiGXJzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 05:55:41 -0400
-Received: from mail-4319.protonmail.ch (mail-4319.protonmail.ch [185.70.43.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5148A9584;
-        Sun, 24 Jul 2022 02:55:40 -0700 (PDT)
-Date:   Sun, 24 Jul 2022 09:55:31 +0000
+        Sun, 24 Jul 2022 05:55:51 -0400
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228A4B4A3;
+        Sun, 24 Jul 2022 02:55:49 -0700 (PDT)
+Date:   Sun, 24 Jul 2022 09:55:37 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1658656538; x=1658915738;
-        bh=/wWDAq/zoQAzjTO22i09RhqoYU9jXUQjE7mlukPwWW0=;
+        s=protonmail3; t=1658656548; x=1658915748;
+        bh=bSIVb35VNgsRupgexWfXqDR6bz6XZ6vs9aSsZ2kOLkM=;
         h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
          References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
          Feedback-ID:Message-ID;
-        b=GXudu4lp86OgwKJ9jFePLCMO2VknlY8ix+IQxn7kOtmA+hp0ME5h7UrmZYcSuBpoR
-         Nt/jVoebQAFhW6CWjbGk08PaNTAUUrST5sq1WTJDMAkhmb/7ea0VqqaSml6NIfwdxC
-         nqwpOmGL7NhklOrmtjnsfMKAd7oumOSweZ+1XfH/98rbejV2wnpJuwQ6Uj57CU5Num
-         BtaT20Ne3Jer32lAyzU+lASSw1cN4AoBWPqMCHhK7j7vTFJ0/xVVbK6gCAoVO1no/M
-         ATcNnQA7NQf7tI6HU8ZiKT+JU4ba82+i1bpGvnxq/tV0YlemwBowpy20TY2tZ2/6tr
-         XtTfZW/EwVs0g==
+        b=Fz38xXVfws9t0QUreaVwzssD7uuL753KR3LtE3AJLPjJAHNapxtXK+SSFvafyjQvR
+         WeKC/qt5rGQ5U1P37Jm47MAbmvmx6wmt63Kz29vkkp4VK/WGTPRhdGXcY1LSOIqL/9
+         R0y8qvFBv1k2zii5cNPsQOb2z/jnaKA8WcSzFH86hHkpvl7uFErrPN6zpPijumMcmQ
+         eoKtghPT8INOG8iTvJlowagGkjqDO99fN16y++VZPVKRuN6sjmvYEWfsPJFuzlJQM3
+         1ttPPUUsUDgajDQrQUil8WBkO4/BSk6TTdxASwY5FY9bBxGvC3Xv/Mpq0V1EHguVYR
+         04prlbeIpCN0w==
 To:     devicetree@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -41,11 +41,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         Nikita Travkin <nikita@trvn.ru>, soc@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        ~postmarketos/upstreaming@lists.sr.ht
 Reply-To: "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [PATCH v7 1/5] dt-bindings: qcom: Document bindings for new msm8916-samsung-e2015 devices
-Message-ID: <20220724095346.14022-1-linmengbo0689@protonmail.com>
+Subject: [PATCH v7 3/5] ARM: dts: qcom-msm8916-samsung-e2015: Include dts from arm64
+Message-ID: <20220724095413.14135-1-linmengbo0689@protonmail.com>
 In-Reply-To: <20220724095039.13568-1-linmengbo0689@protonmail.com>
 References: <20220724095039.13568-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
@@ -54,38 +53,78 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the new samsung,e5/e7/grandmax device tree bindings used in their
-device trees.
+After adding all necessary support for MSM8916 SMP/cpuidle without PSCI
+on ARM32, build the Samsung Galaxy E5/E7/Grand Max device trees from the
+arm64 tree together with the ARM32 include to allow booting this device on
+ARM32.
+
+The approach to include device tree files from other architectures is
+inspired from e.g. the Raspberry Pi (bcm2711-rpi-4-b.dts) where this is
+used to build the device tree for both ARM32 and ARM64.
 
 Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/qcom.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/boot/dts/Makefile                          | 3 +++
+ arch/arm/boot/dts/qcom-msm8916-samsung-e5.dts       | 3 +++
+ arch/arm/boot/dts/qcom-msm8916-samsung-e7.dts       | 3 +++
+ arch/arm/boot/dts/qcom-msm8916-samsung-grandmax.dts | 3 +++
+ 4 files changed, 12 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-e5.dts
+ create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-e7.dts
+ create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-grandmax.dts
 
-diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentatio=
-n/devicetree/bindings/arm/qcom.yaml
-index 5c06d1bfc046..b004f42bc277 100644
---- a/Documentation/devicetree/bindings/arm/qcom.yaml
-+++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-@@ -164,6 +164,9 @@ properties:
-               - longcheer,l8150
-               - samsung,a3u-eur
-               - samsung,a5u-eur
-+              - samsung,e5
-+              - samsung,e7
-+              - samsung,grandmax
-           - const: qcom,msm8916
-
-       - items:
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 5112f493f494..b7a6983ee6fa 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1030,6 +1030,9 @@ dtb-$(CONFIG_ARCH_QCOM) +=3D \
+ =09qcom-ipq8064-rb3011.dtb \
+ =09qcom-msm8226-samsung-s3ve3g.dtb \
+ =09qcom-msm8660-surf.dtb \
++=09qcom-msm8916-samsung-e5.dtb \
++=09qcom-msm8916-samsung-e7.dtb \
++=09qcom-msm8916-samsung-grandmax.dtb \
+ =09qcom-msm8916-samsung-serranove.dtb \
+ =09qcom-msm8960-cdp.dtb \
+ =09qcom-msm8974-lge-nexus5-hammerhead.dtb \
+diff --git a/arch/arm/boot/dts/qcom-msm8916-samsung-e5.dts b/arch/arm/boot/=
+dts/qcom-msm8916-samsung-e5.dts
+new file mode 100644
+index 000000000000..c8d34de8a71e
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-msm8916-samsung-e5.dts
+@@ -0,0 +1,3 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "arm64/qcom/msm8916-samsung-e5.dts"
++#include "qcom-msm8916-smp.dtsi"
+diff --git a/arch/arm/boot/dts/qcom-msm8916-samsung-e7.dts b/arch/arm/boot/=
+dts/qcom-msm8916-samsung-e7.dts
+new file mode 100644
+index 000000000000..85be286c8608
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-msm8916-samsung-e7.dts
+@@ -0,0 +1,3 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "arm64/qcom/msm8916-samsung-e7.dts"
++#include "qcom-msm8916-smp.dtsi"
+diff --git a/arch/arm/boot/dts/qcom-msm8916-samsung-grandmax.dts b/arch/arm=
+/boot/dts/qcom-msm8916-samsung-grandmax.dts
+new file mode 100644
+index 000000000000..d3abe0536238
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-msm8916-samsung-grandmax.dts
+@@ -0,0 +1,3 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "arm64/qcom/msm8916-samsung-grandmax.dts"
++#include "qcom-msm8916-smp.dtsi"
 --
 2.30.2
 

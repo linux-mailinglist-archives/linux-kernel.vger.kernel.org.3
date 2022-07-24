@@ -2,97 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14ED57F587
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 16:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4F057F589
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 16:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiGXOq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 10:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S230072AbiGXOwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 10:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiGXOqz (ORCPT
+        with ESMTP id S229618AbiGXOwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 10:46:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C7810562;
-        Sun, 24 Jul 2022 07:46:54 -0700 (PDT)
+        Sun, 24 Jul 2022 10:52:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50381BF43;
+        Sun, 24 Jul 2022 07:52:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B9E6B80D2E;
-        Sun, 24 Jul 2022 14:46:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5EC5C3411E;
-        Sun, 24 Jul 2022 14:46:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658674011;
-        bh=puU8YqjFpRQ/Pdae2Mkw+tfbNoOrVhW9hFqKqO1Zng0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GvycWdcVWM2u3eH6ngQ/JqSS8VK6I3+6JxgX+lpKiaJbpAi4dvq3R+DuicDFxlPH0
-         TP5czSa7NvrrMVkpDyxvBZ/qV2s4ftezAZGA/0QQVa//Igmo/8JVctvQof0Wm7YsGW
-         ENq6j5Gix7R/Gkuy0G10IaKm1midWjXUfMlTONpfQR/FENrL8pIYxQvv0oOh6agpZo
-         2C/mZG2wR3NwqScZ+6J9cnhUDqUubU8omPckvRHU1Y8o+6iPu6/4rrr6Qd8bdRJUJC
-         lRP43RB083wJ1/Q//AgnUgp9GNC6C7LSOWwewKuGzWLPvsw6djWgl0OHWvkhprHjAn
-         VE1T+pX8DkPyw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oFcsl-0003O4-Rd; Sun, 24 Jul 2022 16:47:00 +0200
-Date:   Sun, 24 Jul 2022 16:46:59 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] USB: serial: usb_wwan: replace DTR/RTS magic numbers
- with macros
-Message-ID: <Yt1bY74PirDyuYcu@hovoldconsulting.com>
-References: <20220722085040.704885-1-sdlyyxy@bupt.edu.cn>
- <Yt0MfqQQTwe4ztuN@hovoldconsulting.com>
- <Yt1OPKNlWZuMrZv4@kroah.com>
- <Yt1SFXlwbW1JCohE@hovoldconsulting.com>
- <Yt1UG058Qjsngps6@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2FCBB80D2E;
+        Sun, 24 Jul 2022 14:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3A1C3411E;
+        Sun, 24 Jul 2022 14:52:07 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TK3CctXU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1658674324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+IZd8UTiSqrEXUZ0HN+/9iRrPAqI/0RHgbNVI4cLbMA=;
+        b=TK3CctXUt4qmmRCp6nCjeThjR4S0i3awq8ciE3I+GDNwIpt98GYgJwrWmCO57Bh13D9kmO
+        yZqSeZX3izi3CDk19svwM8lMSf3+C3gCRtqasPsxK/NY9DxMTB9ryQntn+kfVdt2uXimxS
+        hkvwz2It6NT8EAl6W0OQPDqOgl75ifc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7ce278e5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 24 Jul 2022 14:52:04 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-stable@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Qian Cai <cai@lca.pw>,
+        Lech Perczak <l.perczak@camlintechnologies.com>,
+        Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        kernel test robot <oliver.sang@intel.com>
+Subject: [PATCH stable 4.19 4.14 4.9] Revert "Revert "char/random: silence a lockdep splat with printk()""
+Date:   Sun, 24 Jul 2022 16:51:48 +0200
+Message-Id: <20220724145148.664623-1-Jason@zx2c4.com>
+In-Reply-To: <Ytz+lo4zRQYG3JUR@xsang-OptiPlex-9020>
+References: <Ytz+lo4zRQYG3JUR@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yt1UG058Qjsngps6@kroah.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 04:15:55PM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Jul 24, 2022 at 04:07:17PM +0200, Johan Hovold wrote:
-> > On Sun, Jul 24, 2022 at 03:50:52PM +0200, Greg Kroah-Hartman wrote:
+In 2019, Sergey fixed a lockdep splat with 15341b1dd409 ("char/random:
+silence a lockdep splat with printk()"), but that got reverted soon
+after from 4.19 because back then it apparently caused various problems.
+But the issue it was fixing is still there, and more generally, many
+patches turning printk() into printk_deferred() have landed since,
+making me suspect it's okay to try this out again.
 
-> > > I think Yan should write a patch series to unify these and make it
-> > > right, instead of just papering over it all.
-> > 
-> > Ok, I just fear it will be more work for us since that involves
-> > decisions like whether it should be added to the uapi header, and then
-> > we get into naming, etc. But we're in no rush.
-> > 
-> > > Also this "../" stuff in a
-> > > #include directive is not ok, I wouldn't recommend this change be taken
-> > > as-is.
-> > 
-> > That was never an option, but I'd be ok with taking the v2 which added
-> > defines for the constants directly in the driver.
-> 
-> These are global defines, in a public spec, and they should all just be
-> in one place in the kernel.  What's wrong with include/uapi/linux/cdc.h
-> which is where the other ACM defined values are at?
+This should fix the following deadlock found by the kernel test robot:
 
-Nothing. We'd just need to figure out how best to name them if they're
-going to become UAPI, that's all (e.g. at least use a USB_CDC_ prefix to
-match the other defines).
+[   18.287691] WARNING: possible circular locking dependency detected
+[   18.287692] 4.19.248-00165-g3d1f971aa81f #1 Not tainted
+[   18.287693] ------------------------------------------------------
+[   18.287712] stop/202 is trying to acquire lock:
+[   18.287713] (ptrval) (console_owner){..-.}, at: console_unlock (??:?)
+[   18.287717]
+[   18.287718] but task is already holding lock:
+[   18.287718] (ptrval) (&(&port->lock)->rlock){-...}, at: pty_write (pty.c:?)
+[   18.287722]
+[   18.287722] which lock already depends on the new lock.
+[   18.287723]
+[   18.287724]
+[   18.287725] the existing dependency chain (in reverse order) is:
+[   18.287725]
+[   18.287726] -> #2 (&(&port->lock)->rlock){-...}:
+[   18.287729] validate_chain+0x84a/0xe00
+[   18.287729] __lock_acquire (lockdep.c:?)
+[   18.287730] lock_acquire (??:?)
+[   18.287731] _raw_spin_lock_irqsave (??:?)
+[   18.287732] tty_port_tty_get (??:?)
+[   18.287733] tty_port_default_wakeup (tty_port.c:?)
+[   18.287734] tty_port_tty_wakeup (??:?)
+[   18.287734] uart_write_wakeup (??:?)
+[   18.287735] serial8250_tx_chars (??:?)
+[   18.287736] serial8250_handle_irq (??:?)
+[   18.287737] serial8250_default_handle_irq (8250_port.c:?)
+[   18.287738] serial8250_interrupt (8250_core.c:?)
+[   18.287738] __handle_irq_event_percpu (??:?)
+[   18.287739] handle_irq_event_percpu (??:?)
+[   18.287740] handle_irq_event (??:?)
+[   18.287741] handle_edge_irq (??:?)
+[   18.287742] handle_irq (??:?)
+[   18.287742] do_IRQ (??:?)
+[   18.287743] common_interrupt (entry_32.o:?)
+[   18.287744] _raw_spin_unlock_irqrestore (??:?)
+[   18.287745] uart_write (serial_core.c:?)
+[   18.287746] process_output_block (n_tty.c:?)
+[   18.287747] n_tty_write (n_tty.c:?)
+[   18.287747] tty_write (tty_io.c:?)
+[   18.287748] __vfs_write (??:?)
+[   18.287749] vfs_write (??:?)
+[   18.287750] ksys_write (??:?)
+[   18.287750] sys_write (??:?)
+[   18.287751] do_fast_syscall_32 (??:?)
+[   18.287752] entry_SYSENTER_32 (??:?)
+[   18.287752]
+[   18.287753] -> #1 (&port_lock_key){-.-.}:
+[   18.287756]
+[   18.287756] -> #0 (console_owner){..-.}:
+[   18.287759] check_prevs_add (lockdep.c:?)
+[   18.287760] validate_chain+0x84a/0xe00
+[   18.287761] __lock_acquire (lockdep.c:?)
+[   18.287761] lock_acquire (??:?)
+[   18.287762] console_unlock (??:?)
+[   18.287763] vprintk_emit (??:?)
+[   18.287764] vprintk_default (??:?)
+[   18.287764] vprintk_func (??:?)
+[   18.287765] printk (??:?)
+[   18.287766] get_random_u32 (??:?)
+[   18.287767] shuffle_freelist (slub.c:?)
+[   18.287767] allocate_slab (slub.c:?)
+[   18.287768] new_slab (slub.c:?)
+[   18.287769] ___slab_alloc+0x6d0/0xb20
+[   18.287770] __slab_alloc+0xd6/0x2e0
+[   18.287770] __kmalloc (??:?)
+[   18.287771] tty_buffer_alloc (tty_buffer.c:?)
+[   18.287772] __tty_buffer_request_room (tty_buffer.c:?)
+[   18.287773] tty_insert_flip_string_fixed_flag (??:?)
+[   18.287774] pty_write (pty.c:?)
+[   18.287775] process_output_block (n_tty.c:?)
+[   18.287776] n_tty_write (n_tty.c:?)
+[   18.287777] tty_write (tty_io.c:?)
+[   18.287778] __vfs_write (??:?)
+[   18.287779] vfs_write (??:?)
+[   18.287780] ksys_write (??:?)
+[   18.287780] sys_write (??:?)
+[   18.287781] do_fast_syscall_32 (??:?)
+[   18.287782] entry_SYSENTER_32 (??:?)
+[   18.287783]
+[   18.287783] other info that might help us debug this:
+[   18.287784]
+[   18.287785] Chain exists of:
+[   18.287785]   console_owner --> &port_lock_key --> &(&port->lock)->rlock
+[   18.287789]
+[   18.287790]  Possible unsafe locking scenario:
+[   18.287790]
+[   18.287791]        CPU0                    CPU1
+[   18.287792]        ----                    ----
+[   18.287792]   lock(&(&port->lock)->rlock);
+[   18.287794]                                lock(&port_lock_key);
+[   18.287814]                                lock(&(&port->lock)->rlock);
+[   18.287815]   lock(console_owner);
+[   18.287817]
+[   18.287818]  *** DEADLOCK ***
+[   18.287818]
+[   18.287819] 6 locks held by stop/202:
+[   18.287820] #0: (ptrval) (&tty->ldisc_sem){++++}, at: ldsem_down_read (??:?)
+[   18.287823] #1: (ptrval) (&tty->atomic_write_lock){+.+.}, at: tty_write_lock (tty_io.c:?)
+[   18.287826] #2: (ptrval) (&o_tty->termios_rwsem/1){++++}, at: n_tty_write (n_tty.c:?)
+[   18.287830] #3: (ptrval) (&ldata->output_lock){+.+.}, at: process_output_block (n_tty.c:?)
+[   18.287834] #4: (ptrval) (&(&port->lock)->rlock){-...}, at: pty_write (pty.c:?)
+[   18.287838] #5: (ptrval) (console_lock){+.+.}, at: console_trylock_spinning (printk.c:?)
+[   18.287841]
+[   18.287842] stack backtrace:
+[   18.287843] CPU: 0 PID: 202 Comm: stop Not tainted 4.19.248-00165-g3d1f971aa81f #1
+[   18.287843] Call Trace:
+[   18.287844] dump_stack (??:?)
+[   18.287845] print_circular_bug.cold+0x78/0x8b
+[   18.287846] check_prev_add+0x66a/0xd20
+[   18.287847] check_prevs_add (lockdep.c:?)
+[   18.287848] validate_chain+0x84a/0xe00
+[   18.287848] __lock_acquire (lockdep.c:?)
+[   18.287849] lock_acquire (??:?)
+[   18.287850] ? console_unlock (??:?)
+[   18.287851] console_unlock (??:?)
+[   18.287851] ? console_unlock (??:?)
+[   18.287852] ? native_save_fl (??:?)
+[   18.287853] vprintk_emit (??:?)
+[   18.287854] vprintk_default (??:?)
+[   18.287855] vprintk_func (??:?)
+[   18.287855] printk (??:?)
+[   18.287856] get_random_u32 (??:?)
+[   18.287857] ? shuffle_freelist (slub.c:?)
+[   18.287858] shuffle_freelist (slub.c:?)
+[   18.287858] ? page_address (??:?)
+[   18.287859] allocate_slab (slub.c:?)
+[   18.287860] new_slab (slub.c:?)
+[   18.287861] ? pvclock_clocksource_read (??:?)
+[   18.287862] ___slab_alloc+0x6d0/0xb20
+[   18.287862] ? kvm_sched_clock_read (kvmclock.c:?)
+[   18.287863] ? __slab_alloc+0xbc/0x2e0
+[   18.287864] ? native_wbinvd (paravirt.c:?)
+[   18.287865] __slab_alloc+0xd6/0x2e0
+[   18.287865] __kmalloc (??:?)
+[   18.287866] ? __lock_acquire (lockdep.c:?)
+[   18.287867] ? tty_buffer_alloc (tty_buffer.c:?)
+[   18.287868] tty_buffer_alloc (tty_buffer.c:?)
+[   18.287869] __tty_buffer_request_room (tty_buffer.c:?)
+[   18.287869] tty_insert_flip_string_fixed_flag (??:?)
+[   18.287870] pty_write (pty.c:?)
+[   18.287871] process_output_block (n_tty.c:?)
+[   18.287872] n_tty_write (n_tty.c:?)
+[   18.287873] ? print_dl_stats (??:?)
+[   18.287874] ? n_tty_ioctl (n_tty.c:?)
+[   18.287874] tty_write (tty_io.c:?)
+[   18.287875] ? n_tty_ioctl (n_tty.c:?)
+[   18.287876] ? tty_write_unlock (tty_io.c:?)
+[   18.287877] __vfs_write (??:?)
+[   18.287877] vfs_write (??:?)
+[   18.287878] ? __fget_light (file.c:?)
+[   18.287879] ksys_write (??:?)
 
-And the in-tree users would need to be updated to match.
+Cc: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Cc: Qian Cai <cai@lca.pw>
+Cc: Lech Perczak <l.perczak@camlintechnologies.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Sasha Levin <sashal@kernel.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: John Ogness <john.ogness@linutronix.de>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/lkml/Ytz+lo4zRQYG3JUR@xsang-OptiPlex-9020
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-And it's not just the control lines. We have the state notification bits
-as well. Someone would need to dig out the spec.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index bac4dc501dc4..2be38780a7f7 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -183,8 +183,8 @@ static void __cold process_random_ready_list(void)
+ 
+ #define warn_unseeded_randomness() \
+ 	if (IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM) && !crng_ready()) \
+-		pr_notice("%s called from %pS with crng_init=%d\n", \
+-			  __func__, (void *)_RET_IP_, crng_init)
++		printk_deferred(KERN_NOTICE "random: %s called from %pS with crng_init=%d\n", \
++				__func__, (void *)_RET_IP_, crng_init)
+ 
+ 
+ /*********************************************************************
+-- 
+2.35.1
 
-So we go from accepting a small clean-up patch to some non-trivial
-tree-wide work and review. But sure, bring it on.
-
-Johan

@@ -2,113 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CC857F381
-	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 08:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBD057F385
+	for <lists+linux-kernel@lfdr.de>; Sun, 24 Jul 2022 08:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbiGXGvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 02:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S234789AbiGXGxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 02:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiGXGvx (ORCPT
+        with ESMTP id S229483AbiGXGxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 02:51:53 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46A613FAE;
-        Sat, 23 Jul 2022 23:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658645512; x=1690181512;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2NUyPhN/UYQQ9M7d6K0Zy/ra6kwOYG5LKXH/GneiZ18=;
-  b=jh4Pnm1VXxyckYNMq1EsJDMWo1Kn8cI42jCWFoH5I24CMStyxhrU1VWR
-   Ns5+YZsDkdAxrX45fh305JIq3MllyewolWFUBSChWVRkLvzPP5slI72Wz
-   Ws5hLx3o59ZQLdcQV03cI9BU7dQQy54zy+RRTMwPmTChkT5qyczwz2iAZ
-   HslM88lJIRlL+36SjRZ6R1r8h4bK9sjYo6id8DrBpHCaTYXAzoz8hwWUl
-   6Ept3A7HFNyEVWs2/4HjNF9FAQedM/NiDvFqgaToO35erwEKyhGcdywOt
-   9+9Qtk4QNukFBF8sz+uSe+jf1c88ogeDWNpnYhPSQABF5qa/xbqwLH9B7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="286279761"
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="286279761"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 23:51:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,190,1654585200"; 
-   d="scan'208";a="926512947"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Jul 2022 23:51:43 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFVSo-0003eT-2m;
-        Sun, 24 Jul 2022 06:51:42 +0000
-Date:   Sun, 24 Jul 2022 14:51:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused
- variable 'pxa_camera_of_match'
-Message-ID: <202207241411.UTTuvBZG-lkp@intel.com>
+        Sun, 24 Jul 2022 02:53:32 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF75A18B00;
+        Sat, 23 Jul 2022 23:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Dx2Ld
+        mmelaSG129Gndk1nriYSQBQ1KJZz167f8rv7V0=; b=D911up3lsqiL0jdoI26JR
+        yYjcKRZI5nv1gDQF0P4jbLZqx47PsFfycw9PALK4cHmT9f1ncX7luVBCHV4BAox6
+        oSpfev8rkwqCt2k4j3dRHLVgbhQjSC1yzHEx9yzkAmNSEkucuISCx1zTEDa2OrzZ
+        VIr6eZSWEH+bAJ2Dt5aM2A=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp1 (Coremail) with SMTP id GdxpCgCHoeQq7NxidFSvQA--.22213S4;
+        Sun, 24 Jul 2022 14:52:41 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     sj@kernel.org, akpm@linux-foundation.org
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] mm/damon/reclaim: fix potential memory leak in damon_reclaim_init()
+Date:   Sun, 24 Jul 2022 14:52:24 +0800
+Message-Id: <20220724065224.2555966-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgCHoeQq7NxidFSvQA--.22213S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFyfKr13WF1fXF1fXF1fWFg_yoWkGFXEka
+        12qr9rua1DXayFy3ZrCw1fGr1xZrW8GrykXFWIy347AFyrKrn7Xry8Xrs3Xr17u34UAry2
+        vFs7Zas8Zr129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRibAwPUUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiWxlIjGI0VkuIuQAAs8
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+damon_reclaim_init() allocates a memory chunk for ctx with
+damon_new_ctx(). When damon_select_ops() fails, ctx is not released, which
+will lead to a memory leak.
 
-First bad commit (maybe != root cause):
+We should release the ctx with damon_destroy_ctx() when damon_select_ops()
+fails to fix the memory leak.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   515f71412bb73ebd7f41f90e1684fc80b8730789
-commit: 95495f2aa9d8df1a7697bab24118544d3568f41d media: platform: place Intel drivers on a separate dir
-date:   4 months ago
-config: hexagon-randconfig-r035-20220724 (https://download.01.org/0day-ci/archive/20220724/202207241411.UTTuvBZG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 12fbd2d377e396ad61bce56d71c98a1eb1bebfa9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95495f2aa9d8df1a7697bab24118544d3568f41d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 95495f2aa9d8df1a7697bab24118544d3568f41d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/intel/
+Fixes: 4d69c3457821 ("mm/damon/reclaim: use damon_select_ops() instead of damon_{v,p}a_set_operations()")
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ mm/damon/reclaim.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused variable 'pxa_camera_of_match' [-Wunused-const-variable]
-   static const struct of_device_id pxa_camera_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/pxa_camera_of_match +2449 drivers/media/platform/intel/pxa_camera.c
-
-7254026cedd42d drivers/media/video/pxa_camera.c               Guennadi Liakhovetski 2011-06-29  2448  
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29 @2449  static const struct of_device_id pxa_camera_of_match[] = {
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2450  	{ .compatible = "marvell,pxa270-qci", },
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2451  	{},
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2452  };
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2453  MODULE_DEVICE_TABLE(of, pxa_camera_of_match);
-e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2454  
-
-:::::: The code at line 2449 was first introduced by commit
-:::::: e9a1d94fa85542d4f3046ac82d234a3c8349c948 [media] media: pxa_camera device-tree support
-
-:::::: TO: Robert Jarzmik <robert.jarzmik@free.fr>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
-
+diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+index 4b07c29effe9..0b3c7396cb90 100644
+--- a/mm/damon/reclaim.c
++++ b/mm/damon/reclaim.c
+@@ -441,8 +441,10 @@ static int __init damon_reclaim_init(void)
+ 	if (!ctx)
+ 		return -ENOMEM;
+ 
+-	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
++	if (damon_select_ops(ctx, DAMON_OPS_PADDR)) {
++		damon_destroy_ctx(ctx);
+ 		return -EINVAL;
++	}
+ 
+ 	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
+ 	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

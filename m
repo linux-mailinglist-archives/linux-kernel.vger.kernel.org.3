@@ -2,151 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D9558046F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C200F580473
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiGYTXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 15:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S236002AbiGYT1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 15:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiGYTXu (ORCPT
+        with ESMTP id S229908AbiGYT1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 15:23:50 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2049BE3B;
-        Mon, 25 Jul 2022 12:23:48 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2807D5C0187;
-        Mon, 25 Jul 2022 15:23:48 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 25 Jul 2022 15:23:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1658777028; x=1658863428; bh=Itqe3cTqeN
-        O2sng2SyRO7speA9C+VjPJM1GP+0IL4Yc=; b=p23MTh7vV6M/9Y8DgbLcYqKxL+
-        zzfF/B6G4DGFsbT9OipRrwTUV83aTB9cAnQP/uZ6tf4U+JTB9789vzCiNLgGff0P
-        RS5QxyPXIl4MZa+AgDWBlQrqkXXe3pPmM52kRbt7FYpNP6PnaZKg3wvjhGiKnJN8
-        aY7PSeN5wnWmyttizj8ITuiWmREI/s7T+Xqrq+eSrgDGuQfLJDyMALkO4L12wtMD
-        45hFIWNC28xuV6hOFZfwhCYkSYKCsIZ4l7sWxgxDILS9vTNVE3nDkVpqcy8EAwod
-        hBppe1dtNoYRvA+4xK7m1wj/bYkHEZnG/Y6VqG5htyRUkA07JrdCAINeJD4w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658777028; x=1658863428; bh=Itqe3cTqeNO2sng2SyRO7speA9C+
-        VjPJM1GP+0IL4Yc=; b=MvPHNurBQRSE63/x+TnBwR5hlX0Tdnl1lktx3Lna9puq
-        hdlhl2+wFKteipc+TTgAC+boFW1Z4ghGMxz20gnWEN52Cpcjq82QWjkBBGSlnh46
-        wQQpd3PKvJbw/oym2dLyB1DzFchyw/cTNXBD1/8OrB2Ll1mBJlG/ER2orRQBL/n4
-        FgA5AXbP2yWo+DQhuvjJ1W7XOsl80eu0JE1z9pqMWf9Po+nP0XPEtlw4O55Dhu4H
-        2OQLf6cp95Gwlpf9biR5UtarGcyJMtpoic7HDaXnh7VbCaK4CkrtNY79YBTKEBXH
-        lqig+RKhhiqF8bUB6S23OOdnI5APio0v7+k1YTlUvg==
-X-ME-Sender: <xms:w-3eYk1XGsAVRPMu1xXflCMUtgekQE3vx880iuwT8GDoWXdKtWGmUQ>
-    <xme:w-3eYvF1mP7gl-8GZb1PXljtDYmt6UA2jpB6gF_uydnCDdhoQwjlApSFg6SdGNwor
-    LxjRr7wNeuRVpZxAQ>
-X-ME-Received: <xmr:w-3eYs4VbRBNJcjicVJT5y3nvOYKPnLQ-n91K2t5M_3xhcE2pTlAHitLK1AYeGa36Gci2TZ0dm1pZimtYkc7sA4v8w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtkedgudefiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredt
-    tddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeevuddugeeihfdtffehgffgudeggeegheetgfevhfekkeei
-    leeuieejleekiedvgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:w-3eYt3I1AKUN1RSeaRxdUs7zSvLURWTBA8XS7hDU0AIUQFSYFILEQ>
-    <xmx:w-3eYnHYD2_9-UYSXuEJeHXniL0f2GlZBRt6B9DYqWpiV9Yp-O5haA>
-    <xmx:w-3eYm9KR41LvOKr4-IFVG_neXZ3zATk7Yb8t_Xlhh3jhvlAPxJy9g>
-    <xmx:xO3eYv9oUVYuk62pM7ieLtYRuYXHwricA_hYT-jn7UZfvnrnZsAX2Q>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Jul 2022 15:23:46 -0400 (EDT)
-Date:   Mon, 25 Jul 2022 14:23:45 -0500
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Artem Savkov <asavkov@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>
-Subject: Re: [PATCH bpf-next 1/4] bpf: add BPF_F_DESTRUCTIVE flag for
- BPF_PROG_LOAD
-Message-ID: <20220725192345.jlrqyfktpmttiypp@fedora>
-References: <20220720114652.3020467-1-asavkov@redhat.com>
- <20220720114652.3020467-2-asavkov@redhat.com>
- <CAADnVQ+mt1iEsXUGBeL-dgXRoRwPxoz+G=aRcZTkhx2AA10R-A@mail.gmail.com>
- <YtolJfvSGjSSwbc3@sparkplug.usersys.redhat.com>
- <CAADnVQLyCc7reM1By+TYBaNGh1SBpVqyNyT+WJXOooCqX_w2GA@mail.gmail.com>
+        Mon, 25 Jul 2022 15:27:10 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7E0A45A;
+        Mon, 25 Jul 2022 12:27:08 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id bb16so14655316oib.11;
+        Mon, 25 Jul 2022 12:27:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=biplv8ZnovJJIoreJcaFobXzSk+jEJJVI0kZQA2bmqY=;
+        b=uqu+6HMtKu11PhWQkaU8nbwJVlQTV/9vlUq1cXkrYdZOPv8bLGAH+0AD+SE0zxCgS/
+         C/CaT5IbrfRsC6D8JiDcJzs0f/rQNvtrKpd+j3eG0O97cr/p9ls0Ni9SvEfTEJcv4XPj
+         zH7HK5wKq7lquBgvUeFNCnHmJa4zBv0zD4qRE2tGCE12N+HqlduAGkXnBleTofD3cqPW
+         7u+CfBeNaNUs7OvLtnBCyEt2atwaJhEamm6eOinbeC/hCt/+QeZJn3FyuXbjcdqG9//O
+         vL9+l0+Nhp7GkWNBTg/XRnEENZsFYWc1Nlz1C/qiHbK8RmM1B96DfnoSZCrAxHqJG6D/
+         L2zQ==
+X-Gm-Message-State: AJIora92tBFTEYVrCiRcTFP4s0R/xiL0ejRElC/MjsBUfCxOq2S7l/Bu
+        yLSFyMQfUDkhivB9s+xzvw==
+X-Google-Smtp-Source: AGRyM1sHRDiIqGa4CnHexl48xYWTF6EUArhGrzGDOK0Z9M8NJdDZGNdX/YvkELxDpJNw/dF1MbyF6A==
+X-Received: by 2002:a05:6808:1a88:b0:33a:a573:c1a0 with SMTP id bm8-20020a0568081a8800b0033aa573c1a0mr11389536oib.222.1658777228095;
+        Mon, 25 Jul 2022 12:27:08 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id w7-20020a4aca07000000b0041ba304546csm5176012ooq.1.2022.07.25.12.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 12:27:07 -0700 (PDT)
+Received: (nullmailer pid 2550854 invoked by uid 1000);
+        Mon, 25 Jul 2022 19:27:05 -0000
+Date:   Mon, 25 Jul 2022 13:27:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure
+ Application
+Message-ID: <20220725192705.GA2536409-robh@kernel.org>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQLyCc7reM1By+TYBaNGh1SBpVqyNyT+WJXOooCqX_w2GA@mail.gmail.com>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 09:32:51PM -0700, Alexei Starovoitov wrote:
-> On Thu, Jul 21, 2022 at 9:18 PM Artem Savkov <asavkov@redhat.com> wrote:
-> >
-> > On Thu, Jul 21, 2022 at 07:02:07AM -0700, Alexei Starovoitov wrote:
-> > > On Wed, Jul 20, 2022 at 4:47 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > >
-> > > > +/* If BPF_F_DESTRUCTIVE is used in BPF_PROG_LOAD command, the loaded program
-> > > > + * will be able to perform destructive operations such as calling bpf_panic()
-> > > > + * helper.
-> > > > + */
-> > > > +#define BPF_F_DESTRUCTIVE      (1U << 6)
-> > >
-> > > I don't understand what value this flag provides.
-> > >
-> > > bpf prog won't be using kexec accidentally.
-> > > Requiring user space to also pass this flag seems pointless.
-> >
-> > bpf program likely won't. But I think it is not uncommon for people to
-> > run bpftrace scripts they fetched off the internet to run them without
-> > fully reading the code. So the idea was to provide intermediate tools
-> > like that with a common way to confirm user's intent without
-> > implementing their own guards around dangerous calls.
-> > If that is not a good enough of a reason to add the flag I can drop it.
->
-> The intent makes sense, but bpftrace will set the flag silently.
-> Since bpftrace compiles the prog it knows what helpers are being
-> called, so it will have to pass that extra flag automatically anyway.
-> You can argue that bpftrace needs to require a mandatory cmdline flag
-> from users to run such scripts, but even if you convince the bpftrace
-> community to do that everybody else might just ignore that request.
-> Any tool (even libbpf) can scan the insns and provide flags.
+On Sun, Jul 24, 2022 at 12:49:45AM +0200, Maximilian Luz wrote:
+> On modern Qualcomm platforms, access to EFI variables is restricted to
+> the secure world / TrustZone, i.e. the Trusted Execution Environment
+> (TrEE or TEE) as Qualcomm seems to call it. To access EFI variables, we
+> therefore need to talk to the UEFI Secure Application (uefisecapp),
+> residing in the TrEE.
 
-FWIW I added --unsafe flag to bpftrace a while ago for
-situations/helpers such as these. So this load flag would work OK for
-bpftrace.
+The whole point of UEFI is providing a standard interface. Why can't the 
+UEFI implementation call the TEE itself?
 
-[...]
-> Do you have other ideas to achieve the goal:
-> 'cannot run destructive prog by accident' ?
->
-> If we had an UI it would be a question 'are you sure? please type: yes'.
->
-> I hate to propose the following, since it will delay your patch
-> for a long time, but maybe we should only allow signed bpf programs
-> to be destructive?
+I'm not sure custom interfaces is something we want.
 
-I don't have any opinion on the signing part but I do think it'd be nice
-if there was some sort of opt-in mechanism. It wouldn't be very nice if
-some arbitrary tracing tool panicked my machine. But I suppose tracing
-programs could already do some significant damage by bpf_send_signal()ing
-random processes.
 
-Thanks,
-Daniel
+> This series adds support for accessing EFI variables on those platforms.
+> 
+> To do this, we first need to add some SCM call functions used to manage
+> and talk to Secure Applications. A very small subset of this interface
+> is added in the second patch (whereas the first one exports the required
+> functions for that). Interface specifications are extracted from [1].
+> While this does not (yet) support re-entrant SCM calls (including
+> callbacks and listeners), this is enough to talk to the aforementioned
+> uefisecapp on a couple of platforms (I've tested this on a Surface Pro X
+> and heard reports from Lenovo Flex 5G, Lenovo Thinkpad x13s, and Lenovo
+> Yoga C630 devices).
+
+What does Windows do on these devices? I'm surprised something like this 
+would fly with Microsoft.
+
+Rob

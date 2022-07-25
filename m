@@ -2,238 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607825806DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0015806E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbiGYVfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
+        id S230400AbiGYVjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 17:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbiGYVey (ORCPT
+        with ESMTP id S236876AbiGYVjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:34:54 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10olkn2048.outbound.protection.outlook.com [40.92.40.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E79B7E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:34:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JTMIa0FBRgqM+OZazkPwZ0KymmTdFS2pRzA/Ws4q8q/QaJ4g/UI9WMH3bX3L9Hz30u/eVnAwDZeB/ZMT5hF6S36IIjQS7dIDOFGZfF4Kyx1wDgKQJYvvOckXXt3KbXfPx7peNlFRzffCGndaQK0P3TUzNNAAnuknw6UYPF7dXILeWMP7cJHnka09RGk74pyKQ/s7VehfzIZjZ1XTtzejBVZIalrOXGLdb2hbQhhv8gRWWTcBXI6AzlrF4utov8EfEEmJMj+K0LHnkhGRTAAvJjtFG8Bog7QlxOjtVN0gKUFefRGRxW9M4DQFNWOmNbzjz0mndZCAPgWebfasIna0lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u4CWww67eTFBc/sh0ULB4n/rbVfkkbdsro7qmlXd7fg=;
- b=MHL0Jxr9jrzWp4mTdVYTbAQoPnR+RFj2oaW42M3dyEMJZ87XjuKLmXgVZdaWfIMEhOw1+WITRwWV0wY+YNQcT0/kCWxo6N5yGLjZEsNQOARkxcnjuAdoThQ06HfEh/+A8g0rId+zSLyVDUShWsx5TxuuS/U8NOjadlbNC1wMQxq/1TcNDDMli5FHFbPQsOi7hwMMiIHPrmF1er94nEsawsYu/aIhW9/LmFHqFwokvIXYmV+oZhc9pnx/VDZbhbl4/6sz80rE/zh8o4c4urRjwOOgHq7mGKDGk1tGBB3srROCV02CP14uTcEwyZDj3q3FiCiTINs7Kb4FKUJ2eMBTmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u4CWww67eTFBc/sh0ULB4n/rbVfkkbdsro7qmlXd7fg=;
- b=MjDb0qjY6RRV/bU6sLqM0O/Vt+0yyRLZ3FsTUUPqhPI4i/uraLDXBSEXXqFoGZcjDnaIyhNu5GWUO3mkhihlgD5ruuA893qBFm7S7/2RN749jFvoWLUvThcs9iSInfVb+xEtK1IwlT1i9+rL3u6KyX+Zly4v4AMR5+HaoV3UntKy7riQDzTunGcbERKIwNof0dmLn6pjJ+UvXgOYkNEnt1AdkmNweKcQZZu6gH9j5oVgEZmm+qE15N37AtHgYICFI4FuImOBh+SSoWzq6VybO/1HT35DCBKjnQ9alITADZdMetbuKsf8xdISzJiZAguUojAag/r6Mf7eFVVzgBeHnw==
-Received: from MN2PR17MB3375.namprd17.prod.outlook.com (2603:10b6:208:13c::25)
- by BN6PR17MB2020.namprd17.prod.outlook.com (2603:10b6:404:81::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.24; Mon, 25 Jul
- 2022 21:34:46 +0000
-Received: from MN2PR17MB3375.namprd17.prod.outlook.com
- ([fe80::3409:88f8:6069:ccba]) by MN2PR17MB3375.namprd17.prod.outlook.com
- ([fe80::3409:88f8:6069:ccba%3]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
- 21:34:46 +0000
-From:   Vanessa Page <Vebpe@outlook.com>
-To:     Yifei Liu <yifeliu@cs.stonybrook.edu>
-CC:     "ezk@cs.stonybrook.edu" <ezk@cs.stonybrook.edu>,
-        "madkar@cs.stonybrook.edu" <madkar@cs.stonybrook.edu>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] jffs2: correct logic when creating a hole in
- jffs2_write_begin
-Thread-Topic: [PATCH] jffs2: correct logic when creating a hole in
- jffs2_write_begin
-Thread-Index: AQHYn+OlL8EDeVsAXEe8Sw4ix6TwWa2OiB5VgAEU05c=
-Date:   Mon, 25 Jul 2022 21:34:46 +0000
-Message-ID: <MN2PR17MB33751E0A2DFD72AA5E774DF5B8959@MN2PR17MB3375.namprd17.prod.outlook.com>
-References: <20220725045830.11502-1-yifeliu@cs.stonybrook.edu>
- <MN2PR17MB337506A10F6AF87BBC514F97B8959@MN2PR17MB3375.namprd17.prod.outlook.com>
-In-Reply-To: <MN2PR17MB337506A10F6AF87BBC514F97B8959@MN2PR17MB3375.namprd17.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-tmn:  [/GlHU8A3M9gSE3fr4w9rqsiqJCQXAmK72HDz+jGkgVVsx18jquX8cMmDhpFwDCr/]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4083d897-c1f7-4237-d497-08da6e857f16
-x-ms-traffictypediagnostic: BN6PR17MB2020:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jE72Gi6Z452BXhuiKaT2dGqjE6X77efzDvdDzCwoMhrkDtX+DxG2JAO4YVS5fwq2VBfkMlJbNL+KLaPUSy0HePALKsoxGwkyu+abM70Y62IIgbtdfMRmo/kg8VJKCFTKO355hMYusr6pqUsH9SgOdqlVGgJouLuRPKyoLdecsBCko0URr5sIsm158DkrOXbMTHadlJyqUq4s1j40weukq/GzazzKzgF6ECZ+d1IF73MMseYP7Z9HdeS0n7FjX6rEFtjkksulmZisJD+NFuD/vO9zDZxZ5MZQL7xtWqqnIBahiogR/HisL+HmTD7zVBrpeCVddKcwaubMz3swGu9phJB/n9ePsU75fheRYJzWYieEySZMfZOkXRVqbg4jIlTY+0OkWj2aTLFy35dbIKET1XNFzqyzaIjSy9vWODVrwU5D9fe1Hl+PYig34TIQTVXWJyVfCcQO4VfAqFi2SHzp8Nnjo3/n5s04knGaBDDt6v8tEUrgftLe+7puRZnObZl4AbHJj5x8J7DwoNTJOgWGrW4zQwTgLHDBJaq1daz9QKCLnbM4rWRDX94Wd4u2N7hXCGAM3EgWAjPED+EHHmzlPTiUnJut1bwMHzNpXlA6weEtzoMcdPFbGNBsP17j/rM6QmSIYX89gTDroBS5/16RhiwzhJlatZ5Zq+d/V3HoABlXXbkbWB+g40DdFrD3IF+f
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M244U2NmN0FKS2FMYVNmVWFkVTg4ekdkZU5TUlNLM0d5WDFKU0o1cy9NTGli?=
- =?utf-8?B?dm5oWVdQa0VFQ0RqcVhBbGFRYVNXQ3NlUTBCd2w3WkZPdFJUdno3Q0pWYVdo?=
- =?utf-8?B?U25NWWczUWhPRkhSK3hDYkdNYnNudXNqek94TzZuZVB4cm9pVVVRZVQ0SGRU?=
- =?utf-8?B?L2JldEhvSXB5aVBOdUVOM1IrMEt0aldXcnQxL0E5K2VsZEc5VHJ5OUpXdjdn?=
- =?utf-8?B?d0NJbzNUOWMwWnlqd0JGSDdSdmFtbjZlNWVxWU5BVDhaTk1MTGQrN2d5Ujlq?=
- =?utf-8?B?QXR4TkIwVWVOK05kbWp3SGE2dWI1RFoxMno2WXUxOUVhRXNuMXFEc0N1VGF5?=
- =?utf-8?B?dFVrSWxKdk90NUpsOU5kN3gyWW1wNjdJeWJRSjdnWW4vNTdZTjladzQyTmdM?=
- =?utf-8?B?dW9XWTdzWHd0WjlGUndrWTExTVZyeFc2TGNONzM2Y014eU5qUVkzbm5uajVX?=
- =?utf-8?B?STREVGQwZUhCRGM5VVFJN2RnZ1dqZ3BkREpTZkFGNG0xNU9EbFR1TzZSZENM?=
- =?utf-8?B?d1Z3UjdwNGVIdXM0d3Z2RGpNR1Y2cDVRNlBwT2VqS09GVndsTTh5aE9MaGhC?=
- =?utf-8?B?VzNhK0prV21hclpnS1BURHc5OXVLTENYYXlhZkYxdHFjVS9BUFY1bDJaOGVN?=
- =?utf-8?B?Wi9JUEFqVEVHdGpnblo3QThIRE5BblVNWGZ5RVFCUEVlU1VvTys5SG43OXNx?=
- =?utf-8?B?Wk5SOUtGUEpaTHJEWmJpKzFCNDVDdkxFTFBYNWZMWDBvd09xY0VoUkYxTHkr?=
- =?utf-8?B?Ry9ZYjZrRDd3aEczeTBsZmRPVnVRWFh1OHlWUkpJc1Q3dFFST2VIYVhjcXVq?=
- =?utf-8?B?c09Cb0ZhVitsMDV4STJ6dHJEMnhqYklCMFErdklPaHF0V3hZRGlNa21IOTFn?=
- =?utf-8?B?SWoxZ3lRbjFjS2pqSmdKVmt3TTlrdXlLYU85MTBjZ0FEQURMWWV1cVNpZEx4?=
- =?utf-8?B?UUI1OG0zRms1enJVZXZTck96NFFtUlovUlRvSXhLSDVIbDdUaHZaVHhCcEFP?=
- =?utf-8?B?NE5wc25MTGhmWWw4dGFZRjUzVHhMZHhNTVRYVkpKanhCMWppMzdBYUJDN21U?=
- =?utf-8?B?c3N3QVJxRXF6S0RqUVRnQWFZbjZnM0x6dUpUc2xnT2VzTE5MUEJ6SFlQS3FV?=
- =?utf-8?B?OTVLOFRvaHNOZ2hreElTM1VDYWJKNzJaUENNa0FZWmpPb3o1TWhYV1lYWEtR?=
- =?utf-8?B?STM2UzhkQitSeUVIK1NJcU5YRkt6eWpFNkZWMHBHamw1bkZBeUNvNDBtNHRl?=
- =?utf-8?B?dFozRk8xTkdPVHN0NlV5WnMxME93dWMrOTRNdno4YjhqZ09Pa1pRU2VQOXRN?=
- =?utf-8?B?aGFrQndZVGwxemtURXA1eGRuVWtaVGdFbUpMeENsMEpnNC9sYzRKTmt2eTJu?=
- =?utf-8?B?UHM0K2FMMGlZVXBaVXdRRTh0VWx4S1dPTnVSTTA3VjNWc2tzZ3FhVnQ0ZjA0?=
- =?utf-8?B?UFY2d3VVc3pVT2VqN0FOVVY1cUFPLzRkNnE2b3hxSVIySTQzV2hZaUFJN3Bo?=
- =?utf-8?B?a29wc3B6czJPTDdNTDdOalBINEI5ckNCNjJYNE5tSE9uU1E0VGhnOC91bjFR?=
- =?utf-8?B?dXRhSjJKRmhjTXRkcjdFaWpxc2xTNzdOeFd4dnZaSUNRUVA3NFhyMGcydkx3?=
- =?utf-8?B?OWZFTmEzSVJhRmpTRDFmK0d4UG85bzNFN3R1U0ViMU9lbkthK1YyV2UvS0xz?=
- =?utf-8?B?K2xjVFVnb3MwVVZ2T1pZcmMyMjVzZllLSGlsZ2dVbmxvWDlYcS9aNEc2K3dO?=
- =?utf-8?Q?nUgxUJSsbLXmQPihyshWf12yBzV+GfIlSQ/CwGJ?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 25 Jul 2022 17:39:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDAE120A4;
+        Mon, 25 Jul 2022 14:39:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41CC0B810F5;
+        Mon, 25 Jul 2022 21:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9054EC341C6;
+        Mon, 25 Jul 2022 21:39:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658785169;
+        bh=/Bspk3e9rQe32ANBU5B002KwY3/g9QsVcptxd8d6Vqs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nsNJJYAKxD+md8upWEseI9PwnLfzpmor4uWjZ4HYHoSkWy3EhcyhM/MQ7NspknYV2
+         feIpNsFDwvoFmc5ZKquhqkhxyCBpF3GNoWSh9/5+iRFBiv1TpZRCMC1flB+fZnvxcB
+         9HrRmcYPmfPOAYQ2YtAsjN12/g4eNWznMezxT4ej7QKWoizpfpqCVC+rVDxyLaPjEy
+         1TXotsvvi7ZBX86XWbInzFLDlahMPKlzYTKiRs5Eib4pDhF/KWWigCSxhZuWOrjsvN
+         WKheW61nL4RGe0n2MG2D3DhJx/xP1RsBRWZ0kVZ3fShK7jG9YdQgLociomtMjqEBuO
+         y+JsxSwb771Kg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A0EDA40374; Mon, 25 Jul 2022 18:39:26 -0300 (-03)
+Date:   Mon, 25 Jul 2022 18:39:26 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, pc@us.ibm.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [RFC v3 15/17] perf kwork: Add irq trace bpf support
+Message-ID: <Yt8NjtZUnynstEXt@kernel.org>
+References: <20220709015033.38326-1-yangjihong1@huawei.com>
+ <20220709015033.38326-16-yangjihong1@huawei.com>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR17MB3375.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4083d897-c1f7-4237-d497-08da6e857f16
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 21:34:46.7629
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR17MB2020
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220709015033.38326-16-yangjihong1@huawei.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-S29vcPCfmILwn5iC8J+YkfCfmJHwn5iR8J+YjvCfmITwn5iE8J+YtPCfmLTwn5GA8J+RgPCfkoHw
-n5mI8J+ZiPCfmYjwn5mI8J+SgfCfkYDwn5GA8J+YkfCfkoHwn5iB8J+Ys/CfmI7wn5i08J+YkfCf
-kYDwn5iR8J+YhPCfpKPwn6Sj8J+YgPCfmIPwn5iR8J+YtPCfmITwn6Sl8J+kq/CfmKXwn5iw8J+l
-tfCfpbXwn5ih8J+YofCfpKzwn6Sv8J+YrfCfmK3wn5if8J+Yn/CfpbPwn6Sp8J+luPCfpbjwn6W4
-8J+ZgfCfmKnwn6W64pi577iP8J+Yo/CfmJTwn5iU8J+YlPCfmJbwn5ij8J+YovCfmKHwn6W28J+Y
-sPCfmLDwn5il8J+YpfCfmLbigI3wn4yr77iP8J+krPCfpKzwn6Ss8J+kr/CfmLbigI3wn4yr77iP
-8J+ltvCfmLDwn5iw8J+kq/CfpKvwn5iT8J+kr/CfpK/wn6SvDQpPb2lnZ3ZrbHBvdXJl8J+krPCf
-pKzwn6Ss8J+krPCfpKzwn6Ss8J+krPCfpKzwn6Ss8J+krPCfpK/wn6Sv8J+kr/CfpK/wn6Sv8J+k
-r/CfpK/wn6Sv8J+kr/CfpKvwn5iT8J+krPCfpK/wn6Sv8J+krPCfpKzwn5mB8J+YkvCfmI3wn5iS
-8J+YkvCfmI7wn6W48J+kqfCfpbPwn5if8J+YlvCfpbrwn5ip8J+YqfCfpKnwn6Wz8J+ls/CfmJ/w
-n5iW8J+Yo/CfmYHwn5ip4pi577iP8J+Yn/CfmKvwn5ik8J+YrfCfpKzwn6Sp8J+kqfCfpbjwn5iO
-8J+ZgfCfmKnwn5ih8J+YtfCfmKrwn5in8J+kpfCfpKXwn5iv8J+YtfCfpK7wn5is8J+kpfCfmJPw
-n6SX8J+kl/CfmLbwn5iy8J+kpPCfpJDwn6SS8J+klfCfmLXigI3wn5Kr8J+YteKAjfCfkqvwn5i1
-4oCN8J+Sq/CfmLXigI3wn5Kr8J+YteKAjfCfkqvwn5i14oCN8J+Sq/CfmLXigI3wn5Kr8J+YteKA
-jfCfkqvwn5i14oCN8J+Sq/CfmLXigI3wn5Kr8J+YteKAjfCfkqvwn6SR8J+YvPCfmL3imKDvuI/w
-n5KA8J+SgPCfkbvwn5G78J+Ru/Cfkbnwn5G58J+RuvCfkb3wn5G98J+SgPCfkoDwn5G78J+SgPCf
-koDwn5KA4pig77iP4pig77iP4pig77iP4pig77iPDQoNCj4gT24gSnVsIDI1LCAyMDIyLCBhdCAx
-OjA2IEFNLCBWYW5lc3NhIFBhZ2UgPFZlYnBlQG91dGxvb2suY29tPiB3cm90ZToNCj4gDQo+IO+7
-v/CfpbDwn6Ww8J+lsPCfpbDwn6Ww8J+lsPCfpbDwn6Ww8J+lsPCfmI3wn5GM8J+YjfCfkYzwn5iN
-8J+YjfCfmI3wn5iN8J+YjeKYuu+4j+KYuu+4j+KYuu+4j+KYuu+4j+KYuu+4j/CfkpXwn5KV8J+Y
-mvCfmJrwn5ia8J+YmvCfpbDwn5ia8J+YjfCfmI3wn5iN8J+YmvCfmJrwn5iN4pi677iP4pi677iP
-4pi677iP8J+YjfCfkpXwn5ia8J+lsPCfpbDwn5iN4pi677iP4pi677iP8J+YmvCfpbDwn5iN4pi6
-77iP8J+YjfCfpbDwn5iN4pi677iP4pi677iP8J+SlfCfpbDwn6Ww8J+YjeKYuu+4j+KYuu+4j/Cf
-mIoNCj4gDQo+IFNlbnQgZnJvbSBteSBpUGhvbuKcjO+4jw0KPiANCj4+IE9uIEp1bCAyNSwgMjAy
-MiwgYXQgMTowMSBBTSwgWWlmZWkgTGl1IDx5aWZlbGl1QGNzLnN0b255YnJvb2suZWR1PiB3cm90
-ZToNCj4+IA0KPj4g77u/QnVnIGRlc2NyaXB0aW9uIGFuZCBmaXg6DQo+PiANCj4+IDEuIFdyaXRl
-IGRhdGEgdG8gYSBmaWxlLCBzYXkgYWxsIDFzIGZyb20gb2Zmc2V0IDAgdG8gMTYuDQo+PiANCj4+
-IDIuIFRydW5jYXRlIHRoZSBmaWxlIHRvIGEgc21hbGxlciBzaXplLCBzYXkgOCBieXRlcy4NCj4+
-IA0KPj4gMy4gV3JpdGUgbmV3IGJ5dGVzIChzYXkgMnMpIGZyb20gYW4gb2Zmc2V0IHBhc3QgdGhl
-IG9yaWdpbmFsIHNpemUgb2YgdGhlDQo+PiBmaWxlLCBzYXkgYXQgb2Zmc2V0IDIwLCBmb3IgNCBi
-eXRlcy4gIFRoaXMgaXMgc3VwcG9zZWQgdG8gY3JlYXRlIGEgImhvbGUiDQo+PiBpbiB0aGUgZmls
-ZSwgbWVhbmluZyB0aGF0IHRoZSBieXRlcyBmcm9tIG9mZnNldCA4ICh3aGVyZSBpdCB3YXMgdHJ1
-bmNhdGVkDQo+PiBhYm92ZSkgdXAgdG8gdGhlIG5ldyB3cml0ZSBhdCBvZmZzZXQgMjAsIHNob3Vs
-ZCBhbGwgYmUgMHMgKHplcm9zKS4NCj4+IA0KPj4gNC4gZmx1c2ggYWxsIGNhY2hlcyB1c2luZyAi
-ZWNobyAzID4gL3Byb2Mvc3lzL3ZtL2Ryb3BfY2FjaGVzIiAob3IgdW5tb3VudA0KPj4gYW5kIHJl
-bW91bnQpIHRoZSBmL3MuDQo+PiANCj4+IDUuIENoZWNrIHRoZSBjb250ZW50IG9mIHRoZSBmaWxl
-LiAgSXQgaXMgd3JvbmcuICBUaGUgMXMgdGhhdCB1c2VkIHRvIGJlDQo+PiBiZXR3ZWVuIGJ5dGVz
-IDkgYW5kIDE2LCBiZWZvcmUgdGhlIHRydW5jYXRpb24sIGhhdmUgUkVBUFBFQVJFRCAodGhleSBz
-aG91bGQNCj4+IGJlIDBzKS4NCj4+IA0KPj4gV2Ugd3JvdGUgYSBzY3JpcHQgYW5kIGhlbHBlciBD
-IHByb2dyYW0gdG8gcmVwcm9kdWNlIHRoZSBidWcNCj4+IChyZXByb2R1Y2VfamZmczJfd3JpdGVf
-YmVnaW5faXNzdWUuc2gsIHdyaXRlX2ZpbGUuYywgYW5kIE1ha2VmaWxlKS4gIFdlIGNhbg0KPj4g
-bWFrZSB0aGVtIGF2YWlsYWJsZSB0byBhbnlvbmUuDQo+PiANCj4+IFRoZSBhYm92ZSBleGFtcGxl
-IGlzIHNob3duIHdoZW4gd3JpdGluZyBhIHNtYWxsIGZpbGUgd2l0aGluIHRoZSBzYW1lIGZpcnN0
-DQo+PiBwYWdlLiAgQnV0IHRoZSBidWcgaGFwcGVucyBmb3IgbGFyZ2VyIGZpbGVzLCBhcyBsb25n
-IGFzIHN0ZXBzIDEsIDIsIGFuZCAzDQo+PiBhYm92ZSBhbGwgaGFwcGVuIHdpdGhpbiB0aGUgc2Ft
-ZSBwYWdlLg0KPj4gDQo+PiBUaGUgcHJvYmxlbSB3YXMgdHJhY2VkIHRvIHRoZSBqZmZzMl93cml0
-ZV9iZWdpbiBjb2RlLCB3aGVyZSBpdCBnb2VzIGludG8gYW4NCj4+ICdpZicgc3RhdGVtZW50IGlu
-dGVuZGVkIHRvIGhhbmRsZSB3cml0ZXMgcGFzdCB0aGUgY3VycmVudCBFT0YgKGkuZS4sIHdyaXRl
-cw0KPj4gdGhhdCBtYXkgY3JlYXRlIGEgaG9sZSkuICBUaGUgY29kZSBjb21wdXRlcyBhICdwYWdl
-b2ZzJyB0aGF0IGlzIHRoZSBmbG9vcg0KPj4gb2YgdGhlIHdyaXRlIHBvc2l0aW9uIChwb3MpLCBh
-bGlnbmVkIHRvIHRoZSBwYWdlIHNpemUgYm91bmRhcnkuICBJbiBvdGhlcg0KPj4gd29yZHMsICdw
-YWdlb2ZzJyB3aWxsIG5ldmVyIGJlIGxhcmdlciB0aGFuICdwb3MnLiAgVGhlIGNvZGUgdGhlbiBz
-ZXRzIHRoZQ0KPj4gaW50ZXJuYWwgamZmczJfcmF3X2lub2RlLT5pc2l6ZSB0byB0aGUgc2l6ZSBv
-ZiBtYXgoY3VycmVudCBpbm9kZSBzaXplLA0KPj4gcGFnZW9mcykgYnV0IHRoYXQgaXMgd3Jvbmc6
-IHRoZSBuZXcgZmlsZSBzaXplIHNob3VsZCBiZSB0aGUgJ3BvcycsIHdoaWNoIGlzDQo+PiBsYXJn
-ZXIgdGhhbiBib3RoIHRoZSBjdXJyZW50IGlub2RlIHNpemUgYW5kIHBhZ2VvZnMuDQo+PiANCj4+
-IFNpbWlsYXJseSwgdGhlIGNvZGUgaW5jb3JyZWN0bHkgc2V0cyB0aGUgaW50ZXJuYWwgamZmczJf
-cmF3X2lub2RlLT5kc2l6ZSB0bw0KPj4gdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGUgcGFnZW9m
-cyBtaW51cyBjdXJyZW50IGlub2RlIHNpemU7IGluc3RlYWQgaXQNCj4+IHNob3VsZCBiZSB0aGUg
-Y3VycmVudCBwb3MgbWludXMgdGhlIGN1cnJlbnQgaW5vZGUgc2l6ZS4gIEZpbmFsbHksDQo+PiBp
-bm9kZS0+aV9zaXplIHdhcyBhbHNvIHNldCBpbmNvcnJlY3RseS4NCj4+IA0KPj4gVGhlIHBhdGNo
-IGJlbG93IGZpeGVzIHRoaXMgYnVnLiAgVGhlIGJ1ZyB3YXMgZGlzY292ZXJlZCB1c2luZyBhIG5l
-dyB0b29sDQo+PiBmb3IgZmluZGluZyBmL3MgYnVncyB1c2luZyBtb2RlbCBjaGVja2luZywgY2Fs
-bGVkIE1DRlMgKE1vZGVsIENoZWNraW5nIEZpbGUNCj4+IFN5c3RlbXMpLg0KPj4gDQo+PiBTaWdu
-ZWQtb2ZmLWJ5OiBZaWZlaSBMaXUgPHlpZmVsaXVAY3Muc3Rvbnlicm9vay5lZHU+DQo+PiBTaWdu
-ZWQtb2ZmLWJ5OiBFcmV6IFphZG9rIDxlemtAY3Muc3Rvbnlicm9vay5lZHU+DQo+PiBTaWduZWQt
-b2ZmLWJ5OiBNYW5pc2ggQWRrYXIgPG1hZGthckBjcy5zdG9ueWJyb29rLmVkdT4NCj4+IC0tLQ0K
-Pj4gZnMvamZmczIvZmlsZS5jIHwgMTUgKysrKysrKy0tLS0tLS0tDQo+PiAxIGZpbGUgY2hhbmdl
-ZCwgNyBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQ0KPj4gDQo+PiBkaWZmIC0tZ2l0IGEv
-ZnMvamZmczIvZmlsZS5jIGIvZnMvamZmczIvZmlsZS5jDQo+PiBpbmRleCBiYTg2YWNiZTEyZDMu
-LjA0NzkwOTZiOTZlNCAxMDA2NDQNCj4+IC0tLSBhL2ZzL2pmZnMyL2ZpbGUuYw0KPj4gKysrIGIv
-ZnMvamZmczIvZmlsZS5jDQo+PiBAQCAtMTM3LDE5ICsxMzcsMTggQEAgc3RhdGljIGludCBqZmZz
-Ml93cml0ZV9iZWdpbihzdHJ1Y3QgZmlsZSAqZmlscCwgc3RydWN0IGFkZHJlc3Nfc3BhY2UgKm1h
-cHBpbmcsDQo+PiAgIHN0cnVjdCBqZmZzMl9pbm9kZV9pbmZvICpmID0gSkZGUzJfSU5PREVfSU5G
-Tyhpbm9kZSk7DQo+PiAgIHN0cnVjdCBqZmZzMl9zYl9pbmZvICpjID0gSkZGUzJfU0JfSU5GTyhp
-bm9kZS0+aV9zYik7DQo+PiAgIHBnb2ZmX3QgaW5kZXggPSBwb3MgPj4gUEFHRV9TSElGVDsNCj4+
-IC0gICAgdWludDMyX3QgcGFnZW9mcyA9IGluZGV4IDw8IFBBR0VfU0hJRlQ7DQo+PiAgIGludCBy
-ZXQgPSAwOw0KPj4gDQo+PiAgIGpmZnMyX2RiZygxLCAiJXMoKVxuIiwgX19mdW5jX18pOw0KPj4g
-DQo+PiAtICAgIGlmIChwYWdlb2ZzID4gaW5vZGUtPmlfc2l6ZSkgew0KPj4gLSAgICAgICAgLyog
-TWFrZSBuZXcgaG9sZSBmcmFnIGZyb20gb2xkIEVPRiB0byBuZXcgcGFnZSAqLw0KPj4gKyAgICBp
-ZiAocG9zID4gaW5vZGUtPmlfc2l6ZSkgew0KPj4gKyAgICAgICAgLyogTWFrZSBuZXcgaG9sZSBm
-cmFnIGZyb20gb2xkIEVPRiB0byBuZXcgcG9zaXRpb24gKi8NCj4+ICAgICAgIHN0cnVjdCBqZmZz
-Ml9yYXdfaW5vZGUgcmk7DQo+PiAgICAgICBzdHJ1Y3QgamZmczJfZnVsbF9kbm9kZSAqZm47DQo+
-PiAgICAgICB1aW50MzJfdCBhbGxvY19sZW47DQo+PiANCj4+IC0gICAgICAgIGpmZnMyX2RiZygx
-LCAiV3JpdGluZyBuZXcgaG9sZSBmcmFnIDB4JXgtMHgleCBiZXR3ZWVuIGN1cnJlbnQgRU9GIGFu
-ZCBuZXcgcGFnZVxuIiwNCj4+IC0gICAgICAgICAgICAgICh1bnNpZ25lZCBpbnQpaW5vZGUtPmlf
-c2l6ZSwgcGFnZW9mcyk7DQo+PiArICAgICAgICBqZmZzMl9kYmcoMSwgIldyaXRpbmcgbmV3IGhv
-bGUgZnJhZyAweCV4LTB4JXggYmV0d2VlbiBjdXJyZW50IEVPRiBhbmQgbmV3IHBvc2l0aW9uXG4i
-LA0KPj4gKyAgICAgICAgICAgICAgKHVuc2lnbmVkIGludClpbm9kZS0+aV9zaXplLCAodWludDMy
-X3QpcG9zKTsNCj4+IA0KPj4gICAgICAgcmV0ID0gamZmczJfcmVzZXJ2ZV9zcGFjZShjLCBzaXpl
-b2YocmkpLCAmYWxsb2NfbGVuLA0KPj4gICAgICAgICAgICAgICAgICAgICBBTExPQ19OT1JNQUws
-IEpGRlMyX1NVTU1BUllfSU5PREVfU0laRSk7DQo+PiBAQCAtMTY5LDEwICsxNjgsMTAgQEAgc3Rh
-dGljIGludCBqZmZzMl93cml0ZV9iZWdpbihzdHJ1Y3QgZmlsZSAqZmlscCwgc3RydWN0IGFkZHJl
-c3Nfc3BhY2UgKm1hcHBpbmcsDQo+PiAgICAgICByaS5tb2RlID0gY3B1X3RvX2plbW9kZShpbm9k
-ZS0+aV9tb2RlKTsNCj4+ICAgICAgIHJpLnVpZCA9IGNwdV90b19qZTE2KGlfdWlkX3JlYWQoaW5v
-ZGUpKTsNCj4+ICAgICAgIHJpLmdpZCA9IGNwdV90b19qZTE2KGlfZ2lkX3JlYWQoaW5vZGUpKTsN
-Cj4+IC0gICAgICAgIHJpLmlzaXplID0gY3B1X3RvX2plMzIobWF4KCh1aW50MzJfdClpbm9kZS0+
-aV9zaXplLCBwYWdlb2ZzKSk7DQo+PiArICAgICAgICByaS5pc2l6ZSA9IGNwdV90b19qZTMyKCh1
-aW50MzJfdClwb3MpOw0KPj4gICAgICAgcmkuYXRpbWUgPSByaS5jdGltZSA9IHJpLm10aW1lID0g
-Y3B1X3RvX2plMzIoSkZGUzJfTk9XKCkpOw0KPj4gICAgICAgcmkub2Zmc2V0ID0gY3B1X3RvX2pl
-MzIoaW5vZGUtPmlfc2l6ZSk7DQo+PiAtICAgICAgICByaS5kc2l6ZSA9IGNwdV90b19qZTMyKHBh
-Z2VvZnMgLSBpbm9kZS0+aV9zaXplKTsNCj4+ICsgICAgICAgIHJpLmRzaXplID0gY3B1X3RvX2pl
-MzIoKHVpbnQzMl90KXBvcyAtIGlub2RlLT5pX3NpemUpOw0KPj4gICAgICAgcmkuY3NpemUgPSBj
-cHVfdG9famUzMigwKTsNCj4+ICAgICAgIHJpLmNvbXByID0gSkZGUzJfQ09NUFJfWkVSTzsNCj4+
-ICAgICAgIHJpLm5vZGVfY3JjID0gY3B1X3RvX2plMzIoY3JjMzIoMCwgJnJpLCBzaXplb2Yocmkp
-LTgpKTsNCj4+IEBAIC0yMDIsNyArMjAxLDcgQEAgc3RhdGljIGludCBqZmZzMl93cml0ZV9iZWdp
-bihzdHJ1Y3QgZmlsZSAqZmlscCwgc3RydWN0IGFkZHJlc3Nfc3BhY2UgKm1hcHBpbmcsDQo+PiAg
-ICAgICAgICAgZ290byBvdXRfZXJyOw0KPj4gICAgICAgfQ0KPj4gICAgICAgamZmczJfY29tcGxl
-dGVfcmVzZXJ2YXRpb24oYyk7DQo+PiAtICAgICAgICBpbm9kZS0+aV9zaXplID0gcGFnZW9mczsN
-Cj4+ICsgICAgICAgIGlub2RlLT5pX3NpemUgPSBwb3M7DQo+PiAgICAgICBtdXRleF91bmxvY2so
-JmYtPnNlbSk7DQo+PiAgIH0NCj4+IA0KPj4gLS0gDQo+PiAyLjI1LjENCj4+IA0KPj4gDQo+PiBf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4+
-IExpbnV4IE1URCBkaXNjdXNzaW9uIG1haWxpbmcgbGlzdA0KPj4gaHR0cDovL2xpc3RzLmluZnJh
-ZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1tdGQvDQo=
+Em Sat, Jul 09, 2022 at 09:50:31AM +0800, Yang Jihong escreveu:
+> Implements irq trace bpf function.
+> 
+> Test cases:
+> Trace irq without filter:
+> 
+>   # perf kwork -k irq rep -b
+>   Starting trace, Hit <Ctrl+C> to stop and report
+
+That is cool, works like a charm :-) Lemme go back testing the rest...
+
+- Arnaldo
+
+>   ^C
+>     Kwork Name                     | Cpu  | Total Runtime | Count     | Max runtime   | Max runtime start   | Max runtime end     |
+>    --------------------------------------------------------------------------------------------------------------------------------
+>     virtio0-requests:25            | 0000 |     31.026 ms |       285 |      1.493 ms |     110326.049963 s |     110326.051456 s |
+>     eth0:10                        | 0002 |      7.875 ms |        96 |      1.429 ms |     110313.916835 s |     110313.918264 s |
+>     ata_piix:14                    | 0002 |      2.510 ms |        28 |      0.396 ms |     110331.367987 s |     110331.368383 s |
+>    --------------------------------------------------------------------------------------------------------------------------------
+> 
+> Trace irq with cpu filter:
+> 
+>   # perf kwork -k irq rep -b -C 0
+>   Starting trace, Hit <Ctrl+C> to stop and report
+>   ^C
+>     Kwork Name                     | Cpu  | Total Runtime | Count     | Max runtime   | Max runtime start   | Max runtime end     |
+>    --------------------------------------------------------------------------------------------------------------------------------
+>     virtio0-requests:25            | 0000 |     34.288 ms |       282 |      2.061 ms |     110358.078968 s |     110358.081029 s |
+>    --------------------------------------------------------------------------------------------------------------------------------
+> 
+> Trace irq with name filter:
+> 
+>   # perf kwork -k irq rep -b -n eth0
+>   Starting trace, Hit <Ctrl+C> to stop and report
+>   ^C
+>     Kwork Name                     | Cpu  | Total Runtime | Count     | Max runtime   | Max runtime start   | Max runtime end     |
+>    --------------------------------------------------------------------------------------------------------------------------------
+>     eth0:10                        | 0002 |      2.184 ms |        21 |      0.572 ms |     110386.541699 s |     110386.542271 s |
+>    --------------------------------------------------------------------------------------------------------------------------------
+> 
+> Trace irq with summary:
+> 
+>   # perf kwork -k irq rep -b -S
+>   Starting trace, Hit <Ctrl+C> to stop and report
+>   ^C
+>     Kwork Name                     | Cpu  | Total Runtime | Count     | Max runtime   | Max runtime start   | Max runtime end     |
+>    --------------------------------------------------------------------------------------------------------------------------------
+>     virtio0-requests:25            | 0000 |     42.923 ms |       285 |      1.181 ms |     110418.128867 s |     110418.130049 s |
+>     eth0:10                        | 0002 |      2.085 ms |        20 |      0.668 ms |     110416.002935 s |     110416.003603 s |
+>     ata_piix:14                    | 0002 |      0.970 ms |         4 |      0.656 ms |     110424.034482 s |     110424.035138 s |
+>    --------------------------------------------------------------------------------------------------------------------------------
+>     Total count            :       309
+>     Total runtime   (msec) :    45.977 (0.003% load average)
+>     Total time span (msec) : 17017.655
+>    --------------------------------------------------------------------------------------------------------------------------------
+> 
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>  tools/perf/util/bpf_kwork.c                |  40 +++++-
+>  tools/perf/util/bpf_skel/kwork_trace.bpf.c | 150 +++++++++++++++++++++
+>  2 files changed, 189 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/bpf_kwork.c b/tools/perf/util/bpf_kwork.c
+> index 433bfadd3af1..08252fcda1a4 100644
+> --- a/tools/perf/util/bpf_kwork.c
+> +++ b/tools/perf/util/bpf_kwork.c
+> @@ -62,9 +62,47 @@ void perf_kwork__trace_finish(void)
+>  	skel->bss->enabled = 0;
+>  }
+>  
+> +static int get_work_name_from_map(struct work_key *key, char **ret_name)
+> +{
+> +	char name[MAX_KWORKNAME] = { 0 };
+> +	int fd = bpf_map__fd(skel->maps.perf_kwork_names);
+> +
+> +	*ret_name = NULL;
+> +
+> +	if (fd < 0) {
+> +		pr_debug("Invalid names map fd\n");
+> +		return 0;
+> +	}
+> +
+> +	if ((bpf_map_lookup_elem(fd, key, name) == 0) && (strlen(name) != 0)) {
+> +		*ret_name = strdup(name);
+> +		if (*ret_name == NULL) {
+> +			pr_err("Failed to copy work name\n");
+> +			return -1;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void irq_load_prepare(struct perf_kwork *kwork)
+> +{
+> +	if (kwork->report == KWORK_REPORT_RUNTIME) {
+> +		bpf_program__set_autoload(
+> +			skel->progs.report_irq_handler_entry, true);
+> +		bpf_program__set_autoload(
+> +			skel->progs.report_irq_handler_exit, true);
+> +	}
+> +}
+> +
+> +static struct kwork_class_bpf kwork_irq_bpf = {
+> +	.load_prepare  = irq_load_prepare,
+> +	.get_work_name = get_work_name_from_map,
+> +};
+> +
+>  static struct kwork_class_bpf *
+>  kwork_class_bpf_supported_list[KWORK_CLASS_MAX] = {
+> -	[KWORK_CLASS_IRQ]       = NULL,
+> +	[KWORK_CLASS_IRQ]       = &kwork_irq_bpf,
+>  	[KWORK_CLASS_SOFTIRQ]   = NULL,
+>  	[KWORK_CLASS_WORKQUEUE] = NULL,
+>  };
+> diff --git a/tools/perf/util/bpf_skel/kwork_trace.bpf.c b/tools/perf/util/bpf_skel/kwork_trace.bpf.c
+> index 36112be831e3..1925407d1c16 100644
+> --- a/tools/perf/util/bpf_skel/kwork_trace.bpf.c
+> +++ b/tools/perf/util/bpf_skel/kwork_trace.bpf.c
+> @@ -71,4 +71,154 @@ int enabled = 0;
+>  int has_cpu_filter = 0;
+>  int has_name_filter = 0;
+>  
+> +static __always_inline int local_strncmp(const char *s1,
+> +					 unsigned int sz, const char *s2)
+> +{
+> +	int ret = 0;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < sz; i++) {
+> +		ret = (unsigned char)s1[i] - (unsigned char)s2[i];
+> +		if (ret || !s1[i] || !s2[i])
+> +			break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static __always_inline int trace_event_match(struct work_key *key, char *name)
+> +{
+> +	__u8 *cpu_val;
+> +	char *name_val;
+> +	__u32 zero = 0;
+> +	__u32 cpu = bpf_get_smp_processor_id();
+> +
+> +	if (!enabled)
+> +		return 0;
+> +
+> +	if (has_cpu_filter) {
+> +		cpu_val = bpf_map_lookup_elem(&perf_kwork_cpu_filter, &cpu);
+> +		if (!cpu_val)
+> +			return 0;
+> +	}
+> +
+> +	if (has_name_filter && (name != NULL)) {
+> +		name_val = bpf_map_lookup_elem(&perf_kwork_name_filter, &zero);
+> +		if (name_val &&
+> +		    (local_strncmp(name_val, MAX_KWORKNAME, name) != 0)) {
+> +			return 0;
+> +		}
+> +	}
+> +
+> +	return 1;
+> +}
+> +
+> +static __always_inline void do_update_time(void *map, struct work_key *key,
+> +					   __u64 time_start, __u64 time_end)
+> +{
+> +	struct report_data zero, *data;
+> +	__s64 delta = time_end - time_start;
+> +
+> +	if (delta < 0)
+> +		return;
+> +
+> +	data = bpf_map_lookup_elem(map, key);
+> +	if (!data) {
+> +		__builtin_memset(&zero, 0, sizeof(zero));
+> +		bpf_map_update_elem(map, key, &zero, BPF_NOEXIST);
+> +		data = bpf_map_lookup_elem(map, key);
+> +		if (!data)
+> +			return;
+> +	}
+> +
+> +	if ((delta > data->max_time) ||
+> +	    (data->max_time == 0)) {
+> +		data->max_time       = delta;
+> +		data->max_time_start = time_start;
+> +		data->max_time_end   = time_end;
+> +	}
+> +
+> +	data->total_time += delta;
+> +	data->nr++;
+> +}
+> +
+> +static __always_inline void do_update_timestart(void *map, struct work_key *key)
+> +{
+> +	__u64 ts = bpf_ktime_get_ns();
+> +
+> +	bpf_map_update_elem(map, key, &ts, BPF_ANY);
+> +}
+> +
+> +static __always_inline void do_update_timeend(void *report_map, void *time_map,
+> +					      struct work_key *key)
+> +{
+> +	__u64 *time = bpf_map_lookup_elem(time_map, key);
+> +
+> +	if (time) {
+> +		bpf_map_delete_elem(time_map, key);
+> +		do_update_time(report_map, key, *time, bpf_ktime_get_ns());
+> +	}
+> +}
+> +
+> +static __always_inline void do_update_name(void *map,
+> +					   struct work_key *key, char *name)
+> +{
+> +	if (!bpf_map_lookup_elem(map, key))
+> +		bpf_map_update_elem(map, key, name, BPF_ANY);
+> +}
+> +
+> +static __always_inline int update_timestart_and_name(void *time_map,
+> +						     void *names_map,
+> +						     struct work_key *key,
+> +						     char *name)
+> +{
+> +	if (!trace_event_match(key, name))
+> +		return 0;
+> +
+> +	do_update_timestart(time_map, key);
+> +	do_update_name(names_map, key, name);
+> +
+> +	return 0;
+> +}
+> +
+> +static __always_inline int update_timeend(void *report_map,
+> +					  void *time_map, struct work_key *key)
+> +{
+> +	if (!trace_event_match(key, NULL))
+> +		return 0;
+> +
+> +	do_update_timeend(report_map, time_map, key);
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("tracepoint/irq/irq_handler_entry")
+> +int report_irq_handler_entry(struct trace_event_raw_irq_handler_entry *ctx)
+> +{
+> +	char name[MAX_KWORKNAME];
+> +	struct work_key key = {
+> +		.type = KWORK_CLASS_IRQ,
+> +		.cpu  = bpf_get_smp_processor_id(),
+> +		.id   = (__u64)ctx->irq,
+> +	};
+> +	void *name_addr = (void *)ctx + (ctx->__data_loc_name & 0xffff);
+> +
+> +	bpf_probe_read_kernel_str(name, sizeof(name), name_addr);
+> +
+> +	return update_timestart_and_name(&perf_kwork_time,
+> +					 &perf_kwork_names, &key, name);
+> +}
+> +
+> +SEC("tracepoint/irq/irq_handler_exit")
+> +int report_irq_handler_exit(struct trace_event_raw_irq_handler_exit *ctx)
+> +{
+> +	struct work_key key = {
+> +		.type = KWORK_CLASS_IRQ,
+> +		.cpu  = bpf_get_smp_processor_id(),
+> +		.id   = (__u64)ctx->irq,
+> +	};
+> +
+> +	return update_timeend(&perf_kwork_report, &perf_kwork_time, &key);
+> +}
+> +
+>  char LICENSE[] SEC("license") = "Dual BSD/GPL";
+> -- 
+> 2.30.GIT
+
+-- 
+
+- Arnaldo

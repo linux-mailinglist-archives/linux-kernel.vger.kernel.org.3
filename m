@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0C157FAE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A6157FAED
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbiGYIHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S233583AbiGYIHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiGYIHV (ORCPT
+        with ESMTP id S229900AbiGYIHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:07:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C55413CD2;
-        Mon, 25 Jul 2022 01:07:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A360FD6E;
-        Mon, 25 Jul 2022 01:07:20 -0700 (PDT)
-Received: from [10.57.11.206] (unknown [10.57.11.206])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 388043F73D;
-        Mon, 25 Jul 2022 01:07:17 -0700 (PDT)
-Message-ID: <837b387a-b29d-2122-efb0-881b24dd2725@arm.com>
-Date:   Mon, 25 Jul 2022 09:07:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] cpufreq: schedutil: Move max CPU capacity to sugov_policy
+        Mon, 25 Jul 2022 04:07:42 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21BC13CD2;
+        Mon, 25 Jul 2022 01:07:40 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 3804D5FD0B;
+        Mon, 25 Jul 2022 11:07:39 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658736459;
+        bh=sObFnqMOAqUFZ0if5Z6xdt9QYQocsNhmpGqLuSvEmg0=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=ZSC+dgKzMe5KQOX2bHAFy9k1fbo6e4VPd+sP1+eVqADRou6+zZzNJ6VhcMGjrqS2O
+         5Lsv2cP1tdj3yS106hiwsdyYImOVdzfPQlmjW6ZSM8td35SZKUv+wcQIgedQndfDkY
+         vl4bc3aR0gCvDJuY1aFzQ7zsfvZzgMsvVySHd9lJ/6SmbllceHWJJacRVciHcxhZpU
+         k7ZT9Shga1rI+R9xGe2YS8xzye/k4uSxvMmX3DsePSp6NBQL6C3Z7wH4FxIKM5e2yS
+         5yYpSRDNj/GgrmiKD2jPp42rIHLNK9mHvxa3Yp16akDmFOyDuGuMzVdgRFgu9n/EtR
+         W/l2T3ax8vweA==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 25 Jul 2022 11:07:38 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v2 6/9] hv_sock: disable SO_RCVLOWAT support
+Thread-Topic: [RFC PATCH v2 6/9] hv_sock: disable SO_RCVLOWAT support
+Thread-Index: AQHYn/2PdDRRTeWJ4EqSAxbUzqz6wg==
+Date:   Mon, 25 Jul 2022 08:07:19 +0000
+Message-ID: <6ee85279-df24-7de1-d62d-7a8249fc8fc3@sberdevices.ru>
+In-Reply-To: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
+Accept-Language: en-US, ru-RU
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-References: <20220711124229.16516-1-lukasz.luba@arm.com>
- <1198724e-d94f-0b7c-9c4a-90595f8426d2@arm.com>
- <CAJZ5v0gh78z3tw6simaZ5S6dmGvDc-OE6t02N8vQYk-2eoFQgA@mail.gmail.com>
- <deddd9cc-f517-cff9-e304-e1f09c6784b7@arm.com>
- <CAJZ5v0jYzJo2BU-qKkaJog6pYx7SkpgmWGd6vTTkc2T=gx8abw@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0jYzJo2BU-qKkaJog6pYx7SkpgmWGd6vTTkc2T=gx8abw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0E7C70C150A9C040BEFBAFD04BAAB181@sberdevices.ru>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/25 03:52:00 #19956163
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
-
-On 7/15/22 18:29, Rafael J. Wysocki wrote:
-> On Fri, Jul 15, 2022 at 1:47 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 7/15/22 12:44, Rafael J. Wysocki wrote:
->>> On Fri, Jul 15, 2022 at 10:47 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> Hi Rafael,
->>>>
->>>> gentle ping.
->>>>
->>>> On 7/11/22 13:42, Lukasz Luba wrote:
->>>>> There is no need to keep the max CPU capacity in the per_cpu instance.
->>>>> Furthermore, there is no need to check and update that variable
->>>>> (sg_cpu->max) everytime in the frequency change request, which is part
->>>>> of hot path. Instead use struct sugov_policy to store that information.
->>>>> Initialize the max CPU capacity during the setup and start callback.
->>>>> We can do that since all CPUs in the same frequency domain have the same
->>>>> max capacity (capacity setup and thermal pressure are based on that).
->>>>>
->>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>>> ---
->>>>>     kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
->>>>>     1 file changed, 15 insertions(+), 15 deletions(-)
->>>>
->>>> The patch got Ack from Viresh.
->>>> Could you take it?
->>>
->>> Yes, it's there in my queue.  Same for the EM changes.
->>
->> Thank you Rafael!
-> 
-> Well, the patch doesn't apply on top of 5.19-rc6, because
-> sugov_get_util() is somewhat different.
-> 
-> Please rebase it and resend.
-
-My apologies for the delay, I was on holidays.
-
-I'll do that today and resend it.
-
-Regards,
-Lukasz
+Rm9yIEh5cGVyLVYgaXQgaXMgcXVpZXQgZGlmZmljdWx0IHRvIHN1cHBvcnQgdGhpcyBzb2NrZXQg
+b3B0aW9uLGR1ZSB0bw0KdHJhbnNwb3J0IGludGVybmFscywgc28gZGlzYWJsZSBpdC4NCg0KU2ln
+bmVkLW9mZi1ieTogQXJzZW5peSBLcmFzbm92IDxBVktyYXNub3ZAc2JlcmRldmljZXMucnU+DQot
+LS0NCiBuZXQvdm13X3Zzb2NrL2h5cGVydl90cmFuc3BvcnQuYyB8IDcgKysrKysrKw0KIDEgZmls
+ZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL25ldC92bXdfdnNvY2sv
+aHlwZXJ2X3RyYW5zcG9ydC5jIGIvbmV0L3Ztd192c29jay9oeXBlcnZfdHJhbnNwb3J0LmMNCmlu
+ZGV4IGUxMTFlMTNiNjY2MC4uNWZhYjhmMzU2YTg2IDEwMDY0NA0KLS0tIGEvbmV0L3Ztd192c29j
+ay9oeXBlcnZfdHJhbnNwb3J0LmMNCisrKyBiL25ldC92bXdfdnNvY2svaHlwZXJ2X3RyYW5zcG9y
+dC5jDQpAQCAtODAyLDYgKzgwMiwxMiBAQCBpbnQgaHZzX25vdGlmeV9zZW5kX3Bvc3RfZW5xdWV1
+ZShzdHJ1Y3QgdnNvY2tfc29jayAqdnNrLCBzc2l6ZV90IHdyaXR0ZW4sDQogCXJldHVybiAwOw0K
+IH0NCiANCitzdGF0aWMNCitpbnQgaHZzX3NldF9yY3Zsb3dhdChzdHJ1Y3QgdnNvY2tfc29jayAq
+dnNrLCBpbnQgdmFsKQ0KK3sNCisJcmV0dXJuIC1FT1BOT1RTVVBQOw0KK30NCisNCiBzdGF0aWMg
+c3RydWN0IHZzb2NrX3RyYW5zcG9ydCBodnNfdHJhbnNwb3J0ID0gew0KIAkubW9kdWxlICAgICAg
+ICAgICAgICAgICAgID0gVEhJU19NT0RVTEUsDQogDQpAQCAtODM3LDYgKzg0Myw3IEBAIHN0YXRp
+YyBzdHJ1Y3QgdnNvY2tfdHJhbnNwb3J0IGh2c190cmFuc3BvcnQgPSB7DQogCS5ub3RpZnlfc2Vu
+ZF9wcmVfZW5xdWV1ZSAgPSBodnNfbm90aWZ5X3NlbmRfcHJlX2VucXVldWUsDQogCS5ub3RpZnlf
+c2VuZF9wb3N0X2VucXVldWUgPSBodnNfbm90aWZ5X3NlbmRfcG9zdF9lbnF1ZXVlLA0KIA0KKwku
+c2V0X3Jjdmxvd2F0ICAgICAgICAgICAgID0gaHZzX3NldF9yY3Zsb3dhdA0KIH07DQogDQogc3Rh
+dGljIGJvb2wgaHZzX2NoZWNrX3RyYW5zcG9ydChzdHJ1Y3QgdnNvY2tfc29jayAqdnNrKQ0KLS0g
+DQoyLjI1LjENCg==

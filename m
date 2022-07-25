@@ -2,72 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789F157FB5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C207E57FB68
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233984AbiGYI3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
+        id S234018AbiGYIbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbiGYI3k (ORCPT
+        with ESMTP id S234141AbiGYIau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:29:40 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62D813FBE;
-        Mon, 25 Jul 2022 01:29:37 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id p21so4602566ljh.12;
-        Mon, 25 Jul 2022 01:29:37 -0700 (PDT)
+        Mon, 25 Jul 2022 04:30:50 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A6A6556;
+        Mon, 25 Jul 2022 01:30:20 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id n2so8081171qkk.8;
+        Mon, 25 Jul 2022 01:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bSa24RkLGOVb9mqXyzx5nIyXZhJRiDANt8v3RVr4jNw=;
-        b=NZEnL/5HwwpZkPsB4qWr1n9TlyT8CGVdbUGeyp3B+6OTVvXVjq94R/vWnIP5/sivRD
-         Ur1DfxHDTUN1v7ujHMDWo/yb6BCdUPIf1m/zfO8QuYDcC7haEbJxRDF7Pn649G9cYR+K
-         JqWOmH5SrK9pSbrKnnnKY+5Rb455r2EiMZ2PR0EY1Cx0z4T3U1FnXQNPQFSd825728uw
-         +drQyj53j2SVztE1TZ9M0aEQJzN44LwBeE34w0/6YVcpxkM57UXuw5VNJc/X4l2s8VZB
-         Y0XpHoJyLsGrQh3w7hbtBlmgC0kW2biVf5WF3HrDkjgtD7/HRt7maXTL4/d/vyL2Dn6a
-         GA0A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eGTl5W3lU5EPUSxceW+3YfZM8YTmZNPLhO3+yi0Lxxo=;
+        b=SchD1OSJhqZUbaDH3npCvBVhvgdsTgcai4JGkAeNGwKszMwOXVv1jP2YUfdpVF00gi
+         M7W+LOBWkm3fvR7QR5Oi7Rr243ZKrwIRGyjvM4fEdp3ybWcWAtUz3ifU5jDZ2eCRBBLb
+         hVRD5fVGR5o7NHR3kRn8qM+u20mgIRdugneUsK0DRfgczIFrKpOhBB+f9+/lUqaYKRv+
+         zCqM+TkCzfpywtt7PK8+F+XO4TuRbG4FDiDPWiwIK0+yYxleqIJNXSwBHMHq6a6DI1r4
+         IHORJbjxNq0t+3W70uo7ZSMhJhotvD3N/NslNtJkOTvO+ulZgz6/dODRy4NI0YAEC0V6
+         1QjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bSa24RkLGOVb9mqXyzx5nIyXZhJRiDANt8v3RVr4jNw=;
-        b=F3BTFi7YRVLASz1jhKphBDXgxj0OWvnQ5GKuZUVx5TcghkRn1XJj5Bkn+rX0/1E54v
-         aS9hJKVnqmwiTEElVsy1p0me11XAZzmSsDGk7Ht6KEtXQM+fJoWuizRVhPlyeQHKLQp9
-         YdN7K0H4yhNXF5QaiA7ThuGn10xYdbHxANypxW5jydGOk+SNnrT7ruysQDLn4y/BCk5U
-         QhSct/8VGHlos0IVPx0FcaR1jiNHK/0npXgAOUvP8y+xUzEeKdGz2pg9E9xvF6ZYKNYW
-         V5V5DSGncfr/bU+S0ByGZuQl8h2pPoff4D9Ivif4k9XyCwqoGQybuVuboJD01vDBqTxB
-         hQsw==
-X-Gm-Message-State: AJIora//h3blu0QXrK2dkiCI4MmXD7tSx2Fgfw/yRCb1FYMfZ1956xXK
-        XKJkLz5Om40oB1W+WEDr/Ak=
-X-Google-Smtp-Source: AGRyM1sL8dXypJNjduwiqiel7ZINjQ4gH90GfP8zpYz+wdc3KAC/BR7gkYlI7ebg3aFeuA3y5CnZQA==
-X-Received: by 2002:a2e:908:0:b0:25d:e37b:2cbb with SMTP id 8-20020a2e0908000000b0025de37b2cbbmr3763221ljj.401.1658737775869;
-        Mon, 25 Jul 2022 01:29:35 -0700 (PDT)
-Received: from [192.168.1.103] ([31.173.82.139])
-        by smtp.gmail.com with ESMTPSA id p13-20020a2ea4cd000000b0025e0396786dsm715578ljm.93.2022.07.25.01.29.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 01:29:35 -0700 (PDT)
-Subject: Re: [PATCH v2] USB: HCD: Fix URB giveback issue in tasklet function
-To:     Weitao Wang <WeitaoWang-oc@zhaoxin.com>, stern@rowland.harvard.edu,
-        gregkh@linuxfoundation.org, kishon@ti.com, dianders@chromium.org,
-        s.shtylyov@omp.ru, mka@chromium.org, ming.lei@canonical.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tonywwang@zhaoxin.com, weitaowang@zhaoxin.com
-References: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <3b9a3fec-7716-3e9d-1e91-cfdac46845f7@gmail.com>
-Date:   Mon, 25 Jul 2022 11:29:33 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eGTl5W3lU5EPUSxceW+3YfZM8YTmZNPLhO3+yi0Lxxo=;
+        b=DOwl29MfcAr7pGLDLeY/CXUd9wHq14dJzb6ZC3QEzBvAMZYanQyJ40IkjdbZxbgo3u
+         TfjapNLDmOhbyRk9hQB1V/Bzg0RMyiJJAvqfkVRKHlEXFMnywTtNZx6IkkAN2hx9kTkA
+         7jinPHvENmkw2uMaZG6tLZtHGmgyDHi3PCqOtHm2cg4wPZfY+V/1skHtMJNkRTBi77Nq
+         h+m2mN0PhsQ4/7AnPkB4dJ7XIs9E0WC+z87kRppObiWNG3mUEE+9uSjGQyeW82ncWaNb
+         Ijq3QCWFf13/96DwvTKRavkeH9zWnNpuSf1CQ/jG1azEfvpBJGpAyOEjpINangIWFazH
+         NXkg==
+X-Gm-Message-State: AJIora9aI99Ljjb9e5EkFol/ChC8WbCXGp2VPVf/Z5pHpunSby3hOO8A
+        pRFQvgkmu/wjFMamGUPLfl4H7EEqtU4Lcl2Sanc=
+X-Google-Smtp-Source: AGRyM1tT9zd1NbQQxCDwlfF4CX1SIOVXegpCvtscSaJImwYFwZu4GtSNklBiffb6QTC6/u0h5ukzMhHUITILaRb40TA=
+X-Received: by 2002:a05:620a:2942:b0:6b5:e33a:1771 with SMTP id
+ n2-20020a05620a294200b006b5e33a1771mr8042028qkp.665.1658737820011; Mon, 25
+ Jul 2022 01:30:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-8-peterwu.pub@gmail.com>
+ <CAHp75VfiKMROzxeEaCH6qCthK9qanJPqbjADLMVH-V0upKf+9Q@mail.gmail.com>
+In-Reply-To: <CAHp75VfiKMROzxeEaCH6qCthK9qanJPqbjADLMVH-V0upKf+9Q@mail.gmail.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Mon, 25 Jul 2022 16:29:43 +0800
+Message-ID: <CABtFH5++4N1mECJ0vN-79WsJJWcBTVxLFgvkiouPf1qev7LHHQ@mail.gmail.com>
+Subject: Re: [PATCH v6 07/13] mfd: mt6370: Add MediaTek MT6370 support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,63 +96,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Mon, Jul 25, 2022 at 4:00 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
 
-On 7/25/22 9:52 AM, Weitao Wang wrote:
+...
 
-> Usb core introduce the mechanism of giveback of URB in tasklet context to
-> reduce hardware interrupt handling time. On some test situation(such as
-> FIO with 4KB block size), when tasklet callback function called to
-> giveback URB, interrupt handler add URB node to the bh->head list also.
-> If check bh->head list again after finish all URB giveback of local_list,
-> then it may introduce a "dynamic balance" between giveback URB and add URB
-> to bh->head list. This tasklet callback function may not exit for a long
-> time, which will cause other tasklet function calls to be delayed. Some
-> real-time applications(such as KB and Mouse) will see noticeable lag.
-> 
-> Fix this issue by taking new URBs giveback in next tasklet function call.
-> Add a member high_prio for structure giveback_urb_bh and replace the local
-> high_prio_bh variable with this structure member in usb_hcd_giveback_urb.
-> 
-> Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
-> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
-> ---
-> v1->v2:
->  - Fix compile warning by remove label "restart".
->  - Modify the patch description info.
->  - Change structure member from hi_priority to high_prio.
-> 
->  drivers/usb/core/hcd.c  | 25 ++++++++++++++-----------
->  include/linux/usb/hcd.h |  1 +
->  2 files changed, 15 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 06eea8848ccc..1feb9a604380 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-[...]
-> @@ -2959,6 +2961,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
->  
->  	/* initialize tasklets */
->  	init_giveback_urb_bh(&hcd->high_prio_bh);
-> +	hcd->high_prio_bh.high_prio = 1;
+>
+> > +#define MT6370_REG_DEV_INFO    0x100
+> > +#define MT6370_REG_CHG_IRQ1    0x1C0
+> > +#define MT6370_REG_CHG_MASK1   0x1E0
+> > +
+> > +#define MT6370_VENID_MASK      GENMASK(7, 4)
+> > +
+> > +#define MT6370_NUM_IRQREGS     16
+> > +#define MT6370_USBC_I2CADDR    0x4E
+>
+> > +#define MT6370_REG_ADDRLEN     2
+> > +#define MT6370_REG_MAXADDR     0x1FF
+>
+> These two more logically to have near to other _REG_* definitions above.
 
-   s/1/true/?
+Hi Andy,
+Thanks for your review.
+Do you mean that we should move '#define MT6370_USBC_I2CADDR' and
+'#define MT6370_REG_MAXADDR' after the line '#define
+MT6370_REG_CHG_MASK1'?
+-------------------------------------------------------------------
+#define MT6370_REG_DEV_INFO    0x100
+#define MT6370_REG_CHG_IRQ1    0x1C0
+#define MT6370_REG_CHG_MASK1   0x1E0
+#define MT6370_USBC_I2CADDR    0x4E
+#define MT6370_REG_MAXADDR     0x1FF
 
->  	init_giveback_urb_bh(&hcd->low_prio_bh);
->  
->  	/* enable irqs just before we start the controller,
-> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-> index 2c1fc9212cf2..98d1921f02b1 100644
-> --- a/include/linux/usb/hcd.h
-> +++ b/include/linux/usb/hcd.h
-> @@ -66,6 +66,7 @@
->  
->  struct giveback_urb_bh {
->  	bool running;
-> +	bool high_prio;
->  	spinlock_t lock;
->  	struct list_head  head;
->  	struct tasklet_struct bh;
+#define MT6370_VENID_MASK      GENMASK(7, 4)
 
-MBR, Sergey
+#define MT6370_NUM_IRQREGS     16
+#define MT6370_REG_ADDRLEN     2
+-------------------------------------------------------------------
+Like this?
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+
+-- 
+Best Regards,
+ChiaEn Wu

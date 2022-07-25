@@ -2,73 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9649580651
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3A258056C
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236760AbiGYVTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S236908AbiGYUVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGYVTu (ORCPT
+        with ESMTP id S229589AbiGYUVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:19:50 -0400
-X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 14:19:49 PDT
-Received: from wp175.webpack.hosteurope.de (wp175.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:84b6::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7412F23BCD
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:19:49 -0700 (PDT)
-Received: from p54bc6cd6.dip0.t-ipconnect.de ([84.188.108.214] helo=[192.168.1.245]); authenticated
-        by wp175.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oG4YN-0007hQ-Nw; Mon, 25 Jul 2022 22:19:47 +0200
-Message-ID: <be60acab-7dfe-6841-b176-4bd1e875d52e@birger-koblitz.de>
-Date:   Mon, 25 Jul 2022 22:19:46 +0200
+        Mon, 25 Jul 2022 16:21:39 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329B721806;
+        Mon, 25 Jul 2022 13:21:38 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ss3so22496338ejc.11;
+        Mon, 25 Jul 2022 13:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SKPPpp7Tp2WHUddh1HgYEbccv4hJ/81Ko8q9iKh7koA=;
+        b=GhwS8nqfltd/oDHfdoOH9F1CJGCSVLIEdKDa3fGGjB4Ruhodb/VcUtAloXCdDNrQE1
+         NaPvLjb2J7OyqF7RfnELsfrvnSHHNWBZbw4Q/ZU0MbxYGUo2rhg5kDoOB0HfLYwCViLY
+         cD4tcsChKk1sA2gPJ65j0h2Q9ty+kLHfelJZYDMBVyWIcpVuwX9HoBA0Gexk1miLKOHm
+         Vpm97FXMaMfQUuZBxXfrr6kREU/jsIOPMiHOyed/4dfWesbcKzbMCAkYRhJj9hOh1Apu
+         Cxq/sqHpF++ooE5gfcQ4llhES276hBbwRe4a7MLEDxMvhycU3NQxsR9zVCvB+aRXdCk3
+         I9dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SKPPpp7Tp2WHUddh1HgYEbccv4hJ/81Ko8q9iKh7koA=;
+        b=PB37LVpRwfReMpEPPcvvy5EFthuhcUMPVH1RjJni0yWWxncYLFZWUxjBnL+uFefo6m
+         9SP9MNPwXmaYukD7+4QMMZtYNe59BCGXyZQWkSYtQpljIL98h4p4I/nYJRVyVO7zG30c
+         bj1u2+994oiQxuhWamtaz7pPAmxNYfFiq4+ze/xTlEkjsUx10W4wXUWBCniUrEw/TMLZ
+         eIFtSSrzGWiqZ03uRne7iGE7ZBQ51nDUNl7/OyRFl7ZoejPscYRiiEcArJmqjW+UHgPo
+         XuEx1r4w++FlGuszEgwhdbKi2l0JiBxQ+BtBaOWDqKJ6UfWxs9FbuOZaWH4fNpolpa5S
+         IhHg==
+X-Gm-Message-State: AJIora+9iQcMz0P1oTi6DESxHOOlkwMm0Hug9PuwcaPDoGtmGW9E+9TH
+        R1ub7aNM5+YLIaDaWgl5dSldu0n/saPXEVbOhJk=
+X-Google-Smtp-Source: AGRyM1t0oBn/F44/T031na79bCXNwpyh8cyBQhS5/OyrxJ8LNapumWpF2v8YlEwlYl945vlAMoWY9Yhx0HNZo4V9kaw=
+X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id
+ nb13-20020a1709071c8d00b006f20eb21cd6mr11196050ejc.568.1658780496634; Mon, 25
+ Jul 2022 13:21:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bert@biot.com, sander@svanheule.net
-References: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
-From:   Birger Koblitz <mail@birger-koblitz.de>
-In-Reply-To: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;mail@birger-koblitz.de;1658783989;bbd56df9;
-X-HE-SMSGID: 1oG4YN-0007hQ-Nw
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220721073909.23318-1-srinivas.neeli@xilinx.com>
+ <CAMRc=Mefhk4i8_1j2=JO63SwfHEb3TrRMj45+CC1i1DUr8VULw@mail.gmail.com> <CAHp75Vdr3yM_b_8bDgAhNLrHUuyoq2nkVcj84wdvTzvLLetkNg@mail.gmail.com>
+In-Reply-To: <CAHp75Vdr3yM_b_8bDgAhNLrHUuyoq2nkVcj84wdvTzvLLetkNg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 22:21:00 +0200
+Message-ID: <CAHp75VdWS9DKd=xs8Kitoo9GZCsiNf7gt5HjfZn-9zNXBdvMEg@mail.gmail.com>
+Subject: Re: [PATCH] gpio: gpio-xilinx: Fix integer overflow
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        neelisrinivas18@gmail.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        srinivas.neeli@amd.com, Srinivas Goud <sgoud@xilinx.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+On Mon, Jul 25, 2022 at 10:04 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Fri, Jul 22, 2022 at 9:19 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > On Thu, Jul 21, 2022 at 9:39 AM Srinivas Neeli
+> > <srinivas.neeli@xilinx.com> wrote:
+> > >
+> > > Current implementation is not able to configure more than 32 pins
+> > > due to incorrect data type. So type casting with unsigned long
+> > > to avoid it.
+>
+> > > Fixes: 02b3f84d9080 ("xilinx: Switch to use bitmap APIs")
+>
+> It doesn't fix anything,  I already reject one such "fix" during
+> development of this patch. Thanks!
 
-On 25/07/2022 21:35, Martin Blumenstingl wrote:
-> The code seemingly tries to clear RTL_SPI_SFCSR_LEN_MASK (before then
-> setting either RTL_SPI_SFCSR_LEN1 or RTL_SPI_SFCSR_LEN4) and
-> RTL_SPI_SFCSR_CS. What it actually does is only keeping these bits and
-> clearing all other bits, even the ones which were just set before. Fix
-> the operation to clear the bits in the selected mask and keep all other
-> ones.
-> 
-> Fixes: a8af5cc2ff1e80 ("spi: realtek-rtl: Add support for Realtek RTL838x/RTL839x SPI controllers")
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> I stumbled across this while reading the driver. This patch is untested
-> because I don't have any hardware with this controller.
-I believe your fix is correct. In the meantime, more information has been
-learned about this hardware, in particular, newer SoC versions and the possibility
-to have parallel IO and hardware which uses different chip selects.
-I came up with the following patch for supporting this, and it achieves
-what you also propose:
-https://github.com/bkobl/openwrt/blob/rtl8214qf_merge/target/linux/realtek/patches-5.10/317-spi-cs-support-for-spi-realtek-rtl.patch
-It is still is a bit rough, reading it I immediately saw 2 things that
-would need to be fixed, but it also improves e.g. that RTL_SPI_SFCSR
-is now configured independently of what u-boot did to it.
+Sorry, not my day, it was something else that time... See below.
 
-Cheers,
-   Birger
+> ...
+>
+> > > @@ -99,7 +99,7 @@ c
+>
+> > Applied, thanks!
+>
+> False positive.
+
+Reading again... You mean that
+
+  unsigned long x = y << 32;
+
+wouldn't work?
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

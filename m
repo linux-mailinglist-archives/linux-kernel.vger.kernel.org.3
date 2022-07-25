@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD3957F829
+	by mail.lfdr.de (Postfix) with ESMTP id 59DD157F82A
 	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiGYCIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 22:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S233132AbiGYCIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 22:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiGYCIQ (ORCPT
+        with ESMTP id S233141AbiGYCIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 22:08:16 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A48FEE3C
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:08:14 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id bk6-20020a17090b080600b001f2138a2a7bso10240352pjb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:08:14 -0700 (PDT)
+        Sun, 24 Jul 2022 22:08:20 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BB3FD1C
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:08:19 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id f11so9088117pgj.7
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2bb8XU1Bnk4jusD63lmk3Ol2o00AOfRxKRkmAkiDP4o=;
-        b=fZIYHmc8N+T0x4kQRJbfoR40FVeWXHFoj1Ez9pMFcXxzgRhu2PqfTJX13WZ/W+RErc
-         OPcB5PlL1q7UBLiBsWYp3lmlcvt9LTpbaSGcKj1OlF3D9EJ2VUaL0wG5GK4fm3QG6s3F
-         CqsJ4rBlixoSyIwWe1Al7OeyD+ZwvQEXYZw1+eILqV8AEuRLuJ+TYwAvQon6qTm4+0Wu
-         gWL3JwtDy4xRDqckeXp1Os7f93urL1kvSDpHRRwv7nzF1i1sITAxOcmqV6odWEh4z8OZ
-         XhuLNTpmXovVM+mTrmFrG3WgCoM+U4Llhuo/N2j7RE1xvfb7kkfWmTc0wYInGzP5GKZs
-         AqBA==
+        bh=ZWuX6ov4197gAn7zaYMbI8DUTRJY83Rd6vcUzJETd9g=;
+        b=XqSF0FLr2QcdghFGdajoYosuSawd7eZdo5NaPH1hg4vLniqnKBptDuF7ihMmgpwwxg
+         DpRjpjncqaJaTZWKKKXV/veHN7oedCH+J2hr2vpVY8UQm3DFFXa31omH+MC/TgExD6Bk
+         Ngu2EdGqZR503533oD9SI7UCw1hA3qcWPHfdEhS163dT04JG/LWgNp6B42tW/cfQZMWT
+         fqa0Bn7ocVLBtPRa2arbVyLgC+xoDrOZcuJQqrAwhZEXvq6aoQWa9ZAS7bwmUc4j4Q5g
+         Xf1v3/YJdtK59O0BgkN7sTyPB9M141fbtE++wPdhUQY9HHU16g7CYuNkhJ4q+7ZeA0Fl
+         0ObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2bb8XU1Bnk4jusD63lmk3Ol2o00AOfRxKRkmAkiDP4o=;
-        b=WGg6rllkwofRNuBo6jMTfzkOT2TCZNFtOlxUd4pJ5n+NgxL1osopHIOxHDJAW3mnkX
-         CZr/RtFegGtXkZKXE/F9r7Cfb2cqK11wNqkaNT00kyeogoeFPvXuOClKOBeAjs5azBxL
-         qxpJxJBkii0mqI6blvp3rFDdaBfqe0fWIW0j68a50EbGIC6ja3LYQ+IiiKtbYGsVQppb
-         8jniYdpyYut34gNWW24oshoTOluT/1UGSUimcZNXsn6G5rNh134PsO7Bi5D37ibmwjPo
-         di8izbCU6rfcuEtLhV3Ew8F/kIncrLo+1fSDHPrPf+5N15Io/g6inG0wy4aqeA72ep6Z
-         yMbg==
-X-Gm-Message-State: AJIora9pGWo2mD5FQzWmpmVbBwjEqdxfF7zeJmq7+VgQLGIZqYFdN5fa
-        SXabK6CpV3798p+i3YeWHFRkmq4xvZk0jQ==
-X-Google-Smtp-Source: AGRyM1vZnZRBfbk7P18DqP3O8ruzD393p79BGSWNpGSjB7sr0RoO7KDfhkFVa9m61iUpftGqgqdWYg==
-X-Received: by 2002:a17:902:8a86:b0:16c:4292:9f56 with SMTP id p6-20020a1709028a8600b0016c42929f56mr10268982plo.36.1658714893200;
-        Sun, 24 Jul 2022 19:08:13 -0700 (PDT)
+        bh=ZWuX6ov4197gAn7zaYMbI8DUTRJY83Rd6vcUzJETd9g=;
+        b=sZD+XTB4Gu0rLISw95hynQgH6uF/mPy/u/xxr1UXlfJXxr/shFGfMK6I6oc0Gvwb0Q
+         Tzz95v4XK1U/LkJFT8Bjj0cAN0bBNLATYMy5WlUQXvTx56tCJjaOe6xtAvgpTbKgxMsM
+         vxaxt3l2xC9Y76ibi9LfKEfItbSspAreYrDYhw78GrNw5rTFV8Zwo49eS6MtkcGeIVXp
+         QzWHbakcnizYZBsM6ktoP43TebjqWgK67cSHm02UKHaHH7bU2s+2P+oSeoPAZ7lsFySI
+         ch2zFjTOPXdX9HKcMhmiTDrI1Rcapq0E3ewOBwJwLa3xrd7EXDC4EKC7w0OiaPkzf1XS
+         NICw==
+X-Gm-Message-State: AJIora8VsZ0T+Jems2xxYL/+2LWhidp3j1mDtetHPWf+oAQ2TCxCmnB7
+        pXUdmQImiMYiaHzfnvQueSKHQB4PYyXm6A==
+X-Google-Smtp-Source: AGRyM1vu51mbhNjjI60KrfJm9SOuVAVVlovM1sCD2glOM1YO6DC3eiWv6836S+SygAu8Tt3irUvFMA==
+X-Received: by 2002:a63:4a62:0:b0:412:8c83:a36c with SMTP id j34-20020a634a62000000b004128c83a36cmr9024945pgl.404.1658714898394;
+        Sun, 24 Jul 2022 19:08:18 -0700 (PDT)
 Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id b17-20020a170902d51100b0016c50179b1esm1691376plg.152.2022.07.24.19.08.12
+        by smtp.gmail.com with ESMTPSA id n7-20020a056a00212700b0052ab0a73752sm8124216pfj.198.2022.07.24.19.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 19:08:12 -0700 (PDT)
+        Sun, 24 Jul 2022 19:08:18 -0700 (PDT)
 From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Bjorn Helgaas <helgaas@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Stafford Horne <shorne@gmail.com>,
         Jonas Bonn <jonas@southpole.se>,
         Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         openrisc@lists.librecores.org
-Subject: [PATCH v3 2/3] openrisc: Add pci bus support
-Date:   Mon, 25 Jul 2022 11:07:36 +0900
-Message-Id: <20220725020737.1221739-3-shorne@gmail.com>
+Subject: [PATCH v3 3/3] openrisc: Add virt defconfig
+Date:   Mon, 25 Jul 2022 11:07:37 +0900
+Message-Id: <20220725020737.1221739-4-shorne@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220725020737.1221739-1-shorne@gmail.com>
 References: <20220725020737.1221739-1-shorne@gmail.com>
@@ -67,7 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,74 +73,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds required definitions to allow for PCI buses on OpenRISC.
-This is being tested on the OpenRISC QEMU virt platform which is in
-development.
+I have been developing a new qemu virt platform to help with more
+efficient toolchain and kernel testing [1].
 
-OpenRISC does not have IO ports so we keep the definition of
-IO_SPACE_LIMIT and PIO_RESERVED to be 0.
+This patch adds the defconfig which is needed to support booting
+linux on the platform.
 
-Note, since commit 66bcd06099bb ("parport_pc: Also enable driver for PCI
-systems") all platforms that support PCI also need to support parallel
-port.  We add a generic header to support compiling parallel port
-drivers, though they generally will not work as they require IO ports.
+[1] https://lore.kernel.org/qemu-devel/YpwNtowUTxRbh2Uq@antec/T/#m6db180b0d682785fb320e4a05345c12a063e0c47
 
 Signed-off-by: Stafford Horne <shorne@gmail.com>
 ---
- arch/openrisc/Kconfig            | 5 ++++-
- arch/openrisc/include/asm/Kbuild | 1 +
- arch/openrisc/include/asm/io.h   | 2 +-
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ arch/openrisc/configs/virt_defconfig | 108 +++++++++++++++++++++++++++
+ 1 file changed, 108 insertions(+)
+ create mode 100644 arch/openrisc/configs/virt_defconfig
 
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index e814df4c483c..c7f282f60f64 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -20,8 +20,9 @@ config OPENRISC
- 	select GENERIC_IRQ_CHIP
- 	select GENERIC_IRQ_PROBE
- 	select GENERIC_IRQ_SHOW
--	select GENERIC_IOMAP
-+	select GENERIC_PCI_IOMAP
- 	select GENERIC_CPU_DEVICES
-+	select HAVE_PCI
- 	select HAVE_UID16
- 	select GENERIC_ATOMIC64
- 	select GENERIC_CLOCKEVENTS_BROADCAST
-@@ -32,6 +33,8 @@ config OPENRISC
- 	select CPU_NO_EFFICIENT_FFS if !OPENRISC_HAVE_INST_FF1
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select OMPIC if SMP
-+	select PCI_DOMAINS_GENERIC if PCI
-+	select PCI_MSI if PCI
- 	select ARCH_WANT_FRAME_POINTERS
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select MMU_GATHER_NO_RANGE if MMU
-diff --git a/arch/openrisc/include/asm/Kbuild b/arch/openrisc/include/asm/Kbuild
-index 3386b9c1c073..c8c99b554ca4 100644
---- a/arch/openrisc/include/asm/Kbuild
-+++ b/arch/openrisc/include/asm/Kbuild
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- generic-y += extable.h
- generic-y += kvm_para.h
-+generic-y += parport.h
- generic-y += spinlock_types.h
- generic-y += spinlock.h
- generic-y += qrwlock_types.h
-diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
-index c298061c70a7..625ac6ad1205 100644
---- a/arch/openrisc/include/asm/io.h
-+++ b/arch/openrisc/include/asm/io.h
-@@ -17,7 +17,7 @@
- #include <linux/types.h>
- 
- /*
-- * PCI: can we really do 0 here if we have no port IO?
-+ * PCI: We do not use IO ports in OpenRISC
-  */
- #define IO_SPACE_LIMIT		0
- 
+diff --git a/arch/openrisc/configs/virt_defconfig b/arch/openrisc/configs/virt_defconfig
+new file mode 100644
+index 000000000000..c1b69166c500
+--- /dev/null
++++ b/arch/openrisc/configs/virt_defconfig
+@@ -0,0 +1,108 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_CGROUPS=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_OPENRISC_HAVE_INST_CMOV=y
++CONFIG_OPENRISC_HAVE_INST_ROR=y
++CONFIG_OPENRISC_HAVE_INST_RORI=y
++CONFIG_OPENRISC_HAVE_INST_SEXT=y
++CONFIG_NR_CPUS=8
++CONFIG_SMP=y
++CONFIG_HZ_100=y
++# CONFIG_OPENRISC_NO_SPR_SR_DSX is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++# CONFIG_INET_DIAG is not set
++CONFIG_TCP_CONG_ADVANCED=y
++# CONFIG_TCP_CONG_BIC is not set
++# CONFIG_TCP_CONG_CUBIC is not set
++# CONFIG_TCP_CONG_WESTWOOD is not set
++# CONFIG_TCP_CONG_HTCP is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_PCI=y
++CONFIG_PCIEPORTBUS=y
++CONFIG_PCI_HOST_GENERIC=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_NBD=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_NETDEVICES=y
++CONFIG_VIRTIO_NET=y
++CONFIG_ETHOC=y
++CONFIG_MICREL_PHY=y
++# CONFIG_WLAN is not set
++CONFIG_INPUT_MOUSEDEV=y
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_VIRTIO_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++CONFIG_POWER_RESET=y
++CONFIG_POWER_RESET_SYSCON=y
++CONFIG_POWER_RESET_SYSCON_POWEROFF=y
++CONFIG_SYSCON_REBOOT_MODE=y
++# CONFIG_HWMON is not set
++CONFIG_DRM=y
++# CONFIG_DRM_FBDEV_EMULATION is not set
++CONFIG_DRM_VIRTIO_GPU=y
++CONFIG_FB=y
++CONFIG_FIRMWARE_EDID=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
++CONFIG_LOGO=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_INTEL8X0=y
++CONFIG_SND_INTEL8X0M=y
++CONFIG_SND_SOC=y
++CONFIG_SND_VIRTIO=y
++# CONFIG_HID_A4TECH is not set
++# CONFIG_HID_BELKIN is not set
++# CONFIG_HID_CHERRY is not set
++# CONFIG_HID_CHICONY is not set
++# CONFIG_HID_CYPRESS is not set
++# CONFIG_HID_EZKEY is not set
++# CONFIG_HID_ITE is not set
++# CONFIG_HID_KENSINGTON is not set
++# CONFIG_HID_REDRAGON is not set
++# CONFIG_HID_MICROSOFT is not set
++# CONFIG_HID_MONTEREY is not set
++CONFIG_USB=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_XHCI_PLATFORM=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_OHCI_HCD_PLATFORM=y
++CONFIG_USB_SERIAL=y
++CONFIG_USB_GADGET=y
++CONFIG_TYPEC=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_GOLDFISH=y
++CONFIG_VIRT_DRIVERS=y
++CONFIG_VIRTIO_PCI=y
++# CONFIG_VIRTIO_PCI_LEGACY is not set
++CONFIG_VIRTIO_INPUT=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++# CONFIG_DNOTIFY is not set
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_EXFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_NFS_FS=y
++CONFIG_UNICODE=y
++CONFIG_PRINTK_TIME=y
++CONFIG_DYNAMIC_DEBUG=y
++CONFIG_FTRACE=y
 -- 
 2.36.1
 

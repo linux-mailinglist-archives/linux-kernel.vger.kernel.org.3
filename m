@@ -2,209 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923E457FB84
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B4457FB7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiGYIko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S234076AbiGYIjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiGYIkl (ORCPT
+        with ESMTP id S234080AbiGYIjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:40:41 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5AF16
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:40:40 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id gq7so9767577pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JRx05kPh3Ii0mpG7hTQJSpxflPSjOu6HTrFUf3L55sY=;
-        b=b/gJd3iUl8OERmp+WyI5dC15jE1/7lh4kN0ML2m8TDjjg5+A09Zs5c/jcux/umjCNB
-         E9b2j3m11+23MfAV2gUuOIwI4Tafw/ldONvsGh4u2J8Vpdcvltmgs6t+k5KXpZzo0VZ9
-         Y1b6DFFSZs/j7GucnJod6cEQ+zQ5+1cbLlm3Gk94Vu/bqLd4ImYU+t3/WYn7oY+2dhKr
-         B5ZHR1BDmNOKRNaElyjk4HYwq9sdhws0NKdtm4Z0V+ls3QKwWfZFpeMSsVggUD+tsR9v
-         ydOTI29C1Ubsavi5EufYYWVC6mJ2f1KC1HCQCHSHAQ8jJXNmCUzdmst8S5xXiUUZic+Q
-         lmXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JRx05kPh3Ii0mpG7hTQJSpxflPSjOu6HTrFUf3L55sY=;
-        b=jlJm4TKI0Vt4bVvZTu5uddykoH/tnBJfE1YyWCs7ryRu8o4G1RTZz4FGz7xIXv0SbM
-         RDMWKu3q44IDYWr9fI7JBhQNa0ymuWQRphs5OrsqNUb4XfhAiBChvTDFTbY0XWH7f8tz
-         AO/3d4+/G0c8zzIS53QGiBCKLdtdZPw8qMIJ+BChz6MSDKltEoUg9WDziRWfH3JE4G36
-         DGElONZ49sFuszDni4kMF/ipIZizMLopAXAtjkfOdbQb+yr8HEoCFG4z1k/IUTsQzvj3
-         OFIn/l0I83o59oSnUXAgs91uhJoeBp9vu6xaTKDRQmuQZ9f73Chor2hDS03Y0H21iDfE
-         SX8w==
-X-Gm-Message-State: AJIora8d33KnmPY3WNgE8otwHi4ayQVH+2XL0rBWANNRKlWdQ4x3rn5/
-        w9LpPtIckCIKHo54T1xFrmVgrQ==
-X-Google-Smtp-Source: AGRyM1vlctvOgVdFh/Fgb7CwxXla4DK2/n69hV3Zju/JQYHyXfZs1xGC4mXFAdMg4Fh/tEID47FsXQ==
-X-Received: by 2002:a17:902:c401:b0:16d:8109:4f18 with SMTP id k1-20020a170902c40100b0016d81094f18mr2037084plk.32.1658738439453;
-        Mon, 25 Jul 2022 01:40:39 -0700 (PDT)
-Received: from C02FG34NMD6R.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id 128-20020a621886000000b0052abc2438f1sm8893479pfy.55.2022.07.25.01.40.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 25 Jul 2022 01:40:39 -0700 (PDT)
-From:   Albert Huang <huangjie.albert@bytedance.com>
-Cc:     "huangjie.albert" <huangjie.albert@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-kbuild@vger.kernel.org
-Subject: [PATCH 4/4] x86: boot: avoid memory copy if kernel is uncompressed
-Date:   Mon, 25 Jul 2022 16:38:56 +0800
-Message-Id: <20220725083904.56552-5-huangjie.albert@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220725083904.56552-1-huangjie.albert@bytedance.com>
-References: <20220725083904.56552-1-huangjie.albert@bytedance.com>
+        Mon, 25 Jul 2022 04:39:47 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265741402F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:39:41 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26P6QZlC024221;
+        Mon, 25 Jul 2022 08:39:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Ha/FcfhXmfYLW2Mh9nF+ML5JwMWzZWSHcaHYy6WmG4c=;
+ b=lT6utZtmPVfHYxwm6c0N1IuX0y/RLulVmYjCKxqAoVxeW8X/pZMASo7vvQbahMBodoNn
+ 7zsDDv4hl7D2C5wDsw9D+o4Freg9Amwz/utG+D+tQ0QMw3p7ytBAhNvVK2aVmooJvDNJ
+ VPH8DDMEAzbFDz+pWEkSU9N+i8U2bx8GqN7VCNv583GKt1SW8at9CifWHBVBftdRvoYR
+ FkQbQmdShFKMvnm50GLKdBfWEWdYvP6l1LdnKBXEIilAY4x+eIMDSOkpgQWKtyGZW1pR
+ SFQwrs/5/A3fWrQD6JDRnWBNL9Dq0r6qfkIFuyjaRX0OCK2QtprhDfowcx62ev3Au/Hn Zw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hg8arufpx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 08:39:19 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26P8dIoZ007828
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 08:39:18 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 25 Jul 2022 01:39:18 -0700
+Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Jul
+ 2022 01:39:15 -0700
+Message-ID: <e518246c-4ffa-14af-e568-798572f75bee@quicinc.com>
+Date:   Mon, 25 Jul 2022 16:39:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH] mm/page_owner.c: allow page_owner with given
+ start_pfn/count
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <akpm@linux-foundation.org>, <minchan@kernel.org>,
+        <iamjoonsoo.kim@lge.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <quic_guptap@quicinc.com>
+References: <20220722150810.27740-1-quic_yingangl@quicinc.com>
+ <YtrEXB6o+VROImdg@casper.infradead.org>
+From:   Kassey Li <quic_yingangl@quicinc.com>
+In-Reply-To: <YtrEXB6o+VROImdg@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fqIVd8Ppqw6e7At0-Oq0IhpYe2o0Qn9n
+X-Proofpoint-GUID: fqIVd8Ppqw6e7At0-Oq0IhpYe2o0Qn9n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-23_02,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=590 mlxscore=0
+ impostorscore=0 clxscore=1011 lowpriorityscore=0 malwarescore=0
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207250036
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "huangjie.albert" <huangjie.albert@bytedance.com>
+hi, Matthew:
+	sorry for the delay, I just started to learn how to upstream patch, and 
+setup my Thunderbird with plain text only.
+	you are right, two users will cause problem here.
+	the uses case is dump CMA area to understand the page usage in a given 
+cma pool. 2nd, dump whole memory page owner is very time cost, mostly 
+our android device has 8G memory now.
+	I will research and check again, if you have more idea on this , please 
+kindly to share.
 
-1、if kernel is uncompressed. we do not need to relocate
-kernel image for decompression
+BR
+Kassey
 
-2、if kaslr is disabled, we do not need to do a memory copy
-before prase_elf.
-
-Two memory copies can be skipped with this patch. this can
-save aboat 20ms during booting.
-
-Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
----
- arch/x86/boot/compressed/head_64.S |  8 ++++++--
- arch/x86/boot/compressed/misc.c    | 22 +++++++++++++++++-----
- 2 files changed, 23 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index d33f060900d2..9e7770c7047b 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -398,10 +398,13 @@ SYM_CODE_START(startup_64)
- 1:
- 
- 	/* Target address to relocate to for decompression */
-+#ifdef CONFIG_KERNEL_UNCOMPRESSED
-+	movq %rbp, %rbx
-+#else
- 	movl	BP_init_size(%rsi), %ebx
- 	subl	$ rva(_end), %ebx
- 	addq	%rbp, %rbx
--
-+#endif
- 	/* Set up the stack */
- 	leaq	rva(boot_stack_end)(%rbx), %rsp
- 
-@@ -522,6 +525,7 @@ trampoline_return:
-  * Copy the compressed kernel to the end of our buffer
-  * where decompression in place becomes safe.
-  */
-+#ifndef CONFIG_KERNEL_UNCOMPRESSED
- 	pushq	%rsi
- 	leaq	(_bss-8)(%rip), %rsi
- 	leaq	rva(_bss-8)(%rbx), %rdi
-@@ -531,7 +535,7 @@ trampoline_return:
- 	rep	movsq
- 	cld
- 	popq	%rsi
--
-+#endif
- 	/*
- 	 * The GDT may get overwritten either during the copy we just did or
- 	 * during extract_kernel below. To avoid any issues, repoint the GDTR
-diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-index c23c0f525d93..d8445562d4e9 100644
---- a/arch/x86/boot/compressed/misc.c
-+++ b/arch/x86/boot/compressed/misc.c
-@@ -290,7 +290,7 @@ static inline void handle_relocations(void *output, unsigned long output_len,
- { }
- #endif
- 
--static void parse_elf(void *output)
-+static void parse_elf(void *output, void *input)
- {
- #ifdef CONFIG_X86_64
- 	Elf64_Ehdr ehdr;
-@@ -302,7 +302,7 @@ static void parse_elf(void *output)
- 	void *dest;
- 	int i;
- 
--	memcpy(&ehdr, output, sizeof(ehdr));
-+	memcpy(&ehdr, input, sizeof(ehdr));
- 	if (ehdr.e_ident[EI_MAG0] != ELFMAG0 ||
- 	   ehdr.e_ident[EI_MAG1] != ELFMAG1 ||
- 	   ehdr.e_ident[EI_MAG2] != ELFMAG2 ||
-@@ -317,7 +317,7 @@ static void parse_elf(void *output)
- 	if (!phdrs)
- 		error("Failed to allocate space for phdrs");
- 
--	memcpy(phdrs, output + ehdr.e_phoff, sizeof(*phdrs) * ehdr.e_phnum);
-+	memcpy(phdrs, input + ehdr.e_phoff, sizeof(*phdrs) * ehdr.e_phnum);
- 
- 	for (i = 0; i < ehdr.e_phnum; i++) {
- 		phdr = &phdrs[i];
-@@ -334,7 +334,7 @@ static void parse_elf(void *output)
- #else
- 			dest = (void *)(phdr->p_paddr);
- #endif
--			memmove(dest, output + phdr->p_offset, phdr->p_filesz);
-+			memmove(dest, input + phdr->p_offset, phdr->p_filesz);
- 			break;
- 		default: /* Ignore other PT_* */ break;
- 		}
-@@ -467,9 +467,21 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
- #endif
- 
- 	debug_putstr("\nDecompressing Linux... ");
-+
-+#ifdef CONFIG_KERNEL_UNCOMPRESSED
-+	if (cmdline_find_option_bool("nokaslr")) {
-+		parse_elf(output, input_data);
-+	} else {
-+		__decompress(input_data, input_len, NULL, NULL, output, output_len,
-+				NULL, error);
-+		parse_elf(output, output);
-+	}
-+#else
- 	__decompress(input_data, input_len, NULL, NULL, output, output_len,
- 			NULL, error);
--	parse_elf(output);
-+	parse_elf(output, output);
-+#endif
-+
- 	handle_relocations(output, output_len, virt_addr);
- 	debug_putstr("done.\nBooting the kernel.\n");
- 
--- 
-2.31.1
-
+On 7/22/2022 11:38 PM, Matthew Wilcox wrote:
+> On Fri, Jul 22, 2022 at 11:08:10PM +0800, Kassey Li wrote:
+>> by default, page_owner iterates all page from min_low_pfn to
+>> max_pfn, this cost too much time if we want an alternative pfn range.
+>>
+>> with this patch it allows user to set pfn range to dump the page_onwer.
+> 
+> This is a really bad UI.  If two users try to do different ranges at the
+> same time, it'll go wrong.  What use cases are you actually trying to
+> solve?

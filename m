@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A062058041D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEA8580420
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbiGYShj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 14:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
+        id S235425AbiGYSjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 14:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbiGYSh1 (ORCPT
+        with ESMTP id S235752AbiGYSjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 14:37:27 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDCD2019D;
-        Mon, 25 Jul 2022 11:37:21 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ef5380669cso119583007b3.9;
-        Mon, 25 Jul 2022 11:37:21 -0700 (PDT)
+        Mon, 25 Jul 2022 14:39:14 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8994812606;
+        Mon, 25 Jul 2022 11:39:13 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id k85so21629298ybk.7;
+        Mon, 25 Jul 2022 11:39:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=QUTtx+0vO3maB9dE+LaXkY6OE0TD/Ru+a3YsM8WvWjU=;
-        b=x7x9GKI30JCIyb11yEy4FDZzQ8pbvsZ6dzybjI5Ip+8VNOQ4cA+n3CM1x4aWQh16bb
-         8O5ojw0an64t8GBKycZOow6F3+vo26vlfRlaze9f1xrZrI0reRS2DsJHbcLaBTXDoxeL
-         aSeCfLlEeoGmKrSmz0dby46Tb5435Xckn9GN3mXYU7DW6AWvQE31QJeySCN3mCP2y7Xf
-         wJKsYkQ5tpnWCJ582IejuZKqzMlR1xPNn5/BYt9UXOzBgUSwsVF1tVgzVZlvzBmHeTrj
-         goVX+8PHOgIJwuz+9dQ1ZVdTkh7J6/iQBiQdzvCOwygWSkduIxiV5TrweW36PbVJD1Ld
-         qQKQ==
-X-Gm-Message-State: AJIora9I+fKwbodoHixsAzPcuE9cVEZjY9oNuD8t3VZ0KYOW1aA1CCZR
-        ibUGWcz+5y2Fd+ppjrXo1ypFf/YFxGOwJHLg61I=
-X-Google-Smtp-Source: AGRyM1vHSBF3A1jwFSnFt3gOA6aZOCQOiFvTVsI6T0vWjAiyUNGkj3z2WshxAm7HJuPQHK4sTHDVjaM/oudGdI1KZXU=
-X-Received: by 2002:a81:f8e:0:b0:31f:4226:eb58 with SMTP id
- 136-20020a810f8e000000b0031f4226eb58mr1064842ywp.19.1658774240780; Mon, 25
- Jul 2022 11:37:20 -0700 (PDT)
+        bh=KNBJWlyA9+07rg2cUyhq9BlXYJZB1wgorDKxzUoss4M=;
+        b=EVpfLVATxqGT4MAojDA8Agv3hxQH671FH00YMJMC85q8ddhnVawmHAovD0CLN1XTid
+         SGS/eAagH1yvxA3Q2yx4Fq1YPcYXP9+JoCPnVA322D87ZXaWPYXOXCW6Y7/xh1FjZZpv
+         upyX5twC7NqUASvakYBc2Q2Q0J1WJpr17LFYmkGiKyAlA8vP4YV0B5a0kFxI6L9PkHAX
+         DnrOW7Fz36mymHgVvSeN1Go6XCeFjCnM5XrsMBG5sMEPJL6U149szq6U9CCCkbIkvY7m
+         dF1Xl7M6MhSVPUCDN3ITLKHN+D0WNl+ozqvgNTpDmgwcAu5cGF1XrjBCxugtOZQwDHY+
+         gckQ==
+X-Gm-Message-State: AJIora/M0mFmPOu6Uw8ojE7cNfbgHqJ6dSo1CVMYZ2gi2gKFOC7FPess
+        45qVMv0GCCkcbaBEdFuw4xh1JHRUYA8ov1hniaE=
+X-Google-Smtp-Source: AGRyM1vh9F2FnMVnL1T6X58l+ieZbZtky/9sMNYl4tilyONYlbyKjxKkf81saKpTjncV4jZOSZKjfUh6W9RA0GdOs+I=
+X-Received: by 2002:a25:664f:0:b0:66c:d0f4:36cc with SMTP id
+ z15-20020a25664f000000b0066cd0f436ccmr9894684ybm.482.1658774352789; Mon, 25
+ Jul 2022 11:39:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220715015903.12537-1-rdunlap@infradead.org>
-In-Reply-To: <20220715015903.12537-1-rdunlap@infradead.org>
+References: <20220722025024.454626-1-zhao1.liu@linux.intel.com> <20220725103053.o45ly6rnq7vyfdup@vireshk-i7>
+In-Reply-To: <20220725103053.o45ly6rnq7vyfdup@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 25 Jul 2022 20:37:09 +0200
-Message-ID: <CAJZ5v0ixPqNidmBe=+iyhRjsJfqAuznv7bf5ZPOFC3pT-Jab_Q@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: loongson2: fix Kconfig "its" grammar
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+Date:   Mon, 25 Jul 2022 20:39:01 +0200
+Message-ID: <CAJZ5v0hMTNGWGd881_6hdeqL_69DA90m-wrePt0-aUu0RV6J3Q@mail.gmail.com>
+Subject: Re: [patch] cpufreq: ondemand: Use cpumask_var_t for on-stack cpu mask
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhao Liu <zhao1.liu@linux.intel.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>,
+        Rusty Russell <rusty@rustcorp.com.au>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -59,30 +61,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 3:59 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Mon, Jul 25, 2022 at 12:30 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Use the possessive "its" instead of the contraction "it's"
-> where appropriate.
+> On 22-07-22, 10:50, Zhao Liu wrote:
+> > A cpumask structure on the stack can cause a warning with
+> > CONFIG_NR_CPUS=8192 (e.g. Ubuntu 22.04 uses this):
+> >
+> > drivers/cpufreq/cpufreq_ondemand.c: In function 'od_set_powersave_bias':
+> > drivers/cpufreq/cpufreq_ondemand.c:449:1: warning: the frame size of
+> >       1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+> >   449 | }
+> >       | ^
+> >
+> > CONFIG_CPUMASK_OFFSTACK=y is enabled by default for most distros, and
+> > hence we can work around the warning by using cpumask_var_t.
+> >
+> > Signed-off-by: Zhao Liu <zhao1.liu@linux.intel.com>
+> > ---
+> >  drivers/cpufreq/cpufreq_ondemand.c | 13 +++++++++----
+> >  1 file changed, 9 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+> > index e8fbf970ff07..c52d19d67557 100644
+> > --- a/drivers/cpufreq/cpufreq_ondemand.c
+> > +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> > @@ -416,10 +416,13 @@ static struct dbs_governor od_dbs_gov = {
+> >  static void od_set_powersave_bias(unsigned int powersave_bias)
+> >  {
+> >       unsigned int cpu;
+> > -     cpumask_t done;
+> > +     cpumask_var_t done;
+> > +
+> > +     if (!alloc_cpumask_var(&done, GFP_KERNEL))
+> > +             return;
+> >
+> >       default_powersave_bias = powersave_bias;
+> > -     cpumask_clear(&done);
+> > +     cpumask_clear(done);
+> >
+> >       cpus_read_lock();
+> >       for_each_online_cpu(cpu) {
+> > @@ -428,7 +431,7 @@ static void od_set_powersave_bias(unsigned int powersave_bias)
+> >               struct dbs_data *dbs_data;
+> >               struct od_dbs_tuners *od_tuners;
+> >
+> > -             if (cpumask_test_cpu(cpu, &done))
+> > +             if (cpumask_test_cpu(cpu, done))
+> >                       continue;
+> >
+> >               policy = cpufreq_cpu_get_raw(cpu);
+> > @@ -439,13 +442,15 @@ static void od_set_powersave_bias(unsigned int powersave_bias)
+> >               if (!policy_dbs)
+> >                       continue;
+> >
+> > -             cpumask_or(&done, &done, policy->cpus);
+> > +             cpumask_or(done, done, policy->cpus);
+> >
+> >               dbs_data = policy_dbs->dbs_data;
+> >               od_tuners = dbs_data->tuners;
+> >               od_tuners->powersave_bias = default_powersave_bias;
+> >       }
+> >       cpus_read_unlock();
+> > +
+> > +     free_cpumask_var(done);
+> >  }
+> >
+> >  void od_register_powersave_bias_handler(unsigned int (*f)
 >
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> ---
->  drivers/cpufreq/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> --- a/drivers/cpufreq/Kconfig
-> +++ b/drivers/cpufreq/Kconfig
-> @@ -268,7 +268,7 @@ config LOONGSON2_CPUFREQ
->           This option adds a CPUFreq driver for loongson processors which
->           support software configurable cpu frequency.
->
-> -         Loongson2F and it's successors support this feature.
-> +         Loongson2F and its successors support this feature.
->
->           If in doubt, say N.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 Applied as 5.20 material, thanks!

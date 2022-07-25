@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF05C57FC4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2666D57FC54
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233767AbiGYJXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
+        id S233820AbiGYJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiGYJXr (ORCPT
+        with ESMTP id S230192AbiGYJ0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:23:47 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51203BE0C;
-        Mon, 25 Jul 2022 02:23:45 -0700 (PDT)
-X-UUID: e9265cc9b81b4750872471c207d5af8a-20220725
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:4f02b255-ab0e-4785-9b46-370765e27bea,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.8,REQID:4f02b255-ab0e-4785-9b46-370765e27bea,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:0f94e32,CLOUDID:4565ded3-912a-458b-a623-74f605a77e93,C
-        OID:c5dbe28c4f5a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: e9265cc9b81b4750872471c207d5af8a-20220725
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1147469930; Mon, 25 Jul 2022 17:23:38 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 25 Jul 2022 17:23:37 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 25 Jul 2022 17:23:36 +0800
-Message-ID: <6232f0fc15bc1057aab68523e5eb63e10b3a2802.camel@mediatek.com>
-Subject: Re: [PATCH v14 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 25 Jul 2022 17:23:36 +0800
-In-Reply-To: <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 25 Jul 2022 05:26:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3704313CD3;
+        Mon, 25 Jul 2022 02:26:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EED06B80E19;
+        Mon, 25 Jul 2022 09:26:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF553C341D2;
+        Mon, 25 Jul 2022 09:26:32 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LZX4uVNM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1658741191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zvNrHbTIYzgB0tkOGhVVxAdAHnHebTQeizi3weVIsK0=;
+        b=LZX4uVNMACi/jB4HVvKJPq0/mnjxBgfqakoAfLysChDi3HgisD6QaHOYw75ZyyrX1xLahm
+        XBKjHTCSVOHHHqTDjtlokbIDkMCdeoLQsma7KWe93PAIV8RSzydcGwPf7ehG3FWP89FhMN
+        /bS3mQsDtxO03rpH0kQYPGkVIqqeD5I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d5a3a065 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 25 Jul 2022 09:26:30 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 11:26:27 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        x86@kernel.org, Will Deacon <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH v3] random: handle archrandom with multiple longs
+Message-ID: <Yt5hwxC1xgvA8Asw@zx2c4.com>
+References: <CAHmME9qTA90=GEr6h1GZh0CjS+6tpe5uuqkYoJVv79h0zd0w1w@mail.gmail.com>
+ <20220719130207.147536-1-Jason@zx2c4.com>
+ <Yt5gBZe9F1BE0MVF@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yt5gBZe9F1BE0MVF@zn.tnic>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,101 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+Hi Boris,
 
-On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Mon, Jul 25, 2022 at 11:19:01AM +0200, Borislav Petkov wrote:
+> On Tue, Jul 19, 2022 at 03:02:07PM +0200, Jason A. Donenfeld wrote:
+> > Since callers need to check this return value and loop anyway, each arch
+> > implementation does not bother implementing its own loop to try again to
+> > fill the maximum number of longs. Additionally, all existing callers
+> > pass in a constant max_longs parameter.
 > 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
+> Hmm, maybe this has come up already but it reads weird.
 > 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
+> If I have a function arch_get_random_longs(), I'd expect it to give me
+> the number of longs I requested or say, error.
 > 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
+> Why do the callers need to loop?
 > 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+> If I have to loop, I'd call the "get me one long" function and loop N
+> times.
 
-[snip]
+Answered partially in the commit message you quoted and partially here:
+https://lore.kernel.org/lkml/YtqIbrds53EuyqPE@zx2c4.com/
 
-> +
-> +/*
-> + * We need to handle HPD signal in eDP even though eDP is a always
-> connected
-> + * device. Besides connected status, there is another feature for
-> HPD signal -
-> + * HPD pulse: it presents an IRQ from sink devices to source devices
-> (Refer to
-> + * 5.1.4 of DP1.4 spec).
-> + */
-> +static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
-> +{
-> +	bool hpd_change = false;
-> +	u32 irq_status = mtk_dp_swirq_get_clear(mtk_dp) |
-> +			 mtk_dp_hwirq_get_clear(mtk_dp);
-> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
-> +
-> +	if (!irq_status)
-> +		return IRQ_HANDLED;
-> +
-> +	if (irq_status & MTK_DP_HPD_INTERRUPT)
-> +		train_info->irq_sta.hpd_inerrupt = true;
-> +	if (irq_status & MTK_DP_HPD_CONNECT ||
-> +	    irq_status & MTK_DP_HPD_DISCONNECT)
-> +		hpd_change = true;
-> +
-> +	if (!(hpd_change))
-> +		return IRQ_WAKE_THREAD;
-> +
-> +	if (mtk_dp_plug_state(mtk_dp))
+Note that arch_get_random_longs() is not a general purpose function. For
+that there used to be get_random_bytes_arch(), but that no longer exists
+as people shouldn't be using this stuff directly. arch_get_random_longs()
+is a special purpose function mainly intended for use by the RNG itself.
 
-mtk_dp_plug_state() is called only here, and prevent function call in
-isr handler, so squash mtk_dp_plug_state() into this function.
+More directly, the reason we don't want to error is because the use case
+has fallbacks meant to handle errors. The cascade looks like this
+(quoting from the other email):
 
-> +		train_info->cable_plugged_in = true;
-> +	else
-> +		train_info->cable_plugged_in = false;
-> +
-> +	train_info->cable_state_change = true;
-> +
-> +	return IRQ_WAKE_THREAD;
-> +}
-> +
-> +static irqreturn_t mtk_dp_hpd_event(int hpd, void *dev)
-> +{
-> +	struct mtk_dp *mtk_dp = dev;
-> +	u32 irq_status;
-> +
-> +	irq_status = mtk_dp_read(mtk_dp, MTK_DP_TOP_IRQ_STATUS);
-> +
-> +	if (!irq_status)
-> +		return IRQ_HANDLED;
-> +
-> +	if (irq_status & RGS_IRQ_STATUS_TRANSMITTER)
-> +		return mtk_dp_hpd_isr_handler(mtk_dp);
+    unsigned long array[whatever];
+    for (i = 0; i < ARRAY_SIZE(array);) {
+        longs = arch_get_random_seed_longs(&array[i], ARRAY_SIZE(array) - i);
+        if (longs) {
+            i += longs;
+            continue;
+        }
+        longs = arch_get_random_longs(&array[i], ARRAY_SIZE(array) - i);
+        if (longs) {
+            i += longs;
+            continue;
+        }
+        array[i++] = random_get_entropy();
+    }
 
-Prevent function call in isr handler, squash mtk_dp_hpd_isr_handler()
-into this function.
+It tries to get the best that it can as much as it can, but isn't going
+to block or do anything too nuts for that.
 
-Regards,
-CK
+Anyway, from an x86 perspective, I can't imagine you object to this
+change, right? Codegen is the same.
 
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-
+Jason

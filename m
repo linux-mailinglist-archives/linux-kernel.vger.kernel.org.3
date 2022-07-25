@@ -2,109 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0715357F949
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B329A57F91F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 07:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiGYGBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 02:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S229992AbiGYFvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 01:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiGYGBk (ORCPT
+        with ESMTP id S229496AbiGYFvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 02:01:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798166440;
-        Sun, 24 Jul 2022 23:01:39 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26P55lMb022073;
-        Mon, 25 Jul 2022 06:01:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=soXVwM9nzuX+Q1bj83PaYPMf44fabPxDdP0zIZMD9Is=;
- b=L78DZe8i2gZLMak99ZCeXQEte1gbYAifjxIMAJPPwJAXilI6S/+IzkthSiCXnshvbulr
- LC4O/fFQzbQ9Y6l9EKc7cbwgP1vU3X8Z0GCpqazAf1Jx74N6YBxif5egmoTBgB0N+UFL
- vYcgXTkRM8AR9p3c57H5jWwY2G3jl8zVsRIW2SWLRBMx6uK0bje+u7Isi0IbYeDEY7Xy
- BEJ9oxAs2nLTAWW/MAcca8uE+dxw9jwtT8GcPIj8GAcQtCD5WP3V0rNxLlvsTo6CbPxC
- YlpN2YuAqa6EdY8Az+7cdmZP+s1aX659GS/2SUptcW1aEsEv14VgZbX7RhAhsui8UxWz lQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hga5sk7fs-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Jul 2022 06:01:26 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26P5mcrR010714
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Jul 2022 05:48:38 GMT
-Received: from [10.216.38.128] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 24 Jul
- 2022 22:48:35 -0700
-Message-ID: <8791eec2-4714-f287-6fe7-a8b724e4176a@quicinc.com>
-Date:   Mon, 25 Jul 2022 11:17:59 +0530
+        Mon, 25 Jul 2022 01:51:06 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35332DC1;
+        Sun, 24 Jul 2022 22:51:02 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4F6275C0092;
+        Mon, 25 Jul 2022 01:51:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 25 Jul 2022 01:51:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1658728262; x=1658814662; bh=69zKIkJkrsurUh1tsYk3dVN3W
+        f+GthColtIIHhnoVFs=; b=Jd2BhkQLuYEXV0dbJW09eooHfpL/3DTknKNft6aW8
+        /UoH9TF5FwzdRxntrJ4eq0jBybQMro1Xp7xYFDwExhKaF2eVIVv2Y5dh9W9A4/rD
+        CGphoewDJ+mSpz0S+TqOH6ptObLPHKp4OSplOaZOLmyi47Tw+WUiYAp5w6ZPxT9u
+        3Uj2+ahuPhV+O3kyDvpXQFy1r/deso4M78Wls+4A3KcfbNE1LCQTKto96/mYcIT9
+        Dm/qFp5mWYLDbuIef456VixJaVU0cvODaJa/ppYvrarJ+Z5wntJAvElEcCQd+QZZ
+        7akM3ZzkFITI7iTdFMUwyu+DWnBnWtQT769J13+iMOEUA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1658728262; x=1658814662; bh=69zKIkJkrsurUh1tsYk3dVN3Wf+GthColtI
+        IHhnoVFs=; b=Wk6sJDgBtmqRlExCsXsgznTMJCsHD0VBzH5mvl79QIaCmcj2dUu
+        nOZleopxLVZkCq8qRELUYGbbmULaxPGtAUiIkTWOkUp93Kn0M1DJCXWiZ4pG/wmN
+        nFH7Og/uH0O3C8TR8Jd49/IurERzBKh39x5HdInqsoA6PDEWxY4tj34dWp3gbm1l
+        g3gkwtOWZQi6OrxEUFr1x9goZ3KNbTEa5PcvkkbD+Xv3zOkeewkQ+vySqjz51WSw
+        gSqAr61cFihUQNsvoV7Dh0gYJQQLD/DhNz7WfUzPUDaStiUnvd3l5sqIOIyVzS8g
+        1viZB9ocREVN18cnmKvmdHJVKxyXvFpTQmw==
+X-ME-Sender: <xms:RS_eYoVkzjUt_GHFdQPdAyZtrcMUrAahpX2A47MKXGH6eG3fPwLLVw>
+    <xme:RS_eYslmwp9AzAA5CPirsSltbtRgVD3XoILvYpBWHpAMcyX_rSJUL_aSIfIG2QJun
+    cu93oAFCLeo2gePFA>
+X-ME-Received: <xmr:RS_eYsaxyrRMHdr3H-uLrqlnrAZhP4c9pRK_T2GYgiJ7HwdIhOtUudiJ6RGaEg61ja0Eg-rJkKdXu_rXjlN4yVM13GlmH_x_c8cbQAY3wB73N_sU5ARL4T6yLhzXIvqmlYgm1A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtjedguddtvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
+    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:RS_eYnUBcfFBXn3abAB6imnMMuNEMlR3Sc97t95_A0IaQZ0diWsSYw>
+    <xmx:RS_eYimBjF5mM9jnGzLODa5MSGQa3Ls4c54CP5NmN6fEz-F6YZGxrw>
+    <xmx:RS_eYsdwkJ47XWrnCSWmZqbbXaQqvpiVmqBuF87DW5GnpS5Sf9OvQw>
+    <xmx:Ri_eYn83IMOQALPn13Oluk9lAzyQVS0YfVOWgMeRmF71ZxTTcOzcGQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 25 Jul 2022 01:51:00 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-bluetooth@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>,
+        Alistair Francis <alistair@alistair23.me>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] dt-bindings: net: bluetooth: realtek: Add RTL8723DS
+Date:   Mon, 25 Jul 2022 00:50:59 -0500
+Message-Id: <20220725055059.57498-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] selftests/cgroup: fix repeated words in comments
-Content-Language: en-US
-To:     wangjianli <wangjianli@cdjrlc.com>, <tj@kernel.org>,
-        <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>, <shuah@kernel.org>
-CC:     <cgroups@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220724070435.7999-1-wangjianli@cdjrlc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20220724070435.7999-1-wangjianli@cdjrlc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: O0v9LtqG_0v5FKzE3ZP4mc1QUIOrRrW1
-X-Proofpoint-GUID: O0v9LtqG_0v5FKzE3ZP4mc1QUIOrRrW1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-23_02,2022-07-21_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 adultscore=0 clxscore=1011 lowpriorityscore=0
- mlxlogscore=974 mlxscore=0 bulkscore=0 spamscore=0 phishscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207250026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+RTL8723DS is another version of the RTL8723 WiFi + Bluetooth chip. It is
+already supported by the hci_uart/btrtl driver. Document the compatible.
 
-On 7/24/2022 12:34 PM, wangjianli wrote:
-> Delete the redundant word 'in'.
-> 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->   tools/testing/selftests/cgroup/test_freezer.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
-> index ff519029f6f4..b479434e87b7 100644
-> --- a/tools/testing/selftests/cgroup/test_freezer.c
-> +++ b/tools/testing/selftests/cgroup/test_freezer.c
-> @@ -740,7 +740,7 @@ static int test_cgfreezer_ptraced(const char *root)
->   
->   	/*
->   	 * cg_check_frozen(cgroup, true) will fail here,
-> -	 * because the task in in the TRACEd state.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-s/in in/is in     ?
+ Documentation/devicetree/bindings/net/realtek-bluetooth.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +	 * because the task in the TRACEd state.
->   	 */
->   	if (cg_freeze_wait(cgroup, false))
->   		goto cleanup;
+diff --git a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+index 157d606bf9cb..8ac633b7e917 100644
+--- a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+@@ -20,6 +20,7 @@ properties:
+     enum:
+       - realtek,rtl8723bs-bt
+       - realtek,rtl8723cs-bt
++      - realtek,rtl8723ds-bt
+       - realtek,rtl8822cs-bt
+ 
+   device-wake-gpios:
+-- 
+2.35.1
 
-
--Mukesh

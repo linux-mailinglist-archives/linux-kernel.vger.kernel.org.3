@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4518F5807B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940E65807BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbiGYWn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S237648AbiGYWpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237598AbiGYWnG (ORCPT
+        with ESMTP id S237610AbiGYWou (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:43:06 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E5C29CA5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:41:08 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id w10so137606plq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=+gsloq9DrRj40wgtL1Bj5I/zKXAptLmoCHjL2BnUObw=;
-        b=qUtmtma6HAQJVGOAzv8j1zpuhY/PD+n2lLtrvXqfLjDEbW/92oJFBSdQSqvu0vrBl1
-         6wA5y5aBh4XKOitO+OtYvo6eIpaT54/UGk0fdpdZZrk5dWPezSTLL1T1dX5bNd6Fejmy
-         wLZQ58Uh9DVm4Q9Vwasenaz16K7iKmeICk5jmwSYudByNWr4HffVTxdC0gZv5NSfXM7d
-         h38haZ1YMo7ToVhCDJr7KtgZ+MhXyr2vZFb8eeHqZk9oqtrUHMJN2887ZizkRpG4a9Xq
-         a/V6LSSiy7mRYJSLoWW67r75jEdfwxX8h22LSYiYxrZqvGTo1UdtTggGJHe6S4fqi1gM
-         pIkw==
+        Mon, 25 Jul 2022 18:44:50 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BBF2611C;
+        Mon, 25 Jul 2022 15:43:38 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-10d8880d055so16617160fac.8;
+        Mon, 25 Jul 2022 15:43:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=+gsloq9DrRj40wgtL1Bj5I/zKXAptLmoCHjL2BnUObw=;
-        b=5j4fq4+vXt9+4T8PaZaCDSC0aqmeE0Z7IOhSm/+z/w2b7s4wlsutGXkwvh0ey8VE4B
-         E6K/Jn5K1RBnNUQRYtBf975qsjqKmhEW9A+xRM0RuXaOTRnZJl+K68rJIRBRgpbtFx6W
-         oBt06Paa6HMSmi0c3XGXx+s2lcZ4cBzp0aoGUY7Na+/n4m7ZTmcdShjng25/mq+/yCGe
-         vm9lIYJrLh09u1ztbSpUN0NdGQupcewMbt568oum+S+rbm+1Q7GOQP0tG6ONqUnRWvJK
-         Vczsaq4f6qjlFf0kRaVY5qKlOTRV9BYdOcTIFBNrWU1o4Uu0ct/nWihZqn2TJsvkhwcm
-         +VOQ==
-X-Gm-Message-State: AJIora93iHGiKOqrxmZ4bPDq/JFvLMj+/IzgCnehmnMgXlDbu2TgtWDe
-        M1dmDi0inTFiUvBJ+8mUB8E=
-X-Google-Smtp-Source: AGRyM1sY6xs2vLFIRjWV2bnzc91l1WGwCvv+DJXVUNptBy7iZlV1vdS9ruecuC6uACy/vvyxKuwSiQ==
-X-Received: by 2002:a17:902:ba91:b0:16c:6b8e:cd06 with SMTP id k17-20020a170902ba9100b0016c6b8ecd06mr13859080pls.33.1658788842670;
-        Mon, 25 Jul 2022 15:40:42 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z14-20020aa7958e000000b0052a75004c51sm10440383pfj.146.2022.07.25.15.40.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 15:40:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5ef016a9-c1bb-91dd-454d-504d26074477@roeck-us.net>
-Date:   Mon, 25 Jul 2022 15:40:40 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=414OPFPqm7yiKu0XCIZIVb72Nf4LXIt1k0i8OrjquNM=;
+        b=zqXQz2+Xql+I20zJJzdZeY1qMy0hR3UZ0kbxAcPIU+X6HyIGANlRem1dyhuiU0g8+Q
+         /4mXSu10Mx/JcH1QZ0G5g+bP/Ouz7QImf2xHIMUm7avERpupO+PWrJ2t5S7dRTp1ySdM
+         mFQEpAhva4XwLwKZpPyFRnbOzV7TZwFlLnVwSiUPS/y6SeGje1O6B816SS9G9mD2ET8l
+         7F/DUNXRqzepRphGdTcecuzmiDrR4PiezQsZaSR5yFUibGncbsc7PD6ftFerQIabJ52A
+         Q53Je+xM79k9veCW0juTjjhPitaGu+PrfGgjM3Ge1qlc4shwCl3/m52Zj3lRsmv7UK0A
+         6aTA==
+X-Gm-Message-State: AJIora+GiGVi/Sh/pIbtMbf6bVmKK4GRWrs4zmEGoZ61Qrt2fgL0WAEh
+        V2ZgonpgEqedU19tMQHJYA==
+X-Google-Smtp-Source: AGRyM1sbb07YDLb2nNG3D5ni7t9o/Imo9DVsOQtpEXAJ+WQHpVXMdKmFq3rpH6uepyz4rLi1sRM1gQ==
+X-Received: by 2002:a05:6870:3399:b0:10d:5b33:566f with SMTP id w25-20020a056870339900b0010d5b33566fmr7457280oae.266.1658788997533;
+        Mon, 25 Jul 2022 15:43:17 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id cm36-20020a056870b62400b000fb2aa6eef2sm6763107oab.32.2022.07.25.15.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 15:43:17 -0700 (PDT)
+Received: (nullmailer pid 2883124 invoked by uid 1000);
+        Mon, 25 Jul 2022 22:43:15 -0000
+Date:   Mon, 25 Jul 2022 16:43:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Runyang Chen <Runyang.Chen@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Runyang Chen <runyang.chen@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        angelogioacchino.delregno@collabora.com
+Subject: Re: [PATCH] [1/3] dt-bindings: watchdog: Add compatible for MediaTek
+ MT8188
+Message-ID: <20220725224315.GA2883086-robh@kernel.org>
+References: <20220722072316.582-1-Runyang.Chen@mediatek.com>
+ <20220722072316.582-2-Runyang.Chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Timothy Pearson <tpearson@raptorengineering.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        =?UTF-8?Q?Dan_Hor=c3=a1k?= <dan@danny.cz>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        amd-gfx <amd-gfx@lists.freedesktop.org>,
-        Alex Deucher <alexdeucher@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20220725123918.1903255-1-mpe@ellerman.id.au>
- <CAHk-=wihON4Ytte5zLHWNQtTapUvCpkToxY06OjX-_2B+Gq6Gg@mail.gmail.com>
- <1446417444.13111032.1658777648586.JavaMail.zimbra@raptorengineeringinc.com>
- <20220725204217.GU25951@gate.crashing.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] drm/amdgpu: Re-enable DCN for 64-bit powerpc
-In-Reply-To: <20220725204217.GU25951@gate.crashing.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722072316.582-2-Runyang.Chen@mediatek.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,46 +72,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/25/22 13:42, Segher Boessenkool wrote:
-> On Mon, Jul 25, 2022 at 02:34:08PM -0500, Timothy Pearson wrote:
->>>> Further digging shows that the build failures only occur with compilers
->>>> that default to 64-bit long double.
->>>
->>> Where the heck do we have 'long double' things anywhere in the kernel?
->>>
->>> I tried to grep for it, and failed miserably. I found some constants
->>> that would qualify, but they were in the v4l colorspaces-details.rst
->>> doc file.
->>>
->>> Strange.
->>
->> We don't, at least not that I can see.  The affected code uses standard doubles.
->>
->> What I'm wondering is if the compiler is getting confused between standard and long doubles when they are both the same bit length...
+On Fri, 22 Jul 2022 15:23:14 +0800, Runyang Chen wrote:
+> From: Runyang Chen <runyang.chen@mediatek.com>
 > 
-> The compiler emits the same code (DFmode things, double precision float)
-> in both cases, and it itself does not see any difference anymore fairly
-> early in the pipeline.  Compare to int and long on most 32-bit targets,
-> both are SImode, the compiler will not see different types anymore:
-> there *are* no types, except in the compiler frontend.
+> Add dt-binding documentation of watchdog for MediaTek MT8188 SoC
 > 
-> It only happens for powerpc64le things, and not for powerpc64 builds.
-> 
-> It is probably a GCC problem.  I don't see what forces the GCC build
-> here to use 64-bit long double either btw?  Compilers build via buildall
-> have all kinds of unnecessary things disabled, but not that, not
-> directly at least.
+> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
- From what little documentation I can find, there appears to be
-"--with-long-double-128" and "--with-long-double-format=ieee".
-That looks like something that would need to be enabled, not disabled.
-
-FWIW, depending on compiler build options such as the above for kernel
-builds seems to be a little odd to me, and I am not sure I'd want to
-blame gcc if the kernel wants to be built with 128-bit floating point
-as default. At the very least, that should be documented somewhere,
-and if possible the kernel should refuse to build if the compiler build
-options don't meet the requirements.
-
-Guenter
+Acked-by: Rob Herring <robh@kernel.org>

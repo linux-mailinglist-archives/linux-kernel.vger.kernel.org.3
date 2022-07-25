@@ -2,93 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB1A580352
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95376580261
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbiGYRId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 13:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S235784AbiGYQCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 12:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiGYRIc (ORCPT
+        with ESMTP id S235509AbiGYQCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 13:08:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F2917A8C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658768911; x=1690304911;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=gaRQ8OrgasXoKsBE8DAQZEaK2QlXpbZjuu5pCy7Jz7A=;
-  b=liuffyM1W+OXR1xZOoLDaUXD0/7j8jbhCKp7Y69chKlSQtbP6vWkqB4I
-   5dQVqKmeJszgbYk4j6Q9wu4ubWPNKEnm7ICmdaWf7mtxPiwvw4YP2tzny
-   /V0a6hR2WgEL3fXTclBDa4qRSpfl65rYmOUvElO0Dso27xdJD84RKXpPe
-   rhWXhTt84yjbAgHWYTE2Wp9qXkXUCoWTV0qBBsN1QZ/E+6TBBB225D83Y
-   3GlEJW5LRz6Y/WUbeNcEBmsTQ6doa6uCiteWqMBjlhuIQQKW4uQoYEabZ
-   /HaMGk1P9qT5sRaFy4urjgpE85VQz7LdX6NgSKzKzTm4kseJyS45/iEfG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="287760213"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="287760213"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 10:08:31 -0700
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="550062688"
-Received: from jxzhao-mobl.amr.corp.intel.com (HELO [10.212.0.178]) ([10.212.0.178])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 10:08:30 -0700
-Message-ID: <bdaec1b0-1385-b376-7640-61d363c9b009@linux.intel.com>
-Date:   Mon, 25 Jul 2022 10:03:23 -0500
+        Mon, 25 Jul 2022 12:02:22 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B8E12745
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:02:21 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id r8so2443754plh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:02:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JKqeLialV+6vbEP9iLh1rw+b+hmjByPHU1zMv6k/ebc=;
+        b=3zsZRztKOEhwhcwxTyuAJc8jmK7Yd5DM5WDlQ8uNoCD0B0JdzO0Zr6i0fvzBbIeHGL
+         K1J9803VZkOtPHjBJjT4QvcPcrBqPmlyBibQFNfoLnJL2nH/8cmJZUl6jIbQx7NGbPNN
+         08+Ll+QxTbHmmBtibJ4KKjfXAbYDVI3PjoT0djdSDPSnUr00wKWUXUem3GEA9s+0sqso
+         vpZFIY0eOy38/uhvApzUMyDSDhHH3jPQ1VTXer2Cyum9Ff5GijNMSLUXAyVfmk/nlRqL
+         c0WLgAt1NLkoXArDAkcdqPEZWBzIV/RYls6whvzrjgsVYeCHBq/VtW9q21vfsycSgx3Y
+         CQZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JKqeLialV+6vbEP9iLh1rw+b+hmjByPHU1zMv6k/ebc=;
+        b=XEPNXrirSWRsfqYdTGapnPlZ5+z8EWdIR2JIE0daA5qRRM21S4WQ4IwGpPOh3uQnqM
+         TrVKRylJ6F+60QMrWrn6cYJY0JIQgluYbr+qMSIJCCHKYeYR5sOK0CG/Afay2FbeeaPW
+         hEBLh6IM6JHPi4vf8MXEhuWo08ejzX2dw/+dWD1A7SEfZHz8WsFA2XrnlwdW5LPha8py
+         C+OoNwKft0U80pJvfpKiNvkc5+oriJECvZlJOaR9OEY8kpcjHyxkS7gM6xEVDuKhPPsO
+         +wE9Q4wsBDCJhYTcmy64UG0bqmq8aOIITDyA+NbNzQfrAftFLKBmRgEosdkLCxuEeSc6
+         ijmQ==
+X-Gm-Message-State: AJIora/1CXIJQSw8NAhNcGgxl56mfLrshtuKIvLN2x/0HqbzH6JQ2tU5
+        REc3yjKqRnCNDOtXxQRjqAuUeQ==
+X-Google-Smtp-Source: AGRyM1tqvaWk/DDOXJIx1or0Y+22nYb/JgOeC2l2098PgfKLfLZkKZF0XasYDv3WsyNFz03m/6wFVA==
+X-Received: by 2002:a17:90b:3ec5:b0:1f0:3986:4502 with SMTP id rm5-20020a17090b3ec500b001f039864502mr15647381pjb.6.1658764940683;
+        Mon, 25 Jul 2022 09:02:20 -0700 (PDT)
+Received: from C02F63J9MD6R.bytedance.net ([61.120.150.78])
+        by smtp.gmail.com with ESMTPSA id o6-20020a1709026b0600b0015e8d4eb2easm9273441plk.308.2022.07.25.09.02.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 25 Jul 2022 09:02:19 -0700 (PDT)
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+To:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com
+Cc:     chenzhuo.1@bytedance.com, lukas@wunner.de, jan.kiszka@siemens.com,
+        stuart.w.hayes@gmail.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI/ERR: Use pcie_aer_is_native() to judge whether OS owns AER
+Date:   Tue, 26 Jul 2022 00:01:31 +0800
+Message-Id: <20220725160131.83687-1-chenzhuo.1@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] ASoC: max98373: Removing 0x203E from the volatile reg
-Content-Language: en-US
-To:     Ryan Lee <ryan.lee.analog@gmail.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com, steve@sk2.org,
-        ryans.lee@analog.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20220723015220.4169-1-ryans.lee@analog.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220723015220.4169-1-ryans.lee@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After commit 7d7cbeaba5b7 ("PCI/ERR: Clear status of the reporting
+device"), the AER status of the device that reported the error
+rather than the first downstream port is cleared. So the problem
+in commit aa344bc8b727 ("PCI/ERR: Clear AER status only when we
+control AER") is no longer existent, and we change to use
+pcie_aer_is_native() here.
 
+pci_aer_clear_nonfatal_status() already has pcie_aer_is_native(),
+so we move pci_aer_clear_nonfatal_status() out of
+pcie_aer_is_native().
 
-On 7/22/22 20:52, Ryan Lee wrote:
-> The 0x203E speaker gain register should be non-volatile.
-> This register value was not able to be synced because it was marked as
-> volatile.
-> 
-> Signed-off-by: Ryan Lee <ryans.lee@analog.com>
-> ---
->  sound/soc/codecs/max98373-i2c.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/sound/soc/codecs/max98373-i2c.c b/sound/soc/codecs/max98373-i2c.c
-> index 4fe065ece17c..3e04c7f0cce4 100644
-> --- a/sound/soc/codecs/max98373-i2c.c
-> +++ b/sound/soc/codecs/max98373-i2c.c
-> @@ -442,7 +442,6 @@ static bool max98373_volatile_reg(struct device *dev, unsigned int reg)
->  {
->  	switch (reg) {
->  	case MAX98373_R2000_SW_RESET ... MAX98373_R2009_INT_FLAG3:
-> -	case MAX98373_R203E_AMP_PATH_GAIN:
+Replace statements that judge whether OS owns AER in
+get_port_device_capability() with pcie_aer_is_native().
 
-That register isn't declared as volatile for the SoundWire case so that
-sounds like a good fix
+Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+---
+ drivers/pci/pcie/err.c          | 12 ++----------
+ drivers/pci/pcie/portdrv_core.c |  3 +--
+ 2 files changed, 3 insertions(+), 12 deletions(-)
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+index 0c5a143025af..28339c741555 100644
+--- a/drivers/pci/pcie/err.c
++++ b/drivers/pci/pcie/err.c
+@@ -184,7 +184,6 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 	int type = pci_pcie_type(dev);
+ 	struct pci_dev *bridge;
+ 	pci_ers_result_t status = PCI_ERS_RESULT_CAN_RECOVER;
+-	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
+ 
+ 	/*
+ 	 * If the error was detected by a Root Port, Downstream Port, RCEC,
+@@ -237,16 +236,9 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 	pci_dbg(bridge, "broadcast resume message\n");
+ 	pci_walk_bridge(bridge, report_resume, &status);
+ 
+-	/*
+-	 * If we have native control of AER, clear error status in the device
+-	 * that detected the error.  If the platform retained control of AER,
+-	 * it is responsible for clearing this status.  In that case, the
+-	 * signaling device may not even be visible to the OS.
+-	 */
+-	if (host->native_aer || pcie_ports_native) {
++	if (pcie_aer_is_native(dev))
+ 		pcie_clear_device_status(dev);
+-		pci_aer_clear_nonfatal_status(dev);
+-	}
++	pci_aer_clear_nonfatal_status(dev);
+ 	pci_info(bridge, "device recovery successful\n");
+ 	return status;
+ 
+diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
+index 604feeb84ee4..98c18f4a01b2 100644
+--- a/drivers/pci/pcie/portdrv_core.c
++++ b/drivers/pci/pcie/portdrv_core.c
+@@ -221,8 +221,7 @@ static int get_port_device_capability(struct pci_dev *dev)
+ 	}
+ 
+ #ifdef CONFIG_PCIEAER
+-	if (dev->aer_cap && pci_aer_available() &&
+-	    (pcie_ports_native || host->native_aer)) {
++	if (pcie_aer_is_native(dev) && pci_aer_available()) {
+ 		services |= PCIE_PORT_SERVICE_AER;
+ 
+ 		/*
+-- 
+2.30.1 (Apple Git-130)
 
->  	case MAX98373_R2054_MEAS_ADC_PVDD_CH_READBACK:
->  	case MAX98373_R2055_MEAS_ADC_THERM_CH_READBACK:
->  	case MAX98373_R20B6_BDE_CUR_STATE_READBACK:

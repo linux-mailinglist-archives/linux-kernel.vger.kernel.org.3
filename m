@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD7657FBE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A45157FBE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbiGYJAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S232913AbiGYJAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbiGYJAb (ORCPT
+        with ESMTP id S230177AbiGYJAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 25 Jul 2022 05:00:31 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898BAB85D
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89861B858
         for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:00:30 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bf9so16971527lfb.13
+Received: by mail-lf1-x12b.google.com with SMTP id p10so9511871lfd.9
         for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=me3OVL1nn7XM6F+0ou+AMgoAk19MVv6fz5xIk8IwPU8=;
-        b=xIclQEvTrK1yf2B0AWVT8grYpHJcUxmUiUN4f8ML411IQs0oGYblieVUomys7YhBVA
-         wW6FIQP9BFK7BEOvSmWTAvHqx8YGqGlZI20UgPyW9/P0QSWkm+FLXe64qg4jYfq5qTKs
-         idzdvtP20qHs+kpg2WzsEVVhamx3gcGRoWnpzbnQaOgWP/PCUPE98cKqMXRP4dGYOMOp
-         uCVrJZr+tsIb1F9TlpVcKZvIY8aFc9j0orkkvnQ/EVrcedFR6H91wUM0FzFJfl0yGteQ
-         IX8DAfky8UTKcuxUWIG6/RAF+pUlc9LEmGQOy3rSyhUSE1Tuq7gfMJOtkt3VquRZ015h
-         jYpQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sAMJhrd2Bkf4A5JBNPfHdArMsQpkh8UUS6mEvah+vNM=;
+        b=DxRL1mSUABh7BFK2efuWgszVWEB7Xve38B2r5gvWgjHehpk6jWFywm+gnNLm+a+9i4
+         3vorbfYZF7Ek3nWASg/WuVoYcEtpM319kSAnJjcGJuXFMZifgXU6Qb778/uUi/UdqnRK
+         iTxKm10SzIb9zBZ/hDbd2h864Jk06tDXOJd3HmQa1ps2Ss1WvitjiqhqlWMCHEkScuRY
+         +w6ap2nESwxFpSIoJhUjLVYD3P+Rs9/3TZrg0orC5dBLYw7fFM+wxLdCHvuaJi7btZSd
+         BYlgkI3mOBhXAX6fo6vS3AQo8XNCYj+XUeCUVy0mYeySiJnPYkWcquNbeN2EOmX4u9td
+         rR4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=me3OVL1nn7XM6F+0ou+AMgoAk19MVv6fz5xIk8IwPU8=;
-        b=1igARGoZ6rgBR2nlphBACBnsvpyxg3O+gMXAHkgO2OhLPHI/80fqyNbmG0pHgmMlUZ
-         QjY9Ny9DZWPGcP1w+zFcFbZl9h+6Pv0g+TBmu2KeZjXWLVfMSlZq3NtLnCcY+zTT1E4x
-         V+UK6H+Dxt6VVJ8SJWrsxX1+NudeVsPM+ckhaP60hHeGn+R7v5LJlkoGZk3ZknVT68qZ
-         39q85foQ7GxVhDYUX+fyFV6T66WG17YFIPSmOCAaL03d75ARmvHsDAyxPlbCqScgXMjs
-         TbNI98uwWaJFiWuhyOCVELUmMVsugpBLILC3Ks+AxlRIQYb9UsHLNo8ks5NABn4Jms4s
-         Q1Qg==
-X-Gm-Message-State: AJIora/tlyE0Yq3sSbOVg2Jz8ZNM1HrvkHF22FSYGzH5QzAV+nvXoPw2
-        NB7k2UcYXKNLtU9B6y4mQTNl0Ai90Gu0HA==
-X-Google-Smtp-Source: AGRyM1tgHboZ/znJO7GK8jIrGKI1A+aH2aoVUKcFjSbPTo/t3AJz/4J/Nc1njwG2gFSXcB1gXfyoeg==
-X-Received: by 2002:ac2:4c4d:0:b0:48a:7a96:470d with SMTP id o13-20020ac24c4d000000b0048a7a96470dmr4061399lfk.682.1658739627364;
-        Mon, 25 Jul 2022 02:00:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sAMJhrd2Bkf4A5JBNPfHdArMsQpkh8UUS6mEvah+vNM=;
+        b=DrcqE/wIZV6cusTCVyCPB0Ehi4M/GdgdQbXRr2ZQOeypW5gbbnH8PzvALezszi2ZRh
+         jzeR01IVbvA95WbfwJ46/82lKnxgHNzcB9TxwoUuqjCWyrAUmBuRo5LTvtZZJyXc79Dk
+         FOR5UTQmC+MjwSQxltOHcnovSijo2SgLayUc2hpxQqwn75MPbjMlgkCGAFhI5s0I9JFM
+         zv01vA9zSL9av7l02gIaVfNAspQ32Zk3X1GKWZKlWQgeTjxkW+MtubT3AVnLygulYNt/
+         u8Dk7jD8QZk6jJQeWQxaVlIKKCQ/koof7+bpEqB3NzGx9ZZUViPiAhSgZ45DMWGvGxcg
+         PlPw==
+X-Gm-Message-State: AJIora/h6ln8+C4Thk32fiXHiWJMotaN5miO6H0sJtbVs2dSi2D8eigt
+        OPDch2bp6Sz26fhoaVcog2LIoA==
+X-Google-Smtp-Source: AGRyM1tkuuXCBIpkfmj6A07bIM2TQiELZLCQfKM74qAWVkxWWrFuInVRGnhjub7PHYu9BbdCwMblhw==
+X-Received: by 2002:a05:6512:b03:b0:489:e00a:b32 with SMTP id w3-20020a0565120b0300b00489e00a0b32mr4046317lfu.368.1658739628836;
+        Mon, 25 Jul 2022 02:00:28 -0700 (PDT)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id n20-20020a2ebd14000000b0025de9ff35b4sm2291364ljq.35.2022.07.25.02.00.26
+        by smtp.gmail.com with ESMTPSA id n20-20020a2ebd14000000b0025de9ff35b4sm2291364ljq.35.2022.07.25.02.00.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 02:00:26 -0700 (PDT)
+        Mon, 25 Jul 2022 02:00:28 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     Mark Brown <broonie@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 1/2] regmap: Support accelerated noinc operations
-Date:   Mon, 25 Jul 2022 10:58:21 +0200
-Message-Id: <20220725085822.2360234-1-linus.walleij@linaro.org>
+Subject: [PATCH 2/2] regmap: mmio: Support accelerared noinc operations
+Date:   Mon, 25 Jul 2022 10:58:22 +0200
+Message-Id: <20220725085822.2360234-2-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220725085822.2360234-1-linus.walleij@linaro.org>
+References: <20220725085822.2360234-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,255 +69,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several architectures have accelerated operations for MMIO
-operations writing to a single register, such as writesb, writesw,
-writesl, writesq, readsb, readsw, readsl and readsq but regmap
-currently cannot use them because we have no hooks for providing
-an accelerated noinc back-end for MMIO.
+Use the newly added callback for accelerated noinc MMIO
+to provide writesb, writesw, writesl, writesq, readsb, readsw,
+readsl and readsq.
 
-Solve this by providing reg_[read/write]_noinc callbacks for
-the bus abstraction, so that the regmap-mmio bus can use this.
-
-Currently I do not see a need to support this for custom regmaps
-so it is only added to the bus.
-
-Callbacks are passed a void * with the array of values and a
-count which is the number of items of the byte chunk size for
-the specific register width.
+A special quirk is needed to deal with big endian regmaps: there
+are no accelerated operations defined for big endian, so fall
+back to calling the big endian operations itereatively for this
+case.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/base/regmap/regmap.c | 164 ++++++++++++++++++++++++++++++++++-
- include/linux/regmap.h       |   8 ++
- 2 files changed, 171 insertions(+), 1 deletion(-)
+ drivers/base/regmap/regmap-mmio.c | 153 ++++++++++++++++++++++++++++++
+ 1 file changed, 153 insertions(+)
 
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index 2221d9863831..2923bb63ab95 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -2157,7 +2157,7 @@ int regmap_noinc_write(struct regmap *map, unsigned int reg,
+diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
+index 71f16be7e717..031ee91020e8 100644
+--- a/drivers/base/regmap/regmap-mmio.c
++++ b/drivers/base/regmap/regmap-mmio.c
+@@ -17,6 +17,7 @@ struct regmap_mmio_context {
+ 	void __iomem *regs;
+ 	unsigned int val_bytes;
+ 	bool relaxed_mmio;
++	bool big_endian;
  
- 	if (!map->bus)
- 		return -EINVAL;
--	if (!map->bus->write)
-+	if (!map->bus->write && !map->bus->reg_noinc_write)
- 		return -ENOTSUPP;
- 	if (val_len % map->format.val_bytes)
- 		return -EINVAL;
-@@ -2173,6 +2173,92 @@ int regmap_noinc_write(struct regmap *map, unsigned int reg,
- 		goto out_unlock;
- 	}
+ 	bool attached_clk;
+ 	struct clk *clk;
+@@ -160,6 +161,79 @@ static int regmap_mmio_write(void *context, unsigned int reg, unsigned int val)
+ 	return 0;
+ }
  
-+	/* Use the accelerated operation if we can */
-+	if (map->bus->reg_noinc_write) {
-+		size_t val_bytes = map->format.val_bytes;
-+		size_t val_count = val_len / val_bytes;
-+		unsigned int lastval;
-+		const u8 *u8p;
-+		const u16 *u16p;
-+		const u32 *u32p;
-+#ifdef CONFIG_64BIT
-+		const u64 *u64p;
-+#endif
-+		int i;
++static int regmap_mmio_noinc_write(void *context, unsigned int reg,
++				   const void *val, size_t val_count)
++{
++	struct regmap_mmio_context *ctx = context;
++	int ret = 0;
++	int i;
 +
-+		switch (val_bytes) {
-+		case 1:
-+			u8p = val;
-+			lastval = (unsigned int)u8p[val_count - 1];
-+			break;
++	if (!IS_ERR(ctx->clk)) {
++		ret = clk_enable(ctx->clk);
++		if (ret < 0)
++			return ret;
++	}
++
++	/*
++	 * There are no native, assembly-optimized write single register
++	 * operations for big endian, so fall back to emulation if this
++	 * is needed. (Single bytes are fine, they are not affected by
++	 * endianness.)
++	 */
++	if (ctx->big_endian && (ctx->val_bytes > 1)) {
++		switch (ctx->val_bytes) {
 +		case 2:
-+			u16p = val;
-+			lastval = (unsigned int)u16p[val_count - 1];
++		{
++			const u16 *valp = (const u16 *)val;
++			for (i = 0; i < val_count; i++)
++				iowrite16be(valp[i], ctx->regs + reg);
 +			break;
++		}
 +		case 4:
-+			u32p = val;
-+			lastval = (unsigned int)u32p[val_count - 1];
++		{
++			const u32 *valp = (const u32 *)val;
++			for (i = 0; i < val_count; i++)
++				iowrite32be(valp[i], ctx->regs + reg);
 +			break;
++		}
 +#ifdef CONFIG_64BIT
 +		case 8:
-+			u64p = val;
-+			lastval = (unsigned int)u64p[val_count - 1];
-+			break;
++			/* This is just too esoteric */
++			fallthrough;
 +#endif
 +		default:
 +			ret = -EINVAL;
-+			goto out_unlock;
++			goto out_clk;
 +		}
-+
-+		/*
-+		 * Update the cache with the last value we write, the rest is just
-+		 * gone down in the hardware FIFO. We can't cache FIFOs. This makes
-+		 * sure a single read from the cache will work.
-+		 */
-+		if (!map->cache_bypass && !map->defer_caching) {
-+			ret = regcache_write(map, reg, lastval);
-+			if (ret != 0)
-+				goto out_unlock;
-+			if (map->cache_only) {
-+				map->cache_dirty = true;
-+				ret = 0;
-+				goto out_unlock;
-+			}
-+		}
-+
-+		ret = map->bus->reg_noinc_write(map->bus_context, reg, val, val_count);
-+
-+		if (!ret && regmap_should_log(map)) {
-+			dev_info(map->dev, "%x <= [", reg);
-+			for (i = 0; i < val_len; i++) {
-+				switch (val_bytes) {
-+				case 1:
-+					pr_cont("%x", u8p[i]);
-+					break;
-+				case 2:
-+					pr_cont("%x", u16p[i]);
-+					break;
-+				case 4:
-+					pr_cont("%x", u32p[i]);
-+					break;
-+#ifdef CONFIG_64BIT
-+				case 8:
-+					pr_cont("%llx", u64p[i]);
-+					break;
-+#endif
-+				default:
-+					break;
-+				}
-+				if (i == (val_len - 1))
-+					pr_cont("]\n");
-+				else
-+					pr_cont(",");
-+			}
-+		}
-+		ret = 0;
-+		goto out_unlock;
 +	}
 +
- 	while (val_len) {
- 		if (map->max_raw_write && map->max_raw_write < val_len)
- 			write_len = map->max_raw_write;
-@@ -2918,6 +3004,82 @@ int regmap_noinc_read(struct regmap *map, unsigned int reg,
- 		goto out_unlock;
- 	}
- 
-+	/* Use the accelerated operation if we can */
-+	if (map->bus->reg_noinc_read) {
-+		size_t val_bytes = map->format.val_bytes;
-+		size_t val_count = val_len / val_bytes;
-+		const u8 *u8p;
-+		const u16 *u16p;
-+		const u32 *u32p;
++	switch (ctx->val_bytes) {
++	case 1:
++		writesb(ctx->regs + reg, (const u8 *)val, val_count);
++		break;
++	case 2:
++		writesw(ctx->regs + reg, (const u16 *)val, val_count);
++		break;
++	case 4:
++		writesl(ctx->regs + reg, (const u32 *)val, val_count);
++		break;
 +#ifdef CONFIG_64BIT
-+		const u64 *u64p;
++	case 8:
++		writesq(ctx->regs + reg, (const u64 *)val, val_count);
++		break;
 +#endif
-+		int i;
++	default:
++		ret = -EINVAL;
++		break;
++	}
 +
-+		/*
-+		 * We have not defined the FIFO semantics for cache, as the
-+		 * cache is just one value deep. Should we return the last
-+		 * written value? Just avoid this by always reading the FIFO
-+		 * even when using cache. Cache only will not work.
-+		 */
-+		if (map->cache_only) {
-+			ret = -EBUSY;
-+			goto out_unlock;
-+		}
++out_clk:
++	if (!IS_ERR(ctx->clk))
++		clk_disable(ctx->clk);
 +
-+		switch (val_bytes) {
-+		case 1:
-+			u8p = val;
-+			break;
++	return ret;
++}
++
+ static unsigned int regmap_mmio_read8(struct regmap_mmio_context *ctx,
+ 				      unsigned int reg)
+ {
+@@ -241,6 +315,82 @@ static int regmap_mmio_read(void *context, unsigned int reg, unsigned int *val)
+ 	return 0;
+ }
+ 
++static int regmap_mmio_noinc_read(void *context, unsigned int reg,
++				  void *val, size_t val_count)
++{
++	struct regmap_mmio_context *ctx = context;
++	int ret = 0;
++	int i;
++
++	if (!IS_ERR(ctx->clk)) {
++		ret = clk_enable(ctx->clk);
++		if (ret < 0)
++			return ret;
++	}
++
++	/*
++	 * There are no native, assembly-optimized write single register
++	 * operations for big endian, so fall back to emulation if this
++	 * is needed. (Single bytes are fine, they are not affected by
++	 * endianness.)
++	 */
++	if (ctx->big_endian && (ctx->val_bytes > 1)) {
++		switch (ctx->val_bytes) {
 +		case 2:
-+			u16p = val;
++		{
++			u16 *valp = (u16 *)val;
++			for (i = 0; i < val_count; i++)
++				valp[i] = ioread16be(ctx->regs + reg);
 +			break;
++		}
 +		case 4:
-+			u32p = val;
++		{
++			u32 *valp = (u32 *)val;
++			for (i = 0; i < val_count; i++)
++				valp[i] = ioread32be(ctx->regs + reg);
 +			break;
++		}
 +#ifdef CONFIG_64BIT
 +		case 8:
-+			u64p = val;
-+			break;
++			/* This is just too esoteric */
++			fallthrough;
 +#endif
 +		default:
 +			ret = -EINVAL;
-+			goto out_unlock;
++			goto out_clk;
 +		}
-+
-+		ret = map->bus->reg_noinc_read(map->bus_context, reg, val, val_count);
-+
-+		if (!ret && regmap_should_log(map)) {
-+			dev_info(map->dev, "%x => [", reg);
-+			for (i = 0; i < val_len; i++) {
-+				switch (val_bytes) {
-+				case 1:
-+					pr_cont("%x", u8p[i]);
-+					break;
-+				case 2:
-+					pr_cont("%x", u16p[i]);
-+					break;
-+				case 4:
-+					pr_cont("%x", u32p[i]);
-+					break;
-+#ifdef CONFIG_64BIT
-+				case 8:
-+					pr_cont("%llx", u64p[i]);
-+					break;
-+#endif
-+				default:
-+					break;
-+				}
-+				if (i == (val_len - 1))
-+					pr_cont("]\n");
-+				else
-+					pr_cont(",");
-+			}
-+		}
-+		ret = 0;
-+		goto out_unlock;
 +	}
 +
- 	while (val_len) {
- 		if (map->max_raw_read && map->max_raw_read < val_len)
- 			read_len = map->max_raw_read;
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index 8952fa3d0d59..c60bd3a4b098 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -489,8 +489,12 @@ typedef int (*regmap_hw_read)(void *context,
- 			      void *val_buf, size_t val_size);
- typedef int (*regmap_hw_reg_read)(void *context, unsigned int reg,
- 				  unsigned int *val);
-+typedef int (*regmap_hw_reg_noinc_read)(void *context, unsigned int reg,
-+					void *val, size_t val_count);
- typedef int (*regmap_hw_reg_write)(void *context, unsigned int reg,
- 				   unsigned int val);
-+typedef int (*regmap_hw_reg_noinc_write)(void *context, unsigned int reg,
-+					 const void *val, size_t val_count);
- typedef int (*regmap_hw_reg_update_bits)(void *context, unsigned int reg,
- 					 unsigned int mask, unsigned int val);
- typedef struct regmap_async *(*regmap_hw_async_alloc)(void);
-@@ -511,6 +515,8 @@ typedef void (*regmap_hw_free_context)(void *context);
-  *               must serialise with respect to non-async I/O.
-  * @reg_write: Write a single register value to the given register address. This
-  *             write operation has to complete when returning from the function.
-+ * @reg_write_noinc: Write multiple register value to the same register. This
-+ *             write operation has to complete when returning from the function.
-  * @reg_update_bits: Update bits operation to be used against volatile
-  *                   registers, intended for devices supporting some mechanism
-  *                   for setting clearing bits without having to
-@@ -538,9 +544,11 @@ struct regmap_bus {
- 	regmap_hw_gather_write gather_write;
- 	regmap_hw_async_write async_write;
- 	regmap_hw_reg_write reg_write;
-+	regmap_hw_reg_noinc_write reg_noinc_write;
- 	regmap_hw_reg_update_bits reg_update_bits;
- 	regmap_hw_read read;
- 	regmap_hw_reg_read reg_read;
-+	regmap_hw_reg_noinc_read reg_noinc_read;
- 	regmap_hw_free_context free_context;
- 	regmap_hw_async_alloc async_alloc;
- 	u8 read_flag_mask;
++	switch (ctx->val_bytes) {
++	case 1:
++		readsb(ctx->regs + reg, (u8 *)val, val_count);
++		break;
++	case 2:
++		readsw(ctx->regs + reg, (u16 *)val, val_count);
++		break;
++	case 4:
++		readsl(ctx->regs + reg, (u32 *)val, val_count);
++		break;
++#ifdef CONFIG_64BIT
++	case 8:
++		readsq(ctx->regs + reg, (u64 *)val, val_count);
++		break;
++#endif
++	default:
++		ret = -EINVAL;
++		break;
++	}
++
++out_clk:
++	if (!IS_ERR(ctx->clk))
++		clk_disable(ctx->clk);
++
++	return ret;
++
++	return 0;
++}
++
++
+ static void regmap_mmio_free_context(void *context)
+ {
+ 	struct regmap_mmio_context *ctx = context;
+@@ -257,6 +407,8 @@ static const struct regmap_bus regmap_mmio = {
+ 	.fast_io = true,
+ 	.reg_write = regmap_mmio_write,
+ 	.reg_read = regmap_mmio_read,
++	.reg_noinc_write = regmap_mmio_noinc_write,
++	.reg_noinc_read = regmap_mmio_noinc_read,
+ 	.free_context = regmap_mmio_free_context,
+ 	.val_format_endian_default = REGMAP_ENDIAN_LITTLE,
+ };
+@@ -347,6 +499,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
+ #ifdef __BIG_ENDIAN
+ 	case REGMAP_ENDIAN_NATIVE:
+ #endif
++		ctx->big_endian = true;
+ 		switch (config->val_bits) {
+ 		case 8:
+ 			ctx->reg_read = regmap_mmio_read8;
 -- 
 2.36.1
 

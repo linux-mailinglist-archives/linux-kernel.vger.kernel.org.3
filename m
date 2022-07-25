@@ -2,448 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067E25807CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035C35807D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237517AbiGYWvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S237548AbiGYWxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiGYWvW (ORCPT
+        with ESMTP id S237587AbiGYWxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:51:22 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C54B1EC68
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:51:21 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d3so3845663pls.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:51:21 -0700 (PDT)
+        Mon, 25 Jul 2022 18:53:41 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8067720F61
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:53:39 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id d13so10249791wrn.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=oQl3b0Y0OWQGmD6OeMqO+0BUbxh+KUZ2h2bIFwKAGfs=;
-        b=MAkWfzvzy0or3fzfzgFlB5B4RGO9w2MonCI/Dficd1Z7TdT7VeOP9IZRP0Bjcp6F1F
-         1i0Kuzab82YMpJ0sGTEzS4HgKdT9Xsx0/dEM3lXa2Qsk96q2+a5MCgbHM0auTmLyqOcw
-         X3f9psGzSobeIdZ1g6gjEOropBeP3uyAQIQv9PNiPJM3HOf7ZOmIHbRCLunB7IZLDxF6
-         oyNMMSsTO9ZM4XHhrA5HCEqmctldYlp/gjpxhARp7a1m6OPwCNRuIkqZKeL/QsX+tIgg
-         Z4JRCOGTcedPRVUYyESzBt5wG9RFFeWkZRHDMPRHgbE7CfcKAUY3DWyigrm9VuVqDWb+
-         lvvA==
+         :cc;
+        bh=/W5yt/hqpa2H9l51KPyc7KtGFLwJRO5GtKdVuzCYcYE=;
+        b=eRiyLuxpX5qC8hQzrRkg9frLl3gSC//o1oyul/HoGdiNoF4so6toscBjafhGAfLQqp
+         UCQghoJOnPMwYy0xIHbRlsbkOyD4ektNaPpsrnGpnIlwnydmsHdNvVWSDXiObsYavolQ
+         7R9fpfH9/S4xUCE48oVAhrrLdNjiAmJBq47B5m9UMaOVMHUD9QB7mJrifTVcP6fdgeH8
+         wIXb/bkULIJKGTX2mtNfykVdShVFSTtMxCwl2eqvu7rrTu8g5gyuddq7KlYNBQws6Mb2
+         fnbp/R1KutfkZXIE80k12jmE3KUrvJxhFXu33hIrDM9gJvLIwcHEpdtbMY4NQG2VxAbg
+         71dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oQl3b0Y0OWQGmD6OeMqO+0BUbxh+KUZ2h2bIFwKAGfs=;
-        b=m3ZQENW9DDULC7+k2YEblmrGkC5sVquSTMYlHQmNkluy//8Dy1hQXZZ+s0CSL6vV1b
-         qpWIfWKehDed15hvP6j5Y1fijtSqgFZ5qNGoyfoxbEmEFUP9SvgDDsJNceT8oY7KjJuw
-         dA7L9ReyB2ss94Sx19LXqWbPogVG/GF45yuAsGXZHMT2yrf1QrtdWvfY2L5TqFejyCZQ
-         sqi4mimF7ZKEsrqO3vcSv+lmNpBQ1fEYGAPHhMIHSx789Kgwbadf9eZDfr9k7y4xNZYP
-         8QW5dWknLB1+vXXdCgks2iTWzTX56gKho5wbyeJLMvHuZ8wY8Fv+KDYhHPRSJ1FQDfpP
-         rCtQ==
-X-Gm-Message-State: AJIora8gBMFwE/pnum4zkc5pH4S1nPYI4Ys/j1CRW/M+Ohy/PO9fxdls
-        rY61f5av+ghh0iBnonx7tzb5UTnFSLSZ9XmBLrROiw==
-X-Google-Smtp-Source: AGRyM1tH+6fD4PAN8XDs+R7sKRL32DENvehHlyIk1TIM3YZmZdHuN0ePTaPnjepCxP30H8zWdWadqXTtTo5u+dZYYxw=
-X-Received: by 2002:a17:902:ead2:b0:16d:e8c:ddd5 with SMTP id
- p18-20020a170902ead200b0016d0e8cddd5mr13921830pld.99.1658789480369; Mon, 25
- Jul 2022 15:51:20 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=/W5yt/hqpa2H9l51KPyc7KtGFLwJRO5GtKdVuzCYcYE=;
+        b=KU3KIWGTFZiUDm0qq3tD7vswq/t5P8zigKknA/qE7U/f31Ie3EcL0uFy0nZAZOBZ6R
+         ieg0ou0KtM7NOHl0KUaQWrbJwwXTJyANdVMxCZzVpImWAPeLKWs+bII7RaD7Pa7TYT5t
+         ywgyuvBoc+SwwzMjkmKRODyPCCtiGq33cd0FhgAexVY314kMnmqzeZmM7dSKwdtSyqGH
+         hvVc0ymlbuu3pL/QDr3tDEvRnCRYho0qnqs+NmyRMdK1kYEMeRrkj+vhUygjIYQlo3Qh
+         GM8Xk0XADzgOwB7To/JGWC8R8EbW1zhLGy9zWMUfo5IIejZAW4mcpy1d9hdpa6HHnMXz
+         MJ5Q==
+X-Gm-Message-State: AJIora/A6I1gzyqAhcQnly0OY0tOf8IMDmhJf5/6fI8jX3O2GTMx2+/8
+        aGwVEaQynPO0biljoDU575PzapNYxgosI2v4Vr3e
+X-Google-Smtp-Source: AGRyM1sHda4R7slO2THldYmCB6hufThJf2miVQonTYTic0+WRH9UBEOBbGg/X6g4BlFU1purnp8Q+Tj47z8FJeAvPUY=
+X-Received: by 2002:adf:fb86:0:b0:21e:3cc8:a917 with SMTP id
+ a6-20020adffb86000000b0021e3cc8a917mr9220347wrr.538.1658789617917; Mon, 25
+ Jul 2022 15:53:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722174212.GA1911979@bhelgaas> <86522aa5-2855-0f73-ddb2-a2b50b2fd1b7@nvidia.com>
-In-Reply-To: <86522aa5-2855-0f73-ddb2-a2b50b2fd1b7@nvidia.com>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Mon, 25 Jul 2022 15:50:44 -0700
-Message-ID: <CACK8Z6FSr_ztkZ5+ULjHiDZ5L9qR=Ewtq1ZuDofzvJX=mW5WAQ@mail.gmail.com>
-Subject: Re: [PATCH V2] PCI/ASPM: Save/restore L1SS Capability for suspend/resume
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Lukasz Majczak <lma@semihalf.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Ben Chuang <benchuanggli@gmail.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, refactormyself@gmail.com, kw@linux.com,
-        kenny@panix.com, treding@nvidia.com, jonathanh@nvidia.com,
-        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+References: <20220721172808.585539-1-fred@cloudflare.com> <877d45kri4.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <877d45kri4.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 25 Jul 2022 18:53:26 -0400
+Message-ID: <CAHC9VhQXSXWv=+WYwU=Qq0w3rd+zOFPHL5yut1JdV2K=DDRmmg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Sat, Jul 23, 2022 at 10:03 AM Vidya Sagar <vidyas@nvidia.com> wrote:
+On Fri, Jul 22, 2022 at 1:05 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Frederick Lawler <fred@cloudflare.com> writes:
 >
-> Agree with Bjorn's observations.
-> The fact that the L1SS capability registers themselves disappeared in
-> the root port post resume indicates that there seems to be something
-> wrong with the BIOS itself.
-> Could you please check from that perspective?
-
-ChromeOS Intel platforms use S0ix (suspend-to-idle) for suspend. This
-is a shallower sleep state that preserves more state than, for e.g. S3
-(suspend-to-RAM). When we use S0ix, then BIOS does not come in picture
-at all. i.e. after the kernel runs its suspend routines, it just puts
-the CPU into S0ix state. So I do not think there is a BIOS angle to
-this.
-
-
+> > While creating a LSM BPF MAC policy to block user namespace creation, we
+> > used the LSM cred_prepare hook because that is the closest hook to prevent
+> > a call to create_user_ns().
 >
-> Thanks,
-> Vidya Sagar
+> That description is wrong.  Your goal his is not to limit access to
+> the user namespace.  Your goal is to reduce the attack surface of the
+> kernel by not allowing some processes access to a user namespace.
 >
+> You have already said that you don't have concerns about the
+> fundamentals of the user namespace, and what it enables only that
+> it allows access to exploitable code.
 >
-> On 7/22/2022 11:12 PM, Bjorn Helgaas wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Fri, Jul 22, 2022 at 11:41:14AM +0200, Lukasz Majczak wrote:
-> >> pt., 22 lip 2022 o 09:31 Kai-Heng Feng <kai.heng.feng@canonical.com> n=
-apisa=C5=82(a):
-> >>> On Fri, Jul 15, 2022 at 6:38 PM Ben Chuang <benchuanggli@gmail.com> w=
-rote:
-> >>>> On Tue, Jul 5, 2022 at 2:00 PM Vidya Sagar <vidyas@nvidia.com> wrote=
-:
-> >>>>>
-> >>>>> Previously ASPM L1 Substates control registers (CTL1 and CTL2) were=
-n't
-> >>>>> saved and restored during suspend/resume leading to L1 Substates
-> >>>>> configuration being lost post-resume.
-> >>>>>
-> >>>>> Save the L1 Substates control registers so that the configuration i=
-s
-> >>>>> retained post-resume.
-> >>>>>
-> >>>>> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> >>>>> Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >>>>
-> >>>> Hi Vidya,
-> >>>>
-> >>>> I tested this patch on kernel v5.19-rc6.
-> >>>> The test device is GL9755 card reader controller on Intel i5-10210U =
-RVP.
-> >>>> This patch can restore L1SS after suspend/resume.
-> >>>>
-> >>>> The test results are as follows:
-> >>>>
-> >>>> After Boot:
-> >>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
-> >>>>          Capabilities: [110 v1] L1 PM Substates
-> >>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
-> >>>> ASPM_L1.1+ L1_PM_Substates+
-> >>>>                            PortCommonModeRestoreTime=3D255us
-> >>>> PortTPowerOnTime=3D3100us
-> >>>>                  L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASP=
-M_L1.1+
-> >>>>                             T_CommonMode=3D0us LTR1.2_Threshold=3D31=
-45728ns
-> >>>>                  L1SubCtl2: T_PwrOn=3D3100us
-> >>>>
-> >>>>
-> >>>> After suspend/resume without this patch.
-> >>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
-> >>>>          Capabilities: [110 v1] L1 PM Substates
-> >>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
-> >>>> ASPM_L1.1+ L1_PM_Substates+
-> >>>>                            PortCommonModeRestoreTime=3D255us
-> >>>> PortTPowerOnTime=3D3100us
-> >>>>                  L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASP=
-M_L1.1-
-> >>>>                             T_CommonMode=3D0us LTR1.2_Threshold=3D0n=
-s
-> >>>>                  L1SubCtl2: T_PwrOn=3D10us
-> >>>>
-> >>>>
-> >>>> After suspend/resume with this patch.
-> >>>> #lspci -d 17a0:9755 -vvv | grep -A5 "L1 PM Substates"
-> >>>>          Capabilities: [110 v1] L1 PM Substates
-> >>>>                  L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
-> >>>> ASPM_L1.1+ L1_PM_Substates+
-> >>>>                            PortCommonModeRestoreTime=3D255us
-> >>>> PortTPowerOnTime=3D3100us
-> >>>>                  L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASP=
-M_L1.1+
-> >>>>                             T_CommonMode=3D0us LTR1.2_Threshold=3D31=
-45728ns
-> >>>>                  L1SubCtl2: T_PwrOn=3D3100us
-> >>>>
-> >>>>
-> >>>> Tested-by: Ben Chuang <benchuanggli@gmail.com>
-> >>>
-> >>> Forgot to add mine:
-> >>> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> >>>
-> >>>>
-> >>>> Best regards,
-> >>>> Ben Chuang
-> >>>>
-> >>>>
-> >>>>> ---
-> >>>>> Hi,
-> >>>>> Kenneth R. Crudup <kenny@panix.com>, Could you please verify this p=
-atch
-> >>>>> on your laptop (Dell XPS 13) one last time?
-> >>>>> IMHO, the regression observed on your laptop with an old version of=
- the patch
-> >>>>> could be due to a buggy old version BIOS in the laptop.
-> >>>>>
-> >>>>> Thanks,
-> >>>>> Vidya Sagar
-> >>>>>
-> >>>>>   drivers/pci/pci.c       |  7 +++++++
-> >>>>>   drivers/pci/pci.h       |  4 ++++
-> >>>>>   drivers/pci/pcie/aspm.c | 44 ++++++++++++++++++++++++++++++++++++=
-+++++
-> >>>>>   3 files changed, 55 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> >>>>> index cfaf40a540a8..aca05880aaa3 100644
-> >>>>> --- a/drivers/pci/pci.c
-> >>>>> +++ b/drivers/pci/pci.c
-> >>>>> @@ -1667,6 +1667,7 @@ int pci_save_state(struct pci_dev *dev)
-> >>>>>                  return i;
-> >>>>>
-> >>>>>          pci_save_ltr_state(dev);
-> >>>>> +       pci_save_aspm_l1ss_state(dev);
-> >>>>>          pci_save_dpc_state(dev);
-> >>>>>          pci_save_aer_state(dev);
-> >>>>>          pci_save_ptm_state(dev);
-> >>>>> @@ -1773,6 +1774,7 @@ void pci_restore_state(struct pci_dev *dev)
-> >>>>>           * LTR itself (in the PCIe capability).
-> >>>>>           */
-> >>>>>          pci_restore_ltr_state(dev);
-> >>>>> +       pci_restore_aspm_l1ss_state(dev);
-> >>>>>
-> >>>>>          pci_restore_pcie_state(dev);
-> >>>>>          pci_restore_pasid_state(dev);
-> >>>>> @@ -3489,6 +3491,11 @@ void pci_allocate_cap_save_buffers(struct pc=
-i_dev *dev)
-> >>>>>          if (error)
-> >>>>>                  pci_err(dev, "unable to allocate suspend buffer fo=
-r LTR\n");
-> >>>>>
-> >>>>> +       error =3D pci_add_ext_cap_save_buffer(dev, PCI_EXT_CAP_ID_L=
-1SS,
-> >>>>> +                                           2 * sizeof(u32));
-> >>>>> +       if (error)
-> >>>>> +               pci_err(dev, "unable to allocate suspend buffer for=
- ASPM-L1SS\n");
-> >>>>> +
-> >>>>>          pci_allocate_vc_save_buffers(dev);
-> >>>>>   }
-> >>>>>
-> >>>>> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> >>>>> index e10cdec6c56e..92d8c92662a4 100644
-> >>>>> --- a/drivers/pci/pci.h
-> >>>>> +++ b/drivers/pci/pci.h
-> >>>>> @@ -562,11 +562,15 @@ void pcie_aspm_init_link_state(struct pci_dev=
- *pdev);
-> >>>>>   void pcie_aspm_exit_link_state(struct pci_dev *pdev);
-> >>>>>   void pcie_aspm_pm_state_change(struct pci_dev *pdev);
-> >>>>>   void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
-> >>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev);
-> >>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev);
-> >>>>>   #else
-> >>>>>   static inline void pcie_aspm_init_link_state(struct pci_dev *pdev=
-) { }
-> >>>>>   static inline void pcie_aspm_exit_link_state(struct pci_dev *pdev=
-) { }
-> >>>>>   static inline void pcie_aspm_pm_state_change(struct pci_dev *pdev=
-) { }
-> >>>>>   static inline void pcie_aspm_powersave_config_link(struct pci_dev=
- *pdev) { }
-> >>>>> +static inline void pci_save_aspm_l1ss_state(struct pci_dev *dev) {=
- }
-> >>>>> +static inline void pci_restore_aspm_l1ss_state(struct pci_dev *dev=
-) { }
-> >>>>>   #endif
-> >>>>>
-> >>>>>   #ifdef CONFIG_PCIE_ECRC
-> >>>>> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> >>>>> index a96b7424c9bc..2c29fdd20059 100644
-> >>>>> --- a/drivers/pci/pcie/aspm.c
-> >>>>> +++ b/drivers/pci/pcie/aspm.c
-> >>>>> @@ -726,6 +726,50 @@ static void pcie_config_aspm_l1ss(struct pcie_=
-link_state *link, u32 state)
-> >>>>>                                  PCI_L1SS_CTL1_L1SS_MASK, val);
-> >>>>>   }
-> >>>>>
-> >>>>> +void pci_save_aspm_l1ss_state(struct pci_dev *dev)
-> >>>>> +{
-> >>>>> +       int aspm_l1ss;
-> >>>>> +       struct pci_cap_saved_state *save_state;
-> >>>>> +       u32 *cap;
-> >>>>> +
-> >>>>> +       if (!pci_is_pcie(dev))
-> >>>>> +               return;
-> >>>>> +
-> >>>>> +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L=
-1SS);
-> >>>>> +       if (!aspm_l1ss)
-> >>>>> +               return;
-> >>>>> +
-> >>>>> +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L=
-1SS);
-> >>>>> +       if (!save_state)
-> >>>>> +               return;
-> >>>>> +
-> >>>>> +       cap =3D (u32 *)&save_state->cap.data[0];
-> >>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, cap++=
-);
-> >>>>> +       pci_read_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, cap++=
-);
-> >>>>> +}
-> >>>>> +
-> >>>>> +void pci_restore_aspm_l1ss_state(struct pci_dev *dev)
-> >>>>> +{
-> >>>>> +       int aspm_l1ss;
-> >>>>> +       struct pci_cap_saved_state *save_state;
-> >>>>> +       u32 *cap;
-> >>>>> +
-> >>>>> +       if (!pci_is_pcie(dev))
-> >>>>> +               return;
-> >>>>> +
-> >>>>> +       aspm_l1ss =3D pci_find_ext_capability(dev, PCI_EXT_CAP_ID_L=
-1SS);
-> >>>>> +       if (!aspm_l1ss)
-> >>>>> +               return;
-> >>>>> +
-> >>>>> +       save_state =3D pci_find_saved_ext_cap(dev, PCI_EXT_CAP_ID_L=
-1SS);
-> >>>>> +       if (!save_state)
-> >>>>> +               return;
-> >>>>> +
-> >>>>> +       cap =3D (u32 *)&save_state->cap.data[0];
-> >>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL2, *cap=
-++);
-> >>>>> +       pci_write_config_dword(dev, aspm_l1ss + PCI_L1SS_CTL1, *cap=
-++);
-> >>>>> +}
-> >>>>> +
-> >>>>>   static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
-> >>>>>   {
-> >>>>>          pcie_capability_clear_and_set_word(pdev, PCI_EXP_LNKCTL,
-> >>>>> --
-> >>>>> 2.17.1
-> >>>>>
-> >>
-> >> Hi,
-> >>
-> >> With this patch (and also mentioned
-> >> https://lore.kernel.org/all/20220509073639.2048236-1-kai.heng.feng@can=
-onical.com/)
-> >> applied on 5.10 (chromeos-5.10) I am observing problems after
-> >> suspend/resume with my WiFi card - it looks like whole communication
-> >> via PCI fails. Attaching logs (dmesg, lspci -vvv before suspend/resume
-> >> and after) https://gist.github.com/semihalf-majczak-lukasz/fb36dfa2eff=
-22911109dfb91ab0fc0e3
-> >>
-> >> I played a little bit with this code and it looks like the
-> >> pci_write_config_dword() to the PCI_L1SS_CTL1 breaks it (don't know
-> >> why, not a PCI expert).
-> >
-> > Thanks a lot for testing this!  I'm not quite sure what to make of the
-> > results since v5.10 is fairly old (Dec 2020) and I don't know what
-> > other changes are in chromeos-5.10.
+> Achieving the protection you seek requires talking and thinking clearly
+> about the goal.
 
-Lukasz: I assume you are running this on Atlas and are seeing this bug
-when uprev'ving it to 5.10 kernel. Can you please try it on a newer
-Intel platform that have the latest upstream kernel running already
-and see if this can be reproduced there too?
-Note that the wifi PCI device is different on newer Intel platforms,
-but platform design is similar enough that I suspect we should see
-similar bug on those too. The other option is to try the latest
-ustream kernel on Atlas. Perhaps if we just care about wifi (and
-ignore bringing up the graphics stack and GUI), it may come up
-sufficiently enough to try this patch?
+Providing a single concrete goal for a LSM hook is always going to be
+a challenge due to the nature of the LSM layer and the great unknown
+of all the different LSMs that are implemented underneath the LSM
+abstraction.  However, we can make some very general statements such
+that up to this point the LSMs that have been merged into mainline
+generally provide some level of access control, observability, or
+both.  While that may change in the future (the LSM layer does not
+attempt to restrict LSMs to just these two ideas), I think they are
+"good enough" goals for this discussion.
 
-Thanks,
+In addition to thinking about these goals, I think it also important
+to take a step back and think about the original motivation for the
+LSM and why it, and Linux itself, has proven to be popular with
+everything from the phone in your hand to the datacenter servers
+powering ... pretty much everything :)  Arguably Linux has seen such
+profound success because of its malleability; the open nature of the
+kernel development process has allowed the Linux Kernel to adopt
+capabilities well beyond what any one dev team could produce, and as
+Linux continues to grow in adoption, its ability to flex into new use
+cases only increases.  The kernel namespace concept is an excellent
+example of this: virtualizing core kernel ideas, such as user
+credentials, to provide better, safer solutions.  It is my belief that
+the LSM layer is very much built around this same idea of abstracting
+and extending core kernel concepts, in this case security controls, to
+provide better solutions.  Integrating the LSM into the kernel's
+namespaces is a natural fit, and one that is long overdue.
 
-Rajat
+If we can't find a way to make everyone happy here, let's at least try
+to find a way to make everyone "okay" with adding a LSM hook to the
+user namespace.  If you want to NACK this approach Eric, that's okay,
+but please provide some alternative paths forward that we can discuss.
 
-
-> >
-> > Random observations, no analysis below.  This from your dmesg
-> > certainly looks like PCI reads failing and returning ~0:
-> >
-> >    Timeout waiting for hardware access (CSR_GP_CNTRL 0xffffffff)
-> >    iwlwifi 0000:01:00.0: 00000000: ffffffff ffffffff ffffffff ffffffff =
-ffffffff ffffffff ffffffff ffffffff
-> >    iwlwifi 0000:01:00.0: Device gone - attempting removal
-> >    Hardware became unavailable upon resume. This could be a software is=
-sue prior to suspend or a hardware issue.
-> >
-> > And then we re-enumerate 01:00.0 and it looks like it may have been
-> > reset (BAR is 0):
-> >
-> >    pci 0000:01:00.0: [8086:095a] type 00 class 0x028000
-> >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00001fff 64bit]
-> >
-> > lspci diffs from before/after suspend:
-> >
-> >     00:14.0 PCI bridge: Intel Corporation Celeron N3350/Pentium N4200/A=
-tom E3900 Series PCI Express Port B #1 (rev fb) (prog-if 00 [Normal decode]=
-)
-> >       Bus: primary=3D00, secondary=3D01, subordinate=3D01, sec-latency=
-=3D64
-> >    -               DevSta: CorrErr- NonFatalErr+ FatalErr- UnsupReq+ Au=
-xPwr+ TransPend-
-> >    +               DevSta: CorrErr+ NonFatalErr- FatalErr- UnsupReq- Au=
-xPwr+ TransPend-
-> >    -               LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- Com=
-mClk+
-> >    +               LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommC=
-lk+
-> >    -               LnkSta2: Current De-emphasis Level: -6dB, Equalizati=
-onComplete- EqualizationPhase1-
-> >    +               LnkSta2: Current De-emphasis Level: -3.5dB, Equaliza=
-tionComplete- EqualizationPhase1-
-> >    -       Capabilities: [150 v0] Null
-> >    -       Capabilities: [200 v1] L1 PM Substates
-> >    -               L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_=
-L1.1+ L1_PM_Substates+
-> >    -                         PortCommonModeRestoreTime=3D40us PortTPowe=
-rOnTime=3D10us
-> >    -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM=
-_L1.1+
-> >    -                          T_CommonMode=3D40us LTR1.2_Threshold=3D98=
-304ns
-> >    -               L1SubCtl2: T_PwrOn=3D60us
-> >
-> > The DevSta differences might be BIOS bugs, probably not relevant.
-> > Interesting that ASPM is disabled, maybe didn't get enabled after
-> > re-enumerating 01:00.0?  Strange that the L1 PM Substates capability
-> > disappeared.
-> >
-> >     01:00.0 Network controller: Intel Corporation Wireless 7265 (rev 59=
-)
-> >                    LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- Com=
-mClk+
-> >    -                       ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWIn=
-t-
-> >    +                       ExtSynch- ClockPM- AutWidDis- BWInt- AutBWIn=
-t-
-> >            Capabilities: [154 v1] L1 PM Substates
-> >                    L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_=
-L1.1+ L1_PM_Substates+
-> >                              PortCommonModeRestoreTime=3D30us PortTPowe=
-rOnTime=3D60us
-> >    -               L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM=
-_L1.1+
-> >    -                          T_CommonMode=3D0us LTR1.2_Threshold=3D983=
-04ns
-> >    +               L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM=
-_L1.1-
-> >    +                          T_CommonMode=3D0us LTR1.2_Threshold=3D0ns
-> >
-> > Dmesg claimed we reconfigured common clock config.  Maybe ASPM didn't
-> > get reinitialized after re-enumeration?  Looks like we didn't restore
-> > L1SubCtl1.
-> >
-> > Bjorn
-> >
+-- 
+paul-moore.com

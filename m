@@ -2,131 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023F557FBFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E8C57FBFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiGYJHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S234492AbiGYJHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234467AbiGYJHG (ORCPT
+        with ESMTP id S230177AbiGYJHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:07:06 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85611573B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:07:05 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v13so7236770wru.12
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=BnGSyzyWLf1EvGDsf7ZW1hIPxlS1YAeaIslxDKFW9Lc=;
-        b=rSwioOobGa8baDPiKckdEwxdEMzV6HwL/ZTW68cVzN7aPUZvN+JQDHzKVWPkeB5pbx
-         Loc5/MxovHqCg0lYRJoTPTxqCTksooUzW1ys3HF2pMups1DMXsaGbzFEgCIr4hr9z0uE
-         7+EE41fmrLzRGXHvvAmjxPU++u5q4IPR33bBIWTQsvqhli/F9XGNyOdEgjrWpj1qpYRS
-         aoTJfiafM77H2r8mJbv3GxRa4ZQLU+BRN4hpe1eODx09VCRUb6aQwucdnx/K9Uwg+EYa
-         0vyp/Ie6l+Sw9UaoISEd3F2zPBRXs9nsf1bnEgHrtuIo/2a8I2hTWYshsY1KjjEaAruF
-         xNrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BnGSyzyWLf1EvGDsf7ZW1hIPxlS1YAeaIslxDKFW9Lc=;
-        b=mpdfOhHmtxToiUfTn7wBIx3g6lHe4+1eE7AYDchihNU/pIcWTJx4i+nbMppAId2U9X
-         dqpLocm/h3wRNwINZlnSDEoQsPjPE/1R19/nOlDXmHuDKPRLxE/h4nfB4Y/VWT3jRzXD
-         PqQcgHVOGOT9Ju/9lhHXydM8KpNonve4wwOSWa6EQnORrvkxvQpsuMO4Db77IjksrLIQ
-         PNpiFtYytSVpjFd92+p+5tEOJohxMJUTEbqC8N8iyj1JTfRN0QmhXoEnXhh8Y4/hk8Ag
-         8GF1SNEZUeI6GrvpApbXECkGbtBjCDppZyeqoyhkosLRZnPLftWwq4yCDbm3pj2JHD48
-         /e5Q==
-X-Gm-Message-State: AJIora8Mg6XueF+SEK+dbOUJXHEki4Bh0HFRKXMRKaLKanQY62t+k+N1
-        HY2xrVhQ8NZK9wU2ZfE76c772Q==
-X-Google-Smtp-Source: AGRyM1vpxwE7a/s/dbjPrBmI8wA6AnAUpG3gZp73Uo3GzTfCzIfKPZeJfGcxbtW3YFgrLtc+z7MERg==
-X-Received: by 2002:a5d:6110:0:b0:21e:4fe4:f7ba with SMTP id v16-20020a5d6110000000b0021e4fe4f7bamr7063984wrt.69.1658740024364;
-        Mon, 25 Jul 2022 02:07:04 -0700 (PDT)
-Received: from [192.168.1.9] ([195.24.90.54])
-        by smtp.googlemail.com with ESMTPSA id e29-20020a5d595d000000b0021e501519d3sm11325242wri.67.2022.07.25.02.07.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 02:07:03 -0700 (PDT)
-Message-ID: <8a03351b-2072-d8db-3de9-73a144de0ca1@linaro.org>
-Date:   Mon, 25 Jul 2022 12:07:01 +0300
+        Mon, 25 Jul 2022 05:07:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88C101DA;
+        Mon, 25 Jul 2022 02:07:28 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8899066015E7;
+        Mon, 25 Jul 2022 10:07:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658740047;
+        bh=uBO/pkzkv5EBZYyQnsx8/L7C7pGHaycXjjQey8xXLe4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QbtCyY/TkCm/cZ6AZqWzL7/QMYs2ImlWgUzVxfDiic5PcKm8bW9KeO+u+AdbMM+Z5
+         bI0DjNsw21DmjykhDxvsLDyL1ImWvZ3OX2VSLVeSLlAM5D5uslVqbPAImGNKuZhzMf
+         KetO4iahmMfcG0fIOg9u+5J0dbyU2UXGs6FSJn54KQ+gqrvaEasYO8sUe9uotVNFkb
+         G72Aby95gW0LR8kpNE0tlQlRlmQv4Ulnzu48hz39lC8Tct1N1XO7Dk9CLcjrnvtun3
+         xfll+2wTR+urIfDaTR5MdkiKhFzVMVuK1q5YVk/ROibH5h5QwLFEQ0brJiHvTjaOVQ
+         CUnU9FPjpDKog==
+Message-ID: <59d9e674-2021-b02e-4ec8-aee8a118a96d@collabora.com>
+Date:   Mon, 25 Jul 2022 11:07:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 1/7] venus : Add default values for the control
- V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY
+Subject: Re: [PATCH v2 3/4] soc: mediatek: add support of MTK_SCPD_STRICT_BUSP
+ cap
 Content-Language: en-US
-To:     Viswanath Boma <quic_vboma@quicinc.com>,
-        video.upstream.external@qti.qualcomm.com,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220712122347.6781-1-quic_vboma@quicinc.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-In-Reply-To: <20220712122347.6781-1-quic_vboma@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>
+References: <20220725081853.1636444-1-msp@baylibre.com>
+ <20220725081853.1636444-4-msp@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220725081853.1636444-4-msp@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viswanath,
-
-On 7/12/22 15:23, Viswanath Boma wrote:
-> From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-
-In fact this comes from you, please drop 'From'.
-
+Il 25/07/22 10:18, Markus Schneider-Pargmann ha scritto:
+> From: Alexandre Bailon <abailon@baylibre.com>
 > 
->  V4l2 encoder compliance expecting default values of colormetry for the control.
+> This adds support for MTK_SCPD_STRICT_BUSP capability. It is a strict
+> bus protection policy that requires the bus protection to be disabled
+> before accessing the bus.
+> This is required by the mt8365, for the MM power domain.
 > 
-> Change-Id: I1db0d4940b54e033d646ce39d60dc488afba8d58
-
-Drop this.
-
-> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 > ---
->  drivers/media/platform/qcom/venus/venc_ctrls.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> index ea5805e71c143..37ba7d97f99b2 100644
-> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-> @@ -352,6 +352,8 @@ static const struct v4l2_ctrl_ops venc_ctrl_ops = {
->  int venc_ctrl_init(struct venus_inst *inst)
->  {
->  	int ret;
-> +	struct v4l2_ctrl_hdr10_mastering_display p_hdr10_mastering = { {34000, 13250, 7500 },
-> +	{ 16000, 34500, 3000 }, 15635,	16450, 10000000, 500 };
+> Notes:
+>      Changes in v2:
+>      - Fixup error handling path.
+> 
+>   drivers/soc/mediatek/mtk-pm-domains.c | 29 +++++++++++++++++++++++----
+>   drivers/soc/mediatek/mtk-pm-domains.h |  1 +
+>   2 files changed, 26 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
+> index d0eae2227813..94ca8981f45e 100644
+> --- a/drivers/soc/mediatek/mtk-pm-domains.c
+> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
+> @@ -240,6 +240,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   	struct scpsys *scpsys = pd->scpsys;
+>   	bool tmp;
+>   	int ret;
+> +	bool strict_busprotect;
+>   
+>   	ret = scpsys_regulator_enable(pd->supply);
+>   	if (ret)
+> @@ -263,9 +264,18 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_ISO_BIT);
+>   	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_RST_B_BIT);
+>   
+> -	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
+> -	if (ret)
+> -		goto err_pwr_ack;
+> +	/*
+> +	 * In few Mediatek platforms(e.g. MT6779), the bus protect policy is
+> +	 * stricter, which leads to bus protect release must be prior to bus
+> +	 * access.
+> +	 */
+> +	strict_busprotect = MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUSP);
+> +	if (!strict_busprotect) {
 
-Please do this with proper indentation.
+Please directly check for MTK_SCPD_CAPS, you don't really need that bool variable,
+not even for performance... and it fits just fine in one line, even.
 
->  
->  	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 58);
->  	if (ret)
-> @@ -580,7 +582,7 @@ int venc_ctrl_init(struct venus_inst *inst)
->  
->  	v4l2_ctrl_new_std_compound(&inst->ctrl_handler, &venc_ctrl_ops,
->  				   V4L2_CID_COLORIMETRY_HDR10_MASTERING_DISPLAY,
-> -				   v4l2_ctrl_ptr_create(NULL));
-> +				   v4l2_ctrl_ptr_create((void *)&p_hdr10_mastering));
+	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
 
-I think you do not need to cast to (void *).
+> +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
+> +					      pd->subsys_clks);
+> +		if (ret)
+> +			goto err_pwr_ack;
+> +	}
+>   
+>   	ret = scpsys_sram_enable(pd);
+>   	if (ret < 0)
+> @@ -275,12 +285,23 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+>   	if (ret < 0)
+>   		goto err_disable_sram;
+>   
+> +	if (strict_busprotect) {
 
->  
->  	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
->  			  V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD, 0,
+	if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
 
--- 
-regards,
-Stan
+> +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
+> +					      pd->subsys_clks);
+> +		if (ret)
+> +			goto err_enable_bus_protect;
+> +	}
+> +
+>   	return 0;
+>   
+> +err_enable_bus_protect:
+
+For human readability purposes (and paranoidly preventing future mistakes), I'd
+add a check for the strict bus protection cap here too.
+
+> +	scpsys_bus_protect_enable(pd);
+>   err_disable_sram:
+>   	scpsys_sram_disable(pd);
+>   err_disable_subsys_clks:
+> -	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
+> +	if (!strict_busprotect)
+> +		clk_bulk_disable_unprepare(pd->num_subsys_clks,
+> +					   pd->subsys_clks);
+>   err_pwr_ack:
+>   	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
+>   err_reg:
+> diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
+> index e788d6bdde9d..a50cfb926d22 100644
+> --- a/drivers/soc/mediatek/mtk-pm-domains.h
+> +++ b/drivers/soc/mediatek/mtk-pm-domains.h
+> @@ -8,6 +8,7 @@
+>   #define MTK_SCPD_SRAM_ISO		BIT(2)
+>   #define MTK_SCPD_KEEP_DEFAULT_OFF	BIT(3)
+>   #define MTK_SCPD_DOMAIN_SUPPLY		BIT(4)
+> +#define MTK_SCPD_STRICT_BUSP		BIT(5)
+
+MTK_SCPD_STRICT_BUS_PROTECTION is a bit more human readable.
+
+>   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
+>   
+>   #define SPM_VDE_PWR_CON			0x0210
+
+Regards,
+Angelo

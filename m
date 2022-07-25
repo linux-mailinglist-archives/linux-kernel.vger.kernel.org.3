@@ -2,94 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FB958076C
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05400580770
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237190AbiGYWeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
+        id S237201AbiGYWe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236517AbiGYWeU (ORCPT
+        with ESMTP id S237200AbiGYWeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:34:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F12D25C5C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:34:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B3EAB80EBD
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:34:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7261C341C8;
-        Mon, 25 Jul 2022 22:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658788457;
-        bh=YUM91tAW6kCbHBwCMTDSAq1X+h3xTTK/y1W6Pq3tGBY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EBeV3UOBkPdruyjvVEXN0JPRa8LYxQxYIOipxldxaXG5RZHQOu03+uTMnfLx7Cbmf
-         5pVDaLW2EgMskPVPh5u6048/QbEqaZeYOKQlp2RV5oCORXGfpH6m27Z6Tc+3N8fkq4
-         3AhwDQCNUDZj+pNe5z5Hdil/FaYMixfskr6b6U4pIVIbKe0ipTBki0vCu+Imn+m0GA
-         0w+W+11GM7TsX67yAbAMGoZyojeX/Lqp+0PUkFQ1/xtByx0wNiUFepmA8a1WsacguT
-         iNPp+0tyo4b1Sbc1KQYo6hZZ5/TP06I8VFfL2YQQPBCAoVzr29q1RJ5wDyModc3fhB
-         QsKHA1sPxIt3w==
-Date:   Mon, 25 Jul 2022 15:34:15 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Simon Trimmer <simont@opensource.cirrus.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: sound/soc/codecs/wm_adsp.c:1490:32: warning: taking address of
- packed member 'name' of class or structure 'wm_adsp_host_buf_coeff_v1' may
- result in an unaligned pointer value
-Message-ID: <Yt8aZ3OZ7lJBgf1V@dev-arch.thelio-3990X>
-References: <202207260648.ERQjXCRB-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202207260648.ERQjXCRB-lkp@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 18:34:25 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8313A25C62
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:34:24 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id c9-20020a17090a674900b001f25399c053so4563331pjm.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=oSpcjGYkcXcod89ksW5flXGeS3wxnAvOkS8CIPgpDQU=;
+        b=Gis5dLtYV581itcud3CuHdoEL5SoJJAr2ZN+c7OaJkHgxIY1MxuyCp/WcQlDJPKeX4
+         RTj26kDWYUT3UDbFlBJJjcSesg7V6cE2gKtifdaQs5yb1Eslcj7+ulsmpLnluT1rm+Vd
+         7F7FS71MQUWsgrMHXLX4tnBsDuCB+EocRFDFBzXUSIFGwv5OSuqYtyjNPSbkEUmkgmka
+         ut2jrk2qf32nT+Ink98zM5sHTYt0VvJgWm11f5Qv18c9RRgXnDNfXyCF1yF0SlFAlGix
+         AlsAMI2zaasnBFJS5XIzC0n+VebT3KGUKkNgImCdPnrTVwYmYOe67RVREbXrZn4FVzJ5
+         H91Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=oSpcjGYkcXcod89ksW5flXGeS3wxnAvOkS8CIPgpDQU=;
+        b=x4160exLpDAb6HToCE4ZmIGxurthdcMcZsot+emKJ/Xyfw7WqBUYplUlCKTxLglQ8B
+         ybVvm6xmframrDKjtoGM4flU09fkkPdMv0aNik1JGl9zYq/PueVR3kuVfW8pmoQd8SLg
+         KuqSvF5jNqPRZR5pGA5rrpqYdVyavA0zR5KQ8rCAQVYlVcmAZY3FFHxhxIJzLc0GjZLi
+         vETiT7LjnNqzvsIynVWZPySoCokNBJjY2mY1VZBCyuuC8Ojrsd9Y2xWo6GJRLXlhqVgG
+         LOwFnoGJfU1ru+yGLfMHRRN5P5QVrQKdDnwc3t/KAt9YBoLIgwO/E2Sa7oSbIcq7jUvz
+         4vuA==
+X-Gm-Message-State: AJIora8K3lZlncN8Xn0C/4BZnWY13jW5DZD35z9QI8TsHymZTfiSZOmM
+        WyJGJw5Ex5UXhFcSaWofXxba2FBKrcn8ulB2RhNdRw==
+X-Google-Smtp-Source: AGRyM1vaCq/FkY5ExJrkEYFhAl6BGKDqJIZqy11HorsmSvgSz23CfntiiixB1F93QFwP5fvvzR6Q5ErIeQcrUVT2ObVbKw==
+X-Received: from abps.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:9b4])
+ (user=abhishekpandit job=sendgmr) by 2002:a17:902:ebcb:b0:168:e3ba:4b5a with
+ SMTP id p11-20020a170902ebcb00b00168e3ba4b5amr13929563plg.11.1658788464025;
+ Mon, 25 Jul 2022 15:34:24 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 15:34:21 -0700
+Message-Id: <20220725153415.v2.1.Ia18502557c4ba9ba7cd2d1da2bae3aeb71b37e4e@changeid>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v2] Bluetooth: Always set event mask on suspend
+From:   Abhishek Pandit-Subedi <abhishekpandit@google.com>
+To:     luiz.dentz@gmail.com, linux-bluetooth@vger.kernel.org
+Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 06:29:46AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   e0dccc3b76fb35bb257b4118367a883073d7390e
-> commit: 353bb6a5f2ac495f289b7c7a528c7d134c9a8ec4 ASoC: wm_adsp: Compressed stream DSP memory structs should be __packed
-> date:   5 months ago
-> config: arm-randconfig-r013-20220724 (https://download.01.org/0day-ci/archive/20220726/202207260648.ERQjXCRB-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=353bb6a5f2ac495f289b7c7a528c7d134c9a8ec4
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 353bb6a5f2ac495f289b7c7a528c7d134c9a8ec4
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> sound/soc/codecs/wm_adsp.c:1490:32: warning: taking address of packed member 'name' of class or structure 'wm_adsp_host_buf_coeff_v1' may result in an unaligned pointer value [-Waddress-of-packed-member]
->            cs_dsp_remove_padding((u32 *)&coeff_v1.name, ARRAY_SIZE(coeff_v1.name));
->                                          ^~~~~~~~~~~~~
->    1 warning generated.
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
-This warning is disabled in the main Makefile but a recent change in
-LLVM has caused that check to fail, sorry for the noise :(
+When suspending, always set the event mask once disconnects are
+successful. Otherwise, if wakeup is disallowed, the event mask is not
+set before suspend continues and can result in an early wakeup.
 
-https://github.com/ClangBuiltLinux/linux/issues/1674
+Fixes: 182ee45da083 ("Bluetooth: hci_sync: Rework hci_suspend_notifier")
+Cc: stable@vger.kernel.org
+Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+---
+Observed on ChromeOS as follows:
 
-Cheers,
-Nathan
+< HCI Command: Disconnect (0x01|0x0006) plen 3
+        Handle: 256
+        Reason: Remote Device Terminated due to Power Off (0x15)
+> HCI Event: Command Status (0x0f) plen 4
+      Disconnect (0x01|0x0006) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Device Disconnected (0x000c) plen 8
+        BR/EDR Address: 04:52:C7:C3:65:B5 (Bose Corporation)
+        Reason: Connection terminated by local host for suspend (0x05)
+@ MGMT Event: Controller Suspended (0x002d) plen 1
+        Suspend state: Disconnected and not scanning (1)
+> HCI Event: Disconnect Complete (0x05) plen 4
+        Status: Success (0x00)
+        Handle: 256
+        Reason: Connection Terminated By Local Host (0x16)
+
+The expectation is that we should see Set Event Mask before completing
+the suspend so that the `Disconnect Complete` doesn't wake us up.
+
+
+Changes in v2:
+- Added fixes tag and cc stable
+
+ net/bluetooth/hci_sync.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 148ce629a59f..e6d804b82b67 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -5297,6 +5297,9 @@ int hci_suspend_sync(struct hci_dev *hdev)
+ 		return err;
+ 	}
+ 
++	/* Update event mask so only the allowed event can wakeup the host */
++	hci_set_event_mask_sync(hdev);
++
+ 	/* Only configure accept list if disconnect succeeded and wake
+ 	 * isn't being prevented.
+ 	 */
+@@ -5308,9 +5311,6 @@ int hci_suspend_sync(struct hci_dev *hdev)
+ 	/* Unpause to take care of updating scanning params */
+ 	hdev->scanning_paused = false;
+ 
+-	/* Update event mask so only the allowed event can wakeup the host */
+-	hci_set_event_mask_sync(hdev);
+-
+ 	/* Enable event filter for paired devices */
+ 	hci_update_event_filter_sync(hdev);
+ 
+-- 
+2.37.1.359.gd136c6c3e2-goog
+

@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056CC57F7DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8098C57F7DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiGYBGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 21:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S231201AbiGYBJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 21:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGYBGh (ORCPT
+        with ESMTP id S229437AbiGYBJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 21:06:37 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CB89FD6;
-        Sun, 24 Jul 2022 18:06:36 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id g20-20020a9d6a14000000b0061c84e679f5so7670254otn.2;
-        Sun, 24 Jul 2022 18:06:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=QNCEP/Jd9p9U+kHeTNbZg9vzuQ68V1YM3OnqLNp9aiY=;
-        b=ESlvsy5UyFcNEZ/mdB/h29qdxZNvN5FPQ08G0mOwYmlycN6b9ZFFd97Ewud5LdNYzy
-         Y8hiFpKTj5/KzojzmLCh2RtTIdXXt5pZaflVFt0cgsxu2sskoCBwaXXO9IlQlNC1qv4i
-         z2hi5cvpBNm4DnqZaxqXDiOWMoL0QfQdWQ6Urjhe9CiVqSt+Kw2q3tySPbGDdssROL10
-         kW10MdgaoY35liZUB8rvG1PqV886d5XzusIIhmU9F9cKgNhnsRejUatsXkfu7JP4arSH
-         QB2QSnX3KI15//FX1MNxzs4UninsTqUTQhnjDP2O0NdHoQG8sPEfU9o1mjfud45G5HvW
-         /a4w==
-X-Gm-Message-State: AJIora/RLb+3SsUJPkXxDfiTcvi/v7rdmLqMj/HNqPct/MBkfMXElJ9B
-        uRqwcDujQbvIyOcCVw5Xog==
-X-Google-Smtp-Source: AGRyM1s5XKEnlQ5my1VSNVGytH3TBZejI+JtkvAk9JTSOphfdgVAoaZgqQddJRx6BCAc/nkzgm5u6g==
-X-Received: by 2002:a05:6830:d0b:b0:61c:1bc2:fbc0 with SMTP id bu11-20020a0568300d0b00b0061c1bc2fbc0mr3760368otb.348.1658711195791;
-        Sun, 24 Jul 2022 18:06:35 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t21-20020a056870f21500b0010dc461410bsm3389440oao.38.2022.07.24.18.06.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 18:06:35 -0700 (PDT)
-Received: (nullmailer pid 678621 invoked by uid 1000);
-        Mon, 25 Jul 2022 01:06:32 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Steev Klimaszewski <steev@kali.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20220723224949.1089973-5-luzmaximilian@gmail.com>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com> <20220723224949.1089973-5-luzmaximilian@gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure Application client
-Date:   Sun, 24 Jul 2022 19:06:32 -0600
-Message-Id: <1658711192.682597.678620.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sun, 24 Jul 2022 21:09:25 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54EA9FD6;
+        Sun, 24 Jul 2022 18:09:22 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LrhhW4WJ9zkWmb;
+        Mon, 25 Jul 2022 09:06:51 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Jul
+ 2022 09:09:20 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <javier.martin@vista-silicon.com>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
+Subject: [PATCH v2] crypto: sahara - don't sleep when in softirq
+Date:   Mon, 25 Jul 2022 09:13:24 +0800
+Message-ID: <20220725011324.383031-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Jul 2022 00:49:49 +0200, Maximilian Luz wrote:
-> Add bindings for the Qualcomm Trusted Execution Environment (TrEE) UEFI
-> Secure application (uefisecapp) client.
-> 
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-> ---
->  .../firmware/qcom,tee-uefisecapp.yaml         | 38 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
-> 
+Function of sahara_aes_crypt maybe could be called by function
+of crypto_skcipher_encrypt during the rx softirq, so it is not
+allowed to use mutex lock.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+This patch is not yet tested, compiled only.
+---
+ drivers/crypto/sahara.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/firmware/qcom,tee-uefisecapp.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml: duplicate '$id' value 'http://devicetree.org/schemas/soc/qcom/qcom,rpmh-rsc.yaml#'
-Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.example.dtb:0:0: /example-0/firmware/scm: failed to match any schema with compatible: ['qcom,scm-sc8180x', 'qcom,scm']
-Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.example.dtb:0:0: /example-0/firmware/scm: failed to match any schema with compatible: ['qcom,scm-sc8180x', 'qcom,scm']
-Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb:0:0: /example-0/rsc@179c0000: failed to match any schema with compatible: ['qcom,rpmh-rsc']
-Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb:0:0: /example-1/rsc@af20000: failed to match any schema with compatible: ['qcom,rpmh-rsc']
-Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb:0:0: /example-2/rsc@18200000: failed to match any schema with compatible: ['qcom,rpmh-rsc']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/crypto/sahara.c b/drivers/crypto/sahara.c
+index 457084b344c1..c978d16dc609 100644
+--- a/drivers/crypto/sahara.c
++++ b/drivers/crypto/sahara.c
+@@ -26,7 +26,7 @@
+ #include <linux/kernel.h>
+ #include <linux/kthread.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
++#include <linux/spinlock.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+@@ -196,7 +196,7 @@ struct sahara_dev {
+ 	void __iomem		*regs_base;
+ 	struct clk		*clk_ipg;
+ 	struct clk		*clk_ahb;
+-	struct mutex		queue_mutex;
++	spinlock_t		queue_spinlock;
+ 	struct task_struct	*kthread;
+ 	struct completion	dma_completion;
+ 
+@@ -642,9 +642,9 @@ static int sahara_aes_crypt(struct skcipher_request *req, unsigned long mode)
+ 
+ 	rctx->mode = mode;
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	err = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1043,10 +1043,10 @@ static int sahara_queue_manage(void *data)
+ 	do {
+ 		__set_current_state(TASK_INTERRUPTIBLE);
+ 
+-		mutex_lock(&dev->queue_mutex);
++		spin_lock_bh(&dev->queue_spinlock);
+ 		backlog = crypto_get_backlog(&dev->queue);
+ 		async_req = crypto_dequeue_request(&dev->queue);
+-		mutex_unlock(&dev->queue_mutex);
++		spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 		if (backlog)
+ 			backlog->complete(backlog, -EINPROGRESS);
+@@ -1092,9 +1092,9 @@ static int sahara_sha_enqueue(struct ahash_request *req, int last)
+ 		rctx->first = 1;
+ 	}
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	ret = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1449,7 +1449,7 @@ static int sahara_probe(struct platform_device *pdev)
+ 
+ 	crypto_init_queue(&dev->queue, SAHARA_QUEUE_LENGTH);
+ 
+-	mutex_init(&dev->queue_mutex);
++	spin_lock_init(&dev->queue_spinlock);
+ 
+ 	dev_ptr = dev;
+ 
+-- 
+2.17.1
 

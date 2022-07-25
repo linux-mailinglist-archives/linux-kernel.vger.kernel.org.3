@@ -2,118 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1868580349
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F37580358
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbiGYRF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 13:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S236665AbiGYRJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 13:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbiGYRF1 (ORCPT
+        with ESMTP id S235991AbiGYRJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 13:05:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 377E91AE
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658768725;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a3wUurCyqKCMfKdr4U9KFGd2QMH7GRY0ExQn3XqfuW8=;
-        b=VZlPKnUZJUKnoonX12GuZB4EwcCNJ06py6m5HaMReanFQmlMwkNbfmk/t+VIVavJt8j+10
-        w7nEeszlXxwtuX4TxiuLhEENmwjy9uRQp+BBKtGBCluthOgg1QNFs2TuIx+P2BD5slXAwE
-        pO3o8PzvdsQ80XQo9a/P2iAhfCzK4B0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-y3ncKzm5Myy3Roxjqtj7nw-1; Mon, 25 Jul 2022 13:05:24 -0400
-X-MC-Unique: y3ncKzm5Myy3Roxjqtj7nw-1
-Received: by mail-wr1-f71.google.com with SMTP id h6-20020adfaa86000000b0021e47bcbc6dso1720329wrc.16
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:05:23 -0700 (PDT)
+        Mon, 25 Jul 2022 13:09:20 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AB517A8C;
+        Mon, 25 Jul 2022 10:09:19 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ss3so21654663ejc.11;
+        Mon, 25 Jul 2022 10:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xhWpC8JbYbPY2K4E0t5gdrGAdCwvkqCy1aHXAcFQrpI=;
+        b=QNFIa3/xRREtNeYRud5jAVpPgouu92NjB03+0S/yoLPGepemhUp6xf0I3xMz6ULt05
+         Qh/1MInQvQcvxoZE0Ib2KUIOLecrVMLrVDSnR5ngvVZ5lCVphPXc8AKRSTgSiVbo6voZ
+         pKcNxufUXme7DsnrJHtpcx3krQ+qDiq29hN29yfzd50hoGznhnZZyjD3TpnkFsGG2ZL5
+         GkGV9w06caUMCxD6kWXuar/XYKi7XWR7dmjuxYRBPABOG2UdmNV1N+RrqnsTZ8/S656q
+         d1oJReA5Lb7C4i+SXOnBwrHCYkNiIrWjNnv0TYglrFquvQu52Tc2yzOEEHTE3ALoAAQV
+         rppA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a3wUurCyqKCMfKdr4U9KFGd2QMH7GRY0ExQn3XqfuW8=;
-        b=V8/mjZObgTz4H5cq1/sWB208n0q7JVmW/aHyLAVA06hIj76LoR5c+v5iZ74+X2cnQ4
-         YRjtfGzLYqyzvh4FhErYVvkpanCPTHaXLiXtTV4I9Mumys+vR3xp9a4cN5j1xYKsTpAl
-         roi5eGzMoG9SEqIwBN631iFciaC5zTgO/QaKiNNVWdumbl+vEXR3UlTrIwbBX15e7kDj
-         b2zVcCh5tsWrMTYjOuczn3ayDwCmBerx19eW2JT8voZrENsxyiBmvP/c14QKKCiAsemI
-         vOIfo2kUpT742jj1tQCcFWnVzdm48Fp7d+PR9UHPkqZAOw3ExoWpAzoj/m0GpCkH03Qk
-         W68w==
-X-Gm-Message-State: AJIora8U5IlIVV2H2Fw5I0NfjzGrWgymiZegDhaZ1pnxfqw1yAIiuaFU
-        BEGVlfcqXO+qZ8wC1ReCYxfkWZ/SP5D2PxrtCCqKR/sEEAmr/wr8B4gcaLw877dcg8WczByFGqt
-        n/CSifMKNXM7EG1PXGU5CE8GK
-X-Received: by 2002:a1c:2184:0:b0:3a3:30d7:7314 with SMTP id h126-20020a1c2184000000b003a330d77314mr8754218wmh.19.1658768722839;
-        Mon, 25 Jul 2022 10:05:22 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1unsAlNhV9LUXlYCEzqZs7stqV1rAI2oMdWuUAHWtmFJPB7rYq8qd9v6QobCn8rwQ1jAkhw7Q==
-X-Received: by 2002:a1c:2184:0:b0:3a3:30d7:7314 with SMTP id h126-20020a1c2184000000b003a330d77314mr8754192wmh.19.1658768722393;
-        Mon, 25 Jul 2022 10:05:22 -0700 (PDT)
-Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id q15-20020a5d658f000000b0021e48faed68sm12054630wru.97.2022.07.25.10.05.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 10:05:21 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 19:05:19 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Matthias May <matthias.may@westermo.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nicolas.dichtel@6wind.com,
-        eyal.birger@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2 net-next] geneve: fix TOS inheriting for ipv6
-Message-ID: <20220725170519.GD18808@pc-4.home>
-References: <20220724003741.57816-1-matthias.may@westermo.com>
- <20220724003741.57816-3-matthias.may@westermo.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xhWpC8JbYbPY2K4E0t5gdrGAdCwvkqCy1aHXAcFQrpI=;
+        b=1z1XVOayuvhlHLMKLSVjm6B0/YzyrnGhveg7+8B5IR97YtiArkdAQNPHehLX7TnugY
+         DS4jnLDi+srzxNw7+7gONx+WGlem0Y/A350MNt4xh6a9VU3CWv/m46BuznXv8a1ceztQ
+         XGAjh82rhZyTH1OEyL5GJji3UQTPwH7JrE6AfMeRgWZG2sbvMzdMY7xddmMhiXlaTv5o
+         ldyviHWHYbsHNe5+3jDOeoapH39A+HS0r6odP7JW7qoXPz0QzFc9U1cHxC3EkFslD2b9
+         Pytwr5I/m98ZHq4I7Z5vrIfX9Pd/rO087T7l7d6aeaYJzYWMpAL50WevZTygQQiq1jmP
+         qIYw==
+X-Gm-Message-State: AJIora8nv3tXsi+ZmMfNJQVigRwGRqTmiDQLFDxgBTZtoI0TsLiURHlZ
+        yIML2xPzp2KiI2lUH32Ep3s=
+X-Google-Smtp-Source: AGRyM1usTswj3cKvI95R+nrvoKBYTgtax0V4MeljgNejZmXtPNuyq9jJuFsyWlRbgPoQuy0VD/5SyA==
+X-Received: by 2002:a17:907:1c95:b0:72b:4e37:7736 with SMTP id nb21-20020a1709071c9500b0072b4e377736mr10743421ejc.516.1658768958328;
+        Mon, 25 Jul 2022 10:09:18 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id t25-20020aa7d719000000b0043a6c9e50f4sm7396662edq.29.2022.07.25.10.09.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 10:09:17 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <48de7ea7-fc1a-6a83-3d6f-e04d26ea2f05@redhat.com>
+Date:   Mon, 25 Jul 2022 19:09:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220724003741.57816-3-matthias.may@westermo.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 09/25] KVM: VMX: nVMX: Support TSC scaling and
+ PERF_GLOBAL_CTRL with enlightened VMCS
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220714091327.1085353-1-vkuznets@redhat.com>
+ <20220714091327.1085353-10-vkuznets@redhat.com> <YtnMIkFI469Ub9vB@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YtnMIkFI469Ub9vB@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 02:37:41AM +0200, Matthias May wrote:
-> The current code uses the RT_TOS macro to cut off the 6 DSCP
-> bits, down to the original 3 TOS bits.
+On 7/21/22 23:58, Sean Christopherson wrote:
 > 
-> Do not use this macro to get the prio for inheriting purposes.
-
-Honestly, this patch is a bug fix and is suitable for the net tree
-(with appropriate 'Fixes' tag).
-
-Ideally, we'd also fix ip6_dst_lookup_tunnel() (used by bareudp
-tunnels) and vxlan6_get_route().
-
-Also, mlx5e_tc_tun_update_header_ipv6() and
-mlx5e_tc_tun_create_header_ipv6() both call RT_TOS() inside
-ip6_make_flowinfo() and certainly need to be fixed too.
-
-> Signed-off-by: Matthias May <matthias.may@westermo.com>
-> ---
->  drivers/net/geneve.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index b5cfbf7d487b..7b348a03e096 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -355,11 +355,6 @@ uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu)
+>          return 0;
+>   }
 > 
-> diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
-> index 4c380c06f178..e1a4480e6f17 100644
-> --- a/drivers/net/geneve.c
-> +++ b/drivers/net/geneve.c
-> @@ -877,8 +877,7 @@ static struct dst_entry *geneve_get_v6_dst(struct sk_buff *skb,
->  		use_cache = false;
->  	}
->  
-> -	fl6->flowlabel = ip6_make_flowinfo(RT_TOS(prio),
-> -					   info->key.label);
-> +	fl6->flowlabel = ip6_make_flowinfo(prio, info->key.label);
->  	dst_cache = (struct dst_cache *)&info->dst_cache;
->  	if (use_cache) {
->  		dst = dst_cache_get_ip6(dst_cache, &fl6->saddr);
-> -- 
-> 2.35.1
+> -enum evmcs_v1_revision {
+> -       EVMCSv1_2016,
+> -       EVMCSv1_2022,
+> -};
+> -
+>   enum evmcs_unsupported_ctrl_type {
+>          EVMCS_EXIT_CTLS,
+>          EVMCS_ENTRY_CTLS,
+> @@ -372,29 +367,29 @@ static u32 evmcs_get_unsupported_ctls(struct kvm_vcpu *vcpu,
+>                                        enum evmcs_unsupported_ctrl_type ctrl_type)
+>   {
+>          struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> -       enum evmcs_v1_revision evmcs_rev = EVMCSv1_2016;
+> +       bool has_evmcs_2022_features;
+> 
+>          if (!hv_vcpu)
+>                  return 0;
+> 
+> -       if (hv_vcpu->cpuid_cache.nested_ebx & HV_X64_NESTED_EVMCS1_2022_UPDATE)
+> -               evmcs_rev = EVMCSv1_2022;
+> +       has_evmcs_2022_features = hv_vcpu->cpuid_cache.nested_ebx &
+> +                                 HV_X64_NESTED_EVMCS1_2022_UPDATE;
+> 
+>          switch (ctrl_type) {
+>          case EVMCS_EXIT_CTLS:
+> -               if (evmcs_rev == EVMCSv1_2016)
+> +               if (!has_evmcs_2022_features)
+>                          return EVMCS1_UNSUPPORTED_VMEXIT_CTRL |
+>                                  VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL;
+>                  else
+>                          return EVMCS1_UNSUPPORTED_VMEXIT_CTRL;
+>          case EVMCS_ENTRY_CTLS:
+> -               if (evmcs_rev == EVMCSv1_2016)
+> +               if (!has_evmcs_2022_features)
+>                          return EVMCS1_UNSUPPORTED_VMENTRY_CTRL |
+>                                  VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+>                  else
+>                          return EVMCS1_UNSUPPORTED_VMENTRY_CTRL;
+>          case EVMCS_2NDEXEC:
+> -               if (evmcs_rev == EVMCSv1_2016)
+> +               if (!has_evmcs_2022_features)
+>                          return EVMCS1_UNSUPPORTED_2NDEXEC |
+>                                  SECONDARY_EXEC_TSC_SCALING;
+>                  else
 > 
 
+I kind of like the idea of having a two-dimensional array based on the 
+enums instead of switch statements, so for now I'll keep Vitaly's enums.
+
+Paolo

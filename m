@@ -2,138 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B84757FFC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232D457FFC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbiGYNZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S235542AbiGYNZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiGYNZd (ORCPT
+        with ESMTP id S235503AbiGYNZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:25:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2D826ED
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:25:32 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oFy5G-0002CC-6O; Mon, 25 Jul 2022 15:25:18 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1793DB9964;
-        Mon, 25 Jul 2022 13:25:15 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 15:25:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] can: slcan: extend supported features (step 2)
-Message-ID: <20220725132514.h3iva4xi4sdncus6@pengutronix.de>
-References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
+        Mon, 25 Jul 2022 09:25:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7E05FD5;
+        Mon, 25 Jul 2022 06:25:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41933B80EC9;
+        Mon, 25 Jul 2022 13:25:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077A4C341C6;
+        Mon, 25 Jul 2022 13:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658755538;
+        bh=qrNmI0+Xi+leg5oQ8lCWj5IMys4zFhzyyUUPjKowDQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FjV2jFZAh5LeAxLAXTzPUIDAOPSRfx8adWMLvncWhPIi8+8nk5pkhsSrtoGljxlXv
+         df7RE1rdESD0AXyST3Fn9C7VXlPn+ilAmwBDS4ueIpUJO2hmL6jzbWJ7O5dWAhbha3
+         0Hk0m/LaaEaYf1t3FlFlegWo+Jr0sNspRb/udpgWyVyyv/ak3+GCRXmxiKUTewnxkx
+         UDXvfZQ4WoWgmph0tEQ8T6CUnUknAQZh7+PIFpExApROf+bqMHjsFtgkpwt1Z8UiXT
+         a5yb2KYJwHeZfpryFYMTDWsg7bCwyIsvHL5JF30K8z1iec0QNZgk7MbLjID+C0pBF6
+         q1CsuIDsBG+Lg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oFy5l-0007Zq-GE; Mon, 25 Jul 2022 15:25:49 +0200
+Date:   Mon, 25 Jul 2022 15:25:49 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        linux-pci@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: Re: Why set .suppress_bind_attrs even though .remove() implemented?
+Message-ID: <Yt6Z3cBrVy1lVTp1@hovoldconsulting.com>
+References: <YtqllIHY/R/BbR3V@hovoldconsulting.com>
+ <20220722143858.GA1818206@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yohv5x576q7yvjhc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220722143858.GA1818206@bhelgaas>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[ +CC: maz ]
 
---yohv5x576q7yvjhc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 22, 2022 at 09:38:58AM -0500, Bjorn Helgaas wrote:
+> On Fri, Jul 22, 2022 at 03:26:44PM +0200, Johan Hovold wrote:
+> > On Thu, Jul 21, 2022 at 05:21:22PM -0500, Bjorn Helgaas wrote:
+> 
+> > > qcom is a DWC driver, so all the IRQ stuff happens in
+> > > dw_pcie_host_init().  qcom_pcie_remove() does call
+> > > dw_pcie_host_deinit(), which calls irq_domain_remove(), but nobody
+> > > calls irq_dispose_mapping().
+> > > 
+> > > I'm thoroughly confused by all this.  But I suspect that maybe I
+> > > should drop the "make qcom modular" patch because it seems susceptible
+> > > to this problem:
+> > > 
+> > >   https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/qcom&id=41b68c2d097e
+> > 
+> > That should not be necessary.
+> > 
+> > As you note above, interrupt handling is implemented in dwc core so if
+> > there are any issue here at all, which I doubt, then all of the dwc
+> > drivers that currently can be built as modules would all be broken and
+> > this would need to be fixed in core.
+> 
+> I don't know yet whether there's an issue.  We need a clear argument
+> for why there is or is not.  The fact that others might be broken is
+> not an argument for breaking another one ;)
 
-On 25.07.2022 08:54:13, Dario Binacchi wrote:
-> With this series I try to finish the task, started with the series [1],
-> of completely removing the dependency of the slcan driver from the
-> userspace slcand/slcan_attach applications.
->=20
-> The series, however, still lacks a patch for sending the bitrate setting
-> command to the adapter:
->=20
-> slcan_attach -b <btr> <dev>
->=20
-> Without at least this patch the task cannot be considered truly completed.
->=20
-> The idea I got is that this can only happen through the ethtool API.
-> Among the various operations made available by this interface I would
-> have used the set_regs (but only the get_regs has been developed), or,
-> the set_eeprom, even if the setting would not be stored in an eeprom.
-> IMHO it would take a set_regs operation with a `struct ethtool_wregs'
-> parameter similar to `struct ethtool_eeprom' without the magic field:
+It's not breaking anything that is currently working, and if there's
+some corner case during module unload, that's not the end of the world
+either.
 
-This doesn't feel right.
+It's a feature useful for developers and no one expects remove code to
+be perfect (e.g. resilient against someone trying to break it by doing
+things in parallel, etc.).
 
-> struct ethtool_wregs {
-> 	__u32	cmd;
-> 	__u32	offset;
-> 	__u32	len;
-> 	__u8	data[0];
-> };
->=20
-> But I am not the expert and if there was an alternative solution already
-> usable, it would be welcome.
+> > I've been using the modular pcie-qcom patch for months now, unloading
+> > and reloading the driver repeatedly to test power sequencing, without
+> > noticing any problems whatsoever.
+> 
+> Pali's commit log suggests that unloading the module is not, by
+> itself, enough to trigger the problem:
+> 
+>   https://lore.kernel.org/linux-pci/20220709161858.15031-1-pali@kernel.org/
+> 
+> Can you test the scenario he mentions?
 
-Have a look at the get/set_tunable() callback:
+Turns out the pcie-qcom driver does not support legacy interrupts so
+there's no risk of there being any lingering mappings if I understand
+things correctly.
 
-| https://elixir.bootlin.com/linux/latest/source/include/linux/ethtool.h#L5=
-75
-
-You probably have to add a new tunable. Here you'll find the people and
-commits that changed the tunable:
-
-| https://github.com/torvalds/linux/blame/master/include/uapi/linux/ethtool=
-=2Eh#L229
-
-It's usually worth including them in an RFC patch series where you add a
-new tunable and make use of it in the slcan driver.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---yohv5x576q7yvjhc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLembgACgkQrX5LkNig
-011YBwf8D6sYc5Z10hNfGDyKQ3RcYyhgRysl2n8u/I+7BTE6Y3+sOXF5X0Gt5auQ
-O3L54lyy3/LKsyXwoCRPUgMOgbLCPwPI0EqLNEKhpTrQAJ5h0uCbRZkUREhkngtO
-Tr9MoBK+7JmHVOpZUBVVIXB631k/RNvCZQXm1wlUsumXqX13EFPImJvuk+dDo1lm
-TrM1mSGX8FAq4OG2mlvdLwztIJExjprR2hP2zyUs3gEJk6r4z5z5N5TBCcU8+bH0
-98kyOZzlpUcSB1tIK7V1KHOsW2kifnyGGueznkI/V22bNzq0E4e1jeUjANuEtMXm
-nWmiiH/XE7rvUL/kf4ER0yut8pUv8g==
-=K8BG
------END PGP SIGNATURE-----
-
---yohv5x576q7yvjhc--
+Johan

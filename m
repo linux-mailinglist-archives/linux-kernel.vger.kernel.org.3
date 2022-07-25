@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9AC5802F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD49580326
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbiGYQkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 12:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        id S235879AbiGYQxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 12:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbiGYQkD (ORCPT
+        with ESMTP id S233730AbiGYQxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:40:03 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3030F1D0FC;
-        Mon, 25 Jul 2022 09:40:03 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PEsjw2017948;
-        Mon, 25 Jul 2022 12:39:44 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3hgau76c5t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Jul 2022 12:39:44 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 26PGdhuT013500
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 25 Jul 2022 12:39:43 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 25 Jul
- 2022 12:39:42 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Mon, 25 Jul 2022 12:39:42 -0400
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 26PGd7uL014141;
-        Mon, 25 Jul 2022 12:39:37 -0400
-From:   <alexandru.tachici@analog.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <devicetree@vger.kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gerhard@engleder-embedded.com>, <geert+renesas@glider.be>,
-        <joel@jms.id.au>, <stefan.wahren@i2se.com>, <wellslutw@gmail.com>,
-        <geert@linux-m68k.org>, <robh+dt@kernel.org>,
-        <d.michailidis@fungible.com>, <stephen@networkplumber.org>,
-        <l.stelmach@samsung.com>, <linux-kernel@vger.kernel.org>
-Subject: [net-next v2 3/3] dt-bindings: net: adin1110: Add docs
-Date:   Mon, 25 Jul 2022 19:53:12 +0300
-Message-ID: <20220725165312.59471-4-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220725165312.59471-1-alexandru.tachici@analog.com>
-References: <20220725165312.59471-1-alexandru.tachici@analog.com>
+        Mon, 25 Jul 2022 12:53:37 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125D91D0E2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:53:36 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id o12so13841265ljc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5qC6jLS4IBP8KcMghgftdhKr7IWXyVuOWjf7QInzDOY=;
+        b=iLlriYvFj1J57mpeQrtLp6H3buKCysZi+d2PGYRmnf0fMae4Ss1YqqoIyYjDlVneao
+         0sBZwxqyg6sSk1UX884E2a2Y7rKLbMJBO3zxsvuneS5CbXz4AaVRl3yvoq1QxBa9oBO6
+         IRalGQS9i7ixCpgdz4p6OaIMt/etdgj5v8Ub5HACtSZ+bagRGjnbxdq9b+5FLQqOB1zr
+         OAu3quOLQHpt40yPiqQ17awhJ8Jc+bXnZVSSIM4FAl+z6xhvR6i6/uPgVHLFS3KKwDwU
+         Aq0aKxEXppD2ctplRoJ+ioa08Ax1Tq20TYCuxVPIg5wTOyc5YBWOEPhy0nk5STNzu1Ne
+         cxDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5qC6jLS4IBP8KcMghgftdhKr7IWXyVuOWjf7QInzDOY=;
+        b=RTEwNN9Dm2s4FtMx1XafWIOFPfEbzJ6X5f0nF6lCigY1ulHlyOPpiRzVfx+p8iXah8
+         PaCTU/863AT0pPCXrYWf5crGTwTOk88bWFk/Ix5ZQ6AQeD6Z9JdEPtlxSE8Y0CIiadHw
+         TW8z/z6IVM9WSIc6s1AOoDR1YeAGMKptltDwzL2pYuGO+74QGoU8Nc/LY8Qq4VJxyaMN
+         qogbUE15AyZTYhK+O/1xSGhCY9hw/j1SWSEz+69I8Af8KjYmdHGeIRyByq7KtEguW6R/
+         pQ13uKNNe5hf8uba39ceFiOYxMAG8pfJBpt0jPQb1urHyv3JxTbrXc0WOkXWHXZSmSMW
+         Yq2Q==
+X-Gm-Message-State: AJIora8RRDe0gSgEea94wSyoDA7W1g0NHJ5LNF50HSIqWnjOA8UO4lXG
+        iEVx396ys6DCHWWAmh/06C75NMmtY2Myb24yLLkAkbly7js=
+X-Google-Smtp-Source: AGRyM1vHOyCTXVJpCqHZPL5lZxdt/g6JYSmqZi7q120V6BCVVhb2AolH1enQmPFbfpdpOhT45Pi5DABp2WNESf39e6M=
+X-Received: by 2002:a2e:920e:0:b0:25d:ed6f:e66b with SMTP id
+ k14-20020a2e920e000000b0025ded6fe66bmr4283266ljg.103.1658768014269; Mon, 25
+ Jul 2022 09:53:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: CjdHl1LzH5GQoLKv50SA1JQck2MJ3Q0r
-X-Proofpoint-ORIG-GUID: CjdHl1LzH5GQoLKv50SA1JQck2MJ3Q0r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-25_12,2022-07-25_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 mlxscore=0 clxscore=1015 malwarescore=0 impostorscore=0
- mlxlogscore=981 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207250066
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20220719165300.3000580-1-masahiroy@kernel.org> <20220719165300.3000580-2-masahiroy@kernel.org>
+In-Reply-To: <20220719165300.3000580-2-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 25 Jul 2022 09:53:22 -0700
+Message-ID: <CAKwvOdmV55_q_niHFP26i9US9OBbTaHVNDhOya+yLR2CTEZLjA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] modpost: use sym_get_data() to get module
+ device_table data
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,103 +69,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandru Tachici <alexandru.tachici@analog.com>
+On Tue, Jul 19, 2022 at 9:53 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Use sym_get_data() to replace the long code.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Add bindings for the ADIN1110/2111 MAC-PHY/SWITCH.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- .../devicetree/bindings/net/adi,adin1110.yaml | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/adi,adin1110.yaml
+> ---
+>
+>  scripts/mod/file2alias.c | 4 +---
+>  scripts/mod/modpost.c    | 2 +-
+>  scripts/mod/modpost.h    | 1 +
+>  3 files changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index cbd6b0f48b4e..80d973144fde 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -1571,9 +1571,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>                 zeros = calloc(1, sym->st_size);
+>                 symval = zeros;
+>         } else {
+> -               symval = (void *)info->hdr
+> -                       + info->sechdrs[get_secindex(info, sym)].sh_offset
+> -                       + sym->st_value;
+> +               symval = sym_get_data(info, sym);
+>         }
+>
+>         /* First handle the "special" cases */
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 6370f9accb8e..26254e96c300 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -324,7 +324,7 @@ static void *sym_get_data_by_offset(const struct elf_info *info,
+>         return (void *)info->hdr + sechdr->sh_offset + offset;
+>  }
+>
+> -static void *sym_get_data(const struct elf_info *info, const Elf_Sym *sym)
+> +void *sym_get_data(const struct elf_info *info, const Elf_Sym *sym)
+>  {
+>         return sym_get_data_by_offset(info, get_secindex(info, sym),
+>                                       sym->st_value);
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 044bdfb894b7..4d8a1ae1d1e3 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -187,6 +187,7 @@ void get_src_version(const char *modname, char sum[], unsigned sumlen);
+>  /* from modpost.c */
+>  char *read_text_file(const char *filename);
+>  char *get_line(char **stringp);
+> +void *sym_get_data(const struct elf_info *info, const Elf_Sym *sym);
+>
+>  enum loglevel {
+>         LOG_WARN,
+> --
+> 2.34.1
+>
 
-diff --git a/Documentation/devicetree/bindings/net/adi,adin1110.yaml b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-new file mode 100644
-index 000000000000..cc83f08c0a55
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
-@@ -0,0 +1,81 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/adi,adin1110.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ADI ADIN1110 MAC-PHY
-+
-+maintainers:
-+  - Alexandru Tachici <alexandru.tachici@analog.com>
-+
-+description: |
-+  The ADIN1110 is a low power single port 10BASE-T1L MAC-
-+  PHY designed for industrial Ethernet applications. It integrates
-+  an Ethernet PHY core with a MAC and all the associated analog
-+  circuitry, input and output clock buffering.
-+
-+  The ADIN2111 is a low power, low complexity, two-Ethernet ports
-+  switch with integrated 10BASE-T1L PHYs and one serial peripheral
-+  interface (SPI) port. The device is designed for industrial Ethernet
-+  applications using low power constrained nodes and is compliant
-+  with the IEEE 802.3cg-2019 Ethernet standard for long reach
-+  10 Mbps single pair Ethernet (SPE).
-+
-+  The device has a 4-wire SPI interface for communication
-+  between the MAC and host processor.
-+
-+allOf:
-+  - $ref: ethernet-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,adin1110
-+      - adi,adin2111
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+  reg:
-+    maxItems: 1
-+
-+  adi,spi-crc:
-+    description: |
-+      Enable CRC8 checks on SPI read/writes.
-+    type: boolean
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    spi {
-+        ethernet@0 {
-+            compatible = "adi,adin2111";
-+            reg = <0>;
-+            spi-max-frequency = <24500000>;
-+
-+            adi,spi-crc;
-+
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            interrupt-parent = <&gpio>;
-+            interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
-+
-+            local-mac-address = [ 00 11 22 33 44 55 ];
-+        };
-+    };
+
 -- 
-2.25.1
-
+Thanks,
+~Nick Desaulniers

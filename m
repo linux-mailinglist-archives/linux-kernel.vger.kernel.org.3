@@ -2,85 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B7058080E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BC7580813
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236967AbiGYXQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 19:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S237097AbiGYXTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 19:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbiGYXQN (ORCPT
+        with ESMTP id S237150AbiGYXTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:16:13 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BE810FE4;
-        Mon, 25 Jul 2022 16:16:12 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id i4so5231197oif.2;
-        Mon, 25 Jul 2022 16:16:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g49NRMyXpF3Ukz1Chp1eaP/CKtK/FAlLJyk9rQSO96k=;
-        b=nAp8GR+7+cjm/z8Yl5C7lDpc4CNIxsxr/ZYyhzdzFHGvNiQVr9QX4JQyKQMmUPsIRB
-         xUEowTkuoDEQTOCDMDkosPtVtRK6Eu/7YggSwD7ZYa3QWq14Scr9kaQcZzr/4UfbrZPi
-         bcUHHEWdGwo6PHz4Hl84Fcl1R5AN4CkYAYo5sx3oAWHPG47dMRPhYJ0k6hgtcqDnapov
-         5C3NGsLgE0i3+2xU8rMmQI9t4UfGofnl7n5bd4/bRVISCXcke0oeoDL6MvtSyoMWaY5G
-         bb3U3fqBKRJJ4LL+t7MQ2j0rUPLx+cOoJ21OWiBxtMNpQnjhyXg22CK5j2nww5r0Mhb1
-         O+fQ==
-X-Gm-Message-State: AJIora+y4h9SHgLGYedZpvWOQ4wCTUiiyM6AtzHKI0q2eBg321Amq4L1
-        ji2OKskILW4Shjj/pdU24Swh4xFtNw==
-X-Google-Smtp-Source: AGRyM1u56k9Wer1FDd+BkIDjfxwPl929B5pswvCBQlRHjQCxoxz9IHoo6rqZWSCrgWwgYITubxRwow==
-X-Received: by 2002:aca:90c:0:b0:33a:768b:50d5 with SMTP id 12-20020aca090c000000b0033a768b50d5mr13493374oij.294.1658790971099;
-        Mon, 25 Jul 2022 16:16:11 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id d18-20020a0568301b7200b0061c9bbac1f9sm5583106ote.16.2022.07.25.16.16.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 16:16:10 -0700 (PDT)
-Received: (nullmailer pid 2935442 invoked by uid 1000);
-        Mon, 25 Jul 2022 23:16:09 -0000
-Date:   Mon, 25 Jul 2022 17:16:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: memory-controller: Document Broadcom
- STB MEMC
-Message-ID: <20220725231609.GA2935380-robh@kernel.org>
-References: <20220722201043.2731570-1-f.fainelli@gmail.com>
- <20220722201043.2731570-2-f.fainelli@gmail.com>
+        Mon, 25 Jul 2022 19:19:07 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74C2826541;
+        Mon, 25 Jul 2022 16:19:06 -0700 (PDT)
+Received: from kbox (unknown [76.135.27.191])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0DA0020FE2F5;
+        Mon, 25 Jul 2022 16:19:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0DA0020FE2F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1658791146;
+        bh=50UCpKOQPGTdS25dXIntvXoh2LEaS/tcG43pWXcm5W8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LF927PYThBgiN2hZSCi8yIABcvTjV2khn7vwGSLdsp8ERlwWypUKMVb+i8j5PDrqC
+         6sLXtx3pdcJYajn5LiLHuqi+xrXjlZ87fzbZP8zejl2QkbpFtb7sQC5fL5fgJ74lm1
+         gU1aHy14XHJJn3yeVgeByTg4OzW948MZWnvzVZnk=
+Date:   Mon, 25 Jul 2022 16:19:00 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org,
+        mathieu.desnoyers@efficios.com
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        beaub@linux.microsoft.com
+Subject: tracing/user_events: Tracking broken status and feedback
+Message-ID: <20220725231900.GA2389@kbox>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722201043.2731570-2-f.fainelli@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 13:10:41 -0700, Florian Fainelli wrote:
-> Document the Broadcom STB memory controller which is a trivial binding
-> for now with a set of compatible strings and single register.
-> 
-> Since we introduce this binding, the section in
-> Documentation/devicetree/bindings/arm/bcm/brcm,brcmstb.txt is removed
-> and this binding is referenced instead.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../bindings/arm/bcm/brcm,brcmstb.txt         | 11 +---
->  .../brcm,brcmstb-memc-ddr.yaml                | 53 +++++++++++++++++++
->  2 files changed, 55 insertions(+), 9 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/brcm,brcmstb-memc-ddr.yaml
-> 
+To help keep track of what is required to remove the broken status from
+user_events I am starting this thread. I would like to use this thread
+to provide status on the work that has been done so far and to have a
+discussion about when the broken status can be removed.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Feedback threads from 5.18 version of user_events:
+1. https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
+2. https://lore.kernel.org/all/1651771383.54437.1652370439159.JavaMail.zimbra@efficios.com/
+
+All the feedback has been addressed in the patchsets 1 and 2 (see below).
+Here are the details: 
+
+1. Use bits vs bytes in event enabled memory mappings.
+Fixed in patchset 1.
+
+2. Pack ABI structures where size is used.
+Fixed in patchset 1.
+
+3. Don't trust user strings for string formatting.
+Fixed in patchset 1.
+
+4. Move to refcount APIs vs atomic for tracking references.
+Fixed in patchset 1.
+
+5. Ensure event_mutex is held during registration.
+Fixed in patchset 2.
+
+With these, I believe I have addressed all issues to remove the
+"broken status".
+
+Here is the list of additional feedback (and status) that I don't believe
+should have a bearing on removing the "broken status":
+
+1. Kernel vs user tracers in ABI.
+This is not done, the plan is to build a libtracepoint library that allows
+working with both kernel and user tracers in user programs. Steven is
+working on this at the moment. I don't believe this is required to remove
+the broken status, but it will help prove the ABI by having it.
+
+No patchset yet.
+
+2. Container/namespace isolation of events.
+user_events utilizes tracefs for user facing files in the ABI. I've created
+an RFC patchset showing how if tracefs offered an isolated directory
+structure per-namespace the user_events ABI is unaffected. This is true for
+other ABIs that tracefs hosts, if they would like to integrate. I don't
+believe this is required to remove the broken status, however, it's useful
+to have to see how the ABI is unaffected while we work toward enabling
+isolation within tracing.
+
+See patchset 3.
+
+Patchsets:
+1. https://lore.kernel.org/all/20220425184631.2068-1-beaub@linux.microsoft.com/
+2. https://lore.kernel.org/all/20220328223225.1992-1-beaub@linux.microsoft.com/
+3. https://lore.kernel.org/all/20220707215828.2021-1-beaub@linux.microsoft.com/
+
+Thanks,
+-Beau

@@ -2,528 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4167557F870
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 05:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FB757F873
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 05:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbiGYDGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 23:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S230304AbiGYDRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 23:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiGYDGP (ORCPT
+        with ESMTP id S229571AbiGYDQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 23:06:15 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F309E021;
-        Sun, 24 Jul 2022 20:06:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id c22so5988829wmr.2;
-        Sun, 24 Jul 2022 20:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gOEP+E9vEvmvs8/MLAucoh0GM1fTWokr8r32cEEhGnA=;
-        b=mYDvNxeTMr71SJxS+KOy2KPcVem7hK81JydJ9AiYjPuhDVroBIThLG1ricE3gio0nI
-         W3ktsWbTeNGTSsAojvKBLqA6JR6EXXhOsL+/AuX4aLqncq9ZxlfQ67T+V2tle6CCmAXT
-         vbLfBVkaSDC+2RbdV2u3R8VxVkOQkUc4bxor4fMjFummgcPWvYarzGUTKmnIe7P0+cll
-         RyygBJYKwSPajEpI8WmUzkGnPNnnc3eGLTwy/7wTLkjVaTWzsSTkCCpPS6Igxv1+slur
-         Kgem9VasY1SvW9cc1bHZ8nIJw1T1zSAqi9LwMosyA6qeVxVq6jFGpGIRqi2Kj9F05qP6
-         8KCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gOEP+E9vEvmvs8/MLAucoh0GM1fTWokr8r32cEEhGnA=;
-        b=qnVQA1hn7czJVi91MQoTIrB3uuJ9DThnXzELXXQaJXHSDScnD7Hg5CpsczoGt5mnYS
-         nUmE06nCm3tntDg0qQwiG0RJHRk/3tdA8AfGNW412iQuB3c6kUGA5fd4W9xKe9ubunIf
-         zlAG3V2RT5PIIShhlFgMLQjPfsGK4SjpRiiZ1W0XkWrwomiPLTWn3W00aFHgkWjmQk2I
-         Iie5k37zhzw4wuVmdTiaKzHAfEk/G6pwAXvcyCZdPg4dkV+phi9mX3V7nOPYx6KqUM+J
-         TmUhWrRs9v2MooiAiz8kPpP2CzyHbAwqx9OaRoKWGy7jPPZk7uqLrYaQorF/AXTbRd8g
-         idqQ==
-X-Gm-Message-State: AJIora9+HCKXzcpPNfA8cW6OPTg2yu7Rx27TzCh8DzawTI4Bys4e5xAp
-        5RLi7P5ZfTmhokUOyQSG858gXQ61jzvPyA==
-X-Google-Smtp-Source: AGRyM1tQqhrShSdxdB5nZ+zpWFy1pDSmnACwXGiN9SwTMwCM6ZhhCjfiyJE1Mx+x1BqGjMorF1EYKA==
-X-Received: by 2002:a05:600c:3ac7:b0:3a3:64c3:6ddf with SMTP id d7-20020a05600c3ac700b003a364c36ddfmr676407wms.105.1658718371634;
-        Sun, 24 Jul 2022 20:06:11 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:4b00:9414:100:70ae:aa59:3138:f63c])
-        by smtp.gmail.com with ESMTPSA id p10-20020adff20a000000b0021baf5e590dsm10523227wro.71.2022.07.24.20.06.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 20:06:10 -0700 (PDT)
-From:   Alexey Klimov <klimov.linux@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, oneukum@suse.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        atishp@rivosinc.com, atishp@atishpatra.org, yury.norov@gmail.com,
-        aklimov@redhat.com, atomlin@redhat.com, klimov.linux@gmail.com
-Subject: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
-Date:   Mon, 25 Jul 2022 04:06:05 +0100
-Message-Id: <20220725030605.1808710-1-klimov.linux@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 24 Jul 2022 23:16:54 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCDCCDF3B
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 20:16:49 -0700 (PDT)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxKeEWC95iDaw1AA--.30605S3;
+        Mon, 25 Jul 2022 11:16:39 +0800 (CST)
+Message-ID: <d98399c3-738c-e514-85e1-b278dc813cb9@loongson.cn>
+Date:   Mon, 25 Jul 2022 11:16:38 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/2] LoongArch: Remove clock setting during cpu hotplug
+ stage
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220720072152.3894559-1-maobibo@loongson.cn>
+ <3324feed-e158-8c51-9915-85b0498f1888@xen0n.name>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <3324feed-e158-8c51-9915-85b0498f1888@xen0n.name>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf9AxKeEWC95iDaw1AA--.30605S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw1kKr48Zw15AFyxXryrZwb_yoWrGF1fpF
+        n3Can3KrW8Kwn7uw1ktr1UAry5Gw4DJw47ZF17J3W8AFyDAF1jgFyDXryvgFW7JrZ7Xa1F
+        qr1UXrsruFyUX3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
+        8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
+        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU5PpnJUUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Driver supports StreamLabs usb watchdog device. The device plugs
-into 9-pin usb header and connects to reset pins and reset button
-pins on desktop PC.
-
-USB commands used to communicate with device were reverse
-engineered using usbmon.
-
-Signed-off-by: Alexey Klimov <klimov.linux@gmail.com>
----
-Changes since v4:
-	-- added more comments;
-	-- added nowayout check in ->disconnect();
-	-- completely rework usb_streamlabs_wdt_cmd() ->
-                __usb_streamlabs_wdt_cmd() and functions
-		that handle validation of the response;
-	-- usb sending and receiving msgs are moved to separate
-		functions;
-        -- added soft_unbind=1 flag in usb_driver struct
-		to make it possible to send URBs in ->disconnect();
-        -- buffer is declared as __le16 now;
-        -- made checkpatch.pl --strict happy;
-
-Previous version:
-https://lore.kernel.org/linux-watchdog/20220715234442.3910204-1-klimov.linux@gmail.com/
 
 
- MAINTAINERS                       |   6 +
- drivers/watchdog/Kconfig          |  15 ++
- drivers/watchdog/Makefile         |   1 +
- drivers/watchdog/streamlabs_wdt.c | 360 ++++++++++++++++++++++++++++++
- 4 files changed, 382 insertions(+)
- create mode 100644 drivers/watchdog/streamlabs_wdt.c
+在 2022/7/22 16:10, WANG Xuerui 写道:
+> On 2022/7/20 15:21, Bibo Mao wrote:
+>> On physical machine we can save power by disabling clock of hot removed cpu.
+>> However there will be problem, since different platforms have different clock
+>> setting methods, the code is platform relative. Also it can be in firmware/pmu
+>> compoments or cpu regulator driver, rather than general loongarch cpu booting
+>> flow.
+>>
+>> Also on qemu virt machine, device clock/freq setting is not
+>> emulated, there is no such registers.
+>>
+>> This patch removes hard-coded register accessing in generic
+>> loongarch cpu boot flow.
+> 
+> Improving a little on the wording (mostly fixing eyesore Chinglish):
+> 
+> "On physical machine we can save power by disabling clock of hot removed cpu. However as different platforms require different methods to configure clocks, the code is platform-specific, and probably belongs to firmware/pmu or cpu regulator, rather than generic arch/loongarch code.
+> 
+> Also, there is no such register on QEMU virt machine since the clock/frequency regulation is not emulated.
+> 
+> This patch removes the hard-coded clock register accesses in generic loongarch cpu hotplug flow."
+> 
+Xuerui,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 64379c699903..fb31c1823043 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19190,6 +19190,12 @@ W:	http://www.stlinux.com
- F:	Documentation/networking/device_drivers/ethernet/stmicro/
- F:	drivers/net/ethernet/stmicro/stmmac/
- 
-+STREAMLABS USB WATCHDOG DRIVER
-+M:	Alexey Klimov <klimov.linux@gmail.com>
-+L:	linux-watchdog@vger.kernel.org
-+S:	Maintained
-+F:	drivers/watchdog/streamlabs_wdt.c
-+
- SUN3/3X
- M:	Sam Creasey <sammy@sammy.net>
- S:	Maintained
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 32fd37698932..64b7f947b196 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -2171,6 +2171,21 @@ config USBPCWATCHDOG
- 
- 	  Most people will say N.
- 
-+config USB_STREAMLABS_WATCHDOG
-+	tristate "StreamLabs USB watchdog driver"
-+	depends on USB
-+	help
-+	  This is the driver for the USB Watchdog dongle from StreamLabs.
-+	  If you correctly connect reset pins to motherboard Reset pin and
-+	  to Reset button then this device will simply watch your kernel to make
-+	  sure it doesn't freeze, and if it does, it reboots your computer
-+	  after a certain amount of time.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called streamlabs_wdt.
-+
-+	  Most people will say N. Say yes or M if you want to use such usb device.
-+
- config KEEMBAY_WATCHDOG
- 	tristate "Intel Keem Bay SoC non-secure watchdog"
- 	depends on ARCH_KEEMBAY || (ARM64 && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index c324e9d820e9..2d601da9b5bd 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -33,6 +33,7 @@ obj-$(CONFIG_WDTPCI) += wdt_pci.o
- 
- # USB-based Watchdog Cards
- obj-$(CONFIG_USBPCWATCHDOG) += pcwd_usb.o
-+obj-$(CONFIG_USB_STREAMLABS_WATCHDOG) += streamlabs_wdt.o
- 
- # ALPHA Architecture
- 
-diff --git a/drivers/watchdog/streamlabs_wdt.c b/drivers/watchdog/streamlabs_wdt.c
-new file mode 100644
-index 000000000000..f1130fe5559c
---- /dev/null
-+++ b/drivers/watchdog/streamlabs_wdt.c
-@@ -0,0 +1,360 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * StreamLabs USB Watchdog driver
-+ *
-+ * Copyright (c) 2016-2017,2022 Alexey Klimov <klimov.linux@gmail.com>
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/usb.h>
-+#include <linux/watchdog.h>
-+#include <asm/byteorder.h>
-+
-+/*
-+ * USB Watchdog device from Streamlabs:
-+ * https://www.stream-labs.com/products/devices/watch-dog/
-+ *
-+ * USB commands have been reverse engineered using usbmon.
-+ */
-+
-+#define DRIVER_AUTHOR "Alexey Klimov <klimov.linux@gmail.com>"
-+#define DRIVER_DESC "StreamLabs USB watchdog driver"
-+#define DRIVER_NAME "usb_streamlabs_wdt"
-+
-+MODULE_AUTHOR(DRIVER_AUTHOR);
-+MODULE_DESCRIPTION(DRIVER_DESC);
-+MODULE_LICENSE("GPL");
-+
-+#define USB_STREAMLABS_WATCHDOG_VENDOR	0x13c0
-+#define USB_STREAMLABS_WATCHDOG_PRODUCT	0x0011
-+
-+/*
-+ * one buffer is used for communication, however transmitted message is only
-+ * 32 bytes long
-+ */
-+#define BUFFER_TRANSFER_LENGTH	32
-+#define BUFFER_LENGTH		64
-+#define USB_TIMEOUT		350
-+
-+#define STREAMLABS_CMD_START	0xaacc
-+#define STREAMLABS_CMD_STOP	0xbbff
-+
-+/* timeout values are taken from windows program */
-+#define STREAMLABS_WDT_MIN_TIMEOUT	1
-+#define STREAMLABS_WDT_MAX_TIMEOUT	46
-+
-+struct streamlabs_wdt {
-+	struct watchdog_device wdt_dev;
-+	struct usb_interface *intf;
-+	/* Serialises usb communication with a device */
-+	struct mutex lock;
-+	__le16 *buffer;
-+};
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+/* USB call wrappers to send and receive messages to/from the device. */
-+static int usb_streamlabs_send_msg(struct usb_device *usbdev, __le16 *buf)
-+{
-+	int retval;
-+	int size;
-+
-+	retval = usb_interrupt_msg(usbdev, usb_sndintpipe(usbdev, 0x02),
-+				   buf, BUFFER_TRANSFER_LENGTH,
-+				   &size, USB_TIMEOUT);
-+
-+	if (size != BUFFER_TRANSFER_LENGTH)
-+		return -EIO;
-+
-+	return retval;
-+}
-+
-+static int usb_streamlabs_get_msg(struct usb_device *usbdev, __le16 *buf)
-+{
-+	int retval;
-+	int size;
-+
-+	retval = usb_interrupt_msg(usbdev, usb_rcvintpipe(usbdev, 0x81),
-+				   buf, BUFFER_LENGTH,
-+				   &size, USB_TIMEOUT);
-+
-+	if (size != BUFFER_LENGTH)
-+		return -EIO;
-+
-+	return retval;
-+}
-+
-+/*
-+ * This function is used to check if watchdog timeout in the received buffer
-+ * matches the timeout passed from watchdog subsystem.
-+ */
-+static int usb_streamlabs_wdt_check_timeout(__le16 *buf, unsigned long timeout)
-+{
-+	if (buf[3] != cpu_to_le16(timeout))
-+		return -EPROTO;
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_check_response(u8 *buf)
-+{
-+	/*
-+	 * If watchdog device understood the command it will acknowledge
-+	 * with values 1,2,3,4 at indexes 10, 11, 12, 13 in response message
-+	 * when response treated as 8bit message.
-+	 */
-+	if (buf[10] != 1 || buf[11] != 2 || buf[12] != 3 || buf[13] != 4)
-+		return -EPROTO;
-+
-+	return 0;
-+}
-+
-+/*
-+ * This function is used to check if watchdog command in the received buffer
-+ * matches the command passed to the device.
-+ */
-+static int usb_streamlabs_wdt_check_command(__le16 *buf, u16 cmd)
-+{
-+	if (buf[0] != cpu_to_le16(cmd))
-+		return -EPROTO;
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_validate_response(__le16 *buf, u16 cmd,
-+						unsigned long timeout_msec)
-+{
-+	int retval;
-+
-+	retval = usb_streamlabs_wdt_check_response((u8 *)buf);
-+	if (retval)
-+		return retval;
-+
-+	retval = usb_streamlabs_wdt_check_command(buf, cmd);
-+	if (retval)
-+		return retval;
-+
-+	retval = usb_streamlabs_wdt_check_timeout(buf, timeout_msec);
-+	return retval;
-+}
-+
-+static void usb_streamlabs_wdt_prepare_buf(__le16 *buf, u16 cmd,
-+					   unsigned long timeout_msec)
-+{
-+	/*
-+	 * remaining elements expected to be zero everytime during
-+	 * communication
-+	 */
-+	buf[0] = cpu_to_le16(cmd);
-+	buf[1] = cpu_to_le16(0x8000);
-+	buf[3] = cpu_to_le16(timeout_msec);
-+	buf[5] = 0x0;
-+	buf[6] = 0x0;
-+}
-+
-+static int __usb_streamlabs_wdt_cmd(struct streamlabs_wdt *wdt, u16 cmd)
-+{
-+	struct usb_device *usbdev;
-+	unsigned long timeout_msec;
-+	/* how many times to re-try getting the state of the device */
-+	unsigned int retry_counter = 10;
-+	int retval;
-+
-+	if (unlikely(!wdt->intf))
-+		return -ENODEV;
-+
-+	usbdev = interface_to_usbdev(wdt->intf);
-+	timeout_msec = wdt->wdt_dev.timeout * MSEC_PER_SEC;
-+
-+	usb_streamlabs_wdt_prepare_buf(wdt->buffer, cmd, timeout_msec);
-+
-+	/* send command to watchdog */
-+	retval = usb_streamlabs_send_msg(usbdev, wdt->buffer);
-+	if (retval)
-+		return retval;
-+
-+	/*
-+	 * Transition from one state to another in this device
-+	 * doesn't happen immediately, especially stopping the device
-+	 * is not observed on the first reading of the response.
-+	 * Plus to avoid potentially stale response message in the device
-+	 * we keep reading the state of the device until we see:
-+	 * -- that device recognised the sent command;
-+	 * -- the received state (started or stopped) matches the state
-+	 * that was requested;
-+	 * -- the timeout passed matches the timeout value read from
-+	 * the device.
-+	 * Keep retrying 10 times and if watchdog device doesn't respond
-+	 * correctly as expected we bail out and return an error.
-+	 */
-+	do {
-+		retval = usb_streamlabs_get_msg(usbdev, wdt->buffer);
-+		if (retval)
-+			break;
-+
-+		retval = usb_streamlabs_wdt_validate_response(wdt->buffer, cmd,
-+							      timeout_msec);
-+	} while (retval && retry_counter--);
-+
-+	return retry_counter ? retval : -EIO;
-+}
-+
-+static int usb_streamlabs_wdt_cmd(struct streamlabs_wdt *streamlabs_wdt, u16 cmd)
-+{
-+	int retval;
-+
-+	mutex_lock(&streamlabs_wdt->lock);
-+	retval = __usb_streamlabs_wdt_cmd(streamlabs_wdt, cmd);
-+	mutex_unlock(&streamlabs_wdt->lock);
-+
-+	return retval;
-+}
-+
-+static int usb_streamlabs_wdt_start(struct watchdog_device *wdt_dev)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-+
-+	return usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_START);
-+}
-+
-+static int usb_streamlabs_wdt_stop(struct watchdog_device *wdt_dev)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-+
-+	return usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_STOP);
-+}
-+
-+static const struct watchdog_info streamlabs_wdt_ident = {
-+	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-+	.identity	= DRIVER_NAME,
-+};
-+
-+static const struct watchdog_ops usb_streamlabs_wdt_ops = {
-+	.owner	= THIS_MODULE,
-+	.start	= usb_streamlabs_wdt_start,
-+	.stop	= usb_streamlabs_wdt_stop,
-+};
-+
-+static int usb_streamlabs_wdt_probe(struct usb_interface *intf,
-+				    const struct usb_device_id *id)
-+{
-+	struct usb_device *usbdev = interface_to_usbdev(intf);
-+	struct streamlabs_wdt *streamlabs_wdt;
-+	int retval;
-+
-+	/*
-+	 * USB IDs of this device appear to be weird/unregistered. Hence, do
-+	 * an additional check on product and manufacturer.
-+	 * If there is similar device in the field with same values then
-+	 * there is stop command in probe() below that checks if the device
-+	 * behaves as a watchdog.
-+	 */
-+	if (!usbdev->product || !usbdev->manufacturer ||
-+	    strncmp(usbdev->product, "USBkit", 6) ||
-+	    strncmp(usbdev->manufacturer, "STREAM LABS", 11))
-+		return -ENODEV;
-+
-+	streamlabs_wdt = devm_kzalloc(&intf->dev, sizeof(struct streamlabs_wdt),
-+				      GFP_KERNEL);
-+	if (!streamlabs_wdt)
-+		return -ENOMEM;
-+
-+	streamlabs_wdt->buffer = devm_kzalloc(&intf->dev, BUFFER_LENGTH,
-+					      GFP_KERNEL);
-+	if (!streamlabs_wdt->buffer)
-+		return -ENOMEM;
-+
-+	mutex_init(&streamlabs_wdt->lock);
-+
-+	streamlabs_wdt->wdt_dev.info = &streamlabs_wdt_ident;
-+	streamlabs_wdt->wdt_dev.ops = &usb_streamlabs_wdt_ops;
-+	streamlabs_wdt->wdt_dev.timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.max_timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.min_timeout = STREAMLABS_WDT_MIN_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.parent = &intf->dev;
-+
-+	streamlabs_wdt->intf = intf;
-+	usb_set_intfdata(intf, &streamlabs_wdt->wdt_dev);
-+	watchdog_set_drvdata(&streamlabs_wdt->wdt_dev, streamlabs_wdt);
-+	watchdog_set_nowayout(&streamlabs_wdt->wdt_dev, nowayout);
-+
-+	retval = usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
-+	if (retval)
-+		return -ENODEV;
-+
-+	retval = devm_watchdog_register_device(&intf->dev,
-+					       &streamlabs_wdt->wdt_dev);
-+	if (retval) {
-+		dev_err(&intf->dev, "failed to register watchdog device\n");
-+		return retval;
-+	}
-+
-+	dev_info(&intf->dev, "StreamLabs USB watchdog driver loaded.\n");
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_suspend(struct usb_interface *intf,
-+				      pm_message_t message)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	if (watchdog_active(&streamlabs_wdt->wdt_dev))
-+		return usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_resume(struct usb_interface *intf)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	if (watchdog_active(&streamlabs_wdt->wdt_dev))
-+		return usb_streamlabs_wdt_start(&streamlabs_wdt->wdt_dev);
-+
-+	return 0;
-+}
-+
-+static void usb_streamlabs_wdt_disconnect(struct usb_interface *intf)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	mutex_lock(&streamlabs_wdt->lock);
-+	/*
-+	 * If disconnect happens via sysfs or on rmmod, then try to stop
-+	 * the watchdog. In case of physical detachment of the device this call
-+	 * will fail but we continue.
-+	 */
-+	if (!nowayout)
-+		__usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_STOP);
-+	/* Stop sending (new) messages to the device */
-+	streamlabs_wdt->intf = NULL;
-+	mutex_unlock(&streamlabs_wdt->lock);
-+}
-+
-+static const struct usb_device_id usb_streamlabs_wdt_device_table[] = {
-+	{ USB_DEVICE(USB_STREAMLABS_WATCHDOG_VENDOR, USB_STREAMLABS_WATCHDOG_PRODUCT) },
-+	{ }	/* Terminating entry */
-+};
-+
-+MODULE_DEVICE_TABLE(usb, usb_streamlabs_wdt_device_table);
-+
-+static struct usb_driver usb_streamlabs_wdt_driver = {
-+	.name		= DRIVER_NAME,
-+	.probe		= usb_streamlabs_wdt_probe,
-+	.disconnect	= usb_streamlabs_wdt_disconnect,
-+	.suspend	= usb_streamlabs_wdt_suspend,
-+	.resume		= usb_streamlabs_wdt_resume,
-+	.reset_resume	= usb_streamlabs_wdt_resume,
-+	.id_table	= usb_streamlabs_wdt_device_table,
-+	.soft_unbind	= 1,
-+};
-+
-+module_usb_driver(usb_streamlabs_wdt_driver);
--- 
-2.36.1
+Thanks for reviewing my patch, I will modify the issue in next patch.
+
+regards
+bibo, mao
+
+>>
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> ---
+>>   arch/loongarch/kernel/smp.c | 29 -----------------------------
+>>   include/linux/cpuhotplug.h  |  1 -
+>>   2 files changed, 30 deletions(-)
+>>
+>> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+>> index 73cec62504fb..98b3e059d344 100644
+>> --- a/arch/loongarch/kernel/smp.c
+>> +++ b/arch/loongarch/kernel/smp.c
+>> @@ -359,35 +359,6 @@ void play_dead(void)
+>>       play_dead_uncached(state_addr);
+>>   }
+>>   -static int loongson3_enable_clock(unsigned int cpu)
+>> -{
+>> -    uint64_t core_id = cpu_data[cpu].core;
+>> -    uint64_t package_id = cpu_data[cpu].package;
+>> -
+>> -    LOONGSON_FREQCTRL(package_id) |= 1 << (core_id * 4 + 3);
+>> -
+>> -    return 0;
+>> -}
+>> -
+>> -static int loongson3_disable_clock(unsigned int cpu)
+>> -{
+>> -    uint64_t core_id = cpu_data[cpu].core;
+>> -    uint64_t package_id = cpu_data[cpu].package;
+>> -
+>> -    LOONGSON_FREQCTRL(package_id) &= ~(1 << (core_id * 4 + 3));
+>> -
+>> -    return 0;
+>> -}
+>> -
+>> -static int register_loongson3_notifier(void)
+>> -{
+>> -    return cpuhp_setup_state_nocalls(CPUHP_LOONGARCH_SOC_PREPARE,
+>> -                     "loongarch/loongson:prepare",
+>> -                     loongson3_enable_clock,
+>> -                     loongson3_disable_clock);
+>> -}
+>> -early_initcall(register_loongson3_notifier);
+>> -
+>>   #endif
+>>     /*
+>> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+>> index 19f0dbfdd7fe..b66c5f389159 100644
+>> --- a/include/linux/cpuhotplug.h
+>> +++ b/include/linux/cpuhotplug.h
+>> @@ -130,7 +130,6 @@ enum cpuhp_state {
+>>       CPUHP_ZCOMP_PREPARE,
+>>       CPUHP_TIMERS_PREPARE,
+>>       CPUHP_MIPS_SOC_PREPARE,
+>> -    CPUHP_LOONGARCH_SOC_PREPARE,
+>>       CPUHP_BP_PREPARE_DYN,
+>>       CPUHP_BP_PREPARE_DYN_END        = CPUHP_BP_PREPARE_DYN + 20,
+>>       CPUHP_BRINGUP_CPU,
+> 
+> Seems good. I should have noticed earlier the fact the clock control registers are, in every regard, model-specific, thus not appropriate for arch/loongarch. Proper drivers should be added afterwards, though I assume you must internally have something like that already.
+> 
+> Reviewed-by: WANG Xuerui <git@xen0n.name>
 

@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D42B580653
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC03580657
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbiGYVUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S236863AbiGYVVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 17:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234791AbiGYVUF (ORCPT
+        with ESMTP id S234791AbiGYVVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:20:05 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1637323BFF;
-        Mon, 25 Jul 2022 14:20:05 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ss3so22727728ejc.11;
-        Mon, 25 Jul 2022 14:20:04 -0700 (PDT)
+        Mon, 25 Jul 2022 17:21:34 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED37C1C113;
+        Mon, 25 Jul 2022 14:21:33 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z18so3247646edb.10;
+        Mon, 25 Jul 2022 14:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cDE3NwBwTuDpjLuPQ61t5UcNlhjZmXhZy7wVD92KeX8=;
-        b=cu4WEAq7h2e1+ldcFCGnBTJ+mfSuTH2VJNmhtt3PQIkX72AflLf5U4kNMqpw1v4qPT
-         cqtZyd9hCZfbPwm95nB2S4Q8FzMfNof5i8u7LO3CygpwhXGm7rqdopYDzTb6ANsodHNz
-         GuJQ/zvYEajd/p4Cup9t9kpXE37+iAl2BIA5HnrOdwpHulERUxz5/rF2H446vmnKGMwL
-         lX/gjDcUlVK7WJ7a7qH2YH4c1npXvnTXAALx6nOwowSMH/Jp5GVbBx1mWwAlppt5sgAP
-         Sr3N3stGUBkNrRgFM1hN0TysM5LJiCu0h60o2kWfBjnrb3rhkSurkgt08BiQuY4082bP
-         R9qw==
+         :cc:content-transfer-encoding;
+        bh=NOH91MiZSkF2YO00YePVnFm+Af2B5FjN1XDIKq1x0N4=;
+        b=dIrmlfv5M2mdxPn4g9hE2TIxEyrfiC14kGTfWybm5gW0hRhCM43lWlJ9XLB18BGKgv
+         nF1LBJeY6CcAT42Jw0xRR90su+vOigT5Zv7CqeqjWn2pJl+q4qiQ9lfDn0lAsp824jdz
+         gK4G6A9p2w+iyqakTLJZV2+2BpxBigjYvB+K68iUnZ5azX++W3SFBHM+ucY764yuOzpo
+         6h8dnXETvvDcovgDPscUg0XMUxP59RG7B8ZEQya8h+QCb/MKBqFacf2PQxXlgDduSF/R
+         5lOnAT960Ehsx9p6sMll2CXgds/7MBF606XwlCdKQcfuZJ8HzTa/asjvT7/C+0YF62yM
+         7qIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cDE3NwBwTuDpjLuPQ61t5UcNlhjZmXhZy7wVD92KeX8=;
-        b=tqfDQ3/9Av6qP/BLWfXO4JpuwTph/y8TGG5x1rBW1EaQWZ232F87uvTgUeLO8Q9kGU
-         hKxp9VvdoKqduzGuzcSbe/LE6A8OCMqUhAkBFvsNjoERMoRfSdGaMdWu3e7LI+U7TG8c
-         RfsU5AaytqH1Uard1g4Sqb+7FzHXmR3hd8xxA72hIL6HZdP083o+3RIWt6RmJoJpVjYk
-         ThJ5jt/HoLGiN1SAJIJVRaqjl9tqFGuNVe9iVsuH9glgKMuqKmRTCX/sFlc0GboDJTjV
-         CDOYqByR1iEFCFgIdyubzbIn693rBsJNxbwBvwr6T4OWDRZ8CdRLC3OJIRqFYBul4bLp
-         v5NA==
-X-Gm-Message-State: AJIora/MBY8NIFceqZr1x5ulDMC9AKlPpXjsQQInmmLq74aEpW/e75Mv
-        getbg5/PZGbhsxus92dGsf/VZeirWB3z0+6uVN4=
-X-Google-Smtp-Source: AGRyM1vPOOCrOy3oEP6mcBL2JOZtLqFofph1a2RNAjbdxo04+kZfaOc5cXbNNwTcKf5CrgJxfcvCvV/K7wE6ay3k1uU=
-X-Received: by 2002:a17:907:6297:b0:72f:9aad:fcb with SMTP id
- nd23-20020a170907629700b0072f9aad0fcbmr11289338ejc.161.1658784003634; Mon, 25
- Jul 2022 14:20:03 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NOH91MiZSkF2YO00YePVnFm+Af2B5FjN1XDIKq1x0N4=;
+        b=RpN1WCFReUJQ01bPVztfgZrozdw3KOvNmin1Up1kXYPsJoa+fO7iNFmNj9Qcy2OgQF
+         AVMv/pbJSqUza6s5/NP9v3ASIG4JMyJyPeZktoIwNiaDScfd7uEjVBkVaRE/yZyQsjAp
+         +yl1viGPlyi5oql3OFKIe40dZdAEwHQSBPXGCoRD/Lu9hOh4Ov1hdDZH3Qpt6qDRu9I8
+         auRDVjcnk75f+XYBOwSrH58GgBUxhZEDCPnePMnfBXl633r1mYA3LoRhmCmE8oRZK0JJ
+         eB54jeP/qMPIeXDny1u5OVgppPrKgfOIQzYL4hsshrz0kiAwToc8KLvj2GXhfkC4swSc
+         oeOw==
+X-Gm-Message-State: AJIora9nf+gRNX2mlinahMLdU6Om80mCOeyeOtPWYMWD3yJAl1LlInu1
+        02WCjgjjMkPpNIkd6wGHXzywhJcTAIaKgbpnTpU=
+X-Google-Smtp-Source: AGRyM1v3t0clX13p9/r7yj3ysKAgxa8d0XddjTv5svTAMh5QvLmquJFDnJfiFyWtcjo1zQTSv9mBVDJFwyvOjqLCU+M=
+X-Received: by 2002:a05:6402:5c8:b0:433:545f:a811 with SMTP id
+ n8-20020a05640205c800b00433545fa811mr15300442edx.101.1658784092374; Mon, 25
+ Jul 2022 14:21:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1658597501.git.ang.iglesiasg@gmail.com> <0a99be89263c5e747d541360feede21b0f77e0a5.1658597501.git.ang.iglesiasg@gmail.com>
-In-Reply-To: <0a99be89263c5e747d541360feede21b0f77e0a5.1658597501.git.ang.iglesiasg@gmail.com>
+References: <20220724164316.68393-1-matti.lehtimaki@gmail.com>
+In-Reply-To: <20220724164316.68393-1-matti.lehtimaki@gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Jul 2022 23:19:27 +0200
-Message-ID: <CAHp75Vc+VzfTMJBv-eyYTENKuMGw=m4mpDvCXmKmVwcnnnz5Ag@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] iio: pressure: bmp280: Add more tunable config
- parameters for BMP380
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Date:   Mon, 25 Jul 2022 23:20:55 +0200
+Message-ID: <CAHp75VeJtorTzV-dmxgJz+UD4gTWY1v67U0iU5nZ1pR36W9tMg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] iio: st_sensors: Retry ID verification on failure
+To:     =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
 Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,39 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 7:40 PM Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+On Sun, Jul 24, 2022 at 6:54 PM Matti Lehtim=C3=A4ki
+<matti.lehtimaki@gmail.com> wrote:
 >
-> Allows sampling frequency and IIR filter coefficients configuration
-> using sysfs ABI.
->
-> The IIR filter coefficient is configurable using the sysfs attribute
-> "filter_low_pass_3db_frequency".
->
-> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
-
-> Reported-by: Andy Shevchenko <andy.shevchenko@gmail.com> # uninit var
-
-Bugs in new features can't have Reported-by tag.
-
-If you wish to give credit, use a cover letter / changelog.
+> Some sensors do not always start fast enough to read a valid ID from
+> registers at first attempt. Let's retry at most 3 times with short sleep
+> in between to fix random timing issues.
 
 ...
 
-> +               /*
-> +                * Configuration errors are detected on the fly during a measurement
+> +               for (i =3D 0; i < VERIFY_ID_RETRY_COUNT; i++) {
+> +                       err =3D regmap_read(sdata->regmap,
+> +                                         sdata->sensor_settings->wai_add=
+r, &wai);
+> +
+> +                       if (!err && sdata->sensor_settings->wai =3D=3D wa=
+i)
+> +                               return 0;
+> +
+> +                       msleep(20);
 
-The configurations
+NIH regmap_read_poll_timeout()
 
-> +                * cycle. If the sampling frequency is too low, it's faster to reset
-> +                * measurement loop than wait until next measurement is due.
 
-the measurement
-the next
+> +               }
 
-> +                * Resets sensor measurement loop toggling between sleep and normal
-> +                * operating modes.
-> +                */
-
--- 
+--=20
 With Best Regards,
 Andy Shevchenko

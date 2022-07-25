@@ -2,185 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9E75804F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5235804FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiGYUE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S236748AbiGYUF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbiGYUEx (ORCPT
+        with ESMTP id S236589AbiGYUF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:04:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C608020F5B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:04:52 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oG4Ji-0007t2-9D; Mon, 25 Jul 2022 22:04:38 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oG4Jg-003B0f-S5; Mon, 25 Jul 2022 22:04:36 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oG4Jg-007Uhh-4S; Mon, 25 Jul 2022 22:04:36 +0200
-Date:   Mon, 25 Jul 2022 22:04:17 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] ARM: dts: armada-38x: Fix compatible string for
- gpios
-Message-ID: <20220725200417.nwthxzvdv2bzd5ej@pengutronix.de>
-References: <20220714115515.5748-1-pali@kernel.org>
- <20220714183328.4137-1-pali@kernel.org>
- <20220714183328.4137-3-pali@kernel.org>
- <20220716144028.rzwcn4wl5uyxepjd@pengutronix.de>
- <20220716145019.nps3oh4a22fsuzup@pali>
- <20220716150751.6yaknmo3qwusyy5h@pengutronix.de>
- <20220716160916.jp37siznitgzw6qf@pali>
+        Mon, 25 Jul 2022 16:05:26 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628996385;
+        Mon, 25 Jul 2022 13:05:25 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id tk8so22520491ejc.7;
+        Mon, 25 Jul 2022 13:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IjUjwK3ElFJ8pxv20zoLj+tD6iYdFeeNew4jTmYt/44=;
+        b=cGE6CEk0QSSPB6KPoo76GR4W7rfZkQSW0l/s7lLWDsVAdi0RWDDuAEIm4mPv3Y2vla
+         E9jWTsprUvs7mj3NAZ750HA+h/nDEP0DrHfJKB0kA3Y8aihP6aqn2H9bd2bSYcD4HZLy
+         yruYZcVrm1DtqeIbLOuyj1SLZ9Wgv8ZbPsr9CQyd2skE6PYlEljVmOQuB/H/a2xxcXaE
+         BcVqzg+k6wTU9iZY8D47ZYNT+v7XTYF/kqzNcQEMVyruPFbqhRuWOxOo84f4OzrWUGVi
+         vGmkQy/6ERNzaf+M9TgdJMTsecGebht2h/HKLD8Syb2inviIX+JAs0DJ8Ld8+fheTFMp
+         J5Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IjUjwK3ElFJ8pxv20zoLj+tD6iYdFeeNew4jTmYt/44=;
+        b=D3LOlaCHyUK6ltE55+9Pz9OuBz23Yty+GdBlBf+TvPjJq/Kn98LkSWRBb7fZJEjPrH
+         NNa09fONkVBhOt3oE1HGnZSbcj1GBpiSxvme7fSVjnHkInnUEpb7OLa4BcqRjGnIFMzZ
+         5iRtqyoE5rtvNi0mubnj5mtsqtILvFMH4lzEprVPEF5Jv11CofVRoXyQ82rLtv+2oxUV
+         PJwwY4IPSYYwMYMjPTkbsxaJWy5408gtyKOgYUwvar3pH8gGvvh2cE21zSpINlPUnP9m
+         COpWBs704EVsIieoE+bkoZvs/ULfwTYwgJuUbtiGaQQjNyfKP4gO1NoEfYBcQ1grUPpT
+         wHPA==
+X-Gm-Message-State: AJIora9xDwY/2/b2BXFkHWcUjYrjenfJ0Aik1xD9wXyw4uSEgbVUXD7k
+        BJ+Vq0nre+16mXRsl5oCQjZejeM4xGeojElsOjM=
+X-Google-Smtp-Source: AGRyM1vlACcQsivYTx0sMq+Ae6+AdaZj0mtKjW2Tew03XEARVQjPMHOvoLZ8T1SsDNqV6MOLjdGMYq2w8AjLGWHe2sg=
+X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id
+ nb13-20020a1709071c8d00b006f20eb21cd6mr11153522ejc.568.1658779523752; Mon, 25
+ Jul 2022 13:05:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n5kkir5uuei4mgh7"
-Content-Disposition: inline
-In-Reply-To: <20220716160916.jp37siznitgzw6qf@pali>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220721073909.23318-1-srinivas.neeli@xilinx.com> <CAMRc=Mefhk4i8_1j2=JO63SwfHEb3TrRMj45+CC1i1DUr8VULw@mail.gmail.com>
+In-Reply-To: <CAMRc=Mefhk4i8_1j2=JO63SwfHEb3TrRMj45+CC1i1DUr8VULw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 22:04:47 +0200
+Message-ID: <CAHp75Vdr3yM_b_8bDgAhNLrHUuyoq2nkVcj84wdvTzvLLetkNg@mail.gmail.com>
+Subject: Re: [PATCH] gpio: gpio-xilinx: Fix integer overflow
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        neelisrinivas18@gmail.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        srinivas.neeli@amd.com, Srinivas Goud <sgoud@xilinx.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jul 22, 2022 at 9:19 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> On Thu, Jul 21, 2022 at 9:39 AM Srinivas Neeli
+> <srinivas.neeli@xilinx.com> wrote:
+> >
+> > Current implementation is not able to configure more than 32 pins
+> > due to incorrect data type. So type casting with unsigned long
+> > to avoid it.
 
---n5kkir5uuei4mgh7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > Fixes: 02b3f84d9080 ("xilinx: Switch to use bitmap APIs")
 
-Hello Pali,
+It doesn't fix anything,  I already reject one such "fix" during
+development of this patch. Thanks!
 
-On Sat, Jul 16, 2022 at 06:09:16PM +0200, Pali Roh=E1r wrote:
-> On Saturday 16 July 2022 17:07:51 Uwe Kleine-K=F6nig wrote:
-> > On Sat, Jul 16, 2022 at 04:50:19PM +0200, Pali Roh=E1r wrote:
-> > > On Saturday 16 July 2022 16:40:28 Uwe Kleine-K=F6nig wrote:
-> > > > On Thu, Jul 14, 2022 at 08:33:27PM +0200, Pali Roh=E1r wrote:
-> > > > > Armada 38x supports per CPU interrupts for gpios, like Armada XP.=
- Pre-XP
-> > > > > variants like Armada 370 do not support per CPU interrupts for gp=
-ios.
-> > > > >=20
-> > > > > So change compatible string for Armada 38x from "marvell,armada-3=
-70-gpio"
-> > > > > which indicates pre-XP variant to "marvell,armadaxp-gpio" which i=
-ndicates
-> > > > > XP variant or new.
-> > > > >=20
-> > > > > Driver gpio-mvebu.c which handles both pre-XP and XP variants alr=
-eady
-> > > > > provides support for per CPU interrupts on XP and newer variants.
-> > > > >=20
-> > > > > Signed-off-by: Pali Roh=E1r <pali@kernel.org>
-> > > > > Fixes: 7cb2acb3fbae ("ARM: dts: mvebu: Add PWM properties for arm=
-ada-38x")
-> > > > > ---
-> > > > >  arch/arm/boot/dts/armada-38x.dtsi | 4 ++--
-> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > >=20
-> > > > > diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dt=
-s/armada-38x.dtsi
-> > > > > index df3c8d1d8f64..9343de6947b3 100644
-> > > > > --- a/arch/arm/boot/dts/armada-38x.dtsi
-> > > > > +++ b/arch/arm/boot/dts/armada-38x.dtsi
-> > > > > @@ -292,7 +292,7 @@
-> > > > >  			};
-> > > > > =20
-> > > > >  			gpio0: gpio@18100 {
-> > > > > -				compatible =3D "marvell,armada-370-gpio",
-> > > > > +				compatible =3D "marvell,armadaxp-gpio",
-> > > > >  					     "marvell,orion-gpio";
-> > > >=20
-> > > > If you can treat the XP variant as 370 and everything that is suppo=
-sed
-> > > > to work on 370 works then, then maybe the right incarnation is:
-> > > >=20
-> > > > 	compatible =3D "marvell,armadaxp-gpio", "marvell,armada-370-gpio",=
- "marvell,orion-gpio";
-> > > >=20
-> > > > ?
-> > >=20
-> > > For pre-XP variants is "marvell,orion-gpio" enough and for XP + post-=
-XP
-> > > is needed "marvell,armadaxp-gpio" (with possible "marvell,orion-gpio"
-> > > for backward compatibility).
-> > >=20
-> > > So I do not see reason why to add "marvell,armada-370-gpio" nor what
-> > > value it brings.
-> >=20
-> > If you boot an older kernel (i.e. one that doesn't support
-> > marvell,armadaxp-gpio, but does support marvell,armada-370-gpio), it
->=20
-> Is there such kernel version?
+...
 
-Ah, I thought you added "marvell,armadaxp-gpio" with this patch series.
+> > @@ -99,7 +99,7 @@ static inline void xgpio_set_value32(unsigned long *map, int bit, u32 v)
+> >         const unsigned long offset = (bit % BITS_PER_LONG) & BIT(5);
+> >
+> >         map[index] &= ~(0xFFFFFFFFul << offset);
+> > -       map[index] |= v << offset;
+> > +       map[index] |= (unsigned long)v << offset;
+> >  }
 
-> > will work better as there are relevant differences between
-> > marvell,orion-gpio and marvell,armada-370-gpio.
->=20
-> And if yes, do we really need this in DTS files for new kernel
-> versions? I can imagine that such change can be relevant for old LTS
-> kernel version, but not for new versions.
->=20
-> > For example some
-> > registers seem to have a different offset ...
->=20
-> armada-370-gpio is mapped to MVEBU_GPIO_SOC_VARIANT_ORION, so it will
-> get same offsets as orion-gpio. So no change.
+> Applied, thanks!
 
-OK, you're right, my assumptions were wrong. I'm convinced your change
-is fine now:
+False positive.
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---n5kkir5uuei4mgh7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLe9zUACgkQwfwUeK3K
-7Ak/lAf9GbJU03sNT87u8d1+k2z6T3ReV3ntV5ZIhu/vzMB63UPufXkQpYfNC64R
-HiMeAfrVBmle3OOiz5SglqkdslWGVjAysLTo4AxaVpvJ323RKQdwzhIqKeXACsC2
-cQkbNq3mlbGJ70VZKdw06u0VHmGncSs3vd25mXIN57uvtOxRRqDaOZjuDI17SA0f
-87yboq8YS1PRVwK3NoW1uixpkda5qnyQbNvCt89BXrCf8YAi16JBDzFgNFKN1IrQ
-fH3ZWuGZL7tA1NkzDcVhATwIsUZtgqTlnVa+ShTFQeskq7OPDdzKSW1HkPm1erC4
-2alQnhUNBjI/4nC4OsOIUL+uHRv2Dw==
-=rPdh
------END PGP SIGNATURE-----
-
---n5kkir5uuei4mgh7--
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E839557FC30
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3114257FC33
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbiGYJSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S233936AbiGYJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbiGYJRy (ORCPT
+        with ESMTP id S229995AbiGYJSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:17:54 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2114.outbound.protection.outlook.com [40.107.22.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81271583D;
-        Mon, 25 Jul 2022 02:17:53 -0700 (PDT)
+        Mon, 25 Jul 2022 05:18:54 -0400
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20054.outbound.protection.outlook.com [40.107.2.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37EBE002;
+        Mon, 25 Jul 2022 02:18:52 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eJGir8ekJVKA4fXVDLr4lbGhCp6hlEJpZ1yi8K8N/O2arwYrdZXgwz18YJ8TGzUe1NgFV4+4Y7F2Isx7QOQYHXCUcfy/b8wjWDg15rbBQkiR/aEEHyOdEo6TI2g7zvn9Da7f8gsUqCEsm19qxeL9H8Z4DnjeegSe0hzpJhriQan/R+RD+3kFxGIDe0C4XuiFVIl7uuDhbP/7Ah4MmfeMxZ37nIoVIsAtvdy5+PHyD3phvBjnz6gsVk5S5+xub759sLIputiISKIJpqA7PnwwSAKijFUCRP9xT5uyK4Kf7bu36vpdMMPCYiGXHse0qoPBsfwezeGdVyUbYIjniJLh6Q==
+ b=Qi0ZQ4T4T8RKHAlNTueO8iBWjkEJUEdal7ADiLG7xsVIWfzCeJsCtpsPsFZTBiWB1Q0iJy3150L0xqB1JrsVhavkcwSzIHSBimC1ITD7VKFuHIqzqETA0Td28NlzmgG19Ki5WVFPCPXh5jD6F2qJ/zcW0LHrwxHngvMT7bOsgSSoBGgyJyrDKtoEdjq+naQYWcm/BDwpNlRVdGzgBmpUCI/Ei47zgpDLjU8e9142OJNeoyjpmMPRxIqAhUGI4cDmM0YbdhhGfJ3eypKvHrT3lLvqyIyPSplWRxWlRY+kPemxw4s6cMl9QhwgtabDiSJtfORjBKWJAPLNdOaHE5OgzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wDDHpKTQZsSdqUMw5RvD1JgSMNMi21L6dQ1pctS65wo=;
- b=Q++utMuaHsLSRAGKNgTEM8Ot58cAwSCF2evZ4GLlYoD/r3kFD4gubHQbDyLrG24oqEi2yat2qyaCh4WnBpQS0+6SqVlrkL1bycERudjJg3pFNjit0/yDZ3V2IstIwGf9CveRNkG3JKTJqvkBkOji4dA6BxC28DrHueAJCuJ6ZFeeFrGBAxCkcWjf3KMiAcRyK7fV+PV1JGoGdSKzLaFcXHcag3Otc7a97MsqNAxpuTIMTkZ4g9E490cx6JlFiD3A3L2MxwyIXVHizi59Xjc3FOOstADiVWEJcyThOWA+HPLqaHvvtRVrOoCaxix/AwgLqyTLOeAVCpmtcFsW2RXnhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.2.8) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nokia.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=nokia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
+ bh=CksbUOqC0EZjFvntr55eiViD+ZeEbB3XxfMcpXgkOMM=;
+ b=ap3R/52dHbfIT/VH1QTB3C7XXknxhEB/WR5FVyX32DTm7nCLqnvFnZBIKKm5aR9RTHLGPKcR+cQmGO/kQ7B27qkkK2qYKI4RP6Be1rPLFIh0AUTwebVR3NbS+ntggh7z6dR/yI5/RJdJTe07O+EIR8b4anH3/4bYbGAAAuzD+8q6AWy1MFUs56u210pEsVzfreJCUClueO7Q1VjCuwUgK7Qi7BFBSmLQzXagNc8i0IXdwBHlttCHrYZQi8VTZfw7bkSGQZnY/pM7HggvlrmOOWbJZXRLpCrrBCI0fAQ7xautv6GjfMZ7qzzTLUV8wRicjaCM9U1OrQ9FIchZ93Hvtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wDDHpKTQZsSdqUMw5RvD1JgSMNMi21L6dQ1pctS65wo=;
- b=mX0LN7dYG255S5y3yNd7QTRanfWvtVn4opxdechvwH+VyZ7+KnZb3fZ0tTd4ozIJZ2dyjBHTWt33OmTQ1aoFVcstUmV6/O+BI7ayV5/Sr9ieJWY5z9jLpF1/9i7U1EDz8h3d6iHykfZ6uSDYcH2MKwlzIcUW8Ed/GZDpqewqEw0=
-Received: from DB8PR06CA0023.eurprd06.prod.outlook.com (2603:10a6:10:100::36)
- by PA4PR07MB8551.eurprd07.prod.outlook.com (2603:10a6:102:26c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.2; Mon, 25 Jul
- 2022 09:17:51 +0000
-Received: from DBAEUR03FT012.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:100:cafe::c2) by DB8PR06CA0023.outlook.office365.com
- (2603:10a6:10:100::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19 via Frontend
- Transport; Mon, 25 Jul 2022 09:17:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.8)
- smtp.mailfrom=nokia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia.com designates
- 131.228.2.8 as permitted sender) receiver=protection.outlook.com;
- client-ip=131.228.2.8; helo=fihe3nok0734.emea.nsn-net.net; pr=C
-Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.8) by
- DBAEUR03FT012.mail.protection.outlook.com (100.127.142.126) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5458.17 via Frontend Transport; Mon, 25 Jul 2022 09:17:51 +0000
-Received: from ulegcparamis.emea.nsn-net.net (ulegcparamis.emea.nsn-net.net [10.151.74.146])
-        by fihe3nok0734.emea.nsn-net.net (GMO) with ESMTP id 26P9Hl2O027302;
-        Mon, 25 Jul 2022 09:17:50 GMT
-From:   Alexander A Sverdlin <alexander.sverdlin@nokia.com>
-To:     linux-mips@vger.kernel.org, Joe Perches <joe@perches.com>
-Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Corey Minyard <cminyard@mvista.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] Revert "MIPS: octeon: Remove vestiges of CONFIG_CAVIUM_RESERVE32"
-Date:   Mon, 25 Jul 2022 11:17:40 +0200
-Message-Id: <20220725091740.28188-3-alexander.sverdlin@nokia.com>
-X-Mailer: git-send-email 2.10.2
-In-Reply-To: <20220725091740.28188-1-alexander.sverdlin@nokia.com>
-References: <20220725091740.28188-1-alexander.sverdlin@nokia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
+ bh=CksbUOqC0EZjFvntr55eiViD+ZeEbB3XxfMcpXgkOMM=;
+ b=zdZOJ7k6TzCR+7PktyN1IXivrKtcirhvx0E9+4pj+JQ4rgBsGQ85U9HhGtBa+hjpLUhs2QaXzVG73+gUztfbWi2Sd0usiSqNU3gQ7mac6WAHwuG5doI8XQgXAShDGt1ajfke9Lf6qzBhE9KhUsubg2/Un/se80eIGCTG24OIoFx8iuHKZkM/DrlVeMK3OOTyG9xpNfe0q15S/NTsxR9Txo/DnANZGATg8CK9s95LigLw4ZbwnIa8LtABrjgNVPs/JBFewzHnCM3PAb/QxDF5EaQW/BzzL3hCcBZA5cL0wosNaUwKuKTHcnKEpmP7YctRXIKUO4kNAop4wHnsXK4LaA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16) by AM6PR0402MB3830.eurprd04.prod.outlook.com
+ (2603:10a6:209:1d::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Mon, 25 Jul
+ 2022 09:18:49 +0000
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::21d5:a855:6e65:cf5d]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::21d5:a855:6e65:cf5d%12]) with mapi id 15.20.5458.024; Mon, 25 Jul
+ 2022 09:18:49 +0000
+Message-ID: <ce8ce188-7a5e-faee-e7f2-dbf6877e6424@suse.com>
+Date:   Mon, 25 Jul 2022 11:18:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/7] USB: cdc-acm: use CDC control-line defines
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220725075841.1187-1-johan@kernel.org>
+ <20220725075841.1187-4-johan@kernel.org>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20220725075841.1187-4-johan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0174.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a0::17) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 9ec3f4fa-f957-41fc-4970-08da6e1e8cc6
-X-MS-TrafficTypeDiagnostic: PA4PR07MB8551:EE_
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: be1fb144-7d85-4b96-62e3-08da6e1eaeee
+X-MS-TrafficTypeDiagnostic: AM6PR0402MB3830:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WNL+WVM4nk8+NIyathS//zNlPpL3T6zT6pJBfWyDRa3/HVGLNwz0Fq4zi6yiS/FqSvOWGHPPjUWt7m+pVrAPzrA83C0rGrLRVrLeM05w9HRW3AuZdN+vFv7i6ZP5SxW7XoOHS9DRbW1Ui3A1Ap5381jDIz/GwD92tT9bMnRlgkddlBUeXAsp35NZcgTEiMV2yl8c87S6NXEnXzvAiljxmmHtHCH+kymp1WSulIZa68kXHN0oD0Jo1EVtH++3Bf49pByBfbyCG/kw6lXiY8voBCZXmhAwECYIO15UW9KBpV9vUtG4DHowh1Q9Ad/aRAjJsbBoKJCGn/ds2PrWUMD+gGXoD0NWd8He66Fn2CN5sehb7HV+ZBr4D1pGZEwEspg0C7pmA2dqJXnVyKwvl8Ko4ntAtVwCnxp6b4Kg05hcjui1uTK/IGzOEb6/0zJB2Fr2acUJO9zxTeL1qMcdqfpXWbEU52tGGn40j6nEC3Qsx/uZG07GLsNems9FEAQB8/KzwErT5G1vnEaOhhnPTDbl++6sc+6Lv0yD7rsVv8aH7cgG3iqS/1kz4qq03oXPvx5/Cb6s7ZvhcqCRZyTq/cO06454TZARFFTjAPobJKsXCHQ0zDmvxLOCFCh4MLHNgU4wU5KogGC3Qw2x5CJk9pz+CBWHSemOTr57VSEMu6mrsb5txtjtYQ1f5iUQMUEQntXLGJ4III0JI/28Rq5fcq+3zJngNsEklHQ6NwVwTtC1sa6/x9Fg9iA5IxtxW6gsAGyMvOroJiL/8WEwwzu9V7zIkPpshcF56AYFVhqgTiSswptsGqxYRL2E8l0hEK2kiMAjjmQeP9VY27zRtnDP3yPrDstVGZVxmgt1wNH3ue4Q7t1vyfroJxqGulGLeu4PtDAv0gA1EYCXHKCmChNY4C/yxw==
-X-Forefront-Antispam-Report: CIP:131.228.2.8;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(396003)(36840700001)(46966006)(40470700004)(81166007)(8676002)(316002)(36756003)(4326008)(356005)(36860700001)(83380400001)(40480700001)(1076003)(26005)(82960400001)(82740400003)(6916009)(40460700003)(54906003)(70586007)(70206006)(41300700001)(478600001)(8936002)(5660300002)(6666004)(86362001)(2906002)(47076005)(2616005)(186003)(336012)(82310400005)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 09:17:51.5288
+X-Microsoft-Antispam-Message-Info: 47b2oRP//hKFDnyaVz7QwxXSh1dtDCgrB01aOrpdX8uxSNgD1Dep1yIW3vURAi30pk+cLdFg8daPlVtEsO/sFr2HPRZTiR8I0s01Eq6xHv+d8TiYiuRYpM3lz2xXZiF9lrrM/y3MNaAeIWWQxOz2ObZhjQxJ8IB4eOyBXgAEnj2E4ceZqFQT1jM+CPce90fafAOWAhokldajibpOBLN+Kn7EI3xFTe6ZGyhFHiL81JX5jchQ1OFQfIhLwap6vXDbbvL0DXenJ55IMRRZH+xolD3b2fFC2rvMHH41zdgw99cp6a1inX9UoiWMKBCMAbYD0LkelXkxgV3uejyeajVsor52bFtzIU9JckalRsGK4CJBFfqnePgyCTIQp+IBECmNDYewYvkRs6ZsVWCv7l5V0sa8+0Ssgb0bVvj+QkBbXBvM8xeOQlIlmppEc7H9u0l0PDg4b1sXCXWyffwbrpwx2wEm960v6X++gAVhR8INBf+sD8s/j6X01Z0szqnx3U5MlV7DKzNgJ/vy1BmQfIe8KyIaL7/lc8wwp4EqcOBtWBKoC2/qi9rMNTIrW2vPkicTd6orI+CZCWXw1kk6izKfKwOw8lk1hDhPZtPP/gcZEkdWzw9/6kEnDX5Z1EM0eP1RT2GiuuQbzLwKDa0AZBy6ho/uk5ZIYJ34YjJKM8B2feak9qZ2a0PQAZz2iLwszHlatGG+91HTQC/snRVF7lqE0+UMtFsVCf4vUfGVW8vMYz34DM56M1q22HYPMKqXI+aeZGXWNG95iSco8f1cCtEXuFDoZku2QZHEZWL7VDSO4VrKPFIuJzkUEeJ1C7VnBN8f9fSmwEhVspeuiminCii/pw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(39860400002)(346002)(366004)(396003)(376002)(558084003)(8936002)(66946007)(66556008)(478600001)(66476007)(4326008)(36756003)(5660300002)(86362001)(6486002)(31686004)(6666004)(110136005)(6512007)(31696002)(8676002)(6506007)(186003)(41300700001)(38100700002)(53546011)(2616005)(2906002)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UFZWTkRwaE16Um90QnpUeGk1QVlWaldXVm1mclcwbVpZenNVZUtldTk0ZTZm?=
+ =?utf-8?B?VkpvaXF3ZjgwNU5sMTAyUVhsbGtIY3grdWZ5NW0xdjJUVm5UVDF6Ym90MUdk?=
+ =?utf-8?B?dHZ0clpBSFRPR1RJeEtDOVlFNU92WEZxRnJRVXN6NUwvSUdlRHp6TjRYREl3?=
+ =?utf-8?B?Rm9HQjdCeHZmUHdybW1mRWN1MXA2bjZXejkzckdGTjR3UFA3QkpjQTJKN1M4?=
+ =?utf-8?B?MmZmb2FEU1NvNDBjZkZTOGRtRjBpWTNQSEppdDNQb3Rsa0hJRHBJajVJSXcz?=
+ =?utf-8?B?N1VxVGxPeHVpMTJrVjA2RzZPV0MwNHJYcjJidE1GZVhuT0RiSmNpSnVxUUxG?=
+ =?utf-8?B?RDZCVUo4a2VvSjZpYlBqcXB4R2RJOHcxbHNWd2VmTm9ZNDN1VnJML1poZXZm?=
+ =?utf-8?B?bmRERzkyR1Y3VExNK2d5SlNRaEpEZy8xbTdNbkFqNC9ubEJvTzhwUFlXZkMw?=
+ =?utf-8?B?ek9qK2t3eW5vZDlnYmpzOC8vNmgvUzdVeU9MaHRFbWs5emNPV0lPSjRsSEd1?=
+ =?utf-8?B?WEdjeHpEbCtGYUNINEpYT09PY1FlSy80bnZlTGIwZkFrbDBYYkhVZFpUM0d6?=
+ =?utf-8?B?TjJtTW5QQVc3Ykkrc3MybDlNZXhaQ05rckhqeFkzcEkyVlR0OTNmRG8zbWZK?=
+ =?utf-8?B?ZVZHWlBhN2tSanZSTFVRV2h6S0FQWi9BWWR0aGJyTUJyNW9YZWpsWUVlMXlP?=
+ =?utf-8?B?N3AvOTZ5VDd6OWs3bFdUbVh2cHFvMzhXWHEzUDg4WkoreC9DQU9xd3RMVllk?=
+ =?utf-8?B?OGZDNWdtTGs1RzhzN216UDhNTkVQaEtBY2NuOXJ5S3kxV3RNdEdOQTEvL2lP?=
+ =?utf-8?B?RkNCQVZiTUJXbDZNM2FMMDFyYk1kQnZMR2RSY295RU9KYnVrc09CM1N5WG9s?=
+ =?utf-8?B?MkwvWmtIREU1eGNpc2tIQmJBVEFaRDJsZENqN2pJVXo4a1dnc1oyTkVkUlhW?=
+ =?utf-8?B?SWNIWVBzaXVHTlVPaGtTczZsYS84Rmc4OGJTTHg1amxiS1JicmNoaDg5Y2Z5?=
+ =?utf-8?B?MURNUEpGUXdQOW5TTXN6R1A2U1MxY2N2eTkxaG1jZ0hIaHhTQXVXRVU2b3JC?=
+ =?utf-8?B?UVFXbTE3WUw4cU5ZTTNaSUpFWGJYVHhoZW93RUswNHBIZGtlTERMVEtyV3NI?=
+ =?utf-8?B?ZlRjQU5nVGRvRnB6Y3lod2NnSERGdzZqbnQvY3IvYjYvM2duVEN4VEtGSmQx?=
+ =?utf-8?B?SVJwUTdTNmJ3eVA3UWJXbjk3M1RtQk5KU3lyWUh3Tk1paW91eFptanlPcWpx?=
+ =?utf-8?B?NjFUd0pObERmREZVT3BTRkQrQ3BVcWJBcEdSMXNvWjJISUE5b200Q201OWpC?=
+ =?utf-8?B?TXNsVUhCSlBQOEVTOWNWZHVlWXkwa1dMMlE5N2dkU1JWd0hhc1U3V1FqTDdD?=
+ =?utf-8?B?ZDZBOXJ4VEFaOW8vMlJWNHZ6SStLdjU1dVJ2cWJpVTJCSnNmQzJ3UFZTOGVw?=
+ =?utf-8?B?TGI0cmxRaWZrbDc1UG1aSW5nZ3RaUTJCQ3l5NGluMmV3RFd0SGlEbnNoNlcw?=
+ =?utf-8?B?a25ESmh2TlBjcUptR2pZTW1peEtGUVJtUzVjU0xKM0dJUnlNaXVGakFxd1Qx?=
+ =?utf-8?B?T29LcGJxamhIbHF1aWllUEFiZzBlcnR3c3hNZmN1QnVURHVrSWhZcVRPQ2gx?=
+ =?utf-8?B?SHFxOFZkUTZUazhBZFdSVmJhU2pJYy9VZlZPUWo4RFpjWDBncEZtODZlYjhj?=
+ =?utf-8?B?NityOHpyS3k1bzNpZXJKMTlLOVlXRjdnN0dIcnBQNEd1WVFKSXVuaGR2dmky?=
+ =?utf-8?B?bGkvT1NnZVh1bHE1dU5vdmI1dTVqeXhKTGgrWnhDSTFKbCtZaHl2UkI4ZGdO?=
+ =?utf-8?B?YWdhZEJBNEdla1psM3RLUGVQQ081bEpXc0NxTDIrMW5UbTRwTjg0QkdabU84?=
+ =?utf-8?B?Rm9aV1llcnNKeGh5RjBITXJtZVhadStTNWQydFZ2TFJTL2NnSzhvbFJIRDNa?=
+ =?utf-8?B?U0lzd0x4ODQxVE43aThudHFZeUhBM2NyOGlyZmJjZzNrWkltd1B3eWd6aE11?=
+ =?utf-8?B?QU1KUmdZVnZkYzhyVjg2blhKaktaRHp6SE5JTm04TStqOVE2QllJU1ZsMXJt?=
+ =?utf-8?B?TTc1dmhDWWtGOXp6a3B5Z203UnR2RXZpTFpDbDNaVFFCTHJEazE0ZlllRWJH?=
+ =?utf-8?B?SmliNWVzY3c1K0wrTC9WZzFGLzltSUptNUZtRzZKYk1HaFM4Y1lwMG9wcXhG?=
+ =?utf-8?Q?qnRVWdtA9opaxBWJuhKgN2A2AdRPv7qzhWp6ICXSjGA5?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be1fb144-7d85-4b96-62e3-08da6e1eaeee
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 09:18:49.2404
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ec3f4fa-f957-41fc-4970-08da6e1e8cc6
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.8];Helo=[fihe3nok0734.emea.nsn-net.net]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT012.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR07MB8551
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HfWWvvRgDoWxHZ3+ab5k4TYQv5QXfzUUM7D7YgQ0OBebLsMHP3/9bKclBj88X3cKzezcQmJRI5ZARx06Ywf/yA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3830
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,125 +130,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
-This reverts commit e98b461bb057aaea6fa766260788c08825213837.
 
-We actually have been using the CONFIG_CAVIUM_RESERVE32 and previous patch
-defined it in the corresponding Kconfig.
-
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@nokia.com>
----
- arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c | 21 +++++++++---
- arch/mips/cavium-octeon/setup.c                    | 38 +++++++++++++++++++++-
- 2 files changed, 54 insertions(+), 5 deletions(-)
-
-diff --git a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
-index 20189e9..bf13e35 100644
---- a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
-+++ b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
-@@ -57,14 +57,27 @@ EXPORT_SYMBOL_GPL(__cvmx_cmd_queue_state_ptr);
- static cvmx_cmd_queue_result_t __cvmx_cmd_queue_init_state_ptr(void)
- {
- 	char *alloc_name = "cvmx_cmd_queues";
-+#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
-+	extern uint64_t octeon_reserve32_memory;
-+#endif
- 
- 	if (likely(__cvmx_cmd_queue_state_ptr))
- 		return CVMX_CMD_QUEUE_SUCCESS;
- 
--	__cvmx_cmd_queue_state_ptr =
--		cvmx_bootmem_alloc_named(sizeof(*__cvmx_cmd_queue_state_ptr),
--					 128,
--					 alloc_name);
-+#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
-+	if (octeon_reserve32_memory)
-+		__cvmx_cmd_queue_state_ptr =
-+		    cvmx_bootmem_alloc_named_range(sizeof(*__cvmx_cmd_queue_state_ptr),
-+						   octeon_reserve32_memory,
-+						   octeon_reserve32_memory +
-+						   (CONFIG_CAVIUM_RESERVE32 <<
-+						    20) - 1, 128, alloc_name);
-+	else
-+#endif
-+		__cvmx_cmd_queue_state_ptr =
-+		    cvmx_bootmem_alloc_named(sizeof(*__cvmx_cmd_queue_state_ptr),
-+					    128,
-+					    alloc_name);
- 	if (__cvmx_cmd_queue_state_ptr)
- 		memset(__cvmx_cmd_queue_state_ptr, 0,
- 		       sizeof(*__cvmx_cmd_queue_state_ptr));
-diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
-index 00bf269..cbd8320 100644
---- a/arch/mips/cavium-octeon/setup.c
-+++ b/arch/mips/cavium-octeon/setup.c
-@@ -284,6 +284,11 @@ void octeon_crash_smp_send_stop(void)
- 
- #endif /* CONFIG_KEXEC */
- 
-+#ifdef CONFIG_CAVIUM_RESERVE32
-+uint64_t octeon_reserve32_memory;
-+EXPORT_SYMBOL(octeon_reserve32_memory);
-+#endif
-+
- #ifdef CONFIG_KEXEC
- /* crashkernel cmdline parameter is parsed _after_ memory setup
-  * we also parse it here (workaround for EHB5200) */
-@@ -661,7 +666,9 @@ void __init prom_init(void)
- 	int i;
- 	u64 t;
- 	int argc;
--
-+#ifdef CONFIG_CAVIUM_RESERVE32
-+	int64_t addr = -1;
-+#endif
- 	/*
- 	 * The bootloader passes a pointer to the boot descriptor in
- 	 * $a3, this is available as fw_arg3.
-@@ -776,6 +783,25 @@ void __init prom_init(void)
- 		cvmx_write_csr(CVMX_LED_UDD_DATX(1), 0);
- 		cvmx_write_csr(CVMX_LED_EN, 1);
- 	}
-+#ifdef CONFIG_CAVIUM_RESERVE32
-+	/*
-+	 * We need to temporarily allocate all memory in the reserve32
-+	 * region. This makes sure the kernel doesn't allocate this
-+	 * memory when it is getting memory from the
-+	 * bootloader. Later, after the memory allocations are
-+	 * complete, the reserve32 will be freed.
-+	 *
-+	 * Allocate memory for RESERVED32 aligned on 2MB boundary. This
-+	 * is in case we later use hugetlb entries with it.
-+	 */
-+	addr = cvmx_bootmem_phy_named_block_alloc(CONFIG_CAVIUM_RESERVE32 << 20,
-+						0, 0, 2 << 20,
-+						"CAVIUM_RESERVE32", 0);
-+	if (addr < 0)
-+		pr_err("Failed to allocate CAVIUM_RESERVE32 memory area\n");
-+	else
-+		octeon_reserve32_memory = addr;
-+#endif
- 
- #ifdef CONFIG_CAVIUM_OCTEON_LOCK_L2
- 	if (cvmx_read_csr(CVMX_L2D_FUS3) & (3ull << 34)) {
-@@ -1053,6 +1079,16 @@ void __init plat_mem_setup(void)
- 	cvmx_bootmem_unlock();
- #endif /* CONFIG_CRASH_DUMP */
- 
-+#ifdef CONFIG_CAVIUM_RESERVE32
-+	/*
-+	 * Now that we've allocated the kernel memory it is safe to
-+	 * free the reserved region. We free it here so that builtin
-+	 * drivers can use the memory.
-+	 */
-+	if (octeon_reserve32_memory)
-+		cvmx_bootmem_free_named("CAVIUM_RESERVE32");
-+#endif /* CONFIG_CAVIUM_RESERVE32 */
-+
- 	if (total == 0)
- 		panic("Unable to allocate memory from "
- 		      "cvmx_bootmem_phy_alloc");
--- 
-2.10.2
-
+On 25.07.22 09:58, Johan Hovold wrote:
+> Use the new CDC control-line defines.
+> 
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+Acked-by: Oliver Neukum <oneukum@suse.com>

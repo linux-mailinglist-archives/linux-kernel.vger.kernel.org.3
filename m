@@ -2,157 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2ED57F8E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 06:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D83B57F8E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 07:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiGYEmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 00:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S231432AbiGYE7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 00:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbiGYEmK (ORCPT
+        with ESMTP id S229552AbiGYE7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 00:42:10 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F144EDFE3;
-        Sun, 24 Jul 2022 21:42:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S+1tkt/xgMZUgcVQ+b0LKXr/CHDS7yJceYs2CiaWF+SCDLm5DbO8+2+JkTjHDa2eiEz6a54qBKk8r/DW0cOrGuLkvgCQSVwkhaOswceXfVYHoZH+4K1yJHsLwTfKTL/FACIquRunhaahimeHnK35vHgPO7vVvgAvteeKo6Kz4iID2vV3TC1KjkjoiL3PMdUGUMHCKlcrLnBGMNNrV8nAvsNALMlbSrU+Tx2E3d+V2fLYaQyhh7nSxEL9nkrdx+IDg/h+4H9xKrmLC273c/h+Va3ibAUJXMUXq5hrou1hEA2astcTfpaVblfyRci9U9RS3EjO5JO+HndTCM6sUCfaMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1mOkT84wdSfMomhr3gQ5jNMmuRTRno0f+BEivpKaMF8=;
- b=SoCnZkhA7+8a9x0ifSFlCF6ZoWsR3vFkbnEyXjpcTpwyGSj/t4/rhAOzRStSNVXzZm3Nji4teOyVZPZEwyZhsqAdkgAuS9nMYb7Z34eTVvmON9E8vHGcn2GmVfxDLDIUXMsSqifrHpqe4bMwSDGls8Pc1maWZrI6TABhC3gaWAhjyXPiwZze+SEJBGeUbxbHktyFgRXbXEX1bAxflCiC79nvFv2W2v76Kaj55aormFiv1UIFhrUXk6MtzRg4I2j2xgvMGBmHap+LqlYxmDggDBN5fdHQ+xMoEiucD2P+wSKfxY8DyeeXdLl/iddKxliOfGsa2cQPZu04zJZJG27EDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1mOkT84wdSfMomhr3gQ5jNMmuRTRno0f+BEivpKaMF8=;
- b=K4jRimu9qz9BgQcEKVq6Cfg2aevzBogN294GaV0F1uuR6szLmzByd3IA0eb79oo1suB3EBGQOHdWw4AW0oufrRoDioju4NShV0rsRIUI2+Ppt1cuAP36HYz9axAf1aREx6uk1GvAK9y8jLY4eQJwt42G7aMDvxHkC/b9Z7+6guc=
-Received: from MW3PR12MB4411.namprd12.prod.outlook.com (2603:10b6:303:5e::24)
- by CY4PR1201MB0071.namprd12.prod.outlook.com (2603:10b6:910:1f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Mon, 25 Jul
- 2022 04:42:06 +0000
-Received: from MW3PR12MB4411.namprd12.prod.outlook.com
- ([fe80::ac68:8cd3:1191:f639]) by MW3PR12MB4411.namprd12.prod.outlook.com
- ([fe80::ac68:8cd3:1191:f639%9]) with mapi id 15.20.5458.019; Mon, 25 Jul 2022
- 04:42:06 +0000
-From:   "Gogada, Bharat Kumar" <bharat.kumar.gogada@amd.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "michals@xilinx.com" <michals@xilinx.com>
-Subject: RE: [PATCH] MAINTAINERS: Add Xilinx Versal CPM Root Port maintainers
-Thread-Topic: [PATCH] MAINTAINERS: Add Xilinx Versal CPM Root Port maintainers
-Thread-Index: AQHYgtMikIqnNwLe1kep57k5GJqCGq2K+8oAgAPATiA=
-Date:   Mon, 25 Jul 2022 04:42:06 +0000
-Message-ID: <MW3PR12MB4411127938BC5C09ED2AE5D1BA959@MW3PR12MB4411.namprd12.prod.outlook.com>
-References: <20220618052022.10388-1-bharat.kumar.gogada@xilinx.com>
- <20220722192454.GA1923798@bhelgaas>
-In-Reply-To: <20220722192454.GA1923798@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b3bb5d49-7959-41f7-ac5e-08da6df80746
-x-ms-traffictypediagnostic: CY4PR1201MB0071:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3QrWbhx4EVV+HVXU4jHJFASxGydjDx5MS+8JIqQY7NN3PtM4hQLFE7O9crN/PiZKbajs8akPmVOtHcZmeGxPVU3busQ/cKYq0C456/lcyXTBixWlqIZrpi3Z5eXRba6KtxZpic9bk06rJ9HEfsaypxjANk8S5+O3alzz7G6UFzf3JzRe0iRSM/wPPz6tOAn+xicmWBwHJNNYyRoxUiQu1wo+U9FPHPg+UnebnXjGoARPVVpr7qDc5jzwSw2obnZsHI8eTTXWrRo4fOKQmFjKU68ryTIS+S5H0fRclNJ9NjwwjHKwNUaFRBh06z3QcM7U9wSBh8jccLWYgUXYodUOjD9Xp5EoN9wsLIrlNq195IQn7ma7QzOqOeITa4QiqDnXRDDAwdsCD5MjwNnghJ7TxEpvBjHy+UPSH+7zwwUJ4iNlMEDGup9crp5Ikwf3gk0FXkSCkyOUp68WC8nV8Izf971S6hJTrGiyYw77ujbtDav6xYR4jXAIjdXWQ+88Pgc3W/RYLHS+EgaNPHD7bA7wCjb9i5Tj2K0sbIE2kCU8dNAGx3FGZEse2qf9LE8Aa9XBfbUP/vOod2+olt9VrFeS4O//Totx6Criu35uGZhmwLTAHnbbRNMDMJfzqw+yhMfJkFmNJYuI2gNKp81Rwhii/sIEoNe5+piMlpE42KrCsUDEjwiYAdRcAAbuYk00Xd3fRX14KOprOot24cx6zvo+lJyv5Ip9FsOkexUzGp1OKKr1yRS8kh02Qy7a/PkmgrDXsnx7m7qR2GVpXe5zohcOH2faDgyjtO9dj9HzkTa6q2Wr6wn/AfhTgtoH1qqY43v8
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4411.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(122000001)(186003)(55016003)(38070700005)(38100700002)(66946007)(76116006)(64756008)(4326008)(66446008)(8676002)(66556008)(316002)(66476007)(110136005)(54906003)(6506007)(7696005)(55236004)(71200400001)(33656002)(41300700001)(2906002)(86362001)(9686003)(26005)(107886003)(4744005)(5660300002)(52536014)(478600001)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AB6EE8J4k/JM8Kteva8uHH2u6wJQBHvvS3oJU0tAWdIlTQQiONQjEgrHRn+X?=
- =?us-ascii?Q?Znk1R89BvLqN/QNQ0dY41cCIdFtUuRRiU4GtwfkwkbEM0T5QiPgOoBG3D4ur?=
- =?us-ascii?Q?UPbWbNOrs7BBL4Q7O/BpuFvli65qe2gsSm0WzBh1w+8nt8zxPt040xF5bWcu?=
- =?us-ascii?Q?ehSANV87of6RJhqWBD1YVslJ8yZJ6WKBxluHbmrZo86dLnPn3VoCwFTjTe22?=
- =?us-ascii?Q?vZvmZ5DAmIm55fb4HYCWoI82RZ6lkF5NRBrM9OTpQvmWEwO2DM3/D93JxEYx?=
- =?us-ascii?Q?3WGj9x5t7JGZDcMaHquPG+yPaVxpyeUDhh71kwEgCzqPGl0dPNTTvSjWGgw/?=
- =?us-ascii?Q?Pf99VYeSHOKDOH/Eo9ZdPuwLrh70IpVo2iBw63YtTcs4ck7aVxPpo5+3Quji?=
- =?us-ascii?Q?zx2N0uI2OgR5FKqeEDbSmLWvDvQFiFE8llbs1rdSB8ro0xiaNWwwv9R5+aRB?=
- =?us-ascii?Q?/U0OtIJjQxm5xv6PlXLPz6gN6MxPuWX15eF1AJL2NIyU2pLpFQLfEHdvPMh2?=
- =?us-ascii?Q?fKsBUpUFSXwBUQ5VGPICVaacPFZsB5bpE5NzGds8LWegrX6tHsFp0GDQCWyg?=
- =?us-ascii?Q?Poq0X5SWvjxJsCc3NTJE8msuvFafR4Hv1xzwMhFtZnF5+YxMb7W3eDkcu9na?=
- =?us-ascii?Q?QyF+lwLn5eaYyqbxIDKxScSZ7qGJyEE/O0q36SDKVWJVIT7hu8KEBN84w+cU?=
- =?us-ascii?Q?fUVaMeyjtnc6CsZQ1taiBJBSJ3qHQopzfZOTUWP44mlRIAcW6HjgiAad9+rJ?=
- =?us-ascii?Q?SPMaEvVv0RMvp7VQ0cCRl93ZBb0JCNXY2qihR1btv59fLu2oCgFN2AHTr7f9?=
- =?us-ascii?Q?jXO1uCwakXgCvg6/6f3lrufAkRL+oiSsHMQl+pX/9fwaHUzLY/Ea8ohCJzAg?=
- =?us-ascii?Q?C1EvqkWJ2JO8lHYbECoNtuQvWIYs0pBmv+XrnY39Mj3ha8TIPJ6ZNYmjbnEM?=
- =?us-ascii?Q?ErbUJ0hKe0zAklp125ozVa8F9akPOAbh3YBCLIL+w2P6iHRWi5kKWfTK2WKg?=
- =?us-ascii?Q?dlywpJ2OCM4jTFe+6ST729dK3hCit2yVgwFzEz8OyYLRNQafk4aTP2ZAH+I7?=
- =?us-ascii?Q?DEt8UAqCAhRe4SfZOIP+C+Sa8fakJZ5FbVy+xsVjlmzn/P29hcTB19PlQtYl?=
- =?us-ascii?Q?ZoItsQOlU9q6hwXID09vnoEIxKugkC9EK77p2Fck6upIcNDqAZLI5Vzy+cEr?=
- =?us-ascii?Q?UznYNR4De5hgAiwX9lSa/DWjAF34Yiy5NdEfvZ+aCbvQOc5sZdXh6ppkFZey?=
- =?us-ascii?Q?e2fi+D+jJ8KL5C9EUi0/VsnOKiszf1xl0ChSSAFe9XDDwdgO2wArybOF932i?=
- =?us-ascii?Q?89MRnixkchJoLaIDN6Dh0nfqyDU7PCJnpH/JBnvvxBtS5RAALs+36Vrlr4fR?=
- =?us-ascii?Q?EXYUQh7hu3JwQC13eJrnCR7qFyL13Jdju4Veo8wXXjo26+iwJESJpXY/mrwG?=
- =?us-ascii?Q?GG837p7aeC+QB/6cLRRc2VCmUaSbzc9jn8uuAi48A/2wHAu11B6mL28KE3BT?=
- =?us-ascii?Q?paMa/gyOOdHJeuaAqS9qVI7bx4AnvtpCn87PAxRfDsfzeyiTq3remCTPb/+W?=
- =?us-ascii?Q?DjqsRn4CoUxfJbgiAI4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 25 Jul 2022 00:59:12 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DC4DFA0
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 21:59:10 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id v28so7815444qkg.13
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 21:59:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs-stonybrook-edu.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f6BGyWRa2BjQbDxlapQ6tA/QtZAsEXjWkQiWpBuogLs=;
+        b=rYz3Eqlfn2BBckMR84v/yxdwG1KuAQwjLcz+sUOT0sk+QIQ+NKdaMpol8SO0bCzgWl
+         f9KvDrKpPa6rHtjP+O167hotM7JZE374Um3ZdtAmtiN1e+2QeNG+2dPOqfGx6dmILAhu
+         OkJV+yh8TOU6AUuTlxLHmrJXq5Hwk4eoWMWdJrs59pG0IATNxhwQHWfoVi3fR59HknUX
+         /7gO6r9ApHxj5Op+5+qKrv5jwsPN6nM/A6WAZP9d9DVPEbko7PKHLp1JayxHIrpzK/Uc
+         dkUKoGbmcgLg1IGhL3KKSl0SMiD2US6tJpzOQZR/LU5r8jZFN0EW1GagpTthqcYq1WV1
+         RivQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f6BGyWRa2BjQbDxlapQ6tA/QtZAsEXjWkQiWpBuogLs=;
+        b=zJV+PCJoMdqC2Z8D9cL9lmOSSizrUsOQqJKBgCtFejdYP3AvAoizGUP9xtTvsYYjxG
+         qpGQLYPy0X3W9q+j/reRsUAfe1XoKazDKD77pVy6WlFBT8sFk+ZLJlh/qZcy0s5CyQc8
+         15CjFBqI7uModAgpa7E3B5y+qdR6gjKC8CbEnTX9XKJ8VHs+V1mBRtYULM1NEZkKvBmZ
+         CEZkDhf+EPteEfkwg5/CWdH3tfOR52Tujz+JN7aSybFdX8MOoOFs5ZH8DNO5ZOCbrEuf
+         GOTWUIk8MkQLbNphPAddtkbnhQglNQPkSwLWmacgUla7F3Bi2EWaAE48/YVaKCY5XNKJ
+         9JqQ==
+X-Gm-Message-State: AJIora+B4DS0tEmXYIrrFg6xowIRe5eZgRJu79TCC1K2lqyMPn9uYcio
+        p9XaOeGinZS+aircNz9YqDoQ+As2tWWOVw==
+X-Google-Smtp-Source: AGRyM1uS0iPlsbKkDYNQdF1aWJgVudPzoq9XLqI/N2wu+EpnfqK56z6QlpWSLgUjrEr+wssDnqgeZg==
+X-Received: by 2002:ae9:e313:0:b0:6b5:e41b:64fe with SMTP id v19-20020ae9e313000000b006b5e41b64femr7815515qkf.323.1658725149192;
+        Sun, 24 Jul 2022 21:59:09 -0700 (PDT)
+Received: from sgdp06.fsl.cs.sunysb.edu (sgdp6.fsl.cs.sunysb.edu. [130.245.126.123])
+        by smtp.googlemail.com with ESMTPSA id n8-20020ac86748000000b0031f286f868dsm3766746qtp.92.2022.07.24.21.59.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jul 2022 21:59:08 -0700 (PDT)
+From:   Yifei Liu <yifeliu@cs.stonybrook.edu>
+Cc:     yifeliu@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
+        madkar@cs.stonybrook.edu, David Woodhouse <dwmw2@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] jffs2: correct logic when creating a hole in jffs2_write_begin
+Date:   Mon, 25 Jul 2022 04:58:27 +0000
+Message-Id: <20220725045830.11502-1-yifeliu@cs.stonybrook.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4411.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3bb5d49-7959-41f7-ac5e-08da6df80746
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 04:42:06.7186
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: L9pVtGQV3FOIVWiQ3mklGlNcbIG26HChcFLKu0V9SD+E0b00FXv4tnRMIbzrzyQ9V9u7i40CEug8KA1Wo8Nt8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0071
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Bjorn.
->=20
-> On Sat, Jun 18, 2022 at 10:50:22AM +0530, Bharat Kumar Gogada wrote:
-> > Add maintainer for driver and documentation of Xilinx Versal CPM Root
-> > Port device.
-> >
-> > Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
->=20
-> Applied to pci/ctrl/xilinx-cpm for v5.20, thanks!
->=20
-> > ---
-> >  MAINTAINERS | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS index
-> > ea3e6c914384..a07f926d7e93 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -15063,6 +15063,14 @@ L:   linux-pci@vger.kernel.org
-> >  S:   Maintained
-> >  F:   drivers/pci/controller/dwc/*spear*
-> >
-> > +PCI DRIVER FOR XILINX VERSAL CPM
-> > +M:   Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
-> > +M:   Michal Simek <michal.simek@amd.com>
-> > +L:   linux-pci@vger.kernel.org
-> > +S:   Maintained
-> > +F:   Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> > +F:   drivers/pci/controller/pcie-xilinx-cpm.c
-> > +
-> >  PCMCIA SUBSYSTEM
-> >  M:   Dominik Brodowski <linux@dominikbrodowski.net>
-> >  S:   Odd Fixes
-> > --
-> > 2.17.1
-> >
+Bug description and fix:
+
+1. Write data to a file, say all 1s from offset 0 to 16.
+
+2. Truncate the file to a smaller size, say 8 bytes.
+
+3. Write new bytes (say 2s) from an offset past the original size of the
+file, say at offset 20, for 4 bytes.  This is supposed to create a "hole"
+in the file, meaning that the bytes from offset 8 (where it was truncated
+above) up to the new write at offset 20, should all be 0s (zeros).
+
+4. flush all caches using "echo 3 > /proc/sys/vm/drop_caches" (or unmount
+and remount) the f/s.
+
+5. Check the content of the file.  It is wrong.  The 1s that used to be
+between bytes 9 and 16, before the truncation, have REAPPEARED (they should
+be 0s).
+
+We wrote a script and helper C program to reproduce the bug
+(reproduce_jffs2_write_begin_issue.sh, write_file.c, and Makefile).  We can
+make them available to anyone.
+
+The above example is shown when writing a small file within the same first
+page.  But the bug happens for larger files, as long as steps 1, 2, and 3
+above all happen within the same page.
+
+The problem was traced to the jffs2_write_begin code, where it goes into an
+'if' statement intended to handle writes past the current EOF (i.e., writes
+that may create a hole).  The code computes a 'pageofs' that is the floor
+of the write position (pos), aligned to the page size boundary.  In other
+words, 'pageofs' will never be larger than 'pos'.  The code then sets the
+internal jffs2_raw_inode->isize to the size of max(current inode size,
+pageofs) but that is wrong: the new file size should be the 'pos', which is
+larger than both the current inode size and pageofs.
+
+Similarly, the code incorrectly sets the internal jffs2_raw_inode->dsize to
+the difference between the pageofs minus current inode size; instead it
+should be the current pos minus the current inode size.  Finally,
+inode->i_size was also set incorrectly.
+
+The patch below fixes this bug.  The bug was discovered using a new tool
+for finding f/s bugs using model checking, called MCFS (Model Checking File
+Systems).
+
+Signed-off-by: Yifei Liu <yifeliu@cs.stonybrook.edu>
+Signed-off-by: Erez Zadok <ezk@cs.stonybrook.edu>
+Signed-off-by: Manish Adkar <madkar@cs.stonybrook.edu>
+---
+ fs/jffs2/file.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/fs/jffs2/file.c b/fs/jffs2/file.c
+index ba86acbe12d3..0479096b96e4 100644
+--- a/fs/jffs2/file.c
++++ b/fs/jffs2/file.c
+@@ -137,19 +137,18 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
+ 	struct jffs2_inode_info *f = JFFS2_INODE_INFO(inode);
+ 	struct jffs2_sb_info *c = JFFS2_SB_INFO(inode->i_sb);
+ 	pgoff_t index = pos >> PAGE_SHIFT;
+-	uint32_t pageofs = index << PAGE_SHIFT;
+ 	int ret = 0;
+ 
+ 	jffs2_dbg(1, "%s()\n", __func__);
+ 
+-	if (pageofs > inode->i_size) {
+-		/* Make new hole frag from old EOF to new page */
++	if (pos > inode->i_size) {
++		/* Make new hole frag from old EOF to new position */
+ 		struct jffs2_raw_inode ri;
+ 		struct jffs2_full_dnode *fn;
+ 		uint32_t alloc_len;
+ 
+-		jffs2_dbg(1, "Writing new hole frag 0x%x-0x%x between current EOF and new page\n",
+-			  (unsigned int)inode->i_size, pageofs);
++		jffs2_dbg(1, "Writing new hole frag 0x%x-0x%x between current EOF and new position\n",
++			  (unsigned int)inode->i_size, (uint32_t)pos);
+ 
+ 		ret = jffs2_reserve_space(c, sizeof(ri), &alloc_len,
+ 					  ALLOC_NORMAL, JFFS2_SUMMARY_INODE_SIZE);
+@@ -169,10 +168,10 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
+ 		ri.mode = cpu_to_jemode(inode->i_mode);
+ 		ri.uid = cpu_to_je16(i_uid_read(inode));
+ 		ri.gid = cpu_to_je16(i_gid_read(inode));
+-		ri.isize = cpu_to_je32(max((uint32_t)inode->i_size, pageofs));
++		ri.isize = cpu_to_je32((uint32_t)pos);
+ 		ri.atime = ri.ctime = ri.mtime = cpu_to_je32(JFFS2_NOW());
+ 		ri.offset = cpu_to_je32(inode->i_size);
+-		ri.dsize = cpu_to_je32(pageofs - inode->i_size);
++		ri.dsize = cpu_to_je32((uint32_t)pos - inode->i_size);
+ 		ri.csize = cpu_to_je32(0);
+ 		ri.compr = JFFS2_COMPR_ZERO;
+ 		ri.node_crc = cpu_to_je32(crc32(0, &ri, sizeof(ri)-8));
+@@ -202,7 +201,7 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
+ 			goto out_err;
+ 		}
+ 		jffs2_complete_reservation(c);
+-		inode->i_size = pageofs;
++		inode->i_size = pos;
+ 		mutex_unlock(&f->sem);
+ 	}
+ 
+-- 
+2.25.1
+

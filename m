@@ -2,102 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C200F580473
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D516F58047E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236002AbiGYT1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 15:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
+        id S233996AbiGYTeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 15:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiGYT1K (ORCPT
+        with ESMTP id S229878AbiGYTeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 15:27:10 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7E0A45A;
-        Mon, 25 Jul 2022 12:27:08 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id bb16so14655316oib.11;
-        Mon, 25 Jul 2022 12:27:08 -0700 (PDT)
+        Mon, 25 Jul 2022 15:34:00 -0400
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CDA1FCD3;
+        Mon, 25 Jul 2022 12:33:59 -0700 (PDT)
+Received: by mail-oo1-f51.google.com with SMTP id j8-20020a4ac548000000b00435a8dd31a2so2348210ooq.5;
+        Mon, 25 Jul 2022 12:33:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=biplv8ZnovJJIoreJcaFobXzSk+jEJJVI0kZQA2bmqY=;
-        b=uqu+6HMtKu11PhWQkaU8nbwJVlQTV/9vlUq1cXkrYdZOPv8bLGAH+0AD+SE0zxCgS/
-         C/CaT5IbrfRsC6D8JiDcJzs0f/rQNvtrKpd+j3eG0O97cr/p9ls0Ni9SvEfTEJcv4XPj
-         zH7HK5wKq7lquBgvUeFNCnHmJa4zBv0zD4qRE2tGCE12N+HqlduAGkXnBleTofD3cqPW
-         7u+CfBeNaNUs7OvLtnBCyEt2atwaJhEamm6eOinbeC/hCt/+QeZJn3FyuXbjcdqG9//O
-         vL9+l0+Nhp7GkWNBTg/XRnEENZsFYWc1Nlz1C/qiHbK8RmM1B96DfnoSZCrAxHqJG6D/
-         L2zQ==
-X-Gm-Message-State: AJIora92tBFTEYVrCiRcTFP4s0R/xiL0ejRElC/MjsBUfCxOq2S7l/Bu
-        yLSFyMQfUDkhivB9s+xzvw==
-X-Google-Smtp-Source: AGRyM1sHRDiIqGa4CnHexl48xYWTF6EUArhGrzGDOK0Z9M8NJdDZGNdX/YvkELxDpJNw/dF1MbyF6A==
-X-Received: by 2002:a05:6808:1a88:b0:33a:a573:c1a0 with SMTP id bm8-20020a0568081a8800b0033aa573c1a0mr11389536oib.222.1658777228095;
-        Mon, 25 Jul 2022 12:27:08 -0700 (PDT)
+        bh=KIw937KfRgtYEPX35WUaBoez2BdnKkRvpNFrhrEEgaE=;
+        b=dD9MtLsulX2LksDLMQXrlNUHP7yLsa1OZH126qGyyVnR8DBpZX0PpSeRFtv/RLtfrG
+         CnnyktGByUfD02WnXVSLMbXsDioPP6p06DDsdf9a8lpM2Hpol935iHw1PUh+gfH4UyOM
+         qb5eEg5bIks0lakJvpg+emYsY4HlBJ+3NNdNqtzwbm89OmkFZM6dZ/Ye+jLhAwTybApK
+         HNdAsOGa9Med45ssbbKx7kBItIDK0/i64Y7TXkoI5Kam8emFmtkrT9N5hplMi3ORVfcm
+         TPXaBmR21I4ALj5zvdFawTkO69bhSxNtTyDlIoR3WDOc7YzsoxM71tI/5lBARm9zT/t1
+         owIg==
+X-Gm-Message-State: AJIora8viUvccAQkAupiFMUrYq0zAVPdCuYP/f6fke4t5dJPrjdqKfGl
+        DVDeW4POdBe4jQnRt7z1QA==
+X-Google-Smtp-Source: AGRyM1uTtx/J+WMQ8qtwru58sRJQF2353um12dhZAF81rpKXXTgUH9cVEJf0C4kEVleDBRmC7HIkdA==
+X-Received: by 2002:a4a:d621:0:b0:435:d6cc:b2e1 with SMTP id n1-20020a4ad621000000b00435d6ccb2e1mr4704597oon.88.1658777638776;
+        Mon, 25 Jul 2022 12:33:58 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id w7-20020a4aca07000000b0041ba304546csm5176012ooq.1.2022.07.25.12.27.06
+        by smtp.gmail.com with ESMTPSA id y3-20020a544d83000000b0032f7605d1a3sm5208627oix.31.2022.07.25.12.33.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 12:27:07 -0700 (PDT)
-Received: (nullmailer pid 2550854 invoked by uid 1000);
-        Mon, 25 Jul 2022 19:27:05 -0000
-Date:   Mon, 25 Jul 2022 13:27:05 -0600
+        Mon, 25 Jul 2022 12:33:58 -0700 (PDT)
+Received: (nullmailer pid 2565486 invoked by uid 1000);
+        Mon, 25 Jul 2022 19:33:56 -0000
+Date:   Mon, 25 Jul 2022 13:33:56 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure
- Application
-Message-ID: <20220725192705.GA2536409-robh@kernel.org>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
+To:     Harini Katakam <harini.katakam@xilinx.com>
+Cc:     nicolas.ferre@microchip.com, davem@davemloft.net,
+        claudiu.beznea@microchip.com, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
+        harini.katakam@amd.com, devicetree@vger.kernel.org,
+        radhey.shyam.pandey@xilinx.com
+Subject: Re: [PATCH v2 1/3] dt-bindings: net: cdns,macb: Add versal
+ compatible string
+Message-ID: <20220725193356.GA2561062-robh@kernel.org>
+References: <20220722110330.13257-1-harini.katakam@xilinx.com>
+ <20220722110330.13257-2-harini.katakam@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220723224949.1089973-1-luzmaximilian@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+In-Reply-To: <20220722110330.13257-2-harini.katakam@xilinx.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 12:49:45AM +0200, Maximilian Luz wrote:
-> On modern Qualcomm platforms, access to EFI variables is restricted to
-> the secure world / TrustZone, i.e. the Trusted Execution Environment
-> (TrEE or TEE) as Qualcomm seems to call it. To access EFI variables, we
-> therefore need to talk to the UEFI Secure Application (uefisecapp),
-> residing in the TrEE.
-
-The whole point of UEFI is providing a standard interface. Why can't the 
-UEFI implementation call the TEE itself?
-
-I'm not sure custom interfaces is something we want.
-
-
-> This series adds support for accessing EFI variables on those platforms.
+On Fri, Jul 22, 2022 at 04:33:28PM +0530, Harini Katakam wrote:
+> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 > 
-> To do this, we first need to add some SCM call functions used to manage
-> and talk to Secure Applications. A very small subset of this interface
-> is added in the second patch (whereas the first one exports the required
-> functions for that). Interface specifications are extracted from [1].
-> While this does not (yet) support re-entrant SCM calls (including
-> callbacks and listeners), this is enough to talk to the aforementioned
-> uefisecapp on a couple of platforms (I've tested this on a Surface Pro X
-> and heard reports from Lenovo Flex 5G, Lenovo Thinkpad x13s, and Lenovo
-> Yoga C630 devices).
+> Add versal compatible string.
+> 
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+> ---
+> v2:
+> Sort compatible string alphabetically.
+> 
+>  Documentation/devicetree/bindings/net/cdns,macb.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+> index 9c92156869b2..762deccd3640 100644
+> --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
+> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+> @@ -20,6 +20,7 @@ properties:
+>  
+>        - items:
+>            - enum:
+> +              - cdns,versal-gem       # Xilinx Versal
+>                - cdns,zynq-gem         # Xilinx Zynq-7xxx SoC
+>                - cdns,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
 
-What does Windows do on these devices? I'm surprised something like this 
-would fly with Microsoft.
+Uh, how did we start this pattern? The vendor here is Xilinx, not 
+Cadence. It should be xlnx,versal-gem instead.
 
-Rob
+>            - const: cdns,gem           # Generic
+> -- 
+> 2.17.1
+> 
+> 

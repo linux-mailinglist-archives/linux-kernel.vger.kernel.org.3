@@ -2,167 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B790B5800AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582745800B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbiGYOYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 10:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
+        id S235346AbiGYO1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 10:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbiGYOYf (ORCPT
+        with ESMTP id S230521AbiGYO1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 10:24:35 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDF6167C6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:24:34 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7F1DA344D6;
-        Mon, 25 Jul 2022 14:24:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658759062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3DHSZ0eeKNjdw0rg2aKKUav44aKsZSE3aktJc7q1/kQ=;
-        b=jifpNVdMlHE7ShY097OU8tPqWdO8EwxCG+HOuuuBn2UK/nBZQdJJclwCjXcvMY57K0pwHY
-        euwI3MTOY8tQDWquErseaxkYFNt18YD8Hz2lMm/cTHqsdF7Wz28DcdEknu2b5cUZcfAT5O
-        OQEWIY8ljpfdWN9/Q7fIBh/NKr1dEbo=
-Received: from suse.cz (unknown [10.100.208.146])
+        Mon, 25 Jul 2022 10:27:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948F3DEA0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:27:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3866C2C153;
-        Mon, 25 Jul 2022 14:24:22 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 16:24:21 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2] printk: Skip console drivers on PREEMPT_RT.
-Message-ID: <Yt6nlaSrfZ+fn80x@alley>
-References: <YtgjtfjYVMQrzFTK@linutronix.de>
- <87y1wn3g3g.fsf@jogness.linutronix.de>
- <Ytgu17hATM8iqdGC@linutronix.de>
- <87ilnrn06u.fsf@jogness.linutronix.de>
- <Ytj3PisFjOfS9L0Y@linutronix.de>
- <YtqakGJAQzw/IPul@alley>
- <YtrYdXWGb0NQLKNA@linutronix.de>
- <Yt6MzEEFfpyTBIIj@alley>
- <Yt6gxxRxDZ/wFHrA@linutronix.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51DAFB80DE9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E98C6C341C6;
+        Mon, 25 Jul 2022 14:27:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658759261;
+        bh=VXtn4EZWxJWowsk24t6/C0fFt4JmpcIFmmb79l+yT6k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cYeqqG8erzBosGURd/88sbAGoftwj9VnvNjKqSUu9ECbTE0sh9fmp89b2jerQjQGM
+         MdHtZ7Z21O4CfRiepRYTov4EiEkOuDWCT2gamhs7wGaTrBfzUwmrU1Dp4eePa+eG1P
+         +v3xs/vuYt1SrKSF+N0pwdc14b+f/gYA2tHwXVIcJk8SmutXgkARoPuQBSeRCZRjBe
+         cj//OpYK4djCa/vU9H6NolgN/zRdERs8kJVa3SsnLQBlOeH60YyPo8sswcUrINm+wx
+         2iaao/ss7+1IpyC9+Igb6NJgZP1AErj8ls0pvP8R2LwxGP6vJzriAPCsM8yvf9t3FB
+         qNz2nXQ95lWlg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id ECBCC40374; Mon, 25 Jul 2022 11:27:37 -0300 (-03)
+Date:   Mon, 25 Jul 2022 11:27:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [FYI PATCH 1/1] tools headers cpufeatures: Sync with the kernel
+ sources
+Message-ID: <Yt6oWce9UDAmBAtX@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yt6gxxRxDZ/wFHrA@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-07-25 15:55:19, Sebastian Andrzej Siewior wrote:
-> On 2022-07-25 14:30:04 [+0200], Petr Mladek wrote:
-> > This is what I have missed. It might be obvious for people living by RT
-> > kernel. But spinlocks do not sleep in normal kernel. So I did not get
-> > that the spinlocks are the culprit. Please, make it more obvious
-> > in the commit message, for example:
-> > 
-> > --- cut ---
-> > Console drivers use spinlocks that might sleep in PREEMPT_RT. As a
-> > result they must not be called with interrupts enabled...
-> > --- cut ---
-> 
-> It is not only the sleeping lock by itself but also the fact that
-> polling on 115200 or 9600 to print a line is simply takes too much time.
-> Even if the line consists of four letters.
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-I see.
+- Arnaldo
 
-> > Huh, I do not think that it is a good idea. There are neither atomic
-> > consoles nor printk kthreads in upstream. The patch effectively
-> > completely disables the consoles in PREEMPT_RT. All consoles
-> > will be _empty all the time_.
-> 
-> I am aware of that, I tested that patch (as in I didn't just send it).
-> This is what I see on bare metal's UART:
-> 
-> |  Booting `Debian GNU/Linux'
-> |
-> | Loading Linux RT ...
-> | Loading initial ramdisk ...
-> | No EFI environment detected.
-> | early console in extract_kernel
-> | input_data: 0x00000000031d12e0
-> | input_len: 0x0000000000c283e1
-> | output: 0x0000000001000000
-> | output_len: 0x00000000025f49f8
-> | kernel_total_size: 0x0000000002e26000
-> | needed_size: 0x0000000003000000
-> | trampoline_32bit: 0x0000000000099000
-> | 
-> | Decompressing Linux... Parsing ELF... done.
-> | Booting the kernel.
-> | Loading, please wait...
-> | Starting version 251.3-1
-> | Begin: Loading essential drivers ... done.
+Full explanation:
 
-I see. These messages are pushed to the serial console directly.
+There used not to be copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
-> and this is okay for me at this point. This means that v5.20 could have
-> RT enabled for x86 and people can start test it without additional
-> patches. They can enable it and if it boots they can check dmesg's
-> output for anything odd. If it doesn't boot they can either wait for the
-> next release or grab the patchset with the missing bits for debugging.
-> This is way better than letting printk depend on !RT which would provide
-> no insight at all. The RT option is still hidden behind EXPERT.
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
-Makes sense.
+E.g.:
 
-> > Also the consoles were never tested with interrupts enabled. I am
-> > pretty sure that interrupts has to be disabled in some locations,
-> > for example, when sending some data sequences on the ports. Are we
-> > sure that they are always explicitly disabled inside the drivers?
-> 
-> The 8250 did disable interrupts via local_irq_disable() and this is not
-> desired on RT since it *really* disables interrupts. This was long ago
-> addressed in commit
->    ebade5e833eda ("serial: 8250: Clean up the locking for -rt")
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
 
-Good to know.
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
 
-> The lack of the console probably makes RT not production ready as of
-> v5.20 but I was debugging systems without a UART so.
-> It might not be production ready without a console. Also ARM and PowerPC
-> can not be enabled so there will be a queue for a while unless people
-> device that they don't care about what is left. However it will
-> hopefully will attract x86 people to give it a spin. Then we may receive
-> bug reports and or patches which we did not before and so get better.
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
 
-OK, it all makes sense now. Could you please send v3 with an updated
-commit message?
+---
 
-It should explain why it is not acceptable to call console drivers
-with disabled interrupts in RT (spinlocks are sleeping locks,
-pooling takes too long).
+To pick the changes from:
 
-It should make clear the effect of the patch. printk() messages
-will never reach console. They will be accessible only from userspace
-(dmesg).
+  28a99e95f55c6185 ("x86/amd: Use IBPB for firmware calls")
 
-Finally, it should mention that this is only a temporary solution.
-It allows to boot PREEMPT_RT mainline kernel without extra patches.
-The consoles will later get enabled again by calling console
-drivers with interrupts enabled from dedicated kthreads.
-Also it will be possible to call consoles directly by
-atomic consoles drivers.
+This only causes these perf files to be rebuilt:
 
-If it gets acked by John then I could queue it for 5.20.
+  CC       /tmp/build/perf/bench/mem-memcpy-x86-64-asm.o
+  CC       /tmp/build/perf/bench/mem-memset-x86-64-asm.o
 
-Thanks for explaining all the details.
+And addresses this perf build warning:
 
-Best Regards,
-Petr
+  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
+  diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/x86/include/asm/cpufeatures.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+index 00f5227c8459870d..a77b915d36a8ed88 100644
+--- a/tools/arch/x86/include/asm/cpufeatures.h
++++ b/tools/arch/x86/include/asm/cpufeatures.h
+@@ -302,6 +302,7 @@
+ #define X86_FEATURE_RETPOLINE_LFENCE	(11*32+13) /* "" Use LFENCE for Spectre variant 2 */
+ #define X86_FEATURE_RETHUNK		(11*32+14) /* "" Use REturn THUNK */
+ #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
++#define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+-- 
+2.36.1
+

@@ -2,96 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D9F57FEC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D758957FECA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbiGYMJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S235067AbiGYMMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbiGYMJx (ORCPT
+        with ESMTP id S232143AbiGYMMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:09:53 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017CFDF61
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o20-20020a17090aac1400b001f2da729979so577309pjq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/vAlD2Uj4JArMK2xat0u8itYglD8Kk8L5ACdFaAlxqs=;
-        b=A2oNuiPlEVJtYLXgw2uTDbD5XoOkhTkRZ+TgJG9T0B0UnRIol8tNmoj+OnwvNTiEZc
-         hle3V416mtDl6YnRY54Uz7ZYoma7m8kzIx8/sH8Zt/v1ff/uW63BeM/ei5HFh8fLCpNv
-         6C0RZ+0axhJRxw1pbu0Wwk1xEj3iHOxBSS0IUpvGlOJDhX99a4BSryMuaAVVRNaigVCz
-         Eezn91YMhIcU+BzP8pmyW2Cpxua8a69l8hJMfGFixyqsWwuCm1AYWNB+kPUmtzHc+fak
-         63ETFIbHFLKullcdOwvTPZNIOwkGv8O/GjgK0UZ4M5Gg3dCujVbmnz3mHGPBMdy9JpDu
-         nh2w==
+        Mon, 25 Jul 2022 08:12:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B27119291
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658751134;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uoeyod5zDB0ZJ1Q5JYhvmo5sNmJuhZfqcU+zHvGMHKo=;
+        b=Nm9vqG6ljZFhyyrF4H4YRTdIVewd4hbLlIuXFi5IH39WTTR1pANzHjZPN1OSvLkEb3R1Ir
+        le3sno7y7t0JrAGLUKs99evjRCKJY9zlwEzGtfUMxlWlZ8DM1jsmSLNpwty+4VFosrECSf
+        YsdjJ2SkfeNjJCH0Oqafb9V9npDVVbw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-481-YkpEWxRtP9WiiqGsQoCGlg-1; Mon, 25 Jul 2022 08:12:12 -0400
+X-MC-Unique: YkpEWxRtP9WiiqGsQoCGlg-1
+Received: by mail-wm1-f71.google.com with SMTP id h65-20020a1c2144000000b003a30cae106cso8593578wmh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:12:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/vAlD2Uj4JArMK2xat0u8itYglD8Kk8L5ACdFaAlxqs=;
-        b=YEeb5uGQciV7mlGZXvTeCEY/tUs2hOFvxTD7Vj2txcIjOYNZEQsfxchWJ+7Bm66yzo
-         HMtW8Q+OyCdQyvUySW7ka7ixTm+/Rb0kqROO04QOvlUNJtwY+N/eS6T26Ir0sK8Om+bK
-         mOISpcIis5o5gK4juXTTpZuazklT7SOTVDfMDQbjINqcQsrKkvGKTBicZ53wXi7PkaLR
-         tmGnxGQbfwgwTI03wahAh8rOnmN0Pkxw5xe5Da8Q1oaY7xAF1E6nv4aBnkwE6JNH+3dR
-         Pr0EcsJNOQZUcLgxCB/3rJkGw0+QQExSsz7UTt8LbWGK91Tn2iDiYVAAyb0W2By3/kFQ
-         RG3Q==
-X-Gm-Message-State: AJIora+6Ok/72RH5Gu2/0Pwxd3QjKNZxxzAC4g6jGiuYE3NonuV1dMyv
-        dGsIiWq2usZWTyOA0qWeHkaG9g==
-X-Google-Smtp-Source: AGRyM1sSBp98T6cTNyv8vujrNsns4paivHQuBGy782p0vi4eo2Asxwnq5ntBEh1AcH0145Y434mvdQ==
-X-Received: by 2002:a17:90a:f003:b0:1f2:49f8:19d5 with SMTP id bt3-20020a17090af00300b001f249f819d5mr14573096pjb.28.1658750991448;
-        Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id r13-20020aa7962d000000b0052acb753b8bsm9325800pfg.158.2022.07.25.05.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 05:09:51 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 17:39:49 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, Linux PM <linux-pm@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Subject: Re: WARNING: CPU: 4 PID: 326 at drivers/opp/core.c:2471
- dev_pm_opp_set_config+0x344/0x620
-Message-ID: <20220725120949.fofc7chlsnrgfpvm@vireshk-i7>
-References: <CA+G9fYuGFReF0Z9qj7-80eY0gz-J2C5MVpno_8NjrGSH5_RB0Q@mail.gmail.com>
- <20220725102711.p6eerjjzgeqi4blu@vireshk-i7>
- <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=uoeyod5zDB0ZJ1Q5JYhvmo5sNmJuhZfqcU+zHvGMHKo=;
+        b=sx9PJMzGhv/ya7BO2cRWs/PiNoTJtyvQuJdCZipidkGt3GbT9WBWChIOJp/e4/60rI
+         8AWJBGiR7khzckanbDKZBe5tox9nvwbWywae/og63rizlFYYzRLnY1tyTq8ItPKGGhah
+         YzBAdTwe7bVGolAgrvN5VGK1sUyIgx3wpPJSU8ZuNk8Zn1IOO4hITFkemXttf1HCGPEi
+         fhtcQEW5YIRxJpJfFwq0kCmhqxoP5Y9LPO91lZD5Hrbnkeyq/RDchoNYIs2pcndjoT3w
+         xljTUOCVYsrkafwJAGoUHHUZNxJvf6IK4NV2jcH+OLH/yzBHCjF9neB6ShHkouO8y9Oi
+         6t+g==
+X-Gm-Message-State: AJIora/fHdNQvLtop131hlop1eca/8DstlhREI1XIp/uy8LtzaLJxWdR
+        AXHeOxX3ccVsyVnXx2FBz/RTS75Uuyogz8VyCBPizzfGUqIuUFco14ObFFKPZAj2GYRV6H5bnMn
+        MXWw3PtVms7L7Ile3lUy6akdY
+X-Received: by 2002:a1c:1985:0:b0:3a3:2cf8:ebe with SMTP id 127-20020a1c1985000000b003a32cf80ebemr19085544wmz.7.1658751131464;
+        Mon, 25 Jul 2022 05:12:11 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sg1p/W87M857aANgGZlbkEF29CiOsW6o+B6ylQbKFe160LnKOhoSTAhncXk2EVVeWXUtUgcQ==
+X-Received: by 2002:a1c:1985:0:b0:3a3:2cf8:ebe with SMTP id 127-20020a1c1985000000b003a32cf80ebemr19085498wmz.7.1658751130996;
+        Mon, 25 Jul 2022 05:12:10 -0700 (PDT)
+Received: from redhat.com ([83.148.38.84])
+        by smtp.gmail.com with ESMTPSA id a7-20020adffac7000000b0021e3e73dec6sm14109460wrs.72.2022.07.25.05.12.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 25 Jul 2022 05:12:10 -0700 (PDT)
+From:   Oleg Nesterov <onestero@redhat.com>
+X-Google-Original-From: Oleg Nesterov <oleg@redhat.com>
+Date:   Mon, 25 Jul 2022 14:12:09 +0200
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Dmitry Shmidt <dimitrysh@google.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [PATCH RESEND 3/3 cgroup/for-5.20] cgroup: Make !percpu
+ threadgroup_rwsem operations optional
+Message-ID: <20220725121208.GB28662@redhat.com>
+References: <YtDvN0wJ6CKaEPN8@slm.duckdns.org>
+ <YtDvU4jRPSsarcNp@slm.duckdns.org>
+ <YtDvl7Qjc5zI3e/b@slm.duckdns.org>
+ <YtwFjPnCtw8ySnuv@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f914f5c5-dd61-8495-b362-3043406582da@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YtwFjPnCtw8ySnuv@slm.duckdns.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-07-22, 14:55, Stanimir Varbanov wrote:
-> Hi Viresh,
-> 
-> I can take a look and provide a patch to fix that.
-> 
-> But, is this a new warn or it is a consequence of new changes in
-> opp/core.c ?
+On 07/23, Tejun Heo wrote:
+>
+> +void cgroup_favor_dynmods(struct cgroup_root *root, bool favor)
+> +{
+> +	bool favoring = root->flags & CGRP_ROOT_FAVOR_DYNMODS;
+> +
+> +	/* see the comment above CGRP_ROOT_FAVOR_DYNMODS definition */
+> +	if (favor && !favoring) {
+> +		rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
+> +		root->flags |= CGRP_ROOT_FAVOR_DYNMODS;
+> +	} else if (!favor && favoring) {
+> +		rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
+> +		root->flags &= ~CGRP_ROOT_FAVOR_DYNMODS;
+> +	}
+> +}
 
-This WARN was missing earlier (by mistake) and is added now after some
-redesigning. You can reproduce it on the OPP tree:
+I see no problems in this patch. But just for record, we do not need
+synchronize_rcu() in the "favor && !favoring" case, so we cab probably
+do something like
 
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+	--- a/kernel/rcu/sync.c
+	+++ b/kernel/rcu/sync.c
+	@@ -118,7 +118,7 @@ static void rcu_sync_func(struct rcu_head *rhp)
+	  * optimize away the grace-period wait via a state machine implemented
+	  * by rcu_sync_enter(), rcu_sync_exit(), and rcu_sync_func().
+	  */
+	-void rcu_sync_enter(struct rcu_sync *rsp)
+	+void __rcu_sync_enter(struct rcu_sync *rsp, bool wait)
+	 {
+		int gp_state;
+	 
+	@@ -146,13 +146,20 @@ void rcu_sync_enter(struct rcu_sync *rsp)
+			 * See the comment above, this simply does the "synchronous"
+			 * call_rcu(rcu_sync_func) which does GP_ENTER -> GP_PASSED.
+			 */
+	-		synchronize_rcu();
+	-		rcu_sync_func(&rsp->cb_head);
+	-		/* Not really needed, wait_event() would see GP_PASSED. */
+	-		return;
+	+		if (wait) {
+	+			synchronize_rcu();
+	+			rcu_sync_func(&rsp->cb_head);
+	+		} else {
+	+			rcu_sync_call(rsp);
+	+		}
+	+	} else if (wait) {
+	+		wait_event(rsp->gp_wait, READ_ONCE(rsp->gp_state) >= GP_PASSED);
+		}
+	+}
+	 
+	-	wait_event(rsp->gp_wait, READ_ONCE(rsp->gp_state) >= GP_PASSED);
+	+void rcu_sync_enter(struct rcu_sync *rsp)
+	+{
+	+	__rcu_sync_enter(rsp, true);
+	 }
+	 
+	 /**
 
--- 
-viresh
+later.
+
+__rcu_sync_enter(rsp, false) works just like rcu_sync_enter_start() but it can
+be safely called at any moment.
+
+And can't resist, off-topic question... Say, cgroup_attach_task_all() does
+
+	mutex_lock(&cgroup_mutex);
+	percpu_down_write(&cgroup_threadgroup_rwsem);
+
+and this means that synchronize_rcu() can be called with cgroup_mutex held.
+Perhaps it makes sense to change this code to do
+
+	rcu_sync_enter(&cgroup_threadgroup_rwsem.rss);
+	mutex_lock(&cgroup_mutex);
+	percpu_down_write(&cgroup_threadgroup_rwsem);
+	...
+	percpu_up_write(&cgroup_threadgroup_rwsem);
+	mutex_unlock(&cgroup_mutex);
+	rcu_sync_exit(&cgroup_threadgroup_rwsem.rss);
+
+? Just curious.
+
+> -	/*
+> -	 * The latency of the synchronize_rcu() is too high for cgroups,
+> -	 * avoid it at the cost of forcing all readers into the slow path.
+> -	 */
+> -	rcu_sync_enter_start(&cgroup_threadgroup_rwsem.rss);
+
+Note that it doesn't have other users, probably you can kill it.
+
+Oleg.
+

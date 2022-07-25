@@ -2,112 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C062B580483
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E590A580486
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236190AbiGYTg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 15:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S236227AbiGYThO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 15:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiGYTgY (ORCPT
+        with ESMTP id S232253AbiGYThL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 15:36:24 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27A51F2C3;
-        Mon, 25 Jul 2022 12:36:23 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sz17so22444974ejc.9;
-        Mon, 25 Jul 2022 12:36:23 -0700 (PDT)
+        Mon, 25 Jul 2022 15:37:11 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311DA205C3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:37:10 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id y11so19453666lfs.6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+uGxyBOj8uy9/NOJeYkAeNRty35auyq9QTyL2vbKIqs=;
-        b=aWBpxnn9sn41kMtCQ2/UguJehnh4aNWK34ndCiRANpD781prisqPqWZCnfCezDxegX
-         s6ryz28pxVg6ESxPFX80xxA9DvybUChS08+UihxC2YS4dupc2pRcGPeaeECyoyXUig/H
-         dt1lhQeexIJaGPulZ+6ZsoEwTBKGV7nAL2YbotEcdDGiM0I8jwR5Y5Ub00r9xYxalhMP
-         h8annn3GiOUJ1PL84vn9aApsRQuCxbpu1nULWy3NEjs5Mk7L6YQuh3ahiauj6VL/KDA7
-         PYJk9QLiPkqzI3c/EOuKWceWUSuLB3sDn97ZVJpseghUsAP39zL7meAPQo9Ks98EEIWn
-         bIow==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Zisrg+my4924xsZCS3yBVYkINpOxJI4SuAiL7f/OBT4=;
+        b=UVU+B8Q4PmWuitOO6TvzYHyIb31NEYhP8UgbcCI0d2EqoxgCfV2IRZvMx/z264gI3W
+         0vuTww2XeyEAuKf8Xt66OYeZVtpWWjs/vlDg4YocXVvTlnE/UdNsAgqfr/YZ9gBg8VNG
+         WQ2LuOwnzcG7zll4eI01L1/4mQbKctV3aTSYRRqlJ0adEMto4rtz6P4BTNPMDMsDaUCZ
+         Ixjagsf1JA9sK4LU15vC1TOAuI/TchEGQ+6t7F/wjU/vsJOtcj7EOG13C99VBwlbgW8o
+         Jz2vQX1zgo2DyZ7eBUn7G+ghBPmbCq83J0VmNa+YzwghFhW4LmYdpcJp6rGku8TCRa5S
+         VfTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+uGxyBOj8uy9/NOJeYkAeNRty35auyq9QTyL2vbKIqs=;
-        b=FmxAIJlr+VKYzMQv1F58Nu2bKBeaK9o44/mWwylWJ5ix7j902aeimsCtW+To7OAJlS
-         8mtWv0dQYZjenVi4PduWyRtvMhGAec3W34IhkvuBMr/DoIEYsdaPBJpDHSS1tbDRpEvs
-         0Kgw1cuXZGKWvlYoa1RuoIXp1pcvF32kxjvTHDZB1iqvLHovL6JAc9VkPzLT3n/A15BB
-         H9FhslKKzAsK/S+lxKeflRcPWD7e/oo7nwAcrPJv380jPJOTXUrIYbqm60He2axEFCpw
-         W5aVYQXHTEYU5n5cYR1K3KWmKUXIXmaBocLUjxxPmZ+sMJM9tawKWmo1m1IapMJX86T4
-         FU6Q==
-X-Gm-Message-State: AJIora9+Nl3vJFbkxw2p4+I+cVBSTk6PVe1QuJ21x+beiiNOpQ0Qb2NF
-        40BKMBbZYRi8SqvXwK20NoS+KxXusjs=
-X-Google-Smtp-Source: AGRyM1vYaSolC/1IbcKL/tdF8eKMind/3he4Dge0drIwIiFgbLYBeHdnz4tJkJdybuLB41IEfF5c1g==
-X-Received: by 2002:a17:907:6e8a:b0:72b:1496:7161 with SMTP id sh10-20020a1709076e8a00b0072b14967161mr11612393ejc.519.1658777781976;
-        Mon, 25 Jul 2022 12:36:21 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a01-0c23-c1ab-4100-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c1ab:4100::e63])
-        by smtp.googlemail.com with ESMTPSA id k14-20020aa7d8ce000000b0043a6e807febsm7571001eds.46.2022.07.25.12.36.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 12:36:21 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-spi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, bert@biot.com, sander@svanheule.net,
-        mail@birger-koblitz.de,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH RFC v1] spi: realtek-rtl: Fix clearing some register bits
-Date:   Mon, 25 Jul 2022 21:35:47 +0200
-Message-Id: <20220725193547.1038414-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.37.1
+        bh=Zisrg+my4924xsZCS3yBVYkINpOxJI4SuAiL7f/OBT4=;
+        b=hOYG8zegRhJlUAoG1v8oD0oql3ZN34SVTHwbSgGLoRzPzbioDjBgqUlZznAxO0aI0p
+         onIqhUc4iWvM7tfyPJ0HHLhlamBUTM3NlXIkQNJ+2mEuVhFUHuay16tm9xteV/uZw3/Q
+         WKL9gounM1vf+e9s+i5hveniKgZ49jfjn4okr2oa5ZiIz9EX31z+6HkZCEmAp0o8HnOO
+         b/MBDVAPjvunSqfjGqpstosyL5COaippNbgxkOmGAXz/f15BY5u3s1/wtQ/feXQJ4oVY
+         jiTyoe4UJMkHWZWEnew6Flwq7BYrCE/ZFQXo6zjGorXW3jPg1vu/76z/cXr3EuYU+PDj
+         9vXg==
+X-Gm-Message-State: AJIora9c6vY1hMrLG2HY2FyCja6DmLy7J3/j59xe4geFNPdPj9JHdOTb
+        Ejci9puecaC5K7cSU92z1KfMxw==
+X-Google-Smtp-Source: AGRyM1tSyuOF/ktWhT5phRnEeq9jwZcJbhK+eyafyKSoZs0pNsmXivvCVGASi4KMWU5ocdrIeS7vaQ==
+X-Received: by 2002:a19:4352:0:b0:48a:7b6b:4eec with SMTP id m18-20020a194352000000b0048a7b6b4eecmr4814739lfj.301.1658777828357;
+        Mon, 25 Jul 2022 12:37:08 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id w14-20020a197b0e000000b00489545df9f3sm1167084lfc.148.2022.07.25.12.37.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 12:37:07 -0700 (PDT)
+Message-ID: <a7d0f6c7-1943-8bef-71ff-736455609cde@linaro.org>
+Date:   Mon, 25 Jul 2022 21:37:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [net-next v2 3/3] dt-bindings: net: adin1110: Add docs
+Content-Language: en-US
+To:     alexandru.tachici@analog.com, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        gerhard@engleder-embedded.com, geert+renesas@glider.be,
+        joel@jms.id.au, stefan.wahren@i2se.com, wellslutw@gmail.com,
+        geert@linux-m68k.org, robh+dt@kernel.org,
+        d.michailidis@fungible.com, stephen@networkplumber.org,
+        l.stelmach@samsung.com, linux-kernel@vger.kernel.org
+References: <20220725165312.59471-1-alexandru.tachici@analog.com>
+ <20220725165312.59471-4-alexandru.tachici@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220725165312.59471-4-alexandru.tachici@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code seemingly tries to clear RTL_SPI_SFCSR_LEN_MASK (before then
-setting either RTL_SPI_SFCSR_LEN1 or RTL_SPI_SFCSR_LEN4) and
-RTL_SPI_SFCSR_CS. What it actually does is only keeping these bits and
-clearing all other bits, even the ones which were just set before. Fix
-the operation to clear the bits in the selected mask and keep all other
-ones.
+On 25/07/2022 18:53, alexandru.tachici@analog.com wrote:
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
+> 
+> Add bindings for the ADIN1110/2111 MAC-PHY/SWITCH.
+> 
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+> ---
 
-Fixes: a8af5cc2ff1e80 ("spi: realtek-rtl: Add support for Realtek RTL838x/RTL839x SPI controllers")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
-I stumbled across this while reading the driver. This patch is untested
-because I don't have any hardware with this controller.
+Thank you for your patch. There is something to discuss/improve.
+
+>  .../devicetree/bindings/net/adi,adin1110.yaml | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/adi,adin1110.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/adi,adin1110.yaml b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
+> new file mode 100644
+> index 000000000000..cc83f08c0a55
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/adi,adin1110.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/adi,adin1110.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ADI ADIN1110 MAC-PHY
+> +
+> +maintainers:
+> +  - Alexandru Tachici <alexandru.tachici@analog.com>
+> +
+> +description: |
+> +  The ADIN1110 is a low power single port 10BASE-T1L MAC-
+> +  PHY designed for industrial Ethernet applications. It integrates
+> +  an Ethernet PHY core with a MAC and all the associated analog
+> +  circuitry, input and output clock buffering.
+> +
+> +  The ADIN2111 is a low power, low complexity, two-Ethernet ports
+> +  switch with integrated 10BASE-T1L PHYs and one serial peripheral
+> +  interface (SPI) port. The device is designed for industrial Ethernet
+> +  applications using low power constrained nodes and is compliant
+> +  with the IEEE 802.3cg-2019 Ethernet standard for long reach
+> +  10 Mbps single pair Ethernet (SPE).
+> +
+> +  The device has a 4-wire SPI interface for communication
+> +  between the MAC and host processor.
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,adin1110
+> +      - adi,adin2111
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  adi,spi-crc:
+> +    description: |
+> +      Enable CRC8 checks on SPI read/writes.
+> +    type: boolean
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+
+You had phy nodes here, but they were not replaced with the phy-handle.
+No ethernet-ports or mdios with phy?
 
 
- drivers/spi/spi-realtek-rtl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-realtek-rtl.c b/drivers/spi/spi-realtek-rtl.c
-index 866b0477dbd7..e5ad0f11996f 100644
---- a/drivers/spi/spi-realtek-rtl.c
-+++ b/drivers/spi/spi-realtek-rtl.c
-@@ -49,7 +49,7 @@ static void set_size(struct rtspi *rtspi, int size)
- 	u32 value;
- 
- 	value = readl(REG(RTL_SPI_SFCSR));
--	value &= RTL_SPI_SFCSR_LEN_MASK;
-+	value &= ~RTL_SPI_SFCSR_LEN_MASK;
- 	if (size == 4)
- 		value |= RTL_SPI_SFCSR_LEN4;
- 	else if (size == 1)
-@@ -143,7 +143,7 @@ static void init_hw(struct rtspi *rtspi)
- 	/* Permanently disable CS1, since it's never used */
- 	value |= RTL_SPI_SFCSR_CSB1;
- 	/* Select CS0 for use */
--	value &= RTL_SPI_SFCSR_CS;
-+	value &= ~RTL_SPI_SFCSR_CS;
- 	writel(value, REG(RTL_SPI_SFCSR));
- }
- 
--- 
-2.37.1
-
+Best regards,
+Krzysztof

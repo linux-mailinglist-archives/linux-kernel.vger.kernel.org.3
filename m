@@ -2,168 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5616957FF15
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D200C57FF17
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbiGYMiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S235021AbiGYMjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiGYMiX (ORCPT
+        with ESMTP id S234169AbiGYMjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:38:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4D4BC98
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:38:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oFxLc-0004gS-Ep; Mon, 25 Jul 2022 14:38:08 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 68AB6B98C1;
-        Mon, 25 Jul 2022 12:38:05 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 14:38:04 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Max Staudt <max@enpas.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] can: slcan: remove legacy infrastructure
-Message-ID: <20220725123804.ofqpq4j467qkbtzn@pengutronix.de>
-References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
- <20220725065419.3005015-3-dario.binacchi@amarulasolutions.com>
+        Mon, 25 Jul 2022 08:39:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36AA5BC98
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658752742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3WHFuKmZPQedoN55ZoH0FtL+rcxDT0vItFUzM4he2I8=;
+        b=XdVuorXcX3UyPmS6Mpnf0VZc2RmgGmB9OIc+vj3gqOyDQJlLHIT1DLzffEtVFoDl3+ekKe
+        PPUKhHKPrSxYttXJ2lVB2tBlCENlOjxtf8bG+EnEpINAtqXuZCVJFYi7Bwi8DKHOkbAaav
+        aBRaNvU2qjsThva9Zx+16hz2AFPjeYo=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-27-NdnxX3kONx6504fm3bNVgw-1; Mon, 25 Jul 2022 08:39:00 -0400
+X-MC-Unique: NdnxX3kONx6504fm3bNVgw-1
+Received: by mail-wm1-f70.google.com with SMTP id n30-20020a05600c501e00b003a3264465ebso5821606wmr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:39:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=3WHFuKmZPQedoN55ZoH0FtL+rcxDT0vItFUzM4he2I8=;
+        b=tn7o24noEcpo/dtAP6JE+bpqPGGTu5cmQEDPys0X3jIUpGlSuEyVeDnXF8p8SyIyPD
+         zFm0imwTXUc4qa4ChazkbvFJz2rdEZ6CbB4C6qr10rRKSj64Sp8UpckctAzs65BUNLSL
+         AAEfCvCy3rjlPeagk2fubnBqxZeoI1dPo8xLgJ5hQLt9YjD7CSZ3YXUlvbUY/bE7iW0o
+         4OuN46qmpEBXi3cCrDyS3NE63Nt2/9hCk2hWtefWD+O7mVsbWSOrDWnLtSevzn0pfhJA
+         QXK/zF6u2sUrDNp7VXeY96qLZb7OwdQfAPfDkMH/7gZccixoawEkpZ7L9DAVkAREPnMF
+         j8vQ==
+X-Gm-Message-State: AJIora9hQAqFGM8E13EyderiRJ2IvATaJptwJsWYJEAsN9C8OUbwLEfb
+        7xXOXnSuM0nIDAFQsM5c8y4Re0NC/fAKE7VUtAJ/mAikq1G781GDi7kWEJ6eVjk6GpyLVHtdc8Q
+        QTHyaIfwtzes3RmSJJSruCWQD
+X-Received: by 2002:a05:600c:1986:b0:3a3:490b:1fd4 with SMTP id t6-20020a05600c198600b003a3490b1fd4mr7365133wmq.140.1658752739747;
+        Mon, 25 Jul 2022 05:38:59 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vTnXfTssXHtYtWUqP9z+lS8oior8tLmN08lGBELo1Up+/gD5Avnva+lrhKtPOFyww/a8mGKA==
+X-Received: by 2002:a05:600c:1986:b0:3a3:490b:1fd4 with SMTP id t6-20020a05600c198600b003a3490b1fd4mr7365095wmq.140.1658752739261;
+        Mon, 25 Jul 2022 05:38:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:8c00:eee4:63f0:cef2:5ac0? (p200300cbc7048c00eee463f0cef25ac0.dip0.t-ipconnect.de. [2003:cb:c704:8c00:eee4:63f0:cef2:5ac0])
+        by smtp.gmail.com with ESMTPSA id r17-20020a5d52d1000000b0021d68a504cbsm11691804wrv.94.2022.07.25.05.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 05:38:58 -0700 (PDT)
+Message-ID: <7d664831-a78c-4a4f-5bd6-f0e04463ca7c@redhat.com>
+Date:   Mon, 25 Jul 2022 14:38:57 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e3oacdo4nyrbeooo"
-Content-Disposition: inline
-In-Reply-To: <20220725065419.3005015-3-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
+        tim.gardner@canonical.com, khalid.elmously@canonical.com,
+        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
+        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
+ <YtltYRuL+2uQkYUK@zn.tnic> <ebcf2979-45fc-8d41-cc28-ac8da0d24245@intel.com>
+ <Ytr4FCV2xPGUBLqs@zn.tnic> <707ca113-c2a2-8fe2-a22c-5be13adc7bb4@intel.com>
+ <Yt6LOD9Ae2NqyG1N@zn.tnic>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Yt6LOD9Ae2NqyG1N@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25.07.22 14:23, Borislav Petkov wrote:
+> On Fri, Jul 22, 2022 at 12:30:36PM -0700, Dave Hansen wrote:
+>> Sure does...  *Something* has to manage the cache coherency so that old
+>> physical aliases of the converted memory don't write back and clobber
+>> new data.  But, maybe the hardware is doing that now.
+> 
+> Let's hope.
+> 
+>> Yeah, that two-tier system is the way it's happening today from what
+>> I understand. This whole conversation is about how to handle the >4GB
+>> memory.
+> 
+> Would it be possible to pre-accept a bunch of mem - think "pre-fault" -
+> from userspace?
+> 
+> I.e., I'm thinking some huge process is going to start in the VM, VM
+> userspace goes and causes a chunk of memory to be pre-accepted and then
+> the process starts and runs more-or-less smoothly as the majority of its
+> memory has already been "prepared".
+> 
+> Or does that not make any sense from mm perspective?
+> 
 
---e3oacdo4nyrbeooo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The less core-MM code to handle unaccepted memory the better. Meaning,
+that any kind of additional pre-acceptance (in addition to what we have
+here) needs good justification.
 
-On 25.07.2022 08:54:15, Dario Binacchi wrote:
-> Taking inspiration from the drivers/net/can/can327.c driver and at the
-> suggestion of its author Max Staudt, I removed legacy stuff like
-> `SLCAN_MAGIC' and `slcan_devs' resulting in simplification of the code
-> and its maintainability.
->=20
-> The use of slcan_devs is derived from a very old kernel, since slip.c
-> is about 30 years old, so today's kernel allows us to remove it.
->=20
-> The .hangup() ldisc function, which only called the ldisc .close(), has
-> been removed since the ldisc layer calls .close() in a good place
-> anyway.
->=20
-> The old slcanX name has been dropped in order to use the standard canX
-> interface naming. It has been assumed that this change does not break
-> the user space as the slcan driver provides an ioctl to resolve from tty
-> fd to netdev name.
+-- 
+Thanks,
 
-Is there a man page that documents this iotcl? Please add it and/or the
-IOCTL name.
+David / dhildenb
 
-> The `maxdev' module parameter has also been removed.
->=20
-> CC: Max Staudt <max@enpas.org>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->=20
-> ---
->=20
-> Changes in v2:
-
-Nitpick:
-Changes since RFC: https://lore.kernel.org/all/20220716170007.2020037-1-dar=
-io.binacchi@amarulasolutions.com
-
-> - Update the commit description.
-> - Drop the old "slcan" name to use the standard canX interface naming.
->=20
->  drivers/net/can/slcan/slcan-core.c | 318 ++++++-----------------------
->  1 file changed, 63 insertions(+), 255 deletions(-)
->=20
-> diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/s=
-lcan-core.c
-> index c3dd7468a066..2c546f4a7981 100644
-> --- a/drivers/net/can/slcan/slcan-core.c
-> +++ b/drivers/net/can/slcan/slcan-core.c
-
-[...]
-
-> @@ -898,72 +799,49 @@ static int slcan_open(struct tty_struct *tty)
->  	if (!tty->ops->write)
->  		return -EOPNOTSUPP;
-> =20
-> -	/* RTnetlink lock is misused here to serialize concurrent
-> -	 * opens of slcan channels. There are better ways, but it is
-> -	 * the simplest one.
-> -	 */
-> -	rtnl_lock();
-> +	dev =3D alloc_candev(sizeof(*sl), 1);
-> +	if (!dev)
-> +		return -ENFILE;
-> =20
-> -	/* Collect hanged up channels. */
-> -	slc_sync();
-> +	sl =3D netdev_priv(dev);
-> =20
-> -	sl =3D tty->disc_data;
-> +	/* Configure TTY interface */
-> +	tty->receive_room =3D 65536; /* We don't flow control */
-> +	sl->rcount   =3D 0;
-> +	sl->xleft    =3D 0;
-
-Nitpick: Please use 1 space in front of the =3D.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---e3oacdo4nyrbeooo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLejqkACgkQrX5LkNig
-010mfgf/cH0YEhypTig+kCqgox8q4agiCCilkZAvzfxC/Krv3IF286RMEQTCQEXW
-gNG6EGyWJ63niB/Kum4fsG3Rbb7DxiTcjMqqALC7fWmJ1mKro6/lSN2SbO8LAU2B
-FCa3Cd3HujrZpbaiTo+DXIwQptbEH32GAFWqUL3Pr5IeclMMiaPeAxpPgTXYyP6/
-UqOldpT16NDyk+HdxPoieUPkK4ULcUqj7sAJzmPf+1rQWPZCPmFDI9K1l63ZswRz
-Eoh0S6j1LOKBzYLMmjSyNXts4iEDgxAOpkc188o4vkja9Y0fJghhany+/ojhHn+q
-TWKAVA20tMR12QAHA5xKhcBRWWtdMg==
-=I1Pq
------END PGP SIGNATURE-----
-
---e3oacdo4nyrbeooo--

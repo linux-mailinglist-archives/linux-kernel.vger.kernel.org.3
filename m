@@ -2,56 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AD457FF67
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BE757FF69
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbiGYM7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S235003AbiGYNAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbiGYM7P (ORCPT
+        with ESMTP id S232202AbiGYNAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:59:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D86B1FA
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:59:14 -0700 (PDT)
+        Mon, 25 Jul 2022 09:00:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9C1FE7;
+        Mon, 25 Jul 2022 06:00:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 602DCB80EB1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD26C341C6;
-        Mon, 25 Jul 2022 12:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658753952;
-        bh=qZ7cSckGA22g2DQPcAkq2U832I1kC6AlyyO4svOJTf8=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0848060B08;
+        Mon, 25 Jul 2022 13:00:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3126DC341CD;
+        Mon, 25 Jul 2022 13:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658754034;
+        bh=Z2zzzoZrRO4S3EO/OVriM7FNu33t82mtKGNUW8yxdMo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aY6XTKO0rcCik/LByRoaweygcgBFiODLB65LIAIn4VKqiMBf1Gm4WoAnQsenCBE72
-         aIjvCNLtIOvlA+RnLyKbgsuwlE8uEZmUalhGt9q4pV3U+f+sefIteBRAOOLJnrabUg
-         1qnCumEFUGO97fI+9925QLaGYQqUya365wvI9L0g=
-Date:   Mon, 25 Jul 2022 14:59:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        kernel test robot <lkp@intel.com>,
-        "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Jason A. Donenfeld" <zx2c4@kernel.org>
-Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723]
- arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version
- 4.6 of GCC
-Message-ID: <Yt6Tm4teRfNEvwcw@kroah.com>
-References: <202207250449.BYMZbIA2-lkp@intel.com>
- <Yt3KObFVIUI2mFGt@zx2c4.com>
- <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
- <Yt5Y/cIKIDlyFWMQ@kroah.com>
- <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
+        b=NTlzQhT+8azuC/qm812aifg/DmWh2eB2EqFOBkKQdycA2qCFLnrbnSv+IGxscEV7w
+         VxuRZ5zyIUkwMh+cu4ohMYZvn81JRF5aHk7+SlhD6qJAxylWrauDExuot+Ct5iSgb6
+         TmLxAzU/jxOVaHVX8LyXQ0Bz62L8r4ZKJWS9tELLxLeInMTkttTlDqUIJVou8vzAEY
+         Do+9YAz9S7qmUtM+Wy+8ThqHEXu0U2xMoh4hvRpG/jVBLZdJye1mIAzOCH0NJJdvx7
+         Nl79BRb4YBrpvRbqeW2KhqzG/mI30Sff/868k5qahgPtSNCL69+Megu+Ec7MWN3+G/
+         BsrRDWtE/NOow==
+Date:   Mon, 25 Jul 2022 16:00:14 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
+Message-ID: <Yt6T3vlbTZ5z0nZ/@kernel.org>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
+ <YtltYRuL+2uQkYUK@zn.tnic>
+ <ebcf2979-45fc-8d41-cc28-ac8da0d24245@intel.com>
+ <Ytr4FCV2xPGUBLqs@zn.tnic>
+ <707ca113-c2a2-8fe2-a22c-5be13adc7bb4@intel.com>
+ <Yt6LOD9Ae2NqyG1N@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
+In-Reply-To: <Yt6LOD9Ae2NqyG1N@zn.tnic>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,85 +82,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 02:41:42PM +0200, Ard Biesheuvel wrote:
-> On Mon, 25 Jul 2022 at 10:49, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jul 25, 2022 at 07:42:07AM +0200, Ard Biesheuvel wrote:
-> > > On Mon, 25 Jul 2022 at 00:40, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > > >
-> > > > Hi Ard,
-> > > >
-> > > > On Mon, Jul 25, 2022 at 04:14:48AM +0800, kernel test robot wrote:
-> > > > > All warnings (new ones prefixed by >>):
-> > > > >
-> > > > > >> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
-> > > > >    #warning This code requires at least version 4.6 of GCC
-> > > > >     ^
-> > > > >    1 warning generated.
-> > > > >
-> > > > >
-> > > > > vim +30 arch/arm/lib/xor-neon.c
-> > > > >
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  16
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
-> > > > > 01956597cbc46d Ard Biesheuvel 2013-05-17  32
-> > > >
-> > > > Does this file need a depends on ≥4.6 thing in Kconfig? Or is something
-> > > > else happening here since 4.6 isn't even supported by the kernel these
-> > > > days?
-> > > >
-> > >
-> > > Hi Jason,
-> > >
-> > > This is explained/fixed in
-> > >
-> > > commit a69cb445f7d129abf7c50d48c8a8eca7c8d5df15
-> > > Author: Ard Biesheuvel <ardb@kernel.org>
-> > > Date:   Sat Feb 5 16:23:46 2022 +0100
-> > >
-> > >     crypto: arm/xor - make vectorized C code Clang-friendly
-> > >
-> > >     The ARM version of the accelerated XOR routines are simply the 8-way C
-> > >     routines passed through the auto-vectorizer with SIMD codegen enabled.
-> > >     This used to require GCC version 4.6 at least, but given that 5.1 is now
-> > >     the baseline, this check is no longer necessary, and actually
-> > >     misidentifies Clang as GCC < 4.6 as Clang defines the GCC major/minor as
-> > >     well, but makes no attempt at doing this in a way that conveys feature
-> > >     parity with a certain version of GCC (which would not be a great idea in
-> > >     the first place).
-> > >
-> > > which landed in v5.18. Note that the patch depends on its parent,
-> > > which touches many different architectures, so it may not be
-> > > backportable cleanly.
-> >
-> > I would love to backport this as it bugs me to no end on some various
-> > gerrit systems all the time.  I'll look into it later this week unless
-> > someone beats me to it :)
-> >
+On Mon, Jul 25, 2022 at 02:23:20PM +0200, Borislav Petkov wrote:
+> On Fri, Jul 22, 2022 at 12:30:36PM -0700, Dave Hansen wrote:
+> > Sure does...  *Something* has to manage the cache coherency so that old
+> > physical aliases of the converted memory don't write back and clobber
+> > new data.  But, maybe the hardware is doing that now.
 > 
-> If backporting is an issue, we could just drop this warning - GCC
-> before 4.6 hasn't been supported for a while anyway, and Clang never
-> had the SIMD accelerated XOR to begin with (it needs the __restrict
-> annotations that the parent patch introduces)
+> Let's hope.
+> 
+> > Yeah, that two-tier system is the way it's happening today from what
+> > I understand. This whole conversation is about how to handle the >4GB
+> > memory.
+> 
+> Would it be possible to pre-accept a bunch of mem - think "pre-fault" -
+> from userspace?
+> 
+> I.e., I'm thinking some huge process is going to start in the VM, VM
+> userspace goes and causes a chunk of memory to be pre-accepted and then
+> the process starts and runs more-or-less smoothly as the majority of its
+> memory has already been "prepared".
 
-I would love to drop the warning, as it triggers when clang tries to
-build this file.
+An application in the VM can do mlock() or mmap(..., MAP_POPULATE, ...) and
+this will essentially force acceptance of that memory.
 
-thanks,
+But there's no sysctl or something for that.
+ 
+> Or does that not make any sense from mm perspective?
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
-greg k-h
+-- 
+Sincerely yours,
+Mike.

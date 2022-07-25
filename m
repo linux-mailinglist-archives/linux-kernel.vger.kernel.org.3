@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DE3580337
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2D8580339
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbiGYQ5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 12:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S235863AbiGYQ6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 12:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbiGYQ5w (ORCPT
+        with ESMTP id S236624AbiGYQ6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:57:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FEEFDEB9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658768270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zUTQcsRLeLjivibUTZmQzNSPdRIp0K6U7bQi13E1Qj8=;
-        b=Fuv1MDgui55xaEk1+IKmHxvIVrs2WZw3fbxlI140G3FxByiFqbPcuy7Y+kxkgOb2L1nkHp
-        6jh6X5FP8cIHE74jcMHxfRQwxubEZNyUB/zyimbVkVdSbtikuK4kw5SqSfnCAUazSzKHq3
-        xTZcHzE8X5mei2ycCwpn67lYRvkuHOU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-421-vvzqA9c5NwKGtlQgC_DWNw-1; Mon, 25 Jul 2022 12:57:49 -0400
-X-MC-Unique: vvzqA9c5NwKGtlQgC_DWNw-1
-Received: by mail-wm1-f69.google.com with SMTP id z11-20020a05600c0a0b00b003a043991610so4294917wmp.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:57:48 -0700 (PDT)
+        Mon, 25 Jul 2022 12:58:00 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F8E1DA7F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:57:56 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id c131so21119975ybf.9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=embecosm.com; s=google;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=DriQn3oUNtY9KztAGS0KsFuBc5YfBmykMcm24BuA1yQ=;
+        b=ZW+peu6caAHM2QqStdvCPisu6stK4U4IWoxtEX6sRrag8Bi+FtaUiXYwvMpPLfx+iT
+         9wIQYYp4or6uCLmyXyLiaeYqBtuqM48wm34IClitS+rPWKz5zvduDxo2uxVXr1G/Ned8
+         Vcxwlx4ZMLzw9M+qCJ1qnENF6WLSxT50llySPOYOXj+66tZP75fvxa3HcfUvSyKD3k/K
+         MaBNKjRX8hkvsq8NbNHtg4Aj/F6sQOqEgf2jgCwh2NckJWZKVXkXMv0q2HgbTMDCBsYF
+         NTd5VLR5CGNCcqhvK7cOZWg82T/fRShjQ9mwttc5oxb/O20MwRzSTfh3V6w+5ww4gofG
+         vvHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zUTQcsRLeLjivibUTZmQzNSPdRIp0K6U7bQi13E1Qj8=;
-        b=NTSWbn9GSufEkWYBAfHXlFmE6p3CaFXq/YsrCMHDlrWKlB40bCRIZy8iMvglUL/ck4
-         1CfbA2JBy8mLPUyh5sBVWAnNxuDWohgMpvI5qDSYczfTToYR7T4ter4GD2p2vSfwOj1U
-         Lj9xJrtGr36LQ17EjhIyyvAkKfEICiaGF2OoEVtUZNvCBDg2kESWjE+xfPWBJLbq3MGx
-         MFQg05EujFGVdKLwX5imYy5ev3X5FurHE1jnkvNpOEKRkeDxm+JFlk9pw0n9mry4sMW3
-         YE5hxxCtlbqEmvlIeNEwOBJAHKTcgG2xlbj3Q3WL0HhdIu/uRJ1G64C+n2z68htJ9OJA
-         3Wxg==
-X-Gm-Message-State: AJIora/mKy15S12PqYBiCpxfvdhzW4ipI1mXrdBsl3w0XejEKA/x4I0d
-        l6EkZIC3zi4HFjCXBh7bShv0pwUw4c3n/T19I/R0UCFNbjIHxRtQH8stRmNSWIOqDq7HnngDy2M
-        FXAUWZjt27UeA0K/XWMq3x547
-X-Received: by 2002:a5d:52c4:0:b0:21e:428a:912b with SMTP id r4-20020a5d52c4000000b0021e428a912bmr8284281wrv.395.1658768268029;
-        Mon, 25 Jul 2022 09:57:48 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vRXdoRgIcwEQFMM1Bbckaj4HHI9azZqFwkj6SGqynNPbemdAV9RYTJlHMOrSfp468++8vnzA==
-X-Received: by 2002:a5d:52c4:0:b0:21e:428a:912b with SMTP id r4-20020a5d52c4000000b0021e428a912bmr8284265wrv.395.1658768267774;
-        Mon, 25 Jul 2022 09:57:47 -0700 (PDT)
-Received: from pc-4.home (2a01cb058918ce00dd1a5a4f9908f2d5.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:dd1a:5a4f:9908:f2d5])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05600c358c00b0039c96b97359sm16080728wmq.37.2022.07.25.09.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 09:57:47 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 18:57:45 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Matthias May <matthias.may@westermo.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, nicolas.dichtel@6wind.com,
-        eyal.birger@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2 net-next] geneve: fix TOS inheriting
-Message-ID: <20220725165745.GC18808@pc-4.home>
-References: <20220724003741.57816-1-matthias.may@westermo.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=DriQn3oUNtY9KztAGS0KsFuBc5YfBmykMcm24BuA1yQ=;
+        b=hV4e1QFzcIKF3Inpa6lCmWehH8Oz0SGlLUgVpYrGnKIFhPle8hJsagqKFqM59lfnto
+         4zFGF8CYy+EflQq4Q87XLvSquNitkBHUsAU9F0pQvsZbGZRNKlpqaofOpDreuuHDbGjK
+         BDVjAm32EE0C/RVCyo0tXV+394XmbHQIk9I6OL8W6tPhmH8Rqak5owg+Xne+vwc6r4hg
+         Fd70twBGFFDeox9swJ3Wa/FXc5SmQ2k8jMjp2MD89dhJEo/da9Q4DlQ/A4zfsSSu4o8a
+         Cxukk3Br5TRSP+U4AsSi+r/m+rvcIUpflR3sSYj/juNYuEE/uiC9XpFZkfmaAIl9McXc
+         FIhQ==
+X-Gm-Message-State: AJIora/jwXdVmjRIXdQFHzjMY0KnbLllG+Oh5MMSdynG04+0a+CakXuz
+        n3qcxH5kqnRoW4w2N52yZ0CfXAolZL8CQQ6Tdq9fKA==
+X-Google-Smtp-Source: AGRyM1vna0EzJ1fGGzIgIm07JkuMAsb1BoGLPWFsmN6rGuB3/QzKtteSbNpCgCzOcMV/LeVz+/zNh0xkSyZdNA1xFHA=
+X-Received: by 2002:a5b:1c8:0:b0:671:5d14:5974 with SMTP id
+ f8-20020a5b01c8000000b006715d145974mr1799440ybp.123.1658768275765; Mon, 25
+ Jul 2022 09:57:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220724003741.57816-1-matthias.may@westermo.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Maxim Blinov <maxim.blinov@embecosm.com>
+Date:   Mon, 25 Jul 2022 17:57:45 +0100
+Message-ID: <CADmoyEiUoULvn76UXcS0DaF2-Us4CTL=SyXf7PWYqfPTF3PTtQ@mail.gmail.com>
+Subject: How to read RISC-V mcycle CSR from Linux userspace app?
+To:     qemu-devel@nongnu.org, qemu-riscv@nongnu.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 02:37:39AM +0200, Matthias May wrote:
-> Is there any reason why the flowlabel should be restricted to these
-> 3 bits?
+Hi all, stupid question but I can't for the life of me figure this out
+even with all the docs open.
 
-It's a bug, likely a copy/paste mistake.
+I need to get an estimate figure for the cyclecount of a busy loop in
+one of my small Linux userspace apps. The app in question is running
+in qemu-system-riscv64. I've compiled QEMU myself, and the full code
+is like this:
 
-> The patch simply removes the usage of this macro, but i don't
-> know if there was a specific intention behind that.
+#include <unistd.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-RT_TOS() is an old macro used to interprete IPv4 TOS as described in
-the obsolete RFC 1349. It's conceptually wrong to use it even in IPv4
-code, although, given the current state of the code, most of the
-existing calls have no consequence.
+uint64_t get_mcycle() {
+  uint64_t mcycle = 0;
 
-But using RT_TOS() in IPv6 code is always a bug: IPv6 never had a "TOS"
-field to be interpreted the RFC 1349 way. There's no historical
-compatibility to worry about.
+  asm volatile ("csrr %0,mcycle"   : "=r" (mcycle)  );
 
+  return mcycle;
+}
+
+int main(int argc, char **argv) {
+  printf("Hello\n");
+  printf("mcycle is %lu\n", get_mcycle());
+
+  return 0;
+}
+
+Now I get SIGILL when I hit the `csrr` insn, which makes sense.
+According to the "Privileged Architecture Version 1.10", page 32, [1]
+we need to set mcounteren, hcounteren, and scounteren low bits to 1 in
+order to get the mcycle csr to become available in userspace. So I add
+the following function:
+
+void enable_mcount() {
+  /* Enable IR, TM, CY */
+  uint64_t mcounteren = 0x5;
+  asm volatile ("csrw mcounteren,%0" : "=r" (mcounteren));
+  asm volatile ("csrw hcounteren,%0" : "=r" (mcounteren));
+  asm volatile ("csrw scounteren,%0" : "=r" (mcounteren));
+}
+
+And call it before I call get_mcycle(), but this triggers SIGILL
+(unsurprisingly) also, since these CSRs are also privileged. So
+there's a bit of a chicken and egg problem.
+
+Could someone more knowledgeable please suggest what the course of
+action here is? I've got QEMU revision f45fd24c90 checked out, and I'm
+staring at qemu/target/riscv/csr.c:71, which seems to deal with
+whether or not to raise a SIGILL upon access. I can see a condition
+for when we're in 'S' mode, but nothing for 'U' mode. Does that mean
+there is fundamentally no access to these CSR's from 'U' mode? Is it
+possible to just hack it in?
+
+Maxim
+
+[1]: https://riscv.org/wp-content/uploads/2017/05/riscv-privileged-v1.10.pdf

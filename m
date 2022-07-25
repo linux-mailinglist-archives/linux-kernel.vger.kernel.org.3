@@ -2,178 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E8C57FBFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B92C57FC05
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234492AbiGYJHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S234521AbiGYJIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiGYJHa (ORCPT
+        with ESMTP id S234169AbiGYJIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:07:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88C101DA;
-        Mon, 25 Jul 2022 02:07:28 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8899066015E7;
-        Mon, 25 Jul 2022 10:07:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658740047;
-        bh=uBO/pkzkv5EBZYyQnsx8/L7C7pGHaycXjjQey8xXLe4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QbtCyY/TkCm/cZ6AZqWzL7/QMYs2ImlWgUzVxfDiic5PcKm8bW9KeO+u+AdbMM+Z5
-         bI0DjNsw21DmjykhDxvsLDyL1ImWvZ3OX2VSLVeSLlAM5D5uslVqbPAImGNKuZhzMf
-         KetO4iahmMfcG0fIOg9u+5J0dbyU2UXGs6FSJn54KQ+gqrvaEasYO8sUe9uotVNFkb
-         G72Aby95gW0LR8kpNE0tlQlRlmQv4Ulnzu48hz39lC8Tct1N1XO7Dk9CLcjrnvtun3
-         xfll+2wTR+urIfDaTR5MdkiKhFzVMVuK1q5YVk/ROibH5h5QwLFEQ0brJiHvTjaOVQ
-         CUnU9FPjpDKog==
-Message-ID: <59d9e674-2021-b02e-4ec8-aee8a118a96d@collabora.com>
-Date:   Mon, 25 Jul 2022 11:07:23 +0200
+        Mon, 25 Jul 2022 05:08:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAB310555;
+        Mon, 25 Jul 2022 02:08:14 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z22so13034036edd.6;
+        Mon, 25 Jul 2022 02:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SKEZcZKyJPxnUIHg9vM+IkXxZdZ8ejobr3a6ltkwgqg=;
+        b=SF+aqs+EVnbsbKQkA/8xNH4ehlnunss9fmN5U1pnRWAD2EMIQ+vnoZbzG36K5peZlX
+         CXhER1ViMJa80xFPZtY843nWQs5F1BNT454kUiXwBosjz4IYFjnLaJailn/bPKEmOYYj
+         OQZu//AWglB0ze0HUO1SQYsIXOFhVkCy9Y+HPByleJg8LXsl2myXUq38a43P555UG4Bx
+         W4w40So2uuPYw5I5cWqSTLAX8vR149Ik4ff+qJQus9SdkPcCLkZ3D5xoOpeLQVKUQZ8Y
+         zppNE2E5jRpSRhv5vq/EJEOVqtSyTp9xfxGx+C2GzeLpQ8Hqwv5+/dQLpC89uzdBr14a
+         kbDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SKEZcZKyJPxnUIHg9vM+IkXxZdZ8ejobr3a6ltkwgqg=;
+        b=WMP0r+Teh2HRAGcBZqzf9+ZXiWOTXBwm4NQZLWVE/qZNeqLyBOMCWslXcLHqQgjG7/
+         UYvUr5X0LE+IYvOlM74OSmJiPwCqzJiEUEybDBZlRCmJm8pN1uvWyzZABrYrRxq72GJd
+         nqyifhDDvTZJA/aBy4bAVnLS4/GzviEh5ImuG6oOh7Rl25vZm9c76T9h6juw9CqE74Fl
+         s6Ze30Wwgwp0Bwr30LaA/wTAy9JkgtChBqEY04VJMxupeb+DDOQkikZimfho2d0giW4N
+         wzEYPG3KWCFrREVI/4QSH9Jv6hYQ9jiP+Wat2B7DesHKKdoDSfqGxR/Mx7W3H27LHQJr
+         8SVg==
+X-Gm-Message-State: AJIora/LO3rc3m1iZ8cuNX07+tV846xIITdFMWo11PwhtbavJrStdhUL
+        RVnzydnp8AC0eBmvnAN8/hg3bX8HS0G9Iei7Hag=
+X-Google-Smtp-Source: AGRyM1v5JqoLA7zG3OW50lchaZUo0NzhFJOo3SiC7x0i5Bb09pqP2OvkrfyBcnIJEGb6N4UIi+1F3CYnjToz5WfvfBA=
+X-Received: by 2002:a05:6402:50c9:b0:43c:163a:4d5f with SMTP id
+ h9-20020a05640250c900b0043c163a4d5fmr1821081edb.386.1658740092120; Mon, 25
+ Jul 2022 02:08:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/4] soc: mediatek: add support of MTK_SCPD_STRICT_BUSP
- cap
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-14-peterwu.pub@gmail.com>
+In-Reply-To: <20220722102407.2205-14-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 11:07:35 +0200
+Message-ID: <CAHp75VfxeRR7BzOWwfNSo+x3JZcH37ogR+ZbapTAWrCYkr+FUg@mail.gmail.com>
+Subject: Re: [PATCH v6 13/13] video: backlight: mt6370: Add MediaTek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>
-Cc:     Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>
-References: <20220725081853.1636444-1-msp@baylibre.com>
- <20220725081853.1636444-4-msp@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220725081853.1636444-4-msp@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Alice Chen <alice_chen@richtek.com>,
+        cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/07/22 10:18, Markus Schneider-Pargmann ha scritto:
-> From: Alexandre Bailon <abailon@baylibre.com>
-> 
-> This adds support for MTK_SCPD_STRICT_BUSP capability. It is a strict
-> bus protection policy that requires the bus protection to be disabled
-> before accessing the bus.
-> This is required by the mt8365, for the MM power domain.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> ---
-> 
-> Notes:
->      Changes in v2:
->      - Fixup error handling path.
-> 
->   drivers/soc/mediatek/mtk-pm-domains.c | 29 +++++++++++++++++++++++----
->   drivers/soc/mediatek/mtk-pm-domains.h |  1 +
->   2 files changed, 26 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-> index d0eae2227813..94ca8981f45e 100644
-> --- a/drivers/soc/mediatek/mtk-pm-domains.c
-> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-> @@ -240,6 +240,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
->   	struct scpsys *scpsys = pd->scpsys;
->   	bool tmp;
->   	int ret;
-> +	bool strict_busprotect;
->   
->   	ret = scpsys_regulator_enable(pd->supply);
->   	if (ret)
-> @@ -263,9 +264,18 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
->   	regmap_clear_bits(scpsys->base, pd->data->ctl_offs, PWR_ISO_BIT);
->   	regmap_set_bits(scpsys->base, pd->data->ctl_offs, PWR_RST_B_BIT);
->   
-> -	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-> -	if (ret)
-> -		goto err_pwr_ack;
-> +	/*
-> +	 * In few Mediatek platforms(e.g. MT6779), the bus protect policy is
-> +	 * stricter, which leads to bus protect release must be prior to bus
-> +	 * access.
-> +	 */
-> +	strict_busprotect = MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUSP);
-> +	if (!strict_busprotect) {
+On Fri, Jul 22, 2022 at 12:25 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+>
+> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> driver, display bias voltage supply, one general purpose LDO, and the
+> USB Type-C & PD controller complies with the latest USB Type-C and PD
+> standards.
+>
+> This adds support for MediaTek MT6370 Backlight driver. It's commonly used
 
-Please directly check for MTK_SCPD_CAPS, you don't really need that bool variable,
-not even for performance... and it fits just fine in one line, even.
+Read Submitting Patches, please!
 
-	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
+(In this case, find "This patch" in the above mentioned document, read
+and act accordingly)
 
-> +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
-> +					      pd->subsys_clks);
-> +		if (ret)
-> +			goto err_pwr_ack;
-> +	}
->   
->   	ret = scpsys_sram_enable(pd);
->   	if (ret < 0)
-> @@ -275,12 +285,23 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
->   	if (ret < 0)
->   		goto err_disable_sram;
->   
-> +	if (strict_busprotect) {
+> to drive the display WLED. There are 4 channels inside, and each channel
+> supports up to 30mA of current capability with 2048 current steps in
+> exponential or linear mapping curves.
 
-	if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
+...
 
-> +		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
-> +					      pd->subsys_clks);
-> +		if (ret)
-> +			goto err_enable_bus_protect;
-> +	}
-> +
->   	return 0;
->   
-> +err_enable_bus_protect:
+> +               brightness_val[1] = (brightness - 1) >> fls(MT6370_BL_DIM2_MASK);
 
-For human readability purposes (and paranoidly preventing future mistakes), I'd
-add a check for the strict bus protection cap here too.
 
-> +	scpsys_bus_protect_enable(pd);
->   err_disable_sram:
->   	scpsys_sram_disable(pd);
->   err_disable_subsys_clks:
-> -	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-> +	if (!strict_busprotect)
-> +		clk_bulk_disable_unprepare(pd->num_subsys_clks,
-> +					   pd->subsys_clks);
->   err_pwr_ack:
->   	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
->   err_reg:
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
-> index e788d6bdde9d..a50cfb926d22 100644
-> --- a/drivers/soc/mediatek/mtk-pm-domains.h
-> +++ b/drivers/soc/mediatek/mtk-pm-domains.h
-> @@ -8,6 +8,7 @@
->   #define MTK_SCPD_SRAM_ISO		BIT(2)
->   #define MTK_SCPD_KEEP_DEFAULT_OFF	BIT(3)
->   #define MTK_SCPD_DOMAIN_SUPPLY		BIT(4)
-> +#define MTK_SCPD_STRICT_BUSP		BIT(5)
+(see below)
 
-MTK_SCPD_STRICT_BUS_PROTECTION is a bit more human readable.
+...
 
->   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
->   
->   #define SPM_VDE_PWR_CON			0x0210
+> +               /*
+> +                * To make MT6372 using 14 bits to control the brightness
+> +                * backward compatible with 11 bits brightness control
+> +                * (like MT6370 and MT6371 do), we left shift the value
+> +                * and pad with 1 to remaining bits. Hence, the MT6372's
 
-Regards,
-Angelo
+to the remaining
+
+> +                * backlight brightness will be almost the same as MT6370's
+> +                * and MT6371's.
+> +                */
+> +               if (priv->vid_type == MT6370_VID_6372) {
+> +                       brightness_val[0] <<= MT6370_BL_DIM2_6372_SHIFT;
+> +                       brightness_val[0] |= MT6370_BL_DUMMY_6372_MASK;
+> +               }
+
+Nice! Why not...
+
+...
+
+> +       gpiod_set_value(priv->enable_gpio, brightness ? 1 : 0);
+
+!!brightness will do as well.
+
+...
+
+> +       brightness = brightness_val[1] << fls(MT6370_BL_DIM2_MASK);
+
+> +               val |= prop_val << (ffs(MT6370_BL_PWM_HYS_SEL_MASK) - 1);
+
+> +               val |= ovp_uV << (ffs(MT6370_BL_OVP_SEL_MASK) - 1);
+
+> +               val |= ocp_uA << (ffs(MT6370_BL_OC_SEL_MASK) - 1);
+
+> +       val = prop_val << (ffs(MT6370_BL_CH_MASK) - 1);
+
+...to use respective _SHIFTs in all these?
+
+...
+
+> +       priv->enable_gpio = devm_gpiod_get_optional(dev, "enable",
+> +                                                   GPIOD_OUT_HIGH);
+> +       if (IS_ERR(priv->enable_gpio))
+> +               dev_err(dev, "Failed to get 'enable' gpio\n");
+
+What does this mean? Shouldn't be
+
+  return dev_err_probe()?
+
+-- 
+With Best Regards,
+Andy Shevchenko

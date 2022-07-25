@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FEA580324
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B33B5802F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235692AbiGYQwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 12:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S236446AbiGYQkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 12:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiGYQwV (ORCPT
+        with ESMTP id S236338AbiGYQkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:52:21 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5921D0DB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:52:19 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id i13so8834050qvo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j0BaZSzqD5eIgwyip/HS4aDnwW9Jp806htc77k2W+9I=;
-        b=YrRC8+DcvcJ+j3/daDEZUkXI7wwrYxc1PEjLb5WJCKV4hOP1uHTC/ifMwxGxMiDkfx
-         /A82VqK1LTw9pVhvRXWQeyXrrPJ2ZvCuG5iWP7cY8NmWkKUfWofwwTglQWitP4sLRpre
-         NB5VpzmQIT0yR8C+q/8SpRe6N4qEXuOmhz9/zyJDdIRw6IQfETk2K2RZNRdauaalnISk
-         ecXU6u6eJyO8O/HQW59YX4MJEK3q8L7+iGwgT+B0Xfmvz2s9vSCXiUlMoZjDizM7CmZj
-         Pva3rt58bJXcA2sOVprKVekCrokJioAdbUfKQmHTFPMiKttfucAsODDHed2z6c5VspUe
-         9oNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j0BaZSzqD5eIgwyip/HS4aDnwW9Jp806htc77k2W+9I=;
-        b=JXo9lJWV3bLta2K2h8Fs6mkkHRfzFC+bqd7MU/QpthROF7uMZw8OLt07TJZ79AZlqB
-         mdghoaTx7tMVONou8JqpEl4S0e0y4X182pHYqAFI6zR+M5U4iimr04bTKDWrX6IffyeH
-         WEVDp+ViHZHNW1prVqxxwSPLC+5kynyCSB08IRM7kxT55jG+wgVQXb8FV+mx6EwASZYa
-         B68we9FCI94ibFxCbXJ2PuJg8fz2vcfCkCKPa3kjr7tggVEHxk+GwGwCm+m+cELgW+gO
-         wiwqI1zCVjAvwTFPFOzaNOx6uAtl9FgkcOAsJVpTCXnklVDUrWMrSWumwtSwUY/3Aptl
-         sv6w==
-X-Gm-Message-State: AJIora/jH0/5b2z59qMJ83De1VCNCHhRRsMgtJLcMA9XHvRXVts0MsI0
-        Z3lKyE9A0ztX9DTdTInAp/26Hw==
-X-Google-Smtp-Source: AGRyM1uv3LFH6aM79vzCkplcfzTZ3m25YJ7ns1XG6o8aG/GGTPTrtN6PwrSDI9Hn7ptl4H/XTiIloQ==
-X-Received: by 2002:ad4:5de4:0:b0:474:2384:a0e9 with SMTP id jn4-20020ad45de4000000b004742384a0e9mr11516834qvb.79.1658767938522;
-        Mon, 25 Jul 2022 09:52:18 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:994f])
-        by smtp.gmail.com with ESMTPSA id u20-20020ac858d4000000b00304f3e320f2sm7915678qta.4.2022.07.25.09.52.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 09:52:18 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 12:52:17 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
-        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
-        rdunlap@infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH 8/9] sched/psi: add kernel cmdline parameter
- psi_inner_cgroup
-Message-ID: <Yt7KQc0nnOypB2b2@cmpxchg.org>
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-9-zhouchengming@bytedance.com>
+        Mon, 25 Jul 2022 12:40:03 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC85A1D0D7;
+        Mon, 25 Jul 2022 09:40:02 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PEhPLo014892;
+        Mon, 25 Jul 2022 12:39:36 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3hgdw5wdn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 12:39:36 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 26PGdZlL013494
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 25 Jul 2022 12:39:35 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 25 Jul
+ 2022 12:39:34 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 25 Jul 2022 12:39:34 -0400
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 26PGd7uI014141;
+        Mon, 25 Jul 2022 12:39:09 -0400
+From:   <alexandru.tachici@analog.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <devicetree@vger.kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gerhard@engleder-embedded.com>, <geert+renesas@glider.be>,
+        <joel@jms.id.au>, <stefan.wahren@i2se.com>, <wellslutw@gmail.com>,
+        <geert@linux-m68k.org>, <robh+dt@kernel.org>,
+        <d.michailidis@fungible.com>, <stephen@networkplumber.org>,
+        <l.stelmach@samsung.com>, <linux-kernel@vger.kernel.org>
+Subject: [net-next v2 0/3] net: ethernet: adi: Add ADIN1110 support
+Date:   Mon, 25 Jul 2022 19:53:09 +0300
+Message-ID: <20220725165312.59471-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721040439.2651-9-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: bvmOsmDdtN_j5jZXNSoCv3VxyPWa_I5P
+X-Proofpoint-ORIG-GUID: bvmOsmDdtN_j5jZXNSoCv3VxyPWa_I5P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-25_12,2022-07-25_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 spamscore=0 malwarescore=0 suspectscore=0 bulkscore=0
+ phishscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207250067
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,21 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:04:38PM +0800, Chengming Zhou wrote:
-> PSI accounts stalls for each cgroup separately and aggregates it
-> at each level of the hierarchy. This may case non-negligible overhead
-> for some workloads when under deep level of the hierarchy.
-> 
-> commit 3958e2d0c34e ("cgroup: make per-cgroup pressure stall tracking configurable")
-> make PSI to skip per-cgroup stall accounting, only account system-wide
-> to avoid this each level overhead.
-> 
-> For our use case, we also want leaf cgroup PSI accounted for userspace
-> adjustment on that cgroup, apart from only system-wide management.
+From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-I hear the overhead argument. But skipping accounting in intermediate
-levels is a bit odd and unprecedented in the cgroup interface. Once we
-do this, it's conceivable people would like to do the same thing for
-other stats and accounting, like for instance memory.stat.
+The ADIN1110 is a low power single port 10BASE-T1L MAC-PHY
+designed for industrial Ethernet applications. It integrates
+an Ethernet PHY core with a MAC and all the associated analog
+circuitry, input and output clock buffering.
 
-Tejun, what are your thoughts on this?
+ADIN1110 MAC-PHY encapsulates the ADIN1100 PHY. The PHY registers
+can be accessed through the MDIO MAC registers.
+We are registering an MDIO bus with custom read/write in order
+to let the PHY to be discovered by the PAL. This will let
+the ADIN1100 Linux driver to probe and take control of
+the PHY.
+
+The ADIN2111 is a low power, low complexity, two-Ethernet ports
+switch with integrated 10BASE-T1L PHYs and one serial peripheral
+interface (SPI) port.
+
+The device is designed for industrial Ethernet applications using
+low power constrained nodes and is compliant with the IEEE 802.3cg-2019
+Ethernet standard for long reach 10 Mbps single pair Ethernet (SPE).
+The switch supports various routing configurations between
+the two Ethernet ports and the SPI host port providing a flexible
+solution for line, daisy-chain, or ring network topologies.
+
+The ADIN2111 supports cable reach of up to 1700 meters with ultra
+low power consumption of 77 mW. The two PHY cores support the
+1.0 V p-p operating mode and the 2.4 V p-p operating mode defined
+in the IEEE 802.3cg standard.
+
+The device integrates the switch, two Ethernet physical layer (PHY)
+cores with a media access control (MAC) interface and all the
+associated analog circuitry, and input and output clock buffering.
+
+The device also includes internal buffer queues, the SPI and
+subsystem registers, as well as the control logic to manage the reset
+and clock control and hardware pin configuration.
+
+Access to the PHYs is exposed via an internal MDIO bus. Writes/reads
+can be performed by reading/writing to the ADIN2111 MDIO registers
+via SPI.
+
+On probe, for each port, a struct net_device is allocated and
+registered. When both ports are added to the same bridge, the driver
+will enable offloading of frame forwarding at the hardware level.
+
+Driver offers STP support. Normal operation on forwarding state.
+Allows only frames with the 802.1d DA to be passed to the host
+when in any of the other states.
+
+Supports both VEB and VEPA modes. In VEB mode multicast/broadcast
+and unknown frames are handled by the ADIN2111, sw bridge will
+not see them (this is to save SPI bandwidth). In VEPA mode,
+all forwarding will be handled by the sw bridge, ADIN2111 will
+not attempt to forward any frames in hardware to the other port.
+
+Alexandru Tachici (3):
+  net: phy: adin1100: add PHY IDs of adin1110/adin2111
+  net: ethernet: adi: Add ADIN1110 support
+  dt-bindings: net: adin1110: Add docs
+
+Changelog V1 -> V2:
+adin1100.c:
+	- added additional PHY IDs that are found in both the ADIN1110 and ADIN2111 ICs
+
+adin1110.c:
+	- fixed warnings when built with W=1
+	- in adin1110_irq(): check status register read return value before moving on
+	- call adin1110_read_frames() with a fixed budget to avoid running forever in the loop
+	- in adin1110_port_bridge_join(): removed if() that checks if same port was
+	added to multiple bridges, core already does that
+	- phy_connect() now called with PHY_INTERFACE_MODE_INTERNAL instead
+	- replaced dev_err() dev_err_ratelimited() in places where could flood log
+	- set spi->mode to SPI_MODE_0
+	- on PHY_ID check also print expected PHY_ID
+	- removed lock/unlock from adin1110_ndo_get_stats64()
+	- removed rx_errors/rx_dropped/multicast counters updates for now. Those need
+	SPI register reads in order to be accessed.
+	- replaced mutex_unlocks() + return with gotos and a single mutex_unlock()
+	- in adin1110_rx_mode_work(): check port_priv->flags for IFF_BROADCAST in order to
+	enable/disable RX broadcast frames
+	- allow promiscuous mode for ADIN2111. In this way, when added to a bridge, CPU will see
+	the frames with an unknown destination address
+	- in adin1110_rx_mode_work: also check if hw forwarding offloading can be enabled
+	- added STP support
+	- added VEB/VEPA support (ADIN2111). VEB can be used to allow the hardware to
+	offload forwarding thus decreasing the amount of SPI talk, but with disregard
+	to VLAN tags (hardware is oblivious to those). Also in VEB mode host will
+	receive only multicast/broadcast or host MAC address.
+	VEPA allows the bridge to handle all forwarding. ADIN2111 will not attempt to forward
+	in hardware any type of frame.
+
+adi,adin1110.yaml:
+	- Removed comas from $id and $schema
+	- Removed spi-controller from ref:
+	- Removed patternProperties for PHYs. No need to specify PHY IDs.
+	Phylib probes required drivers anyway based on the IDs found on the registered MDIO bus.
+	- Updated DT example
+
+ .../devicetree/bindings/net/adi,adin1110.yaml |   81 +
+ drivers/net/ethernet/Kconfig                  |    1 +
+ drivers/net/ethernet/Makefile                 |    1 +
+ drivers/net/ethernet/adi/Kconfig              |   28 +
+ drivers/net/ethernet/adi/Makefile             |    6 +
+ drivers/net/ethernet/adi/adin1110.c           | 1449 +++++++++++++++++
+ drivers/net/phy/adin1100.c                    |    7 +-
+ 7 files changed, 1572 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/net/adi,adin1110.yaml
+ create mode 100644 drivers/net/ethernet/adi/Kconfig
+ create mode 100644 drivers/net/ethernet/adi/Makefile
+ create mode 100644 drivers/net/ethernet/adi/adin1110.c
+
+-- 
+2.25.1
+

@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944D757FEE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57F657FEE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbiGYMVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S234700AbiGYMWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbiGYMVu (ORCPT
+        with ESMTP id S232415AbiGYMWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:21:50 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CA912A97;
-        Mon, 25 Jul 2022 05:21:49 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id l23so20266052ejr.5;
-        Mon, 25 Jul 2022 05:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G0PeCq1InDOkHOrNdVXPwB00U4H1K4rkSaM7X/6x/yY=;
-        b=Qc0ca/A2Fx6A0ywOqLmxQVOBwGXF22OUlBf9l2K1xV4siHvmXO7NgFNEA+FoO06JvH
-         N1dNju0HGfWElAx7YhsO22pH5/P0gYAmSAxyF/6k7olhAGdGqLT8WdCh/Cl276Ydg9Jl
-         QDOhzRFb3UtkTJvwaaZR5PLrTyyzLNdFdw2pJmgFdfjAAjtxc/qrSBKT5THtEqUvSyeS
-         VR1NKqgYn7wMTtgPRcnfAYKjcIWfAlOjqCnv7ticFaiOZLsQmFneGBJhCgKzrKZynA+w
-         Ugn3YJr2tcntbKq8XQcThtfwG+BZrVPEW5lrDniByuDnu94fVv/cxG5abmvJ+cbmwLi1
-         WVtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G0PeCq1InDOkHOrNdVXPwB00U4H1K4rkSaM7X/6x/yY=;
-        b=RH0zq/JGladV97p27EQv9IXo3pfF0uDV1rd4CQjaJ58ZJTLFEtqR6Tw+3j0PyDWewo
-         tc/dAruyL19Nro6nEk4GWSyLXbKmIR2KKpx6aq88oAgPsNOvqpvhCLazWZ4SVotum9bM
-         o31o0DQFclkuBeXd6q1Esnq/t44ABIVXA6wI5RXPWd1rbXJcGWFTocE3LRd+Uc4BkPbF
-         wKYzbe2+ZjW2Eao9Jo+6PXc95lyAba0fb5Sp1JRLnLl4MBImUZdOCZSpGlEdxnBX4O5b
-         PCHT2S3jPxWcb+ZPl/S+4pVzOEwDjaNtgcVuPPe2c/92BtgWQv9GpYrr/FlZbbXaMAno
-         eToA==
-X-Gm-Message-State: AJIora8wCtqOnbyxrvB9/7akaZ+mWErd0XXnY7yu84pmPtd+98OaSqWE
-        k06tawyn52QcEkTvnyK/pAg=
-X-Google-Smtp-Source: AGRyM1stnfooI8JCARcglDL0Mpaxsa/lEzBkf0Yq4zwLyMiM1tz6HnrbKPjfSZRKe/NLBhziXcQBXQ==
-X-Received: by 2002:a17:907:86ac:b0:72b:87f6:75c2 with SMTP id qa44-20020a17090786ac00b0072b87f675c2mr10140367ejc.667.1658751707293;
-        Mon, 25 Jul 2022 05:21:47 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id kx19-20020a170907775300b0072fc952b57csm2468145ejc.55.2022.07.25.05.21.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 05:21:46 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 15:21:44 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Marcin Wojtas <mw@semihalf.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>
-Subject: Re: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for
- CPU/DSA ports
-Message-ID: <20220725122144.bdiup756mgquae3n@skbuf>
-References: <20220714010021.1786616-1-mw@semihalf.com>
- <20220724233807.bthah6ctjadl35by@skbuf>
- <CAPv3WKdFNOPRg45TiJuAVuxM0LjEnB0qZH70J1rMenJs7eBJzw@mail.gmail.com>
+        Mon, 25 Jul 2022 08:22:19 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2369B1A800
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:22:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lrzgp72QQz4x1N;
+        Mon, 25 Jul 2022 22:22:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658751735;
+        bh=cmz1y9U6BERShVkGWPBKfC1B5sFPBW9aAhvI41ZOn54=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YXczojTgkFwxQbPWFPF2zx7e5Mj9AdorE4+jm72bj1fgx/ryA4Y6bpJMaMVCN63zM
+         S09SEe3izkieyLY45msWqdI5sPDB4vjn7TEWKdh4lOmjdhBrKhVglBaJPvQzpfzXXY
+         h1oS95mapZD4oTBSy5Ny9EyD3LeR7yOwe6S7KHSeeZ15AH8eOCiiQ/D7cPkl/vE3nM
+         04C99ZtaqbgCUFmfDFDCsmppmfupiXjufeU8oE1RxQ/jYuTKTxRXoq9ysgHUioDPaN
+         ZXZL/6U9bsyWm/PxToK16Xg9f+i/68i2qRj9YV3xFvFweOaon0a0CIksqnkhjdLMyF
+         rXdugKMgVsldA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linuxppc-dev@lists.ozlabs.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH 1/2] powerpc: drop dependency on <asm/machdep.h> in
+ archrandom.h
+In-Reply-To: <8735epd204.fsf@mpe.ellerman.id.au>
+References: <20220723214537.2054208-1-yury.norov@gmail.com>
+ <20220723214537.2054208-2-yury.norov@gmail.com>
+ <8735epd204.fsf@mpe.ellerman.id.au>
+Date:   Mon, 25 Jul 2022 22:22:13 +1000
+Message-ID: <87wnc1bcwa.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPv3WKdFNOPRg45TiJuAVuxM0LjEnB0qZH70J1rMenJs7eBJzw@mail.gmail.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 02:18:45AM +0200, Marcin Wojtas wrote:
-> I can of course apply both suggestions, however, I am wondering if I
-> should resend them at all, as Russell's series is still being
-> discussed. IMO it may be worth waiting whether it makes it before the
-> merge window - if not, I can resend this patch after v5.20-rc1,
-> targetting the net branch. What do you think?
+Michael Ellerman <mpe@ellerman.id.au> writes:
+> Yury Norov <yury.norov@gmail.com> writes:
+>> archrandom.h includes <asm/machdep.h> to refer ppc_md. This causes
+>> circular header dependency, if generic nodemask.h  includes random.h:
+>>
+>> In file included from include/linux/cred.h:16,
+>>                  from include/linux/seq_file.h:13,
+>>                  from arch/powerpc/include/asm/machdep.h:6,
+>>                  from arch/powerpc/include/asm/archrandom.h:5,
+>>                  from include/linux/random.h:109,
+>>                  from include/linux/nodemask.h:97,
+>>                  from include/linux/list_lru.h:12,
+>>                  from include/linux/fs.h:13,
+>>                  from include/linux/compat.h:17,
+>>                  from arch/powerpc/kernel/asm-offsets.c:12:
+>> include/linux/sched.h:1203:9: error: unknown type name 'nodemask_t'
+>>  1203 |         nodemask_t                      mems_allowed;
+>>       |         ^~~~~~~~~~
+>>
+>> Fix it by removing <asm/machdep.h> dependency from archrandom.h
+>>
+>> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+>> ---
+>>  arch/powerpc/include/asm/archrandom.h |  9 +--------
+>>  arch/powerpc/kernel/setup-common.c    | 11 +++++++++++
+>>  2 files changed, 12 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
+>> index 9a53e29680f4..21def59ef1a6 100644
+>> --- a/arch/powerpc/include/asm/archrandom.h
+>> +++ b/arch/powerpc/include/asm/archrandom.h
+>> @@ -4,7 +4,7 @@
+>>  
+>>  #ifdef CONFIG_ARCH_RANDOM
+>>  
+>> -#include <asm/machdep.h>
+>> +bool __must_check arch_get_random_seed_long(unsigned long *v);
+>>  
+>>  static inline bool __must_check arch_get_random_long(unsigned long *v)
+>>  {
+>> @@ -16,13 +16,6 @@ static inline bool __must_check arch_get_random_int(unsigned int *v)
+>>  	return false;
+>>  }
+>>  
+>> -static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
+>> -{
+>> -	if (ppc_md.get_random_seed)
+>> -		return ppc_md.get_random_seed(v);
+>> -
+>> -	return false;
+>> -}
+>
+> I'd rather we didn't have to force this out of line.
+>
+> I think I see a different way to fix it, I'll just do some more build
+> tests.
 
-I just don't want a fix for a known regression to slip through the cracks.
-You can resend whenever you consider, but I believe that if you do so now
-(today or in the following few days), you won't conflict with anybody's work,
-considering that this has been said:
+Of course my idea didn't work :}
 
-On Fri, Jul 15, 2022 at 11:57:20PM +0100, Russell King (Oracle) wrote:
-> Well, at this point, I'm just going to give up with this kernel cycle.
-> It seems impossible to get this sorted. It seems impossible to move
-> forward with the conversion of Marvell DSA to phylink_pcs.
+So I'll just ack your patch for now, and maybe I can get the headers
+cleaned up in future to allow it to be out-of-line again.
+
+cheers

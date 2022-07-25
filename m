@@ -2,104 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4B4580035
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE261580037
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbiGYNwf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Jul 2022 09:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
+        id S235154AbiGYNws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiGYNwc (ORCPT
+        with ESMTP id S235110AbiGYNwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:52:32 -0400
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B932F15736;
-        Mon, 25 Jul 2022 06:52:28 -0700 (PDT)
-Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id 9BD664105A;
-        Mon, 25 Jul 2022 13:52:24 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 2CBFA2000E;
-        Mon, 25 Jul 2022 13:52:16 +0000 (UTC)
-Message-ID: <5bd85a7241e6ccac7fe5647cb9cf7ef22b228943.camel@perches.com>
-Subject: Re: [PATCH v2] docs: Fix typo in comment
-From:   Joe Perches <joe@perches.com>
-To:     Baoquan He <bhe@redhat.com>, Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Slark Xiao <slark_xiao@163.com>
-Cc:     kafai <kafai@fb.com>, vgoyal <vgoyal@redhat.com>,
-        dyoung <dyoung@redhat.com>, ast <ast@kernel.org>,
-        daniel <daniel@iogearbox.net>, andrii <andrii@kernel.org>,
-        "martin.lau" <martin.lau@linux.dev>, song <song@kernel.org>,
-        yhs <yhs@fb.com>, "john.fastabend" <john.fastabend@gmail.com>,
-        kpsingh <kpsingh@kernel.org>, sdf <sdf@google.com>,
-        haoluo <haoluo@google.com>, jolsa <jolsa@kernel.org>,
-        "william.gray" <william.gray@linaro.org>,
-        dhowells <dhowells@redhat.com>, peterz <peterz@infradead.org>,
-        mingo <mingo@redhat.com>, will <will@kernel.org>,
-        longman <longman@redhat.com>,
-        "boqun.feng" <boqun.feng@gmail.com>, tglx <tglx@linutronix.de>,
-        bigeasy <bigeasy@linutronix.de>,
-        kexec <kexec@lists.infradead.org>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-cachefs <linux-cachefs@redhat.com>
-Date:   Mon, 25 Jul 2022 06:52:15 -0700
-In-Reply-To: <YtnlAg6Qhf7fwXXW@MiWiFi-R3L-srv>
-References: <20220721015605.20651-1-slark_xiao@163.com>
-         <20220721154110.fqp7n6f7ij22vayp@kafai-mbp.dhcp.thefacebook.com>
-         <21cac0ea.18f.182218041f7.Coremail.slark_xiao@163.com>
-         <874jzamhxe.fsf@meer.lwn.net>
-         <6ca59494-cc64-d85c-98e8-e9bef2a04c15@infradead.org>
-         <YtnlAg6Qhf7fwXXW@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Mon, 25 Jul 2022 09:52:45 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A58C15A30
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:52:43 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so14429995pjq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=t+pQa5dRvfaXNuusnmsa3SIVfyR2GaEPDHqht+u9DDE=;
+        b=pD1Ibm2SywAsfawFrMeb5vfKjVhMzGWk/OYsaTegH3Z3LeITefVtgnVVpddjUavWrt
+         XLjHgFC8Hn0UCgf9bOZDCtTfrFW6nIALAS5FLb0Au6vO+gTbakg0v+SzdGKuPSY3HCzU
+         q+bNoG5Lx2gj4Dl3ISLst9l8JazGxK07C3YcvuTxBlhZJw2zUIwRknS1PrZKa7hY3hmg
+         tu8dHFxj9iMuC65K3RPjovTN3kU6nwS5M5G9o16Z6fwgX2LXd9prsblT/79K9uQDrgui
+         wIeZMnihlshnyp3LxCYVTe1HAfvsrWy1BXtM9oC9xX5w+VoVH/+MV79thHr8896qZShB
+         S9BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=t+pQa5dRvfaXNuusnmsa3SIVfyR2GaEPDHqht+u9DDE=;
+        b=WbKCYut+Zhf+e7DwRhk8lIdwRcMVzIQvDmHj0WzomFDXkTWpYQyZarB2KcYrDOztGu
+         MUPIQY/R8C7E4FNeORY0egNAWcggorAPcTZR3y6YD0JmxK1LE33rray/lVcGS2tfqIsj
+         dCxam28ReXmfueWDCF1ahResSZcaDwXUBbzS6E4g4J1FWnod101bjV4HJMyRxTRqLWEs
+         6kdngrcmyAlDLVPNm0GLrhxFKJR/TNf2DhzJJ5My8dUgAjFBhy+CRPOFvZIGwQ5QnCxd
+         7GHW7sAu28U1XMv/dWhqFDO8KF1TGpdpLDLV5G/POu5zqmQd7x3pk8qqiuNYKoaKLUrl
+         uKVA==
+X-Gm-Message-State: AJIora8B7MjbpVTGKAw5xC6L8gEg/qb8hV/v4X5yjhTfeghb9fXQlXpN
+        KBqjl2hzK158OwgtXYBrQUEMQfFDaG9wEeU9mNw=
+X-Google-Smtp-Source: AGRyM1sQJ5omaUTPG45xYAEYjzNB4SNvA6riGNleCuzxfo16xSvwR1Rdmhx/SuYMgDeTyxesekjDSc3VpuyMh5beAx8=
+X-Received: by 2002:a17:90a:a40a:b0:1f2:979:397d with SMTP id
+ y10-20020a17090aa40a00b001f20979397dmr14179175pjp.179.1658757162108; Mon, 25
+ Jul 2022 06:52:42 -0700 (PDT)
 MIME-Version: 1.0
-X-Stat-Signature: 7gktrdtqywj6jsoc4553wwy1ksexyrp9
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 2CBFA2000E
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+L2rRg9wujM2WCCGt5WkY3LxQACR7fn/A=
-X-HE-Tag: 1658757136-644642
+Sender: nazeerhabeeb23@gmail.com
+Received: by 2002:a05:6a20:b907:b0:8b:3a65:792a with HTTP; Mon, 25 Jul 2022
+ 06:52:41 -0700 (PDT)
+From:   Mimi Hassan <mimihassan971@gmail.com>
+Date:   Mon, 25 Jul 2022 14:52:41 +0100
+X-Google-Sender-Auth: cy59h9keygFpRZUzHfT3iYVvF4E
+Message-ID: <CAELEEMg8vj1F40yqxtWShBip2Tc1sT=uzrr8O5M6yVp3pifKoA@mail.gmail.com>
+Subject: Good day.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-22 at 07:45 +0800, Baoquan He wrote:
-> On 07/21/22 at 11:40am, Randy Dunlap wrote:
-> > On 7/21/22 11:36, Jonathan Corbet wrote:
-> > > "Slark Xiao" <slark_xiao@163.com> writes:
-> > > > May I know the maintainer of one subsystem could merge the changes
-> > > > contains lots of subsystem?  I also know this could be filtered by
-> > > > grep and sed command, but that patch would have dozens of maintainers
-> > > > and reviewers.
-> > > 
-> > > Certainly I don't think I can merge a patch touching 166 files across
-> > > the tree.  This will need to be broken down by subsystem, and you may
-> > > well find that there are some maintainers who don't want to deal with
-> > > this type of minor fix.
-> > 
-> > We have also seen cases where "the the" should be replaced by "then the"
-> > or some other pair of words, so some of these changes could fall into
-> > that category.
-> 
-> It's possible. I searched in Documentation and went through each place,
-> seems no typo of "then the". Below patch should clean up all the 'the the'
-> typo under Documentation.
-[]
-> The fix is done with below command:
-> sed -i "s/the the /the /g" `git grep -l "the the " Documentation`
-
-This command misses entries at EOL:
-
-Documentation/trace/histogram.rst:  Here's an example where we use a compound key composed of the the
-
-Perhaps a better conversion would be 's/\bthe the\b/the/g'
-
+i am Mrs Mimi Hassan Abdul Muhammad and i was diagnosed with cancer
+about 2 years
+ago,before i go for a surgery  i  have to do this by helping the
+Less-privileged,so If you are interested to use the sum of
+US17.3Million)to help them kindly get back to me for more information.
+Warm Regards,
+Mrs Mimi Hassan Abdul Muhammad

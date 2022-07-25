@@ -2,108 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F224B580340
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAED5580343
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236397AbiGYRDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 13:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
+        id S236486AbiGYREQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 13:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235198AbiGYRC6 (ORCPT
+        with ESMTP id S229695AbiGYREP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 13:02:58 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B898B1DA7B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:02:56 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bf9so18934147lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PwYfqMD6rfq6rjOqioZJHz+L2/HGXhIIjsdnhWmm9BU=;
-        b=Vc7G4MxWVHT6/S2qsrBsiMQtsPNnSiXsjQacSVzDOZiZmwesaOSnB6/TJecUn7Jk/W
-         V/JxPz/nyoQKV99wJRumG26kvizzdXt/fINIgzH63GJzztMyUSybeUAKB4+0H8oPHLud
-         W3C8xJYxXctzgrcFeQqVAWCpXTHoRfyLzlth4mV/pHa3dwxLpiXVD1jEPfZF6CTE80PV
-         ZP9mmW3E4xnaThGcE7XK6NX7fmV09BETnodMOAAK0Xds7Ceyg0oTC/v28fKtF1kwV7ac
-         E2IOmwz5MzERTtULcoC/kSPYWKm84yGNqNrYG0MOsr/Ko4zVf0QlOZdCyPVZ5cPb9iSq
-         c2Jg==
+        Mon, 25 Jul 2022 13:04:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 904DBDEE0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658768653;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WJFOsbX7Y6G6QdsXNVWpRKxVeYxDV/FgyKKB3FpHFo4=;
+        b=JHBoozkR0Gvw/jqpFNnIvBw72ZilPai269ZwK1Nqu4CpU0420cFh50kA5mlTT5QwZz17fZ
+        J8GygMYsvDiww+pl1M2zBUov3xDBOd8NmxiS+v5PhGtDfK4EZBP43OI8yyUXQgWeT19Eap
+        j6tDdkTtHLEZxhydtZ9NmPIRLrfCUqM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-AoAbzvrOMXO1dNEiwRxJKQ-1; Mon, 25 Jul 2022 13:04:12 -0400
+X-MC-Unique: AoAbzvrOMXO1dNEiwRxJKQ-1
+Received: by mail-wm1-f70.google.com with SMTP id i133-20020a1c3b8b000000b003a2fe4c345cso5367126wma.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:04:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PwYfqMD6rfq6rjOqioZJHz+L2/HGXhIIjsdnhWmm9BU=;
-        b=GEHzwzv8lei9tUvpdueZJsI14BhzCQoaLLZvLY0TzSpUOXvLgeKCnhGrZZLvNZEhXw
-         MRnjEtF/G6Y8LVjjbhAjS7a2VRwOY8B9rm3erEFn8ewT21NQIP77Avesp6JoxKjRj+Uf
-         K3QeP7dUOsX3k+g+nHRB++/OvW1aJXOmKSqxHROMD6zm4okQ6aZ2yHvSe0wOY1kQHe9m
-         BsFhs2xn8cN5CPsPROlk+XDFhLBM3++tMupJfF2nRFjAzFw+9e+1G3m99hJrmu6PIcFs
-         VYm76iEWln8soEysuWXtB0VbIOCzFxDEyvPTAURGz+ImBJQEQXsPVGcSvIMctDtMFPP9
-         fz4Q==
-X-Gm-Message-State: AJIora8GQTzQsEbo2xP9M+Ah+1qHReayZ/6+uuklgrU99Vuh0Qan29XN
-        6FGnwXLlkQRgPxGiXbL5JQP6ee6znj31YYKZ34RkqQ==
-X-Google-Smtp-Source: AGRyM1vM13rgd/slOqq6rzR/GF+9bV6nsXD00WID/92zXrhUrPFIIXQ6CrmHMaV8g8gXYlEO+2tkIhtqVfu6YaKkwHc=
-X-Received: by 2002:ac2:4c46:0:b0:489:e93c:69b with SMTP id
- o6-20020ac24c46000000b00489e93c069bmr4711100lfk.403.1658768574640; Mon, 25
- Jul 2022 10:02:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220725020812.622255-1-masahiroy@kernel.org>
-In-Reply-To: <20220725020812.622255-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 25 Jul 2022 10:02:42 -0700
-Message-ID: <CAKwvOd=yeqE-sMRDwB6Nq5RCwHo9wbx2ZagTiqXnkpidpjUAYw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] x86/purgatory: hard-code obj-y in Makefile
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=WJFOsbX7Y6G6QdsXNVWpRKxVeYxDV/FgyKKB3FpHFo4=;
+        b=skD7GJsLK8kqhW+pzkC9mpbifRJeBQdyN0VpvsDEN1C/AAMaqOTWgtcPMrBYXqe+Ze
+         ps36WE/GAaDQeCwGkrJt8HDCGjsWnTCRzFMmf6ZYSJI9B4UT8OpJS941nwUripGliTaR
+         xdF7dPY7kJV6lwFO49c8PjhnVoEol3DEBi+3mPPYIzatdXuHsxJ3Tfkzu+9vNcY5p3Mj
+         5RVCwFuk8CPTLixcg3bk8ImxRzTME+a1kfYiFnQQV6bTobHNEPKgGgQNqbw4SBsJV9bX
+         61J62lhnh3645Zvfuq8OxXzXW2/DVZH7B6+nTdYCEVyn6C3QosAjkyI05TvvHsS1l/QD
+         iuHg==
+X-Gm-Message-State: AJIora8z9qP/LwlBsnPMrqun2GifFOIQfJlKEPdjyH4EgW3ssPOryd1p
+        yvYvl5O63sWVmezJmlz1GDUa2sYC+Kw0UZnWMQCeOCu28PqB1V/kxRpk8yPk2PsHKy7GcZRvKAe
+        anETu8ORuTGtvLaNiI2/suTAO
+X-Received: by 2002:adf:f88c:0:b0:21e:6d3a:d75c with SMTP id u12-20020adff88c000000b0021e6d3ad75cmr8004212wrp.491.1658768649053;
+        Mon, 25 Jul 2022 10:04:09 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sX0JZrFUaWccExNmmino4nmaQ/B0dbaRWmsBvQsM+Eb1iXBEt8fzUySU0LwAxFAAMh2EwFGQ==
+X-Received: by 2002:adf:f88c:0:b0:21e:6d3a:d75c with SMTP id u12-20020adff88c000000b0021e6d3ad75cmr8004174wrp.491.1658768648443;
+        Mon, 25 Jul 2022 10:04:08 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-104-164.dyn.eolo.it. [146.241.104.164])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c28c800b003a02f957245sm19101253wmd.26.2022.07.25.10.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 10:04:07 -0700 (PDT)
+Message-ID: <25344a46ec6e8c2a7a58141dcd3a2c1ba3c4e961.camel@redhat.com>
+Subject: Re: WARNING in inet_sock_destruct
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Dipanjan Das <mail.dipanjan.das@gmail.com>, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Cc:     syzkaller@googlegroups.com, fleischermarius@googlemail.com,
+        its.priyanka.bose@gmail.com
+Date:   Mon, 25 Jul 2022 19:04:06 +0200
+In-Reply-To: <CANX2M5YATwY79MLsKLahgv03RMGyDZsQDcnPCWkBz6ALe1VDuQ@mail.gmail.com>
+References: <CANX2M5YATwY79MLsKLahgv03RMGyDZsQDcnPCWkBz6ALe1VDuQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 7:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> arch/x86/Kbuild guards the entire purgatory/ directory, and
-> CONFIG_KEXEC_FILE is bool type.
->
-> $(CONFIG_KEXEC_FILE) is always 'y' when this directory is being built.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hello,
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+On Fri, 2022-07-22 at 08:22 -0700, Dipanjan Das wrote:
+> We would like to report the following bug which has been found by our
+> modified version of syzkaller.
+> 
+> ======================================================
+> description: WARNING in inet_sock_destruct
+> affected file: net/ipv4/af_inet.c
+> kernel version: 5.19-rc6
+> kernel commit: 32346491ddf24599decca06190ebca03ff9de7f8
+> git tree: upstream
+> kernel config: https://syzkaller.appspot.com/text?tag=KernelConfig&x=cd73026ceaed1402
+> crash reproducer: attached
+> ======================================================
+> Crash log:
+> ======================================================
+> WARNING: CPU: 1 PID: 10818 at net/ipv4/af_inet.c:153
+> inet_sock_destruct+0x6d0/0x8e0 net/ipv4/af_inet.c:153
+> Modules linked in: uio_ivshmem(OE) uio(E)
+> CPU: 1 PID: 10818 Comm: kworker/1:16 Tainted: G           OE
+> 5.19.0-rc6-g2eae0556bb9d #2
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> 1.13.0-1ubuntu1.1 04/01/2014
+> Workqueue: events mptcp_worker
+> RIP: 0010:inet_sock_destruct+0x6d0/0x8e0 net/ipv4/af_inet.c:153
+> Code: 21 02 00 00 41 8b 9c 24 28 02 00 00 e9 07 ff ff ff e8 34 4d 91
+> f9 89 ee 4c 89 e7 e8 4a 47 60 ff e9 a6 fc ff ff e8 20 4d 91 f9 <0f> 0b
+> e9 84 fe ff ff e8 14 4d 91 f9 0f 0b e9 d4 fd ff ff e8 08 4d
+> RSP: 0018:ffffc9001b35fa78 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: 00000000002879d0 RCX: ffff8881326f3b00
+> RDX: 0000000000000000 RSI: ffff8881326f3b00 RDI: 0000000000000002
+> RBP: ffff888179662674 R08: ffffffff87e983a0 R09: 0000000000000000
+> R10: 0000000000000005 R11: 00000000000004ea R12: ffff888179662400
+> R13: ffff888179662428 R14: 0000000000000001 R15: ffff88817e38e258
+> FS:  0000000000000000(0000) GS:ffff8881f5f00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020007bc0 CR3: 0000000179592000 CR4: 0000000000150ee0
+> Call Trace:
+>  <TASK>
+>  __sk_destruct+0x4f/0x8e0 net/core/sock.c:2067
+>  sk_destruct+0xbd/0xe0 net/core/sock.c:2112
+>  __sk_free+0xef/0x3d0 net/core/sock.c:2123
+>  sk_free+0x78/0xa0 net/core/sock.c:2134
+>  sock_put include/net/sock.h:1927 [inline]
+>  __mptcp_close_ssk+0x50f/0x780 net/mptcp/protocol.c:2351
+>  __mptcp_destroy_sock+0x332/0x760 net/mptcp/protocol.c:2828
+>  mptcp_worker+0x5d2/0xc90 net/mptcp/protocol.c:2586
+>  process_one_work+0x9cc/0x1650 kernel/workqueue.c:2289
+>  worker_thread+0x623/0x1070 kernel/workqueue.c:2436
+>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+>  </TASK>
 
-> ---
->
-> (no changes since v1)
->
->  arch/x86/purgatory/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> index ae53d54d7959..248b009c4061 100644
-> --- a/arch/x86/purgatory/Makefile
-> +++ b/arch/x86/purgatory/Makefile
-> @@ -81,4 +81,4 @@ quiet_cmd_bin2c = BIN2C   $@
->  $(obj)/kexec-purgatory.c: $(obj)/purgatory.ro $(obj)/purgatory.chk FORCE
->         $(call if_changed,bin2c)
->
-> -obj-$(CONFIG_KEXEC_FILE)       += kexec-purgatory.o
-> +obj-y += kexec-purgatory.o
-> --
-> 2.34.1
->
+It looks like this is an mptcp-specific issue. I'll try to cook a
+patch. Please cc (also) the mptcp ML for this kind (you see and mptcp-
+related symbol into the stack trace) of reports, thanks!
 
+Paolo
 
--- 
-Thanks,
-~Nick Desaulniers

@@ -2,139 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A13E57FA84
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA3257FA7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbiGYHxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 03:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
+        id S231460AbiGYHx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiGYHxa (ORCPT
+        with ESMTP id S229553AbiGYHx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 03:53:30 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7F712AD7;
-        Mon, 25 Jul 2022 00:53:29 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26P7FAwf006147;
-        Mon, 25 Jul 2022 09:53:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=6razgSe0W2c3Jx+HKO5kPTMtBrHCoPC0SPCdLXo7BWw=;
- b=sdYSfLRwuIhHV0AMaExjlCQ7MlJ3z8UNHpzTzQnSLc/S0wbW9dtRBdfKCjWTnJvDSh5E
- yV1DbhZQl7ZuS1fIelRpkQSM0QAtj4w0/GanZTCTB/RX2ATxNvsQzzllNNj3kVOACS9y
- l3/tQVV+6kzeRx5IVQ+zkJLVBnCUJp1w70OYGXqaixNF2yBrDfnneCDzrDdw2XwjFvgK
- diDe2pE8Gkk5cv46bpQ3q21OPeGl5LwV9SHFkK62F/EATneh/yci62Bovj+u1WIe67tP
- evLZnQ5+LpKNSD92W3e2HXGS3qpwYpzhdJel8KyEf8Lr32TKmKMcQYO82Il1h7M6oA7L WA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3hg8b0qu3g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Jul 2022 09:53:19 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6E993100039;
-        Mon, 25 Jul 2022 09:53:19 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 691602122FA;
-        Mon, 25 Jul 2022 09:53:19 +0200 (CEST)
-Received: from localhost (10.75.127.48) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 25 Jul
- 2022 09:53:19 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <alexandre.torgue@foss.st.com>
-CC:     <robh+dt@kernel.org>, <mcoquelin.stm32@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>
-Subject: [PATCH v2 2/2] ARM: dts: stm32: add pinctrl and disabled spi5 node in stm32mp135f-dk
-Date:   Mon, 25 Jul 2022 09:52:55 +0200
-Message-ID: <20220725075255.429869-3-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220725075255.429869-1-alain.volmat@foss.st.com>
-References: <20220725075255.429869-1-alain.volmat@foss.st.com>
+        Mon, 25 Jul 2022 03:53:26 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D1812A96
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:53:24 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id va17so19125803ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jQHpcE4C1nH2GCEZXh7ETSpGDaBL6cwEwh9j7gNMWo8=;
+        b=OM55UTg0wu+CluQkSUuA01YFDEdR/y4F20whcdzU1hU38os/ei31zozZ3nG+vpyapL
+         C4sqPhvVwG2PGmrj2cqmelAHQZjlR2xb+0rcheIVoEhxmBIqe+DaXqmCPnws0bttvYDM
+         D89CQaUgpv7QHiWFeRnMIGfTUhLaA+sSrNNlQ2lGk5vBhH85BV8zYTEEb6f7J6x954Ik
+         ghxFRwdsElN3pAwFnlfnGAiygd7hZ7un3sZnwbSXymco13wqi4JHyXtohzFegCUej9vR
+         IzoaoYzpzs/Y6OsEkHqDtgppAfiM4auffmbGS9I8nRLK4ITgHl+kV21CjuinMnBydi0u
+         n2gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jQHpcE4C1nH2GCEZXh7ETSpGDaBL6cwEwh9j7gNMWo8=;
+        b=T/4smMw0SC1lpclLW6t4yagADT2o6f4eUz5XlDV8USgVnaJ+u6bvCtZdsdcVZvR3Ru
+         Oxj9agZ4UoyMrin90KhI9vV02ZRK5AwWbMtAmu9vhrqoJeX6m8p2RIy1UP4BBmfHuEa+
+         by2J3Bh1nUKEYEUgA1TqGg84luDAtSj4LUgAMtIWl30sigrp540OGgTz5luZsK/gzP4e
+         kCpWGVxWtw/imTLyaGzUbc61sx81YFOXeewJH5jQHBPVq/ScTLhQdpZFUYM6Fd4FN4PO
+         F7iEmdyEghV/rzRxyHTxM3oUh3rV5F1Eb23T+xDvq5SOjuB0oixHzZUHgalzEqVUmcS5
+         MBZw==
+X-Gm-Message-State: AJIora/mt6H/mlZ03HBYHcSQrOX9cYmO99XyDkGF2oaJdBrD+Zh1rTR3
+        zXgZ+J9n5GqqNfAtMxofrhGhDg==
+X-Google-Smtp-Source: AGRyM1vwhwdAD1fhToosegZ6HJzjjm2A8TIJxILfbOsGmaHcNrwR3F9IeMC7GUh0LFKO8elVo9fdoA==
+X-Received: by 2002:a17:906:c781:b0:726:c967:8d1b with SMTP id cw1-20020a170906c78100b00726c9678d1bmr9205707ejb.54.1658735602996;
+        Mon, 25 Jul 2022 00:53:22 -0700 (PDT)
+Received: from localhost ([85.163.43.78])
+        by smtp.gmail.com with ESMTPSA id ot11-20020a170906cccb00b0072af4af2f46sm5008824ejb.74.2022.07.25.00.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 00:53:22 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 09:53:21 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Vikas Gupta <vikas.gupta@broadcom.com>, jiri@nvidia.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, dsahern@kernel.org,
+        stephen@networkplumber.org, edumazet@google.com, pabeni@redhat.com,
+        ast@kernel.org, leon@kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, michael.chan@broadcom.com,
+        andrew.gospodarek@broadcom.com
+Subject: Re: [PATCH net-next v6 1/2] devlink: introduce framework for
+ selftests
+Message-ID: <Yt5L8TbzTwthnrl7@nanopsycho>
+References: <20220723042206.8104-1-vikas.gupta@broadcom.com>
+ <20220723042206.8104-2-vikas.gupta@broadcom.com>
+ <20220723091600.1277e903@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-23_02,2022-07-21_02,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220723091600.1277e903@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pinctrl information and a disabled spi5 node within
-stm32mp135f-dk.dts in order to use the spi5 bus which is
-available via the GPIO expansion pins of the STM32MP135 Discovery board.
+Sat, Jul 23, 2022 at 06:16:00PM CEST, kuba@kernel.org wrote:
+>On Sat, 23 Jul 2022 09:52:05 +0530 Vikas Gupta wrote:
+>> +enum devlink_attr_selftest_test_id {
+>> +	DEVLINK_ATTR_SELFTEST_TEST_ID_UNSPEC,
+>> +	DEVLINK_ATTR_SELFTEST_TEST_ID_FLASH,	/* flag */
+>> +
+>> +	__DEVLINK_ATTR_SELFTEST_TEST_ID_MAX,
+>> +	DEVLINK_ATTR_SELFTEST_TEST_ID_MAX = __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX - 1
+>> +};
+>> +
+>> +enum devlink_selftest_test_status {
+>> +	DEVLINK_SELFTEST_TEST_STATUS_SKIP,
+>> +	DEVLINK_SELFTEST_TEST_STATUS_PASS,
+>> +	DEVLINK_SELFTEST_TEST_STATUS_FAIL
+>> +};
+>> +
+>> +enum devlink_attr_selftest_result {
+>> +	DEVLINK_ATTR_SELFTEST_RESULT_UNSPEC,
+>> +	DEVLINK_ATTR_SELFTEST_RESULT,			/* nested */
+>> +	DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID,		/* u32,
+>> +							 * enum devlink_attr_selftest_test_id
+>> +							 */
+>> +	DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS,	/* u8,
+>> +							 * enum devlink_selftest_test_status
+>> +							 */
+>> +
+>> +	__DEVLINK_ATTR_SELFTEST_RESULT_MAX,
+>> +	DEVLINK_ATTR_SELFTEST_RESULT_MAX = __DEVLINK_ATTR_SELFTEST_RESULT_MAX - 1
+>
+>Any thoughts on running:
+>
+>	sed -i '/_SELFTEST/ {s/_TEST_/_/g}' $patch
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
----
- arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 23 +++++++++++++++++++++++
- arch/arm/boot/dts/stm32mp135f-dk.dts     |  7 +++++++
- 2 files changed, 30 insertions(+)
+Sure, why not. But please make sure you keep all other related things
+(variables, cmdline opts) consistent.
 
-diff --git a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
-index 749078ba9d42..efdd163eba30 100644
---- a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
-@@ -142,6 +142,29 @@ pins {
- 		};
- 	};
- 
-+	spi5_pins_a: spi5-0 {
-+		pins1 {
-+			pinmux = <STM32_PINMUX('H', 7, AF6)>, /* SPI5_SCK */
-+				 <STM32_PINMUX('H', 3, AF5)>; /* SPI5_MOSI */
-+			bias-disable;
-+			drive-push-pull;
-+			slew-rate = <1>;
-+		};
-+
-+		pins2 {
-+			pinmux = <STM32_PINMUX('A', 8, AF5)>; /* SPI5_MISO */
-+			bias-disable;
-+		};
-+	};
-+
-+	spi5_sleep_pins_a: spi5-sleep-0 {
-+		pins {
-+			pinmux = <STM32_PINMUX('H', 7, ANALOG)>, /* SPI5_SCK */
-+				 <STM32_PINMUX('A', 8, ANALOG)>, /* SPI5_MISO */
-+				 <STM32_PINMUX('H', 3, ANALOG)>; /* SPI5_MOSI */
-+		};
-+	};
-+
- 	uart4_pins_a: uart4-0 {
- 		pins1 {
- 			pinmux = <STM32_PINMUX('D', 6, AF8)>; /* UART4_TX */
-diff --git a/arch/arm/boot/dts/stm32mp135f-dk.dts b/arch/arm/boot/dts/stm32mp135f-dk.dts
-index 3e2823332d51..de341d17e87d 100644
---- a/arch/arm/boot/dts/stm32mp135f-dk.dts
-+++ b/arch/arm/boot/dts/stm32mp135f-dk.dts
-@@ -116,6 +116,13 @@ &sdmmc1 {
- 	status = "okay";
- };
- 
-+&spi5 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&spi5_pins_a>;
-+	pinctrl-1 = <&spi5_sleep_pins_a>;
-+	status = "disabled";
-+};
-+
- &uart4 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart4_pins_a>;
--- 
-2.25.1
+Thanks!
 
+
+>
+>on this patch? For example DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS
+>is 40 characters long, ain't nobody typing that, and _TEST is repeated..
+>
+>Otherwise LGTM!

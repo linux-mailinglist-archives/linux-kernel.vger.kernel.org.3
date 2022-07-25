@@ -2,177 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47E6580239
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03F758023B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235695AbiGYPvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 11:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S235733AbiGYPvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 11:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234646AbiGYPvF (ORCPT
+        with ESMTP id S234893AbiGYPve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 11:51:05 -0400
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30070.outbound.protection.outlook.com [40.107.3.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8BB1C6;
-        Mon, 25 Jul 2022 08:51:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a6tYi2ehw/LZz+Sssy0/Wng2E1H3i6UrS2GqvOQbVt3tkFapVadYp+sVAPlaFGgrzYI4nZgnmh8wFDsetO/Xrs5fg1SogkjQUmEyo1oPc0cKZuTG2SBzoR1ixUBstq1bi0s8pGw+7aAnMzhSX4gH/5r7GKETz4FSRdjbdB0FzIIwiVSqAZfs52GtUUc247CDW3yol6Tvy1OHOXHUFm9fdFUIKgWAYQpM3Ii/vBvP49yC8BUVIOn0QSfiMp5ZBieumvFjA60FSJF6XboccMOQA8eCW/V6TmGYa9Hbc2MkopnNwLa0aV4IwTI39xqJOK6r3prk9ngvGGfzLiixR/Jg8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w9mSf8BvvoKxgJxxfdN8/36y3HhVdJ9MbqbfWyuDeUA=;
- b=gQnboKOhDLHx0pHjDDw2QUHuJlYks5lMDdLfpc6Rnnw4thuVhy3QnYg6AoxVFEWKvoxCvUvtYpCyI1Q2kVtMSlshPaMYLe+r1dDtrEn9zmTWJ909BbqMtrvDrRCWFS6vyd1+MMC8m6TTUQC0/fTyQVPwlmE3OF5i271a7pyLZ5p1V0gJ0Biu1fhXNKkPzx+u9sXOQRQ1EugIw9laJh17MEre5TJO9szhQy3ypKSWbyMI9LlNJ7P+BZP1U93DDfzj0xuWThW3JkdrXD5/9TLLUUzAdrE1QoSfmkeA9hZRqnBfUW8luAGcCWNRn8UDqEw8Z/WFhntxI/yF7j9X4IqjJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w9mSf8BvvoKxgJxxfdN8/36y3HhVdJ9MbqbfWyuDeUA=;
- b=Irho2/RdcjPIP6QigZSzF8YDBMF1s1ZuXYCYCpVI5yi7xk/BFzqeQRKJw2Vs1b3WjH4LeCNfA0EgncvG4RImdOek6ageCvXF7Na5FwZgsX6JqLHiYq2jqbOvN2CTWeyvJ3WCPTcgKM0SL7suBUVJo463ZbuSAdLJoNtnyqyluXWXV6dNVV+Chv/IiS1Bc8dEeLRY6TnjRUNEEN5A5mqPjIxZrEP8QcsJT49w2rLJyKP9R7IGT3UC/mft20T0W//rfK6ireVUOmHWoVrAa2q6wuo30KHPYJrCgTPafPQMLQs3/OW8Eu4CORPq5+GwYbbuY+IgwzxsOI4cMuNrMFD1eQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by AM0PR03MB6018.eurprd03.prod.outlook.com (2603:10a6:208:162::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.24; Mon, 25 Jul
- 2022 15:51:01 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::59ef:35d2:2f27:e98b]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::59ef:35d2:2f27:e98b%4]) with mapi id 15.20.5458.018; Mon, 25 Jul 2022
- 15:51:01 +0000
-Subject: Re: [PATCH v3 06/11] net: phylink: Add some helpers for working with
- mac caps
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexandru Marginean <alexandru.marginean@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-References: <20220725153730.2604096-1-sean.anderson@seco.com>
- <20220725153730.2604096-7-sean.anderson@seco.com>
- <20220725154103.e3l4cde3bhgdl65y@skbuf>
- <2c7b01e3-0236-3fae-7680-05a47b9c266a@seco.com>
- <20220725154623.ynt64sgphyhm3wgm@skbuf>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <0f70a21a-9dc7-a512-e60d-f599f5e8926f@seco.com>
-Date:   Mon, 25 Jul 2022 11:50:57 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20220725154623.ynt64sgphyhm3wgm@skbuf>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR10CA0007.namprd10.prod.outlook.com
- (2603:10b6:208:120::20) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        Mon, 25 Jul 2022 11:51:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C175BDF66;
+        Mon, 25 Jul 2022 08:51:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E4B612D3;
+        Mon, 25 Jul 2022 15:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C507C341C6;
+        Mon, 25 Jul 2022 15:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658764292;
+        bh=D2wgVTwKzP8TBWzA6DR1j32Ce7EmDFIW2LmXj+GKvNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gXK0FaoMHQ32sj98tTKH7oY94dnvER6p018jQ1LWKeXpJJbKDOuq1jQYj+5XhZOfi
+         fC8hjB93sKZIhJlzvBplcInY/+qKq4HQXUdD47IfzTSpSPqWvb9F8EpE3aj4mlbcvT
+         66vBWdXoHvNKouOeL6U0XQQjUK+CgpXXuXdkh+pTALylqcVfZT/otyLfy+Yq1qtyVA
+         R0zassXG9RGgps57C/nhuCSAQPDgrYpM6ThzIJtz2hG8XkVUVCrUzOfJzOt4gL442Y
+         pa5tn2CbpXbyVO3ER600g/2FqlTnuew1Nx2+98WGoEAzBTkffAN3iPhoa7IiTX+mkK
+         PogEiHLzwFAhQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 007D740374; Mon, 25 Jul 2022 12:51:29 -0300 (-03)
+Date:   Mon, 25 Jul 2022 12:51:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Akemi Yagi <toracat@elrepo.org>, ElRepo <contact@elrepo.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf scripts python: Let script to be python2 compliant
+Message-ID: <Yt68AZA2VV9d02xZ@kernel.org>
+References: <20220725104220.1106663-1-leo.yan@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 11456512-2e86-4686-4ce8-08da6e55796e
-X-MS-TrafficTypeDiagnostic: AM0PR03MB6018:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dwYMcJzqbsh7jNh6+p63qz86ld10n1b9bG/N7TW7e3ltOaXNYwCV9BVqtuDwHnNwNu3hFHploOx60/pEDR0K/3+2Mt48bG3fTetNQurv1RGdz2RA376cFal2sxTgUyPNjV9MgP2Jve+zAVKipO0aBEoj0dZ0RHLgRYNWbCYfsLmamhDcy183UQn0Fk2xHVOCRJAIiCC+vQVvxq4NAD24nF3m9t8wmjoEAEC+0OC+bwQBDtNA164QkVu7RP8K2L0nytZlVHe6yfBKO52qKLweuk5l6w40th5vqHBI2bEovpxcMjeDf7iNq/mQuIZKsha5DhXRIF+HnQaE/4pR3jTacDBpJOd3ZFsGvIBSkX7r8CQDrlaUX1LsZzE6finC9YfhGdFRs++gzhTYoPtxUQwI1UALMx9Una2ESR9zD0sbbeHrirZX83CAUe0Kqm85L+GfTCdNrSN75fjUB4PArcwI1s8OeIrh1unHus4pURDoii4uPPHydr9147hOAecHy0iKmhMC5jOAthYiUIXfllo5ROUfzlo/KTAC8zK+pX5G8qWmlZZkLmOnpEE26/mDWHgDim5TpHcHCFuMLyTKSS4vdMITwLoQsBzyp4QCVDvXd2AfHb/CJ20+BUtwTVLLuRKGeReqWYumK/9Mfo464xX6xF8rD85wZt0vvJXbTysQiQbo18GO8jYwwxCrT4qkrEc8o0TuRpn0Zi6CfOlgddUjXhLZ6jixziqKOQ4d98jPX+E/dDNcO2sv3R/c6REuoNOm+3dX3XpUkrZwYEy7zxPwSZq9sN2V8O2qAj8cfayto6sWCxoXrrtYiRI3ezTMYju6Vnv3fab1zV+5tMRG/bRlMS/Dw95vHo0eVw/51wtWrqoIwhCSZefJ+9Of648sm7V3lJ6waByc/ClEPVOvmeliwA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(396003)(376002)(39850400004)(346002)(7416002)(5660300002)(2906002)(4326008)(44832011)(38100700002)(66476007)(66946007)(38350700002)(8676002)(66556008)(8936002)(6666004)(53546011)(6506007)(31686004)(6916009)(41300700001)(54906003)(52116002)(6512007)(26005)(6486002)(36756003)(966005)(316002)(86362001)(2616005)(31696002)(186003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TURYTHNRWW1sbVJGZFkySFBaUWtwNlNrckhKaU15WFNVZjJDMW1vWTlRaDBW?=
- =?utf-8?B?bS9zczBFSjRkVlJ6TVVxOStEcHFYYjBBTDIzZzZMQlhvbVVpZ1pZaDBNWmpl?=
- =?utf-8?B?OG1HVjNycDJVWkhoUFdiVEVLRTB1amNFT2FQb1JKazFFL1JVdzBTZmpkUEI5?=
- =?utf-8?B?eStoYlVwK2MzbXFVc1g0K0YyVjNIQlliUlBwTGhEdEp1UWtTdHpaYy9LdDBV?=
- =?utf-8?B?d0dtWFhhQWVaKzhEclI0YUdWYThQRGhqV1hBcWh4QmJxVFhSQllyd3ZhUDBh?=
- =?utf-8?B?OUJlT05sbHc5SkdVNTJuZDZEY0NCMjVzUE9EbEcyVzkrWnYxb1JleHJqcDRn?=
- =?utf-8?B?bDdIcmFBUEJ1YjhlTkMrakdVUDE0S0tzOW5UZ3RQdkJvalo5a2xCanM2clhv?=
- =?utf-8?B?M1p5VGZTUVJ0MTlvSmxob1F2NldmRXRXeURMeTJqRnVUQ0lDL0owRGVESXJV?=
- =?utf-8?B?WGNHWFdGSkZ5eG5OMzZhV2dmMFZBQ0VhRVoxZExwcWhWU3pPUUtPbUF0R3ZO?=
- =?utf-8?B?KzZJWFowalp3TjZ2Q1QrcjlMcGVXaFZGdS9lM09OYUNGaFJYOUhicWVsNWY5?=
- =?utf-8?B?Q3hvRGNKMzR0ZUY1aHAxdXBUMlM2c0Qyb2JmdEREZjdwbXprSFFjQ1JXSzd6?=
- =?utf-8?B?Uk5iNUFYWE81YXZNT2pGdHArQVJDaldFRFN0V2prME83S1pwd1llM1BOdmVi?=
- =?utf-8?B?WE1oS2hzeXhTL0JhVkRyMW9tMm1nOGNKZFE4SStuanJFTUZPWWw0MzB0T0F1?=
- =?utf-8?B?RXN2Tkc4WXB5TDd5dnJTZ2M2bXkrRWI3UXhkNHNOc2xlK1J4RjRiZWJJV0RQ?=
- =?utf-8?B?WFovM1ZKZ3YxZm5FNTlmSEtzcWdva0ovWWNjOXpGZVpqM0hTL1JXQUNmSmM4?=
- =?utf-8?B?WllqVWF3VnVDWnorTHUxUG1XRFd2Z285Z0J0OG5vcUp2RStHRUl3VGNWTTI1?=
- =?utf-8?B?K2EzSXg4azRCbVBIa1B3N1dPSk80ejFIZXpSR0JKaWl2Z1g5M2JLOFhKVTNp?=
- =?utf-8?B?aTVpdUpJUHk4RU1KUmFKWnpWUDUzTXREVG00Wnp2dFhUQmxxVzlUZGtXaHd1?=
- =?utf-8?B?Z3N3UHpielhuWGhNNGlWb1BKR3d6MURjbTFZYTVQSldHK3lCSGl4YndncERS?=
- =?utf-8?B?a1MrQVd6YUFTZ2lYVU02OUcrMWJ2ZkRyV014dDB0aXBINlNnMmZHUHJqaGxk?=
- =?utf-8?B?YUord1ArMTBLekprM0tUdTQ0dnBLdmxmbGswNkRnOFViVXg2SGZ0UTZiQkdE?=
- =?utf-8?B?NndvZDg1eWhEQ2VqYTBZMFBaUGdCRHVTekpHeXNBbTF5ZTk2TUJmN3l1ZjIv?=
- =?utf-8?B?dWovSU9vWFZPMlYwWUpBYlR5Ym9wUWwzSzFQVWc0ditWYm1Ea01HUFk2YmRX?=
- =?utf-8?B?ZUlHcTZtdTdjWnBBRkg2TGpLRnEwV2taeVcwcWtlMFNGdmcrUUdyZ09lYzNB?=
- =?utf-8?B?dWNpbm0rSTVYcE9WcDMwUEphMnJBVW5XdVphdU15T0YwaVdlNWVvL2RSRTZG?=
- =?utf-8?B?UGFRMXpOVnorM0ZBSVBWQkFBWUZJaElEdzNMRXlBOUczS3ZaQkplQ3AzK1dE?=
- =?utf-8?B?ZVl6anoxSm1xT1I4enJVZzlUUU9UTkttWWdDRk9EUVJaVExYSjVidDhNcTRN?=
- =?utf-8?B?NnZyNVhlUHo3THlLMkNGMHF5MzFrZGsyRitzN0F6S1hGdzB0TTdoRkY0NzJJ?=
- =?utf-8?B?c2RsaVpKZFJ6SUtSRzdzYTNMdmZTdlF4YWtRSWpjWXpXNGlFNGphMHhid0E0?=
- =?utf-8?B?dFdYR1hFZnRoOGtEa1BnMW1yQzhGYmxXeGZUVGdIaXdqbGFJT0h4MDE1cGxj?=
- =?utf-8?B?VGZRL2h4Q1dYQUFBYTRDMm9wVVpQb1YyaDgxM3lvRUdVUmkwOVdDN1M3SGZC?=
- =?utf-8?B?UlJzekZzWjZ0Y2tJZHpEdlNDZlFKZC9NTWVIamxpTFlONEpITkIySFFJamlq?=
- =?utf-8?B?WHc5b3dNNFRNQS9GTGFuaTNCS3h2cTZRMURpVWpYZ2hzcmhxYmluZDY1cE5U?=
- =?utf-8?B?YzdhYUlpU1pjUW9uQmhSUFhvQmE2Q3J5ZkdzOWZKY3FkNktYaldOeW5vclVt?=
- =?utf-8?B?SEU5OWRIbGphNlFuelF3K1FHc0t3ZittZVFrZldyanNzOStyeW94NkZ4ZzdO?=
- =?utf-8?B?bHNVV1lZU3o4YXZPQkdpYlVVLzlmaGF0ZUZESmtqa2VodnlIbDgxNkZ0L0ZE?=
- =?utf-8?B?Wmc9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11456512-2e86-4686-4ce8-08da6e55796e
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 15:51:01.6299
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3+ADej3Dts/HMw4NCIUJJMEFB2yyA4GuNRAPqOsQ//rAMeJ2c5dR5ozKaiYcr72CiNtZ2kbfuC906CKrb9R24w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR03MB6018
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725104220.1106663-1-leo.yan@linaro.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/25/22 11:46 AM, Vladimir Oltean wrote:
-> On Mon, Jul 25, 2022 at 11:42:25AM -0400, Sean Anderson wrote:
->> Hi Vladmir,
->> 
->> On 7/25/22 11:41 AM, Vladimir Oltean wrote:
->> > On Mon, Jul 25, 2022 at 11:37:24AM -0400, Sean Anderson wrote:
->> >> This adds a table for converting between speed/duplex and mac
->> >> capabilities. It also adds a helper for getting the max speed/duplex
->> >> from some caps. It is intended to be used by Russell King's DSA phylink
->> >> series. The table will be used directly later in this series.
->> >> 
->> >> Co-developed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
->> >> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
->> >> Co-developed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
->> >> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
->> >> [ adapted to live in phylink.c ]
->> >> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
->> >> ---
->> >> This is adapted from [1].
->> >> 
->> >> [1] https://lore.kernel.org/netdev/E1oCNlE-006e3z-3T@rmk-PC.armlinux.org.uk/
->> > 
->> > I did not write even one line of code from this patch, please drop my
->> > name from the next revision when there will be one.
->> > 
->> 
->> I merely retained your CDB/SoB from [1].
+Em Mon, Jul 25, 2022 at 06:42:20PM +0800, Leo Yan escreveu:
+> The mainline kernel can be used for relative old distros, e.g. RHEL 7.
+> The distro doesn't upgrade from python2 to python3, this causes the
+> building error that the python script is not python2 compliant.
 > 
-> Yes, but context matters, the logic that you cropped out from that patch
-> was exactly my contribution to that change, the result no longer has anything
-> to do with me. Maybe you didn't have any way to know this, but now you do.
+> To fix the building failure, this patch changes from the python f-string
+> format to traditional string format.
+
+Thanks, applied.
+
+- Arnaldo
+
+ 
+> Reported-by: Akemi Yagi <toracat@elrepo.org>
+> Fixes: 12fdd6c009da ("perf scripts python: Support Arm CoreSight trace data disassembly")
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  .../scripts/python/arm-cs-trace-disasm.py     | 34 ++++++++++---------
+>  1 file changed, 18 insertions(+), 16 deletions(-)
 > 
+> diff --git a/tools/perf/scripts/python/arm-cs-trace-disasm.py b/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> index 5f57d9829956..4339692a8d0b 100755
+> --- a/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> +++ b/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> @@ -61,7 +61,7 @@ def get_optional(perf_dict, field):
+>  
+>  def get_offset(perf_dict, field):
+>  	if field in perf_dict:
+> -		return f"+0x{perf_dict[field]:x}"
+> +		return "+%#x" % perf_dict[field]
+>  	return ""
+>  
+>  def get_dso_file_path(dso_name, dso_build_id):
+> @@ -76,7 +76,7 @@ def get_dso_file_path(dso_name, dso_build_id):
+>  	else:
+>  		append = "/elf"
+>  
+> -	dso_path = f"{os.environ['PERF_BUILDID_DIR']}/{dso_name}/{dso_build_id}{append}"
+> +	dso_path = os.environ['PERF_BUILDID_DIR'] + "/" + dso_name + "/" + dso_build_id + append;
+>  	# Replace duplicate slash chars to single slash char
+>  	dso_path = dso_path.replace('//', '/', 1)
+>  	return dso_path
+> @@ -94,8 +94,8 @@ def read_disam(dso_fname, dso_start, start_addr, stop_addr):
+>  		start_addr = start_addr - dso_start;
+>  		stop_addr = stop_addr - dso_start;
+>  		disasm = [ options.objdump_name, "-d", "-z",
+> -			   f"--start-address=0x{start_addr:x}",
+> -			   f"--stop-address=0x{stop_addr:x}" ]
+> +			   "--start-address="+format(start_addr,"#x"),
+> +			   "--stop-address="+format(stop_addr,"#x") ]
+>  		disasm += [ dso_fname ]
+>  		disasm_output = check_output(disasm).decode('utf-8').split('\n')
+>  		disasm_cache[addr_range] = disasm_output
+> @@ -109,12 +109,14 @@ def print_disam(dso_fname, dso_start, start_addr, stop_addr):
+>  			m = disasm_re.search(line)
+>  			if m is None:
+>  				continue
+> -		print(f"\t{line}")
+> +		print("\t" + line)
+>  
+>  def print_sample(sample):
+> -	print(f"Sample = {{ cpu: {sample['cpu']:04} addr: 0x{sample['addr']:016x} " \
+> -	      f"phys_addr: 0x{sample['phys_addr']:016x} ip: 0x{sample['ip']:016x} " \
+> -	      f"pid: {sample['pid']} tid: {sample['tid']} period: {sample['period']} time: {sample['time']} }}")
+> +	print("Sample = { cpu: %04d addr: 0x%016x phys_addr: 0x%016x ip: 0x%016x " \
+> +	      "pid: %d tid: %d period: %d time: %d }" % \
+> +	      (sample['cpu'], sample['addr'], sample['phys_addr'], \
+> +	       sample['ip'], sample['pid'], sample['tid'], \
+> +	       sample['period'], sample['time']))
+>  
+>  def trace_begin():
+>  	print('ARM CoreSight Trace Data Assembler Dump')
+> @@ -131,7 +133,7 @@ def common_start_str(comm, sample):
+>  	cpu = sample["cpu"]
+>  	pid = sample["pid"]
+>  	tid = sample["tid"]
+> -	return f"{comm:>16} {pid:>5}/{tid:<5} [{cpu:04}] {sec:9}.{ns:09}  "
+> +	return "%16s %5u/%-5u [%04u] %9u.%09u  " % (comm, pid, tid, cpu, sec, ns)
+>  
+>  # This code is copied from intel-pt-events.py for printing source code
+>  # line and symbols.
+> @@ -171,7 +173,7 @@ def print_srccode(comm, param_dict, sample, symbol, dso):
+>  	glb_line_number = line_number
+>  	glb_source_file_name = source_file_name
+>  
+> -	print(f"{start_str}{src_str}")
+> +	print(start_str, src_str)
+>  
+>  def process_event(param_dict):
+>  	global cache_size
+> @@ -188,7 +190,7 @@ def process_event(param_dict):
+>  	symbol = get_optional(param_dict, "symbol")
+>  
+>  	if (options.verbose == True):
+> -		print(f"Event type: {name}")
+> +		print("Event type: %s" % name)
+>  		print_sample(sample)
+>  
+>  	# If cannot find dso so cannot dump assembler, bail out
+> @@ -197,7 +199,7 @@ def process_event(param_dict):
+>  
+>  	# Validate dso start and end addresses
+>  	if ((dso_start == '[unknown]') or (dso_end == '[unknown]')):
+> -		print(f"Failed to find valid dso map for dso {dso}")
+> +		print("Failed to find valid dso map for dso %s" % dso)
+>  		return
+>  
+>  	if (name[0:12] == "instructions"):
+> @@ -244,15 +246,15 @@ def process_event(param_dict):
+>  
+>  	# Handle CS_ETM_TRACE_ON packet if start_addr=0 and stop_addr=4
+>  	if (start_addr == 0 and stop_addr == 4):
+> -		print(f"CPU{cpu}: CS_ETM_TRACE_ON packet is inserted")
+> +		print("CPU%d: CS_ETM_TRACE_ON packet is inserted" % cpu)
+>  		return
+>  
+>  	if (start_addr < int(dso_start) or start_addr > int(dso_end)):
+> -		print(f"Start address 0x{start_addr:x} is out of range [ 0x{dso_start:x} .. 0x{dso_end:x} ] for dso {dso}")
+> +		print("Start address 0x%x is out of range [ 0x%x .. 0x%x ] for dso %s" % (start_addr, int(dso_start), int(dso_end), dso))
+>  		return
+>  
+>  	if (stop_addr < int(dso_start) or stop_addr > int(dso_end)):
+> -		print(f"Stop address 0x{stop_addr:x} is out of range [ 0x{dso_start:x} .. 0x{dso_end:x} ] for dso {dso}")
+> +		print("Stop address 0x%x is out of range [ 0x%x .. 0x%x ] for dso %s" % (stop_addr, int(dso_start), int(dso_end), dso))
+>  		return
+>  
+>  	if (options.objdump_name != None):
+> @@ -267,6 +269,6 @@ def process_event(param_dict):
+>  		if path.exists(dso_fname):
+>  			print_disam(dso_fname, dso_vm_start, start_addr, stop_addr)
+>  		else:
+> -			print(f"Failed to find dso {dso} for address range [ 0x{start_addr:x} .. 0x{stop_addr:x} ]")
+> +			print("Failed to find dso %s for address range [ 0x%x .. 0x%x ]" % (dso, start_addr, stop_addr))
+>  
+>  	print_srccode(comm, param_dict, sample, symbol, dso)
+> -- 
+> 2.25.1
 
-OK, I will remove those lines from the next revision.
+-- 
 
---Sean
+- Arnaldo

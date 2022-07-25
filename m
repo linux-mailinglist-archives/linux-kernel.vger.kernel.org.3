@@ -2,653 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C950857FF79
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FCB57FF90
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbiGYNEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S235429AbiGYNJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbiGYNEk (ORCPT
+        with ESMTP id S234113AbiGYNJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:04:40 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE2912A86
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=N7Synj+43Lb9XGAY2lPlsCW5JSyfYxg69C5766rFdTU=; b=pp15XohnvO0H0/QJ0VRAOyfWPQ
-        mss2IkH2e/etdFzrRCH4ODhT9iYr3voBLDtcnqk/D5pGsQ+hEuEErYiq3ORxh9+G75Nns1GQuoDi2
-        huper1UCCLzUPfWDXUr3PIkVqZqNjO8PGDw8K2v7bq6ZyZ/HTU/L/xpeYlJDnDm/CRIcPZyp6ehHL
-        Ync5uhvqLeAkg10UKv60642yiNA0ucl4/6nbRkyI3Wum53L03Ap8WmYF7Ty3NKlzzAVnX3oNfJDxs
-        GNZo+FNeN7eFloDFYD4y/RJlHvnB1VL16j8kOyYzRqYhR6oEIeJjBrzz3nxHJ4+65VMMw1NsjWZWP
-        qxwZnIyQ==;
-Received: from 201-13-50-220.dsl.telesp.net.br ([201.13.50.220] helo=[192.168.15.109])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oFxl9-005tVi-8y; Mon, 25 Jul 2022 15:04:31 +0200
-Message-ID: <3349b8b2-1475-e1c3-b3e8-8504e49783e4@igalia.com>
-Date:   Mon, 25 Jul 2022 10:04:11 -0300
+        Mon, 25 Jul 2022 09:09:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171ACB8;
+        Mon, 25 Jul 2022 06:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658754559; x=1690290559;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=kbrDRU2puFG5f+Mqs3+ZqIenWq5YsbTsKEgDrLUQZtA=;
+  b=aNsUOPFzTjNO7lI/MeIWk3ak5zYhME+Wfll1hPnMPzKR1YqSx9StnG4i
+   YbFJq/erc/bM4bokdWeo0GDvnBFfCSCCGpxPtPz+Xcv5mmpkeFwUkuIl5
+   lRF72qQljDGE21dMzdNvREu7YPQarq9vc8giR1YV+zzRyV+cOwSqfSQiz
+   3IQdq/GKa5Q+IwNcpTNKgNiHd/0gl+/tK5HUAo3HoqaIqIWGJXKcl3Itu
+   Vr617j8tb7RfwwLZRaM8HtKiyYrotdtmbl9IlLseOq8RXIQgVpsbyPTxg
+   wt+SYH0I6i7S3RwHuKqRKNoC0WjAud0Zg4jEZrDzwwiHM+XBKTB7Om7Xc
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="268085232"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="268085232"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 06:09:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="596668753"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 25 Jul 2022 06:09:06 -0700
+Date:   Mon, 25 Jul 2022 21:04:17 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <20220725130417.GA304216@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
+ <20220719140843.GA84779@chaop.bj.intel.com>
+ <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
+ <20220720150706.GB124133@chaop.bj.intel.com>
+ <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
+ <YtgrkXqP/GIi9ujZ@google.com>
+ <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
+ <20220721092906.GA153288@chaop.bj.intel.com>
+ <YtmT2irvgInX1kPp@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/4] drm/amd: Add detailed GFXOFF stats to debugfs
-Content-Language: en-US
-To:     "Quan, Evan" <Evan.Quan@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Zhang, Hawking" <Hawking.Zhang@amd.com>,
-        "Zhou1, Tao" <Tao.Zhou1@amd.com>,
-        "Kuehling, Felix" <Felix.Kuehling@amd.com>,
-        "Xiao, Jack" <Jack.Xiao@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "StDenis, Tom" <Tom.StDenis@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>
-Cc:     "kernel-dev@igalia.com" <kernel-dev@igalia.com>
-References: <20220722203347.70176-1-andrealmeid@igalia.com>
- <20220722203347.70176-2-andrealmeid@igalia.com>
- <DM6PR12MB26194D127DE749D0E8A37629E4959@DM6PR12MB2619.namprd12.prod.outlook.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <DM6PR12MB26194D127DE749D0E8A37629E4959@DM6PR12MB2619.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YtmT2irvgInX1kPp@google.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Às 07:27 de 25/07/22, Quan, Evan escreveu:
-> [AMD Official Use Only - General]
+On Thu, Jul 21, 2022 at 05:58:50PM +0000, Sean Christopherson wrote:
+> On Thu, Jul 21, 2022, Chao Peng wrote:
+> > On Thu, Jul 21, 2022 at 03:34:59PM +0800, Wei Wang wrote:
+> > > 
+> > > 
+> > > On 7/21/22 00:21, Sean Christopherson wrote:
+> > > Maybe you could tag it with cgs for all the confidential guest support
+> > > related stuff: e.g. kvm_vm_ioctl_set_cgs_mem()
+> > > 
+> > > bool is_private = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
+> > > ...
+> > > kvm_vm_ioctl_set_cgs_mem(, is_private)
+> > 
+> > If we plan to widely use such abbr. through KVM (e.g. it's well known),
+> > I'm fine.
 > 
-> Using "uint64_t" instead of "uint32_t" for entry counter may be better.
+> I'd prefer to stay away from "confidential guest", and away from any VM-scoped
+> name for that matter.  User-unmappable memmory has use cases beyond hiding guest
+> state from the host, e.g. userspace could use inaccessible/unmappable memory to
+> harden itself against unintentional access to guest memory.
 > 
+> > I actually use mem_attr in patch: https://lkml.org/lkml/2022/7/20/610
+> > But I also don't quite like it, it's so generic and sounds say nothing.
+> > 
+> > But I do want a name can cover future usages other than just 
+> > private/shared (pKVM for example may have a third state).
+> 
+> I don't think there can be a third top-level state.  Memory is either private to
+> the guest or it's not.  There can be sub-states, e.g. memory could be selectively
+> shared or encrypted with a different key, in which case we'd need metadata to
+> track that state.
+> 
+> Though that begs the question of whether or not private_fd is the correct
+> terminology.  E.g. if guest memory is backed by a memfd that can't be mapped by
+> userspace (currently F_SEAL_INACCESSIBLE), but something else in the kernel plugs
+> that memory into a device or another VM, then arguably that memory is shared,
+> especially the multi-VM scenario.
+> 
+> For TDX and SNP "private vs. shared" is likely the correct terminology given the
+> current specs, but for generic KVM it's probably better to align with whatever
+> terminology is used for memfd.  "inaccessible_fd" and "user_inaccessible_fd" are
+> a bit odd since the fd itself is accesible.
+> 
+> What about "user_unmappable"?  E.g.
+> 
+>   F_SEAL_USER_UNMAPPABLE, MFD_USER_UNMAPPABLE, KVM_HAS_USER_UNMAPPABLE_MEMORY,
+>   MEMFILE_F_USER_INACCESSIBLE, user_unmappable_fd, etc...
 
-Indeed, it's a good idea. I'll send a v2 with that change, thanks.
+For KVM I also think user_unmappable looks better than 'private', e.g.
+user_unmappable_fd/KVM_HAS_USER_UNMAPPABLE_MEMORY sounds more
+appropriate names. For memfd however, I don't feel that strong to change
+it from current 'inaccessible' to 'user_unmappable', one of the reason
+is it's not just about unmappable, but actually also inaccessible
+through direct ioctls like read()/write().
 
-> BR
-> Evan
->> -----Original Message-----
->> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
->> André Almeida
->> Sent: Saturday, July 23, 2022 4:34 AM
->> To: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
->> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
->> Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Zhang, Hawking
->> <Hawking.Zhang@amd.com>; Zhou1, Tao <Tao.Zhou1@amd.com>; Kuehling,
->> Felix <Felix.Kuehling@amd.com>; Xiao, Jack <Jack.Xiao@amd.com>; amd-
->> gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
->> kernel@vger.kernel.org; StDenis, Tom <Tom.StDenis@amd.com>; Siqueira,
->> Rodrigo <Rodrigo.Siqueira@amd.com>
->> Cc: André Almeida <andrealmeid@igalia.com>; kernel-dev@igalia.com
->> Subject: [PATCH 1/4] drm/amd: Add detailed GFXOFF stats to debugfs
->>
->> Add debugfs interface to log GFXOFF statistics:
->>
->> - Read amdgpu_gfxoff_count to get the total GFXOFF entry count at the
->>   time of query since system power-up
->>
->> - Write 1 to amdgpu_gfxoff_residency to start logging, and 0 to stop.
->>   Read it to get average GFXOFF residency % multiplied by 100
->>   during the last logging interval.
->>
->> Both features are designed to be keep the values persistent between
->> suspends.
->>
->> Signed-off-by: André Almeida <andrealmeid@igalia.com>
->> ---
->>  drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c   | 168
->> ++++++++++++++++++
->>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   2 +
->>  drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c       |  39 ++++
->>  drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h       |   6 +
->>  drivers/gpu/drm/amd/pm/amdgpu_dpm.c           |  45 +++++
->>  drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h       |   3 +
->>  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c     |  34 +++-
->>  drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h |  22 +++
->>  drivers/gpu/drm/amd/pm/swsmu/smu_internal.h   |   3 +
->>  9 files changed, 321 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
->> index e2eec985adb3..edf90a9ba980 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
->> @@ -1042,6 +1042,157 @@ static ssize_t amdgpu_debugfs_gpr_read(struct
->> file *f, char __user *buf,
->>  	return r;
->>  }
->>
->> +/**
->> + * amdgpu_debugfs_gfxoff_residency_read - Read GFXOFF residency
->> + *
->> + * @f: open file handle
->> + * @buf: User buffer to store read data in
->> + * @size: Number of bytes to read
->> + * @pos:  Offset to seek to
->> + *
->> + * Read the last residency value logged. It doesn't auto update, one needs
->> to
->> + * stop logging before getting the current value.
->> + */
->> +static ssize_t amdgpu_debugfs_gfxoff_residency_read(struct file *f, char
->> __user *buf,
->> +						    size_t size, loff_t *pos)
->> +{
->> +	struct amdgpu_device *adev = file_inode(f)->i_private;
->> +	ssize_t result = 0;
->> +	int r;
->> +
->> +	if (size & 0x3 || *pos & 0x3)
->> +		return -EINVAL;
->> +
->> +	r = pm_runtime_get_sync(adev_to_drm(adev)->dev);
->> +	if (r < 0) {
->> +		pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
->> +		return r;
->> +	}
->> +
->> +	while (size) {
->> +		uint32_t value;
->> +
->> +		r = amdgpu_get_gfx_off_residency(adev, &value);
->> +		if (r)
->> +			goto out;
->> +
->> +		r = put_user(value, (uint32_t *)buf);
->> +		if (r)
->> +			goto out;
->> +
->> +		result += 4;
->> +		buf += 4;
->> +		*pos += 4;
->> +		size -= 4;
->> +	}
->> +
->> +	r = result;
->> +out:
->> +	pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
->> +	pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
->> +
->> +	return r;
->> +}
->> +
->> +/**
->> + * amdgpu_debugfs_gfxoff_residency_write - Log GFXOFF Residency
->> + *
->> + * @f: open file handle
->> + * @buf: User buffer to write data from
->> + * @size: Number of bytes to write
->> + * @pos:  Offset to seek to
->> + *
->> + * Write a 32-bit non-zero to start logging; write a 32-bit zero to stop
->> + */
->> +static ssize_t amdgpu_debugfs_gfxoff_residency_write(struct file *f, const
->> char __user *buf,
->> +						     size_t size, loff_t *pos)
->> +{
->> +	struct amdgpu_device *adev = file_inode(f)->i_private;
->> +	ssize_t result = 0;
->> +	int r;
->> +
->> +	if (size & 0x3 || *pos & 0x3)
->> +		return -EINVAL;
->> +
->> +	r = pm_runtime_get_sync(adev_to_drm(adev)->dev);
->> +	if (r < 0) {
->> +		pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
->> +		return r;
->> +	}
->> +
->> +	while (size) {
->> +		u32 value;
->> +
->> +		r = get_user(value, (uint32_t *)buf);
->> +		if (r)
->> +			goto out;
->> +
->> +		amdgpu_set_gfx_off_residency(adev, value ? true : false);
->> +
->> +		result += 4;
->> +		buf += 4;
->> +		*pos += 4;
->> +		size -= 4;
->> +	}
->> +
->> +	r = result;
->> +out:
->> +	pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
->> +	pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
->> +
->> +	return r;
->> +}
->> +
->> +
->> +/**
->> + * amdgpu_debugfs_gfxoff_count_read - Read GFXOFF entry count
->> + *
->> + * @f: open file handle
->> + * @buf: User buffer to store read data in
->> + * @size: Number of bytes to read
->> + * @pos:  Offset to seek to
->> + */
->> +static ssize_t amdgpu_debugfs_gfxoff_count_read(struct file *f, char
->> __user *buf,
->> +						size_t size, loff_t *pos)
->> +{
->> +	struct amdgpu_device *adev = file_inode(f)->i_private;
->> +	ssize_t result = 0;
->> +	int r;
->> +
->> +	if (size & 0x3 || *pos & 0x3)
->> +		return -EINVAL;
->> +
->> +	r = pm_runtime_get_sync(adev_to_drm(adev)->dev);
->> +	if (r < 0) {
->> +		pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
->> +		return r;
->> +	}
->> +
->> +	while (size) {
->> +		u32 value;
->> +
->> +		r = amdgpu_get_gfx_off_entrycount(adev, &value);
->> +		if (r)
->> +			goto out;
->> +
->> +		r = put_user(value, (uint32_t *)buf);
->> +		if (r)
->> +			goto out;
->> +
->> +		result += 4;
->> +		buf += 4;
->> +		*pos += 4;
->> +		size -= 4;
->> +	}
->> +
->> +	r = result;
->> +out:
->> +	pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
->> +	pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
->> +
->> +	return r;
->> +}
->> +
->>  /**
->>   * amdgpu_debugfs_gfxoff_write - Enable/disable GFXOFF
->>   *
->> @@ -1249,6 +1400,19 @@ static const struct file_operations
->> amdgpu_debugfs_gfxoff_status_fops = {
->>  	.llseek = default_llseek
->>  };
->>
->> +static const struct file_operations amdgpu_debugfs_gfxoff_count_fops = {
->> +	.owner = THIS_MODULE,
->> +	.read = amdgpu_debugfs_gfxoff_count_read,
->> +	.llseek = default_llseek
->> +};
->> +
->> +static const struct file_operations amdgpu_debugfs_gfxoff_residency_fops
->> = {
->> +	.owner = THIS_MODULE,
->> +	.read = amdgpu_debugfs_gfxoff_residency_read,
->> +	.write = amdgpu_debugfs_gfxoff_residency_write,
->> +	.llseek = default_llseek
->> +};
->> +
->>  static const struct file_operations *debugfs_regs[] = {
->>  	&amdgpu_debugfs_regs_fops,
->>  	&amdgpu_debugfs_regs2_fops,
->> @@ -1261,6 +1425,8 @@ static const struct file_operations *debugfs_regs[]
->> = {
->>  	&amdgpu_debugfs_gpr_fops,
->>  	&amdgpu_debugfs_gfxoff_fops,
->>  	&amdgpu_debugfs_gfxoff_status_fops,
->> +	&amdgpu_debugfs_gfxoff_count_fops,
->> +	&amdgpu_debugfs_gfxoff_residency_fops,
->>  };
->>
->>  static const char *debugfs_regs_names[] = {
->> @@ -1275,6 +1441,8 @@ static const char *debugfs_regs_names[] = {
->>  	"amdgpu_gpr",
->>  	"amdgpu_gfxoff",
->>  	"amdgpu_gfxoff_status",
->> +	"amdgpu_gfxoff_count",
->> +	"amdgpu_gfxoff_residency",
->>  };
->>
->>  /**
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
->> index b79ee4ffb879..15a95bc2c211 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
->> @@ -3576,6 +3576,8 @@ int amdgpu_device_init(struct amdgpu_device
->> *adev,
->>  	INIT_WORK(&adev->xgmi_reset_work,
->> amdgpu_device_xgmi_reset_func);
->>
->>  	adev->gfx.gfx_off_req_count = 1;
->> +	adev->gfx.gfx_off_residency = 0;
->> +	adev->gfx.gfx_off_entrycount = 0;
->>  	adev->pm.ac_power = power_supply_is_system_supplied() > 0;
->>
->>  	atomic_set(&adev->throttling_logging_enabled, 1);
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
->> index 222d3d7ea076..3675c1b899db 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
->> @@ -610,6 +610,45 @@ void amdgpu_gfx_off_ctrl(struct amdgpu_device
->> *adev, bool enable)
->>  	mutex_unlock(&adev->gfx.gfx_off_mutex);
->>  }
->>
->> +int amdgpu_set_gfx_off_residency(struct amdgpu_device *adev, bool
->> value)
->> +{
->> +	int r = 0;
->> +
->> +	mutex_lock(&adev->gfx.gfx_off_mutex);
->> +
->> +	r = amdgpu_dpm_set_residency_gfxoff(adev, value);
->> +
->> +	mutex_unlock(&adev->gfx.gfx_off_mutex);
->> +
->> +	return r;
->> +}
->> +
->> +int amdgpu_get_gfx_off_residency(struct amdgpu_device *adev, u32
->> *value)
->> +{
->> +	int r = 0;
->> +
->> +	mutex_lock(&adev->gfx.gfx_off_mutex);
->> +
->> +	r = amdgpu_dpm_get_residency_gfxoff(adev, value);
->> +
->> +	mutex_unlock(&adev->gfx.gfx_off_mutex);
->> +
->> +	return r;
->> +}
->> +
->> +int amdgpu_get_gfx_off_entrycount(struct amdgpu_device *adev, u32
->> *value)
->> +{
->> +	int r = 0;
->> +
->> +	mutex_lock(&adev->gfx.gfx_off_mutex);
->> +
->> +	r = amdgpu_dpm_get_entrycount_gfxoff(adev, value);
->> +
->> +	mutex_unlock(&adev->gfx.gfx_off_mutex);
->> +
->> +	return r;
->> +}
->> +
->>  int amdgpu_get_gfx_off_status(struct amdgpu_device *adev, uint32_t
->> *value)
->>  {
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h
->> index 23a696d38390..f06e979e2565 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h
->> @@ -336,6 +336,8 @@ struct amdgpu_gfx {
->>  	struct mutex                    gfx_off_mutex;
->>  	uint32_t                        gfx_off_req_count; /* default 1, enable gfx off:
->> dec 1, disable gfx off: add 1 */
->>  	struct delayed_work             gfx_off_delay_work;
->> +	uint32_t                        gfx_off_residency;
->> +	uint32_t                        gfx_off_entrycount;
->>
->>  	/* pipe reservation */
->>  	struct mutex			pipe_reserve_mutex;
->> @@ -407,6 +409,10 @@ bool amdgpu_gfx_is_me_queue_enabled(struct
->> amdgpu_device *adev, int me,
->>  void amdgpu_gfx_off_ctrl(struct amdgpu_device *adev, bool enable);
->>  int amdgpu_get_gfx_off_status(struct amdgpu_device *adev, uint32_t
->> *value);
->>  int amdgpu_gfx_ras_late_init(struct amdgpu_device *adev, struct
->> ras_common_if *ras_block);
->> +void amdgpu_gfx_ras_fini(struct amdgpu_device *adev);
->> +int amdgpu_get_gfx_off_entrycount(struct amdgpu_device *adev, u32
->> *value);
->> +int amdgpu_get_gfx_off_residency(struct amdgpu_device *adev, u32
->> *residency);
->> +int amdgpu_set_gfx_off_residency(struct amdgpu_device *adev, bool
->> value);
->>  int amdgpu_gfx_process_ras_data_cb(struct amdgpu_device *adev,
->>  		void *err_data,
->>  		struct amdgpu_iv_entry *entry);
->> diff --git a/drivers/gpu/drm/amd/pm/amdgpu_dpm.c
->> b/drivers/gpu/drm/amd/pm/amdgpu_dpm.c
->> index 956b6ce81c84..df87d0768fd7 100644
->> --- a/drivers/gpu/drm/amd/pm/amdgpu_dpm.c
->> +++ b/drivers/gpu/drm/amd/pm/amdgpu_dpm.c
->> @@ -668,6 +668,51 @@ int amdgpu_dpm_wait_for_event(struct
->> amdgpu_device *adev,
->>  	return ret;
->>  }
->>
->> +int amdgpu_dpm_set_residency_gfxoff(struct amdgpu_device *adev, bool
->> value)
->> +{
->> +	struct smu_context *smu = adev->powerplay.pp_handle;
->> +	int ret = 0;
->> +
->> +	if (!is_support_sw_smu(adev))
->> +		return -EOPNOTSUPP;
->> +
->> +	mutex_lock(&adev->pm.mutex);
->> +	ret = smu_set_residency_gfxoff(smu, value);
->> +	mutex_unlock(&adev->pm.mutex);
->> +
->> +	return ret;
->> +}
->> +
->> +int amdgpu_dpm_get_residency_gfxoff(struct amdgpu_device *adev, u32
->> *value)
->> +{
->> +	struct smu_context *smu = adev->powerplay.pp_handle;
->> +	int ret = 0;
->> +
->> +	if (!is_support_sw_smu(adev))
->> +		return -EOPNOTSUPP;
->> +
->> +	mutex_lock(&adev->pm.mutex);
->> +	ret = smu_get_residency_gfxoff(smu, value);
->> +	mutex_unlock(&adev->pm.mutex);
->> +
->> +	return ret;
->> +}
->> +
->> +int amdgpu_dpm_get_entrycount_gfxoff(struct amdgpu_device *adev,
->> u32 *value)
->> +{
->> +	struct smu_context *smu = adev->powerplay.pp_handle;
->> +	int ret = 0;
->> +
->> +	if (!is_support_sw_smu(adev))
->> +		return -EOPNOTSUPP;
->> +
->> +	mutex_lock(&adev->pm.mutex);
->> +	ret = smu_get_entrycount_gfxoff(smu, value);
->> +	mutex_unlock(&adev->pm.mutex);
->> +
->> +	return ret;
->> +}
->> +
->>  int amdgpu_dpm_get_status_gfxoff(struct amdgpu_device *adev, uint32_t
->> *value)
->>  {
->>  	struct smu_context *smu = adev->powerplay.pp_handle;
->> diff --git a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
->> b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
->> index 65624d091ed2..83a83e93037c 100644
->> --- a/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
->> +++ b/drivers/gpu/drm/amd/pm/inc/amdgpu_dpm.h
->> @@ -435,6 +435,9 @@ int amdgpu_dpm_set_soft_freq_range(struct
->> amdgpu_device *adev,
->>  int amdgpu_dpm_write_watermarks_table(struct amdgpu_device *adev);
->>  int amdgpu_dpm_wait_for_event(struct amdgpu_device *adev, enum
->> smu_event_type event,
->>  		       uint64_t event_arg);
->> +int amdgpu_dpm_get_residency_gfxoff(struct amdgpu_device *adev, u32
->> *value);
->> +int amdgpu_dpm_set_residency_gfxoff(struct amdgpu_device *adev, bool
->> value);
->> +int amdgpu_dpm_get_entrycount_gfxoff(struct amdgpu_device *adev,
->> u32 *value);
->>  int amdgpu_dpm_get_status_gfxoff(struct amdgpu_device *adev, uint32_t
->> *value);
->>  uint64_t amdgpu_dpm_get_thermal_throttling_counter(struct
->> amdgpu_device *adev);
->>  void amdgpu_dpm_gfx_state_change(struct amdgpu_device *adev,
->> diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> index fd79b213fab4..cfc3b9d749bf 100644
->> --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> @@ -90,6 +90,30 @@ static int smu_sys_set_pp_feature_mask(void *handle,
->>  	return smu_set_pp_feature_mask(smu, new_mask);
->>  }
->>
->> +int smu_set_residency_gfxoff(struct smu_context *smu, bool value)
->> +{
->> +	if (!smu->ppt_funcs->set_gfx_off_residency)
->> +		return -EINVAL;
->> +
->> +	return smu_set_gfx_off_residency(smu, value);
->> +}
->> +
->> +int smu_get_residency_gfxoff(struct smu_context *smu, u32 *value)
->> +{
->> +	if (!smu->ppt_funcs->get_gfx_off_residency)
->> +		return -EINVAL;
->> +
->> +	return smu_get_gfx_off_residency(smu, value);
->> +}
->> +
->> +int smu_get_entrycount_gfxoff(struct smu_context *smu, u32 *value)
->> +{
->> +	if (!smu->ppt_funcs->get_gfx_off_entrycount)
->> +		return -EINVAL;
->> +
->> +	return smu_get_gfx_off_entrycount(smu, value);
->> +}
->> +
->>  int smu_get_status_gfxoff(struct smu_context *smu, uint32_t *value)
->>  {
->>  	if (!smu->ppt_funcs->get_gfx_off_status)
->> @@ -1573,7 +1597,7 @@ static int smu_suspend(void *handle)
->>  {
->>  	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
->>  	struct smu_context *smu = adev->powerplay.pp_handle;
->> -	int ret;
->> +	int ret, count;
->>
->>  	if (amdgpu_sriov_vf(adev)&& !amdgpu_sriov_is_pp_one_vf(adev))
->>  		return 0;
->> @@ -1591,6 +1615,14 @@ static int smu_suspend(void *handle)
->>
->>  	smu_set_gfx_cgpg(smu, false);
->>
->> +	/*
->> +	 * pwfw resets entrycount when device is suspended, so we save
->> the
->> +	 * last value to be used when we resume to keep it consistent
->> +	 */
->> +	ret = smu_get_entrycount_gfxoff(smu, &count);
->> +	if (!ret)
->> +		adev->gfx.gfx_off_entrycount = count;
->> +
->>  	return 0;
->>  }
->>
->> diff --git a/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h
->> b/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h
->> index b81c657c7386..9827075b768e 100644
->> --- a/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h
->> +++ b/drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h
->> @@ -1111,6 +1111,22 @@ struct pptable_funcs {
->>  	 */
->>  	uint32_t (*get_gfx_off_status)(struct smu_context *smu);
->>
->> +	/**
->> +	 * @gfx_off_entrycount: total GFXOFF entry count at the time of
->> +	 * query since system power-up
->> +	 */
->> +	u32 (*get_gfx_off_entrycount)(struct smu_context *smu, uint32_t
->> *entrycount);
->> +
->> +	/**
->> +	 * @set_gfx_off_residency: set 1 to start logging, 0 to stop logging
->> +	 */
->> +	u32 (*set_gfx_off_residency)(struct smu_context *smu, bool start);
->> +
->> +	/**
->> +	 * @get_gfx_off_residency: Average GFXOFF residency % during the
->> logging interval
->> +	 */
->> +	u32 (*get_gfx_off_residency)(struct smu_context *smu, uint32_t
->> *residency);
->> +
->>  	/**
->>  	 * @register_irq_handler: Register interupt request handlers.
->>  	 */
->> @@ -1454,6 +1470,12 @@ int smu_set_ac_dc(struct smu_context *smu);
->>
->>  int smu_allow_xgmi_power_down(struct smu_context *smu, bool en);
->>
->> +int smu_get_entrycount_gfxoff(struct smu_context *smu, u32 *value);
->> +
->> +int smu_get_residency_gfxoff(struct smu_context *smu, u32 *value);
->> +
->> +int smu_set_residency_gfxoff(struct smu_context *smu, bool value);
->> +
->>  int smu_get_status_gfxoff(struct smu_context *smu, uint32_t *value);
->>
->>  int smu_handle_passthrough_sbr(struct smu_context *smu, bool enable);
->> diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu_internal.h
->> b/drivers/gpu/drm/amd/pm/swsmu/smu_internal.h
->> index 7469bbfce1fb..ceb13c838067 100644
->> --- a/drivers/gpu/drm/amd/pm/swsmu/smu_internal.h
->> +++ b/drivers/gpu/drm/amd/pm/swsmu/smu_internal.h
->> @@ -47,6 +47,9 @@
->>  #define smu_notify_memory_pool_location(smu)
->> 	smu_ppt_funcs(notify_memory_pool_location, 0, smu)
->>  #define smu_gfx_off_control(smu, enable)
->> 	smu_ppt_funcs(gfx_off_control, 0, smu, enable)
->>  #define smu_get_gfx_off_status(smu)
->> 		smu_ppt_funcs(get_gfx_off_status, 0, smu)
->> +#define smu_get_gfx_off_entrycount(smu, value)
->> 			smu_ppt_funcs(get_gfx_off_entrycount, 0, smu,
->> value)
->> +#define smu_get_gfx_off_residency(smu, value)
->> 			smu_ppt_funcs(get_gfx_off_residency, 0, smu,
->> value)
->> +#define smu_set_gfx_off_residency(smu, value)
->> 			smu_ppt_funcs(set_gfx_off_residency, 0, smu,
->> value)
->>  #define smu_set_last_dcef_min_deep_sleep_clk(smu)
->> 	smu_ppt_funcs(set_last_dcef_min_deep_sleep_clk, 0, smu)
->>  #define smu_system_features_control(smu, en)
->> 	smu_ppt_funcs(system_features_control, 0, smu, en)
->>  #define smu_init_max_sustainable_clocks(smu)
->> 	smu_ppt_funcs(init_max_sustainable_clocks, 0, smu)
->> --
->> 2.37.1
+> 
+> that gives us flexibility to map the memory from within the kernel, e.g. into
+> other VMs or devices.
+> 
+> Hmm, and then keep your original "mem_attr_array" name?  And probably 
+> 
+>  int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+>  			       bool is_user_mappable)
+> 
+> Then the x86/mmu code for TDX/SNP private faults could be:
+> 
+> 	is_private = !kvm_is_gpa_user_mappable();
+> 
+> 	if (fault->is_private != is_private) {
+> 
+> or if we want to avoid mixing up "user_mappable" and "user_unmappable":
+> 
+> 	is_private = kvm_is_gpa_user_unmappable();
+> 
+> 	if (fault->is_private != is_private) {
+> 
+> though a helper that returns a negative (not mappable) feels kludgy.  And I like
+> kvm_is_gpa_user_mappable() because then when there's not "special" memory, it
+> defaults to true, which is more intuitive IMO.
+
+yes.
+
+> 
+> And then if the future needs more precision, e.g. user-unmappable memory isn't
+> necessarily guest-exclusive, the uAPI names still work even though KVM internals
+> will need to be reworked, but that's unavoidable.  E.g. piggybacking
+> KVM_MEMORY_ENCRYPT_(UN)REG_REGION doesn't allow for further differentiation,
+> so we'd need to _extend_ the uAPI, but the _existing_ uAPI would still be sane.
+
+Right, that has to be extended.
+
+Chao

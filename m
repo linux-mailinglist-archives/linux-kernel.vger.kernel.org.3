@@ -2,237 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A8D580400
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F913580404
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiGYS34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 14:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        id S234179AbiGYSa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 14:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235327AbiGYS3w (ORCPT
+        with ESMTP id S229753AbiGYSa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 14:29:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D581F2E1;
-        Mon, 25 Jul 2022 11:29:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5012613F7;
-        Mon, 25 Jul 2022 18:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1DBC341C6;
-        Mon, 25 Jul 2022 18:29:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658773788;
-        bh=bkX5XWZwuPnMLgUAndfCdzgha0AbwCCiEfVFScvVnz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZvyVaXhH+Qec7u/tbgmzG1N9uwT1MWtibX97kCenk8sb39YQOZ9wB+eZACTomYlDU
-         nakGyLWIumeLUgqGA1gvtddChQHx7GpmVq84T0qEVrPTOKrach6/KHIGsI+NdXojb8
-         Nl/SlfXLlkYt0/9yH5roHotSiHlVv9HWGYiloVMczX6jyt+Bb4r9G6cYcygwk9VfJ4
-         RB3RlevowQk+07Eoi9HwP9eLfakwUVXVmv3f6QE5J161bb0ZgVo/3Mzv35dnv2tn08
-         pfOVf1Z1Yppi3CmRx7pk7Dglipm4sC7XRL5o4LFiHFmZDZraAdQ1D53Kbp/TCB1end
-         4ixewRm0Z+cLA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 45F4C40374; Mon, 25 Jul 2022 15:29:45 -0300 (-03)
-Date:   Mon, 25 Jul 2022 15:29:45 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Chang Rui <changruinj@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] perf symbol: Correct address for bss symbols
-Message-ID: <Yt7hGepLBAJJuvII@kernel.org>
-References: <20220724060013.171050-1-leo.yan@linaro.org>
- <20220724060013.171050-2-leo.yan@linaro.org>
+        Mon, 25 Jul 2022 14:30:57 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C9E13D1F;
+        Mon, 25 Jul 2022 11:30:56 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-10bd4812c29so15801992fac.11;
+        Mon, 25 Jul 2022 11:30:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FEooM2RT53g6tnmnQNbJRb91DOY7HMArXQf84dlNSkI=;
+        b=oeiPZtgn80QrHXsjEiItM6uOpZ5g9IvLYybch+8NTdGLA/PpqeshF0H/ivaGyX3C9Y
+         IfA5xl2+RnB+SpzOFYMZGKV5wTfb162+oRBajYYY8/NsJsKklGwW8VA8zdthj370SBb2
+         JLZRX6d05Fzgcpe1bCEoOJCJLmQN75V1WxcK+0mMCscsIkIJtrkmuJbo+G7A1I/xVlnc
+         OaJNV0tZAfnIAFccpm32D6XZ8ZbvDJL28/Gv6xI8ra23E0L2ubruf6K6ObJpsNXdb+XN
+         gXKAAhEF0a9QtRYVWxcPQcwrzt3TYMlSIaKm8DNUwVnAKbO0ip1BN1xkugU1zMwV9WT/
+         7BaQ==
+X-Gm-Message-State: AJIora+VX//Er7RysbERCQWsy0AvVW86p7bLNk6zfN+rTHVy2sceNzBN
+        61pW5L+mS/5s2t6nG7GYRBPUgDTspQ==
+X-Google-Smtp-Source: AGRyM1vRZ+8PMG1t9D17j7BFUwsAeYGwVsJCeWuLF64Xel9A8HWkj1FtmFh4QSPgjUumYoKZAhSJLA==
+X-Received: by 2002:a05:6870:b48c:b0:10d:f6a2:8d9e with SMTP id y12-20020a056870b48c00b0010df6a28d9emr5492256oap.227.1658773856060;
+        Mon, 25 Jul 2022 11:30:56 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id x52-20020a9d37b7000000b0061cc1ba78e5sm5255756otb.3.2022.07.25.11.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 11:30:55 -0700 (PDT)
+Received: (nullmailer pid 2459631 invoked by uid 1000);
+        Mon, 25 Jul 2022 18:30:52 -0000
+Date:   Mon, 25 Jul 2022 12:30:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mike Yang <reimu@sudomaker.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>,
+        tudor.ambarus@microchip.com, p.yadav@ti.com, michael@walle.cc,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        aidanmacdonald.0x0@gmail.com, tmn505@gmail.com,
+        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        jinghui.liu@ingenic.com, sernia.zhou@foxmail.com
+Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add Ingenic SFC bindings.
+Message-ID: <20220725183052.GA2392099-robh@kernel.org>
+References: <1658508510-15400-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1658508510-15400-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <487a93c4-3301-aefd-abba-aabf4cb8ec90@linaro.org>
+ <37062a5d-9da3-fbaf-89bd-776f32be36d9@wanyeetech.com>
+ <d1a0dd15-3621-14e9-b931-417cefaab017@linaro.org>
+ <b5505a46-ce76-d0aa-009e-81d9ba16e1d5@sudomaker.com>
+ <YtxLoPOykLDTzTn9@sirena.org.uk>
+ <f05045fa-9ecd-d312-0eaa-5d19498453fc@linaro.org>
+ <b52a8e97-3b8e-c67b-4440-2d7428edb4fa@sudomaker.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220724060013.171050-2-leo.yan@linaro.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b52a8e97-3b8e-c67b-4440-2d7428edb4fa@sudomaker.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, Jul 24, 2022 at 02:00:12PM +0800, Leo Yan escreveu:
-> When using 'perf mem' and 'perf c2c', an issue is observed that tool
-> reports the wrong offset for global data symbols.  This is a common
-> issue on both x86 and Arm64 platforms.
-> 
-> Let's see an example, for a test program, below is the disassembly for
-> its .bss section which is dumped with objdump:
-> 
->   ...
-> 
->   Disassembly of section .bss:
-> 
->   0000000000004040 <completed.0>:
->   	...
-> 
->   0000000000004080 <buf1>:
->   	...
-> 
->   00000000000040c0 <buf2>:
->   	...
-> 
->   0000000000004100 <thread>:
->   	...
-> 
-> First we used 'perf mem record' to run the test program and then used
-> 'perf --debug verbose=4 mem report' to observe what's the symbol info
-> for 'buf1' and 'buf2' structures.
-> 
->   # ./perf mem record -e ldlat-loads,ldlat-stores -- false_sharing.exe 8
+On Sun, Jul 24, 2022 at 04:49:25AM +0800, Mike Yang wrote:
+> On 7/24/22 04:07, Krzysztof Kozlowski wrote:
+> > On 23/07/2022 21:27, Mark Brown wrote:
+> >> On Sun, Jul 24, 2022 at 02:47:14AM +0800, Mike Yang wrote:
+> >>> On 7/24/22 01:43, Krzysztof Kozlowski wrote:
+> >>>> On 23/07/2022 18:50, Zhou Yanjie wrote:
+> >>
+> >>>>> No offense, does it really need to be named that way?
+> >>>>> I can't seem to find documentation with instructions on this :(
+> >>
+> >> ...
+> >>
+> >>>> All bindings are to follow this rule, so I don't understand why you
+> >>>> think it is an exception for you?
+> >>
+> >>> Zhou didn't ask you to make an exception. They have a valid
+> >>> point and they're asking why.
+> >>
+> >>> You may want to avoid further incidents of this kind by stop
+> >>> being bossy and actually writing a guideline of naming these
+> >>> .yaml files and publish it somewhere online.
 
-Can you share the source code for your false sharing proggie? We need to
-have something in 'perf test' exercising these routines :-)
+I don't like your tone. Patches are welcome to fix deficiencies in 
+documentation. Out of the hundreds of bindings a year, I see <5 
+documentation patches a year.
 
->   # ./perf --debug verbose=4 mem report
->     ...
->     dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 sh_addr: 0x4040 sh_offset: 0x3028
->     symbol__new: buf2 0x30a8-0x30e8
->     ...
->     dso__load_sym_internal: adjusting symbol: st_value: 0x4080 sh_addr: 0x4040 sh_offset: 0x3028
->     symbol__new: buf1 0x3068-0x30a8
->     ...
-> 
-> Perf tool relies on libelf to parse symbols, in executable and shared
-> object files, 'st_value' holds a virtual address; 'sh_addr' is the
-> address at which section's first byte should reside in memory, and
-> 'sh_offset' is the byte offset from the beginning of the file to the
-> first byte in the section.  Perf tool uses below formula to convert
-> symbol's memory address to file address:
-> 
->   file_address = st_value - sh_addr + sh_offset
->                     ^
->                     ` Memory address
-> 
-> We can see the final adjusted address ranges for buf1 and buf2 are
-> [0x30a8-0x30e8) and [0x3068-0x30a8) respectively, apparently this is
-> incorrect, in the code, the structure for 'buf1' and 'buf2' specifies
-> compiler attribute with 64-byte alignment.
-> 
-> The problem happens for 'sh_offset', libelf returns it as 0x3028 which
-> is not 64-byte aligned, combining with disassembly, it's likely libelf
-> doesn't respect the alignment for .bss section, therefore, it doesn't
-> return the aligned value for 'sh_offset'.
-> 
-> Suggested by Fangrui Song, elf file contains program header which
-> contains PT_LOAD segments, the fields p_vaddr and p_offset in PT_LOAD
-> segments contain the execution info.  A better choice for converting
-> memory address to file address is using the formula:
-> 
->   file_address = st_value - p_vaddr + p_offset
-> 
-> This patch introduces function elf_read_program_header() which returns
-> out the program header based on the passed 'st_value', then it uses
-> above formula to calculate the symbol file address; and the debugging
-> log is updated respectively.
-> 
-> After applying the change:
-> 
->   # ./perf --debug verbose=4 mem report
->     ...
->     dso__load_sym_internal: adjusting symbol: st_value: 0x40c0 p_vaddr: 0x3d28 p_offset: 0x2d28
->     symbol__new: buf2 0x30c0-0x3100
->     ...
->     dso__load_sym_internal: adjusting symbol: st_value: 0x4080 p_vaddr: 0x3d28 p_offset: 0x2d28
->     symbol__new: buf1 0x3080-0x30c0
->     ...
-> 
-> Fixes: f17e04afaff8 ("perf report: Fix ELF symbol parsing")
-> Reported-by: Chang Rui <changruinj@gmail.com>
-> Suggested-by: Fangrui Song <maskray@google.com>
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
->  tools/perf/util/symbol-elf.c | 45 ++++++++++++++++++++++++++++++++----
->  1 file changed, 41 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-> index ecd377938eea..ef6ced5c5746 100644
-> --- a/tools/perf/util/symbol-elf.c
-> +++ b/tools/perf/util/symbol-elf.c
-> @@ -233,6 +233,33 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
->  	return NULL;
->  }
->  
-> +static int elf_read_program_header(Elf *elf, u64 vaddr, GElf_Phdr *phdr)
-> +{
-> +	size_t i, phdrnum;
-> +	u64 sz;
-> +
-> +	if (elf_getphdrnum(elf, &phdrnum))
-> +		return -1;
-> +
-> +	for (i = 0; i < phdrnum; i++) {
-> +		if (gelf_getphdr(elf, i, phdr) == NULL)
-> +			return -1;
-> +
-> +		if (phdr->p_type != PT_LOAD)
-> +			continue;
-> +
-> +		sz = max(phdr->p_memsz, phdr->p_filesz);
-> +		if (!sz)
-> +			continue;
-> +
-> +		if (vaddr >= phdr->p_vaddr && (vaddr < phdr->p_vaddr + sz))
-> +			return 0;
-> +	}
-> +
-> +	/* Not found any valid program header */
-> +	return -1;
-> +}
-> +
->  static bool want_demangle(bool is_kernel_sym)
->  {
->  	return is_kernel_sym ? symbol_conf.demangle_kernel : symbol_conf.demangle;
-> @@ -1209,6 +1236,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
->  					sym.st_value);
->  			used_opd = true;
->  		}
-> +
->  		/*
->  		 * When loading symbols in a data mapping, ABS symbols (which
->  		 * has a value of SHN_ABS in its st_shndx) failed at
-> @@ -1262,11 +1290,20 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
->  				goto out_elf_end;
->  		} else if ((used_opd && runtime_ss->adjust_symbols) ||
->  			   (!used_opd && syms_ss->adjust_symbols)) {
-> +			GElf_Phdr phdr;
-> +
-> +			if (elf_read_program_header(syms_ss->elf,
-> +						    (u64)sym.st_value, &phdr)) {
-> +				pr_warning("%s: failed to find program header for "
-> +					   "symbol: %s st_value: %#" PRIx64 "\n",
-> +					   __func__, elf_name, (u64)sym.st_value);
-> +				continue;
-> +			}
->  			pr_debug4("%s: adjusting symbol: st_value: %#" PRIx64 " "
-> -				  "sh_addr: %#" PRIx64 " sh_offset: %#" PRIx64 "\n", __func__,
-> -				  (u64)sym.st_value, (u64)shdr.sh_addr,
-> -				  (u64)shdr.sh_offset);
-> -			sym.st_value -= shdr.sh_addr - shdr.sh_offset;
-> +				  "p_vaddr: %#" PRIx64 " p_offset: %#" PRIx64 "\n",
-> +				  __func__, (u64)sym.st_value, (u64)phdr.p_vaddr,
-> +				  (u64)phdr.p_offset);
-> +			sym.st_value -= phdr.p_vaddr - phdr.p_offset;
->  		}
->  
->  		demangled = demangle_sym(dso, kmodule, elf_name);
-> -- 
-> 2.25.1
+The documentation clearly says to run 'make dt_binding_check' and that 
+was obviously not followed here. 
 
--- 
+> >> Yeah, I do have to say that I was also completely unaware that
+> >> there was any enforced convention here.
+> > 
+> > Indeed, it's not a enforced pattern. But there are many other
+> > insignificant ones which we also tend to forget during review, like
+> > using words "Device Tree bindings" in title or using unnecessary quotes
+> > around "refs" (also in ID of schema). It's not a big deal, but I ask
+> > when I notice it.
+> 
+> Good. Thanks for paying attention to these details.
+> 
+> 
+> >> Zhou already mentioned he was unable find the naming guidelines of these .yaml files.
+> >>
+> >> Apparently you think it's unacceptable for new contributors of a certain subsystem to use existing code as examples, and/or they're responsible for figuring out what's a good example and what's a bad one in the existing codebase.
 
-- Arnaldo
+Please wrap your lines on replies.
+
+
+> > 
+> > It's everywhere in the kernel, what can I say? If you copy existing
+> > code, you might copy poor code...
+> 
+> Still, it shouldn't be a responsibility of new contributors to 
+> determine the quality of an existing piece of code, unless there are 
+> clear guidelines (i.e. one should use the new "cs-gpios" attribute in SPI controllers).
+
+Generally the guidance is to look at newer drivers for current best 
+practices.
+
+
+> >>> It might never grow to new devices (because they might be different), so
+> >>> that is not really an argument.
+> >>
+> >> It is an argument. A very valid one.
+> >>
+> >> "they *might* be different". You may want to get your hands on real hardware and try another word. Or at least read the datasheets instead of believing your imagination.
+> >>
+> >> I would enjoy duplicating the st,stm32-spi.yaml into st,stm32{f,h}{0..7}-spi.yaml if I'm bored at a Sunday afternoon.
+> >>
+> >>>
+> >>> All bindings are to follow this rule, so I don't understand why you
+> >>> think it is an exception for you?
+> >>
+> >> Zhou didn't ask you to make an exception. They have a valid point and they're asking why.
+> > 
+> > Hm, everyone has the same valid point and such recommendation is to
+> > everyone, although it is nothing serious.
+> > 
+> >> You may want to avoid further incidents of this kind by stop being bossy and actually writing a guideline of naming these .yaml files and publish it somewhere online.
+> > 
+> > I did not see any incident here... Process of review includes comments
+> > and there is nothing bad happening when you receive a comment. No
+> > incident...
+> 
+> 
+> Okay. After careful inspection of the Ingenic datasheets, now I have 
+> the conclusion: The Ingenic X1000, X1021, X1500, X1501, X1520, X1600, 
+> X1800, X1830, X2000, X2100, X2500 have the same SFC controller.
+
+So if they are all 'the same', then I expect they all have a fallback 
+compatible with x1000 and using that for the filename makes sense.
+
+
+> X1600 has a newer version (let's say v2) of the SFC, and X2000-2500 
+> have v3. Others have the original version (let's say v1). Each new 
+> version introduced new features such as arbitrary DMA sizes, and the 
+> rest features are the same.
+
+So backwards compatible? If so, then they should have x1000 for 
+fallback.
+
+> 
+> So IMO the name "ingenic,sfc.yaml" is perfectly logical.
+
+Covering all 3 versions? If so and not backwards compatible, then I 
+would agree.
+
+Rob

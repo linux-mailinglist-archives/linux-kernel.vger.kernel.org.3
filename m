@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA17D57FEDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DB657FEDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234196AbiGYMTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S234204AbiGYMVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbiGYMTU (ORCPT
+        with ESMTP id S231852AbiGYMVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:19:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC1FE08A
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:19:18 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LrzWv6mlGzWf9Q;
-        Mon, 25 Jul 2022 20:15:23 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Jul 2022 20:19:16 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Jul 2022 20:19:15 +0800
-Message-ID: <f1ee3bd6-d068-b401-04ef-e14ca55529ac@huawei.com>
-Date:   Mon, 25 Jul 2022 20:19:14 +0800
+        Mon, 25 Jul 2022 08:21:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1980513F57
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658751689; x=1690287689;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mmnjIk0oanDl4kUuiNg3bqK9pj4XiKl/ghUN7WvSySY=;
+  b=BtFU57UEOPcHnwATBmgDIpIQ22S3RxFUtZRwFu+41U31BWXdJg/Z4yty
+   BkKr0i+cdxAHhI9T3qe5w0w566fYxcJ8CI7sj41XBxy7CdujQkkETDV0n
+   3UicWU1QQD6FnbUl595DiYIwnBTNBFSgMKQ+7no7KwTgV6xTxysFSV+mH
+   pmEV/1Zq4nPCe4JxN0c9gqDdZ2m1saEZ+RG9/OyhesQPye28bxn5cMPcL
+   jmVZ3j3gcNZe/Qllg9oYZJZ7E71GubQGQKAncGqJ/ZOuT0nLME+Xz1vs+
+   w1cSycHR9EeMLWT/GhiLTrEQrp7cg9puXKR5sOSEjkLPTBN29966sBZ/c
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288869425"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="288869425"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 05:21:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="926878637"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Jul 2022 05:21:26 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFx5S-00057Z-14;
+        Mon, 25 Jul 2022 12:21:26 +0000
+Date:   Mon, 25 Jul 2022 20:21:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse:
+ incorrect type in argument 1 (different address spaces)
+Message-ID: <202207252059.nGTxc7qk-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/2] mm/slub: enable debugging memory wasting of
- kmalloc
-Content-Language: en-US
-To:     Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Christoph Lameter" <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Dave Hansen <dave.hansen@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        John Garry <john.garry@huawei.com>
-References: <20220725112025.22625-1-feng.tang@intel.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20220725112025.22625-1-feng.tang@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,361 +61,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+date:   5 months ago
+config: arm-randconfig-s041-20220721 (https://download.01.org/0day-ci/archive/20220725/202207252059.nGTxc7qk-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f68f2ff91512c199ec24883001245912afc17873
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
 
-On 2022/7/25 19:20, Feng Tang wrote:
-> kmalloc's API family is critical for mm, with one shortcoming that
-> its object size is fixed to be power of 2. When user requests memory
-> for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
-> in worst case, there is around 50% memory space waste.
->
-> We've met a kernel boot OOM panic (v5.10), and from the dumped slab info:
->
->      [   26.062145] kmalloc-2k            814056KB     814056KB
->
-> >From debug we found there are huge number of 'struct iova_magazine',
-> whose size is 1032 bytes (1024 + 8), so each allocation will waste
-> 1016 bytes. Though the issue was solved by giving the right (bigger)
-> size of RAM, it is still nice to optimize the size (either use a
-> kmalloc friendly size or create a dedicated slab for it).
->
-> And from lkml archive, there was another crash kernel OOM case [1]
-> back in 2019, which seems to be related with the similar slab waste
-> situation, as the log is similar:
->
->      [    4.332648] iommu: Adding device 0000:20:02.0 to group 16
->      [    4.338946] swapper/0 invoked oom-killer: gfp_mask=0x6040c0(GFP_KERNEL|__GFP_COMP), nodemask=(null), order=0, oom_score_adj=0
->      ...
->      [    4.857565] kmalloc-2048           59164KB      59164KB
->
-> The crash kernel only has 256M memory, and 59M is pretty big here.
-> (Note: the related code has been changed and optimised in recent
-> kernel [2], these logs are picked just to demo the problem)
->
-> So add an way to track each kmalloc's memory waste info, and leverage
-> the existing SLUB debug framework to show its call stack info, so
-> that user can evaluate the waste situation, identify some hot spots
-> and optimize accordingly, for a better utilization of memory.
->
-> The waste info is integrated into existing interface:
-> /sys/kernel/debug/slab/kmalloc-xx/alloc_traces, one example of
-> 'kmalloc-4k' after boot is:
->
-> 126 ixgbe_alloc_q_vector+0xa5/0x4a0 [ixgbe] waste=233856/1856 age=1493302/1493830/1494358 pid=1284 cpus=32 nodes=1
->          __slab_alloc.isra.86+0x52/0x80
->          __kmalloc_node+0x143/0x350
->          ixgbe_alloc_q_vector+0xa5/0x4a0 [ixgbe]
->          ixgbe_init_interrupt_scheme+0x1a6/0x730 [ixgbe]
->          ixgbe_probe+0xc8e/0x10d0 [ixgbe]
->          local_pci_probe+0x42/0x80
->          work_for_cpu_fn+0x13/0x20
->          process_one_work+0x1c5/0x390
->
-> which means in 'kmalloc-4k' slab, there are 126 requests of
-> 2240 bytes which got a 4KB space (wasting 1856 bytes each
-> and 233856 bytes in total). And when system starts some real
-> workload like multiple docker instances, there are more
-> severe waste.
->
-> [1]. https://lkml.org/lkml/2019/8/12/266
-> [2]. https://lore.kernel.org/lkml/2920df89-9975-5785-f79b-257d3052dfaf@huawei.com/
->
-> [Thanks Hyeonggon for pointing out several bugs about sorting/format]
-> [Thanks Vlastimil for suggesting way to reduce memory usage of
->   orig_size and keep it only for kmalloc objects]
->
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> ---
->    since v1:
->      * limit the 'orig_size' to kmalloc objects only, and save
->        it after track in metadata (Vlastimil Babka)
->      * fix a offset calculation problem in print_trailer
->
->    since RFC:
->      * fix problems in kmem_cache_alloc_bulk() and records sorting,
->        improve the print format (Hyeonggon Yoo)
->      * fix a compiling issue found by 0Day bot
->      * update the commit log based info from iova developers
->
->
->
->   include/linux/slab.h |  2 +
->   mm/slub.c            | 96 ++++++++++++++++++++++++++++++++++++--------
->   2 files changed, 82 insertions(+), 16 deletions(-)
->
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 0fefdf528e0d..a713b0e5bbcd 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -29,6 +29,8 @@
->   #define SLAB_RED_ZONE		((slab_flags_t __force)0x00000400U)
->   /* DEBUG: Poison objects */
->   #define SLAB_POISON		((slab_flags_t __force)0x00000800U)
-> +/* Indicate a kmalloc slab */
-> +#define SLAB_KMALLOC		((slab_flags_t __force)0x00001000U)
->   /* Align objs on cache lines */
->   #define SLAB_HWCACHE_ALIGN	((slab_flags_t __force)0x00002000U)
->   /* Use GFP_DMA memory */
-> diff --git a/mm/slub.c b/mm/slub.c
-> index b1281b8654bd..9763a38bc4f0 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -191,6 +191,12 @@ static inline bool kmem_cache_debug(struct kmem_cache *s)
->   	return kmem_cache_debug_flags(s, SLAB_DEBUG_FLAGS);
->   }
->   
-> +static inline bool slub_debug_orig_size(struct kmem_cache *s)
-> +{
-> +	return (s->flags & SLAB_KMALLOC &&
-> +			kmem_cache_debug_flags(s, SLAB_STORE_USER));
-Swap two judgments to reduce the SLAB_KMALLOC check if no SLAB_STORE_USER.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +}
-> +
->   void *fixup_red_left(struct kmem_cache *s, void *p)
->   {
->   	if (kmem_cache_debug_flags(s, SLAB_RED_ZONE))
-> @@ -814,6 +820,36 @@ static void print_slab_info(const struct slab *slab)
->   	pr_err("Slab 0x%p objects=%u used=%u fp=0x%p flags=%pGp\n",
->   	       slab, slab->objects, slab->inuse, slab->freelist,
->   	       folio_flags(folio, 0));
-> +
-> +}
-> +static inline void set_orig_size(struct kmem_cache *s,
-> +					void *object, unsigned int orig_size)
-> +{
-> +	void *p = kasan_reset_tag(object);
-> +
-> +	if (!slub_debug_orig_size(s))
-> +		return;
-> +
-> +	p = object + get_info_end(s);
-Look like p += get_info_end(s);  ?
-> +
-> +	if (s->flags & SLAB_STORE_USER)
-> +		p += sizeof(struct track) * 2;
-> +
-> +	*(unsigned int *)p = orig_size;
-> +}
-> +
-> +static unsigned int get_orig_size(struct kmem_cache *s, void *object)
-> +{
-> +	void *p = kasan_reset_tag(object);
-> +
-> +	if (!slub_debug_orig_size(s))
-> +		return s->object_size;
-> +
-> +	p = object + get_info_end(s);
-ditto...
-> +	if (s->flags & SLAB_STORE_USER)
-> +		p += sizeof(struct track) * 2;
-> +
-> +	return *(unsigned int *)p;
->   }
->   
->   static void slab_bug(struct kmem_cache *s, char *fmt, ...)
-> @@ -875,6 +911,9 @@ static void print_trailer(struct kmem_cache *s, struct slab *slab, u8 *p)
->   	if (s->flags & SLAB_STORE_USER)
->   		off += 2 * sizeof(struct track);
->   
-> +	if (slub_debug_orig_size(s))
-> +		off += sizeof(unsigned int);
-> +
->   	off += kasan_metadata_size(s);
->   
->   	if (off != size_from_object(s))
-> @@ -1030,6 +1069,9 @@ static int check_pad_bytes(struct kmem_cache *s, struct slab *slab, u8 *p)
->   		/* We also have user information there */
->   		off += 2 * sizeof(struct track);
->   
-> +	if (slub_debug_orig_size(s))
-> +		off += sizeof(unsigned int);
-> +
->   	off += kasan_metadata_size(s);
->   
->   	if (size_from_object(s) == off)
-> @@ -1325,7 +1367,8 @@ static inline int alloc_consistency_checks(struct kmem_cache *s,
->   
->   static noinline int alloc_debug_processing(struct kmem_cache *s,
->   					struct slab *slab,
-> -					void *object, unsigned long addr)
-> +					void *object, unsigned long addr,
-> +					unsigned int orig_size)
->   {
->   	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
->   		if (!alloc_consistency_checks(s, slab, object))
-> @@ -1335,6 +1378,9 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
->   	/* Success perform special debug activities for allocs */
->   	if (s->flags & SLAB_STORE_USER)
->   		set_track(s, object, TRACK_ALLOC, addr);
-> +
-> +	set_orig_size(s, object, orig_size);
-> +
->   	trace(s, slab, object, 1);
->   	init_object(s, object, SLUB_RED_ACTIVE);
->   	return 1;
-> @@ -1661,7 +1707,8 @@ static inline
->   void setup_slab_debug(struct kmem_cache *s, struct slab *slab, void *addr) {}
->   
->   static inline int alloc_debug_processing(struct kmem_cache *s,
-> -	struct slab *slab, void *object, unsigned long addr) { return 0; }
-> +	struct slab *slab, void *object, unsigned long addr,
-> +	unsigned int orig_size) { return 0; }
->   
->   static inline int free_debug_processing(
->   	struct kmem_cache *s, struct slab *slab,
-> @@ -2905,7 +2952,7 @@ static inline void *get_freelist(struct kmem_cache *s, struct slab *slab)
->    * already disabled (which is the case for bulk allocation).
->    */
->   static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> -			  unsigned long addr, struct kmem_cache_cpu *c)
-> +			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
->   {
->   	void *freelist;
->   	struct slab *slab;
-> @@ -3048,7 +3095,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
->   check_new_slab:
->   
->   	if (kmem_cache_debug(s)) {
-> -		if (!alloc_debug_processing(s, slab, freelist, addr)) {
-> +		if (!alloc_debug_processing(s, slab, freelist, addr, orig_size)) {
->   			/* Slab failed checks. Next slab needed */
->   			goto new_slab;
->   		} else {
-> @@ -3102,7 +3149,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
->    * pointer.
->    */
->   static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
-> -			  unsigned long addr, struct kmem_cache_cpu *c)
-> +			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
->   {
->   	void *p;
->   
-> @@ -3115,7 +3162,7 @@ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
->   	c = slub_get_cpu_ptr(s->cpu_slab);
->   #endif
->   
-> -	p = ___slab_alloc(s, gfpflags, node, addr, c);
-> +	p = ___slab_alloc(s, gfpflags, node, addr, c, orig_size);
->   #ifdef CONFIG_PREEMPT_COUNT
->   	slub_put_cpu_ptr(s->cpu_slab);
->   #endif
-> @@ -3206,7 +3253,7 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
->   	 */
->   	if (IS_ENABLED(CONFIG_PREEMPT_RT) ||
->   	    unlikely(!object || !slab || !node_match(slab, node))) {
-> -		object = __slab_alloc(s, gfpflags, node, addr, c);
-> +		object = __slab_alloc(s, gfpflags, node, addr, c, orig_size);
->   	} else {
->   		void *next_object = get_freepointer_safe(s, object);
->   
-> @@ -3731,7 +3778,7 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->   			 * of re-populating per CPU c->freelist
->   			 */
->   			p[i] = ___slab_alloc(s, flags, NUMA_NO_NODE,
-> -					    _RET_IP_, c);
-> +					    _RET_IP_, c, s->object_size);
->   			if (unlikely(!p[i]))
->   				goto error;
->   
-> @@ -4140,6 +4187,10 @@ static int calculate_sizes(struct kmem_cache *s)
->   		 * the object.
->   		 */
->   		size += 2 * sizeof(struct track);
-> +
-> +	/* Save the original requested kmalloc size */
-> +	if (slub_debug_orig_size(s))
-> +		size += sizeof(unsigned int);
->   #endif
->   
->   	kasan_cache_create(s, &size, &s->flags);
-> @@ -4864,7 +4915,7 @@ void __init kmem_cache_init(void)
->   
->   	/* Now we can use the kmem_cache to allocate kmalloc slabs */
->   	setup_kmalloc_cache_index_table();
-> -	create_kmalloc_caches(0);
-> +	create_kmalloc_caches(SLAB_KMALLOC);
->   
->   	/* Setup random freelists for each cache */
->   	init_freelist_randomization();
-> @@ -5092,6 +5143,7 @@ struct location {
->   	depot_stack_handle_t handle;
->   	unsigned long count;
->   	unsigned long addr;
-> +	unsigned long waste;
->   	long long sum_time;
->   	long min_time;
->   	long max_time;
-> @@ -5138,13 +5190,15 @@ static int alloc_loc_track(struct loc_track *t, unsigned long max, gfp_t flags)
->   }
->   
->   static int add_location(struct loc_track *t, struct kmem_cache *s,
-> -				const struct track *track)
-> +				const struct track *track,
-> +				unsigned int orig_size)
->   {
->   	long start, end, pos;
->   	struct location *l;
-> -	unsigned long caddr, chandle;
-> +	unsigned long caddr, chandle, cwaste;
->   	unsigned long age = jiffies - track->when;
->   	depot_stack_handle_t handle = 0;
-> +	unsigned int waste = s->object_size - orig_size;
->   
->   #ifdef CONFIG_STACKDEPOT
->   	handle = READ_ONCE(track->handle);
-> @@ -5162,11 +5216,13 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
->   		if (pos == end)
->   			break;
->   
-> -		caddr = t->loc[pos].addr;
-> -		chandle = t->loc[pos].handle;
-> -		if ((track->addr == caddr) && (handle == chandle)) {
-> +		l = &t->loc[pos];
-> +		caddr = l->addr;
-> +		chandle = l->handle;
-> +		cwaste = l->waste;
-> +		if ((track->addr == caddr) && (handle == chandle) &&
-> +			(waste == cwaste)) {
->   
-> -			l = &t->loc[pos];
->   			l->count++;
->   			if (track->when) {
->   				l->sum_time += age;
-> @@ -5191,6 +5247,9 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
->   			end = pos;
->   		else if (track->addr == caddr && handle < chandle)
->   			end = pos;
-> +		else if (track->addr == caddr && handle == chandle &&
-> +				waste < cwaste)
-> +			end = pos;
->   		else
->   			start = pos;
->   	}
-> @@ -5214,6 +5273,7 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
->   	l->min_pid = track->pid;
->   	l->max_pid = track->pid;
->   	l->handle = handle;
-> +	l->waste = waste;
->   	cpumask_clear(to_cpumask(l->cpus));
->   	cpumask_set_cpu(track->cpu, to_cpumask(l->cpus));
->   	nodes_clear(l->nodes);
-> @@ -5232,7 +5292,7 @@ static void process_slab(struct loc_track *t, struct kmem_cache *s,
->   
->   	for_each_object(p, s, addr, slab->objects)
->   		if (!test_bit(__obj_to_index(s, addr, p), obj_map))
-> -			add_location(t, s, get_track(s, p, alloc));
-> +			add_location(t, s, get_track(s, p, alloc), get_orig_size(s, p));
->   }
->   #endif  /* CONFIG_DEBUG_FS   */
->   #endif	/* CONFIG_SLUB_DEBUG */
-> @@ -6102,6 +6162,10 @@ static int slab_debugfs_show(struct seq_file *seq, void *v)
->   		else
->   			seq_puts(seq, "<not-available>");
->   
-> +		if (l->waste)
-> +			seq_printf(seq, " waste=%lu/%lu",
-> +				l->count * l->waste, l->waste);
-> +
->   		if (l->sum_time != l->min_time) {
->   			seq_printf(seq, " age=%ld/%llu/%ld",
->   				l->min_time, div_u64(l->sum_time, l->count),
+sparse warnings: (new ones prefixed by >>)
+>> drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     got void [noderef] __iomem *
+>> drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:385:17: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:404:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     got void [noderef] __iomem *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     expected void const *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     got void [noderef] __iomem *
+>> drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem * @@
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     expected void *
+   drivers/mtd/nand/onenand/onenand_omap2.c:444:9: sparse:     got void [noderef] __iomem *
+
+vim +385 drivers/mtd/nand/onenand/onenand_omap2.c
+
+3621311695f5b1 drivers/mtd/onenand/omap2.c              Peter Ujfalusi  2018-01-12  359  
+fb25070afdf07c drivers/mtd/onenand/omap2.c              Ladislav Michl  2018-01-12  360  static int omap2_onenand_read_bufferram(struct mtd_info *mtd, int area,
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  361  					unsigned char *buffer, int offset,
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  362  					size_t count)
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  363  {
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  364  	struct omap2_onenand *c = container_of(mtd, struct omap2_onenand, mtd);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  365  	struct onenand_chip *this = mtd->priv;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  366  	struct device *dev = &c->pdev->dev;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  367  	void *buf = (void *)buffer;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  368  	dma_addr_t dma_src, dma_dst;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  369  	int bram_offset, err;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  370  	size_t xtra;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  371  
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  372  	bram_offset = omap2_onenand_bufferram_offset(mtd, area) + area + offset;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  373  	/*
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  374  	 * If the buffer address is not DMA-able, len is not long enough to
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  375  	 * make DMA transfers profitable or if invoked from panic_write()
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  376  	 * fallback to PIO mode.
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  377  	 */
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  378  	if (!virt_addr_valid(buf) || bram_offset & 3 || (size_t)buf & 3 ||
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  379  	    count < 384 || mtd->oops_panic_write)
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  380  		goto out_copy;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  381  
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  382  	xtra = count & 3;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  383  	if (xtra) {
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  384  		count -= xtra;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06 @385  		memcpy(buf + count, this->base + bram_offset + count, xtra);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  386  	}
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  387  
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  388  	dma_dst = dma_map_single(dev, buf, count, DMA_FROM_DEVICE);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  389  	dma_src = c->phys_base + bram_offset;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  390  
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  391  	if (dma_mapping_error(dev, dma_dst)) {
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  392  		dev_err(dev, "Couldn't DMA map a %d byte buffer\n", count);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  393  		goto out_copy;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  394  	}
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  395  
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  396  	err = omap2_onenand_dma_transfer(c, dma_src, dma_dst, count);
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  397  	dma_unmap_single(dev, dma_dst, count, DMA_FROM_DEVICE);
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  398  	if (!err)
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  399  		return 0;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  400  
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  401  	dev_err(dev, "timeout waiting for DMA\n");
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  402  
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  403  out_copy:
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06 @404  	memcpy(buf, this->base + bram_offset, count);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  405  	return 0;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  406  }
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  407  
+fb25070afdf07c drivers/mtd/onenand/omap2.c              Ladislav Michl  2018-01-12  408  static int omap2_onenand_write_bufferram(struct mtd_info *mtd, int area,
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  409  					 const unsigned char *buffer,
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  410  					 int offset, size_t count)
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  411  {
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  412  	struct omap2_onenand *c = container_of(mtd, struct omap2_onenand, mtd);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  413  	struct onenand_chip *this = mtd->priv;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  414  	struct device *dev = &c->pdev->dev;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  415  	void *buf = (void *)buffer;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  416  	dma_addr_t dma_src, dma_dst;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  417  	int bram_offset, err;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  418  
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  419  	bram_offset = omap2_onenand_bufferram_offset(mtd, area) + area + offset;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  420  	/*
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  421  	 * If the buffer address is not DMA-able, len is not long enough to
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  422  	 * make DMA transfers profitable or if invoked from panic_write()
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  423  	 * fallback to PIO mode.
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  424  	 */
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  425  	if (!virt_addr_valid(buf) || bram_offset & 3 || (size_t)buf & 3 ||
+875330f87a057a drivers/mtd/nand/onenand/onenand_omap2.c Thomas Gleixner 2020-11-13  426  	    count < 384 || mtd->oops_panic_write)
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  427  		goto out_copy;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  428  
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  429  	dma_src = dma_map_single(dev, buf, count, DMA_TO_DEVICE);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  430  	dma_dst = c->phys_base + bram_offset;
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  431  	if (dma_mapping_error(dev, dma_src)) {
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  432  		dev_err(dev, "Couldn't DMA map a %d byte buffer\n", count);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  433  		goto out_copy;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  434  	}
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  435  
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  436  	err = omap2_onenand_dma_transfer(c, dma_src, dma_dst, count);
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  437  	dma_unmap_page(dev, dma_src, count, DMA_TO_DEVICE);
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  438  	if (!err)
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  439  		return 0;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  440  
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  441  	dev_err(dev, "timeout waiting for DMA\n");
+6732cfd4cac514 drivers/mtd/nand/onenand/omap2.c         Ladislav Michl  2018-05-02  442  
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  443  out_copy:
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06 @444  	memcpy(this->base + bram_offset, buf, count);
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  445  	return 0;
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  446  }
+36cd4fb5d277f3 drivers/mtd/onenand/omap2.c              Adrian Hunter   2008-08-06  447  
+
+:::::: The code at line 385 was first introduced by commit
+:::::: 36cd4fb5d277f34fe9e4db0deac2d4efd7dff735 [MTD] [OneNAND] Add OMAP2 / OMAP3 OneNAND driver
+
+:::::: TO: Adrian Hunter <ext-adrian.hunter@nokia.com>
+:::::: CC: David Woodhouse <David.Woodhouse@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

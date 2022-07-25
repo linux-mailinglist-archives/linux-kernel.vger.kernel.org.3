@@ -2,149 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B923657FA50
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA30957FA53
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiGYHeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 03:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S230240AbiGYHgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiGYHeI (ORCPT
+        with ESMTP id S229803AbiGYHgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 03:34:08 -0400
-X-Greylist: delayed 36172 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 00:34:06 PDT
-Received: from dvalin.narfation.org (dvalin.narfation.org [213.160.73.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB25D12082;
-        Mon, 25 Jul 2022 00:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-        s=20121; t=1658734444;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V6Vf2jAltQTipO89H4jWJtpPrrxkmjRYpJzgCKIpSjc=;
-        b=aE9rdpdnJp0XGhoj+EVCPaQdSHqT4XThP85IOwkxY0e4GyNl0Lunqc9JWSAz3PFzDtJrS7
-        oEQ7mhkkYF+kkbQiXnmnsqNgXaV3yjvfv9CMc8+1xedtIoVpyzDpNCtbTADzG4ka4/tmCD
-        KeAhU68Wk7YiiAQDk4EYNZY3FjjowgE=
-From:   Sven Eckelmann <sven@narfation.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marek Lindner <mareklindner@neomailbox.ch>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
-        Antonio Quartulli <a@unstable.cc>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2] batman-adv: tracing: Use the new __vstring() helper
-Date:   Mon, 25 Jul 2022 09:33:56 +0200
-Message-ID: <3133019.BU9PzZYyX2@ripper>
-In-Reply-To: <20220724191650.236b1355@rorschach.local.home>
-References: <20220724191650.236b1355@rorschach.local.home>
+        Mon, 25 Jul 2022 03:36:03 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32D0562E2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:36:02 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-69-oYIuq9NKNZ2oDYXkhJf3Sw-1; Mon, 25 Jul 2022 08:35:58 +0100
+X-MC-Unique: oYIuq9NKNZ2oDYXkhJf3Sw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 25 Jul 2022 08:35:55 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 25 Jul 2022 08:35:55 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Luck, Tony'" <tony.luck@intel.com>
+CC:     "Sun, Yi" <yi.sun@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>,
+        "Su, Heng" <heng.su@intel.com>
+Subject: RE: [PATCH 1/2] x86/fpu: Measure the Latency of XSAVE and XRSTOR
+Thread-Topic: [PATCH 1/2] x86/fpu: Measure the Latency of XSAVE and XRSTOR
+Thread-Index: AQHYnm+ODXPdzib5uU6pj7yBjiIw9q2OAAFwgAAUpoCAAJ8nQA==
+Date:   Mon, 25 Jul 2022 07:35:55 +0000
+Message-ID: <70ec475d45644c18b782d8bbe6a4e921@AcuMS.aculab.com>
+References: <921078bc2a994d3ab6aba26d4654cb47@AcuMS.aculab.com>
+ <75084D4E-80AC-4FE7-8CDD-2BFD30D23695@intel.com>
+In-Reply-To: <75084D4E-80AC-4FE7-8CDD-2BFD30D23695@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2457081.NBQ8aREyQt"; micalg="pgp-sha512"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart2457081.NBQ8aREyQt
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Sven Eckelmann <sven@narfation.org>
-To: LKML <linux-kernel@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Marek Lindner <mareklindner@neomailbox.ch>, Simon Wunderlich <sw@simonwunderlich.de>, Antonio Quartulli <a@unstable.cc>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2] batman-adv: tracing: Use the new __vstring() helper
-Date: Mon, 25 Jul 2022 09:33:56 +0200
-Message-ID: <3133019.BU9PzZYyX2@ripper>
-In-Reply-To: <20220724191650.236b1355@rorschach.local.home>
-References: <20220724191650.236b1355@rorschach.local.home>
-
-On Monday, 25 July 2022 01:16:50 CEST Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> Instead of open coding a __dynamic_array() with a fixed length (which
-> defeats the purpose of the dynamic array in the first place). Use the new
-> __vstring() helper that will use a va_list and only write enough of the
-> string into the ring buffer that is needed.
-
-Acked-by: Sven Eckelmann <sven@narfation.org>
-
-(and sorry for taking such a long time to respond to the v1 version of the 
-patch).
-
-> ---
-> Changes since v1:  https://lkml.kernel.org/r/20220705224751.080390002@goodmis.org
-> 
->  - Removed no longer used BATADV_MAX_MSG_LEN
-> 
->  net/batman-adv/trace.h | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
-> 
-> diff --git a/net/batman-adv/trace.h b/net/batman-adv/trace.h
-> index d673ebdd0426..31c8f922651d 100644
-> --- a/net/batman-adv/trace.h
-> +++ b/net/batman-adv/trace.h
-> @@ -28,8 +28,6 @@
->  
->  #endif /* CONFIG_BATMAN_ADV_TRACING */
->  
-> -#define BATADV_MAX_MSG_LEN	256
-> -
->  TRACE_EVENT(batadv_dbg,
->  
->  	    TP_PROTO(struct batadv_priv *bat_priv,
-> @@ -40,16 +38,13 @@ TRACE_EVENT(batadv_dbg,
->  	    TP_STRUCT__entry(
->  		    __string(device, bat_priv->soft_iface->name)
->  		    __string(driver, KBUILD_MODNAME)
-> -		    __dynamic_array(char, msg, BATADV_MAX_MSG_LEN)
-> +		    __vstring(msg, vaf->fmt, vaf->va)
->  	    ),
->  
->  	    TP_fast_assign(
->  		    __assign_str(device, bat_priv->soft_iface->name);
->  		    __assign_str(driver, KBUILD_MODNAME);
-> -		    WARN_ON_ONCE(vsnprintf(__get_dynamic_array(msg),
-> -					   BATADV_MAX_MSG_LEN,
-> -					   vaf->fmt,
-> -					   *vaf->va) >= BATADV_MAX_MSG_LEN);
-> +		    __assign_vstr(msg, vaf->fmt, vaf->va);
->  	    ),
->  
->  	    TP_printk(
-> 
-
-
---nextPart2457081.NBQ8aREyQt
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmLeR2QACgkQXYcKB8Em
-e0b++BAA1XfqNG8IgHveLdrDXzvP9gh02aQZJljfpbrrsVoc4G4wUNFttNnxxY62
-fcFyFXGm4UXe0QxcgW2H0oazYxwOBP68I80Q5kqAPzeVyWny9piJ3Gk0izE0x5St
-uM7nIs3GO+uAF2qEKjAJIvf8V/RzBt+ZSjqiS1rFXw8uSwB//3mhuoO8rLvzT4Sz
-GfRkx8P+YvYHERQDJiFd8jco5an1zNJcM6SA//XfIfg2onaI07aO11fJ+izIRvyo
-nP6bwmQSp3ct/6ESTfzVqEk6EluYIR3g20n7j6qHZp9PylMKzKg2Vi6Tjuh2ATpf
-EEhTHB9m5EjANyX/tmRllLetsRTq9sw5Nvgd+RaUYZPhJFDfSnRPDtELCZknkD4F
-kfA95tY3/YHwsyw+/yP2CSK68tSIleR2dZHWFeMUoC9xxE3tX7VpZjv2fWhhOZ9X
-upX9AyS21y/i++eWHPn4YGjMSkxP9zuMAzNK6gvFEgeA69CdnKovwph4zv6+5pca
-RFQrVImbU81RkQaTihFrZPGVosc8/uNRpOkJ3a5k6jTRtV8NquAKjjVGfClGU6zC
-1oJCpK4z7542bGU29BGTXOEKzp0H/VhynrSmFEO8aukEsPsNvBjjz/7FIfiLTg6s
-H1yEZdH0ovjpAi4jieIBJs1wh9Q5wCrjJK52+pyw5LHB7s+7wko=
-=i8q+
------END PGP SIGNATURE-----
-
---nextPart2457081.NBQ8aREyQt--
-
-
+RnJvbTogTHVjaywgVG9ueQ0KPiBTZW50OiAyNSBKdWx5IDIwMjIgMDA6MDANCj4gDQo+IFJEVFND
+IGhhcyByZXR1cm5lZCB2YWx1ZXMgaW52YXJpYW50IG9mIGN1cnJlbnQgZnJlcXVlbmN5IHNpbmNl
+IE5laGFsZW0gKG1vZHVsbyBhIGZldyBoaWNjb3VnaHMpLiBTbw0KPiBhbnkgQ1BVIHdpdGggWFNB
+VkUvWFJFU1RPUiBzaG91bGQgYmUgc2FmZSB0byBtZWFzdXJlIHVzaW5nIFRTQy4NCg0KSW5kZWVk
+IC0gdGhhdCBpdCBleGFjdGx5IHdoeSB5b3UgY2FuJ3QgdXNlIHRoZSBUU0MgdG8gbWVhc3VyZQ0K
+aW5zdHJ1Y3Rpb24gbGF0ZW5jeSBhbnkgbW9yZS4NCllvdSBuZWVkIHRvIG1lYXN1cmUgbGF0ZW5j
+eSBpbiBjbG9ja3MsIG5vdCB0aW1lLg0KDQpPbiBjcHUgd2hlcmUgYWxsIHRoZSBjb3JlcyBydW4g
+YXQgdGhlIHNhbWUgZnJlcXVlbmN5IHlvdSBjYW4NCnNlZSB0aGUgZWZmZWN0IGJ5IHNwaW5uaW5n
+IG9uZSBjb3JlIGluIHVzZXJzcGFjZS4NClJ1bm5pbmcgJ3doaWxlIDo7IGRvIDo7IGRvbmUnIGZy
+b20gYSBzaGVsbCBwcm9tcHQgaXMgcHJldHR5DQplZmZlY3RpdmUgYXQgc3Bpbm5pbmcgaW4gdXNl
+cnNwYWNlLg0KDQoJRGF2aWQNCg0KPiANCj4gU2VudCBmcm9tIG15IGlQaG9uZQ0KPiANCj4gPiBP
+biBKdWwgMjQsIDIwMjIsIGF0IDE0OjE2LCBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdodEBhY3Vs
+YWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IO+7v0Zyb206IFlpIFN1bg0KPiA+PiBTZW50OiAyMyBK
+dWx5IDIwMjIgMDk6MzgNCj4gPj4NCj4gPj4gQ2FsY3VsYXRlIHRoZSBsYXRlbmN5IG9mIGluc3Ry
+dWN0aW9ucyB4c2F2ZSBhbmQgeHJzdG9yIHdpdGggbmV3IHRyYWNlDQo+ID4+IHBvaW50cyB4ODZf
+ZnB1X2xhdGVuY3lfeHNhdmUgYW5kIHg4Nl9mcHVfbGF0ZW5jeV94cnN0b3IuDQo+ID4+DQo+ID4+
+IFRoZSBkZWx0YSBUU0MgY2FuIGJlIGNhbGN1bGF0ZWQgd2l0aGluIGEgc2luZ2xlIHRyYWNlIGV2
+ZW50LiBBbm90aGVyDQo+ID4+IG9wdGlvbiBjb25zaWRlcmVkIHdhcyB0byBoYXZlIDIgc2VwYXJh
+dGVkIHRyYWNlIGV2ZW50cyBtYXJraW5nIHRoZQ0KPiA+PiBzdGFydCBhbmQgZmluaXNoIG9mIHRo
+ZSB4c2F2ZS94cnN0b3IgaW5zdHJ1Y3Rpb25zLiBUaGUgZGVsdGEgVFNDIHdhcw0KPiA+PiBjYWxj
+dWxhdGVkIGZyb20gdGhlIDIgdHJhY2UgcG9pbnRzIGluIHVzZXIgc3BhY2UsIGJ1dCB0aGVyZSB3
+YXMNCj4gPj4gc2lnbmlmaWNhbnQgb3ZlcmhlYWQgYWRkZWQgYnkgdGhlIHRyYWNlIGZ1bmN0aW9u
+IGl0c2VsZi4NCj4gPj4NCj4gPj4gSW4gaW50ZXJuYWwgdGVzdGluZywgdGhlIHNpbmdsZSB0cmFj
+ZSBwb2ludCBvcHRpb24gd2hpY2ggaXMNCj4gPj4gaW1wbGVtZW50ZWQgaGVyZSBwcm92ZWQgdG8g
+YmUgbW9yZSBhY2N1cmF0ZS4NCj4gPiAuLi4NCj4gPg0KPiA+IEkndmUgZG9uZSBzb21lIGV4cGVy
+aW1lbnRzIHRoYXQgbWVhc3VyZSBzaG9ydCBpbnN0cnVjdGlvbiBsYXRlbmNpZXMuDQo+ID4gQmFz
+aWNhbGx5IEkgZm91bmQ6DQo+ID4gMSkgWW91IG5lZWQgYSBzdWl0YWJsZSBzZXJpYWxpc2luZyBp
+bnN0cnVjdGlvbiBiZWZvcmUgYW5kIGFmdGVyDQo+ID4gICB0aGUgY29kZSBiZWluZyB0ZXN0ZWQg
+LSBvdGhlcndpc2UgaXQgY2FuIG92ZXJsYXAgd2hhdGV2ZXINCj4gPiAgIHlvdSBhcmUgdXNpbmcg
+Zm9yIHRpbWluZy4NCj4gPiAyKSBUaGUgb25seSByZWxpYWJsZSBjb3VudGVyIGlzIHRoZSBwZXJm
+b3JtYW5jZSBtb25pdG9yIGNsb2NrDQo+ID4gICBjb3VudGVyIC0gZXZlcnl0aGluZyBlbHNlIGRl
+cGVuZHMgb24gdGhlIGN1cnJlbnQgY3B1IGZyZXF1ZW5jeS4NCj4gPiAgIE9uIGludGVsIGNwdSB0
+aGUgY3B1IGZyZXF1ZW5jeSBjYW4gY2hhbmdlIGFsbCB0aGUgdGltZS4NCj4gPiBBbGxvd2luZyBm
+b3IgdGhhdCwgYW5kIHRoZW4gaWdub3JpbmcgY29tcGxldGUgb3V0bGllcnMsIEkgY291bGQNCj4g
+PiBnZXQgY2xvY2stY291bnQgYWNjdXJhdGUgdmFsdWVzIGZvciBpdGVyYXRpb25zIG9mIHRoZSBJ
+UCBjc3VtIGxvb3AuDQo+ID4NCj4gPiAgICBEYXZpZA0KPiA+DQo+ID4gLQ0KPiA+IFJlZ2lzdGVy
+ZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5
+bmVzLCBNSzEgMVBULCBVSw0KPiA+IFJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo+
+ID4NCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
+IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
+ODYgKFdhbGVzKQ0K
 

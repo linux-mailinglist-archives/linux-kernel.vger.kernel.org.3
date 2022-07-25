@@ -2,250 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C5157FA61
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD4F57FA6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiGYHlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 03:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S230523AbiGYHn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiGYHlN (ORCPT
+        with ESMTP id S229803AbiGYHnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 03:41:13 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7B512766;
-        Mon, 25 Jul 2022 00:41:12 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26P6VT5Q000854;
-        Mon, 25 Jul 2022 07:41:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=7bYbivrtYkouEMOY/xFjwdGolUCqmvGJlLrJ7S2XD6E=;
- b=Nh5j8knV6QULv1tlNNBz68fmS7ODjEYuuY4EOQrFiWvHX4oBduLjLLzlbuuZidRIGLce
- XSYMNnJ3/aCoRhrPP5nb9vc/D+k6bf0jl3Ea5cgjid1zO+vdownXiaeM/SRvJk1J/GxI
- gH0qZQyMJbfggG1VEUbx5B4vqy5krhmeZYKVlbXxpL7iFsrychNcNFdNRthl+jlCAmFg
- 6GbR4PDbO2c+4OEAuRMCl+JF8ACFlJcbDAtRW0n4prfOSMQxEzGqxXdMJEaEVUW1U1KO
- 7lUdOHECF1c4Y0ApdEJNx/7SNTuxUaAZdopM7Al1USQfNxVr9+efuzJ8LeyTj8r8Z8S+ Zw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hg940jfjm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Jul 2022 07:41:09 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26P58SA4023112;
-        Mon, 25 Jul 2022 07:41:08 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hh5yt5vp3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Jul 2022 07:41:08 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PplctJED1LtQqzjA5SajZKDi64ZIsF2GtHuu7ccxI2b62cp4r8CE00N1oxq+1efFgmgt5S5OvDkcRnNgX3W8ZjvG6eQkA1K37xfsETp0/7vSx/7WDc5kQTqGEqKP2AU/oRrKQczvES7u5GAozSOrOJpLdupQZFgRKgiQbxH/vyCgzCIOjYHPSNkClp2VK1F3MG9+LXs5zHUphNVEHRDXy+T8xg9SUIBD39z71M6SZ0KAfBlwCHDT0eVRNYV929x4B1rqKa53H0RBx65sA/NQFprrnoQjDA5eoX/Jh65syOxJ6jl8LTjsN+N5idmWJARolcFiHH/yUpwPpbQ1NVE6jQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7bYbivrtYkouEMOY/xFjwdGolUCqmvGJlLrJ7S2XD6E=;
- b=SJk3uzAMyyznJeltDOHEXsXZ6WpeDBf9Lpwxe5pGg5NT8ZBxVKB4H0YrSxFE150ajvBiFalhIFY0ZkL9IejpS4tXBmKMBeIzbGyBV4NVDFMb0qsQvTzAlVugRLBBbt0Uc5gEijKsseLyo581KaS5t+If1YqiuBu9bHJRM6RSlcVcbyc1jm0udOrLndvB9clVb73vBp7olabtKxr7ibObnRZAM0CXpuNa+eyJafBCi2Wh31GPaPkViTm9McWfse/AbozU1KAe1nkjBynS5In36tTTC8cbbgjjJsTKji1l2ijUuW0cZH9MjUEGjGhjmiLAsk+l38RoU42Qzw2IJawn7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7bYbivrtYkouEMOY/xFjwdGolUCqmvGJlLrJ7S2XD6E=;
- b=a3QoyTrAmjcVf/5HkMpmZ6nc51bVyvj+WTb1F8uxMTkt9K14e8HRHlUvx7DXQbCDm/8g9QA5JuUnCat7S8FVidaFH85mJrrbQ42+PoMXA6CUs3OftbiN8IKefJSRUJ5LVVFj2DRVhOGyi40ZdoPWNjALT/4drjT6geadr1nrucs=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by DS7PR10MB5101.namprd10.prod.outlook.com (2603:10b6:5:3b0::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Mon, 25 Jul
- 2022 07:41:06 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::b1c7:933:e8c2:f84f]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::b1c7:933:e8c2:f84f%8]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
- 07:41:06 +0000
-Subject: Re: [PATCH] bpf: btf: Fix vsnprintf return value check
-To:     Fedor Tokarev <ftokarev@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220711211317.GA1143610@laptop> <YsyZY/tFm3hi5srl@krava>
- <CAEf4BzYGjNaqL4h8=4Jw7O_xxMfy=TbUg94VO6RZT5wOtV+_wQ@mail.gmail.com>
- <ef44abe0-81fc-9c97-a4e4-2b3ba19cd84f@oracle.com>
- <20220715070742.GA165641@laptop>
-From:   Alan Maguire <alan.maguire@oracle.com>
-Message-ID: <ba445c37-1057-a71c-0ba4-cf8c348ccebb@oracle.com>
-Date:   Mon, 25 Jul 2022 08:41:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
-In-Reply-To: <20220715070742.GA165641@laptop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DU2PR04CA0161.eurprd04.prod.outlook.com
- (2603:10a6:10:2b0::16) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+        Mon, 25 Jul 2022 03:43:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B82E12A9C
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658735003;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eq4OL1zxJF2+2fp+Q22O19ixxH9CotH/xfhS3oI2/ds=;
+        b=d8STTu4sqUed/DVgPxhwQ/VzA0hgIfNph1s1+PCBVMZbdCIqrxQ12P6aaeYwFS9mCu069o
+        QcUUxLVJJ0JJA8LoD2wY0LEla/HIDV1ckTsKShwibYguj5KteZfTsnHn+Y8wMdtFQP1vaO
+        mo3dIbcf043ov26ABmpArsrMuaRa1vQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-R6c5YhgpM46FGHcKbbeB_A-1; Mon, 25 Jul 2022 03:43:21 -0400
+X-MC-Unique: R6c5YhgpM46FGHcKbbeB_A-1
+Received: by mail-wm1-f70.google.com with SMTP id h189-20020a1c21c6000000b003a2fdf9bd2aso5790954wmh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:43:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eq4OL1zxJF2+2fp+Q22O19ixxH9CotH/xfhS3oI2/ds=;
+        b=S/O9WOJd4VLZScqaqECcfFH22f/5sqq3Ho62FhxO8QSmlV+4aNPy+Tu3Oz3Di8nwRf
+         WNzZnPY0jL9RAxdoWxtJjkF668iY5iEwx8C6tuIRkqjh18XHSYRYTAqVFK6tqKyL5Hug
+         fVH/7VPwL0OE+QbB1d/IDDd3/KKyU0ibkTwD3dydiqechE8npzJkBK+ij++VCWwWqxsO
+         FEH4CbpDupfmbp1nNepY7FnmC0q86Wwe8G7EuFR/swLl4RG0XEwmz2PG3iYZjZxit01f
+         h+H5+rdMHL293ZW8DMujuwJdqbY4Ztn314jWPaI8udkCvinGv8vPYwCkZuzYodFzH251
+         A3RQ==
+X-Gm-Message-State: AJIora+yRCy91sdwJL2QaBIPAOqh0mxSGFuWcLlrXPN/q4iLDj7iaTQI
+        L4Cu7uhb1SUV19leeyJxI2vLyTV79voarSNaJbFdamOhoRKOP3YJKJm5Bo6rIXgaBwrkVS6PpJ4
+        XsXnTgbC/IxsXvP90jsa55vxxSKP03OLJ4miWOVzLu+RwH21FqmL9al1/bn5TVLXE9mQORisuLz
+        U=
+X-Received: by 2002:a05:6000:144d:b0:21d:8109:701d with SMTP id v13-20020a056000144d00b0021d8109701dmr6564245wrx.443.1658734998373;
+        Mon, 25 Jul 2022 00:43:18 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tBKBzTRxo9vQI/80qLdj5OZrt+z9DMgSEy+3bbSO1SZWvbh7cisads/gEd5kCIpmRjt1OStw==
+X-Received: by 2002:a05:6000:144d:b0:21d:8109:701d with SMTP id v13-20020a056000144d00b0021d8109701dmr6564214wrx.443.1658734997943;
+        Mon, 25 Jul 2022 00:43:17 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b003a2e42ae9a4sm16069031wmb.14.2022.07.25.00.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 00:43:17 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3] drm/msm: Make .remove and .shutdown HW shutdown consistent
+Date:   Mon, 25 Jul 2022 09:43:13 +0200
+Message-Id: <20220725074313.42172-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9648ffb2-da84-4bf8-8e4b-08da6e11086e
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5101:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8jv1qLvMLAp9vZsi2KoJ7bkOHJSVDDP2P7ADcXI3ezHixefr1Er1dvgBx2Z5983ZHQF7j/6ZCqMFaK+0l4NFEHH0HZMtJjuy0DgRouQZJ/3JAWDtvhTgXzflKMBUNFFMKjUIdRkMDev5fTWhNLKRZ3d32zLd7O02Spr1dBQcyC/lvC9KRpp6KamXU2bVZ0h5Ye6QHtQwTy4PdOPCeqyBBHS9/vXzaTT0vCaUOUDTLloQj2H3HP5eVLfCHPkLrk3iSTFCujPU/wSs52XRBit6jfSkYFO6roQto3Voc/avFQNaNvIhc+4OTR2JQoWC4MO2I46zGEXMSDLMHOnsgYJjBEP8qo09TabrA0Fk60/0ijgJEapal80r7jJd9t+l8e66Dzgi5tmIldlBR3KbMxxr8eQelo9djPH6DkixtPVWdYHo+Dp4o/j5c4NUtJ1gJ4dMJz2KgpekRzgba4crSQRv3fnNYunI1ZEvDYD0kQ52uy3y+6UGEWZoQi9tUsMxQApC/82yzt7kjD3KavNukV+z5zCxdz35YNdne107N8Oe6hnXrzP6YW4CD6Y5qXqzj10RnPGbYvwWtUYTfbKsTZ12f88SyZfenXNj/VtJX0W0NIG5a5uW2ekUpNbQLbIRif5HvIVQTiuuLOeExbgg4+sf5kgtZzQQ1CI5v9rq9vfIeFxzujrj8/0d4WCBo74ZwhK0+cXRqf+AtkwVDOkajer3EaukSXfNoVpv/pMgYLVi0jd74yxkwHRl+Qn8dLI7zO+KwT0EIGAQlPy7KfwyEeSqmWBVwsMqhpmBLSmrlH9mmx+5olLzbHTfFbr3dVQ/j3Qq5UIA2shyKXcTRhROa39JlKEXjh3v/ERhku+TDk2uWM0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(366004)(39860400002)(346002)(136003)(86362001)(31696002)(6512007)(6506007)(53546011)(83380400001)(36756003)(38100700002)(2616005)(186003)(31686004)(41300700001)(316002)(6666004)(54906003)(6916009)(478600001)(966005)(6486002)(52116002)(44832011)(66556008)(5660300002)(8936002)(4326008)(8676002)(66946007)(66476007)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVdoa2kxam5qSHlZQWJPQXhFWW5JQVdEamtDMXp5R3l2a3BjY0xLTHdZMTFn?=
- =?utf-8?B?MDBGT2JidnYvV1psV21hTVdZc1dFMjM5OTgvUmZsZnBXcTBlZUlHMkxFQXQx?=
- =?utf-8?B?ODFtZlJScG8yTTBoeDRyY1YrRy9aZVY5TFFta3ZDV0JsUUE1Smdib05zRWdv?=
- =?utf-8?B?Q0xxWDNnb0g2QzBnQm11YVU5VFNIdmxsWVpvYVNjMklpdEd3bVRyTE5sMWZK?=
- =?utf-8?B?VElmYXZnc0NDdE5lMCtDRjRBcm15KzdPamRwaEFhV2VkWnhPTE9GZ240ak85?=
- =?utf-8?B?eXdDSlZoZGwwTHh0MTcwbjVkbVUwQ0pWOWRkZXplVjJXd1kxOUlxRmhENkcv?=
- =?utf-8?B?d3RrV3N0RmozaE5EdWVmclcwSGIxcTZ4WCttR21RK0NoWjNWaU4rMTh6RDBO?=
- =?utf-8?B?bER3L2h4K1VLYTVJZmtnRHYvYVJlZE5uWlN4bG5KZGZIa2RHVko1UmNpbm8z?=
- =?utf-8?B?MVJkME0vN3RrN1pHM3pDd0Zydm52YTh6OURydmU5Y1MyS0FRcWRFR2VZa3Jk?=
- =?utf-8?B?SVNya2RRWkg4ZU5STlFTYUZ2SWdISjYrd3NvMmJieUF6RVJFUE14VmtOekE5?=
- =?utf-8?B?OFQxU1FtdThkd2NGdWlzeVM5ZlE1Z0R2M083c3RMcmc2QW9BeWlqRFFDazJG?=
- =?utf-8?B?dThuVFNqS0NuRnNHUlc5SFRSZUVBd2tlOUdNWWY0T2pDOTc2Q2FVRFpETCth?=
- =?utf-8?B?ZUErS3VLVVpUNHVScm1YNE0rNzE5MjFqV05FVkdjUmJDSlo1dlJsSkF1cHZ6?=
- =?utf-8?B?N1ZKZ2UwRTBDUXBWdnFQMjNOd1pkNnBoN1hidXIvVWtKa2xObUxxR0RlRmxr?=
- =?utf-8?B?YkRPSnc1TnlIMWgvYklydkNiM0t0azNPMm1IMHd4TmlNRUcwUXpZYWphMldX?=
- =?utf-8?B?dU1ZRE9VVVJxZWY3R3BPR0hsb0ZVRWFpVkkrNkt5Q2pLdFhzMmtnYTFyY0xB?=
- =?utf-8?B?NmdRa29oZTNDVElnTFhvaitWZVUyMUI2SzNIa0lGL3B0SzRhekIzbENJamdG?=
- =?utf-8?B?SG9mS1kycWg0VUQzbUtBNlpZbEdsNjZuMEQybmVSMlBBd3hXdUoxQU9HWDc5?=
- =?utf-8?B?QU0yVWJqdnBPMTNISEtLZTZpcWhWYXNGeHQ3ZzR6Y2dNUSs3dzA3V1hBSWtW?=
- =?utf-8?B?c3N0MDVkUVVOeTVGbmhjeGM5OForUlBxRjR2R1NoUEQ0YVdMOHdOSFk2VXFJ?=
- =?utf-8?B?ckw5ZEFaVzZhcElpVEFwdnp4cHJlcFY4VjZ4K1FGamRkdXIvOW5yZ2VEUjdV?=
- =?utf-8?B?UkI4NjRUMWl2MXNiMENld1FhQUR4SytIazRnV1NOdjJVUW9Fck93bTVYVVFD?=
- =?utf-8?B?TlRjeUVZdHFvY2F2UXRnZnl0cyttUUp3eGY3NmZzenljd244N05MSjRzWklw?=
- =?utf-8?B?QXJFWUZ0djRtRUtjZ1JwT2VDdjdpY2t1eTFmandiQUdYNFNGRVBVbEM0dEpt?=
- =?utf-8?B?RjdIRkpBeEdESzRvbVA4UlpZSzhwcXpUVVJFbGk5dkllVEdPVHRaZm1PY3k0?=
- =?utf-8?B?dk5jZzBJd2RxMXJWTEwvUFZQVXgzcnN4a2FscHJsK003QnMxQ3JVZXNNbzVy?=
- =?utf-8?B?V0ovOWxFUzlpTjhhV0NSN2hGM2oxVVNEYTlFUzJmcHVNeFp5VG0xbTQ1d3hO?=
- =?utf-8?B?dnU1eHBkcXo0clVzV1JwK0pFb3VQZVppb3dQL1lIVDNsUngweE11OG5wOUlO?=
- =?utf-8?B?MnU5SzlZTldXeUFJNkJ3WEFJUU9BTVlFUTVPWkF0MjAvc2lsYXQ2VHA4VCtZ?=
- =?utf-8?B?WUhmOFA2VHpaSVZNT0N6SElCcDJqcVpDSmp2WUFwbGM4NGlBeG43Z2sxdXh4?=
- =?utf-8?B?b290dWZoZUF0a3RGV1lFREJYSEpyQ09pVWU3Z0N2ZGUyMjk0blZ4YkZwQ0hi?=
- =?utf-8?B?amN3cVhwNzhQOUhGWm1NK2pGWU5QbGcvSEZIa0hzSGpPRWh0bUYxMVMxVVdB?=
- =?utf-8?B?dExqUk10SXExRGhFM0JBamJnVjZyOTZ5ZUhhZjdjOTA4UitOZjZOcmJETktZ?=
- =?utf-8?B?YUJ0c2hxaW1yWHlRQSthS3lwWS9ENktLRnJsZGRlSjZXTjN2NXh2UWl6RVJJ?=
- =?utf-8?B?d1J5V1pCa2h2bWU4TGJWVThPRncxVXNSR2NtRlpWaUdMN2RlQ0h2VHkrWGNk?=
- =?utf-8?B?TjA0a3VvdDN1MEJ0RWN1bmJvUWU5VUVKWlFzRndDekVwVEl1Y2xoU1Y5RjNl?=
- =?utf-8?B?bnVwbmgvQnhDbUd5MlNqZGdsSTdPQ0t3TjRSMTQvOFBYQXZ6QWw4NTJXbUZr?=
- =?utf-8?B?VDVSTEZ1bkJmR05pRk1LcnFNaVRBPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9648ffb2-da84-4bf8-8e4b-08da6e11086e
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 07:41:06.3339
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VrgXAcay2Y95vjob1BztU2/aTQ7SX+CPpiWifgCaXod5oJfbtwRGI6uJZaayMH4o/cWTC9JrJGpX3S+ZsJ+mBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5101
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-23_02,2022-07-21_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- mlxscore=0 suspectscore=0 adultscore=0 bulkscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207250032
-X-Proofpoint-GUID: k9HaIgc-_yB1zKDJ6bsyfZh9x3wqlB9p
-X-Proofpoint-ORIG-GUID: k9HaIgc-_yB1zKDJ6bsyfZh9x3wqlB9p
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/07/2022 08:07, Fedor Tokarev wrote:
-> On Thu, Jul 14, 2022 at 11:06:22AM +0100, Alan Maguire wrote:
->> On 13/07/2022 19:40, Andrii Nakryiko wrote:
->>> On Mon, Jul 11, 2022 at 2:45 PM Jiri Olsa <olsajiri@gmail.com> wrote:
->>>>
->>>> On Mon, Jul 11, 2022 at 11:13:17PM +0200, Fedor Tokarev wrote:
->>>>> vsnprintf returns the number of characters which would have been written if
->>>>> enough space had been available, excluding the terminating null byte. Thus,
->>>>> the return value of 'len_left' means that the last character has been
->>>>> dropped.
->>>>
->>>> should we have test for this in progs/test_snprintf.c ?
->>>
->>> It might be too annoying to set up such test, and given the fix is
->>> pretty trivial IMO it's ok without extra test. But cc Alan for ack.
->>> Alan, please take a look as well.
->>>
->>
->> I can follow up with a test, it should be okay I think (we can use
->> the "don't show types" flag and tryp to print "10" with a 2-byte len or
->> similar).
-> 
-> I'll gladly give it a try.
+Drivers' .remove and .shutdown callbacks are executed on different code
+paths. The former is called when a device is removed from the bus, while
+the latter is called at system shutdown time to quiesce the device.
 
-Thanks! I've sent 
+This means that some overlap exists between the two, because both have to
+take care of properly shutting down the hardware. But currently the logic
+used in these two callbacks isn't consistent in msm drivers, which could
+lead to kernel panic.
 
-https://lore.kernel.org/bpf/1658734261-4951-1-git-send-email-alan.maguire@oracle.com/
+For example, on .remove the component is deleted and its .unbind callback
+leads to the hardware being shutdown but only if the DRM device has been
+marked as registered.
 
-If you could give it a try that would be great; tested at my end
-with your fix and all works well. I'd suggest pulling it into a
-2-patch series comprised of your fix + the selftest, but since the
-fix targets bpf and the tests are new (so would be more like a bpf-next
-candidate), not sure if that's the right way to handle this..
+That check doesn't exist in the .shutdown logic and this can lead to the
+driver calling drm_atomic_helper_shutdown() for a DRM device that hasn't
+been properly initialized.
 
-If not I can follow up with the test once the fix lands.
+A situation like this can happen if drivers for expected sub-devices fail
+to probe, since the .bind callback will never be executed. If that is the
+case, drm_atomic_helper_shutdown() will attempt to take mutexes that are
+only initialized if drm_mode_config_init() is called during a device bind.
 
-Anyway thanks again for finding and fixing this!
+This bug was attempted to be fixed in commit 623f279c7781 ("drm/msm: fix
+shutdown hook in case GPU components failed to bind"), but unfortunately
+it still happens in some cases as the one mentioned above, i.e:
 
-Alan 
+[  169.495897] systemd-shutdown[1]: Powering off.
+[  169.500466] kvm: exiting hardware virtualization
+[  169.554787] platform wifi-firmware.0: Removing from iommu group 12
+[  169.610238] platform video-firmware.0: Removing from iommu group 10
+[  169.682164] ------------[ cut here ]------------
+[  169.686909] WARNING: CPU: 6 PID: 1 at drivers/gpu/drm/drm_modeset_lock.c:317 drm_modeset_lock_all_ctx+0x3c4/0x3d0
+...
+[  169.775691] Hardware name: Google CoachZ (rev3+) (DT)
+[  169.780874] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  169.788021] pc : drm_modeset_lock_all_ctx+0x3c4/0x3d0
+[  169.793205] lr : drm_modeset_lock_all_ctx+0x48/0x3d0
+[  169.798299] sp : ffff80000805bb80
+[  169.801701] x29: ffff80000805bb80 x28: ffff327c00128000 x27: 0000000000000000
+[  169.809025] x26: 0000000000000000 x25: 0000000000000001 x24: ffffc95d820ec030
+[  169.816349] x23: ffff327c00bbd090 x22: ffffc95d8215eca0 x21: ffff327c039c5800
+[  169.823674] x20: ffff327c039c5988 x19: ffff80000805bbe8 x18: 0000000000000034
+[  169.830998] x17: 000000040044ffff x16: ffffc95d80cac920 x15: 0000000000000000
+[  169.838322] x14: 0000000000000315 x13: 0000000000000315 x12: 0000000000000000
+[  169.845646] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+[  169.852971] x8 : ffff80000805bc28 x7 : 0000000000000000 x6 : 0000000000000000
+[  169.860295] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[  169.867619] x2 : ffff327c00128000 x1 : 0000000000000000 x0 : ffff327c039c59b0
+[  169.874944] Call trace:
+[  169.877467]  drm_modeset_lock_all_ctx+0x3c4/0x3d0
+[  169.882297]  drm_atomic_helper_shutdown+0x70/0x134
+[  169.887217]  msm_drv_shutdown+0x30/0x40
+[  169.891159]  platform_shutdown+0x28/0x40
+[  169.895191]  device_shutdown+0x148/0x350
+[  169.899221]  kernel_power_off+0x38/0x80
+[  169.903163]  __do_sys_reboot+0x288/0x2c0
+[  169.907192]  __arm64_sys_reboot+0x28/0x34
+[  169.911309]  invoke_syscall+0x48/0x114
+[  169.915162]  el0_svc_common.constprop.0+0x44/0xec
+[  169.919992]  do_el0_svc+0x2c/0xc0
+[  169.923394]  el0_svc+0x2c/0x84
+[  169.926535]  el0t_64_sync_handler+0x11c/0x150
+[  169.931013]  el0t_64_sync+0x18c/0x190
+[  169.934777] ---[ end trace 0000000000000000 ]---
+[  169.939557] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000018
+[  169.948574] Mem abort info:
+[  169.951452]   ESR = 0x0000000096000004
+[  169.955307]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  169.960765]   SET = 0, FnV = 0
+[  169.963901]   EA = 0, S1PTW = 0
+[  169.967127]   FSC = 0x04: level 0 translation fault
+[  169.972136] Data abort info:
+[  169.975093]   ISV = 0, ISS = 0x00000004
+[  169.979037]   CM = 0, WnR = 0
+[  169.982083] user pgtable: 4k pages, 48-bit VAs, pgdp=000000010eab1000
+[  169.988697] [0000000000000018] pgd=0000000000000000, p4d=0000000000000000
+[  169.995669] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+...
+[  170.079614] Hardware name: Google CoachZ (rev3+) (DT)
+[  170.084801] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  170.091941] pc : ww_mutex_lock+0x28/0x32c
+[  170.096064] lr : drm_modeset_lock_all_ctx+0x1b0/0x3d0
+[  170.101254] sp : ffff80000805bb50
+[  170.104658] x29: ffff80000805bb50 x28: ffff327c00128000 x27: 0000000000000000
+[  170.111977] x26: 0000000000000000 x25: 0000000000000001 x24: 0000000000000018
+[  170.119296] x23: ffff80000805bc10 x22: ffff327c039c5ad8 x21: ffff327c039c5800
+[  170.126615] x20: ffff80000805bbe8 x19: 0000000000000018 x18: 0000000000000034
+[  170.133933] x17: 000000040044ffff x16: ffffc95d80cac920 x15: 0000000000000000
+[  170.141252] x14: 0000000000000315 x13: 0000000000000315 x12: 0000000000000000
+[  170.148571] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+[  170.155890] x8 : ffff80000805bc28 x7 : 0000000000000000 x6 : 0000000000000000
+[  170.163209] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+[  170.170528] x2 : ffff327c00128000 x1 : 0000000000000000 x0 : 0000000000000018
+[  170.177847] Call trace:
+[  170.180364]  ww_mutex_lock+0x28/0x32c
+[  170.184127]  drm_modeset_lock_all_ctx+0x1b0/0x3d0
+[  170.188957]  drm_atomic_helper_shutdown+0x70/0x134
+[  170.193876]  msm_drv_shutdown+0x30/0x40
+[  170.197820]  platform_shutdown+0x28/0x40
+[  170.201854]  device_shutdown+0x148/0x350
+[  170.205888]  kernel_power_off+0x38/0x80
+[  170.209832]  __do_sys_reboot+0x288/0x2c0
+[  170.213866]  __arm64_sys_reboot+0x28/0x34
+[  170.217990]  invoke_syscall+0x48/0x114
+[  170.221843]  el0_svc_common.constprop.0+0x44/0xec
+[  170.226672]  do_el0_svc+0x2c/0xc0
+[  170.230079]  el0_svc+0x2c/0x84
+[  170.233215]  el0t_64_sync_handler+0x11c/0x150
+[  170.237686]  el0t_64_sync+0x18c/0x190
+[  170.241451] Code: aa0103f4 d503201f d2800001 aa0103e3 (c8e37c02)
+[  170.247704] ---[ end trace 0000000000000000 ]---
+[  170.252457] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[  170.260654] Kernel Offset: 0x495d77c00000 from 0xffff800008000000
+[  170.266910] PHYS_OFFSET: 0xffffcd8500000000
+[  170.271212] CPU features: 0x800,00c2a015,19801c82
+[  170.276042] Memory Limit: none
+[  170.279183] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
 
-> 
->> In terms of the fix, it looks good, but given that the code is tricky, 
->> it might be good to expand a bit on the explanation. Something like the below?
->>
-> Agreed.
-> 
->> "When using btf_type_snprintf_show(), the user passes in a "len" value, and
->> we use it to initialize ssnprintf.len_left, indicating how much space
->> remains for the string representation, including the null byte, so "len - 1" 
->> bytes are actually available for the actual string data, leaving one for 
->> the terminating null byte.
->>
->> In btf_snprintf_show() - which is passed the ssnprintf data as an argument -
->> vsnprintf() returns the len that would have been written, and this _excludes_ 
->> the null terminator. But we want to handle cases where the length of the string
->> to be written (excluding the null terminator) exactly matches the original len 
->> value we passed in (len == len_left) in the same way was we do other
->> overflow cases (len > len_left)."
->>
->> Acked-by: Alan Maguire <alan.maguire@oracle.com>
->>
->>>>
->>>> jirka
->>>>
->>>>>
->>>>> Signed-off-by: Fedor Tokarev <ftokarev@gmail.com>
->>>>> ---
->>>>>  kernel/bpf/btf.c | 2 +-
->>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->>>>> index eb12d4f705cc..a9c1c98017d4 100644
->>>>> --- a/kernel/bpf/btf.c
->>>>> +++ b/kernel/bpf/btf.c
->>>>> @@ -6519,7 +6519,7 @@ static void btf_snprintf_show(struct btf_show *show, const char *fmt,
->>>>>       if (len < 0) {
->>>>>               ssnprintf->len_left = 0;
->>>>>               ssnprintf->len = len;
->>>>> -     } else if (len > ssnprintf->len_left) {
->>>>> +     } else if (len >= ssnprintf->len_left) {
->>>>>               /* no space, drive on to get length we would have written */
->>>>>               ssnprintf->len_left = 0;
->>>>>               ssnprintf->len += len;
->>>>> --
->>>>> 2.25.1
->>>>>
+Fixes: 9d5cbf5fe46e ("drm/msm: add shutdown support for display platform_driver")
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
+
+Changes in v3:
+- Drop the msm_shutdown_hw() wrapper and just call drm_atomic_helper_shutdown()
+  in both callbacks (Dmitry Baryshkov).
+- Copy the comment in msm_drm_uninit() to msm_drv_shutdown() (Dmitry Baryshkov).
+
+Changes in v2:
+- Take the registered check out of the msm_shutdown_hw() and make callers to check instead.
+- Make msm_shutdown_hw() an inline function.
+- Add a Fixes: tag.
+
+ drivers/gpu/drm/msm/msm_drv.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index 1ed4cd09dbf8..1333fea57713 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -1242,10 +1242,15 @@ void msm_drv_shutdown(struct platform_device *pdev)
+ 	struct msm_drm_private *priv = platform_get_drvdata(pdev);
+ 	struct drm_device *drm = priv ? priv->dev : NULL;
+ 
+-	if (!priv || !priv->kms)
+-		return;
+-
+-	drm_atomic_helper_shutdown(drm);
++	/*
++	 * Shutdown the hw if we're far enough along where things might be on.
++	 * If we run this too early, we'll end up panicking in any variety of
++	 * places. Since we don't register the drm device until late in
++	 * msm_drm_init, drm_dev->registered is used as an indicator that the
++	 * shutdown will be successful.
++	 */
++	if (drm && drm->registered)
++		drm_atomic_helper_shutdown(drm);
+ }
+ 
+ static struct platform_driver msm_platform_driver = {
+-- 
+2.37.1
+

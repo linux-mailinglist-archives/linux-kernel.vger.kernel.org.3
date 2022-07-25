@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA4458076A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FB958076C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237159AbiGYWdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
+        id S237190AbiGYWeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236517AbiGYWdk (ORCPT
+        with ESMTP id S236517AbiGYWeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:33:40 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC3C25C57;
-        Mon, 25 Jul 2022 15:33:39 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-10d6e8990b9so16571701fac.7;
-        Mon, 25 Jul 2022 15:33:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gvdTkDTD4sj8bWVGQetV76cBFWfCOzJwfH1ITvigwvA=;
-        b=j89+HqiEy67DbfkrcHvX3Xj/zvP/pJXCIQsEaGX1Du/kmDVkoKbduDhypIHzVJDWCG
-         OuvaQT6k5Dyp3NBZiNaQbG92q+bVZ+v5Wfwf5GN7AuZsoy3UN2wPbqRdJphbiqlJMCFW
-         9XM5eVw1RFMNlPeWu0mEBEkaCyCo1lk++JO2NHSvVGvfTmMbs7GmcuOe8zsxCkRAEyHk
-         Or+QkY11wspKrevzz32+G1LGxbYoE1yUSc17VqNBTeny2/M9qxaBbSV9bbzJIrUxZyjI
-         XWuFw2cRhQ54K8Qunv+Vv+j95/K5Bh9LmRuxCRpditFolpJQw7rrYi91XQFFJ7xrqBxI
-         OI3w==
-X-Gm-Message-State: AJIora/lgJUUHs64//vu9d0Jixz5lR60BIjYVWlH9RaT4IAE9zNnfGSN
-        Mz+EsGa185RddSukY53v1w==
-X-Google-Smtp-Source: AGRyM1tbsj9fm4f4/WGyJF9cPn1HRWe2ZRYNwHIHsRQgWeBpDUjhfCL2Lghhl6Ya6tUPbsw0GxZWVg==
-X-Received: by 2002:a05:6870:e30e:b0:10d:c6b4:6396 with SMTP id z14-20020a056870e30e00b0010dc6b46396mr7738252oad.128.1658788418892;
-        Mon, 25 Jul 2022 15:33:38 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c17-20020a9d67d1000000b00618fa37308csm5438157otn.35.2022.07.25.15.33.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 15:33:38 -0700 (PDT)
-Received: (nullmailer pid 2867756 invoked by uid 1000);
-        Mon, 25 Jul 2022 22:33:36 -0000
-Date:   Mon, 25 Jul 2022 16:33:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
- fallbacks and example
-Message-ID: <20220725223336.GA2867714-robh@kernel.org>
-References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
- <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
+        Mon, 25 Jul 2022 18:34:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F12D25C5C
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:34:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B3EAB80EBD
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 22:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7261C341C8;
+        Mon, 25 Jul 2022 22:34:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658788457;
+        bh=YUM91tAW6kCbHBwCMTDSAq1X+h3xTTK/y1W6Pq3tGBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EBeV3UOBkPdruyjvVEXN0JPRa8LYxQxYIOipxldxaXG5RZHQOu03+uTMnfLx7Cbmf
+         5pVDaLW2EgMskPVPh5u6048/QbEqaZeYOKQlp2RV5oCORXGfpH6m27Z6Tc+3N8fkq4
+         3AhwDQCNUDZj+pNe5z5Hdil/FaYMixfskr6b6U4pIVIbKe0ipTBki0vCu+Imn+m0GA
+         0w+W+11GM7TsX67yAbAMGoZyojeX/Lqp+0PUkFQ1/xtByx0wNiUFepmA8a1WsacguT
+         iNPp+0tyo4b1Sbc1KQYo6hZZ5/TP06I8VFfL2YQQPBCAoVzr29q1RJ5wDyModc3fhB
+         QsKHA1sPxIt3w==
+Date:   Mon, 25 Jul 2022 15:34:15 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Simon Trimmer <simont@opensource.cirrus.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: sound/soc/codecs/wm_adsp.c:1490:32: warning: taking address of
+ packed member 'name' of class or structure 'wm_adsp_host_buf_coeff_v1' may
+ result in an unaligned pointer value
+Message-ID: <Yt8aZ3OZ7lJBgf1V@dev-arch.thelio-3990X>
+References: <202207260648.ERQjXCRB-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202207260648.ERQjXCRB-lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 09:48:42 +0800, Allen-KH Cheng wrote:
-> The watchdog timer of mt8186. mt8195 and mt7986 have their DT data.
-> We should not use 'mediatek,mt6589-wdt' as fallback.
+On Tue, Jul 26, 2022 at 06:29:46AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+> commit: 353bb6a5f2ac495f289b7c7a528c7d134c9a8ec4 ASoC: wm_adsp: Compressed stream DSP memory structs should be __packed
+> date:   5 months ago
+> config: arm-randconfig-r013-20220724 (https://download.01.org/0day-ci/archive/20220726/202207260648.ERQjXCRB-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=353bb6a5f2ac495f289b7c7a528c7d134c9a8ec4
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 353bb6a5f2ac495f289b7c7a528c7d134c9a8ec4
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
 > 
-> For mediatek,wdt example of mt8183, We remove mediatek,mt6589-wdt fallback.
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> Fixes:a45b408a020b("dt-bindings: watchdog: Add compatible for MediaTek MT8186")
-> Fixes:b326f2c85f3d("dt-bindings: watchdog: Add compatible for Mediatek MT8195")
-> Fixes:41e73feb1024("dt-bindings: watchdog: Add compatible for Mediatek MT7986")
-> Fixes:f43f97a0fc0e("dt-bindings: mediatek: mt8183: Add #reset-cells")
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+> All warnings (new ones prefixed by >>):
 > 
+> >> sound/soc/codecs/wm_adsp.c:1490:32: warning: taking address of packed member 'name' of class or structure 'wm_adsp_host_buf_coeff_v1' may result in an unaligned pointer value [-Waddress-of-packed-member]
+>            cs_dsp_remove_padding((u32 *)&coeff_v1.name, ARRAY_SIZE(coeff_v1.name));
+>                                          ^~~~~~~~~~~~~
+>    1 warning generated.
 
-Acked-by: Rob Herring <robh@kernel.org>
+This warning is disabled in the main Makefile but a recent change in
+LLVM has caused that check to fail, sorry for the noise :(
+
+https://github.com/ClangBuiltLinux/linux/issues/1674
+
+Cheers,
+Nathan

@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A203957F919
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 07:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0715357F949
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiGYFoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 01:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S230380AbiGYGBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 02:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232137AbiGYFoM (ORCPT
+        with ESMTP id S229656AbiGYGBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 01:44:12 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8597658;
-        Sun, 24 Jul 2022 22:44:11 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id b6so6102780wmq.5;
-        Sun, 24 Jul 2022 22:44:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j+TMKKTWkt93wyAShA8GcS53wvc9Ih1A4htlfT9K7Ho=;
-        b=T1T3RCRB8Vx9gQ7AY60KabJX4o1QLZMuP5BHO/3jX0yP9BGyal48GaaVf9woBoP6Yo
-         9AKx/1tbR3dOYXoiLyxAlvLsqDmpkve/m/DH7HAj7xyS6PCWBC0e9mNDtH4o+aQmpfwN
-         gEIpCMSjgvOvwRjcjbjWJLl+baoab86UwJLAJuAgRcAcl93LmaRNcUpAXEg9R2/wixnj
-         +LEAw3zku6EQI7aUe931lps4nDfOQwjjSjRhq8+0k50O6YDtMjWD8dvFWVDFeDxvc3I3
-         zwQ8YOvUWy8ojKN/MAGz8/bNZXaOR6qHF6PHc1qylll4eYLbtYSuKyZFr+6VWeKkPhp2
-         UBDw==
-X-Gm-Message-State: AJIora9eScE6B818S86mCwQxVgIycPjewVWoFFkUPx2XfCwTMIVr0USR
-        V23+0VJfGVO2HSfIBV1bINk=
-X-Google-Smtp-Source: AGRyM1tz29eyW8eFBsIukZelOZJBNJP+xtrRGyJ5rpmY5s1vLLoXX/JRWg29hpOVLhxGJKYUmPJDFQ==
-X-Received: by 2002:a05:600c:2651:b0:3a3:1b8d:d9c8 with SMTP id 17-20020a05600c265100b003a31b8dd9c8mr20308470wmy.160.1658727849689;
-        Sun, 24 Jul 2022 22:44:09 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id t11-20020a5d460b000000b0021b970a68f9sm10736171wrq.26.2022.07.24.22.44.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Jul 2022 22:44:09 -0700 (PDT)
-Message-ID: <8a4f10b1-70b3-25fe-9ffc-4f24a1531139@kernel.org>
-Date:   Mon, 25 Jul 2022 07:44:08 +0200
+        Mon, 25 Jul 2022 02:01:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798166440;
+        Sun, 24 Jul 2022 23:01:39 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26P55lMb022073;
+        Mon, 25 Jul 2022 06:01:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=soXVwM9nzuX+Q1bj83PaYPMf44fabPxDdP0zIZMD9Is=;
+ b=L78DZe8i2gZLMak99ZCeXQEte1gbYAifjxIMAJPPwJAXilI6S/+IzkthSiCXnshvbulr
+ LC4O/fFQzbQ9Y6l9EKc7cbwgP1vU3X8Z0GCpqazAf1Jx74N6YBxif5egmoTBgB0N+UFL
+ vYcgXTkRM8AR9p3c57H5jWwY2G3jl8zVsRIW2SWLRBMx6uK0bje+u7Isi0IbYeDEY7Xy
+ BEJ9oxAs2nLTAWW/MAcca8uE+dxw9jwtT8GcPIj8GAcQtCD5WP3V0rNxLlvsTo6CbPxC
+ YlpN2YuAqa6EdY8Az+7cdmZP+s1aX659GS/2SUptcW1aEsEv14VgZbX7RhAhsui8UxWz lQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hga5sk7fs-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 06:01:26 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26P5mcrR010714
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 05:48:38 GMT
+Received: from [10.216.38.128] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 24 Jul
+ 2022 22:48:35 -0700
+Message-ID: <8791eec2-4714-f287-6fe7-a8b724e4176a@quicinc.com>
+Date:   Mon, 25 Jul 2022 11:17:59 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 5.18 13/70] objtool: skip non-text sections when adding
- return-thunk sites
+Subject: Re: [PATCH] selftests/cgroup: fix repeated words in comments
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bpetkov@suse.de>
-References: <20220722090650.665513668@linuxfoundation.org>
- <20220722090651.464856922@linuxfoundation.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220722090651.464856922@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     wangjianli <wangjianli@cdjrlc.com>, <tj@kernel.org>,
+        <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>, <shuah@kernel.org>
+CC:     <cgroups@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220724070435.7999-1-wangjianli@cdjrlc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20220724070435.7999-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: O0v9LtqG_0v5FKzE3ZP4mc1QUIOrRrW1
+X-Proofpoint-GUID: O0v9LtqG_0v5FKzE3ZP4mc1QUIOrRrW1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-23_02,2022-07-21_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 adultscore=0 clxscore=1011 lowpriorityscore=0
+ mlxlogscore=974 mlxscore=0 bulkscore=0 spamscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207250026
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,48 +81,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-I wonder, why this is needed in stable and not mainline?
-
-Isn't this a different (non-upstream) dup of
-951ddecf4356 objtool: Treat .text.__x86.* as noinstr
-? (That is included in this release too.)
-
-On 22. 07. 22, 11:07, Greg Kroah-Hartman wrote:
-> From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+On 7/24/2022 12:34 PM, wangjianli wrote:
+> Delete the redundant word 'in'.
 > 
-> The .discard.text section is added in order to reserve BRK, with a
-> temporary function just so it can give it a size. This adds a relocation to
-> the return thunk, which objtool will add to the .return_sites section.
-> Linking will then fail as there are references to the .discard.text
-> section.
-> 
-> Do not add instructions from non-text sections to the list of return thunk
-> calls, avoiding the reference to .discard.text.
-> 
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 > ---
->   tools/objtool/check.c |    4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   tools/testing/selftests/cgroup/test_freezer.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -1308,7 +1308,9 @@ static void add_return_call(struct objto
->   	insn->type = INSN_RETURN;
->   	insn->retpoline_safe = true;
+> diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
+> index ff519029f6f4..b479434e87b7 100644
+> --- a/tools/testing/selftests/cgroup/test_freezer.c
+> +++ b/tools/testing/selftests/cgroup/test_freezer.c
+> @@ -740,7 +740,7 @@ static int test_cgfreezer_ptraced(const char *root)
 >   
-> -	list_add_tail(&insn->call_node, &file->return_thunk_list);
-> +	/* Skip the non-text sections, specially .discard ones */
-> +	if (insn->sec->text)
-> +		list_add_tail(&insn->call_node, &file->return_thunk_list);
->   }
->   
->   static bool same_function(struct instruction *insn1, struct instruction *insn2)
-> 
-> 
+>   	/*
+>   	 * cg_check_frozen(cgroup, true) will fail here,
+> -	 * because the task in in the TRACEd state.
 
-thanks,
--- 
-js
-suse labs
+s/in in/is in     ?
+
+> +	 * because the task in the TRACEd state.
+>   	 */
+>   	if (cg_freeze_wait(cgroup, false))
+>   		goto cleanup;
+
+
+-Mukesh

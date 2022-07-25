@@ -2,226 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C683358063E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F23B580642
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbiGYVQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S236573AbiGYVSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 17:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiGYVQi (ORCPT
+        with ESMTP id S231796AbiGYVSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:16:38 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6762A470;
-        Mon, 25 Jul 2022 14:16:37 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id oy13so22837002ejb.1;
-        Mon, 25 Jul 2022 14:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dzqsg7+JuF3LAlSgaMlMSRRgs1ArxUnpTbqt1d3exVk=;
-        b=RPTlyU9TAfxY8p9GFNcVs1x8JBjotrjfPA+6plXrFf2F0FtvaQXkLjqMe5yz3IQwzu
-         YBeSoiNRwYzPuAYDuq3f9kkevLkcaZ8gnLjLOXee0itUZbypwIgU1qWdMUJvwZtvfC6s
-         KATyQmonoplSF0j0cjC205hw44M/4LQZPb+dCEQwnETCmiX1FzfepoECkzo5vtHmRCuA
-         lOVtTNc29YuBpyzAoXVi2QipLFwZMfcUeVeVPHQKtvaGA4K1QEeQ3O8OmYPAltpcHtMV
-         BUtP7ZXSSzxt5nnZNbcY7slWqITlrGghYCFdoexIH8e20KPNcUC98aYL5LgMlGU8bBGO
-         u48w==
+        Mon, 25 Jul 2022 17:18:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C89C22BF9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658783880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2NWyiHW5I2/geA1CEWbRzyNY6UqPET26DY1+YZLfRCI=;
+        b=IW+dj+zsRytjcNScN4mlk62Gs5JMqzLI1jszrsKEv/WlC7VOvbo4nU7fIdiqpLbQO6X/kU
+        zr49ZPKqHN4ptmKIjQ9ah7g3TS2eb2/hVMRMbSPqRZTkF00Okoaq5XSJYxqdmrNv4FAZRS
+        9dF5ld74lQGEup8xgCKIt7rIMkCEyu4=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-cBO-k2pMMCSQgBHW7uZ3Tw-1; Mon, 25 Jul 2022 17:17:59 -0400
+X-MC-Unique: cBO-k2pMMCSQgBHW7uZ3Tw-1
+Received: by mail-il1-f197.google.com with SMTP id b15-20020a92c56f000000b002dd2870c587so5105137ilj.20
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:17:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dzqsg7+JuF3LAlSgaMlMSRRgs1ArxUnpTbqt1d3exVk=;
-        b=cizARIbzOLJzoOFZdxCR95t13otZwpfT/r/RLwHLjhUoSOSTzHBxhFY84TpIlgfM5o
-         s9pEBNW7kXID2lxrQyH0F7CB9hyrxK5/clhh/UdjSB+KvqfF3MM2xpg2x8HOLnofUVeH
-         EhUQQXMd3bIGsGMaVJ8dWXAdI0y6vcp9mLeEJRlcI1jUhnZ+UQMpCG10bOemtH1RgvQL
-         kBy9LKwpQrV6+9Za1P0F5riJkcx5MD/ZsOyKqHUiq+JJ0pJdpIffOrDPr6+KRcvwWpHf
-         GnJzJBc4xMUmCM8XKBAEZKQ8MQJXOmJuhLfvAKrIC5gFs7k5mfXqUSZEgnzkLsIgshha
-         F7yg==
-X-Gm-Message-State: AJIora+nJRz/7MGw3tB+NmIcL/A40fMv7wRABuh4y79+tzzBHxzsktJy
-        Pax2gSdcRrp7TrDDdgB89nvqar7sTs3g23bynSk=
-X-Google-Smtp-Source: AGRyM1u36HPoDbas77V1ajAhCR5VMkr0JYySvUpJ4RZ1BHrCutGJHJbfTtpLPr3JozXmwGSF5q5kDBsG+U7hZPXzReM=
-X-Received: by 2002:a17:906:8a4a:b0:72b:5b23:3065 with SMTP id
- gx10-20020a1709068a4a00b0072b5b233065mr11834533ejc.557.1658783796007; Mon, 25
- Jul 2022 14:16:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=2NWyiHW5I2/geA1CEWbRzyNY6UqPET26DY1+YZLfRCI=;
+        b=bSDaE+eJwlq7hxrEApHUtRfvCR4iwKnuD5VT4MVWvupfZ0OjzR8vmRGVoIcF0YKmju
+         onP2dXqGzU6Tj77zPBpIy7wsnHPCzxIv2cDZy1W7EZOXnDXQWQ2IeIDZ/kbODrMmVIcl
+         piXrJ/UOoLch0UwJbnbLLmwKsgy1nMcJy49jGkavNT8nkqO9MQqVjIkHBbVSm+eWSEfJ
+         kqo3RY5ILYKBWd+lgEmahnQLKi95eC7z1A29vWGButH2zjK8v3HAkipO+b59YHwNaiZ7
+         hdCTTK2DXttoIam/Yc+gjXwekWg3U7eK/OrO72t/OuJJK5dQfL66Vbdq1LeYArgkSU5X
+         nLXA==
+X-Gm-Message-State: AJIora+Ls6THSm/KLsK/dxfb0uFwbNXreAMXSaIBD0v780wiWWrdCB/2
+        S67FNaHHBUfrxLULq1ZGdOnzKKO1qG5eoJor7Jmyp4ShPtWlNd9Rho5cbfqhaES8oU/Cx9YLQzf
+        zgefe0oQVxbxyYDDGJj0q9jUd
+X-Received: by 2002:a05:6e02:148c:b0:2dc:38ae:5c6a with SMTP id n12-20020a056e02148c00b002dc38ae5c6amr5550200ilk.115.1658783878650;
+        Mon, 25 Jul 2022 14:17:58 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uXwuWmhW15O2ymdEn2whv1cs+NjXgAHFLetXDjRt4kzq/rgyjNkTHVfDxBgkGk5gC+VO8tdQ==
+X-Received: by 2002:a05:6e02:148c:b0:2dc:38ae:5c6a with SMTP id n12-20020a056e02148c00b002dc38ae5c6amr5550196ilk.115.1658783878367;
+        Mon, 25 Jul 2022 14:17:58 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id h76-20020a6bb74f000000b0067baeb55e65sm6614546iof.38.2022.07.25.14.17.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 14:17:58 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 15:17:55 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     <kwankhede@nvidia.com>, <corbet@lwn.net>, <hca@linux.ibm.com>,
+        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
+        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+        <zhenyuw@linux.intel.com>, <zhi.a.wang@intel.com>,
+        <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
+        <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <farman@linux.ibm.com>,
+        <mjrosato@linux.ibm.com>, <pasic@linux.ibm.com>,
+        <vneethv@linux.ibm.com>, <oberpar@linux.ibm.com>,
+        <freude@linux.ibm.com>, <akrowiak@linux.ibm.com>,
+        <jjherne@linux.ibm.com>, <cohuck@redhat.com>, <jgg@nvidia.com>,
+        <kevin.tian@intel.com>, <hch@infradead.org>,
+        <jchrist@linux.ibm.com>, <kvm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-s390@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <terrence.xu@intel.com>
+Subject: Re: [PATCH v4 00/10] cover-letter: Update vfio_pin/unpin_pages API
+Message-ID: <20220725151755.12d53f2e.alex.williamson@redhat.com>
+In-Reply-To: <20220723020256.30081-1-nicolinc@nvidia.com>
+References: <20220723020256.30081-1-nicolinc@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <cover.1658597501.git.ang.iglesiasg@gmail.com> <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
-In-Reply-To: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Jul 2022 23:15:59 +0200
-Message-ID: <CAHp75VdQ_oCjyXsXxTEWfKJK=T+OOP=AEXz8KQq5b2Hu8VHy9w@mail.gmail.com>
-Subject: Re: [PATCH v4 4/5] iio: pressure: bmp280: Add support for BMP380
- sensor family
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio <linux-iio@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 7:40 PM Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
->
-> Adds compatibility with the new generation of this sensor, the BMP380
->
-> Includes basic sensor initialization to do pressure and temp
-> measurements and allows tuning oversampling settings for each channel.
->
-> The compensation algorithms are adapted from the device datasheet and
-> the repository https://github.com/BoschSensortec/BMP3-Sensor-API
+On Fri, 22 Jul 2022 19:02:46 -0700
+Nicolin Chen <nicolinc@nvidia.com> wrote:
 
-...
+> This is a preparatory series for IOMMUFD v2 patches. It prepares for
+> replacing vfio_iommu_type1 implementations of vfio_pin/unpin_pages()
+> with IOMMUFD version.
+> 
+> There's a gap between these two versions: the vfio_iommu_type1 version
+> inputs a non-contiguous PFN list and outputs another PFN list for the
+> pinned physical page list, while the IOMMUFD version only supports a
+> contiguous address input by accepting the starting IO virtual address
+> of a set of pages to pin and by outputting to a physical page list.
+> 
+> The nature of existing callers mostly aligns with the IOMMUFD version,
+> except s390's vfio_ccw_cp code where some additional change is needed
+> along with this series. Overall, updating to "iova" and "phys_page"
+> does improve the caller side to some extent.
+> 
+> Also fix a misuse of physical address and virtual address in the s390's
+> crypto code. And update the input naming at the adjacent vfio_dma_rw().
+> 
+> This is on github:
+> https://github.com/nicolinc/iommufd/commits/vfio_pin_pages-v4
+> 
+> Terrence has tested this series on i915; Eric has tested on s390.
+> 
+> Thanks!
+> 
+> Changelog
+> v4:
+>  * Dropped double-shifting at two gvt_unpin_guest_page calls, fixing
+>    a bug that's discovered by Alex
+>  * Added Reviewed-by from Anthony Krowiak
+>  * Rebased on top of linux-vfio's next
+> v3: https://lore.kernel.org/kvm/20220708224427.1245-1-nicolinc@nvidia.com/
+>  * Added a patch to replace roundup with DIV_ROUND_UP in i915 gvt
+>  * Dropped the "driver->ops->unpin_pages" and NULL checks in PATCH-1
+>  * Changed to use WARN_ON and separate into lines in PATCH-1
+>  * Replaced "guest" words with "user" and fix typo in PATCH-5
+>  * Updated commit log of PATCH-1, PATCH-6, and PATCH-10
+>  * Added Reviewed/Acked-by from Christoph, Jason, Kirti, Kevin and Eric
+>  * Added Tested-by from Terrence (i915) and Eric (s390)
+> v2: https://lore.kernel.org/kvm/20220706062759.24946-1-nicolinc@nvidia.com/
+>  * Added a patch to make vfio_unpin_pages return void
+>  * Added two patches to remove PFN list from two s390 callers
+>  * Renamed "phys_page" parameter to "pages" for vfio_pin_pages
+>  * Updated commit log of kmap_local_page() patch
+>  * Added Harald's "Reviewed-by" to pa_ind patch
+>  * Rebased on top of Alex's extern removal path
+> v1: https://lore.kernel.org/kvm/20220616235212.15185-1-nicolinc@nvidia.com/
+> 
+> Nicolin Chen (10):
+>   vfio: Make vfio_unpin_pages() return void
+>   drm/i915/gvt: Replace roundup with DIV_ROUND_UP
+>   vfio/ap: Pass in physical address of ind to ap_aqic()
+>   vfio/ccw: Only pass in contiguous pages
+>   vfio: Pass in starting IOVA to vfio_pin/unpin_pages API
+>   vfio/ap: Change saved_pfn to saved_iova
+>   vfio/ccw: Change pa_pfn list to pa_iova list
+>   vfio: Rename user_iova of vfio_dma_rw()
+>   vfio/ccw: Add kmap_local_page() for memcpy
+>   vfio: Replace phys_pfn with pages for vfio_pin_pages()
+> 
+>  .../driver-api/vfio-mediated-device.rst       |   6 +-
+>  arch/s390/include/asm/ap.h                    |   6 +-
+>  drivers/gpu/drm/i915/gvt/kvmgt.c              |  45 ++--
+>  drivers/s390/cio/vfio_ccw_cp.c                | 195 +++++++++++-------
+>  drivers/s390/crypto/ap_queue.c                |   2 +-
+>  drivers/s390/crypto/vfio_ap_ops.c             |  54 +++--
+>  drivers/s390/crypto/vfio_ap_private.h         |   4 +-
+>  drivers/vfio/vfio.c                           |  54 ++---
+>  drivers/vfio/vfio.h                           |   8 +-
+>  drivers/vfio/vfio_iommu_type1.c               |  45 ++--
+>  include/linux/vfio.h                          |   9 +-
+>  11 files changed, 213 insertions(+), 215 deletions(-)
+> 
 
-> +       /* wait for 2ms for command to be proccessed */
+Applied to vfio next branch for v5.20.  Thanks,
 
-processed
+Alex
 
-> +       dev_dbg(data->dev, "Command 0x%X proccessed successfully\n", cmd);
-
-Ditto. Can you run a spell checker? Kernel has a little one called codespell.
-
-> +
-> +       return 0;
-> +}
-
-...
-
-> +static s32 bmp380_compensate_temp(struct bmp280_data *data, u32 adc_temp)
-> +{
-> +       s64 var1, var2, var3, var4, var5, var6, comp_temp;
-> +       struct bmp380_calib *calib = &data->calib.bmp380;
-> +
-> +       var1 = ((s64) adc_temp) - (((s64) calib->T1) << 8);
-> +       var2 = var1 * ((s64) calib->T2);
-> +       var3 = var1 * var1;
-> +       var4 = var3 * ((s64) calib->T3);
-> +       var5 = (var2 << 18) + var4;
-> +       var6 = var5 >> 32;
-> +       data->t_fine = (s32) var6;
-> +       comp_temp = (var6 * 25) >> 14;
-> +
-> +       comp_temp = clamp_val(comp_temp, BMP380_MIN_TEMP, BMP380_MAX_TEMP);
-> +       return (s32) comp_temp;
-> +}
-
-...
-
-> +       s64 var1, var2, var3, var4, var5, var6, offset, sensitivity;
-> +       u64 comp_press;
-> +       struct bmp380_calib *calib = &data->calib.bmp380;
-> +
-> +       var1 = ((s64)data->t_fine) * ((s64)data->t_fine);
-> +       var2 = var1 >> 6;
-> +       var3 = (var2 * ((s64) data->t_fine)) >> 8;
-> +       var4 = (((s64)calib->P8) * var3) >> 5;
-> +       var5 = (((s64) calib->P7) * var1) << 4;
-> +       var6 = (((s64) calib->P6) * ((s64)data->t_fine)) << 22;
-> +       offset = (((s64)calib->P5) << 47) + var4 + var5 + var6;
-> +       var2 = (((s64)calib->P4) * var3) >> 5;
-> +       var4 = (((s64) calib->P3) * var1) << 2;
-> +       var5 = (((s64) calib->P2) - ((s64) 1<<14)) *
-> +               (((s64)data->t_fine) << 21);
-> +       sensitivity = ((((s64) calib->P1) - ((s64) 1 << 14)) << 46) +
-> +                       var2 + var4 + var5;
-> +       var1 = (sensitivity >> 24) * ((s64)adc_press);
-> +       var2 = ((s64)calib->P10) * ((s64) data->t_fine);
-> +       var3 = var2 + (((s64) calib->P9) << 16);
-> +       var4 = (var3 * ((s64)adc_press)) >> 13;
-> +
-> +       /*
-> +        * Dividing by 10 followed by multiplying by 10 to avoid
-> +        * possible overflow caused by (uncomp_data->pressure * partial_data4)
-> +        */
-> +       var5 = (((s64)adc_press) * (var4 / 10)) >> 9;
-> +       var5 *= 10;
-> +       var6 = ((s64)adc_press) * ((s64)adc_press);
-> +       var2 = (((s64)calib->P11) * var6) >> 16;
-> +       var3 = (var2 * ((s64)adc_press)) >> 7;
-> +       var4 = (offset >> 2) + var1 + var5 + var3;
-> +       comp_press = ((u64)var4 * 25) >> 40;
-
-
-Kbuild bot is right, you forgot to (compile-)test for a 32-bit machine.
-
-...
-
-> +       ret = regmap_bulk_read(data->regmap, BMP380_REG_TEMP_XLSB, data->buf, 3);
-
-sizeof() ?
-
-...
-
-> +       /* Read and compensate temperature so we get a reading of t_fine. */
-
-for temperature
-
-...
-
-> +       ret = regmap_bulk_read(data->regmap, BMP380_REG_PRESS_XLSB, data->buf, 3);
-
-sizeof() ?
-
-...
-
-> +       .oversampling_temp_default = ilog2(1),
-
-> +       .oversampling_press_default = ilog2(4),
-
-BIT()
-
-...
-
-> +#define BMP380_REG_CMD                 0x7E
-> +#define BMP380_REG_CONFIG              0x1F
-> +#define BMP380_REG_ODR                 0X1D
-> +#define BMP380_REG_OSR                 0X1C
-> +#define BMP380_REG_POWER_CONTROL       0X1B
-> +#define BMP380_REG_IF_CONFIG           0X1A
-> +#define BMP380_REG_INT_CONTROL         0X19
-> +#define BMP380_REG_INT_STATUS          0X11
-> +#define BMP380_REG_EVENT               0X10
-> +#define BMP380_REG_STATUS              0X03
-> +#define BMP380_REG_ERROR               0X02
-> +#define BMP380_REG_ID                  0X00
-> +
-> +#define BMP380_REG_FIFO_CONFIG_1       0X18
-> +#define BMP380_REG_FIFO_CONFIG_2       0X17
-> +#define BMP380_REG_FIFO_WATERMARK_MSB  0X16
-> +#define BMP380_REG_FIFO_WATERMARK_LSB  0X15
-> +#define BMP380_REG_FIFO_DATA           0X14
-> +#define BMP380_REG_FIFO_LENGTH_MSB     0X13
-> +#define BMP380_REG_FIFO_LENGTH_LSB     0X12
-> +
-> +#define BMP380_REG_SENSOR_TIME_MSB     0X0E
-> +#define BMP380_REG_SENSOR_TIME_LSB     0X0D
-> +#define BMP380_REG_SENSOR_TIME_XLSB    0X0C
-> +
-> +#define BMP380_REG_TEMP_MSB            0X09
-> +#define BMP380_REG_TEMP_LSB            0X08
-> +#define BMP380_REG_TEMP_XLSB           0X07
-> +
-> +#define BMP380_REG_PRESS_MSB           0X06
-> +#define BMP380_REG_PRESS_LSB           0X05
-> +#define BMP380_REG_PRESS_XLSB          0X04
-> +
-> +#define BMP380_REG_CALIB_TEMP_START    0x31
-
-Be consistent x vs X (we prefer x).
-
--- 
-With Best Regards,
-Andy Shevchenko

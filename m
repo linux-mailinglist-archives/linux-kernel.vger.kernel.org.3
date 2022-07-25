@@ -2,93 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBC95806B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864825806CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236885AbiGYV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
+        id S237410AbiGYVbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 17:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237307AbiGYV2Q (ORCPT
+        with ESMTP id S237510AbiGYVbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:28:16 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FCD24950
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:27:40 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id k11so17261539wrx.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:27:40 -0700 (PDT)
+        Mon, 25 Jul 2022 17:31:34 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B7124974
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:29:11 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id q16so11485125pgq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LC1MButyAjgvhVwdTxySQfcTsI905HcQoSgMguQbeJE=;
-        b=XIuER+QEkXsz5IY+kHqI2bwpSJoq2OQb3wKfqZ+BK5c7jPlBbRxlnq8nlkhnCbbYr7
-         GnGARLlnY71J07XrmeQ0i0J2rmmeTLMs72YlQ6lgmd3IIulDnr/vBnjIrD+U0JRBIHxs
-         zMY0C01JwXyk7ZRgo06AtAS9x9y0BAQ6zuDsCorpBiNWnLuqJfRLrKkYFwaElNMulpjS
-         EG1BOqq9BIYRA0VRAJ1HjUjZCjws1JdY1aA3WCaNq3pCJJyPyiKVBvWBd2wpIz7bCwTB
-         u33/Vm7cN9g8DiKlRpfkVYhe2EIjV6e8Kmm2LyHFV2up/PzCUl4tskP84B1W9bCYDlFn
-         pZzA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hjH/x15kF4vievgUYxvBLMSjt7KRqmoWwdq7tek7XBI=;
+        b=YYelzTNHADuDdMqEj6hXPvqeLqog9iZchp4/aKMc+rsdN+Yrf70fJsu4CiUKIyWg9P
+         NesFwROVwrRmyUi+fW1m7HsG7z7UOiq+mjgFZfUTtAkE9j7DJfmKZ5RT20RJJlgK9lEG
+         GEob/BbOSxdL9t00UmE2BXB7qLim3eixq3dV6QaaKgYxPzPw3pPjdCy0Pz8aJL1Rxs6P
+         2WOi+ukByWxZlnJUY4SGPwXt2z91oPxmRWLLv4M290azGbZfUdE9o0+FyeR/eSYmXDtY
+         GHbuvJBKWqBtFTFxO6AMF5mB1fbXf5H/ECrqI0XpdStwIA5dZLPg/X023iPP14iLLcqs
+         H4NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LC1MButyAjgvhVwdTxySQfcTsI905HcQoSgMguQbeJE=;
-        b=doWxmQNc1vWOJPZOZ90thqm+0H0bIlucB2EUEP9uPhGzx1s5wp2L7uDjqbhyeOIwOr
-         4x7fhHRXJ6TYTCMuC+TI0bbXRA3k/aL514oTKaPa7uVRzw3xVGLIuruu8ksj2BMLsCQg
-         M88MhVPVGkJpAShTC3MJsrPL80n/CMsrMCgbFAOrTutWtRkWd30TIFPA+sbw/PmKzaiq
-         dwLUkkLS+eGYCJqHd6Kqp0tXTzdrRdJ3yFfQkRWBOlluv94QLdWnmjhXjlfbXy6nCVCR
-         NzIltl0+75VQCjkz50C3c9EpMh9Y6xKNQHmv9qg71jC67+qlZ3Qci/126X+i+aoLLQuI
-         UuOA==
-X-Gm-Message-State: AJIora9dA1KLJXPSfXUdOtkdC4f7oEhjAS4FCkvxXC7OVy6m4fRNBxQd
-        Qt2CmBtrwdvdjnDgC9va6QPsCvHMdh8OWA==
-X-Google-Smtp-Source: AGRyM1uhCs8VsFP2JwWvB8LbQsi/wD2WmCWt2Rv2KajohyBY0rFeGaFvWA4ssIOieb9jtBGlLP6edA==
-X-Received: by 2002:a5d:5847:0:b0:21d:b75e:12d0 with SMTP id i7-20020a5d5847000000b0021db75e12d0mr8496954wrf.208.1658784457841;
-        Mon, 25 Jul 2022 14:27:37 -0700 (PDT)
-Received: from [192.168.0.17] (cpc152649-stkp13-2-0-cust121.10-2.cable.virginm.net. [86.15.83.122])
-        by smtp.gmail.com with ESMTPSA id b18-20020adff912000000b0021d65675583sm12624688wrr.52.2022.07.25.14.27.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 14:27:37 -0700 (PDT)
-Message-ID: <0ad68731-1891-ced8-2a2e-682b50cc6488@sifive.com>
-Date:   Mon, 25 Jul 2022 22:27:36 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hjH/x15kF4vievgUYxvBLMSjt7KRqmoWwdq7tek7XBI=;
+        b=7J/MCiZH0kiGFKTFTjOEdLg42at4HEbvS207Cwoi/4a6dbE+s6b5n9dB7o0k/sytnq
+         hx4DaVW9XWMSE2Mva0SgYgo1gQEXJ5bM10O0HLIKiwIHOXFewuh2uZjpxY6hHhY2CtoZ
+         2hKIzw7Rjs+aCmwhG21cilh+7oA3Ik01yKu5nUZbi0rFdsXAETS2uMBj+KEGjYDqEgmp
+         OC0Km4IHIT/DijisZvfz7S60aRAfWFfvWSqc1EIQPoNm/b7dkAKABVEm7rDBlP3zR1e7
+         MhPmcWdBochnx471yM/DPfWWqiyplM/M0hbfs+KvWtyv/StshSY64gp20NQlqDNaUfIo
+         BsJQ==
+X-Gm-Message-State: AJIora80bUSbPqII0jbsPasykGjmTva+eypIegM5EzcaUdvxfE2lCqnt
+        h3awiw2MeboekDJHpe4L6xM=
+X-Google-Smtp-Source: AGRyM1t9wJSixY9rq6ip84lBJ8+/PcZ4uPRWlDd4fHc2aEynQWeHyDwhD6AIRiUqwxRslvGMjQzxOQ==
+X-Received: by 2002:a63:4e24:0:b0:41a:4117:5fee with SMTP id c36-20020a634e24000000b0041a41175feemr12658004pgb.414.1658784551276;
+        Mon, 25 Jul 2022 14:29:11 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id z15-20020aa79f8f000000b0052c02d8c65asm1440806pfr.123.2022.07.25.14.29.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 14:29:10 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 06:29:08 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: Re: [PATCH -next] x86/cyrix: include header linux/isa-dma.h
+Message-ID: <Yt8LJMR8WBSZ+4pd@antec>
+References: <20220725202224.29269-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [[PATCH v2] 1/9] dt-bindings: pwm: Document Synopsys DesignWare
- snps,pwm
-Content-Language: en-GB
-To:     linux-pwm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        u.kleine-koenig@pengutronix.de,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>
-References: <20220725212140.741644-1-ben.dooks@sifive.com>
-From:   Ben Dooks <ben.dooks@sifive.com>
-In-Reply-To: <20220725212140.741644-1-ben.dooks@sifive.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220725202224.29269-1-rdunlap@infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/07/2022 22:21, Ben Dooks wrote:
+On Mon, Jul 25, 2022 at 01:22:24PM -0700, Randy Dunlap wrote:
+> x86/kernel/cpu/cyrix.c now needs to include <linux/isa-dma.h>
+> since the 'isa_dma_bridge_buggy' variable was moved to it.
+> 
+> Fixes this build error:
+> 
+> ../arch/x86/kernel/cpu/cyrix.c: In function ‘init_cyrix’:
+> ../arch/x86/kernel/cpu/cyrix.c:277:17: error: ‘isa_dma_bridge_buggy’ undeclared (first use in this function)
+>   277 |                 isa_dma_bridge_buggy = 2;
+> 
+> Fixes: abb4970ac335 ("PCI: Move isa_dma_bridge_buggy out of asm/dma.h")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
 
-Argh, forgot the cover note on this:
+Acked-by: Stafford Horne <shorne@gmail.com>
 
-Second version of updates for the DesignWare PWM driver to move it
-from PCI only to both PCI and OF.
+> ---
+>  arch/x86/kernel/cpu/cyrix.c |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --- a/arch/x86/kernel/cpu/cyrix.c
+> +++ b/arch/x86/kernel/cpu/cyrix.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <linux/bitops.h>
+>  #include <linux/delay.h>
+> +#include <linux/isa-dma.h>
+>  #include <linux/pci.h>
+>  #include <asm/dma.h>
+>  #include <linux/io.h>
 
-Fixes:
+Sorry, I missed this, I did test several x86 configs, but I guess the cyrix.c
+compilation was not picked up in my tests.
 
-v2:
-- fix #pwm-cells count to be 3
-- fix indetation
-- merge the two clock patches
-- add HAS_IOMEM as a config dependency
+FWIW, I think this should go through Bjorn's pci tree.
+
+-Stafford

@@ -2,175 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2819B57FCDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43AA57FCE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiGYKEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
+        id S234464AbiGYKEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234323AbiGYKE3 (ORCPT
+        with ESMTP id S234425AbiGYKEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:04:29 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2040.outbound.protection.outlook.com [40.107.20.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DBE17598
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:04:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IRGM1lUMf5itmBdzGs/NpLxH8XVm0XuTFR7oFVYUgSC8gfsqcGhks8iEj2CkuAs2hDA1iy68yH2InbPFHXSztxR988PYCmbTwQ4K5hzZzLGFuLikCKdTxad8Pr5kt/B/V0vl0Z2ES40yItwCJHfK5oSUA+6OCmQMFqsym44Hyqk17tahKu6bteVwQvrWLoHGRwTCNH9OFtydruak3MwyqNX0g44W7dRo8UX+LwnwJ0avKzCVnxWeQdl5ARU2YbYmWrMT6TNPHg+wG1SKXbhJdt7LcKA8z6Q/KgbxcuXJ7W4Mda7Edp97BtZM3ZXTjFItGJBnJXcaE74Uki/0Mj9Y7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tEnbRpQQLMPNNUl8X/79Gfd7W3fLrdfdqxWxjpWrlIw=;
- b=lNmPSiX1V7x8t/aSe3rmiTpv35oTNzn0UpnlSWPQO5gwkksyOO+ADjpAMUvMlEPhWNSlN5EzosTCZVPLgu7MONr+M/Lr/9oVHJQFStPNSRWB55op/dATP0t2W+89sEYJF2WoQM1Vooc4xZvYKLF5VpQR/NjrVYNx0VMM4jgw/bxWmOiZyxZgpldZab+udUPkzbvOQf0WxDDlWhIJ+w6v8+FkX5plRQLxXKQsBVwGpMCfsx9HRgxPg58k2wDkxN/eqC1CKT6/wMO9xI5M2hMMl9O2MXS2STF0D6BhqOacBUw1v0rRfe6YNpuEFcJUrvmGfPRbezcg3BrS1JwxvI4AKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tEnbRpQQLMPNNUl8X/79Gfd7W3fLrdfdqxWxjpWrlIw=;
- b=o2pT5GqH1NKc1fTn8XN7VX1Q16etA1epUBbRc/ChOsGANhR5MQc51lUNgrS/x2un5kEpTIiCw9NNDNeRbElf4BSsYTFA+qy0BZWNPUuu0F2p/GMkSrp50bttM71jauYA9Y6Jcwdm1yHhgrJnXQnpcL2ZE7SSvlyPsq7paMNOH+0=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by VI1PR04MB7118.eurprd04.prod.outlook.com (2603:10a6:800:127::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.23; Mon, 25 Jul
- 2022 10:04:25 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::c0c2:ede7:3b85:1597]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::c0c2:ede7:3b85:1597%3]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
- 10:04:25 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-CC:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] soc: imx: imx93-blk-ctrl: set priority level
-Thread-Topic: [PATCH] soc: imx: imx93-blk-ctrl: set priority level
-Thread-Index: AQHYn9q2XCdDIKjK3k6IbfZ3hVw/662Ox5IAgAAB5WCAAAlPAIAAB53Q
-Date:   Mon, 25 Jul 2022 10:04:25 +0000
-Message-ID: <DU0PR04MB9417E452C99EA1C4662A06DA88959@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220725035931.3988435-1-peng.fan@oss.nxp.com>
- <20220725085050.izj7kmgeuxxug6rh@pengutronix.de>
- <DU0PR04MB9417BBDAE35E932F7601F94788959@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <20220725093056.ywr7zo37e4rbrvei@pengutronix.de>
-In-Reply-To: <20220725093056.ywr7zo37e4rbrvei@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: eec1304e-576b-446b-af61-08da6e250e0c
-x-ms-traffictypediagnostic: VI1PR04MB7118:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WY2/Ar1UOZJkoEltf17fzeM53fbzHRT9RjmkvKRsrR4d2mPEPMHBxuJUIz7HQMJqbGOEJazpSuiLia6PAXkJ46d2wjn423rYzji8NE5tpuHztsCgVzaOj1rLpCXWLswhWvD//jKzvWTSamqzuPUmIQQ7BkszSLIjoQKHxjIQ+jYqELC+/G+wGPkwXCTPpNLZWy2Jle+8jzLLW/bl44HCKnhNgDNuYKsJWIp5Jlu180Zo3z7a8zQU09pfCRCRdxiEtCwagm+BNQARwi4+olNT2dL9lb+i1XRd/R+n5qA/cKcKt41nNv/Z/yIDd4j7znNhyLUqzGsyka8JoTgAdMofxr/4sHlYNVEhG3b5od5rrpHtLopMZTFUFCl7ID5Bk9v3cg7WKW3awPXpjFfox1AsNrz25+IgItWa5DymoAlaC70IBZwGu9hx/8HPOAAFIfUB5kdR2DB4hZbNMhDv/jYrQLYV1UzvsxVD+j6H3gfatJLZQAlU8Nk0vymdIE30UWXKboJulWdBrZZmFWVbimPpvOKH426Sdk9Mn9v1Wr9rLA8j+j9ZZhYvtcbnlssI7lBv+204/zeKxojAxtAqSwfCPIWTFDLxn8Stcx+6Ftdz/Mu5XWsIXFJeXkAf7F72HsxLH3FuRsTnYAiUP6YB+ToFQ9TXQpEMigRI20OCpK0XmaCbfffHUYtGnUlP70EBY9KHtW1mVD9DApjocSE6Hh0NBxm6NUCvKvARYFiRrUs1KLViqXfDchAQu5aGSCwRJfxapsuUNk03S9OoWUykaH1NhdhEfMdohEZRa5+lkeHN9X0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(396003)(366004)(136003)(376002)(38070700005)(6916009)(5660300002)(33656002)(316002)(54906003)(2906002)(122000001)(8936002)(7696005)(86362001)(26005)(76116006)(38100700002)(6506007)(9686003)(478600001)(186003)(83380400001)(66946007)(71200400001)(52536014)(66476007)(66556008)(66446008)(64756008)(8676002)(4326008)(55016003)(41300700001)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NQJvNdg+/uv6yfWhkMq9/gtXUOcsniqMPkmEnBZzp6qNqLEHzR7lKhByUTVj?=
- =?us-ascii?Q?BfdzikmuBFzhflLg7g2mLzLKhRwAUtxNBfiZDyc5CF38hf07Ilkn5vKt0urA?=
- =?us-ascii?Q?86VI3A/7o5XcYiKmxDA7KvmpmSYu0JUY9mDva2YyWC/tqcbS76ruFwwC31es?=
- =?us-ascii?Q?Dzstr5dr+Cnmw++9aiXGl9rMDPJPL33783nYn4D15WTddjUj8k74o6U+3nga?=
- =?us-ascii?Q?YaXFZ8ixQJ7hNgjosWuRQRmGLDDMSkDV3ToFAEeszo1q1sMq7V2fYuY83Shu?=
- =?us-ascii?Q?gjPddUCYPvLJqkk6XtvpDiPIU3sctZZAv3O8gVWLEt94KEQ8tPz36HeYxESV?=
- =?us-ascii?Q?eNimHIMHyMU+DvLUg11wwMISI9ZRbh07dp8qHIT+90Sh8PNChi9LXu2257JX?=
- =?us-ascii?Q?2DGnC12gp4+Y5qgYnZ8stigTK3nkvqAn6IKCcrN8B3+7oFfLV+DsiOyBcbrF?=
- =?us-ascii?Q?OaNEB0RJmdYyesXji/yNq73vnRRM35XJ9JBFBY1485iwBIpheRrMEU7VavEL?=
- =?us-ascii?Q?qYNnbY9gzafkubyQ1TVSwceUtY4nnhWguRDLOUJa2EN6wRF6OLaVp3b1irup?=
- =?us-ascii?Q?7+pq7ACoD67+OD3ANmCojghOIwUwtaQOwHS0mqELhX3ja+MMwhLnU9n6jb8G?=
- =?us-ascii?Q?FmdUjZOcLUpbNAMO3f9dYShrH2ltmQKOtkGYIm7PFRDW5B68wC69xHBKZe8K?=
- =?us-ascii?Q?LgBOPQMzWzah+pPbgtQZWyTDRet3SkkMaHExcFg8v4Y8OhmpaiyzIOESRavm?=
- =?us-ascii?Q?It5CfIhKX0OfLHJ0E18scaE7YFKjAL9sA8qxRTqJlKl/94DAC686l+7y0unz?=
- =?us-ascii?Q?PEE8Haa8zifBnb1hgPM41ocv9Toti0jbgbKLg+ZnLO1wegCfHdW1TmfWnTdT?=
- =?us-ascii?Q?K3PbrPId3InSxf/hkn1SABTV4pIwagHjnTU2uGI+mK6359nvBkaWoJTxan2G?=
- =?us-ascii?Q?DVjolJgT8NV3u1OxHAIWsnNshP5r+MBMOxJSnlKwNKcOi+4OK2LdeWmfUkRD?=
- =?us-ascii?Q?P7i0Co91T3A/DVsU8RoBQ86ZISypLX0Xk4Y6rh7Fl7evn0A438zN+RbffGNm?=
- =?us-ascii?Q?aiP34IxbX8XHwjmcimGMkQOj0oEnOLkDq9WTSjOhH8IhvDEr4i8X8n66GE9H?=
- =?us-ascii?Q?nWPEQf3biuYmlr1oJc6Zq8F6DBWtl535Ll7P6d52+0YtxdM40wtbJLtkpz7d?=
- =?us-ascii?Q?nqR5D9DQIOOjuYbvXZ0XnTAYRbz9ZHiGWuOLDsfHzM/Ack26mDrwyXdRJMeD?=
- =?us-ascii?Q?9AZX31rft/IIkOyoPH1DMdzyRqOjpkanTCBvLEm+hR2obnNhid6N7r3E8nXE?=
- =?us-ascii?Q?pHLcAnkvpwc/mY/zR8ZWbPSqkeaYQY3HwMX2Bi0FPzSCb1yMq7fNY77PxsbI?=
- =?us-ascii?Q?26pDNjXwGEdtwdMFi1aAvvtuETjg/39zwtIBB22LrXyuaiC0wPzCD6krgsH/?=
- =?us-ascii?Q?awsuP1TP3aBGJ1j3haX4oR/Iph1p6ln+GxQBHann1hgfFAl58cbOEqCneq1x?=
- =?us-ascii?Q?XhKTWJJrOwc50ZlcFnqabdPv0Ycbs1pqFxbPpO84uQBGSx2cSY2HkSUWH6w3?=
- =?us-ascii?Q?y0J5dtT2rumfd/0npCc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 25 Jul 2022 06:04:40 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23DE175BA
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:04:39 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 6so19146616ybc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fj8jvxKEX8iiGvjDp+IibDYFnluQcdot53aXUrKanc0=;
+        b=ihR+osbfovGu1DrmKYkfjiu3gA7GGAis+L5caXfSadLesTIoliafD6AXKLa+rStWTM
+         3sGztJhxjeieBRZXxzZBMGErTG5AVIEQiGasLdCHpRuPPIK3bL9cK1nu6VW00y44dPNN
+         8zf9ki36BuNNsX1OIFBqBcrb6DrK9sgjpk/VU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fj8jvxKEX8iiGvjDp+IibDYFnluQcdot53aXUrKanc0=;
+        b=kpPDnpyIezxWXVxFcUXzLhTRs0vA1eEz2jbjr3dKvlvE1pCS+CJrAIJrWx2w8Nll/B
+         /UvknpewP6XwqGoD35M8uEqkGv+3Ipqh0YUdFLk/7Gv9ADqCP/XdcZNmCLWoTiZpSaw2
+         EldKgGt2z5C09yPPOCEvCWj2S59M9TOm6puBmujcjhX1iIVYM7rryfmBpT0NdMKBFKh1
+         V1cgwjPWymD3J/O4krRAka7gXUZbm2ypM31Z9jkTfdedxX7//3ErwaAhPQwmfs+g5WfH
+         vVCsftaheBqE7KOuUo+TviHT9gHpdxjYNZvjQRuKToU6MWLONTvgs7jiYSqmWk+xznT3
+         fxDA==
+X-Gm-Message-State: AJIora80V9hX4J0xFRYQdcobLtk6v2IWYke0kPXFfKde/Rign9bRyXWE
+        FwjGwBcryLBgp1A/iGlznGwZah+Fez2w7DqDqjP4+w==
+X-Google-Smtp-Source: AGRyM1vwO1tEitj2Z7M3sTrasfs3Au36Gr9ZYDzY4HnZeNjRVAFADoS/fXYlDdnQ9/93C7H57l0UQw/Vsp3CIV3gx2Y=
+X-Received: by 2002:a25:640c:0:b0:670:91a0:57e3 with SMTP id
+ y12-20020a25640c000000b0067091a057e3mr8735202ybb.204.1658743479242; Mon, 25
+ Jul 2022 03:04:39 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eec1304e-576b-446b-af61-08da6e250e0c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 10:04:25.4279
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4C4UeXAD2v4HJbF/d1imJc9RXo2s3Mmvv76G+wJJDY5K2ow9ukqOAQA/obnA0neLW7x87OMXijJ6N8hD/sa1Rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7118
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220721145017.918102-1-angelogioacchino.delregno@collabora.com> <20220721145017.918102-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220721145017.918102-3-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 25 Jul 2022 18:04:28 +0800
+Message-ID: <CAGXv+5GuhXog_EjuxP_ej6768fdnwS9=__d-RWAn0aaK_NxY2w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/8] arm64: dts: mediatek: cherry: Wire up the ChromeOS
+ EC and GSC
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: Re: [PATCH] soc: imx: imx93-blk-ctrl: set priority level
->=20
-> On 22-07-25, Peng Fan wrote:
-> > Hi Marco,
-> >
-> > > Subject: Re: [PATCH] soc: imx: imx93-blk-ctrl: set priority level
-> > >
-> > > Hi Peng,
-> > >
-> > > thanks for the patch.
-> > >
-> > > On 22-07-25, Peng Fan (OSS) wrote:
-> > > > From: Peng Fan <peng.fan@nxp.com>
-> > > >
-> > > > i.MX93 mediamix blk ctrl has registers to set QoS(priority) value.
-> > > > It support default QoS value and cfg QoS value. Set an initial
-> > > > value from i.MX design team. If LCDIF/ISI/PXP wanna a different
-> > > > QoS value in future, they could use interconnect to request bandwid=
-th.
-> > >
-> > > I need to ask here. Does the iMX93 use the same interconnect as the
-> > > iMX8M* does?
-> >
-> > No. i.MX93 use different interconnect, it has different design, the
-> > QoS priority register are distributed in blk ctrl.
->=20
-> Did just the interface change e.g. how you configure the interconnect or =
-is it
-> a complete new interconnect?
+On Thu, Jul 21, 2022 at 10:51 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Wire up the ChromeOS Embedded Controller on SPI0 and its communication
+> channel via SCP RPMSG along with all of the offered functionality,
+> including Keyboard, Smart Battery Metrics (SBS), PWM controller, I2C
+> tunnel, regulators and Type-C connector management.
+>
+> While at it, also add support for the Cr50 Google Security Chip (GSC)
+> found on this platform on I2C3 to support TPM and also use it as an
+> entropy source for the kernel.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../boot/dts/mediatek/mt8195-cherry.dtsi      | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> index feebbe367e93..87ac2b4f9814 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
+> @@ -149,6 +149,14 @@ &i2c3 {
+>         clock-frequency = <400000>;
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&i2c3_pins>;
+> +
+> +       cr50@50 {
 
-It is different interconnect IP. The QoS(priority) register is not in a cen=
-tral
-place, they are spread in the mix blk ctrl register space, most blk ctrl
-has QoS. By configure the register in BLK CTRL, the QoS value will flow
-into the interconnect IP.
+tpm?
 
-But compared with i.MX8M, it is simpler.
+Also I think the CR50 should be a separate patch. It is not related
+to the EC.
 
-Regards,
-Peng.
+> +               compatible = "google,cr50";
+> +               reg = <0x50>;
+> +               interrupts-extended = <&pio 88 IRQ_TYPE_EDGE_FALLING>;
+> +               pinctrl-names = "default";
+> +               pinctrl-0 = <&cr50_int>;
+> +       };
+>  };
+>
+>  &i2c4 {
+> @@ -426,6 +434,21 @@ &pio {
+>                 "AP_SPI_FLASH_MOSI",
+>                 "AP_SPI_FLASH_MISO";
+>
+> +       cr50_int: cr50-irq-default-pins {
+> +               pins-gsc-ap-int-odl {
+> +                       pinmux = <PINMUX_GPIO88__FUNC_GPIO88>;
+> +                       input-enable;
+> +               };
+> +       };
+> +
+> +       cros_ec_int: cros-ec-irq-default-pins {
+> +               pins-ec-ap-int-odl {
+> +                       pinmux = <PINMUX_GPIO4__FUNC_GPIO4>;
+> +                       bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
+> +                       input-enable;
+> +               };
+> +       };
+> +
+>         i2c0_pins: i2c0-default-pins {
+>                 pins-bus {
+>                         pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
+> @@ -669,6 +692,11 @@ &scp {
+>         memory-region = <&scp_mem>;
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&scp_pins>;
+> +
+> +       cros-ec-rpmsg {
+> +               compatible = "google,cros-ec-rpmsg";
+> +               mediatek,rpmsg-name = "cros-ec-rpmsg";
+> +       };
+>  };
+>
+>  &spi0 {
+> @@ -677,6 +705,68 @@ &spi0 {
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&spi0_pins>;
+>         mediatek,pad-select = <0>;
+> +
+> +       cros_ec: ec@0 {
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +
+> +               compatible = "google,cros-ec-spi";
+> +               reg = <0>;
+> +               interrupts-extended = <&pio 4 IRQ_TYPE_LEVEL_LOW>;
+> +               pinctrl-names = "default";
+> +               pinctrl-0 = <&cros_ec_int>;
+> +               spi-max-frequency = <3000000>;
+> +
+> +               cros_ec_pwm: ec-pwm {
+> +                       compatible = "google,cros-ec-pwm";
+> +                       #pwm-cells = <1>;
+> +               };
 
->=20
-> > The reference manual would be public soon I think, then you could have
-> > more information.
->=20
-> Looking forward to it :)
->=20
-> Regards,
->   Marco
+This only serves the keyboard backlight LED. However, we have a better
+interface for that, described in
+
+    Documentation/devicetree/bindings/chrome/google,cros-kbd-led-backlight.yaml
+
+I think we should go with that one.
+
+
+ChenYu
+
+> +
+> +               i2c_tunnel: i2c-tunnel {
+> +                       compatible = "google,cros-ec-i2c-tunnel";
+> +                       google,remote-bus = <0>;
+> +                       #address-cells = <1>;
+> +                       #size-cells = <0>;
+> +               };
+> +
+> +               mt_pmic_vmc_ldo_reg: regulator@0 {
+> +                       compatible = "google,cros-ec-regulator";
+> +                       reg = <0>;
+> +                       regulator-name = "mt_pmic_vmc_ldo";
+> +                       regulator-min-microvolt = <1200000>;
+> +                       regulator-max-microvolt = <3600000>;
+> +               };
+> +
+> +               mt_pmic_vmch_ldo_reg: regulator@1 {
+> +                       compatible = "google,cros-ec-regulator";
+> +                       reg = <1>;
+> +                       regulator-name = "mt_pmic_vmch_ldo";
+> +                       regulator-min-microvolt = <2700000>;
+> +                       regulator-max-microvolt = <3600000>;
+> +               };
+> +
+> +               typec {
+> +                       compatible = "google,cros-ec-typec";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <0>;
+> +
+> +                       usb_c0: connector@0 {
+> +                               compatible = "usb-c-connector";
+> +                               reg = <0>;
+> +                               power-role = "dual";
+> +                               data-role = "host";
+> +                               try-power-role = "source";
+> +                       };
+> +
+> +                       usb_c1: connector@1 {
+> +                               compatible = "usb-c-connector";
+> +                               reg = <1>;
+> +                               power-role = "dual";
+> +                               data-role = "host";
+> +                               try-power-role = "source";
+> +                       };
+> +               };
+> +       };
+>  };
+>
+>  &u3phy0 {
+> @@ -728,3 +818,6 @@ &xhci3 {
+>         vusb33-supply = <&mt6359_vusb_ldo_reg>;
+>         vbus-supply = <&usb_vbus>;
+>  };
+> +
+> +#include <arm/cros-ec-keyboard.dtsi>
+> +#include <arm/cros-ec-sbs.dtsi>
+> --
+> 2.35.1
+>
+>

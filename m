@@ -2,97 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7226357FBC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E2D57FBC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbiGYIwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        id S234267AbiGYIxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbiGYIwo (ORCPT
+        with ESMTP id S233186AbiGYIxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:52:44 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F109140E4;
-        Mon, 25 Jul 2022 01:52:44 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id l24so8259490ion.13;
-        Mon, 25 Jul 2022 01:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=63aMbMd225HyHDRweTzRK/cD4NhWMDCNRD/2yux7vnI=;
-        b=YIb9XU1nxRKDscGtjt6eFZ294G8xceeXfgZil/fpz3cdJodDWcJROOBYE9AVKU3sTs
-         qbTowhHuuru1dUgRcUjQacbruNICwHVS09brD0Ibr9+Nbz/abpgZq6Y2X7CCLsXNdROD
-         3/2m/0SZ4qV0E8tbZae9dN4LgGRR/MpDO6/Cu4/EgUzDug7lCVP/aAyq8OKDEcJo2Jua
-         PIcpK2aBGSREJZ4JdkOrOTG2EN3bguci9CF+hKMQuqrq1nGEHaGERnNdYvM6d8mAkanN
-         GUnjJghLQtg+JFWwoKeRQ3UegaAojzgjFKjWO72HXW50Ivyn9nXuLKI6iQIt2B8IplOf
-         Q+6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=63aMbMd225HyHDRweTzRK/cD4NhWMDCNRD/2yux7vnI=;
-        b=xys5QFvZkzwtPDeBYgU4VbLziWXZBWTIRV5mui0H1QPolkdnuG7VnsWjnSWmHeJudt
-         Z0AX7VaVHSEA382kXB2j5lszZEemX3pjieeSbX9e6/6t6GZVB3p3VrV2VJTfhI7vJyQU
-         EwlzcxLO5BaHZzt+veaE64ty+goEg6ko1ltWqrVFKha4xZ2NzOFjKpIC94JIlEwktqAz
-         awhZvT5yPSsKViE8c/5shk89yKNTLfeBEHlPKvA5eaGWGUVhNDZp8W8gYwhSJotyWav7
-         6jY36Xqwq8IsFetRSAmfE83okUqgLGYRJuc+ozv9mokNqPl9ucstO2v9DX3nd0CrPuGP
-         YDnA==
-X-Gm-Message-State: AJIora8pftjDBqYrA3r2kxNwkdTWYi0shVpVKPIoZS5k3jFS6pnAa5mu
-        0MXP4vmOt5boYgZsK3Zvck+cYg1/OJo6mnooaYw=
-X-Google-Smtp-Source: AGRyM1t0NsIDgIDJqiW/DelVdsZX7b19NC10o7F1KxHnWXLjsUtcNvO0KJ7lREl+OVq9bDAMlPHEy2wk5prU5VtmKOg=
-X-Received: by 2002:a05:6638:4514:b0:33f:45cb:2f35 with SMTP id
- bs20-20020a056638451400b0033f45cb2f35mr4796201jab.256.1658739163879; Mon, 25
- Jul 2022 01:52:43 -0700 (PDT)
+        Mon, 25 Jul 2022 04:53:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C902140EC
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:53:16 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 08:53:13 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1658739194;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h07meF+OpyOGWFqSjatb90Ng9PCZSeyT/td6Yf8xpu4=;
+        b=LhjIsMtP8ti/X3KNzzyVHB68ebEkzGA133oBXDRDqIwerJUbybuyPNDzze8b4XB/51Gnjm
+        EUbQqtkmU8RIWzMr+UIb81ItDINOI1AdqKAkXkVizCwNot1hSZVR7Yd4gmTCy6VNc6fLJa
+        6iO0KEwNSWkKiBXVqQqPPW+1kt9utrThj3zBT60yF1LUjUVL8hf4ORzUKe3Llj4FP/+NZJ
+        NfXX/lZOq5DoieTyxtU+STkgrIEWqyJs9ptix0wwiLhIEW0VGGdGf1jzGkHKSnn1D9ZWsX
+        JPHoKvIQ47/gnStXcO8u9VdPk8WO3oo4rtOuyVTPQVq8NqomviBSNM29rT6Tnw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1658739194;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h07meF+OpyOGWFqSjatb90Ng9PCZSeyT/td6Yf8xpu4=;
+        b=6srZl7bD8xAWxb9HR3yLAIewreVjWLeMK2Qxt9gZSMw8Dsw3tcs45H919AJebxL1ubclQ5
+        sqPSKqBm/wwRLwAA==
+From:   "irqchip-bot for Ben Dooks" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] irqchip/mmp: Declare init functions in
+ common header file
+Cc:     Ben Dooks <ben-linux@fluff.org>, Marc Zyngier <maz@kernel.org>,
+        tglx@linutronix.de
+In-Reply-To: <20220724222152.551850-1-ben-linux@fluff.org>
+References: <20220724222152.551850-1-ben-linux@fluff.org>
 MIME-Version: 1.0
-References: <20220725184107.429e33bf@canb.auug.org.au>
-In-Reply-To: <20220725184107.429e33bf@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 25 Jul 2022 10:52:33 +0200
-Message-ID: <CANiq72mH=TiKFwZnyo0Y6Fa_5iDgxsciAvVRwfq1Djik_ftM1A@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165873919320.15455.15230987291054613592.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 10:41 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Today's linux-next merge of the rust tree got a conflict in:
->
->   arch/x86/Makefile
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Looks fine to me (I did it a bit differently on my side, but it does
-not matter).
+Commit-ID:     9d9b010f12cc4e254bbba32d79c965b564a8957f
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/9d9b010f12cc4e254bbba32d79c965b564a8957f
+Author:        Ben Dooks <ben-linux@fluff.org>
+AuthorDate:    Sun, 24 Jul 2022 23:21:52 +01:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Mon, 25 Jul 2022 09:42:24 +01:00
 
-Thanks!
+irqchip/mmp: Declare init functions in common header file
 
-Cheers,
-Miguel
+The functions icu_init_irq and mmp2_init_icu are exported
+from this code, so declare them in the header file to avoid
+the following sparse warnings:
+
+drivers/irqchip/irq-mmp.c:248:13: warning: symbol 'icu_init_irq' was not declared. Should it be static?
+drivers/irqchip/irq-mmp.c:271:13: warning: symbol 'mmp2_init_icu' was not declared. Should it be static?
+
+Signed-off-by: Ben Dooks <ben-linux@fluff.org>
+[maz: fixup commit message]
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220724222152.551850-1-ben-linux@fluff.org
+---
+ arch/arm/mach-mmp/mmp2.h    | 2 +-
+ arch/arm/mach-mmp/pxa168.h  | 2 +-
+ arch/arm/mach-mmp/pxa910.h  | 2 +-
+ include/linux/irqchip/mmp.h | 3 +++
+ 4 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/mach-mmp/mmp2.h b/arch/arm/mach-mmp/mmp2.h
+index 3ebc1bb..7f80b90 100644
+--- a/arch/arm/mach-mmp/mmp2.h
++++ b/arch/arm/mach-mmp/mmp2.h
+@@ -5,13 +5,13 @@
+ #include <linux/platform_data/pxa_sdhci.h>
+ 
+ extern void mmp2_timer_init(void);
+-extern void __init mmp2_init_icu(void);
+ extern void __init mmp2_init_irq(void);
+ extern void mmp2_clear_pmic_int(void);
+ 
+ #include <linux/i2c.h>
+ #include <linux/platform_data/i2c-pxa.h>
+ #include <linux/platform_data/dma-mmp_tdma.h>
++#include <linux/irqchip/mmp.h>
+ 
+ #include "devices.h"
+ 
+diff --git a/arch/arm/mach-mmp/pxa168.h b/arch/arm/mach-mmp/pxa168.h
+index 34f907c..c1547e0 100644
+--- a/arch/arm/mach-mmp/pxa168.h
++++ b/arch/arm/mach-mmp/pxa168.h
+@@ -5,7 +5,6 @@
+ #include <linux/reboot.h>
+ 
+ extern void pxa168_timer_init(void);
+-extern void __init icu_init_irq(void);
+ extern void __init pxa168_init_irq(void);
+ extern void pxa168_restart(enum reboot_mode, const char *);
+ extern void pxa168_clear_keypad_wakeup(void);
+@@ -18,6 +17,7 @@ extern void pxa168_clear_keypad_wakeup(void);
+ #include <linux/pxa168_eth.h>
+ #include <linux/platform_data/mv_usb.h>
+ #include <linux/soc/mmp/cputype.h>
++#include <linux/irqchip/mmp.h>
+ 
+ #include "devices.h"
+ 
+diff --git a/arch/arm/mach-mmp/pxa910.h b/arch/arm/mach-mmp/pxa910.h
+index 6ace5a8..7d22921 100644
+--- a/arch/arm/mach-mmp/pxa910.h
++++ b/arch/arm/mach-mmp/pxa910.h
+@@ -3,13 +3,13 @@
+ #define __ASM_MACH_PXA910_H
+ 
+ extern void pxa910_timer_init(void);
+-extern void __init icu_init_irq(void);
+ extern void __init pxa910_init_irq(void);
+ 
+ #include <linux/i2c.h>
+ #include <linux/platform_data/i2c-pxa.h>
+ #include <linux/platform_data/mtd-nand-pxa3xx.h>
+ #include <video/mmp_disp.h>
++#include <linux/irqchip/mmp.h>
+ 
+ #include "devices.h"
+ 
+diff --git a/include/linux/irqchip/mmp.h b/include/linux/irqchip/mmp.h
+index cb8455c..aa18137 100644
+--- a/include/linux/irqchip/mmp.h
++++ b/include/linux/irqchip/mmp.h
+@@ -4,4 +4,7 @@
+ 
+ extern struct irq_chip icu_irq_chip;
+ 
++extern void icu_init_irq(void);
++extern void mmp2_init_icu(void);
++
+ #endif	/* __IRQCHIP_MMP_H */

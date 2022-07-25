@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFDC57F830
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3263357F82D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiGYCL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 22:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
+        id S233114AbiGYCJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 22:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiGYCLV (ORCPT
+        with ESMTP id S233267AbiGYCIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 22:11:21 -0400
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56C9E0C3
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:11:19 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 26P28hG0024554;
-        Mon, 25 Jul 2022 11:08:44 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 26P28hG0024554
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1658714924;
-        bh=fBshU7A7Rde9m6PAxG1uCGgXJuFDSJp0LWPguc3FMLg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bYn3kYIHBv3BbtTm/AOpEJ4+M4l/+DfG+TMkXA+NI4dPD5qNgJhiyY2ZJAd7DiSaR
-         71HF/bcO3Ov6yvDm7/wKC8z4DbRrYEP37CU7zkzHyA3+SOy8rJgOhBLR7VpNXCHGoU
-         TuNs58fbO4V+Hsb2S7MLwd18KtRGEwPrXnt/bJiGGgui2KBgbMgM27Y8x9YsiGk6m4
-         vgRK9Me2hZncA9/ikylNvBTlb5E1wmxVWCSF6gXgrsubVADQ/kV4873xoxroINfDvb
-         9JkYZeUQKWyOpKvdlqU9SvM2wmy/WnDRewOwT1s5IQcvznfPYsNIgFAFdtrotObdPt
-         qENjrqKBe50Bg==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] x86/purgatory: Omit use of bin2c
-Date:   Mon, 25 Jul 2022 11:08:12 +0900
-Message-Id: <20220725020812.622255-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220725020812.622255-1-masahiroy@kernel.org>
-References: <20220725020812.622255-1-masahiroy@kernel.org>
+        Sun, 24 Jul 2022 22:08:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7E57FD24
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658714923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3H+nJazZwUTI7bMfI3XTbXbN/qZRH3y006Os5Yq8ong=;
+        b=WQcW5Gj/5nxI/PoLJzkA4MjQYKf9ZAw2E8VkTINNibpucjpSQst0Sncr3KLiaHD+9CcVKo
+        m5dSzHb07dH8K2JGKqv2usz0xfdAJ4RzQbPwP1BbWtDfI3HuN4svo2g6h94LGcZ5/hMwwy
+        X8pvUL6mdSDVrHSNq7vBfCoHfzVexUs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-LE49NObQNpihPsAljGi0ow-1; Sun, 24 Jul 2022 22:08:37 -0400
+X-MC-Unique: LE49NObQNpihPsAljGi0ow-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9BAD01C068CB;
+        Mon, 25 Jul 2022 02:08:36 +0000 (UTC)
+Received: from [10.22.32.58] (unknown [10.22.32.58])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57C3718EAA;
+        Mon, 25 Jul 2022 02:08:35 +0000 (UTC)
+Message-ID: <0ea27d18-6d45-9673-38b7-78d59325f9d5@redhat.com>
+Date:   Sun, 24 Jul 2022 22:08:34 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V8 10/10] csky: Add qspinlock support
+Content-Language: en-US
+To:     guoren@kernel.org, palmer@rivosinc.com, heiko@sntech.de,
+        hch@infradead.org, arnd@arndb.de, peterz@infradead.org,
+        will@kernel.org, boqun.feng@gmail.com, mingo@redhat.com,
+        philipp.tomsich@vrull.eu, cmuellner@linux.com,
+        linux-kernel@vger.kernel.org, David.Laight@ACULAB.COM
+Cc:     linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+References: <20220724122517.1019187-1-guoren@kernel.org>
+ <20220724122517.1019187-11-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220724122517.1019187-11-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,100 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The .incbin assembler directive is much faster than bin2c + $(CC).
+On 7/24/22 08:25, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Enable qspinlock by the requirements mentioned in a8ad07e5240c9
+> ("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+>
+> C-SKY only has "ldex/stex" for all atomic operations. So csky give a
+> strong forward guarantee for "ldex/stex." That means when ldex grabbed
+> the cache line into $L1, it would block other cores from snooping the
+> address with several cycles.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>   arch/csky/Kconfig               | 16 ++++++++++++++++
+>   arch/csky/include/asm/Kbuild    |  2 ++
+>   arch/csky/include/asm/cmpxchg.h | 20 ++++++++++++++++++++
+>   3 files changed, 38 insertions(+)
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index dfdb436b6078..09f7d1f06bca 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -354,6 +354,22 @@ config HAVE_EFFICIENT_UNALIGNED_STRING_OPS
+>   	  Say Y here to enable EFFICIENT_UNALIGNED_STRING_OPS. Some CPU models could
+>   	  deal with unaligned access by hardware.
+>   
+> +choice
+> +	prompt "C-SKY spinlock type"
+> +	default CSKY_TICKET_SPINLOCKS
+> +
+> +config CSKY_TICKET_SPINLOCKS
+> +	bool "Using ticket spinlock"
+> +
+> +config CSKY_QUEUED_SPINLOCKS
+> +	bool "Using queued spinlock"
+> +	depends on SMP
+> +	select ARCH_USE_QUEUED_SPINLOCKS
+> +	help
+> +	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
+> +	  Otherwise, stay at ticket-lock/combo-lock.
 
-Do similar refactoring as in commit 4c0f032d4963 ("s390/purgatory:
-Omit use of bin2c").
+"combo-lock"? It is a cut-and-paste error. Right?
 
-Please note the .quad directive matches to size_t in C (both 8 byte)
-because the purgatory is compiled only for the 64-bit kernel.
-(KEXEC_FILE depends on X86_64).
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v2:
-  - Fix a typo (kexec_purgatroy_end -> kexec_purgatory_end)
-
- arch/x86/.gitignore                  |  2 --
- arch/x86/Kconfig                     |  1 -
- arch/x86/purgatory/Makefile          |  8 +-------
- arch/x86/purgatory/kexec-purgatory.S | 14 ++++++++++++++
- scripts/remove-stale-files           |  2 ++
- 5 files changed, 17 insertions(+), 10 deletions(-)
- create mode 100644 arch/x86/purgatory/kexec-purgatory.S
-
-diff --git a/arch/x86/.gitignore b/arch/x86/.gitignore
-index 677111acbaa3..f2e1d6c347fb 100644
---- a/arch/x86/.gitignore
-+++ b/arch/x86/.gitignore
-@@ -3,6 +3,4 @@ boot/compressed/vmlinux
- tools/test_get_len
- tools/insn_sanity
- tools/insn_decoder_test
--purgatory/kexec-purgatory.c
- purgatory/purgatory.ro
--
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index be0b95e51df6..2c1d37cd479f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2032,7 +2032,6 @@ config KEXEC
- config KEXEC_FILE
- 	bool "kexec file based system call"
- 	select KEXEC_CORE
--	select BUILD_BIN2C
- 	depends on X86_64
- 	depends on CRYPTO=y
- 	depends on CRYPTO_SHA256=y
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 248b009c4061..31c634a22818 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -73,12 +73,6 @@ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- $(obj)/purgatory.chk: $(obj)/purgatory.ro FORCE
- 		$(call if_changed,ld)
- 
--targets += kexec-purgatory.c
--
--quiet_cmd_bin2c = BIN2C   $@
--      cmd_bin2c = $(objtree)/scripts/bin2c kexec_purgatory < $< > $@
--
--$(obj)/kexec-purgatory.c: $(obj)/purgatory.ro $(obj)/purgatory.chk FORCE
--	$(call if_changed,bin2c)
-+$(obj)/kexec-purgatory.o: $(obj)/purgatory.ro $(obj)/purgatory.chk
- 
- obj-y += kexec-purgatory.o
-diff --git a/arch/x86/purgatory/kexec-purgatory.S b/arch/x86/purgatory/kexec-purgatory.S
-new file mode 100644
-index 000000000000..8530fe93b718
---- /dev/null
-+++ b/arch/x86/purgatory/kexec-purgatory.S
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+	.section .rodata, "a"
-+
-+	.align	8
-+kexec_purgatory:
-+	.globl	kexec_purgatory
-+	.incbin	"arch/x86/purgatory/purgatory.ro"
-+.Lkexec_purgatory_end:
-+
-+	.align	8
-+kexec_purgatory_size:
-+	.globl	kexec_purgatory_size
-+	.quad	.Lkexec_purgatory_end - kexec_purgatory
-diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
-index 7adab4618035..379e86c71bed 100755
---- a/scripts/remove-stale-files
-+++ b/scripts/remove-stale-files
-@@ -41,3 +41,5 @@ if [ -n "${building_out_of_srctree}" ]; then
- fi
- 
- rm -f scripts/extract-cert
-+
-+rm -f arch/x86/purgatory/kexec-purgatory.c
--- 
-2.34.1
+Cheers,
+Longman
 

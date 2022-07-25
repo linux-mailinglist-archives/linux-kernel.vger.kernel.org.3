@@ -2,81 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7EF580492
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9182B580494
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233712AbiGYTj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 15:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S235752AbiGYTj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 15:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiGYTjw (ORCPT
+        with ESMTP id S236144AbiGYTjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 15:39:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381A9205CC;
-        Mon, 25 Jul 2022 12:39:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFF03B810E5;
-        Mon, 25 Jul 2022 19:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24445C341C6;
-        Mon, 25 Jul 2022 19:39:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1658777989;
-        bh=cuudPE0wtvbxElXfQCMzPg0O3xDu7MgSPTnAUbd2BI0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lnm0tSCCxjmphQNW5NriYcH19FeO0pMC/0MZl19jo18xWrIdpmYjjReLjZrbQc3nV
-         M3OCLSW3PO1gZvubU1+zIdU9EZbB6ratbRpHX/aNA2dD8ZrjXLNedUC8xa5hrDNMbu
-         lcZp1M+CGZGybihQDDnCvRc7tTtqd8IELi5v8huc=
-Date:   Mon, 25 Jul 2022 12:39:48 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Ben Dooks <ben-linux@fluff.org>
-Cc:     linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-ia64@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, linux-alpha@vger.kernel.org
-Subject: Re: [PATCH] profile: setup_profiling_timer() is moslty not
- implemented
-Message-Id: <20220725123948.f16674b10022404814161d4a@linux-foundation.org>
-In-Reply-To: <20220721195509.418205-1-ben-linux@fluff.org>
-References: <20220721195509.418205-1-ben-linux@fluff.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 25 Jul 2022 15:39:54 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76FF205D2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:39:52 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m12so18534979lfj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:39:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7TgkwMCGH8mTLYpuQJ03GCo0HTr07mExTrfJu7QnTBk=;
+        b=btN2MagO7hPo507CmIAjmr7FW6Se5tqp2OzRQNuVFFQw+dEh9SkA+t4wsS36uYIYXf
+         0WU5rQuz+J5wpTpZzdr6Hw+8wOWOw3+NJaEQFQEld775tTqM4nqqcCJzFql/NZcW9PxI
+         mIpuPHy2oNM6U38ry7XrMfD3EGVqphUbjsA1d0AgmG+dPk0zNGyITpqJ+4VQJYmY0RqC
+         IKyylCeq9f/Y/4DTzZms2KGHmZpOEihDhLM9MoZDxbIR9apxWYNRPqS1MQNeVi1fep1l
+         Mf9ifJu9aOTO8y8t4qu1W7wCEDwwW7+H44joqMZk0CsJYYGE6xnPlnyzd598QSX6AH9C
+         OQGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7TgkwMCGH8mTLYpuQJ03GCo0HTr07mExTrfJu7QnTBk=;
+        b=pFkdld0YUdLbDLwRCtpdKOiKZJdGYJkX86epFaWgpIg+uwxktDBUfZI/FEKTizjA5A
+         FEEmdry5XsSPB6oSZHqdUeMGGtsH0o+4g8HvkQ7ZmPyg0+aF862L+1AbCmNKuhPAzeia
+         CMtxNNcLfKj904Q0uBs7KB5eDYZAG9ObV4f0LZZv9O1SG/By8okApZM9TSJiVF+I7Qi5
+         znZBZ6/agXPFMko7+0VN/RYBD3kiLv1SB0hE/7L58Bl/I52EcpNhKAzE2Y+FDj0M2RJZ
+         uaiymBl2EwbpZ230LJNKS6LynSNP8Wc3IZ8Pb9wujFP7/S2D6ZDns3ZxkMGMwzh7bjXs
+         7bFw==
+X-Gm-Message-State: AJIora/Xvv0Rm0wI44i1Yz4cpuBz3MxdHO90/HreOBHrlwNXqNwdE7bX
+        8LaVGyxRlKi5xEuAghPxd9q7FQ==
+X-Google-Smtp-Source: AGRyM1uIxsFuo/Pf7kus3RXxJczb4yO8MmUcIhtfROj3yAJgnLiwbh25xjc+u6hAotpQjJH7fjSMyA==
+X-Received: by 2002:a05:6512:22c2:b0:485:8c7a:530d with SMTP id g2-20020a05651222c200b004858c7a530dmr5325325lfu.459.1658777990943;
+        Mon, 25 Jul 2022 12:39:50 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id be9-20020a056512250900b0047f8790085csm2574646lfb.71.2022.07.25.12.39.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 12:39:50 -0700 (PDT)
+Message-ID: <017a3722-d61f-6762-d17f-57417f1e3165@linaro.org>
+Date:   Mon, 25 Jul 2022 21:39:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: net: cdns,macb: Add versal compatible
+ string
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Harini Katakam <harini.katakam@xilinx.com>
+Cc:     nicolas.ferre@microchip.com, davem@davemloft.net,
+        claudiu.beznea@microchip.com, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
+        harini.katakam@amd.com, devicetree@vger.kernel.org,
+        radhey.shyam.pandey@xilinx.com
+References: <20220722110330.13257-1-harini.katakam@xilinx.com>
+ <20220722110330.13257-2-harini.katakam@xilinx.com>
+ <20220725193356.GA2561062-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220725193356.GA2561062-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 20:55:09 +0100 Ben Dooks <ben-linux@fluff.org> wrote:
-
-> The setup_profiling_timer() is mostly un-implemented by many
-> architectures. In many places it isn't guarded by CONFIG_PROFILE
-> which is needed for it to be used. Make it a weak symbol in
-> kernel/profile.c and remove the 'return -EINVAL' implementations
-> from the kenrel.
+On 25/07/2022 21:33, Rob Herring wrote:
+> On Fri, Jul 22, 2022 at 04:33:28PM +0530, Harini Katakam wrote:
+>> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+>>
+>> Add versal compatible string.
+>>
+>> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+>> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+>> ---
+>> v2:
+>> Sort compatible string alphabetically.
+>>
+>>  Documentation/devicetree/bindings/net/cdns,macb.yaml | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+>> index 9c92156869b2..762deccd3640 100644
+>> --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
+>> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+>> @@ -20,6 +20,7 @@ properties:
+>>  
+>>        - items:
+>>            - enum:
+>> +              - cdns,versal-gem       # Xilinx Versal
+>>                - cdns,zynq-gem         # Xilinx Zynq-7xxx SoC
+>>                - cdns,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
 > 
-> There are a couple of architectures which do return 0 from
-> the setup_profiling_timer() function but they don't seem to
-> do anything else with it. To keep the /proc compatibility for
-> now, leave these for a future update or removal.
-> 
-> On ARM, this fixes the following sparse warning:
-> arch/arm/kernel/smp.c:793:5: warning: symbol 'setup_profiling_timer' was not declared. Should it be static?
+> Uh, how did we start this pattern? The vendor here is Xilinx, not 
+> Cadence. It should be xlnx,versal-gem instead.
 
-I'll grab this.
+I missed that piece entirely... Un-ack.
 
-We have had some problems with weak functions lately.  See
-
-https://lore.kernel.org/all/87ee0q7b92.fsf@email.froward.int.ebiederm.org/T/#u
-
-Hopefully that was a rare corner case.
+Best regards,
+Krzysztof

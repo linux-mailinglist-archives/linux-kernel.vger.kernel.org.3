@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADEC5800DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E265800DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbiGYOhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 10:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S235716AbiGYOjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 10:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbiGYOhG (ORCPT
+        with ESMTP id S235747AbiGYOjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 10:37:06 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EADCDE89;
-        Mon, 25 Jul 2022 07:37:04 -0700 (PDT)
-Received: from zn.tnic (p200300ea972976f8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76f8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DCF841EC0554;
-        Mon, 25 Jul 2022 16:36:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658759818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Ukq4Ju25HfOtxA6MIzJPkc7+yNzn1aszkw7wxTvzP54=;
-        b=Tmx9olaPmHkwLBrBL1vEE/sWkEe+Zs2j9FDsF2GEiz9TIkJg5v9gxUBFF7nY3RpzGfVTcG
-        i92eMw4KSOayT98YDkbl34LR/hryxsZsVOdUuFY6MEdwNLXpQkcqnwpwbyrr0B97Sxaxh2
-        YogDp8c2pbWrktu9FED9q/LKngw0f5E=
-Date:   Mon, 25 Jul 2022 16:36:58 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
- RMPUPDATE and PSMASH instruction
-Message-ID: <Yt6qit4al5/eM7YO@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 10:39:08 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EE017A8F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:39:06 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1658759925tes7hwx1
+Received: from smtpclient.apple ( [111.193.9.146])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 25 Jul 2022 22:38:43 +0800 (CST)
+X-QQ-SSF: 01400000002000B0V000B00A0000000
+X-QQ-FEAT: DQ0OCu3gog1JVD1aMWAG4Hzd0HB957q6ScZb3/kq17UDFTyfwdmQb/6ecqjF8
+        eE5OIYywqAy6jzuY4FIO9RM5B1GETLurAPOVmaicr7eAxKNEew43TCCsKF17vEim+KlGrqq
+        TeaZwBauxmOkQGu2+lIYIdxZiG6lJiwhMgYvNmkKCbjn4fAPvX7KGAqFtyAluaodXwWAEPi
+        sMg5MSAXAGwcpOo1g21x2MeU6IUZun5GbFkFq3muAvTkWg8R9f9iIlSjggT+YzW1bYaPsG8
+        j1NsDD1kWdoxotEBrFfUTZakTQaJv7Q1USHOOcbkLbZwEhnx7DQ6ps5BSsvI2u//KJsoT4H
+        QF6kVQVltNmGV5X2QjhK31quG5gxNfYaaWU2z2MoZolb8af71hdQWnWSbBvlUEkeTqPPuvL
+X-QQ-GoodBg: 2
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH 0/7] USB: cdc: add control and state defines
+From:   Yan Xinyu <sdlyyxy@bupt.edu.cn>
+In-Reply-To: <20220725075841.1187-1-johan@kernel.org>
+Date:   Mon, 25 Jul 2022 22:38:42 +0800
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <5964CFE8-1B65-4FE2-9154-0F1C079CE916@bupt.edu.cn>
+References: <20220725075841.1187-1-johan@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:bupt.edu.cn:qybgforeign:qybgforeign4
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:02:52PM +0000, Ashish Kalra wrote:
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index cb16f0e5b585..6ab872311544 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -85,7 +85,9 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
->  
->  /* RMP page size */
->  #define RMP_PG_SIZE_4K			0
-> +#define RMP_PG_SIZE_2M			1
->  #define RMP_TO_X86_PG_LEVEL(level)	(((level) == RMP_PG_SIZE_4K) ? PG_LEVEL_4K : PG_LEVEL_2M)
-> +#define X86_TO_RMP_PG_LEVEL(level)	(((level) == PG_LEVEL_4K) ? RMP_PG_SIZE_4K : RMP_PG_SIZE_2M)
->  
->  /*
->   * The RMP entry format is not architectural. The format is defined in PPR
-> @@ -126,6 +128,15 @@ struct snp_guest_platform_data {
->  	u64 secrets_gpa;
->  };
->  
-> +struct rmpupdate {
+> On Jul 25, 2022, at 15:58, Johan Hovold <johan@kernel.org> wrote:
+> 
+> Several drivers use the control-line and serial-state bitmap values from
+> the CDC spec, but there were no matching defines in the global CDC
+> (UAPI) header.
+> 
+> This series adds the missing defines and converts cdc-acm and f_acm to
+> use them.
+> 
+> One staging driver also had an unused set of CDC defines which are
+> removed.
+> 
+> The final patch by Yan Xinyu, which triggered this work, converts the
+> usb_wwan driver to use CDC defines instead of hardcoded values in its
+> line-control handling.
+> 
+> Greg, are you ok with me taking these through USB serial (where there
+> are a few more drivers that could potentially use them) or do you want
+> to take the lot through your tree directly?
+> 
+> Johan
+> 
+> 
+> Johan Hovold (6):
+>  USB: cdc: add control-signal defines
+>  USB: cdc: add serial-state defines
+>  USB: cdc-acm: use CDC control-line defines
+>  USB: cdc-acm: use CDC serial-state defines
+>  staging: gdm724x: drop unused CDC defines
+>  USB: gadget: f_acm: use CDC defines
+> 
+> Yan Xinyu (1):
+>  USB: serial: usb_wwan: replace DTR/RTS magic numbers with macros
+> 
+> drivers/staging/gdm724x/gdm_tty.c   |  6 -----
+> drivers/usb/class/cdc-acm.c         | 42 ++++++++++++++---------------
+> drivers/usb/class/cdc-acm.h         | 20 --------------
+> drivers/usb/gadget/function/f_acm.c | 20 ++++----------
+> drivers/usb/serial/usb_wwan.c       | 10 ++++---
+> include/uapi/linux/usb/cdc.h        | 13 +++++++++
+> 6 files changed, 45 insertions(+), 66 deletions(-)
+> 
+> -- 
+> 2.35.1
+> 
 
-Why is there a struct rmpupdate *and* a struct rmpentry?!
+Thank you so much for spending your time to write this patch series!
+And thank you and Greg for your reviews, they are very informative
+and educational!
 
-One should be enough.
+sdlyyxy
 
-> +	u64 gpa;
-> +	u8 assigned;
-> +	u8 pagesize;
-> +	u8 immutable;
-> +	u8 rsvd;
-> +	u32 asid;
-> +} __packed;
-> +
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette

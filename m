@@ -2,142 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC0457FD43
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E0757FD42
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiGYKTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S234131AbiGYKT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234510AbiGYKTg (ORCPT
+        with ESMTP id S232734AbiGYKTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:19:36 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617BF1572E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:19:30 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id y141so9990463pfb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:19:30 -0700 (PDT)
+        Mon, 25 Jul 2022 06:19:23 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E739BC25
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:19:22 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id d8so15207062wrp.6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=h8vFO57HHWS7qwyEQBYh03ndUw4GyOD/NZFyb9S7lBc=;
-        b=ibGbRhtFwGpqm+iND5PFg5YLbEgCzhQ5X2eUbHDyxR5NP+75nL1T+W53yQlvfNrBKw
-         wGGL6uhic+9Cy1ev1n9wsmvjZ4CyMoO5HahttoLSmCdCyYpUML9PW4HFSO3njbJ1Jgyu
-         VpfkfJMUzcw/9srk6aDtVyJ+/POs7wH+BT/ugwRm/dei12tOhnA1RiYHjYR+Xief+M2G
-         SK7XPdZpTZoSYZN3fFfpfUBn5YOHypp6VTTkJbdpRjA/8C9/CYa6SuKFfVbXOaYwcz6X
-         xLKZIDyMT7CR+7JflLHAHN7zr2I6s6tjvzinS6Rs4NtiYcKTWVWu8Km4WR2gmm3/mcxp
-         7aPA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4qKGmWMqZhEmESnw4XiD+O0THResKBg5Q3wlwtvAW/k=;
+        b=hv2GEF4dtTTSztB0obRjKRpHxTon1gEYyRohRuamIcDUPyt/tP2SXOQBZFsD7zpGE+
+         bTEK8t5WDE+622xIsSiGf/Fs4gOdTrZhWaglwuctUCChX3HcB07SyaIQwElXb2W6RHRG
+         iGA/Nxx3TL9R4Kd/V57KX6EiRH99aBno+/RAg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=h8vFO57HHWS7qwyEQBYh03ndUw4GyOD/NZFyb9S7lBc=;
-        b=yEEVy8iZSwYOtYtsn9aH5/ymjVo/EVEpoz/U1VHn27QsHGd+w8ZzYylDjgXFDGhxWG
-         IlLg8EqWE6E/DvaAt7fh+dMp8F57LWmXbJLqnbQ8K8SbdW81XPUga+jJzfdbXDrDffj9
-         s8tDDWQwhOeGqDgDWRcouf45JG5AknE10FJQbixY0L3H2jXwXjSrMoATA27fXFFrxsOh
-         UYSkwNmBEYQF8mmDvkQmBBQVIyvBLe8qqEq0u4zADPT8qSmsWakWsUF6lWRhdyEX9f9j
-         dwX1m6S1fFIIonBOokT1rjI7+qhrcrvJtGKMxColnzq4xmyIfSsouFg7AZHsrxeATGPH
-         8UjQ==
-X-Gm-Message-State: AJIora/w6ON254HLAcp4ArxbkjMbMUEBVHFhZnsJzZPnEN78wGHkWwFu
-        YdRKlSurAUA3tfHphx18IBqsCKvkM88=
-X-Google-Smtp-Source: AGRyM1vjjP6XoEnhfKbcOOTRq6bBlhgLcOIagCKRCrGdUz9DkcwYO4u+/fUyZO+Z/e6ixdBg3O/wMw==
-X-Received: by 2002:a62:7bd7:0:b0:52b:1d57:e098 with SMTP id w206-20020a627bd7000000b0052b1d57e098mr11835857pfc.19.1658744369804;
-        Mon, 25 Jul 2022 03:19:29 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id w205-20020a627bd6000000b005286697ec68sm9087618pfc.133.2022.07.25.03.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 03:19:29 -0700 (PDT)
-From:   Chao Liu <chaoliu719@gmail.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Wayne Zhang <zhangwen@coolpad.com>,
-        Chao Liu <liuchao@coolpad.com>
-Subject: [PATCH RESEND] f2fs: fix to remove F2FS_COMPR_FL and tag F2FS_NOCOMP_FL at the same time
-Date:   Mon, 25 Jul 2022 18:16:33 +0800
-Message-Id: <20220725101633.213733-1-chaoliu719@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4qKGmWMqZhEmESnw4XiD+O0THResKBg5Q3wlwtvAW/k=;
+        b=T3jjTF3L1HKZMSXIU4hCdwlafZA1PvSiO2s92BvzSs0EzbyzEzCYDpp3KjkN0yfy0n
+         FtfPaZeCbpWUVp2LfnFJxDHqfZK1LDnp7pWTug9L2grV9tIAXeSfWnluf2lqlupqmzg3
+         NCfrDiYB7Yx2kE0tyZujufm+SjJn2+XoRd+nw/HrgVLBnJP0L+nSygKgO4iQshbuC+tr
+         zaNJb2zefZKvT4fx4Gb+eQBlcI3+stX5NaAL1/4XROR5M3BRHhQSBEPKnMON+YWSxBwk
+         hQ0XOiTLPAS3uvG2um7k6vXbmPxCIfPyZ/V1KCSYKaafsjyf3wOFSapiJZYFeEBrMjc3
+         +iMQ==
+X-Gm-Message-State: AJIora+z6UoBmyFLrRnKd+IF2qZjEvkw/v/6u6GQw8EsV+gMbmPU0bK7
+        RVZ+SeL6ZJtgd4DAPyRwKQzvxg8l4fm1GxyqeDmeaw==
+X-Google-Smtp-Source: AGRyM1uN9zadKS6Nx4rG97C6xaz+jKp9LVcuSfRCaJh2ZAajRxqI38cP8WAfn6ByjTht9F2p1SRciCiBlVqAEVGzDmc=
+X-Received: by 2002:a5d:59a9:0:b0:21e:5e6a:6a8e with SMTP id
+ p9-20020a5d59a9000000b0021e5e6a6a8emr7812606wrr.190.1658744360514; Mon, 25
+ Jul 2022 03:19:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220725082447.2613231-1-treapking@chromium.org> <5856610d-510f-46dc-63b2-79e571956a7c@collabora.com>
+In-Reply-To: <5856610d-510f-46dc-63b2-79e571956a7c@collabora.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Mon, 25 Jul 2022 18:19:09 +0800
+Message-ID: <CAEXTbpeHy6-WjLOyWFkncoHzBPM+6qq4w-kUoZj7=05gf8YBjw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: mt8173-oak: Switch to SMC watchdog
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Liu <liuchao@coolpad.com>
+On Mon, Jul 25, 2022 at 4:39 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 25/07/22 10:24, Pin-yen Lin ha scritto:
+> > Switch to SMC watchdog because we need direct control of HW watchdog
+> > registers from kernel. The corresponding firmware was uploaded in
+> > https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/3405.
+> >
+>
+> There's a fundamental issue with this change, I think.
+>
+> What happens if we run this devicetree on a device that does *not* have
+> the new(er) firmware?
 
-If the inode has the compress flag, it will fail to use
-'chattr -c +m' to remove its compress flag and tag no compress flag.
-However, the same command will be successful when executed again,
-as shown below:
+I haven't tried this patch with an older firmware. I'll manage to
+build one for this.
+>
+> The kernel *shall not* get broken when running on devices that are running
+> on older firmware, especially because that's what was initially supported
+> and what is working right now.
 
-  $ touch foo.txt
-  $ chattr +c foo.txt
-  $ chattr -c +m foo.txt
-  chattr: Invalid argument while setting flags on foo.txt
-  $ chattr -c +m foo.txt
-  $ f2fs_io getflags foo.txt
-  get a flag on foo.txt ret=0, flags=nocompression,inline_data
+Actually the current approach does not work *right*. The device boots,
+but the watchdog does not work properly.
 
-Fix this by removing some checks in f2fs_setflags_common()
-that do not affect the original logic. I go through all the
-possible scenarios, and the results are as follows. Bold is
-the only thing that has changed.
+Also, all MT8173 ChromeOS devices have this firmware updated, and we
+don't have other upstream users apart from mt8173-evb. Do we want to
+support the developers that are running upstream linux with their
+MT8173 boards?
 
-+---------------+-----------+-----------+----------+
-|               |            file flags            |
-+ command       +-----------+-----------+----------+
-|               | no flag   | compr     | nocompr  |
-+---------------+-----------+-----------+----------+
-| chattr +c     | compr     | compr     | -EINVAL  |
-| chattr -c     | no flag   | no flag   | nocompr  |
-| chattr +m     | nocompr   | -EINVAL   | nocompr  |
-| chattr -m     | no flag   | compr     | no flag  |
-| chattr +c +m  | -EINVAL   | -EINVAL   | -EINVAL  |
-| chattr +c -m  | compr     | compr     | compr    |
-| chattr -c +m  | nocompr   | *nocompr* | nocompr  |
-| chattr -c -m  | no flag   | no flag   | no flag  |
-+---------------+-----------+-----------+----------+
+>
+> For this reason, I think that we should get some code around that checks
+> if the SMC watchdog is supported and, if not, resort to MMIO wdog.
 
-Link: https://lore.kernel.org/linux-f2fs-devel/20220621064833.1079383-1-chaoliu719@gmail.com/
-Fixes: 4c8ff7095bef ("f2fs: support data compression")
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Chao Liu <liuchao@coolpad.com>
----
- fs/f2fs/file.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
-
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index daaa0dfd2d2e..0c3ae5993b7a 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1873,10 +1873,7 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
- 		if (masked_flags & F2FS_COMPR_FL) {
- 			if (!f2fs_disable_compressed_file(inode))
- 				return -EINVAL;
--		}
--		if (iflags & F2FS_NOCOMP_FL)
--			return -EINVAL;
--		if (iflags & F2FS_COMPR_FL) {
-+		} else {
- 			if (!f2fs_may_compress(inode))
- 				return -EINVAL;
- 			if (S_ISREG(inode->i_mode) && F2FS_HAS_BLOCKS(inode))
-@@ -1885,10 +1882,6 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
- 			set_compress_context(inode);
- 		}
- 	}
--	if ((iflags ^ masked_flags) & F2FS_NOCOMP_FL) {
--		if (masked_flags & F2FS_COMPR_FL)
--			return -EINVAL;
--	}
-
- 	fi->i_flags = iflags | (fi->i_flags & ~mask);
- 	f2fs_bug_on(F2FS_I_SB(inode), (fi->i_flags & F2FS_COMPR_FL) &&
---
-2.36.1
+What is the expected way to support this backward compatibility? Do we
+put the old compatible strings ("mediatek,mt8173-wdt" and
+"mediatek,mt6589-wdt") after "arm,smc-wdt" and reject it in the
+drivers if the firmware does not support it?
+>
+> Regards,
+> Angelo
+>
+>
+> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> > ---
+> >
+> >   arch/arm64/boot/dts/mediatek/mt8173.dtsi | 6 ++----
+> >   1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> > index a2aef5aa67c1..2d1c776740a5 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> > @@ -528,10 +528,8 @@ power-domain@MT8173_POWER_DOMAIN_MFG {
+> >                       };
+> >               };
+> >
+> > -             watchdog: watchdog@10007000 {
+> > -                     compatible = "mediatek,mt8173-wdt",
+> > -                                  "mediatek,mt6589-wdt";
+> > -                     reg = <0 0x10007000 0 0x100>;
+> > +             watchdog {
+> > +                     compatible = "arm,smc-wdt";
+> >               };
+> >
+> >               timer: timer@10008000 {
+> >
+>
+>

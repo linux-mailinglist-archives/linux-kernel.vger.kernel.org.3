@@ -2,81 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC4358041A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A062058041D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236540AbiGYSh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 14:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S236255AbiGYShj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 14:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236433AbiGYShR (ORCPT
+        with ESMTP id S236544AbiGYSh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 14:37:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6361F61D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:37:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7408360B8D
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 18:37:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BED5C341C8;
-        Mon, 25 Jul 2022 18:37:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1658774228;
-        bh=4Wiq9Lnn7t8N7Hq87zFN59DfW7ymVLg6HgcOtVLTQfQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U29+o6jrPUXpJQUGJlHNswJaua64HHPjufTlSYWyAG42fPxw2nOflcBBCR88GILr3
-         0YK0c/4s6lGn+KW7LjJO/8bED+WRioxjF5k3Hby1NGwjg1Pw9F+usDwdQEYd6pe4Fm
-         5w0xxZZhcoizKDOreVP9a0tEW+2Vb2OjGtj5R+rM=
-Date:   Mon, 25 Jul 2022 11:37:07 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>
-Cc:     minchan@kernel.org, bhe@redhat.com, vbabka@suse.cz,
-        mgorman@techsingularity.net, hannes@cmpxchg.org, mhocko@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        gh21.hong@samsung.com, ytk.lee@samsung.com, jaewon31.kim@gmail.com
-Subject: Re: [PATCH v2] page_alloc: fix invalid watemark check on a negative
- value
-Message-Id: <20220725113707.e03007d0761423f642c15749@linux-foundation.org>
-In-Reply-To: <20220725095212.25388-1-jaewon31.kim@samsung.com>
-References: <CGME20220725095214epcas1p1cc2019c792560da07d673809a3fc7ef3@epcas1p1.samsung.com>
-        <20220725095212.25388-1-jaewon31.kim@samsung.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 14:37:27 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDCD2019D;
+        Mon, 25 Jul 2022 11:37:21 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ef5380669cso119583007b3.9;
+        Mon, 25 Jul 2022 11:37:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=QUTtx+0vO3maB9dE+LaXkY6OE0TD/Ru+a3YsM8WvWjU=;
+        b=x7x9GKI30JCIyb11yEy4FDZzQ8pbvsZ6dzybjI5Ip+8VNOQ4cA+n3CM1x4aWQh16bb
+         8O5ojw0an64t8GBKycZOow6F3+vo26vlfRlaze9f1xrZrI0reRS2DsJHbcLaBTXDoxeL
+         aSeCfLlEeoGmKrSmz0dby46Tb5435Xckn9GN3mXYU7DW6AWvQE31QJeySCN3mCP2y7Xf
+         wJKsYkQ5tpnWCJ582IejuZKqzMlR1xPNn5/BYt9UXOzBgUSwsVF1tVgzVZlvzBmHeTrj
+         goVX+8PHOgIJwuz+9dQ1ZVdTkh7J6/iQBiQdzvCOwygWSkduIxiV5TrweW36PbVJD1Ld
+         qQKQ==
+X-Gm-Message-State: AJIora9I+fKwbodoHixsAzPcuE9cVEZjY9oNuD8t3VZ0KYOW1aA1CCZR
+        ibUGWcz+5y2Fd+ppjrXo1ypFf/YFxGOwJHLg61I=
+X-Google-Smtp-Source: AGRyM1vHSBF3A1jwFSnFt3gOA6aZOCQOiFvTVsI6T0vWjAiyUNGkj3z2WshxAm7HJuPQHK4sTHDVjaM/oudGdI1KZXU=
+X-Received: by 2002:a81:f8e:0:b0:31f:4226:eb58 with SMTP id
+ 136-20020a810f8e000000b0031f4226eb58mr1064842ywp.19.1658774240780; Mon, 25
+ Jul 2022 11:37:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220715015903.12537-1-rdunlap@infradead.org>
+In-Reply-To: <20220715015903.12537-1-rdunlap@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 25 Jul 2022 20:37:09 +0200
+Message-ID: <CAJZ5v0ixPqNidmBe=+iyhRjsJfqAuznv7bf5ZPOFC3pT-Jab_Q@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: loongson2: fix Kconfig "its" grammar
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Jul 2022 18:52:12 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+On Fri, Jul 15, 2022 at 3:59 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Use the possessive "its" instead of the contraction "it's"
+> where appropriate.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  drivers/cpufreq/Kconfig |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- a/drivers/cpufreq/Kconfig
+> +++ b/drivers/cpufreq/Kconfig
+> @@ -268,7 +268,7 @@ config LOONGSON2_CPUFREQ
+>           This option adds a CPUFreq driver for loongson processors which
+>           support software configurable cpu frequency.
+>
+> -         Loongson2F and it's successors support this feature.
+> +         Loongson2F and its successors support this feature.
+>
+>           If in doubt, say N.
 
-> There was a report that a task is waiting at the
-> throttle_direct_reclaim. The pgscan_direct_throttle in vmstat was
-> increasing.
-> 
-> This is a bug where zone_watermark_fast returns true even when the free
-> is very low. The commit f27ce0e14088 ("page_alloc: consider highatomic
-> reserve in watermark fast") changed the watermark fast to consider
-> highatomic reserve. But it did not handle a negative value case which
-> can be happened when reserved_highatomic pageblock is bigger than the
-> actual free.
-> 
-> If watermark is considered as ok for the negative value, allocating
-> contexts for order-0 will consume all free pages without direct reclaim,
-> and finally free page may become depleted except highatomic free.
-> 
-> Then allocating contexts may fall into throttle_direct_reclaim. This
-> symptom may easily happen in a system where wmark min is low and other
-> reclaimers like kswapd does not make free pages quickly.
-> 
-> Handle the negative case by using MIN.
-> 
-
-Thanks, I added cc:stable to this.
+Applied as 5.20 material, thanks!

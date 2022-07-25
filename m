@@ -2,135 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD59E57F88D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 06:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170FE57F88F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 06:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiGYEAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 00:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S231319AbiGYEFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 00:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiGYEAM (ORCPT
+        with ESMTP id S229728AbiGYEFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 00:00:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AA63BC
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 21:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658721610; x=1690257610;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=sjsYWSpI4AaYe5gbtAcmXnJCQxNbFyO5b+Od04NwJIk=;
-  b=UvL9Tsr4sYwCouYEu4rCDkM2NoAOqBhdhWZ656XNaGjt7UQGrjzGZfQS
-   c3jUcVHROqP8yX7F3e/O9//KP9fyqySAiDwf+Zs5aKDyQchihY8xsVTym
-   cGEJn7TBz5sWD3+jGeaIw+lAirv8pEqhFi5C0SaYkpQTc4InIxruR+fSg
-   OGVoJ4OmhvaSynxPixhQYNiPnQpyU+DupB0bSA/+SaM6XNuuuwEZybmJG
-   4UfWARxkzXw5yQHVX+ZYRHJJw+OBwyfR9KBmXcX+qnp7JEEIPBum2tI5k
-   9a18g4vpGjbJqG6UO1IBt6vvH6juJlV00VQkMsVJ1Gm0GuZMdGXsHQ6Ds
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288787530"
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="288787530"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 21:00:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="574882943"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jul 2022 21:00:07 -0700
-From:   kah.jing.lee@intel.com
-To:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de
-Cc:     rafael.j.wysocki@intel.com, tien.sung.ang@intel.com,
-        dinh.nguyen@intel.com, Kah Jing Lee <kah.jing.lee@intel.com>,
-        Zhou Furong <furong.zhou@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: [PATCH v3 3/3] documentation: misc: intel_sysid: Add the system id sysfs documentation for Altera(Intel) FPGA platform
-Date:   Mon, 25 Jul 2022 11:59:41 +0800
-Message-Id: <20220725035940.649062-1-kah.jing.lee@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220721123258.416802-1-kah.jing.lee@intel.com>
-References: <20220721123258.416802-1-kah.jing.lee@intel.com>
+        Mon, 25 Jul 2022 00:05:38 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D8BFD18;
+        Sun, 24 Jul 2022 21:05:26 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LrmbG4dtyz1M7tj;
+        Mon, 25 Jul 2022 12:02:34 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Jul
+ 2022 12:05:24 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <javier.martin@vista-silicon.com>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
+Subject: [PATCH v3] crypto: sahara - don't sleep when in softirq
+Date:   Mon, 25 Jul 2022 12:09:28 +0800
+Message-ID: <20220725040928.77227-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kah Jing Lee <kah.jing.lee@intel.com>
+Function of sahara_aes_crypt maybe could be called by function
+of crypto_skcipher_encrypt during the rx softirq, so it is not
+allowed to use mutex lock.
 
-This sysfs documentation is created for Altera(Intel) FPGA platform
-System ID soft IP. The Altera(Intel) Sysid component is generally
-part of an FPGA design.
-The component can be hotplugged when the FPGA is reconfigured.
-
-Based on an initial contribution from Ley Foon Tan at Altera
-Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
-Reviewed-by: Zhou Furong <furong.zhou@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
-v2->v3:
-- Updated kernel version & date
-- Added format for sysid & builtime output
+This patch is not yet tested, compiled only.
 ---
----
- .../testing/sysfs-devices-platform-soc-sysid  | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-devices-platform-soc-sysid
+ drivers/crypto/sahara.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-platform-soc-sysid b/Documentation/ABI/testing/sysfs-devices-platform-soc-sysid
-new file mode 100644
-index 000000000000..6e40d154601f
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-devices-platform-soc-sysid
-@@ -0,0 +1,41 @@
-+What:		/sys/devices/platform/soc@X/soc:base_fpga_region/
-+soc:base_fpga_region:fpga_pr_region0/XXXXXXXX.sysid/
-+Date:		July 2022
-+KernelVersion:	v5.20
-+Contact:	Kah Jing Lee <kah.jing.lee@intel.com>
-+Description:
-+		The soc@X/soc:base_fpga_region/soc:base_fpga_region:fpga_pr_region0/
-+		XXXXXXXX.sysid/ directory contains read-only attributes exposing
-+		information about an System ID soft IP device. The X values could vary,
-+		based on the FPGA platform System ID soft IP register address.
-+
-+What:		.../XXXXXXX.sysid/sysid
-+Date:		July 2022
-+KernelVersion:	v5.20
-+Contact:	Kah Jing Lee <kah.jing.lee@intel.com>
-+Description:
-+		The .../XXXXXXX.sysid/sysid file contains the System ID for the FPGA
-+		platform which is unique for the platform type and can be used for
-+		checking the platform type for software download purposes. Sysid value
-+		reported is in numerical format, and can also be printed in hex format
-+		for human-readable string.
-+		E.g:
-+			root@agilex:~# cat /sys/bus/platform/drivers/altera_sysid/
-+				f9000900.sysid/sysid/id
-+			4207856382
-+			root@agilex:~# cat /sys/bus/platform/drivers/altera_sysid/
-+				f9000900.sysid/sysid/id | xargs printf "0x%08x\n"
-+			0xfacecafe
-+
-+What:		.../XXXXXXX.sysid/buildtime
-+Date:		July 2022
-+KernelVersion:	v5.20
-+Contact:	Kah Jing Lee <kah.jing.lee@intel.com>
-+Description:
-+		The .../XXXXXXX.sysid/buildtime file contains the buildtime for the
-+		FPGA board file generation. Buildtime value reported in
-+		<Unix timestamp> (YYYY-mm-dd HH:MM:SS UTC) format.
-+		E.g:
-+			root@agilex:~# cat /sys/bus/platform/drivers/altera_sysid/
-+				f9000900.sysid/sysid/timestamp
-+			1637751409 (2021-11-24 10:56:49 UTC)
+diff --git a/drivers/crypto/sahara.c b/drivers/crypto/sahara.c
+index 457084b344c1..b07ae4ba165e 100644
+--- a/drivers/crypto/sahara.c
++++ b/drivers/crypto/sahara.c
+@@ -26,10 +26,10 @@
+ #include <linux/kernel.h>
+ #include <linux/kthread.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
++#include <linux/spinlock.h>
+ 
+ #define SHA_BUFFER_LEN		PAGE_SIZE
+ #define SAHARA_MAX_SHA_BLOCK_SIZE	SHA256_BLOCK_SIZE
+@@ -196,7 +196,7 @@ struct sahara_dev {
+ 	void __iomem		*regs_base;
+ 	struct clk		*clk_ipg;
+ 	struct clk		*clk_ahb;
+-	struct mutex		queue_mutex;
++	spinlock_t		queue_spinlock;
+ 	struct task_struct	*kthread;
+ 	struct completion	dma_completion;
+ 
+@@ -642,9 +642,9 @@ static int sahara_aes_crypt(struct skcipher_request *req, unsigned long mode)
+ 
+ 	rctx->mode = mode;
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	err = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1043,10 +1043,10 @@ static int sahara_queue_manage(void *data)
+ 	do {
+ 		__set_current_state(TASK_INTERRUPTIBLE);
+ 
+-		mutex_lock(&dev->queue_mutex);
++		spin_lock_bh(&dev->queue_spinlock);
+ 		backlog = crypto_get_backlog(&dev->queue);
+ 		async_req = crypto_dequeue_request(&dev->queue);
+-		mutex_unlock(&dev->queue_mutex);
++		spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 		if (backlog)
+ 			backlog->complete(backlog, -EINPROGRESS);
+@@ -1092,9 +1092,9 @@ static int sahara_sha_enqueue(struct ahash_request *req, int last)
+ 		rctx->first = 1;
+ 	}
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	ret = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1449,7 +1449,7 @@ static int sahara_probe(struct platform_device *pdev)
+ 
+ 	crypto_init_queue(&dev->queue, SAHARA_QUEUE_LENGTH);
+ 
+-	mutex_init(&dev->queue_mutex);
++	spin_lock_init(&dev->queue_spinlock);
+ 
+ 	dev_ptr = dev;
+ 
 -- 
-2.25.1
+2.17.1
 

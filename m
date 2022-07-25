@@ -2,93 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A79D57F80F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E0B57F814
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiGYBxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 21:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S232629AbiGYB7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 21:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiGYBxk (ORCPT
+        with ESMTP id S229745AbiGYB7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 21:53:40 -0400
-Received: from m13114.mail.163.com (m13114.mail.163.com [220.181.13.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4F8ADF56;
-        Sun, 24 Jul 2022 18:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=dBony
-        8quVwY2JIJZz0+wYGLL1ZSTYVcvE4c5ekRQf5M=; b=d9R1L0dihKrP7K/+DDH5v
-        0YR1Dblmd6+8dilp51zM5FC+oe9xjQAP30K9rKJj30D+4eupcsf9EUp6mxgTsLtf
-        HF04ClRKxV7SNCtd/USWtXVInT5y3eYp7bJ7nlgWCnhUZ3mqXLoNT8Au2T5xaJUu
-        GhMqb/zz9pM38IUwOH9jkI=
-Received: from slark_xiao$163.com ( [112.97.48.126] ) by
- ajax-webmail-wmsvr114 (Coremail) ; Mon, 25 Jul 2022 09:53:23 +0800 (CST)
-X-Originating-IP: [112.97.48.126]
-Date:   Mon, 25 Jul 2022 09:53:23 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Jakub Kicinski" <kuba@kernel.org>
-Cc:     "Alexandra Winter" <wintera@linux.ibm.com>,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        wenjia@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re:Re: [PATCH] s390/qeth: Fix typo 'the the' in comment
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <20220722115536.0d450512@kernel.org>
-References: <20220722093834.77864-1-slark_xiao@163.com>
- <434e604c-7fd3-6422-d13b-309a7c1fe0d3@linux.ibm.com>
- <20220722115536.0d450512@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Sun, 24 Jul 2022 21:59:01 -0400
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AE3E0C1
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 18:58:59 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 26P1ul8D018856;
+        Mon, 25 Jul 2022 10:56:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 26P1ul8D018856
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658714208;
+        bh=xq0WN+SM7aNSnGtzOLwQXZdnjd13BMgHWxDA8av/i8Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=l2QSq3zYMYc9O2toKl19OI/oILLXfnJXPjTbx/CwhpQxlqDZ8GtqWVRHFmfwdgv7h
+         kAlvzWUG5MIgxwjrJsLmn6ndHxR4xMbOD7Iz9eexMhAdgK4zjNSxSF0i2H1D8wLkRA
+         HoBnwa0Awzcf5YN9OFct3L3nj8JTTRaRiduoI5g+iRpT2JPqJqb6iDlJ8BeNeCBXAi
+         l9IrHmhXIdpbtNr4YZASgpGhgPyctLlDKYVTP/+x/tAR1KDR444hu+E6A5WyB0N8LY
+         5EsAQoArT+j1VEhHUej1TkWXYM7phj6TnAx7EZa38B4ODPdJ7kOSC06uiK5AmNed7h
+         35t+I2oxhRt8Q==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Helge Deller <deller@gmx.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] powerpc/purgatory: Omit use of bin2c
+Date:   Mon, 25 Jul 2022 10:56:19 +0900
+Message-Id: <20220725015619.618070-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <7609758.aa4.182330f18b8.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: csGowADH_9KT991itw8lAA--.65143W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdRZJZGBbEd2eHgABs4
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDctMjMgMDI6NTU6MzYsICJKYWt1YiBLaWNpbnNraSIg
-PGt1YmFAa2VybmVsLm9yZz4gd3JvdGU6Cj5PbiBGcmksIDIyIEp1bCAyMDIyIDEyOjIzOjA2ICsw
-MjAwIEFsZXhhbmRyYSBXaW50ZXIgd3JvdGU6Cj4+IE9uIDIyLjA3LjIyIDExOjM4LCBTbGFyayBY
-aWFvIHdyb3RlOgo+PiA+IFJlcGxhY2UgJ3RoZSB0aGUnIHdpdGggJ3RoZScgaW4gdGhlIGNvbW1l
-bnQuCj4+ID4gCj4+ID4gU2lnbmVkLW9mZi1ieTogU2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMu
-Y29tPgo+PiA+IC0tLQo+PiA+ICBkcml2ZXJzL3MzOTAvbmV0L3FldGhfY29yZV9tYWluLmMgfCAy
-ICstCj4+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+
-PiA+IAo+PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3MzOTAvbmV0L3FldGhfY29yZV9tYWluLmMg
-Yi9kcml2ZXJzL3MzOTAvbmV0L3FldGhfY29yZV9tYWluLmMKPj4gPiBpbmRleCA5ZTU0ZmU3NmE5
-YjIuLjM1ZDRiMzk4YzE5NyAxMDA2NDQKPj4gPiAtLS0gYS9kcml2ZXJzL3MzOTAvbmV0L3FldGhf
-Y29yZV9tYWluLmMKPj4gPiArKysgYi9kcml2ZXJzL3MzOTAvbmV0L3FldGhfY29yZV9tYWluLmMK
-Pj4gPiBAQCAtMzU2NSw3ICszNTY1LDcgQEAgc3RhdGljIHZvaWQgcWV0aF9mbHVzaF9idWZmZXJz
-KHN0cnVjdCBxZXRoX3FkaW9fb3V0X3EgKnF1ZXVlLCBpbnQgaW5kZXgsCj4+ID4gIAkJCWlmICgh
-YXRvbWljX3JlYWQoJnF1ZXVlLT5zZXRfcGNpX2ZsYWdzX2NvdW50KSkgewo+PiA+ICAJCQkJLyoK
-Pj4gPiAgCQkJCSAqIHRoZXJlJ3Mgbm8gb3V0c3RhbmRpbmcgUENJIGFueSBtb3JlLCBzbyB3ZQo+
-PiA+IC0JCQkJICogaGF2ZSB0byByZXF1ZXN0IGEgUENJIHRvIGJlIHN1cmUgdGhlIHRoZSBQQ0kK
-Pj4gPiArCQkJCSAqIGhhdmUgdG8gcmVxdWVzdCBhIFBDSSB0byBiZSBzdXJlIHRoZSBQQ0kKPj4g
-PiAgCQkJCSAqIHdpbGwgd2FrZSBhdCBzb21lIHRpbWUgaW4gdGhlIGZ1dHVyZSB0aGVuIHdlCj4+
-ID4gIAkJCQkgKiBjYW4gZmx1c2ggcGFja2VkIGJ1ZmZlcnMgdGhhdCBtaWdodCBzdGlsbCBiZQo+
-PiA+ICAJCQkJICogaGFuZ2luZyBhcm91bmQsIHdoaWNoIGNhbiBoYXBwZW4gaWYgbm8gIAo+PiAK
-Pj4gVGhpcyB0cml2aWFsIHR5cG8gaGFzIGJlZW4gc2VudCB0d2ljZSBhbHJlYWR5IHRvIHRoaXMg
-bWFpbGluZ2xpc3Q6Cj4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL25ldGRldi9ZdGIxJTJGdVUr
-amxjSTRqWHdAbGktNGEzYTRhNGMtMjhlNS0xMWIyLWE4NWMtYThkMTkyYzZmMDg5LmlibS5jb20v
-VC8KPj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbmV0ZGV2LzdhOTM1NzMwLWYzYTUtMGIxZi0y
-YmRjLWE2Mjk3MTFhM2EwMUBsaW51eC5pYm0uY29tL3QvCj4KPlNvbWUgb2YgdGhlIGNvbW1lbnQg
-c3BlbGxpbmcgZml4ZXMgZ2V0IG5hY2tlZCBpbiBidWxrIChlLmcuIHRoZQo+cHJldmlvdXMgb25l
-IHdhcyBzZW50IHdpdGggYSBkYXRlIG9mIHRocmVlIGRheXMgcHJpb3IgdG8gdGhlIGFjdHVhbAo+
-cG9zdGluZykuIFNpbmNlIHRoZXkgYXJlIG5vdCBpbiBhIHRocmVhZCB0aGUgbmFja3MgYXJlIGhh
-cmQgdG8gc2VlLgo+T3IgbWF5YmUgdGhleSBnb3QgbG9zdCAnY2F1c2UgcGF0Y2h3b3JrIGRvZXMg
-bm90IHVuZGVyc3RhbmQKPmRyaXZlcnMvczM5MC9uZXQgaXMgbmV0ZGV2LiBBbnl3YXksIHRoaXMg
-b25lIGxvb2tzIGdvb2QsIHNvIGl0IHdpbGwKPmxpa2VseSBnbyBpbi4KWWVzLCBJIGp1c3QgdXBk
-YXRlZCBteSBsb2NhbCBsaW51eC1uZXh0IHRocmVhZC4gU28gaXQncyBoYXJkIHRvIGtub3cgd2hl
-dGhlciBvdGhlciB0aHJlYWQgaGFzIGFwcGxpZWQgc3VjaCBwYXRjaGVzLgpJdCBuZWVkcyB0aW1l
-IHRvIG1lcmdlIGNoYW5nZXMgYmV0d2VlbiBkaWZmZXJlbnQgdGhyZWFkcy4gRXNwZWNpYWxseSBm
-b3Igc29tZSBub24tZml4ZXMgY29tbWl0LgoKVGhhbmtzIQo=
+The .incbin assembler directive is much faster than bin2c + $(CC).
+
+Do similar refactoring as in commit 4c0f032d4963 ("s390/purgatory:
+Omit use of bin2c").
+
+Please note the .quad directive matches to size_t in C (both 8 byte)
+because the purgatory is compiled only for the 64-bit kernel.
+(KEXEC_FILE depends on PPC64).
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
+---
+
+Changes in v2:
+  - Fix a typo (kexec_purgatroy_end -> kexec_purgatory_end)
+
+ arch/powerpc/Kconfig                     |  1 -
+ arch/powerpc/purgatory/.gitignore        |  1 -
+ arch/powerpc/purgatory/Makefile          |  8 ++------
+ arch/powerpc/purgatory/kexec-purgatory.S | 14 ++++++++++++++
+ scripts/remove-stale-files               |  2 ++
+ 5 files changed, 18 insertions(+), 8 deletions(-)
+ create mode 100644 arch/powerpc/purgatory/kexec-purgatory.S
+
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 7aa12e88c580..5050af5c1a23 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -551,7 +551,6 @@ config KEXEC_FILE
+ 	bool "kexec file based system call"
+ 	select KEXEC_CORE
+ 	select HAVE_IMA_KEXEC if IMA
+-	select BUILD_BIN2C
+ 	select KEXEC_ELF
+ 	depends on PPC64
+ 	depends on CRYPTO=y
+diff --git a/arch/powerpc/purgatory/.gitignore b/arch/powerpc/purgatory/.gitignore
+index b8dc6ff34254..5e40575c1f2b 100644
+--- a/arch/powerpc/purgatory/.gitignore
++++ b/arch/powerpc/purgatory/.gitignore
+@@ -1,3 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-kexec-purgatory.c
+ purgatory.ro
+diff --git a/arch/powerpc/purgatory/Makefile b/arch/powerpc/purgatory/Makefile
+index 348f59581052..a81d155b89ae 100644
+--- a/arch/powerpc/purgatory/Makefile
++++ b/arch/powerpc/purgatory/Makefile
+@@ -2,17 +2,13 @@
+ 
+ KASAN_SANITIZE := n
+ 
+-targets += trampoline_$(BITS).o purgatory.ro kexec-purgatory.c
++targets += trampoline_$(BITS).o purgatory.ro
+ 
+ LDFLAGS_purgatory.ro := -e purgatory_start -r --no-undefined
+ 
+ $(obj)/purgatory.ro: $(obj)/trampoline_$(BITS).o FORCE
+ 		$(call if_changed,ld)
+ 
+-quiet_cmd_bin2c = BIN2C   $@
+-      cmd_bin2c = $(objtree)/scripts/bin2c kexec_purgatory < $< > $@
+-
+-$(obj)/kexec-purgatory.c: $(obj)/purgatory.ro FORCE
+-	$(call if_changed,bin2c)
++$(obj)/kexec-purgatory.o: $(obj)/purgatory.ro
+ 
+ obj-y	+= kexec-purgatory.o
+diff --git a/arch/powerpc/purgatory/kexec-purgatory.S b/arch/powerpc/purgatory/kexec-purgatory.S
+new file mode 100644
+index 000000000000..f494fd5a0526
+--- /dev/null
++++ b/arch/powerpc/purgatory/kexec-purgatory.S
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++	.section .rodata, "a"
++
++	.align	8
++kexec_purgatory:
++	.globl	kexec_purgatory
++	.incbin	"arch/powerpc/purgatory/purgatory.ro"
++.Lkexec_purgatory_end:
++
++	.align	8
++kexec_purgatory_size:
++	.globl	kexec_purgatory_size
++	.quad	.Lkexec_purgatory_end - kexec_purgatory
+diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
+index 7adab4618035..5a7543469698 100755
+--- a/scripts/remove-stale-files
++++ b/scripts/remove-stale-files
+@@ -20,6 +20,8 @@ set -e
+ # yard. Stale files stay in this file for a while (for some release cycles?),
+ # then will be really dead and removed from the code base entirely.
+ 
++rm -f arch/powerpc/purgatory/kexec-purgatory.c
++
+ # These were previously generated source files. When you are building the kernel
+ # with O=, make sure to remove the stale files in the output tree. Otherwise,
+ # the build system wrongly compiles the stale ones.
+-- 
+2.34.1
+

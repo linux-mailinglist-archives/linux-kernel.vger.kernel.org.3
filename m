@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E4957FC92
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FED557FC90
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbiGYJhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S234043AbiGYJhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiGYJhm (ORCPT
+        with ESMTP id S232340AbiGYJhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:37:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDD9DF1A;
-        Mon, 25 Jul 2022 02:37:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4890AB80E2A;
-        Mon, 25 Jul 2022 09:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95483C341D6;
-        Mon, 25 Jul 2022 09:37:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SpfiMXzU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1658741856;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3cUpfZrsKgEGJdkkpFrCNXEnszi93Av4FpAsIC0uCa0=;
-        b=SpfiMXzUOpap0aBEfAfZZi7o1TEwaCATt4xLMdF0Zred+ymrbuL+5xvQwBCk/R+ObteizU
-        ScP65Bn44eIbQOpKP6FA9erfr5zVNhclTelPIeQ09uYgfHkIibo7kdbhd/QmZgO51srDdk
-        ROpeJfuW2p4cPnz4Ko230z76w+vfIPs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 113134b8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 25 Jul 2022 09:37:36 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id r3so19062561ybr.6;
-        Mon, 25 Jul 2022 02:37:35 -0700 (PDT)
-X-Gm-Message-State: AJIora8/hepjbDyZqICPKVbO6bqpJZ1X0uZkhTB6eBs+0l7qQbavquB/
-        n9FPu8z1XHgzq5r27XNUjTU5LVGOBvgnmWaiJOw=
-X-Google-Smtp-Source: AGRyM1vtoTUXGG7Jo0TmtRIDj+cf9M1nxJdYxKMZn/u+8fRh8UlxuZYJsVFy/hmuvwvzi2boh3ezXgmA1ZUhN9Iv32Y=
-X-Received: by 2002:a5b:70f:0:b0:670:7f57:e46b with SMTP id
- g15-20020a5b070f000000b006707f57e46bmr7841207ybq.24.1658741853953; Mon, 25
- Jul 2022 02:37:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHmME9qTA90=GEr6h1GZh0CjS+6tpe5uuqkYoJVv79h0zd0w1w@mail.gmail.com>
- <20220719130207.147536-1-Jason@zx2c4.com> <Yt5gBZe9F1BE0MVF@zn.tnic>
- <Yt5hwxC1xgvA8Asw@zx2c4.com> <10561a841a7342c882aabb0fbdbfc762@AcuMS.aculab.com>
-In-Reply-To: <10561a841a7342c882aabb0fbdbfc762@AcuMS.aculab.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 25 Jul 2022 11:37:23 +0200
-X-Gmail-Original-Message-ID: <CAHmME9p_9j_B2d1h3cKVbv=ucNAa9_grBBW_jdWa8GTbm5WpZg@mail.gmail.com>
-Message-ID: <CAHmME9p_9j_B2d1h3cKVbv=ucNAa9_grBBW_jdWa8GTbm5WpZg@mail.gmail.com>
-Subject: Re: [PATCH v3] random: handle archrandom with multiple longs
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Borislav Petkov <bp@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, Will Deacon <will@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 05:37:34 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4627B9FF3;
+        Mon, 25 Jul 2022 02:37:33 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E635D20FE02B;
+        Mon, 25 Jul 2022 02:37:32 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E635D20FE02B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1658741852;
+        bh=6KuO3lg0k3uiAOGDOvjAhWv7j6XUbuiAPwNtN8EgbzM=;
+        h=From:To:Subject:Date:From;
+        b=VQdheEs3/ZVsFIPjwql2MvNIvHJLSaXycChX/7GsYWqDPvaCI+rMaBWKHtaNo6EEp
+         h16n5/9FUq2jKAwQhXoDZnD4SymZnAWBfXHh9Z79X63pQQDLwzeVBKovwNeN8xvEat
+         7XT+/fu18FVptQVDsLqbTsld+kvkXjl75VLGAZTI=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH] Drivers: hv: vmbus: Optimize vmbus_on_event
+Date:   Mon, 25 Jul 2022 02:37:28 -0700
+Message-Id: <1658741848-4210-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 11:36 AM David Laight <David.Laight@aculab.com> wrote:
->
-> ...
-> > More directly, the reason we don't want to error is because the use case
-> > has fallbacks meant to handle errors. The cascade looks like this
-> > (quoting from the other email):
-> >
-> >     unsigned long array[whatever];
-> >     for (i = 0; i < ARRAY_SIZE(array);) {
-> >         longs = arch_get_random_seed_longs(&array[i], ARRAY_SIZE(array) - i);
-> >         if (longs) {
-> >             i += longs;
-> >             continue;
-> >         }
-> >         longs = arch_get_random_longs(&array[i], ARRAY_SIZE(array) - i);
-> >         if (longs) {
-> >             i += longs;
-> >             continue;
-> >         }
-> >         array[i++] = random_get_entropy();
-> >     }
-> >
-> > It tries to get the best that it can as much as it can, but isn't going
-> > to block or do anything too nuts for that.
->
-> Do you really want to retry the earlier calls that returned no data?
+In the vmbus_on_event loop, 2 jiffies timer will not serve the purpose if
+callback_fn takes longer. For effective use move this check inside of
+callback functions where needed. Out of all the VMbus drivers using
+vmbus_on_event, only storvsc has a high packet volume, thus add this limit
+only in storvsc callback for now.
+There is no apparent benefit of loop itself because this tasklet will be
+scheduled anyway again if there are packets left in ring buffer. This
+patch removes this unnecessary loop as well.
 
-Does the above code do that?
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+ drivers/hv/connection.c    | 33 ++++++++++++++-------------------
+ drivers/scsi/storvsc_drv.c |  9 +++++++++
+ 2 files changed, 23 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+index eca7afd..9dc27e5 100644
+--- a/drivers/hv/connection.c
++++ b/drivers/hv/connection.c
+@@ -431,34 +431,29 @@ struct vmbus_channel *relid2channel(u32 relid)
+ void vmbus_on_event(unsigned long data)
+ {
+ 	struct vmbus_channel *channel = (void *) data;
+-	unsigned long time_limit = jiffies + 2;
++	void (*callback_fn)(void *context);
+ 
+ 	trace_vmbus_on_event(channel);
+ 
+ 	hv_debug_delay_test(channel, INTERRUPT_DELAY);
+-	do {
+-		void (*callback_fn)(void *);
+ 
+-		/* A channel once created is persistent even when
+-		 * there is no driver handling the device. An
+-		 * unloading driver sets the onchannel_callback to NULL.
+-		 */
+-		callback_fn = READ_ONCE(channel->onchannel_callback);
+-		if (unlikely(callback_fn == NULL))
+-			return;
+-
+-		(*callback_fn)(channel->channel_callback_context);
++	/* A channel once created is persistent even when
++	 * there is no driver handling the device. An
++	 * unloading driver sets the onchannel_callback to NULL.
++	 */
++	callback_fn = READ_ONCE(channel->onchannel_callback);
++	if (unlikely(!callback_fn))
++		return;
+ 
+-		if (channel->callback_mode != HV_CALL_BATCHED)
+-			return;
++	(*callback_fn)(channel->channel_callback_context);
+ 
+-		if (likely(hv_end_read(&channel->inbound) == 0))
+-			return;
++	if (channel->callback_mode != HV_CALL_BATCHED)
++		return;
+ 
+-		hv_begin_read(&channel->inbound);
+-	} while (likely(time_before(jiffies, time_limit)));
++	if (likely(hv_end_read(&channel->inbound) == 0))
++		return;
+ 
+-	/* The time limit (2 jiffies) has been reached */
++	hv_begin_read(&channel->inbound);
+ 	tasklet_schedule(&channel->callback_event);
+ }
+ 
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index fe000da..c457e6b 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -60,6 +60,9 @@
+ #define VMSTOR_PROTO_VERSION_WIN8_1	VMSTOR_PROTO_VERSION(6, 0)
+ #define VMSTOR_PROTO_VERSION_WIN10	VMSTOR_PROTO_VERSION(6, 2)
+ 
++/* channel callback timeout in ms */
++#define CALLBACK_TIMEOUT               2
++
+ /*  Packet structure describing virtual storage requests. */
+ enum vstor_packet_operation {
+ 	VSTOR_OPERATION_COMPLETE_IO		= 1,
+@@ -1204,6 +1207,7 @@ static void storvsc_on_channel_callback(void *context)
+ 	struct hv_device *device;
+ 	struct storvsc_device *stor_device;
+ 	struct Scsi_Host *shost;
++	unsigned long time_limit = jiffies + msecs_to_jiffies(CALLBACK_TIMEOUT);
+ 
+ 	if (channel->primary_channel != NULL)
+ 		device = channel->primary_channel->device_obj;
+@@ -1224,6 +1228,11 @@ static void storvsc_on_channel_callback(void *context)
+ 		u32 minlen = rqst_id ? sizeof(struct vstor_packet) :
+ 			sizeof(enum vstor_packet_operation);
+ 
++		if (unlikely(time_after(jiffies, time_limit))) {
++			hv_pkt_iter_close(channel);
++			return;
++		}
++
+ 		if (pktlen < minlen) {
+ 			dev_err(&device->device,
+ 				"Invalid pkt: id=%llu, len=%u, minlen=%u\n",
+-- 
+1.8.3.1
+

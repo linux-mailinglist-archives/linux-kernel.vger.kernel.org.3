@@ -2,98 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEA957FC95
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 887DA57FC9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbiGYJiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S234275AbiGYJjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiGYJiJ (ORCPT
+        with ESMTP id S234192AbiGYJjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:38:09 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283FBB7C9;
-        Mon, 25 Jul 2022 02:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1658741889; x=1690277889;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TthBya58gH7epvLwOH5Jw8gF6/uSQB1tBx4AWRwJht8=;
-  b=b0LnYgOC3A8u2n/thxdOwXnrety+oNchpSiHnjzoUKd9pVu0CqwSRSDH
-   xsuh3sz052aJeInVVgI9I1lHrGGkGl1zz05q3586yuxS80lyEVlgFkApV
-   sXhuLKswtKEeyCrsH2JSKMthZlitXS0QXZKb4jnjQBVbp12OqANF3xD0/
-   c=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 25 Jul 2022 02:38:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 02:38:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Jul 2022 02:37:36 -0700
-Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 25 Jul 2022 02:37:33 -0700
-Date:   Mon, 25 Jul 2022 15:07:29 +0530
-From:   Parikshit Pareek <quic_ppareek@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: arm: qcom: Document additional
- sa8540p device
-Message-ID: <20220725093729.GA19730@hu-ppareek-blr.qualcomm.com>
-References: <20220722142515.18592-1-quic_ppareek@quicinc.com>
- <de7fc091-ed12-c585-d39d-2bcf2bda37fe@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <de7fc091-ed12-c585-d39d-2bcf2bda37fe@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 05:39:16 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9058DF18;
+        Mon, 25 Jul 2022 02:39:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VKLhpcP_1658741950;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VKLhpcP_1658741950)
+          by smtp.aliyun-inc.com;
+          Mon, 25 Jul 2022 17:39:10 +0800
+Message-ID: <1658741940.4607933-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH V6] virtio-net: fix the race between refill work and close
+Date:   Mon, 25 Jul 2022 17:39:00 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        mst@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+References: <20220725072159.3577-1-jasowang@redhat.com>
+In-Reply-To: <20220725072159.3577-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 08:27:39PM +0200, Krzysztof Kozlowski wrote:
-> On 22/07/2022 16:25, Parikshit Pareek wrote:
-> > Add the ADP ride device to the valid device compatibles found on the
-> > sa8540p platform.
-> > 
-> > Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> 
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
-> 
-> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-> 
-> If a tag was not added on purpose, please state why and what changed.
-My mistake, I missed the tags.
-> 
-> 
-> Additionally - please thread your patchset. Git send-email does it by
-> default. If you use other tools - be sure the effect is threaded.
-Used git send-email. May be happened due to the change in one of the commit headers in one of the patches.
-> Otherwise it is not possible to find the patches from you.
-> 
-> 
-> Best regards,
-> Krzysztof
-Regards,
-Parikshit Pareek
+On Mon, 25 Jul 2022 15:21:59 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> We try using cancel_delayed_work_sync() to prevent the work from
+> enabling NAPI. This is insufficient since we don't disable the source
+> of the refill work scheduling. This means an NAPI poll callback after
+> cancel_delayed_work_sync() can schedule the refill work then can
+> re-enable the NAPI that leads to use-after-free [1].
+>
+> Since the work can enable NAPI, we can't simply disable NAPI before
+> calling cancel_delayed_work_sync(). So fix this by introducing a
+> dedicated boolean to control whether or not the work could be
+> scheduled from NAPI.
+>
+> [1]
+> ==================================================================
+> BUG: KASAN: use-after-free in refill_work+0x43/0xd4
+> Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+>
+> CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> Workqueue: events refill_work
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x34/0x44
+>  print_report.cold+0xbb/0x6ac
+>  ? _printk+0xad/0xde
+>  ? refill_work+0x43/0xd4
+>  kasan_report+0xa8/0x130
+>  ? refill_work+0x43/0xd4
+>  refill_work+0x43/0xd4
+>  process_one_work+0x43d/0x780
+>  worker_thread+0x2a0/0x6f0
+>  ? process_one_work+0x780/0x780
+>  kthread+0x167/0x1a0
+>  ? kthread_exit+0x50/0x50
+>  ret_from_fork+0x22/0x30
+>  </TASK>
+> ...
+>
+> Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+
+> ---
+>  drivers/net/virtio_net.c | 37 ++++++++++++++++++++++++++++++++++---
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 356cf8dd4164..ec8e1b3108c3 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -242,9 +242,15 @@ struct virtnet_info {
+>  	/* Packet virtio header size */
+>  	u8 hdr_len;
+>
+> -	/* Work struct for refilling if we run low on memory. */
+> +	/* Work struct for delayed refilling if we run low on memory. */
+>  	struct delayed_work refill;
+>
+> +	/* Is delayed refill enabled? */
+> +	bool refill_enabled;
+> +
+> +	/* The lock to synchronize the access to refill_enabled */
+> +	spinlock_t refill_lock;
+> +
+>  	/* Work struct for config space updates */
+>  	struct work_struct config_work;
+>
+> @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
+>  	return p;
+>  }
+>
+> +static void enable_delayed_refill(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->refill_enabled = true;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+> +static void disable_delayed_refill(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->refill_enabled = false;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+>  static void virtqueue_napi_schedule(struct napi_struct *napi,
+>  				    struct virtqueue *vq)
+>  {
+> @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+>  	}
+>
+>  	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
+> -		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
+> -			schedule_delayed_work(&vi->refill, 0);
+> +		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
+> +			spin_lock(&vi->refill_lock);
+> +			if (vi->refill_enabled)
+> +				schedule_delayed_work(&vi->refill, 0);
+> +			spin_unlock(&vi->refill_lock);
+> +		}
+>  	}
+>
+>  	u64_stats_update_begin(&rq->stats.syncp);
+> @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i, err;
+>
+> +	enable_delayed_refill(vi);
+> +
+>  	for (i = 0; i < vi->max_queue_pairs; i++) {
+>  		if (i < vi->curr_queue_pairs)
+>  			/* Make sure we have some buffers: if oom use wq. */
+> @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i;
+>
+> +	/* Make sure NAPI doesn't schedule refill work */
+> +	disable_delayed_refill(vi);
+>  	/* Make sure refill_work doesn't re-enable napi! */
+>  	cancel_delayed_work_sync(&vi->refill);
+>
+> @@ -2792,6 +2820,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+>
+>  	virtio_device_ready(vdev);
+>
+> +	enable_delayed_refill(vi);
+> +
+>  	if (netif_running(vi->dev)) {
+>  		err = virtnet_open(vi->dev);
+>  		if (err)
+> @@ -3535,6 +3565,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	vdev->priv = vi;
+>
+>  	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
+> +	spin_lock_init(&vi->refill_lock);
+>
+>  	/* If we can receive ANY GSO packets, we must allocate large ones. */
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> --
+> 2.25.1
+>

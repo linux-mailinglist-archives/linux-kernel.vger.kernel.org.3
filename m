@@ -2,127 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223BE57FC2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AAF57FC2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234174AbiGYJRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S234447AbiGYJRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiGYJRg (ORCPT
+        with ESMTP id S234278AbiGYJRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:17:36 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2069.outbound.protection.outlook.com [40.107.104.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1448B1D9;
-        Mon, 25 Jul 2022 02:17:35 -0700 (PDT)
+        Mon, 25 Jul 2022 05:17:54 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2097.outbound.protection.outlook.com [40.107.21.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310E7B1D9;
+        Mon, 25 Jul 2022 02:17:53 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gklpGtSiNokhJSgoiSiULvP2frJpdtg3mqAh0W1+cgxTNRM6mO1mBus0CzWyRyEmu/3rdkuRML4d2g/65PISZaYwp+eIjC5Z3xFMuUWPC4GN1cL+jwVsaDUceW362JXyCFXzbNMCN4jWnrkhzT5+BtJhpSLqyY0m3r6c7mimSQTRsJc4ofPoBjbYEn2QiUNuVJgfXH6qZDhJWEtY0j6KQJTMG4nJLcM99TLS/E7kmGBMTmh3g+PZhr6kwGY3dEMNakUvSnyvgQDvPr5955HF+PzLvRs+/PZq3bXsNHHAvoBHWzJ+fr9WGmupnY4XDo3jGbd6RvCu9nHTzlsiKCpRGQ==
+ b=VJJULKK7eqeptibHci1d3BM9WWhivIYsK/UDkpzjtftoLyyQLTGymi9GN3tGLJJVkbI0Fo1f422mirlNjNNb88D84wEgjF5QQCgAR0UYBcVOwOQmTRrmX2U2cd3lj+zFrH2iHPLsJ5NHpv3+/doK8UmJDtfbpKE4MGCEoIvp6fSKVJelhHjrwxLqW8hB2kNpmDbIQE4UVcXjEkMr3aYDyov20GU39HBwum2KLeig4AsFNb6GuPr1FglYgzKd17iiQe1X9NA+1xNRlzgMLSBH5TIJpiGPlWIVy5UOondlV92Cu6Qmzl5OOu2ZpkfRn5OIf72GX9JHFJ/WV0V6WkWQmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b2N4OKoIgTJxlB95uJ6sCWRmkz55yw21u9y6n1AIV7k=;
- b=KpueAry55qxITfca1YYZks75mCtmaQYMIJY8/vfQcdBIDZZPVPDTC5IqVGPR4v1yGg77yUWn8N8EZ31mcrfc4k2DkKI28jqFNdW0v0tj+uTXM9AWBovdEqR/FgBI0sMa7Jw9NfwRX7i6VmrGOORDGAH+Rn8YA2tOm1JvFNPGqfgxMFvV8Q70d1KjFqyQJfANmq+GK15TQsGRwZBkkTCXW2rmVi59AZM+rkzRI3/kLAj3uGwGJB/9c+Hm9M/m0FWokZG4r/Cdbchkqn4VwCykgCSwkbI/Ykt5qUAkz7+ebr0EsRIbbeP/vYIQ7BT6iFfffKU7juoFhP5uA6ezdaH22g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ bh=ABfIQg59Rg4WnFKH2wQ7pynE7D9Q8BrVTEmXyiLyZ0c=;
+ b=JkNc4BC1tL9JY6Pvw+rzqDHXKMh/yyiflJGODIK1oLbG2A+srIjhsJiCFKE4sjJ6t8kT0mX8dIy+6F0VrlN/vFRrrCHLdWHP7l1Gm0ZgYkMqqFMoZAxEY/DqiEssJSbgfN8qnFnu5yBHk39bDRV/+9ehA6cJS6KWb5XT9LxmSEqbEQdB6I3BsB/GVAWuNFJzPJUlPNq2C5T3/9M6xJVshk9vGQcU2W0vAuSGiAF1nye5Jgu3rEyNzoMJrKdOu6qbhor5GgenjkkzwQysveUB9xXFeqyu4VSRPEH0YPMIUQdENQ+WesmtASWgnfBSGl0BszFfdLhePxv7L8X3/b6Y4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.8) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nokia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nokia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b2N4OKoIgTJxlB95uJ6sCWRmkz55yw21u9y6n1AIV7k=;
- b=ILn1a3+ElS3/9Kk2qJm01tef5OhaZhThIB/atCDTvtV3t2X0b3EfW+FC59LzFDgYorLjH5J17Q2cGC1zbxiwW7NfWz2OhbexjPzZQHz+Iw7wlotLJxgbYxvxYeJf/sPFuam7mnXx88GzmVkJQkYXoQUPlxH9y2XDyZLYR3NIc9K+I80pV5G/Kh+yCkdsHdTmLzNfDiDEEbvAMLecjJtbO7DMe3CRWsZ0JORJUbbS4+4Z/jQ3iwJ3GnV4FrTEkDb0oPUyRfJTYV6MzyDL1i0ppWi0luXbY5WToP6LmhULh7UWkXQj5vCaHFZ38UNuf3ooYjpBAnqlHyt1ScwPuKV9eg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by AS1PR04MB9382.eurprd04.prod.outlook.com
- (2603:10a6:20b:4da::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.24; Mon, 25 Jul
- 2022 09:17:33 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::21d5:a855:6e65:cf5d]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::21d5:a855:6e65:cf5d%12]) with mapi id 15.20.5458.024; Mon, 25 Jul
- 2022 09:17:33 +0000
-Message-ID: <769f27bb-4a90-eae7-62a6-ee11102e8367@suse.com>
-Date:   Mon, 25 Jul 2022 11:17:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/7] USB: cdc: add serial-state defines
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220725075841.1187-1-johan@kernel.org>
- <20220725075841.1187-3-johan@kernel.org>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20220725075841.1187-3-johan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0176.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a0::11) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
-MIME-Version: 1.0
+ bh=ABfIQg59Rg4WnFKH2wQ7pynE7D9Q8BrVTEmXyiLyZ0c=;
+ b=Zs8rFFHqbotwiMuCYlmCbhNFsucDTMr98Ke3rjsaAgoUM4eFgoHlwvbfqTpn10wsTHGzR2SdjzpKcXL62b5IohP0Yhn6KyxVpSkjaiACfNMgnlNoHK0TueGfKnKl0RRTdET6q9C4VPkske89LXtiyJZNpW+TgkW8yox/BMRS8L4=
+Received: from DB3PR08CA0033.eurprd08.prod.outlook.com (2603:10a6:8::46) by
+ DBAPR07MB7048.eurprd07.prod.outlook.com (2603:10a6:10:19f::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5482.1; Mon, 25 Jul 2022 09:17:50 +0000
+Received: from DBAEUR03FT026.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:8:0:cafe::85) by DB3PR08CA0033.outlook.office365.com
+ (2603:10a6:8::46) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18 via Frontend
+ Transport; Mon, 25 Jul 2022 09:17:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.8)
+ smtp.mailfrom=nokia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia.com designates
+ 131.228.2.8 as permitted sender) receiver=protection.outlook.com;
+ client-ip=131.228.2.8; helo=fihe3nok0734.emea.nsn-net.net; pr=C
+Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.8) by
+ DBAEUR03FT026.mail.protection.outlook.com (100.127.142.242) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5458.17 via Frontend Transport; Mon, 25 Jul 2022 09:17:50 +0000
+Received: from ulegcparamis.emea.nsn-net.net (ulegcparamis.emea.nsn-net.net [10.151.74.146])
+        by fihe3nok0734.emea.nsn-net.net (GMO) with ESMTP id 26P9Hl2M027302;
+        Mon, 25 Jul 2022 09:17:48 GMT
+From:   Alexander A Sverdlin <alexander.sverdlin@nokia.com>
+To:     linux-mips@vger.kernel.org, Joe Perches <joe@perches.com>
+Cc:     Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Corey Minyard <cminyard@mvista.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] MIPS: Restore CONFIG_CAVIUM_RESERVE32
+Date:   Mon, 25 Jul 2022 11:17:38 +0200
+Message-Id: <20220725091740.28188-1-alexander.sverdlin@nokia.com>
+X-Mailer: git-send-email 2.10.2
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7c888d49-625a-4581-33ee-08da6e1e81d9
-X-MS-TrafficTypeDiagnostic: AS1PR04MB9382:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 27a82726-471c-48e1-a2f6-08da6e1e8c55
+X-MS-TrafficTypeDiagnostic: DBAPR07MB7048:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fRDR4fgrihRV3Q9sd9V2fhrfFqQL6tnc0wF1mzV4cT+lZVyxkZhS9Kr6UsezfbmXUjHsERIKGCtV61jliMRt8y/8ULRRcD/JwC3VagUIJHplr/41sS7jw3kzA3xyFUyXrCPJkGW8rTOesDz6lcOe9mqhnfzNUhBBjd1JN9B1ar8YzmRM4FuWHaCPmDp7aZZvILrpAJvcCh0uLr7I5Y/etpA20+CPwLyGLRGJZ3SfMjKEMkWTApAhwAdbUmC7b/R63hprstq1F3IGWEGp8eAMkkK7u72yLpNtr/3LF4xRQSAIbbU5rIoVteA04sBHeV4XYI3V1rKYMrNdSeIxSmp4J3NenffYePHAUwSrMrX6sT0EoOPdsAKJ+HuUUUmgn97zcBVlEkrdfl6t/cQ1Ckcn9bK0qkgOvGWgP/kXeYJMrqQNhBXlQdgJrIoEWaSKB3g5QpmUDYJoc8ziXy3+IBRGp9mWC1zVlKlkF3oJyXtIeQyC309EjgtdCOp3sL5yEdG8pl3n3cuY05FFT2Pfx03lanBsVaLmJ6Z8wEm1d8j6lORZuc0W/iRZ119gHBpsVh+BASYZ2qkgkNoHCuMIuI6HpOnaSdYvDC2GPnW6Z/MhlGCUbk/I9K1mXxFsmnXXnMSAoR7y/1o0+WhC7q3z++RwZfm6P9se+oX1zl+ieE7Aq/xpbYlkOqN6XoFbs5juesp4fJKD1gCEb9VZMU3c251YxUtfo9bsaBXqm7ba3PxCy/di3tibIOuBZpu/eVMPoRiXIRLEp83Z/o9B8bCJyWCPwfclMfrVNdIFF2186k8Vv/9HXewXnyrf4ebxziUNLPhZDd+g34j4rrEnaRaTQtUZCw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(39860400002)(366004)(396003)(346002)(66556008)(4326008)(66946007)(66476007)(8676002)(110136005)(6486002)(38100700002)(478600001)(6512007)(53546011)(316002)(31696002)(86362001)(41300700001)(2906002)(6666004)(6506007)(8936002)(36756003)(186003)(31686004)(2616005)(4744005)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UlNIZXJmb25HU3FaVCtjT1pMbTZNY2N3S1NHaDhXM3I2SCtYR1orZndRTXRN?=
- =?utf-8?B?VDBYUGVYWEdPVmVHRVUzVXptdVIyTmtIblR2QnhtN2FYcEFUSzA0VkoxUDBV?=
- =?utf-8?B?S0RHbHgwQTF4dm45b0VrdUJ3VWY2SGNPcm1TRWZxNDBmZnB5WFIwWUNDdGpG?=
- =?utf-8?B?TVV3QTdzaFdRSTg3aVRyZTlMcEI0WUtnZ2dZQkwyeTNzWWljMHhUbXFoRWc4?=
- =?utf-8?B?Um55THhYZzZCc2FjS21NdTlMVVIxRmVsUkpEVkZyait2b2VrYXBSSTVuM1di?=
- =?utf-8?B?bGRqaXhxRFdhZWxJWkpVNC9HNDhxUThhRGhycThxcm9vMVlGalVlOGhFMy9i?=
- =?utf-8?B?cDA3eUY3ai8vZzVCR2hRZWQvODBjTVhSMmZ3QzN0amtrbnREUTQvNloyd1Ba?=
- =?utf-8?B?N0lzejkyRi9mNmlOMUFnSU1ZUlV3Um5kd0hMSXExdjNJT2pNamV1b2lva29J?=
- =?utf-8?B?SC9wWVVvZFpVem5wbWE3d2hQOUxTNTlCOUxxTnk4TWY4SDhlTndmN1FHSEN6?=
- =?utf-8?B?S3g3Uk1xQ2lrUm54a2F6WURyNnJKQ2hDRnhqK2hFS2dTU2RXYWhabHUvNVlF?=
- =?utf-8?B?MitIamkrMjVwQVN3cjRUWVIxTWUzUCtUamMwTXJzeWxUNFJJVGROWXZkZFo1?=
- =?utf-8?B?MFVlZFZ5UmxKcTFFRWI1cUoyRExTVlBZQUJYQmNsZW81djR2NjNDalZZRUk1?=
- =?utf-8?B?NjYyeVpIcjF1R0RJWnpZWGhabXZUcGdSTVFqWkdlK2FBZVBnNk91NUdwZm83?=
- =?utf-8?B?cE4wd0UwVkUxVWxIc2E3OTk0MXRqenNweDlxa1lhTE0rZ0xuT3Z3WlVXY0FU?=
- =?utf-8?B?NU5wSHloRUpneW04WEhKSVdUTDluYWZqUUVQaXFsZURNR1dhVDBRUjdSTzda?=
- =?utf-8?B?NldmT25leEJwcVNxcWZ3aVNabHpmdUR3UzdXRktBV3pZQzliSU5BRGh3Q212?=
- =?utf-8?B?akJ5dWhuTVVuR1VQSU1pNjU2ODJNNE5QeTRWQ2VzWDB2RjEyUGRlK1Y3WEVk?=
- =?utf-8?B?MzRzN2d2QzhSWWg3RDd6Q2hUbUJYVk4zdjFNN29VL0tSaThJTzRIa3grNVJK?=
- =?utf-8?B?K0xoWEpZeWZKSmJLUEdRRFJZMk5jeU5peEJXYTlleFBzWjVCK2NGakZ6R2Zo?=
- =?utf-8?B?T3lycGtVYVlqSlRLMGJsbWwvQ0tsaWQyNHp0cGVHNmNleG9ERjYvdlVTUnF4?=
- =?utf-8?B?YnBRVlVwOXFzZ0NMSXdIeGFXcTRCN3NTczdxdDNLVll1NktOZVVTL3lsdmVz?=
- =?utf-8?B?RlMrMXVmQ0JDU29lT082NkVPMVZBZU01VmFQejZwUWZoOFNXZlpDaFBXYVRI?=
- =?utf-8?B?Vkd5SGFNQUVQSTRQSHQybmcyRXNZeGlXVCtXaGd0SnhJSngyUHBLdFNxV3Nm?=
- =?utf-8?B?MEIwdVFnT3FBdHlYZ1l5aXJBMUI2ZlFWTUhsbEk0UmVMeE1sK3plSHZZd216?=
- =?utf-8?B?b2JLVWJ2OEFuNkdyMTBSQ2FpalFkNVVvNy9rWDVySXdlWktmcWJLT2tVUnYx?=
- =?utf-8?B?VitKcXl1OWJjSFJNTGordWRCQjdINkJSeGd5Y1h6bHBRS256WC9YaFNzeUtp?=
- =?utf-8?B?MzNDSWtDUXJ3UzJ0dG9RVEVDNm9QYkR4cTRoVG5mbXNwcldST0x3a1E5VXpZ?=
- =?utf-8?B?eThqU2loaUxRVVEvZUE2M1hWNlZQZ3NGeHJ3SnRGNjgwUUpyN1VBNDVoR2xO?=
- =?utf-8?B?c014bUhJMzdDdDNqem5zT2RmR2lSN2lZUWhsd085MHEzM1dPMWdwMEw2WHZ1?=
- =?utf-8?B?RVJQN1JEaWZMc1ZNdkNHRjVnNGY4WkdxQTIwN2lxYkNQckxXalB2R2x4ODJ6?=
- =?utf-8?B?REJxNVJ5aENOVE5ucjVQR3d0cldUMVlpNklRVEtxc1pPVUhMd2F6aXNJNnZL?=
- =?utf-8?B?b1ZPQkc3SktrKzhGMUZUNzFaR1lhbVFlU016Z2VkSnE2ZUVJYjlwNytXY1pN?=
- =?utf-8?B?WDduUWpQWHBab09zSHRMTkxKNlVSNlFxMVJ6MUVFbXRJSzV6Rmh0cTl2aGQr?=
- =?utf-8?B?bmIyN1VmdnJVVXBHVnhOQUQ5VXp3cUs1aFZoVTVFekdTS3h1U0xmSUJRNHJo?=
- =?utf-8?B?R1ErNWI5UzdOajRiME5vR2lBYi84cDJMV3J2OTdFQS9ndWQ4bTBZdDhzSEFI?=
- =?utf-8?B?MXlxZmVwMkkwYTJTbTZLeG1yVE1lOG96WitYeHg0a0tDUnhYdlh1ZEExYnJY?=
- =?utf-8?Q?TBTJkO4R6wMnhba7FSEZqGl5fhqlkUD/Ka14D2Dc621k?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c888d49-625a-4581-33ee-08da6e1e81d9
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 09:17:33.7759
+X-Microsoft-Antispam-Message-Info: 6ZrhbJQ6B30uVcMCYo1FjJ5LiWyclYdU3fyVYsvXX0X3bwCxy9B0k8pS/oA7pOnhFvmcldd4es6dRBtGypIKHzFFFn4gncN57h4ULsHosOBBaEFYz7Ynfc+/bzZVklFBuxFAUE03d1ETEww47Si6CVijaAO5n6txd4fGxOE89LwYwmkFdlF2Ot+Ew7Uzq1GoTqybI+Stg6IekUymbtr6da3szY9cmedLOw7gu7In4o+OdSpwsan0VHGh3DcXn9d0y0M9o+i+JarW4OvrQHBdrP4Y17LCbvBVVqe8SJxusaHicBzNAZvzM4S38B/R/4GRXX6LTgISlkzKjYYW78+uRqYo70Hd+edkMWF2C2xwrPzg954zcHBWqZkeh2NDXpMdWHR+4oGquZ9sH7tQ+uSN7JAKby0wpiNt1DGlYWvHcCttpE6jIU6b9XGuIiKxcl/NlZGzSvlNY5rKkLfocoWB4mJXgRHGUJgGFzLN+6bzQPf+BUATuz6dd+Zw/Y4JMo3mCFhd28zDHYYSV1OJVpyP3+f4XCIFTsm74Fh/pWmCWlII1Ga55UZ8e8Lsh9p4Rl3lzE+7AluBg8T9AS9BqIrpXDm5WvuhuLwcFc+TFRF4cd+URCt5i1xVzsi+7QIlo/txmn9lwxLP7zGvq3MIkIw23EqUfkPEMWt7kQ7gldoiYbhmF6uVotphUMtupkd5JYuqD+8sWp0fMoEHIglVjgPfetwFbxyn1DMytHF5huqdPzrao1eO/mVfiU1wsLv7NZ9Uyv9hkDu13RR/rAjeMQXOohT6NzNkLQNicHAfBDWW5nF0APIYU4bAq+YVeuvZT6t+zGWrStrKkkxhD4bYpb1iiA==
+X-Forefront-Antispam-Report: CIP:131.228.2.8;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(396003)(136003)(46966006)(40470700004)(36840700001)(41300700001)(86362001)(82310400005)(6666004)(4744005)(6916009)(54906003)(186003)(1076003)(36756003)(2616005)(2906002)(83380400001)(316002)(336012)(47076005)(82740400003)(81166007)(40480700001)(36860700001)(70586007)(26005)(5660300002)(70206006)(356005)(8676002)(4326008)(8936002)(82960400001)(40460700003)(478600001)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 09:17:50.8062
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GoniEr0vM51WwNNGeFaAUTTDCJf7tKkFgxp05ujjqoKHBSb2A5ceZwQow9mWS6i/llxy9K8QcWU+h2DLNkFYHQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9382
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27a82726-471c-48e1-a2f6-08da6e1e8c55
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.8];Helo=[fihe3nok0734.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT026.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR07MB7048
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,14 +94,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Alexander Sverdlin <alexander.sverdlin@nokia.com>
 
+We have been using the option but the definition in the Kconfig has not
+been upstreamed. Fix that.
 
-On 25.07.22 09:58, Johan Hovold wrote:
-> Add defines for the serial-state bitmap values from section 6.3.5
-> SerialState of the CDC specification version 1.1.
-> 
-> Note that the bTxCarrier and bRxCarrier bits have been named after their
-> RS-232 signal equivalents DSR and DCD.
-> 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+Alexander Sverdlin (2):
+  MIPS: Introduce CAVIUM_RESERVE32 Kconfig option
+  Revert "MIPS: octeon: Remove vestiges of CONFIG_CAVIUM_RESERVE32"
+
+ arch/mips/cavium-octeon/Kconfig                    | 12 +++++++
+ arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c | 21 +++++++++---
+ arch/mips/cavium-octeon/setup.c                    | 38 +++++++++++++++++++++-
+ 3 files changed, 66 insertions(+), 5 deletions(-)
+
+-- 
+2.10.2
+

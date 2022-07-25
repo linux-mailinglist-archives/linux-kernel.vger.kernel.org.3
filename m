@@ -2,118 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA8557FF1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13ABA57FF27
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbiGYMkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S235165AbiGYMmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235304AbiGYMkM (ORCPT
+        with ESMTP id S234926AbiGYMmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:40:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28421C90E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:39:55 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ls0490wGkz4xFw;
-        Mon, 25 Jul 2022 22:39:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658752794;
-        bh=eSOLGSxxYNa3xROdrcKx9ie20r/UPvDadRCttEkmp6M=;
+        Mon, 25 Jul 2022 08:42:12 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E17D51035;
+        Mon, 25 Jul 2022 05:42:11 -0700 (PDT)
+Received: from pwmachine.numericable.fr (82.65.121.78.rev.sfr.net [78.121.65.82])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A9D4720C356E;
+        Mon, 25 Jul 2022 05:42:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A9D4720C356E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1658752931;
+        bh=UFCSt3k5DxLVighG073IK/AEsI1NTLXv9nmpTeeRKuQ=;
         h=From:To:Cc:Subject:Date:From;
-        b=cckJ3ie61VXTZuA+PJMocDjxpnWF/WYCTpYuoWoOZeNNZaoeifq0LXqGf7YfGv8KV
-         0TDZTeNx2uzQaJ0HAGCc1XIsbOf0FbumYT/OqzSWsOvTgaJaS3wQCNgt+3o++wbozi
-         0FNLgy7uWSdbgZjGtjtOcccfDNzNjcMDbm8eQ4jjWYeTWUMVT4G8YPIfoEKhu0NoEv
-         VJPEv55b50XmApiJGBght5zqEYINJ2rMkGXGpkVicV/bxOBAzEgfxjbAZba/b1/tTZ
-         hJddKbV/AOcUWV9sOIDm64SauKpGxUAMKlHViu1zvBLGdfHbK+G3eT6u+02vkWEWMW
-         ZwPIaX3/+pRkA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     <linuxppc-dev@lists.ozlabs.org>
-Cc:     alexdeucher@gmail.com, amd-gfx@lists.freedesktop.org,
-        linux@roeck-us.net, <torvalds@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, dan@danny.cz,
-        tpearson@raptorengineering.com
-Subject: [PATCH] drm/amdgpu: Re-enable DCN for 64-bit powerpc
-Date:   Mon, 25 Jul 2022 22:39:18 +1000
-Message-Id: <20220725123918.1903255-1-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.35.3
+        b=EM0pJiyhAFIZzLOcCLTT6gmiYDQgA9TulmvnqrY5Tq2uF21dKdQtCYaPl+dxhmmoC
+         JDBaCjGEAUF9oGYpux1+xrs9om2RUcZm02y7FZwmedptXX4Y24ZCx6PkXFQQozMSkB
+         xUtn/Dknl+sF7VJ4elFKhqQMl/izO4hHftcB2CcM=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     linux-security-module@vger.kernel.org
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Francis Laniel <flaniel@linux.microsoft.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>,
+        linux-kernel@vger.kernel.org (open list),
+        bpf@vger.kernel.org (open list:BPF [MISC])
+Subject: [RFC PATCH v4 0/2] Add capabilities file to securityfs
+Date:   Mon, 25 Jul 2022 14:41:21 +0200
+Message-Id: <20220725124123.12975-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d11219ad53dc ("amdgpu: disable powerpc support for the newer
-display engine") disabled the DCN driver for all of powerpc due to
-unresolved build failures with some compilers.
+Hi.
 
-Further digging shows that the build failures only occur with compilers
-that default to 64-bit long double.
 
-Both the ppc64 and ppc64le ABIs define long double to be 128-bits, but
-there are compilers in the wild that default to 64-bits. The compilers
-provided by the major distros (Fedora, Ubuntu) default to 128-bits and
-are not affected by the build failure.
+First, I hope you are fine and the same for your relatives.
 
-There is a compiler flag to force 128-bit long double, which may be the
-correct long term fix, but as an interim fix only allow building the DCN
-driver if long double is 128-bits by default.
+Capabilities are used to check if a thread can perform a given action [1].
+For example, a thread with CAP_BPF set can use the bpf() syscall.
 
-The bisection in commit d11219ad53dc must have gone off the rails at
-some point, the build failure occurs all the way back to the original
-commit that enabled DCN support on powerpc, at least with some
-toolchains.
+Capabilities are used in the container world.
+In terms of code, several projects related to container maintain code where the
+capabilities are written alike include/uapi/linux/capability.h [2][3][4][5].
+For these projects, their codebase should be updated when a new capability is
+added to the kernel.
+Some other projects rely on <sys/capability.h> [6].
+In this case, this header file should reflect the capabilities offered by the
+kernel.
 
-Depends-on: d11219ad53dc ("amdgpu: disable powerpc support for the newer display engine")
-Fixes: 16a9dea110a6 ("amdgpu: Enable initial DCN support on POWER")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2100
+The delay between adding a new capability to the kernel and this
+capability being used by "container stack" software users can be long.
+Indeed, CAP_BPF was added in a17b53c4a4b5 which was part of v5.8 released in
+August 2020.
+Almost 2 years later, none of the "container stack" software authorize using
+this capability in their last stable release.
+The only way to use CAP_BPF with moby is to use v22.06.0-beta.0 release which
+contains a commit enabling CAP_BPF, CAP_PERFMON and CAP_CHECKPOINT_RESTORE [7].
+This situation can be easily explained by the following:
+1. moby depends on containerd which in turns depends on runc.
+2. runc depends on github.com/syndtr/gocapability which is golang package to
+deal with capabilities.
+This high number of dependencies explain the delay and the big amount of human
+work to add support in the "container stack" software for a new capability.
+
+A solution to this problem could be to add a way for the userspace to ask the
+kernel about the capabilities it offers.
+So, in this series, I added a new file to securityfs:
+/sys/kernel/security/capabilities.
+The goal of this file is to be used by "container world" software to know kernel
+capabilities at run time instead of compile time.
+
+The "file" is read-only and its content is the capability number associated with
+the capability name:
+root@vm-amd64:~# cat /sys/kernel/security/capabilities
+0       CAP_CHOWN
+1       CAP_DAC_OVERRIDE
+...
+40      CAP_CHECKPOINT_RESTORE
+root@vm-amd64:~# wc -c /sys/kernel/security/capabilities
+698 /sys/kernel/security/capabilities
+So, the "container stack" software just have to read this file to know if they
+can use the capabilities the user asked for.
+For example, if user asks for CAP_BPF on kernel 5.8, then this capability will
+be present in the file and so it can be used.
+Nonetheless, if the underlying kernel is 5.4, this capability will not be
+present and so it cannot be used.
+
+The kernel already exposes the last capability number under:
+/proc/sys/kernel/cap_last_cap
+So, I think there should not be any issue exposing all the capabilities it
+offers.
+If there is any, please share it as I do not want to introduce issue with this
+series.
+Also, the data exchanged with userspace are less than 700 bytes long which
+represent 17% of PAGE_SIZE.
+
+Note that I am open to any better way for the userspace to ask the kernel for
+known capabilities.
+And if you see any way to improve this series please share it as it would
+increase this contribution quality.
+
+Change since:
+ v3:
+  * Use securityfs_create_file() to create securityfs file.
+ v2:
+  * Use a char * for cap_string instead of an array, each line of this char *
+  contains the capability number and its name.
+  * Move the file under /sys/kernel/security instead of /sys/kernel.
+
+Francis Laniel (2):
+  capability: Add cap_string.
+  security/inode.c: Add capabilities file.
+
+ include/uapi/linux/capability.h |  1 +
+ kernel/capability.c             | 45 +++++++++++++++++++++++++++++++++
+ security/inode.c                | 16 ++++++++++++
+ 3 files changed, 62 insertions(+)
+
+
+Best regards and thank you in advance for your reviews.
 ---
- arch/powerpc/Kconfig                | 4 ++++
- drivers/gpu/drm/amd/display/Kconfig | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-Alex, are you OK if I take this via the powerpc tree for v5.19?
-
-cheers
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 7aa12e88c580..287cc2d4a4b3 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -281,6 +281,10 @@ config PPC
- 	# Please keep this list sorted alphabetically.
- 	#
- 
-+config PPC_LONG_DOUBLE_128
-+	depends on PPC64
-+	def_bool $(success,test "$(shell,echo __LONG_DOUBLE_128__ | $(CC) -E -P -)" = 1)
-+
- config PPC_BARRIER_NOSPEC
- 	bool
- 	default y
-diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
-index 0ba0598eba20..ec6771e87e73 100644
---- a/drivers/gpu/drm/amd/display/Kconfig
-+++ b/drivers/gpu/drm/amd/display/Kconfig
-@@ -6,7 +6,7 @@ config DRM_AMD_DC
- 	bool "AMD DC - Enable new display engine"
- 	default y
- 	select SND_HDA_COMPONENT if SND_HDA_CORE
--	select DRM_AMD_DC_DCN if X86 && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
-+	select DRM_AMD_DC_DCN if (X86 || PPC_LONG_DOUBLE_128) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
- 	help
- 	  Choose this option if you want to use the new display engine
- 	  support for AMDGPU. This adds required support for Vega and
--- 
-2.35.3
-
+[1] man capabilities
+[2] https://github.com/containerd/containerd/blob/1a078e6893d07fec10a4940a5664fab21d6f7d1e/pkg/cap/cap_linux.go#L135
+[3] https://github.com/moby/moby/commit/485cf38d48e7111b3d1f584d5e9eab46a902aabc#diff-2e04625b209932e74c617de96682ed72fbd1bb0d0cb9fb7c709cf47a86b6f9c1
+moby relies on containerd code.
+[4] https://github.com/syndtr/gocapability/blob/42c35b4376354fd554efc7ad35e0b7f94e3a0ffb/capability/enum.go#L47
+[5] https://github.com/opencontainers/runc/blob/00f56786bb220b55b41748231880ba0e6380519a/libcontainer/capabilities/capabilities.go#L12
+runc relies on syndtr package.
+[6] https://github.com/containers/crun/blob/fafb556f09e6ffd4690c452ff51856b880c089f1/src/libcrun/linux.c#L35
+[7] https://github.com/moby/moby/commit/c1c973e81b0ff36c697fbeabeb5ea7d09566ddc0
+--
+2.25.1

@@ -2,156 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F6357F83B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9813F57F83E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233267AbiGYCWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 22:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S231391AbiGYCax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 22:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGYCWU (ORCPT
+        with ESMTP id S229436AbiGYCav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 22:22:20 -0400
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40FDCE17
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:22:19 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 26P2JX9d029536;
-        Mon, 25 Jul 2022 11:19:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 26P2JX9d029536
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1658715575;
-        bh=+6537oUPB6uiy8KoPSUGDtwn8M1UnRpuDy1P24m7/P0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rZ3jOo5ZRxrN6vMecrwhsB88dZeMPk3V2YBF6xeqCEx5iEDUYdEfNf4EtLH7ZJcMD
-         KzSlOtMkr/Btyaw8m2ZomC9h/WFiZvke/6NLUJQa59HHtTFhxB39QvosM0uTdOjOUl
-         2kLTR/vlbrTWGMMr7ypHRLrT2Kpo+N6vnUIMZSKsv96LcE8UPOytaDh0dWuZvJSlnE
-         w/JsPEEpOXAyE/8CrgnhgkHknRe/uYepxV3aht4h/IeYgmG30wMULnprzH14TPgifa
-         wScXe/sAtWMOJHt/hN6uvcv82OMwu1fGWaGduyWcucgbFstGgNStYO5rIBJ/8LwH4y
-         q3TLFaMRT2q/g==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Borislav Petkov <bp@suse.de>, Helge Deller <deller@gmx.de>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] riscv/purgatory: Omit use of bin2c
-Date:   Mon, 25 Jul 2022 11:19:02 +0900
-Message-Id: <20220725021902.625630-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220725021902.625630-1-masahiroy@kernel.org>
-References: <20220725021902.625630-1-masahiroy@kernel.org>
+        Sun, 24 Jul 2022 22:30:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7642703;
+        Sun, 24 Jul 2022 19:30:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2CBACB80D96;
+        Mon, 25 Jul 2022 02:30:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A55C341CF;
+        Mon, 25 Jul 2022 02:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658716247;
+        bh=3Y9WvVFmM0ECeCdNXsmEZ7oye5Th6AVxYZiU45ImmHU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cEuJkFIdcL5eA7zjDyjUv9yKsNHztpEx7BMp/JTYeclXqUbdshF8Z7qyg7afdtOxJ
+         cKWnbIwoBAjTtl4ROi0UWFHUDtd6zyI+gPNwwIpIeBgy91cisCCMG958Qyo3rrp4X9
+         Lts5FZqB7o7lMb+AMKKAnTENIHyKaOI4pxU0yc1u18J11SI9GqGADYpqRmluqFLIX+
+         thUwqBYXhfbe5qQ2Tn4wdQ9/iEs9t3pgRX4mx6F6tHKRG+aiP3PGg5F6Uvvfve1UTw
+         HvixzjQZsn0JAB4mP7blWkoTH4wGyj/ZACoaKYbtTsmol1LcNZ3OThCtLRYgw6cnmX
+         g2v7wzjNM8YEQ==
+Received: by mail-lj1-f171.google.com with SMTP id p22so1754124lji.10;
+        Sun, 24 Jul 2022 19:30:47 -0700 (PDT)
+X-Gm-Message-State: AJIora+eCi3sNgnnc8qAkpmsAoAgcyJQA1gYKB3rTFMhrtRoH6wClZ7j
+        ofwcSuyP15hsVeCDwgMUDlzQ0dVLOh22sPt8Q0Q=
+X-Google-Smtp-Source: AGRyM1tXIh5WGwVRcYfmMTXpag8CZiQxI7uiBibR6shkAufg4w1IPkQYQBRcVwNoJ3589Vdgit+RMHCz3mz7y70I8CM=
+X-Received: by 2002:a2e:309:0:b0:25e:a57:8337 with SMTP id 9-20020a2e0309000000b0025e0a578337mr371519ljd.50.1658716245827;
+ Sun, 24 Jul 2022 19:30:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220724122517.1019187-1-guoren@kernel.org> <20220724122517.1019187-11-guoren@kernel.org>
+ <0ea27d18-6d45-9673-38b7-78d59325f9d5@redhat.com>
+In-Reply-To: <0ea27d18-6d45-9673-38b7-78d59325f9d5@redhat.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 25 Jul 2022 10:30:33 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSf4EX_QpbfgKdYtHK-gShsqh5UcLi5xiMcVDRWx1VxHg@mail.gmail.com>
+Message-ID: <CAJF2gTSf4EX_QpbfgKdYtHK-gShsqh5UcLi5xiMcVDRWx1VxHg@mail.gmail.com>
+Subject: Re: [PATCH V8 10/10] csky: Add qspinlock support
+To:     Waiman Long <longman@redhat.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Christoph Muellner <cmuellner@linux.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The .incbin assembler directive is much faster than bin2c + $(CC).
+On Mon, Jul 25, 2022 at 10:08 AM Waiman Long <longman@redhat.com> wrote:
+>
+> On 7/24/22 08:25, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Enable qspinlock by the requirements mentioned in a8ad07e5240c9
+> > ("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+> >
+> > C-SKY only has "ldex/stex" for all atomic operations. So csky give a
+> > strong forward guarantee for "ldex/stex." That means when ldex grabbed
+> > the cache line into $L1, it would block other cores from snooping the
+> > address with several cycles.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >   arch/csky/Kconfig               | 16 ++++++++++++++++
+> >   arch/csky/include/asm/Kbuild    |  2 ++
+> >   arch/csky/include/asm/cmpxchg.h | 20 ++++++++++++++++++++
+> >   3 files changed, 38 insertions(+)
+> >
+> > diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> > index dfdb436b6078..09f7d1f06bca 100644
+> > --- a/arch/csky/Kconfig
+> > +++ b/arch/csky/Kconfig
+> > @@ -354,6 +354,22 @@ config HAVE_EFFICIENT_UNALIGNED_STRING_OPS
+> >         Say Y here to enable EFFICIENT_UNALIGNED_STRING_OPS. Some CPU models could
+> >         deal with unaligned access by hardware.
+> >
+> > +choice
+> > +     prompt "C-SKY spinlock type"
+> > +     default CSKY_TICKET_SPINLOCKS
+> > +
+> > +config CSKY_TICKET_SPINLOCKS
+> > +     bool "Using ticket spinlock"
+> > +
+> > +config CSKY_QUEUED_SPINLOCKS
+> > +     bool "Using queued spinlock"
+> > +     depends on SMP
+> > +     select ARCH_USE_QUEUED_SPINLOCKS
+> > +     help
+> > +       Make sure your micro arch LL/SC has a strong forward progress guarantee.
+> > +       Otherwise, stay at ticket-lock/combo-lock.
+>
+> "combo-lock"? It is a cut-and-paste error. Right?
+Yes, it's a typo. No combo-lock for csky.
 
-Do similar refactoring as in commit 4c0f032d4963 ("s390/purgatory:
-Omit use of bin2c").
+>
+> Cheers,
+> Longman
+>
 
-Please note the .quad directive matches to size_t in C (both 8 byte)
-because the purgatory is compiled only for the 64-bit kernel.
-(KEXEC_FILE depends on 64BIT).
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v2:
-  - Fix a typo (kexec_purgatroy_end -> kexec_purgatory_end)
-
- arch/riscv/Kconfig                     |  1 -
- arch/riscv/purgatory/.gitignore        |  1 -
- arch/riscv/purgatory/Makefile          |  8 +-------
- arch/riscv/purgatory/kexec-purgatory.S | 14 ++++++++++++++
- scripts/remove-stale-files             |  2 ++
- 5 files changed, 17 insertions(+), 9 deletions(-)
- create mode 100644 arch/riscv/purgatory/kexec-purgatory.S
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 32ffef9f6e5b..218c2f12b3ef 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -447,7 +447,6 @@ config KEXEC_FILE
- 
- config ARCH_HAS_KEXEC_PURGATORY
- 	def_bool KEXEC_FILE
--	select BUILD_BIN2C
- 	depends on CRYPTO=y
- 	depends on CRYPTO_SHA256=y
- 
-diff --git a/arch/riscv/purgatory/.gitignore b/arch/riscv/purgatory/.gitignore
-index 38d7d1bda4d7..6e4dfb024ad2 100644
---- a/arch/riscv/purgatory/.gitignore
-+++ b/arch/riscv/purgatory/.gitignore
-@@ -1,4 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- purgatory.chk
- purgatory.ro
--kexec-purgatory.c
-diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index c2d14e2f345d..dd58e1d99397 100644
---- a/arch/riscv/purgatory/Makefile
-+++ b/arch/riscv/purgatory/Makefile
-@@ -84,12 +84,6 @@ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- $(obj)/purgatory.chk: $(obj)/purgatory.ro FORCE
- 		$(call if_changed,ld)
- 
--targets += kexec-purgatory.c
--
--quiet_cmd_bin2c = BIN2C   $@
--      cmd_bin2c = $(objtree)/scripts/bin2c kexec_purgatory < $< > $@
--
--$(obj)/kexec-purgatory.c: $(obj)/purgatory.ro $(obj)/purgatory.chk FORCE
--	$(call if_changed,bin2c)
-+$(obj)/kexec-purgatory.o: $(obj)/purgatory.ro $(obj)/purgatory.chk
- 
- obj-y += kexec-purgatory.o
-diff --git a/arch/riscv/purgatory/kexec-purgatory.S b/arch/riscv/purgatory/kexec-purgatory.S
-new file mode 100644
-index 000000000000..32c53581b8f2
---- /dev/null
-+++ b/arch/riscv/purgatory/kexec-purgatory.S
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+	.section .rodata, "a"
-+
-+	.align	8
-+kexec_purgatory:
-+	.globl	kexec_purgatory
-+	.incbin	"arch/riscv/purgatory/purgatory.ro"
-+.Lkexec_purgatory_end:
-+
-+	.align	8
-+kexec_purgatory_size:
-+	.globl	kexec_purgatory_size
-+	.quad	.Lkexec_purgatory_end - kexec_purgatory
-diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
-index 7adab4618035..d75a52199a38 100755
---- a/scripts/remove-stale-files
-+++ b/scripts/remove-stale-files
-@@ -40,4 +40,6 @@ if [ -n "${building_out_of_srctree}" ]; then
- 	done
- fi
- 
-+rm -f arch/riscv/purgatory/kexec-purgatory.c
-+
- rm -f scripts/extract-cert
 -- 
-2.34.1
-
+Best Regards
+ Guo Ren

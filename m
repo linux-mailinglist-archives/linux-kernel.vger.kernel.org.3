@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF3B580654
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C683358063E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236854AbiGYVUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S236422AbiGYVQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 17:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234791AbiGYVU3 (ORCPT
+        with ESMTP id S229636AbiGYVQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:20:29 -0400
-X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 14:20:27 PDT
-Received: from forward101o.mail.yandex.net (forward101o.mail.yandex.net [37.140.190.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FB4186D8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:20:27 -0700 (PDT)
-Received: from iva1-dcde80888020.qloud-c.yandex.net (iva1-dcde80888020.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:7695:0:640:dcde:8088])
-        by forward101o.mail.yandex.net (Yandex) with ESMTP id 2ECB3369B50D;
-        Tue, 26 Jul 2022 00:15:15 +0300 (MSK)
-Received: by iva1-dcde80888020.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id ZXho2Z3dGu-FCh4KT0f;
-        Tue, 26 Jul 2022 00:15:14 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1658783714;
-        bh=kAhlQFCfWhrWOTesABzSAGCxFIgasBuWCk2ikQwkOAw=;
-        h=Cc:References:Date:Message-ID:In-Reply-To:From:To:Subject;
-        b=a7+K89XMIQp31FWkZzoPIemd6vfXr+vHqwHgBtS4m/bzkyi/EYQtofn2uuUCzuxaA
-         Hf4kCrj87gbytIcL3w7tp2E0ai84alujiOiPi7SJxeEs1n31ugUxDSoJsNaclJ6QG+
-         YJAxA4Z5VYsL5IyLgtdoRBy8OndxHTvtpH1jleLY=
-Authentication-Results: iva1-dcde80888020.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
-Subject: Re: Attaching qcow2 images to containers
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Kirill Tkhai <kirill.tkhai@openvz.org>
-Cc:     qemu-devel@nongnu.org, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, Kevin Wolf <kwolf@redhat.com>,
-        hreitz@redhat.com, Xie Yongji <xieyongji@bytedance.com>,
-        sgarzare@redhat.com, tkhai@ya.ru
-References: <YoSSkOQaGL0sBNOI@stefanha-x1.localdomain>
-From:   Kirill Tkhai <tkhai@ya.ru>
-Message-ID: <d4aafde8-1686-4423-e9b1-c1cc825236e6@ya.ru>
-Date:   Tue, 26 Jul 2022 00:15:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 25 Jul 2022 17:16:38 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6762A470;
+        Mon, 25 Jul 2022 14:16:37 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id oy13so22837002ejb.1;
+        Mon, 25 Jul 2022 14:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Dzqsg7+JuF3LAlSgaMlMSRRgs1ArxUnpTbqt1d3exVk=;
+        b=RPTlyU9TAfxY8p9GFNcVs1x8JBjotrjfPA+6plXrFf2F0FtvaQXkLjqMe5yz3IQwzu
+         YBeSoiNRwYzPuAYDuq3f9kkevLkcaZ8gnLjLOXee0itUZbypwIgU1qWdMUJvwZtvfC6s
+         KATyQmonoplSF0j0cjC205hw44M/4LQZPb+dCEQwnETCmiX1FzfepoECkzo5vtHmRCuA
+         lOVtTNc29YuBpyzAoXVi2QipLFwZMfcUeVeVPHQKtvaGA4K1QEeQ3O8OmYPAltpcHtMV
+         BUtP7ZXSSzxt5nnZNbcY7slWqITlrGghYCFdoexIH8e20KPNcUC98aYL5LgMlGU8bBGO
+         u48w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dzqsg7+JuF3LAlSgaMlMSRRgs1ArxUnpTbqt1d3exVk=;
+        b=cizARIbzOLJzoOFZdxCR95t13otZwpfT/r/RLwHLjhUoSOSTzHBxhFY84TpIlgfM5o
+         s9pEBNW7kXID2lxrQyH0F7CB9hyrxK5/clhh/UdjSB+KvqfF3MM2xpg2x8HOLnofUVeH
+         EhUQQXMd3bIGsGMaVJ8dWXAdI0y6vcp9mLeEJRlcI1jUhnZ+UQMpCG10bOemtH1RgvQL
+         kBy9LKwpQrV6+9Za1P0F5riJkcx5MD/ZsOyKqHUiq+JJ0pJdpIffOrDPr6+KRcvwWpHf
+         GnJzJBc4xMUmCM8XKBAEZKQ8MQJXOmJuhLfvAKrIC5gFs7k5mfXqUSZEgnzkLsIgshha
+         F7yg==
+X-Gm-Message-State: AJIora+nJRz/7MGw3tB+NmIcL/A40fMv7wRABuh4y79+tzzBHxzsktJy
+        Pax2gSdcRrp7TrDDdgB89nvqar7sTs3g23bynSk=
+X-Google-Smtp-Source: AGRyM1u36HPoDbas77V1ajAhCR5VMkr0JYySvUpJ4RZ1BHrCutGJHJbfTtpLPr3JozXmwGSF5q5kDBsG+U7hZPXzReM=
+X-Received: by 2002:a17:906:8a4a:b0:72b:5b23:3065 with SMTP id
+ gx10-20020a1709068a4a00b0072b5b233065mr11834533ejc.557.1658783796007; Mon, 25
+ Jul 2022 14:16:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YoSSkOQaGL0sBNOI@stefanha-x1.localdomain>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <cover.1658597501.git.ang.iglesiasg@gmail.com> <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
+In-Reply-To: <50841287411a4e459487cc94a05bc6de66be4acf.1658597501.git.ang.iglesiasg@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 23:15:59 +0200
+Message-ID: <CAHp75VdQ_oCjyXsXxTEWfKJK=T+OOP=AEXz8KQq5b2Hu8VHy9w@mail.gmail.com>
+Subject: Re: [PATCH v4 4/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,76 +74,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Stefan,
+On Sat, Jul 23, 2022 at 7:40 PM Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+>
+> Adds compatibility with the new generation of this sensor, the BMP380
+>
+> Includes basic sensor initialization to do pressure and temp
+> measurements and allows tuning oversampling settings for each channel.
+>
+> The compensation algorithms are adapted from the device datasheet and
+> the repository https://github.com/BoschSensortec/BMP3-Sensor-API
 
-sorry for the late reply. I missed your message since I don't use that email address anymore.
-Sent a patch to fix the stale address in .mailmap.
+...
 
-On 18.05.2022 09:30, Stefan Hajnoczi wrote:
-> Hi Kirill,
-> I saw your "[PATCH 0/4] dm: Introduce dm-qcow2 driver to attach QCOW2
-> files as block device" patch series:
-> https://lore.kernel.org/linux-kernel/YkME5ZS2CpXuNmN6@infradead.org/T/
-> 
-> There has been recent work in vDPA (VIRTIO Data Path Acceleration) to
-> achieve similar functionality. The qemu-storage-daemon VDUSE export
-> attaches a virtio-blk device to the host kernel and QEMU's qcow2
-> implementation can be used:
-> https://patchew.org/QEMU/20220504074051.90-1-xieyongji@bytedance.com/
-> 
-> A container can then access this virtio-blk device (/dev/vda). Note that
-> the virtio-blk device is implemented in software using vDPA/VDUSE, there
-> is no virtio-pci device.
-> 
-> As a quick comparison with a dm-qcow2 target, this approach keeps the
-> qcow2 code in QEMU userspace and can take advantage of QEMU block layer
-> features (storage migration/mirroring/backup, snapshots, etc). On the
-> other hand, it's likely to be more heavyweight because bounce buffers
-> are required in VDUSE for security reasons, there is a separate
-> userspace process involved, and there's the virtio_blk.ko driver and an
-> emulated virtio-blk device involved.
+> +       /* wait for 2ms for command to be proccessed */
 
-The main idea is to reach the best performance and density. This is possible only,
-if driver's hot path is implemented in kernel. Comparing to NBD the driver shows
-much better results in these criteria.
+processed
 
-This has a continuation, and I mean DAX here. IO handling with any userspace-based
-implementation will be slower, than DAX in case of kernel-based implementation. So,
-in my driver IO handling is done in kernel, while DAX support is a subject of
-the future development.
+> +       dev_dbg(data->dev, "Command 0x%X proccessed successfully\n", cmd);
 
-And this driver and advantages of QEMU block layer are not mutually exclusive.
-This driver *does not implement* snapshot or backup support, here is only hot-path
-doing IO handling.
- 
-> Another similar feature that was recently added to QEMU is the
-> qemu-storage-daemon FUSE export:
-> 
->   $ qemu-storage-daemon \
->         --blockdev file,filename=test.img,node-name=drive0 \
-> 	--export fuse,node-name=drive0,id=fuse0,mountpoint=/tmp/foo
->   $ ls -alF /tmp/foo
->   -r--------. 1 me me 10737418240 May 18 07:22 /tmp/foo
-> 
-> This exports a disk image as a file via FUSE. Programs can access it
-> like a regular file and qemu-storage-daemon will do the qcow2 I/O on the
-> underlying file.
-> 
-> I wanted to mention these options for exposing qcow2 disk images to
-> processes/containers on the host. Depending on your use cases they might
-> be interesting. Performance comparisons against VDUSE and FUSE exports
-> would be interesting since these new approaches seem to be replacing
-> qemu-nbd.
-> 
-> Can you share more about your use cases for the dm-qcow2 target? It
-> could be useful for everyone I've CCed to be aware of various efforts in
-> this area.
+Ditto. Can you run a spell checker? Kernel has a little one called codespell.
 
-The use case is containers, and they are the requestor for high density.
-The userspace-based implementation overhead will be noticeable on nodes
-running a lot of containers (just because of any overhead is noticeable
-there :)). Also, it's very useful to use the same disk image for VMs and
-containers giving people to choose what they want in the moment.
+> +
+> +       return 0;
+> +}
 
-Best wishes,
-Kirill
+...
+
+> +static s32 bmp380_compensate_temp(struct bmp280_data *data, u32 adc_temp)
+> +{
+> +       s64 var1, var2, var3, var4, var5, var6, comp_temp;
+> +       struct bmp380_calib *calib = &data->calib.bmp380;
+> +
+> +       var1 = ((s64) adc_temp) - (((s64) calib->T1) << 8);
+> +       var2 = var1 * ((s64) calib->T2);
+> +       var3 = var1 * var1;
+> +       var4 = var3 * ((s64) calib->T3);
+> +       var5 = (var2 << 18) + var4;
+> +       var6 = var5 >> 32;
+> +       data->t_fine = (s32) var6;
+> +       comp_temp = (var6 * 25) >> 14;
+> +
+> +       comp_temp = clamp_val(comp_temp, BMP380_MIN_TEMP, BMP380_MAX_TEMP);
+> +       return (s32) comp_temp;
+> +}
+
+...
+
+> +       s64 var1, var2, var3, var4, var5, var6, offset, sensitivity;
+> +       u64 comp_press;
+> +       struct bmp380_calib *calib = &data->calib.bmp380;
+> +
+> +       var1 = ((s64)data->t_fine) * ((s64)data->t_fine);
+> +       var2 = var1 >> 6;
+> +       var3 = (var2 * ((s64) data->t_fine)) >> 8;
+> +       var4 = (((s64)calib->P8) * var3) >> 5;
+> +       var5 = (((s64) calib->P7) * var1) << 4;
+> +       var6 = (((s64) calib->P6) * ((s64)data->t_fine)) << 22;
+> +       offset = (((s64)calib->P5) << 47) + var4 + var5 + var6;
+> +       var2 = (((s64)calib->P4) * var3) >> 5;
+> +       var4 = (((s64) calib->P3) * var1) << 2;
+> +       var5 = (((s64) calib->P2) - ((s64) 1<<14)) *
+> +               (((s64)data->t_fine) << 21);
+> +       sensitivity = ((((s64) calib->P1) - ((s64) 1 << 14)) << 46) +
+> +                       var2 + var4 + var5;
+> +       var1 = (sensitivity >> 24) * ((s64)adc_press);
+> +       var2 = ((s64)calib->P10) * ((s64) data->t_fine);
+> +       var3 = var2 + (((s64) calib->P9) << 16);
+> +       var4 = (var3 * ((s64)adc_press)) >> 13;
+> +
+> +       /*
+> +        * Dividing by 10 followed by multiplying by 10 to avoid
+> +        * possible overflow caused by (uncomp_data->pressure * partial_data4)
+> +        */
+> +       var5 = (((s64)adc_press) * (var4 / 10)) >> 9;
+> +       var5 *= 10;
+> +       var6 = ((s64)adc_press) * ((s64)adc_press);
+> +       var2 = (((s64)calib->P11) * var6) >> 16;
+> +       var3 = (var2 * ((s64)adc_press)) >> 7;
+> +       var4 = (offset >> 2) + var1 + var5 + var3;
+> +       comp_press = ((u64)var4 * 25) >> 40;
+
+
+Kbuild bot is right, you forgot to (compile-)test for a 32-bit machine.
+
+...
+
+> +       ret = regmap_bulk_read(data->regmap, BMP380_REG_TEMP_XLSB, data->buf, 3);
+
+sizeof() ?
+
+...
+
+> +       /* Read and compensate temperature so we get a reading of t_fine. */
+
+for temperature
+
+...
+
+> +       ret = regmap_bulk_read(data->regmap, BMP380_REG_PRESS_XLSB, data->buf, 3);
+
+sizeof() ?
+
+...
+
+> +       .oversampling_temp_default = ilog2(1),
+
+> +       .oversampling_press_default = ilog2(4),
+
+BIT()
+
+...
+
+> +#define BMP380_REG_CMD                 0x7E
+> +#define BMP380_REG_CONFIG              0x1F
+> +#define BMP380_REG_ODR                 0X1D
+> +#define BMP380_REG_OSR                 0X1C
+> +#define BMP380_REG_POWER_CONTROL       0X1B
+> +#define BMP380_REG_IF_CONFIG           0X1A
+> +#define BMP380_REG_INT_CONTROL         0X19
+> +#define BMP380_REG_INT_STATUS          0X11
+> +#define BMP380_REG_EVENT               0X10
+> +#define BMP380_REG_STATUS              0X03
+> +#define BMP380_REG_ERROR               0X02
+> +#define BMP380_REG_ID                  0X00
+> +
+> +#define BMP380_REG_FIFO_CONFIG_1       0X18
+> +#define BMP380_REG_FIFO_CONFIG_2       0X17
+> +#define BMP380_REG_FIFO_WATERMARK_MSB  0X16
+> +#define BMP380_REG_FIFO_WATERMARK_LSB  0X15
+> +#define BMP380_REG_FIFO_DATA           0X14
+> +#define BMP380_REG_FIFO_LENGTH_MSB     0X13
+> +#define BMP380_REG_FIFO_LENGTH_LSB     0X12
+> +
+> +#define BMP380_REG_SENSOR_TIME_MSB     0X0E
+> +#define BMP380_REG_SENSOR_TIME_LSB     0X0D
+> +#define BMP380_REG_SENSOR_TIME_XLSB    0X0C
+> +
+> +#define BMP380_REG_TEMP_MSB            0X09
+> +#define BMP380_REG_TEMP_LSB            0X08
+> +#define BMP380_REG_TEMP_XLSB           0X07
+> +
+> +#define BMP380_REG_PRESS_MSB           0X06
+> +#define BMP380_REG_PRESS_LSB           0X05
+> +#define BMP380_REG_PRESS_XLSB          0X04
+> +
+> +#define BMP380_REG_CALIB_TEMP_START    0x31
+
+Be consistent x vs X (we prefer x).
+
+-- 
+With Best Regards,
+Andy Shevchenko

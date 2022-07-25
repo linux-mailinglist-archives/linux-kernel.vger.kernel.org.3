@@ -2,163 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097CF57FF53
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9BB57FF54
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiGYMwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S235356AbiGYMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbiGYMwL (ORCPT
+        with ESMTP id S234269AbiGYMxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:52:11 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2115.outbound.protection.outlook.com [40.107.21.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5767363F4;
-        Mon, 25 Jul 2022 05:52:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RQ2B7jqevvD+1KssV4tm99p64PZjIjAuAconcUJPyNqxHlN7S9UrsDgCefxbtBBY5/Ou1NN05H8UPibaYqI6u1NmTZc27Vl70AFR8mQ8U6KuVsp7ERwTDg7SvSv+YaGB4g0EofJDb+sbiEhbvocaNMMdWSBiQOSQ9tE5OgvLSlX6B2E8KCRXlVBU9xgJfBqHni+FNXe42w2SDkO06J7MgWb+mduyKNeR9dEfAU9e9em3lkDtdLxHAUcUEuRaKVq2re4gFit4c0mlTqxOQhNooPKLWDxPKaSgDmGWrP2EcP3BS6O+hsbepN4C/cpyqL6Kt8rcGK5zHdOvKUEsFJAusA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fNXVl602WJVP8MaUpBciWZxu73mDg8C35PvtRJeSQAY=;
- b=a3rbGfrQyrSSn6BwpK6GVp3Y2z0Q0YJuCMPXr0l1Jpo5G+SmwcwPwQfnUisEtdq/bxFNMiahwWllJ985njtyfbwdnGDb/tfvzRc+FNYw4nyO8zejU8ogy5VnlJDgqmZvQUGWATvgYf7j+6p7Q4maFCSCE6dvy937lz1FaJo1J1jIHJxIcgDEn43YIHoQXHyvzmde6TMy9GzDegBm3hfoqFxBeG6hD7Nt6MjvCybBJVqxb1zWwgh1WcDv4iL2rAVgLU0OJ1GuxuFK2npk81y/zWfeTsBbAjEvBnIbzWiXpLUDY65taorBh2SbRCToqHZaHkMgvCKDM2JWml75vh6juw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fNXVl602WJVP8MaUpBciWZxu73mDg8C35PvtRJeSQAY=;
- b=Z3dpJBhalg6vjPA4TXihjuD4c7f4qgvACnMBBBappDwYQTvqQJZ88gBt15X/ufmpjFxeEjhTRFPkSpA9yWWAdyPUA6sj24KThv91bYZ4MS1M/ZX0wYbyZ/UC/FEXj/eEmjUFEEfALBnY3UwoECuKKkhAp4ZHTYtcwnUP8TJZCVw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
- by DU0P190MB1931.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:3bc::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.23; Mon, 25 Jul
- 2022 12:52:06 +0000
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5488:868f:fe1e:ab76]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5488:868f:fe1e:ab76%6]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
- 12:52:06 +0000
-Date:   Mon, 25 Jul 2022 15:52:02 +0300
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     broonie@kernel.org, enachman@marvell.com,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        lnoam@marvell.com
-Subject: Re: [PATCH 4/7] spi: a3700: support BE for AC5 SPI driver
-Message-ID: <20220725125202.GA5304@plvision.eu>
-References: <20220723102237.10281-1-vadym.kochan@plvision.eu>
- <53b307a3-67e0-2acd-5d4a-0970f717afa7@wanadoo.fr>
-Content-Type: text/plain; charset=iso-8859-1
+        Mon, 25 Jul 2022 08:53:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE38863F4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:53:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 43489CE127B
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:53:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F43BC341C6;
+        Mon, 25 Jul 2022 12:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658753580;
+        bh=ROkD0ewTSUbH5Y4MAS09LLcGBMU0zKBF8A8Cpc0zxY0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mGeVBIlwPwUuiYIKxmetHBzzuORpyQ+/K/nyNq4h4UfKwwKj7hMqOb1NUh5oaluGu
+         86G61mxrV/YqLhdeRjk7VPAvsstG8Ek/Cf6dj3FYts1IhxNF5UyKr7jRgMbU/qTyhQ
+         xMWzcS+PpkZKLsmgZDKdAsETrB2z19uTMU9A395cu7XCfrN8XpIO50A+RVAbixrBqH
+         C/eHd+ycnJwgBhy+0lotqrq61oD82iMPOZ3FZevEhEkgWjcbrHtvE+x8PXTTdLilJT
+         jxXB4dZwXhFsyqc98gwi1qsef+xP5l1ZXggWoHV5u+wFsKf2tXmpkm7TodQKOZrvD/
+         GEGaHffQBdZ2Q==
+Received: by pali.im (Postfix)
+        id 00CDF793; Mon, 25 Jul 2022 14:52:56 +0200 (CEST)
+Date:   Mon, 25 Jul 2022 14:52:56 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Regression: Linux v5.15+ does not boot on Freescale P2020
+Message-ID: <20220725125256.cg6su4d2ageylvp6@pali>
+References: <20220722090929.mwhmxxdd7yioxqpz@pali>
+ <6b227478-73b8-2a97-1c78-89570d928739@csgroup.eu>
+ <20220723150702.jecerkhxhy65dgww@pali>
+ <875yjld2oe.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <53b307a3-67e0-2acd-5d4a-0970f717afa7@wanadoo.fr>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: GV3P280CA0114.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:8::32) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:802:38::26)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 43f5fe9d-b46d-4409-536b-08da6e3c7ad7
-X-MS-TrafficTypeDiagnostic: DU0P190MB1931:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2f6PuFA7xSP1/8rWTm081jHCSdNr7Ot2TNl34x4IjFH4jzqXIY+4bFT/rng2Ck65OSjCbtXEtipcYgXAPolgfpEt3xo4ptFB0U58QMelP5xB1HEH0w4Sg5+55KSzwO6Sr8PJiUPGtJxJ40bP2fQA4fzuhH3NftpvdROG6BPnYStBMbBjv40WuibkXfjCcK3sfJ2tZ4w6kKvHVO3XJlmrv5hX9Atiuy8wNbqPAdpWM5gUQGBSKl3yPyRIg55f1crAj9oS4DjNlXEU3o0D3is1vLfnD9KIKQLhRFMHfWUWGgGlUoEusri+aZFIltpoa1CKLIzucvsRz1AFEP17RUSix2v8CJ2INm6IaTEWXBGme9aCCrQVtIa6ez64El0d2KLdca+nhTCDKmESWWPnpvNJAHtADRGDGRq/Alxs8Cw+xA/0X+STE9+cGeEi28TSbsaA/bdvN7WAlvB1Ua+SdVL5caHfGE8vxlKoyz5fDOVkpHlEg9Hb3TC+SP5rUtJ7ABi7hlECS6Gu0Y9hGdcvtgcG73eurI1WxCyFWJyQCT1PYt599h3Agma/Ea9ZoXTX++OuTycWrcSQxEUfa69Zn/2qPqJwAX7M6XFubCYv/AgJVH+Lw98ErxtwB7x7BnvBoTBQkddaUjto/cLY5ASbjUxHWmTPWVtm5Qu1zS1wD2kBiRjcky4fkENtFj9RXUoQF+vkGxH1epb8aTCwi93T8lm1W5PgfG+eFler31F1N4JCJ0d0ucPXDmlAFZZQpdKVzfj2DknUO3aigvLtmzA344NS1+W89XKUOj9vf2ON+FmvFls=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(376002)(396003)(39830400003)(136003)(6486002)(6916009)(41300700001)(6666004)(478600001)(316002)(2906002)(66946007)(4326008)(8676002)(66556008)(66476007)(5660300002)(44832011)(83380400001)(8936002)(186003)(33656002)(36756003)(38100700002)(6506007)(1076003)(2616005)(52116002)(38350700002)(26005)(86362001)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?yOQJflnkg2sKB2Iniv7t4NiE5DvKvh8HGLTgdaMNm81x3jgLRh6IaILAgK?=
- =?iso-8859-1?Q?6nJNOpeQA7TUghin0HwqXOcyVDwCEackk+ZDyV4JBEW3LZTNRRVq7Ytpus?=
- =?iso-8859-1?Q?WQ9SVZddCJJbEqL1eYLNnmfNDeZ4Xs8CUV0emuUcpqOARYkoC1lP7o5Nsn?=
- =?iso-8859-1?Q?PsJEjT2tq/lBVIRdc8Sfu3TMdKUuQfTGYc6DPfo6hTS4ECuHqwfyaEIqx9?=
- =?iso-8859-1?Q?g/h5TdgGxpw8F36s1IsqSKWYqiLH/4yeBmBFKbe7g34HobdBSopBbHCrQS?=
- =?iso-8859-1?Q?F8jrSe7m8cyBjv7ddtv2/yjuZuuHjVRV6fyDG90JH2OXpOEN9svBbgJtPW?=
- =?iso-8859-1?Q?BvU73/b/22IaPt7QKjP7wPGeJvq3MDUksAsGFDsw48cpCNCIXe0Bm9Mzfz?=
- =?iso-8859-1?Q?IvxbynxE2f6jf1tRAn9a3GeWYXDTji+I4ucTjLvhhp0W1GEl2GmzlAhpoF?=
- =?iso-8859-1?Q?ld5yqZgGDtSW/F3U/reCwDeo6/iMq9+kva2tIdBtwRWK9SAoRvd7lvI3t1?=
- =?iso-8859-1?Q?0ESrtvUzuJayCQRotcmjqWX/uzBl/cBp+szhtnsBPEiCWv0op03O+iLcUy?=
- =?iso-8859-1?Q?Gs9C8m9RSpHXbMidH+blmqv3W0BDMQmyTrq4sMnX4MSe+4ZmDV2H3fXTa6?=
- =?iso-8859-1?Q?9mTngIgiUM/aQSa0qSJbUvxitnnxLCkhpo4PjwWm0vbE3RP3N3O5GehJMJ?=
- =?iso-8859-1?Q?zLBNhpAmJYvDFmDBEguTpVtykKd4JQFSllQUetj8kADB3S7PfOz/aLLS2I?=
- =?iso-8859-1?Q?NOtwUjB9Q/QRLm8dFj522ZOym4y1GBHWQyptOnvVygKeIFfdj099qIcF8X?=
- =?iso-8859-1?Q?T68Q6o6LFWU+tKRXZx3v359U4IzLqPUS3dyo50rfYI49EiM9dch6u70K+E?=
- =?iso-8859-1?Q?S47+Te9SIvFUG2lNQvQXSlAmZNQjvNf2wRRBPl7vJ9qgDXx6+gyLsdWnwe?=
- =?iso-8859-1?Q?cCOUdvuNCd3lrWVhQ72mvNh+BNIAqhV4j/bvsEBcoUe9iuAzqcGvWZIE/G?=
- =?iso-8859-1?Q?eNOLIhMcXo4iAMryqSdKEu4eyWLv/7rs/HnApDUF5lw+3eA/KQ0rjsCFbh?=
- =?iso-8859-1?Q?fjNn57Iu3Ln+wfR83E5nRU92jcqmD6+a63AUvFLmnut/0BfohoJ3nx4RZu?=
- =?iso-8859-1?Q?n2R8i/F/MpF/WctNSRlC2BtzFgE3/hEy0vc35ZujXgga797bK/HX5dYK1w?=
- =?iso-8859-1?Q?bja5hAyPjvi+39UQ0X1XwXZjuJ2eebizFISU54ME+lEBKNnkL/I/k4J/87?=
- =?iso-8859-1?Q?KefjqCnUO3D+++e0ed2xYhSaXY5kYsvnJmz8BdZsYpXgG/7NJ0wsYGHCFe?=
- =?iso-8859-1?Q?DneSi5F22LLxEjL2VEiYhSSsuFEn2s8wgoHLjujoO/G/ME5JDFM94Htpty?=
- =?iso-8859-1?Q?/8QcyW9uTnqyG9edV6I/j4xDf8cXD/eK1FnDlytL+cLRSGw/3S+AFqxHVY?=
- =?iso-8859-1?Q?4Nmf0CDm+m+fsbD1s8oo980l8achQYZM0AVJXB4zTdsZuVn5vt5+oQABWP?=
- =?iso-8859-1?Q?i1TbwNxi4MPennIObJkcWFgDylv1PWiIbY+ChT/YsE4ZqmDMfTEkbicp96?=
- =?iso-8859-1?Q?Jtm3A+1JZw8jZDdmRvYh0oWdSEAReTF+9r2xvdi2hhmKByAAEeVnvmKe5K?=
- =?iso-8859-1?Q?NJ0R5D1DAxZTwC8IYVK+SSK/ZxhQdsjLY9K9wnj4L3mMYShvJduWVSrw?=
- =?iso-8859-1?Q?=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43f5fe9d-b46d-4409-536b-08da6e3c7ad7
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 12:52:06.6558
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z/3cu0OXJ8z9FRViiU7NcWb3jeB1NNLrCDWe6L5Snc4Su1AGcKrYLySWzykpTuE2E0wzbPhtfY1tAkGqc+hiYr+TG0z4bagwFlSddcaJNdM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P190MB1931
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <875yjld2oe.fsf@mpe.ellerman.id.au>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Monday 25 July 2022 18:20:01 Michael Ellerman wrote:
+> Pali Roh√°r <pali@kernel.org> writes:
+> > On Saturday 23 July 2022 14:42:22 Christophe Leroy wrote:
+> >> Le 22/07/2022 √† 11:09, Pali Roh√°r a √©crit¬†:
+> >> > Trying to boot mainline Linux kernel v5.15+, including current version
+> >> > from master branch, on Freescale P2020 does not work. Kernel does not
+> >> > print anything to serial console, seems that it does not work and after
+> >> > timeout watchdog reset the board.
+> >> 
+> >> Can you provide more information ? Which defconfig or .config, which 
+> >> version of gcc, etc ... ?
+> >
+> > I used default defconfig for mpc85xx with gcc 8, compilation for e500
+> > cores.
+> >
+> > If you need exact .config content I can send it during week.
+> >
+> >> > I run git bisect and it found following commit:
+> >> > 
+> >> > 9401f4e46cf6965e23738f70e149172344a01eef is the first bad commit
+> >> > commit 9401f4e46cf6965e23738f70e149172344a01eef
+> >> > Author: Christophe Leroy <christophe.leroy@csgroup.eu>
+> >> > Date:   Tue Mar 2 08:48:11 2021 +0000
+> >> > 
+> >> >      powerpc: Use lwarx/ldarx directly instead of PPC_LWARX/LDARX macros
+> >> > 
+> >> >      Force the eh flag at 0 on PPC32.
+> >> > 
+> >> >      Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> >> >      Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> >> >      Link: https://lore.kernel.org/r/1fc81f07cabebb875b963e295408cc3dd38c8d85.1614674882.git.christophe.leroy@csgroup.eu
+> >> > 
+> >> > :040000 040000 fe6747e45736dfcba74914a9445e5f70f5120600 96358d08b65d3200928a973efb5b969b3d45f2b0 M      arch
+> >> > 
+> >> > 
+> >> > If I revert this commit then kernel boots correctly. It also boots fine
+> >> > if I revert this commit on top of master branch.
+> >> > 
+> >> > Freescale P2020 has two 32-bit e500 powerpc cores.
+> >> > 
+> >> > Any idea why above commit is causing crash of the kernel? And why it is
+> >> > needed? Could eh flag set to 0 cause deadlock?
+> >> 
+> >> Setting the eh flag to 0 is not supposed to be a change introduced by 
+> >> that commit. Indeed that commit is not supposed to change anything at 
+> >> all in the generated code.
+> >
+> > My understanding of that commit is that it changed eh flag parameter
+> > from 1 to 0 for 32-bit powerpc, including also p2020.
+> 
+> Can you compare the disassembly before and after and find a place where
+> an instruction has changed?
+> 
+> cheers
 
-On Sat, Jul 23, 2022 at 12:49:55PM +0200, Christophe JAILLET wrote:
-> Le 23/07/2022 ‡ 12:22, Vadym Kochan a Ècrit†:
-> > From: Noam <lnoam-eYqpPyKDWXRBDgjK7y7TUQ@public.gmane.org>
-> > 
-> > Tested-by: Raz Adashi <raza-eYqpPyKDWXRBDgjK7y7TUQ@public.gmane.org>
-> > Reviewed-by: Raz Adashi <raza-eYqpPyKDWXRBDgjK7y7TUQ@public.gmane.org>
-> > Signed-off-by: Vadym Kochan <vadym.kochan-Nq3fbkz6jlnsq35pWSNszA@public.gmane.org>
-> > ---
-> >   drivers/spi/spi-armada-3700.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/spi/spi-armada-3700.c b/drivers/spi/spi-armada-3700.c
-> > index d8cc4b270644..386c7959ea93 100644
-> > --- a/drivers/spi/spi-armada-3700.c
-> > +++ b/drivers/spi/spi-armada-3700.c
-> > @@ -497,7 +497,7 @@ static int a3700_spi_fifo_write(struct a3700_spi *a3700_spi)
-> >   	while (!a3700_is_wfifo_full(a3700_spi) && a3700_spi->buf_len) {
-> >   		val = *(u32 *)a3700_spi->tx_buf;
-> > -		spireg_write(a3700_spi, A3700_SPI_DATA_OUT_REG, val);
-> > +		spireg_write(a3700_spi, A3700_SPI_DATA_OUT_REG, cpu_to_le32(val));
-> >   		a3700_spi->buf_len -= 4;
-> >   		a3700_spi->tx_buf += 4;
-> >   	}
-> > @@ -519,7 +519,7 @@ static int a3700_spi_fifo_read(struct a3700_spi *a3700_spi)
-> >   	while (!a3700_is_rfifo_empty(a3700_spi) && a3700_spi->buf_len) {
-> >   		val = spireg_read(a3700_spi, A3700_SPI_DATA_IN_REG);
-> >   		if (a3700_spi->buf_len >= 4) {
-> > -
-> > +			val = cpu_to_le32(val);
-> 
-> Hi,
-> 
-> even if both should generate the same code, should'nt this be le32_to_cpu()?
-> 
-> CJ
-> 
-> >   			memcpy(a3700_spi->rx_buf, &val, 4);
-> >   			a3700_spi->buf_len -= 4;
-> 
+Yes, of course. Here is diff between output from objdump -d vmlinux.
+original version --- is from git master branch and modified version +++
+is the original version with reverted above problematic commit.
+So the +++ version is the one which is working.
 
-Thank you!
-
+--- vmlinux.master.dump	2022-07-25 14:43:45.922239496 +0200
++++ vmlinux.revert.dump	2022-07-25 14:43:49.238259296 +0200
+@@ -1,5 +1,5 @@
+ 
+-vmlinux.master:     file format elf32-powerpc
++vmlinux.revert:     file format elf32-powerpc
+ 
+ 
+ Disassembly of section .head.text:
+@@ -11213,7 +11213,7 @@ c000b850:	3f a0 c1 0f 	lis     r29,-1611
+ c000b854:	81 02 00 04 	lwz     r8,4(r2)
+ c000b858:	3b fd 10 68 	addi    r31,r29,4200
+ c000b85c:	39 40 00 01 	li      r10,1
+-c000b860:	7d 20 f8 29 	lwarx   r9,0,r31,1
++c000b860:	7d 20 f8 28 	lwarx   r9,0,r31
+ c000b864:	2c 09 00 00 	cmpwi   r9,0
+ c000b868:	40 82 00 10 	bne     c000b878 <die+0x68>
+ c000b86c:	7d 40 f9 2d 	stwcx.  r10,0,r31
+@@ -11227,7 +11227,7 @@ c000b888:	81 3e 00 1c 	lwz     r9,28(r30
+ c000b88c:	7f 88 48 00 	cmpw    cr7,r8,r9
+ c000b890:	41 9e 00 38 	beq     cr7,c000b8c8 <die+0xb8>
+ c000b894:	39 40 00 01 	li      r10,1
+-c000b898:	7d 20 f8 29 	lwarx   r9,0,r31,1
++c000b898:	7d 20 f8 28 	lwarx   r9,0,r31
+ c000b89c:	2c 09 00 00 	cmpwi   r9,0
+ c000b8a0:	40 82 00 10 	bne     c000b8b0 <die+0xa0>
+ c000b8a4:	7d 40 f9 2d 	stwcx.  r10,0,r31
+@@ -186495,7 +186495,7 @@ c00b173c:	3b 40 00 00 	li      r26,0
+ c00b1740:	3a e0 00 00 	li      r23,0
+ c00b1744:	7e c0 00 a6 	mfmsr   r22
+ c00b1748:	7c 00 01 46 	wrteei  0
+-c00b174c:	7f a0 c0 29 	lwarx   r29,0,r24,1
++c00b174c:	7f a0 c0 28 	lwarx   r29,0,r24
+ c00b1750:	2c 1d 00 00 	cmpwi   r29,0
+ c00b1754:	40 82 00 10 	bne     c00b1764 <rcu_gp_init+0x15c>
+ c00b1758:	7f 20 c1 2d 	stwcx.  r25,0,r24
+@@ -187821,7 +187821,7 @@ c00b2b7c:	3f e0 c1 0b 	lis     r31,-1611
+ c00b2b80:	38 c0 00 01 	li      r6,1
+ c00b2b84:	3b ff c5 20 	addi    r31,r31,-15072
+ c00b2b88:	38 ff 02 20 	addi    r7,r31,544
+-c00b2b8c:	7d 00 38 29 	lwarx   r8,0,r7,1
++c00b2b8c:	7d 00 38 28 	lwarx   r8,0,r7
+ c00b2b90:	2c 08 00 00 	cmpwi   r8,0
+ c00b2b94:	40 82 00 10 	bne     c00b2ba4 <rcu_cpu_starting+0xc0>
+ c00b2b98:	7c c0 39 2d 	stwcx.  r6,0,r7
+@@ -187947,7 +187947,7 @@ c00b2d6c:	3f a0 c1 0b 	lis     r29,-1611
+ c00b2d70:	39 00 00 01 	li      r8,1
+ c00b2d74:	3b bd c5 20 	addi    r29,r29,-15072
+ c00b2d78:	39 3d 02 20 	addi    r9,r29,544
+-c00b2d7c:	7d 40 48 29 	lwarx   r10,0,r9,1
++c00b2d7c:	7d 40 48 28 	lwarx   r10,0,r9
+ c00b2d80:	2c 0a 00 00 	cmpwi   r10,0
+ c00b2d84:	40 82 00 10 	bne     c00b2d94 <rcu_report_dead+0x90>
+ c00b2d88:	7d 00 49 2d 	stwcx.  r8,0,r9
+@@ -2527838,7 +2527838,7 @@ c096b0e4:	4e 80 00 20 	blr
+ c096b0e8 <_raw_spin_trylock>:
+ c096b0e8:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b0ec:	39 40 00 01 	li      r10,1
+-c096b0f0:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b0f0:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b0f4:	2c 09 00 00 	cmpwi   r9,0
+ c096b0f8:	40 82 00 10 	bne     c096b108 <_raw_spin_trylock+0x20>
+ c096b0fc:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2527853,7 +2527853,7 @@ c096b11c:	4e 80 00 20 	blr
+ 
+ c096b120 <_raw_read_trylock>:
+ c096b120:	94 21 ff f0 	stwu    r1,-16(r1)
+-c096b124:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b124:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b128:	35 29 00 01 	addic.  r9,r9,1
+ c096b12c:	40 81 00 10 	ble     c096b13c <_raw_read_trylock+0x1c>
+ c096b130:	7d 20 19 2d 	stwcx.  r9,0,r3
+@@ -2527869,7 +2527869,7 @@ c096b150:	4e 80 00 20 	blr
+ c096b154 <_raw_write_trylock>:
+ c096b154:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b158:	39 40 ff ff 	li      r10,-1
+-c096b15c:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b15c:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b160:	2c 09 00 00 	cmpwi   r9,0
+ c096b164:	40 82 00 10 	bne     c096b174 <_raw_write_trylock+0x20>
+ c096b168:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2527888,7 +2527888,7 @@ c096b190:	81 22 00 00 	lwz     r9,0(r2)
+ c096b194:	39 29 02 00 	addi    r9,r9,512
+ c096b198:	91 22 00 00 	stw     r9,0(r2)
+ c096b19c:	39 40 00 01 	li      r10,1
+-c096b1a0:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b1a0:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b1a4:	2c 09 00 00 	cmpwi   r9,0
+ c096b1a8:	40 82 00 10 	bne     c096b1b8 <_raw_spin_lock_bh+0x2c>
+ c096b1ac:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2527940,7 +2527940,7 @@ c096b240:	81 22 00 00 	lwz     r9,0(r2)
+ c096b244:	39 29 02 00 	addi    r9,r9,512
+ c096b248:	91 22 00 00 	stw     r9,0(r2)
+ c096b24c:	39 40 00 01 	li      r10,1
+-c096b250:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b250:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b254:	2c 09 00 00 	cmpwi   r9,0
+ c096b258:	40 82 00 10 	bne     c096b268 <_raw_spin_trylock_bh+0x34>
+ c096b25c:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2527997,7 +2527997,7 @@ c096b304:	94 21 ff f0 	stwu    r1,-16(r1
+ c096b308:	81 22 00 00 	lwz     r9,0(r2)
+ c096b30c:	39 29 02 00 	addi    r9,r9,512
+ c096b310:	91 22 00 00 	stw     r9,0(r2)
+-c096b314:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b314:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b318:	35 29 00 01 	addic.  r9,r9,1
+ c096b31c:	40 81 00 10 	ble     c096b32c <_raw_read_lock_bh+0x28>
+ c096b320:	7d 20 19 2d 	stwcx.  r9,0,r3
+@@ -2528018,7 +2528018,7 @@ c096b350:	81 22 00 00 	lwz     r9,0(r2)
+ c096b354:	39 29 02 00 	addi    r9,r9,512
+ c096b358:	91 22 00 00 	stw     r9,0(r2)
+ c096b35c:	39 40 ff ff 	li      r10,-1
+-c096b360:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b360:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b364:	2c 09 00 00 	cmpwi   r9,0
+ c096b368:	40 82 00 10 	bne     c096b378 <_raw_write_lock_bh+0x2c>
+ c096b36c:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2528035,7 +2528035,7 @@ c096b394:	4b ff ff f4 	b       c096b388
+ 
+ c096b398 <_raw_read_lock>:
+ c096b398:	94 21 ff f0 	stwu    r1,-16(r1)
+-c096b39c:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b39c:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b3a0:	35 29 00 01 	addic.  r9,r9,1
+ c096b3a4:	40 81 00 10 	ble     c096b3b4 <_raw_read_lock+0x1c>
+ c096b3a8:	7d 20 19 2d 	stwcx.  r9,0,r3
+@@ -2528053,7 +2528053,7 @@ c096b3d0:	4b ff ff f4 	b       c096b3c4
+ c096b3d4 <_raw_read_lock_irq>:
+ c096b3d4:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b3d8:	7c 00 01 46 	wrteei  0
+-c096b3dc:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b3dc:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b3e0:	35 29 00 01 	addic.  r9,r9,1
+ c096b3e4:	40 81 00 10 	ble     c096b3f4 <_raw_read_lock_irq+0x20>
+ c096b3e8:	7d 20 19 2d 	stwcx.  r9,0,r3
+@@ -2528073,7 +2528073,7 @@ c096b414:	94 21 ff f0 	stwu    r1,-16(r1
+ c096b418:	7c 6a 1b 78 	mr      r10,r3
+ c096b41c:	7c 60 00 a6 	mfmsr   r3
+ c096b420:	7c 00 01 46 	wrteei  0
+-c096b424:	7d 20 50 29 	lwarx   r9,0,r10,1
++c096b424:	7d 20 50 28 	lwarx   r9,0,r10
+ c096b428:	35 29 00 01 	addic.  r9,r9,1
+ c096b42c:	40 81 00 10 	ble     c096b43c <_raw_read_lock_irqsave+0x28>
+ c096b430:	7d 20 51 2d 	stwcx.  r9,0,r10
+@@ -2528091,7 +2528091,7 @@ c096b458:	4b ff ff f4 	b       c096b44c
+ c096b45c <_raw_spin_lock>:
+ c096b45c:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b460:	39 40 00 01 	li      r10,1
+-c096b464:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b464:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b468:	2c 09 00 00 	cmpwi   r9,0
+ c096b46c:	40 82 00 10 	bne     c096b47c <_raw_spin_lock+0x20>
+ c096b470:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2528110,7 +2528110,7 @@ c096b49c <_raw_spin_lock_irq>:
+ c096b49c:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b4a0:	7c 00 01 46 	wrteei  0
+ c096b4a4:	39 40 00 01 	li      r10,1
+-c096b4a8:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b4a8:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b4ac:	2c 09 00 00 	cmpwi   r9,0
+ c096b4b0:	40 82 00 10 	bne     c096b4c0 <_raw_spin_lock_irq+0x24>
+ c096b4b4:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2528131,7 +2528131,7 @@ c096b4e4:	7c 6a 1b 78 	mr      r10,r3
+ c096b4e8:	7c 60 00 a6 	mfmsr   r3
+ c096b4ec:	7c 00 01 46 	wrteei  0
+ c096b4f0:	39 00 00 01 	li      r8,1
+-c096b4f4:	7d 20 50 29 	lwarx   r9,0,r10,1
++c096b4f4:	7d 20 50 28 	lwarx   r9,0,r10
+ c096b4f8:	2c 09 00 00 	cmpwi   r9,0
+ c096b4fc:	40 82 00 10 	bne     c096b50c <_raw_spin_lock_irqsave+0x2c>
+ c096b500:	7d 00 51 2d 	stwcx.  r8,0,r10
+@@ -2528149,7 +2528149,7 @@ c096b528:	4b ff ff f4 	b       c096b51c
+ c096b52c <_raw_write_lock_nested>:
+ c096b52c:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b530:	39 40 ff ff 	li      r10,-1
+-c096b534:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b534:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b538:	2c 09 00 00 	cmpwi   r9,0
+ c096b53c:	40 82 00 10 	bne     c096b54c <_raw_write_lock_nested+0x20>
+ c096b540:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2528167,7 +2528167,7 @@ c096b568:	4b ff ff f4 	b       c096b55c
+ c096b56c <_raw_write_lock>:
+ c096b56c:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b570:	39 40 ff ff 	li      r10,-1
+-c096b574:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b574:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b578:	2c 09 00 00 	cmpwi   r9,0
+ c096b57c:	40 82 00 10 	bne     c096b58c <_raw_write_lock+0x20>
+ c096b580:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2528186,7 +2528186,7 @@ c096b5ac <_raw_write_lock_irq>:
+ c096b5ac:	94 21 ff f0 	stwu    r1,-16(r1)
+ c096b5b0:	7c 00 01 46 	wrteei  0
+ c096b5b4:	39 40 ff ff 	li      r10,-1
+-c096b5b8:	7d 20 18 29 	lwarx   r9,0,r3,1
++c096b5b8:	7d 20 18 28 	lwarx   r9,0,r3
+ c096b5bc:	2c 09 00 00 	cmpwi   r9,0
+ c096b5c0:	40 82 00 10 	bne     c096b5d0 <_raw_write_lock_irq+0x24>
+ c096b5c4:	7d 40 19 2d 	stwcx.  r10,0,r3
+@@ -2528207,7 +2528207,7 @@ c096b5f4:	7c 6a 1b 78 	mr      r10,r3
+ c096b5f8:	7c 60 00 a6 	mfmsr   r3
+ c096b5fc:	7c 00 01 46 	wrteei  0
+ c096b600:	39 00 ff ff 	li      r8,-1
+-c096b604:	7d 20 50 29 	lwarx   r9,0,r10,1
++c096b604:	7d 20 50 28 	lwarx   r9,0,r10
+ c096b608:	2c 09 00 00 	cmpwi   r9,0
+ c096b60c:	40 82 00 10 	bne     c096b61c <_raw_write_lock_irqsave+0x2c>
+ c096b610:	7d 00 51 2d 	stwcx.  r8,0,r10

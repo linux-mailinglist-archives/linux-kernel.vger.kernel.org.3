@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5D558005B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EED580062
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbiGYOFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 10:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        id S235191AbiGYOHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 10:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234105AbiGYOFu (ORCPT
+        with ESMTP id S231472AbiGYOHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 10:05:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE4A6243
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:05:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAD9C611AB
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD17C341C6;
-        Mon, 25 Jul 2022 14:05:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658757949;
-        bh=wHq74HoEAu9/EWdzqXc5E84wFTNprjsr8E+fC3OLjng=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UWmPs8J3euf80lZkCgOWi8vY6aiWbg14PduksljpcnL8glDODXZ4g+N5f7RAzZ0xd
-         kGp+8B9PpZ8EBGkRsVgCs7ecVlhCt4m/de4HeCbkZ6BI80W6tqSPSqHE1qJUTveO/U
-         TL9QLN98srS8fK80vhnuFXqhNZRnhqbFFRsZQaSHxwPrGVxbxVpHc0Ut/rxPQgt1Kx
-         bV8MQTtC0QLCPD+gDmpy6xqYanjQjQSmJLXelFq5kzWu9BMHkP2g3kadFwMH8SOMUc
-         qYgvUNh1uIxJq+y5Ea0Nec+622Hv28dmmIVT5MVYC+jygzwDO+m3o5wyK3/5ytsP2O
-         RvfARjM6Wl8aQ==
-Date:   Mon, 25 Jul 2022 15:05:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     maz@kernel.org, mark.rutland@arm.com, madvenka@linux.microsoft.com,
-        tabba@google.com, will@kernel.org, qperret@google.com,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com,
-        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
-        mhiramat@kernel.org, ast@kernel.org, drjones@redhat.com,
-        wangkefeng.wang@huawei.com, elver@google.com, keirf@google.com,
-        yuzenghui@huawei.com, ardb@kernel.org, oupton@google.com,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, android-mm@google.com,
-        kernel-team@android.com
-Subject: Re: [PATCH v5 05/17] arm64: stacktrace: Factor out common unwind()
-Message-ID: <Yt6jNK17LWJ8IV4o@sirena.org.uk>
-References: <20220721055728.718573-1-kaleshsingh@google.com>
- <20220721055728.718573-6-kaleshsingh@google.com>
+        Mon, 25 Jul 2022 10:07:21 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B79613CC4;
+        Mon, 25 Jul 2022 07:07:20 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id c3so10505812pfb.13;
+        Mon, 25 Jul 2022 07:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mbvIXTn30Rl2aubdxi4kIY7ompkhv+r5bFVC1iAjIf8=;
+        b=qfqOX9NCZ35c6s1+SGcylAwHK9tj10QEKszs64RSy5mqoYX/WRpd+eSVS8E16g37wR
+         2Ik1lf1EARtX6qnb5Du79G54GHaTQiVsLhBIYdICMLPCXT3vKAEI17qNPW54qIgMNKwD
+         B4i9wM53v5bmi0sHa/k9ZGjBh/asZykwpPNcdknzBvwyKG1qDkWGHL0wu06Ey0P/9c/a
+         dK7R+Mk5b8sHYmKnGr0gNEop5GMnI4BGyuCWR2EGy1rfIrJauoPTYI0mT5Izrpfe2GP5
+         3QGLtf9JVjsaW1tvkzt0gwaH4MCWAPiR73EHVaT3K+NHw3Y1tzvfI8apJnndTUq+Y5jv
+         JDNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mbvIXTn30Rl2aubdxi4kIY7ompkhv+r5bFVC1iAjIf8=;
+        b=DwWrTBMBZhSPTyu0mQA+qAasJsgbu6cjZT5wc4uTvWVoHBZFVKYCW1beSHgobtEI8T
+         m6Y8cVrvrG7uicLcuFF0gu6tpfcFcfs3BTQyMhnTwiM9+JnO1INrMOl7YvlE2iPcMPaY
+         GYOR0szM9auAQPL5T+16mqwy63Njh098rVkac/Zn0zSNP193yQCuYTtYFUuN1ZI4RAPM
+         42ynA0OBhaiuKuwEleM3D56DnOURdSge0jvoSZHa6jePUjRUFfioLKHKsjuEGV6Oc9mh
+         9D+fRPZw1I0Z3e4kolyoZ2orueV9qXhs8q1CV1CRxfY7YaRm5yWVk+i/ZZUl+URGsVhC
+         DF4g==
+X-Gm-Message-State: AJIora/s151xD+zNhW7aau2h5DQUnjcMgMrB1/SdZxE5+anrXpk/EXmO
+        pqtLLniQY8jIsWyBMtzaBy8=
+X-Google-Smtp-Source: AGRyM1vPz9QbsQ1zbDmGU7eRndtpV8jTRXKy3TA7peGKa34gFLVQ0RXC4DWhWA3a6XrwCuvsIDlAFw==
+X-Received: by 2002:a05:6a00:140a:b0:4e0:54d5:d01 with SMTP id l10-20020a056a00140a00b004e054d50d01mr12917947pfu.20.1658758039791;
+        Mon, 25 Jul 2022 07:07:19 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b0016b81679c1fsm9381356plf.216.2022.07.25.07.07.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 07:07:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d9e12738-8de4-bce9-a181-b3d231b18e42@roeck-us.net>
+Date:   Mon, 25 Jul 2022 07:07:17 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XMHcVmXSGernh5QO"
-Content-Disposition: inline
-In-Reply-To: <20220721055728.718573-6-kaleshsingh@google.com>
-X-Cookie: We are not a clone.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog
+ device
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Alexey Klimov <klimov.linux@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        oneukum@suse.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, atishp@rivosinc.com,
+        atishp@atishpatra.org, yury.norov@gmail.com, aklimov@redhat.com,
+        atomlin@redhat.com
+References: <20220725030605.1808710-1-klimov.linux@gmail.com>
+ <Yt5Zn9cXDe9/F9RJ@kroah.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <Yt5Zn9cXDe9/F9RJ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/25/22 01:51, Greg KH wrote:
+> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
+>> +static bool nowayout = WATCHDOG_NOWAYOUT;
+>> +module_param(nowayout, bool, 0);
+>> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+>> +			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>> +
+> 
+> Meta-comment about watchdog drivers, this is per-driver, not per-device,
+> which does not make sense for when these devices are on removable busses
+> where you can have multiple ones.
+> 
 
---XMHcVmXSGernh5QO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It is really intended to be a system configuration parameter
+(CONFIG_WATCHDOG_NOWAYOUT) which can be overridden. Also, I think it still
+makes sense to have it, even for removable devices. The ability to bypass
+the flag by pulling the device would defeat its purpose.
 
-On Wed, Jul 20, 2022 at 10:57:16PM -0700, Kalesh Singh wrote:
-> Move unwind() to stacktrace/common.h, and as a result
-> the kernel unwind_next() to asm/stacktrace.h. This allow
-> reusing unwind() in the implementation of the nVHE HYP
-> stack unwinder, later in the series.
+Guenter
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+> I don't suggest changing this (as it follows the current style of other
+> watchdog drivers), but perhaps a sysfs attribute for watchdog devices
+> can do the same thing in the future so you can do this on a per-device
+> basis.
+> 
+> Anyway, driver looks good to me, nice work!
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
---XMHcVmXSGernh5QO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLeozMACgkQJNaLcl1U
-h9AelAf8CN+jflic2RTW4curxqE7B5aE0AKvQRbPZuiX0lCcnOFiF7f897pNSNFy
-IozRUQi9IRjVa9vDFgPPBRRHkuFBNhnFnMxl9Gkh1BdyBJsAf8SuapeTFonxIPjh
-FCjd7Nq9OcE7oV9bffe4+AyPvlzd6hR49NZUP6ED3hoyFh9P2tTKspVJUE42PLuA
-CLFdi0MTHSp4B4KYWSh3TM1RU6bHq6vqRkt03sayLqMct9I0P267iTvTEGUh6Gxa
-AHN0CHZ6FMaztObWGtumcqjM6H+o9oD0MeCT537iUwHEzuKKTKivIOtSmljBTqdR
-0HfoD/QpY0A9FtKW5SRCCfXWFo5Whw==
-=vfZh
------END PGP SIGNATURE-----
-
---XMHcVmXSGernh5QO--

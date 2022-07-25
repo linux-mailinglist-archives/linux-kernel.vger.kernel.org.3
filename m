@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A3757FABC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8153557FA9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbiGYIAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
+        id S232637AbiGYH72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiGYIAI (ORCPT
+        with ESMTP id S229632AbiGYH7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:00:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D966613CE5;
-        Mon, 25 Jul 2022 01:00:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 55B21CE10D4;
-        Mon, 25 Jul 2022 08:00:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 311B7C341D2;
-        Mon, 25 Jul 2022 08:00:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658736001;
-        bh=7HPL7TSph7xHTwSwFr2eiOHKgS3Uzq/+C4Qi1l0Xe+o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o7liZPuaHI1qRg0PKIiLRfQuTCCno8X5u0oznAEQuftElgWtko5jHR38a2nm5A5pL
-         IDvruIlHGBrHtS4Qocx4CLEo7Bxg6qwmJWabYB+GDZJCCYQceMy4gP30ao6AMYyvke
-         23U7AIHk8Rm3FgSdzAB7c9NSgHcNDYOemUxkV8OkrQ2kNagPE8snG/jJwU/OCVgqW5
-         AsOwHkdYlz09iv9jcb0OhiHXobP5rYASQq2R+u9E8fyLyZumIeoMIjy1ycfUfAq1f+
-         SyP8se2dngo6744xj8uc2bsBw6Tg2r2NChBwGJ1PXs3BKTPfpC7Ssaq7/DQFXDdNmz
-         RJ9lnQ0jqIqzA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oFt0e-0000KG-Ec; Mon, 25 Jul 2022 10:00:12 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 7/7] USB: serial: usb_wwan: replace DTR/RTS magic numbers with macros
-Date:   Mon, 25 Jul 2022 09:58:41 +0200
-Message-Id: <20220725075841.1187-8-johan@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220725075841.1187-1-johan@kernel.org>
-References: <20220725075841.1187-1-johan@kernel.org>
+        Mon, 25 Jul 2022 03:59:25 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44368D135;
+        Mon, 25 Jul 2022 00:59:24 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id A53335FD0B;
+        Mon, 25 Jul 2022 10:59:22 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658735962;
+        bh=Ktbbd9hXNDd86/yoPDR8TGlX/txvLJI7Vez6o0MPzn4=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=gFDyn5lzlgkq+1RPQOn85zVANkvBlwyYpykkMIJY6UypfMMHCTtgI3V261SMRQmoM
+         OEaiMZRkJBeIgBP0TBhaVDfXr2rgbxXJup8k5IHzw0e+Z1sOLk/O9hTkW/R/vdSeJw
+         Cm+EUAhhdUkv/BBELOryaT+XCGy2TJvvUEbwh6ON79jddLMI9oWAvTuqk0s0kuNFoO
+         TV5r+6XUM12EO+/dPIZdQ9wqEDpIwHU0IZs2viw5e2+HtibjdgElKHPiyWEDDzShwp
+         4GSt4btMauaGAt0WgK1BQeoIxmbNrScyFihaaEzKtDtnz/1XQjiWCbwDY1rwAntkUR
+         wiAWTT4GD/e/g==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 25 Jul 2022 10:59:21 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v2 2/9] virtio/vsock: use 'target' in notify_poll_in,
+ callback
+Thread-Topic: [RFC PATCH v2 2/9] virtio/vsock: use 'target' in notify_poll_in,
+ callback
+Thread-Index: AQHYn/xnBQBRPJKwbEuxzxqKhyN7Rw==
+Date:   Mon, 25 Jul 2022 07:59:02 +0000
+Message-ID: <c708aae5-b8fe-bc66-7942-8be4e2ccfed5@sberdevices.ru>
+In-Reply-To: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D7273D71A27B7C4392A2E0610B9A95A5@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/25 03:52:00 #19956163
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-
-The usb_wwan_send_setup function generates DTR/RTS signals in compliance
-with CDC ACM standard. This patch changes magic numbers in this function
-to equivalent macros.
-
-Signed-off-by: Yan Xinyu <sdlyyxy@bupt.edu.cn>
-Link: https://lore.kernel.org/r/20220722085040.704885-1-sdlyyxy@bupt.edu.cn
-[ johan: use the new CDC control-line defines ]
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/usb_wwan.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
-index dab38b63eaf7..6129a6e26f2c 100644
---- a/drivers/usb/serial/usb_wwan.c
-+++ b/drivers/usb/serial/usb_wwan.c
-@@ -29,6 +29,7 @@
- #include <linux/bitops.h>
- #include <linux/uaccess.h>
- #include <linux/usb.h>
-+#include <linux/usb/cdc.h>
- #include <linux/usb/serial.h>
- #include <linux/serial.h>
- #include "usb-wwan.h"
-@@ -48,9 +49,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
- 	portdata = usb_get_serial_port_data(port);
- 
- 	if (portdata->dtr_state)
--		val |= 0x01;
-+		val |= USB_CDC_CTRL_DTR;
- 	if (portdata->rts_state)
--		val |= 0x02;
-+		val |= USB_CDC_CTRL_RTS;
- 
- 	ifnum = serial->interface->cur_altsetting->desc.bInterfaceNumber;
- 
-@@ -59,8 +60,9 @@ static int usb_wwan_send_setup(struct usb_serial_port *port)
- 		return res;
- 
- 	res = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
--				0x22, 0x21, val, ifnum, NULL, 0,
--				USB_CTRL_SET_TIMEOUT);
-+				USB_CDC_REQ_SET_CONTROL_LINE_STATE,
-+				USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE,
-+				val, ifnum, NULL, 0, USB_CTRL_SET_TIMEOUT);
- 
- 	usb_autopm_put_interface(port->serial->interface);
- 
--- 
-2.35.1
-
+VGhpcyBjYWxsYmFjayBjb250cm9scyBzZXR0aW5nIG9mIFBPTExJTixQT0xMUkROT1JNIG91dHB1
+dCBiaXRzIG9mIHBvbGwoKQ0Kc3lzY2FsbCxidXQgaW4gc29tZSBjYXNlcyxpdCBpcyBpbmNvcnJl
+Y3RseSB0byBzZXQgaXQsIHdoZW4gc29ja2V0IGhhcw0KYXQgbGVhc3QgMSBieXRlcyBvZiBhdmFp
+bGFibGUgZGF0YS4gVXNlICd0YXJnZXQnIHdoaWNoIGlzIGFscmVhZHkgZXhpc3RzDQphbmQgZXF1
+YWwgdG8gc2tfcmN2bG93YXQgaW4gdGhpcyBjYXNlLg0KDQpTaWduZWQtb2ZmLWJ5OiBBcnNlbml5
+IEtyYXNub3YgPEFWS3Jhc25vdkBzYmVyZGV2aWNlcy5ydT4NCi0tLQ0KIG5ldC92bXdfdnNvY2sv
+dmlydGlvX3RyYW5zcG9ydF9jb21tb24uYyB8IDUgKy0tLS0NCiAxIGZpbGUgY2hhbmdlZCwgMSBp
+bnNlcnRpb24oKyksIDQgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9uZXQvdm13X3Zzb2Nr
+L3ZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMgYi9uZXQvdm13X3Zzb2NrL3ZpcnRpb190cmFuc3Bv
+cnRfY29tbW9uLmMNCmluZGV4IGVjMmMyYWZiZjBkMC4uOGY2MzU2ZWJjZGQxIDEwMDY0NA0KLS0t
+IGEvbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jDQorKysgYi9uZXQvdm13
+X3Zzb2NrL3ZpcnRpb190cmFuc3BvcnRfY29tbW9uLmMNCkBAIC02MzQsMTAgKzYzNCw3IEBAIHZp
+cnRpb190cmFuc3BvcnRfbm90aWZ5X3BvbGxfaW4oc3RydWN0IHZzb2NrX3NvY2sgKnZzaywNCiAJ
+CQkJc2l6ZV90IHRhcmdldCwNCiAJCQkJYm9vbCAqZGF0YV9yZWFkeV9ub3cpDQogew0KLQlpZiAo
+dnNvY2tfc3RyZWFtX2hhc19kYXRhKHZzaykpDQotCQkqZGF0YV9yZWFkeV9ub3cgPSB0cnVlOw0K
+LQllbHNlDQotCQkqZGF0YV9yZWFkeV9ub3cgPSBmYWxzZTsNCisJKmRhdGFfcmVhZHlfbm93ID0g
+dnNvY2tfc3RyZWFtX2hhc19kYXRhKHZzaykgPj0gdGFyZ2V0Ow0KIA0KIAlyZXR1cm4gMDsNCiB9
+DQotLSANCjIuMjUuMQ0K

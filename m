@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54145801F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B085801F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234742AbiGYPeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 11:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        id S235276AbiGYPgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 11:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbiGYPec (ORCPT
+        with ESMTP id S232199AbiGYPgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 11:34:32 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A05BCB2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:34:31 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id x11so8442202qts.13
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=67je02j6uPzSAKV5fALusQHcJaLZtd8UN7xVwkpfhMI=;
-        b=cqYIXD8d4R3afensKf+99266lB8CnpoCR0cvyQJleALFFxfA893nPv3nDzZXt3p9za
-         s8ObwE74BOHxU+40bwlVdDr3a0JISs43bgIQOwzuJcNzM0xST3u+iLxR8hwv1zNTXHS6
-         Grd3BJJSVOsa4373326OgtzSlvStT0S1VDd14qQS8J0boaE438X2O4r5roAtieEZRa6h
-         SNNVP2akwjO8VpRxcok8o5upBwDLt09kWP3F6AcTwTqmdW5Me+jybiLbG/C3AXfnQHXy
-         6oThJosmja+RHL1pI0goIfSDiDz5HrJwrK5df6TJlo/cSxTG7pIONBV6cRi62GYTHyug
-         bsxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=67je02j6uPzSAKV5fALusQHcJaLZtd8UN7xVwkpfhMI=;
-        b=4GeBJ13w18eJppNLGoLs7YlDw77QiAYLTMGQVGRT8xCLv0Jxhdob4CDe3HDmaLl4/3
-         yJ9SePbu+2iVd63juujYPapVwJtCD4BbZ6524OWUFtk0JKfvDCKs6w5OGtlCOY8iT7fI
-         NSAnX2MnpZRNsG+JuJHHbsC/Y8pPuYTLg2oHmZR0Fpogb+FoW809J04TvUt4p20avkaQ
-         t6z78IpzRirYf0B6QHwXUNewACrQ6vFgVXSRWzfL3bX8nV48o4CjtHg+IzzzpUWZ/rNI
-         GxiGAR+fMLOQSJliTz2MzULq+oz11T4DzLXWmwOQn4DRdFvGVeOOBdT950sGsyRPOsTL
-         sZZA==
-X-Gm-Message-State: AJIora8+xXuiRdZJdS2PsDSz1ZDniAxOZg1KYE6LdfsIJvDZzVzb+a5e
-        f5+LtAMJxEkEkk1JuB5vJwJXEw==
-X-Google-Smtp-Source: AGRyM1vgqIkAXbToyHYJQiompUrodEA+PwnkTXUl3kHFv5+9uA0m41T7e88PjoGYpUJEUXXNPNijFg==
-X-Received: by 2002:ac8:5ac2:0:b0:31f:d13:de85 with SMTP id d2-20020ac85ac2000000b0031f0d13de85mr10923232qtd.397.1658763270030;
-        Mon, 25 Jul 2022 08:34:30 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:994f])
-        by smtp.gmail.com with ESMTPSA id q3-20020a05622a030300b0031eb393aa45sm7783893qtw.40.2022.07.25.08.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 08:34:29 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 11:34:28 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
-        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
-        rdunlap@infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH 1/9] sched/psi: fix periodic aggregation shut off
-Message-ID: <Yt64BKsrUbD0xxYI@cmpxchg.org>
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-2-zhouchengming@bytedance.com>
+        Mon, 25 Jul 2022 11:36:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D879ABC98
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:36:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34C5A2B;
+        Mon, 25 Jul 2022 08:36:41 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.28.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1E5B3F73D;
+        Mon, 25 Jul 2022 08:36:38 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 16:36:33 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jagdish Gediya <jvgediya@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ying.huang@intel.com, dave.hansen@intel.com,
+        Jonathan.Cameron@huawei.com, adobriyan@gmail.com,
+        akpm@linux-foundation.org, andriy.shevchenko@linux.intel.com,
+        rf@opensource.cirrus.com, pmladek@suse.com, will@kernel.org
+Subject: Re: [PATCH v3 1/2] lib/kstrtox.c: Add "false"/"true" support to
+ kstrtobool()
+Message-ID: <Yt64gbsRWY3RIPOy@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220426180203.70782-1-jvgediya@linux.ibm.com>
+ <Yt6u34sigPEkeZ0Y@FVFF77S0Q05N.cambridge.arm.com>
+ <Yt605xj898VSAsA3@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220721040439.2651-2-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <Yt605xj898VSAsA3@casper.infradead.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:04:31PM +0800, Chengming Zhou wrote:
-> We don't want to wake periodic aggregation work back up if the
-> task change is the aggregation worker itself going to sleep, or
-> we'll ping-pong forever.
-> 
-> Previously, we would use psi_task_change() in psi_dequeue() when
-> task going to sleep, so this check was put in psi_task_change().
-> 
-> But commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
-> defer task sleep handling to psi_task_switch(), won't go through
-> psi_task_change() anymore.
-> 
-> So this patch move this check to psi_task_switch(). Note for defer sleep
-> case, we should wake periodic avgs work for common ancestors groups,
-> since those groups have next task sched_in.
-> 
-> Fixes: 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+On Mon, Jul 25, 2022 at 04:21:11PM +0100, Matthew Wilcox wrote:
+> On Mon, Jul 25, 2022 at 03:55:27PM +0100, Mark Rutland wrote:
+> > On Tue, Apr 26, 2022 at 11:32:02PM +0530, Jagdish Gediya wrote:
+> > > At many places in kernel, It is necessary to convert sysfs input
+> > > to corrosponding bool value e.g. "false" or "0" need to be converted
+> > > to bool false, "true" or "1" need to be converted to bool true,
+> > > places where such conversion is needed currently check the input
+> > > string manually, kstrtobool() can be utilized at such places but
+> > > currently it doesn't have support to accept "false"/"true".
+> > > 
+> > > Add support to accept "false"/"true" as valid string in kstrtobool().
+> > > 
+> > > Signed-off-by: Jagdish Gediya <jvgediya@linux.ibm.com>
+> > > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > 
+> > I've just spotted that this broke arm64's "rodata=full" command line option,
 
-Good catch!
+> > since "full" gets parsed as 'f' = FALSE, when previously that would have been
+> > rejected. So anyone passing "rodata=full" on the command line will have rodata
+> > disabled, which is not what they wanted.
+> > 
+> > The current state of things is a bit messy (we prase the option twice because
+> > arch code needs it early), and we can probably fix that with some refactoring,
+> > but I do wonder if we actually want to open up the sysfs parsing to accept
+> > anything *beginning* with [tTfF] rather than the full "true" and "false"
+> > strings as previously, or whether it's worth reverting this for now in case
+> > anything else is affected.
+> 
+> Well, that's going to break people who've started using the new option.
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Ah; I had mistakenly thought this was new in v5.19, and so a revert was fine. I
+see that it made it in for v5.18.
+
+> As a quick fix, how about only allowing either "f\0" or "fa"?
+
+TBH I reckon it's best to go for reworking the "rodata=" parsing, and
+backporting that to stable, since people could be relying on any "f*" string by
+now...
+
+I'll have a go at that rework...
+
+Mark.

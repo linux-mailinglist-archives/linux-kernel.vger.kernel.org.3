@@ -2,110 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1183B57FE21
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5A257FE1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbiGYLLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 07:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S233403AbiGYLKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbiGYLL2 (ORCPT
+        with ESMTP id S229561AbiGYLKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 07:11:28 -0400
-Received: from sender4-op-o13.zoho.com (sender4-op-o13.zoho.com [136.143.188.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6DCB7CC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:11:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1658747433; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=fW8TaQMdY65k4a6PKbwO5EvXQYUat5GJl3nk4ojQxYKztgFdxYaf+Hzzd+ScGnx0RY/pxBnIEDpHFwgGtCL6CdpzZlQH+Cfqvz/pgOM3LaBoFg1MLc5bIbv1rMTjmGGozmtprtA3Y13eoVpsfefJ6aaX8QXHz2/kSFY2UkIXxXQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1658747433; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=td2HD537TFOqVAXGmobMSbf6TwwoP0HqZ6KHlLX2n6Q=; 
-        b=DvLAml3IlrBKQOcRZbveXUhmdO6ZcRNg7fPMsr428hc65vAErcS820j243ZZcuF2L9w/NHdKB+JAzukmV5woADgN74+/o4Ko51MwHVcP58lVnV7koQe/2UGEMiFDfEPyhJHHCXZg9Jd1aIeVypWZ5SQ1LXt7mQ6ncdUkcWpW/jc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1658747433;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=td2HD537TFOqVAXGmobMSbf6TwwoP0HqZ6KHlLX2n6Q=;
-        b=NSK+g8lymnxFsW3NBxxSdluCZuP91qRNACJuzv0Vu4ZueHaC7FrumKdnPz6ml8Kk
-        mOcm2peOuCbTo1acgIkx0CrpIBDzCHflXN3ygeXkfNmel1c/kh6vCtQrd+f3ghqU5VI
-        r5NPUJo98R7/rctNerhhHYq+wPd8WsDaVe9yaQfo=
-Received: from edelgard.icenowy.me (59.41.162.230 [59.41.162.230]) by mx.zohomail.com
-        with SMTPS id 1658747431498424.62638727725675; Mon, 25 Jul 2022 04:10:31 -0700 (PDT)
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Icenowy Zheng <uwu@icenowy.me>
-Subject: [PATCH 2/2] ASoC: Intel: Skylake: try to get NHLT blob with PCM params as fallback
-Date:   Mon, 25 Jul 2022 19:10:02 +0800
-Message-Id: <20220725111002.143765-2-uwu@icenowy.me>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220725111002.143765-1-uwu@icenowy.me>
-References: <20220725111002.143765-1-uwu@icenowy.me>
+        Mon, 25 Jul 2022 07:10:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82778B1D5
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:10:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2DFC60F07
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:10:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B750C341C6;
+        Mon, 25 Jul 2022 11:10:46 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UKzIoRW7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1658747444;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4hha2u7Ttf85rlfnP70RRrDiKMZ3achs4iQQcieqiRo=;
+        b=UKzIoRW7iTYCNZ/fLqml5HAw2XqOA11ikyJa25vfT2zuEa+o7iNaa6pH+QFj7busp8sGbu
+        zEbcoRIkdYGZfAP0kx6ADCT//5f8gh3tFABE2+RAqmlCcBwo7QeXiyMsBg9oye0dViu2HE
+        hj4UBfEW2tVgo8Bgct+rh4ly+J8SrjY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b22d6502 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 25 Jul 2022 11:10:43 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Borislav Petkov <bp@suse.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Johannes Berg <johannes@sipsolutions.net>
+Subject: [PATCH] random: discourage use of archrandom outside of rng
+Date:   Mon, 25 Jul 2022 13:10:38 +0200
+Message-Id: <20220725111038.720624-1-Jason@zx2c4.com>
+In-Reply-To: <Yt5hwxC1xgvA8Asw@zx2c4.com>
+References: <Yt5hwxC1xgvA8Asw@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switching to use pipeline parameters to get NHLT blob breaks audio on
-HP Chromebook 13 G1 (at least with MrChromeBox firmware).
+Borislav pointed out during the review of "random: handle archrandom
+with multiple longs" that people might actually use this function, which
+might not be good because the function has surprising semantics. This of
+course was also the case before that patch, and indeed RDSEED-like
+functions across architectures often behave surprisingly, failing often.
+While random.c has been written specifically to work with that behavior,
+not much else is well equipped for that.
 
-Fix this by retrying to get NHLT blob with PCM parameters (which is the
-old behavior) if pipeline parameters fail.
+So add a comment suggesting that this is not for general consumption.
+Fortunately, nobody uses this for general consumption anyway, and people
+who try quickly find themselves in trouble. But adding this comment out
+of an abundance of caution was nonetheless suggested, and it at least
+means there will be easier justification for cleaning up potential
+misuses of the function later.
 
-Fixes: 87b265260046 ("ASoC: Intel: Skylake: Select proper format for NHLT blob")
-Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Suggested-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- sound/soc/intel/skylake/skl-topology.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/arm64/include/asm/archrandom.h   | 13 +++++++++++++
+ arch/powerpc/include/asm/archrandom.h |  8 ++++++++
+ arch/s390/include/asm/archrandom.h    |  8 ++++++++
+ arch/um/include/asm/archrandom.h      |  8 ++++++++
+ arch/x86/include/asm/archrandom.h     |  9 ++++++---
+ include/asm-generic/archrandom.h      |  8 ++++++++
+ 6 files changed, 51 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/intel/skylake/skl-topology.c b/sound/soc/intel/skylake/skl-topology.c
-index 19994ec8bba1..3d5a3ee1c82c 100644
---- a/sound/soc/intel/skylake/skl-topology.c
-+++ b/sound/soc/intel/skylake/skl-topology.c
-@@ -1858,6 +1858,15 @@ static int skl_tplg_be_fill_pipe_params(struct snd_soc_dai *dai,
- 					pipe_fmt->bps, params->s_cont,
- 					pipe_fmt->channels, pipe_fmt->freq,
- 					pipe->direction, dev_type);
-+	if (!cfg) {
-+		/* Retry with PCM parameters, as the old behavior */
-+		cfg = intel_nhlt_get_endpoint_blob(dai->dev, skl->nhlt,
-+						mconfig->vbus_id, link_type,
-+						params->s_fmt, params->s_cont,
-+						params->ch, params->s_freq,
-+						params->stream, dev_type);
-+	}
-+
- 	if (cfg) {
- 		mconfig->formats_config[SKL_PARAM_INIT].caps_size = cfg->size;
- 		mconfig->formats_config[SKL_PARAM_INIT].caps = (u32 *)&cfg->caps;
-@@ -1866,6 +1875,8 @@ static int skl_tplg_be_fill_pipe_params(struct snd_soc_dai *dai,
- 			mconfig->vbus_id, link_type, params->stream,
- 			pipe_fmt->channels, pipe_fmt->freq,
- 			pipe_fmt->bps);
-+		dev_err(dai->dev, "PCM: ch %d, freq %d, fmt %d\n",
-+			params->ch, params->s_freq, params->s_fmt);
- 		return -EINVAL;
- 	}
+diff --git a/arch/arm64/include/asm/archrandom.h b/arch/arm64/include/asm/archrandom.h
+index 109e2a4454be..0b5ee0e12a13 100644
+--- a/arch/arm64/include/asm/archrandom.h
++++ b/arch/arm64/include/asm/archrandom.h
+@@ -58,6 +58,10 @@ static inline bool __arm64_rndrrs(unsigned long *v)
+ 	return ok;
+ }
  
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+ {
+ 	/*
+@@ -71,6 +75,10 @@ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t
+ 	return 0;
+ }
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ {
+ 	if (!max_longs)
+@@ -121,6 +129,11 @@ static inline bool __init __early_cpu_has_rndr(void)
+ 	return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
+ }
+ 
++
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __init __must_check
+ arch_get_random_seed_longs_early(unsigned long *v, size_t max_longs)
+ {
+diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
+index 0e365c5b2396..7accfe346d49 100644
+--- a/arch/powerpc/include/asm/archrandom.h
++++ b/arch/powerpc/include/asm/archrandom.h
+@@ -4,11 +4,19 @@
+ 
+ #include <asm/machdep.h>
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+ {
+ 	return 0;
+ }
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ {
+ 	if (max_longs && ppc_md.get_random_seed && ppc_md.get_random_seed(v))
+diff --git a/arch/s390/include/asm/archrandom.h b/arch/s390/include/asm/archrandom.h
+index cf5e000df0a1..ae1efdd6f3a9 100644
+--- a/arch/s390/include/asm/archrandom.h
++++ b/arch/s390/include/asm/archrandom.h
+@@ -18,11 +18,19 @@
+ DECLARE_STATIC_KEY_FALSE(s390_arch_random_available);
+ extern atomic64_t s390_arch_random_counter;
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+ {
+ 	return 0;
+ }
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ {
+ 	if (static_branch_likely(&s390_arch_random_available)) {
+diff --git a/arch/um/include/asm/archrandom.h b/arch/um/include/asm/archrandom.h
+index 24e16c979c51..d2b20bb0ed53 100644
+--- a/arch/um/include/asm/archrandom.h
++++ b/arch/um/include/asm/archrandom.h
+@@ -7,6 +7,10 @@
+ /* This is from <os.h>, but better not to #include that in a global header here. */
+ ssize_t os_getrandom(void *buf, size_t len, unsigned int flags);
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+ {
+ 	ssize_t ret;
+@@ -17,6 +21,10 @@ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t
+ 	return ret / sizeof(*v);
+ }
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ {
+ 	return 0;
+diff --git a/arch/x86/include/asm/archrandom.h b/arch/x86/include/asm/archrandom.h
+index 02bae8e0758b..8352948e6412 100644
+--- a/arch/x86/include/asm/archrandom.h
++++ b/arch/x86/include/asm/archrandom.h
+@@ -41,15 +41,18 @@ static inline bool __must_check rdseed_long(unsigned long *v)
+ }
+ 
+ /*
+- * These are the generic interfaces; they must not be declared if the
+- * stubs in <linux/random.h> are to be invoked.
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
+  */
+-
+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+ {
+ 	return max_longs && static_cpu_has(X86_FEATURE_RDRAND) && rdrand_long(v) ? 1 : 0;
+ }
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ {
+ 	return max_longs && static_cpu_has(X86_FEATURE_RDSEED) && rdseed_long(v) ? 1 : 0;
+diff --git a/include/asm-generic/archrandom.h b/include/asm-generic/archrandom.h
+index 3cd7f980cfdc..800b41639dd7 100644
+--- a/include/asm-generic/archrandom.h
++++ b/include/asm-generic/archrandom.h
+@@ -2,11 +2,19 @@
+ #ifndef __ASM_GENERIC_ARCHRANDOM_H__
+ #define __ASM_GENERIC_ARCHRANDOM_H__
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+ {
+ 	return 0;
+ }
+ 
++/*
++ * This should only be used by drivers/char/random.c. Other drivers *must*
++ * use get_random_bytes() instead.
++ */
+ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+ {
+ 	return 0;
 -- 
-2.37.1
+2.35.1
 

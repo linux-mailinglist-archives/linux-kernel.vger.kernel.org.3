@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143B558039D
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C2B58039F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236118AbiGYRlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 13:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S233373AbiGYRo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 13:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiGYRlS (ORCPT
+        with ESMTP id S229806AbiGYRoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 13:41:18 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B1E14D0E;
-        Mon, 25 Jul 2022 10:41:17 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31f379a0754so15250787b3.2;
-        Mon, 25 Jul 2022 10:41:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3IhhclTIPbl2mf4VpDDOOj1WY1RyO1WWUZZG7ltuKqA=;
-        b=lMAXG3CQzNQ86IggIF+zCZQhm+33FohG7/XYdhD8iXOZinZjmYh6KNZkY0nFF6SKdI
-         t16o64jdfklhHp7pvAV3MJ8JI2shJSy+SJPtoTsoYjUvh4OcZnkmjVnWcndGgGeY8RKv
-         LnYDXdMVTuI/VuTZV4gIYJGAKPuYqOjE1Q5fliZBWR4fAxPBcQNToKYL6j041+QM8Bmq
-         YUE2hUNg/veXYSPGk044RE3RvukD5esKp/iuKxZNgyRVzhscm3mPpaDVmDF7PRjE5PYJ
-         r/ao1Q3hRsTNtCeEU1LQWLZu+Lu18QFFTmUhcp4LZFKfRlMGibBLenvxRDV51eCiKb7F
-         vwhQ==
-X-Gm-Message-State: AJIora8QOJGDzkp6PmEkFT8pHiCeEb7cW3LTltO3BiGb0w65NOmt94Qz
-        t2HMTmIhh7LZ6YT5KrhamPaKuJMiAuJt41f6UUY=
-X-Google-Smtp-Source: AGRyM1tHl+f3lwTtEqzX/f9XwP9tyLK3+t2hWM95ATK/qXh4QeDQlnZwrVm0LS3uqiJctWDDwMlqHVFs617zoMC8dBM=
-X-Received: by 2002:a81:78c6:0:b0:31e:848b:6e2 with SMTP id
- t189-20020a8178c6000000b0031e848b06e2mr11086109ywc.301.1658770876326; Mon, 25
- Jul 2022 10:41:16 -0700 (PDT)
+        Mon, 25 Jul 2022 13:44:25 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0661A054
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658771064; x=1690307064;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SkpttYi1cwno6GFk8tMlBxbrhXWEBQKeBSWYy4Xy/6A=;
+  b=BqjN4nnsI8yhPNoVdd/SqEM7IlCIQ2bOSRY/RsEoZyupyOcu7tQHtfw/
+   UFldm05FVLYL1m9KLuv6PE9jWsZ0hwL0oy9yaFJXy4Y/1Z0g4riLwQh+I
+   6fHm8GAIZeDNh2Z/BMFnhMmUlK97ciluS+w06wjixDqRdR57V8bopvZth
+   fG5Rd4BY35R05r0yHutbiALLzy5IHpA4/iOWuBGH25B3lHrBJv4NIJHbt
+   rl3ZB8AR5PfFONAkf8UCD+yORl35sU16LadF7cRvV9C1P7kM85j/21HkO
+   E9jXjxUBGvUXAdN0Cuk5tc33hJKaUASLnFMiJJzHtneHMFXCQF3KTST7X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="268148679"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="268148679"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 10:44:24 -0700
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="596750191"
+Received: from spaletti-mobl1.amr.corp.intel.com (HELO [10.212.231.21]) ([10.212.231.21])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 10:44:23 -0700
+Message-ID: <f2a0e0e0-79f2-1b5c-2bcd-b6037d479d4e@intel.com>
+Date:   Mon, 25 Jul 2022 10:44:23 -0700
 MIME-Version: 1.0
-References: <20220723195932.1302575-1-longman@redhat.com>
-In-Reply-To: <20220723195932.1302575-1-longman@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 25 Jul 2022 19:41:05 +0200
-Message-ID: <CAJZ5v0hL7P2miQjivtirzUhuTzqkM091GYCr+OjQARyi7TXSYQ@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: Fix false positive RCU splats due to
- incorrect hardirqs state
-To:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] x86/fpu: Measure the Latency of XSAVE and XRSTOR
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Yi Sun' <yi.sun@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Cc:     "sohil.mehta@intel.com" <sohil.mehta@intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "heng.su@intel.com" <heng.su@intel.com>
+References: <20220723083800.824442-1-yi.sun@intel.com>
+ <20220723083800.824442-2-yi.sun@intel.com>
+ <921078bc2a994d3ab6aba26d4654cb47@AcuMS.aculab.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <921078bc2a994d3ab6aba26d4654cb47@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jul 23, 2022 at 10:00 PM Waiman Long <longman@redhat.com> wrote:
->
-> Commit 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-> uses raw_local_irq_enable/local_irq_disable() around call to
-> __intel_idle() in intel_idle_irq().
->
-> With interrupt enabled, timer tick interrupt can happen and a
-> subsequently call to __do_softirq() may change the lockdep hardirqs state
-> of a debug kernel back to 'on'. This will result in a mismatch between
-> the cpu hardirqs state (off) and the lockdep hardirqs state (on) causing
-> a number of false positive "WARNING: suspicious RCU usage" splats.
->
-> Fix that by using local_irq_disable() to disable interrupt in
-> intel_idle_irq().
->
-> Fixes: 32d4fd5751ea ("cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE")
-> Signed-off-by: Waiman Long <longman@redhat.com>
+On 7/24/22 13:54, David Laight wrote:
+> I've done some experiments that measure short instruction latencies.
+> Basically I found:
 
-Applied as 5.19-rc material.
+Short?  The instructions in question can write up to about 12k of data.
+ That's not "short" by any means.
 
-Peter, please let me know if you have concerns.
+I'm also not sure precision here is all that important.  The main things
+we want to know here when and where the init and modified optimizations
+are coming into play.  In other words, how often is there actual data
+that *needs* to be saved and restored and can't be optimized away.
 
-> ---
->  drivers/idle/intel_idle.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index f5c6802aa6c3..907700d1e78e 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -162,7 +162,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
->
->         raw_local_irq_enable();
->         ret = __intel_idle(dev, drv, index);
-> -       raw_local_irq_disable();
-> +
-> +       /*
-> +        * The lockdep hardirqs state may be changed to 'on' with timer
-> +        * tick interrupt followed by __do_softirq(). Use local_irq_disable()
-> +        * to keep the hardirqs state correct.
-> +        */
-> +       local_irq_disable();
->
->         return ret;
->  }
-> --
-> 2.31.1
->
+So, sure, if we were measuring a dozen cycles here, you could make an
+argument that this _might_ be problematic.
+
+But, in this case, we really just want to be able to tell when
+XSAVE/XRSTOR are getting more or less expensive and also get out a
+minimal amount of data (RFBM/XINUSE) to make a guess why that might be.
+
+Is it *REALLY* worth throwing serializing instructions in and moving
+clock sources to do that?  Is the added precision worth it?

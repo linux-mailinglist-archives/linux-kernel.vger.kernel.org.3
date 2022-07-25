@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C55C580593
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE92580599
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236954AbiGYU1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S237045AbiGYU3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234791AbiGYU1W (ORCPT
+        with ESMTP id S232013AbiGYU33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:27:22 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E604E220F4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:27:17 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id r186so11384150pgr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6pnjId8157F0YTWhWfSC/5aTXpHZCwIpGW/QEGNcteY=;
-        b=abaAiWLmWu93GmZ4BTbyEdgieqn+J3Po/WKjkZo6zp2S8oYLiqt/zNpFD0WKEmFOu0
-         gF4YImq4nZK32SgJkJkgCCKL+wD6+PPDWD34RPRliXyeJptGKWoSsqa91+Vcwu2BBR81
-         sXV7gYpizMscVuktwLzAuXnWJxKSY0IjFPS0HyHtqzS4GTleqogdTNkb2HnErRUyWQHk
-         9sbENXwqhXbzK5CODpLnaectsCjxJyQqD/C/uRylazhGROMQnXqwhFux4qGxv8/aa0AE
-         6BEE7yfP6U8eDnObkVzoZJ/vBoZg5tLkWcI4PJPw1TIvH7OWZSDVQlLAxrJk1wxvOJzB
-         sx0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6pnjId8157F0YTWhWfSC/5aTXpHZCwIpGW/QEGNcteY=;
-        b=LsO2DqJey7ItuXAonb4wzMr+APoQg6KIuZYluDXrjGF5vRPS2GH9BSBTfoaAKdpAuW
-         vQLmh+K+ojNIbtTzWkVmFmDdSDRR1WKkOdu6hoJS9Yjp8XJgUc7i87o+IFwtvzTE6T/O
-         hZrHYFCTK3KoDQh8e7FHyKzOZxm6xNdsHvhiB855GSKhcraPD3bzkBelC4PuuXo0thiG
-         uwjAdLeQ3NxEqyAMrOirvTc+uSFFmjuq/7BPxbznSlYS8XNfl/ggkSVeaZ0w5zeBn0dU
-         YCaZ7lH70xbxHno/aPYW2XKdtLg9YmqqY4BIFmw1XE+1f7rh3hfVCxhM2CNo7B6VL34O
-         jbIA==
-X-Gm-Message-State: AJIora/5zuGms8IyyRdl/22Kb0P2Q1yQ5n5PUQxLIqIlgU1RNh7EAZkn
-        PVyGlBaGADmBZ72rYk1mPsykAQ==
-X-Google-Smtp-Source: AGRyM1seKXbaSXVkL6RxTSPDAO8V8WuGv9UJA311bQxvxR8q5Qj+DwNK8ibUE0wINtgMaajoUaL/bw==
-X-Received: by 2002:a63:1a09:0:b0:415:fa9a:ae57 with SMTP id a9-20020a631a09000000b00415fa9aae57mr12018258pga.181.1658780837266;
-        Mon, 25 Jul 2022 13:27:17 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0])
-        by smtp.gmail.com with ESMTPSA id o4-20020a17090a678400b001ef7fd7954esm11568479pjj.20.2022.07.25.13.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 13:27:16 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-mmc@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, ulf.hansson@linaro.org,
-        robh@kernel.org, bhupesh.sharma@linaro.org,
-        bhupesh.linux@gmail.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: mmc: sdhci-msm: Fix 'operating-points-v2 was unexpected' issue
-Date:   Tue, 26 Jul 2022 01:57:09 +0530
-Message-Id: <20220725202709.2861789-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.3
+        Mon, 25 Jul 2022 16:29:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04519BC9B;
+        Mon, 25 Jul 2022 13:29:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9C57B810FE;
+        Mon, 25 Jul 2022 20:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D78C341CD;
+        Mon, 25 Jul 2022 20:29:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658780965;
+        bh=iX8wr1hPKTneg9a+eBJXq4+wGlRNsgbD59/7wwnN1xA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BDA+ZjuwJ6YdcVR2XPmFe4pShoa4H+Zcpn7U6V/Ix1dgzNGEloHb5vdd8/wO70L+x
+         dmoAklJ3de20NXW8/c1SvEqWtNPSZmTxNVok6Vx0s/+Zw0jpYkx3XGenQLgosEryb4
+         b7FmR+giTmLriHFGB32w/DJlloD/yVi4+PyBNpwXGpojoEs1OjFhNa7zGiDazeLjNb
+         KwXm8hORhBKdXbnAl9JjndzW06JMOGMwYmhrjmfeisJa/LVYJKDlPavdh4T9PJ9091
+         KinrbzXh2VjhmJ96M1uUsh94oYzYhhN9MbQ6mwQEnoB03ZiDfkNYdOW6Tf/1ztj7jC
+         kmc/MV6KkW/8A==
+Received: by mail-vs1-f44.google.com with SMTP id 129so4221098vsq.8;
+        Mon, 25 Jul 2022 13:29:25 -0700 (PDT)
+X-Gm-Message-State: AJIora82RbxpP4yubCHsY22wS6mr092cAojQ03S1COJT0oMYZAsWk5hD
+        NGYvwCz/j+mOJRuVHb7/b/MoWrDka30UFiU/Cw==
+X-Google-Smtp-Source: AGRyM1vzsYMyTaGYF4X1r/77zbG7V68gqLcEpGiz0JYOkMPOFCFcjdJ4Vx5gxnBVP+8Ji/5BOwHBtGdQcDtcAk0fGGI=
+X-Received: by 2002:a05:6102:162b:b0:358:418a:4e57 with SMTP id
+ cu43-20020a056102162b00b00358418a4e57mr4344243vsb.26.1658780964277; Mon, 25
+ Jul 2022 13:29:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220725180916.2850228-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220725180916.2850228-1-bhupesh.sharma@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 25 Jul 2022 14:29:13 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+UaXgCFH5azZoHDSSqagEcRf9f6-ZucWAHuYZi0HaHgA@mail.gmail.com>
+Message-ID: <CAL_Jsq+UaXgCFH5azZoHDSSqagEcRf9f6-ZucWAHuYZi0HaHgA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mmc: Set maximum documented operating
+ frequency as 384MHz
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bhupesh Sharma <bhupesh.linux@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,41 +66,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As Rob reported in [1], there is one more issue present
-in the 'sdhci-msm' dt-binding which shows up when a fix for
-'unevaluatedProperties' handling is applied:
+On Mon, Jul 25, 2022 at 12:09 PM Bhupesh Sharma
+<bhupesh.sharma@linaro.org> wrote:
+>
+> As Ulf noted in [1], the maximum operating frequency
+> documented in the mmc-controller device-tree bindings
+> should be updated to the maximum frequency supported
+> by the mmc controller(s).
 
- Documentation/devicetree/bindings/mmc/sdhci-msm.example.dtb:
-  mmc@8804000: Unevaluated properties are not allowed
-   ('operating-points-v2' was unexpected)
+Please send DT patches to the DT list so checks run and they are in
+the review queue.
 
-Fix the same.
+> Without this fix in place, the 'make dtbs_check' reports
+> issues with 'max-frequency' value for ipq8074 sdhci node:
+>
+>   arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb: mmc@7824900:
+>    max-frequency:0:0: 384000000 is greater than the maximum of 200000000
+>
+> [1]. https://www.spinics.net/lists/kernel/msg4442049.html
+>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+> - Rebased on linux-next/master
+>
+>  .../devicetree/bindings/mmc/mmc-controller.yaml          | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> index ff5ce89e5111..c49f3060c24a 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> @@ -87,12 +87,19 @@ properties:
+>      enum: [1, 4, 8]
+>      default: 1
+>
+> +  # Maximum operating frequency:
+> +  # - for eMMC, the maximum supported frequency is 200MHz,
+> +  # - for SD/SDIO cards the SDR104 mode has a max supported
+> +  #   frequency of 208MHz,
+> +  # - some mmc host controllers do support a max frequency
+> +  #   upto 384MHz,
+> +  # so lets keep the maximum supported value here.
 
-[1]. https://lore.kernel.org/lkml/20220514220116.1008254-1-bhupesh.sharma@linaro.org/
+Add to the description instead of a comment.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- - Rebased on linux-next/master.
 
- Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-index b00578ae1dea..fc0e81c2066c 100644
---- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-+++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-@@ -137,6 +137,8 @@ properties:
- 
-   max-frequency: true
- 
-+  operating-points-v2: true
-+
- patternProperties:
-   '^opp-table(-[a-z0-9]+)?$':
-     if:
--- 
-2.35.3
-
+>    max-frequency:
+>      description:
+>        Maximum operating frequency of the bus.
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      minimum: 400000
+> -    maximum: 200000000
+> +    maximum: 384000000
+>
+>    disable-wp:
+>      $ref: /schemas/types.yaml#/definitions/flag
+> --
+> 2.35.3
+>

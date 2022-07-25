@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F10257FFBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B84757FFC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235470AbiGYNYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S235513AbiGYNZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiGYNYn (ORCPT
+        with ESMTP id S232494AbiGYNZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:24:43 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359A813CCE;
-        Mon, 25 Jul 2022 06:24:42 -0700 (PDT)
-Received: from zn.tnic (p200300ea972976f8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76f8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B0B301EC067C;
-        Mon, 25 Jul 2022 15:24:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658755476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=6AT8Zd6HwL3AiZs+hVZ03j4gMl4EdeI7g5LHD0WVY6c=;
-        b=reBNqb8TBfK88JijG2GZF3ExFDhuXvx6UCJ+L4ncIaQQMbNHAnw46ziQDqR027wg/Pf545
-        gHmETb4hT1AQSnH+5tSTjZoNfWdm1nfBkVX2XX488+Z84i2aM4CdrsUtaA7n4u1Rx/f9vc
-        KB+srz/jIG2tKwpZor+3FWqijTbmBTc=
-Date:   Mon, 25 Jul 2022 15:24:31 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 06/49] x86/sev: Add helper functions for
- RMPUPDATE and PSMASH instruction
-Message-ID: <Yt6ZjzCSqPv6BKfH@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <e4643e9d37fcb025d0aec9080feefaae5e9245d5.1655761627.git.ashish.kalra@amd.com>
- <YrH0ca3Sam7Ru11c@work-vm>
- <SN6PR12MB2767FBF0848B906B9F0284D28EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
- <BYAPR12MB2759910E715C69D1027CCE678EB29@BYAPR12MB2759.namprd12.prod.outlook.com>
- <Yrrc/6x70wa14c5t@work-vm>
- <SN6PR12MB27677062FBBF9D62C7BF41D88EB89@SN6PR12MB2767.namprd12.prod.outlook.com>
+        Mon, 25 Jul 2022 09:25:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2D826ED
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:25:32 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oFy5G-0002CC-6O; Mon, 25 Jul 2022 15:25:18 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1793DB9964;
+        Mon, 25 Jul 2022 13:25:15 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 15:25:14 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] can: slcan: extend supported features (step 2)
+Message-ID: <20220725132514.h3iva4xi4sdncus6@pengutronix.de>
+References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yohv5x576q7yvjhc"
 Content-Disposition: inline
-In-Reply-To: <SN6PR12MB27677062FBBF9D62C7BF41D88EB89@SN6PR12MB2767.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 05:57:41PM +0000, Kalra, Ashish wrote:
-> Yes, I will be adding a check for CPU family/model as following :
 
-Why if the PPR is already kinda spelling the already architectural
-pieces of the RMP entry?
+--yohv5x576q7yvjhc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-"In order to assist software" it says.
+On 25.07.2022 08:54:13, Dario Binacchi wrote:
+> With this series I try to finish the task, started with the series [1],
+> of completely removing the dependency of the slcan driver from the
+> userspace slcand/slcan_attach applications.
+>=20
+> The series, however, still lacks a patch for sending the bitrate setting
+> command to the adapter:
+>=20
+> slcan_attach -b <btr> <dev>
+>=20
+> Without at least this patch the task cannot be considered truly completed.
+>=20
+> The idea I got is that this can only happen through the ethtool API.
+> Among the various operations made available by this interface I would
+> have used the set_regs (but only the get_regs has been developed), or,
+> the set_eeprom, even if the setting would not be stored in an eeprom.
+> IMHO it would take a set_regs operation with a `struct ethtool_wregs'
+> parameter similar to `struct ethtool_eeprom' without the magic field:
 
-So you call the specified ones by their name and the rest is __rsvd.
+This doesn't feel right.
 
-No need for model checks at all.
+> struct ethtool_wregs {
+> 	__u32	cmd;
+> 	__u32	offset;
+> 	__u32	len;
+> 	__u8	data[0];
+> };
+>=20
+> But I am not the expert and if there was an alternative solution already
+> usable, it would be welcome.
 
-Right?
+Have a look at the get/set_tunable() callback:
 
--- 
-Regards/Gruss,
-    Boris.
+| https://elixir.bootlin.com/linux/latest/source/include/linux/ethtool.h#L5=
+75
 
-https://people.kernel.org/tglx/notes-about-netiquette
+You probably have to add a new tunable. Here you'll find the people and
+commits that changed the tunable:
+
+| https://github.com/torvalds/linux/blame/master/include/uapi/linux/ethtool=
+=2Eh#L229
+
+It's usually worth including them in an RFC patch series where you add a
+new tunable and make use of it in the slcan driver.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--yohv5x576q7yvjhc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLembgACgkQrX5LkNig
+011YBwf8D6sYc5Z10hNfGDyKQ3RcYyhgRysl2n8u/I+7BTE6Y3+sOXF5X0Gt5auQ
+O3L54lyy3/LKsyXwoCRPUgMOgbLCPwPI0EqLNEKhpTrQAJ5h0uCbRZkUREhkngtO
+Tr9MoBK+7JmHVOpZUBVVIXB631k/RNvCZQXm1wlUsumXqX13EFPImJvuk+dDo1lm
+TrM1mSGX8FAq4OG2mlvdLwztIJExjprR2hP2zyUs3gEJk6r4z5z5N5TBCcU8+bH0
+98kyOZzlpUcSB1tIK7V1KHOsW2kifnyGGueznkI/V22bNzq0E4e1jeUjANuEtMXm
+nWmiiH/XE7rvUL/kf4ER0yut8pUv8g==
+=K8BG
+-----END PGP SIGNATURE-----
+
+--yohv5x576q7yvjhc--

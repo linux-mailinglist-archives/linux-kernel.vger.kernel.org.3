@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED4D580812
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D846958080A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiGYXSh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 25 Jul 2022 19:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S231181AbiGYXOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 19:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiGYXSf (ORCPT
+        with ESMTP id S231604AbiGYXOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:18:35 -0400
-X-Greylist: delayed 330 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 16:18:34 PDT
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629BA2613E;
-        Mon, 25 Jul 2022 16:18:34 -0700 (PDT)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id C2E71C071E;
-        Mon, 25 Jul 2022 23:13:00 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id 697EA1E;
-        Mon, 25 Jul 2022 23:12:52 +0000 (UTC)
-Message-ID: <c9340a12783beccac426d75f1df5b004c807ceb6.camel@perches.com>
-Subject: Re: [PATCH v2] docs: Fix typo in comment
-From:   Joe Perches <joe@perches.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Baoquan He <bhe@redhat.com>, Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Slark Xiao <slark_xiao@163.com>, kafai <kafai@fb.com>,
-        vgoyal <vgoyal@redhat.com>, dyoung <dyoung@redhat.com>,
-        ast <ast@kernel.org>, daniel <daniel@iogearbox.net>,
-        andrii <andrii@kernel.org>, "martin.lau" <martin.lau@linux.dev>,
-        song <song@kernel.org>, yhs <yhs@fb.com>,
-        "john.fastabend" <john.fastabend@gmail.com>,
-        kpsingh <kpsingh@kernel.org>, sdf <sdf@google.com>,
-        haoluo <haoluo@google.com>, jolsa <jolsa@kernel.org>,
-        dhowells <dhowells@redhat.com>, peterz <peterz@infradead.org>,
-        mingo <mingo@redhat.com>, will <will@kernel.org>,
-        longman <longman@redhat.com>,
-        "boqun.feng" <boqun.feng@gmail.com>, tglx <tglx@linutronix.de>,
-        bigeasy <bigeasy@linutronix.de>,
-        kexec <kexec@lists.infradead.org>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-cachefs <linux-cachefs@redhat.com>
-Date:   Mon, 25 Jul 2022 16:12:51 -0700
-In-Reply-To: <Yt6hMD+HIaERgrqg@fedora>
-References: <20220721015605.20651-1-slark_xiao@163.com>
-         <20220721154110.fqp7n6f7ij22vayp@kafai-mbp.dhcp.thefacebook.com>
-         <21cac0ea.18f.182218041f7.Coremail.slark_xiao@163.com>
-         <874jzamhxe.fsf@meer.lwn.net>
-         <6ca59494-cc64-d85c-98e8-e9bef2a04c15@infradead.org>
-         <YtnlAg6Qhf7fwXXW@MiWiFi-R3L-srv>
-         <5bd85a7241e6ccac7fe5647cb9cf7ef22b228943.camel@perches.com>
-         <Yt6hMD+HIaERgrqg@fedora>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Mon, 25 Jul 2022 19:14:09 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834FB12ADC;
+        Mon, 25 Jul 2022 16:14:08 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-10cf9f5b500so16719214fac.2;
+        Mon, 25 Jul 2022 16:14:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IT9a0wSsGnU4XfNa0zlbA+WkW9Dbub1UMbz6KfLI6MY=;
+        b=pj9o3XWsClJo3/4Wppy2MdfichiXBaaaTyk2IebGc+8yQjxtS9pu47MRr0Hp/d9kDt
+         mAl9WyvUnD/jfqDFHEj6uOskHHjXGNm1rbKUdtHi0DY9Rp2q6g6LHbRqzNh6PYwY81mS
+         4+rVG7ZUIgpRJeVeXHwpCrA0Y6tD3rGJ0jIJ+prVHCym53emCzT08JXSvfoMfa89LFhs
+         Asy/Kt1xJfFiwYSwESc4nKH1jHGrnlQHlEX5XPzn4BhVhZvg8zwJ/ZIytfk4Dk3etv7W
+         f/3ylCCmcM64bJgC6vvQV+LGqe6ha6v0m+mGidxtTw3EtdffVanvTNVaaSsk/4MM+ME4
+         5jRQ==
+X-Gm-Message-State: AJIora9eDKyMIR3rZrAljGzTUmNdKUtI8RrD+WtrRmCX9v5/mAS2IUz+
+        DbHxv55Tlavg1aMxkKxwNg==
+X-Google-Smtp-Source: AGRyM1sOEaENPiaKZi6zm2YQdCZcWqFgTUzFmo56Scl3zxQjWiAN/UML1fly4p3EtWEnkVWhfcKP5g==
+X-Received: by 2002:a05:6870:9a1d:b0:10d:c9c5:e16a with SMTP id fo29-20020a0568709a1d00b0010dc9c5e16amr7700750oab.135.1658790847779;
+        Mon, 25 Jul 2022 16:14:07 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id 62-20020a4a1541000000b0041b49c19a00sm5359166oon.18.2022.07.25.16.14.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 16:14:07 -0700 (PDT)
+Received: (nullmailer pid 2932291 invoked by uid 1000);
+        Mon, 25 Jul 2022 23:14:05 -0000
+Date:   Mon, 25 Jul 2022 17:14:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Belisko <marek@goldelico.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Pratyush Yadav <p.yadav@ti.com>, devicetree@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-spi@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH v2 1/1] spi/panel: dt-bindings: drop CPHA and CPOL from
+ common properties
+Message-ID: <20220725231405.GA2931469-robh@kernel.org>
+References: <20220722191539.90641-1-krzysztof.kozlowski@linaro.org>
+ <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: scxpfj6ognbxy16i47zhaoc7nn8mhr7p
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 697EA1E
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18oibnQ1mEZciO6tvJNDDYSZCjv6uxPeLM=
-X-HE-Tag: 1658790772-439912
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722191539.90641-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-07-25 at 09:57 -0400, William Breathitt Gray wrote:
-> On Mon, Jul 25, 2022 at 06:52:15AM -0700, Joe Perches wrote:
-> > On Fri, 2022-07-22 at 07:45 +0800, Baoquan He wrote:
-> > > The fix is done with below command:
-> > > sed -i "s/the the /the /g" `git grep -l "the the " Documentation`
-> > 
-> > This command misses entries at EOL:
-> > 
-> > Documentation/trace/histogram.rst:  Here's an example where we use a compound key composed of the the
-> > 
-> > Perhaps a better conversion would be 's/\bthe the\b/the/g'
+On Fri, 22 Jul 2022 21:15:39 +0200, Krzysztof Kozlowski wrote:
+> The spi-cpha and spi-cpol properties are device specific and should be
+> accepted only if device really needs them.  Drop them from common
+> spi-peripheral-props.yaml schema, mention in few panel drivers which use
+> them and include instead in the SPI controller bindings.  The controller
+> bindings will provide CPHA/CPOL type validation and one place for
+> description.  Each device schema must list the properties if they are
+> applicable.
 > 
-> It would be good to check for instances that cross newlines as well;
-> i.e. "the" at the end of a line followed by "the" at the start of the
-> next line. However, this would require some thought to properly account
-> for comment blocks ("*") and other similar prefixes that should be
-> ignored.
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/display/panel/lgphilips,lb035q02.yaml    |  3 +++
+>  .../bindings/display/panel/samsung,ld9040.yaml        |  3 +++
+>  .../bindings/display/panel/sitronix,st7789v.yaml      |  3 +++
+>  .../devicetree/bindings/display/panel/tpo,td.yaml     |  3 +++
+>  .../devicetree/bindings/spi/spi-controller.yaml       | 11 +++++++++++
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml | 10 ----------
+>  6 files changed, 23 insertions(+), 10 deletions(-)
+> 
 
-checkpatch already attempts that duplicated word across a newline test.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
+Unless Mark doesn't want to pick this up.

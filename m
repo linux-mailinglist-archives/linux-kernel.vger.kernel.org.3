@@ -2,73 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D12E57F9CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB55757F9D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiGYHAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 03:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S230511AbiGYHBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiGYHAm (ORCPT
+        with ESMTP id S230237AbiGYHBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 03:00:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CD6A46A;
-        Mon, 25 Jul 2022 00:00:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61584610A7;
-        Mon, 25 Jul 2022 07:00:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DF1C341C6;
-        Mon, 25 Jul 2022 07:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658732440;
-        bh=PU/uIPIuT+1JDGrwewxldEjg0C1KjctDuSqs0gZtTDk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kw4hbPrz2g6Htu4tGQOtrQGNyXTYbvOkPF4UaqNJiQZuAXWBmrm6MQEKNq6Ty5z5U
-         oU3uJPO3An296oEQqQHv8W1aRSfCm9WHsX7R1TtThhOcgOn6bcBVrSYjHcSC/+knBA
-         8U2IjXrZa61LhxyYIW+lovvpex2nKICIEhX1o34c=
-Date:   Mon, 25 Jul 2022 09:00:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Max Staudt <max@enpas.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH AUTOSEL 5.18 28/54] tty: Add N_CAN327 line discipline ID
- for ELM327 based CAN driver
-Message-ID: <Yt4/lVCvm/GHuGWj@kroah.com>
-References: <20220720011031.1023305-1-sashal@kernel.org>
- <20220720011031.1023305-28-sashal@kernel.org>
- <544401cc-97ad-c9b6-16e0-ea74d2695fd4@kernel.org>
+        Mon, 25 Jul 2022 03:01:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36EA2DED;
+        Mon, 25 Jul 2022 00:01:01 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LrrSg5n8Hz9268;
+        Mon, 25 Jul 2022 14:57:07 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Jul 2022 15:00:59 +0800
+Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Jul
+ 2022 15:00:59 +0800
+Message-ID: <f565a5b5-8ba2-adbb-8093-6d60b2159222@huawei.com>
+Date:   Mon, 25 Jul 2022 15:00:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <544401cc-97ad-c9b6-16e0-ea74d2695fd4@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] scsi: ufs: ufs-mediatek: Fix build error
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     <stanley.chu@mediatek.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20220704025632.235968-1-renzhijie2@huawei.com>
+ <CAK8P3a07jGCuAVQAZgpENRP_xFLiogU9W1Uze+n21h7TdOZhog@mail.gmail.com>
+ <df9909dc-3303-808e-575a-47190f636279@huawei.com>
+ <CAK8P3a3SA9zvVu0i1m0kqbemLd4WfTMGfpc8VwhsmJOBgZHvsA@mail.gmail.com>
+ <af043109-c101-a147-707b-82e79469ae73@huawei.com>
+ <CAK8P3a0LCaMoWArcQNY5qayUABgRXWEogrtQQ-sbR+zY6n=O4w@mail.gmail.com>
+From:   Ren Zhijie <renzhijie2@huawei.com>
+In-Reply-To: <CAK8P3a0LCaMoWArcQNY5qayUABgRXWEogrtQQ-sbR+zY6n=O4w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 07:35:13AM +0200, Jiri Slaby wrote:
-> On 20. 07. 22, 3:10, Sasha Levin wrote:
-> > From: Max Staudt <max@enpas.org>
-> > 
-> > [ Upstream commit ec5ad331680c96ef3dd30dc297b206988023b9e1 ]
-> > 
-> > The actual driver will be added via the CAN tree.
-> 
-> Hmm, it's a new driver (ldisc). Should it really go to stable?
 
-You are right, no, this shouldn't go to stable kernels, it doesn't
-affect them at all.
+在 2022/7/25 14:34, Arnd Bergmann 写道:
+> On Mon, Jul 25, 2022 at 5:38 AM Ren Zhijie <renzhijie2@huawei.com> wrote:
+>> 在 2022/7/13 16:48, Arnd Bergmann 写道:
+>>
+>> I try to use the new marcos SYSTEM_SLEEP_PM_OPS and RUNTIME_PM_OPS to
+>> replace the old ones, and remove #ifdef around the declarations in the
+>> header, my local changes attach below.
+>>
+>> But it seems  that doesn't work, which has ld errors:
+>>
+>> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
+>> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
+>> drivers/ufs/host/ufs-mediatek.o: In function `ufs_mtk_runtime_resume':
+>> ufs-mediatek.c:(.text+0x1d0c): undefined reference to
+>> `ufshcd_runtime_resume'
+>> drivers/ufs/host/ufs-mediatek.o: In function `ufs_mtk_runtime_suspend':
+>> ufs-mediatek.c:(.text+0x1d64): undefined reference to
+>> `ufshcd_runtime_suspend'
+>> Makefile:1255: recipe for target 'vmlinux' failed
+>> make: *** [vmlinux] Error 1
+>>
+>> (CONFIG_PM and CONFIG_PM_SLEEP are both not set, and
+>>
+> It appears that there is a mistake in the RUNTIME_PM_OPS()
+> macro definition, can you try this patch on top?
 
-Sasha, can you drop this from all autosel queues?
+Hi Arnd,
 
-thanks,
 
-greg k-h
+I apply this patch and it worked.
+
+When will this patch be merged?
+
+
+Thanks,
+
+Ren
+
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index 871c9c49ec9d..84592229d754 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -334,9 +334,9 @@ struct dev_pm_ops {
+>          .restore_noirq = pm_sleep_ptr(resume_fn),
+>
+>   #define RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+> -       .runtime_suspend = suspend_fn, \
+> -       .runtime_resume = resume_fn, \
+> -       .runtime_idle = idle_fn,
+> +       .runtime_suspend = pm_ptr(suspend_fn), \
+> +       .runtime_resume = pm_ptr(resume_fn), \
+> +       .runtime_idle = pm_ptr(idle_fn),
+>
+>   #ifdef CONFIG_PM_SLEEP
+>   #define SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>
+> Commit 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate
+> old ones") introduced all the macros with the intent of using pm_ptr()
+> and pm_sleep_ptr() in them, and I think Paul accidentally forgot to add
+> those in this instance.
+>
+>         Arnd
+>
+> .
+

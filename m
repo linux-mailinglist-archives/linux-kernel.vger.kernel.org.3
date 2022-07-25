@@ -2,200 +2,464 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EED580289
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5D1580293
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234646AbiGYQU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 12:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S235981AbiGYQWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 12:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbiGYQUx (ORCPT
+        with ESMTP id S235786AbiGYQWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:20:53 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90089.outbound.protection.outlook.com [40.107.9.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632E464CA
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:20:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jQTRiJBnSIiFAioT+0mvAIP9iydtKpMD6qTb8ygV21PKqNqClmqp9Jb6rDHm7RwyO+99OCxGCfEK4gBFPqbd0u/zMyQlk1EDpFssX1trAuVlniq/4A1GGA57iHX6GlPxz4TS6F9mwgkOP0MryVQZGZK/dLAWTKEiBiruASrjuVje/vLfWlpma+/EW6nAU1ek7+K916bCBIvRNeB/mu0nTpdTkbDxLlYIptiZn1UymzuwsLWHTsHZUC4yBMvnSjltbHvkKyeAhf6oEs6ZVLj2cpnJJWp1n8zsFCzjf1G8Fz4c8hmW6Zd9CuaopGbSIbToejjt/XZnhOI5VYrSrPsiTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SrLGZh9ZZDGE6iPAopDAZ05ta6FoENX6JJUhI8Xw05k=;
- b=K43D6dzBTfKMlNBdnI9eR0Zf8GfTZeeR03C4yYgHpTMAagYs4bri3TuidZeRu60o9/c13z3x59J4DNB1zagZqB80vjdtv2cgq0At1QyQ7vWUKtEILlKiyPb/K5xOMlgoGLfOgWLp7F8YEaO1Cfb2PI4lXzDE/cZms4V2HiNOdmuAjhN37tIdivOoHiql5xh5MkKtfb5b3eFsHNS8n/gn90S9g4vkDyBAJGbb9OO/naJgDbGZmBDFf1QMq5aEA2EjNQ5JnJXrTZQPzY5xp/WCAHNvj9qQPygEnGMno7ANnJ6p/xDuC0UR5rWMR3zIB0FpxtOSarXBXqRKyKq5J9t0uQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SrLGZh9ZZDGE6iPAopDAZ05ta6FoENX6JJUhI8Xw05k=;
- b=DnN1cX6jQhEE/XqD5/92wFh7Vwz5e2qAKs3nHfJk31YE8+wUBJby6d6SVVen7qUDRn6At+XgbqvcjaSHHXJhrVn+Beqe1HYfsbdsER3nB4CV372PzzscHRlbUqHGJ32bsGNcCvmCk+MT+/jTstjF0OnhaJHNuBPr7AsZqbo18h93z3MfnBKci09qwT8+nuBDlw65NNF+S0mBV1oISr/XNvli7TLavEMILw+M0l/YR9QbuqHRF3EiDtMWkdQZerbKxdehtL2EgDCZwUi4tPrT0QiDb3o9SgLKAc88qs/a0VeF08057hFMkXENLIKU7ki/aiJGlOH1nkEtpDnUXbRoAw==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MR1P264MB2738.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:37::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Mon, 25 Jul
- 2022 16:20:49 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::e063:6eff:d302:8624%5]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
- 16:20:49 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Regression: Linux v5.15+ does not boot on Freescale P2020
-Thread-Topic: Regression: Linux v5.15+ does not boot on Freescale P2020
-Thread-Index: AQHYnarFcL6sKMJcmk+y5CiOp18nOa2MCX8AgAAG5QCAArLxgIAATEEAgAA6FYA=
-Date:   Mon, 25 Jul 2022 16:20:49 +0000
-Message-ID: <e2487668-b6d9-9ddb-1bb4-9f4d37fae1a7@csgroup.eu>
-References: <20220722090929.mwhmxxdd7yioxqpz@pali>
- <6b227478-73b8-2a97-1c78-89570d928739@csgroup.eu>
- <20220723150702.jecerkhxhy65dgww@pali> <875yjld2oe.fsf@mpe.ellerman.id.au>
- <20220725125256.cg6su4d2ageylvp6@pali>
-In-Reply-To: <20220725125256.cg6su4d2ageylvp6@pali>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8c234b66-6254-4912-fe6f-08da6e59a316
-x-ms-traffictypediagnostic: MR1P264MB2738:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hTZEkeoJJ6dWBUu54JBnwygiw7EKPy6IpYpxQbd/x5iYJyXyT71YJxtb8XLoTfyFfxZFIRk3ZUYLfhNW5CCZJ1wyTCsw+jNF43xQXIq3/XLCZ/svMypM1C+nuygjJ+HO85J3ZshVFW4tyA0/mdM8dEcJJQoicMtMnzvVjzJq/BqrK4Y47UPfDBP2DkpDrKV1TuDPVu/8wBlR1ZQfwUKjOXxwXnAmAk/Ju5w8ailoRd/N5LP9CWTXoatBN4PjeKpRjGOa4e+SLLqpK+ae/6mtLPzVnITMy6aff5Pp5ExMuavqW87Faa+F/4Jzlxx1uNpYYdGfzOqhyi7knl7xdSfH3KZexNBqsaVtKcrx6bS7m7P8OTM7o6dx55USKj0NqNwCwcQZ0pPwu3MhPyjkA6EjZkyPzgE9Hu46XdOE+ExFLee9VrupnSYKUPrifa0Y7Yzhjyc4YrAx8P/t/pwsw9Huyj3MUQtKRVlm97GkczGtP+Bjo0p/nMoDEir6l7T4zkq8jBnrQ2GajW9Jwl5nEjZCu+1rkg8uUZRs3mz+9YVd1ZNrKiRq2zCoAKZeHgMKkj7ldZpLTF6MM/R5wnqFeaSEEbW/aeeev8j5fBRKYBYXOmPqAsY6HaRlNAXIz++0vDTdyXuxckhhau+K5qbQwr4GuCFvM9hKOGESTYUc1AQtOnN3WDSuI1iAQGhxLhuxgYO5835Vo3X6S/vuhrbX9ZgKvrhzzor95yIqnG6fOmvaNwc4MRmageBkOpvV+fOpuy8+9IhlqqeDbmKoEEM/KND5hkQIuvKKxXYrBLExLOSY8iq750JijIM8us5QKkCgZyCUpFLcrxv0DawIvRQUWBArmv9vM5i2fSgDvvHtruGe0rLxkwISH/MjVcdOmX+v9sB7OzefWp6hI3olgpntu3FPjw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(39850400004)(136003)(376002)(396003)(346002)(366004)(8936002)(966005)(6486002)(38100700002)(31696002)(5660300002)(8676002)(4326008)(86362001)(478600001)(31686004)(71200400001)(122000001)(36756003)(2616005)(66476007)(83380400001)(66446008)(64756008)(91956017)(66946007)(66556008)(38070700005)(110136005)(186003)(44832011)(6506007)(76116006)(26005)(41300700001)(6512007)(54906003)(316002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dGxlZEdxQm5kbUhPQnZyblVTYkY2b1pMdVdwU1JKeFZjeEh1ald2MGp1b3ZW?=
- =?utf-8?B?eDNaUUhBOWJBajJRaTNzUTdUdzVCVlI4eUJiVHFWMjNoTXp0RDFLbGtkM2NT?=
- =?utf-8?B?NTJCU3h5V0h2L25haHNJQlBlbjgvWXpobUxuaTJWUXlscFhPNWQyd1NmT0t1?=
- =?utf-8?B?cG9MRVJGZDJBdTRycXRPVUpZNkNvSCtweVNzaUlRTjJGMmtON2dxQmJZakpi?=
- =?utf-8?B?RGhVU3VnVW1Ga09lTkZkK2dCZEVibUwzWGYwRTJXaWtoNDJ4elVZdGpYbGk0?=
- =?utf-8?B?eFczTDdDQU9RV0lUZ3IxVmt5YkY2b3Fua0x2YW9DamZYL3VDZ3pKeUxEcTlR?=
- =?utf-8?B?alV4YkZNekh2bXdsUkNrWGFlRXJmOWx5WTFWVUt3UWQzaDNXT0E3TUd2VEgy?=
- =?utf-8?B?TjVkZ3dpdFR5REk0RkdsT1h0WnFXdVlpRk0wYUEvN2J2OXJNVTZFVk52YitB?=
- =?utf-8?B?cXJYN2p2TnBqUUJhOHJKMmc1NFM4WmI2WGtKZTZINGJCTUJ5SFB0TkcvSzkz?=
- =?utf-8?B?ZXp3TUplU3RXcWUxRHNveko3SHlQRnpzbzg3ZS9rcWM2SUt5RnRNa2IxZk9r?=
- =?utf-8?B?MGQvYnh5MWdoWVpnZkVNY2VmZ3BFYUJHcXZwbjU4S2V3YW1ZUzhnMmRreWh1?=
- =?utf-8?B?aXdidlpxMHJqT1gwZGFyakV1TXdhYmRNdDRLM1BkWDdmakJpSUZnNDZIVy82?=
- =?utf-8?B?ZHpoZjVTK01SWXFUbW1WOUtzV2pzM0RHK3pnWGhNbDdLYnFka25XWWcxeWRy?=
- =?utf-8?B?M0lTdkp1bjFtd2dMeW83bldFMGl5bGVtTkovaGoxYW5PcHRGQ1p0S0llM2xz?=
- =?utf-8?B?NlpLM2YwTmpDSGgwVStoclRqaWIxRy82QTVGWGRKZ2gweDJJZVNGbnphOWwy?=
- =?utf-8?B?dnl5MDlld3l0a3ZOTytpekpkenRvNklvR25rQVZYQlhUVDZ4UWd0b3pDdXFu?=
- =?utf-8?B?SVJEd3ZPbm0zNjN2eStlQTgyZW1PaTNSV2FqOTlyUXRrazJ3aTl2dGZWVmhj?=
- =?utf-8?B?T2QrSFV2OW5jWkk0dHRmOTBOa1VTMmxqTGt1V1k1alR3WGluVUZVM3dhWVNX?=
- =?utf-8?B?NFpqUmJmR05oeDB4R3d4SDhQSTc0b3djWC9hUFU2clFFajVWSklxeWNqRDVG?=
- =?utf-8?B?MnJGTFQ2TWVFQkpKeHBtQ2VETFVaS0VOWDRFVHJwQVRqd2xqT0VwRnZhV3VK?=
- =?utf-8?B?N0c0c1llb2EzNlF3ZFVxYWFwTitrZXZ1ZEZUQUFlRW00aFplNFZkU2RRQzln?=
- =?utf-8?B?ejN3bUwvV2NrTXVmRFpYQ3NPT3ZDWk5pRnZHQUhqU05KcWEzWmVuVmNLYjJU?=
- =?utf-8?B?RU5BOENIZGZyRHBkWDhCUVorR3paWUl2cXZHOG9RQ1hDUDlzeDVBK05hSnhU?=
- =?utf-8?B?MEVGS2lLUTJpL1liQldZc3B5MVlUM1dxMWV0YWtwWk11VVFhVTJpa2RXdWdP?=
- =?utf-8?B?Z044WEJ5dUE1TGczUmpDdmV5WFRCN1BNSWV1T1kzMTNGRkVhbHFuVzQ3b1BG?=
- =?utf-8?B?ZlJUdXB3c0dvMWZNaGY4YWluZEkycGQvUS8vRndJUlJDSzQxRmxocUhnNThU?=
- =?utf-8?B?RWNvV3o1a09ad3k3NFN6UXpObWhiUXdUVFZlS0x0dkhabEJiWlFHY3h0V3Rp?=
- =?utf-8?B?eWNoS01sZmtZY1B4bVN0V2xUdDBIN0dLUncwRGpGejR3ai9mZXU1eWJjVnFp?=
- =?utf-8?B?NjdpUVJINlo3QUNEU2ViRVhUdGdjTXVoaEFjVVE1ZlRJVGVkSEZuMGphSHVq?=
- =?utf-8?B?ZzFZUWV6T29RVFlhSWJheG1NaU9tRzhDMzEydUZZRHp6NjlyYkNLc2JBTWtT?=
- =?utf-8?B?NnNudEFQLzFNSFRZakhVemNRUHVGVnNBKy9ISVdHWHBudEFQcHk1eW5rdVVP?=
- =?utf-8?B?TlltRHhHRXdvaUR3enJxcGxZQUZyR0tKZGtmN1B4ZUxsZUJUUFMzUXlFanIv?=
- =?utf-8?B?b0ZCM1cwTXVVb2dNVWZkRitDV0hWalcxaEZyVVV3anlPb3hUd0VUM3huS2tx?=
- =?utf-8?B?SmFBRHZCc01kMUhzaWV2bDNmcWNBd2xhMzhBV21tMjdzZzdpdjBvUmFiWnFF?=
- =?utf-8?B?N29mRWxVajRRSnd5c3NiYnNPWUtKZ1pBWnlZbkdncEtNdzlRM05ucnd2N2Rm?=
- =?utf-8?B?Z3Rtem5wVkp5S05tR1RrNldJTUZNTjBYMjVUVjJOenBvSTdscHBvUyt0UGxk?=
- =?utf-8?B?TUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FF74728681D4344E8D7BD01D2A9BE681@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 25 Jul 2022 12:22:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7A165C4;
+        Mon, 25 Jul 2022 09:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658766167; x=1690302167;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=dnv1N7BB6jDa8gtTrXine5BAkABElN12XYoct5dkzi4=;
+  b=CwnptIO9CIjxRMlgoLwm8T17yS7MmIjTGk0xe0APADj5A3TxqAxzLNxd
+   /dAbnv7Io7e6mlZotPTw/YrbS0xPrNSNNOcwfoikIWJ0CQNihAKXJruHt
+   MMRK0DaCd0muK8NMHhA8+9lbN6tiley3reJMpUcLFlRFCOsEyz10kB0YZ
+   /X5JDlzzpQ4JxNFLRyw6oXbGQtC2r2fOZgVCGvvRQkraTemG86gKqxFWm
+   1tYjkORl/DlVGV+Mcsnknx0E8Fhse31dDVQtRgkWgAIWzt2+6Y8bM1JsV
+   gQfbwKfhRYCiAVTMgRnjbSlPna2pO6euR6LsOnqFtjpJqvK0+bSYlhIF9
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="166295830"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Jul 2022 09:22:46 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 25 Jul 2022 09:22:45 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.28 via Frontend Transport; Mon, 25 Jul 2022 09:22:45 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Jerry Ray" <jerry.ray@microchip.com>
+Subject: [linux][PATCH v1 1/1] dts: arm: at91: Add SAMA5D3-EDS Board
+Date:   Mon, 25 Jul 2022 11:22:44 -0500
+Message-ID: <20220725162244.10916-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c234b66-6254-4912-fe6f-08da6e59a316
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 16:20:49.3371
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JdsTPJmI9LNtWYaecSJj48qhnsrSR7F44BxVDR2fqTPEpqFg1UjIjVRwTxoDU/Ao2jC4KpG1TvZa1u2dZn1hdqfpmTs8qNWVr600IZkiYpE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2738
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI1LzA3LzIwMjIgw6AgMTQ6NTIsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IE9u
-IE1vbmRheSAyNSBKdWx5IDIwMjIgMTg6MjA6MDEgTWljaGFlbCBFbGxlcm1hbiB3cm90ZToNCj4+
-IFBhbGkgUm9ow6FyIDxwYWxpQGtlcm5lbC5vcmc+IHdyaXRlczoNCj4+PiBPbiBTYXR1cmRheSAy
-MyBKdWx5IDIwMjIgMTQ6NDI6MjIgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+Pj4gTGUgMjIv
-MDcvMjAyMiDDoCAxMTowOSwgUGFsaSBSb2jDoXIgYSDDqWNyaXTCoDoNCj4+Pj4+IFRyeWluZyB0
-byBib290IG1haW5saW5lIExpbnV4IGtlcm5lbCB2NS4xNSssIGluY2x1ZGluZyBjdXJyZW50IHZl
-cnNpb24NCj4+Pj4+IGZyb20gbWFzdGVyIGJyYW5jaCwgb24gRnJlZXNjYWxlIFAyMDIwIGRvZXMg
-bm90IHdvcmsuIEtlcm5lbCBkb2VzIG5vdA0KPj4+Pj4gcHJpbnQgYW55dGhpbmcgdG8gc2VyaWFs
-IGNvbnNvbGUsIHNlZW1zIHRoYXQgaXQgZG9lcyBub3Qgd29yayBhbmQgYWZ0ZXINCj4+Pj4+IHRp
-bWVvdXQgd2F0Y2hkb2cgcmVzZXQgdGhlIGJvYXJkLg0KPj4+Pg0KPj4+PiBDYW4geW91IHByb3Zp
-ZGUgbW9yZSBpbmZvcm1hdGlvbiA/IFdoaWNoIGRlZmNvbmZpZyBvciAuY29uZmlnLCB3aGljaA0K
-Pj4+PiB2ZXJzaW9uIG9mIGdjYywgZXRjIC4uLiA/DQo+Pj4NCj4+PiBJIHVzZWQgZGVmYXVsdCBk
-ZWZjb25maWcgZm9yIG1wYzg1eHggd2l0aCBnY2MgOCwgY29tcGlsYXRpb24gZm9yIGU1MDANCj4+
-PiBjb3Jlcy4NCj4+Pg0KPj4+IElmIHlvdSBuZWVkIGV4YWN0IC5jb25maWcgY29udGVudCBJIGNh
-biBzZW5kIGl0IGR1cmluZyB3ZWVrLg0KPj4+DQo+Pj4+PiBJIHJ1biBnaXQgYmlzZWN0IGFuZCBp
-dCBmb3VuZCBmb2xsb3dpbmcgY29tbWl0Og0KPj4+Pj4NCj4+Pj4+IDk0MDFmNGU0NmNmNjk2NWUy
-MzczOGY3MGUxNDkxNzIzNDRhMDFlZWYgaXMgdGhlIGZpcnN0IGJhZCBjb21taXQNCj4+Pj4+IGNv
-bW1pdCA5NDAxZjRlNDZjZjY5NjVlMjM3MzhmNzBlMTQ5MTcyMzQ0YTAxZWVmDQo+Pj4+PiBBdXRo
-b3I6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCj4+Pj4+
-IERhdGU6ICAgVHVlIE1hciAyIDA4OjQ4OjExIDIwMjEgKzAwMDANCj4+Pj4+DQo+Pj4+PiAgICAg
-ICBwb3dlcnBjOiBVc2UgbHdhcngvbGRhcnggZGlyZWN0bHkgaW5zdGVhZCBvZiBQUENfTFdBUlgv
-TERBUlggbWFjcm9zDQo+Pj4+Pg0KPj4+Pj4gICAgICAgRm9yY2UgdGhlIGVoIGZsYWcgYXQgMCBv
-biBQUEMzMi4NCj4+Pj4+DQo+Pj4+PiAgICAgICBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGhlIExl
-cm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQo+Pj4+PiAgICAgICBTaWduZWQtb2Zm
-LWJ5OiBNaWNoYWVsIEVsbGVybWFuIDxtcGVAZWxsZXJtYW4uaWQuYXU+DQo+Pj4+PiAgICAgICBM
-aW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzFmYzgxZjA3Y2FiZWJiODc1Yjk2M2UyOTU0
-MDhjYzNkZDM4YzhkODUuMTYxNDY3NDg4Mi5naXQuY2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1
-DQo+Pj4+Pg0KPj4+Pj4gOjA0MDAwMCAwNDAwMDAgZmU2NzQ3ZTQ1NzM2ZGZjYmE3NDkxNGE5NDQ1
-ZTVmNzBmNTEyMDYwMCA5NjM1OGQwOGI2NWQzMjAwOTI4YTk3M2VmYjViOTY5YjNkNDVmMmIwIE0g
-ICAgICBhcmNoDQo+Pj4+Pg0KPj4+Pj4NCj4+Pj4+IElmIEkgcmV2ZXJ0IHRoaXMgY29tbWl0IHRo
-ZW4ga2VybmVsIGJvb3RzIGNvcnJlY3RseS4gSXQgYWxzbyBib290cyBmaW5lDQo+Pj4+PiBpZiBJ
-IHJldmVydCB0aGlzIGNvbW1pdCBvbiB0b3Agb2YgbWFzdGVyIGJyYW5jaC4NCj4+Pj4+DQo+Pj4+
-PiBGcmVlc2NhbGUgUDIwMjAgaGFzIHR3byAzMi1iaXQgZTUwMCBwb3dlcnBjIGNvcmVzLg0KPj4+
-Pj4NCj4+Pj4+IEFueSBpZGVhIHdoeSBhYm92ZSBjb21taXQgaXMgY2F1c2luZyBjcmFzaCBvZiB0
-aGUga2VybmVsPyBBbmQgd2h5IGl0IGlzDQo+Pj4+PiBuZWVkZWQ/IENvdWxkIGVoIGZsYWcgc2V0
-IHRvIDAgY2F1c2UgZGVhZGxvY2s/DQo+Pj4+DQo+Pj4+IFNldHRpbmcgdGhlIGVoIGZsYWcgdG8g
-MCBpcyBub3Qgc3VwcG9zZWQgdG8gYmUgYSBjaGFuZ2UgaW50cm9kdWNlZCBieQ0KPj4+PiB0aGF0
-IGNvbW1pdC4gSW5kZWVkIHRoYXQgY29tbWl0IGlzIG5vdCBzdXBwb3NlZCB0byBjaGFuZ2UgYW55
-dGhpbmcgYXQNCj4+Pj4gYWxsIGluIHRoZSBnZW5lcmF0ZWQgY29kZS4NCj4+Pg0KPj4+IE15IHVu
-ZGVyc3RhbmRpbmcgb2YgdGhhdCBjb21taXQgaXMgdGhhdCBpdCBjaGFuZ2VkIGVoIGZsYWcgcGFy
-YW1ldGVyDQo+Pj4gZnJvbSAxIHRvIDAgZm9yIDMyLWJpdCBwb3dlcnBjLCBpbmNsdWRpbmcgYWxz
-byBwMjAyMC4NCj4+DQo+PiBDYW4geW91IGNvbXBhcmUgdGhlIGRpc2Fzc2VtYmx5IGJlZm9yZSBh
-bmQgYWZ0ZXIgYW5kIGZpbmQgYSBwbGFjZSB3aGVyZQ0KPj4gYW4gaW5zdHJ1Y3Rpb24gaGFzIGNo
-YW5nZWQ/DQo+Pg0KPj4gY2hlZXJzDQo+IA0KPiBZZXMsIG9mIGNvdXJzZS4gSGVyZSBpcyBkaWZm
-IGJldHdlZW4gb3V0cHV0IGZyb20gb2JqZHVtcCAtZCB2bWxpbnV4Lg0KPiBvcmlnaW5hbCB2ZXJz
-aW9uIC0tLSBpcyBmcm9tIGdpdCBtYXN0ZXIgYnJhbmNoIGFuZCBtb2RpZmllZCB2ZXJzaW9uICsr
-Kw0KPiBpcyB0aGUgb3JpZ2luYWwgdmVyc2lvbiB3aXRoIHJldmVydGVkIGFib3ZlIHByb2JsZW1h
-dGljIGNvbW1pdC4NCj4gU28gdGhlICsrKyB2ZXJzaW9uIGlzIHRoZSBvbmUgd2hpY2ggaXMgd29y
-a2luZy4NCj4gDQo+IC0tLSB2bWxpbnV4Lm1hc3Rlci5kdW1wCTIwMjItMDctMjUgMTQ6NDM6NDUu
-OTIyMjM5NDk2ICswMjAwDQo+ICsrKyB2bWxpbnV4LnJldmVydC5kdW1wCTIwMjItMDctMjUgMTQ6
-NDM6NDkuMjM4MjU5Mjk2ICswMjAwDQo+IEBAIC0xLDUgKzEsNSBAQA0KPiAgIA0KPiAtdm1saW51
-eC5tYXN0ZXI6ICAgICBmaWxlIGZvcm1hdCBlbGYzMi1wb3dlcnBjDQo+ICt2bWxpbnV4LnJldmVy
-dDogICAgIGZpbGUgZm9ybWF0IGVsZjMyLXBvd2VycGMNCj4gICANCj4gICANCj4gICBEaXNhc3Nl
-bWJseSBvZiBzZWN0aW9uIC5oZWFkLnRleHQ6DQo+IEBAIC0xMTIxMyw3ICsxMTIxMyw3IEBAIGMw
-MDBiODUwOgkzZiBhMCBjMSAwZiAJbGlzICAgICByMjksLTE2MTENCj4gICBjMDAwYjg1NDoJODEg
-MDIgMDAgMDQgCWx3eiAgICAgcjgsNChyMikNCj4gICBjMDAwYjg1ODoJM2IgZmQgMTAgNjggCWFk
-ZGkgICAgcjMxLHIyOSw0MjAwDQo+ICAgYzAwMGI4NWM6CTM5IDQwIDAwIDAxIAlsaSAgICAgIHIx
-MCwxDQo+IC1jMDAwYjg2MDoJN2QgMjAgZjggMjkgCWx3YXJ4ICAgcjksMCxyMzEsMQ0KPiArYzAw
-MGI4NjA6CTdkIDIwIGY4IDI4IAlsd2FyeCAgIHI5LDAscjMxDQo+ICAgYzAwMGI4NjQ6CTJjIDA5
-IDAwIDAwIAljbXB3aSAgIHI5LDANCj4gICBjMDAwYjg2ODoJNDAgODIgMDAgMTAgCWJuZSAgICAg
-YzAwMGI4NzggPGRpZSsweDY4Pg0KPiAgIGMwMDBiODZjOgk3ZCA0MCBmOSAyZCAJc3R3Y3guICBy
-MTAsMCxyMzENCg0KVGhhdCdzIHJlYWxseSBzdHJhbmdlLiBJIG1hZGUgYSB0cnkgd2l0aCBtcGM4
-NXh4X2RlZmNvbmZpZyB3aXRoIEdDQyAxMSANCmFuZCBJIGRvbid0IGdldCBhbnkgc3VjaCBkaWZm
-ZXJlbmNlLg0KDQpEb2VzIHlvdXIgdmVyc2lvbiBvZiBHQ0MgaGFzIGFueXRoaW5nIHNwZWNpYWwg
-Pw0KDQpDYW4geW91IHNlbmQgeW91IGV4YWN0IC5jb25maWcgPw0KDQpUaGFua3MNCkNocmlzdG9w
-aGU=
+Adding device tree supporting for the SAMA5D3 Ethernet Development
+System board.
+https://www.microchip.com/en-us/development-tool/SAMA5D3-ETHERNET-DEVELOPMENT-SYSTEM
+
+Modifying the Makefile to include building the file.
+
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+ arch/arm/boot/dts/Makefile             |   1 +
+ arch/arm/boot/dts/at91-sama5d3_eds.dts | 367 +++++++++++++++++++++++++
+ 2 files changed, 368 insertions(+)
+ create mode 100644 arch/arm/boot/dts/at91-sama5d3_eds.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 112931c17a40..29defb067123 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -61,6 +61,7 @@ dtb-$(CONFIG_SOC_SAM_V7) += \
+ 	at91-sama5d2_icp.dtb \
+ 	at91-sama5d2_ptc_ek.dtb \
+ 	at91-sama5d2_xplained.dtb \
++	at91-sama5d3_eds.dtb \
+ 	at91-sama5d3_xplained.dtb \
+ 	at91-dvk_som60.dtb \
+ 	at91-gatwick.dtb \
+diff --git a/arch/arm/boot/dts/at91-sama5d3_eds.dts b/arch/arm/boot/dts/at91-sama5d3_eds.dts
+new file mode 100644
+index 000000000000..7885c296e0fb
+--- /dev/null
++++ b/arch/arm/boot/dts/at91-sama5d3_eds.dts
+@@ -0,0 +1,367 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * at91-sama5d3_eds.dts - Device Tree file for the SAMA5D3 Ethernet
++ *    Development System board.
++ *
++ *  Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
++ *		  2022 Jerry Ray <jerry.ray@microchip.com>
++ */
++/dts-v1/;
++#include "sama5d36.dtsi"
++
++/ {
++	model = "SAMA5D3 Ethernet Development System";
++	compatible = "atmel,sama5d3-xplained", "atmel,sama5d3", "atmel,sama5";
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@20000000 {
++		reg = <0x20000000 0x10000000>;
++	};
++
++	clocks {
++		slow_xtal {
++			clock-frequency = <32768>;
++		};
++
++		main_xtal {
++			clock-frequency = <12000000>;
++		};
++	};
++
++	ahb {
++		apb {
++			can0: can@f000c000 {
++				status = "okay";
++			};
++
++			macb0: ethernet@f0028000 {
++				phy-mode = "rgmii-id";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				local-mac-address = [00 00 00 00 00 00];
++				status = "disabled";
++			};
++
++			macb1: ethernet@f802c000 {
++				phy-mode = "rmii";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				local-mac-address = [00 00 00 00 00 00];
++				status = "disabled";
++			};
++
++			i2c0: i2c@f0014000 {
++				pinctrl-0 = <&pinctrl_i2c0_pu>;
++				status = "okay";
++			};
++
++			i2c1: i2c@f0018000 {
++				status = "okay";
++
++				pmic: act8865@5b {
++					compatible = "active-semi,act8865";
++					reg = <0x5b>;
++					status = "disabled";
++
++					regulators {
++						vcc_3v3_reg: BUCK_REG1 {
++							regulator-name = "VCC_3V3";
++							regulator-min-microvolt = <3300000>;
++							regulator-max-microvolt = <3300000>;
++							regulator-always-on;
++						};
++
++						vcc_2v5_reg: LDO_REG2 {
++							regulator-name = "VCC_2V5";
++							regulator-min-microvolt = <2500000>;
++							regulator-max-microvolt = <2500000>;
++							regulator-always-on;
++						};
++
++						vcc_1v8_reg: LDO_REG3 {
++							regulator-name = "VCC_1V8";
++							regulator-min-microvolt = <1800000>;
++							regulator-max-microvolt = <1800000>;
++							regulator-always-on;
++						};
++
++						vcc_1v2_reg: BUCK_REG4 {
++							regulator-name = "VCC_1V2";
++							regulator-min-microvolt = <1200000>;
++							regulator-max-microvolt = <1200000>;
++							regulator-always-on;
++						};
++					};
++				};
++			};
++
++			i2c2: i2c@f801c000 {
++				dmas = <0>, <0>;	/* Do not use DMA for i2c2 */
++				pinctrl-0 = <&pinctrl_i2c2_pu>;
++				status = "okay";
++			};
++
++			mmc0: mmc@f0000000 {
++				pinctrl-0 = <&pinctrl_mmc0_clk_cmd_dat0 &pinctrl_mmc0_dat1_3 &pinctrl_mmc0_dat4_7 &pinctrl_mmc0_cd>;
++				vmmc-supply = <&vcc_mmc0_reg>;
++				vqmmc-supply = <&vcc_3v3_reg>;
++				status = "okay";
++				slot@0 {
++					reg = <0>;
++					bus-width = <8>;
++					cd-gpios = <&pioE 0 GPIO_ACTIVE_LOW>;
++				};
++			};
++
++			dbgu: serial@ffffee00 {
++				status = "okay";
++			};
++
++			spi0: spi@f0004000 {
++				pinctrl-names = "default", "cs";
++				pinctrl-1 = <&pinctrl_spi0_cs>;
++				cs-gpios = <&pioD 13 0>, <0>, <0>, <&pioD 16 0>;
++				status = "okay";
++			};
++
++			spi1: spi@f8008000 {
++				pinctrl-names = "default", "cs";
++				pinctrl-1 = <&pinctrl_spi1_cs>;
++				cs-gpios = <&pioC 25 0>, <0>, <0>, <&pioC 28 0>;
++				status = "okay";
++			};
++
++			tcb0: timer@f0010000 {
++				timer0: timer@0 {
++					compatible = "atmel,tcb-timer";
++					reg = <0>;
++				};
++
++				timer1: timer@1 {
++					compatible = "atmel,tcb-timer";
++					reg = <1>;
++				};
++			};
++
++			pinctrl@fffff200 {
++				board {
++					pinctrl_i2c0_pu: i2c0_pu {
++						atmel,pins =
++							<AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>,
++							<AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
++					};
++
++					pinctrl_i2c2_pu: i2c2_pu {
++						atmel,pins =
++							<AT91_PIOA 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>,
++							<AT91_PIOA 19 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
++					};
++
++					pinctrl_key_gpio: key_gpio_0 {
++						atmel,pins =
++							<AT91_PIOE 29 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
++					};
++
++					pinctrl_mmc0_cd: mmc0_cd {
++						atmel,pins =
++							<AT91_PIOE 0 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
++					};
++
++					pinctrl_mmc1_cd: mmc1_cd {
++						atmel,pins =
++							<AT91_PIOE 1 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
++					};
++
++					pinctrl_spi0_cs: spi0_cs_default {
++						atmel,pins =
++							<AT91_PIOD 13 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++							 AT91_PIOD 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++					};
++
++					pinctrl_spi1_cs: spi1_cs_default {
++						atmel,pins = <AT91_PIOC 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++							      AT91_PIOC 28 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++					};
++
++					pinctrl_usba_vbus: usba_vbus {
++						atmel,pins =
++							<AT91_PIOE 9 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;	/* PE9, conflicts with A9 */
++					};
++
++					pinctrl_usb_default: usb_default {
++						atmel,pins =
++							<AT91_PIOE 3 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++							 AT91_PIOE 4 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++					};
++
++					pinctrl_vbusfault_irqn: vbusfault_irqn {
++						atmel,pins =
++							<AT91_PIOE 5 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
++					};
++
++					pinctrl_vcc_mmc0_reg_gpio: vcc_mmc0_reg_gpio_default {
++						atmel,pins = <AT91_PIOE 2 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++					};
++
++					pinctrl_gpio_leds: gpio_leds_default {
++						atmel,pins =
++							<AT91_PIOE 15 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++							 AT91_PIOE 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++							 AT91_PIOE 17 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++							 AT91_PIOE 18 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
++							 AT91_PIOE 19 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
++					};
++
++					pinctrl_rgmii_rstn: rgmii_rstn {
++						atmel,pins =
++							<AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
++					};
++
++					pinctrl_spi_irqn: spi_irqn {
++						atmel,pins =
++							<AT91_PIOB 28 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
++					};
++				};
++			};
++		};
++
++		usb0: gadget@500000 {
++			atmel,vbus-gpio = <&pioE 9 GPIO_ACTIVE_HIGH>;	/* PE9, conflicts with A9 */
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_usba_vbus>;
++			status = "okay";
++		};
++
++		usb1: ohci@600000 {
++			num-ports = <3>;
++			atmel,vbus-gpio = <0
++					   &pioE 3 GPIO_ACTIVE_HIGH
++					   &pioE 4 GPIO_ACTIVE_HIGH
++					  >;
++			pinctrl-names = "default";
++			pinctrl-0 = <&pinctrl_usb_default>;
++			status = "okay";
++		};
++
++		usb2: ehci@700000 {
++			status = "okay";
++		};
++
++		ebi: ebi@10000000 {
++			pinctrl-0 = <&pinctrl_ebi_nand_addr>;
++			pinctrl-names = "default";
++			status = "okay";
++
++			nand_controller: nand-controller {
++				status = "okay";
++
++				nand@3 {
++					reg = <0x3 0x0 0x2>;
++					atmel,rb = <0>;
++					nand-bus-width = <8>;
++					nand-ecc-mode = "hw";
++					nand-ecc-strength = <4>;
++					nand-ecc-step-size = <512>;
++					nand-on-flash-bbt;
++					label = "atmel_nand";
++
++					partitions {
++						compatible = "fixed-partitions";
++						#address-cells = <1>;
++						#size-cells = <1>;
++
++						at91bootstrap@0 {
++							label = "at91bootstrap";
++							reg = <0x0 0x40000>;
++						};
++
++						bootloader@40000 {
++							label = "bootloader";
++							reg = <0x40000 0xc0000>;
++						};
++
++						bootloaderenvred@100000 {
++							label = "bootloader env redundant";
++							reg = <0x100000 0x40000>;
++						};
++
++						bootloaderenv@140000 {
++							label = "bootloader env";
++							reg = <0x140000 0x40000>;
++						};
++
++						dtb@180000 {
++							label = "device tree";
++							reg = <0x180000 0x80000>;
++						};
++
++						kernel@200000 {
++							label = "kernel";
++							reg = <0x200000 0x600000>;
++						};
++
++						rootfs@800000 {
++							label = "rootfs";
++							reg = <0x800000 0x0f800000>;
++						};
++					};
++				};
++			};
++		};
++	};
++
++	vcc_mmc0_reg: fixedregulator_mmc0 {
++		compatible = "regulator-fixed";
++		gpio = <&pioE 2 GPIO_ACTIVE_LOW>;
++		regulator-name = "mmc0-card-supply";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++	};
++
++	gpio_keys {
++		compatible = "gpio-keys";
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_key_gpio>;
++
++		button3 {
++			label = "PB_USER";
++			gpios = <&pioE 29 GPIO_ACTIVE_LOW>;
++			linux,code = <0x104>;
++			wakeup-source;
++		};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		pe15 {
++			label = "pe15";
++			gpios = <&pioE 15 GPIO_ACTIVE_LOW>;
++		};
++
++		pe16 {
++			label = "pe16";
++			gpios = <&pioE 16 GPIO_ACTIVE_LOW>;
++		};
++
++		pe17 {
++			label = "pe17";
++			gpios = <&pioE 17 GPIO_ACTIVE_LOW>;
++		};
++
++		pe18 {
++			label = "pe18";
++			gpios = <&pioE 18 GPIO_ACTIVE_LOW>;
++		};
++
++		pe19 {
++			label = "pe19";
++			gpios = <&pioE 19 GPIO_ACTIVE_LOW>;
++		};
++	};
++};
+-- 
+2.17.1
+

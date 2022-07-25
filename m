@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F11157F7D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 02:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056CC57F7DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiGYA7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 20:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S230117AbiGYBGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 21:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGYA7I (ORCPT
+        with ESMTP id S229437AbiGYBGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 20:59:08 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5986DFF6;
-        Sun, 24 Jul 2022 17:59:07 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id bf13so8960138pgb.11;
-        Sun, 24 Jul 2022 17:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GeXl5GSyAbSItPm6ihIZlzdvz0QHtuVM/OL9U7toiKc=;
-        b=DaISG9dn/8fH2Yf83eWjYAA6w/M8YXfUd1TMJ9aWYrdUd8VKm8ndp+ymzpErMVyXhG
-         kSWqIyt2Tpz02nXpcPOb+tUAnV+OGa8mmgPksPcX4bggNNb9Rqz7rdEZlgrsUoj4nOka
-         +tq6WpV/w3j8xuNp0Yu2WjF885kKj60uuX1LtGfVsCDRuIbb95ykMmGyV1CUjNV6Yho6
-         aL8NRulySDj2bXBBU3XyCogt18Pii3exd+ZkHDaE2vsVrO+zM0MXsaGWMTDCiHe6v+Q8
-         wohf09oiwVYH4uGfGesjeGCgd09ZTLZxne4/Ei43P7LXgQNGwrz7oZ9CZsjIWiCPs6yq
-         OP0Q==
+        Sun, 24 Jul 2022 21:06:37 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CB89FD6;
+        Sun, 24 Jul 2022 18:06:36 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id g20-20020a9d6a14000000b0061c84e679f5so7670254otn.2;
+        Sun, 24 Jul 2022 18:06:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GeXl5GSyAbSItPm6ihIZlzdvz0QHtuVM/OL9U7toiKc=;
-        b=4HibIdPceaE58CeZVTI2W3B9+Ap61psjOKZ7jBcQXmPy1oUchpK7W0WnYYaW+SVvxS
-         wPfr15dbgnv3jbbouIQtKIsKevI1yYtkXT7EDWog8my/ZLIxK21mZC9uwa5e4Cv+aGjb
-         b4BUSb5FOjSd3UmQCMRzeRi0K/+Plv5SNHmqVg0RonAUEnpkZnnTfW1jqoQV/vNUuFnA
-         hFvFEmS869FRjtS4gJ3kmyVhLPEOZoMpmAyyRi4JizDrqOjh3GLGWtXJlVhZpHgLNlPr
-         JgxS0lE8eE1aIWEtpWnRUi6ZwaRBpXOgPEd3241qwljLh2iHri9LzdwuJP+a2S3IhWwA
-         Sicw==
-X-Gm-Message-State: AJIora/BkGPGHeK8Rrq762wjv8Zau48wywhJn858YvIWmIWhpiwjTbE1
-        7Ku82m35VU9iU9IxwO1++RA=
-X-Google-Smtp-Source: AGRyM1tt8kRa9ipdbWAhkxHfcq/bCyqpx1QoKe5athWoxm6BQzsgFTxc39Nrn3GrxES05K+BeCXZuQ==
-X-Received: by 2002:a05:6a00:150d:b0:52b:1ffb:503c with SMTP id q13-20020a056a00150d00b0052b1ffb503cmr10478689pfu.44.1658710746682;
-        Sun, 24 Jul 2022 17:59:06 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id s20-20020a170902a51400b001620960f1dfsm7724997plq.198.2022.07.24.17.59.06
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=QNCEP/Jd9p9U+kHeTNbZg9vzuQ68V1YM3OnqLNp9aiY=;
+        b=ESlvsy5UyFcNEZ/mdB/h29qdxZNvN5FPQ08G0mOwYmlycN6b9ZFFd97Ewud5LdNYzy
+         Y8hiFpKTj5/KzojzmLCh2RtTIdXXt5pZaflVFt0cgsxu2sskoCBwaXXO9IlQlNC1qv4i
+         z2hi5cvpBNm4DnqZaxqXDiOWMoL0QfQdWQ6Urjhe9CiVqSt+Kw2q3tySPbGDdssROL10
+         kW10MdgaoY35liZUB8rvG1PqV886d5XzusIIhmU9F9cKgNhnsRejUatsXkfu7JP4arSH
+         QB2QSnX3KI15//FX1MNxzs4UninsTqUTQhnjDP2O0NdHoQG8sPEfU9o1mjfud45G5HvW
+         /a4w==
+X-Gm-Message-State: AJIora/RLb+3SsUJPkXxDfiTcvi/v7rdmLqMj/HNqPct/MBkfMXElJ9B
+        uRqwcDujQbvIyOcCVw5Xog==
+X-Google-Smtp-Source: AGRyM1s5XKEnlQ5my1VSNVGytH3TBZejI+JtkvAk9JTSOphfdgVAoaZgqQddJRx6BCAc/nkzgm5u6g==
+X-Received: by 2002:a05:6830:d0b:b0:61c:1bc2:fbc0 with SMTP id bu11-20020a0568300d0b00b0061c1bc2fbc0mr3760368otb.348.1658711195791;
+        Sun, 24 Jul 2022 18:06:35 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id t21-20020a056870f21500b0010dc461410bsm3389440oao.38.2022.07.24.18.06.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 17:59:06 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 09:59:04 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: linux-next: manual merge of the pci tree with the risc-v tree
-Message-ID: <Yt3q2LX4ds9lwXW+@antec>
-References: <20220725102221.20fe2ca2@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725102221.20fe2ca2@canb.auug.org.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 24 Jul 2022 18:06:35 -0700 (PDT)
+Received: (nullmailer pid 678621 invoked by uid 1000);
+        Mon, 25 Jul 2022 01:06:32 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Steev Klimaszewski <steev@kali.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Shawn Guo <shawn.guo@linaro.org>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20220723224949.1089973-5-luzmaximilian@gmail.com>
+References: <20220723224949.1089973-1-luzmaximilian@gmail.com> <20220723224949.1089973-5-luzmaximilian@gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure Application client
+Date:   Sun, 24 Jul 2022 19:06:32 -0600
+Message-Id: <1658711192.682597.678620.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,80 +69,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 10:22:21AM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Sun, 24 Jul 2022 00:49:49 +0200, Maximilian Luz wrote:
+> Add bindings for the Qualcomm Trusted Execution Environment (TrEE) UEFI
+> Secure application (uefisecapp) client.
 > 
-> Today's linux-next merge of the pci tree got a conflict in:
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+> ---
+>  .../firmware/qcom,tee-uefisecapp.yaml         | 38 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml
 > 
->   arch/riscv/include/asm/pci.h
-> 
-> between commit:
-> 
->   bb356ddb78b2 ("RISC-V: PCI: Avoid handing out address 0 to devices")
-> 
-> from the risc-v tree and commit:
-> 
->   a2912b45b082 ("asm-generic: Add new pci.h and use it")
-> 
-> from the pci tree.
 
-Hi Stephen,
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-We had anticipated this and I believe Palmer should be merging the pci changes
-to his branch to resolve the merge conflict before sending the changes upstream.
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/firmware/qcom,tee-uefisecapp.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml: duplicate '$id' value 'http://devicetree.org/schemas/soc/qcom/qcom,rpmh-rsc.yaml#'
+Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.example.dtb:0:0: /example-0/firmware/scm: failed to match any schema with compatible: ['qcom,scm-sc8180x', 'qcom,scm']
+Documentation/devicetree/bindings/firmware/qcom,tee-uefisecapp.example.dtb:0:0: /example-0/firmware/scm: failed to match any schema with compatible: ['qcom,scm-sc8180x', 'qcom,scm']
+Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb:0:0: /example-0/rsc@179c0000: failed to match any schema with compatible: ['qcom,rpmh-rsc']
+Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb:0:0: /example-1/rsc@af20000: failed to match any schema with compatible: ['qcom,rpmh-rsc']
+Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.example.dtb:0:0: /example-2/rsc@18200000: failed to match any schema with compatible: ['qcom,rpmh-rsc']
 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/riscv/include/asm/pci.h
-> index 830ac621dbbc,6ef4a1426194..000000000000
-> --- a/arch/riscv/include/asm/pci.h
-> +++ b/arch/riscv/include/asm/pci.h
-> @@@ -12,31 -12,7 +12,10 @@@
->   
->   #include <asm/io.h>
->   
->  +#define PCIBIOS_MIN_IO		4
->  +#define PCIBIOS_MIN_MEM		16
->  +
-> - /* RISC-V shim does not initialize PCI bus */
-> - #define pcibios_assign_all_busses() 1
-> - 
-> - #define ARCH_GENERIC_PCI_MMAP_RESOURCE 1
-> - 
-> - extern int isa_dma_bridge_buggy;
-> - 
-> - #ifdef CONFIG_PCI
-> - static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> - {
-> - 	/* no legacy IRQ on risc-v */
-> - 	return -ENODEV;
-> - }
-> - 
-> - static inline int pci_proc_domain(struct pci_bus *bus)
-> - {
-> - 	/* always show the domain in /proc */
-> - 	return 1;
-> - }
-> - 
-> - #ifdef	CONFIG_NUMA
-> - 
-> + #if defined(CONFIG_PCI) && defined(CONFIG_NUMA)
->   static inline int pcibus_to_node(struct pci_bus *bus)
->   {
->   	return dev_to_node(&bus->dev);
+doc reference errors (make refcheckdocs):
 
-Your conflict resolution patch looks good to me.
+See https://patchwork.ozlabs.org/patch/
 
--Stafford
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

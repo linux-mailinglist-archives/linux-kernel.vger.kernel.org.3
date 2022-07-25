@@ -2,176 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D83B57F8E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 07:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B430D57F8EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 07:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbiGYE7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 00:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        id S231637AbiGYFCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 01:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGYE7M (ORCPT
+        with ESMTP id S229552AbiGYFCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 00:59:12 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DC4DFA0
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 21:59:10 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id v28so7815444qkg.13
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 21:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs-stonybrook-edu.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f6BGyWRa2BjQbDxlapQ6tA/QtZAsEXjWkQiWpBuogLs=;
-        b=rYz3Eqlfn2BBckMR84v/yxdwG1KuAQwjLcz+sUOT0sk+QIQ+NKdaMpol8SO0bCzgWl
-         f9KvDrKpPa6rHtjP+O167hotM7JZE374Um3ZdtAmtiN1e+2QeNG+2dPOqfGx6dmILAhu
-         OkJV+yh8TOU6AUuTlxLHmrJXq5Hwk4eoWMWdJrs59pG0IATNxhwQHWfoVi3fR59HknUX
-         /7gO6r9ApHxj5Op+5+qKrv5jwsPN6nM/A6WAZP9d9DVPEbko7PKHLp1JayxHIrpzK/Uc
-         dkUKoGbmcgLg1IGhL3KKSl0SMiD2US6tJpzOQZR/LU5r8jZFN0EW1GagpTthqcYq1WV1
-         RivQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f6BGyWRa2BjQbDxlapQ6tA/QtZAsEXjWkQiWpBuogLs=;
-        b=zJV+PCJoMdqC2Z8D9cL9lmOSSizrUsOQqJKBgCtFejdYP3AvAoizGUP9xtTvsYYjxG
-         qpGQLYPy0X3W9q+j/reRsUAfe1XoKazDKD77pVy6WlFBT8sFk+ZLJlh/qZcy0s5CyQc8
-         15CjFBqI7uModAgpa7E3B5y+qdR6gjKC8CbEnTX9XKJ8VHs+V1mBRtYULM1NEZkKvBmZ
-         CEZkDhf+EPteEfkwg5/CWdH3tfOR52Tujz+JN7aSybFdX8MOoOFs5ZH8DNO5ZOCbrEuf
-         GOTWUIk8MkQLbNphPAddtkbnhQglNQPkSwLWmacgUla7F3Bi2EWaAE48/YVaKCY5XNKJ
-         9JqQ==
-X-Gm-Message-State: AJIora+B4DS0tEmXYIrrFg6xowIRe5eZgRJu79TCC1K2lqyMPn9uYcio
-        p9XaOeGinZS+aircNz9YqDoQ+As2tWWOVw==
-X-Google-Smtp-Source: AGRyM1uS0iPlsbKkDYNQdF1aWJgVudPzoq9XLqI/N2wu+EpnfqK56z6QlpWSLgUjrEr+wssDnqgeZg==
-X-Received: by 2002:ae9:e313:0:b0:6b5:e41b:64fe with SMTP id v19-20020ae9e313000000b006b5e41b64femr7815515qkf.323.1658725149192;
-        Sun, 24 Jul 2022 21:59:09 -0700 (PDT)
-Received: from sgdp06.fsl.cs.sunysb.edu (sgdp6.fsl.cs.sunysb.edu. [130.245.126.123])
-        by smtp.googlemail.com with ESMTPSA id n8-20020ac86748000000b0031f286f868dsm3766746qtp.92.2022.07.24.21.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 21:59:08 -0700 (PDT)
-From:   Yifei Liu <yifeliu@cs.stonybrook.edu>
-Cc:     yifeliu@cs.stonybrook.edu, ezk@cs.stonybrook.edu,
-        madkar@cs.stonybrook.edu, David Woodhouse <dwmw2@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Kyeong Yoo <kyeong.yoo@alliedtelesis.co.nz>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] jffs2: correct logic when creating a hole in jffs2_write_begin
-Date:   Mon, 25 Jul 2022 04:58:27 +0000
-Message-Id: <20220725045830.11502-1-yifeliu@cs.stonybrook.edu>
-X-Mailer: git-send-email 2.25.1
+        Mon, 25 Jul 2022 01:02:47 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2066.outbound.protection.outlook.com [40.107.21.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F92EB87B;
+        Sun, 24 Jul 2022 22:02:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HkRvDCfpW3/+zrdeGx9XYAKBqlfMeNrC4FWMK0vtNdScEh/qTEGQGo1ZzBcW9fgaLRFc97RK35U6DeF+dwu4vdTlto+M8tciOlMEGlvbbU1c5vryLbsc0y5yO7XMF/u2Zz3N3IdbidIKJ9rO8cmirVee9wgmCTqdtdOn6benOMkvRIYO+onbWR4AVnzt7ikRMYW6M7KMXN1L3zOCc/Pp8avnNZLU1UX6wmb5+kiZ3FiKaKgWtOmQZ6VvPpjMTCqwoGaG6+QNS1oyWB5HE55fgUPwmJ0g0Tq+TmGcpg5mqXzpWKXuWuKVoyP/zOWRCXXfJ2SNNtWaRrmuIqlUUxFP2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V7iwT3Qvduzu5ySyyEt+LzY3ltcfpQkjxSSGpxAX4Sc=;
+ b=T2YU5N4e5t5lHSCP4gHkQizOqJi8/H72gI/2Y+fvHc0STSbIaOXLT0dYF012eMzY1HdTWYY6scDDElpxr6XLb0cz83+J6mPSdiGsV2jvlOj6hs3EAYnd/tOC0Aor7YolpNzd/iiTXmoPTVoambNOXXZt9wtpDe8Ae33goX0yU46DyzcgyPAF3kWTqfmC1U0Da477Lxh4UwFFq2B6EZ4sdbVKT7BmGhToSdQbSdYHwQQHHHfdbJcxQqRvAjON/daNFNLIN1E0Ye42NM8vPxnoSKv3wgQQXOiaaAaUwMVWbHq9VOfhEAE+BahAwhs/TSxAMiIHGMgUV4NFGwjVDTdfbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V7iwT3Qvduzu5ySyyEt+LzY3ltcfpQkjxSSGpxAX4Sc=;
+ b=Rf8EhoojlQl4T8xR41kco8sw+8pi/c5LZh8plnlBGDqaTSxHJYneJWjHjO5fwfaZ3cENnXwWZYJ/LqKWzd02qvc3I17YwTY0xv4Vy3eDVbnc0qlAEZ2LC3e0EorzpUYmMBJFaMQOKeJOgo2NlWN0DIob6piuWU36qhhRQpDKRxU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by DB7PR04MB5499.eurprd04.prod.outlook.com (2603:10a6:10:8b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.25; Mon, 25 Jul
+ 2022 05:02:43 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::4c81:58fd:464d:3160]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::4c81:58fd:464d:3160%8]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
+ 05:02:43 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org, michael@walle.cc
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: [PATCH V2] tty: serial: fsl_lpuart: correct the count of break characters
+Date:   Mon, 25 Jul 2022 13:01:15 +0800
+Message-Id: <20220725050115.12396-1-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0202.apcprd06.prod.outlook.com (2603:1096:4:1::34)
+ To AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 73977573-a2aa-486e-e5c8-08da6dfae865
+X-MS-TrafficTypeDiagnostic: DB7PR04MB5499:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i4FwzwpBWfMW2O3Dqd+ma9gaiRAUjB4hGjAVgy5FUSGXJVq3nP9sEcIlW23yqSXbjQj9FaxUSkxk+cXT8fA3M3CLjo8j/Vu+xQs/kTMtdMC7u9AhEr5raI+epmJjWoeUX7oBy3Xz16e0vnFMYIWOE/+26ALfRcmbACNhqE7YXtoQjvLEzrO/HvZ2NuV0ik/idCT5I/cmSQ7N2iCf7JSdOxk1mHAz0/PvnQYBrdBg442GyvbWpql/qHhQ3oM18csndg6p0rti/PeYfXUtHiMYMtsPYwhdDx5rjqTsj8rDdOeyqTnqDZMx8qHFpyknPPPr/oqWmqHzp+ZxnLaPjxb6OvG+9EglIk2Kew21/QlQP1yIj3Ma8lbD/3FenjQgqc1yMKRvB2aeftSq1Md3nJrAGwMSY/lf8ieR8fLAJTRmWrJmN8KEZ/gQjeAwYGVQMLGSTbqTg+lVdveLDbSBac4XLz86/jyqsrwcyAcRU1prt1yU1SNiCCECWJ4hnn3eLIMZgorjBpPgjSfS6ycfrl5GbMoYjg5LRiGIKJysxtaqWW5ZrSIPPMRhP6bPV9SCqyYx2pDtfbhpkKPnjstenq+vJn+M/Pv4WgB1qjW+iKt3+6PjeK2KV7rw1FLQoPoakRK0Hy82k80mmtQag5tWKDn2eILiqcyKB/KoEa83IjeFMB27zxLMnkyWSHZWbedL/F5EYBs07dZSFtCYoqw5aeAFnYIQVvIsyBmyaQxQfA/c1e52m0iD6e25cxxznxT41ajI68iM99b2zy+ypRPAMhCPhTsD1QioWOrpLB3n2wykbzAtkt3KUEkcNWrxEUsW9XXF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(1076003)(6666004)(2616005)(38350700002)(186003)(83380400001)(4326008)(38100700002)(66556008)(36756003)(2906002)(66946007)(316002)(478600001)(6486002)(8936002)(6506007)(44832011)(5660300002)(6512007)(86362001)(66476007)(26005)(8676002)(52116002)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AKc+DoBxIJp3hYR1r3aUCuotXQvVAjCuIBaoqGJdqzrWJGdcuT1eq76eKogN?=
+ =?us-ascii?Q?o33Bl63WesBW5tdlhaXwviG91ESlO+t9YWBh7c3zmikNMXbjEKg4P/+HtEyc?=
+ =?us-ascii?Q?vaGduyk0e2QmGHXge03v1N0jwkNwwvRaYNlk38mJSdbKqn8r0gON3AfCd4kR?=
+ =?us-ascii?Q?IbL6g3BY4SXk9AUBeGBOWaILiyC33u8lE/4h+IJvnqNZtCliXoEYpzdQskMC?=
+ =?us-ascii?Q?OusVv6b8ZRXi90UdQUZn3+f6ehcqShzFIQI0tzcvMYuNKIX6OUiWmUMxyHHe?=
+ =?us-ascii?Q?LRD3ZWW2ImGVSZqo3RiVD3jv+ZUsctMChFihfhj2R47MkP9qmViG138RAqJh?=
+ =?us-ascii?Q?1pW62LcXVdZImKqR2AzU/9loIIAN0nL5NGJk9uq0SDypxNPIEdn+nL2NWNSa?=
+ =?us-ascii?Q?CUbQ/eM1Uul7mPshTF84dxH/uyYynVOlnvbz3/B3dpv9iGdeaFilK1jkWRqn?=
+ =?us-ascii?Q?eYeubfoD7QlvvYhHwk8CzFyVlvJOTRfWZVflr0ZX88B4WX4+4EyIW4PYdYwj?=
+ =?us-ascii?Q?g0eAEH9XNqBM84p1b9CgVwAsPZeZ6RfbuboqNKUQP3wuglsTCE8ZeAhm8ybp?=
+ =?us-ascii?Q?NdMnhkot8AJbAWt9XDAU2P4REv5lFolXlFKKTSsFmDpNYh+e/4c0agvSVdW5?=
+ =?us-ascii?Q?mxCaHL6gwDVGLGlz4HALTGzpAVMt4Zc899BwtGN2X3jry+XtWKoeyfnoyY2b?=
+ =?us-ascii?Q?zmyxxyxoIOzG9e9UVi0nzEROs5pfXPHAr4hYDtGpRADS2CFVoLP7Ro4GdbRX?=
+ =?us-ascii?Q?OaKenLctjeoGRdhRHHEozGDcKgok7JCOauN5BgfMdBSaswonmzIbX27t2q0f?=
+ =?us-ascii?Q?17Z1K8DtmYufVkf1rKV4JTR91cbytnQZanfZEHHwxk58aPhoAwWzg/PHNdN2?=
+ =?us-ascii?Q?4PJtPEUjSSZIsRbuvhpm6b55UMG+FJmINRB5FX+OAJleM+p64lSKAdxFQLoS?=
+ =?us-ascii?Q?9BtITiGEQcKeG7yNWwzL2/Ec3RYEKsulsH06DCEUNwlCO85v3q52rM53dzQb?=
+ =?us-ascii?Q?WJu+V9RnnhypMkGpUgUZ+M115zm3/IIJnU+14z5MloDU0sbp91C6bRdK3KFH?=
+ =?us-ascii?Q?zgZh1pGNwZfW4ntGt93033BuDkaBOvCQu3QGabSbH1RA4CK2H7HLhFiVJkRp?=
+ =?us-ascii?Q?Pn+XSMbyfhTJ8wb37HoD15fYUV4n2Lm2zw2nVUd9s12pr7Ws4GlXI7zzUF3b?=
+ =?us-ascii?Q?ivmFU59V36l3+WceVzGvr+Tru/ssKpVDfCcEcT6tBq07GwSdbZ+RaMyuCv+/?=
+ =?us-ascii?Q?UJhyGjVXytd3mPzXZXov891dApJJVYYIFwpC/zrrHacOxuZLb2atfV5ud3uU?=
+ =?us-ascii?Q?on7AfnLL61xUQLlRXSEssPp3HCRqVYX6AsVObI9BZ7AYRjtQ+G+f/+SYPEzT?=
+ =?us-ascii?Q?trm5tijxyuPqI+Tspva/uUiOiRKKxVHU/O56XpeWrFmICzOGxHtVwmp29M9D?=
+ =?us-ascii?Q?FBaN2d2Ow3l5gUzRtKuLwFEgSIXurdbXvZaBLxEItdCeq4VMv/tV0DQoHNkS?=
+ =?us-ascii?Q?J4U00YQEea7VrxvvBHtNlh4ym1FJcH9VN7CkmbNCoVz2sIR7TkJxLHyCMFCj?=
+ =?us-ascii?Q?nbtHLvdvK2T03m7s1PdMSca6nZ/RDJc6ymdJNdEL?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73977573-a2aa-486e-e5c8-08da6dfae865
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 05:02:43.6933
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lsKDSZ9IIvF6R2JzcrDCucO50XSSYrhXvgpvPpWv2wFwN2jraYf7aBY1rF55ZuldiZAfeQt/1mQzA6oFRBY9CQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5499
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bug description and fix:
+The LPUART can't distinguish between a break signal and a framing error,
+so need to count the break characters if there is a framing error and
+received data is zero instead of the parity error.
 
-1. Write data to a file, say all 1s from offset 0 to 16.
-
-2. Truncate the file to a smaller size, say 8 bytes.
-
-3. Write new bytes (say 2s) from an offset past the original size of the
-file, say at offset 20, for 4 bytes.  This is supposed to create a "hole"
-in the file, meaning that the bytes from offset 8 (where it was truncated
-above) up to the new write at offset 20, should all be 0s (zeros).
-
-4. flush all caches using "echo 3 > /proc/sys/vm/drop_caches" (or unmount
-and remount) the f/s.
-
-5. Check the content of the file.  It is wrong.  The 1s that used to be
-between bytes 9 and 16, before the truncation, have REAPPEARED (they should
-be 0s).
-
-We wrote a script and helper C program to reproduce the bug
-(reproduce_jffs2_write_begin_issue.sh, write_file.c, and Makefile).  We can
-make them available to anyone.
-
-The above example is shown when writing a small file within the same first
-page.  But the bug happens for larger files, as long as steps 1, 2, and 3
-above all happen within the same page.
-
-The problem was traced to the jffs2_write_begin code, where it goes into an
-'if' statement intended to handle writes past the current EOF (i.e., writes
-that may create a hole).  The code computes a 'pageofs' that is the floor
-of the write position (pos), aligned to the page size boundary.  In other
-words, 'pageofs' will never be larger than 'pos'.  The code then sets the
-internal jffs2_raw_inode->isize to the size of max(current inode size,
-pageofs) but that is wrong: the new file size should be the 'pos', which is
-larger than both the current inode size and pageofs.
-
-Similarly, the code incorrectly sets the internal jffs2_raw_inode->dsize to
-the difference between the pageofs minus current inode size; instead it
-should be the current pos minus the current inode size.  Finally,
-inode->i_size was also set incorrectly.
-
-The patch below fixes this bug.  The bug was discovered using a new tool
-for finding f/s bugs using model checking, called MCFS (Model Checking File
-Systems).
-
-Signed-off-by: Yifei Liu <yifeliu@cs.stonybrook.edu>
-Signed-off-by: Erez Zadok <ezk@cs.stonybrook.edu>
-Signed-off-by: Manish Adkar <madkar@cs.stonybrook.edu>
+Fixes: 5541a9bacfe5 ("serial: fsl_lpuart: handle break and make sysrq work")
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+Reviewed-by: Michael Walle <michael@walle.cc>
 ---
- fs/jffs2/file.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+Changes in V2:
+1. Take this fix patch out of the previous patch set separately.
+2. Add the Reviewed-by tag.
+---
+ drivers/tty/serial/fsl_lpuart.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/jffs2/file.c b/fs/jffs2/file.c
-index ba86acbe12d3..0479096b96e4 100644
---- a/fs/jffs2/file.c
-+++ b/fs/jffs2/file.c
-@@ -137,19 +137,18 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 	struct jffs2_inode_info *f = JFFS2_INODE_INFO(inode);
- 	struct jffs2_sb_info *c = JFFS2_SB_INFO(inode->i_sb);
- 	pgoff_t index = pos >> PAGE_SHIFT;
--	uint32_t pageofs = index << PAGE_SHIFT;
- 	int ret = 0;
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index 1c3c6844fa36..8a4aae7dbd99 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -990,12 +990,12 @@ static void lpuart32_rxint(struct lpuart_port *sport)
  
- 	jffs2_dbg(1, "%s()\n", __func__);
+ 		if (sr & (UARTSTAT_PE | UARTSTAT_OR | UARTSTAT_FE)) {
+ 			if (sr & UARTSTAT_PE) {
++				sport->port.icount.parity++;
++			} else if (sr & UARTSTAT_FE) {
+ 				if (is_break)
+ 					sport->port.icount.brk++;
+ 				else
+-					sport->port.icount.parity++;
+-			} else if (sr & UARTSTAT_FE) {
+-				sport->port.icount.frame++;
++					sport->port.icount.frame++;
+ 			}
  
--	if (pageofs > inode->i_size) {
--		/* Make new hole frag from old EOF to new page */
-+	if (pos > inode->i_size) {
-+		/* Make new hole frag from old EOF to new position */
- 		struct jffs2_raw_inode ri;
- 		struct jffs2_full_dnode *fn;
- 		uint32_t alloc_len;
+ 			if (sr & UARTSTAT_OR)
+@@ -1010,12 +1010,12 @@ static void lpuart32_rxint(struct lpuart_port *sport)
+ 			sr &= sport->port.read_status_mask;
  
--		jffs2_dbg(1, "Writing new hole frag 0x%x-0x%x between current EOF and new page\n",
--			  (unsigned int)inode->i_size, pageofs);
-+		jffs2_dbg(1, "Writing new hole frag 0x%x-0x%x between current EOF and new position\n",
-+			  (unsigned int)inode->i_size, (uint32_t)pos);
+ 			if (sr & UARTSTAT_PE) {
++				flg = TTY_PARITY;
++			} else if (sr & UARTSTAT_FE) {
+ 				if (is_break)
+ 					flg = TTY_BREAK;
+ 				else
+-					flg = TTY_PARITY;
+-			} else if (sr & UARTSTAT_FE) {
+-				flg = TTY_FRAME;
++					flg = TTY_FRAME;
+ 			}
  
- 		ret = jffs2_reserve_space(c, sizeof(ri), &alloc_len,
- 					  ALLOC_NORMAL, JFFS2_SUMMARY_INODE_SIZE);
-@@ -169,10 +168,10 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 		ri.mode = cpu_to_jemode(inode->i_mode);
- 		ri.uid = cpu_to_je16(i_uid_read(inode));
- 		ri.gid = cpu_to_je16(i_gid_read(inode));
--		ri.isize = cpu_to_je32(max((uint32_t)inode->i_size, pageofs));
-+		ri.isize = cpu_to_je32((uint32_t)pos);
- 		ri.atime = ri.ctime = ri.mtime = cpu_to_je32(JFFS2_NOW());
- 		ri.offset = cpu_to_je32(inode->i_size);
--		ri.dsize = cpu_to_je32(pageofs - inode->i_size);
-+		ri.dsize = cpu_to_je32((uint32_t)pos - inode->i_size);
- 		ri.csize = cpu_to_je32(0);
- 		ri.compr = JFFS2_COMPR_ZERO;
- 		ri.node_crc = cpu_to_je32(crc32(0, &ri, sizeof(ri)-8));
-@@ -202,7 +201,7 @@ static int jffs2_write_begin(struct file *filp, struct address_space *mapping,
- 			goto out_err;
- 		}
- 		jffs2_complete_reservation(c);
--		inode->i_size = pageofs;
-+		inode->i_size = pos;
- 		mutex_unlock(&f->sem);
- 	}
- 
+ 			if (sr & UARTSTAT_OR)
 -- 
-2.25.1
+2.17.1
 

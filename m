@@ -2,141 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B0857FCB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DA757FCB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbiGYJvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S233254AbiGYJw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbiGYJvT (ORCPT
+        with ESMTP id S233168AbiGYJw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:51:19 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA8BA474;
-        Mon, 25 Jul 2022 02:51:18 -0700 (PDT)
-X-UUID: ae0c1fc3a6f64bfd8b86a4940db392a4-20220725
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:315449f2-28d8-481d-b6b7-0a706ad04402,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:0f94e32,CLOUDID:7c1edfd3-912a-458b-a623-74f605a77e93,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: ae0c1fc3a6f64bfd8b86a4940db392a4-20220725
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1604583661; Mon, 25 Jul 2022 17:51:12 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 25 Jul 2022 17:51:11 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 25 Jul 2022 17:51:11 +0800
-Message-ID: <f0c930400e4a5b3723df2d257cc4bc51ee7a2806.camel@mediatek.com>
-Subject: Re: [PATCH v14 06/10] drm/mediatek: Add MT8195 External DisplayPort
- support
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 25 Jul 2022 17:51:11 +0800
-In-Reply-To: <20220712111223.13080-7-rex-bc.chen@mediatek.com>
-References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
-         <20220712111223.13080-7-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 05:52:26 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E073167F9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:52:22 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220725095216epoutp0487e30d94ea26da70980f34a3b72878ae~FCbsSjRoN1657316573epoutp04n
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:52:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220725095216epoutp0487e30d94ea26da70980f34a3b72878ae~FCbsSjRoN1657316573epoutp04n
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1658742736;
+        bh=1SZSN+URK3fPaUP+8oBcbCaH7+pgUXYqMJcXmpr8nqs=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=RnFMCbzIR2Vnuz6qSbcBf13vjvHKXdVMDd8PTQM3DQcJvlla/aYRifNnVWCF0Ivby
+         IJNGilPlipO6N4PrAts+WklXW64CYBPS9f+rYGwuXGeEoeXFVfvwXyQyNhMc9Z2qZj
+         16Ng2zdlM4T9LIAbV29Qz6K9gRo8VGf/rsESnnSY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20220725095215epcas1p30bf348ac3b337b66638d4422dd796729~FCbrSseRB1436114361epcas1p3c;
+        Mon, 25 Jul 2022 09:52:15 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.241]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LrwLl2xf4z4x9Q0; Mon, 25 Jul
+        2022 09:52:15 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6C.55.09678.FC76ED26; Mon, 25 Jul 2022 18:52:15 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220725095214epcas1p1cc2019c792560da07d673809a3fc7ef3~FCbqhhizu2036020360epcas1p1-;
+        Mon, 25 Jul 2022 09:52:14 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220725095214epsmtrp122086ac3523b47fc40b9ce78431eac60~FCbqgoIjW1354513545epsmtrp1L;
+        Mon, 25 Jul 2022 09:52:14 +0000 (GMT)
+X-AuditID: b6c32a39-e67ff700000025ce-a1-62de67cf6dc2
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CF.35.08905.EC76ED26; Mon, 25 Jul 2022 18:52:14 +0900 (KST)
+Received: from jaewon-linux.10.32.193.11 (unknown [10.253.100.104]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220725095214epsmtip2a03a41b1c28accef45748067fba52612~FCbqUYN2t3171331713epsmtip2v;
+        Mon, 25 Jul 2022 09:52:14 +0000 (GMT)
+From:   Jaewon Kim <jaewon31.kim@samsung.com>
+To:     minchan@kernel.org, akpm@linux-foundation.org, bhe@redhat.com,
+        vbabka@suse.cz, mgorman@techsingularity.net, hannes@cmpxchg.org,
+        mhocko@kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        gh21.hong@samsung.com, ytk.lee@samsung.com, jaewon31.kim@gmail.com,
+        Jaewon Kim <jaewon31.kim@samsung.com>
+Subject: [PATCH v2] page_alloc: fix invalid watemark check on a negative
+ value
+Date:   Mon, 25 Jul 2022 18:52:12 +0900
+Message-Id: <20220725095212.25388-1-jaewon31.kim@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpik+LIzCtJLcpLzFFi42LZdlhTV/d8+r0kg/N9QhZz1q9hszj/4Beb
+        xZbfbxgtVm/ytejePJPRovf9KyaLy7vmsFncW/Of1WLH0n1MFq+/LWO2WPb1PbvF7MY+RovH
+        67kdeD0Ov3nP7LFz1l12j02rOtk8Nn2axO5xYsZvFo/3+66yefRtWcXocWbBEXaPrb/sPD5v
+        kgvgisq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAE6
+        XUmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYFagV5yYW1yal66Xl1piZWhgYGQK
+        VJiQnbFo9xaWgn7Bik2N59kaGPv4uhg5OSQETCR2vP/G0sXIxSEksINRomHnC1YI5xOjxK4F
+        +6Gcb4wSjw7dZYZp6Vy/lBkisZdR4vDWRWwQzg9GiYc951lAqtgEtCXeL5gE1i4iMJNRYv6N
+        RWAJZoHFjBJfHiaA2MICARJLzk9lA7FZBFQlJj95BraCV8BWYu/2fnaIdfISqzccAFsnIdDK
+        IfFg2RlGiISLxMTnO1kgbGGJV8e3QDVISbzsb4OysyWenjwC1MwBZOdINGyQhTDtJd5fsgAx
+        mQU0Jdbv0ocoVpTY+XsuI8SVfBLvvvawQlTzSnS0CUGUqEm0PPvKCmHLSPz99wzK9pB4fX8m
+        I0i5kECsRPPG8AmMsrMQ5i9gZFzFKJZaUJybnlpsWGAKj6Pk/NxNjODEqGW5g3H62w96hxiZ
+        OBgPMUpwMCuJ8Hal3U4S4k1JrKxKLcqPLyrNSS0+xGgKDKyJzFKiyfnA1JxXEm9oYmlgYmZk
+        YmFsaWymJM67atrpRCGB9MSS1OzU1ILUIpg+Jg5OqQamPT1ML3OnGidsYl1vfsDrv89mlx3a
+        MbHX5b7rb/227sX+9eniFzU0fkvK2C3XE8m7c2Sz87Ou6+7mp3l/N0Q4CO9J22W0uu70kqXc
+        /bllf9w79I7IHGvZbz6rTOgFT6d253Lvj0tu36i7dXK+QnGGNUPKtoMzPKL0o80OetofeH/E
+        uV5VUlmjc/UVEf0dC3c1Or+bZV36b+qETZWtsq+TnN3vNdzjjUq1zNpt8DWwNrX+VGj/zbzp
+        mbr/LR8c4p77LlpCnJexKPalacmcy+62sbNmR9UvXMmgvP/siYPqy/iiYy9J7r/49u92qeN2
+        r7Ru2wbGvHxY8OzoqUT5GwGHLHu/xibYnTSYoir2a5u1EktxRqKhFnNRcSIAIwZLkRUEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCLMWRmVeSWpSXmKPExsWy7bCSvO659HtJBlO+G1nMWb+GzeL8g19s
+        Flt+v2G0WL3J16J780xGi973r5gsLu+aw2Zxb81/VosdS/cxWbz+tozZYtnX9+wWsxv7GC0e
+        r+d24PU4/OY9s8fOWXfZPTat6mTz2PRpErvHiRm/WTze77vK5tG3ZRWjx5kFR9g9tv6y8/i8
+        SS6AK4rLJiU1J7MstUjfLoErY9HuLSwF/YIVmxrPszUw9vF1MXJySAiYSHSuX8rcxcjFISSw
+        m1Fi0779bBAJGYk355+ydDFyANnCEocPF0PUfGOUeHXsGxNIDZuAtsT7BZNYQRIiAgsZJXa+
+        fwE2iVlgJaPE25fzGEGqhAX8JJYumscKYrMIqEpMfvKMGcTmFbCV2Lu9nx1im7zE6g0HmCcw
+        8ixgZFjFKJlaUJybnltsWGCYl1quV5yYW1yal66XnJ+7iREcsFqaOxi3r/qgd4iRiYPxEKME
+        B7OSCG9X2u0kId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODil
+        Gpjm1/lbrts2u4Sd77dX9R3R1+z32VfU79/+vnu74i3eb+2BEtEic+SEeT6qNUh0vtl8caJA
+        KFuOwZYWS+boGsVbXh/ylK99XXh6TtLs9y94BLg1XgQuZjF/Hq3Vt1ghluPdDU6Tec8Z2k/u
+        ShY4oSj7yixPgHP5ScNTT/cmv92yMmPivJfHrj2+yF/J//y627sl+7pL5N0D4msq1JqMeCP9
+        fTmj5NUcex9XZj8UDvGUcZPVy3J9rLdM5N1/1p//TiXOtbU8y7rUvXRR69Sz96ofMUc/Uc9e
+        dO3AVUXDDVaet1cwhnILL/txMrHKd5Fo7cEA+wczFkz9NmdzU4TN19eZ/Vr9ySdL9/scWcr2
+        8YQSS3FGoqEWc1FxIgAhUwPdxwIAAA==
+X-CMS-MailID: 20220725095214epcas1p1cc2019c792560da07d673809a3fc7ef3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220725095214epcas1p1cc2019c792560da07d673809a3fc7ef3
+References: <CGME20220725095214epcas1p1cc2019c792560da07d673809a3fc7ef3@epcas1p1.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+There was a report that a task is waiting at the
+throttle_direct_reclaim. The pgscan_direct_throttle in vmstat was
+increasing.
 
-On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
-> From: Guillaume Ranquet <granquet@baylibre.com>
-> 
-> This patch adds External DisplayPort support to the mt8195 eDP
-> driver.
-> 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+This is a bug where zone_watermark_fast returns true even when the free
+is very low. The commit f27ce0e14088 ("page_alloc: consider highatomic
+reserve in watermark fast") changed the watermark fast to consider
+highatomic reserve. But it did not handle a negative value case which
+can be happened when reserved_highatomic pageblock is bigger than the
+actual free.
 
-[snip]
+If watermark is considered as ok for the negative value, allocating
+contexts for order-0 will consume all free pages without direct reclaim,
+and finally free page may become depleted except highatomic free.
 
-> @@ -1489,13 +1543,34 @@ static int mtk_dp_init_port(struct mtk_dp
-> *mtk_dp)
->  static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
->  {
->  	struct mtk_dp *mtk_dp = dev;
-> +	int event;
-> +
-> +	event = mtk_dp_plug_state(mtk_dp) ?
-> +		connector_status_connected :
-> connector_status_disconnected;
-> +
-> +	if (event < 0)
-> +		return IRQ_HANDLED;
+Then allocating contexts may fall into throttle_direct_reclaim. This
+symptom may easily happen in a system where wmark min is low and other
+reclaimers like kswapd does not make free pages quickly.
 
-event is useless, so drop it.
+Handle the negative case by using MIN.
 
-Regards,
-CK
+Fixes: f27ce0e14088 ("page_alloc: consider highatomic reserve in watermark fast")
+Reported-by: GyeongHwan Hong <gh21.hong@samsung.com>
+Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+---
+v2: use explicit code suggested by Mel Gorman
+v1: use signed min
+---
 
-> +
-> +	dev_dbg(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
-> +	drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
->  
->  	if (mtk_dp->train_info.cable_state_change) {
->  		mtk_dp->train_info.cable_state_change = false;
->  
-> -		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> -				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
-> -				   DP_PWR_STATE_MASK);
-> +		if (!mtk_dp->train_info.cable_plugged_in) {
-> +			mtk_dp_video_mute(mtk_dp, true);
-> +
-> +			mtk_dp_initialize_priv_data(mtk_dp);
-> +			mtk_dp_set_idle_pattern(mtk_dp, true);
-> +
-> +			mtk_dp_update_bits(mtk_dp,
-> MTK_DP_TOP_PWR_STATE,
-> +					   DP_PWR_STATE_BANDGAP_TPLL,
-> +					   DP_PWR_STATE_MASK);
-> +		} else {
-> +			mtk_dp_update_bits(mtk_dp,
-> MTK_DP_TOP_PWR_STATE,
-> +					   DP_PWR_STATE_BANDGAP_TPLL_LA
-> NE,
-> +					   DP_PWR_STATE_MASK);
-> +		}
->  	}
->  
->  	if (mtk_dp->train_info.irq_sta.hpd_inerrupt) {
-> @@ -1597,6 +1672,24 @@ static int mtk_dp_dt_parse(struct mtk_dp
-> *mtk_dp,
->  	return 0;
->  }
->  
+ mm/page_alloc.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3df0485..b5b14b78c4fd 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3968,11 +3968,15 @@ static inline bool zone_watermark_fast(struct zone *z, unsigned int order,
+ 	 * need to be calculated.
+ 	 */
+ 	if (!order) {
+-		long fast_free;
++		long usable_free;
++		long reserved;
+ 
+-		fast_free = free_pages;
+-		fast_free -= __zone_watermark_unusable_free(z, 0, alloc_flags);
+-		if (fast_free > mark + z->lowmem_reserve[highest_zoneidx])
++		usable_free = free_pages;
++		reserved = __zone_watermark_unusable_free(z, 0, alloc_flags);
++
++		/* reserved may over estimate high-atomic reserves. */
++		usable_free -= min(usable_free, reserved);
++		if (usable_free > mark + z->lowmem_reserve[highest_zoneidx])
+ 			return true;
+ 	}
+ 
+-- 
+2.17.1
 

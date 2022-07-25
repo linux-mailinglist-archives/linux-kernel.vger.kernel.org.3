@@ -2,121 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDDB57FCCE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923DE57FCD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbiGYKAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S234260AbiGYKDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiGYKAf (ORCPT
+        with ESMTP id S229633AbiGYKDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:00:35 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98DC140B0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:00:33 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso9017808wma.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8kKtLby8MgrUZLt3qipFc/90ZgJiiZA99iRAGb8boms=;
-        b=xCF6GRKmnVCxMYRV/lmEMNlvm2J1s1DWYDqDFYGRm9e9cz9sNAY1IJh07ch4Q4zqbz
-         8d9GAzgrdlVt9UFU6nhVDvCmpx64V8MEFHp3Hb1vqt2BTpGimQXFYVRdfIl/39GRLaJZ
-         Jt/bQllBSlji9wDxYXln4f8yD1ojVRDj6ud6Np7TNQKymRFsSKs7Icv3cZ9ZnJm/k5KU
-         o5ytyhWKg1pGEPzci2qaOq36TdFRWDnN2PyKuEWF1jLZYs+hAFTfWjIXTumvKCIl3+1a
-         7TItGCaULZRrmoLrrw3BgQLily+WEJ+WT6Wd3+M/B8EFuoDp6BVdjC2hqgFSncNqRotz
-         LlkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8kKtLby8MgrUZLt3qipFc/90ZgJiiZA99iRAGb8boms=;
-        b=vI8gQ7ksbokNeeWGaJ7WxzZ+/Fv1zo4JKCHZML4HF7ekzpNOGujPhxYObygKxwoovR
-         1FhRKGC6eBur2j/jS+HFpAJPyneNt3akmU/pU+wH5lmZWypSXaYVlBGns2G8DPWNH6Zq
-         yutexd5MjWDisS6+De/UGYRYxpRqC2gYR88//aEmydXjQnBQrom5SaqPs9MhlpRMyZ9/
-         /NMeAi0OR9oMqKe2s6n4zkTI9NOSZGC0nLriSOT8H2Pp8RUPs9kN4Xdf1TU2wHOS2wGK
-         YarM/XfrsPHfotOTIecfvySDdpmhqCwg4506YsgTtKVDUmF68bZ3aJdlcTTc7xtgNfJx
-         y0Qw==
-X-Gm-Message-State: AJIora/eIbyouB9Nw+B4AR2uNx8UzkMSxuDyi7GxklsvW8+0e1P0MQL3
-        CKnXFNRfb8eLULZxWyo2gnfFwA==
-X-Google-Smtp-Source: AGRyM1t8wbpFtIyQ2/G97onqzgPLGerZ2kGEDsq8OEUx1Zg8c62ccPOUeBcLb0PhnCWY0x+Y98bnqg==
-X-Received: by 2002:a05:600c:224c:b0:3a3:17b7:a229 with SMTP id a12-20020a05600c224c00b003a317b7a229mr20968303wmm.1.1658743232355;
-        Mon, 25 Jul 2022 03:00:32 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:feb7:6a58:3e0f:a58f? ([2a05:6e02:1041:c10:feb7:6a58:3e0f:a58f])
-        by smtp.googlemail.com with ESMTPSA id n6-20020adfe346000000b0021d7ad6b9fdsm11490008wrj.57.2022.07.25.03.00.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 03:00:31 -0700 (PDT)
-Message-ID: <28e915c2-4871-b648-f5ac-78d6ecb32768@linaro.org>
-Date:   Mon, 25 Jul 2022 12:00:30 +0200
+        Mon, 25 Jul 2022 06:03:08 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325D51706F;
+        Mon, 25 Jul 2022 03:03:07 -0700 (PDT)
+X-UUID: 546db1d251104604b86b492a994e56a2-20220725
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0c669bee-5efb-4c13-a930-313eec0af927,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:04e3c129-fd69-41f1-91fc-8b8a329d3a88,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 546db1d251104604b86b492a994e56a2-20220725
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1995892644; Mon, 25 Jul 2022 18:03:03 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 25 Jul 2022 18:03:02 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 25 Jul 2022 18:03:02 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        "Chen-Yu Tsai" <wenst@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/2] MT8186 pinctrl properties adjustments
+Date:   Mon, 25 Jul 2022 18:02:51 +0800
+Message-ID: <20220725100253.10687-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 17/33] thermal/drivers/rcar: Switch to new of API
-Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, khilman@baylibre.com,
-        abailon@baylibre.com, amitk@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <20220710212423.681301-1-daniel.lezcano@linexp.org>
- <20220710212423.681301-18-daniel.lezcano@linexp.org>
- <YtZ1IExNlsYaJkC9@oden.dyn.berto.se>
- <18ade2d0-ebda-0526-71f3-65a0b2685068@linexp.org>
- <Yt2W5UCXaB3Memzg@oden.dyn.berto.se>
- <e2a56ac3-057c-2b17-7bde-7e860a86807d@linexp.org>
- <Yt3KDSO248WebZ/w@oden.dyn.berto.se> <Yt3Vmt/AAzqzDzBF@oden.dyn.berto.se>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Yt3Vmt/AAzqzDzBF@oden.dyn.berto.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Based on tag: next-20220720, linux-next/master.
 
-Hi Niklas,
+In commit e5fabbe43f3f ("pinctrl: mediatek: paris: Support generic
+PIN_CONFIG_DRIVE_STRENGTH_UA"), added support for using
+drive-strength-microamp instead of mediatek,drive-strength-adv.
 
-On 25/07/2022 01:28, Niklas Söderlund wrote:
-> Hi (again) Daniel,
-> 
-> I figured it out, the thermal zone is disabled after this change. For
-> both rcar sensors with the new API thermal_zone_device_enable() is never
-> called.
-> 
-> In the old API the zone is enabled in the call chain of
-> devm_thermal_zone_of_sensor_register(). While after this change the zone
-> is not enabled by the core when calling thermal_zone_device_enable().
-> 
-> If I add a call to thermal_zone_device_enable() together with the new
-> API everything works as before. But I'm not sure if the correct solution
-> is to add a call to thermal_zone_device_enable() in the sensor drivers
-> or in the call chain of the new API?
-> 
-> On 2022-07-25 00:39:10 +0200, Niklas Söderlund wrote:
->> Hi Daniel,
->>
->> I tested your branch, unfortunately with the same result for
->> rcar_gen3_thermal. Manipulation of emul_temp file do not trigger
->> actions.
+We replace the custom mediatek,drive-strength-adv property with
+'drive-strength-microamp' in the mt8186 pinctrl dt-binding which
+have a clearer meaning and is more standardized, also add
+gpio-line-names property used in devicetrees to describe pin names.
 
-Thanks for investigating, I updated the branch. Does it fix the issue ?
+Allen-KH Cheng (2):
+  dt-bindings: pinctrl: mt8186: Add gpio-line-names property
+  dt-bindings: pinctrl: mt8186: Add and use drive-strength-microamp
 
-
-
+ .../bindings/pinctrl/pinctrl-mt8186.yaml      | 31 +++----------------
+ 1 file changed, 5 insertions(+), 26 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.18.0
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

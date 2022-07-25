@@ -2,144 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB519580501
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE95A580505
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbiGYUG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S235337AbiGYUHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236753AbiGYUGX (ORCPT
+        with ESMTP id S230079AbiGYUHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:06:23 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69078CE3C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:06:21 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id o7-20020a056e02102700b002dd09fe012aso7981766ilj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:06:21 -0700 (PDT)
+        Mon, 25 Jul 2022 16:07:44 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70D3CE3B;
+        Mon, 25 Jul 2022 13:07:42 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id v130so9586240oie.13;
+        Mon, 25 Jul 2022 13:07:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=jALjLym/x8uogNDMDeD9EXR+XfiHKoWS+XNpUQ2FdbU=;
-        b=j+LF9x2nj+Yctt9TclNulZ4vj898+mEzTrFoKcS32cq7ct2F4UkoXGdvGtxinv9n5W
-         kJZRuWNHxHSVvh9ukO+9LcBxC/szFFve4riIwcQCcmqLUlsFRfmjo5uQIanvtu2XG12L
-         37HCy8g1dRzm5CXJDAiXhGl8LVUeV+tCfTrIAa/m2uGr+8LN9zWpQV7IGY2rPYAZFtRc
-         fuH4tP97WY8WnkyQSXKzNfXQ/IMnWNrByPoUIKpo67JfM0L3ijcsZa/p1hiDfKCxDxXf
-         XXBhlHM16C5EwMwlrQvukCBr82Us66GCL2h24u+lHQm0lT94+qfLnncVUIGn+wEV+2ZP
-         vrTg==
-X-Gm-Message-State: AJIora8ivd3ab9fNA5HD+GoRq2t/yFnkb3hifGHUkm8bvG2T1xx7EyiE
-        CtUlRqcU5mEGG+KD20mnUZZfx51P8ymuFcKwnWFc1Fhg5WM6
-X-Google-Smtp-Source: AGRyM1uryIB9VDMQcroA8VUz1B/u6VlGSrLflRKjzYDpZ/w9+QWutuaN9aEg65GjW2FxG79UYr5OF/B+xp8M0MID4nSsIT9V2et9
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4GWuWpoAhrVCWo1uur9iksaj/fTVZRC6odEtZowuyck=;
+        b=mHCRsQazEFxw5eYNf5UcFCOZ+DRL3i1xsFteXXnmqEUEXeAka0hmBKyT625N2pCRh3
+         rhZMG/D34A/SiNdZvp82e5odiMBS+gD9D7i82LF0mDELiX9bCxGWlZy5+S6wJOvMopoG
+         Aga2+LHPEn3AF+9ytsHZVuPA2TJpq1T2VA9CzLZ0tMXQFyrOD6P3SBpoGCDlYZSVPmFr
+         W+OBRTej4VR2lL1EqAtv6ynnBC06rxWHdTpzgmK3ueSFlSRh2hydYuUAL06TOvx6xjDW
+         iVWbrcF70RASqRt/qSMaPY4tCJwaaHkhTFhizXSGX6HpUE35TkPkLKlDAgWxBOnEwLga
+         b0wg==
+X-Gm-Message-State: AJIora+H2TealB+0aqg2sHOZuoaeoA3lulxl/hIcjH2BkwgDIPshcoKy
+        cwfB+5fPu6h7fqLzU7hyGg==
+X-Google-Smtp-Source: AGRyM1s9bFZXSzKFUySKHhgElYf8SWow+HiRmq7/Fd7H0J6JmYb+GfEYGWIS4ue0TpRPUdBZYB81vw==
+X-Received: by 2002:a05:6808:209d:b0:33a:8b99:f7a3 with SMTP id s29-20020a056808209d00b0033a8b99f7a3mr6336587oiw.119.1658779662190;
+        Mon, 25 Jul 2022 13:07:42 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id o31-20020a056870911f00b0010c7487aa73sm6473352oae.50.2022.07.25.13.07.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 13:07:41 -0700 (PDT)
+Received: (nullmailer pid 2625395 invoked by uid 1000);
+        Mon, 25 Jul 2022 20:07:40 -0000
+Date:   Mon, 25 Jul 2022 14:07:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, aisheng.dong@nxp.com, festevam@gmail.com,
+        ping.bai@nxp.com, kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 0/9] dt-bindings: pinctrl: imx: use minItems
+Message-ID: <20220725200740.GA2610621-robh@kernel.org>
+References: <20220723094335.3577048-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b44:b0:2dd:89bf:6b99 with SMTP id
- f4-20020a056e020b4400b002dd89bf6b99mr334353ilu.114.1658779580772; Mon, 25 Jul
- 2022 13:06:20 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 13:06:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ac3b8305e4a6b766@google.com>
-Subject: [syzbot] WARNING in __dev_queue_xmit
-From:   syzbot <syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com>
-To:     ast@kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        liuhangbin@gmail.com, netdev@vger.kernel.org, pabeni@redhat.com,
-        pablo@netfilter.org, sdf@google.com, shaozhengchao@huawei.com,
-        syzkaller-bugs@googlegroups.com, willemb@google.com,
-        yajun.deng@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220723094335.3577048-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Jul 23, 2022 at 05:43:26PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> There are many warnings when do dtbs_check: fsl,pins are too long,
+> so add minItems to address that.
 
-syzbot found the following issue on:
+A single cell is not valid though, right?
 
-HEAD commit:    b77ffb30cfc5 libbpf: fix an snprintf() overflow check
-git tree:       bpf-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11ef3226080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=386b986585586629
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ea725c25d06fb9114c4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11004e64080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1009bfd0080000
+This particular property is problematic because each entry depending 
+on the platform has different number of cells (5, 6, etc.). A single 
+cell (minItems: 1) is not valid though, right?
 
-The issue was bisected to:
+There's a fix in dtschema min branch which should fix the warnings. 
+Unfortunately, it just strips any bounds checking.
 
-commit fd1894224407c484f652ad456e1ce423e89bb3eb
-Author: Zhengchao Shao <shaozhengchao@huawei.com>
-Date:   Fri Jul 15 11:55:59 2022 +0000
-
-    bpf: Don't redirect packets with invalid pkt_len
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1749bfd0080000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14c9bfd0080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10c9bfd0080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com
-Fixes: fd1894224407 ("bpf: Don't redirect packets with invalid pkt_len")
-
-------------[ cut here ]------------
-skb_assert_len
-WARNING: CPU: 0 PID: 3608 at include/linux/skbuff.h:2465 skb_assert_len include/linux/skbuff.h:2465 [inline]
-WARNING: CPU: 0 PID: 3608 at include/linux/skbuff.h:2465 __dev_queue_xmit+0x313c/0x3ad0 net/core/dev.c:4171
-Modules linked in:
-CPU: 0 PID: 3608 Comm: syz-executor357 Not tainted 5.19.0-rc5-syzkaller-01146-gb77ffb30cfc5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 06/29/2022
-RIP: 0010:skb_assert_len include/linux/skbuff.h:2465 [inline]
-RIP: 0010:__dev_queue_xmit+0x313c/0x3ad0 net/core/dev.c:4171
-Code: 10 e8 18 6c 73 fa e9 b4 f2 ff ff e8 4e 18 26 fa 48 c7 c6 a0 81 d3 8a 48 c7 c7 a0 55 d3 8a c6 05 89 33 52 06 01 e8 45 75 de 01 <0f> 0b e9 4f f2 ff ff e8 28 18 26 fa e8 a3 17 10 fa 31 ff 89 c3 89
-RSP: 0018:ffffc900031af748 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88801b9bbb00 RSI: ffffffff8160d618 RDI: fffff52000635edb
-RBP: ffff888020059aba R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: ffff888020059a00
-R13: 0000000000000000 R14: ffff888020059a10 R15: ffff888020059a00
-FS:  0000555556f80300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000561be8192048 CR3: 0000000020721000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- packet_snd net/packet/af_packet.c:3073 [inline]
- packet_sendmsg+0x21f4/0x55d0 net/packet/af_packet.c:3104
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2485
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2539
- __sys_sendmsg net/socket.c:2568 [inline]
- __do_sys_sendmsg net/socket.c:2577 [inline]
- __se_sys_sendmsg net/socket.c:2575 [inline]
- __x64_sys_sendmsg+0x132/0x220 net/socket.c:2575
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f4882617369
-Code: 28 c3 e8 4a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff94d23dd8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f4882617369
-RDX: 0000000000000000 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff94d23df0
-R13: 00007fff94d23e10 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Rob

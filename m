@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0881D57FF80
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD66657FF9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbiGYNF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S235502AbiGYNJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiGYNF5 (ORCPT
+        with ESMTP id S235481AbiGYNJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:05:57 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C5918D;
-        Mon, 25 Jul 2022 06:05:56 -0700 (PDT)
-Received: from zn.tnic (p200300ea972976f8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76f8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 875791EC0676;
-        Mon, 25 Jul 2022 15:05:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658754350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=52Qsfzz/eK6LL+bUeQnS882u4becLcvnVA9HncA22sc=;
-        b=LD8LsHoPHH/NL3lqbbPiC+sLdVADfY6h4+j9KI1QvSpaGuAiXBemvCuUiGfRkFkhRk2Hs1
-        OtqFWry/URmUcMVPQQ50FnkfmEBvp/gW8ace4cIgK2IPfAH+Ybjuvvl3GCfbrlICpDH09M
-        TkF7z8DGAOYH3LmJHyCMc+nhnw2KGEY=
-Date:   Mon, 25 Jul 2022 15:05:50 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Message-ID: <Yt6VLnsqedRnxb1g@zn.tnic>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
- <YtltYRuL+2uQkYUK@zn.tnic>
- <ebcf2979-45fc-8d41-cc28-ac8da0d24245@intel.com>
- <Ytr4FCV2xPGUBLqs@zn.tnic>
- <707ca113-c2a2-8fe2-a22c-5be13adc7bb4@intel.com>
- <Yt6LOD9Ae2NqyG1N@zn.tnic>
- <Yt6T3vlbTZ5z0nZ/@kernel.org>
+        Mon, 25 Jul 2022 09:09:32 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22AF013D76;
+        Mon, 25 Jul 2022 06:09:28 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 430C0FF9C3;
+        Mon, 25 Jul 2022 13:09:26 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 15:09:20 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
+Message-ID: <20220725150920.63ac3a77.max@enpas.org>
+In-Reply-To: <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
+References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
+        <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
+        <20220717233842.1451e349.max@enpas.org>
+        <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yt6T3vlbTZ5z0nZ/@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 04:00:14PM +0300, Mike Rapoport wrote:
-> An application in the VM can do mlock() or mmap(..., MAP_POPULATE, ...) and
-> this will essentially force acceptance of that memory.
+On Mon, 25 Jul 2022 08:40:24 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-Ah, cool, that's what I meant.
+> > > @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
+> > >       if (!tty->ops->write)
+> > >               return -EOPNOTSUPP;
+> > >
+> > > -     /* RTnetlink lock is misused here to serialize concurrent
+> > > -      * opens of slcan channels. There are better ways, but it is
+> > > -      * the simplest one.
+> > > -      */
+> > > -     rtnl_lock();
+> > > +     dev = alloc_candev(sizeof(*sl), 1);
+> > > +     if (!dev)
+> > > +             return -ENFILE;
+> > >
+> > > -     /* Collect hanged up channels. */
+> > > -     slc_sync();
+> > > +     sl = netdev_priv(dev);
+> > >
+> > > -     sl = tty->disc_data;
+> > > +     /* Configure TTY interface */
+> > > +     tty->receive_room = 65536; /* We don't flow control */
+> > > +     sl->rcount   = 0;
+> > > +     sl->xleft    = 0;  
+> >
+> > I suggest moving the zeroing to slc_open() - i.e. to the netdev open
+> > function. As a bonus, you can then remove the same two assignments from
+> > slc_close() (see above). They are only used when netif_running(), with
+> > appropiate guards already in place as far as I can see.  
+> 
+> I think it is better to keep the code as it is, since at the entry of
+> the netdev
+> open function, netif_running already returns true (it is set to true by the
+> calling function) and therefore it would be less safe to reset the
+> rcount and xleft
+> fields.
 
-> But there's no sysctl or something for that.
+Wow, great catch!
 
-Yeah, no need.
+I wonder why __LINK_STATE_START is set before ->ndo_open() is called...?
 
-I was simply wondering whether one can relocate the acceptance work to
-the moment prior to starting the process so that it can run smoothly
-once started and doesn't cause spikes due to on-demand acceptance.
 
-At least not too many.
+Since the drivers are similar, I've checked can327. It is unaffected,
+because the counters are additionally guarded by a spinlock. Same in
+slcan, where netdev_close() takes the spinlock to reset the counters.
 
-Thx.
+So you *could* move them to netdev_open() *if* they are always guarded
+by the slcan lock.
 
--- 
-Regards/Gruss,
-    Boris.
+Or, leave it as it is, as it seems to be correct. Your choice :)
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+Thank you!
+
+Max

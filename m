@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C2A57FFEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4BD57FFFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235571AbiGYNct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S234739AbiGYNdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234785AbiGYNcp (ORCPT
+        with ESMTP id S235143AbiGYNdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:32:45 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA381E039;
-        Mon, 25 Jul 2022 06:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oqcDs+srAB4YrGHm4QaEElZN7rrloT2cypguG/C5L2c=; b=mE65Ki9Pj7vmrKskiYZ8p7hecg
-        oDQHUCTAIohrKFKoD+is4+eUxDF1CBiDZdYT/xsucWFKLy5VP2cZqHVYaO96fyaV4g68+YzwWx0VK
-        hEX8Yh1MUX+kob6N6GfvfFdayCcmYZ5isjgqIYjL69dO3bvtRSgH1Go5wzCOg0Gq6UuiXT1XvC+oX
-        5oorhklo/7Wz+y5ybR/2drq42GIPPDldsDRTiYNf2nqpiCiBm3AJSfMjJmDmIkGGneBveKTxAOUak
-        q0vOt/oCoRlwm197Az/tbc5/9T6k/Dyuk5ayh9olMLbOc2VEkqbGI981DgPjHeU8ikvwZMZ/jnSvJ
-        36PwECww==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33554)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1oFyCL-0002uY-FH; Mon, 25 Jul 2022 14:32:37 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oFyCJ-0000IT-0F; Mon, 25 Jul 2022 14:32:35 +0100
-Date:   Mon, 25 Jul 2022 14:32:34 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Marcin Wojtas <mw@semihalf.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Tomasz Nowicki <tn@semihalf.com>
-Subject: Re: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for
- CPU/DSA ports
-Message-ID: <Yt6bcnnMr7UAUFPk@shell.armlinux.org.uk>
-References: <20220714010021.1786616-1-mw@semihalf.com>
- <20220724233807.bthah6ctjadl35by@skbuf>
- <CAPv3WKdFNOPRg45TiJuAVuxM0LjEnB0qZH70J1rMenJs7eBJzw@mail.gmail.com>
- <20220725122144.bdiup756mgquae3n@skbuf>
+        Mon, 25 Jul 2022 09:33:16 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4A0DEB3;
+        Mon, 25 Jul 2022 06:33:10 -0700 (PDT)
+Received: from mail-ed1-f47.google.com ([209.85.208.47]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MF418-1oIB8W2NC4-00FVHH; Mon, 25 Jul 2022 15:33:08 +0200
+Received: by mail-ed1-f47.google.com with SMTP id t3so13984731edd.0;
+        Mon, 25 Jul 2022 06:33:08 -0700 (PDT)
+X-Gm-Message-State: AJIora89bRqDDz//xVeXLWONCcZ2Aa6Da8hDCDMx0IrlcmdUIN67eUJv
+        Ikkwtf3i9k1DNVpFCbTnVJJYKejLuVpjYtQl8Ls=
+X-Google-Smtp-Source: AGRyM1uBYx31EaoHvVg4a6DoO8wdFAmnQxUFYQH4EXTFcFL/POUpdGvHyymM2kU6xA5JVH+KIVtQV6KhInfa2bs5xZo=
+X-Received: by 2002:a05:6402:1003:b0:43a:75d8:a0e with SMTP id
+ c3-20020a056402100300b0043a75d80a0emr13240149edu.303.1658755988158; Mon, 25
+ Jul 2022 06:33:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725122144.bdiup756mgquae3n@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220725131521.607904-1-robert.marko@sartura.hr> <20220725131521.607904-2-robert.marko@sartura.hr>
+In-Reply-To: <20220725131521.607904-2-robert.marko@sartura.hr>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 25 Jul 2022 15:32:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1mL7Pm5+0Ce89LTrup476WaxSQKpTgn=o98_uFuOdfyQ@mail.gmail.com>
+Message-ID: <CAK8P3a1mL7Pm5+0Ce89LTrup476WaxSQKpTgn=o98_uFuOdfyQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: microchip: sparx5: dont use PSCI for core bringup
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:hgPNv7fT6KgSLyogNS0KnDb3EN14lo1+D2ZjToCDJX13T17WaJZ
+ TJ7hUXUujONX1X6I11mew17rx4/bhv0OjBI0VxlBw/z+337vrg8La66hoBMkLchwi1wWTqg
+ MvJfxku6QmKSzT18eOnA/IZLNvxfNz7PSP9rtIhL+foqMCu1SJDi9zelRw4R/ghjCqcwkDP
+ mt6bSvAzNMUETiT45lzMw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+KAQEH0sBqY=:QrvrzKehAlU1GDA/j8wyiC
+ Folzvti2NOPjQuDBTRHUIqUrgkcW2oGKSbWgzCzRxqyQjJ/C10bR2Q4UXS9MS7bO3RE+JkrF7
+ mJparIQ1ZLdjm+BSIqLrEPgX6OBqL2O8w/J3ynpDsDjh1sMnSotJYMiFPfjZ6BVyQrpbYVGRO
+ 7xkwmBwZQokvZPwO+HEK7aWhi7BlDjW3IBA17MKqfdjQZMEYICieaIzVbFm0LvjTwJsLwnh3p
+ Uv7idJKlaAUwNSVtu7gmKpkBZDx3cGQAoDHbRENB5qzToOHZnPuAzqyY8KqcLl9u0Z5xs56Qq
+ BIMrAjAhTEjpSuRd68LEBE2xAYGvb6DwvM0I1B4DJ+cb0Q/lNjgCEeIKxLXqeEoDGqLS21K2q
+ 09z4P2baN2DN32/JBerGu3fCA4cAg3BxYDNaqANWmPtUypIDqrEmjGimAaMKEBptumvdy1wcN
+ X5IbS+cVvL/mWsfhd8dD3Ta3s78kLMrRxvXNa0+10VeTVnWKp2AyYiGG0EnjvUPlwgYYWYJ1P
+ AVj6M6irjf4LGnfpUQthWO2trccScJVdjuRRplH7phSGHEfkaCvXbQEtd9pbhSOnvWVjRJA61
+ HxYMZiPI+Hf1DCtiSP/YBQx1eJFZKmWK4H7+G17utmIT53rhcTsTdpb38TNxQg151nGNg/EEF
+ RVQ5n85xeLm5kIMcvqRvMSGAS8bcAVycZiq7NqfouafdnoFHMjcyVQa6zMWP4rU8wicDknOY5
+ M6385ul+ZllyOqOv4Ql82LacYqa1BEttwaJQsvTg+NT4gE1EtvRX3CgET2iGDuIPoqY2o8k+V
+ HWSyNiZtnm8vWH+l6ZsoH1WkDnzE3hKDBOQeMzC19qo4/HMpv4Iis5jkwNje6iyqLejn/n6jW
+ advdEn/XtlQ6BCMm4zZg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 03:21:44PM +0300, Vladimir Oltean wrote:
-> On Mon, Jul 25, 2022 at 02:18:45AM +0200, Marcin Wojtas wrote:
-> > I can of course apply both suggestions, however, I am wondering if I
-> > should resend them at all, as Russell's series is still being
-> > discussed. IMO it may be worth waiting whether it makes it before the
-> > merge window - if not, I can resend this patch after v5.20-rc1,
-> > targetting the net branch. What do you think?
-> 
-> I just don't want a fix for a known regression to slip through the cracks.
-> You can resend whenever you consider, but I believe that if you do so now
-> (today or in the following few days), you won't conflict with anybody's work,
-> considering that this has been said:
-> 
-> On Fri, Jul 15, 2022 at 11:57:20PM +0100, Russell King (Oracle) wrote:
-> > Well, at this point, I'm just going to give up with this kernel cycle.
-> > It seems impossible to get this sorted. It seems impossible to move
-> > forward with the conversion of Marvell DSA to phylink_pcs.
+On Mon, Jul 25, 2022 at 3:15 PM Robert Marko <robert.marko@sartura.hr> wrote:
+>
+> As described in previous commit, PSCI is not implemented on this SoC at
+> all, so use spin-tables to bringup the cores.
+>
+> Tested on PCB134 with eMMC (VSC5640EV).
+>
+> Fixes: 6694aee00a4b ("arm64: dts: sparx5: Add basic cpu support")
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
 
-That is correct - I'm not intending to submit it, because there's not
-enough time to sort out the mess that has been created by comments
-on the approach coming way too late.
+Surely this is only a machine specific bug in the boot loader, not something
+the SoC is incapable of supporting, right?
 
-And in fact, I'm now _scared_ to submit a revision of it. I don't want
-to get into writing lots more replies that take hours to compose only
-to have responses that require yet more multi-hour sessions to reply
-to, which only then lead to the cycle repeating with no sign of an end
-to it. Something is very wrong with email as a communication tool when
-things get to that point.
+>  arch/arm64/boot/dts/microchip/sparx5.dtsi | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+> index 38da24c1796c..ea2b07ca2887 100644
+> --- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
+> +++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+> @@ -40,14 +40,16 @@ cpu0: cpu@0 {
+>                         compatible = "arm,cortex-a53";
+>                         device_type = "cpu";
+>                         reg = <0x0 0x0>;
+> -                       enable-method = "psci";
+> +                       enable-method = "spin-table";
+> +                       cpu-release-addr = <0x0 0x0000fff8>;
+>                         next-level-cache = <&L2_0>;
+>                 };
 
-So, I won't be working on this. Someone else can sort the problem.
+I think the psci method should be kept in the dtsi file here, since actual
+product boards would have to support it to be useful, you can just add
+the spin-table as an override in the broken reference boards, with a
+comment about which u-boot version is broken, in case this gets fixed
+in the future.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+       Arnd

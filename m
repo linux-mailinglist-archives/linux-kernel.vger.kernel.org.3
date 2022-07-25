@@ -2,216 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F36457FBA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D99257FBA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234053AbiGYIs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S234166AbiGYItN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiGYIsy (ORCPT
+        with ESMTP id S234128AbiGYItJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:48:54 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05656DFBC
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:48:53 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t17so4738099lfk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:48:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kyJI4LlXY9CVorVEng21FOai96UW/ZVKurT3Buh0Q5U=;
-        b=JzdnkCP82kKVz43IfB8ySNgsPfbL9fHvfWH2a9bBTJBScn1o8Td8cXqjyCN59jpvp4
-         rIzPdlSd8Zr+FTsOBCTmHrb2vb5InAuz7izBB0dwKDH1XrCNi4h2BsxGwYHqHFq5Ffkz
-         PHSroD5VWN4CHBVt4s0GCViBuHbEwMJdIqIj0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kyJI4LlXY9CVorVEng21FOai96UW/ZVKurT3Buh0Q5U=;
-        b=ctngjzfN070TzUWxlfl6s3NhkVlDMjCW3faOMZ8+9eoo8yvG8ZHmbawyUdoy15N0Aw
-         WBpgOTabZLASIuhxwNuFZRUHBl06pq1IQBRob/8WVvqtNmQMNCpUOv+wWhlgcXD6qNDO
-         fW7Eitm26+eTLzum1P1jP6i6VIUSFrp6bH2LkHA5ML4mI6HLk4RKISV6fiVv2qBqR3QY
-         JH+WL3KbHXQrdw7eup/TjGalrE1V6Q01o8lPfvg5BvFkEXiLfdYMPK9WSamk+KoyBN/y
-         QmsYYXIcz6SSlWXMVF4Iqtd1ESMjt0AS/ZTk3rJX2d3dK9OLTdiwIwi2GJzxErQCSVyU
-         PwOA==
-X-Gm-Message-State: AJIora/6fKRUJoMXdcU6F+GRj3vpm/ASHe1Fq7v3e5YwR0xpwcyFGEDS
-        rYynJw+oBhhs8TziydkSDYGJ5RYuNrBWi4Ge+pvZ0w==
-X-Google-Smtp-Source: AGRyM1voXjxeDP2zWasG/Lf+fjsU3sa+t6jhMdKgzv9dRNb6MxviXOsqY2x7Urj7zWBtz8hQjkUGlbWiFGQaLw/aCsE=
-X-Received: by 2002:a05:6512:1594:b0:48a:874f:535 with SMTP id
- bp20-20020a056512159400b0048a874f0535mr2228851lfb.320.1658738931148; Mon, 25
- Jul 2022 01:48:51 -0700 (PDT)
+        Mon, 25 Jul 2022 04:49:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC808140FC
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:49:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C9CC6120F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:49:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F243CC341C6;
+        Mon, 25 Jul 2022 08:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658738946;
+        bh=cjzjB+1URjAUpyLs5sc2ikwKmPZiasuZVYvT5zw61Hw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JKinLoPNtLc24WbMkn/724aPsznGQcQ4+C+NOoZtL/3/WoNVzz54rVZwWiJ9atutS
+         RqzU84h7UYz2nm490uqblKS1KWfSw9nih2y9Mrx3bkSYQOSH8y3DZL/WzxO62IY3lX
+         ad4zqAowEguXfdZ2MgZ4nGNE97nBjaoGx0rVOTXA=
+Date:   Mon, 25 Jul 2022 10:49:01 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        kernel test robot <lkp@intel.com>,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Jason A. Donenfeld" <zx2c4@kernel.org>
+Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723]
+ arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version
+ 4.6 of GCC
+Message-ID: <Yt5Y/cIKIDlyFWMQ@kroah.com>
+References: <202207250449.BYMZbIA2-lkp@intel.com>
+ <Yt3KObFVIUI2mFGt@zx2c4.com>
+ <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220723042206.8104-1-vikas.gupta@broadcom.com>
- <20220723042206.8104-2-vikas.gupta@broadcom.com> <20220723091600.1277e903@kernel.org>
- <Yt5L8TbzTwthnrl7@nanopsycho>
-In-Reply-To: <Yt5L8TbzTwthnrl7@nanopsycho>
-From:   Vikas Gupta <vikas.gupta@broadcom.com>
-Date:   Mon, 25 Jul 2022 14:18:39 +0530
-Message-ID: <CAHLZf_uWxnS5Voc6h7pnS=dRq96JV1wq9zVXKhVbyrRva9=b0g@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/2] devlink: introduce framework for selftests
-To:     Jiri Pirko <jiri@resnulli.us>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, dsahern@kernel.org,
-        stephen@networkplumber.org, Eric Dumazet <edumazet@google.com>,
-        pabeni@redhat.com, ast@kernel.org, leon@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Michael Chan <michael.chan@broadcom.com>,
-        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ca7b5605e49d4010"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000ca7b5605e49d4010
-Content-Type: text/plain; charset="UTF-8"
-
-Hi Jiri,
-
-On Mon, Jul 25, 2022 at 1:23 PM Jiri Pirko <jiri@resnulli.us> wrote:
->
-> Sat, Jul 23, 2022 at 06:16:00PM CEST, kuba@kernel.org wrote:
-> >On Sat, 23 Jul 2022 09:52:05 +0530 Vikas Gupta wrote:
-> >> +enum devlink_attr_selftest_test_id {
-> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_UNSPEC,
-> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_FLASH,    /* flag */
-> >> +
-> >> +    __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX,
-> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_MAX = __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX - 1
-> >> +};
-> >> +
-> >> +enum devlink_selftest_test_status {
-> >> +    DEVLINK_SELFTEST_TEST_STATUS_SKIP,
-> >> +    DEVLINK_SELFTEST_TEST_STATUS_PASS,
-> >> +    DEVLINK_SELFTEST_TEST_STATUS_FAIL
-> >> +};
-> >> +
-> >> +enum devlink_attr_selftest_result {
-> >> +    DEVLINK_ATTR_SELFTEST_RESULT_UNSPEC,
-> >> +    DEVLINK_ATTR_SELFTEST_RESULT,                   /* nested */
-> >> +    DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID,           /* u32,
-> >> +                                                     * enum devlink_attr_selftest_test_id
-> >> +                                                     */
-> >> +    DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS,       /* u8,
-> >> +                                                     * enum devlink_selftest_test_status
-> >> +                                                     */
-> >> +
-> >> +    __DEVLINK_ATTR_SELFTEST_RESULT_MAX,
-> >> +    DEVLINK_ATTR_SELFTEST_RESULT_MAX = __DEVLINK_ATTR_SELFTEST_RESULT_MAX - 1
+On Mon, Jul 25, 2022 at 07:42:07AM +0200, Ard Biesheuvel wrote:
+> On Mon, 25 Jul 2022 at 00:40, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 > >
-> >Any thoughts on running:
+> > Hi Ard,
 > >
-> >       sed -i '/_SELFTEST/ {s/_TEST_/_/g}' $patch
->
-> Sure, why not. But please make sure you keep all other related things
-> (variables, cmdline opts) consistent.
->
-> Thanks!
-Does the 'test_id' in command line
- 'devlink dev selftests run DEV test_id flash'
-will still hold good if DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID changes
-to DEVLINK_ATTR_SELFTEST_RESULT_ID ?
-or it should be
-'devlink dev selftests run DEV selftest_id flash' ?
-
-Thanks,
-Vikas
-
-
->
->
+> > On Mon, Jul 25, 2022 at 04:14:48AM +0800, kernel test robot wrote:
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > > >> arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least version 4.6 of GCC [-W#warnings]
+> > >    #warning This code requires at least version 4.6 of GCC
+> > >     ^
+> > >    1 warning generated.
+> > >
+> > >
+> > > vim +30 arch/arm/lib/xor-neon.c
+> > >
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  16
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  17  /*
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  18   * Pull in the reference implementations while instructing GCC (through
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  19   * -ftree-vectorize) to attempt to exploit implicit parallelism and emit
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  20   * NEON instructions.
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  21   */
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  22  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  23  #pragma GCC optimize "tree-vectorize"
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  24  #else
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  25  /*
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  26   * While older versions of GCC do not generate incorrect code, they fail to
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  27   * recognize the parallel nature of these functions, and emit plain ARM code,
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  28   * which is known to be slower than the optimized ARM code in asm-arm/xor.h.
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  29   */
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17 @30  #warning This code requires at least version 4.6 of GCC
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  31  #endif
+> > > 01956597cbc46d Ard Biesheuvel 2013-05-17  32
 > >
-> >on this patch? For example DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS
-> >is 40 characters long, ain't nobody typing that, and _TEST is repeated..
+> > Does this file need a depends on ≥4.6 thing in Kconfig? Or is something
+> > else happening here since 4.6 isn't even supported by the kernel these
+> > days?
 > >
-> >Otherwise LGTM!
+> 
+> Hi Jason,
+> 
+> This is explained/fixed in
+> 
+> commit a69cb445f7d129abf7c50d48c8a8eca7c8d5df15
+> Author: Ard Biesheuvel <ardb@kernel.org>
+> Date:   Sat Feb 5 16:23:46 2022 +0100
+> 
+>     crypto: arm/xor - make vectorized C code Clang-friendly
+> 
+>     The ARM version of the accelerated XOR routines are simply the 8-way C
+>     routines passed through the auto-vectorizer with SIMD codegen enabled.
+>     This used to require GCC version 4.6 at least, but given that 5.1 is now
+>     the baseline, this check is no longer necessary, and actually
+>     misidentifies Clang as GCC < 4.6 as Clang defines the GCC major/minor as
+>     well, but makes no attempt at doing this in a way that conveys feature
+>     parity with a certain version of GCC (which would not be a great idea in
+>     the first place).
+> 
+> which landed in v5.18. Note that the patch depends on its parent,
+> which touches many different architectures, so it may not be
+> backportable cleanly.
 
---000000000000ca7b5605e49d4010
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+I would love to backport this as it bugs me to no end on some various
+gerrit systems all the time.  I'll look into it later this week unless
+someone beats me to it :)
 
-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
-I7qKxvF8Yo7eGTnHRTa99J+6yTd88AKVuhM5TEhpC8cS7qvrQXJje+Uing2xWC4FH76LEWIFH0Pt
-x8C1WoCU0ClXHU/XfzH2mYrFANBSCeP1Co6QdEfRAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGHZpa2FzLmd1cHRhQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUc6J11rH3s6PyZQ0zIVZHIuP20Yw
-DQYJKoZIhvcNAQELBQADggEBALvCjXn9gy9a2nU/Ey0nphGZefIP33ggiyuKnmqwBt7Wk/uDHIIc
-kkIlqtTbo0x0PqphS9A23CxCDjKqZq2WN34fL5MMW83nrK0vqnPloCaxy9/6yuLbottBY4STNuvA
-mQ//Whh+PE+DZadqiDbxXbos3IH8AeFXH4A1zIqIrc0Um2/CSD/T6pvu9QrchtvemfP0z/f1Bk+8
-QbQ4ARVP93WV1I13US69evWXw+mOv9VnejShU9PMcDK203xjXbBOi9Hm+fthrWfwIyGoC5aEf7vd
-PKkEDt4VZ9RbudZU/c3N8+kURaHNtrvu2K+mQs5w/AF7HYZThqmOzQJnvMRjuL8xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwYjepatB64S625eswwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFb7W2PfZkbdDA1OIDb0jwzpNjNZS8HVzBUQ
-C5+aDCT6MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDcyNTA4
-NDg1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQA5x2oe0Q3zif482GkqX0iu025ez751xSNMhArZhh4m6hLjWe5oG0hr
-uIpIUzTndJ4tqRd64fAQCzSTIddh8X3R+rBZ9kFZ/ZbSWNIS3S8Xzp2xA8I/e/OTN73Rh8aFZAU4
-XMPPSXmvvP0qCeisgHoduk/6prTUUy+/Oc4z0NrjMUK+J6skTRhVFVq+atsx+rtnp7VKOdyb5qlt
-2WJVDAAvpGuQp4ILjZvIPFPLOXFzwE0vKIqJHV1REDBS9t8jtsKRupSjIgL0uv6xgIQyXOeuAdCu
-dinKmVvxmtfudXqgzgACyIZlgHhXnlvyrnvHfDqdIvEUXPgOyTMBNqFbMkIZ
---000000000000ca7b5605e49d4010--
+thanks,
+
+greg k-h

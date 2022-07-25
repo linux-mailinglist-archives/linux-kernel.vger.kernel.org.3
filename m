@@ -2,162 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1D65803CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EF35803D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236596AbiGYSJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 14:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S233622AbiGYSMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 14:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbiGYSJh (ORCPT
+        with ESMTP id S229470AbiGYSM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 14:09:37 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-eastus2azon11021027.outbound.protection.outlook.com [52.101.57.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEFF1EED9;
-        Mon, 25 Jul 2022 11:09:35 -0700 (PDT)
+        Mon, 25 Jul 2022 14:12:28 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BFEBF77
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:12:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jgL6fsMz9uTOWvxzy7Nuxsz01HH7FvXaYOJY6033FPO2pSukY3YaIUENSRZ6JL2XjHq/2KWUdrna+eYqU/Nb8KsEmGlPDU2Epz90KM72BPGFgBTdP3liqz6Q6rMS9qfhUyHZvANFVjtQw3mauG41DwoLQCBS0ai0450wO9yXD7mjG3ZNbGAsLIdl9PohbXQs6ezuswYcThAKxCD32YOCg8xX47suUK+xqkq70OFVTthkl6aGPzd5XW73v6J5nWVmslD+FjSu07s4IZt2LkGgnT7f/e26HGjKHxYU+u4awbTrsDxUM/W0dn73HgfJteqjotC8MAeVTGVSHY3ym+ugiQ==
+ b=HrXNKP2eYY4xyxtjPQNt1srlvxfEABUCQA9hebjrdGlPlDtcrip3wji8Rmz5cwVMEHI7D2JGfD+48g4h2q5cgjQlkjEWwQsD99EFCrL6vwdzIRuL/75xLfUYx+UiChn2NmeNRuTUpTEt/BUsIPw91+bCd6N4TF+TmcZSeDXoEdi+G7j3PoHqwFqcmT6Nv4bzFf88PkJRZPGE1lH1qz2k5TDQP2pilIXA9OLMFKgrille47aowCgS9ty6rNGkPrzJyZRlf/fIJ8KPPsRkYisLXttrpIcPqEaRm5ngHwwNPGah3Tuz79jiuicWnkOUku4Vqba81CWYiD1nUg2BnOt9OQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FVTj4d0PIpyQIm6ct7HgBykBbuSTzMESNqhhJFeLmS8=;
- b=Sow2Kbn2jK7ZJV0nwwax76JBbujG6THSl0R3vPWKXCqOnIJn59Znq0tfVWCFX6D+wLzewF5XmGrYZBMlRbz8RrGH7t8ALsLvkGGdhqCqW6GExQMQ1kKDfr1zOb/wBCOuOMfsMmTGkxOsisU5gstdVtLYEw2cTsghvzola4iOeko72cgCvmEdtI3EcIs0UMTA5Acq8DqB00zihU3f5JNZSSDxaFD6pHdaOaH1Z5d+cryrfIlb+7VxXjxj0Ft8w0LMdgGjbqVm10TFfhn2zyrQAtSSm/o8SupmE4zIDSV/eOdpe1FGGxi0u5q4v9vQ+Mp7ObRmg2tbwDq7fPUEOZGzsw==
+ bh=JaNJKdPcaxzbJC/+6YP5dcrEclVTtqnkbhsUhVqu7B0=;
+ b=Ahf5nAfIQlHJWVTx9c68r3g1ZU3d6CdRXXoIDEJqSxs1wXeJ/E7EtbCKolgw/Yofq5rZ5zrVrPEqAWfWoZmssLK1QaxBBG8n2msye49qNBiSXqvYeUXT3PcRbQxZNZ1xOqrmBUBvn0u5DS+M+qyuKAV82H12tYk0l6jexHjWFDL13pNqtoF6ogWDiJCu8tWT6gBPAXRpP+6qYZ52eS/f2CJX3RL4Hk44/h4ACZ+lOwCO76ug7hu+C30mjqzanSpMwNepXitnQPoM0prCEu4VYOnrmJTUgqRaDn9Fi19mUFmMyLRb/8WIG6Zg48rqCIAgTIXJiRFDKeG4Dp8yHqmHjQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FVTj4d0PIpyQIm6ct7HgBykBbuSTzMESNqhhJFeLmS8=;
- b=aHVrP37v1LQQWGsoYnyk6I72ru19VErToBdhLeq7KFV3OhHxlBUk6Ru+ZJIt8sZPC62Hkcq7ThKsMvsQcnsHUTDJTCuj8JLZXO35UqxROq49+Ug5tSMljt3psvjJ0IEpmqLIvZLjcD5c8lpnEjkgucOb/ZLoA2PbAvyfYdqpyIg=
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
- by LV2PR21MB3229.namprd21.prod.outlook.com (2603:10b6:408:174::12) with
+ bh=JaNJKdPcaxzbJC/+6YP5dcrEclVTtqnkbhsUhVqu7B0=;
+ b=e5MmRycY625x2aE4Oo+Ny9CJqjn2M0q3pEZQkyiFZsuB90oUOzKrDley9XjXUsgQ3vP8265zt32/d4+P3mSFFWhk7UGqRvl5DOaDe43xMkRV69ESRt9a2DGU5KUBeZd7ui9Vp7WdfNPom+XKgHsZp6dNtRlhMjJA+/Kbr3o7MSA=
+Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
+ by BN9PR12MB5212.namprd12.prod.outlook.com (2603:10b6:408:11d::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.1; Mon, 25 Jul
- 2022 18:09:28 +0000
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::ddda:3701:dfb8:6743]) by PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::ddda:3701:dfb8:6743%4]) with mapi id 15.20.5504.001; Mon, 25 Jul 2022
- 18:09:28 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: RE: [PATCH v2 11/13] video/hyperv_fb: Avoid taking busy spinlock on
- panic path
-Thread-Topic: [PATCH v2 11/13] video/hyperv_fb: Avoid taking busy spinlock on
- panic path
-Thread-Index: AQHYm6nhxD3vCNgXDkaqQNF/QdvErK2PaFrg
-Date:   Mon, 25 Jul 2022 18:09:28 +0000
-Message-ID: <PH0PR21MB30252061CD7F2FD15BD77F7ED7959@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-12-gpiccoli@igalia.com>
-In-Reply-To: <20220719195325.402745-12-gpiccoli@igalia.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Mon, 25 Jul
+ 2022 18:12:25 +0000
+Received: from BL1PR12MB5144.namprd12.prod.outlook.com
+ ([fe80::589b:a1f6:9c87:a8ba]) by BL1PR12MB5144.namprd12.prod.outlook.com
+ ([fe80::589b:a1f6:9c87:a8ba%7]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
+ 18:12:25 +0000
+From:   "Deucher, Alexander" <Alexander.Deucher@amd.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     "dan@danny.cz" <dan@danny.cz>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "tpearson@raptorengineering.com" <tpearson@raptorengineering.com>,
+        "alexdeucher@gmail.com" <alexdeucher@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>
+Subject: RE: [PATCH] drm/amdgpu: Re-enable DCN for 64-bit powerpc
+Thread-Topic: [PATCH] drm/amdgpu: Re-enable DCN for 64-bit powerpc
+Thread-Index: AQHYoCfGKHQdtJmGsUum6CTa+/BPTa2PY22g
+Date:   Mon, 25 Jul 2022 18:12:25 +0000
+Message-ID: <BL1PR12MB51442913428C33EE5CEA91E0F7959@BL1PR12MB5144.namprd12.prod.outlook.com>
+References: <20220725123918.1903255-1-mpe@ellerman.id.au>
+In-Reply-To: <20220725123918.1903255-1-mpe@ellerman.id.au>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ae7ebccc-db95-447a-9683-4ffcff5d64b9;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-07-25T17:56:17Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-07-25T18:10:54Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=8ed7cb56-7270-4ad9-9f60-5340b053bcc9;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-07-25T18:12:23Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: e66fb564-3818-4534-b630-579ca090f472
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
+ header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8c0944d6-3045-424b-a98e-08da6e68d098
-x-ms-traffictypediagnostic: LV2PR21MB3229:EE_
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-office365-filtering-correlation-id: 35a2551c-9566-4a9a-aae6-08da6e693a09
+x-ms-traffictypediagnostic: BN9PR12MB5212:EE_
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KovVjc6I2VDImi0AOuGG6JEpYG7geqh58rISYn3tOctmQHdYqlqi/Rxa/lR2hQ3KwuyArJ4RnkNh1o2uzbxMtu+xkZGEC964lm045rxqxn/DG9ZJ/s9QGFhQNqHktTZt5bKGrhkuWAn0r7KaYsqMsscDPGobnyd+dLtGYguOA7YUdsvhyQthrQj3mH5AI4/m8iZlNuEMNxx0tiXyfcvYHncsn+FvKEvysr3wJK5UXVp3RDL0wgYSOnBP1D9J+2CBmJLhc28RrSSpsRZjFLIfNaeLInznFUiB2dJaRVF0W5Z0GBCNEMYC+5J8Tz/yRFowwTqCDMi95ShuG9Xk/gWjqZsQhRZ/EHt4w4wAxubAaPuASC4cUk+z6//7O+YCngCw6ynX5QVQqznFqcgghCKZqZUYk/7kvusFMxU+8UUyfInXQ6DA4PXXjS/UermJmehdwXxQmFP13/qhezx0moCi5T0g6GjpJkm9KvOf53/mAxGXBBvUtYA/zbvuhUf6xEDoXr6U/PhwuWYj2keO+dwTUPHL1SkTauqxjbN7Et6R3ZxbYJMvJzo4sjXLuxNB+zvozVR+S+Fmd9kuZrUH0UdYdFtZ/KBd3EYTUc2QkhvAT846a4KK7UqibLEPAybdhqoWB6YzI9t9zpDwriCGXeVWNZ4n3eYo3U1xJ9EEUgFXGdt2MJn8cf7nb4OsCK3/Rlkg6caOu3G1RqyaQBOQ9v6orOUwoNhXrCY8JXHw59rvvMlBEjtMu9YaKyUv8MXpOT/s7DBD/ZGFw/uN3zgusz3VXzp0Wl9/kjn0m0YhjgPbyCDtyW777ogOz7TExDs/SWG58CnygOLoTmx1+TYomnyQoF0dSRzMkR5sPbYjk9fYXWpR5GfgPpH1W+TqwIFkqrGK
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199009)(66946007)(4326008)(66556008)(76116006)(66446008)(64756008)(71200400001)(41300700001)(66476007)(55016003)(7696005)(52536014)(26005)(8676002)(5660300002)(10290500003)(8936002)(7406005)(83380400001)(7416002)(86362001)(2906002)(33656002)(54906003)(186003)(122000001)(82960400001)(38100700002)(9686003)(82950400001)(316002)(110136005)(478600001)(6506007)(966005)(8990500004)(38070700005);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: 2SqqeYH13zHNIzH/oe4EuPOambPTSK+BilXMblrUSd71KunU7stZJQXcdB6ndEFWidyN4N1gDIwc86EjABpzoP/93Nlfw3D9B3IM5lupdrSExN0aIFGb6OmShVF4MflO2h5/KtutXftz/5vvjMqW6iAFzY0pnvhxqXHnLDA5q9kv+T9eWt1LylUZ9OhItLbaJTBRyn3ZDpQKeAwVEC8Zcvxi8jWanfEijdvFrqPI/8gD2SyNmYt+xKD1WT/aO+uasEJzXO+NmaTyQ6/tFbQ/3D8F+La+4fpaUn0xhDp3or4wTPMDKJZPXF82OqVyoa+/gbngSUfCkGdDzV8pCknanNyP7K8EMZJUw9pUG32fBiVwhrpAEhtgczTuCzpdrJUpybqkxfXPFbu6TYE4UEzVblsF+55Eenmluz9pJBCcoUkp5L8mUV8iS6NqE2Tw87RZHugDkYyHnb+V5ET4071blZbzvuRrRfQNYjvZ8C69r8MTbZ2Hd1OHX+YK/ePgrcT7+1LcZPgZZX7OZ5UdJp4OVYwfI/kWXyFtnxmKdWRbhodlrBQ9wgoNR1t9ialjCHD7uXecLnX1tSbYygo9RHWOYErfTnH+E+CAEhaz3XQGpnN/33EQrJajmJbuIXMZ4kRyb6bKJgPxPlXDUTuTUqMrR5VcxVigpyviGAaSynBNMFt/UW+d9Mf8cHaAc7W7NZefZgWaA6Cfe2pOr/xEaNrZSPbnRRQrD4hL5szSQWZhVkLUS1efNXWOLoBJM9QSSkhzFXhlTjnbwf1bvykz8UhJV+/4BmYsSfIJigGjt4JGDeBper+hZ00in4WD1zdUjL60Z0npiIW1G+bvxt19cPI7WQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(346002)(366004)(396003)(376002)(83380400001)(38070700005)(122000001)(52536014)(8936002)(33656002)(86362001)(186003)(9686003)(38100700002)(6506007)(53546011)(7696005)(41300700001)(54906003)(45080400002)(110136005)(478600001)(71200400001)(2906002)(76116006)(5660300002)(8676002)(4326008)(66446008)(66946007)(66476007)(66556008)(64756008)(316002)(55016003)(966005)(26005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?otKPG2cvIajyqGsTEjBNKyvkL5ZTL8Rd365UjHBX8WT0SZ/25/hU+GIQUU4t?=
- =?us-ascii?Q?gNmQON/cxVlXZKNmnAzZ4umXmBRS9DZyXuk2J+jr+wCAV0F7cA7Ev19lKaJF?=
- =?us-ascii?Q?IQ6F/4TfQzS6o9EGvwY9AJM8ISvYpD+E8sVFfaRWhS1nRyRhcFP7//zo4Y8x?=
- =?us-ascii?Q?GKYX1wc703TT7E/BskPKiKWG4DBj0c/A4o4gPAh35CXqc5exY57ktPMCwXab?=
- =?us-ascii?Q?QrAylc1u0DzrkHRQgjIsfwtuVx9I+iEA0fhMfVqnJiHygAMzj9sGjJ7SgNK4?=
- =?us-ascii?Q?5EIW4zcyvCtt2h1lJgctlbL/LJm3XtLbuDEFqzStyDiLzVBR7hLwmri0HXhW?=
- =?us-ascii?Q?N6451gBXye0WqD0yE0MMK/Vl3ZZgDzbiyOOvrIM3e9WLjfJt2GZAJ9ZnU1Jg?=
- =?us-ascii?Q?favLSXL1E38c0mkemKp/pXTGQxUgIctWThhH5XToJhs/xOP/bgRfWLA9A0do?=
- =?us-ascii?Q?zG+sb+YT3fJ13gkuVOCpMu6gk19FYzgQt5PmTCkq18HZcQ2KDUFDHnds15Pv?=
- =?us-ascii?Q?YTz7FwVmX2lu24OLlbBJn0IikljUwDfD8q59uKb7Etl3dh+NF6FfBcm348N3?=
- =?us-ascii?Q?G9MouHxn+zdJbeSHoYENmYMUqqlduOyyAi7hLwlojOOtpmiwJy43swMldcPo?=
- =?us-ascii?Q?4aJCI01q+xDkZRzxto1UhzKGeNXSMSdfD8v9PQrZ34YCqU2ZDDYGy+moAce9?=
- =?us-ascii?Q?TVYdtfc3tKVITEPTWaZbImM+YlCsMKLC0QAQrgVqNddeTI3XdUqNHFY3mmnc?=
- =?us-ascii?Q?4Smcu4vqF7cw1CsJ2dosGI7lfj3QbrklXe5f/cWgzSXHBsn5NF3tnkLsYjz5?=
- =?us-ascii?Q?BWbx9VJasC+xyUB0VgqO4w7hESY7ESpUDA1B6VoY0t9BmiEMX+0pWD+pHSnK?=
- =?us-ascii?Q?glbhWFxa5umoJ8t1WLNJh6E5fXqyW9op5y8ItY+KVojNiSHt73AVsD7UH11W?=
- =?us-ascii?Q?w1RpNKRYVcWdBuOsDDijC/3c/FGxX7HD8bF9V6sgIG+Hbm7IGELrlqWa5Nb5?=
- =?us-ascii?Q?GrF9TlGdG4kQFd9UNo51wOG2KDshStmW4OWTJApXDaGu/mC27+Gh5yDxte9V?=
- =?us-ascii?Q?VzNxRcf3ew0JWrRmE/tZyn8s4OtUNLtcmeCvnigLmUTzKFka+YfCAqxU0TPq?=
- =?us-ascii?Q?lFoMCICXWg2r/SVgil55Sn75bmADI9Dm9pTeOvaQs5rdws7+8q88PnCD01cS?=
- =?us-ascii?Q?jw/GbpX41bjQlwJXzxEYLX0f++ilKB1NrvGuea+ZehYvU2mWuJtLPOXB+gM7?=
- =?us-ascii?Q?OCuWMoF0IrXiQRI/dMaPwFdv+UmByxiPkNMeUAmR7740rgMDhnv/WI2/HZyW?=
- =?us-ascii?Q?502uThB/3NGf28WvP4GswpBpdC+INXZiBMeDEmjWDw81rH59pYEE2p9jFGSP?=
- =?us-ascii?Q?tL0fBbGBBPJ+5Qps/l/MnzSVSf21ksAyBy3wqIJi8oZMNA9cNtqRhLxCV3Yn?=
- =?us-ascii?Q?ldy5W7XkHqbZB46Us6hVIwAP89b6J7yPm4hl0MX/NlOihwl9ji7AOv2Yi4ee?=
- =?us-ascii?Q?Tjls1W+xOfnfWLY4qNoPTP0k3pR0cAfJCmW2qPdE2U1ZGpMwE5aWlG20sA0w?=
- =?us-ascii?Q?fapkAaNC3v5pj0XzvOEueFAWcE3Ub/BQNYjo+dp7hRiO/LbGOUe6gII4tRzA?=
- =?us-ascii?Q?Ng=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Erf7+dCSk/NXbKp6v5jRx0vAspO63NM8ExBR8S9HZn3dZohJbVkbznYV8b/w?=
+ =?us-ascii?Q?SGetrx3burqutlqckRobogHBPTKMcEXx1ROICTRVSKCarjIThB2piCmPovIf?=
+ =?us-ascii?Q?NixoxEwXSnPd2k0EVb2xN1nvITgcqcUcYNfhbO359EqZ7E1GojtsbfgUDCu/?=
+ =?us-ascii?Q?Rl3xsjMU/d2nIs+EiCqpx9uTDF08qljjDix9AZEMZZ28Gv+rxGPEuHpuT0Q9?=
+ =?us-ascii?Q?K5rXN3u+AqdwL3t/LzoK7ism5PQGEz3qXSDc5x8ckrxo79/u91ivMFDyIktI?=
+ =?us-ascii?Q?ZKTQ5Oi5YpWG0n06hUY1XuBTqR4AWIJeHkJgNRMrwRJD5Kub6kLIT+WWfBvq?=
+ =?us-ascii?Q?hpyHlly3isr3o8ytwgKWchsRShCGjuj3i6hN/Frm/H0vSliBtzspm1IvPudI?=
+ =?us-ascii?Q?55TJefgcrtcNH7NX5yMnTZd7YN0/Rw5YJeJzt2mPgdLoaPhuJxO3mneuZJVC?=
+ =?us-ascii?Q?C/qk7VfzHvYiijJej+YyKWnILR/6AvLpDsS44Xr59HAYiyf32pc9dd1EN+Yh?=
+ =?us-ascii?Q?FZozQW604MI51/Bs8iYlPRF7VUCrcALEXcOxBJeqWZswAEzH0HfzRdmix6dg?=
+ =?us-ascii?Q?FbEc45mPg27aGQ4ouEMuIB1ZMVPH8+vCbFPY69L+OxANvx3Jdh/But6Z6Gmp?=
+ =?us-ascii?Q?+Tgf0OwFP2xj74a3e+POGwOIoaBtcXFwxo/v8XTM46IOtD6k6P8RlR0YRef+?=
+ =?us-ascii?Q?h2SacHX9oSRntU0SBsS+f6w2KhuYYmGa2l1up7LY0qXlhrFlqXFAdlOyrZFI?=
+ =?us-ascii?Q?smkyw7eVwIeL+UurwlMl57ZNlrncPc3W8qKnR9Y1ZZIPfjjDe4rdRH7N/u0I?=
+ =?us-ascii?Q?0Sj0IbNul0TW2Ofc9pu0gQzd/osS/eppW3HoQeZNku4W2h2aQMeTxaLtIYbU?=
+ =?us-ascii?Q?44bvPM2qYmWifdPesUhqj1M1I/cNDfP5IShsnBQiShg7Pe3C+75BsNMyzt/N?=
+ =?us-ascii?Q?YN1Jb1cPEVRw81kYeVqUjxMK+zp2LlJfFMmnPf2TzqRTXTQjD8+2avJt5o8i?=
+ =?us-ascii?Q?rql5bfy4yV2Ci020zFpC18sAc7GJRo3K7VCdL/Llk+DP/oWbC4iGIj5fctw+?=
+ =?us-ascii?Q?p1rV6faW3ziaVoMbWDVeUts7QFU2J3H71B44+Nf1ySbZtX8Tvkci3CtSwIw5?=
+ =?us-ascii?Q?21Xw+U6pNEnlvU6+OuJpw8SDm+PVPAV59pLKQwsQ5MBA6/mWYfo+wbvj4I6b?=
+ =?us-ascii?Q?eqLTi2+TnqGgK0w5WcRQ3Lnk5SvJeWnxyVTmcVxozQODD5q0OH91wESNZVku?=
+ =?us-ascii?Q?FrRbK0jCQODV9OOvIIrqPYn1wMTQHmf/QDY2gCHSJ8P7EsgM4Ytimy3IiWXH?=
+ =?us-ascii?Q?KuuoVuOKp/5lZDE9RaO8PYLfju/+c4nq19BVUs7GQvtGtjGrQdfrZAqHKBVs?=
+ =?us-ascii?Q?SqEWLEpM1auLMA95Ek+rxM+Q9Nj//hccVAFxW2zHMkGtEkdpu0jutWH2508p?=
+ =?us-ascii?Q?jdTuebYEzuULxA0K7sFYcjeicr2AnOJqn4JL0UBZnPeJ5jTHtKTq0IDzfDsw?=
+ =?us-ascii?Q?Ym8UBwdlxTwxflUcYaF0L+XUuanEA3IxVdMTTHZPZund+LxNCK88hUFPIBom?=
+ =?us-ascii?Q?VG+OVYfkglwx4pJ/1M3eudqScy9ZG9MPnltLHx+g?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR21MB3025.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c0944d6-3045-424b-a98e-08da6e68d098
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 18:09:28.1197
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35a2551c-9566-4a9a-aae6-08da6e693a09
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 18:12:25.0367
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rBq6wrLJkpA3uHTYypcRxdrruDnIoQeMKoz5hNlFu059lPzJxu8yJQNvSAWtACj3HusD58h4TrbzsUpQvueHdZnU9b0SS2hDxclC/zVPqg0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3229
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+X-MS-Exchange-CrossTenant-userprincipalname: 62gSf/4m13XM+TEHNWbJCORAEiMHONsFGg7qRhgM1sMoR0DFKHGEgkrZ217cosiltG6pmbVr+XYtXzk5XCyCVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5212
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -165,120 +135,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guilherme G. Piccoli <gpiccoli@igalia.com> Sent: Tuesday, July 19, 20=
-22 12:53 PM
+[Public]
+
+> -----Original Message-----
+> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
+> Michael Ellerman
+> Sent: Monday, July 25, 2022 8:39 AM
+> To: linuxppc-dev@lists.ozlabs.org
+> Cc: dan@danny.cz; linux-kernel@vger.kernel.org; amd-
+> gfx@lists.freedesktop.org; tpearson@raptorengineering.com;
+> alexdeucher@gmail.com; torvalds@linux-foundation.org; linux@roeck-
+> us.net
+> Subject: [PATCH] drm/amdgpu: Re-enable DCN for 64-bit powerpc
 >=20
-> The Hyper-V framebuffer code registers a panic notifier in order
-> to try updating its fbdev if the kernel crashed. The notifier
-> callback is straightforward, but it calls the vmbus_sendpacket()
-> routine eventually, and such function takes a spinlock for the
-> ring buffer operations.
+> Commit d11219ad53dc ("amdgpu: disable powerpc support for the newer
+> display engine") disabled the DCN driver for all of powerpc due to unreso=
+lved
+> build failures with some compilers.
 >=20
-> Panic path runs in atomic context, with local interrupts and
-> preemption disabled, and all secondary CPUs shutdown. That said,
-> taking a spinlock might cause a lockup if a secondary CPU was
-> disabled with such lock taken. Fix it here by checking if the
-> ring buffer spinlock is busy on Hyper-V framebuffer panic notifier;
-> if so, bail-out avoiding the potential lockup scenario.
+> Further digging shows that the build failures only occur with compilers t=
+hat
+> default to 64-bit long double.
 >=20
-> Cc: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-> Cc: Dexuan Cui <decui@microsoft.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Michael Kelley <mikelley@microsoft.com>
-> Cc: Stephen Hemminger <sthemmin@microsoft.com>
-> Cc: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Tested-by: Fabio A M Martins <fabiomirmar@gmail.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Both the ppc64 and ppc64le ABIs define long double to be 128-bits, but th=
+ere
+> are compilers in the wild that default to 64-bits. The compilers provided=
+ by
+> the major distros (Fedora, Ubuntu) default to 128-bits and are not affect=
+ed
+> by the build failure.
 >=20
+> There is a compiler flag to force 128-bit long double, which may be the
+> correct long term fix, but as an interim fix only allow building the DCN =
+driver if
+> long double is 128-bits by default.
+>=20
+> The bisection in commit d11219ad53dc must have gone off the rails at some
+> point, the build failure occurs all the way back to the original commit t=
+hat
+> enabled DCN support on powerpc, at least with some toolchains.
+>=20
+> Depends-on: d11219ad53dc ("amdgpu: disable powerpc support for the
+> newer display engine")
+> Fixes: 16a9dea110a6 ("amdgpu: Enable initial DCN support on POWER")
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Link:
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgitla
+> b.freedesktop.org%2Fdrm%2Famd%2F-
+> %2Fissues%2F2100&amp;data=3D05%7C01%7Calexander.deucher%40amd.com
+> %7C3bfc6788a65444cb7ffe08da6e3ee794%7C3dd8961fe4884e608e11a82d994
+> e183d%7C0%7C0%7C637943513703402010%7CUnknown%7CTWFpbGZsb3d8
+> eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3
+> D%7C3000%7C%7C%7C&amp;sdata=3DMTWp8MSgFBltLYbrPHCAyR8VdVEHakp
+> KVMkNEBRx%2FrI%3D&amp;reserved=3D0
 > ---
+>  arch/powerpc/Kconfig                | 4 ++++
+>  drivers/gpu/drm/amd/display/Kconfig | 2 +-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
 >=20
-> V2:
-> - new patch, based on the discussion in [0].
-> [0] https://lore.kernel.org/lkml/2787b476-6366-1c83-db80-0393da417497@iga=
-lia.com/
->=20
->  drivers/hv/ring_buffer.c        | 16 ++++++++++++++++
->  drivers/video/fbdev/hyperv_fb.c |  8 +++++++-
->  include/linux/hyperv.h          |  2 ++
->  3 files changed, 25 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-> index 59a4aa86d1f3..9ceb3a7e8d19 100644
-> --- a/drivers/hv/ring_buffer.c
-> +++ b/drivers/hv/ring_buffer.c
-> @@ -280,6 +280,22 @@ void hv_ringbuffer_cleanup(struct hv_ring_buffer_inf=
-o
-> *ring_info)
->  	ring_info->pkt_buffer_size =3D 0;
->  }
->=20
-> +/*
-> + * Check if the ring buffer spinlock is available to take or not; used o=
-n
-> + * atomic contexts, like panic path (see the Hyper-V framebuffer driver)=
-.
-> + */
-> +
-> +bool hv_ringbuffer_spinlock_busy(struct vmbus_channel *channel)
-> +{
-> +	struct hv_ring_buffer_info *rinfo =3D &channel->outbound;
-> +
-> +	if (spin_is_locked(&rinfo->ring_lock))
-> +		return true;
-> +
-> +	return false;
+> Alex, are you OK if I take this via the powerpc tree for v5.19?
 
-Could simplify the code as just:
+No problem.=20
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
+FWIW, We should have all of this PPC FP stuff cleared up in 5.20.
 
-	return spin_is_locked(&rinfo->ring_lock);
+Alex
 
-> +}
-> +EXPORT_SYMBOL_GPL(hv_ringbuffer_spinlock_busy);
-> +
->  /* Write to the ring buffer. */
->  int hv_ringbuffer_write(struct vmbus_channel *channel,
->  			const struct kvec *kv_list, u32 kv_count,
-> diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv=
-_fb.c
-> index 886c564787f1..e1b65a01fb96 100644
-> --- a/drivers/video/fbdev/hyperv_fb.c
-> +++ b/drivers/video/fbdev/hyperv_fb.c
-> @@ -783,12 +783,18 @@ static void hvfb_ondemand_refresh_throttle(struct
-> hvfb_par *par,
->  static int hvfb_on_panic(struct notifier_block *nb,
->  			 unsigned long e, void *p)
->  {
-> +	struct hv_device *hdev;
->  	struct hvfb_par *par;
->  	struct fb_info *info;
 >=20
->  	par =3D container_of(nb, struct hvfb_par, hvfb_panic_nb);
-> -	par->synchronous_fb =3D true;
->  	info =3D par->info;
-> +	hdev =3D device_to_hv_device(info->device);
-> +
-> +	if (hv_ringbuffer_spinlock_busy(hdev->channel))
-> +		return NOTIFY_DONE;
-> +
-> +	par->synchronous_fb =3D true;
->  	if (par->need_docopy)
->  		hvfb_docopy(par, 0, dio_fb_size);
->  	synthvid_update(info, 0, 0, INT_MAX, INT_MAX);
-> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-> index 3b42264333ef..646f1da9f27e 100644
-> --- a/include/linux/hyperv.h
-> +++ b/include/linux/hyperv.h
-> @@ -1341,6 +1341,8 @@ struct hv_ring_buffer_debug_info {
->  int hv_ringbuffer_get_debuginfo(struct hv_ring_buffer_info *ring_info,
->  				struct hv_ring_buffer_debug_info *debug_info);
+> cheers
 >=20
-> +bool hv_ringbuffer_spinlock_busy(struct vmbus_channel *channel);
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig index
+> 7aa12e88c580..287cc2d4a4b3 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -281,6 +281,10 @@ config PPC
+>  	# Please keep this list sorted alphabetically.
+>  	#
+>=20
+> +config PPC_LONG_DOUBLE_128
+> +	depends on PPC64
+> +	def_bool $(success,test "$(shell,echo __LONG_DOUBLE_128__ |
+> $(CC) -E
+> +-P -)" =3D 1)
 > +
->  /* Vmbus interface */
->  #define vmbus_driver_register(driver)	\
->  	__vmbus_driver_register(driver, THIS_MODULE, KBUILD_MODNAME)
+>  config PPC_BARRIER_NOSPEC
+>  	bool
+>  	default y
+> diff --git a/drivers/gpu/drm/amd/display/Kconfig
+> b/drivers/gpu/drm/amd/display/Kconfig
+> index 0ba0598eba20..ec6771e87e73 100644
+> --- a/drivers/gpu/drm/amd/display/Kconfig
+> +++ b/drivers/gpu/drm/amd/display/Kconfig
+> @@ -6,7 +6,7 @@ config DRM_AMD_DC
+>  	bool "AMD DC - Enable new display engine"
+>  	default y
+>  	select SND_HDA_COMPONENT if SND_HDA_CORE
+> -	select DRM_AMD_DC_DCN if X86 && !(KCOV_INSTRUMENT_ALL &&
+> KCOV_ENABLE_COMPARISONS)
+> +	select DRM_AMD_DC_DCN if (X86 || PPC_LONG_DOUBLE_128) &&
+> +!(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
+>  	help
+>  	  Choose this option if you want to use the new display engine
+>  	  support for AMDGPU. This adds required support for Vega and
 > --
-> 2.37.1
-
+> 2.35.3

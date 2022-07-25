@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E6657F9AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7933857F9A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbiGYGyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 02:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S231969AbiGYGxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 02:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbiGYGxX (ORCPT
+        with ESMTP id S230309AbiGYGxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 02:53:23 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9690C11161
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:53:17 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220725065311epoutp0364fb0612df71cf6157d65447c7363d3e~E--VB3HFr1827518275epoutp03H
+        Mon, 25 Jul 2022 02:53:21 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B6910FFB
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:53:16 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220725065311epoutp04056bf09bb155ae7b3b2573d769e50253~E--VEgq_M0685006850epoutp04g
         for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:53:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220725065311epoutp0364fb0612df71cf6157d65447c7363d3e~E--VB3HFr1827518275epoutp03H
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220725065311epoutp04056bf09bb155ae7b3b2573d769e50253~E--VEgq_M0685006850epoutp04g
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1658731991;
-        bh=f/Tk7QPHmHvnLX0TTqkpwKZHuCUlDZdKaFD5eqvHi70=;
+        bh=IGDWHVYiT7zLw/RUcYT4G2NS9SOc2hc90t7MvRAEEgQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Czr/yQHxRGLshcHoHaHEnN6jlzwTudi7OEGWlPY3ZY/ydu5GDF/L2JdLcEukvjxBm
-         CFFncnV9+m64WsCxKQbGnUCWvs+TTqPy4zx1lsDCfrVw9RRiB7m5pTwOMSfUN/CdDg
-         S+hpQyH8dc+w+uHZVQH30Nw2DaJIXiCRmpRa4sOY=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        b=MALnqRx7LdCIogdNwuf/32LYA6HmjFiENsNF7Po/9T/U2E/AmtQmr5OUlTvAl+Ffy
+         j/xjWl+eBKmVaO6gZNzAcLOYKvlZUsz9BB8J8U6bEOIWedJConwEVIsPOIOMK0VgaQ
+         IcUfrnRZbZRw8xkC74jQe95+XI8tURIkU3O4bwZk=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
         epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20220725065311epcas1p320fc367618ba4b77773ae7798d8d1186~E--UvdJT_2509525095epcas1p3D;
+        20220725065311epcas1p35d5d817f662d9f535ea129a67ee3bf26~E--U0Jxo72805428054epcas1p3q;
         Mon, 25 Jul 2022 06:53:11 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.36.133]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LrrN63Dkyz4x9Q0; Mon, 25 Jul
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.237]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LrrN61k92z4x9Q2; Mon, 25 Jul
         2022 06:53:10 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        89.29.09657.5DD3ED26; Mon, 25 Jul 2022 15:53:09 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220725065309epcas1p20c847655e7332c818fc0fd2c50fb0e27~E--TFURq62833028330epcas1p2j;
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        64.BE.09678.6DD3ED26; Mon, 25 Jul 2022 15:53:10 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220725065309epcas1p42ba84c5241d69192ea73904ed6af17d7~E--TLHamw0810408104epcas1p48;
         Mon, 25 Jul 2022 06:53:09 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220725065309epsmtrp29ab38f0dbb2870940aeaa9bfb0b612ab~E--TEeTJn0769507695epsmtrp2s;
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220725065309epsmtrp12be707269d49ef709413f9d9fe10abf7~E--TKdB6f0382103821epsmtrp1s;
         Mon, 25 Jul 2022 06:53:09 +0000 (GMT)
-X-AuditID: b6c32a35-f4312a80000025b9-c5-62de3dd5546f
+X-AuditID: b6c32a39-e67ff700000025ce-c8-62de3dd6cc48
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        64.B6.08802.5DD3ED26; Mon, 25 Jul 2022 15:53:09 +0900 (KST)
+        74.B6.08802.5DD3ED26; Mon, 25 Jul 2022 15:53:09 +0900 (KST)
 Received: from localhost.localdomain (unknown [10.113.113.58]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220725065309epsmtip29180d39c6e7186d726066a3671e8035d~E--SzdMmV2536525365epsmtip2U;
+        20220725065309epsmtip22a0640da8f71186d70180c31feb34801~E--S8v1qC2537425374epsmtip2V;
         Mon, 25 Jul 2022 06:53:09 +0000 (GMT)
 From:   Jiho Chu <jiho.chu@samsung.com>
 To:     gregkh@linuxfoundation.org, arnd@arndb.de,
         linux-kernel@vger.kernel.org
 Cc:     yelini.jeong@samsung.com, myungjoo.ham@samsung.com,
         Jiho Chu <jiho.chu@samsung.com>
-Subject: [PATCH 3/9] trinity: Add load/unload IDU files
-Date:   Mon, 25 Jul 2022 15:53:02 +0900
-Message-Id: <20220725065308.2457024-4-jiho.chu@samsung.com>
+Subject: [PATCH 4/9] trinity: Add schduler module
+Date:   Mon, 25 Jul 2022 15:53:03 +0900
+Message-Id: <20220725065308.2457024-5-jiho.chu@samsung.com>
 In-Reply-To: <20220725065308.2457024-1-jiho.chu@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrKKsWRmVeSWpSXmKPExsWy7bCmru5V23tJBpcaDC3+TjrGbtG8eD2b
-        xfvu3cwWl3fNYbO43biCzeL5tOssDmwev39NYvTYP3cNu0ffllWMHp83yQWwRGXbZKQmpqQW
-        KaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gAtV1IoS8wpBQoFJBYX
-        K+nb2RTll5akKmTkF5fYKqUWpOQUmBboFSfmFpfmpevlpZZYGRoYGJkCFSZkZ8x8lVbwtIWx
-        Yv3laawNjBtzuhg5OSQETCRO/T/H3MXIxSEksINRYvXmWYwQzidGiYbFT5ggnM+MEg9PP2eF
-        aXkz4S1U1S5GiZ9921jhqs53r2ACqWITUJWYOWMNO4gtIuAtMb+1CyjOwcEsEClxbUUVSFhY
-        wFzi2f5uRhCbBah8fs9NZhCbV8AaqHUHC4jNKWAjseDHbqi4oMTJmU/A4swC8hLNW2eD3S0h
-        cIpd4uL3qcwQ17lILNj9hw3CFpZ4dXwLO4QtJfH53V6oeLbElI5FLBB2gcS551uZQW6TEDCW
-        uLgiBeJMTYn1u/QhKhQldv6eywixlk/i3dceVohqXomONiGIEiWJJX8OQy2SkJg64xsThO0h
-        0fZzNTR0+hklrjdNZpnAKD8LyTezkHwzC2HzAkbmVYxiqQXFuempxYYFhvBITc7P3cQITn9a
-        pjsYJ779oHeIkYmD8RCjBAezkghvV9rtJCHelMTKqtSi/Pii0pzU4kOMpsDwncgsJZqcD0zA
-        eSXxhiaWBiZmRsYmFoZmhkrivKumnU4UEkhPLEnNTk0tSC2C6WPi4JRqYCo5a/fqQPKXHIFz
-        E7/8TTn/JyXzhV+tCR/zri8uv7nMFX42JPNvd1i3Ws94Lcsk5j3MJ0qL5t0rvVa6sFpzdVFW
-        X1ki6xRetcNa6zdmzdmq/u+qrcW6hGdbRNLK9tTly7W67FNknLh8/tmFpq6HL2dMmB6UmnF4
-        yaXJ2/iuTXGsMDDb61QnOe/Cqpx1zzUqfrmrvb5c81dyytPrXEp3JKVDP1R9KbrEzTBhR5fT
-        vtc7p3755P16ZeQpRnfOoNlTw/NZpBVS4rQb9kzIqepnmV8+pyZ3gtDl43nzGeqfflr/88my
-        Vrvnq2rU/thKrJj2uWB1yN5OprX6zIr//5r6l7XO3rXoWYXFlenLud4a885SYinOSDTUYi4q
-        TgQAfdleyQgEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPLMWRmVeSWpSXmKPExsWy7bCSvO5V23tJBut7JC3+TjrGbtG8eD2b
-        xfvu3cwWl3fNYbO43biCzeL5tOssDmwev39NYvTYP3cNu0ffllWMHp83yQWwRHHZpKTmZJal
-        FunbJXBlzHyVVvC0hbFi/eVprA2MG3O6GDk5JARMJN5MeMsIYgsJ7GCUODk/EiIuIbHp3nLm
-        LkYOIFtY4vDh4i5GLqCSj4wSHb2zmEBq2ARUJWbOWMMOYosI+Ev8/XSMFcRmFoiWWL3tPguI
-        LSxgLvFsfzfYfBag+vk9N5lBbF4Ba6DeHWA1nAI2Egt+7GaGuMFaor/rBCtEjaDEyZlPWCBm
-        yks0b53NPIGRfxaS1CwkqQWMTKsYJVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYLDVEtr
-        B+OeVR/0DjEycTAeYpTgYFYS4e1Ku50kxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0
-        xJLU7NTUgtQimCwTB6dUA9NUvTr3WRqRy29edxfTVIo/q+574vbvpxw1PE3S31mCdR536iu9
-        lGraY1PcHdg8vV7HiaP0aFO17l2jzBMW2wylWkTz3TiYk9NmJd34aHF/yZqD177tOclwd595
-        KVPpiWC1utOXm1wORR91D+Pa23h3St9Hng35dzm2XxC/P09fwVH5+byDeaYWITdnyG6omT/n
-        2N81qbk/Xi5eL3+osmZv6nS12J+PH3w98KeSNSrz663/qSd7lzUfl+p+HRN/l8HqUsJfPlv5
-        7mMa95rN/Gctbp+yMEa+3lWWi6GU/2RpJENj+FqrJI71n3aF2PjK5OZ+tbN/yKTfczvNxed7
-        ve/8c5vvSKlue1oTwuWlq8RSnJFoqMVcVJwIAGZ2eRXCAgAA
-X-CMS-MailID: 20220725065309epcas1p20c847655e7332c818fc0fd2c50fb0e27
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmvu4123tJBgdvcFr8nXSM3aJ58Xo2
+        i/fdu5ktLu+aw2Zxu3EFm8XzaddZHNg8fv+axOixf+4ado++LasYPT5vkgtgicq2yUhNTEkt
+        UkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAFarqRQlphTChQKSCwu
+        VtK3synKLy1JVcjILy6xVUotSMkpMC3QK07MLS7NS9fLSy2xMjQwMDIFKkzIzpix9BFzwet2
+        xorOd6+ZGxiv53cxcnJICJhIHN06j7mLkYtDSGAHo0T38vVMEM4nRomnf44yQjifGSUOzXjD
+        BtNyf0YnO0RiF6PEzastLHBVx/4/BKtiE1CVmDljDTuILSLgLTG/tQtoLgcHs0CkxLUVVSBh
+        YQFDialv1jGC2CxA5ef7msFaeQWsJTaf3c0KYnMK2Egs+LGbGSIuKHFy5hMWEJtZQF6ieets
+        sLslBM6xS1x/8ZcdZL6EgIvEy0UhEIcKS7w6voUdwpaSeNnfBmVnS0zpWMQCYRdInHu+lRmi
+        1Vji4ooUiCs1Jdbv0oeoUJTY+XsuI8RWPol3X3tYIap5JTrahCBKlCSW/DkMNVxCYuqMb0wQ
+        todE1+tLYK1CAv2MEpu7Sicwys9C8sssJL/MQli8gJF5FaNYakFxbnpqsWGBKTxOk/NzNzGC
+        k5+W5Q7G6W8/6B1iZOJgPMQowcGsJMLblXY7SYg3JbGyKrUoP76oNCe1+BCjKTB0JzJLiSbn
+        A9NvXkm8oYmlgYmZkbGJhaGZoZI476pppxOFBNITS1KzU1MLUotg+pg4OKUamBbuT/jGM8/9
+        +W2OmU7HNnlsWDtDh/n7ouojP9lZYrsXK5pdWNG996/a7wfiIYzrPd9V71rWv+2e1My7b1al
+        nDqZOj2w5t+6V3c+dVQqa0713JHWpfd/x2a76S/fvpmvfnpr5q5X8b7c8jH1/48cuXjWqC+l
+        9hv32kkZrxNn2txIXLju5OYDJRdWmF+InZ7H9Xr5+ruKLJkLMtr3XFjz6uPipSz8xbqz5j+f
+        q2y9NnLu8zctTzh/uktwubGUmX9cs1lv3T1hsepmkSZ1ZrXHcyTznxRKPGJsygns8pK93PCd
+        VXrB/F5L3WitL/r3cnv4ZnNm7N789NTcGw+ONdvtNss1cY0vPfjs7QTlY8Gu0UffK7EUZyQa
+        ajEXFScCAHfZXG0HBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrILMWRmVeSWpSXmKPExsWy7bCSvO5V23tJBl/2Klj8nXSM3aJ58Xo2
+        i/fdu5ktLu+aw2Zxu3EFm8XzaddZHNg8fv+axOixf+4ado++LasYPT5vkgtgieKySUnNySxL
+        LdK3S+DKmLH0EXPB63bGis53r5kbGK/ndzFyckgImEjcn9HJ3sXIxSEksINRYvb0H4wQCQmJ
+        TfeWM3cxcgDZwhKHDxdD1HxklNj75BgrSA2bgKrEzBlr2EFsEQF/ib+fIOLMAtESq7fdZwGx
+        hQUMJaa+WQc2kwWo/nxfMxuIzStgLbH57G6wek4BG4kFP3Yzg9hCQPH+rhOsEDWCEidnPmGB
+        mCkv0bx1NvMERv5ZSFKzkKQWMDKtYpRMLSjOTc8tNiwwykst1ytOzC0uzUvXS87P3cQIDlUt
+        rR2Me1Z90DvEyMTBeIhRgoNZSYS3K+12khBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE
+        0hNLUrNTUwtSi2CyTBycUg1MXbPsDGa0dOYsSA7hSy74dTbi5wPX1hdae59E7Vh8qeHv/GVf
+        7C5dX1UkyvRtt1WnoU3Pn4dtc39tXmVhUWrkx+Ua+OKHb7Tz1CWiRT1BPoI1fYbvNBzn6+b8
+        NnMzN2tfH3hu63GzY7Uax10/CYlJMGoZMFftOsqpxSnmsGb95bpFYssdey+br/+8LdF0/iJv
+        7qNzXFh8q3U/3H0sWuf5rEl7SVBxyQpNFXYO2an2RjdexGzPMPj0eIFBl37n6SC52up0w+Vt
+        2xcebs6XXHj/i09cZ+yT042VgjmzY07Hrnq2aNL5x5f3LFS2q9zz33Tpa96z97s1+3dnl32M
+        2btnmfGt/jVNHu6zlWvFJPKUWIozEg21mIuKEwGS+xhOxAIAAA==
+X-CMS-MailID: 20220725065309epcas1p42ba84c5241d69192ea73904ed6af17d7
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220725065309epcas1p20c847655e7332c818fc0fd2c50fb0e27
+X-CMS-RootMailID: 20220725065309epcas1p42ba84c5241d69192ea73904ed6af17d7
 References: <20220725065308.2457024-1-jiho.chu@samsung.com>
-        <CGME20220725065309epcas1p20c847655e7332c818fc0fd2c50fb0e27@epcas1p2.samsung.com>
+        <CGME20220725065309epcas1p42ba84c5241d69192ea73904ed6af17d7@epcas1p4.samsung.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -114,595 +114,644 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch implements IDU load/unload works.
+This patch includes NPU scheduler interface.
 
-Samsung NPU loads Instruction Decoder Unit (IDU) program,
-which can decode binary code generated by NPU compiler.
-The IDU program is loaded while loading driver, and it
-starts to parse the codes of compiled decoder binary.
-Then, all operations of the NPU is working with the decoder
-program which is using predefined virtual ISA.
+Tasks can be pushed to the NPU in order by the scheduler. The default
+schduling algorithm is provided using Priority policy.
+The scheduler waits request from the user. When the requests are
+invoked, it submits each request to the NPU by the priority, and waits
+until complete interrupt arrives. The priority is calculated with
+remained time to requested timeout.
+
+Thus the scheduler algorithm may be added more in the later, it
+provides an interface which can support various schedulers.
 
 Signed-off-by: Jiho Chu <jiho.chu@samsung.com>
 Signed-off-by: Yelin Jeong <yelini.jeong@samsung.com>
 Signed-off-by: Dongju Chae <dongju.chae@samsung.com>
 Signed-off-by: MyungJoo Ham <myungjoo.ham@samsung.com>
 ---
- drivers/misc/trinity/trinity.c             |  10 +
- drivers/misc/trinity/trinity_common.h      |   1 +
- drivers/misc/trinity/trinity_vision2_drv.c | 397 ++++++++++++++++++++-
- 3 files changed, 404 insertions(+), 4 deletions(-)
+ drivers/misc/trinity/Makefile         |   1 +
+ drivers/misc/trinity/sched/core.c     | 170 +++++++++++++
+ drivers/misc/trinity/sched/priority.c | 335 ++++++++++++++++++++++++++
+ drivers/misc/trinity/sched/priority.h |  18 ++
+ drivers/misc/trinity/sched/sched.h    |  52 ++++
+ 5 files changed, 576 insertions(+)
+ create mode 100644 drivers/misc/trinity/sched/core.c
+ create mode 100644 drivers/misc/trinity/sched/priority.c
+ create mode 100644 drivers/misc/trinity/sched/priority.h
+ create mode 100644 drivers/misc/trinity/sched/sched.h
 
-diff --git a/drivers/misc/trinity/trinity.c b/drivers/misc/trinity/trinity.c
-index 1ee9403dbdca..4c1b8a7108d6 100644
---- a/drivers/misc/trinity/trinity.c
-+++ b/drivers/misc/trinity/trinity.c
-@@ -37,12 +37,22 @@
+diff --git a/drivers/misc/trinity/Makefile b/drivers/misc/trinity/Makefile
+index cf313c3afb3d..dcf9d7ad1b4b 100644
+--- a/drivers/misc/trinity/Makefile
++++ b/drivers/misc/trinity/Makefile
+@@ -4,5 +4,6 @@ obj-$(CONFIG_TRINITY_VISION2) += trinity_vision2.o
  
- #define BASE_DEV_NAME "trinity"
+ trinity-y := trinity.o
+ trinity-y += trinity_resv_mem.o trinity_hwmem.o
++trinity-y += sched/core.o sched/priority.o
  
-+#define TRINITY_PADDR_BASE (0x0)
-+
- /* A global lock for shared static variables such as dev_bitmap */
- static DEFINE_SPINLOCK(trinity_lock);
- 
- /* A bitmap to keep track of active Trinity devices */
- static unsigned long dev_bitmap[TRINITY_DEV_END];
- 
-+phys_addr_t trinity_get_paddr(struct iommu_domain *domain, dma_addr_t daddr)
-+{
-+	if (domain)
-+		return iommu_iova_to_phys(domain, daddr);
-+
-+	return TRINITY_PADDR_BASE + daddr;
-+}
-+
- /**
-  * trinity_release() - A common callback for close() in file_operations for a
-  *		Trinity	device node. If there are device-specific data to be
-diff --git a/drivers/misc/trinity/trinity_common.h b/drivers/misc/trinity/trinity_common.h
-index 7f576d4a71a5..6940318362f6 100644
---- a/drivers/misc/trinity/trinity_common.h
-+++ b/drivers/misc/trinity/trinity_common.h
-@@ -378,6 +378,7 @@ static inline int32_t trinity_get_app_id(void)
- int trinity_create_node(struct trinity_driver *drv);
- void trinity_destroy_node(struct trinity_driver *drv);
- int trinity_wait_ready(struct trinity_driver *drv);
-+phys_addr_t trinity_get_paddr(struct iommu_domain *domain, dma_addr_t daddr);
- 
- /* File operations */
- int trinity_open(struct inode *inode, struct file *f);
-diff --git a/drivers/misc/trinity/trinity_vision2_drv.c b/drivers/misc/trinity/trinity_vision2_drv.c
-index f1c1e06d188e..9e616466c57b 100644
---- a/drivers/misc/trinity/trinity_vision2_drv.c
-+++ b/drivers/misc/trinity/trinity_vision2_drv.c
-@@ -105,6 +105,7 @@ struct triv2_cmd_info {
- 
- 	struct triv2_req *reqs[TRIV2_MAX_CMDSLOTS];
- 	struct triv2_cmd cur_cmd;
-+	struct trinity_resv_mem buf;
- };
- 
- struct triv2_hashed_cmd_info {
-@@ -124,6 +125,8 @@ struct triv2_kernel_req {
- struct triv2_req {
- 	struct trinity_req req;
- 
-+	struct trinity_hwmem_import *seg_import;
-+
- 	int cmd_slot;
- 
- 	/** kernel requets */
-@@ -140,6 +143,9 @@ struct triv2_req {
- struct triv2_idu {
- 	phys_addr_t *addrs;
- 	size_t addr_num;
-+	struct trinity_resv_mem data;
-+	struct trinity_resv_mem code;
-+	dma_addr_t dspm;
- };
- 
- struct triv2_pdata {
-@@ -153,6 +159,9 @@ struct triv2_pdata {
- 
- 	/* command info */
- 	struct triv2_cmd_info cmd_info;
-+
-+	/* back buffer for context switching */
-+	struct trinity_resv_mem back_buf;
- };
- 
- static void triv2_setup_buffers(struct trinity_driver *drv);
-@@ -161,6 +170,74 @@ static int triv2_idu_load(struct trinity_driver *drv, const char *dirpath,
- 
- static LIST_HEAD(triv2_driver_list);
- 
-+/**
-+ * triv2_get_state() - Get state (TRINITY_STATE_READY/TRINITY_STATE_PAUSE) of the device.
-+ * @returns (enum triv2_state) TRINITY_STATE_READY (i.e., 1) or TRINITY_STATE_PAUSE (i.e., 0 )
-+ * according to the state of the device
+ trinity_vision2-objs := $(trinity-y) trinity_vision2_drv.o
+diff --git a/drivers/misc/trinity/sched/core.c b/drivers/misc/trinity/sched/core.c
+new file mode 100644
+index 000000000000..2d94f5d07e8b
+--- /dev/null
++++ b/drivers/misc/trinity/sched/core.c
+@@ -0,0 +1,170 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * NPU scheduler interface
++ *
++ * Copyright (C) 2021-2022 Samsung Electronics
++ * Copyright (C) 2021 Dongju Chae <dongju.chae@samsung.com>
++ * Copyright (C) 2022 MyungJoo Ham <myungjoo.ham@samsung.com>
++ * Copyright (C) 2022 Yelin Jeong <yelini.jeong@samsung.com>
++ * Copyright (C) 2022 Jiho Chu <jiho.chu@samsung.com>
 + */
-+int32_t triv2_get_state(const struct trinity_driver *drv)
-+{
-+	if (ioread32(drv->mmreg_vaddr[0] + OFFSET_NPU_CMD_READY) == 1)
-+		return TRINITY_STATE_READY;
 +
-+	return TRINITY_STATE_PAUSE;
++#include <linux/spinlock.h>
++
++#include "../trinity_common.h"
++#include "sched.h"
++#include "priority.h"
++
++static struct trinity_sched_desc *sched_table[SCHED_END];
++static DEFINE_SPINLOCK(sched_lock);
++
++/**
++ * trinity_sched_register() - Register trinity task scheduler
++ *   It does nothing if it is already registered.
++ *
++ * @type: scheduler type
++ * @desc: scheduler description
++ */
++void trinity_sched_register(enum trinity_sched_type type,
++			    struct trinity_sched_desc *desc)
++{
++	if (type >= SCHED_END)
++		return;
++
++	spin_lock(&sched_lock);
++	if (!sched_table[type])
++		sched_table[type] = desc;
++	spin_unlock(&sched_lock);
 +}
 +
 +/**
-+ * triv2_set_state() - Set state of the device to TRINITY_STATE_READY (1) or TRINITY_STATE_PAUSE (0)
++ * trinity_sched_unregister() - Unregister trinity task scheduler
++ *
++ * @type: scheduler type
++ * @desc: scheduler description
 + */
-+static void triv2_set_state(const struct trinity_driver *drv,
-+			    enum trinity_state state)
++void trinity_sched_unregister(enum trinity_sched_type type,
++			      struct trinity_sched_desc *desc)
 +{
-+	void __iomem *addr;
++	if (type >= SCHED_END)
++		return;
 +
-+	switch (state) {
-+	case TRINITY_STATE_PAUSE:
-+		/* CP */
-+		addr = trinity_get_iomem_addr(drv->mmreg_vaddr[0],
-+					      OFFSET_CP_PROC_SET);
-+		trinity_set_bit(BIT_SET_PAUSE, addr);
-+		iowrite32(0, addr);
++	spin_lock(&sched_lock);
++	if (sched_table[type] == desc)
++		sched_table[type] = NULL;
++	spin_unlock(&sched_lock);
++}
 +
-+		/* DSP */
-+		addr = trinity_get_iomem_addr(drv->mmreg_vaddr[1],
-+					      OFFSET_DSP_PROC_SET);
-+		trinity_set_bit(BIT_SET_PAUSE, addr);
-+		iowrite32(0, addr);
++/**
++ * trinity_sched_find() - Find trinity task scheduler
++ *
++ * @type: scheduler type
++ * Return: trinity scheduler description on Success, Otherwise return NULL.
++ */
++struct trinity_sched_desc *trinity_sched_find(enum trinity_sched_type type)
++{
++	struct trinity_sched_desc *desc;
++	unsigned long flags;
 +
-+		break;
-+	case TRINITY_STATE_READY:
-+		/* CP */
-+		addr = trinity_get_iomem_addr(drv->mmreg_vaddr[0],
-+					      OFFSET_CP_PROC_CLR);
-+		trinity_set_bit(BIT_CLR_PAUSE, addr);
-+		iowrite32(0, addr);
++	if (type >= SCHED_END)
++		return NULL;
 +
-+		/* DSP */
-+		addr = trinity_get_iomem_addr(drv->mmreg_vaddr[1],
-+					      OFFSET_DSP_PROC_CLR);
-+		trinity_set_bit(BIT_CLR_PAUSE, addr);
-+		iowrite32(0, addr);
++	spin_lock_irqsave(&sched_lock, flags);
++	desc = sched_table[type];
++	spin_unlock_irqrestore(&sched_lock, flags);
 +
-+		/* Performance Counter */
-+		addr = trinity_get_iomem_addr(drv->mmreg_vaddr[0],
-+					      OFFSET_CP_CNT_CFG);
-+		trinity_set_bit(BIT_CNT_IST_EN | BIT_CNT_FR_EN, addr);
-+		break;
-+	default:
++	return desc;
++}
++
++/**
++ * trinity_sched_run_req() - Schedules a req to the target from the req queue
++ *
++ * @req_data: The data ptr to hold req information to be submitted.
++ *
++ * Return: 0 on success. Otherwise, returns negative error. Additional status of
++ * the submitted req could be passed by req->status.
++ */
++int32_t trinity_sched_run_req(void *req_data, void *sched_data)
++{
++	struct trinity_req *req = (struct trinity_req *)req_data;
++	struct trinity_driver *drv = req->drv;
++	int32_t err = 0;
++	int32_t ready;
++
++	/** setup is only allowed in ready state */
++	ready = drv->desc->get_state(drv);
++	if (ready != TRINITY_STATE_READY) {
 +		dev_err(drv_to_dev_ptr(drv),
-+			"failed to set state of the NPU state: %d", state);
++			"Cannot setup NPU when it's in a non-ready state");
++		err = -EPERM;
++		goto out;
++	}
++
++	if (req->stat->status != TRINITY_REQ_STATUS_PENDING &&
++	    req->stat->status != TRINITY_REQ_STATUS_FINISHED) {
++		dev_err(drv_to_dev_ptr(drv), "Invalid req status: %d",
++			req->stat->status);
++		err = -EINVAL;
++		goto out;
++	}
++
++	req->stat->status = TRINITY_REQ_STATUS_RUNNING;
++	err = drv->desc->invoke_req(drv, req, sched_data);
++out:
++	if (err != 0)
++		req->stat->status = TRINITY_REQ_STATUS_ERROR;
++
++	return err;
++}
++
++/**
++ * trinity_sched_suspend() - Suspend whole task schedulers
++ */
++void trinity_sched_suspend(void)
++{
++	enum trinity_sched_type type;
++	struct trinity_sched_desc *desc;
++
++	for (type = SCHED_PRI; type < SCHED_END; type++) {
++		desc = sched_table[type];
++		if (desc)
++			desc->suspend();
 +	}
 +}
 +
-+static void triv2_wakeup_cp(const struct trinity_driver *drv)
++/**
++ * trinity_sched_suspend() - Resume whole task schedulers
++ */
++void trinity_sched_resume(void)
 +{
-+	void *addr =
-+		trinity_get_iomem_addr(drv->mmreg_vaddr[0], OFFSET_CP_PROC_SET);
++	enum trinity_sched_type type;
++	struct trinity_sched_desc *desc;
 +
-+	trinity_set_bit(BIT_SET_SEND_EVT1, addr);
-+}
-+
- static void triv2_cancel_reqs(struct trinity_driver *drv)
- {
- 	struct triv2_cmd_info *info;
-@@ -204,6 +281,8 @@ static void triv2_reset(struct trinity_driver *drv)
- 	do_test = true;
- 	list_for_each_entry(pdata, &triv2_driver_list, list) {
- 		triv2_reset_devices(pdata->drv, do_test);
-+		if (pdata->drv->opened > 0)
-+			triv2_set_state(pdata->drv, TRINITY_STATE_READY);
- 		do_test = false;
- 	}
- 
-@@ -233,6 +312,20 @@ static const struct file_operations triv2_fops = {
- 	.llseek = noop_llseek,
- };
- 
-+static void triv2_setup_cp(struct trinity_driver *drv, phys_addr_t paddr)
-+{
-+	iowrite32(TRIV2_IDU_ADDR(paddr) >> 4,
-+		  drv->mmreg_vaddr[0] + OFFSET_CP_IMIF_BASE);
-+	iowrite32(TRIV2_IDU_ADDR(drv->mmreg_paddr[2]),
-+		  drv->mmreg_vaddr[0] + OFFSET_NPU_CBOX_BASE);
-+}
-+
-+static void triv2_setup_dsp(struct trinity_driver *drv, phys_addr_t paddr)
-+{
-+	iowrite32(TRIV2_IDU_ADDR(paddr) >> 4,
-+		  drv->mmreg_vaddr[1] + OFFSET_DSP_IMIF_BASE);
-+}
-+
- static void triv2_init_common(void)
- {
- 	static bool done;
-@@ -244,6 +337,20 @@ static void triv2_init_common(void)
- 	done = true;
- }
- 
-+static int triv2_idu_alloc(struct device *dev, struct trinity_resv_mem *mem)
-+{
-+	return trinity_alloc_from_resv_mem(mem->size, mem, false);
-+}
-+
-+static void triv2_idu_free(struct device *dev, struct trinity_resv_mem *mem)
-+{
-+	if (!mem->vaddr)
-+		return;
-+
-+	trinity_free_from_resv_mem(mem, false);
-+	mem->vaddr = NULL;
-+}
-+
- static int triv2_idu_version(struct trinity_driver *drv, uint32_t *major,
- 			     uint32_t *minor, uint32_t *extra)
- {
-@@ -272,36 +379,276 @@ static void triv2_idu_check(struct trinity_driver *drv)
- 	struct device *dev = drv_to_dev_ptr(drv);
- 	uint32_t major, minor, extra;
- 
-+	if (trinity_wait_ready(drv) != 0) {
-+		dev_warn(dev, "Unable to load IDU properly");
-+		return;
++	for (type = SCHED_PRI; type < SCHED_END; type++) {
++		desc = sched_table[type];
++		if (desc)
++			desc->resume();
 +	}
-+
- 	pdata->idu_version =
- 		ioread32(drv->mmreg_vaddr[0] + OFFSET_NPU_IDU_VERSION);
- 	if (triv2_idu_version(drv, &major, &minor, &extra) == 0)
- 		dev_info(dev,
- 			 "Instruction Decoder Unit (IDU) v%u.%u.%u detected",
- 			 major, minor, extra);
-+
-+	/* paused until device is opened */
-+	triv2_set_state(drv, TRINITY_STATE_PAUSE);
 +}
 +
-+static int triv2_idu_load_file(struct trinity_driver *drv, const char *dirpath,
-+			       const char *file_name,
-+			       struct trinity_resv_mem *sector)
++/**
++ * trinity_sched_init() - Initialize trinity task schedulers
++ *
++ * @dev: an instance of the device
++ * Return: always returns 0
++ */
++int32_t trinity_sched_init(struct device *dev)
 +{
-+	struct device *dev = drv_to_dev_ptr(drv);
-+	struct trinity_resv_mem mem;
-+	char filepath[NAME_MAX];
-+	struct kstat *stat;
-+	struct file *filp;
-+	loff_t pos = 0;
-+	size_t size;
-+	int ret;
-+
-+	dev = drv_to_dev_ptr(drv);
-+	stat = vmalloc(sizeof(*stat));
-+	if (stat == NULL)
-+		return -ENOMEM;
-+
-+	/* if dirpath is null, use the default path */
-+	if (dirpath)
-+		snprintf(filepath, NAME_MAX, "%s/%s", dirpath, file_name);
-+	else
-+		snprintf(filepath, NAME_MAX, TRIV2_IDU_DIRPATH_FMT "/%s",
-+			 utsname()->release, file_name);
-+
-+	filp = filp_open(filepath, O_RDONLY, 0400);
-+	if (IS_ERR(filp)) {
-+		dev_err(dev, "Failed to open the idu binary: %s", filepath);
-+		ret = PTR_ERR(filp);
-+		goto out_free;
-+	}
-+
-+	/* check file existence first */
-+	ret = vfs_getattr(&filp->f_path, stat, STATX_SIZE,
-+			  AT_STATX_SYNC_AS_STAT);
-+
-+	if (ret != 0 || stat->size == 0) {
-+		dev_warn(dev, "File not found: %s", filepath);
-+		ret = -ENOENT;
-+		goto out_close;
-+	}
-+
-+	size = stat->size;
-+	if (size > TRIV2_IDU_MAXSIZE) {
-+		dev_err(dev, "Too large idu binary: %zu MiB", size >> 20);
-+		ret = -EINVAL;
-+		goto out_close;
-+	}
-+
-+	mem.size = PAGE_ALIGN(size);
-+	ret = triv2_idu_alloc(dev, &mem);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to allocate memory for idu");
-+		goto out_close;
-+	}
-+
-+	ret = read_idu_file(filp, pos, mem.vaddr, size);
-+	if (ret != size) {
-+		dev_err(dev, "Failed to read the file %s", filepath);
-+		triv2_idu_free(dev, &mem);
-+		ret = -ERANGE;
-+		goto out_close;
-+	}
-+
-+	/* free previous idu if exists */
-+	if (sector->vaddr)
-+		triv2_idu_free(dev, sector);
-+
-+	sector->daddr = mem.daddr;
-+	sector->vaddr = mem.vaddr;
-+	sector->size = mem.size;
-+	sector->orig_size = size;
-+
-+	ret = 0;
-+out_close:
-+	filp_close(filp, NULL);
-+out_free:
-+	vfree(stat);
-+
-+	return ret;
-+}
-+
-+static int triv2_idu_load_files(struct trinity_driver *drv, const char *dirpath)
-+{
-+	struct triv2_pdata *pdata = TRIV2_DRV_GET_PDATA(drv);
-+	struct iommu_domain *domain;
-+	phys_addr_t paddr;
-+	int ret;
-+
-+	domain = iommu_get_domain_for_dev(drv_to_dev_ptr(drv));
-+
-+	ret = triv2_idu_load_file(drv, dirpath, "cp/data.bin",
-+				  &(pdata->idu_cp.data));
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = triv2_idu_load_file(drv, dirpath, "cp/code.bin",
-+				  &(pdata->idu_cp.code));
-+	if (ret < 0)
-+		return ret;
-+
-+	paddr = trinity_get_paddr(domain, pdata->idu_cp.code.daddr);
-+	pdata->idu_cp.addrs[TRIV2_IDU_CODEIDX] = paddr;
-+
-+	if (!pdata->idu_dsp.addrs)
-+		return 0;
-+
-+	ret = triv2_idu_load_file(drv, dirpath, "dsp/data.bin",
-+				  &(pdata->idu_dsp.data));
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = triv2_idu_load_file(drv, dirpath, "dsp/code.bin",
-+				  &(pdata->idu_dsp.code));
-+	if (ret < 0)
-+		return ret;
-+
-+	paddr = trinity_get_paddr(domain, pdata->idu_dsp.code.daddr);
-+	pdata->idu_dsp.addrs[TRIV2_IDU_CODEIDX] = paddr;
++	if (trinity_sched_init_pri(dev) < 0)
++		dev_warn(dev, "Unable to initialize SR task scheduler");
 +
 +	return 0;
 +}
 +
-+static void triv2_idu_fill_zero(struct trinity_driver *drv, phys_addr_t paddr,
-+				size_t size)
++/**
++ * trinity_sched_exit() - Exit trinity task schedulers
++ */
++void trinity_sched_exit(void)
 +{
-+	void *__iomem vaddr;
-+
-+	vaddr = ioremap(paddr, PAGE_ALIGN(size));
-+	if (vaddr == NULL) {
-+		dev_err(drv_to_dev_ptr(drv), "Failed to do ioremap() for 0x%lx",
-+			(unsigned long)paddr);
-+		return;
-+	}
-+	memset_io(vaddr, 0, size);
-+
-+	iounmap(vaddr);
++	trinity_sched_exit_pri();
 +}
+diff --git a/drivers/misc/trinity/sched/priority.c b/drivers/misc/trinity/sched/priority.c
+new file mode 100644
+index 000000000000..3d27c84ff0ba
+--- /dev/null
++++ b/drivers/misc/trinity/sched/priority.c
+@@ -0,0 +1,335 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * NPU scheduler follows priority policy
++ *
++ * Copyright (C) 2021-2022 Samsung Electronics
++ * Copyright (C) 2021 Dongju Chae <dongju.chae@samsung.com>
++ * Copyright (C) 2022 MyungJoo Ham <myungjoo.ham@samsung.com>
++ * Copyright (C) 2022 Yelin Jeong <yelini.jeong@samsung.com>
++ * Copyright (C) 2022 Jiho Chu <jiho.chu@samsung.com>
++ */
 +
-+static void triv2_idu_fill_data(struct trinity_driver *drv, phys_addr_t paddr,
-+				struct trinity_resv_mem *data)
-+{
-+	void *__iomem vaddr;
++#include <linux/fs.h>
++#include <linux/kernel.h>
++#include <linux/kthread.h>
++#include <linux/miscdevice.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
 +
-+	vaddr = ioremap(paddr, data->size);
-+	if (vaddr == NULL) {
-+		dev_err(drv_to_dev_ptr(drv), "Failed to do ioremap() for 0x%lx",
-+			(unsigned long)paddr);
-+		return;
-+	}
-+	memcpy_toio(vaddr, data->vaddr, data->orig_size);
++#include "../trinity_common.h"
++#include "sched.h"
 +
-+	iounmap(vaddr);
-+}
++#define get_dev_ptr() (g_sched_priv.dev)
 +
-+static void triv2_idu_load_code(struct trinity_driver *drv)
-+{
-+	struct triv2_pdata *pdata = TRIV2_DRV_GET_PDATA(drv);
-+
-+	/* CP is mandatory */
-+	triv2_setup_cp(drv, pdata->idu_cp.addrs[TRIV2_IDU_CODEIDX]);
-+
-+	/* DSP is optional */
-+	if (pdata->idu_dsp.addrs)
-+		triv2_setup_dsp(drv, pdata->idu_dsp.addrs[TRIV2_IDU_CODEIDX]);
- }
- 
- static int triv2_idu_load(struct trinity_driver *drv, const char *dirpath,
- 			  bool load_files)
- {
--	/* load idu data */
-+	struct triv2_pdata *pdata;
-+	struct triv2_idu *idu_cp;
-+	struct triv2_idu *idu_dsp;
++struct trinity_sched_priv {
 +	struct device *dev;
++	struct llist_head req_queue;
++	wait_queue_head_t wait_queue;
++	struct task_struct *sched_thread;
++	struct mutex lock;
++	unsigned long suspended;
++};
 +
-+	if (!drv)
++static struct trinity_sched_priv g_sched_priv;
++
++/**
++ * sched_calc_pri() - Calculate priority using timeout
++ */
++static unsigned long sched_calc_pri(struct trinity_req *req)
++{
++	ktime_t elapsed_time;
++	int64_t priority;
++
++	if (req->input.config.timeout_ms == 0)
++		return 0; /** @todo need preemption */
++
++	elapsed_time = ktime_to_ms(ktime_sub(ktime_get(), req->time_started));
++	WARN_ON(elapsed_time < 0);
++
++	/**
++	 * if the elapsed time exceeds the timeout of req,
++	 * its priority value is set to the minimum (highest).
++	 */
++	priority = req->input.config.timeout_ms - elapsed_time;
++	if (priority < 0)
++		priority = 0;
++
++	return priority;
++}
++
++/**
++ * sched_pick_req() - Pick the top-priority request from request queue
++ */
++static struct trinity_req *sched_pick_req(struct llist_head *queue)
++{
++	struct trinity_req *req, *req_prev;
++	struct trinity_req *top_req, *top_req_prev;
++	int64_t top_priority = S64_MAX;
++	unsigned long priority;
++
++	if (llist_empty(queue))
++		return NULL;
++
++	req = req_prev = NULL;
++	top_req = top_req_prev = NULL;
++
++	/**
++	 * llist is not a double linked list, and sorting is not easy
++	 * because llist provides only limited APIs.
++	 * it could be better than sorting if there are a few pending reqs.
++	 * Note that each user application can submit only one req at once.
++	 */
++	llist_for_each_entry(req, queue->first, llist) {
++		priority = sched_calc_pri(req);
++		if (top_priority > priority) {
++			top_priority = priority;
++			top_req = req;
++			top_req_prev = req_prev;
++		}
++
++		req_prev = req;
++	}
++
++	if (top_req_prev) {
++		WARN_ON(!top_req);
++		top_req_prev->llist.next = top_req->llist.next;
++	} else {
++		/** it's first entry */
++		top_req = llist_entry(llist_del_first(queue), typeof(*(req)),
++				      llist);
++	}
++
++	return top_req;
++}
++
++/**
++ * llist_last() - Get latest node from list
++ */
++static struct llist_node *llist_last(struct llist_node *first)
++{
++	struct llist_node *last = first;
++
++	while (first && first->next) {
++		last = first->next;
++		first = last;
++	}
++
++	return last;
++}
++
++/**
++ * sched_thread_func() - Scheduler thread function
++ */
++static int sched_thread_func(void *data)
++{
++	const unsigned long MAX_RETRY_COUNT = 100;
++
++	struct llist_head local_queue;
++	struct llist_node *new_first;
++
++	init_llist_head(&local_queue);
++repeat:
++	if (kthread_should_stop())
++		return 0;
++
++	/** extract requests from global queue without locking */
++	new_first = llist_del_all(&g_sched_priv.req_queue);
++	/** new and pending requests could be located together */
++	if (new_first) {
++		struct llist_node *new_last = llist_last(new_first);
++
++		llist_add_batch(new_first, new_last, &local_queue);
++	}
++
++	/** flush requests in the queue */
++	while (!llist_empty(&local_queue)) {
++		struct trinity_req *req;
++		int32_t ret;
++
++		/**
++		 * pick the top-priority request from the queue.
++		 * first and last node pointers are updated
++		 */
++		req = sched_pick_req(&local_queue);
++		if (!req)
++			goto repeat;
++
++		mutex_lock(&g_sched_priv.lock);
++		ret = trinity_sched_run_req(req, NULL);
++		mutex_unlock(&g_sched_priv.lock);
++
++		/** do not modify or access for 'req' except on an error case.
++		 *  it could be released by the interrupt.
++		 */
++
++		if (ret == -EBUSY) {
++			if (req->submit_retry >= MAX_RETRY_COUNT) {
++				/** give up to handling this req*/
++				complete_all(&req->complete);
++			} else {
++				req->submit_retry++;
++				/** push again and restart the loop */
++				llist_add(&req->llist, &local_queue);
++			}
++			goto repeat;
++		} else if (ret != 0) {
++			/** let's notify this unknown error */
++			complete_all(&req->complete);
++		}
++	}
++
++	/** ensure the local queue is empty */
++	WARN_ON(!llist_empty(&local_queue));
++
++	wait_event_interruptible(
++		g_sched_priv.wait_queue,
++		kthread_should_stop() ||
++			!llist_empty(&(g_sched_priv.req_queue)));
++	goto repeat;
++}
++
++/**
++ * sched_ready() - Check scheduler is ready
++ */
++static bool sched_ready(void)
++{
++	return (test_bit(1, &g_sched_priv.suspended) != 1);
++}
++
++/**
++ * sched_submit() - Submit request to scheduler
++ */
++static int32_t sched_submit(void *data)
++{
++	struct trinity_req *req = data;
++
++	if (!req)
 +		return -EINVAL;
 +
-+	dev = drv_to_dev_ptr(drv);
-+	if (load_files) {
-+		int ret = triv2_idu_load_files(drv, dirpath);
++	if (!sched_ready())
++		return -EAGAIN;
 +
-+		if (ret != 0) {
-+			dev_warn(dev, "Unable to load IDU files: %d", ret);
-+			goto load_code;
-+		}
++	llist_add(&req->llist, &g_sched_priv.req_queue);
++	wake_up(&g_sched_priv.wait_queue);
++
++	return 0;
++}
++
++/**
++ * sched_notify() - finishes and notify the request handled
++ */
++static void sched_notify(void *data, bool error)
++{
++	struct trinity_req *req = data;
++
++	req->scheduled = false;
++}
++
++/**
++ * sched_suspend() - Suspend scheduler
++ */
++static void sched_suspend(void)
++{
++	if (!test_and_set_bit(1, &g_sched_priv.suspended))
++		mutex_lock(&g_sched_priv.lock);
++}
++
++/**
++ * sched_resume() - Resume scheduler
++ */
++static void sched_resume(void)
++{
++	if (test_and_clear_bit(1, &g_sched_priv.suspended))
++		mutex_unlock(&g_sched_priv.lock);
++}
++
++static struct trinity_sched_desc trinity_sched_pri = {
++	.ready = sched_ready,
++	.submit = sched_submit,
++	.notify = sched_notify,
++	.suspend = sched_suspend,
++	.resume = sched_resume,
++};
++
++/**
++ * sched_open() - Open scheduler
++ */
++static int sched_open(struct inode *inodep, struct file *filp)
++{
++	return 0;
++}
++
++/**
++ * sched_open() - Release scheduler
++ */
++static int sched_release(struct inode *inodep, struct file *filp)
++{
++	return 0;
++}
++
++static const struct file_operations sched_fops = {
++	.owner = THIS_MODULE,
++	.open = sched_open,
++	.release = sched_release,
++	.llseek = no_llseek,
++};
++
++static struct miscdevice sched_device = {
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "trinity_sched_pri",
++	.fops = &sched_fops,
++};
++
++/**
++ * sched_init_priv() - Initialize scheduler
++ */
++static int sched_init_priv(void)
++{
++	g_sched_priv.dev = sched_device.this_device;
++
++	init_llist_head(&g_sched_priv.req_queue);
++	init_waitqueue_head(&g_sched_priv.wait_queue);
++
++	g_sched_priv.sched_thread =
++		kthread_run(sched_thread_func, NULL, "trinity_sched_thread");
++	if (IS_ERR(g_sched_priv.sched_thread)) {
++		dev_err(get_dev_ptr(),
++			"Failed to create a thread for scheduling reqs");
++		misc_deregister(&sched_device);
++		return PTR_ERR(g_sched_priv.sched_thread);
 +	}
 +
-+	pdata = TRIV2_DRV_GET_PDATA(drv);
-+	idu_cp = &pdata->idu_cp;
-+	idu_dsp = &pdata->idu_dsp;
++	mutex_init(&g_sched_priv.lock);
++	clear_bit(1, &g_sched_priv.suspended);
 +
-+	triv2_idu_fill_zero(drv, idu_cp->addrs[TRIV2_IDU_ZEROIDX],
-+			    TRIV2_IDU_CP_DSPM_SIZE);
-+	triv2_idu_fill_data(drv, idu_cp->addrs[TRIV2_IDU_DATAIDX],
-+			    &idu_cp->data);
++	return 0;
++}
 +
-+	if (!pdata->idu_dsp.addrs)
-+		goto load_code;
++/**
++ * trinity_sched_init_pri() - Initialize trinity priority task schedulers
++ *
++ * @dev: an instance of the device
++ */
++int trinity_sched_init_pri(struct device *dev)
++{
++	int err;
 +
-+	triv2_idu_fill_zero(drv, idu_dsp->addrs[TRIV2_IDU_ZEROIDX],
-+			    drv->dspm + TRIV2_DSP_DSPM_OFFSET);
-+	triv2_idu_fill_data(drv, idu_dsp->addrs[TRIV2_IDU_DATAIDX],
-+			    &idu_dsp->data);
-+
-+load_code:
-+	triv2_idu_load_code(drv);
- 
- 	return 0;
- }
- 
- static void triv2_idu_unload(struct trinity_driver *drv)
- {
--	/* unload idu data */
-+	struct device *dev = drv_to_dev_ptr(drv);
-+	struct triv2_pdata *pdata = TRIV2_DRV_GET_PDATA(drv);
-+
-+	triv2_idu_free(dev, &pdata->idu_cp.data);
-+	triv2_idu_free(dev, &pdata->idu_dsp.data);
-+
-+	triv2_idu_free(dev, &pdata->idu_cp.code);
-+	triv2_idu_free(dev, &pdata->idu_dsp.code);
- }
- 
- static void triv2_setup_buffers(struct trinity_driver *drv)
- {
--	/* setup buffer */
-+	struct device *dev = drv_to_dev_ptr(drv);
-+	struct iommu_domain *domain;
-+	struct trinity_resv_mem *cmd_buf;
-+	struct trinity_resv_mem *back_buf;
-+	phys_addr_t paddr;
-+
-+	domain = iommu_get_domain_for_dev(dev);
-+	cmd_buf = TRIV2_DRV_GET_CMD_BUF(drv);
-+	back_buf = TRIV2_DRV_GET_BACK_BUF(drv);
-+
-+	/* command */
-+	paddr = trinity_get_paddr(domain, cmd_buf->daddr);
-+	iowrite32(TRIV2_IDU_ADDR(paddr),
-+		  trinity_get_iomem_addr(drv->mmreg_vaddr[0],
-+					 OFFSET_NPU_CMD_BASE));
-+	/* backup */
-+	iowrite32(TRIV2_IDU_ADDR(back_buf->daddr),
-+		  trinity_get_iomem_addr(drv->mmreg_vaddr[0],
-+					 OFFSET_NPU_BACK_ADDR));
-+	iowrite32(back_buf->size, trinity_get_iomem_addr(drv->mmreg_vaddr[0],
-+							 OFFSET_NPU_BACK_SIZE));
- }
- 
- static int32_t triv2_init_pdata(struct trinity_driver *drv)
- {
- 	struct triv2_pdata *pdata;
- 	struct triv2_cmd_info *cmd_info;
-+	struct trinity_resv_mem *cmd_buf;
-+	struct trinity_resv_mem *back_buf;
- 
- 	/* alloc triv2 pdata */
- 	drv->pdata = kzalloc(sizeof(struct triv2_pdata), GFP_KERNEL);
-@@ -312,6 +659,8 @@ static int32_t triv2_init_pdata(struct trinity_driver *drv)
- 	pdata->drv = drv;
- 
- 	cmd_info = TRIV2_DRV_GET_CMD_INFO(drv);
-+	cmd_buf = TRIV2_DRV_GET_CMD_BUF(drv);
-+	back_buf = TRIV2_DRV_GET_BACK_BUF(drv);
- 
- 	spin_lock_init(&cmd_info->lock);
- 	/* init cmd bitmap */
-@@ -393,7 +742,21 @@ static int triv2_setup_idu(struct trinity_driver *drv)
- 		triv2_idu_check(drv);
- 	}
- 
--	/* setup dma info */
-+	if (pdata->idu_dsp.addrs && drv->dspm > 0) {
-+		struct iommu_domain *domain;
-+		phys_addr_t paddr;
-+		dma_addr_t daddr;
-+
-+		/* iommu mapping for dspm segment */
-+		domain = iommu_get_domain_for_dev(dev);
-+		if (!domain)
-+			return 0;
-+
-+		paddr = pdata->idu_dsp.addrs[0] + TRIV2_DSP_DSPM_OFFSET;
-+		daddr = dma_map_resource(dev, paddr, drv->dspm,
-+					 DMA_BIDIRECTIONAL, 0);
-+		pdata->idu_dsp.dspm = daddr;
-+	}
- 
- 	return 0;
- }
-@@ -412,11 +775,23 @@ static int32_t triv2_init(struct trinity_driver *drv)
-  */
- static void triv2_cleanup(struct trinity_driver *drv)
- {
-+	struct trinity_resv_mem *cmd_buf;
-+	struct trinity_resv_mem *back_buf;
-+
- 	if (!drv->pdata)
- 		return;
- 
- 	triv2_idu_unload(drv);
- 
-+	cmd_buf = TRIV2_DRV_GET_CMD_BUF(drv);
-+	back_buf = TRIV2_DRV_GET_BACK_BUF(drv);
-+
-+	if (cmd_buf->vaddr)
-+		trinity_free_from_resv_mem(cmd_buf, false);
-+
-+	if (back_buf->vaddr)
-+		trinity_free_from_resv_mem(back_buf, false);
-+
- 	list_del(&(TRIV2_DRV_GET_PDATA(drv)->list));
- 	kfree(drv->pdata);
- 	drv->pdata = NULL;
-@@ -430,6 +805,8 @@ static struct trinity_desc triv2_desc = {
- 	.reset = triv2_reset,
- 	.idu_load = triv2_idu_load,
- 	.idu_version = triv2_idu_version,
-+	.get_state = triv2_get_state,
-+	.set_state = triv2_set_state,
- 	/* req management */
- 	.alloc_req = triv2_alloc_req,
- 	.dealloc_req = triv2_dealloc_req,
-@@ -456,6 +833,18 @@ static int trinity_triv2_probe(struct platform_device *pdev)
- 	if (err < 0)
- 		return err;
- 
-+	drv = (struct trinity_driver *)platform_get_drvdata(pdev);
-+	if (drv->dspm > 0) {
-+		/* DSPM's some region is reserved for DSP kernel operations */
-+		if (drv->dspm < TRIV2_DSP_DSPM_OFFSET) {
-+			dev_err(drv_to_dev_ptr(drv),
-+				"Too small DSPM size.. wrong device tree?");
-+			err = -EINVAL;
-+			goto out_remove;
-+		}
-+		drv->dspm -= TRIV2_DSP_DSPM_OFFSET;
++	err = misc_register(&sched_device);
++	if (err) {
++		dev_err(dev,
++			"Failed to register a misc device for scheduler\n");
++		return err;
 +	}
 +
- 	err = triv2_init(drv);
- 	if (err < 0)
- 		goto out_remove;
++	trinity_sched_register(SCHED_PRI, &trinity_sched_pri);
++	return sched_init_priv();
++}
++
++/**
++ * trinity_sched_exit_pri() - Exit trinity priority task schedulers
++ */
++void trinity_sched_exit_pri(void)
++{
++	trinity_sched_unregister(SCHED_PRI, &trinity_sched_pri);
++	misc_deregister(&sched_device);
++}
+diff --git a/drivers/misc/trinity/sched/priority.h b/drivers/misc/trinity/sched/priority.h
+new file mode 100644
+index 000000000000..35ac07530496
+--- /dev/null
++++ b/drivers/misc/trinity/sched/priority.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/**
++ * NPU scheduler follows priority policy
++ *
++ * Copyright (C) 2021-2022 Samsung Electronics
++ * Copyright (C) 2021 Dongju Chae <dongju.chae@samsung.com>
++ * Copyright (C) 2022 MyungJoo Ham <myungjoo.ham@samsung.com>
++ * Copyright (C) 2022 Yelin Jeong <yelini.jeong@samsung.com>
++ * Copyright (C) 2022 Jiho Chu <jiho.chu@samsung.com>
++ */
++
++#ifndef __TRINITY_SCHED_PRI_H__
++#define __TRINITY_SCHED_PRI_H__
++
++int trinity_sched_init_pri(struct device *dev);
++void trinity_sched_exit_pri(void);
++
++#endif /* __TRINITY_SCHED_PRI_H__ */
+diff --git a/drivers/misc/trinity/sched/sched.h b/drivers/misc/trinity/sched/sched.h
+new file mode 100644
+index 000000000000..d13ef5857fc7
+--- /dev/null
++++ b/drivers/misc/trinity/sched/sched.h
+@@ -0,0 +1,52 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/**
++ * Scheduler I/F header for trinity devices
++ *
++ * Copyright (C) 2021-2022 Samsung Electronics
++ * Copyright (C) 2021 Dongju Chae <dongju.chae@samsung.com>
++ * Copyright (C) 2022 MyungJoo Ham <myungjoo.ham@samsung.com>
++ * Copyright (C) 2022 Yelin Jeong <yelini.jeong@samsung.com>
++ * Copyright (C) 2022 Jiho Chu <jiho.chu@samsung.com>
++ */
++
++#ifndef __TRINITY_SCHED_H__
++#define __TRINITY_SCHED_H__
++
++#include <linux/device.h>
++#include <linux/types.h>
++
++/**
++ * struct trinity_sched_type - scheduler type
++ */
++enum trinity_sched_type { SCHED_PRI = 0, SCHED_END };
++
++typedef void (*remove_req_cb)(void *data, void *req);
++
++/**
++ * struct trinity_sched_desc - a structure for scheduler description
++ */
++struct trinity_sched_desc {
++	bool (*ready)(void);
++	int32_t (*submit)(void *data);
++	bool (*cancel)(void *data);
++	void (*suspend)(void);
++	void (*resume)(void);
++	void (*notify)(void *data, bool error);
++
++	struct trinity_req *(*find_req)(uint32_t dev_id, int req_id);
++	void (*remove_reqs)(void *data, remove_req_cb cb);
++	void (*test_run)(void *data, int req_id);
++};
++
++struct trinity_sched_desc *trinity_sched_find(enum trinity_sched_type type);
++void trinity_sched_register(enum trinity_sched_type type,
++			    struct trinity_sched_desc *desc);
++void trinity_sched_unregister(enum trinity_sched_type type,
++			      struct trinity_sched_desc *desc);
++int32_t trinity_sched_run_req(void *req_data, void *sched_data);
++void trinity_sched_suspend(void);
++void trinity_sched_resume(void);
++int32_t trinity_sched_init(struct device *dev);
++void trinity_sched_exit(void);
++
++#endif /* __TRINITY_SCHED_H__ */
 -- 
 2.25.1
 

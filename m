@@ -2,137 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F5257FB8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8893457FB90
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbiGYIlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S234190AbiGYIl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbiGYIlP (ORCPT
+        with ESMTP id S234094AbiGYIlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:41:15 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E649714015;
-        Mon, 25 Jul 2022 01:41:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 25 Jul 2022 04:41:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18D714015
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:41:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lrtmh42zWz4x1b;
-        Mon, 25 Jul 2022 18:41:08 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1658738472;
-        bh=Xc9z+OS9WFCSWiBpxnyLpLzjfFMk6Dpyc1CkrC8qqzQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lDbwRiug68dau1djnwFjwbiFayGSvaT9R/6kuu8McwLNhF8bte7Ehe2OUrycFC5QT
-         HsapBREIp41AQd+HWWOcomUUhZV3LsJY/hCSSV6X4pPfwvbzPSFstg0BMwD6AwfTZm
-         WTe7vPvJQSR/+0d8PFRegkqDYQlQx9tNcxNg01eh30yP9wMP4uzmvzFZJml34NflfV
-         e7dm0wlLq77frRq9y5gQ2BiP9lwFU+MHRzpVSr5A8KHltHbbZNilQQ1xOO/Bf1DKjZ
-         V7Ncm+ukVOLjiOAqfsD2PCYrzEGbbpqfG4YKL8KUl1tzgJttY9R1epNDPOjjzfc9kl
-         XxSiWppq5CmWA==
-Date:   Mon, 25 Jul 2022 18:41:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with Linus' tree
-Message-ID: <20220725184107.429e33bf@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FFA161208
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 151E3C341CF;
+        Mon, 25 Jul 2022 08:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658738477;
+        bh=/HB3Uzk9dZaAy+A6UzvSrfBCRCsObkHLmT+uzcqVNZw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nxo+3JCJsKzBfvAD6tdUtTaL5q34i7obsjm9cH5pxB4Wf49ZZMZ1QUPibI8XRPlRK
+         ltMqEaVeHBqRi+05IQZTi/4Z6PZFgQistjtcAnJeULjpZxNGra9ZT2keQ4weG/YH3y
+         joEv+imbR6PTuXamXvAT+Pz4l69j6xg+vZW1EgaI=
+Date:   Mon, 25 Jul 2022 10:41:12 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ren Yu <renyu@nfschina.com>
+Cc:     keescook@chromium.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, yuzhe@nfschina.com
+Subject: Re: [PATCH 1/3] lkdtm/fortify: Check possible NULL pointer returned
+ by kmalloc()
+Message-ID: <Yt5XKEzSz3uAvjCJ@kroah.com>
+References: <20220725081000.19407-1-renyu@nfschina.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_x9SLabwJlwQ/4l7UmTbugN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725081000.19407-1-renyu@nfschina.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_x9SLabwJlwQ/4l7UmTbugN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jul 25, 2022 at 04:10:00PM +0800, Ren Yu wrote:
+> As the possible alloc failure of the kmalloc(),the return pointer
+> could be NULL,therefore it should be better to check it.
+> 
+> Signed-off-by: Ren Yu <renyu@nfschina.com>
+> ---
+>  drivers/misc/lkdtm/fortify.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Hi all,
+For some reason this patch series is not properly threaded, so our tools
+can not pick them up automatically.  Can you please resend them threaded
+properly (git send-email can do this for you)?
 
-Today's linux-next merge of the rust tree got a conflict in:
+thanks,
 
-  arch/x86/Makefile
-
-between commit:
-
-  efc72a665a61 ("lkdtm: Disable return thunks in rodata.c")
-
-from Linus' tree and commit:
-
-  0ea4b9a1bece ("Kbuild: add Rust support")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/Makefile
-index 7854685c5f25,5ac9b324751d..000000000000
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@@ -21,13 -21,8 +21,15 @@@ ifdef CONFIG_CC_IS_CLAN
-  RETPOLINE_CFLAGS	:=3D -mretpoline-external-thunk
-  RETPOLINE_VDSO_CFLAGS	:=3D -mretpoline
-  endif
- +
- +ifdef CONFIG_RETHUNK
- +RETHUNK_CFLAGS		:=3D -mfunction-return=3Dthunk-extern
- +RETPOLINE_CFLAGS	+=3D $(RETHUNK_CFLAGS)
- +endif
- +
-+ RETPOLINE_RUSTFLAGS	:=3D -Ctarget-feature=3D+retpoline-external-thunk
-+=20
- +export RETHUNK_CFLAGS
-  export RETPOLINE_CFLAGS
-  export RETPOLINE_VDSO_CFLAGS
- =20
-
---Sig_/_x9SLabwJlwQ/4l7UmTbugN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmLeVyMACgkQAVBC80lX
-0Gwetgf/Y8wHZHNv6ZGH1fGxOuRPsltj4JJ1bcKWavRdnnqbfkZikSL4+9nrEo5A
-MR2uVFFVpq1KQnKryTvRRvxnZil3Ll7Lp6YczbiGSgJSH2LBx3D9lJNTA+kM8Cdo
-UVl3vCs3Bv32UvS664WxvHVut2TW5eUH4kSAKRi98Xs59nGtY2j0eNQz42pNRzIB
-qsi39bGkzRsNkbqayKBb4XPHRpuQQk4SfsA3Vc0AlGeL3xiq3sKdgzLXxVQNRDAg
-6PdvzENcTNkQwtXso/x+sQc8gt4lxUOOGGAQTWTor+YQVIzEmzKzi7NhlcdOyfT7
-psN1c0nCT5lVfbTqUkEQYrINdMWXog==
-=hhbw
------END PGP SIGNATURE-----
-
---Sig_/_x9SLabwJlwQ/4l7UmTbugN--
+greg k-h

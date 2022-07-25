@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFE157FDE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D25F57FD9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233677AbiGYKwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S234379AbiGYKfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiGYKwe (ORCPT
+        with ESMTP id S229694AbiGYKfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:52:34 -0400
-Received: from 9.mo576.mail-out.ovh.net (9.mo576.mail-out.ovh.net [46.105.56.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D5A165A6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:52:32 -0700 (PDT)
-Received: from player687.ha.ovh.net (unknown [10.108.20.85])
-        by mo576.mail-out.ovh.net (Postfix) with ESMTP id 5AE8920BD1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:33:54 +0000 (UTC)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player687.ha.ovh.net (Postfix) with ESMTPSA id 4FFA92CE895EB;
-        Mon, 25 Jul 2022 10:33:49 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-108S002738e379f-7450-47b0-8359-6da69f772e69,
-                    4E37C95A03F31501693E8CB0BA0B4A523DB5F384) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Message-ID: <df8f4765-a804-cb50-bbb5-475925ba2036@milecki.pl>
-Date:   Mon, 25 Jul 2022 12:33:48 +0200
+        Mon, 25 Jul 2022 06:35:50 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3221055A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:35:48 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LrxJt751Fz4x1V;
+        Mon, 25 Jul 2022 20:35:42 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658745343;
+        bh=0lCaavWzTEZHOsWuEv+IyLlCXiBw3fnmcQUsCDoTEz0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=hyKiJ+CvxWjTeFH0JhJenCdhUYGHkDfBTRDkIc1X4zHDAv1/FORSiBRgQZB8PGbR5
+         Ldq6Btgt1i2zTlEr8ad8HFzqPXb/+gAdWOAweGIzyste/CmE/GPFpKKhVepo/o7PMo
+         qcv/NfGcS3nH4QJxf0T2hElvPY+KR0jUTkUReVyEY4BQ0vhi0Y8WC5TNfwdlFCSiPB
+         hkwx+cQ+V/GdxacJ/9pGduOp1MLDyWSTNZwtogKMwaoHm+NYNN7nwvNo+7f28rnRgG
+         Pw+8J41ddH3Jw1FevbnYJkIOkTIuEhkjoH2TUnRbPWqJ59NslgXeD1L/xOyPUXtePH
+         uk6gSM1mTppzA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     wangjianli <wangjianli@cdjrlc.com>, benh@kernel.crashing.org,
+        paulus@samba.org, Julia.Lawall@inria.fr, liubo03@inspur.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/kvm: fix repeated words in comments Delete the
+ redundant word 'that'.
+In-Reply-To: <alpine.DEB.2.22.394.2207250913290.2424@hadrien>
+References: <20220724062920.1551-1-wangjianli@cdjrlc.com>
+ <87bktdd6s8.fsf@mpe.ellerman.id.au>
+ <alpine.DEB.2.22.394.2207250913290.2424@hadrien>
+Date:   Mon, 25 Jul 2022 20:35:40 +1000
+Message-ID: <87zggxbhtv.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: linux-next: build warnings after merge of the broadcom tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220725095913.31e859ec@canb.auug.org.au>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-In-Reply-To: <20220725095913.31e859ec@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 8183603476842064765
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtkedgvdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpedtgeetheeutddvudekuddtkeetveehteegleehffetkeehjeetfffgveegkeefueenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheikeejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeei
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Julia Lawall <julia.lawall@inria.fr> writes:
+> On Mon, 25 Jul 2022, Michael Ellerman wrote:
+>> wangjianli <wangjianli@cdjrlc.com> writes:
+>> > diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+>> > index 514fd45c1994..73c6db20cd8a 100644
+>> > --- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
+>> > +++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
+>> > @@ -1601,7 +1601,7 @@ long kvm_vm_ioctl_resize_hpt_commit(struct kvm *kvm,
+>> >   * is valid, it is written to the HPT as if an H_ENTER with the
+>> >   * exact flag set was done.  When the invalid count is non-zero
+>> >   * in the header written to the stream, the kernel will make
+>> > - * sure that that many HPTEs are invalid, and invalidate them
+>> > + * sure that many HPTEs are invalid, and invalidate them
+>> >   * if not.
+>>
+>> The existing wording is correct:
+>>
+>>  "the kernel will make sure that ... that many HPTEs are invalid"
+>
+> Maybe it would be better as "that the number of invalid HPTEs is the same
+> as the invalid count"?
 
-On 25.07.2022 01:59, Stephen Rothwell wrote:
-> After merging the broadcom tree, today's linux-next build (arm
-> multi_v7_defconfig) produced these warnings:
-> 
-> arch/arm/boot/dts/bcm5301x.dtsi:240.21-246.5: Warning (pci_bridge): /axi@18000000/pcie@12000: missing ranges for PCI bridge (or not a bridge)
-> arch/arm/boot/dts/bcm5301x.dtsi:248.21-254.5: Warning (pci_bridge): /axi@18000000/pcie@13000: missing ranges for PCI bridge (or not a bridge)
-> arch/arm/boot/dts/bcm5301x.dtsi:256.21-262.5: Warning (pci_bridge): /axi@18000000/pcie@14000: missing ranges for PCI bridge (or not a bridge)
+That doesn't read quite right, I think because if the number of invalid
+HPTEs doesn't match the invalid count, the code will invalidate HPTEs so
+that the number matches.
 
-This is expected. My commit ef126d3f58d25 ("ARM: dts: BCM5301X: Add
-basic PCI controller properties") reduced following warnings:
+So maybe:
 
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'device_type' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#address-cells' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: '#size-cells' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
+  When the invalid count is non-zero in the header written to the stream,
+  the kernel will make sure that number of HPTEs are invalid, or
+  invalidate them if not.
 
-
-down to this one:
-
-arch/arm/boot/dts/bcm47081-buffalo-wzr-600dhp2.dtb: pcie@12000: 'ranges' is a required property
-         From schema: /lib/python3.9/site-packages/dtschema/schemas/pci/pci-bus.yaml
-
-
-and basically does the right thing (adds required properties).
-
-
-I'm fully aware "ranges" need to be added (it's mentioned in the commit)
-and it's one of next things on my BCM5301X list.
-
-So while my commits triggers that problem it also reduces warnings so
-I'd say it's acceptable.
+cheers

@@ -2,123 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2666D57FC54
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECA857FC66
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiGYJ0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S234142AbiGYJ1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiGYJ0i (ORCPT
+        with ESMTP id S233595AbiGYJ1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:26:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3704313CD3;
-        Mon, 25 Jul 2022 02:26:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EED06B80E19;
-        Mon, 25 Jul 2022 09:26:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF553C341D2;
-        Mon, 25 Jul 2022 09:26:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LZX4uVNM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1658741191;
+        Mon, 25 Jul 2022 05:27:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B624A15A33
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658741253;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=zvNrHbTIYzgB0tkOGhVVxAdAHnHebTQeizi3weVIsK0=;
-        b=LZX4uVNMACi/jB4HVvKJPq0/mnjxBgfqakoAfLysChDi3HgisD6QaHOYw75ZyyrX1xLahm
-        XBKjHTCSVOHHHqTDjtlokbIDkMCdeoLQsma7KWe93PAIV8RSzydcGwPf7ehG3FWP89FhMN
-        /bS3mQsDtxO03rpH0kQYPGkVIqqeD5I=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d5a3a065 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 25 Jul 2022 09:26:30 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 11:26:27 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        x86@kernel.org, Will Deacon <will@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v3] random: handle archrandom with multiple longs
-Message-ID: <Yt5hwxC1xgvA8Asw@zx2c4.com>
-References: <CAHmME9qTA90=GEr6h1GZh0CjS+6tpe5uuqkYoJVv79h0zd0w1w@mail.gmail.com>
- <20220719130207.147536-1-Jason@zx2c4.com>
- <Yt5gBZe9F1BE0MVF@zn.tnic>
+        bh=1QVqQ+wSo/PH7nffVgYDKhPQVUQyQA66yhZRbwATq3k=;
+        b=bTWvMeT9akuYOGtqQveq3ZnduF7aX1bhXMKCE1KxkyJ0yrIop96DBzbZFPr1rqmZiFr3dG
+        LJR56s3rX1VZqskmdPEX019MNgNHpjYgvsMQvPt5Vg8qYkyiPyW+DzoJz/05CfbvmWMLNt
+        1pq6LicKstitSuC0/LDU36GrKiI528Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-fb8431ylMo-6xzubwJD8BA-1; Mon, 25 Jul 2022 05:27:27 -0400
+X-MC-Unique: fb8431ylMo-6xzubwJD8BA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A9E43801F51;
+        Mon, 25 Jul 2022 09:27:27 +0000 (UTC)
+Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8315618EB5;
+        Mon, 25 Jul 2022 09:27:25 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 11:27:23 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Daniel Vacek <dvacek@redhat.com>,
+        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>
+Subject: Re: [PATCH bpf-next 1/4] bpf: add BPF_F_DESTRUCTIVE flag for
+ BPF_PROG_LOAD
+Message-ID: <Yt5h+4pSwbfmdKDu@samus.usersys.redhat.com>
+Mail-Followup-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Daniel Vacek <dvacek@redhat.com>, Jiri Olsa <olsajiri@gmail.com>,
+        Song Liu <song@kernel.org>
+References: <20220720114652.3020467-1-asavkov@redhat.com>
+ <20220720114652.3020467-2-asavkov@redhat.com>
+ <CAADnVQ+mt1iEsXUGBeL-dgXRoRwPxoz+G=aRcZTkhx2AA10R-A@mail.gmail.com>
+ <YtolJfvSGjSSwbc3@sparkplug.usersys.redhat.com>
+ <CAADnVQLyCc7reM1By+TYBaNGh1SBpVqyNyT+WJXOooCqX_w2GA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yt5gBZe9F1BE0MVF@zn.tnic>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAADnVQLyCc7reM1By+TYBaNGh1SBpVqyNyT+WJXOooCqX_w2GA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris,
-
-On Mon, Jul 25, 2022 at 11:19:01AM +0200, Borislav Petkov wrote:
-> On Tue, Jul 19, 2022 at 03:02:07PM +0200, Jason A. Donenfeld wrote:
-> > Since callers need to check this return value and loop anyway, each arch
-> > implementation does not bother implementing its own loop to try again to
-> > fill the maximum number of longs. Additionally, all existing callers
-> > pass in a constant max_longs parameter.
+On Thu, Jul 21, 2022 at 09:32:51PM -0700, Alexei Starovoitov wrote:
+> On Thu, Jul 21, 2022 at 9:18 PM Artem Savkov <asavkov@redhat.com> wrote:
+> >
+> > On Thu, Jul 21, 2022 at 07:02:07AM -0700, Alexei Starovoitov wrote:
+> > > On Wed, Jul 20, 2022 at 4:47 AM Artem Savkov <asavkov@redhat.com> wrote:
+> > > >
+> > > > +/* If BPF_F_DESTRUCTIVE is used in BPF_PROG_LOAD command, the loaded program
+> > > > + * will be able to perform destructive operations such as calling bpf_panic()
+> > > > + * helper.
+> > > > + */
+> > > > +#define BPF_F_DESTRUCTIVE      (1U << 6)
+> > >
+> > > I don't understand what value this flag provides.
+> > >
+> > > bpf prog won't be using kexec accidentally.
+> > > Requiring user space to also pass this flag seems pointless.
+> >
+> > bpf program likely won't. But I think it is not uncommon for people to
+> > run bpftrace scripts they fetched off the internet to run them without
+> > fully reading the code. So the idea was to provide intermediate tools
+> > like that with a common way to confirm user's intent without
+> > implementing their own guards around dangerous calls.
+> > If that is not a good enough of a reason to add the flag I can drop it.
 > 
-> Hmm, maybe this has come up already but it reads weird.
+> The intent makes sense, but bpftrace will set the flag silently.
+> Since bpftrace compiles the prog it knows what helpers are being
+> called, so it will have to pass that extra flag automatically anyway.
+> You can argue that bpftrace needs to require a mandatory cmdline flag
+> from users to run such scripts, but even if you convince the bpftrace
+> community to do that everybody else might just ignore that request.
+> Any tool (even libbpf) can scan the insns and provide flags.
 > 
-> If I have a function arch_get_random_longs(), I'd expect it to give me
-> the number of longs I requested or say, error.
+> Long ago we added the 'kern_version' field to the prog_load command.
+> The intent was to tie bpf prog with kernel version.
+> Soon enough people started querying the kernel and put that
+> version in there ignoring SEC("version") that bpf prog had.
+> It took years to clean that up.
+> BPF_F_DESTRUCTIVE flag looks similar to me.
+> Good intent, but unlikely to achieve the goal.
+
+Good point, I only thought of those who would like to use this, not the
+ones who would try to work around it.
+
+> Do you have other ideas to achieve the goal:
+> 'cannot run destructive prog by accident' ?
 > 
-> Why do the callers need to loop?
+> If we had an UI it would be a question 'are you sure? please type: yes'.
 > 
-> If I have to loop, I'd call the "get me one long" function and loop N
-> times.
+> I hate to propose the following, since it will delay your patch
+> for a long time, but maybe we should only allow signed bpf programs
+> to be destructive?
 
-Answered partially in the commit message you quoted and partially here:
-https://lore.kernel.org/lkml/YtqIbrds53EuyqPE@zx2c4.com/
+Anything I can think of is likely to be as easily defeated as the flag,
+requirement for destructive programs to be signed is not. So I like the
+idea. However I think that if bpf program signature checking is disabled
+on the system then destructive programs should be able to run with just
+CAP_SYS_BOOT. So maybe we can treat everything as this case until we
+have the ability to sign bpf programs?
 
-Note that arch_get_random_longs() is not a general purpose function. For
-that there used to be get_random_bytes_arch(), but that no longer exists
-as people shouldn't be using this stuff directly. arch_get_random_longs()
-is a special purpose function mainly intended for use by the RNG itself.
+-- 
+ Artem
 
-More directly, the reason we don't want to error is because the use case
-has fallbacks meant to handle errors. The cascade looks like this
-(quoting from the other email):
-
-    unsigned long array[whatever];
-    for (i = 0; i < ARRAY_SIZE(array);) {
-        longs = arch_get_random_seed_longs(&array[i], ARRAY_SIZE(array) - i);
-        if (longs) {
-            i += longs;
-            continue;
-        }
-        longs = arch_get_random_longs(&array[i], ARRAY_SIZE(array) - i);
-        if (longs) {
-            i += longs;
-            continue;
-        }
-        array[i++] = random_get_entropy();
-    }
-
-It tries to get the best that it can as much as it can, but isn't going
-to block or do anything too nuts for that.
-
-Anyway, from an x86 perspective, I can't imagine you object to this
-change, right? Codegen is the same.
-
-Jason

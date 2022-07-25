@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864825806CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4334F5806D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237410AbiGYVbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S237132AbiGYVc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 17:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237510AbiGYVbe (ORCPT
+        with ESMTP id S237147AbiGYVcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:31:34 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B7124974
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:29:11 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id q16so11485125pgq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 14:29:11 -0700 (PDT)
+        Mon, 25 Jul 2022 17:32:36 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BA9C60;
+        Mon, 25 Jul 2022 14:30:09 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id j22so22892022ejs.2;
+        Mon, 25 Jul 2022 14:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hjH/x15kF4vievgUYxvBLMSjt7KRqmoWwdq7tek7XBI=;
-        b=YYelzTNHADuDdMqEj6hXPvqeLqog9iZchp4/aKMc+rsdN+Yrf70fJsu4CiUKIyWg9P
-         NesFwROVwrRmyUi+fW1m7HsG7z7UOiq+mjgFZfUTtAkE9j7DJfmKZ5RT20RJJlgK9lEG
-         GEob/BbOSxdL9t00UmE2BXB7qLim3eixq3dV6QaaKgYxPzPw3pPjdCy0Pz8aJL1Rxs6P
-         2WOi+ukByWxZlnJUY4SGPwXt2z91oPxmRWLLv4M290azGbZfUdE9o0+FyeR/eSYmXDtY
-         GHbuvJBKWqBtFTFxO6AMF5mB1fbXf5H/ECrqI0XpdStwIA5dZLPg/X023iPP14iLLcqs
-         H4NA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hG6d5UoxHzM3cTAhPbPewA+gfVWFpNNpNHiESxa2M/I=;
+        b=hUYv/m11ctMGaI38/nWpbh4grCb8qsdJY9IzCA9Spxs8E0xNlb58l4+DdK7Aj7G8I1
+         eLbR1GmTT4h80wt/tm2+3xCMiIa6mbJdfRNHpByY2eMShJavGljyfmh5ZAHW+FG0DOJk
+         hovjz7kgX2g2FTuYAAkU879Q5Vmjzz8zRqG+fbTZ3oi/2t5K4LfrU4fLegN3xsCyRH82
+         JQQBw+UnmUk9lQwIPOssovOWcYEvb6Bf/leWsA+bzsimgnnmmGU55z7Fl6DUzbdVH9AL
+         ubEJEgqrjOPMZ2LHnS+tW7CmAAB+1CXgYvTvbJSvZut4WGg5prJ3f5KO/lkUlV8Owhyg
+         45PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hjH/x15kF4vievgUYxvBLMSjt7KRqmoWwdq7tek7XBI=;
-        b=7J/MCiZH0kiGFKTFTjOEdLg42at4HEbvS207Cwoi/4a6dbE+s6b5n9dB7o0k/sytnq
-         hx4DaVW9XWMSE2Mva0SgYgo1gQEXJ5bM10O0HLIKiwIHOXFewuh2uZjpxY6hHhY2CtoZ
-         2hKIzw7Rjs+aCmwhG21cilh+7oA3Ik01yKu5nUZbi0rFdsXAETS2uMBj+KEGjYDqEgmp
-         OC0Km4IHIT/DijisZvfz7S60aRAfWFfvWSqc1EIQPoNm/b7dkAKABVEm7rDBlP3zR1e7
-         MhPmcWdBochnx471yM/DPfWWqiyplM/M0hbfs+KvWtyv/StshSY64gp20NQlqDNaUfIo
-         BsJQ==
-X-Gm-Message-State: AJIora80bUSbPqII0jbsPasykGjmTva+eypIegM5EzcaUdvxfE2lCqnt
-        h3awiw2MeboekDJHpe4L6xM=
-X-Google-Smtp-Source: AGRyM1t9wJSixY9rq6ip84lBJ8+/PcZ4uPRWlDd4fHc2aEynQWeHyDwhD6AIRiUqwxRslvGMjQzxOQ==
-X-Received: by 2002:a63:4e24:0:b0:41a:4117:5fee with SMTP id c36-20020a634e24000000b0041a41175feemr12658004pgb.414.1658784551276;
-        Mon, 25 Jul 2022 14:29:11 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa79f8f000000b0052c02d8c65asm1440806pfr.123.2022.07.25.14.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 14:29:10 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 06:29:08 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Subject: Re: [PATCH -next] x86/cyrix: include header linux/isa-dma.h
-Message-ID: <Yt8LJMR8WBSZ+4pd@antec>
-References: <20220725202224.29269-1-rdunlap@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hG6d5UoxHzM3cTAhPbPewA+gfVWFpNNpNHiESxa2M/I=;
+        b=btp3z5H8I2oLfdKK/h5+bGHwugSkBl99qTOddJEy0sgctg4XM6gg3CYPDDrd5KmBum
+         /Kh8o7GcR7B8bAGDRS35hhZNk1v6sAByHnj/1CWGhQBefYAeOTXR9BlGMnMVrwioFgC6
+         l5quSK0NAoKt9LfrngXuDDnn7XtOMo6vYsXFe7n38moRNBYfzI9zgq9nqNM3B2Rm6ANa
+         iW/KOEhJBBABZQwl0+KAKPE41kkoXpCKTJsjgO3AFU6VBFyjZfRZgFh+ekEir/g7CD3Y
+         socgimapAZHDTT0EtwEpaOFTo2rj5NqIk2gg0egyWJNP8hYGEt8F6HREkL6azuHfwy/5
+         zsMw==
+X-Gm-Message-State: AJIora9DxFvslLqJhzkzRPLFQVCkRWCcOrCXHXzOMBe431xhRdGV5OB6
+        l7Jw9nVTgcwp7t2oi+fteII4ielDG6M+veF7v40=
+X-Google-Smtp-Source: AGRyM1s0wvsIZHHycPFxyzHmwkc7yXG2GZIJ1xIpDPc8GWj20AW4SBVxC6aj9eUN+kvENQaZZ6DkeVCfCdcAZwg5QH4=
+X-Received: by 2002:a17:907:6297:b0:72f:9aad:fcb with SMTP id
+ nd23-20020a170907629700b0072f9aad0fcbmr11312748ejc.161.1658784607947; Mon, 25
+ Jul 2022 14:30:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220725202224.29269-1-rdunlap@infradead.org>
+References: <20220725184439.7618-1-ddrokosov@sberdevices.ru> <20220725184439.7618-2-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220725184439.7618-2-ddrokosov@sberdevices.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 23:29:31 +0200
+Message-ID: <CAHp75VcpY1vwHCOaJNb-qw+3gsMyv9mJe+QaWrjiTKOdj1xfYg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] units: complement the set of Hz units
+To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,44 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 01:22:24PM -0700, Randy Dunlap wrote:
-> x86/kernel/cpu/cyrix.c now needs to include <linux/isa-dma.h>
-> since the 'isa_dma_bridge_buggy' variable was moved to it.
-> 
-> Fixes this build error:
-> 
-> ../arch/x86/kernel/cpu/cyrix.c: In function ‘init_cyrix’:
-> ../arch/x86/kernel/cpu/cyrix.c:277:17: error: ‘isa_dma_bridge_buggy’ undeclared (first use in this function)
->   277 |                 isa_dma_bridge_buggy = 2;
-> 
-> Fixes: abb4970ac335 ("PCI: Move isa_dma_bridge_buggy out of asm/dma.h")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
+On Mon, Jul 25, 2022 at 8:44 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+>
+> Currently, Hz units do not have milli, micro and nano Hz coefficients.
+> Some drivers (IIO especially) use their analogues to calculate
+> appropriate Hz values. This patch includes them to units.h definitions,
+> so they can be used from different kernel places.
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+...
 
-> ---
->  arch/x86/kernel/cpu/cyrix.c |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> --- a/arch/x86/kernel/cpu/cyrix.c
-> +++ b/arch/x86/kernel/cpu/cyrix.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <linux/bitops.h>
->  #include <linux/delay.h>
-> +#include <linux/isa-dma.h>
->  #include <linux/pci.h>
->  #include <asm/dma.h>
->  #include <linux/io.h>
+> +#define NHZ_PER_HZ             1000000000UL
+> +#define UHZ_PER_HZ             1000000UL
+> +#define MHZ_PER_HZ             1000UL
 
-Sorry, I missed this, I did test several x86 configs, but I guess the cyrix.c
-compilation was not picked up in my tests.
+mHZ perhaps?
 
-FWIW, I think this should go through Bjorn's pci tree.
+>  #define HZ_PER_KHZ             1000UL
+>  #define KHZ_PER_MHZ            1000UL
+>  #define HZ_PER_MHZ             1000000UL
 
--Stafford
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,123 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685C758070E
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61EBB58070F
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbiGYWGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S236651AbiGYWGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiGYWGW (ORCPT
+        with ESMTP id S236113AbiGYWGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:06:22 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489F0222AA;
-        Mon, 25 Jul 2022 15:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YyhxX2mWLvi9NimhQGcKzGIHUcpD9uFByKnTgfQXT2w=; b=PGkpTuxYoVATcBmmo5QpTR9OdU
-        CwxiCUUyg+Y43WZFKPZI8tVhTGlbReOvxwRy9vN5xlFY3Picc9q02QVGon0mk2qr+gc0H6DI1xkdA
-        Ocae0c8zKyVjxHiL0K7bl4oQZhe8iJrhJtaQD9dZsgzJVrcCJZAzsov/XHxJWKbmbo5ftSD95pWKz
-        UFCnlx6Icb4+P+rIPF6DDujCPBhMW2lOCenPqvqjXpVKjdwjx9mBL17sU/cCfl+FmUrx7l2Dspgvf
-        whmOYidPV6T/it/Bz3pnx0XUGVjPveeRJzlInsHK3oB41Rw1lJRpzg9VZc6aVCj990v9DlchEvxp+
-        pb2gaO3A==;
-Received: from [177.51.67.168] (helo=[192.168.43.24])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oG6D1-006U4U-LN; Tue, 26 Jul 2022 00:05:52 +0200
-Message-ID: <da0ed272-1d47-dd1f-9ad3-46b5adba2dec@igalia.com>
-Date:   Mon, 25 Jul 2022 19:05:18 -0300
+        Mon, 25 Jul 2022 18:06:37 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275A1BC9F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658786797; x=1690322797;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mtQex+tF3nqMKIaJPEdmeV6cujGPvYgLpkJZmv0xAV4=;
+  b=GOHiAlfEwhDyJumtJbdMVvr2FRXnNOiH/8jK3K9WJLCmvmitAMXjtOyz
+   nUFvATI1FL9MicBntAVnyiDz6sD5nWbKyC+TaBSzBqIhlTVRbZlmNLHlX
+   qxRSqS0mBStgu7Mgoy/875Jq970VgcqnNG9W2lS4y3XFgwXZyGbep0o8O
+   6gIxH6QUI/H5GIfIjk8caQOZl6Aam5NzEbZgkruQxNEYNHI4pmysefYOJ
+   1Hz0sI9gEbtBhSHMctp9Du7nm3ecClCscypIWBh0PhqiOOrKv8aQyBwp0
+   HIicK+MbXfBCOGcMO7v2bjNtGCJVIs34uX10RsPdRSaTZ9OTJymh3Tdfl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="274671141"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="274671141"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 15:06:35 -0700
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="575231955"
+Received: from mgarner-mobl.amr.corp.intel.com (HELO [10.209.39.177]) ([10.209.39.177])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 15:06:35 -0700
+Message-ID: <56e1c722-1378-c59c-73f9-de79b7afce60@linux.intel.com>
+Date:   Mon, 25 Jul 2022 15:06:34 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 11/13] video/hyperv_fb: Avoid taking busy spinlock on
- panic path
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
 Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+To:     "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>
-References: <20220719195325.402745-1-gpiccoli@igalia.com>
- <20220719195325.402745-12-gpiccoli@igalia.com>
- <PH0PR21MB30252061CD7F2FD15BD77F7ED7959@PH0PR21MB3025.namprd21.prod.outlook.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <PH0PR21MB30252061CD7F2FD15BD77F7ED7959@PH0PR21MB3025.namprd21.prod.outlook.com>
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
+        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
+        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
+        "Cox, Philip" <philip.cox@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <403cfccb-7fff-ab0b-8ebd-e5b04e631571@intel.com>
+ <20220722190524.GA3299911@ls.amr.corp.intel.com>
+ <18578c5a-7a35-ab20-467c-80141b0410a8@intel.com>
+ <b8ea1778-02c1-b688-896d-dbb231eddf23@linux.intel.com>
+ <4B48A192-8305-4E94-AA0C-10FCE23F424D@intel.com>
+ <7c09d15b-40bc-c6a0-3282-a94e9d9c36be@intel.com>
+ <1A54F61B-DAD8-45E1-BBB4-42338D9B0917@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <1A54F61B-DAD8-45E1-BBB4-42338D9B0917@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/07/2022 15:09, Michael Kelley (LINUX) wrote:
-> [...]
->> +bool hv_ringbuffer_spinlock_busy(struct vmbus_channel *channel)
->> +{
->> +	struct hv_ring_buffer_info *rinfo = &channel->outbound;
->> +
->> +	if (spin_is_locked(&rinfo->ring_lock))
->> +		return true;
->> +
->> +	return false;
+Hi Jun,
+
+On 7/25/22 2:56 PM, Nakajima, Jun wrote:
 > 
-> Could simplify the code as just:
+>> On Jul 25, 2022, at 1:23 PM, Hansen, Dave <dave.hansen@intel.com> wrote:
+>>
+>> On 7/25/22 13:19, Nakajima, Jun wrote:
+>>> 3. Need to be available in minimal/early runtime environments,
+>>> including pre-boot, e.g. guest BIOS, no user-space yet.
+>>
+>> Jun, are we talking about the same thing here?  This patch is for a
+>> guest userspace -> guest kernel ABI.  This facility is *FOR* userspace.
+>> It can't possibly be used before userspace is running.
+>>
+>> I'm horribly confused.
 > 
-> 	return spin_is_locked(&rinfo->ring_lock);
+> I responded to one of Sathya’s questions, especially why we have the GetQuote in GHCI. 
+> And the hypervisor needs to implement that anyway because it doesn’t matter (or doesn’t know) whether the TD guest is running in BIOS, the kernel, or userspace. Of course, the facility in this patch is for userspace, but we don’t want to suggest to implement two different GetQuote code paths for guests, depending on the guest state, e.g. in the OS (kernel or userspace) or guest BIOS.
+
+Ok. Since both host and QE need to support GetQuote hypercall to
+handle attestation request from the BIOS, QE/host may want to use
+the same communication model for requests from the guest user space
+as well.
+
+> 
+> --- 
+> Jun
+> 
+> 
+> 
 > 
 
-Sure, makes sense! Thanks for the suggestion, I'll do that for V3.
-Cheers,
-
-
-Guilherme
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

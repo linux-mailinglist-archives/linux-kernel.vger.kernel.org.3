@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1623157FE98
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A274A57FE99
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbiGYLp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 07:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
+        id S234833AbiGYLqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbiGYLpY (ORCPT
+        with ESMTP id S234612AbiGYLqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 07:45:24 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9606AA1B0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:45:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id f3-20020a17090ac28300b001f22d62bfbcso8159752pjt.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1waDT/Uu9da6MNp40DJuFsfnaQFRitkplpYUuVaMUX8=;
-        b=m7RBCc7XVK3O2lCDZq14AWHEcgTmWs2nRhStjd2dmQaYdopcG/xxg70UM8WLKMRnfP
-         p7F5alMmzqqFL6uIEducyKx+kVLTyGApEkWWgW801f1xUgh+H6THXoSQ6wwe3vA9++h4
-         OtLpftQ4vGO6No9VV3/PqTWkDZ4mg+XAIvkhtMsnniv8VdZLJC0G0HYxnUPHcD3kpbjo
-         hBT/dKmU48E9TuvcEcvp48UQTJbDkKQnWYLFjDKROB0s+RLYWkaLd9fziaP6iHAxBJsX
-         jri3K/7vkYI+Ujvm6+/Vgc+gYbD04uwnSJuKD3v10MEsBxiwRwQ6B/7OD/DfxHsjawqY
-         dLqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1waDT/Uu9da6MNp40DJuFsfnaQFRitkplpYUuVaMUX8=;
-        b=O38hQcA8Kdjr96dRw+v5utBi2N6frPFn3UzGJJ/vKMhNr4Lp7APmSPYr+i514BfRa5
-         94IRMcB6TifERJqJEG7qu5u9nkJY+BGYtE1T6z9rr3uhXlAZmRQA1Ngv8X97WseTktqh
-         bd/w4euuoe+1G5HTHDc+EqMxB+3vDZDn3ZDmmhMJk6+1by5Y6eaFa7ofXyf206807k5w
-         TCEOxKvE6xF6Bp66zV/uydGsHjgTdcq+h3QQKUK1GUQSH8JI0Cz62Tz068ZUh2ThfmJS
-         mGN0i0FJg14jj8alBHUQlh+HrX4kyN52EGXNU1RdOoMWaM3GCHF64YvMZYE9QNjYtWk0
-         PXeA==
-X-Gm-Message-State: AJIora/I3pxzyX5D0eZxOtECiworDosdO0qf6XWBzf3eCAKiIqXYfVEW
-        GfBUKn63OQdX0pX8rmsQhrG6uUmDKrTwGA==
-X-Google-Smtp-Source: AGRyM1sRNKC474Vo7/sTrqvEIRriUyLHySpKLEsmxxNUyVQQnn1FqOModHgArQqt5HNLZ95JsS0R9w==
-X-Received: by 2002:a17:902:a418:b0:16c:9ee2:8a02 with SMTP id p24-20020a170902a41800b0016c9ee28a02mr11738377plq.46.1658749522575;
-        Mon, 25 Jul 2022 04:45:22 -0700 (PDT)
-Received: from localhost.localdomain ([175.195.128.78])
-        by smtp.gmail.com with ESMTPSA id 7-20020a620507000000b005289f594326sm9334989pff.69.2022.07.25.04.45.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 04:45:21 -0700 (PDT)
-From:   Sidong Yang <realwakka@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc:     Sidong Yang <realwakka@gmail.com>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: remove duplicated comments
-Date:   Mon, 25 Jul 2022 12:45:13 +0100
-Message-Id: <20220725114513.85089-1-realwakka@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 25 Jul 2022 07:46:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A44FDF09
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:46:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACDC161001
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A92C341C6;
+        Mon, 25 Jul 2022 11:45:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658749560;
+        bh=JfLnKxHUib152IHy8B6iUkQ7nDyB6B5a3CTZnpDa5u8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hqFlEm72YMPG5y5UNB67neCFZncLooHcvkS5GfpSQqSDl9ABt7Qc2o36KImQisvQO
+         TBvBKJO5TRizcX1p2mGEkYNa/EQbp2nl2ULUrg+eUNAxA9LhtGqKz5pufHKUL3Mbcn
+         LVI5Juo1hWs5t9GM2q//6AoSwhbda/PC+xDvo+QtjguaBW/4AjtdtLblI40kS8/l4s
+         nnDH+5e7WCbgKSWbIjNQP+CKV7zHvDMEyyU9g3xZlnBCaVC/YKES28yrv9Dt0BjFBK
+         frq8Y2veENWwo9zvMTTzmKyMY1Z7oAS+S0AznKy3/wryvO3gcbCyy78lWbLMWQUic9
+         WzBCiTXRZ8I5A==
+Date:   Mon, 25 Jul 2022 12:45:56 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] regmap: Support accelerated noinc operations
+Message-ID: <Yt6CdDg5I70fMdOK@sirena.org.uk>
+References: <20220725085822.2360234-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="24TZ4iZUIxm0ktD3"
+Content-Disposition: inline
+In-Reply-To: <20220725085822.2360234-1-linus.walleij@linaro.org>
+X-Cookie: Replace with same type.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicated words in comments for readability. The words are
-duplicated from a sentence below.
 
-Signed-off-by: Sidong Yang <realwakka@gmail.com>
----
- drivers/staging/pi433/pi433_if.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--24TZ4iZUIxm0ktD3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index 941aaa7eab2e..df02335fdbab 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -1406,7 +1406,7 @@ static int __init pi433_init(void)
- 
- 	/*
- 	 * Claim device numbers.  Then register a class
--	 * that will key udev/mdev to add/remove /dev nodes.  Last, register
-+	 * that will key udev/mdev to add/remove /dev nodes.
- 	 * Last, register the driver which manages those device numbers.
- 	 */
- 	status = alloc_chrdev_region(&pi433_dev, 0, N_PI433_MINORS, "pi433");
--- 
-2.30.2
+On Mon, Jul 25, 2022 at 10:58:21AM +0200, Linus Walleij wrote:
 
+> +	/* Use the accelerated operation if we can */
+> +	if (map->bus->reg_noinc_write) {
+> +		size_t val_bytes = map->format.val_bytes;
+
+A lot of duplicated buffer formatting in here...  that should probably
+be factored out rather than copied, otherwise the noinc stuff is going
+to drift out of sync.
+
+--24TZ4iZUIxm0ktD3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLegnMACgkQJNaLcl1U
+h9BAHAf9HYNwRcJeSXLyDfSiqP5EIk6dCc2ByZD7KWj3R3D5mmVvfGsQnTj4aBYG
+iZGmjRnwnAgTJh2UnjN+uK5F33k+epUY1In9wXErXg8amJXxIEGFKbCRcNldHA5d
+LSAS+pX1Yekk+dqwrrBd6OH0JaKMOleNfLluJJqZPj/vHdOvxQO/gN5/+/OJ+Y5L
+1Hr9DyZrgFHfnaI1yjvLK4zGcjpD6LkTbYRe2qFO/xHwl0BBjCecXKXe8M2vr6IV
+uLtwdCuP+XZzC1/n9GPQ+PfYvTij11SURiW/hOSLgwF31BzqdfGMvbpGszXy378A
+qTnNMxCgIe52Ub+89xtJfJLqMdyIOA==
+=rE2z
+-----END PGP SIGNATURE-----
+
+--24TZ4iZUIxm0ktD3--

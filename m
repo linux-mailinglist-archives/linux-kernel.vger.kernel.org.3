@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED8F57F969
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:29:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF1A57F96B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiGYG3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 02:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S230436AbiGYG31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 02:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiGYG3P (ORCPT
+        with ESMTP id S230365AbiGYG3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 02:29:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD39DE0DD
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:29:14 -0700 (PDT)
+        Mon, 25 Jul 2022 02:29:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F08FE0EA
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:29:23 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 82D8E1FDF9;
-        Mon, 25 Jul 2022 06:29:13 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CA5A535214;
+        Mon, 25 Jul 2022 06:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658730553; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1658730561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=flqme/XnVeCGBxdVYk5l5GiHC+qK9xMhG1HvyPoDmh8=;
-        b=hjytWK+G4oLa94C8nQ5j0N+FHKqn0RAe3aqIMDSCPHNne60WWYnwJ4eIG1/4ekM8otMgFb
-        wQGeoAGN+45EAsIjLQqquSRoWZ9XZYgDuvv6anI60k1xO1TRVQwI0W3vG7N6YrSBB/bAcK
-        OEHRdc3ueHh0wrWzQtd5bqCerOA/AFw=
+        bh=qfhHL8qNjWo+VGWVOvG8VjHBh7oP/UIx9kWwq9ivNQc=;
+        b=h0Jt7KAnwHReV1TJFTwSynFGj7TcZEq4kKAJ+cx4E0x4wId8fkPA/ZIAb1ypNWBXLwkxYg
+        x6ZN0p9EcYP5JX/xGxrHbaZRXBmphqc5x2KObSnp2IIh5JI83MOsrETozlcQjjDqxsjXwj
+        YdhIG+1PdtAfIsw4LJVPzOhMoIJG77Y=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658730553;
+        s=susede2_ed25519; t=1658730561;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=flqme/XnVeCGBxdVYk5l5GiHC+qK9xMhG1HvyPoDmh8=;
-        b=hZ0o9SSrHOpBWIXIfjPR1ONekaVFfhHdb6eX91lZfnxQnls4Dnchwgd57hvjEtc5MwEB14
-        3rAfOONu8qbRZsBw==
+        bh=qfhHL8qNjWo+VGWVOvG8VjHBh7oP/UIx9kWwq9ivNQc=;
+        b=JuvCsorX2WFzApL6pQDAF2BwdMjK8Ai1hqC9e9rqRL5Da9Nyu5nzgAb+ABoQJGbiztS0dy
+        ceXzw0FN6X8CiBCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57EC313AD7;
-        Mon, 25 Jul 2022 06:29:13 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A042413AD7;
+        Mon, 25 Jul 2022 06:29:21 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id oYiNFDk43mJtPgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 25 Jul 2022 06:29:13 +0000
-Date:   Mon, 25 Jul 2022 08:29:12 +0200
-Message-ID: <875yjlemdj.wl-tiwai@suse.de>
+        id 1QVbJkE43mKBPgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 25 Jul 2022 06:29:21 +0000
+Date:   Mon, 25 Jul 2022 08:29:21 +0200
+Message-ID: <874jz5emda.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb/6fire: fix repeated words in comments
-In-Reply-To: <20220724071644.10630-1-wangjianli@cdjrlc.com>
-References: <20220724071644.10630-1-wangjianli@cdjrlc.com>
+Cc:     perex@perex.cz, tiwai@suse.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] usb/hiface: fix repeated words in comments
+In-Reply-To: <20220724071829.11117-1-wangjianli@cdjrlc.com>
+References: <20220724071829.11117-1-wangjianli@cdjrlc.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,7 +68,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Jul 2022 09:16:44 +0200,
+On Sun, 24 Jul 2022 09:18:29 +0200,
 wangjianli wrote:
 > 
 >  Delete the redundant word 'in'.

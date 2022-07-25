@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3A258056C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C51A580570
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbiGYUVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S236960AbiGYUWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiGYUVj (ORCPT
+        with ESMTP id S229589AbiGYUWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:21:39 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329B721806;
-        Mon, 25 Jul 2022 13:21:38 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ss3so22496338ejc.11;
-        Mon, 25 Jul 2022 13:21:38 -0700 (PDT)
+        Mon, 25 Jul 2022 16:22:10 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6996F2180F
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:22:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bf9so19664503lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:22:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SKPPpp7Tp2WHUddh1HgYEbccv4hJ/81Ko8q9iKh7koA=;
-        b=GhwS8nqfltd/oDHfdoOH9F1CJGCSVLIEdKDa3fGGjB4Ruhodb/VcUtAloXCdDNrQE1
-         NaPvLjb2J7OyqF7RfnELsfrvnSHHNWBZbw4Q/ZU0MbxYGUo2rhg5kDoOB0HfLYwCViLY
-         cD4tcsChKk1sA2gPJ65j0h2Q9ty+kLHfelJZYDMBVyWIcpVuwX9HoBA0Gexk1miLKOHm
-         Vpm97FXMaMfQUuZBxXfrr6kREU/jsIOPMiHOyed/4dfWesbcKzbMCAkYRhJj9hOh1Apu
-         Cxq/sqHpF++ooE5gfcQ4llhES276hBbwRe4a7MLEDxMvhycU3NQxsR9zVCvB+aRXdCk3
-         I9dA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6olDaq/uvfvlpPsjXbwiD0KGbFCbw/GgwCU0Otoyu9o=;
+        b=cf14DlLTiGj5aFxICV0ITuDWZLKAzORtJfL76XQFibFta09hkTS/VA7G2ru2FHZ7XY
+         0kqakW/bTZpWyTvpU4Go2JkGrHVA7hfUprfxJv4XhVaiTYBXYZgDwReNqsm0Q4mJrdG2
+         4sxqgFTaKJaIPaI7XkYl7gGEfhxdIEjE8sjVuPeQAAVJh0BHmnAKGwEpl3SWhhmDFyF+
+         wmNkoxVFGhOOJ94Ui+OUxGPg75+rB9sd29OxeteYKad6L6a7OjcbPYoi6+IjDXuZbag5
+         ozPvVXrMsRp1I4aEQz9ipWK7+KMvhX11RaKBnEGChwTVdHSnttZy8gycLkUk4/ESuXzd
+         avGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SKPPpp7Tp2WHUddh1HgYEbccv4hJ/81Ko8q9iKh7koA=;
-        b=PB37LVpRwfReMpEPPcvvy5EFthuhcUMPVH1RjJni0yWWxncYLFZWUxjBnL+uFefo6m
-         9SP9MNPwXmaYukD7+4QMMZtYNe59BCGXyZQWkSYtQpljIL98h4p4I/nYJRVyVO7zG30c
-         bj1u2+994oiQxuhWamtaz7pPAmxNYfFiq4+ze/xTlEkjsUx10W4wXUWBCniUrEw/TMLZ
-         eIFtSSrzGWiqZ03uRne7iGE7ZBQ51nDUNl7/OyRFl7ZoejPscYRiiEcArJmqjW+UHgPo
-         XuEx1r4w++FlGuszEgwhdbKi2l0JiBxQ+BtBaOWDqKJ6UfWxs9FbuOZaWH4fNpolpa5S
-         IhHg==
-X-Gm-Message-State: AJIora+9iQcMz0P1oTi6DESxHOOlkwMm0Hug9PuwcaPDoGtmGW9E+9TH
-        R1ub7aNM5+YLIaDaWgl5dSldu0n/saPXEVbOhJk=
-X-Google-Smtp-Source: AGRyM1t0oBn/F44/T031na79bCXNwpyh8cyBQhS5/OyrxJ8LNapumWpF2v8YlEwlYl945vlAMoWY9Yhx0HNZo4V9kaw=
-X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id
- nb13-20020a1709071c8d00b006f20eb21cd6mr11196050ejc.568.1658780496634; Mon, 25
- Jul 2022 13:21:36 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6olDaq/uvfvlpPsjXbwiD0KGbFCbw/GgwCU0Otoyu9o=;
+        b=a78BngoVVTMx+0jBwkL0/W2s5W80kOn/nS4hJzvHhkC6sniocTgd8glV+jZUNk8DkW
+         Lp6V9gCzcKpOy4XNVlKIapJJfgBZeFphoeAD67C697RdSsfg0bI0KKB3HnoT3vuLpEDO
+         QrpUpEi2uKHpj+ZCQlG/aya74Qf6Z45fYFhyH6aRtvHiCWY+pW2WwzsFhumDoLtHnE0p
+         1tzzosUkcdIp5i2QQRxj3GRYGWfuIlC2v47eB8YjAqiQn61QfQe2t/tUFRHrBdoK2U33
+         EqzMorw2QrMI3bbRbj9Jz0GLTNo/Ir8S9f+AkTXh8zrUc7yrW5XHTszOSbkFObFxfSuk
+         kWjw==
+X-Gm-Message-State: AJIora8oKfHB4pt1B/wFLLz0JZ7bG4TvmfwW815MpZUHpjEqXHUNK1Bt
+        mQcGqJtdnpdoLRKH/57grd6K9FhbrM+mOEJM
+X-Google-Smtp-Source: AGRyM1tiIV7vdS2ost7/f/zFELVJA8SPxee2aUrt7GUtNNgBp0VRvmv5veQZvMzPDKzi96SxqWMlnQ==
+X-Received: by 2002:ac2:465d:0:b0:48a:8122:45f3 with SMTP id s29-20020ac2465d000000b0048a812245f3mr4217480lfo.573.1658780527708;
+        Mon, 25 Jul 2022 13:22:07 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id u4-20020a2e9b04000000b0025de8d95352sm2714473lji.1.2022.07.25.13.22.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 13:22:07 -0700 (PDT)
+Message-ID: <3faffe39-061f-0e94-a59f-ab25a25820b5@linaro.org>
+Date:   Mon, 25 Jul 2022 22:22:05 +0200
 MIME-Version: 1.0
-References: <20220721073909.23318-1-srinivas.neeli@xilinx.com>
- <CAMRc=Mefhk4i8_1j2=JO63SwfHEb3TrRMj45+CC1i1DUr8VULw@mail.gmail.com> <CAHp75Vdr3yM_b_8bDgAhNLrHUuyoq2nkVcj84wdvTzvLLetkNg@mail.gmail.com>
-In-Reply-To: <CAHp75Vdr3yM_b_8bDgAhNLrHUuyoq2nkVcj84wdvTzvLLetkNg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Jul 2022 22:21:00 +0200
-Message-ID: <CAHp75VdWS9DKd=xs8Kitoo9GZCsiNf7gt5HjfZn-9zNXBdvMEg@mail.gmail.com>
-Subject: Re: [PATCH] gpio: gpio-xilinx: Fix integer overflow
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        neelisrinivas18@gmail.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        srinivas.neeli@amd.com, Srinivas Goud <sgoud@xilinx.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: smd: reference SMD edge
+ schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20220723082358.39544-1-krzysztof.kozlowski@linaro.org>
+ <20220725191742.GA2535526-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220725191742.GA2535526-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 10:04 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Fri, Jul 22, 2022 at 9:19 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > On Thu, Jul 21, 2022 at 9:39 AM Srinivas Neeli
-> > <srinivas.neeli@xilinx.com> wrote:
-> > >
-> > > Current implementation is not able to configure more than 32 pins
-> > > due to incorrect data type. So type casting with unsigned long
-> > > to avoid it.
->
-> > > Fixes: 02b3f84d9080 ("xilinx: Switch to use bitmap APIs")
->
-> It doesn't fix anything,  I already reject one such "fix" during
-> development of this patch. Thanks!
-
-Sorry, not my day, it was something else that time... See below.
-
-> ...
->
-> > > @@ -99,7 +99,7 @@ c
->
-> > Applied, thanks!
->
-> False positive.
-
-Reading again... You mean that
-
-  unsigned long x = y << 32;
-
-wouldn't work?
+On 25/07/2022 21:17, Rob Herring wrote:
+> On Sat, 23 Jul 2022 10:23:57 +0200, Krzysztof Kozlowski wrote:
+>> The child node of smd is an SMD edge representing remote subsystem.
+>> Bring back missing reference from previously sent patch (disappeared
+>> when applying).
+>>
+>> Link: https://lore.kernel.org/r/20220517070113.18023-9-krzysztof.kozlowski@linaro.org
+>> Fixes: 385fad1303af ("dt-bindings: remoteproc: qcom,smd-edge: define re-usable schema for smd-edge")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
 
 
+Bjorn,
 
--- 
-With Best Regards,
-Andy Shevchenko
+Can you take it for v5.20 via remote-proc?
+
+Best regards,
+Krzysztof

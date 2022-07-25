@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAAE57F856
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BEB57F85A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbiGYCop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 22:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S231860AbiGYCp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 22:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbiGYCoh (ORCPT
+        with ESMTP id S230036AbiGYCpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 22:44:37 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D58ABF5B;
-        Sun, 24 Jul 2022 19:44:35 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id g12so9236055pfb.3;
-        Sun, 24 Jul 2022 19:44:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=OJDKOROYoXVDH++yfrosV7/5WWokwSxr5idK1N46DJk=;
-        b=V8/pIYxZALstImC7gmvlecpqn4G1a1EVGfZocH8m0s/Lu1HoElas4l4V5K0QsuOUlp
-         s3sbCLfHXyT7JJlA4/nmMzVNe8y7eS2scBvB85kzWwJli2G6yuHgS3jw3cSy06cExjyd
-         b7/U8YgaJ1D3Kjjx4M23/IEUdWY99mLcuz/NEgKwCcLz6svJWRavJr2mrfZlRCGmf4WC
-         uL7RBlwJIpEiY37qKJVmQCGHx9bH8gIr06uzzUFRj4eTufKi+7XFpcghsUCidDe6XCo5
-         wd4IVpI7iKjzdLE+4KjjtSEsZh6oOss/GRMiJz2BhdTt32PCpNh7erA0/pNP0HkPqaC7
-         yowg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=OJDKOROYoXVDH++yfrosV7/5WWokwSxr5idK1N46DJk=;
-        b=UM4LU7QIHaL7JToFOJjZXLjux9X0psX/DVTln22YksbIsml7ANAPPvt765sa1YkFWC
-         1uaAPMGOYQq5IR7tWpGo/5Wxs9B/dR4BYFbsXy8QE3IWXBdXTQi53cqYIXIENQBUH9h/
-         MuLIh+xBJlIyRFEUR+3TzH81ojUW5hMON60EiVTFUUZwWDxoUJ0bps2L0DBe2HVs/i3o
-         97UkTPTZdETCMSIlfw/k8WpDTBALxjyPJbiDDtKRIAH2ZccA431C8AevivsWDyoEwT2h
-         5ZIFqB0ktkeuSsk0cMc8Sp4Oq8iYKypwuD4/YdYu9D5tMUdZ8ePlNU96vEUZbH9FYMLa
-         exjw==
-X-Gm-Message-State: AJIora+lOi/ET32Aeq72Dgr/WauMwnRWzILdo7+g/eOHdYwe9l12osBE
-        OH7D/6RWFm66W5p+ft8Ywuk=
-X-Google-Smtp-Source: AGRyM1sD3gsJBJpYhA79iMNgjkkV2YhwAMccugHvOKL6zG4wvHg8IroydzlzodE6ZtPPM+b1l8IBwg==
-X-Received: by 2002:a05:6a00:148d:b0:52b:946:67d2 with SMTP id v13-20020a056a00148d00b0052b094667d2mr10504546pfu.31.1658717074658;
-        Sun, 24 Jul 2022 19:44:34 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id u13-20020a170903124d00b0016d1b197914sm7983304plh.90.2022.07.24.19.44.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 24 Jul 2022 19:44:34 -0700 (PDT)
-From:   Vincent Shih <vincent.sunplus@gmail.com>
-To:     kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>
-Subject: [PATCH v5 2/2] dt-bindings: phy: Add bindings doc for Sunplus USB2 PHY driver
-Date:   Mon, 25 Jul 2022 10:44:12 +0800
-Message-Id: <1658717052-26142-3-git-send-email-vincent.sunplus@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1658717052-26142-1-git-send-email-vincent.sunplus@gmail.com>
-References: <1658717052-26142-1-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 24 Jul 2022 22:45:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DE6DFBC;
+        Sun, 24 Jul 2022 19:45:23 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Lrkpt59H0zjXN9;
+        Mon, 25 Jul 2022 10:42:30 +0800 (CST)
+Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Jul 2022 10:45:21 +0800
+Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
+ (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Jul
+ 2022 10:45:20 +0800
+Message-ID: <52cc2ddf-1a16-32c0-5c44-0f4c389fd626@huawei.com>
+Date:   Mon, 25 Jul 2022 10:45:20 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] PCI: imx6: Fix build error unused-function
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220724101353.127875-1-renzhijie2@huawei.com>
+ <CAK8P3a317gaAjwLhaxbR8bwZW60htG4pV+_DoS8VFkR39yCLMQ@mail.gmail.com>
+From:   Ren Zhijie <renzhijie2@huawei.com>
+In-Reply-To: <CAK8P3a317gaAjwLhaxbR8bwZW60htG4pV+_DoS8VFkR39yCLMQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500008.china.huawei.com (7.185.36.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,111 +61,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings doc for Sunplus USB2 PHY driver
+在 2022/7/24 23:40, Arnd Bergmann 写道:
+> On Sun, Jul 24, 2022 at 12:13 PM Ren Zhijie <renzhijie2@huawei.com> wrote:
+>> If CONFIG_PM_SLEEP is not set,
+>> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will be failed, like this:
+>>
+>> drivers/pci/controller/dwc/pci-imx6.c:973:13: error: ‘imx6_pcie_host_exit’ defined but not used [-Werror=unused-function]
+>>   static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
+>>               ^~~~~~~~~~~~~~~~~~~
+>> drivers/pci/controller/dwc/pci-imx6.c:904:13: error: ‘imx6_pcie_stop_link’ defined but not used [-Werror=unused-function]
+>>   static void imx6_pcie_stop_link(struct dw_pcie *pci)
+>>               ^~~~~~~~~~~~~~~~~~~
+>> cc1: all warnings being treated as errors
+>> make[4]: *** [drivers/pci/controller/dwc/pci-imx6.o] Error 1
+>>
+>> These two functions imx6_pcie_host_exit() and imx6_pcie_stop_link() only be called by imx6_pcie_suspend_noirq(), which was warpped by CONFIG_PM_SLEEP.
+>> To fix build error unused-function, use __maybe_unused to attach them.
+>>
+>> Fixes: 25ae5434c3de ("PCI: imx6: Reformat suspend callback to keep symmetric with resume")
+>> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> There is already a better fix for this, see
+> https://lore.kernel.org/all/20220719210427.GA1568454@bhelgaas/
+>
+> If you come across other suspend/resume functions that trigger the
+> unused-function
+> warning, please use the same method there instead of adding __maybe_unused
+> or #ifdef annotations.
+>
+>        Arnd
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
----
-Changes in v5
- - No change
+Hi, Arnd
 
- .../bindings/phy/sunplus,sp7021-usb2-phy.yaml      | 73 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
+Thanks for your reply. I have actually met the other warning, and I use 
+the new  marco RUNTIME_PM_OPS to replace the old one,see
 
-diff --git a/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-new file mode 100644
-index 0000000..069d422
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd. 2021
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/phy/sunplus,sp7021-usb2-phy.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Sunplus SP7021 USB 2.0 PHY Controller
-+
-+maintainers:
-+  - Vincent Shih <vincent.sunplus@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: sunplus,sp7021-usb2-phy
-+
-+  reg:
-+    items:
-+      - description: UPHY register region
-+      - description: MOON4 register region
-+
-+  reg-names:
-+    items:
-+      - const: phy
-+      - const: moon4
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cell-names:
-+    description: names corresponding to the nvmem cells of disconnect voltage
-+    const: disc_vol
-+
-+  nvmem-cells:
-+    description: nvmem cell address of disconnect voltage
-+    maxItems: 1
-+
-+  sunplus,disc-vol-addr-off:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: the otp address offset of disconnect voltage
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - clocks
-+  - resets
-+  - "#phy-cells"
-+  - nvmem-cell-names
-+  - nvmem-cells
-+  - sunplus,disc-vol-addr-off
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    sp_uphy0: usb-phy@9c004a80 {
-+      compatible = "sunplus,sp7021-usb2-phy";
-+      reg = <0x9c004a80 0x80>, <0x9c000248 0x10>;
-+      reg-names = "phy", "moon4";
-+      clocks = <&clkc 0x3d>;
-+      resets = <&rstc 0x2d>;
-+      #phy-cells = <0>;
-+      nvmem-cell-names = "disc_vol";
-+      nvmem-cells = <&disc_vol>;
-+      sunplus,disc-vol-addr-off = <0>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 31d2ba0..989e5ba 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19227,6 +19227,7 @@ SUNPLUS USB2 PHY DRIVER
- M:	Vincent Shih <vincent.sunplus@gmail.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
- F:	drivers/phy/sunplus/Kconfig
- F:	drivers/phy/sunplus/Makefile
- F:	drivers/phy/sunplus/phy-sunplus-usb2.c
--- 
-2.7.4
+https://lore.kernel.org/all/20220725023611.57055-1-renzhijie2@huawei.com/
+
+
+Thanks,
+
+Ren Zhijie
+
+> .
 

@@ -2,176 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9926C57FA90
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D16F57FA94
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbiGYHzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 03:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S232428AbiGYHzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbiGYHzJ (ORCPT
+        with ESMTP id S231382AbiGYHzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 03:55:09 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D334712AFA;
-        Mon, 25 Jul 2022 00:55:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Mon, 25 Jul 2022 03:55:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837BCDEAE;
+        Mon, 25 Jul 2022 00:55:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LrslR0DBfz4x1m;
-        Mon, 25 Jul 2022 17:54:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658735701;
-        bh=kfMv139CeGprLEOUlo0T6IDnCb2WFfwtwCE1JhOhq1Q=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YeOdbcpbhGuVhZFMiOzh00EVlLpZH55kzPtMe3tBwlEnUdmgbkYgP/PzPAuEdZa8F
-         afbTbjlyjZwWyCq1NhYgk7i42OYzki1l7MYRi2HxtPS3budKyWuVwrMAjnEupXQieV
-         QjwBnrGhgxEV/RoBGc6uZPRTfCYFKJA0aCM5qV9jtIqgtiWNTzqu11wujigFUI7xtL
-         iTuNZm0NAOcUh0dvhnmZwYDyKNcffgeUE5xX8yWD/iKSQuSBT82QgGY69AGs9b1p8d
-         NJWGDi/UtvJC18YAprwtvns44Hmrz1s4wJgSc0EWbQajLIEWhZmeHzUtuDGFjURU7Y
-         Dzg7JumpG4mQw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     zhouzhouyi@gmail.com, john.ogness@linutronix.de,
-        benh@kernel.crashing.org, paulus@samba.org,
-        akpm@linux-foundation.org, christophe.leroy@csgroup.eu,
-        wangkefeng.wang@huawei.com, npiggin@gmail.com, rppt@kernel.org,
-        aneesh.kumar@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, lance@osuosl.org, paulmck@kernel.org,
-        rcu@vger.kernel.org
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: Re: [PATCH linux-next] powerpc: init jump label early in ppc 64
-In-Reply-To: <20220724010221.17371-1-zhouzhouyi@gmail.com>
-References: <20220724010221.17371-1-zhouzhouyi@gmail.com>
-Date:   Mon, 25 Jul 2022 17:54:55 +1000
-Message-ID: <878rohd3u8.fsf@mpe.ellerman.id.au>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A1591F977;
+        Mon, 25 Jul 2022 07:55:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658735749; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YwiyINh2YKKLfdtiarw+bQrH30d/PHkMn5lSmx+kcGQ=;
+        b=tA25VmyvmgEELAzhlyfRDAFvxqSBUv3xryJB/oEee55eT5gI8mRgFSQ5mTKOsaE/eOtAfd
+        nYntkn5UtmsGMnAUc6Rbbp4c2rZl9SUPBGi3wV7kaBIe4Ep69g9fHARn2jV/NU8K4Nu50O
+        DDduKs7N8s0CyWdO482oNBfyTNIR5DQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658735749;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YwiyINh2YKKLfdtiarw+bQrH30d/PHkMn5lSmx+kcGQ=;
+        b=PrwJJJvcN2c6dT2lvSxBTg4eU8OgQe+pIRIrYr0gVJmFD68qt9FeiHr6HDA+palJKbe5DY
+        1PfzpqinkqcCKdBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0068713A8D;
+        Mon, 25 Jul 2022 07:55:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JwDROoRM3mK2YAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 25 Jul 2022 07:55:48 +0000
+Message-ID: <c06cccc7-9e7d-5659-c23d-40ca386574b0@suse.de>
+Date:   Mon, 25 Jul 2022 09:55:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] fbdev: Make registered_fb[] private to fbmem.c
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-staging@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-fbdev@vger.kernel.org
+References: <20220725075400.68478-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220725075400.68478-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------dvvkHpjn000X4YxaH5fi7KPW"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-zhouzhouyi@gmail.com writes:
-> From: Zhouyi Zhou <zhouzhouyi@gmail.com>
->
-> In ppc 64, invoke jump_label_init in setup_feature_keys is too late
-> because static key will be used in subroutine of early_init_devtree.
->
-> So we can invoke jump_label_init earlier in early_setup.
-> We can not move setup_feature_keys backward because its subroutine
-> cpu_feature_keys_init depend on data structures initialized in
-> early_init_devtree.
->
-> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> ---
-> Dear PPC developers
->
-> I found this bug when trying to do rcutorture tests in ppc VM of
-> Open Source Lab of Oregon State University.
->
-> qemu-system-ppc64 -nographic -smp cores=8,threads=1 -net none -M pseries -nodefaults -device spapr-vscsi -serial file:/home/ubuntu/linux-next/tools/testing/selftests/rcutorture/res/2022.07.19-01.18.42-torture/results-rcutorture/TREE03/console.log -m 512 -kernel /home/ubuntu/linux-next/tools/testing/selftests/rcutorture/res/2022.07.19-01.18.42-torture/results-rcutorture/TREE03/vmlinux -append "debug_boot_weak_hash panic=-1 console=ttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000 rcutorture.onoff_interval=200 rcutorture.onoff_holdoff=30 rcutree.gp_preinit_delay=12 rcutree.gp_init_delay=3 rcutree.gp_cleanup_delay=3 rcutree.kthread_prio=2 threadirqs tree.use_softirq=0 rcutorture.n_barrier_cbs=4 rcutorture.stat_interval=15 rcutorture.shutdown_secs=420 rcutorture.test_no_idle_hz=1 rcutorture.verbose=1"
->
-> console.log report following WARN:
-> [    0.000000][    T0] static_key_enable_cpuslocked(): static key '0xc000000002953260' used before call to jump_label_init()^M
-> [    0.000000][    T0] WARNING: CPU: 0 PID: 0 at kernel/jump_label.c:166 static_key_enable_cpuslocked+0xfc/0x120^M
-> [    0.000000][    T0] Modules linked in:^M
-> [    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 5.19.0-rc5-next-20220708-dirty #131^M
-> [    0.000000][    T0] NIP:  c00000000038068c LR: c000000000380688 CTR: c000000000186ac0^M
-> [    0.000000][    T0] REGS: c000000002867930 TRAP: 0700   Not tainted  (5.19.0-rc5-next-20220708-dirty)^M
-> [    0.000000][    T0] MSR:  8000000000022003 <SF,FP,RI,LE>  CR: 24282224  XER: 20040000^M
-> [    0.000000][    T0] CFAR: 0000000000000730 IRQMASK: 1 ^M
-> [    0.000000][    T0] GPR00: c000000000380688 c000000002867bd0 c000000002868d00 0000000000000065 ^M
-> [    0.000000][    T0] GPR04: 0000000000000001 0000000000000000 0000000000000080 000000000000000d ^M
-> [    0.000000][    T0] GPR08: 0000000000000000 0000000000000000 c0000000027fd000 000000000000000f ^M
-> [    0.000000][    T0] GPR12: c000000000186ac0 c000000002082280 0000000000000003 000000000000000d ^M
-> [    0.000000][    T0] GPR16: 0000000002cc00d0 0000000000000000 c000000002082280 0000000000000001 ^M
-> [    0.000000][    T0] GPR20: c000000002080942 0000000000000000 0000000000000000 0000000000000000 ^M
-> [    0.000000][    T0] GPR24: 0000000000000000 c0000000010d6168 0000000000000000 c0000000020034c8 ^M
-> [    0.000000][    T0] GPR28: 0000002800000000 0000000000000000 c000000002080942 c000000002953260 ^M
-> [    0.000000][    T0] NIP [c00000000038068c] static_key_enable_cpuslocked+0xfc/0x120^M
-> [    0.000000][    T0] LR [c000000000380688] static_key_enable_cpuslocked+0xf8/0x120^M
-> [    0.000000][    T0] Call Trace:^M
-> [    0.000000][    T0] [c000000002867bd0] [c000000000380688] static_key_enable_cpuslocked+0xf8/0x120 (unreliable)^M
-> [    0.000000][    T0] [c000000002867c40] [c000000000380810] static_key_enable+0x30/0x50^M
-> [    0.000000][    T0] [c000000002867c70] [c000000002030314] setup_forced_irqthreads+0x28/0x40^M
-> [    0.000000][    T0] [c000000002867c90] [c000000002003568] do_early_param+0xa0/0x108^M
-> [    0.000000][    T0] [c000000002867d10] [c000000000175340] parse_args+0x290/0x4e0^M
-> [    0.000000][    T0] [c000000002867e10] [c000000002003c74] parse_early_options+0x48/0x5c^M
-> [    0.000000][    T0] [c000000002867e30] [c000000002003ce0] parse_early_param+0x58/0x84^M
-> [    0.000000][    T0] [c000000002867e60] [c000000002009878] early_init_devtree+0xd4/0x518^M
-> [    0.000000][    T0] [c000000002867f10] [c00000000200aee0] early_setup+0xb4/0x214^M
->
-> After this fix, the WARN does not show again.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------dvvkHpjn000X4YxaH5fi7KPW
+Content-Type: multipart/mixed; boundary="------------IjtmPP6kmUKIFKrGPr0H8Hi0";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: linux-staging@lists.linux.dev,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ dri-devel@lists.freedesktop.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Daniel Vetter <daniel.vetter@intel.com>,
+ Alex Deucher <alexander.deucher@amd.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
+ linux-fbdev@vger.kernel.org
+Message-ID: <c06cccc7-9e7d-5659-c23d-40ca386574b0@suse.de>
+Subject: Re: [PATCH] fbdev: Make registered_fb[] private to fbmem.c
+References: <20220725075400.68478-1-javierm@redhat.com>
+In-Reply-To: <20220725075400.68478-1-javierm@redhat.com>
 
-Hi Zhouyi,
+--------------IjtmPP6kmUKIFKrGPr0H8Hi0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-We have hit something like this previously, see the stack trace in
-commit e7eb919057c3 ("powerpc/64s: Handle program checks in wrong endian
-during early boot").
+SGkNCg0KQW0gMjUuMDcuMjIgdW0gMDk6NTQgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IEZyb206IERhbmllbCBWZXR0ZXIgPGRhbmllbC52ZXR0ZXJAZmZ3bGwuY2g+
+DQo+IA0KPiBObyBkcml2ZXIgYWNjZXNzIHRoaXMgYW55bW9yZSwgZXhjZXB0IGZvciB0aGUg
+b2xwYyBkY29uIGZiZGV2IGRyaXZlciBidXQNCj4gdGhhdCBoYXMgYmVlbiBtYXJrZWQgYXMg
+YnJva2VuIGFueXdheXMgYnkgY29tbWl0IGRlMDk1MmYyNjdmZiAoInN0YWdpbmc6DQo+IG9s
+cGNfZGNvbjogbWFyayBkcml2ZXIgYXMgYnJva2VuIikuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
+OiBEYW5pZWwgVmV0dGVyIDxkYW5pZWwudmV0dGVyQGludGVsLmNvbT4NCj4gU2lnbmVkLW9m
+Zi1ieTogRGFuaWVsIFZldHRlciA8ZGFuaWVsLnZldHRlckBmZndsbC5jaD4NCj4gUmV2aWV3
+ZWQtYnk6IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyA8amF2aWVybUByZWRoYXQuY29tPg0K
+PiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVk
+aGF0LmNvbT4NCg0KQWNrZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBz
+dXNlLmRlPg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IC0tLQ0KPiANCj4gICBkcml2
+ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0uYyB8IDYgKysrLS0tDQo+ICAgaW5jbHVkZS9s
+aW51eC9mYi5oICAgICAgICAgICAgICAgfCA2IC0tLS0tLQ0KPiAgIDIgZmlsZXMgY2hhbmdl
+ZCwgMyBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5jIGIvZHJpdmVycy92aWRlby9mYmRl
+di9jb3JlL2ZibWVtLmMNCj4gaW5kZXggNmFlMWM1ZmExOWY5Li4xZTcwZDhjNjc2NTMgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5jDQo+ICsrKyBi
+L2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5jDQo+IEBAIC01MSwxMCArNTEsMTAg
+QEANCj4gICBzdGF0aWMgREVGSU5FX01VVEVYKHJlZ2lzdHJhdGlvbl9sb2NrKTsNCj4gICAN
+Cj4gICBzdHJ1Y3QgZmJfaW5mbyAqcmVnaXN0ZXJlZF9mYltGQl9NQVhdIF9fcmVhZF9tb3N0
+bHk7DQo+IC1FWFBPUlRfU1lNQk9MKHJlZ2lzdGVyZWRfZmIpOw0KPiAtDQo+ICAgaW50IG51
+bV9yZWdpc3RlcmVkX2ZiIF9fcmVhZF9tb3N0bHk7DQo+IC1FWFBPUlRfU1lNQk9MKG51bV9y
+ZWdpc3RlcmVkX2ZiKTsNCj4gKyNkZWZpbmUgZm9yX2VhY2hfcmVnaXN0ZXJlZF9mYihpKQkJ
+XA0KPiArCWZvciAoaSA9IDA7IGkgPCBGQl9NQVg7IGkrKykJCVwNCj4gKwkJaWYgKCFyZWdp
+c3RlcmVkX2ZiW2ldKSB7fSBlbHNlDQo+ICAgDQo+ICAgYm9vbCBmYl9jZW50ZXJfbG9nbyBf
+X3JlYWRfbW9zdGx5Ow0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9mYi5o
+IGIvaW5jbHVkZS9saW51eC9mYi5oDQo+IGluZGV4IDQ1M2MzYjJiNmI4ZS4uMGFmZjc2YmNi
+YjAwIDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L2ZiLmgNCj4gKysrIGIvaW5jbHVk
+ZS9saW51eC9mYi5oDQo+IEBAIC02MjcsMTYgKzYyNywxMCBAQCBleHRlcm4gaW50IGZiX2dl
+dF9jb2xvcl9kZXB0aChzdHJ1Y3QgZmJfdmFyX3NjcmVlbmluZm8gKnZhciwNCj4gICBleHRl
+cm4gaW50IGZiX2dldF9vcHRpb25zKGNvbnN0IGNoYXIgKm5hbWUsIGNoYXIgKipvcHRpb24p
+Ow0KPiAgIGV4dGVybiBpbnQgZmJfbmV3X21vZGVsaXN0KHN0cnVjdCBmYl9pbmZvICppbmZv
+KTsNCj4gICANCj4gLWV4dGVybiBzdHJ1Y3QgZmJfaW5mbyAqcmVnaXN0ZXJlZF9mYltGQl9N
+QVhdOw0KPiAtZXh0ZXJuIGludCBudW1fcmVnaXN0ZXJlZF9mYjsNCj4gICBleHRlcm4gYm9v
+bCBmYl9jZW50ZXJfbG9nbzsNCj4gICBleHRlcm4gaW50IGZiX2xvZ29fY291bnQ7DQo+ICAg
+ZXh0ZXJuIHN0cnVjdCBjbGFzcyAqZmJfY2xhc3M7DQo+ICAgDQo+IC0jZGVmaW5lIGZvcl9l
+YWNoX3JlZ2lzdGVyZWRfZmIoaSkJCVwNCj4gLQlmb3IgKGkgPSAwOyBpIDwgRkJfTUFYOyBp
+KyspCQlcDQo+IC0JCWlmICghcmVnaXN0ZXJlZF9mYltpXSkge30gZWxzZQ0KPiAtDQo+ICAg
+c3RhdGljIGlubGluZSB2b2lkIGxvY2tfZmJfaW5mbyhzdHJ1Y3QgZmJfaW5mbyAqaW5mbykN
+Cj4gICB7DQo+ICAgCW11dGV4X2xvY2soJmluZm8tPmxvY2spOw0KDQotLSANClRob21hcyBa
+aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
+bHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywg
+R2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6
+IEl2byBUb3Rldg0K
 
-That was fixed incidentally/accidentally by the page_poison code
-changing to not use static keys so early.
+--------------IjtmPP6kmUKIFKrGPr0H8Hi0--
 
-There was a similar case recently in the random code too, see
-60e5b2886b92 ("random: do not use jump labels before they are
-initialized").
+--------------dvvkHpjn000X4YxaH5fi7KPW
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-But I guess this will keep happening, as generic code authors expect to
-be able to use static keys in early_param() handlers.
+-----BEGIN PGP SIGNATURE-----
 
-I think the ideal solution would be to move most early param parsing
-later. There's only a few parameters that need to be parsed that early
-in early_init_devtree(). That would be a complex and error-prone change
-though, so I won't ask you to do that :)
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLeTIQFAwAAAAAACgkQlh/E3EQov+DS
+Mw//ZmvlyqJkhxNldf+1ZCiVpgshWANrIAuheUXaPczR4hUmUGlVK18azel+EkNRTRZ0tdzdFLDu
+jQ5icc2R/z9w9oEkZu0i3hLIxSq6QJ3mExt0oucX8CNY7uFihvWeAzgJFuv5wwKnuchcsIk/ZIxc
+nXotwICnq4bn+JSoC9lM6M3rzrHGYQbJIcuCNDX7S3WAOveXEM40+D06e8SrAd+220sUWJysZaQF
+AaihSuBabbTQzn+M1poA94G55m1IMC3t8AvdfnXBP+iyj8EXtQ39RNzyErhdO8xH1UKxe1WjzXBg
+oh9/XUQ5WB0QT2tXPAwzndWBqZExyPlLj2fIh/GSgeTmHYUD59ycnCopsRoxz6/T3D/NTOE9DmsO
+PWXzP9MdzkI7uPt3HSV/ux2H1xrH/isscPzgOI9uWiMc2eLuNjiNCIwCUbLOgBkQGNW8t7Ehf/NJ
+JceL4rrrPhW1tPPU+pmomnJvuu2s4BUq4/QsxfLuzyFodRlAS4Wu/YtBg/BfvKvLb0w7rsptponn
+pAaCSBeEFOVG+dCv2WJOIXaoJvy7sdZtrqA4udNZc/kWyZ0d+LVCN4MY2a41unTvBQulprxNhHfz
+dEzCxsP6c9X+kCMowLcxB75x5qwsm8D6KQc6eiKDb0WPhwb6N8BQDklrHs66LFlvvqt3pTO32aiH
+egw=
+=RKox
+-----END PGP SIGNATURE-----
 
-But I think it would be better if you moved the call to
-jump_label_init() into early_init_devtree(), just before we call
-parse_early_param(), with a comment saying that it's required to call it
-before parsing early params.
-
-And ...
-
-> diff --git a/arch/powerpc/kernel/setup_64.c b/arch/powerpc/kernel/setup_64.c
-> index 2b2d0b0fbb30..bf2fb76221da 100644
-> --- a/arch/powerpc/kernel/setup_64.c
-> +++ b/arch/powerpc/kernel/setup_64.c
-> @@ -365,6 +365,9 @@ void __init early_setup(unsigned long dt_ptr)
->  
->  	udbg_printf(" -> %s(), dt_ptr: 0x%lx\n", __func__, dt_ptr);
->  
-> +	/* Initialise jump label because subsequent calls need it */
-> +	jump_label_init();
-> +
->  	/*
->  	 * Do early initialization using the flattened device
->  	 * tree, such as retrieving the physical memory map or
-> @@ -394,8 +397,15 @@ void __init early_setup(unsigned long dt_ptr)
->  
->  	/* Apply all the dynamic patching */
->  	apply_feature_fixups();
-> -	setup_feature_keys();
-
-I think you can just leave this as-is, it's fine to call
-jump_label_init() more than once.
-
-> +
-> +	/*
-> +	 * All the cpu/mmu_has_feature() checks take on their correct polarity
-> +	 * based on the current set of CPU/MMU features. These should be done
-> +	 * only after early_init_devtree.
-> +	 */
-> +	cpu_feature_keys_init();
-> +	mmu_feature_keys_init();
-> +
->  
->  	/* Initialize the hash table or TLB handling */
->  	early_init_mmu();
-> -- 
-> 2.25.1
-
-cheers
+--------------dvvkHpjn000X4YxaH5fi7KPW--

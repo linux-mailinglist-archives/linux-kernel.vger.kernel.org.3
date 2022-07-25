@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F4C57F83A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F6357F83B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbiGYCWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 22:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S233267AbiGYCWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 22:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGYCWC (ORCPT
+        with ESMTP id S229436AbiGYCWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 22:22:02 -0400
+        Sun, 24 Jul 2022 22:22:20 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60945116F
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:21:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40FDCE17
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:22:19 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 26P2JX9c029536;
+        by conuserg-08.nifty.com with ESMTP id 26P2JX9d029536;
         Mon, 25 Jul 2022 11:19:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 26P2JX9c029536
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 26P2JX9d029536
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1658715574;
-        bh=SCnWUTOIqjfB89rOg7Ig7Vg8sxcS4A6+OR94yhgDrEQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uvvfneWPq3Jp9S3lMU+YReM/b5EXCFXzf8KWkZsGnERpRGlKQxhlnMSPxspEpX9VP
-         gXJwFXjhqYPD//fvUIz312mXaG8YhPpGPCaUNe26MDKJO5RvxVygsQ/GDSJ9UM7Zuz
-         0LQsMVmgk1Ks80IaNgkb9YAaqkgj9GOId+IUMmhnS3BS3SeRmhdM2yYglANswDEnpH
-         KQXDmzs4HW1x0sCVod7Tf/atEU8cqxnEJucaN0glYXDvst+Gionle9jGmi2Q4DEl+J
-         accDGMlHs7JO59GAYqBZnS4OiWH1g0X8m6dq5HF1tuwu/008nKsn728cZo2wa/U9oQ
-         5LUGRLsBFdqjg==
+        s=dec2015msa; t=1658715575;
+        bh=+6537oUPB6uiy8KoPSUGDtwn8M1UnRpuDy1P24m7/P0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rZ3jOo5ZRxrN6vMecrwhsB88dZeMPk3V2YBF6xeqCEx5iEDUYdEfNf4EtLH7ZJcMD
+         KzSlOtMkr/Btyaw8m2ZomC9h/WFiZvke/6NLUJQa59HHtTFhxB39QvosM0uTdOjOUl
+         2kLTR/vlbrTWGMMr7ypHRLrT2Kpo+N6vnUIMZSKsv96LcE8UPOytaDh0dWuZvJSlnE
+         w/JsPEEpOXAyE/8CrgnhgkHknRe/uYepxV3aht4h/IeYgmG30wMULnprzH14TPgifa
+         wScXe/sAtWMOJHt/hN6uvcv82OMwu1fGWaGduyWcucgbFstGgNStYO5rIBJ/8LwH4y
+         q3TLFaMRT2q/g==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
@@ -36,14 +36,18 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-riscv@lists.infradead.org
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
+        Borislav Petkov <bp@suse.de>, Helge Deller <deller@gmx.de>,
         Li Zhengyu <lizhengyu3@huawei.com>,
         Nick Desaulniers <ndesaulniers@google.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] riscv/purgatory: hard-code obj-y in Makefile
-Date:   Mon, 25 Jul 2022 11:19:01 +0900
-Message-Id: <20220725021902.625630-1-masahiroy@kernel.org>
+Subject: [PATCH v2 2/2] riscv/purgatory: Omit use of bin2c
+Date:   Mon, 25 Jul 2022 11:19:02 +0900
+Message-Id: <20220725021902.625630-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220725021902.625630-1-masahiroy@kernel.org>
+References: <20220725021902.625630-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,30 +59,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The purgatory/ directory is entirely guarded in arch/riscv/Kbuild.
-CONFIG_ARCH_HAS_KEXEC_PURGATORY is bool type.
+The .incbin assembler directive is much faster than bin2c + $(CC).
 
-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) is always 'y' when Kbuild visits
-this Makefile for building.
+Do similar refactoring as in commit 4c0f032d4963 ("s390/purgatory:
+Omit use of bin2c").
+
+Please note the .quad directive matches to size_t in C (both 8 byte)
+because the purgatory is compiled only for the 64-bit kernel.
+(KEXEC_FILE depends on 64BIT).
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
-(no changes since v1)
+Changes in v2:
+  - Fix a typo (kexec_purgatroy_end -> kexec_purgatory_end)
 
- arch/riscv/purgatory/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/Kconfig                     |  1 -
+ arch/riscv/purgatory/.gitignore        |  1 -
+ arch/riscv/purgatory/Makefile          |  8 +-------
+ arch/riscv/purgatory/kexec-purgatory.S | 14 ++++++++++++++
+ scripts/remove-stale-files             |  2 ++
+ 5 files changed, 17 insertions(+), 9 deletions(-)
+ create mode 100644 arch/riscv/purgatory/kexec-purgatory.S
 
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 32ffef9f6e5b..218c2f12b3ef 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -447,7 +447,6 @@ config KEXEC_FILE
+ 
+ config ARCH_HAS_KEXEC_PURGATORY
+ 	def_bool KEXEC_FILE
+-	select BUILD_BIN2C
+ 	depends on CRYPTO=y
+ 	depends on CRYPTO_SHA256=y
+ 
+diff --git a/arch/riscv/purgatory/.gitignore b/arch/riscv/purgatory/.gitignore
+index 38d7d1bda4d7..6e4dfb024ad2 100644
+--- a/arch/riscv/purgatory/.gitignore
++++ b/arch/riscv/purgatory/.gitignore
+@@ -1,4 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ purgatory.chk
+ purgatory.ro
+-kexec-purgatory.c
 diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index d4df200f7edf..c2d14e2f345d 100644
+index c2d14e2f345d..dd58e1d99397 100644
 --- a/arch/riscv/purgatory/Makefile
 +++ b/arch/riscv/purgatory/Makefile
-@@ -92,4 +92,4 @@ quiet_cmd_bin2c = BIN2C   $@
- $(obj)/kexec-purgatory.c: $(obj)/purgatory.ro $(obj)/purgatory.chk FORCE
- 	$(call if_changed,bin2c)
+@@ -84,12 +84,6 @@ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+ $(obj)/purgatory.chk: $(obj)/purgatory.ro FORCE
+ 		$(call if_changed,ld)
  
--obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY)	+= kexec-purgatory.o
-+obj-y += kexec-purgatory.o
+-targets += kexec-purgatory.c
+-
+-quiet_cmd_bin2c = BIN2C   $@
+-      cmd_bin2c = $(objtree)/scripts/bin2c kexec_purgatory < $< > $@
+-
+-$(obj)/kexec-purgatory.c: $(obj)/purgatory.ro $(obj)/purgatory.chk FORCE
+-	$(call if_changed,bin2c)
++$(obj)/kexec-purgatory.o: $(obj)/purgatory.ro $(obj)/purgatory.chk
+ 
+ obj-y += kexec-purgatory.o
+diff --git a/arch/riscv/purgatory/kexec-purgatory.S b/arch/riscv/purgatory/kexec-purgatory.S
+new file mode 100644
+index 000000000000..32c53581b8f2
+--- /dev/null
++++ b/arch/riscv/purgatory/kexec-purgatory.S
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++	.section .rodata, "a"
++
++	.align	8
++kexec_purgatory:
++	.globl	kexec_purgatory
++	.incbin	"arch/riscv/purgatory/purgatory.ro"
++.Lkexec_purgatory_end:
++
++	.align	8
++kexec_purgatory_size:
++	.globl	kexec_purgatory_size
++	.quad	.Lkexec_purgatory_end - kexec_purgatory
+diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
+index 7adab4618035..d75a52199a38 100755
+--- a/scripts/remove-stale-files
++++ b/scripts/remove-stale-files
+@@ -40,4 +40,6 @@ if [ -n "${building_out_of_srctree}" ]; then
+ 	done
+ fi
+ 
++rm -f arch/riscv/purgatory/kexec-purgatory.c
++
+ rm -f scripts/extract-cert
 -- 
 2.34.1
 

@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8098C57F7DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD86457F7E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiGYBJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 21:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S231644AbiGYBR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 21:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGYBJZ (ORCPT
+        with ESMTP id S229687AbiGYBRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 21:09:25 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54EA9FD6;
-        Sun, 24 Jul 2022 18:09:22 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LrhhW4WJ9zkWmb;
-        Mon, 25 Jul 2022 09:06:51 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Jul
- 2022 09:09:20 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <javier.martin@vista-silicon.com>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH v2] crypto: sahara - don't sleep when in softirq
-Date:   Mon, 25 Jul 2022 09:13:24 +0800
-Message-ID: <20220725011324.383031-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 24 Jul 2022 21:17:24 -0400
+Received: from smtp01.aussiebb.com.au (smtp01.aussiebb.com.au [121.200.0.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F92BCA7;
+        Sun, 24 Jul 2022 18:17:23 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by smtp01.aussiebb.com.au (Postfix) with ESMTP id 6017E1003A8;
+        Mon, 25 Jul 2022 11:17:19 +1000 (AEST)
+X-Virus-Scanned: Debian amavisd-new at smtp01.aussiebb.com.au
+Received: from smtp01.aussiebb.com.au ([127.0.0.1])
+        by localhost (smtp01.aussiebb.com.au [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id asN7OfZIUr8M; Mon, 25 Jul 2022 11:17:19 +1000 (AEST)
+Received: by smtp01.aussiebb.com.au (Postfix, from userid 116)
+        id 54D64100391; Mon, 25 Jul 2022 11:17:19 +1000 (AEST)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: from donald.themaw.net (180-150-90-198.b4965a.per.nbn.aussiebb.net [180.150.90.198])
+        by smtp01.aussiebb.com.au (Postfix) with ESMTP id 36F09100387;
+        Mon, 25 Jul 2022 11:17:17 +1000 (AEST)
+Subject: [PATCH v3 0/2] vfs: fix a mount table handling problem
+From:   Ian Kent <raven@themaw.net>
+To:     Al Viro <viro@ZenIV.linux.org.uk>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Siddhesh Poyarekar <siddhesh@gotplt.org>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Mon, 25 Jul 2022 09:17:16 +0800
+Message-ID: <165871154975.22404.9637671230578653457.stgit@donald.themaw.net>
+User-Agent: StGit/1.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function of sahara_aes_crypt maybe could be called by function
-of crypto_skcipher_encrypt during the rx softirq, so it is not
-allowed to use mutex lock.
+Whenever a mount has an empty "source" (aka mnt_fsname), the glibc
+function getmntent incorrectly parses its input, resulting in reporting
+incorrect data to the caller.
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
-This patch is not yet tested, compiled only.
----
- drivers/crypto/sahara.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+The problem is that the get_mnt_entry() function in glibc's
+misc/mntent_r.c assumes that leading whitespace on a line can always
+be discarded because it will always be followed by a # for the case
+of a comment or a non-whitespace character that's part of the value
+of the first field. However, this assumption is violated when the
+value of the first field is an empty string.
 
-diff --git a/drivers/crypto/sahara.c b/drivers/crypto/sahara.c
-index 457084b344c1..c978d16dc609 100644
---- a/drivers/crypto/sahara.c
-+++ b/drivers/crypto/sahara.c
-@@ -26,7 +26,7 @@
- #include <linux/kernel.h>
- #include <linux/kthread.h>
- #include <linux/module.h>
--#include <linux/mutex.h>
-+#include <linux/spinlock.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
-@@ -196,7 +196,7 @@ struct sahara_dev {
- 	void __iomem		*regs_base;
- 	struct clk		*clk_ipg;
- 	struct clk		*clk_ahb;
--	struct mutex		queue_mutex;
-+	spinlock_t		queue_spinlock;
- 	struct task_struct	*kthread;
- 	struct completion	dma_completion;
- 
-@@ -642,9 +642,9 @@ static int sahara_aes_crypt(struct skcipher_request *req, unsigned long mode)
- 
- 	rctx->mode = mode;
- 
--	mutex_lock(&dev->queue_mutex);
-+	spin_lock_bh(&dev->queue_spinlock);
- 	err = crypto_enqueue_request(&dev->queue, &req->base);
--	mutex_unlock(&dev->queue_mutex);
-+	spin_unlock_bh(&dev->queue_spinlock);
- 
- 	wake_up_process(dev->kthread);
- 
-@@ -1043,10 +1043,10 @@ static int sahara_queue_manage(void *data)
- 	do {
- 		__set_current_state(TASK_INTERRUPTIBLE);
- 
--		mutex_lock(&dev->queue_mutex);
-+		spin_lock_bh(&dev->queue_spinlock);
- 		backlog = crypto_get_backlog(&dev->queue);
- 		async_req = crypto_dequeue_request(&dev->queue);
--		mutex_unlock(&dev->queue_mutex);
-+		spin_unlock_bh(&dev->queue_spinlock);
- 
- 		if (backlog)
- 			backlog->complete(backlog, -EINPROGRESS);
-@@ -1092,9 +1092,9 @@ static int sahara_sha_enqueue(struct ahash_request *req, int last)
- 		rctx->first = 1;
- 	}
- 
--	mutex_lock(&dev->queue_mutex);
-+	spin_lock_bh(&dev->queue_spinlock);
- 	ret = crypto_enqueue_request(&dev->queue, &req->base);
--	mutex_unlock(&dev->queue_mutex);
-+	spin_unlock_bh(&dev->queue_spinlock);
- 
- 	wake_up_process(dev->kthread);
- 
-@@ -1449,7 +1449,7 @@ static int sahara_probe(struct platform_device *pdev)
- 
- 	crypto_init_queue(&dev->queue, SAHARA_QUEUE_LENGTH);
- 
--	mutex_init(&dev->queue_mutex);
-+	spin_lock_init(&dev->queue_spinlock);
- 
- 	dev_ptr = dev;
- 
--- 
-2.17.1
+This is fixed in the mount API code by simply checking for a pointer
+that contains a NULL and treating it as a NULL pointer.
+
+Changes:
+
+v3: added patch to fix zero length string access violation caused after
+    fs parser patch is applied.
+
+v2: fix possible oops if conversion functions such as fs_param_is_u32()
+    are called.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+
+Ian Kent (2):
+      ext4: fix possible null pointer dereference
+      vfs: parse: deal with zero length string value
+
+
+ fs/ext4/super.c            |  4 ++--
+ fs/fs_context.c            | 17 ++++++++++++-----
+ fs/fs_parser.c             | 16 ++++++++++++++++
+ include/linux/fs_context.h |  3 ++-
+ 4 files changed, 32 insertions(+), 8 deletions(-)
+
+--
+Ian
 

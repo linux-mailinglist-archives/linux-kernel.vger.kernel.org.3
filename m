@@ -2,282 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4177A580088
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A2B580083
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 16:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbiGYONC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 10:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
+        id S235384AbiGYOL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 10:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbiGYOM6 (ORCPT
+        with ESMTP id S233550AbiGYOL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 10:12:58 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26CB15A1B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:12:56 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id o12so13279134ljc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:12:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=S+h68/UdQXXbMficXAC0iBgwRyN+X6qyYClrVNRZdi0=;
-        b=a5it5baTS9WwQq1d7VrWZbgehHeGK5sYCQ2mo0nd+fdX0FGwc24xaHkXFCVxabfPYk
-         gdIHpkJAgfVWuWRopgMHCDMlwn69CVd0v1Zaev+XlYu5100CBKwX6H9unqLrT4rMbPc5
-         Rc8JHZ6fWhMBobS6QmLJA4ZX8fSAFt/xiztpQ6X65kaYRBEIZxCCyzzGnHFf1WYo2BBv
-         GWFUlQUGrim4QdjS3YPrIR5+rXHWwiApvas3DwE8bo+h5c4q9sQv3c6+G5HJHTPGfpn6
-         WaAUH0WKmZ+lpqJHPYj81JrARFLSRdD7EWqOI6YugOGFWZaWLoY7wk9r/WaesPs+ndZc
-         3H7g==
+        Mon, 25 Jul 2022 10:11:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF070AE45
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658758285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/iwb85TjmRaVZHGqzyek+VGRdYMNOqw3oLLy+2G9Arc=;
+        b=gsUaJtW03JBCUJKlMBQ9aMdrFSN9hd6ez1ggDg4i2LnIpYGksYC+XKXYvGTaqqLMNTIDDW
+        qZHzUeNa+igQQYTWZSqzZZlK/EFzrfINkRCt4z1QMG+cF4/JX0SOTVwa+SW9wZPHG5AlpM
+        i5CI8oAoYUpwplb+rnsnJQt6IhQb8+E=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-147-T6Bb1N__MMy4e3QgZxe3Ng-1; Mon, 25 Jul 2022 10:11:22 -0400
+X-MC-Unique: T6Bb1N__MMy4e3QgZxe3Ng-1
+Received: by mail-wm1-f69.google.com with SMTP id f21-20020a1cc915000000b003a3551598a1so1187783wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 07:11:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=S+h68/UdQXXbMficXAC0iBgwRyN+X6qyYClrVNRZdi0=;
-        b=X+dgnOdJwm+d9GZbQGQCKyt85/rF+LJwKxKWdRcIBK/azrXazvmL0d4+lCUBQ40R/n
-         rDO7Vpp2SFyTpys2XVuvMTi9Uj6GRxKEIrv9YmXklP2C74ts0HnjIt06HMlU7vrNBgah
-         u1CnpOqBgH7gPt6g+zicwIdRKWkrvyxuliSdyuXw0ECdLbp0JP9RGPL79uGUncVt84Xm
-         2fZ6ImjLYBMWTHAYvFGokruIZ5WLjNRkfjNnFYs5awgebnk45F/o7ytExHZOuEXXrb1s
-         pazOsiknIHwYMT2shxeZCDXv+WqQeThMo7Xqar/92a1RsoXzNIBh+QxP+DDI5oh882Sh
-         wXUg==
-X-Gm-Message-State: AJIora9D/lRXzQNpfJFAej3KeMvE2inYvm4yJG749InzlxhTRn5WpFIr
-        i0RPNBf9c0GpdfjuF3Exu7QR7g==
-X-Google-Smtp-Source: AGRyM1vVJg8MWR/yH0SSItnoe/QPOUADD/h5EkOyFM41FS32BqVlV5hqs7/4fpeQrK36b7RFiU1V1Q==
-X-Received: by 2002:a2e:a287:0:b0:25d:b515:430c with SMTP id k7-20020a2ea287000000b0025db515430cmr4558943lja.358.1658758375019;
-        Mon, 25 Jul 2022 07:12:55 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id a9-20020a195f49000000b00489ec0d7636sm2676028lfj.110.2022.07.25.07.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 07:12:54 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 2/2 v2] regmap: mmio: Support accelerared noinc operations
-Date:   Mon, 25 Jul 2022 16:10:36 +0200
-Message-Id: <20220725141036.2399822-2-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220725141036.2399822-1-linus.walleij@linaro.org>
-References: <20220725141036.2399822-1-linus.walleij@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=/iwb85TjmRaVZHGqzyek+VGRdYMNOqw3oLLy+2G9Arc=;
+        b=8SLLz6YmOuC1kOaL4ew72xHNtKc/Bd2GnkLG0Ikh4zWGcYgbQRoditl+hnL+ULh2PO
+         sNNAp1zlRIi5gIMgaMtrC3RdRvCRDHi7cJhWEbfNPWTY7t71A7vU6oE6UlDtNQyPXEJw
+         pzbthSr7BOYxew54t5siVuvEAftone/M1OFynCHX3q9Ka5KhVi2tz/Y3iTJNHxdy7d6T
+         sNTET5M1VZqesrLJIl6W/zod2exQKqIqHMylul6uLqPN3/UWsn/8KZ0x66caIzY8oYWo
+         YBOSIS5M06pDyX3Gv5UfSxtKK/vzvyHHNMmtc8OgcTMt7SOzINzVR65i+VvKWlpIso2I
+         leUg==
+X-Gm-Message-State: AJIora/Rw4WWsJEQm40LT9pojVnTY5wJkxYsdEEv0ZCkP5U7E+LNNjIS
+        iPTMVxTkRg1SlXAomtXq7EX25jUmpeV40LzrcAm0vTI1e9blGR6P3ofpe3+VLWE3iWp62aUVyAz
+        3CmleJI+nKyXV4n5Ch/BeMA9r
+X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr19871521wmq.58.1658758281137;
+        Mon, 25 Jul 2022 07:11:21 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vtzG0CN2yUQ1pX5yQ/a+vnliMtb9S4rjw1rsrqoCvHi/aPRiJTlaroNrJ3ayyb9sZ2T0ejBw==
+X-Received: by 2002:a05:600c:3556:b0:3a3:2a9c:f26 with SMTP id i22-20020a05600c355600b003a32a9c0f26mr19871495wmq.58.1658758280645;
+        Mon, 25 Jul 2022 07:11:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:8c00:eee4:63f0:cef2:5ac0? (p200300cbc7048c00eee463f0cef25ac0.dip0.t-ipconnect.de. [2003:cb:c704:8c00:eee4:63f0:cef2:5ac0])
+        by smtp.gmail.com with ESMTPSA id q12-20020adff50c000000b0021e5757fb4csm11192877wro.88.2022.07.25.07.11.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 07:11:20 -0700 (PDT)
+Message-ID: <1b574e20-26f3-fb3e-69d2-21f35c9e4730@redhat.com>
+Date:   Mon, 25 Jul 2022 16:11:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 1/3] mm/mprotect: Fix soft-dirty check in
+ can_change_pte_writable()
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, Nadav Amit <nadav.amit@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+References: <20220721183338.27871-1-peterx@redhat.com>
+ <20220721183338.27871-2-peterx@redhat.com>
+ <e35e42ce-e942-141d-09e7-a3a7868f4abb@redhat.com>
+ <C2910936-FDCF-4ECF-B014-D985284B225A@gmail.com>
+ <Yt6htg03lqj7FFU2@xz-m1.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Yt6htg03lqj7FFU2@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the newly added callback for accelerated noinc MMIO
-to provide writesb, writesw, writesl, writesq, readsb, readsw,
-readsl and readsq.
+On 25.07.22 15:59, Peter Xu wrote:
+> On Fri, Jul 22, 2022 at 10:21:00AM -0700, Nadav Amit wrote:
+>> On Jul 22, 2022, at 12:08 AM, David Hildenbrand <david@redhat.com> wrote:
+>>
+>>>> +static inline bool vma_soft_dirty_enabled(struct vm_area_struct *vma)
+>>>> +{
+>>>> +	/*
+>>>> +	 * NOTE: we must check this before VM_SOFTDIRTY on soft-dirty
+>>>> +	 * enablements, because when without soft-dirty being compiled in,
+>>>> +	 * VM_SOFTDIRTY is defined as 0x0, then !(vm_flags & VM_SOFTDIRTY)
+>>>> +	 * will be constantly true.
+>>>> +	 */
+>>>> +	if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+>>>> +		return false;
+>>>> +
+>>>> +	/*
+>>>> +	 * Soft-dirty is kind of special: its tracking is enabled when the
+>>>> +	 * vma flags not set.
+>>>> +	 */
+>>>> +	return !(vma->vm_flags & VM_SOFTDIRTY);
+>>>> +}
+>>>
+>>> That will come in handy in other patches I'm cooking.
+>>
+>> clear_refs_write() also comes to mind as well (for consistency; I see no
+>> correctness or performance issue).
+> 
+> I explicitly didn't touch that because current code is better..
+> 
+>         mas_for_each(&mas, vma, ULONG_MAX) {
+>                 if (!(vma->vm_flags & VM_SOFTDIRTY))
+>                         continue;
+>                 vma->vm_flags &= ~VM_SOFTDIRTY;
+>                 vma_set_page_prot(vma);
+>         }
+> 
+> It means when !CONFIG_MEM_SOFT_DIRTY the "if" will always be true and all
+> vma will be jumped.
+> 
+> If replaced with vma_soft_dirty_enabled() it'll be instead constantly false
+> returned.  We'll redo vma_set_page_prot() even if unnecessary.
+> 
+> Here if we want to add the "CONFIG_MEM_SOFT_DIRTY" into equation it can be:
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index f8cd58846a28..ab6f2913b5a5 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1290,6 +1290,8 @@ static ssize_t clear_refs_write(struct file *file, const char __user *buf,
+>                 }
+>  
+>                 if (type == CLEAR_REFS_SOFT_DIRTY) {
+> +                       if (!IS_ENABLED(CONFIG_MEM_SOFT_DIRTY))
+> +                               goto out_unlock;
+>                         mas_for_each(&mas, vma, ULONG_MAX) {
+>                                 if (!(vma->vm_flags & VM_SOFTDIRTY))
+>                                         continue;
+> 
+> Or even at the entrance to not take the mm sem.  But it's not anything
+> important IMHO, so if no one asking for that I'll just leave it be.
 
-A special quirk is needed to deal with big endian regmaps: there
-are no accelerated operations defined for big endian, so fall
-back to calling the big endian operations itereatively for this
-case.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- No changes.
----
- drivers/base/regmap/regmap-mmio.c | 153 ++++++++++++++++++++++++++++++
- 1 file changed, 153 insertions(+)
+Yeah, I don't think we particularly care about that.
 
-diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
-index 71f16be7e717..031ee91020e8 100644
---- a/drivers/base/regmap/regmap-mmio.c
-+++ b/drivers/base/regmap/regmap-mmio.c
-@@ -17,6 +17,7 @@ struct regmap_mmio_context {
- 	void __iomem *regs;
- 	unsigned int val_bytes;
- 	bool relaxed_mmio;
-+	bool big_endian;
- 
- 	bool attached_clk;
- 	struct clk *clk;
-@@ -160,6 +161,79 @@ static int regmap_mmio_write(void *context, unsigned int reg, unsigned int val)
- 	return 0;
- }
- 
-+static int regmap_mmio_noinc_write(void *context, unsigned int reg,
-+				   const void *val, size_t val_count)
-+{
-+	struct regmap_mmio_context *ctx = context;
-+	int ret = 0;
-+	int i;
-+
-+	if (!IS_ERR(ctx->clk)) {
-+		ret = clk_enable(ctx->clk);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	/*
-+	 * There are no native, assembly-optimized write single register
-+	 * operations for big endian, so fall back to emulation if this
-+	 * is needed. (Single bytes are fine, they are not affected by
-+	 * endianness.)
-+	 */
-+	if (ctx->big_endian && (ctx->val_bytes > 1)) {
-+		switch (ctx->val_bytes) {
-+		case 2:
-+		{
-+			const u16 *valp = (const u16 *)val;
-+			for (i = 0; i < val_count; i++)
-+				iowrite16be(valp[i], ctx->regs + reg);
-+			break;
-+		}
-+		case 4:
-+		{
-+			const u32 *valp = (const u32 *)val;
-+			for (i = 0; i < val_count; i++)
-+				iowrite32be(valp[i], ctx->regs + reg);
-+			break;
-+		}
-+#ifdef CONFIG_64BIT
-+		case 8:
-+			/* This is just too esoteric */
-+			fallthrough;
-+#endif
-+		default:
-+			ret = -EINVAL;
-+			goto out_clk;
-+		}
-+	}
-+
-+	switch (ctx->val_bytes) {
-+	case 1:
-+		writesb(ctx->regs + reg, (const u8 *)val, val_count);
-+		break;
-+	case 2:
-+		writesw(ctx->regs + reg, (const u16 *)val, val_count);
-+		break;
-+	case 4:
-+		writesl(ctx->regs + reg, (const u32 *)val, val_count);
-+		break;
-+#ifdef CONFIG_64BIT
-+	case 8:
-+		writesq(ctx->regs + reg, (const u64 *)val, val_count);
-+		break;
-+#endif
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+out_clk:
-+	if (!IS_ERR(ctx->clk))
-+		clk_disable(ctx->clk);
-+
-+	return ret;
-+}
-+
- static unsigned int regmap_mmio_read8(struct regmap_mmio_context *ctx,
- 				      unsigned int reg)
- {
-@@ -241,6 +315,82 @@ static int regmap_mmio_read(void *context, unsigned int reg, unsigned int *val)
- 	return 0;
- }
- 
-+static int regmap_mmio_noinc_read(void *context, unsigned int reg,
-+				  void *val, size_t val_count)
-+{
-+	struct regmap_mmio_context *ctx = context;
-+	int ret = 0;
-+	int i;
-+
-+	if (!IS_ERR(ctx->clk)) {
-+		ret = clk_enable(ctx->clk);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	/*
-+	 * There are no native, assembly-optimized write single register
-+	 * operations for big endian, so fall back to emulation if this
-+	 * is needed. (Single bytes are fine, they are not affected by
-+	 * endianness.)
-+	 */
-+	if (ctx->big_endian && (ctx->val_bytes > 1)) {
-+		switch (ctx->val_bytes) {
-+		case 2:
-+		{
-+			u16 *valp = (u16 *)val;
-+			for (i = 0; i < val_count; i++)
-+				valp[i] = ioread16be(ctx->regs + reg);
-+			break;
-+		}
-+		case 4:
-+		{
-+			u32 *valp = (u32 *)val;
-+			for (i = 0; i < val_count; i++)
-+				valp[i] = ioread32be(ctx->regs + reg);
-+			break;
-+		}
-+#ifdef CONFIG_64BIT
-+		case 8:
-+			/* This is just too esoteric */
-+			fallthrough;
-+#endif
-+		default:
-+			ret = -EINVAL;
-+			goto out_clk;
-+		}
-+	}
-+
-+	switch (ctx->val_bytes) {
-+	case 1:
-+		readsb(ctx->regs + reg, (u8 *)val, val_count);
-+		break;
-+	case 2:
-+		readsw(ctx->regs + reg, (u16 *)val, val_count);
-+		break;
-+	case 4:
-+		readsl(ctx->regs + reg, (u32 *)val, val_count);
-+		break;
-+#ifdef CONFIG_64BIT
-+	case 8:
-+		readsq(ctx->regs + reg, (u64 *)val, val_count);
-+		break;
-+#endif
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+out_clk:
-+	if (!IS_ERR(ctx->clk))
-+		clk_disable(ctx->clk);
-+
-+	return ret;
-+
-+	return 0;
-+}
-+
-+
- static void regmap_mmio_free_context(void *context)
- {
- 	struct regmap_mmio_context *ctx = context;
-@@ -257,6 +407,8 @@ static const struct regmap_bus regmap_mmio = {
- 	.fast_io = true,
- 	.reg_write = regmap_mmio_write,
- 	.reg_read = regmap_mmio_read,
-+	.reg_noinc_write = regmap_mmio_noinc_write,
-+	.reg_noinc_read = regmap_mmio_noinc_read,
- 	.free_context = regmap_mmio_free_context,
- 	.val_format_endian_default = REGMAP_ENDIAN_LITTLE,
- };
-@@ -347,6 +499,7 @@ static struct regmap_mmio_context *regmap_mmio_gen_context(struct device *dev,
- #ifdef __BIG_ENDIAN
- 	case REGMAP_ENDIAN_NATIVE:
- #endif
-+		ctx->big_endian = true;
- 		switch (config->val_bits) {
- 		case 8:
- 			ctx->reg_read = regmap_mmio_read8;
+
 -- 
-2.36.1
+Thanks,
+
+David / dhildenb
 

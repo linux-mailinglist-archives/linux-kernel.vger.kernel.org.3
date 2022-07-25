@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E5057FEEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01F457FEF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbiGYMXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S234860AbiGYMYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbiGYMXa (ORCPT
+        with ESMTP id S231722AbiGYMYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:23:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6612B12A97;
-        Mon, 25 Jul 2022 05:23:29 -0700 (PDT)
-Received: from zn.tnic (p200300ea972976f8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9729:76f8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 25 Jul 2022 08:24:41 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FAD167FA;
+        Mon, 25 Jul 2022 05:24:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EE7341EC0646;
-        Mon, 25 Jul 2022 14:23:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1658751804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Sn5hmQQVaS9IivV+qbBQot02DE7Tn3rjLFedQjB87Z8=;
-        b=YSaLt6rMmx//TZ9X4tE5W2zr6O5WXLi/77suixSs0FK1W3MtTiHr4HGB++dUuUruuskSyE
-        hguBTrv+vOf/SXueqGd6fzgOc9nzLCrUwg5m5drkiVP6EgsqV6kYJL3nE0hUWrrOlHMpRG
-        yOpRsGwmx+YWM5mWRadfubTwOQ2IdZs=
-Date:   Mon, 25 Jul 2022 14:23:20 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Message-ID: <Yt6LOD9Ae2NqyG1N@zn.tnic>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
- <YtltYRuL+2uQkYUK@zn.tnic>
- <ebcf2979-45fc-8d41-cc28-ac8da0d24245@intel.com>
- <Ytr4FCV2xPGUBLqs@zn.tnic>
- <707ca113-c2a2-8fe2-a22c-5be13adc7bb4@intel.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Lrzkb3ML7z4x1N;
+        Mon, 25 Jul 2022 22:24:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658751879;
+        bh=y+UzVL8kGSqCUz9xn5lz5WfJemKYihBdD0xz8EVTC0o=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Z1DvviqPDZM3kXdh6qx5DKZLAJwkCLKRe6kMJcBt6Dgy3QOS3nKZEToJrFofWf6Be
+         Dsz2gLQz+XA2Shv1fQQoZCrpOK7vFZugs4ixemxh0eaKul3nKFHz5/8KsepR/Ne78d
+         /Ff1pNZTj3LH6VVMa0kGIGGnpxPP9ybGDfc3r/uSXqlflQIhav7gL6q70jUOI3/SsN
+         Q+q1lNadpqFZ0f6UixOZh2vc53xVdJl8gOPVmHv4K/TwRhqVAzztUBNqLX3uSxejZD
+         0theMhbpkPIjw+f0bvlYVQctYSQa7uFW6B0NKBeMgM4Cc9DlH/6CWhgm7ZCDDO8Du5
+         rfznUEDWqDjMA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/fsl-pci: Fix Class Code of PCIe Root Port
+In-Reply-To: <20220722194226.GA1927257@bhelgaas>
+References: <20220722194226.GA1927257@bhelgaas>
+Date:   Mon, 25 Jul 2022 22:24:39 +1000
+Message-ID: <87r129bcs8.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <707ca113-c2a2-8fe2-a22c-5be13adc7bb4@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:30:36PM -0700, Dave Hansen wrote:
-> Sure does...  *Something* has to manage the cache coherency so that old
-> physical aliases of the converted memory don't write back and clobber
-> new data.  But, maybe the hardware is doing that now.
+Bjorn Helgaas <helgaas@kernel.org> writes:
+> On Wed, Jul 06, 2022 at 12:10:43PM +0200, Pali Roh=C3=A1r wrote:
+>> By default old pre-3.0 Freescale PCIe controllers reports invalid PCI Cl=
+ass
+>> Code 0x0b20 for PCIe Root Port. It can be seen by lspci -b output on P20=
+20
+>> board which has this pre-3.0 controller:
+>>=20
+>>   $ lspci -bvnn
+>>   00:00.0 Power PC [0b20]: Freescale Semiconductor Inc P2020E [1957:0070=
+] (rev 21)
+>>           !!! Invalid class 0b20 for header type 01
+>>           Capabilities: [4c] Express Root Port (Slot-), MSI 00
+>>=20
+>> Fix this issue by programming correct PCI Class Code 0x0604 for PCIe Root
+>> Port to the Freescale specific PCIe register 0x474.
+>>=20
+>> With this change lspci -b output is:
+>>=20
+>>   $ lspci -bvnn
+>>   00:00.0 PCI bridge [0604]: Freescale Semiconductor Inc P2020E [1957:00=
+70] (rev 21) (prog-if 00 [Normal decode])
+>>           Capabilities: [4c] Express Root Port (Slot-), MSI 00
+>>=20
+>> Without any "Invalid class" error. So class code was properly reflected
+>> into standard (read-only) PCI register 0x08.
+>>=20
+>> Same fix is already implemented in U-Boot pcie_fsl.c driver in commit:
+>> http://source.denx.de/u-boot/u-boot/-/commit/d18d06ac35229345a0af80977a4=
+08cfbe1d1015b
+>>=20
+>> Fix activated by U-Boot stay active also after booting Linux kernel.
+>> But boards which use older U-Boot version without that fix are affected =
+and
+>> still require this fix.
+>>=20
+>> So implement this class code fix also in kernel fsl_pci.c driver.
+>>=20
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+>
+> I assume the powerpc folks will take care of this.
 
-Let's hope.
+Will do.
 
-> Yeah, that two-tier system is the way it's happening today from what
-> I understand. This whole conversation is about how to handle the >4GB
-> memory.
-
-Would it be possible to pre-accept a bunch of mem - think "pre-fault" -
-from userspace?
-
-I.e., I'm thinking some huge process is going to start in the VM, VM
-userspace goes and causes a chunk of memory to be pre-accepted and then
-the process starts and runs more-or-less smoothly as the majority of its
-memory has already been "prepared".
-
-Or does that not make any sense from mm perspective?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+cheers

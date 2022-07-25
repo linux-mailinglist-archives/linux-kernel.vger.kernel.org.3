@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D3757FBC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCBD57FBC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbiGYIxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S234233AbiGYIw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiGYIxt (ORCPT
+        with ESMTP id S234213AbiGYIw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:53:49 -0400
-Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1883B14D07;
-        Mon, 25 Jul 2022 01:53:47 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Mon, 25 Jul
- 2022 16:52:20 +0800
-Received: from [10.29.8.21] (10.29.8.21) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Mon, 25 Jul
- 2022 16:52:18 +0800
-Message-ID: <0db4dc76-68cf-dc84-1a1b-ebe5abbbff8e@zhaoxin.com>
-Date:   Mon, 25 Jul 2022 16:52:17 +0800
+        Mon, 25 Jul 2022 04:52:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69B1140D0;
+        Mon, 25 Jul 2022 01:52:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A088B80E0C;
+        Mon, 25 Jul 2022 08:52:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F18BAC341C7;
+        Mon, 25 Jul 2022 08:52:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1658739143;
+        bh=dk4dxGJLEJyeKq9FFm0ufVN4qajcM88UqvIcq9q1f+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CqeCDrEiSmCNFcu7LfFKRW5AAcdr/sUXlG5b6/loMvdyK+zB3L4HQsDY9wUgKXI4C
+         Pkgt9yM8MWpxEhNfMo8JE6JN58kEowdlShOv+YTBkEZBtSyklJKaeAQKbontq7JMNt
+         XTtJvPUnttJDNsMdGa2M+tvKLfFFyRwUT06AAvdo=
+Date:   Mon, 25 Jul 2022 10:52:17 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, Felipe Balbi <balbi@kernel.org>,
+        Yan Xinyu <sdlyyxy@bupt.edu.cn>, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] USB: cdc: add control and state defines
+Message-ID: <Yt5ZwYAI/jy4XW2n@kroah.com>
+References: <20220725075841.1187-1-johan@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] USB: HCD: Fix URB giveback issue in tasklet function
-Content-Language: en-US
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <kishon@ti.com>, <dianders@chromium.org>, <s.shtylyov@omp.ru>,
-        <mka@chromium.org>, <ming.lei@canonical.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
-References: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
- <3b9a3fec-7716-3e9d-1e91-cfdac46845f7@gmail.com>
-From:   "WeitaoWang-oc@zhaoxin.com" <WeitaoWang-oc@zhaoxin.com>
-In-Reply-To: <3b9a3fec-7716-3e9d-1e91-cfdac46845f7@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.29.8.21]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725075841.1187-1-johan@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,68 +51,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/25 16:29, Sergei Shtylyov wrote:
-> Hello!
+On Mon, Jul 25, 2022 at 09:58:34AM +0200, Johan Hovold wrote:
+> Several drivers use the control-line and serial-state bitmap values from
+> the CDC spec, but there were no matching defines in the global CDC
+> (UAPI) header.
 > 
-> On 7/25/22 9:52 AM, Weitao Wang wrote:
+> This series adds the missing defines and converts cdc-acm and f_acm to
+> use them.
 > 
->> Usb core introduce the mechanism of giveback of URB in tasklet context to
->> reduce hardware interrupt handling time. On some test situation(such as
->> FIO with 4KB block size), when tasklet callback function called to
->> giveback URB, interrupt handler add URB node to the bh->head list also.
->> If check bh->head list again after finish all URB giveback of local_list,
->> then it may introduce a "dynamic balance" between giveback URB and add URB
->> to bh->head list. This tasklet callback function may not exit for a long
->> time, which will cause other tasklet function calls to be delayed. Some
->> real-time applications(such as KB and Mouse) will see noticeable lag.
->>
->> Fix this issue by taking new URBs giveback in next tasklet function call.
->> Add a member high_prio for structure giveback_urb_bh and replace the local
->> high_prio_bh variable with this structure member in usb_hcd_giveback_urb.
->>
->> Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
->> Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
->> ---
->> v1->v2:
->>   - Fix compile warning by remove label "restart".
->>   - Modify the patch description info.
->>   - Change structure member from hi_priority to high_prio.
->>
->>   drivers/usb/core/hcd.c  | 25 ++++++++++++++-----------
->>   include/linux/usb/hcd.h |  1 +
->>   2 files changed, 15 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
->> index 06eea8848ccc..1feb9a604380 100644
->> --- a/drivers/usb/core/hcd.c
->> +++ b/drivers/usb/core/hcd.c
-> [...]
->> @@ -2959,6 +2961,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
->>   
->>   	/* initialize tasklets */
->>   	init_giveback_urb_bh(&hcd->high_prio_bh);
->> +	hcd->high_prio_bh.high_prio = 1;
+> One staging driver also had an unused set of CDC defines which are
+> removed.
 > 
->     s/1/true/?
-Okay,this Boolean variable should be initialized to ture.
-Thanks for your suggestion.
+> The final patch by Yan Xinyu, which triggered this work, converts the
+> usb_wwan driver to use CDC defines instead of hardcoded values in its
+> line-control handling.
+> 
+> Greg, are you ok with me taking these through USB serial (where there
+> are a few more drivers that could potentially use them) or do you want
+> to take the lot through your tree directly?
 
-weitao
->>   	init_giveback_urb_bh(&k->low_prio_bh);
->>   
->>   	/* enable irqs just before we start the controller,
->> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
->> index 2c1fc9212cf2..98d1921f02b1 100644
->> --- a/include/linux/usb/hcd.h
->> +++ b/include/linux/usb/hcd.h
->> @@ -66,6 +66,7 @@
->>   
->>   struct giveback_urb_bh {
->>   	bool running;
->> +	bool high_prio;
->>   	spinlock_t lock;
->>   	struct list_head  head;
->>   	struct tasklet_struct bh;
-> 
-> MBR, Sergey
-> .
+Many thanks for this, I'll just take this now and you can send future
+patches for usb-serial that can rely on these being present.
+
+greg k-h

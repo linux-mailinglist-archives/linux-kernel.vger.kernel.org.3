@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981AD57FAD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B5D57FADE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbiGYIEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        id S233489AbiGYIF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiGYIET (ORCPT
+        with ESMTP id S232399AbiGYIFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:04:19 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628FA5FEF;
-        Mon, 25 Jul 2022 01:04:18 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id j22so19126473ejs.2;
-        Mon, 25 Jul 2022 01:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r9oGiDsxiFpBH+3rbxjYFk4fKS6kxjytRyEJ438nM14=;
-        b=CJb2GrDqw5wptQkMGvGnlEHmNqNpBTz+oVejWM8vbDuV20ZOTC6BJ/xAOcSduhufTS
-         CtY8s0Ob07oaPbu/f4yqfvkHz/xDY1O6vs2/oftm3gv1Uc+ykJC+fUd1S21cXIv8VjyW
-         kSXeGTgiv3k4SaU7t5pXcn2tjl5/OFjnaZJ8Uu0DxeB/9Oof1BN5BOo2rRbXDmOoY1Oc
-         CAj9lT0OP1cy+XTY99JtA98O+TDOotsScJIH1YM0dQeqD+8VHoEVugkGshM79Qhx2IYY
-         Qmh4+CVjG1cahmKQrRaUHy+VKbjtu21T43SHNPAsr2ti4ofng6x5uib9AjGL5NY7lM5l
-         yEHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r9oGiDsxiFpBH+3rbxjYFk4fKS6kxjytRyEJ438nM14=;
-        b=qZNUDlfWV1gfKJrxcTaZGJJhKHsk86f362lbhhUtJH+39QG18dOLO63N1sHxgCRE1H
-         hXm6eU6V0zn4Ngv/zQjWMXrfZCkvsMO/VMSSToZETMcw0REBy9BmK+P9YJfC+nZgw5cT
-         F+qDNuwoySwOch2p8/iJA5ylWFoyf0v7tFAwEeaH0uWrL6+ZZT4aBARFcbEv55R4JkOu
-         2wncweioY2IspB39VCmTaBJU8caqKqXBd+e1p9oyen/hPiOj5FQVl/1Y+O0e0bEuHsCf
-         KjK7sJb4BxeEWWf1jzEqXuorh3Ov6obUdVU+bbyYUqQ67tauI+GTcAOFluXaORzYiWvf
-         Zysg==
-X-Gm-Message-State: AJIora8TqEE87kbc31MTqzf5aii+SPJ4mSYWqmMxH1ccYAQZK7hV2fAY
-        /mR9EM6czKo4CmxzsJ13XvQCrJJhJsU0MZbEpVU=
-X-Google-Smtp-Source: AGRyM1slRdGOzS2afMezkzisSa07VKYBk0S3NkjvREARPdSLLPsbko0C4F61HAPbqNjfvUDyrYKyJb1xX+GfnwkFVZU=
-X-Received: by 2002:a17:906:8a4a:b0:72b:5b23:3065 with SMTP id
- gx10-20020a1709068a4a00b0072b5b233065mr9334315ejc.557.1658736256789; Mon, 25
- Jul 2022 01:04:16 -0700 (PDT)
+        Mon, 25 Jul 2022 04:05:51 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292CA13CD8;
+        Mon, 25 Jul 2022 01:05:50 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 47AE05FD0B;
+        Mon, 25 Jul 2022 11:05:48 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1658736348;
+        bh=pCw9/kVOeCE/CCajlNyM8QpfiZna4eRW1EqZxJu2eJg=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=NipdLVEYo9awZ8x/aNxrBaWkKUZJULScNVDO/L5BjJu9VPXvNLJB5etTtlKSRTbRN
+         QuHINHSY9o2W8nKRwPGrA7KXTUR5psVb0bg4D+PzLPmNqxhvd3FuiU7/FBdg+k221p
+         O2MMfgjHndPhBKb1R/3pS/6XF5TWqpsaeBUztix0L0dSzx5YpbmjwnIH5+eY8kVvM6
+         kzoMZ+LK/uTBpJnaMi11fo8I36+AxR9KeaSRIS3xwqv5gfLKE4DPqfHKvOi76a8ZIF
+         xDghmsCDdnLue7SaicVx1XVoQdTcbkBG6QwWXb6+MahRZ9l/37O7KRsOojWrekhhLO
+         a/DAmCRqqVnfw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 25 Jul 2022 11:05:47 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: [RFC PATCH v2 5/9] vsock: SO_RCVLOWAT transport set callback
+Thread-Topic: [RFC PATCH v2 5/9] vsock: SO_RCVLOWAT transport set callback
+Thread-Index: AQHYn/1NoPOM/Um+pUC5XxeDqd2x/w==
+Date:   Mon, 25 Jul 2022 08:05:28 +0000
+Message-ID: <8baa2e3a-af6b-c0fe-9bfb-7cf89506474a@sberdevices.ru>
+In-Reply-To: <19e25833-5f5c-f9b9-ac0f-1945ea17638d@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <40D3115A2D73A340AB96E70176059B63@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-9-peterwu.pub@gmail.com>
-In-Reply-To: <20220722102407.2205-9-peterwu.pub@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Jul 2022 10:03:40 +0200
-Message-ID: <CAHp75VessBZMBA6wNWhhXhPshDCghgkV8EkEUUqOeLqn-5pmpA@mail.gmail.com>
-Subject: Re: [PATCH v6 08/13] usb: typec: tcpci_mt6370: Add MediaTek MT6370
- tcpci driver
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/25 03:52:00 #19956163
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 12:25 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
->
-> From: ChiYuan Huang <cy_huang@richtek.com>
->
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual
-> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
->
-> Add support for the Type-C & Power Delivery controller in
-> MediaTek MT6370 IC.
-
-...
-
-> +static int mt6370_tcpc_set_vconn(struct tcpci *tcpci, struct tcpci_data *data,
-> +                                bool enable)
-> +{
-> +       return regmap_update_bits(data->regmap, MT6370_REG_SYSCTRL8,
-> +                                 MT6370_AUTOIDLE_MASK,
-> +                                 !enable ? MT6370_AUTOIDLE_MASK : 0);
-
-Why not positive conditional?
-
-  enable ? 0 : mask
-
-> +}
-
-...
-
-> +       ret = devm_add_action_or_reset(dev, mt6370_unregister_tcpci_port,
-> +                                      priv->tcpci);
-
-I believe nothing bad will happen if you put it on one line.
-
--- 
-With Best Regards,
-Andy Shevchenko
+VGhpcyBhZGRzIHRyYW5zcG9ydCBzcGVjaWZpYyBjYWxsYmFjayBmb3IgU09fUkNWTE9XQVQsIGJl
+Y2F1c2UgaW4gc29tZQ0KdHJhbnNwb3J0cyBpdCBtYXkgYmUgZGlmZmljdWx0IHRvIGtub3cgY3Vy
+cmVudCBhdmFpbGFibGUgbnVtYmVyIG9mIGJ5dGVzDQpyZWFkeSB0byByZWFkLiBUaHVzLCB3aGVu
+IFNPX1JDVkxPV0FUIGlzIHNldCwgdHJhbnNwb3J0IG1heSByZWplY3QgaXQuDQoNClNpZ25lZC1v
+ZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQog
+aW5jbHVkZS9uZXQvYWZfdnNvY2suaCAgIHwgIDEgKw0KIG5ldC92bXdfdnNvY2svYWZfdnNvY2su
+YyB8IDE5ICsrKysrKysrKysrKysrKysrKysNCiAyIGZpbGVzIGNoYW5nZWQsIDIwIGluc2VydGlv
+bnMoKykNCg0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvbmV0L2FmX3Zzb2NrLmggYi9pbmNsdWRlL25l
+dC9hZl92c29jay5oDQppbmRleCBmNzQyZTUwMjA3ZmIuLmVhZTU4NzRiYWUzNSAxMDA2NDQNCi0t
+LSBhL2luY2x1ZGUvbmV0L2FmX3Zzb2NrLmgNCisrKyBiL2luY2x1ZGUvbmV0L2FmX3Zzb2NrLmgN
+CkBAIC0xMzQsNiArMTM0LDcgQEAgc3RydWN0IHZzb2NrX3RyYW5zcG9ydCB7DQogCXU2NCAoKnN0
+cmVhbV9yY3ZoaXdhdCkoc3RydWN0IHZzb2NrX3NvY2sgKik7DQogCWJvb2wgKCpzdHJlYW1faXNf
+YWN0aXZlKShzdHJ1Y3QgdnNvY2tfc29jayAqKTsNCiAJYm9vbCAoKnN0cmVhbV9hbGxvdykodTMy
+IGNpZCwgdTMyIHBvcnQpOw0KKwlpbnQgKCpzZXRfcmN2bG93YXQpKHN0cnVjdCB2c29ja19zb2Nr
+ICosIGludCk7DQogDQogCS8qIFNFUV9QQUNLRVQuICovDQogCXNzaXplX3QgKCpzZXFwYWNrZXRf
+ZGVxdWV1ZSkoc3RydWN0IHZzb2NrX3NvY2sgKnZzaywgc3RydWN0IG1zZ2hkciAqbXNnLA0KZGlm
+ZiAtLWdpdCBhL25ldC92bXdfdnNvY2svYWZfdnNvY2suYyBiL25ldC92bXdfdnNvY2svYWZfdnNv
+Y2suYw0KaW5kZXggNjNhMTNmYTI2ODZhLi5iN2EyODZkYjRhZjEgMTAwNjQ0DQotLS0gYS9uZXQv
+dm13X3Zzb2NrL2FmX3Zzb2NrLmMNCisrKyBiL25ldC92bXdfdnNvY2svYWZfdnNvY2suYw0KQEAg
+LTIxMzAsNiArMjEzMCwyNCBAQCB2c29ja19jb25uZWN0aWJsZV9yZWN2bXNnKHN0cnVjdCBzb2Nr
+ZXQgKnNvY2ssIHN0cnVjdCBtc2doZHIgKm1zZywgc2l6ZV90IGxlbiwNCiAJcmV0dXJuIGVycjsN
+CiB9DQogDQorc3RhdGljIGludCB2c29ja19zZXRfcmN2bG93YXQoc3RydWN0IHNvY2sgKnNrLCBp
+bnQgdmFsKQ0KK3sNCisJY29uc3Qgc3RydWN0IHZzb2NrX3RyYW5zcG9ydCAqdHJhbnNwb3J0Ow0K
+KwlzdHJ1Y3QgdnNvY2tfc29jayAqdnNrOw0KKwlpbnQgZXJyID0gMDsNCisNCisJdnNrID0gdnNv
+Y2tfc2soc2spOw0KKwl0cmFuc3BvcnQgPSB2c2stPnRyYW5zcG9ydDsNCisNCisJaWYgKHRyYW5z
+cG9ydC0+c2V0X3Jjdmxvd2F0KQ0KKwkJZXJyID0gdHJhbnNwb3J0LT5zZXRfcmN2bG93YXQodnNr
+LCB2YWwpOw0KKw0KKwlpZiAoIWVycikNCisJCVdSSVRFX09OQ0Uoc2stPnNrX3Jjdmxvd2F0LCB2
+YWwgPyA6IDEpOw0KKw0KKwlyZXR1cm4gZXJyOw0KK30NCisNCiBzdGF0aWMgY29uc3Qgc3RydWN0
+IHByb3RvX29wcyB2c29ja19zdHJlYW1fb3BzID0gew0KIAkuZmFtaWx5ID0gUEZfVlNPQ0ssDQog
+CS5vd25lciA9IFRISVNfTU9EVUxFLA0KQEAgLTIxNDksNiArMjE2Nyw3IEBAIHN0YXRpYyBjb25z
+dCBzdHJ1Y3QgcHJvdG9fb3BzIHZzb2NrX3N0cmVhbV9vcHMgPSB7DQogCS5yZWN2bXNnID0gdnNv
+Y2tfY29ubmVjdGlibGVfcmVjdm1zZywNCiAJLm1tYXAgPSBzb2NrX25vX21tYXAsDQogCS5zZW5k
+cGFnZSA9IHNvY2tfbm9fc2VuZHBhZ2UsDQorCS5zZXRfcmN2bG93YXQgPSB2c29ja19zZXRfcmN2
+bG93YXQsDQogfTsNCiANCiBzdGF0aWMgY29uc3Qgc3RydWN0IHByb3RvX29wcyB2c29ja19zZXFw
+YWNrZXRfb3BzID0gew0KLS0gDQoyLjI1LjENCg==

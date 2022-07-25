@@ -2,131 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B1E580186
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E12258018D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236283AbiGYPRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 11:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
+        id S236360AbiGYPR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 11:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235910AbiGYPQX (ORCPT
+        with ESMTP id S235949AbiGYPRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 11:16:23 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F0D1B78A;
-        Mon, 25 Jul 2022 08:13:49 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so10566982pjf.2;
-        Mon, 25 Jul 2022 08:13:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=XRISqH0YEt9x37mOvZB1aRfZZEl6+ks0JDgNi4Ug7Zk=;
-        b=o5neeh4ryOoBCB8aglOKL52nvvcBgFyio+39f1GPtB2O/slaQJdSCAr4qATZhCQmF7
-         1zjFyzWkusGEbaJI6oYjegXXuPo5ICsGd2dXIQ3WCRyjOMFl1YGlKEM/kFKKyzPx72An
-         8bKV15YiEXk1Ungcvs+IogfaUTguat61aZa9aDVmg4Q/qvSsp4AhG19nCC+xfY3ti/Fx
-         geXalA7hGJGtLujyQ4lCHfgFo1jn7cZ3B0VK+qwRSVNqXAysraPUQa2by2+4YDAEhftO
-         xpAiofVS6Qh3GnK8oRRIe2TiGXoHU+WOyIcastiLhcc/h49+tTNlSpugOwWQo1fONNrV
-         N0Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=XRISqH0YEt9x37mOvZB1aRfZZEl6+ks0JDgNi4Ug7Zk=;
-        b=EN2HqiH/endOWYT8s6zHVsmLnThfi/DGEAV5SudbZU+2q+8H/sCpFO0lhF8dgRVH4F
-         ZN/nRlLrBsMd63yWTnHA5MMRelkQI17Rq1upT72m9fOeobP5QKzL/4j6MUKaQ9BUTrCH
-         kwizF+8DGeFsuHr14FViIo+b2Az+1+sT/rUebb4/DxzrtmdN9njXftoeGcnWl1EFlq4Z
-         p6QayWV5AZsVad+7ElnSQx6fpXiv6MorsPBOIYfusNWj0zo+9hAEpNhVAFmUcJc1wqBC
-         doblPzGHV6eplpFv+qxOsxPBrDiLS+Tbmdqlf4tp77FR49R5zzrkmPGzzpfXVZtAgABW
-         QvmQ==
-X-Gm-Message-State: AJIora+MA9gZ4r/6FYdJXkTwKniYxQjAi3g1e6WGr5VsGLlZRIVPrdER
-        Ao0lyxyN/I4zQApOh2ZdeowG8LFr0ec=
-X-Google-Smtp-Source: AGRyM1uCEX3dmY0dBa+CpILOTqJu48Q9xyKEqm4oI4EyeWgqGjO1n1uVJmCPP5x3Ng2Y3fble129qw==
-X-Received: by 2002:a17:902:c40a:b0:16d:2dbd:35cd with SMTP id k10-20020a170902c40a00b0016d2dbd35cdmr12397728plk.65.1658762022801;
-        Mon, 25 Jul 2022 08:13:42 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.144.250])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b001641b2d61d4sm6649667plh.30.2022.07.25.08.13.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 08:13:42 -0700 (PDT)
-From:   Jim Quinlan <jim2101024@gmail.com>
-To:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
-        james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 7/7] PCI: brcmstb: Have .map_bus function names end with 'map_bus'
-Date:   Mon, 25 Jul 2022 11:12:56 -0400
-Message-Id: <20220725151258.42574-8-jim2101024@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220725151258.42574-1-jim2101024@gmail.com>
-References: <20220725151258.42574-1-jim2101024@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 11:17:39 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E121BEAF;
+        Mon, 25 Jul 2022 08:14:47 -0700 (PDT)
+Received: from localhost.localdomain (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPSA id A648D40D403D;
+        Mon, 25 Jul 2022 15:14:16 +0000 (UTC)
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Brooke Basile <brookebasile@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH] ath9k: hif_usb: fix memory leak of urbs in ath9k_hif_usb_dealloc_tx_urbs()
+Date:   Mon, 25 Jul 2022 18:13:59 +0300
+Message-Id: <20220725151359.283704-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conform with other drivers' map_bus functions.
+Syzkaller reports a long-known leak of urbs in
+ath9k_hif_usb_dealloc_tx_urbs().
 
-Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+The cause of the leak is that usb_get_urb() is called but usb_free_urb()
+(or usb_put_urb()) is not called inside usb_kill_urb() as urb->dev or
+urb->ep fields have not been initialized and usb_kill_urb() returns
+immediately.
+
+The patch removes trying to kill urbs located in hif_dev->tx.tx_buf
+because hif_dev->tx.tx_buf is not supposed to contain urbs which are in
+pending state (the pending urbs are stored in hif_dev->tx.tx_pending).
+The tx.tx_lock is acquired so there should not be any changes in the list.
+
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+
+Fixes: 03fb92a432ea ("ath9k: hif_usb: fix race condition between usb_get_urb() and usb_kill_anchored_urbs()")
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
 ---
- drivers/pci/controller/pcie-brcmstb.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/wireless/ath/ath9k/hif_usb.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index fc1d36f6094e..b40733dd253c 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -685,7 +685,7 @@ static bool brcm_pcie_link_up(struct brcm_pcie *pcie)
- 	return dla && plu;
- }
+diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
+index 518deb5098a2..2d2cd895a9d4 100644
+--- a/drivers/net/wireless/ath/ath9k/hif_usb.c
++++ b/drivers/net/wireless/ath/ath9k/hif_usb.c
+@@ -780,14 +780,10 @@ static void ath9k_hif_usb_dealloc_tx_urbs(struct hif_device_usb *hif_dev)
+ 	spin_lock_irqsave(&hif_dev->tx.tx_lock, flags);
+ 	list_for_each_entry_safe(tx_buf, tx_buf_tmp,
+ 				 &hif_dev->tx.tx_buf, list) {
+-		usb_get_urb(tx_buf->urb);
+-		spin_unlock_irqrestore(&hif_dev->tx.tx_lock, flags);
+-		usb_kill_urb(tx_buf->urb);
+ 		list_del(&tx_buf->list);
+ 		usb_free_urb(tx_buf->urb);
+ 		kfree(tx_buf->buf);
+ 		kfree(tx_buf);
+-		spin_lock_irqsave(&hif_dev->tx.tx_lock, flags);
+ 	}
+ 	spin_unlock_irqrestore(&hif_dev->tx.tx_lock, flags);
  
--static void __iomem *brcm_pcie_map_conf(struct pci_bus *bus, unsigned int devfn,
-+static void __iomem *brcm_pcie_map_bus(struct pci_bus *bus, unsigned int devfn,
- 					int where)
- {
- 	struct brcm_pcie *pcie = bus->sysdata;
-@@ -706,7 +706,7 @@ static void __iomem *brcm_pcie_map_conf(struct pci_bus *bus, unsigned int devfn,
- 	return base + PCIE_EXT_CFG_DATA + (where & 0xfff);
- }
- 
--static void __iomem *brcm_pcie_map_conf32(struct pci_bus *bus, unsigned int devfn,
-+static void __iomem *brcm_pcie_map_bus32(struct pci_bus *bus, unsigned int devfn,
- 					 int where)
- {
- 	struct brcm_pcie *pcie = bus->sysdata;
-@@ -1509,7 +1509,7 @@ static const struct of_device_id brcm_pcie_match[] = {
- };
- 
- static struct pci_ops brcm_pcie_ops = {
--	.map_bus = brcm_pcie_map_conf,
-+	.map_bus = brcm_pcie_map_bus,
- 	.read = pci_generic_config_read,
- 	.write = pci_generic_config_write,
- 	.add_bus = brcm_pcie_add_bus,
-@@ -1517,7 +1517,7 @@ static struct pci_ops brcm_pcie_ops = {
- };
- 
- static struct pci_ops brcm_pcie_ops32 = {
--	.map_bus = brcm_pcie_map_conf32,
-+	.map_bus = brcm_pcie_map_bus32,
- 	.read = pci_generic_config_read32,
- 	.write = pci_generic_config_write32,
- 	.add_bus = brcm_pcie_add_bus,
 -- 
-2.17.1
+2.25.1
 

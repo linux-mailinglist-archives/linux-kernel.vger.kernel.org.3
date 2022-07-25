@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D28F5807EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47255807F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiGYXEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 19:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S236999AbiGYXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 19:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiGYXEb (ORCPT
+        with ESMTP id S230015AbiGYXFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:04:31 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E61A248EA;
-        Mon, 25 Jul 2022 16:04:30 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso9738630otv.3;
-        Mon, 25 Jul 2022 16:04:30 -0700 (PDT)
+        Mon, 25 Jul 2022 19:05:38 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8527513F6B
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:05:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id g17so11764992plh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:05:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dsyzfIxg32VvoJpFM6+63IrnxKTtUOzvq3rmFFDbmP8=;
+        b=PxgkMBzLRHAfQ7B60nayCWYa9mhZ1axfflsaNINC6NCdhjoBb8XnXYHiVXBXdsFLTl
+         T/oRCXBb2cqpoOGmJsxMGJYKnMxTcI1ASsnjywOYadrG96hUKouYta/7/8/I7wNHLDKZ
+         mPmuh9Y5RLkV0wyjAXz6MQV2dhX5Ikx3kpmj4pamKDCNnVBBzDQ7LOzvUnojB7UEscmF
+         Okeeb+IIQ16/I+P3QusE1odKz7kOl/hWStztAcUVPNWS71ANOCyYSnRGQUYYiNMRbbAI
+         lPAfg1ohZ+YsPqBrrQG1P3okSuIvzbvE7N6hzTwjmwLtt7HjqACs2Uf77/SmlQdgsIyb
+         OF/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=eTgoh7DbKWnFDYZi2IHM/90awoS3XaT0gHdUIdLXdDU=;
-        b=OCx4d620BSA6qRO14Fcfh3h1NhEYhVMf90/R6vo4eZ1DiHFalpHoydPNjDHI/ej590
-         3CaU/6zdDRvMpWImrIrZNPISkNllg9yYOv2wLQk65ETj3kByY1wAP12etZR3DBenZeXU
-         oTMauJv07k7WHWJ31HXY3EOrjIK4cc7HZV0SUiFHrsbxAnkbW0GrhfXxU7G+BTfC0cVv
-         dAAcaiTO/TC/59t+ThopRxj7hbXy7lrUN37bKF8PMP8DNWCkvf0c6KOqA5SC6Gu5NbPV
-         vKIycs3YIzPSEG0sAbJWKQEU4Ekt1zECqMU9JLa/IxKGu+xhYvmFTwZlhg8QdMMdfO81
-         fPuA==
-X-Gm-Message-State: AJIora8QsaCGIkYWXHHEcPfQ1dXerM7jbs2Gw5wLo2kZtapha/y9TmHJ
-        NB8yrbZjhKU5Z8kVeO6Zvw==
-X-Google-Smtp-Source: AGRyM1uecQJtg6pRlsmJSeENIG+qRk4fLLpkHPBOGWzDmAImaMuPt3VmsmvMXDI5IQgKcJbUb5Un/A==
-X-Received: by 2002:a05:6830:d0b:b0:61c:1bc2:fbc0 with SMTP id bu11-20020a0568300d0b00b0061c1bc2fbc0mr5397907otb.348.1658790269759;
-        Mon, 25 Jul 2022 16:04:29 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id f2-20020a4ae602000000b004288e69cac2sm5384551oot.23.2022.07.25.16.04.28
+        bh=dsyzfIxg32VvoJpFM6+63IrnxKTtUOzvq3rmFFDbmP8=;
+        b=t/B3aUKHUO+4TLhcW8Ulc8aq3CPLi0qpQfDv9j/ueQISPabZ/pa9STxxzFsb6KQYBh
+         PQDWYRR1RhriPK8nXe8CaimjkedzAryqzY+83eRWQz79Rwn6foSGGFQllLUcYHXzixS3
+         ZykiCpjWdZPCAnA57jBBFQjh9U8JCt/3FGZbBnhO/ZHgt8RGEh0lFX6cYI3ncH1golGh
+         7F6ldID9cpLIUfrfJgt4Wh83uq5HwagcMHfGu5yNIHtZtWiCeZu/alWEGNKDZuptvHFO
+         ZNrsdB9H5ctm4tXyM5KKhtGlJufszNAyZZ2lgP5wK/nyiHOW6NYnGoYKItXnfLrfCNrF
+         Pdvg==
+X-Gm-Message-State: AJIora8WxP+BiOJ9iaeYUFaeGjVryD+HKpLuMQrZfTr/BphQ3jy8uOZs
+        p2oAK78giqBss+TqNgZbl9GsMQ==
+X-Google-Smtp-Source: AGRyM1uucwSxFARNDP3qz4oGiQRp6IdkQX1/SOtHcdgRETPdnw1LgDTDMzHXG48RHx0yk7MxtfnXpQ==
+X-Received: by 2002:a17:90a:b00b:b0:1f1:6023:dacd with SMTP id x11-20020a17090ab00b00b001f16023dacdmr33521701pjq.184.1658790336675;
+        Mon, 25 Jul 2022 16:05:36 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170902784900b001678dcb4c5asm8425579pln.100.2022.07.25.16.05.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 16:04:29 -0700 (PDT)
-Received: (nullmailer pid 2916995 invoked by uid 1000);
-        Mon, 25 Jul 2022 23:04:28 -0000
-Date:   Mon, 25 Jul 2022 17:04:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
- Document RZ/Five SoC
-Message-ID: <20220725230427.GA2916958-robh@kernel.org>
-References: <20220722141506.20171-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220722141506.20171-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 25 Jul 2022 16:05:35 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 16:05:31 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 2/6] KVM: x86/mmu: Properly account NX huge page
+ workaround for nonpaging MMUs
+Message-ID: <Yt8hu/+I8YzVckvU@google.com>
+References: <20220723012325.1715714-1-seanjc@google.com>
+ <20220723012325.1715714-3-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722141506.20171-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20220723012325.1715714-3-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,24 +75,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Jul 2022 15:15:05 +0100, Lad Prabhakar wrote:
-> Document RZ/Five (R9A07G043) SYSC bindings. The SYSC block found on the
-> RZ/Five SoC is almost identical to one found on the RZ/G2UL (and alike)
-> SoC's. "renesas,r9a07g043-sysc" compatible string will be used on the
-> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
-> SoC.
+On Sat, Jul 23, 2022 at 01:23:21AM +0000, Sean Christopherson wrote:
+> Account and track NX huge pages for nonpaging MMUs so that a future
+> enhancement to precisely check if shadow page cannot be replaced by a NX
+> huge page doesn't get false positives.  Without correct tracking, KVM can
+> get stuck in a loop if an instruction is fetching and writing data on the
+> same huge page, e.g. KVM installs a small executable page on the fetch
+> fault, replaces it with an NX huge page on the write fault, and faults
+> again on the fetch.
 > 
-> The SYSC block on RZ/Five has no interrupts to the core so to accommodate
-> this SoC make interrupts{,-names} properties optional.
+> Alternatively, and perhaps ideally, KVM would simply not enforce the
+> workaround for nonpaging MMUs.  The guest has no page tables to abuse
+> and KVM is guaranteed to switch to a different MMU on CR0.PG being
+> toggled so there's no security or performance concerns.  However, getting
+> make_spte() to play nice now and in the future is unnecessarily complex.
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1->v2:
-> * Dropped "renesas,r9a07g043-rzfive-sysc" compatible string
-> * Made interrupts{,-names} properties optional
-> ---
->  .../devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml   | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> In the current code base, make_spte() can enforce the mitigation if TDP
+> is enabled or the MMU is indirect, but make_spte() may not always have a
+> vCPU/MMU to work with, e.g. if KVM were to support in-line huge page
+> promotion when disabling dirty logging.
 > 
+> Without a vCPU/MMU, KVM could either pass in the correct information
+> and/or derive it from the shadow page, but the former is ugly and the
+> latter subtly non-trivial due to the possitibility of direct shadow pages
+> in indirect MMUs.  Given that using shadow paging with an unpaged guest
+> is far from top priority _and_ has been subjected to the workaround since
+> its inception, keep it simple and just fix the accounting glitch.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It's odd that KVM enforced NX Huge Pages but just skipped the accounting.
+In retrospect, that was bound to cause some issue.
+
+Aside from the comment suggestion below,
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+> ---
+>  arch/x86/kvm/mmu/mmu.c          |  2 +-
+>  arch/x86/kvm/mmu/mmu_internal.h |  8 ++++++++
+>  arch/x86/kvm/mmu/spte.c         | 11 +++++++++++
+>  3 files changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 1112e3a4cf3e..493cdf1c29ff 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3135,7 +3135,7 @@ static int __direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  			continue;
+>  
+>  		link_shadow_page(vcpu, it.sptep, sp);
+> -		if (fault->is_tdp && fault->huge_page_disallowed)
+> +		if (fault->huge_page_disallowed)
+>  			account_nx_huge_page(vcpu->kvm, sp,
+>  					     fault->req_level >= it.level);
+>  	}
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index ff4ca54b9dda..83644a0167ab 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -201,6 +201,14 @@ struct kvm_page_fault {
+>  
+>  	/* Derived from mmu and global state.  */
+>  	const bool is_tdp;
+> +
+> +	/*
+> +	 * Note, enforcing the NX huge page mitigation for nonpaging MMUs
+> +	 * (shadow paging, CR0.PG=0 in the guest) is completely unnecessary.
+> +	 * The guest doesn't have any page tables to abuse and is guaranteed
+> +	 * to switch to a different MMU when CR0.PG is toggled on (may not
+> +	 * always be guaranteed when KVM is using TDP).  See also make_spte().
+> +	 */
+>  	const bool nx_huge_page_workaround_enabled;
+>  
+>  	/*
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 7314d27d57a4..9f3e5af088a5 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -147,6 +147,17 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  	if (!prefetch)
+>  		spte |= spte_shadow_accessed_mask(spte);
+>  
+> +	/*
+> +	 * For simplicity, enforce the NX huge page mitigation even if not
+> +	 * strictly necessary.  KVM could ignore if the mitigation if paging is
+> +	 * disabled in the guest, but KVM would then have to ensure a new MMU
+> +	 * is loaded (or all shadow pages zapped) when CR0.PG is toggled on,
+> +	 * and that's a net negative for performance when TDP is enabled.  KVM
+> +	 * could ignore the mitigation if TDP is disabled and CR0.PG=0, as KVM
+> +	 * will always switch to a new MMU if paging is enabled in the guest,
+> +	 * but that adds complexity just to optimize a mode that is anything
+> +	 * but performance critical.
+> +	 */
+
+I had some trouble parsing the last sentence. How about this for slightly
+better flow:
+
+	/*
+	 * For simplicity, enforce the NX huge page mitigation even if not
+	 * strictly necessary.  KVM could ignore if the mitigation if paging is
+	 * disabled in the guest, but KVM would then have to ensure a new MMU
+	 * is loaded (or all shadow pages zapped) when CR0.PG is toggled on,
+         * and that's a net negative for performance when TDP is enabled.  When
+         * TDP is disabled, KVM will always switch to a new MMU when CR0.PG is
+         * toggled, but that would tie make_spte() further to vCPU/MMU state
+         * and add complexity just to optimize a mode that is anything but
+         * performance critical.
+	 */
+
+>  	if (level > PG_LEVEL_4K && (pte_access & ACC_EXEC_MASK) &&
+>  	    is_nx_huge_page_enabled(vcpu->kvm)) {
+>  		pte_access &= ~ACC_EXEC_MASK;
+> -- 
+> 2.37.1.359.gd136c6c3e2-goog
+> 

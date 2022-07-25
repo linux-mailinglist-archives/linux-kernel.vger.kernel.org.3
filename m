@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD18557FE40
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8789E57FE3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiGYLUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 07:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
+        id S234870AbiGYLU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbiGYLU0 (ORCPT
+        with ESMTP id S229694AbiGYLUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 07:20:26 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D48317AAA;
-        Mon, 25 Jul 2022 04:20:24 -0700 (PDT)
+        Mon, 25 Jul 2022 07:20:25 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1922175A7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:20:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658748024; x=1690284024;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RuTOhHe/Z85XuEOFDkWIJLJ9pTTo7hHky8fWNmi6cLg=;
-  b=ADsEC+8zMFNW7TNS9MmzGWKUBVLeRpbXZB324hu2sDpfzD06HQ+1Egf3
-   E4v4za7yIXMvWuQdJxmUF/n+zYuKfgE+HngSYktEFeVFSwsCYpk990q2Y
-   6orSK+k53nsrWTk0SnAnETtlBw2gUTTk6sfjC1kLiKF6sNaTKtxr+qLFW
-   /ei2LE8J7Y4vyFihMgVAOaT0j8CmoyBvMv3OyMp8v3/XxfR0fFXlKLFA4
-   7nYVsE4SdJTYyU6v+78wacf30AR5350YnzNlFBXNrSkCWUmBjsH89oKG7
-   E+tOU2sSaeodXVwrK7B8osL/vVEgLnJOpG1SalEF+mmpxlVhWSO/aWPwj
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="351669323"
+  t=1658748023; x=1690284023;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a9BcNWLmuD1zb0hx82FThC890vZ7sFx67yUHjFwOXcs=;
+  b=gKGmjY3ZhAsK5+w8VeFjWp485uUGNLSo0RWSnto2zNka0bsJ53CdqChY
+   BeHGlLQv4THrpqXW6wDrxeT5HEdt9RF2lvQBmAvIaPMWzd4v7+5ZORm3u
+   KCMWCgxKgVAVC5MBnocZdZTiKBa7WUqYQl2o64p+n/gOVg1VBgcAqO6Py
+   iNKEXNumkmEQ4sPDVVn8s/uRJn+5gy1fBF1MYPoAb6pJzSs64aNSTQXjI
+   t3qa/spaxEq4IREVkEfH+eo3ZYjmgVsCFApyxuiU8tj3E/JabigSrrdTW
+   kRj0YEXSNgQACjuYqbehVdbcHHkr0IMG0C+N4Qc+CNVQFakaSi1n7rmUG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="285223154"
 X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="351669323"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:20:23 -0700
+   d="scan'208";a="285223154"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:20:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="689025180"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Jul 2022 04:20:21 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFw8K-00052K-1s;
-        Mon, 25 Jul 2022 11:20:20 +0000
-Date:   Mon, 25 Jul 2022 19:19:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, skhan@linuxfoundation.org, corbet@lwn.net,
-        mairacanal@riseup.net
-Cc:     kbuild-all@lists.01.org, Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] Documentation: kunit: Add CLI args for kunit_tool
-Message-ID: <202207251914.OgQ6lGdw-lkp@intel.com>
-References: <20220724184758.1723925-1-sadiyakazi@google.com>
+   d="scan'208";a="549954137"
+Received: from shbuild999.sh.intel.com ([10.239.146.138])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jul 2022 04:20:19 -0700
+From:   Feng Tang <feng.tang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Feng Tang <feng.tang@intel.com>
+Subject: [PATCH v2 1/2] mm/slub: enable debugging memory wasting of kmalloc
+Date:   Mon, 25 Jul 2022 19:20:24 +0800
+Message-Id: <20220725112025.22625-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220724184758.1723925-1-sadiyakazi@google.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,68 +67,358 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sadiya,
+kmalloc's API family is critical for mm, with one shortcoming that
+its object size is fixed to be power of 2. When user requests memory
+for '2^n + 1' bytes, actually 2^(n+1) bytes will be allocated, so
+in worst case, there is around 50% memory space waste.
 
-Thank you for the patch! Perhaps something to improve:
+We've met a kernel boot OOM panic (v5.10), and from the dumped slab info:
 
-[auto build test WARNING on lwn/docs-next]
-[also build test WARNING on linus/master v5.19-rc8 next-20220722]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+    [   26.062145] kmalloc-2k            814056KB     814056KB
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sadiya-Kazi/Documentation-kunit-Add-CLI-args-for-kunit_tool/20220725-025055
-base:   git://git.lwn.net/linux.git docs-next
-reproduce: make htmldocs
+From debug we found there are huge number of 'struct iova_magazine',
+whose size is 1032 bytes (1024 + 8), so each allocation will waste
+1016 bytes. Though the issue was solved by giving the right (bigger)
+size of RAM, it is still nice to optimize the size (either use a
+kmalloc friendly size or create a dedicated slab for it).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+And from lkml archive, there was another crash kernel OOM case [1]
+back in 2019, which seems to be related with the similar slab waste
+situation, as the log is similar:
 
-All warnings (new ones prefixed by >>):
+    [    4.332648] iommu: Adding device 0000:20:02.0 to group 16
+    [    4.338946] swapper/0 invoked oom-killer: gfp_mask=0x6040c0(GFP_KERNEL|__GFP_COMP), nodemask=(null), order=0, oom_score_adj=0
+    ...
+    [    4.857565] kmalloc-2048           59164KB      59164KB
 
->> Documentation/dev-tools/kunit/run_wrapper.rst:262: WARNING: Unexpected indentation.
+The crash kernel only has 256M memory, and 59M is pretty big here.
+(Note: the related code has been changed and optimised in recent
+kernel [2], these logs are picked just to demo the problem)
 
-vim +262 Documentation/dev-tools/kunit/run_wrapper.rst
+So add an way to track each kmalloc's memory waste info, and leverage
+the existing SLUB debug framework to show its call stack info, so
+that user can evaluate the waste situation, identify some hot spots
+and optimize accordingly, for a better utilization of memory.
 
-   226	
-   227	- ``--help``: Lists all available options. To list common options,
-   228	  place ``--help`` before the command. To list options specific to that
-   229	  command, place ``--help`` after the command.
-   230	
-   231	  .. note:: Different commands (``config``, ``build``, ``run``, etc)
-   232	            have different supported options.
-   233	- ``--build_dir``: Specifies kunit_tool build directory. It includes
-   234	  the ``.kunitconfig``, ``.config`` files and compiled kernel.
-   235	
-   236	- ``--make_options``: Specifies additional options to pass to make, when
-   237	  compiling a kernel (using ``build`` or ``run`` commands). For example:
-   238	  to enable compiler warnings, we can pass ``--make_options W=1``.
-   239	
-   240	- ``--alltests``: Builds a UML kernel with all config options enabled
-   241	  using ``make allyesconfig``. This allows us to run as many tests as
-   242	  possible.
-   243	
-   244	  .. note:: It is slow and prone to breakage as new options are
-   245	            added or modified. Instead, enable all tests
-   246	            which have satisfied dependencies by adding
-   247	            ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
-   248	
-   249	- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
-   250	  file. For example:
-   251	
-   252	  - ``lib/kunit/.kunitconfig`` can be the path of the file.
-   253	
-   254	  - ``lib/kunit`` can be the directory in which the file is located.
-   255	
-   256	  This file is used to build and run with a predefined set of tests
-   257	  and their dependencies. For example, to run tests for a given subsystem.
-   258	
-   259	- ``--kconfig_add``: Specifies additional configuration options to be
-   260	  appended to the ``.kunitconfig`` file. For example:
-   261	  .. code-block::
- > 262		./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y
-   263	
+The waste info is integrated into existing interface:
+/sys/kernel/debug/slab/kmalloc-xx/alloc_traces, one example of
+'kmalloc-4k' after boot is:
 
+126 ixgbe_alloc_q_vector+0xa5/0x4a0 [ixgbe] waste=233856/1856 age=1493302/1493830/1494358 pid=1284 cpus=32 nodes=1
+        __slab_alloc.isra.86+0x52/0x80
+        __kmalloc_node+0x143/0x350
+        ixgbe_alloc_q_vector+0xa5/0x4a0 [ixgbe]
+        ixgbe_init_interrupt_scheme+0x1a6/0x730 [ixgbe]
+        ixgbe_probe+0xc8e/0x10d0 [ixgbe]
+        local_pci_probe+0x42/0x80
+        work_for_cpu_fn+0x13/0x20
+        process_one_work+0x1c5/0x390
+
+which means in 'kmalloc-4k' slab, there are 126 requests of
+2240 bytes which got a 4KB space (wasting 1856 bytes each
+and 233856 bytes in total). And when system starts some real
+workload like multiple docker instances, there are more
+severe waste.
+
+[1]. https://lkml.org/lkml/2019/8/12/266
+[2]. https://lore.kernel.org/lkml/2920df89-9975-5785-f79b-257d3052dfaf@huawei.com/
+
+[Thanks Hyeonggon for pointing out several bugs about sorting/format]
+[Thanks Vlastimil for suggesting way to reduce memory usage of
+ orig_size and keep it only for kmalloc objects]
+
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+---
+  since v1:
+    * limit the 'orig_size' to kmalloc objects only, and save
+      it after track in metadata (Vlastimil Babka)
+    * fix a offset calculation problem in print_trailer
+
+  since RFC:
+    * fix problems in kmem_cache_alloc_bulk() and records sorting,
+      improve the print format (Hyeonggon Yoo)
+    * fix a compiling issue found by 0Day bot
+    * update the commit log based info from iova developers
+
+
+
+ include/linux/slab.h |  2 +
+ mm/slub.c            | 96 ++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 82 insertions(+), 16 deletions(-)
+
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 0fefdf528e0d..a713b0e5bbcd 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -29,6 +29,8 @@
+ #define SLAB_RED_ZONE		((slab_flags_t __force)0x00000400U)
+ /* DEBUG: Poison objects */
+ #define SLAB_POISON		((slab_flags_t __force)0x00000800U)
++/* Indicate a kmalloc slab */
++#define SLAB_KMALLOC		((slab_flags_t __force)0x00001000U)
+ /* Align objs on cache lines */
+ #define SLAB_HWCACHE_ALIGN	((slab_flags_t __force)0x00002000U)
+ /* Use GFP_DMA memory */
+diff --git a/mm/slub.c b/mm/slub.c
+index b1281b8654bd..9763a38bc4f0 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -191,6 +191,12 @@ static inline bool kmem_cache_debug(struct kmem_cache *s)
+ 	return kmem_cache_debug_flags(s, SLAB_DEBUG_FLAGS);
+ }
+ 
++static inline bool slub_debug_orig_size(struct kmem_cache *s)
++{
++	return (s->flags & SLAB_KMALLOC &&
++			kmem_cache_debug_flags(s, SLAB_STORE_USER));
++}
++
+ void *fixup_red_left(struct kmem_cache *s, void *p)
+ {
+ 	if (kmem_cache_debug_flags(s, SLAB_RED_ZONE))
+@@ -814,6 +820,36 @@ static void print_slab_info(const struct slab *slab)
+ 	pr_err("Slab 0x%p objects=%u used=%u fp=0x%p flags=%pGp\n",
+ 	       slab, slab->objects, slab->inuse, slab->freelist,
+ 	       folio_flags(folio, 0));
++
++}
++static inline void set_orig_size(struct kmem_cache *s,
++					void *object, unsigned int orig_size)
++{
++	void *p = kasan_reset_tag(object);
++
++	if (!slub_debug_orig_size(s))
++		return;
++
++	p = object + get_info_end(s);
++
++	if (s->flags & SLAB_STORE_USER)
++		p += sizeof(struct track) * 2;
++
++	*(unsigned int *)p = orig_size;
++}
++
++static unsigned int get_orig_size(struct kmem_cache *s, void *object)
++{
++	void *p = kasan_reset_tag(object);
++
++	if (!slub_debug_orig_size(s))
++		return s->object_size;
++
++	p = object + get_info_end(s);
++	if (s->flags & SLAB_STORE_USER)
++		p += sizeof(struct track) * 2;
++
++	return *(unsigned int *)p;
+ }
+ 
+ static void slab_bug(struct kmem_cache *s, char *fmt, ...)
+@@ -875,6 +911,9 @@ static void print_trailer(struct kmem_cache *s, struct slab *slab, u8 *p)
+ 	if (s->flags & SLAB_STORE_USER)
+ 		off += 2 * sizeof(struct track);
+ 
++	if (slub_debug_orig_size(s))
++		off += sizeof(unsigned int);
++
+ 	off += kasan_metadata_size(s);
+ 
+ 	if (off != size_from_object(s))
+@@ -1030,6 +1069,9 @@ static int check_pad_bytes(struct kmem_cache *s, struct slab *slab, u8 *p)
+ 		/* We also have user information there */
+ 		off += 2 * sizeof(struct track);
+ 
++	if (slub_debug_orig_size(s))
++		off += sizeof(unsigned int);
++
+ 	off += kasan_metadata_size(s);
+ 
+ 	if (size_from_object(s) == off)
+@@ -1325,7 +1367,8 @@ static inline int alloc_consistency_checks(struct kmem_cache *s,
+ 
+ static noinline int alloc_debug_processing(struct kmem_cache *s,
+ 					struct slab *slab,
+-					void *object, unsigned long addr)
++					void *object, unsigned long addr,
++					unsigned int orig_size)
+ {
+ 	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+ 		if (!alloc_consistency_checks(s, slab, object))
+@@ -1335,6 +1378,9 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
+ 	/* Success perform special debug activities for allocs */
+ 	if (s->flags & SLAB_STORE_USER)
+ 		set_track(s, object, TRACK_ALLOC, addr);
++
++	set_orig_size(s, object, orig_size);
++
+ 	trace(s, slab, object, 1);
+ 	init_object(s, object, SLUB_RED_ACTIVE);
+ 	return 1;
+@@ -1661,7 +1707,8 @@ static inline
+ void setup_slab_debug(struct kmem_cache *s, struct slab *slab, void *addr) {}
+ 
+ static inline int alloc_debug_processing(struct kmem_cache *s,
+-	struct slab *slab, void *object, unsigned long addr) { return 0; }
++	struct slab *slab, void *object, unsigned long addr,
++	unsigned int orig_size) { return 0; }
+ 
+ static inline int free_debug_processing(
+ 	struct kmem_cache *s, struct slab *slab,
+@@ -2905,7 +2952,7 @@ static inline void *get_freelist(struct kmem_cache *s, struct slab *slab)
+  * already disabled (which is the case for bulk allocation).
+  */
+ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+-			  unsigned long addr, struct kmem_cache_cpu *c)
++			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
+ {
+ 	void *freelist;
+ 	struct slab *slab;
+@@ -3048,7 +3095,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ check_new_slab:
+ 
+ 	if (kmem_cache_debug(s)) {
+-		if (!alloc_debug_processing(s, slab, freelist, addr)) {
++		if (!alloc_debug_processing(s, slab, freelist, addr, orig_size)) {
+ 			/* Slab failed checks. Next slab needed */
+ 			goto new_slab;
+ 		} else {
+@@ -3102,7 +3149,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+  * pointer.
+  */
+ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+-			  unsigned long addr, struct kmem_cache_cpu *c)
++			  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
+ {
+ 	void *p;
+ 
+@@ -3115,7 +3162,7 @@ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 	c = slub_get_cpu_ptr(s->cpu_slab);
+ #endif
+ 
+-	p = ___slab_alloc(s, gfpflags, node, addr, c);
++	p = ___slab_alloc(s, gfpflags, node, addr, c, orig_size);
+ #ifdef CONFIG_PREEMPT_COUNT
+ 	slub_put_cpu_ptr(s->cpu_slab);
+ #endif
+@@ -3206,7 +3253,7 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
+ 	 */
+ 	if (IS_ENABLED(CONFIG_PREEMPT_RT) ||
+ 	    unlikely(!object || !slab || !node_match(slab, node))) {
+-		object = __slab_alloc(s, gfpflags, node, addr, c);
++		object = __slab_alloc(s, gfpflags, node, addr, c, orig_size);
+ 	} else {
+ 		void *next_object = get_freepointer_safe(s, object);
+ 
+@@ -3731,7 +3778,7 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
+ 			 * of re-populating per CPU c->freelist
+ 			 */
+ 			p[i] = ___slab_alloc(s, flags, NUMA_NO_NODE,
+-					    _RET_IP_, c);
++					    _RET_IP_, c, s->object_size);
+ 			if (unlikely(!p[i]))
+ 				goto error;
+ 
+@@ -4140,6 +4187,10 @@ static int calculate_sizes(struct kmem_cache *s)
+ 		 * the object.
+ 		 */
+ 		size += 2 * sizeof(struct track);
++
++	/* Save the original requested kmalloc size */
++	if (slub_debug_orig_size(s))
++		size += sizeof(unsigned int);
+ #endif
+ 
+ 	kasan_cache_create(s, &size, &s->flags);
+@@ -4864,7 +4915,7 @@ void __init kmem_cache_init(void)
+ 
+ 	/* Now we can use the kmem_cache to allocate kmalloc slabs */
+ 	setup_kmalloc_cache_index_table();
+-	create_kmalloc_caches(0);
++	create_kmalloc_caches(SLAB_KMALLOC);
+ 
+ 	/* Setup random freelists for each cache */
+ 	init_freelist_randomization();
+@@ -5092,6 +5143,7 @@ struct location {
+ 	depot_stack_handle_t handle;
+ 	unsigned long count;
+ 	unsigned long addr;
++	unsigned long waste;
+ 	long long sum_time;
+ 	long min_time;
+ 	long max_time;
+@@ -5138,13 +5190,15 @@ static int alloc_loc_track(struct loc_track *t, unsigned long max, gfp_t flags)
+ }
+ 
+ static int add_location(struct loc_track *t, struct kmem_cache *s,
+-				const struct track *track)
++				const struct track *track,
++				unsigned int orig_size)
+ {
+ 	long start, end, pos;
+ 	struct location *l;
+-	unsigned long caddr, chandle;
++	unsigned long caddr, chandle, cwaste;
+ 	unsigned long age = jiffies - track->when;
+ 	depot_stack_handle_t handle = 0;
++	unsigned int waste = s->object_size - orig_size;
+ 
+ #ifdef CONFIG_STACKDEPOT
+ 	handle = READ_ONCE(track->handle);
+@@ -5162,11 +5216,13 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
+ 		if (pos == end)
+ 			break;
+ 
+-		caddr = t->loc[pos].addr;
+-		chandle = t->loc[pos].handle;
+-		if ((track->addr == caddr) && (handle == chandle)) {
++		l = &t->loc[pos];
++		caddr = l->addr;
++		chandle = l->handle;
++		cwaste = l->waste;
++		if ((track->addr == caddr) && (handle == chandle) &&
++			(waste == cwaste)) {
+ 
+-			l = &t->loc[pos];
+ 			l->count++;
+ 			if (track->when) {
+ 				l->sum_time += age;
+@@ -5191,6 +5247,9 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
+ 			end = pos;
+ 		else if (track->addr == caddr && handle < chandle)
+ 			end = pos;
++		else if (track->addr == caddr && handle == chandle &&
++				waste < cwaste)
++			end = pos;
+ 		else
+ 			start = pos;
+ 	}
+@@ -5214,6 +5273,7 @@ static int add_location(struct loc_track *t, struct kmem_cache *s,
+ 	l->min_pid = track->pid;
+ 	l->max_pid = track->pid;
+ 	l->handle = handle;
++	l->waste = waste;
+ 	cpumask_clear(to_cpumask(l->cpus));
+ 	cpumask_set_cpu(track->cpu, to_cpumask(l->cpus));
+ 	nodes_clear(l->nodes);
+@@ -5232,7 +5292,7 @@ static void process_slab(struct loc_track *t, struct kmem_cache *s,
+ 
+ 	for_each_object(p, s, addr, slab->objects)
+ 		if (!test_bit(__obj_to_index(s, addr, p), obj_map))
+-			add_location(t, s, get_track(s, p, alloc));
++			add_location(t, s, get_track(s, p, alloc), get_orig_size(s, p));
+ }
+ #endif  /* CONFIG_DEBUG_FS   */
+ #endif	/* CONFIG_SLUB_DEBUG */
+@@ -6102,6 +6162,10 @@ static int slab_debugfs_show(struct seq_file *seq, void *v)
+ 		else
+ 			seq_puts(seq, "<not-available>");
+ 
++		if (l->waste)
++			seq_printf(seq, " waste=%lu/%lu",
++				l->count * l->waste, l->waste);
++
+ 		if (l->sum_time != l->min_time) {
+ 			seq_printf(seq, " age=%ld/%llu/%ld",
+ 				l->min_time, div_u64(l->sum_time, l->count),
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

@@ -2,89 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF8A57FFD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5638957FFD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbiGYNcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        id S234616AbiGYNc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234946AbiGYNcQ (ORCPT
+        with ESMTP id S234946AbiGYNc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:32:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D806D128
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658755935;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 25 Jul 2022 09:32:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BBFDE96;
+        Mon, 25 Jul 2022 06:32:24 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6B7F61FB52;
+        Mon, 25 Jul 2022 13:32:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658755943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JyZo0WxiL5oXBoeMfzl8+8hKmuMVqE5C0/+Gga0ddkY=;
-        b=SH3xYtR1a54Co6zGzUYH8yiAg1kEF+aXLJQdP1tgHylLPYPtYw6vzExyOm2QUEe17V1RW0
-        lNwMjxvhYVWCgqmL0zIPTqKq9xQSGTVhaO560vCpJMGYu4S/cGgM0ZRezbaATCxg99kInv
-        MAkcBe1ZbiODnMFOxRt3X/AMlQAdksg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-103--Zr6J0TZO1qRWRxqH02CyQ-1; Mon, 25 Jul 2022 09:32:10 -0400
-X-MC-Unique: -Zr6J0TZO1qRWRxqH02CyQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=t9LEZiaIxr7qWut5KwVWqnFFQS4Gg1WXbelNaKHOXxs=;
+        b=ZawmajlquknUUrsNaNFuwHIe/SAjv+wxqrOqyi2DXAo1rlqiTjetta3AbZl0nNBVHRZwgT
+        0hzfjG5w1QGJ43WbAPCdIOCiVlxnEfms76oYWwAz/GQ3zoYbE4+RvTXe7eeo9gToJjI1oV
+        eONWmLAqsWsWHuvU5u1dCRkiz/g8FrA=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 87EE980418F;
-        Mon, 25 Jul 2022 13:32:08 +0000 (UTC)
-Received: from localhost (ovpn-12-90.pek2.redhat.com [10.72.12.90])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 841DB40E80E0;
-        Mon, 25 Jul 2022 13:32:07 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 21:32:04 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     corbet@lwn.net, Slark Xiao <slark_xiao@163.com>, vgoyal@redhat.com,
-        dyoung@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        william.gray@linaro.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, bigeasy@linutronix.de,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-cachefs@redhat.com
-Subject: Re: [PATCH v2] docs: Fix typo in comment
-Message-ID: <Yt6bVIoRa0nIvxei@MiWiFi-R3L-srv>
-References: <YtlyDZEsOZHt6tRs@MiWiFi-R3L-srv>
- <20220721015605.20651-1-slark_xiao@163.com>
- <2778505.1658746506@warthog.procyon.org.uk>
+        by relay2.suse.de (Postfix) with ESMTPS id 4198F2C153;
+        Mon, 25 Jul 2022 13:32:22 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 15:32:22 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Rik van Riel <riel@surriel.com>
+Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        kernel-team@fb.com, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Breno Leitao <leitao@debian.org>
+Subject: Re: [PATCH v2] livepatch: fix race between fork and
+ klp_reverse_transition
+Message-ID: <Yt6bZo5ztnVSjLLC@alley>
+References: <20220720121023.043738bb@imladris.surriel.com>
+ <YtrCqMLUqJlcoqIo@alley>
+ <20220722150106.683f3704@imladris.surriel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2778505.1658746506@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220722150106.683f3704@imladris.surriel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/25/22 at 11:55am, David Howells wrote:
-> Baoquan He <bhe@redhat.com> wrote:
+On Fri 2022-07-22 15:01:06, Rik van Riel wrote:
+> v2: a better approach, suggested by Petr (thank you)
+> ---8<---
 > 
-> > sed -i "s/the the /the /g" `git grep -l "the the "`
+> When a KLP fails to apply, klp_reverse_transition will clear the
+> TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
+> which are not on the task list yet.
 > 
-> You might want to clarify the first "the" with a preceding boundary marker.
-> There are some English words ending in "the" that can be used as verbs, though
-> I'm not sure you'd find any of them here - clothe for example.
+> Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
+> parent to the child early on, in dup_task_struct -> setup_thread_stack.
+> 
+> Much later, klp_copy_process will set child->patch_state to match
+> that of the parent.
+> 
+> However, the parent's patch_state may have been changed by KLP loading
+> or unloading since it was initially copied over into the child.
+> 
+> This results in the KLP code occasionally hitting this warning in
+> klp_complete_transition:
+> 
+>         for_each_process_thread(g, task) {
+>                 WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
+>                 task->patch_state = KLP_UNDEFINED;
+>         }
+> 
+> This patch will set, or clear, the TIF_PATCH_PENDING flag in the child
+> process depending on whether or not it is needed at the time
+> klp_copy_process is called, at a point in copy_process where the
+> tasklist_lock is held exclusively, preventing races with the KLP
+> code.
+> 
+> This should prevent this warning from triggering again in the
+> future.
+> 
+> I have not yet figured out whether this would also help with races in
+> the other direction, where the child process fails to have TIF_PATCH_PENDING
+> set and somehow misses a transition, or whether the retries in
+> klp_try_complete_transition would catch that task and help it transition
+> later.
 
-Right. I plan to split this big one into patches corresponding to
-different component as Jonathan suggested, and will consider how to mark
-the first 'the' as you suggested, and wrap Slark's pathces which
-includes typo fix of "then the".
+It should fix these races as well. Both task->patch_state and
+TIF_PATCH_PENDING flag are almost always modified under tasklist_lock.
 
-Thanks
-Baoquan
+One exception is klp_update_patch_state(current) but it could not
+race because klp_copy_process() is called under spinlock.
+So that "current" can't sleep and can't get migrated in the middle of
+klp_copy_process().
 
+Another exception is klp_check_and_switch_task() that is called
+under p->pi_lock. It prevents rescheduling and the task will be
+migrated only when sleeping. As a result "current" again
+can't get migrated inside klp_copy_process().
+
+Finally, the state of "idle" tasks (idle_task(cpu)) is updated
+without tasklist_lock. But they are not forked so that we are
+on safe side.
+
+
+> Signed-off-by: Rik van Riel <riel@surriel.com>
+> Reported-by: Breno Leitao <leitao@debian.org>
+
+We should update the commit message and mention also the other
+two locations where the state is manipulated without tasklist_lock.
+I am sorry that I did not mention it on Friday.
+
+Also we should remove "I have not figured yet whether". The patch
+should fix these races as well.
+
+With the above changes:
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+
+Best Regards,
+Petr

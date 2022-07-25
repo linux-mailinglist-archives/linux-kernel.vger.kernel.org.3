@@ -2,216 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE9357FF60
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB3E57FF61
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbiGYMz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
+        id S235325AbiGYM4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbiGYMzx (ORCPT
+        with ESMTP id S234936AbiGYM4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:55:53 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D713DB1FA
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:55:51 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id e69so8687297iof.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=H9ottcv2Ksz0B+4pJCK3xpnZJpAvCKLgMsQNt3fRODU=;
-        b=irqzMeXyJAkiNze/TqgZt5WRBDgkHI24zJTp2KdxtJbkBIql0GIz6hlkJbIE/NFIXL
-         QLxBu7UGVKxTCdvJS2SzpaRAwEM5fMwRIki2unw+CoaYltOL3gQmtEGRXmJIUeFKFKET
-         ZLdkq2d9JX1TfED5OzBAfRRdcS8DPZzsnGFd420qxd4XLGq0itPlmXY3aRePxCLEBqzq
-         eGnXCeT38lk06CWOHH6GjJCUv7CUl1stbmbrC2GxAAcTCRlOgw/DzqImyvJ3teBlIc9C
-         si1xxu8X3JDop5H6xVt7580mx7ig0hB4MVDAO/UACy9Ei7AXJo645DIAfKDGo8BaGJT/
-         ZY1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=H9ottcv2Ksz0B+4pJCK3xpnZJpAvCKLgMsQNt3fRODU=;
-        b=i75OkanpflCrFvAhXFJYhhjw+JK5v5xsNNzvgYjOZIrnZ+vyqCPt+F5D/Bk6v7vrW0
-         0kBWFs1jNOpTa/uw9jiVT/o4VYXbVgt7l1jLqNUCDhKHyjssCfucpwPjMBLPOa+951QI
-         5UtI9qYLbj6qMuoxmKJs1RMHFrJjoYd5d5BzkAFHAXrGsdXT0TgykmBA58jB8r+tBBHQ
-         svWcBa9v+qg5QgI3UKZLxds3Ce2RCqcM1TDZHc8+xWiQmINTdd0fCoth4mve3Prjduzb
-         d9GVDdW5hW700XponPavKMRvKP5pln1mcLxtZu+JJbwSen1im3C08eVM0Y7u4XePexKG
-         TVTg==
-X-Gm-Message-State: AJIora+PnifslIuhDnGF3Txiwq2nOa7/Do6qisZbLDZe3bN1NeyJWEa0
-        sXO3buvc7BGApSRbjYj6+6mKddfUv+wWExppRgfFD28nEqE=
-X-Google-Smtp-Source: AGRyM1sf5HEJpYc6fVapLWQURfRQVyT/5HkLC19aRxU2ZVeneO2D9qlHj5/KcqS8VEVZ2Xo8xWrw6Srx7aUabOTwLqo=
-X-Received: by 2002:a02:c722:0:b0:33f:393d:d198 with SMTP id
- h2-20020a02c722000000b0033f393dd198mr4948737jao.22.1658753751071; Mon, 25 Jul
- 2022 05:55:51 -0700 (PDT)
+        Mon, 25 Jul 2022 08:56:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F257BF62
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:56:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28682B80EAE
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D731EC385A9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658753761;
+        bh=Ocs5hztpzo9hNvSzYVdqDXeQpBIVga6VGoPNKHQ7rvA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=m6LX9br5ws7ghvLQfKL8jZ5FqaDjyouTtOMy5blpWWF0O5Kc0zGg0mxPfQYvV8Gmz
+         ON3TEuu74RKD3GFSIUIz4gxZp0STVzw+d5Aa0r9SwKf7aC7zVF+xpnwQ+7qFKUkpN3
+         kLA9uRcpRl7yyY8DTbRbEc1BzHZ5esC2pgTeXk7POcUdtUff/M7g0ZV6G5k46JZW3p
+         x0AkxO1Ue5eAYzY2xLVWCWI/FpmvHIY65z8sG2D0RCnae9GmhxltUAX7JdxSHznOgP
+         DZDzrz68YYqmFAnPwmqofiWm5V5aWIqLNsrpKIUwwoyAyMgvEmAJQ8TuXfzjyA4+EV
+         B/9cd8uzmIDJw==
+Received: by mail-ej1-f47.google.com with SMTP id sz17so20410693ejc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:56:01 -0700 (PDT)
+X-Gm-Message-State: AJIora+lYO8g+LgTmpqce9G9W3KhCKiOx4XWi3XvcoAjxjcRVLM6Uwev
+        XPuAjN5y/EqK6ZlOsSHMk3zyUbjaxPVHVM1cLAQ=
+X-Google-Smtp-Source: AGRyM1uFwePnWFLSGm7VODXIFS62XfHViTmk1T7KBXIgR4MibFPnIXWzp5ZFBhSklV+pNb9rkpcfCMZYw2Fe0T4yvIw=
+X-Received: by 2002:a17:907:d0f:b0:72e:db1f:9b91 with SMTP id
+ gn15-20020a1709070d0f00b0072edb1f9b91mr10174393ejc.470.1658753760025; Mon, 25
+ Jul 2022 05:56:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220725083904.56552-1-huangjie.albert@bytedance.com> <20220725083904.56552-5-huangjie.albert@bytedance.com>
-In-Reply-To: <20220725083904.56552-5-huangjie.albert@bytedance.com>
-From:   =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
-Date:   Mon, 25 Jul 2022 20:55:39 +0800
-Message-ID: <CABKxMyNcuHE4iEWLHdGZw-O4g8zaj9CvXWNQ7fqBkZV0mNWVfQ@mail.gmail.com>
-Subject: Fwd: [PATCH 4/4] x86: boot: avoid memory copy if kernel is uncompressed
-To:     linux-kernel <linux-kernel@vger.kernel.org>
+References: <202207250449.BYMZbIA2-lkp@intel.com> <Yt3KObFVIUI2mFGt@zx2c4.com>
+ <CAMj1kXHTf4f+onREnWhYk-vYXkPaQtPpZz+SqFCP+Ey7+bOXkQ@mail.gmail.com>
+ <Yt5Y/cIKIDlyFWMQ@kroah.com> <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
+In-Reply-To: <CAMj1kXGPjFAY0y-SPZv64CRhpo9s1+__z4bya86aMcTs9=f8pw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 25 Jul 2022 14:55:44 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0g4NT1oDW5gq7YO540Eo0UDoqbK1tmtb8QHteiDNXj5Q@mail.gmail.com>
+Message-ID: <CAK8P3a0g4NT1oDW5gq7YO540Eo0UDoqbK1tmtb8QHteiDNXj5Q@mail.gmail.com>
+Subject: Re: [linux-stable-rc:linux-5.15.y 6874/8723] arch/arm/lib/xor-neon.c:30:2:
+ warning: This code requires at least version 4.6 of GCC
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        kernel test robot <lkp@intel.com>,
+        "Justin M. Forbes" <jforbes@fedoraproject.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Jason A. Donenfeld" <zx2c4@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----------- Forwarded message ---------
-=E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9A Albert Huang <huangjie.albert@bytedanc=
-e.com>
-Date: 2022=E5=B9=B47=E6=9C=8825=E6=97=A5=E5=91=A8=E4=B8=80 16:40
-Subject: [PATCH 4/4] x86: boot: avoid memory copy if kernel is uncompressed
-To:
-Cc: huangjie.albert <huangjie.albert@bytedance.com>, Thomas Gleixner
-<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-<x86@kernel.org>, H. Peter Anvin <hpa@zytor.com>, Eric Biederman
-<ebiederm@xmission.com>, Masahiro Yamada <masahiroy@kernel.org>,
-Michal Marek <michal.lkml@markovi.net>, Nick Desaulniers
-<ndesaulniers@google.com>, Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com>, Kuppuswamy Sathyanarayanan
-<sathyanarayanan.kuppuswamy@linux.intel.com>, Michael Roth
-<michael.roth@amd.com>, Nathan Chancellor <nathan@kernel.org>, Ard
-Biesheuvel <ardb@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-Sean Christopherson <seanjc@google.com>, Peter Zijlstra
-<peterz@infradead.org>, Kees Cook <keescook@chromium.org>, Tony Luck
-<tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-<kexec@lists.infradead.org>, <linux-kbuild@vger.kernel.org>
+On Mon, Jul 25, 2022 at 2:41 PM Ard Biesheuvel <ardb@kernel.org> wrote:
 
+> > I would love to backport this as it bugs me to no end on some various
+> > gerrit systems all the time.  I'll look into it later this week unless
+> > someone beats me to it :)
+> >
+>
+> If backporting is an issue, we could just drop this warning - GCC
+> before 4.6 hasn't been supported for a while anyway, and Clang never
+> had the SIMD accelerated XOR to begin with (it needs the __restrict
+> annotations that the parent patch introduces)
 
-From: "huangjie.albert" <huangjie.albert@bytedance.com>
+The other easy workaround would be to just turn off the xor-neon code
+when building with clang, e.g. using this Makefile hack:
 
-1=E3=80=81if kernel is uncompressed. we do not need to relocate
-kernel image for decompression
+diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
+index 6d2ba454f25b..8e4fe6421dd2 100644
+--- a/arch/arm/lib/Makefile
++++ b/arch/arm/lib/Makefile
+@@ -43,8 +43,10 @@ endif
+ $(obj)/csumpartialcopy.o:      $(obj)/csumpartialcopygeneric.S
+ $(obj)/csumpartialcopyuser.o:  $(obj)/csumpartialcopygeneric.S
 
-2=E3=80=81if kaslr is disabled, we do not need to do a memory copy
-before prase_elf.
++ifdef CONFIG_CC_IS_CLANG
+ ifeq ($(CONFIG_KERNEL_MODE_NEON),y)
+   NEON_FLAGS                   := -march=armv7-a -mfloat-abi=softfp -mfpu=neon
+   CFLAGS_xor-neon.o            += $(NEON_FLAGS)
+   obj-$(CONFIG_XOR_BLOCKS)     += xor-neon.o
+ endif
++endif
 
-Two memory copies can be skipped with this patch. this can
-save aboat 20ms during booting.
+As far as I understand it, without your patch the code is the same as the
+generic version anyway, we just never turned it off in mainline this way because
+the plan was always to make it work. It now does work, and for the stable
+kernel the mainline patch would only be a performance optimization that we
+normally don't backport.
 
-Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
----
- arch/x86/boot/compressed/head_64.S |  8 ++++++--
- arch/x86/boot/compressed/misc.c    | 22 +++++++++++++++++-----
- 2 files changed, 23 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/head_64.S
-b/arch/x86/boot/compressed/head_64.S
-index d33f060900d2..9e7770c7047b 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -398,10 +398,13 @@ SYM_CODE_START(startup_64)
- 1:
-
-        /* Target address to relocate to for decompression */
-+#ifdef CONFIG_KERNEL_UNCOMPRESSED
-+       movq %rbp, %rbx
-+#else
-        movl    BP_init_size(%rsi), %ebx
-        subl    $ rva(_end), %ebx
-        addq    %rbp, %rbx
--
-+#endif
-        /* Set up the stack */
-        leaq    rva(boot_stack_end)(%rbx), %rsp
-
-@@ -522,6 +525,7 @@ trampoline_return:
-  * Copy the compressed kernel to the end of our buffer
-  * where decompression in place becomes safe.
-  */
-+#ifndef CONFIG_KERNEL_UNCOMPRESSED
-        pushq   %rsi
-        leaq    (_bss-8)(%rip), %rsi
-        leaq    rva(_bss-8)(%rbx), %rdi
-@@ -531,7 +535,7 @@ trampoline_return:
-        rep     movsq
-        cld
-        popq    %rsi
--
-+#endif
-        /*
-         * The GDT may get overwritten either during the copy we just did o=
-r
-         * during extract_kernel below. To avoid any issues, repoint the GD=
-TR
-diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/mis=
-c.c
-index c23c0f525d93..d8445562d4e9 100644
---- a/arch/x86/boot/compressed/misc.c
-+++ b/arch/x86/boot/compressed/misc.c
-@@ -290,7 +290,7 @@ static inline void handle_relocations(void
-*output, unsigned long output_len,
- { }
- #endif
-
--static void parse_elf(void *output)
-+static void parse_elf(void *output, void *input)
- {
- #ifdef CONFIG_X86_64
-        Elf64_Ehdr ehdr;
-@@ -302,7 +302,7 @@ static void parse_elf(void *output)
-        void *dest;
-        int i;
-
--       memcpy(&ehdr, output, sizeof(ehdr));
-+       memcpy(&ehdr, input, sizeof(ehdr));
-        if (ehdr.e_ident[EI_MAG0] !=3D ELFMAG0 ||
-           ehdr.e_ident[EI_MAG1] !=3D ELFMAG1 ||
-           ehdr.e_ident[EI_MAG2] !=3D ELFMAG2 ||
-@@ -317,7 +317,7 @@ static void parse_elf(void *output)
-        if (!phdrs)
-                error("Failed to allocate space for phdrs");
-
--       memcpy(phdrs, output + ehdr.e_phoff, sizeof(*phdrs) * ehdr.e_phnum)=
-;
-+       memcpy(phdrs, input + ehdr.e_phoff, sizeof(*phdrs) * ehdr.e_phnum);
-
-        for (i =3D 0; i < ehdr.e_phnum; i++) {
-                phdr =3D &phdrs[i];
-@@ -334,7 +334,7 @@ static void parse_elf(void *output)
- #else
-                        dest =3D (void *)(phdr->p_paddr);
- #endif
--                       memmove(dest, output + phdr->p_offset, phdr->p_file=
-sz);
-+                       memmove(dest, input + phdr->p_offset, phdr->p_files=
-z);
-                        break;
-                default: /* Ignore other PT_* */ break;
-                }
-@@ -467,9 +467,21 @@ asmlinkage __visible void *extract_kernel(void
-*rmode, memptr heap,
- #endif
-
-        debug_putstr("\nDecompressing Linux... ");
-+
-+#ifdef CONFIG_KERNEL_UNCOMPRESSED
-+       if (cmdline_find_option_bool("nokaslr")) {
-+               parse_elf(output, input_data);
-+       } else {
-+               __decompress(input_data, input_len, NULL, NULL,
-output, output_len,
-+                               NULL, error);
-+               parse_elf(output, output);
-+       }
-+#else
-        __decompress(input_data, input_len, NULL, NULL, output, output_len,
-                        NULL, error);
--       parse_elf(output);
-+       parse_elf(output, output);
-+#endif
-+
-        handle_relocations(output, output_len, virt_addr);
-        debug_putstr("done.\nBooting the kernel.\n");
-
---
-2.31.1
+       Arnd

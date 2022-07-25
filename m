@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC2D57F826
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD3957F829
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232988AbiGYCIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 22:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S233075AbiGYCIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 22:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiGYCIL (ORCPT
+        with ESMTP id S231421AbiGYCIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 22:08:11 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F32DF83;
-        Sun, 24 Jul 2022 19:08:10 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id q16so9090698pgq.6;
-        Sun, 24 Jul 2022 19:08:10 -0700 (PDT)
+        Sun, 24 Jul 2022 22:08:16 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A48FEE3C
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:08:14 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id bk6-20020a17090b080600b001f2138a2a7bso10240352pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wPqnXwXti1+G5tWXmkHTdMuVELnLmjzK9jn4d9GRpd0=;
-        b=VDm5l9E+2HuSM1K5W3uvSA51dlS6VFJXblBSWOH2EKnXLZLKifshM9+cmkfKqXqAUb
-         Lp01f6pGs2IG5th9y+gzAgnoZyOUTS457R7GeR7X3tNC+E+iXNQAXN0Qd4UuEi0U+3v0
-         C+jiaAKkB7x7fMhMAIsdmN7ryNK/1kImmiv2hXwbRjrtoyn7K6C1IlmAFbJrokDljWbE
-         BTPjtHcG50eFJHzfvIje0tKIPXFBn6nm8vJ/aQyGieEPQgHRJYtjDGexIk/pnZT99f8n
-         xFR3vW/ENV7nyioVcn8fFeB9XyBq+F8rpBjvB+t0iVm4uXIjL50iPed1qZKZpi6JGHAC
-         JHCg==
+        bh=2bb8XU1Bnk4jusD63lmk3Ol2o00AOfRxKRkmAkiDP4o=;
+        b=fZIYHmc8N+T0x4kQRJbfoR40FVeWXHFoj1Ez9pMFcXxzgRhu2PqfTJX13WZ/W+RErc
+         OPcB5PlL1q7UBLiBsWYp3lmlcvt9LTpbaSGcKj1OlF3D9EJ2VUaL0wG5GK4fm3QG6s3F
+         CqsJ4rBlixoSyIwWe1Al7OeyD+ZwvQEXYZw1+eILqV8AEuRLuJ+TYwAvQon6qTm4+0Wu
+         gWL3JwtDy4xRDqckeXp1Os7f93urL1kvSDpHRRwv7nzF1i1sITAxOcmqV6odWEh4z8OZ
+         XhuLNTpmXovVM+mTrmFrG3WgCoM+U4Llhuo/N2j7RE1xvfb7kkfWmTc0wYInGzP5GKZs
+         AqBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wPqnXwXti1+G5tWXmkHTdMuVELnLmjzK9jn4d9GRpd0=;
-        b=1XIRkiJfCFu8o7XC9v2/lcUjq8FBQuT75FAykK9BprSIBlBb4FHjAYOYovfZSer0R4
-         4lHJnXLtgAx3Y1ca0uJno/n2YKQa+ElQPtnCcRo4w2bRH6cz31KInxoJKmM21rjh6G8P
-         CGsHsW2isqKW5SelcUU+kJjw8LvpKYFLLsP+n0p2Nwzpbc8OipziWMeYo0BvG1Cb3szu
-         1EvOH+wdgVy9qgiygathR3C+GFEG6ls09CUB6QqUs1wv3y7er1MdjmdscEgn/tr5H9OF
-         r1IB041JJqn+b80I7JThpaZ10oIx4Rlb7j2Wp32qnV9HawmcqlgEJEIKSld0P6/9RGFD
-         cJeg==
-X-Gm-Message-State: AJIora+WTH15FGuBuQ71nqz+e6+QgwmFIeKWQyVZUSyhFk0jcwy6leAf
-        y37v+nw0iLrUvcdulifGCpzg2OG+u2jTlA==
-X-Google-Smtp-Source: AGRyM1sv7D6TECjQbd7J6r840ZgNyxq3COsXrFclaRJu6HRQYwhr+T1u7cICzUR21mWnw3rw92Zopg==
-X-Received: by 2002:a63:6c87:0:b0:419:b667:6622 with SMTP id h129-20020a636c87000000b00419b6676622mr8895996pgc.495.1658714889186;
-        Sun, 24 Jul 2022 19:08:09 -0700 (PDT)
+        bh=2bb8XU1Bnk4jusD63lmk3Ol2o00AOfRxKRkmAkiDP4o=;
+        b=WGg6rllkwofRNuBo6jMTfzkOT2TCZNFtOlxUd4pJ5n+NgxL1osopHIOxHDJAW3mnkX
+         CZr/RtFegGtXkZKXE/F9r7Cfb2cqK11wNqkaNT00kyeogoeFPvXuOClKOBeAjs5azBxL
+         qxpJxJBkii0mqI6blvp3rFDdaBfqe0fWIW0j68a50EbGIC6ja3LYQ+IiiKtbYGsVQppb
+         8jniYdpyYut34gNWW24oshoTOluT/1UGSUimcZNXsn6G5rNh134PsO7Bi5D37ibmwjPo
+         di8izbCU6rfcuEtLhV3Ew8F/kIncrLo+1fSDHPrPf+5N15Io/g6inG0wy4aqeA72ep6Z
+         yMbg==
+X-Gm-Message-State: AJIora9pGWo2mD5FQzWmpmVbBwjEqdxfF7zeJmq7+VgQLGIZqYFdN5fa
+        SXabK6CpV3798p+i3YeWHFRkmq4xvZk0jQ==
+X-Google-Smtp-Source: AGRyM1vZnZRBfbk7P18DqP3O8ruzD393p79BGSWNpGSjB7sr0RoO7KDfhkFVa9m61iUpftGqgqdWYg==
+X-Received: by 2002:a17:902:8a86:b0:16c:4292:9f56 with SMTP id p6-20020a1709028a8600b0016c42929f56mr10268982plo.36.1658714893200;
+        Sun, 24 Jul 2022 19:08:13 -0700 (PDT)
 Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id z10-20020a1709027e8a00b0016c740e53bbsm307815pla.79.2022.07.24.19.08.08
+        by smtp.gmail.com with ESMTPSA id b17-20020a170902d51100b0016c50179b1esm1691376plg.152.2022.07.24.19.08.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 19:08:08 -0700 (PDT)
+        Sun, 24 Jul 2022 19:08:12 -0700 (PDT)
 From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Bjorn Helgaas <helgaas@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Stafford Horne <shorne@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH v3 1/3] asm-generic: Support NO_IOPORT_MAP in pci_iomap.h
-Date:   Mon, 25 Jul 2022 11:07:35 +0900
-Message-Id: <20220725020737.1221739-2-shorne@gmail.com>
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        openrisc@lists.librecores.org
+Subject: [PATCH v3 2/3] openrisc: Add pci bus support
+Date:   Mon, 25 Jul 2022 11:07:36 +0900
+Message-Id: <20220725020737.1221739-3-shorne@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220725020737.1221739-1-shorne@gmail.com>
 References: <20220725020737.1221739-1-shorne@gmail.com>
@@ -72,40 +75,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building OpenRISC PCI which has no ioport_map we get the following build
-error.
+This patch adds required definitions to allow for PCI buses on OpenRISC.
+This is being tested on the OpenRISC QEMU virt platform which is in
+development.
 
-    lib/pci_iomap.c: In function 'pci_iomap_range':
-      CC      drivers/i2c/i2c-core-base.o
-    ./include/asm-generic/pci_iomap.h:29:41: error: implicit declaration of function 'ioport_map'; did you mean 'ioremap'? [-Werror=implicit-function-declaration]
-       29 | #define __pci_ioport_map(dev, port, nr) ioport_map((port), (nr))
-          |                                         ^~~~~~~~~~
-    lib/pci_iomap.c:44:24: note: in expansion of macro '__pci_ioport_map'
-       44 |                 return __pci_ioport_map(dev, start, len);
-          |                        ^~~~~~~~~~~~~~~~
+OpenRISC does not have IO ports so we keep the definition of
+IO_SPACE_LIMIT and PIO_RESERVED to be 0.
 
-This patch adds a NULL definition of __pci_ioport_map for architetures
-which do not support ioport_map.
+Note, since commit 66bcd06099bb ("parport_pc: Also enable driver for PCI
+systems") all platforms that support PCI also need to support parallel
+port.  We add a generic header to support compiling parallel port
+drivers, though they generally will not work as they require IO ports.
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Stafford Horne <shorne@gmail.com>
 ---
- include/asm-generic/pci_iomap.h | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/openrisc/Kconfig            | 5 ++++-
+ arch/openrisc/include/asm/Kbuild | 1 +
+ arch/openrisc/include/asm/io.h   | 2 +-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/pci_iomap.h b/include/asm-generic/pci_iomap.h
-index 5a2f9bf53384..8fbb0a55545d 100644
---- a/include/asm-generic/pci_iomap.h
-+++ b/include/asm-generic/pci_iomap.h
-@@ -25,6 +25,8 @@ extern void pci_iounmap(struct pci_dev *dev, void __iomem *);
- #ifdef CONFIG_NO_GENERIC_PCI_IOPORT_MAP
- extern void __iomem *__pci_ioport_map(struct pci_dev *dev, unsigned long port,
- 				      unsigned int nr);
-+#elif !defined(CONFIG_HAS_IOPORT_MAP)
-+#define __pci_ioport_map(dev, port, nr) NULL
- #else
- #define __pci_ioport_map(dev, port, nr) ioport_map((port), (nr))
- #endif
+diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+index e814df4c483c..c7f282f60f64 100644
+--- a/arch/openrisc/Kconfig
++++ b/arch/openrisc/Kconfig
+@@ -20,8 +20,9 @@ config OPENRISC
+ 	select GENERIC_IRQ_CHIP
+ 	select GENERIC_IRQ_PROBE
+ 	select GENERIC_IRQ_SHOW
+-	select GENERIC_IOMAP
++	select GENERIC_PCI_IOMAP
+ 	select GENERIC_CPU_DEVICES
++	select HAVE_PCI
+ 	select HAVE_UID16
+ 	select GENERIC_ATOMIC64
+ 	select GENERIC_CLOCKEVENTS_BROADCAST
+@@ -32,6 +33,8 @@ config OPENRISC
+ 	select CPU_NO_EFFICIENT_FFS if !OPENRISC_HAVE_INST_FF1
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select OMPIC if SMP
++	select PCI_DOMAINS_GENERIC if PCI
++	select PCI_MSI if PCI
+ 	select ARCH_WANT_FRAME_POINTERS
+ 	select GENERIC_IRQ_MULTI_HANDLER
+ 	select MMU_GATHER_NO_RANGE if MMU
+diff --git a/arch/openrisc/include/asm/Kbuild b/arch/openrisc/include/asm/Kbuild
+index 3386b9c1c073..c8c99b554ca4 100644
+--- a/arch/openrisc/include/asm/Kbuild
++++ b/arch/openrisc/include/asm/Kbuild
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ generic-y += extable.h
+ generic-y += kvm_para.h
++generic-y += parport.h
+ generic-y += spinlock_types.h
+ generic-y += spinlock.h
+ generic-y += qrwlock_types.h
+diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
+index c298061c70a7..625ac6ad1205 100644
+--- a/arch/openrisc/include/asm/io.h
++++ b/arch/openrisc/include/asm/io.h
+@@ -17,7 +17,7 @@
+ #include <linux/types.h>
+ 
+ /*
+- * PCI: can we really do 0 here if we have no port IO?
++ * PCI: We do not use IO ports in OpenRISC
+  */
+ #define IO_SPACE_LIMIT		0
+ 
 -- 
 2.36.1
 

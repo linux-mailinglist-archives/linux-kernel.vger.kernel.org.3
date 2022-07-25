@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD66657FF9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB30257FF82
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbiGYNJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S235408AbiGYNHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbiGYNJc (ORCPT
+        with ESMTP id S230495AbiGYNHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:09:32 -0400
-Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22AF013D76;
-        Mon, 25 Jul 2022 06:09:28 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 430C0FF9C3;
-        Mon, 25 Jul 2022 13:09:26 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 15:09:20 +0200
-From:   Max Staudt <max@enpas.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
-Message-ID: <20220725150920.63ac3a77.max@enpas.org>
-In-Reply-To: <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
-References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
-        <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
-        <20220717233842.1451e349.max@enpas.org>
-        <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
+        Mon, 25 Jul 2022 09:07:07 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFB1B8
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658754424; x=1690290424;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4MVD07uVz8TokT7Qhzd/sDyjjIjUsb7epkzs9go0QoM=;
+  b=EYet1Z7/QTwjqIJcsD1qZusCdtqxE8TGXc9ICJDtz9sLJ8lpFSw8xbXz
+   DcRWEr7L9fkMH+vzaBH4sxQwK5/sqLfGwaO9BztBN8Q8Bxbr+Ksn1IMiB
+   T3Wy1xX3FakCakvq7UydIhtxy0I5LiWZ/zPfYrx3FJ1h8ra/xdMr24Occ
+   yi3vxzAS0DDvqVK70mqOXnkYRAQYGogSvaqCzGXEUl5r97FyosB7/g6/q
+   l0Pp/Yl5rBmfio9O68JLMqjV6343ijULOFAaVyTCZI0XyeGAL8GH31xR+
+   6X6Y9ZhC0jd9k4y/SkjSXdM4yA823ZtEfQeVXZr9vBkxwE+UHnJKQJtKO
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="106005848"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Jul 2022 06:07:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 25 Jul 2022 06:07:02 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 25 Jul 2022 06:07:00 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v2 0/5] ASoC: atmel: one fix and few cleanups
+Date:   Mon, 25 Jul 2022 16:09:20 +0300
+Message-ID: <20220725130925.1781791-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 25 Jul 2022 08:40:24 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+Hi,
 
-> > > @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
-> > >       if (!tty->ops->write)
-> > >               return -EOPNOTSUPP;
-> > >
-> > > -     /* RTnetlink lock is misused here to serialize concurrent
-> > > -      * opens of slcan channels. There are better ways, but it is
-> > > -      * the simplest one.
-> > > -      */
-> > > -     rtnl_lock();
-> > > +     dev = alloc_candev(sizeof(*sl), 1);
-> > > +     if (!dev)
-> > > +             return -ENFILE;
-> > >
-> > > -     /* Collect hanged up channels. */
-> > > -     slc_sync();
-> > > +     sl = netdev_priv(dev);
-> > >
-> > > -     sl = tty->disc_data;
-> > > +     /* Configure TTY interface */
-> > > +     tty->receive_room = 65536; /* We don't flow control */
-> > > +     sl->rcount   = 0;
-> > > +     sl->xleft    = 0;  
-> >
-> > I suggest moving the zeroing to slc_open() - i.e. to the netdev open
-> > function. As a bonus, you can then remove the same two assignments from
-> > slc_close() (see above). They are only used when netif_running(), with
-> > appropiate guards already in place as far as I can see.  
-> 
-> I think it is better to keep the code as it is, since at the entry of
-> the netdev
-> open function, netif_running already returns true (it is set to true by the
-> calling function) and therefore it would be less safe to reset the
-> rcount and xleft
-> fields.
+The series adds one fix for mchp-spdifrx and few cleanups for
+mchp-spdifrx and mchp-spdifrx drivers.
 
-Wow, great catch!
+Thank you,
+Claudiu Beznea
 
-I wonder why __LINK_STATE_START is set before ->ndo_open() is called...?
+Changes in v2:
+- s/tag/tab in the title of patch 2/5
 
+Claudiu Beznea (5):
+  ASoC: mchp-spdifrx: disable end of block interrupt on failures
+  ASoC: mchp-spdifrx: use single tag indent for structure
+  ASoC: mchp-spdiftx: remove references to mchp_i2s_caps
+  ASoC: mchp-spdiftx: return directly ret
+  ASoC: mchp-spdiftx: add and remove black line around
+    MODULE_DEVICE_TABLE()
 
-Since the drivers are similar, I've checked can327. It is unaffected,
-because the counters are additionally guarded by a spinlock. Same in
-slcan, where netdev_close() takes the spinlock to reset the counters.
+ sound/soc/atmel/mchp-spdifrx.c | 19 +++++++++++--------
+ sound/soc/atmel/mchp-spdiftx.c | 21 +++++----------------
+ 2 files changed, 16 insertions(+), 24 deletions(-)
 
-So you *could* move them to netdev_open() *if* they are always guarded
-by the slcan lock.
+-- 
+2.34.1
 
-Or, leave it as it is, as it seems to be correct. Your choice :)
-
-
-Thank you!
-
-Max

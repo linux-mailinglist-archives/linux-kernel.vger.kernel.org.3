@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BB65805EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C299A5805F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbiGYUr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49484 "EHLO
+        id S237242AbiGYUtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiGYUr4 (ORCPT
+        with ESMTP id S237213AbiGYUtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:47:56 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85285E030;
-        Mon, 25 Jul 2022 13:47:55 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-10d9137bd2eso16305150fac.3;
-        Mon, 25 Jul 2022 13:47:55 -0700 (PDT)
+        Mon, 25 Jul 2022 16:49:03 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C191EEDB;
+        Mon, 25 Jul 2022 13:49:01 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id z23so22483513eju.8;
+        Mon, 25 Jul 2022 13:49:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H1sQSHwWsz6Sfwn/nw5m5qGb/V8KmFsQdNiXy1s2J4A=;
+        b=W6LQBYpYc9r0gZTP+KjajSNtzgYjp0/W2wVeAlBo5qX18C2YIIAN+mkPZ2k25X0vQH
+         D5oLTPfisi9KkMr8vadRjvyneg4i1dl+sz7DXPqL0XaCuJk30rxo0H2aSea12gZy/4NR
+         IOJDxxSOzPwbkNiiCyLrjbHPhdhxQDq5E4kYKJLWVsd0aeAazrt0fOtbC4jQmTtdp3Qm
+         PYqpSLmGcz6URRVp1+olPkUVxFc4CtH47lxnyL6bUnnvBdD5M21q+kZI+2GEmZIC4Z59
+         4SicQIcK9zBuo6xVm/SHK9rNDeKI2Y7aiKF6PD38NwOEBeujYYYXEU72gHfrhP0UvkkA
+         yK+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wM1hK2c/dTp5U3qgSjbl+Mkf9GAgKrulWLu2l8asXMg=;
-        b=PI+N7/O2Z4m58Erb5nDnV1AKkk0VweFFIOZD6QE3S525fh3sGYzdbHCVIsFOrTGxvh
-         +sU12ttR/BrmIG2I21bcm6pWAGoujjymfU2Ct+bo7TWqpsMxgB7XJMie33kx749a+Ns2
-         w9DFEkv+RIY/hF9FX/tBv3ah8SJJxrXnJsqV8dFr4CKN9IL2CrEQhzzdEdjiS6CX+5kA
-         NYHhakT21iNx8kBowlsn93G9GFkCD+I0hf6haS9vDZ2rKyeoz9a7JOFsT2HhgGbhPqEk
-         OkXiQDTawzsoScp1+Fb2nSsLzaum3j1dNpLrF6xMVv/tXlNv8zBLbV31wqQkMtjYAhtH
-         kdJA==
-X-Gm-Message-State: AJIora+kgUd7QLA6Rl0K0MReFXqZXyCBxokTLIzE2PJzJ4Q1nBO+8iND
-        Ihh2vlbadUG1oE8hL0vivJSW653y0A==
-X-Google-Smtp-Source: AGRyM1uYYn9eDDDIyVDp1EozaBHVGSFeYmutnuF07N2Do7HDPkvBIRyLKm0gPmoaR0mEba9mzl7nSw==
-X-Received: by 2002:a05:6870:231b:b0:10b:7a08:bfbf with SMTP id w27-20020a056870231b00b0010b7a08bfbfmr14335133oao.11.1658782074708;
-        Mon, 25 Jul 2022 13:47:54 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id w21-20020a056870b39500b0010bf07976c9sm6539499oap.41.2022.07.25.13.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 13:47:54 -0700 (PDT)
-Received: (nullmailer pid 2696639 invoked by uid 1000);
-        Mon, 25 Jul 2022 20:47:52 -0000
-Date:   Mon, 25 Jul 2022 14:47:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert Chiras <robert.chiras@nxp.com>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH] dt-bindings: panel: raydium,rm67191: Add missing type to
- 'video-mode'
-Message-ID: <20220725204752.GA2696554-robh@kernel.org>
-References: <20220719215201.1877997-1-robh@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H1sQSHwWsz6Sfwn/nw5m5qGb/V8KmFsQdNiXy1s2J4A=;
+        b=QXXGQTe/LXvHnK7ykNcvJfASj7iZz1jZh2m49Z06JXS3zojB3+fUYVXL7RN+k2GMe8
+         ZGnCwlz8lRxJ0OdLUatWRNk0AUvFgMBEYs0Nj/dT4AdjQmnRXWFRnx7/oYMDpcJGcxZH
+         WX+7y/8Qsbg0zmdeom/DkAtr8GUeHQ5oGzR5wmxUbv3k0s55L5BVM9dcDLvf/WpOzQYF
+         N7LIXFVDlVIlnl+qZy0NNkmqHtEK+UU5Z0sD5seslMugRSufiw18mbAPuu58lRaocLFz
+         sz4prN/DAroxpDvP3xlje515OXQr3HYDeJoZ0W1MkgUHC06XdzYCzzIBXB1PElc0DzRK
+         1VvQ==
+X-Gm-Message-State: AJIora/Ha4Pph7LpX9DoOKUWAQVAfA6149NONXY27GRTLvA1UV8M0/Cz
+        vPUOgTKAOunzkQ/zeXQYIplxutMYfoR5b7CLWH0CSLs2dcU=
+X-Google-Smtp-Source: AGRyM1v8uNsvvjdJ96eRk3dnw3sMBVwfFmLN8sslNZ3kPcNgk3WfNeienkmUBExxzF5QOMHyQ0VLaHIXE+p+WboqWSw=
+X-Received: by 2002:a17:906:9b09:b0:72b:9612:d373 with SMTP id
+ eo9-20020a1709069b0900b0072b9612d373mr11208248ejc.606.1658782139887; Mon, 25
+ Jul 2022 13:48:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220719215201.1877997-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220721093422.2173982-1-marcus.folkesson@gmail.com>
+ <CAHp75VddBhc9peHXfNfTyTNni246kC8CyLqCrMFadn67LGDarQ@mail.gmail.com> <CACRpkdaczrU1tM5Yt7P-Q2h+ge8STOi6HvvYeTM-g+JwS8_gZw@mail.gmail.com>
+In-Reply-To: <CACRpkdaczrU1tM5Yt7P-Q2h+ge8STOi6HvvYeTM-g+JwS8_gZw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 22:48:23 +0200
+Message-ID: <CAHp75VfaExrFYto7LWa5Vnbm6JbiAqtutKmk0HzfeHmmi3PwOg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] gpio: gpio-74x164: add support for CDx4HC4094
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,14 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Jul 2022 15:52:01 -0600, Rob Herring wrote:
-> 'video-mode' is missing a type definition and is not a common property. The
-> type is 'uint32'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/display/panel/raydium,rm67191.yaml       | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Mon, Jul 25, 2022 at 3:54 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Mon, Jul 25, 2022 at 11:32 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Thu, Jul 21, 2022 at 11:32 AM Marcus Folkesson
+> > <marcus.folkesson@gmail.com> wrote:
 
-Applied, thanks!
+...
+
+> > Sorry for my absence of understanding, but why?
+> > SPI has MOSI, CLK, CS, where the last one is exactly for that. No?
+>
+> Forgive me if I misunderstand, but if you use CS that
+> way, the way that the SPI framework works is to assert
+> CS then transfer a few chunks over SPI (MOSI/CLK)
+> then de-assert CS.
+
+No, CS here is used exactly for what it is designed for ("tell that
+this message is *for me*"). Yes, hardware implementation here is a
+latch register. Because otherwise ALL messages are "for me" which is
+wrong. Is it wrong interpretation of the hardware and SPI?
+
+> If CS is used for strobe, it is constantly asserted
+> during transfer and the sequence will be latched
+> out immediately as you write the SPI transfers and
+> the data is clocked through the register, making the
+> whole train of zeroes and ones flash across the
+> output pins before they stabilize after the SPI
+> transfer is finished.
+
+I'm not sure I understand the stabilization issue here. It's how SPI
+normally works and we have a lot of delays here and there related to
+the phase of the CS in comparison to clock and data. We have a lot of
+time to stabilize the outputs of the shift register before latching
+it. Did I miss anything?
+
+
+> If you first do the SPI transfer, then strobe after
+> finished, this will not happen.
+
+I have hardware, I have tested it and I understand what you mean by
+"stabilizing", but finishing transfer _is_ CS toggling for _this_
+chip. No?
+
+> Then it should be a separate pin, so this doesn't
+> happen, right?
+
+I think no, you don't need it. I.o.w. either I'm missing something
+very interesting about both this kind of chips and SPI basics (shame
+on me in this case) or...?
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

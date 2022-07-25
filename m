@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD1D57FD94
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D7D57FD7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234093AbiGYKeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S234377AbiGYKa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbiGYKeI (ORCPT
+        with ESMTP id S231623AbiGYKa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:34:08 -0400
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B166418352
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:34:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1658745246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AdS8+B/O/n4mduTrHxo0RL4fuHx8wGK9eiouBtBzHLE=;
-        b=k0GrSIUd8mByDuglGSYoVtPYkzqjmdlJIn1lmchjO2Lk14nNydx/ygC0NgPa8foPqrKzfs
-        RWcBJipCx4qCEQoryZ+Px9qGXdNDrfJI0Plk7CNtoDMRzDmud4vnx5+6mi0UmWK3RJNSQt
-        o4dXj1i6k+3tralq7+Tmnaxl0JsyYB2Rf5HXGbF6tLBs38y3FXpAyAzfYebJPMU02TfXb7
-        RlzcKkocEgRRQUrlC7sS4EsaC+U2kXsJDuyN23zK3E/4jwVrPa+bFvRYkkO+XCAO2AAEmR
-        H/393cej0jBVAbHqNl/QkHZwhxliv0K+EQ0D34k8ExyBU7rClYeJmFA4dxSAqg==
-Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-97-Dh75eSUgPq6mae4Tcwhp4g-1; Mon, 25 Jul 2022 06:27:44 -0400
-X-MC-Unique: Dh75eSUgPq6mae4Tcwhp4g-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Mon, 25 Jul 2022 03:27:46 -0700
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
-        <linux-clk@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
-        "Rahul Tanwar" <rtanwar@maxlinear.com>
-Subject: [PATCH RESEND 3/3] clk: mxl: Avoid disabling gate clocks from clk driver
-Date:   Mon, 25 Jul 2022 18:27:29 +0800
-Message-ID: <f63435d71b9772de9628355c05c7de95d38dbbb1.1658742240.git.rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1658742240.git.rtanwar@maxlinear.com>
-References: <cover.1658742240.git.rtanwar@maxlinear.com>
+        Mon, 25 Jul 2022 06:30:57 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFE726F1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:30:56 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id 70so10069838pfx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1xGF5aFfgJ7JsFSzowx7exjTtEsle8A3v3zLVOTakyA=;
+        b=EG5fUr3iThznm85cLXUOslnsHpTFUwpixcv/8sZ2g3CLIlM/kCwFlXQiIHWs/dnwGw
+         wDU6PN8b+uWmrrLW+8ctX40y4g05jmheRhEIGS46PXR44PNpaN8tbd0RBEv08rPss6N3
+         6hm96atbOFyLknMmH18KxKWLLpEBxMiBBMIxrVzfvKyuYOHm6W4wLDRIftfSERAmM/HV
+         /fBbaw6Xi5I77o0txbbUXu8cuvzj4nnh2NKsDwvwHXKg5DlkjADcxsEyiG1G7iSYSf3T
+         2x2t22AFVLHEvy0AVN6wHENDSm/KEwvBl2woopG2w5ui6Fck9fM4rY/sky27KJVEcgA+
+         HNMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1xGF5aFfgJ7JsFSzowx7exjTtEsle8A3v3zLVOTakyA=;
+        b=rHzxZoNqtaLX7IxAqcaT4TvE8x4/JdV8HDAmSsAUf4Md2QPQX9t0XMY/x8hD9QFW4C
+         6AP4/ldPT0aAQ2QqCnENPEPt6xfQdSlmJO2wJihSniSwJmYmHLXWJeXwNoJjNhLV4Z7D
+         IVMYwJq6e3GAJHlk61bNt8AgOQdEjzg3YzCSi1xxC+k+G+5SQkVQYLgvl9dt/f0Oh1uu
+         t1KKZMDCK2k/L6WRL7X5xvnzaXZ1s2Zc3SvqAk/fepmBEHBHUC+TnTxL+b0e1K2xmdK6
+         WiOMvPEFvoQBjPqqzLPgX6w3wKQilwesFxbvtkvoxVwRE8cf43uLwQmtu3gP5bmebOa7
+         OJfw==
+X-Gm-Message-State: AJIora8xfZebJo5xCE+aJ8wAaCe4wJ1TRS9nowSgzNSCUG72mHSRfCbL
+        vrqUHyjIfnapgs75cn3MpDCO0w==
+X-Google-Smtp-Source: AGRyM1vjAokCn70WjNP0yJgI/UhAc0WGLoWPLIyuJlNCIMbyXXC/NmZQZ+40z+hilq8a/U95N994RQ==
+X-Received: by 2002:a05:6a00:1c94:b0:52a:b71d:5c65 with SMTP id y20-20020a056a001c9400b0052ab71d5c65mr12334582pfw.65.1658745056241;
+        Mon, 25 Jul 2022 03:30:56 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id y14-20020a63180e000000b0041af82dacf7sm1783279pgl.73.2022.07.25.03.30.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 03:30:55 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 16:00:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Zhao Liu <zhao1.liu@linux.intel.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trivial@kernel.org,
+        Rusty Russell <rusty@rustcorp.com.au>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhao Liu <zhao1.liu@intel.com>
+Subject: Re: [patch] cpufreq: ondemand: Use cpumask_var_t for on-stack cpu
+ mask
+Message-ID: <20220725103053.o45ly6rnq7vyfdup@vireshk-i7>
+References: <20220722025024.454626-1-zhao1.liu@linux.intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA115A51 smtp.mailfrom=rtanwar@maxlinear.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722025024.454626-1-zhao1.liu@linux.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -63,107 +74,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In MxL's LGM SoC, gate clocks are supposed to be enabled or disabled
-from EPU (power management IP) in certain power saving modes. If gate
-clocks are allowed to be enabled/disabled from CGU clk driver, then
-there arises a conflict where in case clk driver disables a gate clk,
-and then EPU tries to disable the same gate clk, then it will hang
-polling for the clk gated successful status.
+On 22-07-22, 10:50, Zhao Liu wrote:
+> A cpumask structure on the stack can cause a warning with
+> CONFIG_NR_CPUS=8192 (e.g. Ubuntu 22.04 uses this):
+> 
+> drivers/cpufreq/cpufreq_ondemand.c: In function 'od_set_powersave_bias':
+> drivers/cpufreq/cpufreq_ondemand.c:449:1: warning: the frame size of
+> 	1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>   449 | }
+>       | ^
+> 
+> CONFIG_CPUMASK_OFFSTACK=y is enabled by default for most distros, and
+> hence we can work around the warning by using cpumask_var_t.
+> 
+> Signed-off-by: Zhao Liu <zhao1.liu@linux.intel.com>
+> ---
+>  drivers/cpufreq/cpufreq_ondemand.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+> index e8fbf970ff07..c52d19d67557 100644
+> --- a/drivers/cpufreq/cpufreq_ondemand.c
+> +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> @@ -416,10 +416,13 @@ static struct dbs_governor od_dbs_gov = {
+>  static void od_set_powersave_bias(unsigned int powersave_bias)
+>  {
+>  	unsigned int cpu;
+> -	cpumask_t done;
+> +	cpumask_var_t done;
+> +
+> +	if (!alloc_cpumask_var(&done, GFP_KERNEL))
+> +		return;
+>  
+>  	default_powersave_bias = powersave_bias;
+> -	cpumask_clear(&done);
+> +	cpumask_clear(done);
+>  
+>  	cpus_read_lock();
+>  	for_each_online_cpu(cpu) {
+> @@ -428,7 +431,7 @@ static void od_set_powersave_bias(unsigned int powersave_bias)
+>  		struct dbs_data *dbs_data;
+>  		struct od_dbs_tuners *od_tuners;
+>  
+> -		if (cpumask_test_cpu(cpu, &done))
+> +		if (cpumask_test_cpu(cpu, done))
+>  			continue;
+>  
+>  		policy = cpufreq_cpu_get_raw(cpu);
+> @@ -439,13 +442,15 @@ static void od_set_powersave_bias(unsigned int powersave_bias)
+>  		if (!policy_dbs)
+>  			continue;
+>  
+> -		cpumask_or(&done, &done, policy->cpus);
+> +		cpumask_or(done, done, policy->cpus);
+>  
+>  		dbs_data = policy_dbs->dbs_data;
+>  		od_tuners = dbs_data->tuners;
+>  		od_tuners->powersave_bias = default_powersave_bias;
+>  	}
+>  	cpus_read_unlock();
+> +
+> +	free_cpumask_var(done);
+>  }
+>  
+>  void od_register_powersave_bias_handler(unsigned int (*f)
 
-To avoid such a conflict, disable gate clocks enabling/disabling from
-CGU clk driver. But add a GATE_CLK_HW flag to control this in order to
-be backward compatible with other SoCs which share the same CGU IP but
-not the same EPU IP.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- drivers/clk/x86/clk-cgu.c | 32 ++++++++++++++++++++++++--------
- drivers/clk/x86/clk-cgu.h |  1 +
- 2 files changed, 25 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/clk/x86/clk-cgu.c b/drivers/clk/x86/clk-cgu.c
-index 1f7e93de67bc..d24173cfe0b0 100644
---- a/drivers/clk/x86/clk-cgu.c
-+++ b/drivers/clk/x86/clk-cgu.c
-@@ -258,8 +258,12 @@ static int lgm_clk_gate_enable(struct clk_hw *hw)
- =09struct lgm_clk_gate *gate =3D to_lgm_clk_gate(hw);
- =09unsigned int reg;
-=20
--=09reg =3D GATE_HW_REG_EN(gate->reg);
--=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09if (gate->flags & GATE_CLK_HW) {
-+=09=09reg =3D GATE_HW_REG_EN(gate->reg);
-+=09=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09} else {
-+=09=09gate->reg =3D 1;
-+=09}
-=20
- =09return 0;
- }
-@@ -269,8 +273,12 @@ static void lgm_clk_gate_disable(struct clk_hw *hw)
- =09struct lgm_clk_gate *gate =3D to_lgm_clk_gate(hw);
- =09unsigned int reg;
-=20
--=09reg =3D GATE_HW_REG_DIS(gate->reg);
--=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09if (gate->flags & GATE_CLK_HW) {
-+=09=09reg =3D GATE_HW_REG_DIS(gate->reg);
-+=09=09lgm_set_clk_val(gate->membase, reg, gate->shift, 1, 1);
-+=09} else {
-+=09=09gate->reg =3D 0;
-+=09}
- }
-=20
- static int lgm_clk_gate_is_enabled(struct clk_hw *hw)
-@@ -278,8 +286,12 @@ static int lgm_clk_gate_is_enabled(struct clk_hw *hw)
- =09struct lgm_clk_gate *gate =3D to_lgm_clk_gate(hw);
- =09unsigned int reg, ret;
-=20
--=09reg =3D GATE_HW_REG_STAT(gate->reg);
--=09ret =3D lgm_get_clk_val(gate->membase, reg, gate->shift, 1);
-+=09if (gate->flags & GATE_CLK_HW) {
-+=09=09reg =3D GATE_HW_REG_STAT(gate->reg);
-+=09=09ret =3D lgm_get_clk_val(gate->membase, reg, gate->shift, 1);
-+=09} else {
-+=09=09ret =3D gate->reg;
-+=09}
-=20
- =09return ret;
- }
-@@ -315,7 +327,8 @@ lgm_clk_register_gate(struct lgm_clk_provider *ctx,
- =09init.num_parents =3D pname ? 1 : 0;
-=20
- =09gate->membase =3D ctx->membase;
--=09gate->reg =3D reg;
-+=09if (cflags & GATE_CLK_HW)
-+=09=09gate->reg =3D reg;
- =09gate->shift =3D shift;
- =09gate->flags =3D cflags;
- =09gate->hw.init =3D &init;
-@@ -326,7 +339,10 @@ lgm_clk_register_gate(struct lgm_clk_provider *ctx,
- =09=09return ERR_PTR(ret);
-=20
- =09if (cflags & CLOCK_FLAG_VAL_INIT) {
--=09=09lgm_set_clk_val(gate->membase, reg, shift, 1, list->gate_val);
-+=09=09if (cflags & GATE_CLK_HW)
-+=09=09=09lgm_set_clk_val(gate->membase, reg, shift, 1, list->gate_val);
-+=09=09else
-+=09=09=09gate->reg =3D 1;
- =09}
-=20
- =09return hw;
-diff --git a/drivers/clk/x86/clk-cgu.h b/drivers/clk/x86/clk-cgu.h
-index 0aa0f35d63a0..73ce84345f81 100644
---- a/drivers/clk/x86/clk-cgu.h
-+++ b/drivers/clk/x86/clk-cgu.h
-@@ -197,6 +197,7 @@ struct lgm_clk_branch {
- /* clock flags definition */
- #define CLOCK_FLAG_VAL_INIT=09BIT(16)
- #define MUX_CLK_SW=09=09BIT(17)
-+#define GATE_CLK_HW=09=09BIT(18)
-=20
- #define LGM_MUX(_id, _name, _pdata, _f, _reg,=09=09\
- =09=09_shift, _width, _cf, _v)=09=09\
---=20
-2.17.1
-
+-- 
+viresh

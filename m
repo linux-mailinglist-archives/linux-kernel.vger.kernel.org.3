@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A8D57FE0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AC557FE14
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbiGYLHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 07:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
+        id S234810AbiGYLHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbiGYLHF (ORCPT
+        with ESMTP id S234847AbiGYLHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 07:07:05 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836E219C0B
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:07:03 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id u12so8394234edd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=n+BeAGcM1vq8ZV/ndWyo+zk8e0dfuS3zI75lX0M5C2w=;
-        b=4ms6i4laHSu5iZlef+raBf2V73x2tuq6e3cOiFP1UAUH43CgRJFYGWCgpdOzxChBbB
-         uuPPG6JVj1dwUw5a8a6cElip0FDeUiCqrm/TLUIaTDrWajPRVVYc3wMmYfd8RhP/vDRR
-         O3t9OxcFanbV9pBTorqDaNbDfKmuydzSIa8emvXpbf3WcNfX+inT5dnBYbC/VefyZLuI
-         D/ypCWO62zzThBg+noSmy5o81mGzm1om3cTxwMSn+3wUCytQcHeb4VSrqzCVhzb25hvG
-         DkLy0AzOKHAuZzHHkvzv9d5mZYZIeSM8eaAcHgXMAayXA+MH5zVcQoaPLc9+3o/ekh2u
-         zyWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n+BeAGcM1vq8ZV/ndWyo+zk8e0dfuS3zI75lX0M5C2w=;
-        b=xtQp0lrCPCtCJhSOPu8iLMwuLQ0lbJeEucyqJpK7Jz4iklLcRLDkgevFn8+/caL+TQ
-         DVOq757FAN8xJ9PCjS7Edx21ZHwvO+kP2Ad53lqwoQtMk1PVMzIbu/drZTsI+ACJabhO
-         MiVBYGHGVPRtUfoU27ZVVziPYnM6PVFlLU/8npZ/HBCbnw1uxMLZ/CZP1hAny8SbCsjs
-         zRaGx4Fc45w4OydDJJbLkw3H2layb5d1U83U/MQcaF3vklVMGl7xQxs6g+6XdrowxIoO
-         KNJqhsEV+YgUKQH0H6WZTBxHOlZDrISvmhtpotFR8Ed+grlcqT4/q+KpLmgX87UfJMYa
-         B8Sg==
-X-Gm-Message-State: AJIora9MYdjWNJnNtGNEuItXWDAQygNnjBKjpjazLIz++9V/i/ye+Z8i
-        cBnBf6NomWb2on/rjkRmhlIm/w==
-X-Google-Smtp-Source: AGRyM1uzygQ7IcGlo7tWExJkeaAPv1aDXBKe0jd6OkKFAERi1ZPwX3guPUdn2Oqszle7jYGmTuSH2Q==
-X-Received: by 2002:a05:6402:1117:b0:43b:c965:549e with SMTP id u23-20020a056402111700b0043bc965549emr12589985edv.366.1658747221572;
-        Mon, 25 Jul 2022 04:07:01 -0700 (PDT)
-Received: from localhost (mail.chocen-mesto.cz. [85.163.43.2])
-        by smtp.gmail.com with ESMTPSA id b7-20020aa7c6c7000000b0043a78236cd2sm7037185eds.89.2022.07.25.04.07.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 04:07:00 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 13:07:00 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vikas Gupta <vikas.gupta@broadcom.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, dsahern@kernel.org,
-        stephen@networkplumber.org, Eric Dumazet <edumazet@google.com>,
-        pabeni@redhat.com, ast@kernel.org, leon@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net,
-        Michael Chan <michael.chan@broadcom.com>,
-        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
-Subject: Re: [PATCH net-next v6 1/2] devlink: introduce framework for
- selftests
-Message-ID: <Yt55VKOYmn/dF4Ob@nanopsycho>
-References: <20220723042206.8104-1-vikas.gupta@broadcom.com>
- <20220723042206.8104-2-vikas.gupta@broadcom.com>
- <20220723091600.1277e903@kernel.org>
- <Yt5L8TbzTwthnrl7@nanopsycho>
- <CAHLZf_uWxnS5Voc6h7pnS=dRq96JV1wq9zVXKhVbyrRva9=b0g@mail.gmail.com>
+        Mon, 25 Jul 2022 07:07:19 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FD11A043;
+        Mon, 25 Jul 2022 04:07:12 -0700 (PDT)
+X-UUID: 715f399c6a8541359826b97472a9d49b-20220725
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:d682d56f-4774-4e47-b078-4f1a6a69f0a7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:0f94e32,CLOUDID:2b986eb3-06d2-48ef-b2dd-540836705165,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 715f399c6a8541359826b97472a9d49b-20220725
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1709852671; Mon, 25 Jul 2022 19:07:06 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 25 Jul 2022 19:07:04 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 25 Jul 2022 19:07:04 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v2 0/2] MT8186 pinctrl properties adjustments
+Date:   Mon, 25 Jul 2022 19:07:00 +0800
+Message-ID: <20220725110702.11362-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHLZf_uWxnS5Voc6h7pnS=dRq96JV1wq9zVXKhVbyrRva9=b0g@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,69 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Jul 25, 2022 at 10:48:39AM CEST, vikas.gupta@broadcom.com wrote:
->Hi Jiri,
->
->On Mon, Jul 25, 2022 at 1:23 PM Jiri Pirko <jiri@resnulli.us> wrote:
->>
->> Sat, Jul 23, 2022 at 06:16:00PM CEST, kuba@kernel.org wrote:
->> >On Sat, 23 Jul 2022 09:52:05 +0530 Vikas Gupta wrote:
->> >> +enum devlink_attr_selftest_test_id {
->> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_UNSPEC,
->> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_FLASH,    /* flag */
->> >> +
->> >> +    __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX,
->> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_MAX = __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX - 1
->> >> +};
->> >> +
->> >> +enum devlink_selftest_test_status {
->> >> +    DEVLINK_SELFTEST_TEST_STATUS_SKIP,
->> >> +    DEVLINK_SELFTEST_TEST_STATUS_PASS,
->> >> +    DEVLINK_SELFTEST_TEST_STATUS_FAIL
->> >> +};
->> >> +
->> >> +enum devlink_attr_selftest_result {
->> >> +    DEVLINK_ATTR_SELFTEST_RESULT_UNSPEC,
->> >> +    DEVLINK_ATTR_SELFTEST_RESULT,                   /* nested */
->> >> +    DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID,           /* u32,
->> >> +                                                     * enum devlink_attr_selftest_test_id
->> >> +                                                     */
->> >> +    DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS,       /* u8,
->> >> +                                                     * enum devlink_selftest_test_status
->> >> +                                                     */
->> >> +
->> >> +    __DEVLINK_ATTR_SELFTEST_RESULT_MAX,
->> >> +    DEVLINK_ATTR_SELFTEST_RESULT_MAX = __DEVLINK_ATTR_SELFTEST_RESULT_MAX - 1
->> >
->> >Any thoughts on running:
->> >
->> >       sed -i '/_SELFTEST/ {s/_TEST_/_/g}' $patch
->>
->> Sure, why not. But please make sure you keep all other related things
->> (variables, cmdline opts) consistent.
->>
->> Thanks!
->Does the 'test_id' in command line
-> 'devlink dev selftests run DEV test_id flash'
->will still hold good if DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID changes
->to DEVLINK_ATTR_SELFTEST_RESULT_ID ?
->or it should be
->'devlink dev selftests run DEV selftest_id flash' ?
+Based on tag: next-20220720, linux-next/master.
 
-Just "id". Thanks!
+In commit e5fabbe43f3f ("pinctrl: mediatek: paris: Support generic
+PIN_CONFIG_DRIVE_STRENGTH_UA"), added support for using
+drive-strength-microamp instead of mediatek,drive-strength-adv.
 
+We replace the custom mediatek,drive-strength-adv property with
+'drive-strength-microamp' in the mt8186 pinctrl dt-binding which
+have a clearer meaning and is more standardized, also add
+gpio-line-names property used in devicetrees to describe pin names.
 
->
->Thanks,
->Vikas
->
->
->>
->>
->> >
->> >on this patch? For example DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS
->> >is 40 characters long, ain't nobody typing that, and _TEST is repeated..
->> >
->> >Otherwise LGTM!
+changes since v1:
+ - fix the fixes tag
 
+Allen-KH Cheng (2):
+  dt-bindings: pinctrl: mt8186: Add gpio-line-names property
+  dt-bindings: pinctrl: mt8186: Add and use drive-strength-microamp
+
+ .../bindings/pinctrl/pinctrl-mt8186.yaml      | 31 +++----------------
+ 1 file changed, 5 insertions(+), 26 deletions(-)
+
+-- 
+2.18.0
 

@@ -2,182 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F70A5807C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034A55807C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237174AbiGYWsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
+        id S237499AbiGYWtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiGYWsr (ORCPT
+        with ESMTP id S231424AbiGYWti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:48:47 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEE1DDB;
-        Mon, 25 Jul 2022 15:48:46 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h9so17941013wrm.0;
-        Mon, 25 Jul 2022 15:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=v0eFbfS7O5AVR+EFjErfd5gP7h25CtoREQ2LCaVVvlU=;
-        b=NYx1huxf8ioAZX8TZ59MtqRGUSdESFWIcHBWAmklig4cik0HGMmZqSpYGtr5aGTz4I
-         RyngoUoGFV0aP5hfNtbO/13Sq4rmBd5VPM429zOvwrm0M4u/XePnmzGJfp9jD5Nkw3/B
-         cEykMazhOyF8ZwyzChWx0+yyv7mj2KqM8+VDFMbdn8ZrG3pvwDhC7JdwwxYVtVCfn9B5
-         LIRAfxmXpYWnfmZvLUASvUm4WqsJh2+AMLmoXqLaSnOFrkozUJ2VcORGZkL+PlhYsWwz
-         4GGzk9j5/wAkhLFY+dtT4EsL/SBMYpDuVRAvyyhRmvmKgNGvQLmLuJdF2frnN4pyQZSA
-         OBYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=v0eFbfS7O5AVR+EFjErfd5gP7h25CtoREQ2LCaVVvlU=;
-        b=x7Z0eVoJvfwskeCgPF0pRNO8aPboa55K4o+ZCXSd1aIHa8WAHcDzTywLuNowjjoejk
-         4qSMH5JzRCyjietdfforNhaZI8rl1Z+iOeQcIcusVVrR9SqT3uivafID1S5sPGc2j2bK
-         L+aU44dJoGC2Ab5idgqrHDYWQ0cJ/wupYSycvsqB8FSC/UMQX3w3l6zGCJZRdCMzDeuN
-         xMDX0MR89bOg6XwanR+ErChZQElPVi9kKvNsWl8dNEzfntLDHIJFwfKhiKmqnw5yNCqa
-         CwCf9nlu9l+IyO9ETjVGn9vEYhGrA/OeCC+VHfIxC7OOU8wBB7rCGYSJJAbfSo4jKMbU
-         bvjg==
-X-Gm-Message-State: AJIora+VXOmyysRe/U84ILVXkbO5pzu0KDD07wlGP2N0ag2CuR6ZaOvU
-        0hYSoWD0wh/GtyCV2OPF8mey5InjeH2DqQ==
-X-Google-Smtp-Source: AGRyM1vzlsy5l3KyyFCstL3o+3bE4S18PzrDXsLo0P5a6Q3P33wG7KFEN0R1lfj3BD1IzKsA/WB3gA==
-X-Received: by 2002:a5d:47a4:0:b0:21e:6994:9ec5 with SMTP id 4-20020a5d47a4000000b0021e69949ec5mr8916684wrb.568.1658789324992;
-        Mon, 25 Jul 2022 15:48:44 -0700 (PDT)
-Received: from elementary ([94.73.33.57])
-        by smtp.gmail.com with ESMTPSA id z4-20020adfd0c4000000b0021d7b41255esm12817674wrh.98.2022.07.25.15.48.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 15:48:44 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 00:48:41 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ping Cheng <ping.cheng@wacom.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
-Cc:     Stefan Hansson <newbie13xd@gmail.com>,
-        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: PROBLEM: Regression likely in hid_uclogic driver breaks Huion
- Inspiroy H640 drawing tablet
-Message-ID: <20220725224841.GA75640@elementary>
-References: <9e16d503-2203-57ed-d6af-61fea0c3e10b@gmail.com>
- <nycvar.YFH.7.76.2207231339500.19850@cbobk.fhfr.pm>
- <20220724114849.GA32182@elementary>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220724114849.GA32182@elementary>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 18:49:38 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D4610B0;
+        Mon, 25 Jul 2022 15:49:37 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id E573C320090E;
+        Mon, 25 Jul 2022 18:49:32 -0400 (EDT)
+Received: from imap43 ([10.202.2.93])
+  by compute2.internal (MEProxy); Mon, 25 Jul 2022 18:49:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1658789372; x=1658875772; bh=ND
+        s6eODdn2bexcjuNKFWjUTcea0bQW5OWSmo8ftc1/g=; b=zu146mCcQc1T9H7Y/Z
+        7j1DVU1UX8Q2ZohlvLcSWonP7z5rmGLaV5AzYQ/SJxuKxtd9d0ukJUn6twVXAZPI
+        STTxLSLUdRjtHug88sM5T6J2cXWp9swCGPpwU6Vac0i1qyTWa2OYgmUtunC+ZPrM
+        VAuxbP89C80fOYMm/oUd9Ng+ZVx0ReC7WsG2QQatpRjvQdLN3iGdNuqJIKWUsM66
+        bJlrMdzbmP7vov8CbT0lCGk5Y+AKNQa6wqk8Y4GnSLgYKzeOn4WwSZgI1h2Wu9vc
+        /E9PQjTyzPew78Z9p2OEBYgNGEZTxf3zI+TnGpGNAQPhUR/Rq+X4yKzw2lY022WO
+        ZDvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658789372; x=1658875772; bh=NDs6eODdn2bexcjuNKFWjUTcea0b
+        QW5OWSmo8ftc1/g=; b=Lp0QAv5sz2CbyyZiVx0PLOnJU39P11Pq190bzsC5pIZL
+        /XsNGrk0F1VH3O18JmhHdRBv4JupuE/SEOXMcgKrwIegANR8mEEV+gq6l0zBP4gL
+        uq6mhJHpMybVH9143OEtMBCNL1SOE0Px3tpXj8NlP64KO3YNt9tazxAq/rXZGs5L
+        jRz3BR/N7j7EBngpfNtGIRXhVXknisZ6DM0xI8qa8wxuTMbFFikvJa1gNEHgHDYi
+        tdDhHjLuhZwT+y8NcJo45PyECJC1uSeE1G5kcYArQwqTjdtVQM2M/AKb5ZWCb4C8
+        H1CWVxmoUV8Bmssz0Lc2va2MeI4lr4GpyqUV5nAplQ==
+X-ME-Sender: <xms:_B3fYn2eb6G-FmB2gZvefgAfbw-ytSrx-WhQu1AUl7YemxtfbUT70g>
+    <xme:_B3fYmHlHM5QEenUZU7B3MCagd5uIIg5DsYEJ_de0J_YtKD1X3m4QZtUb8XxORbkB
+    1ZrsirDIBvwSGwq-To>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtledgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpeetlhhi
+    shhtrghirhcuoegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrf
+    grthhtvghrnhepueekffekhfejteehtdeigedujeevvdfhjeelkeehfefhudffhfejgfej
+    ieehhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:_B3fYn4oL0MGX6gx_0Td1RJui8sxWd1bLwjeGoV9qMzfhvL3HuDMkg>
+    <xmx:_B3fYs3dgNZtn0RUrr1FvaKFb0tsoInl9T2JRpnio77FdAawv3S6_A>
+    <xmx:_B3fYqFiZJcltk0TnWy_9WftQWH9g4cpBfgKxFQjH_4hiJCB5TwHIQ>
+    <xmx:_B3fYhcbdoPXUCQkCnwuH-be5R5FfON6l48MSSb9ebdUau6_FCOj7Q>
+Feedback-ID: ifd214418:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 03E322D40074; Mon, 25 Jul 2022 18:49:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-757-gc3ad9c75d3-fm-20220722.001-gc3ad9c75
+Mime-Version: 1.0
+Message-Id: <9820e03f-8e81-4dc8-ae21-82a21c830278@www.fastmail.com>
+In-Reply-To: <20220725055059.57498-1-samuel@sholland.org>
+References: <20220725055059.57498-1-samuel@sholland.org>
+Date:   Tue, 26 Jul 2022 08:49:11 +1000
+From:   Alistair <alistair@alistair23.me>
+To:     "Samuel Holland" <samuel@sholland.org>,
+        "Marcel Holtmann" <marcel@holtmann.org>,
+        "Johan Hedberg" <johan.hedberg@gmail.com>,
+        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>
+Cc:     linux-bluetooth@vger.kernel.org,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Vasily Khoruzhick" <anarsoul@gmail.com>,
+        devicetree@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: net: bluetooth: realtek: Add RTL8723DS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
-
-On Sun, Jul 24, 2022 at 01:48:49PM +0200, José Expósito wrote:
-> On Fri, 22 Jul 2022, Stefan Hansson wrote:
-> > Hi!
-> >
-> > Somewhere between Linux 5.17.6 and 5.18.11 the Huion tablet I have stopped
-> > working properly. In GNOME Control Center it is identified as Huion New 1060
-> > Plus, however that's a different tablet than the one I have. Mine is a Huion
-> > Inspiroy H640, and it uses the hid_uclogic driver.
-> >
-> > With Linux 5.17.6, the tablet works as expected with all the buttons being
-> > detected and the stylus being usable. With 5.18.11, the buttons work fine but
-> > the stylus does not work correctly. The first time I approach the tablet with
-> > the stylus it works properly, i.e., the cursor on my screen moves around and
-> > follows the stylus around the tablet as expected. It continues working like
-> > this until I remove the stylus from the tablet. After I remove it from the
-> > tablet, the cursor never gets controlled by the stylus again. I can see that
-> > the tablet detects the stylus (it has a small indicator light), but the cursor
-> > doesn't move when I approach the tablet again. To clarify, with Linux 5.17.6,
-> > the cursor moves around just fine when I remove and then put it back to the
-> > tablet, just as you would expected.
-> >
-> > It may also be worth noting that it worked fine when I previously used it
-> > around six months ago, although I'm not sure what version of Linux I was using
-> > at that time (whatever Fedora shipped back then). I also tried reproducing it
-> > with yesterday's linux-next and Linux 5.19.0-RC7, and the behaviour was the
-> > same as 5.18.11. I am currently trying to bisect this, but it's not going very
-> > fast as I currently only have access to a dual core laptop from 2014, so
-> > building Linux takes a good while.
+On Mon, 25 Jul 2022, at 3:50 PM, Samuel Holland wrote:
+> RTL8723DS is another version of the RTL8723 WiFi + Bluetooth chip. It is
+> already supported by the hci_uart/btrtl driver. Document the compatible.
 > 
-> Thanks a lot for reporting the issue.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+Reviewed-by: Alistair Francis <alistair@alistair23.me>
+
+Alistair
+
+> ---
 > 
-> HUION and other non-Wacom tablets are handled by the UCLogic driver.
-> This driver is present in the kernel but its changes were deployed
-> and tested first in the DIGImend driver:
-> https://github.com/DIGImend/digimend-kernel-drivers
+> Documentation/devicetree/bindings/net/realtek-bluetooth.yaml | 1 +
+> 1 file changed, 1 insertion(+)
 > 
-> A while ago, I started including in the kernel the code present in
-> DIGImend. At this moment, 5.19.0-RC7 and DIGImend have the same code
-> (well, 5.19 has more features, but they don't affect your tablet).
+> diff --git a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+> index 157d606bf9cb..8ac633b7e917 100644
+> --- a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+> +++ b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
+> @@ -20,6 +20,7 @@ properties:
+>      enum:
+>        - realtek,rtl8723bs-bt
+>        - realtek,rtl8723cs-bt
+> +      - realtek,rtl8723ds-bt
+>        - realtek,rtl8822cs-bt
+>  
+>    device-wake-gpios:
+> -- 
+> 2.35.1
 > 
-> I'm telling you this because it might be easier for you to bisect the
-> changes in the DIGImend driver as it builds way faster than the kernel.
-> Let me know if you need help bisecting it and I'll do my best to help
-> you.
 > 
-> Is this your device?
-> https://www.huion.com/pen_tablet/Inspiroy/H640P.html
-> 
-> It is affordable, so I ordered it. I don't have any HUION devices to
-> debug and this is a good excuse to buy one ;)
-> I'll let you know how it goes once I receive it.
-
-The tablet arrived today and it is a bank holiday in Spain, so I had
-some time to bisect the bug.
-
-The first bad commit is 87562fcd1342 ("HID: input: remove the need for
-HID_QUIRK_INVERT"):
-https://lore.kernel.org/all/20220203143226.4023622-11-benjamin.tissoires@redhat.com/
-(CCing the folks whose email is in the patch tags)
-
-I reverted the patch on hid/for-next and, after fixing a tiny conflict,
-I can confirm that the tablet works again as expected.
-
-I'd need to investigate a bit more over the weekend, but I think that
-all HUION tablets with the latest firmware (internally, v2) are
-affected.
-
-Those tablets do not set the inrange bit (UCLOGIC_PARAMS_PEN_INRANGE_NONE).
-The driver sets it and uses a timer to remove it.
-See drivers/hid/hid-uclogic-core.c, function uclogic_raw_event_pen().
-
-However, at least the Huion Inspiroy H640, sends a 0x00 byte when the
-tool is removed, making it possible to fix it in the driver [1].
-
-Unfortunately, the affected code path is used by many tablets and I
-can not test them, so I'd prefer to hear Benjamin's opinion and see if
-this should be fixed in hid-input rather than in the driver before
-sending a fix.
-
-Best wishes,
-José Expósito
-
-[1] Diff of a possible fix:
-
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index 47a17375c7fc..bdcbbd57d0fc 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -316,8 +316,11 @@ static int uclogic_raw_event_pen(struct uclogic_drvdata *drvdata,
-        }
-        /* If we need to emulate in-range detection */
-        if (pen->inrange == UCLOGIC_PARAMS_PEN_INRANGE_NONE) {
-                /* Set in-range bit */
--               data[1] |= 0x40;
-+               if (data[1])
-+                       data[1] |= 0x40;
-+
-                /* (Re-)start in-range timeout */
-                mod_timer(&drvdata->inrange_timer,
-                                jiffies + msecs_to_jiffies(100));

@@ -2,172 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38201580396
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF499580399
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 19:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235955AbiGYRib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 13:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S236270AbiGYRju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 13:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiGYRi3 (ORCPT
+        with ESMTP id S229921AbiGYRjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 13:38:29 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB06F1C916;
-        Mon, 25 Jul 2022 10:38:28 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id y9so11045189pff.12;
-        Mon, 25 Jul 2022 10:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9CQxdN0UuCCTwqKPx83Nzu7fLirKahxtUNngDAmtuPY=;
-        b=RRNd2A2HkQ6hbJaE13qKf/tqqRa1cdyvaSFzq5KJAbWtgKTUwcqQqUcH88F6odiq3R
-         mSUzI/nwKgT/i6FE3aoj/YGbP4lwOcM+bFgdFCH0Xshfxjey9DvbZ5W5vo2LspgPtAAa
-         Uk1wwa9m6rhTSjIFiUjREkJm+ZSnmTl80EBUo4N29HXVWI5puU/uxfc4Q0N9MYPpOe7i
-         cmAMtBSjdJ6TyhcajUq9m9VorSpMwt7GJz2Fz8oijxRXXYFhe0A0+cc0DmiNlPN2ip2n
-         7QA5zZBd45nA9fxvtKLPXhdYYB8YTGc27q1078F9cezra1NOnmZHtVaWwIP0nsFdbley
-         egGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9CQxdN0UuCCTwqKPx83Nzu7fLirKahxtUNngDAmtuPY=;
-        b=lfd2vCL+MvpouwCAK7bTz7B8T8hi8k2nE6+DDSb1L1iL7IvqMh+CuPc3Yr6nJNhOn/
-         dT1G1l3UvobQ6tIoRZksH8zC0TEGCaWDu+/jXusvnAqWAQn8MvQZ+55fwPIgcXTK2VhW
-         ttSL9Ysd+/538SzkVeiJtn7SiGeFPxJ/u9h9CqpNz4/m0io+coLtmndny/y/XpzJdJHq
-         kcyeiaFvW801Pjy7kOXxq0/HlJcl4A1O1PPBO4R3V9fXpWNgWE2FPrscdP33lEOM0kuf
-         Ef3G54Ifuhk7WHV2lOMgjbTjSA1uhS8BjMxziJKhXE3Tgqt6uDSOKsHO5Ho0CrV0bBix
-         7PDA==
-X-Gm-Message-State: AJIora8aEZ6tUIrnlAqa9mu0p6OkUVFCN89BW/wd2baRhwXMNd9v3yYs
-        wykQcGpJG8iQOaUQ7ReX92roDkEwqYk=
-X-Google-Smtp-Source: AGRyM1vgKz/ifCaiCr8JOoIJjb7/GeKixT5F/X1KEdo30UBhdFvBcugFAnTbTxwXUuYIqmCDYr1w8Q==
-X-Received: by 2002:a05:6a00:2185:b0:520:7276:6570 with SMTP id h5-20020a056a00218500b0052072766570mr14054362pfi.84.1658770707922;
-        Mon, 25 Jul 2022 10:38:27 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i188-20020a6287c5000000b005251b9102dbsm10219146pfe.144.2022.07.25.10.38.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 10:38:27 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     mmayer@broadcom.com, Florian Fainelli <f.fainelli@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL)
-Subject: [PATCH] tools/thermal: Fix possible path truncations
-Date:   Mon, 25 Jul 2022 10:37:54 -0700
-Message-Id: <20220725173755.2993805-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 25 Jul 2022 13:39:49 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAA61C912
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 10:39:47 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ls6gs17tnz68737;
+        Tue, 26 Jul 2022 01:37:45 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 25 Jul 2022 19:39:44 +0200
+Received: from [10.126.173.156] (10.126.173.156) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 25 Jul 2022 18:39:44 +0100
+Message-ID: <c2f91d00-96d2-c1f4-c858-5619515a30ed@huawei.com>
+Date:   Mon, 25 Jul 2022 18:39:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/2] arm64 defconfig: Get faddr2line working
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        <jpoimboe@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <1658681004-132191-1-git-send-email-john.garry@huawei.com>
+ <CAK8P3a0umWWic6LAzxXJ7BACYVE--m-wbynh7Z8F+pGoUBxGTA@mail.gmail.com>
+ <25237c44-ebc4-fc9a-7c6f-3e990f968038@huawei.com>
+ <CAK8P3a2+0EwSJ=fRBL2JCGypJRL-qE4rEiXYnJbqhZ=weethdQ@mail.gmail.com>
+ <4d5c9bfc-dc10-7019-cad4-751e21f02a18@huawei.com>
+ <CAK8P3a3QNjOSodb-ND=nZ=ThC9xZhEyUOaUsWCDF70s9g80r-w@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <CAK8P3a3QNjOSodb-ND=nZ=ThC9xZhEyUOaUsWCDF70s9g80r-w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.173.156]
+X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A build with -D_FORTIFY_SOURCE=2 enabled will produce the following warnings:
+On 25/07/2022 15:22, Arnd Bergmann wrote:
+>> INTERCONNECT has no dependencies, so "select" - like for MAILBOX -
+>> should be fine, I suppose
+> There are a couple of trade-offs between the two approaches.
+> The main advantage of 'select' is that you can enable drivers more
+> easily and all the required subsystems are there automatically.
+> The advantage of 'depends on' is that it becomes easier to disable
+> entire subsystems that one may not need.
+> 
+> Which of those two is more important is of course a matter of perspective,
+> I like to be able to turn things off more easily because that makes it
+> possible to test the corner cases with randconfig more easily, and it
+> helps produce size-reduced kernels for embedded systems.
+> 
+> Another aspect is that we overall have more 'depends on' than 'select',
+> and sticking with the more common way avoids circular dependencies,
+> both within an area of the kernel and overall.
+> 
+> The rule that I tend to follow with 'select' is to only use it on symbols
+> that you don't even want to show to users. If a feature is part of
+> a library (think zlib), then each user just needs to select the symbol
+> but you never actually have to decide whether to show it or not.
 
-sysfs.c:63:30: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size between 0 and 255 [-Wformat-truncation=]
-  snprintf(filepath, 256, "%s/%s", path, filename);
-                              ^~
-Bump up the buffer to PATH_MAX which is the limit and account for all of
-the possible NUL and separators that could lead to exceeding the
-allocated buffer sizes.
+ok, seems reasonable. Personally I dislike 'select' for all the common 
+reasons.
 
-Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- tools/thermal/tmon/sysfs.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+>>>> And would each config item deletion merit a separate patch?
+>>> You send a combined patch for the obvious ones (secccomp
+>>> and mailbox AFAICT) or send them separately. For the other ones I think
+>>> we should try fixing the Kconfig files first, otherwise we just end up
+>>> putting them back afterwards.
+>> ok, fine. I'll deal with the obvious changes first plus
+>> CONFIG_DEBUG_INFO and then the non-obvious, non-trivial ones. I'll base
+>> on your arm/defconfig branch (for defconfig changes).
+> The CONFIG_DEBUG_INFO one should be fixed by my series from
+> last week already, do you still see another issue with that?
 
-diff --git a/tools/thermal/tmon/sysfs.c b/tools/thermal/tmon/sysfs.c
-index b00b1bfd9d8e..cb1108bc9249 100644
---- a/tools/thermal/tmon/sysfs.c
-+++ b/tools/thermal/tmon/sysfs.c
-@@ -13,6 +13,7 @@
- #include <stdint.h>
- #include <dirent.h>
- #include <libintl.h>
-+#include <limits.h>
- #include <ctype.h>
- #include <time.h>
- #include <syslog.h>
-@@ -33,9 +34,9 @@ int sysfs_set_ulong(char *path, char *filename, unsigned long val)
- {
- 	FILE *fd;
- 	int ret = -1;
--	char filepath[256];
-+	char filepath[PATH_MAX + 2]; /* NUL and '/' */
- 
--	snprintf(filepath, 256, "%s/%s", path, filename);
-+	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
- 
- 	fd = fopen(filepath, "w");
- 	if (!fd) {
-@@ -57,9 +58,9 @@ static int sysfs_get_ulong(char *path, char *filename, unsigned long *p_ulong)
- {
- 	FILE *fd;
- 	int ret = -1;
--	char filepath[256];
-+	char filepath[PATH_MAX + 2]; /* NUL and '/' */
- 
--	snprintf(filepath, 256, "%s/%s", path, filename);
-+	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
- 
- 	fd = fopen(filepath, "r");
- 	if (!fd) {
-@@ -76,9 +77,9 @@ static int sysfs_get_string(char *path, char *filename, char *str)
- {
- 	FILE *fd;
- 	int ret = -1;
--	char filepath[256];
-+	char filepath[PATH_MAX + 2]; /* NUL and '/' */
- 
--	snprintf(filepath, 256, "%s/%s", path, filename);
-+	snprintf(filepath, sizeof(filepath), "%s/%s", path, filename);
- 
- 	fd = fopen(filepath, "r");
- 	if (!fd) {
-@@ -199,8 +200,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
- {
- 	unsigned long trip_instance = 0;
- 	char cdev_name_linked[256];
--	char cdev_name[256];
--	char cdev_trip_name[256];
-+	char cdev_name[PATH_MAX];
-+	char cdev_trip_name[PATH_MAX];
- 	int cdev_id;
- 
- 	if (nl->d_type == DT_LNK) {
-@@ -213,7 +214,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
- 			return -EINVAL;
- 		}
- 		/* find the link to real cooling device record binding */
--		snprintf(cdev_name, 256, "%s/%s", tz_name, nl->d_name);
-+		snprintf(cdev_name, sizeof(cdev_name) - 2, "%s/%s",
-+			 tz_name, nl->d_name);
- 		memset(cdev_name_linked, 0, sizeof(cdev_name_linked));
- 		if (readlink(cdev_name, cdev_name_linked,
- 				sizeof(cdev_name_linked) - 1) != -1) {
-@@ -226,8 +228,8 @@ static int find_tzone_cdev(struct dirent *nl, char *tz_name,
- 			/* find the trip point in which the cdev is binded to
- 			 * in this tzone
- 			 */
--			snprintf(cdev_trip_name, 256, "%s%s", nl->d_name,
--				"_trip_point");
-+			snprintf(cdev_trip_name, sizeof(cdev_trip_name) - 1,
-+				"%s%s", nl->d_name, "_trip_point");
- 			sysfs_get_ulong(tz_name, cdev_trip_name,
- 					&trip_instance);
- 			/* validate trip point range, e.g. trip could return -1
--- 
-2.25.1
+Ah, I thought that you re-enabled CONFIG_DEBUG_INFO for only the arm32 
+configs but see that you also re-enabled for arm64 defconfig as well.
 
+> I actually
+> have another patch to fix up all the non-Arm defconfigs for this one as
+> well, but haven't sent that one yet.
+
+Thanks,
+John

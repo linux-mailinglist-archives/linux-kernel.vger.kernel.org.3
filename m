@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB6B5805A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0015805A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbiGYUao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S236479AbiGYUbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237144AbiGYUah (ORCPT
+        with ESMTP id S236580AbiGYUbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:30:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09B622510
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658781032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XR/XGl5d+vD331sf91Cdt4PhYy4RnDiWcXKqjqi8ODs=;
-        b=ZuVBkM87FFykPm+R3alPR2NULAqXz3yWtCmRMhRBLpGoy/xT0BeTIvxP3uS7I02sQuQYUE
-        TO5QYLcP3OEUCosjlRX91f9WI7mk2Z1gjZEek1PGA70PrTJhel6u2BT8ewphGOMKxaqv9K
-        JZ2vthHRzO6pBDWTuh6Ww5+rUzN22So=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9-dyA-NRXXMy2xkd0yzUdM4Q-1; Mon, 25 Jul 2022 16:30:31 -0400
-X-MC-Unique: dyA-NRXXMy2xkd0yzUdM4Q-1
-Received: by mail-oo1-f69.google.com with SMTP id d22-20020a4a9196000000b00435761169daso928214ooh.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:30:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=XR/XGl5d+vD331sf91Cdt4PhYy4RnDiWcXKqjqi8ODs=;
-        b=c30pp+u4zR0BKosvEY0LGMdkcGW8RTnGORwKg+EQu53sqfhLgmGW1IXwKEe4CqtW5o
-         Pt3gqvDpmHF/d5Wc5E+nerbMTCC6UTDtgZ2sn0OQ7kots8NSMFx2/SOgiFAYji5I5qhN
-         IRFZYCL6avyJoby35GjlqXtedL2KYwXCV4NNYG+Ita3/0pJgopnELSVhu7aX8FhUd3CE
-         7EHu0hr94X0LR8ct6P0LqVAs8fR1xyLNH8TrNKPVraiCYDlo9m9+iYCKZM5pUfIN1TDR
-         B30RI7TFYj4vPMpp8dydVD5oOjxQmS6tN3SLK3BJ4OcTGZde00BmD4m61RVyiYmrHeGq
-         gAEg==
-X-Gm-Message-State: AJIora+BqN4GbFxqKK/IOHxwGmZmk02FRDh5aCMjXK0nJrm/z26mnOvb
-        FoS4oY5/hINSi1h4KOHWO7euF5FgOnz3h7I1NEDh66g1G1f6VuQ0+/62ku+tCa4mySnI7aUFGIM
-        MZQjaGcSK5HfDuF2mbyKrVtN6
-X-Received: by 2002:a05:6870:f222:b0:10b:7326:18c2 with SMTP id t34-20020a056870f22200b0010b732618c2mr14678592oao.55.1658781030628;
-        Mon, 25 Jul 2022 13:30:30 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vMKdLBsCrpyPFiMwp1I36On67rQNmu7kKIT17kKg4MZ0q/jXm/7VX99Y0AfExWzkcNf7gWrA==
-X-Received: by 2002:a05:6870:f222:b0:10b:7326:18c2 with SMTP id t34-20020a056870f22200b0010b732618c2mr14678576oao.55.1658781030337;
-        Mon, 25 Jul 2022 13:30:30 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id o31-20020a056870911f00b0010c7487aa73sm6507887oae.50.2022.07.25.13.30.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 13:30:29 -0700 (PDT)
-Subject: Re: [PATCH] ASoC: amd: acp: Fix initialization of ext_intr_stat1 in
- i2s_irq_handler()
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20220725180539.1315066-1-nathan@kernel.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <fd7188f2-8e42-3683-0ef5-2ddde56b3efc@redhat.com>
-Date:   Mon, 25 Jul 2022 13:30:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 25 Jul 2022 16:31:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3908C559D;
+        Mon, 25 Jul 2022 13:31:36 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C4F616601B06;
+        Mon, 25 Jul 2022 21:31:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658781093;
+        bh=W9DZSzPqzjJhWL01AORUmAgCTKm7R4Z6jqzXRhJ6p8k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mgLtyfjmxYamFkm0NIFFBO3WvTNhryYyRZZRfwEtyhlaBaAtHEiXXp9ZQLoLy81u7
+         HrPMgjH3ij0kg5sCxQsN1iwAQhSxRcSd0YvfF1S6e/zhJysobbiqVH1oFwZYZfoBU0
+         o3ScnCOQs5eAeIzlvAboZRLo20Go7myIHghXYaMdumMH83Q59E8LqFgY5os84PfVcT
+         4XNI5lZh61oNjAZwdCqFnN7/MrU6e+VaksXFUwPQBID47YE8eyjh104PY4pJNN2FPs
+         TNSGaHM2lH+UM0VNozY+NEuXlhqr9XWOPEp3RIgw4OncR13x2gs3Yjsbn/ScKeXEHq
+         COV/hZR/wCQ1g==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: retimer: Add missing id check in match callback
+Date:   Mon, 25 Jul 2022 16:31:29 -0400
+Message-Id: <20220725203129.1973260-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-In-Reply-To: <20220725180539.1315066-1-nathan@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The fwnode_connection_find_match() function handles two cases: named
+references and graph endpoints. In the second case, the match function
+passed in is called with the id to check for the match. However, the
+match function for the recently added type-c retimer class assumes the
+connection has already been matched (which is only true for the first
+case).
 
-On 7/25/22 11:05 AM, Nathan Chancellor wrote:
-> Clang warns:
->
->    ../sound/soc/amd/acp/acp-platform.c:117:19: error: variable 'ext_intr_stat1' is uninitialized when used here [-Werror,-Wuninitialized]
->                            if (stream && (ext_intr_stat1 & stream->irq_bit)) {
->                                           ^~~~~~~~~~~~~~
->    ../sound/soc/amd/acp/acp-platform.c:97:35: note: initialize the variable 'ext_intr_stat1' to silence this warning
->            u32 ext_intr_stat, ext_intr_stat1, i;
->                                             ^
->                                              = 0
->    1 error generated.
->
-> The variable was not properly renamed, correct it to resolve the
-> warning.
->
-> Fixes: 93f53881473c ("ASoC: amd: acp: Modify local variables name to generic")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1675
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Tom Rix <trix@redhat.com>
-> ---
->   sound/soc/amd/acp/acp-platform.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/sound/soc/amd/acp/acp-platform.c b/sound/soc/amd/acp/acp-platform.c
-> index 10730d33c3b0..f561d39b33e2 100644
-> --- a/sound/soc/amd/acp/acp-platform.c
-> +++ b/sound/soc/amd/acp/acp-platform.c
-> @@ -100,7 +100,7 @@ static irqreturn_t i2s_irq_handler(int irq, void *data)
->   		return IRQ_NONE;
->   
->   	if (adata->rsrc->no_of_ctrls == 2)
-> -		ext_intr_stat = readl(ACP_EXTERNAL_INTR_STAT(adata, (rsrc->irqp_used - 1)));
-> +		ext_intr_stat1 = readl(ACP_EXTERNAL_INTR_STAT(adata, (rsrc->irqp_used - 1)));
->   
->   	ext_intr_stat = readl(ACP_EXTERNAL_INTR_STAT(adata, rsrc->irqp_used));
->   
->
-> base-commit: be0aa8d4b0fcb4532bf7973141e911998ab39508
+The result is that with that change, all type-c nodes with graph
+endpoints defer probe indefinitely, independently of having a retimer
+connection or not.
+
+Add the missing check, like is done by the type-c mux and usb role
+switch code, to fix the issue.
+
+Fixes: ddaf8d96f93b ("usb: typec: Add support for retimers")
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+---
+
+ drivers/usb/typec/retimer.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/typec/retimer.c b/drivers/usb/typec/retimer.c
+index 051eaa7d2899..2003731f1bee 100644
+--- a/drivers/usb/typec/retimer.c
++++ b/drivers/usb/typec/retimer.c
+@@ -36,8 +36,13 @@ static int retimer_fwnode_match(struct device *dev, const void *fwnode)
+ 
+ static void *typec_retimer_match(struct fwnode_handle *fwnode, const char *id, void *data)
+ {
+-	struct device *dev  = class_find_device(&retimer_class, NULL, fwnode,
+-						retimer_fwnode_match);
++	struct device *dev;
++
++	if (id && !fwnode_property_present(fwnode, id))
++		return NULL;
++
++	dev = class_find_device(&retimer_class, NULL, fwnode,
++				retimer_fwnode_match);
+ 
+ 	return dev ? to_typec_retimer(dev) : ERR_PTR(-EPROBE_DEFER);
+ }
+-- 
+2.37.0
 

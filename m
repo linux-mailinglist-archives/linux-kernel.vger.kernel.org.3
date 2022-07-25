@@ -2,107 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B3D57FDD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E261657FDD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234014AbiGYKpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S234809AbiGYKqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234822AbiGYKp0 (ORCPT
+        with ESMTP id S232638AbiGYKqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:45:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05764CE05;
-        Mon, 25 Jul 2022 03:45:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EEE460B6E;
-        Mon, 25 Jul 2022 10:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3654C341C8;
-        Mon, 25 Jul 2022 10:45:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658745924;
-        bh=8FN7wqx7Bn6NDn4fHaqkWhzadFtp7D8Qq1pnKah2Auc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BsHkSMgzSXnEev+OixsDAfFJyitvX0T+kTPo44UA4XMte9zrAEt7yXx1M1D4qiA6K
-         Wo5pnCnrdgEfJwhReT6Rdn2i/8A/zjIFtUGwg5jd1BEc9Mf0E6jCDqCNAz2gOuX/BM
-         PfEuU61D2lrGnjoNQiF1uAQzd6r+Rv6evCnHlGh3Ku6ZX1t0hP3wWBlVJttTxhxCmy
-         43PKIxamZ3p9tA+qQj/sdOai5xu7wMe+DVsQMPujNiRgIau4bNLph4++T3DC/DpXJ1
-         fkIxS123/fMQeXqUV7at2lcZO4ThphXhDhPfQiHYwVn+x6cdwb5TeJrRb0Na5htz05
-         ZsNvizU2N6N8w==
-Date:   Mon, 25 Jul 2022 12:45:18 +0200
-From:   Robert Richter <rric@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Toshi Kani <toshi.kani@hpe.com>, mchehab@kernel.org,
-        elliott@hpe.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] EDAC/ghes: Fix buffer overflow in ghes_edac_register()
-Message-ID: <Yt50Pp3kQRCtSqw6@rric.localdomain>
-References: <20220721180503.896050-1-toshi.kani@hpe.com>
- <YtqkMicKdZdPdUWB@zn.tnic>
- <Yt5oAjbZ5Koy9v5i@rric.localdomain>
- <Yt5s/f/jyRcFY1Md@zn.tnic>
+        Mon, 25 Jul 2022 06:46:01 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED03313
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:46:00 -0700 (PDT)
+Received: from alisa-ThinkPad-T440s.. (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPS id D00E440D403D;
+        Mon, 25 Jul 2022 10:45:56 +0000 (UTC)
+From:   Alisa Khabibrakhmanova <khabibrakhmanova@ispras.ru>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     Alisa Khabibrakhmanova <khabibrakhmanova@ispras.ru>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: [PATCH] drm/via: Add new condition to via_dma_cleanup()
+Date:   Mon, 25 Jul 2022 13:45:55 +0300
+Message-Id: <20220725104555.124044-1-khabibrakhmanova@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yt5s/f/jyRcFY1Md@zn.tnic>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.07.22 12:14:21, Borislav Petkov wrote:
-> On Mon, Jul 25, 2022 at 11:53:06AM +0200, Robert Richter wrote:
-> > The dimm->label buffer must be pre-initialized zero. This broke with:
-> > 
-> >  b9cae27728d1 EDAC/ghes: Scan the system once on driver init
-> > 
-> > since krealloc/krealloc_array() does not zero out the new allocated
-> > buffer for struct dimm_info in enumerate_dimms(). This uninitialized
-> > broken struct is then copied in ghes_edac_register() to the final
-> > dimm_info destination. Originally, before b9cae27728d1, the struct was
-> > zero initialized with kzalloc'ed by edac_mc_alloc() and directly used.
-> > Now, that a copy is created first, this copy must be also zero
-> > initialized.
-> > 
-> > IMO this is the proper fix:
-> 
-> Maybe, but this needs fixing too:
-> 
-> 	/* both strings must be non-zero */
-> 	if (bank && *bank && device && *device)
-> 
-> Obviously one of those strings are zero coming from that BIOS...
+Pointer dev_priv->mmio, which was checked for NULL at via_do_init_map(),
+is passed to via_do_cleanup_map() and is dereferenced there without check.
 
-But the label is pre-initialized in edac_mc_alloc_dimms():
+The patch adds the condition in via_dma_cleanup() which prevents potential NULL
+pointer dereference.
 
-	p = dimm->label;
-	n = snprintf(p, len, "mc#%u", mci->mc_idx);
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-You check if the label is emtpy when copying it in
-ghes_edac_register():
+Fixes: 22f579c621e2 ("drm: Add via unichrome support")
+Signed-off-by: Alisa Khabibrakhmanova <khabibrakhmanova@ispras.ru>
+---
+ drivers/gpu/drm/via/via_dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	if (strlen(src->label))
-		memcpy(dst->label, src->label, sizeof(src->label));
+diff --git a/drivers/gpu/drm/via/via_dma.c b/drivers/gpu/drm/via/via_dma.c
+index 177b0499abf1..56bcbbf4ed54 100644
+--- a/drivers/gpu/drm/via/via_dma.c
++++ b/drivers/gpu/drm/via/via_dma.c
+@@ -164,7 +164,7 @@ int via_dma_cleanup(struct drm_device *dev)
+ 		drm_via_private_t *dev_priv =
+ 		    (drm_via_private_t *) dev->dev_private;
+ 
+-		if (dev_priv->ring.virtual_start) {
++		if (dev_priv->ring.virtual_start && dev_priv->mmio) {
+ 			via_cmdbuf_reset(dev_priv);
+ 
+ 			drm_legacy_ioremapfree(&dev_priv->ring.map, dev);
+-- 
+2.34.1
 
-So if there is nothing that comes from the bios, this default label
-string from edac_mc_alloc_dimms() will be used.
-
-If you write "N/A" to the label instead, the sysfs dimm_label values
-wont be unique any longer between dimms, which might break existing
-applications.
-
--Robert
-
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette

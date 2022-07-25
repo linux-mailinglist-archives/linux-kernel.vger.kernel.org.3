@@ -2,78 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF1A57F96B
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C043757F974
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiGYG31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 02:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        id S231285AbiGYGdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 02:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbiGYG3X (ORCPT
+        with ESMTP id S229436AbiGYGc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 02:29:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F08FE0EA
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:29:23 -0700 (PDT)
+        Mon, 25 Jul 2022 02:32:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9795DEBC
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:32:57 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CA5A535214;
-        Mon, 25 Jul 2022 06:29:21 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7F13135214;
+        Mon, 25 Jul 2022 06:32:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658730561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1658730776; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qfhHL8qNjWo+VGWVOvG8VjHBh7oP/UIx9kWwq9ivNQc=;
-        b=h0Jt7KAnwHReV1TJFTwSynFGj7TcZEq4kKAJ+cx4E0x4wId8fkPA/ZIAb1ypNWBXLwkxYg
-        x6ZN0p9EcYP5JX/xGxrHbaZRXBmphqc5x2KObSnp2IIh5JI83MOsrETozlcQjjDqxsjXwj
-        YdhIG+1PdtAfIsw4LJVPzOhMoIJG77Y=
+        bh=P1LXcn+hKt49MBdlgeZ82zxYZFLVTBrIq3FWrHSmwmA=;
+        b=oUJy5dpT1PfTeMsYPEbfWNYwllEopChogBV53EDYgX9V++PiZj/MfKAaNT0CH8QiemvC6e
+        NFpSvk6FDhi3UX1SEdLYVBdgwkV33l4rfnN3ZF92dee0D5EwilJp8Am22+mVaaV5XCmTJX
+        L8iN92/KeScuxwnwnFJ86I8b5s12T6k=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658730561;
+        s=susede2_ed25519; t=1658730776;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qfhHL8qNjWo+VGWVOvG8VjHBh7oP/UIx9kWwq9ivNQc=;
-        b=JuvCsorX2WFzApL6pQDAF2BwdMjK8Ai1hqC9e9rqRL5Da9Nyu5nzgAb+ABoQJGbiztS0dy
-        ceXzw0FN6X8CiBCQ==
+        bh=P1LXcn+hKt49MBdlgeZ82zxYZFLVTBrIq3FWrHSmwmA=;
+        b=1dHrctAwEAi++CA4JlU4TjuL3O24usA1XTAzFSzEorlZLO8Qr2MWRr1fVp2yE6Ui/MFc7v
+        JG1i2QihP2rWA8AQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A042413AD7;
-        Mon, 25 Jul 2022 06:29:21 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 448FD13AD7;
+        Mon, 25 Jul 2022 06:32:56 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1QVbJkE43mKBPgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 25 Jul 2022 06:29:21 +0000
-Date:   Mon, 25 Jul 2022 08:29:21 +0200
-Message-ID: <874jz5emda.wl-tiwai@suse.de>
+        id DM0XEBg53mIdQAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 25 Jul 2022 06:32:56 +0000
+Date:   Mon, 25 Jul 2022 08:32:55 +0200
+Message-ID: <871qu9em7c.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     perex@perex.cz, tiwai@suse.com, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH] usb/hiface: fix repeated words in comments
-In-Reply-To: <20220724071829.11117-1-wangjianli@cdjrlc.com>
-References: <20220724071829.11117-1-wangjianli@cdjrlc.com>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
+        <tanureal@opensource.cirrus.com>, <rf@opensource.cirrus.com>,
+        <perex@perex.cz>, <tiwai@suse.com>,
+        <sbinding@opensource.cirrus.com>, <vitalyr@opensource.cirrus.com>,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de
+Subject: Re: [PATCH -next] ALSA: hda: cs35l41: Fix build error unused-function
+In-Reply-To: <20220725023611.57055-1-renzhijie2@huawei.com>
+References: <20220725023611.57055-1-renzhijie2@huawei.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ISO-8859-7
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Jul 2022 09:18:29 +0200,
-wangjianli wrote:
+On Mon, 25 Jul 2022 04:36:11 +0200,
+Ren Zhijie wrote:
 > 
->  Delete the redundant word 'in'.
+> If CONFIG_PM_SLEEP is not set,
+> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
 > 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> sound/pci/hda/cs35l41_hda.c:583:12: error: ¡cs35l41_runtime_resume¢ defined but not used [-Werror=unused-function]
+>  static int cs35l41_runtime_resume(struct device *dev)
+>             ^~~~~~~~~~~~~~~~~~~~~~
+> sound/pci/hda/cs35l41_hda.c:565:12: error: ¡cs35l41_runtime_suspend¢ defined but not used [-Werror=unused-function]
+>  static int cs35l41_runtime_suspend(struct device *dev)
+>             ^~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> make[3]: *** [sound/pci/hda/cs35l41_hda.o] Error 1
+> 
+> commit 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros,
+> deprecate old ones"), add new marco RUNTIME_PM_OPS to fix this unused-function problem.
+> 
+> Fixes: 1873ebd30cc8 ("ALSA: hda: cs35l41: Support Hibernation during Suspend")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
 
 Thanks, applied.
 

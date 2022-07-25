@@ -2,146 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209035803DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFB35803EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235644AbiGYSNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 14:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S236206AbiGYSS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 14:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiGYSNg (ORCPT
+        with ESMTP id S236046AbiGYSSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 14:13:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA15DF4B;
-        Mon, 25 Jul 2022 11:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658772815; x=1690308815;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=W1W3K6HtndLxG/12lj9ntiMcXN03GrPr2INAm/PqZW0=;
-  b=I8mvqZZnQb6BLS4RNVokv6c6Ho5GkbL9Julcnws03sVD/l4znFW0oJO8
-   701hKDQbkDAEg8zDDmCK/OrefLnb5tmAOV0tP0FbS1zqaIijzvxQu8tub
-   78dz13qfXfI5lcqnncKpY3cArKR4/vgUsJto6+L0mPDpZ0gpSY6yyBV+K
-   tUYp3COea2JJQsZ+clabqadtWLwFSOYhDECdK9WCGnL2Pk6ShM90CHYS/
-   ING5vUsrXSKxb6dNUdDNafTTMMM4OsBKBR4KUMdhtaEPG90mGtqwyMTwv
-   axvJY6cVGiG73D5vW9swyLQhxp0KZad2oToimUn5IHv6wXDfY8YY7L/jU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="288521824"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="288521824"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 11:13:35 -0700
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="575153907"
-Received: from mgarner-mobl.amr.corp.intel.com (HELO [10.209.39.177]) ([10.209.39.177])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 11:13:35 -0700
-Message-ID: <dcb634c3-7671-9073-555f-e861088cfcd0@linux.intel.com>
-Date:   Mon, 25 Jul 2022 11:13:34 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH] PCI/ERR: Use pcie_aer_is_native() to judge whether OS
- owns AER
-Content-Language: en-US
-To:     Zhuo Chen <chenzhuo.1@bytedance.com>, ruscur@russell.cc,
-        oohall@gmail.com, bhelgaas@google.com
-Cc:     lukas@wunner.de, jan.kiszka@siemens.com, stuart.w.hayes@gmail.com,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        Mon, 25 Jul 2022 14:18:52 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B328A1EEE4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:18:51 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id j70so14480989oih.10
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TQraKRTwranfua7QFRgcXvvnBZubuSnmpInT6C6BiTs=;
+        b=lJBLleC/MSm8LzkLYV2TFqVj17DZr991BpjRXmIa+izgTEjUAp9YOpnt3Xf8+xdAlr
+         XNcmnXcHLilfFftYcQgQkSNs5Vffc3jg3GIhKZ6HmBn3Fp/BgmVbLjAR+L5t5aLUTkpr
+         /+yQ5p5RvLFyU2/kdDN0dSwX4ER5xLhe3FWE4udNphySk0kHUIWEasTQroA0W4vo6ubD
+         GlZXK1wHXUtZ/EWBlqvc/uLyh8nIyesv3SxWBIFsVO5Iil0qraDmXBBZQVYPMGz7sszY
+         cszVwDEoyjr78VBEWrkwMjAQkLtBhMO55ERJfsy3Tuy579+s72tyJ8Dtd/9RYlSslq1q
+         kVLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TQraKRTwranfua7QFRgcXvvnBZubuSnmpInT6C6BiTs=;
+        b=vsHgLwZSw66bV05ifa0VT4XZ95wROKVgkeOmxT8R4oqQS2cgolHj0X2eMLt3eUAy/A
+         fJZDrOv0deXHCWhTggVxU8fGlPu2W76lfoOL+ibQ3x6k8aAr6lCWgUy+ivkmThUBxaoE
+         XqODi1xQbDz4kQYALnKn2RDwT0YswEmHbbLyMG1LnkOR8ZZ+MaG4d8AUKPuuxnE2BQbw
+         IjR5W1B/46bBBH2VreuaLiezjBPynrKbVtE8SFrggkE7mHGDMdv/k8mVCrrRZu+Zx8A6
+         HA8Hwku+KW7U3zo2MT6Ymv0e+zm6kBacLdrn804Tt0xqjub+uhrpm/QFy62FOmfesl6n
+         Opjg==
+X-Gm-Message-State: AJIora+1hDMnSIfcqZfwX0RpHBlFfI4rh9C2NyjEmWEBZ0VJeX6maC8g
+        4zpOmo/1xvDaxLrCz7CEcrQ=
+X-Google-Smtp-Source: AGRyM1t/JIwxEKJ3eL15RARypEuL6HM72lc2k52SQPSuMWI1RceloJpl+n7nsnxiriqT2oDP/wMpqQ==
+X-Received: by 2002:a05:6808:1a0b:b0:33a:72c6:c96e with SMTP id bk11-20020a0568081a0b00b0033a72c6c96emr13157252oib.176.1658773130913;
+        Mon, 25 Jul 2022 11:18:50 -0700 (PDT)
+Received: from fedora.. ([2804:14c:bbe3:4370:95da:f07f:e927:6958])
+        by smtp.gmail.com with ESMTPSA id m42-20020a056870562a00b0010db1a8d931sm5358484oao.28.2022.07.25.11.18.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 11:18:50 -0700 (PDT)
+From:   Magali Lemes <magalilemes00@gmail.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     mwen@igalia.com, mairacanal@riseup.net, isabbasso@riseup.net,
+        siqueirajordao@riseup.net, andrealmeid@riseup.net,
+        tales.aparecida@gmail.com, Magali Lemes <magalilemes00@gmail.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-References: <20220725160131.83687-1-chenzhuo.1@bytedance.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220725160131.83687-1-chenzhuo.1@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH 1/2] drm/amd/display: change variables type
+Date:   Mon, 25 Jul 2022 15:15:58 -0300
+Message-Id: <20220725181559.250030-1-magalilemes00@gmail.com>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As "dcn3_15_soc" and "dcn3_16_soc" are of type "struct
+_vcs_dpi_soc_bounding_box_st", change their types accordingly.
 
+Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
+---
+ drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h | 2 +-
+ drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 7/25/22 9:01 AM, Zhuo Chen wrote:
-> After commit 7d7cbeaba5b7 ("PCI/ERR: Clear status of the reporting
-> device"), the AER status of the device that reported the error
-> rather than the first downstream port is cleared. So the problem
-> in commit aa344bc8b727 ("PCI/ERR: Clear AER status only when we
-> control AER") is no longer existent, and we change to use
-> pcie_aer_is_native() here.
-Can you add the details of the problem you are referring to? Also
-include details about how this problem relates to your commit.
-
-IIUC, your commit replaces "host->native_aer || pcie_ports_native"
-with pcie_aer_is_native(dev, correct? If so, add a note in commit
-log that it has no functional changes.
-
-> 
-> pci_aer_clear_nonfatal_status() already has pcie_aer_is_native(),
-> so we move pci_aer_clear_nonfatal_status() out of
-> pcie_aer_is_native().
-> 
-> Replace statements that judge whether OS owns AER in
-> get_port_device_capability() with pcie_aer_is_native().
-> 
-> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
-> ---
->  drivers/pci/pcie/err.c          | 12 ++----------
->  drivers/pci/pcie/portdrv_core.c |  3 +--
->  2 files changed, 3 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
-> index 0c5a143025af..28339c741555 100644
-> --- a/drivers/pci/pcie/err.c
-> +++ b/drivers/pci/pcie/err.c
-> @@ -184,7 +184,6 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  	int type = pci_pcie_type(dev);
->  	struct pci_dev *bridge;
->  	pci_ers_result_t status = PCI_ERS_RESULT_CAN_RECOVER;
-> -	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
->  
->  	/*
->  	 * If the error was detected by a Root Port, Downstream Port, RCEC,
-> @@ -237,16 +236,9 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  	pci_dbg(bridge, "broadcast resume message\n");
->  	pci_walk_bridge(bridge, report_resume, &status);
->  
-> -	/*
-> -	 * If we have native control of AER, clear error status in the device
-> -	 * that detected the error.  If the platform retained control of AER,
-> -	 * it is responsible for clearing this status.  In that case, the
-> -	 * signaling device may not even be visible to the OS.
-> -	 */
-> -	if (host->native_aer || pcie_ports_native) {
-> +	if (pcie_aer_is_native(dev))
->  		pcie_clear_device_status(dev);
-> -		pci_aer_clear_nonfatal_status(dev);
-> -	}
-> +	pci_aer_clear_nonfatal_status(dev);
->  	pci_info(bridge, "device recovery successful\n");
->  	return status;
->  
-> diff --git a/drivers/pci/pcie/portdrv_core.c b/drivers/pci/pcie/portdrv_core.c
-> index 604feeb84ee4..98c18f4a01b2 100644
-> --- a/drivers/pci/pcie/portdrv_core.c
-> +++ b/drivers/pci/pcie/portdrv_core.c
-> @@ -221,8 +221,7 @@ static int get_port_device_capability(struct pci_dev *dev)
->  	}
->  
->  #ifdef CONFIG_PCIEAER
-> -	if (dev->aer_cap && pci_aer_available() &&
-> -	    (pcie_ports_native || host->native_aer)) {
-> +	if (pcie_aer_is_native(dev) && pci_aer_available()) {
->  		services |= PCIE_PORT_SERVICE_AER;
->  
->  		/*
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
+index 39929fa67a51..45276317c057 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
++++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.h
+@@ -32,7 +32,7 @@
+ 	container_of(pool, struct dcn315_resource_pool, base)
+ 
+ extern struct _vcs_dpi_ip_params_st dcn3_15_ip;
+-extern struct _vcs_dpi_ip_params_st dcn3_15_soc;
++extern struct _vcs_dpi_soc_bounding_box_st dcn3_15_soc;
+ 
+ struct dcn315_resource_pool {
+ 	struct resource_pool base;
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
+index 0dc5a6c13ae7..d2234aac5449 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
++++ b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.h
+@@ -32,7 +32,7 @@
+ 	container_of(pool, struct dcn316_resource_pool, base)
+ 
+ extern struct _vcs_dpi_ip_params_st dcn3_16_ip;
+-extern struct _vcs_dpi_ip_params_st dcn3_16_soc;
++extern struct _vcs_dpi_soc_bounding_box_st dcn3_16_soc;
+ 
+ struct dcn316_resource_pool {
+ 	struct resource_pool base;
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.37.1
+

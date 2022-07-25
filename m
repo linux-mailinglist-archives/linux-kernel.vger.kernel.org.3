@@ -2,112 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBF457FB2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F87057FB37
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233874AbiGYIUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
+        id S232776AbiGYIZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233972AbiGYIUS (ORCPT
+        with ESMTP id S229822AbiGYIZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:20:18 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4629514091
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:20:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LrtJK6dcZz4x1k;
-        Mon, 25 Jul 2022 18:20:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658737202;
-        bh=Wrn2BUW27rZ1SIN5JnOFM+dnk2r7UcKK57unfYC/sd4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Hg8mJWfvVBw1KMVgXUSsxvnOoXxJkLw4ag24+n3PENoq4IhXjFD+y1pcFO8rA4GIP
-         0FP23qil4YvTU0bz/Gb8o41Q7ghv2lFpxb1AVkztq9ryFkZiOx4ciQBrStDPfVGoeP
-         2TkzldCofvui1w8FfVZq2Pf+5p2MlnUUg9gbOFIa16jN4Nugmdojv8OwIE5+ZTU5iq
-         /PnDHcuUMToUst6ONFhGbjJSo0BWoP2CMPR+2AqzKfIiaUhhItSVfZ+Nc136stoHiJ
-         kX4TDCUfWO6XmCZ87Ygh8zU/qrpyeCSObjLNE1W4V9bC+ZgjVG98y2dAVyMZA1/ayj
-         J9S3R6/uFRFQw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Regression: Linux v5.15+ does not boot on Freescale P2020
-In-Reply-To: <20220723150702.jecerkhxhy65dgww@pali>
-References: <20220722090929.mwhmxxdd7yioxqpz@pali>
- <6b227478-73b8-2a97-1c78-89570d928739@csgroup.eu>
- <20220723150702.jecerkhxhy65dgww@pali>
-Date:   Mon, 25 Jul 2022 18:20:01 +1000
-Message-ID: <875yjld2oe.fsf@mpe.ellerman.id.au>
+        Mon, 25 Jul 2022 04:25:02 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC236157;
+        Mon, 25 Jul 2022 01:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1658737480;
+        bh=Q/fzEFlwcS/PYAbsBodtIxc86HI6kWU6z8JxCzps4eo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=haMhWUlCPSH5CFEkb0z9XyWjeCnaOXm7B0Gjp52g2V2KjksyrBJ0nx8UQPbs7OJ1g
+         DS29IswjQ2h6ZFbmPiR8keX7HDDJNADZXCJ0m/CbQycVn3WGjVvwh5pG+ZmRyuhZHv
+         vIq/xaXqGnMzT4ajuKB9or8374i45vckYEUKwPek=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.140.141]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MD9T1-1oP04v0xDF-009CJD; Mon, 25
+ Jul 2022 10:24:40 +0200
+Message-ID: <1a640421-9b22-28a3-4712-714c4f12b9b2@gmx.de>
+Date:   Mon, 25 Jul 2022 10:23:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] fbdev: Make registered_fb[] private to fbmem.c
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-staging@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-fbdev@vger.kernel.org
+References: <20220725075400.68478-1-javierm@redhat.com>
+ <c06cccc7-9e7d-5659-c23d-40ca386574b0@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <c06cccc7-9e7d-5659-c23d-40ca386574b0@suse.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:ZjD4JArpyofLO9WHEqMo7VhreBlhRkiYZWwkzSJ3Pv2a4CUMFyH
+ GpzCKg2poPDFbIftn7s2o5SN25CTaCkb9CJ9zhnYW2itdAoGH1OBhyAjghiSxr6IOIh/Oti
+ 8eEHUYQ+sKfYY7F0fp7JWhHUL8Ky+ZppQKYTk3pyTY/9vWpsoEQyDxtzGtLrhjNeiIaTYd0
+ EWoBMPhLFis81KNIAv2mQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DUwW8Qj4G4M=:rbDf/oYyOEYdx/kjrJdzjh
+ aakadAtGrJJ/GrLKujso2nN1ycLy28ElhpfL7mCeCfxLdjLo4dQthoO9u8j8tfNQWhbdGXLqM
+ 8Ixx7v2Tt5Rdzc63KyupPoGyuwcUxdPBgbbKfYH4i1WgmXL4ElGxnPadr8NCS4jpZ+0zbdnKA
+ MFYqqygzz4UbwC76HGPwlhjzohYkZnlUCqk3nmLLM0jeEiN3g4FahKeswfEe4KmqcAy8HbdBs
+ l/jCv5L9sPDRYll0VIe3O7KHXpd05ezXfE3SENW/AwbJA0E6kaJa6rogLsv5MUgMKDcGxgftR
+ XcRYM2kgqkDbAHRQolQjF0mnsw52b81I8D/vuWApPemCG74yL/vEdn7+IiNacTMA3IapOsKGD
+ fNeU+LOwpoqE6fFaIlBsKhX3JL9z2AMprM209B1k4C6qHCWwbW2KCVBK6b2kFdaePjGmYZUf5
+ DIoUgJnbtmn8gR+HFPxo3KX1/5Ish/uMJKObGkBZeD9WV2j3fm/8tlXhYbSd0L77FG9spUsfi
+ eunv3i1ws7IQM9YWZbdR/CEnUjfCoDpfi8mBtXglfc1O0MkGQ2D01tuwoyKO8reMVVBdDKMJY
+ HRVUEtPzdh8SRVOUm2qjABmwPaoOfXgoh8MpJvJ954KPa38VVIxpGaR0eTm+Tr2+c3TVkWf8V
+ U4HQ200lja4Qf8/FXH3vUCIN9PmEOwRzZRIOoXcgd2K2igDNJnH6Ho0gdpIvyN3UKaR8yyzJC
+ pjbx14nfHISOJIsDqCRpHYHhpHCAFDDMYfrGxEqUYZ4ZY3rA7nHFlJb3D8TqNXO9qA1zelo06
+ nlZI/QAF8aMBT+KiHSx+Dy9QJDQiYK8d7E5VZ6brncCBYgHN2Y9ifKVKt4nwibK1bJo4jLXZe
+ xj2WGXt5Nv37EdkfFfTMIemj8OfjPJ10lJi2lpmkwEEQkILRe9D/V/nZDjwWHviB3MlK8BKOr
+ 0SbUE1KnidP/jg1mlhk7yfAFrp0BEDheR7x/a0OK6xLhshBAmanms2Lq/jCy4ZLbqa6DtL/L+
+ PFNW335uVyXxwxUKNkG0vLTv4nUnfYhWDit2Di2qDnw5BLFcV+SU+RLr8jZEJRlYPdIDaoSmn
+ OLDxm1sKFNQuctnCqQrwsiTFICrPDrmek+vHWmbsq3yT76Fi5IOTbn+zA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
-> On Saturday 23 July 2022 14:42:22 Christophe Leroy wrote:
->> Le 22/07/2022 =C3=A0 11:09, Pali Roh=C3=A1r a =C3=A9crit=C2=A0:
->> > Trying to boot mainline Linux kernel v5.15+, including current version
->> > from master branch, on Freescale P2020 does not work. Kernel does not
->> > print anything to serial console, seems that it does not work and after
->> > timeout watchdog reset the board.
->>=20
->> Can you provide more information ? Which defconfig or .config, which=20
->> version of gcc, etc ... ?
+On 7/25/22 09:55, Thomas Zimmermann wrote:
+> Hi
 >
-> I used default defconfig for mpc85xx with gcc 8, compilation for e500
-> cores.
+> Am 25.07.22 um 09:54 schrieb Javier Martinez Canillas:
+>> From: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>
+>> No driver access this anymore, except for the olpc dcon fbdev driver bu=
+t
+>> that has been marked as broken anyways by commit de0952f267ff ("staging=
+:
+>> olpc_dcon: mark driver as broken").
+>>
+>> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+>> Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 >
-> If you need exact .config content I can send it during week.
->
->> > I run git bisect and it found following commit:
->> >=20
->> > 9401f4e46cf6965e23738f70e149172344a01eef is the first bad commit
->> > commit 9401f4e46cf6965e23738f70e149172344a01eef
->> > Author: Christophe Leroy <christophe.leroy@csgroup.eu>
->> > Date:   Tue Mar 2 08:48:11 2021 +0000
->> >=20
->> >      powerpc: Use lwarx/ldarx directly instead of PPC_LWARX/LDARX macr=
-os
->> >=20
->> >      Force the eh flag at 0 on PPC32.
->> >=20
->> >      Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->> >      Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->> >      Link: https://lore.kernel.org/r/1fc81f07cabebb875b963e295408cc3dd=
-38c8d85.1614674882.git.christophe.leroy@csgroup.eu
->> >=20
->> > :040000 040000 fe6747e45736dfcba74914a9445e5f70f5120600 96358d08b65d32=
-00928a973efb5b969b3d45f2b0 M      arch
->> >=20
->> >=20
->> > If I revert this commit then kernel boots correctly. It also boots fine
->> > if I revert this commit on top of master branch.
->> >=20
->> > Freescale P2020 has two 32-bit e500 powerpc cores.
->> >=20
->> > Any idea why above commit is causing crash of the kernel? And why it is
->> > needed? Could eh flag set to 0 cause deadlock?
->>=20
->> Setting the eh flag to 0 is not supposed to be a change introduced by=20
->> that commit. Indeed that commit is not supposed to change anything at=20
->> all in the generated code.
->
-> My understanding of that commit is that it changed eh flag parameter
-> from 1 to 0 for 32-bit powerpc, including also p2020.
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-Can you compare the disassembly before and after and find a place where
-an instruction has changed?
+Acked-by: Helge Deller <deller@gmx.de>
 
-cheers
+Helge
+
+>
+> Best regards
+> Thomas
+>
+>> ---
+>>
+>> =C2=A0 drivers/video/fbdev/core/fbmem.c | 6 +++---
+>> =C2=A0 include/linux/fb.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 6 ------
+>> =C2=A0 2 files changed, 3 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/cor=
+e/fbmem.c
+>> index 6ae1c5fa19f9..1e70d8c67653 100644
+>> --- a/drivers/video/fbdev/core/fbmem.c
+>> +++ b/drivers/video/fbdev/core/fbmem.c
+>> @@ -51,10 +51,10 @@
+>> =C2=A0 static DEFINE_MUTEX(registration_lock);
+>> =C2=A0 =C2=A0 struct fb_info *registered_fb[FB_MAX] __read_mostly;
+>> -EXPORT_SYMBOL(registered_fb);
+>> -
+>> =C2=A0 int num_registered_fb __read_mostly;
+>> -EXPORT_SYMBOL(num_registered_fb);
+>> +#define for_each_registered_fb(i)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 \
+>> +=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < FB_MAX; i++)=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 \
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!registered_fb[i]) {} e=
+lse
+>> =C2=A0 =C2=A0 bool fb_center_logo __read_mostly;
+>> =C2=A0 diff --git a/include/linux/fb.h b/include/linux/fb.h
+>> index 453c3b2b6b8e..0aff76bcbb00 100644
+>> --- a/include/linux/fb.h
+>> +++ b/include/linux/fb.h
+>> @@ -627,16 +627,10 @@ extern int fb_get_color_depth(struct fb_var_scree=
+ninfo *var,
+>> =C2=A0 extern int fb_get_options(const char *name, char **option);
+>> =C2=A0 extern int fb_new_modelist(struct fb_info *info);
+>> =C2=A0 -extern struct fb_info *registered_fb[FB_MAX];
+>> -extern int num_registered_fb;
+>> =C2=A0 extern bool fb_center_logo;
+>> =C2=A0 extern int fb_logo_count;
+>> =C2=A0 extern struct class *fb_class;
+>> =C2=A0 -#define for_each_registered_fb(i)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 \
+>> -=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < FB_MAX; i++)=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 \
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!registered_fb[i]) {} e=
+lse
+>> -
+>> =C2=A0 static inline void lock_fb_info(struct fb_info *info)
+>> =C2=A0 {
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_lock(&info->lock);
+>
+

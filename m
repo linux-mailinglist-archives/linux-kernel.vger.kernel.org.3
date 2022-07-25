@@ -2,148 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D110958075B
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B6F580757
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiGYW2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S236922AbiGYW2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237021AbiGYW2p (ORCPT
+        with ESMTP id S229491AbiGYW2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:28:45 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C2D255AD;
-        Mon, 25 Jul 2022 15:28:44 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c12so8345512ede.3;
-        Mon, 25 Jul 2022 15:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s5F5bTPmIWsgz/PHUFTiPwn7ArH62vLQlD0Ro1hOzT8=;
-        b=EYVKVy9GR8tIisHmLoKIAUDGdhGTgA+V+O8Z1DMo3OCm/8lIX+f2pBj5Fg2PBSooVF
-         VzXhmo5+5SRh+gS/j/TCjZm9g3wuPPfIJR/lHwPjJL/VEagtHu4Dj8nzh2Yo4SFJGt3q
-         zAUrZThxpZhnqya/xFcQ4ZsSQixW2/qBTznI3inG+qxqjP1qimuGWnkE5ilwBjyN3+/y
-         raASv3WxXlCYKvPPX5tYi45XmgelBIcFRlQ0HkBw+VCjLX907GaOeSAK/FU3cnRM4b9W
-         MPdErn+DQYwABxF4eRq6GZgzE3ovur6veftazbNX8N0e8zULCGOPcg3f8KMdCnw0nJuq
-         TVHA==
+        Mon, 25 Jul 2022 18:28:36 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A783B252AA;
+        Mon, 25 Jul 2022 15:28:35 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id u9so15148645oiv.12;
+        Mon, 25 Jul 2022 15:28:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s5F5bTPmIWsgz/PHUFTiPwn7ArH62vLQlD0Ro1hOzT8=;
-        b=sP+54nMD81yYcOMQuGpRqWintABlzDRcMesavl3I5iFmQMlSdzYeadGPvN5mIQqygq
-         aa+2d8s4VD700HGOk5ckr+ulKjj5JbExyeBnGuiPJ0UUNKmDNLMwqHN/I8d3Ui7kWOmL
-         e6KR6t45hI7U6JqErsi5+nuGw4CZAAJHXMoNgRnWfnSZmvNpIvjy4uMYBY1Kd95u3s97
-         lA8BPU6viHRrt22jCAgz1RvPu1T9IFAVy8zk0ABzXaMfjq3XxalAfN2FKwHQoyYBTmZr
-         wBdtwfskFhvd8DB1MaA+Y57rFbZ6zQ77eVVaBFUzZZ1dzpNO8lwmZ82T5cBaGqPV3Wro
-         xdpA==
-X-Gm-Message-State: AJIora/VUpFaMZVQvlXAwXoTTOvhT2csd25Z1943Q4Lz+mW5qAFP7FgZ
-        LBgzfIrrttKIAiEHKskuYvYL1gNuHGSuyH8huP4=
-X-Google-Smtp-Source: AGRyM1tyT5tOI9pZi4I45uufPdEI2vvTki7s66xiQ+IU6rwz2Xy9oHm51p5RXCfq5CLrCpa0+X/RHhv6nZlPcKRiYtg=
-X-Received: by 2002:a05:6402:5412:b0:435:5997:ccb5 with SMTP id
- ev18-20020a056402541200b004355997ccb5mr14756047edb.167.1658788122613; Mon, 25
- Jul 2022 15:28:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ydROe5Yeqe7LKLvisIFiWDBcUFI7G/LxHrwDl1ZPZes=;
+        b=UI4ZK7Mss07ztjlb0lt2hn3LtbNEPeXCcAiSyjh+USavG4RGiDy0rSy82QStGHC1wv
+         H/TEnM0skLfpItvl37sxna57Wi224DnCTJKVMqgVVv8qt4b5owPsIBDdOnmklUX79zj1
+         cBUjaX1yNUxUlS4Pg6WYwOhsblWL4CYgOlGaTBPJZuSCbVgp/ULUb4my0ybYVvCZPh7Q
+         pjN51b78F1kImacrxUx7WlkjzVnvQ35FFidSjna8c64p0+ndwiNyZVslcZnKeD7CW/tv
+         +XoL100FlzUjRIsL1Q1bG+Wv+/x7KMIKMQuAy1H/LT3L65uXXRJj8T5OSL+3n3dYPPlJ
+         mbUg==
+X-Gm-Message-State: AJIora8/CH8HS1oFfOGqn++Fs7Gw+uSNaqe43CRw0LXXMOViAUBjSGNH
+        WFxG0TezDZeFhyxSCZnzvw==
+X-Google-Smtp-Source: AGRyM1s71mYHjgRvajARzt6yUDLac3slJauP/Yk6irLnti0u1tVfqTcvRz9lQPTSlzY1oaeDkp/SWA==
+X-Received: by 2002:a05:6808:bce:b0:33a:c6c8:9d6f with SMTP id o14-20020a0568080bce00b0033ac6c89d6fmr6219832oik.135.1658788114842;
+        Mon, 25 Jul 2022 15:28:34 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id b17-20020a056808011100b0033a9f4c13cesm5322861oie.13.2022.07.25.15.28.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 15:28:34 -0700 (PDT)
+Received: (nullmailer pid 2859320 invoked by uid 1000);
+        Mon, 25 Jul 2022 22:28:32 -0000
+Date:   Mon, 25 Jul 2022 16:28:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Jitao shi <jitao.shi@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org, hsinyi@chromium.org,
+        linux-mediatek@lists.infradead.org, fparent@baylibre.com,
+        CK Hu <ck.hu@mediatek.com>
+Subject: Re: [PATCH v2 1/1] dt-bindings: display: mediatek: dpi: add
+ power-domains property
+Message-ID: <20220725222832.GA2859262-robh@kernel.org>
+References: <20220720130604.14113-1-allen-kh.cheng@mediatek.com>
+ <20220720130604.14113-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-References: <20220725135026.1.Ia18502557c4ba9ba7cd2d1da2bae3aeb71b37e4e@changeid>
-In-Reply-To: <20220725135026.1.Ia18502557c4ba9ba7cd2d1da2bae3aeb71b37e4e@changeid>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 25 Jul 2022 15:28:31 -0700
-Message-ID: <CABBYNZLWUM4JJjm5H=f7szt_7bgSFcAknk4AcVUmO5iPJzQVcQ@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: Always set event mask on suspend
-To:     Abhishek Pandit-Subedi <abhishekpandit@google.com>
-Cc:     "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720130604.14113-2-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abhishek,
-
-On Mon, Jul 25, 2022 at 1:50 PM Abhishek Pandit-Subedi
-<abhishekpandit@google.com> wrote:
->
-> From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->
-> When suspending, always set the event mask once disconnects are
-> successful. Otherwise, if wakeup is disallowed, the event mask is not
-> set before suspend continues and can result in an early wakeup.
->
-
-Please include the commit hash it fixes, also it may be a good idea to
-tag it for stable as well.
-
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+On Wed, 20 Jul 2022 21:06:04 +0800, Allen-KH Cheng wrote:
+> DPI is part of the display / multimedia block in MediaTek SoCs
+> and is managed using power controller in some platforms. We add
+> the power-domains property to the binding documentation.
+> 
+> Fixes:9273cf7d3942("dt-bindings: display: mediatek: convert the dpi bindings to yaml")
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
-> Observed on ChromeOS as follows:
->
-> < HCI Command: Disconnect (0x01|0x0006) plen 3
->         Handle: 256
->         Reason: Remote Device Terminated due to Power Off (0x15)
-> > HCI Event: Command Status (0x0f) plen 4
->       Disconnect (0x01|0x0006) ncmd 1
->         Status: Success (0x00)
-> @ MGMT Event: Device Disconnected (0x000c) plen 8
->         BR/EDR Address: 04:52:C7:C3:65:B5 (Bose Corporation)
->         Reason: Connection terminated by local host for suspend (0x05)
-> @ MGMT Event: Controller Suspended (0x002d) plen 1
->         Suspend state: Disconnected and not scanning (1)
-> > HCI Event: Disconnect Complete (0x05) plen 4
->         Status: Success (0x00)
->         Handle: 256
->         Reason: Connection Terminated By Local Host (0x16)
->
-> The expectation is that we should see Set Event Mask before completing
-> the suspend so that the `Disconnect Complete` doesn't wake us up.
->
->
->  net/bluetooth/hci_sync.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-> index 148ce629a59f..e6d804b82b67 100644
-> --- a/net/bluetooth/hci_sync.c
-> +++ b/net/bluetooth/hci_sync.c
-> @@ -5297,6 +5297,9 @@ int hci_suspend_sync(struct hci_dev *hdev)
->                 return err;
->         }
->
-> +       /* Update event mask so only the allowed event can wakeup the host */
-> +       hci_set_event_mask_sync(hdev);
-> +
->         /* Only configure accept list if disconnect succeeded and wake
->          * isn't being prevented.
->          */
-> @@ -5308,9 +5311,6 @@ int hci_suspend_sync(struct hci_dev *hdev)
->         /* Unpause to take care of updating scanning params */
->         hdev->scanning_paused = false;
->
-> -       /* Update event mask so only the allowed event can wakeup the host */
-> -       hci_set_event_mask_sync(hdev);
-> -
->         /* Enable event filter for paired devices */
->         hci_update_event_filter_sync(hdev);
->
-> --
-> 2.37.1.359.gd136c6c3e2-goog
->
+>  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml   | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-
--- 
-Luiz Augusto von Dentz
+Acked-by: Rob Herring <robh@kernel.org>

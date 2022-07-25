@@ -2,92 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE4B57FDA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBBB57FDA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234607AbiGYKgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S234562AbiGYKge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbiGYKgC (ORCPT
+        with ESMTP id S234618AbiGYKgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:36:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752E91055A;
-        Mon, 25 Jul 2022 03:36:00 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 817D266015E7;
-        Mon, 25 Jul 2022 11:35:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658745359;
-        bh=jEQh6kA6cG5l8Za0dnxbvc3C991fy8Px0Uzw5Xq3bXY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=iRyB95T2NEuTF+YHchnVkWaT9MeJrFWEHlwRmXCxBg5+S9wJrJh3SMNo783Om/Xqe
-         LVWzCV4wsoRfy8I14Es5TDCugvgxzCDsKGU3SBC4vkPU3kdAlRvw7NCiXSOOtG6S9h
-         iQY3DN8sTKYurDBZm4dU+5BNlE4BrVeN57GJ6bJsB+CVB3aAO6JMWWhovVxR6SJE9+
-         B1/HL7WcKcDov3k/YeUO+ZdADFx8Fl69dNGc295BHPsRhx0a1NEdiSG+f+5vyv/aHD
-         6Y2PoP6kxMLtMqls0LmziKVJYxmI8VNX+TflvUipBzGoi7imrdfVKMOskR7cFVKyke
-         7v9TE6FJrgfdg==
-Message-ID: <6a36c425-ca49-c7ec-69cd-f79dcce5bedc@collabora.com>
-Date:   Mon, 25 Jul 2022 12:35:56 +0200
+        Mon, 25 Jul 2022 06:36:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6A9167DE;
+        Mon, 25 Jul 2022 03:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658745383; x=1690281383;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=THMuk/+fHLYsNtlG0j7lAFgILZf63dS0Zd2Cx2MnyCs=;
+  b=c30FFe52mgCGOxlSbMcczY3cWPdSdEFKjWnpLCmS6mnWG7DNxNpPpRZK
+   65f5Lq0zFewUZ1no7sruq1wAfQUgeD3vmAmZYoR4viHFAqiiaK3J00Chy
+   FMPiO791REOW1n99cwSCQ6sAU/Czb1RO8CowVb/zMhqOTuGh+/KOfuzUx
+   1OztQZhwzKp5/gphPqrISWe9c5Cd0DRagucmdDOpEZQ5ftmnZWYR1mnsR
+   +xt3Ef6XUvreS3ATuUPEl7moj6B7zYbsknDuHmpoGUuq/kZxr/Qg6Tc/q
+   rL2bF7QZRIyR6zmAFH2eOfdKCErNcU1ywzGLjfYUyDgrT3wCsRoR/J4w7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="287678395"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="287678395"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 03:36:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="596635665"
+Received: from edere-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.168.34])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 03:36:19 -0700
+Message-ID: <06a9fef8579e880b9b031f03911739d4d902dbe0.camel@intel.com>
+Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
+ Notification
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Haitao Huang <haitao.huang@linux.intel.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 25 Jul 2022 22:36:17 +1200
+In-Reply-To: <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
+References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
+         <ab467244dd03b5f94bafe9068b1c02790033c18c.camel@intel.com>
+         <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: mt8186: Add gpio-line-names
- property
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20220725100253.10687-1-allen-kh.cheng@mediatek.com>
- <20220725100253.10687-2-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220725100253.10687-2-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/07/22 12:02, Allen-KH Cheng ha scritto:
-> Add the 'gpio-line-names' property to mt8186-pinctrl, as this will be
-> used in devicetrees to describe pin names.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+On Fri, 2022-07-22 at 08:21 -0700, Dave Hansen wrote:
+> On 7/22/22 06:26, Kai Huang wrote:
+> > Did a quick look at the spec.  It appears ENCLU[EDECCSSA] should be use=
+d
+> > together with AEX-notify.  So besides advertising the new
+> > SGX_ATTR_ASYNC_EXIT_NOTIFY bit to the KVM guest, I think we should also
+> > advertise the ENCLU[EDECCSSA] support in guest's CPUID, like below (unt=
+ested)?
+>=20
+> Sounds like a great follow-on patch!  It doesn't seem truly functionally
+> required from the spec:
+>=20
+> > EDECCSSA is a new Intel SGX user leaf function
+> > (ENCLU[EDECCSSA]) that can facilitate AEX notification handling...
+>=20
+> If that's wrong or imprecise, I'd love to hear more about it and also
+> about how the spec will be updated.
+>=20
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+They are enumerated separately, but looks in practice the notify handler wi=
+ll
+use it to switch back to the correct/targeted CSSA to continue to run norma=
+lly
+after handling the exit notify.  This is my understanding of the "facilitat=
+e"
+mean in the spec.
 
-> ---
->   Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
-> index 8a2bb8608291..6784885edc5c 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
-> @@ -28,6 +28,8 @@ properties:
->     gpio-ranges:
->       maxItems: 1
->   
-> +  gpio-line-names: true
-> +
->     reg:
->       description: |
->         Physical address base for gpio base registers. There are 8 different GPIO
+Btw, in real hardware I think the two should come together, meaning no real
+hardware will only support one.=20
+
+Haitao, could you give us more information?
+
+--=20
+Thanks,
+-Kai
+
 

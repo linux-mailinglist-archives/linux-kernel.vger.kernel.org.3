@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B74E580535
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C8958053B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236818AbiGYUNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45724 "EHLO
+        id S237059AbiGYUNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236800AbiGYUMs (ORCPT
+        with ESMTP id S236936AbiGYUMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:12:48 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46D7220D3
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:12:40 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id o13so450120edc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DLNtAH4ZVUtmn0ECdu7iuFAaapi+HL9I7pXxXmdck8w=;
-        b=PTUrc6t1ic0HYfkNp2akyzJG2VcZ5pnZ+lxvTG51h33EEWxLes5a5mcyzuh8GlXTEI
-         yo8GZ686GVz6FZxlheDXTD00px2WiBzEGXUVc3fP6KKIUqx9hqzx3IX6+peazAI/VF53
-         VpnjVMpwAj4GXuZELDmhxcU3DlbL+hukrIdgletKPl1HnOyHba4SnYgLJpJ7JIGgQomP
-         4EUUie+QxeJGLSXfIioN1ZFDB5i5+4bmnpO5DJZPdnDSyq5Beulsc3QbOUx7GIjZcKs7
-         kmCm7RkD/cVLlh7P3IGq5Wg8Q3lrB3PM2bRq/GAZTxi2RKXCLjCZjhSvl0tAW8bdHa4P
-         zdSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DLNtAH4ZVUtmn0ECdu7iuFAaapi+HL9I7pXxXmdck8w=;
-        b=4jxfKhaeeZ+1nLFxYW+Hiup87hUXpgWGTIDtgTCHlbS/bgrapJflKm7wpWJ6e+ey1G
-         YENEJyyvukp61Sgf/kksqRCgzGOJnatJczaaBb4IF3lzxtfWwGnkaWoJDXQM6/s+MrPL
-         lR4XeAcH8QXBydU2SfDuXD3PmGvaJleOLle/W7GrE/ffljG7+6fsObcLFNQrP8F+D5ct
-         YR0hImx7OMdJagZGJ6qO14wXAsRrbVipCc04tjJDQyzspidNVIUh8hZtLi9eSFLCeboR
-         wpEwEh0i6S5ZHhC1YkyJYm6xCKw9g0hOSCsb+I274v+dTyptTFY0QV1T8259jAHlqpwC
-         ppvQ==
-X-Gm-Message-State: AJIora+QfSXKeMju7le3ILS2nnQC9FNzqpBL62oVVOWKERXUeIeG/KJY
-        fjopKRwHwEFIhSyB5u0xmNOT62xnJj/pIlimXc1ow+LA
-X-Google-Smtp-Source: AGRyM1sHgpidV9VnWISJsHLqj+Bvg1fR0OozJDV3Q4VSZSDdCPqA8td9X6oFEhicq4HYQEhGBzhJRgnpRhXt5xv8eMo=
-X-Received: by 2002:a05:6402:248d:b0:437:dd4c:e70e with SMTP id
- q13-20020a056402248d00b00437dd4ce70emr14751707eda.75.1658779959059; Mon, 25
- Jul 2022 13:12:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220724074150.17869-1-wangjianli@cdjrlc.com>
-In-Reply-To: <20220724074150.17869-1-wangjianli@cdjrlc.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 25 Jul 2022 16:12:27 -0400
-Message-ID: <CADnq5_M0QnP+W83cSb-mpHNjrjnF9hS_e=PJ=QkEiof7Em=NPg@mail.gmail.com>
-Subject: Re: [PATCH] dc/dce: fix repeated words in comments
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 16:12:51 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DFA220D1;
+        Mon, 25 Jul 2022 13:12:40 -0700 (PDT)
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PJ227L024284;
+        Mon, 25 Jul 2022 20:12:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id; s=pps0720;
+ bh=b8nDNy/MlViLEuNpBEpRnqKp5eyKzSKaaZRfltlXsLs=;
+ b=ZvCs8bBHLUbrOQuH/oGaKCeD2lF4L3rVxT/wEzySl7MsWQ4pM0VY1kiEtnZ8Jh76jAiT
+ yNFvApVPT2iRluFJItEORRC+dF1oAxOpWK8nq68L0W4jK4j4z6N6+pxiF94ulY7+K6zS
+ +U/jy3Z6wW4FF3O2HUCpDNFglH31/k0G6ov07ideWTr6H4IkhSOCKq/qCsnknqqGnYnC
+ BL9Z7DMunO82arNr/DlC6/NQctoBjUKI40KqoMMWBc3fEQfxFLnbG0RoLVxuSykqnleL
+ q18/vxN1IL7h8zPmbWV6RECy80d49B/n21hsjfgRa5DuXqOef1vvDxzydKT/EiDPZC/O Gg== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3hhy8dsekm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 20:12:20 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 0AF358001AE;
+        Mon, 25 Jul 2022 20:12:19 +0000 (UTC)
+Received: from hpe.com (unknown [16.231.227.36])
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 786F58041EF;
+        Mon, 25 Jul 2022 20:12:18 +0000 (UTC)
+From:   nick.hawkins@hpe.com
+To:     nick.hawkins@hpe.com
+Cc:     broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, verdun@hpe.com,
+        linux@armlinux.org.uk, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, arnd@arndb.de, joel@jms.id.au
+Subject: [PATCH v4 0/5] Add SPI Driver to HPE GXP Architecture
+Date:   Mon, 25 Jul 2022 15:13:17 -0500
+Message-Id: <20220725201322.41810-1-nick.hawkins@hpe.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-ORIG-GUID: 7lf9Va_UEhUEAjP8PhwcGOvi74VEoL24
+X-Proofpoint-GUID: 7lf9Va_UEhUEAjP8PhwcGOvi74VEoL24
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-25_12,2022-07-25_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 mlxscore=0 adultscore=0
+ spamscore=0 impostorscore=0 clxscore=1015 suspectscore=0 malwarescore=0
+ mlxlogscore=425 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207250082
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+From: Nick Hawkins <nick.hawkins@hpe.com>
 
-On Mon, Jul 25, 2022 at 3:23 AM wangjianli <wangjianli@cdjrlc.com> wrote:
->
->  Delete the redundant word 'in'.
->
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->  drivers/gpu/drm/amd/display/dc/dce/dce_audio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c b/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c
-> index 70eaac017624..f0b585caa28f 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dce/dce_audio.c
-> @@ -322,7 +322,7 @@ static void set_video_latency(
->                 value);
->  }
->
-> -/* set audio latency in in ms/2+1 */
-> +/* set audio latency in ms/2+1 */
->  static void set_audio_latency(
->         struct audio *audio,
->         int latency_in_ms)
-> --
-> 2.36.1
->
+Changes since v4:
+ *Removed unnecessary quotes in hpe,gxp-spifi.yaml
+
+Changes since v3:
+ *Fixed indentations in hpe,gxp-spifi.yaml
+
+Changes since v2:
+ *Changed the CONFIG_SPI_GXP from y to m in defconfig
+ *Removed extra space around < > for reg in hpe,gxp-spifi.yaml
+ *Changed interrupt-parrent to interrupt-parent in hpe,gxp-spifi.yaml
+ *Removed repeated include file in spi-gxp.c
+ *Removed unnecessary initialization of ret variable in spi-gxp.c
+ *Removed conditional variable checks where failure is not possible in
+  spi-gxp.c
+ *Removed unnecessary variable cs in spi-gxp.c
+ *Removed blank gxp-spifi-remove function in spi-gxp.c
+ *Fixed error messages so they are not repetitive
+
+The GXP supports 3 separate SPI interfaces to accommodate the system
+flash, core flash, and other functions. The SPI engine supports variable
+clock frequency, selectable 3-byte or 4-byte addressing and a
+configurable x1, x2, and x4 command/address/data modes. The memory
+buffer for reading and writing ranges between 256 bytes and 8KB. This
+driver supports access to the core flash and bios part.
+
+Nick Hawkins (5):
+  spi: spi-gxp: Add support for HPE GXP SoCs
+  spi: dt-bindings: add documentation for hpe,gxp-spifi
+  ARM: dts: hpe: Add spi driver node
+  ARM: configs: multi_v7_defconfig: Enable HPE GXP SPI driver
+  MAINTAINERS: add spi support to GXP
+
+ .../bindings/spi/hpe,gxp-spifi.yaml           |  56 +++
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/hpe-bmc-dl360gen10.dts      |  58 ++++
+ arch/arm/boot/dts/hpe-gxp.dtsi                |  21 +-
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ drivers/spi/Kconfig                           |   7 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-gxp.c                         | 325 ++++++++++++++++++
+ 8 files changed, 470 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+ create mode 100644 drivers/spi/spi-gxp.c
+
+-- 
+2.17.1
+

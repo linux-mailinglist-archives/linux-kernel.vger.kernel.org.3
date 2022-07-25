@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B9F5801C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D2C5801C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236380AbiGYPXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 11:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S235984AbiGYPX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 11:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236292AbiGYPXN (ORCPT
+        with ESMTP id S236452AbiGYPXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 11:23:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434C5D10B;
-        Mon, 25 Jul 2022 08:22:43 -0700 (PDT)
+        Mon, 25 Jul 2022 11:23:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE6BEE;
+        Mon, 25 Jul 2022 08:23:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90AADB80EAF;
-        Mon, 25 Jul 2022 15:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B70C341C6;
-        Mon, 25 Jul 2022 15:22:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60D186122D;
+        Mon, 25 Jul 2022 15:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943AAC341C6;
+        Mon, 25 Jul 2022 15:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658762559;
-        bh=LnsVxq5NLSX1iQ3ZqaZEdR1nH0pMz9DMkcibmIg8Am8=;
+        s=k20201202; t=1658762609;
+        bh=3s3HCAIq22KW8xdlHADk+52r1ZJHJUwaz1P2FsyYFfU=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MfW+2Pdv+xv/8Z3kqWpr4cEwGJ8pzDPDQ+IVLAFz5fCSiw1LvTOL4I9ONq13qt5oL
-         Ejfq9BQ+iYc+VB2XcNx6kEWdlRzGB3Chlw1HPczWO9RlZeuO6Fr5BLNM7LxkRF9azY
-         KXSRDuwc8O1M6jPXzhM+DJufpHLveOSYMyPJyxYj1T/v8WC40feIFP5OOfDDAdc6ZW
-         mPBb+TIAqa/2ZmqhnltaQd730SlBn4Zko1qE+RrdKlnKpPO4f8UBpnj7rKH4lBXMSt
-         Q+D6aDBO94QST37SxYV/VWxbdtplHfT3oQjt3qtylQKHDkVB5KLCb5JCWwW+W2VXv3
-         EEzws/6DCGqVw==
-Message-ID: <3cf60868-fb3b-54cd-2177-09c4827e75e7@kernel.org>
-Date:   Mon, 25 Jul 2022 17:22:35 +0200
+        b=oScXdJx5xfbg//Whh9manEFT986v5s9h4ig/+L7Fl1xIsraZpC69KrO3xVHv2ggmA
+         idz2nHsBB9F9cxAe/tY5SNmZlc2IVP381AKRbwRgDh9DDDAMD7MP3IOWlaIXQWuNgg
+         QB8+BaFbH+RJ54PsTorxmFWCtucEIEwhGP7JOx+YBJtmQ1sICZGqtGL4PBf9MgGeOg
+         s9ikuOiNopmUNnYFMOKXb3JEskJqAZXKCZELcy/2NcD+6iksi5d+cBwGZflga/A/Is
+         Ptkl432RnAvplE87qAavg5V9sfZR4dbvUzZCyGc0qHqlOWZs6+mV2///k4hiuW5nsx
+         7U7F1oXYPhyWQ==
+Message-ID: <8112c80c-8e65-aa0e-e335-562d9b8d3343@kernel.org>
+Date:   Mon, 25 Jul 2022 17:23:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] rtla: fix double free
+Subject: Re: [PATCH v2] rtla: Fix double free
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Andreas Schwab <schwab@suse.de>
+To:     Andreas Schwab <schwab@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <mvmzggxl4n1.fsf@suse.de>
  <fd0888a4-099c-95fe-7e20-82be1489061f@kernel.org> <mvmv8rll2yn.fsf@suse.de>
- <20220725105639.295a7d7d@gandalf.local.home>
+ <20220725105639.295a7d7d@gandalf.local.home> <mvmilnlkyzx.fsf_-_@suse.de>
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220725105639.295a7d7d@gandalf.local.home>
+In-Reply-To: <mvmilnlkyzx.fsf_-_@suse.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,45 +59,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/25/22 16:56, Steven Rostedt wrote:
-> On Mon, 25 Jul 2022 15:46:40 +0200
-> Andreas Schwab <schwab@suse.de> wrote:
+On 7/25/22 17:12, Andreas Schwab wrote:
+> Avoid double free by making trace_instance_destroy indempotent.  When
+> trace_instance_init fails, it calls trace_instance_destroy, but its only
+> caller osnoise_destroy_tool calls it again.
 > 
->> On Jul 25 2022, Daniel Bristot de Oliveira wrote:
->>
->>> Hi Andreas
->>>
->>> On 7/25/22 15:10, Andreas Schwab wrote:  
->>>> Don't call trace_instance_destroy in trace_instance_init when it fails,
->>>> this is done by the caller.  
->>>
->>> Regarding the Subject, are you seeing a double-free error, or it is just an
->>> optimization?  
->>
->> A double free nowadays is almost always an error, due to better malloc
->> checking.
->>
->>> AFAICS, trace_instance_destroy() checks the pointers before calling free().  
->>
->> That doesn't help when the pointer is not cleared afterwards.  Do you
->> prefer that?
->>
->>> Why am I asking? because if it is a double-free bug, we need to add the "Fixes:"
->>> tag,  
->>
->> It's the first time I tried running rtla, so I don't know whether it is
->> a regression, but from looking at the history it appears to have been
->> introduced already in commit 0605bf009f18 ("rtla: Add osnoise tool")
->>
-> 
-> I think the real fix is to make trace_instance_destroy() be able to be
-> called more than once.
-> 
-> void trace_instance_destroy(struct trace_instance *trace)
-> {
->         if (trace->inst) {
->                 disable_tracer(trace->inst);
->                 destroy_instance(trace->inst);
-> 		trace->inst = NULL
-ah! right, it was missing this... ^^^
+> Fixes: 0605bf009f18 ("rtla: Add osnoise tool")
+> Signed-off-by: Andreas Schwab <schwab@suse.de>
+
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+
+Thanks!
 -- Daniel

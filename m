@@ -2,160 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C159257FDFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F7557FE07
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234835AbiGYLBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 07:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S234503AbiGYLFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234666AbiGYLB1 (ORCPT
+        with ESMTP id S231513AbiGYLFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 07:01:27 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7298E6155
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:01:26 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id f73so19361923yba.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hnm/5jPi/oqeCaQaqiY7o9Mgs5EnAdp5rIAWl4CX1kc=;
-        b=E3q3Uy+KE30s3i9aCOl8AotGVDDShiXI7tWYkdizXOWArvf4tCCKrrqgQQ+YkeOGMm
-         JDZXyDdGc/Uy1nkQfdfP8PF5dqX8nk6czkkh8l5sGQ583o9cap9IXxSoNArL0baijSwt
-         zxeqokI9/BAh+Kpu6s6ZhCETT0Cktr5+QqYK8cEs+7TfRw5jw7YZ7zwqspzZo5C9BLvR
-         5uISoADuepWhs+rjDzP1giy3xy79mqbzcC3qlpiBZ/VLbqFYtOecxkQkVGrV6aGMsObC
-         ELKTuHvvUvXvFC6VwmucZ+kr2LAnyx0MLuRN/eCgrT7ajUJwPwKB1iGwhNyH/jqqBifR
-         kIuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hnm/5jPi/oqeCaQaqiY7o9Mgs5EnAdp5rIAWl4CX1kc=;
-        b=M6+uJWggJQsflarbHeAFc2WEPAX1OPgQCN+ncUkk70rSFNV1ln7vU/yayhl2S/t6e2
-         g7yqFNalrynITrJxH33hyjXWWSnt7NoyxLOo5nlWy/RV3JD9qQJez3WlQchguToGaX59
-         6Ug2ko8ENgXNqs4xjVl/9seAgHXD7B4P33j4Cje5a61OlMjgBKx/w9rgfwzTJl4v63tE
-         LlqkJGjkXjgM0aUcQ4jX6TN+A7w+eTvkMlpQ1au84bmw4DDquApLw8uG6tK43eFlyXXO
-         Uv6igmIkpFMajWaZXBvmnDsIBb8VuCOUF0AkmMR8Zn3VaTaG526BgPze6yvrzXO5qDhe
-         mmDQ==
-X-Gm-Message-State: AJIora+hO1og9GDcYTvJClr5jrBjjvgDf8bhtIyuRUOw8c598aafB8vl
-        vwz7YEVywsBF0+CmaZd/GPWLNtOXi585AYKDB7vhmA==
-X-Google-Smtp-Source: AGRyM1s4PTcghivRcD1z3aK99V0VtYiFFUccAGTBIJw4jlLGmDG/y/3ylLenSc8tzgZ6jqSK70Df541MERbbmnr4XaI=
-X-Received: by 2002:a25:c602:0:b0:670:90ba:98fb with SMTP id
- k2-20020a25c602000000b0067090ba98fbmr8445943ybf.143.1658746885541; Mon, 25
- Jul 2022 04:01:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704150514.48816-1-elver@google.com> <20220704150514.48816-2-elver@google.com>
- <Ytl9L0Zn1PVuL1cB@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <Ytl9L0Zn1PVuL1cB@FVFF77S0Q05N.cambridge.arm.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 25 Jul 2022 13:00:48 +0200
-Message-ID: <CANpmjNMk+p1bAEKe6Em6n0_6_1O2Aco7g9v1hcVj54hKdGJ4ug@mail.gmail.com>
-Subject: Re: [PATCH v3 01/14] perf/hw_breakpoint: Add KUnit test for
- constraints accounting
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        Mon, 25 Jul 2022 07:05:50 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6B01208C
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658747150; x=1690283150;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=ixXvROZDu+Emrv/qHHT+UatmUz6QD6tkz4g3J0IDh4w=;
+  b=V1C1msUDBDza5OLEhnWKxHEk0ZnlrmJkF6rELSvFzFztUb3f+r4NcWCr
+   kRv8HmpSiEI/O1iYJb3arPQMJJQ/f+VbON6jVstaieriTyPNZgmuigEb4
+   OLGxQS1wAGfo9j0U8WbZqOhlMu6RV1D1sTSoXmItfXpmRa4xl2pbKyCXs
+   7N6BbgtIbq1fq4DcoFkPAdWw2ev1NBR1j3T7/y81ew52Ee9uaPQBQjtlA
+   2sbVaByH0i/Zo3HcYCBexNqT+IDSqRBm7N6mIwJjDMdR/0Z70B2a34SvY
+   PGE9XvfP0MEuL9uQQ/yV8M1CMXwMWP+Ca6DOwePunHMt6+Bj4CGo8PXFC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="268064251"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="268064251"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:05:49 -0700
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="667450151"
+Received: from edere-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.168.34])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:05:46 -0700
+Message-ID: <5905d2772ba3ba015f386787fa0b7a8fade69005.camel@intel.com>
+Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org, linux-sh@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 25 Jul 2022 23:05:44 +1200
+In-Reply-To: <18578c5a-7a35-ab20-467c-80141b0410a8@intel.com>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <403cfccb-7fff-ab0b-8ebd-e5b04e631571@intel.com>
+         <20220722190524.GA3299911@ls.amr.corp.intel.com>
+         <18578c5a-7a35-ab20-467c-80141b0410a8@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 18:22, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Marco,
->
-> [adding Will]
->
-> On Mon, Jul 04, 2022 at 05:05:01PM +0200, Marco Elver wrote:
-> > Add KUnit test for hw_breakpoint constraints accounting, with various
-> > interesting mixes of breakpoint targets (some care was taken to catch
-> > interesting corner cases via bug-injection).
-> >
-> > The test cannot be built as a module because it requires access to
-> > hw_breakpoint_slots(), which is not inlinable or exported on all
-> > architectures.
-> >
-> > Signed-off-by: Marco Elver <elver@google.com>
->
-> As mentioned on IRC, I'm seeing these tests fail on arm64 when applied atop
-> v5.19-rc7:
->
-> | TAP version 14
-> | 1..1
-> |     # Subtest: hw_breakpoint
-> |     1..9
-> |     ok 1 - test_one_cpu
-> |     ok 2 - test_many_cpus
-> |     # test_one_task_on_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> |     Expected IS_ERR(bp) to be false, but is true
-> |     not ok 3 - test_one_task_on_all_cpus
-> |     # test_two_tasks_on_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> |     Expected IS_ERR(bp) to be false, but is true
-> |     not ok 4 - test_two_tasks_on_all_cpus
-> |     # test_one_task_on_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> |     Expected IS_ERR(bp) to be false, but is true
-> |     not ok 5 - test_one_task_on_one_cpu
-> |     # test_one_task_mixed: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> |     Expected IS_ERR(bp) to be false, but is true
-> |     not ok 6 - test_one_task_mixed
-> |     # test_two_tasks_on_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> |     Expected IS_ERR(bp) to be false, but is true
-> |     not ok 7 - test_two_tasks_on_one_cpu
-> |     # test_two_tasks_on_one_all_cpus: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> |     Expected IS_ERR(bp) to be false, but is true
-> |     not ok 8 - test_two_tasks_on_one_all_cpus
-> |     # test_task_on_all_and_one_cpu: ASSERTION FAILED at kernel/events/hw_breakpoint_test.c:70
-> |     Expected IS_ERR(bp) to be false, but is true
-> |     not ok 9 - test_task_on_all_and_one_cpu
-> | # hw_breakpoint: pass:2 fail:7 skip:0 total:9
-> | # Totals: pass:2 fail:7 skip:0 total:9
->
-> ... which seems to be becasue arm64 currently forbids per-task
-> breakpoints/watchpoints in hw_breakpoint_arch_parse(), where we have:
->
->         /*
->          * Disallow per-task kernel breakpoints since these would
->          * complicate the stepping code.
->          */
->         if (hw->ctrl.privilege == AARCH64_BREAKPOINT_EL1 && bp->hw.target)
->                 return -EINVAL;
->
-> ... which has been the case since day one in commit:
->
->   478fcb2cdb2351dc ("arm64: Debugging support")
->
-> I'm not immediately sure what would be necessary to support per-task kernel
-> breakpoints, but given a lot of that state is currently per-cpu, I imagine it's
-> invasive.
+On Fri, 2022-07-22 at 12:13 -0700, Dave Hansen wrote:
+> On 7/22/22 12:05, Isaku Yamahata wrote:
+> > > So, the quote portion of this is basically a bidirectional blob sende=
+r.
+> > >  It's to send a blob between guest userspace to host userspace.
+> > >=20
+> > > Do we *REALLY* need specific driver functionality for this?  For
+> > > instance, is there no existing virtio device that can send blobs back
+> > > and forth?
+> > It's virtio-vsock.  If virtio-vsock is available, the communication wor=
+ks.
+> > However, some users would like to disable virtio-vsock on their environ=
+ment for
+> > some reasons.  Even virtio at all.  Especially for confidential computi=
+ng use
+> > case.  It's their choice.  It can't be assumed that virtio is available=
+.
+> >=20
+> > The goal is VMM-agnostic (but TDX-specific) interface for that.
+>=20
+> You're basically saying that every confidential computing technology
+> should have its own host user <-> guest kernel <-> guest user ABI.
+> That's insanity.  If we do this, we need *one* interface that says "talk
+> to the hypervisor" that's common for all hypervisors and hardware
+> vendors, or at least more than *one*.
+>=20
+> We don't need a way to talk to hypervisors for Intel systems and another
+> for AMD and yet another on whatever.
 
-Thanks for investigating - so the test is working as intended. ;-)
+Maybe the GetQuote support can be a "Intel driver" with a dedicated Kconfig
+option?  Not all customers want it anyway, so having a Kconfig option can a=
+lso
+reduce code size/attack window.
 
-However it's a shame that arm64's support is limited. And what Will
-said about possible removal/rework of arm64 hw_breakpoint support
-doesn't sound too reassuring.
-
-We will definitely want to revisit arm64's hw_breakpoint support in future.
-
+--=20
 Thanks,
--- Marco
+-Kai
+
+

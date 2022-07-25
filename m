@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5C957FE35
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD18557FE40
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiGYLTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 07:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S234938AbiGYLUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiGYLTa (ORCPT
+        with ESMTP id S234659AbiGYLU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 07:19:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE3C15802;
-        Mon, 25 Jul 2022 04:19:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C9DD237784;
-        Mon, 25 Jul 2022 11:19:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1658747967; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fsGXEvpXgpa8MJd9I5kGhBSqRiO/o6Xz4MHAqkV7RDk=;
-        b=Gz71EENsDg6dNC88X0BdB9GDBrjspBCS9qbzDEOQ/iWz0SiagzJivwYHMaMeD41PQ+dlI+
-        VHsHpr0zFlH6d8P8n6f1sU2dUl9yslL+1EaJe+/Sh+n1ohih6dj7woa2MyYq86/ACCNjDA
-        5KAODZQYHvrt8J14qJDocRHImGDT9do=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1658747967;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fsGXEvpXgpa8MJd9I5kGhBSqRiO/o6Xz4MHAqkV7RDk=;
-        b=6rKjRPkY2Y/kcUjOc6t9q/asPWGv1DEJ7cIAFX4WwWDU5cWaY9XiR/3aYOhnWbAtwNH/Rk
-        /FythNPbFou+dkBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5997D13ABB;
-        Mon, 25 Jul 2022 11:19:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id t8RXFT983mLUQgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 25 Jul 2022 11:19:27 +0000
-Message-ID: <a0774cc5-17f8-94ca-a490-1a06a5dec1fd@suse.cz>
-Date:   Mon, 25 Jul 2022 13:19:27 +0200
+        Mon, 25 Jul 2022 07:20:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D48317AAA;
+        Mon, 25 Jul 2022 04:20:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658748024; x=1690284024;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RuTOhHe/Z85XuEOFDkWIJLJ9pTTo7hHky8fWNmi6cLg=;
+  b=ADsEC+8zMFNW7TNS9MmzGWKUBVLeRpbXZB324hu2sDpfzD06HQ+1Egf3
+   E4v4za7yIXMvWuQdJxmUF/n+zYuKfgE+HngSYktEFeVFSwsCYpk990q2Y
+   6orSK+k53nsrWTk0SnAnETtlBw2gUTTk6sfjC1kLiKF6sNaTKtxr+qLFW
+   /ei2LE8J7Y4vyFihMgVAOaT0j8CmoyBvMv3OyMp8v3/XxfR0fFXlKLFA4
+   7nYVsE4SdJTYyU6v+78wacf30AR5350YnzNlFBXNrSkCWUmBjsH89oKG7
+   E+tOU2sSaeodXVwrK7B8osL/vVEgLnJOpG1SalEF+mmpxlVhWSO/aWPwj
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="351669323"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="351669323"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:20:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="689025180"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Jul 2022 04:20:21 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFw8K-00052K-1s;
+        Mon, 25 Jul 2022 11:20:20 +0000
+Date:   Mon, 25 Jul 2022 19:19:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, skhan@linuxfoundation.org, corbet@lwn.net,
+        mairacanal@riseup.net
+Cc:     kbuild-all@lists.01.org, Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] Documentation: kunit: Add CLI args for kunit_tool
+Message-ID: <202207251914.OgQ6lGdw-lkp@intel.com>
+References: <20220724184758.1723925-1-sadiyakazi@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH Part2 v6 33/49] KVM: x86: Update page-fault trace to log
- full 64-bit error code
-Content-Language: en-US
-To:     Ashish Kalra <Ashish.Kalra@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, jroedel@suse.de,
-        thomas.lendacky@amd.com, hpa@zytor.com, ardb@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
-        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <a937386611dc7d38981c8a08255c4a71f1295d9a.1655761627.git.ashish.kalra@amd.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <a937386611dc7d38981c8a08255c4a71f1295d9a.1655761627.git.ashish.kalra@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220724184758.1723925-1-sadiyakazi@google.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/22 01:10, Ashish Kalra wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> The #NPT error code is a 64-bit value but the trace prints only the
-> lower 32-bits. Some of the fault error code (e.g PFERR_GUEST_FINAL_MASK)
-> are available in the upper 32-bits.
-> 
-> Cc: <stable@kernel.org>
+Hi Sadiya,
 
-Why stable?
+Thank you for the patch! Perhaps something to improve:
 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/kvm/trace.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
-> index e3a24b8f04be..9b9bc5468103 100644
-> --- a/arch/x86/kvm/trace.h
-> +++ b/arch/x86/kvm/trace.h
-> @@ -383,12 +383,12 @@ TRACE_EVENT(kvm_inj_exception,
->   * Tracepoint for page fault.
->   */
->  TRACE_EVENT(kvm_page_fault,
-> -	TP_PROTO(unsigned long fault_address, unsigned int error_code),
-> +	TP_PROTO(unsigned long fault_address, u64 error_code),
->  	TP_ARGS(fault_address, error_code),
->  
->  	TP_STRUCT__entry(
->  		__field(	unsigned long,	fault_address	)
-> -		__field(	unsigned int,	error_code	)
-> +		__field(	u64,		error_code	)
->  	),
->  
->  	TP_fast_assign(
-> @@ -396,7 +396,7 @@ TRACE_EVENT(kvm_page_fault,
->  		__entry->error_code	= error_code;
->  	),
->  
-> -	TP_printk("address %lx error_code %x",
-> +	TP_printk("address %lx error_code %llx",
->  		  __entry->fault_address, __entry->error_code)
->  );
->  
+[auto build test WARNING on lwn/docs-next]
+[also build test WARNING on linus/master v5.19-rc8 next-20220722]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Sadiya-Kazi/Documentation-kunit-Add-CLI-args-for-kunit_tool/20220725-025055
+base:   git://git.lwn.net/linux.git docs-next
+reproduce: make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/dev-tools/kunit/run_wrapper.rst:262: WARNING: Unexpected indentation.
+
+vim +262 Documentation/dev-tools/kunit/run_wrapper.rst
+
+   226	
+   227	- ``--help``: Lists all available options. To list common options,
+   228	  place ``--help`` before the command. To list options specific to that
+   229	  command, place ``--help`` after the command.
+   230	
+   231	  .. note:: Different commands (``config``, ``build``, ``run``, etc)
+   232	            have different supported options.
+   233	- ``--build_dir``: Specifies kunit_tool build directory. It includes
+   234	  the ``.kunitconfig``, ``.config`` files and compiled kernel.
+   235	
+   236	- ``--make_options``: Specifies additional options to pass to make, when
+   237	  compiling a kernel (using ``build`` or ``run`` commands). For example:
+   238	  to enable compiler warnings, we can pass ``--make_options W=1``.
+   239	
+   240	- ``--alltests``: Builds a UML kernel with all config options enabled
+   241	  using ``make allyesconfig``. This allows us to run as many tests as
+   242	  possible.
+   243	
+   244	  .. note:: It is slow and prone to breakage as new options are
+   245	            added or modified. Instead, enable all tests
+   246	            which have satisfied dependencies by adding
+   247	            ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
+   248	
+   249	- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
+   250	  file. For example:
+   251	
+   252	  - ``lib/kunit/.kunitconfig`` can be the path of the file.
+   253	
+   254	  - ``lib/kunit`` can be the directory in which the file is located.
+   255	
+   256	  This file is used to build and run with a predefined set of tests
+   257	  and their dependencies. For example, to run tests for a given subsystem.
+   258	
+   259	- ``--kconfig_add``: Specifies additional configuration options to be
+   260	  appended to the ``.kunitconfig`` file. For example:
+   261	  .. code-block::
+ > 262		./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y
+   263	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

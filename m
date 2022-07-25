@@ -2,112 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCE258042E
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824DC580434
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiGYSpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 14:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
+        id S236116AbiGYSta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 14:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiGYSo4 (ORCPT
+        with ESMTP id S229544AbiGYSt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 14:44:56 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADD51F2EC;
-        Mon, 25 Jul 2022 11:44:53 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id D28DC5FD06;
-        Mon, 25 Jul 2022 21:44:50 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1658774690;
-        bh=QpaBQJcbjdnu9SDzc6opNHgRycoO3tNZDzVMIW2qPJ4=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=oURdaKDGKLC1avHIkHxnlr29CgJnnjBxTHiISE+IKFlSaEQ0eK00jXjFN4NYPUMHg
-         BFa+VCBWWmOZ8Zcbv/UliLMxkw9/qqZNGXEqcPqLnO4fLQ8Z6CtipGhN0NvcMJpNsJ
-         AYe4Le1eEj614H7EGJWTsSE3Nt+BUJB2ekmTb0Gsxmbj1I1Eaj7khIfuz6hQ95//ev
-         ZnSxcahQtkPSyz9evXJUkSLoYsCtu01qAkQrGK9d179vL+TPGeTTCTHa6RKYR2+347
-         1oU8RIDUtdKRthGruKx6LG4w7Qd+juK5SEpOfJJBccyqTS1sseTP2TpbAaxxhaZXZp
-         o8FSVsRBkXCxg==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 25 Jul 2022 21:44:50 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
-        "jbhayana@google.com" <jbhayana@google.com>
-CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v1 3/3] iio: common: scmi_sensors: use HZ macro from units.h
-Thread-Topic: [PATCH v1 3/3] iio: common: scmi_sensors: use HZ macro from
- units.h
-Thread-Index: AQHYoFaRbBw0+Bf9VEi6RsC5NjNiJg==
-Date:   Mon, 25 Jul 2022 18:44:28 +0000
-Message-ID: <20220725184439.7618-4-ddrokosov@sberdevices.ru>
-References: <20220725184439.7618-1-ddrokosov@sberdevices.ru>
-In-Reply-To: <20220725184439.7618-1-ddrokosov@sberdevices.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 25 Jul 2022 14:49:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C431D4B
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:49:28 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id va17so22299422ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sAiruYU2YzJNdYlca4LZT5jIUn7wqFU4SB2mN4rLMjk=;
+        b=M2D87eNsp6eYBd6ZAXOXe1tTm55yj7N2yIeXPn0pryPpXD6mneFXjwPaWNxUfEu+1P
+         kLOcYsfmyNRcv4oT4EYym9CESBVlR8/luw/sPaNoZFojUPVsu7EVnrG/SL6EL026Y9wl
+         tkVN8YM7B/q/EwErCw7ipNbAumPnsiEAhL900=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sAiruYU2YzJNdYlca4LZT5jIUn7wqFU4SB2mN4rLMjk=;
+        b=jO6MSaSe5zB3IjsUFJCC6o2EA3nIryOl9RCYdGvPMXt1fHAX67uckNUbZKCd6AhX4S
+         pSXeKiYKkmbmdqhWO+S/1AUDN7VXwHfyxYOwp+H0AGimFDoQRQxr70OpdcjhJFQZxPLq
+         d/f15zBruV63wBw6LBA7fjTmx0YLGijhezPUKNQTGIPRcs21MXdJEiymvzqxFhDwoR9p
+         peHc4eOemU3QOV8kWkOL4ChsFbxN1U1dieUF5jf/x20JtBgOE0R50i+Go8dQLSr3HLEX
+         wts4psOONQTWEB0DFaGa4MvGjF8ocaopXWCg/X45bGB465I6YqQvBlGtR+cvzG1sJrRQ
+         Qejw==
+X-Gm-Message-State: AJIora+1ecdyzAj8WMBugyHHjoGgTJBVi4Trkq2VPlEo0cN5feWKttgB
+        0GvI9uYfGt/4ihcEs/TxOjIeemdKR4NT0mTq
+X-Google-Smtp-Source: AGRyM1s8YA75HGbFDlFx3mp2LFEeQ8GQRWtr4yousD29litXGvE+ksRuH1DTlcPe9nnMTjJGH2FOUA==
+X-Received: by 2002:a17:907:2c74:b0:72b:5ba7:d96f with SMTP id ib20-20020a1709072c7400b0072b5ba7d96fmr11518492ejc.33.1658774966529;
+        Mon, 25 Jul 2022 11:49:26 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id ja12-20020a170907988c00b0072ee0976aa2sm5536655ejc.222.2022.07.25.11.49.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 11:49:25 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id m17so16981667wrw.7
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:49:25 -0700 (PDT)
+X-Received: by 2002:a5d:59a4:0:b0:21e:8704:ea35 with SMTP id
+ p4-20020a5d59a4000000b0021e8704ea35mr4400795wrr.442.1658774965332; Mon, 25
+ Jul 2022 11:49:25 -0700 (PDT)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/07/25 14:44:00 #19963834
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
+ <20220725161141.GA1306881@roeck-us.net> <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
+In-Reply-To: <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 25 Jul 2022 11:49:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgGrewyOqT7Cm-eHKp5W+8rJ=aL8iNtsbhRfc0YD2gbeA@mail.gmail.com>
+Message-ID: <CAHk-=wgGrewyOqT7Cm-eHKp5W+8rJ=aL8iNtsbhRfc0YD2gbeA@mail.gmail.com>
+Subject: Re: Linux 5.19-rc8
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Yury Norov <yury.norov@gmail.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicate definition of UHZ_PER_HZ, because it's available in
-the units.h.
+On Mon, Jul 25, 2022 at 10:55 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I think the fix might be something like this:
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- drivers/iio/common/scmi_sensors/scmi_iio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hmm. Maybe the fix is to just not have the arm architecture-specific
+version at all.
 
-diff --git a/drivers/iio/common/scmi_sensors/scmi_iio.c b/drivers/iio/commo=
-n/scmi_sensors/scmi_iio.c
-index 793d628db55f..c6d2cf5504cb 100644
---- a/drivers/iio/common/scmi_sensors/scmi_iio.c
-+++ b/drivers/iio/common/scmi_sensors/scmi_iio.c
-@@ -18,6 +18,7 @@
- #include <linux/scmi_protocol.h>
- #include <linux/time.h>
- #include <linux/types.h>
-+#include <linux/units.h>
-=20
- #define SCMI_IIO_NUM_OF_AXIS 3
-=20
-@@ -130,7 +131,6 @@ static const struct iio_buffer_setup_ops scmi_iio_buffe=
-r_ops =3D {
- static int scmi_iio_set_odr_val(struct iio_dev *iio_dev, int val, int val2=
-)
- {
- 	struct scmi_iio_priv *sensor =3D iio_priv(iio_dev);
--	const unsigned long UHZ_PER_HZ =3D 1000000UL;
- 	u64 sec, mult, uHz, sf;
- 	u32 sensor_config;
- 	char buf[32];
---=20
-2.36.0
+The generic code handles the "small constant size bitmap that fits in
+a word" case better than the ARM special case code does.
+
+And the generic code handles the "scan large bitmap" case better than
+the ARM code does too, in that it does things a word at a time, while
+the ARM special case code does things one byte at a time.
+
+The ARM code does have a few things going for it:
+
+ (a) it's simple
+
+ (b) it has separate routines for the little-endian case
+
+Now, (a) is probably not too strong an argument, because it's arguably
+*too* simple, and buggy as a result. And having looked a bit more,
+it's not just _find_next_bit_le() that has this bug, it's all the
+"next" versions (zero-bit and big-endian).
+
+But (b) is actively better than what the generic "find bit" code has.
+The generic code is kind of disgusting in this area, with code like
+
+        if (le)
+                tmp = swab(tmp);
+
+in lib/find_bit.c and this is nasty for two reasons:
+
+ (1) on little-endian, the "le" flag is mis-named: it's always zero,
+and it never should swab, but the code was taken from some big-endian
+generic case
+
+ (2) even on big-endian, that "le" flag is basically a compile-time
+constant, but the header file shenanigans have hidden that fact, so it
+ends up being a "pass a constant to a function that then has to test
+it dynamically" situation
+
+So the generic code is in many ways better than the ARM special case
+code, but it has a couple of unfortunate warts too. At least those
+unfortunate warts aren't outright *bugs*, they are just ugly.
+
+              Linus

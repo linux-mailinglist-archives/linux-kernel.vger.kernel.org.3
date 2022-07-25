@@ -2,273 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B0357F989
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D23857F994
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiGYGkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 02:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S231467AbiGYGpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 02:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiGYGkk (ORCPT
+        with ESMTP id S230212AbiGYGpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 02:40:40 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6142ACD
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:40:37 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id r14so11979347ljp.2
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:40:37 -0700 (PDT)
+        Mon, 25 Jul 2022 02:45:15 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194A460DD
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:45:14 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31e7c4b593fso98836167b3.13
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:45:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3n2kEuwuuK7IkJ0ff/d4b/av1Jc3vPr0Y+VbQ9saI84=;
-        b=LMFj5ZuaBlD5A8dOVY5use5OPng2TabtOQeQh3sj1+jQuFlqkgAZUEmCK8tSwYgexa
-         o2MsvhXhVrSMXTC9diMSKAfs4wAZuvHIqEhL/GdOURDxkZOeJ7e/fIS5RBAjIuiKWfcA
-         gqtQq0NLk4mZWY2TGmOQJx/c1R0bJUVAsjrac=
+        bh=koE1sOchZGcuAQ6ZIasz8+3z8ouCYYjQCDzwRp9wkxE=;
+        b=Rcjc8ntxdRRnzxYtaeC8PNuN5mEqizkS+usqu0ltMEG3LntntbO+oSzNniJmafQwEQ
+         kWd8OOtIHmb4VWGTZbhqaaHlPmIQAX9jcNBMHFE8lMInOR9PsqFDldUjdXu3A1P3iDIq
+         2cUPz3TadTV49aFZGesO2kJgSOwPxjfjIh/UQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3n2kEuwuuK7IkJ0ff/d4b/av1Jc3vPr0Y+VbQ9saI84=;
-        b=WOrFuJxE19b/t1IubuotlgdRvkITX8jHdWmkFgmN37cZFU0oAvD1AztZr9Enljv5mk
-         0WYfITqqwH8vUdMACLee1vaqzMFqirGTGVWIn+gSPJCy7bOGESCUocXeoveF4ffkqYAk
-         2XseFd5c9ck3hMmmDRxXP+dfYulsfCI/zyRNvsB7BRTgA2WAGq2KqGa/o/9AUfvKGtr0
-         QC1Lq2EzEQan8dBRNm9JSIu09WNVYqkf+97dfUwQt5DNlhk+KwIgGSWJfVwXoyRZjR6N
-         8H0ZNd3YbDZancEiiIXbm+XjQYfwYBTDACVp7mGI9k7NMSJ2LodCHFjETf0usgmWm7Ar
-         O4ig==
-X-Gm-Message-State: AJIora9pTC1AOcA7cKly8/5aBDQvXWgSmUeF9f/TYzUfzpWMxgvB0gS8
-        dvukhxCXDPrIBxaJol+3cfNQTZgqb2utHFWcWF9D7w==
-X-Google-Smtp-Source: AGRyM1sn3iWkEiLU6hMHnvyasmekyibSLlJDbi1WCJvYwpGTp4FtZLeav7l27mv0g0B0s3BIzRQHP86NWkxqKLRXK1k=
-X-Received: by 2002:a2e:bf0e:0:b0:258:e99e:998c with SMTP id
- c14-20020a2ebf0e000000b00258e99e998cmr3841212ljr.365.1658731236073; Sun, 24
- Jul 2022 23:40:36 -0700 (PDT)
+        bh=koE1sOchZGcuAQ6ZIasz8+3z8ouCYYjQCDzwRp9wkxE=;
+        b=d3DkDchGLfgIAYEhW5aMcNsByG1pSmA9yUnkKXKCpAwQ2jpkJYdP4bdvw/Hcg7GsBQ
+         nJ/wiHwuC4JzpAuWG8u43/DveEwShmR2WI+M8+EAfsCxTXKmXVurJUfXB9/oICpiBAzm
+         G5XwnfTRQGP1wSuVQL348qvk7p4dyU50figKRfOoWiUPIFhCSbYnxVPDHEV8oDgpxcpR
+         UTnvSw3TkTk7qzRzHR81qEaYXst/iwksVtwjL0X9OY4nlxY5gyFOCBFMxSdambrqy25U
+         NR9MZpJvCf+c/F5Bm/FzMO/dsurFDFltpxXC0tMgg08BJXOhP6AelEvqr2xzE64RQ3iD
+         RrMw==
+X-Gm-Message-State: AJIora8kINwY637yNMUbcKOeFwbBAGkADv0N9U0IEWDZeOP6FFRcpUSE
+        LK2fyDu4l6+W7p/to/kN2TszrdAa77UrjWlLnLKb4g==
+X-Google-Smtp-Source: AGRyM1tWX8v8lA94PgQz8q4L+DWzhvEaTMIwan7i6g4iVoqzmL5YsXQN/5N9OGYvaAFxZcMla6oIVbP/pg4cyghjqs0=
+X-Received: by 2002:a81:610:0:b0:31e:4822:6807 with SMTP id
+ 16-20020a810610000000b0031e48226807mr8670649ywg.354.1658731513346; Sun, 24
+ Jul 2022 23:45:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
- <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com> <20220717233842.1451e349.max@enpas.org>
-In-Reply-To: <20220717233842.1451e349.max@enpas.org>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Mon, 25 Jul 2022 08:40:24 +0200
-Message-ID: <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
-To:     Max Staudt <max@enpas.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <20220712114046.15574-1-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20220712114046.15574-1-allen-kh.cheng@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 25 Jul 2022 14:45:02 +0800
+Message-ID: <CAGXv+5FmXVYTtOusB8gqh1SprWHuNJYcC5MNEHQUGKQx8yrrLQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] Complete driver nodes for MT8192 SoC
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+On Tue, Jul 12, 2022 at 7:40 PM Allen-KH Cheng
+<allen-kh.cheng@mediatek.com> wrote:
+>
+> This series are based on matthias.bgg/linux.git, for-next.
+>
+> I remove vcodec lat and core nodes PATCH from series and will comfirm
+> clocks usage then resend PATCH.
+>
+> Also should reference below PATCH for dsi in chunkuang.hu/linux.git
+> dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
+>
+> changes since v2:
+>  - add mmsys #reset-cells PATCH
+>  - add missing fallback compatible
+>  - add display aliases
+>  - remove vcodec lat and core nodes PATCH
+>
+> changes since v1:
+>  - add Reviewed-by Tag
+>  - rename dsi-phy from dsi-dphy
+>  - add missing power-domains in disp mutex
+>  - Add remove mt8192 display rdma compatible PATCH in series
+>  - use "mediatek,mt8183-disp-rdma" as fallback
+>  - remove mediatek,larb from rdma node
+>  - remove syscon-dsi and add power-domains in dsi
+>  - add reset property in dsi and mt8192-resets.h
+>  - correct Typo: s/ndoe/node in commit message
+>
+> Allen-KH Cheng (5):
+>   arm64: dts: mt8192: Add pwm node
+>   arm64: dts: mt8192: Add mipi_tx node
+>   arm64: dts: mediatek: Add mmsys #reset-cells property for mt8192
+>   arm64: dts: mt8192: Add display nodes
+>   arm64: dts: mt8192: Add dsi node
 
-First of all thank you for your review, it took me a while to get back
-to you because I wanted to
-do some analysis and tests regarding the code you suggested I change
-and also last week
-was very busy.
+With additional changes to asurada.dtsi I have a working internal display.
+Needs a fix [1] for mtk-drm from Angelo on top of next-20220722.
 
-On Sun, Jul 17, 2022 at 11:38 PM Max Staudt <max@enpas.org> wrote:
->
-> Hi Dario,
->
-> This looks good, thank you for continuing to look after slcan!
->
-> A few comments below.
->
->
->
-> On Sat, 16 Jul 2022 19:00:04 +0200
-> Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
->
-> [...]
->
->
-> > @@ -68,7 +62,6 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
-> >                                  SLC_STATE_BE_TXCNT_LEN)
-> >  struct slcan {
-> >       struct can_priv         can;
-> > -     int                     magic;
-> >
-> >       /* Various fields. */
-> >       struct tty_struct       *tty;           /* ptr to TTY structure      */
-> > @@ -84,17 +77,14 @@ struct slcan {
-> >       int                     xleft;          /* bytes left in XMIT queue  */
-> >
-> >       unsigned long           flags;          /* Flag values/ mode etc     */
-> > -#define SLF_INUSE            0               /* Channel in use            */
-> > -#define SLF_ERROR            1               /* Parity, etc. error        */
-> > -#define SLF_XCMD             2               /* Command transmission      */
-> > +#define SLF_ERROR            0               /* Parity, etc. error        */
-> > +#define SLF_XCMD             1               /* Command transmission      */
-> >       unsigned long           cmd_flags;      /* Command flags             */
-> >  #define CF_ERR_RST           0               /* Reset errors on open      */
-> >       wait_queue_head_t       xcmd_wait;      /* Wait queue for commands   */
->
-> I assume xcmd_wait() came in as part of the previous patch series?
->
+For the whole series
 
-Yes, correct.
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
->
-> [...]
->
->
-> >  /* Send a can_frame to a TTY queue. */
-> > @@ -652,25 +637,21 @@ static int slc_close(struct net_device *dev)
-> >       struct slcan *sl = netdev_priv(dev);
-> >       int err;
-> >
-> > -     spin_lock_bh(&sl->lock);
-> > -     if (sl->tty) {
-> > -             if (sl->can.bittiming.bitrate &&
-> > -                 sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
-> > -                     spin_unlock_bh(&sl->lock);
-> > -                     err = slcan_transmit_cmd(sl, "C\r");
-> > -                     spin_lock_bh(&sl->lock);
-> > -                     if (err)
-> > -                             netdev_warn(dev,
-> > -                                         "failed to send close command 'C\\r'\n");
-> > -             }
-> > -
-> > -             /* TTY discipline is running. */
-> > -             clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
-> > +     if (sl->can.bittiming.bitrate &&
-> > +         sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
-> > +             err = slcan_transmit_cmd(sl, "C\r");
-> > +             if (err)
-> > +                     netdev_warn(dev,
-> > +                                 "failed to send close command 'C\\r'\n");
-> >       }
-> > +
-> > +     /* TTY discipline is running. */
-> > +     clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
-> > +     flush_work(&sl->tx_work);
-> > +
-> >       netif_stop_queue(dev);
-> >       sl->rcount   = 0;
-> >       sl->xleft    = 0;
->
-> I suggest moving these two assignments to slc_open() - see below.
->
->
-> [...]
->
->
-> > @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
-> >       if (!tty->ops->write)
-> >               return -EOPNOTSUPP;
-> >
-> > -     /* RTnetlink lock is misused here to serialize concurrent
-> > -      * opens of slcan channels. There are better ways, but it is
-> > -      * the simplest one.
-> > -      */
-> > -     rtnl_lock();
-> > +     dev = alloc_candev(sizeof(*sl), 1);
-> > +     if (!dev)
-> > +             return -ENFILE;
-> >
-> > -     /* Collect hanged up channels. */
-> > -     slc_sync();
-> > +     sl = netdev_priv(dev);
-> >
-> > -     sl = tty->disc_data;
-> > +     /* Configure TTY interface */
-> > +     tty->receive_room = 65536; /* We don't flow control */
-> > +     sl->rcount   = 0;
-> > +     sl->xleft    = 0;
->
-> I suggest moving the zeroing to slc_open() - i.e. to the netdev open
-> function. As a bonus, you can then remove the same two assignments from
-> slc_close() (see above). They are only used when netif_running(), with
-> appropiate guards already in place as far as I can see.
-
-I think it is better to keep the code as it is, since at the entry of
-the netdev
-open function, netif_running already returns true (it is set to true by the
-calling function) and therefore it would be less safe to reset the
-rcount and xleft
-fields.
-
-Thanks and regards,
-Dario
-
->
->
-> > +     spin_lock_init(&sl->lock);
-> > +     INIT_WORK(&sl->tx_work, slcan_transmit);
-> > +     init_waitqueue_head(&sl->xcmd_wait);
-> >
-> > -     err = -EEXIST;
-> > -     /* First make sure we're not already connected. */
-> > -     if (sl && sl->magic == SLCAN_MAGIC)
-> > -             goto err_exit;
-> > +     /* Configure CAN metadata */
-> > +     sl->can.bitrate_const = slcan_bitrate_const;
-> > +     sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
-> >
-> > -     /* OK.  Find a free SLCAN channel to use. */
-> > -     err = -ENFILE;
-> > -     sl = slc_alloc();
-> > -     if (!sl)
-> > -             goto err_exit;
-> > +     /* Configure netdev interface */
-> > +     sl->dev = dev;
-> > +     strscpy(dev->name, "slcan%d", sizeof(dev->name));
->
-> The third parameter looks... unintentional :)
->
-> What do the maintainers think of dropping the old "slcan" name, and
-> just allowing this to be a normal canX device? These patches do bring
-> it closer to that, after all. In this case, this name string magic
-> could be dropped altogether.
->
->
-> [...]
->
->
->
-> This looks good to me overall.
->
-> Thanks Dario!
->
->
-> Max
-
-
-
--- 
-
-Dario Binacchi
-
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+[1] https://lore.kernel.org/lkml/20220721172727.14624-1-angelogioacchino.delregno@collabora.com/

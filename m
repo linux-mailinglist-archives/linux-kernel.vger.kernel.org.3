@@ -2,130 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27D657FD30
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DE757FD0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiGYKLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
+        id S234553AbiGYKJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234690AbiGYKLZ (ORCPT
+        with ESMTP id S234538AbiGYKJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:11:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC92FD13
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:11:17 -0700 (PDT)
+        Mon, 25 Jul 2022 06:09:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D677A17070
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:09:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658743878; x=1690279878;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1kqxjz8pEwN4Kot1Jt27wFtLc1vilZcf22t+QeswRi8=;
-  b=FdkodQZeh7U5pdupHIqVQe5t8N9ewFZaMYNst55Wu2RlsTIsW1DS7pfv
-   FQhHrCqt6hqA6CgcSKRvWDuAAlBhiLKczxXhRvsc+Tq4FnaJ3KjLe1KRu
-   BSHvkk2M0Pc3Y1FM6CvB8+aXrPcxVweNlm5gPMdOIpKoOPh2ODs+l2Mqs
-   6v8ouN5tKy7e4moNMhb4zsOrUNvINtn5JE08hkMzVtinj70eet63soKRT
-   VTio+GODf4f2rgvr+idl6HFf0JnFOSrHHHrAl0GDPDX38Ii/1eGcT+m1i
-   jTavvA/mk892TsrsDBWF9Fb+rscLty0XsZyMkWqUJN0rP/6sVMmUJXkPr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="351656941"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1658743747; x=1690279747;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=23Lw4hO9PnrAnUiexgQt9P4+WeHQTapIxHltzfSk/RQ=;
+  b=Lm7OcK/IsBjfDcm1g2O6A8Wnj0ohA84Sl4tFnan6PJXtM0ybzjjXfBA6
+   +Mlx0qhlvucSfeZnETHuBxlIDLvncJ4+Hkj0Z/IYQoq8raaV/jzC1WC0y
+   tBWAZ/x0yT5Bx/xFc9/ULoj53jNKJFnSEDMUVPrntYsN9b02tJqlhNlkX
+   r6gY4xCfMdWODM44OkjDzAnUCcGZH5PPDdP3bia8DwhajEwfWTG7GZnI9
+   oLO4TEUD+HExyyNebOObISbfsxuRY94kcRSgjJPX/5m38QmkMpmSUe/d4
+   Afdd1Bltv4GAfZzGDxDop4VfGBO9itZFSBiaF/12ScWNPDN05GdMnEBCn
+   g==;
 X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="351656941"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 03:11:17 -0700
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="658125872"
-Received: from liangk-mobl.ccr.corp.intel.com (HELO [10.255.30.67]) ([10.255.30.67])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 03:11:13 -0700
-Message-ID: <441f6537-dde0-885a-3cc2-089b3ed4f4df@linux.intel.com>
-Date:   Mon, 25 Jul 2022 18:11:13 +0800
+   d="scan'208";a="173496299"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Jul 2022 03:09:07 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 25 Jul 2022 03:09:06 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 25 Jul 2022 03:09:04 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 0/5] ASoC: atmel: one fix and few cleanups
+Date:   Mon, 25 Jul 2022 13:11:25 +0300
+Message-ID: <20220725101130.1780393-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        "Zhu, Tony" <tony.zhu@intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v10 04/12] iommu: Add attach/detach_dev_pasid iommu
- interface
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-5-baolu.lu@linux.intel.com>
- <20220723141118.GD79279@nvidia.com>
- <5d353fe4-b642-992e-ef42-7d7f8b2edf7e@linux.intel.com>
- <BN9PR11MB527627410352E6DE921755898C959@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB527627410352E6DE921755898C959@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/7/25 15:46, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Sunday, July 24, 2022 5:14 PM
->>
->> On 2022/7/23 22:11, Jason Gunthorpe wrote:
->>>> +void iommu_detach_device_pasid(struct iommu_domain *domain,
->> struct device *dev,
->>>> +			       ioasid_t pasid)
->>>> +{
->>>> +	struct iommu_group *group = iommu_group_get(dev);
->>>> +
->>>> +	mutex_lock(&group->mutex);
->>>> +	domain->ops->block_dev_pasid(domain, dev, pasid);
->>> I still really this OP, it is nonsense to invoke 'block_dev_pasid' on
->>> a domain, it should be on the iommu ops and it should not take in a
->>> domain parameter. This is why I prefer we write it as
->>>
->>> domain->ops->set_dev_pasid(group->blocking_domain, dev, pasid);
->>>
->>
->> I originally plan to refactor this after both Intel and ARM SMMUv3
->> drivers have real blocking domain supports. After revisiting this, it
->> seems that the only difficulty is how to check whether a domain is a
->> blocking domain. I am going to use below checking code:
->>
->> +	/*
->> +	 * Detach the domain if a blocking domain is set. Check the
->> +	 * right domain type once the IOMMU driver supports a real
->> +	 * blocking domain.
->> +	 */
->> +	if (!domain || domain->type == IOMMU_DOMAIN_UNMANAGED) {
->>
->> Does this work for you?
->>
-> 
-> Or you can call __iommu_group_alloc_blocking_domain() in the sva
-> path and then just check whether the domain is equal to
-> group->blocking_domain here.
+Hi,
 
-Above check is in the IOMMU driver where group->blocking_domain is not
-viable. I ever thought about have something like
+The series adds one fix for mchp-spdifrx and few cleanups for
+mchp-spdifrx and mchp-spdifrx drivers.
 
-struct iommu_domain *iommu_group_blocking_domain(struct iommu_group
-*group)
+Thank you,
+Claudiu Beznea
 
-to return group->blocking_domain. But it looks redundant.
+Claudiu Beznea (5):
+  ASoC: mchp-spdifrx: disable end of block interrupt on failures
+  ASoC: mchp-spdifrx: use single tag indent for structure
+  ASoC: mchp-spdiftx: remove references to mchp_i2s_caps
+  ASoC: mchp-spdiftx: return directly ret
+  ASoC: mchp-spdiftx: add and remove black line around
+    MODULE_DEVICE_TABLE()
 
-Best regards,
-baolu
+ sound/soc/atmel/mchp-spdifrx.c | 19 +++++++++++--------
+ sound/soc/atmel/mchp-spdiftx.c | 21 +++++----------------
+ 2 files changed, 16 insertions(+), 24 deletions(-)
+
+-- 
+2.34.1
+

@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD15A580193
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E215801A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236223AbiGYPTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 11:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S236241AbiGYPV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 11:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236388AbiGYPTG (ORCPT
+        with ESMTP id S236153AbiGYPVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 11:19:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4080C1EAE5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:16:21 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 17:16:16 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658762177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 25 Jul 2022 11:21:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5976159;
+        Mon, 25 Jul 2022 08:18:34 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 28CD33447C;
+        Mon, 25 Jul 2022 15:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1658762313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=P33YtHMgl2bIxHCGXheabYqxEWw48Aq4FFEore11rZU=;
-        b=JyJuqUpdivPn+qr8aN+9SoCs/L0lZQdkhKv5SHdzeNr7CXQrtdIRCxD3TP7jvlJd24/lvI
-        f2aLXdLw3Q4Xytt7NMz6of01dThuJ0nHI7la5fNB7rKzDtsBzQyUdu3OLf+ypMNiJYBEw9
-        8E34kj9cdxvDkfGZ95U8yng/4a6AQQXpqDpTR2KNVzyuHRRFyNS+DDBqV2DW1Jt3JsXKed
-        g0WA8mB6rEU9cPy0yPvvl+nn6recs5hq5odHBfY+fchwJlrOcjsim2YSlNoD67cLYks7Ok
-        yVlDe6F0kmJni64uZWqqs9RcAMDrAVTVkidm+NSebGvC7nK5iAZAJyf2EtGLaQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658762177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        bh=yMSuGIGKLpHAzMbpgLiAFszp/HqZve7TTrNtIxOn6TY=;
+        b=ivTJWNrJiBymPEB/Qa+jyPhEXDIlra0zBkWR3N3l43YJd3uPzwZ8TGq+0S2PFQO6nCLbEy
+        P6VEqskZFSaOg60MBtz7av+C/aI4xiPvffmLz5F/ZtnsisxVsoXikHjyEP6w0eGDoQXOD7
+        Ah6UUh5Wvsey9xKzpEXeHa6yHX41C3U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1658762313;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=P33YtHMgl2bIxHCGXheabYqxEWw48Aq4FFEore11rZU=;
-        b=OquDrbSJHxBTVvKm+LaqgTt81CmI3ivRZTMWv8yAJf/MiNvw3jQfc6EIDW/0iWihOMTyVa
-        1i6cf4b1Tpt0agDA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH v3] printk: Skip console drivers on PREEMPT_RT.
-Message-ID: <Yt6zwP9xSdUhsoQ9@linutronix.de>
-References: <YtgjtfjYVMQrzFTK@linutronix.de>
- <87y1wn3g3g.fsf@jogness.linutronix.de>
- <Ytgu17hATM8iqdGC@linutronix.de>
- <87ilnrn06u.fsf@jogness.linutronix.de>
- <Ytj3PisFjOfS9L0Y@linutronix.de>
- <YtqakGJAQzw/IPul@alley>
- <YtrYdXWGb0NQLKNA@linutronix.de>
- <Yt6MzEEFfpyTBIIj@alley>
- <Yt6gxxRxDZ/wFHrA@linutronix.de>
- <Yt6nlaSrfZ+fn80x@alley>
+        bh=yMSuGIGKLpHAzMbpgLiAFszp/HqZve7TTrNtIxOn6TY=;
+        b=1uH8/AQVCYHhY4LAHMSnZ9e6Uki809Yd24q6eVVPUUXVXH0AbbG0qnaO7Mx2YW+LyuFN3E
+        TuM9WQZF9vaeO/AQ==
+Received: from hawking.suse.de (unknown [10.168.4.11])
+        by relay2.suse.de (Postfix) with ESMTP id 1F0FF2C171;
+        Mon, 25 Jul 2022 15:18:33 +0000 (UTC)
+Received: by hawking.suse.de (Postfix, from userid 17005)
+        id 08D89444B2F; Mon, 25 Jul 2022 17:18:32 +0200 (CEST)
+From:   Andreas Schwab <schwab@suse.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] rtla: Fix double free
+References: <mvmzggxl4n1.fsf@suse.de>
+        <fd0888a4-099c-95fe-7e20-82be1489061f@kernel.org>
+        <mvmv8rll2yn.fsf@suse.de> <20220725105639.295a7d7d@gandalf.local.home>
+        <mvmilnlkyzx.fsf_-_@suse.de>
+X-Yow:  Yow!  Is my fallout shelter termite proof?
+Date:   Mon, 25 Jul 2022 17:18:32 +0200
+In-Reply-To: <mvmilnlkyzx.fsf_-_@suse.de> (Andreas Schwab's message of "Mon,
+        25 Jul 2022 17:12:18 +0200")
+Message-ID: <mvmedy9kypj.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.90 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Yt6nlaSrfZ+fn80x@alley>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,60 +65,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-printk might be invoked in a context with disabled interrupts and or
-preemption and additionally disables interrupts before it invokes the
-console drivers. This behaviour is not desired on PREEMPT_RT:
-- The console driver are using spinlock_t based locking which become sleepi=
-ng
-  locks on PREEMPT_RT and must not be acquired with disabled interrupts (or
-  preemption).
+On Jul 25 2022, Andreas Schwab wrote:
 
-- The locks within the console drivers must remain sleeping locks and they =
-must
-  not disable interrupts. Printing (and polling for its completion) at 1152=
-00
-  baud on an UART takes too long for PREEMPT_RT in general and so raises the
-  latency of the IRQ-off time of the system beyond acceptable levels.
+> Avoid double free by making trace_instance_destroy indempotent.  When
 
-Skip printing to the console as temporary workaround until the printing thr=
-eads
-and atomic consoles have been introduced or another solution which is
-compatible with the PREEMPT_RT approach.
-With this change, the user will not see any kernel message printed to the
-console but can retrieve the printk buffer from userland (via the dmesg
-command). This allows enable PREEMPT_RT as a whole without disabling printk=
- and
-loosing all kernel output.
+s/indempotent/idempotent/
 
-Disable console printing on PREEMPT_RT.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-v2=E2=80=A6v3:
-  - Reword commit message by adding a few details/ explanations.
-
-v1=E2=80=A6v2:
-   - Use __console_unlock() as suggested by John.
-
- kernel/printk/printk.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
-
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2843,6 +2843,16 @@ void console_unlock(void)
- 	}
-=20
- 	/*
-+	 * On PREEMPT_RT it is not possible to invoke console drivers with
-+	 * disabled interrupts and or preemption. Therefore all drivers are
-+	 * skipped and the output can be retrieved from the buffer.
-+	 */
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
-+		__console_unlock();
-+		return;
-+	}
-+
-+	/*
- 	 * Console drivers are called with interrupts disabled, so
- 	 * @console_may_schedule should be cleared before; however, we may
- 	 * end up dumping a lot of lines, for example, if called from
+-- 
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."

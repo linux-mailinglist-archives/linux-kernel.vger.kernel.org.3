@@ -2,151 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A05557FC10
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95C057FC12
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbiGYJKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S233567AbiGYJKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiGYJKH (ORCPT
+        with ESMTP id S231134AbiGYJKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:10:07 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7557B140BD;
-        Mon, 25 Jul 2022 02:10:05 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l23so19409011ejr.5;
-        Mon, 25 Jul 2022 02:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BSEtgg8+Hpw/EtiHjL5IRktNHYkZQ4l9B8QMcHNKzRs=;
-        b=DvY9h9DoO0kblI5Gb7JOwMF5uAXyYh+0N98faLjkVtDpKYgYiZXw8rUpaon1Qsb+x/
-         y8PR5FRgsPRxbCvYRmi6JyQZHxlbh7MXccC1nAKDIdus48fm9phu/mVPu5c/7jnzpiUa
-         CeYdC3SruNmPOz8QR4pQRYz+9lbX/PiafhwNwu9n1G7QLCs3uqxyNxwD3CM2frokPBsH
-         DkjmmlsnQziUrFfN7mDBzyVBjS82vigYVYvIcaX8uI8LEUmNiadHmdk5ix5lNuZ/1UZ/
-         NGL0Cy1cT3KvSr2YKUSTaA8mjLj8kGwovaeEc5qHPC+CgkPbA4CYf9Td2TeI9EthK4eN
-         F2CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BSEtgg8+Hpw/EtiHjL5IRktNHYkZQ4l9B8QMcHNKzRs=;
-        b=NslrMZ5f6I5mWX5JpKL7DuOYDqURoD3YpuEXmU1oZytERSQagJTrj0I4F41CB8iZCu
-         5e0iIcyVN28dlKxkbGucyXvZ6lJtrSkqnGKQmlfNy6xtYAHwGLG8tHsyKeIxE8ru9HyF
-         9DErc0ZbvY0UouD6yy5HWppQYzUkPXOG7ujfVUYU4ZSJdz0iG+wyBCIA5xFUb28loMIg
-         o7X6AwFLu4cUtPcddtQ7D4ttza7Y4HuTlrWv2jtexYywisJ+B5hOTFLnp0cxUZfazDFG
-         EX8GmNajUoxskItnRrxCulluUMHprqfwceJuBj3wdoD6T6hq6w5WOwezm0NjpnTx48YW
-         YJFw==
-X-Gm-Message-State: AJIora9xNIqvD722EYwBt0oMcuhu/EvVZdvkb+WWLyTW7rUhzCeiwFjc
-        NSPkfLDqoM4hF3AOJsxqY0RvYlrJcu3XEBpxfXY=
-X-Google-Smtp-Source: AGRyM1u9Nn1gh/K3al7D9YTYNDVE3nZB3C3o2fD7AeOdyqGaPbXnVSlqvpk1KEgMM6wZM2t+cB6cSp8E5+GGA2PWOz8=
-X-Received: by 2002:a17:907:6297:b0:72f:9aad:fcb with SMTP id
- nd23-20020a170907629700b0072f9aad0fcbmr9108533ejc.161.1658740203874; Mon, 25
- Jul 2022 02:10:03 -0700 (PDT)
+        Mon, 25 Jul 2022 05:10:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CEF13F2A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:10:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BCA961248
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:10:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 857FCC341CF
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:10:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658740234;
+        bh=iVYubWVhr7m8SgQOz5yFmdeGtJpAvYw1/iYnb5v6064=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZuV+DvPvE0YP4XjtVPCjfLxvuDAI7EMRFUM0Mgmca3prTznHH+fVUBqR6K13WgkXe
+         kraZ/Mvc15xsGErqNPtohXSC5mQ5nGVRrnF5M3THAORcyruGx8VIHkQyUsDbH/yV8D
+         ICy2P+NHQVjgsMFODSoUYXzrz0wkoK4RKA10f9hBuPL6xeoGmwHW+IZ4cm1TLXMhcJ
+         u1kzFuSJF5JAguzScuFsa8Y5zg20HPdmHEo1w4nU1Lq4fwPkae3r242YG/y2T1lliW
+         WtAQzOzeAer+oVcxar0JaPd3ZtQ0Zd5yZVrKhnrbc6vde6VxBE5/QM9zP88yZdFNSq
+         GiC8gv2M8slvQ==
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-31e7c4b593fso102096177b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:10:34 -0700 (PDT)
+X-Gm-Message-State: AJIora8IYUxSAF6UNp3kXtJ1ZI6mKtHqAxRaX+t+9auaog8jcucEg++i
+        A/yjjOvazl2qjKhCamx/2adyYlQ1MB4A7c2YIM4=
+X-Google-Smtp-Source: AGRyM1vq4bmce3d+fC8j36lyWWo0InmMKmRxezrTSEkgvh0iucP+Dq2oUKytenc6fkQ6+Fcc1crpFodVipdA7tTdZKg=
+X-Received: by 2002:a81:4909:0:b0:31e:961f:a334 with SMTP id
+ w9-20020a814909000000b0031e961fa334mr9119377ywa.424.1658740233581; Mon, 25
+ Jul 2022 02:10:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722102407.2205-1-peterwu.pub@gmail.com> <20220722102407.2205-8-peterwu.pub@gmail.com>
- <CAHp75VfiKMROzxeEaCH6qCthK9qanJPqbjADLMVH-V0upKf+9Q@mail.gmail.com>
- <CABtFH5++4N1mECJ0vN-79WsJJWcBTVxLFgvkiouPf1qev7LHHQ@mail.gmail.com>
- <CAHp75VfKihBLjUFqe_Sj5dqTO7-wjLehAF+9_8-sbUeyJ-ZAmg@mail.gmail.com> <CABtFH5+LvvcVscRotyRYXhXs1pPkCahbVe0NcSFxC4k_WMMsuQ@mail.gmail.com>
-In-Reply-To: <CABtFH5+LvvcVscRotyRYXhXs1pPkCahbVe0NcSFxC4k_WMMsuQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Jul 2022 11:09:26 +0200
-Message-ID: <CAHp75Vd53faWJ8oD2WGQEMAVc-NfoceUUjpOJwy7piaraH8CNA@mail.gmail.com>
-Subject: Re: [PATCH v6 07/13] mfd: mt6370: Add MediaTek MT6370 support
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
+References: <CGME20220725065308epcas1p2f6de3d74792854bb312cca4b310badac@epcas1p2.samsung.com>
+ <20220725065308.2457024-1-jiho.chu@samsung.com> <Yt5cFBgiTLwGXv17@kroah.com>
+In-Reply-To: <Yt5cFBgiTLwGXv17@kroah.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 25 Jul 2022 12:10:07 +0300
+X-Gmail-Original-Message-ID: <CAFCwf13JA+5vuAKqvBSs3MkcF-gbE_8vd9nSvStQga55vW80VA@mail.gmail.com>
+Message-ID: <CAFCwf13JA+5vuAKqvBSs3MkcF-gbE_8vd9nSvStQga55vW80VA@mail.gmail.com>
+Subject: Re: [PATCH 0/9] Samsung Trinity NPU device driver
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        yelini.jeong@samsung.com, myungjoo.ham@samsung.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 11:06 AM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> On Mon, Jul 25, 2022 at 4:43 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-
-...
-
-> > > > > +#define MT6370_REG_DEV_INFO    0x100
-> > > > > +#define MT6370_REG_CHG_IRQ1    0x1C0
-> > > > > +#define MT6370_REG_CHG_MASK1   0x1E0
-> > > > > +
-> > > > > +#define MT6370_VENID_MASK      GENMASK(7, 4)
-> > > > > +
-> > > > > +#define MT6370_NUM_IRQREGS     16
-> > > > > +#define MT6370_USBC_I2CADDR    0x4E
-> > > >
-> > > > > +#define MT6370_REG_ADDRLEN     2
-> > > > > +#define MT6370_REG_MAXADDR     0x1FF
-> > > >
-> > > > These two more logically to have near to other _REG_* definitions above.
-
-...
-
-> > You lost me. Namespace has a meaning, i.e. grouping items of a kind.
-> > In your proposal I don't see that. If REG_MAXADDR and REG_ADDRLEN are
-> > _not_ of the _REG_ kind as per above, why do they have this namespace
-> > in the first place?
-
-> oh... Sorry, I just got the wrong meaning
-> maybe it should be revised like this, right??
-
-I don't know. I am not an author of the code, I do not have access
-(and don't want to) to the hardware datasheets, all up to you. From
-the style perspective below looks good.
-
-> -------------------------------------------------------------------
-> #define MT6370_REG_DEV_INFO    0x100
-> #define MT6370_REG_CHG_IRQ1    0x1C0
-> #define MT6370_REG_CHG_MASK1   0x1E0
-> #define MT6370_REG_MAXADDR     0x1FF // Move it to here
+On Mon, Jul 25, 2022 at 12:02 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> #define MT6370_VENID_MASK      GENMASK(7, 4)
+> On Mon, Jul 25, 2022 at 03:52:59PM +0900, Jiho Chu wrote:
+> > Hello,
+> >
+> > My name is Jiho Chu, and working for device driver and system daemon for
+> > several years at Samsung Electronics.
+> >
+> > Trinity Neural Processing Unit (NPU) series are hardware accelerators
+> > for neural network processing in embedded systems, which are integrated
+> > into application processors or SoCs. Trinity NPU is compatible with AMBA
+> > bus architecture and first launched in 2018 with its first version for
+> > vision processing, Trinity Version1 (TRIV1). Its second version, TRIV2,
+> > is released in Dec, 2021. Another Trinity NPU for audio processing is
+> > referred as TRIA.
+> >
+> > TRIV2 is shipped for many models of 2022 Samsung TVs, providing
+> > acceleration for various AI-based applications, which include image
+> > recognition and picture quality improvements for streaming video, which
+> > can be accessed via GStreamer and its neural network plugins,
+> > NNStreamer.
+> >
+> > In this patch set, it includes Trinity Vision 2 kernel device driver.
+> > Trinity Vision 2 supports accelerating image inference process for
+> > Convolution Neural Network (CNN). The CNN workload is executed by Deep
+> > Learning Accelerator (DLA), and general Neural Network Layers are
+> > executed by Digital Signal Processor (DSP). And there is a Control
+> > Processor (CP) which can control DLA and DSP. These three IPs (DLA, DSP,
+> > CP) are composing Trinity Vision 2 NPU, and the device driver mainly
+> > supervise the CP to manage entire NPU.
+> >
+> > Controlling DLA and DSP operations is performed with internal command
+> > instructions. and the instructions for the Trinity is similar with
+> > general processor's ISA, but it is specialized for Neural Processing
+> > operations. The virtual ISA (vISA) is designed for calculating multiple
+> > data with single operation, like modern SIMD processor. The device
+> > driver loads a program to CP at start up, and the program can decode a
+> > binary which is built with the vISA. We calls this decoding program as a
+> > Instruction Decoding Unit (IDU) program. While running the NPU, the CP
+> > executes IDU program to fetch and decode instructions which made up of
+> > vISA, by the scheduling policy of the device driver.
+> >
+> > These DLA, DSP and CP are loosely coupled using ARM's AMBA, so the
+> > Trinity can easily communicate with most ARM processors. Each IPs
+> > designed to have memory-mapped registers which can be used to control
+> > the IP, and the CP provides Wait-For-Event (WFE) operation to subscribe
+> > interrupt signals from the DLA and DSP. Also, embedded Direct Memory
+> > Access Controller (DMAC) manages data communications between internal
+> > SRAM and outer main memory, IOMMU module supports unified memory space.
+> >
+> > A user can control the Trinity NPU with IOCTLs provided by driver. These
+> > controls includes memory management operations to transfer model data
+> > (HWMEM_ALLOC/HWMEM_DEALLOC), NPU workload control operations to submit
+> > workload (RUN/STOP), and statistics operations to check current NPU
+> > status. (STAT)
+> >
+> > The device driver also implemented features for developers. It provides
+> > sysfs control attributes like stop, suspend, sched_test, and profile.
+> > Also, it provides status attributes like app status, a number of total
+> > requests, a number of active requests and memory usages. For the tracing
+> > operations, several ftrace events are defined and embedded for several
+> > important points.
 >
-> #define MT6370_NUM_IRQREGS     16
-> #define MT6370_USBC_I2CADDR    0x4E
+> If you have created sysfs files, you need to document them in
+> Documentation/ABI/ which I do not see in your diffstat.  Perhaps add
+> that for your next respin?
 >
-> #define MT6370_MAX_ADDRLEN     2    // Rename
+> Also, please remove the "tracing" logic you have in the code, use
+> ftrace, don't abuse dev_info() everywhere, that's not needed at all.
+>
+> thanks,
+>
+> greg k-h
 
+Hi,
+Why isn't this submitted to soc/ subsystem ?
+Don't you think that would be more appropriate, given that this IP is
+integrated into application processors ?
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks,
+Oded

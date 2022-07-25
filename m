@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D200C57FF17
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA8557FF1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 14:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbiGYMjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 08:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S235330AbiGYMkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 08:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbiGYMjE (ORCPT
+        with ESMTP id S235304AbiGYMkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 08:39:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36AA5BC98
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658752742;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3WHFuKmZPQedoN55ZoH0FtL+rcxDT0vItFUzM4he2I8=;
-        b=XdVuorXcX3UyPmS6Mpnf0VZc2RmgGmB9OIc+vj3gqOyDQJlLHIT1DLzffEtVFoDl3+ekKe
-        PPUKhHKPrSxYttXJ2lVB2tBlCENlOjxtf8bG+EnEpINAtqXuZCVJFYi7Bwi8DKHOkbAaav
-        aBRaNvU2qjsThva9Zx+16hz2AFPjeYo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-27-NdnxX3kONx6504fm3bNVgw-1; Mon, 25 Jul 2022 08:39:00 -0400
-X-MC-Unique: NdnxX3kONx6504fm3bNVgw-1
-Received: by mail-wm1-f70.google.com with SMTP id n30-20020a05600c501e00b003a3264465ebso5821606wmr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:39:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=3WHFuKmZPQedoN55ZoH0FtL+rcxDT0vItFUzM4he2I8=;
-        b=tn7o24noEcpo/dtAP6JE+bpqPGGTu5cmQEDPys0X3jIUpGlSuEyVeDnXF8p8SyIyPD
-         zFm0imwTXUc4qa4ChazkbvFJz2rdEZ6CbB4C6qr10rRKSj64Sp8UpckctAzs65BUNLSL
-         AAEfCvCy3rjlPeagk2fubnBqxZeoI1dPo8xLgJ5hQLt9YjD7CSZ3YXUlvbUY/bE7iW0o
-         4OuN46qmpEBXi3cCrDyS3NE63Nt2/9hCk2hWtefWD+O7mVsbWSOrDWnLtSevzn0pfhJA
-         QXK/zF6u2sUrDNp7VXeY96qLZb7OwdQfAPfDkMH/7gZccixoawEkpZ7L9DAVkAREPnMF
-         j8vQ==
-X-Gm-Message-State: AJIora9hQAqFGM8E13EyderiRJ2IvATaJptwJsWYJEAsN9C8OUbwLEfb
-        7xXOXnSuM0nIDAFQsM5c8y4Re0NC/fAKE7VUtAJ/mAikq1G781GDi7kWEJ6eVjk6GpyLVHtdc8Q
-        QTHyaIfwtzes3RmSJJSruCWQD
-X-Received: by 2002:a05:600c:1986:b0:3a3:490b:1fd4 with SMTP id t6-20020a05600c198600b003a3490b1fd4mr7365133wmq.140.1658752739747;
-        Mon, 25 Jul 2022 05:38:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vTnXfTssXHtYtWUqP9z+lS8oior8tLmN08lGBELo1Up+/gD5Avnva+lrhKtPOFyww/a8mGKA==
-X-Received: by 2002:a05:600c:1986:b0:3a3:490b:1fd4 with SMTP id t6-20020a05600c198600b003a3490b1fd4mr7365095wmq.140.1658752739261;
-        Mon, 25 Jul 2022 05:38:59 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:8c00:eee4:63f0:cef2:5ac0? (p200300cbc7048c00eee463f0cef25ac0.dip0.t-ipconnect.de. [2003:cb:c704:8c00:eee4:63f0:cef2:5ac0])
-        by smtp.gmail.com with ESMTPSA id r17-20020a5d52d1000000b0021d68a504cbsm11691804wrv.94.2022.07.25.05.38.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 05:38:58 -0700 (PDT)
-Message-ID: <7d664831-a78c-4a4f-5bd6-f0e04463ca7c@redhat.com>
-Date:   Mon, 25 Jul 2022 14:38:57 +0200
+        Mon, 25 Jul 2022 08:40:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28421C90E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 05:39:55 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ls0490wGkz4xFw;
+        Mon, 25 Jul 2022 22:39:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1658752794;
+        bh=eSOLGSxxYNa3xROdrcKx9ie20r/UPvDadRCttEkmp6M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cckJ3ie61VXTZuA+PJMocDjxpnWF/WYCTpYuoWoOZeNNZaoeifq0LXqGf7YfGv8KV
+         0TDZTeNx2uzQaJ0HAGCc1XIsbOf0FbumYT/OqzSWsOvTgaJaS3wQCNgt+3o++wbozi
+         0FNLgy7uWSdbgZjGtjtOcccfDNzNjcMDbm8eQ4jjWYeTWUMVT4G8YPIfoEKhu0NoEv
+         VJPEv55b50XmApiJGBght5zqEYINJ2rMkGXGpkVicV/bxOBAzEgfxjbAZba/b1/tTZ
+         hJddKbV/AOcUWV9sOIDm64SauKpGxUAMKlHViu1zvBLGdfHbK+G3eT6u+02vkWEWMW
+         ZwPIaX3/+pRkA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     <linuxppc-dev@lists.ozlabs.org>
+Cc:     alexdeucher@gmail.com, amd-gfx@lists.freedesktop.org,
+        linux@roeck-us.net, <torvalds@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, dan@danny.cz,
+        tpearson@raptorengineering.com
+Subject: [PATCH] drm/amdgpu: Re-enable DCN for 64-bit powerpc
+Date:   Mon, 25 Jul 2022 22:39:18 +1000
+Message-Id: <20220725123918.1903255-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>, marcelo.cerri@canonical.com,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com, x86@kernel.org, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com>
- <YtltYRuL+2uQkYUK@zn.tnic> <ebcf2979-45fc-8d41-cc28-ac8da0d24245@intel.com>
- <Ytr4FCV2xPGUBLqs@zn.tnic> <707ca113-c2a2-8fe2-a22c-5be13adc7bb4@intel.com>
- <Yt6LOD9Ae2NqyG1N@zn.tnic>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Yt6LOD9Ae2NqyG1N@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.07.22 14:23, Borislav Petkov wrote:
-> On Fri, Jul 22, 2022 at 12:30:36PM -0700, Dave Hansen wrote:
->> Sure does...  *Something* has to manage the cache coherency so that old
->> physical aliases of the converted memory don't write back and clobber
->> new data.  But, maybe the hardware is doing that now.
-> 
-> Let's hope.
-> 
->> Yeah, that two-tier system is the way it's happening today from what
->> I understand. This whole conversation is about how to handle the >4GB
->> memory.
-> 
-> Would it be possible to pre-accept a bunch of mem - think "pre-fault" -
-> from userspace?
-> 
-> I.e., I'm thinking some huge process is going to start in the VM, VM
-> userspace goes and causes a chunk of memory to be pre-accepted and then
-> the process starts and runs more-or-less smoothly as the majority of its
-> memory has already been "prepared".
-> 
-> Or does that not make any sense from mm perspective?
-> 
+Commit d11219ad53dc ("amdgpu: disable powerpc support for the newer
+display engine") disabled the DCN driver for all of powerpc due to
+unresolved build failures with some compilers.
 
-The less core-MM code to handle unaccepted memory the better. Meaning,
-that any kind of additional pre-acceptance (in addition to what we have
-here) needs good justification.
+Further digging shows that the build failures only occur with compilers
+that default to 64-bit long double.
 
+Both the ppc64 and ppc64le ABIs define long double to be 128-bits, but
+there are compilers in the wild that default to 64-bits. The compilers
+provided by the major distros (Fedora, Ubuntu) default to 128-bits and
+are not affected by the build failure.
+
+There is a compiler flag to force 128-bit long double, which may be the
+correct long term fix, but as an interim fix only allow building the DCN
+driver if long double is 128-bits by default.
+
+The bisection in commit d11219ad53dc must have gone off the rails at
+some point, the build failure occurs all the way back to the original
+commit that enabled DCN support on powerpc, at least with some
+toolchains.
+
+Depends-on: d11219ad53dc ("amdgpu: disable powerpc support for the newer display engine")
+Fixes: 16a9dea110a6 ("amdgpu: Enable initial DCN support on POWER")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2100
+---
+ arch/powerpc/Kconfig                | 4 ++++
+ drivers/gpu/drm/amd/display/Kconfig | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+Alex, are you OK if I take this via the powerpc tree for v5.19?
+
+cheers
+
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 7aa12e88c580..287cc2d4a4b3 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -281,6 +281,10 @@ config PPC
+ 	# Please keep this list sorted alphabetically.
+ 	#
+ 
++config PPC_LONG_DOUBLE_128
++	depends on PPC64
++	def_bool $(success,test "$(shell,echo __LONG_DOUBLE_128__ | $(CC) -E -P -)" = 1)
++
+ config PPC_BARRIER_NOSPEC
+ 	bool
+ 	default y
+diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+index 0ba0598eba20..ec6771e87e73 100644
+--- a/drivers/gpu/drm/amd/display/Kconfig
++++ b/drivers/gpu/drm/amd/display/Kconfig
+@@ -6,7 +6,7 @@ config DRM_AMD_DC
+ 	bool "AMD DC - Enable new display engine"
+ 	default y
+ 	select SND_HDA_COMPONENT if SND_HDA_CORE
+-	select DRM_AMD_DC_DCN if X86 && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
++	select DRM_AMD_DC_DCN if (X86 || PPC_LONG_DOUBLE_128) && !(KCOV_INSTRUMENT_ALL && KCOV_ENABLE_COMPARISONS)
+ 	help
+ 	  Choose this option if you want to use the new display engine
+ 	  support for AMDGPU. This adds required support for Vega and
 -- 
-Thanks,
-
-David / dhildenb
+2.35.3
 

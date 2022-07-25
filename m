@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EFB5804A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1875804A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 21:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234965AbiGYTo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 15:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S235360AbiGYTqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 15:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234254AbiGYToX (ORCPT
+        with ESMTP id S234254AbiGYTqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 15:44:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1575E205D5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:44:23 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oG401-0004xW-Dt; Mon, 25 Jul 2022 21:44:17 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oG3zz-003Ayb-RY; Mon, 25 Jul 2022 21:44:15 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oG3zz-007Tts-5o; Mon, 25 Jul 2022 21:44:15 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH] hwmon: sht15: Fix wrong assumptions in device remove callback
-Date:   Mon, 25 Jul 2022 21:43:44 +0200
-Message-Id: <20220725194344.150098-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.36.1
+        Mon, 25 Jul 2022 15:46:42 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C471F2D6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:46:41 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id z132so3091984yba.3
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 12:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lY+1yfeH/k1eux5Oe0YusyRsTu8qiRzbYPN4fFrCgzE=;
+        b=HdiPl6dXjNF6LPf7HkcGS4YZoh5aBgx4nIkbOH/OfLLBBjsKXGqHDIB+hC4jZYE9N/
+         GGBmWWQBCnqabbkdrY0Iks11LQ6J2Sg+Cf94dZaXH9hC4WZhZdREtroR/NnZ4n69032q
+         mLlTn3GK+cvkdV6aef5Sfa2lcO4ZXTDw8d0rBjOHFDooKliuR5xjmDDeaUc68CN29IbP
+         MvSZSRf5rGvvjEj3glkszn0ACaXMepK3ImRRKfVqlvgIgJ0ctR5GG21B1wT9KRPJEBjW
+         AdiUsUTDJv8GUcjkLu8ygLRoOQkOtjX6ajKZOywDX4xJVM14aN36sQsaJz6eSFYoJ7f+
+         5d3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lY+1yfeH/k1eux5Oe0YusyRsTu8qiRzbYPN4fFrCgzE=;
+        b=IXxyIXgdVpeqhqAUqqoZbWtQQxMcuHcxt7Ywz3Smj8tIkcfG5KP//ok+k1AO1YHHNq
+         78Zle6KhiyIT933UZDzOxE0lWNlJ/fUngxhURE2w220cpgi3Do47e2pFn4kSpQ80zMKK
+         IWh+xNDsjkoL7zo2Kc6Cvr4kPIdCB+cCH+bqrbHbj3MqEEEtspAK7RaHGeP2PBXibhCP
+         Rr9hbYXIo7mRZidoajd9zn2XnN4Maqm+q6J2WDQsKHFzYZbTMGH0PFGje6EORATrzlL8
+         LCv9FuQI+Fkwthhwwln3xeY75WOzp6gqP1Z+RLE7KC5pYZugi7kajPnFgQHIaunMve1z
+         EvAQ==
+X-Gm-Message-State: AJIora/6yF/zkjer5uVc14PGE5ndE+qv5lfIz3LnYmRK5w9kFgUUMbJr
+        X5k9l+kazhkJMMrxnExly/V+xVzxEKm4YTex3K4=
+X-Google-Smtp-Source: AGRyM1vMUtIDndWYNe5OZY7OOkwWLUzuvCOFcfFBRUrr0Ae03QgWFj/BLZ4lP8rZuLVJji3skuyl0+5BRrNy8T76GiI=
+X-Received: by 2002:a25:808c:0:b0:670:7d94:f2a with SMTP id
+ n12-20020a25808c000000b006707d940f2amr11093199ybk.452.1658778400804; Mon, 25
+ Jul 2022 12:46:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2541; h=from:subject; bh=03In0uPqCNWfcwxxoZFMnMxqu/a77O3w3D+UFn5GWVY=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi3vJnd05J5PSmrIgIMEHncs2fOep+tDiVPPxmUcDo duzXRNmJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYt7yZwAKCRDB/BR4rcrsCYAXB/ 9YcVEOSqTOjKAG8JIc/nT01muBVxJ/knc1znnCtd8vxrzmMl/8IFx42A2ISV/lPPb8qi7rc9u1ibMh EgP5b0iGTiM+JSiM0QwnMNtuCOIHr9X+JRkz8DINWRkNUkpfDeXYADWTzIjop2thu9xaVyin9I5SQ4 qGOud3dA+r/rCEw5NgZdhdZImxW/hKh+YcRgeCf6xbMMpzZmfC9HPz9qg4XGMjr8dfmnpPVnBWhz1m 0j1V+prIVCCqjdeIYN/pI1WYxSn3RPis8c35/e/rxAWHddNv1qXoxIVSTUHf8fqTpwQOJ4lZP0Y+3D SIq0LU0kr6vehbQBfZ8emVFHsG75yQ
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220705022032.281665-1-windhl@126.com>
+In-Reply-To: <20220705022032.281665-1-windhl@126.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 25 Jul 2022 21:46:30 +0200
+Message-ID: <CAFBinCC1x-655H2LbbUhiVGmgXL+tdSRnCPV0a-NJcZKOFJZuw@mail.gmail.com>
+Subject: Re: [PATCH] soc: amlogic: meson-pwrc: Hold reference returned by of_get_parent()
+To:     Liang He <windhl@126.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, khilman@baylibre.com,
+        jbrunet@baylibre.com, inux-amlogic@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Taking a lock at the beginning of .remove() doesn't prevent new readers.
-With the existing approach it can happen, that a read occurs just when
-the lock was taken blocking the reader until the lock is released at the
-end of the remove callback which then accessed *data that is already
-freed then.
-
-To actually fix this problem the hwmon core needs some adaption. Until
-this is implemented take the optimistic approach of assuming that all
-readers are gone after hwmon_device_unregister() and
-sysfs_remove_group() as most other drivers do. (And once the core
-implements that, taking the lock would deadlock.)
-
-So drop the lock, move the reset to after device unregistration to keep
-the device in a workable state until it's deregistered. Also add a error
-message in case the reset fails and return 0 anyhow. (Returning an error
-code, doesn't stop the platform device unregistration and only results
-in a little helpful error message before the devm cleanup handlers are
-called.)
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
 Hello,
 
-the motivation for this patch is to fix the driver to not return an
-error code in .remove(). The long term goal is to make remove callbacks
-return void as returning an error is nearly always wrong and doesn't
-have the effect that driver authors think it has. This patch is a
-preparation for this conversion.
+thank you for your patch!
 
-Best regards
-Uwe
+On Tue, Jul 5, 2022 at 4:20 AM Liang He <windhl@126.com> wrote:
+[...]
+> +       struct device_node *np;
+>
+>         int i, ret;
+>
+>         match = of_device_get_match_data(&pdev->dev);
+> @@ -495,7 +496,9 @@ static int meson_ee_pwrc_probe(struct platform_device *pdev)
+>
+>         pwrc->xlate.num_domains = match->count;
+>
+> -       regmap_hhi = syscon_node_to_regmap(of_get_parent(pdev->dev.of_node));
+> +       np = of_get_parent(pdev->dev.of_node);
+> +       regmap_hhi = syscon_node_to_regmap(np);
+This works but I had to read the code twice because I thought the
+wrong struct device_node was used.
+Other drivers typically use "np" for whatever the code section
+currently refers to. In this case the code section is about the power
+controller, so I thought that "np" was the same as
+"pdev->dev.of_node".
 
- drivers/hwmon/sht15.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+I think the code would be easier to understand and the likelihood of
+someone making the same mistake as I did if you could rename "np" to
+"parent_np" (just like you have done in your other patches).
 
-diff --git a/drivers/hwmon/sht15.c b/drivers/hwmon/sht15.c
-index 7f4a63959730..ae4d14257a11 100644
---- a/drivers/hwmon/sht15.c
-+++ b/drivers/hwmon/sht15.c
-@@ -1020,25 +1020,20 @@ static int sht15_probe(struct platform_device *pdev)
- static int sht15_remove(struct platform_device *pdev)
- {
- 	struct sht15_data *data = platform_get_drvdata(pdev);
-+	int ret;
- 
--	/*
--	 * Make sure any reads from the device are done and
--	 * prevent new ones beginning
--	 */
--	mutex_lock(&data->read_lock);
--	if (sht15_soft_reset(data)) {
--		mutex_unlock(&data->read_lock);
--		return -EFAULT;
--	}
- 	hwmon_device_unregister(data->hwmon_dev);
- 	sysfs_remove_group(&pdev->dev.kobj, &sht15_attr_group);
-+
-+	ret = sht15_soft_reset(data);
-+	if (ret)
-+		dev_err(&pdev->dev, "Failed to reset device (%pe)\n", ERR_PTR(ret));
-+
- 	if (!IS_ERR(data->reg)) {
- 		regulator_unregister_notifier(data->reg, &data->nb);
- 		regulator_disable(data->reg);
- 	}
- 
--	mutex_unlock(&data->read_lock);
--
- 	return 0;
- }
- 
--- 
-2.36.1
-
+[...]
+> +       struct device_node *np;
+same as above, I suggest renaming this to parent_np.

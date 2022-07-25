@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4727858084F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA80580846
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237299AbiGYXfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 19:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
+        id S237256AbiGYXdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 19:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiGYXfN (ORCPT
+        with ESMTP id S236745AbiGYXdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:35:13 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6FC5F41
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:35:12 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id l9-20020a056830268900b006054381dd35so9806346otu.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DeZ0i71m7lXsgqJ3r02BqYK+cq3KZTMlnLHmvKXbYxU=;
-        b=CuxM3sWsBSTPgEOjZsRT4+4fjCKRp1DD+h+q+tZsJRmUqGgttEcydVnl3HwtZDIHer
-         zxXhs/Vjw76o3wJC5EHOUZ6QyEMyToO4FSwgjULATEJOuaKcPo2Yu3N0q/uewVDZD369
-         YIKPwTVKdqvc2Sz8CbHeesLVfi4Ka1YUdHmIi8XTW8plTbruiqXKUMqM+8De8VVnVWJ+
-         0/X1uPuvJcI8rqqJlVL9KSYPTSEyEyipCPPXvfCwwXgUwUdpMfTig+A4aZQy5s3XpeEa
-         X7lgFDZHvvnS/yLDdjjKsdMVMzeeDMdKDA2q5aIH6LiG9807L2flrLQ32a1Gc5SSkaIf
-         NFoA==
+        Mon, 25 Jul 2022 19:33:05 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CEE26AE6;
+        Mon, 25 Jul 2022 16:33:05 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id s204so15298256oif.5;
+        Mon, 25 Jul 2022 16:33:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DeZ0i71m7lXsgqJ3r02BqYK+cq3KZTMlnLHmvKXbYxU=;
-        b=MwT9EVj8nlO5FKimiXP6itTZzyiujPonQDIS/E1Y/P41Aa0JoJT+2UYzuAGqgZBq7g
-         JJDxvxlvau/cuX7n7EDi2V92bOdxFBiZB5ySiv+JUT/YuGPQAm0M1Yvs90A0JYFYW4//
-         Nlouo1DUDi0NxapI7jIfZGH5cVAYRpvIvDnPzIaKHLmrMwQ0dZ51y70UkkVZyfoGvnub
-         vWV8LOFJ7lpZ/GxxiuEhN0Ni2oEMOxQ9fXu5X2iU5U/qt9PxJkNuq5rIJ39gIKK+Dz7M
-         RNXdSyxj4M9mfWLkL68m2CciP4LDEyfcsHYh5ixoO8r2+341ypk4YzcyA4rHYy+xZAz9
-         tyUA==
-X-Gm-Message-State: AJIora/vHgoJ2ryEyZPixmy0xjsTjlf/OGMUA2+e+TJRaEz3qe/FcQft
-        ehVC4eh0miu88n0w50ItU40=
-X-Google-Smtp-Source: AGRyM1vy8C5iqLabeXFffOkfvK810psuEvspeFasjH3OSccwMohmjm9n6GHknf3IO6BpuRysXhKSzQ==
-X-Received: by 2002:a05:6830:1f3b:b0:61c:8421:6dbb with SMTP id e27-20020a0568301f3b00b0061c84216dbbmr5437090oth.263.1658792111438;
-        Mon, 25 Jul 2022 16:35:11 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id l11-20020a9d550b000000b0061ca92ae442sm5450341oth.72.2022.07.25.16.35.10
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=35be8RwrHUGDdl8k/ntz3JQSksF3mPF6MXbq1qdhuHU=;
+        b=4c0bPz+499WN8/wvOsb+37H3yIQZNV6aPWYFF8HNvW3PiZtiP3x5K56udw2h2k2V7Y
+         NEB3yyQqPKmwTFl1+KLbvf/NBoK23yfv0m/CHYxEj0YAPODgR5CI03TRjiEG1dC3ny1w
+         /0LVVJGEibwe+9oy/mKB61pfDgK8bR8OyXrOmZvBNp/ohK9+Do7m+xi7vxUfavT6A4E4
+         Og68FuxnYgUmBM2Ge25OqMLDVBbe5yZoDOVHhnIatp59m5NvHZGgaARYO8J/QZ04uVfA
+         sWNhnVd0mcYoQLNk/bd/AwHn3exfU22WvZmGKdrV/x0y32T18YcqtCdiZ2WA4Fji4+ef
+         LqNg==
+X-Gm-Message-State: AJIora+frBJzlU68OxJqlGHPkjRF3h+wam29PF7fzQ/0+AometbGrElJ
+        y2OZOWxlN+cKZfzvEgADGg==
+X-Google-Smtp-Source: AGRyM1tNQzJxjy2xupFgtOlnhIeZ+EZdU/HB0Xxsyad8N1nbdVc3UgpG6moPKBDToAkVZkHNcoXaaA==
+X-Received: by 2002:aca:1a17:0:b0:33a:c75f:8020 with SMTP id a23-20020aca1a17000000b0033ac75f8020mr3599344oia.179.1658791984251;
+        Mon, 25 Jul 2022 16:33:04 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id i22-20020a056870221600b000f325409614sm6729181oaf.13.2022.07.25.16.33.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 16:35:11 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 16:32:59 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH 1/2] powerpc: drop dependency on <asm/machdep.h> in
- archrandom.h
-Message-ID: <Yt8oK1gUojEbO0WI@yury-laptop>
-References: <20220723214537.2054208-1-yury.norov@gmail.com>
- <20220723214537.2054208-2-yury.norov@gmail.com>
- <CAHp75VfOmN=cTEs7gbwxZ7W3hXjBo67N4AmHHiDfcVfFzHkMLA@mail.gmail.com>
- <Yt7CJj8r3eo05pKd@yury-laptop>
- <CAHp75VcGPQkY9ApsX2fi6sK5=3U=0vKbrHZZ3x___wUtgrFRSA@mail.gmail.com>
+        Mon, 25 Jul 2022 16:33:03 -0700 (PDT)
+Received: (nullmailer pid 2964216 invoked by uid 1000);
+        Mon, 25 Jul 2022 23:33:01 -0000
+Date:   Mon, 25 Jul 2022 17:33:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, rafal@milecki.pl,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        linux-kernel@vger.kernel.org, anand.gore@broadcom.com,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        f.fainelli@gmail.com, kursad.oney@broadcom.com,
+        krzysztof.kozlowski@linaro.org, joel.peshkin@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dan.beygelman@broadcom.com, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
+ description
+Message-ID: <20220725233301.GA2964152-robh@kernel.org>
+References: <20220725055402.6013-1-william.zhang@broadcom.com>
+ <20220725055402.6013-3-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHp75VcGPQkY9ApsX2fi6sK5=3U=0vKbrHZZ3x___wUtgrFRSA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220725055402.6013-3-william.zhang@broadcom.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 11:39:39PM +0200, Andy Shevchenko wrote:
-> On Mon, Jul 25, 2022 at 6:19 PM Yury Norov <yury.norov@gmail.com> wrote:
-> > On Mon, Jul 25, 2022 at 09:28:12AM +0200, Andy Shevchenko wrote:
-> > > On Sun, Jul 24, 2022 at 12:19 AM Yury Norov <yury.norov@gmail.com> wrote:
+On Sun, 24 Jul 2022 22:53:55 -0700, William Zhang wrote:
+> Append "brcm,bcmbca" to BCM4908 chip family compatible strings to
+> follow the convention of BCMBCA chip and help identifying chip family.
 > 
-> ...
+> Also add a bare bone generic 4908 board compatbile string to support any
+> 4908 based board. This is useful for board bring-up test and kernel test
+> with CPU and memory related change.
 > 
-> > > >  EXPORT_SYMBOL_GPL(pm_power_off);
-> > >
-> > > ^^^ (Note this and read below)
-> > >
-> > > ...
-> > >
-> > > > +EXPORT_SYMBOL(arch_get_random_seed_long);
-> > >
-> > > It can't be like this. Brief browsing of the callees shows that.
-> >
-> > Is my understanding correct that you're suggesting to make it GPL?
-> >
-> > ppc_md is exported with EXPORT_SYMBOL(), and the function is in header,
-> > so it's available for non-GPL code now. I don't want to change it.
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> Acked-by: Rafał Miłecki <rafal@milecki.pl>
 > 
-> The symbols your function calls are GPL. As far as I understand (not a
-> lawyer!) it logically one may not call GPL and pretend to be non-GPL.
+> ---
+> 
+> Changes in v2:
+> - Add Acked-by tag
+> - Insert the 4908 generic compatible string in alphabetical order
+> - Update commit message with more details of 4908 generic board dts
+> 
+>  Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-Can you explain what you mean in details?
-
-The function is:
-        static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
-        {
-               if (ppc_md.get_random_seed)
-                       return ppc_md.get_random_seed(v);
-
-               return false;
-        }
-
-ppc_md is non-GPL:
- 77 /* The main machine-dep calls structure
- 78  */
- 79 struct machdep_calls ppc_md;
- 80 EXPORT_SYMBOL(ppc_md);
-
-And get_random_seed is initialized in in arch/powerpc/platforms/powernv/rng.c
-with different functions that are static and not exported at all. 
-
-I don't understand where arch_get_random_seed_long calls GPL...
+Acked-by: Rob Herring <robh@kernel.org>

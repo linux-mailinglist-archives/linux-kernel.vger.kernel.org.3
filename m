@@ -2,245 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD4F57FA6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0A657FA71
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiGYHn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 03:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S231502AbiGYHrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbiGYHnZ (ORCPT
+        with ESMTP id S230270AbiGYHqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 03:43:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B82E12A9C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:43:24 -0700 (PDT)
+        Mon, 25 Jul 2022 03:46:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE52412619
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:46:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658735003;
+        s=mimecast20190719; t=1658735209;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eq4OL1zxJF2+2fp+Q22O19ixxH9CotH/xfhS3oI2/ds=;
-        b=d8STTu4sqUed/DVgPxhwQ/VzA0hgIfNph1s1+PCBVMZbdCIqrxQ12P6aaeYwFS9mCu069o
-        QcUUxLVJJ0JJA8LoD2wY0LEla/HIDV1ckTsKShwibYguj5KteZfTsnHn+Y8wMdtFQP1vaO
-        mo3dIbcf043ov26ABmpArsrMuaRa1vQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eMlcbANKfJle3FD3sp54e/O4tglNGsQHuCzPBZAyo74=;
+        b=M0b/RbMx7JydJShi0A0c/HF1o0eVs4B401m/mBRe7amfTgcdTrrrctJHzGcOI5TIuuuQzq
+        PutUyOTTRZObZVAmLpSRdARoLFmduQ1qkqA0/mtSBVHE7BzbjdFVppEhwIkeKt41uk9bLY
+        oSRqq925IXz4Kv4OXfpRzrmap6QOkZQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-670-R6c5YhgpM46FGHcKbbeB_A-1; Mon, 25 Jul 2022 03:43:21 -0400
-X-MC-Unique: R6c5YhgpM46FGHcKbbeB_A-1
-Received: by mail-wm1-f70.google.com with SMTP id h189-20020a1c21c6000000b003a2fdf9bd2aso5790954wmh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:43:21 -0700 (PDT)
+ us-mta-589-zudWaJhpOeGcI6ka-egWfg-1; Mon, 25 Jul 2022 03:46:48 -0400
+X-MC-Unique: zudWaJhpOeGcI6ka-egWfg-1
+Received: by mail-wm1-f72.google.com with SMTP id n19-20020a05600c3b9300b003a314062cf4so5992351wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:46:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eq4OL1zxJF2+2fp+Q22O19ixxH9CotH/xfhS3oI2/ds=;
-        b=S/O9WOJd4VLZScqaqECcfFH22f/5sqq3Ho62FhxO8QSmlV+4aNPy+Tu3Oz3Di8nwRf
-         WNzZnPY0jL9RAxdoWxtJjkF668iY5iEwx8C6tuIRkqjh18XHSYRYTAqVFK6tqKyL5Hug
-         fVH/7VPwL0OE+QbB1d/IDDd3/KKyU0ibkTwD3dydiqechE8npzJkBK+ij++VCWwWqxsO
-         FEH4CbpDupfmbp1nNepY7FnmC0q86Wwe8G7EuFR/swLl4RG0XEwmz2PG3iYZjZxit01f
-         h+H5+rdMHL293ZW8DMujuwJdqbY4Ztn314jWPaI8udkCvinGv8vPYwCkZuzYodFzH251
-         A3RQ==
-X-Gm-Message-State: AJIora+yRCy91sdwJL2QaBIPAOqh0mxSGFuWcLlrXPN/q4iLDj7iaTQI
-        L4Cu7uhb1SUV19leeyJxI2vLyTV79voarSNaJbFdamOhoRKOP3YJKJm5Bo6rIXgaBwrkVS6PpJ4
-        XsXnTgbC/IxsXvP90jsa55vxxSKP03OLJ4miWOVzLu+RwH21FqmL9al1/bn5TVLXE9mQORisuLz
-        U=
-X-Received: by 2002:a05:6000:144d:b0:21d:8109:701d with SMTP id v13-20020a056000144d00b0021d8109701dmr6564245wrx.443.1658734998373;
-        Mon, 25 Jul 2022 00:43:18 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tBKBzTRxo9vQI/80qLdj5OZrt+z9DMgSEy+3bbSO1SZWvbh7cisads/gEd5kCIpmRjt1OStw==
-X-Received: by 2002:a05:6000:144d:b0:21d:8109:701d with SMTP id v13-20020a056000144d00b0021d8109701dmr6564214wrx.443.1658734997943;
-        Mon, 25 Jul 2022 00:43:17 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b003a2e42ae9a4sm16069031wmb.14.2022.07.25.00.43.16
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=eMlcbANKfJle3FD3sp54e/O4tglNGsQHuCzPBZAyo74=;
+        b=o28dyIA83t0rn8V2HKPbrJtmTcZnljh4kOoa7lxdo/pvu5YxrXqAHxOymbk6AU7bR8
+         cUllFEoL9Vr97xOQqUzYEcTg6fiyOQQVyrjYGV2dbyp2XYbNdyLkVEsitGdaDXaq79Bm
+         6XR+z28tp26eikw72ytpMM8wOwJuv/BTQ6+XcckjzTwBRNmHlMjjx0MwqloDaBlY3iKa
+         V8Dr0QaGc/Foc9u7/iti8lk1hsBpgYmPGkfOpO01c+o8phIUBmtu439idQJ6GvWtDWIZ
+         rIVKfZZE9sf5LQ1hZl80fvZ+Rq++yW3edukK/v9MFg/+gdvu4uMl/xivZ4ghnMcpr7jI
+         DUNw==
+X-Gm-Message-State: AJIora+1WkYXv2uB8r2/QlYHRMcKMeaGiQVwPfbQ8/CEelR4uG1VB0/U
+        oiK/RkCwe7289u/hHyilgRkHCzdKdc8/zipKhVcGW/EFiVRPL2Ekn6juNN8KzSRV8WfEGOIuT/g
+        KIVeH9yHpJUhkxEQfDylxkacw
+X-Received: by 2002:a05:6000:2a8:b0:21d:8c81:7eb0 with SMTP id l8-20020a05600002a800b0021d8c817eb0mr6637326wry.460.1658735206808;
+        Mon, 25 Jul 2022 00:46:46 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uGAeaP6zG5DACZXn3IdfwA62T9sMZ4jbNP6FGASI/iTgfCErmmuIHtpCle49XWZvsGwGlhNA==
+X-Received: by 2002:a05:6000:2a8:b0:21d:8c81:7eb0 with SMTP id l8-20020a05600002a800b0021d8c817eb0mr6637306wry.460.1658735206495;
+        Mon, 25 Jul 2022 00:46:46 -0700 (PDT)
+Received: from redhat.com ([2.55.46.46])
+        by smtp.gmail.com with ESMTPSA id d5-20020adff845000000b0021dd08ad8d7sm11473081wrq.46.2022.07.25.00.46.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 00:43:17 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v3] drm/msm: Make .remove and .shutdown HW shutdown consistent
-Date:   Mon, 25 Jul 2022 09:43:13 +0200
-Message-Id: <20220725074313.42172-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.37.1
+        Mon, 25 Jul 2022 00:46:45 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 03:46:42 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com
+Subject: Re: [PATCH V6] virtio-net: fix the race between refill work and close
+Message-ID: <20220725034545-mutt-send-email-mst@kernel.org>
+References: <20220725072159.3577-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220725072159.3577-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drivers' .remove and .shutdown callbacks are executed on different code
-paths. The former is called when a device is removed from the bus, while
-the latter is called at system shutdown time to quiesce the device.
+On Mon, Jul 25, 2022 at 03:21:59PM +0800, Jason Wang wrote:
+> We try using cancel_delayed_work_sync() to prevent the work from
+> enabling NAPI. This is insufficient since we don't disable the source
+> of the refill work scheduling. This means an NAPI poll callback after
+> cancel_delayed_work_sync() can schedule the refill work then can
+> re-enable the NAPI that leads to use-after-free [1].
+> 
+> Since the work can enable NAPI, we can't simply disable NAPI before
+> calling cancel_delayed_work_sync(). So fix this by introducing a
+> dedicated boolean to control whether or not the work could be
+> scheduled from NAPI.
+> 
+> [1]
+> ==================================================================
+> BUG: KASAN: use-after-free in refill_work+0x43/0xd4
+> Read of size 2 at addr ffff88810562c92e by task kworker/2:1/42
+> 
+> CPU: 2 PID: 42 Comm: kworker/2:1 Not tainted 5.19.0-rc1+ #480
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> Workqueue: events refill_work
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x34/0x44
+>  print_report.cold+0xbb/0x6ac
+>  ? _printk+0xad/0xde
+>  ? refill_work+0x43/0xd4
+>  kasan_report+0xa8/0x130
+>  ? refill_work+0x43/0xd4
+>  refill_work+0x43/0xd4
+>  process_one_work+0x43d/0x780
+>  worker_thread+0x2a0/0x6f0
+>  ? process_one_work+0x780/0x780
+>  kthread+0x167/0x1a0
+>  ? kthread_exit+0x50/0x50
+>  ret_from_fork+0x22/0x30
+>  </TASK>
+> ...
+> 
+> Fixes: b2baed69e605c ("virtio_net: set/cancel work on ndo_open/ndo_stop")
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
-This means that some overlap exists between the two, because both have to
-take care of properly shutting down the hardware. But currently the logic
-used in these two callbacks isn't consistent in msm drivers, which could
-lead to kernel panic.
+That's very clean, thanks!
 
-For example, on .remove the component is deleted and its .unbind callback
-leads to the hardware being shutdown but only if the DRM device has been
-marked as registered.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-That check doesn't exist in the .shutdown logic and this can lead to the
-driver calling drm_atomic_helper_shutdown() for a DRM device that hasn't
-been properly initialized.
 
-A situation like this can happen if drivers for expected sub-devices fail
-to probe, since the .bind callback will never be executed. If that is the
-case, drm_atomic_helper_shutdown() will attempt to take mutexes that are
-only initialized if drm_mode_config_init() is called during a device bind.
 
-This bug was attempted to be fixed in commit 623f279c7781 ("drm/msm: fix
-shutdown hook in case GPU components failed to bind"), but unfortunately
-it still happens in some cases as the one mentioned above, i.e:
-
-[  169.495897] systemd-shutdown[1]: Powering off.
-[  169.500466] kvm: exiting hardware virtualization
-[  169.554787] platform wifi-firmware.0: Removing from iommu group 12
-[  169.610238] platform video-firmware.0: Removing from iommu group 10
-[  169.682164] ------------[ cut here ]------------
-[  169.686909] WARNING: CPU: 6 PID: 1 at drivers/gpu/drm/drm_modeset_lock.c:317 drm_modeset_lock_all_ctx+0x3c4/0x3d0
-...
-[  169.775691] Hardware name: Google CoachZ (rev3+) (DT)
-[  169.780874] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  169.788021] pc : drm_modeset_lock_all_ctx+0x3c4/0x3d0
-[  169.793205] lr : drm_modeset_lock_all_ctx+0x48/0x3d0
-[  169.798299] sp : ffff80000805bb80
-[  169.801701] x29: ffff80000805bb80 x28: ffff327c00128000 x27: 0000000000000000
-[  169.809025] x26: 0000000000000000 x25: 0000000000000001 x24: ffffc95d820ec030
-[  169.816349] x23: ffff327c00bbd090 x22: ffffc95d8215eca0 x21: ffff327c039c5800
-[  169.823674] x20: ffff327c039c5988 x19: ffff80000805bbe8 x18: 0000000000000034
-[  169.830998] x17: 000000040044ffff x16: ffffc95d80cac920 x15: 0000000000000000
-[  169.838322] x14: 0000000000000315 x13: 0000000000000315 x12: 0000000000000000
-[  169.845646] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-[  169.852971] x8 : ffff80000805bc28 x7 : 0000000000000000 x6 : 0000000000000000
-[  169.860295] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-[  169.867619] x2 : ffff327c00128000 x1 : 0000000000000000 x0 : ffff327c039c59b0
-[  169.874944] Call trace:
-[  169.877467]  drm_modeset_lock_all_ctx+0x3c4/0x3d0
-[  169.882297]  drm_atomic_helper_shutdown+0x70/0x134
-[  169.887217]  msm_drv_shutdown+0x30/0x40
-[  169.891159]  platform_shutdown+0x28/0x40
-[  169.895191]  device_shutdown+0x148/0x350
-[  169.899221]  kernel_power_off+0x38/0x80
-[  169.903163]  __do_sys_reboot+0x288/0x2c0
-[  169.907192]  __arm64_sys_reboot+0x28/0x34
-[  169.911309]  invoke_syscall+0x48/0x114
-[  169.915162]  el0_svc_common.constprop.0+0x44/0xec
-[  169.919992]  do_el0_svc+0x2c/0xc0
-[  169.923394]  el0_svc+0x2c/0x84
-[  169.926535]  el0t_64_sync_handler+0x11c/0x150
-[  169.931013]  el0t_64_sync+0x18c/0x190
-[  169.934777] ---[ end trace 0000000000000000 ]---
-[  169.939557] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000018
-[  169.948574] Mem abort info:
-[  169.951452]   ESR = 0x0000000096000004
-[  169.955307]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  169.960765]   SET = 0, FnV = 0
-[  169.963901]   EA = 0, S1PTW = 0
-[  169.967127]   FSC = 0x04: level 0 translation fault
-[  169.972136] Data abort info:
-[  169.975093]   ISV = 0, ISS = 0x00000004
-[  169.979037]   CM = 0, WnR = 0
-[  169.982083] user pgtable: 4k pages, 48-bit VAs, pgdp=000000010eab1000
-[  169.988697] [0000000000000018] pgd=0000000000000000, p4d=0000000000000000
-[  169.995669] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-...
-[  170.079614] Hardware name: Google CoachZ (rev3+) (DT)
-[  170.084801] pstate: a0400009 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  170.091941] pc : ww_mutex_lock+0x28/0x32c
-[  170.096064] lr : drm_modeset_lock_all_ctx+0x1b0/0x3d0
-[  170.101254] sp : ffff80000805bb50
-[  170.104658] x29: ffff80000805bb50 x28: ffff327c00128000 x27: 0000000000000000
-[  170.111977] x26: 0000000000000000 x25: 0000000000000001 x24: 0000000000000018
-[  170.119296] x23: ffff80000805bc10 x22: ffff327c039c5ad8 x21: ffff327c039c5800
-[  170.126615] x20: ffff80000805bbe8 x19: 0000000000000018 x18: 0000000000000034
-[  170.133933] x17: 000000040044ffff x16: ffffc95d80cac920 x15: 0000000000000000
-[  170.141252] x14: 0000000000000315 x13: 0000000000000315 x12: 0000000000000000
-[  170.148571] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-[  170.155890] x8 : ffff80000805bc28 x7 : 0000000000000000 x6 : 0000000000000000
-[  170.163209] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-[  170.170528] x2 : ffff327c00128000 x1 : 0000000000000000 x0 : 0000000000000018
-[  170.177847] Call trace:
-[  170.180364]  ww_mutex_lock+0x28/0x32c
-[  170.184127]  drm_modeset_lock_all_ctx+0x1b0/0x3d0
-[  170.188957]  drm_atomic_helper_shutdown+0x70/0x134
-[  170.193876]  msm_drv_shutdown+0x30/0x40
-[  170.197820]  platform_shutdown+0x28/0x40
-[  170.201854]  device_shutdown+0x148/0x350
-[  170.205888]  kernel_power_off+0x38/0x80
-[  170.209832]  __do_sys_reboot+0x288/0x2c0
-[  170.213866]  __arm64_sys_reboot+0x28/0x34
-[  170.217990]  invoke_syscall+0x48/0x114
-[  170.221843]  el0_svc_common.constprop.0+0x44/0xec
-[  170.226672]  do_el0_svc+0x2c/0xc0
-[  170.230079]  el0_svc+0x2c/0x84
-[  170.233215]  el0t_64_sync_handler+0x11c/0x150
-[  170.237686]  el0t_64_sync+0x18c/0x190
-[  170.241451] Code: aa0103f4 d503201f d2800001 aa0103e3 (c8e37c02)
-[  170.247704] ---[ end trace 0000000000000000 ]---
-[  170.252457] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-[  170.260654] Kernel Offset: 0x495d77c00000 from 0xffff800008000000
-[  170.266910] PHYS_OFFSET: 0xffffcd8500000000
-[  170.271212] CPU features: 0x800,00c2a015,19801c82
-[  170.276042] Memory Limit: none
-[  170.279183] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-
-Fixes: 9d5cbf5fe46e ("drm/msm: add shutdown support for display platform_driver")
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
-
-Changes in v3:
-- Drop the msm_shutdown_hw() wrapper and just call drm_atomic_helper_shutdown()
-  in both callbacks (Dmitry Baryshkov).
-- Copy the comment in msm_drm_uninit() to msm_drv_shutdown() (Dmitry Baryshkov).
-
-Changes in v2:
-- Take the registered check out of the msm_shutdown_hw() and make callers to check instead.
-- Make msm_shutdown_hw() an inline function.
-- Add a Fixes: tag.
-
- drivers/gpu/drm/msm/msm_drv.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 1ed4cd09dbf8..1333fea57713 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -1242,10 +1242,15 @@ void msm_drv_shutdown(struct platform_device *pdev)
- 	struct msm_drm_private *priv = platform_get_drvdata(pdev);
- 	struct drm_device *drm = priv ? priv->dev : NULL;
- 
--	if (!priv || !priv->kms)
--		return;
--
--	drm_atomic_helper_shutdown(drm);
-+	/*
-+	 * Shutdown the hw if we're far enough along where things might be on.
-+	 * If we run this too early, we'll end up panicking in any variety of
-+	 * places. Since we don't register the drm device until late in
-+	 * msm_drm_init, drm_dev->registered is used as an indicator that the
-+	 * shutdown will be successful.
-+	 */
-+	if (drm && drm->registered)
-+		drm_atomic_helper_shutdown(drm);
- }
- 
- static struct platform_driver msm_platform_driver = {
--- 
-2.37.1
+> ---
+>  drivers/net/virtio_net.c | 37 ++++++++++++++++++++++++++++++++++---
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 356cf8dd4164..ec8e1b3108c3 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -242,9 +242,15 @@ struct virtnet_info {
+>  	/* Packet virtio header size */
+>  	u8 hdr_len;
+>  
+> -	/* Work struct for refilling if we run low on memory. */
+> +	/* Work struct for delayed refilling if we run low on memory. */
+>  	struct delayed_work refill;
+>  
+> +	/* Is delayed refill enabled? */
+> +	bool refill_enabled;
+> +
+> +	/* The lock to synchronize the access to refill_enabled */
+> +	spinlock_t refill_lock;
+> +
+>  	/* Work struct for config space updates */
+>  	struct work_struct config_work;
+>  
+> @@ -348,6 +354,20 @@ static struct page *get_a_page(struct receive_queue *rq, gfp_t gfp_mask)
+>  	return p;
+>  }
+>  
+> +static void enable_delayed_refill(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->refill_enabled = true;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+> +static void disable_delayed_refill(struct virtnet_info *vi)
+> +{
+> +	spin_lock_bh(&vi->refill_lock);
+> +	vi->refill_enabled = false;
+> +	spin_unlock_bh(&vi->refill_lock);
+> +}
+> +
+>  static void virtqueue_napi_schedule(struct napi_struct *napi,
+>  				    struct virtqueue *vq)
+>  {
+> @@ -1527,8 +1547,12 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
+>  	}
+>  
+>  	if (rq->vq->num_free > min((unsigned int)budget, virtqueue_get_vring_size(rq->vq)) / 2) {
+> -		if (!try_fill_recv(vi, rq, GFP_ATOMIC))
+> -			schedule_delayed_work(&vi->refill, 0);
+> +		if (!try_fill_recv(vi, rq, GFP_ATOMIC)) {
+> +			spin_lock(&vi->refill_lock);
+> +			if (vi->refill_enabled)
+> +				schedule_delayed_work(&vi->refill, 0);
+> +			spin_unlock(&vi->refill_lock);
+> +		}
+>  	}
+>  
+>  	u64_stats_update_begin(&rq->stats.syncp);
+> @@ -1651,6 +1675,8 @@ static int virtnet_open(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i, err;
+>  
+> +	enable_delayed_refill(vi);
+> +
+>  	for (i = 0; i < vi->max_queue_pairs; i++) {
+>  		if (i < vi->curr_queue_pairs)
+>  			/* Make sure we have some buffers: if oom use wq. */
+> @@ -2033,6 +2059,8 @@ static int virtnet_close(struct net_device *dev)
+>  	struct virtnet_info *vi = netdev_priv(dev);
+>  	int i;
+>  
+> +	/* Make sure NAPI doesn't schedule refill work */
+> +	disable_delayed_refill(vi);
+>  	/* Make sure refill_work doesn't re-enable napi! */
+>  	cancel_delayed_work_sync(&vi->refill);
+>  
+> @@ -2792,6 +2820,8 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+>  
+>  	virtio_device_ready(vdev);
+>  
+> +	enable_delayed_refill(vi);
+> +
+>  	if (netif_running(vi->dev)) {
+>  		err = virtnet_open(vi->dev);
+>  		if (err)
+> @@ -3535,6 +3565,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	vdev->priv = vi;
+>  
+>  	INIT_WORK(&vi->config_work, virtnet_config_changed_work);
+> +	spin_lock_init(&vi->refill_lock);
+>  
+>  	/* If we can receive ANY GSO packets, we must allocate large ones. */
+>  	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
+> -- 
+> 2.25.1
 

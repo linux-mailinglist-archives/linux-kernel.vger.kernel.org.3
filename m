@@ -2,190 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53B257F8DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 06:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DA657F8DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 06:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbiGYEfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 00:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S231318AbiGYEmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 00:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiGYEfC (ORCPT
+        with ESMTP id S229633AbiGYEl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 00:35:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B36DDF03
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 21:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658723701; x=1690259701;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I2SLO4dCpAcfHZlc7mOrl4GrpsEMOZ+vdDC3yry863o=;
-  b=dSk9LuZW9xtMsog/u8SKxNr7DtsIsFi+hvMGVLCv/7ctXVgHsAA6wIfB
-   sIsdnJh0gjooGqTfJiYCriah1mAk+ktnero2rWizdsWErTD3KHIXkTL37
-   fipdVoNL4aBloPqlNoe2oefjw199HUEs7mUiiW3qiXxi7J2EpancpmPE3
-   Gd9wfRI44+x/FMlA1ZqwZcmcSsRgNdBMTOeWAKTs7mjDFvvKbWvFrJg88
-   hV5M4F5/oZrUZ0s9fMQOdJg1jy9R1J1SzFkuDJJbhxGrlpPZaOoTbNDzb
-   F3xo6KM5BoncenhmsO9TPAF/u7ZdMPSm4xilicoLrCl2aN6PiNVc9iRVW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288791062"
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="288791062"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2022 21:35:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,191,1654585200"; 
-   d="scan'208";a="741696633"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jul 2022 21:34:59 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFpo2-0004jV-2b;
-        Mon, 25 Jul 2022 04:34:58 +0000
-Date:   Mon, 25 Jul 2022 12:34:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [intel-tdx:guest-attest 4/6] ebda.c:(.text+0x0): multiple definition
- of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0):
- first defined here
-Message-ID: <202207251242.ga7J0oaX-lkp@intel.com>
+        Mon, 25 Jul 2022 00:41:59 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2042.outbound.protection.outlook.com [40.107.95.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75333DFA9;
+        Sun, 24 Jul 2022 21:41:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mxTVYFpiXH/vVwJLGCnEsbQczVtDBzVod2ttWl7rG4NsHR5iul34EwQY7+BGaNq5APx5DSBEQJpIrxLBQ/peOTqIzHFQ5BtougqvJENUmFN3HeziC8MXXcqpc6ew7/hJRCmUHlzfoeTp8nFjhCfWT/NV0fC47Ze6f4ItIdaRQljweWlmgB5/JpOpu80IaCu1MfwhW+2sFTnuCoTSK1SYpVDq44dH+tf+bVnF0eGwz0SG9oo89JPa8nVsqipktXw3zN/yqWH3QRobbDU0LfUYvqyf/0T+G08nxCINgpv+HXbYLBtEWx0lL4vr1dKnBzhmiHhpdp0usnIeI3Cj8oJq4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a4FuuLu3AP0KYy8ax7GqTJMWLHqkhvxHRbjAuM3FR88=;
+ b=in1trQYc9jn3SHezN3lNFruhYx6xMjWTlDGR9tyhDUxriThpomBkWpvqSymCvxrYyKJkWU75lLMBheiLnklVeGuqVxIbOM9d/ghX5yCfNGaZyItTZRuJo0D9A5gdfz1FNjRivx+fz/pB6PD2dRBVDzdupV8kFiwBIiYzXE7S6QHDFIH0dwwdcDhP2Xw78+Ozv9yVjKV+Q35p4KDJ0a0rs9iuxmJVXOsL538K9Wpoaa4eiCFlnSgsi9H86MJdg8zXx+J9yHrW01APzaHJaAGraAumG4tNm/wVu1/VOCz6d0CZ+WQjnStxU5sTDWOf1ZrV06XIaO4nmQBve4dlgbGviQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a4FuuLu3AP0KYy8ax7GqTJMWLHqkhvxHRbjAuM3FR88=;
+ b=rZlodXheoWGu/xFQqbiv1fDmFPid9Kk2ARJbad4aQLLWU2dbqcCGG1BYEUf6VUsJ3YfVyWd/J9Nr24hexj+jROxA8w031qH13pmYaBITOpoKTqIT7EqYCJMN7VM231xOSUlVlVn2f7a7ya8+M5PbhKIYTp7cVJ7ww4ac0ebKz5c=
+Received: from MW3PR12MB4411.namprd12.prod.outlook.com (2603:10b6:303:5e::24)
+ by CY4PR1201MB0071.namprd12.prod.outlook.com (2603:10b6:910:1f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.19; Mon, 25 Jul
+ 2022 04:41:55 +0000
+Received: from MW3PR12MB4411.namprd12.prod.outlook.com
+ ([fe80::ac68:8cd3:1191:f639]) by MW3PR12MB4411.namprd12.prod.outlook.com
+ ([fe80::ac68:8cd3:1191:f639%9]) with mapi id 15.20.5458.019; Mon, 25 Jul 2022
+ 04:41:54 +0000
+From:   "Gogada, Bharat Kumar" <bharat.kumar.gogada@amd.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "michals@xilinx.com" <michals@xilinx.com>
+Subject: RE: [PATCH v6 0/2] Add support for Xilinx Versal CPM5 Root Port
+Thread-Topic: [PATCH v6 0/2] Add support for Xilinx Versal CPM5 Root Port
+Thread-Index: AQHYkF3x8YswtN9DtEuLQU3s9u3ckq2K4JmAgAPASLA=
+Date:   Mon, 25 Jul 2022 04:41:54 +0000
+Message-ID: <MW3PR12MB4411E1D8389270BDFFB6DC60BA959@MW3PR12MB4411.namprd12.prod.outlook.com>
+References: <20220705105646.16980-1-bharat.kumar.gogada@xilinx.com>
+ <20220722192431.GA1923712@bhelgaas>
+In-Reply-To: <20220722192431.GA1923712@bhelgaas>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 31939a8c-5fba-4a34-795a-08da6df80021
+x-ms-traffictypediagnostic: CY4PR1201MB0071:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9doDWVCmN8smEPos4JYeW/fYEI7zaRG+Y/EJhsFizI5dHWaVZaoP/6MrDjlRbkAPNcMMebchTWg90oL+0P4au5yOqzosXVPInqNrLJEQQICcKxa43TU21kPg40NBl3MfgrPlXxOeCqB/lWn4m75wC48x7UfkV5h2iPYWnXM7sk0nsPl8rf8lJpJTQPHRHoFM70l9DMuDgwOR00ab7tdyL/zOeor4m/2kM/0/b3HdM5BiGO7qIjJyryeLr0IABJiClfnM9JKEM0EZoSea1t2DBXH/lqhCCFhQ33XbfAccgLIGjvultiHmXJLp4mm3+Nyi40hEOLEZ762O+/0qE/5AutTN2V2J9PyVOuK6CXiwtVYaKOrzzQsqJ2d72vBusMqMYo+c44GIrT7IhleAgzOsLs6Yq4keRTynPNxEer3rI/eulRuDSrKy8vn3Z2iIIPn5hjsPNt7rBxVE9Ja0K6rlA2WCGeMwiTHP/3joC7TPiN+Sfr4qDCuDsUnHGvXjhffOCjMqSiwo+QYTKmSprWMM9tgmOb0/Pv0awRYG8SnAv1/vOc2CgOYcWbQ09OjHFeetdg/JdXMxJnkNhmPz2x1MSupUO/roZnXaucBzQLj64sL4Odj6rgebZYb37bZzCeCK/hOhzaqdN++D7ePUeqbNLsMwJSbANzB3knRIzwRzMzQYjpoCVVpa2MuxSe1t3OU75miKbPkvHb7bOrMU0HGn56QZD016/m233a99GBOb403qquPBnEDpglYTNcqWfKZmPOTKWSdI4uYIhnmExyz4dGmGWLuI8phHq8q2SnmqytviAb1iYNNNUFBmxn8cGl/R
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4411.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(122000001)(186003)(55016003)(38070700005)(38100700002)(66946007)(76116006)(64756008)(4326008)(66446008)(8676002)(66556008)(316002)(66476007)(110136005)(54906003)(6506007)(7696005)(55236004)(71200400001)(33656002)(41300700001)(2906002)(86362001)(9686003)(26005)(107886003)(83380400001)(5660300002)(52536014)(478600001)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OzAcrg3j71nNW04W44lSPeCvvA87fx6dUJaccRJNUQQc7VA3FLyFSMb32siV?=
+ =?us-ascii?Q?v/hxPzhnLD2pQjFZ8owhIZ7JLzOX9Ejvt0T0KepvQK0k/J7zvtiBpBFH+F9X?=
+ =?us-ascii?Q?zup4p3r9WxIdnc+nE9IFqcLeGzJsyzak4lsLnHzxS7SwGgK1mvcGhCOsfwSl?=
+ =?us-ascii?Q?amFWJ3y9LNUWok3h/b5r5U4G1LsgJ98yFBUbBv+OcuNdLNLSdEqWtp24ulyu?=
+ =?us-ascii?Q?YqW3Xako9rqc/m3dhzitgznIEQfI2kkm9RrLo7KYrL1n4HETWz0HfMnu2owl?=
+ =?us-ascii?Q?txQTEeJopgUv0sXIr/0lBEEzLTHxdfl3hussc1lExJQYer4TzkJ9QPuiSEPH?=
+ =?us-ascii?Q?VxzhUexCxWd2Yl64El+anfQdWyZ28SCCZAsROPHTaqIiU9MGfuEQe6h2ItEs?=
+ =?us-ascii?Q?G0H1KmuxaELjut3uH9Y2/wXAf95vNtmZotyqjvVfOPUuTT7heA+z1zFpSknt?=
+ =?us-ascii?Q?hy5ePdMzQLoUUvLTVexFtOJtZPkKfhimLihbkGSKGTwpVPTUYSl3HDWrF37S?=
+ =?us-ascii?Q?qVfLTtp36rTALYSBkJ1el8JyZXaAiF/lDEqqKbgKEB19Y15yObTzrwYbzXU8?=
+ =?us-ascii?Q?AI6rdk+IO/9L07Pn9ijoyMy/uGAx30w2wr2/aBdWvpTrbXarRt79Ba+aVF0G?=
+ =?us-ascii?Q?gxwXTfwDJ9xYrRKEV83hP1BjxDwJoekAYCoLh0PccwV1hjWTqj/DdyU5+e2/?=
+ =?us-ascii?Q?JUqf7uJeFjgiYrMN2u+pzCzhsXnbwNIZ94qMbfjFrLJLELpqM2ZWoVOws5lZ?=
+ =?us-ascii?Q?bzmcMLhc1d/5cnM2Ez/UmD/5awhbC6uO/Baeuo0Lx2QPo7uKukO7zkvdf+bP?=
+ =?us-ascii?Q?MHKmkhA3m0078Lckl1hU9OuHFkWL1oGe6Oud4+q4Wm83NPQY2xIFzNr/f91a?=
+ =?us-ascii?Q?y13hW5oM8nn9zXxm+1JjFvuxptT1dON61SwD5ylwTSjTLMROjrYAxbgJglRu?=
+ =?us-ascii?Q?xS0oCpTr/xXeiaE3uJ2TN4aJzGeuOb/Kr+T++OMS5V93+Z1RPk8wCBa5krc7?=
+ =?us-ascii?Q?VZbWfForhLKv9IdAiBj32JdTffWvpU2NplYWEO73z0QZp2xh0C5qN1KsluCK?=
+ =?us-ascii?Q?aAsnVDfc7+Md0STrH8RKqR9v2lzEFIxsL5JHJNoO7KNCVzYCZlk2nt+IryXy?=
+ =?us-ascii?Q?jZgfsrybsLdUW2b13eJ9G3kMfp+BzIqvedBwZaRGKeRgZGTrLiDVyNnOaPJb?=
+ =?us-ascii?Q?sjalFTtjiQEaH8t1gi94UKcx5NOVdHekoIfvrcs+R0TFW5kEieATYDq2+8So?=
+ =?us-ascii?Q?SUWSCtMqrifdV5WoIuf0SqjvpR2Zr4wIkbMbfxXpi5D7GChDV77ZpvCgkzTD?=
+ =?us-ascii?Q?rGOuxYnT+34bZY+3nfmX3Lww6LUNnEC1fS2pLrpClScqHmo1mVLMD+mwkv/+?=
+ =?us-ascii?Q?VM5AK9DjlSj7+HN2FNQM/Uc5Y0Xt7GPuzm3fqicmK3XpRMHQ8js2mxZaCt20?=
+ =?us-ascii?Q?NlMadgP6f3Tja7AJf6osMmRnOYyb62bXP73MOAkDwGxpz4v/GyKt+7aD0t7j?=
+ =?us-ascii?Q?pzEuQawE2JJJT7H2yx55Lb68gZfinbC2LFhfLYVbPppGWZzLomeYrQoGxaMe?=
+ =?us-ascii?Q?Y7irZEcRl5V4bh5OP5o=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4411.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31939a8c-5fba-4a34-795a-08da6df80021
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 04:41:54.7701
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IIxXSblRABBurU5gu6yyi3/lAXEeFj9PiX8RBgoNA4//p7Z/YFdn/lkz2JEKkvanf8TuMie41joGXWz2JA8rrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0071
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-attest
-head:   79bafa5b3cf70766a5a52e4338aa3ed9bc94205f
-commit: e0fa61c75620a8b0c0eaf08cefd4023afcf78c8d [4/6] x86/coco: Add cc_decrypted_alloc/free() interfaces
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220725/202207251242.ga7J0oaX-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/e0fa61c75620a8b0c0eaf08cefd4023afcf78c8d
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-attest
-        git checkout e0fa61c75620a8b0c0eaf08cefd4023afcf78c8d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Thanks Bjorn.=20
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld: arch/x86/kernel/ebda.o: in function `cc_decrypted_alloc':
->> ebda.c:(.text+0x0): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/kernel/ebda.o: in function `cc_decrypted_free':
->> ebda.c:(.text+0x3): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: init/main.o: in function `cc_decrypted_alloc':
-   main.c:(.text+0x794): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: init/main.o: in function `cc_decrypted_free':
-   main.c:(.text+0x79c): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: init/do_mounts.o: in function `cc_decrypted_alloc':
-   do_mounts.c:(.text+0x19d): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: init/do_mounts.o: in function `cc_decrypted_free':
-   do_mounts.c:(.text+0x1a5): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: init/do_mounts_initrd.o: in function `cc_decrypted_alloc':
-   do_mounts_initrd.c:(.text+0x0): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: init/do_mounts_initrd.o: in function `cc_decrypted_free':
-   do_mounts_initrd.c:(.text+0x8): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: init/initramfs.o: in function `cc_decrypted_alloc':
-   initramfs.c:(.text+0x55): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: init/initramfs.o: in function `cc_decrypted_free':
-   initramfs.c:(.text+0x5d): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: init/init_task.o: in function `cc_decrypted_alloc':
-   init_task.c:(.text+0x0): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: init/init_task.o: in function `cc_decrypted_free':
-   init_task.c:(.text+0x8): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/entry/syscall_64.o: in function `cc_decrypted_free':
-   syscall_64.c:(.text+0x3): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/entry/syscall_64.o: in function `cc_decrypted_alloc':
-   syscall_64.c:(.text+0x0): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/entry/common.o: in function `cc_decrypted_free':
-   common.c:(.text+0x3): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/entry/common.o: in function `cc_decrypted_alloc':
-   common.c:(.text+0x0): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/entry/vdso/vma.o: in function `cc_decrypted_alloc':
-   vma.c:(.text+0x2cc): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/entry/vdso/vma.o: in function `cc_decrypted_free':
-   vma.c:(.text+0x2cf): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/entry/vdso/extable.o: in function `cc_decrypted_alloc':
-   extable.c:(.text+0x0): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/entry/vdso/extable.o: in function `cc_decrypted_free':
-   extable.c:(.text+0x3): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/entry/vsyscall/vsyscall_64.o: in function `cc_decrypted_alloc':
-   vsyscall_64.c:(.text+0x318): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/entry/vsyscall/vsyscall_64.o: in function `cc_decrypted_free':
-   vsyscall_64.c:(.text+0x320): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/core.o: in function `cc_decrypted_alloc':
-   core.c:(.text+0x178e): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/core.o: in function `cc_decrypted_free':
-   core.c:(.text+0x1796): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/rapl.o: in function `cc_decrypted_alloc':
-   rapl.c:(.text+0x73a): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/rapl.o: in function `cc_decrypted_free':
-   rapl.c:(.text+0x742): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/amd/core.o: in function `cc_decrypted_alloc':
-   core.c:(.text+0x1243): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/amd/core.o: in function `cc_decrypted_free':
-   core.c:(.text+0x124b): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/amd/ibs.o: in function `cc_decrypted_alloc':
-   ibs.c:(.text+0x102e): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/amd/ibs.o: in function `cc_decrypted_free':
-   ibs.c:(.text+0x1036): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/msr.o: in function `cc_decrypted_alloc':
-   msr.c:(.text+0x37e): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/msr.o: in function `cc_decrypted_free':
-   msr.c:(.text+0x386): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/core.o: in function `cc_decrypted_alloc':
-   core.c:(.text+0x3286): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/core.o: in function `cc_decrypted_free':
-   core.c:(.text+0x328e): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/bts.o: in function `cc_decrypted_alloc':
-   bts.c:(.text+0xafd): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/bts.o: in function `cc_decrypted_free':
-   bts.c:(.text+0xb05): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/ds.o: in function `cc_decrypted_alloc':
-   ds.c:(.text+0x23c6): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/ds.o: in function `cc_decrypted_free':
-   ds.c:(.text+0x23ce): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/knc.o: in function `cc_decrypted_alloc':
-   knc.c:(.text+0x43a): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/knc.o: in function `cc_decrypted_free':
-   knc.c:(.text+0x442): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/lbr.o: in function `cc_decrypted_alloc':
-   lbr.c:(.text+0xdcd): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/lbr.o: in function `cc_decrypted_free':
-   lbr.c:(.text+0xdd5): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/p4.o: in function `cc_decrypted_alloc':
-   p4.c:(.text+0xa94): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/p4.o: in function `cc_decrypted_free':
-   p4.c:(.text+0xa9c): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/p6.o: in function `cc_decrypted_alloc':
-   p6.c:(.text+0x232): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/p6.o: in function `cc_decrypted_free':
-   p6.c:(.text+0x23a): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/pt.o: in function `cc_decrypted_alloc':
-   pt.c:(.text+0x2321): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/pt.o: in function `cc_decrypted_free':
-   pt.c:(.text+0x2329): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/uncore.o: in function `cc_decrypted_alloc':
-   uncore.c:(.text+0x112c): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/uncore.o: in function `cc_decrypted_free':
-   uncore.c:(.text+0x1134): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-   ld: arch/x86/events/intel/uncore_nhmex.o: in function `cc_decrypted_alloc':
-   uncore_nhmex.c:(.text+0x1a2e): multiple definition of `cc_decrypted_alloc'; arch/x86/kernel/head64.o:head64.c:(.text+0x0): first defined here
-   ld: arch/x86/events/intel/uncore_nhmex.o: in function `cc_decrypted_free':
-   uncore_nhmex.c:(.text+0x1a36): multiple definition of `cc_decrypted_free'; arch/x86/kernel/head64.o:head64.c:(.text+0x3): first defined here
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> On Tue, Jul 05, 2022 at 04:26:44PM +0530, Bharat Kumar Gogada wrote:
+> > Xilinx Versal Premium series has CPM5 block which supports Root Port
+> > functioning at Gen5 speed.
+> >
+> > Xilinx Versal CPM5 has few changes with existing CPM block.
+> > - CPM5 has dedicated register space for control and status registers.
+> > - CPM5 legacy interrupt handling needs additional register bit
+> >   to enable and handle legacy interrupts.
+> >
+> > Changes in v6:
+> > - Added of_device_get_match_data to identify CPM version.
+> > - Used enum values to differentiate CPM version.
+> >
+> > Bharat Kumar Gogada (2):
+> >   dt-bindings: PCI: xilinx-cpm: Add Versal CPM5 Root Port
+> >   PCI: xilinx-cpm: Add support for Versal CPM5 Root Port
+> >
+> >  .../bindings/pci/xilinx-versal-cpm.yaml       | 38 ++++++++++-
+> >  drivers/pci/controller/pcie-xilinx-cpm.c      | 64 ++++++++++++++++++-
+> >  2 files changed, 98 insertions(+), 4 deletions(-)
+>=20
+> Applied to pci/ctrl/xilinx-cpm for v5.20, thanks!
+>=20
+> I tweaked the driver patch to test:
+>=20
+>   if (port->variant->version =3D=3D CPM5)
+>=20
+> instead of just:
+>=20
+>   if (port->variant->version)
+>=20
+> so it doesn't depend on the enum values.

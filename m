@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543FF57FDF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE4757FDFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbiGYKzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S234456AbiGYLBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiGYKzx (ORCPT
+        with ESMTP id S232406AbiGYLBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:55:53 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD6618E3A;
-        Mon, 25 Jul 2022 03:55:52 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id x24-20020a17090ab01800b001f21556cf48so14011409pjq.4;
-        Mon, 25 Jul 2022 03:55:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jizxdn4AeaM9vGiU9lrvZv7w74oicIoCysUCYbSOl84=;
-        b=kRkhrwK3DPW2t7fYXHm1e0ms1G76elOQhzsIn6/FQlpI88C1Kxp88jVAEDg6SkG089
-         hB4feSsHEliEyiZDMhv9sCvTaKG1U6NjuOYJaYzcXn7ECDiyui3kpazIQ42jcGb96OrY
-         9r9GkrVa9lqtOuuoS4coIfJF1iqGjp9dBfthZGIqHxQZYPTKnjkFRj15rwRqkzOnseOz
-         w6BCpaBe/1vvPafvoczJAk0xvVTLFmpUUg4+XeEV7T18UKbnWRDgARjMXTmf1uqum50l
-         eO36vwt1hrvXU/QwVMWPGJFK9i6dDHNpE8vuOeDV0jJY43SSP4SEffLyaHeDT6sMSdNO
-         tM7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jizxdn4AeaM9vGiU9lrvZv7w74oicIoCysUCYbSOl84=;
-        b=YXFg52RUfr2oSoZN4R8oKL+EkaynABbt1QKjImYfJZ1oX7YFtcUg6vjCJO5m9bboQs
-         V9ujW0419vRA5hVeNxa2GHrScW4mCSt3KntAgBolOxJQi1NLZ03CaP+Fjg3OhPAEplzg
-         Y5ZyqDT0r1IqidmiiCeTpAjGwH95tXWvSPb1YXqyMT0imoqSTXWL/exa/z3mQR1yOJJN
-         /J/yN6F4XUb6oP4I/qa2WWKDakbmMGF/RnPDKoC9a+mO6DbhYM2HbJcdnOmbRbbyjZDQ
-         lpAIux6qFGIfLsfJkja+Zi/8BDXwgf24ReJjY5BPPHQJRtMLc6L6VIWBRhKsnwre5SVQ
-         JATw==
-X-Gm-Message-State: AJIora9YQhFVmLJ1itTPc1VGdoD8tUp4QqUP3mzd8HPOkDnl2uy/CqiT
-        hHV3igRf/Q9aAoENta8//0eUhG/zQEc3cN4e2uk=
-X-Google-Smtp-Source: AGRyM1sJEIM//oT8Ms9EiN859p9vVGAsLNN9o+I83rqP2ZI9QAkpUq7tYiNLOs9YwSKBPn1HocP+qZEWe4/SmofzD7w=
-X-Received: by 2002:a17:902:d582:b0:16d:612c:2d6a with SMTP id
- k2-20020a170902d58200b0016d612c2d6amr8263669plh.168.1658746551759; Mon, 25
- Jul 2022 03:55:51 -0700 (PDT)
+        Mon, 25 Jul 2022 07:01:01 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C880E5FDB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658746860; x=1690282860;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mo9chgy0bi5uG+EZ6kmOhhKH/zG+YyE1Qh3F/VVxZYk=;
+  b=RaBW85fvCGiY/36kkxl0ZIgLwXov1+26FuA7087TOIdYxzNqTo/ZqWC2
+   RSEOkW+nW6xiITcDD7RerYkIJwhyRw8u+sMU71DrPhEIL2PYB7Xk6oSLS
+   b4nL/cPW8Vx2MKXcVIjIV6P+TX2xXmHoQGnO/Xf7QBl9DnESUuFDh1Ei7
+   FTkUIwfJnaEWZXa26RWKCvgo5uhDdNwg7FtsU1ujQXELTS8sDbQwdt2rq
+   IXnNirqOBPhx04B58cecoQnRXzn+vRoMySYikbXs6F3T2aLKUoil48P7R
+   E5UzaDxlS4OmFIOLdeXIwmeVDzk0yzXabf1gvF9MaaZAfp4lsK7ey9R79
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288429245"
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="288429245"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 04:00:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
+   d="scan'208";a="549949151"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jul 2022 04:00:16 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFvot-0004yf-34;
+        Mon, 25 Jul 2022 11:00:15 +0000
+Date:   Mon, 25 Jul 2022 18:59:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Felix Fietkau <nbd@nbd.name>
+Subject: drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c:262:17:
+ warning: taking address of packed member 'len' of class or structure 'tlv'
+ may result in an unaligned pointer value
+Message-ID: <202207251801.hLXIP9Rh-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220722215445.3548530-1-marcel@ziswiler.com>
-In-Reply-To: <20220722215445.3548530-1-marcel@ziswiler.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 25 Jul 2022 07:55:39 -0300
-Message-ID: <CAOMZO5CY5hg=AFdFTFdd4fC0XgEmkmKUPWcA_vCdP6MUHFmbdw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] ARM: arm64: dts/clk: imx8mm: indentation
- whitespace cleanup
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcel,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e0dccc3b76fb35bb257b4118367a883073d7390e
+commit: 25702d9c55dc5fda2ad9ad8de115e50dc7394ef9 mt76: connac: rely on le16_add_cpu in mt76_connac_mcu_add_nested_tlv
+date:   7 months ago
+config: arm-buildonly-randconfig-r003-20220724 (https://download.01.org/0day-ci/archive/20220725/202207251801.hLXIP9Rh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9e88cbcc403bdf82f29259ad60ff60a8fc4434a1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=25702d9c55dc5fda2ad9ad8de115e50dc7394ef9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 25702d9c55dc5fda2ad9ad8de115e50dc7394ef9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/
 
-On Fri, Jul 22, 2022 at 6:55 PM Marcel Ziswiler <marcel@ziswiler.com> wrote:
->
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
->
->
-> While synchronising them imx device trees with U-Boot I stumbled over
-> various checkpatch warnings. This series addresses those trivial
-> indentation and/or whitespace cleanups.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks for doing this cleanup:
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>> drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c:262:17: warning: taking address of packed member 'len' of class or structure 'tlv' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   le16_add_cpu(&sta_hdr->len, len);
+                                 ^~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +262 drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
+
+   242	
+   243	struct tlv *
+   244	mt76_connac_mcu_add_nested_tlv(struct sk_buff *skb, int tag, int len,
+   245				       void *sta_ntlv, void *sta_wtbl)
+   246	{
+   247		struct sta_ntlv_hdr *ntlv_hdr = sta_ntlv;
+   248		struct tlv *sta_hdr = sta_wtbl;
+   249		struct tlv *ptlv, tlv = {
+   250			.tag = cpu_to_le16(tag),
+   251			.len = cpu_to_le16(len),
+   252		};
+   253		u16 ntlv;
+   254	
+   255		ptlv = skb_put(skb, len);
+   256		memcpy(ptlv, &tlv, sizeof(tlv));
+   257	
+   258		ntlv = le16_to_cpu(ntlv_hdr->tlv_num);
+   259		ntlv_hdr->tlv_num = cpu_to_le16(ntlv + 1);
+   260	
+   261		if (sta_hdr)
+ > 262			le16_add_cpu(&sta_hdr->len, len);
+   263	
+   264		return ptlv;
+   265	}
+   266	EXPORT_SYMBOL_GPL(mt76_connac_mcu_add_nested_tlv);
+   267	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

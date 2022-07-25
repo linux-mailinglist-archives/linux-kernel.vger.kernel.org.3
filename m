@@ -2,296 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8153A57FB72
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E5357FB73
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234021AbiGYIfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S234041AbiGYIfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiGYIf2 (ORCPT
+        with ESMTP id S234038AbiGYIfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:35:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A82813F11
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658738127; x=1690274127;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=UDMDJz3MwFoJPekzCYzBqOFV43jJdG0572fd8ItnWRA=;
-  b=OyMzlEa0xA68Mnbn09QHadykEdrP55+ExkgD6pO07q3Wan8/6RVXkFnN
-   c+1bUow5G2RAvCsnOcjjPiRz/2jsKotuYnqlD9JgIlvTrRa6DV3K0hAvt
-   Tk0lUfcTbXBVNIp4msNYHkjioPxd2DNkCMwCEWCm+C46zc+vbkdXH8K/6
-   uU8zndkOY1iZ9hGDG6NRmK0ou4zBX47xu2lIzwXCQoubp0LH/Xxk3qVVe
-   It8ZL4LWJKSjd5thRLQcJ0ur3bItd5abnlAgV/Kbaj15m2yhIbVhq5eMz
-   islFDHOmlEkY48hM814VJbwuIotB3gzLVTjuTVcGTAu6AhQLrPz8N8rN5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288404740"
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="288404740"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 01:35:27 -0700
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="574963532"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 01:35:23 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v10 4/8] mm/demotion/dax/kmem: Set node's performance
- level to MEMTIER_PERF_LEVEL_PMEM
-References: <20220720025920.1373558-1-aneesh.kumar@linux.ibm.com>
-        <20220720025920.1373558-5-aneesh.kumar@linux.ibm.com>
-        <874jz5zoi9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <adbf4fc8-80a6-3160-3338-ea4e8739cb64@linux.ibm.com>
-Date:   Mon, 25 Jul 2022 16:35:10 +0800
-In-Reply-To: <adbf4fc8-80a6-3160-3338-ea4e8739cb64@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Mon, 25 Jul 2022 12:18:39 +0530")
-Message-ID: <87mtcxy4ht.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 25 Jul 2022 04:35:36 -0400
+Received: from out29-217.mail.aliyun.com (out29-217.mail.aliyun.com [115.124.29.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78EC14004
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:35:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07437|-1;BR=01201311R231S26rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.118326-0.0259815-0.855693;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.Od487LD_1658738131;
+Received: from SunxiBot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.Od487LD_1658738131)
+          by smtp.aliyun-inc.com;
+          Mon, 25 Jul 2022 16:35:32 +0800
+From:   Victor Hassan <victor@allwinnertech.com>
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev,
+        allwinner-opensource-support@allwinnertech.com
+Subject: [PATCH 1/2] clocksource: sun4i: Fix the bug that tick_resume stucks
+Date:   Mon, 25 Jul 2022 16:35:21 +0800
+Message-Id: <20220725083522.82931-1-victor@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+Currently syscore_resume() will stuck on tick_resume().
+Fix this by changing  `.tick_resume` from
+sun4i_clkevt_shutdown() to a new function sun4i_tick_resume().
 
-> On 7/25/22 12:07 PM, Huang, Ying wrote:
->> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->> 
->>> By default, all nodes are assigned to the default memory tier which
->>> is the memory tier designated for nodes with DRAM
->>>
->>> Set dax kmem device node's tier to slower memory tier by assigning
->>> performance level to MEMTIER_PERF_LEVEL_PMEM. PMEM tier
->>> appears below the default memory tier in demotion order.
->>>
->>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->>> ---
->>>  arch/powerpc/platforms/pseries/papr_scm.c | 41 ++++++++++++++++++++---
->>>  drivers/acpi/nfit/core.c                  | 41 ++++++++++++++++++++++-
->>>  2 files changed, 76 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/arch/powerpc/platforms/pseries/papr_scm.c b/arch/powerpc/platforms/pseries/papr_scm.c
->>> index 82cae08976bc..3b6164418d6f 100644
->>> --- a/arch/powerpc/platforms/pseries/papr_scm.c
->>> +++ b/arch/powerpc/platforms/pseries/papr_scm.c
->>> @@ -14,6 +14,8 @@
->>>  #include <linux/delay.h>
->>>  #include <linux/seq_buf.h>
->>>  #include <linux/nd.h>
->>> +#include <linux/memory.h>
->>> +#include <linux/memory-tiers.h>
->>>  
->>>  #include <asm/plpar_wrappers.h>
->>>  #include <asm/papr_pdsm.h>
->>> @@ -98,6 +100,7 @@ struct papr_scm_priv {
->>>  	bool hcall_flush_required;
->>>  
->>>  	uint64_t bound_addr;
->>> +	int target_node;
->>>  
->>>  	struct nvdimm_bus_descriptor bus_desc;
->>>  	struct nvdimm_bus *bus;
->>> @@ -1278,6 +1281,7 @@ static int papr_scm_nvdimm_init(struct papr_scm_priv *p)
->>>  	p->bus_desc.module = THIS_MODULE;
->>>  	p->bus_desc.of_node = p->pdev->dev.of_node;
->>>  	p->bus_desc.provider_name = kstrdup(p->pdev->name, GFP_KERNEL);
->>> +	p->target_node = dev_to_node(&p->pdev->dev);
->>>  
->>>  	/* Set the dimm command family mask to accept PDSMs */
->>>  	set_bit(NVDIMM_FAMILY_PAPR, &p->bus_desc.dimm_family_mask);
->>> @@ -1322,7 +1326,7 @@ static int papr_scm_nvdimm_init(struct papr_scm_priv *p)
->>>  	mapping.size = p->blocks * p->block_size; // XXX: potential overflow?
->>>  
->>>  	memset(&ndr_desc, 0, sizeof(ndr_desc));
->>> -	target_nid = dev_to_node(&p->pdev->dev);
->>> +	target_nid = p->target_node;
->>>  	online_nid = numa_map_to_online_node(target_nid);
->>>  	ndr_desc.numa_node = online_nid;
->>>  	ndr_desc.target_node = target_nid;
->>> @@ -1582,15 +1586,42 @@ static struct platform_driver papr_scm_driver = {
->>>  	},
->>>  };
->>>  
->>> +static int papr_scm_callback(struct notifier_block *self,
->>> +			     unsigned long action, void *arg)
->>> +{
->>> +	struct memory_notify *mnb = arg;
->>> +	int nid = mnb->status_change_nid;
->>> +	struct papr_scm_priv *p;
->>> +
->>> +	if (nid == NUMA_NO_NODE || action != MEM_ONLINE)
->>> +		return NOTIFY_OK;
->>> +
->>> +	mutex_lock(&papr_ndr_lock);
->>> +	list_for_each_entry(p, &papr_nd_regions, region_list) {
->>> +		if (p->target_node == nid) {
->>> +			node_devices[nid]->perf_level = MEMTIER_PERF_LEVEL_PMEM;
->>> +			break;
->>> +		}
->>> +	}
->>> +
->>> +	mutex_unlock(&papr_ndr_lock);
->>> +	return NOTIFY_OK;
->>> +}
->>> +
->>>  static int __init papr_scm_init(void)
->>>  {
->>>  	int ret;
->>>  
->>>  	ret = platform_driver_register(&papr_scm_driver);
->>> -	if (!ret)
->>> -		mce_register_notifier(&mce_ue_nb);
->>> -
->>> -	return ret;
->>> +	if (ret)
->>> +		return ret;
->>> +	mce_register_notifier(&mce_ue_nb);
->>> +	/*
->>> +	 * register a memory hotplug notifier at prio 2 so that we
->>> +	 * can update the perf level for the node.
->>> +	 */
->>> +	hotplug_memory_notifier(papr_scm_callback, MEMTIER_HOTPLUG_PRIO + 1);
->>> +	return 0;
->>>  }
->>>  module_init(papr_scm_init);
->>>  
->>> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
->>> index ae5f4acf2675..7ea1017ef790 100644
->>> --- a/drivers/acpi/nfit/core.c
->>> +++ b/drivers/acpi/nfit/core.c
->>> @@ -15,6 +15,8 @@
->>>  #include <linux/sort.h>
->>>  #include <linux/io.h>
->>>  #include <linux/nd.h>
->>> +#include <linux/memory.h>
->>> +#include <linux/memory-tiers.h>
->>>  #include <asm/cacheflush.h>
->>>  #include <acpi/nfit.h>
->>>  #include "intel.h"
->>> @@ -3470,6 +3472,39 @@ static struct acpi_driver acpi_nfit_driver = {
->>>  	},
->>>  };
->>>  
->>> +static int nfit_callback(struct notifier_block *self,
->>> +			 unsigned long action, void *arg)
->>> +{
->>> +	bool found = false;
->>> +	struct memory_notify *mnb = arg;
->>> +	int nid = mnb->status_change_nid;
->>> +	struct nfit_spa *nfit_spa;
->>> +	struct acpi_nfit_desc *acpi_desc;
->>> +
->>> +	if (nid == NUMA_NO_NODE || action != MEM_ONLINE)
->>> +		return NOTIFY_OK;
->>> +
->>> +	mutex_lock(&acpi_desc_lock);
->>> +	list_for_each_entry(acpi_desc, &acpi_descs, list) {
->>> +		mutex_lock(&acpi_desc->init_mutex);
->>> +		list_for_each_entry(nfit_spa, &acpi_desc->spas, list) {
->>> +			struct acpi_nfit_system_address *spa = nfit_spa->spa;
->>> +			int target_node = pxm_to_node(spa->proximity_domain);
->>> +
->>> +			if (target_node == nid) {
->>> +				node_devices[nid]->perf_level = MEMTIER_PERF_LEVEL_PMEM;
->>> +				found = true;
->>> +				break;
->>> +			}
->>> +		}
->>> +		mutex_unlock(&acpi_desc->init_mutex);
->>> +		if (found)
->>> +			break;
->>> +	}
->>> +	mutex_unlock(&acpi_desc_lock);
->>> +	return NOTIFY_OK;
->>> +}
->>> +
->>>  static __init int nfit_init(void)
->>>  {
->>>  	int ret;
->>> @@ -3509,7 +3544,11 @@ static __init int nfit_init(void)
->>>  		nfit_mce_unregister();
->>>  		destroy_workqueue(nfit_wq);
->>>  	}
->>> -
->>> +	/*
->>> +	 * register a memory hotplug notifier at prio 2 so that we
->>> +	 * can update the perf level for the node.
->>> +	 */
->>> +	hotplug_memory_notifier(nfit_callback, MEMTIER_HOTPLUG_PRIO + 1);
->>>  	return ret;
->>>  
->>>  }
->> 
->> I don't think that it's a good idea to set perf_level of a memory device
->> (node) via NFIT only.
->
->> 
->> For example, we may prefer HMAT over NFIT when it's available.  So the
->> perf_level should be set in dax/kmem.c based on information provided by
->> ACPI or other information sources.  ACPI can provide some functions/data
->> structures to let drivers (like dax/kmem.c) to query the properties of
->> the memory device (node).
->> 
->
-> I was trying to make it architecture specific so that we have a placeholder
-> to fine-tune this better. For example, ppc64 will look at device tree
-> details to find the performance level and x86 will look at ACPI data structure.
-> Adding that hotplug callback in dax/kmem will prevent that architecture-specific
-> customization? 
->
-> I would expect that callback to move to the generic ACPI layer so that even
-> firmware managed CXL devices can be added to a lower tier?  I don't understand
-> ACPI enough to find the right abstraction for that hotplug callback. 
+Signed-off-by: Victor Hassan <victor@allwinnertech.com>
+---
+ drivers/clocksource/timer-sun4i.c | 131 ++++++++++++++++++++++--------
+ 1 file changed, 96 insertions(+), 35 deletions(-)
 
-I'm OK for this to be architecture specific.
+diff --git a/drivers/clocksource/timer-sun4i.c b/drivers/clocksource/timer-sun4i.c
+index bb6ea6c19829..afc26de963af 100644
+--- a/drivers/clocksource/timer-sun4i.c
++++ b/drivers/clocksource/timer-sun4i.c
+@@ -38,6 +38,19 @@
+ 
+ #define TIMER_SYNC_TICKS	3
+ 
++/* Registers which needs to be saved and restored before and after sleeping */
++static u32 sun4i_timer_regs_offset[] = {
++	TIMER_IRQ_EN_REG,
++	TIMER_CTL_REG(0),
++	TIMER_INTVAL_REG(0),
++	TIMER_CNTVAL_REG(0),
++	TIMER_CTL_REG(1),
++	TIMER_INTVAL_REG(1),
++	TIMER_CNTVAL_REG(1),
++};
++
++static void __iomem *sun4i_timer_sched_base __read_mostly;
++
+ /*
+  * When we disable a timer, we need to wait at least for 2 cycles of
+  * the timer source clock. We will use for that the clocksource timer
+@@ -79,10 +92,41 @@ static void sun4i_clkevt_time_start(void __iomem *base, u8 timer,
+ 	       base + TIMER_CTL_REG(timer));
+ }
+ 
++static inline void sun4i_timer_save_regs(struct timer_of *to)
++{
++	void __iomem *base = timer_of_base(to);
++	int i;
++	u32 *regs_backup = (u32 *)to->private_data;
++
++	for (i = 0; i < ARRAY_SIZE(sun4i_timer_regs_offset); i++)
++		regs_backup[i] = readl(base + sun4i_timer_regs_offset[i]);
++}
++
++static inline void sun4i_timer_restore_regs(struct timer_of *to)
++{
++	void __iomem *base = timer_of_base(to);
++	int i;
++	u32 *regs_backup = (u32 *)to->private_data;
++
++	for (i = 0; i < ARRAY_SIZE(sun4i_timer_regs_offset); i++)
++		writel(regs_backup[i], base + sun4i_timer_regs_offset[i]);
++}
++
+ static int sun4i_clkevt_shutdown(struct clock_event_device *evt)
+ {
+ 	struct timer_of *to = to_timer_of(evt);
+ 
++	sun4i_timer_save_regs(to);
++	sun4i_clkevt_time_stop(timer_of_base(to), 0);
++
++	return 0;
++}
++
++static int sun4i_tick_resume(struct clock_event_device *evt)
++{
++	struct timer_of *to = to_timer_of(evt);
++
++	sun4i_timer_restore_regs(to);
+ 	sun4i_clkevt_time_stop(timer_of_base(to), 0);
+ 
+ 	return 0;
+@@ -137,45 +181,54 @@ static irqreturn_t sun4i_timer_interrupt(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static struct timer_of to = {
+-	.flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE,
+-
+-	.clkevt = {
+-		.name = "sun4i_tick",
+-		.rating = 350,
+-		.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
+-		.set_state_shutdown = sun4i_clkevt_shutdown,
+-		.set_state_periodic = sun4i_clkevt_set_periodic,
+-		.set_state_oneshot = sun4i_clkevt_set_oneshot,
+-		.tick_resume = sun4i_clkevt_shutdown,
+-		.set_next_event = sun4i_clkevt_next_event,
+-		.cpumask = cpu_possible_mask,
+-	},
+-
+-	.of_irq = {
+-		.handler = sun4i_timer_interrupt,
+-		.flags = IRQF_TIMER | IRQF_IRQPOLL,
+-	},
+-};
++static void __init sun4i_clockevent_init(struct timer_of *to)
++{
++	to->clkevt.name = "sun4i_tick";
++	to->clkevt.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT;
++	to->clkevt.set_state_shutdown = sun4i_clkevt_shutdown;
++	to->clkevt.set_state_periodic = sun4i_clkevt_set_periodic;
++	to->clkevt.set_state_oneshot = sun4i_clkevt_set_oneshot;
++	to->clkevt.tick_resume = sun4i_tick_resume;
++	to->clkevt.set_next_event = sun4i_clkevt_next_event;
++	to->clkevt.cpumask = cpu_possible_mask;
++	to->of_irq.flags = IRQF_TIMER | IRQF_IRQPOLL;
++
++	sun4i_timer_sched_base = timer_of_base(to) + TIMER_CNTVAL_REG(1);
++}
+ 
+ static u64 notrace sun4i_timer_sched_read(void)
+ {
+-	return ~readl(timer_of_base(&to) + TIMER_CNTVAL_REG(1));
++	return (u64)~readl(sun4i_timer_sched_base);
+ }
+ 
+ static int __init sun4i_timer_init(struct device_node *node)
+ {
++	struct timer_of *to;
+ 	int ret;
+ 	u32 val;
+ 
+-	ret = timer_of_init(node, &to);
++	to = kzalloc(sizeof(*to), GFP_KERNEL);
++	if (!to)
++		return -ENOMEM;
++
++	to->flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE;
++	to->of_irq.handler = sun4i_timer_interrupt;
++	ret = timer_of_init(node, to);
+ 	if (ret)
+-		return ret;
++		goto err;
+ 
+-	writel(~0, timer_of_base(&to) + TIMER_INTVAL_REG(1));
++	sun4i_clockevent_init(to);
++
++	to->private_data = kcalloc(ARRAY_SIZE(sun4i_timer_regs_offset), sizeof(u32), GFP_KERNEL);
++	if (!to->private_data) {
++		ret = -ENOMEM;
++		goto err1;
++	}
++
++	writel(~0, timer_of_base(to) + TIMER_INTVAL_REG(1));
+ 	writel(TIMER_CTL_ENABLE | TIMER_CTL_RELOAD |
+ 	       TIMER_CTL_CLK_SRC(TIMER_CTL_CLK_SRC_OSC24M),
+-	       timer_of_base(&to) + TIMER_CTL_REG(1));
++	       timer_of_base(to) + TIMER_CTL_REG(1));
+ 
+ 	/*
+ 	 * sched_clock_register does not have priorities, and on sun6i and
+@@ -186,32 +239,40 @@ static int __init sun4i_timer_init(struct device_node *node)
+ 	    of_machine_is_compatible("allwinner,sun5i-a10s") ||
+ 	    of_machine_is_compatible("allwinner,suniv-f1c100s"))
+ 		sched_clock_register(sun4i_timer_sched_read, 32,
+-				     timer_of_rate(&to));
++				     timer_of_rate(to));
+ 
+-	ret = clocksource_mmio_init(timer_of_base(&to) + TIMER_CNTVAL_REG(1),
+-				    node->name, timer_of_rate(&to), 350, 32,
++	ret = clocksource_mmio_init(timer_of_base(to) + TIMER_CNTVAL_REG(1),
++				    node->name, timer_of_rate(to), 350, 32,
+ 				    clocksource_mmio_readl_down);
+ 	if (ret) {
+ 		pr_err("Failed to register clocksource\n");
+-		return ret;
++		goto err2;
+ 	}
+ 
+ 	writel(TIMER_CTL_CLK_SRC(TIMER_CTL_CLK_SRC_OSC24M),
+-	       timer_of_base(&to) + TIMER_CTL_REG(0));
++	       timer_of_base(to) + TIMER_CTL_REG(0));
+ 
+ 	/* Make sure timer is stopped before playing with interrupts */
+-	sun4i_clkevt_time_stop(timer_of_base(&to), 0);
++	sun4i_clkevt_time_stop(timer_of_base(to), 0);
+ 
+ 	/* clear timer0 interrupt */
+-	sun4i_timer_clear_interrupt(timer_of_base(&to));
++	sun4i_timer_clear_interrupt(timer_of_base(to));
+ 
+-	clockevents_config_and_register(&to.clkevt, timer_of_rate(&to),
++	clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
+ 					TIMER_SYNC_TICKS, 0xffffffff);
+ 
+ 	/* Enable timer0 interrupt */
+-	val = readl(timer_of_base(&to) + TIMER_IRQ_EN_REG);
+-	writel(val | TIMER_IRQ_EN(0), timer_of_base(&to) + TIMER_IRQ_EN_REG);
++	val = readl(timer_of_base(to) + TIMER_IRQ_EN_REG);
++	writel(val | TIMER_IRQ_EN(0), timer_of_base(to) + TIMER_IRQ_EN_REG);
++
++	return ret;
+ 
++err2:
++	kfree(to->private_data);
++err1:
++	timer_of_cleanup(to);
++err:
++	kfree(to);
+ 	return ret;
+ }
+ TIMER_OF_DECLARE(sun4i, "allwinner,sun4i-a10-timer",
+-- 
+2.29.0
 
-But ACPI NFIT isn't enough for x86.  For example, PMEM can be added to a
-virtual machine as normal memory nodes without NFIT.  Instead, PMEM is
-marked via "memmap=<nn>G!<ss>G" or "efi_fake_mem=<nn>G@<ss>G:0x40000",
-and dax/kmem.c is used to hot-add the memory.
-
-So, before a more sophisticated version is implemented for x86.  The
-simplest version as I suggested below works even better.
-
->> As the simplest first version, this can be just hard coded.
->> 
->
-> If you are suggesting to not use hotplug callback, one of the challenge was node_devices[nid]
-> get allocated pretty late when we try to online the node. 
-
-As the simplest first version, this can be as simple as,
-
-/* dax/kmem.c */
-static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
-{
-	node_devices[dev_dax->target_node]->perf_level = MEMTIER_PERF_LEVEL_PMEM;
-	/* add_memory_driver_managed() */
-}
-
-To be compatible with ppc64 version, how about make dev_dax_kmem_probe()
-set perf_level only if it's uninitialized?
-
-Best Regards,
-Huang, Ying

@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA80580846
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F3158084E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237256AbiGYXdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 19:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S231899AbiGYXfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 19:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236745AbiGYXdF (ORCPT
+        with ESMTP id S237424AbiGYXdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:33:05 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CEE26AE6;
-        Mon, 25 Jul 2022 16:33:05 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id s204so15298256oif.5;
-        Mon, 25 Jul 2022 16:33:04 -0700 (PDT)
+        Mon, 25 Jul 2022 19:33:19 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7943926AF9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:33:17 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 6so11662663pgb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZQyRxqGM1W/LS0ssRps7WJXXzo4kRUKS7bNZtUe51CI=;
+        b=nD1BmdVcHA3I/t+9230v3W5nFsOePTrhYHGv1QgVncGS6DjjdzdUlg0mB28F2w17he
+         wLIwFt2t1dozuJkNbrYtPWRQKfBx2GA6EQRPMLVO5IBGIyYkvHpjqIa6DwjXaLl15cks
+         o1vVz7YidMp46YVb/IJoMUHFevN7f18woJ3vqb1msw37nMZ1WMQDEUfiCZekJKT2B3g+
+         /V4sFLBnFXPB7bJpDxO1U8rWzwNquDh13PZXl2rPZVcUBUgi5Vp7svlCGze6dANvD2Ow
+         eZI6QTIWPbeTOhqOGkng55MBfyQiuvBtWJwJA4h6yEK8FAfmGad8EtpVPzP9xiMtjFmc
+         JcSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=35be8RwrHUGDdl8k/ntz3JQSksF3mPF6MXbq1qdhuHU=;
-        b=4c0bPz+499WN8/wvOsb+37H3yIQZNV6aPWYFF8HNvW3PiZtiP3x5K56udw2h2k2V7Y
-         NEB3yyQqPKmwTFl1+KLbvf/NBoK23yfv0m/CHYxEj0YAPODgR5CI03TRjiEG1dC3ny1w
-         /0LVVJGEibwe+9oy/mKB61pfDgK8bR8OyXrOmZvBNp/ohK9+Do7m+xi7vxUfavT6A4E4
-         Og68FuxnYgUmBM2Ge25OqMLDVBbe5yZoDOVHhnIatp59m5NvHZGgaARYO8J/QZ04uVfA
-         sWNhnVd0mcYoQLNk/bd/AwHn3exfU22WvZmGKdrV/x0y32T18YcqtCdiZ2WA4Fji4+ef
-         LqNg==
-X-Gm-Message-State: AJIora+frBJzlU68OxJqlGHPkjRF3h+wam29PF7fzQ/0+AometbGrElJ
-        y2OZOWxlN+cKZfzvEgADGg==
-X-Google-Smtp-Source: AGRyM1tNQzJxjy2xupFgtOlnhIeZ+EZdU/HB0Xxsyad8N1nbdVc3UgpG6moPKBDToAkVZkHNcoXaaA==
-X-Received: by 2002:aca:1a17:0:b0:33a:c75f:8020 with SMTP id a23-20020aca1a17000000b0033ac75f8020mr3599344oia.179.1658791984251;
-        Mon, 25 Jul 2022 16:33:04 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id i22-20020a056870221600b000f325409614sm6729181oaf.13.2022.07.25.16.33.02
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZQyRxqGM1W/LS0ssRps7WJXXzo4kRUKS7bNZtUe51CI=;
+        b=Ph2DzjlOQ1PNdJpAQkcTUIm7+gfrYm1/4RXGL492qU+SnY6kSf1cLFNboyobXREdqW
+         kA/6LLtisYCDI7agh6qRwD4nuz0JSm92PqeN8352q9SLm61AD4DtMakdTEznDN0GIjRe
+         vS0Ghl8bbgQa9R8EoSYhRV/JY/CF1Y8ARc30xZRNuR6Cr4TeKU6HzQWuN+OUwngq3I49
+         JVZn5y1JwHLyfrTjopZFdNorE1jR71znLdCNdh6xI/fUDKiZ1DgKcQ2dLe08266fv3uq
+         PE3YrzEGMpPEcOXYZE2MHf+mtOHAfDF5U3nbX25FR0CCNHFPCyoSIdZsGG53MEQIE4p1
+         PUYw==
+X-Gm-Message-State: AJIora+xLsH0jaakgKE3KuAwalFNRoG9BC6frk5MYCWQHRtYROmY2wsn
+        sDo52+UmMq/qDGAj07ZFveUQHA==
+X-Google-Smtp-Source: AGRyM1sMXhCPTxflahi4xB99ucQ9r1TYGMPJzX8LIjoubSDlVEHm0UejmNXeAe5WrFC09nN3obvhWQ==
+X-Received: by 2002:a05:6a00:134e:b0:52a:d5b4:19bb with SMTP id k14-20020a056a00134e00b0052ad5b419bbmr14826941pfu.45.1658791996740;
+        Mon, 25 Jul 2022 16:33:16 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a8-20020a17090a6d8800b001f24c08c3fesm7573683pjk.1.2022.07.25.16.33.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 16:33:03 -0700 (PDT)
-Received: (nullmailer pid 2964216 invoked by uid 1000);
-        Mon, 25 Jul 2022 23:33:01 -0000
-Date:   Mon, 25 Jul 2022 17:33:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, rafal@milecki.pl,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        linux-kernel@vger.kernel.org, anand.gore@broadcom.com,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
-        f.fainelli@gmail.com, kursad.oney@broadcom.com,
-        krzysztof.kozlowski@linaro.org, joel.peshkin@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dan.beygelman@broadcom.com, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/9] dt-bindings: arm64: bcmbca: Update BCM4908
- description
-Message-ID: <20220725233301.GA2964152-robh@kernel.org>
-References: <20220725055402.6013-1-william.zhang@broadcom.com>
- <20220725055402.6013-3-william.zhang@broadcom.com>
+        Mon, 25 Jul 2022 16:33:16 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 23:33:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 5/6] KVM: x86/mmu: Add helper to convert SPTE value to
+ its shadow page
+Message-ID: <Yt8oOHvNO2nnBQwM@google.com>
+References: <20220723012325.1715714-1-seanjc@google.com>
+ <20220723012325.1715714-6-seanjc@google.com>
+ <Yt8mCI7MFhZbT+5R@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220725055402.6013-3-william.zhang@broadcom.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yt8mCI7MFhZbT+5R@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 24 Jul 2022 22:53:55 -0700, William Zhang wrote:
-> Append "brcm,bcmbca" to BCM4908 chip family compatible strings to
-> follow the convention of BCMBCA chip and help identifying chip family.
+On Mon, Jul 25, 2022, David Matlack wrote:
+> On Sat, Jul 23, 2022 at 01:23:24AM +0000, Sean Christopherson wrote:
+> > Add a helper to convert a SPTE to its shadow page to deduplicate a
+> > variety of flows and hopefully avoid future bugs, e.g. if KVM attempts to
+> > get the shadow page for a SPTE without dropping high bits.
+> > 
+> > Opportunistically add a comment in mmu_free_root_page() documenting why
+> > it treats the root HPA as a SPTE.
+> > 
+> > No functional change intended.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> [...]
+> > --- a/arch/x86/kvm/mmu/spte.h
+> > +++ b/arch/x86/kvm/mmu/spte.h
+> > @@ -207,6 +207,23 @@ static inline int spte_index(u64 *sptep)
+> >   */
+> >  extern u64 __read_mostly shadow_nonpresent_or_rsvd_lower_gfn_mask;
+> >  
+> > +static inline struct kvm_mmu_page *to_shadow_page(hpa_t shadow_page)
+> > +{
+> > +	struct page *page = pfn_to_page((shadow_page) >> PAGE_SHIFT);
+> > +
+> > +	return (struct kvm_mmu_page *)page_private(page);
+> > +}
+> > +
+> > +static inline struct kvm_mmu_page *spte_to_sp(u64 spte)
+> > +{
+> > +	return to_shadow_page(spte & SPTE_BASE_ADDR_MASK);
+> > +}
 > 
-> Also add a bare bone generic 4908 board compatbile string to support any
-> 4908 based board. This is useful for board bring-up test and kernel test
-> with CPU and memory related change.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Rafał Miłecki <rafal@milecki.pl>
-> 
-> ---
-> 
-> Changes in v2:
-> - Add Acked-by tag
-> - Insert the 4908 generic compatible string in alphabetical order
-> - Update commit message with more details of 4908 generic board dts
-> 
->  Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+> spte_to_sp() and sptep_to_sp() are a bit hard to differentiate visually.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Yeah, I balked a bit when making the change, but couldn't come up with a better
+alternative.
+
+> Maybe spte_to_child_sp() or to_child_sp()?
+
+I like to_child_sp().  Apparently I have a mental block when it comes to parent
+vs. child pages and never realized that sptep_to_sp() gets the "parent" but
+spte_to_sp() gets the "child".  That indeed makes spte_to_sp() a bad name.
+

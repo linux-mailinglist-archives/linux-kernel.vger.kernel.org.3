@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AF05805DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142235805DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237214AbiGYUlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S237234AbiGYUmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235916AbiGYUlS (ORCPT
+        with ESMTP id S235916AbiGYUmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:41:18 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EE413DEA
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:41:17 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id m8so15448904edd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:41:17 -0700 (PDT)
+        Mon, 25 Jul 2022 16:42:11 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0E5639D;
+        Mon, 25 Jul 2022 13:42:09 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id c72so12589550edf.8;
+        Mon, 25 Jul 2022 13:42:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FZom5onWB4/D1hB5gtNREa3jGNLAjEikzJFm8hKoPD0=;
-        b=JrYQ1MsbBhAWbnaL4bCij1Z+c5wDkvvYdK/PM2IEUDz7HvTomeAn+WSNJzMkgCy13b
-         EgrIXpYySyaMWbLxouqnE+66vsESWi1xYmrXXjwGjSyGP3XC1acrXDW7ZHHBF0j7gDG3
-         0TvsT1JhnAFNTi/QJSeb9SeoqJaAD3nciEmLw=
+        bh=CzlvqtZ4sW/ElEWpOjSICTJbEHD0aNQ9entd4nvbv7Y=;
+        b=kB7cXd7d/JNiJw4UHUCysp+SCyNBoKLAZbtLOINNgPIiTgSRGrS1D/B1btIP+jplUD
+         hLfdMsEBa6uw9G0hc/4wjTVCyiEZmU8GPJG6U0EgDCyYgbq/k4EX6AfbTnZ3vez6my/S
+         FjAdUeKOty6/PS30jBULBSk9jKE/DzPejB6hjxSWI16UhbMkGoqUy6fFJlMW5cxl7GDq
+         hdhGJ3sMyv1RP7LLux2UpX25pTDj0FEwd9nuxuLRYd3YIPWdqogqPeQbx5UR4GQybDw6
+         rPoTr9e3Ymeh8CsUpWvKGaV6wPrIfEh5jftOQnAOMUtGNfYSVUkMS4/Tfk+Qpb9uvmqP
+         kqHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FZom5onWB4/D1hB5gtNREa3jGNLAjEikzJFm8hKoPD0=;
-        b=KGoT09JugTTHZz+CtBCDbcz/NwCoVZ4pLvCHWPMu3zzfMJvjJquH53Ua1yyttG1d1S
-         S3kyRELhsh+fYhWcOheYHihw1iXENUMZXL0WU1qixeYycShFA7jLWJ71vq77Xf9AmPbI
-         Pv5k919H+rAtQFnvcZplmM/gKQMA2IhnJphAaXyr21w+wYFy4NcbxPjz9i0Ay3yBRjEe
-         pVzXL6V7L0ey5mAMxjtBYcJBfM+pNKt4vpewusUr3h4H1aDYfZ1gSm3f+K3ZdzZdVwbp
-         JsPkCLkEhL9fvxiaqXWM8bBxWh2t3dqxRFB9fICTOUpuYshllqWIedccn4v54NgYd3nm
-         S41w==
-X-Gm-Message-State: AJIora99Imef97gEm9uXFJSih/Q9JBE118/XIzQ8GxnpGfW1VnjUEF2X
-        nrz9Dpk3B4v0beWvZeA1bya+63/Pp3TRcVpe
-X-Google-Smtp-Source: AGRyM1u4/ApsW4wVcpUMnBvUIYK+zy0fY40AnZHi/WhdEALwwFewEUJYXHM6N5sSKAitr5ANIAl4Kg==
-X-Received: by 2002:a05:6402:1e8c:b0:43c:2032:7d98 with SMTP id f12-20020a0564021e8c00b0043c20327d98mr4510879edf.297.1658781675475;
-        Mon, 25 Jul 2022 13:41:15 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id b2-20020a1709063ca200b0072ee79bb8ebsm5728438ejh.126.2022.07.25.13.41.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 13:41:14 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id a18-20020a05600c349200b003a30de68697so73072wmq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:41:14 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
- g16-20020a05600c4ed000b003a33ef3c8d1mr12441864wmq.154.1658781674109; Mon, 25
- Jul 2022 13:41:14 -0700 (PDT)
+        bh=CzlvqtZ4sW/ElEWpOjSICTJbEHD0aNQ9entd4nvbv7Y=;
+        b=mOeRTn9nRpWm53OqHw2Ul7pf4msH1B2E1OyhxPlz7KHEPQhgfmT4i+S0e+9UZattqm
+         2F+pD8PCKiLuykE4GPhPEzZ4AUxPy8o6rSvKq7cu7V/L8ggJw6pb69d2VRl34Og6CfmX
+         gA4z186sizg8Qircb+IFivf2nB+e9rw8lv6SlgYsXVit0swqigAQThc7TPIFWoUqWsbP
+         ks2Lx0H7qIQHT8vf9/5F7EclCc4OQV/RBxAgCYHBXhUuzQypt2nxc1om/h/OG9mAO77a
+         C7T21BcyTE5invgUtlKvqwTjtDZKsZpZdOt7p5XBUBaDxPErbeVNelvFt/LNM33Xi1sQ
+         23ig==
+X-Gm-Message-State: AJIora8kHzTtJb3ktwo+lS9yYJNhaDu4w8UDFEtz9sLZ7M0BzgdvdfRe
+        9Hyuiw9Fxyj2YJXO6jJ/umGZTCoGKpNYa2EEX5s=
+X-Google-Smtp-Source: AGRyM1sJVhjzVOjASQIpOG0za4qTj18ieNxKgJ9b/Q8r0g76G9F2hNLsedKENR4/v/5jin+j3fdwa6HLNrnYzJ7Ayg0=
+X-Received: by 2002:a05:6402:34c5:b0:43a:8f90:e643 with SMTP id
+ w5-20020a05640234c500b0043a8f90e643mr15004477edc.88.1658781727930; Mon, 25
+ Jul 2022 13:42:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
- <20220725161141.GA1306881@roeck-us.net> <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
- <CAHk-=wgGrewyOqT7Cm-eHKp5W+8rJ=aL8iNtsbhRfc0YD2gbeA@mail.gmail.com> <Yt7+pPyEmYYH8D1K@yury-laptop>
-In-Reply-To: <Yt7+pPyEmYYH8D1K@yury-laptop>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 25 Jul 2022 13:40:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg6k1oxtEF3M7_icZ_62Je4R0VUaA69jo4xrOTxF_mMoQ@mail.gmail.com>
-Message-ID: <CAHk-=wg6k1oxtEF3M7_icZ_62Je4R0VUaA69jo4xrOTxF_mMoQ@mail.gmail.com>
-Subject: Re: Linux 5.19-rc8
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Dennis Zhou <dennis@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+References: <20220721093422.2173982-1-marcus.folkesson@gmail.com>
+ <CAHp75VddBhc9peHXfNfTyTNni246kC8CyLqCrMFadn67LGDarQ@mail.gmail.com> <CACRpkdaczrU1tM5Yt7P-Q2h+ge8STOi6HvvYeTM-g+JwS8_gZw@mail.gmail.com>
+In-Reply-To: <CACRpkdaczrU1tM5Yt7P-Q2h+ge8STOi6HvvYeTM-g+JwS8_gZw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 22:41:31 +0200
+Message-ID: <CAHp75Ve4+r14dL3poOF7dCPMRgAe8etLeuBPNay0tkyNf97UWg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] gpio: gpio-74x164: add support for CDx4HC4094
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,20 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 1:35 PM Yury Norov <yury.norov@gmail.com> wrote:
+On Mon, Jul 25, 2022 at 3:54 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> Here we have 2 ugly options - having pairs of almost identical
-> functions, or passing dummy variables. I decided that copy-pasting is
-> worse than abusing branch predictor.
+> On Mon, Jul 25, 2022 at 11:32 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Thu, Jul 21, 2022 at 11:32 AM Marcus Folkesson
+> > <marcus.folkesson@gmail.com> wrote:
+> > >
+> > > 74hc4094 and 75hc4094 works similar to 74x164 but has an additional
+> > > storage latch associated with each stage for strobing data from the
+> > > serial input to parallell buffer tri-state output.
+> >
+> > parallel
+> >
+> > > Add support for an optional strobe pin.
+> >
+> > Sorry for my absence of understanding, but why?
+> > SPI has MOSI, CLK, CS, where the last one is exactly for that. No?
+>
+> Forgive me if I misunderstand, but if you use CS that
+> way, the way that the SPI framework works is to assert
+> CS then transfer a few chunks over SPI (MOSI/CLK)
+> then de-assert CS.
+>
+> If CS is used for strobe, it is constantly asserted
+> during transfer and the sequence will be latched
+> out immediately as you write the SPI transfers and
+> the data is clocked through the register, making the
+> whole train of zeroes and ones flash across the
+> output pins before they stabilize after the SPI
+> transfer is finished.
+>
+> If you first do the SPI transfer, then strobe after
+> finished, this will not happen.
+>
+> Then it should be a separate pin, so this doesn't
+> happen, right?
+>
+> Yours,
+> Linus Walleij
 
-The thing is, we have solutions for this - just use a single inline
-function, and make it *see* the constant.
 
-That way the compiler can DTRT, either generating two copies (with the
-constant elided) or depending on the branch predictor.
 
-That's particularly true in a case like this, when there is only *one*
-case for the normal situation (ie little-endian). Because let's face
-it, big-endian is completely dead and legacy model.
-
-              Linus
+-- 
+With Best Regards,
+Andy Shevchenko

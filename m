@@ -2,69 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7172057F836
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F4C57F83A
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 04:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbiGYCQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 22:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S233163AbiGYCWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 22:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiGYCQa (ORCPT
+        with ESMTP id S229436AbiGYCWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 24 Jul 2022 22:16:30 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 498199598;
-        Sun, 24 Jul 2022 19:16:29 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 9EEDC1E80D0F;
-        Mon, 25 Jul 2022 10:11:30 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BkgryQaiO_vd; Mon, 25 Jul 2022 10:11:28 +0800 (CST)
-Received: from localhost.localdomain.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: xupengfei@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id CEBA91E80D05;
-        Mon, 25 Jul 2022 10:11:27 +0800 (CST)
-From:   XU pengfei <xupengfei@nfschina.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kernel@nfschina.com,
-        XU pengfei <xupengfei@nfschina.com>
-Subject: [PATCH 1/1] clk/qcom/drivers/sm6350: qcom_cc_really_probe(pdev, &gcc_sm6350_desc, regmap) is assigned an extra semicolon
-Date:   Mon, 25 Jul 2022 10:16:23 +0800
-Message-Id: <20220725021623.3910-1-xupengfei@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Sun, 24 Jul 2022 22:22:02 -0400
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60945116F
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 19:21:59 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 26P2JX9c029536;
+        Mon, 25 Jul 2022 11:19:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 26P2JX9c029536
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1658715574;
+        bh=SCnWUTOIqjfB89rOg7Ig7Vg8sxcS4A6+OR94yhgDrEQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uvvfneWPq3Jp9S3lMU+YReM/b5EXCFXzf8KWkZsGnERpRGlKQxhlnMSPxspEpX9VP
+         gXJwFXjhqYPD//fvUIz312mXaG8YhPpGPCaUNe26MDKJO5RvxVygsQ/GDSJ9UM7Zuz
+         0LQsMVmgk1Ks80IaNgkb9YAaqkgj9GOId+IUMmhnS3BS3SeRmhdM2yYglANswDEnpH
+         KQXDmzs4HW1x0sCVod7Tf/atEU8cqxnEJucaN0glYXDvst+Gionle9jGmi2Q4DEl+J
+         accDGMlHs7JO59GAYqBZnS4OiWH1g0X8m6dq5HF1tuwu/008nKsn728cZo2wa/U9oQ
+         5LUGRLsBFdqjg==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] riscv/purgatory: hard-code obj-y in Makefile
+Date:   Mon, 25 Jul 2022 11:19:01 +0900
+Message-Id: <20220725021902.625630-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think this semicolon could be deleted.
+The purgatory/ directory is entirely guarded in arch/riscv/Kbuild.
+CONFIG_ARCH_HAS_KEXEC_PURGATORY is bool type.
 
-Signed-off-by: XU pengfei <xupengfei@nfschina.com>
+$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) is always 'y' when Kbuild visits
+this Makefile for building.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- drivers/clk/qcom/gcc-sm6350.c | 2 +-
+
+(no changes since v1)
+
+ arch/riscv/purgatory/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/gcc-sm6350.c b/drivers/clk/qcom/gcc-sm6350.c
-index a4f7fba70393..69412400efa4 100644
---- a/drivers/clk/qcom/gcc-sm6350.c
-+++ b/drivers/clk/qcom/gcc-sm6350.c
-@@ -2558,7 +2558,7 @@ static int gcc_sm6350_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+index d4df200f7edf..c2d14e2f345d 100644
+--- a/arch/riscv/purgatory/Makefile
++++ b/arch/riscv/purgatory/Makefile
+@@ -92,4 +92,4 @@ quiet_cmd_bin2c = BIN2C   $@
+ $(obj)/kexec-purgatory.c: $(obj)/purgatory.ro $(obj)/purgatory.chk FORCE
+ 	$(call if_changed,bin2c)
  
--	return qcom_cc_really_probe(pdev, &gcc_sm6350_desc, regmap);;
-+	return qcom_cc_really_probe(pdev, &gcc_sm6350_desc, regmap);
- }
- 
- static struct platform_driver gcc_sm6350_driver = {
+-obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY)	+= kexec-purgatory.o
++obj-y += kexec-purgatory.o
 -- 
-2.18.2
+2.34.1
 

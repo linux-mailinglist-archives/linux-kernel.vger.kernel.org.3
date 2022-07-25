@@ -2,96 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4177F580019
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9EA580027
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234785AbiGYNqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S234801AbiGYNtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiGYNqo (ORCPT
+        with ESMTP id S232047AbiGYNta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:46:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CDBF5B2;
-        Mon, 25 Jul 2022 06:46:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7039D2023D;
-        Mon, 25 Jul 2022 13:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1658756801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZWg1dNIhhKKeM/ZSg5hAzZXqdnTzD1UVa31cpsoSSq4=;
-        b=SQ48r1r+JWht5928b2Ar6Uz5vJJzxMnT5Io/z7g4K7/llpT2wtqEjkWLgl/qApcQXugSXb
-        ZeCxQr39rxPcodlVPHFW5c6fkxrFX2vzn3ADMX+fq5n9+SnB5V6Dd8HflMFh1w+P5iWxjR
-        hGZAkDxxp8DlVFbF56tG7J2gB5tSqpk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1658756801;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZWg1dNIhhKKeM/ZSg5hAzZXqdnTzD1UVa31cpsoSSq4=;
-        b=gZVZBo+MfWbc2oWAcUgAhvJx8Z2uEwDGQXKQvGyBt5XvnZE/jyr4a4zmNx+b6335v6lK/Q
-        FsDkk9BjosyslkAQ==
-Received: from hawking.suse.de (unknown [10.168.4.11])
-        by relay2.suse.de (Postfix) with ESMTP id 651FB2C153;
-        Mon, 25 Jul 2022 13:46:40 +0000 (UTC)
-Received: by hawking.suse.de (Postfix, from userid 17005)
-        id 48CD9444B2F; Mon, 25 Jul 2022 15:46:40 +0200 (CEST)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtla: fix double free
-References: <mvmzggxl4n1.fsf@suse.de>
-        <fd0888a4-099c-95fe-7e20-82be1489061f@kernel.org>
-X-Yow:  Th' PINK SOCK... soaking... soaking... soaking...
- Th' PINK SOCK... washing... washing... washing...
- Th' PINK SOCK... rinsing... rinsing... rinsing...
-Date:   Mon, 25 Jul 2022 15:46:40 +0200
-In-Reply-To: <fd0888a4-099c-95fe-7e20-82be1489061f@kernel.org> (Daniel Bristot
-        de Oliveira's message of "Mon, 25 Jul 2022 15:34:56 +0200")
-Message-ID: <mvmv8rll2yn.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.90 (gnu/linux)
+        Mon, 25 Jul 2022 09:49:30 -0400
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDE5EE3F;
+        Mon, 25 Jul 2022 06:49:29 -0700 (PDT)
+Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1oFySW-00085J-5z;
+        Mon, 25 Jul 2022 09:49:20 -0400
+Date:   Mon, 25 Jul 2022 09:49:19 -0400
+From:   Rik van Riel <riel@surriel.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        kernel-team@fb.com, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Breno Leitao <leitao@debian.org>
+Subject: [PATCH v3] livepatch: fix race between fork and
+ klp_reverse_transition
+Message-ID: <20220725094919.52bcde19@imladris.surriel.com>
+In-Reply-To: <Yt6bZo5ztnVSjLLC@alley>
+References: <20220720121023.043738bb@imladris.surriel.com>
+        <YtrCqMLUqJlcoqIo@alley>
+        <20220722150106.683f3704@imladris.surriel.com>
+        <Yt6bZo5ztnVSjLLC@alley>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jul 25 2022, Daniel Bristot de Oliveira wrote:
+On Mon, 25 Jul 2022 15:32:22 +0200
+Petr Mladek <pmladek@suse.com> wrote:
 
-> Hi Andreas
->
-> On 7/25/22 15:10, Andreas Schwab wrote:
->> Don't call trace_instance_destroy in trace_instance_init when it fails,
->> this is done by the caller.
->
-> Regarding the Subject, are you seeing a double-free error, or it is just an
-> optimization?
+> We should update the commit message and mention also the other
+> two locations where the state is manipulated without tasklist_lock.
+> I am sorry that I did not mention it on Friday.
 
-A double free nowadays is almost always an error, due to better malloc
-checking.
+Done. Thank you for reviewing this patch so carefully!
+I had looked at those other places in the code as well, but
+do not have as complete a picture of the KLP code as you.
 
-> AFAICS, trace_instance_destroy() checks the pointers before calling free().
+v2: a better approach, suggested by Petr (thank you)
+v3: update changelog (thank you Petr)
+---8<---
+When a KLP fails to apply, klp_reverse_transition will clear the
+TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
+which are not on the task list yet.
 
-That doesn't help when the pointer is not cleared afterwards.  Do you
-prefer that?
+Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
+parent to the child early on, in dup_task_struct -> setup_thread_stack.
 
-> Why am I asking? because if it is a double-free bug, we need to add the "Fixes:"
-> tag,
+Much later, klp_copy_process will set child->patch_state to match
+that of the parent.
 
-It's the first time I tried running rtla, so I don't know whether it is
-a regression, but from looking at the history it appears to have been
-introduced already in commit 0605bf009f18 ("rtla: Add osnoise tool")
+However, the parent's patch_state may have been changed by KLP loading
+or unloading since it was initially copied over into the child.
 
+This results in the KLP code occasionally hitting this warning in
+klp_complete_transition:
+
+        for_each_process_thread(g, task) {
+                WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
+                task->patch_state = KLP_UNDEFINED;
+        }
+
+This patch will set, or clear, the TIF_PATCH_PENDING flag in the child
+process depending on whether or not it is needed at the time
+klp_copy_process is called, at a point in copy_process where the
+tasklist_lock is held exclusively, preventing races with the KLP
+code.
+
+The KLP code does have a few places where the state is changed
+without the tasklist_lock held, but those should not cause
+problems because klp_update_patch_state(current) cannot be
+called while the current task is in the middle of fork,
+klp_check_and_switch_task() which is called under the pi_lock,
+which prevents rescheduling, and manipulation of the patch
+state of idle tasks, which do not fork.
+
+This should prevent this warning from triggering again in the
+future.
+
+Signed-off-by: Rik van Riel <riel@surriel.com>
+Reported-by: Breno Leitao <leitao@debian.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+---
+ kernel/livepatch/transition.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 5d03a2ad1066..30187b1d8275 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -610,9 +610,23 @@ void klp_reverse_transition(void)
+ /* Called from copy_process() during fork */
+ void klp_copy_process(struct task_struct *child)
+ {
+-	child->patch_state = current->patch_state;
+ 
+-	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
++	/*
++	 * The parent process may have gone through a KLP transition since
++	 * the thread flag was copied in setup_thread_stack earlier. Bring
++	 * the task flag up to date with the parent here.
++	 *
++	 * The operation is serialized against all klp_*_transition()
++	 * operations by the tasklist_lock. The only exception is
++	 * klp_update_patch_state(current), but we cannot race with
++	 * that because we are current.
++	 */
++	if (test_tsk_thread_flag(current, TIF_PATCH_PENDING))
++		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
++	else
++		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
++
++	child->patch_state = current->patch_state;
+ }
+ 
+ /*
 -- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+2.35.1
+

@@ -2,242 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AFA5803F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AF25803FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 20:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiGYS0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 14:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S235463AbiGYS3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 14:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiGYS0H (ORCPT
+        with ESMTP id S229544AbiGYS3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 14:26:07 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CBA2734
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:26:05 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id n2so9331063qkk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SJ5ATteDCNi/4BY4PNgsMgCW15cD92wrz0tkARQ7vKY=;
-        b=5Il4a5zJ8mZ7Jsn+zAu4/T22MYYX/u7qfLg1Hhhzz0CR+QXMWP33kGSYR882OgzOpj
-         OVKFcnRluW7I3M2Boby0n7KYmrHRJY9hbe2IthGoVb8QE8dqPRn0yL2jlgwpnww/JzAi
-         9ZCF4+UJ4cKy5QQNJTPy8INVEWIGwPK9fti7YVVatWk2z38K0SHkYiN6o8odYEpivsuC
-         46zLsxTLQaeMxELrYNDQviXs4I482h4Abw+SPw4NfqjinXzzGFF49XmksFoLrWWwfJqz
-         GPIouRxslZ70CAnHJKQRcyU5sQztNc/x4Uc3Ji0+iaFoOXtPdUwJO6PVQ43mUJ1f+Qgu
-         Dc4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SJ5ATteDCNi/4BY4PNgsMgCW15cD92wrz0tkARQ7vKY=;
-        b=0KkfsjW3Mw2cvuWs42T6/LpbZjeQFjpmvR1xHjG+mmhgoP+GsigxiYnO52f4L0qzku
-         YqmPaEZ1GXtknewxlu13R19rS/wOT52eFjYJF8mTZZS7MyeLuIh3D5tmFMvQfdA6PVW7
-         VMbEaWfjVRGQkd7d5EmwrmkMhbEitnecwu38x6BBmIArHEUGuNPTQjxBwoeIgMAqW/P+
-         Iv+Ru85zLmpiZGiOSZNLSape9xrIUM74ZjIPgLrUV+aL5f87mGBmVEVo0wv3JGKuango
-         CvmAZyc4DqXN1ODwvBv4tkn0LlNg/eOpPWprc9nwO6jotREeQ84y32KIUgscf/r4rrJ9
-         0M+Q==
-X-Gm-Message-State: AJIora/IKikH+efO0LbYu0sBEVAKpbdlgyrlk+vltDLJxysG2XHFtv6B
-        jWq4M5mAF7v86Fma/uCdO57ucA==
-X-Google-Smtp-Source: AGRyM1uTbBMqG1BBBhxK8bht1t4dDpel1BDmUmM/Bbft6w+1tQQNObfPJpb1/O+P5QI/qbOpdjwsMw==
-X-Received: by 2002:a05:620a:1478:b0:6b5:e085:9c03 with SMTP id j24-20020a05620a147800b006b5e0859c03mr10127245qkl.550.1658773564133;
-        Mon, 25 Jul 2022 11:26:04 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:994f])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05622a058700b0031f0cfc5645sm8255859qtb.28.2022.07.25.11.26.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 11:26:03 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 14:26:02 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
-        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
-        rdunlap@infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        cgroups@vger.kernel.org
-Subject: Re: [PATCH 9/9] sched/psi: add PSI_IRQ to track IRQ/SOFTIRQ pressure
-Message-ID: <Yt7gOhbqYzIKyhfv@cmpxchg.org>
-References: <20220721040439.2651-1-zhouchengming@bytedance.com>
- <20220721040439.2651-10-zhouchengming@bytedance.com>
+        Mon, 25 Jul 2022 14:29:30 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2057.outbound.protection.outlook.com [40.107.102.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC4F1F2CB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 11:29:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e7fIs4VBEf3qgdz6sjI0XGatWjVwy8+DPBjzxFryXkRT1VYd/WjfKKp9imAU0QzcTJxuNbKCZrCeqaua0xbetAdSekh2UqhDxsDguTCgXVojVt2cSjM6/eCnqA6TEJW1PZe0qoWWM9M5Fm8fablGfmPTm9DZ4wodhIRWvm86L6tYTm9FZpiJGnuDmcgW2l8cJhjiPS7Ji7LVhNH7+UoPq4aVpIdO0S7ci8J0LVgMKTVbFMzoySZgCiqQX/AX++HTbT4QzeoOQp+i5hj/V8v7WT3a1pC3AVKl+UHSwwkSEH8Y2Ted52k6u+625uolcC6AWR0IAJ03KDef9AMBAexJOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3MzTf8MX1kpfFoZbkXjqiUEWY18fJeUpdw8OrN8kTbM=;
+ b=RtDQYhvyJWaTnArrh4uFEAo4wdtEeMHSUFeMqYNeqaci5UjkX/V0C2fN5ip8FBuyMel5cVkqPcA4m/fZBmpm06k9BRAmErMnw8/GDL7NwdlHcuC8IJ2Wod7qgWKGWne7VG3x3G272th6IUzmHIOp1GRure4BoJvGKvCulQPoDsa317xP3oV5A0VonK70MDRuXRhuXvdzDbQTh4lB7VSQl7v7hW9X7iALB5lHaX2t+8+KYR3AbOc4P/nEBvLZwqflf3GRPtNBLgt7SZ5RXcWspk1YFTtDI2ikDk/QEXC8oOk+6ykPeLOA6kck2xfk+vaRzXcppjYHKA70VeHrxRd0Lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3MzTf8MX1kpfFoZbkXjqiUEWY18fJeUpdw8OrN8kTbM=;
+ b=GMaFe3MqTkR3KjSKifUdSFP8961/xc1LBFid4GqkhunF816LscuOup/PJ/et5lWy3Jd0QHWYVR6bVC0hZcs833UIPTpfPIOTthwXBO8I278piGoMJnk5YkivQgEbGF0gdGSbep5cXo0tUeMNK7Xw/vPZich0NHmASjr9MevIDF0=
+Received: from BYAPR05MB3960.namprd05.prod.outlook.com (2603:10b6:a02:88::12)
+ by BN8PR05MB6337.namprd05.prod.outlook.com (2603:10b6:408:53::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.1; Mon, 25 Jul
+ 2022 18:29:26 +0000
+Received: from BYAPR05MB3960.namprd05.prod.outlook.com
+ ([fe80::959e:de9c:2ea:213a]) by BYAPR05MB3960.namprd05.prod.outlook.com
+ ([fe80::959e:de9c:2ea:213a%5]) with mapi id 15.20.5438.010; Mon, 25 Jul 2022
+ 18:29:26 +0000
+From:   Vishnu Dasa <vdasa@vmware.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Pv-drivers <Pv-drivers@vmware.com>,
+        Bryan Tan <bryantan@vmware.com>
+Subject: Re: [PATCH] VMCI: Update maintainers for VMCI
+Thread-Topic: [PATCH] VMCI: Update maintainers for VMCI
+Thread-Index: AQHYoEQyk/xBLr4HNE2eyPGwuSIgoq2PYdCAgAAGloA=
+Date:   Mon, 25 Jul 2022 18:29:25 +0000
+Message-ID: <FD326388-D2BB-42B4-B217-89DB9C134866@vmware.com>
+References: <20220725163246.38486-1-vdasa@vmware.com>
+ <Yt7bfyANrfdPxdS8@kroah.com>
+In-Reply-To: <Yt7bfyANrfdPxdS8@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fe94fbe3-20d7-48d6-cd22-08da6e6b9a91
+x-ms-traffictypediagnostic: BN8PR05MB6337:EE_
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ky0QHV7wQ0shF9ER/RhiGaEka+Z+LleAg4OnTb47Ea2OZfjvHS46xYRqZDCuhfbTAEPAM7aTCVvEPhuYi72yfJO+/awcNLnjIiwALPzmzMUPsWA3PVr+fJKG989RGp5+PWuJtCSejAQTYdhsgsvDuts+yD4sjqU1LwIDdqsEMjAXvz3urhypmkKrUnQqzHd/Kfk7Yyt0EzngJFQhI3wSHzCLb1td+zrk9P+IPAN8IQ7OpVHxhYRSqaCKPFKtsIiIVdhW39Z7sIT7IHrmCNq18elZ8+geNlgWMfy0yxKfoX5cBZDYBZs516rJ3iZJtXsNa/EcmmEHnjuFxz14sLawhCPx5d4yOoJfDGwhmDw/qNp60e7GfOME9f4/E1/Dj9EN5yk5dmwbd3/8QbiYICywhs+u/jHa5EIT7eT0H24UqgDluNZ/byuyZXDD3/7Rg9tD8i/fz28WI1c7seMjH2eDbaN15jeB4+suJqY+ZFV2Kc0v5/U1Ah+pIb1pSGCfIgdoSWb3394Ti4eatiZoTrCPbBX1rWN0AA8emJyP0yksI94E9AUYkxc9iGObGHc55jlgw3pJoVEvTJ2thPidbLPLAADFKNHDE1vNnEs2Sz3+eJd0jnkb3zaUlPNkPXghXie5ouG4suVX3xVASOvz5dHGITS3pksa39EdbiPDpP8eZXk4LS7SRGJ6Ikjc8cUjOUOmP/ej//ErcR9Ih35E54IMvSkSyZR5klt/kqUMTqkYy06Si8AVXR93oJtJqPCvqfWxMqUdpiY8QlQCkOlWV9VqV7F6AQ7vUqvBi878/8uZc9hVxu6MJ8WPTJVHXUzplKDYWlO/uMEMZlH0wFYjDYBb1w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB3960.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(366004)(39860400002)(376002)(346002)(122000001)(33656002)(86362001)(38070700005)(38100700002)(64756008)(8936002)(5660300002)(478600001)(4744005)(36756003)(316002)(66556008)(8676002)(66446008)(186003)(107886003)(4326008)(76116006)(66476007)(2616005)(6486002)(6506007)(2906002)(71200400001)(54906003)(6916009)(53546011)(66946007)(41300700001)(6512007)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yvM6LNDxhLhmh6WedPsyPD5teEP5QojagkHqh0JwBvWlJCb4m1lgl2nZdezL?=
+ =?us-ascii?Q?b0rpDz1/T37sDd8i0oDb043CddjnVV9unw7IP0DeMxbX8fZYF28GEKUJxYkF?=
+ =?us-ascii?Q?gmKLy8dE4lH0zY1wE287gcE0PtsBaGRHWD1Mv5JFF8Q5dP+x1xjsEr+6n6YU?=
+ =?us-ascii?Q?miV7BF0NkEIpMI1hdVgM/hRmKqvxFb/7p7POM4AG3tFDI4gaNUK+He8jq4A8?=
+ =?us-ascii?Q?RNeXCTQSdvSZe+yWa7uhdFtVE2F0+MyagkFZHI3iriPSf8MQaprm7vdLiAjl?=
+ =?us-ascii?Q?yUsonF0khdCIX6hNJnmAag/FpaqqVweMf7vpP6WmqCGqEdfHHSSRI9I4OZrt?=
+ =?us-ascii?Q?iClicbO2oCFI/RIhn5zn0lcTd3NR6loNsTC9A2Dywk4G06Modli7LGmGlLEG?=
+ =?us-ascii?Q?i1SUZWdFSpcxhsGaC15ib5u41rocJIL5+yQeEi4AnwN3Ow5z1B/rbqCoOb+j?=
+ =?us-ascii?Q?g+inkRK/O9nDuz0ghjAukH/QQIFUku8yyWgkCC+kqN5qglOrzW15cqqG1FTO?=
+ =?us-ascii?Q?RRTEuhT45MUfA9xtunoP2robvQcSZlfIwMnRyxp7df4eTrNSCsUYou6nrmvs?=
+ =?us-ascii?Q?7ZixgJRngRLA50MWku6MzxIkCesntdeNaUJW7R6Pc1VMP9SCGmZqcKVcgnqi?=
+ =?us-ascii?Q?rrtOoOcZ3EkGnIAHmNssJIVwvQAtEJiTtR2UW0Vsiz/aHivOMuCLV4XOSmTW?=
+ =?us-ascii?Q?GvisIGy8WvXT6Ry9+Ky++qds8kgXe4GbLayilwF0P+3lhpfWli27P8mQxHSh?=
+ =?us-ascii?Q?EsuuYlfUoq7Dpfc+OLnYJNz3gc9m7AocCWH/ZqDm6blPr4oV54eOGgo8fRX/?=
+ =?us-ascii?Q?+11FpPJ2vQAaESY0NOLGW3xZ7iinMKo6pZynMmGe+/KlCGRXY0LR1xrsVgld?=
+ =?us-ascii?Q?ZSUYDIitXyKGcI3dfBzfWVHynm//N8/D5Bd73yXvi4iK0cyRr5Qtl2LAsZdj?=
+ =?us-ascii?Q?5SoENvaXB9Cm9VXHa+JPMBzJWoPzreRELMdHd44gSiegr3P5rp09L74PJPxQ?=
+ =?us-ascii?Q?y4UIGKPgLk9tLOPvT6YdCDcdMTcJ34iLT0j/dss/c1fl0s4/3eZACNn/kMbW?=
+ =?us-ascii?Q?Wq7LZWKH0ugRX2cYRII512I3mNtzcwh8SBrV51XBCOdheyRLIAYSGvhtxK7W?=
+ =?us-ascii?Q?J3qHvQkOM4nBBEN3vqCFcljqFk0pirFz7e7k0RPaB74lC7DLRZkLAPSRQAaL?=
+ =?us-ascii?Q?F73/iKt7mEoPdvCUEFhxkYCKGYw7bhWRTsRtJLwIxwu0j9MojKNqXevSS8dT?=
+ =?us-ascii?Q?uCJM1ZK5IR2JUtYeHJ2W2YyIaLBVs86+4ZGWtZBNcHrCz7QLz1b7zX8rUiv/?=
+ =?us-ascii?Q?8cVkHafCTpssSpMvmYd7S/pk0RvqFjn2A7taF6xPdHhAibkhk36y0mqjMZyD?=
+ =?us-ascii?Q?YjkdZiLgfA0GJjoCM2IHDwhHBNsEs9O2/J+13YMtzbZTTJ8ZskvYX3xnYOr4?=
+ =?us-ascii?Q?ulGRZIHjdehuyTsuDfRV29BI7PrVyIxSzPeyGaV1lrooo/d7rWqN574G6llV?=
+ =?us-ascii?Q?LdK2qhDUxTT3sMSr1Prckr7kfepCF3FhQwbzktcvuvS1J9NdAnZDoOVd5tO2?=
+ =?us-ascii?Q?FfvasDrT9DWafwcdCwijiq5bATq6JZMe9Ouvx44YhRc0X63rdeotApUT3cjF?=
+ =?us-ascii?Q?9Qmhar5k/vydwiUmu/fLd0VZK7ndwdcDzBfLpxPDxD+4?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3E672CC9D4235C4E8DC549BD5C0B63AC@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721040439.2651-10-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR05MB3960.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe94fbe3-20d7-48d6-cd22-08da6e6b9a91
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2022 18:29:25.9836
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IpR2mlxvjczV3+yspsKo2/Y+sTYt9CnU8JxmT/ICU9FGQR5Mq3QSUrQDEGp+emrzkYAoKJkpYubJiA4mqNX8kg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR05MB6337
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 12:04:39PM +0800, Chengming Zhou wrote:
-> Now PSI already tracked workload pressure stall information for
-> CPU, memory and IO. Apart from these, IRQ/SOFTIRQ could have
-> obvious impact on some workload productivity, such as web service
-> workload.
-> 
-> When CONFIG_IRQ_TIME_ACCOUNTING, we can get IRQ/SOFTIRQ delta time
-> from update_rq_clock_task(), in which we can record that delta
-> to CPU curr task's cgroups as PSI_IRQ_FULL status.
->
-> Note we don't use PSI_IRQ_SOME since IRQ/SOFTIRQ always happen in
-> the current task on the CPU, make nothing productive could run
-> even if it were runnable, so we only use PSI_IRQ_FULL.
 
-That sounds reasonable.
+> On Jul 25, 2022, at 11:05 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
+>=20
+> On Mon, Jul 25, 2022 at 09:32:46AM -0700, vdasa@vmware.com wrote:
+>> From: Vishnu Dasa <vdasa@vmware.com>
+>>=20
+>> Remove Rajesh as a maintainer for the VMCI driver.
+>=20
+> Why?
 
-> For performance impact consideration, this is enabled by default when
-> CONFIG_IRQ_TIME_ACCOUNTING, but can be disabled by kernel cmdline
-> parameter "psi_irq=".
+Rajesh is no longer with VMware and won't be working on VMCI.
 
-If there isn't a concrete usecase already, let's not add another
-commandline parameter for now.
+>=20
+>>=20
+>> Acked-by: Bryan Tan <bryantan@vmware.com>
+>> Signed-off-by: Vishnu Dasa <vdasa@vmware.com>
+>=20
+> I need an ack from the person that is being removed here, for obvious
+> reasons.  Any specific reason you didn't cc: them on this patch?
 
-> @@ -63,9 +64,11 @@ enum psi_states {
->  	PSI_MEM_FULL,
->  	PSI_CPU_SOME,
->  	PSI_CPU_FULL,
-> +	PSI_IRQ_SOME,
-> +	PSI_IRQ_FULL,
->  	/* Only per-CPU, to weigh the CPU in the global average: */
->  	PSI_NONIDLE,
-> -	NR_PSI_STATES = 7,
-> +	NR_PSI_STATES = 9,
->  };
+He is aware of this change, but we missed sending this patch before his
+last day.  So, his email ID is inactive now.  Hence, it was omitted.
 
-Unfortunately, this grows the psi state touched by the scheduler into
-a second cacheline. :( Please reclaim space first.
-
-I think we can remove the NR_CPU task count, which frees up one
-u32. Something like the below diff should work (untested!)
-
-And you should be able to remove PSI_IRQ_SOME, since it's not used
-anyway. Then we'd be good to go.
-
-diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-index c7fe7c089718..31dc76e2d8ea 100644
---- a/include/linux/psi_types.h
-+++ b/include/linux/psi_types.h
-@@ -15,13 +15,6 @@ enum psi_task_count {
- 	NR_IOWAIT,
- 	NR_MEMSTALL,
- 	NR_RUNNING,
--	/*
--	 * This can't have values other than 0 or 1 and could be
--	 * implemented as a bit flag. But for now we still have room
--	 * in the first cacheline of psi_group_cpu, and this way we
--	 * don't have to special case any state tracking for it.
--	 */
--	NR_ONCPU,
- 	/*
- 	 * For IO and CPU stalls the presence of running/oncpu tasks
- 	 * in the domain means a partial rather than a full stall.
-@@ -39,9 +32,11 @@ enum psi_task_count {
- #define TSK_IOWAIT	(1 << NR_IOWAIT)
- #define TSK_MEMSTALL	(1 << NR_MEMSTALL)
- #define TSK_RUNNING	(1 << NR_RUNNING)
--#define TSK_ONCPU	(1 << NR_ONCPU)
- #define TSK_MEMSTALL_RUNNING	(1 << NR_MEMSTALL_RUNNING)
- 
-+/* Only one task can be scheduled, no corresponding task count */
-+#define TSK_ONCPU	(1 << NR_PSI_TASK_COUNTS)
-+
- /* Resources that workloads could be stalled on */
- enum psi_res {
- 	PSI_IO,
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index a4fa3aadfcba..232e1dbfad46 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -215,7 +215,7 @@ void __init psi_init(void)
- 	group_init(&psi_system);
- }
- 
--static bool test_state(unsigned int *tasks, enum psi_states state)
-+static bool test_state(unsigned int *tasks, enum psi_states state, bool oncpu)
- {
- 	switch (state) {
- 	case PSI_IO_SOME:
-@@ -228,9 +228,9 @@ static bool test_state(unsigned int *tasks, enum psi_states state)
- 		return unlikely(tasks[NR_MEMSTALL] &&
- 			tasks[NR_RUNNING] == tasks[NR_MEMSTALL_RUNNING]);
- 	case PSI_CPU_SOME:
--		return unlikely(tasks[NR_RUNNING] > tasks[NR_ONCPU]);
-+		return unlikely(tasks[NR_RUNNING] > oncpu);
- 	case PSI_CPU_FULL:
--		return unlikely(tasks[NR_RUNNING] && !tasks[NR_ONCPU]);
-+		return unlikely(tasks[NR_RUNNING] && !oncpu);
- 	case PSI_NONIDLE:
- 		return tasks[NR_IOWAIT] || tasks[NR_MEMSTALL] ||
- 			tasks[NR_RUNNING];
-@@ -692,9 +692,9 @@ static void psi_group_change(struct psi_group *group, int cpu,
- 			     bool wake_clock)
- {
- 	struct psi_group_cpu *groupc;
--	u32 state_mask = 0;
- 	unsigned int t, m;
- 	enum psi_states s;
-+	u32 state_mask;
- 
- 	groupc = per_cpu_ptr(group->pcpu, cpu);
- 
-@@ -710,6 +710,26 @@ static void psi_group_change(struct psi_group *group, int cpu,
- 
- 	record_times(groupc, now);
- 
-+	/*
-+	 * Start with TSK_ONCPU, which doesn't have a corresponding
-+	 * task count - it's just a boolean flag directly encoded in
-+	 * the state mask. Clear, set, or carry the current state if
-+	 * no changes are requested.
-+	 */
-+	if (clear & TSK_ONCPU) {
-+		state_mask = 0;
-+		clear &= ~TSK_ONCPU;
-+	} else if (set & TSK_ONCPU) {
-+		state_mask = TSK_ONCPU;
-+		set &= ~TSK_ONCPU;
-+	} else {
-+		state_mask = groupc->state_mask & TSK_ONCPU;
-+	}
-+
-+	/*
-+	 * The rest of the state mask is calculated based on the task
-+	 * counts. Update those first, then construct the mask.
-+	 */
- 	for (t = 0, m = clear; m; m &= ~(1 << t), t++) {
- 		if (!(m & (1 << t)))
- 			continue;
-@@ -729,9 +749,8 @@ static void psi_group_change(struct psi_group *group, int cpu,
- 		if (set & (1 << t))
- 			groupc->tasks[t]++;
- 
--	/* Calculate state mask representing active states */
- 	for (s = 0; s < NR_PSI_STATES; s++) {
--		if (test_state(groupc->tasks, s))
-+		if (test_state(groupc->tasks, s, state_mask & TSK_ONCPU))
- 			state_mask |= (1 << s);
- 	}
- 
-@@ -743,7 +762,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
- 	 * task in a cgroup is in_memstall, the corresponding groupc
- 	 * on that cpu is in PSI_MEM_FULL state.
- 	 */
--	if (unlikely(groupc->tasks[NR_ONCPU] && cpu_curr(cpu)->in_memstall))
-+	if (unlikely((state_mask & TSK_ONCPU) && cpu_curr(cpu)->in_memstall))
- 		state_mask |= (1 << PSI_MEM_FULL);
- 
- 	groupc->state_mask = state_mask;
-@@ -847,7 +866,8 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
- 		iter = NULL;
- 		while ((group = iterate_groups(next, &iter))) {
- 			if (identical_state &&
--			    per_cpu_ptr(group->pcpu, cpu)->tasks[NR_ONCPU]) {
-+			    (per_cpu_ptr(group->pcpu, cpu)->state_mask &
-+			     TSK_ONCPU)) {
- 				common = group;
- 				break;
- 			}
+Please let me know if there's anything I can do.

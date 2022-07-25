@@ -2,93 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D4857FCAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B0857FCB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 11:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbiGYJtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 05:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S233629AbiGYJvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 05:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiGYJtN (ORCPT
+        with ESMTP id S232747AbiGYJvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 05:49:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4943E167E0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 02:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658742553; x=1690278553;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Yc2IwfO234HVEdSYGqjS9OHWZNlHN8ag2FS4W7zgU3A=;
-  b=GssvQOaW/uUAaYHF9HlTteNJ/D/fmyoNNI8eFI50WoRmCV83pnUp4FJR
-   uTckPvJfwx7+U2LxRxJf4kqZ7bwLRfDhbbyzP8kP04fv2FXu2lIZanyk4
-   iuLbHLRE9mdIamHN3PkcnE0SV/8cI+/HKGXyC8h+H9hQykIqoXkirVQl6
-   4oSwB1DXiK6jq5F6DtOqW06Cos7ld4dV1NFcf1FLIUX93ouKDupbxPpaz
-   uoA/iakVz7L3o8c6Ih5ssjgJj64CyCpNcxkYrVBHx8bYwGDyl9aKkNVkb
-   yqCdl57Nztd9qpXy90Nvr/yvFeAvxf84g+AnaQ7GYxwkPlxr/tXaLyFGr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="288843771"
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="288843771"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 02:49:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="627385857"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jul 2022 02:49:11 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oFui7-0004vh-0J;
-        Mon, 25 Jul 2022 09:49:11 +0000
-Date:   Mon, 25 Jul 2022 17:48:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-Subject: [steev:sc8280xp-next-20220714 10/11] qcom_tee.c:undefined reference
- to `qcom_scm_call'
-Message-ID: <202207251717.Z6tTRx8w-lkp@intel.com>
+        Mon, 25 Jul 2022 05:51:19 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA8BA474;
+        Mon, 25 Jul 2022 02:51:18 -0700 (PDT)
+X-UUID: ae0c1fc3a6f64bfd8b86a4940db392a4-20220725
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:315449f2-28d8-481d-b6b7-0a706ad04402,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:7c1edfd3-912a-458b-a623-74f605a77e93,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: ae0c1fc3a6f64bfd8b86a4940db392a4-20220725
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1604583661; Mon, 25 Jul 2022 17:51:12 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 25 Jul 2022 17:51:11 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 25 Jul 2022 17:51:11 +0800
+Message-ID: <f0c930400e4a5b3723df2d257cc4bc51ee7a2806.camel@mediatek.com>
+Subject: Re: [PATCH v14 06/10] drm/mediatek: Add MT8195 External DisplayPort
+ support
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <liangxu.xu@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 25 Jul 2022 17:51:11 +0800
+In-Reply-To: <20220712111223.13080-7-rex-bc.chen@mediatek.com>
+References: <20220712111223.13080-1-rex-bc.chen@mediatek.com>
+         <20220712111223.13080-7-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/steev/linux sc8280xp-next-20220714
-head:   c31ad66577ce26a1414d843c526244ddb75283bf
-commit: 83d2fed55d3f7504dc2af5dbc73768d3aaff2618 [10/11] wip! firmware: Add support for Qualcomm UEFI Secure Application
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220725/202207251717.Z6tTRx8w-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/steev/linux/commit/83d2fed55d3f7504dc2af5dbc73768d3aaff2618
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev sc8280xp-next-20220714
-        git checkout 83d2fed55d3f7504dc2af5dbc73768d3aaff2618
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi, Bo-Chen:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On Tue, 2022-07-12 at 19:12 +0800, Bo-Chen Chen wrote:
+> From: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> This patch adds External DisplayPort support to the mt8195 eDP
+> driver.
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
 
-All errors (new ones prefixed by >>):
+[snip]
 
-   ld: drivers/firmware/qcom_tee.o: in function `qctee_os_scm_call':
->> qcom_tee.c:(.text+0x34): undefined reference to `qcom_scm_call'
+> @@ -1489,13 +1543,34 @@ static int mtk_dp_init_port(struct mtk_dp
+> *mtk_dp)
+>  static irqreturn_t mtk_dp_hpd_event_thread(int hpd, void *dev)
+>  {
+>  	struct mtk_dp *mtk_dp = dev;
+> +	int event;
+> +
+> +	event = mtk_dp_plug_state(mtk_dp) ?
+> +		connector_status_connected :
+> connector_status_disconnected;
+> +
+> +	if (event < 0)
+> +		return IRQ_HANDLED;
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for QCOM_TEE
-   Depends on QCOM_SCM
-   Selected by
-   - QCOM_TEE_UEFISECAPP && EFI
+event is useless, so drop it.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+CK
+
+> +
+> +	dev_dbg(mtk_dp->dev, "drm_helper_hpd_irq_event\n");
+> +	drm_helper_hpd_irq_event(mtk_dp->bridge.dev);
+>  
+>  	if (mtk_dp->train_info.cable_state_change) {
+>  		mtk_dp->train_info.cable_state_change = false;
+>  
+> -		mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> -				   DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> -				   DP_PWR_STATE_MASK);
+> +		if (!mtk_dp->train_info.cable_plugged_in) {
+> +			mtk_dp_video_mute(mtk_dp, true);
+> +
+> +			mtk_dp_initialize_priv_data(mtk_dp);
+> +			mtk_dp_set_idle_pattern(mtk_dp, true);
+> +
+> +			mtk_dp_update_bits(mtk_dp,
+> MTK_DP_TOP_PWR_STATE,
+> +					   DP_PWR_STATE_BANDGAP_TPLL,
+> +					   DP_PWR_STATE_MASK);
+> +		} else {
+> +			mtk_dp_update_bits(mtk_dp,
+> MTK_DP_TOP_PWR_STATE,
+> +					   DP_PWR_STATE_BANDGAP_TPLL_LA
+> NE,
+> +					   DP_PWR_STATE_MASK);
+> +		}
+>  	}
+>  
+>  	if (mtk_dp->train_info.irq_sta.hpd_inerrupt) {
+> @@ -1597,6 +1672,24 @@ static int mtk_dp_dt_parse(struct mtk_dp
+> *mtk_dp,
+>  	return 0;
+>  }
+>  
+

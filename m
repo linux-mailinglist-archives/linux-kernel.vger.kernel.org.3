@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBBB57FDA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A996A57FDAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 12:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbiGYKge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 06:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S234634AbiGYKhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 06:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234618AbiGYKgY (ORCPT
+        with ESMTP id S232413AbiGYKhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 06:36:24 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6A9167DE;
-        Mon, 25 Jul 2022 03:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658745383; x=1690281383;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=THMuk/+fHLYsNtlG0j7lAFgILZf63dS0Zd2Cx2MnyCs=;
-  b=c30FFe52mgCGOxlSbMcczY3cWPdSdEFKjWnpLCmS6mnWG7DNxNpPpRZK
-   65f5Lq0zFewUZ1no7sruq1wAfQUgeD3vmAmZYoR4viHFAqiiaK3J00Chy
-   FMPiO791REOW1n99cwSCQ6sAU/Czb1RO8CowVb/zMhqOTuGh+/KOfuzUx
-   1OztQZhwzKp5/gphPqrISWe9c5Cd0DRagucmdDOpEZQ5ftmnZWYR1mnsR
-   +xt3Ef6XUvreS3ATuUPEl7moj6B7zYbsknDuHmpoGUuq/kZxr/Qg6Tc/q
-   rL2bF7QZRIyR6zmAFH2eOfdKCErNcU1ywzGLjfYUyDgrT3wCsRoR/J4w7
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10418"; a="287678395"
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="287678395"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 03:36:23 -0700
-X-IronPort-AV: E=Sophos;i="5.93,192,1654585200"; 
-   d="scan'208";a="596635665"
-Received: from edere-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.168.34])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 03:36:19 -0700
-Message-ID: <06a9fef8579e880b9b031f03911739d4d902dbe0.camel@intel.com>
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Haitao Huang <haitao.huang@linux.intel.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 25 Jul 2022 22:36:17 +1200
-In-Reply-To: <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
-         <ab467244dd03b5f94bafe9068b1c02790033c18c.camel@intel.com>
-         <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
+        Mon, 25 Jul 2022 06:37:52 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3315A18344
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:37:51 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id i205-20020a1c3bd6000000b003a2fa488efdso3323499wma.4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 03:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=+9DH2yvpmzJTbR5IRlHExx56HEvkEyqIpYZIUzY5w+A=;
+        b=FJps3xWD3fTcLB5G6iYtWvZ04LSQQ460w2JesdVKAYJcYQ0VZ2CeLNBqG8wT1SwGTZ
+         KxkkceVqsAXI0cmlTQ8/iOH/Ad6WR+ID84f0jCBhf6PN+z5SplCiEg/3GUKUFaMiuMkW
+         EviuOr15IgnDYAMFTARD+yJXWwCBjtGCt+5EMeClBR1ooU0CiwdwcioQbTzXwJ/inTZS
+         ULH3P3Rdq1vUgXkhicNx6sDLb12vG/rq2ROAirRjQBh6bW+fpV9TKJtGuuexSuF7YdDp
+         /vaRsg99tahX6PHl3UaF6xcyxO40ipCFmysAftFWor/QqI2Tnv/oZT4TXYOyTgnrXKyl
+         W+hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+9DH2yvpmzJTbR5IRlHExx56HEvkEyqIpYZIUzY5w+A=;
+        b=N2e6V5LgCKz8eFzzZq29AXERE7VRwD783Vg9YThKEknKB4Iw2i+iwtuDChZ2ZDPHBz
+         z+o0xFRrTZml9HQvJpkDmzICvMPUjNKc46jURgL2IYn8RdgVG9ZM6oSbOL4C3IXJWs+T
+         FGIoy6ZucT0gxI1uviAXDNSU8c2bbCgC7as5b9GaXuQUl4do/6WojWTzCIwNP2jzjWpz
+         E8UoDJUSctYwt/6av5g3rMvbowvwkpNWhY+8o6+I4aXZ3t5pPmqNWLBjSEwmuXgj19KE
+         pRBoEI3EZFR+z686IO5g1MdPdyQE27UVXiBn4ZFArLCVv2xGGtSmeBzAZ3pZhORnuqoK
+         LEUQ==
+X-Gm-Message-State: AJIora8DLP9s0rmzZq/OVIR6NyCXY0N2ZkyT3Xi9S8sl7alBhinyo0Jh
+        X96rehvTUZ/xQDl2XTbqFpkkyg==
+X-Google-Smtp-Source: AGRyM1ui0IeqFV27TNP9tXSKwFKHp50Fq3KFu4y2q1dEhoKO6vTUYsV1xBAWfptX9qaAPUV9SUc6OQ==
+X-Received: by 2002:a1c:f313:0:b0:3a3:1117:282d with SMTP id q19-20020a1cf313000000b003a31117282dmr21119036wmq.40.1658745469737;
+        Mon, 25 Jul 2022 03:37:49 -0700 (PDT)
+Received: from [192.168.1.6] ([195.24.90.54])
+        by smtp.googlemail.com with ESMTPSA id y2-20020a5d6142000000b0021d70a871cbsm11606346wrt.32.2022.07.25.03.37.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 03:37:49 -0700 (PDT)
+Message-ID: <83fcf3ef-9b85-2307-c5f2-c4609af059f7@linaro.org>
+Date:   Mon, 25 Jul 2022 13:37:47 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/7] venus : Addition of control support -
+ V4L2_CID_MIN_BUFFERS_FOR_OUTPUT
+Content-Language: en-US
+To:     Viswanath Boma <quic_vboma@quicinc.com>,
+        video.upstream.external@qti.qualcomm.com,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220712122347.6781-1-quic_vboma@quicinc.com>
+ <20220712122347.6781-2-quic_vboma@quicinc.com>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+In-Reply-To: <20220712122347.6781-2-quic_vboma@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-07-22 at 08:21 -0700, Dave Hansen wrote:
-> On 7/22/22 06:26, Kai Huang wrote:
-> > Did a quick look at the spec.  It appears ENCLU[EDECCSSA] should be use=
-d
-> > together with AEX-notify.  So besides advertising the new
-> > SGX_ATTR_ASYNC_EXIT_NOTIFY bit to the KVM guest, I think we should also
-> > advertise the ENCLU[EDECCSSA] support in guest's CPUID, like below (unt=
-ested)?
->=20
-> Sounds like a great follow-on patch!  It doesn't seem truly functionally
-> required from the spec:
->=20
-> > EDECCSSA is a new Intel SGX user leaf function
-> > (ENCLU[EDECCSSA]) that can facilitate AEX notification handling...
->=20
-> If that's wrong or imprecise, I'd love to hear more about it and also
-> about how the spec will be updated.
->=20
-
-They are enumerated separately, but looks in practice the notify handler wi=
-ll
-use it to switch back to the correct/targeted CSSA to continue to run norma=
-lly
-after handling the exit notify.  This is my understanding of the "facilitat=
-e"
-mean in the spec.
-
-Btw, in real hardware I think the two should come together, meaning no real
-hardware will only support one.=20
-
-Haitao, could you give us more information?
-
---=20
-Thanks,
--Kai
 
 
+On 7/12/22 15:23, Viswanath Boma wrote:
+>   V4l2 encoder compliance expecting minimum buffers support for the application to allocate
+>   buffers as per the control support values.
+
+Please start the sentence from the beginning.
+
+> 
+> Change-Id: Idb41ff7dce8b8138f28df01d045eae6facf7e93d
+
+No Change-Ids, please.
+
+> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+> ---
+>  drivers/media/platform/qcom/venus/venc_ctrls.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
+> index 37ba7d97f99b2..95fdad160732b 100644
+> --- a/drivers/media/platform/qcom/venus/venc_ctrls.c
+> +++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+> @@ -355,7 +355,7 @@ int venc_ctrl_init(struct venus_inst *inst)
+>  	struct v4l2_ctrl_hdr10_mastering_display p_hdr10_mastering = { {34000, 13250, 7500 },
+>  	{ 16000, 34500, 3000 }, 15635,	16450, 10000000, 500 };
+>  
+> -	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 58);
+> +	ret = v4l2_ctrl_handler_init(&inst->ctrl_handler, 59);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -435,6 +435,9 @@ int venc_ctrl_init(struct venus_inst *inst)
+>  		V4L2_MPEG_VIDEO_VP8_PROFILE_3,
+>  		0, V4L2_MPEG_VIDEO_VP8_PROFILE_0);
+>  
+> +	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+
+You did not provide a g_ctrl handler for this ?
+
+> +		V4L2_CID_MIN_BUFFERS_FOR_OUTPUT, 4, 11, 1, 4);
+> +
+>  	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+>  		V4L2_CID_MPEG_VIDEO_BITRATE, BITRATE_MIN, BITRATE_MAX,
+>  		BITRATE_STEP, BITRATE_DEFAULT);
+
+-- 
+regards,
+Stan

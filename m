@@ -2,136 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016575805BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D535805BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 22:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237124AbiGYUdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 16:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
+        id S237185AbiGYUeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 16:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237195AbiGYUda (ORCPT
+        with ESMTP id S231420AbiGYUeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 16:33:30 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9FA22531
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:33:28 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id y1so3417754pja.4
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=G5jYWH3hxREIRAZ8xNdidgICrjJheqmXGjb2G8FN6b8=;
-        b=pHMpJ5bbRdXkUSMdQf34U5FJaTcIT5vq2m9zsL+qYLFi/LoMKXvQeXC/Pmg47dqiO2
-         ZaUz76atfDMJ10DJ0+zUGJGyVQwd0kawSE13uhQYTko3cfNm/YQ75TdG01H9gykWRnTF
-         cwncz3qMOR3ZPjPYnE0iYlvHN1xNTSTY5E53fqVUDa5SqdX5KJMZ7mEXtGW+KaL1mNPq
-         8A6d1dB2vKV2NUcMurvhX9mPnK2R2StmKbirRFN5MLyqrCFGv6IelD4rFNTvHopj8kNL
-         lDbmGUdjfBPL8AhkyZsmAF99ioOcQzEeh6Ew5ouUosX5QBfjLo89jYiRXZFoaChdCH8p
-         D+5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G5jYWH3hxREIRAZ8xNdidgICrjJheqmXGjb2G8FN6b8=;
-        b=EEOthWiZgdiT/gfEnyN4oRv2WrktcPdwTW6ZSnK8t/NlF/OOD5hCVHvEe+F/cxSk1g
-         YsGCM2aNH7RE7x+w5s9yJnjbwmzcdkMGmftCBB1QfRYyK9wv116IjToMzayIhpH197GG
-         HbchlLcTT6GvdFCeYr4luFdUDAtcsmtlYjs2uM1Tt6CyJAaIoMnIm8L5DwcWdVsBB2O2
-         8ovTCdqHP5t1nWXFbVKTbGn04tUTXbb5En8CsSP7bVIkB47QIvhTevCQPMg6CrgmgN6w
-         Ws6k/1PIRoQDOjoK8LiUeV70R4pJsooMB3eWAZqH9wJtAcdhr6mrR/6H0rbKQnFkinhb
-         9K/Q==
-X-Gm-Message-State: AJIora/y0ZCxIjDtIbqye1cziBkyqbLeCqyMmGtbFHCKKu3tkv9/R3Ev
-        vYxXoa5LXnktODQbnE9qP172Uw==
-X-Google-Smtp-Source: AGRyM1uB8HPgkDJUFByliUB9fkkCz5dnUGW9tgJHiF+d1vbneXSJ66bbTruO1FX9I+boh7B6qELv9A==
-X-Received: by 2002:a17:90b:3c86:b0:1f2:1fb9:ebd with SMTP id pv6-20020a17090b3c8600b001f21fb90ebdmr31488423pjb.151.1658781208299;
-        Mon, 25 Jul 2022 13:33:28 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0? ([2401:4900:1f3a:5a45:a9cd:d7dd:fd01:73c0])
-        by smtp.gmail.com with ESMTPSA id s36-20020a17090a69a700b001f03287f704sm11501106pjj.57.2022.07.25.13.33.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 13:33:27 -0700 (PDT)
-Message-ID: <863c3c60-fade-44d5-892a-c002883a044f@linaro.org>
-Date:   Tue, 26 Jul 2022 02:03:23 +0530
+        Mon, 25 Jul 2022 16:34:23 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF3E22531
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 13:34:21 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by michel.telenet-ops.be with bizsmtp
+        id zYaJ270034C55Sk06YaJB3; Mon, 25 Jul 2022 22:34:18 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oG4mQ-005GTI-2z
+        for linux-kernel@vger.kernel.org; Mon, 25 Jul 2022 22:34:18 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oG4mP-00ESeX-Kr
+        for linux-kernel@vger.kernel.org; Mon, 25 Jul 2022 22:34:17 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v5.19-rc8
+Date:   Mon, 25 Jul 2022 22:34:17 +0200
+Message-Id: <20220725203417.3446690-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
+References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: mmc: Set maximum documented operating
- frequency as 384MHz
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bhupesh Sharma <bhupesh.linux@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220725180916.2850228-1-bhupesh.sharma@linaro.org>
- <CAL_Jsq+UaXgCFH5azZoHDSSqagEcRf9f6-ZucWAHuYZi0HaHgA@mail.gmail.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <CAL_Jsq+UaXgCFH5azZoHDSSqagEcRf9f6-ZucWAHuYZi0HaHgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Below is the list of build error/warning regressions/improvements in
+v5.19-rc8[1] compared to v5.18[2].
 
-On 7/26/22 1:59 AM, Rob Herring wrote:
-> On Mon, Jul 25, 2022 at 12:09 PM Bhupesh Sharma
-> <bhupesh.sharma@linaro.org> wrote:
->>
->> As Ulf noted in [1], the maximum operating frequency
->> documented in the mmc-controller device-tree bindings
->> should be updated to the maximum frequency supported
->> by the mmc controller(s).
-> 
-> Please send DT patches to the DT list so checks run and they are in
-> the review queue.
+Summarized:
+  - build errors: +3/-4
+  - build warnings: +11/-11
 
-Oops, will do.
+JFYI, when comparing v5.19-rc8[1] to v5.19-rc7[3], the summaries are:
+  - build errors: +1/-5
+  - build warnings: +0/-0
 
->> Without this fix in place, the 'make dtbs_check' reports
->> issues with 'max-frequency' value for ipq8074 sdhci node:
->>
->>    arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb: mmc@7824900:
->>     max-frequency:0:0: 384000000 is greater than the maximum of 200000000
->>
->> [1]. https://www.spinics.net/lists/kernel/msg4442049.html
->>
->> Cc: Ulf Hansson <ulf.hansson@linaro.org>
->> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->> Cc: Rob Herring <robh@kernel.org>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->> - Rebased on linux-next/master
->>
->>   .../devicetree/bindings/mmc/mmc-controller.yaml          | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
->> index ff5ce89e5111..c49f3060c24a 100644
->> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
->> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
->> @@ -87,12 +87,19 @@ properties:
->>       enum: [1, 4, 8]
->>       default: 1
->>
->> +  # Maximum operating frequency:
->> +  # - for eMMC, the maximum supported frequency is 200MHz,
->> +  # - for SD/SDIO cards the SDR104 mode has a max supported
->> +  #   frequency of 208MHz,
->> +  # - some mmc host controllers do support a max frequency
->> +  #   upto 384MHz,
->> +  # so lets keep the maximum supported value here.
-> 
-> Add to the description instead of a comment.
+Note that there may be false regressions, as some logs are incomplete.
+Still, they're build errors/warnings.
 
-Ok, will fix in v2.
+Happy fixing! ;-)
 
-Thanks,
-Bhupesh
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e0dccc3b76fb35bb257b4118367a883073d7390e/ (all 135 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4b0986a3613c92f4ec1bdc7f60ec66fea135991f/ (131 out of 135 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ff6992735ade75aae3e35d16b17da1008d753d28/ (all 135 configs)
+
+
+*** ERRORS ***
+
+3 error regressions:
+  + /kisskb/src/include/ufs/ufshci.h: error: initializer element is not constant:  => 245:36
+  + error: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5100), (.head.text+0x5040)
+  + error: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
+
+4 error improvements:
+  - /kisskb/src/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: error: case label does not reduce to an integer constant: 4917:4 => 
+  - /kisskb/src/drivers/scsi/aacraid/commsup.c: error: case label does not reduce to an integer constant: 1983:2 => 
+  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text': (.head.text+0x5100), (.head.text+0x5040) => 
+  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o: (.init.text+0xa4) => 
+
+
+*** WARNINGS ***
+
+11 warning regressions:
+  + .config: warning: override: ARCH_RV32I changes choice state:  => 3864
+  + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 61
+  + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid for ZPOOL:  => 37
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47b0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47e0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4810): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4828): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4840): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000:  => N/A
+  + modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x52bc): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names:  => N/A
+
+11 warning improvements:
+  - .config: warning: override: reassigning to symbol GCC_PLUGIN_RANDSTRUCT: 12253, 12475 => 
+  - /kisskb/src/drivers/scsi/mpt3sas/mpt3sas_base.c: warning: array subscript 'Mpi2SasIOUnitPage1_t {aka struct _MPI2_CONFIG_PAGE_SASIOUNIT_1}[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]: 5400:40, 5396:40, 5403:43 => 
+  - /kisskb/src/drivers/tty/serial/sh-sci.c: warning: unused variable 'sport' [-Wunused-variable]: 2651:26 => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4790): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47a8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47c0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47d8): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x47f0): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4808): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o(.data+0x4820): Section mismatch in reference from the variable qede_forced_speed_maps to the variable .init.rodata:qede_forced_speed_100000: N/A => 
+  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45d4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

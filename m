@@ -2,82 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5A358026F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F87580275
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbiGYQHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 12:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S235596AbiGYQIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 12:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbiGYQHo (ORCPT
+        with ESMTP id S235868AbiGYQI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:07:44 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560FADFBD;
-        Mon, 25 Jul 2022 09:07:43 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id y15so10805922plp.10;
-        Mon, 25 Jul 2022 09:07:43 -0700 (PDT)
+        Mon, 25 Jul 2022 12:08:29 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AE613FBB
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:08:27 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id t3-20020a17090a3b4300b001f21eb7e8b0so14206892pjf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mjgpg4ZV+VLOftEfwsbp2uyCZES8VtwrkrpG5A+4mFg=;
-        b=PXdnEvIptvDcZIyG61PW8j3e6CaFKPs19zNKWybPquAAocjh6WbFtCYQABJRRGRkGu
-         iSUSKehBWJ/TCJFMwYEg5SncOsQAV2wAtaVwamxeFssuKAK/HimjxRXHwBHxEz3f+YF6
-         JsaO/9sidEX+KvCCwDDykoSyC6kiQMUsuY0/xl0xcBBKQ2xRkRfahd2it2a6kYagMQJp
-         7/j0YYDIrp2F19w4rGdFzNIiGadoxK1raR5PJBfH2xdmtCYmrwsdophoyYam6qzOHwmZ
-         gV/ZDaIPH9Vnvxd4Gt2jmI8c0wmeMDnDEWwbv/sRTUndC/hkzN11ZPd2Qe8Zf19mqaGz
-         ccLg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FjmoqdU5kj6rAICx3+QzM5MmmkfRNlf/iMQ4fGtplDA=;
+        b=qPSXGfwvhrycsBQOp8iY52tnh1KgXSyBQB+dY2Cc2tVNhSXPKkg6St7J8kQhqlxsEa
+         03/RDkLPFIsTansQAXIAeanSealDnebMm5Rkdeor7AxexibjsXRGN73FxGe+80khHHPT
+         v8xnWy3f4sCauZhKga5d0yRHZMfto0sAsNxbMkAfxHPvxIQ0QMx7qXI5Yd72cemfFpCD
+         ub1xtP7DT0g4876OlkgQbiBkH+IA9KU4VYPyvaX+x4qSh+CKsdH1qu+6TICYYOcHbB97
+         U52lm5UEl9xUZTAXBGfNfpUs+Njp6xwD/4d+nSIA1+bpzWLsFtNt7MCE6xDG67zmiVWT
+         cQ2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mjgpg4ZV+VLOftEfwsbp2uyCZES8VtwrkrpG5A+4mFg=;
-        b=MWCr2pC8Qa3gG8WRGAVyVqpfUvbcKA0TjMLi/VGYJsTTVBckTV/lOgS4u+1KPodp//
-         gjvHhys3h+/CtFlQrB5TDtXzG4tQkAPXtax1KGbBhrPz+QpcFLCW1b58uKBpZ+s+dHms
-         buRqDqaLB0efQdB9Pp/g/CR+TZwsSUTM6FtoMXh7CZNpx/dI6u/oxldJZ5n6nRV0wJwB
-         5H0Cnni2WkcEafLz+UkvN58XNji1g7MtbF9ahfAzwbJVm14Ad3Fcty34ZmMXYUlVPKJI
-         WTpeQMJ1pXtBXCEcNQ+6qceFCR0QCT4FOhGNWj57j+zi+wxFDZYPPcYyq3oj0qUHdfyk
-         Z1TA==
-X-Gm-Message-State: AJIora9EMFkAgoC9cW+XqBMaShfCxs01ySsHf72ALUqtJZu/yL/T2LTg
-        s5Na7evXQtTGjyivCEzr4r0=
-X-Google-Smtp-Source: AGRyM1tycli7tWbSuKOfM9rGxt5Dyr1KuUTf/FDE2xa7x7hnJJiKYHpi7gi56Bzr++oS+nvtJdxlqA==
-X-Received: by 2002:a17:903:41d0:b0:16d:23e9:41d0 with SMTP id u16-20020a17090341d000b0016d23e941d0mr12667651ple.47.1658765262423;
-        Mon, 25 Jul 2022 09:07:42 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b124-20020a621b82000000b0052bf6789f02sm2914567pfb.178.2022.07.25.09.07.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 09:07:41 -0700 (PDT)
-Message-ID: <3d29b8fc-f183-5883-edc0-cde55b76e4fd@gmail.com>
-Date:   Mon, 25 Jul 2022 09:07:40 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FjmoqdU5kj6rAICx3+QzM5MmmkfRNlf/iMQ4fGtplDA=;
+        b=adMfZXRpiKGFVmmMX6+6olOaeG90c0OCSoC1qy0mD+3vQeJT08SFEit1P11loslMD4
+         fW0dMTnE4MrTEUCmOKx1qDmbrrCY4lmZK9OUtTB4jcxoUsoRIJrQDjKa4yWM/uzvF3/K
+         yWEhrYSORN99aDbIAHLp5i40jFufr+3ZIXDWiaX0EdHOVZi8bMIZZheZE1M0m0jB7paN
+         XHg5K/672jh6OYxTVmqAObLziZKkoGdyZxxoOxIHUF/I3+R47uhN3Npx9Ek/eFI+u8lP
+         ZPCWAnMroN6d8i5cV0GhfGQrdAGBnf6dWEr+vxje4iEO8GQSFJu+igpq//aQbWgZfv4N
+         6FFQ==
+X-Gm-Message-State: AJIora+Vpr1s+g+AnThErjdKcuAVx5KauLrbot/MsNBv69b0iTi7ZaMU
+        1j+heWwXckBIehh/sdciNFrA/w==
+X-Google-Smtp-Source: AGRyM1unzHQqb8zVBUKEs6rrq19O/McmbA2bTcyfP51716abdNtaluRuKhI7j88I4xjSdpuIYIqcpg==
+X-Received: by 2002:a17:90b:4a12:b0:1ef:a8bb:b475 with SMTP id kk18-20020a17090b4a1200b001efa8bbb475mr15047889pjb.124.1658765306524;
+        Mon, 25 Jul 2022 09:08:26 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id e7-20020a17090301c700b0016bf2dc1724sm9463154plh.247.2022.07.25.09.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 09:08:25 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 16:08:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH v3 04/19] KVM: x86: mmu: allow to enable write
+ tracking externally
+Message-ID: <Yt6/9V0S9of7dueW@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+ <20220427200314.276673-5-mlevitsk@redhat.com>
+ <YoZyWOh4NPA0uN5J@google.com>
+ <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
+ <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/3] Documentation: sysfs: Document Broadcom STB memc
- sysfs knobs
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20220722201043.2731570-1-f.fainelli@gmail.com>
- <20220722201043.2731570-3-f.fainelli@gmail.com>
- <135be705-24f9-13b8-6939-0eaa569434d7@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <135be705-24f9-13b8-6939-0eaa569434d7@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,47 +97,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/23/22 10:59, Krzysztof Kozlowski wrote:
-> On 22/07/2022 22:10, Florian Fainelli wrote:
->> Document the "srpd" and "frequency" sysfs attributes exposed by
->> the brcmstb_memc driver.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../ABI/testing/sysfs-platform-brcmstb-memc       | 15 +++++++++++++++
->>  1 file changed, 15 insertions(+)
->>  create mode 100644 Documentation/ABI/testing/sysfs-platform-brcmstb-memc
->>
->> diff --git a/Documentation/ABI/testing/sysfs-platform-brcmstb-memc b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
->> new file mode 100644
->> index 000000000000..2bf0f58e412c
->> --- /dev/null
->> +++ b/Documentation/ABI/testing/sysfs-platform-brcmstb-memc
->> @@ -0,0 +1,15 @@
->> +What:		/sys/devices/platform/*/*/*/*/srpd
-> 
-> That's a lot of */. Are you sure it is correct path? Didn't you include
-> here some driver-related path components? Can you paste in email full
-> path as an example?
+On Wed, Jul 20, 2022, Maxim Levitsky wrote:
+> On Sun, 2022-05-22 at 13:22 +0300, Maxim Levitsky wrote:
+> > On Thu, 2022-05-19 at 16:37 +0000, Sean Christopherson wrote:
+> > > On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> > > > @@ -5753,6 +5752,10 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+> Now for nested AVIC, this is what I would like to do:
+>  
+> - just like mmu, I prefer to register the write tracking notifier, when the
+>   VM is created.
+>
+> - just like mmu, write tracking should only be enabled when nested AVIC is
+>   actually used first time, so that write tracking is not always enabled when
+>   you just boot a VM with nested avic supported, since the VM might not use
+>   nested at all.
+>  
+> Thus I either need to use the __kvm_page_track_register_notifier too for AVIC
+> (and thus need to export it) or I need to have a boolean
+> (nested_avic_was_used_once) and register the write tracking notifier only
+> when false and do it not on VM creation but on first attempt to use nested
+> AVIC.
+>  
+> Do you think this is worth it? I mean there is some value of registering the
+> notifier only when needed (this way it is not called for nothing) but it does
+> complicate things a bit.
 
-Yes this is the correct path:
+Compared to everything else that you're doing in the nested AVIC code, refcounting
+the shared kvm_page_track_notifier_node object is a trivial amount of complexity.
 
-/sys/devices/platform/rdb/rdb:memory_controllers/rdb:memory_controllers:memc@0/9902000.memc-ddr/
+And on that topic, do you have performance numbers to justify using a single
+shared node?  E.g. if every table instance has its own notifier, then no additional
+refcounting is needed.  It's not obvious that a shared node will provide better
+performance, e.g. if there are only a handful of AVIC tables being shadowed, then
+a linear walk of all nodes is likely fast enough, and doesn't bring the risk of
+a write potentially being stalled due to having to acquire a VM-scoped mutex.
 
-the 'rdb' node is our top level bus node, the 'rdb:memory_controllers' is an encapsulating node that groups all of the possible memory controllers in a system (there can be between 1 and 3), the rdb:memory_controllers@0 is the first of those memory controller and finally the 9902000.memc-ddr is the sub-node that contains the register controls of interest, since the memory controller aggregates different functions (arbitration, configuration, statistics, DDR PHY SHIM layer, etc.). Maybe I should provide a more complete binding while I am it.
+> I can also stash this boolean (like 'bool registered;') into the 'struct
+> kvm_page_track_notifier_node',  and thus allow the
+> kvm_page_track_register_notifier to be called more that once -  then I can
+> also get rid of __kvm_page_track_register_notifier. 
 
-> 
->> +Date:		July 2022
->> +KernelVersion:	5.21
->> +Contact:	Florian Fainelli <f.fainelli@gmail.com>
->> +Description:
->> +		Self Refresh Power Down (SRPD) inactivity timeout counted in
->> +		internal DDR controller clock cycles. Possible values range
->> +		from 0 (disable inactivity timeout) to 65535 (0xffff).
-> 
-> Using hex suggests one should write there hex? If so, skip decimal...
-> You describe the user interface, not hardware registers.
-
-Fair enough.
--- 
-Florian
+No, allowing redundant registration without proper refcounting leads to pain,
+e.g. X registers, Y registers, X unregisters, kaboom.

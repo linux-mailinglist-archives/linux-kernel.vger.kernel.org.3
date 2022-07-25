@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5638957FFD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C2A57FFEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 15:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbiGYNc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 09:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S235571AbiGYNct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 09:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234946AbiGYNc0 (ORCPT
+        with ESMTP id S234785AbiGYNcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 09:32:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BBFDE96;
-        Mon, 25 Jul 2022 06:32:24 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 6B7F61FB52;
-        Mon, 25 Jul 2022 13:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1658755943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t9LEZiaIxr7qWut5KwVWqnFFQS4Gg1WXbelNaKHOXxs=;
-        b=ZawmajlquknUUrsNaNFuwHIe/SAjv+wxqrOqyi2DXAo1rlqiTjetta3AbZl0nNBVHRZwgT
-        0hzfjG5w1QGJ43WbAPCdIOCiVlxnEfms76oYWwAz/GQ3zoYbE4+RvTXe7eeo9gToJjI1oV
-        eONWmLAqsWsWHuvU5u1dCRkiz/g8FrA=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4198F2C153;
-        Mon, 25 Jul 2022 13:32:22 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 15:32:22 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kernel-team@fb.com, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Breno Leitao <leitao@debian.org>
-Subject: Re: [PATCH v2] livepatch: fix race between fork and
- klp_reverse_transition
-Message-ID: <Yt6bZo5ztnVSjLLC@alley>
-References: <20220720121023.043738bb@imladris.surriel.com>
- <YtrCqMLUqJlcoqIo@alley>
- <20220722150106.683f3704@imladris.surriel.com>
+        Mon, 25 Jul 2022 09:32:45 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA381E039;
+        Mon, 25 Jul 2022 06:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oqcDs+srAB4YrGHm4QaEElZN7rrloT2cypguG/C5L2c=; b=mE65Ki9Pj7vmrKskiYZ8p7hecg
+        oDQHUCTAIohrKFKoD+is4+eUxDF1CBiDZdYT/xsucWFKLy5VP2cZqHVYaO96fyaV4g68+YzwWx0VK
+        hEX8Yh1MUX+kob6N6GfvfFdayCcmYZ5isjgqIYjL69dO3bvtRSgH1Go5wzCOg0Gq6UuiXT1XvC+oX
+        5oorhklo/7Wz+y5ybR/2drq42GIPPDldsDRTiYNf2nqpiCiBm3AJSfMjJmDmIkGGneBveKTxAOUak
+        q0vOt/oCoRlwm197Az/tbc5/9T6k/Dyuk5ayh9olMLbOc2VEkqbGI981DgPjHeU8ikvwZMZ/jnSvJ
+        36PwECww==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33554)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oFyCL-0002uY-FH; Mon, 25 Jul 2022 14:32:37 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oFyCJ-0000IT-0F; Mon, 25 Jul 2022 14:32:35 +0100
+Date:   Mon, 25 Jul 2022 14:32:34 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Marcin Wojtas <mw@semihalf.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Tomasz Nowicki <tn@semihalf.com>
+Subject: Re: [net-next: PATCH] net: dsa: mv88e6xxx: fix speed setting for
+ CPU/DSA ports
+Message-ID: <Yt6bcnnMr7UAUFPk@shell.armlinux.org.uk>
+References: <20220714010021.1786616-1-mw@semihalf.com>
+ <20220724233807.bthah6ctjadl35by@skbuf>
+ <CAPv3WKdFNOPRg45TiJuAVuxM0LjEnB0qZH70J1rMenJs7eBJzw@mail.gmail.com>
+ <20220725122144.bdiup756mgquae3n@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722150106.683f3704@imladris.surriel.com>
+In-Reply-To: <20220725122144.bdiup756mgquae3n@skbuf>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,78 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-07-22 15:01:06, Rik van Riel wrote:
-> v2: a better approach, suggested by Petr (thank you)
-> ---8<---
+On Mon, Jul 25, 2022 at 03:21:44PM +0300, Vladimir Oltean wrote:
+> On Mon, Jul 25, 2022 at 02:18:45AM +0200, Marcin Wojtas wrote:
+> > I can of course apply both suggestions, however, I am wondering if I
+> > should resend them at all, as Russell's series is still being
+> > discussed. IMO it may be worth waiting whether it makes it before the
+> > merge window - if not, I can resend this patch after v5.20-rc1,
+> > targetting the net branch. What do you think?
 > 
-> When a KLP fails to apply, klp_reverse_transition will clear the
-> TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
-> which are not on the task list yet.
+> I just don't want a fix for a known regression to slip through the cracks.
+> You can resend whenever you consider, but I believe that if you do so now
+> (today or in the following few days), you won't conflict with anybody's work,
+> considering that this has been said:
 > 
-> Meanwhile, fork will copy over the TIF_PATCH_PENDING flag from the
-> parent to the child early on, in dup_task_struct -> setup_thread_stack.
-> 
-> Much later, klp_copy_process will set child->patch_state to match
-> that of the parent.
-> 
-> However, the parent's patch_state may have been changed by KLP loading
-> or unloading since it was initially copied over into the child.
-> 
-> This results in the KLP code occasionally hitting this warning in
-> klp_complete_transition:
-> 
->         for_each_process_thread(g, task) {
->                 WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
->                 task->patch_state = KLP_UNDEFINED;
->         }
-> 
-> This patch will set, or clear, the TIF_PATCH_PENDING flag in the child
-> process depending on whether or not it is needed at the time
-> klp_copy_process is called, at a point in copy_process where the
-> tasklist_lock is held exclusively, preventing races with the KLP
-> code.
-> 
-> This should prevent this warning from triggering again in the
-> future.
-> 
-> I have not yet figured out whether this would also help with races in
-> the other direction, where the child process fails to have TIF_PATCH_PENDING
-> set and somehow misses a transition, or whether the retries in
-> klp_try_complete_transition would catch that task and help it transition
-> later.
+> On Fri, Jul 15, 2022 at 11:57:20PM +0100, Russell King (Oracle) wrote:
+> > Well, at this point, I'm just going to give up with this kernel cycle.
+> > It seems impossible to get this sorted. It seems impossible to move
+> > forward with the conversion of Marvell DSA to phylink_pcs.
 
-It should fix these races as well. Both task->patch_state and
-TIF_PATCH_PENDING flag are almost always modified under tasklist_lock.
+That is correct - I'm not intending to submit it, because there's not
+enough time to sort out the mess that has been created by comments
+on the approach coming way too late.
 
-One exception is klp_update_patch_state(current) but it could not
-race because klp_copy_process() is called under spinlock.
-So that "current" can't sleep and can't get migrated in the middle of
-klp_copy_process().
+And in fact, I'm now _scared_ to submit a revision of it. I don't want
+to get into writing lots more replies that take hours to compose only
+to have responses that require yet more multi-hour sessions to reply
+to, which only then lead to the cycle repeating with no sign of an end
+to it. Something is very wrong with email as a communication tool when
+things get to that point.
 
-Another exception is klp_check_and_switch_task() that is called
-under p->pi_lock. It prevents rescheduling and the task will be
-migrated only when sleeping. As a result "current" again
-can't get migrated inside klp_copy_process().
+So, I won't be working on this. Someone else can sort the problem.
 
-Finally, the state of "idle" tasks (idle_task(cpu)) is updated
-without tasklist_lock. But they are not forked so that we are
-on safe side.
-
-
-> Signed-off-by: Rik van Riel <riel@surriel.com>
-> Reported-by: Breno Leitao <leitao@debian.org>
-
-We should update the commit message and mention also the other
-two locations where the state is manipulated without tasklist_lock.
-I am sorry that I did not mention it on Friday.
-
-Also we should remove "I have not figured yet whether". The patch
-should fix these races as well.
-
-With the above changes:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-
-Best Regards,
-Petr
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

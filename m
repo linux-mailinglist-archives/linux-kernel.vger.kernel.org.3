@@ -2,124 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2F957F9D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2527857F9E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 09:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiGYHGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 03:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S232007AbiGYHHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 03:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiGYHGN (ORCPT
+        with ESMTP id S229694AbiGYHHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 03:06:13 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2044.outbound.protection.outlook.com [40.107.237.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2332F9FE0
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 00:06:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tpj0U1bwRhq0yapZXF4ZxSIT07gOLqJvgG+vSnNdH/POt0SEJ6OGVRX8qdq5EbrEpoD+s9cXLKeuLzJq3TcF5BZuXbiX2yUI8c35j9Jer+gNUDRYGDKb5RfCP4J6YrtqYk0/rllYTx8DDbF6POj5WMeeNtuDfWDA65H3/UwsoK6dkdWaz6bKpCkMAU0s7QmyIerVqDHASBMpz44kdMsm0eCK/Hcd+D+zHRlzuEGgJmnRrDkmAfnVw+p7SnE5M87/sFXyD4qIfJ+AZQKv3qgnVcKXrubaIg4dj07LwFc1ALWSmv8+k2ZgEhkm7R1W7fy8tk4PRUnncpD2QMQvUcWUqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5T6O33q2ruZSkN7YEnJ/8fvggiIvua8zB54KQPCUdAE=;
- b=bPKaDYHCZgQ4YrQWEhS0IoBExKNc3OFxYlud44m6vBwCV6xl9431Pz1hi1o+UjY3W7LKc7LJ0j2ElUQnbmdZkY3dkuSeSCWzuyZJrCy6herNwE3pzrr8Wm2GHAblK8MpAB9NAOPxGvC01vRjv4pQIT9BOVXMxEdp9maN02qZzw5qKdUcara0sV2z6oa3FJjRvpbCdUZS81ZwlDtk7XStyQ5C5aLcp73gT42wHW+1lagGBNfV01DDWgJdBqLXto7zsoGbz4nbPJbGD67S9nbxziCMSYRr8q8lQSh9+dFowMd6TE8WLG0q2NSGWV/UMlliE74X54/KomMIAqs0+hJ45Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5T6O33q2ruZSkN7YEnJ/8fvggiIvua8zB54KQPCUdAE=;
- b=HpVjjKjC3loHOfzt/Hy/d9jnm+38rGUC0VKvG+/WIO1kstHXIzoJ4KCAfqhoC3ATij5tzIgEmBuWb5SHd5RoybCiw5m2lajNAj1vsGetZsjlirO/mphSBGzUhJ4k73/L8wHAS3e4eDY1UcZxs6kEQE8gOiJJzSYYZynQTB3SkuM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
- BYAPR12MB2951.namprd12.prod.outlook.com (2603:10b6:a03:138::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.20; Mon, 25 Jul
- 2022 07:06:07 +0000
-Received: from DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::d4af:b726:bc18:e60c]) by DM8PR12MB5445.namprd12.prod.outlook.com
- ([fe80::d4af:b726:bc18:e60c%7]) with mapi id 15.20.5458.024; Mon, 25 Jul 2022
- 07:06:07 +0000
-Message-ID: <a07eded4-c1d7-edf5-9c0e-dfa0c3373e4c@amd.com>
-Date:   Mon, 25 Jul 2022 14:05:59 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH] iommu/amd: Disable guest vapic logging during early kdump
- init
-Content-Language: en-US
-To:     Joerg Roedel <joro@8bytes.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220721003439.403435-1-jsnitsel@redhat.com>
- <Ytq2GRX7UJjvXk4w@8bytes.org>
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-In-Reply-To: <Ytq2GRX7UJjvXk4w@8bytes.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2P153CA0022.APCP153.PROD.OUTLOOK.COM (2603:1096:4:190::8)
- To DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7)
+        Mon, 25 Jul 2022 03:07:02 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94140DEC7;
+        Mon, 25 Jul 2022 00:06:54 -0700 (PDT)
+X-UUID: 90b453bb580944f8883dbe434af52809-20220725
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:33a33025-2038-4ef5-a669-3b329abc2c66,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.8,REQID:33a33025-2038-4ef5-a669-3b329abc2c66,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:0f94e32,CLOUDID:b6ae67b3-06d2-48ef-b2dd-540836705165,C
+        OID:d24ea36d58f7,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 90b453bb580944f8883dbe434af52809-20220725
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 49096496; Mon, 25 Jul 2022 15:06:46 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 25 Jul 2022 15:06:45 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 25 Jul 2022 15:06:43 +0800
+Message-ID: <1f1a37daf6f3c19a2506f53689c8efbed2b716c3.camel@mediatek.com>
+Subject: Re: [PATCH v6 08/13] usb: typec: tcpci_mt6370: Add MediaTek MT6370
+ tcpci driver
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, <lee.jones@linaro.org>,
+        <daniel.thompson@linaro.org>, <jingoohan1@gmail.com>,
+        <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <sre@kernel.org>, <gregkh@linuxfoundation.org>, <jic23@kernel.org>,
+        <lars@metafoo.de>, <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <linux@roeck-us.net>, <heikki.krogerus@linux.intel.com>,
+        <deller@gmx.de>, <andy.shevchenko@gmail.com>
+CC:     <chiaen_wu@richtek.com>, <alice_chen@richtek.com>,
+        <cy_huang@richtek.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-fbdev@vger.kernel.org>, <szunichen@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Date:   Mon, 25 Jul 2022 15:06:43 +0800
+In-Reply-To: <20220722102407.2205-9-peterwu.pub@gmail.com>
+References: <20220722102407.2205-1-peterwu.pub@gmail.com>
+         <20220722102407.2205-9-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 97e775ba-57ee-4413-c038-08da6e0c2546
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2951:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EAqME8RdnjTmJkbJSQowkzqjx5pnvZtu8I+ndeuXpa6t+yTpk7hjsCOXB3ccXuVciKRnAymvBjlrEE6t/FjzFdBje/+vGEp4aV0uwIE6KjWICqdPH+7pbPi75mI1AjGDZW6sd+SXE3M4eDVroDiMmFFFWFJWbkj0Zg3tuozfD+LUiM+Ib142hbPYMBnHZF6o4YZfqpCGy4WgFm+9k/8u76rEGcuJOWvjjiQrinnMCXBAipL6cQ9dWvaKWtDTc8uCnZ34L1qH+dhc5NnMYjbZKxgl644pdo3hriMMhQbf7oz1BOnSdOdi6hJFQDBWvnwNFufbN9pTR0HSMHjeSXfE0osfOFkpop+SwjowfaIrzVStbX54iGLuVM1wzlXpuXOkJ8e5E87tgbVdbJEXPMokFpz71Xx2oq2mWmHrOc6tKjEAGDeKDN+/YdTh6BV4IVTw5JFequk7V1jyqlxJODR8eTqPHbTPl3HpGStFhQmCl0NSCoi85Lo1pjSTjlk5+V2A9+o5gIL8IVvVjZKtCaYSYZRtyKEreo1bYew5rT0nCSVpMDmC8ncp9j47LsUIAGPa+f1Rk2yNus7stBaotNgJkBonVFSxt5du1HrUT/we1tkq0G/9zefflcZzdDdhhaSeK87p779XMKlGpEt/kp+ELRfwmvDK04z4JPTL/XOA+Rb92+w8RQVenA8WVgrz8vpkDUMNYXZI59gAruUu/20n3iowBV9XQEydW0iHWMLONA7vTu0QWdVX9YJENc1xANK3aBCO9sCJ3X0p9N8QOvdx2tbzPtpx9v8AhXS96NZPbS83GEkx+w4OE/lPT6+udjPwDZpVBmiJz6a7N46yWYluZA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(110136005)(316002)(186003)(2616005)(53546011)(6506007)(31686004)(31696002)(4326008)(86362001)(44832011)(2906002)(5660300002)(36756003)(8936002)(38100700002)(8676002)(6486002)(66476007)(66946007)(6666004)(6512007)(478600001)(66556008)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZFpYMzV3MmlmK1NuVUFVUW9mek9BZzUxR3BZNlVCYnlkTkZaRWRQU1NHNUs1?=
- =?utf-8?B?MmtpZCtiWjFyRklZamNIdFo2czJnbVZlY2lNOE5CbnplWlJFcmsybk05QkVP?=
- =?utf-8?B?aUZlR2JCRnJzdnhMRzA1Y0V5V3BRamNHaU9BSnRMRU42b3BIVXQzbENDemtu?=
- =?utf-8?B?eXVPMnVzb2kzNXBGQlluc1NSWVBqOEFRcmdhazFjQ3FXMTl4NWxocS85Zi9w?=
- =?utf-8?B?b0pjNE53aVpXbVFMWDRJUkZwL1RHa2Q0cHJFWFh2ZXh5N0NCNENQdldsczZw?=
- =?utf-8?B?S0NHWEtZNTRZbnZQaXhuMHp2aVBraWN6SGEwOW1IWlpLVUpOTUNuU29MYkpI?=
- =?utf-8?B?cklBdnVYdlFjbUNWTFpEYVpUODZub0ZVWHFXWU8xRFlJTko0OGM1V0NXR3FN?=
- =?utf-8?B?Q0ZXWHM3WEg5cEtyVTUxUkIrVWNCZTZCNkpjTDFkL1VaNWFSb1Z2dUxPbnpi?=
- =?utf-8?B?VHRrMHo3ZVAwWXlDbDdCb1dSdWpZMkxEUDlTTW1MclErZTMvTUp2RmFzdnNm?=
- =?utf-8?B?VkN2djA2TmozaTl1YURXOU0ydlZHVDdqQjlZN3h1MFBTMkI1M0x0dWtTcDZv?=
- =?utf-8?B?UjdMUUlMMzJrYU1TM0tLZzFJakN6NDRpd0pXeUxRV25GeGw5bld6N2hycEJZ?=
- =?utf-8?B?bk9NYzNvenpQdUQyOUhoV3QvaUJ6ZVAwOTBWa292TC9seW1QUGZVZE16VDBm?=
- =?utf-8?B?ZldwYkxaTzNEZmFjOHpNdk1uRVFyQmRVcG5udDRXVGJ1TVNmRk9oNnVqM25O?=
- =?utf-8?B?MzdJWmZIbzBLcEtHOW5qTkJ2aGN4OUdMWnVBMkZ0UG5URUxWUUdZQU9LV0Na?=
- =?utf-8?B?L1Z2ckpzZ2FEL0lOc29RZXlqNGlycEJKbXFRNm5pUGJBQVhTdjl3QkRHMzU3?=
- =?utf-8?B?Z2FXZFR3bncrNWZrYnI3QldVeTZONlpPZTloVDZyRDBOMXRObkxmczNyYjRD?=
- =?utf-8?B?ZjBDZjZ3TnFxbkU3ODlNNzFLdWxNQ2g4SGQzUkxHSjR1US9DVk1KeFlYY0ho?=
- =?utf-8?B?Q09oTHZsUnNSTXB3VG43NU04YXF2SDB3LzV4Y25zbWF1emc3dDloM3daQW1o?=
- =?utf-8?B?aDZWVjVNZWx6ZVQxdTNWSDA3V3NtNDJ4WWNHMXdnYmZxaEJnMXhVMkt1VDFv?=
- =?utf-8?B?ek1GaFYzaUNIMzF0aDhHbnFtTkkzeEI1T1BzYU1wbytrTWFNQ0ZLNVZSbXJW?=
- =?utf-8?B?OFpLUEttNGRwUUYyWUM1ckN4WVNBWHBaOVNDWFV4ay9NQ0NoYU5uQjJhWHV5?=
- =?utf-8?B?YnV0S0xNU1hzRGpWNlRmcy90ZFUrcmNZTXd5WGtPbkQwRTRTTWFza056eEI5?=
- =?utf-8?B?NXpHMHArZExxRkZ6TVVMUlo4ZzR3N3QwSjBTNktqNGQ0bkt0TE1teHQxTE03?=
- =?utf-8?B?UEJEcGV3QVVTRDBqVC9xTHoyNDJKSmkxb2p1eWtPdDRXYlRGczhBTXRRNlZU?=
- =?utf-8?B?SE9aM1g4S1o0bzNrMyszNzBYbzhRS1Z2ZDgyV0NLenV3d1VJZlUweEhaOFhB?=
- =?utf-8?B?MFRxSXVqM0ErTWplTzNXSGU5U1oyY2NkUG5ZaGs1STdSQW16dzZ3eitndE5p?=
- =?utf-8?B?WWR0RVEvc2k2RXFhQzBqSWRUL0d6ekZFSm5INDd4MTQra3hmZm5zUUQySmth?=
- =?utf-8?B?OU8wRDBOeTYybG4vazVrMDdLZWVnaUd3VFlXcUNYUnpVcGNjZjJaZHhmTEYx?=
- =?utf-8?B?a2xqVnR6YTFhTkx4VjNWZHB0MEgyY0ltZjh3QWNuN2VtUUYzR01Jb3gvdTVo?=
- =?utf-8?B?TmdQdmVhTkY1d1k2Q3dJcDRDQ2RYZllvR0ZQaEdYbkQraU9Hbk5LWm1BMVRv?=
- =?utf-8?B?T0RNUkhjeE01QTg4bm1PT21iQWZtM3R3N3JpRjVMMmdLVWtJUS9xNVpOYk95?=
- =?utf-8?B?TEtodzNDdW10TEo5REYzMDlEK3lxbUFCYWNXRi9aYjJQSWQxNGFWTTdKWnht?=
- =?utf-8?B?OGZyOG9lWENVUkhhNWxzYkh3OWIyNlArNXJ4d0xSSWRaNVI2a2FaWCswejlX?=
- =?utf-8?B?cVoydGFWSFAvNWxaRWVMUFlxMW81TWkwUUwvcEsxMHVhM1dPWmt4aTFzUk45?=
- =?utf-8?B?UWIwcFc2R3RCbzBWY1FNTFU1Q2hvK2tvQlFaQzhjcHNRalJwZnM1cmZpQUxO?=
- =?utf-8?B?N3ZMMnFLalZLTU9yK3ZzK3dBKzBLbkNFL1JCMDU2YXE1OGt3Qi9qU1F5dmVu?=
- =?utf-8?Q?GTWjP5qsoiUbbQlVoB7sHfAn/pmkkfQHrn7EdySH9nUG?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97e775ba-57ee-4413-c038-08da6e0c2546
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2022 07:06:07.4320
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L9WedZR3zFcT1GLP9C5+eZem6ctRemXoCLMiaddAeZ8lUcYJzQsShOVnfZzKyT5PhdY0v11XUYfFPCbEkN+vsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2951
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,42 +78,300 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joeg / Jerry,
-
-On 7/22/22 9:37 PM, Joerg Roedel wrote:
-> On Wed, Jul 20, 2022 at 05:34:39PM -0700, Jerry Snitselaar wrote:
->> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
->> index 1d08f87e734b..2b00d7f28df7 100644
->> --- a/drivers/iommu/amd/init.c
->> +++ b/drivers/iommu/amd/init.c
->> @@ -815,6 +815,11 @@ static void free_ga_log(struct amd_iommu *iommu)
->>   #endif
->>   }
->>   
->> +static void iommu_ga_log_disable(struct amd_iommu *iommu)
->> +{
->> +	iommu_feature_disable(iommu, CONTROL_GALOG_EN);
->> +}
->> +
->>   static int iommu_ga_log_enable(struct amd_iommu *iommu)
->>   {
->>   #ifdef CONFIG_IRQ_REMAP
->> @@ -2504,6 +2509,7 @@ static void early_enable_iommus(void)
->>   		for_each_iommu(iommu) {
->>   			iommu_disable_command_buffer(iommu);
->>   			iommu_disable_event_buffer(iommu);
->> +			iommu_ga_log_disable(iommu);
->>   			iommu_enable_command_buffer(iommu);
->>   			iommu_enable_event_buffer(iommu);
->>   			iommu_enable_ga(iommu);
+On Fri, 2022-07-22 at 18:24 +0800, ChiaEn Wu wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> Looks about right, but I also let Suravee comment on this.
+> The MediaTek MT6370 is a highly-integrated smart power management IC,
+> which includes a single cell Li-Ion/Li-Polymer switching battery
+> charger, a USB Type-C & Power Delivery (PD) controller, dual
+> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> a display bias driver and a general LDO for portable devices.
 > 
-> Disabling the GA-Log under a device still using it should hopefully not
-> put it into some undefined state.
+> Add support for the Type-C & Power Delivery controller in
+> MediaTek MT6370 IC.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+> 
+> v6
+> - Convert tcpci as device resource managed with
+> 'devm_add_action_or_reset' API.
+> - Refine remvoe callback.
+> - Refine the commit text from 'This commit add' to 'Add'.
+> ---
+>  drivers/usb/typec/tcpm/Kconfig        |  11 ++
+>  drivers/usb/typec/tcpm/Makefile       |   1 +
+>  drivers/usb/typec/tcpm/tcpci_mt6370.c | 208
+> ++++++++++++++++++++++++++++++++++
+>  3 files changed, 220 insertions(+)
+>  create mode 100644 drivers/usb/typec/tcpm/tcpci_mt6370.c
+> 
+> diff --git a/drivers/usb/typec/tcpm/Kconfig
+> b/drivers/usb/typec/tcpm/Kconfig
+> index 073fd2e..e6b88ca 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -35,6 +35,17 @@ config TYPEC_MT6360
+>  	  USB Type-C. It works with Type-C Port Controller Manager
+>  	  to provide USB PD and USB Type-C functionalities.
+>  
+> +config TYPEC_TCPCI_MT6370
+> +	tristate "MediaTek MT6370 Type-C driver"
+> +	depends on MFD_MT6370
+> +	help
+> +	  MediaTek MT6370 is a multi-functional IC that includes
+> +	  USB Type-C. It works with Type-C Port Controller Manager
+> +	  to provide USB PD and USB Type-C functionalities.
+> +
+> +	  This driver can also be built as a module. The module
+> +	  will be called "tcpci_mt6370".
+> +
+>  config TYPEC_TCPCI_MAXIM
+>  	tristate "Maxim TCPCI based Type-C chip driver"
+>  	help
+> diff --git a/drivers/usb/typec/tcpm/Makefile
+> b/drivers/usb/typec/tcpm/Makefile
+> index 7d499f3..906d9dc 100644
+> --- a/drivers/usb/typec/tcpm/Makefile
+> +++ b/drivers/usb/typec/tcpm/Makefile
+> @@ -6,4 +6,5 @@ typec_wcove-y				:= wcove.o
+>  obj-$(CONFIG_TYPEC_TCPCI)		+= tcpci.o
+>  obj-$(CONFIG_TYPEC_RT1711H)		+= tcpci_rt1711h.o
+>  obj-$(CONFIG_TYPEC_MT6360)		+= tcpci_mt6360.o
+> +obj-$(CONFIG_TYPEC_TCPCI_MT6370)	+= tcpci_mt6370.o
+>  obj-$(CONFIG_TYPEC_TCPCI_MAXIM)		+= tcpci_maxim.o
+> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> new file mode 100644
+> index 0000000..4f53319
+> --- /dev/null
+> +++ b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> @@ -0,0 +1,208 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Richtek Technology Corp.
+> + *
+> + * Author: ChiYuan Huang <cy_huang@richtek.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_wakeup.h>
+> +#include <linux/pm_wakeirq.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/usb/tcpm.h>
+> +#include "tcpci.h"
+> +
+> +#define MT6370_REG_SYSCTRL8	0x9B
+> +
+> +#define MT6370_AUTOIDLE_MASK	BIT(3)
+> +
+> +#define MT6370_VENDOR_ID	0x29CF
+> +#define MT6370_TCPC_DID_A	0x2170
+> +
+> +struct mt6370_priv {
+> +	struct device *dev;
+> +	struct regulator *vbus;
+> +	struct tcpci *tcpci;
+> +	struct tcpci_data tcpci_data;
+> +};
+> +
+> +static const struct reg_sequence mt6370_reg_init[] = {
+> +	REG_SEQ(0xA0, 0x1, 1000),
+> +	REG_SEQ(0x81, 0x38, 0),
+> +	REG_SEQ(0x82, 0x82, 0),
+> +	REG_SEQ(0xBA, 0xFC, 0),
+> +	REG_SEQ(0xBB, 0x50, 0),
+> +	REG_SEQ(0x9E, 0x8F, 0),
+> +	REG_SEQ(0xA1, 0x5, 0),
+> +	REG_SEQ(0xA2, 0x4, 0),
+> +	REG_SEQ(0xA3, 0x4A, 0),
+> +	REG_SEQ(0xA4, 0x01, 0),
+> +	REG_SEQ(0x95, 0x01, 0),
+> +	REG_SEQ(0x80, 0x71, 0),
+> +	REG_SEQ(0x9B, 0x3A, 1000),
+> +};
+> +
+> +static int mt6370_tcpc_init(struct tcpci *tcpci, struct tcpci_data
+> *data)
+> +{
+> +	u16 did;
+> +	int ret;
+> +
+> +	ret = regmap_register_patch(data->regmap, mt6370_reg_init,
+> +				    ARRAY_SIZE(mt6370_reg_init));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_raw_read(data->regmap, TCPC_BCD_DEV, &did,
+> sizeof(u16));
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (did == MT6370_TCPC_DID_A)
+> +		return regmap_write(data->regmap, TCPC_FAULT_CTRL,
+> 0x80);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6370_tcpc_set_vconn(struct tcpci *tcpci, struct
+> tcpci_data *data,
+> +				 bool enable)
+> +{
+> +	return regmap_update_bits(data->regmap, MT6370_REG_SYSCTRL8,
+> +				  MT6370_AUTOIDLE_MASK,
+> +				  !enable ? MT6370_AUTOIDLE_MASK : 0);
+> +}
+> +
+> +static int mt6370_tcpc_set_vbus(struct tcpci *tcpci, struct
+> tcpci_data *data,
+> +				bool source, bool sink)
+@sink is not used in this function?
 
-Sorry for late reply. I have been actually working on the new GAM and GALOG enabling code,
-which should also address this issue as well. I'll send out the patch soon.
+> +{
+> +	struct mt6370_priv *priv = container_of(data, struct
+> mt6370_priv,
+> +						tcpci_data);
+> +	int ret;
+> +
+> +	ret = regulator_is_enabled(priv->vbus);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret && !source)
+> +		return regulator_disable(priv->vbus);
+> +
+> +	if (!ret && source)
+> +		return regulator_enable(priv->vbus);
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t mt6370_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct mt6370_priv *priv = dev_id;
+> +
+> +	return tcpci_irq(priv->tcpci);
+> +}
+> +
+> +static int mt6370_check_vendor_info(struct mt6370_priv *priv)
+> +{
+> +	struct regmap *regmap = priv->tcpci_data.regmap;
+> +	u16 vid;
+> +	int ret;
+> +
+> +	ret = regmap_raw_read(regmap, TCPC_VENDOR_ID, &vid,
+> sizeof(u16));
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (vid != MT6370_VENDOR_ID)
+> +		return dev_err_probe(priv->dev, -ENODEV,
+> +				     "Vendor ID not correct 0x%02x\n",
+> vid);
+> +
+> +	return 0;
+> +}
+> +
+> +static void mt6370_unregister_tcpci_port(void *tcpci)
+> +{
+> +	tcpci_unregister_port(tcpci);
+> +}
+> +
+> +static int mt6370_tcpc_probe(struct platform_device *pdev)
+> +{
+> +	struct mt6370_priv *priv;
+> +	struct device *dev = &pdev->dev;
+> +	int irq, ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->dev = dev;
+> +
+> +	priv->tcpci_data.regmap = dev_get_regmap(dev->parent, NULL);
+> +	if (!priv->tcpci_data.regmap)
+> +		return dev_err_probe(dev, -ENODEV, "Failed to init
+> regmap\n");
+> +
+> +	ret = mt6370_check_vendor_info(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return dev_err_probe(dev, irq, "Failed to get irq\n");
+> +
+> +	/* Assign TCPCI feature and ops */
+> +	priv->tcpci_data.auto_discharge_disconnect = 1;
+> +	priv->tcpci_data.init = mt6370_tcpc_init;
+> +	priv->tcpci_data.set_vconn = mt6370_tcpc_set_vconn;
+> +
+> +	priv->vbus = devm_regulator_get_optional(dev, "vbus");
+> +	if (!IS_ERR(priv->vbus))
+> +		priv->tcpci_data.set_vbus = mt6370_tcpc_set_vbus;
+> +
+> +	priv->tcpci = tcpci_register_port(dev, &priv->tcpci_data);
+> +	if (IS_ERR(priv->tcpci))
+> +		return dev_err_probe(dev, PTR_ERR(priv->tcpci),
+> +				     "Failed to register tcpci
+> port\n");
+> +
+> +	ret = devm_add_action_or_reset(dev,
+> mt6370_unregister_tcpci_port,
+> +				       priv->tcpci);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_request_threaded_irq(dev, irq, NULL,
+> mt6370_irq_handler,
+> +					IRQF_ONESHOT, dev_name(dev),
+> priv);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to allocate
+> irq\n");
+> +
+> +	device_init_wakeup(dev, true);
+> +	dev_pm_set_wake_irq(dev, irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6370_tcpc_remove(struct platform_device *pdev)
+> +{
+> +	dev_pm_clear_wake_irq(&pdev->dev);
+> +	device_init_wakeup(&pdev->dev, false);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mt6370_tcpc_devid_table[] = {
+> +	{ .compatible = "mediatek,mt6370-tcpc" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mt6370_tcpc_devid_table);
+> +
+> +static struct platform_driver mt6370_tcpc_driver = {
+> +	.driver = {
+> +		.name = "mt6370-tcpc",
+> +		.of_match_table = mt6370_tcpc_devid_table,
+> +	},
+> +	.probe = mt6370_tcpc_probe,
+> +	.remove = mt6370_tcpc_remove,
+> +};
+> +module_platform_driver(mt6370_tcpc_driver);
+> +
+> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
+> +MODULE_DESCRIPTION("MT6370 USB Type-C Port Controller Interface
+> Driver");
+> +MODULE_LICENSE("GPL v2");
 
-Regards,
-Suravee

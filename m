@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5E857F7FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3640C57F802
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 03:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbiGYBpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 24 Jul 2022 21:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S232165AbiGYBp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 24 Jul 2022 21:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbiGYBpt (ORCPT
+        with ESMTP id S231522AbiGYBpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 24 Jul 2022 21:45:49 -0400
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5181130;
-        Sun, 24 Jul 2022 18:45:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VKFpxuy_1658713541;
-Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKFpxuy_1658713541)
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AFF135;
+        Sun, 24 Jul 2022 18:45:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VKFqhM7_1658713543;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VKFqhM7_1658713543)
           by smtp.aliyun-inc.com;
-          Mon, 25 Jul 2022 09:45:42 +0800
+          Mon, 25 Jul 2022 09:45:44 +0800
 From:   Xianting Tian <xianting.tian@linux.alibaba.com>
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
@@ -31,10 +31,12 @@ Cc:     kexec@lists.infradead.org, linux-doc@vger.kernel.org,
         heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
         hschauhan@nulltrace.org,
         Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [RESEND PATCH V2 0/5] Fixups to work with crash tool
-Date:   Mon, 25 Jul 2022 09:45:34 +0800
-Message-Id: <20220725014539.1037627-1-xianting.tian@linux.alibaba.com>
+Subject: [RESEND PATCH V2 1/5] RISC-V: use __smp_processor_id() instead of smp_processor_id()
+Date:   Mon, 25 Jul 2022 09:45:35 +0800
+Message-Id: <20220725014539.1037627-2-xianting.tian@linux.alibaba.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220725014539.1037627-1-xianting.tian@linux.alibaba.com>
+References: <20220725014539.1037627-1-xianting.tian@linux.alibaba.com>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
@@ -45,52 +47,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I ever sent the patch 1 in the link:
-https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/
-And patch 2,3 in the link:
-https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/
-https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/
+Use __smp_processor_id() to avoid check the preemption context when
+CONFIG_DEBUG_PREEMPT enabled, as we will enter crash kernel and no
+return.
 
-This patch series just put these patches together, and with two new patch 4, 5.
-these five patches are the fixups for machine_kexec, kernel mode PC for vmcore
-and improvements for vmcoreinfo and memory layout dump.
+Without the patch,
+[  103.781044] sysrq: Trigger a crash
+[  103.784625] Kernel panic - not syncing: sysrq triggered crash
+[  103.837634] CPU1: off
+[  103.889668] CPU2: off
+[  103.933479] CPU3: off
+[  103.939424] Starting crashdump kernel...
+[  103.943442] BUG: using smp_processor_id() in preemptible [00000000] code: sh/346
+[  103.950884] caller is debug_smp_processor_id+0x1c/0x26
+[  103.956051] CPU: 0 PID: 346 Comm: sh Kdump: loaded Not tainted 5.10.113-00002-gce03f03bf4ec-dirty #149
+[  103.965355] Call Trace:
+[  103.967805] [<ffffffe00020372a>] walk_stackframe+0x0/0xa2
+[  103.973206] [<ffffffe000bcf1f4>] show_stack+0x32/0x3e
+[  103.978258] [<ffffffe000bd382a>] dump_stack_lvl+0x72/0x8e
+[  103.983655] [<ffffffe000bd385a>] dump_stack+0x14/0x1c
+[  103.988705] [<ffffffe000bdc8fe>] check_preemption_disabled+0x9e/0xaa
+[  103.995057] [<ffffffe000bdc926>] debug_smp_processor_id+0x1c/0x26
+[  104.001150] [<ffffffe000206c64>] machine_kexec+0x22/0xd0
+[  104.006463] [<ffffffe000291a7e>] __crash_kexec+0x6a/0xa4
+[  104.011774] [<ffffffe000bcf3fa>] panic+0xfc/0x2b0
+[  104.016480] [<ffffffe000656ca4>] sysrq_reset_seq_param_set+0x0/0x70
+[  104.022745] [<ffffffe000657310>] __handle_sysrq+0x8c/0x154
+[  104.028229] [<ffffffe0006577e8>] write_sysrq_trigger+0x5a/0x6a
+[  104.034061] [<ffffffe0003d90e0>] proc_reg_write+0x58/0xd4
+[  104.039459] [<ffffffe00036cff4>] vfs_write+0x7e/0x254
+[  104.044509] [<ffffffe00036d2f6>] ksys_write+0x58/0xbe
+[  104.049558] [<ffffffe00036d36a>] sys_write+0xe/0x16
+[  104.054434] [<ffffffe000201b9a>] ret_from_syscall+0x0/0x2
+[  104.067863] Will call new kernel at ecc00000 from hart id 0
+[  104.074939] FDT image at fc5ee000
+[  104.079523] Bye...
 
-The main changes in the five patchs as below,
-Patch 1: use __smp_processor_id() instead of smp_processor_id() to cleanup
-	 the console prints.
-Patch 2: Add VM layout, va bits, ram base to vmcoreinfo, which can simplify
-	 the development of crash tool as ARM64 already did
-	 (arch/arm64/kernel/crash_core.c).
-Patch 3: Add modules to virtual kernel memory layout dump.
-Patch 4: Fixup to get correct kernel mode PC for vmcore.
-Patch 5: Updates vmcoreinfo.rst.
+With the patch we can got clear output,
+[   67.740553] sysrq: Trigger a crash
+[   67.744166] Kernel panic - not syncing: sysrq triggered crash
+[   67.809123] CPU1: off
+[   67.865210] CPU2: off
+[   67.909075] CPU3: off
+[   67.919123] Starting crashdump kernel...
+[   67.924900] Will call new kernel at ecc00000 from hart id 0
+[   67.932045] FDT image at fc5ee000
+[   67.935560] Bye...
 
-With these 5 patches(patch 2 is must), crash tool can work well to analyze
-a vmcore. The patches for crash tool for RISCV64 is in the link:
-https://lore.kernel.org/linux-riscv/20220718025346.411758-1-xianting.tian@linux.alibaba.com/
+Fixes: 0e105f1d0037 ("riscv: use hart id instead of cpu id on machine_kexec")
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+---
+ arch/riscv/kernel/machine_kexec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes v1 -> v2:
- 1, remove the patch "Add a fast call path of crash_kexec()" from this series
- of patches, as it already applied to riscv git.
- https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
- 2, add 'Reviewed-by' based on the comments of v1.  
-
-Xianting Tian (5):
-  RISC-V: use __smp_processor_id() instead of smp_processor_id()
-  RISC-V: Add arch_crash_save_vmcoreinfo support
-  riscv: Add modules to virtual kernel memory layout dump
-  RISC-V: Fixup getting correct current pc
-  riscv64: crash_core: Export kernel vm layout, phys_ram_base
-
- .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
- arch/riscv/kernel/Makefile                    |  1 +
- arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
- arch/riscv/kernel/crash_save_regs.S           |  2 +-
- arch/riscv/kernel/machine_kexec.c             |  2 +-
- arch/riscv/mm/init.c                          |  4 +++
- 6 files changed, 67 insertions(+), 2 deletions(-)
- create mode 100644 arch/riscv/kernel/crash_core.c
-
+diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
+index df8e24559035..86d1b5f9dfb5 100644
+--- a/arch/riscv/kernel/machine_kexec.c
++++ b/arch/riscv/kernel/machine_kexec.c
+@@ -171,7 +171,7 @@ machine_kexec(struct kimage *image)
+ 	struct kimage_arch *internal = &image->arch;
+ 	unsigned long jump_addr = (unsigned long) image->start;
+ 	unsigned long first_ind_entry = (unsigned long) &image->head;
+-	unsigned long this_cpu_id = smp_processor_id();
++	unsigned long this_cpu_id = __smp_processor_id();
+ 	unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+ 	unsigned long fdt_addr = internal->fdt_addr;
+ 	void *control_code_buffer = page_address(image->control_code_page);
 -- 
 2.17.1
 

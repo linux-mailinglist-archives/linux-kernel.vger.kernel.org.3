@@ -2,160 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30F6580122
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BAF580126
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbiGYPHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 11:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S235832AbiGYPIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 11:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiGYPHO (ORCPT
+        with ESMTP id S230207AbiGYPHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 11:07:14 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD41B10FCD
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:07:13 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id p132so13777307oif.9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:07:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lLYdNu88rwK9RKi0Hdu8L2qjedcRHOnzO3eSS99Jj+4=;
-        b=uSX66gaqfINSKgXXJRgV9sqXY+qx32zQLxcNjZ6CWsyfWP6uWpYcmvETA9qCT8azEH
-         wyrpJBz+8s3IJvKOu8sbcmIchg37H79YpU9DkLH3SQCGSjT7zsV3DO7zu6tlXN1PPB/i
-         KlvTM7bzjKlqmrmFj9E6PafmJ8mI+33KkvwBqCCTu02zeu86uE2OarY3Yknu7tznn8pj
-         KC+ppdyG3FAfrsbP7kt/xCUNNRXAs09PQhm3yXRxiQt5BHeXJlcNKcBm7S3gFxABYeBF
-         Nq7K0X67Tp2umeeRku8MeZClQRl/W4tzXGoJwFNQZvEQ/Bmxe8Z7pGjdyajott0pYUcg
-         E/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lLYdNu88rwK9RKi0Hdu8L2qjedcRHOnzO3eSS99Jj+4=;
-        b=FCNj6mZy462Okt8oCH06O38hkgkytzrP8k9zamPbvJzwfhOWKvjoGzIaSY0BXSvSsB
-         S8tyH93RPDmwGtX69KEDctjkubhBvuJecI+Gp0LFF6daVMGDyDoWJ8vx/N04aFZSDmm8
-         dmGSznKS7A7obt1eioRSt/roQPv2f1+SZFvgwvu5z5cmkTW4OE46WvDcDvDFYITd5C+9
-         InnI/Y0jFFj0qpg5C00xgWbNvmIpmt3rrHrdNvYUMetpzaMhayzfq2YwR356qQGwC4aX
-         tsVhDUlA4PD0k+YQpqpukw8RuFMnTzSRavMevQIkA3nPFMbVQsuDvgPzcmGceYCxooPh
-         9iCA==
-X-Gm-Message-State: AJIora97NuVjCdiYX0svWMjgWze3kQrfyCFVl0h8IYhltkAhOFHDl0+T
-        0bZ7Tj1bENndGTNvlGSQNVf0HDSPZEczX05hit4nSg==
-X-Google-Smtp-Source: AGRyM1v7J6NrpM5+VYdxmL1VK1k+qwfa9rxkPwG/5wkAIEBb1fYGvBYNHVcpI2jpl2oYPKyinajp9kZ1GoG3d3VJEzo=
-X-Received: by 2002:a05:6808:1b20:b0:33a:b9ab:30d8 with SMTP id
- bx32-20020a0568081b2000b0033ab9ab30d8mr7623167oib.8.1658761633157; Mon, 25
- Jul 2022 08:07:13 -0700 (PDT)
+        Mon, 25 Jul 2022 11:07:54 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB8112D2B;
+        Mon, 25 Jul 2022 08:07:53 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PEuCMu016146;
+        Mon, 25 Jul 2022 15:07:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=j7N5+TGRAxBqIlGqsayaYIXgxpZw2C6QH2sfrmlRjyc=;
+ b=NlEpaTMbSxFi5ugEv3CTbR2EOoxVVm+UbQaM/VN5AJr2k55ZtFBxm2jTUNAtNCOwoS7W
+ prfnPv8NH5Giy3IcKg8quJy91hviE42wG2GyVq2uessP1A7rUz/GPFL5JD9Gaq0WzSEn
+ rjrhJLpdvOKXwCx/XXvOq13uJUfBz32jEFkpXC3UdAiKPMN/gLxBrBsWCpbfzJmXZY9x
+ AWTKynia6KSK96G6SDvgKP4sCbA6hlp163lxyEd7UDB+/NOeUk/9EigY0E/3DeldLdwI
+ IlZNOz9SICtdoijc/XmXd4H2ZPL9UQL6jy/q1mrzbsecnvg3Ek8ja2q1PzhcdwCGblc/ dQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhwcggbtb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 15:07:40 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26PEwIlp022752;
+        Mon, 25 Jul 2022 15:07:40 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhwcggbse-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 15:07:40 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26PF7MCf023285;
+        Mon, 25 Jul 2022 15:07:38 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hg97tamp3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 15:07:38 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26PF5dO624183158
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Jul 2022 15:05:39 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6717DA4051;
+        Mon, 25 Jul 2022 15:07:36 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D7D4A4040;
+        Mon, 25 Jul 2022 15:07:34 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.106.214])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 25 Jul 2022 15:07:33 +0000 (GMT)
+Date:   Mon, 25 Jul 2022 20:37:31 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     linux-ext4@vger.kernel.org,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev
+Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
+ Raspberry Pi
+Message-ID: <Yt6xsyy3+qEMn08y@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
 MIME-Version: 1.0
-References: <20220725131521.607904-1-robert.marko@sartura.hr>
- <20220725131521.607904-2-robert.marko@sartura.hr> <CAK8P3a1mL7Pm5+0Ce89LTrup476WaxSQKpTgn=o98_uFuOdfyQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a1mL7Pm5+0Ce89LTrup476WaxSQKpTgn=o98_uFuOdfyQ@mail.gmail.com>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Mon, 25 Jul 2022 17:07:02 +0200
-Message-ID: <CA+HBbNEjYcZ1yU+h3ZR_g=6+18JBQ2U=v3VesRxR21Rc9N4LbA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: microchip: sparx5: dont use PSCI for core bringup
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fMjzhnueeb4PV1uHl4nXgNsMQjRB0qfV
+X-Proofpoint-ORIG-GUID: X-AUXOegB27dalfgzIQ5mR5ClmK4CUJF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-25_10,2022-07-25_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
+ priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0 adultscore=0
+ phishscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207250061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 3:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Jul 25, 2022 at 3:15 PM Robert Marko <robert.marko@sartura.hr> wrote:
-> >
-> > As described in previous commit, PSCI is not implemented on this SoC at
-> > all, so use spin-tables to bringup the cores.
-> >
-> > Tested on PCB134 with eMMC (VSC5640EV).
-> >
-> > Fixes: 6694aee00a4b ("arm64: dts: sparx5: Add basic cpu support")
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
->
-> Surely this is only a machine specific bug in the boot loader, not something
-> the SoC is incapable of supporting, right?
+On Mon, Jul 18, 2022 at 03:29:47PM +0200, Stefan Wahren wrote:
+> Hi,
+> 
+> i noticed that since Linux 5.18 (Linux 5.19-rc6 is still affected) i'm
+> unable to run "rpi-update" without massive performance regression on my
+> Raspberry Pi 4 (multi_v7_defconfig + CONFIG_ARM_LPAE). Using Linux 5.17 this
+> tool successfully downloads the latest firmware (> 100 MB) on my development
+> micro SD card (Kingston 16 GB Industrial) with a ext4 filesystem within ~ 1
+> min. The same scenario on Linux 5.18 shows the following symptoms:
+> 
+> - download takes endlessly much time and leads to an abort by userspace in
+> most cases because of the poor performance
+> - massive system load during download even after download has been aborted
+> (heartbeat LED goes wild)
+> - whole system becomes nearly unresponsive
+> - system load goes back to normal after > 10 min
+> - dmesg doesn't show anything suspicious
+> 
+> I was able to bisect this issue:
+> 
+> ff042f4a9b050895a42cae893cc01fa2ca81b95c good
+> 4b0986a3613c92f4ec1bdc7f60ec66fea135991f bad
+> 25fd2d41b505d0640bdfe67aa77c549de2d3c18a bad
+> b4bc93bd76d4da32600795cd323c971f00a2e788 bad
+> 3fe2f7446f1e029b220f7f650df6d138f91651f2 bad
+> b080cee72ef355669cbc52ff55dc513d37433600 good
+> ad9c6ee642a61adae93dfa35582b5af16dc5173a good
+> 9b03992f0c88baef524842e411fbdc147780dd5d bad
+> aab4ed5816acc0af8cce2680880419cd64982b1d good
+> 14705fda8f6273501930dfe1d679ad4bec209f52 good
+> 5c93e8ecd5bd3bfdee013b6da0850357eb6ca4d8 good
+> 8cb5a30372ef5cf2b1d258fce1711d80f834740a bad
+> 077d0c2c78df6f7260cdd015a991327efa44d8ad bad
+> cc5095747edfb054ca2068d01af20be3fcc3634f good
+> 27b38686a3bb601db48901dbc4e2fc5d77ffa2c1 good
+> 
+> commit 077d0c2c78df6f7260cdd015a991327efa44d8ad
+> Author: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Date:   Tue Mar 8 15:22:01 2022 +0530
+> 
+> ext4: make mb_optimize_scan performance mount option work with extents
+> 
+> If i revert this commit with Linux 5.19-rc6 the performance regression
+> disappears.
+> 
+> Please ask if you need more information.
 
+Hi Stefan, 
 
-PSCI itself could be implemented on this SoC, you can even implement
-it just by using U-boot.
-I have been looking into adding basic reset and core bring up PSCI
-support to the BSP U-boot for start.
+Apologies, I had missed this email initially. So this particular patch
+simply changed a typo in an if condition which was preventing the
+mb_optimize_scan option to be enabled correctly (This feature was
+introduced in the following commit [1]). I think with the
+mb_optimize_scan now working, it is somehow causing the firmware
+download/update to take a longer time. 
 
->
->
-> >  arch/arm64/boot/dts/microchip/sparx5.dtsi | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-> > index 38da24c1796c..ea2b07ca2887 100644
-> > --- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
-> > +++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-> > @@ -40,14 +40,16 @@ cpu0: cpu@0 {
-> >                         compatible = "arm,cortex-a53";
-> >                         device_type = "cpu";
-> >                         reg = <0x0 0x0>;
-> > -                       enable-method = "psci";
-> > +                       enable-method = "spin-table";
-> > +                       cpu-release-addr = <0x0 0x0000fff8>;
-> >                         next-level-cache = <&L2_0>;
-> >                 };
->
-> I think the psci method should be kept in the dtsi file here, since actual
-> product boards would have to support it to be useful, you can just add
-> the spin-table as an override in the broken reference boards, with a
-> comment about which u-boot version is broken, in case this gets fixed
-> in the future.
+I'll try to investigate this and get back with my findings.
 
+Regard,
+Ojaswin
 
-Well, that's the thing, Microchip-s BSP is not utilizing PSCI at all,
-they reverted
-to using spin-tables in both Linux and U-boot, and they dont implement
-PSCI at all.
-I highly doubt that any of the vendors are gonna implement it themselves.
+[1] 
+	commit 196e402adf2e4cd66f101923409f1970ec5f1af3
+	From: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+	Date: Thu, 1 Apr 2021 10:21:27 -0700
+	
+	ext4: improve cr 0 / cr 1 group scanning
 
-I have contacted Microchip and they confirmed that there is no PSCI
-support, they stated
-that they started working on PSCI but that images were larger and took
-longer to boot
-and they dont see any advantage so they removed that.
-
-So I doubt that we are gonna be seeing any boards that implement PSCI
-by default.
-I can tell you that it's annoying me as we are back to 2013 and using
-a GPIO for restart.
-
-U-boot version that I tested is the last one from their 2022.06 BSP,
-its based off U-boot 2019.10.
-
-Maybe somebody from Microchip can chime in on this?
-
-Regards,
-Robert
->
->
->        Arnd
-
-
-
--- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+> 
+> Regards
+> 

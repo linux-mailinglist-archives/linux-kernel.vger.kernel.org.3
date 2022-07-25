@@ -2,124 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC765802C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6286D5802C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 18:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbiGYQeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 12:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S236218AbiGYQfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 12:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236186AbiGYQeH (ORCPT
+        with ESMTP id S236153AbiGYQfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:34:07 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8191A80F
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:34:06 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso9758186wma.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 09:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1O/8Z+0FTImQ7fUUXDyXrX7k/yISSmS9A01yiX1R2Gc=;
-        b=SnH9vvJkYswfs8xHSJuHla7KIa1w3rDQ0LMx7L0uY3Ui/FJyQIS8F+eiONK2aU/TOo
-         tJG389TWyMGWP+fiPI3uXTZfIlWbnedMN/49f5VR2bdzSnlh6+1JBc2M+8NRqL9WlHbw
-         Dv56nvToAQFofcKHa6ZuuBXeSheRECt1nv7QAnKJsWBxotyTNLHBnLWVWdDt9dLGuSuB
-         hVthXZLRVdeOO8F8bwqhwHTct2TND4fcB/PtBJ2AWf4r9AxRdvoFWztT9bC8Lo75vXWD
-         sRBdCFWP3I/cAcUf0hKtzb0BAWh1spPRHymB58WdvNt9sAphafykDhH6+w2Tplev4yMQ
-         mJMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1O/8Z+0FTImQ7fUUXDyXrX7k/yISSmS9A01yiX1R2Gc=;
-        b=2JRIN6v9PSj8+nQ24aWOxCSozVG2y9OgZ61MIh+lXAkeoFDzj93aiZSmDsRHXh1PkB
-         UK42ND/5ao38eIL7FPOsEIf1pLylm8DRzhUSr7Q/AQZjSSlvlzrvYzKf2wssI0SBOxRJ
-         FdJL7+JA1rtXK6Pmn3JDnpXCyXghOMvTlZtTAWfsthx4McWd+ROuRXcf+G72CkhbAnkE
-         H+hdUHhYisIb22w0aeSYxNuf7+jovfrFvUwphalDo1/m6Ig+ylZ3ipjM99BKTuP/Q8Gw
-         OzswzUQRpNTljU98PGyNq2YOO/VyYFEf1Ph49Y6aZSLkcbrB+noG+Q6HGUsHa3BP7gbb
-         +8xg==
-X-Gm-Message-State: AJIora9bb2XUJx3/jHTmxoOQZO1hLT4ivDNGIvDHVXypDpRFrWXpPD7L
-        +XSulTjpdDfWak7mHnXNmApjXw==
-X-Google-Smtp-Source: AGRyM1vkoaTuricTMgjgkSLToecTEKq23q5cywQr8v8cMsuJprFjkAuUkl4GQbyy/SaOMSin8iFicg==
-X-Received: by 2002:a05:600c:3d88:b0:3a3:63ad:c592 with SMTP id bi8-20020a05600c3d8800b003a363adc592mr2948258wmb.71.1658766844974;
-        Mon, 25 Jul 2022 09:34:04 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:1780:8e54:dd38:6668? ([2a05:6e02:1041:c10:1780:8e54:dd38:6668])
-        by smtp.googlemail.com with ESMTPSA id c17-20020a5d5291000000b0021b956da1dcsm7581256wrv.113.2022.07.25.09.34.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 09:34:04 -0700 (PDT)
-Message-ID: <1aa3ae56-84ae-8a96-7a52-3181c47dcb07@linaro.org>
-Date:   Mon, 25 Jul 2022 18:34:03 +0200
+        Mon, 25 Jul 2022 12:35:39 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084C9D107;
+        Mon, 25 Jul 2022 09:35:38 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PBOwxI026705;
+        Mon, 25 Jul 2022 16:35:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cEnwduPpwyucOzJXFfJGKfXaIW8eArB4jOH+nPzZ/ys=;
+ b=OMoD2qvVlzw+rrR6uY4NlPQcExQG+2UcZYtsheKnskuPZ+mZXOu05+/6E3aB6NnFvOkG
+ iw6w/6GZWAUcE8krES+K/Md8734K/g+O1W0IsbIUO9gJnGZDRaEtAZ4UecplC4GM4XQj
+ 3x3xYqfJbWveL1EUO6oG+kNc1NpLJPSMbUb3qGqpPBq/YKamfhuZkG1tlsWs8cH3mRpX
+ 6cwT7uw7yr34lWWyvfbezkN0Sc/6RxjBjgaOfM8oRiau6kNhssxz81S7Z2P/UXtp+ZYU
+ 63CxvDMOFnWVm9PMgeash7q9EjimicE3zJi1inC1/KZ2058CAt4EpA3da5lyjLofOC33 fg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hhs84h6q9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 16:35:19 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 26PGZIAr006910
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 16:35:18 GMT
+Received: from [10.110.113.144] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Jul
+ 2022 09:35:18 -0700
+Message-ID: <78495ab6-358d-4d91-e710-140331f37843@quicinc.com>
+Date:   Mon, 25 Jul 2022 09:35:17 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 00/12] thermal OF rework
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, lukasz.luba@arm.com
-References: <20220722200007.1839356-1-daniel.lezcano@linexp.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220722200007.1839356-1-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH 1/2] scsi: ufs: Add Multi-Circular Queue support
+To:     Avri Altman <Avri.Altman@wdc.com>, Can Guo <quic_cang@quicinc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+        "quic_ziqichen@quicinc.com" <quic_ziqichen@quicinc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>
+CC:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1658214120-22772-1-git-send-email-quic_cang@quicinc.com>
+ <1658214120-22772-2-git-send-email-quic_cang@quicinc.com>
+ <DM6PR04MB65756C5A6C5F674B19091F7DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>
+In-Reply-To: <DM6PR04MB65756C5A6C5F674B19091F7DFC939@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ESPoP9rufNSTrlSh0hXFVCj6eX04fc2H
+X-Proofpoint-GUID: ESPoP9rufNSTrlSh0hXFVCj6eX04fc2H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-25_12,2022-07-25_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 mlxscore=0 spamscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2206140000 definitions=main-2207250067
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/23/2022 2:23 PM, Avri Altman wrote:
+>>   static inline
+>> -void ufshcd_send_command(struct ufs_hba *hba, unsigned int task_tag)
+>> +void ufshcd_send_command(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
+>> +                        struct ufs_hw_queue *hwq)
+>>   {
+>> -       struct ufshcd_lrb *lrbp = &hba->lrb[task_tag];
+>>          unsigned long flags;
+>>
+>>          lrbp->issue_time_stamp = ktime_get();
+>>          lrbp->compl_time_stamp = ktime_set(0, 0);
+>> -       ufshcd_add_command_trace(hba, task_tag, UFS_CMD_SEND);
+>> +       ufshcd_add_command_trace(hba, lrbp, UFS_CMD_SEND);
+>>          ufshcd_clk_scaling_start_busy(hba);
+>>          if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
+>>                  ufshcd_start_monitor(hba, lrbp);
+>>
+>> -       spin_lock_irqsave(&hba->outstanding_lock, flags);
+>> -       if (hba->vops && hba->vops->setup_xfer_req)
+>> -               hba->vops->setup_xfer_req(hba, task_tag, !!lrbp->cmd);
+>> -       __set_bit(task_tag, &hba->outstanding_reqs);
+>> -       ufshcd_writel(hba, 1 << task_tag,
+>> REG_UTP_TRANSFER_REQ_DOOR_BELL);
+>> -       spin_unlock_irqrestore(&hba->outstanding_lock, flags);
+>> +       if (is_mcq_enabled(hba)) {
+>> +               int utrd_size = sizeof(struct utp_transfer_req_desc);
+> Maybe we can map some designated ops, so all those if (is_mcq) can be avoided in the data-path.
+Umm, I couldn't find any ops in scsi_host_template {...}. Do you have 
+any further insight into how this check can be avoided?
+> Also maybe we can constify sizeof(struct utp_transfer_req_desc) which is used now few times.
+> 
+Ok, agree to make sizeof(struct utp_transfer_req_desc) a constant in the 
+next version.
 
-Hi Rafael,
-
-On 22/07/2022 21:59, Daniel Lezcano wrote:
-> The thermal framework initialization with the device tree appears to
-> be complicated and hard to make it to evolve.
-> 
-> It contains duplication of almost the same thermal generic structures
-> and has an assymetric initialization making hard any kind of serious
-> changes for more complex features. One of them is the multiple sensors
-> support per thermal zone.
-> 
-> In order to set the scene for the aforementioned feature with generic
-> code, we need to cleanup and rework the device tree initialization.
-> 
-> However this rework is not obvious because of the multiple components
-> entering in the composition of a thermal zone and being initialized at
-> different moments. For instance, a cooling device can be initialized
-> before a sensor, so the thermal zones must exist before the cooling
-> device as well as the sensor. This asynchronous initialization forces
-> the thermal zone to be created with fake ops because they are
-> mandotory and build a list of cooling devices which is used to lookup
-> afterwards when the cooling device driver is registering itself.
-> 
-> As there could be a large number of changes, this first series provide
-> some steps forward for a simpler device tree initialization.
-> 
-> More series for cleanup and code duplication removal will follow.
-> 
-> Changelog:
-> 
->   - v6:
->      - Folded patches 8, 9, 10
->      - Removed thermal_zone_get_trips() and thermal_zone_get_num_trips()
->      - Moved tz->ntrips => tz->num_trips changes into patch 11 to fix the
->        git bisecting
-> 
-
-I believe all the comments were addressed, is it fine if I merge this 
-series ?
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+-asd

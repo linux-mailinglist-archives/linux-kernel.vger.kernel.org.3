@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D23857F994
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F0957F996
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiGYGpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 02:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S231521AbiGYGqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 02:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiGYGpP (ORCPT
+        with ESMTP id S229547AbiGYGqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 02:45:15 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194A460DD
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:45:14 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31e7c4b593fso98836167b3.13
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:45:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=koE1sOchZGcuAQ6ZIasz8+3z8ouCYYjQCDzwRp9wkxE=;
-        b=Rcjc8ntxdRRnzxYtaeC8PNuN5mEqizkS+usqu0ltMEG3LntntbO+oSzNniJmafQwEQ
-         kWd8OOtIHmb4VWGTZbhqaaHlPmIQAX9jcNBMHFE8lMInOR9PsqFDldUjdXu3A1P3iDIq
-         2cUPz3TadTV49aFZGesO2kJgSOwPxjfjIh/UQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=koE1sOchZGcuAQ6ZIasz8+3z8ouCYYjQCDzwRp9wkxE=;
-        b=d3DkDchGLfgIAYEhW5aMcNsByG1pSmA9yUnkKXKCpAwQ2jpkJYdP4bdvw/Hcg7GsBQ
-         nJ/wiHwuC4JzpAuWG8u43/DveEwShmR2WI+M8+EAfsCxTXKmXVurJUfXB9/oICpiBAzm
-         G5XwnfTRQGP1wSuVQL348qvk7p4dyU50figKRfOoWiUPIFhCSbYnxVPDHEV8oDgpxcpR
-         UTnvSw3TkTk7qzRzHR81qEaYXst/iwksVtwjL0X9OY4nlxY5gyFOCBFMxSdambrqy25U
-         NR9MZpJvCf+c/F5Bm/FzMO/dsurFDFltpxXC0tMgg08BJXOhP6AelEvqr2xzE64RQ3iD
-         RrMw==
-X-Gm-Message-State: AJIora8kINwY637yNMUbcKOeFwbBAGkADv0N9U0IEWDZeOP6FFRcpUSE
-        LK2fyDu4l6+W7p/to/kN2TszrdAa77UrjWlLnLKb4g==
-X-Google-Smtp-Source: AGRyM1tWX8v8lA94PgQz8q4L+DWzhvEaTMIwan7i6g4iVoqzmL5YsXQN/5N9OGYvaAFxZcMla6oIVbP/pg4cyghjqs0=
-X-Received: by 2002:a81:610:0:b0:31e:4822:6807 with SMTP id
- 16-20020a810610000000b0031e48226807mr8670649ywg.354.1658731513346; Sun, 24
- Jul 2022 23:45:13 -0700 (PDT)
+        Mon, 25 Jul 2022 02:46:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A8FB1FD
+        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:46:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2D066112A
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 06:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF0EC341C7;
+        Mon, 25 Jul 2022 06:46:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658731575;
+        bh=hIZrYAxn265ebgeF7Bwq7AWTsRMM8aNkjPhwdYrVvPo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=osNv7G6brArIxFH6QeFgaRQ6faY2Q0HTiCZ1w/P+kGwwRNfXEJMAHrbYdJY2g1aFa
+         qHTyjZ/CCqMxNbJd6JjQSSBfbLFbXr7PAtJKicGfARZgvm/uATPZ9KNmKkophIW5lo
+         XdagoKwJqC3B78lYz417IQxdGlnTr/RiojJn2nBPN9GOwtJ17VSDxlkZFtfdqPlr9U
+         BienTQy1Fcxw2C1faujgJCrzJdQXrwhaKOtLnaitvQe50I44I6mQqR+0rnwfHQk/SC
+         iKl7uAedh7x2u8PAJqiGQnIfoII+C6ypUkQAP7GARtMT/Cd7hYryBlytp56Vh/4lqh
+         M5fNWDCiB67rw==
+Date:   Mon, 25 Jul 2022 09:46:04 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     "guanghui.fgh" <guanghuifeng@linux.alibaba.com>,
+        baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        akpm@linux-foundation.org, david@redhat.com, jianyong.wu@arm.com,
+        james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
+        ardb@kernel.org, linux-mm@kvack.org, yaohongbo@linux.alibaba.com,
+        alikernel-developer@linux.alibaba.com
+Subject: Re: [PATCH v5] arm64: mm: fix linear mem mapping access performance
+ degradation
+Message-ID: <Yt48LK6pU/VL1dJ3@kernel.org>
+References: <f0dd1176-39f1-0a08-d0e2-627dd437aa5f@linux.alibaba.com>
+ <1657460657-25698-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <a6caa7b5-6a15-987d-c0a3-dcf9c1cdd3b0@linux.alibaba.com>
+ <20220718131005.GA12406@willie-the-truck>
 MIME-Version: 1.0
-References: <20220712114046.15574-1-allen-kh.cheng@mediatek.com>
-In-Reply-To: <20220712114046.15574-1-allen-kh.cheng@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 25 Jul 2022 14:45:02 +0800
-Message-ID: <CAGXv+5FmXVYTtOusB8gqh1SprWHuNJYcC5MNEHQUGKQx8yrrLQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] Complete driver nodes for MT8192 SoC
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718131005.GA12406@willie-the-truck>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,46 +65,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 7:40 PM Allen-KH Cheng
-<allen-kh.cheng@mediatek.com> wrote:
->
-> This series are based on matthias.bgg/linux.git, for-next.
->
-> I remove vcodec lat and core nodes PATCH from series and will comfirm
-> clocks usage then resend PATCH.
->
-> Also should reference below PATCH for dsi in chunkuang.hu/linux.git
-> dt-bindings: display: mediatek: dsi: Convert dsi_dtbinding to .yaml
->
-> changes since v2:
->  - add mmsys #reset-cells PATCH
->  - add missing fallback compatible
->  - add display aliases
->  - remove vcodec lat and core nodes PATCH
->
-> changes since v1:
->  - add Reviewed-by Tag
->  - rename dsi-phy from dsi-dphy
->  - add missing power-domains in disp mutex
->  - Add remove mt8192 display rdma compatible PATCH in series
->  - use "mediatek,mt8183-disp-rdma" as fallback
->  - remove mediatek,larb from rdma node
->  - remove syscon-dsi and add power-domains in dsi
->  - add reset property in dsi and mt8192-resets.h
->  - correct Typo: s/ndoe/node in commit message
->
-> Allen-KH Cheng (5):
->   arm64: dts: mt8192: Add pwm node
->   arm64: dts: mt8192: Add mipi_tx node
->   arm64: dts: mediatek: Add mmsys #reset-cells property for mt8192
->   arm64: dts: mt8192: Add display nodes
->   arm64: dts: mt8192: Add dsi node
+On Mon, Jul 18, 2022 at 02:10:06PM +0100, Will Deacon wrote:
+> On Sun, Jul 10, 2022 at 11:33:02PM +0800, guanghui.fgh wrote:
+> > In short, this path work:
+> > 
+> > 1.Before doing work for rebuiling crashkernel mem, the pgd is swapper_pg_dir
+> > in [[[ttbr1]]]
+> > 
+> > 2.Change the [[[ttbr0]]]to use idmap_pg_dir pgd
+> > 
+> > 3.The [[[idmap_cpu_replace_ttbr1_with_flush_tlb]]] are mapped [[[only]]]
+> > with idmap_pg_dir mapping in [[[ttbr0]]]
+> > 
+> > 4.The [[[idmap_cpu_replace_ttbr1_with_flush_tlb]]] will flush tlb all,
+> > switch [[[ttbr1]]] to use init_pg_dir pgd(and flush tlb all again).
+> > There is no tlb conflict to swapper_pg_dir.
+> > There is no tlb cache for swapper_pg_dir.
+> > 
+> > 5.Woring with init_pg_dir pgd to access swapper_pg_dir pagetable with fix
+> > mapping. And modify crashkernel mapping in the swapper_pg_dir without any
+> > tlb conflict and flush.
+> > 
+> > 6.When finishing the work, switch ttbr1 pgd to the origin swapper_pg_dir
+> > with cpu_replace_ttbr1 function(similar to the above).
+> 
+> I do not think that this complexity is justified. As I have stated on
+> numerous occasions already, I would prefer that we leave the crashkernel
+> mapped when rodata is not "full". That fixes your performance issue and
+> matches what we do for module code, so I do not see a security argument
+> against it.
 
-With additional changes to asurada.dtsi I have a working internal display.
-Needs a fix [1] for mtk-drm from Angelo on top of next-20220722.
+The protection of the crash kernel is not about security. This is about an
+ability to do post mortem with kdump and such when the things go awry.
 
-For the whole series
+I think it's possible to have both large pages in the linear map and the
+protection of crash kernel in much simpler way that this patch does, I'll
+try to send an RFC Really Soon.
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> I do not plan to merge this patch as-is.
+> 
+> Thanks,
+> 
+> Will
 
-[1] https://lore.kernel.org/lkml/20220721172727.14624-1-angelogioacchino.delregno@collabora.com/
+-- 
+Sincerely yours,
+Mike.

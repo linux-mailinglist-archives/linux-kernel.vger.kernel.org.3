@@ -2,141 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4863557FBA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F36457FBA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 10:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234066AbiGYIrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 04:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
+        id S234053AbiGYIs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 04:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbiGYIrx (ORCPT
+        with ESMTP id S233342AbiGYIsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:47:53 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEFF1400C
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:47:50 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id oy13so19307554ejb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:47:50 -0700 (PDT)
+        Mon, 25 Jul 2022 04:48:54 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05656DFBC
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:48:53 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t17so4738099lfk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 01:48:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LMteYojnWBtoBZUgjFuGYDtFnOFLH6JXb9UumNXhn2E=;
-        b=uToNS5kKkiuzs3gCE1rAKXdBoFmN0lpjA5ZkeB4459FtfHbC9+wY5AOtOHYoEUTE9N
-         c0imgAa1Mc/tiaOerXohnyta47hUVxft0Z23bMLD8bWnwKb92hEnK8xjE5xH0G+EgxDt
-         KYyblAehv0WKufr76QTyeVn2e/U+elwAIjeDYRistamWUiJNLyn6aM/I7ot+YL4SRO+q
-         EvjIAeu6U9mb5FE4F+QaHbv6gLhA9zqMHgIrv6/eFu3ebN36y5sbStpoB918gYmMgOi1
-         HTvtMWkEHW5ev+OwZu1+pBe68MjW89sxQFch6LzhUK7ioHBtgnylNr1sBH5kUDPTfZM3
-         WVug==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kyJI4LlXY9CVorVEng21FOai96UW/ZVKurT3Buh0Q5U=;
+        b=JzdnkCP82kKVz43IfB8ySNgsPfbL9fHvfWH2a9bBTJBScn1o8Td8cXqjyCN59jpvp4
+         rIzPdlSd8Zr+FTsOBCTmHrb2vb5InAuz7izBB0dwKDH1XrCNi4h2BsxGwYHqHFq5Ffkz
+         PHSroD5VWN4CHBVt4s0GCViBuHbEwMJdIqIj0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LMteYojnWBtoBZUgjFuGYDtFnOFLH6JXb9UumNXhn2E=;
-        b=nESOEgpfUWKCFZfTKEQp0ld040hrIfQCEB5MszHhHl1NYh67Iucc87LVPeIBYo4HcI
-         UTFB3TsMUaxwQ7ID+mVJzZRYzJIuMOw7n4YXwmnh8FRNVb5sim/CqNySZdu+0+TkuHVG
-         drwmiLwvUggPkwTvTXGVr6NneYjtKPruOc8Z5uoWuwlr4JXpzNNh6lXDlSdIHvt8hcQ0
-         pCVFgJ1drMJw7N18iw1CJcAandas9jV9d3Bh62COGpulN/KLbKkbu9AtL32Ggz48KPZ7
-         Jzgegwrexl+kVZpDWUDUc5Vxy0wAEpHZojh8DddGDST+cr3GMq7iDQrVgIQ+jNSUd9hq
-         i5rQ==
-X-Gm-Message-State: AJIora+QgvqjUn/TjZJ3dVRff/SEOH7f8LpWX7LS86hfZ2DAHPMY6syp
-        6uOKPh3PJF8AaxvnyqJqKwOp2g==
-X-Google-Smtp-Source: AGRyM1vk81vhSt+pOYi8QJg6zOOGb6DFzGSak5oaJCagQUdhnuL9SB2HvWOyu2eMNsT6e66zXtlaKQ==
-X-Received: by 2002:a17:906:844f:b0:72b:549e:a654 with SMTP id e15-20020a170906844f00b0072b549ea654mr8879155ejy.535.1658738869244;
-        Mon, 25 Jul 2022 01:47:49 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id la10-20020a170907780a00b0072b13a10477sm5090474ejc.108.2022.07.25.01.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 01:47:48 -0700 (PDT)
-Date:   Mon, 25 Jul 2022 09:47:22 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        "Zhu, Tony" <tony.zhu@intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 08/12] iommu/sva: Refactoring
- iommu_sva_bind/unbind_device()
-Message-ID: <Yt5YmquF3vf/swBi@myrica>
-References: <20220705050710.2887204-1-baolu.lu@linux.intel.com>
- <20220705050710.2887204-9-baolu.lu@linux.intel.com>
- <20220723142650.GH79279@nvidia.com>
- <bffb6e2d-d310-49b9-0725-37ab4263c22d@linux.intel.com>
- <Yt5IqyZw/Sa6Ck5t@myrica>
- <BN9PR11MB52769B02DE62A229CCB4F2E38C959@BN9PR11MB5276.namprd11.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kyJI4LlXY9CVorVEng21FOai96UW/ZVKurT3Buh0Q5U=;
+        b=ctngjzfN070TzUWxlfl6s3NhkVlDMjCW3faOMZ8+9eoo8yvG8ZHmbawyUdoy15N0Aw
+         WBpgOTabZLASIuhxwNuFZRUHBl06pq1IQBRob/8WVvqtNmQMNCpUOv+wWhlgcXD6qNDO
+         fW7Eitm26+eTLzum1P1jP6i6VIUSFrp6bH2LkHA5ML4mI6HLk4RKISV6fiVv2qBqR3QY
+         JH+WL3KbHXQrdw7eup/TjGalrE1V6Q01o8lPfvg5BvFkEXiLfdYMPK9WSamk+KoyBN/y
+         QmsYYXIcz6SSlWXMVF4Iqtd1ESMjt0AS/ZTk3rJX2d3dK9OLTdiwIwi2GJzxErQCSVyU
+         PwOA==
+X-Gm-Message-State: AJIora/6fKRUJoMXdcU6F+GRj3vpm/ASHe1Fq7v3e5YwR0xpwcyFGEDS
+        rYynJw+oBhhs8TziydkSDYGJ5RYuNrBWi4Ge+pvZ0w==
+X-Google-Smtp-Source: AGRyM1voXjxeDP2zWasG/Lf+fjsU3sa+t6jhMdKgzv9dRNb6MxviXOsqY2x7Urj7zWBtz8hQjkUGlbWiFGQaLw/aCsE=
+X-Received: by 2002:a05:6512:1594:b0:48a:874f:535 with SMTP id
+ bp20-20020a056512159400b0048a874f0535mr2228851lfb.320.1658738931148; Mon, 25
+ Jul 2022 01:48:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52769B02DE62A229CCB4F2E38C959@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220723042206.8104-1-vikas.gupta@broadcom.com>
+ <20220723042206.8104-2-vikas.gupta@broadcom.com> <20220723091600.1277e903@kernel.org>
+ <Yt5L8TbzTwthnrl7@nanopsycho>
+In-Reply-To: <Yt5L8TbzTwthnrl7@nanopsycho>
+From:   Vikas Gupta <vikas.gupta@broadcom.com>
+Date:   Mon, 25 Jul 2022 14:18:39 +0530
+Message-ID: <CAHLZf_uWxnS5Voc6h7pnS=dRq96JV1wq9zVXKhVbyrRva9=b0g@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 1/2] devlink: introduce framework for selftests
+To:     Jiri Pirko <jiri@resnulli.us>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>, dsahern@kernel.org,
+        stephen@networkplumber.org, Eric Dumazet <edumazet@google.com>,
+        pabeni@redhat.com, ast@kernel.org, leon@kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net,
+        Michael Chan <michael.chan@broadcom.com>,
+        Andrew Gospodarek <andrew.gospodarek@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ca7b5605e49d4010"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 08:02:05AM +0000, Tian, Kevin wrote:
-> > From: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> > Sent: Monday, July 25, 2022 3:39 PM
-> > 
-> > On Sun, Jul 24, 2022 at 09:48:15PM +0800, Baolu Lu wrote:
-> > > /*
-> > >  * iommu_detach_device_pasid() - Detach the domain from pasid of device
-> > >  * @domain: the iommu domain.
-> > >  * @dev: the attached device.
-> > >  * @pasid: the pasid of the device.
-> > >  *
-> > >  * The @domain must have been attached to @pasid of the @dev with
-> > >  * iommu_detach_device_pasid().
-> > >  */
-> > > void iommu_detach_device_pasid(struct iommu_domain *domain, struct
-> > device
-> > > *dev,
-> > > 			       ioasid_t pasid)
-> > > {
-> > > 	struct iommu_group *group = iommu_group_get(dev);
-> > > 	struct group_pasid *param;
-> > >
-> > > 	mutex_lock(&group->mutex);
-> > > 	domain->ops->set_dev_pasid(group->blocking_domain, dev, pasid);
-> > 
-> > Please also pass the old domain to this detach() function, so that the
-> > IOMMU driver doesn't have to keep track of them internally.
-> 
-> The old domain is already tracked in group->pasid_xarray and can
-> be retrieved using [dev, pasid].
+--000000000000ca7b5605e49d4010
+Content-Type: text/plain; charset="UTF-8"
 
-Ah yes, I can use that. Something explicit would help avoid breaking the
-driver next time the core changes
+Hi Jiri,
 
-> 
-> > 
-> > In addition to clearing contexts, detach() also needs to invalidate TLBs,
-> > and for that the SMMU driver needs to know the old ASID (!= PASID) that
-> > was used by the context descriptor.
-> > 
-> 
-> Presumably both ASID and context descriptor are SMMU internal
-> knowledge. What exact information is required from the core API
-> and how is it done today?
-
-Today the SMMU driver keeps track of bonds, but the goal of this series is
-to move that to the core.
+On Mon, Jul 25, 2022 at 1:23 PM Jiri Pirko <jiri@resnulli.us> wrote:
+>
+> Sat, Jul 23, 2022 at 06:16:00PM CEST, kuba@kernel.org wrote:
+> >On Sat, 23 Jul 2022 09:52:05 +0530 Vikas Gupta wrote:
+> >> +enum devlink_attr_selftest_test_id {
+> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_UNSPEC,
+> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_FLASH,    /* flag */
+> >> +
+> >> +    __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX,
+> >> +    DEVLINK_ATTR_SELFTEST_TEST_ID_MAX = __DEVLINK_ATTR_SELFTEST_TEST_ID_MAX - 1
+> >> +};
+> >> +
+> >> +enum devlink_selftest_test_status {
+> >> +    DEVLINK_SELFTEST_TEST_STATUS_SKIP,
+> >> +    DEVLINK_SELFTEST_TEST_STATUS_PASS,
+> >> +    DEVLINK_SELFTEST_TEST_STATUS_FAIL
+> >> +};
+> >> +
+> >> +enum devlink_attr_selftest_result {
+> >> +    DEVLINK_ATTR_SELFTEST_RESULT_UNSPEC,
+> >> +    DEVLINK_ATTR_SELFTEST_RESULT,                   /* nested */
+> >> +    DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID,           /* u32,
+> >> +                                                     * enum devlink_attr_selftest_test_id
+> >> +                                                     */
+> >> +    DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS,       /* u8,
+> >> +                                                     * enum devlink_selftest_test_status
+> >> +                                                     */
+> >> +
+> >> +    __DEVLINK_ATTR_SELFTEST_RESULT_MAX,
+> >> +    DEVLINK_ATTR_SELFTEST_RESULT_MAX = __DEVLINK_ATTR_SELFTEST_RESULT_MAX - 1
+> >
+> >Any thoughts on running:
+> >
+> >       sed -i '/_SELFTEST/ {s/_TEST_/_/g}' $patch
+>
+> Sure, why not. But please make sure you keep all other related things
+> (variables, cmdline opts) consistent.
+>
+> Thanks!
+Does the 'test_id' in command line
+ 'devlink dev selftests run DEV test_id flash'
+will still hold good if DEVLINK_ATTR_SELFTEST_RESULT_TEST_ID changes
+to DEVLINK_ATTR_SELFTEST_RESULT_ID ?
+or it should be
+'devlink dev selftests run DEV selftest_id flash' ?
 
 Thanks,
-Jean
+Vikas
 
+
+>
+>
+> >
+> >on this patch? For example DEVLINK_ATTR_SELFTEST_RESULT_TEST_STATUS
+> >is 40 characters long, ain't nobody typing that, and _TEST is repeated..
+> >
+> >Otherwise LGTM!
+
+--000000000000ca7b5605e49d4010
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+I7qKxvF8Yo7eGTnHRTa99J+6yTd88AKVuhM5TEhpC8cS7qvrQXJje+Uing2xWC4FH76LEWIFH0Pt
+x8C1WoCU0ClXHU/XfzH2mYrFANBSCeP1Co6QdEfRAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
+BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
+NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
+A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
+aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
+cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
+MBqBGHZpa2FzLmd1cHRhQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
+GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUc6J11rH3s6PyZQ0zIVZHIuP20Yw
+DQYJKoZIhvcNAQELBQADggEBALvCjXn9gy9a2nU/Ey0nphGZefIP33ggiyuKnmqwBt7Wk/uDHIIc
+kkIlqtTbo0x0PqphS9A23CxCDjKqZq2WN34fL5MMW83nrK0vqnPloCaxy9/6yuLbottBY4STNuvA
+mQ//Whh+PE+DZadqiDbxXbos3IH8AeFXH4A1zIqIrc0Um2/CSD/T6pvu9QrchtvemfP0z/f1Bk+8
+QbQ4ARVP93WV1I13US69evWXw+mOv9VnejShU9PMcDK203xjXbBOi9Hm+fthrWfwIyGoC5aEf7vd
+PKkEDt4VZ9RbudZU/c3N8+kURaHNtrvu2K+mQs5w/AF7HYZThqmOzQJnvMRjuL8xggJtMIICaQIB
+ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
+bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwYjepatB64S625eswwDQYJ
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFb7W2PfZkbdDA1OIDb0jwzpNjNZS8HVzBUQ
+C5+aDCT6MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDcyNTA4
+NDg1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
+BgkqhkiG9w0BAQEFAASCAQA5x2oe0Q3zif482GkqX0iu025ez751xSNMhArZhh4m6hLjWe5oG0hr
+uIpIUzTndJ4tqRd64fAQCzSTIddh8X3R+rBZ9kFZ/ZbSWNIS3S8Xzp2xA8I/e/OTN73Rh8aFZAU4
+XMPPSXmvvP0qCeisgHoduk/6prTUUy+/Oc4z0NrjMUK+J6skTRhVFVq+atsx+rtnp7VKOdyb5qlt
+2WJVDAAvpGuQp4ILjZvIPFPLOXFzwE0vKIqJHV1REDBS9t8jtsKRupSjIgL0uv6xgIQyXOeuAdCu
+dinKmVvxmtfudXqgzgACyIZlgHhXnlvyrnvHfDqdIvEUXPgOyTMBNqFbMkIZ
+--000000000000ca7b5605e49d4010--

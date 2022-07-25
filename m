@@ -2,126 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5D1580610
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9912580617
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 23:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbiGYVBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 17:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S233581AbiGYVCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 17:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiGYVBj (ORCPT
+        with ESMTP id S229535AbiGYVCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:01:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BFC22B2F;
-        Mon, 25 Jul 2022 14:01:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14C07B8110C;
-        Mon, 25 Jul 2022 21:01:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92177C341C6;
-        Mon, 25 Jul 2022 21:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658782895;
-        bh=kj3SxkVzlgx5vGfy5x9aBo/9/7AY1z7twe5Lujc5cV8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dX7n5rodFHFTDGcU0ojkDlfq/6Kd3Df2z4bgjyCVILloHC2aBR5KXoSOl+vF3xI12
-         aCsyXRyg0fHEARvF0vaPFPIb+V3yAYLzuiIB/6ubPAUpLu24w5OdoAQCT8Y0zvcaBY
-         YDja6o1FIdHaJZ2frm/sEgJZj0cLsROEjgA9se89Hu3Qp0fjtzexko8lq0fM9/dEkX
-         WS6b49GLscQyVbmogVG79jViQX/nofkqVCmycvXUI9b8sYxy2SdoL2YUL0b2mIXWJz
-         fXBf575vy6wTVrPkn52IYSpOkoRe5L/sYj16EG06aG/8C6lmUMDiTGd5tpEUQ5kZyT
-         rPJ64/X87SbzA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EC95940374; Mon, 25 Jul 2022 18:01:32 -0300 (-03)
-Date:   Mon, 25 Jul 2022 18:01:32 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCHSET 0/5] perf lock: Add contention subcommand (v2)
-Message-ID: <Yt8ErPFUtSoGfrzM@kernel.org>
-References: <20220725183124.368304-1-namhyung@kernel.org>
+        Mon, 25 Jul 2022 17:02:35 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41532237CB;
+        Mon, 25 Jul 2022 14:02:34 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z22so15531079edd.6;
+        Mon, 25 Jul 2022 14:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1zhas+8j3Wav2jMIlQmpqUM9YHQ6PqTqpsAq4Djjqwg=;
+        b=M/gXcYWmpK6NPe5p+2Pq4EMKc3X45ZXAOFG2H1e/evwrSyEU+YnnNtpJpAgyIb0nPG
+         2iRgZNe0RN68r7cAdZ7eNBbRKbXboinWjbGGFgYvuemsP+2zq3Ekp5KPvdS1QFsU0gWg
+         lcVkNtwt9uk3Sar7RHWr39BCkyI0nD0HvVdCF9PJJP7oEdg5FC6Z/UqVtSL5VV7F0Crn
+         An4siyp+A/7DXsmczgc5ZX+ejf06aeaFUtIIT8p8OAwMSHIlb70UDeybuZCG8tojKfKY
+         t6OiJsU4ae93uEXDV8q9J4WJEEUNCqw07kMY5wbdXCaPBefTlrVAwNLcflsyFF47SKJp
+         ZUBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1zhas+8j3Wav2jMIlQmpqUM9YHQ6PqTqpsAq4Djjqwg=;
+        b=qT7LHtQWxkr/5wYn353cJSoyUNIVpqVt2RroBo0G2gMEXC0lvqO6j4XyJvn3NJVxuF
+         OPL0a1CbnLOHXFfid1Ugb3rK4DFeNuyJducPJo+alBJnK4Ada1lX7/ctfjsMob7txz/v
+         Qj37+uX1nRB1BcS9cQcTJ5sOCQwMZNf0Ib+O3MgF7SvHxBhYSfg7T+msLmvUtCc+/dEX
+         /8F6w7V4238kNVWai8Re/PeapT8tViG/I5Yw28mE6CU8u+TGi01LYqGBzSZYiYG7HXkP
+         cngXdPcluLRH1n/EDYqcr5AMNUG3N83SscV3F3nZVTmZ+GWb57nRv2BWgJtcKXg7fE+f
+         m0ww==
+X-Gm-Message-State: AJIora8aaycO4lzfye+kMJSxbx7aFQSsP1bZccb+695fhsrRyDLLoncX
+        RSOdx4NUESAOmkAGuVIAlAkLKsR0iyFVFJdFUGceMNjV77Q=
+X-Google-Smtp-Source: AGRyM1toS9e2QkPPe35y3WOoD+NQiUZrM17KRlMPBBqXq/DFCH4IquvDKzOfQAYT58z4+gR2SWNOQ9NSDettfjc+DFc=
+X-Received: by 2002:a05:6402:d53:b0:43b:a0cf:d970 with SMTP id
+ ec19-20020a0564020d5300b0043ba0cfd970mr14726259edb.277.1658782952432; Mon, 25
+ Jul 2022 14:02:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725183124.368304-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722172035.44977-1-potin.lai.pt@gmail.com>
+In-Reply-To: <20220722172035.44977-1-potin.lai.pt@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 25 Jul 2022 23:01:56 +0200
+Message-ID: <CAHp75VdH4UXsG7GP5A3ocy0-J2XDr=9akwX+dwczt6ejA8kO7A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] iio: humidity: hdc100x: add manufacturer and device
+ id cehck
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jul 25, 2022 at 11:31:19AM -0700, Namhyung Kim escreveu:
-> Hello,
-> 
-> It's to add a new subcommand 'contention' (shortly 'con') to perf lock.
-> 
-> Changes in v2)
-> * bugfix is merged already
-> * fix build error in patch 2
-> 
-> The new subcommand is to handle the new lock:contention_{begin,end}
-> tracepoints and shows lock type and caller address like below:
-> 
->   $ perf lock contention
->    contended   total wait     max wait     avg wait         type   caller
-> 
->          238      1.41 ms     29.20 us      5.94 us     spinlock   update_blocked_averages+0x4c
->            1    902.08 us    902.08 us    902.08 us      rwsem:R   do_user_addr_fault+0x1dd
->           81    330.30 us     17.24 us      4.08 us     spinlock   _nohz_idle_balance+0x172
->            2     89.54 us     61.26 us     44.77 us     spinlock   do_anonymous_page+0x16d
->           24     78.36 us     12.27 us      3.27 us        mutex   pipe_read+0x56
->            2     71.58 us     59.56 us     35.79 us     spinlock   __handle_mm_fault+0x6aa
->            6     25.68 us      6.89 us      4.28 us     spinlock   do_idle+0x28d
->            1     18.46 us     18.46 us     18.46 us      rtmutex   exec_fw_cmd+0x21b
->            3     15.25 us      6.26 us      5.08 us     spinlock   tick_do_update_jiffies64+0x2c
->    ...
-> 
-> where rwsem:R stands for read access (down_read) for a rw-semaphore.
-> Other types of lock access is obvious and it doesn't detect optimistic
-> spinning on mutex yet.  This is just a base work for lock contention
-> analysis and more will come later.
-> 
-> You can get this from 'perf/lock-subcmd-v2' branch on
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+On Fri, Jul 22, 2022 at 7:25 PM Potin Lai <potin.lai.pt@gmail.com> wrote:
+>
+> Add manufacturer and device id checking during probe, and Skip the
 
-Thanks, applied locally, pushed to tmp.perf/core, will go to perf/core
-after further automated tests.
+ID
+skip
 
-- Arnaldo
- 
-> Thanks,
-> Namhyung
-> 
-> 
-> Namhyung Kim (5):
->   perf lock: Add flags field in the lock_stat
->   perf lock: Add lock aggregation enum
->   perf lock: Add 'contention' subcommand
->   perf lock: Add -k and -F options to 'contention' subcommand
->   perf lock: Support -t option for 'contention' subcommand
-> 
->  tools/perf/Documentation/perf-lock.txt |  23 +-
->  tools/perf/builtin-lock.c              | 401 +++++++++++++++++++++++--
->  2 files changed, 390 insertions(+), 34 deletions(-)
-> 
-> 
-> base-commit: 9fe9b252c7c022df8e503435e778f15c04dfa3bf
-> -- 
-> 2.37.1.359.gd136c6c3e2-goog
+> checking if chip model not supported.
+>
+> Supported:
+> - HDC1000
+> - HDC1010
+> - HDC1050
+> - HDC1080
+>
+> Not supported:
+> - HDC1008
+
+...
+
+> +enum {
+> +       HDC100X,
+> +       HDC1000,
+> +       HDC1008,
+> +       HDC1010,
+> +       HDC1050,
+> +       HDC1080
+
++ Comma here.
+
+> +};
+
+...
+
+> +static const struct of_device_id hdc100x_dt_ids[];
+
+No, drop it.
+
+...
+
+> +       match = i2c_of_match_device(hdc100x_dt_ids, client);
+> +
+> +       if (match) {
+> +               of_data = (struct hdc100x_of_data *)match->data;
+> +               if (!of_data->support_mfr_check)
+> +                       return true;
+
+Besides the redundant blank line this call to i2c_of_match_device() is not good.
+
+of_data is a misleading name. What about ACPI?
+
+What you are looking for is:
+
+  data = device_get_match_data(&client->dev);
+
+> +       } else if (id->driver_data == HDC1008)
+
+Don't use I2C id field, switch to i2c ->probe_new() if it's not done yet.
+
+> +               return true;
+> +
+> +       mfr_id = hdc100x_read_mfr_id(client);
+> +       dev_id = hdc100x_read_dev_id(client);
+> +       if (mfr_id == HDC100X_MFR_ID &&
+> +          (dev_id == 0x1000 || dev_id == 0x1050))
+> +               return true;
+> +
+> +       return false;
+> +}
+
+...
+
+>  static const struct i2c_device_id hdc100x_id[] = {
+> -       { "hdc100x", 0 },
+> -       { "hdc1000", 0 },
+> -       { "hdc1008", 0 },
+> -       { "hdc1010", 0 },
+> -       { "hdc1050", 0 },
+> -       { "hdc1080", 0 },
+> +       { "hdc100X", HDC100X },
+> +       { "hdc1000", HDC1000 },
+> +       { "hdc1008", HDC1008 },
+> +       { "hdc1010", HDC1010 },
+> +       { "hdc1050", HDC1050 },
+> +       { "hdc1080", HDC1080 },
+
+Please, use pointers as in of_device_id table.
+
+>         { }
+>  };
 
 -- 
-
-- Arnaldo
+With Best Regards,
+Andy Shevchenko

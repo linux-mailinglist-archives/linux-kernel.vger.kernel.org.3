@@ -2,72 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D2C5801C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54145801F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 17:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235984AbiGYPX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 11:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S234742AbiGYPeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 11:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236452AbiGYPXm (ORCPT
+        with ESMTP id S232199AbiGYPec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 11:23:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE6BEE;
-        Mon, 25 Jul 2022 08:23:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60D186122D;
-        Mon, 25 Jul 2022 15:23:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943AAC341C6;
-        Mon, 25 Jul 2022 15:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658762609;
-        bh=3s3HCAIq22KW8xdlHADk+52r1ZJHJUwaz1P2FsyYFfU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oScXdJx5xfbg//Whh9manEFT986v5s9h4ig/+L7Fl1xIsraZpC69KrO3xVHv2ggmA
-         idz2nHsBB9F9cxAe/tY5SNmZlc2IVP381AKRbwRgDh9DDDAMD7MP3IOWlaIXQWuNgg
-         QB8+BaFbH+RJ54PsTorxmFWCtucEIEwhGP7JOx+YBJtmQ1sICZGqtGL4PBf9MgGeOg
-         s9ikuOiNopmUNnYFMOKXb3JEskJqAZXKCZELcy/2NcD+6iksi5d+cBwGZflga/A/Is
-         Ptkl432RnAvplE87qAavg5V9sfZR4dbvUzZCyGc0qHqlOWZs6+mV2///k4hiuW5nsx
-         7U7F1oXYPhyWQ==
-Message-ID: <8112c80c-8e65-aa0e-e335-562d9b8d3343@kernel.org>
-Date:   Mon, 25 Jul 2022 17:23:26 +0200
+        Mon, 25 Jul 2022 11:34:32 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A05BCB2
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:34:31 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id x11so8442202qts.13
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 08:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=67je02j6uPzSAKV5fALusQHcJaLZtd8UN7xVwkpfhMI=;
+        b=cqYIXD8d4R3afensKf+99266lB8CnpoCR0cvyQJleALFFxfA893nPv3nDzZXt3p9za
+         s8ObwE74BOHxU+40bwlVdDr3a0JISs43bgIQOwzuJcNzM0xST3u+iLxR8hwv1zNTXHS6
+         Grd3BJJSVOsa4373326OgtzSlvStT0S1VDd14qQS8J0boaE438X2O4r5roAtieEZRa6h
+         SNNVP2akwjO8VpRxcok8o5upBwDLt09kWP3F6AcTwTqmdW5Me+jybiLbG/C3AXfnQHXy
+         6oThJosmja+RHL1pI0goIfSDiDz5HrJwrK5df6TJlo/cSxTG7pIONBV6cRi62GYTHyug
+         bsxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=67je02j6uPzSAKV5fALusQHcJaLZtd8UN7xVwkpfhMI=;
+        b=4GeBJ13w18eJppNLGoLs7YlDw77QiAYLTMGQVGRT8xCLv0Jxhdob4CDe3HDmaLl4/3
+         yJ9SePbu+2iVd63juujYPapVwJtCD4BbZ6524OWUFtk0JKfvDCKs6w5OGtlCOY8iT7fI
+         NSAnX2MnpZRNsG+JuJHHbsC/Y8pPuYTLg2oHmZR0Fpogb+FoW809J04TvUt4p20avkaQ
+         t6z78IpzRirYf0B6QHwXUNewACrQ6vFgVXSRWzfL3bX8nV48o4CjtHg+IzzzpUWZ/rNI
+         GxiGAR+fMLOQSJliTz2MzULq+oz11T4DzLXWmwOQn4DRdFvGVeOOBdT950sGsyRPOsTL
+         sZZA==
+X-Gm-Message-State: AJIora8+xXuiRdZJdS2PsDSz1ZDniAxOZg1KYE6LdfsIJvDZzVzb+a5e
+        f5+LtAMJxEkEkk1JuB5vJwJXEw==
+X-Google-Smtp-Source: AGRyM1vgqIkAXbToyHYJQiompUrodEA+PwnkTXUl3kHFv5+9uA0m41T7e88PjoGYpUJEUXXNPNijFg==
+X-Received: by 2002:ac8:5ac2:0:b0:31f:d13:de85 with SMTP id d2-20020ac85ac2000000b0031f0d13de85mr10923232qtd.397.1658763270030;
+        Mon, 25 Jul 2022 08:34:30 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:994f])
+        by smtp.gmail.com with ESMTPSA id q3-20020a05622a030300b0031eb393aa45sm7783893qtw.40.2022.07.25.08.34.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 08:34:29 -0700 (PDT)
+Date:   Mon, 25 Jul 2022 11:34:28 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        tj@kernel.org, corbet@lwn.net, akpm@linux-foundation.org,
+        rdunlap@infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH 1/9] sched/psi: fix periodic aggregation shut off
+Message-ID: <Yt64BKsrUbD0xxYI@cmpxchg.org>
+References: <20220721040439.2651-1-zhouchengming@bytedance.com>
+ <20220721040439.2651-2-zhouchengming@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] rtla: Fix double free
-Content-Language: en-US
-To:     Andreas Schwab <schwab@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <mvmzggxl4n1.fsf@suse.de>
- <fd0888a4-099c-95fe-7e20-82be1489061f@kernel.org> <mvmv8rll2yn.fsf@suse.de>
- <20220725105639.295a7d7d@gandalf.local.home> <mvmilnlkyzx.fsf_-_@suse.de>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <mvmilnlkyzx.fsf_-_@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220721040439.2651-2-zhouchengming@bytedance.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/25/22 17:12, Andreas Schwab wrote:
-> Avoid double free by making trace_instance_destroy indempotent.  When
-> trace_instance_init fails, it calls trace_instance_destroy, but its only
-> caller osnoise_destroy_tool calls it again.
+On Thu, Jul 21, 2022 at 12:04:31PM +0800, Chengming Zhou wrote:
+> We don't want to wake periodic aggregation work back up if the
+> task change is the aggregation worker itself going to sleep, or
+> we'll ping-pong forever.
 > 
-> Fixes: 0605bf009f18 ("rtla: Add osnoise tool")
-> Signed-off-by: Andreas Schwab <schwab@suse.de>
+> Previously, we would use psi_task_change() in psi_dequeue() when
+> task going to sleep, so this check was put in psi_task_change().
+> 
+> But commit 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
+> defer task sleep handling to psi_task_switch(), won't go through
+> psi_task_change() anymore.
+> 
+> So this patch move this check to psi_task_switch(). Note for defer sleep
+> case, we should wake periodic avgs work for common ancestors groups,
+> since those groups have next task sched_in.
+> 
+> Fixes: 4117cebf1a9f ("psi: Optimize task switch inside shared cgroups")
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Good catch!
 
-Thanks!
--- Daniel
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>

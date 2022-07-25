@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D094C57FE42
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E32757FE45
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 13:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbiGYLUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 07:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S234868AbiGYLXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 07:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbiGYLUa (ORCPT
+        with ESMTP id S229694AbiGYLXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 07:20:30 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273F918B23
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 04:20:29 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LryFD1xMLzjXSS;
-        Mon, 25 Jul 2022 19:17:36 +0800 (CST)
-Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Jul 2022 19:20:09 +0800
-Received: from huawei.com (10.67.174.33) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 25 Jul
- 2022 19:20:09 +0800
-From:   "GONG, Ruiqi" <gongruiqi1@huawei.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Richard Weinberger <richard@nod.at>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        "Wang Weiyang" <wangweiyang2@huawei.com>,
-        GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: [PATCH] mtd: rawnand: arasan: stop using 0 as NULL pointer
-Date:   Mon, 25 Jul 2022 19:21:07 +0800
-Message-ID: <20220725112108.686347-1-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 25 Jul 2022 07:23:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A32714D08;
+        Mon, 25 Jul 2022 04:23:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53F0DB80E4B;
+        Mon, 25 Jul 2022 11:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B5FC341C6;
+        Mon, 25 Jul 2022 11:23:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658748187;
+        bh=0IIAYshbz5A3pRgoMrl6JuShGW3ecxOFOPEaKrdoSE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ic4+4ho6edsY2dPPnjJLfbAb0kgjLEbkRVMDSOo7ihh5/hJhc4RMA44DkV+OH2Y4u
+         mv/ZItSwUyUEUKwkUa5wjRj5OezKJGWLWm+TN1nWvRWI2wOVjMhk7RvPn5ydXD+iYB
+         qwn2lHL1VnrhoQCBYuMniJwQ+hoHM5bf+jFv24Axj8RTctqIIKp0FrU/z7ZOxp9wdV
+         jVMuxbqLySFyC+1r8OkIMANPUSEpguK4OGm0/kbQs0+sf4QL43sUqxJLfonJepqnJu
+         q/Ytkv17qK0WtGgEYPRAZsJDEMjB/FemCWW3kmI3KGrSaFAKEHvxatSsnw6oMC8/TW
+         S+8U61eGPLc/Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oFwBC-0003kT-W7; Mon, 25 Jul 2022 13:23:19 +0200
+Date:   Mon, 25 Jul 2022 13:23:18 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] media: flexcop-usb: probe cleanups
+Message-ID: <Yt59Jv6PWPHQEuJR@hovoldconsulting.com>
+References: <20220609142605.23620-1-johan@kernel.org>
+ <YsvyXJ2a0ILnB+vu@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.33]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsvyXJ2a0ILnB+vu@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,29 +57,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following sparse warnings:
+On Mon, Jul 11, 2022 at 11:50:20AM +0200, Johan Hovold wrote:
+> On Thu, Jun 09, 2022 at 04:26:02PM +0200, Johan Hovold wrote:
+> > This series cleans up the probe helper functions a bit to make the code
+> > more readable.
+> > 
+> > Note that these apply on top of the fix posted here:
+> > 
+> > 	https://lore.kernel.org/all/20220609135341.19941-1-johan@kernel.org/
+> 
+> > Johan Hovold (3):
+> >   media: flexcop-usb: clean up endpoint sanity checks
+> >   media: flexcop-usb: clean up URB initialisation
+> >   media: flexcop-usb: use usb_endpoint_maxp()
+> 
+> I haven't received any notification about this series being added to any
+> tree and the status is still set to "NEW" in the patch tracker so
+> sending a reminder.
 
-drivers/mtd/nand/raw/arasan-nand-controller.c:918:70: warning: Using plain integer as NULL pointer
-drivers/mtd/nand/raw/arasan-nand-controller.c:918:73: warning: Using plain integer as NULL pointer
+Another two weeks without a reply so sending another reminder.
 
-Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
----
- drivers/mtd/nand/raw/arasan-nand-controller.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Any chance of getting these (and the separate fix) into 5.20?
 
-diff --git a/drivers/mtd/nand/raw/arasan-nand-controller.c b/drivers/mtd/nand/raw/arasan-nand-controller.c
-index 296fb16c8dc3..ec7e6eeac55f 100644
---- a/drivers/mtd/nand/raw/arasan-nand-controller.c
-+++ b/drivers/mtd/nand/raw/arasan-nand-controller.c
-@@ -915,7 +915,7 @@ static int anfc_check_op(struct nand_chip *chip,
- 			if (instr->ctx.data.len > ANFC_MAX_CHUNK_SIZE)
- 				return -ENOTSUPP;
- 
--			if (anfc_pkt_len_config(instr->ctx.data.len, 0, 0))
-+			if (anfc_pkt_len_config(instr->ctx.data.len, NULL, NULL))
- 				return -ENOTSUPP;
- 
- 			break;
--- 
-2.25.1
+> >  drivers/media/usb/b2c2/flexcop-usb.c | 22 ++++++++++++++--------
+> >  1 file changed, 14 insertions(+), 8 deletions(-)
 
+Johan

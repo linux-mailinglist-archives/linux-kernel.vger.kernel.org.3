@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A15758089A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 01:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202195808A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 02:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbiGYX6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 19:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S230311AbiGZABI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 20:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiGYX6j (ORCPT
+        with ESMTP id S237108AbiGYX7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:58:39 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D9227FC9
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:58:36 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id bf13so11708410pgb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dilger-ca.20210112.gappssmtp.com; s=20210112;
-        h=from:message-id:mime-version:subject:date:in-reply-to:cc:to
-         :references;
-        bh=Ojaa/UU8B50WRImEMgYvPwV6uUe5mTD3KQg4CpEBv6U=;
-        b=PkQ/Af+T+bA+/HBQemEG7rZ7dPDvjPWBs3HhdBpZabOE+c1rBlVlPIz1r+rHpdv09X
-         hB/EyFoWNzuccoVADcy4Vdl0PLaNW6AiPxDyeJbUvnDe/d0KvCIQjhAOcQQ6b24XQJYg
-         8/PAIEY6L4XYgwJFXkpYL6jJ6xqV0QHoFCBKZuCOOlwPSQ9LL/4PuyVrqBEmhxUVKhgq
-         +5HJCiX+CYP8vccNJNvOCHb5WsnAQn5aouKG55wjmwwCi36yEZd/bT00fkiGHByJF0de
-         LcwGyirkTcqrv4ntzC3qtmLHmekGwpixqOSlqyQo5wyaYQWrvN7MIDDe1tW66CN4d0X1
-         CgSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:mime-version:subject:date
-         :in-reply-to:cc:to:references;
-        bh=Ojaa/UU8B50WRImEMgYvPwV6uUe5mTD3KQg4CpEBv6U=;
-        b=p74SoGejLDq0hmR/sCqrCsikfOBV/Iyfev3W/+YmY42jJG70MibDPK12EfJC6zSwAG
-         H+ZVN2MFeYD03zgVpe3Jzy4Zxug3ZyLUpbgM2Mff9utluUuAq00QRVPQzBL4Ga4st8OX
-         y05uYd1dEB3W2lgaLzxFdAGDo4/zZq5H1zOj56xGo1NLhQGjy6CrsZd+67o1kZUjpCP2
-         ueKyGBC0ONZDRWCLjuS+Pm1kj3NE2rHfI9lYzsd5MmkgUxcRszUrNnWoWthZyA237Bfh
-         2G/UAt/Ge9rFHWJAsEpdf+gFQQbRrsuAAJ/XxGaZwTVRVOOP00p6w02hsw2VI4HcKk2D
-         NC/w==
-X-Gm-Message-State: AJIora/mxOo1n19EVpOB2jpfzf0OOZ7/2XuCzAHI4dUtirwsUvGU+t/X
-        ZtreplcagD6WBbOJbNZjn2cPUg==
-X-Google-Smtp-Source: AGRyM1syH3Cbkf+bRQQU5ivPuhB3TZd0qaZdIG1SBv9zyCS0k235ZiPGksi9iuxNjB1O939AUiI02Q==
-X-Received: by 2002:a65:57c2:0:b0:41a:ff04:694c with SMTP id q2-20020a6557c2000000b0041aff04694cmr5997273pgr.573.1658793516160;
-        Mon, 25 Jul 2022 16:58:36 -0700 (PDT)
-Received: from cabot.adilger.int (S01061cabc081bf83.cg.shawcable.net. [70.77.221.9])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902780200b00168dadc7354sm9859676pll.78.2022.07.25.16.58.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 25 Jul 2022 16:58:35 -0700 (PDT)
-From:   Andreas Dilger <adilger@dilger.ca>
-Message-Id: <EC8AF6A7-9A90-4C21-8A1F-4AE936776876@dilger.ca>
-Content-Type: multipart/signed;
- boundary="Apple-Mail=_DB83B9B8-69A7-4FD9-B14D-F8B77FC7C0F2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
-Subject: Re: [PATCH v4 6/9] f2fs: don't allow DIO reads but not DIO writes
-Date:   Mon, 25 Jul 2022 17:58:31 -0600
-In-Reply-To: <Yt7dCcG0ns85QqJe@sol.localdomain>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-References: <20220722071228.146690-1-ebiggers@kernel.org>
- <20220722071228.146690-7-ebiggers@kernel.org> <YtyoF89iOg8gs7hj@google.com>
- <Yt7dCcG0ns85QqJe@sol.localdomain>
-X-Mailer: Apple Mail (2.3273)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 19:59:11 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0567727FD9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 16:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=O2ubfH2wQgxmJZWUP8M1vkKi6rTyTW4C61EL27uDGLI=; b=FdDGoOYDIjVUe17qJdSxcppF/6
+        BgyYILkT7FztFKmP5+K0qCFLxZJWgrWhYxWMSilPQ4diZCLP3Se96eLLn4WPnI6lY6ITlMj6DAPQy
+        VhK13AaOvQEp+JM6mzrrAjFHoNgvCfFnIecAQWxnBDbLf/CfOiQWjd7I/V6rMW2ANaWfyI1THxdfJ
+        2RRlR/Yi0CZ/dCebV1OhcjrSLd08zWg6GCAaPZSivHXCg/pYcRO1jjChs9qJFJNdIwNDcvmD+M9oP
+        X/Ye4KdN1/p09or297EABop8W2NJ0cxKaB0HTzJ5EL18QHUWC8KRSokCcfX598Lc1yTlEhUU7Dwck
+        hIqTgYGw==;
+Received: from [165.90.126.25] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oG7yX-006bNf-8M; Tue, 26 Jul 2022 01:59:01 +0200
+Date:   Mon, 25 Jul 2022 22:58:48 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Magali Lemes <magalilemes00@gmail.com>
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, mairacanal@riseup.net, isabbasso@riseup.net,
+        siqueirajordao@riseup.net, andrealmeid@riseup.net,
+        tales.aparecida@gmail.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] drm/amd/display: include missing headers
+Message-ID: <20220725235848.372aapiwvmxiiowt@mail.igalia.com>
+References: <20220725181559.250030-1-magalilemes00@gmail.com>
+ <20220725181559.250030-2-magalilemes00@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fydmeijpi4u4gmq5"
+Content-Disposition: inline
+In-Reply-To: <20220725181559.250030-2-magalilemes00@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,101 +60,147 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Apple-Mail=_DB83B9B8-69A7-4FD9-B14D-F8B77FC7C0F2
+--fydmeijpi4u4gmq5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
 
-On Jul 25, 2022, at 12:12 PM, Eric Biggers <ebiggers@kernel.org> wrote:
+On 07/25, Magali Lemes wrote:
+> Add missing headers to solve the following warnings from sparse:
 >=20
-> On Sat, Jul 23, 2022 at 07:01:59PM -0700, Jaegeuk Kim wrote:
->> On 07/22, Eric Biggers wrote:
->>> From: Eric Biggers <ebiggers@google.com>
->>>=20
->>> Currently, if an f2fs filesystem is mounted with the mode=3Dlfs and
->>> io_bits mount options, DIO reads are allowed but DIO writes are not.
->>> Allowing DIO reads but not DIO writes is an unusual restriction, =
-which
->>> is likely to be surprising to applications, namely any application =
-that
->>> both reads and writes from a file (using O_DIRECT).  This behavior =
-is
->>> also incompatible with the proposed STATX_DIOALIGN extension to =
-statx.
->>> Given this, let's drop the support for DIO reads in this =
-configuration.
->>=20
->> IIRC, we allowed DIO reads since applications complained a lower =
-performance.
->> So, I'm afraid this change will make another confusion to users. =
-Could
->> you please apply the new bahavior only for STATX_DIOALIGN?
->>=20
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:656:17: wa=
+rning: symbol 'ddr4_wm_table_gs' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:693:17: wa=
+rning: symbol 'lpddr4_wm_table_gs' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:730:17: wa=
+rning: symbol 'lpddr4_wm_table_with_disabled_ppt' was not declared. Should =
+it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:767:17: wa=
+rning: symbol 'ddr4_wm_table_rn' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:804:17: wa=
+rning: symbol 'ddr4_1R_wm_table_rn' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/dcn20_fpu.c:841:17: wa=
+rning: symbol 'lpddr4_wm_table_rn' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn301/dcn301_fpu.c:217:17: =
+warning: symbol 'ddr4_wm_table' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn301/dcn301_fpu.c:254:17: =
+warning: symbol 'lpddr5_wm_table' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:53:30: war=
+ning: symbol 'dcn3_1_ip' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:117:37: wa=
+rning: symbol 'dcn3_1_soc' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:197:30: wa=
+rning: symbol 'dcn3_15_ip' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:262:37: wa=
+rning: symbol 'dcn3_15_soc' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:293:30: wa=
+rning: symbol 'dcn3_16_ip' was not declared. Should it be static?
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/dcn31_fpu.c:358:37: wa=
+rning: symbol 'dcn3_16_soc' was not declared. Should it be static?
 >=20
-> Well, the issue is that the proposed STATX_DIOALIGN fields cannot =
-represent this
-> weird case where DIO reads are allowed but not DIO writes.  So the =
-question is
-> whether this case actually matters, in which case we should make =
-STATX_DIOALIGN
-> distinguish between DIO reads and DIO writes, or whether it's some odd =
-edge case
-> that doesn't really matter, in which case we could just fix it or make
-> STATX_DIOALIGN report that DIO is unsupported.  I was hoping that you =
-had some
-> insight here.  What sort of applications want DIO reads but not DIO =
-writes?
-> Is this common at all?
+Hi Magali,
 
-I don't think this is f2fs related, but some backup applications I'm =
-aware
-of are using DIO reads to avoid polluting the page cache when reading =
-large
-numbers of files. They don't care about DIO writes, since that is =
-usually
-slower than async writes due to the sync before returning from the =
-syscall.
+Nice catch! See some comments below:
 
-Also, IMHO it doesn't make sense to remove useful functionality because =
-the
-new STATX_DIOALIGN fields don't handle this.  At worst the application =
-will
-still get an error when trying a DIO write, but in most cases they will
-not use the brand new STATX call in the first place, and if this is =
-documented
-then any application that starts to use it should be able to handle it.
+> Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
+> ---
+>  drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h | 1 +
+>  drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c      | 1 +
+>  drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c    | 1 +
+>  drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c      | 3 +++
+>  4 files changed, 6 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h b/=
+drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h
+> index 2e088c5171b2..f1319957e400 100644
+> --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h
+> +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr.h
+> @@ -28,6 +28,7 @@
+> =20
+>  #include "clk_mgr.h"
+>  #include "dm_pp_smu.h"
+> +#include "clk_mgr_internal.h"
 
-Cheers, Andreas
+I see that this fix (right above) comes from another warning not listed
+in the commit message. Can you explicit it there or split it in
+another commit if possible?
 
+Also, clk_mgr/dcn21/rn_clk_mgr.c includes clk_mgr_internal.h and
+rn_clk_mgr.h; I wonder if a cleaner solution is to remove the
+`#include clk_mgr_internal.h` from rn_clk_mgr.c too.
 
+The remaining changes seems correct to me.
 
+Thanks,
 
+Melissa
 
+> =20
+>  extern struct wm_table ddr4_wm_table_gs;
+>  extern struct wm_table lpddr4_wm_table_gs;
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c b/drive=
+rs/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
+> index eeeae52fe6fc..45e9f4663abe 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.c
+> @@ -30,6 +30,7 @@
+>  #include "dchubbub.h"
+>  #include "dcn20/dcn20_resource.h"
+>  #include "dcn21/dcn21_resource.h"
+> +#include "clk_mgr/dcn21/rn_clk_mgr.h"
+> =20
+>  #include "dcn20_fpu.h"
+> =20
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c b/dri=
+vers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+> index 7ef66e511ec8..d211cf6d234c 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn301/dcn301_fpu.c
+> @@ -26,6 +26,7 @@
+>  #include "clk_mgr.h"
+>  #include "dcn20/dcn20_resource.h"
+>  #include "dcn301/dcn301_resource.h"
+> +#include "clk_mgr/dcn301/vg_clk_mgr.h"
+> =20
+>  #include "dml/dcn20/dcn20_fpu.h"
+>  #include "dcn301_fpu.h"
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c b/drive=
+rs/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
+> index e36cfa5985ea..2d11a2c13345 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
+> @@ -25,6 +25,9 @@
+> =20
+>  #include "resource.h"
+>  #include "clk_mgr.h"
+> +#include "dcn31/dcn31_resource.h"
+> +#include "dcn315/dcn315_resource.h"
+> +#include "dcn316/dcn316_resource.h"
+> =20
+>  #include "dml/dcn20/dcn20_fpu.h"
+>  #include "dcn31_fpu.h"
+> --=20
+> 2.37.1
+>=20
 
---Apple-Mail=_DB83B9B8-69A7-4FD9-B14D-F8B77FC7C0F2
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename=signature.asc
-Content-Type: application/pgp-signature;
-	name=signature.asc
-Content-Description: Message signed with OpenPGP
+--fydmeijpi4u4gmq5
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
-Comment: GPGTools - http://gpgtools.org
 
-iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAmLfLigACgkQcqXauRfM
-H+DIjBAAuhcCUrRZxLbIIbGQiYg9WA8Kq1A3wSBPDzMet5t78gjiKUo6y+RE2w0X
-O2Be8DY9X8x4OIpbD4jiFAe7TiVDAHAYjjrzKFMykU63wB4nJELcIZrqELT/O1qg
-9Zi1+hqoXK+WcCcC8IEh52+ypABRczFIb9OF6RPR450wAxc+0x7lXfyZ/TzBcRyl
-+NeWbyLAQfW+VRViN/re9tlticLobDklbfgNC0rNuhp1CawlnMVsqWSxx/F9WT3s
-RjdsJ8hzDqLEpPv6Sgd30T9U4UaoLEpRe36CMuT4/SYx6h6SR2Kv61+Z3IihAp41
-utLypsHnpswfLjF3KmxusOMLZGmCG1EFazn/gMi6WuccfBaI+m7OXeUvvlLGnzn4
-9RJWpVHy3TVTWdikFE/LVP9L7D8rj2jos9UVpFE8QUO2Gu1NNf6C5lIg3iXlvcvn
-uxuqCpYcPCCwYosLSNcpi9tNW/p3aS0WNNfGlqWfB8Au4S/91sMJsGKkON+jwsMs
-cMiUECc+eFc7HuCrP80IW+N8asiaGrTWGrrg+EpxFtl12OzKyn4OnoY5NxWuLXLF
-3lSS1IZWudfgO1TD/5sUmvsHtUS4Rd3akslKsAQyavGxszDWvxIGvU0kABSb8k1P
-q3CXMHx8oG9FooyoP3FnfUzDrZXf40Sk28cCsqOa09926JUbhqY=
-=zitC
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmLfLhYACgkQwqF3j0dL
+ehxzPBAAlERN6pDxUTfpiujfTDPJOWpVtWnC1Masl4psyPTOojPrar7khCz7lyZL
+BVRSXjIGV7seRAe765s8oEb9D5GQUqMU3Jlpro1EBWF7AQ77qV3/hPlyhYCDr4tM
+am9En8V4PynUgos/ayu+ALEmgPNlBAlJd46fY2rln/4VlPAAyJosp1ipVMzMe4vL
+6QPonpOvTVcVoc3LjNGc2sDGfu1Ktmmou6fRKiHAXk4Wfk8ak55yzH5AoWG+X881
+SiiDdT+kt7U8c0cIdVvdt9T7aksOgPtAixDe22pZon2FaMfqjvOWrobRwOg2qAUG
+UXxHXxWUs1+2+y1J+AYx91WWdJ9A9S/po+Qaw/pdKNmGMwRQljcVTwrk4J46ib78
+F71NSi+39+cvyNOmnZoYpCy0A+YXJWoLsXv6bw225ntqA7Jyqf3LstklMaJYeTgh
+m0gGwQ4eJXZqcnfY29S7W+O4jo6gQXJJBC6Di/bJO1MBUQmPgmFWjaKJdpt7Peax
+SHrzyQwz2GZr1g3hq8MM+9KezYp5BpcjJEdNyC22Tu4+5mEmvs8aR+ZlY4VEEfXE
++UeILM57PyFFeYoqvL9wcyzPDCZwp+aHtl3Y7H7zxHZLcUmlpx9uAmipI3hobiKF
+k1a5jmi5Y3ez0FP14YsQPtyIE1EaEs+vSHbAXlPsn7tLIqpm16g=
+=MbwT
 -----END PGP SIGNATURE-----
 
---Apple-Mail=_DB83B9B8-69A7-4FD9-B14D-F8B77FC7C0F2--
+--fydmeijpi4u4gmq5--

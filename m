@@ -2,77 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDC157F99F
-	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F6257F9AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 25 Jul 2022 08:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiGYGv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 02:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S232636AbiGYGyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 02:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbiGYGv1 (ORCPT
+        with ESMTP id S232177AbiGYGxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 02:51:27 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B53EEE01
-        for <linux-kernel@vger.kernel.org>; Sun, 24 Jul 2022 23:51:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LrrL206Bbz4xD0;
-        Mon, 25 Jul 2022 16:51:21 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658731884;
-        bh=Cq8bprSGytnq2wIOB6aqNZj7GK3JK47zvUvRs+fgQm4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=SQ4dHzjSQVr6SQ8wG7VrnKMJ6yPNI7yp4dfApyCrgCSvRQ4dd2JzPWqGRBHv+SqYB
-         pTr5y8lGQXXQPWdR1+3/oHhaAPDoybW29W3objiWdq7anBqYbTI05SsCmVgUCNGzjj
-         I3tyc5sxmqGtpM5F+U/kim/dfMcE05BxOnj61gFuucMIeEKK/s0/YH/iAZzt3709Q2
-         EdLvJCB8U53InTde6PO+wfQ3lwIdtji6Fddg0Woxz85+UH74bV5X1NdtzjNV5FcIy6
-         yOk1JqM6NP6Ttlz//q96UKGru1D3mgAHupUSGc04EFIvk+QKnXKjLWFBnmzzayjkIN
-         mWMMRZflV+h6A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     wangjianli <wangjianli@cdjrlc.com>, benh@kernel.crashing.org,
-        paulus@samba.org, Julia.Lawall@inria.fr, liubo03@inspur.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        wangjianli <wangjianli@cdjrlc.com>
-Subject: Re: [PATCH] powerpc/kvm: fix repeated words in comments Delete the
- redundant word 'that'.
-In-Reply-To: <20220724062920.1551-1-wangjianli@cdjrlc.com>
-References: <20220724062920.1551-1-wangjianli@cdjrlc.com>
-Date:   Mon, 25 Jul 2022 16:51:19 +1000
-Message-ID: <87bktdd6s8.fsf@mpe.ellerman.id.au>
+        Mon, 25 Jul 2022 02:53:24 -0400
+Received: from ZXSHCAS1.zhaoxin.com (ZXSHCAS1.zhaoxin.com [210.0.225.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149511055A;
+        Sun, 24 Jul 2022 23:53:20 -0700 (PDT)
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Mon, 25 Jul
+ 2022 14:52:52 +0800
+Received: from L440.zhaoxin.com (10.29.8.21) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Mon, 25 Jul
+ 2022 14:52:52 +0800
+From:   Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <kishon@ti.com>, <dianders@chromium.org>, <s.shtylyov@omp.ru>,
+        <mka@chromium.org>, <ming.lei@canonical.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <tonywwang@zhaoxin.com>, <weitaowang@zhaoxin.com>
+Subject: [PATCH v2] USB: HCD: Fix URB giveback issue in tasklet function
+Date:   Mon, 25 Jul 2022 14:52:51 +0800
+Message-ID: <20220725065251.832087-1-WeitaoWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.29.8.21]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wangjianli <wangjianli@cdjrlc.com> writes:
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->  arch/powerpc/kvm/book3s_64_mmu_hv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/kvm/book3s_64_mmu_hv.c b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> index 514fd45c1994..73c6db20cd8a 100644
-> --- a/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> +++ b/arch/powerpc/kvm/book3s_64_mmu_hv.c
-> @@ -1601,7 +1601,7 @@ long kvm_vm_ioctl_resize_hpt_commit(struct kvm *kvm,
->   * is valid, it is written to the HPT as if an H_ENTER with the
->   * exact flag set was done.  When the invalid count is non-zero
->   * in the header written to the stream, the kernel will make
-> - * sure that that many HPTEs are invalid, and invalidate them
-> + * sure that many HPTEs are invalid, and invalidate them
->   * if not.
+Usb core introduce the mechanism of giveback of URB in tasklet context to
+reduce hardware interrupt handling time. On some test situation(such as
+FIO with 4KB block size), when tasklet callback function called to
+giveback URB, interrupt handler add URB node to the bh->head list also.
+If check bh->head list again after finish all URB giveback of local_list,
+then it may introduce a "dynamic balance" between giveback URB and add URB
+to bh->head list. This tasklet callback function may not exit for a long
+time, which will cause other tasklet function calls to be delayed. Some
+real-time applications(such as KB and Mouse) will see noticeable lag.
 
-The existing wording is correct:
+Fix this issue by taking new URBs giveback in next tasklet function call.
+Add a member high_prio for structure giveback_urb_bh and replace the local
+high_prio_bh variable with this structure member in usb_hcd_giveback_urb.
 
- "the kernel will make sure that ... that many HPTEs are invalid"
+Fixes: 94dfd7edfd5c ("USB: HCD: support giveback of URB in tasklet context")
+Signed-off-by: Weitao Wang <WeitaoWang-oc@zhaoxin.com>
+---
+v1->v2:
+ - Fix compile warning by remove label "restart".
+ - Modify the patch description info.
+ - Change structure member from hi_priority to high_prio.
 
-cheers
+ drivers/usb/core/hcd.c  | 25 ++++++++++++++-----------
+ include/linux/usb/hcd.h |  1 +
+ 2 files changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 06eea8848ccc..1feb9a604380 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1691,7 +1691,6 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+ 
+ 	spin_lock_irq(&bh->lock);
+ 	bh->running = true;
+- restart:
+ 	list_replace_init(&bh->head, &local_list);
+ 	spin_unlock_irq(&bh->lock);
+ 
+@@ -1705,10 +1704,16 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+ 		bh->completing_ep = NULL;
+ 	}
+ 
+-	/* check if there are new URBs to giveback */
++	/* giveback new URBs next time to prevent this function from
++	 * not exiting for a long time.
++	 */
+ 	spin_lock_irq(&bh->lock);
+-	if (!list_empty(&bh->head))
+-		goto restart;
++	if (!list_empty(&bh->head)) {
++		if (bh->high_prio)
++			tasklet_hi_schedule(&bh->bh);
++		else
++			tasklet_schedule(&bh->bh);
++	}
+ 	bh->running = false;
+ 	spin_unlock_irq(&bh->lock);
+ }
+@@ -1737,7 +1742,7 @@ static void usb_giveback_urb_bh(struct tasklet_struct *t)
+ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ {
+ 	struct giveback_urb_bh *bh;
+-	bool running, high_prio_bh;
++	bool running;
+ 
+ 	/* pass status to tasklet via unlinked */
+ 	if (likely(!urb->unlinked))
+@@ -1748,13 +1753,10 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ 		return;
+ 	}
+ 
+-	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe)) {
++	if (usb_pipeisoc(urb->pipe) || usb_pipeint(urb->pipe))
+ 		bh = &hcd->high_prio_bh;
+-		high_prio_bh = true;
+-	} else {
++	else
+ 		bh = &hcd->low_prio_bh;
+-		high_prio_bh = false;
+-	}
+ 
+ 	spin_lock(&bh->lock);
+ 	list_add_tail(&urb->urb_list, &bh->head);
+@@ -1763,7 +1765,7 @@ void usb_hcd_giveback_urb(struct usb_hcd *hcd, struct urb *urb, int status)
+ 
+ 	if (running)
+ 		;
+-	else if (high_prio_bh)
++	else if (bh->high_prio)
+ 		tasklet_hi_schedule(&bh->bh);
+ 	else
+ 		tasklet_schedule(&bh->bh);
+@@ -2959,6 +2961,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
+ 
+ 	/* initialize tasklets */
+ 	init_giveback_urb_bh(&hcd->high_prio_bh);
++	hcd->high_prio_bh.high_prio = 1;
+ 	init_giveback_urb_bh(&hcd->low_prio_bh);
+ 
+ 	/* enable irqs just before we start the controller,
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 2c1fc9212cf2..98d1921f02b1 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -66,6 +66,7 @@
+ 
+ struct giveback_urb_bh {
+ 	bool running;
++	bool high_prio;
+ 	spinlock_t lock;
+ 	struct list_head  head;
+ 	struct tasklet_struct bh;
+-- 
+2.32.0

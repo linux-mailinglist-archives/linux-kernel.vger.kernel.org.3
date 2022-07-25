@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035C35807D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A838C5807DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 00:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237548AbiGYWxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 18:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S231145AbiGYW5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 18:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237587AbiGYWxl (ORCPT
+        with ESMTP id S229764AbiGYW47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:53:41 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8067720F61
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:53:39 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id d13so10249791wrn.10
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 15:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/W5yt/hqpa2H9l51KPyc7KtGFLwJRO5GtKdVuzCYcYE=;
-        b=eRiyLuxpX5qC8hQzrRkg9frLl3gSC//o1oyul/HoGdiNoF4so6toscBjafhGAfLQqp
-         UCQghoJOnPMwYy0xIHbRlsbkOyD4ektNaPpsrnGpnIlwnydmsHdNvVWSDXiObsYavolQ
-         7R9fpfH9/S4xUCE48oVAhrrLdNjiAmJBq47B5m9UMaOVMHUD9QB7mJrifTVcP6fdgeH8
-         wIXb/bkULIJKGTX2mtNfykVdShVFSTtMxCwl2eqvu7rrTu8g5gyuddq7KlYNBQws6Mb2
-         fnbp/R1KutfkZXIE80k12jmE3KUrvJxhFXu33hIrDM9gJvLIwcHEpdtbMY4NQG2VxAbg
-         71dQ==
+        Mon, 25 Jul 2022 18:56:59 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F371EC61;
+        Mon, 25 Jul 2022 15:56:54 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id by10-20020a056830608a00b0061c1ac80e1dso9698456otb.13;
+        Mon, 25 Jul 2022 15:56:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/W5yt/hqpa2H9l51KPyc7KtGFLwJRO5GtKdVuzCYcYE=;
-        b=KU3KIWGTFZiUDm0qq3tD7vswq/t5P8zigKknA/qE7U/f31Ie3EcL0uFy0nZAZOBZ6R
-         ieg0ou0KtM7NOHl0KUaQWrbJwwXTJyANdVMxCZzVpImWAPeLKWs+bII7RaD7Pa7TYT5t
-         ywgyuvBoc+SwwzMjkmKRODyPCCtiGq33cd0FhgAexVY314kMnmqzeZmM7dSKwdtSyqGH
-         hvVc0ymlbuu3pL/QDr3tDEvRnCRYho0qnqs+NmyRMdK1kYEMeRrkj+vhUygjIYQlo3Qh
-         GM8Xk0XADzgOwB7To/JGWC8R8EbW1zhLGy9zWMUfo5IIejZAW4mcpy1d9hdpa6HHnMXz
-         MJ5Q==
-X-Gm-Message-State: AJIora/A6I1gzyqAhcQnly0OY0tOf8IMDmhJf5/6fI8jX3O2GTMx2+/8
-        aGwVEaQynPO0biljoDU575PzapNYxgosI2v4Vr3e
-X-Google-Smtp-Source: AGRyM1sHda4R7slO2THldYmCB6hufThJf2miVQonTYTic0+WRH9UBEOBbGg/X6g4BlFU1purnp8Q+Tj47z8FJeAvPUY=
-X-Received: by 2002:adf:fb86:0:b0:21e:3cc8:a917 with SMTP id
- a6-20020adffb86000000b0021e3cc8a917mr9220347wrr.538.1658789617917; Mon, 25
- Jul 2022 15:53:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8G3Mm+NgIeVbS725ckPK31yPoR4kpxEiiHwhot9k/Nc=;
+        b=HyGnRurHgjFGzkE6AJ032h8SPiAO0SR9z2mRe6skYcmbFeGVZyLNtERRR54VWE/PJl
+         cs+bk3CKFbDtVASg2Gkd2eQCo7tA+TiqZ1ilPPAhy2cDQLEbHiA9l7AivbRzpft0aHUb
+         uIpY8SaLWrVRSW00C/EnQEs0IDmhqn76lrALGxdwaohOtAjvGz2djFAFlkfXY9XL5cFw
+         e8kNTR8II+dY6ZIFsdZ0GnOfOC3KDsgeolFnZXmklGQzx3nfARt0Fe3ewG5kezRik1QM
+         55obWTW5VZWTCJI8e+4vHpqoFH0rU4ngwRhwgMP1BSlaokCxwUT5/4GRvGCEQBWTo4pR
+         pfJA==
+X-Gm-Message-State: AJIora8XyyzYPdPF4Cix/hkPQxm7KzG5PWx0Rb+f7vCEiEKi9fJ9QCuI
+        WsSWBo2Yfui1UzbyCtqbRziAMAq3bw==
+X-Google-Smtp-Source: AGRyM1uK8ktfyXTn2VznXnPkErlmaz2g0keJTy1EP9+gYpUQVBWi5vIvutDGqn2Kvhy6iuZ6pso49A==
+X-Received: by 2002:a9d:7a59:0:b0:61c:e43d:eaec with SMTP id z25-20020a9d7a59000000b0061ce43deaecmr5770927otm.7.1658789813917;
+        Mon, 25 Jul 2022 15:56:53 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id n8-20020a0568301e8800b0061c530ec022sm5445611otr.79.2022.07.25.15.56.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 15:56:53 -0700 (PDT)
+Received: (nullmailer pid 2904901 invoked by uid 1000);
+        Mon, 25 Jul 2022 22:56:50 -0000
+Date:   Mon, 25 Jul 2022 16:56:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-binding: spi: npcm-pspi: Add npcm845 compatible
+Message-ID: <20220725225650.GA2898332-robh@kernel.org>
+References: <20220722114136.251415-1-tmaimon77@gmail.com>
+ <20220722114136.251415-2-tmaimon77@gmail.com>
 MIME-Version: 1.0
-References: <20220721172808.585539-1-fred@cloudflare.com> <877d45kri4.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <877d45kri4.fsf@email.froward.int.ebiederm.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 25 Jul 2022 18:53:26 -0400
-Message-ID: <CAHC9VhQXSXWv=+WYwU=Qq0w3rd+zOFPHL5yut1JdV2K=DDRmmg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220722114136.251415-2-tmaimon77@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 1:05 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Frederick Lawler <fred@cloudflare.com> writes:
->
-> > While creating a LSM BPF MAC policy to block user namespace creation, we
-> > used the LSM cred_prepare hook because that is the closest hook to prevent
-> > a call to create_user_ns().
->
-> That description is wrong.  Your goal his is not to limit access to
-> the user namespace.  Your goal is to reduce the attack surface of the
-> kernel by not allowing some processes access to a user namespace.
->
-> You have already said that you don't have concerns about the
-> fundamentals of the user namespace, and what it enables only that
-> it allows access to exploitable code.
->
-> Achieving the protection you seek requires talking and thinking clearly
-> about the goal.
+On Fri, Jul 22, 2022 at 02:41:35PM +0300, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM845 PSPI.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> index b98203ca656d..a4e72e52af59 100644
+> --- a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> +++ b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> @@ -3,7 +3,8 @@ Nuvoton NPCM Peripheral Serial Peripheral Interface(PSPI) controller driver
+>  Nuvoton NPCM7xx SOC support two PSPI channels.
+>  
+>  Required properties:
+> - - compatible : "nuvoton,npcm750-pspi" for NPCM7XX BMC
+> + - compatible : "nuvoton,npcm750-pspi" for Poleg NPCM7XX.
 
-Providing a single concrete goal for a LSM hook is always going to be
-a challenge due to the nature of the LSM layer and the great unknown
-of all the different LSMs that are implemented underneath the LSM
-abstraction.  However, we can make some very general statements such
-that up to this point the LSMs that have been merged into mainline
-generally provide some level of access control, observability, or
-both.  While that may change in the future (the LSM layer does not
-attempt to restrict LSMs to just these two ideas), I think they are
-"good enough" goals for this discussion.
+Who/What is Polog? Board/BMC vendor? If so, that should not be in SoC 
+bindings.
 
-In addition to thinking about these goals, I think it also important
-to take a step back and think about the original motivation for the
-LSM and why it, and Linux itself, has proven to be popular with
-everything from the phone in your hand to the datacenter servers
-powering ... pretty much everything :)  Arguably Linux has seen such
-profound success because of its malleability; the open nature of the
-kernel development process has allowed the Linux Kernel to adopt
-capabilities well beyond what any one dev team could produce, and as
-Linux continues to grow in adoption, its ability to flex into new use
-cases only increases.  The kernel namespace concept is an excellent
-example of this: virtualizing core kernel ideas, such as user
-credentials, to provide better, safer solutions.  It is my belief that
-the LSM layer is very much built around this same idea of abstracting
-and extending core kernel concepts, in this case security controls, to
-provide better solutions.  Integrating the LSM into the kernel's
-namespaces is a natural fit, and one that is long overdue.
+> +				"nuvoton,npcm845-pspi" for Arbel NPCM8XX.
 
-If we can't find a way to make everyone happy here, let's at least try
-to find a way to make everyone "okay" with adding a LSM hook to the
-user namespace.  If you want to NACK this approach Eric, that's okay,
-but please provide some alternative paths forward that we can discuss.
+Same for Arbel.
 
--- 
-paul-moore.com
+To answer your question on fallback, just put:
+
+    "nuvoton,npcm845-pspi", "nuvoton,npcm750-pspi" for NPCM8XX BMC
+
+
+>   - #address-cells : should be 1. see spi-bus.txt
+>   - #size-cells : should be 0. see spi-bus.txt
+>   - specifies physical base address and size of the register.
+> -- 
+> 2.33.0
+> 
+> 

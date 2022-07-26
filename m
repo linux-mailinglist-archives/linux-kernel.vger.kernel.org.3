@@ -2,133 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 535165816F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0FE581711
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233989AbiGZQEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S237917AbiGZQOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiGZQEp (ORCPT
+        with ESMTP id S229949AbiGZQOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:04:45 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CEE15716;
-        Tue, 26 Jul 2022 09:04:43 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A22025C0144;
-        Tue, 26 Jul 2022 12:04:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 26 Jul 2022 12:04:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1658851480; x=1658937880; bh=a6f1CrYBK3
-        cjjtgqfVGH2IZkfk4izkWqCxCWdm306FM=; b=UFuOY2TSZfah37xjC8T4IpQ7+Z
-        8gSsFs8TwmGzqvaB4aY7WDi7ZGeXI1nLQ35ukRhcH4zFDERxLQmYrqAQJJddWglc
-        TowMxf4BbjiSw22twSXlHj01yDIt/wiguMRtoJDJijyWUGnlKYRfulnYtwN26Qhh
-        4FoZEXXbcSmqVOHQSC1t+W4XaRLNPXBogWGS+tvFyFvcsPF3ACMXHrmy7LVvoglb
-        Is+WCvLN4zY5fKmVVmImMWaExLh4SpbWc2/nGthfqzE7Kc+MBWwjoAH1ZZ1wPxft
-        cqhceFRswIbjHseSPwJTkzkMM7W5eHEFUlO2uUdW5ZDrd75ifKHBFSR46wag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1658851480; x=1658937880; bh=a6f1CrYBK3cjjtgqfVGH2IZkfk4i
-        zkWqCxCWdm306FM=; b=WCdZd1MTT8Kk+U94GnteZyW2cfL6zjjWkShB8Wa0jNpx
-        4IpZKNQW3BNde4rogqyYyo14TOMutX941FEaZy4PwFby32evm+Zasjc65l2V0c2q
-        7cpyzzIRJNu7wOE4PNbfUZEFhTuc0jK0Gi1nePk3XZLNaBUDcwVaAEcCl7Yk31fO
-        XljGpW/Fyz/vfLbaxfFJ1HjlGdhBTkGo9qW794sb04Bxy/5OLXxZw3zEvIMlAGUx
-        pTvvRAIH2z7ElB+WDGUvIW04iox4m9ED8eVc1d1WIggOnnEqYnCme2n8eMwdZ7Ve
-        kUOlJ7YbGTgN8PjATkU1hfr3gjdw240UyRACWH+qxw==
-X-ME-Sender: <xms:lhDgYpuiJmBk9PJ9QSWiWegpeACkZNU2DEFtiIZFnbJ1SK8vDAfdiw>
-    <xme:lhDgYieaZD_TsC7wbT6zUaPxsd7h7ma_bTGlPQr6S55B4LbxK0idzsMq7_H1tG66j
-    enj4sIemLq48AwhQmI>
-X-ME-Received: <xmr:lhDgYswEqUW7Pb9yuZga61jlTCtOHkO1RhD-C1crubDc5SBF-cvRMTwuP_3ms33sSQVOPNQAhMTHUfb2JUJ8fp6jzaW2s2xn>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddutddgleejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
-    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
-    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
-    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:lxDgYgO_ORzrGfx89uXBOqLX9fYWqBgmlYtFVBBybYtjG1pUry7XyA>
-    <xmx:lxDgYp_KOtP7x6vCfY72gCIOxwI94vz8oEx2yONZ_g_SbeXH9sw2FQ>
-    <xmx:lxDgYgW8je86Gx4X5dDEuhdw4tkvs9E0GJgfy-V8mRtrl5qf0sNDeg>
-    <xmx:mBDgYtVD9lWRLecMlTHoxsIv21dK01w73RY8H4KkeVRkqN6sMAixPw>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 26 Jul 2022 12:04:38 -0400 (EDT)
-Date:   Tue, 26 Jul 2022 11:04:37 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Logananth Sundararaj <logananth13.hcl@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, garnermic@gmail.com, thangavel.k@hcl.com,
-        naveen.mosess@hcl.com, velumanit@hcl.com
-Subject: Re: [PATCH v5] ARM: dts: aspeed: Adding Facebook Yosemite V3.5 BMC
-Message-ID: <YuAQlU8IfBK4zI9R@heinlein.stwcx.org.github.beta.tailscale.net>
-References: <20220726132445.GA22389@logan-ThinkPad-T14-Gen-1>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="oJH/1hxiws+0ENCW"
+        Tue, 26 Jul 2022 12:14:19 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397641B7A2;
+        Tue, 26 Jul 2022 09:14:18 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26QFnPKY006232;
+        Tue, 26 Jul 2022 16:14:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=5VIC+8QKB6j6ojZgfnIHmY2RBsGnyCmv+5v6cZTexFo=;
+ b=yGvh1FKKMdDj74JbHZXwJHnz+4fJO5bMThZm6PPDFWje1iSShPrmu6+DArGdBK/YE30x
+ F9xbv8BH/7X/O0iDayRCzlDIEtBh69rRQP0ROMHfmkWd0dxUvthmUCPipFC629u73O2q
+ rfCd6xN8Cpi+IdLGr+sDDQgYJL12YBfRGRZyAILfiLHapJnm+06Jm/iL9PNj3CEw0lEE
+ vL2A/xRBxMKVP5R6Q8IzBFLu54ZAi2uufKCNHyUZtgz/gevbASus3jq5b4NMlC56yhlG
+ XzFPwe/jqqqU2GwaxhqLW0wu375OzHIsnymOANJWkpjm456ras0KFrmwaCGQF3NXgG8+ Tg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hg940puc0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Jul 2022 16:14:11 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26QFWh5D034494;
+        Tue, 26 Jul 2022 16:14:10 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hh633163k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Jul 2022 16:14:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hxTl12jHcFY9ybQIKkFAWEP4Bs5HJyagTMT5PNhSeYkDUu0rW+/xxO0BqgKa//q54X409J20NIyBCooAOoRryrBgAGI+ORlpNWMtt4ELZpWFfpiho7PcEt+hM5+uyxjt9RNyMlkBkWKmcSaJ3mkzPo37HRtVIISXJcL9riSJbkXGNsT5aA5GXfaCaqbhf8nJxJkQ3EssLISBu4UhnZp/Z5krtn8f3ecSw5cN6IpduVXM+MHQ+JulOOi4kXKl5jJ2Jp/T5yJpnV8InwHothGaNpR/2HZMNzq6kCrR1Vu7o3SCWzGEjqPYtoXqpCBlS7IOD5tse/GOqcZEZpkYORmEGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5VIC+8QKB6j6ojZgfnIHmY2RBsGnyCmv+5v6cZTexFo=;
+ b=BqIn/RMYNvD34OPo0rWkYeJAlgf/Y7xaAasFPI+8ow7OiQB7HXXTZ3oARO71ySBvcQWS40H3Szv9TPmCLmp1EnEkkdqg6Pnswmz3j1T3iddv0ukBVN92+zIYPycVMoBCdOwMnPw3uHBRlKdmZbnfAtO38sjEFQhvKYB80VIIeR2ussAtlL1XA2swvWw4cdm4p86jktozwRphemvqvFFfl9CUHWHNxotwTd5Af2nSxGyPM4kJEsXu2eDMm4ar9p1bDt9m8mDWxQYIp4UjVj6MPmOqItDtEXWzEs94Zo1FX1OWR5+W3QWsshRrl+oIUMQwCfATmna4uMT6XPpDJNaSzw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5VIC+8QKB6j6ojZgfnIHmY2RBsGnyCmv+5v6cZTexFo=;
+ b=QD50pHZlJNB6Wwq5mvVhkNKluDsOlIhLODRTbsEtoifJHtIf+hTgiax9O6jKWbRIdbL2320PbC3xcZoF6CDDNR2s6hP8Hmgr3IZbEYDt0sIRrH/YPleY2dZjTTe1dL7cGp2H5dbHNK8qpCdYquYHkl6mEtnqfWhduQ6yuCbAqpw=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by SJ0PR10MB4479.namprd10.prod.outlook.com
+ (2603:10b6:a03:2af::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Tue, 26 Jul
+ 2022 16:14:08 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::24dc:9f9a:c139:5c97]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::24dc:9f9a:c139:5c97%4]) with mapi id 15.20.5458.025; Tue, 26 Jul 2022
+ 16:14:07 +0000
+Date:   Tue, 26 Jul 2022 19:13:48 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Peter Suti <peter.suti@streamunlimited.com>,
+        Chuansheng Liu <chuansheng.liu@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: fbtft: core: set smem_len before
+ fb_deferred_io_init call
+Message-ID: <20220726161347.GR2338@kadam>
+References: <20220726082114.891853-1-peter.suti@streamunlimited.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220726132445.GA22389@logan-ThinkPad-T14-Gen-1>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220726082114.891853-1-peter.suti@streamunlimited.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0009.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::21)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9981f1e0-719b-41be-45d3-08da6f21dd55
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB4479:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /U75/waJgv12VJDaeXWvxdcPsmnj5eIBy7uG0ARy5ODCljBjqKQnjjqewHfjuah/CyHu9UEB6mggOs0ngO8p0q+9UnuyZWKhyrCJk7eywmas9LW50fkoDBdDFUjc3l2pF8qVCTfP7onl9kmJb3XJn+Vxe4gnHQSKhwzSJnHe6oFeNpgACADlaMXylnxl5B/jTI8BU+Pw3pDgg+cL5DWOPfGoKoPUrUbEaxa90LEDXspc8ZygZm5bOfL5vJN+HGev6MYdM7DvSk3IXzJ2iaqOgB2VrN7EeyXwzLyngWR4lg98qcGkSCMKvvv34IAQPmN8Iq9YoCzBzPgecNDdfZLJMMEU3QwsAphkf/Kdy+lrbLYNjl5uAzZHR8/0saA7AnGoliGZA7BYnmhRGCMJYnAlN5VI9fLgYZAol5BvQasqlCoWfGZfONUr0y6Xx8TOxRKTY5WT6YBub4JWGiZNl1fiKsyqyoWMmD3PcBc5EvOEnpx7sT/bQD0Y83bHXtcrXTB4SAbKNF0LsN39YGqNXsUZehvTgEWvdP10zXXIn+UsM0ON19zXv4oMjOmRxJjOYQrk3vRY+GBbZAiRusGoYlLKdb3mEz1S25bTGxqIgFVPWof9mVSTc8ocghw1MpGJtZUcCkMckTavhZt4Lf0TegULUWrXcwu/+iuDCZ9mvBIBpfJL+bXxMdmyeAoR8YhcQEadE0bitUp2785ZiLLp2+pV1p91b0UlJiCr1IwZOvNm4DF2pjZKVo8ql0qGI4jOJiaVXfYnW3W830N39wWm4+a7CNi0cy8Mdu/os/ZMxIvbb8H317+n3ImjrpBU1ZDRzvm9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(136003)(396003)(376002)(346002)(39860400002)(26005)(86362001)(6486002)(44832011)(6512007)(9686003)(38100700002)(2906002)(38350700002)(41300700001)(5660300002)(66476007)(83380400001)(4326008)(66556008)(1076003)(8676002)(66946007)(6666004)(110136005)(8936002)(186003)(33716001)(478600001)(6506007)(316002)(33656002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7yqiM4dBJFAA1/hpwOrp4n1yxBe1s+BIfBTLiSGgjhdN0cejisvdqMjGfSpz?=
+ =?us-ascii?Q?BpCvzT3gySbBpVOL0YYUnX/t4excOCYCLMNanD/bq9puc9L/iuPXDx+t3OgK?=
+ =?us-ascii?Q?H/t94aMv/998UI1c7NZfegkmLTDOcH9tx1IeuivsIUfUk/dguv8jLm1Uqn+i?=
+ =?us-ascii?Q?y+/v6cKHGwhHauCa6rGNsTq4aAS5KyhLcFXpIFrhHIPx+m3L+p9VuA8jlKsi?=
+ =?us-ascii?Q?FBkBap644z/TAB8GgAiwcq5SFiKCtJgv1D8itEtvNoh0jQnw9uH7WRntcQwq?=
+ =?us-ascii?Q?V48OSyq1DmDkeMxs6UiEjsacO6MXNeCtcVxWMJohCRDpMxr1w32UW5v9vbJ2?=
+ =?us-ascii?Q?+7jxV+j23kUiphIgk4Q1jGaOouOEoBYrM+B5hJKSjYLBQB7wpUK0xI2IExOt?=
+ =?us-ascii?Q?dQ0U11CNsKrtDlBRVNjgHxwrt/2RVoYM6Geuli3IG4IMzDB8IQvhdnbLhKcV?=
+ =?us-ascii?Q?8QsPKe5yvUxsNzAHb+eWCU5mS3bT3eZoLIQA5xnlpji0ehRrrsBTI9ycYVVo?=
+ =?us-ascii?Q?eCT6Q8RIBR2yN6bt1bP+1rmvRv7s8wrLsdOfZF9J63o+OBPUyWeVxjNrttSO?=
+ =?us-ascii?Q?sWKXA8YS+hnaURt8+fJftyM+G9fAtRjS2+uZxnhaSko/0XkgXNkS3O7kFYj5?=
+ =?us-ascii?Q?yZhCIVolFPCvHTN4h8qR5m2Vbj+rsz+soknpFkiOLlE3e4aZx9RjuAFQvaJE?=
+ =?us-ascii?Q?2QVEQkowX92ZvllhmtY6D7oGUr2u6U+/l8wIydoIn1ITI3mLpW/NEgPtA7zc?=
+ =?us-ascii?Q?Dpdl/Nn+K/N4sWkkbU6iIcXZNipC/Od0JmP9eoR9YYUl6+GvkQWMIolBO+Bd?=
+ =?us-ascii?Q?Kb/rXxc31rY0iTty/8Pi/YVGeSvSyM5P/ujFhs+ryhU6B21NPGPBsBaCpch+?=
+ =?us-ascii?Q?cYMPTNfeTa57w3bCCosLLQF+RefWtIVtrYm7XR1HcnSKy9Dl87IK3YzO7iJm?=
+ =?us-ascii?Q?aqw8fqVOOrVmRYRz2cpYpqa5USSZHLJDlS/NF7XvDwfll08N0Hfee+NDPx/F?=
+ =?us-ascii?Q?j9DCsvZt57i+RXSi1a1UuFuq3W33oK82qw7kKYdXwuUOOS89eyyHq4Q0eUv+?=
+ =?us-ascii?Q?F08xZU67pX7JBquV3PIOAOmFfjF5too3kpqxuTKcNFIUXx6pPYqJL5hkx6h+?=
+ =?us-ascii?Q?KYFSCkksJl7ndaQKrVivmXx9Tt805AKvNOfseuEF1ULFwocn3e4m4bVyw4dd?=
+ =?us-ascii?Q?b8Yo5RJznEX7B/+b3nDIrQQuEGbY9udw37GfAf7PYrWJ+v6C+InA8gmyhvzq?=
+ =?us-ascii?Q?AsmPtfkb/5CiZshLcSejIlD1XUGft8rQEeKdsFLNwAk2HZf0lr0szTZMl6Xx?=
+ =?us-ascii?Q?MiTGsacdaKV8tu+tSEi5CMEOdypdnenkDvQm41wooBUqh2fxlO1/LOIDUvf1?=
+ =?us-ascii?Q?ZkjPbIPReDZZzcX6DXumY9sbRJ6H1qvbkyCzwChRhKEsb7Mx+3QwjH8F5c2R?=
+ =?us-ascii?Q?4YEOsK/0jXyivBm+q457dAt9v80o2zaLOmLQyiPJenpXlc1BM/9SQqQVcvXn?=
+ =?us-ascii?Q?aRmU/p3sXUJ9ZA0cLcly+MrxxHWDZ1gSedPJ0O2pHq556NFjnmjajxYZnx07?=
+ =?us-ascii?Q?asBkSbaFfle9jTGoVDWOupbOwiI1ZTFd5PQh2IEBNMa/4cDubDjr711WCnEh?=
+ =?us-ascii?Q?4Q=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9981f1e0-719b-41be-45d3-08da6f21dd55
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2022 16:14:07.3521
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ue9Ga6sOnhwIYvV1gsK2zPcYduyOorYIlQdFoylj3XLIG/7vQfO2pTBj6YGXetTLL9XeG4iUh77dKea7rEDnNvZZDvTjW4P+E3aeTCrZbMg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4479
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-26_04,2022-07-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207260063
+X-Proofpoint-GUID: vTmx0m2G7k2tWyFn9UNLB-RVA8gAwjyP
+X-Proofpoint-ORIG-GUID: vTmx0m2G7k2tWyFn9UNLB-RVA8gAwjyP
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks for the patch.
 
---oJH/1hxiws+0ENCW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 26, 2022 at 10:21:13AM +0200, Peter Suti wrote:
+> fb_deferred_io_init depends on smem_len being filled
+> to be able to initialize the virtual page lists since
+> commit 856082f021a2 ("fbdev: defio: fix the pagelist corruption")
+> 
 
-On Tue, Jul 26, 2022 at 06:54:45PM +0530, Logananth Sundararaj wrote:
-> The Yosemite V3.5 is a facebook multi-node server
-> platform that host four OCP server. The BMC
-> in the Yosemite V3.5 platform based on AST2600 SoC.
->=20
-> This patch adds linux device tree entry related to
-> Yosemite V3.5 specific devices connected to BMC SoC.
->=20
-> Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+This code has changed since then so the patch needs to be updated.
+The patch is still necessary but the bug will look different now
+because there was a WARN_ON() added.
 
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+Currently the commit message does not say how this bug looks like to the
+user.  Also the use a Fixes tag.  Something like this:
 
---=20
-Patrick Williams
+The fbtft_framebuffer_alloc() calls fb_deferred_io_init() before
+initializing info->fix.smem_len.  It is set to zero by the
+framebuffer_alloc() function.  It will trigger a WARN_ON() at the
+start of fb_deferred_io_init() and the function will not do anything.
 
---oJH/1hxiws+0ENCW
-Content-Type: application/pgp-signature; name="signature.asc"
+Fixes: 856082f021a2 ("fbdev: defio: fix the pagelist corruption")
+Signed-off-by:
 
------BEGIN PGP SIGNATURE-----
+Make sure you CC the original author (Chuansheng Liu) so they can review
+the bug fix.
 
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmLgEJUACgkQqwNHzC0A
-wRneRA//ZQzNIoyRePI4dlJRvGZUaMFxkV/lNgQ5tvL+Zqo6Eu80BE6LekfIvSQ5
-n0NXmbveTLyp6G5ZxN2FCxOuuPV/HFgnabM6GN6J+DUjmaaFEAH1TW2e2FTdC8su
-T4JtaRNVIFpQfKE5U1x23wvVtjhqy+KtE2sNdE/TVxlXZF8bMjsz15LPfExtGBId
-1Dyh4tkEX1vbrUGuaELTRc7jkl9R5BecViN1CyKUngapW+lE2hNAvfzy4uwvGyi9
-8cf/V55a+XqEq7AUoyRJC4grswnKrs3FTItQfiwJLbq4mp/7pJSP2ooboprFdXQL
-3QlmiFOsV2Uq3nPlC6U4Tuj8pq7nGxdG4OL/140Rb1c6don1JjlnfCQMRhDyYgnU
-GKomtike5wFRxMzKF7YVC1KEauWFXPeh6aQJtXg0cTL+wwN1Aav86EOrZrd6LpTO
-YTLBRHr50R0bnKZfos/ZFwuKYsU/4XF24GUp6WwqiqYSSZo+ZUJLT/txKmLZNKbZ
-Bqpz89bmvHnN2vkaFXJt/YMo4M1v5QJIXcfqEMLxr/IgH89bUuiP8asTJXYPXQUq
-LbbnMAJWafdQhgnBnXPtZDLx4BeBTZ/nzLK4dHtOeDqVZpWIewVjhNWHDUNp4iuS
-jwubG8I1zIiHJBe6VC+36Ru2JXv6V5e5CEiUUSTHnZ0YbSqlRV0=
-=guU1
------END PGP SIGNATURE-----
+Google used to give good guides for how to send a v2 patch but now the
+first page is just useless.  :/
 
---oJH/1hxiws+0ENCW--
+regards,
+dan carpenter
+
+
+
+
+
+
+
+
+> Signed-off-by: Peter Suti <peter.suti@streamunlimited.com>
+> ---
+>  drivers/staging/fbtft/fbtft-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/fbtft/fbtft-core.c b/drivers/staging/fbtft/fbtft-core.c
+> index 9c4d797e7ae4..4137c1a51e1b 100644
+> --- a/drivers/staging/fbtft/fbtft-core.c
+> +++ b/drivers/staging/fbtft/fbtft-core.c
+> @@ -656,7 +656,6 @@ struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
+>  	fbdefio->delay =           HZ / fps;
+>  	fbdefio->sort_pagelist =   true;
+>  	fbdefio->deferred_io =     fbtft_deferred_io;
+> -	fb_deferred_io_init(info);
+>  
+>  	snprintf(info->fix.id, sizeof(info->fix.id), "%s", dev->driver->name);
+>  	info->fix.type =           FB_TYPE_PACKED_PIXELS;
+> @@ -667,6 +666,7 @@ struct fb_info *fbtft_framebuffer_alloc(struct fbtft_display *display,
+>  	info->fix.line_length =    width * bpp / 8;
+>  	info->fix.accel =          FB_ACCEL_NONE;
+>  	info->fix.smem_len =       vmem_size;
+> +	fb_deferred_io_init(info);
+>  
+>  	info->var.rotate =         pdata->rotate;
+>  	info->var.xres =           width;
+> -- 
+> 2.25.1
+> 

@@ -2,112 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38A1581132
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73095581134
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238311AbiGZKcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S238658AbiGZKd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbiGZKcf (ORCPT
+        with ESMTP id S238636AbiGZKd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:32:35 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068D32C661
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:32:35 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q7EU0R002774;
-        Tue, 26 Jul 2022 05:32:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=Rgzgn6pxWGdE46sVS9kTTyVGpCIohZ0hRtKU1FWs9Mc=;
- b=RXQjezNLjwj/HpVEXGbOyfRCXB5YFUyDPskFMN5B2gh2Ii7dYvLXpqCWvBXlpciFOLp+
- ESVZEG+AgwriFTCm8AyIa307P3hdpEJq7POcukYdaxYJ2/ip1izmyVEKqM9HP0oiMSpl
- SUhhPH0nMCGOPu1pHgFDZ5Vxj4P1dptp12vmowgDW+MSWdxsSTRJDgwK2qZgxo4vTjgy
- XWedYzXp/50XmnKgDTiDT6X/3H56QT4epJJ3p8pwGH5nTzHL8yp3UmCCIyZQBRG33R2E
- FNubhDk8/aIq4L7nhjQukMX+1R6rYZkJEv14JD3PdVPTzsvYyBmlbyrRbsAHkHrqVQvJ Dg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3hged1ubug-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 Jul 2022 05:32:31 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Tue, 26 Jul
- 2022 05:32:29 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
- 15.2.1118.9 via Frontend Transport; Tue, 26 Jul 2022 05:32:29 -0500
-Received: from [198.90.251.95] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B1BAE2C5;
-        Tue, 26 Jul 2022 10:32:29 +0000 (UTC)
-Message-ID: <4165774b-2b96-83d1-67eb-f7c49dd8041e@opensource.cirrus.com>
-Date:   Tue, 26 Jul 2022 11:32:28 +0100
+        Tue, 26 Jul 2022 06:33:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F99E2CDC1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:33:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658831604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jECiOq0E3ywwe79d1zTfZoKz4jXt6DMQSmkfo1EKKqo=;
+        b=U/aNHSAdARjr7E5CEfk8uD/70n0LHGyQwugEGsXSdrPsm0304GINwFZtz+yJt9Ld3jPYMC
+        ypA2WdKfwULjYFZX4cHhtOrKzQBznW7CzlftQkPNzPuINy1W3lnz4CUkWkejf4AUOOoZMa
+        KrGA3/RlS34i3ryK2mRxbcdq/O1lOyA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-q08Knb2cPValgy4UE-IfKQ-1; Tue, 26 Jul 2022 06:33:23 -0400
+X-MC-Unique: q08Knb2cPValgy4UE-IfKQ-1
+Received: by mail-wm1-f70.google.com with SMTP id q19-20020a7bce93000000b003a3264f3de9so5227173wmj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:33:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=jECiOq0E3ywwe79d1zTfZoKz4jXt6DMQSmkfo1EKKqo=;
+        b=OuYQ3ejacPfvPNKTj+a2sx00oHFoF8qhOVTFDRgKE+QZro2jdAJuDs2xG5lhGRbtyl
+         qwHA3dmOix5brzTv612or2HWquQjrBMQc7K/gSBK+3NIN4w1z4wLTLBfyC9KsbOd0nRJ
+         mybRtXm72g7gEIiII1OLMC6BhUTnlmfNnm2p4ZZocslUmFGP9Z1HQVlISbxRBLXaL46F
+         IGsrNwVnJ7k6DALkZrPonijO07LTKSQebzZORpint5ngTM47izxmmS4BxvwLjb1gWVkc
+         o84EV99awXox6I2qL23b0iBGfkkC4iWkw9BFtnY3gCaG1py4yxK/aAJluTebpDnNn5VM
+         vToA==
+X-Gm-Message-State: AJIora/48XksxxQEHca6HyEAa7W6N0Q+Y8tXCTSedScdHtaf+asUYY7u
+        ZwVSRQ0uKiTwRdx6tUkcuLnZ5+raoQCRyyXtpXia4BDipeaVrH5Smmuo1l3PGlLEnPOMVpF17ND
+        9XsPIdqHMxiys1jrYpwqetRgh
+X-Received: by 2002:a05:6000:1541:b0:21d:b298:96be with SMTP id 1-20020a056000154100b0021db29896bemr10132072wry.206.1658831601873;
+        Tue, 26 Jul 2022 03:33:21 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tTQ/OcdsegKe5OGqBkLomcrzDjzWC9phkXjmP0MUcp3Qss3S4w5JJ0BWvgekckWmI9RvVtvw==
+X-Received: by 2002:a05:6000:1541:b0:21d:b298:96be with SMTP id 1-20020a056000154100b0021db29896bemr10132031wry.206.1658831601234;
+        Tue, 26 Jul 2022 03:33:21 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-104-164.dyn.eolo.it. [146.241.104.164])
+        by smtp.gmail.com with ESMTPSA id r11-20020a0560001b8b00b0021e6baea4ffsm10137380wru.29.2022.07.26.03.33.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 03:33:20 -0700 (PDT)
+Message-ID: <9cdb7fadf35fc7b7c07d3f3f0fc036da9fd81277.camel@redhat.com>
+Subject: Re: [PATCH net-next v1 1/2] net: asix: ax88772: migrate to phylink
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Russell King <linux@armlinux.org.uk>
+Date:   Tue, 26 Jul 2022 12:33:19 +0200
+In-Reply-To: <20220723174711.1539574-1-o.rempel@pengutronix.de>
+References: <20220723174711.1539574-1-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] component: try_module_get() to prevent unloading while in
- use
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <rafael@kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-References: <20220725160859.1274472-1-rf@opensource.cirrus.com>
- <Yt7cT66p0Bn+aXn5@kroah.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <Yt7cT66p0Bn+aXn5@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: _DlEI_9hgYWZuqTkzb6e6eQs-CQ8iuIv
-X-Proofpoint-ORIG-GUID: _DlEI_9hgYWZuqTkzb6e6eQs-CQ8iuIv
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/07/2022 19:09, Greg KH wrote:
-> On Mon, Jul 25, 2022 at 05:08:59PM +0100, Richard Fitzgerald wrote:
->> Call try_module_get() on a component before attempting to call its
->> bind() function, to ensure that a loadable module cannot be
->> unloaded while we are executing its bind().
+On Sat, 2022-07-23 at 19:47 +0200, Oleksij Rempel wrote:
+> There are some exotic ax88772 based devices which may require
+> functionality provide by the phylink framework. For example:
+> - US100A20SFP, USB 2.0 auf LWL Converter with SFP Cage
+> - AX88772B USB to 100Base-TX Ethernet (with RMII) demo board, where it
+>   is possible to switch between internal PHY and external RMII based
+>   connection.
 > 
-> How can bind be called while the module is unloaded?
+> So, convert this driver to phylink as soon as possible.
 > 
-
-I didn't say it could. What I said is "unloaded while we are executing
-its bind()". Maybe that's already guaranteed to be safe somehow. It's
-actually the problem below that I was trying to fix but placing the
-try_module_get() before the bind() rather than after bind() seemed a
-trivial extra safety.
-
->> If the bind is successful the module_put() is called only after it
->> has been unbound. This ensures that the module cannot be unloaded
->> while it is in use as an aggregate device.
+> Tested with:
+> - AX88772A + internal PHY
+> - AX88772B + external DP83TD510E T1L PHY
 > 
-> That's almost never the correct thing to do, what problem is this
-> solving?
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/usb/Kconfig        |   2 +-
+>  drivers/net/usb/asix.h         |   3 +
+>  drivers/net/usb/asix_devices.c | 123 ++++++++++++++++++++++++++++-----
+>  3 files changed, 110 insertions(+), 18 deletions(-)
 > 
+> diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
+> index e62fc4f2aee0..3d46b5f9287a 100644
+> --- a/drivers/net/usb/Kconfig
+> +++ b/drivers/net/usb/Kconfig
+> @@ -168,7 +168,7 @@ config USB_NET_AX8817X
+>  	tristate "ASIX AX88xxx Based USB 2.0 Ethernet Adapters"
+>  	depends on USB_USBNET
+>  	select CRC32
+> -	select PHYLIB
+> +	select PHYLINK
+>  	select AX88796B_PHY
+>  	imply NET_SELFTESTS
+>  	default y
+> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
+> index 21c1ca275cc4..74162190bccc 100644
+> --- a/drivers/net/usb/asix.h
+> +++ b/drivers/net/usb/asix.h
+> @@ -27,6 +27,7 @@
+>  #include <linux/if_vlan.h>
+>  #include <linux/phy.h>
+>  #include <net/selftests.h>
+> +#include <linux/phylink.h>
+>  
+>  #define DRIVER_VERSION "22-Dec-2011"
+>  #define DRIVER_NAME "asix"
+> @@ -185,6 +186,8 @@ struct asix_common_private {
+>  	struct mii_bus *mdio;
+>  	struct phy_device *phydev;
+>  	struct phy_device *phydev_int;
+> +	struct phylink *phylink;
+> +	struct phylink_config phylink_config;
+>  	u16 phy_addr;
+>  	bool embd_phy;
+>  	u8 chipcode;
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 5b5eb630c4b7..3f93bc46a7eb 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -327,6 +327,12 @@ static int ax88772_reset(struct usbnet *dev)
+>  	struct asix_common_private *priv = dev->driver_priv;
+>  	int ret;
+>  
+> +	ret = phylink_connect_phy(priv->phylink, priv->phydev);
+> +	if (ret) {
+> +		netdev_err(dev->net, "Could not connect PHY\n");
+> +		return ret;
+> +	}
 
-What I see is that when a loadable module has been made part of an
-aggregate it is still possible to rmmod'd it.
+Don't you need to additionally call phylink_disconnect_phy() in later
+error paths? why?
 
-An alternative workaround would be for the parent to softdep to every
-driver that _might_ provide the aggregated components. Softdeps aren't
-unusual (we use it in some drivers that are directly related but don't
-directly link into each other). But to me this feels like a hack when
-used with the component framework - isn't the idea that the parent
-doesn't know (or doesn't need to know) which drivers will be aggregated?
-Wouldn't it be better that when a component driver is bound into an
-aggregate its module is automatically marked in-use?
+> +
+>  	/* Rewrite MAC address */
+>  	ether_addr_copy(data->mac_addr, dev->net->dev_addr);
+>  	ret = asix_write_cmd(dev, AX_CMD_WRITE_NODE_ID, 0, 0,
+> @@ -343,7 +349,7 @@ static int ax88772_reset(struct usbnet *dev)
+>  	if (ret < 0)
+>  		goto out;
+>  
+> -	phy_start(priv->phydev);
+> +	phylink_start(priv->phylink);
+>  
+>  	return 0;
+>  
+> @@ -590,8 +596,11 @@ static void ax88772_suspend(struct usbnet *dev)
+>  	struct asix_common_private *priv = dev->driver_priv;
+>  	u16 medium;
+>  
+> -	if (netif_running(dev->net))
+> -		phy_stop(priv->phydev);
+> +	if (netif_running(dev->net)) {
+> +		rtnl_lock();
+> +		phylink_suspend(priv->phylink, false);
+> +		rtnl_unlock();
+> +	}
+>  
+>  	/* Stop MAC operation */
+>  	medium = asix_read_medium_status(dev, 1);
+> @@ -622,8 +631,11 @@ static void ax88772_resume(struct usbnet *dev)
+>  		if (!priv->reset(dev, 1))
+>  			break;
+>  
+> -	if (netif_running(dev->net))
+> -		phy_start(priv->phydev);
+> +	if (netif_running(dev->net)) {
+> +		rtnl_lock();
+> +		phylink_resume(priv->phylink);
+> +		rtnl_unlock();
+> +	}
+>  }
+>  
+>  static int asix_resume(struct usb_interface *intf)
+> @@ -659,7 +671,6 @@ static int ax88772_init_mdio(struct usbnet *dev)
+>  static int ax88772_init_phy(struct usbnet *dev)
+>  {
+>  	struct asix_common_private *priv = dev->driver_priv;
+> -	int ret;
+>  
+>  	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
+>  	if (!priv->phydev) {
+> @@ -667,13 +678,6 @@ static int ax88772_init_phy(struct usbnet *dev)
+>  		return -ENODEV;
+>  	}
+>  
+> -	ret = phy_connect_direct(dev->net, priv->phydev, &asix_adjust_link,
+> -				 PHY_INTERFACE_MODE_INTERNAL);
+> -	if (ret) {
+> -		netdev_err(dev->net, "Could not connect PHY\n");
+> -		return ret;
+> -	}
+> -
+>  	phy_suspend(priv->phydev);
+>  	priv->phydev->mac_managed_pm = 1;
+>  
+> @@ -698,6 +702,89 @@ static int ax88772_init_phy(struct usbnet *dev)
+>  	return 0;
+>  }
+>  
+> +static void ax88772_mac_config(struct phylink_config *config, unsigned int mode,
+> +			      const struct phylink_link_state *state)
+> +{
+> +	/* Nothing to do */
+> +}
+> +
+> +static void ax88772_mac_link_down(struct phylink_config *config,
+> +				 unsigned int mode, phy_interface_t interface)
+> +{
+> +	struct usbnet *dev = netdev_priv(to_net_dev(config->dev));
+> +
+> +	asix_write_medium_mode(dev, 0, 0);
+> +	usbnet_link_change(dev, false, false);
+> +}
+> +
+> +static void ax88772_mac_link_up(struct phylink_config *config,
+> +			       struct phy_device *phy,
+> +			       unsigned int mode, phy_interface_t interface,
+> +			       int speed, int duplex,
+> +			       bool tx_pause, bool rx_pause)
+> +{
+> +	struct usbnet *dev = netdev_priv(to_net_dev(config->dev));
+> +	u16 m = AX_MEDIUM_AC | AX_MEDIUM_RE;
+> +
+> +	m |= duplex ? AX_MEDIUM_FD : 0;
+> +
+> +	switch (speed) {
+> +	case SPEED_100:
+> +		m |= AX_MEDIUM_PS;
+> +		break;
+> +	case SPEED_10:
+> +		break;
+> +	default:
+> +		return;
+> +	}
+> +
+> +	if (tx_pause)
+> +		m |= AX_MEDIUM_TFC;
+> +
+> +	if (rx_pause)
+> +		m |= AX_MEDIUM_RFC;
+> +
+> +	asix_write_medium_mode(dev, m, 0);
+> +	usbnet_link_change(dev, true, false);
+> +}
+> +
+> +static const struct phylink_mac_ops ax88772_phylink_mac_ops = {
+> +	.validate = phylink_generic_validate,
+> +	.mac_config = ax88772_mac_config,
+> +	.mac_link_down = ax88772_mac_link_down,
+> +	.mac_link_up = ax88772_mac_link_up,
+> +};
+> +
+> +static int ax88772_phylink_setup(struct usbnet *dev)
+> +{
+> +	struct asix_common_private *priv = dev->driver_priv;
+> +	phy_interface_t phy_if_mode;
+> +	struct phylink *phylink;
+> +
+> +	priv->phylink_config.dev = &dev->net->dev;
+> +	priv->phylink_config.type = PHYLINK_NETDEV;
+> +	priv->phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
+> +		MAC_10 | MAC_100;
+> +
+> +	__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+> +		  priv->phylink_config.supported_interfaces);
+> +	__set_bit(PHY_INTERFACE_MODE_RMII,
+> +		  priv->phylink_config.supported_interfaces);
+> +
+> +	if (priv->embd_phy)
+> +		phy_if_mode = PHY_INTERFACE_MODE_INTERNAL;
+> +	else
+> +		phy_if_mode = PHY_INTERFACE_MODE_RMII;
+> +
+> +	phylink = phylink_create(&priv->phylink_config, dev->net->dev.fwnode,
+> +				 phy_if_mode, &ax88772_phylink_mac_ops);
+> +	if (IS_ERR(phylink))
+> +		return PTR_ERR(phylink);
+> +
+> +	priv->phylink = phylink;
 
-If there's a better way to mark the module in-use while is it bound
-into an aggregate, let me know and I'll look at implementing it.
+Who will call phylink_destroy() on priv->phylink? It looks like you are
+leaking it ?!?
 
-> thanks,
-> 
-> greg k-h
+Thanks!
+
+Paolo
+

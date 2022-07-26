@@ -2,145 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81142580996
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84962580999
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbiGZCq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 22:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S232718AbiGZCsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 22:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiGZCq4 (ORCPT
+        with ESMTP id S230033AbiGZCs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 22:46:56 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F30A1A5
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 19:46:53 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 25 Jul 2022 22:48:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FBBF24BD4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 19:48:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658803706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TrVML+RmKiQO+KVpqG2+JGeEF1NTrW9VY/z2r6IxLSg=;
+        b=JBDvhIpnipEj3gqsnmkjOCSXdoaBv8LTqBfXZZc2qXwA8jglGzE2feteC7oMGn2Tj7R/+9
+        Hqt3sXKOXoeTLCANZmeyFsY7xQ8gpW0zLtEeY0m4ZQ12XPkBoXDRfAgMv2/cjY54DWBQpD
+        X4LdisjdGcZ0go1/eLz2gf4fAj0/2ks=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-520-SJwa8gNbODmGhHnmbGbOTw-1; Mon, 25 Jul 2022 22:48:22 -0400
+X-MC-Unique: SJwa8gNbODmGhHnmbGbOTw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LsLsQ6nVXz4xD7;
-        Tue, 26 Jul 2022 12:46:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1658803612;
-        bh=d3mL1k1NMT34C1y5QN9NQJ5hVYOTx4F+h/uvzQ4WTp0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=IS9n5yJ30hjXD+pYI3Rk6esf6g8We4+3Te4njNGWL0U+0I/5NauF8044UfZ7tQZqN
-         kA4ym1Ke5i2zt+ILiJCArZ0Kfld8wAGzNU8BoFCQ0j5zdxYM1PXXYT9tKpYZEUw2uI
-         lUaHSEEoTFEwM6XCtfBl1PvdETJT0B6DX+s7LXQI1Q8ehD46urKMpC1NhRgBNmYrVU
-         ThRZkpPq5nwBcLEDAJdfqwTWUpMM3497q+2EurUa44g0em7q4uzgNtBBkrdb+U9v93
-         46VqWBXvBZeO1rmxeotOVt21TswCPy0gfy+e413vIlFDoXYxonBIbTd2GuamtoO/6Q
-         JfYKQI8Pt/CVA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linuxppc-dev@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH 1/2] powerpc: drop dependency on <asm/machdep.h> in
- archrandom.h
-In-Reply-To: <Yt7Ewi2vu49fW1ZJ@yury-laptop>
-References: <20220723214537.2054208-1-yury.norov@gmail.com>
- <20220723214537.2054208-2-yury.norov@gmail.com>
- <8735epd204.fsf@mpe.ellerman.id.au> <87wnc1bcwa.fsf@mpe.ellerman.id.au>
- <Yt7Ewi2vu49fW1ZJ@yury-laptop>
-Date:   Tue, 26 Jul 2022 12:46:49 +1000
-Message-ID: <87h734bnfq.fsf@mpe.ellerman.id.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7535801585;
+        Tue, 26 Jul 2022 02:48:21 +0000 (UTC)
+Received: from T590 (ovpn-8-27.pek2.redhat.com [10.72.8.27])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D57F440357BA;
+        Tue, 26 Jul 2022 02:48:15 +0000 (UTC)
+Date:   Tue, 26 Jul 2022 10:48:10 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, osandov@fb.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, ming.lei@redhat.com
+Subject: Re: [PATCH] blk-mq: fix io hung due to missing commit_rqs while
+ scheduler is none
+Message-ID: <Yt9V6sW66oJRbW/o@T590>
+References: <20220726023852.3413784-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220726023852.3413784-1-yukuai1@huaweicloud.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yury Norov <yury.norov@gmail.com> writes:
-> On Mon, Jul 25, 2022 at 10:22:13PM +1000, Michael Ellerman wrote:
->> Michael Ellerman <mpe@ellerman.id.au> writes:
->> > Yury Norov <yury.norov@gmail.com> writes:
->> >> archrandom.h includes <asm/machdep.h> to refer ppc_md. This causes
->> >> circular header dependency, if generic nodemask.h  includes random.h:
->> >>
->> >> In file included from include/linux/cred.h:16,
->> >>                  from include/linux/seq_file.h:13,
->> >>                  from arch/powerpc/include/asm/machdep.h:6,
->> >>                  from arch/powerpc/include/asm/archrandom.h:5,
->> >>                  from include/linux/random.h:109,
->> >>                  from include/linux/nodemask.h:97,
->> >>                  from include/linux/list_lru.h:12,
->> >>                  from include/linux/fs.h:13,
->> >>                  from include/linux/compat.h:17,
->> >>                  from arch/powerpc/kernel/asm-offsets.c:12:
->> >> include/linux/sched.h:1203:9: error: unknown type name 'nodemask_t'
->> >>  1203 |         nodemask_t                      mems_allowed;
->> >>       |         ^~~~~~~~~~
->> >>
->> >> Fix it by removing <asm/machdep.h> dependency from archrandom.h
->> >>
->> >> Signed-off-by: Yury Norov <yury.norov@gmail.com>
->> >> ---
->> >>  arch/powerpc/include/asm/archrandom.h |  9 +--------
->> >>  arch/powerpc/kernel/setup-common.c    | 11 +++++++++++
->> >>  2 files changed, 12 insertions(+), 8 deletions(-)
->> >>
->> >> diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
->> >> index 9a53e29680f4..21def59ef1a6 100644
->> >> --- a/arch/powerpc/include/asm/archrandom.h
->> >> +++ b/arch/powerpc/include/asm/archrandom.h
->> >> @@ -4,7 +4,7 @@
->> >>  
->> >>  #ifdef CONFIG_ARCH_RANDOM
->> >>  
->> >> -#include <asm/machdep.h>
->> >> +bool __must_check arch_get_random_seed_long(unsigned long *v);
->> >>  
->> >>  static inline bool __must_check arch_get_random_long(unsigned long *v)
->> >>  {
->> >> @@ -16,13 +16,6 @@ static inline bool __must_check arch_get_random_int(unsigned int *v)
->> >>  	return false;
->> >>  }
->> >>  
->> >> -static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
->> >> -{
->> >> -	if (ppc_md.get_random_seed)
->> >> -		return ppc_md.get_random_seed(v);
->> >> -
->> >> -	return false;
->> >> -}
->> >
->> > I'd rather we didn't have to force this out of line.
->> >
->> > I think I see a different way to fix it, I'll just do some more build
->> > tests.
->> 
->> Of course my idea didn't work :}
->> 
->> So I'll just ack your patch for now, and maybe I can get the headers
->> cleaned up in future to allow it to be out-of-line again.
->
-> I understand that it looks like a tradeoff - we inline a couple of small
-> functions with the cost of uninlining an almost innocent victim. 
+On Tue, Jul 26, 2022 at 10:38:52AM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Currently, in virtio_scsi, if 'bd->last' is not set to true while
+> dispatching request, such io will stay in driver's queue, and driver
+> will wait for block layer to dispatch more rqs. However, if block
+> layer failed to dispatch more rq, it should trigger commit_rqs to
+> inform driver.
+> 
+> There is a problem in blk_mq_try_issue_list_directly() that commit_rqs
+> won't be called:
+> 
+> // assume that queue_depth is set to 1, list contains two rq
+> blk_mq_try_issue_list_directly
+>  blk_mq_request_issue_directly
+>  // dispatch first rq
+>  // last is false
+>   __blk_mq_try_issue_directly
+>    blk_mq_get_dispatch_budget
+>    // succeed to get first budget
+>    __blk_mq_issue_directly
+>     scsi_queue_rq
+>      cmd->flags |= SCMD_LAST
+>       virtscsi_queuecommand
+>        kick = (sc->flags & SCMD_LAST) != 0
+>        // kick is false, first rq won't issue to disk
+>  queued++
+> 
+>  blk_mq_request_issue_directly
+>  // dispatch second rq
+>   __blk_mq_try_issue_directly
+>    blk_mq_get_dispatch_budget
+>    // failed to get second budget
+>  ret == BLK_STS_RESOURCE
+>   blk_mq_request_bypass_insert
+>  // errors is still 0
+> 
+>  if (!list_empty(list) || errors && ...)
+>   // won't pass, commit_rqs won't be called
+> 
+> In this situation, first rq relied on second rq to dispatch, while
+> second rq relied on first rq to complete, thus they will both hung.
+> 
+> Fix the problem by also treat 'BLK_STS_RESOURCE' and
+> 'BLK_STS_DEV_RESOURCE' as 'errors' in blk_mq_try_issue_list_directly(),
+> so that 'commit_rqs' will be called when dispatch of last rq failed.
+> 
+> Fixes: d666ba98f849 ("blk-mq: add mq_ops->commit_rqs()")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  block/blk-mq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 70177ee74295..752b0fe4c128 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2680,6 +2680,7 @@ void blk_mq_try_issue_list_directly(struct blk_mq_hw_ctx *hctx,
+>  		list_del_init(&rq->queuelist);
+>  		ret = blk_mq_request_issue_directly(rq, list_empty(list));
+>  		if (ret != BLK_STS_OK) {
+> +			errors++;
 
-Yeah. The truth is the cost to access the RNG will far outweigh the cost
-of that out-of-line call, so there's no real issue. But it's also such a
-small function that it just cries out to be inlined :)
+OK, it is because that list becomes empty, but .queue_rq(last_rq_in_list)
+returns BLK_STS_*RESOURCE, but scsi can't call ->queuecommand() for this
+real last rq. Then blk_mq_try_issue_list_directly() doesn't call
+->commit_rqs() too.
 
-> The complete solution would be probably a splitting ppc_md declaration
-> out of asm/machdep.h. I wanted to do that, but I'm not a PPC guy, and
-> just don't know how to split the header correctly.
+Here errors means that request not queued successfully, so this patch
+looks fine.
 
-I managed to drop the includes of seq_file.h and dma-mapping.h, which
-seemed to fix the circular include problem, but there's a bit of fall
-out in unrelated files. I think I can get that sorted though eventually.
+Also I think blk_mq_dispatch_rq_list() needs similar handling too,
+right?
 
-> Anyways, thanks for the ack. Applied on bitmap-for-next.
 
-No worries.
+thanks,
+Ming
 
-cheers

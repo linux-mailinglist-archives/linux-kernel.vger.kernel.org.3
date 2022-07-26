@@ -2,252 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8625819D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209515819E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 20:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiGZSiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 14:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S232693AbiGZSn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 14:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239496AbiGZSiU (ORCPT
+        with ESMTP id S230515AbiGZSnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 14:38:20 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E46F240B1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:38:18 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v13so13550843wru.12
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 11:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=j6N0pmFjTqcYOHHvMWdXLEZrWTcV8zp2h7HHkht5ViE=;
-        b=ywaywuIvS7cTnJS09uyXPae4Azt6+q5qheewgaxEG63GjCPCWxiOSFaVxxgQqqEYfu
-         urv9iD3hLCtsJJFh0pVSLrBYkxq7fNYwyld086b2Nix6h0ovq9TPiW9p3JXjJYwinUZe
-         lknDuVNOG27+uwOIqgrsDK4QQjv+E+2in2w4/W2g7BRYd/UugqIuINSjLIH3KCHvJwsR
-         VqPbuyECorN43RDFaYM48Zyqy6uNMKKunutOgPdTHVMhpgAQAt6NB6zGCsVINiOZpX0z
-         gPMPKzlMcFFiugwWs2sm7ao5q20kY0Vp23vBgOoGAhEELTDU3HCrcrYtqgDVC2r2pqNB
-         gYWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j6N0pmFjTqcYOHHvMWdXLEZrWTcV8zp2h7HHkht5ViE=;
-        b=T6yuK6uaTX+mjXFxoZmb5z9kdgn3vuDHpKO6NJmQ9U9zRAimjWct9zJMPgJGgun2O9
-         C2liYhu7A5LOmtryEqT18fefcAmUkNIqZY4ScPE6JKapi7v9AJ5cl+fPNxfYUnwEPKFI
-         L2OWbA9oyHaJNC/0DT4ynErtqS95vL41jnAHYUTutR4IgjOgZmkW/S9s43rESaaSJU/R
-         8NkhjGVCLrX/yFLnsNJK8bpAwBSOlBtkC1nzwrczUe6lbPHJAqMIiiyp/JwTKCQXh29t
-         BErUIxJs1SkaH3w9J9mA8IYynZdYMD1/NkPfaEEmMb1D6kZh0cQGS/C9BUKWlkNpipcj
-         +l4Q==
-X-Gm-Message-State: AJIora809e2xn/Lvr4cKVh98/j3rNplxobXiaHzpcXpP4IrnRl5/7Mvu
-        c+ImBXjUJQ61LduKvwskYuVXXw==
-X-Google-Smtp-Source: AGRyM1vZ4aIjBeDsIxo7OnqgPf9xQ+rIuz4ELfoYfGifICmrCLqwNOCq5LZ24NUUVvCdIv0/R1aM5A==
-X-Received: by 2002:adf:f0ce:0:b0:21e:5eeb:f33e with SMTP id x14-20020adff0ce000000b0021e5eebf33emr11456384wro.362.1658860696589;
-        Tue, 26 Jul 2022 11:38:16 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id k19-20020a05600c1c9300b003a31fd05e0fsm4520683wms.2.2022.07.26.11.38.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 11:38:15 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 21:38:14 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC] PM: domains: Reverse the order of performance and enabling
- ops
-Message-ID: <YuA0luCtQ1J+ExBi@linaro.org>
-References: <20220720110246.762939-1-abel.vesa@linaro.org>
- <CAPDyKFoh8UV=QC6RhOkc=FSvoeqF_UiWp97h0Qp8dniB=sS+8A@mail.gmail.com>
+        Tue, 26 Jul 2022 14:43:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11752D1DC;
+        Tue, 26 Jul 2022 11:43:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 57C721F9F3;
+        Tue, 26 Jul 2022 18:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1658861002;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TTiR4Rj7a7i+4taUmgliJ6Lzey5oIZm0ImPZfCjUCq4=;
+        b=wR2cHz/QKkCnntnFSMrNYmBy3J2tl3rYKVEMnA2Z+NfeSrnRb0wD2x+D/FZldcu3vE0Kkp
+        JU9U+lSxa8pIkJzJen/lJA8J8bdIrHIfqneBD+6GWORKgwOE85wacfWOYVxCO141VBf6gI
+        4+DMmE3O57MLFhB45hqGTN7trd/Wp5E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1658861002;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TTiR4Rj7a7i+4taUmgliJ6Lzey5oIZm0ImPZfCjUCq4=;
+        b=IkzZPx64FXtCcAad35qXVAYOVlbcZqWYCaSRVvzEoG+BX7uF5FdA4wpuQ/xMkDGfSpoJWE
+        QvXvjPe75ouPeqDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B9E013322;
+        Tue, 26 Jul 2022 18:43:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1x24Bco14GIkIAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 26 Jul 2022 18:43:22 +0000
+Date:   Tue, 26 Jul 2022 20:38:24 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     hmsjwzb <hmsjwzb@zoho.com>
+Cc:     Nikolay Borisov <nborisov@suse.com>, anand.jain@oracle.com,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH]btrfs: Fix fstest case btrfs/219
+Message-ID: <20220726183824.GL13489@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, hmsjwzb <hmsjwzb@zoho.com>,
+        Nikolay Borisov <nborisov@suse.com>, anand.jain@oracle.com,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220721083609.5695-1-hmsjwzb@zoho.com>
+ <0c2337c3-2b39-c54c-27e9-dd4f0a99cf71@suse.com>
+ <1aaff0ac-436e-7782-081c-3549ff3d8c8f@zoho.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFoh8UV=QC6RhOkc=FSvoeqF_UiWp97h0Qp8dniB=sS+8A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1aaff0ac-436e-7782-081c-3549ff3d8c8f@zoho.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-07-21 18:48:10, Ulf Hansson wrote:
-> On Wed, 20 Jul 2022 at 13:03, Abel Vesa <abel.vesa@linaro.org> wrote:
-> >
-> > Rather than enabling and then setting the performance state, which usually
-> > translates into two different levels (voltages) in order to get to the
-> > one required by the consumer, we could give a chance to the providers to
-> > cache the performance state needed by the consumer and then, when powering
-> > on the power domain, the provider could use the cached level instead.
->
-> I don't think it's really clear what you want to do here. Let's see
-> what the discussion below brings us to, but for the next version
-> please elaborate a bit more in the commit message.
+On Fri, Jul 22, 2022 at 01:34:11AM -0400, hmsjwzb wrote:
+> On 7/21/22 09:37, Nikolay Borisov wrote:
+> > On 21.07.22 г. 11:36 ч., Flint.Wang wrote:
+> >> Hi,
+> >> fstest btrfs/291 failed.
+> >>
+> >> [How to reproduce]
+> >> mkdir -p /mnt/test/219.mnt
+> >> xfs_io -f -c "truncate 256m" /mnt/test/219.img1
+> >> mkfs.btrfs /mnt/test/219.img1
+> >> cp /mnt/test/219.img1 /mnt/test/219.img2
+> >> mount -o loop /mnt/test/219.img1 /mnt/test/219.mnt
+> >> umount /mnt/test/219.mnt
+> >> losetup -f --show /mnt/test/219.img1 dev
+> >> mount /dev/loop0 /mnt/test/219.mnt
+> >> umount /mnt/test/219.mnt
+> >> mount -o loop /mnt/test/219.img2 /mnt/test/219.mnt
+> >>
+> >> [Root cause]
+> >> if (fs_devices->opened && found_transid < device->generation) {
+> >>     /*
+> >>      * That is if the FS is _not_ mounted and if you
+> >>      * are here, that means there is more than one
+> >>      * disk with same uuid and devid.We keep the one
+> >>      * with larger generation number or the last-in if
+> >>      * generation are equal.
+> >>      */
+> >>     mutex_unlock(&fs_devices->device_list_mutex);
+> >>     return ERR_PTR(-EEXIST);
+> >> }
+> >>
+> >> [Personal opinion]
+> >> User might back up a block device to another. I think it is improper
+> >> to forbid user from mounting it.
+> >>
+> >> Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
+> > 
+> > 
+> > This lacks any explanation whatsoever so it's not possible to judge whether the fix is correct or not.
+> > 
+> >> ---
+> >>   fs/btrfs/volumes.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+> >> index 6aa6bc769569a..76af32032ac85 100644
+> >> --- a/fs/btrfs/volumes.c
+> >> +++ b/fs/btrfs/volumes.c
+> >> @@ -900,7 +900,7 @@ static noinline struct btrfs_device *device_list_add(const char *path,
+> >>            * tracking a problem where systems fail mount by subvolume id
+> >>            * when we reject replacement on a mounted FS.
+> >>            */
+> >> -        if (!fs_devices->opened && found_transid < device->generation) {
+> >> +        if (fs_devices->opened && found_transid < device->generation) {
+> >>               /*
+> >>                * That is if the FS is _not_ mounted and if you
+> >>                * are here, that means there is more than one
+> 
+> Hi Nikolay,
+> 
+> It seems the failure of btrfs/219 needs some explanation.
+> 
+> Here is the thing.
+>         1. A storage device A with btrfs filesystem is running on a host.
+>         2. For example, we backup the device A to an exactly some device B.
+>         3. The device A continue to run for a while so the device->generation is getting bigger.
+>         4. Then you umount the device A and try to mount device B.
+>         5. Kernel find that device A has the same UUID as device B and has bigger device->generation.
+>            So the mount request of device B will be rejected.
 
-Sorry about that. Will give more details in the next version.
+That's on purpose, devices are matched by UUIDs and making block copies
+of the same filesystem is known "don't do that" and discouraged.
 
->
-> Although, if I understand correctly (also from our offlist
-> discussions), you want to make it possible to move from two calls,
-> into one call into the FW from the genpd provider. So it's basically
-> an optimization, which to me, certainly sounds worth doing.
->
-> Furthermore, to get the complete picture, in the Qcom case, we set a
-> "default" low performance level from the genpd's ->power_on()
-> callback, which is needed to enable basic functionality for some
-> consumers.
->
-> The second call that I refer to is made when genpd calls the
-> ->set_performance() callback (from genpd_runtime_suspend()), which is
-> done by genpd to potentially set a new value for an aggregated
-> performance state of the PM domain. In case when there actually is a
-> new performance state set in this path, we end up calling the FW twice
-> for the Qcom case, where this first one is unnecessary.
->
-> Did I get that right?
+If you must store the block copies then you can change the UUID by
+btrfstune, there are two ways (fast metadata_uuid, and slow rewriting
+all metadata uuids in all blocks).
 
-Actually, for every ->power_on, there is a ->set_performance right after.
+> 
+>             if (!fs_devices->opened && found_transid < device->generation) {
+>                  /*
+>                   * That is if the FS is _not_ mounted and if you
+>                   * are here, that means there is more than one
+>                   * disk with same uuid and devid.We keep the one
+>                   * with larger generation number or the last-in if
+>                   * generation are equal.
+>                   */
+>                   mutex_unlock(&fs_devices->device_list_mutex);
+>                   return ERR_PTR(-EEXIST);
+>             }
+> 
+> I think it is improper to reject that request. Because device A is not in open state.
 
-For example, on genpd_runtime_suspend, this is done:
+But this would prevent mounting A. There should really be some way to
+distiguish the filesystems, the block device is not a stable identifier,
+the UUID is. Imagine having 10 copies of the same filesystem identified
+by the same UUID and device UUID, but with different generations and
+data. That's asking for problems.
 
-	genpd_lock(genpd);
-	ret = genpd_power_on(genpd, 0);
-	if (!ret)
-        	genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-	genpd_unlock(genpd);
-
-And same thing on __genpd_dev_pm_attach.
-
-Now, TBH, I can't think of any scenario where a consumer would want its PD powered,
-(which implies a non-zero voltage level) and then changed to a higher performance
-level (higher voltage).
-
-In most scenarios, though, the consumer needs the PD powered on to a specific voltage
-level.
-
-Based on the two statements above, we need ->set_performance to actually act as
-a way to tell the provider to which voltage level to power on the power domain
-when the ->power_on will be called.
-
-So my suggestion with this patch is to reverse the order, do ->set_performance first
-and then ->power_on, this way the provider receives the voltage level required by
-a consumer before the request to power on the PD. Then a provider might use that
-info when powering on/off that PD.
-
->
-> > Also the drop_performance and power_off have to be reversed so that
-> > when the last active consumer suspends, the level doesn't actually drop
-> > until the pd is disabled.
->
-> I don't quite get what this part helps with, is it really needed to
-> improve the behaviour?
-
-Again, why would a consumer need its PD voltage dropped before being powered off?
-
-I think it makes more sense for the ->set_performance in this case to act as a
-way to tell the provider that a specific device has yeilded its voltage level
-request. That way the provider can drop the voltage to the minimum requested by
-the active consumers of that PD.
-
->
-> >
-> > For the power domains that do not provide the set_performance, things
-> > remain unchanged, as does for the power domains that only provide the
-> > set_performance but do not provide the power_on/off.
->
-> Right, good points!
->
-> I get back to review the code soon, just wanted to make sure I have
-> the complete picture first.
->
-> Kind regards
-> Uffe
->
-> >
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >  drivers/base/power/domain.c | 30 +++++++++++++++---------------
-> >  1 file changed, 15 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 5a2e0232862e..38647c304b73 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
-> >                 return 0;
-> >
-> >         genpd_lock(genpd);
-> > -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >         genpd_power_off(genpd, true, 0);
-> > +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >         genpd_unlock(genpd);
-> >
-> >         return 0;
-> > @@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
-> >                 goto out;
-> >
-> >         genpd_lock(genpd);
-> > +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-> >         ret = genpd_power_on(genpd, 0);
-> > -       if (!ret)
-> > -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-> >         genpd_unlock(genpd);
-> >
-> >         if (ret)
-> > @@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
-> >  err_poweroff:
-> >         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
-> >                 genpd_lock(genpd);
-> > -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >                 genpd_power_off(genpd, true, 0);
-> > +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >                 genpd_unlock(genpd);
-> >         }
-> >
-> > @@ -2747,17 +2746,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >         dev->pm_domain->detach = genpd_dev_pm_detach;
-> >         dev->pm_domain->sync = genpd_dev_pm_sync;
-> >
-> > -       if (power_on) {
-> > -               genpd_lock(pd);
-> > -               ret = genpd_power_on(pd, 0);
-> > -               genpd_unlock(pd);
-> > -       }
-> > -
-> > -       if (ret) {
-> > -               genpd_remove_device(pd, dev);
-> > -               return -EPROBE_DEFER;
-> > -       }
-> > -
-> >         /* Set the default performance state */
-> >         pstate = of_get_required_opp_performance_state(dev->of_node, index);
-> >         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-> > @@ -2769,6 +2757,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >                         goto err;
-> >                 dev_gpd_data(dev)->default_pstate = pstate;
-> >         }
-> > +
-> > +       if (power_on) {
-> > +               genpd_lock(pd);
-> > +               ret = genpd_power_on(pd, 0);
-> > +               genpd_unlock(pd);
-> > +       }
-> > +
-> > +       if (ret) {
-> > +               genpd_remove_device(pd, dev);
-> > +               return -EPROBE_DEFER;
-> > +       }
-> > +
-> >         return 1;
-> >
-> >  err:
-> > --
-> > 2.34.3
-> >
->
+There's not much the filesystem driver can do than to avoid using old
+devices and giving preference to the highest generation device. All
+devices with btrfs signature are registered in memory and this is the
+primary source when mounting the devices, not the block device itself.

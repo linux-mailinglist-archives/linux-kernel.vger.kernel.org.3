@@ -2,211 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697CF580A35
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215F6580A3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 06:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbiGZEEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 00:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S231479AbiGZENR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 00:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237320AbiGZEE3 (ORCPT
+        with ESMTP id S230398AbiGZENQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 00:04:29 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A092A402
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:04:28 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id n8so3947607yba.2
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:04:28 -0700 (PDT)
+        Tue, 26 Jul 2022 00:13:16 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6298D205D9
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:13:13 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id x71-20020a63314a000000b00419699fc9afso5829997pgx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 21:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8X0WA+kebRC6mPq3dqdjSQFAk2sYowHyB2qCeMP7O6M=;
-        b=S9w8M90liuvaIw1ZfTS+HP0fbRUfVP4FKs1zYR2wsbdAc/LIYKZEwDSZRJ3PVd9niI
-         WOdYSAmVJ3kokTsI95tUVlk1qcJzfnOASGSbc3G0Xz+L/nePrU3c9daZKj7ePg8JOmMa
-         mZA376is49CSoCqeSYkJuacoE8AQu6QvZkhB8=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=VOgQF+G8SNdxv9KXxlnj8cWs1UtKcyFM/CeLPL1cf7A=;
+        b=qLZlSfzMGHj5dcZe2ZQFJyIeQ06FEbm0g27vehG1XYchRmx7b7dFsEJRhLVb8BUQZF
+         0JgQCGyPdVEFFFuhga7lHZebVqdL5fe8YG1dAlgsvgJkgDsmkHNXBtOr4pewYVd331GR
+         BAtr3f9upswaSut4UsqvHYu/To8Slq2GxHDR/Bp8thuQRHXqCniZqli8OqU1PPIXMKu3
+         DweGNS7NoFDDvFSrJTO1egKraeAQ/kM5SE2OuKExQyE2wmO3pVABWgYBIkN5spPdVud9
+         fVyrLBerlex3++Ff0OvH3+Vc7rZU/wzxkTmV3lk2i0IJqhpjNRpUFvkBw8mOa6xt1mNs
+         3e+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8X0WA+kebRC6mPq3dqdjSQFAk2sYowHyB2qCeMP7O6M=;
-        b=ZLFiLkq01eQy5+LIyWN0lRe+BsTPj0JmMdRP1I7MA0I5o0q+4ZjK6qDwJg0BNTTAA9
-         miPwVbwvYsFvSfXnu+4995Klzar0LQezl3ZdDUlOEecM09Fh6giNfZ3yW1yT2Eg7vwog
-         EIG8HsGjVpAHluc4dIENHmJxObC2aKYsMY3K62Q9/UrZjpz2QE+UdoW0vHD+/2MCeYk1
-         rIl3yvyYzuK8k3KmEqWZi7+ioVFOD13qKJn1QNH76fTY4D4LbYrbIZb8DRx1mla016TG
-         QsxNAQIEfXbeVEJfOsKtgsQquQ8IMOg38bMRHXpU9MtmqNM47dFdLLSNpQuduHTbF76V
-         O/cQ==
-X-Gm-Message-State: AJIora/kVVfznFWjFLeg9LBTCfB5KWEU91LspmW3KWcLjgsq+ldtYNdf
-        wEhXp4AV6wmVN7BToVJOWR+C66+aGOFGtJWSz+cujw==
-X-Google-Smtp-Source: AGRyM1uP48hjj3jsBDjgKChjyZ2zuY+tmqTb7maY9L6QDMxw3VUhyT+58wQYtUAL2USTYtbhj0Z0phTWRZL5gh5ClF0=
-X-Received: by 2002:a25:6a43:0:b0:66f:d259:7918 with SMTP id
- f64-20020a256a43000000b0066fd2597918mr12011506ybc.486.1658808267687; Mon, 25
- Jul 2022 21:04:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220721145017.918102-1-angelogioacchino.delregno@collabora.com>
- <20220721145017.918102-5-angelogioacchino.delregno@collabora.com>
- <CAGXv+5FutJb_MRwSVgjV7tByBvfq3AFsSxs6ETUZaNzrfpywgg@mail.gmail.com> <781f6d3e-412e-1553-c2c2-23c9a897626b@collabora.com>
-In-Reply-To: <781f6d3e-412e-1553-c2c2-23c9a897626b@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 26 Jul 2022 12:04:16 +0800
-Message-ID: <CAGXv+5Gdwcj1n0q8e8ReoUOZX18pbtbxV7oof06Q2_nJMNY-cw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/8] arm64: dts: mediatek: cherry: Enable secondary
- SD/MMC controller
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=VOgQF+G8SNdxv9KXxlnj8cWs1UtKcyFM/CeLPL1cf7A=;
+        b=ILBnxCJILAatxo0ZeI1cRWdqCjjvhiEA+DI5le2HlPfaWPgxTP5jRt0otwPc15lwOS
+         AP9lobS9ldkjfpUvlkZ50DxFUiPDNHDOqxEi0EGqREykYI6KfED7Lb9FPdoLXU47WH/E
+         X4sMH+F+rqLF8/Y/2QNAiHB576YHgPwgKRrjAlhhOJqWgq2iB5jzQky5sCcfcyMGHyyW
+         tgag4V8+M8cpKOnWque4HKL4vyj4B9KB99veslf10qKCToNoQbiVBXK8jUgy1I84RI3D
+         +pHuZ2fPFHuSkYweOnViH/CCYcEFR4NPlMJnYjhVodB2Gw+AK7Bp8eyYSIQOXYbPebeD
+         bX1w==
+X-Gm-Message-State: AJIora9dKfoD5IZFM8QBtc58DLIY5my0KRkAU0y+YNEqpHATcZ9QS97i
+        cULFR3yR4bOy8SboOeqOwvW10SbYL4WKhPmZ
+X-Google-Smtp-Source: AGRyM1vg1d/+z8ikDa8GdVjfcnaomA/orA9VGjZIdsqU/f5WKSvEZAKhcNt2ka+zCtEWu5HA4j956NpCVzrAQJai
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a17:90b:3509:b0:1f2:dc98:5976 with SMTP
+ id ls9-20020a17090b350900b001f2dc985976mr4344862pjb.154.1658808792908; Mon,
+ 25 Jul 2022 21:13:12 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 04:12:50 +0000
+Message-Id: <20220726041250.1905521-1-sadiyakazi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v4] Documentation: kunit: Add CLI args for kunit_tool
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net, mairacanal@riseup.net
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 6:20 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 25/07/22 10:54, Chen-Yu Tsai ha scritto:
-> > On Thu, Jul 21, 2022 at 10:51 PM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> >>
-> >> As of now, all of the boards based on the cherry platform have a
-> >> usable secondary SD/MMC controller, usually for SD cards: enable
-> >> it to allow both booting from it and generally accessing external
-> >> storage.
-> >>
-> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> >> ---
-> >>   .../boot/dts/mediatek/mt8195-cherry.dtsi      | 62 +++++++++++++++++++
-> >>   1 file changed, 62 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-> >> index 2853f7f76c90..8859957c7b27 100644
-> >> --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-> >> +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-> >> @@ -17,6 +17,7 @@ aliases {
-> >>                  i2c5 = &i2c5;
-> >>                  i2c7 = &i2c7;
-> >>                  mmc0 = &mmc0;
-> >> +               mmc1 = &mmc1;
-> >>                  serial0 = &uart0;
-> >>          };
-> >>
-> >> @@ -227,6 +228,24 @@ &mmc0 {
-> >>          vqmmc-supply = <&mt6359_vufs_ldo_reg>;
-> >>   };
-> >>
-> >> +&mmc1 {
-> >> +       status = "okay";
-> >> +
-> >> +       bus-width = <4>;
-> >> +       cap-sd-highspeed;
-> >> +       cd-gpios = <&pio 54 GPIO_ACTIVE_LOW>;
-> >> +       max-frequency = <200000000>;
-> >> +       no-mmc;
-> >> +       no-sdio;
-> >> +       pinctrl-names = "default", "state_uhs";
-> >> +       pinctrl-0 = <&mmc1_pins_default>;
-> >> +       pinctrl-1 = <&mmc1_pins_uhs>;
-> >> +       sd-uhs-sdr50;
-> >> +       sd-uhs-sdr104;
-> >> +       vmmc-supply = <&mt_pmic_vmch_ldo_reg>;
-> >> +       vqmmc-supply = <&mt_pmic_vmc_ldo_reg>;
-> >> +};
-> >> +
-> >>   /* for CPU-L */
-> >>   &mt6359_vcore_buck_reg {
-> >>          regulator-always-on;
-> >> @@ -575,6 +594,49 @@ pins-rst {
-> >>                  };
-> >>          };
-> >>
-> >> +       mmc1_pins_default: mmc1-default-pins {
-> >> +               pins-cmd-dat {
-> >> +                       pinmux = <PINMUX_GPIO110__FUNC_MSDC1_CMD>,
-> >> +                                <PINMUX_GPIO112__FUNC_MSDC1_DAT0>,
-> >> +                                <PINMUX_GPIO113__FUNC_MSDC1_DAT1>,
-> >> +                                <PINMUX_GPIO114__FUNC_MSDC1_DAT2>,
-> >> +                                <PINMUX_GPIO115__FUNC_MSDC1_DAT3>;
-> >> +                       input-enable;
-> >> +                       drive-strength = <8>;
-> >> +                       bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-> >> +               };
-> >> +
-> >> +               pins-clk {
-> >> +                       pinmux = <PINMUX_GPIO111__FUNC_MSDC1_CLK>;
-> >> +                       drive-strength = <8>;
-> >> +                       bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-> >> +               };
-> >> +
-> >> +               pins-insert {
-> >> +                       pinmux = <PINMUX_GPIO54__FUNC_GPIO54>;
-> >> +                       bias-pull-up;
-> >> +               };
-> >> +       };
-> >> +
-> >> +       mmc1_pins_uhs: mmc1-uhs-pins {
-> >> +               pins-cmd-dat {
-> >> +                       pinmux = <PINMUX_GPIO110__FUNC_MSDC1_CMD>,
-> >> +                                <PINMUX_GPIO112__FUNC_MSDC1_DAT0>,
-> >> +                                <PINMUX_GPIO113__FUNC_MSDC1_DAT1>,
-> >> +                                <PINMUX_GPIO114__FUNC_MSDC1_DAT2>,
-> >> +                                <PINMUX_GPIO115__FUNC_MSDC1_DAT3>;
-> >> +                       input-enable;
-> >> +                       drive-strength = <8>;
-> >> +                       bias-pull-up = <MTK_PUPD_SET_R1R0_01>;
-> >> +               };
-> >> +
-> >> +               pins-clk {
-> >> +                       pinmux = <PINMUX_GPIO111__FUNC_MSDC1_CLK>;
-> >> +                       drive-strength = <8>;
-> >> +                       bias-pull-down = <MTK_PUPD_SET_R1R0_10>;
-> >> +               };
-> >
-> > I wonder if pins-insert should be duplicated here. And there's no
-> > difference between the standard and UHS pinconfigs. One would expect
-> > higher drive strength on the UHS set, if two sets were required.
-> > So maybe we should just have one set, and use that one for both
-> > the default and uhs states.
-> >
->
-> I don't think that it would really make a lot of sense to duplicate the
-> insertion pin setup in the UHS-specific pinctrl set...
->
-> Whenever you remove the uSD card, the controller goes back to default,
-> as the first steps in card initialization are always happening at low
-> speed and only after that we can switch to UHS speeds... so we do expect
-> that the first-ever state is always `default` (by spec!), which means
-> that we are also ensuring that the insertion pin setup is always done.
+Some kunit_tool command line arguments are missing in run_wrapper.rst.
+Document them.
 
-Right. What I wanted to say was that, besides the insertion pin, there's
-no difference between the default and uhs states here. So why have two
-copies instead of one that is referenced twice? (the uhs state is required
-by the binding).
+Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
 
-ChenYu
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20220724184758.1723925-1-sadiyakazi=
+@google.com/
+-Fixed the indention bug in the run_wrapper.rst file. Thanks for
+catching that(Kernel test robot, Bagas).
+-Updated the commit message.
 
-> Cheers,
-> Angelo
->
-> > Otherwise,
-> >
-> > Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> >
-> >> +       };
-> >> +
-> >>          nor_pins_default: nor-default-pins {
-> >>                  pins-ck-io {
-> >>                          pinmux = <PINMUX_GPIO142__FUNC_SPINOR_IO0>,
-> >> --
-> >> 2.35.1
-> >>
-> >>
->
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220721081026.1247067-1-sadiyakazi=
+@google.com/
+-Added a code block for =E2=80=94kconfig_add argument to make the styling c=
+onsistent
+-Slightly changed the words for =E2=80=94arch argument
+-Changed QEMU to qemu wherever applicable for the cli args
+-Changed the style for ``-smp 8``
+-Changed "Might be repeated" to "may be repeated=E2=80=9D for kernel_args
+
+Changes since V1:
+https://lore.kernel.org/linux-kselftest/20220719092214.995965-1-sadiyakazi@=
+google.com/
+- Addressed most of the review comments from Maira and David, except
+  removing the duplicate arguments as I felt its worth keeping them in
+  the reference documentation as well as in context. We can improve them
+  and differentiate their use cases in the future patches.
+
+---
+ Documentation/dev-tools/kunit/run_wrapper.rst | 63 ++++++++++++++++++-
+ 1 file changed, 62 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/=
+dev-tools/kunit/run_wrapper.rst
+index 5e560f2c5fca..cce203138fb7 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -233,7 +233,7 @@ Command-Line Arguments
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ kunit_tool has a number of other command-line arguments which can
+-be useful for our test environment. Below the most commonly used
++be useful for our test environment. Below are the most commonly used
+ command line arguments:
+=20
+ - ``--help``: Lists all available options. To list common options,
+@@ -257,3 +257,64 @@ command line arguments:
+             added or modified. Instead, enable all tests
+             which have satisfied dependencies by adding
+             ``CONFIG_KUNIT_ALL_TESTS=3Dy`` to your ``.kunitconfig``.
++
++- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitco=
+nfig``
++  file. For example:
++
++  - ``lib/kunit/.kunitconfig`` can be the path of the file.
++
++  - ``lib/kunit`` can be the directory in which the file is located.
++
++  This file is used to build and run with a predefined set of tests
++  and their dependencies. For example, to run tests for a given subsystem.
++
++- ``--kconfig_add``: Specifies additional configuration options to be
++  appended to the ``.kunitconfig`` file. For example:
++
++  .. code-block::
++
++	./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=3Dy
++
++- ``--arch``: Runs tests on the specified architecture. The architecture
++  argument is same as the Kbuild ARCH environment variable.
++  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on qe=
+mu.
++  Default is `um`.
++
++- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
++  same argument as passed to the ``CROSS_COMPILE`` variable used by
++  Kbuild. This will be the prefix for the toolchain
++  binaries such as GCC. For example:
++
++  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
++    our system.
++
++  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/mi=
+croblaze-linux``
++    if we have downloaded the microblaze toolchain from the 0-day
++    website to a specified path in our home directory called toolchains.
++
++- ``--qemu_config``: Specifies the path to a file containing a
++  custom qemu architecture definition. This should be a python file
++  containing a `QemuArchParams` object.
++
++- ``--qemu_args``: Specifies additional qemu arguments, for example, ``-sm=
+p 8``.
++
++- ``--jobs``: Specifies the number of jobs (commands) to run simultaneousl=
+y.
++  By default, this is set to the number of cores on your system.
++
++- ``--timeout``: Specifies the maximum number of seconds allowed for all t=
+ests to run.
++  This does not include the time taken to build the tests.
++
++- ``--kernel_args``: Specifies additional kernel command-line arguments. M=
+ay be repeated.
++
++- ``--run_isolated``: If set, boots the kernel for each individual suite/t=
+est.
++  This is useful for debugging a non-hermetic test, one that
++  might pass/fail based on what ran before it.
++
++- ``--raw_output``: If set, generates unformatted output from kernel. Poss=
+ible options are:
++
++   - ``all``: To view the full kernel output, use ``--raw_output=3Dall``.
++
++   - ``kunit``: This is the default option and filters to KUnit output. Us=
+e ``--raw_output`` or ``--raw_output=3Dkunit``.
++
++- ``--json``: If set, stores the test results in a JSON format and prints =
+to `stdout` or
++  saves to a file if a filename is specified.
+--=20
+2.37.1.359.gd136c6c3e2-goog
+

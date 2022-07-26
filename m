@@ -2,151 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD2C5810FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E495810FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238294AbiGZKSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S238239AbiGZKVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbiGZKS1 (ORCPT
+        with ESMTP id S230262AbiGZKVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:18:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D74B252AF
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658830705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5lnSTLtfpiMG3nHTtX3jKFzE3hNNSSLXlSNWKqDtSbM=;
-        b=a+j/zzrpAHJIJkvfcWAdaY4VL/E5ZHl17fomZXZU31r5JGdxYhclY6Z3IwPMbUWaJK/Zx7
-        JW/4Zqcm2qy5pbyWh9EIgx7AyKtBu2TZ5d+/F/sDEskOfCsisccgZLRyvNXIGJFROpt0/y
-        jjxzaFA87D03D9g0+8cnvnPAZsnxaTg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-277-RA-bByWDOvKUDlfN8EamxQ-1; Tue, 26 Jul 2022 06:18:23 -0400
-X-MC-Unique: RA-bByWDOvKUDlfN8EamxQ-1
-Received: by mail-wm1-f71.google.com with SMTP id a18-20020a05600c225200b003a30355c0feso5203573wmm.6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:18:23 -0700 (PDT)
+        Tue, 26 Jul 2022 06:21:02 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E21057E
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:21:01 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id x91so17182948ede.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=2X8HXtEcU/ZehxuPCgIPz4aOGr6MXTRGr5kvCe3jveI=;
+        b=jveyBG06D/n1bqoyIRbG5FLD+LD2HIlg1YZci4oKNaIBM0KQNUHuEAtMKJPMSazsvL
+         xdsPzbyuA9aqdLxi0YeHrMCWJ/3COWiCFHRUrWLBXRuv7jxz93sUhDERbGy7EwppF5no
+         7LCExXx5mkTtX1zlz3g/KZcEuRXOuxUXJajx5JpsdL8wclx3XQGPBBxpY5sMvKe8D+7O
+         WknKauyqfApGBESWWLaPEOks6uYIXuPo0b/Q3HYC7KGbV/5XTtmi1fpvAEk+ePYenlAo
+         Xytx6RfUSvTyuEGo/lNghw8hduQ9Mip4qaGEGuZxVc6P7FhDzZjUgJgnJo1PX/PB3DeW
+         dZ3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=5lnSTLtfpiMG3nHTtX3jKFzE3hNNSSLXlSNWKqDtSbM=;
-        b=pA4Ey55drLgdPFMkHapUEJKV8AbE/tICEZSLaRaTxxDNoelgz0N/O9Y8b6u2qF4iek
-         v6i0sXeWbAuPs9aOVw0xWiCSeStIXPXh42u2qvhTdvZbwzOUvFf2rnRWwF2gDnJJ89Kl
-         QB30+iGe6BpPp3Ia5mSUlE+ogWjfKQ9iIgxXQA9hnoJVVulwHYANIh8+HLpfpedWNdCp
-         RE8gb+WfIMgpg5uSFRfBPPIB43+LrnsBxm4g2JfKjSIqV+RH6k3Lyh2f9LfBXSCxuUlt
-         wzbaluIjst9bT2HZWGCrJPduVoYXB722Pxl7Z1PxyfI0vExCFwCMXnTqMGqCO00+3jfF
-         upMA==
-X-Gm-Message-State: AJIora93MR1vownNtvxEM7QqlX+mRH3Tm+V/UVOkJankpBeWpKBghDIa
-        3qrCZqUJc6WcdoZjTQ1fe5BIgbK2qaZSBSLZ+QuAKfzKle7SA7Ut06Lt0erCujEUI1KMh37n0vE
-        xaVCzUJVaLuX2xneEelsx3ZPS
-X-Received: by 2002:a7b:cbce:0:b0:3a3:2d78:f066 with SMTP id n14-20020a7bcbce000000b003a32d78f066mr11827326wmi.66.1658830702612;
-        Tue, 26 Jul 2022 03:18:22 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v8kydM3js1Qil6SAxeNCdOc4EVpN3aiOG2Sa/CTbqYiQy1OSiHZETtGoU4toS9G3LOObJOnA==
-X-Received: by 2002:a7b:cbce:0:b0:3a3:2d78:f066 with SMTP id n14-20020a7bcbce000000b003a32d78f066mr11827305wmi.66.1658830702343;
-        Tue, 26 Jul 2022 03:18:22 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id o8-20020a05600c378800b003a2e7c13a3asm16726137wmr.42.2022.07.26.03.18.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 03:18:21 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>, Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH 2/2] sched: Consider task_struct::saved_state in
- wait_task_inactive().
-In-Reply-To: <Yt+G/somh8qcKc/R@linutronix.de>
-References: <20220720154435.232749-1-bigeasy@linutronix.de>
- <20220720154435.232749-3-bigeasy@linutronix.de>
- <xhsmhy1whdqy9.mognet@vschneid.remote.csb>
- <Yt+G/somh8qcKc/R@linutronix.de>
-Date:   Tue, 26 Jul 2022 11:18:20 +0100
-Message-ID: <xhsmhsfmodvo3.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=2X8HXtEcU/ZehxuPCgIPz4aOGr6MXTRGr5kvCe3jveI=;
+        b=cx9Jc2E7ZQ00yt+akmb2x6Ui4hcO/4ZcJDmPqdoDkfJSISVPDUwxGOxF0TG/q1eaXL
+         hdpW3324WLPtAP83MgMqlDZJ6yR4r+3Cr+oFSbE8Hi63ISI4g+fVFyaFEA3qwDGuyDa6
+         3gI39vKshrd6x07gq9OqSP4+An/jOEknjKVYDdlX8JGzp0iVVhscVup6oD9o67Fucu+V
+         xtnHDeKUNYkxmJgs20X9hHjoB346QB/Pod2Ksqg/0f/C5McQNlPsqXQP9EI59L2PaUkL
+         2VooJfzEY5++DYBpX7Ok8wNK7aYAAMBtyrbXoTJRP7P9sQi3LstpGg8zBeKuSZ5U/xcK
+         Ie4Q==
+X-Gm-Message-State: AJIora/uCo7IaIbafqG2v0l/G+K5E3nkhrhGmgO2XogEIZcXEqAlVTM6
+        By253emNwL00oez+jcKGBiAWzILwUD3Ix7R5euE=
+X-Google-Smtp-Source: AGRyM1sNdgy+v4AYGpGySs6L4iejaYmUbMARQLmADcO3i+JleTkB1awAHcHlwct/NtgczAvIIhSVG0GOo9XJ05T9RP8=
+X-Received: by 2002:aa7:c382:0:b0:43b:bbaa:31fb with SMTP id
+ k2-20020aa7c382000000b0043bbbaa31fbmr17844782edq.269.1658830859999; Tue, 26
+ Jul 2022 03:20:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: sgtkaylama@gmail.com
+Sender: adboulayewale@gmail.com
+Received: by 2002:a17:906:3485:0:0:0:0 with HTTP; Tue, 26 Jul 2022 03:20:59
+ -0700 (PDT)
+From:   sgtkaylama <sgtkaylama@gmail.com>
+Date:   Tue, 26 Jul 2022 10:20:59 +0000
+X-Google-Sender-Auth: yT7lMkZ9vRcdCiR4sfX7OL2IPOE
+Message-ID: <CAKZu-sWoYXtd9dXyXzmc15bQzsBGZ1CQX8Y2TmPhDpKP4w2ykw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/07/22 08:17, Sebastian Andrzej Siewior wrote:
-> On 2022-07-25 18:47:58 [+0100], Valentin Schneider wrote:
->> > --- a/kernel/sched/core.c
->> > +++ b/kernel/sched/core.c
->> > @@ -3257,6 +3257,40 @@ int migrate_swap(struct task_struct *cur
->> >  }
->> >  #endif /* CONFIG_NUMA_BALANCING */
->> >
->> > +#ifdef CONFIG_PREEMPT_RT
->>
->> Would something like the below be useful?
->>
->> /*
->>  * If p->saved_state is anything else than TASK_RUNNING, then p blocked on an
->>  * rtlock *before* voluntarily calling into schedule() after setting its state
->>  * to X. For things like ptrace (X=TASK_TRACED), the task could have more work
->>  * to do upon acquiring the lock before whoever called wait_task_inactive()
->>  * should return. IOW, we have to wait for:
->>  *
->>  *   p.saved_state = TASK_RUNNING
->>  *   p.__state     = X
->>  *
->>  * which implies the task isn't blocked on an RT lock and got to schedule() by
->>  * itself.
->>  *
->>  * Also see comments in ttwu_state_match().
->>  */
->
-> This sums up the code. I would s/schedule/schedule_rtlock/ since there
-> are two entrypoints.
-
-Right, this any better?
-
-/*
- * Consider:
- *
- *  set_special_state(X);
- *
- *  do_things()
- *    // Somewhere in there is an rtlock that can be contended:
- *    current_save_and_set_rtlock_wait_state();
- *    [...]
- *    schedule_rtlock(); (A)
- *    [...]
- *    current_restore_rtlock_saved_state();
- *
- *  schedule(); (B)
- *
- * If p->saved_state is anything else than TASK_RUNNING, then p blocked on an
- * rtlock (A) *before* voluntarily calling into schedule() (B) after setting its
- * state to X. For things like ptrace (X=TASK_TRACED), the task could have more
- * work to do upon acquiring the lock in do_things() before whoever called
- * wait_task_inactive() should return. IOW, we have to wait for:
- *
- *   p.saved_state = TASK_RUNNING
- *   p.__state     = X
- *
- * which implies the task isn't blocked on an RT lock and got to schedule() (B).
- *
- * Also see comments in ttwu_state_match().
- */
-
+5L2g5aW977yM5L2g5pS25Yiw5oiR5LmL5YmN55qE5Lik5p2h5raI5oGv5LqG5ZCX77yfDQo=

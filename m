@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871375814F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35845814F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 16:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238090AbiGZORq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 10:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S239171AbiGZORx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 10:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbiGZORj (ORCPT
+        with ESMTP id S236694AbiGZORj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 26 Jul 2022 10:17:39 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D3115FEE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00DA2495F
         for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 07:17:35 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 91F176601B20;
-        Tue, 26 Jul 2022 15:17:33 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2FC926601B21;
+        Tue, 26 Jul 2022 15:17:34 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1658845054;
-        bh=uS7ApYx3lrjLcYD1pymwlYBH9OgH7HrM1kmYQvF3hBA=;
+        bh=0Pq7bNM/o1tXtZIQEeEKqw5+dJrRJyg3c7c9n4VhnQg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gZMfUN1hXPskmNmlXdbD1RV0XzqReyhXu4T8/VylUnoj4BRoTKBfCVCcuu814cdJe
-         3taTMm78ZC8aC88P51C0QRsiHVfRJ2dB65UECGqGX08QsXr3EvSu1Y0CCRqRQDqvKm
-         MLAYLTE8EcMGLpCvBpvdW3T6Sdvs4185uDqOi0Qn/qyimHNVkeo4sC9vD47nIBw3bu
-         NsjvmbqMYXSHgpHkTRX09s90ttSzXGB50gPCY5wB89WBOUwNh31+ta4+kExxHehAO4
-         Ve6HF8p0qPJWNej7K2ciOs5n3aHk6BZtU+CRzkYhCVV/MkovVa9OFautwaQ0DVPvr1
-         +ODsVn63ZtMLw==
+        b=NzcgJJa47jvHM0qeQq11B4CvOqXuefN0JcZ8i8XG3h2Prnevck3URTpecbJQS5xA8
+         /C0rOFGZbYvr4B8InTEjFQKhE3MLJFB5eHYLAHn4GFm7rpB3tHM6/NxWrnPvZapvpv
+         k3QMRHgivLoiHS/ebTvfgLCUDnXdsQcQy99UA4i0Fbl35M4kH+qOzdOUROwj3CTAoF
+         w21vcDrJLwaEaHAhohdyZ7QjjZWXQiOA+TgnsU5WGDODPRJkwafaWA2ovUJanwRfFv
+         ZovAk/jIYsxymyMUsJdhpfK6JgmKq8hX12P/NhYf5rlo58HnN6RJHNGh9eE6gcB43t
+         ChflXVH5CS6Qg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -41,9 +41,9 @@ Cc:     roger.lu@mediatek.com, khilman@baylibre.com,
         nfraprado@collabora.com, kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 1/6] soc: mediatek: mtk-svs: Commonize t-calibration-data fuse array read
-Date:   Tue, 26 Jul 2022 16:16:48 +0200
-Message-Id: <20220726141653.177948-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/6] soc: mediatek: mtk-svs: Switch to platform_get_irq()
+Date:   Tue, 26 Jul 2022 16:16:49 +0200
+Message-Id: <20220726141653.177948-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220726141653.177948-1-angelogioacchino.delregno@collabora.com>
 References: <20220726141653.177948-1-angelogioacchino.delregno@collabora.com>
@@ -58,201 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commonize the repeating pattern for reading the "t-calibration-data"
-efuse data in a new function svs_thermal_efuse_get_data(), reducing
-the size of this driver.
-
-No functional changes.
+Instead of using irq_of_parse_and_map() to retrieve the interrupt from
+devicetree, switch to platform_get_irq() instead: this function will
+conveniently also write an error message in case the irq is not found.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/soc/mediatek/mtk-svs.c | 111 +++++++++++----------------------
- 1 file changed, 38 insertions(+), 73 deletions(-)
+ drivers/soc/mediatek/mtk-svs.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 5ac431a04548..600492dc334c 100644
+index 600492dc334c..ee990acfc2d5 100644
 --- a/drivers/soc/mediatek/mtk-svs.c
 +++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -1684,11 +1684,36 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
- 	return 0;
- }
+@@ -2757,8 +2757,7 @@ static struct svs_platform *svs_platform_probe(struct platform_device *pdev)
+ static int svs_probe(struct platform_device *pdev)
+ {
+ 	struct svs_platform *svsp;
+-	unsigned int svsp_irq;
+-	int ret;
++	int svsp_irq, ret;
  
-+static int svs_thermal_efuse_get_data(struct svs_platform *svsp)
-+{
-+	struct nvmem_cell *cell;
-+
-+	/* Thermal efuse parsing */
-+	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
-+	if (IS_ERR_OR_NULL(cell)) {
-+		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n", PTR_ERR(cell));
-+		return PTR_ERR(cell);
+ 	svsp = svs_platform_probe(pdev);
+ 	if (IS_ERR(svsp))
+@@ -2776,7 +2775,12 @@ static int svs_probe(struct platform_device *pdev)
+ 		goto svs_probe_free_resource;
+ 	}
+ 
+-	svsp_irq = irq_of_parse_and_map(svsp->dev->of_node, 0);
++	svsp_irq = platform_get_irq(pdev, 0);
++	if (svsp_irq < 0) {
++		ret = svsp_irq;
++		goto svs_probe_free_resource;
 +	}
 +
-+	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
-+	if (IS_ERR(svsp->tefuse)) {
-+		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
-+			PTR_ERR(svsp->tefuse));
-+		nvmem_cell_put(cell);
-+		return PTR_ERR(svsp->tefuse);
-+	}
-+
-+	svsp->tefuse_max /= sizeof(u32);
-+	nvmem_cell_put(cell);
-+
-+	return 0;
-+}
-+
- static bool svs_mt8195_efuse_parsing(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb;
--	struct nvmem_cell *cell;
- 	u32 idx, i, ft_pgm, vmin, golden_temp;
-+	int ret;
- 
- 	for (i = 0; i < svsp->efuse_max; i++)
- 		if (svsp->efuse[i])
-@@ -1730,24 +1755,9 @@ static bool svs_mt8195_efuse_parsing(struct svs_platform *svsp)
- 		svsb->vmax += svsb->dvt_fixed;
- 	}
- 
--	/* Thermal efuse parsing */
--	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
--	if (IS_ERR_OR_NULL(cell)) {
--		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n",
--			PTR_ERR(cell));
--		return false;
--	}
--
--	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
--	if (IS_ERR(svsp->tefuse)) {
--		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
--			PTR_ERR(svsp->tefuse));
--		nvmem_cell_put(cell);
-+	ret = svs_thermal_efuse_get_data(svsp);
-+	if (ret)
- 		return false;
--	}
--
--	svsp->tefuse_max /= sizeof(u32);
--	nvmem_cell_put(cell);
- 
- 	for (i = 0; i < svsp->tefuse_max; i++)
- 		if (svsp->tefuse[i] != 0)
-@@ -1770,8 +1780,8 @@ static bool svs_mt8195_efuse_parsing(struct svs_platform *svsp)
- static bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb;
--	struct nvmem_cell *cell;
- 	u32 idx, i, vmin, golden_temp;
-+	int ret;
- 
- 	for (i = 0; i < svsp->efuse_max; i++)
- 		if (svsp->efuse[i])
-@@ -1809,24 +1819,9 @@ static bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
- 		svsb->vmax += svsb->dvt_fixed;
- 	}
- 
--	/* Thermal efuse parsing */
--	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
--	if (IS_ERR_OR_NULL(cell)) {
--		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n",
--			PTR_ERR(cell));
--		return false;
--	}
--
--	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
--	if (IS_ERR(svsp->tefuse)) {
--		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
--			PTR_ERR(svsp->tefuse));
--		nvmem_cell_put(cell);
-+	ret = svs_thermal_efuse_get_data(svsp);
-+	if (ret)
- 		return false;
--	}
--
--	svsp->tefuse_max /= sizeof(u32);
--	nvmem_cell_put(cell);
- 
- 	for (i = 0; i < svsp->tefuse_max; i++)
- 		if (svsp->tefuse[i] != 0)
-@@ -1849,8 +1844,8 @@ static bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
- static bool svs_mt8186_efuse_parsing(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb;
--	struct nvmem_cell *cell;
- 	u32 idx, i, golden_temp;
-+	int ret;
- 
- 	for (i = 0; i < svsp->efuse_max; i++)
- 		if (svsp->efuse[i])
-@@ -1911,24 +1906,9 @@ static bool svs_mt8186_efuse_parsing(struct svs_platform *svsp)
- 		svsb->vmax += svsb->dvt_fixed;
- 	}
- 
--	/* Thermal efuse parsing */
--	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
--	if (IS_ERR_OR_NULL(cell)) {
--		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n",
--			PTR_ERR(cell));
-+	ret = svs_thermal_efuse_get_data(svsp);
-+	if (ret)
- 		return false;
--	}
--
--	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
--	if (IS_ERR(svsp->tefuse)) {
--		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
--			PTR_ERR(svsp->tefuse));
--		nvmem_cell_put(cell);
--		return false;
--	}
--
--	svsp->tefuse_max /= sizeof(u32);
--	nvmem_cell_put(cell);
- 
- 	golden_temp = (svsp->tefuse[0] >> 24) & GENMASK(7, 0);
- 	if (!golden_temp)
-@@ -1946,11 +1926,11 @@ static bool svs_mt8186_efuse_parsing(struct svs_platform *svsp)
- static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb;
--	struct nvmem_cell *cell;
- 	int format[6], x_roomt[6], o_vtsmcu[5], o_vtsabb, tb_roomt = 0;
- 	int adc_ge_t, adc_oe_t, ge, oe, gain, degc_cali, adc_cali_en_t;
- 	int o_slope, o_slope_sign, ts_id;
- 	u32 idx, i, ft_pgm, mts, temp0, temp1, temp2;
-+	int ret;
- 
- 	for (i = 0; i < svsp->efuse_max; i++)
- 		if (svsp->efuse[i])
-@@ -2026,24 +2006,9 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
- 		}
- 	}
- 
--	/* Get thermal efuse by nvmem */
--	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
--	if (IS_ERR(cell)) {
--		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n",
--			PTR_ERR(cell));
--		goto remove_mt8183_svsb_mon_mode;
--	}
--
--	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
--	if (IS_ERR(svsp->tefuse)) {
--		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
--			PTR_ERR(svsp->tefuse));
--		nvmem_cell_put(cell);
--		goto remove_mt8183_svsb_mon_mode;
--	}
--
--	svsp->tefuse_max /= sizeof(u32);
--	nvmem_cell_put(cell);
-+	ret = svs_thermal_efuse_get_data(svsp);
-+	if (ret)
-+		return false;
- 
- 	/* Thermal efuse parsing */
- 	adc_ge_t = (svsp->tefuse[1] >> 22) & GENMASK(9, 0);
+ 	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+ 					svsp->irqflags | IRQF_ONESHOT,
+ 					svsp->name, svsp);
 -- 
 2.35.1
 

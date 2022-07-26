@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95F1581B25
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7A0581B2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 22:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239632AbiGZUf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 16:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S239663AbiGZUgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 16:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbiGZUfy (ORCPT
+        with ESMTP id S239950AbiGZUgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 16:35:54 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D173910CB;
-        Tue, 26 Jul 2022 13:35:53 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so66518wme.0;
-        Tue, 26 Jul 2022 13:35:53 -0700 (PDT)
+        Tue, 26 Jul 2022 16:36:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F02E5FF8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:36:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658867771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u6lCMOJBxFXFYmVcVNt/zc0jKT+n1PEiVlC/ff/AZGk=;
+        b=gA661EJuxGw6qRJUrUxiL7QpmAKRhw4vHOHlcEjn7fp2g/FtkUXCsZUN4uzr9bpeKUyzU2
+        l05fcIA5KgPBhLuB72IHiEifpiSw7tj0o5DznjG7vIutZGlsA40Deu9FO/xVPpBpT7KJtX
+        iH5RDUFGcKznJZa3q1iXgU0LQzePvbw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-483-HQZTz32qPjKAgOrSi5m_vw-1; Tue, 26 Jul 2022 16:36:09 -0400
+X-MC-Unique: HQZTz32qPjKAgOrSi5m_vw-1
+Received: by mail-wr1-f71.google.com with SMTP id o8-20020adfa108000000b0021e903fb612so1085535wro.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 13:36:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rzfldDnwiZ1L6vukyYNiW1lGtHYIp/Q69JeDkFAi97M=;
-        b=NrBKrq5r54CNRqCiHqc+b0XCUq+6TNDZRGDtHsxLbYGlx7g2URPcV3bKsqigURnhDk
-         xLN9L/OSOiI/ApnuRADRiey8zBDOAl16OsZwMWxB1hqQRRG4YiaBpMPfqKa7RxArAB9C
-         1iLMkphn+eyY77ecHJ50QhdbGN3LdA0aBrjJ24Ll8FjNbs+o+aswEBenYfCoXpK/9hgM
-         wAo5uts4yAa8FDtmUNPMEGS9A9WUE+mdXgAXgwHKYFqFd0LufUcOScwhdX4TotHCdNkW
-         51xMUhp8Pu8RBrQrx0Q1LnBpWIBOo4sMe043enOzzBITyUBbqa2K6+QgJOeOQiIDWhGy
-         6vyw==
-X-Gm-Message-State: AJIora8G2l+MeNPHMiNgOxDa/BBLsbbykbEu3UxotVVNZ65Io3v2eAnA
-        bQC60pfwV0LSJj6sVy3q1foilSrtg5ohocCOJhw=
-X-Google-Smtp-Source: AGRyM1tmpHDUGYkF3Pa0LuFMVPwSUfzWWt+oKsCfgWxV9rShxvWw0PrOPEUryVbTGeQlSFOd0x7JI+YXckH6bcc0s5E=
-X-Received: by 2002:a05:600c:2d4c:b0:3a3:22c0:c3dd with SMTP id
- a12-20020a05600c2d4c00b003a322c0c3ddmr618767wmg.107.1658867752308; Tue, 26
- Jul 2022 13:35:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220725104220.1106663-1-leo.yan@linaro.org> <Yt68AZA2VV9d02xZ@kernel.org>
- <CA+_WhHyZZC=3gtzetEAQQrjtGujHmY5azwtQNZEc90gyOAwUDg@mail.gmail.com>
- <CAP-5=fWiNdnEawdj_3ExCrcwRSnRxeV8=8RhA6pwbw_bJdPJFg@mail.gmail.com> <YuBDw/+7McESS05X@kernel.org>
-In-Reply-To: <YuBDw/+7McESS05X@kernel.org>
-From:   Akemi Yagi <toracat@elrepo.org>
-Date:   Tue, 26 Jul 2022 13:35:40 -0700
-Message-ID: <CABA31DoEJEyVeUgzROzzj_OA2exmj69WamaavQWi=7nWq52dxw@mail.gmail.com>
-Subject: Re: [PATCH] perf scripts python: Let script to be python2 compliant
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, Alan Bartlett <ajb@elrepo.org>,
-        Leo Yan <leo.yan@linaro.org>,
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=u6lCMOJBxFXFYmVcVNt/zc0jKT+n1PEiVlC/ff/AZGk=;
+        b=XOZV/lhW8crjIi2G//J0V6nl8I3PrGQKCITs4QcF/gz/h9SIKkgL3MuwrC3YHly+VN
+         0rwCzppXYHceR09aiwp+9jtEkfO2F/3s6nmib0UvhM4hpEh4ZjTf7hcY1px/ZeGsjC+C
+         Dge9+pMj8EWEYXtKLrYMFjvvtiNMI1ybBwBAgXV4F+1g0hFobF2wUAhhZJ5+uuKGWwpR
+         SWgoIkNG6kWX/HJoCf1M1RN5SGRI6m5n9bFIXBzgGWh8EIBTvoVTRXRA7wDyYXfjI/H5
+         4KmynJm74mIWV+RfkpVHKeWuph5hPURAV1EJIwDupjkMnJm90HSYRyiHHACGlnZc7EQO
+         xR2g==
+X-Gm-Message-State: AJIora/nRcr7zBT0ukHy1KWR1iszqQzSHD+V9zql3WVCGOEBIL2uKX5/
+        v3hTSyL3dDSVax35rQ+pCYXAamQfNX5NEBC4SDglwXlPISfGzqcBN4gcb7Qw04WxSpZkzxKRy/F
+        MDJsrjX6BviM78OUB4T6ulTft
+X-Received: by 2002:a5d:6b89:0:b0:21e:b591:2b80 with SMTP id n9-20020a5d6b89000000b0021eb5912b80mr2143817wrx.33.1658867768661;
+        Tue, 26 Jul 2022 13:36:08 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vAc4fJua9Ro/vxC/7kJgMBamDKNST3wUAXyOWoBgnK5RIuARyr3qU0uXWQIteyzohsPdnhWA==
+X-Received: by 2002:a5d:6b89:0:b0:21e:b591:2b80 with SMTP id n9-20020a5d6b89000000b0021eb5912b80mr2143804wrx.33.1658867768400;
+        Tue, 26 Jul 2022 13:36:08 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05600c0a0b00b003a17ab4e7c8sm27632453wmp.39.2022.07.26.13.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 13:36:07 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-perf-users@vger.kernel.org, ElRepo <contact@elrepo.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [RFC PATCH] workqueue: Unbind workers before sending them to
+ exit()
+In-Reply-To: <YuAkroXHF+Zg45KU@slm.duckdns.org>
+References: <20220719165743.3409313-1-vschneid@redhat.com>
+ <YthDjPq3CtWc+o0/@slm.duckdns.org>
+ <CAJhGHyAso+JH+QMXcfKTyOqq4yBD9Vc19sBbebEXohHe5znL8Q@mail.gmail.com>
+ <xhsmhv8rqfu6w.mognet@vschneid.remote.csb>
+ <YtuEJLDkO/lATYeb@slm.duckdns.org>
+ <xhsmh8rohfq6m.mognet@vschneid.remote.csb>
+ <YuAkroXHF+Zg45KU@slm.duckdns.org>
+Date:   Tue, 26 Jul 2022 21:36:06 +0100
+Message-ID: <xhsmhmtcvehmx.mognet@vschneid.remote.csb>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 12:43 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+On 26/07/22 07:30, Tejun Heo wrote:
+> Hello,
 >
-> Em Tue, Jul 26, 2022 at 10:52:31AM -0700, Ian Rogers escreveu:
-
-> > So I'm somewhat concerned about perf supporting unsupported
-> > distributions and this holding the code base back. RHEL7 was launched
-> > 8 years ago (June 10, 2014) and full support ended 3 years ago (August
-> > 6, 2019) [1]. Currently RHEL7 is in "Maintenance Support or
-> > Maintenance Support 2" phase which is defined to mean [2]:
-[...]
-
-> In this specific supporting things that people report using, like was
-> done in this case, isn't such a big problem.
+> On Mon, Jul 25, 2022 at 11:21:37AM +0100, Valentin Schneider wrote:
+>> Hm so my choice of words in the changelog wasn't great - "initial setup"
+>> can be kernel init, but *also* setup of whatever workload is being deployed
+>> onto the system.
+>>
+>> So you can be having "normal" background activity (I've seen some IRQs end
+>> up with schedule_work() on isolated CPUs, they're not moved away at boot
+>> time but rather shortly before launching the latency-sensitive app), some
+>> preliminary stats collection / setup to make sure the CPU will be quiet
+>> (e.g. refresh_vm_stats()), and *then* the application starts with
+>> fresh-but-no-longer-required extra pcpu kworkers assigned to its CPU.
 >
-> Someone reported a problem in a system they used, the author of the code
-> in question posted a patch allowing perf to be used in such old systems,
-> doesn't get in the way of newer systems, small patch, merged, life goes
-> on.
+> Ah, I see. I guess we'll need to figure out how to unbind the workers then.
 >
-> Sometimes some organizations are stuck with some distro till they can go
-> thru re-certifications, bidding for new hardware, whatever, and then
-> they want to continue using the latest perf on those systems because
-> they want to benefit from new features we're working on that work on
-> such systems. If the cost is small, like in this case, I see no problems
-> to have perf working on such older systems.
+
+I've been playing with different ways to unbind & wake the workers in a
+sleepable context, but so far I haven't been happy with any of my
+experiments.
+
+What hasn't changed much between my attempts is transferring to-be-destroyed
+kworkers from their pool->idle_list to a reaper_list which is walked by
+*something* that does unbind+wakeup. AFAIA as long as the kworker is off
+the pool->idle_list we can play with it (i.e. unbind+wake) off the
+pool->lock.
+
+It's the *something* that's annoying to get right, I don't want it to be
+overly complicated given most users are probably not impacted by what I'm
+trying to fix, but I'm getting the feeling it should still be a per-pool
+kthread. I toyed with a single reaper kthread but a central synchronization
+for all the pools feels like a stupid overhead.
+
+If any of that sounds ludicrous please shout, otherwise I'm going to keep
+tinkering :)
+
+> Thanks.
 >
-> - Arnaldo
+> --
+> tejun
 
-Just wanted to make a note about the "old" systems.
-
-While RHEL 7 might be regarded as "old" in general, it may not be so
-in the world of Enterprise Linux. A graph of EPEL mirror stats [1],
-while it is from about a year ago, shows EL 7 (RHEL 7 and its
-rebuilds) has a huge user base and was still growing quite fast.
-
-By the way, my main workstation runs RHEL 7. ;-)
-
-Akemi
-
-[1] https://twitter.com/mattdm/status/1447224008831811588

@@ -2,191 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB86D5816B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AD75816B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239265AbiGZPqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S239227AbiGZPqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239259AbiGZPqj (ORCPT
+        with ESMTP id S229678AbiGZPqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:46:39 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AB22E6B6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:46:37 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26QFXs3S015605;
-        Tue, 26 Jul 2022 15:46:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=GYRw2fMaeZ2qQH3mzhZyeyQOB2dfFBP2cGFyI90IZjw=;
- b=ltobhGuXJuIFTCHtdUHffSZiqCkMPLOVQ2YkHptTZ2ynQJN8WaEsiK2JT0Un9UYZB+vr
- GWGO7W++xWTYroKNbKQ6IDC73Fp89Su8wbyryViA2PveY9javVX4OifAAZ+hOxbqbBYW
- 1a6L2cZ1QP8u48NN1a+EeLsMIh//U1kve+gHNqu7L3sUyFZxeV+uZZkYwpb8j2n5ZW93
- 4mIb7Q20GgG+dZrZiU6iHknbpZrGYW8JZ5bL28Q25HTyGIIeIwFdIqHOVYLVV0Nnu/uh
- zn2KsZmaT5ayMNa1C4mbdpFTWimDCjtSZ9Wg/kMGBJ1/nJSjAY+4ypfy/uTkX5mXAwwy xQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hg940prrw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Jul 2022 15:46:15 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26QEvov9006379;
-        Tue, 26 Jul 2022 15:46:15 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2177.outbound.protection.outlook.com [104.47.57.177])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hh65bp69q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 Jul 2022 15:46:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FBToqwMqeaADlKmHMYzSrQvksx31PeKA06eIm2ZjnJaPogaP5fuzP76hUdTkDqqVwE/JRJni3Pl3ZcS3d/zbQVQGfPvWQZXPQoP7kQHtjQCOMbXhqf0xQzc3hNbdrotQyQab7FNHkYsbq/47WCG+5+uWd9Hct8GyHzThv3eT/9NaWYVaXdKepgvwH4b984346znaqqp+Ng64W7v+SEBUYEAWwzmmz4v2xZiyHOTVaxyDlbvSAn0xMT8VvAg1xku1+Rz6X8+w+5OZDbzQ+mMM6gqFGAI80PDPCHsQ67w4AFuRRdT2aswARofOQcGeA4KrzwSdY1QE+jMffREMczjnqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GYRw2fMaeZ2qQH3mzhZyeyQOB2dfFBP2cGFyI90IZjw=;
- b=V6V5J+MnZWo3ZqaavOCjE2PcO3Y2Le2hNplnjW5OjGaNlr3CPIpv10dw3Etds76DrWWQ6uU+ZhdHjcn5Nh5D+xLhj0M6sF1oINBp7hm1mdDgSrOn6aTCUY8w4WEmiwZFwxVJEJcNB/BSSd2RNPfpA+FqOpA5+X38k0qjL57q09OvdDq8mbjWV5MGW5ZcVlYinqzq2sIjgw5e7qd4PT0+yDapqP2Mu5t4igwchHg280gccI7RGPbgxVWBsVDijg2jRSNOreIs6pfoMcH9APLrHAkvKVRzpfcuSgNMSplMNaIkz7NhsYZKFQOQMoiNvGM4agmlBF4h0cxIgzYsx3+4MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GYRw2fMaeZ2qQH3mzhZyeyQOB2dfFBP2cGFyI90IZjw=;
- b=bDhkoKrFZmmnn3IKLbmrw8aqz+XVO6YGpyVL1wOVf2q78MIY6c6s7zrif5I03T17mplBfhuUZXfMBLSFT+tEYU9GMVBqJPyFAAbTjEde64tEvS1gQImjd4U7XxGRJfp9zYyriZJAmHDuOM8hxV3S9qYFqJd3SVI5YG4XTJQz3Js=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BN6PR1001MB2339.namprd10.prod.outlook.com
- (2603:10b6:405:2d::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.21; Tue, 26 Jul
- 2022 15:46:12 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::24dc:9f9a:c139:5c97]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::24dc:9f9a:c139:5c97%4]) with mapi id 15.20.5458.025; Tue, 26 Jul 2022
- 15:46:12 +0000
-Date:   Tue, 26 Jul 2022 18:46:02 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Phillip Potter <phil@philpotter.co.uk>
-Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
-        paskripkin@gmail.com, straube.linux@gmail.com, martin@kaiser.cx,
-        abdun.nihaal@gmail.com, philipp.g.hortmann@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: r8188eu: convert rtw_pwr_wakeup to correct
- error code semantics
-Message-ID: <20220726154602.GQ2316@kadam>
-References: <20220725220745.12739-1-phil@philpotter.co.uk>
- <20220726133559.GP2338@kadam>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726133559.GP2338@kadam>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MRXP264CA0016.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:15::28) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        Tue, 26 Jul 2022 11:46:19 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586822C10A
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:46:16 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220726154610epoutp021bf5a8570f5ab0965e5774fae8b9cd30~Fa5_C3kRE2987029870epoutp02e
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 15:46:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220726154610epoutp021bf5a8570f5ab0965e5774fae8b9cd30~Fa5_C3kRE2987029870epoutp02e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1658850370;
+        bh=bsbhIglKKloE7hZ1DdKwGPVei4I/y5lPhFQOdRu63rg=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=Fk/oa3qMxR9yvggTyn82R1qFh60B/5GLpdNgLARnuYXRduFGXOVOrZuyS5AJL/0zH
+         8hW5WltEbZiG36Y1PcE1LjxIt4E1yzIPK2GxngSWTRrbMwzd90g1QPlPgcCQdyqYKx
+         c9M7pwIy5K0mFzKAj1DBvyeeLan5z8pJTnB/GwKM=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220726154609epcas1p4702cce003fbdbffdc7734c02276f6d0b~Fa59KxES51794117941epcas1p4V;
+        Tue, 26 Jul 2022 15:46:09 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.38.232]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Lsh8c4ztyz4x9Pw; Tue, 26 Jul
+        2022 15:46:08 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        91.EB.09661.04C00E26; Wed, 27 Jul 2022 00:46:08 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547~Fa57txtoW0714907149epcas1p2D;
+        Tue, 26 Jul 2022 15:46:08 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220726154608epsmtrp1d81d56dd731876dcea351da56032f248~Fa57tF0n91112811128epsmtrp1F;
+        Tue, 26 Jul 2022 15:46:08 +0000 (GMT)
+X-AuditID: b6c32a37-2b9ff700000025bd-c0-62e00c40d45c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        64.74.08905.F3C00E26; Wed, 27 Jul 2022 00:46:07 +0900 (KST)
+Received: from jihochu04 (unknown [10.113.112.236]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220726154607epsmtip12a39630c2ae87083490008e871e74bae~Fa57iB2i32652526525epsmtip1A;
+        Tue, 26 Jul 2022 15:46:07 +0000 (GMT)
+From:   "Jiho Chu" <jiho.chu@samsung.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <arnd@arndb.de>, <linux-kernel@vger.kernel.org>,
+        <yelini.jeong@samsung.com>, <myungjoo.ham@samsung.com>
+Subject: RE: RE: [PATCH 0/9] Samsung Trinity NPU device driver
+Date:   Wed, 27 Jul 2022 00:46:07 +0900
+Message-ID: <001801d8a106$d26e2860$774a7920$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a94722e6-3575-47dd-af75-08da6f1df775
-X-MS-TrafficTypeDiagnostic: BN6PR1001MB2339:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GB5VmLthgJiB5WfD8KvsxFPJX+OaAkcXeNizOykAvJyMdxf33xO4ZIqIhm1HNXQj1UNAPie/EuiH3AMmzPS0OPONjZqXk5MK7srNnIi5UnvvFljOwGdb9ScgO21NCWns1r5EEpehULJr2P0kbR1I13zdkd6pfLk247hVjRa+zseWTthUD05DmWqUAfZ3eZObPwztglg7nXl519YZK3ON3KJjjp3J6CodLTJWPXQL7EgqckQZpFQ9VWATY8VLxeZc8Vad+ijgFDAZdmoWQFqpMIcyYM/rR3DU7ikVxKX22ZLm88qihbxQrj/WFF/zUW40CJXCYohezmU2/4xtk2YxjNsu6fHU1F0xexYiNQabdXLcoha5+fJs0kaaBaiantoK3WytN3g1F6M3+2Z61ENsVBbYM2xuso34rMPJfwbWV/9tiwDl74JTCWsB1YcqJ81xoCeLY8b2wXzD2a58bBHJ54kP/ltuog5+pgEp9duXv0KSbhVqbrNdywPa6wX5sQhU6RG0BW0nZfmLjpZTfSbV1WZggacdJ3DbIapb+P5B3KlsZprM++JJysFtzYG3l1vrkNM6pT2rEC6d2PE7UHeIgiy//ILItNUnIC7afeDC0qSwtDvaXa7ajqvDsitVa5fdiKz8sPH3m7nGq3RwBy9NWs6IBtkiSQTghhTULHbTDUtPLzih0CtZcDhDlEctiYynmz6zlyq8HiUcjp6aPi7PVds0dASM+/moOD+Gr3LBaOAuuw1cxF9gqP7wj0uMPQloz0rSvR7i7mO1YjKTztZkNIcP2FBttX6XeVHZ7dUfCLoMHrIGI3I7TuI0jVNZijVz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(376002)(396003)(136003)(346002)(366004)(8676002)(4326008)(6916009)(66556008)(1076003)(66946007)(66476007)(478600001)(6486002)(52116002)(6512007)(9686003)(44832011)(33716001)(2906002)(26005)(316002)(6506007)(8936002)(33656002)(83380400001)(6666004)(5660300002)(86362001)(41300700001)(186003)(7416002)(38100700002)(38350700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1ze9hqZE5YZnKqwg1f5lAt4L/ZoRNn23Unv2iIozZD8plUN0CeVb56ZOsrc+?=
- =?us-ascii?Q?beg+CuqL0qjrjfubU38YtC8qxx0WxWBTx4ko/ohJ0rOZ6uPMeeYRdiJqHdL5?=
- =?us-ascii?Q?5L62K58VyTrg4ue6kqK9ZAbxIxAj0eZaBkxTcUGuBNo8k10pdb/HWWSnULX3?=
- =?us-ascii?Q?PWL7FcpCnYnpUPCU6VS33xB7Yd3RZtd7Qp4KA1nJlSyAZj+g1uXQjsupxCeJ?=
- =?us-ascii?Q?Hnx+LUJBbKUoossHmVhehQaWj+W7wmIEII6sCY//S2B1Xaeat+F9CiSbitMe?=
- =?us-ascii?Q?9/YjF8KV0iVkuHhJjviyIKItLDmk2/7Yi54xFkX2Uahr9Uqm8Kjx6RbWfyq1?=
- =?us-ascii?Q?SHvGGZ7MdUe418c5g2mRu8O0h035rtd7v21Zt8CAq/q7aceMaBb/IWPDXoI+?=
- =?us-ascii?Q?8K1Wz3b7jLwEQkt87+dEx4+sQ+DYBlVn/VGmkIZ2P0UBcZeyiBXtNzNBM/Xg?=
- =?us-ascii?Q?HTlvkm6wviX1UUPelGAagTdSQhuhq0J//qBhoh0AlOBMuj8Se6z2NiQezsK7?=
- =?us-ascii?Q?SlhYjokstSdZj/g5QIKLo6LpqWzp+KetYkZU5C9YJ0jOOLfP3S/22wWhvn3l?=
- =?us-ascii?Q?EZQskk4+pWwFQ+lgCx2zImz9IlW2Beimrkyx2DtI17nKPY0G8nZBma3jYjjv?=
- =?us-ascii?Q?LnubyZVwFlU4ylyzX6g/OiegNOyFg1LduX5334YMwMpkzWWBOm8Fkc7kso6J?=
- =?us-ascii?Q?5qVKSOrBi+gK+qHK4oYnsOPK+P4fkE2ke60a7TPVp3LZY8dNljRkcZxEWhpc?=
- =?us-ascii?Q?Rai59//+Xq03/pAQSbKzqNorZj+pX+yEhs77k6S8AOywv/2Jycwfkkvwowkr?=
- =?us-ascii?Q?pTd+YjqfPfkb4obgP/ITNxiQx30zmE5TB+RSzO53WO9TMaBMU3NvoyIHmcJc?=
- =?us-ascii?Q?Zgf6/ujkSelP+kUewGFA6A6K5HXek8kwnOwG5QkBcxwTWE5PoMavQNIBMVJY?=
- =?us-ascii?Q?9meoELfTCMR4PetueLtmn0PpnER2hR3UZ4tfmxbu0t5nfM9HM6rbIBz+uHny?=
- =?us-ascii?Q?2mlH0D+k81SjLJqOjzdR+ktHbRbVkm15iMQcJ/Mte+NrVuGF4hrAHqjPj7On?=
- =?us-ascii?Q?LCvikQY3MhGcHQ7EG3zndZHo0nKxTaXIYrKUHG2/BcLwiJI10m4mf4+CVVAZ?=
- =?us-ascii?Q?eoDtmCiHiQc3THqEGQadg4qCPSr76bnHQ48K72rqrGqr0SL4ffRu/4iNgC6N?=
- =?us-ascii?Q?jFZjfiJ7Wb6ghE99Ufy9dZ2y6Mz/FVPz6Rn4Dq/FSEbhVBnlHLU0UdL+YZCV?=
- =?us-ascii?Q?P7vfb/GYBOSB7bIcyjXzsFkZnfho4MaHaPSdw+CiJ9LInUp9mgd6w4BI1N00?=
- =?us-ascii?Q?F65v8wGjXWTXyt+xPr7PLU4quzJB58zmq1ZsUUwLDx3FhzaOMMuRzMaWR/sn?=
- =?us-ascii?Q?cwHFYWBVkEQPnioJC6CsAqR/ViSgMfD1LHqXk6Yzkv4ywv2bJAsTDsvIt+8V?=
- =?us-ascii?Q?PvNjHYltEkUoelfo+kWXmmE4lLCgLVrbBUZMyOGN2qC2gcZ80WYr4pfbwbfM?=
- =?us-ascii?Q?+6f8d69kLzq7HlwOUtnVx+UNnd2CrNpQggKOnbp1KSr1Db3JMdtEyby4AbXe?=
- =?us-ascii?Q?kmuFj+0xaJ92YTPtvJIRAyjXYpeqnvNh2cYp2xrPHyfPlTXiZd3H6PLdLIQb?=
- =?us-ascii?Q?BQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a94722e6-3575-47dd-af75-08da6f1df775
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2022 15:46:12.5578
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LKfeEtrzX2i+q/VJQvqfkiBZ8qk1GSttX3eYdFuR0eymBnZQ9f8hEuoQaFoGPl5sorBpqVmFfEgO8ySxEU3DGJ0yT2x8zGxrIeCfwtUWt9s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1001MB2339
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-26_04,2022-07-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- spamscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207260060
-X-Proofpoint-GUID: id15q6S0KEIK08S386vTsuoszOOlzntL
-X-Proofpoint-ORIG-GUID: id15q6S0KEIK08S386vTsuoszOOlzntL
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdihBUm9mEN6PLeoTiiwkHAUdjbCkw==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplk+LIzCtJLcpLzFFi42LZdlhTV9eB50GSQd9NRYu/k46xWzQvXs9m
+        cXnXHDaL240r2CyeT7vO4sDq8fvXJEaP/XPXsHv0bVnF6PF5k1wAS1S2TUZqYkpqkUJqXnJ+
+        SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QXiWFssScUqBQQGJxsZK+nU1R
+        fmlJqkJGfnGJrVJqQUpOgWmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsaVbR/YCn4qVqx5v5up
+        gXGmdBcjJ4eEgInEp/a97F2MXBxCAjsYJWZt/8EC4XxilFhzZSKU841RYuWsicwwLXumrGWE
+        SOxllDi5qIUdJCEk8IJRYvXfeBCbTUBd4sz6r2wgtoiAgsTVn7/BbGaBXIm3N/cygtjCAnYS
+        018tAhvKIqAqMfH0ObAaXgFLib/PIWbyCghKnJz5hAWiV15i+9s5UEcoSPx8uoy1i5EDaL6e
+        xOObERAlIhKzO9uYQW6TEHjJLrG0aTMTSI2EgIvEj0euEK3CEq+Ob2GHsKUkXva3QdnZElM6
+        FrFA2AUS555vZYZoNZa4uCIFxGQW0JRYv0sfokJRYufvuYwQW/kk3n3tYYWo5pXoaBOCKFGS
+        WPLnMNRwCYmpM74xQdgeEvc2rmaawKg4C8mLs5C8OAvJL7MQFi9gZFnFKJZaUJybnlpsWGAM
+        j+nk/NxNjOD0qGW+g3Ha2w96hxiZOBgPMUpwMCuJ8CZE308S4k1JrKxKLcqPLyrNSS0+xGgK
+        DPSJzFKiyfnABJ1XEm9oYmlgYmZkbGJhaGaoJM67atrpRCGB9MSS1OzU1ILUIpg+Jg5OqQam
+        nREyq9+dzp50Olvk1+TFYv/uL1naPn9+BP+hpZO/+S+rmLeC9f39K5fi1tguiHVzkesN1dcy
+        WKIZtDavK+rIwV9q58qEl7avX5tfO+Vac93RztQpVzR37RfJeCY777XwRwfm2zLPDjK65CWI
+        rJA2P5PS3XLh+wOFYJ/ylw36/Dl32p4fNtGV0C1xPH7YMnT+/4P68jp2s8Xv7oz/tiBF90ZF
+        O9u/80Zfuee/XKh+O1TdiWHFyRvripiUb/z5+nVv48LQZRyPb+12tTFo8c8r89R9kB+3lMH5
+        7hY2brP6xhkJ+/SulW70U+BP+2zpXda3YP7vf+LfeNrv7J+VVmDqz1SvGqCTsiCIS091wk8R
+        JZbijERDLeai4kQAsNeQNRgEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBLMWRmVeSWpSXmKPExsWy7bCSnK4Dz4Mkg38hFn8nHWO3aF68ns3i
+        8q45bBa3G1ewWTyfdp3FgdXj969JjB77565h9+jbsorR4/MmuQCWKC6blNSczLLUIn27BK6M
+        K9s+sBX8VKxY8343UwPjTOkuRk4OCQETiT1T1jJ2MXJxCAnsZpR49+IBC0RCQmLTveXMXYwc
+        QLawxOHDxRA1zxglXr45ywpSwyagLnFm/Vc2EFtEQEHi6s/fbCD1zAKFErNeZYCEhQXsJKa/
+        WsQMYrMIqEpMPH0OrJxXwFLi7/MWdghbUOLkzCdga5kFtCWe3nwKZctLbH87hxniHAWJn0+X
+        sYKMFxHQk3h8MwKiRERidmcb8wRGwVlIJs1CMmkWkkmzkLQsYGRZxSiZWlCcm55bbFhgmJda
+        rlecmFtcmpeul5yfu4kRHPhamjsYt6/6oHeIkYmD8RCjBAezkghvQvT9JCHelMTKqtSi/Pii
+        0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqY8gu2WR5//FNoxg/bosMxW6ss
+        T8mdmjHl5alvOcWCK6Jdyx4E/nqrtt7IuPLs308qzZd+ipx4kxR5YJbu36fbVxdZ1Kt3r9pu
+        GL+1ztAt/WjyjqtKIe5F6qXG3/1PHkxQKlPX4BO4w3xtbxGT7fLjibUqm27bCX20u/4m9fmR
+        voRPP1cXZZxzCk/ya1Ldu7cq65DGuh6Bhl/3Dlukn1VgzbVXus99oC0jIlhFcW7vz5SL9xmW
+        JR7IjkngOtFzetcaCbUrnz5qbVvPuGe+/yyGIr97jiWHVZcdPCHiYj/p8Nt/p9Q2Xe02+7Kh
+        qC5xycnT71piPFNVHL6ynXrzcOWvBe4+Z8wuNTpUX8lVdtULUGIpzkg01GIuKk4EAP5thdHr
+        AgAA
+X-CMS-MailID: 20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547
+References: <CGME20220726154608epcas1p27b31dc63fe80e6021d9e747be68e4547@epcas1p2.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 04:35:59PM +0300, Dan Carpenter wrote:
-> On Mon, Jul 25, 2022 at 11:07:45PM +0100, Phillip Potter wrote:
-> > Convert the rtw_pwr_wakeup function to use 0 on success and an appropriate
-> > error code on error. For the first failure block where ips_leave is
-> > invoked, use -ENOMEM as this is the main cause of failure here anyway.
-> > For the second failure block, use -EBUSY, as it seems the most
-> > appropriate.
-> > 
-> > Finally, within the functions rtw_wx_set_mode, rtw_wx_set_wap,
-> > rtw_wx_set_scan and rtw_wx_set_essid, pass the error code on from
-> > rtw_pwr_wakeup as appropriate now that it is converted.
-> > 
-> > This gets the driver closer to removal of the non-standard _SUCCESS and
-> > _FAIL definitions, which are inverted compared to the standard in-kernel
-> > error code mechanism.
-> > 
-> > Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-> > ---
-> > 
-> > Changes from V1: Act on feedback from Dan Carpenter:
-> > * Try to use more appropriate error codes than -EPERM.
-> > * Revert the places where existing -1 was converted as they are out of
-> >   scope.
-> > * Preserve error codes in places where calling function already uses
-> >   proper negative semantics, so that they can be passed through to the
-> >   caller.
-> > 
+> --------- Original Message ---------
+> Sender : Greg KH <gregkh@linuxfoundation.org> Date : 2022-07-25 18:02
+> (GMT+9) Title : Re: [PATCH 0/9] Samsung Trinity NPU device driver
 > 
-> This is a much better patch, right?  Everything hangs together better.
+> On Mon, Jul 25, 2022 at 03:52:59PM +0900, Jiho Chu wrote:
+> > Hello,
+> >
+> > My name is Jiho Chu, and working for device driver and system daemon
+> >for
+> > several years at Samsung Electronics.
+> >
+> > Trinity Neural Processing Unit (NPU) series are hardware accelerators
+> > for neural network processing in embedded systems, which are
+> >integrated
+> > into application processors or SoCs. Trinity NPU is compatible with
+> >AMBA
+> > bus architecture and first launched in 2018 with its first version for
+> > vision processing, Trinity Version1 (TRIV1). Its second version,
+> >TRIV2,
+> > is released in Dec, 2021. Another Trinity NPU for audio processing is
+> > referred as TRIA.
+> >
+> > TRIV2 is shipped for many models of 2022 Samsung TVs, providing
+> > acceleration for various AI-based applications, which include image
+> > recognition and picture quality improvements for streaming video,
+> >which
+> > can be accessed via GStreamer and its neural network plugins,
+> > NNStreamer.
+> >
+> > In this patch set, it includes Trinity Vision 2 kernel device driver.
+> > Trinity Vision 2 supports accelerating image inference process for
+> > Convolution Neural Network (CNN). The CNN workload is executed by Deep
+> > Learning Accelerator (DLA), and general Neural Network Layers are
+> > executed by Digital Signal Processor (DSP). And there is a Control
+> > Processor (CP) which can control DLA and DSP. These three IPs (DLA,
+> >DSP,
+> > CP) are composing Trinity Vision 2 NPU, and the device driver mainly
+> > supervise the CP to manage entire NPU.
+> >
+> > Controlling DLA and DSP operations is performed with internal command
+> > instructions. and the instructions for the Trinity is similar with
+> > general processor's ISA, but it is specialized for Neural Processing
+> > operations. The virtual ISA (vISA) is designed for calculating
+> >multiple
+> > data with single operation, like modern SIMD processor. The device
+> > driver loads a program to CP at start up, and the program can decode a
+> > binary which is built with the vISA. We calls this decoding program as
+> >a
+> > Instruction Decoding Unit (IDU) program. While running the NPU, the CP
+> > executes IDU program to fetch and decode instructions which made up of
+> > vISA, by the scheduling policy of the device driver.
+> >
+> > These DLA, DSP and CP are loosely coupled using ARM's AMBA, so the
+> > Trinity can easily communicate with most ARM processors. Each IPs
+> > designed to have memory-mapped registers which can be used to control
+> > the IP, and the CP provides Wait-For-Event (WFE) operation to
+> >subscribe
+> > interrupt signals from the DLA and DSP. Also, embedded Direct Memory
+> > Access Controller (DMAC) manages data communications between internal
+> > SRAM and outer main memory, IOMMU module supports unified memory space.
+> >
+> > A user can control the Trinity NPU with IOCTLs provided by driver.
+> >These
+> > controls includes memory management operations to transfer model data
+> > (HWMEM_ALLOC/HWMEM_DEALLOC), NPU workload control operations to submit
+> > workload (RUN/STOP), and statistics operations to check current NPU
+> > status. (STAT)
+> >
+> > The device driver also implemented features for developers. It
+> >provides
+> > sysfs control attributes like stop, suspend, sched_test, and profile.
+> > Also, it provides status attributes like app status, a number of total
+> > requests, a number of active requests and memory usages. For the
+> >tracing
+> > operations, several ftrace events are defined and embedded for several
+> > important points.
 > 
-> There are seven callers which need to be updated and all of them are
-> updated.
+> If you have created sysfs files, you need to document them in
+> Documentation/ABI/ which I do not see in your diffstat.  Perhaps add
+> that for your next respin?
 > 
-> Reviewed-by: Dan Carpenter
+> Also, please remove the "tracing" logic you have in the code, use
+> ftrace, don't abuse dev_info() everywhere, that's not needed at all.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+> 
 
-Oops.  I messed up my R-b tag.
+Hi, Greg
+Thanks for your review.
+A documentation for ABI/ is added for user interfaces.
+And, most of unnecessary 'dev_info' removed except initialize information.
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Thanks,
 
-regards,
-dan carpenter
+Jiho Chu
+

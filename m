@@ -2,70 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E495810FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C42A581100
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238239AbiGZKVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S238406AbiGZKWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiGZKVC (ORCPT
+        with ESMTP id S230262AbiGZKWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:21:02 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E21057E
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:21:01 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id x91so17182948ede.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2X8HXtEcU/ZehxuPCgIPz4aOGr6MXTRGr5kvCe3jveI=;
-        b=jveyBG06D/n1bqoyIRbG5FLD+LD2HIlg1YZci4oKNaIBM0KQNUHuEAtMKJPMSazsvL
-         xdsPzbyuA9aqdLxi0YeHrMCWJ/3COWiCFHRUrWLBXRuv7jxz93sUhDERbGy7EwppF5no
-         7LCExXx5mkTtX1zlz3g/KZcEuRXOuxUXJajx5JpsdL8wclx3XQGPBBxpY5sMvKe8D+7O
-         WknKauyqfApGBESWWLaPEOks6uYIXuPo0b/Q3HYC7KGbV/5XTtmi1fpvAEk+ePYenlAo
-         Xytx6RfUSvTyuEGo/lNghw8hduQ9Mip4qaGEGuZxVc6P7FhDzZjUgJgnJo1PX/PB3DeW
-         dZ3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=2X8HXtEcU/ZehxuPCgIPz4aOGr6MXTRGr5kvCe3jveI=;
-        b=cx9Jc2E7ZQ00yt+akmb2x6Ui4hcO/4ZcJDmPqdoDkfJSISVPDUwxGOxF0TG/q1eaXL
-         hdpW3324WLPtAP83MgMqlDZJ6yR4r+3Cr+oFSbE8Hi63ISI4g+fVFyaFEA3qwDGuyDa6
-         3gI39vKshrd6x07gq9OqSP4+An/jOEknjKVYDdlX8JGzp0iVVhscVup6oD9o67Fucu+V
-         xtnHDeKUNYkxmJgs20X9hHjoB346QB/Pod2Ksqg/0f/C5McQNlPsqXQP9EI59L2PaUkL
-         2VooJfzEY5++DYBpX7Ok8wNK7aYAAMBtyrbXoTJRP7P9sQi3LstpGg8zBeKuSZ5U/xcK
-         Ie4Q==
-X-Gm-Message-State: AJIora/uCo7IaIbafqG2v0l/G+K5E3nkhrhGmgO2XogEIZcXEqAlVTM6
-        By253emNwL00oez+jcKGBiAWzILwUD3Ix7R5euE=
-X-Google-Smtp-Source: AGRyM1sNdgy+v4AYGpGySs6L4iejaYmUbMARQLmADcO3i+JleTkB1awAHcHlwct/NtgczAvIIhSVG0GOo9XJ05T9RP8=
-X-Received: by 2002:aa7:c382:0:b0:43b:bbaa:31fb with SMTP id
- k2-20020aa7c382000000b0043bbbaa31fbmr17844782edq.269.1658830859999; Tue, 26
- Jul 2022 03:20:59 -0700 (PDT)
+        Tue, 26 Jul 2022 06:22:00 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E70248FD;
+        Tue, 26 Jul 2022 03:21:58 -0700 (PDT)
+Received: from zn.tnic (p200300ea970f4ff2329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:970f:4ff2:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B337F1EC0752;
+        Tue, 26 Jul 2022 12:21:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1658830912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=/P1wM6FgHkzkzzeSWlInZ0RYBV1gb4eC4ZgQi5olGm4=;
+        b=PbdzczJDeQ8LLlXksk7hVHQ+T2TLNFi5/od1iAPMkG/SpwqVeFVPeMxAGLmG4UGEhQRHBY
+        MH7M/FAFaHUptHivgNBeijb6YkGj2olR1lf7jAUeVa2FbhM0+IWqiX+5sOgMNZthnBHYx4
+        La2ARG9vO/kG+snwBdh4BAuY1+QQX74=
+Date:   Tue, 26 Jul 2022 12:21:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
+ into unaccepted memory
+Message-ID: <Yt/ANO5usdV+JSSW@zn.tnic>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Reply-To: sgtkaylama@gmail.com
-Sender: adboulayewale@gmail.com
-Received: by 2002:a17:906:3485:0:0:0:0 with HTTP; Tue, 26 Jul 2022 03:20:59
- -0700 (PDT)
-From:   sgtkaylama <sgtkaylama@gmail.com>
-Date:   Tue, 26 Jul 2022 10:20:59 +0000
-X-Google-Sender-Auth: yT7lMkZ9vRcdCiR4sfX7OL2IPOE
-Message-ID: <CAKZu-sWoYXtd9dXyXzmc15bQzsBGZ1CQX8Y2TmPhDpKP4w2ykw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5L2g5aW977yM5L2g5pS25Yiw5oiR5LmL5YmN55qE5Lik5p2h5raI5oGv5LqG5ZCX77yfDQo=
+On Tue, Jun 14, 2022 at 03:02:27PM +0300, Kirill A. Shutemov wrote:
+> But, this approach does not work for unaccepted memory. For TDX, a load
+> from unaccepted memory will not lead to a recoverable exception within
+> the guest. The guest will exit to the VMM where the only recourse is to
+> terminate the guest.
+
+FTR, this random-memory-access-to-unaccepted-memory-is-deadly thing is
+really silly. We should be able to handle such cases - because they do
+happen often - in a more resilient way. Just look at the complex dance
+this patch needs to do just to avoid this.
+
+IOW, this part of the coco technology needs improvement.
+
+Just sayin...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

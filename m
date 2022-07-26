@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82579580980
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB242580983
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 04:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237073AbiGZCdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 22:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S230454AbiGZCed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 22:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiGZCd3 (ORCPT
+        with ESMTP id S230489AbiGZCeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 22:33:29 -0400
-Received: from m1364.mail.163.com (m1364.mail.163.com [220.181.13.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C52B3248DF;
-        Mon, 25 Jul 2022 19:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=pLrtd
-        kcwQvHdPJ+naDCEI5KTFs+cLRhwjAVaN1b8C9c=; b=VeIurJIwT4PFZjMIocgaU
-        k4X81NE07pGEB7QdhqFPEhwSVFbKrqXfeqRGFn9x/ne75YRJOSAJAodA1q7aXPP5
-        t3MSHdQOSSy5JGjyp0Q160XG1fyi8No76J11yZ05WxLA7U8ENhIfn/t7Pm3Tw695
-        PwxPUxKHhI4CFZ3jhXL7Ho=
-Received: from slark_xiao$163.com ( [223.104.68.106] ) by
- ajax-webmail-wmsvr64 (Coremail) ; Tue, 26 Jul 2022 10:31:31 +0800 (CST)
-X-Originating-IP: [223.104.68.106]
-Date:   Tue, 26 Jul 2022 10:31:31 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Kalle Valo" <kvalo@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, loic.poulain@linaro.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, wcn36xx@lists.infradead.org
-Subject: Re:Re: [PATCH] wireless: ath: Fix typo 'the the' in comment
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <165874719705.30937.12813347117072714125.kvalo@kernel.org>
-References: <20220722082653.74553-1-slark_xiao@163.com>
- <165874719705.30937.12813347117072714125.kvalo@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 25 Jul 2022 22:34:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481FF28E29;
+        Mon, 25 Jul 2022 19:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658802870; x=1690338870;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oQGLDobYwHi1A02VN+sYCWqkJ5xg453HmlwiMQc6qZQ=;
+  b=Sx6HWrZu6dpUQRlQNpsq+Az7JnokEicO3tr8H8Vjr8sR6h4AGsM8SiZJ
+   Tp4lA6udJONf8pxfKqP+eP2vzwxHbB1WimnPwtyMbEASup/QFWHU3edDN
+   M9kQbeH5FADAl60N0HMMiyYPQavor7Yxgwfb0lVxRrPO71qJ73ujusNPM
+   PIR7Z+WAxmexulWZaCsZekQjZricfhIy78TNcqEYUkzrnfTqCz/nI0oQf
+   h/t+3uTOY+k6KscVL6nrtJAWz5w6//ObzA31Q0q7dx2gbT+NHqpecTIo8
+   0jsdT0B7PJOEPrPMy7JSYynIXeHBsKSXKT0sH5mT3u9huCivev4fuy5m9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="289030171"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="289030171"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2022 19:34:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="742050967"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Jul 2022 19:34:27 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oGAOw-0005sk-2h;
+        Tue, 26 Jul 2022 02:34:26 +0000
+Date:   Tue, 26 Jul 2022 10:33:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        jikos@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        j.witteveen@gmail.com, stefanberzl@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v2 6/7] HID: uclogic: Add support for UGEE v2 mouse frames
+Message-ID: <202207261047.hUEFf74G-lkp@intel.com>
+References: <20220717144333.251190-7-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-Message-ID: <3621f4e.e19.18238585e4a.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: QMGowABXei4DUt9iJSEsAA--.42339W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBAw1KZGB0LrMXJQAAsb
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220717144333.251190-7-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMDctMjUgMTk6MDY6NTAsICJLYWxsZSBWYWxvIiA8a3Zh
-bG9Aa2VybmVsLm9yZz4gd3JvdGU6Cj5TbGFyayBYaWFvIDxzbGFya194aWFvQDE2My5jb20+IHdy
-b3RlOgo+Cj4+IFJlcGxhY2UgJ3RoZSB0aGUnIHdpdGggJ3RoZScgaW4gdGhlIGNvbW1lbnQuCj4+
-IAo+PiBTaWduZWQtb2ZmLWJ5OiBTbGFyayBYaWFvIDxzbGFya194aWFvQDE2My5jb20+Cj4KPkZh
-aWxzIHRvIGFwcGx5LCBwbGVhc2UgcmViYXNlIG9uIHRvcCBteSBhdGguZ2l0IG1hc3RlciBicmFu
-Y2guCj4KPmVycm9yOiBwYXRjaCBmYWlsZWQ6IGRyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg2
-a2wvaGlmLmg6OTIKPmVycm9yOiBkcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRoNmtsL2hpZi5o
-OiBwYXRjaCBkb2VzIG5vdCBhcHBseQo+ZXJyb3I6IHBhdGNoIGZhaWxlZDogZHJpdmVycy9uZXQv
-d2lyZWxlc3MvYXRoL2F0aDZrbC9zZGlvLmM6MTE4NQo+ZXJyb3I6IGRyaXZlcnMvbmV0L3dpcmVs
-ZXNzL2F0aC9hdGg2a2wvc2Rpby5jOiBwYXRjaCBkb2VzIG5vdCBhcHBseQo+ZXJyb3I6IHBhdGNo
-IGZhaWxlZDogZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL3djbjM2eHgvaGFsLmg6NDE0Mgo+ZXJy
-b3I6IGRyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC93Y24zNnh4L2hhbC5oOiBwYXRjaCBkb2VzIG5v
-dCBhcHBseQo+c3RnIGltcG9ydDogRGlmZiBkb2VzIG5vdCBhcHBseSBjbGVhbmx5Cj4KPlBhdGNo
-IHNldCB0byBDaGFuZ2VzIFJlcXVlc3RlZC4KPgo+LS0gCj5odHRwczovL3BhdGNod29yay5rZXJu
-ZWwub3JnL3Byb2plY3QvbGludXgtd2lyZWxlc3MvcGF0Y2gvMjAyMjA3MjIwODI2NTMuNzQ1NTMt
-MS1zbGFya194aWFvQDE2My5jb20vCj4KPmh0dHBzOi8vd2lyZWxlc3Mud2lraS5rZXJuZWwub3Jn
-L2VuL2RldmVsb3BlcnMvZG9jdW1lbnRhdGlvbi9zdWJtaXR0aW5ncGF0Y2hlcwoKQmFkIG5ld3Ms
-IEkgY2FuJ3QgZ2V0IHlvdXIgYXRoIGNvZGUgY29tcGxldGVseS4gCnVidW50dUBWTS0wLTI3LXVi
-dW50dTp+L2F0aCQgITE0MgpnaXQgY2xvbmUgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9s
-aW51eC9rZXJuZWwvZ2l0L2t2YWxvL2F0aC5naXQKQ2xvbmluZyBpbnRvICdhdGgnLi4uCnJlbW90
-ZTogRW51bWVyYXRpbmcgb2JqZWN0czogMjAyLCBkb25lLgpyZW1vdGU6IENvdW50aW5nIG9iamVj
-dHM6IDEwMCUgKDIwMi8yMDIpLCBkb25lLgpyZW1vdGU6IENvbXByZXNzaW5nIG9iamVjdHM6IDEw
-MCUgKDgzLzgzKSwgZG9uZS4KUmVjZWl2aW5nIG9iamVjdHM6IDEwMCUgKDg4OTc2MDYvODg5NzYw
-NiksIDIuNDcgR2lCIHwgMTEuOTkgTWlCL3MsIGRvbmUuCnJlbW90ZTogVG90YWwgODg5NzYwNiAo
-ZGVsdGEgMTUwKSwgcmV1c2VkIDEzMyAoZGVsdGEgMTE5KSwgcGFjay1yZXVzZWQgODg5NzQwNApl
-cnJvcjogaW5kZXgtcGFjayBkaWVkIG9mIHNpZ25hbCA5ODQwMDApCmZhdGFsOiBpbmRleC1wYWNr
-IGZhaWxlZAoKdWJ1bnR1QFZNLTAtMjctdWJ1bnR1On4vYXRoJCBnaXQgY2xvbmUgaHR0cHM6Ly9n
-aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQva3ZhbG8vYXRoLmdpdApDbG9u
-aW5nIGludG8gJ2F0aCcuLi4KcmVtb3RlOiBFbnVtZXJhdGluZyBvYmplY3RzOiAyMDIsIGRvbmUu
-CnJlbW90ZTogQ291bnRpbmcgb2JqZWN0czogMTAwJSAoMjAyLzIwMiksIGRvbmUuCnJlbW90ZTog
-Q29tcHJlc3Npbmcgb2JqZWN0czogMTAwJSAoODMvODMpLCBkb25lLgpyZW1vdGU6IFRvdGFsIDg4
-OTc2MDYgKGRlbHRhIDE1MCksIHJldXNlZCAxMzMgKGRlbHRhIDExOSksIHBhY2stcmV1c2VkIDg4
-OTc0MDQKUmVjZWl2aW5nIG9iamVjdHM6IDEwMCUgKDg4OTc2MDYvODg5NzYwNiksIDIuNDcgR2lC
-IHwgMTEuODggTWlCL3MsIGRvbmUuCmVycm9yOiBpbmRleC1wYWNrIGRpZWQgb2Ygc2lnbmFsIDk4
-NDAwMCkKZmF0YWw6IGluZGV4LXBhY2sgZmFpbGVkCgp1YnVudHVAVk0tMC0yNy11YnVudHU6fi9h
-dGgkIGdpdCBjbG9uZSBodHRwczovL2tlcm5lbC5nb29nbGVzb3VyY2UuY29tL3B1Yi9zY20vbGlu
-dXgva2VybmVsL2dpdC9rdmFsby9hdGguZ2l0CkNsb25pbmcgaW50byAnYXRoJy4uLgpyZW1vdGU6
-IFNlbmRpbmcgYXBwcm94aW1hdGVseSAxLjY3IEdpQiAuLi4KcmVtb3RlOiBDb3VudGluZyBvYmpl
-Y3RzOiAyOTMyMywgZG9uZQpyZW1vdGU6IEZpbmRpbmcgc291cmNlczogMTAwJSAoODg5NzYwNi84
-ODk3NjA2KQpyZW1vdGU6IFRvdGFsIDg4OTc2MDYgKGRlbHRhIDc1MjQwNzMpLCByZXVzZWQgODg5
-NzA0NCAoZGVsdGEgNzUyNDA3MykKUmVjZWl2aW5nIG9iamVjdHM6IDEwMCUgKDg4OTc2MDYvODg5
-NzYwNiksIDEuNjcgR2lCIHwgMTEuOTggTWlCL3MsIGRvbmUuCmVycm9yOiBpbmRleC1wYWNrIGRp
-ZWQgb2Ygc2lnbmFsIDk0MDczKQpmYXRhbDogaW5kZXgtcGFjayBmYWlsZWQKCkkgdHJpZWQgdGhl
-c2UgMyBzZXJ2ZXJzIGJ1dCBhbGwgZmFpbGVkLiBBbnkgb3RoZXIgaWRlYXM/Cg==
+Hi "José,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on 0cb1fc0988e32bda84c2b7218e0c761af1430baf]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
+base:   0cb1fc0988e32bda84c2b7218e0c761af1430baf
+config: x86_64-buildonly-randconfig-r002-20220718 (https://download.01.org/0day-ci/archive/20220726/202207261047.hUEFf74G-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fa0c7639e91fa1cd0cf2ff0445a1634a90fe850a)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/10fcf5d5cca4657c53477c392b1fb675d72cfda3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jos-Exp-sito/XP-PEN-Deco-Pro-S-support-for-5-20-uclogic/20220717-224559
+        git checkout 10fcf5d5cca4657c53477c392b1fb675d72cfda3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: call to __read_overflow marked "dontcall-error": detected read beyond size of object (1st parameter)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

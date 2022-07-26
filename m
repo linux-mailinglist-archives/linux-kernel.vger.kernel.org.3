@@ -2,99 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C3E581298
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04BE58129D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238964AbiGZMBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 08:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S238409AbiGZMBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239033AbiGZMAq (ORCPT
+        with ESMTP id S232819AbiGZMBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:00:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431EF32ED2;
-        Tue, 26 Jul 2022 05:00:45 -0700 (PDT)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1658836842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vuUtdzjfdpLaDm0Xj29b8qdtw+eGj7xd6Mtgh5eeL8U=;
-        b=OoNS1vk4OWAuJSgFL1y6FSQxEsx3nUB6Siu1u/7KXkerKbjNzA4/i5adk7hgRmMGbzSSLB
-        RfnMfPAxVAMawa5YwKwuHUY6xPZ2GAq7rDRLufYZGCEhuqbso2darxXyvjr9/7Jn/+Eq4E
-        pV5NIAPFJz+jq1CNQsGIxhdsMUTz9VEjJLtcw30DZoxHCXGKrOyT7NSKW1soslyeUjjq32
-        m/ssHydSTYvOE+aPYBdeGj53TFKsQe4RTa79DoMZP6z6VW8cbA6ixhPu9uxx6mt87EzlBE
-        9FBTZU50LB2K2jiBAb7eq5ey3zoMrcl81581r/YHEtnjQskxZdZ9YSlaFfLEuA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1658836842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vuUtdzjfdpLaDm0Xj29b8qdtw+eGj7xd6Mtgh5eeL8U=;
-        b=lrviFpvLXZipPYeyL5NH6xhMlLhndkuP6xI1MVIad4fz+gBNR7Mqze9GI8M65lSqcvYpf0
-        TKVRmH/xmXtNsKBQ==
+        Tue, 26 Jul 2022 08:01:42 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CCBBE0D;
+        Tue, 26 Jul 2022 05:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658836901; x=1690372901;
+  h=subject:from:to:cc:references:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=Y19Fz65PlnLCYSYXGeKtni8ycM0Z52y7gynxwVIafhU=;
+  b=tm9ArRv8SPTzFssb5Cmd9Q5GIxfz3ewtshcsx0z2lcyFaLrlcDSfq9Er
+   QdXx15+7S/bWxGcfuFRuvV4GaqMsTfevFwZL5DY8vRYLITms7uPjKpXjS
+   aIsF/fImV6otHmTB8IxKtQFA0Y+DVuTWO27FL7wMV4ZBcfeNDUHLwVZb9
+   4=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Jul 2022 05:01:41 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 05:01:40 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Jul 2022 05:01:40 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
+ 2022 05:01:36 -0700
+Subject: Re: [PATCH 10/10] arm64: dts: qcom: sdm845: add LLCC BWMON
+From:   Sibi Sankar <quic_sibis@quicinc.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] dt-bindings: net: hirschmann,hellcreek: use absolute
- path to other schema
-In-Reply-To: <20220726115650.100726-1-krzysztof.kozlowski@linaro.org>
-References: <20220726115650.100726-1-krzysztof.kozlowski@linaro.org>
-Date:   Tue, 26 Jul 2022 14:00:40 +0200
-Message-ID: <87pmhsf5hz.fsf@kurt>
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+ <20220720192807.130098-11-krzysztof.kozlowski@linaro.org>
+ <25673493-4171-62b0-f696-1316d115f388@kali.org>
+ <96552a95-8939-3ac2-c9b3-14dabaf53923@linaro.org>
+ <d814a6da-b0d7-2fd1-fd14-8f1f3b88666f@kali.org>
+ <d89a540f-672d-83de-d19d-00f10e4370d1@kali.org>
+ <fec6bd98-5efd-fe34-6d75-1765219acd82@linaro.org>
+ <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
+Message-ID: <3325c626-f1af-2e95-fc53-68cf3d427a88@quicinc.com>
+Date:   Tue, 26 Jul 2022 17:31:33 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
+In-Reply-To: <25321f37-dbea-188b-1b11-e983a00701b2@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+On 7/26/22 5:01 PM, Sibi Sankar wrote:
+> On 7/23/22 2:06 PM, Krzysztof Kozlowski wrote:
+>> On 23/07/2022 04:37, Steev Klimaszewski wrote:
+>>>>
+>>>> Currently it's 5.19.0-rc7 (torvalds tree at 4ba1329c) with a few extra
+>>>> patches on top, the bwmon set included.  It's possible that secure
+>>>> world uses it, but I do not know enough about that to say one way or
+>>>> the other.
+>>
+>> To test patches you should apply them on maintainer's tree or
+>> linux-next. Applying on other trees of course might be useful for
+>> testing some backports, but it is independent process and different 
+>> issue.
+>>
+>>>>
+>>>> -- steev
+>>>>
+>>> I think you may be right; I just applied this patchset to -next
+>>> (20220722) and i do not see the error message there.  On my 5.19-rc7
+>>> tree, i am also testing a patchset that enables qcom devices to access
+>>> efivars, so possibly we are ending up in secure world there?
+>>
+>> Actually mapping of IO space should not touch secure world, so this was
+>> a long shot assuming you test it on the next.
+>>
+> 
+> The memory region specified in device tree overlaps with the llcc system
+> cache controller node. Steev probably had the QCOM_LLCC config enabled 
+> when he tested it out on his branch.
 
-On Tue Jul 26 2022, Krzysztof Kozlowski wrote:
-> Absolute path to other DT schema is preferred over relative one.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ From what I see we can probably get away with restricting the llcc_base
+reg region to just llcc0_common region and leave the lcc-bwmon as is.
 
-Acked-by: Kurt Kanzenbach <kurt@linutronix.de>
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmLf12gTHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgulzEACkltGhaXSH9Cnp9pqpvukbZZTi5sm3
-R1UfDJXTHR5aWj8qOx7CFjzm6TTdtGLZ9t8rx+SXP3gYYotGAfgOvcngsVKXccoR
-+JNffngJ70Zu2CdXuS+sgZ3MLRI56/bhBDpT9uPCMhsRa26s6myja515Jt1KBOKZ
-TVHAqoNPT3aU8U+d8r0TqcOD9+ahxyKCxh3JlPnLD1gg4GjgC24ObnvNY9CxvpGh
-i0i3qzSXSQZpRzs2Jg3Gd1fTju3s+9Rxn/4axrqDISGfHez73YOQG0Byl9yNvQYM
-9PIFoMIpxGAyiRJJa6R7hoYKuRXa/xapz24ROkGq+rEo1JcDWaKSwT260d+wkXf1
-JnNQFgv0Y2fgQ4MM7Ij/c0Pdami1PiHwp++Hw5U7PdrRSSzmnQKW1C0nU89ormgn
-iLA1MPTK+1uAvIYbKfruhjHa/o2+8tOXF7R9s44ToQcdBD3XvKuiSYLzJZwFDA+/
-iZuCbZ9gRjwyl/v5Hq0o2ZGDVNBeWp994jFSIzq025Dpg89GZpULH2/dmh5spCTo
-dh3oo7oPyB9ITmhblLKjHY0pb/jtEQhFYc4jeuXu7E7HxFr0JxwxAPPZJprjGmxV
-CK21rjlRoIGfqCumCB/7wL1W+DtTcMK6ay5IwFsKtCOAKNI/3Dduy6gvNMDyzEY8
-uUWkwbfOVkmspg==
-=I87M
------END PGP SIGNATURE-----
---=-=-=--
+> 
+>>
+>> Best regards,
+>> Krzysztof
+>>

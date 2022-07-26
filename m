@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3749C58113A
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC4558113D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238693AbiGZKei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S238687AbiGZKel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238688AbiGZKeT (ORCPT
+        with ESMTP id S238708AbiGZKeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:34:19 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C4B2CE33
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:18 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id b6so8455904wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:18 -0700 (PDT)
+        Tue, 26 Jul 2022 06:34:22 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5820A32463
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:20 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id v5so8471066wmj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=QHCyTIRLNQ/OUCi6dUmgrM3Y9T7C/9FW0O1buPIAQjQ=;
-        b=pA1UDfyauG57hX/HGYq50O3qF4ZqTy08+zbcjw8u8c4qDSHkTJ+6BJM+9VWl8+AphZ
-         oDyXdcynfiaFvrEdQTFhrQjmu/Wwny4Hj4Eo8Fv5w4DQwxIOAuRnNaQKO3j2s/7f3ZBb
-         NMcXv1c11TEo+cy/mdOJVQW/bFR3tXzZ8j2ppnARrT+7fqNfac9BrTvrL4zbbXoT5BC9
-         ZqFk3OflRvCalb9kAFWBLy+sFJ1rgA/+Mojk/wNvgbEca7lH3DmKPDOgJVL+KUvhNciv
-         xfjyUL/r6/O4nDey6GZffovNPpJQn25YCnw1VLk4mu7WUkBCZxJxz6nnrr9gI4EnnFy+
-         VYUw==
+        bh=nRm7T586IVqER+nWuPPvT9TSOI3c0IELRytvLb2fip8=;
+        b=yYbOfeWar4cPz1aldKgI/l5Fuqhd97saimvxx5OLwWFhyjQI2SWcLMn9cBRDnipWzC
+         xrinAzal1HMa6WGyS9Qcpux+ziThsZiCZSRmIn/Pu/+Sis6kvN7/PkDJ9pTRJHBnPcBS
+         kpG/T6nrr3YgX0BFlCXX1OXhf4x+HGgzAIOrbzRnHxLjmmoAx1a9HGfRhnewVZzPK68E
+         BzD+0ZPEqRg5vRBwjYgh4UQB7HpFxmNAxM+95Vd+WAM2DhjkbiE3iKmJl75Q3JLPrMSt
+         sp6i8vWzeVGvbkz1qL+7ucSsD/X69imOlx5BjLZ8xIm+dPOSsd2MvDpeyDLZSMbu+Txx
+         3ckQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=QHCyTIRLNQ/OUCi6dUmgrM3Y9T7C/9FW0O1buPIAQjQ=;
-        b=Pats1/6QsnVg909TnydhARX/A2TkT6IQgzf/dG/rlOtQeY+IYY7riLLxDy91a8cEMF
-         O4TnLNYC+kOZOItj/Lb7ukZw+RO0OSdmlroc1b/Q23FBAI+wqARdL4mRn4OETCygsWFz
-         N731uIptxQsrGIlUyB0Hhrdq2KrWrnYiomqWiRH3lTX9M9lXj2Wz8QWQC4sMK4JjKe2G
-         Z72TJ2XWFWuZpFSGhWktbMMk1cGKS8E5Bk03FzlwoQ+r0cMWxuovo20WnueDhncF6GEI
-         qUcOmI5PQgOYOBzMoQRdeZYm223lHDzFKhI5Qcadbbv2ogQxRlTz9aRozVPsbFOlDL+j
-         p2kw==
-X-Gm-Message-State: AJIora8zUjaqVXCzTgpqOQHy8mIssfeTp8wzZgykmeMvPjd7gdZkNIyV
-        ZI/6z4fjSr2ClUOhuorkpF2pjA==
-X-Google-Smtp-Source: AGRyM1uMtX6RJnHdH3iRbZ+Uud9uMoY67ZHIhhGq7kUhKKWqF6rPmysZgFIbC3VBsgLjO0q2FORd6A==
-X-Received: by 2002:a05:600c:1552:b0:3a3:2e4c:bd0a with SMTP id f18-20020a05600c155200b003a32e4cbd0amr20435408wmg.82.1658831656595;
-        Tue, 26 Jul 2022 03:34:16 -0700 (PDT)
+        bh=nRm7T586IVqER+nWuPPvT9TSOI3c0IELRytvLb2fip8=;
+        b=hwzyAdoKXk3gV5BayVKItIMmYUs2nUAD7pPYnLmASX6X/xlImRxAanp9mDkV/tFLKX
+         5K3zTeo61LyaHF47USJvCLyQ88csAhfq2Azzszo6bvTHeR2d40G5ze+uyCajUFlZIaJr
+         BdtkKbpY1EOy5Be8lAsAtVzO06BGR8zqBoaAwLqU9itMgPeGDm2lT+6YsEDHwKQwI4+/
+         tStDJb+a3ZrKUZPJYFzNmyY7J1dznUjNKHbf7zuTTFRTghJiXxbfqlXTw/atjO7F4wpp
+         d2Pwy9UA4s2jGr3q1eQfNTNqQ+ztNB3gyzXlnouu+zhTXAAV49oraMQu8u5AD+mx7z7m
+         s0FA==
+X-Gm-Message-State: AJIora+AAf3eZCnPWarnYQH4zZ8JXyelyN4ZwvNLPsQ1LeNtTcjMthBz
+        LdEP+2w2JGNymMcdVaWTyxLLkepnJw6VAw==
+X-Google-Smtp-Source: AGRyM1sqivGj8DnM+Fj6hXaxmJwGXtnnK/mSa3hSHfmCVeHHutSIuqZdoraER/IjTl+HeJI0K/53Ng==
+X-Received: by 2002:a1c:f317:0:b0:3a2:df38:9877 with SMTP id q23-20020a1cf317000000b003a2df389877mr23958396wmq.124.1658831658864;
+        Tue, 26 Jul 2022 03:34:18 -0700 (PDT)
 Received: from localhost.localdomain (2a02-8440-4641-6f91-91b7-326a-5d27-a1c3.rev.sfr.net. [2a02:8440:4641:6f91:91b7:326a:5d27:a1c3])
-        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b003a2e42ae9a4sm20617121wmb.14.2022.07.26.03.34.15
+        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b003a2e42ae9a4sm20617121wmb.14.2022.07.26.03.34.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 03:34:16 -0700 (PDT)
+        Tue, 26 Jul 2022 03:34:18 -0700 (PDT)
 From:   Jerome Neanne <jneanne@baylibre.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
         nm@ti.com, kristo@kernel.org
@@ -54,44 +54,217 @@ Cc:     khilman@baylibre.com, narmstrong@baylibre.com, msp@baylibre.com,
         j-keerthy@ti.com, lee.jones@linaro.org, jneanne@baylibre.com,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 04/11] MAINTAINERS: OMAP2+ support, add tps65218-pwrbutton
-Date:   Tue, 26 Jul 2022 12:33:48 +0200
-Message-Id: <20220726103355.17684-5-jneanne@baylibre.com>
+Subject: [PATCH v2 05/11] regulator: dt-bindings: Add TI TPS65219 PMIC bindings
+Date:   Tue, 26 Jul 2022 12:33:49 +0200
+Message-Id: <20220726103355.17684-6-jneanne@baylibre.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220726103355.17684-1-jneanne@baylibre.com>
 References: <20220726103355.17684-1-jneanne@baylibre.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markus Schneider-Pargmann <msp@baylibre.com>
+Add TPS65219 PMIC bindings using json-schema.
 
-The entry for the pwrbutton driver seems to be missing. Add it to the
-list for OMAP2+ SUPPORT.
+Describe required properties and regname-supply.
+regname-supply is required when bypass mode is used for a regulator.
+Describes regulator topology.
+Interrupts support.
+Add a power-button property to configure the EN/PB/VSENSE pin as a
+powerbutton:
+
+TPS65219 has a multipurpose pin called EN/PB/VSENSE that can be either:
+- EN in which case it functions as an enable pin.
+- VSENSE which compares the voltages and triggers an automatic
+on/off request.
+- PB in which case it can be configured to trigger an interrupt
+to the SoC.
+ti,power-button reflects the last one of those options
+where the board has a button wired to the pin and triggers
+an interrupt on pressing it.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/regulator/ti,tps65219.yaml       | 164 ++++++++++++++++++
+ 1 file changed, 164 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 64379c699903..67850b321cbb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14704,6 +14704,7 @@ F:	arch/arm/mach-omap2/
- F:	arch/arm/plat-omap/
- F:	drivers/bus/ti-sysc.c
- F:	drivers/i2c/busses/i2c-omap.c
-+F:	drivers/input/misc/tps65218-pwrbutton.c
- F:	drivers/irqchip/irq-omap-intc.c
- F:	drivers/mfd/*omap*.c
- F:	drivers/mfd/menelaus.c
+diff --git a/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
+new file mode 100644
+index 000000000000..8fca4db6c64c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
+@@ -0,0 +1,164 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/ti,tps65219.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI tps65219 Power Management Integrated Circuit regulators
++
++maintainers:
++  - Jerome Neanne <jerome.neanne@baylibre.com>
++
++description: |
++  Regulator nodes should be named to buck<number> and ldo<number>.
++
++properties:
++  compatible:
++    enum:
++      - ti,tps65219
++
++  reg:
++    maxItems: 1
++
++  system-power-controller:
++    type: boolean
++    description: Optional property that indicates that this device is
++      controlling system power.
++
++  interrupts:
++    description: Short-circuit, over-current, under-voltage for regulators, PB interrupts.
++    maxItems: 1
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    description: Specifies the PIN numbers and Flags, as defined in
++      include/dt-bindings/interrupt-controller/irq.h
++    const: 1
++
++  power-button:
++    type: boolean
++    description: Optional property that sets the EN/PB/VSENSE pin to be a
++      power-button.
++
++patternProperties:
++  "^buck[1-3]-supply$":
++    description: Input supply phandle of one regulator.
++
++  "^ldo[1-4]-supply$":
++    description: Input supply phandle of one regulator.
++
++  regulators:
++    type: object
++    description: |
++      list of regulators provided by this controller
++
++    patternProperties:
++      "^ldo[1-4]$":
++        type: object
++        $ref: regulator.yaml#
++        description:
++          Properties for single LDO regulator.
++
++        unevaluatedProperties: false
++
++      "^buck[1-3]$":
++        type: object
++        $ref: regulator.yaml#
++        description:
++          Properties for single BUCK regulator.
++
++        unevaluatedProperties: false
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - regulators
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        tps65219: pmic@30 {
++            compatible = "ti,tps65219";
++            reg = <0x30>;
++            buck1-supply = <&vcc_3v3_sys>;
++            buck2-supply = <&vcc_3v3_sys>;
++            buck3-supply = <&vcc_3v3_sys>;
++            ldo1-supply = <&vcc_3v3_sys>;
++            ldo2-supply = <&buck2_reg>;
++            ldo3-supply = <&vcc_3v3_sys>;
++            ldo4-supply = <&vcc_3v3_sys>;
++
++            pinctrl-0 = <&pmic_irq_pins_default>;
++
++            interrupt-parent = <&gic500>;
++            interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-controller;
++            #interrupt-cells = <1>;
++
++            regulators {
++                buck1_reg: buck1 {
++                    regulator-name = "VDD_CORE";
++                    regulator-min-microvolt = <750000>;
++                    regulator-max-microvolt = <750000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                buck2_reg: buck2 {
++                    regulator-name = "VCC1V8";
++                    regulator-min-microvolt = <1800000>;
++                    regulator-max-microvolt = <1800000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                buck3_reg: buck3 {
++                    regulator-name = "VDD_LPDDR4";
++                    regulator-min-microvolt = <1100000>;
++                    regulator-max-microvolt = <1100000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                ldo1_reg: ldo1 {
++                    regulator-name = "VDDSHV_SD_IO_PMIC";
++                    regulator-min-microvolt = <33000000>;
++                    regulator-max-microvolt = <33000000>;
++                };
++
++                ldo2_reg: ldo2 {
++                    regulator-name = "VDDAR_CORE";
++                    regulator-min-microvolt = <850000>;
++                    regulator-max-microvolt = <850000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                ldo3_reg: ldo3 {
++                    regulator-name = "VDDA_1V8";
++                    regulator-min-microvolt = <18000000>;
++                    regulator-max-microvolt = <18000000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                ldo4_reg: ldo4 {
++                    regulator-name = "VDD_PHY_2V5";
++                    regulator-min-microvolt = <25000000>;
++                    regulator-max-microvolt = <25000000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++            };
++        };
++    };
 -- 
 2.17.1
 

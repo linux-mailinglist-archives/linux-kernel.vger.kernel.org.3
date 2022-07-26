@@ -2,138 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC2F581A6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 21:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE2A581A6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 21:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiGZToJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 15:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S239551AbiGZTop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 15:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiGZToH (ORCPT
+        with ESMTP id S230287AbiGZTon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 15:44:07 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFA43122B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 12:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658864646; x=1690400646;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qFqQf/X9xOP1UrWgNELGB3eKZJrSKae+ecpk0lRLfho=;
-  b=ljRIqT9ss8pN9uV+AotCPgw7xscYTMgRRt1EuK9sFLrv05tLtWEo08Vi
-   UUWekmpL7C+PbN1ZCzD862lCI3crdNdEXpK/aU7HgVVlcyFwVT3CSRQwV
-   MhLFnTBwDdZ5XS3Vw1k5VdPh2PqrAwD2Xq/q8Ndxi+WTbzXW531THs3hO
-   BIDootyOh04BH4AiZ60DnJ6plOJZiscSw0dWpXGqyPTI8l7G/8ni9Wwur
-   u6JeiTrK7L/Kbw4rowx4gqM/2ht1RxEOK65VC1+xERTRNuehwqVaXbp+R
-   38K1954FII2UzXfh8QfMwmAEjvTuo1AhKnrTIpgJCNzvhlgtrMPi41qBF
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="267806036"
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="267806036"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 12:44:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,194,1654585200"; 
-   d="scan'208";a="776425017"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Jul 2022 12:44:05 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oGQTM-0007de-15;
-        Tue, 26 Jul 2022 19:44:04 +0000
-Date:   Wed, 27 Jul 2022 03:43:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 776db515ca7e2787800c105e58d36dfb11cde8d4
-Message-ID: <62e043e2.Mlr77Mj+rL+d4wUt%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 26 Jul 2022 15:44:43 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D923122B
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 12:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=TGq8QP1oBJLa4d9eMw2KLoD7AcNO8P4iv3iIuufPVq4=; b=DoPmG1X4azqFAa9TxUU9xSoQO4
+        PtjPwk2cEf59HghYi6McmmrULab2qwjdhs8xG2upOd4P/QQDDFZsZfvM1Vye8fVqAFmsfXpKwPSCt
+        A7HH24z8qsPdm/WEI/1S14aw2cQKaV9yQUNI7GTtpv0LbHdAnIOPj1lwjEzczETDanFiIJ3Olzhrg
+        u+HvoSF4Dw/bulkDWQ90cLky6Pjfh7faZaj51p23r/xRXMqcbbRi4fVygESlq1h6v1ZlMiahLrfhI
+        FVhZeEb+JeR9p8nGfPm/gbSmwYuJmDr2biZphi4DDy2FSpkkeQv/m2Jqlcj6wae2cH2quNuqwOfk2
+        jYAUJ0hA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33578)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oGQTt-0004YI-Cr; Tue, 26 Jul 2022 20:44:37 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oGQTq-0001UV-AR; Tue, 26 Jul 2022 20:44:34 +0100
+Date:   Tue, 26 Jul 2022 20:44:34 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, Dennis Zhou <dennis@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: Linux 5.19-rc8
+Message-ID: <YuBEIiLL1xZVyEFl@shell.armlinux.org.uk>
+References: <CAHk-=wiWwDYxNhnStS0e+p-NTFAQSHvab=2-8LwxunCVuY5-2A@mail.gmail.com>
+ <20220725161141.GA1306881@roeck-us.net>
+ <CAHk-=whtGUwJwHUSNsXd4g7cok=n0Zwje7nACp8skh1fa2NtJA@mail.gmail.com>
+ <YuAm5h1B6bsrR/9q@fedora>
+ <CAHk-=wgYpJTMMxmfbpqc=JVtSK0Zj4b15G=AvEYk6vPNySDSsA@mail.gmail.com>
+ <YuAv+lV324G7pmlk@yury-laptop>
+ <CAHk-=wg2-j8zocUjurAeg_bimNz7C5h5HDEXKK6PxDmR+DaHRg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg2-j8zocUjurAeg_bimNz7C5h5HDEXKK6PxDmR+DaHRg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 776db515ca7e2787800c105e58d36dfb11cde8d4  Merge branch into tip/master: 'x86/vmware'
+On Tue, Jul 26, 2022 at 11:36:21AM -0700, Linus Torvalds wrote:
+> On Tue, Jul 26, 2022 at 11:18 AM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > We have find_bit_benchmark to check how it works in practice. Would
+> > be great if someone with access to the hardware can share numbers.
+> 
+> Honestly, I doubt benchmarking find_bit in a loop is all that sensible.
 
-elapsed time: 726m
+Yes, that's what I was thinking - I've never seen it crop up in any of
+the perf traces I've seen.
 
-configs tested: 57
-configs skipped: 2
+Nevertheless, here's some numbers from a single run of the
+find_bit_benchmark module, kernel built with:
+arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 20210110
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Current native implementation:
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220724
-riscv                randconfig-r042-20220724
-s390                 randconfig-r044-20220724
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+[   46.184565]
+               Start testing find_bit() with random-filled bitmap
+[   46.195127] find_next_bit:                 2440833 ns, 163112 iterations
+[   46.204226] find_next_zero_bit:            2372128 ns, 164569 iterations
+[   46.213152] find_last_bit:                 2199779 ns, 163112 iterations
+[   46.299398] find_first_bit:               79526013 ns,  16234 iterations
+[   46.684026] find_first_and_bit:          377912990 ns,  32617 iterations
+[   46.692020] find_next_and_bit:             1269071 ns,  73562 iterations
+[   46.698745]
+               Start testing find_bit() with sparse bitmap
+[   46.705711] find_next_bit:                  118652 ns,    656 iterations
+[   46.716621] find_next_zero_bit:            4183472 ns, 327025 iterations
+[   46.723395] find_last_bit:                   50448 ns,    656 iterations
+[   46.762308] find_first_bit:               32190802 ns,    656 iterations
+[   46.769093] find_first_and_bit:              52129 ns,      1 iterations
+[   46.775882] find_next_and_bit:               62522 ns,      1 iterations
 
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220724
-hexagon              randconfig-r045-20220724
+Generic implementation:
+
+[   25.149238]
+               Start testing find_bit() with random-filled bitmap
+[   25.160002] find_next_bit:                 2640943 ns, 163537 iterations
+[   25.169567] find_next_zero_bit:            2838485 ns, 164144 iterations
+[   25.178595] find_last_bit:                 2302372 ns, 163538 iterations
+[   25.204016] find_first_bit:               18697630 ns,  16373 iterations
+[   25.602571] find_first_and_bit:          391841480 ns,  32555 iterations
+[   25.610563] find_next_and_bit:             1260306 ns,  73587 iterations
+[   25.617295]
+               Start testing find_bit() with sparse bitmap
+[   25.624222] find_next_bit:                   70289 ns,    656 iterations
+[   25.636478] find_next_zero_bit:            5527050 ns, 327025 iterations
+[   25.643253] find_last_bit:                   52147 ns,    656 iterations
+[   25.657304] find_first_bit:                7328573 ns,    656 iterations
+[   25.664087] find_first_and_bit:              48518 ns,      1 iterations
+[   25.670871] find_next_and_bit:               59750 ns,      1 iterations
+
+Overall, I would say it's pretty similar (some generic perform
+marginally better, some native perform marginally better) with the
+exception of find_first_bit() being much better with the generic
+implementation, but find_next_zero_bit() being noticably worse.
+
+So, pretty much nothing of any relevance between them, which may
+come as a surprise given the byte vs word access differences between
+the two implementations.
+
+I suspect the reason behind that may be because the native
+implementation code is smaller than the generic implementation,
+outweighing the effects of the by-byte rather than by-word. I would
+also suspect that, because of the smaller implementation, the native
+version performs better in a I$-cool situation than the generic. Lastly,
+I would suspect if we fixed the bug in the native version, and converted
+it to use word loads, it would probably be better than the generic
+version. I haven't anything to base that on other than gut feeling at
+the moment, but I can make the changes to the native implementation and
+see what effect that has, possibly tomorrow.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

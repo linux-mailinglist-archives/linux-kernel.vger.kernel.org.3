@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B182B5809E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6FE5809F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiGZDXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 23:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S237544AbiGZDYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 23:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiGZDXE (ORCPT
+        with ESMTP id S237524AbiGZDYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 23:23:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FB02A270;
-        Mon, 25 Jul 2022 20:23:03 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LsMbs31VNzjXSd;
-        Tue, 26 Jul 2022 11:20:09 +0800 (CST)
-Received: from dggpeml500008.china.huawei.com (7.185.36.147) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 11:23:00 +0800
-Received: from [127.0.0.1] (10.67.111.83) by dggpeml500008.china.huawei.com
- (7.185.36.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Jul
- 2022 11:23:00 +0800
-Message-ID: <a103b0a3-2137-c7c9-9999-88b28f03c312@huawei.com>
-Date:   Tue, 26 Jul 2022 11:22:59 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] ACPI/IORT: Fix build error
- implicit-function-declaration
-To:     Hanjun Guo <guohanjun@huawei.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-CC:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lorenzo.pieralisi@linaro.org" <lorenzo.pieralisi@linaro.org>
-References: <20220724115423.212932-1-renzhijie2@huawei.com>
- <d59bc043788e4dc796a445588d667ab7@huawei.com>
- <078d74b2-151e-4b4a-55fc-9cd8f6fb910c@huawei.com>
-From:   Ren Zhijie <renzhijie2@huawei.com>
-In-Reply-To: <078d74b2-151e-4b4a-55fc-9cd8f6fb910c@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.83]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500008.china.huawei.com (7.185.36.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 23:24:43 -0400
+Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D08EA2A703;
+        Mon, 25 Jul 2022 20:24:40 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [218.12.17.60])
+        by mail-app2 (Coremail) with SMTP id by_KCgAnLfVlXt9iqVNnAQ--.12653S2;
+        Tue, 26 Jul 2022 11:24:30 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-hams@vger.kernel.org
+Cc:     ralf@linux-mips.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net v2] netrom: fix sleep in atomic context bugs in timer handlers
+Date:   Tue, 26 Jul 2022 11:24:20 +0800
+Message-Id: <20220726032420.5516-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgAnLfVlXt9iqVNnAQ--.12653S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrW5AFW8AF4kuFWxKw17ZFb_yoW8GFyDpF
+        Z7KF9IyF4qqw1UAay8Jw4ku34Y9wn5JF43G340vw4Fy3s0qrWUJFWjkFWjqF4v9rWxWFWY
+        vFs0v3WUJ3W2yFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r48
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
+        WxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb2g4DUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAggDAVZdta05PAABsf
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There are sleep in atomic context bugs in timer handlers of netrom
+such as nr_t1timer_expiry(), nr_t2timer_expiry(), nr_heartbeat_expiry(),
+nr_idletimer_expiry() and so on.
 
-在 2022/7/26 10:53, Hanjun Guo 写道:
-> On 2022/7/25 21:50, Shameerali Kolothum Thodi wrote:
-> [...]
->>>
->>> If CONFIG_ACPI_IORT=y and CONFIG_IOMMU_API is not set,
->>> make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-, will be failed, like
->>> this:
->>>
->>> drivers/acpi/arm64/iort.c: In function ‘iort_get_rmr_sids’:
->>> drivers/acpi/arm64/iort.c:1406:2: error: implicit declaration of 
->>> function
->>> ‘iort_iommu_rmr_get_resv_regions’; did you mean
->>> ‘iort_iommu_get_resv_regions’? [-Werror=implicit-function-declaration]
->>>    iort_iommu_rmr_get_resv_regions(iommu_fwnode, NULL, head);
->>>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>    iort_iommu_get_resv_regions
->>> cc1: some warnings being treated as errors
->>> make[3]: *** [drivers/acpi/arm64/iort.o] Error 1
->>
->> Thanks for spotting this.
->>
->>> The function iort_iommu_rmr_get_resv_regions() is declared at #ifdef
->>> CONFIG_IOMMU_API area, and the callers of  iort_get_rmr_sids() and
->>> iort_put_rmr_sids() would select IOMMU_API.
->>> To fix this error, move the definitions to #ifdef CONFIG_IOMMU_API 
->>> area.
->>
->> That makes sense. And the only callers of these are SMMU drivers I 
->> think we
->> don't need stub functions under !CONFIG_IOMMU_API(Lorenzo, could you
->> please double check this).
->
-> I think so, because SMMU drivers will select IOMMU_API,
-> in drivers/iommu/Kconfig, it says:
->
-> # IOMMU_API always gets selected by whoever wants it.
-> config IOMMU_API
-> bool
->
->>
->> Nit: Please wrap the commit description to a max of 75 chars per line.
->
-> Zhijie, would you mind send a updated version?
->
-sure, will send patch v2.
+The root cause is kmemdup() with GFP_KERNEL parameter that may sleep
+could be called by different timer handlers which is in interrupt context.
 
-Thanks,
+One of the call paths that could trigger bug is shown below:
 
-Ren Zhijie
+      (interrupt context)
+nr_heartbeat_expiry
+  nr_write_internal
+    nr_transmit_buffer
+      nr_route_frame
+        nr_add_node
+          kmemdup(..,GFP_KERNEL) //may sleep
 
-> Thanks
-> Hanjun
-> .
+This patch changes gfp_t parameter of kmemdup in nr_add_node()
+from GFP_KERNEL to GFP_ATOMIC in order to prevent sleep in atomic
+context bugs.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in v2:
+  - Correct the "Fixes" tag.
+
+ net/netrom/nr_route.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/netrom/nr_route.c b/net/netrom/nr_route.c
+index baea3cbd76c..1ddcf13de6a 100644
+--- a/net/netrom/nr_route.c
++++ b/net/netrom/nr_route.c
+@@ -163,7 +163,7 @@ static int __must_check nr_add_node(ax25_address *nr, const char *mnemonic,
+ 		if (ax25_digi != NULL && ax25_digi->ndigi > 0) {
+ 			nr_neigh->digipeat = kmemdup(ax25_digi,
+ 						     sizeof(*ax25_digi),
+-						     GFP_KERNEL);
++						     GFP_ATOMIC);
+ 			if (nr_neigh->digipeat == NULL) {
+ 				kfree(nr_neigh);
+ 				if (nr_node)
+-- 
+2.17.1
 

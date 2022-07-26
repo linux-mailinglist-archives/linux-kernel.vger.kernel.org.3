@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BEF5810ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392CE5810F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238317AbiGZKQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S238348AbiGZKQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiGZKP7 (ORCPT
+        with ESMTP id S232523AbiGZKQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:15:59 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB4914009;
-        Tue, 26 Jul 2022 03:15:58 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id b10so13019638pjq.5;
-        Tue, 26 Jul 2022 03:15:58 -0700 (PDT)
+        Tue, 26 Jul 2022 06:16:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1948921251;
+        Tue, 26 Jul 2022 03:16:22 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id l14-20020a17090a72ce00b001f20ed3c55dso12779289pjk.5;
+        Tue, 26 Jul 2022 03:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZVAfKYIxLF8XEC4qYp9NrQYOKbMB2AyqeCKsux8Y4Ps=;
-        b=cKy9ArCR9EM1WP9fz9Y5fa+zfnyVHq6CyvuXJFYblKXw6aofaHpEgNTSqk67Erh/5o
-         ELAf6AYwGEQcIaulu9r7gfQ8Fx8l6zCMWeDv2cGf0lZBNQqFHKmAMGCp0Yv6i0Od9sla
-         d/UySqiHgYHfXdQtitfV2S2upTddqLESkdoJvU45VhtKF2lEUtheD3F2M38BYfQz25DJ
-         vHDmffCneudZSr5RgJk4EpSSo6oYUz+y1WSvKgsTfqek3LKT783kc6j4jRmhM1XmkJI5
-         ABdZi45zXIIoPl6W6I6ScwTcgyGlm2GeWhfBVDaHoV6FR4gStVBLuyI4cFq3wgZKpbSf
-         y21Q==
+        bh=etCt9LpoLIlQPOP6Jvaqe1+7m8WSiZUh3fpnSxEhW0A=;
+        b=jsK5CLODrq6j6ULl3qttZQPTIfPMew/Mc1sLO08gYI/RCqZMZGvYOHGmb5itSAnRRi
+         1T6IMv8F4th3U1cw1H/oz71BWppBbE+pLVAVlOsIu+CGdldK0JXzP0z0XmZhmt4o4mZ+
+         zqbgtB8ZzOA7BQbI0In7/44NUoRFFDCZxs6hEvNxYpqLOskpzNIVrmTzCPLASvEpbWUl
+         XgYpICjEoXfEU7FOZl+lQ1BY+eEWuvUeMQzYxigrD9X5jHYkPTJU6/AguCvC/vcOm99q
+         hxTSvwgstHAgPCz2oAwaG0XbIDAkPGIgmKRI2PgoHEkCjD2Q+i5uKq68dJKpRFnJHfS/
+         2gsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZVAfKYIxLF8XEC4qYp9NrQYOKbMB2AyqeCKsux8Y4Ps=;
-        b=2P9m+vyf7+zuXqQ4bpxG7UGqJJhjqIATowOVFUJ7/tFWhXGIYnfVGkvDNVAdmpFF0u
-         U+NdyigPD2NcWm6DgSBFJb95UNIs4XjIiRzJrrdr5vV7DuZv8EgX5oX/bX4s7HJztpp2
-         Rbo3MBDOEZdmeAYztCQvBVc3PsqEQXT6nsKpDVTpL0DXKxnFuIFKgJGV52/K9XiJdej4
-         Se2O8N2DTlDIO/oZdj2wMMBNFFO6DcaNP1GRqA4hPtOUymrAb0S1u6e9pV28xD8OrGXO
-         LfAHC7EG/kZ96zaAbAY6ETyoGpY3pFdM8B89jj06FlZ3nB2VsI5z67Ulzbg0In5p+jFF
-         LLGA==
-X-Gm-Message-State: AJIora9tP+hekri0Zk503sCIDCoBnATsKfrEc4rQEX2kXlrDWV6HfeaJ
-        f1rLaDX6E4XijK9HI6YBnRs=
-X-Google-Smtp-Source: AGRyM1uEuxhhReOUIpyudX28mVJ1+KwSazXM5vba9h56MpZRFoDdhfLZvQhnIpCAHaHL9uqXsmmYYw==
-X-Received: by 2002:a17:90b:4b88:b0:1f2:503e:b19b with SMTP id lr8-20020a17090b4b8800b001f2503eb19bmr22248691pjb.30.1658830558240;
-        Tue, 26 Jul 2022 03:15:58 -0700 (PDT)
+        bh=etCt9LpoLIlQPOP6Jvaqe1+7m8WSiZUh3fpnSxEhW0A=;
+        b=GCKFUS2d7Lw7HS4xlCAlvcEKilqp3aYWz/acapxMgCHAFji+8HtUbdedE9PuQ5B+3F
+         fq2uYu1/CdvaIysV3OargCZ1GgHH6o60383MGBcw5/RyHv5WIJ/XSGkP1KqylZm8/gYr
+         8vv7HZzqRmkMWsWZCt3FzCkxEze7nr/hjUBnl7ThAu3YNUQXKnF94obp6ibOd6DbIlqO
+         e4x5vMfvkr6T4aXSqy3QI4TFx8SZTiknuPvuPMVez5tSfSOW3pJbIJWLZUKjbVDCOp9F
+         f6PyQPL9koQrlOXbe3rN5csOwlU9gtoa7+VZI6+fIFERCPZ9H5fqkAkc5f1WTW1UivdX
+         2rvw==
+X-Gm-Message-State: AJIora8fmszuG7+5UvunzSuYfkaRaOhhQfUjTnVTmD21JBLOBbJZ0kiY
+        wr5VelzJmHEOJXalFcgJH1k=
+X-Google-Smtp-Source: AGRyM1sVBB9x5PnYdtE1G/qEv2m+hSv6jbvskTPC54ZflRXcV9uNuJwDHnqWFb3fHEcdZw6VnSrF7A==
+X-Received: by 2002:a17:90b:1b0b:b0:1f2:bc36:f8bd with SMTP id nu11-20020a17090b1b0b00b001f2bc36f8bdmr9070674pjb.234.1658830581518;
+        Tue, 26 Jul 2022 03:16:21 -0700 (PDT)
 Received: from localhost.localdomain ([112.0.190.94])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b0016d303f266dsm5515106plg.276.2022.07.26.03.15.51
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b0016d303f266dsm5515106plg.276.2022.07.26.03.16.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 03:15:57 -0700 (PDT)
+        Tue, 26 Jul 2022 03:16:20 -0700 (PDT)
 From:   Molly Sophia <mollysophia379@gmail.com>
 To:     Sumit Semwal <sumit.semwal@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -60,9 +60,9 @@ To:     Sumit Semwal <sumit.semwal@linaro.org>,
         linux-kernel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Molly Sophia <mollysophia379@gmail.com>
-Subject: [PATCH v3 1/2] dt-bindings: display: panel: Add Novatek NT35596S panel bindings
-Date:   Tue, 26 Jul 2022 18:15:12 +0800
-Message-Id: <20220726101513.66988-2-mollysophia379@gmail.com>
+Subject: [PATCH v3 2/2] drm: panel: Add novatek nt35596s panel driver
+Date:   Tue, 26 Jul 2022 18:15:13 +0800
+Message-Id: <20220726101513.66988-3-mollysophia379@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220726101513.66988-1-mollysophia379@gmail.com>
 References: <20220726101513.66988-1-mollysophia379@gmail.com>
@@ -78,48 +78,338 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for "novatek,nt35596s" panel.
+Novatek NT35596s is a generic DSI IC that drives command and video mode
+panels. Add the driver for it. Currently add support for the LCD panel
+from JDI connected with this IC, as found on Xiaomi Mi Mix2s phones.
 
 Changes in v3:
-- Embed the documentation into existing one (novatek,nt36672a).
+- Embed the support into existing driver (panel-novatek-nt36672a), as
+  these two IC are similar with different initialization commands.
 
 Signed-off-by: Molly Sophia <mollysophia379@gmail.com>
 ---
- .../display/panel/novatek,nt36672a.yaml       | 20 ++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/panel/Kconfig                 |   7 +-
+ .../gpu/drm/panel/panel-novatek-nt36672a.c    | 246 ++++++++++++++++--
+ 2 files changed, 234 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt36672a.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt36672a.yaml
-index 563766d283f6..560fb66d0e5a 100644
---- a/Documentation/devicetree/bindings/display/panel/novatek,nt36672a.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/novatek,nt36672a.yaml
-@@ -20,14 +20,20 @@ allOf:
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index 38799effd00a..ecc1b9aa6a1c 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -328,14 +328,15 @@ config DRM_PANEL_NOVATEK_NT35950
+ 	  mobile phones.
  
- properties:
-   compatible:
--    items:
--      - enum:
--          - tianma,fhd-video
--      - const: novatek,nt36672a
-+    oneOf:
-+      - items:
-+          - enum:
-+              - tianma,fhd-video
-+          - const: novatek,nt36672a
-+
-+      - items:
-+          - enum:
-+              - jdi,fhd-nt35596s
-+          - const: novatek,nt35596s
-+
-     description: This indicates the panel manufacturer of the panel that is
--      in turn using the NT36672A panel driver. This compatible string
--      determines how the NT36672A panel driver is configured for the indicated
--      panel. The novatek,nt36672a compatible shall always be provided as a fallback.
-+      in turn using the NT36672A or the NT35596S panel driver. This compatible string
-+      determines how the panel driver is configured for the indicated panel.
+ config DRM_PANEL_NOVATEK_NT36672A
+-	tristate "Novatek NT36672A DSI panel"
++	tristate "Novatek NT36672A/NT35596S DSI panel"
+ 	depends on OF
+ 	depends on DRM_MIPI_DSI
+ 	depends on BACKLIGHT_CLASS_DEVICE
+ 	help
+ 	  Say Y here if you want to enable support for the panels built
+-	  around the Novatek NT36672A display controller, such as some
+-	  Tianma panels used in a few Xiaomi Poco F1 mobile phones.
++	  around the Novatek NT36672A or NT35596S display controller, such
++	  as some Tianma panels used in a few Xiaomi Poco F1 mobile phones
++	  or the JDI panels used in Xiaomi Mi Mix2S mobile phones.
  
-   reset-gpios:
-     maxItems: 1
+ config DRM_PANEL_NOVATEK_NT39016
+ 	tristate "Novatek NT39016 RGB/SPI panel"
+diff --git a/drivers/gpu/drm/panel/panel-novatek-nt36672a.c b/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
+index 231f371901e8..fcdde538d847 100644
+--- a/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
++++ b/drivers/gpu/drm/panel/panel-novatek-nt36672a.c
+@@ -3,13 +3,15 @@
+  * Copyright (C) 2020 Linaro Ltd
+  * Author: Sumit Semwal <sumit.semwal@linaro.org>
+  *
+- * This driver is for the DSI interface to panels using the NT36672A display driver IC
++ * Copyright (C) 2022 Molly Sophia <mollysophia379@gmail.com>
++ *
++ * This driver is for the DSI interface to panels using the NT36672A/NT35596S display driver IC
+  * from Novatek.
+  * Currently supported are the Tianma FHD+ panels found in some Xiaomi phones, including
+- * some variants of the Poco F1 phone.
++ * some variants of the Poco F1 phone, and the JDI FHD+ panels found in Xiaomi Mi Mix2S phones.
+  *
+- * Panels using the Novatek NT37762A IC should add appropriate configuration per-panel and
+- * use this driver.
++ * Panels using the Novatek NT37762A or NT35596S IC should add appropriate configuration
++ * per-panel and use this driver.
+  */
+ 
+ #include <linux/delay.h>
+@@ -123,12 +125,14 @@ static int nt36672a_panel_unprepare(struct drm_panel *panel)
+ 	if (!pinfo->prepared)
+ 		return 0;
+ 
+-	/* send off cmds */
+-	ret = nt36672a_send_cmds(panel, pinfo->desc->off_cmds,
+-				 pinfo->desc->num_off_cmds);
++	if (pinfo->desc->num_off_cmds != 0) {
++		/* send off cmds if present */
++		ret = nt36672a_send_cmds(panel, pinfo->desc->off_cmds,
++					pinfo->desc->num_off_cmds);
+ 
+-	if (ret < 0)
+-		dev_err(panel->dev, "failed to send DCS off cmds: %d\n", ret);
++		if (ret < 0)
++			dev_err(panel->dev, "failed to send DCS off cmds: %d\n", ret);
++	}
+ 
+ 	ret = mipi_dsi_dcs_set_display_off(pinfo->link);
+ 	if (ret < 0)
+@@ -211,13 +215,15 @@ static int nt36672a_panel_prepare(struct drm_panel *panel)
+ 		goto poweroff;
+ 	}
+ 
+-	/* Send rest of the init cmds */
+-	err = nt36672a_send_cmds(panel, pinfo->desc->on_cmds_2,
+-				 pinfo->desc->num_on_cmds_2);
++	if (pinfo->desc->num_on_cmds_2 != 0) {
++		/* Send rest of the init cmds if present */
++		err = nt36672a_send_cmds(panel, pinfo->desc->on_cmds_2,
++					pinfo->desc->num_on_cmds_2);
+ 
+-	if (err < 0) {
+-		dev_err(panel->dev, "failed to send DCS Init 2nd Code: %d\n", err);
+-		goto poweroff;
++		if (err < 0) {
++			dev_err(panel->dev, "failed to send DCS Init 2nd Code: %d\n", err);
++			goto poweroff;
++		}
+ 	}
+ 
+ 	msleep(120);
+@@ -601,6 +607,212 @@ static const struct nt36672a_panel_desc tianma_fhd_video_panel_desc = {
+ 	.num_off_cmds = ARRAY_SIZE(tianma_fhd_video_off_cmds),
+ };
+ 
++static const struct nt36672a_panel_cmd jdi_nt35596s_video_on_cmds[] = {
++	{ .data = { 0xff, 0x24 } },
++	{ .data = { 0x9d, 0x34 } },
++	{ .data = { 0xfb, 0x01 } },
++	{ .data = { 0xc4, 0x25 } },
++	{ .data = { 0xd1, 0x08 } },
++	{ .data = { 0xd2, 0x84 } },
++	{ .data = { 0xff, 0x26 } },
++	{ .data = { 0xfb, 0x01 } },
++	{ .data = { 0x03, 0x1c } },
++	{ .data = { 0x3b, 0x08 } },
++	{ .data = { 0x6b, 0x08 } },
++	{ .data = { 0x97, 0x08 } },
++	{ .data = { 0xc5, 0x08 } },
++	{ .data = { 0xfb, 0x01 } },
++	{ .data = { 0xff, 0x23 } },
++	{ .data = { 0xfb, 0x01 } },
++	{ .data = { 0x01, 0x84 } },
++	{ .data = { 0x05, 0x2d } },
++	{ .data = { 0x06, 0x00 } },
++	{ .data = { 0x33, 0x07 } },
++	{ .data = { 0x21, 0xee } },
++	{ .data = { 0x22, 0xed } },
++	{ .data = { 0x23, 0xea } },
++	{ .data = { 0x24, 0xe8 } },
++	{ .data = { 0x25, 0xe5 } },
++	{ .data = { 0x26, 0xe2 } },
++	{ .data = { 0x27, 0xde } },
++	{ .data = { 0x28, 0xbb } },
++	{ .data = { 0x29, 0x87 } },
++	{ .data = { 0x2a, 0x77 } },
++	{ .data = { 0x32, 0x0c } },
++	{ .data = { 0x13, 0x3f } },
++	{ .data = { 0x14, 0x34 } },
++	{ .data = { 0x15, 0x2a } },
++	{ .data = { 0x16, 0x25 } },
++	{ .data = { 0x17, 0x9d } },
++	{ .data = { 0x18, 0x9a } },
++	{ .data = { 0x19, 0x97 } },
++	{ .data = { 0x1a, 0x94 } },
++	{ .data = { 0x1b, 0x91 } },
++	{ .data = { 0x1c, 0x8e } },
++	{ .data = { 0x1d, 0x8b } },
++	{ .data = { 0x1e, 0x89 } },
++	{ .data = { 0x1f, 0x86 } },
++	{ .data = { 0x20, 0x83 } },
++	{ .data = { 0xff, 0x22 } },
++	{ .data = { 0x00, 0x0a } },
++	{ .data = { 0x01, 0x43 } },
++	{ .data = { 0x02, 0x5b } },
++	{ .data = { 0x03, 0x6a } },
++	{ .data = { 0x04, 0x7a } },
++	{ .data = { 0x05, 0x82 } },
++	{ .data = { 0x06, 0x85 } },
++	{ .data = { 0x07, 0x80 } },
++	{ .data = { 0x08, 0x7c } },
++	{ .data = { 0x09, 0x7c } },
++	{ .data = { 0x0a, 0x74 } },
++	{ .data = { 0x0b, 0x71 } },
++	{ .data = { 0x0c, 0x6e } },
++	{ .data = { 0x0d, 0x68 } },
++	{ .data = { 0x0e, 0x65 } },
++	{ .data = { 0x0f, 0x5c } },
++	{ .data = { 0x10, 0x32 } },
++	{ .data = { 0x11, 0x18 } },
++	{ .data = { 0x12, 0x00 } },
++	{ .data = { 0x13, 0x00 } },
++	{ .data = { 0x1a, 0x00 } },
++	{ .data = { 0x1b, 0x00 } },
++	{ .data = { 0x1c, 0x00 } },
++	{ .data = { 0x1d, 0x00 } },
++	{ .data = { 0x1e, 0x00 } },
++	{ .data = { 0x1f, 0x00 } },
++	{ .data = { 0x20, 0x00 } },
++	{ .data = { 0x21, 0x00 } },
++	{ .data = { 0x22, 0x00 } },
++	{ .data = { 0x23, 0x00 } },
++	{ .data = { 0x24, 0x00 } },
++	{ .data = { 0x25, 0x00 } },
++	{ .data = { 0x26, 0x00 } },
++	{ .data = { 0x27, 0x00 } },
++	{ .data = { 0x28, 0x00 } },
++	{ .data = { 0x29, 0x00 } },
++	{ .data = { 0x2a, 0x00 } },
++	{ .data = { 0x2b, 0x00 } },
++	{ .data = { 0x2f, 0x00 } },
++	{ .data = { 0x30, 0x00 } },
++	{ .data = { 0x31, 0x00 } },
++	{ .data = { 0x32, 0x0c } },
++	{ .data = { 0x33, 0x0c } },
++	{ .data = { 0x34, 0x0c } },
++	{ .data = { 0x35, 0x0b } },
++	{ .data = { 0x36, 0x09 } },
++	{ .data = { 0x37, 0x09 } },
++	{ .data = { 0x38, 0x08 } },
++	{ .data = { 0x39, 0x05 } },
++	{ .data = { 0x3a, 0x03 } },
++	{ .data = { 0x3b, 0x00 } },
++	{ .data = { 0x3f, 0x00 } },
++	{ .data = { 0x40, 0x00 } },
++	{ .data = { 0x41, 0x00 } },
++	{ .data = { 0x42, 0x00 } },
++	{ .data = { 0x43, 0x00 } },
++	{ .data = { 0x44, 0x00 } },
++	{ .data = { 0x45, 0x00 } },
++	{ .data = { 0x46, 0x00 } },
++	{ .data = { 0x47, 0x00 } },
++	{ .data = { 0x48, 0x00 } },
++	{ .data = { 0x49, 0x03 } },
++	{ .data = { 0x4a, 0x06 } },
++	{ .data = { 0x4b, 0x07 } },
++	{ .data = { 0x4c, 0x07 } },
++	{ .data = { 0x53, 0x01 } },
++	{ .data = { 0x54, 0x01 } },
++	{ .data = { 0x55, 0x89 } },
++	{ .data = { 0x56, 0x00 } },
++	{ .data = { 0x58, 0x00 } },
++	{ .data = { 0x68, 0x00 } },
++	{ .data = { 0x84, 0xff } },
++	{ .data = { 0x85, 0xff } },
++	{ .data = { 0x86, 0x03 } },
++	{ .data = { 0x87, 0x00 } },
++	{ .data = { 0x88, 0x00 } },
++	{ .data = { 0xa2, 0x20 } },
++	{ .data = { 0xa9, 0x01 } },
++	{ .data = { 0xaa, 0x12 } },
++	{ .data = { 0xab, 0x13 } },
++	{ .data = { 0xac, 0x0a } },
++	{ .data = { 0xad, 0x74 } },
++	{ .data = { 0xaf, 0x33 } },
++	{ .data = { 0xb0, 0x03 } },
++	{ .data = { 0xb1, 0x14 } },
++	{ .data = { 0xb2, 0x42 } },
++	{ .data = { 0xb3, 0x40 } },
++	{ .data = { 0xb4, 0xa5 } },
++	{ .data = { 0xb6, 0x44 } },
++	{ .data = { 0xb7, 0x04 } },
++	{ .data = { 0xb8, 0x14 } },
++	{ .data = { 0xb9, 0x42 } },
++	{ .data = { 0xba, 0x40 } },
++	{ .data = { 0xbb, 0xa5 } },
++	{ .data = { 0xbd, 0x44 } },
++	{ .data = { 0xbe, 0x04 } },
++	{ .data = { 0xbf, 0x00 } },
++	{ .data = { 0xc0, 0x75 } },
++	{ .data = { 0xc1, 0x6a } },
++	{ .data = { 0xc2, 0xa5 } },
++	{ .data = { 0xc4, 0x22 } },
++	{ .data = { 0xc5, 0x02 } },
++	{ .data = { 0xc6, 0x00 } },
++	{ .data = { 0xc7, 0x95 } },
++	{ .data = { 0xc8, 0x8a } },
++	{ .data = { 0xc9, 0xa5 } },
++	{ .data = { 0xcb, 0x22 } },
++	{ .data = { 0xcc, 0x02 } },
++	{ .data = { 0xcd, 0x00 } },
++	{ .data = { 0xce, 0xb5 } },
++	{ .data = { 0xcf, 0xaa } },
++	{ .data = { 0xd0, 0xa5 } },
++	{ .data = { 0xd2, 0x22 } },
++	{ .data = { 0xd3, 0x02 } },
++	{ .data = { 0xfb, 0x01 } },
++	{ .data = { 0xff, 0x10 } },
++	{ .data = { 0x26, 0x02 } },
++	{ .data = { 0x35, 0x00 } },
++	{ .data = { 0x51, 0xff } },
++	{ .data = { 0x53, 0x24 } },
++	{ .data = { 0x55, 0x00 } },
++	{ .data = { 0xb0, 0x00 } },
++};
++
++static const struct drm_display_mode jdi_nt35596s_video_panel_mode = {
++	.clock = (1080 + 16 + 28 + 40) * (2160 + 7 + 4 + 24) * 60 / 1000,
++
++	.hdisplay = 1080,
++	.hsync_start = 1080 + 16,
++	.hsync_end = 1080 + 16 + 28,
++	.htotal = 1080 + 16 + 28 + 40,
++
++	.vdisplay = 2160,
++	.vsync_start = 2160 + 7,
++	.vsync_end = 2160 + 7 + 4,
++	.vtotal = 2160 + 7 + 4 + 24,
++
++	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
++};
++
++static const struct nt36672a_panel_desc jdi_nt35596s_video_panel_desc = {
++	.display_mode = &jdi_nt35596s_video_panel_mode,
++
++	.width_mm = 68,
++	.height_mm = 136,
++
++	.mode_flags = MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_VIDEO |
++		      MIPI_DSI_MODE_VIDEO_HSE | MIPI_DSI_CLOCK_NON_CONTINUOUS |
++		      MIPI_DSI_MODE_VIDEO_BURST,
++	.format = MIPI_DSI_FMT_RGB888,
++	.lanes = 4,
++	.on_cmds_1 = jdi_nt35596s_video_on_cmds,
++	.num_on_cmds_1 = ARRAY_SIZE(jdi_nt35596s_video_on_cmds),
++	.on_cmds_2 = NULL,
++	.num_on_cmds_2 = 0,
++	.off_cmds = NULL,
++	.num_off_cmds = 0,
++};
++
+ static int nt36672a_panel_add(struct nt36672a_panel *pinfo)
+ {
+ 	struct device *dev = &pinfo->link->dev;
+@@ -697,6 +909,7 @@ static void nt36672a_panel_shutdown(struct mipi_dsi_device *dsi)
+ 
+ static const struct of_device_id tianma_fhd_video_of_match[] = {
+ 	{ .compatible = "tianma,fhd-video", .data = &tianma_fhd_video_panel_desc },
++	{ .compatible = "jdi,fhd-nt35596s", .data = &jdi_nt35596s_video_panel_desc },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, tianma_fhd_video_of_match);
+@@ -713,5 +926,6 @@ static struct mipi_dsi_driver nt36672a_panel_driver = {
+ module_mipi_dsi_driver(nt36672a_panel_driver);
+ 
+ MODULE_AUTHOR("Sumit Semwal <sumit.semwal@linaro.org>");
+-MODULE_DESCRIPTION("NOVATEK NT36672A based MIPI-DSI LCD panel driver");
++MODULE_AUTHOR("Molly Sophia <mollysophia379@gmail.com>");
++MODULE_DESCRIPTION("NOVATEK NT36672A/NT35596S based MIPI-DSI LCD panel driver");
+ MODULE_LICENSE("GPL");
 -- 
 2.37.1
 

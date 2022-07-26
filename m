@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF025808B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 02:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98005808B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 02:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236985AbiGZAR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 20:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S237055AbiGZAWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 20:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbiGZAR0 (ORCPT
+        with ESMTP id S229970AbiGZAWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 20:17:26 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1EF2497F;
-        Mon, 25 Jul 2022 17:17:25 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id mf4so23454034ejc.3;
-        Mon, 25 Jul 2022 17:17:25 -0700 (PDT)
+        Mon, 25 Jul 2022 20:22:10 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A9725E8E;
+        Mon, 25 Jul 2022 17:22:06 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id d17so18328109lfa.12;
+        Mon, 25 Jul 2022 17:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oegRzPvhEXy0RuRC470612+PNk6XDdhRUUgEKb6Yhw4=;
-        b=HWQ1fG98udOeFnE6AU0udN33g8gV72IHhvVYo9k/QK2jVEm0V3p6wyAu4jE2fBlif0
-         pR57kKLAAeF1+z7j+Y8We1wOOi1VKwasXWwxbY+uqDu3S+U3q0X0kBAEYajNs6C9V9Mj
-         8kE5kV58luSxS/+dNo/HOp/ey0XO6++0M5iUHQPaW2Pn2oEEdACf3n3zoZ8Pc3spWTGO
-         RxN3T13JnI1O8xp/WyvxKmMjmgFfRDcpV6o4ezZQBvsPYZYJFkp1qQYr8jMAAuKY+mNN
-         /IstELYEeO6R6O851esZUTzRYkYYrRYxIV0BpqSXdJnS7jRjUqKO6wjaUKmG/RH0thx+
-         sfZg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EaYNG2aQ0oiTpHSnTbpApj7mEaMN9HPDBkq1B1/AltU=;
+        b=fyXzC1OSbVNMehWpe0sazaYp8HJ9WnM4fHxHbHAtxJzpvcDWFqfZ104p8EuOG5bQxk
+         v2yVEcP9P9YCQma9nNg4WDvYtC+cA8Ff4SSUWyib88GyVtmQ0suu8Ninm6qZp22AOP4p
+         AjJcleU5M8WhVeICiCP7OtN9TC7LtViPG+zqEcMnoiqH/GcQ8pZk7JOOCV+uXjGReP3I
+         tIMPHzOPRjQDjVfzGt+F3gBugF15BaAXGgajRqqCEA9tHevF71C8qBl6080u79EaCPa2
+         N82NMj2KlNKoeHdt1KHpD3fdggQ945TzJxCYlzTiRF/EsLgfQKX0O3IfZDLmI28Urdm3
+         Js/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oegRzPvhEXy0RuRC470612+PNk6XDdhRUUgEKb6Yhw4=;
-        b=vj9DlBV90j7l9HIwI/o3uOZq/vsdO5Azv2KjKHvcHNvrxFQnskNdgxNS1CJmvFfyLu
-         ogSBWNwJA+Pckqzysor57ZEwhLicAOrnP6IZPk+j3KWoxgksOb1iRn48Jz7nSoEKXGyb
-         57YuvPKWKkpS43MN292tTLQMxMQ+ZxR25NYxCAmYkoOT0RE2BfhhhHeTPNGq5Ej3K9aH
-         JRi9M3yg4iWOzqxK2U5VINP5f0LLxDY04DhcV3yPrVmFHxSpY+f7jZrZM/3NyoqYY0aD
-         ioCWrx+7ToXMw+WL2Y5MLqtT3PO0VheXzXlaT6FDtx6borcQmIoNyP7HB+rdRN+zukJs
-         gHaQ==
-X-Gm-Message-State: AJIora9ixQOWpb1rTmRE/jL6hA7ENCAu7oZN7JLTy5BFHzeOxNoTnVnM
-        pS+7TikkkPqSbVZ502wH+9N+TrYt3NC6xA==
-X-Google-Smtp-Source: AGRyM1tkSz7iPceEXBAdwCvJugSsT5xFiZNf6UVIeafmXzAA6CG19dQXYigE2LM59CGI1N5hy3nIJg==
-X-Received: by 2002:a17:907:1dce:b0:72b:40c4:deec with SMTP id og14-20020a1709071dce00b0072b40c4deecmr12646645ejc.70.1658794644128;
-        Mon, 25 Jul 2022 17:17:24 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id h23-20020aa7c957000000b0043bea0a48d0sm3279112edt.22.2022.07.25.17.17.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 17:17:23 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 03:17:20 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [net-next PATCH v4 09/14] net: dsa: qca8k: move set age/MTU/port
- enable/disable functions to common code
-Message-ID: <20220726001720.d75t26oigcdp2eca@skbuf>
-References: <20220724201938.17387-1-ansuelsmth@gmail.com>
- <20220724201938.17387-1-ansuelsmth@gmail.com>
- <20220724201938.17387-10-ansuelsmth@gmail.com>
- <20220724201938.17387-10-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EaYNG2aQ0oiTpHSnTbpApj7mEaMN9HPDBkq1B1/AltU=;
+        b=EYmEyli5vqU0TRZGSAjcHpQU6NW2nvvS/ceF7sQtDCE8dbajHUziG8lIZ66VCVYSg6
+         Xy41EzS19t/caA3S72VKyCLcwkm8zypqHd2x9Uekao66CUutXW4y5odXlc1rV/nEA4y2
+         3Mw89Kx5xqpVqzvfjV3+Eg0asa7fz+ZPGC0Uho/7H4pgjUfgbGDpo3jrIhrFlp2rr/YE
+         ie7bV720vkg47MPoJ2YEnuDxI0MD4jdqZeQb/M1AK+mHLuRiJNbw84VgqZBYM96+9wJr
+         qMvKKjTokBuT4zfp0x692GbOeAQb/ju3mza6gCUga+eTAHHKgOcHmGy8HaA8FH4dfZLP
+         dRig==
+X-Gm-Message-State: AJIora8H/v5YO5F1s7PgH6ifqkkxkBgurmNILGJBlMRyEiWMN4KQlxYa
+        eWCbY9/8t4+6n2ucrRqA9mQmXImHA9yYbDhOiAM=
+X-Google-Smtp-Source: AGRyM1vaNr9ZbK2sLsRtcCiLtDkFXowpSziaiSMqGPZJcdNe25N3DBBuJ44EmmTa3hIyseewUpfKl74ZcPaXOdTx6+s=
+X-Received: by 2002:a05:6512:10c9:b0:48a:9fd6:8527 with SMTP id
+ k9-20020a05651210c900b0048a9fd68527mr289049lfg.384.1658794923344; Mon, 25 Jul
+ 2022 17:22:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220724201938.17387-10-ansuelsmth@gmail.com>
- <20220724201938.17387-10-ansuelsmth@gmail.com>
+References: <20220725030605.1808710-1-klimov.linux@gmail.com> <Yt5Zn9cXDe9/F9RJ@kroah.com>
+In-Reply-To: <Yt5Zn9cXDe9/F9RJ@kroah.com>
+From:   Alexey Klimov <klimov.linux@gmail.com>
+Date:   Tue, 26 Jul 2022 01:21:52 +0100
+Message-ID: <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
+Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Oliver Neukum <oneukum@suse.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        atishp@rivosinc.com, atishp@atishpatra.org,
+        Yury Norov <yury.norov@gmail.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Aaron Tomlin <atomlin@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -86,46 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 10:19:33PM +0200, Christian Marangi wrote:
-> The same set age, MTU and port enable/disable function are used by
-> driver based on qca8k family switch.
-> Move them to common code to make them accessible also by other drivers.
-> While at it also drop unnecessary qca8k_priv cast for void pointers.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> diff --git a/drivers/net/dsa/qca/qca8k-common.c b/drivers/net/dsa/qca/qca8k-common.c
-> index a50c21c90e81..7e573827dac6 100644
-> --- a/drivers/net/dsa/qca/qca8k-common.c
-> +++ b/drivers/net/dsa/qca/qca8k-common.c
-> @@ -373,3 +373,91 @@ void qca8k_port_bridge_leave(struct dsa_switch *ds, int port,
->  	qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
->  		  QCA8K_PORT_LOOKUP_MEMBER, BIT(cpu_port));
->  }
-> +
-> +int
-> +qca8k_set_ageing_time(struct dsa_switch *ds, unsigned int msecs)
+On Mon, Jul 25, 2022 at 9:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
 
-Same comment about prototypes now fitting a single line. I won't be
-making this comment everywhere.
+[..]
 
-> +{
-> +	struct qca8k_priv *priv = ds->priv;
-> +	unsigned int secs = msecs / 1000;
-> +	u32 val;
-> +
-> +	/* AGE_TIME reg is set in 7s step */
-> +	val = secs / 7;
-> +
-> +	/* Handle case with 0 as val to NOT disable
-> +	 * learning
-> +	 */
-> +	if (!val)
-> +		val = 1;
-> +
-> +	return regmap_update_bits(priv->regmap, QCA8K_REG_ATU_CTRL, QCA8K_ATU_AGE_TIME_MASK,
-> +				  QCA8K_ATU_AGE_TIME(val));
+> Anyway, driver looks good to me, nice work!
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Maybe now would be a good time to trim this line to 80 characters?
-Networking wasn't a huge fan of the 100 character limit increase,
-I think this might even be pointed out in the process docs.
+Thanks, Greg. If you don't mind I'll use your tag in next version
+after making changes suggested by Guenter since there will be no
+significant functional changes. If code will change a lot, then the
+process (Documentation/process/submitting-patches.rst) will require me
+to drop the tag.
+
+Best regards,
+Alexey

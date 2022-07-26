@@ -2,265 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC555581785
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB3758178C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239480AbiGZQhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S239490AbiGZQjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 12:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiGZQhD (ORCPT
+        with ESMTP id S229558AbiGZQjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:37:03 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6B713DE6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:36:58 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id w29so10814844qtv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:36:58 -0700 (PDT)
+        Tue, 26 Jul 2022 12:39:33 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86E71B78A;
+        Tue, 26 Jul 2022 09:39:31 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id u14-20020a05600c00ce00b003a323062569so8484416wmm.4;
+        Tue, 26 Jul 2022 09:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GBKyD5smnK7tno71jb1bB9yhbMUK8NKS22ZzIA9O3cQ=;
-        b=DtXe2RdpyxH0D5KqKHKi59fBpof0YzZrWR6No+xlI0oi7Jt7fJ5wN/sJw71Vbuck2k
-         NvRvLftsDA4vov5yU9aFQJBK8yyNGpw5CaYrXUm5/kmALBWuHvLxo8BVSHrT89FzINqG
-         rgBOJlRtAtrAgS396nYc2Xn1ZJtfsXZLMDJWAWfEfq297whVWAC/8QqlBQJpxSb0hsGP
-         RIyu1gFQb8CNeV3kF7YehN7TVtID0tbCJrl7D5Iu9St4EfEQqXeKDQSVpt7zStBmTL8J
-         XLd7zzqzz14NuHZXQlN43ME0SjtGrqmk9mskuneJcnJK7lGUUCdYhN07xWLb1T5MKDyT
-         EuMw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=29x0nCk/ur2KUdOZUnTIumuxDHZRb0pHCThFhm3QUnE=;
+        b=eswxB9oFMd4BSNn6cVnnv4RNChTe8UtyetdfRbT1oXV5VAf6YcJUBTrPXZ0VQe+kNf
+         +0/N6ga2xIWLlVVuGYPllkmQImEkJf0M87MZ6O24tB9ioBD3PxZ0BneI1ZbJpVXZu4DW
+         ZmzFg652az62jrOfIqLi5605sk1LGg51MmHdsdI7fyZp82ha8Em5Mrf4KoslJAhjYLu9
+         pKz231jd7R7sDsu3mebgW3JKbX0xD3b0lnNqkb4IlyAjzKFacnEqGyUpoyfqjXlBTMWz
+         A65qYyxKXwL6DDaonfQDvqxyum0683VRl8OwFhBkxG/is83k6uYOJvDszhaf0/YWLLUV
+         Rsmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GBKyD5smnK7tno71jb1bB9yhbMUK8NKS22ZzIA9O3cQ=;
-        b=EJerEHYEYNX+mkmVS8GmLx4ndqKd9U/BMBITDYHCSNUx8a5/A186O/PfP04HtM4zPE
-         L3se3hY+jLc/C/Px5kZ/EdqtwYvCompFSKlfN7C4GSraYiDkUuIfL5fQ6t1NIa8z3Tjb
-         KXmz/KRNqH7PXinxBOdfH1xv2me7sNCahEw46fOvFURy0QYlsSd0DX1SCqgDCjTXrLlR
-         NMYQR5Bfr3zTZCFJPTz9VCpZM2ybTkybZwExt6p0v5Xn96PAD1176bn4xwDrjos1wIzr
-         ySBBVQUqPuJgDOZeIx079bT80HRrWfvxQ8y4ZsCqvc55f/Pb3mEkHg/7QhC6dVobwGxL
-         DtlA==
-X-Gm-Message-State: AJIora9uIBiyH1b3UUuzSl6rj0LheAfT7fHnWe0f5X9AN5gG/KDMNssp
-        4YYQy3iR83w6Vndlvt+IR9dmzb2ZJUF9v9NZqmRpcw==
-X-Google-Smtp-Source: AGRyM1tYtlb4ZulItXV1x+MgURqOpyK61O09vosQqjXlSyMFwfYI+g7X37g/XlaW76RZhndSbC0nkJ7wm8eXKsKZJsc=
-X-Received: by 2002:a05:622a:19a1:b0:31e:d34f:c9c5 with SMTP id
- u33-20020a05622a19a100b0031ed34fc9c5mr15207878qtc.629.1658853417335; Tue, 26
- Jul 2022 09:36:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=29x0nCk/ur2KUdOZUnTIumuxDHZRb0pHCThFhm3QUnE=;
+        b=vDVdKRGWuyI/0XUQu2uyptE1sRqbL7iwNe3N+JbLSAeGoHHzyyWCZ5VCaBVeKSptNJ
+         H9CdtolAvBNlu9WivuwPQ4QXYmkH7QqNQLk1Y62o1UQP8SxrMhdXLMAo9Bhov7/UiHvl
+         xklcRIIHzxAaQG+8vX3gk8OwTJTB3Pc1z3CUC/hamrdCwDRPTDxkq93FoKEhsi6GsI2k
+         mas8IkNIwxKIbWvrFRV1eNq2goS0VetlsELHLQwKGBn4w48HJgo0TBUzlkuIjTymuMcF
+         30SIQw1Nl2nqqmZ3wYCFkxsDsoI7NCu3+U8a8W8vaBK/fIRaKH4uejSB/bhsbBB7cU6+
+         DlJQ==
+X-Gm-Message-State: AJIora9rWK0ZzCXUQbiCMcGdZovUc7VWFJel5OGuU4y4WEoD9wYihRJO
+        VTSWQt5EcIS8efNW5a5fgQI=
+X-Google-Smtp-Source: AGRyM1sQevuEo1/3d/ZSVQq2jLHlnNo7slsoom4acFCjIgpOnRwPtpOSFtw0+CEM9oqFtCqLBh05Yg==
+X-Received: by 2002:a05:600c:1e83:b0:3a3:3ecb:52a0 with SMTP id be3-20020a05600c1e8300b003a33ecb52a0mr59570wmb.44.1658853570264;
+        Tue, 26 Jul 2022 09:39:30 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.33.57])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c058900b0039c54bb28f2sm19514710wmd.36.2022.07.26.09.39.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 09:39:29 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        j.witteveen@gmail.com, stefanberzl@gmail.com, nathan@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v3 0/7] XP-PEN Deco Pro S support (for-5.20/uclogic)
+Date:   Tue, 26 Jul 2022 18:39:19 +0200
+Message-Id: <20220726163926.10549-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220726142303.4126434-1-abel.vesa@linaro.org> <20220726142303.4126434-2-abel.vesa@linaro.org>
-In-Reply-To: <20220726142303.4126434-2-abel.vesa@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 26 Jul 2022 19:36:46 +0300
-Message-ID: <CAA8EJprrV4vb6j6617T+KoD38hOUwD+7x53B9i51tMke5iHH5g@mail.gmail.com>
-Subject: Re: [RFC 1/9] clk: qcom: qcc-sdm845: Collapse gdsc structs into macros
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 at 17:23, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> Collapse gdsc structs definitions into macros to make them
-> more compact visually.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/clk/qcom/gcc-sdm845.c | 129 ++++------------------------------
->  drivers/clk/qcom/gdsc.h       |  10 +++
->  2 files changed, 23 insertions(+), 116 deletions(-)
->
-> diff --git a/drivers/clk/qcom/gcc-sdm845.c b/drivers/clk/qcom/gcc-sdm845.c
-> index 58aa3ec9a7fc..8529e9c8c90c 100644
-> --- a/drivers/clk/qcom/gcc-sdm845.c
-> +++ b/drivers/clk/qcom/gcc-sdm845.c
-> @@ -3191,122 +3191,19 @@ static struct clk_branch gcc_lpass_sway_clk = {
->  };
->  #endif
->
-> -static struct gdsc pcie_0_gdsc = {
-> -       .gdscr = 0x6b004,
-> -       .pd = {
-> -               .name = "pcie_0_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = POLL_CFG_GDSCR,
-> -};
-> -
-> -static struct gdsc pcie_1_gdsc = {
-> -       .gdscr = 0x8d004,
-> -       .pd = {
-> -               .name = "pcie_1_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = POLL_CFG_GDSCR,
-> -};
-> -
-> -static struct gdsc ufs_card_gdsc = {
-> -       .gdscr = 0x75004,
-> -       .pd = {
-> -               .name = "ufs_card_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = POLL_CFG_GDSCR,
-> -};
-> -
-> -static struct gdsc ufs_phy_gdsc = {
-> -       .gdscr = 0x77004,
-> -       .pd = {
-> -               .name = "ufs_phy_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = POLL_CFG_GDSCR,
-> -};
-> -
-> -static struct gdsc usb30_prim_gdsc = {
-> -       .gdscr = 0xf004,
-> -       .pd = {
-> -               .name = "usb30_prim_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = POLL_CFG_GDSCR,
-> -};
-> -
-> -static struct gdsc usb30_sec_gdsc = {
-> -       .gdscr = 0x10004,
-> -       .pd = {
-> -               .name = "usb30_sec_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = POLL_CFG_GDSCR,
-> -};
-> -
-> -static struct gdsc hlos1_vote_aggre_noc_mmu_audio_tbu_gdsc = {
-> -       .gdscr = 0x7d030,
-> -       .pd = {
-> -               .name = "hlos1_vote_aggre_noc_mmu_audio_tbu_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = VOTABLE,
-> -};
-> -
-> -static struct gdsc hlos1_vote_aggre_noc_mmu_pcie_tbu_gdsc = {
-> -       .gdscr = 0x7d03c,
-> -       .pd = {
-> -               .name = "hlos1_vote_aggre_noc_mmu_pcie_tbu_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = VOTABLE,
-> -};
-> -
-> -static struct gdsc hlos1_vote_aggre_noc_mmu_tbu1_gdsc = {
-> -       .gdscr = 0x7d034,
-> -       .pd = {
-> -               .name = "hlos1_vote_aggre_noc_mmu_tbu1_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = VOTABLE,
-> -};
-> -
-> -static struct gdsc hlos1_vote_aggre_noc_mmu_tbu2_gdsc = {
-> -       .gdscr = 0x7d038,
-> -       .pd = {
-> -               .name = "hlos1_vote_aggre_noc_mmu_tbu2_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = VOTABLE,
-> -};
-> -
-> -static struct gdsc hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc = {
-> -       .gdscr = 0x7d040,
-> -       .pd = {
-> -               .name = "hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = VOTABLE,
-> -};
-> -
-> -static struct gdsc hlos1_vote_mmnoc_mmu_tbu_hf1_gdsc = {
-> -       .gdscr = 0x7d048,
-> -       .pd = {
-> -               .name = "hlos1_vote_mmnoc_mmu_tbu_hf1_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = VOTABLE,
-> -};
-> -
-> -static struct gdsc hlos1_vote_mmnoc_mmu_tbu_sf_gdsc = {
-> -       .gdscr = 0x7d044,
-> -       .pd = {
-> -               .name = "hlos1_vote_mmnoc_mmu_tbu_sf_gdsc",
-> -       },
-> -       .pwrsts = PWRSTS_OFF_ON,
-> -       .flags = VOTABLE,
-> -};
-> +DEFINE_QCOM_CC_GDSC(pcie_0_gdsc, 0x6b004, "pcie_0_gdsc", PWRSTS_OFF_ON, POLL_CFG_GDSCR);
-> +DEFINE_QCOM_CC_GDSC(pcie_1_gdsc, 0x8d004, "pcie_1_gdsc", PWRSTS_OFF_ON, POLL_CFG_GDSCR);
-> +DEFINE_QCOM_CC_GDSC(ufs_card_gdsc, 0x75004, "ufs_card_gdsc", PWRSTS_OFF_ON, POLL_CFG_GDSCR);
-> +DEFINE_QCOM_CC_GDSC(ufs_phy_gdsc, 0x77004, "ufs_phy_gdsc", PWRSTS_OFF_ON, POLL_CFG_GDSCR);
-> +DEFINE_QCOM_CC_GDSC(usb30_prim_gdsc, 0xf004, "usb30_prim_gdsc", PWRSTS_OFF_ON, POLL_CFG_GDSCR);
-> +DEFINE_QCOM_CC_GDSC(usb30_sec_gdsc, 0x10004, "usb30_sec_gdsc", PWRSTS_OFF_ON, POLL_CFG_GDSCR);
-> +DEFINE_QCOM_CC_GDSC(hlos1_vote_aggre_noc_mmu_audio_tbu_gdsc, 0x7d030, "hlos1_vote_aggre_noc_mmu_audio_tbu_gdsc", PWRSTS_OFF_ON, VOTABLE);
-> +DEFINE_QCOM_CC_GDSC(hlos1_vote_aggre_noc_mmu_pcie_tbu_gdsc, 0x7d03c, "hlos1_vote_aggre_noc_mmu_pcie_tbu_gdsc", PWRSTS_OFF_ON, VOTABLE);
-> +DEFINE_QCOM_CC_GDSC(hlos1_vote_aggre_noc_mmu_tbu1_gdsc, 0x7d034, "hlos1_vote_aggre_noc_mmu_tbu1_gdsc", PWRSTS_OFF_ON, VOTABLE);
-> +DEFINE_QCOM_CC_GDSC(hlos1_vote_aggre_noc_mmu_tbu2_gdsc, 0x7d038, "hlos1_vote_aggre_noc_mmu_tbu2_gdsc", PWRSTS_OFF_ON, VOTABLE);
-> +DEFINE_QCOM_CC_GDSC(hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc, 0x7d040, "hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc", PWRSTS_OFF_ON, VOTABLE);
-> +DEFINE_QCOM_CC_GDSC(hlos1_vote_mmnoc_mmu_tbu_hf1_gdsc, 0x7d048, "hlos1_vote_mmnoc_mmu_tbu_hf1_gdsc", PWRSTS_OFF_ON, VOTABLE);
-> +DEFINE_QCOM_CC_GDSC(hlos1_vote_mmnoc_mmu_tbu_sf_gdsc, 0x7d044, "hlos1_vote_mmnoc_mmu_tbu_sf_gdsc", PWRSTS_OFF_ON, VOTABLE);
->
->  static struct clk_regmap *gcc_sdm845_clocks[] = {
->         [GCC_AGGRE_NOC_PCIE_TBU_CLK] = &gcc_aggre_noc_pcie_tbu_clk.clkr,
-> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-> index 5de48c9439b2..c0e616b49dee 100644
-> --- a/drivers/clk/qcom/gdsc.h
-> +++ b/drivers/clk/qcom/gdsc.h
-> @@ -78,6 +78,16 @@ struct gdsc_desc {
->         size_t num;
->  };
->
-> +#define DEFINE_QCOM_CC_GDSC(_name, _gdscr, _pd_name, _pwrsts, _flags) \
+Hello everyone,
 
-IMO just #define QCOM_CC_GDSC
+This is v3 of [1]. Check the description in the link for more
+information, please.
 
-> +       static struct gdsc _name = {                    \
-> +               .gdscr = _gdscr,                \
-> +               .pd = {                         \
-> +                       .name = _pd_name,       \
+v1 -> v2:
 
-.name = # _name
+First patch acked-by Daniel Latypov
 
-This would allos us to get rid of _pd_name.
-Also if you want to take another step further, I'd define
+v2 -> v3:
 
-#define QCOM_GDSC_VOTABLE(name, _gdscr) QCOM_CC_GDSC(_name, _gdscr,
-PWRSTS_OFF_ON, VOTABLE)
-and use it
+Fix bug in "HID: uclogic: Add support for UGEE v2 mouse frames".
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +               },                              \
-> +               .pwrsts = _pwrsts,              \
-> +               .flags = _flags,                \
-> +       }
-> +
->  #ifdef CONFIG_QCOM_GDSC
->  int gdsc_register(struct gdsc_desc *desc, struct reset_controller_dev *,
->                   struct regmap *);
-> --
-> 2.34.3
->
+I copy-pasted the wrong template size.
+Thanks to Nathan Chancellor for looking into it. As he mentioned [2],
+CONFIG_FORTIFY_SOURCE doesn't catch this error without LTO enabled.
+
+[1] https://lore.kernel.org/linux-input/20220717144333.251190-1-jose.exposito89@gmail.com/T/
+[2] https://lore.kernel.org/linux-input/20220717144333.251190-1-jose.exposito89@gmail.com/T/#m796ac6c8f7484b0bafc1f1ed80d3ead90ae5dbb7
+
+José Expósito (7):
+  HID: uclogic: KUnit best practices and naming conventions
+  HID: uclogic: Refactor UGEE v2 string descriptor parsing
+  HID: uclogic: Refactor UGEE v2 frame initialization
+  HID: uclogic: Parse the UGEE v2 frame type
+  HID: uclogic: Add support for UGEE v2 dial frames
+  HID: uclogic: Add support for UGEE v2 mouse frames
+  HID: uclogic: Add support for XP-PEN Deco Pro S
+
+ drivers/hid/Kconfig                   |   2 +-
+ drivers/hid/Makefile                  |   4 +-
+ drivers/hid/hid-ids.h                 |   1 +
+ drivers/hid/hid-uclogic-core.c        |   2 +
+ drivers/hid/hid-uclogic-params-test.c | 192 ++++++++++++++++++++++
+ drivers/hid/hid-uclogic-params.c      | 225 ++++++++++++++++++++++----
+ drivers/hid/hid-uclogic-params.h      |  10 ++
+ drivers/hid/hid-uclogic-rdesc-test.c  |  22 +--
+ drivers/hid/hid-uclogic-rdesc.c       |  74 +++++++++
+ drivers/hid/hid-uclogic-rdesc.h       |   8 +
+ 10 files changed, 494 insertions(+), 46 deletions(-)
+ create mode 100644 drivers/hid/hid-uclogic-params-test.c
 
 
+base-commit: 0cb1fc0988e32bda84c2b7218e0c761af1430baf
 -- 
-With best wishes
-Dmitry
+2.25.1
+

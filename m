@@ -2,172 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1029580E0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8946580E12
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 09:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238355AbiGZHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 03:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S238412AbiGZHkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 03:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238550AbiGZHiq (ORCPT
+        with ESMTP id S232438AbiGZHji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 03:38:46 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C56467
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:38:37 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31e60b8bb07so105105217b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=jqHv3wNh5seyZnCSMu1rVV5xcStpMLXUKBtcU3Y1j6g=;
-        b=ocN5AR1zWFMJEdlfQYlUgBVvqdAFbwAuvDwmF8/WQF7flrQZy/d2lABpWZ90I1DGwj
-         uBDOTwVB3d0mowFCuMBvFItzze3IgDYvVeY7MF+0YCht4BAY9N6Rvg3LgAdPwNAO7Zqa
-         UWsoXpemhN+pJ+qvZZlKIlMkVeXNiyHkkrkksywHf4jDn9qkfULtI3MYl337w8Z1pIi0
-         hGesxH4lpG5OYmornCWfc/StZhbhdxa0VAvVvGMJ8tJ7mP8FUQKCMgedSz5c27wL4aN1
-         Y/7E4OfVr6mEd/aTfmMEtKFSKRG5k/Q6b/oS8yrnS7U3v1pA8SbmNiuNjfXvoeXZ3KFi
-         sMjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=jqHv3wNh5seyZnCSMu1rVV5xcStpMLXUKBtcU3Y1j6g=;
-        b=GpRILJeTQtkk1U5astqHp6tGArkRwlU3WaAF8F3Y0HUhQCyHvZpJGBLPBU68kUSpXZ
-         6AvypuDW3rH6AUUXGaQK0P4/X/4zmgunXv15TVUbMuJy9cA3yG22mshRHEVSBjqS+CV4
-         bT4IDs/Mo0d0fWepUrg0gFVnIkfgEAqC0QuTJCS9aDFGXbBaDxpNyD52VgeIAB/Fhc48
-         l98Y2yJ0yW6Htv+XykmOPTJXf5WhgUI+BuHEU34yicRPPjCiA041GSEGyPlMyKyv9ov1
-         u/BepvJZxHFIZzUAVO4358un/Fvo8zi/fH3MSfmxIiUSoyDWKY+odrd6E3o+wVPem77n
-         OWKg==
-X-Gm-Message-State: AJIora97RyzQEcJRCBZwiSktzgFF8k6Hqhu3im8PH7iAYIUOSc8XK9zI
-        jkVaSoyLfeBkFbH0lAxCzb4NlOAijnSqL2hDAQ==
-X-Google-Smtp-Source: AGRyM1topRzJUtRGNFO9xj3XVL9vGf78Qw66LXXmx8qTxzqFbDxaG+0vvCO+D0Dnu6p0fFCleQQnl3iTvjkdyPhgxw==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:4f77:3b64:736a:394e])
- (user=kaleshsingh job=sendgmr) by 2002:a25:640a:0:b0:671:3386:f860 with SMTP
- id y10-20020a25640a000000b006713386f860mr6983680ybb.423.1658821116945; Tue,
- 26 Jul 2022 00:38:36 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 00:37:50 -0700
-In-Reply-To: <20220726073750.3219117-1-kaleshsingh@google.com>
-Message-Id: <20220726073750.3219117-18-kaleshsingh@google.com>
-Mime-Version: 1.0
-References: <20220726073750.3219117-1-kaleshsingh@google.com>
-X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
-Subject: [PATCH v6 17/17] KVM: arm64: Introduce pkvm_dump_backtrace()
-From:   Kalesh Singh <kaleshsingh@google.com>
-To:     maz@kernel.org, mark.rutland@arm.com, broonie@kernel.org,
-        madvenka@linux.microsoft.com, tabba@google.com,
-        oliver.upton@linux.dev
-Cc:     will@kernel.org, qperret@google.com, kaleshsingh@google.com,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com,
-        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
-        mhiramat@kernel.org, ast@kernel.org, wangkefeng.wang@huawei.com,
-        elver@google.com, keirf@google.com, yuzenghui@huawei.com,
-        ardb@kernel.org, oupton@google.com,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, android-mm@google.com,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 26 Jul 2022 03:39:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BFEC14
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 00:39:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 636431FA15;
+        Tue, 26 Jul 2022 07:39:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1658821176; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rmbXJGe5s5+edusIb6jmJRsEkx7ZmJqyeOYvqRtA3r0=;
+        b=m+mGuYfkM07cVS8L6C+K7w8NCUFdW71HAXJIFSUNLKGHuBvd01E/xQc+pjzwSCYyBa7z34
+        3MVA2xjHl1tLxY/A1+rNS7lzt8cIuV8tnxnTA8VKPiqq5y78NScqsj3VlGJEisG7/pFkXZ
+        yZ6kXZlt/vjYXOpwoEebsHID1F379Ao=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 1EFD02C16E;
+        Tue, 26 Jul 2022 07:39:36 +0000 (UTC)
+Date:   Tue, 26 Jul 2022 09:39:32 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v3] printk: Skip console drivers on PREEMPT_RT.
+Message-ID: <Yt+aNCBNk046viFq@alley>
+References: <87y1wn3g3g.fsf@jogness.linutronix.de>
+ <Ytgu17hATM8iqdGC@linutronix.de>
+ <87ilnrn06u.fsf@jogness.linutronix.de>
+ <Ytj3PisFjOfS9L0Y@linutronix.de>
+ <YtqakGJAQzw/IPul@alley>
+ <YtrYdXWGb0NQLKNA@linutronix.de>
+ <Yt6MzEEFfpyTBIIj@alley>
+ <Yt6gxxRxDZ/wFHrA@linutronix.de>
+ <Yt6nlaSrfZ+fn80x@alley>
+ <Yt6zwP9xSdUhsoQ9@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yt6zwP9xSdUhsoQ9@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dumps the pKVM hypervisor backtrace from EL1 by reading the unwinded
-addresses from the shared stacktrace buffer.
+On Mon 2022-07-25 17:16:16, Sebastian Andrzej Siewior wrote:
+> printk might be invoked in a context with disabled interrupts and or
+> preemption and additionally disables interrupts before it invokes the
+> console drivers. This behaviour is not desired on PREEMPT_RT:
+> - The console driver are using spinlock_t based locking which become sleeping
+>   locks on PREEMPT_RT and must not be acquired with disabled interrupts (or
+>   preemption).
+> 
+> - The locks within the console drivers must remain sleeping locks and they must
+>   not disable interrupts. Printing (and polling for its completion) at 115200
+>   baud on an UART takes too long for PREEMPT_RT in general and so raises the
+>   latency of the IRQ-off time of the system beyond acceptable levels.
+> 
+> Skip printing to the console as temporary workaround until the printing threads
+> and atomic consoles have been introduced or another solution which is
+> compatible with the PREEMPT_RT approach.
+> With this change, the user will not see any kernel message printed to the
+> console but can retrieve the printk buffer from userland (via the dmesg
+> command). This allows enable PREEMPT_RT as a whole without disabling printk and
+> loosing all kernel output.
+> 
+> Disable console printing on PREEMPT_RT.
+> 
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-The nVHE hyp backtrace is dumped on hyp_panic(), before panicking the
-host.
+Thanks a lot for updating the commit message. It looks good to me now.
 
-[  111.623091] kvm [367]: nVHE call trace:
-[  111.623215] kvm [367]:  [<ffff8000090a6570>] __kvm_nvhe_hyp_panic+0xac/0xf8
-[  111.623448] kvm [367]:  [<ffff8000090a65cc>] __kvm_nvhe_hyp_panic_bad_stack+0x10/0x10
-[  111.623642] kvm [367]:  [<ffff8000090a61e4>] __kvm_nvhe_recursive_death+0x24/0x34
-. . .
-[  111.640366] kvm [367]:  [<ffff8000090a61e4>] __kvm_nvhe_recursive_death+0x24/0x34
-[  111.640467] kvm [367]:  [<ffff8000090a61e4>] __kvm_nvhe_recursive_death+0x24/0x34
-[  111.640574] kvm [367]:  [<ffff8000090a5de4>] __kvm_nvhe___kvm_vcpu_run+0x30/0x40c
-[  111.640676] kvm [367]:  [<ffff8000090a8b64>] __kvm_nvhe_handle___kvm_vcpu_run+0x30/0x48
-[  111.640778] kvm [367]:  [<ffff8000090a88b8>] __kvm_nvhe_handle_trap+0xc4/0x128
-[  111.640880] kvm [367]:  [<ffff8000090a7864>] __kvm_nvhe___host_exit+0x64/0x64
-[  111.640996] kvm [367]: ---[ end nVHE call trace ]---
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
----
+Best Regards,
+Petr
 
-Changes in v6:
-  - And range check when dumping pkvm stacktrace, per Oliver
-  - Use consistent nVHE call trace delimiters between protected and
-    non-protected mode, per Oliver
-  - Fix typo in comment, per Fuad
-
-Changes in v5:
-  - Move code out from nvhe.h header to handle_exit.c, per Marc
-  - Fix stacktrace symbolization when CONFIG_RAMDOMIZE_BASE is enabled,
-    per Fuad
-  - Use regular comments instead of doc comments, per Fuad
-
- arch/arm64/kvm/handle_exit.c | 35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-index e83e6f735100..c14fc4ba4422 100644
---- a/arch/arm64/kvm/handle_exit.c
-+++ b/arch/arm64/kvm/handle_exit.c
-@@ -371,6 +371,39 @@ static void hyp_dump_backtrace(unsigned long hyp_offset)
- 	kvm_nvhe_dump_backtrace_end();
- }
- 
-+#ifdef CONFIG_PROTECTED_NVHE_STACKTRACE
-+DECLARE_KVM_NVHE_PER_CPU(unsigned long [NVHE_STACKTRACE_SIZE/sizeof(long)],
-+			 pkvm_stacktrace);
-+
-+/*
-+ * pkvm_dump_backtrace - Dump the protected nVHE HYP backtrace.
-+ *
-+ * @hyp_offset: hypervisor offset, used for address translation.
-+ *
-+ * Dumping of the pKVM HYP backtrace is done by reading the
-+ * stack addresses from the shared stacktrace buffer, since the
-+ * host cannot directly access hypervisor memory in protected
-+ * mode.
-+ */
-+static void pkvm_dump_backtrace(unsigned long hyp_offset)
-+{
-+	unsigned long *stacktrace
-+		= (unsigned long *) this_cpu_ptr_nvhe_sym(pkvm_stacktrace);
-+	int i, size = NVHE_STACKTRACE_SIZE / sizeof(long);
-+
-+	kvm_nvhe_dump_backtrace_start();
-+	/* The saved stacktrace is terminated by a null entry */
-+	for (i = 0; i < size && stacktrace[i]; i++)
-+		kvm_nvhe_dump_backtrace_entry((void *)hyp_offset, stacktrace[i]);
-+	kvm_nvhe_dump_backtrace_end();
-+}
-+#else	/* !CONFIG_PROTECTED_NVHE_STACKTRACE */
-+static void pkvm_dump_backtrace(unsigned long hyp_offset)
-+{
-+	kvm_err("Cannot dump pKVM nVHE stacktrace: !CONFIG_PROTECTED_NVHE_STACKTRACE\n");
-+}
-+#endif /* CONFIG_PROTECTED_NVHE_STACKTRACE */
-+
- /*
-  * kvm_nvhe_dump_backtrace - Dump KVM nVHE hypervisor backtrace.
-  *
-@@ -379,7 +412,7 @@ static void hyp_dump_backtrace(unsigned long hyp_offset)
- static void kvm_nvhe_dump_backtrace(unsigned long hyp_offset)
- {
- 	if (is_protected_kvm_enabled())
--		return;
-+		pkvm_dump_backtrace(hyp_offset);
- 	else
- 		hyp_dump_backtrace(hyp_offset);
- }
--- 
-2.37.1.359.gd136c6c3e2-goog
-
+PS: John, if you ack it then I'll queue it for 5.20.

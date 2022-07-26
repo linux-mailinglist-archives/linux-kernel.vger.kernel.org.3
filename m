@@ -2,310 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73095581134
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2404E581138
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238658AbiGZKd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S238665AbiGZKeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238636AbiGZKd1 (ORCPT
+        with ESMTP id S238668AbiGZKeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:33:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F99E2CDC1
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658831604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jECiOq0E3ywwe79d1zTfZoKz4jXt6DMQSmkfo1EKKqo=;
-        b=U/aNHSAdARjr7E5CEfk8uD/70n0LHGyQwugEGsXSdrPsm0304GINwFZtz+yJt9Ld3jPYMC
-        ypA2WdKfwULjYFZX4cHhtOrKzQBznW7CzlftQkPNzPuINy1W3lnz4CUkWkejf4AUOOoZMa
-        KrGA3/RlS34i3ryK2mRxbcdq/O1lOyA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-q08Knb2cPValgy4UE-IfKQ-1; Tue, 26 Jul 2022 06:33:23 -0400
-X-MC-Unique: q08Knb2cPValgy4UE-IfKQ-1
-Received: by mail-wm1-f70.google.com with SMTP id q19-20020a7bce93000000b003a3264f3de9so5227173wmj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:33:22 -0700 (PDT)
+        Tue, 26 Jul 2022 06:34:11 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9043D2CC88
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:06 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id q18so9110588wrx.8
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=L7cF1S0BR1iDtQS+rWz5OxrcNphL8d0/4H/6zzg8gsk=;
+        b=FKiEkDsrBPnIBGldU7/Qea96rNYXmsCKktbZ+rZhW1SF9qhz7BSd61lB5Ksq3Lg0r8
+         BSiBaQKv6OcEnFLxscbl8Ha/bhjIrdfpc3VC+rtoI6I9u1J/mne7u0uqIovexwzevepg
+         aIwXxr/q8Go41bLTToTa4zZx0MZPYotCm27bIIqIPZdQE6tIxGzhKw0VXtGVZnlIMHi1
+         ZuZsQe086wdw5OBuUDmLqTprsfBQdMfL7JJf+FkU8ZDDy9EnE67RbZsN4L9FFoc7CfOs
+         L2enuSZYREynQRhUwIBGEutAh157j+iVWgz6tw7u3RGso9Z/DmJlQk8aNR4jlr2rttQ8
+         41hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=jECiOq0E3ywwe79d1zTfZoKz4jXt6DMQSmkfo1EKKqo=;
-        b=OuYQ3ejacPfvPNKTj+a2sx00oHFoF8qhOVTFDRgKE+QZro2jdAJuDs2xG5lhGRbtyl
-         qwHA3dmOix5brzTv612or2HWquQjrBMQc7K/gSBK+3NIN4w1z4wLTLBfyC9KsbOd0nRJ
-         mybRtXm72g7gEIiII1OLMC6BhUTnlmfNnm2p4ZZocslUmFGP9Z1HQVlISbxRBLXaL46F
-         IGsrNwVnJ7k6DALkZrPonijO07LTKSQebzZORpint5ngTM47izxmmS4BxvwLjb1gWVkc
-         o84EV99awXox6I2qL23b0iBGfkkC4iWkw9BFtnY3gCaG1py4yxK/aAJluTebpDnNn5VM
-         vToA==
-X-Gm-Message-State: AJIora/48XksxxQEHca6HyEAa7W6N0Q+Y8tXCTSedScdHtaf+asUYY7u
-        ZwVSRQ0uKiTwRdx6tUkcuLnZ5+raoQCRyyXtpXia4BDipeaVrH5Smmuo1l3PGlLEnPOMVpF17ND
-        9XsPIdqHMxiys1jrYpwqetRgh
-X-Received: by 2002:a05:6000:1541:b0:21d:b298:96be with SMTP id 1-20020a056000154100b0021db29896bemr10132072wry.206.1658831601873;
-        Tue, 26 Jul 2022 03:33:21 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tTQ/OcdsegKe5OGqBkLomcrzDjzWC9phkXjmP0MUcp3Qss3S4w5JJ0BWvgekckWmI9RvVtvw==
-X-Received: by 2002:a05:6000:1541:b0:21d:b298:96be with SMTP id 1-20020a056000154100b0021db29896bemr10132031wry.206.1658831601234;
-        Tue, 26 Jul 2022 03:33:21 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-104-164.dyn.eolo.it. [146.241.104.164])
-        by smtp.gmail.com with ESMTPSA id r11-20020a0560001b8b00b0021e6baea4ffsm10137380wru.29.2022.07.26.03.33.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=L7cF1S0BR1iDtQS+rWz5OxrcNphL8d0/4H/6zzg8gsk=;
+        b=focw4n6NFy9H9x/dAz2KlbERTOoglG7o4EWB5AY19PE+FrhXzpxwGTFUtzvO4kJ2GQ
+         QTsuKHV1p7zZ+KEOwQvv11c/2dlUw/gT6xozIzAPMZClPqscRid927NceNaxyYHgW2JZ
+         /pisGpIQqaB21WkGScjK/WjJqxV894oCtXTRGWggcGVGt59VqyqqsG10wfAixI6j4cXU
+         3CAHXnOadKbjVAAYgMSLM5d2Zv78wgv2+pKURjVU0DXv1EBwq/rp+s5mOgkX45UVqjJn
+         1lx5Zp+zwiWqhdD6oc7M8ldS9H3UtaQCdNY4TJuRHFssZOUYvwMbJAvyPkb2IZM5H+J+
+         P4vQ==
+X-Gm-Message-State: AJIora+5Duu+FIL6aLRD1sAHXUBxhF6pQpDCsC/kpfmtfjouVqaYMd3S
+        dvWSPzCEI7/PgNS5H/XGH3WuTw==
+X-Google-Smtp-Source: AGRyM1uyiuaZ7sRQ/+/0vbZseRe6hCKHZv5K0YV4/qCtSPx8WCUAqPe3SrO3oPl2godcD/NnhhmFXA==
+X-Received: by 2002:adf:e18b:0:b0:21e:894e:48c with SMTP id az11-20020adfe18b000000b0021e894e048cmr6008220wrb.341.1658831644991;
+        Tue, 26 Jul 2022 03:34:04 -0700 (PDT)
+Received: from localhost.localdomain (2a02-8440-4641-6f91-91b7-326a-5d27-a1c3.rev.sfr.net. [2a02:8440:4641:6f91:91b7:326a:5d27:a1c3])
+        by smtp.gmail.com with ESMTPSA id ay35-20020a05600c1e2300b003a2e42ae9a4sm20617121wmb.14.2022.07.26.03.34.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 03:33:20 -0700 (PDT)
-Message-ID: <9cdb7fadf35fc7b7c07d3f3f0fc036da9fd81277.camel@redhat.com>
-Subject: Re: [PATCH net-next v1 1/2] net: asix: ax88772: migrate to phylink
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Russell King <linux@armlinux.org.uk>
-Date:   Tue, 26 Jul 2022 12:33:19 +0200
-In-Reply-To: <20220723174711.1539574-1-o.rempel@pengutronix.de>
-References: <20220723174711.1539574-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 26 Jul 2022 03:34:04 -0700 (PDT)
+From:   Jerome Neanne <jneanne@baylibre.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org
+Cc:     khilman@baylibre.com, narmstrong@baylibre.com, msp@baylibre.com,
+        j-keerthy@ti.com, lee.jones@linaro.org, jneanne@baylibre.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 00/11] Add support for TI TPS65219 PMIC.
+Date:   Tue, 26 Jul 2022 12:33:44 +0200
+Message-Id: <20220726103355.17684-1-jneanne@baylibre.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-07-23 at 19:47 +0200, Oleksij Rempel wrote:
-> There are some exotic ax88772 based devices which may require
-> functionality provide by the phylink framework. For example:
-> - US100A20SFP, USB 2.0 auf LWL Converter with SFP Cage
-> - AX88772B USB to 100Base-TX Ethernet (with RMII) demo board, where it
->   is possible to switch between internal PHY and external RMII based
->   connection.
-> 
-> So, convert this driver to phylink as soon as possible.
-> 
-> Tested with:
-> - AX88772A + internal PHY
-> - AX88772B + external DP83TD510E T1L PHY
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/usb/Kconfig        |   2 +-
->  drivers/net/usb/asix.h         |   3 +
->  drivers/net/usb/asix_devices.c | 123 ++++++++++++++++++++++++++++-----
->  3 files changed, 110 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-> index e62fc4f2aee0..3d46b5f9287a 100644
-> --- a/drivers/net/usb/Kconfig
-> +++ b/drivers/net/usb/Kconfig
-> @@ -168,7 +168,7 @@ config USB_NET_AX8817X
->  	tristate "ASIX AX88xxx Based USB 2.0 Ethernet Adapters"
->  	depends on USB_USBNET
->  	select CRC32
-> -	select PHYLIB
-> +	select PHYLINK
->  	select AX88796B_PHY
->  	imply NET_SELFTESTS
->  	default y
-> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-> index 21c1ca275cc4..74162190bccc 100644
-> --- a/drivers/net/usb/asix.h
-> +++ b/drivers/net/usb/asix.h
-> @@ -27,6 +27,7 @@
->  #include <linux/if_vlan.h>
->  #include <linux/phy.h>
->  #include <net/selftests.h>
-> +#include <linux/phylink.h>
->  
->  #define DRIVER_VERSION "22-Dec-2011"
->  #define DRIVER_NAME "asix"
-> @@ -185,6 +186,8 @@ struct asix_common_private {
->  	struct mii_bus *mdio;
->  	struct phy_device *phydev;
->  	struct phy_device *phydev_int;
-> +	struct phylink *phylink;
-> +	struct phylink_config phylink_config;
->  	u16 phy_addr;
->  	bool embd_phy;
->  	u8 chipcode;
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index 5b5eb630c4b7..3f93bc46a7eb 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -327,6 +327,12 @@ static int ax88772_reset(struct usbnet *dev)
->  	struct asix_common_private *priv = dev->driver_priv;
->  	int ret;
->  
-> +	ret = phylink_connect_phy(priv->phylink, priv->phydev);
-> +	if (ret) {
-> +		netdev_err(dev->net, "Could not connect PHY\n");
-> +		return ret;
-> +	}
+Not implemented
+- DVS
 
-Don't you need to additionally call phylink_disconnect_phy() in later
-error paths? why?
+1-Regulators:
+Full implementation and test
+Visual check: cat /sys/kernel/debug/regulator/regulator_summary
+Full validation requires userspace-consumer and virtual-regulator
+LDO1 is not used and output can be probbed on TP84.
 
-> +
->  	/* Rewrite MAC address */
->  	ether_addr_copy(data->mac_addr, dev->net->dev_addr);
->  	ret = asix_write_cmd(dev, AX_CMD_WRITE_NODE_ID, 0, 0,
-> @@ -343,7 +349,7 @@ static int ax88772_reset(struct usbnet *dev)
->  	if (ret < 0)
->  		goto out;
->  
-> -	phy_start(priv->phydev);
-> +	phylink_start(priv->phylink);
->  
->  	return 0;
->  
-> @@ -590,8 +596,11 @@ static void ax88772_suspend(struct usbnet *dev)
->  	struct asix_common_private *priv = dev->driver_priv;
->  	u16 medium;
->  
-> -	if (netif_running(dev->net))
-> -		phy_stop(priv->phydev);
-> +	if (netif_running(dev->net)) {
-> +		rtnl_lock();
-> +		phylink_suspend(priv->phylink, false);
-> +		rtnl_unlock();
-> +	}
->  
->  	/* Stop MAC operation */
->  	medium = asix_read_medium_status(dev, 1);
-> @@ -622,8 +631,11 @@ static void ax88772_resume(struct usbnet *dev)
->  		if (!priv->reset(dev, 1))
->  			break;
->  
-> -	if (netif_running(dev->net))
-> -		phy_start(priv->phydev);
-> +	if (netif_running(dev->net)) {
-> +		rtnl_lock();
-> +		phylink_resume(priv->phylink);
-> +		rtnl_unlock();
-> +	}
->  }
->  
->  static int asix_resume(struct usb_interface *intf)
-> @@ -659,7 +671,6 @@ static int ax88772_init_mdio(struct usbnet *dev)
->  static int ax88772_init_phy(struct usbnet *dev)
->  {
->  	struct asix_common_private *priv = dev->driver_priv;
-> -	int ret;
->  
->  	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
->  	if (!priv->phydev) {
-> @@ -667,13 +678,6 @@ static int ax88772_init_phy(struct usbnet *dev)
->  		return -ENODEV;
->  	}
->  
-> -	ret = phy_connect_direct(dev->net, priv->phydev, &asix_adjust_link,
-> -				 PHY_INTERFACE_MODE_INTERNAL);
-> -	if (ret) {
-> -		netdev_err(dev->net, "Could not connect PHY\n");
-> -		return ret;
-> -	}
-> -
->  	phy_suspend(priv->phydev);
->  	priv->phydev->mac_managed_pm = 1;
->  
-> @@ -698,6 +702,89 @@ static int ax88772_init_phy(struct usbnet *dev)
->  	return 0;
->  }
->  
-> +static void ax88772_mac_config(struct phylink_config *config, unsigned int mode,
-> +			      const struct phylink_link_state *state)
-> +{
-> +	/* Nothing to do */
-> +}
-> +
-> +static void ax88772_mac_link_down(struct phylink_config *config,
-> +				 unsigned int mode, phy_interface_t interface)
-> +{
-> +	struct usbnet *dev = netdev_priv(to_net_dev(config->dev));
-> +
-> +	asix_write_medium_mode(dev, 0, 0);
-> +	usbnet_link_change(dev, false, false);
-> +}
-> +
-> +static void ax88772_mac_link_up(struct phylink_config *config,
-> +			       struct phy_device *phy,
-> +			       unsigned int mode, phy_interface_t interface,
-> +			       int speed, int duplex,
-> +			       bool tx_pause, bool rx_pause)
-> +{
-> +	struct usbnet *dev = netdev_priv(to_net_dev(config->dev));
-> +	u16 m = AX_MEDIUM_AC | AX_MEDIUM_RE;
-> +
-> +	m |= duplex ? AX_MEDIUM_FD : 0;
-> +
-> +	switch (speed) {
-> +	case SPEED_100:
-> +		m |= AX_MEDIUM_PS;
-> +		break;
-> +	case SPEED_10:
-> +		break;
-> +	default:
-> +		return;
-> +	}
-> +
-> +	if (tx_pause)
-> +		m |= AX_MEDIUM_TFC;
-> +
-> +	if (rx_pause)
-> +		m |= AX_MEDIUM_RFC;
-> +
-> +	asix_write_medium_mode(dev, m, 0);
-> +	usbnet_link_change(dev, true, false);
-> +}
-> +
-> +static const struct phylink_mac_ops ax88772_phylink_mac_ops = {
-> +	.validate = phylink_generic_validate,
-> +	.mac_config = ax88772_mac_config,
-> +	.mac_link_down = ax88772_mac_link_down,
-> +	.mac_link_up = ax88772_mac_link_up,
-> +};
-> +
-> +static int ax88772_phylink_setup(struct usbnet *dev)
-> +{
-> +	struct asix_common_private *priv = dev->driver_priv;
-> +	phy_interface_t phy_if_mode;
-> +	struct phylink *phylink;
-> +
-> +	priv->phylink_config.dev = &dev->net->dev;
-> +	priv->phylink_config.type = PHYLINK_NETDEV;
-> +	priv->phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
-> +		MAC_10 | MAC_100;
-> +
-> +	__set_bit(PHY_INTERFACE_MODE_INTERNAL,
-> +		  priv->phylink_config.supported_interfaces);
-> +	__set_bit(PHY_INTERFACE_MODE_RMII,
-> +		  priv->phylink_config.supported_interfaces);
-> +
-> +	if (priv->embd_phy)
-> +		phy_if_mode = PHY_INTERFACE_MODE_INTERNAL;
-> +	else
-> +		phy_if_mode = PHY_INTERFACE_MODE_RMII;
-> +
-> +	phylink = phylink_create(&priv->phylink_config, dev->net->dev.fwnode,
-> +				 phy_if_mode, &ax88772_phylink_mac_ops);
-> +	if (IS_ERR(phylink))
-> +		return PTR_ERR(phylink);
-> +
-> +	priv->phylink = phylink;
+2-Reset WARM/COLD
+test procedure: launch reboot on the console and check visually
 
-Who will call phylink_destroy() on priv->phylink? It looks like you are
-leaking it ?!?
+warm vs. cold can be configured on the kernel command-line at boot time.
+Default is cold, but adding `reboot=w`
+to kernel command allow testing warm reboot.
 
-Thanks!
+Alternative:
+`# echo warm > /sys/kernel/reboot/mode` 
 
-Paolo
+3-SW Shutdown
+test procedure: launch halt on the console and check visually
+
+Note: enters in competition with other source during probe
+
+Board Test Points can be used to check voltage after system shutdown.
+baseport is not handling wakeup.
+A power OFF/ON cycle is needed to recover.
+
+4-Interrupt Pin (nINT):
+
+Interrupt occurring on PMIC TPS65219 is propagated to SOC
+through EXTINTn pin connected to gic500 interrupt controller
+
+Interrupt lines for TPS65219 shows-up on console:
+cat /proc/interrupts
+
+Validation:
+Create a Residual Voltage interrupt and handling and interrupt source is cleared.
+`tps65219 0-0030: Registered residual voltage for LDO1`
+`533:          1          0  tps65219_irq  35 Edge      LDO1_RV`
+
+Mapped to power button (use TP90 to GND to emulate a physical button)
+
+5-PB Startup and Shutdown:
+New implementation to support both rising and falling edge.
+
+TPS65219 has different interrupts compared to other TPS6521* chips.
+TPS65219 defines two interrupts for the powerbutton one for push and one
+for release.
+
+
+Interrupt support: cat proc/interrupts
+`557:          0          0  tps65219_irq  47 Edge      tps65219-pwrbutton.1.auto`
+`558:          0          0  tps65219_irq  48 Edge      tps65219-pwrbutton.1.auto`
+
+TPS65219 has a multipurpose pin called EN/PB/VSENSE that can be either:
+- EN in which case it functions as an enable pin.
+- VSENSE which compares the voltages and triggers an automatic on/off request.
+- PB in which case it can be configured to trigger an interrupt to the SoC.
+ti,power-button reflects the last one of those options
+where the board has a button wired to the pin and triggers
+an interrupt on pressing it.
+
+6-Changes vs v1:
+
+6.1- Regulators:
+- Further to Mark Brown review:
+Use standard regmap helpers for set_voltage, enable and disable.
+tps65219_set_mode, return -EINVAL in default statement for clarity.
+Reshaped irq handler to report events through the notification API:
+regulator_notifier_call_chain().
+Use standard regulator events (consumer.h).
+
+6.2- Device tree
+- Further to Nishanth Menon review:
+add tag DONOTMERGE
+Board support is pending waiting for TI commitment.
+This device tree is needed for driver test purpose but should not go upstream.
+
+6.3- Bindings
+- Further to Rob Herring review:
+Squash interrupt commit into regulator dt-binding.
+Squash pwrbutton commit into regulator dt-binding.
+Remove interrupt-controller/cells properties because no consumer for those interrupts.
+
+- Further to Mark Brown review:
+Remove constraints on regulator-name.
+
+- Pending for decision from Lee Jones further to Mark Brown review
+The entire binding document should probably be in MFD if it's going to
+have properties for other functions added to it.
+
+6.4- Misc
+- Further to Mark Brown review:
+Use C++ (//) formatting for file header block including SPDX License
+in mfd, regulator and pwrbutton.
+
+Jerome Neanne (7):
+  DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC support for AM642 SK
+    board.
+  DONOTMERGE: arm64: dts: ti: Add pinmux and irq mapping for TPS65219
+    external interrupts
+  regulator: dt-bindings: Add TI TPS65219 PMIC bindings
+  mfd: drivers: Add TI TPS65219 PMIC support
+  mfd: drivers: Add interrupts support to TI TPS65219 PMIC
+  regulator: drivers: Add TI TPS65219 PMIC regulators support
+  arm64: defconfig: Add tps65219 as modules
+
+Markus Schneider-Pargmann (4):
+  DONOTMERGE: arm64: dts: ti: k3-am642-sk: Enable tps65219 power-button
+  MAINTAINERS: OMAP2+ support, add tps65218-pwrbutton
+  mfd: tps65219: Add power-button support
+  Input: Add tps65219 interrupt driven powerbutton
+
+ .../bindings/regulator/ti,tps65219.yaml       | 164 +++++++
+ MAINTAINERS                                   |   4 +
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts        | 115 +++++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/input/misc/Kconfig                    |  10 +
+ drivers/input/misc/Makefile                   |   1 +
+ drivers/input/misc/tps65219-pwrbutton.c       | 150 ++++++
+ drivers/mfd/Kconfig                           |  15 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/tps65219.c                        | 437 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/tps65219-regulator.c        | 416 +++++++++++++++++
+ include/linux/mfd/tps65219.h                  | 364 +++++++++++++++
+ 14 files changed, 1690 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
+ create mode 100644 drivers/input/misc/tps65219-pwrbutton.c
+ create mode 100644 drivers/mfd/tps65219.c
+ create mode 100644 drivers/regulator/tps65219-regulator.c
+ create mode 100644 include/linux/mfd/tps65219.h
+
+-- 
+2.17.1
 

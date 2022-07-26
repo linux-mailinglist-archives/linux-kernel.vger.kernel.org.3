@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C36581BD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 23:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E292581BE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 27 Jul 2022 00:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbiGZV4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 17:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S239423AbiGZWBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 18:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiGZV4A (ORCPT
+        with ESMTP id S229550AbiGZWBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 17:56:00 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D75120A6;
-        Tue, 26 Jul 2022 14:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=QXD2A6Ajbfm76chMd9c4TBy9DlwseOktOgWogUlrNA8=; b=i5aEiOAU8BWsotX7540rUmdihL
-        Peq0blapeK7KZ+3sR+Vy7ckT8eWD5VpFqTtnWKJTtQ3jFQssyKazoEssbBYpywQIfkgNA96DVQ5eJ
-        TArZ5Se5kusKs2F9I+zIc0PsSx43doItVBzXypyu+WmVTCojiQJsYmeXrwME4bgVT2QM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oGSWZ-00BbIl-Ia; Tue, 26 Jul 2022 23:55:31 +0200
-Date:   Tue, 26 Jul 2022 23:55:31 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     alexandru.tachici@analog.com
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gerhard@engleder-embedded.com,
-        geert+renesas@glider.be, joel@jms.id.au, stefan.wahren@i2se.com,
-        wellslutw@gmail.com, geert@linux-m68k.org, robh+dt@kernel.org,
-        d.michailidis@fungible.com, stephen@networkplumber.org,
-        l.stelmach@samsung.com, linux-kernel@vger.kernel.org
-Subject: Re: [net-next v2 2/3] net: ethernet: adi: Add ADIN1110 support
-Message-ID: <YuBi0+wJBlqBPhKn@lunn.ch>
-References: <20220725165312.59471-1-alexandru.tachici@analog.com>
- <20220725165312.59471-3-alexandru.tachici@analog.com>
+        Tue, 26 Jul 2022 18:01:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179B732DAF;
+        Tue, 26 Jul 2022 15:01:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAD24616E1;
+        Tue, 26 Jul 2022 22:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B814C433C1;
+        Tue, 26 Jul 2022 22:01:17 +0000 (UTC)
+Date:   Tue, 26 Jul 2022 18:01:15 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] tracing/user_events: Use bits vs bytes for
+ enabled status page data
+Message-ID: <20220726180115.69320865@gandalf.local.home>
+In-Reply-To: <20220425184631.2068-7-beaub@linux.microsoft.com>
+References: <20220425184631.2068-1-beaub@linux.microsoft.com>
+        <20220425184631.2068-7-beaub@linux.microsoft.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725165312.59471-3-alexandru.tachici@analog.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,120 +47,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int adin1110_set_mac_address(struct net_device *netdev, const unsigned char *dev_addr)
-> +{
-> +	struct adin1110_port_priv *port_priv = netdev_priv(netdev);
-> +	u8 mask[ETH_ALEN];
-> +
-> +	if (!is_valid_ether_addr(dev_addr))
-> +		return -EADDRNOTAVAIL;
-> +
-> +	eth_hw_addr_set(netdev, dev_addr);
-> +	memset(mask, 0xFF, ETH_ALEN);
-> +
-> +	return adin1110_write_mac_address(port_priv, ADIN_MAC_ADDR_SLOT, netdev->dev_addr, mask);
+On Mon, 25 Apr 2022 11:46:30 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-It looks like you have one slot for this? But two interfaces? So if
-you change it on one, you actually change it for both? I would say
-this needs handling better, either two slots, or refuse to allow it to
-be changed.
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 2bcae7abfa81..4afc41e321ac 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -40,17 +40,26 @@
+>   */
+>  #define MAX_PAGE_ORDER 0
+>  #define MAX_PAGES (1 << MAX_PAGE_ORDER)
+> -#define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
+> +#define MAX_BYTES (MAX_PAGES * PAGE_SIZE)
+> +#define MAX_EVENTS (MAX_BYTES * 8)
+>  
+>  /* Limit how long of an event name plus args within the subsystem. */
+>  #define MAX_EVENT_DESC 512
+>  #define EVENT_NAME(user_event) ((user_event)->tracepoint.name)
+>  #define MAX_FIELD_ARRAY_SIZE 1024
+>  
+> +#define STATUS_BYTE(bit) ((bit) >> 3)
+> +#define STATUS_MASK(bit) (1 << ((bit) & 7))
+> +
+> +/* Internal bits to keep track of connected probes */
+> +#define EVENT_STATUS_FTRACE (1 << 0)
+> +#define EVENT_STATUS_PERF (1 << 1)
+> +#define EVENT_STATUS_OTHER (1 << 7)
 
-> +static int adin1110_ioctl(struct net_device *netdev, struct ifreq *rq, int cmd)
-> +{
-> +	if (!netif_running(netdev))
-> +		return -EINVAL;
-> +
-> +	if (!netdev->phydev)
-> +		return -ENODEV;
-> +
-> +	return phy_mii_ioctl(netdev->phydev, rq, cmd);
+Did you mean to shift STATUS_OTHER by 7?
 
-phy_do_ioctl()
+Is EVENT_STATUS_OTHER suppose to be one of the flags within the 3 bits of
+the 7 in STATUS_MASK?
 
-> +static int adin1110_probe_netdevs(struct adin1110_priv *priv)
-> +{
-> +	struct device *dev = &priv->spidev->dev;
-> +	struct adin1110_port_priv *port_priv;
-> +	struct net_device *netdev;
-> +	int ret;
-> +	int i;
-> +
-> +	for (i = 0; i < priv->cfg->ports_nr; i++) {
-> +		netdev = devm_alloc_etherdev(dev, sizeof(*port_priv));
-> +		if (!netdev)
-> +			return -ENOMEM;
-> +
-> +		port_priv = netdev_priv(netdev);
-> +		port_priv->netdev = netdev;
-> +		port_priv->priv = priv;
-> +		port_priv->cfg = priv->cfg;
-> +		port_priv->nr = i;
-> +		priv->ports[i] = port_priv;
-> +		SET_NETDEV_DEV(netdev, dev);
-> +
-> +		ret = device_get_ethdev_address(dev, netdev);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		netdev->irq = priv->spidev->irq;
-> +		INIT_WORK(&port_priv->tx_work, adin1110_tx_work);
-> +		INIT_WORK(&port_priv->rx_mode_work, adin1110_rx_mode_work);
-> +		skb_queue_head_init(&port_priv->txq);
-> +
-> +		netif_carrier_off(netdev);
-> +
-> +		netdev->if_port = IF_PORT_10BASET;
-> +		netdev->netdev_ops = &adin1110_netdev_ops;
-> +		netdev->ethtool_ops = &adin1110_ethtool_ops;
-> +		netdev->priv_flags |= IFF_UNICAST_FLT;
-> +		netdev->features |= NETIF_F_NETNS_LOCAL;
-> +
-> +		ret = devm_register_netdev(dev, netdev);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to register network device\n");
-> +			return ret;
-> +		}
-
-At this point, the device is live. If you are using NFS root for
-example, the kernel will try mounting the rootfs before this even
-returns. So you need to ensure your netdev is functional at this
-point. Anything which happens afterwards needs to be optional, not
-cause an OOPS if missing etc.
+-- Steve
 
 > +
-> +		port_priv->phydev = get_phy_device(priv->mii_bus, i + 1, false);
-> +		if (!port_priv->phydev) {
-> +			netdev_err(netdev, "Could not find PHY with device address: %d.\n", i);
-> +			return -ENODEV;
-> +		}
-> +
-> +		port_priv->phydev = phy_connect(netdev, phydev_name(port_priv->phydev),
-> +						adin1110_adjust_link, PHY_INTERFACE_MODE_INTERNAL);
-> +		if (IS_ERR(port_priv->phydev)) {
-> +			netdev_err(netdev, "Could not connect PHY with device address: %d.\n", i);
-> +			return PTR_ERR(port_priv->phydev);
-> +		}
-> +
-> +		ret = devm_add_action_or_reset(dev, adin1110_disconnect_phy, port_priv->phydev);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	/* ADIN1110 INT_N pin will be used to signal the host */
-> +	ret = devm_request_threaded_irq(dev, priv->spidev->irq, NULL, adin1110_irq,
-> +					IRQF_TRIGGER_LOW | IRQF_ONESHOT, dev_name(dev), priv);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = register_netdevice_notifier(&adin1110_netdevice_nb);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = register_switchdev_blocking_notifier(&adin1110_switchdev_blocking_notifier);
-> +	if (ret < 0) {
-> +		unregister_netdevice_notifier(&adin1110_netdevice_nb);
-> +		return ret;
-> +	}
-> +
-> +	return devm_add_action_or_reset(dev, adin1110_unregister_notifiers, NULL);
-> +}
+>  static char *register_page_data;
+>  
+>  static DEFINE_MUTEX(reg_mutex);
+> -static DEFINE_HASHTABLE(register_table, 4);
+> +static DEFINE_HASHTABLE(register_table, 8);
+>  static DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
+>  
+>  /*
+> @@ -72,6 +81,7 @@ struct user_event {
+>  	int index;
+>  	int flags;
+>  	int min_size;
+> +	char status;
+>  };

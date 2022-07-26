@@ -2,148 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F71581166
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA9C581169
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiGZKpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S233279AbiGZKrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiGZKpk (ORCPT
+        with ESMTP id S230093AbiGZKrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:45:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B0E5FED
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:45:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A80B1B81597
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 10:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D251C341C0;
-        Tue, 26 Jul 2022 10:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658832336;
-        bh=nbaVwL4kXjzhCUBIrQX/hG3/Kht2aI2sNMsVa672Ivc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XxOLpDEZYuQ9XfYA65yY3O2OtXyOKXgUy9DqmCAwmF2ysmC/2KBkogK6CeMrrESGR
-         tFTsHI2EfF4r2GClYoGqrj3ayZdqOvNdaR7hHEDz4cmC1Ws5Ivjg2Dqyf750ROG22e
-         LguP347esIRLrWyY8sRpdaBRJs4H9AuxPM6CL9j9rjyvoH0411YEChpWd7IDeXLyyX
-         aAQykjNgPasrtLHvNT3IDWbk08cJXJQ4loBdfZep4NzG6LazZGAKqx3n8z37fBP8qG
-         BAU1A/dAy2COPUzcZRTBx8QxfOMTfsm518kd6wIr3VVnbGRjmbYgBAKLsFXXdOXoXz
-         Ov8F7odvyihqg==
-Date:   Tue, 26 Jul 2022 11:45:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] ASoC: mchp-spdifrx: disable end of block
- interrupt on failures
-Message-ID: <Yt/Fy1xWUHtpbGMn@sirena.org.uk>
-References: <20220725130925.1781791-1-claudiu.beznea@microchip.com>
- <20220725130925.1781791-2-claudiu.beznea@microchip.com>
+        Tue, 26 Jul 2022 06:47:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B271D20F62;
+        Tue, 26 Jul 2022 03:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658832440; x=1690368440;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=ZyuJfo1tH/pCiSj2o7MaBubPz2oOmRhAnvP+Jqwl3g0=;
+  b=eOt7AC16YMH22SFiRRKYi/eM1fW8rHwpymrxFYBCxrBJ3DYYDNR88c7R
+   YOae+gZK0vGoKEDEZw8reiXe4u/hs8FmAtZRUheYG+0VmsKLgCsO5TS8D
+   GndhnPGx0n7afa9xgMBho6AFEfj7CpK+yAnVtsm7+5YgJXtS97ydp9GoJ
+   oH2c27p+SkRyCFep8ocL3Iuy0FcBcrUla3a5Szc5+raKcBiTPHyIOK8t4
+   LetfXXgnwQkCyKA8jtGxLdSEizuxMsTbFkQ/uexWcWayVHAQyMr+cW8vI
+   Bq3qcSIjS+KBheqHy9PWYFi3tR+njZd0bAMmp9KCdib8xpr3QRdb1+A6q
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="268311999"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="268311999"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 03:47:20 -0700
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="726495838"
+Received: from rgevard-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.32.51])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 03:47:17 -0700
+Message-ID: <4c614defad8e9ce2bccce8a062600212e4978113.camel@intel.com>
+Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
+ Notification
+From:   Kai Huang <kai.huang@intel.com>
+To:     Haitao Huang <haitao.huang@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 26 Jul 2022 22:47:14 +1200
+In-Reply-To: <op.1pwcs8btwjvjmi@hhuan26-mobl1.mshome.net>
+References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
+         <ab467244dd03b5f94bafe9068b1c02790033c18c.camel@intel.com>
+         <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
+         <06a9fef8579e880b9b031f03911739d4d902dbe0.camel@intel.com>
+         <op.1pwcs8btwjvjmi@hhuan26-mobl1.mshome.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 (3.44.3-1.fc36) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b+XP6nxpxfg5BBfu"
-Content-Disposition: inline
-In-Reply-To: <20220725130925.1781791-2-claudiu.beznea@microchip.com>
-X-Cookie: Save energy:  Drive a smaller shell.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-07-26 at 00:10 -0500, Haitao Huang wrote:
+> On Mon, 25 Jul 2022 05:36:17 -0500, Kai Huang <kai.huang@intel.com> wrote=
+:
+>=20
+> > On Fri, 2022-07-22 at 08:21 -0700, Dave Hansen wrote:
+> > > On 7/22/22 06:26, Kai Huang wrote:
+> > > > Did a quick look at the spec.  It appears ENCLU[EDECCSSA] should be=
+ =20
+> > > used
+> > > > together with AEX-notify.  So besides advertising the new
+> > > > SGX_ATTR_ASYNC_EXIT_NOTIFY bit to the KVM guest, I think we should =
+=20
+> > > also
+> > > > advertise the ENCLU[EDECCSSA] support in guest's CPUID, like below =
+=20
+> > > (untested)?
+> > >=20
+> > > Sounds like a great follow-on patch!  It doesn't seem truly functiona=
+lly
+> > > required from the spec:
+> > >=20
+> > > > EDECCSSA is a new Intel SGX user leaf function
+> > > > (ENCLU[EDECCSSA]) that can facilitate AEX notification handling...
+> > >=20
+> > > If that's wrong or imprecise, I'd love to hear more about it and also
+> > > about how the spec will be updated.
+> > >=20
+> >=20
+> > They are enumerated separately, but looks in practice the notify handle=
+r =20
+> > will
+> > use it to switch back to the correct/targeted CSSA to continue to run =
+=20
+> > normally
+> > after handling the exit notify.  This is my understanding of the =20
+> > "facilitate"
+> > mean in the spec.
+> >=20
+> > Btw, in real hardware I think the two should come together, meaning no =
+=20
+> > real
+> > hardware will only support one.
+> >=20
+> > Haitao, could you give us more information?
+> >=20
+> You are right. They are enumerated separately and HW should come with bot=
+h =20
+> or neither.
+> My understanding it is also possible for enclaves choose not to receive =
+=20
+> AEX notify
+> but still use EDECCSSA.
+>=20
 
---b+XP6nxpxfg5BBfu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What is the use case of using EDECCSSA w/o using AEX notify? =C2=A0
 
-On Mon, Jul 25, 2022 at 04:09:21PM +0300, Claudiu Beznea wrote:
+If I understand correctly EDECCSSA effectively switches to another thread (=
+using
+the previous SSA, which is the context of another TCS thread if I understan=
+d
+correctly).  Won't this cause problem?
 
-> +++ b/sound/soc/atmel/mchp-spdifrx.c
-> @@ -288,15 +288,17 @@ static void mchp_spdifrx_isr_blockend_en(struct mch=
-p_spdifrx_dev *dev)
->  	spin_unlock_irqrestore(&dev->blockend_lock, flags);
->  }
-> =20
-> -/* called from atomic context only */
-> +/* called from atomic/non-atomic context */
->  static void mchp_spdifrx_isr_blockend_dis(struct mchp_spdifrx_dev *dev)
->  {
-> -	spin_lock(&dev->blockend_lock);
-> +	unsigned int flags;
-> +
-> +	spin_lock_irqsave(&dev->blockend_lock);
->  	dev->blockend_refcount--;
->  	/* don't enable BLOCKEND interrupt if it's already enabled */
->  	if (dev->blockend_refcount =3D=3D 0)
->  		regmap_write(dev->regmap, SPDIFRX_IDR, SPDIFRX_IR_BLOCKEND);
-> -	spin_unlock(&dev->blockend_lock);
-> +	spin_unlock_irqrestore(&dev->blockend_lock);
->  }
+It probably makes sense to use only AEX notify w/o using EDECCSSA though, b=
+ut
+this should be the case that the enclave detects serious attack and don't w=
+ant
+to continue to run normally.  In another words, it is enclave's choice, but
+hardware should always support both AEX notify and EDECCSSA.
 
-This breaks an x86_64 allmodconfig build:
+--=20
+Thanks,
+-Kai
 
-/build/stage/linux/sound/soc/atmel/mchp-spdifrx.c: In function =E2=80=98mch=
-p_spdifrx_isr_blockend_dis=E2=80=99:
-/build/stage/linux/sound/soc/atmel/mchp-spdifrx.c:296:46: error: macro "spi=
-n_lock_irqsave" requires 2 arguments, but only 1 given
-  296 |         spin_lock_irqsave(&dev->blockend_lock);
-      |                                              ^
-In file included from /build/stage/linux/include/linux/rwsem.h:15,
-                 from /build/stage/linux/include/linux/notifier.h:15,
-                 from /build/stage/linux/include/linux/clk.h:14,
-                 from /build/stage/linux/sound/soc/atmel/mchp-spdifrx.c:9:
-/build/stage/linux/include/linux/spinlock.h:377: note: macro "spin_lock_irq=
-save" defined here
-  377 | #define spin_lock_irqsave(lock, flags)                          \
-      |=20
-/build/stage/linux/sound/soc/atmel/mchp-spdifrx.c:296:9: error: =E2=80=98sp=
-in_lock_irqsave=E2=80=99 undeclared (first use in this function); did you m=
-ean =E2=80=98spin_lock_irq=E2=80=99?
-  296 |         spin_lock_irqsave(&dev->blockend_lock);
-      |         ^~~~~~~~~~~~~~~~~
-      |         spin_lock_irq
-/build/stage/linux/sound/soc/atmel/mchp-spdifrx.c:296:9: note: each undecla=
-red identifier is reported only once for each function it appears in
-/build/stage/linux/sound/soc/atmel/mchp-spdifrx.c:301:9: error: too few arg=
-uments to function =E2=80=98spin_unlock_irqrestore=E2=80=99
-  301 |         spin_unlock_irqrestore(&dev->blockend_lock);
-      |         ^~~~~~~~~~~~~~~~~~~~~~
-In file included from /build/stage/linux/include/linux/rwsem.h:15,
-                 from /build/stage/linux/include/linux/notifier.h:15,
-                 from /build/stage/linux/include/linux/clk.h:14,
-                 from /build/stage/linux/sound/soc/atmel/mchp-spdifrx.c:9:
-/build/stage/linux/include/linux/spinlock.h:402:29: note: declared here
-  402 | static __always_inline void spin_unlock_irqrestore(spinlock_t *lock=
-, unsigned long flags)
-      |                             ^~~~~~~~~~~~~~~~~~~~~~
-/build/stage/linux/sound/soc/atmel/mchp-spdifrx.c:294:22: error: unused var=
-iable =E2=80=98flags=E2=80=99 [-Werror=3Dunused-variable]
-  294 |         unsigned int flags;
-      |                      ^~~~~
-cc1: all warnings being treated as errors
 
---b+XP6nxpxfg5BBfu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLfxcoACgkQJNaLcl1U
-h9AMAQf/ZTHs18/rfqRU4HJc6KLOkajyRypWYU9T41QMxDa2A/tPhxvFZcVAWOlH
-gTxXGPpvcAci0LFAQVRZAB0Qwe4BIe9Bp11pbpADIIzmbRd9ibaChu2tljfssarr
-q05TE4AElzpG1OVce+KmSpxzB8AewceRojlkhnDr3FPmklhNmmKZZCKqrJIZ5rQ5
-HHbPTlO4n568YQxYoTgINEfvgTqIK/XrEpZsVRlAbw3OHbmZksnxXPi/kJRs86rd
-/USNouYj8KNr208jceC57O8uqmE7nP0dzig3OjIcNPZ+xps863Uw03nTqFfnOtIW
-uRXTrfgj80cNEWr2+ddok6ev5vf3zQ==
-=BLt+
------END PGP SIGNATURE-----
-
---b+XP6nxpxfg5BBfu--

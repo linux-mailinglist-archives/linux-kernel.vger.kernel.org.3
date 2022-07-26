@@ -2,117 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F39581723
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29384581726
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 18:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbiGZQRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 12:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S239215AbiGZQSX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 26 Jul 2022 12:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239140AbiGZQRO (ORCPT
+        with ESMTP id S229815AbiGZQSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 12:17:14 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6C9EE00
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:17:13 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id k3so10735506vsr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2geObz/qPbQ0zmW0zjdppN56rmNh6IuNe6i2t19UWOo=;
-        b=ofQmKhi/49cqZ5A1rRryuXLezENFS9l4JDZrD2ri8Yk6DRsP18VOtFBHAW45b/UMui
-         TBr8fc1SVa8bnC9+RXA97hPki0bHu4mud9Eldgu/3eObunJTYIDt11xTLSlG2UQ92Yv8
-         QSKMwgoP4zb1R0maTvcscdYJ3As0sKT0QdFkayY9ekiSTbcT9nH/ptHiUxmmls93o0BD
-         4+MbvwKz4G7HV1aRJKtzFIwajmXpjKmi4kqsQWnJINKdYAgnwcrd+8f0AQDx3znN24OX
-         udAVJiwq53I53fbVLwIlvnQOM9EC0dvszcGohD/bhgrqsXHmJp+iLVxaHi2zZx52Rfke
-         yGUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=2geObz/qPbQ0zmW0zjdppN56rmNh6IuNe6i2t19UWOo=;
-        b=SsWdS9ieDJkf3gyQ3mmFKpqizw96K3cLmcnhn6ngM3OpamqjeEProB+bmMOd2jsCbp
-         1/d8vQl7Udhmsw03KgeVDGyVQ2LUdxnr6lOGFVAkEewOevwxn00gsLIIrftfSy+jEcY/
-         FOYqRLO9KGO8O/L7voEvSMwyVlL9dP8CCYtZutZ6RDfQb0C0z6zEFKnpW9UAC7Gjltpw
-         /l5IVwbf4M7oSGfk4c7kgf20suIMxtpAurdtO80Ns+OZc7kn6PJRjp5TbAJUzefLVY5a
-         Qp3Qh66u5bHCLV5F0OU7ZnhBg7dmQrWW4kTyMRpRE2GQHPsPhTyVyosjLRvGOU0m9D84
-         2ndg==
-X-Gm-Message-State: AJIora+WYap+rlG0GfIyVf+TpvRq/snmu+4LEpdB8zKyMLRNwM5t7jIQ
-        foGDtkj24f2k92cprUDxr8Rz36mUjmQnT6ricXA=
-X-Google-Smtp-Source: AGRyM1vsERW5ExbDZ1cfVh9Iq9uCCbPK65wLhBWU9vW/smWA40rNYGQbGWXkTSAs6Ip+dO0b4vYPVswvlwzdU5bgAEo=
-X-Received: by 2002:a67:cb11:0:b0:355:84b2:5c58 with SMTP id
- b17-20020a67cb11000000b0035584b25c58mr5069497vsl.43.1658852232443; Tue, 26
- Jul 2022 09:17:12 -0700 (PDT)
+        Tue, 26 Jul 2022 12:18:21 -0400
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A012255A5
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 09:18:20 -0700 (PDT)
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay01.hostedemail.com (Postfix) with ESMTP id B17811C63C5;
+        Tue, 26 Jul 2022 16:18:18 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 3D0AA20024;
+        Tue, 26 Jul 2022 16:18:16 +0000 (UTC)
+Message-ID: <1c536f8e9666725ce9f3eb97acc34d08f38d2095.camel@perches.com>
+Subject: Re: [PATCH] VMCI: Update maintainers for VMCI
+From:   Joe Perches <joe@perches.com>
+To:     Vishnu Dasa <vdasa@vmware.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "rajeshjalisatgi@gmail.com" <rajeshjalisatgi@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Pv-drivers <Pv-drivers@vmware.com>,
+        Bryan Tan <bryantan@vmware.com>
+Date:   Tue, 26 Jul 2022 09:18:15 -0700
+In-Reply-To: <47D07B41-C327-4908-A383-683FC6C67040@vmware.com>
+References: <20220725163246.38486-1-vdasa@vmware.com>
+         <Yt7bfyANrfdPxdS8@kroah.com>
+         <FD326388-D2BB-42B4-B217-89DB9C134866@vmware.com>
+         <YuAD90UfLnf1Ojso@kroah.com>
+         <47D07B41-C327-4908-A383-683FC6C67040@vmware.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Received: by 2002:a67:ea88:0:0:0:0:0 with HTTP; Tue, 26 Jul 2022 09:17:11
- -0700 (PDT)
-Reply-To: cfc.ubagroup09@gmail.com
-From:   Kristalina Georgieva <ubagroup.tgo12@gmail.com>
-Date:   Tue, 26 Jul 2022 09:17:11 -0700
-Message-ID: <CADnAz75BBK3Vrx2Wt8H0_TFunUUpJu6wCMtMnTXUmmptq2ErJw@mail.gmail.com>
-Subject: =?UTF-8?Q?GOWY_T=C3=84ZELIK?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Stat-Signature: 4ogh8f9z7ycintqz6pitj7rkzrkyccbw
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 3D0AA20024
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19NAXR081PqcA4zDQC4b0ZscieEdEbqVDI=
+X-HE-Tag: 1658852296-201436
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hormatly pe=C3=BDdalanyjy,
-Bu haty size bir a=C3=BD =C3=B6=C5=88 iberipdim, =C3=BD=C3=B6ne sizden e=C5=
-=9Fitmedim, =C3=BDok
-Al=C3=BDandygy=C5=88yza ynan=C3=BDaryn we =C5=9Fonu=C5=88 =C3=BC=C3=A7inem =
-size =C3=BDene iberdim,
-Ilki bilen men dolandyryjy m=C3=BCdir Kristalina Georgi=C3=BDewa we
-Halkara Wal=C3=BDuta Gaznasyny=C5=88 prezidenti.
+On Tue, 2022-07-26 at 15:55 +0000, Vishnu Dasa wrote:
+> > On Jul 26, 2022, at 8:10 AM, Greg KH <gregkh@linuxfoundation.org wrote:
+> > On Mon, Jul 25, 2022 at 06:29:25PM +0000, Vishnu Dasa wrote:
+> > > > On Jul 25, 2022, at 11:05 AM, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > On Mon, Jul 25, 2022 at 09:32:46AM -0700, vdasa@vmware.com wrote:
+> > > > > From: Vishnu Dasa <vdasa@vmware.com>
+> > > > > Remove Rajesh as a maintainer for the VMCI driver.
+> > > > Why?
+> > > Rajesh is no longer with VMware and won't be working on VMCI.
+> > 
+> > But employment does not matter for maintainership and has nothing to do
+> > with it.  Maintainership follows the person, not the company, you all
+> > know this.
+> > 
+> > So for obvious reasons, I can't take this type of change without
+> > Rajesh acking it.
+> 
+> I understand.  After getting in touch with Rajesh, cc'ing him via his
+> personal email ID.
+> 
+> Rajesh, could you please provide your ack if you agree with this patch to
+> remove you as the maintainer for VMCI?
 
-Aslynda, t=C3=B6weregind=C3=A4ki =C3=A4hli p=C3=A4sgel=C3=A7ilikleri we mes=
-eleleri g=C3=B6zden ge=C3=A7irdik
-doly d=C3=A4l amaly=C5=88yz we t=C3=B6legleri =C3=BDerine =C3=BDetirip bilm=
-ezligi=C5=88iz
-opsi=C3=BDalary =C3=BC=C3=A7in size gar=C5=9Fy t=C3=B6leg t=C3=B6len=C3=BD=
-=C3=A4r
-=C3=B6=C5=88ki ge=C3=A7irimler, tassyklamak =C3=BC=C3=A7in sahypamyza giri=
-=C5=88 38
-=C2=B0 53=E2=80=B256 =E2=80=B3 N 77 =C2=B0 2 =E2=80=B2 39 =E2=80=B3 W.
+If being an employee of a company is a criteria for maintainership
+of this subsystem, likely the subsystem entry should be:
 
-Biz direktorlar ge=C5=88e=C5=9Fi, B=C3=BCtind=C3=BCn=C3=BD=C3=A4 banky we P=
-ul gaznasy
-Wa=C5=9Fington, Halkara Halkara Pul Gaznasy, B=C3=B6l=C3=BCm bilen bilelikd=
-e
-Amerikany=C5=88 Birle=C5=9Fen =C5=9Etatlaryny=C5=88 Gazna we k=C3=A4bir be=
-=C3=BDleki der=C5=88ew guramalary
-Amerikany=C5=88 Birle=C5=9Fen =C5=9Etatlarynda degi=C5=9Flidir. sargyt etdi
-Da=C5=9Fary =C3=BDurt t=C3=B6leg t=C3=B6leg b=C3=B6l=C3=BCmimiz, United Ban=
-k
-Afrika Lome Togo, size $ VISA karto=C3=A7kasy bermek =C3=BC=C3=A7in
-Gaznadan has k=C3=B6p pul almak =C3=BC=C3=A7in gaznadan 1,5 million.
+"S:	Supported" not "S:	Maintained"
 
-Der=C5=88ewimizi=C5=88 dowamynda g=C3=B6zledik
-t=C3=B6legi=C5=88izi=C5=88 korrumpirlenen i=C5=9Fg=C3=A4rler tarapyndan gij=
-ikdirilendigine alada bildiri=C5=88
-seri=C5=9Fd=C3=A4=C5=88izi hasaby=C5=88yza g=C3=B6n=C3=BCkdirm=C3=A4ge syna=
-ny=C5=9F=C3=BDan Banky=C5=88
-hususy.
+MAINTAINERS:VMWARE VMCI DRIVER
+MAINTAINERS-M:  Bryan Tan <bryantan@vmware.com>
+MAINTAINERS-M:  Rajesh Jalisatgi <rjalisatgi@vmware.com>
+MAINTAINERS-M:  Vishnu Dasa <vdasa@vmware.com>
+MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+MAINTAINERS-L:  linux-kernel@vger.kernel.org
+MAINTAINERS-S:  Maintained
 
-Bu g=C3=BCn bolsa gaznany=C5=88yzy=C5=88 Karta berilendigini habar ber=C3=
-=BD=C3=A4ris
-UBA Bank tarapyndan VISA we eltip berm=C3=A4ge ta=C3=BDyn. Indi
-UBA Bank m=C3=BCdiri bilen habarla=C5=9Fy=C5=88, ady jenap Toni
-Elumelu, E-po=C3=A7ta: (cfc.ubagroup09@gmail.com)
-bankomat VISA karty=C5=88yzy n=C3=A4dip almalydygyny a=C3=BDtmak =C3=BC=C3=
-=A7in.
+Likely that's true for every VMware entry.
 
-Hormatlamak bilen,
+MAINTAINERS:VMWARE BALLOON DRIVER
+MAINTAINERS-M:  Nadav Amit <namit@vmware.com>
+MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+MAINTAINERS-L:  linux-kernel@vger.kernel.org
+MAINTAINERS-S:  Maintained
+MAINTAINERS-F:  drivers/misc/vmw_balloon.c
+MAINTAINERS-
+MAINTAINERS:VMWARE PVRDMA DRIVER
+MAINTAINERS-M:  Bryan Tan <bryantan@vmware.com>
+MAINTAINERS-M:  Vishnu Dasa <vdasa@vmware.com>
+MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+MAINTAINERS-L:  linux-rdma@vger.kernel.org
+MAINTAINERS-S:  Maintained
+MAINTAINERS-F:  drivers/infiniband/hw/vmw_pvrdma/
+MAINTAINERS-
+MAINTAINERS-VMware PVSCSI driver
+MAINTAINERS-M:  Vishal Bhakta <vbhakta@vmware.com>
+MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+MAINTAINERS-L:  linux-scsi@vger.kernel.org
+MAINTAINERS-S:  Maintained
+MAINTAINERS-F:  drivers/scsi/vmw_pvscsi.c
+MAINTAINERS-F:  drivers/scsi/vmw_pvscsi.h
+MAINTAINERS-
+MAINTAINERS:VMWARE VMMOUSE SUBDRIVER
+MAINTAINERS-M:  Zack Rusin <zackr@vmware.com>
+MAINTAINERS-R:  VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>
+MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+MAINTAINERS-L:  linux-input@vger.kernel.org
+MAINTAINERS-S:  Maintained
+MAINTAINERS-F:  drivers/input/mouse/vmmouse.c
+MAINTAINERS-F:  drivers/input/mouse/vmmouse.h
+MAINTAINERS-
+MAINTAINERS:VMWARE VMXNET3 ETHERNET DRIVER
+MAINTAINERS-M:  Ronak Doshi <doshir@vmware.com>
+MAINTAINERS-R:  VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+MAINTAINERS-L:  netdev@vger.kernel.org
+MAINTAINERS-S:  Maintained
+MAINTAINERS-F:  drivers/net/vmxnet3/
+MAINTAINERS-
 
-Hanym Kristalina Georgi=C3=BDewa

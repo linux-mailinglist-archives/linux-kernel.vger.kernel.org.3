@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DFC581662
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E21E58166C
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235899AbiGZP3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S236288AbiGZPa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiGZP3G (ORCPT
+        with ESMTP id S230219AbiGZPa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:29:06 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB3FDFCF;
-        Tue, 26 Jul 2022 08:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658849345; x=1690385345;
-  h=to:cc:subject:references:date:mime-version:
-   content-transfer-encoding:from:message-id:in-reply-to;
-  bh=/PrORd58ALKhiuN1jepHSSL1AFYlYZW+6m1cjPphYV4=;
-  b=ebFjznKkVXP1lmcLG0yIt4Essxz05N1hiO3USrePFAyCJOW9Z7S6DTbX
-   xOnpzybzWJ9DbCF7NcWGzhNqdpzgr9rxgtcLqC0QDATCYcxwYxtuNBGeO
-   JWmSEANlbO5qjZkOwBT853GNjLrn4TbQo/+jFsug/9frmdZlk8bIXe2A/
-   RofRUOQ8rfzb+fHby7HD/qDVh4Y4iHsW7rRnlSEPdKWR9wcxOEvpexDaW
-   KaGSy+s4wA8IkZOWb4cGMpAWiRymzNTkQzqJac2lAv48EenFHNuiM9lzS
-   DsL7EeM1Dv80owKcneQVNVTDYDAN27cKxUy52zBOaQ73r+B6ibBiNxPqU
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10420"; a="286738891"
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="286738891"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 08:29:05 -0700
-X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
-   d="scan'208";a="575534287"
-Received: from hhuan26-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.212.15.50])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 26 Jul 2022 08:29:03 -0700
-Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
-To:     "Dave Hansen" <dave.hansen@intel.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Kai Huang" <kai.huang@intel.com>
-Cc:     "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Sean Christopherson" <seanjc@google.com>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
- <ab467244dd03b5f94bafe9068b1c02790033c18c.camel@intel.com>
- <a82e840f-2030-7ab3-7160-f1b900ecdb7d@intel.com>
- <06a9fef8579e880b9b031f03911739d4d902dbe0.camel@intel.com>
- <op.1pwcs8btwjvjmi@hhuan26-mobl1.mshome.net>
- <4c614defad8e9ce2bccce8a062600212e4978113.camel@intel.com>
-Date:   Tue, 26 Jul 2022 10:28:19 -0500
+        Tue, 26 Jul 2022 11:30:26 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D1DAE45
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:30:25 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bn9so9794675wrb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h0wgweyi5NGRv+HE2MTaBWrplm2EHlyiIAxkkqIQSs0=;
+        b=X47KxyizSGoS2M4kT8l3dojbBsx8AlSGEk/cpikgOxJynDa/Y5++hdo0KEAxdqBZMw
+         SyXwpOijT0+YR5+VNyj5Er+GLUFDxf3oOutcVSwsJudhHX+45ov34VH+/yEvyjbvE8OE
+         J/EFnpOl9nJGfEPyWu+AOV5EfDpSl/ROMPUnOAE39kCW9HcAIfrNVEJPbYmzGJv6u3fo
+         shx9bLD+thS2W6D2iiGNBW/5/NgufOiCpSr/QOMU5h3KjQtCEiPeMliB/NdB3fhWZCYA
+         Kw2/wCpm0xIephjsdP0ShBZ2PdbKM3zzjT1FtA6vcdwADBxizYVd8YY3CBuSJYnZk34O
+         MEZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h0wgweyi5NGRv+HE2MTaBWrplm2EHlyiIAxkkqIQSs0=;
+        b=S17urj5iN0zAlY5Si3lvNV0spQhE1IYiaXQbHq80l/SmlDssKOmDRnvSlG6q5NjGoZ
+         Hhlb9IGKTjkhsdZJnQMKaeRsbFl6OnqbH7S1uw2979cHtXVC26AECl+0/MEDcqNewNy3
+         4keWImmoNjkIBMApJ72KnUlEGd31tC5x5jRpBhQ/YZSYDqTNmc3cP31Hl0rWNub7W8es
+         PN14kxzrQbfss0QZYq4bATdGvA1WR/A869aFLYRA5AWpNUCA4HgRagfENZGRqkDlMDJg
+         5GEFuDdryGS9SMvDxrW2tO/snQIW+j0AjzW1UjKQznVFEZScV7CP7x0zHDhRVvnQz+DI
+         vnnQ==
+X-Gm-Message-State: AJIora8i+4EdO8M2mvAMRQN4qBE/71+Oivak6Pmyt/tQwNpaJOdF3jNl
+        wcRwVsDnvZyM1kIbJzflR2sOixXUgu/pah1XKHmeAQ==
+X-Google-Smtp-Source: AGRyM1uqZdO2rcSVp/+TPJN7QEyIEDvp460BhjWSnS8sTm4VBrNNvBNfn82pg1xgJHAV0aUyNeV626vcuz4oZvZTUiI=
+X-Received: by 2002:a05:6000:508:b0:21d:4105:caf9 with SMTP id
+ a8-20020a056000050800b0021d4105caf9mr11603813wrf.699.1658849423820; Tue, 26
+ Jul 2022 08:30:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-From:   "Haitao Huang" <haitao.huang@linux.intel.com>
-Organization: Intel Corp
-Message-ID: <op.1pw6lhz8wjvjmi@hhuan26-mobl1.mshome.net>
-In-Reply-To: <4c614defad8e9ce2bccce8a062600212e4978113.camel@intel.com>
-User-Agent: Opera Mail/1.0 (Win32)
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726073750.3219117-1-kaleshsingh@google.com>
+ <20220726073750.3219117-5-kaleshsingh@google.com> <Yt/7WzuBzc1m/6JU@sirena.org.uk>
+In-Reply-To: <Yt/7WzuBzc1m/6JU@sirena.org.uk>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Tue, 26 Jul 2022 08:30:12 -0700
+Message-ID: <CAC_TJveY_pk6AaMuRASy8UmhHvk2Du6A9VbuwrJ50Sw1RAPBMg@mail.gmail.com>
+Subject: Re: [PATCH v6 04/17] arm64: stacktrace: Handle frame pointer from
+ different address spaces
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Fuad Tabba <tabba@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        andreyknvl@gmail.com, vincenzo.frascino@arm.com,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Marco Elver <elver@google.com>, Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>, android-mm@google.com,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 05:47:14 -0500, Kai Huang <kai.huang@intel.com> wrote:
-
-> On Tue, 2022-07-26 at 00:10 -0500, Haitao Huang wrote:
->> On Mon, 25 Jul 2022 05:36:17 -0500, Kai Huang <kai.huang@intel.com>  
->> wrote:
->>
->> > On Fri, 2022-07-22 at 08:21 -0700, Dave Hansen wrote:
->> > > On 7/22/22 06:26, Kai Huang wrote:
->> > > > Did a quick look at the spec.  It appears ENCLU[EDECCSSA] should  
->> be
->> > > used
->> > > > together with AEX-notify.  So besides advertising the new
->> > > > SGX_ATTR_ASYNC_EXIT_NOTIFY bit to the KVM guest, I think we should
->> > > also
->> > > > advertise the ENCLU[EDECCSSA] support in guest's CPUID, like below
->> > > (untested)?
->> > >
->> > > Sounds like a great follow-on patch!  It doesn't seem truly  
->> functionally
->> > > required from the spec:
->> > >
->> > > > EDECCSSA is a new Intel SGX user leaf function
->> > > > (ENCLU[EDECCSSA]) that can facilitate AEX notification handling...
->> > >
->> > > If that's wrong or imprecise, I'd love to hear more about it and  
->> also
->> > > about how the spec will be updated.
->> > >
->> >
->> > They are enumerated separately, but looks in practice the notify  
->> handler
->> > will
->> > use it to switch back to the correct/targeted CSSA to continue to run
->> > normally
->> > after handling the exit notify.  This is my understanding of the
->> > "facilitate"
->> > mean in the spec.
->> >
->> > Btw, in real hardware I think the two should come together, meaning no
->> > real
->> > hardware will only support one.
->> >
->> > Haitao, could you give us more information?
->> >
->> You are right. They are enumerated separately and HW should come with  
->> both
->> or neither.
->> My understanding it is also possible for enclaves choose not to receive
->> AEX notify
->> but still use EDECCSSA.
->>
+On Tue, Jul 26, 2022 at 7:34 AM Mark Brown <broonie@kernel.org> wrote:
 >
-> What is the use case of using EDECCSSA w/o using AEX notify?  
-> If I understand correctly EDECCSSA effectively switches to another  
-> thread (using
-> the previous SSA, which is the context of another TCS thread if I  
-> understand
-> correctly).  Won't this cause problem?
-
-No. Decrementing CSSA is equivalent to popping stack frames, not switching  
-threads.
-In some cases such as so-called "first stage" exception handling, one  
-could pop CSSA back to the previous after resetting CPU context and stack  
-frame appropriate to the "second stage" or "real" exception handling  
-routine, then jump to the handler directly. This could improve exception  
-handling performance by saving an EEXIT/ERESUME trip.
-
+> On Tue, Jul 26, 2022 at 12:37:37AM -0700, Kalesh Singh wrote:
+> > The unwinder code is made reusable so that it can be used to
+> > unwind various types of stacks. One usecase is unwinding the
+> > nVHE hyp stack from the host (EL1) in non-protected mode. This
+> > means that the unwinder must be able to translate HYP stack
+> > addresses to kernel addresses.
+> >
+> > Add a callback (stack_trace_translate_fp_fn) to allow specifying
+> > the translation function.
 >
-> It probably makes sense to use only AEX notify w/o using EDECCSSA  
-> though, but
-> this should be the case that the enclave detects serious attack and  
-> don't want
-> to continue to run normally.  In another words, it is enclave's choice,  
-> but
-> hardware should always support both AEX notify and EDECCSSA.
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+>
+> with or without one very minor thing:
+>
+> >  static inline int unwind_next_common(struct unwind_state *state,
+> > -                                  struct stack_info *info)
+> > +                                  struct stack_info *info,
+> > +                                  stack_trace_translate_fp_fn translate_fp)
+> >  {
+> > +     unsigned long fp = state->fp, kern_fp = fp;
+>
+> As a coding style nit I don't love having multiple assignments on a
+> single line especially as part of declarations.
+
+Hi Mark,
+
+Thanks for the reviews. I'll update this if a respin is needed.
+
+--Kalesh

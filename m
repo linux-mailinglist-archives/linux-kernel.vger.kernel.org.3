@@ -2,297 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDAA580F18
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDD0580F1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 10:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238425AbiGZIdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 04:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S238510AbiGZIe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 04:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238048AbiGZIdk (ORCPT
+        with ESMTP id S238578AbiGZIeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:33:40 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541C430F4B
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:33:39 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-31e623a4ff4so134803477b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:33:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2Zj6IDscOqGpySURIv3/6OT9Yjl3MfpVD47TFHbtsSY=;
-        b=Cq3woY32gfETWotKVJ0jVvPaZnuXlO78yPMcYGL8XNfszfNG7vyRsamBeGl50H7/DM
-         J4k0t8KmRkm3KkP1t1wOHez6f3tCNBb5ZYCEXlAegZfUA1u1uQ2N4SyDIsmwBF6HImaV
-         A7ct2UFqNDuN9o8jqRbLaVguw6IYnuM4PnMqtw756iGGGcOXvtYVuMCLiPtkWFXIR4QD
-         i/9LXg2E5q5LxtRVbWiRFKxQBEWsHFGOIs0KmhqhLaPeYWCS/OBQdZA/foxm0yZypBzP
-         AUjJqyGrt6YMi7GLRGTUEaTJF7FrAPzyZL37KFUUJjNFMtJ00jt0BgkhbdosUZK2Kvaw
-         QH+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2Zj6IDscOqGpySURIv3/6OT9Yjl3MfpVD47TFHbtsSY=;
-        b=5Lapd5TIJS3Y62VqMCtZ4LLHwahJVe388G7nMn+QrjfRZJXV6Z8Qm/qYOKa4jYWmTB
-         u/k/XYMA/9UlBoB0gwaKEVGS1IfUXAKo99S7AMmEOo2x+jQuxVWgZuTpCE3nXaz7Y4wz
-         +DOqbkgN4MYk8Vp5/7lYbY7Brnoopx6i1dUMZpOZBS3Ab0ZfwOFplq+wiqpsS7Ll9RxT
-         nZ17IvixvhekFH7kLmseP5rghzluMKq+++KPUHLl4CzjY6akv3w+zqA2bkdXoVUGNGkN
-         l1oM/CkVTdMD1IjrquFxcI50QeKVzzuHBeY1paLMT/yXRlFkuYcu4hT3qDDFRHrSRNJz
-         rVFw==
-X-Gm-Message-State: AJIora8fVj7WKHQUwNGkohZUU/9vhgEZ/948yxSzXldroJFcxjsP1RhF
-        9y6ScpZU0MMZSwIxJKW01i1svCucelIZKljsJWwO4+es199Cetop
-X-Google-Smtp-Source: AGRyM1ua9TSRpV0zIZSYIP6XnTuBYQmdJo06utwGMAgbUoepW/SG6vP4DyIAXqYyoa7tAeOpas2aiWwwh7IAFnd+Z+I=
-X-Received: by 2002:a81:74d:0:b0:31e:c419:fc75 with SMTP id
- 74-20020a81074d000000b0031ec419fc75mr13398395ywh.364.1658824418308; Tue, 26
- Jul 2022 01:33:38 -0700 (PDT)
+        Tue, 26 Jul 2022 04:34:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980C830557
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 01:34:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 563AFB8120F
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6241C341C0;
+        Tue, 26 Jul 2022 08:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658824451;
+        bh=DUYTDoq1jHjKTj++71miVKY1KqsLvjaMgOiKbqjXSOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GY2pK/jTFzhsBNlfbT0Mh6BT3cmiDRCpssCK9TaRSbupz9Hz1krtm540gaYeOkpqs
+         y1Ope8Lg/OXobCyTbM/Ln35EzdMffupELE5+BAXTSjmGAFagB2Uh65oNLzBjoLlHBe
+         skIFE/jHnwXGOUExRczYfGeC5EJhckZixRBHKkdcZEAX1xnp5yf6fZwIzY+pGx8Q4k
+         zJAJ4h6Ds3cVlzfgiOB0b57TJypL1A41HPdrqizTpCqcKjx2QbTwqxNd1bFeKZXIki
+         FwUoC4CIsVklxIh17FeWV1XxKalLplG3UOKEX324e5rlNfwbyY1dINdzO2e1AsnWeF
+         dQ4NWiIdOhzRw==
+Received: by pali.im (Postfix)
+        id A316282D; Tue, 26 Jul 2022 10:34:06 +0200 (CEST)
+Date:   Tue, 26 Jul 2022 10:34:06 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Regression: Linux v5.15+ does not boot on Freescale P2020
+Message-ID: <20220726083406.tcjvny6d2di6q7ar@pali>
+References: <20220722090929.mwhmxxdd7yioxqpz@pali>
+ <6b227478-73b8-2a97-1c78-89570d928739@csgroup.eu>
+ <20220723150702.jecerkhxhy65dgww@pali>
+ <875yjld2oe.fsf@mpe.ellerman.id.au>
+ <20220725125256.cg6su4d2ageylvp6@pali>
+ <e2487668-b6d9-9ddb-1bb4-9f4d37fae1a7@csgroup.eu>
+ <20220725201009.gwuchzswcqaxntrk@pali>
+ <20220725215416.GV25951@gate.crashing.org>
 MIME-Version: 1.0
-References: <20220722230241.1944655-1-avagin@google.com> <Yts1tUfPxdPH5XGs@google.com>
-In-Reply-To: <Yts1tUfPxdPH5XGs@google.com>
-From:   Andrei Vagin <avagin@google.com>
-Date:   Tue, 26 Jul 2022 01:33:27 -0700
-Message-ID: <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
-Subject: Re: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jianfeng Tan <henry.tjf@antfin.com>,
-        Adin Scannell <ascannell@google.com>,
-        Konstantin Bogomolov <bogomolov@google.com>,
-        Etienne Perot <eperot@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220725215416.GV25951@gate.crashing.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 4:41 PM Sean Christopherson <seanjc@google.com> wro=
-te:
->
-> +x86 maintainers, patch 1 most definitely needs acceptance from folks bey=
-ond KVM.
->
-> On Fri, Jul 22, 2022, Andrei Vagin wrote:
-> > Another option is the KVM platform. In this case, the Sentry (gVisor
-> > kernel) can run in a guest ring0 and create/manage multiple address
-> > spaces. Its performance is much better than the ptrace one, but it is
-> > still not great compared with the native performance. This change
-> > optimizes the most critical part, which is the syscall overhead.
->
-> What exactly is the source of the syscall overhead,
+On Monday 25 July 2022 16:54:16 Segher Boessenkool wrote:
+> On Mon, Jul 25, 2022 at 10:10:09PM +0200, Pali Rohár wrote:
+> > On Monday 25 July 2022 16:20:49 Christophe Leroy wrote:
+> > Now I did again clean test with same Debian 10 cross compiler.
+> > 
+> > $ git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git && cd linux
+> > $ git checkout v5.15
+> > $ make mpc85xx_smp_defconfig ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnuspe-
+> > $ make vmlinux ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnuspe-
+> > $ cp -a vmlinux vmlinux.v5.15
+> > $ git revert 9401f4e46cf6965e23738f70e149172344a01eef
+> > $ make vmlinux ARCH=powerpc CROSS_COMPILE=powerpc-linux-gnuspe-
+> > $ cp -a vmlinux vmlinux.revert
+> > $ powerpc-linux-gnuspe-objdump -d vmlinux.revert > vmlinux.revert.dump
+> > $ powerpc-linux-gnuspe-objdump -d vmlinux.v5.15 > vmlinux.v5.15.dump
+> > $ diff -Naurp vmlinux.v5.15.dump vmlinux.revert.dump
+> > 
+> > And there are:
+> > 
+> > -c000c304:      7d 20 f8 29     lwarx   r9,0,r31,1
+> > +c000c304:      7d 20 f8 28     lwarx   r9,0,r31
+> > 
+> > I guess it must be reproducible this issue as I'm using regular
+> > toolchain from distribution.
+> 
+> The kernel had
+> 
+> #define PPC_RAW_LWARX(t, a, b, eh)       (0x7c000028 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b) | __PPC_EH(eh))
+> 
+> and
+> 
+> #define PPC_LWARX(t, a, b, eh) stringify_in_c(.long PPC_RAW_LWARX(t, a, b, eh))
+> 
+> and
+> 
+> #ifdef CONFIG_PPC64
+> #define __PPC_EH(eh)    (((eh) & 0x1) << 0)
+> #else
+> #define __PPC_EH(eh)    0
+> #endif
+> 
+> but Christophe's 9401f4e46cf6 changed
+> 
+> -"1:    " PPC_LWARX(%0,0,%2,1) "\n\
+> +"1:    lwarx           %0,0,%2,1\n\
+> 
+> no longer checking CONFIG_PPC64.  That appears to be the bug.
 
-Here are perf traces for two cases: when "guest" syscalls are executed via
-hypercalls and when syscalls are executed by the user-space VMM:
-https://gist.github.com/avagin/f50a6d569440c9ae382281448c187f4e
+Nice catch!
 
-And here are two tests that I use to collect these traces:
-https://github.com/avagin/linux-task-diag/commit/4e19c7007bec6a15645025c337=
-f2e85689b81f99
+Now I have tried to apply following change on master (without reverting
+anything)
 
-If we compare these traces, we can find that in the second case, we spend e=
-xtra
-time in vmx_prepare_switch_to_guest, fpu_swap_kvm_fpstate, vcpu_put,
-syscall_exit_to_user_mode.
+diff --git a/arch/powerpc/include/asm/simple_spinlock.h b/arch/powerpc/include/asm/simple_spinlock.h
+index 7ae6aeef8464..72d3657fd2f7 100644
+--- a/arch/powerpc/include/asm/simple_spinlock.h
++++ b/arch/powerpc/include/asm/simple_spinlock.h
+@@ -51,7 +51,7 @@ static inline unsigned long __arch_spin_trylock(arch_spinlock_t *lock)
+ 
+ 	token = LOCK_TOKEN;
+ 	__asm__ __volatile__(
+-"1:	lwarx		%0,0,%2,1\n\
++"1:	lwarx		%0,0,%2,0\n\
+ 	cmpwi		0,%0,0\n\
+ 	bne-		2f\n\
+ 	stwcx.		%1,0,%2\n\
+@@ -158,7 +158,7 @@ static inline long __arch_read_trylock(arch_rwlock_t *rw)
+ 	long tmp;
+ 
+ 	__asm__ __volatile__(
+-"1:	lwarx		%0,0,%1,1\n"
++"1:	lwarx		%0,0,%1,0\n"
+ 	__DO_SIGN_EXTEND
+ "	addic.		%0,%0,1\n\
+ 	ble-		2f\n"
+@@ -182,7 +182,7 @@ static inline long __arch_write_trylock(arch_rwlock_t *rw)
+ 
+ 	token = WRLOCK_TOKEN;
+ 	__asm__ __volatile__(
+-"1:	lwarx		%0,0,%2,1\n\
++"1:	lwarx		%0,0,%2,0\n\
+ 	cmpwi		0,%0,0\n\
+ 	bne-		2f\n"
+ "	stwcx.		%1,0,%2\n\
 
-> and what alternatives have been explored?  Making arbitrary syscalls from
-> within KVM is mildly terrifying.
+and with this change, objdump showed exactly same result as if I revert
+that problematic commit on top of master branch.
 
-"mildly terrifying" is a good sentence in this case:). If I were in your pl=
-ace,
-I would think about it similarly.
+I guess that simple_spinlock.h should be fixed to pass 1 to lwarx for
+CONFIG_PPC64 and 0 otherwise.
 
-I understand these concerns about calling syscalls from the KVM code, and t=
-his
-is why I hide this feature under a separate capability that can be enabled
-explicitly.
+Christophe, are you going to look at it?
 
-We can think about restricting the list of system calls that this hypercall=
- can
-execute. In the user-space changes for gVisor, we have a list of system cal=
-ls
-that are not executed via this hypercall. For example, sigprocmask is never
-executed by this hypercall, because the kvm vcpu has its signal mask.  Anot=
-her
-example is the ioctl syscall, because it can be one of kvm ioctl-s.
+> The EH field in larx insns is new since ISA 2.05, and some ISA 1.x cpu
+> implementations actually raise an illegal insn exception on EH=1.  It
+> appears P2020 is one of those.
+> 
+> 
+> Segher
 
-As for alternatives, we explored different ways:
-
-=3D=3D Host Ring3/Guest ring0 mixed mode =3D=3D
-
-This is how the gVisor KVM platform works right now. We don=E2=80=99t have =
-a separate
-hypervisor, and the Sentry does its functions. The Sentry creates a KVM vir=
-tual
-machine instance, sets it up, and handles VMEXITs. As a result, the Sentry =
-runs
-in the host ring3 and the guest ring0 and can transparently switch between
-these two contexts.
-
-When the Sentry starts, it creates a new kernel VM instance and maps its me=
-mory
-to the guest physical. Then it makes a set of page tables for the Sentry th=
-at
-mirrors the host virtual address space. When host and guest address spaces =
-are
-identical, the Sentry can switch between these two contexts.
-
-The bluepill function switches the Sentry into guest ring0. It calls a
-privileged instruction (CLI) that is a no-op in the guest (by design, since=
- we
-ensure interrupts are disabled for guest ring 0 execution) and triggers a
-signal on the host. The signal is handled by the bluepillHandler that takes=
- a
-virtual CPU and executes it with the current thread state grabbed from a si=
-gnal
-frame.
-
-As for regular VMs, user processes have their own address spaces (page tabl=
-es)
-and run in guest ring3. So when the Sentry is going to execute a user proce=
-ss,
-it needs to be sure that it is running inside a VM, and it is the exact poi=
-nt
-when it calls bluepill(). Then it executes a user process with its page tab=
-les
-before it triggers an exception or a system call. All such events are trapp=
-ed
-and handled in the Sentry.
-
-The Sentry is a normal Linux process that can trigger a fault and execute
-system calls. To handle these events, the Sentry returns to the host mode. =
-If
-ring0 sysenter or exception entry point detects an event from the Sentry, t=
-hey
-save the current thread state on a per-CPU structure and trigger VMEXIT. Th=
-is
-returns us into bluepillHandler, where we set the thread state on a signal
-frame and exit from the signal handler, so the Sentry resumes from the poin=
-t
-where it has been in the VM.
-
-In this scheme, the sentry syscall time is 3600ns. This is for the case whe=
-n a
-system call is called from gr0.
-
-The benefit of this way is that only a first system call triggers vmexit an=
-d
-all subsequent syscalls are executed on the host natively.
-
-But it has downsides:
-* Each sentry system call trigger the full exit to hr3.
-* Each vmenter/vmexit requires to trigger a signal but it is expensive.
-* It doesn't allow to support Confidential Computing (SEV-ES/SGX). The Sent=
-ry
-  has to be fully enclosed in a VM to be able to support these technologies=
-.
-
-=3D=3D Execute system calls from a user-space VMM =3D=3D
-
-In this case, the Sentry is always running in VM, and a syscall handler in =
-GR0
-triggers vmexit to transfer control to VMM (user process that is running in
-hr3), VMM executes a required system call, and transfers control back to th=
-e
-Sentry. We can say that it implements the suggested hypercall in the
-user-space.
-
-The sentry syscall time is 2100ns in this case.
-
-The new hypercall does the same but without switching to the host ring 3. I=
-t
-reduces the sentry syscall time to 1000ns.
-
-
-=3D=3D A new BPF hook to handle vmexit-s  =3D=3D
-
-https://github.com/avagin/linux-task-diag/commits/kvm-bpf
-
-This way allows us to reach the same performance numbers, but it gives less
-control over who and how use this functionality. Second, it requires adding=
- a
-few questionable BPF helpers like calling syscall from BPF hooks.
-
-=3D=3D Non-KVM platforms =3D=3D
-
-We are experimenting with non-KVM platforms. We have the ptrace platform, b=
-ut it
-is almost for experiments due to the slowness of the ptrace interface.
-
-Another idea was to add the process_vm_exec system call:
-https://lwn.net/Articles/852662/
-
-This system call can significantly increase performance compared with the
-ptrace platform, but it is still slower than the KVM platform in its curren=
-t
-form (without the new hypercall). But this is true only if we run the KVM
-platform on a bare-metal. In the case of nested-virtualization, the KVM
-platform becomes much slower, which is expected.
-
-We have another idea to use the seccomp notify to trap system calls, but it
-requires some kernel change to reach a reasonable performance. I am working=
- on
-these changes and will present them soon.
-
-I want to emphasize that non-KVM platforms don't allow us to implement the
-confidential concept in gVisor, but this is one of our main goals concernin=
-g
-the KVM platform.
-
-All previous numbers have been getting from the same host (Xeon(R) Gold 626=
-8CL,
-5.19-rc5).
-
->
-> > The idea of using vmcall to execute system calls isn=E2=80=99t new. Two=
- large users
-> > of gVisor (Google and AntFinacial) have out-of-tree code to implement s=
-uch
-> > hypercalls.
-> >
-> > In the Google kernel, we have a kvm-like subsystem designed especially
-> > for gVisor. This change is the first step of integrating it into the KV=
-M
-> > code base and making it available to all Linux users.
->
-> Can you please lay out the complete set of changes that you will be propo=
-sing?
-> Doesn't have to be gory details, but at a minimum there needs to be a hig=
-h level
-> description that very clearly defines the scope of what changes you want =
-to make
-> and what the end result will look like.
->
-> It's practically impossible to review this series without first understan=
-ding the
-> bigger picture, e.g. if KVM_HC_HOST_SYSCALL is ultimately useless without=
- the other
-> bits you plan to upstream, then merging it without a high level of confid=
-ence that
-> the other bits are acceptable is a bad idea since it commits KVM to suppo=
-rting
-> unused ABI.
-
-I was not precise in my description. This is the only change that we
-need right now.
-The gVisor KVM platform is the real thing that exists today and works
-on the upstream kernels:
-https://cs.opensource.google/gvisor/gvisor/+/master:pkg/sentry/platform/kvm=
-/
-
-This hypercall improves its performance and makes it comparable with
-the google-internal platform.
-
-Thanks,
-Andrei
+P2020 has e500 cores. e500 cores uses ISA 2.03. So this may be reason.
+But in official Freescale/NXP documentation for e500 is documented that
+lwarx supports also eh=1. Maybe it is not really supported.
+https://www.nxp.com/files-static/32bit/doc/ref_manual/EREF_RM.pdf (page 562)
+At least there is NOTE:
+Some older processors may treat EH=1 as an illegal instruction.

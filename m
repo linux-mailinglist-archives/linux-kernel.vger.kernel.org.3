@@ -2,219 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D535815D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0285F5815DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 17:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiGZPAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 11:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S238739AbiGZPCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 11:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238739AbiGZPAt (ORCPT
+        with ESMTP id S234176AbiGZPCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 11:00:49 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1C222BD2;
-        Tue, 26 Jul 2022 08:00:48 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id oy13so26675569ejb.1;
-        Tue, 26 Jul 2022 08:00:48 -0700 (PDT)
+        Tue, 26 Jul 2022 11:02:04 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0005A24BDE
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:02:02 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id t22so16665716lfg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 08:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KXwks4U0bf08TlIwVOpXBx4c7TuLqBhqZnpO6daZqYo=;
-        b=Sh7qNY+kJv8+cDt+1q4uHQ5Ti3AHrhrhzbfbajKjQp/9vdOO7AIzcSANWRgOw46kCr
-         5ERIz0uklAnNmgUWHvVZhxxTdIIYlEbQn0Z5hLivPWTScSOJGsD8zW95uEzLtKYZhJ/T
-         0LoKATxykYGdnjuCEoa5AO7W8at2ezytfKPaIjbI23k5x8KYQpENvGqt9Ehd9/rH4KUe
-         5r+osbu8EfeZG6LUZDg/29osIvaPKdol21q0+LBEXHqITJ8T1MwGmA8xewDvVfLQn00I
-         iIKfA5bbfA3nYCEVbRW8fF4SNV9huDfzWN2ufI+M5pwyQh9UX61C6RAkobVya1i2tSBO
-         R26g==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M3eaKEqKki8qki5Qb9UhtHWwntPVhLRvYCUBCxNj9YQ=;
+        b=AiM8g9yWAbkS9+J/TBFSAt7ymESNu9mLo+7HhBQMUsThEYK5XHpx+Li+LJM3yz1HKc
+         JEWiCI6JYY8P1UzuKwqy6FhoeRBbYMV5IBV57aBJ6s1S/pxW+IuhcnRQ0ewsmwvLmigi
+         wq/HR0UD9L4fZMIIJbl/tKUG91ZvQlJPeawXaeB9D/wTxRFnqBKyZ08jDYofYXTNH9Gr
+         YBtRGSZtHDEDDMO0i9e7w0VmZhW+J1aKcfiPTdnpQ4sjdpfmTVbGdHvRglcLnXGeGQZQ
+         wwacrfyXpYa4iunxNiOx25bH/6uG9psehXkQU9nWZfqQQ0zB3N1fN7XPoeVt+yJw4QO3
+         xepw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KXwks4U0bf08TlIwVOpXBx4c7TuLqBhqZnpO6daZqYo=;
-        b=M8ggu2jnnGTW+7lz//U5sYzdf3NDQiqQXwBZ/xGS1sQ5WCFBGFaKeYfM5W2tO7Mxia
-         e0HZ2wl3sf/rRUh/WFZ5SLBlJJqF6AAmwpDQoiw9jsIed5KRyrbRfvc/KnfJ6cL1KlfY
-         xrLOHZY+OrMhxKkwNtoff/aS0nRSMOW487fD1mpSd7u2yRCsfOoLS0L39yTo2SkVpk+h
-         fMR8w0aAR92zKu2k1M3PlXugJEvRfE1KOjyq0GRr6sNtig9fDsUXtOoxDjGDIAaaEBYx
-         DTdR6IYaFBLTY/2XqoXlFS35vvKaNwH5+BOXYbkqHlFpXRIolhBScaQnnGwuI/e41d0P
-         wSug==
-X-Gm-Message-State: AJIora9O1OYEH1LIvurZbA8ZfovyJcV3Klv2sagEXTnYdiFbSzKz/QxD
-        edWi9Oz4n4ePKxcQl1VIj90=
-X-Google-Smtp-Source: AGRyM1vRtocosg8JVRjgrQC/nJP8vPkOTsq97SrpEIEnttjWfPmMtRul49X1rpyuGj0Ao/UiDFEbTA==
-X-Received: by 2002:a17:906:93e8:b0:72b:6923:a0b9 with SMTP id yl8-20020a17090693e800b0072b6923a0b9mr14028141ejb.244.1658847646919;
-        Tue, 26 Jul 2022 08:00:46 -0700 (PDT)
-Received: from [10.30.0.4] ([37.120.217.82])
-        by smtp.gmail.com with ESMTPSA id b20-20020a170906195400b0072aa38d768esm6592234eje.64.2022.07.26.08.00.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 08:00:45 -0700 (PDT)
-Message-ID: <2e522bcd-5d55-e87f-126c-514f5edaa560@gmail.com>
-Date:   Tue, 26 Jul 2022 17:00:43 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M3eaKEqKki8qki5Qb9UhtHWwntPVhLRvYCUBCxNj9YQ=;
+        b=KOewEe3Fme86GdYXBMQ/ShCWND9VDMBNHh6jAuT48YrXGnwO3cLLvPh42FzGQgOz7O
+         k8Z53ew6ff2f4FjpiD4G5PUzaTBw0P3CVVpxb3xHAIzvWCN3CtSl3IwXZWNXAYisefCd
+         MvCUYnpu3Kb19Mkr3A4IGTkUuX2Ng/nXLmhlGLAOMOg0Cj0MfQz4D1CP5YAvUacplLl2
+         Gr8w4HVp9nJN5j1RLIjzbpFvhPB9CsPo6r1zXOqFpGD/iWWAl+kvid7/LzZTl0oAKzUb
+         Mk5ZMUOnOTToE9G8o1ZFkf74VeZ4BkEmVCC+CmGk8zNV5LUbidCWFkk2l/p/jVumBQz/
+         Dx9w==
+X-Gm-Message-State: AJIora9u1U2k8kcIJcdneboToHWCqS9WvvXleCZ3S/fgVZbso5IdnQP7
+        2vDyEGnFNL8IMUsbLR0cO5cyLzEWM/XqdFQanNfz4A==
+X-Google-Smtp-Source: AGRyM1uvj3g/wzQqWfb045Pdx41ie7mPz5l6Yuz5unfLdcYSECshn91W4YKovkSvKEvnNaqiqHxlbfPutsUrJA3Wc+8=
+X-Received: by 2002:a05:6512:32c5:b0:48a:af79:601e with SMTP id
+ f5-20020a05651232c500b0048aaf79601emr501700lfg.373.1658847721311; Tue, 26 Jul
+ 2022 08:02:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] dt-bindings: firmware: Add Qualcomm UEFI Secure
- Application client
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
+References: <20220726062842.18846-1-axe.yang@mediatek.com>
+In-Reply-To: <20220726062842.18846-1-axe.yang@mediatek.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 26 Jul 2022 17:01:25 +0200
+Message-ID: <CAPDyKFpX32bprQMVXo-CYkfB__UL99JVZQ9EKfOWFqA7yh3Mbg@mail.gmail.com>
+Subject: Re: [PATCH v14 0/3] mmc: mediatek: add support for SDIO async IRQ
+To:     Axe Yang <axe.yang@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        angelogioacchino.delregno@collabora.com, linux-mmc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <20220723224949.1089973-5-luzmaximilian@gmail.com>
- <e88d1036-dc58-3fc8-c388-edba9b2d62a7@linaro.org>
- <87c19c5a-d7f4-7183-1322-f62267e01b3b@gmail.com>
- <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <11e5c369-c0da-7756-b9e2-ac375dc78e9d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 15:25, Krzysztof Kozlowski wrote:
-> On 26/07/2022 13:15, Maximilian Luz wrote:
->>>> +properties:
->>>> +  compatible:
->>>> +    const: qcom,tee-uefisecapp
->>>
->>> Isn't this SoC-specific device? Generic compatibles are usually not
->>> expected.
->>
->> This is essentially software (kernel driver) talking to software (in the
->> TrustZone), so I don't expect there to be anything SoC specific about it.
-> 
-> You are documenting here firmware in TZ (not kernel driver). Isn't this
-> a specific piece which might vary from device to device?
-> 
-> IOW, do you expect the same compatible to work for all possible Qualcomm
-> boards (past and future like in 10 years from now)?
+On Tue, 26 Jul 2022 at 08:28, Axe Yang <axe.yang@mediatek.com> wrote:
+>
+> Changes in v14:
+> - add sdio_irq_claimed() judgement condition around msdc irq and pinctrl
+>   control in suspend|resume callback
 
-I'm not sure if Qualcomm will still use the "uefisecapp" approach in 10
-years, but I don't expect the interface of uefisecapp to change. The
-interface is modeled after the respective UEFI functions, which are spec
-and thus I don't expect those to change. Also, it seems to have been
-around for a couple of generations and it hasn't changed. The oldest
-tested is sdm850 (Lenovo Yoga C630), and the latest is sc8280xp
-(Thinkpad X13s).
+Version 14, applied for next, thanks!
 
-Why not make this behave like a "normal" third-party device? If the
-interface ever changes use qcom,tee-uefisecapp-v2 or something like
-that? Again, this does not seem to be directly tied to the SoC.
+FYI; Since we are relying on an updated behaviour in the
+pm_runtime_force_suspend|resume() helpers, which are queued as a patch
+via Rafael's tree, I am going to withhold my pull-request for a few
+days longer than usual, until Linus has picked up Rafael's
+pull-request, for v5.20-rc1.
 
-Then again, if you prefer to name everything based on
-"qcom,<device>-<soc>" I don't have any strong arguments against it and
-I'm happy to change that. I just think it will unnecessarily introduce
-a bunch of compatibles and doesn't reflect the interface "versioning"
-situation as I see it.
+Kind regards
+Uffe
 
->>>> +
->>>> +required:
->>>> +  - compatible
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    firmware {
->>>> +        scm {
->>>> +            compatible = "qcom,scm-sc8180x", "qcom,scm";
->>>> +        };
->>>> +        tee-uefisecapp {
->>>> +            compatible = "qcom,tee-uefisecapp";
->>>
->>> You did not model here any dependency on SCM. This is not full
->>> description of the firmware/hardware
->>
->> How would I do that? A lot of other stuff also depends on SCM being
->> present (e.g. qcom_q6v5_pas for loading mdt files) and I don't see them
->> declare this in the device tree. As far as I can tell, SCM is pretty
->> much expected to be there at all times (i.e. can't be unloaded) and
->> drivers check for it when probing via qcom_scm_is_available(),
->> deferring probe if not.
-> 
-> It seems this will be opening a can of worms...
 
-Indeed.
-
-> The problem with existing approach is:
-> 1. Lack of any probe ordering or probe deferral support.
-> 2. Lack of any other dependencies, e.g. for PM.
-
-I'm not entirely sure what you mean by "lack of probe deferral support".
-We have qcom_scm_is_available() and defer probe if that fails. So
-deferral works, unless I'm misunderstanding something.
-
-But yes, correct on the other points.
-
-> Unloading is "solved" only by disallowing the unload, not by proper
-> device links and module get/put.
-> 
-> I understand that SCM must be there, but the same for several other
-> components and for these others we have ways to pass reference around
-> (e.g. syscon regmap, PHYs handles).
-> 
->>
->> Don't take this as an excuse as in "I want to leave that out", it's just
->> that I don't know how one would declare such a dependency explicitly. If
->> you can tell me how to fix it, I'll include that for v2.
-> 
-> I think there are no dedicated subsystem helpers for this (like for
-> provider/consumer of resets/power domains/clocks etc), so one way would
-> be something like nvidia,bpmp is doing.
-
-I assume you're referring to tegra_bpmp_get()? Does this correctly
-handle PM dependencies? At least as far as I can tell it doesn't
-explicitly establish a device link, it only gets a reference to the
-device, which doesn't guarantee the presence of a driver. Nor correct PM
-ordering. Please correct me if I'm wrong. As far as I know automatic
-creation of device links only works with certain props defined in
-of_supplier_bindings, right?
-
-So unless I'm wrong there is also a bunch of other stuff that may be
-subtly broken. (Again, not a justification to include these changes,
-just wondering whether there should be a conscious approach to find and
-fix these things... rather than discover them patch-by-patch).
-
-> meson_sm_get is a bit similar - looking by compatible. This is less
-> portable and I would prefer the bpmp way (just like syscon phandles).
-
-I have another example (that could be improved via a phandle in DT): For
-the Surface System Aggregator (in ACPI-land), we have ssam_client_bind().
-This function 1) checks if the controller is available and ready, 2) if
-it is gets a reference to it, and 3) establishes a device link for
-PM-ordering, before 4) returning the reference to that controller to the
-client. This combined with deferring probe ensures that we will always
-have a valid reference. And since we're in DT-land, we could hook that
-up with a phandle reference to SCM and load that instead of having to
-use a global static.
-
-> The qcom_q6v5_pas could be converted later to use similar approach and
-> eventually the "tatic struct qcom_scm *__scm;" can be entirely removed.
-> 
-> Any comments on this approach from Konrad, Bjorn, Dmitry, Vinod and
-> anyone else?
-
-Regards,
-Max
+>
+> Changes in v13:
+> - remove state_dat1 related description in mtk-sd.yaml
+> - move device_init_wakeup() to probe stage
+> - remove redundancy SDC_CFG_SDIOIDE bit control in msdc_runtime_suspend()
+> - replace SDC_CFG_SDIOIDE control with __msdc_enable_sdio_irq() function to
+>   disable sdio irq when sdio_irq_claimed() return true in msdc_runtime_resume()
+> - restore to use pm_runtime_force_resume|suspend(), to avoid go out directly
+>   in force resume, bump up runtime PM usage counter before force suspend.
+>
+> Changes in v12:
+> - assign NULL to pins_eint directly instead of using kfree()
+>
+> Changes in v11:
+> - remove '_irq' suffix in interrupts-names property
+> - fix yaml example build error
+> - refactor msdc_enable_sdio_irq(), free pins_eint if async irq is not supported
+>
+> Changes in v10:
+> - add sample node for SDIO host which support wakeup interrupt in yaml
+> - skip MMC_PM_WAKE_SDIO_IRQ check before enable SDIO async interrupt
+> - add MMC_PM_KEEP_POWER check before SDIO eint pinstate parsing
+> - use dev_pm_set_dedicated_wake_irq_reverse() to correct irq control sequence
+> - set dedicated irq in msdc_enable_sdio_irq() rather than msdc_drv_probe()
+> - remove unnecessary wake irq control, rpm/dpm system shall manage that
+> - move wake irq/msdc irq control back to system suspend phase, use rpm_suspend
+>   and rpm_resume to ensure irq control sequence:
+>      disable msdc irq -> enable wake irq -> disable wake irq -> enable msdc irq
+> - simplify variables, check pins_eint to know whether wakeup settings are managed
+>
+> Changes in v9:
+> - remove pinctrl "state_dat1"
+>
+> Changes in v8:
+> - remove maxItems property under pinctrl-names property
+>
+> Changes in v7:
+> - add device_init_wakeup() to register SDIO host as wakeup source
+>
+> Changes in v6:
+> - abandon cap-sdio-async-irq flag, use wakeup-source flag instead
+> - extend interrupts and pinctrls in mediatek mmc host controller DT documents
+> - add mmc_card_enable_async_irq() to access enable_async_irq flag
+> - simplify wakeup irq implementation with dedicate wake up irq related interface
+>
+> Changes in v5:
+> - resort variables to reversed xmas tree order
+> - restore old copyright year range and add current year back
+>
+> Changes in v4:
+> - add MMC_CAP2_SDIO_ASYNC_IRQ judge before lookup eint pinctrl
+> - replace spin_lock_irqsave() variant with spin_lock() in eint irq handler
+>
+> Changes in v3:
+> - correct abbreviations with capital letters in commit message
+> - replace copyright year with 2022 in mtk-sd.c
+> - remove unnessary pointer casting
+> - adjust variable order to reversed xmas tree
+> - remove a redundant blank line
+> - refine if statement, following standard pattern
+>
+> Changes in v2:
+> - change flag name from 'cap-sdio-async-int' to 'cap-sdio-async-irq'
+> - change corresponding macro names from xxx_INT to xxx_IRQ
+> - resort new member in msdc_host structure
+> - refine function msdc_request_dat1_eint_irq()
+> - rename msdc_{suspend,resume} function names, add suffix '_noirq'
+> - add MMC_CAP2_NO_SDIO judgement before parse eint related pin setting
+>
+> Axe Yang (3):
+>   dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
+>   mmc: core: Add support for SDIO wakeup interrupt
+>   mmc: mediatek: add support for SDIO eint wakup IRQ
+>
+>  .../devicetree/bindings/mmc/mtk-sd.yaml       | 50 ++++++++++-
+>  drivers/mmc/core/sdio.c                       | 14 +++
+>  drivers/mmc/host/mtk-sd.c                     | 86 +++++++++++++++++--
+>  include/linux/mmc/card.h                      |  8 +-
+>  include/linux/mmc/sdio.h                      |  5 ++
+>  5 files changed, 155 insertions(+), 8 deletions(-)
+>
+> --
+> 2.25.1
+>
+>

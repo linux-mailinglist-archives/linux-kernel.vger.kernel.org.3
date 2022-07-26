@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2F4580C02
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B83580C03
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 08:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbiGZG6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 02:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
+        id S231833AbiGZG7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 02:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiGZG6n (ORCPT
+        with ESMTP id S231300AbiGZG7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 02:58:43 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53842715E
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:58:41 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id i13so7483116edj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:58:41 -0700 (PDT)
+        Tue, 26 Jul 2022 02:59:15 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBEB2715E
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:59:13 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id z13so15115467ljj.6
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 23:59:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=VO93DLDSyuiE5m/h3CZQjoxqN5ZUewPL97M2fFnH/Ms=;
-        b=xxDn2/5x1eOM3bJXBPJHTeh/x6nTyx4S7ffCNaq1gtDhyu/yl8+ARXDntYn5WK8nim
-         Pb0wIGNCiktlQg7lpbUJGPCSIPnaZtTr3JxL/aMrfS7eUPsxD8Dns23byMqhme8SvZq6
-         qvpI+EaYVEZJ5mZesrko8p1c7G+yqwT6D3EvrtQdD6wgIT7s1p0iV0MVeRbgYVpkY6vN
-         FBtTxHvbDS0eh/ZGmzKi3s88hAj+8DmpOuvconLElTRiF6UclozLDBNDYTudFeET85H+
-         igNVpA6fnDiZY3+91tO5yBBso5q9ajnoJs01C8gzRKaftG4iS4c2E8SVZXhIiYUVcBQy
-         ZSZA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uYNyGTqh43kdnBvGIItlfjBuqOczPcK4t5svoUE++Sk=;
+        b=FfFsLA3qk43d5a5qjKaYryUjbhcodKmzeaS/64zv+PlvlACHk2cU7U5gNjgXVaJq21
+         ozs0wzuICeMTbfMjAoMUq3OOLcpIkakc711DZDckxWDVUZgPZGDjQ2o56MKLXE+Rawsi
+         h/z1mnlrEsLtwul05QNDC2cpPh9v0zUHrQDGkOrD0/9Wx44X2RTaTicJM4/nToBLisYP
+         TCauqvodKluV4JKUJWaNZbchYVJ+TSaLGWUDPPOpIS0IiYzAFGXJMcK9gSjgg7NpDdzI
+         lGB1/s0lb1Jukc0ERp4c8SlS6ejoI1CvdRcbbuR1wgAY+6Cv6tErRjE9H9QodX9zklSq
+         pWqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=VO93DLDSyuiE5m/h3CZQjoxqN5ZUewPL97M2fFnH/Ms=;
-        b=bNHYd7k8dvgFiVejecTxxCsMEM/FFQ9faTUKgCrB7eML/APQRPapC3WNH31aI4LOSE
-         D8j5PMfIAz18Napgvq7pQQWawV5dto5N7nO5b+uT2YO32mO08R8Kze5XBYiLMEAOjMf7
-         QCeuS+FpFJusUq8hWvhXSMxU14M23NfChQby3lo1a43mK+/UB+/qk0dap5u0ia2ZbvJ4
-         FnuoQopqVnk/Q8KayOyF/mnlq7n6hZqrtCrzwwR6U9sZgRMJtnrePzBy66HoND7D4cme
-         73WBs3cXEfJYFl6oeofIBoLa3e3sOzVwtF/2evDIAeAIPY7XUsgSNgF0DVRQz/uQz71r
-         jW1w==
-X-Gm-Message-State: AJIora99tgxGjKTTyUOtW2yfseO+nXbW+Zl5ntDm3SPhu1bivey3ahjj
-        8YLClevm2nduirrYX9/5swaf5pCXO2CU16lKss4Kxw==
-X-Google-Smtp-Source: AGRyM1sHcB8im8ckzbaXWEnk89N66dulZhudukS3hn368DoQg0apkNatvAJ3/pqjz/MO7qPI7bcFw5PaHE/jpF0/zuc=
-X-Received: by 2002:a05:6402:caa:b0:43b:c350:18c7 with SMTP id
- cn10-20020a0564020caa00b0043bc35018c7mr16973239edb.193.1658818720183; Mon, 25
- Jul 2022 23:58:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uYNyGTqh43kdnBvGIItlfjBuqOczPcK4t5svoUE++Sk=;
+        b=tObuQX+Uli0VAZKkHJ69GEoPYr19VabX+7MYMfQoKBoxXBxBeBSMtjOKsnL8RltH7i
+         MKRHjiB45dpS8K4yGwL3cLfFbI3qlWPWq95ppohidoLFh5914BMfxzgpe41upZH0q1Mg
+         HFFw8X2mtJJCfTAsa2gbD0wIZflVTEUD39k7QE7CQXzSwvrp/Ei33+9wnJR8GTYxpZ5I
+         7AMxppbwPm8msthxqEqzCeHYvRc/neGfEWMgIVOPWP6taJTb0ljVGRD2nSjfkQDIX+vB
+         P/fkuIT9H8e1oKUSHrgNhjwltjDtyGCLZGF7oBrTH/fpLwoU8wk3iFthIYryeZe5HCT3
+         IZ0A==
+X-Gm-Message-State: AJIora9Yjj1aVAcWR6870u76Zyqbu45D8lWD0dvC4d/94MXQiaFHt5QA
+        GVUOr84tUgtlDMpWC6R+QLPT+g==
+X-Google-Smtp-Source: AGRyM1u8ak2tbwYve79n/McQbM8lAlJlWuSclfCpYDvx6NrH3khnSpB6imATgjsFjzlpYIaUsp7Qhg==
+X-Received: by 2002:a05:651c:504:b0:25e:c01:47c1 with SMTP id o4-20020a05651c050400b0025e0c0147c1mr1971100ljp.65.1658818752327;
+        Mon, 25 Jul 2022 23:59:12 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id g22-20020a2e9396000000b0025e0c352498sm687352ljh.129.2022.07.25.23.59.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Jul 2022 23:59:11 -0700 (PDT)
+Message-ID: <8b69b813-d030-2666-37f1-a731b1d52f4e@linaro.org>
+Date:   Tue, 26 Jul 2022 08:59:10 +0200
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 26 Jul 2022 12:28:29 +0530
-Message-ID: <CA+G9fYuH+Jo3xFypJc8+F6juT783StO=oe0P9ZMMLE7nM0bQJg@mail.gmail.com>
-Subject: [next] clang: drivers/gpu/drm/i915/gt/intel_region_lmem.c:94:23:
- error: result of comparison of constant 4294967296 with expression of type
- 'resource_size_t' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Cc:     Nirmoy Das <nirmoy.das@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/9] Samsung Trinity NPU device driver
+Content-Language: en-US
+To:     myungjoo.ham@samsung.com, Oded Gabbay <ogabbay@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Yelin Jeong <yelini.jeong@samsung.com>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>
+References: <CAFCwf13JA+5vuAKqvBSs3MkcF-gbE_8vd9nSvStQga55vW80VA@mail.gmail.com>
+ <20220725065308.2457024-1-jiho.chu@samsung.com> <Yt5cFBgiTLwGXv17@kroah.com>
+ <CGME20220725065308epcas1p2f6de3d74792854bb312cca4b310badac@epcms1p5>
+ <20220726020952epcms1p59c06fabb55776e195dcbeac549c98ef7@epcms1p5>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220726020952epcms1p59c06fabb55776e195dcbeac549c98ef7@epcms1p5>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,52 +80,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Linux next-20220725 i386 clang builds failed due this build error,
+On 26/07/2022 04:09, MyungJoo Ham wrote:
+>> Hi,
+>> Why isn't this submitted to soc/ subsystem ?
+>> Don't you think that would be more appropriate, given that this IP is
+>> integrated into application processors ?
+>>
+>> Thanks,
+>> Oded
+> 
+> This series (Trinity-V2.3, V2.4, A1, ..) is being integrated to multiple SoCs,
+> not limited to Samsung-designed chips (e.g., Exynos).
+> It's a bit weird to have them in /drivers/soc/samsung.
+> 
+> CC: Krzysztof and Alim (Samsung-SoC maintainers)
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Regressions found on i386:
-
-   - build-clang-11-defconfig
-   - build-clang-14-lkftconfig
-   - build-clang-13-defconfig
-   - build-clang-12-defconfig
-   - build-clang-13-lkftconfig
-   - build-clang-12-lkftconfig
-   - build-clang-14-defconfig
-
-Steps to reproduce:
--------------------
-tuxmake --runtime podman \
-        --target-arch i386 \
-        --toolchain clang-14 \
-        --kconfig
-https://builds.tuxbuild.com/2CQwgxqR0lJKwPMl2LxaDTNwsq0/config \
-          LLVM=1 \
-          LLVM_IAS=1
-
-Build error log:
------------------
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-ARCH=i386 CROSS_COMPILE=i686-linux-gnu- 'HOSTCC=sccache clang'
-'CC=sccache clang'
-drivers/gpu/drm/i915/gt/intel_region_lmem.c:94:23: error: result of
-comparison of constant 4294967296 with expression of type
-'resource_size_t' (aka 'unsigned int') is always false
-[-Werror,-Wtautological-constant-out-of-range-compare]
-                    root_res->start > 0x100000000ull)
-                    ~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
-1 error generated.
-make[5]: *** [scripts/Makefile.build:250:
-drivers/gpu/drm/i915/gt/intel_region_lmem.o] Error 1
-make[5]: Target '__build' not remade because of errors.
+If it is not related to Samsung SoCs (or other designs by Samsung
+Foundry), then it should not go to drivers/soc. Based on cover letter,
+it looks this is the case.
 
 
-Build link:
-https://builds.tuxbuild.com/2CQwgxqR0lJKwPMl2LxaDTNwsq0/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

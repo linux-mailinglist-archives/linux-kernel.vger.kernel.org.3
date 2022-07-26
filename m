@@ -2,115 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB25581A4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 21:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04A0581A4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 21:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239816AbiGZT3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 15:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S239823AbiGZT3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 15:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiGZT3R (ORCPT
+        with ESMTP id S229379AbiGZT3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 15:29:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EA21A807;
-        Tue, 26 Jul 2022 12:29:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 211086156B;
-        Tue, 26 Jul 2022 19:29:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 226E2C433D7;
-        Tue, 26 Jul 2022 19:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658863755;
-        bh=WlwSgYuZ7DFZd25furNi2YJWO8JHrpAPXAv1LXJRhNI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vIZ6FT+gIccoXebDvLukleSESPSpc77naQ7Nq5Xa8ZsRAtW6rPeZLVUx0Md888S+M
-         WTw/z0N6gZJ9+VNeeBE29/EyuWIc+x9Eo1HiG3scsWcoanfMws5Qhnp4g20pPnjnZb
-         eSLb9QeSc7DPTUIRQODcBmQg7CvmIdKg2+9oGeipCwkrVVMZd9wn9wZ+bEn+Fx5cGh
-         VwOIrcgXYnpk9AlSrvLw/1KzWCKXQpAyS8VnZlwm2QT3s0dhi/PdqzsF0kIfrFG4gR
-         tjuKtuKbdE0W0pf0LO07KgdnDXuOyCARCvLyzHkPpO4H3xjggL8xkTw/jcY1mxYqtR
-         HgblGPdqp0H4g==
-Date:   Tue, 26 Jul 2022 19:29:13 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, osandov@osandov.com,
-        kernel-team@fb.com
-Subject: Re: [PATCH RFC 4/4] fscrypt: Add new encryption policy for btrfs.
-Message-ID: <YuBAiRg9K8IrlCqV@gmail.com>
-References: <cover.1658623235.git.sweettea-kernel@dorminy.me>
- <675dd03f1a4498b09925fbf93cc38b8430cb7a59.1658623235.git.sweettea-kernel@dorminy.me>
- <Yt8oEiN6AkglKfIc@sol.localdomain>
- <7130dd3f-202c-2e70-c37f-57be9b85548b@dorminy.me>
+        Tue, 26 Jul 2022 15:29:24 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013632A711
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 12:29:23 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id v13so13700890wru.12
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 12:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=WUOSkRQ3fQqq70wMpzepWE3fWlY6MVxN11eTEnWzzQE=;
+        b=MyeztoY+OUnOXpaoBRs0XFJ2UH5Apm1p/Enuxaps1LrEATW9K0ljoZXzeCAz3plZrM
+         G9SO9hAKUfHImcfKiPpr3yg264Iyvtph3mvf/27Dxs08w0mK1Efd2n5UVNaEEr3tz9gB
+         oGfyK/d7tnd2snsDkM7AQ7Je/z3ZeM4H8RXERMxYWR/cB4ehGxZeb2HBN1AhiqibbAHW
+         hZxnaV2XnOc1WV8Z6MA1roOy1mV47J8SUSu6C+UUxXHSyPEwSSBUFYrPv9yZIhYoTYJt
+         u7dVUNUenxyWY1N5VbNlAzm5+kYFR+9jpsSn7qGgog8kWLTFgzf05e+6A6PhH5eEB8zw
+         RUkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WUOSkRQ3fQqq70wMpzepWE3fWlY6MVxN11eTEnWzzQE=;
+        b=n5uUDPGpvWZ1ylo4mYEPkuem4w5nHYIQKYYKKAtbtU9gy62/FjLLJXwhUUOgBaUSCG
+         4bLEF90aacrz/gNxfsjod2IToqFdd2QCO7LJWrcXMFJKVzYIH8VNcfe2Q5dEtXEB1xLV
+         FVdL3UyJv6BFrLvX29R++kyt0Cfmf2EqI873Eb2dGKF1e8C4LQIp9a7b99jS4lvURkj6
+         09utqG6E+vX38YiR44hEA4XBaQw1m2vj7M8fnqmqn6al//o8ii+cOG8iy0Pbga+zF0pH
+         a+Sd/oHCL5KD4XvoQz1sMD9gTeoF3MvtI2tFTp2FR0LvHYTZzzDPWmoVmP1lxhgklfA2
+         5zeg==
+X-Gm-Message-State: AJIora8+tVIBeDjC3YuspLbEz1oWCyqP+nuOOvrXrA8q5oRCpBo8p+c/
+        yS0jTCbsZ7VxgDtbXCyGkHDmeQ==
+X-Google-Smtp-Source: AGRyM1uPRQE2CT3+NMtMbvn2eH53F1Bgd6i5gZcFUuwu8XnFYFmHZUeNsQ+iHpqXZKMzppVLoBypUA==
+X-Received: by 2002:a5d:6da3:0:b0:21d:cde7:cb7 with SMTP id u3-20020a5d6da3000000b0021dcde70cb7mr11258338wrs.683.1658863761366;
+        Tue, 26 Jul 2022 12:29:21 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:d08b:b37:d7fc:8179? ([2a05:6e02:1041:c10:d08b:b37:d7fc:8179])
+        by smtp.googlemail.com with ESMTPSA id i13-20020adff30d000000b0021e4982270asm15628288wro.13.2022.07.26.12.29.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Jul 2022 12:29:20 -0700 (PDT)
+Message-ID: <b1972a54-324a-63af-fe6c-51715fa972ba@linaro.org>
+Date:   Tue, 26 Jul 2022 21:29:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7130dd3f-202c-2e70-c37f-57be9b85548b@dorminy.me>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] dt-bindings: timer: ingenic,tcu: use absolute path to
+ other schema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220726115937.101432-1-krzysztof.kozlowski@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220726115937.101432-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 10:16:07PM -0400, Sweet Tea Dorminy wrote:
+On 26/07/2022 13:59, Krzysztof Kozlowski wrote:
+> Absolute path to other DT schema is preferred over relative one.
 > 
-> 
-> On 7/25/22 19:32, Eric Biggers wrote:
-> > On Sat, Jul 23, 2022 at 08:52:28PM -0400, Sweet Tea Dorminy wrote:
-> > > Certain filesystems may want to use IVs generated and stored outside of
-> > > fscrypt's inode-based IV generation policies.  In particular, btrfs can
-> > > have multiple inodes referencing a single block of data, and moves
-> > > logical data blocks to different physical locations on disk; these two
-> > > features mean inode or physical-location-based IV generation policies
-> > > will not work for btrfs. For these or similar reasons, such filesystems
-> > > may want to implement their own IV generation and storage for data
-> > > blocks.
-> > > 
-> > > Plumbing each such filesystem's internals into fscrypt for IV generation
-> > > would be ungainly and fragile. Thus, this change adds a new policy,
-> > > IV_FROM_FS, and a new operation function pointer, get_fs_derived_iv.  If
-> > > this policy is selected, the filesystem is required to provide the
-> > > function pointer, which populates the IV for a particular data block.
-> > > The IV buffer passed to get_fs_derived_iv() is pre-populated with the
-> > > inode contexts' nonce, in case the filesystem would like to use this
-> > > information; for btrfs, this is used for filename encryption.  Any
-> > > filesystem using this policy is expected to appropriately generate and
-> > > store a persistent random IV for each block of data.
-> > 
-> > This is changed from the original proposal to store just a random "starting IV"
-> > per extent, right?
-> 
-> This is intended to be a generic interface that doesn't require any
-> particular IV scheme from the filesystem. 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-I don't think that's a good way to do it.  The fscrypt settings are supposed to
-be very concrete, meaning that they specify a particular way of doing the
-encryption, which can be reviewed for its security and which can be tested for
-correctness of the on-disk format.  There shouldn't be cryptographic differences
-between how different filesystems implement the same setting.
+Applied, thanks
 
-The fscrypt settings also shouldn't specify internal implementation details of
-the code, as "IV_FROM_FS" does.  From userspace's perspective, *all* fscrypt
-settings have IVs chosen by the filesystem; the division between the
-"filesystem" and fs/crypto/ is an internal kernel implementation detail.
 
-So I think you should go with something like RANDOM_IV or IV_PER_EXTENT.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> In practice, the btrfs side of the code is using a per-extent starting IV, as
-> originally proposed. 
-
-This is inconsistent with your commit message, which says that there is a random
-IV for each block of data.  It's also inconsistent with your proposed change to
-fscrypt_limit_io_blocks().  So I don't know which to believe.
-
-Clearly this can't be properly reviewed on its own, so please send out the whole
-patch series and not just the fs/crypto/ parts.
-
-- Eric
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E825809DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCCE5809E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237037AbiGZDU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 23:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
+        id S237471AbiGZDVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 23:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiGZDUw (ORCPT
+        with ESMTP id S230164AbiGZDVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 23:20:52 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E2DA727CE4;
-        Mon, 25 Jul 2022 20:20:46 -0700 (PDT)
-Received: by ajax-webmail-mail-app2 (Coremail) ; Tue, 26 Jul 2022 11:20:25
- +0800 (GMT+08:00)
-X-Originating-IP: [218.12.17.60]
-Date:   Tue, 26 Jul 2022 11:20:25 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Jakub Kicinski" <kuba@kernel.org>
-Cc:     linux-hams@vger.kernel.org, ralf@linux-mips.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] netrom: fix sleep in atomic context bugs in timer
- handlers
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20220725194930.44ca1518@kernel.org>
-References: <20220723035646.29857-1-duoming@zju.edu.cn>
- <20220725194930.44ca1518@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <14bac17c.5d665.182388522da.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: by_KCgCHz1t6Xd9iXENnAQ--.25193W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMDAVZdta05LAABsE
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 25 Jul 2022 23:21:39 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 515B627CE4
+        for <linux-kernel@vger.kernel.org>; Mon, 25 Jul 2022 20:21:38 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.218:46296.160933712
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.8.199 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id 3B61B2800DB;
+        Tue, 26 Jul 2022 11:21:35 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id ee3b4560c65b4957bb52cabbf7ed1611 for rppt@kernel.org;
+        Tue, 26 Jul 2022 11:21:37 CST
+X-Transaction-ID: ee3b4560c65b4957bb52cabbf7ed1611
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     rppt@kernel.org, david@redhat.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH] memblock tests: compiling error
+Date:   Tue, 26 Jul 2022 11:21:21 +0800
+Message-Id: <1658805681-17371-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBNb24sIDI1IEp1bCAyMDIyIDE5OjQ5OjMwIC0wNzAwIEpha3ViIEtpY2luc2tp
-IHdyb3RlOgoKPiBPbiBTYXQsIDIzIEp1bCAyMDIyIDExOjU2OjQ2ICswODAwIER1b21pbmcgWmhv
-dSB3cm90ZToKPiA+IEZpeGVzOiBlYWZmZjg2ZDNiZDggKCJbTkVUUk9NXTogVXNlIGttZW1kdXAi
-KQo+IAo+IFRoYXQncyBub3QgYSBjb3JyZWN0IEZpeGVzIHRhZywgYWNtZSBqdXN0IHN3YXBwZWQg
-a21hbGxvYyBmb3Iga21lbWR1cCgpLgo+IFRoZSBhbGxvY2F0ZSBmbGFncyBkaWQgbm90IGNoYW5n
-ZS4KClRoYW5rcyBmb3IgeW91ciB0aW1lIGFuZCByZXBseSEKClRoZSBjb3JyZWN0IEZpeGVzIHRh
-ZyBpcyAiRml4ZXM6IDFkYTE3N2U0YzNmNCAoIkxpbnV4LTIuNi4xMi1yYzIiKSIuClRoZSBmb2xs
-b3dpbmcgaXMgdGhlIGNvZGU6CgpodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92Mi42
-LjEyLXJjMi9zb3VyY2UvbmV0L25ldHJvbS9ucl9yb3V0ZS5jI0wxNTgKCi4uLgppZiAoKG5yX25l
-aWdoLT5kaWdpcGVhdCA9IGttYWxsb2Moc2l6ZW9mKCpheDI1X2RpZ2kpLCBHRlBfS0VSTkVMKSkg
-PT0gTlVMTCkgewouLi4KCkJlc3QgcmVnYXJkcywKRHVvbWluZyBaaG91CgoK
+memblock.o: In function `memblock_find_in_range.constprop.9':
+memblock.c:(.text+0x4651): undefined reference to `pr_warn_ratelimited'
+memblock.o: In function `memblock_mark_mirror':
+memblock.c:(.text+0x7171): undefined reference to `mirrored_kernelcore'
+
+Fixs: 902c2d91582 ("memblock: Disable mirror feature if kernelcore is not
+specified")
+Fixs: 14d9a675fd0 ("mm: Ratelimited mirrored memory related warning")
+
+Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+---
+ tools/testing/memblock/internal.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/memblock/internal.h b/tools/testing/memblock/internal.h
+index c2a492c..cf67e6e 100644
+--- a/tools/testing/memblock/internal.h
++++ b/tools/testing/memblock/internal.h
+@@ -9,6 +9,9 @@
+ static int memblock_debug = 1;
+ #endif
+ 
++#define pr_warn_ratelimited(fmt, ...)    printf(fmt, ##__VA_ARGS__)
++
++bool mirrored_kernelcore = false;
+ struct page {};
+ 
+ void memblock_free_pages(struct page *page, unsigned long pfn,
+-- 
+1.8.3.1
+

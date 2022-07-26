@@ -2,173 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614515812D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B83E5812D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 14:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238070AbiGZMIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 08:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S238707AbiGZMKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 08:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbiGZMI0 (ORCPT
+        with ESMTP id S238087AbiGZMKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 08:08:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50592B252;
-        Tue, 26 Jul 2022 05:08:23 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsbDl1C8HzWfWq;
-        Tue, 26 Jul 2022 20:04:23 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 20:08:15 +0800
-Received: from [10.67.110.237] (10.67.110.237) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Jul 2022 20:08:14 +0800
-Subject: Re: [PATCH 3/5] ARM: stacktrace: Allow stack trace saving for
- non-current tasks
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     Linus Walleij <linus.walleij@linaro.org>, <ardb@kernel.org>,
-        <will@kernel.org>, <mark.rutland@arm.com>, <broonie@kernel.org>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <arnd@arndb.de>, <rostedt@goodmis.org>,
-        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>,
-        <ast@kernel.org>, <linyujun809@huawei.com>,
-        <ndesaulniers@google.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-References: <20220712021527.109921-1-lihuafei1@huawei.com>
- <20220712021527.109921-4-lihuafei1@huawei.com>
- <CACRpkdYvOjfmf=Z3pGfD-UPxfTc9PXtOyw2x+ptYiSy=gmGnpQ@mail.gmail.com>
- <1288c73b-cf29-707d-47cb-4e2737300a29@huawei.com>
- <Yt+4qSeIM0WbjcJj@shell.armlinux.org.uk>
-From:   Li Huafei <lihuafei1@huawei.com>
-Message-ID: <d1605c5a-1dfb-65b6-f79f-9c92bb507d4b@huawei.com>
-Date:   Tue, 26 Jul 2022 20:08:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Tue, 26 Jul 2022 08:10:04 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624902BB3B;
+        Tue, 26 Jul 2022 05:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=qE9E//dP4gc/xOOwIwhfrlODHz+ESpUGR+JNi63mXEM=; b=R/anHNFW+YvnZqTxmBZ4X5KCCE
+        w9mmbiT/KxL/PY7AkmL+4J7yoizv4Edtk/DEZSvzHXQ6Xrw54Xo3PNT2HWey4a9NVXeBEgb3gCqI0
+        bRBGX0oVZCNff5b18jAlCh1Ezapg+LK29rRdb+lF/kb8hnyqKrAoCHWlgCjWc4tYEPaU1zFC8PMis
+        MIAlxr03QCdoWtVl20M8VgxXO7WvmzQVE+vuzAldSiXly3gHCWcebF+pNgGlQw+z+sxnHJkkFJ0Z4
+        eXL6sbdmk7bdJJwttajxl0psl5eIbnG/87cwkkk3w0l4tPow6I0pveCpRIeHdYDtyO1+a1wKyt84J
+        KB5E+7Clr61Bib8Hewb4+R83aUVT9y5ErXdGU4kmC4svF1WTM4+qQvwimac6jqdzN/SM+UAbwQe+0
+        nVP8dXFUXIEHRGhxpAds7qb8YJHuwz4zkkP2/+YG6RdcMQhM9KZ6xTb1772rzaLhprYuzqaL9AsJH
+        YY5y0bqnKpmcoRJdTfL+r19avlE6JYcgaSjm6/N21miUWAm1HOc1+ASELHezsUzeGcjj0arm0ba/p
+        RwUBpPsHY1TLzfZvAyjGKCTt0EUEcJ6XCFLNFACSH1N9FxRiS0SKiSGxFaRr1cVr3M9A7pWuZWq8y
+        emuOo1+DxmLee/4PjvDGXexXc4TQFG5YHLOVa1dP8=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     asmadeus@codewreck.org, Dmitry Vyukov <dvyukov@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        syzbot <syzbot+5e28cdb7ebd0f2389ca4@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, davem@davemloft.net,
+        edumazet@google.com, elver@google.com, ericvh@gmail.com,
+        hdanton@sina.com, k.kahurani@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, lucho@ionkov.net,
+        netdev@vger.kernel.org, pabeni@redhat.com, rientjes@google.com,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
+        v9fs-developer@lists.sourceforge.net
+Subject: Re: [syzbot] WARNING in p9_client_destroy
+Date:   Tue, 26 Jul 2022 14:09:37 +0200
+Message-ID: <2916828.W3qMjvkFlE@silver>
+In-Reply-To: <CACT4Y+Yx2MZ9KEX9gfm-LahQE4KaXX=u4RQBuj-1gS57KL0OSw@mail.gmail.com>
+References: <000000000000e6917605e48ce2bf@google.com> <Yt6DjrMdIhpQmm7V@codewreck.org>
+ <CACT4Y+Yx2MZ9KEX9gfm-LahQE4KaXX=u4RQBuj-1gS57KL0OSw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Yt+4qSeIM0WbjcJj@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.237]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Montag, 25. Juli 2022 14:45:08 CEST Dmitry Vyukov wrote:
+> On Mon, 25 Jul 2022 at 13:51, <asmadeus@codewreck.org> wrote:
+> > Vlastimil Babka wrote on Mon, Jul 25, 2022 at 12:15:24PM +0200:
+> > > On 7/24/22 15:17, syzbot wrote:
+> > > > syzbot has bisected this issue to:
+> > > > 
+> > > > commit 7302e91f39a81a9c2efcf4bc5749d18128366945
+> > > > Author: Marco Elver <elver@google.com>
+> > > > Date:   Fri Jan 14 22:03:58 2022 +0000
+> > > > 
+> > > >     mm/slab_common: use WARN() if cache still has objects on destroy
+> > > 
+> > > Just to state the obvious, bisection pointed to a commit that added the
+> > > warning, but the reason for the warning would be that p9 is destroying a
+> > > kmem_cache without freeing all the objects there first, and that would
+> > > be
+> > > true even before the commit.
+> > 
+> > Probably true from the moment that cache/idr was introduced... I've got
+> > a couple of fixes in next but given syzcaller claims that's the tree it
+> > was produced on I guess there can be more such leaks.
+> > (well, the lines it sent in the backtrace yesterday don't match next,
+> > but I wouldn't count on it)
+> > 
+> > If someone wants to have a look please feel free, I would bet the
+> > problem is just that p9_fd_close() doesn't call or does something
+> > equivalent to p9_conn_cancel() and there just are some requests that
+> > haven't been sent yet when the mount is closed..
+> > But I don't have/can/want to take the time to check right now as I
+> > consider such a leak harmless enough, someone has to be root or
+> > equivalent to do 9p mounts in most cases.
+> 
+> FWIW with KASAN we have allocation stacks for each heap object. So
+> when KASAN is enabled that warning could list all live object
+> allocation stacks.
+
+With allocation stack you mean the backtrace/call stack at the point in time 
+when the memory originally was acquired?
+
+If the answer is yes, then sure, if someone had a chance to post those 
+backtraces, then that would help us to take a closer look at where this leak 
+might happen. Otherwise I fear it will end up among those other "lack of 
+priority" issues.
+
+Best regards,
+Christian Schoenebeck
 
 
-On 2022/7/26 17:49, Russell King (Oracle) wrote:
-> On Tue, Jul 26, 2022 at 05:12:39PM +0800, Li Huafei wrote:
->>
->>
->> On 2022/7/18 17:07, Linus Walleij wrote:
->>> On Tue, Jul 12, 2022 at 4:18 AM Li Huafei <lihuafei1@huawei.com> wrote:
->>>
->>>> The current ARM implementation of save_stack_trace_tsk() does not allow
->>>> saving stack trace for non-current tasks, which may limit the scenarios
->>>> in which stack_trace_save_tsk() can be used. Like other architectures,
->>>> or like ARM's unwind_backtrace(), we can leave it up to the caller to
->>>> ensure that the task that needs to be unwound is not running.
->>>>
->>>> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
->>>
->>> That sounds good, but:
->>>
->>>>         if (tsk != current) {
->>>> -#ifdef CONFIG_SMP
->>>> -               /*
->>>> -                * What guarantees do we have here that 'tsk' is not
->>>> -                * running on another CPU?  For now, ignore it as we
->>>> -                * can't guarantee we won't explode.
->>>> -                */
->>>> -               return;
->>>> -#else
->>>> +               /* task blocked in __switch_to */
->>>
->>> The commit text is not consistent with the comment you are removing.
->>>
->>> The commit is talking about "non-current" tasks which is one thing,
->>> but the code is avoiding any tasks under SMP because they may be
->>> running on another CPU. So you need to update the commit
->>> message to say something like "non-current or running on another CPU".
->>>
->>> If this condition will be checked at call sites in following patches,
->>> then mention
->>> that in the commit as well, so we know the end result is that we do
->>> not break it,
->>
->> The generic code stack_trace_save_tsk() does not have this check, and by
->> 'caller' I mean the caller of stack_trace_save_tsk(), expecting the
->> 'caller' to ensure that the task is not running. So in effect this check
->> has been dropped and there is no more guarantee. Sorry for not
->> clarifying the change here.
-> 
-> Can you prove in every case that the thread we're being asked to unwind
-> is not running? I don't think you can.
-> 
-> There are things like proc_pid_stack() in procfs and the stack traces
-> in sysrq-t which have attempted to unwind everything whether it's
-> running or not.
-> 
-> So no, there is no guarantee that the thread is blocked in
-> __switch_to().
-> 
-
-Yes, I agree.
-
->> But can we assume that the user should know that the stacktrace is
->> unreliable for a task that is running on another CPU? If not, I should
->> remove this patch and keep the check.
-> 
-> It's not about "unreliable" stack traces, it's about the unwinder
-> killing the kernel.
-> 
-> The hint is this:
-> 
->                 frame.fp = thread_saved_fp(tsk);
->                 frame.sp = thread_saved_sp(tsk);
->                 frame.lr = 0;           /* recovered from the stack */
->                 frame.pc = thread_saved_pc(tsk);
-> 
-> These access the context saved by the scheduler when the task is
-> sleeping. When the thread is running, these saved values will be
-> the state when the thread last slept. However, with the thread
-> running, the stack could now contain any data what so ever, and
-> could change at any moment.
-> 
-
-I get it. For example, since the data on the stack is changing,
-'*(unsigned long *)fp' could access any illegal address and crash the
-kernel.
-
-> Whether the unwind-table unwinder is truely safe in such a
-> situation is unknown - we try to ensure that it won't do anything
-> stupid, but proving that is a hard task, and we've recently had
-> issues with the unwinder even without that.
-> 
-> So, allowing this feels like we're opening the door to DoS attacks
-> from userspace, where userspace sits there reading /proc/*/stack of
-> some thread running on a different CPU waiting for the kernel to
-> oops itself, possibly holding a lock, resulting in the system
-> dying.
-> 
-> These decisions need to be made by architecture code not generic
-> code, particularly where the method of unwinding is architecture
-> specific and thus may have criteria defining when its safe to do so.
-> 
-
-Thank you for your comments, I'll remove the patch and keep the check.
-
-Thanks,
-Huafei

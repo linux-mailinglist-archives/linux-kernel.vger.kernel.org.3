@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE63E5809CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985A05809C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 05:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbiGZDHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 25 Jul 2022 23:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
+        id S237436AbiGZDEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 25 Jul 2022 23:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbiGZDGy (ORCPT
+        with ESMTP id S236795AbiGZDEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 25 Jul 2022 23:06:54 -0400
-Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530382A243;
-        Mon, 25 Jul 2022 20:06:53 -0700 (PDT)
-Received: from amadeus-VLT-WX0.lan (unknown [113.118.189.34])
-        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 3F99E800058;
-        Tue, 26 Jul 2022 11:06:51 +0800 (CST)
-From:   Chukun Pan <amadeus@jmu.edu.cn>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Chukun Pan <amadeus@jmu.edu.cn>
-Subject: [PATCH 3/3] arm: dts: mt7623: update scpsys device nodes
-Date:   Tue, 26 Jul 2022 11:06:21 +0800
-Message-Id: <20220726030621.7555-3-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220726030621.7555-1-amadeus@jmu.edu.cn>
-References: <20220726030621.7555-1-amadeus@jmu.edu.cn>
+        Mon, 25 Jul 2022 23:04:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6208A240AA;
+        Mon, 25 Jul 2022 20:04:06 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LsM8q4Tr4zWf95;
+        Tue, 26 Jul 2022 11:00:11 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 26 Jul
+ 2022 11:03:47 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next] net/sched: sch_cbq: change the type of cbq_set_lss to void
+Date:   Tue, 26 Jul 2022 11:07:48 +0800
+Message-ID: <20220726030748.243505-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDGhlPVkJNT0lDSBhDGEpKHVUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpKSFVKSkNVSkNCVUhPWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Oio6Ehw*UT0rKE44GUgLNx4q
-        LBgKCUxVSlVKTU5DQ0tPQ0pKQktPVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUpK
-        SFVKSkNVSkNCVUhPWVdZCAFZQUlLSU43Bg++
-X-HM-Tid: 0a823878b704b03akuuu3f99e800058
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,30 +47,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the power domain data of mt7623a changed,
-device tree should also be changed accordingly.
+Change the type of cbq_set_lss to void.
 
-Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- arch/arm/boot/dts/mt7623a.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ net/sched/sch_cbq.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/mt7623a.dtsi b/arch/arm/boot/dts/mt7623a.dtsi
-index d304b62d24b5..fb2670875a66 100644
---- a/arch/arm/boot/dts/mt7623a.dtsi
-+++ b/arch/arm/boot/dts/mt7623a.dtsi
-@@ -31,8 +31,9 @@ &pcie {
+diff --git a/net/sched/sch_cbq.c b/net/sched/sch_cbq.c
+index 599e26fc2fa8..91a0dc463c48 100644
+--- a/net/sched/sch_cbq.c
++++ b/net/sched/sch_cbq.c
+@@ -979,7 +979,7 @@ cbq_reset(struct Qdisc *sch)
+ }
  
- &scpsys {
- 	compatible = "mediatek,mt7623a-scpsys";
--	clocks = <&topckgen CLK_TOP_ETHIF_SEL>;
--	clock-names = "ethif";
-+	clocks = <&topckgen CLK_TOP_MM_SEL>,
-+		 <&topckgen CLK_TOP_ETHIF_SEL>;
-+	clock-names = "mm", "ethif";
- };
  
- &usb0 {
+-static int cbq_set_lss(struct cbq_class *cl, struct tc_cbq_lssopt *lss)
++static void cbq_set_lss(struct cbq_class *cl, struct tc_cbq_lssopt *lss)
+ {
+ 	if (lss->change & TCF_CBQ_LSS_FLAGS) {
+ 		cl->share = (lss->flags & TCF_CBQ_LSS_ISOLATED) ? NULL : cl->tparent;
+@@ -997,7 +997,6 @@ static int cbq_set_lss(struct cbq_class *cl, struct tc_cbq_lssopt *lss)
+ 	}
+ 	if (lss->change & TCF_CBQ_LSS_OFFTIME)
+ 		cl->offtime = lss->offtime;
+-	return 0;
+ }
+ 
+ static void cbq_rmprio(struct cbq_sched_data *q, struct cbq_class *cl)
 -- 
-2.25.1
+2.17.1
 

@@ -2,151 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EB9581127
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E604158112A
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 12:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238640AbiGZK1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 06:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S231345AbiGZK1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 06:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiGZK1M (ORCPT
+        with ESMTP id S238662AbiGZK1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:27:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D1B8B7D6
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:27:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658831230;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4qHufDszC3S/UXoGPmLgr+LT8K7L0fqHbq2F1Jr6Ad0=;
-        b=DdpNvhVSiRu0QgZDWeCamM0qQJwy5HSXnVlr1yaXYvyNvGkaNCknIl11liC9/BF7xNBKxj
-        uyLyvRAyRYHBDgp/zGKMMA1b0vyP+h8XJqZ3KryPtJo3ShNMv1bCA2DuJsT3ltgeJOSTkO
-        YCXo4PxbMQW9Ar0g8O9BoTQ76AlukLk=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-lZFieREVMRaMTRzfEC7TQQ-1; Tue, 26 Jul 2022 06:27:09 -0400
-X-MC-Unique: lZFieREVMRaMTRzfEC7TQQ-1
-Received: by mail-ed1-f71.google.com with SMTP id n8-20020a05640205c800b00434fb0c150cso8570656edx.19
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:27:09 -0700 (PDT)
+        Tue, 26 Jul 2022 06:27:19 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA63244F
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:27:16 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id t17so9733274lfk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 03:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TMi+bjKy7+WtWPXtstlGwzQClNVWhga6kNx+LvTNJdY=;
+        b=cGoPyMRCRG1wVftIfDL0na3cR29l2mbznyINOy4G21vt7LkfhPNzCVn6pGP92k84OI
+         B3r9JWWwZgF1DS4ZIMn3FDhOdugj7ni01vQWYboEGeYxzRzryZesnfwyOvY8p/pMz1HT
+         ks4iYsZYSEOo+pUjiKWCGNcizbTnIgv4nmxUGCM7DKfpjutAecKTuRiur6oobhlZSRjh
+         UDCx0GnkIvsg0RZ4BgdyCV5pjqFrvHEvqatCcqBFiBlZ+Z0HUzNEe+gSWzD+A4/FOdoS
+         iiFiGL59QhmvJkx7/w1ZlV+2Fj0LPrBzQ+XLbeqBExysWr1e0n55QPV79+oHnPJXlH0L
+         ZzZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=4qHufDszC3S/UXoGPmLgr+LT8K7L0fqHbq2F1Jr6Ad0=;
-        b=St1Hok7x9XIKhPO9cbd/TK+gohshVO+2dJFBTc1MuUH3LEh3kp7nsInN2gcXkIRQW5
-         OZ+zNUFea4rbecdZ5hyoDkpDK6U6F8YdNIMq6zL6h6uYhqMDsM18j3iE4RXQym0KHSY0
-         hXX7nQs5DGumZCQ5jGoeM2FXbmfUL5/XjXeIrMMDYujfpMZ8AWqw2uEnHhaXscKOAz3i
-         wu5QqfZ7Thhy9BXFg9RGMtgCBg80joZb3Vksv2xS/Y1Eiez77gD+uARPwuYHRFBHugcg
-         xsf9rbJDiA7lz1Efq9fweZeKP3kdKiAEnxPhW/+TC9q5cSAaamj3Qcp9Oy180ZQPI9QA
-         iY1Q==
-X-Gm-Message-State: AJIora+l2J0la6qUjPf4h+SR4209PW2b7cmeY5V6yXM5KW1UDq1TyMky
-        qfk/cYj0IUEQ9TWnqWek881UalR9+Vb2bNfXsrWw1d1rIlOzpP2qa7/MY9vjobtpINOXAKa8A0o
-        QKxzrJ5ivrhkwpqo9FtJEPGM+
-X-Received: by 2002:a17:907:9810:b0:72f:36e5:266c with SMTP id ji16-20020a170907981000b0072f36e5266cmr13370129ejc.105.1658831228077;
-        Tue, 26 Jul 2022 03:27:08 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tzvJx2BmA9Y9WJYMRkHNQKE5WwuhnG2bCIf5i89vcfA4dJvmoC55LLUzurv8om5eij1GIqIg==
-X-Received: by 2002:a17:907:9810:b0:72f:36e5:266c with SMTP id ji16-20020a170907981000b0072f36e5266cmr13370102ejc.105.1658831227663;
-        Tue, 26 Jul 2022 03:27:07 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id dk20-20020a0564021d9400b0043a71775903sm8368247edb.39.2022.07.26.03.27.06
+        bh=TMi+bjKy7+WtWPXtstlGwzQClNVWhga6kNx+LvTNJdY=;
+        b=CWK3j7H1mcB3hADh8286E2RWD5XSWZ3vYMPEKauuywm+o8XkXjpLy1W2iIjvvo+Maq
+         vOe2F+hbTveU69LNQTnNhCRT4ZJJda3OpKZI66VNgt9ifcdyNtPmJUMHEbTtGKucvLa3
+         4EVtNBxnjDo2/Q8Ew9nAG3gCfwz1K5OTmLch2cQ/fwunSbmUPH6G/Tg51JD2P4l20GLj
+         kw7kLDxBHNjO/tYC//digeDUEQ5oTpT/epoGSadTOv7+eAYaFugxC7Ex3OuxBnZyzET9
+         GzbBK56gI1tWVNICGNxJL6FSdmSUdUieqSPbbcf2Vn1riOC/eVFpCybdonqrX3FxmwS3
+         f4WA==
+X-Gm-Message-State: AJIora8Ns7rGUGIgTq6yH7aQ0+RHEhnRMO/XnOGRrNa4aOU60HAilJJ9
+        1SD79P+R/zhO87IZfYxqYQ3vPg==
+X-Google-Smtp-Source: AGRyM1uo4j3H6oHQ9Qu/k+9ltEMAux8NWWJeXFv14NJa5aTEhvH9PCsvcwnh/gZG5kUyOKOSY2asMQ==
+X-Received: by 2002:a05:6512:3503:b0:481:4470:4134 with SMTP id h3-20020a056512350300b0048144704134mr6017873lfs.42.1658831234451;
+        Tue, 26 Jul 2022 03:27:14 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id b15-20020a056512070f00b0048a7901903esm2357778lfs.144.2022.07.26.03.27.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 03:27:06 -0700 (PDT)
-Message-ID: <69b45487-ce0e-d643-6c48-03c5943ce2e6@redhat.com>
-Date:   Tue, 26 Jul 2022 12:27:05 +0200
+        Tue, 26 Jul 2022 03:27:14 -0700 (PDT)
+Message-ID: <57f8d9c4-6f49-ad3d-fc82-7a0f66d1775a@linaro.org>
+Date:   Tue, 26 Jul 2022 12:27:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 2/2] power: reset: qcom-pon: add support for
+ qcom,pmk8350-pon compatible string
 Content-Language: en-US
-To:     Andrei Vagin <avagin@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jianfeng Tan <henry.tjf@antfin.com>,
-        Adin Scannell <ascannell@google.com>,
-        Konstantin Bogomolov <bogomolov@google.com>,
-        Etienne Perot <eperot@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20220722230241.1944655-1-avagin@google.com>
- <Yts1tUfPxdPH5XGs@google.com>
- <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 0/5] KVM/x86: add a new hypercall to execute host system
-In-Reply-To: <CAEWA0a4hrRb5HYLqa1Q47=guY6TLsWSJ_zxNjOXXV2jCjUekUA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, corbet@lwn.net,
+        sre@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220725191314.19456-1-quic_amelende@quicinc.com>
+ <20220725191314.19456-3-quic_amelende@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220725191314.19456-3-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 10:33, Andrei Vagin wrote:
-> We can think about restricting the list of system calls that this hypercall can
-> execute. In the user-space changes for gVisor, we have a list of system calls
-> that are not executed via this hypercall. For example, sigprocmask is never
-> executed by this hypercall, because the kvm vcpu has its signal mask.  Another
-> example is the ioctl syscall, because it can be one of kvm ioctl-s.
-
-The main issue I have is that the system call addresses are not translated.
-
-On one hand, I understand why it's done like this; it's pretty much 
-impossible to do it without duplicating half of the sentry in the host 
-kernel.  And the KVM API you're adding is certainly sensible.
-
-On the other hand this makes the hypercall even more specialized, as it 
-depends on the guest's memslot layout, and not self-sufficient, in the 
-sense that the sandbox isn't secure without prior copying and validation 
-of arguments in guest ring0.
-
-> == Host Ring3/Guest ring0 mixed mode ==
+On 25/07/2022 21:13, Anjelique Melendez wrote:
+> Add support for the new "qcom,pmk8350-pon" comptaible string.
 > 
-> This is how the gVisor KVM platform works right now. We don’t have a separate
-> hypervisor, and the Sentry does its functions. The Sentry creates a KVM virtual
-> machine instance, sets it up, and handles VMEXITs. As a result, the Sentry runs
-> in the host ring3 and the guest ring0 and can transparently switch between
-> these two contexts.  In this scheme, the sentry syscall time is 3600ns.
-> This is for the case when a system call is called from gr0.
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
+>  drivers/power/reset/qcom-pon.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> The benefit of this way is that only a first system call triggers vmexit and
-> all subsequent syscalls are executed on the host natively.
-> 
-> But it has downsides:
-> * Each sentry system call trigger the full exit to hr3.
-> * Each vmenter/vmexit requires to trigger a signal but it is expensive.
-> * It doesn't allow to support Confidential Computing (SEV-ES/SGX). The Sentry
->    has to be fully enclosed in a VM to be able to support these technologies.
-> 
-> == Execute system calls from a user-space VMM ==
-> 
-> In this case, the Sentry is always running in VM, and a syscall handler in GR0
-> triggers vmexit to transfer control to VMM (user process that is running in
-> hr3), VMM executes a required system call, and transfers control back to the
-> Sentry. We can say that it implements the suggested hypercall in the
-> user-space.
-> 
-> The sentry syscall time is 2100ns in this case.
-> 
-> The new hypercall does the same but without switching to the host ring 3. It
-> reduces the sentry syscall time to 1000ns.
+> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
+> index 4a688741a88a..16bc01738be9 100644
+> --- a/drivers/power/reset/qcom-pon.c
+> +++ b/drivers/power/reset/qcom-pon.c
+> @@ -82,6 +82,7 @@ static const struct of_device_id pm8916_pon_id_table[] = {
+>  	{ .compatible = "qcom,pm8916-pon", .data = (void *)GEN1_REASON_SHIFT },
+>  	{ .compatible = "qcom,pms405-pon", .data = (void *)GEN1_REASON_SHIFT },
+>  	{ .compatible = "qcom,pm8998-pon", .data = (void *)GEN2_REASON_SHIFT },
+> +	{ .compatible = "qcom,pmk8350-pon", .data = (void *)GEN2_REASON_SHIFT },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, pm8916_pon_id_table);
 
-Yeah, ~3000 clock cycles is what I would expect.
+This is now confusing. The new device has entirely different first and
+second IO address spaces, but you do not code here any differences.
 
-What does it translate to in terms of benchmarks?  For example a simple 
-netperf/UDP_RR benchmark.
-
-Paolo
-
+Best regards,
+Krzysztof

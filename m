@@ -2,88 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC475811C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 13:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C3E5811CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 26 Jul 2022 13:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238796AbiGZLSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 26 Jul 2022 07:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S238830AbiGZLTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 26 Jul 2022 07:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbiGZLSH (ORCPT
+        with ESMTP id S229759AbiGZLTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 26 Jul 2022 07:18:07 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E1631230
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:18:05 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id a13so15957888ljr.11
-        for <linux-kernel@vger.kernel.org>; Tue, 26 Jul 2022 04:18:05 -0700 (PDT)
+        Tue, 26 Jul 2022 07:19:43 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DD730F49;
+        Tue, 26 Jul 2022 04:19:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=geCVNY+flwt789c9RdieCurETz/pfYIPVuJSXzc2+N4=;
-        b=JgLJoIHl+NK9NYyAoWjepj6PT+eWxDBr9jpfQarPOCel6KomwPBTz6m4W25da1hd0E
-         fmLKUnYhiwdRyrycGFjN1K8uOwRGA1ekXuWIALaWbJNEqDoKu83Glc+S5sgAbe8ux8GE
-         tYrhKRKs4SZ17ct+4IuUutjBjL7+Ae9Wzq0nmXfoi3ifZdiZLsmJJSSEphNlhukaWq+s
-         Dyt79g6HpKMWs4NBdyn4whBsIMD1XvHBcAhfIYfTribo+JLCRFIgxhoysoles8BSQj9v
-         6EdN8ymB4dwVHPiX6N4KHgBPE6uHEvEYh8WLUSj4l0CMj4ofosb2XdE3soHC2x48eK8a
-         +bJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=geCVNY+flwt789c9RdieCurETz/pfYIPVuJSXzc2+N4=;
-        b=jndSOLHnvIKT/RW3IMiMnoXmhXXDrZHT3zlaWakM4k2VE2Bp9+pAJVTJ5YcLPTdfLh
-         UaVX+FuXIMp8jQT8KpVaSyPYqWn2kYoY1Cyw6wX1OEYRoP531hqtqKkHZHO7Py+had+g
-         w3Z591vZBg92LMJikYKnREoOBRMfeVDtooz/TezizdLTEmuxDy6JBd+oj1vQ4iwYiDnV
-         /0e7ji2tXhOjubuKoqHE/gb3TAtUx8zoJzkvoWUOKFG7tGDUoG3iQnTS7RvMiIR7n9RU
-         OgXJ0dw3STEv+/y75Ldv4YSsdZ/EYGeY2k44ovRBFEIK9NxL/YpNIiR5RfuJGofYsAJ0
-         RB9g==
-X-Gm-Message-State: AJIora8uQ07bm9AjUxFOM5Uh5hcI1XYsqjH3bsmA7v+dSRbimr7CHJk3
-        u8V2FiUYPnblvfwqmgAq9tMJ5IoolU7L1gcMwl0=
-X-Google-Smtp-Source: AGRyM1vz4FhlTogYq8w7C/qsyADg0JDA1YibcqR3FsuYNojSiMWvg0qTL1Y3+AFZtdmgdQtqqRvx6MTUDbSEkX+Cnvc=
-X-Received: by 2002:a2e:944a:0:b0:24f:10bd:b7e8 with SMTP id
- o10-20020a2e944a000000b0024f10bdb7e8mr6210583ljh.238.1658834283283; Tue, 26
- Jul 2022 04:18:03 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1658834383; x=1690370383;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=ABO1vc8TQN3jq3u/kMUZdKq6N7zMTog4CpKlzMZ7bA0=;
+  b=rKJ6uomUAqkKvMtrY3/8B2ormqf7rGiLFJWHd6YV8RNr8zzEvTZAYy2l
+   cS18l0nezxLou8EA2bx1sCSJAlm5NDByM+7hYoSFbpWc0XVEdI3/7f1uH
+   8CnoFS/WNiraf3jHWAouv8u2MRXa9bBgV2+wZ7y8q1mFBtkKVy8751kuO
+   g=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Jul 2022 04:19:42 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 04:19:42 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 26 Jul 2022 04:19:42 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 26 Jul
+ 2022 04:19:37 -0700
+Subject: Re: [PATCH 01/10] dt-bindings: interconnect: qcom,msm8998-bwmon: add
+ support for SDM845 LLCC BWMON
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Rajendra Nayak <quic_rjendra@quicinc.com>
+References: <20220720192807.130098-1-krzysztof.kozlowski@linaro.org>
+ <20220720192807.130098-2-krzysztof.kozlowski@linaro.org>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <902c7c6c-e2f7-d441-cb6f-a803238c8df9@quicinc.com>
+Date:   Tue, 26 Jul 2022 16:49:33 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: by 2002:ab3:2a1:0:b0:1d7:b824:937f with HTTP; Tue, 26 Jul 2022
- 04:18:02 -0700 (PDT)
-Reply-To: loebarryson@consultant.com
-From:   shahab Ayub <drusmanhassan19@gmail.com>
-Date:   Tue, 26 Jul 2022 12:18:02 +0100
-Message-ID: <CAMdE0PNqP3T1xsOdKnST0JJ=w+FqPZVZ541q0wq5M=yXMFcFQw@mail.gmail.com>
-Subject: Business Proposal From Dubai UAE
-To:     shahedhossen2010 <shahedhossen2010@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <20220720192807.130098-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
 
-I am the Chief Compliance Officer of the United Arab Bank of Dubai. I
-invite you to a good business deal. I want us to work together as a
-partner and benefit from this good business. I will explain in detail in
-my next letter if you are interested in doing business with me.
-Have a nice day
+On 7/21/22 12:57 AM, Krzysztof Kozlowski wrote:
+> Add compatible for SDM845 Bandwidth Monitor instance measuring traffic
+> between LLCC and memory.  It comes with different register layout:
+> called v5.
+> 
+> Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I look forward to your prompt reply.
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 
-   Shahab Ayub
- shahabayub@consultant.com
-
-Shahab Ayub
-Chief Compliance Officer
-https://www.uab.ae/en/Discover-Us/Senior-management
-Website:
-www.uab.ae
-Address:
-Sh Abdulla Bin Salem Al Qasimi Al Qasimia St , P.O Box 25022 Sharjah
-United Arab Emirates ( UAE )
+> ---
+>   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml     | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> index c2e697f6e6cf..32e2892d736b 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> @@ -27,6 +27,7 @@ properties:
+>                 - qcom,sdm845-bwmon
+>             - const: qcom,msm8998-bwmon
+>         - const: qcom,msm8998-bwmon       # BWMON v4
+> +      - const: qcom,sdm845-llcc-bwmon   # BWMON v5
+>   
+>     interconnects:
+>       maxItems: 1
+> 
